@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,28 +29,27 @@ THE SOFTWARE.
 #define __DeflectorPlaneAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreDeflectorPlaneAffector.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for DeflectorPlaneAffector. */
-    class _OgreParticleFXExport DeflectorPlaneAffectorFactory : public ParticleAffectorFactory
+    class _OgreParticleFXExport DeflectorPlaneAffectorFactory final : public ParticleAffectorFactory
     {
         /** See ParticleAffectorFactory */
-        String getName() const { return "DeflectorPlane"; }
+        String getName() const override { return "DeflectorPlane"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
-            ParticleAffector* p = OGRE_NEW DeflectorPlaneAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW DeflectorPlaneAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

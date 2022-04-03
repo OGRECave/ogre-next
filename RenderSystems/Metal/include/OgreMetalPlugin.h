@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -28,37 +28,41 @@ THE SOFTWARE.
 #ifndef _OgreMetalPlugin_H_
 #define _OgreMetalPlugin_H_
 
-#include "OgrePlugin.h"
 #include "OgreMetalPrerequisites.h"
+
+#include "OgrePlugin.h"
 
 namespace Ogre
 {
     class MetalRenderSystem;
 
     /** Plugin instance for Metal Manager */
-    class _OgreMetalExport MetalPlugin : public Plugin
+    class _OgreMetalExport MetalPlugin final : public Plugin
     {
     public:
         MetalPlugin();
 
-
         /// @copydoc Plugin::getName
-        const String& getName() const;
+        const String &getName() const override;
 
         /// @copydoc Plugin::install
-        void install();
+        void install() override;
 
         /// @copydoc Plugin::initialise
-        void initialise();
+        void initialise() override;
 
         /// @copydoc Plugin::shutdown
-        void shutdown();
+        void shutdown() override;
 
         /// @copydoc Plugin::uninstall
-        void uninstall();
+        void uninstall() override;
+
+        /// @copydoc Plugin::getAbiCookie
+        void getAbiCookie( AbiCookie &outAbiCookie ) override;
+
     protected:
-        MetalRenderSystem* mRenderSystem;
+        MetalRenderSystem *mRenderSystem;
     };
-}
+}  // namespace Ogre
 
 #endif

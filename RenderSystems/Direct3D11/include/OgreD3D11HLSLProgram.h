@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,16 +29,17 @@ THE SOFTWARE.
 #define __D3D11HLSLProgram_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreD3D11DeviceResource.h"
 #include "OgreHighLevelGpuProgram.h"
-#include "OgreHardwareUniformBuffer.h"
-#include "Vao/OgreVertexBufferPacked.h"
 #include "OgreString.h"
+#include "Vao/OgreVertexBufferPacked.h"
 
-namespace Ogre {
+namespace Ogre
+{
     typedef vector<byte>::type MicroCode;
 
-    /** Specialization of HighLevelGpuProgram to provide support for D3D11 
+    /** Specialization of HighLevelGpuProgram to provide support for D3D11
     High-Level Shader Language (HLSL).
     @remarks
     Note that the syntax of D3D11 HLSL is identical to nVidia's Cg language, therefore
@@ -46,96 +47,95 @@ namespace Ogre {
     reason for not wanting to use the Cg plugin, I suggest you use Cg instead since that
     can produce programs for OpenGL too.
     */
-    class _OgreD3D11Export D3D11HLSLProgram
-        : public HighLevelGpuProgram
-        , protected D3D11DeviceResource
+    class _OgreD3D11Export D3D11HLSLProgram final : public HighLevelGpuProgram,
+                                                    protected D3D11DeviceResource
     {
     public:
         /// Command object for setting entry point
-        class CmdEntryPoint : public ParamCommand
+        class CmdEntryPoint final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /// Command object for setting target assembler
-        class CmdTarget : public ParamCommand
+        class CmdTarget final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /// Command object for setting macro defines
-        class CmdPreprocessorDefines : public ParamCommand
+        class CmdPreprocessorDefines final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /// Command object for setting matrix packing in column-major order
-        class CmdColumnMajorMatrices : public ParamCommand
+        class CmdColumnMajorMatrices final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /// Command object for setting backwards compatibility
-        class CmdEnableBackwardsCompatibility : public ParamCommand
+        class CmdEnableBackwardsCompatibility final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
     protected:
-
-        static CmdEntryPoint msCmdEntryPoint;
-        static CmdTarget msCmdTarget;
-        static CmdPreprocessorDefines msCmdPreprocessorDefines;
-        static CmdColumnMajorMatrices msCmdColumnMajorMatrices;
+        static CmdEntryPoint                   msCmdEntryPoint;
+        static CmdTarget                       msCmdTarget;
+        static CmdPreprocessorDefines          msCmdPreprocessorDefines;
+        static CmdColumnMajorMatrices          msCmdColumnMajorMatrices;
         static CmdEnableBackwardsCompatibility msCmdEnableBackwardsCompatibility;
-        
-        void notifyDeviceLost(D3D11Device* device);
-        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
+
+        void notifyDeviceLost( D3D11Device *device ) override;
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
 
         /** Internal method for creating an appropriate low-level program from this
         high-level program, must be implemented by subclasses. */
-        void createLowLevelImpl(void);
+        void createLowLevelImpl() override;
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl(void);
+        void unloadHighLevelImpl() override;
 
         // Recursive utility method for populateParameterNames
-        void processParamElement(String prefix, LPCSTR pName, ID3D11ShaderReflectionType* varRefType);
+        void processParamElement( String prefix, LPCSTR pName, ID3D11ShaderReflectionType *varRefType );
 
-        void populateDef(D3D11_SHADER_TYPE_DESC& d3dDesc, GpuConstantDefinition& def) const;
-		
-		void getDefines(String& stringBuffer, vector<D3D_SHADER_MACRO>::type& defines, const String& definesString);
+        void populateDef( D3D11_SHADER_TYPE_DESC &d3dDesc, GpuConstantDefinition &def ) const;
+
+        void getDefines( String &stringBuffer, vector<D3D_SHADER_MACRO>::type &defines,
+                         const String &definesString );
 
         String mTarget;
         String mEntryPoint;
         String mPreprocessorDefines;
-        bool mColumnMajorMatrices;
-        bool mEnableBackwardsCompatibility;
+        bool   mColumnMajorMatrices;
+        bool   mEnableBackwardsCompatibility;
 
-        bool mErrorsInCompile;
+        bool      mErrorsInCompile;
         MicroCode mMicroCode;
 
-        D3D11Device & mDevice;
+        D3D11Device &mDevice;
 
-        ComPtr<ID3D11VertexShader> mVertexShader;
-        ComPtr<ID3D11PixelShader> mPixelShader;
+        ComPtr<ID3D11VertexShader>   mVertexShader;
+        ComPtr<ID3D11PixelShader>    mPixelShader;
         ComPtr<ID3D11GeometryShader> mGeometryShader;
-        ComPtr<ID3D11DomainShader> mDomainShader;
-        ComPtr<ID3D11HullShader> mHullShader;
-        ComPtr<ID3D11ComputeShader> mComputeShader;
+        ComPtr<ID3D11DomainShader>   mDomainShader;
+        ComPtr<ID3D11HullShader>     mHullShader;
+        ComPtr<ID3D11ComputeShader>  mComputeShader;
 
         struct ShaderVarWithPosInBuf
         {
             mutable String name;
-            size_t size;
-            size_t startOffset;
-            
-            ShaderVarWithPosInBuf& operator=(const ShaderVarWithPosInBuf& var)
+            size_t         size;
+            size_t         startOffset;
+
+            ShaderVarWithPosInBuf &operator=( const ShaderVarWithPosInBuf &var )
             {
                 name = var.name;
                 size = var.size;
@@ -144,204 +144,136 @@ namespace Ogre {
             }
         };
         typedef vector<ShaderVarWithPosInBuf>::type ShaderVars;
-        typedef ShaderVars::iterator ShaderVarsIter;
-        typedef ShaderVars::const_iterator ShaderVarsConstIter; 
+        typedef ShaderVars::iterator                ShaderVarsIter;
+        typedef ShaderVars::const_iterator          ShaderVarsConstIter;
 
         // A hack for cg to get the "original name" of the var in the "auto comments"
         // that cg adds to the hlsl 4 output. This is to solve the issue that
         // in some cases cg changes the name of the var to a new name.
-        void fixVariableNameFromCg(const ShaderVarWithPosInBuf& newVar);
-        //ShaderVars mShaderVars;
-        
-        // HACK: Multi-index emulation container to store constant buffer information by index and name at same time
-        // using tips from http://www.boost.org/doc/libs/1_35_0/libs/multi_index/doc/performance.html
-        // and http://cnx.org/content/m35767/1.2/
-#define INVALID_IDX (unsigned int)-1
+        void fixVariableNameFromCg( const ShaderVarWithPosInBuf &newVar );
+
         struct BufferInfo
         {
-            static _StringHash mHash;
-            unsigned int mIdx;
-            String mName;
-            mutable v1::HardwareUniformBufferSharedPtr mUniformBuffer;
-            mutable ShaderVars mShaderVars;
-                
-            // Default constructor
-            BufferInfo() : mIdx(0), mName("") { mUniformBuffer.setNull(); }
-            BufferInfo(unsigned int index, const String& name)
-                : mIdx(index), mName(name)
-            {
-                mUniformBuffer.setNull();
-            }
-            
-            // Copy constructor
-            BufferInfo(const BufferInfo& info) 
-                : mIdx(info.mIdx)
-                , mName(info.mName)
-                , mUniformBuffer(info.mUniformBuffer)
-                , mShaderVars(info.mShaderVars)
-            {
-
-            }
-
-            // Copy operator
-            BufferInfo& operator=(const BufferInfo& info)
-            {
-                this->mIdx = info.mIdx;
-                this->mName = info.mName;
-                mUniformBuffer = info.mUniformBuffer;
-                mShaderVars = info.mShaderVars;
-                return *this;
-            }
-            
-            // Constructors and operators used for search
-            BufferInfo(unsigned int index) : mIdx(index), mName("") { }
-            BufferInfo(const String& name) : mIdx(INVALID_IDX), mName(name) { }
-            BufferInfo& operator=(unsigned int index) { this->mIdx = index; return *this; }
-            BufferInfo& operator=(const String& name) { this->mName = name; return *this; } 
-            
-            bool operator==(const BufferInfo& other) const
-            {
-                return mName == other.mName && mIdx == other.mIdx;
-            }
-            bool operator<(const BufferInfo& other) const
-            {
-                if (mIdx == INVALID_IDX || other.mIdx == INVALID_IDX) 
-                {
-                    return mName < other.mName;
-                }
-                else if (mName == "" || other.mName == "")
-                {
-                    return mIdx < other.mIdx;
-                }
-                else 
-                {
-                    if (mName == other.mName)
-                    {
-                        return mIdx < other.mIdx;
-                    }
-                    else
-                    {
-                        return mName < other.mName;
-                    }
-                }
-            }
+            ComPtr<ID3D11Buffer> mConstBuffer;
+            ShaderVars           mShaderVars;
         };
 
-        // Make sure that objects have index and name, or some search will fail
-//        typedef std::set<BufferInfo> BufferInfoMap;
-//        typedef std::set<BufferInfo>::iterator BufferInfoIterator;
-//        BufferInfoMap mBufferInfoMap;
-
-        // Map to store interface slot position. 
+        // Map to store interface slot position.
         // Number of interface slots is size of this map.
-        typedef std::map<String, unsigned int> SlotMap;
+        typedef std::map<String, unsigned int>                 SlotMap;
         typedef std::map<String, unsigned int>::const_iterator SlotIterator;
+
         SlotMap mSlotMap;
 
         typedef vector<D3D11_SIGNATURE_PARAMETER_DESC>::type D3d11ShaderParameters;
-        typedef D3d11ShaderParameters::iterator D3d11ShaderParametersIter; 
-
+        typedef D3d11ShaderParameters::iterator              D3d11ShaderParametersIter;
 
         typedef vector<D3D11_SHADER_VARIABLE_DESC>::type D3d11ShaderVariables;
-        typedef D3d11ShaderVariables::iterator D3d11ShaderVariablesIter; 
+        typedef D3d11ShaderVariables::iterator           D3d11ShaderVariablesIter;
 
         struct GpuConstantDefinitionWithName : GpuConstantDefinition
         {
-            LPCSTR                  Name;          
+            LPCSTR Name;
         };
         typedef vector<GpuConstantDefinitionWithName>::type D3d11ShaderVariableSubparts;
-        typedef D3d11ShaderVariableSubparts::iterator D3d11ShaderVariableSubpartsIter; 
+        typedef D3d11ShaderVariableSubparts::iterator       D3d11ShaderVariableSubpartsIter;
 
         struct MemberTypeName
         {
-            LPCSTR                  Name;           
+            LPCSTR Name;
         };
 
         vector<String *>::type mSerStrings;
 
         typedef vector<D3D11_SHADER_BUFFER_DESC>::type D3d11ShaderBufferDescs;
-        typedef vector<D3D11_SHADER_TYPE_DESC>::type D3d11ShaderTypeDescs;
-        typedef vector<UINT>::type InterfaceSlots;
-        typedef vector<MemberTypeName>::type MemberTypeNames;
+        typedef vector<D3D11_SHADER_TYPE_DESC>::type   D3d11ShaderTypeDescs;
+        typedef vector<UINT>::type                     InterfaceSlots;
+        typedef vector<MemberTypeName>::type           MemberTypeNames;
 
-        UINT mConstantBufferSize;
-        UINT mConstantBufferNr;
-        UINT mNumSlots;
-        ShaderVars mShaderVars;
-        D3d11ShaderParameters mD3d11ShaderInputParameters;
-        D3d11ShaderParameters mD3d11ShaderOutputParameters;
-        D3d11ShaderVariables mD3d11ShaderVariables;
+        UINT                        mConstantBufferSize;
+        UINT                        mConstantBufferNr;
+        UINT                        mNumSlots;
+        ShaderVars                  mShaderVars;
+        D3d11ShaderParameters       mD3d11ShaderInputParameters;
+        D3d11ShaderParameters       mD3d11ShaderOutputParameters;
+        D3d11ShaderVariables        mD3d11ShaderVariables;
         D3d11ShaderVariableSubparts mD3d11ShaderVariableSubparts;
-        D3d11ShaderBufferDescs mD3d11ShaderBufferDescs;
-        D3d11ShaderVariables mVarDescBuffer;
-        D3d11ShaderVariables mVarDescPointer;
-        D3d11ShaderTypeDescs mD3d11ShaderTypeDescs;
-        D3d11ShaderTypeDescs mMemberTypeDesc;
+        D3d11ShaderBufferDescs      mD3d11ShaderBufferDescs;
+        D3d11ShaderVariables        mVarDescBuffer;
+        D3d11ShaderVariables        mVarDescPointer;
+        D3d11ShaderTypeDescs        mD3d11ShaderTypeDescs;
+        D3d11ShaderTypeDescs        mMemberTypeDesc;
         enum DefaultBufferTypes
         {
             BufferGlobal,
             BufferParam,
             NumDefaultBufferTypes
         };
-        //D3D11_SHADER_INPUT_BIND_DESC    mDefaultBufferBindPoints[NumDefaultBufferTypes];
-        UINT        mDefaultBufferBindPoint;
-        BufferInfo  mDefaultBuffers[NumDefaultBufferTypes];
+        // D3D11_SHADER_INPUT_BIND_DESC    mDefaultBufferBindPoints[NumDefaultBufferTypes];
+        UINT            mDefaultBufferBindPoint;
+        BufferInfo      mDefaultBuffers[NumDefaultBufferTypes];
         MemberTypeNames mMemberTypeName;
-        InterfaceSlots mInterfaceSlots;
+        InterfaceSlots  mInterfaceSlots;
 
         void analizeMicrocode();
-        void getMicrocodeFromCache(void);
-        void compileMicrocode(void);
+        void getMicrocodeFromCache();
+        void compileMicrocode();
+
     public:
-        D3D11HLSLProgram(ResourceManager* creator, const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader, D3D11Device & device);
-        ~D3D11HLSLProgram();
+        D3D11HLSLProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
+                          const String &group, bool isManual, ManualResourceLoader *loader,
+                          D3D11Device &device );
+        ~D3D11HLSLProgram() override;
 
         /** Sets the entry point for this program ie the first method called. */
-        void setEntryPoint(const String& entryPoint) { mEntryPoint = entryPoint; }
+        void setEntryPoint( const String &entryPoint ) { mEntryPoint = entryPoint; }
         /** Gets the entry point defined for this program. */
-        const String& getEntryPoint(void) const { return mEntryPoint; }
+        const String &getEntryPoint() const { return mEntryPoint; }
         /** Sets the shader target to compile down to, e.g. 'vs_1_1'. */
-        void setTarget(const String& target);
+        void setTarget( const String &target );
         /** Gets the shader target to compile down to, e.g. 'vs_1_1'. */
-        const String& getTarget(void) const { return mTarget; }
-        /** Gets the shader target promoted to the first compatible, e.g. 'vs_4_0' or 'ps_4_0' if backward compatibility is enabled. */
-        const String& getCompatibleTarget(void) const;
+        const String &getTarget() const { return mTarget; }
+        /** Gets the shader target promoted to the first compatible, e.g. 'vs_4_0' or 'ps_4_0' if
+         * backward compatibility is enabled. */
+        const String &getCompatibleTarget() const;
 
         /** Sets the preprocessor defines use to compile the program. */
-        void setPreprocessorDefines(const String& defines) { mPreprocessorDefines = defines; }
+        void setPreprocessorDefines( const String &defines ) { mPreprocessorDefines = defines; }
         /** Sets the preprocessor defines use to compile the program. */
-        const String& getPreprocessorDefines(void) const { return mPreprocessorDefines; }
-        /** Sets whether matrix packing in column-major order. */ 
-        void setColumnMajorMatrices(bool columnMajor) { mColumnMajorMatrices = columnMajor; }
+        const String &getPreprocessorDefines() const { return mPreprocessorDefines; }
+        /** Sets whether matrix packing in column-major order. */
+        void setColumnMajorMatrices( bool columnMajor ) { mColumnMajorMatrices = columnMajor; }
         /** Gets whether matrix packed in column-major order. */
-        bool getColumnMajorMatrices(void) const { return mColumnMajorMatrices; }
-        /** Sets whether backwards compatibility is enabled. */ 
-        void setEnableBackwardsCompatibility(bool enableBackwardsCompatibility) { mEnableBackwardsCompatibility = enableBackwardsCompatibility; }
+        bool getColumnMajorMatrices() const { return mColumnMajorMatrices; }
+        /** Sets whether backwards compatibility is enabled. */
+        void setEnableBackwardsCompatibility( bool enableBackwardsCompatibility )
+        {
+            mEnableBackwardsCompatibility = enableBackwardsCompatibility;
+        }
         /** Gets whether backwards compatibility is enabled. */
-        bool getEnableBackwardsCompatibility(void) const { return mEnableBackwardsCompatibility; }
+        bool getEnableBackwardsCompatibility() const { return mEnableBackwardsCompatibility; }
         /// Overridden from GpuProgram
-        bool isSupported(void) const;
+        bool isSupported() const override;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters(void);
+        GpuProgramParametersSharedPtr createParameters() override;
         /// Overridden from GpuProgram
-        const String& getLanguage(void) const;
+        const String &getLanguage() const override;
 
-        virtual void buildConstantDefinitions() const;
-        ID3D11VertexShader* getVertexShader(void) const;
-        ID3D11PixelShader* getPixelShader(void) const; 
-        ID3D11GeometryShader* getGeometryShader(void) const; 
-        ID3D11DomainShader* getDomainShader(void) const;
-        ID3D11HullShader* getHullShader(void) const;
-        ID3D11ComputeShader* getComputeShader(void) const;
-        const MicroCode &  getMicroCode(void) const;  
+        void                  buildConstantDefinitions() const override;
+        ID3D11VertexShader   *getVertexShader() const;
+        ID3D11PixelShader    *getPixelShader() const;
+        ID3D11GeometryShader *getGeometryShader() const;
+        ID3D11DomainShader   *getDomainShader() const;
+        ID3D11HullShader     *getHullShader() const;
+        ID3D11ComputeShader  *getComputeShader() const;
+        const MicroCode      &getMicroCode() const;
 
         /// buffers must have a capacity of 2, i.e. ID3D11Buffer *buffers[2];
-        void getConstantBuffers( ID3D11Buffer** buffers, UINT &outSlotStart, UINT &outNumBuffers,
+        void getConstantBuffers( ID3D11Buffer **buffers, UINT &outSlotStart, UINT &outNumBuffers,
                                  GpuProgramParametersSharedPtr params, uint16 variabilityMask );
 
         // Get slot for a specific interface
-        unsigned int getSubroutineSlot(const String& subroutineSlotName) const;
+        unsigned int getSubroutineSlot( const String &subroutineSlotName ) const;
 
         ComPtr<ID3D11InputLayout> getLayoutForPso( const VertexElement2VecVec &vertexElements );
 
@@ -353,20 +285,20 @@ namespace Ogre {
         void CreateComputeShader();
 
         /** Internal load implementation, must be implemented by subclasses.
-        */
-        void loadFromSource(void);
+         */
+        void loadFromSource() override;
 
-        void reinterpretGSForStreamOut(void);
+        void reinterpretGSForStreamOut();
         bool mReinterpretingGS;
-        
-        unsigned int getNumInputs(void)const;
-        unsigned int getNumOutputs(void)const;
+
+        size_t getNumInputs() const;
+        size_t getNumOutputs() const;
 
         String getNameForMicrocodeCache();
 
-        const D3D11_SIGNATURE_PARAMETER_DESC & getInputParamDesc(unsigned int index) const;
-        const D3D11_SIGNATURE_PARAMETER_DESC & getOutputParamDesc(unsigned int index) const;    
+        const D3D11_SIGNATURE_PARAMETER_DESC &getInputParamDesc( size_t index ) const;
+        const D3D11_SIGNATURE_PARAMETER_DESC &getOutputParamDesc( size_t index ) const;
     };
-}
+}  // namespace Ogre
 
 #endif

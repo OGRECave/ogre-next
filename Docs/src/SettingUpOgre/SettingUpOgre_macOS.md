@@ -8,6 +8,8 @@ If you do not already have `cmake`, install it with `brew` or whatever your favo
 brew install cmake
 ```
 
+@copydoc DownloadingOgreScriptsCommon
+
 # Install dependencies
 
 Clone dependencies from [ogre-next-deps](https://github.com/OGRECave/ogre-next-deps) and build the `ALL` target and then the `INSTALL` target:

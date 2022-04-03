@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,25 +30,25 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-namespace v1
-{
-    //-----------------------------------------------------------------------
-    const String& PanelOverlayElementFactory::getTypeName(void) const
+    namespace v1
     {
-        static String name = "Panel";
-        return name;
-    }
-    //-----------------------------------------------------------------------
-    const String& BorderPanelOverlayElementFactory::getTypeName(void) const
-    {
-        static String name = "BorderPanel";
-        return name;
-    }
-    //-----------------------------------------------------------------------
-    const String& TextAreaOverlayElementFactory::getTypeName(void) const
-    {
-        static String name = "TextArea";
-        return name;
-    }
-}
-}
+        //-----------------------------------------------------------------------
+        const String &PanelOverlayElementFactory::getTypeName() const
+        {
+            static String name = "Panel";
+            return name;
+        }
+        //-----------------------------------------------------------------------
+        const String &BorderPanelOverlayElementFactory::getTypeName() const
+        {
+            static String name = "BorderPanel";
+            return name;
+        }
+        //-----------------------------------------------------------------------
+        const String &TextAreaOverlayElementFactory::getTypeName() const
+        {
+            static String name = "TextArea";
+            return name;
+        }
+    }  // namespace v1
+}  // namespace Ogre

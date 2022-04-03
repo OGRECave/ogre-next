@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -38,37 +38,38 @@ namespace Ogre
     {
         class VulkanHardwareBufferManagerBase;
 
-        class _OgreVulkanExport VulkanHardwareIndexBuffer : public HardwareIndexBuffer
+        class _OgreVulkanExport VulkanHardwareIndexBuffer final : public HardwareIndexBuffer
         {
         private:
             VulkanHardwareBufferCommon mVulkanHardwareBufferCommon;
+
         protected:
-            virtual void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
-            virtual void unlockImpl( void ) override;
+            void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
+            void unlockImpl() override;
 
         public:
             VulkanHardwareIndexBuffer( VulkanHardwareBufferManagerBase *mgr, IndexType idxType,
                                        size_t numIndexes, HardwareBuffer::Usage usage,
                                        bool useShadowBuffer );
-            virtual ~VulkanHardwareIndexBuffer();
+            ~VulkanHardwareIndexBuffer() override;
 
-            void _notifyDeviceStalled( void );
+            void _notifyDeviceStalled();
 
             /// @copydoc VulkanHardwareBufferCommon::getBufferName
             VkBuffer getBufferName( size_t &outOffset );
             /// @copydoc VulkanHardwareBufferCommon::getBufferNameForGpuWrite
             VkBuffer getBufferNameForGpuWrite( size_t &outOffset );
 
-            virtual void readData( size_t offset, size_t length, void *pDest ) override;
+            void readData( size_t offset, size_t length, void *pDest ) override;
 
-            virtual void writeData( size_t offset, size_t length, const void *pSource,
-                                    bool discardWholeBuffer = false ) override;
-            virtual void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset,
-                                   size_t length, bool discardWholeBuffer = false );
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false ) override;
+            void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset, size_t length,
+                           bool discardWholeBuffer = false ) override;
 
-            virtual void _updateFromShadow( void );
+            void _updateFromShadow() override;
 
-            virtual void *getRenderSystemData( void );
+            void *getRenderSystemData() override;
         };
     }  // namespace v1
 }  // namespace Ogre

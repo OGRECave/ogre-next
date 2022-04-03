@@ -2,9 +2,9 @@
 #ifndef _Demo_TutorialUav01_SetupGameState_H_
 #define _Demo_TutorialUav01_SetupGameState_H_
 
+#include "OgreMesh2.h"
 #include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
-#include "OgreMesh2.h"
 
 namespace Demo
 {
@@ -13,8 +13,8 @@ namespace Demo
     public:
         TutorialUav01_SetupGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
     };
-}
+}  // namespace Demo
 
 #endif

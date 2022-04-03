@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -82,38 +82,38 @@ namespace Ogre
         void parseSharedParams( const NameValuePairList *miscParams );
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
-        void createSwapchain( void );
-        void destroySwapchain( void );
+        void createSwapchain();
+        void destroySwapchain();
 
     public:
-        void acquireNextSwapchain( void );
+        void acquireNextSwapchain();
 
     public:
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        virtual ~VulkanWindow();
+        ~VulkanWindow() override;
 
-        virtual void destroy( void );
+        void destroy() override;
 
         void _setDevice( VulkanDevice *device );
-        virtual void _initialize( TextureGpuManager *textureGpuManager );
+        void _initialize( TextureGpuManager *textureGpuManager ) override;
         virtual void _initialize( TextureGpuManager *textureGpuManager,
                                   const NameValuePairList *miscParams ) = 0;
 
         /// Returns null if getImageAcquiredSemaphore has already been called during this frame
-        VkSemaphore getImageAcquiredSemaphore( void );
+        VkSemaphore getImageAcquiredSemaphore();
 
-        size_t getNumSwapchains( void ) const { return mSwapchainImages.size(); }
+        size_t getNumSwapchains() const { return mSwapchainImages.size(); }
         VkImage getSwapchainImage( size_t idx ) const { return mSwapchainImages[idx]; }
 
-        virtual bool isClosed( void ) const;
+        bool isClosed() const override;
 
-        virtual void setVSync( bool vSync, uint32 vSyncInterval );
+        void setVSync( bool vSync, uint32 vSyncInterval ) override;
 
         /// Tells our VulkanDevice that the next commitAndNextCommandBuffer call should present us
         /// Calling swapBuffers during the command buffer that is rendering to us is key for
         /// good performance; otherwise Ogre may split the commands that render to this window
         /// and the command that presents this window into two queue submissions.
-        virtual void swapBuffers( void );
+        void swapBuffers() override;
 
         /** Actually performs present. Called by VulkanDevice::commitAndNextCommandBuffer
         @param queueFinishSemaphore
@@ -121,7 +121,7 @@ namespace Ogre
         */
         void _swapBuffers( VkSemaphore queueFinishSemaphore );
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
 }  // namespace Ogre
 

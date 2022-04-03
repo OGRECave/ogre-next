@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreMetalStagingTexture_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreStagingTextureBufferImpl.h"
 
 #include "Vao/OgreMetalDynamicBuffer.h"
@@ -38,27 +39,28 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalStagingTexture : public StagingTextureBufferImpl
+    class _OgreMetalExport MetalStagingTexture final : public StagingTextureBufferImpl
     {
-        id<MTLBuffer>   mVboName;
-        void            *mMappedPtr;
-        MetalDevice     *mDevice;
+        id<MTLBuffer> mVboName;
+        void         *mMappedPtr;
+        MetalDevice  *mDevice;
 
-        virtual bool belongsToUs( const TextureBox &box );
-        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr(void);
+        bool belongsToUs( const TextureBox &box ) override;
+
+        void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
     public:
-        MetalStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
-                             size_t sizeBytes, MetalDevice *device );
-        virtual ~MetalStagingTexture();
+        MetalStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t sizeBytes,
+                             MetalDevice *device );
+        ~MetalStagingTexture() override;
 
-        virtual void stopMapRegion(void);
+        void stopMapRegion() override;
 
-        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                             uint8 mipLevel, const TextureBox *cpuSrcBox=0,
-                             const TextureBox *dstBox=0, bool skipSysRamCopy=false );
+        void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                     const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
+                     bool skipSysRamCopy = false ) override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

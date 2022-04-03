@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,11 +30,12 @@ THE SOFTWARE.
 #define __RingEmitter_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreAreaEmitter.h"
 #include "OgreMath.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Particle emitter which emits particles randomly from points inside a ring (e.g. a tube).
     @remarks
         This particle emitter emits particles from a ring-shaped area.
@@ -42,55 +43,55 @@ namespace Ogre {
         direction (i.e. a line), a random scattering inside a cone, or a random
         scattering in all directions, depending the 'angle' parameter, which
         is the angle across which to scatter the particles either side of the
-        base direction of the emitter. 
+        base direction of the emitter.
     */
     class _OgreParticleFXExport RingEmitter : public AreaEmitter
     {
     public:
         /// @see AreaEmitter
         /** Command object for inner size (see ParamCommand).*/
-        class CmdInnerX : public ParamCommand
+        class CmdInnerX final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /** Command object for inner size (see ParamCommand).*/
-        class CmdInnerY : public ParamCommand
+        class CmdInnerY final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        RingEmitter(ParticleSystem* psys);
+        RingEmitter( ParticleSystem *psys );
 
         /// @see ParticleEmitter
-        void _initParticle(Particle* pParticle);
+        void _initParticle( Particle *pParticle ) override;
 
         /** Sets the size of the clear space inside the area from where NO particles are emitted.
         @param x, y
             Parametric values describing the proportion of the shape which is hollow in each direction.
             E.g. 0 is solid, 0.5 is half-hollow etc
         */
-        void setInnerSize(Real x, Real y);
+        void setInnerSize( Real x, Real y );
 
-        /** Sets the x component of the area inside the ellipsoid which doesn't emit particles. 
+        /** Sets the x component of the area inside the ellipsoid which doesn't emit particles.
         @param x
             Parametric value describing the proportion of the shape which is hollow in this direction.
             E.g. 0 is solid, 0.5 is half-hollow etc
         */
-        void setInnerSizeX(Real x);
-        /** Sets the y component of the area inside the ellipsoid which doesn't emit particles. 
+        void setInnerSizeX( Real x );
+        /** Sets the y component of the area inside the ellipsoid which doesn't emit particles.
         @param y
             Parametric value describing the proportion of the shape which is hollow in this direction.
             E.g. 0 is solid, 0.5 is half-hollow etc
         */
-        void setInnerSizeY(Real y);
+        void setInnerSizeY( Real y );
         /** Gets the x component of the area inside the ellipsoid which doesn't emit particles. */
-        Real getInnerSizeX(void) const;
+        Real getInnerSizeX() const;
         /** Gets the y component of the area inside the ellipsoid which doesn't emit particles. */
-        Real getInnerSizeY(void) const;
+        Real getInnerSizeY() const;
 
     protected:
         /// @see ParticleEmitter
@@ -100,12 +101,8 @@ namespace Ogre {
         /// Size of 'clear' center area (> 0 and < 1.0)
         Real mInnerSizex;
         Real mInnerSizey;
-
-
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

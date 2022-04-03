@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -42,7 +42,7 @@ namespace Ogre
 
         struct Interface
         {
-            InterfaceType type;
+            InterfaceType   type;
             GL3PlusSupport *support;
 
             Interface( InterfaceType _type, GL3PlusSupport *_support ) :
@@ -52,8 +52,8 @@ namespace Ogre
             }
         };
 
-        uint8 mSelectedInterface;
-        bool mInterfaceSelected;
+        uint8                mSelectedInterface;
+        bool                 mInterfaceSelected;
         FastArray<Interface> mAvailableInterfaces;
 
         static const char *getInterfaceName( InterfaceType interface );
@@ -61,26 +61,26 @@ namespace Ogre
         /**
          * Refresh config options to reflect dependencies
          */
-        void refreshConfig( void );
+        void refreshConfig();
 
     public:
         GlSwitchableSupport();
         ~GlSwitchableSupport();
 
         /// @copydoc see GL3PlusSupport::addConfig
-        void addConfig( void );
+        void addConfig();
 
         /// @copydoc see GL3PlusSupport::validateConfig
-        String validateConfig( void );
+        String validateConfig();
 
         /// @copydoc see GL3PlusSupport::setConfigOption
         void setConfigOption( const String &name, const String &value );
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
-        virtual const char* getPriorityConfigOption( size_t idx ) const;
+        virtual const char *getPriorityConfigOption( size_t idx ) const;
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
-        virtual size_t getNumPriorityConfigOptions( void ) const;
+        virtual size_t getNumPriorityConfigOptions() const;
 
         /// @copydoc GL3PlusSupport::createWindow
         Window *createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
@@ -99,7 +99,7 @@ namespace Ogre
         /// @copydoc see GL3PlusSupport::getProcAddress
         void *getProcAddress( const char *procname ) const;
 
-        uint8 findSelectedInterfaceIdx( void ) const;
+        uint8 findSelectedInterfaceIdx() const;
     };
 }  // namespace Ogre
 

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,33 +29,35 @@ THE SOFTWARE.
 #define __Technique_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCommon.h"
 #include "OgrePass.h"
 #include "OgreRenderSystemCapabilities.h"
 #include "OgreUserObjectBindings.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Materials
-    *  @{
-    */
-    /** Class representing an approach to rendering this particular Material. 
+     *  @{
+     */
+    /** Class representing an approach to rendering this particular Material.
     @remarks
-        Ogre will attempt to use the best technique supported by the active hardware, 
+        Ogre will attempt to use the best technique supported by the active hardware,
         unless you specifically request a lower detail technique (say for distant
         rendering).
     */
-    class _OgreExport Technique : public TechniqueAlloc
+    class _OgreExport Technique : public OgreAllocatedObj
     {
     protected:
-        typedef vector<Pass*>::type Passes;
+        typedef vector<Pass *>::type Passes;
         /// List of primary passes
         Passes mPasses;
         // Raw pointer since we don't want child to stop parent's destruction
-        Material* mParent;
-        bool mIsSupported;
+        Material *mParent;
+        bool      mIsSupported;
         /// LOD level
         unsigned short mLodIndex;
         /** Scheme index, derived from scheme name but the names are held on
@@ -65,19 +67,20 @@ namespace Ogre {
         /// Optional name for the technique
         String mName;
 
-        /** When casting shadow, if not using default Ogre shadow casting material, or 
-        * nor using fixed function casting, mShadowCasterMaterial let you customize per material
-        * shadow caster behavior
-        */
+        /** When casting shadow, if not using default Ogre shadow casting material, or
+         * nor using fixed function casting, mShadowCasterMaterial let you customize per material
+         * shadow caster behavior
+         */
         MaterialPtr mShadowCasterMaterial;
-        /** When casting shadow, if not using default Ogre shadow casting material, or 
-        * nor using fixed function casting, mShadowCasterMaterial let you customize per material
-        * shadow caster behavior.There only material name is stored so that it can be loaded once all file parsed in a resource group.
-        */
+        /** When casting shadow, if not using default Ogre shadow casting material, or
+         * nor using fixed function casting, mShadowCasterMaterial let you customize per material
+         * shadow caster behavior.There only material name is stored so that it can be loaded once all
+         * file parsed in a resource group.
+         */
         String mShadowCasterMaterialName;
 
         // User objects binding.
-        UserObjectBindings  mUserObjectBindings;
+        UserObjectBindings mUserObjectBindings;
 
     public:
         /** Directive used to manually control technique support based on the
@@ -93,124 +96,127 @@ namespace Ogre {
         /// Rule controlling whether technique is deemed supported based on GPU vendor
         struct GPUVendorRule
         {
-            GPUVendor vendor;
+            GPUVendor        vendor;
             IncludeOrExclude includeOrExclude;
-            GPUVendorRule()
-                : vendor(GPU_UNKNOWN), includeOrExclude(EXCLUDE) {}
-            GPUVendorRule(GPUVendor v, IncludeOrExclude ie)
-                : vendor(v), includeOrExclude(ie) {}
+            GPUVendorRule() : vendor( GPU_UNKNOWN ), includeOrExclude( EXCLUDE ) {}
+            GPUVendorRule( GPUVendor v, IncludeOrExclude ie ) : vendor( v ), includeOrExclude( ie ) {}
         };
         /// Rule controlling whether technique is deemed supported based on GPU device name
         struct GPUDeviceNameRule
         {
-            String devicePattern;
+            String           devicePattern;
             IncludeOrExclude includeOrExclude;
-            bool caseSensitive;
-            GPUDeviceNameRule()
-                : includeOrExclude(EXCLUDE), caseSensitive(false) {}
-            GPUDeviceNameRule(const String& pattern, IncludeOrExclude ie, bool caseSen)
-                : devicePattern(pattern), includeOrExclude(ie), caseSensitive(caseSen) {}
+            bool             caseSensitive;
+            GPUDeviceNameRule() : includeOrExclude( EXCLUDE ), caseSensitive( false ) {}
+            GPUDeviceNameRule( const String &pattern, IncludeOrExclude ie, bool caseSen ) :
+                devicePattern( pattern ),
+                includeOrExclude( ie ),
+                caseSensitive( caseSen )
+            {
+            }
         };
-        typedef vector<GPUVendorRule>::type GPUVendorRuleList;
+        typedef vector<GPUVendorRule>::type     GPUVendorRuleList;
         typedef vector<GPUDeviceNameRule>::type GPUDeviceNameRuleList;
+
     protected:
-        GPUVendorRuleList mGPUVendorRules;
+        GPUVendorRuleList     mGPUVendorRules;
         GPUDeviceNameRuleList mGPUDeviceNameRules;
+
     public:
         /// Constructor
-        Technique(Material* parent);
+        Technique( Material *parent );
         /// Copy constructor
-        Technique(Material* parent, const Technique& oth);
+        Technique( Material *parent, const Technique &oth );
         ~Technique();
         /** Indicates if this technique is supported by the current graphics card.
         @remarks
             This will only be correct after the Technique has been compiled, which is
             usually done from Material::compile.
         */
-        bool isSupported(void) const;
-        /** Internal compilation method; see Material::compile. 
+        bool isSupported() const;
+        /** Internal compilation method; see Material::compile.
         @return Any information explaining problems with the compile.
         */
-        String _compile(bool autoManageTextureUnits);
+        String _compile( bool autoManageTextureUnits );
         /// Internal method for checking GPU vendor / device rules
-        bool checkGPURules(StringStream& errors);
+        bool checkGPURules( StringStream &errors );
         /// Internal method for checking hardware support
-        bool checkHardwareSupport(bool autoManageTextureUnits, StringStream& compileErrors);
-        size_t calculateSize(void) const;
+        bool   checkHardwareSupport( bool autoManageTextureUnits, StringStream &compileErrors );
+        size_t calculateSize() const;
 
         /** Creates a new Pass for this Technique.
         @remarks
             A Pass is a single rendering pass, i.e. a single draw of the given material.
             Note that if you create a pass without a fragment program, during compilation of the
             material the pass may be split into multiple passes if the graphics card cannot
-            handle the number of texture units requested. For passes with fragment programs, however, 
-            the number of passes you create will never be altered, so you have to make sure 
-            that you create an alternative fallback Technique for if a card does not have 
+            handle the number of texture units requested. For passes with fragment programs, however,
+            the number of passes you create will never be altered, so you have to make sure
+            that you create an alternative fallback Technique for if a card does not have
             enough facilities for what you're asking for.
         */
-        Pass* createPass(void);
+        Pass *createPass();
         /** Retrieves the Pass with the given index. */
-        Pass* getPass(unsigned short index);
+        Pass *getPass( unsigned short index );
         /** Retrieves the Pass matching name.
             Returns 0 if name match is not found.
         */
-        Pass* getPass(const String& name);
+        Pass *getPass( const String &name );
         /** Retrieves the number of passes. */
-        unsigned short getNumPasses(void) const;
+        unsigned short getNumPasses() const;
         /** Removes the Pass with the given index. */
-        void removePass(unsigned short index);
+        void removePass( unsigned short index );
         /** Removes all Passes from this Technique. */
-        void removeAllPasses(void);
+        void removeAllPasses();
         /** Move a pass from source index to destination index.
             If successful then returns true.
         */
-        bool movePass(const unsigned short sourceIndex, const unsigned short destinationIndex);
+        bool movePass( const unsigned short sourceIndex, const unsigned short destinationIndex );
         typedef VectorIterator<Passes> PassIterator;
         /** Gets an iterator over the passes in this Technique. */
-        const PassIterator getPassIterator(void);
+        const PassIterator getPassIterator();
         /// Gets the parent Material
-        Material* getParent(void) const { return mParent; }
+        Material *getParent() const { return mParent; }
 
         /** Overloaded operator to copy on Technique to another. */
-        Technique& operator=(const Technique& rhs);
+        Technique &operator=( const Technique &rhs );
 
         /// Gets the resource group of the ultimate parent Material
-        const String& getResourceGroup(void) const;
+        const String &getResourceGroup() const;
 
-        /** Returns true if this Technique involves transparency. 
+        /** Returns true if this Technique involves transparency.
         @remarks
             This basically boils down to whether the first pass
-            has a scene blending factor. Even if the other passes 
-            do not, the base colour, including parts of the original 
+            has a scene blending factor. Even if the other passes
+            do not, the base colour, including parts of the original
             scene, may be used for blending, therefore we have to treat
             the whole Technique as transparent.
         */
-        bool isTransparent(void) const;
+        bool isTransparent() const;
 
         /** Internal prepare method, derived from call to Material::prepare. */
-        void _prepare(void);
+        void _prepare();
         /** Internal unprepare method, derived from call to Material::unprepare. */
-        void _unprepare(void);
+        void _unprepare();
         /** Internal load method, derived from call to Material::load. */
-        void _load(void);
+        void _load();
         /** Internal unload method, derived from call to Material::unload. */
-        void _unload(void);
+        void _unload();
 
         /// Is this loaded?
-        bool isLoaded(void) const;
+        bool isLoaded() const;
 
         /** Tells the technique that it needs recompilation. */
-        void _notifyNeedsRecompile(void);
+        void _notifyNeedsRecompile();
 
         /** return this material specific  shadow casting specific material
-        */
+         */
         Ogre::MaterialPtr getShadowCasterMaterial() const;
         /** set this material specific  shadow casting specific material
-        */
-        void setShadowCasterMaterial(Ogre::MaterialPtr val);
+         */
+        void setShadowCasterMaterial( Ogre::MaterialPtr val );
         /** set this material specific  shadow casting specific material
-        */
-        void setShadowCasterMaterial(const Ogre::String &name);
+         */
+        void setShadowCasterMaterial( const Ogre::String &name );
 
         // -------------------------------------------------------------------------------
         // The following methods are to make migration from previous versions simpler
@@ -219,108 +225,108 @@ namespace Ogre {
 
         /** Sets the point size properties for every Pass in this Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setPointSize
         */
-        void setPointSize(Real ps);
+        void setPointSize( Real ps );
 
         /** Sets the ambient colour reflectance properties for every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setAmbient
         */
-        void setAmbient(Real red, Real green, Real blue);
+        void setAmbient( Real red, Real green, Real blue );
 
         /** Sets the ambient colour reflectance properties for every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setAmbient
         */
-        void setAmbient(const ColourValue& ambient);
+        void setAmbient( const ColourValue &ambient );
 
         /** Sets the diffuse colour reflectance properties of every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setDiffuse
         */
-        void setDiffuse(Real red, Real green, Real blue, Real alpha);
+        void setDiffuse( Real red, Real green, Real blue, Real alpha );
 
         /** Sets the diffuse colour reflectance properties of every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setDiffuse
         */
-        void setDiffuse(const ColourValue& diffuse);
+        void setDiffuse( const ColourValue &diffuse );
 
         /** Sets the specular colour reflectance properties of every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setSpecular
         */
-        void setSpecular(Real red, Real green, Real blue, Real alpha);
+        void setSpecular( Real red, Real green, Real blue, Real alpha );
 
         /** Sets the specular colour reflectance properties of every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setSpecular
         */
-        void setSpecular(const ColourValue& specular);
+        void setSpecular( const ColourValue &specular );
 
         /** Sets the shininess properties of every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setShininess
         */
-        void setShininess(Real val);
+        void setShininess( Real val );
 
         /** Sets the amount of self-illumination of every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setSelfIllumination
         */
-        void setSelfIllumination(Real red, Real green, Real blue);
+        void setSelfIllumination( Real red, Real green, Real blue );
 
         /** Sets the amount of self-illumination of every Pass in every Technique.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setSelfIllumination
         */
-        void setSelfIllumination(const ColourValue& selfIllum);
+        void setSelfIllumination( const ColourValue &selfIllum );
 
         /** Sets the type of light shading required
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setShadingMode
@@ -329,23 +335,21 @@ namespace Ogre {
 
         /** Sets the fogging mode applied to each pass.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setFog
         */
-        void setFog(
-            bool overrideScene,
-            FogMode mode = FOG_NONE,
-            const ColourValue& colour = ColourValue::White,
-            Real expDensity = 0.001, Real linearStart = 0.0, Real linearEnd = 1.0 );
+        void setFog( bool overrideScene, FogMode mode = FOG_NONE,
+                     const ColourValue &colour = ColourValue::White, Real expDensity = Real( 0.001 ),
+                     Real linearStart = 0.0, Real linearEnd = 1.0 );
 
         /** Set samplerblock for every texture unit in every Pass
         @note
             This property actually exists on the TextureUnitState class
-            For simplicity, this method allows you to set these properties for 
-            every current TeextureUnitState, If you need more precision, retrieve the  
+            For simplicity, this method allows you to set these properties for
+            every current TeextureUnitState, If you need more precision, retrieve the
             Pass and TextureUnitState instances and set the property there.
         @see TextureUnitState::setSamplerblock
         */
@@ -363,8 +367,8 @@ namespace Ogre {
 
         /** Sets the blendblock every pass has with the existing contents of the scene.
         @note
-            This property actually exists on the Pass class. For simplicity, this method allows 
-            you to set these properties for every current Pass within this Technique. If 
+            This property actually exists on the Pass class. For simplicity, this method allows
+            you to set these properties for every current Pass within this Technique. If
             you need more precision, retrieve the Pass instance and set the
             property there.
         @see Pass::setBlendblock
@@ -375,31 +379,31 @@ namespace Ogre {
         @remarks
             As noted previously, as well as providing fallback support for various
             graphics cards, multiple Technique objects can also be used to implement
-            material LOD, where the detail of the material diminishes with distance to 
+            material LOD, where the detail of the material diminishes with distance to
             save rendering power.
         @par
             By default, all Techniques have a LOD index of 0, which means they are the highest
-            level of detail. Increasing LOD indexes are lower levels of detail. You can 
-            assign more than one Technique to the same LOD index, meaning that the best 
-            Technique that is supported at that LOD index is used. 
+            level of detail. Increasing LOD indexes are lower levels of detail. You can
+            assign more than one Technique to the same LOD index, meaning that the best
+            Technique that is supported at that LOD index is used.
         @par
             You should not leave gaps in the LOD sequence; Ogre will allow you to do this
-            and will continue to function as if the LODs were sequential, but it will 
+            and will continue to function as if the LODs were sequential, but it will
             confuse matters.
         */
-        void setLodIndex(unsigned short index);
+        void setLodIndex( unsigned short index );
         /** Gets the level-of-detail index assigned to this Technique. */
-        unsigned short getLodIndex(void) const { return mLodIndex; }
+        unsigned short getLodIndex() const { return mLodIndex; }
 
-        /** Set the 'scheme name' for this technique. 
+        /** Set the 'scheme name' for this technique.
         @remarks
             Material schemes are used to control top-level switching from one
-            set of techniques to another. For example, you might use this to 
+            set of techniques to another. For example, you might use this to
             define 'high', 'medium' and 'low' complexity levels on materials
             to allow a user to pick a performance / quality ratio. Another
             possibility is that you have a fully HDR-enabled pipeline for top
-            machines, rendering all objects using unclamped shaders, and a 
-            simpler pipeline for others; this can be implemented using 
+            machines, rendering all objects using unclamped shaders, and a
+            simpler pipeline for others; this can be implemented using
             schemes.
         @par
             Every technique belongs to a scheme - if you don't specify one, the
@@ -408,32 +412,32 @@ namespace Ogre {
             two ways - either by calling Viewport::setMaterialScheme, or
             by manually calling MaterialManager::setActiveScheme.
         */
-        void setSchemeName(const String& schemeName);
+        void setSchemeName( const String &schemeName );
         /** Returns the scheme to which this technique is assigned.
             @see Technique::setSchemeName
         */
-        const String& getSchemeName(void) const;
-        
+        const String &getSchemeName() const;
+
         /// Internal method for getting the scheme index
-        unsigned short _getSchemeIndex(void) const;
-            
+        unsigned short _getSchemeIndex() const;
+
         /** Is depth writing going to occur on this technique? */
-        bool isDepthWriteEnabled(void) const;
+        bool isDepthWriteEnabled() const;
 
         /** Is depth checking going to occur on this technique? */
-        bool isDepthCheckEnabled(void) const;
+        bool isDepthCheckEnabled() const;
 
         /** Exists colour writing disabled pass on this technique? */
-        bool hasColourWriteDisabled(void) const;
+        bool hasColourWriteDisabled() const;
 
         /** Set the name of the technique.
         @remarks
-        The use of technique name is optional.  Its useful in material scripts where a material could inherit
-        from another material and only want to modify a particular technique.
+        The use of technique name is optional.  Its useful in material scripts where a material could
+        inherit from another material and only want to modify a particular technique.
         */
-        void setName(const String& name);
+        void setName( const String &name );
         /// Gets the name of the technique
-        const String& getName(void) const { return mName; }
+        const String &getName() const { return mName; }
 
         /** Applies texture names to Texture Unit State with matching texture name aliases.
             All passes, and Texture Unit States within the technique are checked.
@@ -442,12 +446,13 @@ namespace Ogre {
         @param
             aliasList is a map container of texture alias, texture name pairs
         @param
-            apply set true to apply the texture aliases else just test to see if texture alias matches are found.
+            apply set true to apply the texture aliases else just test to see if texture alias matches
+        are found.
         @return
             True if matching texture aliases were found in the Technique.
         */
-        bool applyTextureAliases(const AliasTextureNamePairList& aliasList, const bool apply = true) const;
-
+        bool applyTextureAliases( const AliasTextureNamePairList &aliasList,
+                                  const bool                      apply = true ) const;
 
         /** Add a rule which manually influences the support for this technique based
             on a GPU vendor.
@@ -455,34 +460,34 @@ namespace Ogre {
             You can use this facility to manually control whether a technique is
             considered supported, based on a GPU vendor. You can add inclusive
             or exclusive rules, and you can add as many of each as you like. If
-            at least one inclusive rule is added, a technique is considered 
+            at least one inclusive rule is added, a technique is considered
             unsupported if it does not match any of those inclusive rules. If exclusive rules are
             added, the technique is considered unsupported if it matches any of
-            those inclusive rules. 
+            those inclusive rules.
         @note
             Any rule for the same vendor will be removed before adding this one.
         @param vendor The GPU vendor
         @param includeOrExclude Whether this is an inclusive or exclusive rule
         */
-        void addGPUVendorRule(GPUVendor vendor, IncludeOrExclude includeOrExclude);
+        void addGPUVendorRule( GPUVendor vendor, IncludeOrExclude includeOrExclude );
         /** Add a rule which manually influences the support for this technique based
             on a GPU vendor.
         @remarks
             You can use this facility to manually control whether a technique is
             considered supported, based on a GPU vendor. You can add inclusive
             or exclusive rules, and you can add as many of each as you like. If
-            at least one inclusive rule is added, a technique is considered 
+            at least one inclusive rule is added, a technique is considered
             unsupported if it does not match any of those inclusive rules. If exclusive rules are
             added, the technique is considered unsupported if it matches any of
-            those inclusive rules. 
+            those inclusive rules.
         @note
             Any rule for the same vendor will be removed before adding this one.
         */
-        void addGPUVendorRule(const GPUVendorRule& rule);
+        void addGPUVendorRule( const GPUVendorRule &rule );
         /** Removes a matching vendor rule.
         @see addGPUVendorRule
         */
-        void removeGPUVendorRule(GPUVendor vendor);
+        void                                           removeGPUVendorRule( GPUVendor vendor );
         typedef ConstVectorIterator<GPUVendorRuleList> GPUVendorRuleIterator;
         /// Get an iterator over the currently registered vendor rules.
         GPUVendorRuleIterator getGPUVendorRuleIterator() const;
@@ -493,7 +498,7 @@ namespace Ogre {
             You can use this facility to manually control whether a technique is
             considered supported, based on a GPU device name pattern. You can add inclusive
             or exclusive rules, and you can add as many of each as you like. If
-            at least one inclusive rule is added, a technique is considered 
+            at least one inclusive rule is added, a technique is considered
             unsupported if it does not match any of those inclusive rules. If exclusive rules are
             added, the technique is considered unsupported if it matches any of
             those inclusive rules. The pattern you supply can include wildcard
@@ -504,14 +509,15 @@ namespace Ogre {
         @param includeOrExclude Whether this is an inclusive or exclusive rule
         @param caseSensitive Whether the match is case sensitive or not
         */
-        void addGPUDeviceNameRule(const String& devicePattern, IncludeOrExclude includeOrExclude, bool caseSensitive = false);
+        void addGPUDeviceNameRule( const String &devicePattern, IncludeOrExclude includeOrExclude,
+                                   bool caseSensitive = false );
         /** Add a rule which manually influences the support for this technique based
             on a pattern that matches a GPU device name (e.g. '*8800*').
         @remarks
             You can use this facility to manually control whether a technique is
             considered supported, based on a GPU device name pattern. You can add inclusive
             or exclusive rules, and you can add as many of each as you like. If
-            at least one inclusive rule is added, a technique is considered 
+            at least one inclusive rule is added, a technique is considered
             unsupported if it does not match any of those inclusive rules. If exclusive rules are
             added, the technique is considered unsupported if it matches any of
             those inclusive rules. The pattern you supply can include wildcard
@@ -519,11 +525,11 @@ namespace Ogre {
         @note
             Any rule for the same device pattern will be removed before adding this one.
         */
-        void addGPUDeviceNameRule(const GPUDeviceNameRule& rule);
+        void addGPUDeviceNameRule( const GPUDeviceNameRule &rule );
         /** Removes a matching device name rule.
         @see addGPUDeviceNameRule
         */
-        void removeGPUDeviceNameRule(const String& devicePattern);
+        void removeGPUDeviceNameRule( const String &devicePattern );
         typedef ConstVectorIterator<GPUDeviceNameRuleList> GPUDeviceNameRuleIterator;
         /// Get an iterator over the currently registered device name rules.
         GPUDeviceNameRuleIterator getGPUDeviceNameRuleIterator() const;
@@ -532,18 +538,17 @@ namespace Ogre {
         You can use it to associate one or more custom objects with this class instance.
         @see UserObjectBindings::setUserAny.
         */
-        UserObjectBindings& getUserObjectBindings() { return mUserObjectBindings; }
+        UserObjectBindings &getUserObjectBindings() { return mUserObjectBindings; }
 
         /** Return an instance of user objects binding associated with this class.
         You can use it to associate one or more custom objects with this class instance.
-        @see UserObjectBindings::setUserAny.        
+        @see UserObjectBindings::setUserAny.
         */
-        const UserObjectBindings& getUserObjectBindings() const { return mUserObjectBindings; }
-
+        const UserObjectBindings &getUserObjectBindings() const { return mUserObjectBindings; }
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 #endif

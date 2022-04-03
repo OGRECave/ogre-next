@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,16 +28,16 @@ THE SOFTWARE.
 
 // Emulate _findfirst, _findnext on non-Windows platforms
 #include "OgreSearchOps.h"
-#include <stdio.h>
 #include <dirent.h>
 #include <fnmatch.h>
-#include <sys/stat.h>
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
 
 /* Win32 directory operations emulation */
 #if OGRE_PLATFORM != OGRE_PLATFORM_WIN32 && OGRE_PLATFORM != OGRE_PLATFORM_WINRT
-    
+
 struct _find_search_t
 {
     char *pattern;
@@ -46,79 +46,79 @@ struct _find_search_t
     int dirlen;
     DIR *dirfd;
 };
-        
-intptr_t _findfirst(const char *pattern, struct _finddata_t *data)
+
+intptr_t _findfirst( const char *pattern, struct _finddata_t *data )
 {
     _find_search_t *fs = new _find_search_t;
     fs->curfn = NULL;
     fs->pattern = NULL;
 
     // Separate the mask from directory name
-    const char *mask = strrchr (pattern, '/');
-    if (mask)
+    const char *mask = strrchr( pattern, '/' );
+    if( mask )
     {
-        fs->dirlen = static_cast<int>(mask - pattern);
+        fs->dirlen = static_cast<int>( mask - pattern );
         mask++;
-        fs->directory = (char *)malloc (fs->dirlen + 1);
-        memcpy (fs->directory, pattern, fs->dirlen);
-        fs->directory [fs->dirlen] = 0;
+        fs->directory = (char *)malloc( static_cast<size_t>( fs->dirlen ) + 1u );
+        memcpy( fs->directory, pattern, static_cast<size_t>( fs->dirlen ) );
+        fs->directory[fs->dirlen] = 0;
     }
     else
     {
         mask = pattern;
-        fs->directory = strdup (".");
+        fs->directory = strdup( "." );
         fs->dirlen = 1;
     }
 
-    fs->dirfd = opendir (fs->directory);
-    if (!fs->dirfd)
+    fs->dirfd = opendir( fs->directory );
+    if( !fs->dirfd )
     {
-        _findclose ((intptr_t)fs);
+        _findclose( (intptr_t)fs );
         return -1;
     }
 
     /* Hack for "*.*" -> "*' from DOS/Windows */
-    if (strcmp (mask, "*.*") == 0)
+    if( strcmp( mask, "*.*" ) == 0 )
         mask += 2;
-    fs->pattern = strdup (mask);
+    fs->pattern = strdup( mask );
 
     /* Get the first entry */
-    if (_findnext ((intptr_t)fs, data) < 0)
+    if( _findnext( (intptr_t)fs, data ) < 0 )
     {
-        _findclose ((intptr_t)fs);
+        _findclose( (intptr_t)fs );
         return -1;
     }
 
     return (intptr_t)fs;
 }
 
-int _findnext(intptr_t id, struct _finddata_t *data)
+int _findnext( intptr_t id, struct _finddata_t *data )
 {
-    _find_search_t *fs = reinterpret_cast<_find_search_t *>(id);
+    _find_search_t *fs = reinterpret_cast<_find_search_t *>( id );
 
     /* Loop until we run out of entries or find the next one */
     dirent *entry;
-    for (;;)
+    for( ;; )
     {
-        if (!(entry = readdir (fs->dirfd)))
+        if( !( entry = readdir( fs->dirfd ) ) )
             return -1;
 
         /* See if the filename matches our pattern */
-        if (fnmatch (fs->pattern, entry->d_name, 0) == 0)
+        if( fnmatch( fs->pattern, entry->d_name, 0 ) == 0 )
             break;
     }
 
-    if (fs->curfn)
-        free (fs->curfn);
-    data->name = fs->curfn = strdup (entry->d_name);
+    if( fs->curfn )
+        free( fs->curfn );
+    data->name = fs->curfn = strdup( entry->d_name );
 
-    size_t namelen = strlen (entry->d_name);
-    char *xfn = new char [fs->dirlen + 1 + namelen + 1];
-    sprintf (xfn, "%s/%s", fs->directory, entry->d_name);
+    size_t namelen = strlen( entry->d_name );
+    char *xfn = new char[static_cast<size_t>( fs->dirlen ) + 1 + namelen + 1];
+    sprintf( xfn, "%s/%s", fs->directory, entry->d_name );
 
     /* stat the file to get if it's a subdir and to find its length */
     struct stat stat_buf;
-    if (stat (xfn, &stat_buf))
+    if( stat( xfn, &stat_buf ) )
     {
         // Hmm strange, imitate a zero-length file then
         data->attrib = _A_NORMAL;
@@ -126,7 +126,7 @@ int _findnext(intptr_t id, struct _finddata_t *data)
     }
     else
     {
-        if (S_ISDIR(stat_buf.st_mode))
+        if( S_ISDIR( stat_buf.st_mode ) )
             data->attrib = _A_SUBDIR;
         else
             /* Default type to a normal file */
@@ -135,25 +135,25 @@ int _findnext(intptr_t id, struct _finddata_t *data)
         data->size = (unsigned long)stat_buf.st_size;
     }
 
-    delete [] xfn;
+    delete[] xfn;
 
     /* Files starting with a dot are hidden files in Unix */
-    if (data->name [0] == '.')
+    if( data->name[0] == '.' )
         data->attrib |= _A_HIDDEN;
 
     return 0;
 }
 
-int _findclose(intptr_t id)
+int _findclose( intptr_t id )
 {
     int ret;
-    _find_search_t *fs = reinterpret_cast<_find_search_t *>(id);
-    
-    ret = fs->dirfd ? closedir (fs->dirfd) : 0;
-    free (fs->pattern);
-    free (fs->directory);
-    if (fs->curfn)
-        free (fs->curfn);
+    _find_search_t *fs = reinterpret_cast<_find_search_t *>( id );
+
+    ret = fs->dirfd ? closedir( fs->dirfd ) : 0;
+    free( fs->pattern );
+    free( fs->directory );
+    if( fs->curfn )
+        free( fs->curfn );
     delete fs;
 
     return ret;

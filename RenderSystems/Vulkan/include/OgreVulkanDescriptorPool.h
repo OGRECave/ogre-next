@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -43,7 +43,7 @@ namespace Ogre
         However it is not tied to a single VulkanRootLayout and
         may be shared by multiple VulkanRootLayouts
     */
-    class _OgreVulkanExport VulkanDescriptorPool : public RenderSysAlloc
+    class _OgreVulkanExport VulkanDescriptorPool : public OgreAllocatedObj
     {
         struct Pool
         {
@@ -52,7 +52,7 @@ namespace Ogre
             size_t capacity;
 
             Pool( size_t _capacity );
-            bool isFull( void ) const { return size == capacity; }
+            bool isFull() const { return size == capacity; }
         };
 
         size_t mCurrentCapacity;
@@ -78,10 +78,10 @@ namespace Ogre
         VkDescriptorSet allocate( VulkanDevice *device, VkDescriptorSetLayout setLayout );
         void reset( VulkanDevice *device );
 
-        size_t getCurrentCapacity( void ) const { return mCurrentCapacity; }
+        size_t getCurrentCapacity() const { return mCurrentCapacity; }
 
-        void _advanceFrame( void );
-        bool isAvailableInCurrentFrame( void ) const;
+        void _advanceFrame();
+        bool isAvailableInCurrentFrame() const;
     };
 }  // namespace Ogre
 

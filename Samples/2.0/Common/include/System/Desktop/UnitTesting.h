@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -60,29 +60,29 @@ namespace Demo
     {
         struct KeyStroke
         {
-            int32_t keycode;    // SDL_Keycode
+            int32_t  keycode;   // SDL_Keycode
             uint16_t scancode;  // SDL_Scancode
-            bool bReleased;
+            bool     bReleased;
             KeyStroke();
         };
 
         struct FrameActivity
         {
-            uint32_t frameId;
-            Ogre::Vector3 cameraPos;
-            Ogre::Quaternion cameraRot;
+            uint32_t               frameId;
+            Ogre::Vector3          cameraPos;
+            Ogre::Quaternion       cameraRot;
             std::vector<KeyStroke> keyStrokes;
-            bool screenshotRenderWindow;
-            Ogre::StringVector targetsToScreenshot;
+            bool                   screenshotRenderWindow;
+            Ogre::StringVector     targetsToScreenshot;
             FrameActivity( uint32_t _frameId );
         };
 
     public:
         struct Params
         {
-            bool bRecord;
-            bool bCompressDuration;
-            bool bSkipDump;  // Useful for debugging a record showing something that is broken
+            bool        bRecord;
+            bool        bCompressDuration;
+            bool        bSkipDump;  // Useful for debugging a record showing something that is broken
             std::string recordPath;
             std::string outputPath;
             Params();
@@ -92,16 +92,16 @@ namespace Demo
         };
 
     protected:
-        double mFrametime;
-        uint32_t mFrameIdx;
-        uint32_t mNumFrames;
+        double            mFrametime;
+        uint32_t          mFrameIdx;
+        uint32_t          mNumFrames;
         KeyboardListener *mRealKeyboardListener;
-        MouseListener *mRealMouseListener;
+        MouseListener *   mRealMouseListener;
 
         std::vector<FrameActivity> mFrameActivity;
 
         Params mParams;
-        bool mBlockInputForwarding;
+        bool   mBlockInputForwarding;
 
         inline static void flushLwString( Ogre::LwString &jsonStr, std::string &outJson );
 
@@ -109,7 +109,7 @@ namespace Demo
                                   std::string &outJson );
         void saveToJsonStr( std::string &outJson );
 
-        static bool shouldRecordKey( const SDL_KeyboardEvent &arg );
+        static bool          shouldRecordKey( const SDL_KeyboardEvent &arg );
         static Ogre::Vector3 getCameraRecordPosition( Ogre::Camera *camera );
 
     public:
@@ -117,7 +117,7 @@ namespace Demo
 
         void parseCmdLine( int nargs, const char *const *argv );
 
-        const Params &getParams( void ) const { return mParams; }
+        const Params &getParams() const { return mParams; }
 
         void startRecording( Demo::GraphicsSystem *graphicsSystem );
         void notifyRecordingNewFrame( Demo::GraphicsSystem *graphicsSystem );
@@ -132,11 +132,11 @@ namespace Demo
         */
         void saveToJson( const char *fullpath, const bool bCompressDuration );
 
-        virtual void keyPressed( const SDL_KeyboardEvent &arg );
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
-        virtual void mouseMoved( const SDL_Event &arg );
-        virtual void mousePressed( const SDL_MouseButtonEvent &arg, Ogre::uint8 id );
-        virtual void mouseReleased( const SDL_MouseButtonEvent &arg, Ogre::uint8 id );
+        void keyPressed( const SDL_KeyboardEvent &arg ) override;
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
+        void mouseMoved( const SDL_Event &arg ) override;
+        void mousePressed( const SDL_MouseButtonEvent &arg, Ogre::uint8 id ) override;
+        void mouseReleased( const SDL_MouseButtonEvent &arg, Ogre::uint8 id ) override;
 
         /** Loads JSON from fullpath and plays it back, saving the results to outputFolder
             Return value is the return value for main()

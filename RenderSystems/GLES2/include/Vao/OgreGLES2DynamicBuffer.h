@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -78,7 +78,7 @@ namespace Ogre
                               BufferType persistentMethod );
         ~GLES2DynamicBuffer();
 
-        GLuint getVboName(void) const               { return mVboName; }
+        GLuint getVboName() const               { return mVboName; }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );

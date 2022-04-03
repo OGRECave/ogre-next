@@ -1,6 +1,6 @@
 /*
  -----------------------------------------------------------------------------
- This source file is part of OGRE
+ This source file is part of OGRE-Next
  (Object-oriented Graphics Rendering Engine)
  For the latest info, see http://www.ogre3d.org/
  
@@ -33,20 +33,20 @@ namespace Ogre
 {
     template<> GLSLESProgramPipelineManager* Singleton<GLSLESProgramPipelineManager>::msSingleton = 0;
     
-    GLSLESProgramPipelineManager* GLSLESProgramPipelineManager::getSingletonPtr(void)
+    GLSLESProgramPipelineManager* GLSLESProgramPipelineManager::getSingletonPtr()
     {
         return msSingleton;
     }
     
-    GLSLESProgramPipelineManager& GLSLESProgramPipelineManager::getSingleton(void)
+    GLSLESProgramPipelineManager& GLSLESProgramPipelineManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
 
-    GLSLESProgramPipelineManager::GLSLESProgramPipelineManager(void) :
+    GLSLESProgramPipelineManager::GLSLESProgramPipelineManager() :
         GLSLESProgramManagerCommon(), mActiveProgramPipeline(NULL) { }
 
-    GLSLESProgramPipelineManager::~GLSLESProgramPipelineManager(void)
+    GLSLESProgramPipelineManager::~GLSLESProgramPipelineManager()
     {
         // Iterate through map container and delete program pipelines.
         for (ProgramPipelineIterator currentProgram = mProgramPipelines.begin();
@@ -76,7 +76,7 @@ namespace Ogre
         }
     }
 
-    GLSLESProgramPipeline* GLSLESProgramPipelineManager::getActiveProgramPipeline(void)
+    GLSLESProgramPipeline* GLSLESProgramPipelineManager::getActiveProgramPipeline()
     {
         // If there is an active link program then return it.
         if (mActiveProgramPipeline)

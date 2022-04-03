@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -43,16 +43,16 @@ namespace Ogre
     /**
     @class LightProfiles
     */
-    class _OgreHlmsPbsExport LightProfiles : public UtilityAlloc
+    class _OgreHlmsPbsExport LightProfiles : public OgreAllocatedObj
     {
-        FastArray<IesLoader *> mIesData;
+        FastArray<IesLoader *>      mIesData;
         map<IdString, size_t>::type mIesNameMap;
-        TextureGpu *mLightProfilesTexture;
+        TextureGpu                 *mLightProfilesTexture;
 
-        HlmsPbs *mHlmsPbs;
+        HlmsPbs           *mHlmsPbs;
         TextureGpuManager *mTextureGpuManager;
 
-        void destroyTexture( void );
+        void destroyTexture();
 
     public:
         LightProfiles( HlmsPbs *hlmsPbs, TextureGpuManager *textureGpuManager );
@@ -73,7 +73,7 @@ namespace Ogre
 
             You can call LightProfiles::assignProfile before calling build
         */
-        void build( void );
+        void build();
 
         /** Assigns the given profile to the light.
             Use either:

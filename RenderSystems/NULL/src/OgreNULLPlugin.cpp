@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -27,27 +27,23 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 */
 
 #include "OgreNULLPlugin.h"
+
+#include "OgreAbiUtils.h"
 #include "OgreRoot.h"
 
 namespace Ogre
 {
     const String sPluginName = "NULL RenderSystem";
     //---------------------------------------------------------------------
-    NULLPlugin::NULLPlugin()
-        : mRenderSystem(0)
-    {
-    }
+    NULLPlugin::NULLPlugin() : mRenderSystem( 0 ) {}
     //---------------------------------------------------------------------
-    const String& NULLPlugin::getName() const
-    {
-        return sPluginName;
-    }
+    const String &NULLPlugin::getName() const { return sPluginName; }
     //---------------------------------------------------------------------
     void NULLPlugin::install()
     {
         mRenderSystem = OGRE_NEW NULLRenderSystem();
 
-        Root::getSingleton().addRenderSystem(mRenderSystem);
+        Root::getSingleton().addRenderSystem( mRenderSystem );
     }
     //---------------------------------------------------------------------
     void NULLPlugin::initialise()
@@ -65,4 +61,6 @@ namespace Ogre
         OGRE_DELETE mRenderSystem;
         mRenderSystem = 0;
     }
-}
+    //---------------------------------------------------------------------
+    void NULLPlugin::getAbiCookie( AbiCookie &outAbiCookie ) { outAbiCookie = generateAbiCookie(); }
+}  // namespace Ogre

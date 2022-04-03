@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,37 +29,43 @@ THE SOFTWARE.
 #define _OgreHlmsBufferManager_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreHlms.h"
+
 #include "OgreHeaderPrefix.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-#   if defined( OGRE_STATIC_LIB ) || defined( OGRE_PBS_STATIC_LIB ) || defined( OGRE_UNLIT_STATIC_LIB )
-#       define _OgreHlmsCommonExport
-#   else
-#       if defined( OgreHlmsPbs_EXPORTS ) || defined( OgreHlmsUnlit_EXPORTS )
-#           define _OgreHlmsCommonExport __declspec( dllexport )
-#       else
-#           if defined( __MINGW32__ )
-#               define _OgreHlmsCommonExport
-#           else
-#               define _OgreHlmsCommonExport __declspec( dllimport )
-#           endif
-#       endif
-#   endif
-#elif defined ( OGRE_GCC_VISIBILITY )
-#   define _OgreHlmsCommonExport __attribute__ ((visibility("default")))
+#    if defined( OGRE_STATIC_LIB ) || defined( OGRE_PBS_STATIC_LIB ) || defined( OGRE_UNLIT_STATIC_LIB )
+#        define _OgreHlmsCommonExport
+#    else
+#        if defined( OgreHlmsPbs_EXPORTS ) || defined( OgreHlmsUnlit_EXPORTS )
+#            define _OgreHlmsCommonExport __declspec( dllexport )
+#        else
+#            if defined( __MINGW32__ )
+#                define _OgreHlmsCommonExport
+#            else
+#                define _OgreHlmsCommonExport __declspec( dllimport )
+#            endif
+#        endif
+#    endif
+#elif defined( OGRE_GCC_VISIBILITY )
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreHlmsCommonExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreHlmsCommonExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
-#   define _OgreHlmsCommonExport
+#    define _OgreHlmsCommonExport
 #endif
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     /** Managing constant and texture buffers for sending shader parameters
         is a very similar process to most Hlms implementations using them.
@@ -71,28 +77,28 @@ namespace Ogre
     class _OgreHlmsCommonExport HlmsBufferManager : public Hlms
     {
     protected:
-        typedef vector<ConstBufferPacked*>::type ConstBufferPackedVec;
-        typedef vector<ReadOnlyBufferPacked*>::type ReadOnlyBufferPackedVec;
+        typedef vector<ConstBufferPacked *>::type ConstBufferPackedVec;
+        typedef vector<ReadOnlyBufferPacked *>::type ReadOnlyBufferPackedVec;
 
-        VaoManager              *mVaoManager;
+        VaoManager *mVaoManager;
 
-        uint32                  mCurrentConstBuffer;    /// Resets every to zero every new frame.
-        uint32                  mCurrentTexBuffer;      /// Resets every to zero every new frame.
-        ConstBufferPackedVec    mConstBuffers;
+        uint32 mCurrentConstBuffer;  /// Resets every to zero every new frame.
+        uint32 mCurrentTexBuffer;    /// Resets every to zero every new frame.
+        ConstBufferPackedVec mConstBuffers;
         ReadOnlyBufferPackedVec mTexBuffers;
 
-        uint32  *mStartMappedConstBuffer;
-        uint32  *mCurrentMappedConstBuffer;
-        size_t  mCurrentConstBufferSize;
+        uint32 *mStartMappedConstBuffer;
+        uint32 *mCurrentMappedConstBuffer;
+        size_t mCurrentConstBufferSize;
 
         /// Holds ptr to the start of the mapped region
-        float   *mRealStartMappedTexBuffer;
+        float *mRealStartMappedTexBuffer;
         /// Holds ptr to the start of the **bound** region to the shader slot.
         /// It is always mStartMappedTexBuffer >= mRealStartMappedTexBuffer
-        float   *mStartMappedTexBuffer;
-        float   *mCurrentMappedTexBuffer;
+        float *mStartMappedTexBuffer;
+        float *mCurrentMappedTexBuffer;
         /// Bindable size left.
-        size_t  mCurrentTexBufferSize;
+        size_t mCurrentTexBufferSize;
 
         /** Holds the offset at which all tex. binds should start from.
             Resets every to zero every new buffer (@see unmapTexBuffer
@@ -107,12 +113,12 @@ namespace Ogre
                 * How much data we've written so far for the current texture buffer,
                   tracked via mTexLastOffset.
         */
-        size_t  mTexLastOffset;
+        size_t mTexLastOffset;
 
         /// Stores the offset to the last command buffer's binding command so we can
         /// write the amount of bytes that should be bound (which is only known after
         /// we've written them).
-        size_t  mLastTexBufferCmdOffset;
+        size_t mLastTexBufferCmdOffset;
 
         /// The tex. buffer's size. Try raising this number if your API traces/profilers
         /// show we're constantly binding new textures. Should only be relevant if you
@@ -124,10 +130,10 @@ namespace Ogre
         /// and get a new one. We will at least have to get a new one on every pass.
         /// This is affordable since common Const buffer limits are of 64kb.
         /// At the next frame we restart mCurrentConstBuffer to 0.
-        void unmapConstBuffer(void);
+        void unmapConstBuffer();
 
         /// Warning: Calling this function affects BOTH mCurrentConstBuffer and mCurrentTexBuffer
-        uint32* RESTRICT_ALIAS_RETURN mapNextConstBuffer( CommandBuffer *commandBuffer );
+        uint32 *RESTRICT_ALIAS_RETURN mapNextConstBuffer( CommandBuffer *commandBuffer );
 
         /// Texture buffers are treated differently than Const buffers. We first map it.
         /// Once we're done with it, we save our progress (in mTexLastOffset) and in the
@@ -144,7 +150,7 @@ namespace Ogre
         ///
         /// (*) D3D11.1 allows using MAP_NO_OVERWRITE for texture buffers.
         void unmapTexBuffer( CommandBuffer *commandBuffer );
-        float* RESTRICT_ALIAS_RETURN mapNextTexBuffer( CommandBuffer *commandBuffer,
+        float *RESTRICT_ALIAS_RETURN mapNextTexBuffer( CommandBuffer *commandBuffer,
                                                        size_t minimumSizeBytes );
 
         /** Rebinds the texture buffer. Finishes the last bind command to the tbuffer.
@@ -160,23 +166,22 @@ namespace Ogre
         void rebindTexBuffer( CommandBuffer *commandBuffer, bool resetOffset = false,
                               size_t minimumSizeBytes = 1 );
 
-        virtual void destroyAllBuffers(void);
+        virtual void destroyAllBuffers();
 
     public:
         HlmsBufferManager( HlmsTypes type, const String &typeName, Archive *dataFolder,
                            ArchiveVec *libraryFolders );
-        ~HlmsBufferManager();
+        ~HlmsBufferManager() override;
 
-        virtual void _changeRenderSystem( RenderSystem *newRs );
+        void _changeRenderSystem( RenderSystem *newRs ) override;
 
-        virtual HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode,
-                                           bool casterPass, bool dualParaboloid,
-                                           SceneManager *sceneManager );
+        HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode, bool casterPass,
+                                   bool dualParaboloid, SceneManager *sceneManager ) override;
 
-        virtual void preCommandBufferExecution( CommandBuffer *commandBuffer );
-        virtual void postCommandBufferExecution( CommandBuffer *commandBuffer );
+        void preCommandBufferExecution( CommandBuffer *commandBuffer ) override;
+        void postCommandBufferExecution( CommandBuffer *commandBuffer ) override;
 
-        virtual void frameEnded(void);
+        void frameEnded() override;
 
         /// Changes the default suggested size for the texture buffer.
         /// Actual size may be lower if the GPU can't honour the request.
@@ -186,7 +191,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

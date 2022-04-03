@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,8 +28,8 @@ THE SOFTWARE.
 #ifndef __ObjectMemoryManager_H__
 #define __ObjectMemoryManager_H__
 
-#include "Math/Array/OgreObjectData.h"
 #include "Math/Array/OgreArrayMemoryManager.h"
+#include "Math/Array/OgreObjectData.h"
 
 #include "Math/Array/OgreTransform.h"
 
@@ -39,11 +39,11 @@ namespace Ogre
     class NullEntity;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Memory
-    *  @{
-    */
+     *  @{
+     */
 
     /** Wrap-around class that contains multiple ArrayMemoryManager, one per render queue
     @remarks
@@ -53,26 +53,26 @@ namespace Ogre
         Note that some SceneManager implementations (i.e. Octree like) may want to have more
         than one ObjectMemoryManager, for example one per octant.
     */
-    class _OgreExport ObjectMemoryManager : ArrayMemoryManager::RebaseListener
+    class _OgreExport ObjectMemoryManager final : ArrayMemoryManager::RebaseListener
     {
         typedef vector<ObjectDataArrayMemoryManager>::type ArrayMemoryManagerVec;
         /// ArrayMemoryManagers grouped by hierarchy depth
-        ArrayMemoryManagerVec                   mMemoryManagers;
+        ArrayMemoryManagerVec mMemoryManagers;
 
         /// Tracks total number of objects in all render queues.
-        size_t                                  mTotalObjects;
+        size_t mTotalObjects;
 
         /// Dummy node where to point ObjectData::mParents[i] when they're unused slots.
-        SceneNode                               *mDummyNode;
-        Transform                               mDummyTransformPtrs;
-        NullEntity                              *mDummyObject;
+        SceneNode  *mDummyNode;
+        Transform   mDummyTransformPtrs;
+        NullEntity *mDummyObject;
 
         /** Memory managers can have a 'twin' (optional). A twin is used when there
             static and dynamic scene managers, thus caching their pointers here is
             very convenient.
         */
-        SceneMemoryMgrTypes                     mMemoryManagerType;
-        ObjectMemoryManager                     *mTwinMemoryManager;
+        SceneMemoryMgrTypes  mMemoryManagerType;
+        ObjectMemoryManager *mTwinMemoryManager;
 
         /** Makes mMemoryManagers big enough to be able to fulfill mMemoryManagers[newDepth]
         @param newDepth
@@ -88,8 +88,8 @@ namespace Ogre
         void _setTwin( SceneMemoryMgrTypes memoryManagerType, ObjectMemoryManager *twinMemoryManager );
 
         /// Note the return value can be null
-        ObjectMemoryManager* getTwin() const                        { return mTwinMemoryManager; }
-        SceneMemoryMgrTypes getMemoryManagerType() const            { return mMemoryManagerType; }
+        ObjectMemoryManager *getTwin() const { return mTwinMemoryManager; }
+        SceneMemoryMgrTypes  getMemoryManagerType() const { return mMemoryManagerType; }
 
         /** Requests memory for the given ObjectData, initializing values.
         @param outObjectData
@@ -133,10 +133,10 @@ namespace Ogre
                         ObjectMemoryManager *dstObjectMemoryManager );
 
         /// @copydoc ArrayMemoryManager::defragment
-        void defragment(void);
+        void defragment();
 
         /// @copydoc ArrayMemoryManager::shrinkToFit
-        void shrinkToFit(void);
+        void shrinkToFit();
 
         /** Retrieves the number of render queues that have been created.
         @remarks
@@ -145,7 +145,7 @@ namespace Ogre
         */
         size_t getNumRenderQueues() const;
 
-        size_t _getTotalRenderQueues() const                { return mMemoryManagers.size(); }
+        size_t _getTotalRenderQueues() const { return mMemoryManagers.size(); }
 
         /** Retrieves the sum of the number of objects in all render queues.
         @remarks
@@ -163,14 +163,14 @@ namespace Ogre
             4 until the 4th object is removed or a cleanup is performed; whereas
             getTotalNumObjects will return the actual number of objects.
         */
-        size_t getTotalNumObjects() const                   { return mTotalObjects; }
+        size_t getTotalNumObjects() const { return mTotalObjects; }
 
         /// This is the opposite of getTotalNumObjects. This function returns the sum
         /// of the return values of getFirstObjectData
         size_t calculateTotalNumObjectDataIncludingFragmentedSlots() const;
 
         /// Returns the pointer to the dummy node (useful when detaching)
-        SceneNode* _getDummyNode() const                    { return mDummyNode; }
+        SceneNode *_getDummyNode() const { return mDummyNode; }
 
         /** Retrieves a ObjectData pointing to the first MovableObject in the given render queue
         @param outObjectData
@@ -182,18 +182,17 @@ namespace Ogre
         */
         size_t getFirstObjectData( ObjectData &outObjectData, size_t renderQueue );
 
-        //Derived from ArrayMemoryManager::RebaseListener
-        virtual void buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,
-                                    ArrayMemoryManager::PtrdiffVec &outDiffsList );
-        virtual void applyRebase( uint16 level, const MemoryPoolVec &newBasePtrs,
-                                  const ArrayMemoryManager::PtrdiffVec &diffsList );
-        virtual void performCleanup( uint16 level, const MemoryPoolVec &basePtrs,
-                                     size_t const *elementsMemSizes,
-                                     size_t startInstance, size_t diffInstances );
+        // Derived from ArrayMemoryManager::RebaseListener
+        void buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,
+                            ArrayMemoryManager::PtrdiffVec &outDiffsList ) override;
+        void applyRebase( uint16 level, const MemoryPoolVec &newBasePtrs,
+                          const ArrayMemoryManager::PtrdiffVec &diffsList ) override;
+        void performCleanup( uint16 level, const MemoryPoolVec &basePtrs, size_t const *elementsMemSizes,
+                             size_t startInstance, size_t diffInstances ) override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

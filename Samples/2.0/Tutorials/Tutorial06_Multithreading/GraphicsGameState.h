@@ -13,17 +13,17 @@ namespace Demo
 
     class GraphicsGameState : public TutorialGameState
     {
-        bool        mEnableInterpolation;
+        bool mEnableInterpolation;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         GraphicsGameState( const Ogre::String &helpDescription );
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -60,7 +60,7 @@ namespace Ogre
         bool mIsTopLevel;
         bool mIsExternal;
 
-        void initConnection( void );
+        void initConnection();
 
         void createWindow( const String &windowName, uint32 width, uint32 height,
                            const NameValuePairList *miscParams );
@@ -71,27 +71,27 @@ namespace Ogre
 
     public:
         VulkanXcbWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        ~VulkanXcbWindow();
+        ~VulkanXcbWindow() override;
 
-        static const char *getRequiredExtensionName( void );
+        static const char *getRequiredExtensionName();
 
-        virtual void destroy( void );
-        virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *miscParams );
+        void destroy() override;
+        void _initialize( TextureGpuManager *textureGpuManager,
+                          const NameValuePairList *miscParams ) override;
 
-        virtual void reposition( int32 left, int32 top );
-        virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                              uint32 width, uint32 height, uint32 frequencyNumerator,
-                                              uint32 frequencyDenominator );
-        virtual void requestResolution( uint32 width, uint32 height );
-        virtual void windowMovedOrResized( void );
+        void reposition( int32 left, int32 top ) override;
+        void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                      uint32 width, uint32 height, uint32 frequencyNumerator,
+                                      uint32 frequencyDenominator ) override;
+        void requestResolution( uint32 width, uint32 height ) override;
+        void windowMovedOrResized() override;
 
-        virtual void _setVisible( bool visible );
-        virtual bool isVisible( void ) const;
-        virtual void setHidden( bool hidden );
-        virtual bool isHidden( void ) const;
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
 
 }  // namespace Ogre

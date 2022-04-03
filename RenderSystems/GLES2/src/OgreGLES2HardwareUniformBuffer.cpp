@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -130,7 +130,7 @@ namespace v1 {
         return retPtr;
     }
     
-    void GLES2HardwareUniformBuffer::unlockImpl(void)
+    void GLES2HardwareUniformBuffer::unlockImpl()
     {
         OGRE_CHECK_GL_ERROR(glBindBuffer(GL_UNIFORM_BUFFER, mBufferId));
         

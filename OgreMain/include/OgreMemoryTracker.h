@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -35,70 +35,22 @@ THE SOFTWARE.
 // This file must be included within another file which already has the prerequisites in it
 //#include "OgrePrerequisites.h"
 #ifndef OGRE_COMPILER
-#   pragma message "MemoryTracker included somewhere OgrePrerequisites.h wasn't!"
-#endif
-
-// If we're using the GCC 3.1 C++ Std lib
-#if OGRE_COMPILER == OGRE_COMPILER_GNUC && OGRE_COMP_VER >= 310 && !defined(STLPORT)
-// We need to define a hash function for void*
-// For gcc 4.3 see http://gcc.gnu.org/gcc-4.3/changes.html
-#   if __cplusplus >= 201103L
-#       include <unordered_map>
-#   elif OGRE_COMP_VER >= 430
-#       include <tr1/unordered_map>
-#   else
-#       include <ext/hash_map>
-namespace __gnu_cxx
-{
-    template <> struct hash< void* >
-    {
-        size_t operator()( void* const & ptr ) const
-        {
-            return (size_t)ptr;
-        }
-    };
-}
-
-#   endif
+#    pragma message "MemoryTracker included somewhere OgrePrerequisites.h wasn't!"
 #endif
 
 #if OGRE_MEMORY_TRACKER
+#    include <unordered_map>
 #    include "Threading/OgreThreadHeaders.h"
-
-#    if( OGRE_COMPILER == OGRE_COMPILER_GNUC ) && !defined( STLPORT )
-#        if __cplusplus >= 201103L
-#            include <unordered_map>
-#        elif OGRE_COMP_VER >= 430
-#            include <tr1/unordered_map>
-#        else
-#            include <ext/hash_map>
-#        endif
-#    elif( OGRE_COMPILER == OGRE_COMPILER_CLANG )
-#        if defined( _LIBCPP_VERSION ) || __cplusplus >= 201103L
-#            include <unordered_map>
-#        else
-#            include <tr1/unordered_map>
-#        endif
-#    elif !defined( STLPORT )
-#        if( OGRE_COMPILER == OGRE_COMPILER_MSVC ) && _MSC_FULL_VER >= 150030729  // VC++ 9.0 SP1+
-#            include <unordered_map>
-#        elif OGRE_THREAD_PROVIDER == 1
-#            include <boost/unordered_map.hpp>
-#        else
-#            error \
-                "Your compiler doesn't support unordered_map. Try to compile Ogre with Boost or STLPort."
-#        endif
-#    endif
 #endif
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Memory
-    *  @{
-    */
+     *  @{
+     */
 
 #if OGRE_MEMORY_TRACKER
 
@@ -110,77 +62,69 @@ namespace Ogre
     class _OgreExport MemoryTracker
     {
     protected:
-            OGRE_AUTO_MUTEX;
+        OGRE_AUTO_MUTEX;
 
         // Allocation record
         struct Alloc
         {
-            size_t bytes;
+            size_t       bytes;
             unsigned int pool;
-            std::string filename;
-            size_t line;
-            std::string function;
+            std::string  filename;
+            size_t       line;
+            std::string  function;
 
-            Alloc() :bytes(0), line(0) {}
-            Alloc(size_t sz, unsigned int p, const char* file, size_t ln, const char* func)
-                :bytes(sz), pool(p), line(ln)
+            Alloc() : bytes( 0 ), line( 0 ) {}
+            Alloc( size_t sz, unsigned int p, const char *file, size_t ln, const char *func ) :
+                bytes( sz ),
+                pool( p ),
+                line( ln )
             {
-                if (file)
+                if( file )
                     filename = file;
-                if (func)
+                if( func )
                     function = func;
             }
         };
 
         std::string mLeakFileName;
-        bool mDumpToStdOut;
-        // typedef std::unordered_map<void*, Alloc> AllocationMap;
-        typedef OGRE_HASH_NAMESPACE::OGRE_HASHMAP_NAME<void*, Alloc> AllocationMap;
+        bool        mDumpToStdOut;
+
+        typedef ::std::unordered_map<void *, Alloc> AllocationMap;
+
         AllocationMap mAllocations;
 
         size_t mTotalAllocations;
+
         typedef std::vector<size_t> AllocationsByPool;
+
         AllocationsByPool mAllocationsByPool;
-        bool mRecordEnable;
+        bool              mRecordEnable;
 
         void reportLeaks();
 
         // protected ctor
-        MemoryTracker()
-            : mLeakFileName("OgreLeaks.log"), mDumpToStdOut(true),
-            mTotalAllocations(0), mRecordEnable(true)
+        MemoryTracker() :
+            mLeakFileName( "OgreLeaks.log" ),
+            mDumpToStdOut( true ),
+            mTotalAllocations( 0 ),
+            mRecordEnable( true )
         {
         }
+
     public:
-
         /** Set the name of the report file that will be produced on exit. */
-        void setReportFileName(const std::string& name)
-        {
-            mLeakFileName = name;
-        }
+        void setReportFileName( const std::string &name ) { mLeakFileName = name; }
         /// Return the name of the file which will contain the report at exit
-        const std::string& getReportFileName() const
-        {
-            return mLeakFileName;
-        }
+        const std::string &getReportFileName() const { return mLeakFileName; }
         /// Sets whether the memory report should be sent to stdout
-        void setReportToStdOut(bool rep)
-        {
-            mDumpToStdOut = rep;
-        }
+        void setReportToStdOut( bool rep ) { mDumpToStdOut = rep; }
         /// Gets whether the memory report should be sent to stdout
-        bool getReportToStdOut() const
-        {
-            return mDumpToStdOut;
-        }
-
-        
+        bool getReportToStdOut() const { return mDumpToStdOut; }
 
         /// Get the total amount of memory allocated currently.
         size_t getTotalMemoryAllocated() const;
         /// Get the amount of memory allocated in a given pool
-        size_t getMemoryAllocatedForPool(unsigned int pool) const;
-
+        size_t getMemoryAllocatedForPool( unsigned int pool ) const;
 
         /** Record an allocation that has been made. Only to be called by
             the memory management subsystem.
@@ -191,22 +135,16 @@ namespace Ogre
             @param ln The line on which the allocation is being made
             @param func The function in which the allocation is being made
         */
-        void _recordAlloc(void* ptr, size_t sz, unsigned int pool = 0,
-                          const char* file = 0, size_t ln = 0, const char* func = 0);
+        void _recordAlloc( void *ptr, size_t sz, unsigned int pool = 0, const char *file = 0,
+                           size_t ln = 0, const char *func = 0 );
         /** Record the deallocation of memory. */
-        void _recordDealloc(void* ptr);
+        void _recordDealloc( void *ptr );
 
         /// Sets whether the record alloc/dealloc enabled.
-        void setRecordEnable(bool recordEnable)
-        {
-            mRecordEnable = recordEnable;
-        }
+        void setRecordEnable( bool recordEnable ) { mRecordEnable = recordEnable; }
 
         /// Gets whether the record alloc/dealloc enabled.
-        bool getRecordEnable() const
-        {
-            return mRecordEnable;
-        }
+        bool getRecordEnable() const { return mRecordEnable; }
 
         ~MemoryTracker()
         {
@@ -217,20 +155,15 @@ namespace Ogre
         }
 
         /// Static utility method to get the memory tracker instance
-        static MemoryTracker& get();
-
-
+        static MemoryTracker &get();
     };
-
-
 
 #endif
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-

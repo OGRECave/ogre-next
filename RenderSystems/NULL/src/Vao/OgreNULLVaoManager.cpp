@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,44 +27,42 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreNULLVaoManager.h"
-#include "Vao/OgreNULLStagingBuffer.h"
-#include "Vao/OgreNULLVertexArrayObject.h"
-#include "Vao/OgreNULLBufferInterface.h"
-#include "Vao/OgreNULLConstBufferPacked.h"
-#include "Vao/OgreNULLTexBufferPacked.h"
-#include "Vao/OgreNULLUavBufferPacked.h"
-#include "Vao/OgreNULLMultiSourceVertexBufferPool.h"
-#include "Vao/OgreNULLAsyncTicket.h"
-
-#include "Vao/OgreIndirectBufferPacked.h"
 
 #include "OgreRenderQueue.h"
-
-#include "OgreTimer.h"
 #include "OgreStringConverter.h"
+#include "OgreTimer.h"
+#include "Vao/OgreIndirectBufferPacked.h"
+#include "Vao/OgreNULLAsyncTicket.h"
+#include "Vao/OgreNULLBufferInterface.h"
+#include "Vao/OgreNULLConstBufferPacked.h"
+#include "Vao/OgreNULLStagingBuffer.h"
+#include "Vao/OgreNULLTexBufferPacked.h"
+#include "Vao/OgreNULLUavBufferPacked.h"
+#include "Vao/OgreNULLVertexArrayObject.h"
+#ifdef _OGRE_MULTISOURCE_VBO
+#    include "Vao/OgreNULLMultiSourceVertexBufferPool.h"
+#endif
 
 namespace Ogre
 {
-    NULLVaoManager::NULLVaoManager() :
-        mDrawId( 0 ),
-        VaoManager( 0 )
+    NULLVaoManager::NULLVaoManager() : VaoManager( 0 ), mDrawId( 0 )
     {
-        mConstBufferAlignment   = 256;
-        mTexBufferAlignment     = 256;
+        mConstBufferAlignment = 256;
+        mTexBufferAlignment = 256;
 
-        mConstBufferMaxSize = 64 * 1024;        //64kb
-        mTexBufferMaxSize   = 128 * 1024 * 1024;//128MB
+        mConstBufferMaxSize = 64 * 1024;        // 64kb
+        mTexBufferMaxSize = 128 * 1024 * 1024;  // 128MB
 
-        mSupportsPersistentMapping  = true;
-        mSupportsIndirectBuffers    = false;
+        mSupportsPersistentMapping = true;
+        mSupportsIndirectBuffers = false;
 
         mDynamicBufferMultiplier = 1;
 
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );
-        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( 4096 * sizeof(uint32),
-                                                                    MEMCATEGORY_GEOMETRY ) );
-        for( uint32 i=0; i<4096; ++i )
+        uint32 *drawIdPtr =
+            static_cast<uint32 *>( OGRE_MALLOC_SIMD( 4096 * sizeof( uint32 ), MEMCATEGORY_GEOMETRY ) );
+        for( uint32 i = 0; i < 4096; ++i )
             drawIdPtr[i] = i;
         mDrawId = createVertexBuffer( vertexElements, 4096, BT_IMMUTABLE, drawIdPtr, true );
     }
@@ -84,21 +82,18 @@ namespace Ogre
         outIncludesTextures = false;
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::cleanupEmptyPools(void)
-    {
-    }
+    void NULLVaoManager::cleanupEmptyPools() {}
     //-----------------------------------------------------------------------------------
-    VertexBufferPacked* NULLVaoManager::createVertexBufferImpl( size_t numElements,
-                                                                   uint32 bytesPerElement,
-                                                                   BufferType bufferType,
-                                                                   void *initialData, bool keepAsShadow,
-                                                                   const VertexElement2Vec &vElements )
+    VertexBufferPacked *NULLVaoManager::createVertexBufferImpl( size_t numElements,
+                                                                uint32 bytesPerElement,
+                                                                BufferType bufferType, void *initialData,
+                                                                bool keepAsShadow,
+                                                                const VertexElement2Vec &vElements )
     {
         NULLBufferInterface *bufferInterface = new NULLBufferInterface( 0 );
-        VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
-                                                        0, numElements, bytesPerElement, 0,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, vElements, 0, 0, 0 );
+        VertexBufferPacked *retVal =
+            OGRE_NEW VertexBufferPacked( 0, numElements, bytesPerElement, 0, bufferType, initialData,
+                                         keepAsShadow, this, bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -106,30 +101,26 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer )
-    {
-    }
+    void NULLVaoManager::destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) {}
     //-----------------------------------------------------------------------------------
-    MultiSourceVertexBufferPool* NULLVaoManager::createMultiSourceVertexBufferPoolImpl(
-                                                const VertexElement2VecVec &vertexElementsBySource,
-                                                size_t maxNumVertices, size_t totalBytesPerVertex,
-                                                BufferType bufferType )
+#ifdef _OGRE_MULTISOURCE_VBO
+    MultiSourceVertexBufferPool *NULLVaoManager::createMultiSourceVertexBufferPoolImpl(
+        const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
+        size_t totalBytesPerVertex, BufferType bufferType )
     {
-        return OGRE_NEW NULLMultiSourceVertexBufferPool( 0, vertexElementsBySource,
-                                                            maxNumVertices, bufferType,
-                                                            0, this );
+        return OGRE_NEW NULLMultiSourceVertexBufferPool( 0, vertexElementsBySource, maxNumVertices,
+                                                         bufferType, 0, this );
     }
+#endif
     //-----------------------------------------------------------------------------------
-    IndexBufferPacked* NULLVaoManager::createIndexBufferImpl( size_t numElements,
-                                                                 uint32 bytesPerElement,
-                                                                 BufferType bufferType,
-                                                                 void *initialData, bool keepAsShadow )
+    IndexBufferPacked *NULLVaoManager::createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                              BufferType bufferType, void *initialData,
+                                                              bool keepAsShadow )
     {
         NULLBufferInterface *bufferInterface = new NULLBufferInterface( 0 );
-        IndexBufferPacked *retVal = OGRE_NEW IndexBufferPacked(
-                                                        0, numElements, bytesPerElement, 0,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface );
+        IndexBufferPacked *retVal =
+            OGRE_NEW IndexBufferPacked( 0, numElements, bytesPerElement, 0, bufferType, initialData,
+                                        keepAsShadow, this, bufferInterface );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -137,12 +128,10 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::destroyIndexBufferImpl( IndexBufferPacked *indexBuffer )
-    {
-    }
+    void NULLVaoManager::destroyIndexBufferImpl( IndexBufferPacked *indexBuffer ) {}
     //-----------------------------------------------------------------------------------
-    ConstBufferPacked* NULLVaoManager::createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
-                                                                 void *initialData, bool keepAsShadow )
+    ConstBufferPacked *NULLVaoManager::createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
+                                                              void *initialData, bool keepAsShadow )
     {
         uint32 alignment = mConstBufferAlignment;
 
@@ -150,18 +139,17 @@ namespace Ogre
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
-            //For dynamic buffers, the size will be 3x times larger
+            // For dynamic buffers, the size will be 3x times larger
             //(depending on mDynamicBufferMultiplier); we need the
-            //offset after each map to be aligned; and for that, we
-            //sizeBytes to be multiple of alignment.
-            sizeBytes = ( (sizeBytes + alignment - 1) / alignment ) * alignment;
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
+            sizeBytes = ( ( sizeBytes + alignment - 1 ) / alignment ) * alignment;
         }
 
         NULLBufferInterface *bufferInterface = new NULLBufferInterface( 0 );
-        ConstBufferPacked *retVal = OGRE_NEW NULLConstBufferPacked(
-                                                        0, sizeBytes, 1, 0,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, bindableSize );
+        ConstBufferPacked *retVal =
+            OGRE_NEW NULLConstBufferPacked( 0, sizeBytes, 1, 0, bufferType, initialData, keepAsShadow,
+                                            this, bufferInterface, bindableSize );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, sizeBytes );
@@ -169,9 +157,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::destroyConstBufferImpl( ConstBufferPacked *constBuffer )
-    {
-    }
+    void NULLVaoManager::destroyConstBufferImpl( ConstBufferPacked *constBuffer ) {}
     //-----------------------------------------------------------------------------------
     TexBufferPacked *NULLVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                                           BufferType bufferType, void *initialData,
@@ -179,22 +165,21 @@ namespace Ogre
     {
         uint32 alignment = mTexBufferAlignment;
 
-        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        // VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
-            //For dynamic buffers, the size will be 3x times larger
+            // For dynamic buffers, the size will be 3x times larger
             //(depending on mDynamicBufferMultiplier); we need the
-            //offset after each map to be aligned; and for that, we
-            //sizeBytes to be multiple of alignment.
-            sizeBytes = ( (sizeBytes + alignment - 1) / alignment ) * alignment;
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
+            sizeBytes = ( ( sizeBytes + alignment - 1 ) / alignment ) * alignment;
         }
 
         NULLBufferInterface *bufferInterface = new NULLBufferInterface( 0 );
-        TexBufferPacked *retVal = OGRE_NEW NULLTexBufferPacked(
-                                                        0, sizeBytes, 1, 0,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, pixelFormat );
+        TexBufferPacked *retVal =
+            OGRE_NEW NULLTexBufferPacked( 0, sizeBytes, 1, 0, bufferType, initialData, keepAsShadow,
+                                          this, bufferInterface, pixelFormat );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, sizeBytes );
@@ -202,9 +187,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::destroyTexBufferImpl( TexBufferPacked *texBuffer )
-    {
-    }
+    void NULLVaoManager::destroyTexBufferImpl( TexBufferPacked *texBuffer ) {}
     //-----------------------------------------------------------------------------------
     ReadOnlyBufferPacked *NULLVaoManager::createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
                                                                     size_t sizeBytes,
@@ -214,7 +197,7 @@ namespace Ogre
     {
         uint32 alignment = mTexBufferAlignment;
 
-        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        // VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
@@ -238,15 +221,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void NULLVaoManager::destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) {}
     //-----------------------------------------------------------------------------------
-    UavBufferPacked* NULLVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                          uint32 bindFlags,
-                                                          void *initialData, bool keepAsShadow )
+    UavBufferPacked *NULLVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                          uint32 bindFlags, void *initialData,
+                                                          bool keepAsShadow )
     {
         NULLBufferInterface *bufferInterface = new NULLBufferInterface( 0 );
-        UavBufferPacked *retVal = OGRE_NEW NULLUavBufferPacked(
-                                                        0, numElements, bytesPerElement,
-                                                        bindFlags, initialData, keepAsShadow,
-                                                        this, bufferInterface );
+        UavBufferPacked *retVal =
+            OGRE_NEW NULLUavBufferPacked( 0, numElements, bytesPerElement, bindFlags, initialData,
+                                          keepAsShadow, this, bufferInterface );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -254,25 +236,23 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::destroyUavBufferImpl( UavBufferPacked *uavBuffer )
-    {
-    }
+    void NULLVaoManager::destroyUavBufferImpl( UavBufferPacked *uavBuffer ) {}
     //-----------------------------------------------------------------------------------
-    IndirectBufferPacked* NULLVaoManager::createIndirectBufferImpl( size_t sizeBytes,
-                                                                       BufferType bufferType,
-                                                                       void *initialData,
-                                                                       bool keepAsShadow )
+    IndirectBufferPacked *NULLVaoManager::createIndirectBufferImpl( size_t sizeBytes,
+                                                                    BufferType bufferType,
+                                                                    void *initialData,
+                                                                    bool keepAsShadow )
     {
         const size_t alignment = 4;
-        size_t bufferOffset = 0;
+        // size_t bufferOffset = 0;
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
-            //For dynamic buffers, the size will be 3x times larger
+            // For dynamic buffers, the size will be 3x times larger
             //(depending on mDynamicBufferMultiplier); we need the
-            //offset after each map to be aligned; and for that, we
-            //sizeBytes to be multiple of alignment.
-            sizeBytes = ( (sizeBytes + alignment - 1) / alignment ) * alignment;
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
+            sizeBytes = ( ( sizeBytes + alignment - 1 ) / alignment ) * alignment;
         }
 
         NULLBufferInterface *bufferInterface = 0;
@@ -282,9 +262,7 @@ namespace Ogre
         }
 
         IndirectBufferPacked *retVal = OGRE_NEW IndirectBufferPacked(
-                                                        0, sizeBytes, 1, 0,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface );
+            0, sizeBytes, 1, 0, bufferType, initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
         {
@@ -308,63 +286,59 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VertexArrayObject* NULLVaoManager::createVertexArrayObjectImpl(
-                                                            const VertexBufferPackedVec &vertexBuffers,
-                                                            IndexBufferPacked *indexBuffer,
-                                                            OperationType opType )
+    VertexArrayObject *NULLVaoManager::createVertexArrayObjectImpl(
+        const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
+        OperationType opType )
     {
-        size_t idx = mVertexArrayObjects.size();
+        uint32 idx = (uint32)mVertexArrayObjects.size();
 
-        const int bitsOpType = 3;
-        const int bitsVaoGl  = 2;
+        const uint32 bitsOpType = 3;
+        const uint32 bitsVaoGl = 2;
         const uint32 maskOpType = OGRE_RQ_MAKE_MASK( bitsOpType );
-        const uint32 maskVaoGl  = OGRE_RQ_MAKE_MASK( bitsVaoGl );
-        const uint32 maskVao    = OGRE_RQ_MAKE_MASK( RqBits::MeshBits - bitsOpType - bitsVaoGl );
+        const uint32 maskVaoGl = OGRE_RQ_MAKE_MASK( bitsVaoGl );
+        const uint32 maskVao =
+            OGRE_RQ_MAKE_MASK( static_cast<uint32>( RqBits::MeshBits ) - bitsOpType - bitsVaoGl );
 
-        const uint32 shiftOpType    = RqBits::MeshBits - bitsOpType;
-        const uint32 shiftVaoGl     = shiftOpType - bitsVaoGl;
+        const uint32 shiftOpType = static_cast<uint32>( RqBits::MeshBits ) - bitsOpType;
+        const uint32 shiftVaoGl = shiftOpType - bitsVaoGl;
 
-        uint32 renderQueueId =
-                ( (opType & maskOpType) << shiftOpType ) |
-                ( (idx & maskVaoGl) << shiftVaoGl ) |
-                (idx & maskVao);
+        uint32 renderQueueId = ( ( opType & maskOpType ) << shiftOpType ) |
+                               ( ( idx & maskVaoGl ) << shiftVaoGl ) | ( idx & maskVao );
 
-        NULLVertexArrayObject *retVal = OGRE_NEW NULLVertexArrayObject( idx,
-                                                                        renderQueueId,
-                                                                        vertexBuffers,
-                                                                        indexBuffer,
-                                                                        opType );
+        NULLVertexArrayObject *retVal =
+            OGRE_NEW NULLVertexArrayObject( idx, renderQueueId, vertexBuffers, indexBuffer, opType );
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
     void NULLVaoManager::destroyVertexArrayObjectImpl( VertexArrayObject *vao )
     {
-        NULLVertexArrayObject *glVao = static_cast<NULLVertexArrayObject*>( vao );
+        NULLVertexArrayObject *glVao = static_cast<NULLVertexArrayObject *>( vao );
         OGRE_DELETE glVao;
     }
     //-----------------------------------------------------------------------------------
-    StagingBuffer* NULLVaoManager::createStagingBuffer( size_t sizeBytes, bool forUpload )
+    StagingBuffer *NULLVaoManager::createStagingBuffer( size_t sizeBytes, bool forUpload )
     {
         sizeBytes = std::max<size_t>( sizeBytes, 4 * 1024 * 1024 );
         NULLStagingBuffer *stagingBuffer = OGRE_NEW NULLStagingBuffer( 0, sizeBytes, this, forUpload );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
-        if( mNextStagingBufferTimestampCheckpoint == (unsigned long)( ~0 ) )
-            mNextStagingBufferTimestampCheckpoint = mTimer->getMilliseconds() + mDefaultStagingBufferLifetime;
+        if( mNextStagingBufferTimestampCheckpoint == std::numeric_limits<uint64>::max() )
+            mNextStagingBufferTimestampCheckpoint =
+                mTimer->getMilliseconds() + mDefaultStagingBufferLifetime;
 
         return stagingBuffer;
     }
     //-----------------------------------------------------------------------------------
     AsyncTicketPtr NULLVaoManager::createAsyncTicket( BufferPacked *creator,
-                                                         StagingBuffer *stagingBuffer,
-                                                         size_t elementStart, size_t elementCount )
+                                                      StagingBuffer *stagingBuffer, size_t elementStart,
+                                                      size_t elementCount )
     {
-        return AsyncTicketPtr( OGRE_NEW NULLAsyncTicket( creator, stagingBuffer,
-                                                            elementStart, elementCount ) );
+        return AsyncTicketPtr(
+            OGRE_NEW NULLAsyncTicket( creator, stagingBuffer, elementStart, elementCount ) );
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::_update(void)
+    void NULLVaoManager::_update()
     {
         VaoManager::_update();
 
@@ -372,33 +346,35 @@ namespace Ogre
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
         {
-            mNextStagingBufferTimestampCheckpoint = (unsigned long)(~0);
+            mNextStagingBufferTimestampCheckpoint = std::numeric_limits<uint64>::max();
 
-            for( size_t i=0; i<2; ++i )
+            for( size_t i = 0; i < 2; ++i )
             {
                 StagingBufferVec::iterator itor = mZeroRefStagingBuffers[i].begin();
-                StagingBufferVec::iterator end  = mZeroRefStagingBuffers[i].end();
+                StagingBufferVec::iterator end = mZeroRefStagingBuffers[i].end();
 
                 while( itor != end )
                 {
                     StagingBuffer *stagingBuffer = *itor;
 
                     mNextStagingBufferTimestampCheckpoint = std::min(
-                        mNextStagingBufferTimestampCheckpoint, 
+                        mNextStagingBufferTimestampCheckpoint,
                         stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getLifetimeThreshold() );
 
-                    /*if( stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getUnfencedTimeThreshold() < currentTimeMs )
+                    /*if( stagingBuffer->getLastUsedTimestamp() +
+                    stagingBuffer->getUnfencedTimeThreshold() < currentTimeMs )
                     {
                         static_cast<NULLStagingBuffer*>( stagingBuffer )->cleanUnfencedHazards();
                     }*/
 
-                    if( stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getLifetimeThreshold() < currentTimeMs )
+                    if( stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getLifetimeThreshold() <
+                        currentTimeMs )
                     {
-                        //Time to delete this buffer.
+                        // Time to delete this buffer.
                         delete *itor;
 
                         itor = efficientVectorRemove( mZeroRefStagingBuffers[i], itor );
-                        end  = mZeroRefStagingBuffers[i].end();
+                        end = mZeroRefStagingBuffers[i].end();
                     }
                     else
                     {
@@ -415,32 +391,23 @@ namespace Ogre
             destroyDelayedBuffers( mDynamicBufferCurrentFrame );
         }
 
-        mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
+        mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    uint8 NULLVaoManager::waitForTailFrameToFinish(void)
-    {
-        return mDynamicBufferCurrentFrame;
-    }
+    uint8 NULLVaoManager::waitForTailFrameToFinish() { return mDynamicBufferCurrentFrame; }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::waitForSpecificFrameToFinish( uint32 frameCount )
-    {
-    }
+    void NULLVaoManager::waitForSpecificFrameToFinish( uint32 frameCount ) {}
     //-----------------------------------------------------------------------------------
-    bool NULLVaoManager::isFrameFinished( uint32 frameCount )
-    {
-        return true;
-    }
+    bool NULLVaoManager::isFrameFinished( uint32 frameCount ) { return true; }
     //-----------------------------------------------------------------------------------
     NULLVaoManager::VboFlag NULLVaoManager::bufferTypeToVboFlag( BufferType bufferType )
     {
-        return static_cast<VboFlag>( std::max( 0, (bufferType - BT_DYNAMIC_DEFAULT) +
-                                                    CPU_ACCESSIBLE_DEFAULT ) );
+        return static_cast<VboFlag>(
+            std::max( 0, ( bufferType - BT_DYNAMIC_DEFAULT ) + CPU_ACCESSIBLE_DEFAULT ) );
     }
     //-----------------------------------------------------------------------------------
     void NULLVaoManager::switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
                                                  size_t newPoolIdx, BufferPacked *buffer )
     {
     }
-}
-
+}  // namespace Ogre

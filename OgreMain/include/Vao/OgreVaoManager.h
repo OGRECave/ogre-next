@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -31,18 +31,18 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "Vao/OgreVertexBufferPacked.h"
-#include "Vao/OgreIndexBufferPacked.h"
 #include "OgrePixelFormatGpu.h"
+#include "Vao/OgreIndexBufferPacked.h"
+#include "Vao/OgreVertexBufferPacked.h"
 
 #include "ogrestd/unordered_set.h"
 
 namespace Ogre
 {
-    typedef vector<StagingBuffer*>::type               StagingBufferVec;
-    typedef unordered_set<VertexArrayObject*>::type    VertexArrayObjectSet;
+    typedef vector<StagingBuffer *>::type            StagingBufferVec;
+    typedef unordered_set<VertexArrayObject *>::type VertexArrayObjectSet;
 
-    class _OgreExport VaoManager : public RenderSysAlloc
+    class _OgreExport VaoManager : public OgreAllocatedObj
     {
     protected:
         Timer *mTimer;
@@ -55,31 +55,36 @@ namespace Ogre
         StagingBufferVec mRefedStagingBuffers[2];
         StagingBufferVec mZeroRefStagingBuffers[2];
 
-        bool            mReadOnlyIsTexBuffer;
-        bool            mSupportsPersistentMapping;
-        bool            mSupportsIndirectBuffers;
-        bool            mSupportsBaseInstance;
-        uint8           mDynamicBufferMultiplier;
-        uint8           mDynamicBufferCurrentFrame;
-        uint64          mNextStagingBufferTimestampCheckpoint;
-        uint32          mFrameCount;
+        bool   mReadOnlyIsTexBuffer;
+        bool   mSupportsPersistentMapping;
+        bool   mSupportsIndirectBuffers;
+        bool   mSupportsBaseInstance;
+        uint8  mDynamicBufferMultiplier;
+        uint8  mDynamicBufferCurrentFrame;
+        uint64 mNextStagingBufferTimestampCheckpoint;
+        uint32 mFrameCount;
 
-        BufferPackedSet         mBuffers[NUM_BUFFER_PACKED_TYPES];
-        VertexArrayObjectSet    mVertexArrayObjects;
-        uint32                  mNumGeneratedVaos; /// Increases on every createVertexArrayObject call
+        BufferPackedSet      mBuffers[NUM_BUFFER_PACKED_TYPES];
+        VertexArrayObjectSet mVertexArrayObjects;
+        uint32               mNumGeneratedVaos;  /// Increases on every createVertexArrayObject call
 
         struct DelayedBuffer
         {
-            BufferPacked    *bufferPacked;
-            uint32          frame;
-            uint8           frameNumDynamic;
+            BufferPacked *bufferPacked;
+            uint32        frame;
+            uint8         frameNumDynamic;
 
             DelayedBuffer( BufferPacked *_bufferPacked, uint32 _frame, uint8 _frameNumDynamic ) :
-                bufferPacked( _bufferPacked ), frame( _frame ), frameNumDynamic( _frameNumDynamic ) {}
+                bufferPacked( _bufferPacked ),
+                frame( _frame ),
+                frameNumDynamic( _frameNumDynamic )
+            {
+            }
         };
 
         typedef vector<DelayedBuffer>::type DelayedBufferVec;
-        DelayedBufferVec    mDelayedDestroyBuffers;
+
+        DelayedBufferVec mDelayedDestroyBuffers;
 
         uint32 mConstBufferAlignment;
         uint32 mTexBufferAlignment;
@@ -89,56 +94,52 @@ namespace Ogre
         size_t mReadOnlyBufferMaxSize;
         size_t mUavBufferMaxSize;
 
-        virtual VertexBufferPacked* createVertexBufferImpl( size_t numElements,
-                                                            uint32 bytesPerElement,
-                                                            BufferType bufferType,
-                                                            void *initialData, bool keepAsShadow,
-                                                            const VertexElement2Vec &vertexElements )
-                                                            = 0;
+        virtual VertexBufferPacked *createVertexBufferImpl(
+            size_t numElements, uint32 bytesPerElement, BufferType bufferType, void *initialData,
+            bool keepAsShadow, const VertexElement2Vec &vertexElements ) = 0;
 
         virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) = 0;
 
-        virtual MultiSourceVertexBufferPool* createMultiSourceVertexBufferPoolImpl(
-                                                    const VertexElement2VecVec &vertexElementsBySource,
-                                                    size_t maxNumVertices, size_t totalBytesPerVertex,
-                                                    BufferType bufferType ) = 0;
+#ifdef _OGRE_MULTISOURCE_VBO
+        virtual MultiSourceVertexBufferPool *createMultiSourceVertexBufferPoolImpl(
+            const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
+            size_t totalBytesPerVertex, BufferType bufferType ) = 0;
+#endif
 
-        virtual IndexBufferPacked* createIndexBufferImpl( size_t numElements,
-                                                          uint32 bytesPerElement,
-                                                          BufferType bufferType,
-                                                          void *initialData, bool keepAsShadow ) = 0;
+        virtual IndexBufferPacked *createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                          BufferType bufferType, void *initialData,
+                                                          bool keepAsShadow ) = 0;
 
         virtual void destroyIndexBufferImpl( IndexBufferPacked *indexBuffer ) = 0;
 
-        virtual ConstBufferPacked* createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
+        virtual ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                           void *initialData, bool keepAsShadow ) = 0;
-        virtual void destroyConstBufferImpl( ConstBufferPacked *constBuffer ) = 0;
+        virtual void               destroyConstBufferImpl( ConstBufferPacked *constBuffer ) = 0;
 
-        virtual TexBufferPacked* createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                                      BufferType bufferType,
-                                                      void *initialData, bool keepAsShadow ) = 0;
-        virtual void destroyTexBufferImpl( TexBufferPacked *texBuffer ) = 0;
+        virtual TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                      BufferType bufferType, void *initialData,
+                                                      bool keepAsShadow ) = 0;
+        virtual void             destroyTexBufferImpl( TexBufferPacked *texBuffer ) = 0;
 
         virtual ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
                                                                 size_t sizeBytes, BufferType bufferType,
                                                                 void *initialData,
-                                                                bool keepAsShadow ) = 0;
-        virtual void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *texBuffer ) = 0;
+                                                                bool  keepAsShadow ) = 0;
+        virtual void                  destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *texBuffer ) = 0;
 
-        virtual UavBufferPacked* createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                      uint32 bindFlags,
-                                                      void *initialData, bool keepAsShadow ) = 0;
-        virtual void destroyUavBufferImpl( UavBufferPacked *uavBuffer ) = 0;
+        virtual UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                      uint32 bindFlags, void *initialData,
+                                                      bool keepAsShadow ) = 0;
+        virtual void             destroyUavBufferImpl( UavBufferPacked *uavBuffer ) = 0;
 
-        virtual IndirectBufferPacked* createIndirectBufferImpl( size_t sizeBytes,
-                                                                BufferType bufferType,
+        virtual IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                                 void *initialData,
-                                                                bool keepAsShadow ) = 0;
+                                                                bool  keepAsShadow ) = 0;
         virtual void destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) = 0;
 
-        virtual VertexArrayObject* createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
-                                                                IndexBufferPacked *indexBuffer,
-                                                                OperationType opType ) = 0;
+        virtual VertexArrayObject *createVertexArrayObjectImpl(
+            const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
+            OperationType opType ) = 0;
 
         virtual void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) = 0;
 
@@ -146,11 +147,11 @@ namespace Ogre
         /// those pointers, they will become dangling. Don't call this if you
         /// are unsure; unless you're shutting down. It gets called automatically
         /// on shutdown though.
-        void destroyAllVertexArrayObjects(void);
+        void destroyAllVertexArrayObjects();
 
         /// Just deletes the pointers, but may not destroy/free the API constructs.
         /// Utility helper for derived classes. Also clears the containers.
-        void deleteAllBuffers(void);
+        void deleteAllBuffers();
 
         /** Removes all the buffers whose destruction was delayed until now.
         @remarks
@@ -158,7 +159,7 @@ namespace Ogre
             Caller is responsible for hazard checking.
         */
         void destroyDelayedBuffers( uint8 fromDynamicFrame );
-        void _destroyAllDelayedBuffers(void);
+        void _destroyAllDelayedBuffers();
 
         inline void callDestroyBufferImpl( BufferPacked *bufferPacked );
 
@@ -270,7 +271,7 @@ namespace Ogre
                                      bool &outIncludesTextures ) const = 0;
 
         /// Frees GPU memory if there are empty, unused pools
-        virtual void cleanupEmptyPools(void) = 0;
+        virtual void cleanupEmptyPools() = 0;
 
         /// Returns the size of a single vertex buffer source with the given declaration, in bytes
         static uint32 calculateVertexSize( const VertexElement2Vec &vertexElements );
@@ -295,13 +296,15 @@ namespace Ogre
         @return
             The desired vertex buffer pointer
         */
-        VertexBufferPacked* createVertexBuffer( const VertexElement2Vec &vertexElements,
+        VertexBufferPacked *createVertexBuffer( const VertexElement2Vec &vertexElements,
                                                 size_t numVertices, BufferType bufferType,
                                                 void *initialData, bool keepAsShadow );
 
-        MultiSourceVertexBufferPool* createMultiSourceVertexBufferPool(
-                                const VertexElement2VecVec &vertexElementsBySource,
-                                size_t maxNumVertices, BufferType bufferType );
+#ifdef _OGRE_MULTISOURCE_VBO
+        MultiSourceVertexBufferPool *createMultiSourceVertexBufferPool(
+            const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
+            BufferType bufferType );
+#endif
 
         /** Destroys the given vertex buffer created with createVertexBuffer.
             NOTE: Vertex Buffers created by a MultiSourceVertexBufferPool
@@ -322,9 +325,9 @@ namespace Ogre
         @return
             The desired index buffer pointer
         */
-        IndexBufferPacked* createIndexBuffer( IndexBufferPacked::IndexType indexType,
-                                              size_t numIndices, BufferType bufferType,
-                                              void *initialData, bool keepAsShadow );
+        IndexBufferPacked *createIndexBuffer( IndexBufferPacked::IndexType indexType, size_t numIndices,
+                                              BufferType bufferType, void *initialData,
+                                              bool keepAsShadow );
 
         /** Destroys the given index buffer created with createIndexBuffer.
         @param indexBuffer
@@ -343,8 +346,8 @@ namespace Ogre
         @return
             The desired const buffer pointer
         */
-        ConstBufferPacked* createConstBuffer( size_t sizeBytes, BufferType bufferType,
-                                              void *initialData, bool keepAsShadow );
+        ConstBufferPacked *createConstBuffer( size_t sizeBytes, BufferType bufferType, void *initialData,
+                                              bool keepAsShadow );
 
         /** Destroys the given constant buffer created with createConstBuffer.
         @param constBuffer
@@ -364,9 +367,8 @@ namespace Ogre
         @return
             The desired texture buffer pointer
         */
-        TexBufferPacked* createTexBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                          BufferType bufferType,
-                                          void *initialData, bool keepAsShadow );
+        TexBufferPacked *createTexBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                          BufferType bufferType, void *initialData, bool keepAsShadow );
 
         /** Destroys the given texture buffer created with createTexBuffer.
         @param constBuffer
@@ -409,7 +411,7 @@ namespace Ogre
         @return
             The desired UAV buffer pointer
         */
-        UavBufferPacked* createUavBuffer( size_t numElements, uint32 bytesPerElement, uint32 bindFlags,
+        UavBufferPacked *createUavBuffer( size_t numElements, uint32 bytesPerElement, uint32 bindFlags,
                                           void *initialData, bool keepAsShadow );
 
         /** Destroys the given UAV buffer created with createUavBuffer.
@@ -422,7 +424,7 @@ namespace Ogre
         @remarks
             @See createVertexBuffer for the remaining parameters not documented here.
         */
-        IndirectBufferPacked* createIndirectBuffer( size_t sizeBytes, BufferType bufferType,
+        IndirectBufferPacked *createIndirectBuffer( size_t sizeBytes, BufferType bufferType,
                                                     void *initialData, bool keepAsShadow );
 
         /** Destroys the given indirect buffer created with createIndirectBuffer.
@@ -443,9 +445,9 @@ namespace Ogre
         @return
             VertexArrayObject that can be rendered.
         */
-        VertexArrayObject* createVertexArrayObject( const VertexBufferPackedVec &vertexBuffers,
-                                                    IndexBufferPacked *indexBuffer,
-                                                    OperationType opType );
+        VertexArrayObject *createVertexArrayObject( const VertexBufferPackedVec &vertexBuffers,
+                                                    IndexBufferPacked           *indexBuffer,
+                                                    OperationType                opType );
 
         /** Destroys the input pointer. After this call, it's no longer valid
         @remarks
@@ -462,7 +464,7 @@ namespace Ogre
             The returned buffer starts with a reference count of 1. You should decrease
             it when you're done using it.
         */
-        virtual StagingBuffer* createStagingBuffer( size_t sizeBytes, bool forUpload ) = 0;
+        virtual StagingBuffer *createStagingBuffer( size_t sizeBytes, bool forUpload ) = 0;
 
         /** Retrieves a staging buffer for use. We'll search for existing ones that can
             hold minSizeBytes. We first prioritize those that won't cause a stall at all.
@@ -483,24 +485,24 @@ namespace Ogre
         @return
             The staging buffer.
         */
-        StagingBuffer* getStagingBuffer( size_t minSizeBytes, bool forUpload );
+        StagingBuffer *getStagingBuffer( size_t minSizeBytes, bool forUpload );
 
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount ) = 0;
 
-        virtual void _beginFrame(void) {}
-        virtual void _update(void);
+        virtual void _beginFrame() {}
+        virtual void _update();
 
         void _notifyStagingBufferEnteredZeroRef( StagingBuffer *stagingBuffer );
         void _notifyStagingBufferLeftZeroRef( StagingBuffer *stagingBuffer );
 
-        uint32 getConstBufferAlignment(void) const      { return mConstBufferAlignment; }
-        uint32 getTexBufferAlignment(void) const        { return mTexBufferAlignment; }
-        uint32 getUavBufferAlignment(void) const        { return mUavBufferAlignment; }
-        size_t getConstBufferMaxSize(void) const        { return mConstBufferMaxSize; }
-        size_t getTexBufferMaxSize(void) const          { return mTexBufferMaxSize; }
-        size_t getReadOnlyBufferMaxSize(void) const     { return mReadOnlyBufferMaxSize; }
-        size_t getUavBufferMaxSize(void) const          { return mUavBufferMaxSize; }
+        uint32 getConstBufferAlignment() const { return mConstBufferAlignment; }
+        uint32 getTexBufferAlignment() const { return mTexBufferAlignment; }
+        uint32 getUavBufferAlignment() const { return mUavBufferAlignment; }
+        size_t getConstBufferMaxSize() const { return mConstBufferMaxSize; }
+        size_t getTexBufferMaxSize() const { return mTexBufferMaxSize; }
+        size_t getReadOnlyBufferMaxSize() const { return mReadOnlyBufferMaxSize; }
+        size_t getUavBufferMaxSize() const { return mUavBufferMaxSize; }
 
         /// When true, ReadOnlyBufferPacked behaves like TexBufferPacked, i.e. assigned
         /// to texture buffer slots.
@@ -509,17 +511,17 @@ namespace Ogre
         /// to UAV buffer slots.
         /// Except D3D11, which still uses texture buffer slots when false but chooses
         /// StructuredBuffer over Buffer
-        bool readOnlyIsTexBuffer(void) const			{ return mReadOnlyIsTexBuffer; }
-        bool supportsPersistentMapping(void) const      { return mSupportsPersistentMapping; }
+        bool readOnlyIsTexBuffer() const { return mReadOnlyIsTexBuffer; }
+        bool supportsPersistentMapping() const { return mSupportsPersistentMapping; }
 
         /// When false, IndirectBufferPacked will emulate the mapping behavior,
         /// and we need to use the emulated calls in RenderSystem.
-        bool supportsIndirectBuffers(void) const        { return mSupportsIndirectBuffers; }
-        bool supportsBaseInstance(void) const           { return mSupportsBaseInstance; }
+        bool supportsIndirectBuffers() const { return mSupportsIndirectBuffers; }
+        bool supportsBaseInstance() const { return mSupportsBaseInstance; }
 
-        Timer* getTimer(void)               { return mTimer; }
+        Timer *getTimer() { return mTimer; }
 
-        uint32 getFrameCount(void)          { return mFrameCount; }
+        uint32 getFrameCount() { return mFrameCount; }
 
         /** Sets the default time for staging buffers. Staging buffers are recycled/reused.
             When their reference count reaches 0, this VaoManager will begin to track how
@@ -568,18 +570,16 @@ namespace Ogre
         */
         void setDefaultStagingBufferlifetime( uint32 lifetime, uint32 unfencedTime );
 
-        uint32 getDefaultStagingBufferUnfencedTime(void) const
-                                            { return mDefaultStagingBufferUnfencedTime; }
-        uint32 getDefaultStagingBufferLifetime(void) const
-                                            { return mDefaultStagingBufferLifetime; }
+        uint32 getDefaultStagingBufferUnfencedTime() const { return mDefaultStagingBufferUnfencedTime; }
+        uint32 getDefaultStagingBufferLifetime() const { return mDefaultStagingBufferLifetime; }
 
-        uint8 _getDynamicBufferCurrentFrameNoWait(void) const   { return mDynamicBufferCurrentFrame; }
-        uint8 getDynamicBufferMultiplier(void) const            { return mDynamicBufferMultiplier; }
+        uint8 _getDynamicBufferCurrentFrameNoWait() const { return mDynamicBufferCurrentFrame; }
+        uint8 getDynamicBufferMultiplier() const { return mDynamicBufferMultiplier; }
 
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind
         /// is finished.
-        virtual uint8 waitForTailFrameToFinish(void) = 0;
+        virtual uint8 waitForTailFrameToFinish() = 0;
 
         /** Waits for a specific frame to be ready.
             Calling waitForSpecificFrameToFinish( mFrameCount - mDynamicBufferMultiplier )
@@ -596,6 +596,6 @@ namespace Ogre
         /// If this returns true, then waitForSpecificFrameToFinish is guaranteed to return immediately.
         virtual bool isFrameFinished( uint32 frameCount ) = 0;
     };
-}
+}  // namespace Ogre
 
 #endif

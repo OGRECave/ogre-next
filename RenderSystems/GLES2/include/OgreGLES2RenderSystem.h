@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -132,10 +132,10 @@ namespace Ogre {
             vector<GLuint>::type mRenderAttribsBound;
             vector<GLuint>::type mRenderInstanceAttribsBound;
 
-            GLint getCombinedMinMipFilter(void) const;
+            GLint getCombinedMinMipFilter() const;
 
             /// @copydoc RenderSystem::getPixelFormatToShaderType
-            virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
+            virtual const PixelFormatToShaderType* getPixelFormatToShaderType() const;
 
             unsigned char *mSwIndirectBufferPtr;
 
@@ -175,15 +175,15 @@ namespace Ogre {
             /** See
               RenderSystem
              */
-            const String& getName(void) const;
+            const String& getName() const;
             /** See
               RenderSystem
              */
-            const String& getFriendlyName(void) const;
+            const String& getFriendlyName() const;
             /** See
               RenderSystem
              */
-            ConfigOptionMap& getConfigOptions(void);
+            ConfigOptionMap& getConfigOptions();
             /** See
               RenderSystem
              */
@@ -191,7 +191,7 @@ namespace Ogre {
             /** See
               RenderSystem
              */
-            String validateConfigOptions(void);
+            String validateConfigOptions();
             /** See
               RenderSystem
              */
@@ -207,11 +207,11 @@ namespace Ogre {
             /** See
               RenderSystem
              */
-            void reinitialise(void); // Used if settings changed mid-rendering
+            void reinitialise(); // Used if settings changed mid-rendering
             /** See
               RenderSystem
              */
-            void shutdown(void);
+            void shutdown();
 
             /// @copydoc RenderSystem::_createRenderWindow
             RenderWindow* _createRenderWindow(const String &name, unsigned int width, unsigned int height, 
@@ -238,7 +238,7 @@ namespace Ogre {
             /** See
               RenderSystem
              */
-            VertexElementType getColourVertexElementType(void) const;
+            VertexElementType getColourVertexElementType() const;
 
             // -----------------------------
             // Low-level overridden members
@@ -305,7 +305,7 @@ namespace Ogre {
                                        ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
                                        size_t offset = 0, size_t sizeBytes = 0 );
 
-            virtual void clearUAVs(void);
+            virtual void clearUAVs();
  
             virtual void _bindTextureUavCS( uint32 slot, Texture *texture,
                                             ResourceAccess::ResourceAccess access,
@@ -338,11 +338,11 @@ namespace Ogre {
             /** See
              RenderSystem
              */
-            void _beginFrame(void);
+            void _beginFrame();
             /** See
              RenderSystem
              */
-            void _endFrame(void);
+            void _endFrame();
             /** See
              RenderSystem
              */
@@ -406,7 +406,7 @@ namespace Ogre {
             virtual void _renderEmulatedNoBaseInstance( const CbDrawCallIndexed *cmd );
             virtual void _renderEmulatedNoBaseInstance( const CbDrawCallStrip *cmd );
 
-            virtual void _startLegacyV1Rendering(void);
+            virtual void _startLegacyV1Rendering();
             virtual void _setRenderOperation( const v1::CbRenderOp *cmd );
             virtual void _render( const v1::CbDrawCallIndexed *cmd );
             virtual void _render( const v1::CbDrawCallStrip *cmd );
@@ -417,11 +417,11 @@ namespace Ogre {
                 const ColourValue& colour = ColourValue::Black,
                 Real depth = 1.0f, unsigned short stencil = 0);
             virtual void discardFrameBuffer( unsigned int buffers );
-            HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
-            Real getHorizontalTexelOffset(void) { return 0.0; }               // No offset in GL
-            Real getVerticalTexelOffset(void) { return 0.0; }                 // No offset in GL
-            Real getMinimumDepthInputValue(void) { return -1.0f; }            // Range [-1.0f, 1.0f]
-            Real getMaximumDepthInputValue(void) { return 1.0f; }             // Range [-1.0f, 1.0f]
+            HardwareOcclusionQuery* createHardwareOcclusionQuery();
+            Real getHorizontalTexelOffset() { return 0.0; }               // No offset in GL
+            Real getVerticalTexelOffset() { return 0.0; }                 // No offset in GL
+            Real getMinimumDepthInputValue() { return -1.0f; }            // Range [-1.0f, 1.0f]
+            Real getMaximumDepthInputValue() { return 1.0f; }             // Range [-1.0f, 1.0f]
             OGRE_MUTEX(mThreadInitMutex);
             void registerThread();
             void unregisterThread();
@@ -481,7 +481,7 @@ namespace Ogre {
             virtual void beginProfileEvent( const String &eventName );
             
             /// @copydoc RenderSystem::endProfileEvent
-            virtual void endProfileEvent( void );
+            virtual void endProfileEvent();
             
             /// @copydoc RenderSystem::markProfileEvent
             virtual void markProfileEvent( const String &eventName );
@@ -494,8 +494,8 @@ namespace Ogre {
             static GLES2ManagedResourceManager* mResourceManager;
 #endif
 
-            virtual void initGPUProfiling(void);
-            virtual void deinitGPUProfiling(void);
+            virtual void initGPUProfiling();
+            virtual void deinitGPUProfiling();
             virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
             virtual void endGPUSampleProfile( const String &name );
     };

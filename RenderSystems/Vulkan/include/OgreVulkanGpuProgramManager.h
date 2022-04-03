@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -44,7 +44,7 @@ namespace Ogre
 
     bool operator<( const VulkanSingleSetLayoutDesc &a, const VulkanSingleSetLayoutDesc &b );
 
-    class _OgreVulkanExport VulkanGpuProgramManager : public GpuProgramManager
+    class _OgreVulkanExport VulkanGpuProgramManager final : public GpuProgramManager
     {
     public:
         typedef GpuProgram *( *CreateGpuProgramCallback )( ResourceManager *creator, const String &name,
@@ -76,19 +76,20 @@ namespace Ogre
         /// @copydoc ResourceManager::createImpl
         Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
                               bool isManual, ManualResourceLoader *loader,
-                              const NameValuePairList *createParams );
+                              const NameValuePairList *createParams ) override;
         /// Specialised create method with specific parameters
         Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
                               bool isManual, ManualResourceLoader *loader, GpuProgramType gptype,
-                              const String &syntaxCode );
+                              const String &syntaxCode ) override;
 
     public:
         VulkanGpuProgramManager( VulkanDevice *device );
-        virtual ~VulkanGpuProgramManager();
+        ~VulkanGpuProgramManager() override;
+
         bool registerProgramFactory( const String &syntaxCode, CreateGpuProgramCallback createFn );
         bool unregisterProgramFactory( const String &syntaxCode );
 
-        VulkanDevice *getDevice( void ) const { return mDevice; }
+        VulkanDevice *getDevice() const { return mDevice; }
 
         VkDescriptorSetLayout getCachedSet( const VulkanSingleSetLayoutDesc &set );
 

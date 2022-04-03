@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -93,10 +93,9 @@ namespace Ogre
             delete *itor;
             efficientVectorRemove( mTexBufferViews, itor );
         }
-
     }
     //-----------------------------------------------------------------------------------
-    ReadOnlyBufferPacked *UavBufferPacked::getAsReadOnlyBufferView( void )
+    ReadOnlyBufferPacked *UavBufferPacked::getAsReadOnlyBufferView()
     {
         OGRE_ASSERT_LOW( mBindFlags & BB_FLAG_READONLY &&
                          "Buffer must've been created with BB_FLAG_READONLY" );
@@ -120,7 +119,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void UavBufferPacked::destroyReadOnlyBufferView( void )
+    void UavBufferPacked::destroyReadOnlyBufferView()
     {
         if( !mTexBufferViews.empty() &&
             mTexBufferViews.front()->getBufferPackedType() == BP_TYPE_READONLY )
@@ -133,7 +132,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void UavBufferPacked::destroyAllBufferViews( void )
+    void UavBufferPacked::destroyAllBufferViews()
     {
         vector<TexBufferPacked *>::type::const_iterator itor = mTexBufferViews.begin();
         vector<TexBufferPacked *>::type::const_iterator endt = mTexBufferViews.end();

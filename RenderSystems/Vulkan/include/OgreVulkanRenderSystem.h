@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -53,7 +53,7 @@ namespace Ogre
     /**
        Implementation of Vulkan as a rendering system.
     */
-    class _OgreVulkanExport VulkanRenderSystem : public RenderSystem
+    class _OgreVulkanExport VulkanRenderSystem final : public RenderSystem
     {
         bool mInitialized;
         v1::HardwareBufferManager *mHardwareBufferManager;
@@ -134,69 +134,74 @@ namespace Ogre
         PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
         VkDebugReportCallbackEXT mDebugReportCallback;
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        PFN_vkCmdBeginDebugUtilsLabelEXT CmdBeginDebugUtilsLabelEXT;
+        PFN_vkCmdEndDebugUtilsLabelEXT CmdEndDebugUtilsLabelEXT;
+#endif
+
         /// Declared here to avoid constant reallocations
         FastArray<VkImageMemoryBarrier> mImageBarriers;
 
-        void addInstanceDebugCallback( void );
+        void addInstanceDebugCallback();
 
         /// Creates a dummy VkRenderPass for use in PSO creation
         VkRenderPass getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount );
 
         void bindDescriptorSet() const;
 
-        void flushRootLayout( void );
-        void flushRootLayoutCS( void );
+        void flushRootLayout();
+        void flushRootLayoutCS();
 
     public:
         VulkanRenderSystem();
-        ~VulkanRenderSystem();
+        ~VulkanRenderSystem() override;
 
-        virtual void shutdown( void );
+        void shutdown() override;
 
-        virtual const String &getName( void ) const;
-        virtual const String &getFriendlyName( void ) const;
+        const String &getName() const override;
+        const String &getFriendlyName() const override;
         void refreshConfig();
         void initConfigOptions();
-        virtual ConfigOptionMap &getConfigOptions( void );
-        virtual void setConfigOption( const String &name, const String &value );
-        virtual const char *getPriorityConfigOption( size_t idx ) const;
-        virtual size_t getNumPriorityConfigOptions( void ) const;
+        ConfigOptionMap &getConfigOptions() override;
+        void setConfigOption( const String &name, const String &value ) override;
+        const char *getPriorityConfigOption( size_t idx ) const override;
+        size_t getNumPriorityConfigOptions() const override;
 
-        virtual HardwareOcclusionQuery *createHardwareOcclusionQuery( void );
+        HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
 
-        virtual String validateConfigOptions( void );
+        String validateConfigOptions() override;
 
-        virtual RenderSystemCapabilities *createRenderSystemCapabilities( void ) const;
+        RenderSystemCapabilities *createRenderSystemCapabilities() const override;
 
-        void resetAllBindings( void );
+        void resetAllBindings();
 
-        virtual void reinitialise( void );
+        void reinitialise() override;
 
-        void initializeVkInstance( void );
+        void initializeVkInstance();
 
-        VkInstance getVkInstance( void ) const { return mVkInstance; }
+        VkInstance getVkInstance() const { return mVkInstance; }
 
-        virtual Window *_initialise( bool autoCreateWindow,
-                                     const String &windowTitle = "OGRE Render Window" );
+        Window *_initialise( bool autoCreateWindow,
+                             const String &windowTitle = "OGRE Render Window" ) override;
 
-        virtual Window *_createRenderWindow( const String &name, uint32 width, uint32 height,
-                                             bool fullScreen, const NameValuePairList *miscParams = 0 );
+        Window *_createRenderWindow( const String &name, uint32 width, uint32 height, bool fullScreen,
+                                     const NameValuePairList *miscParams = 0 ) override;
 
-        virtual String getErrorDescription( long errorNumber ) const;
+        String getErrorDescription( long errorNumber ) const override;
 
-        virtual void _useLights( const LightList &lights, unsigned short limit );
-        virtual void _setWorldMatrix( const Matrix4 &m );
-        virtual void _setViewMatrix( const Matrix4 &m );
-        virtual void _setProjectionMatrix( const Matrix4 &m );
+        void _useLights( const LightList &lights, unsigned short limit ) override;
+        void _setWorldMatrix( const Matrix4 &m ) override;
+        void _setViewMatrix( const Matrix4 &m ) override;
+        void _setProjectionMatrix( const Matrix4 &m ) override;
 
-        virtual void _setSurfaceParams( const ColourValue &ambient, const ColourValue &diffuse,
-                                        const ColourValue &specular, const ColourValue &emissive,
-                                        Real shininess, TrackVertexColourType tracking = TVC_NONE );
-        virtual void _setPointSpritesEnabled( bool enabled );
-        virtual void _setPointParameters( Real size, bool attenuationEnabled, Real constant, Real linear,
-                                          Real quadratic, Real minSize, Real maxSize );
+        void _setSurfaceParams( const ColourValue &ambient, const ColourValue &diffuse,
+                                const ColourValue &specular, const ColourValue &emissive, Real shininess,
+                                TrackVertexColourType tracking = TVC_NONE ) override;
+        void _setPointSpritesEnabled( bool enabled ) override;
+        void _setPointParameters( Real size, bool attenuationEnabled, Real constant, Real linear,
+                                  Real quadratic, Real minSize, Real maxSize ) override;
 
-        void flushUAVs( void );
+        void flushUAVs();
 
         void _setParamBuffer( GpuProgramType shaderStage, const VkDescriptorBufferInfo &bufferInfo );
         void _setConstBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
@@ -205,150 +210,154 @@ namespace Ogre
         void _setTexBufferCS( size_t slot, VkBufferView bufferView );
         void _setReadOnlyBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
 
-        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
-        virtual void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly );
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
-                                   uint32 hazardousTexIdx );
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
-        virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
-        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
-        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set );
-        virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
-        virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
+        void _setCurrentDeviceFromTexture( TextureGpu *texture ) override;
+        void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly ) override;
+        void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
+                           uint32 hazardousTexIdx ) override;
+        void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
+        void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) override;
+        void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) override;
+        void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
+        void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) override;
+        void _setUavCS( uint32 slotStart, const DescriptorSetUav *set ) override;
 
-        virtual void _setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
-                                                  const Frustum *frustum = 0 );
-        virtual void _setTextureBlendMode( size_t unit, const LayerBlendModeEx &bm );
-        virtual void _setTextureMatrix( size_t unit, const Matrix4 &xform );
+        void _setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
+                                          const Frustum *frustum = 0 ) override;
+        void _setTextureBlendMode( size_t unit, const LayerBlendModeEx &bm ) override;
+        void _setTextureMatrix( size_t unit, const Matrix4 &xform ) override;
 
-        virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
+        void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) override;
 
-        virtual VulkanFrameBufferDescMap &_getFrameBufferDescMap( void ) { return mFrameBufferDescMap; }
-        virtual VulkanFlushOnlyDescMap &_getFlushOnlyDescMap( void ) { return mFlushOnlyDescMap; }
-        virtual RenderPassDescriptor *createRenderPassDescriptor( void );
+        VulkanFrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
+        VulkanFlushOnlyDescMap &_getFlushOnlyDescMap() { return mFlushOnlyDescMap; }
+        RenderPassDescriptor *createRenderPassDescriptor() override;
 
-        virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
-        virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso );
+        void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso ) override;
+        void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso ) override;
 
-        virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
+        void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams ) override;
 
-        virtual void _beginFrame( void );
-        virtual void _endFrame( void );
-        virtual void _endFrameOnce( void );
+        void _beginFrame() override;
+        void _endFrame() override;
+        void _endFrameOnce() override;
 
-        virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock );
-        virtual void _setPipelineStateObject( const HlmsPso *pso );
-        virtual void _setComputePso( const HlmsComputePso *pso );
+        void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) override;
+        void _setPipelineStateObject( const HlmsPso *pso ) override;
+        void _setComputePso( const HlmsComputePso *pso ) override;
 
-        virtual VertexElementType getColourVertexElementType( void ) const;
+        VertexElementType getColourVertexElementType() const override;
 
-        virtual void _dispatch( const HlmsComputePso &pso );
+        void _dispatch( const HlmsComputePso &pso ) override;
 
-        virtual void _setVertexArrayObject( const VertexArrayObject *vao );
+        void _setVertexArrayObject( const VertexArrayObject *vao ) override;
         void flushDescriptorState(
             VkPipelineBindPoint pipeline_bind_point, const VulkanConstBufferPacked &constBuffer,
             const size_t bindOffset, const size_t bytesToWrite,
             const unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type &shaderBindings );
 
-        virtual void _render( const CbDrawCallIndexed *cmd );
-        virtual void _render( const CbDrawCallStrip *cmd );
+        void _render( const CbDrawCallIndexed *cmd ) override;
+        void _render( const CbDrawCallStrip *cmd ) override;
         void bindDescriptorSet( VulkanVaoManager *&vaoManager );
-        virtual void _renderEmulated( const CbDrawCallIndexed *cmd );
-        virtual void _renderEmulated( const CbDrawCallStrip *cmd );
+        void _renderEmulated( const CbDrawCallIndexed *cmd ) override;
+        void _renderEmulated( const CbDrawCallStrip *cmd ) override;
 
-        virtual void _setRenderOperation( const v1::CbRenderOp *cmd );
-        virtual void _render( const v1::CbDrawCallIndexed *cmd );
-        virtual void _render( const v1::CbDrawCallStrip *cmd );
+        void _setRenderOperation( const v1::CbRenderOp *cmd ) override;
+        void _render( const v1::CbDrawCallIndexed *cmd ) override;
+        void _render( const v1::CbDrawCallStrip *cmd ) override;
 
-        virtual void _render( const v1::RenderOperation &op );
+        void _render( const v1::RenderOperation &op ) override;
 
-        virtual void bindGpuProgramParameters( GpuProgramType gptype,
-                                               GpuProgramParametersSharedPtr params,
-                                               uint16 variabilityMask );
-        virtual void bindGpuProgramPassIterationParameters( GpuProgramType gptype );
+        void bindGpuProgramParameters( GpuProgramType gptype, GpuProgramParametersSharedPtr params,
+                                       uint16 variabilityMask ) override;
+        void bindGpuProgramPassIterationParameters( GpuProgramType gptype ) override;
 
-        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
-                                       uint8 mipLevel );
+        void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
+                               uint8 mipLevel ) override;
 
-        virtual Real getHorizontalTexelOffset( void );
-        virtual Real getVerticalTexelOffset( void );
-        virtual Real getMinimumDepthInputValue( void );
-        virtual Real getMaximumDepthInputValue( void );
+        Real getHorizontalTexelOffset() override;
+        Real getVerticalTexelOffset() override;
+        Real getMinimumDepthInputValue() override;
+        Real getMaximumDepthInputValue() override;
 
-        virtual void preExtraThreadsStarted();
-        virtual void postExtraThreadsStarted();
-        virtual void registerThread();
-        virtual void unregisterThread();
-        virtual unsigned int getDisplayMonitorCount() const { return 1; }
+        void preExtraThreadsStarted() override;
+        void postExtraThreadsStarted() override;
+        void registerThread() override;
+        void unregisterThread() override;
+        unsigned int getDisplayMonitorCount() const override { return 1; }
 
-        virtual const PixelFormatToShaderType *getPixelFormatToShaderType( void ) const;
+        const PixelFormatToShaderType *getPixelFormatToShaderType() const override;
 
-        virtual void flushCommands( void );
+        void flushCommands() override;
 
-        virtual void beginProfileEvent( const String &eventName );
-        virtual void endProfileEvent( void );
-        virtual void markProfileEvent( const String &event );
+        void beginProfileEvent( const String &eventName ) override;
+        void endProfileEvent() override;
+        void markProfileEvent( const String &event ) override;
 
-        virtual void initGPUProfiling( void );
-        virtual void deinitGPUProfiling( void );
-        virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
-        virtual void endGPUSampleProfile( const String &name );
+        void debugAnnotationPush( const String &event ) override;
+        void debugAnnotationPop() override;
 
-        virtual bool hasAnisotropicMipMapFilter() const { return true; }
+        void initGPUProfiling() override;
+        void deinitGPUProfiling() override;
+        void beginGPUSampleProfile( const String &name, uint32 *hashCache ) override;
+        void endGPUSampleProfile( const String &name ) override;
 
-        virtual void setClipPlanesImpl( const PlaneList &clipPlanes );
-        virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
-                                                             Window *primary );
+        void endGpuDebuggerFrameCapture( Window *window ) override;
 
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
-                                                uint8 mipLevel, const Vector4 *viewportSizes,
-                                                const Vector4 *scissors, uint32 numViewports,
-                                                bool overlaysEnabled, bool warnIfRtvWasFlushed );
+        bool hasAnisotropicMipMapFilter() const override { return true; }
+
+        void setClipPlanesImpl( const PlaneList &clipPlanes ) override;
+        void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
+                                                     Window *primary ) override;
+
+        void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
+                                        uint8 mipLevel, const Vector4 *viewportSizes,
+                                        const Vector4 *scissors, uint32 numViewports,
+                                        bool overlaysEnabled, bool warnIfRtvWasFlushed ) override;
         void executeRenderPassDescriptorDelayedActions( bool officialCall );
-        virtual void executeRenderPassDescriptorDelayedActions( void );
+        void executeRenderPassDescriptorDelayedActions() override;
         inline void endRenderPassDescriptor( bool isInterruptingRender );
-        virtual void endRenderPassDescriptor( void );
+        void endRenderPassDescriptor() override;
 
         TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                          PixelFormatGpu depthBufferFormat, uint16 poolId );
+                                          PixelFormatGpu depthBufferFormat, uint16 poolId ) override;
 
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
 
         void notifyRenderTextureNonResident( VulkanTextureGpu *texture );
 
-        virtual void endCopyEncoder( void );
-        virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
+        void endCopyEncoder() override;
+        void executeResourceTransition( const ResourceTransitionArray &rstCollection ) override;
 
-        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
-        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos );
-        virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock );
-        virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block );
-        virtual void _hlmsBlendblockCreated( HlmsBlendblock *newBlock );
-        virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block );
-        virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
-        virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
-        virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet );
-        virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set );
-        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
-        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
-        virtual void _descriptorSetSamplerCreated( DescriptorSetSampler *newSet );
-        virtual void _descriptorSetSamplerDestroyed( DescriptorSetSampler *set );
-        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
-        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
+        void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
+        void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos ) override;
+        void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;
+        void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) override;
+        void _hlmsBlendblockCreated( HlmsBlendblock *newBlock ) override;
+        void _hlmsBlendblockDestroyed( HlmsBlendblock *block ) override;
+        void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) override;
+        void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) override;
+        void _descriptorSetTextureCreated( DescriptorSetTexture *newSet ) override;
+        void _descriptorSetTextureDestroyed( DescriptorSetTexture *set ) override;
+        void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet ) override;
+        void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set ) override;
+        void _descriptorSetSamplerCreated( DescriptorSetSampler *newSet ) override;
+        void _descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) override;
+        void _descriptorSetUavCreated( DescriptorSetUav *newSet ) override;
+        void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu format );
+                                                     PixelFormatGpu format ) override;
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
-        void _notifyActiveComputeEnded( void );
+        void _notifyActiveComputeEnded();
 
-        void debugCallback( void );
+        void debugCallback();
 
-        virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
-                                   const TextureGpu *texture, bool bIsDebugCheck ) const;
+        bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b, const TextureGpu *texture,
+                           bool bIsDebugCheck ) const override;
     };
 }  // namespace Ogre
 

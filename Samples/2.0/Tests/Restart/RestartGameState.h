@@ -9,22 +9,22 @@ namespace Demo
 {
     class RestartGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
+        bool mAnimateObjects;
 
-        size_t          mNumSpheres;
-        Ogre::uint32    mFrameCount;
+        size_t mNumSpheres;
+        Ogre::uint32 mFrameCount;
 
     public:
         RestartGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
     };
-}
+}  // namespace Demo
 
 #endif

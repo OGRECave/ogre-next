@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,29 +30,26 @@ THE SOFTWARE.
 
 #include "OgreLodStrategy.h"
 
+#include "OgreCamera.h"
 #include "OgreLodListener.h"
 
-#include "OgreCamera.h"
-
-namespace Ogre {
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    LodStrategy::LodStrategy(const String& name)
-        : mName(name)
-    { }
+    LodStrategy::LodStrategy( const String &name ) : mName( name ) {}
     //-----------------------------------------------------------------------
-    LodStrategy::~LodStrategy()
-    { }
+    LodStrategy::~LodStrategy() {}
     //-----------------------------------------------------------------------
-    Real LodStrategy::transformUserValue(Real userValue) const
+    Real LodStrategy::transformUserValue( Real userValue ) const
     {
         // No transformation by default
         return userValue;
     }
     //-----------------------------------------------------------------------
-    Real LodStrategy::getValue(const MovableObject *movableObject, const Camera *camera) const
+    Real LodStrategy::getValue( const MovableObject *movableObject, const Camera *camera ) const
     {
         // Just return implementation with LOD camera
-        return getValueImpl(movableObject, camera->getLodCamera());
+        return getValueImpl( movableObject, camera->getLodCamera() );
     }
     //-----------------------------------------------------------------------
 #if 0
@@ -129,6 +126,6 @@ namespace Ogre {
     }
 #endif
 
-    LodListener::~LodListener () {}
+    LodListener::~LodListener() {}
 
-} // namespace
+}  // namespace Ogre

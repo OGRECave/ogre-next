@@ -1,27 +1,27 @@
 
-#include "GraphicsSystem.h"
 #include "DecalsGameState.h"
+#include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
-#include "OgreCamera.h"
-#include "OgreRoot.h"
-#include "OgreWindow.h"
-#include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreCamera.h"
+#include "OgreConfigFile.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreWindow.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
-#else
+#    else
 int mainApp( int argc, const char *argv[] )
-#endif
+#    endif
 {
     return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
@@ -29,16 +29,16 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class DecalsGraphicsSystem : public GraphicsSystem
+    class DecalsGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace* setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
-                                                    mCamera, "PbsMaterialsWorkspace", true );
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
+                                                    "PbsMaterialsWorkspace", true );
         }
 
-        virtual void setupResources(void)
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 
@@ -49,7 +49,7 @@ namespace Demo
 
             if( dataFolder.empty() )
                 dataFolder = AndroidSystems::isAndroid() ? "/" : "./";
-            else if( *(dataFolder.end() - 1) != '/' )
+            else if( *( dataFolder.end() - 1 ) != '/' )
                 dataFolder += "/";
 
             dataFolder += "2.0/scripts/materials/PbsMaterials";
@@ -57,7 +57,7 @@ namespace Demo
             addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
         }
 
-        void reserveDecalTextures(void)
+        void reserveDecalTextures()
         {
             /*
             Decals support having up to 3 texture arrays, one for diffuse, normal and emissive maps.
@@ -94,12 +94,11 @@ namespace Demo
             const Ogre::uint32 decalDiffuseId = 1;
             const Ogre::uint32 decalNormalId = 1;
 
-            //TODO: These pools should be destroyed manually or else they will live
-            //forever until Ogre shutdowns
+            // TODO: These pools should be destroyed manually or else they will live
+            // forever until Ogre shutdowns
             textureManager->reservePoolId( decalDiffuseId, 512u, 512u, 8u, 10u,
                                            Ogre::PFG_RGBA8_UNORM_SRGB );
-            textureManager->reservePoolId( decalNormalId, 512u, 512u, 8u, 10u,
-                                           Ogre::PFG_RG8_SNORM );
+            textureManager->reservePoolId( decalNormalId, 512u, 512u, 8u, 10u, Ogre::PFG_RG8_SNORM );
 
             /*
                 Create a blank diffuse & normal map textures, so we can use index 0 to "disable" them
@@ -107,9 +106,8 @@ namespace Demo
                 This is not necessary if you intend to have all your decals using both diffuse
                 and normals.
             */
-            Ogre::uint8 *blackBuffer = reinterpret_cast<Ogre::uint8*>(
-                                           OGRE_MALLOC_SIMD( 512u * 512u * 4u,
-                                                             Ogre::MEMCATEGORY_RESOURCE ) );
+            Ogre::uint8 *blackBuffer = reinterpret_cast<Ogre::uint8 *>(
+                OGRE_MALLOC_SIMD( 512u * 512u * 4u, Ogre::MEMCATEGORY_RESOURCE ) );
             memset( blackBuffer, 0, 512u * 512u * 4u );
             Ogre::Image2 blackImage;
             blackImage.loadDynamicImage( blackBuffer, 512u, 512u, 1u, Ogre::TextureTypes::Type2D,
@@ -117,11 +115,9 @@ namespace Demo
             blackImage.generateMipmaps( false, Ogre::Image2::FILTER_NEAREST );
             Ogre::TextureGpu *decalTexture = 0;
             decalTexture = textureManager->createOrRetrieveTexture(
-                               "decals_disabled_diffuse",
-                               Ogre::GpuPageOutStrategy::Discard,
-                               Ogre::TextureFlags::AutomaticBatching |
-                               Ogre::TextureFlags::ManualTexture,
-                               Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, decalDiffuseId );
+                "decals_disabled_diffuse", Ogre::GpuPageOutStrategy::Discard,
+                Ogre::TextureFlags::AutomaticBatching | Ogre::TextureFlags::ManualTexture,
+                Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, decalDiffuseId );
             decalTexture->setResolution( blackImage.getWidth(), blackImage.getHeight() );
             decalTexture->setNumMipmaps( blackImage.getNumMipmaps() );
             decalTexture->setPixelFormat( blackImage.getPixelFormat() );
@@ -129,18 +125,16 @@ namespace Demo
             blackImage.uploadTo( decalTexture, 0, decalTexture->getNumMipmaps() - 1u );
 
             blackImage.freeMemory();
-            blackBuffer = reinterpret_cast<Ogre::uint8*>(
-                              OGRE_MALLOC_SIMD( 512u * 512u * 2u, Ogre::MEMCATEGORY_RESOURCE ) );
+            blackBuffer = reinterpret_cast<Ogre::uint8 *>(
+                OGRE_MALLOC_SIMD( 512u * 512u * 2u, Ogre::MEMCATEGORY_RESOURCE ) );
             memset( blackBuffer, 0, 512u * 512u * 2u );
             blackImage.loadDynamicImage( blackBuffer, 512u, 512u, 1u, Ogre::TextureTypes::Type2D,
                                          Ogre::PFG_RG8_SNORM, true );
             blackImage.generateMipmaps( false, Ogre::Image2::FILTER_NEAREST );
             decalTexture = textureManager->createOrRetrieveTexture(
-                               "decals_disabled_normals",
-                               Ogre::GpuPageOutStrategy::Discard,
-                               Ogre::TextureFlags::AutomaticBatching |
-                               Ogre::TextureFlags::ManualTexture,
-                               Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, decalNormalId );
+                "decals_disabled_normals", Ogre::GpuPageOutStrategy::Discard,
+                Ogre::TextureFlags::AutomaticBatching | Ogre::TextureFlags::ManualTexture,
+                Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, decalNormalId );
             decalTexture->setResolution( blackImage.getWidth(), blackImage.getHeight() );
             decalTexture->setNumMipmaps( blackImage.getNumMipmaps() );
             decalTexture->setPixelFormat( blackImage.getPixelFormat() );
@@ -151,18 +145,15 @@ namespace Demo
                 Now actually create the decals into the array with the pool ID we desire.
             */
             textureManager->createOrRetrieveTexture(
-                        "floor_diffuse.PNG", Ogre::GpuPageOutStrategy::Discard,
-                        Ogre::CommonTextureTypes::Diffuse,
-                        Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                        decalDiffuseId );
+                "floor_diffuse.PNG", Ogre::GpuPageOutStrategy::Discard,
+                Ogre::CommonTextureTypes::Diffuse,
+                Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, decalDiffuseId );
             textureManager->createOrRetrieveTexture(
-                        "floor_bump.PNG", Ogre::GpuPageOutStrategy::Discard,
-                        Ogre::CommonTextureTypes::NormalMap,
-                        Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                        decalNormalId );
+                "floor_bump.PNG", Ogre::GpuPageOutStrategy::Discard, Ogre::CommonTextureTypes::NormalMap,
+                Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, decalNormalId );
         }
 
-        virtual void loadResources(void)
+        void loadResources() override
         {
             registerHlms();
 
@@ -176,22 +167,18 @@ namespace Demo
         }
 
     public:
-        DecalsGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState )
-        {
-        }
+        DecalsGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}
     };
 
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
         DecalsGameState *gfxGameState = new DecalsGameState(
-        ""
-        "\n"
-        "LEGAL: Uses Saint Peter's Basilica (C) by Emil Persson under CC Attrib 3.0 Unported\n"
-        "See Samples/Media/materials/textures/Cubemaps/License.txt for more information." );
+            ""
+            "\n"
+            "LEGAL: Uses Saint Peter's Basilica (C) by Emil Persson under CC Attrib 3.0 Unported\n"
+            "See Samples/Media/materials/textures/Cubemaps/License.txt for more information." );
 
         GraphicsSystem *graphicsSystem = new DecalsGraphicsSystem( gfxGameState );
 
@@ -201,17 +188,12 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
-    {
-        return "Screen Space Decals";
-    }
-}
+    const char *MainEntryPoints::getWindowTitle() { return "Screen Space Decals"; }
+}  // namespace Demo

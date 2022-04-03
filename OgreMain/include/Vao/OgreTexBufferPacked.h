@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -29,8 +29,8 @@ THE SOFTWARE.
 #ifndef _Ogre_TexBufferPacked_H_
 #define _Ogre_TexBufferPacked_H_
 
-#include "Vao/OgreBufferPacked.h"
 #include "OgrePixelFormatGpu.h"
+#include "Vao/OgreBufferPacked.h"
 
 namespace Ogre
 {
@@ -43,16 +43,16 @@ namespace Ogre
 
     public:
         TexBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                         uint32 numElementsPadding, BufferType bufferType,
-                         void *initialData, bool keepAsShadow,
-                         VaoManager *vaoManager, BufferInterface *bufferInterface, PixelFormatGpu pf ) :
+                         uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                         bool keepAsShadow, VaoManager *vaoManager, BufferInterface *bufferInterface,
+                         PixelFormatGpu pf ) :
             BufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                           bufferType, initialData, keepAsShadow, vaoManager, bufferInterface ),
             mPixelFormat( pf )
         {
         }
 
-        virtual BufferPackedTypes getBufferPackedType(void) const   { return BP_TYPE_TEX; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_TEX; }
 
         /** Binds the texture buffer to the given slot in the
             Vertex/Pixel/Geometry/Hull/Domain/Compute Shader
@@ -72,19 +72,24 @@ namespace Ogre
             Size in bytes to bind the tex buffer. When zero,
             binds from offset until the end of the buffer.
         */
-        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
+        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) = 0;
+        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) = 0;
+        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) = 0;
+        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) = 0;
+        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) = 0;
+        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) = 0;
 
         /// To be overriden only by GL3+. Does the same as bindBufferXX but
         /// assumes the current GL_TEXTURE slot is already set.
-        virtual void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes ) {}
+        virtual void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes )
+        {
+            OGRE_UNUSED_VAR( slot );
+            OGRE_UNUSED_VAR( offset );
+            OGRE_UNUSED_VAR( sizeBytes );
+        }
 
-        PixelFormatGpu getPixelFormat(void) const       { return mPixelFormat; }
+        PixelFormatGpu getPixelFormat() const { return mPixelFormat; }
     };
-}
+}  // namespace Ogre
 
 #endif

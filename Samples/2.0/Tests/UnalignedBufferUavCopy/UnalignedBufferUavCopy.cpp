@@ -2,12 +2,12 @@
 #include "GraphicsSystem.h"
 #include "UnalignedBufferUavCopyGameState.h"
 
-#include "OgreRoot.h"
-#include "OgreConfigFile.h"
-#include "OgreWindow.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreConfigFile.h"
+#include "OgreRoot.h"
+#include "OgreWindow.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
@@ -31,26 +31,23 @@ namespace Demo
 
         It throws when it detects the buffer hasn't been copied correctly
     */
-	class UnalignedBufferUavCopyGraphicsSystem : public GraphicsSystem
+    class UnalignedBufferUavCopyGraphicsSystem final : public GraphicsSystem
     {
     public:
-		UnalignedBufferUavCopyGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState )
+        UnalignedBufferUavCopyGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState )
         {
-			mAlwaysAskForConfig = false;
+            mAlwaysAskForConfig = false;
         }
     };
 
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
-		UnalignedBufferUavCopyGameState *gfxGameState = new UnalignedBufferUavCopyGameState(
-        "" );
+        UnalignedBufferUavCopyGameState *gfxGameState = new UnalignedBufferUavCopyGameState( "" );
 
         UnalignedBufferUavCopyGraphicsSystem *graphicsSystem =
-                new UnalignedBufferUavCopyGraphicsSystem( gfxGameState );
+            new UnalignedBufferUavCopyGraphicsSystem( gfxGameState );
 
         gfxGameState->_notifyGraphicsSystem( graphicsSystem );
 
@@ -58,17 +55,12 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
-    {
-		return "UnalignedBufferUavCopy";
-    }
-}
+    const char *MainEntryPoints::getWindowTitle() { return "UnalignedBufferUavCopy"; }
+}  // namespace Demo

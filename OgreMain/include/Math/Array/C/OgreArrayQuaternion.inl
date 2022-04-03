@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -253,15 +253,9 @@ namespace Ogre
         y = std::sqrt( std::max( Real(0.0), (1 - m00) + (m11 - m22) ) ) * Real(0.5);
         z = std::sqrt( std::max( Real(0.0), (1 - m00) - (m11 - m22) ) ) * Real(0.5);
 
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
-		x = _copysign( x, m21 - m12 );
-        y = _copysign( y, m02 - m20 );
-        z = _copysign( z, m10 - m01 );
-#else
-        x = copysign( x, m21 - m12 );
-        y = copysign( y, m02 - m20 );
-        z = copysign( z, m10 - m01 );
-#endif
+        x = std::copysign( x, m21 - m12 );
+        y = std::copysign( y, m02 - m20 );
+        z = std::copysign( z, m10 - m01 );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayQuaternion::FromAngleAxis( const ArrayRadian& rfAngle, const ArrayVector3& rkAxis )
@@ -310,7 +304,7 @@ namespace Ogre
                                                 z * fInvLength, 0, mask );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayQuaternion::xAxis( void ) const
+    inline ArrayVector3 ArrayQuaternion::xAxis() const
     {
         ArrayReal fTy  = y + y;     // 2 * y
         ArrayReal fTz  = z + z;     // 2 * z
@@ -324,7 +318,7 @@ namespace Ogre
         return ArrayVector3( 1.0f - (fTyy + fTzz), fTxy + fTwz, fTxz - fTwy );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayQuaternion::yAxis( void ) const
+    inline ArrayVector3 ArrayQuaternion::yAxis() const
     {
         ArrayReal fTx  = x + x;                     // 2 * x
         ArrayReal fTy  = y + y;                     // 2 * y
@@ -339,7 +333,7 @@ namespace Ogre
         return ArrayVector3( fTxy - fTwz, 1.0f - (fTxx + fTzz), fTyz + fTwx );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayQuaternion::zAxis( void ) const
+    inline ArrayVector3 ArrayQuaternion::zAxis() const
     {
         ArrayReal fTx  = x + x;                     // 2 * x
         ArrayReal fTy  = y + y;                     // 2 * y
@@ -359,12 +353,12 @@ namespace Ogre
         return w * rkQ.w + x * rkQ.x + y * rkQ.y + z * rkQ.z;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayQuaternion::Norm( void ) const
+    inline ArrayReal ArrayQuaternion::Norm() const
     {
         return w * w + x * x + y * y + z * z;
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayQuaternion::normalise( void )
+    inline void ArrayQuaternion::normalise()
     {
         ArrayReal sqLength = w * w + x * x + y * y + z * z;
 
@@ -380,7 +374,7 @@ namespace Ogre
         z = z * invLength;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayQuaternion ArrayQuaternion::Inverse( void ) const
+    inline ArrayQuaternion ArrayQuaternion::Inverse() const
     {
         ArrayReal fNorm = w * w + x * x + y * y + z * z;
 
@@ -392,12 +386,12 @@ namespace Ogre
         return ArrayQuaternion( w * invNorm, x * negInvNorm, y * negInvNorm, z * negInvNorm );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayQuaternion ArrayQuaternion::UnitInverse( void ) const
+    inline ArrayQuaternion ArrayQuaternion::UnitInverse() const
     {
         return ArrayQuaternion( w, -x, -y, -z );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayQuaternion ArrayQuaternion::Exp( void ) const
+    inline ArrayQuaternion ArrayQuaternion::Exp() const
     {
         // If q = A*(x*i+y*j+z*k) where (x,y,z) is unit length, then
         // exp(q) = cos(A)+sin(A)*(x*i+y*j+z*k).  If sin(A) is near zero,
@@ -414,7 +408,7 @@ namespace Ogre
         return ArrayQuaternion( localW, x * coeff, y * coeff, z * coeff );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayQuaternion ArrayQuaternion::Log( void ) const
+    inline ArrayQuaternion ArrayQuaternion::Log() const
     {
         // If q = cos(A)+sin(A)*(x*i+y*j+z*k) where (x,y,z) is unit length, then
         // log(q) = A*(x*i+y*j+z*k).  If sin(A) is near zero, use log(q) =

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,16 +29,16 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreDescriptorSetUav.h"
-#include "OgreTextureGpu.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "Vao/OgreUavBufferPacked.h"
 
 #include "OgreException.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureGpu.h"
+#include "Vao/OgreUavBufferPacked.h"
 
 namespace Ogre
 {
     //-----------------------------------------------------------------------------------
-    bool DescriptorSetUav::TextureSlot::formatNeedsReinterpret(void) const
+    bool DescriptorSetUav::TextureSlot::formatNeedsReinterpret() const
     {
         PixelFormatGpu format = pixelFormat;
         if( format == PFG_UNKNOWN )
@@ -47,20 +47,20 @@ namespace Ogre
         return format != texture->getPixelFormat();
     }
     //-----------------------------------------------------------------------------------
-    bool DescriptorSetUav::TextureSlot::needsDifferentView(void) const
+    bool DescriptorSetUav::TextureSlot::needsDifferentView() const
     {
         return formatNeedsReinterpret() || mipmapLevel != 0 || textureArrayIndex != 0;
     }
     //-----------------------------------------------------------------------------------
-    void DescriptorSetUav::checkValidity(void) const
+    void DescriptorSetUav::checkValidity() const
     {
         assert( !mUavs.empty() &&
                 "This DescriptorSetUav doesn't use any texture/buffer! Perhaps incorrectly setup?" );
 
         FastArray<Slot>::const_iterator itor = mUavs.begin();
-        FastArray<Slot>::const_iterator end  = mUavs.end();
+        FastArray<Slot>::const_iterator endt = mUavs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const Slot &slot = *itor;
             if( slot.isTexture() )
@@ -68,13 +68,14 @@ namespace Ogre
                 const TextureSlot &texSlot = slot.getTexture();
                 if( texSlot.formatNeedsReinterpret() && !texSlot.texture->isReinterpretable() )
                 {
-                    //This warning here is for
+                    // This warning here is for
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "UAV sRGB textures must be bound as non-sRGB. "
                                  "You must set the reinterpretable flag "
                                  "(TextureFlags::Reinterpretable) for "
-                                 "texture: '" + texSlot.texture->getNameStr() + "' " +
-                                 texSlot.texture->getSettingsDesc(),
+                                 "texture: '" +
+                                     texSlot.texture->getNameStr() + "' " +
+                                     texSlot.texture->getSettingsDesc(),
                                  "DescriptorSetUav::checkValidity" );
                 }
             }
@@ -92,4 +93,4 @@ namespace Ogre
             ++itor;
         }
     }
-}
+}  // namespace Ogre

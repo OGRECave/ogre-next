@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -119,7 +119,7 @@ namespace Ogre
         for( size_t i = 0u; i < numPoolSizes; ++i )
         {
             poolSizes[i] = mPoolSizes[i];
-            poolSizes[i].descriptorCount *= newCapacity;
+            poolSizes[i].descriptorCount *= (uint32)newCapacity;
         }
 
         // We do not set FREE_DESCRIPTOR_SET_BIT as we do not need to free individual descriptor sets
@@ -199,13 +199,13 @@ namespace Ogre
         mCurrentPoolIdx = 0u;
     }
     //-------------------------------------------------------------------------
-    void VulkanDescriptorPool::_advanceFrame( void )
+    void VulkanDescriptorPool::_advanceFrame()
     {
         mLastFrameUsed = mVaoManager->getFrameCount();
         mAdvanceFrameScheduled = false;
     }
     //-------------------------------------------------------------------------
-    bool VulkanDescriptorPool::isAvailableInCurrentFrame( void ) const
+    bool VulkanDescriptorPool::isAvailableInCurrentFrame() const
     {
         return mVaoManager->isFrameFinished( mLastFrameUsed );
     }

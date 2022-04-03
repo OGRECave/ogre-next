@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,15 +29,15 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreStagingTextureBufferImpl.h"
-#include "OgrePixelFormatGpuUtils.h"
+
 #include "OgreCommon.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
 {
     StagingTextureBufferImpl::StagingTextureBufferImpl( VaoManager *vaoManager,
-                                                        PixelFormatGpu formatFamily,
-                                                        size_t size, size_t internalBufferStart,
-                                                        size_t vboPoolIdx ) :
+                                                        PixelFormatGpu formatFamily, size_t size,
+                                                        size_t internalBufferStart, size_t vboPoolIdx ) :
         StagingTexture( vaoManager, formatFamily ),
         mInternalBufferStart( internalBufferStart ),
         mCurrentOffset( 0 ),
@@ -46,31 +46,26 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-	StagingTextureBufferImpl::~StagingTextureBufferImpl()
-    {
-    }
+    StagingTextureBufferImpl::~StagingTextureBufferImpl() {}
     //-----------------------------------------------------------------------------------
     bool StagingTextureBufferImpl::supportsFormat( uint32 width, uint32 height, uint32 depth,
                                                    uint32 slices, PixelFormatGpu pixelFormat ) const
     {
         const uint32 rowAlignment = 4u;
-        size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
-                                                                 pixelFormat, rowAlignment );
+        size_t requiredSize =
+            PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat, rowAlignment );
         return requiredSize <= mSize;
     }
     //-----------------------------------------------------------------------------------
     bool StagingTextureBufferImpl::isSmallerThan( const StagingTexture *other ) const
     {
-        assert( dynamic_cast<const StagingTextureBufferImpl*>( other ) );
-        return this->mSize < static_cast<const StagingTextureBufferImpl*>( other )->mSize;
+        assert( dynamic_cast<const StagingTextureBufferImpl *>( other ) );
+        return this->mSize < static_cast<const StagingTextureBufferImpl *>( other )->mSize;
     }
     //-----------------------------------------------------------------------------------
-    size_t StagingTextureBufferImpl::_getSizeBytes(void)
-    {
-        return mSize;
-    }
+    size_t StagingTextureBufferImpl::_getSizeBytes() { return mSize; }
     //-----------------------------------------------------------------------------------
-    void StagingTextureBufferImpl::startMapRegion(void)
+    void StagingTextureBufferImpl::startMapRegion()
     {
         StagingTexture::startMapRegion();
         mCurrentOffset = 0;
@@ -80,14 +75,15 @@ namespace Ogre
                                                         uint32 slices, PixelFormatGpu pixelFormat )
     {
         const uint32 rowAlignment = 4u;
-        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
-                                                                    pixelFormat, rowAlignment );
+        const size_t sizeBytes =
+            PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat, rowAlignment );
 
-        //Ensure the offset is always aligned to the block size for compressed formats
-        //Otherwise align to maximum between pixel size (important for Metal) and 4u
-        const size_t blockSizeBytes = PixelFormatGpuUtils::isCompressed( pixelFormat ) ?
-            PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat ) :
-            std::max( (size_t)4u, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
+        // Ensure the offset is always aligned to the block size for compressed formats
+        // Otherwise align to maximum between pixel size (important for Metal) and 4u
+        const size_t blockSizeBytes =
+            PixelFormatGpuUtils::isCompressed( pixelFormat )
+                ? PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat )
+                : std::max( 4u, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
         mCurrentOffset = alignToNextMultiple( mCurrentOffset, blockSizeBytes );
         mCurrentOffset = std::min( mCurrentOffset, mSize );
 
@@ -97,19 +93,19 @@ namespace Ogre
 
         if( sizeBytes <= availableSize )
         {
-            retVal.width    = width;
-            retVal.height   = height;
-            retVal.depth    = depth;
-            retVal.numSlices= slices;
+            retVal.width = width;
+            retVal.height = height;
+            retVal.depth = depth;
+            retVal.numSlices = slices;
             retVal.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
-            retVal.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( width, 1, 1, 1,
-                                                                    pixelFormat, rowAlignment );
-            retVal.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( width, height, 1, 1,
-                                                                      pixelFormat, rowAlignment );
+            retVal.bytesPerRow =
+                (uint32)PixelFormatGpuUtils::getSizeBytes( width, 1, 1, 1, pixelFormat, rowAlignment );
+            retVal.bytesPerImage =
+                PixelFormatGpuUtils::getSizeBytes( width, height, 1, 1, pixelFormat, rowAlignment );
             retVal.data = mapRegionImplRawPtr();
             mCurrentOffset += sizeBytes;
         }
 
         return retVal;
     }
-}
+}  // namespace Ogre

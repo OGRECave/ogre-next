@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -119,7 +119,7 @@ namespace Ogre
         return "ERROR";
     }
     //-------------------------------------------------------------------------
-    void GlSwitchableSupport::addConfig( void )
+    void GlSwitchableSupport::addConfig()
     {
         mInterfaceSelected = false;
 
@@ -148,7 +148,7 @@ namespace Ogre
         refreshConfig();
     }
     //-------------------------------------------------------------------------
-    void GlSwitchableSupport::refreshConfig( void )
+    void GlSwitchableSupport::refreshConfig()
     {
         ConfigOptionMap::iterator optInterfaces = mOptions.find( "Interface" );
 
@@ -196,7 +196,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    String GlSwitchableSupport::validateConfig( void )
+    String GlSwitchableSupport::validateConfig()
     {
         // TODO
         return BLANKSTRING;
@@ -209,7 +209,7 @@ namespace Ogre
         return "Interface";
     }
     //-------------------------------------------------------------------------
-    size_t GlSwitchableSupport::getNumPriorityConfigOptions( void ) const
+    size_t GlSwitchableSupport::getNumPriorityConfigOptions() const
     {
         return 1u + mAvailableInterfaces[mSelectedInterface].support->getNumPriorityConfigOptions();
     }
@@ -237,7 +237,7 @@ namespace Ogre
         return mAvailableInterfaces[mSelectedInterface].support->getProcAddress( procname );
     }
     //-------------------------------------------------------------------------
-    uint8 GlSwitchableSupport::findSelectedInterfaceIdx( void ) const
+    uint8 GlSwitchableSupport::findSelectedInterfaceIdx() const
     {
         ConfigOptionMap::const_iterator it = mOptions.find( "Interface" );
         if( it != mOptions.end() )

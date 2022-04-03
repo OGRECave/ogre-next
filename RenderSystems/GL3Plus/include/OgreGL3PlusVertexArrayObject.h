@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -29,10 +29,11 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define __GL3PlusOldVertexArrayObject_H__
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreHardwareVertexBuffer.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Specialisation of VertexDeclaration for OpenGL Vertex Array Object usage */
     class GL3PlusOldVertexArrayObject
     {
@@ -46,11 +47,11 @@ namespace Ogre {
         GL3PlusOldVertexArrayObject();
         ~GL3PlusOldVertexArrayObject();
         /// Bind a VAO
-        void bind(void);
-        bool isInitialised(void) { return mInitialised; }
-        void setInitialised(bool flag) { mInitialised = flag; }
+        void bind();
+        bool isInitialised() { return mInitialised; }
+        void setInitialised( bool flag ) { mInitialised = flag; }
     };
 
-}
+}  // namespace Ogre
 
 #endif

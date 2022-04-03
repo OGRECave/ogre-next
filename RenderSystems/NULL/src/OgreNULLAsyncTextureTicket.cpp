@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,28 +27,25 @@ THE SOFTWARE.
 */
 
 #include "OgreNULLAsyncTextureTicket.h"
-#include "OgreNULLTextureGpu.h"
-#include "Vao/OgreNULLVaoManager.h"
 
+#include "OgreNULLTextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
+#include "Vao/OgreNULLVaoManager.h"
 
 namespace Ogre
 {
-    NULLAsyncTextureTicket::NULLAsyncTextureTicket( uint32 width, uint32 height,
-                                                    uint32 depthOrSlices,
+    NULLAsyncTextureTicket::NULLAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                                     TextureTypes::TextureTypes textureType,
                                                     PixelFormatGpu pixelFormatFamily ) :
-        AsyncTextureTicket( width, height, depthOrSlices, textureType,
-                            pixelFormatFamily ),
+        AsyncTextureTicket( width, height, depthOrSlices, textureType, pixelFormatFamily ),
         mVboName( 0 )
     {
         const uint32 rowAlignment = 4u;
-        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depthOrSlices,
-                                                                    1u, mPixelFormatFamily,
-                                                                    rowAlignment );
-        mVboName = reinterpret_cast<uint8*>( OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RENDERSYS ) );
+        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depthOrSlices, 1u,
+                                                                    mPixelFormatFamily, rowAlignment );
+        mVboName = reinterpret_cast<uint8 *>( OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RENDERSYS ) );
         memset( mVboName, 0, sizeBytes );
     }
     //-----------------------------------------------------------------------------------
@@ -70,14 +67,9 @@ namespace Ogre
 
         TextureBox retVal;
 
-        size_t sizeBytes = 0;
-        const uint32 rowAlignment = 4u;
         retVal = TextureBox( mWidth, mHeight, getDepth(), getNumSlices(),
                              PixelFormatGpuUtils::getBytesPerPixel( mPixelFormatFamily ),
                              getBytesPerRow(), getBytesPerImage() );
-        sizeBytes = PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, mDepthOrSlices,
-                                                       1u, mPixelFormatFamily,
-                                                       rowAlignment );
 
         if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
             retVal.setCompressedPixelFormat( mPixelFormatFamily );
@@ -88,20 +80,18 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void NULLAsyncTextureTicket::unmapImpl(void)
-    {
-    }
+    void NULLAsyncTextureTicket::unmapImpl() {}
     //-----------------------------------------------------------------------------------
-    bool NULLAsyncTextureTicket::queryIsTransferDone(void)
+    bool NULLAsyncTextureTicket::queryIsTransferDone()
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {
-            //Early out. The texture is not even finished being ready.
-            //We didn't even start the actual download.
+            // Early out. The texture is not even finished being ready.
+            // We didn't even start the actual download.
             return false;
         }
 
         mStatus = Ready;
         return true;
     }
-}
+}  // namespace Ogre

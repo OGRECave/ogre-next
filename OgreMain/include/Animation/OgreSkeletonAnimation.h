@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,54 +30,62 @@ THE SOFTWARE.
 #define __SkeletonAnimation_H__
 
 #include "OgreSkeletonTrack.h"
-#include "OgreIdString.h"
 
+#include "OgreIdString.h"
 #include "OgreRawPtr.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
+
     class SkeletonAnimationDef;
     class SkeletonInstance;
 
     typedef vector<KeyFrameRigVec::const_iterator>::type KnownKeyFramesVec;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
 
     /// Represents the instance of a Skeletal animation based on its definition
-    class _OgreExport SkeletonAnimation : public MovableAlloc
+    class _OgreExport SkeletonAnimation : public OgreAllocatedObj
     {
-        SkeletonAnimationDef const  *mDefinition;
+        SkeletonAnimationDef const *mDefinition;
+
     protected:
         RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> mBoneWeights;
-        Real                    mCurrentFrame;
+        Real                                               mCurrentFrame;
+
     public:
-        Real                    mFrameRate;     // Playback framerate
-        Real                    mWeight;
-        FastArray<size_t> const *mSlotStarts;   // One per parent depth level
-        bool                    mLoop;
-        bool                    mEnabled;
+        Real                     mFrameRate;  // Playback framerate
+        Real                     mWeight;
+        FastArray<size_t> const *mSlotStarts;  // One per parent depth level
+        bool                     mLoop;
+        bool                     mEnabled;
         SkeletonInstance        *mOwner;
+
     protected:
-        IdString                mName;
+        IdString mName;
 
         /// One per track
-        KnownKeyFramesVec       mLastKnownKeyFrames;
+        KnownKeyFramesVec mLastKnownKeyFrames;
 
     public:
         SkeletonAnimation( const SkeletonAnimationDef *definition, const FastArray<size_t> *slotStarts,
-                            SkeletonInstance *owner );
+                           SkeletonInstance *owner );
 
         /// Internal function that initializes a lot of structures that can't be done in the
         /// constructor due to how SkeletonInstance is created/pushed in a vector.
         /// If you're not an Ogre dev, don't call this directly.
-        void _initialize(void);
+        void _initialize();
 
         /** Shifts the values of mBoneWeights to new locations because the bones' mIndex
             may have changed.
@@ -92,7 +100,7 @@ namespace Ogre
         @param time
             Time to advance, in seconds
         */
-        void addTime( Real time )                                   { addFrame( time * mFrameRate ); }
+        void addTime( Real time ) { addFrame( time * mFrameRate ); }
 
         /** Plays the animation forward (or backwards if negative)
         @param frames
@@ -104,7 +112,7 @@ namespace Ogre
         @param time
             Time to set to, in seconds
         */
-        void setTime( Real time )                                   { setFrame( time * mFrameRate ); }
+        void setTime( Real time ) { setFrame( time * mFrameRate ); }
 
         /** Sets the animation to a particular frame.
         @param frames
@@ -113,29 +121,29 @@ namespace Ogre
         void setFrame( Real frame );
 
         /// Gets the current animation time, in seconds. Prefer using getCurrentFrame
-        Real getCurrentTime(void) const                      { return mCurrentFrame / mFrameRate; }
+        Real getCurrentTime() const { return mCurrentFrame / mFrameRate; }
 
         /// Gets the current animation frame, in frames.
-        Real getCurrentFrame(void) const                     { return mCurrentFrame; }
+        Real getCurrentFrame() const { return mCurrentFrame; }
 
         /// Gets the frame count.
-        Real getNumFrames(void) const;
+        Real getNumFrames() const;
 
         /// Gets animation length, in seconds.
-        Real getDuration(void) const;
+        Real getDuration() const;
 
-        IdString getName(void) const                                { return mName; }
+        IdString getName() const { return mName; }
 
         /** Loop setting. Looped animations will wrap back to zero when reaching the animation length
             or go back to the animation length if playing backwards.
             Non-looped animations will stop at the animation length (or at 0 if backwards) but won't
             be disabled.
         */
-        void setLoop( bool bLoop )                                  { mLoop = bLoop; }
+        void setLoop( bool bLoop ) { mLoop = bLoop; }
 
         /** Returns current loop setting. @See setLoop.
-        */
-        bool getLoop(void) const                                    { return mLoop; }
+         */
+        bool getLoop() const { return mLoop; }
 
         /** Sets the per-bone weight to a particular bone. Useful for fine control
             over animation strength on a set of nodes (i.e. an arm)
@@ -176,7 +184,7 @@ namespace Ogre
         @return
             The pointer to the bone weight of the specified bone. Null pointer if not found.
         */
-        Real* getBoneWeightPtr( IdString boneName );
+        Real *getBoneWeightPtr( IdString boneName );
 
         /** Given all the bones this animation uses, sets the weight of these on _other_ animations
 
@@ -259,19 +267,23 @@ namespace Ogre
 
         /// Enables or disables this animation. A disabled animation won't be processed at all.
         void setEnabled( bool bEnable );
-        bool getEnabled(void) const                                 { return mEnabled; }
+        bool getEnabled() const { return mEnabled; }
 
         void _applyAnimation( const TransformArray &boneTransforms );
 
-        void _swapBoneWeightsUniquePtr( RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION>
-                                        &inOutBoneWeights );
+        void _swapBoneWeightsUniquePtr(
+            RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> &inOutBoneWeights );
 
-        const SkeletonAnimationDef* getDefinition(void) const       { return mDefinition; }
+        const SkeletonAnimationDef *getDefinition() const { return mDefinition; }
     };
 
     /** @} */
     /** @} */
-}
+
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

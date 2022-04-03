@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -46,11 +46,11 @@ namespace Ogre {
     {
     protected:
         /// Compiles and links the vertex and fragment programs
-        void compileAndLink(void);
+        void compileAndLink();
         /// Put a program in use
-        void _useProgram(void);
+        void _useProgram();
 
-        void buildGLUniformReferences(void);
+        void buildGLUniformReferences();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
         /** See AndroidResource. */
@@ -63,12 +63,12 @@ namespace Ogre {
     public:
         /// Constructor should only be used by GLSLESLinkProgramManager
         GLSLESLinkProgram(GLSLESShader* vertexProgram, GLSLESShader* fragmentProgram);
-        virtual ~GLSLESLinkProgram(void);
+        virtual ~GLSLESLinkProgram();
 
         /** Makes a program object active by making sure it is linked
             and then putting it in use.
         */
-        void activate(void);
+        void activate();
 
         /** Updates program object uniforms using data from
             GpuProgramParameters.  normally called by

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,8 +30,8 @@ THE SOFTWARE.
 #define _Ogre_D3D11DynamicBuffer_H_
 
 #include "OgreD3D11Prerequisites.h"
-#include "OgreD3D11DeviceResource.h"
 
+#include "OgreD3D11DeviceResource.h"
 #include "Vao/OgreBufferPacked.h"
 
 #include "ogrestd/vector.h"
@@ -52,7 +52,7 @@ namespace Ogre
             Caller is responsible for proper synchronization.
             No check is performed to see if two map calls overlap.
     */
-    class _OgreD3D11Export D3D11DynamicBuffer : protected D3D11DeviceResource
+    class _OgreD3D11Export D3D11DynamicBuffer final : protected D3D11DeviceResource
     {
     protected:
         struct MappedRange
@@ -66,33 +66,33 @@ namespace Ogre
         typedef vector<MappedRange>::type MappedRangeVec;
 
         ComPtr<ID3D11Buffer> mVboName;
-        size_t          mVboSize;
-        void            *mMappedPtr;
+        size_t               mVboSize;
+        void                *mMappedPtr;
 
-        D3D11Device     &mDevice;
+        D3D11Device &mDevice;
 
-        MappedRangeVec mMappedRanges;
+        MappedRangeVec       mMappedRanges;
         vector<size_t>::type mFreeRanges;
 
         size_t addMappedRange( size_t start, size_t count );
 
-        void notifyDeviceLost( D3D11Device *device );
-        void notifyDeviceRestored( D3D11Device *device, unsigned pass );
+        void notifyDeviceLost( D3D11Device *device ) override;
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
 
     public:
         D3D11DynamicBuffer( ID3D11Buffer *vboName, size_t vboSize, D3D11Device &device );
         ~D3D11DynamicBuffer();
 
-        ID3D11Buffer* getVboName(void) const        { return mVboName.Get(); }
+        ID3D11Buffer *getVboName() const { return mVboName.Get(); }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
-        void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
+        void *RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
 
         /// Unmaps given ticket (got from @see map).
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         /// The ticket becomes invalid after this.
         void unmap( size_t ticket );
     };
-}
+}  // namespace Ogre
 
 #endif

@@ -5,14 +5,22 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
+@pset( vctTexUnit, 2 )
+
 Texture3D voxelAlbedoTex	: register(t0);
 Texture3D voxelNormalTex	: register(t1);
-Texture3D vctProbe			: register(t2);
+Texture3D vctProbes[@value( hlms_num_vct_cascades )]		: register(t@value(vctTexUnit));
+@add( vctTexUnit, hlms_num_vct_cascades )
 
 @property( vct_anisotropic )
-	Texture3D vctProbeX	: register(t3);
-	Texture3D vctProbeY	: register(t4);
-	Texture3D vctProbeZ	: register(t5);
+	Texture3D vctProbeX[@value( hlms_num_vct_cascades )]	: register(t@value(vctTexUnit));
+	@add( vctTexUnit, hlms_num_vct_cascades )
+
+	Texture3D vctProbeY[@value( hlms_num_vct_cascades )]	: register(t@value(vctTexUnit));
+	@add( vctTexUnit, hlms_num_vct_cascades )
+
+	Texture3D vctProbeZ[@value( hlms_num_vct_cascades )]	: register(t@value(vctTexUnit));
+	@add( vctTexUnit, hlms_num_vct_cascades )
 @end
 
 SamplerState vctProbeSampler	: register(s2);
@@ -35,13 +43,21 @@ RWTexture3D<@insertpiece(uav0_pf_type)> lightVoxel;
 uniform float3 voxelCellSize;
 uniform float3 invVoxelResolution;
 uniform float iterationDampening;
-uniform float2 startBias_invStartBias;
+
+uniform float4 startBias_invStartBias_cascadeMaxLod[@value( hlms_num_vct_cascades )];
+
+@property( hlms_num_vct_cascades > 1 )
+	uniform float4 fromPreviousProbeToNext[@value( hlms_num_vct_cascades ) - 1][2];
+@else
+	// Unused, but declare them to shut up warnings of setting non-existant params
+	uniform float4 fromPreviousProbeToNext[1][2];
+@end
 
 #define p_voxelCellSize voxelCellSize
 #define p_invVoxelResolution invVoxelResolution
 #define p_iterationDampening iterationDampening
-#define p_vctStartBias startBias_invStartBias.x
-#define p_vctInvStartBias startBias_invStartBias.y
+#define p_vctStartBias_invStartBias_cascadeMaxLod startBias_invStartBias_cascadeMaxLod
+#define p_vctFromPreviousProbeToNext fromPreviousProbeToNext
 
 @insertpiece( HeaderCS )
 

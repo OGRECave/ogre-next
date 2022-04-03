@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,8 +30,9 @@ THE SOFTWARE.
 #define __GLXCONFIGDIALOG_H__
 
 #include "../OgrePrerequisites.h"
-#include "../OgreRoot.h"
+
 #include "../OgreRenderSystem.h"
+#include "../OgreRoot.h"
 
 #include <gtk/gtk.h>
 
@@ -49,11 +50,11 @@ namespace Ogre
     @author
         Andrew Zabolotny <zap@homelink.ru>
     */
-    class _OgreExport ConfigDialog : public UtilityAlloc
+    class _OgreExport ConfigDialog : public OgreAllocatedObj
     {
     public:
         ConfigDialog();
-        virtual ~ConfigDialog() {};
+        virtual ~ConfigDialog(){};
 
         /**
         Displays the dialog.
@@ -84,15 +85,15 @@ namespace Ogre
         GtkWidget *mOKButton;
 
         /// Create the gtk+ dialog window
-        bool createWindow ();
+        bool createWindow();
         /// Get parameters from selected renderer and fill the dialog
-        void setupRendererParams ();
+        void setupRendererParams();
         /// Callback function for renderer select combobox
-        static void rendererChanged (GtkComboBox *widget, gpointer data);
+        static void rendererChanged( GtkComboBox *widget, gpointer data );
         /// Callback function to change a renderer option
-        static void optionChanged (GtkComboBox *widget, gpointer data);
+        static void optionChanged( GtkComboBox *widget, gpointer data );
         /// Idle function to refresh renderer parameters
-        static gboolean refreshParams (gpointer data);
+        static gboolean refreshParams( gpointer data );
     };
-}
+}  // namespace Ogre
 #endif

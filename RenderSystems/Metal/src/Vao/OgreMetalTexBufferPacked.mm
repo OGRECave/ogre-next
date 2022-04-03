@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -31,32 +31,30 @@ THE SOFTWARE.
 
 #include "OgreMetalDevice.h"
 
-#import <Metal/MTLRenderCommandEncoder.h>
 #import <Metal/MTLComputeCommandEncoder.h>
+#import <Metal/MTLRenderCommandEncoder.h>
 
 namespace Ogre
 {
-    MetalTexBufferPacked::MetalTexBufferPacked(
-                size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                uint32 numElementsPadding, BufferType bufferType,
-                void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, MetalBufferInterface *bufferInterface, PixelFormatGpu pf,
-                MetalDevice *device ) :
+    MetalTexBufferPacked::MetalTexBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                                uint32 bytesPerElement, uint32 numElementsPadding,
+                                                BufferType bufferType, void *initialData,
+                                                bool keepAsShadow, VaoManager *vaoManager,
+                                                MetalBufferInterface *bufferInterface, PixelFormatGpu pf,
+                                                MetalDevice *device ) :
         ReadOnlyBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
                               bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf ),
         mDevice( device )
     {
     }
     //-----------------------------------------------------------------------------------
-    MetalTexBufferPacked::~MetalTexBufferPacked()
-    {
-    }
+    MetalTexBufferPacked::~MetalTexBufferPacked() {}
     //-----------------------------------------------------------------------------------
     void MetalTexBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
     {
         assert( mDevice->mRenderEncoder || mDevice->mFrameAborted );
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         [mDevice->mRenderEncoder setVertexBuffer:bufferInterface->getVboName()
                                           offset:mFinalBufferStart * mBytesPerElement + offset
@@ -66,8 +64,8 @@ namespace Ogre
     void MetalTexBufferPacked::bindBufferPS( uint16 slot, size_t offset, size_t sizeBytes )
     {
         assert( mDevice->mRenderEncoder || mDevice->mFrameAborted );
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         [mDevice->mRenderEncoder setFragmentBuffer:bufferInterface->getVboName()
                                             offset:mFinalBufferStart * mBytesPerElement + offset
@@ -76,22 +74,21 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalTexBufferPacked::bindBufferCS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
 
-        __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder =
-                mDevice->getComputeEncoder();
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder = mDevice->getComputeEncoder();
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         [computeEncoder setBuffer:bufferInterface->getVboName()
                            offset:mFinalBufferStart * mBytesPerElement + offset
                           atIndex:slot + OGRE_METAL_CS_TEX_SLOT_START];
     }
     //-----------------------------------------------------------------------------------
-    void MetalTexBufferPacked::bindBufferForDescriptor( __unsafe_unretained id <MTLBuffer> *buffers,
+    void MetalTexBufferPacked::bindBufferForDescriptor( __unsafe_unretained id<MTLBuffer> *buffers,
                                                         NSUInteger *offsets, size_t offset )
     {
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         *buffers = bufferInterface->getVboName();
         *offsets = mFinalBufferStart * mBytesPerElement + offset;

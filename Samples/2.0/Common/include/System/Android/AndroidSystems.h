@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -39,16 +39,18 @@ namespace Demo
     /// Utility class to load plugins statically
     class AndroidSystems
     {
-        android_app *mAndroidApp;
+#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        android_app *  mAndroidApp;
         ANativeWindow *mNativeWindow;
+#endif
 
     public:
         AndroidSystems();
 
         static void setAndroidApp( android_app *androidApp );
 
-        static void setNativeWindow( ANativeWindow *nativeWindow );
-        static ANativeWindow *getNativeWindow( void );
+        static void           setNativeWindow( ANativeWindow *nativeWindow );
+        static ANativeWindow *getNativeWindow();
 
         /**
         On Android platforms:
@@ -65,7 +67,7 @@ namespace Demo
 
         static bool isAndroid();
 
-        static void registerArchiveFactories( void );
+        static void registerArchiveFactories();
     };
 }  // namespace Demo
 

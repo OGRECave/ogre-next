@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,11 +28,11 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "OgreException.h"
-
 #include "Animation/OgreSkeletonAnimManager.h"
+
 #include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonInstance.h"
+#include "OgreException.h"
 
 namespace Ogre
 {
@@ -43,7 +43,7 @@ namespace Ogre
         threadStarts.resize( threadCount + 1, 0 );
     }
     //-----------------------------------------------------------------------
-    void BySkeletonDef::initializeMemoryManager(void)
+    void BySkeletonDef::initializeMemoryManager()
     {
         vector<size_t>::type bonesPerDepth;
         skeletonDef->getBonesPerDepth( bonesPerDepth );
@@ -51,20 +51,19 @@ namespace Ogre
         boneMemoryManager.setBoneRebaseListener( this );
     }
     //-----------------------------------------------------------------------
-    void BySkeletonDef::updateThreadStarts(void)
+    void BySkeletonDef::updateThreadStarts()
     {
         size_t lastStart = 0;
-        size_t increments = std::max<size_t>( ARRAY_PACKED_REALS,
-                                              skeletons.size() / (threadStarts.size() - 1) );
-        for( size_t i=0; i<threadStarts.size(); ++i )
+        size_t increments =
+            std::max<size_t>( ARRAY_PACKED_REALS, skeletons.size() / ( threadStarts.size() - 1 ) );
+        for( size_t i = 0; i < threadStarts.size(); ++i )
         {
             threadStarts[i] = lastStart;
             lastStart += increments;
             lastStart = std::min( lastStart, skeletons.size() );
 
-            while( lastStart < skeletons.size() &&
-                   skeletons[lastStart]->_getMemoryBlock() ==
-                   skeletons[lastStart-1]->_getMemoryBlock() )
+            while( lastStart < skeletons.size() && skeletons[lastStart]->_getMemoryBlock() ==
+                                                       skeletons[lastStart - 1]->_getMemoryBlock() )
             {
                 ++lastStart;
             }
@@ -74,25 +73,25 @@ namespace Ogre
         threadStarts.back() = skeletons.size();
     }
     //-----------------------------------------------------------------------
-    void BySkeletonDef::_updateBoneStartTransforms(void)
+    void BySkeletonDef::_updateBoneStartTransforms()
     {
-        FastArray<SkeletonInstance*>::iterator itor = skeletons.begin();
-        FastArray<SkeletonInstance*>::iterator end  = skeletons.end();
+        FastArray<SkeletonInstance *>::iterator itor = skeletons.begin();
+        FastArray<SkeletonInstance *>::iterator endt = skeletons.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->_updateBoneStartTransforms();
+            ( *itor )->_updateBoneStartTransforms();
             ++itor;
         }
     }
 
     //-----------------------------------------------------------------------
-    SkeletonInstance* SkeletonAnimManager::createSkeletonInstance( const SkeletonDef *skeletonDef,
-                                                                    size_t numWorkerThreads )
+    SkeletonInstance *SkeletonAnimManager::createSkeletonInstance( const SkeletonDef *skeletonDef,
+                                                                   size_t numWorkerThreads )
     {
         IdString defName( skeletonDef->getNameStr() );
-        BySkeletonDefList::iterator itor = std::find( bySkeletonDefs.begin(), bySkeletonDefs.end(),
-                                                        defName );
+        BySkeletonDefList::iterator itor =
+            std::find( bySkeletonDefs.begin(), bySkeletonDefs.end(), defName );
         if( itor == bySkeletonDefs.end() )
         {
             bySkeletonDefs.push_front( BySkeletonDef( skeletonDef, numWorkerThreads ) );
@@ -101,33 +100,31 @@ namespace Ogre
         }
 
         BySkeletonDef &bySkelDef = *itor;
-        FastArray<SkeletonInstance*> &skeletonsArray = bySkelDef.skeletons;
-        SkeletonInstance *newInstance = OGRE_NEW SkeletonInstance( skeletonDef,
-                                                                    &bySkelDef.boneMemoryManager );
-        FastArray<SkeletonInstance*>::iterator it = std::lower_bound(
-                                                            skeletonsArray.begin(), skeletonsArray.end(),
-                                                            newInstance,
-                                                            OrderSkeletonInstanceByMemory );
+        FastArray<SkeletonInstance *> &skeletonsArray = bySkelDef.skeletons;
+        SkeletonInstance *newInstance =
+            OGRE_NEW SkeletonInstance( skeletonDef, &bySkelDef.boneMemoryManager );
+        FastArray<SkeletonInstance *>::iterator it = std::lower_bound(
+            skeletonsArray.begin(), skeletonsArray.end(), newInstance, OrderSkeletonInstanceByMemory );
 
-        //If this assert triggers, two instances got the same memory slot. Most likely we forgot to
-        //remove a previous instance and the slot was reused. Otherwise something nasty happened.
-        assert( it == skeletonsArray.end() || (*it)->_getMemoryUniqueOffset() != newInstance );
+        // If this assert triggers, two instances got the same memory slot. Most likely we forgot to
+        // remove a previous instance and the slot was reused. Otherwise something nasty happened.
+        assert( it == skeletonsArray.end() || ( *it )->_getMemoryUniqueOffset() != newInstance );
 
         skeletonsArray.insert( it, newInstance );
 
 #if OGRE_DEBUG_MODE
         {
-            //Check all depth levels respect the same ordering
-            FastArray<SkeletonInstance*>::const_iterator itSkel = skeletonsArray.begin();
-            FastArray<SkeletonInstance*>::const_iterator enSkel = skeletonsArray.end();
+            // Check all depth levels respect the same ordering
+            FastArray<SkeletonInstance *>::const_iterator itSkel = skeletonsArray.begin();
+            FastArray<SkeletonInstance *>::const_iterator enSkel = skeletonsArray.end();
             while( itSkel != enSkel )
             {
-                const TransformArray &transf1 = (*itSkel)-> _getTransformArray();
-                FastArray<SkeletonInstance*>::const_iterator itSkel2 = itSkel+1;
+                const TransformArray &transf1 = ( *itSkel )->_getTransformArray();
+                FastArray<SkeletonInstance *>::const_iterator itSkel2 = itSkel + 1;
                 while( itSkel2 != enSkel )
                 {
-                    const TransformArray &transf2 = (*itSkel2)-> _getTransformArray();
-                    for( size_t i=0; i<transf1.size(); ++i )
+                    const TransformArray &transf2 = ( *itSkel2 )->_getTransformArray();
+                    for( size_t i = 0; i < transf1.size(); ++i )
                     {
                         Bone **owner1 = transf1[i].mOwner + transf1[i].mIndex;
                         Bone **owner2 = transf2[i].mOwner + transf2[i].mIndex;
@@ -142,7 +139,7 @@ namespace Ogre
         }
 #endif
 
-        //Update the thread starts, they have changed.
+        // Update the thread starts, they have changed.
         bySkelDef.updateThreadStarts();
 
         return newInstance;
@@ -151,8 +148,8 @@ namespace Ogre
     void SkeletonAnimManager::destroySkeletonInstance( SkeletonInstance *skeletonInstance )
     {
         IdString defName( skeletonInstance->getDefinition()->getNameStr() );
-        BySkeletonDefList::iterator itor = std::find( bySkeletonDefs.begin(), bySkeletonDefs.end(),
-                                                        defName );
+        BySkeletonDefList::iterator itor =
+            std::find( bySkeletonDefs.begin(), bySkeletonDefs.end(), defName );
 
         if( itor == bySkeletonDefs.end() )
         {
@@ -162,32 +159,32 @@ namespace Ogre
         }
 
         BySkeletonDef &bySkelDef = *itor;
-        FastArray<SkeletonInstance*> &skeletonsArray = bySkelDef.skeletons;
+        FastArray<SkeletonInstance *> &skeletonsArray = bySkelDef.skeletons;
 
-        FastArray<SkeletonInstance*>::iterator it = std::lower_bound(
-                                                        skeletonsArray.begin(), skeletonsArray.end(),
-                                                        skeletonInstance,
-                                                        OrderSkeletonInstanceByMemory );
+        FastArray<SkeletonInstance *>::iterator it =
+            std::lower_bound( skeletonsArray.begin(), skeletonsArray.end(), skeletonInstance,
+                              OrderSkeletonInstanceByMemory );
 
         if( it == skeletonsArray.end() || *it != skeletonInstance )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Trying to remove a SkeletonInstance we don't have. Have you already removed it?",
-                         "SceneManager::destroySkeletonInstance" );
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Trying to remove a SkeletonInstance we don't have. Have you already removed it?",
+                "SceneManager::destroySkeletonInstance" );
         }
 
         OGRE_DELETE *it;
         skeletonsArray.erase( it );
 
-        //Update the thread starts, they have changed.
+        // Update the thread starts, they have changed.
         bySkelDef.updateThreadStarts();
     }
     //-----------------------------------------------------------------------
     void SkeletonAnimManager::removeSkeletonDef( const SkeletonDef *skeletonDef )
     {
         IdString defName( skeletonDef->getNameStr() );
-        BySkeletonDefList::iterator itor = std::find( bySkeletonDefs.begin(), bySkeletonDefs.end(),
-                                                        defName );
+        BySkeletonDefList::iterator itor =
+            std::find( bySkeletonDefs.begin(), bySkeletonDefs.end(), defName );
 
         if( itor == bySkeletonDefs.end() )
         {
@@ -197,15 +194,16 @@ namespace Ogre
         }
 
         BySkeletonDef &bySkelDef = *itor;
-        FastArray<SkeletonInstance*> &skeletonsArray = bySkelDef.skeletons;
+        FastArray<SkeletonInstance *> &skeletonsArray = bySkelDef.skeletons;
 
         if( !skeletonsArray.empty() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Trying to remove a SkeletonDef for which instances are still in use. Destroy all SkeletonInstances first.",
+                         "Trying to remove a SkeletonDef for which instances are still in use. Destroy "
+                         "all SkeletonInstances first.",
                          "SceneManager::destroySkeletonDef" );
         }
 
         bySkeletonDefs.erase( itor );
     }
-}
+}  // namespace Ogre

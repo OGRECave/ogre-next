@@ -19,6 +19,8 @@ compositor_node ShadowMapDebuggingRenderingNode
 			}
 			overlays	on
 			shadows		ShadowMapDebuggingShadowNode
+
+			profiling_id "Main Render"
 		}
 	}
 }

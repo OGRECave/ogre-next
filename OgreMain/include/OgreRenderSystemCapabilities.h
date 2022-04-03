@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,37 +28,39 @@ THE SOFTWARE.
 #ifndef __RenderSystemCapabilities__
 #define __RenderSystemCapabilities__
 
-// Precompiler options
 #include "OgrePrerequisites.h"
-#include "OgreStringVector.h"
-#include "OgreStringConverter.h"
+
+// Precompiler options
 #include "OgreLwString.h"
+#include "OgreStringConverter.h"
+#include "OgreStringVector.h"
 
 #include "ogrestd/set.h"
 
 #include "OgreHeaderPrefix.h"
 
 // Because there are more than 32 possible Capabilities, more than 1 int is needed to store them all.
-// In fact, an array of integers is used to store capabilities. However all the capabilities are defined in the single
-// enum. The only way to know which capabilities should be stored where in the array is to use some of the 32 bits
-// to record the category of the capability.  These top few bits are used as an index into mCapabilities array
-// The lower bits are used to identify each capability individually by setting 1 bit for each
+// In fact, an array of integers is used to store capabilities. However all the capabilities are defined
+// in the single enum. The only way to know which capabilities should be stored where in the array is to
+// use some of the 32 bits to record the category of the capability.  These top few bits are used as an
+// index into mCapabilities array The lower bits are used to identify each capability individually by
+// setting 1 bit for each
 
 // Identifies how many bits are reserved for categories
 // NOTE: Although 4 bits (currently) are enough
 #define CAPS_CATEGORY_SIZE 4
-#define OGRE_CAPS_BITSHIFT (32 - CAPS_CATEGORY_SIZE)
-#define CAPS_CATEGORY_MASK (((1 << CAPS_CATEGORY_SIZE) - 1) << OGRE_CAPS_BITSHIFT)
-#define OGRE_CAPS_VALUE(cat, val) ((cat << OGRE_CAPS_BITSHIFT) | (1 << val))
+#define OGRE_CAPS_BITSHIFT ( 32 - CAPS_CATEGORY_SIZE )
+#define CAPS_CATEGORY_MASK ( ( ( 1 << CAPS_CATEGORY_SIZE ) - 1 ) << OGRE_CAPS_BITSHIFT )
+#define OGRE_CAPS_VALUE( cat, val ) ( ( cat << OGRE_CAPS_BITSHIFT ) | ( 1 << val ) )
 
-namespace Ogre 
+namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup RenderSystem
-    *  @{
-    */
+     *  @{
+     */
 
     /// Enumerates the categories of capabilities
     enum CapabilitiesCategory
@@ -79,6 +81,7 @@ namespace Ogre
     // b is the value (from 0 to 27)
     enum Capabilities
     {
+        // clang-format off
         /// Supports generating mipmaps in hardware
         RSC_AUTOMIPMAP              = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON, 0),
         RSC_BLENDING                = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON, 1),
@@ -229,6 +232,33 @@ namespace Ogre
         RSC_TEXTURE_COMPRESSION_ASTC = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 11),
         RSC_STORE_AND_MULTISAMPLE_RESOLVE = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 12),
         RSC_DEPTH_CLAMP = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 13),
+        /// Shaders supports mediump (aka relaxed precision) and is not masked
+        /// out due to known bugs
+        ///
+        /// OpenGL: Disabled, even if supported
+        ///
+        /// D3D11: Masked out due to fxc bugs.
+        /// See https://shader-playground.timjones.io/3110a80dff6acfbdd8384a64f2fa495d
+        /// and  https://gist.github.com/darksylinc/655495dae603c4e544dd475ae3537621
+        ///
+        /// Vulkan: Supported. May be masked out if driver is buggy
+        ///
+        /// Metal: Unsupported. Use RSC_SHADER_FLOAT16 instead
+        RSC_SHADER_RELAXED_FLOAT = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 14),
+        /// Shaders support float16_t / half datatype as:
+        ///
+        ///		- Math (i.e. a + b)
+        ///		- In/Out blocks (i.e. to pass data between shader stages)
+        ///
+        /// OpenGL: Disabled, even if supported
+        ///
+        /// D3D11: Unsupported (needs SM 6.2 / DXC / DX12)
+        ///
+        /// Vulkan: Supported. Depends on HW GPU support.
+        ///
+        /// Metal: Always supported.
+        RSC_SHADER_FLOAT16 = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 15),
+        RSC_UMA            = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 16),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported
@@ -264,41 +294,39 @@ namespace Ogre
         RSC_POINT_EXTENDED_PARAMETERS_ARB = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 7),
         /// Support for point parameters EXT implementation
         RSC_POINT_EXTENDED_PARAMETERS_EXT = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 8),
-        /// Support for Separate Shader Objects
-        RSC_SEPARATE_SHADER_OBJECTS = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 9),
+        /// Available for anything
+        RSC_SEPARATE_UNUSED = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 9),
         /// Support for Vertex Array Objects (VAOs)
         RSC_VAO              = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 10),
 
         // ***** Metal Specific Caps *****
+        // clang-format on
     };
 
     /// DriverVersion is used by RenderSystemCapabilities and both GL and D3D9
     /// to store the version of the current GPU driver
-    struct _OgreExport DriverVersion 
+    struct _OgreExport DriverVersion
     {
         int major;
         int minor;
         int release;
         int build;
 
-        DriverVersion() 
-        {
-            major = minor = release = build = 0;
-        }
+        DriverVersion() { major = minor = release = build = 0; }
 
-        String toString() const 
+        String toString() const
         {
-            char tmpBuffer[64];
+            char     tmpBuffer[64];
             LwString str( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             str.a( major, ".", minor, ".", release, ".", build );
             return str.c_str();
         }
 
-        void fromString(const String& versionString);
+        void fromString( const String &versionString );
 
         bool hasMinVersion( int minMajor, int minMinor ) const
         {
-            return major > minMajor || (major == minMajor && minor >= minMinor);
+            return major > minMajor || ( major == minMajor && minor >= minMinor );
         }
     };
 
@@ -316,38 +344,40 @@ namespace Ogre
         GPU_IMAGINATION_TECHNOLOGIES = 8,
         GPU_APPLE = 9,  // Apple Software Renderer
         GPU_NOKIA = 10,
-        GPU_MS_SOFTWARE = 11, // Microsoft software device
-        GPU_MS_WARP = 12, // Microsoft WARP (Windows Advanced Rasterization Platform) software device - http://msdn.microsoft.com/en-us/library/dd285359.aspx
-        GPU_ARM = 13, // For the Mali chipsets
+        GPU_MS_SOFTWARE = 11,  // Microsoft software device
+        GPU_MS_WARP = 12,  // Microsoft WARP (Windows Advanced Rasterization Platform) software device -
+                           // http://msdn.microsoft.com/en-us/library/dd285359.aspx
+        GPU_ARM = 13,      // For the Mali chipsets
         GPU_QUALCOMM = 14,
-        GPU_MOZILLA = 15, // WebGL on Mozilla/Firefox based browser
-        GPU_WEBKIT = 16, // WebGL on WebKit/Chrome base browser
-        GPU_IMGTEC = 17, // PowerVR
+        GPU_MOZILLA = 15,  // WebGL on Mozilla/Firefox based browser
+        GPU_WEBKIT = 16,   // WebGL on WebKit/Chrome base browser
+        GPU_IMGTEC = 17,   // PowerVR
         /// placeholder
         GPU_VENDOR_COUNT = 18
     };
 
-    /** singleton class for storing the capabilities of the graphics card. 
+    /** singleton class for storing the capabilities of the graphics card.
     @remarks
     This class stores the capabilities of the graphics card.  This
     information is set by the individual render systems.
     */
-    class _OgreExport RenderSystemCapabilities : public RenderSysAlloc
+    class _OgreExport RenderSystemCapabilities : public OgreAllocatedObj
     {
-
     public:
-
         typedef set<String>::type ShaderProfiles;
+
     private:
         /// This is used to build a database of RSC's
-        /// if a RSC with same name, but newer version is introduced, the older one 
+        /// if a RSC with same name, but newer version is introduced, the older one
         /// will be removed
         DriverVersion mDriverVersion;
         /// GPU Vendor
         GPUVendor mVendor;
+        /// GPU device ID. If 0 RenderSystem or API didn't fill it
+        uint32 mDeviceId;
 
         static StringVector msGPUVendorStrings;
-        static void initVendorStrings();
+        static void         initVendorStrings();
 
         /// The number of world matrices available
         ushort mNumWorldMatrices;
@@ -367,21 +397,21 @@ namespace Ogre
         String mRenderSystemName;
 
         /// The number of floating-point constants vertex programs support
-        ushort mVertexProgramConstantFloatCount;           
+        ushort mVertexProgramConstantFloatCount;
         /// The number of integer constants vertex programs support
-        ushort mVertexProgramConstantIntCount;           
+        ushort mVertexProgramConstantIntCount;
         /// The number of boolean constants vertex programs support
-        ushort mVertexProgramConstantBoolCount;           
+        ushort mVertexProgramConstantBoolCount;
         /// The number of floating-point constants geometry programs support
-        ushort mGeometryProgramConstantFloatCount;           
+        ushort mGeometryProgramConstantFloatCount;
         /// The number of integer constants vertex geometry support
-        ushort mGeometryProgramConstantIntCount;           
+        ushort mGeometryProgramConstantIntCount;
         /// The number of boolean constants vertex geometry support
-        ushort mGeometryProgramConstantBoolCount;           
+        ushort mGeometryProgramConstantBoolCount;
         /// The number of floating-point constants fragment programs support
-        ushort mFragmentProgramConstantFloatCount;           
+        ushort mFragmentProgramConstantFloatCount;
         /// The number of integer constants fragment programs support
-        ushort mFragmentProgramConstantIntCount;           
+        ushort mFragmentProgramConstantIntCount;
         /// The number of boolean constants fragment programs support
         ushort mFragmentProgramConstantBoolCount;
         /// The number of simultaneous render targets supported
@@ -405,27 +435,32 @@ namespace Ogre
         /// The number of vertices a geometry program can emit in a single run
         int mGeometryProgramNumOutputVertices;
 
+        /// Max number of textures per shader stage that can be fit in
+        /// DescriptorSetTexture and DescriptorSetTexture2
+        ///
+        /// mNumTexturesInTextureDescriptor[NumShaderTypes] is compute
+        uint32 mNumTexturesInTextureDescriptor[NumShaderTypes + 1u];
 
         /// The list of supported shader profiles
         ShaderProfiles mSupportedShaderProfiles;
 
         // Support for new shader stages in shader model 5.0
         /// The number of floating-point constants tessellation Hull programs support
-        ushort mTessellationHullProgramConstantFloatCount;           
+        ushort mTessellationHullProgramConstantFloatCount;
         /// The number of integer constants tessellation Hull programs support
-        ushort mTessellationHullProgramConstantIntCount;           
+        ushort mTessellationHullProgramConstantIntCount;
         /// The number of boolean constants tessellation Hull programs support
         ushort mTessellationHullProgramConstantBoolCount;
         /// The number of floating-point constants tessellation Domain programs support
-        ushort mTessellationDomainProgramConstantFloatCount;           
+        ushort mTessellationDomainProgramConstantFloatCount;
         /// The number of integer constants tessellation Domain programs support
-        ushort mTessellationDomainProgramConstantIntCount;           
+        ushort mTessellationDomainProgramConstantIntCount;
         /// The number of boolean constants tessellation Domain programs support
         ushort mTessellationDomainProgramConstantBoolCount;
         /// The number of floating-point constants compute programs support
-        ushort mComputeProgramConstantFloatCount;           
+        ushort mComputeProgramConstantFloatCount;
         /// The number of integer constants compute programs support
-        ushort mComputeProgramConstantIntCount;           
+        ushort mComputeProgramConstantIntCount;
         /// The number of boolean constants compute programs support
         ushort mComputeProgramConstantBoolCount;
 
@@ -440,180 +475,156 @@ namespace Ogre
         /// Max threads per threadgroup
         uint32 mMaxThreadsPerThreadgroup;
 
+    public:
+        RenderSystemCapabilities();
+        virtual ~RenderSystemCapabilities();
 
-
-    public: 
-        RenderSystemCapabilities ();
-        virtual ~RenderSystemCapabilities ();
-
-        virtual size_t calculateSize() const {return 0;}
+        virtual size_t calculateSize() const { return 0; }
 
         /** Set the driver version. */
-        void setDriverVersion(const DriverVersion& version)
-        {
-            mDriverVersion = version;
-        }
+        void setDriverVersion( const DriverVersion &version ) { mDriverVersion = version; }
 
-        void parseDriverVersionFromString(const String& versionString)
+        void parseDriverVersionFromString( const String &versionString )
         {
             DriverVersion version;
-            version.fromString(versionString);
-            setDriverVersion(version);
+            version.fromString( versionString );
+            setDriverVersion( version );
         }
 
+        DriverVersion getDriverVersion() const { return mDriverVersion; }
 
-        DriverVersion getDriverVersion() const
-        {
-            return mDriverVersion;
-        }
+        GPUVendor getVendor() const { return mVendor; }
 
-        GPUVendor getVendor() const
-        {
-            return mVendor;
-        }
+        void setVendor( GPUVendor v ) { mVendor = v; }
 
-        void setVendor(GPUVendor v)
-        {
-            mVendor = v;
-        }
+        uint32 getDeviceId() const { return mDeviceId; }
+
+        void setDeviceId( uint32 deviceId ) { mDeviceId = deviceId; }
 
         /// Parse and set vendor
-        void parseVendorFromString(const String& vendorString)
+        void parseVendorFromString( const String &vendorString )
         {
-            setVendor(vendorFromString(vendorString));
+            setVendor( vendorFromString( vendorString ) );
         }
 
         /// Convert a vendor string to an enum
-        static GPUVendor vendorFromString(const String& vendorString);
+        static GPUVendor vendorFromString( const String &vendorString );
         /// Convert a vendor enum to a string
-        static String vendorToString(GPUVendor v);
+        static String vendorToString( GPUVendor v );
 
-        bool isDriverOlderThanVersion(const DriverVersion &v) const
+        bool isDriverOlderThanVersion( const DriverVersion &v ) const
         {
-            if (mDriverVersion.major < v.major)
+            if( mDriverVersion.major < v.major )
                 return true;
-            else if (mDriverVersion.major == v.major && 
-                mDriverVersion.minor < v.minor)
+            else if( mDriverVersion.major == v.major && mDriverVersion.minor < v.minor )
                 return true;
-            else if (mDriverVersion.major == v.major && 
-                mDriverVersion.minor == v.minor && 
-                mDriverVersion.release < v.release)
+            else if( mDriverVersion.major == v.major && mDriverVersion.minor == v.minor &&
+                     mDriverVersion.release < v.release )
                 return true;
-            else if (mDriverVersion.major == v.major && 
-                mDriverVersion.minor == v.minor && 
-                mDriverVersion.release == v.release &&
-                mDriverVersion.build < v.build)
+            else if( mDriverVersion.major == v.major && mDriverVersion.minor == v.minor &&
+                     mDriverVersion.release == v.release && mDriverVersion.build < v.build )
                 return true;
             return false;
         }
 
-        void setNumWorldMatrices(ushort num)
-        {
-            mNumWorldMatrices = num;
-        }
+        void setNumWorldMatrices( ushort num ) { mNumWorldMatrices = num; }
 
-        void setNumTextureUnits(ushort num)
-        {
-            mNumTextureUnits = num;
-        }
+        void setNumTextureUnits( ushort num ) { mNumTextureUnits = num; }
 
-        void setStencilBufferBitDepth(ushort num)
-        {
-            mStencilBufferBitDepth = num;
-        }
+        void setStencilBufferBitDepth( ushort num ) { mStencilBufferBitDepth = num; }
 
-        void setNumVertexBlendMatrices(ushort num)
-        {
-            mNumVertexBlendMatrices = num;
-        }
+        void setNumVertexBlendMatrices( ushort num ) { mNumVertexBlendMatrices = num; }
 
         /// The number of simultaneous render targets supported
-        void setNumMultiRenderTargets(ushort num)
-        {
-            mNumMultiRenderTargets = num;
-        }
+        void setNumMultiRenderTargets( ushort num ) { mNumMultiRenderTargets = num; }
 
-        ushort getNumWorldMatrices(void) const
-        { 
-            return mNumWorldMatrices;
-        }
+        ushort getNumWorldMatrices() const { return mNumWorldMatrices; }
 
         /** Returns the number of texture units the current output hardware
         supports.
 
         For use in rendering, this determines how many texture units the
-        are available for multitexturing (i.e. rendering multiple 
-        textures in a single pass). Where a Material has multiple 
-        texture layers, it will try to use multitexturing where 
+        are available for multitexturing (i.e. rendering multiple
+        textures in a single pass). Where a Material has multiple
+        texture layers, it will try to use multitexturing where
         available, and where it is not available, will perform multipass
         rendering to achieve the same effect. This property only applies
-        to the fixed-function pipeline, the number available to the 
+        to the fixed-function pipeline, the number available to the
         programmable pipeline depends on the shader model in use.
         */
-        ushort getNumTextureUnits(void) const
-        {
-            return mNumTextureUnits;
-        }
+        ushort getNumTextureUnits() const { return mNumTextureUnits; }
 
-        /** Determines the bit depth of the hardware accelerated stencil 
+        /** Determines the bit depth of the hardware accelerated stencil
         buffer, if supported.
         @remarks
         If hardware stencilling is not supported, the software will
         provide an 8-bit software stencil.
         */
-        ushort getStencilBufferBitDepth(void) const
-        {
-            return mStencilBufferBitDepth;
-        }
+        ushort getStencilBufferBitDepth() const { return mStencilBufferBitDepth; }
 
-        /** Returns the number of matrices available to hardware vertex 
+        /** Returns the number of matrices available to hardware vertex
         blending for this rendering system. */
-        ushort getNumVertexBlendMatrices(void) const
-        {
-            return mNumVertexBlendMatrices;
-        }
+        ushort getNumVertexBlendMatrices() const { return mNumVertexBlendMatrices; }
 
         /// The number of simultaneous render targets supported
-        ushort getNumMultiRenderTargets(void) const
+        ushort getNumMultiRenderTargets() const { return mNumMultiRenderTargets; }
+
+        /** Max number of textures per shader stage that can be fit in
+            DescriptorSetTexture and DescriptorSetTexture2
+
+            mNumTexturesInTextureDescriptor[NumShaderTypes] is compute
+        @remarks
+            With some APIs Ogre will bind the textures to all stages.
+            Hence if you're using Vertex & Pixel shaders and vertex
+            supports 16 but pixel supports 32, you can only use 16.
+            This combo is pretty rare though.
+        */
+        uint32 getNumTexturesInTextureDescriptor( ShaderType shaderType ) const
         {
-            return mNumMultiRenderTargets;
+            return mNumTexturesInTextureDescriptor[shaderType];
+        }
+
+        void setNumTexturesInTextureDescriptor( uint32 values[NumShaderTypes + 1] )
+        {
+            for( int i = 0u; i < NumShaderTypes + 1; ++i )
+                mNumTexturesInTextureDescriptor[i] = values[i];
         }
 
         /** Returns true if capability is render system specific
-        */
-        bool isCapabilityRenderSystemSpecific(const Capabilities c) const
+         */
+        bool isCapabilityRenderSystemSpecific( const Capabilities c ) const
         {
             int cat = c >> OGRE_CAPS_BITSHIFT;
-            if(cat == CAPS_CATEGORY_GL || cat == CAPS_CATEGORY_D3D9)
+            if( cat == CAPS_CATEGORY_GL || cat == CAPS_CATEGORY_D3D9 )
                 return true;
             return false;
         }
 
         /** Adds a capability flag
-        */
-        void setCapability(const Capabilities c) 
-        { 
-            int index = (CAPS_CATEGORY_MASK & c) >> OGRE_CAPS_BITSHIFT;
+         */
+        void setCapability( const Capabilities c )
+        {
+            int index = ( CAPS_CATEGORY_MASK & c ) >> OGRE_CAPS_BITSHIFT;
             // zero out the index from the stored capability
-            mCapabilities[index] |= (c & ~CAPS_CATEGORY_MASK);
+            mCapabilities[index] |= ( c & ~CAPS_CATEGORY_MASK );
         }
 
         /** Remove a capability flag
-        */
-        void unsetCapability(const Capabilities c) 
-        { 
-            int index = (CAPS_CATEGORY_MASK & c) >> OGRE_CAPS_BITSHIFT;
+         */
+        void unsetCapability( const Capabilities c )
+        {
+            int index = ( CAPS_CATEGORY_MASK & c ) >> OGRE_CAPS_BITSHIFT;
             // zero out the index from the stored capability
-            mCapabilities[index] &= (~c | CAPS_CATEGORY_MASK);
+            mCapabilities[index] &= ( ~c | CAPS_CATEGORY_MASK );
         }
 
         /** Checks for a capability
-        */
-        bool hasCapability(const Capabilities c) const
+         */
+        bool hasCapability( const Capabilities c ) const
         {
-            int index = (CAPS_CATEGORY_MASK & c) >> OGRE_CAPS_BITSHIFT;
+            int index = ( CAPS_CATEGORY_MASK & c ) >> OGRE_CAPS_BITSHIFT;
             // test against
-            if(mCapabilities[index] & (c & ~CAPS_CATEGORY_MASK))
+            if( mCapabilities[index] & ( c & ~CAPS_CATEGORY_MASK ) )
             {
                 return true;
             }
@@ -624,139 +635,73 @@ namespace Ogre
         }
 
         /** Adds the profile to the list of supported profiles
-        */
-        void addShaderProfile(const String& profile)
-        {
-            mSupportedShaderProfiles.insert(profile);
-
-        }
+         */
+        void addShaderProfile( const String &profile ) { mSupportedShaderProfiles.insert( profile ); }
 
         /** Remove a given shader profile, if present.
-        */
-        void removeShaderProfile(const String& profile)
-        {
-            mSupportedShaderProfiles.erase(profile);
-        }
+         */
+        void removeShaderProfile( const String &profile ) { mSupportedShaderProfiles.erase( profile ); }
 
         /** Returns true if profile is in the list of supported profiles
-        */
-        bool isShaderProfileSupported(const String& profile) const
+         */
+        bool isShaderProfileSupported( const String &profile ) const
         {
-            return (mSupportedShaderProfiles.end() != mSupportedShaderProfiles.find(profile));
+            return ( mSupportedShaderProfiles.end() != mSupportedShaderProfiles.find( profile ) );
         }
-
 
         /** Returns a set of all supported shader profiles
-        * */
-        const ShaderProfiles& getSupportedShaderProfiles() const
-        {
-            return mSupportedShaderProfiles;
-        }
-
+         * */
+        const ShaderProfiles &getSupportedShaderProfiles() const { return mSupportedShaderProfiles; }
 
         /// The number of floating-point constants vertex programs support
-        ushort getVertexProgramConstantFloatCount(void) const
-        {
-            return mVertexProgramConstantFloatCount;           
-        }
+        ushort getVertexProgramConstantFloatCount() const { return mVertexProgramConstantFloatCount; }
         /// The number of integer constants vertex programs support
-        ushort getVertexProgramConstantIntCount(void) const
-        {
-            return mVertexProgramConstantIntCount;           
-        }
+        ushort getVertexProgramConstantIntCount() const { return mVertexProgramConstantIntCount; }
         /// The number of boolean constants vertex programs support
-        ushort getVertexProgramConstantBoolCount(void) const
-        {
-            return mVertexProgramConstantBoolCount;           
-        }
+        ushort getVertexProgramConstantBoolCount() const { return mVertexProgramConstantBoolCount; }
         /// The number of floating-point constants geometry programs support
-        ushort getGeometryProgramConstantFloatCount(void) const
+        ushort getGeometryProgramConstantFloatCount() const
         {
-            return mGeometryProgramConstantFloatCount;           
+            return mGeometryProgramConstantFloatCount;
         }
         /// The number of integer constants geometry programs support
-        ushort getGeometryProgramConstantIntCount(void) const
-        {
-            return mGeometryProgramConstantIntCount;           
-        }
+        ushort getGeometryProgramConstantIntCount() const { return mGeometryProgramConstantIntCount; }
         /// The number of boolean constants geometry programs support
-        ushort getGeometryProgramConstantBoolCount(void) const
-        {
-            return mGeometryProgramConstantBoolCount;           
-        }
+        ushort getGeometryProgramConstantBoolCount() const { return mGeometryProgramConstantBoolCount; }
         /// The number of floating-point constants fragment programs support
-        ushort getFragmentProgramConstantFloatCount(void) const
+        ushort getFragmentProgramConstantFloatCount() const
         {
-            return mFragmentProgramConstantFloatCount;           
+            return mFragmentProgramConstantFloatCount;
         }
         /// The number of integer constants fragment programs support
-        ushort getFragmentProgramConstantIntCount(void) const
-        {
-            return mFragmentProgramConstantIntCount;           
-        }
+        ushort getFragmentProgramConstantIntCount() const { return mFragmentProgramConstantIntCount; }
         /// The number of boolean constants fragment programs support
-        ushort getFragmentProgramConstantBoolCount(void) const
-        {
-            return mFragmentProgramConstantBoolCount;           
-        }
+        ushort getFragmentProgramConstantBoolCount() const { return mFragmentProgramConstantBoolCount; }
 
         /// sets the device name for Render system
-        void setDeviceName(const String& name)
-        {
-            mDeviceName = name;
-        }
+        void setDeviceName( const String &name ) { mDeviceName = name; }
 
         /// gets the device name for render system
-        String getDeviceName() const
-        {
-            return mDeviceName;
-        }
+        String getDeviceName() const { return mDeviceName; }
 
         /// The number of floating-point constants vertex programs support
-        void setVertexProgramConstantFloatCount(ushort c)
-        {
-            mVertexProgramConstantFloatCount = c;           
-        }
+        void setVertexProgramConstantFloatCount( ushort c ) { mVertexProgramConstantFloatCount = c; }
         /// The number of integer constants vertex programs support
-        void setVertexProgramConstantIntCount(ushort c)
-        {
-            mVertexProgramConstantIntCount = c;           
-        }
+        void setVertexProgramConstantIntCount( ushort c ) { mVertexProgramConstantIntCount = c; }
         /// The number of boolean constants vertex programs support
-        void setVertexProgramConstantBoolCount(ushort c)
-        {
-            mVertexProgramConstantBoolCount = c;           
-        }
+        void setVertexProgramConstantBoolCount( ushort c ) { mVertexProgramConstantBoolCount = c; }
         /// The number of floating-point constants geometry programs support
-        void setGeometryProgramConstantFloatCount(ushort c)
-        {
-            mGeometryProgramConstantFloatCount = c;           
-        }
+        void setGeometryProgramConstantFloatCount( ushort c ) { mGeometryProgramConstantFloatCount = c; }
         /// The number of integer constants geometry programs support
-        void setGeometryProgramConstantIntCount(ushort c)
-        {
-            mGeometryProgramConstantIntCount = c;           
-        }
+        void setGeometryProgramConstantIntCount( ushort c ) { mGeometryProgramConstantIntCount = c; }
         /// The number of boolean constants geometry programs support
-        void setGeometryProgramConstantBoolCount(ushort c)
-        {
-            mGeometryProgramConstantBoolCount = c;           
-        }
+        void setGeometryProgramConstantBoolCount( ushort c ) { mGeometryProgramConstantBoolCount = c; }
         /// The number of floating-point constants fragment programs support
-        void setFragmentProgramConstantFloatCount(ushort c)
-        {
-            mFragmentProgramConstantFloatCount = c;           
-        }
+        void setFragmentProgramConstantFloatCount( ushort c ) { mFragmentProgramConstantFloatCount = c; }
         /// The number of integer constants fragment programs support
-        void setFragmentProgramConstantIntCount(ushort c)
-        {
-            mFragmentProgramConstantIntCount = c;           
-        }
+        void setFragmentProgramConstantIntCount( ushort c ) { mFragmentProgramConstantIntCount = c; }
         /// The number of boolean constants fragment programs support
-        void setFragmentProgramConstantBoolCount(ushort c)
-        {
-            mFragmentProgramConstantBoolCount = c;           
-        }
+        void setFragmentProgramConstantBoolCount( ushort c ) { mFragmentProgramConstantBoolCount = c; }
         /// Maximum resolution (width or height)
         void setMaximumResolutions( uint32 res2d, uint32 res3d, uint32 resCube )
         {
@@ -765,35 +710,17 @@ namespace Ogre
             mMaxTextureResolutionCubemap = resCube;
         }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolution2D(void) const
-        {
-            return mMaxTextureResolution2D;
-        }
+        uint32 getMaximumResolution2D() const { return mMaxTextureResolution2D; }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolution3D(void) const
-        {
-            return mMaxTextureResolution3D;
-        }
+        uint32 getMaximumResolution3D() const { return mMaxTextureResolution3D; }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolutionCubemap(void) const
-        {
-            return mMaxTextureResolutionCubemap;
-        }
+        uint32 getMaximumResolutionCubemap() const { return mMaxTextureResolutionCubemap; }
         /// Maximum point screen size in pixels
-        void setMaxPointSize(Real s)
-        {
-            mMaxPointSize = s;
-        }
+        void setMaxPointSize( Real s ) { mMaxPointSize = s; }
         /// Maximum point screen size in pixels
-        Real getMaxPointSize(void) const
-        {
-            return mMaxPointSize;
-        }
+        Real getMaxPointSize() const { return mMaxPointSize; }
         /// Non-POW2 textures limited
-        void setNonPOW2TexturesLimited(bool l)
-        {
-            mNonPOW2TexturesLimited = l;
-        }
+        void setNonPOW2TexturesLimited( bool l ) { mNonPOW2TexturesLimited = l; }
         /** Are non-power of two textures limited in features?
         @remarks
         If the RSC_NON_POWER_OF_2_TEXTURES capability is set, but this
@@ -802,174 +729,121 @@ namespace Ogre
         <li>You don't use DXT texture compression</li>
         <li>You use clamp texture addressing</li></ul>
         */
-        bool getNonPOW2TexturesLimited(void) const
-        {
-            return mNonPOW2TexturesLimited;
-        }
+        bool getNonPOW2TexturesLimited() const { return mNonPOW2TexturesLimited; }
         /// Set the maximum supported anisotropic filtering
-        void setMaxSupportedAnisotropy(Real s)
-        {
-            mMaxSupportedAnisotropy = s;
-        }
+        void setMaxSupportedAnisotropy( Real s ) { mMaxSupportedAnisotropy = s; }
         /// Get the maximum supported anisotropic filtering
-        Real getMaxSupportedAnisotropy() const
-        {
-            return mMaxSupportedAnisotropy;
-        }
+        Real getMaxSupportedAnisotropy() const { return mMaxSupportedAnisotropy; }
 
         /// Set the number of vertex texture units supported
-        void setNumVertexTextureUnits(ushort n)
-        {
-            mNumVertexTextureUnits = n;
-        }
+        void setNumVertexTextureUnits( ushort n ) { mNumVertexTextureUnits = n; }
         /// Get the number of vertex texture units supported
-        ushort getNumVertexTextureUnits(void) const
-        {
-            return mNumVertexTextureUnits;
-        }
+        ushort getNumVertexTextureUnits() const { return mNumVertexTextureUnits; }
         /// Set whether the vertex texture units are shared with the fragment processor
-        void setVertexTextureUnitsShared(bool shared)
-        {
-            mVertexTextureUnitsShared = shared;
-        }
+        void setVertexTextureUnitsShared( bool shared ) { mVertexTextureUnitsShared = shared; }
         /// Get whether the vertex texture units are shared with the fragment processor
-        bool getVertexTextureUnitsShared(void) const
-        {
-            return mVertexTextureUnitsShared;
-        }
+        bool getVertexTextureUnitsShared() const { return mVertexTextureUnitsShared; }
 
         /// Set the number of vertices a single geometry program run can emit
-        void setGeometryProgramNumOutputVertices(int numOutputVertices)
+        void setGeometryProgramNumOutputVertices( int numOutputVertices )
         {
             mGeometryProgramNumOutputVertices = numOutputVertices;
         }
         /// Get the number of vertices a single geometry program run can emit
-        int getGeometryProgramNumOutputVertices(void) const
-        {
-            return mGeometryProgramNumOutputVertices;
-        }
+        int getGeometryProgramNumOutputVertices() const { return mGeometryProgramNumOutputVertices; }
 
         /// Get the identifier of the rendersystem from which these capabilities were generated
-        String getRenderSystemName(void) const
-        {
-            return mRenderSystemName;
-        }
+        String getRenderSystemName() const { return mRenderSystemName; }
         ///  Set the identifier of the rendersystem from which these capabilities were generated
-        void setRenderSystemName(const String& rs)
-        {
-            mRenderSystemName = rs;
-        }
+        void setRenderSystemName( const String &rs ) { mRenderSystemName = rs; }
 
         /// Mark a category as 'relevant' or not, ie will it be reported
-        void setCategoryRelevant(CapabilitiesCategory cat, bool relevant)
+        void setCategoryRelevant( CapabilitiesCategory cat, bool relevant )
         {
             mCategoryRelevant[cat] = relevant;
         }
 
         /// Return whether a category is 'relevant' or not, ie will it be reported
-        bool isCategoryRelevant(CapabilitiesCategory cat)
-        {
-            return mCategoryRelevant[cat];
-        }
-
-
+        bool isCategoryRelevant( CapabilitiesCategory cat ) { return mCategoryRelevant[cat]; }
 
         /** Write the capabilities to the pass in Log */
-        void log(Log* pLog);
+        void log( Log *pLog );
 
         // Support for new shader stages in shader model 5.0
         /// The number of floating-point constants tessellation Hull programs support
-        void setTessellationHullProgramConstantFloatCount(ushort c)
+        void setTessellationHullProgramConstantFloatCount( ushort c )
         {
-            mTessellationHullProgramConstantFloatCount = c;           
+            mTessellationHullProgramConstantFloatCount = c;
         }
         /// The number of integer constants tessellation Domain programs support
-        void setTessellationHullProgramConstantIntCount(ushort c)
+        void setTessellationHullProgramConstantIntCount( ushort c )
         {
-            mTessellationHullProgramConstantIntCount = c;           
+            mTessellationHullProgramConstantIntCount = c;
         }
         /// The number of boolean constants tessellation Domain programs support
-        void setTessellationHullProgramConstantBoolCount(ushort c)
+        void setTessellationHullProgramConstantBoolCount( ushort c )
         {
-            mTessellationHullProgramConstantBoolCount = c;           
+            mTessellationHullProgramConstantBoolCount = c;
         }
         /// The number of floating-point constants fragment programs support
-        ushort getTessellationHullProgramConstantFloatCount(void) const
+        ushort getTessellationHullProgramConstantFloatCount() const
         {
-            return mTessellationHullProgramConstantFloatCount;           
+            return mTessellationHullProgramConstantFloatCount;
         }
         /// The number of integer constants fragment programs support
-        ushort getTessellationHullProgramConstantIntCount(void) const
+        ushort getTessellationHullProgramConstantIntCount() const
         {
-            return mTessellationHullProgramConstantIntCount;           
+            return mTessellationHullProgramConstantIntCount;
         }
         /// The number of boolean constants fragment programs support
-        ushort getTessellationHullProgramConstantBoolCount(void) const
+        ushort getTessellationHullProgramConstantBoolCount() const
         {
-            return mTessellationHullProgramConstantBoolCount;           
+            return mTessellationHullProgramConstantBoolCount;
         }
 
         /// The number of floating-point constants tessellation Domain programs support
-        void setTessellationDomainProgramConstantFloatCount(ushort c)
+        void setTessellationDomainProgramConstantFloatCount( ushort c )
         {
-            mTessellationDomainProgramConstantFloatCount = c;           
+            mTessellationDomainProgramConstantFloatCount = c;
         }
         /// The number of integer constants tessellation Domain programs support
-        void setTessellationDomainProgramConstantIntCount(ushort c)
+        void setTessellationDomainProgramConstantIntCount( ushort c )
         {
-            mTessellationDomainProgramConstantIntCount = c;           
+            mTessellationDomainProgramConstantIntCount = c;
         }
         /// The number of boolean constants tessellation Domain programs support
-        void setTessellationDomainProgramConstantBoolCount(ushort c)
+        void setTessellationDomainProgramConstantBoolCount( ushort c )
         {
-            mTessellationDomainProgramConstantBoolCount = c;           
+            mTessellationDomainProgramConstantBoolCount = c;
         }
         /// The number of floating-point constants fragment programs support
-        ushort getTessellationDomainProgramConstantFloatCount(void) const
+        ushort getTessellationDomainProgramConstantFloatCount() const
         {
-            return mTessellationDomainProgramConstantFloatCount;           
+            return mTessellationDomainProgramConstantFloatCount;
         }
         /// The number of integer constants fragment programs support
-        ushort getTessellationDomainProgramConstantIntCount(void) const
+        ushort getTessellationDomainProgramConstantIntCount() const
         {
-            return mTessellationDomainProgramConstantIntCount;           
+            return mTessellationDomainProgramConstantIntCount;
         }
         /// The number of boolean constants fragment programs support
-        ushort getTessellationDomainProgramConstantBoolCount(void) const
+        ushort getTessellationDomainProgramConstantBoolCount() const
         {
-            return mTessellationDomainProgramConstantBoolCount;           
+            return mTessellationDomainProgramConstantBoolCount;
         }
 
         /// The number of floating-point constants compute programs support
-        void setComputeProgramConstantFloatCount(ushort c)
-        {
-            mComputeProgramConstantFloatCount = c;           
-        }
+        void setComputeProgramConstantFloatCount( ushort c ) { mComputeProgramConstantFloatCount = c; }
         /// The number of integer constants compute programs support
-        void setComputeProgramConstantIntCount(ushort c)
-        {
-            mComputeProgramConstantIntCount = c;           
-        }
+        void setComputeProgramConstantIntCount( ushort c ) { mComputeProgramConstantIntCount = c; }
         /// The number of boolean constants compute programs support
-        void setComputeProgramConstantBoolCount(ushort c)
-        {
-            mComputeProgramConstantBoolCount = c;           
-        }
+        void setComputeProgramConstantBoolCount( ushort c ) { mComputeProgramConstantBoolCount = c; }
         /// The number of floating-point constants fragment programs support
-        ushort getComputeProgramConstantFloatCount(void) const
-        {
-            return mComputeProgramConstantFloatCount;           
-        }
+        ushort getComputeProgramConstantFloatCount() const { return mComputeProgramConstantFloatCount; }
         /// The number of integer constants fragment programs support
-        ushort getComputeProgramConstantIntCount(void) const
-        {
-            return mComputeProgramConstantIntCount;           
-        }
+        ushort getComputeProgramConstantIntCount() const { return mComputeProgramConstantIntCount; }
         /// The number of boolean constants fragment programs support
-        ushort getComputeProgramConstantBoolCount(void) const
-        {
-            return mComputeProgramConstantBoolCount;           
-        }
+        ushort getComputeProgramConstantBoolCount() const { return mComputeProgramConstantBoolCount; }
 
         void setMaxThreadsPerThreadgroupAxis( const uint32 value[3] )
         {
@@ -978,28 +852,17 @@ namespace Ogre
             mMaxThreadsPerThreadgroupAxis[2] = value[2];
         }
 
-        void setMaxThreadsPerThreadgroup( uint32 value )
-        {
-            mMaxThreadsPerThreadgroup = value;
-        }
+        void setMaxThreadsPerThreadgroup( uint32 value ) { mMaxThreadsPerThreadgroup = value; }
 
-        const uint32* getMaxThreadsPerThreadgroupAxis(void) const
-        {
-            return mMaxThreadsPerThreadgroupAxis;
-        }
+        const uint32 *getMaxThreadsPerThreadgroupAxis() const { return mMaxThreadsPerThreadgroupAxis; }
 
-        uint32 getMaxThreadsPerThreadgroup(void) const
-        {
-            return mMaxThreadsPerThreadgroup;
-        }
+        uint32 getMaxThreadsPerThreadgroup() const { return mMaxThreadsPerThreadgroup; }
     };
 
     /** @} */
     /** @} */
-} // namespace
-
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
-#endif // __RenderSystemCapabilities__
-
+#endif  // __RenderSystemCapabilities__

@@ -2,32 +2,31 @@
 #ifndef _Demo_Tutorial_SMAAGameState_H_
 #define _Demo_Tutorial_SMAAGameState_H_
 
+#include "OgreMesh2.h"
 #include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
-#include "OgreMesh2.h"
 
 namespace Demo
 {
     class Tutorial_SMAAGameState : public TutorialGameState
     {
-	private:
-		Ogre::SceneNode     *mSceneNode[16];
-		Ogre::SceneNode     *mLightNodes[3];
+    private:
+        Ogre::SceneNode *mSceneNode[16];
+        Ogre::SceneNode *mLightNodes[3];
 
-		bool                mAnimateObjects;
+        bool mAnimateObjects;
 
-		virtual void generateDebugText(float timeSinceLast, Ogre::String &outText);
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         Tutorial_SMAAGameState( const Ogre::String &helpDescription );
 
-		virtual void createScene01(void);
+        void createScene01() override;
 
-		virtual void update(float timeSinceLast);
+        void update( float timeSinceLast ) override;
 
-		virtual void keyReleased(const SDL_KeyboardEvent &arg);
-
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

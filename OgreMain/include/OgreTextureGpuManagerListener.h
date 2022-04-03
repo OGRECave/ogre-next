@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -89,10 +89,10 @@ namespace Ogre
 
         DefaultTextureGpuManagerListener();
 
-        virtual size_t getNumSlicesFor( TextureGpu *texture, TextureGpuManager *textureManager );
+        size_t getNumSlicesFor( TextureGpu *texture, TextureGpuManager *textureManager ) override;
 
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
     };
 
     /** @} */

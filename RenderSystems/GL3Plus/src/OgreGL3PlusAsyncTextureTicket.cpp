@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,13 +27,13 @@ THE SOFTWARE.
 */
 
 #include "OgreGL3PlusAsyncTextureTicket.h"
-#include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusMappings.h"
+#include "OgreGL3PlusTextureGpu.h"
 #include "Vao/OgreGL3PlusVaoManager.h"
 
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
 {
@@ -43,8 +43,7 @@ namespace Ogre
                                                           PixelFormatGpu pixelFormatFamily,
                                                           GL3PlusVaoManager *vaoManager,
                                                           bool supportsGetTextureSubImage ) :
-        AsyncTextureTicket( width, height, depthOrSlices, textureType,
-                            pixelFormatFamily ),
+        AsyncTextureTicket( width, height, depthOrSlices, textureType, pixelFormatFamily ),
         mVboName( 0 ),
         mTmpVboName( 0 ),
         mDownloadFrame( 0 ),
@@ -88,17 +87,18 @@ namespace Ogre
         OCGE( glBindBuffer( GL_PIXEL_PACK_BUFFER, vboName ) );
 
         const uint32 rowAlignment = 4u;
-        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depthOrSlices,
-                                                                    1u, mPixelFormatFamily,
-                                                                    rowAlignment );
+        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depthOrSlices, 1u,
+                                                                    mPixelFormatFamily, rowAlignment );
 
         if( mVaoManager->supportsArbBufferStorage() )
         {
-            OCGE( glBufferStorage( GL_PIXEL_PACK_BUFFER, sizeBytes, 0, GL_MAP_READ_BIT ) );
+            OCGE( glBufferStorage( GL_PIXEL_PACK_BUFFER, static_cast<GLsizeiptr>( sizeBytes ), 0,
+                                   GL_MAP_READ_BIT ) );
         }
         else
         {
-            OCGE( glBufferData( GL_PIXEL_PACK_BUFFER, sizeBytes, 0, GL_STREAM_READ ) );
+            OCGE( glBufferData( GL_PIXEL_PACK_BUFFER, static_cast<GLsizeiptr>( sizeBytes ), 0,
+                                GL_STREAM_READ ) );
         }
 
         return vboName;
@@ -125,75 +125,77 @@ namespace Ogre
         else
         {
             srcTextureBox = *srcBox;
-            srcTextureBox.bytesPerRow   = fullSrcTextureBox.bytesPerRow;
+            srcTextureBox.bytesPerRow = fullSrcTextureBox.bytesPerRow;
             srcTextureBox.bytesPerPixel = fullSrcTextureBox.bytesPerPixel;
             srcTextureBox.bytesPerImage = fullSrcTextureBox.bytesPerImage;
         }
 
         if( textureSrc->hasAutomaticBatching() )
         {
-            fullSrcTextureBox.sliceStart= textureSrc->getInternalSliceStart();
+            fullSrcTextureBox.sliceStart = textureSrc->getInternalSliceStart();
             fullSrcTextureBox.numSlices = textureSrc->getTexturePool()->masterTexture->getNumSlices();
 
             srcTextureBox.sliceStart += textureSrc->getInternalSliceStart();
         }
 
         const size_t bytesPerPixel =
-                PixelFormatGpuUtils::getBytesPerPixel( textureSrc->getPixelFormat() );
+            PixelFormatGpuUtils::getBytesPerPixel( textureSrc->getPixelFormat() );
 
-        const GLint rowLength   = bytesPerPixel > 0 ? (srcTextureBox.bytesPerRow / bytesPerPixel) : 0;
-        const GLint imageHeight = (srcTextureBox.bytesPerRow > 0) ?
-                                      (srcTextureBox.bytesPerImage / srcTextureBox.bytesPerRow) : 0;
+        const GLint rowLength =
+            bytesPerPixel > 0 ? GLint( srcTextureBox.bytesPerRow / bytesPerPixel ) : 0;
+        const GLint imageHeight = ( srcTextureBox.bytesPerRow > 0 )
+                                      ? GLint( srcTextureBox.bytesPerImage / srcTextureBox.bytesPerRow )
+                                      : 0;
 
         OCGE( glPixelStorei( GL_PACK_ALIGNMENT, 4 ) );
-        OCGE( glPixelStorei( GL_PACK_ROW_LENGTH, rowLength) );
+        OCGE( glPixelStorei( GL_PACK_ROW_LENGTH, rowLength ) );
         OCGE( glPixelStorei( GL_PACK_IMAGE_HEIGHT, imageHeight ) );
 
         const TextureTypes::TextureTypes textureType = textureSrc->getInternalTextureType();
         const PixelFormatGpu pixelFormat = textureSrc->getPixelFormat();
 
-        assert( dynamic_cast<GL3PlusTextureGpu*>( textureSrc ) );
-        GL3PlusTextureGpu *srcTextureGl = static_cast<GL3PlusTextureGpu*>( textureSrc );
+        assert( dynamic_cast<GL3PlusTextureGpu *>( textureSrc ) );
+        GL3PlusTextureGpu *srcTextureGl = static_cast<GL3PlusTextureGpu *>( textureSrc );
 
         OCGE( glBindBuffer( GL_PIXEL_PACK_BUFFER, mVboName ) );
 
-        GLint xPos          = static_cast<GLint>( srcTextureBox.x );
-        GLint yPos          = static_cast<GLint>( srcTextureBox.y );
-        GLint zPos          = static_cast<GLint>( srcTextureBox.z );
-        GLint slicePos      = static_cast<GLint>( srcTextureBox.sliceStart );
-        GLsizei width       = static_cast<GLsizei>( srcTextureBox.width );
-        GLsizei height      = static_cast<GLsizei>( srcTextureBox.height );
-        GLsizei depthOrSlices= static_cast<GLsizei>( srcTextureBox.getDepthOrSlices() );
+        GLint xPos = static_cast<GLint>( srcTextureBox.x );
+        GLint yPos = static_cast<GLint>( srcTextureBox.y );
+        GLint zPos = static_cast<GLint>( srcTextureBox.z );
+        GLint slicePos = static_cast<GLint>( srcTextureBox.sliceStart );
+        GLsizei width = static_cast<GLsizei>( srcTextureBox.width );
+        GLsizei height = static_cast<GLsizei>( srcTextureBox.height );
+        GLsizei depthOrSlices = static_cast<GLsizei>( srcTextureBox.getDepthOrSlices() );
 
         if( textureType == TextureTypes::Type1DArray )
         {
-            yPos            = slicePos;
-            slicePos        = 1;
-            height          = depthOrSlices;
-            depthOrSlices   = 1u;
+            yPos = slicePos;
+            slicePos = 1;
+            height = depthOrSlices;
+            depthOrSlices = 1u;
         }
 
-        //We need to use glGetTextureSubImage & glGetCompressedTextureSubImage,
-        //which is only available since GL4.5. If this isn't possible, then
-        //we need to download the whole texture into a dummy temporary buffer.
+        // We need to use glGetTextureSubImage & glGetCompressedTextureSubImage,
+        // which is only available since GL4.5. If this isn't possible, then
+        // we need to download the whole texture into a dummy temporary buffer.
         if( !fullSrcTextureBox.equalSize( srcTextureBox ) && !mSupportsGetTextureSubImage )
         {
             if( !mTmpVboName || !mSubregion.equalSize( srcTextureBox ) )
             {
                 if( mTmpVboName )
                     glDeleteBuffers( 1u, &mTmpVboName );
-                //Create temporary BO to hold the whole thing.
-                //When mapping we'll use the subregion via
-                //bytesPer* variables.
+                // Create temporary BO to hold the whole thing.
+                // When mapping we'll use the subregion via
+                // bytesPer* variables.
                 mTmpVboName = createBuffer( fullSrcTextureBox.width, fullSrcTextureBox.height,
                                             fullSrcTextureBox.getDepthOrSlices() );
             }
 
             OCGE( glBindBuffer( GL_PIXEL_PACK_BUFFER, mTmpVboName ) );
             mSubregion = srcTextureBox;
-            mSubregion.bytesPerPixel    = fullSrcTextureBox.bytesPerPixel;
-            mSubregion.bytesPerRow      = fullSrcTextureBox.bytesPerRow;
-            mSubregion.bytesPerImage    = fullSrcTextureBox.bytesPerImage;
+            mSubregion.bytesPerPixel = fullSrcTextureBox.bytesPerPixel;
+            mSubregion.bytesPerRow = fullSrcTextureBox.bytesPerRow;
+            mSubregion.bytesPerImage = fullSrcTextureBox.bytesPerImage;
         }
         else if( mTmpVboName )
         {
@@ -204,14 +206,14 @@ namespace Ogre
 
         if( !textureSrc->isOpenGLRenderWindow() )
         {
-            const GLenum targetGl   = srcTextureGl->getGlTextureTarget();
-            const GLuint texName    = srcTextureGl->getFinalTextureName();
+            const GLenum targetGl = srcTextureGl->getGlTextureTarget();
+            const GLuint texName = srcTextureGl->getFinalTextureName();
 
             OCGE( glBindTexture( targetGl, texName ) );
 
             if( fullSrcTextureBox.equalSize( srcTextureBox ) || !mSupportsGetTextureSubImage )
             {
-                //We can use glGetTexImage & glGetCompressedTexImage (cubemaps need a special path)
+                // We can use glGetTexImage & glGetCompressedTexImage (cubemaps need a special path)
                 if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )
                 {
                     GLenum format, type;
@@ -223,13 +225,13 @@ namespace Ogre
                     }
                     else
                     {
-                        for( size_t i=0; i<(size_t)depthOrSlices; ++i )
+                        for( size_t i = 0; i < (size_t)depthOrSlices; ++i )
                         {
                             const GLenum targetCubeGl =
-                                    static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
-                            OCGE( glGetTexImage( targetCubeGl, mipLevel, format, type,
-                                                 reinterpret_cast<void*>(
-                                                     srcTextureBox.bytesPerImage * i ) ) );
+                                static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+                            OCGE( glGetTexImage(
+                                targetCubeGl, mipLevel, format, type,
+                                reinterpret_cast<void *>( srcTextureBox.bytesPerImage * i ) ) );
                         }
                     }
                 }
@@ -241,38 +243,36 @@ namespace Ogre
                     }
                     else
                     {
-                        for( size_t i=0; i<(size_t)depthOrSlices; ++i )
+                        for( size_t i = 0; i < (size_t)depthOrSlices; ++i )
                         {
                             const GLenum targetCubeGl =
-                                    static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
-                            OCGE( glGetCompressedTexImage( targetCubeGl, mipLevel,
-                                                           reinterpret_cast<void*>(
-                                                               srcTextureBox.bytesPerImage * i ) ) );
+                                static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+                            OCGE( glGetCompressedTexImage(
+                                targetCubeGl, mipLevel,
+                                reinterpret_cast<void *>( srcTextureBox.bytesPerImage * i ) ) );
                         }
                     }
                 }
             }
             else
             {
-                //We need to use glGetTextureSubImage & glGetCompressedTextureSubImage,
-                //which is only available since GL4.5. Support is here. Yay!
+                // We need to use glGetTextureSubImage & glGetCompressedTextureSubImage,
+                // which is only available since GL4.5. Support is here. Yay!
                 if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )
                 {
-                    //Use INT_MAX as buffer size, OpenGL already
-                    //knows the size because the buffer is bound.
+                    // Use INT_MAX as buffer size, OpenGL already
+                    // knows the size because the buffer is bound.
                     GLenum format, type;
                     GL3PlusMappings::getFormatAndType( pixelFormat, format, type );
                     OCGE( glGetTextureSubImage( texName, mipLevel, xPos, yPos,
-                                                std::max( zPos, slicePos ),
-                                                width, height, depthOrSlices, format, type,
-                                                std::numeric_limits<int>::max(), 0 ) );
+                                                std::max( zPos, slicePos ), width, height, depthOrSlices,
+                                                format, type, std::numeric_limits<int>::max(), 0 ) );
                 }
                 else
                 {
-                    OCGE( glGetCompressedTextureSubImage( texName, mipLevel, xPos, yPos,
-                                                          std::max( zPos, slicePos ),
-                                                          width, height, depthOrSlices,
-                                                          std::numeric_limits<int>::max(), 0 ) );
+                    OCGE( glGetCompressedTextureSubImage(
+                        texName, mipLevel, xPos, yPos, std::max( zPos, slicePos ), width, height,
+                        depthOrSlices, std::numeric_limits<int>::max(), 0 ) );
                 }
             }
         }
@@ -304,29 +304,29 @@ namespace Ogre
         if( mTmpVboName )
         {
             retVal = mSubregion;
-            sizeBytes = retVal.bytesPerImage * std::max( mSubregion.getMaxZ(),
-                                                         mSubregion.getMaxSlice() );
+            sizeBytes =
+                retVal.bytesPerImage * std::max( mSubregion.getMaxZ(), mSubregion.getMaxSlice() );
         }
         else
         {
             retVal = TextureBox( mWidth, mHeight, getDepth(), getNumSlices(),
                                  PixelFormatGpuUtils::getBytesPerPixel( mPixelFormatFamily ),
                                  getBytesPerRow(), getBytesPerImage() );
-            sizeBytes = PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, mDepthOrSlices,
-                                                           1u, mPixelFormatFamily,
-                                                           rowAlignment );
+            sizeBytes = PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, mDepthOrSlices, 1u,
+                                                           mPixelFormatFamily, rowAlignment );
         }
 
         if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
             retVal.setCompressedPixelFormat( mPixelFormatFamily );
 
-        retVal.data = glMapBufferRange( GL_PIXEL_PACK_BUFFER, 0, sizeBytes, GL_MAP_READ_BIT );
+        retVal.data = glMapBufferRange( GL_PIXEL_PACK_BUFFER, 0, static_cast<GLsizeiptr>( sizeBytes ),
+                                        GL_MAP_READ_BIT );
 
         if( mTmpVboName )
         {
-            //Offset to the beginning of the region.
-            retVal.data = retVal.at( retVal.x, retVal.y, std::max( retVal.z,
-                                                                   retVal.sliceStart + slice ) );
+            // Offset to the beginning of the region.
+            retVal.data =
+                retVal.at( retVal.x, retVal.y, std::max( retVal.z, retVal.sliceStart + slice ) );
             retVal.x = 0;
             retVal.y = 0;
             retVal.z = 0;
@@ -341,17 +341,17 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusAsyncTextureTicket::unmapImpl(void)
+    void GL3PlusAsyncTextureTicket::unmapImpl()
     {
         GLuint vboName = mTmpVboName ? mTmpVboName : mVboName;
         OCGE( glBindBuffer( GL_PIXEL_PACK_BUFFER, vboName ) );
         OCGE( glUnmapBuffer( GL_PIXEL_PACK_BUFFER ) );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusAsyncTextureTicket::waitForDownloadToFinish(void)
+    void GL3PlusAsyncTextureTicket::waitForDownloadToFinish()
     {
         if( mStatus != Downloading )
-            return; //We're done.
+            return;  // We're done.
 
         if( mAccurateFence )
         {
@@ -366,12 +366,12 @@ namespace Ogre
         mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusAsyncTextureTicket::queryIsTransferDone(void)
+    bool GL3PlusAsyncTextureTicket::queryIsTransferDone()
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {
-            //Early out. The texture is not even finished being ready.
-            //We didn't even start the actual download.
+            // Early out. The texture is not even finished being ready.
+            // We didn't even start the actual download.
             return false;
         }
 
@@ -383,7 +383,7 @@ namespace Ogre
         }
         else if( mAccurateFence )
         {
-            //Ask GL API to return immediately and tells us about the fence
+            // Ask GL API to return immediately and tells us about the fence
             GLenum waitRet = glClientWaitSync( mAccurateFence, 0, 0 );
             if( waitRet == GL_ALREADY_SIGNALED || waitRet == GL_CONDITION_SATISFIED )
             {
@@ -400,29 +400,30 @@ namespace Ogre
             {
                 if( mNumInaccurateQueriesWasCalledInIssuingFrame > 3 )
                 {
-                    //Use is not calling vaoManager->update(). Likely it's stuck in an
-                    //infinite loop checking if we're done, but we'll always return false.
-                    //If so, switch to accurate tracking.
+                    // Use is not calling vaoManager->update(). Likely it's stuck in an
+                    // infinite loop checking if we're done, but we'll always return false.
+                    // If so, switch to accurate tracking.
                     OCGE( mAccurateFence = glFenceSync( GL_SYNC_GPU_COMMANDS_COMPLETE, 0 ) );
                     OCGE( glFlush() );
 
                     LogManager::getSingleton().logMessage(
-                                "WARNING: Calling AsyncTextureTicket::queryIsTransferDone too "
-                                "often with innacurate tracking in the same frame this transfer "
-                                "was issued. Switching to accurate tracking. If this is an accident, "
-                                "wait until you've rendered a few frames before checking if it's done. "
-                                "If this is on purpose, consider calling AsyncTextureTicket::download()"
-                                " with accurate tracking enabled.", LML_CRITICAL );
+                        "WARNING: Calling AsyncTextureTicket::queryIsTransferDone too "
+                        "often with inaccurate tracking in the same frame this transfer "
+                        "was issued. Switching to accurate tracking. If this is an accident, "
+                        "wait until you've rendered a few frames before checking if it's done. "
+                        "If this is on purpose, consider calling AsyncTextureTicket::download()"
+                        " with accurate tracking enabled.",
+                        LML_CRITICAL );
                 }
 
                 ++mNumInaccurateQueriesWasCalledInIssuingFrame;
             }
 
-            //We're downloading but have no fence. That means we don't have accurate tracking.
+            // We're downloading but have no fence. That means we don't have accurate tracking.
             retVal = mVaoManager->isFrameFinished( mDownloadFrame );
             ++mNumInaccurateQueriesWasCalledInIssuingFrame;
         }
 
         return retVal;
     }
-}
+}  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -47,7 +47,7 @@ namespace v1 {
             /** See HardwareBuffer. */
             void* lockImpl(size_t offset, size_t length, LockOptions options);
             /** See HardwareBuffer. */
-            void unlockImpl(void);
+            void unlockImpl();
 
         public:
             GLES2HardwareUniformBuffer(HardwareBufferManagerBase* mgr, size_t bufferSize, HardwareBuffer::Usage usage,
@@ -65,9 +65,9 @@ namespace v1 {
             void copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
                           size_t dstOffset, size_t length, bool discardWholeBuffer = false);
 
-            inline GLuint getGLBufferId(void) const { return mBufferId; }
+            inline GLuint getGLBufferId() const { return mBufferId; }
             void setGLBufferBinding(GLint binding);
-            inline GLint getGLBufferBinding(void) const { return mBinding; }
+            inline GLint getGLBufferBinding() const { return mBinding; }
     };
 }
 }

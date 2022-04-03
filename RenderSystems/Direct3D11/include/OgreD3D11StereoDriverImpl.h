@@ -29,26 +29,26 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-#ifndef __D3D11StereoDriverImpl_H__
-#define __D3D11StereoDriverImpl_H__
+#    ifndef __D3D11StereoDriverImpl_H__
+#        define __D3D11StereoDriverImpl_H__
 
-#include "OgreCommon.h"
-#include "OgreD3D11RenderWindow.h"
+#        include "OgreCommon.h"
+#        include "OgreD3D11RenderWindow.h"
 
-namespace Ogre {
-
-  /** Virtual interface of the stereo driver */
-  class _OgreD3D11Export D3D11StereoDriverImpl : public ResourceAlloc
-  {
+namespace Ogre
+{
+    /** Virtual interface of the stereo driver */
+    class _OgreD3D11Export D3D11StereoDriverImpl : public OgreAllocatedObj
+    {
     public:
-      D3D11StereoDriverImpl() {}
-      virtual ~D3D11StereoDriverImpl() {}
-	  virtual bool addRenderWindow(D3D11RenderWindowBase* renderWindow) = 0;
-      virtual bool removeRenderWindow(const String& renderWindowName) = 0;
-      virtual bool isStereoEnabled(const String& renderWindowName) = 0;
-      virtual bool setDrawBuffer(ColourBufferType colourBuffer) = 0;
-  };
-}
-#endif
-#endif
+        D3D11StereoDriverImpl() {}
+        virtual ~D3D11StereoDriverImpl() {}
 
+        virtual bool addRenderWindow( D3D11RenderWindowBase *renderWindow ) = 0;
+        virtual bool removeRenderWindow( const String &renderWindowName ) = 0;
+        virtual bool isStereoEnabled( const String &renderWindowName ) = 0;
+        virtual bool setDrawBuffer( ColourBufferType colourBuffer ) = 0;
+    };
+}  // namespace Ogre
+#    endif
+#endif

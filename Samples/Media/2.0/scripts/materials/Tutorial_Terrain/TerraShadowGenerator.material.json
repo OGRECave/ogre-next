@@ -40,7 +40,8 @@
 				["xyStep",     		[1], "int"],
 				["isSteep",      	[1], "int"],
 				["delta",			[1.0, 0.0]],
-				["heightDelta",     [0.001]]
+				["heightDelta",     [0.001]],
+				["resolutionShift", [0], "int"]
 			],
 
 			"params_glsl" :

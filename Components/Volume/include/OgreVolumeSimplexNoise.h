@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -62,7 +62,7 @@ namespace Volume {
         @return
             A random long.
         */
-        unsigned long random(void);
+        unsigned long random();
         
         /** Dot product of a gradient with the given values.
         @param g
@@ -89,7 +89,7 @@ namespace Volume {
 
         /** Constructor with a random permutation table.
         */
-        SimplexNoise(void);
+        SimplexNoise();
 
         /** Constructor with a by seed defined permutation table.
         @param definedSeed
@@ -113,7 +113,7 @@ namespace Volume {
         @return
             The current seed.
         */
-        long getSeed(void) const;
+        long getSeed() const;
 
     };
 

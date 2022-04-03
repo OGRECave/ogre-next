@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -58,7 +58,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanTextureGpuWindow::~VulkanTextureGpuWindow() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
-    VkSemaphore VulkanTextureGpuWindow::getImageAcquiredSemaphore( void )
+    VkSemaphore VulkanTextureGpuWindow::getImageAcquiredSemaphore()
     {
         return mWindow->getImageAcquiredSemaphore();
     }
@@ -74,24 +74,21 @@ namespace Ogre
         return mWindow->getSwapchainImage( idx );
     }
     //-----------------------------------------------------------------------------------
-    size_t VulkanTextureGpuWindow::getWindowNumSurfaces( void ) const
-    {
-        return mWindow->getNumSwapchains();
-    }
+    size_t VulkanTextureGpuWindow::getWindowNumSurfaces() const { return mWindow->getNumSwapchains(); }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::createInternalResourcesImpl( void )
+    void VulkanTextureGpuWindow::createInternalResourcesImpl()
     {
         if( mSampleDescription.isMultisample() )
             createMsaaSurface();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::destroyInternalResourcesImpl( void )
+    void VulkanTextureGpuWindow::destroyInternalResourcesImpl()
     {
         mFinalTextureName = 0;
         destroyMsaaSurface();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::notifyDataIsReady( void )
+    void VulkanTextureGpuWindow::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
@@ -101,12 +98,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpuWindow::_isDataReadyImpl( void ) const
+    bool VulkanTextureGpuWindow::_isDataReadyImpl() const
     {
         return mResidencyStatus == GpuResidency::Resident;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::swapBuffers( void ) { mWindow->swapBuffers(); }
+    void VulkanTextureGpuWindow::swapBuffers() { mWindow->swapBuffers(); }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::getCustomAttribute( IdString name, void *pData )
     {
@@ -114,9 +111,7 @@ namespace Ogre
             *static_cast<Window **>( pData ) = mWindow;
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpuWindow::isOpenGLRenderWindow( void ) const { return true; }
-    //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::_setToDisplayDummyTexture( void ) {}
+    void VulkanTextureGpuWindow::_setToDisplayDummyTexture() {}
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
     {

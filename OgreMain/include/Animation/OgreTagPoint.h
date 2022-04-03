@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -32,14 +32,14 @@ THE SOFTWARE.
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
 
     /** TagPoints are like SceneNodes, that can be children of a Bone.
 
@@ -101,24 +101,24 @@ namespace Ogre {
     {
     protected:
         /// Pointer to parent node
-        Bone    *mParentBone;
+        Bone *mParentBone;
 
         /// @copydoc Node::updateFromParentImpl.
-        void updateFromParentImpl(void);
+        void updateFromParentImpl() override;
 
     public:
-        TagPoint( IdType id, SceneManager* creator, NodeMemoryManager *nodeMemoryManager,
+        TagPoint( IdType id, SceneManager *creator, NodeMemoryManager *nodeMemoryManager,
                   SceneNode *parent );
-        virtual ~TagPoint();
+        ~TagPoint() override;
 
         /// Don't call directly. @see Bone::addTagPoint
         void _setParentBone( Bone *bone );
-        void _unsetParentBone(void);
+        void _unsetParentBone();
 
         /// Gets this Bones's parent (NULL if no parent).
-        Bone* getParentBone(void) const                                 { return mParentBone; }
+        Bone *getParentBone() const { return mParentBone; }
 
-        Matrix3 _getDerivedOrientationMatrix(void) const;
+        Matrix3 _getDerivedOrientationMatrix() const;
 
         /// @See Node::updateAllTransforms.
         /// This version grabs the parent Bone of a TagPoint, derives the final transform
@@ -132,14 +132,13 @@ namespace Ogre {
         /// of another TagPoint, respecting non-uniform scaling.
         static void updateAllTransformsTagOnTag( const size_t numNodes, Transform t );
 
-        virtual TagPoint* createChildTagPoint( const Vector3& vPos = Vector3::ZERO,
-                                               const Quaternion& qRot = Quaternion::IDENTITY );
+        virtual TagPoint *createChildTagPoint( const Vector3    &vPos = Vector3::ZERO,
+                                               const Quaternion &qRot = Quaternion::IDENTITY );
     };
     /** @} */
     /** @} */
 
-
-}// namespace
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

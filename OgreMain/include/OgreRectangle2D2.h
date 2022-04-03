@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -66,28 +66,28 @@ namespace Ogre
             NumCorners
         };
 
-        bool mChanged;
-        uint32 mGeometryFlags;
+        bool    mChanged;
+        uint32  mGeometryFlags;
         Vector3 mNormals[NumCorners];
 
         Vector2 mPosition;
         Vector2 mSize;
 
-        void createBuffers( void );
+        void createBuffers();
         void fillHollowFsRect( float *RESTRICT_ALIAS vertexData, size_t maxElements );
         void fillBuffer( float *RESTRICT_ALIAS vertexData, size_t maxElements );
 
     public:
         Rectangle2D( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
-        virtual ~Rectangle2D();
+        ~Rectangle2D() override;
 
-        bool isQuad( void ) const;
-        bool isStereo( void ) const;
-        bool hasNormals( void ) const;
-        BufferType getBufferType( void ) const;
-        bool isHollowFullscreenRect( void ) const;
+        bool       isQuad() const;
+        bool       isStereo() const;
+        bool       hasNormals() const;
+        BufferType getBufferType() const;
+        bool       isHollowFullscreenRect() const;
 
-        uint32 calculateNumVertices( void ) const;
+        uint32 calculateNumVertices() const;
 
         void setGeometry( const Vector2 &pos, const Vector2 &size );
 
@@ -95,38 +95,39 @@ namespace Ogre
                          const Vector3 &upperRight, const Vector3 &bottomRight );
 
         void setHollowRectRadius( Real radius );
-        Real getHollowRectRadius( void ) const { return mNormals[0].x; }
+        Real getHollowRectRadius() const { return mNormals[0].x; }
 
         void initialize( BufferType bufferType, uint32 geometryFlags );
 
-        void update( void );
+        void update();
 
         // Overrides from MovableObject
-        virtual const String &getMovableType( void ) const;
+        const String &getMovableType() const override;
 
         // Overrides from Renderable
-        virtual const LightList &getLights( void ) const;
-        virtual void getRenderOperation( v1::RenderOperation &op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4 *xform ) const;
-        virtual bool getCastsShadows( void ) const;
+        const LightList &getLights() const override;
+        void             getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void             getWorldTransforms( Matrix4 *xform ) const override;
+        bool             getCastsShadows() const override;
     };
 
     /** Factory object for creating Entity instances */
-    class _OgreExport Rectangle2DFactory : public MovableObjectFactory
+    class _OgreExport Rectangle2DFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList *params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager            *manager,
+                                           const NameValuePairList *params = 0 ) override;
 
     public:
         Rectangle2DFactory() {}
-        ~Rectangle2DFactory() {}
+        ~Rectangle2DFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String &getType( void ) const;
-        void destroyInstance( MovableObject *obj );
+        const String &getType() const override;
+
+        void destroyInstance( MovableObject *obj ) override;
     };
 }  // namespace Ogre
 

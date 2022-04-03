@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,32 +27,33 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Compositor/OgreTextureDefinition.h"
+
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/Pass/OgreCompositorPass.h"
-
+#include "OgreDepthBuffer.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
 #include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "OgreDepthBuffer.h"
 #include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
     TextureDefinitionBase::TextureDefinitionBase( TextureSource defaultSource ) :
-            mDefaultLocalTextureSource( defaultSource )
+        mDefaultLocalTextureSource( defaultSource )
     {
         assert( mDefaultLocalTextureSource == TEXTURE_LOCAL ||
                 mDefaultLocalTextureSource == TEXTURE_GLOBAL );
     }
     //-----------------------------------------------------------------------------------
-    size_t TextureDefinitionBase::getNumInputChannels(void) const
+    size_t TextureDefinitionBase::getNumInputChannels() const
     {
         size_t numInputChannels = 0;
         NameToChannelMap::const_iterator itor = mNameToChannelMap.begin();
-        NameToChannelMap::const_iterator end  = mNameToChannelMap.end();
+        NameToChannelMap::const_iterator endt = mNameToChannelMap.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             size_t index;
             TextureSource texSource;
@@ -65,14 +66,14 @@ namespace Ogre
         return numInputChannels;
     }
     //-----------------------------------------------------------------------------------
-    size_t TextureDefinitionBase::getNumInputBufferChannels(void) const
+    size_t TextureDefinitionBase::getNumInputBufferChannels() const
     {
         size_t numInputChannels = 0;
         IdString nullString;
         IdStringVec::const_iterator itor = mInputBuffers.begin();
-        IdStringVec::const_iterator end  = mInputBuffers.end();
+        IdStringVec::const_iterator endt = mInputBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( *itor != nullString )
                 ++numInputChannels;
@@ -85,10 +86,10 @@ namespace Ogre
     void TextureDefinitionBase::decodeTexSource( uint32 encodedVal, size_t &outIdx,
                                                  TextureSource &outTexSource )
     {
-        uint32 texSource = (encodedVal & 0xC0000000) >> 30;
+        uint32 texSource = ( encodedVal & 0xC0000000 ) >> 30;
         assert( texSource < NUM_TEXTURES_SOURCES );
 
-        outIdx       = encodedVal & 0x3FFFFFFF;
+        outIdx = encodedVal & 0x3FFFFFFF;
         outTexSource = static_cast<TextureSource>( texSource );
     }
     //-----------------------------------------------------------------------------------
@@ -99,14 +100,14 @@ namespace Ogre
         if( textureSource == TEXTURE_LOCAL && findResult == 0 )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                        "Local textures can't start with global_ prefix! '" + name + "'",
-                        "TextureDefinitionBase::addTextureSourceName" );
+                         "Local textures can't start with global_ prefix! '" + name + "'",
+                         "TextureDefinitionBase::addTextureSourceName" );
         }
         else if( textureSource == TEXTURE_GLOBAL && findResult != 0 )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                        "Global textures must start with global_ prefix! '" + name + "'",
-                        "TextureDefinitionBase::addTextureSourceName" );
+                         "Global textures must start with global_ prefix! '" + name + "'",
+                         "TextureDefinitionBase::addTextureSourceName" );
         }
 
         const uint32 value = encodeTexSource( index, textureSource );
@@ -116,9 +117,8 @@ namespace Ogre
         if( itor != mNameToChannelMap.end() && itor->second != value )
         {
             OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
-                        "Texture with same name '" + name +
-                        "' in the same scope already exists",
-                        "TextureDefinitionBase::addTextureSourceName" );
+                         "Texture with same name '" + name + "' in the same scope already exists",
+                         "TextureDefinitionBase::addTextureSourceName" );
         }
 
         mNameToChannelMap[hashedName] = value;
@@ -134,7 +134,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::removeTexture( IdString name )
     {
-        size_t index = -1;
+        size_t index = std::numeric_limits<size_t>::max();
         TextureSource textureSource = NUM_TEXTURES_SOURCES;
         {
             NameToChannelMap::iterator it = mNameToChannelMap.find( name );
@@ -151,14 +151,14 @@ namespace Ogre
 
         if( textureSource == mDefaultLocalTextureSource )
         {
-            //Try to keep order (don't use efficientVectorRemove)
-            mLocalTextureDefs.erase( mLocalTextureDefs.begin() + index );
+            // Try to keep order (don't use efficientVectorRemove)
+            mLocalTextureDefs.erase( mLocalTextureDefs.begin() + static_cast<ptrdiff_t>( index ) );
 
-            //Update the references
+            // Update the references
             NameToChannelMap::iterator itor = mNameToChannelMap.begin();
-            NameToChannelMap::iterator end  = mNameToChannelMap.end();
+            NameToChannelMap::iterator endt = mNameToChannelMap.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 size_t otherIndex;
                 decodeTexSource( itor->second, otherIndex, textureSource );
@@ -181,13 +181,13 @@ namespace Ogre
                          "TextureDefinitionBase::renameTexture" );
         }
 
-        size_t index = -1;
+        size_t index = std::numeric_limits<size_t>::max();
         TextureSource textureSource = NUM_TEXTURES_SOURCES;
         decodeTexSource( it->second, index, textureSource );
 
         String::size_type findResult = newName.find( "global_" );
-        if( (textureSource == TEXTURE_GLOBAL && findResult != 0) ||
-            (textureSource != TEXTURE_GLOBAL && findResult == 0) )
+        if( ( textureSource == TEXTURE_GLOBAL && findResult != 0 ) ||
+            ( textureSource != TEXTURE_GLOBAL && findResult == 0 ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Can't rename global texture without the global_ prefix,"
@@ -206,36 +206,38 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::getTextureSource( IdString name, size_t &index,
-                                                    TextureSource &textureSource ) const
+                                                  TextureSource &textureSource ) const
     {
         NameToChannelMap::const_iterator itor = mNameToChannelMap.find( name );
         if( itor == mNameToChannelMap.end() )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                        "Can't find texture with name: '" + name.getFriendlyText() + "'"
-                        " If it's a global texture, trying to use it in the output channel will fail.",
-                        "CompositorNodeDef::getTextureSource" );
+            OGRE_EXCEPT(
+                Exception::ERR_ITEM_NOT_FOUND,
+                "Can't find texture with name: '" + name.getFriendlyText() +
+                    "'"
+                    " If it's a global texture, trying to use it in the output channel will fail.",
+                "CompositorNodeDef::getTextureSource" );
         }
 
         decodeTexSource( itor->second, index, textureSource );
     }
     //-----------------------------------------------------------------------------------
-    TextureDefinitionBase::TextureDefinition* TextureDefinitionBase::addTextureDefinition
-                                                                        ( const String &name )
+    TextureDefinitionBase::TextureDefinition *TextureDefinitionBase::addTextureDefinition(
+        const String &name )
     {
-        IdString hashedName = addTextureSourceName( name, mLocalTextureDefs.size(),
-                                                    mDefaultLocalTextureSource );
+        IdString hashedName =
+            addTextureSourceName( name, mLocalTextureDefs.size(), mDefaultLocalTextureSource );
         mLocalTextureDefs.push_back( TextureDefinition( hashedName ) );
         return &mLocalTextureDefs.back();
     }
     //-----------------------------------------------------------------------------------
-    RenderTargetViewDef* TextureDefinitionBase::addRenderTextureView( IdString name )
+    RenderTargetViewDef *TextureDefinitionBase::addRenderTextureView( IdString name )
     {
         if( mLocalRtvs.find( name ) != mLocalRtvs.end() )
         {
             OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
-                         "RenderTextureView definition with name '" +
-                         name.getFriendlyText() + "' already exists.",
+                         "RenderTextureView definition with name '" + name.getFriendlyText() +
+                             "' already exists.",
                          "TextureDefinitionBase::addRenderTextureView" );
         }
 
@@ -244,7 +246,7 @@ namespace Ogre
         return &retVal;
     }
     //-----------------------------------------------------------------------------------
-    const RenderTargetViewDef* TextureDefinitionBase::getRenderTargetViewDef( IdString name ) const
+    const RenderTargetViewDef *TextureDefinitionBase::getRenderTargetViewDef( IdString name ) const
     {
         RenderTargetViewDefMap::const_iterator itor = mLocalRtvs.find( name );
 
@@ -258,7 +260,7 @@ namespace Ogre
         return &itor->second;
     }
     //-----------------------------------------------------------------------------------
-    RenderTargetViewDef* TextureDefinitionBase::getRenderTargetViewDefNonConstNoThrow( IdString name )
+    RenderTargetViewDef *TextureDefinitionBase::getRenderTargetViewDefNonConstNoThrow( IdString name )
     {
         RenderTargetViewDef *retVal = 0;
         RenderTargetViewDefMap::iterator itor = mLocalRtvs.find( name );
@@ -276,23 +278,21 @@ namespace Ogre
             mLocalRtvs.erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    void TextureDefinitionBase::removeAllRenderTextureViews( void ) { mLocalRtvs.clear(); }
+    void TextureDefinitionBase::removeAllRenderTextureViews() { mLocalRtvs.clear(); }
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::createTextures( const TextureDefinitionVec &textureDefs,
-                                                CompositorChannelVec &inOutTexContainer,
-                                                IdType id,
-                                                const TextureGpu *finalTarget,
-                                                RenderSystem *renderSys )
+                                                CompositorChannelVec &inOutTexContainer, IdType id,
+                                                const TextureGpu *finalTarget, RenderSystem *renderSys )
     {
         inOutTexContainer.reserve( textureDefs.size() );
 
-        //Create the local textures
+        // Create the local textures
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
-        TextureDefinitionVec::const_iterator end  = textureDefs.end();
+        TextureDefinitionVec::const_iterator endt = textureDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            String textureName = (itor->getName() + IdString( id )).getFriendlyText();
+            String textureName = ( itor->getName() + IdString( id ) ).getFriendlyText();
 
             CompositorChannel newChannel = createTexture( *itor, textureName, finalTarget, renderSys );
             inOutTexContainer.push_back( newChannel );
@@ -306,13 +306,12 @@ namespace Ogre
                                                             RenderSystem *renderSys )
     {
         assert( textureDef.depthOrSlices > 0 &&
-                (textureDef.depthOrSlices == 1u || textureDef.textureType > TextureTypes::Type2D ) &&
-                (textureDef.depthOrSlices == 6 || textureDef.textureType != TextureTypes::TypeCube) );
+                ( textureDef.depthOrSlices == 1u || textureDef.textureType > TextureTypes::Type2D ) &&
+                ( textureDef.depthOrSlices == 6 || textureDef.textureType != TextureTypes::TypeCube ) );
 
         TextureGpuManager *textureManager = renderSys->getTextureGpuManager();
-        TextureGpu *tex = textureManager->createTexture( texName, GpuPageOutStrategy::Discard,
-                                                         textureDef.textureFlags,
-                                                         textureDef.textureType );
+        TextureGpu *tex = textureManager->createTexture(
+            texName, GpuPageOutStrategy::Discard, textureDef.textureFlags, textureDef.textureType );
         setupTexture( tex, textureDef, finalTarget );
 
         return tex;
@@ -322,35 +321,36 @@ namespace Ogre
                                               const TextureGpu *finalTarget )
     {
         SampleDescription defaultSampleDescription;
-        PixelFormatGpu defaultPixelFormat               = PFG_RGBA8_UNORM_SRGB;
+        PixelFormatGpu defaultPixelFormat = PFG_RGBA8_UNORM_SRGB;
         if( finalTarget )
         {
-            //Inherit settings from target
+            // Inherit settings from target
             defaultSampleDescription = finalTarget->getSampleDescription();
-            defaultPixelFormat  = finalTarget->getPixelFormat();
+            defaultPixelFormat = finalTarget->getPixelFormat();
         }
-        uint32 width  = textureDef.width;
+        uint32 width = textureDef.width;
         uint32 height = textureDef.height;
         if( finalTarget )
         {
             if( textureDef.width == 0 )
             {
-                width = static_cast<uint32>( ceilf( finalTarget->getWidth() *
-                                                    textureDef.widthFactor ) );
+                width = static_cast<uint32>( ceilf( finalTarget->getWidth() * textureDef.widthFactor ) );
             }
             if( textureDef.height == 0 )
             {
-                height = static_cast<uint32>( ceilf( finalTarget->getHeight() *
-                                                     textureDef.heightFactor ) );
+                height =
+                    static_cast<uint32>( ceilf( finalTarget->getHeight() * textureDef.heightFactor ) );
             }
         }
 
         assert( textureDef.depthOrSlices > 0 &&
-                (textureDef.depthOrSlices == 1u || textureDef.textureType > TextureTypes::Type2D ) &&
-                (textureDef.depthOrSlices == 6 || textureDef.textureType != TextureTypes::TypeCube) );
+                ( textureDef.depthOrSlices == 1u || textureDef.textureType > TextureTypes::Type2D ) &&
+                ( textureDef.depthOrSlices == 6 || textureDef.textureType != TextureTypes::TypeCube ) );
 
         tex->_setSourceType( TextureSourceType::Compositor );
         tex->setResolution( width, height, textureDef.depthOrSlices );
+        if( textureDef.bTargetOrientation )
+            tex->setOrientationMode( finalTarget->getOrientationMode() );
         if( textureDef.format != PFG_UNKNOWN )
             tex->setPixelFormat( textureDef.format );
         else
@@ -361,8 +361,8 @@ namespace Ogre
         }
         else
         {
-            tex->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height,
-                                                                        tex->getDepth() ) );
+            tex->setNumMipmaps(
+                PixelFormatGpuUtils::getMaxMipmapCount( width, height, tex->getDepth() ) );
         }
         if( !textureDef.fsaa.empty() )
         {
@@ -376,14 +376,14 @@ namespace Ogre
         tex->_setDepthBufferDefaults( textureDef.depthBufferId, textureDef.preferDepthTexture,
                                       textureDef.depthBufferFormat );
 
-        tex->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        tex->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
-//        RenderTexture* rt = tex->getBuffer()->getRenderTarget();
-//        rt->setDepthBufferPool( textureDef.depthBufferId );
-//        if( !PixelUtil::isDepth( textureDef.formatList[0] ) )
-//            rt->setPreferDepthTexture( textureDef.preferDepthTexture );
-//        if( textureDef.depthBufferFormat != PF_UNKNOWN )
-//            rt->setDesiredDepthBufferFormat( textureDef.depthBufferFormat );
+        //        RenderTexture* rt = tex->getBuffer()->getRenderTarget();
+        //        rt->setDepthBufferPool( textureDef.depthBufferId );
+        //        if( !PixelUtil::isDepth( textureDef.formatList[0] ) )
+        //            rt->setPreferDepthTexture( textureDef.preferDepthTexture );
+        //        if( textureDef.depthBufferFormat != PF_UNKNOWN )
+        //            rt->setDesiredDepthBufferFormat( textureDef.depthBufferFormat );
     }
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::destroyTextures( CompositorChannelVec &inOutTexContainer,
@@ -391,9 +391,9 @@ namespace Ogre
     {
         TextureGpuManager *textureManager = renderSys->getTextureGpuManager();
         CompositorChannelVec::const_iterator itor = inOutTexContainer.begin();
-        CompositorChannelVec::const_iterator end  = inOutTexContainer.end();
+        CompositorChannelVec::const_iterator endt = inOutTexContainer.end();
 
-        while( itor != end )
+        while( itor != endt )
             textureManager->destroyTexture( *itor++ );
 
         inOutTexContainer.clear();
@@ -404,15 +404,15 @@ namespace Ogre
                                                              const TextureGpu *finalTarget )
     {
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
-        TextureDefinitionVec::const_iterator end  = textureDefs.end();
+        TextureDefinitionVec::const_iterator endt = textureDefs.end();
 
         CompositorChannelVec::iterator itorTex = inOutTexContainer.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            if( (itor->width == 0 || itor->height == 0) )
+            if( ( itor->width == 0 || itor->height == 0 ) )
             {
-                (*itorTex)->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+                ( *itorTex )->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
                 setupTexture( *itorTex, *itor, finalTarget );
             }
             ++itorTex;
@@ -426,13 +426,13 @@ namespace Ogre
                                                              const CompositorPassVec *passes )
     {
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
-        TextureDefinitionVec::const_iterator end  = textureDefs.end();
+        TextureDefinitionVec::const_iterator endt = textureDefs.end();
 
         CompositorChannelVec::iterator itorTex = inOutTexContainer.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            if( (itor->width == 0 || itor->height == 0) )
+            if( ( itor->width == 0 || itor->height == 0 ) )
             {
                 if( passes )
                 {
@@ -440,7 +440,7 @@ namespace Ogre
                     CompositorPassVec::const_iterator passEn = passes->end();
                     while( passIt != passEn )
                     {
-                        (*passIt)->notifyRecreated( *itorTex );
+                        ( *passIt )->notifyRecreated( *itorTex );
                         ++passIt;
                     }
                 }
@@ -450,7 +450,7 @@ namespace Ogre
 
                 while( itNodes != enNodes )
                 {
-                    (*itNodes)->notifyRecreated( *itorTex );
+                    ( *itNodes )->notifyRecreated( *itorTex );
                     ++itNodes;
                 }
             }
@@ -479,12 +479,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::removeBuffer( IdString name )
     {
-        //Search it everywhere and remove where it's appropiate
+        // Search it everywhere and remove where it's appropiate
         {
             IdStringVec::iterator itor = mInputBuffers.begin();
-            IdStringVec::iterator end  = mInputBuffers.end();
+            IdStringVec::iterator endt = mInputBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( *itor == name )
                     *itor = IdString();
@@ -497,14 +497,14 @@ namespace Ogre
 
         {
             BufferDefinitionVec::iterator itor = mLocalBufferDefs.begin();
-            BufferDefinitionVec::iterator end  = mLocalBufferDefs.end();
+            BufferDefinitionVec::iterator endt = mLocalBufferDefs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->getName() == name )
                 {
                     itor = efficientVectorRemove( mLocalBufferDefs, itor );
-                    end  = mLocalBufferDefs.end();
+                    endt = mLocalBufferDefs.end();
                 }
                 else
                 {
@@ -516,12 +516,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::renameBuffer( IdString oldName, const String &newName )
     {
-        //Search it everywhere and remove where it's appropiate
+        // Search it everywhere and remove where it's appropiate
         {
             IdStringVec::iterator itor = mInputBuffers.begin();
-            IdStringVec::iterator end  = mInputBuffers.end();
+            IdStringVec::iterator endt = mInputBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( *itor == oldName )
                     *itor = newName;
@@ -531,9 +531,9 @@ namespace Ogre
 
         {
             BufferDefinitionVec::iterator itor = mLocalBufferDefs.begin();
-            BufferDefinitionVec::iterator end  = mLocalBufferDefs.end();
+            BufferDefinitionVec::iterator endt = mLocalBufferDefs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->getName() == oldName )
                     itor->_setName( newName );
@@ -550,13 +550,12 @@ namespace Ogre
 
         VaoManager *vaoManager = renderSys->getVaoManager();
         BufferDefinitionVec::const_iterator itor = bufferDefs.begin();
-        BufferDefinitionVec::const_iterator end  = bufferDefs.end();
+        BufferDefinitionVec::const_iterator endt = bufferDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            CompositorNamedBufferVec::iterator itBuf = std::lower_bound( inOutBufContainer.begin(),
-                                                                         inOutBufContainer.end(),
-                                                                         itor->name, cmp );
+            CompositorNamedBufferVec::iterator itBuf =
+                std::lower_bound( inOutBufContainer.begin(), inOutBufContainer.end(), itor->name, cmp );
 
             if( itBuf != inOutBufContainer.end() && itBuf->name == itor->name )
             {
@@ -571,7 +570,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    UavBufferPacked* TextureDefinitionBase::createBuffer( const BufferDefinition &bufferDef,
+    UavBufferPacked *TextureDefinitionBase::createBuffer( const BufferDefinition &bufferDef,
                                                           const TextureGpu *finalTarget,
                                                           VaoManager *vaoManager )
     {
@@ -579,17 +578,17 @@ namespace Ogre
 
         if( bufferDef.widthFactor > 0 )
         {
-            numElements *= static_cast<size_t>( ceilf( finalTarget->getWidth() *
-                                                       bufferDef.widthFactor ) );
+            numElements *=
+                static_cast<size_t>( ceilf( finalTarget->getWidth() * bufferDef.widthFactor ) );
         }
         if( bufferDef.heightFactor > 0 )
         {
-            numElements *= static_cast<size_t>( ceilf( finalTarget->getHeight() *
-                                                       bufferDef.heightFactor ) );
+            numElements *=
+                static_cast<size_t>( ceilf( finalTarget->getHeight() * bufferDef.heightFactor ) );
         }
 
-        return vaoManager->createUavBuffer( numElements, bufferDef.bytesPerElement,
-                                            bufferDef.bindFlags, 0, false );
+        return vaoManager->createUavBuffer( numElements, bufferDef.bytesPerElement, bufferDef.bindFlags,
+                                            0, false );
     }
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::destroyBuffers( const BufferDefinitionVec &bufferDefs,
@@ -600,13 +599,12 @@ namespace Ogre
 
         VaoManager *vaoManager = renderSys->getVaoManager();
         BufferDefinitionVec::const_iterator itor = bufferDefs.begin();
-        BufferDefinitionVec::const_iterator end  = bufferDefs.end();
+        BufferDefinitionVec::const_iterator endt = bufferDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            CompositorNamedBufferVec::iterator itBuf = std::lower_bound( inOutBufContainer.begin(),
-                                                                         inOutBufContainer.end(),
-                                                                         itor->name, cmp );
+            CompositorNamedBufferVec::iterator itBuf =
+                std::lower_bound( inOutBufContainer.begin(), inOutBufContainer.end(), itor->name, cmp );
 
             if( itBuf != inOutBufContainer.end() && itBuf->name == itor->name )
             {
@@ -629,15 +627,14 @@ namespace Ogre
 
         VaoManager *vaoManager = renderSys->getVaoManager();
         BufferDefinitionVec::const_iterator itor = bufferDefs.begin();
-        BufferDefinitionVec::const_iterator end  = bufferDefs.end();
+        BufferDefinitionVec::const_iterator endt = bufferDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->widthFactor > 0 || itor->heightFactor > 0 )
             {
-                CompositorNamedBufferVec::iterator itBuf = std::lower_bound( inOutBufContainer.begin(),
-                                                                             inOutBufContainer.end(),
-                                                                             itor->name, cmp );
+                CompositorNamedBufferVec::iterator itBuf = std::lower_bound(
+                    inOutBufContainer.begin(), inOutBufContainer.end(), itor->name, cmp );
 
                 UavBufferPacked *newUavBuffer = createBuffer( *itor, finalTarget, vaoManager );
 
@@ -647,7 +644,7 @@ namespace Ogre
                     CompositorPassVec::const_iterator passEn = passes->end();
                     while( passIt != passEn )
                     {
-                        (*passIt)->notifyRecreated( itBuf->buffer, newUavBuffer );
+                        ( *passIt )->notifyRecreated( itBuf->buffer, newUavBuffer );
                         ++passIt;
                     }
                 }
@@ -657,7 +654,7 @@ namespace Ogre
 
                 while( itNodes != enNodes )
                 {
-                    (*itNodes)->notifyRecreated( itBuf->buffer, newUavBuffer );
+                    ( *itNodes )->notifyRecreated( itBuf->buffer, newUavBuffer );
                     ++itNodes;
                 }
 
@@ -690,9 +687,9 @@ namespace Ogre
             RenderTargetViewEntry attachment;
             attachment.textureName = texName;
             this->colourAttachments.push_back( attachment );
-            this->depthBufferId      = texDef->depthBufferId;
+            this->depthBufferId = texDef->depthBufferId;
             this->preferDepthTexture = texDef->preferDepthTexture;
-            this->depthBufferFormat  = texDef->depthBufferFormat;
+            this->depthBufferFormat = texDef->depthBufferFormat;
         }
         else
         {
@@ -701,4 +698,4 @@ namespace Ogre
                 this->stencilAttachment.textureName = texName;
         }
     }
-}
+}  // namespace Ogre

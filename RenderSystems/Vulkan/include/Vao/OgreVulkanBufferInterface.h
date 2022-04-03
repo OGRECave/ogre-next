@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanBufferInterface : public BufferInterface
+    class _OgreVulkanExport VulkanBufferInterface final : public BufferInterface
     {
     protected:
         // clang-format off
@@ -60,11 +60,11 @@ namespace Ogre
 
     public:
         VulkanBufferInterface( size_t vboPoolIdx, VkBuffer vboName, VulkanDynamicBuffer *dynamicBuffer );
-        ~VulkanBufferInterface();
+        ~VulkanBufferInterface() override;
 
         // clang-format off
-        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
-        VkBuffer getVboName(void) const             { return mVboName; }
+        size_t getVboPoolIndex()                { return mVboPoolIdx; }
+        VkBuffer getVboName() const             { return mVboName; }
         // clang-format on
 
         void _setVboPoolIndex( size_t newVboPool ) { mVboPoolIdx = newVboPool; }
@@ -72,16 +72,16 @@ namespace Ogre
         /// Only use this function for the first upload
         void _firstUpload( void *data, size_t elementStart, size_t elementCount );
 
-        virtual void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
-                                                 MappingState prevMappingState,
-                                                 bool advanceFrame = true );
-        virtual void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
-                            size_t flushSizeElem = 0 );
-        virtual void advanceFrame( void );
-        virtual void regressFrame( void );
+        void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+                                         MappingState prevMappingState,
+                                         bool advanceFrame = true ) override;
+        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                    size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
 
-        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
-                             size_t sizeBytes );
+        void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
+                     size_t sizeBytes ) override;
         void *getVulkanDataPtr() { return mMappedPtr; };
     };
 }  // namespace Ogre

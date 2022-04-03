@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -32,17 +32,15 @@ THE SOFTWARE.
 
 #include <OgreGL3PlusPrerequisites.h>
 
-
-namespace Ogre {
+namespace Ogre
+{
     // Forward declarations
     class Win32GLSupport;
     class Win32Window;
     class Win32Context;
 
-
     // Useful error method implemented in Win32GLSupport
     String translateWGLError();
-}
-
+}  // namespace Ogre
 
 #endif

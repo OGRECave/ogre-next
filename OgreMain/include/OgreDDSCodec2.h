@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,11 +33,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
 
     // Forward declarations
     struct DXTColourBlock;
@@ -54,49 +54,51 @@ namespace Ogre
     private:
         String mType;
 
-		static void flipEndian(void * pData, size_t size, size_t count);	// invokes Bitwise::bswapChunks() if OGRE_ENDIAN_BIG
-		static void flipEndian(void * pData, size_t size);					// invokes Bitwise::bswapBuffer() if OGRE_ENDIAN_BIG
+        static void flipEndian( void *pData, size_t size,
+                                size_t count );  // invokes Bitwise::bswapChunks() if OGRE_ENDIAN_BIG
+        static void flipEndian( void  *pData,
+                                size_t size );  // invokes Bitwise::bswapBuffer() if OGRE_ENDIAN_BIG
 
         PixelFormatGpu convertFourCCFormat( uint32 fourcc ) const;
         PixelFormatGpu convertDXToOgreFormat( uint32 fourcc ) const;
-        PixelFormatGpu convertPixelFormat( uint32 rgbBits, uint32 rMask, uint32 gMask,
-                                           uint32 bMask, uint32 aMask, bool isSigned ) const;
+        PixelFormatGpu convertPixelFormat( uint32 rgbBits, uint32 rMask, uint32 gMask, uint32 bMask,
+                                           uint32 aMask, bool isSigned ) const;
 
         /// Unpack DXT colours into array of 16 colour values
-        void unpackDXTColour( PixelFormatGpu pf, const DXTColourBlock& block, ColourValue* pCol) const;
+        void unpackDXTColour( PixelFormatGpu pf, const DXTColourBlock &block, ColourValue *pCol ) const;
         /// Unpack DXT alphas into array of 16 colour values
-        void unpackDXTAlpha(const DXTExplicitAlphaBlock& block, ColourValue* pCol) const;
+        void unpackDXTAlpha( const DXTExplicitAlphaBlock &block, ColourValue *pCol ) const;
         /// Unpack DXT alphas into array of 16 colour values
-        void unpackDXTAlpha(const DXTInterpolatedAlphaBlock& block, ColourValue* pCol) const;
+        void unpackDXTAlpha( const DXTInterpolatedAlphaBlock &block, ColourValue *pCol ) const;
 
         /// Single registered codec instance
-        static DDSCodec2* msInstance;
+        static DDSCodec2 *msInstance;
+
     public:
         DDSCodec2();
-        virtual ~DDSCodec2() { }
+        ~DDSCodec2() override {}
 
         /// @copydoc Codec::encode
-        DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const;
+        DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const override;
         /// @copydoc Codec::encodeToFile
         void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
-                           CodecDataPtr &pData ) const;
+                           CodecDataPtr &pData ) const override;
         /// @copydoc Codec::decode
-        DecodeResult decode( DataStreamPtr &input ) const;
+        DecodeResult decode( DataStreamPtr &input ) const override;
 
         /// @copydoc Codec::magicNumberToFileExt
-        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const;
-        
-        virtual String getType(void) const;
+        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const override;
+
+        String getType() const override;
 
         /// Static method to startup and register the DDS codec
-        static void startup(void);
+        static void startup();
         /// Static method to shutdown and unregister the DDS codec
-        static void shutdown(void);
+        static void shutdown();
     };
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif
-

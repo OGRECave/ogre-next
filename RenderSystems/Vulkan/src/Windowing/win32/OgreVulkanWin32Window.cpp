@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -68,7 +68,6 @@ namespace Ogre
         mSizing( false ),
         mHidden( false ),
         mVisible( true ),
-        mIsTopLevel( true ),
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 )
     {
@@ -95,12 +94,12 @@ namespace Ogre
         mStencilBuffer = 0;
     }
     //-------------------------------------------------------------------------
-    const char *VulkanWin32Window::getRequiredExtensionName( void )
+    const char *VulkanWin32Window::getRequiredExtensionName()
     {
         return VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
     }
     //-------------------------------------------------------------------------
-    void VulkanWin32Window::updateWindowRect( void )
+    void VulkanWin32Window::updateWindowRect()
     {
         RECT rc;
         BOOL result;
@@ -143,8 +142,12 @@ namespace Ogre
         mClosed = true;
         mFocused = false;
 
-        if( !mIsExternal )
+        if( mHwnd && !mIsExternal )
+        {
             WindowEventUtilities::_removeRenderWindow( this );
+            DestroyWindow( mHwnd );
+        }
+        mHwnd = 0;
 
         if( mFullscreenMode )
         {
@@ -304,8 +307,8 @@ namespace Ogre
             winHeight = mRequestedHeight;
             {
                 // Center window horizontally and/or vertically, on the right monitor.
-                uint32 screenw = ( uint32 )( monitorInfoEx.rcWork.right - monitorInfoEx.rcWork.left );
-                uint32 screenh = ( uint32 )( monitorInfoEx.rcWork.bottom - monitorInfoEx.rcWork.top );
+                uint32 screenw = (uint32)( monitorInfoEx.rcWork.right - monitorInfoEx.rcWork.left );
+                uint32 screenh = (uint32)( monitorInfoEx.rcWork.bottom - monitorInfoEx.rcWork.top );
                 uint32 outerw = ( winWidth < screenw ) ? winWidth : screenw;
                 uint32 outerh = ( winHeight < screenh ) ? winHeight : screenh;
                 if( left == INT_MAX )
@@ -533,7 +536,8 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
 
         mTexture = textureManager->createTextureGpuWindow( this );
-        mDepthBuffer = textureManager->createWindowDepthBuffer();
+        if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
+            mDepthBuffer = textureManager->createWindowDepthBuffer();
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 
@@ -541,12 +545,16 @@ namespace Ogre
         //     mTexture->setPixelFormat( PFG_B5G5R5A1_UNORM );
         // else
         mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
-        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
-        if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
-            mStencilBuffer = mDepthBuffer;
+        if( mDepthBuffer )
+        {
+            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+                mStencilBuffer = mDepthBuffer;
+        }
 
         mTexture->setSampleDescription( mRequestedSampleDescription );
-        mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
+        if( mDepthBuffer )
+            mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
         mSampleDescription = mRequestedSampleDescription;
 
         if( mDepthBuffer )
@@ -570,9 +578,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWin32Window::reposition( int32 left, int32 top )
     {
-        if( mClosed || !mIsTopLevel )
-            return;
-
         if( mHwnd && !mRequestedFullscreenMode )
         {
             SetWindowPos( mHwnd, 0, top, left, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
@@ -717,7 +722,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanWin32Window::windowMovedOrResized( void )
+    void VulkanWin32Window::windowMovedOrResized()
     {
         if( !mHwnd || IsIconic( mHwnd ) )
             return;

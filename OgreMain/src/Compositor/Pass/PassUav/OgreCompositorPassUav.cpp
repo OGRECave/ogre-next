@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,25 +29,25 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/PassUav/OgreCompositorPassUav.h"
-#include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
-#include "Compositor/OgreCompositorNodeDef.h"
-#include "Compositor/OgreCompositorNode.h"
+
 #include "Compositor/OgreCompositorManager2.h"
+#include "Compositor/OgreCompositorNode.h"
+#include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-#include "Vao/OgreUavBufferPacked.h"
-
-#include "OgreRenderSystem.h"
-#include "OgreTextureGpuManager.h"
-#include "OgreRoot.h"
-#include "OgreHlmsManager.h"
+#include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 #include "OgreDescriptorSetUav.h"
+#include "OgreHlmsManager.h"
+#include "OgreRenderSystem.h"
+#include "OgreRoot.h"
+#include "OgreTextureGpuManager.h"
+#include "Vao/OgreUavBufferPacked.h"
 
 namespace Ogre
 {
     void CompositorPassUavDef::setUav( uint32 slot, bool isExternal, const String &textureName,
-                                       ResourceAccess::ResourceAccess access,
-                                       int32 mipmapLevel, PixelFormatGpu pixelFormat )
+                                       ResourceAccess::ResourceAccess access, uint8 mipmapLevel,
+                                       PixelFormatGpu pixelFormat )
     {
         if( !isExternal )
         {
@@ -60,13 +60,12 @@ namespace Ogre
 
         if( textureName.empty() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Cannot supply empty name for UAV texture",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Cannot supply empty name for UAV texture",
                          "CompositorPassUavDef::setUav" );
         }
 
-        mTextureSources.push_back( TextureSource( slot, textureName, isExternal,
-                                                  access, mipmapLevel, pixelFormat ) );
+        mTextureSources.push_back(
+            TextureSource( slot, textureName, isExternal, access, mipmapLevel, pixelFormat ) );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassUavDef::addUavBuffer( uint32 slotIdx, IdString bufferName,
@@ -79,31 +78,27 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     CompositorPassUav::CompositorPassUav( const CompositorPassUavDef *definition,
-                                          CompositorNode *parentNode,
-                                          const RenderTargetViewDef *rtv ) :
-                CompositorPass( definition, parentNode ),
-                mDefinition( definition ),
-                mDescriptorSetUav( 0 )
+                                          CompositorNode *parentNode, const RenderTargetViewDef *rtv ) :
+        CompositorPass( definition, parentNode ),
+        mDefinition( definition ),
+        mDescriptorSetUav( 0 )
     {
         initialize( rtv );
     }
     //-----------------------------------------------------------------------------------
-    CompositorPassUav::~CompositorPassUav()
-    {
-        destroyDescriptorSetUav();
-    }
+    CompositorPassUav::~CompositorPassUav() { destroyDescriptorSetUav(); }
     //-----------------------------------------------------------------------------------
-    uint32 CompositorPassUav::calculateNumberUavSlots(void) const
+    uint32 CompositorPassUav::calculateNumberUavSlots() const
     {
         uint32 retVal = 0;
 
         {
             const CompositorPassUavDef::TextureSources &textureSources =
-                    mDefinition->getTextureSources();
+                mDefinition->getTextureSources();
             CompositorPassUavDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassUavDef::TextureSources::const_iterator end  = textureSources.end();
+            CompositorPassUavDef::TextureSources::const_iterator endt = textureSources.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 retVal = std::max( retVal, itor->uavSlot + 1u );
                 ++itor;
@@ -113,8 +108,8 @@ namespace Ogre
         {
             const CompositorPassUavDef::BufferSourceVec &bufferSources = mDefinition->getBufferSources();
             CompositorPassUavDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
-            CompositorPassUavDef::BufferSourceVec::const_iterator end  = bufferSources.end();
-            while( itor != end )
+            CompositorPassUavDef::BufferSourceVec::const_iterator endt = bufferSources.end();
+            while( itor != endt )
             {
                 retVal = std::max( retVal, itor->uavSlot + 1u );
                 ++itor;
@@ -124,7 +119,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassUav::setupDescriptorSetUav(void)
+    void CompositorPassUav::setupDescriptorSetUav()
     {
         destroyDescriptorSetUav();
 
@@ -133,10 +128,10 @@ namespace Ogre
             descSetUav.mUavs.resize( calculateNumberUavSlots() );
 
             const CompositorPassUavDef::TextureSources &textureSources =
-                    mDefinition->getTextureSources();
+                mDefinition->getTextureSources();
             CompositorPassUavDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassUavDef::TextureSources::const_iterator end  = textureSources.end();
-            while( itor != end )
+            CompositorPassUavDef::TextureSources::const_iterator endt = textureSources.end();
+            while( itor != endt )
             {
                 TextureGpu *texture;
 
@@ -152,23 +147,23 @@ namespace Ogre
                 if( !texture )
                 {
                     OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                                 "Texture with name: " +
-                                 itor->textureName.getFriendlyText() +
-                                 " does not exist. The texture must exist by the time the "
-                                 "workspace is executed. Are you trying to use a texture "
-                                 "defined by the compositor? If so you need to set it via "
-                                 "'uav' instead of 'uav_external'", "CompositorPassUav::execute" );
+                                 "Texture with name: " + itor->textureName.getFriendlyText() +
+                                     " does not exist. The texture must exist by the time the "
+                                     "workspace is executed. Are you trying to use a texture "
+                                     "defined by the compositor? If so you need to set it via "
+                                     "'uav' instead of 'uav_external'",
+                                 "CompositorPassUav::execute" );
                 }
 
                 texture->addListener( this );
 
                 DescriptorSetUav::Slot slot( DescriptorSetUav::SlotTypeTexture );
                 DescriptorSetUav::TextureSlot &textureSlot = slot.getTexture();
-                textureSlot.texture             = texture;
-                textureSlot.access              = itor->access;
-                textureSlot.mipmapLevel         = itor->mipmapLevel;
-                textureSlot.textureArrayIndex   = 0;
-                textureSlot.pixelFormat         = itor->pixelFormat;
+                textureSlot.texture = texture;
+                textureSlot.access = itor->access;
+                textureSlot.mipmapLevel = itor->mipmapLevel;
+                textureSlot.textureArrayIndex = 0;
+                textureSlot.pixelFormat = itor->pixelFormat;
 
                 descSetUav.mUavs[itor->uavSlot] = slot;
                 ++itor;
@@ -178,8 +173,8 @@ namespace Ogre
         {
             const CompositorPassUavDef::BufferSourceVec &bufferSources = mDefinition->getBufferSources();
             CompositorPassUavDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
-            CompositorPassUavDef::BufferSourceVec::const_iterator end  = bufferSources.end();
-            while( itor != end )
+            CompositorPassUavDef::BufferSourceVec::const_iterator endt = bufferSources.end();
+            while( itor != endt )
             {
                 UavBufferPacked *uavBuffer = 0;
 
@@ -188,10 +183,10 @@ namespace Ogre
 
                 DescriptorSetUav::Slot slot( DescriptorSetUav::SlotTypeBuffer );
                 DescriptorSetUav::BufferSlot &bufferSlot = slot.getBuffer();
-                bufferSlot.buffer       = uavBuffer;
-                bufferSlot.offset       = itor->offset;
-                bufferSlot.sizeBytes    = itor->sizeBytes;
-                bufferSlot.access       = itor->access;
+                bufferSlot.buffer = uavBuffer;
+                bufferSlot.offset = itor->offset;
+                bufferSlot.sizeBytes = itor->sizeBytes;
+                bufferSlot.access = itor->access;
 
                 descSetUav.mUavs[itor->uavSlot] = slot;
                 ++itor;
@@ -207,7 +202,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassUav::execute( const Camera *lodCamera )
     {
-        //Execute a limited number of times?
+        // Execute a limited number of times?
         if( mNumPassesLeft != std::numeric_limits<uint32>::max() )
         {
             if( !mNumPassesLeft )
@@ -220,13 +215,13 @@ namespace Ogre
         if( !mDescriptorSetUav )
             setupDescriptorSetUav();
 
-        //Fire the listener in case it wants to change anything
+        // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
 
-        //Do not execute resource transitions. This pass shouldn't have them.
-        //The transitions are made when the bindings are needed
+        // Do not execute resource transitions. This pass shouldn't have them.
+        // The transitions are made when the bindings are needed
         //(<sarcasm>we'll have fun with the validation layers later</sarcasm>).
-        //executeResourceTransitions();
+        // executeResourceTransitions();
         OGRE_ASSERT_LOW( mResourceTransitions.empty() );
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
@@ -245,9 +240,9 @@ namespace Ogre
         {
             HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
             FastArray<DescriptorSetUav::Slot>::const_iterator itor = mDescriptorSetUav->mUavs.begin();
-            FastArray<DescriptorSetUav::Slot>::const_iterator end  = mDescriptorSetUav->mUavs.end();
+            FastArray<DescriptorSetUav::Slot>::const_iterator endt = mDescriptorSetUav->mUavs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->isTexture() )
                     itor->getTexture().texture->removeListener( this );
@@ -260,14 +255,15 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassUav::notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer )
+    void CompositorPassUav::notifyRecreated( const UavBufferPacked *oldBuffer,
+                                             UavBufferPacked *newBuffer )
     {
         destroyDescriptorSetUav();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassUav::notifyTextureChanged( TextureGpu *texture,
-                                                  TextureGpuListener::Reason reason, void *extraData )
+    void CompositorPassUav::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                                  void *extraData )
     {
         destroyDescriptorSetUav();
     }
-}
+}  // namespace Ogre

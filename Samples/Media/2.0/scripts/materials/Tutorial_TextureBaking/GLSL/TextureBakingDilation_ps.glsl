@@ -9,7 +9,9 @@
 
 vulkan_layout( ogre_t0 ) uniform sampler2DArray srcTex;
 
+vulkan_layout( location = 0 )
 out float4 fragColour;
+
 in vec4 gl_FragCoord;
 
 void main()

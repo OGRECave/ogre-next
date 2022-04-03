@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,11 +30,12 @@ THE SOFTWARE.
 #define _Ogre_D3D11ConstBufferPacked_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "Vao/OgreConstBufferPacked.h"
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11ConstBufferPacked : public ConstBufferPacked
+    class _OgreD3D11Export D3D11ConstBufferPacked final : public ConstBufferPacked
     {
         D3D11Device &mDevice;
 
@@ -43,15 +44,15 @@ namespace Ogre
                                 BufferType bufferType, void *initialData, bool keepAsShadow,
                                 VaoManager *vaoManager, BufferInterface *bufferInterface,
                                 D3D11Device &device );
-        virtual ~D3D11ConstBufferPacked();
+        ~D3D11ConstBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot );
-        virtual void bindBufferPS( uint16 slot );
-        virtual void bindBufferGS( uint16 slot );
-        virtual void bindBufferHS( uint16 slot );
-        virtual void bindBufferDS( uint16 slot );
-        virtual void bindBufferCS( uint16 slot );
+        void bindBufferVS( uint16 slot ) override;
+        void bindBufferPS( uint16 slot ) override;
+        void bindBufferGS( uint16 slot ) override;
+        void bindBufferHS( uint16 slot ) override;
+        void bindBufferDS( uint16 slot ) override;
+        void bindBufferCS( uint16 slot ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

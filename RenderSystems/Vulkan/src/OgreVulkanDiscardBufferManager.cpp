@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -28,6 +28,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 #include "OgreVulkanDiscardBufferManager.h"
 
+#include "OgreException.h"
 #include "OgreStringConverter.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanUtils.h"
@@ -269,7 +270,7 @@ namespace Ogre
     {
         alignment = std::max<uint16>( 4u, alignment );  // Prevent alignments lower than 4 bytes.
         VulkanDiscardBuffer *retVal =
-            OGRE_NEW VulkanDiscardBuffer( bufferSize, alignment, mVaoManager, mDevice, this );
+            OGRE_NEW VulkanDiscardBuffer( bufferSize, alignment, mVaoManager, this );
         mDiscardBuffers.push_back( retVal );
         _getBlock( retVal );
         retVal->mBuffer = mBuffer.mVboName;
@@ -307,10 +308,9 @@ namespace Ogre
     }
 
     VulkanDiscardBuffer::VulkanDiscardBuffer( size_t bufferSize, uint16 alignment,
-                                              VaoManager *vaoManager, VulkanDevice *device,
+                                              VaoManager *vaoManager,
                                               VulkanDiscardBufferManager *owner ) :
         mBuffer( 0 ),
-        mDevice( device ),
         mBlockPrePadding( 0 ),
         mBufferOffset( 0 ),
         mBufferSize( bufferSize ),
@@ -328,7 +328,7 @@ namespace Ogre
         return reinterpret_cast<uint8 *>( mOwner->getBuffer().map() ) + mBufferOffset;
     }
 
-    void VulkanDiscardBuffer::unmap( void ) { mOwner->getBuffer().unmap(); }
+    void VulkanDiscardBuffer::unmap() { mOwner->getBuffer().unmap(); }
 
     VkBuffer VulkanDiscardBuffer::getBufferName( size_t &outOffset )
     {

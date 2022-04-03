@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,30 +28,33 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbTexture.h"
 
+#include "CommandBuffer/OgreCommandBuffer.h"
 #include "OgreRenderSystem.h"
 
 namespace Ogre
 {
     CbTexture::CbTexture( uint16 _texUnit, TextureGpu *_texture, const HlmsSamplerblock *_samplerBlock,
-                          bool bDepthReadOnly ) :
+                          bool _bDepthReadOnly ) :
         CbBase( CB_SET_TEXTURE ),
         texUnit( _texUnit ),
-        bDepthReadOnly( bDepthReadOnly ),
+        bDepthReadOnly( _bDepthReadOnly ),
         texture( _texture ),
         samplerBlock( _samplerBlock )
     {
     }
 
-    void CommandBuffer::execute_setTexture( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    void CommandBuffer::execute_setTexture( CommandBuffer *_this, const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbTexture *cmd = static_cast<const CbTexture*>( _cmd );
+        const CbTexture *cmd = static_cast<const CbTexture *>( _cmd );
         _this->mRenderSystem->_setTexture( cmd->texUnit, cmd->texture, cmd->bDepthReadOnly );
 
         if( cmd->samplerBlock )
-            _this->mRenderSystem->_setHlmsSamplerblock( cmd->texUnit, cmd->samplerBlock );
+        {
+            OGRE_ASSERT_MEDIUM( cmd->texUnit < std::numeric_limits<uint8>::max() );
+            _this->mRenderSystem->_setHlmsSamplerblock( (uint8)cmd->texUnit, cmd->samplerBlock );
+        }
     }
 
     CbTextures::CbTextures( uint16 _texUnit, uint16 _hazardousTexIdx,
@@ -63,9 +66,9 @@ namespace Ogre
     {
     }
 
-    void CommandBuffer::execute_setTextures( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    void CommandBuffer::execute_setTextures( CommandBuffer *_this, const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbTextures *cmd = static_cast<const CbTextures*>( _cmd );
+        const CbTextures *cmd = static_cast<const CbTextures *>( _cmd );
         _this->mRenderSystem->_setTextures( cmd->texUnit, cmd->descSet, cmd->hazardousTexIdx );
     }
 
@@ -76,9 +79,9 @@ namespace Ogre
     {
     }
 
-    void CommandBuffer::execute_setSamplers( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    void CommandBuffer::execute_setSamplers( CommandBuffer *_this, const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbSamplers *cmd = static_cast<const CbSamplers*>( _cmd );
+        const CbSamplers *cmd = static_cast<const CbSamplers *>( _cmd );
         _this->mRenderSystem->_setSamplers( cmd->texUnit, cmd->descSet );
     }
-}
+}  // namespace Ogre

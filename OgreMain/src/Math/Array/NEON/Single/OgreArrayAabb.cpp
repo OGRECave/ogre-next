@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,19 +34,16 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const ArrayAabb ArrayAabb::BOX_INFINITE( ArrayVector3( vdupq_n_f32( 0.0f ),
-                                                            vdupq_n_f32( 0.0f ),
-                                                            vdupq_n_f32( 0.0f ) ),
-                                ArrayVector3( vdupq_n_f32( std::numeric_limits<float>::infinity() ),
-                                                    vdupq_n_f32( std::numeric_limits<float>::infinity() ),
-                                                    vdupq_n_f32( std::numeric_limits<float>::infinity() ) ) );
+    const ArrayAabb ArrayAabb::BOX_INFINITE(
+        ArrayVector3( vdupq_n_f32( 0.0f ), vdupq_n_f32( 0.0f ), vdupq_n_f32( 0.0f ) ),
+        ArrayVector3( vdupq_n_f32( std::numeric_limits<float>::infinity() ),
+                      vdupq_n_f32( std::numeric_limits<float>::infinity() ),
+                      vdupq_n_f32( std::numeric_limits<float>::infinity() ) ) );
 
-    const ArrayAabb ArrayAabb::BOX_ZERO( ArrayVector3( vdupq_n_f32( 0.0f ),
-                                                      vdupq_n_f32( 0.0f ),
-                                                      vdupq_n_f32( 0.0f ) ),
-                                        ArrayVector3( vdupq_n_f32( 0.0f ),
-                                                     vdupq_n_f32( 0.0f ),
-                                                     vdupq_n_f32( 0.0f ) ) );
-}
+    const ArrayAabb ArrayAabb::BOX_ZERO( ArrayVector3( vdupq_n_f32( 0.0f ), vdupq_n_f32( 0.0f ),
+                                                       vdupq_n_f32( 0.0f ) ),
+                                         ArrayVector3( vdupq_n_f32( 0.0f ), vdupq_n_f32( 0.0f ),
+                                                       vdupq_n_f32( 0.0f ) ) );
+}  // namespace Ogre
 
 #endif

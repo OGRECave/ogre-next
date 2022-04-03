@@ -29,29 +29,30 @@ THE SOFTWARE.
 #define _OgreGL3PlusHlmsPso_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /// @See HlmsPso. We cache some conversion values here
     /// to avoid doing it every time we set the Pso
     struct _OgreGL3PlusExport GL3PlusHlmsPso
     {
-        //Macroblock data
-        GLboolean   depthWrite;
-        GLenum      depthFunc;
-        GLenum      cullMode;
-        GLenum      polygonMode;
+        // Macroblock data
+        GLboolean depthWrite;
+        GLenum    depthFunc;
+        GLenum    cullMode;
+        GLenum    polygonMode;
 
-        //Blendblock data
-        bool    enableAlphaBlend;
+        // Blendblock data
+        bool   enableAlphaBlend;
         GLenum sourceBlend;
         GLenum destBlend;
         GLenum sourceBlendAlpha;
@@ -59,7 +60,7 @@ namespace Ogre
         GLenum blendFunc;
         GLenum blendFuncAlpha;
 
-        //Shader
+        // Shader
         GLSLShader *vertexShader;
         GLSLShader *geometryShader;
         GLSLShader *hullShader;
@@ -70,7 +71,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

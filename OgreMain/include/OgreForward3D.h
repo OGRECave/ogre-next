@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,17 +29,19 @@ THE SOFTWARE.
 #define _OgreForward3D_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreForwardPlusBase.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** Forward3D */
     class _OgreExport Forward3D : public ForwardPlusBase
@@ -48,23 +50,22 @@ namespace Ogre
         {
             uint32 width;
             uint32 height;
-            Real   zEnd; /// Depth at which this slice ends, in view space.
+            Real   zEnd;  /// Depth at which this slice ends, in view space.
             Resolution() : width( 0 ), height( 0 ), zEnd( 0 ) {}
-            Resolution( uint32 w, uint32 h, Real _zEnd ) :
-                width( w ), height( h ), zEnd( _zEnd ) {}
+            Resolution( uint32 w, uint32 h, Real _zEnd ) : width( w ), height( h ), zEnd( _zEnd ) {}
         };
 
-        uint32  mWidth;
-        uint32  mHeight;
-        uint32  mNumSlices;
-        uint32  mLightsPerCell;
-        uint32  mTableSize; /// Automatically calculated, size of the first table, elements.
+        uint32 mWidth;
+        uint32 mHeight;
+        uint32 mNumSlices;
+        uint32 mLightsPerCell;
+        uint32 mTableSize;  /// Automatically calculated, size of the first table, elements.
 
-        FastArray<Resolution>   mResolutionAtSlice;
+        FastArray<Resolution> mResolutionAtSlice;
 
-        float   mMinDistance;
-        float   mMaxDistance;
-        float   mInvMaxDistance;
+        float mMinDistance;
+        float mMaxDistance;
+        float mInvMaxDistance;
 
         /// Performs the reverse of getSliceAtDepth. @see getSliceAtDepth.
         inline Real getDepthAtSlice( uint32 slice ) const;
@@ -89,44 +90,44 @@ namespace Ogre
             The row of the table in the given slice.
             Will be in range [0; mResolutionAtSlice[slice].height)
         */
-        inline void projectionSpaceToGridSpace( const Vector2 &projSpace, uint32 slice,
-                                                uint32 &outX, uint32 &outY ) const;
+        inline void projectionSpaceToGridSpace( const Vector2 &projSpace, uint32 slice, uint32 &outX,
+                                                uint32 &outY ) const;
 
     public:
         Forward3D( uint32 width, uint32 height, uint32 numSlices, uint32 lightsPerCell,
                    float minDistance, float maxDistance, SceneManager *sceneManager );
-        virtual ~Forward3D();
+        ~Forward3D() override;
 
-        virtual ForwardPlusMethods getForwardPlusMethod(void) const     { return MethodForward3D; }
+        ForwardPlusMethods getForwardPlusMethod() const override { return MethodForward3D; }
 
-        virtual void collectLights( Camera *camera );
+        void collectLights( Camera *camera ) override;
 
-        uint32 getWidth(void) const                                     { return mWidth; }
-        uint32 getHeight(void) const                                    { return mHeight; }
-        uint32 getNumSlices(void) const                                 { return mNumSlices; }
-        uint32 getLightsPerCell(void) const                             { return mLightsPerCell; }
-        float getMinDistance(void) const                                { return mMinDistance; }
-        float getMaxDistance(void) const                                { return mMaxDistance; }
+        uint32 getWidth() const { return mWidth; }
+        uint32 getHeight() const { return mHeight; }
+        uint32 getNumSlices() const { return mNumSlices; }
+        uint32 getLightsPerCell() const { return mLightsPerCell; }
+        float  getMinDistance() const { return mMinDistance; }
+        float  getMaxDistance() const { return mMaxDistance; }
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
-        virtual size_t getConstBufferSize(void) const;
+        size_t getConstBufferSize() const override;
 
         /** Fills 'passBufferPtr' with the necessary data for Forward3D rendering.
             @see getConstBufferSize
         @remarks
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
-        virtual void fillConstBufferData( Viewport *viewport, TextureGpu *renderTarget,
-                                          IdString shaderSyntax, bool instancedStereo,
-                                          float * RESTRICT_ALIAS passBufferPtr ) const;
+        void fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
+                                  uint32 renderTargetHeight, IdString shaderSyntax, bool instancedStereo,
+                                  float *RESTRICT_ALIAS passBufferPtr ) const override;
 
-        virtual void setHlmsPassProperties( Hlms *hlms );
+        void setHlmsPassProperties( Hlms *hlms ) override;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

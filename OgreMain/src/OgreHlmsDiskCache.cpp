@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,18 +29,20 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsDiskCache.h"
+
 #include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
-#include "OgreStringConverter.h"
 #include "OgreProfiler.h"
+#include "OgreRenderSystem.h"
+#include "OgreStringConverter.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-    #include "iOS/macUtils.h"
+#    include "iOS/macUtils.h"
 #endif
 
 namespace Ogre
 {
-    static const uint16 c_hlmsDiskCacheVersion = 2u;
+    static const uint16 c_hlmsDiskCacheVersion = 3u;
 
     HlmsDiskCache::HlmsDiskCache( HlmsManager *hlmsManager ) :
         mTemplatesOutOfDate( false ),
@@ -48,12 +50,9 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    HlmsDiskCache::~HlmsDiskCache()
-    {
-        clearCache();
-    }
+    HlmsDiskCache::~HlmsDiskCache() { clearCache(); }
     //-----------------------------------------------------------------------------------
-    void HlmsDiskCache::clearCache(void)
+    void HlmsDiskCache::clearCache()
     {
         mTemplatesOutOfDate = false;
         memset( mCache.templateHash, 0, sizeof( mCache.templateHash ) );
@@ -61,29 +60,27 @@ namespace Ogre
         mCache.sourceCode.clear();
         mCache.pso.clear();
         mShaderProfile.clear();
+
+        mNativeShadingLangVer = 0u;
+        mPrecisionMode = Hlms::PrecisionFull32;
+        mFastShaderBuildHack = true;
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    HlmsDiskCache::SourceCode::SourceCode() :
-        mergedCache( HlmsPropertyVec(), 0 )
-    {
-    }
+    HlmsDiskCache::SourceCode::SourceCode() : mergedCache( HlmsPropertyVec(), 0 ) {}
     //-----------------------------------------------------------------------------------
     HlmsDiskCache::SourceCode::SourceCode( const Hlms::ShaderCodeCache &shaderCodeCache ) :
         mergedCache( shaderCodeCache.mergedCache )
     {
-        for( size_t i=0; i<NumShaderTypes; ++i )
+        for( size_t i = 0; i < NumShaderTypes; ++i )
         {
             if( shaderCodeCache.shaders[i] )
                 this->sourceFile[i] = shaderCodeCache.shaders[i]->getSource();
         }
     }
     //-----------------------------------------------------------------------------------
-    HlmsDiskCache::Pso::Pso() :
-        renderableCache( HlmsPropertyVec(), 0 )
-    {
-    }
+    HlmsDiskCache::Pso::Pso() : renderableCache( HlmsPropertyVec(), 0 ) {}
     //-----------------------------------------------------------------------------------
     HlmsDiskCache::Pso::Pso( const Hlms::RenderableCache &srcRenderableCache,
                              const Hlms::PassCache &srcPassCache, const HlmsCache *srcPsoCache ) :
@@ -103,15 +100,18 @@ namespace Ogre
 
         mCache.type = hlms->getType();
         mShaderProfile = hlms->getShaderProfile();
+        mNativeShadingLangVer = hlms->getRenderSystem()->getNativeShadingLanguageVersion();
+        mPrecisionMode = hlms->getSupportedPrecisionMode();
+        mFastShaderBuildHack = hlms->getFastShaderBuildHack();
         hlms->getTemplateChecksum( mCache.templateHash );
 
         {
-            //Copy shaders
+            // Copy shaders
             mCache.sourceCode.reserve( hlms->mShaderCodeCache.size() );
             Hlms::ShaderCodeCacheVec::const_iterator itor = hlms->mShaderCodeCache.begin();
-            Hlms::ShaderCodeCacheVec::const_iterator end  = hlms->mShaderCodeCache.end();
+            Hlms::ShaderCodeCacheVec::const_iterator endt = hlms->mShaderCodeCache.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 SourceCode sourceCode( *itor );
                 mCache.sourceCode.push_back( sourceCode );
@@ -120,21 +120,21 @@ namespace Ogre
         }
 
         {
-            //Copy PSOs
+            // Copy PSOs
             mCache.pso.reserve( hlms->mShaderCache.size() );
             HlmsCacheVec::const_iterator itor = hlms->mShaderCache.begin();
-            HlmsCacheVec::const_iterator end  = hlms->mShaderCache.end();
+            HlmsCacheVec::const_iterator endt = hlms->mShaderCache.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                const uint32 finalHash = (*itor)->hash;
+                const uint32 finalHash = ( *itor )->hash;
 
-                const uint32 renderableIdx  = (finalHash >> HlmsBits::RenderableShift) &
-                                              (uint32)HlmsBits::RenderableMask;
-                const uint32 passIdx        = (finalHash >> HlmsBits::PassShift) &
-                                              (uint32)HlmsBits::PassMask;
-//                const uint32 inputLayout    = (finalHash >> HlmsBits::InputLayoutShift) &
-//                                              (uint32)HlmsBits::InputLayoutMask;
+                const uint32 renderableIdx = ( finalHash >> HlmsBits::RenderableShift ) &  //
+                                             (uint32)HlmsBits::RenderableMask;
+                const uint32 passIdx = ( finalHash >> HlmsBits::PassShift ) &  //
+                                       (uint32)HlmsBits::PassMask;
+                // const uint32 inputLayout    = (finalHash >> HlmsBits::InputLayoutShift) & //
+                //                              (uint32)HlmsBits::InputLayoutMask;
                 Pso pso( hlms->mRenderableCache[renderableIdx], hlms->mPassCache[passIdx], *itor );
                 mCache.pso.push_back( pso );
                 ++itor;
@@ -150,11 +150,9 @@ namespace Ogre
         if( mCache.type != hlms->getType() )
         {
             LogManager::getSingleton().logMessage(
-                        "WARNING: The cached Hlms is for type " +
-                        StringConverter::toString( mCache.type ) +
-                        " but it is being applied to Hlms type: " +
-                        StringConverter::toString( hlms->getType() ) +
-                        ". HlmsDiskCache won't be applied." );
+                "WARNING: The cached Hlms is for type " + StringConverter::toString( mCache.type ) +
+                " but it is being applied to Hlms type: " +
+                StringConverter::toString( hlms->getType() ) + ". HlmsDiskCache won't be applied." );
             return;
         }
 
@@ -162,43 +160,73 @@ namespace Ogre
         {
             mTemplatesOutOfDate = true;
             LogManager::getSingleton().logMessage(
-                        "INFO: The cached Hlms is for shader profile in '" + mShaderProfile +
-                        "' but it does not match the current one '" + hlms->getShaderProfile() +
-                        "'. This increases loading times." );
+                "INFO: The cached Hlms is for shader profile in '" + mShaderProfile +
+                "' but it does not match the current one '" + hlms->getShaderProfile() +
+                "'. This increases loading times." );
+        }
+
+        if( !mTemplatesOutOfDate &&
+            mNativeShadingLangVer != hlms->getRenderSystem()->getNativeShadingLanguageVersion() )
+        {
+            mTemplatesOutOfDate = true;
+            LogManager::getSingleton().logMessage(
+                "INFO: mNativeShadingLangVer has changed from '" +
+                StringConverter::toString( mNativeShadingLangVer ) + "' to the current value '" +
+                StringConverter::toString( hlms->getRenderSystem()->getNativeShadingLanguageVersion() ) +
+                "'. This increases loading times." );
+        }
+
+        if( !mTemplatesOutOfDate && mPrecisionMode != hlms->getSupportedPrecisionMode() )
+        {
+            mTemplatesOutOfDate = true;
+            LogManager::getSingleton().logMessage(
+                "INFO: mPrecisionMode has changed from '" +
+                StringConverter::toString( mPrecisionMode ) + "' to the current value '" +
+                StringConverter::toString( hlms->getSupportedPrecisionMode() ) +
+                "'. This increases loading times." );
+        }
+
+        if( !mTemplatesOutOfDate && mFastShaderBuildHack != hlms->getFastShaderBuildHack() )
+        {
+            mTemplatesOutOfDate = true;
+            LogManager::getSingleton().logMessage(
+                "INFO: mFastShaderBuildHack has changed from '" +
+                StringConverter::toString( mFastShaderBuildHack ) + "' to the current value '" +
+                StringConverter::toString( hlms->getFastShaderBuildHack() ) +
+                "'. This increases loading times." );
         }
 
         {
             uint64 currentHash[2];
             hlms->getTemplateChecksum( currentHash );
-            if( mCache.templateHash[0] != currentHash[0] ||
-                mCache.templateHash[1] != currentHash[1] )
+            if( mCache.templateHash[0] != currentHash[0] || mCache.templateHash[1] != currentHash[1] )
             {
                 mTemplatesOutOfDate = true;
                 LogManager::getSingleton().logMessage(
-                            "WARNING: The cached Hlms is out of date. The templates have changed. "
-                            "We will parse the templates again. If you experience crashes or shader "
-                            "compiler errors, delete the cache" );
+                    "WARNING: The cached Hlms is out of date. The templates have changed. "
+                    "We will parse the templates again. If you experience crashes or shader "
+                    "compiler errors, delete the cache" );
             }
         }
 
         hlms->clearShaderCache();
 
         {
-            //Compile shaders
+            // Compile shaders
             SourceCodeVec::const_iterator itor = mCache.sourceCode.begin();
-            SourceCodeVec::const_iterator end  = mCache.sourceCode.end();
+            SourceCodeVec::const_iterator endt = mCache.sourceCode.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( !mTemplatesOutOfDate )
                 {
-                    //Templates haven't changed, send the Hlms-processed shader code for compilation
+                    // Templates haven't changed, send the Hlms-processed shader code for compilation
                     hlms->_compileShaderFromPreprocessedSource( itor->mergedCache, itor->sourceFile );
                 }
                 else
                 {
-                    //Templates have changed, they need to be run through the Hlms
-                    //preprocessor again before they can be compiled again
+                    // Templates have changed, they need to be run through the Hlms
+                    // preprocessor again before they can be compiled again
                     Hlms::ShaderCodeCache shaderCodeCache( itor->mergedCache.pieces );
                     shaderCodeCache.mergedCache.setProperties = itor->mergedCache.setProperties;
                     hlms->compileShaderCode( shaderCodeCache );
@@ -211,47 +239,52 @@ namespace Ogre
             hlms->mRenderableCache.reserve( hlms->mRenderableCache.size() + mCache.pso.size() );
 
             PsoVec::const_iterator itor = mCache.pso.begin();
-            PsoVec::const_iterator end  = mCache.pso.end();
+            PsoVec::const_iterator endt = mCache.pso.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                uint32 renderableHash =
-                        static_cast<uint32 >(
-                            hlms->addRenderableCache( itor->renderableCache.setProperties,
-                                                      itor->renderableCache.pieces ) );
+                // uint32 renderableHash = static_cast<uint32>( hlms->addRenderableCache(
+                //        itor->renderableCache.setProperties, itor->renderableCache.pieces ) );
 
-                uint32 passHash = 0;
+                // uint32 passHash = 0;
                 {
                     assert( hlms->mPassCache.size() <= (uint32)HlmsBits::PassMask &&
                             "Too many passes combinations, we'll overflow "
                             "the bits assigned in the hash!" );
 
                     Hlms::PassCache passCache;
-                    passCache.passPso       = itor->pso.pass;
-                    passCache.properties    = itor->passProperties;
+                    passCache.passPso = itor->pso.pass;
+                    passCache.properties = itor->passProperties;
 
-                    Hlms::PassCacheVec::iterator it = std::find( hlms->mPassCache.begin(),
-                                                                 hlms->mPassCache.end(), passCache );
+                    Hlms::PassCacheVec::iterator it =
+                        std::find( hlms->mPassCache.begin(), hlms->mPassCache.end(), passCache );
                     if( it == hlms->mPassCache.end() )
                     {
                         hlms->mPassCache.push_back( passCache );
                         it = hlms->mPassCache.end() - 1u;
                     }
 
-                    passHash = (uint32)(it - hlms->mPassCache.begin()) << (uint32)HlmsBits::PassShift;
+                    // passHash = (uint32)(it - hlms->mPassCache.begin()) << (uint32)HlmsBits::PassShift;
                 }
 
-                //const uint32 finalHash = renderableHash | passHash;
-                //hlms->createShaderCacheEntry( renderableHash, passHash, finalHash, );
+                // const uint32 finalHash = renderableHash | passHash;
+                // hlms->createShaderCacheEntry( renderableHash, passHash, finalHash, );
 
                 ++itor;
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    template <typename T> void write( DataStreamPtr &dataStream, const T &value )
+    template <typename T>
+    void write( DataStreamPtr &dataStream, const T &value )
     {
-        dataStream->write( &value, sizeof(value) );
+        dataStream->write( &value, sizeof( value ) );
+    }
+    template <>
+    void write<bool>( DataStreamPtr &dataStream, const bool &value )
+    {
+        const uint8 valueAsU8 = value ? 1u : 0u;
+        dataStream->write( &valueAsU8, sizeof( valueAsU8 ) );
     }
     //-----------------------------------------------------------------------------------
     void HlmsDiskCache::save( DataStreamPtr &dataStream, const IdString &hashedString )
@@ -275,9 +308,9 @@ namespace Ogre
         write<uint32>( dataStream, static_cast<uint32>( properties.size() ) );
 
         HlmsPropertyVec::const_iterator itor = properties.begin();
-        HlmsPropertyVec::const_iterator end  = properties.end();
+        HlmsPropertyVec::const_iterator endt = properties.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             save( dataStream, itor->keyName );
             write( dataStream, itor->value );
@@ -287,18 +320,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsDiskCache::save( DataStreamPtr &dataStream, const Hlms::RenderableCache &renderableCache )
     {
-        //Save the properties
+        // Save the properties
         save( dataStream, renderableCache.setProperties );
 
-        //Save the pieces
-        for( size_t i=0; i<NumShaderTypes; ++i )
+        // Save the pieces
+        for( size_t i = 0; i < NumShaderTypes; ++i )
         {
             write<uint32>( dataStream, static_cast<uint32>( renderableCache.pieces[i].size() ) );
 
             PiecesMap::const_iterator itor = renderableCache.pieces[i].begin();
-            PiecesMap::const_iterator end  = renderableCache.pieces[i].end();
+            PiecesMap::const_iterator endt = renderableCache.pieces[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 save( dataStream, itor->first );
                 save( dataStream, itor->second );
@@ -321,17 +354,21 @@ namespace Ogre
         write( dataStream, mCache.type );
         save( dataStream, mShaderProfile );
 
+        write<uint16>( dataStream, mNativeShadingLangVer );
+        write<uint8>( dataStream, mPrecisionMode );
+        write<bool>( dataStream, mFastShaderBuildHack );
+
         {
-            //Save shaders
+            // Save shaders
             write<uint32>( dataStream, static_cast<uint32>( mCache.sourceCode.size() ) );
 
             SourceCodeVec::const_iterator itor = mCache.sourceCode.begin();
-            SourceCodeVec::const_iterator end  = mCache.sourceCode.end();
+            SourceCodeVec::const_iterator endt = mCache.sourceCode.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 save( dataStream, itor->mergedCache );
-                for( size_t i=0; i<NumShaderTypes; ++i )
+                for( size_t i = 0; i < NumShaderTypes; ++i )
                     save( dataStream, itor->sourceFile[i] );
 
                 ++itor;
@@ -339,13 +376,13 @@ namespace Ogre
         }
 
         {
-            //Save PSOs
+            // Save PSOs
             write<uint32>( dataStream, static_cast<uint32>( mCache.pso.size() ) );
 
             PsoVec::const_iterator itor = mCache.pso.begin();
-            PsoVec::const_iterator end  = mCache.pso.end();
+            PsoVec::const_iterator endt = mCache.pso.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 save( dataStream, itor->renderableCache );
                 save( dataStream, itor->passProperties );
@@ -402,15 +439,31 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    template <typename T> void read( DataStreamPtr &dataStream, T &value )
+    template <typename T>
+    void read( DataStreamPtr &dataStream, T &value )
     {
-        dataStream->read( &value, sizeof(value) );
+        dataStream->read( &value, sizeof( value ) );
     }
-    template <typename T> T read( DataStreamPtr &dataStream )
+    template <typename T>
+    T read( DataStreamPtr &dataStream )
     {
         T value;
-        dataStream->read( &value, sizeof(value) );
+        dataStream->read( &value, sizeof( value ) );
         return value;
+    }
+    template <>
+    void read<bool>( DataStreamPtr &dataStream, bool &value )
+    {
+        uint8 valueU8;
+        dataStream->read( &valueU8, sizeof( valueU8 ) );
+        value = valueU8 != 0u;
+    }
+    template <>
+    bool read<bool>( DataStreamPtr &dataStream )
+    {
+        uint8 value;
+        dataStream->read( &value, sizeof( value ) );
+        return value != 0u;
     }
     //-----------------------------------------------------------------------------------
     void HlmsDiskCache::load( DataStreamPtr &dataStream, IdString &hashedString )
@@ -422,7 +475,7 @@ namespace Ogre
             const uint16 strLength = read<uint16>( dataStream );
             const uint16 bytesToRead = std::min<uint16>( strLength, OGRE_DEBUG_STR_SIZE - 1u );
             dataStream->read( hashedString.mDebugString, bytesToRead );
-            hashedString.mDebugString[bytesToRead] = '\0'; //Force the string to be null-terminated
+            hashedString.mDebugString[bytesToRead] = '\0';  // Force the string to be null-terminated
             dataStream->skip( strLength - bytesToRead );
         }
 #else
@@ -448,7 +501,7 @@ namespace Ogre
         properties.clear();
         properties.reserve( numEntries );
 
-        for( size_t j=0; j<numEntries; ++j )
+        for( size_t j = 0; j < numEntries; ++j )
         {
             IdString keyName;
             int32 value;
@@ -460,17 +513,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsDiskCache::load( DataStreamPtr &dataStream, Hlms::RenderableCache &renderableCache )
     {
-        //Load the properties
+        // Load the properties
         load( dataStream, renderableCache.setProperties );
 
-        //Load the pieces
-        for( size_t i=0; i<NumShaderTypes; ++i )
+        // Load the pieces
+        for( size_t i = 0; i < NumShaderTypes; ++i )
         {
             uint32 numEntries = read<uint32>( dataStream );
-            //renderableCache.pieces[i].reserve( numEntries );
+            // renderableCache.pieces[i].reserve( numEntries );
             renderableCache.pieces[i].clear();
 
-            for( size_t j=0; j<numEntries; ++j )
+            for( size_t j = 0; j < numEntries; ++j )
             {
                 IdString key;
                 String valueStr;
@@ -499,9 +552,8 @@ namespace Ogre
         if( OGRE_DEBUG_STR_SIZE != mDebugStrSize )
         {
             LogManager::getSingleton().logMessage(
-                        "HlmsDiskCache: This cache was built with a OGRE_DEBUG_STR_SIZE (IdString) of "
-                        + StringConverter::toString( mDebugStrSize ) +
-                        ". It cannot be used. Not loading." );
+                "HlmsDiskCache: This cache was built with a OGRE_DEBUG_STR_SIZE (IdString) of " +
+                StringConverter::toString( mDebugStrSize ) + ". It cannot be used. Not loading." );
             return;
         }
 #endif
@@ -510,28 +562,32 @@ namespace Ogre
         read( dataStream, mCache.type );
         load( dataStream, mShaderProfile );
 
+        read<uint16>( dataStream, mNativeShadingLangVer );
+        read<uint8>( dataStream, mPrecisionMode );
+        read<bool>( dataStream, mFastShaderBuildHack );
+
         {
-            //Load shaders
+            // Load shaders
             uint32 numEntries = read<uint32>( dataStream );
             mCache.sourceCode.reserve( numEntries );
 
             SourceCode sourceCode;
-            for( size_t i=0; i<numEntries; ++i )
+            for( size_t i = 0; i < numEntries; ++i )
             {
                 load( dataStream, sourceCode.mergedCache );
-                for( size_t j=0; j<NumShaderTypes; ++j )
+                for( size_t j = 0; j < NumShaderTypes; ++j )
                     load( dataStream, sourceCode.sourceFile[j] );
                 mCache.sourceCode.push_back( sourceCode );
             }
         }
 
         {
-            //Load PSOs
+            // Load PSOs
             const uint32 numEntries = read<uint32>( dataStream );
             mCache.pso.reserve( numEntries );
 
             Pso pso;
-            for( size_t i=0; i<numEntries; ++i )
+            for( size_t i = 0; i < numEntries; ++i )
             {
                 load( dataStream, pso.renderableCache );
                 load( dataStream, pso.passProperties );
@@ -539,7 +595,7 @@ namespace Ogre
                 const uint32 numVertexElements = read<uint32>( dataStream );
                 pso.pso.vertexElements.reserve( numVertexElements );
 
-                for( size_t j=0; j<numVertexElements; ++j )
+                for( size_t j = 0; j < numVertexElements; ++j )
                 {
                     pso.pso.vertexElements.push_back( VertexElement2Vec() );
                     VertexElement2Vec &vertexElements = pso.pso.vertexElements.back();
@@ -547,11 +603,11 @@ namespace Ogre
                     const uint32 numVertexElements2 = read<uint32>( dataStream );
                     vertexElements.reserve( numVertexElements2 );
 
-                    for( size_t k=0; k<numVertexElements2; ++k )
+                    for( size_t k = 0; k < numVertexElements2; ++k )
                     {
-                        VertexElementType type          = read<VertexElementType>( dataStream );
-                        VertexElementSemantic semantic  = read<VertexElementSemantic>( dataStream );
-                        uint32 instancingStepRate       = read<uint32>( dataStream );
+                        VertexElementType type = read<VertexElementType>( dataStream );
+                        VertexElementSemantic semantic = read<VertexElementSemantic>( dataStream );
+                        uint32 instancingStepRate = read<uint32>( dataStream );
                         vertexElements.push_back( VertexElement2( type, semantic ) );
                         vertexElements.back().mInstancingStepRate = instancingStepRate;
                     }
@@ -583,19 +639,19 @@ namespace Ogre
                 read( dataStream, pso.blendblock.mBlendOperation );
                 read( dataStream, pso.blendblock.mBlendOperationAlpha );
 
-                //We retrieve the Macroblock & Blendblock from HlmsManager and immediately remove them
-                //This allows us to create a permanent pointer, while the actual internal pointer is
-                //released (i.e. it becomes inactive)
+                // We retrieve the Macroblock & Blendblock from HlmsManager and immediately remove them
+                // This allows us to create a permanent pointer, while the actual internal pointer is
+                // released (i.e. it becomes inactive)
                 pso.pso.macroblock = mHlmsManager->getMacroblock( pso.macroblock );
                 mHlmsManager->destroyMacroblock( pso.pso.macroblock );
 
                 pso.pso.blendblock = mHlmsManager->getBlendblock( pso.blendblock );
                 mHlmsManager->destroyBlendblock( pso.pso.blendblock );
 
-                uint16 inputLayoutId = mHlmsManager->_getInputLayoutId( pso.pso.vertexElements,
-                                                                        pso.pso.operationType );
+                uint16 inputLayoutId =
+                    mHlmsManager->_getInputLayoutId( pso.pso.vertexElements, pso.pso.operationType );
 
-                //Reset these properties because they may be different now
+                // Reset these properties because they may be different now
                 Hlms::setProperty( pso.renderableCache.setProperties, HlmsPsoProp::Macroblock,
                                    pso.pso.macroblock->mLifetimeId );
                 Hlms::setProperty( pso.renderableCache.setProperties, HlmsPsoProp::Blendblock,
@@ -607,4 +663,4 @@ namespace Ogre
             }
         }
     }
-}
+}  // namespace Ogre

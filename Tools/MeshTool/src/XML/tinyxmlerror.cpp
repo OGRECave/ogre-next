@@ -22,6 +22,11 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wsuggest-override"
+#endif
+
 #include "XML/tinyxml.h"
 
 // The goal of the seperate error file is to make the first
@@ -51,3 +56,7 @@ const char* TiXmlBase::errorString[ TIXML_ERROR_STRING_COUNT ] =
     "Error parsing CDATA.",
     "Error when TiXmlDocument added to document, because TiXmlDocument can only be at the root.",
 };
+
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif

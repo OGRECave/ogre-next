@@ -51,45 +51,46 @@
 	worldPos.z = dot( worldMat[2], inputPos );
 	worldPos.xyz *= inVs_blendWeights[0];
     @property( hlms_normal || hlms_qtangent )
-        float3 worldNorm;
-		worldNorm.x = dot( worldMat[0].xyz, inputNormal );
-		worldNorm.y = dot( worldMat[1].xyz, inputNormal );
-		worldNorm.z = dot( worldMat[2].xyz, inputNormal );
-		worldNorm *= inVs_blendWeights[0];
+		midf3 worldNorm;
+		worldNorm.x = dot( midf3_c( worldMat[0].xyz ), inputNormal );
+		worldNorm.y = dot( midf3_c( worldMat[1].xyz ), inputNormal );
+		worldNorm.z = dot( midf3_c( worldMat[2].xyz ), inputNormal );
+		worldNorm *= midf_c( inVs_blendWeights[0] );
 	@end
 	@property( normal_map )
-		float3 worldTang;
-		worldTang.x = dot( worldMat[0].xyz, inputTangent );
-		worldTang.y = dot( worldMat[1].xyz, inputTangent );
-		worldTang.z = dot( worldMat[2].xyz, inputTangent );
-		worldTang *= inVs_blendWeights[0];
+		midf3 worldTang;
+		worldTang.x = dot( midf3_c( worldMat[0].xyz ), inputTangent );
+		worldTang.y = dot( midf3_c( worldMat[1].xyz ), inputTangent );
+		worldTang.z = dot( midf3_c( worldMat[2].xyz ), inputTangent );
+		worldTang *= midf_c( inVs_blendWeights[0] );
 	@end
 
 	@psub( NeedsMoreThan1BonePerVertex, hlms_bones_per_vertex, 1 )
 	@property( NeedsMoreThan1BonePerVertex )
-		float4 tmp;
-		tmp.w = 1.0;
+		float4 tmp4;
+		tmp4.w = 1.0;
+		midf3 tmp3;
 	@end //!NeedsMoreThan1BonePerVertex
 	@foreach( hlms_bones_per_vertex, n, 1 )
 		_idx = (inVs_blendIndices[@n] << 1u) + inVs_blendIndices[@n]; //inVs_blendIndices[@n] * 3; a 32-bit int multiply is 4 cycles on GCN! (and mul24 is not exposed to GLSL...)
 		worldMat[0] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 0u) );
 		worldMat[1] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 1u) );
 		worldMat[2] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 2u) );
-		tmp.x = dot( worldMat[0], inputPos );
-		tmp.y = dot( worldMat[1], inputPos );
-		tmp.z = dot( worldMat[2], inputPos );
-		worldPos.xyz += (tmp * inVs_blendWeights[@n]).xyz;
+		tmp4.x = dot( worldMat[0], inputPos );
+		tmp4.y = dot( worldMat[1], inputPos );
+		tmp4.z = dot( worldMat[2], inputPos );
+		worldPos.xyz += (tmp4 * inVs_blendWeights[@n]).xyz;
 		@property( hlms_normal || hlms_qtangent )
-			tmp.x = dot( worldMat[0].xyz, inputNormal );
-			tmp.y = dot( worldMat[1].xyz, inputNormal );
-			tmp.z = dot( worldMat[2].xyz, inputNormal );
-			worldNorm += tmp.xyz * inVs_blendWeights[@n];
+			tmp3.x = dot( midf3_c( worldMat[0].xyz ), inputNormal );
+			tmp3.y = dot( midf3_c( worldMat[1].xyz ), inputNormal );
+			tmp3.z = dot( midf3_c( worldMat[2].xyz ), inputNormal );
+			worldNorm += tmp3.xyz * midf_c( inVs_blendWeights[@n] );
 		@end
 		@property( normal_map )
-			tmp.x = dot( worldMat[0].xyz, inputTangent );
-			tmp.y = dot( worldMat[1].xyz, inputTangent );
-			tmp.z = dot( worldMat[2].xyz, inputTangent );
-			worldTang += tmp.xyz * inVs_blendWeights[@n];
+			tmp3.x = dot( midf3_c( worldMat[0].xyz ), inputTangent );
+			tmp3.y = dot( midf3_c( worldMat[1].xyz ), inputTangent );
+			tmp3.z = dot( midf3_c( worldMat[2].xyz ), inputTangent );
+			worldTang += tmp3.xyz * midf_c( inVs_blendWeights[@n] );
 		@end
 	@end
 
@@ -116,10 +117,10 @@
 	@psub( MoreThanOnePose, hlms_pose, 1 )
 	@property( !MoreThanOnePose )
 		float4 poseWeights = readOnlyFetch( worldMatBuf, int(poseDataStart + 1u) );
-		float4 posePos = bufferFetch( poseBuf, int( vertexID @property( hlms_pose_normals )<< 1u@end ) );
+		float4 posePos = float4( bufferFetch( poseBuf, int( vertexID @property( hlms_pose_normals )<< 1u@end ) ) );
 		inputPos += posePos * poseWeights.x;
 		@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
-			float4 poseNormal = bufferFetch( poseBuf, int( (vertexID << 1u) + 1u ) );
+			float4 poseNormal = float4( bufferFetch( poseBuf, int( (vertexID << 1u) + 1u ) ) );
 			inputNormal += poseNormal.xyz * poseWeights.x;
 		@end
 		@pset( NumPoseWeightVectors, 1 )
@@ -135,9 +136,9 @@
 		@property( !MoreThanOnePoseWeightVector )
 			float4 poseWeights = readOnlyFetch( worldMatBuf, int( poseDataStart + 1u ) );
 			@foreach( hlms_pose, n )
-				inputPos += bufferFetch( poseBuf, int( (vertexID + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ) ) * poseWeights[@n];
+				inputPos += float4( bufferFetch( poseBuf, int( (vertexID + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ) ) ) * poseWeights[@n];
 				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
-				inputNormal += bufferFetch( poseBuf, int( ((vertexID + numVertices * @nu) << 1u) + 1u ) ).xyz * poseWeights[@n];
+				inputNormal += midf3_c( bufferFetch( poseBuf, int( ((vertexID + numVertices * @nu) << 1u) + 1u ) ).xyz * poseWeights[@n] );
 				@end
 			@end
 		@else
@@ -150,9 +151,9 @@
 				poseWeights[@n * 4 + 3] = weights@n[3];
 			@end
 			@foreach( hlms_pose, n )
-				inputPos += bufferFetch( poseBuf, int( (vertexID + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ) ) * poseWeights[@n];
+				inputPos += float4( bufferFetch( poseBuf, int( (vertexID + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ) ) ) * poseWeights[@n];
 				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
-					inputNormal += bufferFetch( poseBuf, int( ((vertexID + numVertices * @nu) << 1u) + 1u ) ).xyz * poseWeights[@nu];
+					inputNormal += midf3_c( bufferFetch( poseBuf, int( ((vertexID + numVertices * @nu) << 1u) + 1u ) ).xyz * poseWeights[@nu] );
 				@end
 			@end
 		@end
@@ -190,8 +191,8 @@
 	@insertpiece( custom_vs_preTransform )
 	//Lighting is in view space
 	@property( hlms_normal || hlms_qtangent )	outVs.pos		= @insertpiece( CalculatePsPos );@end
-	@property( hlms_normal || hlms_qtangent )	outVs.normal	= mul( @insertpiece(local_normal), toFloat3x3( worldViewMat ) );@end
-	@property( normal_map )						outVs.tangent	= mul( @insertpiece(local_tangent), toFloat3x3( worldViewMat ) );@end
+	@property( hlms_normal || hlms_qtangent )	outVs.normal	= mul( @insertpiece(local_normal), toMidf3x3( worldViewMat ) );@end
+	@property( normal_map )						outVs.tangent	= mul( @insertpiece(local_tangent), toMidf3x3( worldViewMat ) );@end
 	@property( !hlms_dual_paraboloid_mapping )
         @property( !hlms_use_uv_baking )
 			@property( !hlms_instanced_stereo )
@@ -233,24 +234,21 @@
 	// Define inputNormal and inputTangent using inVs_normal, inVs_tangent, inVs_qtangent
 	@property( hlms_qtangent )
 		//Decode qTangent to TBN with reflection
-		float3 inputNormal	= xAxis( normalize( inVs_qtangent ) );
+		const midf4 qTangent = normalize( inVs_qtangent );
+		midf3 inputNormal = xAxis( qTangent );
 		@property( normal_map )
-			float3 inputTangent	= yAxis( inVs_qtangent );
+			midf3 inputTangent = yAxis( qTangent );
 			outVs.biNormalReflection = sign( inVs_qtangent.w ); //We ensure in C++ qtangent.w is never 0
 		@end
 	@else
-		@property( hlms_normal && hlms_pose && hlms_pose_normals )
-			float3 inputNormal = inVs_normal; // We need inputNormal as lvalue for PoseTransform
-		@else
-			#define inputNormal inVs_normal
+		@property( hlms_normal )
+			midf3 inputNormal = midf3_c( inVs_normal ); // We need inputNormal as lvalue for PoseTransform
 		@end
-		@property( hlms_tangent4 )
-			#define inputTangent inVs_tangent.xyz
-			@property( normal_map )
-				outVs.biNormalReflection = sign( inVs_tangent.w );
+		@property( normal_map )
+			midf3 inputTangent = midf3_c( inVs_tangent.xyz );
+			@property( hlms_tangent4 )
+				outVs.biNormalReflection = sign( midf( inVs_tangent.w ) );
 			@end
-		@else
-			#define inputTangent inVs_tangent
 		@end
 	@end
 
@@ -263,7 +261,7 @@
 		float4 worldPos = float4( mul(inVs_vertex, worldMat).xyz, 1.0f );
 		@property( ( hlms_normal || hlms_qtangent) && hlms_num_shadow_map_lights )
 			// We need worldNorm for normal offset bias
-			float3 worldNorm = mul( inputNormal, toFloat3x3( worldMat ) ).xyz;
+			midf3 worldNorm = mul( inputNormal, toMidf3x3( worldMat ) ).xyz;
 		@end
 	@end
 
@@ -271,10 +269,10 @@
 
 	@property( !hlms_skeleton && hlms_pose && ( hlms_normal || hlms_qtangent) && hlms_num_shadow_map_lights )
 		// We need worldNorm for normal offset bias, special path when using poses
-		float3 worldNorm;
-		worldNorm.x = dot( worldMat[0].xyz, inputNormal );
-		worldNorm.y = dot( worldMat[1].xyz, inputNormal );
-		worldNorm.z = dot( worldMat[2].xyz, inputNormal );
+		midf3 worldNorm;
+		worldNorm.x = dot( midf3_c( worldMat[0].xyz ), inputNormal );
+		worldNorm.y = dot( midf3_c( worldMat[1].xyz ), inputNormal );
+		worldNorm.z = dot( midf3_c( worldMat[2].xyz ), inputNormal );
 	@end
 
 	@insertpiece( SkeletonTransform )

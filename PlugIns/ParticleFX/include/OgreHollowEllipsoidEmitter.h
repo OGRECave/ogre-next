@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,10 +30,11 @@ THE SOFTWARE.
 #define __HollowEllipsoidEmitter_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreEllipsoidEmitter.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Particle emitter which emits particles randomly from points inside a hollow ellipsoid.
     @remarks
         This particle emitter emits particles from a hollow ellipsoid area.
@@ -41,70 +42,70 @@ namespace Ogre {
         direction (i.e. a line), a random scattering inside a cone, or a random
         scattering in all directions, depending the 'angle' parameter, which
         is the angle across which to scatter the particles either side of the
-        base direction of the emitter. 
+        base direction of the emitter.
     */
     class _OgreParticleFXExport HollowEllipsoidEmitter : public EllipsoidEmitter
     {
     public:
         /** Command object for inner size (see ParamCommand).*/
-        class CmdInnerX : public ParamCommand
+        class CmdInnerX final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /** Command object for inner size (see ParamCommand).*/
-        class CmdInnerY : public ParamCommand
+        class CmdInnerY final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /** Command object for inner size (see ParamCommand).*/
-        class CmdInnerZ : public ParamCommand
+        class CmdInnerZ final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         // See AreaEmitter
 
-        HollowEllipsoidEmitter(ParticleSystem* psys);
+        HollowEllipsoidEmitter( ParticleSystem *psys );
 
         /** See ParticleEmitter. */
-        void _initParticle(Particle* pParticle);
+        void _initParticle( Particle *pParticle ) override;
 
         /** Sets the size of the clear space inside the area from where NO particles are emitted.
         @param x,y,z
             Parametric values describing the proportion of the shape which is hollow in each direction.
             E.g. 0 is solid, 0.5 is half-hollow etc
         */
-        void setInnerSize(Real x, Real y, Real z);
+        void setInnerSize( Real x, Real y, Real z );
 
-        /** Sets the x component of the area inside the ellipsoid which doesn't emit particles. 
+        /** Sets the x component of the area inside the ellipsoid which doesn't emit particles.
         @param x
             Parametric value describing the proportion of the shape which is hollow in this direction.
             E.g. 0 is solid, 0.5 is half-hollow etc
         */
-        void setInnerSizeX(Real x);
-        /** Sets the y component of the area inside the ellipsoid which doesn't emit particles. 
+        void setInnerSizeX( Real x );
+        /** Sets the y component of the area inside the ellipsoid which doesn't emit particles.
         @param y
             Parametric value describing the proportion of the shape which is hollow in this direction.
             E.g. 0 is solid, 0.5 is half-hollow etc
         */
-        void setInnerSizeY(Real y);
-        /** Sets the z component of the area inside the ellipsoid which doesn't emit particles. 
+        void setInnerSizeY( Real y );
+        /** Sets the z component of the area inside the ellipsoid which doesn't emit particles.
         @param z
             Parametric value describing the proportion of the shape which is hollow in this direction.
             E.g. 0 is solid, 0.5 is half-hollow etc
         */
-        void setInnerSizeZ(Real z);
+        void setInnerSizeZ( Real z );
         /** Gets the x component of the area inside the ellipsoid which doesn't emit particles. */
-        Real getInnerSizeX(void) const;
+        Real getInnerSizeX() const;
         /** Gets the y component of the area inside the ellipsoid which doesn't emit particles. */
-        Real getInnerSizeY(void) const;
+        Real getInnerSizeY() const;
         /** Gets the z component of the area inside the ellipsoid which doesn't emit particles. */
-        Real getInnerSizeZ(void) const;
+        Real getInnerSizeZ() const;
 
     protected:
         /// @see ParticleEmitter
@@ -115,12 +116,8 @@ namespace Ogre {
         static CmdInnerX msCmdInnerX;
         static CmdInnerY msCmdInnerY;
         static CmdInnerZ msCmdInnerZ;
-
-
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

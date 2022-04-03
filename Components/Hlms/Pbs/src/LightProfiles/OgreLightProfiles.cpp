@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -56,7 +56,7 @@ namespace Ogre
             delete *itor++;
     }
     //-------------------------------------------------------------------------
-    void LightProfiles::destroyTexture( void )
+    void LightProfiles::destroyTexture()
     {
         if( !mLightProfilesTexture )
             return;
@@ -92,7 +92,7 @@ namespace Ogre
         mIesData.push_back( iesLoader );
     }
     //-------------------------------------------------------------------------
-    void LightProfiles::build( void )
+    void LightProfiles::build()
     {
         uint32 suggestedWidth = 0u;
 
@@ -167,7 +167,7 @@ namespace Ogre
                              "LightProfiles::assignProfile" );
             }
 
-            light->_setLightProfileIdx( itor->second + 1u );
+            light->_setLightProfileIdx( uint16( itor->second + 1u ) );
         }
     }
     //-------------------------------------------------------------------------

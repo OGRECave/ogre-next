@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,19 +27,17 @@ THE SOFTWARE.
 */
 
 #include "OgreMetalTextureGpuManager.h"
-#include "OgreMetalMappings.h"
-#include "OgreMetalTextureGpu.h"
-#include "OgreMetalStagingTexture.h"
+
 #include "OgreMetalAsyncTextureTicket.h"
-#include "OgreMetalTextureGpuWindow.h"
-
-#include "Vao/OgreMetalVaoManager.h"
-
 #include "OgreMetalDevice.h"
-
+#include "OgreMetalMappings.h"
+#include "OgreMetalStagingTexture.h"
+#include "OgreMetalTextureGpu.h"
+#include "OgreMetalTextureGpuWindow.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
 #include "OgreVector2.h"
+#include "Vao/OgreMetalVaoManager.h"
 
 #include "OgreException.h"
 
@@ -51,54 +49,52 @@ namespace Ogre
         mDevice( device )
     {
         MTLTextureDescriptor *desc = [MTLTextureDescriptor new];
-        desc.mipmapLevelCount   = 1u;
-        desc.width              = 4u;
-        desc.height             = 4u;
-        desc.depth              = 1u;
-        desc.arrayLength        = 1u;
-        desc.pixelFormat        = MTLPixelFormatRGBA8Unorm;
-        desc.sampleCount        = 1u;
+        desc.mipmapLevelCount = 1u;
+        desc.width = 4u;
+        desc.height = 4u;
+        desc.depth = 1u;
+        desc.arrayLength = 1u;
+        desc.pixelFormat = MTLPixelFormatRGBA8Unorm;
+        desc.sampleCount = 1u;
         desc.usage = MTLTextureUsageShaderRead;
 
-        const MTLTextureType textureTypes[] =
-        {
+        const MTLTextureType textureTypes[] = {
             MTLTextureType2D,
             MTLTextureType1D,
             MTLTextureType1DArray,
             MTLTextureType2D,
             MTLTextureType2DArray,
             MTLTextureTypeCube,
-    #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
             MTLTextureTypeCubeArray,
-    #else
+#else
             MTLTextureTypeCube,
-    #endif
+#endif
             MTLTextureType3D
         };
 
-        const char *dummyNames[] =
-        {
+        const char *dummyNames[] = {
             "Dummy Unknown (2D)",
             "Dummy 1D 4x1",
             "Dummy 1DArray 4x1",
             "Dummy 2D 4x4",
             "Dummy 2DArray 4x4x1",
             "Dummy Cube 4x4",
-    #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
             "Dummy CubeArray 4x4x1",
-    #else
+#else
             "Dummy CubeArray 4x4x1 (Emulated w/ Cube)",
-    #endif
+#endif
             "Dummy 3D 4x4x4"
         };
 
-        //Must be large enough to hold the biggest transfer we'll do.
-        uint8 c_whiteData[4*4*6*4];
-        uint8 c_blackData[4*4*6*4];
+        // Must be large enough to hold the biggest transfer we'll do.
+        uint8 c_whiteData[4 * 4 * 6 * 4];
+        uint8 c_blackData[4 * 4 * 6 * 4];
         memset( c_whiteData, 0xff, sizeof( c_whiteData ) );
         memset( c_blackData, 0x00, sizeof( c_blackData ) );
 
-        for( int i=1; i<=TextureTypes::Type3D; ++i )
+        for( int i = 1; i <= TextureTypes::Type3D; ++i )
         {
             if( i == TextureTypes::Type3D )
                 desc.depth = 4u;
@@ -113,22 +109,21 @@ namespace Ogre
             mBlankTexture[i] = [device->mDevice newTextureWithDescriptor:desc];
             if( !mBlankTexture[i] )
             {
-                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "Out of GPU memory or driver refused.",
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Out of GPU memory or driver refused.",
                              "MetalTextureGpuManager::MetalTextureGpuManager" );
             }
             mBlankTexture[i].label = [NSString stringWithUTF8String:dummyNames[i]];
 
             if( i == TextureTypes::TypeCube || i == TextureTypes::TypeCubeArray )
             {
-                for( uint32 j=0; j<6u; ++j )
+                for( uint32 j = 0; j < 6u; ++j )
                 {
                     [mBlankTexture[i] replaceRegion:MTLRegionMake2D( 0, 0, 4u, 4u )
                                         mipmapLevel:0
                                               slice:j
                                           withBytes:c_blackData
-                                        bytesPerRow:4u*4u
-                                      bytesPerImage:4u*4u*4u];
+                                        bytesPerRow:4u * 4u
+                                      bytesPerImage:4u * 4u * 4u];
                 }
             }
             else
@@ -137,8 +132,8 @@ namespace Ogre
                                     mipmapLevel:0
                                           slice:0
                                       withBytes:c_whiteData
-                                    bytesPerRow:4u*4u
-                                  bytesPerImage:4u*4u*4u];
+                                    bytesPerRow:4u * 4u
+                                  bytesPerImage:4u * 4u * 4u];
             }
         }
 
@@ -149,41 +144,37 @@ namespace Ogre
     {
         destroyAll();
 
-        for( int i=0; i<=TextureTypes::Type3D; ++i )
+        for( int i = 0; i <= TextureTypes::Type3D; ++i )
             mBlankTexture[i] = 0;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* MetalTextureGpuManager::createTextureGpuWindow( MetalWindow *window )
+    TextureGpu *MetalTextureGpuManager::createTextureGpuWindow( MetalWindow *window )
     {
-        return OGRE_NEW MetalTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
-                                               "RenderWindow",
-                                               TextureFlags::NotTexture|
-                                               TextureFlags::RenderToTexture|
-                                               TextureFlags::RenderWindowSpecific|
-                                               TextureFlags::DiscardableContent,
+        return OGRE_NEW MetalTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow",
+                                               TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                                                   TextureFlags::RenderWindowSpecific |
+                                                   TextureFlags::DiscardableContent,
                                                TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* MetalTextureGpuManager::createWindowDepthBuffer(void)
+    TextureGpu *MetalTextureGpuManager::createWindowDepthBuffer()
     {
-        return OGRE_NEW MetalTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
-                                                     "RenderWindow DepthBuffer",
-                                                     TextureFlags::NotTexture|
-                                                     TextureFlags::RenderToTexture|
-                                                     TextureFlags::RenderWindowSpecific|
-                                                     TextureFlags::DiscardableContent,
-                                                     TextureTypes::Type2D, this );
+        return OGRE_NEW MetalTextureGpuRenderTarget(
+            GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow DepthBuffer",
+            TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent,
+            TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
     id<MTLTexture> MetalTextureGpuManager::getBlankTextureMetalName(
-            TextureTypes::TextureTypes textureType ) const
+        TextureTypes::TextureTypes textureType ) const
     {
         return mBlankTexture[textureType];
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* MetalTextureGpuManager::createTextureImpl(
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
+    TextureGpu *MetalTextureGpuManager::createTextureImpl(
+        GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, IdString name, uint32 textureFlags,
+        TextureTypes::TextureTypes initialType )
     {
         MetalTextureGpu *retVal = 0;
         if( textureFlags & TextureFlags::RenderToTexture )
@@ -193,38 +184,35 @@ namespace Ogre
         }
         else
         {
-            retVal = OGRE_NEW MetalTextureGpu( pageOutStrategy, mVaoManager, name,
-                                               textureFlags, initialType, this );
+            retVal = OGRE_NEW MetalTextureGpu( pageOutStrategy, mVaoManager, name, textureFlags,
+                                               initialType, this );
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    StagingTexture* MetalTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
-                                                                      uint32 depth,
-                                                                      uint32 slices,
+    StagingTexture *MetalTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
+                                                                      uint32 depth, uint32 slices,
                                                                       PixelFormatGpu pixelFormat )
     {
         const uint32 rowAlignment = 4u;
-        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
-                                                                    pixelFormat, rowAlignment );
-        MetalStagingTexture *retVal =
-                OGRE_NEW MetalStagingTexture( mVaoManager,
-                                              PixelFormatGpuUtils::getFamily( pixelFormat ),
-                                              sizeBytes, mDevice );
+        const size_t sizeBytes =
+            PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat, rowAlignment );
+        MetalStagingTexture *retVal = OGRE_NEW MetalStagingTexture(
+            mVaoManager, PixelFormatGpuUtils::getFamily( pixelFormat ), sizeBytes, mDevice );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )
     {
-        //Do nothing, caller will delete stagingTexture.
+        // Do nothing, caller will delete stagingTexture.
     }
     //-----------------------------------------------------------------------------------
-    AsyncTextureTicket* MetalTextureGpuManager::createAsyncTextureTicketImpl(
-            uint32 width, uint32 height, uint32 depthOrSlices,
-            TextureTypes::TextureTypes textureType, PixelFormatGpu pixelFormatFamily )
+    AsyncTextureTicket *MetalTextureGpuManager::createAsyncTextureTicketImpl(
+        uint32 width, uint32 height, uint32 depthOrSlices, TextureTypes::TextureTypes textureType,
+        PixelFormatGpu pixelFormatFamily )
     {
-        MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mVaoManager );
+        MetalVaoManager *vaoManager = static_cast<MetalVaoManager *>( mVaoManager );
         return OGRE_NEW MetalAsyncTextureTicket( width, height, depthOrSlices, textureType,
                                                  pixelFormatFamily, vaoManager, mDevice );
     }

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -35,37 +35,37 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11TextureGpuWindow : public D3D11TextureGpuRenderTarget
+    class _OgreD3D11Export D3D11TextureGpuWindow final : public D3D11TextureGpuRenderTarget
     {
         Window *mWindow;
 
-        virtual void createInternalResourcesImpl(void);
-        virtual void destroyInternalResourcesImpl(void);
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
     public:
         D3D11TextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                               TextureTypes::TextureTypes initialType,
-                               TextureGpuManager *textureManager, Window *window );
-        virtual ~D3D11TextureGpuWindow();
+                               TextureTypes::TextureTypes initialType, TextureGpuManager *textureManager,
+                               Window *window );
+        ~D3D11TextureGpuWindow() override;
 
         void _setBackbuffer( ID3D11Texture2D *backbuffer );
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
 
-        virtual void notifyDataIsReady(void);
-        virtual bool _isDataReadyImpl(void) const;
+        void notifyDataIsReady() override;
+        bool _isDataReadyImpl() const override;
 
-        virtual void swapBuffers(void);
+        void swapBuffers() override;
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
 
-        virtual void _setToDisplayDummyTexture(void);
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setToDisplayDummyTexture() override;
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

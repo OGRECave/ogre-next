@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -198,10 +198,12 @@ namespace Ogre
 
         virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer );
 
+#ifdef _OGRE_MULTISOURCE_VBO
         virtual MultiSourceVertexBufferPool* createMultiSourceVertexBufferPoolImpl(
                                             const VertexElement2VecVec &vertexElementsBySource,
                                             size_t maxNumVertices, size_t totalBytesPerVertex,
                                             BufferType bufferType );
+#endif
 
         virtual IndexBufferPacked* createIndexBufferImpl( size_t numElements,
                                                           uint32 bytesPerElement,
@@ -244,10 +246,10 @@ namespace Ogre
         virtual ~GLES2VaoManager();
 
         /// Binds the Draw ID to the currently bound vertex array object.
-        void bindDrawId(void);
+        void bindDrawId();
 
-        bool supportsArbBufferStorage(void) const       { return mArbBufferStorage; }
-        GLint getMaxVertexAttribs(void) const           { return mMaxVertexAttribs; }
+        bool supportsArbBufferStorage() const       { return mArbBufferStorage; }
+        GLint getMaxVertexAttribs() const           { return mMaxVertexAttribs; }
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks
@@ -259,10 +261,10 @@ namespace Ogre
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
 
-        virtual void _update(void);
+        virtual void _update();
 
         /// See VaoManager::waitForTailFrameToFinish
-        virtual uint8 waitForTailFrameToFinish(void);
+        virtual uint8 waitForTailFrameToFinish();
 
         /// See VaoManager::waitForSpecificFrameToFinish
         virtual void waitForSpecificFrameToFinish( uint32 frameCount );

@@ -23,9 +23,9 @@ namespace Demo
     public:
         AnimationTagPointGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void update( float timeSinceLast );
+        void createScene01() override;
+        void update( float timeSinceLast ) override;
     };
-}
+}  // namespace Demo
 
 #endif

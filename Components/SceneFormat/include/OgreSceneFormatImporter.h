@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,21 +29,27 @@ THE SOFTWARE.
 #define _OgreSceneFormatImporter_H_
 
 #include "OgreSceneFormatBase.h"
+
 #include "OgreHeaderPrefix.h"
 
 // Forward declaration for |Document|.
 namespace rapidjson
 {
     class CrtAllocator;
-    template <typename> class MemoryPoolAllocator;
-    template <typename> struct UTF8;
-    template <typename, typename, typename> class GenericDocument;
-    typedef GenericDocument< UTF8<char>, MemoryPoolAllocator<CrtAllocator>, CrtAllocator > Document;
+    template <typename>
+    class MemoryPoolAllocator;
+    template <typename>
+    struct UTF8;
+    template <typename, typename, typename>
+    class GenericDocument;
+    typedef GenericDocument<UTF8<char>, MemoryPoolAllocator<CrtAllocator>, CrtAllocator> Document;
 
-    template <typename BaseAllocator> class MemoryPoolAllocator;
-    template <typename Encoding, typename>  class GenericValue;
+    template <typename BaseAllocator>
+    class MemoryPoolAllocator;
+    template <typename Encoding, typename>
+    class GenericValue;
     typedef GenericValue<UTF8<char>, MemoryPoolAllocator<CrtAllocator> > Value;
-}
+}  // namespace rapidjson
 
 namespace Ogre
 {
@@ -52,57 +58,59 @@ namespace Ogre
     class IrradianceVolume;
 
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /**
-    */
+     */
     class _OgreSceneFormatExport SceneFormatImporter : public SceneFormatBase
     {
     protected:
-        String mFilename;
-        InstantRadiosity *mInstantRadiosity;
-        IrradianceVolume *mIrradianceVolume;
+        String                    mFilename;
+        InstantRadiosity         *mInstantRadiosity;
+        IrradianceVolume         *mIrradianceVolume;
         ParallaxCorrectedCubemap *mParallaxCorrectedCubemap;
-        Matrix4 mSceneComponentTransform;
-        String  mDefaultPccWorkspaceName;
+        Matrix4                   mSceneComponentTransform;
+        String                    mDefaultPccWorkspaceName;
 
         bool mUseBinaryFloatingPoint;
         bool mUsingOitd;
 
         LightArray mVplLights;
 
-        typedef map<uint32, SceneNode*>::type IndexToSceneNodeMap;
-        IndexToSceneNodeMap mCreatedSceneNodes;
+        typedef map<uint32, SceneNode *>::type IndexToSceneNodeMap;
+        IndexToSceneNodeMap                    mCreatedSceneNodes;
 
         SceneNode *mRootNodes[NUM_SCENE_MEMORY_MANAGER_TYPES];
         SceneNode *mParentlessRootNodes[NUM_SCENE_MEMORY_MANAGER_TYPES];
 
-        void destroyInstantRadiosity(void);
-        void destroyParallaxCorrectedCubemap(void);
+        void destroyInstantRadiosity();
+        void destroyParallaxCorrectedCubemap();
 
         static inline Light::LightTypes parseLightType( const char *value );
-        inline bool isFloat( const rapidjson::Value &jsonValue ) const;
-        inline bool isDouble( const rapidjson::Value &jsonValue ) const;
-        inline float decodeFloat( const rapidjson::Value &jsonValue );
-        inline double decodeDouble( const rapidjson::Value &jsonValue );
-        inline Vector2 decodeVector2Array( const rapidjson::Value &jsonArray );
-        inline Vector3 decodeVector3Array( const rapidjson::Value &jsonArray );
-        inline Vector4 decodeVector4Array( const rapidjson::Value &jsonArray );
-        inline Quaternion decodeQuaternionArray( const rapidjson::Value &jsonArray );
+
+        inline bool        isFloat( const rapidjson::Value &jsonValue ) const;
+        inline bool        isDouble( const rapidjson::Value &jsonValue ) const;
+        inline float       decodeFloat( const rapidjson::Value &jsonValue );
+        inline double      decodeDouble( const rapidjson::Value &jsonValue );
+        inline Vector2     decodeVector2Array( const rapidjson::Value &jsonArray );
+        inline Vector3     decodeVector3Array( const rapidjson::Value &jsonArray );
+        inline Vector4     decodeVector4Array( const rapidjson::Value &jsonArray );
+        inline Quaternion  decodeQuaternionArray( const rapidjson::Value &jsonArray );
         inline ColourValue decodeColourValueArray( const rapidjson::Value &jsonArray );
-        inline Aabb decodeAabbArray( const rapidjson::Value &jsonArray,
-                                            const Aabb &defaultValue );
+
+        inline Aabb    decodeAabbArray( const rapidjson::Value &jsonArray, const Aabb &defaultValue );
         inline Matrix3 decodeMatrix3Array( const rapidjson::Value &jsonArray );
 
-        void importNode( const rapidjson::Value &nodeValue, Node *node );
-        SceneNode* importSceneNode( const rapidjson::Value &sceneNodeValue, uint32 nodeIdx,
+        void       importNode( const rapidjson::Value &nodeValue, Node *node );
+        SceneNode *importSceneNode( const rapidjson::Value &sceneNodeValue, uint32 nodeIdx,
                                     const rapidjson::Value &sceneNodesJson );
+
         void importSceneNodes( const rapidjson::Value &json );
         void importMovableObject( const rapidjson::Value &movableObjectValue,
-                                  MovableObject *movableObject );
+                                  MovableObject          *movableObject );
         void importRenderable( const rapidjson::Value &renderableValue, Renderable *renderable );
         void importSubItem( const rapidjson::Value &subItemValue, SubItem *subItem );
         void importSubEntity( const rapidjson::Value &subEntityValue, v1::SubEntity *subEntity );
@@ -119,7 +127,7 @@ namespace Ogre
         void importSceneSettings( const rapidjson::Value &json, uint32 importFlags );
 
         void importScene( const String &filename, const rapidjson::Document &d,
-                          uint32 importFlags=~SceneFlags::LightsVpl );
+                          uint32 importFlags = static_cast<uint32>( ~SceneFlags::LightsVpl ) );
 
     public:
         /**
@@ -202,9 +210,10 @@ namespace Ogre
             import time because the cached results will be loaded instead.
         */
         void importScene( const String &filename, const char *jsonString,
-                          uint32 importFlags=~SceneFlags::LightsVpl );
+                          uint32 importFlags = static_cast<uint32>( ~SceneFlags::LightsVpl ) );
 
-        void importSceneFromFile( const String &filename, uint32 importFlags=~SceneFlags::LightsVpl );
+        void importSceneFromFile( const String &filename,
+                                  uint32 importFlags = static_cast<uint32>( ~SceneFlags::LightsVpl ) );
 
         /** Retrieve the InstantRadiosity pointer that may have been created while importing a scene
         @param releaseOwnership
@@ -226,17 +235,16 @@ namespace Ogre
         @return
             InstantRadiosity pointer.
         */
-        void getInstantRadiosity( bool releaseOwnership,
-                                  InstantRadiosity **outInstantRadiosity,
+        void getInstantRadiosity( bool releaseOwnership, InstantRadiosity **outInstantRadiosity,
                                   IrradianceVolume **outIrradianceVolume );
 
-        ParallaxCorrectedCubemap* getParallaxCorrectedCubemap( bool releaseOwnership );
+        ParallaxCorrectedCubemap *getParallaxCorrectedCubemap( bool releaseOwnership );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

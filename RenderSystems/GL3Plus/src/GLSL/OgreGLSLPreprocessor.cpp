@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -29,173 +29,175 @@
 #include "OgreGLSLPreprocessor.h"
 #include "OgreLogManager.h"
 
+#include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
-#include <assert.h>
 
-namespace Ogre {
-
+namespace Ogre
+{
     // Limit max number of macro arguments to this
 #define MAX_MACRO_ARGS 16
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 && !defined( __MINGW32__ )
-#define snprintf _snprintf
+#    define snprintf _snprintf
 #endif
 
     /// Return closest power of two not smaller than given number
-    static size_t ClosestPow2 (size_t x)
+    static size_t ClosestPow2( size_t x )
     {
-        if (!(x & (x - 1)))
+        if( !( x & ( x - 1 ) ) )
             return x;
-        while (x & (x + 1))
-            x |= (x + 1);
+        while( x & ( x + 1 ) )
+            x |= ( x + 1 );
         return x + 1;
     }
 
-    void CPreprocessor::Token::Append (const char *iString, size_t iLength)
+    void CPreprocessor::Token::Append( const char *iString, size_t iLength )
     {
-        Token t (Token::TK_TEXT, iString, iLength);
-        Append (t);
+        Token t( Token::TK_TEXT, iString, iLength );
+        Append( t );
     }
 
-    void CPreprocessor::Token::Append (const Token &iOther)
+    void CPreprocessor::Token::Append( const Token &iOther )
     {
-        if (!iOther.String)
+        if( !iOther.String )
             return;
 
-        if (!String)
+        if( !String )
         {
             String = iOther.String;
             Length = iOther.Length;
             Allocated = iOther.Allocated;
-            iOther.Allocated = 0; // !!! not quite correct but effective
+            iOther.Allocated = 0;  // !!! not quite correct but effective
             return;
         }
 
-        if (Allocated)
+        if( Allocated )
         {
-            size_t new_alloc = ClosestPow2 (Length + iOther.Length);
-            if (new_alloc < 64)
+            size_t new_alloc = ClosestPow2( Length + iOther.Length );
+            if( new_alloc < 64 )
                 new_alloc = 64;
-            if (new_alloc != Allocated)
+            if( new_alloc != Allocated )
             {
                 Allocated = new_alloc;
-                Buffer = (char *)realloc (Buffer, Allocated);
+                Buffer = (char *)realloc( Buffer, Allocated );
             }
         }
-        else if (String + Length != iOther.String)
+        else if( String + Length != iOther.String )
         {
-            Allocated = ClosestPow2 (Length + iOther.Length);
-            if (Allocated < 64)
+            Allocated = ClosestPow2( Length + iOther.Length );
+            if( Allocated < 64 )
                 Allocated = 64;
-            char *newstr = (char *)malloc (Allocated);
-            memcpy (newstr, String, Length);
+            char *newstr = (char *)malloc( Allocated );
+            memcpy( newstr, String, Length );
             Buffer = newstr;
         }
 
-        if (Allocated)
-            memcpy (Buffer + Length, iOther.String, iOther.Length);
+        if( Allocated )
+            memcpy( Buffer + Length, iOther.String, iOther.Length );
         Length += iOther.Length;
     }
 
-    bool CPreprocessor::Token::GetValue (long &oValue) const
+    bool CPreprocessor::Token::GetValue( long &oValue ) const
     {
         long val = 0;
         size_t i = 0;
 
-        while (isspace (String [i]))
+        while( isspace( String[i] ) )
             i++;
 
         long base = 10;
-        if (String [i] == '0')
+        if( String[i] == '0' )
         {
-            if (Length > i + 1 && String [i + 1] == 'x')
-                base = 16, i += 2;
+            if( Length > i + 1 && String[i + 1] == 'x' )
+            {
+                base = 16;
+                i += 2;
+            }
             else
+            {
                 base = 8;
+            }
         }
 
-        for (; i < Length; i++)
+        for( ; i < Length; i++ )
         {
-            int c = int (String [i]);
-            if (isspace (c))
+            int c = int( String[i] );
+            if( isspace( c ) )
                 // Possible end of number
                 break;
 
-            if (c >= 'a' && c <= 'z')
-                c -= ('a' - 'A');
+            if( c >= 'a' && c <= 'z' )
+                c -= ( 'a' - 'A' );
 
             c -= '0';
-            if (c < 0)
+            if( c < 0 )
                 return false;
 
-            if (c > 9)
-                c -= ('A' - '9' - 1);
+            if( c > 9 )
+                c -= ( 'A' - '9' - 1 );
 
-            if (c >= base)
+            if( c >= base )
                 return false;
 
-            val = (val * base) + c;
+            val = ( val * base ) + c;
         }
 
         // Check that all other characters are just spaces
-        for (; i < Length; i++)
-            if (!isspace (String [i]))
+        for( ; i < Length; i++ )
+        {
+            if( !isspace( String[i] ) )
                 return false;
+        }
 
         oValue = val;
         return true;
     }
 
-
-    void CPreprocessor::Token::SetValue (long iValue)
+    void CPreprocessor::Token::SetValue( long iValue )
     {
-        char tmp [21];
-        int len = snprintf (tmp, sizeof (tmp), "%ld", iValue);
+        char tmp[21];
+        int len = snprintf( tmp, sizeof( tmp ), "%ld", iValue );
         Length = 0;
-        Append (tmp, len);
+        Append( tmp, static_cast<size_t>( len ) );
         Type = TK_NUMBER;
     }
 
-
-    void CPreprocessor::Token::AppendNL (int iCount)
+    void CPreprocessor::Token::AppendNL( int iCount )
     {
-        static const char newlines [8] =
-            { '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n' };
+        static const char newlines[8] = { '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n' };
 
-        while (iCount > 8)
+        while( iCount > 8 )
         {
-            Append (newlines, 8);
+            Append( newlines, 8 );
             iCount -= 8;
         }
-        if (iCount > 0)
-            Append (newlines, iCount);
+        if( iCount > 0 )
+            Append( newlines, static_cast<size_t>( iCount ) );
     }
 
-
-    int CPreprocessor::Token::CountNL ()
+    int CPreprocessor::Token::CountNL()
     {
-        if (Type == TK_EOS || Type == TK_ERROR)
+        if( Type == TK_EOS || Type == TK_ERROR )
             return 0;
 
         const char *s = String;
         size_t l = Length;
         int c = 0;
-        while (l > 0)
+        while( l > 0 )
         {
-            const char *n = (const char *)memchr (s, '\n', l);
-            if (!n)
+            const char *n = (const char *)memchr( s, '\n', l );
+            if( !n )
                 return c;
             c++;
-            l -= (n - s + 1);
+            l -= static_cast<size_t>( n - s + 1 );
             s = n + 1;
         }
         return c;
     }
 
-
-    CPreprocessor::Token CPreprocessor::Macro::Expand (
-        int iNumArgs, CPreprocessor::Token *iArgs, Macro *iMacros)
+    CPreprocessor::Token CPreprocessor::Macro::Expand( int iNumArgs, CPreprocessor::Token *iArgs,
+                                                       Macro *iMacros )
     {
         Expanding = true;
 
@@ -204,42 +206,39 @@ namespace Ogre {
 
         // Define a new macro for every argument
         int i;
-        for (i = 0; i < iNumArgs; i++)
-            cpp.Define (Args [i].String, Args [i].Length,
-                        iArgs [i].String, iArgs [i].Length);
+        for( i = 0; i < iNumArgs; i++ )
+            cpp.Define( Args[i].String, Args[i].Length, iArgs[i].String, iArgs[i].Length );
         // The rest arguments are empty
-        for (; i < NumArgs; i++)
-            cpp.Define (Args [i].String, Args [i].Length, "", 0);
+        for( ; i < NumArgs; i++ )
+            cpp.Define( Args[i].String, Args[i].Length, "", 0 );
 
         // Now run the macro expansion through the supplimentary preprocessor
         cpp.SupplimentaryExpand = true;
-        Token xt = cpp.Parse (Value);
+        Token xt = cpp.Parse( Value );
 
         Expanding = false;
 
         // Remove the extra macros we have defined
-        for (int j = NumArgs - 1; j >= 0; j--)
-            cpp.Undef (Args [j].String, Args [j].Length);
+        for( int j = NumArgs - 1; j >= 0; j-- )
+            cpp.Undef( Args[j].String, Args[j].Length );
 
         cpp.MacroList = NULL;
 
         return xt;
     }
 
-
-    static void DefaultError (void *iData, int iLine, const char *iError,
-                              const char *iToken, size_t iTokenLen)
+    static void DefaultError( void *iData, int iLine, const char *iError, const char *iToken,
+                              size_t iTokenLen )
     {
         (void)iData;
-        char line [1000];
-        if (iToken)
-            snprintf (line, sizeof (line), "line %d: %s: `%.*s'\n",
-                      iLine, iError, int (iTokenLen), iToken);
+        char line[1000];
+        if( iToken )
+            snprintf( line, sizeof( line ), "line %d: %s: `%.*s'\n", iLine, iError, int( iTokenLen ),
+                      iToken );
         else
-            snprintf (line, sizeof (line), "line %d: %s\n", iLine, iError);
-        LogManager::getSingleton ().logMessage (line, LML_CRITICAL);
+            snprintf( line, sizeof( line ), "line %d: %s\n", iLine, iError );
+        LogManager::getSingleton().logMessage( line, LML_CRITICAL );
     }
-
 
     CPreprocessor::ErrorHandlerFunc CPreprocessor::ErrorHandler = DefaultError;
 
@@ -253,7 +252,7 @@ namespace Ogre {
         SupplimentaryExpand = false;
     }
 
-    CPreprocessor::CPreprocessor (const Token &iToken, int iLine) : MacroList (NULL)
+    CPreprocessor::CPreprocessor( const Token &iToken, int iLine ) : MacroList( NULL )
     {
         Source = iToken.String;
         SourceEnd = iToken.String + iToken.Length;
@@ -263,214 +262,201 @@ namespace Ogre {
         SupplimentaryExpand = false;
     }
 
-    CPreprocessor::~CPreprocessor ()
-    {
-        delete MacroList;
-    }
+    CPreprocessor::~CPreprocessor() { delete MacroList; }
 
-
-    void CPreprocessor::Error (int iLine, const char *iError, const Token *iToken)
+    void CPreprocessor::Error( int iLine, const char *iError, const Token *iToken )
     {
-        if (iToken)
-            ErrorHandler (ErrorData, iLine, iError, iToken->String, iToken->Length);
+        if( iToken )
+            ErrorHandler( ErrorData, iLine, iError, iToken->String, iToken->Length );
         else
-            ErrorHandler (ErrorData, iLine, iError, NULL, 0);
+            ErrorHandler( ErrorData, iLine, iError, NULL, 0 );
     }
 
-
-    CPreprocessor::Token CPreprocessor::GetToken (bool iExpand)
+    CPreprocessor::Token CPreprocessor::GetToken( bool iExpand )
     {
-        if (Source >= SourceEnd)
-            return Token (Token::TK_EOS);
+        if( Source >= SourceEnd )
+            return Token( Token::TK_EOS );
 
         const char *begin = Source;
         char c = *Source++;
 
-
-        if (c == '\n' || (c == '\r' && *Source == '\n'))
+        if( c == '\n' || ( c == '\r' && *Source == '\n' ) )
         {
             Line++;
             BOL = true;
-            if (c == '\r')
+            if( c == '\r' )
                 Source++;
-            return Token (Token::TK_NEWLINE, begin, Source - begin);
+            return Token( Token::TK_NEWLINE, begin, static_cast<size_t>( Source - begin ) );
         }
-        else if (isspace (c))
+        else if( isspace( c ) )
         {
-            while (Source < SourceEnd &&
-                   *Source != '\r' &&
-                   *Source != '\n' &&
-                   isspace (*Source))
+            while( Source < SourceEnd && *Source != '\r' && *Source != '\n' && isspace( *Source ) )
                 Source++;
 
-            return Token (Token::TK_WHITESPACE, begin, Source - begin);
+            return Token( Token::TK_WHITESPACE, begin, static_cast<size_t>( Source - begin ) );
         }
-        else if (isdigit (c))
+        else if( isdigit( c ) )
         {
             BOL = false;
-            if (c == '0' && Source < SourceEnd && Source [0] == 'x') // hex numbers
+            if( c == '0' && Source < SourceEnd && Source[0] == 'x' )  // hex numbers
             {
                 Source++;
-                while (Source < SourceEnd && isxdigit (*Source))
+                while( Source < SourceEnd && isxdigit( *Source ) )
                     Source++;
             }
             else
-                while (Source < SourceEnd && isdigit (*Source))
+                while( Source < SourceEnd && isdigit( *Source ) )
                     Source++;
-            return Token (Token::TK_NUMBER, begin, Source - begin);
+            return Token( Token::TK_NUMBER, begin, static_cast<size_t>( Source - begin ) );
         }
-        else if (c == '_' || isalnum (c))
+        else if( c == '_' || isalnum( c ) )
         {
             BOL = false;
-            while (Source < SourceEnd && (*Source == '_' || isalnum (*Source)))
+            while( Source < SourceEnd && ( *Source == '_' || isalnum( *Source ) ) )
                 Source++;
-            Token t (Token::TK_KEYWORD, begin, Source - begin);
-            if (iExpand)
-                t = ExpandMacro (t);
+            Token t( Token::TK_KEYWORD, begin, static_cast<size_t>( Source - begin ) );
+            if( iExpand )
+                t = ExpandMacro( t );
             return t;
         }
-        else if (c == '"' || c == '\'')
+        else if( c == '"' || c == '\'' )
         {
             BOL = false;
-            while (Source < SourceEnd && *Source != c)
+            while( Source < SourceEnd && *Source != c )
             {
-                if (*Source == '\\')
+                if( *Source == '\\' )
                 {
                     Source++;
-                    if (Source >= SourceEnd)
+                    if( Source >= SourceEnd )
                         break;
                 }
-                if (*Source == '\n')
+                if( *Source == '\n' )
                     Line++;
                 Source++;
             }
-            if (Source < SourceEnd)
+            if( Source < SourceEnd )
                 Source++;
-            return Token (Token::TK_STRING, begin, Source - begin);
+            return Token( Token::TK_STRING, begin, static_cast<size_t>( Source - begin ) );
         }
-        else if (c == '/' && *Source == '/')
+        else if( c == '/' && *Source == '/' )
         {
             BOL = false;
             Source++;
-            while (Source < SourceEnd && *Source != '\r' && *Source != '\n')
+            while( Source < SourceEnd && *Source != '\r' && *Source != '\n' )
                 Source++;
-            return Token (Token::TK_LINECOMMENT, begin, Source - begin);
+            return Token( Token::TK_LINECOMMENT, begin, static_cast<size_t>( Source - begin ) );
         }
-        else if (c == '/' && *Source == '*')
+        else if( c == '/' && *Source == '*' )
         {
             BOL = false;
             Source++;
-            while (Source < SourceEnd && (Source [0] != '*' || Source [1] != '/'))
+            while( Source < SourceEnd && ( Source[0] != '*' || Source[1] != '/' ) )
             {
-                if (*Source == '\n')
+                if( *Source == '\n' )
                     Line++;
                 Source++;
             }
-            if (Source < SourceEnd && *Source == '*')
+            if( Source < SourceEnd && *Source == '*' )
                 Source++;
-            if (Source < SourceEnd && *Source == '/')
+            if( Source < SourceEnd && *Source == '/' )
                 Source++;
-            return Token (Token::TK_COMMENT, begin, Source - begin);
+            return Token( Token::TK_COMMENT, begin, static_cast<size_t>( Source - begin ) );
         }
-        else if (c == '#' && BOL)
+        else if( c == '#' && BOL )
         {
             // Skip all whitespaces after '#'
-            while (Source < SourceEnd && isspace (*Source))
+            while( Source < SourceEnd && isspace( *Source ) )
                 Source++;
-            while (Source < SourceEnd && !isspace (*Source))
+            while( Source < SourceEnd && !isspace( *Source ) )
                 Source++;
-            return Token (Token::TK_DIRECTIVE, begin, Source - begin);
+            return Token( Token::TK_DIRECTIVE, begin, static_cast<size_t>( Source - begin ) );
         }
-        else if (c == '\\' && Source < SourceEnd && (*Source == '\r' || *Source == '\n'))
+        else if( c == '\\' && Source < SourceEnd && ( *Source == '\r' || *Source == '\n' ) )
         {
             // Treat backslash-newline as a whole token
-            if (*Source == '\r')
+            if( *Source == '\r' )
                 Source++;
-            if (*Source == '\n')
+            if( *Source == '\n' )
                 Source++;
             Line++;
             BOL = true;
-            return Token (Token::TK_LINECONT, begin, Source - begin);
+            return Token( Token::TK_LINECONT, begin, static_cast<size_t>( Source - begin ) );
         }
         else
         {
             BOL = false;
             // Handle double-char operators here
-            if (c == '>' && (*Source == '>' || *Source == '='))
+            if( c == '>' && ( *Source == '>' || *Source == '=' ) )
                 Source++;
-            else if (c == '<' && (*Source == '<' || *Source == '='))
+            else if( c == '<' && ( *Source == '<' || *Source == '=' ) )
                 Source++;
-            else if (c == '!' && *Source == '=')
+            else if( c == '!' && *Source == '=' )
                 Source++;
-            else if (c == '=' && *Source == '=')
+            else if( c == '=' && *Source == '=' )
                 Source++;
-            else if ((c == '|' || c == '&' || c == '^') && *Source == c)
+            else if( ( c == '|' || c == '&' || c == '^' ) && *Source == c )
                 Source++;
-            return Token (Token::TK_PUNCTUATION, begin, Source - begin);
+            return Token( Token::TK_PUNCTUATION, begin, static_cast<size_t>( Source - begin ) );
         }
     }
 
-
-    CPreprocessor::Macro *CPreprocessor::IsDefined (const Token &iToken)
+    CPreprocessor::Macro *CPreprocessor::IsDefined( const Token &iToken )
     {
-        for (Macro *cur = MacroList; cur; cur = cur->Next)
-            if (cur->Name == iToken)
+        for( Macro *cur = MacroList; cur; cur = cur->Next )
+            if( cur->Name == iToken )
                 return cur;
 
         return NULL;
     }
 
-
-    CPreprocessor::Token CPreprocessor::ExpandMacro (const Token &iToken)
+    CPreprocessor::Token CPreprocessor::ExpandMacro( const Token &iToken )
     {
-        Macro *cur = IsDefined (iToken);
-        if (cur && !cur->Expanding)
+        Macro *cur = IsDefined( iToken );
+        if( cur && !cur->Expanding )
         {
             Token *args = NULL;
             int nargs = 0;
             int old_line = Line;
 
-            if (cur->NumArgs != 0)
+            if( cur->NumArgs != 0 )
             {
-                Token t = GetArguments (nargs, args, cur->ExpandFunc ? false : true, false);
-                if (t.Type == Token::TK_ERROR)
+                Token t = GetArguments( nargs, args, cur->ExpandFunc ? false : true, false );
+                if( t.Type == Token::TK_ERROR )
                 {
-                    delete [] args;
+                    delete[] args;
                     return t;
                 }
 
                 // Put the token back into the source pool; we'll handle it later
-                if (t.String)
+                if( t.String )
                 {
                     // Returned token should never be allocated on heap
-                    assert (t.Allocated == 0);
+                    assert( t.Allocated == 0 );
                     Source = t.String;
-                    Line -= t.CountNL ();
+                    Line -= t.CountNL();
                 }
             }
 
-            if (nargs > cur->NumArgs)
+            if( nargs > cur->NumArgs )
             {
-                char tmp [60];
-                snprintf (tmp, sizeof (tmp), "Macro `%.*s' passed %d arguments, but takes just %d",
-                          int (cur->Name.Length), cur->Name.String,
-                          nargs, cur->NumArgs);
-                Error (old_line, tmp);
-                return Token (Token::TK_ERROR);
+                char tmp[60];
+                snprintf( tmp, sizeof( tmp ), "Macro `%.*s' passed %d arguments, but takes just %d",
+                          int( cur->Name.Length ), cur->Name.String, nargs, cur->NumArgs );
+                Error( old_line, tmp );
+                return Token( Token::TK_ERROR );
             }
 
-            Token t = cur->ExpandFunc ?
-                cur->ExpandFunc (this, nargs, args) :
-                cur->Expand (nargs, args, MacroList);
-            t.AppendNL (Line - old_line);
+            Token t = cur->ExpandFunc ? cur->ExpandFunc( this, nargs, args )
+                                      : cur->Expand( nargs, args, MacroList );
+            t.AppendNL( Line - old_line );
 
-            //Handle edge case where the macro argument was passed exactly/unmodified to th
-            //expanded string, thus we have to prevent freeing a string that is still in use.
-            //This edge case can be triggered with the following:
+            // Handle edge case where the macro argument was passed exactly/unmodified to th
+            // expanded string, thus we have to prevent freeing a string that is still in use.
+            // This edge case can be triggered with the following:
             //	#define float3 vec3
             //	#define INTERPOLANT( decl, bindingPoint ) decl
             //	INTERPOLANT( float3 pos, 1 );
-            for( int i=0; i<nargs && !t.Allocated; ++i )
+            for( int i = 0; i < nargs && !t.Allocated; ++i )
             {
                 if( t.Buffer == args[i].Buffer )
                 {
@@ -479,14 +465,13 @@ namespace Ogre {
                 }
             }
 
-            delete [] args;
+            delete[] args;
 
             return t;
         }
 
         return iToken;
     }
-
 
     /**
      * Operator priority:
@@ -504,185 +489,215 @@ namespace Ogre {
      * 11: '*' '/' '%'
      * 12: unary '+' '-' '!' '~'
      */
-    CPreprocessor::Token CPreprocessor::GetExpression (
-        Token &oResult, int iLine, int iOpPriority)
+    CPreprocessor::Token CPreprocessor::GetExpression( Token &oResult, int iLine, int iOpPriority )
     {
-        char tmp [40];
+        char tmp[40];
 
         do
         {
-            oResult = GetToken (true);
-        } while (oResult.Type == Token::TK_WHITESPACE ||
-                 oResult.Type == Token::TK_NEWLINE ||
-                 oResult.Type == Token::TK_COMMENT ||
-                 oResult.Type == Token::TK_LINECOMMENT ||
-                 oResult.Type == Token::TK_LINECONT);
+            oResult = GetToken( true );
+        } while( oResult.Type == Token::TK_WHITESPACE || oResult.Type == Token::TK_NEWLINE ||
+                 oResult.Type == Token::TK_COMMENT || oResult.Type == Token::TK_LINECOMMENT ||
+                 oResult.Type == Token::TK_LINECONT );
 
-        Token op (Token::TK_WHITESPACE, "", 0);
+        Token op( Token::TK_WHITESPACE, "", 0 );
 
         // Handle unary operators here
-        if (oResult.Type == Token::TK_PUNCTUATION && oResult.Length == 1)
+        if( oResult.Type == Token::TK_PUNCTUATION && oResult.Length == 1 )
         {
-            if (strchr ("+-!~", oResult.String [0]))
+            if( strchr( "+-!~", oResult.String[0] ) )
             {
-                char uop = oResult.String [0];
-                op = GetExpression (oResult, iLine, 12);
+                char uop = oResult.String[0];
+                op = GetExpression( oResult, iLine, 12 );
                 long val;
-                if (!GetValue (oResult, val, iLine))
+                if( !GetValue( oResult, val, iLine ) )
                 {
-                    snprintf (tmp, sizeof (tmp), "Unary '%c' not applicable", uop);
-                    Error (iLine, tmp, &oResult);
-                    return Token (Token::TK_ERROR);
+                    snprintf( tmp, sizeof( tmp ), "Unary '%c' not applicable", uop );
+                    Error( iLine, tmp, &oResult );
+                    return Token( Token::TK_ERROR );
                 }
 
-                if (uop == '-')
-                    oResult.SetValue (-val);
-                else if (uop == '!')
-                    oResult.SetValue (!val);
-                else if (uop == '~')
-                    oResult.SetValue (~val);
+                if( uop == '-' )
+                    oResult.SetValue( -val );
+                else if( uop == '!' )
+                    oResult.SetValue( !val );
+                else if( uop == '~' )
+                    oResult.SetValue( ~val );
             }
-            else if (oResult.String [0] == '(')
+            else if( oResult.String[0] == '(' )
             {
-                op = GetExpression (oResult, iLine, 1);
-                if (op.Type == Token::TK_ERROR)
+                op = GetExpression( oResult, iLine, 1 );
+                if( op.Type == Token::TK_ERROR )
                     return op;
-                if (op.Type == Token::TK_EOS)
+                if( op.Type == Token::TK_EOS )
                 {
-                    Error (iLine, "Unclosed parenthesis in #if expression");
-                    return Token (Token::TK_ERROR);
+                    Error( iLine, "Unclosed parenthesis in #if expression" );
+                    return Token( Token::TK_ERROR );
                 }
 
-                assert (op.Type == Token::TK_PUNCTUATION &&
-                        op.Length == 1 &&
-                        op.String [0] == ')');
-                op = GetToken (true);
+                assert( op.Type == Token::TK_PUNCTUATION && op.Length == 1 && op.String[0] == ')' );
+                op = GetToken( true );
             }
         }
 
-        while (op.Type == Token::TK_WHITESPACE ||
-               op.Type == Token::TK_NEWLINE ||
-               op.Type == Token::TK_COMMENT ||
-               op.Type == Token::TK_LINECOMMENT ||
-               op.Type == Token::TK_LINECONT)
-            op = GetToken (true);
+        while( op.Type == Token::TK_WHITESPACE || op.Type == Token::TK_NEWLINE ||
+               op.Type == Token::TK_COMMENT || op.Type == Token::TK_LINECOMMENT ||
+               op.Type == Token::TK_LINECONT )
+            op = GetToken( true );
 
-        while (true)
+        while( true )
         {
-            if (op.Type != Token::TK_PUNCTUATION)
+            if( op.Type != Token::TK_PUNCTUATION )
                 return op;
 
             int prio = 0;
-            if (op.Length == 1)
-                switch (op.String [0])
+            if( op.Length == 1 )
+                switch( op.String[0] )
                 {
-                case ')': return op;
-                case '|': prio = 4; break;
-                case '^': prio = 5; break;
-                case '&': prio = 6; break;
+                case ')':
+                    return op;
+                case '|':
+                    prio = 4;
+                    break;
+                case '^':
+                    prio = 5;
+                    break;
+                case '&':
+                    prio = 6;
+                    break;
                 case '<':
-                case '>': prio = 8; break;
+                case '>':
+                    prio = 8;
+                    break;
                 case '+':
-                case '-': prio = 10; break;
+                case '-':
+                    prio = 10;
+                    break;
                 case '*':
                 case '/':
-                case '%': prio = 11; break;
+                case '%':
+                    prio = 11;
+                    break;
                 }
-            else if (op.Length == 2)
-                switch (op.String [0])
+            else if( op.Length == 2 )
+                switch( op.String[0] )
                 {
-                case '|': if (op.String [1] == '|') prio = 2; break;
-                case '&': if (op.String [1] == '&') prio = 3; break;
-                case '=': if (op.String [1] == '=') prio = 7; break;
-                case '!': if (op.String [1] == '=') prio = 7; break;
+                case '|':
+                    if( op.String[1] == '|' )
+                        prio = 2;
+                    break;
+                case '&':
+                    if( op.String[1] == '&' )
+                        prio = 3;
+                    break;
+                case '=':
+                    if( op.String[1] == '=' )
+                        prio = 7;
+                    break;
+                case '!':
+                    if( op.String[1] == '=' )
+                        prio = 7;
+                    break;
                 case '<':
-                    if (op.String [1] == '=')
+                    if( op.String[1] == '=' )
                         prio = 8;
-                    else if (op.String [1] == '<')
+                    else if( op.String[1] == '<' )
                         prio = 9;
                     break;
                 case '>':
-                    if (op.String [1] == '=')
+                    if( op.String[1] == '=' )
                         prio = 8;
-                    else if (op.String [1] == '>')
+                    else if( op.String[1] == '>' )
                         prio = 9;
                     break;
                 }
 
-            if (!prio)
+            if( !prio )
             {
-                Error (iLine, "Expecting operator, got", &op);
-                return Token (Token::TK_ERROR);
+                Error( iLine, "Expecting operator, got", &op );
+                return Token( Token::TK_ERROR );
             }
 
-            if (iOpPriority >= prio)
+            if( iOpPriority >= prio )
                 return op;
 
             Token rop;
-            Token nextop = GetExpression (rop, iLine, prio);
+            Token nextop = GetExpression( rop, iLine, prio );
             long vlop, vrop;
-            if (!GetValue (oResult, vlop, iLine))
+            if( !GetValue( oResult, vlop, iLine ) )
             {
-                snprintf (tmp, sizeof (tmp), "Left operand of '%.*s' is not a number",
-                          int (op.Length), op.String);
-                Error (iLine, tmp, &oResult);
-                return Token (Token::TK_ERROR);
+                snprintf( tmp, sizeof( tmp ), "Left operand of '%.*s' is not a number", int( op.Length ),
+                          op.String );
+                Error( iLine, tmp, &oResult );
+                return Token( Token::TK_ERROR );
             }
-            if (!GetValue (rop, vrop, iLine))
+            if( !GetValue( rop, vrop, iLine ) )
             {
-                snprintf (tmp, sizeof (tmp), "Right operand of '%.*s' is not a number",
-                          int (op.Length), op.String);
-                Error (iLine, tmp, &rop);
-                return Token (Token::TK_ERROR);
+                snprintf( tmp, sizeof( tmp ), "Right operand of '%.*s' is not a number",
+                          int( op.Length ), op.String );
+                Error( iLine, tmp, &rop );
+                return Token( Token::TK_ERROR );
             }
 
-            switch (op.String [0])
+            switch( op.String[0] )
             {
             case '|':
-                if (prio == 2)
-                    oResult.SetValue (vlop || vrop);
+                if( prio == 2 )
+                    oResult.SetValue( vlop || vrop );
                 else
-                    oResult.SetValue (vlop | vrop);
+                    oResult.SetValue( vlop | vrop );
                 break;
             case '&':
-                if (prio == 3)
-                    oResult.SetValue (vlop && vrop);
+                if( prio == 3 )
+                    oResult.SetValue( vlop && vrop );
                 else
-                    oResult.SetValue (vlop & vrop);
+                    oResult.SetValue( vlop & vrop );
                 break;
             case '<':
-                if (op.Length == 1)
-                    oResult.SetValue (vlop < vrop);
-                else if (prio == 8)
-                    oResult.SetValue (vlop <= vrop);
-                else if (prio == 9)
-                    oResult.SetValue (vlop << vrop);
+                if( op.Length == 1 )
+                    oResult.SetValue( vlop < vrop );
+                else if( prio == 8 )
+                    oResult.SetValue( vlop <= vrop );
+                else if( prio == 9 )
+                    oResult.SetValue( vlop << vrop );
                 break;
             case '>':
-                if (op.Length == 1)
-                    oResult.SetValue (vlop > vrop);
-                else if (prio == 8)
-                    oResult.SetValue (vlop >= vrop);
-                else if (prio == 9)
-                    oResult.SetValue (vlop >> vrop);
+                if( op.Length == 1 )
+                    oResult.SetValue( vlop > vrop );
+                else if( prio == 8 )
+                    oResult.SetValue( vlop >= vrop );
+                else if( prio == 9 )
+                    oResult.SetValue( vlop >> vrop );
                 break;
-            case '^': oResult.SetValue (vlop ^ vrop); break;
-            case '!': oResult.SetValue (vlop != vrop); break;
-            case '=': oResult.SetValue (vlop == vrop); break;
-            case '+': oResult.SetValue (vlop + vrop); break;
-            case '-': oResult.SetValue (vlop - vrop); break;
-            case '*': oResult.SetValue (vlop * vrop); break;
+            case '^':
+                oResult.SetValue( vlop ^ vrop );
+                break;
+            case '!':
+                oResult.SetValue( vlop != vrop );
+                break;
+            case '=':
+                oResult.SetValue( vlop == vrop );
+                break;
+            case '+':
+                oResult.SetValue( vlop + vrop );
+                break;
+            case '-':
+                oResult.SetValue( vlop - vrop );
+                break;
+            case '*':
+                oResult.SetValue( vlop * vrop );
+                break;
             case '/':
             case '%':
-                if (vrop == 0)
+                if( vrop == 0 )
                 {
-                    Error (iLine, "Division by zero");
-                    return Token (Token::TK_ERROR);
+                    Error( iLine, "Division by zero" );
+                    return Token( Token::TK_ERROR );
                 }
-                if (op.String [0] == '/')
-                    oResult.SetValue (vlop / vrop);
+                if( op.String[0] == '/' )
+                    oResult.SetValue( vlop / vrop );
                 else
-                    oResult.SetValue (vlop % vrop);
+                    oResult.SetValue( vlop % vrop );
                 break;
             }
 
@@ -690,37 +705,35 @@ namespace Ogre {
         }
     }
 
-
-    bool CPreprocessor::GetValue (const Token &iToken, long &oValue, int iLine)
+    bool CPreprocessor::GetValue( const Token &iToken, long &oValue, int iLine )
     {
         Token r;
         const Token *vt = &iToken;
 
-        if ((vt->Type == Token::TK_KEYWORD ||
-             vt->Type == Token::TK_TEXT ||
-             vt->Type == Token::TK_NUMBER) &&
-            !vt->String)
+        if( ( vt->Type == Token::TK_KEYWORD || vt->Type == Token::TK_TEXT ||
+              vt->Type == Token::TK_NUMBER ) &&
+            !vt->String )
         {
-            Error (iLine, "Trying to evaluate an empty expression");
+            Error( iLine, "Trying to evaluate an empty expression" );
             return false;
         }
 
-        if (vt->Type == Token::TK_TEXT)
+        if( vt->Type == Token::TK_TEXT )
         {
-            CPreprocessor cpp (iToken, iLine);
+            CPreprocessor cpp( iToken, iLine );
             cpp.MacroList = MacroList;
 
             Token t;
-            t = cpp.GetExpression (r, iLine);
+            t = cpp.GetExpression( r, iLine );
 
             cpp.MacroList = NULL;
 
-            if (t.Type == Token::TK_ERROR)
+            if( t.Type == Token::TK_ERROR )
                 return false;
 
-            if (t.Type != Token::TK_EOS)
+            if( t.Type != Token::TK_EOS )
             {
-                Error (iLine, "Garbage after expression", &t);
+                Error( iLine, "Garbage after expression", &t );
                 return false;
             }
 
@@ -728,7 +741,7 @@ namespace Ogre {
         }
 
         Macro *m;
-        switch (vt->Type)
+        switch( vt->Type )
         {
         case Token::TK_EOS:
         case Token::TK_ERROR:
@@ -736,11 +749,11 @@ namespace Ogre {
 
         case Token::TK_KEYWORD:
             // Try to expand the macro
-            if ((m = IsDefined (*vt)) && !m->Expanding)
+            if( ( m = IsDefined( *vt ) ) && !m->Expanding )
             {
-                Token x = ExpandMacro (*vt);
+                Token x = ExpandMacro( *vt );
                 m->Expanding = true;
-                bool rc = GetValue (x, oValue, iLine);
+                bool rc = GetValue( x, oValue, iLine );
                 m->Expanding = false;
                 return rc;
             }
@@ -751,50 +764,45 @@ namespace Ogre {
 
         case Token::TK_TEXT:
         case Token::TK_NUMBER:
-            if (!vt->GetValue (oValue))
+            if( !vt->GetValue( oValue ) )
             {
-                Error (iLine, "Not a numeric expression", vt);
+                Error( iLine, "Not a numeric expression", vt );
                 return false;
             }
             break;
 
         default:
-            Error (iLine, "Unexpected token", vt);
+            Error( iLine, "Unexpected token", vt );
             return false;
         }
 
         return true;
     }
 
-
-    CPreprocessor::Token CPreprocessor::GetArgument (Token &oArg, bool iExpand,
-                                                     bool shouldAppendArg)
+    CPreprocessor::Token CPreprocessor::GetArgument( Token &oArg, bool iExpand, bool shouldAppendArg )
     {
         do
         {
-            oArg = GetToken (iExpand);
-        } while (oArg.Type == Token::TK_WHITESPACE ||
-                 oArg.Type == Token::TK_NEWLINE ||
-                 oArg.Type == Token::TK_COMMENT ||
-                 oArg.Type == Token::TK_LINECOMMENT ||
-                 oArg.Type == Token::TK_LINECONT);
+            oArg = GetToken( iExpand );
+        } while( oArg.Type == Token::TK_WHITESPACE || oArg.Type == Token::TK_NEWLINE ||
+                 oArg.Type == Token::TK_COMMENT || oArg.Type == Token::TK_LINECOMMENT ||
+                 oArg.Type == Token::TK_LINECONT );
 
-        if (!iExpand)
+        if( !iExpand )
         {
-            if (oArg.Type == Token::TK_EOS)
+            if( oArg.Type == Token::TK_EOS )
                 return oArg;
-            else if (oArg.Type == Token::TK_PUNCTUATION &&
-                     (oArg.String [0] == ',' ||
-                      oArg.String [0] == ')'))
+            else if( oArg.Type == Token::TK_PUNCTUATION &&
+                     ( oArg.String[0] == ',' || oArg.String[0] == ')' ) )
             {
                 Token t = oArg;
-                oArg = Token (Token::TK_TEXT, "", 0);
+                oArg = Token( Token::TK_TEXT, "", 0 );
                 return t;
             }
-            else if (oArg.Type != Token::TK_KEYWORD)
+            else if( oArg.Type != Token::TK_KEYWORD )
             {
-                Error (Line, "Unexpected token", &oArg);
-                return Token (Token::TK_ERROR);
+                Error( Line, "Unexpected token", &oArg );
+                return Token( Token::TK_ERROR );
             }
         }
 
@@ -804,37 +812,37 @@ namespace Ogre {
             ++braceCount;
 
         size_t len = oArg.Length;
-        while (true)
+        while( true )
         {
-            Token t = GetToken (iExpand);
-            switch (t.Type)
+            Token t = GetToken( iExpand );
+            switch( t.Type )
             {
             case Token::TK_EOS:
-                Error (Line, "Unfinished list of arguments");
+                Error( Line, "Unfinished list of arguments" );
+                OGRE_FALLTHROUGH;
             case Token::TK_ERROR:
-                return Token (Token::TK_ERROR);
+                return Token( Token::TK_ERROR );
             case Token::TK_PUNCTUATION:
-                if( t.String [0] == '(' )
+                if( t.String[0] == '(' )
                 {
                     ++braceCount;
                 }
                 else if( !braceCount )
                 {
-                    if (t.String [0] == ',' ||
-                        t.String [0] == ')')
+                    if( t.String[0] == ',' || t.String[0] == ')' )
                     {
                         // Trim whitespaces at the end
                         oArg.Length = len;
 
-                        //Append "__arg_" to all macro arguments, otherwise if user does:
+                        // Append "__arg_" to all macro arguments, otherwise if user does:
                         //  #define mad( a, b, c ) fma( a, b, c )
                         //  mad( x.s, y, a );
-                        //It will be translated to:
+                        // It will be translated to:
                         //  fma( x.s, y, x.s );
-                        //instead of:
+                        // instead of:
                         //  fma( x.s, y, a );
-                        //This does not fix the problem by the root, but
-                        //typing "__arg_" by the user is extremely rare.
+                        // This does not fix the problem by the root, but
+                        // typing "__arg_" by the user is extremely rare.
                         if( shouldAppendArg )
                             oArg.Append( "__arg_", 6 );
                         return t;
@@ -842,7 +850,7 @@ namespace Ogre {
                 }
                 else
                 {
-                    if( t.String [0] == ')' )
+                    if( t.String[0] == ')' )
                         --braceCount;
                 }
                 break;
@@ -856,24 +864,23 @@ namespace Ogre {
                 break;
             }
 
-            if (!iExpand && t.Type != Token::TK_WHITESPACE)
+            if( !iExpand && t.Type != Token::TK_WHITESPACE )
             {
-                Error (Line, "Unexpected token", &oArg);
-                return Token (Token::TK_ERROR);
+                Error( Line, "Unexpected token", &oArg );
+                return Token( Token::TK_ERROR );
             }
 
-            oArg.Append (t);
+            oArg.Append( t );
 
-            if (t.Type != Token::TK_WHITESPACE)
+            if( t.Type != Token::TK_WHITESPACE )
                 len = oArg.Length;
         }
     }
 
-
-    CPreprocessor::Token CPreprocessor::GetArguments (int &oNumArgs, Token *&oArgs,
-                                                      bool iExpand, bool shouldAppendArg)
+    CPreprocessor::Token CPreprocessor::GetArguments( int &oNumArgs, Token *&oArgs, bool iExpand,
+                                                      bool shouldAppendArg )
     {
-        Token args [MAX_MACRO_ARGS];
+        Token args[MAX_MACRO_ARGS];
         int nargs = 0;
 
         // Suppose we'll leave by the wrong path
@@ -886,17 +893,15 @@ namespace Ogre {
         Token t;
         do
         {
-            t = GetToken (iExpand);
+            t = GetToken( iExpand );
 
-            if( !isFirstTokenParsed &&
-                (t.Type != Token::TK_PUNCTUATION || t.String [0] != '(') )
+            if( !isFirstTokenParsed && ( t.Type != Token::TK_PUNCTUATION || t.String[0] != '(' ) )
             {
                 isFirstTokenNotAnOpenBrace = true;
             }
             isFirstTokenParsed = true;
-        } while (t.Type == Token::TK_WHITESPACE ||
-                 t.Type == Token::TK_COMMENT ||
-                 t.Type == Token::TK_LINECOMMENT);
+        } while( t.Type == Token::TK_WHITESPACE || t.Type == Token::TK_COMMENT ||
+                 t.Type == Token::TK_LINECOMMENT );
 
         if( isFirstTokenNotAnOpenBrace )
         {
@@ -905,70 +910,74 @@ namespace Ogre {
             return t;
         }
 
-        while (true)
+        while( true )
         {
-            if (nargs == MAX_MACRO_ARGS)
+            if( nargs == MAX_MACRO_ARGS )
             {
-                Error (Line, "Too many arguments to macro");
-                return Token (Token::TK_ERROR);
+                Error( Line, "Too many arguments to macro" );
+                return Token( Token::TK_ERROR );
             }
 
-            t = GetArgument (args [nargs++], iExpand, shouldAppendArg);
+            t = GetArgument( args[nargs++], iExpand, shouldAppendArg );
 
-            switch (t.Type)
+            switch( t.Type )
             {
             case Token::TK_EOS:
-                Error (Line, "Unfinished list of arguments");
+                Error( Line, "Unfinished list of arguments" );
+                OGRE_FALLTHROUGH;
             case Token::TK_ERROR:
-                return Token (Token::TK_ERROR);
+                return Token( Token::TK_ERROR );
 
             case Token::TK_PUNCTUATION:
-                if (t.String [0] == ')')
+                if( t.String[0] == ')' )
                 {
-                    t = GetToken (iExpand);
+                    t = GetToken( iExpand );
                     goto Done;
-                } // otherwise we've got a ','
+                }  // otherwise we've got a ','
                 break;
 
             default:
-                Error (Line, "Unexpected token", &t);
+                Error( Line, "Unexpected token", &t );
                 break;
             }
         }
 
     Done:
+        // numArgs = nargs but unsigned to calm compiler warnings
+        const size_t numArgs = static_cast<size_t>( nargs );
+
         oNumArgs = nargs;
-        oArgs = new Token [nargs];
-        for (int i = 0; i < nargs; i++)
-            oArgs [i] = args [i];
+        oArgs = new Token[numArgs];
+
+        for( size_t i = 0u; i < numArgs; ++i )
+            oArgs[i] = args[i];
         return t;
     }
 
-
-    bool CPreprocessor::HandleDefine (Token &iBody, int iLine)
+    bool CPreprocessor::HandleDefine( Token &iBody, int iLine )
     {
         // Create an additional preprocessor to process macro body
-        CPreprocessor cpp (iBody, iLine);
+        CPreprocessor cpp( iBody, iLine );
 
-        Token t = cpp.GetToken (false);
-        if (t.Type != Token::TK_KEYWORD)
+        Token t = cpp.GetToken( false );
+        if( t.Type != Token::TK_KEYWORD )
         {
-            Error (iLine, "Macro name expected after #define");
+            Error( iLine, "Macro name expected after #define" );
             return false;
         }
 
-        Macro *m = new Macro (t);
+        Macro *m = new Macro( t );
         m->Body = iBody;
-        t = cpp.GetArguments (m->NumArgs, m->Args, false, true);
-        while (t.Type == Token::TK_WHITESPACE)
-            t = cpp.GetToken (false);
+        t = cpp.GetArguments( m->NumArgs, m->Args, false, true );
+        while( t.Type == Token::TK_WHITESPACE )
+            t = cpp.GetToken( false );
 
-        switch (t.Type)
+        switch( t.Type )
         {
         case Token::TK_NEWLINE:
         case Token::TK_EOS:
             // Assign "" to token
-            t = Token (Token::TK_TEXT, "", 0);
+            t = Token( Token::TK_TEXT, "", 0 );
             break;
 
         case Token::TK_ERROR:
@@ -977,8 +986,8 @@ namespace Ogre {
 
         default:
             t.Type = Token::TK_TEXT;
-            assert (t.String + t.Length == cpp.Source);
-            t.Length = cpp.SourceEnd - t.String;
+            assert( t.String + t.Length == cpp.Source );
+            t.Length = static_cast<size_t>( cpp.SourceEnd - t.String );
             break;
         }
 
@@ -986,14 +995,14 @@ namespace Ogre {
         {
             CPreprocessor cpp2;
 
-            //We need to convert:
+            // We need to convert:
             //  #define mad( a__arg_, b__arg_, c__arg_ ) fma( a, b, c )
-            //into:
+            // into:
             //  #define mad( a__arg_, b__arg_, c__arg_ ) fma( a__arg_, b__arg_, c__arg_ )
             for( int i = 0; i < m->NumArgs; ++i )
             {
-                cpp2.Define( m->Args[i].String, m->Args[i].Length - 6,
-                             m->Args[i].String, m->Args[i].Length );
+                cpp2.Define( m->Args[i].String, m->Args[i].Length - 6, m->Args[i].String,
+                             m->Args[i].Length );
             }
 
             // Now run the macro expansion through the supplimentary preprocessor
@@ -1008,87 +1017,83 @@ namespace Ogre {
         return true;
     }
 
-
-    bool CPreprocessor::HandleUnDef (Token &iBody, int iLine)
+    bool CPreprocessor::HandleUnDef( Token &iBody, int iLine )
     {
-        CPreprocessor cpp (iBody, iLine);
+        CPreprocessor cpp( iBody, iLine );
 
-        Token t = cpp.GetToken (false);
+        Token t = cpp.GetToken( false );
 
-        if (t.Type != Token::TK_KEYWORD)
+        if( t.Type != Token::TK_KEYWORD )
         {
-            Error (iLine, "Expecting a macro name after #undef, got", &t);
+            Error( iLine, "Expecting a macro name after #undef, got", &t );
             return false;
         }
 
         // Don't barf if macro does not exist - standard C behaviour
-        Undef (t.String, t.Length);
+        Undef( t.String, t.Length );
 
         do
         {
-            t = cpp.GetToken (false);
-        } while (t.Type == Token::TK_WHITESPACE ||
-                 t.Type == Token::TK_COMMENT ||
-                 t.Type == Token::TK_LINECOMMENT);
+            t = cpp.GetToken( false );
+        } while( t.Type == Token::TK_WHITESPACE || t.Type == Token::TK_COMMENT ||
+                 t.Type == Token::TK_LINECOMMENT );
 
-        if (t.Type != Token::TK_EOS)
-            Error (iLine, "Warning: Ignoring garbage after directive", &t);
+        if( t.Type != Token::TK_EOS )
+            Error( iLine, "Warning: Ignoring garbage after directive", &t );
 
         return true;
     }
 
-    bool CPreprocessor::HandleIfDef (Token &iBody, int iLine)
+    bool CPreprocessor::HandleIfDef( Token &iBody, int iLine )
     {
-        if (EnableOutput & (1 << 31))
+        if( EnableOutput & ( 1u << 31u ) )
         {
-            Error (iLine, "Too many embedded #if directives");
+            Error( iLine, "Too many embedded #if directives" );
             return false;
         }
 
-        CPreprocessor cpp (iBody, iLine);
+        CPreprocessor cpp( iBody, iLine );
 
-        Token t = cpp.GetToken (false);
+        Token t = cpp.GetToken( false );
 
-        if (t.Type != Token::TK_KEYWORD)
+        if( t.Type != Token::TK_KEYWORD )
         {
-            Error (iLine, "Expecting a macro name after #ifdef, got", &t);
+            Error( iLine, "Expecting a macro name after #ifdef, got", &t );
             return false;
         }
 
         EnableOutput <<= 1;
-        if (IsDefined (t))
+        if( IsDefined( t ) )
             EnableOutput |= 1;
 
         do
         {
-            t = cpp.GetToken (false);
-        } while (t.Type == Token::TK_WHITESPACE ||
-                 t.Type == Token::TK_COMMENT ||
-                 t.Type == Token::TK_LINECOMMENT);
+            t = cpp.GetToken( false );
+        } while( t.Type == Token::TK_WHITESPACE || t.Type == Token::TK_COMMENT ||
+                 t.Type == Token::TK_LINECOMMENT );
 
-        if (t.Type != Token::TK_EOS)
-            Error (iLine, "Warning: Ignoring garbage after directive", &t);
+        if( t.Type != Token::TK_EOS )
+            Error( iLine, "Warning: Ignoring garbage after directive", &t );
 
         return true;
     }
 
-
-    CPreprocessor::Token CPreprocessor::ExpandDefined (CPreprocessor *iParent, int iNumArgs, Token *iArgs)
+    CPreprocessor::Token CPreprocessor::ExpandDefined( CPreprocessor *iParent, int iNumArgs,
+                                                       Token *iArgs )
     {
-        if (iNumArgs != 1)
+        if( iNumArgs != 1 )
         {
-            iParent->Error (iParent->Line, "The defined() function takes exactly one argument");
-            return Token (Token::TK_ERROR);
+            iParent->Error( iParent->Line, "The defined() function takes exactly one argument" );
+            return Token( Token::TK_ERROR );
         }
 
-        const char *v = iParent->IsDefined (iArgs [0]) ? "1" : "0";
-        return Token (Token::TK_NUMBER, v, 1);
+        const char *v = iParent->IsDefined( iArgs[0] ) ? "1" : "0";
+        return Token( Token::TK_NUMBER, v, 1 );
     }
 
-
-    bool CPreprocessor::HandleIf (Token &iBody, int iLine)
+    bool CPreprocessor::HandleIf( Token &iBody, int iLine )
     {
-        Macro defined (Token (Token::TK_KEYWORD, "defined", 7));
+        Macro defined( Token( Token::TK_KEYWORD, "defined", 7 ) );
         defined.Next = MacroList;
         defined.ExpandFunc = ExpandDefined;
         defined.NumArgs = 1;
@@ -1097,32 +1102,31 @@ namespace Ogre {
         MacroList = &defined;
 
         long val;
-        bool rc = GetValue (iBody, val, iLine);
+        bool rc = GetValue( iBody, val, iLine );
 
         // Restore the macro list
         MacroList = defined.Next;
         defined.Next = NULL;
 
-        if (!rc)
+        if( !rc )
             return false;
 
         EnableOutput <<= 1;
-        if (val)
+        if( val )
             EnableOutput |= 1;
 
         return true;
     }
 
-
-    bool CPreprocessor::HandleElif (Token &iBody, int iLine)
+    bool CPreprocessor::HandleElif( Token &iBody, int iLine )
     {
-        if (EnableOutput == 1)
+        if( EnableOutput == 1 )
         {
-            Error (iLine, "#elif without #if");
+            Error( iLine, "#elif without #if" );
             return false;
         }
 
-        Macro defined (Token (Token::TK_KEYWORD, "defined", 7));
+        Macro defined( Token( Token::TK_KEYWORD, "defined", 7 ) );
         defined.Next = MacroList;
         defined.ExpandFunc = ExpandDefined;
         defined.NumArgs = 1;
@@ -1131,65 +1135,65 @@ namespace Ogre {
         MacroList = &defined;
 
         long val;
-        bool rc = GetValue (iBody, val, iLine);
+        bool rc = GetValue( iBody, val, iLine );
 
         // Restore the macro list
         MacroList = defined.Next;
         defined.Next = NULL;
 
-        if (!rc)
+        if( !rc )
             return false;
 
-        if (val)
-            EnableOutput |= 1;
+        if( val )
+            EnableOutput |= 1u;
         else
-            EnableOutput &= ~1;
+            EnableOutput &= ~1u;
 
         return true;
     }
 
-
-    bool CPreprocessor::HandleElse (Token &iBody, int iLine)
+    bool CPreprocessor::HandleElse( Token &iBody, int iLine )
     {
-        if (EnableOutput == 1)
+        if( EnableOutput == 1 )
         {
-            Error (iLine, "#else without #if");
+            Error( iLine, "#else without #if" );
             return false;
         }
 
         // Negate the result of last #if
         EnableOutput ^= 1;
 
-        if (iBody.Length)
-            Error (iLine, "Warning: Ignoring garbage after #else", &iBody);
+        if( iBody.Length )
+            Error( iLine, "Warning: Ignoring garbage after #else", &iBody );
 
         return true;
     }
 
-
-    bool CPreprocessor::HandleEndIf (Token &iBody, int iLine)
+    bool CPreprocessor::HandleEndIf( Token &iBody, int iLine )
     {
         EnableOutput >>= 1;
-        if (EnableOutput == 0)
+        if( EnableOutput == 0 )
         {
-            Error (iLine, "#endif without #if");
+            Error( iLine, "#endif without #if" );
             return false;
         }
 
-        if (iBody.Length)
-            Error (iLine, "Warning: Ignoring garbage after #endif", &iBody);
+        if( iBody.Length )
+            Error( iLine, "Warning: Ignoring garbage after #endif", &iBody );
 
         return true;
     }
 
-
-    CPreprocessor::Token CPreprocessor::HandleDirective (Token &iToken, int iLine)
+    CPreprocessor::Token CPreprocessor::HandleDirective( Token &iToken, int iLine )
     {
         // Analyze preprocessor directive
         const char *directive = iToken.String + 1;
-        size_t dirlen = iToken.Length - 1;
-        while (dirlen && isspace (*directive))
-            dirlen--, directive++;
+        size_t dirlen = iToken.Length - 1u;
+        while( dirlen && isspace( *directive ) )
+        {
+            dirlen--;
+            directive++;
+        }
 
         int old_line = Line;
 
@@ -1197,23 +1201,21 @@ namespace Ogre {
         Token t, last;
         do
         {
-            t = GetToken (false);
-            if (t.Type == Token::TK_NEWLINE)
+            t = GetToken( false );
+            if( t.Type == Token::TK_NEWLINE )
             {
                 // No directive arguments
                 last = t;
                 t.Length = 0;
                 goto Done;
             }
-        } while (t.Type == Token::TK_WHITESPACE ||
-                 t.Type == Token::TK_LINECONT ||
-                 t.Type == Token::TK_COMMENT ||
-                 t.Type == Token::TK_LINECOMMENT);
+        } while( t.Type == Token::TK_WHITESPACE || t.Type == Token::TK_LINECONT ||
+                 t.Type == Token::TK_COMMENT || t.Type == Token::TK_LINECOMMENT );
 
-        for (;;)
+        for( ;; )
         {
-            last = GetToken (false);
-            switch (last.Type)
+            last = GetToken( false );
+            switch( last.Type )
             {
             case Token::TK_EOS:
                 // Can happen and is not an error
@@ -1237,42 +1239,41 @@ namespace Ogre {
                 break;
             }
 
-            t.Append (last);
+            t.Append( last );
             t.Type = Token::TK_TEXT;
         }
     Done:
 
-#define IS_DIRECTIVE(s)                                                 \
-        (dirlen == strlen(s) && (strncmp (directive, s, strlen(s)) == 0))
+#define IS_DIRECTIVE( s ) ( dirlen == strlen( s ) && ( strncmp( directive, s, strlen( s ) ) == 0 ) )
 
-        bool outputEnabled = ((EnableOutput & (EnableOutput + 1)) == 0);
+        bool outputEnabled = ( ( EnableOutput & ( EnableOutput + 1 ) ) == 0 );
         bool rc;
 
-        if (IS_DIRECTIVE ("define") && outputEnabled)
-            rc = HandleDefine (t, iLine);
-        else if (IS_DIRECTIVE ("undef") && outputEnabled)
-            rc = HandleUnDef (t, iLine);
-        else if (IS_DIRECTIVE ("ifdef"))
-            rc = HandleIfDef (t, iLine);
-        else if (IS_DIRECTIVE ("ifndef"))
+        if( IS_DIRECTIVE( "define" ) && outputEnabled )
+            rc = HandleDefine( t, iLine );
+        else if( IS_DIRECTIVE( "undef" ) && outputEnabled )
+            rc = HandleUnDef( t, iLine );
+        else if( IS_DIRECTIVE( "ifdef" ) )
+            rc = HandleIfDef( t, iLine );
+        else if( IS_DIRECTIVE( "ifndef" ) )
         {
-            rc = HandleIfDef (t, iLine);
-            if (rc)
+            rc = HandleIfDef( t, iLine );
+            if( rc )
                 EnableOutput ^= 1;
         }
-        else if (IS_DIRECTIVE ("if"))
-            rc = HandleIf (t, iLine);
-        else if (IS_DIRECTIVE ("elif"))
-            rc = HandleElif (t, iLine);
+        else if( IS_DIRECTIVE( "if" ) )
+            rc = HandleIf( t, iLine );
+        else if( IS_DIRECTIVE( "elif" ) )
+            rc = HandleElif( t, iLine );
 
-        else if (IS_DIRECTIVE ("else"))
-            rc = HandleElse (t, iLine);
-        else if (IS_DIRECTIVE ("endif"))
-            rc = HandleEndIf (t, iLine);
+        else if( IS_DIRECTIVE( "else" ) )
+            rc = HandleElse( t, iLine );
+        else if( IS_DIRECTIVE( "endif" ) )
+            rc = HandleEndIf( t, iLine );
         else
         {
-            //Error (iLine, "Unknown preprocessor directive", &iToken);
-            //return Token (Token::TK_ERROR);
+            // Error (iLine, "Unknown preprocessor directive", &iToken);
+            // return Token (Token::TK_ERROR);
 
             // Unknown preprocessor directive, roll back and pass through
             Line = old_line;
@@ -1283,55 +1284,50 @@ namespace Ogre {
 
 #undef IS_DIRECTIVE
 
-        if (!rc)
-            return Token (Token::TK_ERROR);
+        if( !rc )
+            return Token( Token::TK_ERROR );
         return last;
     }
 
-
-    void CPreprocessor::Define (const char *iMacroName, size_t iMacroNameLen,
-                                const char *iMacroValue, size_t iMacroValueLen)
+    void CPreprocessor::Define( const char *iMacroName, size_t iMacroNameLen, const char *iMacroValue,
+                                size_t iMacroValueLen )
     {
-        Macro *m = new Macro (Token (Token::TK_KEYWORD, iMacroName, iMacroNameLen));
-        m->Value = Token (Token::TK_TEXT, iMacroValue, iMacroValueLen);
+        Macro *m = new Macro( Token( Token::TK_KEYWORD, iMacroName, iMacroNameLen ) );
+        m->Value = Token( Token::TK_TEXT, iMacroValue, iMacroValueLen );
         m->Next = MacroList;
         MacroList = m;
     }
 
-
-    void CPreprocessor::Define (const char *iMacroName, size_t iMacroNameLen,
-                                long iMacroValue)
+    void CPreprocessor::Define( const char *iMacroName, size_t iMacroNameLen, long iMacroValue )
     {
-        Macro *m = new Macro (Token (Token::TK_KEYWORD, iMacroName, iMacroNameLen));
-        m->Value.SetValue (iMacroValue);
+        Macro *m = new Macro( Token( Token::TK_KEYWORD, iMacroName, iMacroNameLen ) );
+        m->Value.SetValue( iMacroValue );
         m->Next = MacroList;
         MacroList = m;
     }
 
-
-    bool CPreprocessor::Undef (const char *iMacroName, size_t iMacroNameLen)
+    bool CPreprocessor::Undef( const char *iMacroName, size_t iMacroNameLen )
     {
         Macro **cur = &MacroList;
-        Token name (Token::TK_KEYWORD, iMacroName, iMacroNameLen);
-        while (*cur)
+        Token name( Token::TK_KEYWORD, iMacroName, iMacroNameLen );
+        while( *cur )
         {
-            if ((*cur)->Name == name)
+            if( ( *cur )->Name == name )
             {
-                Macro *next = (*cur)->Next;
-                (*cur)->Next = NULL;
-                delete (*cur);
+                Macro *next = ( *cur )->Next;
+                ( *cur )->Next = NULL;
+                delete( *cur );
                 *cur = next;
                 return true;
             }
 
-            cur = &(*cur)->Next;
+            cur = &( *cur )->Next;
         }
 
         return false;
     }
 
-
-    CPreprocessor::Token CPreprocessor::Parse (const Token &iSource)
+    CPreprocessor::Token CPreprocessor::Parse( const Token &iSource )
     {
         Source = iSource.String;
         SourceEnd = Source + iSource.Length;
@@ -1340,7 +1336,7 @@ namespace Ogre {
         EnableOutput = 1;
 
         // Accumulate output into this token
-        Token output (Token::TK_TEXT);
+        Token output( Token::TK_TEXT );
         int empty_lines = 0;
 
         // Enable output only if all embedded #if's were true
@@ -1348,26 +1344,26 @@ namespace Ogre {
         bool output_enabled = true;
         int output_disabled_line = 0;
 
-        while (Source < SourceEnd)
+        while( Source < SourceEnd )
         {
             int old_line = Line;
-            Token t = GetToken (true);
+            Token t = GetToken( true );
 
         NextToken:
-            switch (t.Type)
+            switch( t.Type )
             {
             case Token::TK_ERROR:
                 return t;
 
             case Token::TK_EOS:
-                return output; // Force termination
+                return output;  // Force termination
 
             case Token::TK_COMMENT:
                 // C comments are replaced with single spaces.
-                if (output_enabled)
+                if( output_enabled )
                 {
-                    output.Append (" ", 1);
-                    output.AppendNL (Line - old_line);
+                    output.Append( " ", 1 );
+                    output.AppendNL( Line - old_line );
                 }
                 break;
 
@@ -1377,20 +1373,20 @@ namespace Ogre {
 
             case Token::TK_DIRECTIVE:
                 // Handle preprocessor directives
-                t = HandleDirective (t, old_line);
+                t = HandleDirective( t, old_line );
 
-                output_enabled = ((EnableOutput & (EnableOutput + 1)) == 0);
-                if (output_enabled != old_output_enabled)
+                output_enabled = ( ( EnableOutput & ( EnableOutput + 1 ) ) == 0 );
+                if( output_enabled != old_output_enabled )
                 {
-                    if (output_enabled)
-                        output.AppendNL (old_line - output_disabled_line);
+                    if( output_enabled )
+                        output.AppendNL( old_line - output_disabled_line );
                     else
                         output_disabled_line = old_line;
                     old_output_enabled = output_enabled;
                 }
 
-                if (output_enabled)
-                    output.AppendNL (Line - old_line - t.CountNL ());
+                if( output_enabled )
+                    output.AppendNL( Line - old_line - t.CountNL() );
                 goto NextToken;
 
             case Token::TK_LINECONT:
@@ -1398,43 +1394,42 @@ namespace Ogre {
                 empty_lines++;
                 break;
             case Token::TK_PUNCTUATION:
-                if (output_enabled && (t.String[0] != '#' || !SupplimentaryExpand))
-                    output.Append (t);
+                if( output_enabled && ( t.String[0] != '#' || !SupplimentaryExpand ) )
+                    output.Append( t );
                 break;
             case Token::TK_NEWLINE:
-                if (empty_lines)
+                if( empty_lines )
                 {
                     // Compensate for the backslash-newline combinations
                     // we have encountered, otherwise line numeration is broken
-                    if (output_enabled)
-                        output.AppendNL (empty_lines);
+                    if( output_enabled )
+                        output.AppendNL( empty_lines );
                     empty_lines = 0;
                 }
-                // Fallthrough to default
+                OGRE_FALLTHROUGH;
             case Token::TK_WHITESPACE:
-                // Fallthrough to default
+                OGRE_FALLTHROUGH;
             default:
                 // Passthrough all other tokens
-                if (output_enabled)
-                    output.Append (t);
+                if( output_enabled )
+                    output.Append( t );
                 break;
             }
         }
 
-        if (EnableOutput != 1)
+        if( EnableOutput != 1 )
         {
-            Error (Line, "Unclosed #if at end of source");
-            return Token (Token::TK_ERROR);
+            Error( Line, "Unclosed #if at end of source" );
+            return Token( Token::TK_ERROR );
         }
 
         return output;
     }
 
-
-    char *CPreprocessor::Parse (const char *iSource, size_t iLength, size_t &oLength)
+    char *CPreprocessor::Parse( const char *iSource, size_t iLength, size_t &oLength )
     {
-        Token retval = Parse (Token (Token::TK_TEXT, iSource, iLength));
-        if (retval.Type == Token::TK_ERROR)
+        Token retval = Parse( Token( Token::TK_TEXT, iSource, iLength ) );
+        if( retval.Type == Token::TK_ERROR )
             return NULL;
 
         oLength = retval.Length;
@@ -1442,4 +1437,4 @@ namespace Ogre {
         return retval.Buffer;
     }
 
-} // namespace Ogre
+}  // namespace Ogre

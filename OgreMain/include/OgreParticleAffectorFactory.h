@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,56 +28,59 @@ THE SOFTWARE.
 #ifndef __ParticleAffectorFactory_H__
 #define __ParticleAffectorFactory_H__
 
-
 #include "OgrePrerequisites.h"
+
 #include "OgreParticleAffector.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
-    /** Abstract class defining the interface to be implemented by creators of ParticleAffector subclasses.
+     *  @{
+     */
+    /** Abstract class defining the interface to be implemented by creators of ParticleAffector
+        subclasses.
     @remarks
         Plugins or 3rd party applications can add new types of particle affectors to Ogre by creating
         subclasses of the ParticleAffector class. Because multiple instances of these affectors may be
-        required, a factory class to manage the instances is also required. 
+        required, a factory class to manage the instances is also required.
     @par
         ParticleAffectorFactory subclasses must allow the creation and destruction of ParticleAffector
         subclasses. They must also be registered with the ParticleSystemManager. All factories have
-        a name which identifies them, examples might be 'force_vector', 'attractor', or 'fader', and these can be 
-        also be used from particle system scripts.
+        a name which identifies them, examples might be 'force_vector', 'attractor', or 'fader', and
+        these can be also be used from particle system scripts.
     */
-    class _OgreExport ParticleAffectorFactory : public FXAlloc
+    class _OgreExport ParticleAffectorFactory : public OgreAllocatedObj
     {
     protected:
-        vector<ParticleAffector*>::type mAffectors;
+        vector<ParticleAffector *>::type mAffectors;
+
     public:
         ParticleAffectorFactory() {}
         virtual ~ParticleAffectorFactory();
-        /** Returns the name of the factory, the name which identifies the particle affector type this factory creates. */
+        /** Returns the name of the factory, the name which identifies the particle affector type this
+         * factory creates. */
         virtual String getName() const = 0;
 
         /** Creates a new affector instance.
         @remarks
             The subclass MUST add a pointer to the created instance to mAffectors.
         */
-        virtual ParticleAffector* createAffector(ParticleSystem* psys) = 0;
+        virtual ParticleAffector *createAffector( ParticleSystem *psys ) = 0;
 
         /** Destroys the affector pointed to by the parameter (for early clean up if required). */
-        virtual void destroyAffector(ParticleAffector* e);
+        virtual void destroyAffector( ParticleAffector *e );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-

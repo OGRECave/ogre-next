@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -38,30 +38,30 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     enum ShadowMapTechniques
     {
-        SHADOWMAP_UNIFORM,          //Default
+        SHADOWMAP_UNIFORM,  // Default
         SHADOWMAP_PLANEOPTIMAL,
         SHADOWMAP_FOCUSED,
         SHADOWMAP_PSSM
     };
 
     /// Local texture definition
-    class ShadowTextureDefinition : public CompositorInstAlloc
+    class ShadowTextureDefinition : public OgreAllocatedObj
     {
     public:
-        Vector2     uvOffset;
-        Vector2     uvLength;
-        uint8       arrayIdx;
+        Vector2 uvOffset;
+        Vector2 uvLength;
+        uint8   arrayIdx;
 
-        size_t      light;  //Render Nth closest light
-        size_t      split;  //Split for that light (only for PSSM/CSM)
+        size_t light;  // Render Nth closest light
+        size_t split;  // Split for that light (only for PSSM/CSM)
 
         /// Constant bias is per material (tweak HlmsDatablock::mShadowConstantBias).
         /// This value lets you multiply it 'mShadowConstantBias * constantBiasScale'
@@ -83,18 +83,21 @@ namespace Ogre
 
         ShadowMapTechniques shadowMapTechnique;
 
-        //PSSM params
-        Real                pssmLambda;
-        Real                splitPadding;
-        Real                splitBlend;
-        Real                splitFade;
-        uint32              numSplits;
-        uint32              numStableSplits;
+        // Focused params (also applies to PSSM)
+        float xyPadding;
+
+        // PSSM params
+        Real   pssmLambda;
+        Real   splitPadding;
+        Real   splitBlend;
+        Real   splitFade;
+        uint32 numSplits;
+        uint32 numStableSplits;
 
     protected:
-        IdString    texName;
-        String      texNameStr;
-        size_t      sharesSetupWith;
+        IdString texName;
+        String   texNameStr;
+        size_t   sharesSetupWith;
 
     public:
         ShadowTextureDefinition( ShadowMapTechniques t, const String &texRefName,
@@ -110,6 +113,7 @@ namespace Ogre
             autoConstantBiasScale( 100.0f ),
             autoNormalOffsetBiasScale( 4.0f ),
             shadowMapTechnique( t ),
+            xyPadding( 1.5f ),
             pssmLambda( 0.95f ),
             splitPadding( 1.0f ),
             splitBlend( 0.125f ),
@@ -118,15 +122,15 @@ namespace Ogre
             numStableSplits( 0u ),
             texName( texRefName ),
             texNameStr( texRefName ),
-            sharesSetupWith( -1 )
+            sharesSetupWith( std::numeric_limits<size_t>::max() )
         {
         }
 
-        IdString getTextureName() const             { return texName; }
-        String getTextureNameStr() const            { return texNameStr; }
+        IdString getTextureName() const { return texName; }
+        String   getTextureNameStr() const { return texNameStr; }
 
-        void _setSharesSetupWithIdx( size_t idx )   { sharesSetupWith = idx; }
-        size_t getSharesSetupWith() const           { return sharesSetupWith; }
+        void   _setSharesSetupWithIdx( size_t idx ) { sharesSetupWith = idx; }
+        size_t getSharesSetupWith() const { return sharesSetupWith; }
     };
 
     /** Shadow Nodes are special nodes (not to be confused with @see CompositorNode)
@@ -147,9 +151,9 @@ namespace Ogre
         friend class CompositorShadowNode;
 
     protected:
-        typedef vector<ShadowTextureDefinition>::type   ShadowMapTexDefVec;
-        typedef vector<uint8>::type LightTypeMaskVec;
-        ShadowMapTexDefVec  mShadowMapTexDefinitions;
+        typedef vector<ShadowTextureDefinition>::type ShadowMapTexDefVec;
+        typedef vector<uint8>::type                   LightTypeMaskVec;
+        ShadowMapTexDefVec                            mShadowMapTexDefinitions;
         /// Some shadow maps may only support a few light types (e.g.
         /// PSSM only supports directional lights).
         /// In the example this would be 1u << Light::LT_DIRECTIONAL
@@ -158,24 +162,29 @@ namespace Ogre
         ShadowMapTechniques mDefaultTechnique;
 
         /// Not the same as mShadowMapTexDefinitions.size(), because splits aren't included
-        size_t              mNumLights;
-        size_t              mMinRq; //Minimum RQ included by one of our passes
-        size_t              mMaxRq; //Maximum RQ included by one of our passes
+        size_t mNumLights;
+        size_t mMinRq;  // Minimum RQ included by one of our passes
+        size_t mMaxRq;  // Maximum RQ included by one of our passes
 
     public:
         CompositorShadowNodeDef( const String &name, CompositorManager2 *compositorManager ) :
-                CompositorNodeDef( name, compositorManager ), mDefaultTechnique( SHADOWMAP_UNIFORM ),
-                mNumLights( 0 ), mMinRq( ~0 ), mMaxRq( 0 ) {}
-        virtual ~CompositorShadowNodeDef() {}
+            CompositorNodeDef( name, compositorManager ),
+            mDefaultTechnique( SHADOWMAP_UNIFORM ),
+            mNumLights( 0 ),
+            mMinRq( std::numeric_limits<size_t>::max() ),
+            mMaxRq( 0 )
+        {
+        }
+        ~CompositorShadowNodeDef() override {}
 
         /// Overloaded to prevent creating input channels.
-        virtual IdString addTextureSourceName( const String &name, size_t index,
-                                               TextureSource textureSource );
-        virtual void addBufferInput( size_t inputChannel, IdString name );
+        IdString addTextureSourceName( const String &name, size_t index,
+                                       TextureSource textureSource ) override;
+        void     addBufferInput( size_t inputChannel, IdString name ) override;
 
-        virtual void postInitializePassDef( CompositorPassDef *passDef );
+        void postInitializePassDef( CompositorPassDef *passDef ) override;
 
-        void setDefaultTechnique( ShadowMapTechniques techn )   { mDefaultTechnique = techn; }
+        void setDefaultTechnique( ShadowMapTechniques techn ) { mDefaultTechnique = techn; }
 
         /** Reserves enough memory for all texture definitions
         @remarks
@@ -206,20 +215,22 @@ namespace Ogre
         @param arrayIdx
             If the texture is an array texture, index to the slice that holds our shadow map.
         */
-        ShadowTextureDefinition* addShadowTextureDefinition( size_t lightIdx, size_t split,
-                                                             const String &name,
-                                                             const Vector2 &uvOffset,
-                                                             const Vector2 &uvLength,
-                                                             uint8 arrayIdx );
+        ShadowTextureDefinition *addShadowTextureDefinition( size_t lightIdx, size_t split,
+                                                             const String &name, const Vector2 &uvOffset,
+                                                             const Vector2 &uvLength, uint8 arrayIdx );
 
         /// Gets the number of shadow texture definitions in this node.
-        size_t getNumShadowTextureDefinitions() const   { return mShadowMapTexDefinitions.size(); }
+        size_t getNumShadowTextureDefinitions() const { return mShadowMapTexDefinitions.size(); }
 
         /// Retrieves a shadow texture definition by its index.
-        const ShadowTextureDefinition* getShadowTextureDefinition( size_t texIndex ) const
-                                                        { return &mShadowMapTexDefinitions[texIndex]; }
-        ShadowTextureDefinition* getShadowTextureDefinitionNonConst( size_t texIndex )
-                                                        { return &mShadowMapTexDefinitions[texIndex]; }
+        const ShadowTextureDefinition *getShadowTextureDefinition( size_t texIndex ) const
+        {
+            return &mShadowMapTexDefinitions[texIndex];
+        }
+        ShadowTextureDefinition *getShadowTextureDefinitionNonConst( size_t texIndex )
+        {
+            return &mShadowMapTexDefinitions[texIndex];
+        }
 
         /** Checks that paremeters are correctly set, and finalizes whatever needs to be
             done, probably because not enough data was available at the time of creation.
@@ -229,12 +240,12 @@ namespace Ogre
             We should validate here if it's not possible to validate at any other time
             or if it's substantially easier to do so here.
         */
-        virtual void _validateAndFinish(void);
+        virtual void _validateAndFinish();
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

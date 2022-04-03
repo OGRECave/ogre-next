@@ -22,6 +22,12 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wsuggest-override"
+#    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+
 #include <ctype.h>
 #include <stddef.h>
 
@@ -1606,3 +1612,6 @@ bool TiXmlText::Blank() const
     return true;
 }
 
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -34,22 +34,22 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Represents Indirect buffers for storing draw call commands
-    */
+     */
     class _OgreExport IndirectBufferPacked : public BufferPacked
     {
         unsigned char *mSwBuffer;
 
     public:
         IndirectBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                              uint32 numElementsPadding, BufferType bufferType,
-                              void *initialData, bool keepAsShadow,
-                              VaoManager *vaoManager, BufferInterface *bufferInterface );
-        ~IndirectBufferPacked();
+                              uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                              bool keepAsShadow, VaoManager *vaoManager,
+                              BufferInterface *bufferInterface );
+        ~IndirectBufferPacked() override;
 
-        virtual BufferPackedTypes getBufferPackedType(void) const   { return BP_TYPE_INDIRECT; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_INDIRECT; }
 
-        unsigned char* getSwBufferPtr(void)     { return mSwBuffer; }
+        unsigned char *getSwBufferPtr() { return mSwBuffer; }
     };
-}
+}  // namespace Ogre
 
 #endif

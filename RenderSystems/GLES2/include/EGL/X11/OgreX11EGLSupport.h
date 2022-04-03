@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -153,9 +153,9 @@ namespace Ogre {
 //              size_t width, size_t height);
 
             virtual void switchMode(uint& width, uint& height, short& frequency);
-            String getDisplayName(void);
+            String getDisplayName();
 
-            NativeDisplayType getNativeDisplay(void);
+            NativeDisplayType getNativeDisplay();
             XVisualInfo *getVisualFromFBConfig(::EGLConfig glConfig);
             Atom mAtomDeleteWindow;
             Atom mAtomFullScreen;

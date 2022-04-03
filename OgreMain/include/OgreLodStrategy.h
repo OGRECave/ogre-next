@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,14 +33,14 @@ THE SOFTWARE.
 #include "Math/Array/OgreArrayConfig.h"
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup LOD
-    *  @{
-    */
+     *  @{
+     */
     /** Strategy for determining level of detail.
     @remarks
         Generally, to create a new LOD strategy, all of the following will
@@ -48,18 +48,18 @@ namespace Ogre {
         getIndex, sort, and isSorted.
         In addition, transformUserValue may be overridden.
     */
-    class _OgreExport LodStrategy : public LodAlloc
+    class _OgreExport LodStrategy : public OgreAllocatedObj
     {
     protected:
         /** Name of this strategy. */
         String mName;
 
         /** Compute the LOD value for a given movable object relative to a given camera. */
-        virtual Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const = 0;
+        virtual Real getValueImpl( const MovableObject *movableObject, const Camera *camera ) const = 0;
 
     public:
         /** Constructor accepting name. */
-        LodStrategy(const String& name);
+        LodStrategy( const String &name );
 
         /** Virtual destructor. */
         virtual ~LodStrategy();
@@ -68,12 +68,12 @@ namespace Ogre {
         virtual Real getBaseValue() const = 0;
 
         /** Transform LOD bias so it only needs to be multiplied by the LOD value. */
-        virtual Real transformBias(Real factor) const = 0;
+        virtual Real transformBias( Real factor ) const = 0;
 
-        virtual void lodUpdateImpl( const size_t numNodes, ObjectData t,
-                                    const Camera *camera, Real bias ) const = 0;
+        virtual void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,
+                                    Real bias ) const = 0;
 
-        //Include OgreLodStrategyPrivate.inl in the CPP files that use this function.
+        // Include OgreLodStrategyPrivate.inl in the CPP files that use this function.
         inline static void lodSet( ObjectData &t, Real lodValues[ARRAY_PACKED_REALS] );
 
         /** Transform user supplied value to internal value.
@@ -83,12 +83,12 @@ namespace Ogre {
             Do not throw exceptions for invalid values here, as the LOD strategy
             may be changed such that the values become valid.
         */
-        virtual Real transformUserValue(Real userValue) const;
+        virtual Real transformUserValue( Real userValue ) const;
 
         /** Compute the LOD value for a given movable object relative to a given camera. */
-        Real getValue(const MovableObject *movableObject, const Camera *camera) const;
+        Real getValue( const MovableObject *movableObject, const Camera *camera ) const;
 
-#if 0 // Unused and requires including Mesh.h and Material.h
+#if 0  // Unused and requires including Mesh.h and Material.h
 
         /** Get the index of the LOD usage which applies to a given value. */
         static ushort getIndex(Real value, const v1::Mesh::MeshLodUsageList& meshLodUsageList);
@@ -107,12 +107,12 @@ namespace Ogre {
 #endif
 
         /** Get the name of this strategy. */
-        const String& getName() const { return mName; }
+        const String &getName() const { return mName; }
     };
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

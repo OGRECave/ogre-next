@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -41,12 +41,12 @@ THE SOFTWARE.
 
 - (void)initCommon
 {
-    self.opaque             = YES;
-    self.backgroundColor    = nil;
-    self.scaleToNative      = true;
-    self.nativeScaleFactor  = 1.0;
-    self.layer.contentsScale= [[UIScreen mainScreen] scale];
-    self.presentationTime   = -1.0;
+    self.opaque = YES;
+    self.backgroundColor = nil;
+    self.scaleToNative = true;
+    self.nativeScaleFactor = 1.0;
+    self.layer.contentsScale = [[UIScreen mainScreen] scale];
+    self.presentationTime = -1.0;
 }
 
 - (void)didMoveToWindow
@@ -59,19 +59,19 @@ THE SOFTWARE.
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    
+
     if( self )
     {
         [self initCommon];
     }
-    
+
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
-    
+
     if( self )
     {
         [self initCommon];
@@ -89,7 +89,7 @@ THE SOFTWARE.
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    
+
     _layerSizeDidUpdate = YES;
 }
 

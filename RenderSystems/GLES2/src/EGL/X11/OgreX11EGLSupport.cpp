@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -160,7 +160,7 @@ namespace Ogre {
         return mNativeDisplay;
     }
 
-    String X11EGLSupport::getDisplayName(void)
+    String X11EGLSupport::getDisplayName()
     {
         return String((const char*)XDisplayName(DisplayString(mNativeDisplay)));
     }

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,42 +28,40 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "OgreCamera.h"
-
 #include "Compositor/OgreCompositorShadowNode.h"
+
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
-
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
-#include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
-#include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
-#include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
 #include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
-
+#include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
+#include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
+#include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
+#include "OgreCamera.h"
+#include "OgreDepthBuffer.h"
+#include "OgreLogManager.h"
+#include "OgrePass.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
 #include "OgreSceneManager.h"
-#include "OgreViewport.h"
-#include "OgrePass.h"
-#include "OgreDepthBuffer.h"
-#include "OgrePixelFormatGpuUtils.h"
-
 #include "OgreShadowCameraSetupFocused.h"
 #include "OgreShadowCameraSetupPSSM.h"
-
-#include "OgreLogManager.h"
+#include "OgreViewport.h"
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-    #include <intrin.h>
-    #pragma intrinsic(_BitScanForward)
+#    include <intrin.h>
+#    pragma intrinsic( _BitScanForward )
 #endif
 
 namespace Ogre
 {
-    const Matrix4 PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE(
+    // clang-format off
+    static const Matrix4 PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE(
         0.5,    0,    0,  0.5,
         0,   -0.5,    0,  0.5,
         0,      0,    1,    0,
         0,      0,    0,    1);
+    // clang-format on
 
     inline uint32 ctz( uint32 value )
     {
@@ -75,18 +73,18 @@ namespace Ogre
         _BitScanForward( &trailingZero, value );
         return trailingZero;
 #else
-        return __builtin_ctz( value );
+        return static_cast<uint32>( __builtin_ctz( value ) );
 #endif
     }
 
     CompositorShadowNode::CompositorShadowNode( IdType id, const CompositorShadowNodeDef *definition,
                                                 CompositorWorkspace *workspace, RenderSystem *renderSys,
                                                 TextureGpu *finalTarget ) :
-            CompositorNode( id, definition->getName(), definition, workspace, renderSys, finalTarget ),
-            mDefinition( definition ),
-            mLastCamera( 0 ),
-            mLastFrame( -1 ),
-            mNumActiveShadowMapCastingLights( 0 )
+        CompositorNode( id, definition->getName(), definition, workspace, renderSys, finalTarget ),
+        mDefinition( definition ),
+        mLastCamera( 0 ),
+        mLastFrame( std::numeric_limits<size_t>::max() ),
+        mNumActiveShadowMapCastingLights( 0 )
     {
         mShadowMapCameras.reserve( definition->mShadowMapTexDefinitions.size() );
         mLocalTextures.reserve( mLocalTextures.size() + definition->mShadowMapTexDefinitions.size() );
@@ -113,28 +111,30 @@ namespace Ogre
             pseudoRootNode->setIndestructibleByClearScene( true );
         }
 
-        //Create the local textures
+        // Create the local textures
         CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator itor =
-                                                            definition->mShadowMapTexDefinitions.begin();
-        CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator end  =
-                                                            definition->mShadowMapTexDefinitions.end();
+            definition->mShadowMapTexDefinitions.begin();
+        CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator endt =
+            definition->mShadowMapTexDefinitions.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             // One map, one camera
-            const size_t shadowMapIdx = itor - definition->mShadowMapTexDefinitions.begin();
+            const size_t shadowMapIdx =
+                static_cast<size_t>( itor - definition->mShadowMapTexDefinitions.begin() );
             ShadowMapCamera shadowMapCamera;
-            shadowMapCamera.camera = sceneManager->createCamera( "ShadowNode Camera ID " +
-                                                StringConverter::toString( id ) + " Map " +
-                                                StringConverter::toString( shadowMapIdx ), false );
+            shadowMapCamera.camera =
+                sceneManager->createCamera( "ShadowNode Camera ID " + StringConverter::toString( id ) +
+                                                " Map " + StringConverter::toString( shadowMapIdx ),
+                                            false );
             shadowMapCamera.camera->setFixedYawAxis( false );
             shadowMapCamera.minDistance = 0.0f;
             shadowMapCamera.maxDistance = 100000.0f;
-            for( size_t i=0; i<Light::NUM_LIGHT_TYPES; ++i )
+            for( size_t i = 0; i < Light::NUM_LIGHT_TYPES; ++i )
                 shadowMapCamera.scenePassesViewportSize[i] = -Vector2::UNIT_SCALE;
 
             {
-                //Find out the index to our texture in both mLocalTextures & mContiguousShadowMapTex
+                // Find out the index to our texture in both mLocalTextures & mContiguousShadowMapTex
                 size_t index;
                 TextureDefinitionBase::TextureSource textureSource;
                 mDefinition->getTextureSource( itor->getTextureName(), index, textureSource );
@@ -145,28 +145,25 @@ namespace Ogre
                 shadowMapCamera.idxToLocalTextures = static_cast<uint32>( index );
 
                 TextureGpu *refTex = mLocalTextures[index];
-                TextureGpuVec::const_iterator itContig = std::find( mContiguousShadowMapTex.begin(),
-                                                                    mContiguousShadowMapTex.end(),
-                                                                    refTex );
+                TextureGpuVec::const_iterator itContig =
+                    std::find( mContiguousShadowMapTex.begin(), mContiguousShadowMapTex.end(), refTex );
                 if( itContig == mContiguousShadowMapTex.end() )
                 {
                     mContiguousShadowMapTex.push_back( refTex );
                     itContig = mContiguousShadowMapTex.end() - 1u;
                 }
 
-                shadowMapCamera.idxToContiguousTex = static_cast<uint32>(
-                            itContig - mContiguousShadowMapTex.begin() );
+                shadowMapCamera.idxToContiguousTex =
+                    static_cast<uint32>( itContig - mContiguousShadowMapTex.begin() );
             }
 
-
             {
-                //Attach the camera to a node that exists outside the scene, so that it
-                //doesn't get affected by relative origins (otherwise we'll be setting
-                //the relative origin *twice*)
+                // Attach the camera to a node that exists outside the scene, so that it
+                // doesn't get affected by relative origins (otherwise we'll be setting
+                // the relative origin *twice*)
                 shadowMapCamera.camera->detachFromParent();
                 pseudoRootNode->attachObject( shadowMapCamera.camera );
             }
-
 
             const size_t sharingSetupIdx = itor->getSharesSetupWith();
             if( sharingSetupIdx != std::numeric_limits<size_t>::max() )
@@ -179,29 +176,31 @@ namespace Ogre
                 {
                 case SHADOWMAP_UNIFORM:
                     shadowMapCamera.shadowCameraSetup =
-                                    ShadowCameraSetupPtr( OGRE_NEW DefaultShadowCameraSetup() );
+                        ShadowCameraSetupPtr( OGRE_NEW DefaultShadowCameraSetup() );
                     break;
                 /*case SHADOWMAP_PLANEOPTIMAL:
                     break;*/
                 case SHADOWMAP_FOCUSED:
-                    {
-                        FocusedShadowCameraSetup *setup = OGRE_NEW FocusedShadowCameraSetup();
-                        shadowMapCamera.shadowCameraSetup = ShadowCameraSetupPtr( setup );
-                    }
-                    break;
+                {
+                    FocusedShadowCameraSetup *setup = OGRE_NEW FocusedShadowCameraSetup();
+                    shadowMapCamera.shadowCameraSetup = ShadowCameraSetupPtr( setup );
+                    setup->setXYPadding( itor->xyPadding );
+                }
+                break;
                 case SHADOWMAP_PSSM:
-                    {
-                        PSSMShadowCameraSetup *setup = OGRE_NEW PSSMShadowCameraSetup();
-                        shadowMapCamera.shadowCameraSetup = ShadowCameraSetupPtr( setup );
-                        setup->calculateSplitPoints( itor->numSplits, 0.1f, 100.0f, 0.95f, 0.125f, 0.313f );
-                        setup->setSplitPadding( itor->splitPadding );
-                        setup->setNumStableSplits( itor->numStableSplits );
-                    }
-                    break;
+                {
+                    PSSMShadowCameraSetup *setup = OGRE_NEW PSSMShadowCameraSetup();
+                    shadowMapCamera.shadowCameraSetup = ShadowCameraSetupPtr( setup );
+                    setup->setXYPadding( itor->xyPadding );
+                    setup->calculateSplitPoints( itor->numSplits, 0.1f, 100.0f, 0.95f, 0.125f, 0.313f );
+                    setup->setSplitPadding( itor->splitPadding );
+                    setup->setNumStableSplits( itor->numStableSplits );
+                }
+                break;
                 default:
                     OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                                "Shadow Map technique not implemented or not recognized.",
-                                "CompositorShadowNode::CompositorShadowNode");
+                                 "Shadow Map technique not implemented or not recognized.",
+                                 "CompositorShadowNode::CompositorShadowNode" );
                     break;
                 }
             }
@@ -224,16 +223,16 @@ namespace Ogre
     {
         SceneNode *pseudoRootNode = 0;
         SceneManager *sceneManager = mWorkspace->getSceneManager();
-        
-        if(sceneManager)
-        {
-            if(sceneManager->getCurrentShadowNode()==this)
-                sceneManager->_setCurrentShadowNode(0, false);
-            
-            ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
-            ShadowMapCameraVec::const_iterator end  = mShadowMapCameras.end();
 
-            while( itor != end )
+        if( sceneManager )
+        {
+            if( sceneManager->getCurrentShadowNode() == this )
+                sceneManager->_setCurrentShadowNode( 0, false );
+
+            ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
+            ShadowMapCameraVec::const_iterator endt = mShadowMapCameras.end();
+
+            while( itor != endt )
             {
                 pseudoRootNode = itor->camera->getParentSceneNode();
                 sceneManager->destroyCamera( itor->camera );
@@ -245,43 +244,45 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    //An Input Iterator that is the same as doing vector<int> val( N ); and goes in increasing
-    //order (i.e. val[0] = 0; val[1] = 1; val[n-1] = n-1) but doesn't occupy N elements in memory,
-    //just one.
+    // An Input Iterator that is the same as doing vector<int> val( N ); and goes in increasing
+    // order (i.e. val[0] = 0; val[1] = 1; val[n-1] = n-1) but doesn't occupy N elements in memory,
+    // just one.
     struct MemoryLessInputIterator : public std::iterator<std::input_iterator_tag, size_t>
     {
         size_t index;
         MemoryLessInputIterator( size_t startValue ) : index( startValue ) {}
 
-        MemoryLessInputIterator& operator ++() //Prefix increment
+        MemoryLessInputIterator &operator++()  // Prefix increment
         {
             ++index;
             return *this;
         }
 
-        MemoryLessInputIterator operator ++(int) //Postfix increment
+        MemoryLessInputIterator operator++( int )  // Postfix increment
         {
             MemoryLessInputIterator copy = *this;
             ++index;
             return copy;
         }
 
-        size_t operator *() const   { return index; }
+        size_t operator*() const { return index; }
 
-        bool operator == (const MemoryLessInputIterator &r) const    { return index == r.index; }
-        bool operator != (const MemoryLessInputIterator &r) const    { return index != r.index; }
+        bool operator==( const MemoryLessInputIterator &r ) const { return index == r.index; }
+        bool operator!=( const MemoryLessInputIterator &r ) const { return index != r.index; }
     };
 
     class ShadowMappingLightCmp
     {
         LightListInfo const *mLightList;
-        uint32              mCombinedVisibilityFlags;
-        Vector3             mCameraPos;
+        uint32 mCombinedVisibilityFlags;
+        Vector3 mCameraPos;
 
     public:
         ShadowMappingLightCmp( LightListInfo const *lightList, uint32 combinedVisibilityFlags,
                                const Vector3 &cameraPos ) :
-            mLightList( lightList ), mCombinedVisibilityFlags( combinedVisibilityFlags ), mCameraPos( cameraPos )
+            mLightList( lightList ),
+            mCombinedVisibilityFlags( combinedVisibilityFlags ),
+            mCameraPos( cameraPos )
         {
         }
 
@@ -290,23 +291,23 @@ namespace Ogre
             uint32 visibilityMaskL = mLightList->visibilityMask[_l];
             uint32 visibilityMaskR = mLightList->visibilityMask[_r];
 
-            if( (visibilityMaskL & mCombinedVisibilityFlags) &&
-                !(visibilityMaskR & mCombinedVisibilityFlags) )
+            if( ( visibilityMaskL & mCombinedVisibilityFlags ) &&
+                !( visibilityMaskR & mCombinedVisibilityFlags ) )
             {
                 return true;
             }
-            else if( !(visibilityMaskL & mCombinedVisibilityFlags) &&
-                     (visibilityMaskR & mCombinedVisibilityFlags) )
+            else if( !( visibilityMaskL & mCombinedVisibilityFlags ) &&
+                     ( visibilityMaskR & mCombinedVisibilityFlags ) )
             {
                 return false;
             }
-            else if( (visibilityMaskL & VisibilityFlags::LAYER_SHADOW_CASTER) &&
-                    !(visibilityMaskR & VisibilityFlags::LAYER_SHADOW_CASTER) )
+            else if( ( visibilityMaskL & VisibilityFlags::LAYER_SHADOW_CASTER ) &&
+                     !( visibilityMaskR & VisibilityFlags::LAYER_SHADOW_CASTER ) )
             {
                 return true;
             }
-            else if( !(visibilityMaskL & VisibilityFlags::LAYER_SHADOW_CASTER) &&
-                     (visibilityMaskR & VisibilityFlags::LAYER_SHADOW_CASTER) )
+            else if( !( visibilityMaskL & VisibilityFlags::LAYER_SHADOW_CASTER ) &&
+                     ( visibilityMaskR & VisibilityFlags::LAYER_SHADOW_CASTER ) )
             {
                 return false;
             }
@@ -323,15 +324,12 @@ namespace Ogre
         LightListInfo const *mLightList;
 
     public:
-        SortByLightTypeCmp( LightListInfo const *lightList ) :
-            mLightList( lightList )
-        {
-        }
+        SortByLightTypeCmp( LightListInfo const *lightList ) : mLightList( lightList ) {}
 
         bool operator()( size_t _l, size_t _r ) const
         {
-            assert( _l < mLightList->lights.size() ); //This should never happen.
-            assert( _r < mLightList->lights.size() ); //This should never happen.
+            assert( _l < mLightList->lights.size() );  // This should never happen.
+            assert( _r < mLightList->lights.size() );  // This should never happen.
             return mLightList->lights[_l]->getType() < mLightList->lights[_r]->getType();
         }
     };
@@ -351,35 +349,35 @@ namespace Ogre
         const SceneManager *sceneManager = newCamera->getSceneManager();
         const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
 
-        uint32 combinedVisibilityFlags = viewport->getVisibilityMask() &
-                                            sceneManager->getVisibilityMask();
+        uint32 combinedVisibilityFlags =
+            viewport->getVisibilityMask() & sceneManager->getVisibilityMask();
 
         clearShadowCastingLights( globalLightList );
 
         size_t startIndex = 0;
         size_t begEmptyLightIdx = 0;
         size_t nxtEmptyLightIdx = 0;
-        findNextEmptyShadowCastingLightEntry( 1u << Light::LT_DIRECTIONAL,
-                                              &begEmptyLightIdx, &nxtEmptyLightIdx );
+        findNextEmptyShadowCastingLightEntry( 1u << Light::LT_DIRECTIONAL, &begEmptyLightIdx,
+                                              &nxtEmptyLightIdx );
 
         {
-            //SceneManager puts the directional lights first. Add them first as casters.
+            // SceneManager puts the directional lights first. Add them first as casters.
             LightArray::const_iterator itor = globalLightList.lights.begin();
-            LightArray::const_iterator end  = globalLightList.lights.end();
+            LightArray::const_iterator endt = globalLightList.lights.end();
 
-            uint32 const * RESTRICT_ALIAS visibilityMask = globalLightList.visibilityMask;
+            uint32 const *RESTRICT_ALIAS visibilityMask = globalLightList.visibilityMask;
 
-            while( itor != end && (*itor)->getType() == Light::LT_DIRECTIONAL &&
+            while( itor != endt && ( *itor )->getType() == Light::LT_DIRECTIONAL &&
                    nxtEmptyLightIdx < mShadowMapCastingLights.size() )
             {
-                if( (*visibilityMask & combinedVisibilityFlags) &&
-                    (*visibilityMask & VisibilityFlags::LAYER_SHADOW_CASTER) )
+                if( ( *visibilityMask & combinedVisibilityFlags ) &&
+                    ( *visibilityMask & VisibilityFlags::LAYER_SHADOW_CASTER ) )
                 {
-                    const size_t listIdx = itor - globalLightList.lights.begin();
+                    const size_t listIdx = static_cast<size_t>( itor - globalLightList.lights.begin() );
                     mAffectedLights[listIdx] = true;
                     mShadowMapCastingLights[nxtEmptyLightIdx] = LightClosest( *itor, listIdx, 0 );
-                    findNextEmptyShadowCastingLightEntry( 1u << Light::LT_DIRECTIONAL,
-                                                          &begEmptyLightIdx, &nxtEmptyLightIdx );
+                    findNextEmptyShadowCastingLightEntry( 1u << Light::LT_DIRECTIONAL, &begEmptyLightIdx,
+                                                          &nxtEmptyLightIdx );
                     ++mNumActiveShadowMapCastingLights;
                 }
 
@@ -387,11 +385,11 @@ namespace Ogre
                 ++itor;
             }
 
-            //Reach the end of directional lights section
-            while( itor != end && (*itor)->getType() == Light::LT_DIRECTIONAL )
+            // Reach the end of directional lights section
+            while( itor != endt && ( *itor )->getType() == Light::LT_DIRECTIONAL )
                 ++itor;
 
-            startIndex = itor - globalLightList.lights.begin();
+            startIndex = static_cast<size_t>( itor - globalLightList.lights.begin() );
         }
 
         const Vector3 &camPos( newCamera->getDerivedPosition() );
@@ -399,38 +397,44 @@ namespace Ogre
         const size_t numTmpSortedLights = std::min( mShadowMapCastingLights.size() - begEmptyLightIdx,
                                                     globalLightList.lights.size() - startIndex );
 
-        mTmpSortedIndexes.resize( numTmpSortedLights, ~0 );
-        std::partial_sort_copy( MemoryLessInputIterator( startIndex ),
-                            MemoryLessInputIterator( globalLightList.lights.size() ),
-                            mTmpSortedIndexes.begin(), mTmpSortedIndexes.end(),
-                            ShadowMappingLightCmp( &globalLightList, combinedVisibilityFlags, camPos ) );
+        mTmpSortedIndexes.resize( numTmpSortedLights, std::numeric_limits<size_t>::max() );
+        std::partial_sort_copy(
+            MemoryLessInputIterator( startIndex ),
+            MemoryLessInputIterator( globalLightList.lights.size() ), mTmpSortedIndexes.begin(),
+            mTmpSortedIndexes.end(),
+            ShadowMappingLightCmp( &globalLightList, combinedVisibilityFlags, camPos ) );
 
         std::sort( mTmpSortedIndexes.begin(), mTmpSortedIndexes.end(),
                    SortByLightTypeCmp( &globalLightList ) );
 
         vector<size_t>::type::const_iterator itor = mTmpSortedIndexes.begin();
-        vector<size_t>::type::const_iterator end  = mTmpSortedIndexes.end();
+        vector<size_t>::type::const_iterator endt = mTmpSortedIndexes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            assert( *itor < globalLightList.lights.size() ); //This should never happen.
+            assert( *itor < globalLightList.lights.size() );  // This should never happen.
 
             uint32 visibilityMask = globalLightList.visibilityMask[*itor];
-            if( !(visibilityMask & combinedVisibilityFlags) ||
-                !(visibilityMask & VisibilityFlags::LAYER_SHADOW_CASTER) ||
+            if( !( visibilityMask & combinedVisibilityFlags ) ||
+                !( visibilityMask & VisibilityFlags::LAYER_SHADOW_CASTER ) ||
                 begEmptyLightIdx >= mShadowMapCastingLights.size() )
             {
                 break;
             }
 
-            findNextEmptyShadowCastingLightEntry( 1u << globalLightList.lights[*itor]->getType(),
-                                                  &begEmptyLightIdx, &nxtEmptyLightIdx );
+            static_assert( ( 1u << Light::NUM_LIGHT_TYPES ) < std::numeric_limits<uint8>::max(),
+                           "Shadow map lights are tracking lights via u8 but there's more"
+                           "possible types than that" );
+
+            findNextEmptyShadowCastingLightEntry(
+                uint8( 1u << globalLightList.lights[*itor]->getType() ),  //
+                &begEmptyLightIdx, &nxtEmptyLightIdx );
 
             if( nxtEmptyLightIdx < mShadowMapCastingLights.size() )
             {
                 mAffectedLights[*itor] = true;
                 mShadowMapCastingLights[nxtEmptyLightIdx] =
-                        LightClosest( globalLightList.lights[*itor], *itor, 0 );
+                    LightClosest( globalLightList.lights[*itor], *itor, 0 );
                 ++mNumActiveShadowMapCastingLights;
             }
             ++itor;
@@ -438,15 +442,12 @@ namespace Ogre
 
         restoreStaticShadowCastingLights( globalLightList );
 
-        mCastersBox = sceneManager->_calculateCurrentCastersBox( viewport->getVisibilityMask(),
-                                                                 mDefinition->mMinRq,
-                                                                 mDefinition->mMaxRq );
+        mCastersBox = sceneManager->_calculateCurrentCastersBox(
+            viewport->getVisibilityMask(), (uint8)mDefinition->mMinRq, (uint8)mDefinition->mMaxRq );
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNode::findNextEmptyShadowCastingLightEntry(
-            uint8 lightTypeMask,
-            size_t * RESTRICT_ALIAS startIdx,
-            size_t * RESTRICT_ALIAS entryToUse ) const
+        uint8 lightTypeMask, size_t *RESTRICT_ALIAS startIdx, size_t *RESTRICT_ALIAS entryToUse ) const
     {
         size_t lightIdx = *startIdx;
 
@@ -471,9 +472,9 @@ namespace Ogre
             ++itCastingLight;
         }
 
-        //If we get here entryToUse == mShadowMapCastingLights.size() but startIdx may still
-        //be valid (we found no entry that supports the requested light type but there could
-        //still be empty entries for other types of light)
+        // If we get here entryToUse == mShadowMapCastingLights.size() but startIdx may still
+        // be valid (we found no entry that supports the requested light type but there could
+        // still be empty entries for other types of light)
         *startIdx = newStartIdx;
         *entryToUse = lightIdx;
     }
@@ -481,16 +482,16 @@ namespace Ogre
     void CompositorShadowNode::clearShadowCastingLights( const LightListInfo &globalLightList )
     {
         mAffectedLights.clear();
-        //Reserve last place for avoid crashing with static
-        //lights that weren't collected into globalLightList
+        // Reserve last place for avoid crashing with static
+        // lights that weren't collected into globalLightList
         mAffectedLights.resize( globalLightList.lights.size() + 1u, false );
 
         mNumActiveShadowMapCastingLights = 0;
 
         LightClosestArray::iterator itor = mShadowMapCastingLights.begin();
-        LightClosestArray::iterator end  = mShadowMapCastingLights.end();
+        LightClosestArray::iterator endt = mShadowMapCastingLights.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( !itor->isStatic )
             {
@@ -499,18 +500,18 @@ namespace Ogre
             else
             {
                 LightArray::const_iterator it = std::find( globalLightList.lights.begin(),
-                                                           globalLightList.lights.end(),
-                                                           itor->light );
+                                                           globalLightList.lights.end(), itor->light );
 
                 if( it != globalLightList.lights.end() )
                 {
-                    itor->globalIndex = it - globalLightList.lights.begin();
+                    itor->globalIndex = static_cast<size_t>( it - globalLightList.lights.begin() );
                     mAffectedLights[itor->globalIndex] = true;
 
-                    //Force this light to "not cast shadow" to fool buildClosestLightList
-                    //and prevent assigning this light into any other shadow map by accident
+                    // Force this light to "not cast shadow" to fool buildClosestLightList
+                    // and prevent assigning this light into any other shadow map by accident
                     itor->light->setCastShadows( false );
-                    globalLightList.visibilityMask[itor->globalIndex] =itor->light->getVisibilityFlags();
+                    globalLightList.visibilityMask[itor->globalIndex] =
+                        itor->light->getVisibilityFlags();
                 }
                 else
                 {
@@ -526,9 +527,9 @@ namespace Ogre
     void CompositorShadowNode::restoreStaticShadowCastingLights( const LightListInfo &globalLightList )
     {
         LightClosestArray::iterator itor = mShadowMapCastingLights.begin();
-        LightClosestArray::iterator end  = mShadowMapCastingLights.end();
+        LightClosestArray::iterator endt = mShadowMapCastingLights.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->isStatic && itor->globalIndex < globalLightList.lights.size() )
             {
@@ -539,20 +540,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorShadowNode::_update( Camera* camera, const Camera *lodCamera,
+    void CompositorShadowNode::_update( Camera *camera, const Camera *lodCamera,
                                         SceneManager *sceneManager )
     {
         ShadowMapCameraVec::iterator itShadowCamera = mShadowMapCameras.begin();
 
         buildClosestLightList( camera, lodCamera );
 
-        //Setup all the cameras
+        // Setup all the cameras
         CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator itor =
-                                                            mDefinition->mShadowMapTexDefinitions.begin();
-        CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator end  =
-                                                            mDefinition->mShadowMapTexDefinitions.end();
+            mDefinition->mShadowMapTexDefinitions.begin();
+        CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator endt =
+            mDefinition->mShadowMapTexDefinitions.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             Light const *light = mShadowMapCastingLights[itor->light].light;
 
@@ -560,11 +561,11 @@ namespace Ogre
             {
                 Camera *texCamera = itShadowCamera->camera;
 
-                //Use the material scheme of the main viewport
-                //This is required to pick up the correct shadow_caster_material and similar properties.
-                //dark_sylinc: removed. It's losing usefulness (Hlms), and it's broken (CompositorPassScene
-                //will overwrite it anyway)
-                //texCamera->getLastViewport()->setMaterialScheme( viewport->getMaterialScheme() );
+                // Use the material scheme of the main viewport
+                // This is required to pick up the correct shadow_caster_material and similar properties.
+                // dark_sylinc: removed. It's losing usefulness (Hlms), and it's broken
+                // (CompositorPassScene will overwrite it anyway)
+                // texCamera->getLastViewport()->setMaterialScheme( viewport->getMaterialScheme() );
 
                 // Associate main view camera as LOD camera
                 texCamera->setLodCamera( lodCamera );
@@ -587,28 +588,29 @@ namespace Ogre
 
                 if( itor->shadowMapTechnique == SHADOWMAP_PSSM )
                 {
-                    assert( dynamic_cast<PSSMShadowCameraSetup*>
-                            ( itShadowCamera->shadowCameraSetup.get() ) );
+                    assert( dynamic_cast<PSSMShadowCameraSetup *>(
+                        itShadowCamera->shadowCameraSetup.get() ) );
 
-                    PSSMShadowCameraSetup *pssmSetup = static_cast<PSSMShadowCameraSetup*>
-                                                        ( itShadowCamera->shadowCameraSetup.get() );
+                    PSSMShadowCameraSetup *pssmSetup =
+                        static_cast<PSSMShadowCameraSetup *>( itShadowCamera->shadowCameraSetup.get() );
                     if( pssmSetup->getSplitPoints()[0] != camera->getNearClipDistance() ||
-                        pssmSetup->getSplitPoints()[itor->numSplits-1] != light->getShadowFarDistance() )
+                        pssmSetup->getSplitPoints()[itor->numSplits - 1] !=
+                            light->getShadowFarDistance() )
                     {
                         pssmSetup->calculateSplitPoints( itor->numSplits, camera->getNearClipDistance(),
-                                                    light->getShadowFarDistance(), itor->pssmLambda, itor->splitBlend, itor->splitFade );
+                                                         light->getShadowFarDistance(), itor->pssmLambda,
+                                                         itor->splitBlend, itor->splitFade );
                     }
                 }
 
-                //Set the viewport to 0, to explictly crash if accidentally using it. Compositors
-                //may have many passes of different sizes and resolutions that affect the same shadow
-                //map and it's impossible to tell which one is "the main one" (if there's any)
+                // Set the viewport to 0, to explictly crash if accidentally using it. Compositors
+                // may have many passes of different sizes and resolutions that affect the same shadow
+                // map and it's impossible to tell which one is "the main one" (if there's any)
                 texCamera->_notifyViewport( 0 );
 
                 const Vector2 vpRealSize = itShadowCamera->scenePassesViewportSize[light->getType()];
                 itShadowCamera->shadowCameraSetup->getShadowCamera( sceneManager, camera, light,
-                                                                    texCamera, itor->split,
-                                                                    vpRealSize );
+                                                                    texCamera, itor->split, vpRealSize );
 
                 itShadowCamera->minDistance = itShadowCamera->shadowCameraSetup->getMinDistance();
                 itShadowCamera->maxDistance = itShadowCamera->shadowCameraSetup->getMaxDistance();
@@ -630,8 +632,8 @@ namespace Ogre
                 texCamera->_setNeedsDepthClamp( light->getType() == Light::LT_DIRECTIONAL &&
                                                 caps->hasCapability( RSC_DEPTH_CLAMP ) );
             }
-            //Else... this shadow map shouldn't be rendered and when used, return a blank one.
-            //The Nth closest lights don't cast shadows
+            // Else... this shadow map shouldn't be rendered and when used, return a blank one.
+            // The Nth closest lights don't cast shadows
 
             ++itShadowCamera;
             ++itor;
@@ -640,7 +642,7 @@ namespace Ogre
         SceneManager::IlluminationRenderStage previous = sceneManager->_getCurrentRenderStage();
         sceneManager->_setCurrentRenderStage( SceneManager::IRS_RENDER_TO_TEXTURE );
 
-        //Now render all passes
+        // Now render all passes
         CompositorNode::_update( lodCamera, sceneManager );
 
         sceneManager->_setCurrentRenderStage( previous );
@@ -661,8 +663,8 @@ namespace Ogre
     {
         const CompositorPassDef *passDef = pass->getDefinition();
 
-        //passDef->mShadowMapIdx may be invalid if this is not a pass
-        //tied to a shadow map in particular (e.g. clearing an atlas)
+        // passDef->mShadowMapIdx may be invalid if this is not a pass
+        // tied to a shadow map in particular (e.g. clearing an atlas)
         if( passDef->mShadowMapIdx < mShadowMapCameras.size() )
         {
             if( passDef->getType() == PASS_SCENE )
@@ -674,15 +676,15 @@ namespace Ogre
                 const CompositorTargetDef *targetPass = passDef->getParentTargetDef();
                 uint8 lightTypesLeft = targetPass->getShadowMapSupportedLightTypes();
 
-                //Get the viewport size set for this shadow node (which may vary per light type,
-                //but for the same light type, it must remain constant for all passes to the
-                //same shadow map)
+                // Get the viewport size set for this shadow node (which may vary per light type,
+                // but for the same light type, it must remain constant for all passes to the
+                // same shadow map)
                 uint32 firstBitSet = ctz( lightTypesLeft );
                 while( firstBitSet != 32u )
                 {
-                    assert( (smCamera.scenePassesViewportSize[firstBitSet].x < Real( 0.0 ) ||
-                             smCamera.scenePassesViewportSize[firstBitSet].y < Real( 0.0 ) ||
-                             smCamera.scenePassesViewportSize[firstBitSet] == vpSize) &&
+                    assert( ( smCamera.scenePassesViewportSize[firstBitSet].x < Real( 0.0 ) ||
+                              smCamera.scenePassesViewportSize[firstBitSet].y < Real( 0.0 ) ||
+                              smCamera.scenePassesViewportSize[firstBitSet] == vpSize ) &&
                             "Two scene passes to the same shadow map have different viewport sizes! "
                             "Ogre cannot determine how to prevent jittering. Maybe you meant assign "
                             "assign each light types to different passes but you assigned more than "
@@ -690,18 +692,18 @@ namespace Ogre
 
                     smCamera.scenePassesViewportSize[firstBitSet] = vpSize;
 
-                    lightTypesLeft &= ~(1u << ((uint8)firstBitSet));
+                    lightTypesLeft &= ~( 1u << ( (uint8)firstBitSet ) );
                     firstBitSet = ctz( lightTypesLeft );
                 }
 
-                assert( dynamic_cast<CompositorPassScene*>(pass) );
-                static_cast<CompositorPassScene*>(pass)->_setCustomCamera( smCamera.camera );
-                static_cast<CompositorPassScene*>(pass)->_setCustomCullCamera( smCamera.camera );
+                assert( dynamic_cast<CompositorPassScene *>( pass ) );
+                static_cast<CompositorPassScene *>( pass )->_setCustomCamera( smCamera.camera );
+                static_cast<CompositorPassScene *>( pass )->_setCustomCullCamera( smCamera.camera );
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    const LightList* CompositorShadowNode::setShadowMapsToPass( Renderable* rend, const Pass* pass,
+    const LightList *CompositorShadowNode::setShadowMapsToPass( Renderable *rend, const Pass *pass,
                                                                 AutoParamDataSource *autoParamDataSource,
                                                                 size_t startLight )
     {
@@ -710,29 +712,32 @@ namespace Ogre
         mCurrentLightList.clear();
         mCurrentLightList.reserve( lightsPerPass );
 
-        const LightList& renderableLights = rend->getLights();
+        const LightList &renderableLights = rend->getLights();
 
         size_t shadowMapStart = std::min( startLight, mShadowMapCastingLights.size() );
-        size_t shadowMapEnd   = std::min( startLight + lightsPerPass, mShadowMapCastingLights.size() );
+        size_t shadowMapEnd = std::min( startLight + lightsPerPass, mShadowMapCastingLights.size() );
 
-        //Push **all** shadow casting lights first.
+        // Push **all** shadow casting lights first.
         {
             LightClosestArray::const_iterator itor = mShadowMapCastingLights.begin() + shadowMapStart;
-            LightClosestArray::const_iterator end  = mShadowMapCastingLights.begin() + shadowMapEnd;
-            while( itor != end )
+            LightClosestArray::const_iterator endt = mShadowMapCastingLights.begin() + shadowMapEnd;
+            while( itor != endt )
             {
                 mCurrentLightList.push_back( *itor );
                 ++itor;
             }
         }
 
-        //Now again, but push non-shadow casting lights (if there's room left)
+        // Now again, but push non-shadow casting lights (if there's room left)
         {
-            size_t slotsToSkip  = std::max<ptrdiff_t>( startLight - mCurrentLightList.size(), 0 );
-            size_t slotsLeft    = std::max<ptrdiff_t>( lightsPerPass - (shadowMapEnd - shadowMapStart), 0 );
+            ptrdiff_t slotsToSkip = std::max<ptrdiff_t>(
+                static_cast<ptrdiff_t>( startLight - mCurrentLightList.size() ), 0 );
+            ptrdiff_t slotsLeft = std::max<ptrdiff_t>(
+                static_cast<ptrdiff_t>( lightsPerPass - ( shadowMapEnd - shadowMapStart ) ), 0 );
+
             LightList::const_iterator itor = renderableLights.begin();
-            LightList::const_iterator end  = renderableLights.end();
-            while( itor != end && slotsLeft > 0 )
+            LightList::const_iterator endt = renderableLights.end();
+            while( itor != endt && slotsLeft > 0 )
             {
                 if( !mAffectedLights[itor->globalIndex] )
                 {
@@ -750,32 +755,32 @@ namespace Ogre
             }
         }
 
-        //Set the shadow map texture units
+        // Set the shadow map texture units
         {
             CompositorManager2 *compoMgr = mWorkspace->getCompositorManager();
 
             assert( shadowMapStart < mDefinition->mShadowMapTexDefinitions.size() );
 
-            size_t shadowIdx=0;
+            size_t shadowIdx = 0;
             CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator shadowTexItor =
-                                        mDefinition->mShadowMapTexDefinitions.begin() + shadowMapStart;
-            CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator shadowTexItorEnd  =
-                                        mDefinition->mShadowMapTexDefinitions.end();
+                mDefinition->mShadowMapTexDefinitions.begin() + static_cast<ptrdiff_t>( shadowMapStart );
+            CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator shadowTexItorEnd =
+                mDefinition->mShadowMapTexDefinitions.end();
             while( shadowTexItor != shadowTexItorEnd && shadowIdx < pass->getNumShadowContentTextures() )
             {
                 size_t texUnitIdx = pass->_getTextureUnitWithContentTypeIndex(
-                                                    TextureUnitState::CONTENT_SHADOW, shadowIdx );
+                    TextureUnitState::CONTENT_SHADOW, shadowIdx );
                 // I know, nasty const_cast
-                TextureUnitState *texUnit = const_cast<TextureUnitState*>(
-                                                    pass->getTextureUnitState(texUnitIdx) );
+                TextureUnitState *texUnit =
+                    const_cast<TextureUnitState *>( pass->getTextureUnitState( texUnitIdx ) );
 
                 // Projective texturing needs to be disabled explicitly when using vertex shaders.
-                texUnit->setProjectiveTexturing( false, (const Frustum*)0 );
+                texUnit->setProjectiveTexturing( false, (const Frustum *)0 );
                 autoParamDataSource->setTextureProjector( mShadowMapCameras[shadowIdx].camera,
-                                                            shadowIdx );
+                                                          shadowIdx );
 
-                //TODO: textures[0] is out of bounds when using shadow atlas. Also see how what
-                //changes need to be done so that UV calculations land on the right place
+                // TODO: textures[0] is out of bounds when using shadow atlas. Also see how what
+                // changes need to be done so that UV calculations land on the right place
                 TextureGpu *shadowTex = mLocalTextures[shadowIdx];
                 texUnit->_setTexturePtr( shadowTex );
 
@@ -783,20 +788,20 @@ namespace Ogre
                 ++shadowTexItor;
             }
 
-            for( ; shadowIdx<pass->getNumShadowContentTextures(); ++shadowIdx )
+            for( ; shadowIdx < pass->getNumShadowContentTextures(); ++shadowIdx )
             {
-                //If we're here, the material supports more shadow maps than the
-                //shadow node actually renders. This probably smells slopy setup.
-                //Put blank textures
+                // If we're here, the material supports more shadow maps than the
+                // shadow node actually renders. This probably smells slopy setup.
+                // Put blank textures
                 size_t texUnitIdx = pass->_getTextureUnitWithContentTypeIndex(
-                                                    TextureUnitState::CONTENT_SHADOW, shadowIdx );
+                    TextureUnitState::CONTENT_SHADOW, shadowIdx );
                 // I know, nasty const_cast
-                TextureUnitState *texUnit = const_cast<TextureUnitState*>(
-                                                    pass->getTextureUnitState(texUnitIdx) );
+                TextureUnitState *texUnit =
+                    const_cast<TextureUnitState *>( pass->getTextureUnitState( texUnitIdx ) );
                 texUnit->_setTexturePtr( compoMgr->getNullShadowTexture( PFG_RGBA8_UNORM ) );
 
                 // Projective texturing needs to be disabled explicitly when using vertex shaders.
-                texUnit->setProjectiveTexturing( false, (const Frustum*)0 );
+                texUnit->setProjectiveTexturing( false, (const Frustum *)0 );
                 autoParamDataSource->setTextureProjector( 0, shadowIdx );
             }
         }
@@ -809,12 +814,12 @@ namespace Ogre
         return shadowMapIdx < mDefinition->mShadowMapTexDefinitions.size();
     }
     //-----------------------------------------------------------------------------------
-    bool CompositorShadowNode::isShadowMapIdxActive( uint32 shadowMapIdx ) const
+    bool CompositorShadowNode::isShadowMapIdxActive( size_t shadowMapIdx ) const
     {
         if( shadowMapIdx < mDefinition->mShadowMapTexDefinitions.size() )
         {
             const ShadowTextureDefinition &shadowTexDef =
-                    mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
+                mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
             return mShadowMapCastingLights[shadowTexDef.light].light != 0;
         }
         else
@@ -830,11 +835,11 @@ namespace Ogre
         if( shadowMapIdx < mDefinition->mShadowMapTexDefinitions.size() )
         {
             const ShadowTextureDefinition &shadowTexDef =
-                    mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
+                mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
 
             if( !mShadowMapCastingLights[shadowTexDef.light].light ||
-                (mShadowMapCastingLights[shadowTexDef.light].isStatic &&
-                !mShadowMapCastingLights[shadowTexDef.light].isDirty ) )
+                ( mShadowMapCastingLights[shadowTexDef.light].isStatic &&
+                  !mShadowMapCastingLights[shadowTexDef.light].isDirty ) )
             {
                 retVal = false;
             }
@@ -846,31 +851,31 @@ namespace Ogre
     uint8 CompositorShadowNode::getShadowMapLightTypeMask( uint32 shadowMapIdx ) const
     {
         const ShadowTextureDefinition &shadowTexDef =
-                mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
-        return 1u << mShadowMapCastingLights[shadowTexDef.light].light->getType();
+            mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
+        return uint8( 1u << mShadowMapCastingLights[shadowTexDef.light].light->getType() );
     }
     //-----------------------------------------------------------------------------------
-    const Light* CompositorShadowNode::getLightAssociatedWith( uint32 shadowMapIdx ) const
+    const Light *CompositorShadowNode::getLightAssociatedWith( size_t shadowMapIdx ) const
     {
         Light const *retVal = 0;
 
         if( shadowMapIdx < mDefinition->mShadowMapTexDefinitions.size() )
         {
             const ShadowTextureDefinition &shadowTexDef =
-                    mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
+                mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
             retVal = mShadowMapCastingLights[shadowTexDef.light].light;
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorShadowNode::getMinMaxDepthRange( const Frustum *shadowMapCamera,
-                                                    Real &outMin, Real &outMax ) const
+    void CompositorShadowNode::getMinMaxDepthRange( const Frustum *shadowMapCamera, Real &outMin,
+                                                    Real &outMax ) const
     {
         ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
-        ShadowMapCameraVec::const_iterator end  = mShadowMapCameras.end();
+        ShadowMapCameraVec::const_iterator endt = mShadowMapCameras.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->camera == shadowMapCamera )
             {
@@ -885,8 +890,8 @@ namespace Ogre
         outMax = 100000.0f;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorShadowNode::getMinMaxDepthRange( size_t shadowMapIdx,
-                                                    Real &outMin, Real &outMax ) const
+    void CompositorShadowNode::getMinMaxDepthRange( size_t shadowMapIdx, Real &outMin,
+                                                    Real &outMax ) const
     {
         outMin = mShadowMapCameras[shadowMapIdx].minDistance;
         outMax = mShadowMapCameras[shadowMapIdx].maxDistance;
@@ -895,41 +900,40 @@ namespace Ogre
     Matrix4 CompositorShadowNode::getViewProjectionMatrix( size_t shadowMapIdx ) const
     {
         const ShadowTextureDefinition &shadowTexDef =
-                mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
+            mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
         Matrix4 clipToImageSpace;
 
-        Vector3 vScale(  0.5f * shadowTexDef.uvLength.x,
-                        -0.5f * shadowTexDef.uvLength.y, 1.0f );
-        clipToImageSpace.makeTransform( Vector3(  vScale.x + shadowTexDef.uvOffset.x,
-                                                 -vScale.y + shadowTexDef.uvOffset.y, 0.0f ),
-                                        Vector3(  vScale.x, vScale.y, 1.0f ),
-                                        Quaternion::IDENTITY );
+        Vector3 vScale( 0.5f * shadowTexDef.uvLength.x, -0.5f * shadowTexDef.uvLength.y, 1.0f );
+        clipToImageSpace.makeTransform(
+            Vector3( vScale.x + shadowTexDef.uvOffset.x, -vScale.y + shadowTexDef.uvOffset.y, 0.0f ),  //
+            Vector3( vScale.x, vScale.y, 1.0f ),                                                       //
+            Quaternion::IDENTITY );
 
-        return /*PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE*/clipToImageSpace *
-                mShadowMapCameras[shadowMapIdx].camera->getProjectionMatrixWithRSDepth() *
-                mShadowMapCameras[shadowMapIdx].camera->getViewMatrix( true );
+        return /*PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE*/ clipToImageSpace *
+               mShadowMapCameras[shadowMapIdx].camera->getProjectionMatrixWithRSDepth() *
+               mShadowMapCameras[shadowMapIdx].camera->getViewMatrix( true );
     }
     //-----------------------------------------------------------------------------------
-    const Matrix4& CompositorShadowNode::getViewMatrix( size_t shadowMapIdx ) const
+    const Matrix4 &CompositorShadowNode::getViewMatrix( size_t shadowMapIdx ) const
     {
         return mShadowMapCameras[shadowMapIdx].camera->getViewMatrix( true );
     }
     //-----------------------------------------------------------------------------------
-    const vector<Real>::type* CompositorShadowNode::getPssmSplits( size_t shadowMapIdx ) const
+    const vector<Real>::type *CompositorShadowNode::getPssmSplits( size_t shadowMapIdx ) const
     {
         vector<Real>::type const *retVal = 0;
 
         if( shadowMapIdx < mShadowMapCastingLights.size() )
         {
             if( mDefinition->mShadowMapTexDefinitions[shadowMapIdx].shadowMapTechnique ==
-                SHADOWMAP_PSSM &&
+                    SHADOWMAP_PSSM &&
                 isShadowMapIdxActive( shadowMapIdx ) )
             {
-                assert( dynamic_cast<PSSMShadowCameraSetup*>(
-                        mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() ) );
+                assert( dynamic_cast<PSSMShadowCameraSetup *>(
+                    mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() ) );
 
-                PSSMShadowCameraSetup *pssmSetup = static_cast<PSSMShadowCameraSetup*>(
-                                            mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() );
+                PSSMShadowCameraSetup *pssmSetup = static_cast<PSSMShadowCameraSetup *>(
+                    mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() );
                 retVal = &pssmSetup->getSplitPoints();
             }
         }
@@ -937,21 +941,21 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    const vector<Real>::type* CompositorShadowNode::getPssmBlends( size_t shadowMapIdx ) const
+    const vector<Real>::type *CompositorShadowNode::getPssmBlends( size_t shadowMapIdx ) const
     {
         vector<Real>::type const *retVal = 0;
 
         if( shadowMapIdx < mShadowMapCastingLights.size() )
         {
             if( mDefinition->mShadowMapTexDefinitions[shadowMapIdx].shadowMapTechnique ==
-                SHADOWMAP_PSSM &&
+                    SHADOWMAP_PSSM &&
                 isShadowMapIdxActive( shadowMapIdx ) )
             {
-                assert( dynamic_cast<PSSMShadowCameraSetup*>(
-                        mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() ) );
+                assert( dynamic_cast<PSSMShadowCameraSetup *>(
+                    mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() ) );
 
-                PSSMShadowCameraSetup *pssmSetup = static_cast<PSSMShadowCameraSetup*>(
-                                            mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() );
+                PSSMShadowCameraSetup *pssmSetup = static_cast<PSSMShadowCameraSetup *>(
+                    mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() );
                 retVal = &pssmSetup->getSplitBlendPoints();
             }
         }
@@ -959,21 +963,21 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    const Real* CompositorShadowNode::getPssmFade( size_t shadowMapIdx ) const
+    const Real *CompositorShadowNode::getPssmFade( size_t shadowMapIdx ) const
     {
         Real const *retVal = 0;
 
         if( shadowMapIdx < mShadowMapCastingLights.size() )
         {
             if( mDefinition->mShadowMapTexDefinitions[shadowMapIdx].shadowMapTechnique ==
-                SHADOWMAP_PSSM &&
+                    SHADOWMAP_PSSM &&
                 isShadowMapIdxActive( shadowMapIdx ) )
             {
-                assert( dynamic_cast<PSSMShadowCameraSetup*>(
-                        mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() ) );
+                assert( dynamic_cast<PSSMShadowCameraSetup *>(
+                    mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() ) );
 
-                PSSMShadowCameraSetup *pssmSetup = static_cast<PSSMShadowCameraSetup*>(
-                                            mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() );
+                PSSMShadowCameraSetup *pssmSetup = static_cast<PSSMShadowCameraSetup *>(
+                    mShadowMapCameras[shadowMapIdx].shadowCameraSetup.get() );
                 retVal = &pssmSetup->getSplitFadePoint();
             }
         }
@@ -1006,7 +1010,7 @@ namespace Ogre
                 fAutoConstantBiasScale = 1.0f + autoFactor * shadowMapDef.autoNormalOffsetBiasScale;
             }
         }
-        return shadowMapDef.normalOffsetBias;
+        return shadowMapDef.normalOffsetBias * fAutoConstantBiasScale;
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNode::setLightFixedToShadowMap( size_t shadowMapIdx, Light *light )
@@ -1014,8 +1018,7 @@ namespace Ogre
         assert( shadowMapIdx < mShadowMapCameras.size() );
 
         const size_t lightIdx = mDefinition->mShadowMapTexDefinitions[shadowMapIdx].light;
-        assert( (!light ||
-                mDefinition->mLightTypesMask[lightIdx] & (1u << light->getType())) &&
+        assert( ( !light || mDefinition->mLightTypesMask[lightIdx] & ( 1u << light->getType() ) ) &&
                 "The shadow map says that type of light is not supported!" );
 
         mShadowMapCastingLights[lightIdx].light = light;
@@ -1028,7 +1031,7 @@ namespace Ogre
         assert( shadowMapIdx < mShadowMapCameras.size() );
 
         const ShadowTextureDefinition &shadowTexDef =
-                mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
+            mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
         const size_t lightIdx = mDefinition->mShadowMapTexDefinitions[shadowMapIdx].light;
         assert( mShadowMapCastingLights[lightIdx].isStatic &&
                 "Shadow Map is not static! Did you forget to call setLightFixedToShadowMap?" );
@@ -1038,11 +1041,11 @@ namespace Ogre
         if( includeLinked )
         {
             CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator itor =
-                    mDefinition->mShadowMapTexDefinitions.begin();
-            CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator end =
-                    mDefinition->mShadowMapTexDefinitions.end();
+                mDefinition->mShadowMapTexDefinitions.begin();
+            CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator endt =
+                mDefinition->mShadowMapTexDefinitions.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( shadowTexDef.getTextureName() == itor->getTextureName() )
                     mShadowMapCastingLights[itor->light].isDirty = true;
@@ -1059,11 +1062,11 @@ namespace Ogre
         mContiguousShadowMapTex.clear();
 
         CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator itDef =
-                mDefinition->mShadowMapTexDefinitions.begin();
+            mDefinition->mShadowMapTexDefinitions.begin();
         ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
-        ShadowMapCameraVec::const_iterator end  = mShadowMapCameras.end();
+        ShadowMapCameraVec::const_iterator endt = mShadowMapCameras.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->idxToContiguousTex >= mContiguousShadowMapTex.size() )
                 mContiguousShadowMapTex.push_back( mLocalTextures[itor->idxToLocalTextures] );
@@ -1075,15 +1078,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    ShadowNodeHelper::Resolution::Resolution() :
-        x( 0 ), y( 0 ) {}
+    ShadowNodeHelper::Resolution::Resolution() : x( 0 ), y( 0 ) {}
     //-----------------------------------------------------------------------------------
-    ShadowNodeHelper::Resolution::Resolution( uint32 _x, uint32 _y ) :
-        x( _x ), y( _y ) {}
+    ShadowNodeHelper::Resolution::Resolution( uint32 _x, uint32 _y ) : x( _x ), y( _y ) {}
     //-----------------------------------------------------------------------------------
-    uint64 ShadowNodeHelper::Resolution::asUint64(void) const
+    uint64 ShadowNodeHelper::Resolution::asUint64() const
     {
-        return ((uint64)x << (uint64)32ul) | ((uint64)y);
+        return ( (uint64)x << (uint64)32ul ) | ( (uint64)y );
     }
     //-----------------------------------------------------------------------------------
     void ShadowNodeHelper::ShadowParam::addLightType( Light::LightTypes lightType )
@@ -1092,33 +1093,46 @@ namespace Ogre
         supportedLightTypes |= 1u << lightType;
     }
     //-----------------------------------------------------------------------------------
-    void ShadowNodeHelper::createShadowNodeWithSettings( CompositorManager2 *compositorManager,
-                                                         const RenderSystemCapabilities *capabilities,
-                                                         const String &shadowNodeName,
-                                                         const ShadowNodeHelper::
-                                                         ShadowParamVec &shadowParams,
-                                                         bool useEsm,
-                                                         uint32 pointLightCubemapResolution,
-                                                         Real pssmLambda, Real splitPadding,
-                                                         Real splitBlend, Real splitFade,
-                                                         uint32 numStableSplits,
-                                                         uint32 visibilityMask )
+    void ShadowNodeHelper::createShadowNodeWithSettings(
+        CompositorManager2 *compositorManager,                 //
+        const RenderSystemCapabilities *capabilities,          //
+        const String &shadowNodeName,                          //
+        const ShadowNodeHelper::ShadowParamVec &shadowParams,  //
+        bool useEsm,                                           //
+        uint32 pointLightCubemapResolution,                    //
+        Real pssmLambda,                                       //
+        Real splitPadding,                                     //
+        Real splitBlend,                                       //
+        Real splitFade,                                        //
+        uint32 numStableSplits,                                //
+        uint32 visibilityMask,                                 //
+        float xyPadding,                                       //
+        uint8 firstRq,                                         //
+        uint8 lastRq )
     {
         typedef map<uint64, uint32>::type ResolutionsToEsmMap;
 
         ResolutionsToEsmMap resolutionsToEsmMap;
         const bool supportsCompute = capabilities->hasCapability( RSC_COMPUTE_PROGRAM );
 
-        const uint32 spotMask           = 1u << Light::LT_SPOTLIGHT;
-        const uint32 directionalMask    = 1u << Light::LT_DIRECTIONAL;
-        const uint32 pointMask          = 1u << Light::LT_POINT;
+        if( firstRq >= lastRq )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "We must satisfy firstRq < lastRq. If unsure, set firstRq = 0u & lastRq = 255u",
+                         "CompositorShadowNode::createShadowNodeWithSettings" );
+        }
+
+        const uint32 spotMask = 1u << Light::LT_SPOTLIGHT;
+        const uint32 directionalMask = 1u << Light::LT_DIRECTIONAL;
+        const uint32 pointMask = 1u << Light::LT_POINT;
         const uint32 spotAndDirMask = spotMask | directionalMask;
 
-        typedef vector< Resolution >::type ResolutionVec;
+        typedef vector<Resolution>::type ResolutionVec;
 
         size_t numExtraShadowMapsForPssmSplits = 0;
         size_t numTargetPasses = 0;
         ResolutionVec atlasResolutions;
+        FastArray<size_t> passesPerAtlas;
 
         const RenderSystem *renderSystem = compositorManager->getRenderSystem();
 
@@ -1128,13 +1142,13 @@ namespace Ogre
         else
             clearColour = ColourValue( 0.0f, 0.0f, 0.0f, 0.0f );
 
-        //Validation and data gathering
+        // Validation and data gathering
         bool hasPointLights = false;
 
         ShadowParamVec::const_iterator itor = shadowParams.begin();
-        ShadowParamVec::const_iterator end  = shadowParams.end();
+        ShadowParamVec::const_iterator endt = shadowParams.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->technique == SHADOWMAP_PSSM )
             {
@@ -1144,7 +1158,7 @@ namespace Ogre
                                  "PSSM can only only be used with directional lights!",
                                  "CompositorShadowNode::createShadowNodeWithSettings" );
                 }
-                if( (itor - shadowParams.begin()) != 0 )
+                if( ( itor - shadowParams.begin() ) != 0 )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "PSSM must be specified in the first entry of shadowParams",
@@ -1158,21 +1172,26 @@ namespace Ogre
                 }
 
                 numExtraShadowMapsForPssmSplits = itor->numPssmSplits - 1u;
-                numTargetPasses += numExtraShadowMapsForPssmSplits + 1u; //1 per PSSM split
+                numTargetPasses += numExtraShadowMapsForPssmSplits + 1u;  // 1 per PSSM split
             }
 
             if( itor->atlasId >= atlasResolutions.size() )
+            {
                 atlasResolutions.resize( itor->atlasId + 1u );
+                passesPerAtlas.resize( itor->atlasId + 1u, 0u );
+            }
 
             Resolution &resolution = atlasResolutions[itor->atlasId];
 
             const size_t numSplits = itor->technique == SHADOWMAP_PSSM ? itor->numPssmSplits : 1u;
-            for( size_t i=0; i<numSplits; ++i )
+
+            passesPerAtlas[itor->atlasId] += numSplits;
+
+            for( size_t i = 0; i < numSplits; ++i )
             {
                 if( itor->resolution[i].x == 0 || itor->resolution[i].y == 0 )
                 {
-                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "Resolution can't be 0",
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Resolution can't be 0",
                                  "CompositorShadowNode::createShadowNodeWithSettings" );
                 }
 
@@ -1183,16 +1202,15 @@ namespace Ogre
             if( itor->supportedLightTypes & pointMask )
             {
                 hasPointLights = true;
-                numTargetPasses += 7u; //6 target passes per cubemap + 1 for copy
+                numTargetPasses += 7u;  // 6 target passes per cubemap + 1 for copy
             }
-            if( itor->supportedLightTypes & spotAndDirMask &&
-                itor->technique != SHADOWMAP_PSSM )
+            if( itor->supportedLightTypes & spotAndDirMask && itor->technique != SHADOWMAP_PSSM )
             {
-                //1 per directional/spot light (for non-PSSM techniques)
+                // 1 per directional/spot light (for non-PSSM techniques)
                 numTargetPasses += 1u;
             }
 
-            if( !(itor->supportedLightTypes & (spotAndDirMask|pointMask)) )
+            if( !( itor->supportedLightTypes & ( spotAndDirMask | pointMask ) ) )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "supportedLightTypes does not indicate any valid Light::LightTypes bit",
@@ -1202,41 +1220,42 @@ namespace Ogre
             ++itor;
         }
 
-        //One clear for each atlas
+        // One clear for each atlas
         numTargetPasses += atlasResolutions.size();
         if( useEsm )
         {
-            //ESM using compute: 1 extra pass (2 subpasses) for the gaussian filter
-            //ESM using graphics: 2 extra passes for the gaussian filter
-            numTargetPasses += atlasResolutions.size() * (supportsCompute ? 1u : 2u);
+            // ESM using compute: 1 extra pass (2 subpasses) for the gaussian filter
+            // ESM using graphics: 2 extra passes for the gaussian filter
+            numTargetPasses += atlasResolutions.size() * ( supportsCompute ? 1u : 2u );
         }
 
-        //Create the shadow node definition
+        // Create the shadow node definition
         CompositorShadowNodeDef *shadowNodeDef =
-                compositorManager->addShadowNodeDefinition( shadowNodeName );
+            compositorManager->addShadowNodeDefinition( shadowNodeName );
 
         const size_t numTextures = atlasResolutions.size();
         {
-            //Define the atlases (textures)
-            shadowNodeDef->setNumLocalTextureDefinitions( numTextures + (hasPointLights ? 1u : 0u) );
-            for( size_t i=0; i<numTextures; ++i )
+            // Define the atlases (textures)
+            shadowNodeDef->setNumLocalTextureDefinitions( numTextures + ( hasPointLights ? 1u : 0u ) );
+            for( size_t i = 0; i < numTextures; ++i )
             {
                 const Resolution &atlasRes = atlasResolutions[i];
 
                 if( atlasRes.x == 0 || atlasRes.y == 0 )
                 {
                     LogManager::getSingleton().logMessage(
-                                "WARNING: atlasId is having gaps (e.g. you're using IDs 0 & 2, "
-                                "but not using 1). This leads to pointless GPU memory waste. "
-                                "Currently not using atlasId = " + StringConverter::toString( i ) );
+                        "WARNING: atlasId is having gaps (e.g. you're using IDs 0 & 2, "
+                        "but not using 1). This leads to pointless GPU memory waste. "
+                        "Currently not using atlasId = " +
+                        StringConverter::toString( i ) );
                 }
 
-                String texName = "atlas" + StringConverter::toString(i);
+                String texName = "atlas" + StringConverter::toString( i );
                 TextureDefinitionBase::TextureDefinition *texDef =
-                        shadowNodeDef->addTextureDefinition( texName );
+                    shadowNodeDef->addTextureDefinition( texName );
 
-                texDef->width   = std::max( atlasRes.x, 1u );
-                texDef->height  = std::max( atlasRes.y, 1u );
+                texDef->width = std::max( atlasRes.x, 1u );
+                texDef->height = std::max( atlasRes.y, 1u );
                 if( !useEsm )
                 {
                     texDef->format = PFG_D32_FLOAT;
@@ -1255,13 +1274,13 @@ namespace Ogre
                 RenderTargetViewDef *rtv = shadowNodeDef->addRenderTextureView( texName );
                 rtv->setForTextureDefinition( texName, texDef );
 
-                //Make all atlases with the same resolution share the same temporary
-                //gaussian filter target (to avoid wasting GPU RAM) and give
-                //each one a unique ID.
-                resolutionsToEsmMap[atlasRes.asUint64()] = i;
+                // Make all atlases with the same resolution share the same temporary
+                // gaussian filter target (to avoid wasting GPU RAM) and give
+                // each one a unique ID.
+                resolutionsToEsmMap[atlasRes.asUint64()] = (uint32)i;
             }
 
-            //Define the temporary needed to filter ESM using gaussian filters
+            // Define the temporary needed to filter ESM using gaussian filters
             if( useEsm )
             {
                 ResolutionsToEsmMap::const_iterator itEsm = resolutionsToEsmMap.begin();
@@ -1269,12 +1288,12 @@ namespace Ogre
 
                 while( itEsm != enEsm )
                 {
-                    String texName = "tmpGaussianFilter" + StringConverter::toString(itEsm->second);
+                    String texName = "tmpGaussianFilter" + StringConverter::toString( itEsm->second );
                     TextureDefinitionBase::TextureDefinition *texDef =
-                            shadowNodeDef->addTextureDefinition( texName );
+                        shadowNodeDef->addTextureDefinition( texName );
 
-                    texDef->width   = static_cast<uint32>( (itEsm->first >> (uint64)32ul) );
-                    texDef->height  = static_cast<uint32>( (itEsm->first & (uint64)0xfffffffful) );
+                    texDef->width = static_cast<uint32>( ( itEsm->first >> (uint64)32ul ) );
+                    texDef->height = static_cast<uint32>( ( itEsm->first & (uint64)0xfffffffful ) );
                     texDef->format = PFG_R16_UNORM;
                     texDef->depthBufferId = DepthBuffer::POOL_NO_DEPTH;
                     texDef->preferDepthTexture = false;
@@ -1291,15 +1310,15 @@ namespace Ogre
                 }
             }
 
-            //Define the cubemap needed by point lights
+            // Define the cubemap needed by point lights
             if( hasPointLights )
             {
                 const String texName = "tmpCubemap";
                 TextureDefinitionBase::TextureDefinition *texDef =
-                        shadowNodeDef->addTextureDefinition( texName );
+                    shadowNodeDef->addTextureDefinition( texName );
 
-                texDef->width   = pointLightCubemapResolution;
-                texDef->height  = pointLightCubemapResolution;
+                texDef->width = pointLightCubemapResolution;
+                texDef->height = pointLightCubemapResolution;
                 texDef->depthOrSlices = 6u;
                 texDef->textureType = TextureTypes::TypeCube;
                 texDef->format = useEsm ? PFG_R16_UNORM : PFG_R32_FLOAT;
@@ -1312,36 +1331,36 @@ namespace Ogre
             }
         }
 
-        //Create the shadow maps
+        // Create the shadow maps
         const size_t numShadowMaps = shadowParams.size() + numExtraShadowMapsForPssmSplits;
         shadowNodeDef->setNumShadowTextureDefinitions( numShadowMaps );
 
         itor = shadowParams.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            const size_t lightIdx = itor - shadowParams.begin();
+            const size_t lightIdx = static_cast<size_t>( itor - shadowParams.begin() );
             const ShadowParam &shadowParam = *itor;
 
             const Resolution &texResolution = atlasResolutions[shadowParam.atlasId];
 
-            const size_t numSplits =
-                    shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
+            const uint32 numSplits =
+                shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
 
-            for( size_t j=0; j<numSplits; ++j )
+            for( uint32 j = 0; j < numSplits; ++j )
             {
-                Vector2 uvOffset( shadowParam.atlasStart[j].x, shadowParam.atlasStart[j].y );
-                Vector2 uvLength( shadowParam.resolution[j].x, shadowParam.resolution[j].y );
+                Vector2 uvOffset( (Real)shadowParam.atlasStart[j].x, (Real)shadowParam.atlasStart[j].y );
+                Vector2 uvLength( (Real)shadowParam.resolution[j].x, (Real)shadowParam.resolution[j].y );
 
-                uvOffset /= Vector2( texResolution.x, texResolution.y );
-                uvLength /= Vector2( texResolution.x, texResolution.y );
+                uvOffset /= Vector2( (Real)texResolution.x, (Real)texResolution.y );
+                uvLength /= Vector2( (Real)texResolution.x, (Real)texResolution.y );
 
                 const String texName = "atlas" + StringConverter::toString( shadowParam.atlasId );
 
-                ShadowTextureDefinition *shadowTexDef =
-                        shadowNodeDef->addShadowTextureDefinition( lightIdx, j, texName,
-                                                                   uvOffset, uvLength, 0 );
+                ShadowTextureDefinition *shadowTexDef = shadowNodeDef->addShadowTextureDefinition(
+                    lightIdx, j, texName, uvOffset, uvLength, 0 );
                 shadowTexDef->shadowMapTechnique = shadowParam.technique;
+                shadowTexDef->xyPadding = xyPadding;
                 shadowTexDef->pssmLambda = pssmLambda;
                 shadowTexDef->splitPadding = splitPadding;
                 shadowTexDef->splitBlend = splitBlend;
@@ -1355,32 +1374,36 @@ namespace Ogre
 
         shadowNodeDef->setNumTargetPass( numTargetPasses );
 
-        //Create the passes for each atlas
-        for( size_t atlasId=0; atlasId<numTextures; ++atlasId )
+        // Create the passes for each atlas
+        for( size_t atlasId = 0; atlasId < numTextures; ++atlasId )
         {
             const String texName = "atlas" + StringConverter::toString( atlasId );
+
+            const bool bMergeClearAndRender = passesPerAtlas[atlasId] <= 1u;
+
+            if( !bMergeClearAndRender )
             {
-                //Atlas clear pass
+                // Atlas clear pass
                 CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( texName );
                 targetDef->setNumPasses( 1u );
 
                 CompositorPassDef *passDef = targetDef->addPass( PASS_CLEAR );
-                CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>( passDef );
+                CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef *>( passDef );
                 passClear->setAllClearColours( clearColour );
                 passClear->mClearDepth = 1.0f;
             }
 
-            //Pass scene for directional and spot lights first
-            size_t shadowMapIdx = 0;
+            // Pass scene for directional and spot lights first
+            uint32 shadowMapIdx = 0;
             itor = shadowParams.begin();
-            while( itor != end )
+            while( itor != endt )
             {
                 const ShadowParam &shadowParam = *itor;
-                const size_t numSplits = shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
-                if( shadowParam.atlasId == atlasId &&
-                    shadowParam.supportedLightTypes & spotAndDirMask )
+                const uint32 numSplits =
+                    shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
+                if( shadowParam.atlasId == atlasId && shadowParam.supportedLightTypes & spotAndDirMask )
                 {
-                    for( size_t i=0; i<numSplits; ++i )
+                    for( size_t i = 0; i < numSplits; ++i )
                     {
                         CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( texName );
                         targetDef->setShadowMapSupportedLightTypes( shadowParam.supportedLightTypes &
@@ -1389,9 +1412,17 @@ namespace Ogre
 
                         CompositorPassDef *passDef = targetDef->addPass( PASS_SCENE );
                         CompositorPassSceneDef *passScene =
-                                static_cast<CompositorPassSceneDef*>( passDef );
+                            static_cast<CompositorPassSceneDef *>( passDef );
+
+                        if( bMergeClearAndRender )
+                        {
+                            passScene->setAllLoadActions( LoadAction::Clear );
+                            passScene->mClearDepth = 1.0f;
+                        }
 
                         passScene->mShadowMapIdx = shadowMapIdx;
+                        passScene->mFirstRQ = firstRq;
+                        passScene->mLastRQ = lastRq;
                         passScene->mIncludeOverlays = false;
                         passScene->mVisibilityMask = visibilityMask;
                         ++shadowMapIdx;
@@ -1404,109 +1435,113 @@ namespace Ogre
                 ++itor;
             }
 
-            //Pass scene for point lights last
+            // Pass scene for point lights last
             shadowMapIdx = 0;
             itor = shadowParams.begin();
-            while( itor != end )
+            while( itor != endt )
             {
                 const ShadowParam &shadowParam = *itor;
-                if( shadowParam.atlasId == atlasId &&
-                    shadowParam.supportedLightTypes & pointMask )
+                if( shadowParam.atlasId == atlasId && shadowParam.supportedLightTypes & pointMask )
                 {
-                    //Render to cubemap, each face clear + render
-                    for( uint32 i=0; i<6u; ++i )
+                    // Render to cubemap, each face clear + render
+                    for( uint32 i = 0; i < 6u; ++i )
                     {
                         CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( "tmpCubemap", i );
                         targetDef->setNumPasses( 1u );
                         targetDef->setShadowMapSupportedLightTypes( shadowParam.supportedLightTypes &
                                                                     pointMask );
                         {
-                            //Scene pass
+                            // Scene pass
                             CompositorPassDef *passDef = targetDef->addPass( PASS_SCENE );
                             CompositorPassSceneDef *passScene =
-                                    static_cast<CompositorPassSceneDef*>( passDef );
+                                static_cast<CompositorPassSceneDef *>( passDef );
                             passScene->setAllLoadActions( LoadAction::Clear );
                             passScene->setAllClearColours( clearColour );
                             passScene->mClearDepth = 1.0f;
                             passScene->mCameraCubemapReorient = true;
                             passScene->mShadowMapIdx = shadowMapIdx;
+                            passScene->mFirstRQ = firstRq;
+                            passScene->mLastRQ = lastRq;
                             passScene->mIncludeOverlays = false;
                             passScene->mVisibilityMask = visibilityMask;
                         }
                     }
 
-                    //Copy to the atlas using a pass quad (Cubemap -> DPSM / Dual Paraboloid).
+                    // Copy to the atlas using a pass quad (Cubemap -> DPSM / Dual Paraboloid).
                     CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( texName );
                     targetDef->setShadowMapSupportedLightTypes( shadowParam.supportedLightTypes &
                                                                 pointMask );
                     targetDef->setNumPasses( 1u );
 
                     CompositorPassDef *passDef = targetDef->addPass( PASS_QUAD );
-                    CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( passDef );
+                    CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef *>( passDef );
                     passQuad->mMaterialIsHlms = false;
-                    passQuad->mMaterialName = useEsm ? "Ogre/DPSM/CubeToDpsmColour" : "Ogre/DPSM/CubeToDpsm";
+                    passQuad->mMaterialName =
+                        useEsm ? "Ogre/DPSM/CubeToDpsmColour" : "Ogre/DPSM/CubeToDpsm";
                     passQuad->addQuadTextureSource( 0, "tmpCubemap" );
                     passQuad->mShadowMapIdx = shadowMapIdx;
                 }
-                const size_t numSplits =
-                        shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
+                const uint32 numSplits =
+                    shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
                 shadowMapIdx += numSplits;
                 ++itor;
             }
 
-            //Apply Gaussian Filter on top of the whole atlas after we're done with it
+            // Apply Gaussian Filter on top of the whole atlas after we're done with it
             if( useEsm )
             {
                 const String tmpGaussianFilterName =
-                        "tmpGaussianFilter" +
-                        StringConverter::toString(
-                            resolutionsToEsmMap[atlasResolutions[atlasId].asUint64()] );
+                    "tmpGaussianFilter" +
+                    StringConverter::toString(
+                        resolutionsToEsmMap[atlasResolutions[atlasId].asUint64()] );
                 if( supportsCompute )
                 {
                     CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( texName );
                     targetDef->setNumPasses( 2u );
                     {
-                        //Compute pass
+                        // Compute pass
                         CompositorPassDef *passDef = targetDef->addPass( PASS_COMPUTE );
                         CompositorPassComputeDef *passCompute =
-                                static_cast<CompositorPassComputeDef*>( passDef );
+                            static_cast<CompositorPassComputeDef *>( passDef );
                         passCompute->mJobName = "ESM/GaussianLogFilterH";
                         passCompute->addTextureSource( 0, texName );
-                        passCompute->addUavSource( 0, tmpGaussianFilterName, ResourceAccess::Write,
-                                                   0, 0, PFG_R16_UNORM, false );
+                        passCompute->addUavSource( 0, tmpGaussianFilterName, ResourceAccess::Write, 0, 0,
+                                                   PFG_R16_UNORM, false );
                     }
                     {
-                        //Compute pass
+                        // Compute pass
                         CompositorPassDef *passDef = targetDef->addPass( PASS_COMPUTE );
                         CompositorPassComputeDef *passCompute =
-                                static_cast<CompositorPassComputeDef*>( passDef );
+                            static_cast<CompositorPassComputeDef *>( passDef );
                         passCompute->mJobName = "ESM/GaussianLogFilterV";
                         passCompute->addTextureSource( 0, tmpGaussianFilterName );
-                        passCompute->addUavSource( 0, texName,  ResourceAccess::Write,
-                                                   0, 0, PFG_R16_UNORM, false );
+                        passCompute->addUavSource( 0, texName, ResourceAccess::Write, 0, 0,
+                                                   PFG_R16_UNORM, false );
                     }
                 }
                 else
                 {
                     {
-                        //Quad pass
+                        // Quad pass
                         CompositorTargetDef *targetDef =
-                                shadowNodeDef->addTargetPass( tmpGaussianFilterName );
+                            shadowNodeDef->addTargetPass( tmpGaussianFilterName );
                         targetDef->setNumPasses( 1u );
 
                         CompositorPassDef *passDef = targetDef->addPass( PASS_QUAD );
-                        CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( passDef );
+                        CompositorPassQuadDef *passQuad =
+                            static_cast<CompositorPassQuadDef *>( passDef );
                         passQuad->mMaterialIsHlms = false;
                         passQuad->mMaterialName = "ESM/GaussianLogFilterH";
                         passQuad->addQuadTextureSource( 0, texName );
                     }
                     {
-                        //Quad  pass
+                        // Quad  pass
                         CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( texName );
                         targetDef->setNumPasses( 1u );
 
                         CompositorPassDef *passDef = targetDef->addPass( PASS_QUAD );
-                        CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( passDef );
+                        CompositorPassQuadDef *passQuad =
+                            static_cast<CompositorPassQuadDef *>( passDef );
                         passQuad->mMaterialIsHlms = false;
                         passQuad->mMaterialName = "ESM/GaussianLogFilterV";
                         passQuad->addQuadTextureSource( 0, tmpGaussianFilterName );
@@ -1515,4 +1550,4 @@ namespace Ogre
             }
         }
     }
-}
+}  // namespace Ogre

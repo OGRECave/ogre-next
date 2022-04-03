@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -53,7 +53,11 @@ namespace Ogre
 #       endif
 #   endif
 #elif defined ( OGRE_GCC_VISIBILITY )
-#   define _OgrePropertyExport __attribute__ ((visibility("default")))
+#   if !defined( OGRE_STATIC_LIB )
+#       define _OgrePropertyExport __attribute__ ((visibility("default")))
+#   else
+#       define _OgrePropertyExport __attribute__ ((visibility("hidden")))
+#   endif
 #else
 #   define _OgrePropertyExport
 #endif 

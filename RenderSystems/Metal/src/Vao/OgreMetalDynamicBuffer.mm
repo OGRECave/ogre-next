@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,8 +27,8 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreMetalDynamicBuffer.h"
-#include "Vao/OgreMetalVaoManager.h"
 #include "Vao/OgreMetalStagingBuffer.h"
+#include "Vao/OgreMetalVaoManager.h"
 
 #import <Metal/MTLBuffer.h>
 
@@ -41,9 +41,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    MetalDynamicBuffer::~MetalDynamicBuffer()
-    {
-    }
+    MetalDynamicBuffer::~MetalDynamicBuffer() {}
     //-----------------------------------------------------------------------------------
     size_t MetalDynamicBuffer::addMappedRange( size_t start, size_t count )
     {
@@ -64,7 +62,7 @@ namespace Ogre
         return ticket;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN MetalDynamicBuffer::map( size_t start, size_t count, size_t &outTicket )
+    void *RESTRICT_ALIAS_RETURN MetalDynamicBuffer::map( size_t start, size_t count, size_t &outTicket )
     {
         assert( start <= mVboSize && start + count <= mVboSize );
 
@@ -73,16 +71,16 @@ namespace Ogre
 
         outTicket = addMappedRange( start, count );
 
-        return static_cast<uint8*>(mMappedPtr) + start;
+        return static_cast<uint8 *>( mMappedPtr ) + start;
     }
     //-----------------------------------------------------------------------------------
     void MetalDynamicBuffer::flush( size_t ticket, size_t start, size_t count )
     {
         assert( start <= mMappedRanges[ticket].count && start + count <= mMappedRanges[ticket].count );
-//#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-//        NSRange range = NSMakeRange( mMappedRanges[ticket].start + start, count );
-//        [mVboName didModifyRange:range];
-//#endif
+        //#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        //        NSRange range = NSMakeRange( mMappedRanges[ticket].start + start, count );
+        //        [mVboName didModifyRange:range];
+        //#endif
     }
     //-----------------------------------------------------------------------------------
     void MetalDynamicBuffer::unmap( size_t ticket )

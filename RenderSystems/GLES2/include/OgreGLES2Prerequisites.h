@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -54,7 +54,7 @@ THE SOFTWARE.
 #           endif
 #       endif
 #   endif
-#elif (OGRE_PLATFORM == OGRE_PLATFORM_ANDROID) || (OGRE_PLATFORM == OGRE_PLATFORM_NACL) || (OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN)
+#elif (OGRE_PLATFORM == OGRE_PLATFORM_ANDROID) || (OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN)
 #   ifndef GL_GLEXT_PROTOTYPES
 #       define GL_GLEXT_PROTOTYPES
 #   endif
@@ -65,17 +65,6 @@ THE SOFTWARE.
 #       include <GLES2/gl2platform.h>
 #       include <GLES2/gl2.h>
 #       include <GLES2/gl2ext.h>
-#   endif
-#   if (OGRE_PLATFORM == OGRE_PLATFORM_NACL)
-#       include "ppapi/cpp/completion_callback.h"
-#       include "ppapi/cpp/instance.h"
-#       include "ppapi/c/ppp_graphics_3d.h"
-#       include "ppapi/cpp/graphics_3d.h"
-#       include "ppapi/cpp/graphics_3d_client.h"
-#       include "ppapi/gles2/gl2ext_ppapi.h"
-#       undef GL_OES_get_program_binary
-#       undef GL_OES_mapbuffer
-#       undef GL_OES_vertex_array_object
 #   endif
 #else
 #   if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32)
@@ -286,7 +275,11 @@ namespace Ogre {
 #       endif
 #   endif
 #elif defined ( OGRE_GCC_VISIBILITY )
-#    define _OgreGLES2Export  __attribute__ ((visibility("default")))
+#   if !defined( OGRE_STATIC_LIB )
+#       define _OgreGLES2Export __attribute__ ((visibility("default")))
+#   else
+#       define _OgreGLES2Export __attribute__ ((visibility("hidden")))
+#   endif
 #else
 #    define _OgreGLES2Export
 #endif

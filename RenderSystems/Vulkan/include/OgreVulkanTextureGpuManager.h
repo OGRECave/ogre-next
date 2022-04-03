@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -50,7 +50,7 @@ namespace Ogre
     /** \addtogroup Resources
      *  @{
      */
-    class _OgreVulkanExport VulkanTextureGpuManager : public TextureGpuManager
+    class _OgreVulkanExport VulkanTextureGpuManager final : public TextureGpuManager
     {
     protected:
         struct BlankTexture
@@ -80,25 +80,25 @@ namespace Ogre
 
         bool mCanRestrictImageViewUsage;
 
-        virtual TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                               IdString name, uint32 textureFlags,
-                                               TextureTypes::TextureTypes initialType );
-        virtual StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
-                                                          uint32 slices, PixelFormatGpu pixelFormat );
-        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture );
+        TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                       IdString name, uint32 textureFlags,
+                                       TextureTypes::TextureTypes initialType ) override;
+        StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                  uint32 slices, PixelFormatGpu pixelFormat ) override;
+        void destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
-        virtual AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
-                                                                  uint32 depthOrSlices,
-                                                                  TextureTypes::TextureTypes textureType,
-                                                                  PixelFormatGpu pixelFormatFamily );
+        AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
+                                                          uint32 depthOrSlices,
+                                                          TextureTypes::TextureTypes textureType,
+                                                          PixelFormatGpu pixelFormatFamily ) override;
 
     public:
         VulkanTextureGpuManager( VulkanVaoManager *vaoManager, RenderSystem *renderSystem,
                                  VulkanDevice *device, bool bCanRestrictImageViewUsage );
-        virtual ~VulkanTextureGpuManager();
+        ~VulkanTextureGpuManager() override;
 
         TextureGpu *createTextureGpuWindow( VulkanWindow *window );
-        TextureGpu *createWindowDepthBuffer( void );
+        TextureGpu *createWindowDepthBuffer();
 
         VkImage getBlankTextureVulkanName( TextureTypes::TextureTypes textureType ) const;
         VkImageView getBlankTextureView( TextureTypes::TextureTypes textureType ) const;
@@ -111,10 +111,10 @@ namespace Ogre
 
         VulkanDevice *getDevice() const { return mDevice; }
 
-        bool canRestrictImageViewUsage( void ) const { return mCanRestrictImageViewUsage; }
+        bool canRestrictImageViewUsage() const { return mCanRestrictImageViewUsage; }
 
-        virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
-                                   uint32 textureFlags ) const;
+        bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
+                           uint32 textureFlags ) const override;
     };
 
     /** @} */

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,11 +29,11 @@ THE SOFTWARE.
 #ifndef _OgreCompositorPassIblSpecularDef_H_
 #define _OgreCompositorPassIblSpecularDef_H_
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
 #include "OgreCommon.h"
 #include "OgreVector4.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -64,7 +64,7 @@ namespace Ogre
         CompositorNodeDef *mParentNodeDef;
 
     public:
-        CompositorPassIblSpecularDef( CompositorNodeDef *parentNodeDef,
+        CompositorPassIblSpecularDef( CompositorNodeDef   *parentNodeDef,
                                       CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_IBL_SPECULAR, parentTargetDef ),
             mSamplesPerIteration( 128.0 ),
@@ -84,8 +84,8 @@ namespace Ogre
         void setCubemapInput( const String &textureName );
         void setCubemapOutput( const String &textureName );
 
-        IdString getInputTextureName( void ) const { return mInputTextureName; }
-        IdString getOutputTextureName( void ) const { return mOutputTextureName; }
+        IdString getInputTextureName() const { return mInputTextureName; }
+        IdString getOutputTextureName() const { return mOutputTextureName; }
     };
 
     /** @} */

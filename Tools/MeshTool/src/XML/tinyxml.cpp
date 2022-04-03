@@ -29,8 +29,14 @@ distribution.
 #include <iostream>
 #endif
 
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wsuggest-override"
+#endif
 #include "XML/tinyxml.h"
-
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif
 
 bool TiXmlBase::condenseWhiteSpace = true;
 

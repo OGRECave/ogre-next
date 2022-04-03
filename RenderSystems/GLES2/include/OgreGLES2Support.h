@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -57,7 +57,7 @@ namespace Ogre
             * @return string with error message
             */
             virtual String validateConfig() = 0;
-            virtual ConfigOptionMap& getConfigOptions(void);
+            virtual ConfigOptionMap& getConfigOptions();
             virtual RenderWindow* createWindow(bool autoCreateWindow,
                                                GLES2RenderSystem *renderSystem,
                                                const String& windowTitle) = 0;
@@ -71,7 +71,7 @@ namespace Ogre
             /**
             * Get vendor information
             */
-            const String& getGLVendor(void) const
+            const String& getGLVendor() const
             {
                 return mVendor;
             }
@@ -79,7 +79,7 @@ namespace Ogre
             /**
             * Get version information
             */
-            const DriverVersion& getGLVersion(void) const
+            const DriverVersion& getGLVersion() const
             {
                 return mVersion;
             }
@@ -87,7 +87,7 @@ namespace Ogre
             /**
             * Get shader cache path
             */
-            const String& getShaderCachePath(void) const
+            const String& getShaderCachePath() const
             {
                 return mShaderCachePath;
             }
@@ -95,7 +95,7 @@ namespace Ogre
             /**
             * Get shader library path
             */
-            const String& getShaderLibraryPath(void) const
+            const String& getShaderLibraryPath() const
             {
                 return mShaderLibraryPath;
             }

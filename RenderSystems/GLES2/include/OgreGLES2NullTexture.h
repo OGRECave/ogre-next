@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -46,18 +46,18 @@ namespace Ogre
     protected:
 
         /// @copydoc Texture::createInternalResourcesImpl
-        virtual void createInternalResourcesImpl(void);
+        virtual void createInternalResourcesImpl();
         /// @copydoc Resource::freeInternalResourcesImpl
-        virtual void freeInternalResourcesImpl(void);
+        virtual void freeInternalResourcesImpl();
 
-        virtual void _autogenerateMipmaps(void) {}
+        virtual void _autogenerateMipmaps() {}
 
         /// @copydoc Resource::prepareImpl
-        virtual void prepareImpl(void);
+        virtual void prepareImpl();
         /// @copydoc Resource::unprepareImpl
-        virtual void unprepareImpl(void);
+        virtual void unprepareImpl();
         /// @copydoc Resource::loadImpl
-        virtual void loadImpl(void);
+        virtual void loadImpl();
 
         /// internal method, create GLES2HardwarePixelBuffers for every face and mipmap level.
         void _createSurfaceList();
@@ -71,7 +71,7 @@ namespace v1
         RenderTexture   *mDummyRenderTexture;
 
         virtual PixelBox lockImpl( const Box &lockBox, LockOptions options );
-        virtual void unlockImpl(void);
+        virtual void unlockImpl();
 
         /// Notify HardwarePixelBuffer of destruction of render target.
         virtual void _clearSliceRTT( size_t zoffset );
@@ -100,11 +100,11 @@ namespace v1
         virtual bool requiresTextureFlipping() const { return true; }
 
         /// @copydoc RenderTarget::getForceDisableColourWrites
-        virtual bool getForceDisableColourWrites(void) const    { return true; }
+        virtual bool getForceDisableColourWrites() const    { return true; }
 
         /// Null buffers never resolve; only colour buffers do. (we need mFsaaResolveDirty to be always
         /// true so that the proper path is taken in GLES2Texture::getGLID)
-        virtual void setFsaaResolveDirty(void)  {}
+        virtual void setFsaaResolveDirty()  {}
         virtual void setFsaaResolved()          {}
 
         /// Notifies the ultimate texture owner the buffer changed

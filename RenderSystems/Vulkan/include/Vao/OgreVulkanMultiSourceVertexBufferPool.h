@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -31,12 +31,13 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
-#include "Vao/OgreMultiSourceVertexBufferPool.h"
-#include "Vao/OgreVulkanVaoManager.h"
+#ifdef _OGRE_MULTISOURCE_VBO
+#    include "Vao/OgreMultiSourceVertexBufferPool.h"
+#    include "Vao/OgreVulkanVaoManager.h"
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanMultiSourceVertexBufferPool : public MultiSourceVertexBufferPool
+    class _OgreVulkanExport VulkanMultiSourceVertexBufferPool final : public MultiSourceVertexBufferPool
     {
         size_t mVboPoolIndex;
 
@@ -57,18 +58,19 @@ namespace Ogre
         /// Deallocates a buffer allocated with @allocateVbo. All params are in vertices, not bytes.
         void deallocateVbo( size_t bufferOffset, size_t numVertices );
 
-        virtual void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers );
+        void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers ) override;
 
     public:
         VulkanMultiSourceVertexBufferPool( size_t vboPoolIndex,
                                            const VertexElement2VecVec &vertexElementsBySource,
                                            size_t maxVertices, BufferType bufferType,
                                            size_t internalBufferStart, VaoManager *vaoManager );
-        virtual ~VulkanMultiSourceVertexBufferPool();
+        ~VulkanMultiSourceVertexBufferPool() override;
 
         void createVertexBuffers( VertexBufferPackedVec &outVertexBuffers, size_t numVertices,
                                   void *const *initialData, bool keepAsShadow );
     };
 }  // namespace Ogre
 
+#endif
 #endif

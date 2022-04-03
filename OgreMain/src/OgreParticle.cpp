@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,34 +28,29 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreParticle.h"
+
 #include "OgreParticleSystem.h"
 
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    void Particle::setRotation(const Radian& rot)
+    void Particle::setRotation( const Radian &rot )
     {
         mRotation = rot;
-        if (mRotation != Radian(0))
+        if( mRotation != Radian( 0 ) )
             mParentSystem->_notifyParticleRotated();
     }
     //-----------------------------------------------------------------------
-    void Particle::setDimensions(Real width, Real height)
+    void Particle::setDimensions( Real width, Real height )
     {
-        assert(width >= 0 && height >= 0 && "Particle dimensions can not be negative");
+        assert( width >= 0 && height >= 0 && "Particle dimensions can not be negative" );
         mOwnDimensions = true;
         mWidth = width;
         mHeight = height;
         mParentSystem->_notifyParticleResized();
     }
     //-----------------------------------------------------------------------
-    void Particle::_notifyOwner(ParticleSystem* owner)
-    {
-        mParentSystem = owner;
-    }
+    void Particle::_notifyOwner( ParticleSystem *owner ) { mParentSystem = owner; }
     //-----------------------------------------------------------------------
-    void Particle::resetDimensions(void)
-    {
-        mOwnDimensions = false;
-    }
-}
+    void Particle::resetDimensions() { mOwnDimensions = false; }
+}  // namespace Ogre

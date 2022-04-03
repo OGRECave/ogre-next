@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,11 +26,11 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreAxisAlignedBox.h"
 
 namespace Ogre
 {
     const AxisAlignedBox AxisAlignedBox::BOX_NULL;
-    const AxisAlignedBox AxisAlignedBox::BOX_INFINITE(AxisAlignedBox::EXTENT_INFINITE);
-}
-
+    const AxisAlignedBox AxisAlignedBox::BOX_INFINITE( AxisAlignedBox::EXTENT_INFINITE );
+}  // namespace Ogre

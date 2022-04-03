@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,14 +28,14 @@ THE SOFTWARE.
 #ifndef __RotationAffector_H__
 #define __RotationAffector_H__
 
-#include "OgreMath.h"
 #include "OgreParticleFXPrerequisites.h"
+
+#include "OgreMath.h"
 #include "OgreParticleAffector.h"
 #include "OgreStringInterface.h"
 
-namespace Ogre {
-
-
+namespace Ogre
+{
     /** This plugin subclass of ParticleAffector allows you to alter the rotation of particles.
     @remarks
         This class supplies the ParticleAffector implementation required to make the particle expand
@@ -44,73 +44,70 @@ namespace Ogre {
     class _OgreParticleFXExport RotationAffector : public ParticleAffector
     {
     public:
-        /// Command object for particle emitter  - see ParamCommand 
-        class CmdRotationSpeedRangeStart : public ParamCommand
+        /// Command object for particle emitter  - see ParamCommand
+        class CmdRotationSpeedRangeStart final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        /// Command object for particle emitter  - see ParamCommand 
-        class CmdRotationSpeedRangeEnd : public ParamCommand
+        /// Command object for particle emitter  - see ParamCommand
+        class CmdRotationSpeedRangeEnd final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        /// Command object for particle emitter  - see ParamCommand 
-        class CmdRotationRangeStart : public ParamCommand
+        /// Command object for particle emitter  - see ParamCommand
+        class CmdRotationRangeStart final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        /// Command object for particle emitter  - see ParamCommand 
-        class CmdRotationRangeEnd : public ParamCommand
+        /// Command object for particle emitter  - see ParamCommand
+        class CmdRotationRangeEnd final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Default constructor. */
-        RotationAffector(ParticleSystem* psys);
+        RotationAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _initParticle(Particle* pParticle);
+        void _initParticle( Particle *pParticle ) override;
 
         /** See ParticleAffector. */
-        void _affectParticles(ParticleSystem* pSystem, Real timeElapsed);
-
-
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         /** Sets the minimum rotation speed of particles to be emitted. */
-        void setRotationSpeedRangeStart(const Radian& angle);
+        void setRotationSpeedRangeStart( const Radian &angle );
         /** Sets the maximum rotation speed of particles to be emitted. */
-        void setRotationSpeedRangeEnd(const Radian& angle);
+        void setRotationSpeedRangeEnd( const Radian &angle );
         /** Gets the minimum rotation speed of particles to be emitted. */
-        const Radian& getRotationSpeedRangeStart(void) const;
+        const Radian &getRotationSpeedRangeStart() const;
         /** Gets the maximum rotation speed of particles to be emitted. */
-        const Radian& getRotationSpeedRangeEnd(void) const;
+        const Radian &getRotationSpeedRangeEnd() const;
 
-        
         /** Sets the minimum rotation angle of particles to be emitted. */
-        void setRotationRangeStart(const Radian& angle);
+        void setRotationRangeStart( const Radian &angle );
         /** Sets the maximum rotation angle of particles to be emitted. */
-        void setRotationRangeEnd(const Radian& angle);
+        void setRotationRangeEnd( const Radian &angle );
         /** Gets the minimum rotation of particles to be emitted. */
-        const Radian& getRotationRangeStart(void) const;
+        const Radian &getRotationRangeStart() const;
         /** Gets the maximum rotation of particles to be emitted. */
-        const Radian& getRotationRangeEnd(void) const;
+        const Radian &getRotationRangeEnd() const;
 
-        static CmdRotationSpeedRangeStart   msRotationSpeedRangeStartCmd;
-        static CmdRotationSpeedRangeEnd     msRotationSpeedRangeEndCmd;
-        static CmdRotationRangeStart        msRotationRangeStartCmd;
-        static CmdRotationRangeEnd          msRotationRangeEndCmd;
-        
+        static CmdRotationSpeedRangeStart msRotationSpeedRangeStartCmd;
+        static CmdRotationSpeedRangeEnd   msRotationSpeedRangeEndCmd;
+        static CmdRotationRangeStart      msRotationRangeStartCmd;
+        static CmdRotationRangeEnd        msRotationRangeEndCmd;
+
     protected:
         /// Initial rotation speed of particles (range start)
         Radian mRotationSpeedRangeStart;
@@ -120,12 +117,8 @@ namespace Ogre {
         Radian mRotationRangeStart;
         /// Initial rotation angle of particles (range end)
         Radian mRotationRangeEnd;
-
     };
 
-
-}
-
+}  // namespace Ogre
 
 #endif
-

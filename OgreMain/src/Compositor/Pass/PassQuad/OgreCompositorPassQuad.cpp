@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,18 +29,18 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
-#include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
-#include "Compositor/OgreCompositorNodeDef.h"
-#include "Compositor/OgreCompositorNode.h"
+
 #include "Compositor/OgreCompositorManager2.h"
+#include "Compositor/OgreCompositorNode.h"
+#include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
+#include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
+#include "OgreCamera.h"
 #include "OgreMaterialManager.h"
 #include "OgreRectangle2D.h"
 #include "OgreSceneManager.h"
 #include "OgreTechnique.h"
-#include "OgreCamera.h"
 
 namespace Ogre
 {
@@ -49,7 +49,7 @@ namespace Ogre
         if( textureName.find( "global_" ) == 0 )
         {
             mParentNodeDef->addTextureSourceName( textureName, 0,
-                                                    TextureDefinitionBase::TEXTURE_GLOBAL );
+                                                  TextureDefinitionBase::TEXTURE_GLOBAL );
         }
         mTextureSources.push_back( QuadTextureSource( texUnitIdx, textureName ) );
     }
@@ -59,21 +59,20 @@ namespace Ogre
                                             Camera *defaultCamera, CompositorNode *parentNode,
                                             const RenderTargetViewDef *rtv, Real horizonalTexelOffset,
                                             Real verticalTexelOffset ) :
-                CompositorPass( definition, parentNode ),
-                mDefinition( definition ),
-                mFsRect( 0 ),
-                mDatablock( 0 ),
-                mPass( 0 ),
-                mCamera( 0 ),
-                mHorizonalTexelOffset( horizonalTexelOffset ),
-                mVerticalTexelOffset( verticalTexelOffset )
+        CompositorPass( definition, parentNode ),
+        mDefinition( definition ),
+        mFsRect( 0 ),
+        mDatablock( 0 ),
+        mPass( 0 ),
+        mCamera( 0 ),
+        mHorizonalTexelOffset( horizonalTexelOffset ),
+        mVerticalTexelOffset( verticalTexelOffset )
     {
         initialize( rtv );
 
         const CompositorWorkspace *workspace = parentNode->getWorkspace();
 
-        if( mDefinition->mUseQuad ||
-            mDefinition->mFrustumCorners != CompositorPassQuadDef::NO_CORNERS )
+        if( mDefinition->mUseQuad || mDefinition->mFrustumCorners != CompositorPassQuadDef::NO_CORNERS )
         {
             mFsRect = workspace->getCompositorManager()->getSharedFullscreenQuad();
         }
@@ -89,23 +88,28 @@ namespace Ogre
         else
         {
             mMaterial = MaterialManager::getSingleton().getByName( mDefinition->mMaterialName );
-            if( mMaterial.isNull() )
+            if( !mMaterial )
             {
-                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Cannot find material '" +
-                             mDefinition->mMaterialName + "'", "CompositorPassQuad::CompositorPassQuad" );
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Cannot find material '" + mDefinition->mMaterialName + "'",
+                             "CompositorPassQuad::CompositorPassQuad" );
             }
             mMaterial->load();
 
             if( !mMaterial->getBestTechnique() )
             {
-                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Cannot find best technique for material '" +
-                             mDefinition->mMaterialName + "'", "CompositorPassQuad::CompositorPassQuad" );
+                OGRE_EXCEPT(
+                    Exception::ERR_ITEM_NOT_FOUND,
+                    "Cannot find best technique for material '" + mDefinition->mMaterialName + "'",
+                    "CompositorPassQuad::CompositorPassQuad" );
             }
 
             if( !mMaterial->getBestTechnique()->getPass( 0 ) )
             {
-                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Best technique must have a Pass! Material '" +
-                             mDefinition->mMaterialName + "'", "CompositorPassQuad::CompositorPassQuad" );
+                OGRE_EXCEPT(
+                    Exception::ERR_ITEM_NOT_FOUND,
+                    "Best technique must have a Pass! Material '" + mDefinition->mMaterialName + "'",
+                    "CompositorPassQuad::CompositorPassQuad" );
             }
 
             mPass = mMaterial->getBestTechnique()->getPass( 0 );
@@ -120,11 +124,11 @@ namespace Ogre
         else
             mCamera = defaultCamera;
 
-        //List all our RTT dependencies
+        // List all our RTT dependencies
         const CompositorPassQuadDef::TextureSources &textureSources = mDefinition->getTextureSources();
         CompositorPassQuadDef::TextureSources::const_iterator itor = textureSources.begin();
-        CompositorPassQuadDef::TextureSources::const_iterator end  = textureSources.end();
-        while( itor != end )
+        CompositorPassQuadDef::TextureSources::const_iterator endt = textureSources.end();
+        while( itor != endt )
         {
             TextureGpu *channel = mParentNode->getDefinedTexture( itor->textureName );
             CompositorTextureVec::const_iterator it = mTextureDependencies.begin();
@@ -143,12 +147,12 @@ namespace Ogre
     {
         if( mPass )
         {
-            //Reset the names of our material textures, so that material could be reloaded later
+            // Reset the names of our material textures, so that material could be reloaded later
             const CompositorPassQuadDef::TextureSources &textureSources =
-                                                                mDefinition->getTextureSources();
+                mDefinition->getTextureSources();
             CompositorPassQuadDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassQuadDef::TextureSources::const_iterator end  = textureSources.end();
-            while( itor != end )
+            CompositorPassQuadDef::TextureSources::const_iterator endt = textureSources.end();
+            while( itor != endt )
             {
                 if( itor->texUnitIdx < mPass->getNumTextureUnitStates() )
                 {
@@ -163,7 +167,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassQuad::execute( const Camera *lodCamera )
     {
-        //Execute a limited number of times?
+        // Execute a limited number of times?
         if( mNumPassesLeft != std::numeric_limits<uint32>::max() )
         {
             if( !mNumPassesLeft )
@@ -177,12 +181,12 @@ namespace Ogre
 
         if( mPass )
         {
-            //Set the material textures every frame (we don't clone the material)
+            // Set the material textures every frame (we don't clone the material)
             const CompositorPassQuadDef::TextureSources &textureSources =
-                                                                mDefinition->getTextureSources();
+                mDefinition->getTextureSources();
             CompositorPassQuadDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassQuadDef::TextureSources::const_iterator end  = textureSources.end();
-            while( itor != end )
+            CompositorPassQuadDef::TextureSources::const_iterator endt = textureSources.end();
+            while( itor != endt )
             {
                 if( itor->texUnitIdx < mPass->getNumTextureUnitStates() )
                 {
@@ -208,7 +212,7 @@ namespace Ogre
             const Real hOffset = 2.0f * mHorizonalTexelOffset / mAnyTargetTexture->getWidth();
             const Real vOffset = 2.0f * mVerticalTexelOffset / mAnyTargetTexture->getHeight();
 
-            //The rectangle is shared, set the corners each time
+            // The rectangle is shared, set the corners each time
             mFsRect->setCorners( 0.0f + hOffset, 0.0f - vOffset, 1.0f, 1.0f );
         }
 
@@ -230,26 +234,23 @@ namespace Ogre
         if( mDefinition->mFrustumCorners >= CompositorPassQuadDef::VIEW_SPACE_CORNERS &&
             mDefinition->mFrustumCorners <= CompositorPassQuadDef::VIEW_SPACE_CORNERS_NORMALIZED_LH )
         {
-            const Ogre::Matrix4 &viewMat = mCamera->getViewMatrix(true);
+            const Ogre::Matrix4 &viewMat = mCamera->getViewMatrix( true );
             const Vector3 *corners = mCamera->getWorldSpaceCorners();
 
-            Vector3 finalCorners[4] =
-            {
-                viewMat * corners[5], viewMat * corners[6],
-                viewMat * corners[4], viewMat * corners[7]
-            };
+            Vector3 finalCorners[4] = { viewMat * corners[5], viewMat * corners[6], viewMat * corners[4],
+                                        viewMat * corners[7] };
 
             if( mDefinition->mFrustumCorners >= CompositorPassQuadDef::VIEW_SPACE_CORNERS_NORMALIZED )
             {
                 const Real farPlane = mCamera->getFarClipDistance();
-                for( int i=0; i<4; ++i )
+                for( int i = 0; i < 4; ++i )
                 {
-                    //finalCorners[i].z should always be == 1; (ignoring precision errors)
+                    // finalCorners[i].z should always be == 1; (ignoring precision errors)
                     finalCorners[i] /= farPlane;
                     if( mDefinition->mFrustumCorners ==
-                            CompositorPassQuadDef::VIEW_SPACE_CORNERS_NORMALIZED_LH )
+                        CompositorPassQuadDef::VIEW_SPACE_CORNERS_NORMALIZED_LH )
                     {
-                        //Make it left handed: Flip Z.
+                        // Make it left handed: Flip Z.
                         finalCorners[i].z = -finalCorners[i].z;
                     }
                 }
@@ -291,7 +292,7 @@ namespace Ogre
 
         setRenderPassDescToCurrent();
 
-        //Fire the listener in case it wants to change anything
+        // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
 
 #if TODO_OGRE_2_2
@@ -299,14 +300,14 @@ namespace Ogre
 #endif
 
         SceneManager *sceneManager = mCamera->getSceneManager();
-        sceneManager->_setCamerasInProgress( CamerasInProgress(mCamera) );
+        sceneManager->_setCamerasInProgress( CamerasInProgress( mCamera ) );
         sceneManager->_setCurrentCompositorPass( this );
 
-        //sceneManager->_injectRenderWithPass( mPass, mFsRect, mCamera, false, false );
-        if( !mMaterial.isNull() )
-            mFsRect->setMaterial( mMaterial ); //Low level material
+        // sceneManager->_injectRenderWithPass( mPass, mFsRect, mCamera, false, false );
+        if( mMaterial )
+            mFsRect->setMaterial( mMaterial );  // Low level material
         else
-            mFsRect->setDatablock( mDatablock ); //Hlms material
+            mFsRect->setDatablock( mDatablock );  // Hlms material
 
         RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
         renderSystem->executeRenderPassDescriptorDelayedActions();
@@ -315,7 +316,7 @@ namespace Ogre
 
         if( mDefinition->mCameraCubemapReorient )
         {
-            //Restore orientation
+            // Restore orientation
             mCamera->setOrientation( oldCameraOrientation );
         }
 

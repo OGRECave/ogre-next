@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,11 +26,11 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-
 #ifndef _OgreMetalProgramFactory_H_
 #define _OgreMetalProgramFactory_H_
 
 #import "OgreMetalPrerequisites.h"
+
 #import "OgreHighLevelGpuProgramManager.h"
 
 @protocol MTLFunction;
@@ -38,23 +38,26 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Factory class for Metal programs. */
-    class _OgreMetalExport MetalProgramFactory : public HighLevelGpuProgramFactory
+    class _OgreMetalExport MetalProgramFactory final : public HighLevelGpuProgramFactory
     {
     protected:
         static String sLanguageName;
-        MetalDevice *mDevice;
+        MetalDevice  *mDevice;
 
     public:
         MetalProgramFactory( MetalDevice *device );
-        virtual ~MetalProgramFactory(void);
+        ~MetalProgramFactory() override;
+
         /// Get the name of the language this factory creates programs for
-        const String& getLanguage(void) const;
+        const String &getLanguage() const override;
+
         /// Create an instance of MetalProgram
-        HighLevelGpuProgram* create(ResourceManager* creator, 
-            const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader);
-        void destroy(HighLevelGpuProgram* prog);
+        HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
+                                     const String &group, bool isManual,
+                                     ManualResourceLoader *loader ) override;
+
+        void destroy( HighLevelGpuProgram *prog ) override;
     };
 }
 
-#endif // __MetalProgramFactory_H__
+#endif  // __MetalProgramFactory_H__

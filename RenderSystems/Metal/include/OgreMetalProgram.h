@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,11 +29,14 @@ THE SOFTWARE.
 #define _OgreMetalProgram_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreHighLevelGpuProgram.h"
+
 #include "OgreHardwareVertexBuffer.h"
+
 #import <Metal/MTLLibrary.h>
-#import <Metal/MTLRenderPipeline.h>
 #import <Metal/MTLRenderCommandEncoder.h>
+#import <Metal/MTLRenderPipeline.h>
 
 @class MTLArgument;
 
@@ -43,125 +46,125 @@ namespace Ogre
         Shader Language.
     @remarks
         Metal has no target assembler or entry point specification like DirectX 9 HLSL.
-        Vertex and Fragment shaders only have one entry point called "main".  
+        Vertex and Fragment shaders only have one entry point called "main".
         When a shader is compiled, microcode is generated but can not be accessed by
         the application.
         Metal also does not provide assembler low level output after compiling.  The Metal Render
-        system assumes that the Gpu program is a Metal Gpu program so MetalProgram will create a 
+        system assumes that the Gpu program is a Metal Gpu program so MetalProgram will create a
         MetalGpuProgram that is subclassed from MetalGpuProgram for the low level implementation.
         The MetalProgram class will create a shader object and compile the source but will
         not create a program object.  It's up to MetalGpuProgram class to request a program object
         to link the shader object to.
     */
-    class _OgreMetalExport MetalProgram : public HighLevelGpuProgram
+    class _OgreMetalExport MetalProgram final : public HighLevelGpuProgram
     {
     public:
-
         /// Command object for setting macro defines
         class CmdPreprocessorDefines : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const;
+            void   doSet( void *target, const String &val );
         };
-        
+
         /// Command object for setting entry point
         class CmdEntryPoint : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const;
+            void   doSet( void *target, const String &val );
         };
 
         /// Command object for setting vertex shader pair
         class CmdShaderReflectionPairHint : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const;
+            void   doSet( void *target, const String &val );
         };
 
-        MetalProgram( ResourceManager* creator, const String& name, ResourceHandle handle,
-                      const String& group, bool isManual, ManualResourceLoader* loader,
+        MetalProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
+                      const String &group, bool isManual, ManualResourceLoader *loader,
                       MetalDevice *device );
-        virtual ~MetalProgram();
+        ~MetalProgram() override;
 
         /// Overridden
-        bool getPassTransformStates(void) const;
-        bool getPassSurfaceAndLightStates(void) const;
-        bool getPassFogStates(void) const;
+        bool getPassTransformStates() const override;
+        bool getPassSurfaceAndLightStates() const override;
+        bool getPassFogStates() const override;
 
         /// Sets the preprocessor defines use to compile the program.
-        void setPreprocessorDefines(const String& defines) { mPreprocessorDefines = defines; }
+        void setPreprocessorDefines( const String &defines ) { mPreprocessorDefines = defines; }
         /// Sets the preprocessor defines use to compile the program.
-        const String& getPreprocessorDefines(void) const { return mPreprocessorDefines; }
+        const String &getPreprocessorDefines() const { return mPreprocessorDefines; }
 
         /** Sets the entry point for this program ie the first method called. */
-        void setEntryPoint(const String& entryPoint) { mEntryPoint = entryPoint; }
+        void setEntryPoint( const String &entryPoint ) { mEntryPoint = entryPoint; }
         /** Gets the entry point defined for this program. */
-        const String& getEntryPoint(void) const { return mEntryPoint; }
+        const String &getEntryPoint() const { return mEntryPoint; }
 
         /// If this shader is a pixel shader, sets a vertex shader that can be paired with us
         /// for properly getting reflection data for GPU program parameters.
-        void setShaderReflectionPairHint(const String& shaderName)
-                                                    { mShaderReflectionPairHint = shaderName; }
+        void setShaderReflectionPairHint( const String &shaderName )
+        {
+            mShaderReflectionPairHint = shaderName;
+        }
         /// Gets the paired shader. See setShaderReflectionPairHint.
-        const String& getShaderReflectionPairHint(void) const       { return mShaderReflectionPairHint; }
+        const String &getShaderReflectionPairHint() const { return mShaderReflectionPairHint; }
 
         /// Overridden from GpuProgram
-        const String& getLanguage(void) const;
+        const String &getLanguage() const override;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters(void);
+        GpuProgramParametersSharedPtr createParameters() override;
 
         /// Retrieve the Metal function object
-        id<MTLFunction> getMetalFunction(void) const    { return mFunction; }
+        id<MTLFunction> getMetalFunction() const { return mFunction; }
 
         /// Compile source into shader object
-        bool compile(const bool checkErrors = false);
-        void analyzeComputeParameters(void);
-        void analyzeRenderParameters(void);
+        bool        compile( const bool checkErrors = false );
+        void        analyzeComputeParameters();
+        void        analyzeRenderParameters();
         static void autoFillDummyVertexAttributesForShader( id<MTLFunction> inVertexFunction,
                                                             MTLRenderPipelineDescriptor *outPsd );
-        void analyzeParameterBuffer( MTLArgument *arg );
+        void        analyzeParameterBuffer( MTLArgument *arg );
 
         /// In bytes.
-        uint32 getBufferRequiredSize(void) const;
+        uint32 getBufferRequiredSize() const;
         /// dstData must be able to hold at least getBufferRequiredSize
-        void updateBuffers( const GpuProgramParametersSharedPtr &params,
-                            uint8 * RESTRICT_ALIAS dstData );
+        void updateBuffers( const GpuProgramParametersSharedPtr &params, uint8 *RESTRICT_ALIAS dstData );
 
     protected:
-        static CmdPreprocessorDefines msCmdPreprocessorDefines;
-        static CmdEntryPoint msCmdEntryPoint;
+        static CmdPreprocessorDefines      msCmdPreprocessorDefines;
+        static CmdEntryPoint               msCmdEntryPoint;
         static CmdShaderReflectionPairHint msCmdShaderReflectionPairHint;
 
         /** Internal load implementation, must be implemented by subclasses.
-        */
-        void loadFromSource(void);
+         */
+        void loadFromSource() override;
         /** Internal method for creating a dummy low-level program for this
         high-level program. Metal does not give access to the low level implementation of the
         shader so this method creates an object sub-classed from MetalGpuProgram just to be
         compatible with MetalRenderSystem.
         */
-        void createLowLevelImpl(void);
+        void createLowLevelImpl() override;
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl(void);
+        void unloadHighLevelImpl() override;
         /// Overridden from HighLevelGpuProgram
-        void unloadImpl(void);
+        void unloadImpl() override;
 
         /// Populate the passed parameters with name->index map
-        void populateParameterNames(GpuProgramParametersSharedPtr params);
+        void populateParameterNames( GpuProgramParametersSharedPtr params ) override;
         /// Populate the passed parameters with name->index map, must be overridden
-        void buildConstantDefinitions(void) const;
+        void buildConstantDefinitions() const override;
 
-        void parsePreprocessorDefinitions( NSMutableDictionary<NSString*, NSObject*> *inOutMacros );
+        void parsePreprocessorDefinitions( NSMutableDictionary<NSString *, NSObject *> *inOutMacros );
 
     private:
-        id <MTLLibrary> mLibrary;
-        id <MTLFunction> mFunction;
+        id<MTLLibrary>  mLibrary;
+        id<MTLFunction> mFunction;
 
         MetalDevice *mDevice;
-        
+
         /// Flag indicating if shader object successfully compiled
         bool mCompiled;
         /// Preprocessor options
@@ -169,10 +172,10 @@ namespace Ogre
         String mEntryPoint;
 
         vector<GpuConstantDefinition>::type mConstantDefsSorted;
-        uint32 mConstantsBytesToWrite;
+        uint32                              mConstantsBytesToWrite;
 
         String mShaderReflectionPairHint;
     };
 }
 
-#endif // __MetalProgram_H__
+#endif  // __MetalProgram_H__

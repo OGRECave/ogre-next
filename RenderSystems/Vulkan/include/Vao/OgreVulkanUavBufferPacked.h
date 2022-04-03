@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -39,19 +39,19 @@ namespace Ogre
 {
     class VulkanBufferInterface;
 
-    class _OgreVulkanExport VulkanUavBufferPacked : public UavBufferPacked
+    class _OgreVulkanExport VulkanUavBufferPacked final : public UavBufferPacked
     {
     protected:
-        virtual TexBufferPacked *getAsTexBufferImpl( PixelFormatGpu pixelFormat );
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl( void );
+        TexBufferPacked *getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
+        ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() override;
 
     public:
         VulkanUavBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
                                uint32 bindFlags, void *initialData, bool keepAsShadow,
                                VaoManager *vaoManager, VulkanBufferInterface *bufferInterface );
-        ~VulkanUavBufferPacked();
+        ~VulkanUavBufferPacked() override;
 
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
 
         void setupBufferInfo( VkDescriptorBufferInfo &outBufferInfo, size_t offset, size_t sizeBytes );
     };

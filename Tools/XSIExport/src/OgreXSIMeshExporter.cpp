@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -138,7 +138,7 @@ namespace Ogre {
         }
 
         // write the data into a mesh
-        buildMesh(mMesh.getPointer(), mergeSubMeshes, !skeletonName.empty(), 
+        buildMesh(mMesh.get(), mergeSubMeshes, !skeletonName.empty(), 
             vertexAnimation, animList, fps);
 
         // progress report
@@ -193,12 +193,12 @@ namespace Ogre {
         mMesh->_setBounds(currBounds, false);
 
         MeshSerializer serializer;
-        serializer.exportMesh(mMesh.getPointer(), fileName);
+        serializer.exportMesh(mMesh.get(), fileName);
 
         // progress report
         ProgressManager::getSingleton().progress();
 
-        mMesh.setNull();
+        mMesh.reset();
 
 
     }

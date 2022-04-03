@@ -29,42 +29,41 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-#ifndef __D3D11StereoDriverNVIDIA_H__
-#define __D3D11StereoDriverNVIDIA_H__
+#    ifndef __D3D11StereoDriverNVIDIA_H__
+#        define __D3D11StereoDriverNVIDIA_H__
 
-#include "OgreD3D11StereoDriverImpl.h"
-#include "OgreD3D11Device.h"
-#include "nvapi.h"
+#        include "OgreD3D11Device.h"
+#        include "OgreD3D11StereoDriverImpl.h"
+#        include "nvapi.h"
 
-namespace Ogre {
-
-  /** Interface of the NVIDIA stereo driver */
-  class _OgreD3D11Export D3D11StereoDriverNVIDIA : public D3D11StereoDriverImpl
-  {
-    // Interface
+namespace Ogre
+{
+    /** Interface of the NVIDIA stereo driver */
+    class _OgreD3D11Export D3D11StereoDriverNVIDIA : public D3D11StereoDriverImpl
+    {
+        // Interface
     public:
-      D3D11StereoDriverNVIDIA();
-      virtual ~D3D11StereoDriverNVIDIA();
-	  virtual bool addRenderWindow(D3D11RenderWindowBase* renderWindow);
-      virtual bool removeRenderWindow(const String& renderWindowName);
-      virtual bool isStereoEnabled(const String& renderWindowName);
-      virtual bool setDrawBuffer(ColourBufferType colourBuffer);
+        D3D11StereoDriverNVIDIA();
+        virtual ~D3D11StereoDriverNVIDIA();
+        virtual bool addRenderWindow( D3D11RenderWindowBase *renderWindow );
+        virtual bool removeRenderWindow( const String &renderWindowName );
+        virtual bool isStereoEnabled( const String &renderWindowName );
+        virtual bool setDrawBuffer( ColourBufferType colourBuffer );
 
     protected:
-      bool logErrorMessage(NvAPI_Status nvStatus);
+        bool logErrorMessage( NvAPI_Status nvStatus );
 
-      typedef struct OgreStereoHandle
-      {
-		  D3D11RenderWindowBase* renderWindow;
-          StereoHandle nvapiStereoHandle;
-          NvU8 isStereoOn;
-      };
+        typedef struct OgreStereoHandle
+        {
+            D3D11RenderWindowBase *renderWindow;
+            StereoHandle           nvapiStereoHandle;
+            NvU8                   isStereoOn;
+        };
 
-      typedef map<String, OgreStereoHandle>::type StereoHandleMap;
-      StereoHandleMap mStereoMap;
-      NvU8 mStereoEnabled;
-  };
-}
+        typedef map<String, OgreStereoHandle>::type StereoHandleMap;
+        StereoHandleMap                             mStereoMap;
+        NvU8                                        mStereoEnabled;
+    };
+}  // namespace Ogre
+#    endif
 #endif
-#endif
-

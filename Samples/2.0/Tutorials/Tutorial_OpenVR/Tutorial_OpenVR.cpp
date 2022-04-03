@@ -12,13 +12,13 @@
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
-#include "OpenVRCompositorListener.h"
 #include "NullCompositorListener.h"
 #include "OgreLogManager.h"
+#include "OpenVRCompositorListener.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
@@ -43,7 +43,7 @@ const bool c_useRDM = true;
 
 namespace Demo
 {
-    Ogre::CompositorWorkspace* Tutorial_OpenVRGraphicsSystem::setupCompositor()
+    Ogre::CompositorWorkspace *Tutorial_OpenVRGraphicsSystem::setupCompositor()
     {
         initOpenVR();
 
@@ -55,39 +55,29 @@ namespace Demo
                                                 "Tutorial_OpenVRMirrorWindowWorkspace", true );
     }
 
-    void Tutorial_OpenVRGraphicsSystem::setupResources(void)
+    void Tutorial_OpenVRGraphicsSystem::setupResources()
     {
         GraphicsSystem::setupResources();
 
         Ogre::ConfigFile cf;
-        cf.load(mResourcePath + "resources2.cfg");
-
-        Ogre::String dataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
-
-        if( dataFolder.empty() )
-            dataFolder = "./";
-        else if( *(dataFolder.end() - 1) != '/' )
-            dataFolder += "/";
+        cf.load( mResourcePath + "resources2.cfg" );
 
         Ogre::String originalDataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 
         if( originalDataFolder.empty() )
             originalDataFolder = "./";
-        else if( *(originalDataFolder.end() - 1) != '/' )
+        else if( *( originalDataFolder.end() - 1 ) != '/' )
             originalDataFolder += "/";
 
-        const char *c_locations[] =
-        {
-            "Hlms/Common/GLSL",
-            "Hlms/Common/HLSL",
-            "Hlms/Common/Metal",
-            "Compute/Tools/Any",
-            "Compute/VR",
-            "Compute/VR/Foveated",
-            "2.0/scripts/materials/PbsMaterials"
-        };
+        const char *c_locations[] = { "Hlms/Common/GLSL",
+                                      "Hlms/Common/HLSL",
+                                      "Hlms/Common/Metal",
+                                      "Compute/Tools/Any",
+                                      "Compute/VR",
+                                      "Compute/VR/Foveated",
+                                      "2.0/scripts/materials/PbsMaterials" };
 
-        for( size_t i=0; i<sizeof(c_locations) / sizeof(c_locations[0]); ++i )
+        for( size_t i = 0; i < sizeof( c_locations ) / sizeof( c_locations[0] ); ++i )
         {
             Ogre::String dataFolder = originalDataFolder + c_locations[i];
             addResourceLocation( dataFolder, "FileSystem", "General" );
@@ -98,25 +88,25 @@ namespace Demo
     // Purpose: Helper to get a string from a tracked device property and turn it
     //			into a std::string
     //-----------------------------------------------------------------------------
-    std::string Tutorial_OpenVRGraphicsSystem::GetTrackedDeviceString(vr::TrackedDeviceIndex_t unDevice,
-                                                                      vr::TrackedDeviceProperty prop,
-                                                                      vr::TrackedPropertyError *peError)
+    std::string Tutorial_OpenVRGraphicsSystem::GetTrackedDeviceString(
+        vr::TrackedDeviceIndex_t unDevice, vr::TrackedDeviceProperty prop,
+        vr::TrackedPropertyError *peError )
     {
         vr::IVRSystem *vrSystem = vr::VRSystem();
-        uint32_t unRequiredBufferLen = vrSystem->GetStringTrackedDeviceProperty( unDevice, prop,
-                                                                                 NULL, 0, peError );
+        uint32_t unRequiredBufferLen =
+            vrSystem->GetStringTrackedDeviceProperty( unDevice, prop, NULL, 0, peError );
         if( unRequiredBufferLen == 0 )
             return "";
 
-        char *pchBuffer = new char[ unRequiredBufferLen ];
+        char *pchBuffer = new char[unRequiredBufferLen];
         unRequiredBufferLen = vrSystem->GetStringTrackedDeviceProperty( unDevice, prop, pchBuffer,
                                                                         unRequiredBufferLen, peError );
         std::string sResult = pchBuffer;
-        delete [] pchBuffer;
+        delete[] pchBuffer;
         return sResult;
     }
 
-    void Tutorial_OpenVRGraphicsSystem::initOpenVR(void)
+    void Tutorial_OpenVRGraphicsSystem::initOpenVR()
     {
         const Ogre::IdString workspaceName =
             c_useRDM ? "Tutorial_OpenVRWorkspaceRDM" : "Tutorial_OpenVRWorkspaceNoRDM";
@@ -137,12 +127,12 @@ namespace Demo
         mStrDriver = "No Driver";
         mStrDisplay = "No Display";
 
-        mStrDriver = GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd,
-                                             vr::Prop_TrackingSystemName_String );
-        mStrDisplay = GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd,
-                                              vr::Prop_SerialNumber_String );
-        mDeviceModelNumber = GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd,
-                                                     vr::Prop_ModelNumber_String );
+        mStrDriver =
+            GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd, vr::Prop_TrackingSystemName_String );
+        mStrDisplay =
+            GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd, vr::Prop_SerialNumber_String );
+        mDeviceModelNumber =
+            GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd, vr::Prop_ModelNumber_String );
 
         initCompositorVR();
 
@@ -150,13 +140,12 @@ namespace Demo
         mHMD->GetRecommendedRenderTargetSize( &width, &height );
 
         Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
-        //Radial Density Mask requires the VR texture to be UAV & reinterpretable
-        mVrTexture = textureManager->createOrRetrieveTexture( "OpenVR Both Eyes",
-                                                              Ogre::GpuPageOutStrategy::Discard,
-                                                              Ogre::TextureFlags::RenderToTexture |
-                                                              Ogre::TextureFlags::Uav |
-                                                              Ogre::TextureFlags::Reinterpretable,
-                                                              Ogre::TextureTypes::Type2D );
+        // Radial Density Mask requires the VR texture to be UAV & reinterpretable
+        mVrTexture = textureManager->createOrRetrieveTexture(
+            "OpenVR Both Eyes", Ogre::GpuPageOutStrategy::Discard,
+            Ogre::TextureFlags::RenderToTexture | Ogre::TextureFlags::Uav |
+                Ogre::TextureFlags::Reinterpretable,
+            Ogre::TextureTypes::Type2D );
         mVrTexture->setResolution( width << 1u, height );
         mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
         if( !c_useRDM )
@@ -171,18 +160,16 @@ namespace Demo
 
         createHiddenAreaMeshVR();
 
-        mOvrCompositorListener = new OpenVRCompositorListener( mHMD, vr::VRCompositor(), mVrTexture,
-                                                               mRoot, mVrWorkspace,
-                                                               mCamera, mVrCullCamera );
+        mOvrCompositorListener = new OpenVRCompositorListener(
+            mHMD, vr::VRCompositor(), mVrTexture, mRoot, mVrWorkspace, mCamera, mVrCullCamera );
 #else
         Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
-        //Radial Density Mask requires the VR texture to be UAV & reinterpretable
-        mVrTexture = textureManager->createOrRetrieveTexture( "OpenVR Both Eyes",
-                                                              Ogre::GpuPageOutStrategy::Discard,
-                                                              Ogre::TextureFlags::RenderToTexture |
-                                                              Ogre::TextureFlags::Uav |
-                                                              Ogre::TextureFlags::Reinterpretable,
-                                                              Ogre::TextureTypes::Type2D );
+        // Radial Density Mask requires the VR texture to be UAV & reinterpretable
+        mVrTexture = textureManager->createOrRetrieveTexture(
+            "OpenVR Both Eyes", Ogre::GpuPageOutStrategy::Discard,
+            Ogre::TextureFlags::RenderToTexture | Ogre::TextureFlags::Uav |
+                Ogre::TextureFlags::Reinterpretable,
+            Ogre::TextureTypes::Type2D );
         mVrTexture->setResolution( 3704u, 2056u );
         mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
         if( !c_useRDM )
@@ -195,7 +182,7 @@ namespace Demo
         mVrWorkspace = compositorManager->addWorkspace( mSceneManager, mVrTexture, mCamera,
                                                         workspaceName, true, 0 );
 
-        mDeviceModelNumber = "Vive"; // Pretend we have a Vive so the HAM works.
+        mDeviceModelNumber = "Vive";  // Pretend we have a Vive so the HAM works.
         createHiddenAreaMeshVR();
 
         mNullCompositorListener =
@@ -203,9 +190,9 @@ namespace Demo
 #endif
     }
 
-    void Tutorial_OpenVRGraphicsSystem::initCompositorVR(void)
+    void Tutorial_OpenVRGraphicsSystem::initCompositorVR()
     {
-        if ( !vr::VRCompositor() )
+        if( !vr::VRCompositor() )
         {
             OGRE_EXCEPT( Ogre::Exception::ERR_RENDERINGAPI_ERROR,
                          "VR Compositor initialization failed. See log file for details",
@@ -213,7 +200,7 @@ namespace Demo
         }
     }
 
-    void Tutorial_OpenVRGraphicsSystem::createHiddenAreaMeshVR(void)
+    void Tutorial_OpenVRGraphicsSystem::createHiddenAreaMeshVR()
     {
         try
         {
@@ -233,7 +220,7 @@ namespace Demo
         }
     }
 
-    void Tutorial_OpenVRGraphicsSystem::deinitialize(void)
+    void Tutorial_OpenVRGraphicsSystem::deinitialize()
     {
         delete mOvrCompositorListener;
         mOvrCompositorListener = 0;
@@ -265,11 +252,9 @@ namespace Demo
 
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
-        Tutorial_OpenVRGameState *gfxGameState = new Tutorial_OpenVRGameState(
-        "" );
+        Tutorial_OpenVRGameState *gfxGameState = new Tutorial_OpenVRGameState( "" );
 
         GraphicsSystem *graphicsSystem = new Tutorial_OpenVRGraphicsSystem( gfxGameState );
 
@@ -279,17 +264,12 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
-    {
-        return "OpenVR Sample";
-    }
-}
+    const char *MainEntryPoints::getWindowTitle() { return "OpenVR Sample"; }
+}  // namespace Demo

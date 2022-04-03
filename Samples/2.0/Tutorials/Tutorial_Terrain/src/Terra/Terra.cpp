@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,22 +28,20 @@ THE SOFTWARE.
 
 #include "Terra/Terra.h"
 
-#include "Terra/TerraShadowMapper.h"
-#include "Terra/Hlms/OgreHlmsTerra.h"
-
-#include "OgreImage2.h"
-
 #include "Compositor/OgreCompositorChannel.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "OgreCamera.h"
 #include "OgreDepthBuffer.h"
+#include "OgreImage2.h"
 #include "OgreMaterialManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreSceneManager.h"
 #include "OgreStagingTexture.h"
 #include "OgreTechnique.h"
 #include "OgreTextureGpuManager.h"
+#include "Terra/Hlms/OgreHlmsTerra.h"
+#include "Terra/TerraShadowMapper.h"
 
 namespace Ogre
 {
@@ -146,12 +144,12 @@ namespace Ogre
         return value;
     }
     //-----------------------------------------------------------------------------------
-    void Terra::destroyHeightmapTexture(void)
+    void Terra::destroyHeightmapTexture()
     {
         if( m_heightMapTex )
         {
             TextureGpuManager *textureManager =
-                    mManager->getDestinationRenderSystem()->getTextureGpuManager();
+                mManager->getDestinationRenderSystem()->getTextureGpuManager();
             textureManager->destroyTexture( m_heightMapTex );
             m_heightMapTex = 0;
         }
@@ -161,8 +159,7 @@ namespace Ogre
     {
         destroyHeightmapTexture();
 
-        if( image.getPixelFormat() != PFG_R8_UNORM &&
-            image.getPixelFormat() != PFG_R16_UNORM &&
+        if( image.getPixelFormat() != PFG_R8_UNORM && image.getPixelFormat() != PFG_R16_UNORM &&
             image.getPixelFormat() != PFG_R32_FLOAT )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -170,10 +167,10 @@ namespace Ogre
                          "Terra::createHeightmapTexture" );
         }
 
-        //const uint8 numMipmaps = image.getNumMipmaps();
+        // const uint8 numMipmaps = image.getNumMipmaps();
 
         TextureGpuManager *textureManager =
-                mManager->getDestinationRenderSystem()->getTextureGpuManager();
+            mManager->getDestinationRenderSystem()->getTextureGpuManager();
         m_heightUnormScaled = m_height;
         PixelFormatGpu pixelFormat = image.getPixelFormat();
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
@@ -187,23 +184,19 @@ namespace Ogre
 #endif
 
         m_heightMapTex = textureManager->createTexture(
-                             "HeightMapTex" + StringConverter::toString( getId() ),
-                             GpuPageOutStrategy::SaveToSystemRam,
-                             TextureFlags::ManualTexture,
-                             TextureTypes::Type2D );
+            "HeightMapTex" + StringConverter::toString( getId() ), GpuPageOutStrategy::SaveToSystemRam,
+            TextureFlags::ManualTexture, TextureTypes::Type2D );
         m_heightMapTex->setResolution( image.getWidth(), image.getHeight() );
         m_heightMapTex->setPixelFormat( pixelFormat );
         m_heightMapTex->scheduleTransitionTo( GpuResidency::Resident );
 
-        StagingTexture *stagingTexture = textureManager->getStagingTexture( image.getWidth(),
-                                                                            image.getHeight(),
-                                                                            1u, 1u,
-                                                                            pixelFormat );
+        StagingTexture *stagingTexture = textureManager->getStagingTexture(
+            image.getWidth(), image.getHeight(), 1u, 1u, pixelFormat );
         stagingTexture->startMapRegion();
-        TextureBox texBox = stagingTexture->mapRegion( image.getWidth(), image.getHeight(), 1u, 1u,
-                                                       pixelFormat );
+        TextureBox texBox =
+            stagingTexture->mapRegion( image.getWidth(), image.getHeight(), 1u, 1u, pixelFormat );
 
-        //for( uint8 mip=0; mip<numMipmaps; ++mip )
+        // for( uint8 mip=0; mip<numMipmaps; ++mip )
         texBox.copyFrom( image.getData( 0 ) );
         stagingTexture->stopMapRegion();
         stagingTexture->upload( texBox, m_heightMapTex, 0, 0, 0 );
@@ -211,61 +204,61 @@ namespace Ogre
         stagingTexture = 0;
     }
     //-----------------------------------------------------------------------------------
-    void Terra::createHeightmap( Image2 &image, const String &imageName,
-                                 bool bMinimizeMemoryConsumption )
+    void Terra::createHeightmap( Image2 &image, const String &imageName, bool bMinimizeMemoryConsumption,
+                                 bool bLowResShadow )
     {
         m_width = image.getWidth();
         m_depth = image.getHeight();
-        m_depthWidthRatio = m_depth / (float)(m_width);
+        m_depthWidthRatio = m_depth / (float)( m_width );
         m_invWidth = 1.0f / m_width;
         m_invDepth = 1.0f / m_depth;
 
-        //image.generateMipmaps( false, Image::FILTER_NEAREST );
+        // image.generateMipmaps( false, Image::FILTER_NEAREST );
 
         createHeightmapTexture( image, imageName );
 
         m_heightMap.resize( m_width * m_depth );
 
-        float fBpp = (float)(PixelFormatGpuUtils::getBytesPerPixel( image.getPixelFormat() ) << 3u);
+        float fBpp = (float)( PixelFormatGpuUtils::getBytesPerPixel( image.getPixelFormat() ) << 3u );
         const float maxValue = powf( 2.0f, fBpp ) - 1.0f;
         const float invMaxValue = 1.0f / maxValue;
 
         if( image.getPixelFormat() == PFG_R8_UNORM )
         {
-            for( uint32 y=0; y<m_depth; ++y )
+            for( uint32 y = 0; y < m_depth; ++y )
             {
-                TextureBox texBox = image.getData(0);
-                const uint8 * RESTRICT_ALIAS data =
-                        reinterpret_cast<uint8*RESTRICT_ALIAS>( texBox.at( 0, y, 0 ) );
-                for( uint32 x=0; x<m_width; ++x )
-                    m_heightMap[y * m_width + x] = (data[x] * invMaxValue) * m_height;
+                TextureBox texBox = image.getData( 0 );
+                const uint8 *RESTRICT_ALIAS data =
+                    reinterpret_cast<uint8 * RESTRICT_ALIAS>( texBox.at( 0, y, 0 ) );
+                for( uint32 x = 0; x < m_width; ++x )
+                    m_heightMap[y * m_width + x] = ( data[x] * invMaxValue ) * m_height;
             }
         }
         else if( image.getPixelFormat() == PFG_R16_UNORM )
         {
-            TextureBox texBox = image.getData(0);
-            for( uint32 y=0; y<m_depth; ++y )
+            TextureBox texBox = image.getData( 0 );
+            for( uint32 y = 0; y < m_depth; ++y )
             {
-                const uint16 * RESTRICT_ALIAS data =
-                        reinterpret_cast<uint16*RESTRICT_ALIAS>( texBox.at( 0, y, 0 ) );
-                for( uint32 x=0; x<m_width; ++x )
-                    m_heightMap[y * m_width + x] = (data[x] * invMaxValue) * m_height;
+                const uint16 *RESTRICT_ALIAS data =
+                    reinterpret_cast<uint16 * RESTRICT_ALIAS>( texBox.at( 0, y, 0 ) );
+                for( uint32 x = 0; x < m_width; ++x )
+                    m_heightMap[y * m_width + x] = ( data[x] * invMaxValue ) * m_height;
             }
         }
         else if( image.getPixelFormat() == PFG_R32_FLOAT )
         {
-            TextureBox texBox = image.getData(0);
-            for( uint32 y=0; y<m_depth; ++y )
+            TextureBox texBox = image.getData( 0 );
+            for( uint32 y = 0; y < m_depth; ++y )
             {
-                const float * RESTRICT_ALIAS data =
-                        reinterpret_cast<float*RESTRICT_ALIAS>( texBox.at( 0, y, 0 ) );
-                for( uint32 x=0; x<m_width; ++x )
+                const float *RESTRICT_ALIAS data =
+                    reinterpret_cast<float * RESTRICT_ALIAS>( texBox.at( 0, y, 0 ) );
+                for( uint32 x = 0; x < m_width; ++x )
                     m_heightMap[y * m_width + x] = data[x] * m_height;
             }
         }
 
-        m_xzRelativeSize = m_xzDimensions / Vector2( static_cast<Real>(m_width),
-                                                     static_cast<Real>(m_depth) );
+        m_xzRelativeSize =
+            m_xzDimensions / Vector2( static_cast<Real>( m_width ), static_cast<Real>( m_depth ) );
 
         createNormalTexture();
 
@@ -275,12 +268,12 @@ namespace Ogre
         m_shadowMapper = new ShadowMapper( mManager, m_compositorManager );
         m_shadowMapper->_setSharedResources( m_sharedResources );
         m_shadowMapper->setMinimizeMemoryConsumption( bMinimizeMemoryConsumption );
-        m_shadowMapper->createShadowMap( getId(), m_heightMapTex );
+        m_shadowMapper->createShadowMap( getId(), m_heightMapTex, bLowResShadow );
 
         calculateOptimumSkirtSize();
     }
     //-----------------------------------------------------------------------------------
-    void Terra::createNormalTexture(void)
+    void Terra::createNormalTexture()
     {
         destroyNormalTexture();
 
@@ -308,12 +301,11 @@ namespace Ogre
             "TMP NormalMapTex_", getId(), m_sharedResources, TerraSharedResources::TmpNormalMap,
             m_normalMapTex, TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
 
-        MaterialPtr normalMapperMat = MaterialManager::getSingleton().load(
-                    "Terra/GpuNormalMapper",
-                    ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ).
-                staticCast<Material>();
-        Pass *pass = normalMapperMat->getTechnique(0)->getPass(0);
-        TextureUnitState *texUnit = pass->getTextureUnitState(0);
+        MaterialPtr normalMapperMat =
+            std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+                "Terra/GpuNormalMapper", ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
+        Pass *pass = normalMapperMat->getTechnique( 0 )->getPass( 0 );
+        TextureUnitState *texUnit = pass->getTextureUnitState( 0 );
         texUnit->setTexture( m_heightMapTex );
 
         // Normalize vScale for better precision in the shader math
@@ -321,9 +313,9 @@ namespace Ogre
             Vector3( m_xzRelativeSize.x, m_heightUnormScaled, m_xzRelativeSize.y ).normalisedCopy();
 
         GpuProgramParametersSharedPtr psParams = pass->getFragmentProgramParameters();
-        psParams->setNamedConstant( "heightMapResolution", Vector4( static_cast<Real>( m_width ),
-                                                                    static_cast<Real>( m_depth ),
-                                                                    1, 1 ) );
+        psParams->setNamedConstant(
+            "heightMapResolution",
+            Vector4( static_cast<Real>( m_width ), static_cast<Real>( m_depth ), 1, 1 ) );
         psParams->setNamedConstant( "vScale", vScale );
 
         CompositorChannelVec finalTargetChannels( 1, CompositorChannel() );
@@ -352,34 +344,35 @@ namespace Ogre
         TerraSharedResources::destroyTempTexture( m_sharedResources, tmpRtt );
     }
     //-----------------------------------------------------------------------------------
-    void Terra::destroyNormalTexture(void)
+    void Terra::destroyNormalTexture()
     {
         if( m_normalMapTex )
         {
             TextureGpuManager *textureManager =
-                    mManager->getDestinationRenderSystem()->getTextureGpuManager();
+                mManager->getDestinationRenderSystem()->getTextureGpuManager();
             textureManager->destroyTexture( m_normalMapTex );
             m_normalMapTex = 0;
         }
     }
     //-----------------------------------------------------------------------------------
-    void Terra::calculateOptimumSkirtSize(void)
+    void Terra::calculateOptimumSkirtSize()
     {
         m_skirtSize = std::numeric_limits<float>::max();
 
         const uint32 basePixelDimension = m_basePixelDimension;
-        const uint32 vertPixelDimension = static_cast<uint32>(m_basePixelDimension * m_depthWidthRatio);
+        const uint32 vertPixelDimension =
+            static_cast<uint32>( m_basePixelDimension * m_depthWidthRatio );
 
-        for( size_t y=vertPixelDimension-1u; y<m_depth-1u; y += vertPixelDimension )
+        for( size_t y = vertPixelDimension - 1u; y < m_depth - 1u; y += vertPixelDimension )
         {
             const size_t ny = y + 1u;
 
             bool allEqualInLine = true;
             float minHeight = m_heightMap[y * m_width];
-            for( size_t x=0; x<m_width; ++x )
+            for( size_t x = 0; x < m_width; ++x )
             {
-                const float minValue = std::min( m_heightMap[y * m_width + x],
-                                                  m_heightMap[ny * m_width + x] );
+                const float minValue =
+                    std::min( m_heightMap[y * m_width + x], m_heightMap[ny * m_width + x] );
                 minHeight = std::min( minValue, minHeight );
                 allEqualInLine &= m_heightMap[y * m_width + x] == m_heightMap[ny * m_width + x];
             }
@@ -388,16 +381,16 @@ namespace Ogre
                 m_skirtSize = std::min( minHeight, m_skirtSize );
         }
 
-        for( size_t x=basePixelDimension-1u; x<m_width-1u; x += basePixelDimension )
+        for( size_t x = basePixelDimension - 1u; x < m_width - 1u; x += basePixelDimension )
         {
             const size_t nx = x + 1u;
 
             bool allEqualInLine = true;
             float minHeight = m_heightMap[x];
-            for( size_t y=0; y<m_depth; ++y )
+            for( size_t y = 0; y < m_depth; ++y )
             {
-                const float minValue = std::min( m_heightMap[y * m_width + x],
-                                                  m_heightMap[y * m_width + nx] );
+                const float minValue =
+                    std::min( m_heightMap[y * m_width + x], m_heightMap[y * m_width + nx] );
                 minHeight = std::min( minValue, minHeight );
                 allEqualInLine &= m_heightMap[y * m_width + x] == m_heightMap[y * m_width + nx];
             }
@@ -419,10 +412,10 @@ namespace Ogre
         const float fWidth = static_cast<float>( m_width );
         const float fDepth = static_cast<float>( m_depth );
 
-        const float fX = floorf( ((vPos.x - m_terrainOrigin.x) * m_xzInvDimensions.x) * fWidth );
-        const float fZ = floorf( ((vPos.z - m_terrainOrigin.z) * m_xzInvDimensions.y) * fDepth );
-        retVal.x = fX >= 0.0f ? static_cast<uint32>( fX ) : 0xffffffff;
-        retVal.z = fZ >= 0.0f ? static_cast<uint32>( fZ ) : 0xffffffff;
+        const float fX = floorf( ( ( vPos.x - m_terrainOrigin.x ) * m_xzInvDimensions.x ) * fWidth );
+        const float fZ = floorf( ( ( vPos.z - m_terrainOrigin.z ) * m_xzInvDimensions.y ) * fDepth );
+        retVal.x = fX >= 0.0f ? static_cast<int32>( fX ) : -1;
+        retVal.z = fZ >= 0.0f ? static_cast<int32>( fZ ) : -1;
 
         return retVal;
     }
@@ -433,28 +426,26 @@ namespace Ogre
         const float fWidth = static_cast<float>( m_width );
         const float fDepth = static_cast<float>( m_depth );
 
-        retVal.x = (gPos.x / fWidth) * m_xzDimensions.x + m_terrainOrigin.x;
-        retVal.y = (gPos.z / fDepth) * m_xzDimensions.y + m_terrainOrigin.z;
+        retVal.x = ( gPos.x / fWidth ) * m_xzDimensions.x + m_terrainOrigin.x;
+        retVal.y = ( gPos.z / fDepth ) * m_xzDimensions.y + m_terrainOrigin.z;
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
     bool Terra::isVisible( const GridPoint &gPos, const GridPoint &gSize ) const
     {
-        if( gPos.x >= static_cast<int32>( m_width ) ||
-            gPos.z >= static_cast<int32>( m_depth ) ||
-            gPos.x + gSize.x <= 0 ||
-            gPos.z + gSize.z <= 0 )
+        if( gPos.x >= static_cast<int32>( m_width ) || gPos.z >= static_cast<int32>( m_depth ) ||
+            gPos.x + gSize.x <= 0 || gPos.z + gSize.z <= 0 )
         {
-            //Outside terrain bounds.
+            // Outside terrain bounds.
             return false;
         }
 
-//        return true;
+        //        return true;
 
         const Vector2 cellPos = gridToWorld( gPos );
-        const Vector2 cellSize( (gSize.x + 1u) * m_xzRelativeSize.x,
-                                (gSize.z + 1u) * m_xzRelativeSize.y );
+        const Vector2 cellSize( ( gSize.x + 1 ) * m_xzRelativeSize.x,
+                                ( gSize.z + 1 ) * m_xzRelativeSize.y );
 
         const Vector3 vHalfSizeYUp = Vector3( cellSize.x, m_height, cellSize.y ) * 0.5f;
         const Vector3 vCenter =
@@ -463,13 +454,13 @@ namespace Ogre
 
         for( unsigned i = 0; i < 6u; ++i )
         {
-            //Skip far plane if view frustum is infinite
+            // Skip far plane if view frustum is infinite
             if( i == FRUSTUM_PLANE_FAR && m_camera->getFarClipDistance() == 0 )
                 continue;
 
-            Plane::Side side = m_camera->getFrustumPlane(i).getSide( vCenter, vHalfSize );
+            Plane::Side side = m_camera->getFrustumPlane( (uint16)i ).getSide( vCenter, vHalfSize );
 
-            //We only need one negative match to know the obj is outside the frustum
+            // We only need one negative match to know the obj is outside the frustum
             if( side == Plane::NEGATIVE_SIDE )
                 return false;
         }
@@ -480,13 +471,15 @@ namespace Ogre
     void Terra::addRenderable( const GridPoint &gridPos, const GridPoint &cellSize, uint32 lodLevel )
     {
         TerrainCell *cell = &m_terrainCells[0][m_currentCell++];
-        cell->setOrigin( gridPos, cellSize.x, cellSize.z, lodLevel );
+        cell->setOrigin( gridPos,  //
+                         static_cast<uint32>( cellSize.x ), static_cast<uint32>( cellSize.z ),
+                         lodLevel );
         m_collectedCells[0].push_back( cell );
     }
     //-----------------------------------------------------------------------------------
-    void Terra::optimizeCellsAndAdd(void)
+    void Terra::optimizeCellsAndAdd()
     {
-        //Keep iterating until m_collectedCells[0] stops shrinking
+        // Keep iterating until m_collectedCells[0] stops shrinking
         size_t numCollectedCells = std::numeric_limits<size_t>::max();
         while( numCollectedCells != m_collectedCells[0].size() )
         {
@@ -496,13 +489,13 @@ namespace Ogre
             {
                 m_collectedCells[1].clear();
 
-                std::vector<TerrainCell*>::const_iterator itor = m_collectedCells[0].begin();
-                std::vector<TerrainCell*>::const_iterator end  = m_collectedCells[0].end();
+                std::vector<TerrainCell *>::const_iterator itor = m_collectedCells[0].begin();
+                std::vector<TerrainCell *>::const_iterator end = m_collectedCells[0].end();
 
                 while( end - itor >= 2u )
                 {
                     TerrainCell *currCell = *itor;
-                    TerrainCell *nextCell = *(itor+1);
+                    TerrainCell *nextCell = *( itor + 1 );
 
                     m_collectedCells[1].push_back( currCell );
                     if( currCell->merge( nextCell ) )
@@ -518,8 +511,8 @@ namespace Ogre
             }
         }
 
-        std::vector<TerrainCell*>::const_iterator itor = m_collectedCells[0].begin();
-        std::vector<TerrainCell*>::const_iterator end  = m_collectedCells[0].end();
+        std::vector<TerrainCell *>::const_iterator itor = m_collectedCells[0].begin();
+        std::vector<TerrainCell *>::const_iterator end = m_collectedCells[0].end();
         while( itor != end )
             mRenderables.push_back( *itor++ );
 
@@ -535,44 +528,45 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Terra::update( const Vector3 &lightDir, float lightEpsilon )
     {
-        const float lightCosAngleChange = Math::Clamp(
-                    (float)m_prevLightDir.dotProduct( lightDir.normalisedCopy() ), -1.0f, 1.0f );
-        if( lightCosAngleChange <= (1.0f - lightEpsilon) )
+        const float lightCosAngleChange =
+            Math::Clamp( (float)m_prevLightDir.dotProduct( lightDir.normalisedCopy() ), -1.0f, 1.0f );
+        if( lightCosAngleChange <= ( 1.0f - lightEpsilon ) )
         {
             m_shadowMapper->updateShadowMap( toYUp( lightDir ), m_xzDimensions, m_height );
             m_prevLightDir = lightDir.normalisedCopy();
         }
-        //m_shadowMapper->updateShadowMap( Vector3::UNIT_X, m_xzDimensions, m_height );
-        //m_shadowMapper->updateShadowMap( Vector3(2048,0,1024), m_xzDimensions, m_height );
-        //m_shadowMapper->updateShadowMap( Vector3(1,0,0.1), m_xzDimensions, m_height );
-        //m_shadowMapper->updateShadowMap( Vector3::UNIT_Y, m_xzDimensions, m_height ); //Check! Does NAN
+        // m_shadowMapper->updateShadowMap( Vector3::UNIT_X, m_xzDimensions, m_height );
+        // m_shadowMapper->updateShadowMap( Vector3(2048,0,1024), m_xzDimensions, m_height );
+        // m_shadowMapper->updateShadowMap( Vector3(1,0,0.1), m_xzDimensions, m_height );
+        // m_shadowMapper->updateShadowMap( Vector3::UNIT_Y, m_xzDimensions, m_height ); //Check! Does
+        // NAN
 
         mRenderables.clear();
         m_currentCell = 0;
 
         const Vector3 camPos = toYUp( m_camera->getDerivedPosition() );
 
-        const uint32 basePixelDimension = m_basePixelDimension;
-        const uint32 vertPixelDimension = static_cast<uint32>(m_basePixelDimension * m_depthWidthRatio);
+        const int32 basePixelDimension = static_cast<int32>( m_basePixelDimension );
+        const int32 vertPixelDimension = static_cast<int32>( m_basePixelDimension * m_depthWidthRatio );
 
         GridPoint cellSize;
         cellSize.x = basePixelDimension;
         cellSize.z = vertPixelDimension;
 
-        //Quantize the camera position to basePixelDimension steps
+        // Quantize the camera position to basePixelDimension steps
         GridPoint camCenter = worldToGrid( camPos );
-        camCenter.x = (camCenter.x / basePixelDimension) * basePixelDimension;
-        camCenter.z = (camCenter.z / vertPixelDimension) * vertPixelDimension;
+        camCenter.x = ( camCenter.x / basePixelDimension ) * basePixelDimension;
+        camCenter.z = ( camCenter.z / vertPixelDimension ) * vertPixelDimension;
 
         uint32 currentLod = 0;
 
-//        camCenter.x = 64;
-//        camCenter.z = 64;
+        //        camCenter.x = 64;
+        //        camCenter.z = 64;
 
-        //LOD 0: Add full 4x4 grid
-        for( int32 z=-2; z<2; ++z )
+        // LOD 0: Add full 4x4 grid
+        for( int32 z = -2; z < 2; ++z )
         {
-            for( int32 x=-2; x<2; ++x )
+            for( int32 x = -2; x < 2; ++x )
             {
                 GridPoint pos = camCenter;
                 pos.x += x * cellSize.x;
@@ -585,16 +579,17 @@ namespace Ogre
 
         optimizeCellsAndAdd();
 
-        m_currentCell = 16u; //The first 16 cells don't use skirts.
+        m_currentCell = 16u;  // The first 16 cells don't use skirts.
 
         const uint32 maxRes = std::max( m_width, m_depth );
-        //TODO: When we're too far (outside the terrain), just display a 4x4 grid or something like that.
+        // TODO: When we're too far (outside the terrain), just display a 4x4 grid or something like
+        // that.
 
         size_t numObjectsAdded = std::numeric_limits<size_t>::max();
-        //LOD n: Add 4x4 grid, ignore 2x2 center (which
-        //is the same as saying the borders of the grid)
+        // LOD n: Add 4x4 grid, ignore 2x2 center (which
+        // is the same as saying the borders of the grid)
         while( numObjectsAdded != m_currentCell ||
-               (mRenderables.empty() && (1u << currentLod) <= maxRes) )
+               ( mRenderables.empty() && ( 1u << currentLod ) <= maxRes ) )
         {
             numObjectsAdded = m_currentCell;
 
@@ -602,10 +597,10 @@ namespace Ogre
             cellSize.z <<= 1u;
             ++currentLod;
 
-            //Row 0
+            // Row 0
             {
                 const int32 z = 1;
-                for( int32 x=-2; x<2; ++x )
+                for( int32 x = -2; x < 2; ++x )
                 {
                     GridPoint pos = camCenter;
                     pos.x += x * cellSize.x;
@@ -615,10 +610,10 @@ namespace Ogre
                         addRenderable( pos, cellSize, currentLod );
                 }
             }
-            //Row 3
+            // Row 3
             {
                 const int32 z = -2;
-                for( int32 x=-2; x<2; ++x )
+                for( int32 x = -2; x < 2; ++x )
                 {
                     GridPoint pos = camCenter;
                     pos.x += x * cellSize.x;
@@ -628,10 +623,10 @@ namespace Ogre
                         addRenderable( pos, cellSize, currentLod );
                 }
             }
-            //Cells [0, 1] & [0, 2];
+            // Cells [0, 1] & [0, 2];
             {
                 const int32 x = -2;
-                for( int32 z=-1; z<1; ++z )
+                for( int32 z = -1; z < 1; ++z )
                 {
                     GridPoint pos = camCenter;
                     pos.x += x * cellSize.x;
@@ -641,10 +636,10 @@ namespace Ogre
                         addRenderable( pos, cellSize, currentLod );
                 }
             }
-            //Cells [3, 1] & [3, 2];
+            // Cells [3, 1] & [3, 2];
             {
                 const int32 x = 1;
-                for( int32 z=-1; z<1; ++z )
+                for( int32 z = -1; z < 1; ++z )
                 {
                     GridPoint pos = camCenter;
                     pos.x += x * cellSize.x;
@@ -660,16 +655,16 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void Terra::load( const String &texName, const Vector3 &center, const Vector3 &dimensions,
-                      bool bMinimizeMemoryConsumption )
+                      bool bMinimizeMemoryConsumption, bool bLowResShadow )
     {
         Ogre::Image2 image;
         image.load( texName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
 
-        load( image, center, dimensions, bMinimizeMemoryConsumption, texName );
+        load( image, center, dimensions, bMinimizeMemoryConsumption, bLowResShadow, texName );
     }
     //-----------------------------------------------------------------------------------
-    void Terra::load( Image2 &image, Vector3 center, Vector3 dimensions,
-                      bool bMinimizeMemoryConsumption, const String &imageName )
+    void Terra::load( Image2 &image, Vector3 center, Vector3 dimensions, bool bMinimizeMemoryConsumption,
+                      bool bLowResShadow, const String &imageName )
     {
         // Use sign-preserving because origin in XZ plane is always from
         // bottom-left to top-right.
@@ -681,29 +676,29 @@ namespace Ogre
         m_xzInvDimensions = 1.0f / m_xzDimensions;
         m_height = dimensions.y;
         m_basePixelDimension = 64u;
-        createHeightmap( image, imageName, bMinimizeMemoryConsumption );
+        createHeightmap( image, imageName, bMinimizeMemoryConsumption, bLowResShadow );
 
         {
-            //Find out how many TerrainCells we need. I think this might be
-            //solved analitically with a power series. But my math is rusty.
+            // Find out how many TerrainCells we need. I think this might be
+            // solved analitically with a power series. But my math is rusty.
             const uint32 basePixelDimension = m_basePixelDimension;
-            const uint32 vertPixelDimension = static_cast<uint32>( m_basePixelDimension *
-                                                                   m_depthWidthRatio );
+            const uint32 vertPixelDimension =
+                static_cast<uint32>( m_basePixelDimension * m_depthWidthRatio );
             const uint32 maxPixelDimension = std::max( basePixelDimension, vertPixelDimension );
             const uint32 maxRes = std::max( m_width, m_depth );
 
-            uint32 numCells = 16u; //4x4
+            uint32 numCells = 16u;  // 4x4
             uint32 accumDim = 0u;
             uint32 iteration = 1u;
             while( accumDim < maxRes )
             {
-                numCells += 12u; //4x4 - 2x2
-                accumDim += maxPixelDimension * (1u << iteration);
+                numCells += 12u;  // 4x4 - 2x2
+                accumDim += maxPixelDimension * ( 1u << iteration );
                 ++iteration;
             }
 
             numCells += 12u;
-            accumDim += maxPixelDimension * (1u << iteration);
+            accumDim += maxPixelDimension * ( 1u << iteration );
             ++iteration;
 
             for( size_t i = 0u; i < 2u; ++i )
@@ -738,36 +733,39 @@ namespace Ogre
 
         GridPoint pos2D = worldToGrid( vPos );
 
-        if( pos2D.x < m_width-1 && pos2D.z < m_depth-1 )
+        const int32 iWidth = static_cast<int32>( m_width );
+        const int32 iDepth = static_cast<int32>( m_depth );
+
+        if( pos2D.x < iWidth - 1 && pos2D.z < iDepth - 1 )
         {
             const Vector2 vPos2D = gridToWorld( pos2D );
 
-            const float dx = (vPos.x - vPos2D.x) * m_width * m_xzInvDimensions.x;
-            const float dz = (vPos.z - vPos2D.y) * m_depth * m_xzInvDimensions.y;
+            const float dx = ( vPos.x - vPos2D.x ) * m_width * m_xzInvDimensions.x;
+            const float dz = ( vPos.z - vPos2D.y ) * m_depth * m_xzInvDimensions.y;
 
             float a, b, c;
-            const float h00 = m_heightMap[ pos2D.z * m_width + pos2D.x ];
-            const float h11 = m_heightMap[ (pos2D.z+1) * m_width + pos2D.x + 1 ];
+            const float h00 = m_heightMap[size_t( pos2D.z * iWidth + pos2D.x )];
+            const float h11 = m_heightMap[size_t( ( pos2D.z + 1 ) * iWidth + pos2D.x + 1 )];
 
             c = h00;
             if( dx < dz )
             {
-                //Plane eq: y = ax + bz + c
-                //x=0 z=0 -> c		= h00
-                //x=0 z=1 -> b + c	= h01 -> b = h01 - c
-                //x=1 z=1 -> a + b + c  = h11 -> a = h11 - b - c
-                const float h01 = m_heightMap[ (pos2D.z+1) * m_width + pos2D.x ];
+                // Plane eq: y = ax + bz + c
+                // x=0 z=0 -> c		= h00
+                // x=0 z=1 -> b + c	= h01 -> b = h01 - c
+                // x=1 z=1 -> a + b + c  = h11 -> a = h11 - b - c
+                const float h01 = m_heightMap[size_t( ( pos2D.z + 1 ) * iWidth + pos2D.x )];
 
                 b = h01 - c;
                 a = h11 - b - c;
             }
             else
             {
-                //Plane eq: y = ax + bz + c
-                //x=0 z=0 -> c		= h00
-                //x=1 z=0 -> a + c	= h10 -> a = h10 - c
-                //x=1 z=1 -> a + b + c  = h11 -> b = h11 - a - c
-                const float h10 = m_heightMap[ pos2D.z * m_width + pos2D.x + 1 ];
+                // Plane eq: y = ax + bz + c
+                // x=0 z=0 -> c		= h00
+                // x=1 z=0 -> a + c	= h10 -> a = h10 - c
+                // x=1 z=1 -> a + b + c  = h11 -> b = h11 - a - c
+                const float h10 = m_heightMap[size_t( pos2D.z * iWidth + pos2D.x + 1 )];
 
                 a = h10 - c;
                 b = h11 - a - c;
@@ -796,7 +794,7 @@ namespace Ogre
         for( size_t i = 0u; i < 2u; ++i )
         {
             std::vector<TerrainCell>::iterator itor = m_terrainCells[i].begin();
-            std::vector<TerrainCell>::iterator end  = m_terrainCells[i].end();
+            std::vector<TerrainCell>::iterator end = m_terrainCells[i].end();
 
             while( itor != end )
             {
@@ -813,26 +811,23 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    Ogre::TextureGpu* Terra::_getShadowMapTex(void) const
-    {
-        return m_shadowMapper->getShadowMapTex();
-    }
+    Ogre::TextureGpu *Terra::_getShadowMapTex() const { return m_shadowMapper->getShadowMapTex(); }
     //-----------------------------------------------------------------------------------
-    Vector3 Terra::getTerrainOrigin( void ) const { return fromYUpSignPreserving( m_terrainOrigin ); }
+    Vector3 Terra::getTerrainOrigin() const { return fromYUpSignPreserving( m_terrainOrigin ); }
     //-----------------------------------------------------------------------------------
-    Vector2 Terra::getTerrainXZCenter(void) const
+    Vector2 Terra::getTerrainXZCenter() const
     {
         return Vector2( m_terrainOrigin.x + m_xzDimensions.x * 0.5f,
                         m_terrainOrigin.z + m_xzDimensions.y * 0.5f );
     }
     //-----------------------------------------------------------------------------------
-    const String& Terra::getMovableType(void) const
+    const String &Terra::getMovableType() const
     {
         static const String movType = "Terra";
         return movType;
     }
     //-----------------------------------------------------------------------------------
-    void Terra::_swapSavedState( void )
+    void Terra::_swapSavedState()
     {
         m_terrainCells[0].swap( m_terrainCells[1] );
         m_savedState.m_renderables.swap( mRenderables );
@@ -842,15 +837,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    TerraSharedResources::TerraSharedResources()
-    {
-        memset( textures, 0, sizeof( textures ) );
-    }
+    TerraSharedResources::TerraSharedResources() { memset( textures, 0, sizeof( textures ) ); }
     //-----------------------------------------------------------------------------------
-    TerraSharedResources::~TerraSharedResources()
-    {
-        freeAllMemory();
-    }
+    TerraSharedResources::~TerraSharedResources() { freeAllMemory(); }
     //-----------------------------------------------------------------------------------
     void TerraSharedResources::freeAllMemory()
     {
@@ -915,4 +904,4 @@ namespace Ogre
             textureManager->destroyTexture( tmpRtt );
         }
     }
-}
+}  // namespace Ogre

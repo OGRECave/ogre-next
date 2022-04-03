@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,13 +34,13 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-	struct _OgreVulkanExport VulkanResourceTransition
+    struct _OgreVulkanExport VulkanResourceTransition
     {
-		VkPipelineStageFlags srcStage;
-		VkPipelineStageFlags dstStage;
+        VkPipelineStageFlags srcStage;
+        VkPipelineStageFlags dstStage;
 
-		VkMemoryBarrier memBarrier;
-		FastArray<VkImageMemoryBarrier> imageBarriers;
+        VkMemoryBarrier memBarrier;
+        FastArray<VkImageMemoryBarrier> imageBarriers;
     };
 }  // namespace Ogre
 

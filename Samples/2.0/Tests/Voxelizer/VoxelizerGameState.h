@@ -10,7 +10,7 @@ namespace Ogre
     class VctVoxelizer;
     class VctLighting;
     class IrradianceField;
-}
+}  // namespace Ogre
 
 namespace Demo
 {
@@ -55,51 +55,51 @@ namespace Demo
             NumGiModes
         };
 
-        Ogre::VctVoxelizer  *mVoxelizer;
-        Ogre::VctLighting   *mVctLighting;
-        float               mThinWallCounter;
+        Ogre::VctVoxelizer *mVoxelizer;
+        Ogre::VctLighting *mVctLighting;
+        float mThinWallCounter;
 
-        Ogre::IrradianceField   *mIrradianceField;
-        bool                    mUseRasterIrradianceField;
+        Ogre::IrradianceField *mIrradianceField;
+        bool mUseRasterIrradianceField;
 
-        Ogre::uint32    mDebugVisualizationMode;
-        Ogre::uint32    mIfdDebugVisualizationMode;
-        Ogre::uint32    mNumBounces;
+        Ogre::uint32 mDebugVisualizationMode;
+        Ogre::uint32 mIfdDebugVisualizationMode;
+        Ogre::uint32 mNumBounces;
 
-        Ogre::FastArray<Ogre::Item*>    mItems;
+        Ogre::FastArray<Ogre::Item *> mItems;
 
-        Scenes			mCurrentScene;
+        Scenes mCurrentScene;
 
-        TestUtils       *mTestUtils;
+        TestUtils *mTestUtils;
 
         void cycleVisualizationMode( bool bPrev );
-        void toggletVctQuality(void);
-        GiMode getGiMode(void) const;
+        void toggletVctQuality();
+        GiMode getGiMode() const;
         void cycleIfdProbeVisualizationMode( bool bPrev );
         void cycleIrradianceField( bool bPrev );
 
-        void voxelizeScene(void);
+        void voxelizeScene();
 
         void cycleScenes( bool bPrev );
-        void destroyCurrentScene(void);
+        void destroyCurrentScene();
 
-        void createCornellScene(void);
-        void createSibenikScene(void);
-        void createStressScene(void);
+        void createCornellScene();
+        void createSibenikScene();
+        void createStressScene();
 
-        bool needsVoxels(void) const;
+        bool needsVoxels() const;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         VoxelizerGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
-        virtual void update( float timeSinceLast );
+        void createScene01() override;
+        void destroyScene() override;
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

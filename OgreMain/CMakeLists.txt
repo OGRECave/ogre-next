@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -8,10 +8,10 @@
 #-------------------------------------------------------------------
 
 ############################################################
-# OgreMain core library
+# OgreNextMain core library
 ############################################################
 
-PROJECT(OgreMain)
+PROJECT(${OGRE_NEXT}Main)
 
 function( add_filtered_h filterName fileString )
 	file(GLOB TMP_FILES ${fileString})
@@ -116,15 +116,7 @@ endif ()
 
 
 # Add platform specific files
-if (OGRE_BUILD_PLATFORM_NACL)
-  include_directories("include/NaCl")
-  file(GLOB PLATFORM_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/NaCl/*.h")
-  file(GLOB PLATFORM_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/NaCl/*.cpp"
-    src/OgreSearchOps.cpp)
-
-  set(PLATFORM_LIBS nosys)
-  set(PLATFORM_HEADER_INSTALL "NaCl")
-elseif (EMSCRIPTEN)
+if (EMSCRIPTEN)
   include_directories(include/Emscripten)
 
   file(GLOB PLATFORM_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/Emscripten/*.h)
@@ -243,7 +235,7 @@ elseif (UNIX)
 		file(GLOB PLATFORM_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/*.cpp"
 		  src/OgreSearchOps.cpp)
 
-		set(PLATFORM_LIBS ${X11_LIBRARIES} ${X11_Xt_LIB} ${XAW_LIBRARY} ${X11_Xrandr_LIB} pthread)
+		set(PLATFORM_LIBS ${X11_LIBRARIES} ${X11_Xt_LIB} ${XAW_LIBRARY} ${X11_Xrandr_LIB} xcb pthread)
 		set(PLATFORM_HEADER_INSTALL "GLX")
 	else()
 		file(GLOB PLATFORM_HEADERS
@@ -299,15 +291,6 @@ if (OGRE_THREAD_PROVIDER EQUAL 0)
 	list(APPEND THREAD_SOURCE_FILES
 		src/Threading/OgreDefaultWorkQueueStandard.cpp
 	)
-elseif (OGRE_THREAD_PROVIDER EQUAL 1)
-	list(APPEND THREAD_HEADER_FILES
-		include/Threading/OgreThreadDefinesBoost.h
-		include/Threading/OgreThreadHeadersBoost.h
-		include/Threading/OgreDefaultWorkQueueStandard.h
-	)
-	list(APPEND THREAD_SOURCE_FILES
-		src/Threading/OgreDefaultWorkQueueStandard.cpp
-	)
 elseif (OGRE_THREAD_PROVIDER EQUAL 2)
 	list(APPEND THREAD_HEADER_FILES
 		include/Threading/OgreThreadDefinesPoco.h
@@ -339,9 +322,8 @@ endif ()
 
 list(APPEND HEADER_FILES ${THREAD_HEADER_FILES})
 
-# Add needed definitions and nedmalloc include dir
+# Add needed definitions
 add_definitions(-DOGRE_NONCLIENT_BUILD -DFREEIMAGE_LIB -D_MT -D_USRDLL)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/nedmalloc)
 
 set(LIBRARIES ${PLATFORM_LIBS})
 
@@ -406,19 +388,19 @@ set (TARGET_LINK_FLAGS "")
 # setup OgreMain target
 if (WINDOWS_STORE OR WINDOWS_PHONE)
 	# exclude OgreTimer.cpp from unity builds; causes problem
-	ogre_add_library(OgreMain ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/WIN32/OgreTimer.cpp")
+	ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/WIN32/OgreTimer.cpp")
 else ()
 	# exclude OgreAlignedAllocator.cpp from unity builds; causes problems on Linux
-	ogre_add_library(OgreMain ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/OgreAlignedAllocator.cpp")
+	ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/OgreAlignedAllocator.cpp")
 endif ()
 # In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
 if(WIN32 AND MSVC10 AND CMAKE_CL_64)
-  set_target_properties(OgreMain PROPERTIES 
+  set_target_properties(${OGRE_NEXT}Main PROPERTIES
                         VERSION ${OGRE_SOVERSION}
                         LINK_FLAGS "/INCREMENTAL:NO"
                       )
 else()
-  set_target_properties(OgreMain PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
+  set_target_properties(${OGRE_NEXT}Main PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
 endif()
 
 if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -433,15 +415,15 @@ endif()
 
 if (APPLE)
   if (OGRE_BUILD_PLATFORM_APPLE_IOS)
-    set_target_properties(OgreMain PROPERTIES INSTALL_NAME_DIR "OGRE")
+    set_target_properties(${OGRE_NEXT}Main PROPERTIES INSTALL_NAME_DIR "OGRE")
   else ()
-    set_target_properties(OgreMain PROPERTIES
+    set_target_properties(${OGRE_NEXT}Main PROPERTIES
         LINK_FLAGS "-framework IOKit -framework Cocoa -framework Carbon -framework OpenGL -framework CoreVideo"
     )
 
     set(OGRE_OSX_BUILD_CONFIGURATION "$(PLATFORM_NAME)/$(CONFIGURATION)")
   
-  	add_custom_command(TARGET OgreMain POST_BUILD
+	add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
 		COMMAND mkdir ARGS -p ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
         COMMAND ditto 
 		${OGRE_SOURCE_DIR}/OgreMain/include/Threading/*.h ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/Threading
@@ -454,7 +436,7 @@ if (APPLE)
     foreach(HEADER_PATH ${THREAD_HEADER_FILES})
         get_filename_component(HEADER_FILE ${HEADER_PATH} NAME)
         set(FWK_HEADER_PATH ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
-        add_custom_command(TARGET OgreMain POST_BUILD
+        add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
             COMMAND rm -f ${FWK_HEADER_PATH}
             )
     endforeach()
@@ -462,23 +444,23 @@ if (APPLE)
     foreach(HEADER_PATH ${PLATFORM_HEADERS})
         get_filename_component(HEADER_FILE ${HEADER_PATH} NAME)
         set(FWK_HEADER_PATH ${OGRE_BINARY_DIR}/lib/${OGRE_OSX_BUILD_CONFIGURATION}/Ogre.framework/Headers/${HEADER_FILE})
-        add_custom_command(TARGET OgreMain POST_BUILD
+        add_custom_command(TARGET ${OGRE_NEXT}Main POST_BUILD
             COMMAND rm -f ${FWK_HEADER_PATH}
             )
     endforeach()
 
-    ogre_config_framework(OgreMain)
+    ogre_config_framework(${OGRE_NEXT}Main)
   endif ()
 
   # Framework is called 'Ogre'
   if (OGRE_BUILD_LIBS_AS_FRAMEWORKS)
-    set_target_properties(OgreMain PROPERTIES	OUTPUT_NAME Ogre)
+    set_target_properties(${OGRE_NEXT}Main PROPERTIES	OUTPUT_NAME Ogre)
   endif ()
 endif ()
-target_link_libraries(OgreMain ${LIBRARIES})
+target_link_libraries(${OGRE_NEXT}Main ${LIBRARIES})
 if (MINGW)
   # may need winsock htons functions for FreeImage
-  target_link_libraries(OgreMain ws2_32)
+  target_link_libraries(${OGRE_NEXT}Main ws2_32)
 endif ()
 
 #set_source_files_properties( ${SOURCE_FILES} PROPERTIES HEADER_FILE_ONLY TRUE)
@@ -488,13 +470,13 @@ endif ()
 #set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSubMesh2.cpp" PROPERTIES HEADER_FILE_ONLY FALSE)
 
 # specify a precompiled header to use
-use_precompiled_header(OgreMain 
+use_precompiled_header(${OGRE_NEXT}Main
   "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreStableHeaders.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/OgrePrecompiledHeaders.cpp"
 )
 
-# install OgreMain
-ogre_config_lib(OgreMain TRUE)
+# install ${OGRE_NEXT}Main
+ogre_config_lib(${OGRE_NEXT}Main TRUE)
 foreach(HEADER_FILE ${HEADER_FILES})
 	string(REGEX REPLACE "((${CMAKE_CURRENT_SOURCE_DIR}|${OGRE_BINARY_DIR})/)?(include|src)/" "" RELATIVE_HEADER_FILE ${HEADER_FILE})
 	string(REGEX MATCH "((.*)/)+" HEADER_SUBDIRECTORY ${RELATIVE_HEADER_FILE})
@@ -506,27 +488,4 @@ install(FILES ${PLATFORM_HEADERS}
 )
 install(FILES ${THREAD_HEADER_FILES}
 	DESTINATION include/OGRE/Threading
-)
-
-set( DEPRECATED_HEADER_FILES
-	include/Deprecated/OgreDDSCodec.h
-	include/Deprecated/OgreDepthBuffer.h
-	include/Deprecated/OgreFreeImageCodec.h
-	include/Deprecated/OgreHardwarePixelBuffer.h
-	include/Deprecated/OgreImageCodec.h
-	include/Deprecated/OgreImage.h
-	include/Deprecated/OgrePixelBox.h
-	include/Deprecated/OgrePixelFormatDescriptions.h
-	include/Deprecated/OgrePixelFormat.h
-	include/Deprecated/OgreRenderTarget.h
-	include/Deprecated/OgreRenderTargetListener.h
-	include/Deprecated/OgreRenderTexture.h
-	include/Deprecated/OgreRenderToVertexBuffer.h
-	include/Deprecated/OgreRenderWindow.h
-	include/Deprecated/OgreTexture.h
-	include/Deprecated/OgreTextureManager.h
-)
-
-install(FILES ${DEPRECATED_HEADER_FILES}
-  DESTINATION include/OGRE/Deprecated
 )

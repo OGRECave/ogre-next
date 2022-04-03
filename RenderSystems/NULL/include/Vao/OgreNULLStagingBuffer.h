@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -42,26 +42,27 @@ namespace Ogre
         In other words, a staging buffer is an intermediate buffer to transfer data between
         CPU & GPU
     */
-    class _OgreNULLExport NULLStagingBuffer : public StagingBuffer
+    class _OgreNULLExport NULLStagingBuffer final : public StagingBuffer
     {
     protected:
-        void    *mMappedPtr;
+        void *mMappedPtr;
 
-        uint8   *mNullDataPtr;
+        uint8 *mNullDataPtr;
 
-        virtual void* mapImpl( size_t sizeBytes );
-        virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
-        virtual const void* _mapForReadImpl( size_t offset, size_t sizeBytes );
+        void *mapImpl( size_t sizeBytes ) override;
+        void  unmapImpl( const Destination *destinations, size_t numDestinations ) override;
+
+        const void *_mapForReadImpl( size_t offset, size_t sizeBytes ) override;
 
     public:
-        NULLStagingBuffer( size_t internalBufferStart, size_t sizeBytes,
-                              VaoManager *vaoManager, bool uploadOnly );
-        virtual ~NULLStagingBuffer();
+        NULLStagingBuffer( size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
+                           bool uploadOnly );
+        ~NULLStagingBuffer() override;
 
-        virtual StagingStallType uploadWillStall( size_t sizeBytes );
+        StagingStallType uploadWillStall( size_t sizeBytes ) override;
 
-        virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
+        size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -46,8 +46,8 @@ namespace Ogre {
         GLES2OldVertexArrayObject();
         ~GLES2OldVertexArrayObject();
         /// Bind a VAO
-        void bind(void);
-        bool isInitialised(void) { return mInitialised; }
+        void bind();
+        bool isInitialised() { return mInitialised; }
         void setInitialised(bool flag) { mInitialised = flag; }
     };
 }

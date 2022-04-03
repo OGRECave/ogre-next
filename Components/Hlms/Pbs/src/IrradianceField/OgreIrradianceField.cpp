@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -31,12 +31,13 @@ THE SOFTWARE.
 #include "IrradianceField/OgreIfdProbeVisualizer.h"
 #include "IrradianceField/OgreIrradianceFieldRaster.h"
 #include "Vct/OgreVctLighting.h"
-#include "Vct/OgreVctVoxelizer.h"
+#include "Vct/OgreVctVoxelizerSourceBase.h"
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "OgreRoot.h"
 
+#include "OgreBitwise.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
@@ -72,7 +73,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     bool IrradianceFieldSettings::isRaster() const { return mRasterParams.mWorkspaceName != IdString(); }
     //-------------------------------------------------------------------------
-    void IrradianceFieldSettings::createSubsamples( void )
+    void IrradianceFieldSettings::createSubsamples()
     {
         if( isRaster() )
             return;
@@ -95,7 +96,7 @@ namespace Ogre
         }
         else
         {
-            const float fGridSize = ceilf( sqrtf( numRaysPerPixel ) );
+            const float fGridSize = ceilf( sqrtf( (float)numRaysPerPixel ) );
             const float invGridSize = 1.0f / fGridSize;
             const size_t gridSize = static_cast<size_t>( fGridSize );
             const size_t numGridCells = gridSize * gridSize;
@@ -108,7 +109,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    uint32 IrradianceFieldSettings::getTotalNumProbes( void ) const
+    uint32 IrradianceFieldSettings::getTotalNumProbes() const
     {
         return mNumProbes[0] * mNumProbes[1] * mNumProbes[2];
     }
@@ -149,13 +150,13 @@ namespace Ogre
         return mDepthProbeResolution + 2u;
     }
     //-------------------------------------------------------------------------
-    uint32 IrradianceFieldSettings::getNumRaysPerIrradiancePixel( void ) const
+    uint32 IrradianceFieldSettings::getNumRaysPerIrradiancePixel() const
     {
         return mDepthProbeResolution * mDepthProbeResolution * mNumRaysPerPixel /
                ( mIrradianceResolution * mIrradianceResolution );
     }
     //-------------------------------------------------------------------------
-    Vector3 IrradianceFieldSettings::getNumProbes3f( void ) const
+    Vector3 IrradianceFieldSettings::getNumProbes3f() const
     {
         return Vector3( static_cast<Real>( mNumProbes[0] ), static_cast<Real>( mNumProbes[1] ),
                         static_cast<Real>( mNumProbes[2] ) );
@@ -248,7 +249,9 @@ namespace Ogre
         OGRE_ASSERT_LOW( !mSettings.isRaster() );
 
         float *RESTRICT_ALIAS updateData = reinterpret_cast<float * RESTRICT_ALIAS>( outBuffer );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
         const float *RESTRICT_ALIAS updateDataStart = updateData;
+#endif
 
         const Vector2 *subsamples = &mSettings.getSubsamples()[0];
 
@@ -271,7 +274,9 @@ namespace Ogre
                     {
                         for( size_t rayIdx = 0u; rayIdx < numRaysPerPixel; ++rayIdx )
                         {
-                            Vector2 uvOct = Vector2( x + blockX, y + blockY ) + subsamples[rayIdx];
+                            Vector2 uvOct = Vector2( Real( x + blockX ),  //
+                                                     Real( y + blockY ) ) +
+                                            subsamples[rayIdx];
                             uvOct /= static_cast<float>( depthProbeRes );
 
                             Vector3 directionVector = Math::octahedronMappingDecode( uvOct );
@@ -286,7 +291,7 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( updateData - updateDataStart ) <=
+        OGRE_ASSERT_LOW( (size_t)( updateData - updateDataStart ) <=
                          ( depthProbeRes * depthProbeRes * numRaysPerPixel * 4u ) );
     }
     //-------------------------------------------------------------------------
@@ -330,7 +335,7 @@ namespace Ogre
         {
             for( size_t x = 0u; x < probeRes; ++x )
             {
-                Vector2 uvOct = Vector2( x, y );
+                Vector2 uvOct = Vector2( (Real)x, (Real)y );
                 uvOct /= static_cast<float>( probeRes );
                 Vector3 directionVector = Math::octahedronMappingDecode( uvOct );
 
@@ -340,7 +345,7 @@ namespace Ogre
                 {
                     for( size_t otherX = 0u; otherX < probeRes; ++otherX )
                     {
-                        Vector2 otherUv = Vector2( otherX, otherY );
+                        Vector2 otherUv = Vector2( (Real)otherX, (Real)otherY );
                         otherUv /= static_cast<float>( probeRes );
                         Vector3 otherDir = Math::octahedronMappingDecode( otherUv );
 
@@ -361,13 +366,15 @@ namespace Ogre
                                                   uint32 maxTapsPerPixel )
     {
         float2 *RESTRICT_ALIAS updateData = reinterpret_cast<float2 * RESTRICT_ALIAS>( outBuffer );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
         const float2 *RESTRICT_ALIAS updateDataStart = updateData;
+#endif
 
         for( size_t y = 0u; y < probeRes; ++y )
         {
             for( size_t x = 0u; x < probeRes; ++x )
             {
-                Vector2 uvOct = Vector2( x, y );
+                Vector2 uvOct = Vector2( (Real)x, (Real)y );
                 uvOct /= static_cast<float>( probeRes );
                 Vector3 directionVector = Math::octahedronMappingDecode( uvOct );
 
@@ -379,7 +386,7 @@ namespace Ogre
                 {
                     for( size_t otherX = 0u; otherX < probeRes; ++otherX )
                     {
-                        Vector2 otherUv = Vector2( otherX, otherY );
+                        Vector2 otherUv = Vector2( (Real)otherX, (Real)otherY );
                         otherUv /= static_cast<float>( probeRes );
                         Vector3 otherDir = Math::octahedronMappingDecode( otherUv );
 
@@ -411,14 +418,14 @@ namespace Ogre
                 const uint32 maxIntegrationTapsPerPixel = maxTapsPerPixel;
                 for( size_t i = numTaps; i < maxIntegrationTapsPerPixel; ++i )
                 {
-                    updateData->x = y * probeRes + x;
+                    updateData->x = float( y * probeRes + x );
                     updateData->y = 0;
                     ++updateData;
                 }
             }
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( updateData - updateDataStart ) <=
+        OGRE_ASSERT_LOW( (size_t)( updateData - updateDataStart ) <=
                          ( probeRes * probeRes * maxTapsPerPixel ) );
     }
     //-------------------------------------------------------------------------
@@ -427,7 +434,7 @@ namespace Ogre
         if( mSettings.isRaster() )
         {
             // Avoid Valgrind from complaining when we copy the whole struct to GPU for the integrator
-            memset( &mIfGenParams, 0, sizeof( mIfGenParams ) );
+            silent_memset( &mIfGenParams, 0, sizeof( mIfGenParams ) );
             return;
         }
 
@@ -457,7 +464,7 @@ namespace Ogre
         mIfGenParams.numProbes_threadsPerRow.z = mSettings.mNumProbes[2];
         mIfGenParams.numProbes_threadsPerRow.w = 0u;
 
-        const VctVoxelizer *voxelizer = mVctLighting->getVoxelizer();
+        const VctVoxelizerSourceBase *voxelizer = mVctLighting->getVoxelizer();
         Matrix4 irrProbeToVctTransform;
         irrProbeToVctTransform.makeTransform(
             ( mFieldOrigin - voxelizer->getVoxelOrigin() ) / voxelizer->getVoxelSize(),
@@ -557,7 +564,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void IrradianceField::createTextures( void )
+    void IrradianceField::createTextures()
     {
         destroyTextures();
 
@@ -647,7 +654,7 @@ namespace Ogre
                                                                 "IrradianceField/Gen/Workspace", false );
     }
     //-------------------------------------------------------------------------
-    void IrradianceField::destroyTextures( void )
+    void IrradianceField::destroyTextures()
     {
         if( mDebugIfdProbeVisualizer )
             mDebugIfdProbeVisualizer->setVisible( false );
@@ -759,7 +766,7 @@ namespace Ogre
         mNumProbesProcessed += probesPerFrame;
     }
     //-------------------------------------------------------------------------
-    size_t IrradianceField::getConstBufferSize( void ) const
+    size_t IrradianceField::getConstBufferSize() const
     {
         return sizeof( float ) * ( 4u * 3u + 4u + 4u );
     }
@@ -784,7 +791,9 @@ namespace Ogre
             float2 irradInvFullResolution;
         };
 
-        Vector3 numProbes( mSettings.mNumProbes[0], mSettings.mNumProbes[1], mSettings.mNumProbes[2] );
+        const Vector3 numProbes( (Real)mSettings.mNumProbes[0],  //
+                                 (Real)mSettings.mNumProbes[1],  //
+                                 (Real)mSettings.mNumProbes[2] );
         const Vector3 finalSize = numProbes / mFieldSize;
 
         Matrix4 xform;
@@ -801,8 +810,8 @@ namespace Ogre
             reinterpret_cast<IrradianceFieldRenderParams * RESTRICT_ALIAS>( passBufferPtr );
 
         renderParams->viewToIrradianceFieldRows = xform;
-        renderParams->numProbesAggregated.x = mSettings.mNumProbes[0];
-        renderParams->numProbesAggregated.y = mSettings.mNumProbes[0] * mSettings.mNumProbes[1];
+        renderParams->numProbesAggregated.x = numProbes.x;
+        renderParams->numProbesAggregated.y = numProbes.x * numProbes.y;
         renderParams->padding0 = 0;
         renderParams->padding1 = 0;
 
@@ -848,11 +857,11 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    bool IrradianceField::getDebugVisualizationMode( void ) const { return mDebugVisualizationMode; }
+    bool IrradianceField::getDebugVisualizationMode() const { return mDebugVisualizationMode; }
     //-------------------------------------------------------------------------
-    uint8 IrradianceField::getDebugTessellation( void ) const { return mDebugTessellation; }
+    uint8 IrradianceField::getDebugTessellation() const { return mDebugTessellation; }
     //-------------------------------------------------------------------------
-    void IrradianceField::setTextureToDebugVisualizer( void )
+    void IrradianceField::setTextureToDebugVisualizer()
     {
         TextureGpu *trackedTex =
             mDebugVisualizationMode == DebugVisualizationColour ? mIrradianceTex : mDepthVarianceTex;

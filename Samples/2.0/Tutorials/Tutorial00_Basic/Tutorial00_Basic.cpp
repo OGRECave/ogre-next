@@ -9,6 +9,7 @@
 // See the next tutorials on how to handles all OSes and how to properly setup a robust render loop
 //---------------------------------------------------------------------------------------
 
+#include "OgreAbiUtils.h"
 #include "OgreArchiveManager.h"
 #include "OgreCamera.h"
 #include "OgreConfigFile.h"
@@ -24,9 +25,9 @@
 #include "OgreWindowEventUtilities.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-#   include "OSX/macUtils.h"
+#    include "OSX/macUtils.h"
 #endif
-static void registerHlms( void )
+static void registerHlms()
 {
     using namespace Ogre;
 
@@ -129,15 +130,15 @@ static void registerHlms( void )
     }
 }
 
-class MyWindowEventListener : public Ogre::WindowEventListener
+class MyWindowEventListener final : public Ogre::WindowEventListener
 {
     bool mQuit;
 
 public:
     MyWindowEventListener() : mQuit( false ) {}
-    virtual void windowClosed( Ogre::Window *rw ) { mQuit = true; }
+    void windowClosed( Ogre::Window *rw ) override { mQuit = true; }
 
-    bool getQuit( void ) const { return mQuit; }
+    bool getQuit() const { return mQuit; }
 };
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -163,9 +164,13 @@ int main( int argc, const char *argv[] )
 #    else
     const char *pluginsFile = "plugins.cfg";
 #    endif
+#else
+    const char *pluginsFile = 0;  // TODO
 #endif
-    Root *root = OGRE_NEW Root( pluginsFolder + pluginsFile,     //
-                                writeAccessFolder + "ogre.cfg",  //
+
+    const Ogre::AbiCookie abiCookie = Ogre::generateAbiCookie();
+    Root *root = OGRE_NEW Root( &abiCookie, pluginsFolder + pluginsFile,  //
+                                writeAccessFolder + "ogre.cfg",           //
                                 writeAccessFolder + "Ogre.log" );
 
     if( !root->showConfigDialog() )

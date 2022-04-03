@@ -88,7 +88,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::toggletVctQuality( void )
+    void VoxelizerGameState::toggletVctQuality()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -96,7 +96,7 @@ namespace Demo
         hlmsPbs->setVctFullConeCount( !hlmsPbs->getVctFullConeCount() );
     }
     //-----------------------------------------------------------------------------------
-    VoxelizerGameState::GiMode VoxelizerGameState::getGiMode( void ) const
+    VoxelizerGameState::GiMode VoxelizerGameState::getGiMode() const
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -189,7 +189,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::voxelizeScene( void )
+    void VoxelizerGameState::voxelizeScene()
     {
         TODO_do_this_in_voxelizer;
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
@@ -285,7 +285,7 @@ namespace Demo
         voxelizeScene();
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::destroyCurrentScene( void )
+    void VoxelizerGameState::destroyCurrentScene()
     {
         mVoxelizer->removeAllItems();
         mThinWallCounter = 1.0f;
@@ -305,7 +305,7 @@ namespace Demo
         mItems.clear();
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::createCornellScene( void )
+    void VoxelizerGameState::createCornellScene()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -357,7 +357,7 @@ namespace Demo
         mThinWallCounter = 2.0f;
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::createSibenikScene( void )
+    void VoxelizerGameState::createSibenikScene()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -375,7 +375,7 @@ namespace Demo
         mItems.push_back( item );
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::createStressScene( void )
+    void VoxelizerGameState::createStressScene()
     {
         createCornellScene();
 
@@ -423,7 +423,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::createScene01( void )
+    void VoxelizerGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -468,7 +468,7 @@ namespace Demo
         voxelizeScene();
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::destroyScene( void )
+    void VoxelizerGameState::destroyScene()
     {
         delete mIrradianceField;
         mIrradianceField = 0;
@@ -511,7 +511,7 @@ namespace Demo
         TutorialGameState::update( timeSinceLast );
     }
     //-----------------------------------------------------------------------------------
-    bool VoxelizerGameState::needsVoxels( void ) const
+    bool VoxelizerGameState::needsVoxels() const
     {
         return !( getGiMode() == IfdOnly && mUseRasterIrradianceField );
     }

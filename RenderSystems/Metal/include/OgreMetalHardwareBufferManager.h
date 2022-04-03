@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -30,62 +30,54 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define _OgreMetalHardwareBufferManager_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreHardwareBufferManager.h"
 
-namespace Ogre {
-namespace v1 {
-    /// Implementation of HardwareBufferManager for Metal.
-    class _OgreMetalExport MetalHardwareBufferManagerBase : public HardwareBufferManagerBase
+namespace Ogre
+{
+    namespace v1
     {
-    protected:
-        MetalDiscardBufferManager *mDiscardBufferManager;
-
-    public:
-        MetalHardwareBufferManagerBase( MetalDevice *device, VaoManager *vaoManager );
-        virtual ~MetalHardwareBufferManagerBase();
-
-        void _notifyDeviceStalled(void);
-
-        MetalDiscardBufferManager* _getDiscardBufferManager(void)   { return mDiscardBufferManager; }
-
-        /// Creates a vertex buffer
-        virtual HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,
-                                                                  HardwareBuffer::Usage usage,
-                                                                  bool useShadowBuffer = false );
-        /// Create an index buffer
-        virtual HardwareIndexBufferSharedPtr createIndexBuffer(
-                HardwareIndexBuffer::IndexType itype, size_t numIndexes,
-                HardwareBuffer::Usage usage, bool useShadowBuffer = false );
-
-        /// Create a uniform buffer
-        virtual HardwareUniformBufferSharedPtr createUniformBuffer( size_t sizeBytes,
-                                                                    HardwareBuffer::Usage usage,
-                                                                    bool useShadowBuffer,
-                                                                    const String& name = "");
-        /// Create a counter buffer
-        virtual HardwareCounterBufferSharedPtr createCounterBuffer( size_t sizeBytes,
-                                                                    HardwareBuffer::Usage usage,
-                                                                    bool useShadowBuffer,
-                                                                    const String& name = "" );
-    };
-
-    /// MetalHardwareBufferManagerBase as a Singleton
-    class _OgreMetalExport MetalHardwareBufferManager : public HardwareBufferManager
-    {
-    public:
-        MetalHardwareBufferManager( MetalDevice *device, VaoManager *vaoManager ) :
-            HardwareBufferManager( OGRE_NEW MetalHardwareBufferManagerBase( device, vaoManager ) )
+        /// Implementation of HardwareBufferManager for Metal.
+        class _OgreMetalExport MetalHardwareBufferManagerBase final : public HardwareBufferManagerBase
         {
-        }
-        virtual ~MetalHardwareBufferManager()
-        {
-            OGRE_DELETE mImpl;
-        }
+        protected:
+            MetalDiscardBufferManager *mDiscardBufferManager;
 
-        void _notifyDeviceStalled(void)
-                    { static_cast<MetalHardwareBufferManagerBase*>(mImpl)->_notifyDeviceStalled(); }
-    };
-}
-}
+        public:
+            MetalHardwareBufferManagerBase( MetalDevice *device, VaoManager *vaoManager );
+            ~MetalHardwareBufferManagerBase() override;
+
+            void _notifyDeviceStalled();
+
+            MetalDiscardBufferManager *_getDiscardBufferManager() { return mDiscardBufferManager; }
+
+            /// Creates a vertex buffer
+            HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,
+                                                              HardwareBuffer::Usage usage,
+                                                              bool useShadowBuffer = false ) override;
+            /// Create an index buffer
+            HardwareIndexBufferSharedPtr createIndexBuffer( HardwareIndexBuffer::IndexType itype,
+                                                            size_t                         numIndexes,
+                                                            HardwareBuffer::Usage          usage,
+                                                            bool useShadowBuffer = false ) override;
+        };
+
+        /// MetalHardwareBufferManagerBase as a Singleton
+        class _OgreMetalExport MetalHardwareBufferManager final : public HardwareBufferManager
+        {
+        public:
+            MetalHardwareBufferManager( MetalDevice *device, VaoManager *vaoManager ) :
+                HardwareBufferManager( OGRE_NEW MetalHardwareBufferManagerBase( device, vaoManager ) )
+            {
+            }
+            ~MetalHardwareBufferManager() override { OGRE_DELETE mImpl; }
+
+            void _notifyDeviceStalled()
+            {
+                static_cast<MetalHardwareBufferManagerBase *>( mImpl )->_notifyDeviceStalled();
+            }
+        };
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

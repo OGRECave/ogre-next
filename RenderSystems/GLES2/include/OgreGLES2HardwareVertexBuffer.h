@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -46,7 +46,7 @@ namespace v1 {
             /** See HardwareBuffer. */
             void* lockImpl(size_t offset, size_t length, LockOptions options);
             /** See HardwareBuffer. */
-            void unlockImpl(void);
+            void unlockImpl();
         
             void createBuffer();
         
@@ -77,9 +77,9 @@ namespace v1 {
                       size_t dstOffset, size_t length, bool discardWholeBuffer = false);
 #endif
             /** See HardwareBuffer. */
-            void _updateFromShadow(void);
+            void _updateFromShadow();
 
-            inline GLuint getGLBufferId(void) const { return mBufferId; }
+            inline GLuint getGLBufferId() const { return mBufferId; }
     };
 }
 }

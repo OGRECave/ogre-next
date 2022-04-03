@@ -8,24 +8,32 @@
 
 namespace Ogre
 {
-    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy> >
+#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
+#    define OGRE_STL_ALIGNMENT_DEF_ARG , typename A = STLAllocator<T, AllocPolicy>
+#    define OGRE_STL_ALIGNMENT_ARG , typename A
+#    define OGRE_STL_ALIGNMENT_A , A
+#else
+#    define OGRE_STL_ALIGNMENT_DEF_ARG
+#    define OGRE_STL_ALIGNMENT_ARG
+#    define OGRE_STL_ALIGNMENT_A
+#endif
+
+    template <typename T OGRE_STL_ALIGNMENT_DEF_ARG>
     struct vector
     {
-#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename std::vector<T, A> type;
-        typedef typename std::vector<T, A>::iterator iterator;
-        typedef typename std::vector<T, A>::const_iterator const_iterator;
-#else
-        typedef typename std::vector<T> type;
-        typedef typename std::vector<T>::iterator iterator;
-        typedef typename std::vector<T>::const_iterator const_iterator;
-#endif
+        typedef typename std::vector<T OGRE_STL_ALIGNMENT_A>                 type;
+        typedef typename std::vector<T OGRE_STL_ALIGNMENT_A>::iterator       iterator;
+        typedef typename std::vector<T OGRE_STL_ALIGNMENT_A>::const_iterator const_iterator;
     };
 
-    template <typename T, typename A>
-    class StdVector : public std::vector<T, A>
+    template <typename T OGRE_STL_ALIGNMENT_ARG>
+    class StdVector : public std::vector<T OGRE_STL_ALIGNMENT_A>
     {
     };
+
+#undef OGRE_STL_ALIGNMENT_A
+#undef OGRE_STL_ALIGNMENT_ARG
+#undef OGRE_STL_ALIGNMENT_DEF_ARG
 }  // namespace Ogre
 
 #endif

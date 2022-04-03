@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -41,20 +41,20 @@ namespace Ogre
     class _OgreNULLExport NULLBufferInterface : public BufferInterface
     {
     protected:
-        size_t  mVboPoolIdx;
-        void    *mMappedPtr;
+        size_t mVboPoolIdx;
+        void  *mMappedPtr;
 
-        uint8   *mNullDataPtr;
+        uint8 *mNullDataPtr;
 
         size_t advanceFrame( bool bAdvanceFrame );
 
     public:
         NULLBufferInterface( size_t vboPoolIdx );
-        ~NULLBufferInterface();
+        ~NULLBufferInterface() override;
 
-        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
+        size_t getVboPoolIndex() { return mVboPoolIdx; }
 
-        uint8* getNullDataPtr(void)                 { return mNullDataPtr; }
+        uint8 *getNullDataPtr() { return mNullDataPtr; }
 
         /// will null the data ptr so it wont be freed on destruction
         void nullDataPtr() { mNullDataPtr = 0; }
@@ -62,19 +62,20 @@ namespace Ogre
         /// Only use this function for the first upload
         void _firstUpload( const void *data, size_t elementStart, size_t elementCount );
 
-        virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
-                                                 MappingState prevMappingState,
-                                                 bool advanceFrame = true );
-        virtual void unmap( UnmapOptions unmapOption,
-                            size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+                                         MappingState prevMappingState,
+                                         bool         advanceFrame = true ) override;
 
-        virtual void _notifyBuffer( BufferPacked *buffer );
+        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                    size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
 
-        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
-                             size_t srcOffsetBytes, size_t sizeBytes );
+        void _notifyBuffer( BufferPacked *buffer ) override;
+
+        void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
+                     size_t sizeBytes ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,10 +29,10 @@ THE SOFTWARE.
 #ifndef __CompositorPassScene_H__
 #define __CompositorPassScene_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -40,14 +40,14 @@ namespace Ogre
     class Camera;
     class CompositorShadowNode;
     class CompositorWorkspace;
-    typedef vector<TextureGpu*>::type TextureGpuVec;
+    typedef vector<TextureGpu *>::type TextureGpuVec;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will perform main rendering, selecting several parameters
@@ -61,25 +61,26 @@ namespace Ogre
     class _OgreExport CompositorPassScene : public CompositorPass
     {
         CompositorPassSceneDef const *mDefinition;
-    protected:
-        CompositorShadowNode    *mShadowNode;
-        Camera                  *mCamera;
-        Camera                  *mLodCamera;
-        Camera                  *mCullCamera;
-        bool                    mUpdateShadowNode;
 
-        TextureGpuVec   mPrePassTextures;
-        TextureGpu      *mPrePassDepthTexture;
-        TextureGpu      *mSsrTexture;
-        TextureGpu      *mDepthTextureNoMsaa;
-        TextureGpu      *mRefractionsTexture;
+    protected:
+        CompositorShadowNode *mShadowNode;
+        Camera               *mCamera;
+        Camera               *mLodCamera;
+        Camera               *mCullCamera;
+        bool                  mUpdateShadowNode;
+
+        TextureGpuVec mPrePassTextures;
+        TextureGpu   *mPrePassDepthTexture;
+        TextureGpu   *mSsrTexture;
+        TextureGpu   *mDepthTextureNoMsaa;
+        TextureGpu   *mRefractionsTexture;
 
         HlmsManager *mHlmsManager;
 
-        void notifyPassSceneAfterShadowMapsListeners(void);
-        void notifyPassSceneAfterFrustumCullingListeners(void);
+        void notifyPassSceneAfterShadowMapsListeners();
+        void notifyPassSceneAfterFrustumCullingListeners();
 
-        virtual void analyzeBarriers( const bool bClearBarriers = true );
+        void analyzeBarriers( const bool bClearBarriers = true ) override;
 
     public:
         /** Constructor
@@ -93,27 +94,27 @@ namespace Ogre
         */
         CompositorPassScene( const CompositorPassSceneDef *definition, Camera *defaultCamera,
                              const RenderTargetViewDef *rtv, CompositorNode *parentNode );
-        ~CompositorPassScene();
+        ~CompositorPassScene() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
 
-        CompositorShadowNode* getShadowNode() const             { return mShadowNode; }
-        Camera* getCamera() const                               { return mCamera; }
-        void _setCustomCamera( Camera *camera )                 { mCamera = camera; }
-        Camera* getCullCamera() const                           { return mCullCamera; }
-        void _setCustomCullCamera( Camera *camera )             { mCullCamera = camera; }
-        void _setUpdateShadowNode( bool update )                { mUpdateShadowNode = update; }
+        CompositorShadowNode *getShadowNode() const { return mShadowNode; }
+        Camera               *getCamera() const { return mCamera; }
+        void                  _setCustomCamera( Camera *camera ) { mCamera = camera; }
+        Camera               *getCullCamera() const { return mCullCamera; }
+        void                  _setCustomCullCamera( Camera *camera ) { mCullCamera = camera; }
+        void                  _setUpdateShadowNode( bool update ) { mUpdateShadowNode = update; }
 
-        bool getUpdateShadowNode(void) const                    { return mUpdateShadowNode; }
+        bool getUpdateShadowNode() const { return mUpdateShadowNode; }
 
-        virtual void notifyCleared(void);
+        void notifyCleared() override;
 
-        const CompositorPassSceneDef* getDefinition() const     { return mDefinition; }
+        const CompositorPassSceneDef *getDefinition() const { return mDefinition; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

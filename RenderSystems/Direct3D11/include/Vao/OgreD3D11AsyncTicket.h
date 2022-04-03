@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -35,22 +35,21 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11AsyncTicket : public AsyncTicket
+    class _OgreD3D11Export D3D11AsyncTicket final : public AsyncTicket
     {
     protected:
         ComPtr<ID3D11Query> mFenceName;
-        D3D11Device &mDevice;
+        D3D11Device        &mDevice;
 
-        virtual const void* mapImpl(void);
+        const void *mapImpl() override;
 
     public:
-        D3D11AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                          size_t elementStart, size_t elementCount,
-                          D3D11Device &device );
-        virtual ~D3D11AsyncTicket();
+        D3D11AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
+                          size_t elementCount, D3D11Device &device );
+        ~D3D11AsyncTicket() override;
 
-        virtual bool queryIsTransferDone(void);
+        bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

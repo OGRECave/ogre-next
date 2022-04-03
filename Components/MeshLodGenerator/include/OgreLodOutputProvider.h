@@ -1,7 +1,7 @@
 
 /*
  * -----------------------------------------------------------------------------
- * This source file is part of OGRE
+ * This source file is part of OGRE-Next
  * (Object-oriented Graphics Rendering Engine)
  * For the latest info, see http://www.ogre3d.org/
  *
@@ -31,24 +31,22 @@
 #define _LodOutputProvider_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodData.h"
 
 namespace Ogre
 {
-
     class _OgreLodExport LodOutputProvider
     {
     public:
         virtual ~LodOutputProvider() {}
-        virtual void prepare(LodData* data) = 0;
-        virtual void finalize(LodData* data) = 0;
-        virtual void bakeManualLodLevel(LodData* data, String& manualMeshName, int lodIndex) = 0;
-        virtual void bakeLodLevel(LodData* data, int lodIndex) = 0;
-        virtual void triangleRemoved(LodData* data, LodData::Triangle* tri) {}
-        virtual void triangleChanged(LodData* data, LodData::Triangle* tri) {}
+        virtual void prepare( LodData *data ) = 0;
+        virtual void finalize( LodData *data ) = 0;
+        virtual void bakeManualLodLevel( LodData *data, String &manualMeshName, int lodIndex ) = 0;
+        virtual void bakeLodLevel( LodData *data, int lodIndex ) = 0;
+        virtual void triangleRemoved( LodData *data, LodData::Triangle *tri ) {}
+        virtual void triangleChanged( LodData *data, LodData::Triangle *tri ) {}
         virtual void inject() {}
     };
-}
+}  // namespace Ogre
 #endif
-
-

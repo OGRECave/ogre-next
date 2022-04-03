@@ -19,6 +19,8 @@ compositor_node PbsMaterialsRenderingNode
 			}
 			overlays	on
 			shadows		PbsMaterialsShadowNode
+
+			profiling_id "Main Render"
 		}
 	}
 }

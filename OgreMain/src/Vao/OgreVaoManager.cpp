@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,52 +30,54 @@ THE SOFTWARE.
 
 #include "Vao/OgreVaoManager.h"
 
-#include "Vao/OgreStagingBuffer.h"
-#include "Vao/OgreVertexArrayObject.h"
-#include "Vao/OgreConstBufferPacked.h"
-#include "Vao/OgreReadOnlyBufferPacked.h"
-#include "Vao/OgreTexBufferPacked.h"
-#include "Vao/OgreUavBufferPacked.h"
-#include "Vao/OgreIndirectBufferPacked.h"
-#include "OgreTimer.h"
 #include "OgreCommon.h"
-#include "OgreStringConverter.h"
 #include "OgreLogManager.h"
 #include "OgreRoot.h"
+#include "OgreStringConverter.h"
+#include "OgreTimer.h"
+#include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreIndirectBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
+#include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreUavBufferPacked.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 namespace Ogre
 {
     VaoManager::VaoManager( const NameValuePairList *params ) :
         mTimer( 0 ),
-        mDefaultStagingBufferUnfencedTime( 300000 - 1000 ), //4 minutes, 59 seconds
-        mDefaultStagingBufferLifetime( 300000 ), //5 minutes
+        mDefaultStagingBufferUnfencedTime( 300000 - 1000 ),  // 4 minutes, 59 seconds
+        mDefaultStagingBufferLifetime( 300000 ),             // 5 minutes
         mReadOnlyIsTexBuffer( true ),
         mSupportsPersistentMapping( false ),
         mSupportsIndirectBuffers( false ),
         mSupportsBaseInstance( true ),
         mDynamicBufferMultiplier( 3 ),
         mDynamicBufferCurrentFrame( 0 ),
-        mNextStagingBufferTimestampCheckpoint( ~0 ),
+        mNextStagingBufferTimestampCheckpoint( std::numeric_limits<uint64>::max() ),
         mFrameCount( 0 ),
         mNumGeneratedVaos( 0 ),
         mConstBufferAlignment( 256 ),
         mTexBufferAlignment( 256 ),
         mUavBufferAlignment( 256 ),
-        mConstBufferMaxSize( 16 * 1024 * 1024 ), //Minimum guaranteed by GL.
-        mTexBufferMaxSize( 64 * 1024 * 1024 ),  //Minimum guaranteed by GL. Intel HD Graphics 3000-5000/Iris provide 64M only
+        mConstBufferMaxSize( 16 * 1024 * 1024 ),  // Minimum guaranteed by GL.
+        mTexBufferMaxSize(
+            64 * 1024 *
+            1024 ),  // Minimum guaranteed by GL. Intel HD Graphics 3000-5000/Iris provide 64M only
         mReadOnlyBufferMaxSize( 64 * 1024 * 1024 ),
-        mUavBufferMaxSize( 16 * 1024 * 1024 )    //Minimum guaranteed by GL.
+        mUavBufferMaxSize( 16 * 1024 * 1024 )  // Minimum guaranteed by GL.
     {
         mTimer = OGRE_NEW Timer();
 
         if( params )
         {
             NameValuePairList::const_iterator itor =
-                    params->find( "VaoManager::mDynamicBufferMultiplier" );
+                params->find( "VaoManager::mDynamicBufferMultiplier" );
             if( itor != params->end() )
             {
-                const uint32 newBufMult = StringConverter::parseUnsignedInt( itor->second,
-                                                                             mDynamicBufferMultiplier );
+                const uint32 newBufMult =
+                    StringConverter::parseUnsignedInt( itor->second, mDynamicBufferMultiplier );
                 mDynamicBufferMultiplier = static_cast<uint8>( newBufMult );
                 OGRE_ASSERT_LOW( mDynamicBufferMultiplier > 0u );
             }
@@ -95,9 +97,9 @@ namespace Ogre
         for( size_t i = 0; i < 2; ++i )
         {
             StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
-            StagingBufferVec::const_iterator end = mRefedStagingBuffers[i].end();
+            StagingBufferVec::const_iterator endt = mRefedStagingBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 OGRE_DELETE *itor;
                 ++itor;
@@ -107,9 +109,9 @@ namespace Ogre
             mRefedStagingBuffers[i].clear();
 
             itor = mZeroRefStagingBuffers[i].begin();
-            end = mZeroRefStagingBuffers[i].end();
+            endt = mZeroRefStagingBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 OGRE_DELETE *itor;
                 ++itor;
@@ -123,11 +125,11 @@ namespace Ogre
     uint32 VaoManager::calculateVertexSize( const VertexElement2Vec &vertexElements )
     {
         VertexElement2Vec::const_iterator itor = vertexElements.begin();
-        VertexElement2Vec::const_iterator end  = vertexElements.end();
+        VertexElement2Vec::const_iterator endt = vertexElements.end();
 
         uint32 bytesPerVertex = 0;
 
-        while( itor != end )
+        while( itor != endt )
         {
             bytesPerVertex += v1::VertexElement::getTypeSize( itor->mType );
             ++itor;
@@ -136,7 +138,7 @@ namespace Ogre
         return bytesPerVertex;
     }
     //-----------------------------------------------------------------------------------
-    VertexBufferPacked* VaoManager::createVertexBuffer( const VertexElement2Vec &vertexElements,
+    VertexBufferPacked *VaoManager::createVertexBuffer( const VertexElement2Vec &vertexElements,
                                                         size_t numVertices, BufferType bufferType,
                                                         void *initialData, bool keepAsShadow )
     {
@@ -151,14 +153,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VaoManager::destroyVertexBuffer( VertexBufferPacked *vertexBuffer )
     {
+#ifdef _OGRE_MULTISOURCE_VBO
         if( vertexBuffer->getMultiSourcePool() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Vertex Buffer belongs to a Multisource pool, not this VaoManager",
                          "VaoManager::destroyVertexBuffer" );
         }
+#endif
 
-        BufferPackedSet::iterator itor = mBuffers[ BP_TYPE_VERTEX ].find( vertexBuffer );
+        BufferPackedSet::iterator itor = mBuffers[BP_TYPE_VERTEX].find( vertexBuffer );
 
         if( itor == mBuffers[BP_TYPE_VERTEX].end() )
         {
@@ -170,8 +174,8 @@ namespace Ogre
 
         if( vertexBuffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
         {
-            //We need to delay the removal of this buffer until
-            //we're sure it's not in use by the GPU anymore
+            // We need to delay the removal of this buffer until
+            // we're sure it's not in use by the GPU anymore
             DelayedBuffer delayedBuffer( vertexBuffer, mFrameCount, mDynamicBufferCurrentFrame );
             mDelayedDestroyBuffers.push_back( delayedBuffer );
         }
@@ -181,10 +185,10 @@ namespace Ogre
             OGRE_DELETE vertexBuffer;
         }
 
-        mBuffers[ BP_TYPE_VERTEX ].erase( itor );
+        mBuffers[BP_TYPE_VERTEX].erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    IndexBufferPacked* VaoManager::createIndexBuffer( IndexBufferPacked::IndexType indexType,
+    IndexBufferPacked *VaoManager::createIndexBuffer( IndexBufferPacked::IndexType indexType,
                                                       size_t numIndices, BufferType bufferType,
                                                       void *initialData, bool keepAsShadow )
     {
@@ -197,7 +201,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VaoManager::destroyIndexBuffer( IndexBufferPacked *indexBuffer )
     {
-        BufferPackedSet::iterator itor = mBuffers[ BP_TYPE_INDEX ].find( indexBuffer );
+        BufferPackedSet::iterator itor = mBuffers[BP_TYPE_INDEX].find( indexBuffer );
 
         if( itor == mBuffers[BP_TYPE_INDEX].end() )
         {
@@ -209,8 +213,8 @@ namespace Ogre
 
         if( indexBuffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
         {
-            //We need to delay the removal of this buffer until
-            //we're sure it's not in use by the GPU anymore
+            // We need to delay the removal of this buffer until
+            // we're sure it's not in use by the GPU anymore
             DelayedBuffer delayedBuffer( indexBuffer, mFrameCount, mDynamicBufferCurrentFrame );
             mDelayedDestroyBuffers.push_back( delayedBuffer );
         }
@@ -220,10 +224,10 @@ namespace Ogre
             OGRE_DELETE *itor;
         }
 
-        mBuffers[ BP_TYPE_INDEX ].erase( itor );
+        mBuffers[BP_TYPE_INDEX].erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    ConstBufferPacked* VaoManager::createConstBuffer( size_t sizeBytes, BufferType bufferType,
+    ConstBufferPacked *VaoManager::createConstBuffer( size_t sizeBytes, BufferType bufferType,
                                                       void *initialData, bool keepAsShadow )
     {
         ConstBufferPacked *retVal;
@@ -234,7 +238,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VaoManager::destroyConstBuffer( ConstBufferPacked *constBuffer )
     {
-        BufferPackedSet::iterator itor = mBuffers[ BP_TYPE_CONST ].find( constBuffer );
+        BufferPackedSet::iterator itor = mBuffers[BP_TYPE_CONST].find( constBuffer );
 
         if( itor == mBuffers[BP_TYPE_CONST].end() )
         {
@@ -246,8 +250,8 @@ namespace Ogre
 
         if( constBuffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
         {
-            //We need to delay the removal of this buffer until
-            //we're sure it's not in use by the GPU anymore
+            // We need to delay the removal of this buffer until
+            // we're sure it's not in use by the GPU anymore
             DelayedBuffer delayedBuffer( constBuffer, mFrameCount, mDynamicBufferCurrentFrame );
             mDelayedDestroyBuffers.push_back( delayedBuffer );
         }
@@ -257,12 +261,12 @@ namespace Ogre
             OGRE_DELETE *itor;
         }
 
-        mBuffers[ BP_TYPE_CONST ].erase( itor );
+        mBuffers[BP_TYPE_CONST].erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* VaoManager::createTexBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                                  BufferType bufferType,
-                                                  void *initialData, bool keepAsShadow )
+    TexBufferPacked *VaoManager::createTexBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                  BufferType bufferType, void *initialData,
+                                                  bool keepAsShadow )
     {
         TexBufferPacked *retVal;
         retVal = createTexBufferImpl( pixelFormat, sizeBytes, bufferType, initialData, keepAsShadow );
@@ -272,7 +276,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VaoManager::destroyTexBuffer( TexBufferPacked *texBuffer )
     {
-        BufferPackedSet::iterator itor = mBuffers[ BP_TYPE_TEX ].find( texBuffer );
+        BufferPackedSet::iterator itor = mBuffers[BP_TYPE_TEX].find( texBuffer );
 
         if( itor == mBuffers[BP_TYPE_TEX].end() )
         {
@@ -284,8 +288,8 @@ namespace Ogre
 
         if( texBuffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
         {
-            //We need to delay the removal of this buffer until
-            //we're sure it's not in use by the GPU anymore
+            // We need to delay the removal of this buffer until
+            // we're sure it's not in use by the GPU anymore
             DelayedBuffer delayedBuffer( texBuffer, mFrameCount, mDynamicBufferCurrentFrame );
             mDelayedDestroyBuffers.push_back( delayedBuffer );
         }
@@ -295,7 +299,7 @@ namespace Ogre
             OGRE_DELETE *itor;
         }
 
-        mBuffers[ BP_TYPE_TEX ].erase( itor );
+        mBuffers[BP_TYPE_TEX].erase( itor );
     }
     //-----------------------------------------------------------------------------------
     ReadOnlyBufferPacked *VaoManager::createReadOnlyBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
@@ -337,13 +341,13 @@ namespace Ogre
         mBuffers[BP_TYPE_READONLY].erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    UavBufferPacked* VaoManager::createUavBuffer( size_t numElements, uint32 bytesPerElement,
-                                                  uint32 bindFlags,
-                                                  void *initialData, bool keepAsShadow )
+    UavBufferPacked *VaoManager::createUavBuffer( size_t numElements, uint32 bytesPerElement,
+                                                  uint32 bindFlags, void *initialData,
+                                                  bool keepAsShadow )
     {
         UavBufferPacked *retVal;
-        retVal = createUavBufferImpl( numElements, bytesPerElement, bindFlags,
-                                      initialData, keepAsShadow );
+        retVal =
+            createUavBufferImpl( numElements, bytesPerElement, bindFlags, initialData, keepAsShadow );
         mBuffers[BP_TYPE_UAV].insert( retVal );
         return retVal;
     }
@@ -368,7 +372,7 @@ namespace Ogre
         mBuffers[BP_TYPE_UAV].erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    IndirectBufferPacked* VaoManager::createIndirectBuffer( size_t sizeBytes, BufferType bufferType,
+    IndirectBufferPacked *VaoManager::createIndirectBuffer( size_t sizeBytes, BufferType bufferType,
                                                             void *initialData, bool keepAsShadow )
     {
         IndirectBufferPacked *retVal;
@@ -379,7 +383,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VaoManager::destroyIndirectBuffer( IndirectBufferPacked *indirectBuffer )
     {
-        BufferPackedSet::iterator itor = mBuffers[ BP_TYPE_INDIRECT ].find( indirectBuffer );
+        BufferPackedSet::iterator itor = mBuffers[BP_TYPE_INDIRECT].find( indirectBuffer );
 
         if( itor == mBuffers[BP_TYPE_INDIRECT].end() )
         {
@@ -391,8 +395,8 @@ namespace Ogre
 
         if( indirectBuffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
         {
-            //We need to delay the removal of this buffer until
-            //we're sure it's not in use by the GPU anymore
+            // We need to delay the removal of this buffer until
+            // we're sure it's not in use by the GPU anymore
             DelayedBuffer delayedBuffer( indirectBuffer, mFrameCount, mDynamicBufferCurrentFrame );
             mDelayedDestroyBuffers.push_back( delayedBuffer );
         }
@@ -405,21 +409,22 @@ namespace Ogre
         mBuffers[BP_TYPE_INDIRECT].erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    VertexArrayObject* VaoManager::createVertexArrayObject( const VertexBufferPackedVec &vertexBuffers,
+    VertexArrayObject *VaoManager::createVertexArrayObject( const VertexBufferPackedVec &vertexBuffers,
                                                             IndexBufferPacked *indexBuffer,
                                                             OperationType opType )
     {
+#ifdef _OGRE_MULTISOURCE_VBO
         if( vertexBuffers.size() > 1 )
         {
-            size_t multiSourceId                            = vertexBuffers[0]->getMultiSourceId();
-            MultiSourceVertexBufferPool *multiSourcePool    = vertexBuffers[0]->getMultiSourcePool();
+            size_t multiSourceId = vertexBuffers[0]->getMultiSourceId();
+            MultiSourceVertexBufferPool *multiSourcePool = vertexBuffers[0]->getMultiSourcePool();
 
             VertexBufferPackedVec::const_iterator itor = vertexBuffers.begin();
-            VertexBufferPackedVec::const_iterator end  = vertexBuffers.end();
+            VertexBufferPackedVec::const_iterator endt = vertexBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                if( !(*itor)->getMultiSourcePool() )
+                if( !( *itor )->getMultiSourcePool() )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Cannot use a non-multisource vertex buffer "
@@ -427,8 +432,8 @@ namespace Ogre
                                  "VaoManager::createVertexArrayObject" );
                 }
 
-                if( multiSourceId != (*itor)->getMultiSourceId() ||
-                    multiSourcePool != (*itor)->getMultiSourcePool() )
+                if( multiSourceId != ( *itor )->getMultiSourceId() ||
+                    multiSourcePool != ( *itor )->getMultiSourcePool() )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Multisource vertex buffers can only be bound together with "
@@ -441,6 +446,7 @@ namespace Ogre
                 ++itor;
             }
         }
+#endif
 
         VertexArrayObject *retVal;
         retVal = createVertexArrayObjectImpl( vertexBuffers, indexBuffer, opType );
@@ -465,12 +471,12 @@ namespace Ogre
         mVertexArrayObjects.erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::destroyAllVertexArrayObjects(void)
+    void VaoManager::destroyAllVertexArrayObjects()
     {
         VertexArrayObjectSet::const_iterator itor = mVertexArrayObjects.begin();
-        VertexArrayObjectSet::const_iterator end  = mVertexArrayObjects.end();
+        VertexArrayObjectSet::const_iterator endt = mVertexArrayObjects.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             destroyVertexArrayObjectImpl( *itor );
             ++itor;
@@ -479,17 +485,17 @@ namespace Ogre
         mVertexArrayObjects.clear();
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::deleteAllBuffers(void)
+    void VaoManager::deleteAllBuffers()
     {
-        for( int i=0; i<NUM_BUFFER_PACKED_TYPES; ++i )
+        for( int i = 0; i < NUM_BUFFER_PACKED_TYPES; ++i )
         {
             BufferPackedSet::const_iterator itor = mBuffers[i].begin();
-            BufferPackedSet::const_iterator end  = mBuffers[i].end();
+            BufferPackedSet::const_iterator endt = mBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                //For some RS 'callDestroyBufferImpl' is unnecessary and will only
-                //increase shutdown times. However for other RS, this is necessary.
+                // For some RS 'callDestroyBufferImpl' is unnecessary and will only
+                // increase shutdown times. However for other RS, this is necessary.
                 callDestroyBufferImpl( *itor );
                 OGRE_DELETE *itor++;
             }
@@ -499,12 +505,12 @@ namespace Ogre
 
         {
             DelayedBufferVec::const_iterator itor = mDelayedDestroyBuffers.begin();
-            DelayedBufferVec::const_iterator end  = mDelayedDestroyBuffers.end();
+            DelayedBufferVec::const_iterator endt = mDelayedDestroyBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                //For some RS 'callDestroyBufferImpl' is unnecessary and will only
-                //increase shutdown times. However for other RS, this is necessary.
+                // For some RS 'callDestroyBufferImpl' is unnecessary and will only
+                // increase shutdown times. However for other RS, this is necessary.
                 callDestroyBufferImpl( itor->bufferPacked );
                 OGRE_DELETE itor->bufferPacked;
                 ++itor;
@@ -514,31 +520,31 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    StagingBuffer* VaoManager::getStagingBuffer( size_t minSizeBytes, bool forUpload )
+    StagingBuffer *VaoManager::getStagingBuffer( size_t minSizeBytes, bool forUpload )
     {
         StagingBuffer *candidates[NUM_STALL_TYPES];
         memset( candidates, 0, sizeof( candidates ) );
 
         StagingBufferVec::const_iterator itor = mZeroRefStagingBuffers[forUpload].begin();
-        StagingBufferVec::const_iterator end  = mZeroRefStagingBuffers[forUpload].end();
+        StagingBufferVec::const_iterator endt = mZeroRefStagingBuffers[forUpload].end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( forUpload )
             {
-                if( minSizeBytes <= (*itor)->getMaxSize() )
+                if( minSizeBytes <= ( *itor )->getMaxSize() )
                 {
-                    StagingStallType stallType = (*itor)->uploadWillStall( minSizeBytes );
+                    StagingStallType stallType = ( *itor )->uploadWillStall( minSizeBytes );
                     candidates[stallType] = *itor;
 
-                    //This is best case scenario, we can stop looking.
+                    // This is best case scenario, we can stop looking.
                     if( stallType == STALL_NONE )
                         break;
                 }
             }
             else
             {
-                if( (*itor)->canDownload( minSizeBytes ) )
+                if( ( *itor )->canDownload( minSizeBytes ) )
                 {
                     candidates[0] = *itor;
                     break;
@@ -550,12 +556,12 @@ namespace Ogre
 
         StagingBuffer *retVal = candidates[STALL_FULL];
 
-        for( size_t i=0; i<NUM_STALL_TYPES && !retVal; ++i )
+        for( size_t i = 0; i < NUM_STALL_TYPES && !retVal; ++i )
             retVal = candidates[i];
 
         if( !retVal )
         {
-            //No buffer is large enough. Get a new one.
+            // No buffer is large enough. Get a new one.
             retVal = createStagingBuffer( minSizeBytes, forUpload );
         }
         else
@@ -569,9 +575,9 @@ namespace Ogre
     void VaoManager::destroyDelayedBuffers( uint8 fromDynamicFrame )
     {
         DelayedBufferVec::iterator itor = mDelayedDestroyBuffers.begin();
-        DelayedBufferVec::iterator end  = mDelayedDestroyBuffers.end();
+        DelayedBufferVec::iterator endt = mDelayedDestroyBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->frameNumDynamic != fromDynamicFrame || itor->frame == mFrameCount )
                 break;
@@ -589,12 +595,12 @@ namespace Ogre
         mDelayedDestroyBuffers.erase( mDelayedDestroyBuffers.begin(), itor );
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::_destroyAllDelayedBuffers(void)
+    void VaoManager::_destroyAllDelayedBuffers()
     {
         DelayedBufferVec::iterator itor = mDelayedDestroyBuffers.begin();
-        DelayedBufferVec::iterator end  = mDelayedDestroyBuffers.end();
+        DelayedBufferVec::iterator endt = mDelayedDestroyBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             callDestroyBufferImpl( itor->bufferPacked );
             OGRE_DELETE itor->bufferPacked;
@@ -609,45 +615,47 @@ namespace Ogre
         switch( bufferPacked->getBufferPackedType() )
         {
         case BP_TYPE_VERTEX:
-            assert( dynamic_cast<VertexBufferPacked*>( bufferPacked ) );
-            destroyVertexBufferImpl( static_cast<VertexBufferPacked*>( bufferPacked ) );
+            assert( dynamic_cast<VertexBufferPacked *>( bufferPacked ) );
+            destroyVertexBufferImpl( static_cast<VertexBufferPacked *>( bufferPacked ) );
             break;
         case BP_TYPE_INDEX:
-            assert( dynamic_cast<IndexBufferPacked*>( bufferPacked ) );
-            destroyIndexBufferImpl( static_cast<IndexBufferPacked*>( bufferPacked ) );
+            assert( dynamic_cast<IndexBufferPacked *>( bufferPacked ) );
+            destroyIndexBufferImpl( static_cast<IndexBufferPacked *>( bufferPacked ) );
             break;
         case BP_TYPE_CONST:
-            assert( dynamic_cast<ConstBufferPacked*>( bufferPacked ) );
-            destroyConstBufferImpl( static_cast<ConstBufferPacked*>( bufferPacked ) );
+            assert( dynamic_cast<ConstBufferPacked *>( bufferPacked ) );
+            destroyConstBufferImpl( static_cast<ConstBufferPacked *>( bufferPacked ) );
             break;
         case BP_TYPE_TEX:
-            assert( dynamic_cast<TexBufferPacked*>( bufferPacked ) );
-            destroyTexBufferImpl( static_cast<TexBufferPacked*>( bufferPacked ) );
+            assert( dynamic_cast<TexBufferPacked *>( bufferPacked ) );
+            destroyTexBufferImpl( static_cast<TexBufferPacked *>( bufferPacked ) );
             break;
         case BP_TYPE_READONLY:
-            assert( dynamic_cast<ReadOnlyBufferPacked*>( bufferPacked ) );
-            destroyReadOnlyBufferImpl( static_cast<ReadOnlyBufferPacked*>( bufferPacked ) );
+            assert( dynamic_cast<ReadOnlyBufferPacked *>( bufferPacked ) );
+            destroyReadOnlyBufferImpl( static_cast<ReadOnlyBufferPacked *>( bufferPacked ) );
             break;
         case BP_TYPE_UAV:
-            assert( dynamic_cast<UavBufferPacked*>( bufferPacked ) );
-            destroyUavBufferImpl( static_cast<UavBufferPacked*>( bufferPacked ) );
+            assert( dynamic_cast<UavBufferPacked *>( bufferPacked ) );
+            destroyUavBufferImpl( static_cast<UavBufferPacked *>( bufferPacked ) );
             break;
         case BP_TYPE_INDIRECT:
-            assert( dynamic_cast<IndirectBufferPacked*>( bufferPacked ) );
-            destroyIndirectBufferImpl( static_cast<IndirectBufferPacked*>( bufferPacked ) );
+            assert( dynamic_cast<IndirectBufferPacked *>( bufferPacked ) );
+            destroyIndirectBufferImpl( static_cast<IndirectBufferPacked *>( bufferPacked ) );
             break;
+        default:
+            assert( false );  // unreachable
         }
     }
     //-----------------------------------------------------------------------------------
     void VaoManager::switchVboPoolIndex( unsigned internalVboBufferType, size_t oldPoolIdx,
                                          size_t newPoolIdx )
     {
-        for( int i=0; i<NUM_BUFFER_PACKED_TYPES; ++i )
+        for( int i = 0; i < NUM_BUFFER_PACKED_TYPES; ++i )
         {
             BufferPackedSet::const_iterator itor = mBuffers[i].begin();
-            BufferPackedSet::const_iterator end  = mBuffers[i].end();
+            BufferPackedSet::const_iterator endt = mBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 switchVboPoolIndexImpl( internalVboBufferType, oldPoolIdx, newPoolIdx, *itor );
                 ++itor;
@@ -656,9 +664,9 @@ namespace Ogre
 
         {
             DelayedBufferVec::const_iterator itor = mDelayedDestroyBuffers.begin();
-            DelayedBufferVec::const_iterator end  = mDelayedDestroyBuffers.end();
+            DelayedBufferVec::const_iterator endt = mDelayedDestroyBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 switchVboPoolIndexImpl( internalVboBufferType, oldPoolIdx, newPoolIdx,
                                         itor->bufferPacked );
@@ -667,7 +675,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::_update(void)
+    void VaoManager::_update()
     {
         Root::getSingleton()._renderingFrameEnded();
         ++mFrameCount;
@@ -676,8 +684,8 @@ namespace Ogre
     void VaoManager::_notifyStagingBufferEnteredZeroRef( StagingBuffer *stagingBuffer )
     {
         StagingBufferVec &refedStagingBuffers = mRefedStagingBuffers[stagingBuffer->getUploadOnly()];
-        StagingBufferVec::iterator itor = std::find( refedStagingBuffers.begin(),
-                                                     refedStagingBuffers.end(), stagingBuffer );
+        StagingBufferVec::iterator itor =
+            std::find( refedStagingBuffers.begin(), refedStagingBuffers.end(), stagingBuffer );
 
         assert( itor != refedStagingBuffers.end() );
         efficientVectorRemove( refedStagingBuffers, itor );
@@ -688,8 +696,8 @@ namespace Ogre
     void VaoManager::_notifyStagingBufferLeftZeroRef( StagingBuffer *stagingBuffer )
     {
         StagingBufferVec &zeroRefStagingBuffers = mZeroRefStagingBuffers[stagingBuffer->getUploadOnly()];
-        StagingBufferVec::iterator itor = std::find( zeroRefStagingBuffers.begin(),
-                                                     zeroRefStagingBuffers.end(), stagingBuffer );
+        StagingBufferVec::iterator itor =
+            std::find( zeroRefStagingBuffers.begin(), zeroRefStagingBuffers.end(), stagingBuffer );
 
         assert( itor != zeroRefStagingBuffers.end() );
         efficientVectorRemove( zeroRefStagingBuffers, itor );
@@ -709,15 +717,15 @@ namespace Ogre
         if( unfencedTime == lifetime )
         {
             LogManager::getSingleton().logMessage(
-                        "WARNING: lifetime is equal to unfencedTime in "
-                        "VaoManager::setDefaultStagingBufferlifetime. This could give you random "
-                        "stalls or framerate hiccups. You should set unfencedTime to some time "
-                        "earlier to lifetime. Like 1 second earlier. But not too distant either "
-                        "to prevent API overhead.", LML_CRITICAL );
+                "WARNING: lifetime is equal to unfencedTime in "
+                "VaoManager::setDefaultStagingBufferlifetime. This could give you random "
+                "stalls or framerate hiccups. You should set unfencedTime to some time "
+                "earlier to lifetime. Like 1 second earlier. But not too distant either "
+                "to prevent API overhead.",
+                LML_CRITICAL );
         }
 
-        mDefaultStagingBufferLifetime       = lifetime;
-        mDefaultStagingBufferUnfencedTime   = unfencedTime;
+        mDefaultStagingBufferLifetime = lifetime;
+        mDefaultStagingBufferUnfencedTime = unfencedTime;
     }
-}
-
+}  // namespace Ogre

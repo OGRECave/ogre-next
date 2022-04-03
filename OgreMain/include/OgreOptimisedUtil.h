@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,18 +29,19 @@ THE SOFTWARE.
 #define __OptimisedUtil_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreEdgeListBuilder.h"
 
 #include "stddef.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** Utility class for provides optimised functions.
     @note
         This class are supposed used by internal engine only.
@@ -49,20 +50,20 @@ namespace Ogre {
     {
     private:
         /// Privated copy constructor, to prevent misuse
-        OptimisedUtil(const OptimisedUtil& rhs); /* do nothing, should not use */
+        OptimisedUtil( const OptimisedUtil &rhs ); /* do nothing, should not use */
         /// Privated operator=, to prevent misuse
-        OptimisedUtil& operator=(const OptimisedUtil& rhs); /* do not use */
+        OptimisedUtil &operator=( const OptimisedUtil &rhs ); /* do not use */
 
     protected:
         /// Store a pointer to the implementation
-        static OptimisedUtil* msImplementation;
+        static OptimisedUtil *msImplementation;
 
         /// Detect best implementation based on run-time environment
-        static OptimisedUtil* _detectImplementation(void);
+        static OptimisedUtil *_detectImplementation();
 
     public:
         // Default constructor
-        OptimisedUtil(void) {}
+        OptimisedUtil() {}
         // Destructor
         virtual ~OptimisedUtil() {}
 
@@ -71,7 +72,7 @@ namespace Ogre {
             Don't cache the pointer returned by this function, it'll change due
             run-time environment detection to pick up the best implementation.
         */
-        static OptimisedUtil* getImplementation(void) { return msImplementation; }
+        static OptimisedUtil *getImplementation() { return msImplementation; }
 
         /** Performs software vertex skinning.
         @param srcPosPtr Pointer to source position buffer.
@@ -98,18 +99,14 @@ namespace Ogre {
         @param numVertices Number of vertices to blend.
         */
         virtual void softwareVertexSkinning(
-            const float *srcPosPtr, float *destPosPtr,
-            const float *srcNormPtr, float *destNormPtr,
-            const float *blendWeightPtr, const unsigned char* blendIndexPtr,
-            const Matrix4* const* blendMatrices,
-            size_t srcPosStride, size_t destPosStride,
-            size_t srcNormStride, size_t destNormStride,
-            size_t blendWeightStride, size_t blendIndexStride,
-            size_t numWeightsPerVertex,
-            size_t numVertices) = 0;
+            const float *srcPosPtr, float *destPosPtr, const float *srcNormPtr, float *destNormPtr,
+            const float *blendWeightPtr, const unsigned char *blendIndexPtr,
+            const Matrix4 *const *blendMatrices, size_t srcPosStride, size_t destPosStride,
+            size_t srcNormStride, size_t destNormStride, size_t blendWeightStride,
+            size_t blendIndexStride, size_t numWeightsPerVertex, size_t numVertices ) = 0;
 
         /** Performs a software vertex morph, of the kind used for
-            morph animation although it can be used for other purposes. 
+            morph animation although it can be used for other purposes.
         @remarks
             This function will linearly interpolate positions between two
             source buffers, into a third buffer.
@@ -122,13 +119,9 @@ namespace Ogre {
             the number in start, end and destination buffer. Bear in mind
             three floating-point values per vertex
         */
-        virtual void softwareVertexMorph(
-            Real t,
-            const float *srcPos1, const float *srcPos2,
-            float *dstPos,
-            size_t pos1VSize, size_t pos2VSize, size_t dstVSize, 
-            size_t numVertices,
-            bool morphNormals) = 0;
+        virtual void softwareVertexMorph( Real t, const float *srcPos1, const float *srcPos2,
+                                          float *dstPos, size_t pos1VSize, size_t pos2VSize,
+                                          size_t dstVSize, size_t numVertices, bool morphNormals ) = 0;
 
         /** Concatenate an affine matrix to an array of affine matrices.
         @note
@@ -139,11 +132,8 @@ namespace Ogre {
         @param dstMatrices An array of matrix to store matrix concatenate results.
         @param numMatrices Number of matrices in the array.
         */
-        virtual void concatenateAffineMatrices(
-            const Matrix4& baseMatrix,
-            const Matrix4* srcMatrices,
-            Matrix4* dstMatrices,
-            size_t numMatrices) = 0;
+        virtual void concatenateAffineMatrices( const Matrix4 &baseMatrix, const Matrix4 *srcMatrices,
+                                                Matrix4 *dstMatrices, size_t numMatrices ) = 0;
 
         /** Calculate the face normals for the triangles based on position
             information.
@@ -156,11 +146,9 @@ namespace Ogre {
             Must be aligned to SIMD alignment.
         @param numTriangles Number of triangles to calculate face normal.
         */
-        virtual void calculateFaceNormals(
-            const float *positions,
-            const v1::EdgeData::Triangle *triangles,
-            Vector4 *faceNormals,
-            size_t numTriangles) = 0;
+        virtual void calculateFaceNormals( const float                  *positions,
+                                           const v1::EdgeData::Triangle *triangles, Vector4 *faceNormals,
+                                           size_t numTriangles ) = 0;
 
         /** Calculate the light facing state of the triangle's face normals
         @remarks
@@ -178,11 +166,8 @@ namespace Ogre {
             the light, false otherwise. This array no alignment requires.
         @param numFaces Number of face normals to calculate.
         */
-        virtual void calculateLightFacing(
-            const Vector4& lightPos,
-            const Vector4* faceNormals,
-            char* lightFacings,
-            size_t numFaces) = 0;
+        virtual void calculateLightFacing( const Vector4 &lightPos, const Vector4 *faceNormals,
+                                           char *lightFacings, size_t numFaces ) = 0;
 
         /** Extruding vertices by a fixed distance based on light position.
         @param lightPos 4D light position, when w=0.0f this represents a
@@ -198,12 +183,9 @@ namespace Ogre {
         @param numVertices Number of vertices need to extruding, which agree
             with source and destination buffers.
         */
-        virtual void extrudeVertices(
-            const Vector4& lightPos,
-            Real extrudeDist,
-            const float* srcPositions,
-            float* destPositions,
-            size_t numVertices) = 0;
+        virtual void extrudeVertices( const Vector4 &lightPos, Real extrudeDist,
+                                      const float *srcPositions, float *destPositions,
+                                      size_t numVertices ) = 0;
     };
 
     /** Returns raw offseted of the given pointer.
@@ -211,15 +193,27 @@ namespace Ogre {
         The offset are in bytes, no matter what type of the pointer.
     */
     template <class T>
-    static FORCEINLINE const T* rawOffsetPointer(const T* ptr, ptrdiff_t offset)
+    static FORCEINLINE const T *rawOffsetPointer( const T *ptr, ptrdiff_t offset )
     {
-        return (const T*)((const char*)(ptr) + offset);
+        return (const T *)( (const char *)( ptr ) + offset );
     }
 
     template <class T>
-    static FORCEINLINE T* rawOffsetPointer(T* ptr, ptrdiff_t offset)
+    static FORCEINLINE T *rawOffsetPointer( T *ptr, ptrdiff_t offset )
     {
-        return (T*)((char*)(ptr) + offset);
+        return (T *)( (char *)( ptr ) + offset );
+    }
+
+    template <class T>
+    static FORCEINLINE T *rawOffsetPointer( T *ptr, size_t offset )
+    {
+        return (T *)( (char *)( ptr ) + static_cast<ptrdiff_t>( offset ) );
+    }
+
+    template <class T>
+    static FORCEINLINE const T *rawOffsetPointer( const T *ptr, size_t offset )
+    {
+        return (const T *)( (const char *)( ptr ) + static_cast<ptrdiff_t>( offset ) );
     }
 
     /** Advance the pointer with raw offset.
@@ -227,19 +221,25 @@ namespace Ogre {
         The offset are in bytes, no matter what type of the pointer.
     */
     template <class T>
-    static FORCEINLINE void advanceRawPointer(const T*& ptr, ptrdiff_t offset)
+    static FORCEINLINE void advanceRawPointer( const T *&ptr, ptrdiff_t offset )
     {
-        ptr = rawOffsetPointer(ptr, offset);
+        ptr = rawOffsetPointer( ptr, offset );
     }
 
     template <class T>
-    static FORCEINLINE void advanceRawPointer(T*& ptr, ptrdiff_t offset)
+    static FORCEINLINE void advanceRawPointer( T *&ptr, ptrdiff_t offset )
     {
-        ptr = rawOffsetPointer(ptr, offset);
+        ptr = rawOffsetPointer( ptr, offset );
+    }
+
+    template <class T>
+    static FORCEINLINE void advanceRawPointer( T *&ptr, size_t offset )
+    {
+        ptr = rawOffsetPointer( ptr, static_cast<ptrdiff_t>( offset ) );
     }
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif  // __OptimisedUtil_H__

@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------------
- * This source file is part of OGRE
+ * This source file is part of OGRE-Next
  * (Object-oriented Graphics Rendering Engine)
  * For the latest info, see http://www.ogre3d.org/
  *
@@ -30,43 +30,37 @@
 #define _LodWorkQueueInjector_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreSingleton.h"
 #include "OgreWorkQueue.h"
 
 namespace Ogre
 {
-
     /**
      * @brief Injects the output of a request to the mesh in a thread safe way.
      */
-    class _OgreLodExport LodWorkQueueInjector :
-        public WorkQueue::ResponseHandler,
-        public Singleton<LodWorkQueueInjector>
+    class _OgreLodExport LodWorkQueueInjector : public WorkQueue::ResponseHandler,
+                                                public Singleton<LodWorkQueueInjector>
     {
     public:
         LodWorkQueueInjector();
-        virtual ~LodWorkQueueInjector();
+        ~LodWorkQueueInjector() override;
 
-        static LodWorkQueueInjector* getSingletonPtr();
-        static LodWorkQueueInjector& getSingleton();
+        static LodWorkQueueInjector *getSingletonPtr();
+        static LodWorkQueueInjector &getSingleton();
 
-        void handleResponse(const WorkQueue::Response* res, const WorkQueue* srcQ);
+        void handleResponse( const WorkQueue::Response *res, const WorkQueue *srcQ ) override;
 
-        void setInjectorListener(LodWorkQueueInjectorListener* injectorListener)
+        void setInjectorListener( LodWorkQueueInjectorListener *injectorListener )
         {
             mInjectorListener = injectorListener;
         }
-        LodWorkQueueInjectorListener* getInjectorListener()
-        {
-            return mInjectorListener;
-        }
-        void removeInjectorListener()
-        {
-            mInjectorListener = 0;
-        }
+        LodWorkQueueInjectorListener *getInjectorListener() { return mInjectorListener; }
+        void                          removeInjectorListener() { mInjectorListener = 0; }
+
     protected:
-        LodWorkQueueInjectorListener* mInjectorListener;
+        LodWorkQueueInjectorListener *mInjectorListener;
     };
 
-}
+}  // namespace Ogre
 #endif

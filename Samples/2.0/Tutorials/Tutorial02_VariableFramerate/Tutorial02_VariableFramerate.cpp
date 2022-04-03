@@ -2,12 +2,12 @@
 #include "GraphicsSystem.h"
 #include "MyGameState.h"
 
-#include "OgreWindow.h"
 #include "OgreTimer.h"
+#include "OgreWindow.h"
 
 #include "Threading/OgreThreads.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
@@ -16,8 +16,7 @@ namespace Demo
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
         MyGameState *gfxGameState = new MyGameState( "See desktop's version notes for more details." );
         GraphicsSystem *graphicsSystem = new GraphicsSystem( gfxGameState );
@@ -28,16 +27,14 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 #endif
-}
+}  // namespace Demo
 
 using namespace Demo;
 
@@ -70,7 +67,7 @@ int mainApp( int argc, const char *argv[] )
     if( graphicsSystem.getQuit() )
     {
         graphicsSystem.deinitialize();
-        return 0; //User cancelled config
+        return 0;  // User cancelled config
     }
 
     Ogre::Window *renderWindow = graphicsSystem.getRenderWindow();
@@ -92,13 +89,13 @@ int mainApp( int argc, const char *argv[] )
 
         if( !renderWindow->isVisible() )
         {
-            //Don't burn CPU cycles unnecessary when we're minimized.
+            // Don't burn CPU cycles unnecessary when we're minimized.
             Ogre::Threads::Sleep( 500 );
         }
 
         Ogre::uint64 endTime = timer.getMicroseconds();
-        timeSinceLast = (endTime - startTime) / 1000000.0;
-        timeSinceLast = std::min( 1.0, timeSinceLast ); //Prevent from going haywire.
+        timeSinceLast = ( endTime - startTime ) / 1000000.0;
+        timeSinceLast = std::min( 1.0, timeSinceLast );  // Prevent from going haywire.
         startTime = endTime;
     }
 

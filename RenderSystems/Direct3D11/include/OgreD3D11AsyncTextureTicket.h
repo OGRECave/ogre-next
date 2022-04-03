@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,43 +30,43 @@ THE SOFTWARE.
 #define _OgreD3D11AsyncTextureTicket_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreAsyncTextureTicket.h"
 #include "OgreTextureBox.h"
 
 namespace Ogre
 {
     /** See AsyncTextureTicket
-    */
-    class _OgreD3D11Export D3D11AsyncTextureTicket : public AsyncTextureTicket
+     */
+    class _OgreD3D11Export D3D11AsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
         ComPtr<ID3D11Resource> mStagingTexture;
 
-        uint32          mDownloadFrame;
+        uint32              mDownloadFrame;
         ComPtr<ID3D11Query> mAccurateFence;
-        D3D11VaoManager *mVaoManager;
-        uint32          mMappedSlice;
-        bool            mIsArray2DTexture;
+        D3D11VaoManager    *mVaoManager;
+        uint32              mMappedSlice;
+        bool                mIsArray2DTexture;
 
-        virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl(void);
+        TextureBox mapImpl( uint32 slice ) override;
+        void       unmapImpl() override;
 
-        virtual bool canMapMoreThanOneSlice(void) const;
+        bool canMapMoreThanOneSlice() const override;
 
-        void waitForDownloadToFinish(void);
+        void waitForDownloadToFinish();
 
-        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
-                                      bool accurateTracking, TextureBox *srcBox=0 );
+        void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                              TextureBox *srcBox = 0 ) override;
 
     public:
         D3D11AsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                  TextureTypes::TextureTypes textureType,
-                                 PixelFormatGpu pixelFormatFamily,
-                                 D3D11VaoManager *vaoManager );
-        virtual ~D3D11AsyncTextureTicket();
+                                 PixelFormatGpu pixelFormatFamily, D3D11VaoManager *vaoManager );
+        ~D3D11AsyncTextureTicket() override;
 
-        virtual bool queryIsTransferDone(void);
+        bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

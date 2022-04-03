@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -72,15 +72,15 @@ namespace Ogre {
 
     public:
 
-        GLSLESLinkProgramManager(void);
+        GLSLESLinkProgramManager();
 
-        ~GLSLESLinkProgramManager(void);
+        ~GLSLESLinkProgramManager();
 
         /** Get the program object that links the two active shader
             objects together if a program object was not already
             created and linked a new one is created and linked
         */
-        GLSLESLinkProgram* getActiveLinkProgram(void);
+        GLSLESLinkProgram* getActiveLinkProgram();
 
         /** Set the active vertex shader for the next rendering state.
             The active program object will be cleared. Normally
@@ -95,8 +95,8 @@ namespace Ogre {
         */
         void setActiveFragmentShader(GLSLESShader* fragmentShader);
 
-        static GLSLESLinkProgramManager& getSingleton(void);
-        static GLSLESLinkProgramManager* getSingletonPtr(void);
+        static GLSLESLinkProgramManager& getSingleton();
+        static GLSLESLinkProgramManager* getSingletonPtr();
 
     };
 

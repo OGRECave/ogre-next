@@ -30,38 +30,22 @@ THE SOFTWARE.
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 
-#include "OgreD3D11RenderWindow.h"
+#    include "OgreD3D11RenderWindow.h"
 
 namespace Ogre
 {
-	//---------------------------------------------------------------------
-	D3D11StereoDriverAMD::D3D11StereoDriverAMD()
-	{
-	}
-	//---------------------------------------------------------------------
-	D3D11StereoDriverAMD::~D3D11StereoDriverAMD()
-	{
-	}
-	//---------------------------------------------------------------------
-	bool D3D11StereoDriverAMD::addRenderWindow(D3D11RenderWindowBase* renderWindow)
-	{
-		return false;
-	}
-	//---------------------------------------------------------------------
-	bool D3D11StereoDriverAMD::removeRenderWindow(const String& renderWindowName)
-	{
-		return false;
-	}
-	//---------------------------------------------------------------------
-	bool D3D11StereoDriverAMD::isStereoEnabled(const String& renderWindowName)
-	{
-		return false;
-	}
-	//---------------------------------------------------------------------
-	bool D3D11StereoDriverAMD::setDrawBuffer(ColourBufferType colourBuffer)
-	{
-		return false;
-	}
-	//---------------------------------------------------------------------
-}
+    //---------------------------------------------------------------------
+    D3D11StereoDriverAMD::D3D11StereoDriverAMD() {}
+    //---------------------------------------------------------------------
+    D3D11StereoDriverAMD::~D3D11StereoDriverAMD() {}
+    //---------------------------------------------------------------------
+    bool D3D11StereoDriverAMD::addRenderWindow( D3D11RenderWindowBase *renderWindow ) { return false; }
+    //---------------------------------------------------------------------
+    bool D3D11StereoDriverAMD::removeRenderWindow( const String &renderWindowName ) { return false; }
+    //---------------------------------------------------------------------
+    bool D3D11StereoDriverAMD::isStereoEnabled( const String &renderWindowName ) { return false; }
+    //---------------------------------------------------------------------
+    bool D3D11StereoDriverAMD::setDrawBuffer( ColourBufferType colourBuffer ) { return false; }
+    //---------------------------------------------------------------------
+}  // namespace Ogre
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreHlmsDatablock.h"
+
 #include "OgreConstBufferPool.h"
 #include "OgreTextureGpuListener.h"
 
@@ -35,11 +36,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** This is not a regular header, therefore it has no include guards.
         This header contains a base class that defines
@@ -71,8 +72,9 @@ namespace Ogre
         When OGRE_HLMS_TEXTURE_BASE_CLASS is not defined, the *.inl version of this
         file will include a few headers in order to get proper syntax highlighting.
     */
-    class _OgreHlmsTextureBaseClassExport OGRE_HLMS_TEXTURE_BASE_CLASS :
-            public HlmsDatablock, public ConstBufferPoolUser, public TextureGpuListener
+    class _OgreHlmsTextureBaseClassExport OGRE_HLMS_TEXTURE_BASE_CLASS : public HlmsDatablock,
+                                                                         public ConstBufferPoolUser,
+                                                                         public TextureGpuListener
     {
     protected:
         /// The last bit in mTexIndices (ManualTexIndexBit) is reserved. When set, it
@@ -83,31 +85,30 @@ namespace Ogre
         DescriptorSetTexture const *mTexturesDescSet;
         DescriptorSetSampler const *mSamplersDescSet;
 
-        TextureGpu              *mTextures[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
-        HlmsSamplerblock const	*mSamplerblocks[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
+        TextureGpu *mTextures[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
+        HlmsSamplerblock const *mSamplerblocks[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
 
-        uint8                   mTexLocationInDescSet[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
+        uint8 mTexLocationInDescSet[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
 
-        void scheduleConstBufferUpdate( bool updateTextures=false, bool updateSamplers=false );
+        void scheduleConstBufferUpdate( bool updateTextures = false, bool updateSamplers = false );
         void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 
         /// Expects caller to call flushRenderables if we return true.
         virtual bool bakeTextures( bool hasSeparateSamplers );
         /// Expects caller to call flushRenderables if we return true.
-        bool bakeSamplers(void);
+        bool bakeSamplers();
 
-        virtual void cloneImpl( HlmsDatablock *datablock ) const;
+        void cloneImpl( HlmsDatablock *datablock ) const override;
 
     public:
-        OGRE_HLMS_TEXTURE_BASE_CLASS( IdString name, Hlms *creator,
-                                      const HlmsMacroblock *macroblock,
-                                      const HlmsBlendblock *blendblock,
-                                      const HlmsParamVec &params );
-        virtual ~OGRE_HLMS_TEXTURE_BASE_CLASS();
+        OGRE_HLMS_TEXTURE_BASE_CLASS( IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
+                                      const HlmsBlendblock *blendblock, const HlmsParamVec &params );
+        ~OGRE_HLMS_TEXTURE_BASE_CLASS() override;
 
-        virtual void saveTextures( const String &folderPath, set<String>::type &savedTextures,
-                                   bool saveOitd, bool saveOriginal,
-                                   HlmsTextureExportListener *listener );
+        void preload() override;
+
+        void saveTextures( const String &folderPath, set<String>::type &savedTextures, bool saveOitd,
+                           bool saveOriginal, HlmsTextureExportListener *listener ) override;
 
         /** Sets a new texture for rendering. Calling this function may trigger an
             HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
@@ -126,9 +127,9 @@ namespace Ogre
             index, instead of relying on texture->getInternalSliceStart().
             Only useful if texture is TextureTypes::Type2DArray. For advanced users.
         */
-        void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams=0,
-                         uint16 sliceIdx=std::numeric_limits<uint16>::max() );
-        TextureGpu* getTexture( uint8 texType ) const;
+        void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams = 0,
+                         uint16 sliceIdx = std::numeric_limits<uint16>::max() );
+        TextureGpu *getTexture( uint8 texType ) const;
 
         /// Same as setTexture, but samplerblockPtr is a raw samplerblock retrieved from HlmsManager,
         /// and is assumed to have its reference count already be incremented for us
@@ -136,8 +137,8 @@ namespace Ogre
         /// Mostly for internal use, but can speed up loading if you already manage samplerblocks
         /// manually and have the raw ptr.
         void _setTexture( uint8 texType, TextureGpu *texture,
-                          const HlmsSamplerblock *samplerblockPtr=0,
-                          uint16 sliceIdx=std::numeric_limits<uint16>::max() );
+                          const HlmsSamplerblock *samplerblockPtr = 0,
+                          uint16 sliceIdx = std::numeric_limits<uint16>::max() );
 
         /** Sets a new sampler block to be associated with the texture
             (i.e. filtering mode, addressing modes, etc). If the samplerblock changes,
@@ -148,7 +149,7 @@ namespace Ogre
             The sampler block to use as reference.
         */
         void setSamplerblock( uint8 texType, const HlmsSamplerblock &params );
-        const HlmsSamplerblock* getSamplerblock( uint8 texType ) const;
+        const HlmsSamplerblock *getSamplerblock( uint8 texType ) const;
 
         /// Same as setSamplerblock, but samplerblockPtr is a raw samplerblock retrieved from
         /// HlmsManager, and is assumed to have its reference count already be incremented for us.
@@ -162,12 +163,12 @@ namespace Ogre
         /// instead. Same complexity as getIndexToDescriptorTexture
         uint8 getIndexToDescriptorSampler( uint8 texType );
 
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
-        virtual bool shouldStayLoaded( TextureGpu *texture );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
+        bool shouldStayLoaded( TextureGpu *texture ) override;
 
-        void loadAllTextures(void);
+        void loadAllTextures();
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"

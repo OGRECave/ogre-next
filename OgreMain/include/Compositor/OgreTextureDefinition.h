@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,44 +29,50 @@ THE SOFTWARE.
 #ifndef __CompositorTextureDefinitionBase_H__
 #define __CompositorTextureDefinitionBase_H__
 
-#include "OgreHeaderPrefix.h"
-#include "Compositor/OgreCompositorCommon.h"
 #include "Compositor/OgreCompositorChannel.h"
+#include "Compositor/OgreCompositorCommon.h"
 #include "Compositor/OgreCompositorNamedBuffer.h"
-#include "OgreTextureGpu.h"
-#include "OgreIdString.h"
 #include "OgreId.h"
+#include "OgreIdString.h"
+#include "OgreTextureGpu.h"
 
 #include "ogrestd/map.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     struct _OgreExport RenderTargetViewEntry
     {
-        IdString    textureName;
+        IdString textureName;
         /// Can be left blank if texture is implicitly resolved (will be filled automatically)
         /// But must be present if the texture in textureName is explicitly resolved and
         /// StoreAction is set to Resolve.
-        IdString    resolveTextureName;
-        uint8       mipLevel;
-        uint8       resolveMipLevel;
+        IdString resolveTextureName;
+        uint8    mipLevel;
+        uint8    resolveMipLevel;
 
-        uint16      slice;
-        uint16      resolveSlice;
+        uint16 slice;
+        uint16 resolveSlice;
 
         /// See RenderPassColourTarget::allLayers
-        bool        colourAllLayers;
+        bool colourAllLayers;
 
         RenderTargetViewEntry() :
-            mipLevel( 0 ), resolveMipLevel( 0 ), slice( 0 ),
-            resolveSlice( 0 ), colourAllLayers( false ) {}
+            mipLevel( 0 ),
+            resolveMipLevel( 0 ),
+            slice( 0 ),
+            resolveSlice( 0 ),
+            colourAllLayers( false )
+        {
+        }
     };
 
     typedef vector<RenderTargetViewEntry>::type RenderTargetViewEntryVec;
@@ -79,31 +85,33 @@ namespace Ogre
     @version
         1.0
     */
-    class _OgreExport TextureDefinitionBase : public CompositorInstAlloc
+    class _OgreExport TextureDefinitionBase : public OgreAllocatedObj
     {
     public:
         enum TextureSource
         {
-            TEXTURE_INPUT,      /// We got the texture through an input channel
-            TEXTURE_LOCAL,      /// We own the texture
-            TEXTURE_GLOBAL,     /// It's a global texture. Ask the manager for it.
+            TEXTURE_INPUT,   /// We got the texture through an input channel
+            TEXTURE_LOCAL,   /// We own the texture
+            TEXTURE_GLOBAL,  /// It's a global texture. Ask the manager for it.
             NUM_TEXTURES_SOURCES
         };
 
         typedef vector<PixelFormatGpu>::type PixelFormatGpuVec;
 
         /// Local texture definition
-        class _OgreExport TextureDefinition : public CompositorInstAlloc
+        class _OgreExport TextureDefinition : public OgreAllocatedObj
         {
             IdString name;
+
         public:
             TextureTypes::TextureTypes textureType;
-            uint32 width;           //0 means adapt to target width
-            uint32 height;          //0 means adapt to target height
-            uint32 depthOrSlices;   //Can never be 0.
-            uint8 numMipmaps;       //1u to disable mipmaps, 0 to generate until the max
-            float widthFactor;  //multiple of target width to use (if width = 0)
-            float heightFactor; //multiple of target height to use (if height = 0)
+            uint32                     width;          // 0 means adapt to target width
+            uint32                     height;         // 0 means adapt to target height
+            uint32                     depthOrSlices;  // Can never be 0.
+            uint8                      numMipmaps;  // 1u to disable mipmaps, 0 to generate until the max
+            bool  bTargetOrientation;               // If true, follows same getOrientationMode as target
+            float widthFactor;                      // multiple of target width to use (if width = 0)
+            float heightFactor;                     // multiple of target height to use (if height = 0)
             /// Use PFG_UNKNOWN to use same format as main target
             PixelFormatGpu format;
             /// "1"  = Disable.
@@ -125,26 +133,39 @@ namespace Ogre
             /// This is a default value for the texture,
             /// but can be overriden by an RTV definition.
             /// See RenderTargetViewEntry::depthBufferId
-            uint16          depthBufferId;
-            bool            preferDepthTexture;
-            PixelFormatGpu  depthBufferFormat;
+            uint16         depthBufferId;
+            bool           preferDepthTexture;
+            PixelFormatGpu depthBufferFormat;
 
             /// Do not call directly. @see TextureDefinition::renameTexture instead.
-            void _setName( IdString newName )   { name = newName; }
-            IdString getName(void) const        { return name; }
+            void     _setName( IdString newName ) { name = newName; }
+            IdString getName() const { return name; }
 
-            TextureDefinition( IdString _name ) : name(_name), textureType( TextureTypes::Type2D ),
-                    width( 0 ), height( 0 ), depthOrSlices( 1u ), numMipmaps( 1u ),
-                    widthFactor( 1.0f ), heightFactor( 1.0f ),
-                    format( PFG_UNKNOWN ), fsaa( "1" ),
-                    textureFlags( TextureFlags::RenderToTexture | TextureFlags::DiscardableContent ),
-                    depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ) {}
+            TextureDefinition( IdString _name ) :
+                name( _name ),
+                textureType( TextureTypes::Type2D ),
+                width( 0 ),
+                height( 0 ),
+                depthOrSlices( 1u ),
+                numMipmaps( 1u ),
+                bTargetOrientation( false ),
+                widthFactor( 1.0f ),
+                heightFactor( 1.0f ),
+                format( PFG_UNKNOWN ),
+                fsaa( "1" ),
+                textureFlags( TextureFlags::RenderToTexture | TextureFlags::DiscardableContent ),
+                depthBufferId( 1u ),
+                preferDepthTexture( false ),
+                depthBufferFormat( PFG_UNKNOWN )
+            {
+            }
         };
-        typedef vector<TextureDefinition>::type     TextureDefinitionVec;
+        typedef vector<TextureDefinition>::type TextureDefinitionVec;
 
-        struct _OgreExport BufferDefinition : public CompositorInstAlloc
+        struct _OgreExport BufferDefinition : public OgreAllocatedObj
         {
             IdString name;
+
         public:
             size_t numElements;
             uint32 bytesPerElement;
@@ -162,46 +183,50 @@ namespace Ogre
             /// and heightFactor to 1.
             /// Since there are no pixel formats, the bytesPerElement controls such
             /// such thing (eg. 4 bytes for RGBA8888)
-            float widthFactor;  // multiple of target width to use (activates if > 0)
-            float heightFactor; // multiple of target height to use (activates if > 0)
+            float widthFactor;   // multiple of target width to use (activates if > 0)
+            float heightFactor;  // multiple of target height to use (activates if > 0)
 
             /// Do not call directly. @see TextureDefinition::renameBuffer instead.
-            void _setName( IdString newName )   { name = newName; }
-            IdString getName(void) const        { return name; }
+            void     _setName( IdString newName ) { name = newName; }
+            IdString getName() const { return name; }
 
-            BufferDefinition( IdString _name, size_t _numElements,
-                              uint32 _bytesPerElement, uint32 _bindFlags,
-                              float _widthFactor, float _heightFactor ) :
-                    name(_name), numElements( _numElements ),
-                    bytesPerElement( _bytesPerElement ), bindFlags( _bindFlags ),
-                    widthFactor( _widthFactor ), heightFactor( _heightFactor ) {}
+            BufferDefinition( IdString _name, size_t _numElements, uint32 _bytesPerElement,
+                              uint32 _bindFlags, float _widthFactor, float _heightFactor ) :
+                name( _name ),
+                numElements( _numElements ),
+                bytesPerElement( _bytesPerElement ),
+                bindFlags( _bindFlags ),
+                widthFactor( _widthFactor ),
+                heightFactor( _heightFactor )
+            {
+            }
         };
-        typedef vector<BufferDefinition>::type     BufferDefinitionVec;
+        typedef vector<BufferDefinition>::type BufferDefinitionVec;
 
     protected:
         friend class CompositorNode;
         friend class CompositorWorkspace;
-        typedef map<IdString, uint32>::type                 NameToChannelMap;
-        typedef map<IdString, RenderTargetViewDef>::type    RenderTargetViewDefMap;
+        typedef map<IdString, uint32>::type              NameToChannelMap;
+        typedef map<IdString, RenderTargetViewDef>::type RenderTargetViewDefMap;
 
         /** TextureSource to use by addLocalTextureDefinition. Could be either
             TEXTURE_LOCAL or TEXTURE_GLOBAL (!!depends on our derived class!!)
         */
-        TextureSource           mDefaultLocalTextureSource;
-        TextureDefinitionVec    mLocalTextureDefs;
-        BufferDefinitionVec     mLocalBufferDefs;
-        IdStringVec             mInputBuffers;
-        RenderTargetViewDefMap  mLocalRtvs;
+        TextureSource          mDefaultLocalTextureSource;
+        TextureDefinitionVec   mLocalTextureDefs;
+        BufferDefinitionVec    mLocalBufferDefs;
+        IdStringVec            mInputBuffers;
+        RenderTargetViewDefMap mLocalRtvs;
 
         /** Similar to @see CompositorNodeDef::mOutChannelMapping,
             associates a given name with the input, local or global textures.
         */
-        NameToChannelMap        mNameToChannelMap;
+        NameToChannelMap mNameToChannelMap;
 
         static inline uint32 encodeTexSource( size_t index, TextureSource textureSource )
         {
             assert( index <= 0x3FFFFFFF && "Texture Source Index out of supported range" );
-            return (index & 0x3FFFFFFF)|(textureSource<<30);
+            return ( index & 0x3FFFFFFF ) | ( static_cast<uint32>( textureSource ) << 30u );
         }
 
         static void decodeTexSource( uint32 encodedVal, size_t &outIdx, TextureSource &outTexSource );
@@ -210,8 +235,8 @@ namespace Ogre
         TextureDefinitionBase( TextureSource defaultSource );
 
         /// This has O(N) complexity! (not cached, we look in mNameToChannelMap)
-        size_t getNumInputChannels(void) const;
-        size_t getNumInputBufferChannels(void) const;
+        size_t getNumInputChannels() const;
+        size_t getNumInputBufferChannels() const;
 
         /** Adds a texture name, whether a real one or an alias, and where to grab it from.
         @remarks
@@ -239,7 +264,7 @@ namespace Ogre
             IdString of the fullName paremeter, for convenience
         */
         virtual IdString addTextureSourceName( const String &name, size_t index,
-                                                TextureSource textureSource );
+                                               TextureSource textureSource );
 
         /** WARNING: Be very careful with this function.
             Removes a texture.
@@ -288,7 +313,7 @@ namespace Ogre
         @param numPasses
             The number of texture definitions expected to contain.
         */
-        void setNumLocalTextureDefinitions( size_t numTDs )     { mLocalTextureDefs.reserve( numTDs ); }
+        void setNumLocalTextureDefinitions( size_t numTDs ) { mLocalTextureDefs.reserve( numTDs ); }
 
         /** Creates a TextureDefinition with a given name, must be unique.
         @remarks
@@ -304,9 +329,9 @@ namespace Ogre
             We need the name, not its hash because we need to validate the global_ prefix
             is used correctly.
         */
-        TextureDefinition* addTextureDefinition( const String &name );
+        TextureDefinition *addTextureDefinition( const String &name );
 
-        const TextureDefinitionVec& getLocalTextureDefinitions(void) const  { return mLocalTextureDefs; }
+        const TextureDefinitionVec &getLocalTextureDefinitions() const { return mLocalTextureDefs; }
 
         /** Returns the local texture definitions.
         @remarks
@@ -314,15 +339,15 @@ namespace Ogre
             as mNameToChannelMap needs to be kept in sync. @see addTextureDefinition,
             @see removeTexture and @see renameTexture to perform these actions
         */
-        TextureDefinitionVec& getLocalTextureDefinitionsNonConst(void)      { return mLocalTextureDefs; }
+        TextureDefinitionVec &getLocalTextureDefinitionsNonConst() { return mLocalTextureDefs; }
 
-        const NameToChannelMap& getNameToChannelMap(void) const             { return mNameToChannelMap; }
+        const NameToChannelMap &getNameToChannelMap() const { return mNameToChannelMap; }
 
-        RenderTargetViewDef* addRenderTextureView( IdString name );
-        const RenderTargetViewDef* getRenderTargetViewDef( IdString name ) const;
-        RenderTargetViewDef* getRenderTargetViewDefNonConstNoThrow( IdString name );
-        void removeRenderTextureView( IdString name );
-        void removeAllRenderTextureViews( void );
+        RenderTargetViewDef       *addRenderTextureView( IdString name );
+        const RenderTargetViewDef *getRenderTargetViewDef( IdString name ) const;
+        RenderTargetViewDef       *getRenderTargetViewDefNonConstNoThrow( IdString name );
+        void                       removeRenderTextureView( IdString name );
+        void                       removeAllRenderTextureViews();
 
         /** Utility function to create the textures based on a given set of
             texture definitions and put them in a container.
@@ -348,15 +373,14 @@ namespace Ogre
             The RenderSystem to use
         */
         static void createTextures( const TextureDefinitionVec &textureDefs,
-                                    CompositorChannelVec &inOutTexContainer,
-                                    IdType id, const TextureGpu *finalTarget,
-                                    RenderSystem *renderSys );
+                                    CompositorChannelVec &inOutTexContainer, IdType id,
+                                    const TextureGpu *finalTarget, RenderSystem *renderSys );
 
         static CompositorChannel createTexture( const TextureDefinition &textureDef,
                                                 const String &texName, const TextureGpu *finalTarget,
                                                 RenderSystem *renderSys );
-        static void setupTexture( TextureGpu *tex, const TextureDefinition &textureDef,
-                                  const TextureGpu *finalTarget );
+        static void              setupTexture( TextureGpu *tex, const TextureDefinition &textureDef,
+                                               const TextureGpu *finalTarget );
 
         /// @See createTextures
         static void destroyTextures( CompositorChannelVec &inOutTexContainer, RenderSystem *renderSys );
@@ -379,8 +403,8 @@ namespace Ogre
             The RenderSystem to use
         */
         static void recreateResizableTextures01( const TextureDefinitionVec &textureDefs,
-                                                 CompositorChannelVec &inOutTexContainer,
-                                                 const TextureGpu *finalTarget );
+                                                 CompositorChannelVec       &inOutTexContainer,
+                                                 const TextureGpu           *finalTarget );
         /** See recreateResizableTextures01
             Updates involved RenderPassDescriptors.
         @param connectedNodes
@@ -390,10 +414,9 @@ namespace Ogre
             When the pointer is null, we don't iterate through it.
         */
         static void recreateResizableTextures02( const TextureDefinitionVec &textureDefs,
-                                                 CompositorChannelVec &inOutTexContainer,
-                                                 const CompositorNodeVec &connectedNodes,
-                                                 const CompositorPassVec *passes );
-
+                                                 CompositorChannelVec       &inOutTexContainer,
+                                                 const CompositorNodeVec    &connectedNodes,
+                                                 const CompositorPassVec    *passes );
 
         /////////////////////////////////////////////////////////////////////////////////
         /// Buffers
@@ -425,9 +448,8 @@ namespace Ogre
         @param heightFactor
             @see BufferDefinition::widthFactor
         */
-        void addBufferDefinition( IdString name, size_t numElements,
-                                  uint32 bytesPerElement, uint32 bindFlags,
-                                  float widthFactor, float heightFactor );
+        void addBufferDefinition( IdString name, size_t numElements, uint32 bytesPerElement,
+                                  uint32 bindFlags, float widthFactor, float heightFactor );
 
         /// Remove a buffer. Buffer can come from an input channel, or a locally defined one.
         virtual void removeBuffer( IdString name );
@@ -443,16 +465,16 @@ namespace Ogre
         @param numPasses
             The number of texture definitions expected to contain.
         */
-        void setNumLocalBufferDefinitions( size_t numTDs )      { mLocalBufferDefs.reserve( numTDs ); }
+        void setNumLocalBufferDefinitions( size_t numTDs ) { mLocalBufferDefs.reserve( numTDs ); }
 
-        const BufferDefinitionVec& getLocalBufferDefinitions(void) const    { return mLocalBufferDefs; }
+        const BufferDefinitionVec &getLocalBufferDefinitions() const { return mLocalBufferDefs; }
 
         /** Returns the local buffer definitions.
         @remarks
             WARNING: Use with care. You should not add/remove elements or change the name
             @see addBufferDefinition, @see removeBuffer and @see renameBuffer to perform these actions
         */
-        BufferDefinitionVec& getLocalBufferDefinitionsNonConst(void)        { return mLocalBufferDefs; }
+        BufferDefinitionVec &getLocalBufferDefinitionsNonConst() { return mLocalBufferDefs; }
 
         /** Utility function to create the buffers based on a given set of
             buffer definitions and put them in a container.
@@ -464,10 +486,10 @@ namespace Ogre
             similar functionality (when in fact, workspace manages nodes)
         */
         static void createBuffers( const BufferDefinitionVec &bufferDefs,
-                                   CompositorNamedBufferVec &inOutBufContainer,
+                                   CompositorNamedBufferVec  &inOutBufContainer,
                                    const TextureGpu *finalTarget, RenderSystem *renderSys );
 
-        static UavBufferPacked* createBuffer( const BufferDefinition &bufferDef,
+        static UavBufferPacked *createBuffer( const BufferDefinition &bufferDef,
                                               const TextureGpu *finalTarget, VaoManager *vaoManager );
 
         /// @see createBuffers
@@ -477,8 +499,8 @@ namespace Ogre
         /// It is illegal for two buffers to have the same name, so it's invalid that a
         /// e.g. an input and a local texture would share the same name.
         static void destroyBuffers( const BufferDefinitionVec &bufferDefs,
-                                    CompositorNamedBufferVec &inOutBufContainer,
-                                    RenderSystem *renderSys );
+                                    CompositorNamedBufferVec  &inOutBufContainer,
+                                    RenderSystem              *renderSys );
 
         /** Destroys & recreates only the buffers that depend on the main RT
             (i.e. the RenderWindow) resolution
@@ -498,22 +520,21 @@ namespace Ogre
             When the pointer is null, we don't iterate through it.
         */
         static void recreateResizableBuffers( const BufferDefinitionVec &bufferDefs,
-                                              CompositorNamedBufferVec &inOutBufContainer,
-                                              const TextureGpu *finalTarget,
-                                              RenderSystem *renderSys,
+                                              CompositorNamedBufferVec  &inOutBufContainer,
+                                              const TextureGpu *finalTarget, RenderSystem *renderSys,
                                               const CompositorNodeVec &connectedNodes,
                                               const CompositorPassVec *passes );
     };
 
     struct _OgreExport RenderTargetViewDef
     {
-        RenderTargetViewEntryVec    colourAttachments;
-        RenderTargetViewEntry       depthAttachment;
-        RenderTargetViewEntry       stencilAttachment;
+        RenderTargetViewEntryVec colourAttachments;
+        RenderTargetViewEntry    depthAttachment;
+        RenderTargetViewEntry    stencilAttachment;
 
         /// Depth Buffer's pool ID. Ignored if depthAttachment.textureName or
         /// stencilAttachment.textureName are explicitly set.
-        uint16          depthBufferId;
+        uint16 depthBufferId;
         /** Whether this RTV should be attached to a depth texture (i.e.
             TextureGpu::isTexture == true) or a regular depth buffer.
             True to use depth textures. False otherwise (default).
@@ -523,18 +544,25 @@ namespace Ogre
         @par
             Ignored if depthAttachment.texture or stencilAttachment.texture are explicitly set.
         */
-        bool            preferDepthTexture;
-        PixelFormatGpu  depthBufferFormat;
+        bool           preferDepthTexture;
+        PixelFormatGpu depthBufferFormat;
 
         bool depthReadOnly;
         bool stencilReadOnly;
-        protected: bool bIsRuntimeAnalyzed;
+
+    protected:
+        bool bIsRuntimeAnalyzed;
 
     public:
         RenderTargetViewDef() :
-            depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ),
-            depthReadOnly( false ), stencilReadOnly( false ), bIsRuntimeAnalyzed( false )
-        {}
+            depthBufferId( 1u ),
+            preferDepthTexture( false ),
+            depthBufferFormat( PFG_UNKNOWN ),
+            depthReadOnly( false ),
+            stencilReadOnly( false ),
+            bIsRuntimeAnalyzed( false )
+        {
+        }
 
         /** If the texture comes from an input channel, we don't have yet enough information,
             as we're missing:
@@ -547,20 +575,20 @@ namespace Ogre
         @param texName
         */
         void setRuntimeAnalyzed( IdString texName );
-        bool isRuntimeAnalyzed(void) const                  { return bIsRuntimeAnalyzed; }
+        bool isRuntimeAnalyzed() const { return bIsRuntimeAnalyzed; }
 
         /** Convenience routine to setup an RTV that renders directly to a texture
             defined by the provided TextureDefinition; which is the most common case.
         @param texName
         @param texDef
         */
-        void setForTextureDefinition( const String &texName,
+        void setForTextureDefinition( const String                             &texName,
                                       TextureDefinitionBase::TextureDefinition *texDef );
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

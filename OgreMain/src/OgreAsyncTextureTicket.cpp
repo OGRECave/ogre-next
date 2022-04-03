@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,11 +30,10 @@ THE SOFTWARE.
 
 #include "OgreAsyncTextureTicket.h"
 
-#include "OgreTextureBox.h"
-#include "OgrePixelFormatGpuUtils.h"
-
 #include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureBox.h"
 
 namespace Ogre
 {
@@ -74,11 +73,10 @@ namespace Ogre
         else
         {
             srcTextureBox = *srcBox;
-            srcTextureBox.bytesPerRow   = fullSrcTextureBox.bytesPerRow;
+            srcTextureBox.bytesPerRow = fullSrcTextureBox.bytesPerRow;
             srcTextureBox.bytesPerPixel = fullSrcTextureBox.bytesPerPixel;
             srcTextureBox.bytesPerImage = fullSrcTextureBox.bytesPerImage;
         }
-
 
         assert( mipLevel < textureSrc->getNumMipmaps() );
         assert( mPixelFormatFamily == PixelFormatGpuUtils::getFamily( textureSrc->getPixelFormat() ) );
@@ -86,14 +84,13 @@ namespace Ogre
         assert( srcTextureBox.width == mWidth );
         assert( srcTextureBox.height == mHeight );
         assert( srcTextureBox.getDepthOrSlices() == mDepthOrSlices );
-        assert( (!textureSrc->isMultisample() || !textureSrc->hasMsaaExplicitResolves() ||
-                 textureSrc->isOpenGLRenderWindow()) &&
+        assert( ( !textureSrc->isMultisample() || !textureSrc->hasMsaaExplicitResolves() ||
+                  textureSrc->isOpenGLRenderWindow() ) &&
                 "Cannot download from an explicitly resolved MSAA texture!" );
     }
     //-----------------------------------------------------------------------------------
     void AsyncTextureTicket::notifyTextureChanged( TextureGpu *texture,
-                                                   TextureGpuListener::Reason reason,
-                                                   void *extraData )
+                                                   TextureGpuListener::Reason reason, void *extraData )
     {
         if( reason == ReadyForRendering )
         {
@@ -108,16 +105,16 @@ namespace Ogre
             mDelayedDownload.textureSrc->removeListener( this );
             mDelayedDownload = DelayedDownload();
             LogManager::getSingleton().logMessage(
-                        "WARNING: AsyncTextureTicket was waiting on texture to become "
-                        "ready to download its contents, but Texture '" + texture->getNameStr() +
-                        "' lost residency!", LML_CRITICAL );
+                "WARNING: AsyncTextureTicket was waiting on texture to become "
+                "ready to download its contents, but Texture '" +
+                    texture->getNameStr() + "' lost residency!",
+                LML_CRITICAL );
             mStatus = Ready;
         }
     }
     //-----------------------------------------------------------------------------------
-    void AsyncTextureTicket::download( TextureGpu *textureSrc, uint8 mipLevel,
-                                       bool accurateTracking, TextureBox *srcBox,
-                                       bool bImmediate )
+    void AsyncTextureTicket::download( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                                       TextureBox *srcBox, bool bImmediate )
     {
         if( mDelayedDownload.textureSrc )
         {
@@ -132,14 +129,14 @@ namespace Ogre
                          "AsyncTextureTicket::download" );
         }
 
-        if( (bImmediate && (!textureSrc->_isDataReadyImpl() &&
-            textureSrc->getResidencyStatus() == GpuResidency::Resident)) ||
-            (!textureSrc->isDataReady() &&
-            textureSrc->getNextResidencyStatus() == GpuResidency::Resident &&
-            textureSrc->getPendingResidencyChanges() <= 1u) )
+        if( ( bImmediate && ( !textureSrc->_isDataReadyImpl() &&
+                              textureSrc->getResidencyStatus() == GpuResidency::Resident ) ) ||
+            ( !textureSrc->isDataReady() &&
+              textureSrc->getNextResidencyStatus() == GpuResidency::Resident &&
+              textureSrc->getPendingResidencyChanges() <= 1u ) )
         {
-            //Texture is not resident but soon will be, or is resident but not yet ready.
-            //Register ourselves to listen for when that happens, we'll download then.
+            // Texture is not resident but soon will be, or is resident but not yet ready.
+            // Register ourselves to listen for when that happens, we'll download then.
             textureSrc->addListener( this );
             mDelayedDownload = DelayedDownload( textureSrc, mipLevel, accurateTracking, srcBox );
         }
@@ -147,12 +144,13 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Only Resident textures can be downloaded via AsyncTextureTicket. "
-                         "Trying to download texture: '" + textureSrc->getNameStr() + "'",
+                         "Trying to download texture: '" +
+                             textureSrc->getNameStr() + "'",
                          "AsyncTextureTicket::download" );
         }
         else
         {
-            //Download now!
+            // Download now!
             downloadFromGpu( textureSrc, mipLevel, accurateTracking, srcBox );
         }
 
@@ -178,55 +176,40 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void AsyncTextureTicket::unmap(void)
+    void AsyncTextureTicket::unmap()
     {
         assert( mStatus == Mapped );
         unmapImpl();
         mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getWidth(void) const
+    uint32 AsyncTextureTicket::getWidth() const { return mWidth; }
+    //-----------------------------------------------------------------------------------
+    uint32 AsyncTextureTicket::getHeight() const { return mHeight; }
+    //-----------------------------------------------------------------------------------
+    uint32 AsyncTextureTicket::getDepthOrSlices() const { return mDepthOrSlices; }
+    //-----------------------------------------------------------------------------------
+    uint32 AsyncTextureTicket::getDepth() const
     {
-        return mWidth;
+        return ( mTextureType != TextureTypes::Type3D ) ? 1u : mDepthOrSlices;
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getHeight(void) const
+    uint32 AsyncTextureTicket::getNumSlices() const
     {
-        return mHeight;
+        return ( mTextureType != TextureTypes::Type3D ) ? mDepthOrSlices : 1u;
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getDepthOrSlices(void) const
+    PixelFormatGpu AsyncTextureTicket::getPixelFormatFamily() const { return mPixelFormatFamily; }
+    //-----------------------------------------------------------------------------------
+    uint32 AsyncTextureTicket::getBytesPerRow() const
     {
-        return mDepthOrSlices;
+        return (uint32)PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormatFamily, 4u );
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getDepth(void) const
-    {
-        return (mTextureType != TextureTypes::Type3D) ? 1u : mDepthOrSlices;
-    }
-    //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getNumSlices(void) const
-    {
-        return (mTextureType != TextureTypes::Type3D) ? mDepthOrSlices : 1u;
-    }
-    //-----------------------------------------------------------------------------------
-    PixelFormatGpu AsyncTextureTicket::getPixelFormatFamily(void) const
-    {
-        return mPixelFormatFamily;
-    }
-    //-----------------------------------------------------------------------------------
-    size_t AsyncTextureTicket::getBytesPerRow(void) const
-    {
-        return PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormatFamily, 4u );
-    }
-    //-----------------------------------------------------------------------------------
-    size_t AsyncTextureTicket::getBytesPerImage(void) const
+    size_t AsyncTextureTicket::getBytesPerImage() const
     {
         return PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, mPixelFormatFamily, 4u );
     }
     //-----------------------------------------------------------------------------------
-    bool AsyncTextureTicket::queryIsTransferDone(void)
-    {
-        return mDelayedDownload.textureSrc == 0;
-    }
-}
+    bool AsyncTextureTicket::queryIsTransferDone() { return mDelayedDownload.textureSrc == 0; }
+}  // namespace Ogre

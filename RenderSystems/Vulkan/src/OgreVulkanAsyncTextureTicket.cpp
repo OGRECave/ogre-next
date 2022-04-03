@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -195,9 +195,9 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanAsyncTextureTicket::unmapImpl( void ) { mVboName.unmap(); }
+    void VulkanAsyncTextureTicket::unmapImpl() { mVboName.unmap(); }
     //-----------------------------------------------------------------------------------
-    void VulkanAsyncTextureTicket::waitForDownloadToFinish( void )
+    void VulkanAsyncTextureTicket::waitForDownloadToFinish()
     {
         if( mStatus != Downloading )
             return;  // We're done.
@@ -215,7 +215,7 @@ namespace Ogre
         mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanAsyncTextureTicket::queryIsTransferDone( void )
+    bool VulkanAsyncTextureTicket::queryIsTransferDone()
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {
@@ -260,7 +260,7 @@ namespace Ogre
 
                     LogManager::getSingleton().logMessage(
                         "WARNING: Calling AsyncTextureTicket::queryIsTransferDone too "
-                        "often with innacurate tracking in the same frame this transfer "
+                        "often with inaccurate tracking in the same frame this transfer "
                         "was issued. Switching to accurate tracking. If this is an accident, "
                         "wait until you've rendered a few frames before checking if it's done. "
                         "If this is on purpose, consider calling AsyncTextureTicket::download()"

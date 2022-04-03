@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -32,39 +32,40 @@ THE SOFTWARE.
 #include "OgreWin32Prerequisites.h"
 #include "OgreWindow.h"
 
-namespace Ogre {
+namespace Ogre
+{
     class _OgreGL3PlusExport Win32Window : public Window
     {
     protected:
         Win32GLSupport &mGLSupport;
-        HWND    mHwnd;                  // Win32 Window handle
-        HDC     mHDC;
-        HGLRC   mGlrc;
-        uint32  mColourDepth;
-        bool    mIsExternal;
-        char*   mDeviceName;
-        bool    mIsExternalGLControl;
-        bool    mOwnsGLContext;
-        bool    mSizing;
-        bool    mClosed;
-        bool    mHidden;
-        bool    mVisible;
-        bool    mHwGamma;
-        Win32Context *mContext;
-        DWORD   mWindowedWinStyle;      // Windowed mode window style flags.
-        DWORD   mFullscreenWinStyle;    // Fullscreen mode window style flags.
+        HWND            mHwnd;  // Win32 Window handle
+        HDC             mHDC;
+        HGLRC           mGlrc;
+        uint32          mColourDepth;
+        bool            mIsExternal;
+        char           *mDeviceName;
+        bool            mIsExternalGLControl;
+        bool            mOwnsGLContext;
+        bool            mSizing;
+        bool            mClosed;
+        bool            mHidden;
+        bool            mVisible;
+        bool            mHwGamma;
+        Win32Context   *mContext;
+        DWORD           mWindowedWinStyle;    // Windowed mode window style flags.
+        DWORD           mFullscreenWinStyle;  // Fullscreen mode window style flags.
 
         static bool mClassRegistered;
 
         void create( PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams );
 
-        void updateWindowRect(void);
-        void adjustWindow( uint32 clientWidth, uint32 clientHeight,
-                           uint32 *outDrawableWidth, uint32 *outDrawableHeight );
+        void updateWindowRect();
+        void adjustWindow( uint32 clientWidth, uint32 clientHeight, uint32 *outDrawableWidth,
+                           uint32 *outDrawableHeight );
         /// Return the target window style depending on the fullscreen parameter.
         DWORD getWindowStyle( bool fullScreen ) const;
 
-        void notifyResolutionChanged(void);
+        void notifyResolutionChanged();
 
     public:
         Win32Window( const String &title, uint32 width, uint32 height, bool fullscreenMode,
@@ -73,30 +74,30 @@ namespace Ogre {
         virtual ~Win32Window();
 
         virtual void _initialize( TextureGpuManager *textureGpuManager );
-        virtual void destroy(void);
+        virtual void destroy();
 
         virtual void reposition( int32 left, int32 top );
         virtual void requestResolution( uint32 width, uint32 height );
         virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                              uint32 width, uint32 height,
-                                              uint32 frequencyNumerator, uint32 frequencyDenominator );
+                                              uint32 width, uint32 height, uint32 frequencyNumerator,
+                                              uint32 frequencyDenominator );
 
-        virtual void windowMovedOrResized(void);
+        virtual void windowMovedOrResized();
 
-        bool isClosed(void) const;
+        bool         isClosed() const;
         virtual void _setVisible( bool visible );
-        virtual bool isVisible(void) const;
+        virtual bool isVisible() const;
         virtual void setHidden( bool hidden );
-        virtual bool isHidden(void) const;
+        virtual bool isHidden() const;
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
-        virtual void swapBuffers(void);
+        virtual void swapBuffers();
         virtual void setFocused( bool focused );
 
-        HWND getWindowHandle() const        { return mHwnd; }
-        HDC getHDC() const                  { return mHDC; }
+        HWND getWindowHandle() const { return mHwnd; }
+        HDC  getHDC() const { return mHDC; }
 
-        void getCustomAttribute( IdString name, void* pData );
+        void getCustomAttribute( IdString name, void *pData );
     };
-}
+}  // namespace Ogre
 
 #endif

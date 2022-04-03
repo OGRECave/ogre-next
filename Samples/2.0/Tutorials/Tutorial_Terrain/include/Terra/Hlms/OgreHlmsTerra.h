@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,10 +29,13 @@ THE SOFTWARE.
 #define _OgreHlmsTerra_H_
 
 #include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
-#include "OgreHlmsBufferManager.h"
-#include "OgreConstBufferPool.h"
-#include "OgreMatrix4.h"
+
 #include "OgreHlmsPbs.h"
+
+#include "OgreConstBufferPool.h"
+#include "OgreHlmsBufferManager.h"
+#include "OgreMatrix4.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -43,11 +46,11 @@ namespace Ogre
     class Terra;
 
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     class HlmsTerraDatablock;
 
@@ -61,10 +64,9 @@ namespace Ogre
         FastArray<Terra *> mLinkedTerras;
 
     protected:
-        virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
-                                                    const HlmsMacroblock *macroblock,
-                                                    const HlmsBlendblock *blendblock,
-                                                    const HlmsParamVec &paramVec );
+        HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
+                                            const HlmsBlendblock *blendblock,
+                                            const HlmsParamVec &  paramVec ) override;
 
         void setDetailMapProperties( HlmsTerraDatablock *datablock, PiecesMap *inOutPieces );
         void setTextureProperty( const char *propertyName, HlmsTerraDatablock *datablock,
@@ -72,61 +74,56 @@ namespace Ogre
         void setDetailTextureProperty( const char *propertyName, HlmsTerraDatablock *datablock,
                                        TerraTextureTypes baseTexType, uint8 detailIdx );
 
-        virtual void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash );
-        virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
-        virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
+        void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash ) override;
+        void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override;
+        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) override;
 
-        virtual void notifyPropertiesMergedPreGenerationStep(void);
+        void notifyPropertiesMergedPreGenerationStep() override;
 
-        FORCEINLINE uint32 fillBuffersFor( const HlmsCache *cache,
-                                           const QueuedRenderable &queuedRenderable,
-                                           bool casterPass, uint32 lastCacheHash,
-                                           CommandBuffer *commandBuffer, bool isV1 );
+        FORCEINLINE uint32 fillBuffersFor( const HlmsCache *       cache,
+                                           const QueuedRenderable &queuedRenderable, bool casterPass,
+                                           uint32 lastCacheHash, CommandBuffer *commandBuffer,
+                                           bool isV1 );
 
     public:
         HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders );
-        virtual ~HlmsTerra();
+        ~HlmsTerra() override;
 
-        const FastArray<Terra *> &getLinkedTerras( void ) const { return mLinkedTerras; }
+        const FastArray<Terra *> &getLinkedTerras() const { return mLinkedTerras; }
 
         void _linkTerra( Terra *terra );
         void _unlinkTerra( Terra *terra );
 
-        virtual void _changeRenderSystem( RenderSystem *newRs );
+        void _changeRenderSystem( RenderSystem *newRs ) override;
 
-        virtual void analyzeBarriers( BarrierSolver &barrierSolver,
-                                      ResourceTransitionArray &resourceTransitions,
-                                      Camera *renderingCamera, const bool bCasterPass );
+        void analyzeBarriers( BarrierSolver &barrierSolver, ResourceTransitionArray &resourceTransitions,
+                              Camera *renderingCamera, const bool bCasterPass ) override;
 
-        virtual uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
-                                       bool casterPass, uint32 lastCacheHash,
-                                       uint32 lastTextureHash );
+        uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
+                               bool casterPass, uint32 lastCacheHash, uint32 lastTextureHash ) override;
 
-        virtual uint32 fillBuffersForV1( const HlmsCache *cache,
-                                         const QueuedRenderable &queuedRenderable,
-                                         bool casterPass, uint32 lastCacheHash,
-                                         CommandBuffer *commandBuffer );
-        virtual uint32 fillBuffersForV2( const HlmsCache *cache,
-                                         const QueuedRenderable &queuedRenderable,
-                                         bool casterPass, uint32 lastCacheHash,
-                                         CommandBuffer *commandBuffer );
+        uint32 fillBuffersForV1( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
+                                 bool casterPass, uint32 lastCacheHash,
+                                 CommandBuffer *commandBuffer ) override;
+        uint32 fillBuffersForV2( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
+                                 bool casterPass, uint32 lastCacheHash,
+                                 CommandBuffer *commandBuffer ) override;
 
-        static void getDefaultPaths( String& outDataFolderPath, StringVector& outLibraryFoldersPaths );
+        static void getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths );
 
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
-        virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
-                                HlmsDatablock *datablock, const String &resourceGroup,
-                                HlmsJsonListener *listener,
-                                const String &additionalTextureExtension ) const;
+        void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
+                        HlmsDatablock *datablock, const String &resourceGroup,
+                        HlmsJsonListener *listener,
+                        const String &    additionalTextureExtension ) const override;
         /// @copydoc Hlms::_saveJson
-        virtual void _saveJson( const HlmsDatablock *datablock, String &outString,
-                                HlmsJsonListener *listener,
-                                const String &additionalTextureExtension ) const;
+        void _saveJson( const HlmsDatablock *datablock, String &outString, HlmsJsonListener *listener,
+                        const String &additionalTextureExtension ) const override;
 
         /// @copydoc Hlms::_collectSamplerblocks
-        virtual void _collectSamplerblocks( set<const HlmsSamplerblock*>::type &outSamplerblocks,
-                                            const HlmsDatablock *datablock ) const;
+        void _collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
+                                    const HlmsDatablock *                datablock ) const override;
 #endif
     };
 
@@ -136,19 +133,19 @@ namespace Ogre
         static const IdString ZUp;
 
         static const IdString NumTextures;
-        static const char *DiffuseMap;
-        static const char *EnvProbeMap;
-        static const char *DetailWeightMap;
-        static const char *DetailMapN;
-        static const char *DetailMapNmN;
-        static const char *RoughnessMap;
-        static const char *MetalnessMap;
+        static const char *   DiffuseMap;
+        static const char *   EnvProbeMap;
+        static const char *   DetailWeightMap;
+        static const char *   DetailMapN;
+        static const char *   DetailMapNmN;
+        static const char *   RoughnessMap;
+        static const char *   MetalnessMap;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

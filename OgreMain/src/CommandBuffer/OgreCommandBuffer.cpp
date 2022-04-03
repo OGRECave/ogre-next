@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -36,8 +36,7 @@ namespace Ogre
 {
     const size_t CommandBuffer::COMMAND_FIXED_SIZE = 32;
 
-    static CommandBuffer::CommandBufferExecuteFunc* CbExecutionTable[MAX_COMMAND_BUFFER+1] =
-    {
+    static CommandBuffer::CommandBufferExecuteFunc *CbExecutionTable[MAX_COMMAND_BUFFER + 1] = {
         &CommandBuffer::execute_invalidCommand,
         &CommandBuffer::execute_setVao,
         &CommandBuffer::execute_setIndirectBuffer,
@@ -82,9 +81,7 @@ namespace Ogre
         &CommandBuffer::execute_invalidCommand
     };
     //-----------------------------------------------------------------------------------
-    CommandBuffer::CommandBuffer() : mRenderSystem( 0 )
-    {
-    }
+    CommandBuffer::CommandBuffer() : mRenderSystem( 0 ) {}
     //-----------------------------------------------------------------------------------
     void CommandBuffer::setCurrentRenderSystem( RenderSystem *renderSystem )
     {
@@ -99,41 +96,43 @@ namespace Ogre
                      "CommandBuffer::execute_setInvalidCommand" );
     }
     //-----------------------------------------------------------------------------------
-    void CommandBuffer::execute(void)
+    void CommandBuffer::execute()
     {
-        unsigned char const * RESTRICT_ALIAS cmdBase = mCommandBuffer.begin();
+        unsigned char const *RESTRICT_ALIAS cmdBase = mCommandBuffer.begin();
 
         size_t cmdBufferCount = mCommandBuffer.size() / CommandBuffer::COMMAND_FIXED_SIZE;
-        for( size_t i=cmdBufferCount; i--; )
+        for( size_t i = cmdBufferCount; i--; )
         {
-            CbBase const * RESTRICT_ALIAS cmd = reinterpret_cast<const CbBase*RESTRICT_ALIAS>( cmdBase );
-            (*CbExecutionTable[cmd->commandType])( this, cmd );
+            CbBase const *RESTRICT_ALIAS cmd =
+                reinterpret_cast<const CbBase * RESTRICT_ALIAS>( cmdBase );
+            ( *CbExecutionTable[cmd->commandType] )( this, cmd );
             cmdBase += CommandBuffer::COMMAND_FIXED_SIZE;
         }
 
         mCommandBuffer.clear();
     }
     //-----------------------------------------------------------------------------------
-    CbBase* CommandBuffer::getLastCommand(void)
+    CbBase *CommandBuffer::getLastCommand()
     {
-        return reinterpret_cast<CbBase*>( mCommandBuffer.end() - COMMAND_FIXED_SIZE );
+        return reinterpret_cast<CbBase *>( mCommandBuffer.end() - COMMAND_FIXED_SIZE );
     }
     //-----------------------------------------------------------------------------------
     size_t CommandBuffer::getCommandOffset( CbBase *cmd ) const
     {
-        return reinterpret_cast<FastArray<unsigned char>::const_iterator>(cmd) - mCommandBuffer.begin();
+        return static_cast<size_t>( reinterpret_cast<FastArray<unsigned char>::const_iterator>( cmd ) -
+                                    mCommandBuffer.begin() );
     }
     //-----------------------------------------------------------------------------------
-    CbBase* CommandBuffer::getCommandFromOffset( size_t offset )
+    CbBase *CommandBuffer::getCommandFromOffset( size_t offset )
     {
         CbBase *retVal = 0;
 
         if( offset < mCommandBuffer.size() )
         {
-            assert( !(offset % COMMAND_FIXED_SIZE) );
-            retVal = reinterpret_cast<CbBase*>( mCommandBuffer.begin() + offset );
+            assert( !( offset % COMMAND_FIXED_SIZE ) );
+            retVal = reinterpret_cast<CbBase *>( mCommandBuffer.begin() + offset );
         }
 
         return retVal;
     }
-}
+}  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreTerrainCell_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreRenderable.h"
 
 namespace Ogre
@@ -42,10 +43,10 @@ namespace Ogre
         int32  m_gridX;
         int32  m_gridZ;
         uint32 m_lodLevel;
-        uint32  m_verticesPerLine;
+        uint32 m_verticesPerLine;
 
-        uint32  m_sizeX;
-        uint32  m_sizeZ;
+        uint32 m_sizeX;
+        uint32 m_sizeZ;
 
         VaoManager *m_vaoManager;
 
@@ -55,16 +56,16 @@ namespace Ogre
 
     public:
         TerrainCell( Terra *parentTerra );
-        virtual ~TerrainCell();
+        ~TerrainCell() override;
 
-        bool getUseSkirts(void) const                   { return m_useSkirts; }
+        bool getUseSkirts() const { return m_useSkirts; }
 
-        bool isZUp( void ) const;
+        bool isZUp() const;
 
         void initialize( VaoManager *vaoManager, bool useSkirts );
 
-        void setOrigin( const GridPoint &gridPos, uint32 horizontalPixelDim,
-                        uint32 verticalPixelDim, uint32 lodLevel );
+        void setOrigin( const GridPoint &gridPos, uint32 horizontalPixelDim, uint32 verticalPixelDim,
+                        uint32 lodLevel );
 
         /** Merges another TerrainCell into 'this' for reducing batch counts.
             e.g.
@@ -81,16 +82,16 @@ namespace Ogre
         */
         bool merge( TerrainCell *next );
 
-        void uploadToGpu( uint32 * RESTRICT_ALIAS gpuPtr ) const;
+        void uploadToGpu( uint32 *RESTRICT_ALIAS gpuPtr ) const;
 
-        Terra *getParentTerra( void ) const { return m_parentTerra; }
+        Terra *getParentTerra() const { return m_parentTerra; }
 
-        //Renderable overloads
-        virtual const LightList& getLights(void) const;
-        virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual bool getCastsShadows(void) const;
+        // Renderable overloads
+        const LightList &getLights() const override;
+        void             getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void             getWorldTransforms( Matrix4 *xform ) const override;
+        bool             getCastsShadows() const override;
     };
-}
+}  // namespace Ogre
 
 #endif

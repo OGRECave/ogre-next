@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,23 +30,23 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreSingleton.h"
 #include "OgreIteratorWrappers.h"
+#include "OgreSingleton.h"
 
 #include "ogrestd/map.h"
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup LOD
-    *  @{
-    */
+     *  @{
+     */
     /** Manager for LOD strategies. */
-    class _OgreExport LodStrategyManager : public Singleton<LodStrategyManager>, public LodAlloc
+    class _OgreExport LodStrategyManager : public Singleton<LodStrategyManager>, public OgreAllocatedObj
     {
         /** Map of strategies. */
         typedef map<String, LodStrategy *>::type StrategyMap;
@@ -65,14 +65,14 @@ namespace Ogre {
         ~LodStrategyManager();
 
         /** Add a strategy to the manager. */
-        void addStrategy(LodStrategy *strategy);
+        void addStrategy( LodStrategy *strategy );
 
         /** Remove a strategy from the manager with a specified name.
         @remarks
             The removed strategy is returned so the user can control
             how it is destroyed.
         */
-        LodStrategy *removeStrategy(const String& name);
+        LodStrategy *removeStrategy( const String &name );
 
         /** Remove and delete all strategies from the manager.
         @remarks
@@ -82,13 +82,13 @@ namespace Ogre {
         void removeAllStrategies();
 
         /** Get the strategy with the specified name. */
-        LodStrategy *getStrategy(const String& name);
+        LodStrategy *getStrategy( const String &name );
 
         /** Set the default strategy. */
-        void setDefaultStrategy(LodStrategy *strategy);
+        void setDefaultStrategy( LodStrategy *strategy );
 
         /** Set the default strategy by name. */
-        void setDefaultStrategy(const String& name);
+        void setDefaultStrategy( const String &name );
 
         /** Get the current default strategy. */
         LodStrategy *getDefaultStrategy();
@@ -111,7 +111,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static LodStrategyManager& getSingleton(void);
+        static LodStrategyManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -127,11 +127,11 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static LodStrategyManager* getSingletonPtr(void);
+        static LodStrategyManager *getSingletonPtr();
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

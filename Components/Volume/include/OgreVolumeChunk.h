@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -93,7 +93,7 @@ namespace Volume {
 
         /** Constructor.
         */
-        ChunkParameters(void) :
+        ChunkParameters() :
             sceneManager(0), src(0), baseError((Real)0.0), errorMultiplicator((Real)1.0), createOctreeVisualization(false),
             createDualGridVisualization(false), skirtFactor(0), lodCallback(0), scale((Real)1.0), maxScreenSpaceError(0), createGeometryFromLevel(0),
             updateFrom(Vector3::ZERO), updateTo(Vector3::ZERO), async(false)
@@ -129,7 +129,7 @@ namespace Volume {
 
         /** Destructor.
         */
-        ~ChunkTreeSharedData(void)
+        ~ChunkTreeSharedData()
         {
             delete parameters;
         }
@@ -315,15 +315,15 @@ namespace Volume {
         
         /** Constructor.
         */
-        Chunk(void);
+        Chunk();
 
         /** Destructor.
         */
-        virtual ~Chunk(void);
+        virtual ~Chunk();
 
         /** Overridden from MovableObject.
         */
-        virtual const String& getMovableType(void) const;
+        virtual const String& getMovableType() const;
         
         /** Overridden from Renderable.
         */
@@ -376,7 +376,7 @@ namespace Volume {
         @return
             true if visible.
         */
-        virtual bool getDualGridVisible(void) const;
+        virtual bool getDualGridVisible() const;
         
         /** Shows the debug visualization entity of the octree.
         @param visible
@@ -389,7 +389,7 @@ namespace Volume {
         @return
             true if visible.
         */
-        virtual bool getOctreeVisible(void) const;
+        virtual bool getOctreeVisible() const;
         
         /** Sets whether the volume mesh is visible.
         @param visible
@@ -401,7 +401,7 @@ namespace Volume {
         @return
             true if visible
         */
-        virtual bool getVolumeVisible(void) const;
+        virtual bool getVolumeVisible() const;
         
         /** Overridden from FrameListener.
         */
@@ -411,7 +411,7 @@ namespace Volume {
         @return
             The created chunk.
         */
-        virtual Chunk* createInstance(void);
+        virtual Chunk* createInstance();
         
         /** Overridden from SimpleRenderable.
             Sets the material of this chunk and all of his children.
@@ -445,7 +445,7 @@ namespace Volume {
         @return
             The parameters.
         */
-        ChunkParameters* getChunkParameters(void);
+        ChunkParameters* getChunkParameters();
 
     };
 }

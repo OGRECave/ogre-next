@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,41 +26,38 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
+#include "OgreHlmsJsonPbs.h"
 
 #if !OGRE_NO_JSON
 
-#include "OgreHlmsJsonPbs.h"
-#include "OgreHlmsManager.h"
-#include "OgreTextureGpuManager.h"
-#include "OgreTextureFilters.h"
+#    include "OgreHlmsManager.h"
+#    include "OgreTextureFilters.h"
+#    include "OgreTextureGpuManager.h"
 
-#include "OgreLwString.h"
+#    include "OgreLwString.h"
 
-#include "OgreStringConverter.h"
+#    include "OgreStringConverter.h"
 
-#include "rapidjson/document.h"
+#    include "rapidjson/document.h"
 
 namespace Ogre
 {
     extern const String c_pbsBlendModes[];
 
-    const char* c_workflows[HlmsPbsDatablock::MetallicWorkflow+1] =
-    {
-        "specular_ogre",
-        "specular_fresnel",
+    const char *c_workflows[HlmsPbsDatablock::MetallicWorkflow + 1] = {  //
+        "specular_ogre",                                                 //
+        "specular_fresnel",                                              //
         "metallic"
     };
-    const char* c_transparencyModes[HlmsPbsDatablock::Refractive+1] =
-    {
-        "None",
-        "Transparent",
-        "Fade",
+    const char *c_transparencyModes[HlmsPbsDatablock::Refractive + 1] = {  //
+        "None",                                                            //
+        "Transparent",                                                     //
+        "Fade",                                                            //
         "Refractive"
     };
 
     HlmsJsonPbs::HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager,
-                                                        HlmsJsonListener *listener, const String &additionalExtension ) :
+                              HlmsJsonListener *listener, const String &additionalExtension ) :
         mHlmsManager( hlmsManager ),
         mTextureManager( textureManager ),
         mListener( listener ),
@@ -106,19 +103,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsPbsDatablock::TransparencyModes HlmsJsonPbs::parseTransparencyMode( const char *value )
     {
-        if( !strcmp( value, "None" ) )
-            return HlmsPbsDatablock::None;
-        if( !strcmp( value, "Transparent" ) )
-            return HlmsPbsDatablock::Transparent;
-        if( !strcmp( value, "Fade" ) )
-            return HlmsPbsDatablock::Fade;
+        for( size_t i = 0; i < sizeof( c_transparencyModes ) / sizeof( c_transparencyModes[0] ); ++i )
+        {
+            if( !strcmp( value, c_transparencyModes[i] ) )
+                return static_cast<HlmsPbsDatablock::TransparencyModes>( i );
+        }
 
         return HlmsPbsDatablock::None;
     }
     //-----------------------------------------------------------------------------------
     PbsBlendModes HlmsJsonPbs::parseBlendMode( const char *value )
     {
-        for( int i=0; i<NUM_PBSM_BLEND_MODES; ++i )
+        for( int i = 0; i < NUM_PBSM_BLEND_MODES; ++i )
         {
             if( !strcmp( value, c_pbsBlendModes[i].c_str() ) )
                 return static_cast<PbsBlendModes>( i );
@@ -131,30 +127,30 @@ namespace Ogre
     {
         if( !strcmp( value, "coeff" ) )
         {
-            outUseIOR       = false;
-            outIsColoured   = false;
+            outUseIOR = false;
+            outIsColoured = false;
         }
         else if( !strcmp( value, "ior" ) )
         {
-            outUseIOR       = true;
-            outIsColoured   = false;
+            outUseIOR = true;
+            outIsColoured = false;
         }
         else if( !strcmp( value, "coloured" ) )
         {
-            outUseIOR       = false;
-            outIsColoured   = true;
+            outUseIOR = false;
+            outIsColoured = true;
         }
         else if( !strcmp( value, "coloured_ior" ) )
         {
-            outUseIOR       = true;
-            outIsColoured   = true;
+            outUseIOR = true;
+            outIsColoured = true;
         }
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::parseOffset( const rapidjson::Value &jsonArray, Vector4 &offsetScale )
     {
         const rapidjson::SizeType arraySize = std::min( 2u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( jsonArray[i].IsNumber() )
                 offsetScale[i] = static_cast<float>( jsonArray[i].GetDouble() );
@@ -164,10 +160,10 @@ namespace Ogre
     void HlmsJsonPbs::parseScale( const rapidjson::Value &jsonArray, Vector4 &offsetScale )
     {
         const rapidjson::SizeType arraySize = std::min( 2u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( jsonArray[i].IsNumber() )
-                offsetScale[i+2u] = static_cast<float>( jsonArray[i].GetDouble() );
+                offsetScale[i + 2u] = static_cast<float>( jsonArray[i].GetDouble() );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -180,8 +176,8 @@ namespace Ogre
 
         rapidjson::Value::ConstMemberIterator itor = json.FindMember( "texture" );
         if( itor != json.MemberEnd() &&
-            (itor->value.IsString() || (itor->value.IsArray() && itor->value.Size() == 2u &&
-                                        itor->value[0].IsString() && itor->value[1].IsString())) )
+            ( itor->value.IsString() || ( itor->value.IsArray() && itor->value.Size() == 2u &&
+                                          itor->value[0].IsString() && itor->value[1].IsString() ) ) )
         {
             char const *textureName = 0;
             char const *aliasName = 0;
@@ -198,7 +194,7 @@ namespace Ogre
 
             if( textureType == PBSM_DIFFUSE )
             {
-                itor = json.FindMember("grayscale");
+                itor = json.FindMember( "grayscale" );
                 if( itor != json.MemberEnd() && itor->value.IsBool() )
                 {
                     datablock->setUseDiffuseMapAsGrayscale( itor->value.GetBool() );
@@ -223,24 +219,22 @@ namespace Ogre
             if( textureType == PBSM_REFLECTION )
             {
                 internalTextureType = TextureTypes::TypeCube;
-                textureFlags &= ~TextureFlags::AutomaticBatching;
+                textureFlags &= static_cast<uint32>( ~TextureFlags::AutomaticBatching );
             }
 
             uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
             filters |= datablock->suggestFiltersForType( textureType );
 
-            texture = mTextureManager->createOrRetrieveTexture( textureName + mAdditionalExtension,
-                                                                aliasName,
-                                                                GpuPageOutStrategy::Discard,
-                                                                textureFlags, internalTextureType,
-                                                                resourceGroup, filters );
+            texture = mTextureManager->createOrRetrieveTexture(
+                textureName + mAdditionalExtension, aliasName, GpuPageOutStrategy::Discard, textureFlags,
+                internalTextureType, resourceGroup, filters );
         }
 
         itor = json.FindMember( "sampler" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
         {
-            map<LwConstString, const HlmsSamplerblock*>::type::const_iterator it =
-                    blocks.samplerblocks.find( LwConstString::FromUnsafeCStr(itor->value.GetString()) );
+            map<LwConstString, const HlmsSamplerblock *>::type::const_iterator it =
+                blocks.samplerblocks.find( LwConstString::FromUnsafeCStr( itor->value.GetString() ) );
             if( it != blocks.samplerblocks.end() )
             {
                 samplerblock = it->second;
@@ -248,14 +242,14 @@ namespace Ogre
             }
         }
 
-        if (texture)
+        if( texture )
         {
-            if (!samplerblock)
-                samplerblock = mHlmsManager->getSamplerblock(HlmsSamplerblock());
-            datablock->_setTexture(textureType, texture, samplerblock);
+            if( !samplerblock )
+                samplerblock = mHlmsManager->getSamplerblock( HlmsSamplerblock() );
+            datablock->_setTexture( textureType, texture, samplerblock );
         }
-        else if (samplerblock)
-            datablock->_setSamplerblock(textureType, samplerblock);
+        else if( samplerblock )
+            datablock->_setSamplerblock( textureType, samplerblock );
 
         itor = json.FindMember( "uv" );
         if( itor != json.MemberEnd() && itor->value.IsUint() )
@@ -270,7 +264,21 @@ namespace Ogre
         Vector3 retVal( Vector3::ZERO );
 
         const rapidjson::SizeType arraySize = std::min( 3u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
+        {
+            if( jsonArray[i].IsNumber() )
+                retVal[i] = static_cast<float>( jsonArray[i].GetDouble() );
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    inline Vector4 HlmsJsonPbs::parseVector4Array( const rapidjson::Value &jsonArray )
+    {
+        Vector4 retVal( Vector4::ZERO );
+
+        const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( jsonArray[i].IsNumber() )
                 retVal[i] = static_cast<float>( jsonArray[i].GetDouble() );
@@ -285,7 +293,7 @@ namespace Ogre
         ColourValue retVal( defaultValue );
 
         const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( jsonArray[i].IsNumber() )
                 retVal[i] = static_cast<float>( jsonArray[i].GetDouble() );
@@ -297,29 +305,29 @@ namespace Ogre
     void HlmsJsonPbs::loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
                                     HlmsDatablock *datablock, const String &resourceGroup )
     {
-        assert( dynamic_cast<HlmsPbsDatablock*>(datablock) );
-        HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock*>(datablock);
+        assert( dynamic_cast<HlmsPbsDatablock *>( datablock ) );
+        HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock *>( datablock );
 
-        rapidjson::Value::ConstMemberIterator itor = json.FindMember("workflow");
+        rapidjson::Value::ConstMemberIterator itor = json.FindMember( "workflow" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
             pbsDatablock->setWorkflow( parseWorkflow( itor->value.GetString() ) );
 
-        itor = json.FindMember("brdf");
+        itor = json.FindMember( "brdf" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
-            pbsDatablock->setBrdf( parseBrdf(itor->value.GetString()) );
+            pbsDatablock->setBrdf( parseBrdf( itor->value.GetString() ) );
 
-        itor = json.FindMember("two_sided");
+        itor = json.FindMember( "two_sided" );
         if( itor != json.MemberEnd() && itor->value.IsBool() )
         {
             pbsDatablock->setTwoSidedLighting( itor->value.GetBool(), true,
-                                               pbsDatablock->getMacroblock(true)->mCullMode );
+                                               pbsDatablock->getMacroblock( true )->mCullMode );
         }
 
         itor = json.FindMember( "receive_shadows" );
         if( itor != json.MemberEnd() && itor->value.IsBool() )
             pbsDatablock->setReceiveShadows( itor->value.GetBool() );
 
-        itor = json.FindMember("transparency");
+        itor = json.FindMember( "transparency" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
@@ -341,8 +349,8 @@ namespace Ogre
                 useAlphaFromTextures = itor->value.GetBool();
 
             const bool changeBlendblock = !json.HasMember( "blendblock" );
-            pbsDatablock->setTransparency( transparencyValue, transpMode,
-                                           useAlphaFromTextures, changeBlendblock );
+            pbsDatablock->setTransparency( transparencyValue, transpMode, useAlphaFromTextures,
+                                           changeBlendblock );
         }
 
         itor = json.FindMember( "clear_coat" );
@@ -359,7 +367,7 @@ namespace Ogre
                 pbsDatablock->setClearCoatRoughness( static_cast<float>( itor->value.GetDouble() ) );
         }
 
-        itor = json.FindMember("diffuse");
+        itor = json.FindMember( "diffuse" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
@@ -374,7 +382,7 @@ namespace Ogre
                 pbsDatablock->setBackgroundDiffuse( parseColourValueArray( itor->value ) );
         }
 
-        itor = json.FindMember("specular");
+        itor = json.FindMember( "specular" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
@@ -385,7 +393,7 @@ namespace Ogre
                 pbsDatablock->setSpecular( parseVector3Array( itor->value ) );
         }
 
-        itor = json.FindMember("roughness");
+        itor = json.FindMember( "roughness" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
@@ -396,7 +404,7 @@ namespace Ogre
                 pbsDatablock->setRoughness( static_cast<float>( itor->value.GetDouble() ) );
         }
 
-        itor = json.FindMember("fresnel");
+        itor = json.FindMember( "fresnel" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
@@ -409,7 +417,7 @@ namespace Ogre
                 parseFresnelMode( itor->value.GetString(), isColoured, useIOR );
 
             itor = subobj.FindMember( "value" );
-            if( itor != subobj.MemberEnd() && (itor->value.IsArray() || itor->value.IsNumber()) )
+            if( itor != subobj.MemberEnd() && ( itor->value.IsArray() || itor->value.IsNumber() ) )
             {
                 Vector3 value;
                 if( itor->value.IsArray() )
@@ -424,10 +432,10 @@ namespace Ogre
             }
         }
 
-        //There used to be a typo, so allow the wrong spelling.
-        itor = json.FindMember("metalness");
+        // There used to be a typo, so allow the wrong spelling.
+        itor = json.FindMember( "metalness" );
         if( itor == json.MemberEnd() )
-            itor = json.FindMember("metallness");
+            itor = json.FindMember( "metallness" );
 
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
@@ -439,7 +447,7 @@ namespace Ogre
                 pbsDatablock->setMetalness( static_cast<float>( itor->value.GetDouble() ) );
         }
 
-        itor = json.FindMember("normal");
+        itor = json.FindMember( "normal" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
@@ -450,23 +458,23 @@ namespace Ogre
                 pbsDatablock->setNormalMapWeight( static_cast<float>( itor->value.GetDouble() ) );
         }
 
-        itor = json.FindMember("detail_weight");
+        itor = json.FindMember( "detail_weight" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
             loadTexture( subobj, blocks, PBSM_DETAIL_WEIGHT, pbsDatablock, resourceGroup );
         }
 
-        for( int i=0; i<4; ++i )
+        for( uint8 i = 0u; i < 4u; ++i )
         {
-            const String iAsStr = StringConverter::toString(i);
+            const String iAsStr = StringConverter::toString( i );
             String texTypeName = "detail_diffuse" + iAsStr;
 
-            itor = json.FindMember(texTypeName.c_str());
+            itor = json.FindMember( texTypeName.c_str() );
             if( itor != json.MemberEnd() && itor->value.IsObject() )
             {
                 const rapidjson::Value &subobj = itor->value;
-                loadTexture( subobj, blocks, static_cast<PbsTextureTypes>(PBSM_DETAIL0 + i),
+                loadTexture( subobj, blocks, static_cast<PbsTextureTypes>( PBSM_DETAIL0 + i ),
                              pbsDatablock, resourceGroup );
 
                 itor = subobj.FindMember( "value" );
@@ -491,11 +499,11 @@ namespace Ogre
             }
 
             texTypeName = "detail_normal" + iAsStr;
-            itor = json.FindMember(texTypeName.c_str());
+            itor = json.FindMember( texTypeName.c_str() );
             if( itor != json.MemberEnd() && itor->value.IsObject() )
             {
                 const rapidjson::Value &subobj = itor->value;
-                loadTexture( subobj, blocks, static_cast<PbsTextureTypes>(PBSM_DETAIL0_NM + i),
+                loadTexture( subobj, blocks, static_cast<PbsTextureTypes>( PBSM_DETAIL0_NM + i ),
                              pbsDatablock, resourceGroup );
 
                 itor = subobj.FindMember( "value" );
@@ -519,7 +527,7 @@ namespace Ogre
             }
         }
 
-        itor = json.FindMember("emissive");
+        itor = json.FindMember( "emissive" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
@@ -530,11 +538,27 @@ namespace Ogre
                 pbsDatablock->setEmissive( parseVector3Array( itor->value ) );
         }
 
-        itor = json.FindMember("reflection");
+        itor = json.FindMember( "reflection" );
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
             loadTexture( subobj, blocks, PBSM_REFLECTION, pbsDatablock, resourceGroup );
+        }
+
+        itor = json.FindMember( "user_values" );
+        if( itor != json.MemberEnd() && itor->value.IsObject() )
+        {
+            const rapidjson::Value &subobj = itor->value;
+            for( int i = 0; i < 3; ++i )
+            {
+                itor = subobj.FindMember( StringConverter::toString( i ).c_str() );
+
+                if( itor != subobj.MemberEnd() && itor->value.IsArray() )
+                {
+                    pbsDatablock->setUserValue( static_cast<uint8>( i ),
+                                                parseVector4Array( itor->value ) );
+                }
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -593,46 +617,41 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::saveFresnel( const HlmsPbsDatablock *datablock, String &outString )
     {
-        saveTexture( datablock->getFresnel(), ColourValue::ZERO, "fresnel", PBSM_SPECULAR,
-                     true, false, true, true,
-                     datablock->getWorkflow() == HlmsPbsDatablock::SpecularAsFresnelWorkflow,
+        saveTexture( datablock->getFresnel(), ColourValue::ZERO, "fresnel", PBSM_SPECULAR, true, false,
+                     true, true, datablock->getWorkflow() == HlmsPbsDatablock::SpecularAsFresnelWorkflow,
                      datablock, outString );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsJsonPbs::saveTexture( const char *blockName,
-                                   PbsTextureTypes textureType,
+    void HlmsJsonPbs::saveTexture( const char *blockName, PbsTextureTypes textureType,
                                    const HlmsPbsDatablock *datablock, String &outString,
                                    bool writeTexture )
     {
-        saveTexture( Vector3(0.0f), ColourValue::ZERO, blockName, textureType,
-                     false, false, false, false, writeTexture, datablock, outString);
+        saveTexture( Vector3( 0.0f ), ColourValue::ZERO, blockName, textureType, false, false, false,
+                     false, writeTexture, datablock, outString );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsJsonPbs::saveTexture( float value, const char *blockName,
-                                   PbsTextureTypes textureType,
+    void HlmsJsonPbs::saveTexture( float value, const char *blockName, PbsTextureTypes textureType,
                                    const HlmsPbsDatablock *datablock, String &outString,
                                    bool writeTexture )
     {
-        saveTexture( Vector3(value), ColourValue::ZERO, blockName, textureType,
-                     true, false, true, false, writeTexture, datablock, outString);
+        saveTexture( Vector3( value ), ColourValue::ZERO, blockName, textureType, true, false, true,
+                     false, writeTexture, datablock, outString );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsJsonPbs::saveTexture(const Vector3 &value, const char *blockName,
-                                   PbsTextureTypes textureType,
-                                   const HlmsPbsDatablock *datablock, String &outString,
-                                   bool writeTexture, const ColourValue &bgColour )
+    void HlmsJsonPbs::saveTexture( const Vector3 &value, const char *blockName,
+                                   PbsTextureTypes textureType, const HlmsPbsDatablock *datablock,
+                                   String &outString, bool writeTexture, const ColourValue &bgColour )
     {
         const bool writeBgDiffuse = textureType == PBSM_DIFFUSE;
-        saveTexture( value, bgColour, blockName, textureType,
-                     true, writeBgDiffuse, false, false, writeTexture,
-                     datablock, outString );
+        saveTexture( value, bgColour, blockName, textureType, true, writeBgDiffuse, false, false,
+                     writeTexture, datablock, outString );
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::saveTexture( const Vector3 &value, const ColourValue &bgDiffuse,
-                                   const char *blockName, PbsTextureTypes textureType,
-                                   bool writeValue, bool writeBgDiffuse, bool scalarValue,
-                                   bool isFresnel, bool writeTexture,
-                                   const HlmsPbsDatablock *datablock, String &outString )
+                                   const char *blockName, PbsTextureTypes textureType, bool writeValue,
+                                   bool writeBgDiffuse, bool scalarValue, bool isFresnel,
+                                   bool writeTexture, const HlmsPbsDatablock *datablock,
+                                   String &outString )
     {
         outString += ",\n\t\t\t\"";
         outString += blockName;
@@ -680,7 +699,7 @@ namespace Ogre
             }
 
             const Vector4 &offsetScale =
-                    datablock->getDetailMapOffsetScale( textureType - PBSM_DETAIL0 );
+                datablock->getDetailMapOffsetScale( textureType - PBSM_DETAIL0 );
             const Vector2 offset( offsetScale.x, offsetScale.y );
             const Vector2 scale( offsetScale.z, offsetScale.w );
 
@@ -724,8 +743,8 @@ namespace Ogre
                         outString += finalTexName;
                         outString += '"';
                     }
-                    
-                    if(textureType == PBSM_DIFFUSE && datablock->getUseDiffuseMapAsGrayscale())
+
+                    if( textureType == PBSM_DIFFUSE && datablock->getUseDiffuseMapAsGrayscale() )
                     {
                         outString += ",\n\t\t\t\t\"grayscale\" : true";
                     }
@@ -753,7 +772,7 @@ namespace Ogre
 
         if( !writeValue && outString.size() != currentOffset )
         {
-            //Remove an extra comma and newline characters.
+            // Remove an extra comma and newline characters.
             outString.erase( currentOffset, 2 );
         }
 
@@ -762,8 +781,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::saveMaterial( const HlmsDatablock *datablock, String &outString )
     {
-        assert( dynamic_cast<const HlmsPbsDatablock*>(datablock) );
-        const HlmsPbsDatablock *pbsDatablock = static_cast<const HlmsPbsDatablock*>(datablock);
+        assert( dynamic_cast<const HlmsPbsDatablock *>( datablock ) );
+        const HlmsPbsDatablock *pbsDatablock = static_cast<const HlmsPbsDatablock *>( datablock );
 
         outString += ",\n\t\t\t\"workflow\" : ";
         toQuotedStr( pbsDatablock->getWorkflow(), outString );
@@ -804,10 +823,9 @@ namespace Ogre
             outString += "\n\t\t\t}";
         }
 
-        saveTexture( pbsDatablock->getDiffuse(),  "diffuse", PBSM_DIFFUSE,
-                     pbsDatablock, outString, true, pbsDatablock->getBackgroundDiffuse() );
-        saveTexture( pbsDatablock->getSpecular(), "specular", PBSM_SPECULAR,
-                     pbsDatablock, outString,
+        saveTexture( pbsDatablock->getDiffuse(), "diffuse", PBSM_DIFFUSE, pbsDatablock, outString, true,
+                     pbsDatablock->getBackgroundDiffuse() );
+        saveTexture( pbsDatablock->getSpecular(), "specular", PBSM_SPECULAR, pbsDatablock, outString,
                      pbsDatablock->getWorkflow() == HlmsPbsDatablock::SpecularWorkflow );
         if( pbsDatablock->getWorkflow() != HlmsPbsDatablock::MetallicWorkflow )
         {
@@ -815,81 +833,113 @@ namespace Ogre
         }
         else
         {
-            saveTexture( pbsDatablock->getMetalness(), "metalness", PBSM_METALLIC,
-                         pbsDatablock, outString );
+            saveTexture( pbsDatablock->getMetalness(), "metalness", PBSM_METALLIC, pbsDatablock,
+                         outString );
         }
 
-        if( pbsDatablock->getNormalMapWeight() != 1.0f ||
-            pbsDatablock->getTexture( PBSM_NORMAL ) )
+        if( pbsDatablock->getNormalMapWeight() != 1.0f || pbsDatablock->getTexture( PBSM_NORMAL ) )
         {
-            saveTexture( pbsDatablock->getNormalMapWeight(), "normal", PBSM_NORMAL,
-                         pbsDatablock, outString );
+            saveTexture( pbsDatablock->getNormalMapWeight(), "normal", PBSM_NORMAL, pbsDatablock,
+                         outString );
         }
 
-        saveTexture( pbsDatablock->getRoughness(), "roughness", PBSM_ROUGHNESS,
-                     pbsDatablock, outString );
+        saveTexture( pbsDatablock->getRoughness(), "roughness", PBSM_ROUGHNESS, pbsDatablock,
+                     outString );
 
         if( pbsDatablock->getTexture( PBSM_DETAIL_WEIGHT ) )
             saveTexture( "detail_weight", PBSM_DETAIL_WEIGHT, pbsDatablock, outString );
 
-        for( int i=0; i<4; ++i )
+        for( uint8 i = 0u; i < 4u; ++i )
         {
             PbsBlendModes blendMode = pbsDatablock->getDetailMapBlendMode( i );
             const Vector4 &offsetScale = pbsDatablock->getDetailMapOffsetScale( i );
             const Vector2 offset( offsetScale.x, offsetScale.y );
             const Vector2 scale( offsetScale.z, offsetScale.w );
 
-            const PbsTextureTypes textureType = static_cast<PbsTextureTypes>(PBSM_DETAIL0 + i);
+            const PbsTextureTypes textureType = static_cast<PbsTextureTypes>( PBSM_DETAIL0 + i );
 
             if( blendMode != PBSM_BLEND_NORMAL_NON_PREMUL || offset != Vector2::ZERO ||
                 scale != Vector2::UNIT_SCALE || pbsDatablock->getDetailMapWeight( i ) != 1.0f ||
                 pbsDatablock->getTexture( textureType ) )
             {
                 char tmpBuffer[64];
-                LwString blockName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+                LwString blockName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
                 blockName.a( "detail_diffuse", i );
 
                 saveTexture( pbsDatablock->getDetailMapWeight( i ), blockName.c_str(),
-                             static_cast<PbsTextureTypes>(PBSM_DETAIL0 + i), pbsDatablock,
-                             outString );
+                             static_cast<PbsTextureTypes>( PBSM_DETAIL0 + i ), pbsDatablock, outString );
             }
         }
 
-        for( int i=0; i<4; ++i )
+        for( uint8 i = 0u; i < 4u; ++i )
         {
-            const PbsTextureTypes textureType = static_cast<PbsTextureTypes>(PBSM_DETAIL0_NM + i);
+            const PbsTextureTypes textureType = static_cast<PbsTextureTypes>( PBSM_DETAIL0_NM + i );
 
             if( pbsDatablock->getDetailNormalWeight( i ) != 1.0f ||
                 pbsDatablock->getTexture( textureType ) )
             {
                 char tmpBuffer[64];
-                LwString blockName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+                LwString blockName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
                 blockName.a( "detail_normal", i );
                 saveTexture( pbsDatablock->getDetailNormalWeight( i ), blockName.c_str(),
-                             static_cast<PbsTextureTypes>(PBSM_DETAIL0_NM + i), pbsDatablock,
+                             static_cast<PbsTextureTypes>( PBSM_DETAIL0_NM + i ), pbsDatablock,
                              outString );
             }
         }
 
         if( pbsDatablock->_hasEmissive() )
         {
-            saveTexture( pbsDatablock->getEmissive(), "emissive", PBSM_EMISSIVE,
-                         pbsDatablock, outString );
+            saveTexture( pbsDatablock->getEmissive(), "emissive", PBSM_EMISSIVE, pbsDatablock,
+                         outString );
         }
 
         if( pbsDatablock->getTexture( PBSM_REFLECTION ) )
             saveTexture( "reflection", PBSM_REFLECTION, pbsDatablock, outString );
+
+        bool bHasUserValues = false;
+        for( int i = 0; i < 3 && !bHasUserValues; ++i )
+        {
+            const Vector4 userValue = pbsDatablock->getUserValue( static_cast<uint8>( i ) );
+            if( userValue != Vector4::ZERO )
+                bHasUserValues = true;
+        }
+
+        if( bHasUserValues )
+        {
+            outString += ",\n\t\t\t\"user_values\" :\n\t\t\t{";
+
+            bool bFirstElement = true;
+            for( int i = 0; i < 3; ++i )
+            {
+                const Vector4 userValue = pbsDatablock->getUserValue( static_cast<uint8>( i ) );
+
+                if( userValue != Vector4::ZERO )
+                {
+                    char tmpBuffer[64];
+                    LwString keyName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+                    if( !bFirstElement )
+                        keyName.a( "," );
+                    keyName.a( "\n\t\t\t\t\"", i, "\" : " );
+                    outString += keyName.c_str();
+                    HlmsJson::toStr( userValue, outString );
+
+                    bFirstElement = false;
+                }
+            }
+            outString += "\n\t\t\t}";
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::collectSamplerblocks( const HlmsDatablock *datablock,
-                                            set<const HlmsSamplerblock*>::type &outSamplerblocks )
+                                            set<const HlmsSamplerblock *>::type &outSamplerblocks )
     {
-        assert( dynamic_cast<const HlmsPbsDatablock*>(datablock) );
-        const HlmsPbsDatablock *pbsDatablock = static_cast<const HlmsPbsDatablock*>(datablock);
+        assert( dynamic_cast<const HlmsPbsDatablock *>( datablock ) );
+        const HlmsPbsDatablock *pbsDatablock = static_cast<const HlmsPbsDatablock *>( datablock );
 
-        for( int i=0; i<NUM_PBSM_TEXTURE_TYPES; ++i )
+        for( int i = 0; i < NUM_PBSM_TEXTURE_TYPES; ++i )
         {
             const PbsTextureTypes textureType = static_cast<PbsTextureTypes>( i );
             const HlmsSamplerblock *samplerblock = pbsDatablock->getSamplerblock( textureType );
@@ -897,6 +947,6 @@ namespace Ogre
                 outSamplerblocks.insert( samplerblock );
         }
     }
-}
+}  // namespace Ogre
 
 #endif

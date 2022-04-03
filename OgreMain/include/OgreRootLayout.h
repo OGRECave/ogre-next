@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -55,9 +55,10 @@ namespace Ogre
         uint16 end;    // Exclusive
         DescBindingRange();
 
-        size_t getNumUsedSlots( void ) const { return end - start; }
-        bool isInUse( void ) const { return start < end; }
-        bool isValid( void ) const { return start <= end; }
+        uint32 getNumUsedSlots() const { return end - start; }
+
+        bool isInUse() const { return start < end; }
+        bool isValid() const { return start <= end; }
 
         bool isDirty( uint8 minDirtySlot ) const
         {
@@ -382,12 +383,31 @@ namespace Ogre
     class _OgreExport RootLayout
     {
     public:
-        bool mCompute;
-        uint8 mParamsBuffStages;
-        bool mBaked[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS];
+        struct ArrayDesc
+        {
+            uint16 bindingIdx;
+            uint16 arraySize;
+
+            ArrayDesc( uint16 _bindingIdx, uint16 _arraySize ) :
+                bindingIdx( _bindingIdx ),
+                arraySize( _arraySize )
+            {
+            }
+
+            static ArrayDesc fromKey( uint32 x ) { return ArrayDesc( x >> 16u, x & 0x0000FFFFu ); }
+            uint32           toKey() const { return uint32( bindingIdx << 16u ) | arraySize; }
+        };
+
+        bool             mCompute;
+        uint8            mParamsBuffStages;
+        bool             mBaked[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS];
         DescBindingRange mDescBindingRanges[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS]
                                            [DescBindingTypes::NumDescBindingTypes];
 
+    protected:
+        FastArray<uint32> mArrayRanges[DescBindingTypes::NumDescBindingTypes];
+
+    public:
         void validate( const String &filename ) const;
 
     protected:
@@ -395,17 +415,55 @@ namespace Ogre
 
         inline static void flushLwString( LwString &jsonStr, String &outJson );
 
-        size_t calculateNumUsedSets( void ) const;
+        size_t calculateNumUsedSets() const;
         size_t calculateNumBindings( const size_t setIdx ) const;
 
     public:
         RootLayout();
 
+        /** Tells the RootLayout that the element at setIdx and bindingIdx is
+            an array of size arraySize
+
+            The purpose of this function is that we can specify mDescBindingRanges[0][Texture] = [4, 6]
+            and have:
+
+                vulkan_layout( ogre_t4 ) uniform texture2D myTexA;
+                vulkan_layout( ogre_t5 ) uniform texture2D myTexB;
+
+            However if we wish to have:
+
+                vulkan_layout( ogre_t4 ) uniform texture2D myTexA[2];
+                // ogre_t5 is occupied
+
+            Then we MUST call addArrayBinding( Texture, ArrayDesc( 4, 2 ) );
+            since arrays are treated differently
+
+            Arrays of length = 1 don't need to call this function.
+        @remarks
+            Calls must be done in order (i.e. increasing setIdx and bindingIdx)
+            Bindings cannot overlap (i.e. last.bindingIdx + last.arraySize <= new.bindingIdx)
+            Will throw if this condition is not satisfied
+        */
+        void addArrayBinding( DescBindingTypes::DescBindingTypes bindingType, ArrayDesc arrayDesc );
+
         /** Copies all our parameters from 'other'
             Does NOT call validate()
         @param other
+        @param bIncludeArrayBindings
+            When false, mArrayRanges are not included
         */
-        void copyFrom( const RootLayout &other );
+        void copyFrom( const RootLayout &other, bool bIncludeArrayBindings = true );
+
+        /** Validates that the array bindings in groundTruth.mArrayRanges are included
+            in this->mArrayRanges.
+
+            Will throw otherwise
+        @param groundTruth
+            Root Layout to compare against. Its data should've been obtrained through reflection
+        @param filename
+            Filename for logging purposes if errors are found
+        */
+        void validateArrayBindings( const RootLayout &groundTruth, const String &filename ) const;
 
         /** Parses a root layout definition from a JSON string
             The JSON string:
@@ -422,6 +480,11 @@ namespace Ogre
                         "uav_buffers" : [0, 16]
                         "uav_textures" : [16, 32],
                         "baked" : false
+                    },
+
+                    "arrays" :
+                    {
+                        "tex_buffers" : [[4, 5], [10, 2]],
                     }
                 }
             @endcode

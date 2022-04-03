@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -27,32 +27,28 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 */
 
 #include "OgreMetalPlugin.h"
+
+#include "OgreAbiUtils.h"
 #include "OgreMetalRenderSystem.h"
 #include "OgreRoot.h"
 
 #if !__has_feature( objc_arc )
-    #error "ARC is off!!!"
+#    error "ARC is off!!!"
 #endif
 
 namespace Ogre
 {
     const String sPluginName = "Metal RenderSystem";
     //---------------------------------------------------------------------
-    MetalPlugin::MetalPlugin()
-        : mRenderSystem(0)
-    {
-    }
+    MetalPlugin::MetalPlugin() : mRenderSystem( 0 ) {}
     //---------------------------------------------------------------------
-    const String& MetalPlugin::getName() const
-    {
-        return sPluginName;
-    }
+    const String &MetalPlugin::getName() const { return sPluginName; }
     //---------------------------------------------------------------------
     void MetalPlugin::install()
     {
         mRenderSystem = OGRE_NEW MetalRenderSystem();
 
-        Root::getSingleton().addRenderSystem(mRenderSystem);
+        Root::getSingleton().addRenderSystem( mRenderSystem );
     }
     //---------------------------------------------------------------------
     void MetalPlugin::initialise()
@@ -70,4 +66,6 @@ namespace Ogre
         OGRE_DELETE mRenderSystem;
         mRenderSystem = 0;
     }
+    //---------------------------------------------------------------------
+    void MetalPlugin::getAbiCookie( AbiCookie &outAbiCookie ) { outAbiCookie = generateAbiCookie(); }
 }

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -36,7 +36,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Factory class for Vulkan programs. */
-    class _OgreVulkanExport VulkanProgramFactory : public HighLevelGpuProgramFactory
+    class _OgreVulkanExport VulkanProgramFactory final : public HighLevelGpuProgramFactory
     {
     protected:
         String mLanguageName;
@@ -46,13 +46,14 @@ namespace Ogre
 
     public:
         VulkanProgramFactory( VulkanDevice *device, const char *languageName, bool glslLangInitializer );
-        virtual ~VulkanProgramFactory( void );
+        ~VulkanProgramFactory() override;
         /// Get the name of the language this factory creates programs for
-        const String &getLanguage( void ) const;
+        const String &getLanguage() const override;
         /// Create an instance of VulkanProgram
         HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
-                                     const String &group, bool isManual, ManualResourceLoader *loader );
-        void destroy( HighLevelGpuProgram *prog );
+                                     const String &group, bool isManual,
+                                     ManualResourceLoader *loader ) override;
+        void destroy( HighLevelGpuProgram *prog ) override;
     };
 }  // namespace Ogre
 

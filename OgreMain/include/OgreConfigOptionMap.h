@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,14 +33,14 @@ THE SOFTWARE.
 
 #include "OgreStringVector.h"
 
-
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** Packages the details of a configuration option.
         @remarks
             Used for RenderSystem::getConfigOptions. If immutable is true, this
@@ -48,15 +48,15 @@ namespace Ogre {
     */
     typedef struct _ConfigOption
     {
-        String name;
-        String currentValue;
+        String       name;
+        String       currentValue;
         StringVector possibleValues;
-        bool immutable;
+        bool         immutable;
     } ConfigOption;
 
-    typedef map< String, ConfigOption >::type ConfigOptionMap;
+    typedef map<String, ConfigOption>::type ConfigOptionMap;
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,29 +33,29 @@ THE SOFTWARE.
 
 - (id)initWithFrame:(NSRect)frameRect
 {
-	  if((self = [super initWithFrame:frameRect]))
+    if( ( self = [super initWithFrame:frameRect] ) )
     {
         NSApplicationLoad();
-        
+
         ogreWindow = NULL;
     }
-	  return self;
+    return self;
 }
 
-- (void)setOgreWindow:(Ogre::Window*)newWindow
+- (void)setOgreWindow:(Ogre::Window *)newWindow
 {
-	  ogreWindow = newWindow;
+    ogreWindow = newWindow;
 }
 
-- (Ogre::Window*)ogreWindow
+- (Ogre::Window *)ogreWindow
 {
-	  return ogreWindow;
+    return ogreWindow;
 }
 
 - (void)setFrameSize:(NSSize)newSize
 {
-  	[super setFrameSize:newSize];
-    if (ogreWindow)
+    [super setFrameSize:newSize];
+    if( ogreWindow )
     {
         ogreWindow->windowMovedOrResized();
     }
@@ -63,7 +63,7 @@ THE SOFTWARE.
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    if(ogreWindow)
+    if( ogreWindow )
     {
         ogreWindow->swapBuffers();
     }

@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -29,33 +29,35 @@
 #ifndef __GLSLShaderFactory_H__
 #define __GLSLShaderFactory_H__
 
-#include "OgreHighLevelGpuProgramManager.h"
 #include "OgreGLSLExtSupport.h"
+
+#include "OgreHighLevelGpuProgramManager.h"
 
 namespace Ogre
 {
     /** Factory class for GLSL shaders.
      */
-    class _OgreGL3PlusExport GLSLShaderFactory : public HighLevelGpuProgramFactory
+    class _OgreGL3PlusExport GLSLShaderFactory final : public HighLevelGpuProgramFactory
     {
     protected:
         static String mLanguageName;
 
     public:
-        GLSLShaderFactory(const GL3PlusSupport& support);
-        ~GLSLShaderFactory(void);
+        GLSLShaderFactory( const GL3PlusSupport &support );
+        ~GLSLShaderFactory() override;
         /// Get the name of the language this factory creates shaders for.
-        const String& getLanguage(void) const;
+        const String &getLanguage() const override;
+
         /// Create an instance of GLSLProgram.
-        HighLevelGpuProgram* create(ResourceManager* creator,
-                                    const String& name, ResourceHandle handle,
-                                    const String& group, bool isManual, ManualResourceLoader* loader);
-        void destroy(HighLevelGpuProgram* prog);
+        HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
+                                     const String &group, bool isManual,
+                                     ManualResourceLoader *loader ) override;
+
+        void destroy( HighLevelGpuProgram *prog ) override;
 
     private:
-        static GLSLMonolithicProgramManager* mMonolithicProgramManager;
-        static GLSLSeparableProgramManager* mSeparableProgramManager;
+        static GLSLMonolithicProgramManager *mMonolithicProgramManager;
     };
-}
+}  // namespace Ogre
 
-#endif // __GLSLShaderFactory_H__
+#endif  // __GLSLShaderFactory_H__

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -53,11 +53,11 @@ namespace Ogre
         size_t mInternalBufferStart;
         size_t mVboPoolIdx;
 
-        void *map( void );
-        void unmap( void );
+        void *map();
+        void unmap();
     };
 
-    class _OgreVulkanExport VulkanVaoManager : public VaoManager
+    class _OgreVulkanExport VulkanVaoManager final : public VaoManager
     {
     public:
         friend class VulkanStagingBuffer;
@@ -188,7 +188,7 @@ namespace Ogre
         /// Note: mVbos[CPU_INACCESIBLE] may contain some Vbos from memory types which are not
         /// mBestVkMemoryTypeIndex.
         ///
-        /// This can happen if a texture request couldn't be fullfilled but other memory
+        /// This can happen if a texture request couldn't be fulfilled but other memory
         /// types were available. If that's the case, then
         /// Vbo::vkMemoryTypeIdx & mBestVkMemoryTypeIndex[CPU_INACCESIBLE] will be 0
         VboVec mVbos[MAX_VBO_FLAG];
@@ -252,7 +252,7 @@ namespace Ogre
         void addMemoryType( VboFlag vboFlag, const VkPhysicalDeviceMemoryProperties &memProperties,
                             const uint32 memoryTypeIdx );
         uint32 determineSupportedMemoryTypes( VkBufferUsageFlags usageFlags ) const;
-        void determineBestMemoryTypes( void );
+        void determineBestMemoryTypes();
 
         /** Asks for allocating buffer space in a memory pool.
             If the VBO doesn't exist, all VBOs are full or can't fit this request,
@@ -306,57 +306,59 @@ namespace Ogre
         void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
                             const VboFlag vboFlag );
 
-        virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                            BufferType bufferType, void *initialData,
-                                                            bool keepAsShadow,
-                                                            const VertexElement2Vec &vertexElements );
+        VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                    BufferType bufferType, void *initialData,
+                                                    bool keepAsShadow,
+                                                    const VertexElement2Vec &vertexElements ) override;
 
-        virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer );
+        void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) override;
 
-        virtual MultiSourceVertexBufferPool *createMultiSourceVertexBufferPoolImpl(
+#ifdef _OGRE_MULTISOURCE_VBO
+        MultiSourceVertexBufferPool *createMultiSourceVertexBufferPoolImpl(
             const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
-            size_t totalBytesPerVertex, BufferType bufferType );
+            size_t totalBytesPerVertex, BufferType bufferType ) override;
+#endif
 
-        virtual IndexBufferPacked *createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                          BufferType bufferType, void *initialData,
-                                                          bool keepAsShadow );
+        IndexBufferPacked *createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                  BufferType bufferType, void *initialData,
+                                                  bool keepAsShadow ) override;
 
-        virtual void destroyIndexBufferImpl( IndexBufferPacked *indexBuffer );
+        void destroyIndexBufferImpl( IndexBufferPacked *indexBuffer ) override;
 
-        virtual ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
-                                                          void *initialData, bool keepAsShadow );
-        virtual void destroyConstBufferImpl( ConstBufferPacked *constBuffer );
+        ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
+                                                  void *initialData, bool keepAsShadow ) override;
+        void destroyConstBufferImpl( ConstBufferPacked *constBuffer ) override;
 
-        virtual TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                                      BufferType bufferType, void *initialData,
-                                                      bool keepAsShadow );
-        virtual void destroyTexBufferImpl( TexBufferPacked *texBuffer );
+        TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                              BufferType bufferType, void *initialData,
+                                              bool keepAsShadow ) override;
+        void destroyTexBufferImpl( TexBufferPacked *texBuffer ) override;
 
-        virtual ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
-                                                                size_t sizeBytes, BufferType bufferType,
-                                                                void *initialData, bool keepAsShadow );
-        virtual void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer );
+        ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                        BufferType bufferType, void *initialData,
+                                                        bool keepAsShadow ) override;
+        void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) override;
 
-        virtual UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                      uint32 bindFlags, void *initialData,
-                                                      bool keepAsShadow );
-        virtual void destroyUavBufferImpl( UavBufferPacked *uavBuffer );
+        UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                              uint32 bindFlags, void *initialData,
+                                              bool keepAsShadow ) override;
+        void destroyUavBufferImpl( UavBufferPacked *uavBuffer ) override;
 
-        virtual IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
-                                                                void *initialData, bool keepAsShadow );
-        virtual void destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer );
+        IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
+                                                        void *initialData, bool keepAsShadow ) override;
+        void destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) override;
 
-        virtual VertexArrayObject *createVertexArrayObjectImpl(
-            const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
-            OperationType opType );
+        VertexArrayObject *createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
+                                                        IndexBufferPacked *indexBuffer,
+                                                        OperationType opType ) override;
 
-        virtual void destroyVertexArrayObjectImpl( VertexArrayObject *vao );
+        void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) override;
 
         /// Finds the Vao. Calls createVao automatically if not found.
         /// Increases refCount before returning the iterator.
         VaoVec::iterator findVao( const VertexBufferPackedVec &vertexBuffers,
                                   IndexBufferPacked *indexBuffer, OperationType opType );
-        uint32 createVao( void );
+        uint32 createVao();
 
         static uint32 generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId );
 
@@ -369,13 +371,13 @@ namespace Ogre
 
         void deallocateEmptyVbos( const bool bDeviceStall );
 
-        virtual void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
-                                             size_t newPoolIdx, BufferPacked *buffer );
+        void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
+                                     size_t newPoolIdx, BufferPacked *buffer ) override;
 
     public:
         VulkanVaoManager( VulkanDevice *device, VulkanRenderSystem *renderSystem,
                           const NameValuePairList *params );
-        virtual ~VulkanVaoManager();
+        ~VulkanVaoManager() override;
 
         void initDrawIdVertexBuffer();
         void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer, uint32 binding = 15 );
@@ -389,37 +391,37 @@ namespace Ogre
 
         void addDelayedFunc( VulkanDelayedFuncBase *cmd );
 
-        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
-                                     size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
+        void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                             size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const override;
 
-        virtual void cleanupEmptyPools( void );
+        void cleanupEmptyPools() override;
 
-        bool supportsCoherentMapping( void ) const;
-        bool supportsNonCoherentMapping( void ) const;
+        bool supportsCoherentMapping() const;
+        bool supportsNonCoherentMapping() const;
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks
             The returned buffer starts with a reference count of 1. You should decrease
             it when you're done using it.
         */
-        virtual StagingBuffer *createStagingBuffer( size_t sizeBytes, bool forUpload );
+        StagingBuffer *createStagingBuffer( size_t sizeBytes, bool forUpload ) override;
 
-        virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                                                  size_t elementStart, size_t elementCount );
+        AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
+                                          size_t elementStart, size_t elementCount ) override;
 
         VulkanDescriptorPool *getDescriptorPool( const VulkanRootLayout *rootLayout, size_t setIdx,
                                                  VkDescriptorSetLayout setLayout );
         void _schedulePoolAdvanceFrame( VulkanDescriptorPool *pool );
 
-        virtual void _update( void );
-        void _notifyNewCommandBuffer( void );
+        void _update() override;
+        void _notifyNewCommandBuffer();
 
-        VulkanDevice *getDevice( void ) const { return mDevice; }
+        VulkanDevice *getDevice() const { return mDevice; }
 
         /// Insert into the end of semaphoreArray 'numSemaphores'
         /// number of semaphores that are safe for use.
         void getAvailableSempaphores( VkSemaphoreArray &semaphoreArray, size_t numSemaphores );
-        VkSemaphore getAvailableSempaphore( void );
+        VkSemaphore getAvailableSempaphore();
 
         /// Call this function after you've submitted to the GPU a VkSemaphore that will be waited on.
         /// i.e. 'semaphore' is part of VkSubmitInfo::pWaitSemaphores or part of
@@ -434,13 +436,13 @@ namespace Ogre
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind
         /// is finished.
-        uint8 waitForTailFrameToFinish( void );
+        uint8 waitForTailFrameToFinish() override;
 
         /// See VaoManager::waitForSpecificFrameToFinish
-        virtual void waitForSpecificFrameToFinish( uint32 frameCount );
+        void waitForSpecificFrameToFinish( uint32 frameCount ) override;
 
         /// See VaoManager::isFrameFinished
-        virtual bool isFrameFinished( uint32 frameCount );
+        bool isFrameFinished( uint32 frameCount ) override;
 
         /** Will stall undefinitely until GPU finishes (signals the sync object).
         @param fenceName

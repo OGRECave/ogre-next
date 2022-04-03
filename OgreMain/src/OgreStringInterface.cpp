@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,9 +26,11 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreStringInterface.h"
 
-namespace Ogre {
+namespace Ogre
+{
     OGRE_STATIC_MUTEX( g_DictionaryMutex );
 
     typedef map<String, ParamDictionary>::type ParamDictionaryMap;
@@ -37,27 +39,27 @@ namespace Ogre {
 
     ParamCommand::~ParamCommand() {}
 
-    const ParameterList& StringInterface::getParameters(void) const
+    const ParameterList &StringInterface::getParameters() const
     {
         static ParameterList emptyList;
 
-        const ParamDictionary* dict = getParamDictionary();
-        if (dict)
+        const ParamDictionary *dict = getParamDictionary();
+        if( dict )
             return dict->getParameters();
         else
             return emptyList;
-
     }
 
-    bool StringInterface::createParamDictionary(const String& className)
+    bool StringInterface::createParamDictionary( const String &className )
     {
         OGRE_LOCK_MUTEX( g_DictionaryMutex );
 
-        ParamDictionaryMap::iterator it = msDictionary.find(className);
+        ParamDictionaryMap::iterator it = msDictionary.find( className );
 
-        if ( it == msDictionary.end() )
+        if( it == msDictionary.end() )
         {
-            mParamDict = &msDictionary.insert( std::make_pair( className, ParamDictionary() ) ).first->second;
+            mParamDict =
+                &msDictionary.insert( std::make_pair( className, ParamDictionary() ) ).first->second;
             mParamDictName = className;
             return true;
         }
@@ -69,18 +71,18 @@ namespace Ogre {
         }
     }
 
-    bool StringInterface::setParameter(const String& name, const String& value)
+    bool StringInterface::setParameter( const String &name, const String &value )
     {
         // Get dictionary
-        ParamDictionary* dict = getParamDictionary();
+        ParamDictionary *dict = getParamDictionary();
 
-        if (dict)
+        if( dict )
         {
             // Look up command object
-            ParamCommand* cmd = dict->getParamCommand(name);
-            if (cmd)
+            ParamCommand *cmd = dict->getParamCommand( name );
+            if( cmd )
             {
-                cmd->doSet(this, value);
+                cmd->doSet( this, value );
                 return true;
             }
         }
@@ -88,20 +90,20 @@ namespace Ogre {
         return false;
     }
     //-----------------------------------------------------------------------
-    void StringInterface::setParameterList(const NameValuePairList& paramList)
+    void StringInterface::setParameterList( const NameValuePairList &paramList )
     {
         NameValuePairList::const_iterator i, iend;
         iend = paramList.end();
-        for (i = paramList.begin(); i != iend; ++i)
+        for( i = paramList.begin(); i != iend; ++i )
         {
-            setParameter(i->first, i->second);
+            setParameter( i->first, i->second );
         }
     }
     //-----------------------------------------------------------------------
-    void StringInterface::cleanupDictionary ()
+    void StringInterface::cleanupDictionary()
     {
-            OGRE_LOCK_MUTEX( g_DictionaryMutex );
+        OGRE_LOCK_MUTEX( g_DictionaryMutex );
 
         msDictionary.clear();
     }
-}
+}  // namespace Ogre

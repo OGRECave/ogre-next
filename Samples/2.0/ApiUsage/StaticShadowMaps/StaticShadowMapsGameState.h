@@ -2,9 +2,10 @@
 #ifndef _Demo_StaticShadowMapsGameState_H_
 #define _Demo_StaticShadowMapsGameState_H_
 
-#include "OgrePrerequisites.h"
-#include "OgreOverlayPrerequisites.h"
 #include "OgreOverlay.h"
+#include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
+
 #include "TutorialGameState.h"
 
 namespace Ogre
@@ -16,30 +17,30 @@ namespace Demo
 {
     class StaticShadowMapsGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
-        bool                mUpdateShadowMaps;
-        Ogre::CompositorShadowNode  *mShadowNode;
+        bool mAnimateObjects;
+        bool mUpdateShadowMaps;
+        Ogre::CompositorShadowNode *mShadowNode;
 
         Ogre::v1::Overlay *mDebugOverlayPSSM;
         Ogre::v1::Overlay *mDebugOverlaySpotlights;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
-        void createShadowMapDebugOverlays(void);
+        void createShadowMapDebugOverlays();
 
     public:
         StaticShadowMapsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

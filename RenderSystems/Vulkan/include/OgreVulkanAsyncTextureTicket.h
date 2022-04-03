@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -40,7 +40,7 @@ namespace Ogre
 {
     /** See AsyncTextureTicket
      */
-    class _OgreVulkanExport VulkanAsyncTextureTicket : public AsyncTextureTicket
+    class _OgreVulkanExport VulkanAsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
         VulkanRawBuffer mVboName;
@@ -50,22 +50,22 @@ namespace Ogre
         VulkanVaoManager *mVaoManager;
         VulkanQueue *mQueue;
 
-        virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl( void );
+        TextureBox mapImpl( uint32 slice ) override;
+        void unmapImpl() override;
 
-        void waitForDownloadToFinish( void );
+        void waitForDownloadToFinish();
 
     public:
         VulkanAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                   TextureTypes::TextureTypes textureType,
                                   PixelFormatGpu pixelFormatFamily, VulkanVaoManager *vaoManager,
                                   VulkanQueue *queue );
-        virtual ~VulkanAsyncTextureTicket();
+        ~VulkanAsyncTextureTicket() override;
 
-        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
-                                      TextureBox *srcBox );
+        void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                              TextureBox *srcBox ) override;
 
-        virtual bool queryIsTransferDone( void );
+        bool queryIsTransferDone() override;
     };
 }  // namespace Ogre
 

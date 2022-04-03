@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,17 +27,18 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
-#include "Vao/OgreMultiSourceVertexBufferPool.h"
-#include "Vao/OgreVaoManager.h"
 
-#include "OgreStringConverter.h"
+#ifdef _OGRE_MULTISOURCE_VBO
+#    include "Vao/OgreMultiSourceVertexBufferPool.h"
+
+#    include "OgreStringConverter.h"
+#    include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
     MultiSourceVertexBufferPool::MultiSourceVertexBufferPool(
-                            const VertexElement2VecVec &vertexElementsBySource,
-                            size_t maxVertices, BufferType bufferType,
-                            size_t internalBufferStart, VaoManager *vaoManager ) :
+        const VertexElement2VecVec &vertexElementsBySource, size_t maxVertices, BufferType bufferType,
+        size_t internalBufferStart, VaoManager *vaoManager ) :
         mVertexElementsBySource( vertexElementsBySource ),
         mMaxVertices( maxVertices ),
         mBufferType( bufferType ),
@@ -53,14 +54,14 @@ namespace Ogre
 
         size_t accumulatedOffset = 0;
 
-        for( size_t i=0; i<mVertexElementsBySource.size(); ++i )
+        for( size_t i = 0; i < mVertexElementsBySource.size(); ++i )
         {
             uint32 bytesPerVertex = VaoManager::calculateVertexSize( mVertexElementsBySource[i] );
 
-            //Add padding when needed (needed if the buffer is rendered solo)
-            //Round to next multiple of bytesPerElement
-            accumulatedOffset = ( (accumulatedOffset + bytesPerVertex - 1) /
-                                 bytesPerVertex ) * bytesPerVertex;
+            // Add padding when needed (needed if the buffer is rendered solo)
+            // Round to next multiple of bytesPerElement
+            accumulatedOffset =
+                ( ( accumulatedOffset + bytesPerVertex - 1 ) / bytesPerVertex ) * bytesPerVertex;
 
             mBytesPerVertexPerSource.push_back( bytesPerVertex );
             mSourceOffset.push_back( accumulatedOffset );
@@ -71,31 +72,31 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MultiSourceVertexBufferPool::destroyVertexBuffers( VertexBufferPackedVec &inOutVertexBuffers )
     {
-        //First check that all of the buffers have been handed to us
+        // First check that all of the buffers have been handed to us
         if( inOutVertexBuffers.size() != mVertexElementsBySource.size() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "We were expecting a list of " +
-                         StringConverter::toString( mVertexElementsBySource.size() ) +
-                         " buffers, user provided " + StringConverter::toString( inOutVertexBuffers.size() ),
+                             StringConverter::toString( mVertexElementsBySource.size() ) +
+                             " buffers, user provided " +
+                             StringConverter::toString( inOutVertexBuffers.size() ),
                          "MultiSourceVertexBufferPool::destroyVertexBuffers" );
         }
 
         size_t multiSourceId = inOutVertexBuffers[0]->getMultiSourceId();
 
         VertexBufferPackedVec::const_iterator itor = inOutVertexBuffers.begin();
-        VertexBufferPackedVec::const_iterator end  = inOutVertexBuffers.end();
+        VertexBufferPackedVec::const_iterator endt = inOutVertexBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            if( (*itor)->getMultiSourcePool() != this )
+            if( ( *itor )->getMultiSourcePool() != this )
             {
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Vertex buffer doesn't belong to this pool!",
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Vertex buffer doesn't belong to this pool!",
                              "MultiSourceVertexBufferPool::destroyVertexBuffers" );
             }
 
-            if( multiSourceId != (*itor)->getMultiSourceId() )
+            if( multiSourceId != ( *itor )->getMultiSourceId() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "You must provide all the vertex buffers that "
@@ -110,7 +111,7 @@ namespace Ogre
 
         itor = inOutVertexBuffers.begin();
 
-        while( itor != end )
+        while( itor != endt )
             delete *itor++;
 
         inOutVertexBuffers.clear();
@@ -120,5 +121,6 @@ namespace Ogre
     {
         return mSourceOffset[sourceIdx] * mBytesPerVertexPerSource[sourceIdx];
     }
-}
+}  // namespace Ogre
 
+#endif

@@ -8,55 +8,54 @@
 
 namespace Ogre
 {
-    template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
+#    define OGRE_STL_ALIGNMENT_DEF_ARG , typename A = STLAllocator<std::pair<const K, V>, AllocPolicy>
+#    define OGRE_STL_ALIGNMENT_ARG , typename A
+#    define OGRE_STL_ALIGNMENT_A , A
+#else
+#    define OGRE_STL_ALIGNMENT_DEF_ARG
+#    define OGRE_STL_ALIGNMENT_ARG
+#    define OGRE_STL_ALIGNMENT_A
+#endif
+
+    template <typename K, typename V, typename P = std::less<K> OGRE_STL_ALIGNMENT_DEF_ARG>
     struct map
     {
-#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename std::map<K, V, P, A> type;
-        typedef typename std::map<K, V, P, A>::iterator iterator;
-        typedef typename std::map<K, V, P, A>::const_iterator const_iterator;
-#else
-        typedef typename std::map<K, V, P> type;
-        typedef typename std::map<K, V, P>::iterator iterator;
-        typedef typename std::map<K, V, P>::const_iterator const_iterator;
-#endif
+        typedef typename std::map<K, V, P OGRE_STL_ALIGNMENT_A>                 type;
+        typedef typename std::map<K, V, P OGRE_STL_ALIGNMENT_A>::iterator       iterator;
+        typedef typename std::map<K, V, P OGRE_STL_ALIGNMENT_A>::const_iterator const_iterator;
     };
 
-    template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+    template <typename K, typename V, typename P = std::less<K> OGRE_STL_ALIGNMENT_DEF_ARG>
     struct multimap
     {
-#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename std::multimap<K, V, P, A> type;
-        typedef typename std::multimap<K, V, P, A>::iterator iterator;
-        typedef typename std::multimap<K, V, P, A>::const_iterator const_iterator;
-#else
-        typedef typename std::multimap<K, V, P> type;
-        typedef typename std::multimap<K, V, P>::iterator iterator;
-        typedef typename std::multimap<K, V, P>::const_iterator const_iterator;
-#endif
+        typedef typename std::multimap<K, V, P OGRE_STL_ALIGNMENT_A>                 type;
+        typedef typename std::multimap<K, V, P OGRE_STL_ALIGNMENT_A>::iterator       iterator;
+        typedef typename std::multimap<K, V, P OGRE_STL_ALIGNMENT_A>::const_iterator const_iterator;
     };
 
-    template <typename K, typename V, typename P, typename A>
-    class StdMap : public std::map<K, V, P, A>
+    template <typename K, typename V, typename P OGRE_STL_ALIGNMENT_ARG>
+    class StdMap : public std::map<K, V, P OGRE_STL_ALIGNMENT_A>
     {
     public:
-        StdMap() : std::map<K, V, P, A>() {}
+        StdMap() : std::map<K, V, P OGRE_STL_ALIGNMENT_A>() {}
 
-#if __cplusplus >= 201103L
-        StdMap( std::initializer_list<typename std::map<K, V, P, A>::value_type> __l,
+        StdMap( std::initializer_list<typename std::map<K, V, P OGRE_STL_ALIGNMENT_A>::value_type> __l,
                 const P &__comp = P() ) :
-            std::map<K, V, P, A>( __l, __comp )
+            std::map<K, V, P OGRE_STL_ALIGNMENT_A>( __l, __comp )
         {
         }
-#endif
     };
 
-    template <typename K, typename V, typename P, typename A>
-    class StdMultiMap : public std::multimap<K, V, P, A>
+    template <typename K, typename V, typename P OGRE_STL_ALIGNMENT_ARG>
+    class StdMultiMap : public std::multimap<K, V, P OGRE_STL_ALIGNMENT_A>
     {
     };
+
+#undef OGRE_STL_ALIGNMENT_A
+#undef OGRE_STL_ALIGNMENT_ARG
+#undef OGRE_STL_ALIGNMENT_DEF_ARG
+
 }  // namespace Ogre
 
 #endif

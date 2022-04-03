@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -100,6 +100,8 @@ namespace Ogre
         FastArray<String>::const_iterator itor = mDevices.begin();
         FastArray<String>::const_iterator endt = mDevices.end();
 
+        optDevices.possibleValues.push_back( "(default)" );
+
         while( itor != endt )
             optDevices.possibleValues.push_back( *itor++ );
 
@@ -124,7 +126,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    String VulkanSupport::validateConfigOptions( void )
+    String VulkanSupport::validateConfigOptions()
     {
         ConfigOptionMap::iterator it;
 
@@ -132,9 +134,10 @@ namespace Ogre
         if( it != mOptions.end() )
         {
             const String deviceName = it->second.currentValue;
-            if( std::find( mDevices.begin(), mDevices.end(), deviceName ) == mDevices.end() )
+            if( deviceName != "(default)" &&
+                std::find( mDevices.begin(), mDevices.end(), deviceName ) == mDevices.end() )
             {
-                setConfigOption( "Device", mDevices.front() );
+                setConfigOption( "Device", "(default)" );
                 return "Requested rendering device could not be found, default will be used instead.";
             }
         }
@@ -142,7 +145,7 @@ namespace Ogre
         return BLANKSTRING;
     }
     //-------------------------------------------------------------------------
-    uint32 VulkanSupport::getSelectedDeviceIdx( void ) const
+    uint32 VulkanSupport::getSelectedDeviceIdx() const
     {
         uint32 deviceIdx = 0u;
 
@@ -153,7 +156,7 @@ namespace Ogre
             FastArray<String>::const_iterator itDevice =
                 std::find( mDevices.begin(), mDevices.end(), deviceName );
             if( itDevice != mDevices.end() )
-                deviceIdx = itDevice - mDevices.begin();
+                deviceIdx = uint32( itDevice - mDevices.begin() );
         }
 
         return deviceIdx;

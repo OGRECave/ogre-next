@@ -34,12 +34,12 @@ namespace Ogre
 
 headerCmdTemplate = \
 """
-class VulkanDelayed_{funcName} : public VulkanDelayedFuncBase
+class VulkanDelayed_{funcName} final : public VulkanDelayedFuncBase
     {{
     public:
         {argsClassDecl}
 
-        virtual void execute();
+        void execute() override;
     }};
     void delayed_{funcName}( VaoManager *vaoMgr, {argsFuncDecl} );
 """

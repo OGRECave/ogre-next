@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,21 +29,21 @@ THE SOFTWARE.
 #ifndef _OgreCompositorPassDepthCopy_H_
 #define _OgreCompositorPassDepthCopy_H_
 
-#include "OgreHeaderPrefix.h"
-
-#include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/OgreCompositorCommon.h"
+#include "Compositor/Pass/OgreCompositorPass.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class CompositorPassDepthCopyDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will copy one DepthBuffer to another DepthBuffer from
@@ -57,19 +57,18 @@ namespace Ogre
     {
         CompositorPassDepthCopyDef const *mDefinition;
 
-        virtual void analyzeBarriers( const bool bClearBarriers = true );
+        void analyzeBarriers( const bool bClearBarriers = true ) override;
 
     public:
         CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,
-                                 const RenderTargetViewDef *rtv,
-                                 CompositorNode *parentNode );
+                                 const RenderTargetViewDef *rtv, CompositorNode *parentNode );
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

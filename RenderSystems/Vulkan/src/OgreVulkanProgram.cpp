@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -42,8 +42,15 @@ THE SOFTWARE.
 
 #include "OgreRenderSystemCapabilities.h"
 #include "OgreRoot.h"
-#include "OgreVulkanGlslangHeader.h"
 
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wshadow"
+#endif
+#include "glslang/Public/ShaderLang.h"
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif
 #include "glslang/SPIRV/Logger.h"
 
 // Inclusion of SPIRV headers triggers lots of C++11 errors we don't care
@@ -115,6 +122,7 @@ namespace Ogre
         mShaderModule( 0 ),
         mNumSystemGenVertexInputs( 0u ),
         mCustomRootLayout( false ),
+        mReflectArrayRootLayouts( false ),
         mReplaceVersionMacro( false ),
         mCompiled( false ),
         mConstantsBytesToWrite( 0 )
@@ -138,7 +146,7 @@ namespace Ogre
     //---------------------------------------------------------------------------
     VulkanProgram::~VulkanProgram()
     {
-        // Have to call this here reather than in Resource destructor
+        // Have to call this here rather than in Resource destructor
         // since calling virtual methods in base destructors causes crash
         if( isLoaded() )
         {
@@ -150,7 +158,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    uint32 VulkanProgram::getEshLanguage( void ) const
+    uint32 VulkanProgram::getEshLanguage() const
     {
         switch( mType )
         {
@@ -167,10 +175,10 @@ namespace Ogre
         return EShLangFragment;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::extractRootLayoutFromSource( void )
+    bool VulkanProgram::extractRootLayoutFromSource()
     {
         if( mRootLayout )
-            return;  // Programmatically specified
+            return false;  // Programmatically specified
 
         const String rootLayoutHeader = "## ROOT LAYOUT BEGIN";
         const String rootLayoutFooter = "## ROOT LAYOUT END";
@@ -181,7 +189,7 @@ namespace Ogre
             LogManager::getSingleton().logMessage( "Error " + mName + ": failed to find required '" +
                                                    rootLayoutHeader + "'" );
             mCompileError = true;
-            return;
+            return false;
         }
         posStart += rootLayoutHeader.size();
         const size_t posEnd = mSource.find( "## ROOT LAYOUT END", posStart );
@@ -190,13 +198,14 @@ namespace Ogre
             LogManager::getSingleton().logMessage( "Error " + mName + ": failed to find required '" +
                                                    rootLayoutFooter + "'" );
             mCompileError = true;
-            return;
+            return false;
         }
 
         VulkanGpuProgramManager *vulkanProgramManager =
             static_cast<VulkanGpuProgramManager *>( VulkanGpuProgramManager::getSingletonPtr() );
         mRootLayout = vulkanProgramManager->getRootLayout(
             mSource.substr( posStart, posEnd - posStart ).c_str(), mType == GPT_COMPUTE_PROGRAM, mName );
+        return true;
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::initGlslResources( TBuiltInResource &resources )
@@ -309,13 +318,13 @@ namespace Ogre
         resources.limits.generalConstantMatrixVectorIndexing = 1;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::loadFromSource( void ) { compile( true ); }
+    void VulkanProgram::loadFromSource() { compile( true ); }
     //-----------------------------------------------------------------------
     /**
     @brief VulkanProgram::replaceVersionMacros
         Finds the first occurrence of "ogre_glsl_ver_xxx" and replaces it with "450"
     */
-    void VulkanProgram::replaceVersionMacros( void )
+    void VulkanProgram::replaceVersionMacros()
     {
         const String matchStr = "ogre_glsl_ver_";
         const size_t pos = mSource.find( matchStr );
@@ -459,10 +468,16 @@ namespace Ogre
         mRootLayout = vulkanProgramManager->getRootLayout( rootLayout );
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::unsetRootLayout( void )
+    void VulkanProgram::unsetRootLayout()
     {
         mRootLayout = 0;
+        mReflectArrayRootLayouts = false;
         mCustomRootLayout = false;
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::setAutoReflectArrayBindingsInRootLayout( bool bReflectArrayRootLayouts )
+    {
+        mReflectArrayRootLayouts = bReflectArrayRootLayouts;
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::setReplaceVersionMacro( bool bReplace ) { mReplaceVersionMacro = bReplace; }
@@ -496,20 +511,31 @@ namespace Ogre
     void VulkanProgram::debugDump( String &outString )
     {
         outString += mName;
-        outString += "\n";
+        outString += "\n## ROOT LAYOUT BEGIN\n";
         mRootLayout->dump( outString );
-        outString += "\n";
+        outString += "\n## ROOT LAYOUT END\n";
         getPreamble( outString );
         outString += "\n";
         outString += mSource;
     }
     //-----------------------------------------------------------------------
-    bool VulkanProgram::compile( const bool checkErrors )
+    bool VulkanProgram::compile( const bool checkErrors, const bool bReflectingArrays )
     {
         mCompiled = false;
         mCompileError = false;
 
-        extractRootLayoutFromSource();
+        const bool bRootLayoutExtracted = extractRootLayoutFromSource();
+        if( !bRootLayoutExtracted && mReflectArrayRootLayouts && !bReflectingArrays )
+        {
+            // We will have to compile twice to know if there are arrays and where they are
+            // so we can patch our root layout. After that we can compile the final shader
+            //
+            // Without this step, we can't force bindings to be consecutive which can cause
+            // driver & tool bugs see https://github.com/baldurk/renderdoc/issues/2410
+            compile( checkErrors, true );
+            if( mCompiled )
+                gatherArrayedDescs( false );
+        }
 
         const EShLanguage stage = static_cast<EShLanguage>( getEshLanguage() );
         glslang::TShader shader( stage );
@@ -519,12 +545,12 @@ namespace Ogre
         initGlslResources( resources );
 
         // Enable SPIR-V and Vulkan rules when parsing GLSL
-        EShMessages messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgVulkanRules );
+        EShMessages messages = (EShMessages)( EShMsgDefault | EShMsgSpvRules | EShMsgVulkanRules );
         if( mShaderSyntax == HLSL )
         {
             // glslang::EShTargetClientVersion VulkanClientVersion = glslang::EShTargetVulkan_1_0;
             // glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_0;
-            messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl );
+            messages = (EShMessages)( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl );
             shader.setEnvInput( glslang::EShSourceHlsl, stage, glslang::EShClientVulkan, 100 );
             // shader.setEnvClient( glslang::EShClientVulkan, VulkanClientVersion );
             // shader.setEnvTarget( glslang::EShTargetSpv, TargetVersion );
@@ -532,7 +558,7 @@ namespace Ogre
         }
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-        messages = ( EShMessages )( messages | EShMsgDebugInfo );
+        messages = (EShMessages)( messages | EShMsgDebugInfo );
 #endif
 
         const char *sourceCString = mSource.c_str();
@@ -604,14 +630,23 @@ namespace Ogre
         {
             spv::SpvBuildLogger logger;
             glslang::SpvOptions opts;
+
+            if( bReflectingArrays )
+            {
+                opts.disableOptimizer = true;
+                opts.generateDebugInfo = false;
+            }
+            else
+            {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH && OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-            opts.disableOptimizer = true;
-            opts.generateDebugInfo = true;
+                opts.disableOptimizer = true;
+                opts.generateDebugInfo = true;
 #else
-            opts.disableOptimizer = false;
-            opts.optimizeSize = true;
-            opts.generateDebugInfo = false;
+                opts.disableOptimizer = false;
+                opts.optimizeSize = true;
+                opts.generateDebugInfo = false;
 #endif
+            }
             glslang::GlslangToSpv( *intermediate, mSpirv, &logger, &opts );
 
             LogManager::getSingleton().logMessage(
@@ -620,14 +655,18 @@ namespace Ogre
 
         mCompiled = !mCompileError;
 
+        if( bReflectingArrays )
+            return mCompiled;
+
         if( !mCompileError )
             LogManager::getSingleton().logMessage( "Shader " + mName + " compiled successfully." );
 
         if( !mCompiled && checkErrors )
         {
             String dumpStr;
+            dumpStr += "\n## ROOT LAYOUT BEGIN\n";
             mRootLayout->dump( dumpStr );
-            dumpStr += "\n";
+            dumpStr += "\n## ROOT LAYOUT END\n";
             getPreamble( dumpStr );
 
             LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
@@ -670,12 +709,17 @@ namespace Ogre
             gatherVertexInputs( module );
         }
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( ( bRootLayoutExtracted || !mReflectArrayRootLayouts ) && !bReflectingArrays )
+            gatherArrayedDescs( true );
+#endif
+
         return mCompiled;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::createLowLevelImpl( void )
+    void VulkanProgram::createLowLevelImpl()
     {
-        mAssemblerProgram = GpuProgramPtr( this, SPFM_NONE );
+        mAssemblerProgram = GpuProgramPtr( this, []( GpuProgram * ) {} );
         if( !mCompiled )
             compile( true );
     }
@@ -685,7 +729,7 @@ namespace Ogre
         // We didn't create mAssemblerProgram through a manager, so override this
         // implementation so that we don't try to remove it from one. Since getCreator()
         // is used, it might target a different matching handle!
-        mAssemblerProgram.setNull();
+        mAssemblerProgram.reset();
 
         unloadHighLevel();
 
@@ -693,7 +737,7 @@ namespace Ogre
             mRootLayout = 0;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::unloadHighLevelImpl( void )
+    void VulkanProgram::unloadHighLevelImpl()
     {
         // Release everything
         mCompiled = false;
@@ -737,7 +781,7 @@ namespace Ogre
         return binding;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::buildConstantDefinitions( void ) const
+    void VulkanProgram::buildConstantDefinitions() const
     {
         OgreProfileExhaustive( "VulkanProgram::buildConstantDefinitions" );
 
@@ -749,11 +793,14 @@ namespace Ogre
         if( mSpirv.empty() )
             return;
 
+        // const_cast to get around the fact that buildConstantDefinitions() is const.
+        VulkanProgram *vp = const_cast<VulkanProgram *>( this );
+
         size_t paramSetIdx = 0u;
         size_t paramBindingIdx = 0u;
         if( !mRootLayout->findParamsBuffer( mType, paramSetIdx, paramBindingIdx ) )
         {
-            // Root layout does not specify a params buffer. Nothing to do here.
+            // Root layout does not specify a params buffer. Nothing to do here
             return;
         }
 
@@ -792,9 +839,6 @@ namespace Ogre
                              " error code: " + getSpirvReflectError( result ),
                          "VulkanDescriptors::generateDescriptorSet" );
         }
-
-        // const_cast to get around the fact that buildConstantDefinitions() is const.
-        VulkanProgram *vp = const_cast<VulkanProgram *>( this );
 
         const SpvReflectDescriptorBinding *descBinding =
             findBinding( sets, paramSetIdx, paramBindingIdx );
@@ -938,9 +982,16 @@ namespace Ogre
             if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_ARRAY )
             {
                 def.elementSize = blockVariable.array.stride / sizeof( float );
-                // I have no idea why blockVariable.array.dims_count != 1u
-                OGRE_ASSERT_LOW( blockVariable.array.dims_count == 1u );
-                def.arraySize = blockVariable.array.dims[0];
+                // When blockVariable.array.dims_count == 1 we're dealing with 1D array, e.g.:
+                //      uniform vec2 myArray[4];
+                // When blockVariable.array.dims_count == 2 we're dealing with 2D array, e.g.:
+                //      uniform vec2 myArray2[4][5];
+                // and so on. We'll treat it as a large 1D array e.g. myArray2[4*5]
+                OGRE_ASSERT_LOW( blockVariable.array.dims_count >= 1u );
+                size_t arraySize = blockVariable.array.dims[0];
+                for( size_t i = 1u; i < blockVariable.array.dims_count; ++i )
+                    arraySize *= blockVariable.array.dims[i];
+                def.arraySize = arraySize;
             }
             else
             {
@@ -985,15 +1036,15 @@ namespace Ogre
             }
 
             String varName = blockVariable.name;
-            if( blockVariable.array.dims_count )
+            if( blockVariable.array.dims_count == 1u )
                 vp->mConstantDefs->generateConstantDefinitionArrayEntries( varName, def );
 
             mConstantDefs->map.insert( GpuConstantDefinitionMap::value_type( varName, def ) );
             vp->mConstantDefsSorted.push_back( def );
 
-            vp->mConstantsBytesToWrite =
-                std::max<uint32>( vp->mConstantsBytesToWrite,
-                                  def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) );
+            vp->mConstantsBytesToWrite = std::max<uint32>(
+                vp->mConstantsBytesToWrite,
+                uint32( def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) ) );
         }
 
         VulkanConstantDefinitionBindingParam bindingParam;
@@ -1078,6 +1129,155 @@ namespace Ogre
             ++itor;
         }
     }
+
+    //-----------------------------------------------------------------------
+    void VulkanProgram::gatherArrayedDescs( const bool bValidating )
+    {
+        OgreProfileExhaustive( "VulkanProgram::gatherArrayedDescs" );
+
+        SpvReflectShaderModule module;
+        memset( &module, 0, sizeof( module ) );
+        SpvReflectResult result =
+            spvReflectCreateShaderModule( mSpirv.size() * sizeof( uint32 ), &mSpirv[0], &module );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectCreateShaderModule failed on shader " + mName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateDescriptorSet" );
+        }
+
+        // Ensure module gets freed if we throw
+        FreeModuleOnDestructor modulePtr( &module );
+
+        uint32 numDescSets = 0;
+        result = spvReflectEnumerateDescriptorSets( &module, &numDescSets, 0 );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectEnumerateDescriptorSets failed on shader " + mName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateDescriptorSet" );
+        }
+
+        FastArray<SpvReflectDescriptorSet *> sets;
+        sets.resize( numDescSets );
+        result = spvReflectEnumerateDescriptorSets( &module, &numDescSets, sets.begin() );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectEnumerateDescriptorSets failed on shader " + mName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateDescriptorSet" );
+        }
+
+        gatherArrayedDescs( sets, bValidating );
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::gatherArrayedDescs( const FastArray<SpvReflectDescriptorSet *> &sets,
+                                            const bool bValidating )
+    {
+        OgreProfileExhaustive( "VulkanProgram::gatherArrayedDescs::SpvReflectDescriptorSet" );
+
+        bool bRootLayoutCopied = false;
+        RootLayout tmpRootLayout;
+
+        FastArray<SpvReflectDescriptorSet *>::const_iterator itor = sets.begin();
+        FastArray<SpvReflectDescriptorSet *>::const_iterator endt = sets.end();
+
+        while( itor != endt )
+        {
+            const SpvReflectDescriptorSet *set = *itor;
+
+            const size_t numBindings = set->binding_count;
+
+            for( size_t i = 0u; i < numBindings; ++i )
+            {
+                const SpvReflectDescriptorBinding *binding = set->bindings[i];
+                size_t arraySize = 0u;
+                if( binding->type_description->type_flags & SPV_REFLECT_TYPE_FLAG_ARRAY )
+                {
+                    const size_t numDims = binding->array.dims_count;
+                    arraySize = binding->array.dims[0];
+                    for( size_t dim = 1u; dim < numDims; ++dim )
+                        arraySize *= binding->array.dims[dim];
+                }
+
+                // Arrays of == 1 don't matter
+                if( arraySize > 1u )
+                {
+                    size_t slotIdx;
+                    DescBindingTypes::DescBindingTypes bindingType;
+                    const bool bFound = mRootLayout->findBindingIndex( binding->set, binding->binding,
+                                                                       bindingType, slotIdx );
+
+                    if( !bFound )
+                    {
+                        LogManager::getSingleton().logMessage(
+                            "Error: set = " + StringConverter::toString( binding->set ) +
+                                " binding = " + StringConverter::toString( binding->binding ),
+                            LML_CRITICAL );
+
+                        String dumpStr;
+                        dumpStr += "\n## ROOT LAYOUT BEGIN\n";
+                        mRootLayout->dump( dumpStr );
+                        dumpStr += "\n## ROOT LAYOUT END\n";
+                        getPreamble( dumpStr );
+
+                        LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
+
+                        OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                                     "Shader " + mName +
+                                         " has an array binding at a binding idx that is not in the "
+                                         "Root Layout.\nThis should not happen. Check log for more info",
+                                     "VulkanProgram::gatherArrayedDescs" );
+                    }
+                    else
+                    {
+                        if( !bRootLayoutCopied )
+                        {
+                            // We have at least one array. We'll need a root layout. Copy it now.
+                            mRootLayout->copyTo( tmpRootLayout, false );
+                            bRootLayoutCopied = true;
+                        }
+
+                        tmpRootLayout.addArrayBinding(
+                            bindingType, RootLayout::ArrayDesc( static_cast<uint16>( slotIdx ),
+                                                                static_cast<uint16>( arraySize ) ) );
+                    }
+                }
+            }
+
+            ++itor;
+        }
+
+        if( bRootLayoutCopied && !bValidating )
+        {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+            try
+            {
+                // In OGRE_DEBUG_NONE we assume programmatically generated
+                // root layouts are well formed to speed up compilation
+                tmpRootLayout.validate( mName );
+            }
+            catch( Exception & )
+            {
+                String dumpStr;
+                dumpStr = "Error in " + mName + " with its Root Layout:\n";
+                tmpRootLayout.dump( dumpStr );
+                LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
+                throw;
+            }
+#endif
+            VulkanGpuProgramManager *vulkanProgramManager =
+                static_cast<VulkanGpuProgramManager *>( VulkanGpuProgramManager::getSingletonPtr() );
+            mRootLayout = vulkanProgramManager->getRootLayout( tmpRootLayout );
+        }
+        else if( bRootLayoutCopied && bValidating )
+        {
+            mRootLayout->validateArrayBindings( tmpRootLayout, mName );
+        }
+    }
     //-----------------------------------------------------------------------
     static VkShaderStageFlagBits get( GpuProgramType programType )
     {
@@ -1102,7 +1302,7 @@ namespace Ogre
         pssCi.pName = "main";
     }
     //-----------------------------------------------------------------------
-    uint32 VulkanProgram::getBufferRequiredSize( void ) const { return mConstantsBytesToWrite; }
+    uint32 VulkanProgram::getBufferRequiredSize() const { return mConstantsBytesToWrite; }
     //-----------------------------------------------------------------------
     void VulkanProgram::updateBuffers( const GpuProgramParametersSharedPtr &params,
                                        uint8 *RESTRICT_ALIAS dstData )
@@ -1114,13 +1314,22 @@ namespace Ogre
         {
             const GpuConstantDefinition &def = *itor;
 
-            void *RESTRICT_ALIAS src;
+            void const *RESTRICT_ALIAS src;
             if( def.isFloat() )
-                src = (void *)&( *( params->getFloatConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void const *)&( *( params->getFloatConstantList().begin() +
+                                          static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
             else if( def.isUnsignedInt() )
-                src = (void *)&( *( params->getUnsignedIntConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void const *)&( *( params->getUnsignedIntConstantList().begin() +
+                                          static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
             else
-                src = (void *)&( *( params->getIntConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void const *)&( *( params->getIntConstantList().begin() +
+                                          static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
 
             memcpy( &dstData[def.logicalIndex], src, def.elementSize * def.arraySize * sizeof( float ) );
 
@@ -1252,19 +1461,19 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    inline bool VulkanProgram::getPassSurfaceAndLightStates( void ) const
+    inline bool VulkanProgram::getPassSurfaceAndLightStates() const
     {
         // Scenemanager should pass on light & material state to the rendersystem
         return true;
     }
     //---------------------------------------------------------------------
-    inline bool VulkanProgram::getPassTransformStates( void ) const
+    inline bool VulkanProgram::getPassTransformStates() const
     {
         // Scenemanager should pass on transform state to the rendersystem
         return true;
     }
     //---------------------------------------------------------------------
-    inline bool VulkanProgram::getPassFogStates( void ) const
+    inline bool VulkanProgram::getPassFogStates() const
     {
         // Scenemanager should pass on fog state to the rendersystem
         return true;
@@ -1280,13 +1489,13 @@ namespace Ogre
         static_cast<VulkanProgram *>( target )->setPreprocessorDefines( val );
     }
     //-----------------------------------------------------------------------
-    const String &VulkanProgram::getLanguage( void ) const
+    const String &VulkanProgram::getLanguage() const
     {
         static const String language = "glsl";
         return language;
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr VulkanProgram::createParameters( void )
+    GpuProgramParametersSharedPtr VulkanProgram::createParameters()
     {
         GpuProgramParametersSharedPtr params = HighLevelGpuProgram::createParameters();
         params->setTransposeMatrices( true );

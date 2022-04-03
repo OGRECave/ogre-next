@@ -35,7 +35,8 @@
 
 #include "OgreLwConstString.h"
 
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1600  // no <inttypes.h>
+#if( OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1600 ) || \
+    ( OGRE_COMPILER == OGRE_COMPILER_GNUC && OGRE_COMP_VER < 800 )  // no <inttypes.h>
 #    define PRIi64 "lli"
 #    define PRIu64 "llu"
 #else
@@ -43,11 +44,11 @@
 #endif
 
 #ifndef _MSC_VER
-    #define OGRE_LWSTRING_SNPRINTF_DEFINED
-    #define _snprintf snprintf
+#    define OGRE_LWSTRING_SNPRINTF_DEFINED
+#    define _snprintf snprintf
 #else
-    #pragma warning( push ) // CRT deprecation
-    #pragma warning( disable : 4996 )
+#    pragma warning( push )  // CRT deprecation
+#    pragma warning( disable : 4996 )
 #endif
 
 namespace Ogre
@@ -118,10 +119,9 @@ namespace Ogre
     class LwString : public LwConstString
     {
     public:
-        LwString( char *inStr, size_t maxLength ) :
-            LwConstString( inStr, maxLength )
+        LwString( char *inStr, size_t maxLength ) : LwConstString( inStr, maxLength )
         {
-            mStrPtr[mCapacity-1] = '\0';
+            mStrPtr[mCapacity - 1] = '\0';
         }
 
         static LwString FromEmptyPointer( char *cStr, size_t maxLength )
@@ -134,13 +134,13 @@ namespace Ogre
         /// and copies it to our string.
         void setToSubstr( const LwConstString &source, size_t _start, size_t size )
         {
-            assert( (size + 1u) <= this->mCapacity );
+            assert( ( size + 1u ) <= this->mCapacity );
             assert( _start <= source.mSize );
             assert( _start + size <= source.mSize );
 
-            _start  = std::min( _start, source.mSize );
-            size    = std::min( size, source.mSize - _start );
-            size    = std::min( size, this->mCapacity - 1 );
+            _start = std::min( _start, source.mSize );
+            size = std::min( size, source.mSize - _start );
+            size = std::min( size, this->mCapacity - 1 );
 
             memmove( this->mStrPtr, source.mStrPtr + _start, size );
             this->mSize = size;
@@ -154,7 +154,8 @@ namespace Ogre
         void setToSubstr( const LwConstString &source, char *_start, char *_end )
         {
             assert( _start >= source.begin() && _start <= source.end() );
-            this->setToSubstr( source, _start - source.mStrPtr, _end - _start );
+            this->setToSubstr( source, static_cast<size_t>( _start - source.mStrPtr ),
+                               static_cast<size_t>( _end - _start ) );
         }
 
         void clear()
@@ -178,40 +179,40 @@ namespace Ogre
         }
 
         // Assignment.
-        LwString& operator = ( const LwConstString &other )
+        LwString &operator=( const LwConstString &other )
         {
             assert( other.mSize < this->mCapacity );
             strncpy( this->mStrPtr, other.mStrPtr, this->mCapacity );
-            this->mStrPtr[this->mCapacity-1] = '\0';
+            this->mStrPtr[this->mCapacity - 1] = '\0';
             this->mSize = std::min( other.mSize, this->mCapacity - 1 );
             return *this;
         }
 
         // Assignment from a C string.
-        LwString& operator = ( const char *pOther )
+        LwString &operator=( const char *pOther )
         {
             size_t otherSize = strlen( pOther );
             assert( otherSize < this->mCapacity );
             strncpy( this->mStrPtr, pOther, this->mCapacity );
-            this->mStrPtr[this->mCapacity-1] = '\0';
+            this->mStrPtr[this->mCapacity - 1] = '\0';
             this->mSize = std::min( otherSize, this->mCapacity - 1 );
             return *this;
         }
 
-        LwString& operator += ( const LwString &other )
+        LwString &operator+=( const LwString &other )
         {
             this->a( other );
             return *this;
         }
 
         // Append of a C string.
-        LwString& operator += ( const char *pOther )
+        LwString &operator+=( const char *pOther )
         {
             this->a( pOther );
             return *this;
         }
 
-        LwString& a( const LwString& a0 )
+        LwString &a( const LwString &a0 )
         {
             assert( this->mSize + a0.mSize < this->mCapacity );
             assert( this->mStrPtr != a0.mStrPtr );
@@ -221,7 +222,7 @@ namespace Ogre
             return *this;
         }
 
-        LwString& a( const char *a0 )
+        LwString &a( const char *a0 )
         {
             size_t otherSize = strlen( a0 );
             assert( this->mSize + otherSize < this->mCapacity );
@@ -232,54 +233,48 @@ namespace Ogre
             return *this;
         }
 
-        LwString& aChar( char a0 )
+        LwString &aChar( char a0 )
         {
             assert( mSize + 1u < mCapacity );
             if( mSize + 1u < mCapacity )
             {
                 mStrPtr[mSize] = a0;
-                mStrPtr[mSize+1u] = '\0';
+                mStrPtr[mSize + 1u] = '\0';
                 ++mSize;
             }
             return *this;
         }
 
-        LwString& a( int32 a0 )
+        LwString &a( int32 a0 )
         {
-            int written = _snprintf( mStrPtr + mSize,
-                                     mCapacity - mSize,
-                                     "%i", a0 );
+            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%i", a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
             mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
             return *this;
         }
 
-        LwString& a( uint32 a0 )
+        LwString &a( uint32 a0 )
         {
-            int written = _snprintf( mStrPtr + mSize,
-                                     mCapacity - mSize,
-                                     "%u", a0 );
+            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%u", a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
             mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
             return *this;
         }
 
-        LwString& a( int64 a0 )
+        LwString &a( int64 a0 )
         {
-            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                     "%" PRIi64, a0 );
+            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%" PRIi64, a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
             mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
             return *this;
         }
 
-        LwString& a( uint64 a0 )
+        LwString &a( uint64 a0 )
         {
-            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                     "%" PRIu64, a0 );
+            int written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%" PRIu64, a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
             mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
@@ -288,9 +283,9 @@ namespace Ogre
 
         struct Float
         {
-            float   mValue;
-            int     mPrecision;
-            int     mMinWidth;
+            float mValue;
+            int   mPrecision;
+            int   mMinWidth;
 
             /**
             @param value
@@ -314,39 +309,38 @@ namespace Ogre
             }
         };
 
-        LwString& a( float a0 )
+        LwString &a( float a0 )
         {
             this->a( Float( a0 ) );
             return *this;
         }
 
-        LwString& a( Float a0 )
+        LwString &a( Float a0 )
         {
             int written = -1;
             if( a0.mMinWidth < 0 )
             {
                 if( a0.mPrecision < 0 )
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%f", (double)a0.mValue );
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%f", (double)a0.mValue );
                 }
                 else
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%.*f", a0.mPrecision, (double)a0.mValue );
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%.*f", a0.mPrecision,
+                                         (double)a0.mValue );
                 }
             }
             else
             {
                 if( a0.mPrecision < 0 )
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%*f", a0.mMinWidth, (double)a0.mValue );
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%*f", a0.mMinWidth,
+                                         (double)a0.mValue );
                 }
                 else
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%*.*f", a0.mMinWidth, a0.mPrecision, (double)a0.mValue );
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%*.*f", a0.mMinWidth,
+                                         a0.mPrecision, (double)a0.mValue );
                 }
             }
 
@@ -358,9 +352,9 @@ namespace Ogre
 
         struct Double
         {
-            double  mValue;
-            int     mPrecision;
-            int     mMinWidth;
+            double mValue;
+            int    mPrecision;
+            int    mMinWidth;
 
             /**
             @param value
@@ -384,69 +378,69 @@ namespace Ogre
             }
         };
 
-        LwString& a( double a0 )
+        LwString &a( double a0 )
         {
             this->a( Double( a0 ) );
             return *this;
         }
 
-        LwString& a( Double a0 )
+        LwString &a( Double a0 )
         {
             int written = -1;
             if( a0.mMinWidth < 0 )
             {
                 if( a0.mPrecision < 0 )
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%lf", a0.mValue );
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%lf", a0.mValue );
                 }
                 else
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%.*lf", a0.mPrecision, a0.mValue );
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%.*lf", a0.mPrecision,
+                                         a0.mValue );
                 }
             }
             else
             {
                 if( a0.mPrecision < 0 )
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%*lf", a0.mMinWidth, a0.mValue );
+                    written =
+                        _snprintf( mStrPtr + mSize, mCapacity - mSize, "%*lf", a0.mMinWidth, a0.mValue );
                 }
                 else
                 {
-                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%*.*lf", a0.mMinWidth, a0.mPrecision, a0.mValue );
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize, "%*.*lf", a0.mMinWidth,
+                                         a0.mPrecision, a0.mValue );
                 }
             }
 
             mStrPtr[mCapacity - 1] = '\0';
             assert( ( written >= 0 ) && ( (unsigned)written < mCapacity ) );
-            mSize = std::min<size_t>( mSize + std::max( written, 0 ), mCapacity - 1 );
+            mSize = std::min<size_t>( mSize + static_cast<size_t>( std::max( written, 0 ) ),
+                                      static_cast<size_t>( mCapacity - 1u ) );
             return *this;
         }
 
-        size_t size() const         { return mSize; }
-        size_t capacity() const     { return mCapacity; }
+        size_t size() const { return mSize; }
+        size_t capacity() const { return mCapacity; }
 
-        char* begin()               { return mStrPtr; }
-        char* end()                 { return mStrPtr + mSize; }
+        char *begin() { return mStrPtr; }
+        char *end() { return mStrPtr + mSize; }
 
         /// Make every begin & end method from LwConstString available.
         /// @see https://isocpp.org/wiki/faq/strange-inheritance#overload-derived
         using LwConstString::begin;
         using LwConstString::end;
 
-        template<typename M, typename N>
-        LwString & a( const M &a0, const N &a1 )
+        template <typename M, typename N>
+        LwString &a( const M &a0, const N &a1 )
         {
             this->a( a0 );
             this->a( a1 );
             return *this;
         }
 
-        template<typename M, typename N, typename O>
-        LwString & a( const M &a0, const N &a1, const O &a2 )
+        template <typename M, typename N, typename O>
+        LwString &a( const M &a0, const N &a1, const O &a2 )
         {
             this->a( a0 );
             this->a( a1 );
@@ -454,56 +448,55 @@ namespace Ogre
             return *this;
         }
 
-        template<typename M, typename N, typename O, typename P>
-        LwString & a( const M &a0, const N &a1, const O &a2, const P &a3 )
+        template <typename M, typename N, typename O, typename P>
+        LwString &a( const M &a0, const N &a1, const O &a2, const P &a3 )
         {
             this->a( a0, a1 );
             this->a( a2, a3 );
             return *this;
         }
 
-        template<typename M, typename N, typename O, typename P, typename Q>
-        LwString & a( const M &a0, const N &a1, const O &a2, const P &a3, const Q &a4 )
+        template <typename M, typename N, typename O, typename P, typename Q>
+        LwString &a( const M &a0, const N &a1, const O &a2, const P &a3, const Q &a4 )
         {
             this->a( a0, a1, a2, a3 );
             this->a( a4 );
             return *this;
         }
 
-        template<typename M, typename N, typename O, typename P, typename Q, typename R>
-        LwString & a( const M &a0, const N &a1, const O &a2,
-                     const P &a3, const Q &a4, const R &a5 )
+        template <typename M, typename N, typename O, typename P, typename Q, typename R>
+        LwString &a( const M &a0, const N &a1, const O &a2, const P &a3, const Q &a4, const R &a5 )
         {
             this->a( a0, a1, a2 );
             this->a( a3, a4, a5 );
             return *this;
         }
 
-        template<typename M, typename N, typename O, typename P, typename Q, typename R, typename S>
-        LwString & a( const M &a0, const N &a1, const O &a2, const P &a3,
-                     const Q &a4, const R &a5, const S &a6 )
+        template <typename M, typename N, typename O, typename P, typename Q, typename R, typename S>
+        LwString &a( const M &a0, const N &a1, const O &a2, const P &a3, const Q &a4, const R &a5,
+                     const S &a6 )
         {
             this->a( a0, a1, a2, a3 );
             this->a( a4, a5, a6 );
             return *this;
         }
 
-        template<typename M, typename N, typename O, typename P,
-                 typename Q, typename R, typename S, typename T>
-        LwString & a( const M &a0, const N &a1, const O &a2, const P &a3,
-                     const Q &a4, const R &a5, const S &a6, const S &a7 )
+        template <typename M, typename N, typename O, typename P, typename Q, typename R, typename S,
+                  typename T>
+        LwString &a( const M &a0, const N &a1, const O &a2, const P &a3, const Q &a4, const R &a5,
+                     const S &a6, const S &a7 )
         {
             this->a( a0, a1, a2, a3 );
             this->a( a4, a5, a6, a7 );
             return *this;
         }
     };
-}
+}  // namespace Ogre
 
 #ifdef OGRE_LWSTRING_SNPRINTF_DEFINED
-    #undef _snprintf
+#    undef _snprintf
 #else
-    #pragma warning( pop )
+#    pragma warning( pop )
 #endif
 
 #endif

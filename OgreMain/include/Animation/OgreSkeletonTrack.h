@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define __SkeletonTrack_H__
 
 #include "OgrePrerequisites.h"
+
 #include "Math/Array/OgreArrayQuaternion.h"
 #include "Math/Array/OgreKfTransform.h"
 
@@ -42,28 +43,28 @@ namespace Ogre
     struct KeyFrameRig
     {
         Real mFrame;
-        Real mInvNextFrameDistance; // 1.0f / (KeyFrameRig[1].mFrame - KeyFrameRig[0].mFrame)
+        Real mInvNextFrameDistance;  // 1.0f / (KeyFrameRig[1].mFrame - KeyFrameRig[0].mFrame)
 
         // SoA variable. Packs posrotscale posrotscale ...
-        KfTransform * RESTRICT_ALIAS mBoneTransform;
+        KfTransform *RESTRICT_ALIAS mBoneTransform;
     };
 
     typedef vector<KeyFrameRig>::type KeyFrameRigVec;
 
     typedef FastArray<BoneTransform> TransformArray;
 
-    class _OgreExport SkeletonTrack : public AnimationAlloc
+    class _OgreExport SkeletonTrack : public OgreAllocatedObj
     {
     protected:
         /// There is one entry per each parent level
-        KeyFrameRigVec      mKeyFrameRigs;
-        Real                mNumFrames;
+        KeyFrameRigVec mKeyFrameRigs;
+        Real           mNumFrames;
 
-        uint32              mBoneBlockIdx;
+        uint32 mBoneBlockIdx;
 
         /** Number of SIMD slots used by all @see KeyFrameRig::mBoneTransform.
             When this value is <= (ARRAY_PACKED_REALS / 2); then we repeat the transforms
-            to the next slots. i.e: 
+            to the next slots. i.e:
             mUsedSlots = 2;
             mBoneTransform[0] = Bone Transform A
             mBoneTransform[1] = Bone Transform B
@@ -76,7 +77,7 @@ namespace Ogre
             mBoneTransform[2] = mBoneTransform[0]
             mBoneTransform[3] = mBoneTransform[0]
         */
-        uint32              mUsedSlots;
+        uint32 mUsedSlots;
 
         KfTransformArrayMemoryManager *mLocalMemoryManager;
 
@@ -87,20 +88,18 @@ namespace Ogre
         void setNumKeyFrame( size_t numKeyFrames );
 
         void addKeyFrame( Real timestamp, Real frameRate );
-        void setKeyFrameTransform( Real frame, uint32 slot, const Vector3 &vPos,
-                                    const Quaternion &qRot, const Vector3 vScale );
+        void setKeyFrameTransform( Real frame, uint32 slot, const Vector3 &vPos, const Quaternion &qRot,
+                                   const Vector3 vScale );
 
-        uint32 getBoneBlockIdx(void) const                      { return mBoneBlockIdx; }
-        size_t getUsedSlots(void) const                         { return mUsedSlots; }
-        void _setMaxUsedSlot( uint32 slot )
-                                        { mUsedSlots = std::max( slot+1, mUsedSlots ); }
+        uint32 getBoneBlockIdx() const { return mBoneBlockIdx; }
+        size_t getUsedSlots() const { return mUsedSlots; }
+        void   _setMaxUsedSlot( uint32 slot ) { mUsedSlots = std::max( slot + 1, mUsedSlots ); }
 
-        const KeyFrameRigVec& getKeyFrames(void) const          { return mKeyFrameRigs; }
-        KeyFrameRigVec& _getKeyFrames(void)                     { return mKeyFrameRigs; }
+        const KeyFrameRigVec &getKeyFrames() const { return mKeyFrameRigs; }
+        KeyFrameRigVec       &_getKeyFrames() { return mKeyFrameRigs; }
 
         inline void getKeyFrameRigAt( KeyFrameRigVec::const_iterator &inOutPrevFrame,
-                                        KeyFrameRigVec::const_iterator &outNextFrame,
-                                        Real frame ) const;
+                                      KeyFrameRigVec::const_iterator &outNextFrame, Real frame ) const;
 
         /** Applies the interpolated keyframe at the given frame to all bone
             transformations that are animated by this Track.
@@ -120,17 +119,17 @@ namespace Ogre
             The key frames are only applied to affected bones.
         */
         void applyKeyFrameRigAt( KeyFrameRigVec::const_iterator &inOutLastKnownKeyFrame, float frame,
-                                 ArrayReal animWeight, const ArrayReal * RESTRICT_ALIAS perBoneWeights,
+                                 ArrayReal animWeight, const ArrayReal *RESTRICT_ALIAS perBoneWeights,
                                  const TransformArray &KfTransforms ) const;
 
         /** Takes all KeyFrames and repeats the KfTransforms for every unused slot by a pattern
             based on the number of used slots. Only useful when
             mUsedSlots <= (ARRAY_PACKED_REALS >> 1). Otherwise it does nothing.
         */
-        void _bakeUnusedSlots(void);
+        void _bakeUnusedSlots();
     };
 
     typedef vector<SkeletonTrack>::type SkeletonTrackVec;
-}
+}  // namespace Ogre
 
 #endif

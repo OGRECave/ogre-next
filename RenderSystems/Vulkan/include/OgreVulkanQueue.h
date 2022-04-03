@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -147,14 +147,14 @@ namespace Ogre
         BufferPackedDownloadMap mCopyDownloadBuffers;
 
         /// Returns a signaled fence, could be recycled or new
-        VkFence getFence( void );
+        VkFence getFence();
         /// Puts all input fences into mAvailableFences for recycling,
         /// unless their external reference count isn't 0
         ///
         /// Clears fences.
         void recycleFences( FastArray<VkFence> &fences );
 
-        inline VkFence getCurrentFence( void );
+        inline VkFence getCurrentFence();
 
         VkCommandBuffer getCmdBuffer( size_t currFrame );
 
@@ -212,17 +212,17 @@ namespace Ogre
         void setQueueData( VulkanDevice *owner, QueueFamily family, uint32 familyIdx, uint32 queueIdx );
 
         void init( VkDevice device, VkQueue queue, VulkanRenderSystem *renderSystem );
-        void destroy( void );
+        void destroy();
 
     protected:
-        void newCommandBuffer( void );
-        void endCommandBuffer( void );
+        void newCommandBuffer();
+        void endCommandBuffer();
 
     public:
-        EncoderState getEncoderState( void ) const { return mEncoderState; }
+        EncoderState getEncoderState() const { return mEncoderState; }
 
-        void getGraphicsEncoder( void );
-        void getComputeEncoder( void );
+        void getGraphicsEncoder();
+        void getComputeEncoder();
         /** Call this function when you need to start copy/transfer operations
         @remarks
             buffer and texture pointers cannot be both nullptr at the same time
@@ -258,15 +258,15 @@ namespace Ogre
                              CopyEncTransitionMode::CopyEncTransitionMode transitionMode );
         void getCopyEncoderV1Buffer( const bool bDownload );
 
-        void endCopyEncoder( void );
+        void endCopyEncoder();
         void endRenderEncoder( const bool endRenderPassDesc = true );
-        void endComputeEncoder( void );
+        void endComputeEncoder();
 
         void endAllEncoders( bool endRenderPassDesc = true );
 
         void notifyTextureDestroyed( VulkanTextureGpu *texture );
 
-        VkFence acquireCurrentFence( void );
+        VkFence acquireCurrentFence();
         void releaseFence( VkFence fence );
 
         /// When we'll call commitAndNextCommandBuffer, we'll have to wait for
@@ -283,7 +283,7 @@ namespace Ogre
         void commitAndNextCommandBuffer(
             SubmissionType::SubmissionType submissionType = SubmissionType::FlushOnly );
 
-        VulkanVaoManager *getVaoManager( void ) { return mVaoManager; }
+        VulkanVaoManager *getVaoManager() { return mVaoManager; }
     };
 
 }  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -34,39 +34,35 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    GL3PlusUavBufferPacked::GL3PlusUavBufferPacked(
-                size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                uint32 bindFlags, void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface ) :
-        UavBufferPacked( internalBufStartBytes, numElements, bytesPerElement,
-                         bindFlags, initialData, keepAsShadow, vaoManager, bufferInterface )
+    GL3PlusUavBufferPacked::GL3PlusUavBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                                    uint32 bytesPerElement, uint32 bindFlags,
+                                                    void *initialData, bool keepAsShadow,
+                                                    VaoManager *vaoManager,
+                                                    GL3PlusBufferInterface *bufferInterface ) :
+        UavBufferPacked( internalBufStartBytes, numElements, bytesPerElement, bindFlags, initialData,
+                         keepAsShadow, vaoManager, bufferInterface )
     {
     }
     //-----------------------------------------------------------------------------------
-    GL3PlusUavBufferPacked::~GL3PlusUavBufferPacked()
-    {
-    }
+    GL3PlusUavBufferPacked::~GL3PlusUavBufferPacked() {}
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* GL3PlusUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
+    TexBufferPacked *GL3PlusUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
-        OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
 
-        GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
-                                                                      mBufferInterface );
-
+        GL3PlusBufferInterface *bufferInterface =
+            static_cast<GL3PlusBufferInterface *>( mBufferInterface );
 
         TexBufferPacked *retVal = OGRE_NEW GL3PlusTexBufferPacked(
-                                                        mInternalBufferStart * mBytesPerElement,
-                                                        mNumElements, mBytesPerElement, 0,
-                                                        mBufferType, (void*)0, false,
-                                                        (VaoManager*)0, bufferInterface, pixelFormat );
-        //We were overriden by the BufferPacked we just created. Restore this back!
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VaoManager *)0, bufferInterface, pixelFormat );
+        // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ReadOnlyBufferPacked *GL3PlusUavBufferPacked::getAsReadOnlyBufferImpl( void )
+    ReadOnlyBufferPacked *GL3PlusUavBufferPacked::getAsReadOnlyBufferImpl()
     {
         OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
 
@@ -76,7 +72,7 @@ namespace Ogre
         ReadOnlyBufferPacked *retVal = OGRE_NEW GL3PlusReadOnlyUavBufferPacked(
             mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
             (void *)0, false, (VaoManager *)0, bufferInterface, PFG_NULL );
-        // We were overriden by the BufferPacked we just created. Restore this back!
+        // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;
@@ -89,44 +85,44 @@ namespace Ogre
         OGRE_ASSERT_LOW( sizeBytes <= getTotalSizeBytes() );
         OGRE_ASSERT_LOW( ( offset + sizeBytes ) <= getTotalSizeBytes() );
 
-        sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
+        sizeBytes = !sizeBytes ? ( mNumElements * mBytesPerElement - offset ) : sizeBytes;
 
-        GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
-                                                                      mBufferInterface );
+        GL3PlusBufferInterface *bufferInterface =
+            static_cast<GL3PlusBufferInterface *>( mBufferInterface );
 
-        OCGE(
-          glBindBufferRange( GL_SHADER_STORAGE_BUFFER, slot, bufferInterface->getVboName(),
-                             mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+        OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, slot, bufferInterface->getVboName(),
+                                 static_cast<GLintptr>( mFinalBufferStart * mBytesPerElement + offset ),
+                                 static_cast<GLsizeiptr>( sizeBytes ) ) );
     }
     //-----------------------------------------------------------------------------------
-//    void GL3PlusUavBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
-//    {
-//        bindBuffer( slot, offset, sizeBytes );
-//    }
-//    //-----------------------------------------------------------------------------------
-//    void GL3PlusUavBufferPacked::bindBufferPS( uint16 slot, size_t offset, size_t sizeBytes )
-//    {
-//        bindBuffer( slot, offset, sizeBytes );
-//    }
-//    //-----------------------------------------------------------------------------------
-//    void GL3PlusUavBufferPacked::bindBufferGS( uint16 slot, size_t offset, size_t sizeBytes )
-//    {
-//        bindBuffer( slot, offset, sizeBytes );
-//    }
-//    //-----------------------------------------------------------------------------------
-//    void GL3PlusUavBufferPacked::bindBufferHS( uint16 slot, size_t offset, size_t sizeBytes )
-//    {
-//        bindBuffer( slot, offset, sizeBytes );
-//    }
-//    //-----------------------------------------------------------------------------------
-//    void GL3PlusUavBufferPacked::bindBufferDS( uint16 slot, size_t offset, size_t sizeBytes )
-//    {
-//        bindBuffer( slot, offset, sizeBytes );
-//    }
+    //    void GL3PlusUavBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
+    //    {
+    //        bindBuffer( slot, offset, sizeBytes );
+    //    }
+    //    //-----------------------------------------------------------------------------------
+    //    void GL3PlusUavBufferPacked::bindBufferPS( uint16 slot, size_t offset, size_t sizeBytes )
+    //    {
+    //        bindBuffer( slot, offset, sizeBytes );
+    //    }
+    //    //-----------------------------------------------------------------------------------
+    //    void GL3PlusUavBufferPacked::bindBufferGS( uint16 slot, size_t offset, size_t sizeBytes )
+    //    {
+    //        bindBuffer( slot, offset, sizeBytes );
+    //    }
+    //    //-----------------------------------------------------------------------------------
+    //    void GL3PlusUavBufferPacked::bindBufferHS( uint16 slot, size_t offset, size_t sizeBytes )
+    //    {
+    //        bindBuffer( slot, offset, sizeBytes );
+    //    }
+    //    //-----------------------------------------------------------------------------------
+    //    void GL3PlusUavBufferPacked::bindBufferDS( uint16 slot, size_t offset, size_t sizeBytes )
+    //    {
+    //        bindBuffer( slot, offset, sizeBytes );
+    //    }
     //-----------------------------------------------------------------------------------
     void GL3PlusUavBufferPacked::bindBufferCS( uint16 slot, size_t offset, size_t sizeBytes )
     {
         bindBuffer( slot, offset, sizeBytes );
     }
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

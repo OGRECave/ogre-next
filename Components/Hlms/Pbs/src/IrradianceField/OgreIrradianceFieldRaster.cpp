@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -79,7 +79,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     IrradianceFieldRaster::~IrradianceFieldRaster() { destroyWorkspace(); }
     //-------------------------------------------------------------------------
-    void IrradianceFieldRaster::createWorkspace( void )
+    void IrradianceFieldRaster::createWorkspace()
     {
         destroyWorkspace();
 
@@ -163,7 +163,7 @@ namespace Ogre
         mNumProbesParam = mShaderParamsConvertToIfd->findParameter( "numProbes" );
     }
     //-------------------------------------------------------------------------
-    void IrradianceFieldRaster::destroyWorkspace( void )
+    void IrradianceFieldRaster::destroyWorkspace()
     {
         if( !mRenderWorkspace )
             return;
@@ -193,10 +193,10 @@ namespace Ogre
         const IrradianceFieldSettings &settings = mCreator->mSettings;
 
         Vector3 pos;
-        pos.x = probeIdx % settings.mNumProbes[0];
-        pos.y =
-            ( probeIdx % ( settings.mNumProbes[0] * settings.mNumProbes[1] ) ) / settings.mNumProbes[0];
-        pos.z = probeIdx / ( settings.mNumProbes[0] * settings.mNumProbes[1] );
+        pos.x = Real( probeIdx % settings.mNumProbes[0] );
+        pos.y = Real( ( probeIdx % ( settings.mNumProbes[0] * settings.mNumProbes[1] ) ) /
+                      settings.mNumProbes[0] );
+        pos.z = Real( probeIdx / ( settings.mNumProbes[0] * settings.mNumProbes[1] ) );
         pos += 0.5f;
 
         pos /= settings.getNumProbes3f();

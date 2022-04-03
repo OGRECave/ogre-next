@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,9 +29,8 @@ THE SOFTWARE.
 #define _OgreMetalWindow_H_
 
 #include "OgreMetalPrerequisites.h"
-#include "OgreWindow.h"
 
-#include "OgreMetalRenderTargetCommon.h"
+#include "OgreWindow.h"
 
 #include "OgreMetalView.h"
 
@@ -41,48 +40,57 @@ namespace Ogre
 {
     class MetalWindow : public Window
     {
-        bool    mClosed;
-        bool    mHwGamma;
+        bool mClosed;
+        bool mHidden;
+        bool mIsExternal;
+        bool mHwGamma;
+        bool mManualRelease;
 
-        CAMetalLayer        *mMetalLayer;
+        CAMetalLayer       *mMetalLayer;
         id<CAMetalDrawable> mCurrentDrawable;
-        OgreMetalView       *mMetalView;
+        OgreMetalView      *mMetalView;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        NSWindow            *mWindow;
+        NSWindow *mWindow;
 #endif
-        MetalDevice         *mDevice;
+        MetalDevice *mDevice;
 
-        inline void checkLayerSizeChanges(void);
-        void setResolutionFromView(void);
+        inline void checkLayerSizeChanges();
+        void        setResolutionFromView();
+
     public:
         MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
                      const NameValuePairList *miscParams, MetalDevice *ownerDevice );
-        virtual ~MetalWindow();
+        ~MetalWindow() override;
 
-        virtual float getViewPointToPixelScale() const;
+        float getViewPointToPixelScale() const override;
 
-        virtual void swapBuffers(void);
-        virtual void windowMovedOrResized(void);
+        void swapBuffers() override;
+        void windowMovedOrResized() override;
 
-        virtual bool nextDrawable(void);
+        void setManualSwapRelease( bool bManualRelease ) override;
+        bool isManualSwapRelease() const override;
+        void performManualRelease() override;
+        void setWantsToDownload( bool bWantsToDownload ) override;
+        bool canDownloadData() const override;
+
+        bool nextDrawable();
 
         virtual void create( bool fullScreen, const NameValuePairList *miscParams );
-        virtual void destroy(void);
+        void         destroy() override;
 
-        void _initialize( TextureGpuManager *textureGpuManager );
+        void _initialize( TextureGpuManager *textureGpuManager ) override;
 
-        virtual void reposition( int32 left, int32 top );
-        virtual void requestResolution( uint32 width, uint32 height );
+        void reposition( int32 left, int32 top ) override;
+        void requestResolution( uint32 width, uint32 height ) override;
 
-        virtual bool isClosed(void) const;
-        virtual void _setVisible( bool visible );
-        virtual bool isVisible(void) const;
-        virtual void setHidden( bool hidden );
-        virtual bool isHidden(void) const;
+        bool isClosed() const override;
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
 
-        virtual void getCustomAttribute( IdString name, void* pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
-}
+}  // namespace Ogre
 
 #endif
-

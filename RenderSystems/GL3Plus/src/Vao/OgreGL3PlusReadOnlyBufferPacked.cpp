@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -69,7 +69,8 @@ namespace Ogre
         OCGE( glActiveTexture( GL_TEXTURE0 + slot ) );
         OCGE( glBindTexture( GL_TEXTURE_BUFFER, mTexName ) );
         OCGE( glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
-                                mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+                                static_cast<GLintptr>( mFinalBufferStart * mBytesPerElement + offset ),
+                                static_cast<GLsizeiptr>( sizeBytes ) ) );
 
         // TODO: Get rid of this nonsense of restoring the active texture.
         // RenderSystem is always restores to 0 after using,
@@ -90,7 +91,8 @@ namespace Ogre
             static_cast<GL3PlusBufferInterface *>( mBufferInterface );
         OCGE( glBindTexture( GL_TEXTURE_BUFFER, mTexName ) );
         OCGE( glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
-                                mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+                                static_cast<GLintptr>( mFinalBufferStart * mBytesPerElement + offset ),
+                                static_cast<GLsizeiptr>( sizeBytes ) ) );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusReadOnlyTexBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
@@ -148,7 +150,8 @@ namespace Ogre
             static_cast<GL3PlusBufferInterface *>( mBufferInterface );
 
         OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, slot, bufferInterface->getVboName(),
-                                 mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+                                 static_cast<GLintptr>( mFinalBufferStart * mBytesPerElement + offset ),
+                                 static_cast<GLsizeiptr>( sizeBytes ) ) );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusReadOnlyUavBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
@@ -226,8 +229,9 @@ namespace Ogre
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST ) );
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
-        OCGE( glTexImage2D( GL_TEXTURE_2D, 0, mInternalFormat, width, texHeight, 0, mOriginFormat,
-                            mOriginDataType, NULL ) );
+        OCGE( glTexImage2D( GL_TEXTURE_2D, 0, static_cast<GLint>( mInternalFormat ),
+                            static_cast<GLsizei>( width ), static_cast<GLsizei>( texHeight ), 0,
+                            mOriginFormat, mOriginDataType, NULL ) );
     }
     //-----------------------------------------------------------------------------------
     GL3PlusReadOnlyBufferEmulatedPacked::~GL3PlusReadOnlyBufferEmulatedPacked()
@@ -260,7 +264,8 @@ namespace Ogre
         OCGE( glBindBuffer( GL_PIXEL_UNPACK_BUFFER, bufferInterface->getVboName() ) );
         OCGE( glBindTexture( GL_TEXTURE_2D, mTexName ) );
         OCGE( glTexSubImage2D(
-            GL_TEXTURE_2D, 0, 0, 0, texWidth, texHeight, mOriginFormat, mOriginDataType,
+            GL_TEXTURE_2D, 0, 0, 0, (GLsizei)texWidth, (GLsizei)texHeight, mOriginFormat,
+            mOriginDataType,
             reinterpret_cast<void *>( mFinalBufferStart * mBytesPerElement + offset ) ) );
 
         // Restore alignment.

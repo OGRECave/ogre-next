@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -22,6 +22,6 @@ add_recursive( ./ SOURCE_FILES )
 
 ogre_add_executable(Sample_SceneFormat WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
 
-target_link_libraries(Sample_SceneFormat ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} OgreSceneFormat)
+target_link_libraries(Sample_SceneFormat ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} ${OGRE_NEXT}SceneFormat)
 ogre_config_sample_lib(Sample_SceneFormat)
 ogre_config_sample_pkg(Sample_SceneFormat)

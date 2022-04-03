@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -36,31 +36,31 @@ namespace Ogre
 {
     class MetalBufferInterface;
 
-    class _OgreMetalExport MetalUavBufferPacked : public UavBufferPacked
+    class _OgreMetalExport MetalUavBufferPacked final : public UavBufferPacked
     {
         MetalDevice *mDevice;
 
     protected:
-        virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat );
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl( void );
+        TexBufferPacked      *getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
+        ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() override;
 
     public:
         MetalUavBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
                               uint32 bindFlags, void *initialData, bool keepAsShadow,
                               VaoManager *vaoManager, MetalBufferInterface *bufferInterface,
                               MetalDevice *device );
-        ~MetalUavBufferPacked();
+        ~MetalUavBufferPacked() override;
 
-        void bindBufferAllRenderStages( uint16 slot, size_t offset=0 );
-        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-//        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-//        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-//        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
+        void bindBufferAllRenderStages( uint16 slot, size_t offset = 0 );
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        // void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override {}
+        // void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override {}
+        // void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override {}
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
 
-        void bindBufferForDescriptor( __unsafe_unretained id <MTLBuffer> *buffers,
-                                      NSUInteger *offsets, size_t offset );
+        void bindBufferForDescriptor( __unsafe_unretained id<MTLBuffer> *buffers, NSUInteger *offsets,
+                                      size_t offset );
     };
 }
 

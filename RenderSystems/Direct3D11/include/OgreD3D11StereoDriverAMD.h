@@ -29,35 +29,35 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-#ifndef __D3D11StereoDriverAMD_H__
-#define __D3D11StereoDriverAMD_H__
+#    ifndef __D3D11StereoDriverAMD_H__
+#        define __D3D11StereoDriverAMD_H__
 
-#include "OgreD3D11StereoDriverImpl.h"
-#include "AMDDxExtQbStereoApi.h"
+#        include "AMDDxExtQbStereoApi.h"
+#        include "OgreD3D11StereoDriverImpl.h"
 
-namespace Ogre {
-	
-  /** Virtual interface of the stereo driver*/
-  class _OgreD3D11Export D3D11StereoDriverAMD : public D3D11StereoDriverImpl
-  {
-    // Interface
+namespace Ogre
+{
+    /** Virtual interface of the stereo driver*/
+    class _OgreD3D11Export D3D11StereoDriverAMD : public D3D11StereoDriverImpl
+    {
+        // Interface
     public:
-      D3D11StereoDriverAMD();
-      virtual ~D3D11StereoDriverAMD();
-	  virtual bool addRenderWindow(D3D11RenderWindowBase* renderWindow);
-      virtual bool removeRenderWindow(const String& renderWindowName);
-      virtual bool isStereoEnabled(const String& renderWindowName);
-      virtual bool setDrawBuffer(ColourBufferType colourBuffer);
+        D3D11StereoDriverAMD();
+        virtual ~D3D11StereoDriverAMD();
+        virtual bool addRenderWindow( D3D11RenderWindowBase *renderWindow );
+        virtual bool removeRenderWindow( const String &renderWindowName );
+        virtual bool isStereoEnabled( const String &renderWindowName );
+        virtual bool setDrawBuffer( ColourBufferType colourBuffer );
 
     protected:
-      typedef struct OgreStereoHandle
-      {
-		  D3D11RenderWindowBase* renderWindow;
-      };
+        typedef struct OgreStereoHandle
+        {
+            D3D11RenderWindowBase *renderWindow;
+        };
 
-      typedef map<String, OgreStereoHandle>::type StereoHandleMap;
-      StereoHandleMap mStereoMap;
-  };
-}
-#endif
+        typedef map<String, OgreStereoHandle>::type StereoHandleMap;
+        StereoHandleMap                             mStereoMap;
+    };
+}  // namespace Ogre
+#    endif
 #endif

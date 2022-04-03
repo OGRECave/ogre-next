@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreTerra_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreMovableObject.h"
 #include "OgreShaderParams.h"
 
@@ -65,40 +66,40 @@ namespace Ogre
         struct SavedState
         {
             RenderableArray m_renderables;
-            size_t m_currentCell;
-            Camera const *m_camera;
+            size_t          m_currentCell;
+            Camera const *  m_camera;
         };
 
-        std::vector<float>          m_heightMap;
-        uint32                      m_width;
-        uint32                      m_depth; //PNG's Height
-        float                       m_depthWidthRatio;
-        float                       m_skirtSize; // Already unorm scaled
-        float                       m_invWidth;
-        float                       m_invDepth;
+        std::vector<float> m_heightMap;
+        uint32             m_width;
+        uint32             m_depth;  // PNG's Height
+        float              m_depthWidthRatio;
+        float              m_skirtSize;  // Already unorm scaled
+        float              m_invWidth;
+        float              m_invDepth;
 
         bool m_zUp;
 
-        Vector2     m_xzDimensions;
-        Vector2     m_xzInvDimensions;
-        Vector2     m_xzRelativeSize; // m_xzDimensions / [m_width, m_height]
-        float       m_height;
-        float       m_heightUnormScaled; // m_height / 1 or m_height / 65535
-        Vector3     m_terrainOrigin;
-        uint32      m_basePixelDimension;
+        Vector2 m_xzDimensions;
+        Vector2 m_xzInvDimensions;
+        Vector2 m_xzRelativeSize;  // m_xzDimensions / [m_width, m_height]
+        float   m_height;
+        float   m_heightUnormScaled;  // m_height / 1 or m_height / 65535
+        Vector3 m_terrainOrigin;
+        uint32  m_basePixelDimension;
 
         /// 0 is currently in use
         /// 1 is SavedState
-        std::vector<TerrainCell>   m_terrainCells[2];
+        std::vector<TerrainCell> m_terrainCells[2];
         /// 0 & 1 are for tmp use
-        std::vector<TerrainCell*>  m_collectedCells[2];
+        std::vector<TerrainCell *> m_collectedCells[2];
         size_t                     m_currentCell;
 
-        Ogre::TextureGpu*   m_heightMapTex;
-        Ogre::TextureGpu*   m_normalMapTex;
+        Ogre::TextureGpu *m_heightMapTex;
+        Ogre::TextureGpu *m_normalMapTex;
 
-        Vector3             m_prevLightDir;
-        ShadowMapper        *m_shadowMapper;
+        Vector3       m_prevLightDir;
+        ShadowMapper *m_shadowMapper;
 
         TerraSharedResources *m_sharedResources;
 
@@ -106,9 +107,9 @@ namespace Ogre
         /// but only temporarily, for later restoring it.
         SavedState m_savedState;
 
-        //Ogre stuff
-        CompositorManager2      *m_compositorManager;
-        Camera const            *m_camera;
+        // Ogre stuff
+        CompositorManager2 *m_compositorManager;
+        Camera const *      m_camera;
 
         /// Converts value from Y-up to whatever the user up vector is (see m_zUp)
         inline Vector3 fromYUp( Vector3 value ) const;
@@ -123,17 +124,18 @@ namespace Ogre
         uint32 mHlmsTerraIndex;
 
     protected:
-        void destroyHeightmapTexture(void);
+        void destroyHeightmapTexture();
 
         /// Creates the Ogre texture based on the image data.
         /// Called by @see createHeightmap
         void createHeightmapTexture( const Image2 &image, const String &imageName );
 
         /// Calls createHeightmapTexture, loads image data to our CPU-side buffers
-        void createHeightmap( Image2 &image, const String &imageName, bool bMinimizeMemoryConsumption );
+        void createHeightmap( Image2 &image, const String &imageName, bool bMinimizeMemoryConsumption,
+                              bool bLowResShadow );
 
-        void createNormalTexture(void);
-        void destroyNormalTexture(void);
+        void createNormalTexture();
+        void destroyNormalTexture();
 
         ///	Automatically calculates the optimum skirt size (no gaps with
         /// lowest overdraw possible).
@@ -141,21 +143,21 @@ namespace Ogre
         /// pixels in a 4x4 block.
         ///	This calculation may not be perfect, as the block search should
         /// get bigger for higher LODs.
-        void calculateOptimumSkirtSize(void);
+        void calculateOptimumSkirtSize();
 
         inline GridPoint worldToGrid( const Vector3 &vPos ) const;
-        inline Vector2 gridToWorld( const GridPoint &gPos ) const;
+        inline Vector2   gridToWorld( const GridPoint &gPos ) const;
 
         bool isVisible( const GridPoint &gPos, const GridPoint &gSize ) const;
 
         void addRenderable( const GridPoint &gridPos, const GridPoint &cellSize, uint32 lodLevel );
 
-        void optimizeCellsAndAdd(void);
+        void optimizeCellsAndAdd();
 
     public:
         Terra( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *sceneManager,
                uint8 renderQueueId, CompositorManager2 *compositorManager, Camera *camera, bool zUp );
-        ~Terra();
+        ~Terra() override;
 
         /// Sets shared resources for minimizing memory consumption wasted on temporary
         /// resources when you have more than one Terra.
@@ -176,8 +178,8 @@ namespace Ogre
         ///
         /// A value of 0.0 will give you the biggest skirt and fix all skirt-related issues.
         /// Note however, this may have a *tremendous* GPU performance impact.
-        void setCustomSkirtMinHeight( const float skirtMinHeight ) { m_skirtSize = skirtMinHeight; }
-        float getCustomSkirtMinHeight( void ) const { return m_skirtSize; }
+        void  setCustomSkirtMinHeight( const float skirtMinHeight ) { m_skirtSize = skirtMinHeight; }
+        float getCustomSkirtMinHeight() const { return m_skirtSize; }
 
         /** Must be called every frame so we can check the camera's position
             (passed in the constructor) and update our visible batches (and LODs)
@@ -196,7 +198,7 @@ namespace Ogre
             useful to prevent heterogeneity between frames (reduce stutter) if
             you intend to update the light slightly every frame.
         */
-        void update( const Vector3 &lightDir, float lightEpsilon=1e-6f );
+        void update( const Vector3 &lightDir, float lightEpsilon = 1e-6f );
 
         /**
         @brief load
@@ -204,12 +206,14 @@ namespace Ogre
         @param center
         @param dimensions
         @param bMinimizeMemoryConsumption
-            See ShadowMapper::_setMinimizeMemoryConsumption
+            See ShadowMapper::setMinimizeMemoryConsumption
+        @param bLowResShadow
+            See ShadowMapper::createShadowMap
         */
         void load( const String &texName, const Vector3 &center, const Vector3 &dimensions,
-                   bool bMinimizeMemoryConsumption );
-        void load( Image2 &image, Vector3 center, Vector3 dimensions,
-                   bool bMinimizeMemoryConsumption, const String &imageName = BLANKSTRING );
+                   bool bMinimizeMemoryConsumption, bool bLowResShadow );
+        void load( Image2 &image, Vector3 center, Vector3 dimensions, bool bMinimizeMemoryConsumption,
+                   bool bLowResShadow, const String &imageName = BLANKSTRING );
 
         /** Gets the interpolated height at the given location.
             If outside the bounds, it leaves the height untouched.
@@ -228,36 +232,35 @@ namespace Ogre
         /// load must already have been called.
         void setDatablock( HlmsDatablock *datablock );
 
-        //MovableObject overloads
-        const String& getMovableType(void) const;
+        // MovableObject overloads
+        const String &getMovableType() const override;
 
         /// Swaps current state with a saved one. Useful for rendering shadow maps
-        void _swapSavedState( void );
+        void _swapSavedState();
 
-        const Camera* getCamera() const                 { return m_camera; }
-        void setCamera( const Camera *camera )          { m_camera = camera; }
+        const Camera *getCamera() const { return m_camera; }
+        void          setCamera( const Camera *camera ) { m_camera = camera; }
 
-        bool isZUp( void ) const { return m_zUp; }
+        bool isZUp() const { return m_zUp; }
 
-        const ShadowMapper* getShadowMapper(void) const { return m_shadowMapper; }
+        const ShadowMapper *getShadowMapper() const { return m_shadowMapper; }
 
-        Ogre::TextureGpu* getHeightMapTex(void) const   { return m_heightMapTex; }
-        Ogre::TextureGpu* getNormalMapTex(void) const   { return m_normalMapTex; }
-        TextureGpu* _getShadowMapTex(void) const;
+        Ogre::TextureGpu *getHeightMapTex() const { return m_heightMapTex; }
+        Ogre::TextureGpu *getNormalMapTex() const { return m_normalMapTex; }
+        TextureGpu *      _getShadowMapTex() const;
 
         // These are always in Y-up space
-        const Vector2& getXZDimensions(void) const      { return m_xzDimensions; }
-        const Vector2& getXZInvDimensions(void) const   { return m_xzInvDimensions; }
-        float getHeight(void) const                     { return m_height; }
-        const Vector3& getTerrainOriginRaw( void ) const{ return m_terrainOrigin; }
+        const Vector2 &getXZDimensions() const { return m_xzDimensions; }
+        const Vector2 &getXZInvDimensions() const { return m_xzInvDimensions; }
+        float          getHeight() const { return m_height; }
+        const Vector3 &getTerrainOriginRaw() const { return m_terrainOrigin; }
 
         /// Return value is in client-space (i.e. could be y- or z-up)
-        Vector3 getTerrainOrigin( void ) const;
+        Vector3 getTerrainOrigin() const;
 
         // Always in Y-up space
-        Vector2 getTerrainXZCenter(void) const;
+        Vector2 getTerrainXZCenter() const;
     };
-
 
     /** Terra during creation requires a number of temporary surfaces that are used then discarded.
         These resources can be shared by all the Terra 'islands' since as long as they have the
@@ -347,6 +350,6 @@ namespace Ogre
         */
         static void destroyTempTexture( TerraSharedResources *sharedResources, TextureGpu *tmpRtt );
     };
-}
+}  // namespace Ogre
 
 #endif

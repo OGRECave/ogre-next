@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -27,28 +27,23 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 */
 
 #include "OgreGL3PlusPlugin.h"
+
+#include "OgreAbiUtils.h"
 #include "OgreRoot.h"
 
 namespace Ogre
 {
     const String sPluginName = "GL 3+ RenderSystem";
     //---------------------------------------------------------------------
-    GL3PlusPlugin::GL3PlusPlugin()
-        : mRenderSystem(0)
-    {
-
-    }
+    GL3PlusPlugin::GL3PlusPlugin() : mRenderSystem( 0 ) {}
     //---------------------------------------------------------------------
-    const String& GL3PlusPlugin::getName() const
-    {
-        return sPluginName;
-    }
+    const String &GL3PlusPlugin::getName() const { return sPluginName; }
     //---------------------------------------------------------------------
     void GL3PlusPlugin::install()
     {
         mRenderSystem = OGRE_NEW GL3PlusRenderSystem();
 
-        Root::getSingleton().addRenderSystem(mRenderSystem);
+        Root::getSingleton().addRenderSystem( mRenderSystem );
     }
     //---------------------------------------------------------------------
     void GL3PlusPlugin::initialise()
@@ -65,8 +60,7 @@ namespace Ogre
     {
         OGRE_DELETE mRenderSystem;
         mRenderSystem = 0;
-
     }
-
-
-}
+    //---------------------------------------------------------------------
+    void GL3PlusPlugin::getAbiCookie( AbiCookie &outAbiCookie ) { outAbiCookie = generateAbiCookie(); }
+}  // namespace Ogre

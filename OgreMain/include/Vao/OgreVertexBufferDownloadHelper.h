@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,35 +29,40 @@ THE SOFTWARE.
 #define _OgreVertexBufferDownloadHelper_H_
 
 #include "OgrePrerequisites.h"
-#include "OgreSharedPtr.h"
-#include "Vao/OgreAsyncTicket.h"
-#include "Vao/OgreVertexBufferPacked.h"
-#include "OgreHardwareVertexBuffer.h"
+
 #include "OgreBitwise.h"
+#include "OgreHardwareVertexBuffer.h"
+#include "OgreSharedPtr.h"
 #include "OgreVector3.h"
 #include "OgreVector4.h"
+#include "Vao/OgreAsyncTicket.h"
+#include "Vao/OgreVertexBufferPacked.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace  Ogre
+namespace Ogre
 {
     struct VertexElementSemanticFull
     {
-        VertexElementSemantic   semantic;
-        uint8                   repeat;
-        VertexElementSemanticFull( VertexElementSemantic _semantic, uint8 _repeat=0 ) :
-            semantic( _semantic ), repeat( _repeat ) {}
+        VertexElementSemantic semantic;
+        uint8                 repeat;
+        VertexElementSemanticFull( VertexElementSemantic _semantic, uint8 _repeat = 0 ) :
+            semantic( _semantic ),
+            repeat( _repeat )
+        {
+        }
     };
 
-    typedef vector<VertexBufferPacked*>::type VertexBufferPackedVec;
+    typedef vector<VertexBufferPacked *>::type   VertexBufferPackedVec;
     typedef FastArray<VertexElementSemanticFull> VertexElementSemanticFullArray;
     struct VertexElement2;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /**
     @class VertexBufferDownloadHelper
@@ -76,6 +81,7 @@ namespace  Ogre
             /// If this value is nullptr, then the requested
             /// element semantic was not present in the Vao
             VertexElement2 const *origElements;
+
             size_t bufferIdx;
             size_t srcOffset;
             size_t srcBytesPerVertex;
@@ -84,8 +90,9 @@ namespace  Ogre
         };
 
     protected:
-        typedef FastArray<DownloadData> DownloadDataArray;
-        DownloadDataArray   mDownloadData;
+        typedef vector<DownloadData>::type DownloadDataVec;
+
+        DownloadDataVec mDownloadData;
 
     public:
         /** Creates AsyncTickets to download GPU -> CPU the requested VertexElementSemantics
@@ -99,9 +106,9 @@ namespace  Ogre
         @param elementCount
             Number of vertices to download. When 0, we download all that remains.
         */
-        void queueDownload( const VertexArrayObject *vao,
+        void queueDownload( const VertexArrayObject              *vao,
                             const VertexElementSemanticFullArray &semanticsToDownload,
-                            size_t elementStart=0, size_t elementCount=0 );
+                            size_t elementStart = 0, size_t elementCount = 0 );
 
         /** Maps the buffers that have been downloaded with queueDownload.
             and outputs the pointers in outDataPtrs.
@@ -134,25 +141,23 @@ namespace  Ogre
             const VertexElementType baseType = v1::VertexElement::getBaseType( vertexElement.mType );
             if( baseType == VET_HALF2 )
             {
-                //Convert half to float.
+                // Convert half to float.
                 uint16 hfData[4];
                 memcpy( hfData, srcData, readSize );
 
                 const size_t typeCount = v1::VertexElement::getTypeCount( vertexElement.mType );
 
-                for( size_t j=0; j<typeCount; ++j )
+                for( size_t j = 0; j < typeCount; ++j )
                     retVal[j] = Bitwise::halfToFloat( hfData[j] );
             }
             else
             {
-                //Raw. Transfer as is.
+                // Raw. Transfer as is.
                 memcpy( retVal, srcData, readSize );
             }
 
-            return Vector4( static_cast<Real>( retVal[0] ),
-                            static_cast<Real>( retVal[1] ),
-                            static_cast<Real>( retVal[2] ),
-                            static_cast<Real>( retVal[3] ) );
+            return Vector4( static_cast<Real>( retVal[0] ), static_cast<Real>( retVal[1] ),
+                            static_cast<Real>( retVal[2] ), static_cast<Real>( retVal[3] ) );
         }
 
         inline static Vector3 getNormal( uint8 const *srcData, VertexElement2 vertexElement )
@@ -168,39 +173,41 @@ namespace  Ogre
             }
             else if( vertexElement.mType == VET_SHORT4_SNORM )
             {
-                //Dealing with QTangents.
-                Quaternion qTangent;
-                const int16 *srcData16 = reinterpret_cast<const int16*>( srcData );
+                // Dealing with QTangents.
+                Quaternion   qTangent;
+                const int16 *srcData16 = reinterpret_cast<const int16 *>( srcData );
                 qTangent.x = Bitwise::snorm16ToFloat( srcData16[0] );
                 qTangent.y = Bitwise::snorm16ToFloat( srcData16[1] );
                 qTangent.z = Bitwise::snorm16ToFloat( srcData16[2] );
                 qTangent.w = Bitwise::snorm16ToFloat( srcData16[3] );
 
+#if 0
+                // Reflection is only needed to flip qTangent.zAxis()
                 float reflection = 1.0f;
                 if( qTangent.w < 0 )
                     reflection = -1.0f;
+#endif
 
                 retVal = qTangent.xAxis();
             }
             else
             {
-                //Raw. Transfer as is.
+                // Raw. Transfer as is.
                 float tmpData[4];
                 memcpy( tmpData, srcData, readSize );
-                retVal = Vector3( static_cast<Real>( tmpData[0] ),
-                                  static_cast<Real>( tmpData[1] ),
+                retVal = Vector3( static_cast<Real>( tmpData[0] ), static_cast<Real>( tmpData[1] ),
                                   static_cast<Real>( tmpData[2] ) );
             }
 
             return retVal;
         }
 
-        const DownloadDataArray& getDownloadData(void) const        { return mDownloadData; }
+        const DownloadDataVec &getDownloadData() const { return mDownloadData; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

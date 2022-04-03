@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -48,10 +48,8 @@ namespace Ogre
     bool Workarounds::mBad3DBlit = false;
 #endif
 
-    void Workarounds::dump( void *outStrVoid )
+    void Workarounds::dump( String &outStr )
     {
-        String &outStr = *reinterpret_cast<String *>( outStrVoid );
-
 #ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
         outStr +=
             "\n - mAdrenoUbo64kLimit: " + StringConverter::toString( Workarounds::mAdrenoUbo64kLimit );

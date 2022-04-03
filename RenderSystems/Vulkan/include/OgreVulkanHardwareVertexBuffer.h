@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -29,47 +29,49 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #ifndef _OgreVulkanHardwareVertexBuffer_H_
 #define _OgreVulkanHardwareVertexBuffer_H_
 
-#include "OgreVulkanHardwareBufferCommon.h"
 #include "OgreHardwareVertexBuffer.h"
+#include "OgreVulkanHardwareBufferCommon.h"
 
 namespace Ogre
 {
-namespace v1
-{
-    class VulkanHardwareBufferManagerBase;
-
-    class _OgreVulkanExport VulkanHardwareVertexBuffer : public HardwareVertexBuffer
+    namespace v1
     {
-    private:
-        VulkanHardwareBufferCommon mVulkanHardwareBufferCommon;
-    protected:
-        virtual void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
-        virtual void unlockImpl( void ) override;
-    public:
-        VulkanHardwareVertexBuffer( VulkanHardwareBufferManagerBase *mgr, size_t vertexSize,
-                                    size_t numVertices,
-                              HardwareBuffer::Usage usage, bool useShadowBuffer );
-        virtual ~VulkanHardwareVertexBuffer();
+        class VulkanHardwareBufferManagerBase;
 
-        void _notifyDeviceStalled( void );
+        class _OgreVulkanExport VulkanHardwareVertexBuffer final : public HardwareVertexBuffer
+        {
+        private:
+            VulkanHardwareBufferCommon mVulkanHardwareBufferCommon;
 
-        /// @copydoc VulkanHardwareBufferCommon::getBufferName
-        VkBuffer getBufferName( size_t &outOffset );
-        /// @copydoc VulkanHardwareBufferCommon::getBufferNameForGpuWrite
-        VkBuffer getBufferNameForGpuWrite( size_t &outOffset );
+        protected:
+            void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
+            void unlockImpl() override;
 
-        virtual void readData( size_t offset, size_t length, void *pDest ) override;
-        
-        virtual void writeData( size_t offset, size_t length, const void *pSource,
-                                bool discardWholeBuffer = false ) override;
-        virtual void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset,
-                               size_t length, bool discardWholeBuffer = false );
+        public:
+            VulkanHardwareVertexBuffer( VulkanHardwareBufferManagerBase *mgr, size_t vertexSize,
+                                        size_t numVertices, HardwareBuffer::Usage usage,
+                                        bool useShadowBuffer );
+            ~VulkanHardwareVertexBuffer() override;
 
-        virtual void _updateFromShadow( void );
+            void _notifyDeviceStalled();
 
-        virtual void *getRenderSystemData( void );
-    };
-}
-}
+            /// @copydoc VulkanHardwareBufferCommon::getBufferName
+            VkBuffer getBufferName( size_t &outOffset );
+            /// @copydoc VulkanHardwareBufferCommon::getBufferNameForGpuWrite
+            VkBuffer getBufferNameForGpuWrite( size_t &outOffset );
+
+            void readData( size_t offset, size_t length, void *pDest ) override;
+
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false ) override;
+            void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset, size_t length,
+                           bool discardWholeBuffer = false ) override;
+
+            void _updateFromShadow() override;
+
+            void *getRenderSystemData() override;
+        };
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

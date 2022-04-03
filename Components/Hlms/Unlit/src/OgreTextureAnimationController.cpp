@@ -2,51 +2,52 @@
 #include "OgreStableHeaders.h"
 
 #include "OgreTextureAnimationController.h"
-#include "OgreMath.h"
+
 #include "OgreHlmsUnlitDatablock.h"
+#include "OgreMath.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
     // TexCoordModifierControllerValue
     //-----------------------------------------------------------------------
     TextureAnimationControllerValue::TextureAnimationControllerValue( HlmsDatablock *datablock,
-                                                                      uint8 textureUnit )
-        : mTransU(false)
-        , mTransV(false)
-        , mScaleU(false)
-        , mScaleV(false)
-        , mRotate(false)
-        , mTextureUnit(textureUnit)
-        , mDatablock(datablock)
-        , mUMod(0)
-        , mVMod(0)
-        , mUScale(1)
-        , mVScale(1)
-        , mRotation(0)
-        , mTexModMatrix(Matrix4::IDENTITY)
-        , mNumFramesHorizontal(0)
-        , mNumFramesVertical(0)
-        , mLastFrame(0)
-        , mCurrentVerticalFrame(0)
+                                                                      uint8 textureUnit ) :
+        mTransU( false ),
+        mTransV( false ),
+        mScaleU( false ),
+        mScaleV( false ),
+        mRotate( false ),
+        mTextureUnit( textureUnit ),
+        mDatablock( datablock ),
+        mUMod( 0 ),
+        mVMod( 0 ),
+        mUScale( 1 ),
+        mVScale( 1 ),
+        mRotation( 0 ),
+        mTexModMatrix( Matrix4::IDENTITY ),
+        mNumFramesHorizontal( 0 ),
+        mNumFramesVertical( 0 ),
+        mLastFrame( 0 ),
+        mCurrentVerticalFrame( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
     Real TextureAnimationControllerValue::getValue() const
     {
-        if (mTransU)
+        if( mTransU )
         {
             return mTexModMatrix[0][3];
         }
-        else if (mTransV)
+        else if( mTransV )
         {
             return mTexModMatrix[1][3];
         }
-        else if (mScaleU)
+        else if( mScaleU )
         {
             return mTexModMatrix[0][0];
         }
-        else if (mScaleV)
+        else if( mScaleV )
         {
             return mTexModMatrix[1][1];
         }
@@ -54,66 +55,67 @@ namespace Ogre {
         return 0;
     }
     //-----------------------------------------------------------------------------------
-    void TextureAnimationControllerValue::setValue(Real value)
+    void TextureAnimationControllerValue::setValue( Real value )
     {
-        if (mNumFramesHorizontal > 0) // tex tile animation
+        if( mNumFramesHorizontal > 0 )  // tex tile animation
         {
-            // The current animation frame.
-            unsigned int currentFrame = ((int)(value * mNumFramesHorizontal) % mNumFramesHorizontal);
+            if( value < 0.0f )
+                value = 1.0f + value;
 
-            if (mLastFrame == 0 && currentFrame == (mNumFramesHorizontal - 1u))
+            // The current animation frame.
+            uint32 currentFrame =
+                static_cast<uint32>( value * mNumFramesHorizontal ) % mNumFramesHorizontal;
+
+            if( mLastFrame == 0 && currentFrame == ( mNumFramesHorizontal - 1u ) )
             {
-                if (mCurrentVerticalFrame == (mNumFramesVertical - 1u))
+                if( mCurrentVerticalFrame == ( mNumFramesVertical - 1u ) )
                     mCurrentVerticalFrame = 0;
                 else
                     mCurrentVerticalFrame++;
             }
 
-            mUMod = (1 / (Real)mNumFramesHorizontal) * (Real)currentFrame;
-            mVMod = (1 / (Real)mNumFramesVertical) * (Real)mCurrentVerticalFrame;
+            mUMod = ( 1 / (Real)mNumFramesHorizontal ) * (Real)currentFrame;
+            mVMod = ( 1 / (Real)mNumFramesVertical ) * (Real)mCurrentVerticalFrame;
 
-            mLastFrame = currentFrame;
+            mLastFrame = static_cast<uint16>( currentFrame );
 
-            mUScale = mNumFramesHorizontal;
-            mVScale = mNumFramesVertical;
+            mUScale = (Real)mNumFramesHorizontal;
+            mVScale = (Real)mNumFramesVertical;
         }
         else
         {
-            if (mTransU)
+            if( mTransU )
                 mUMod = value;
 
-            if (mTransV)
+            if( mTransV )
                 mVMod = value;
 
-            if (mScaleU)
+            if( mScaleU )
                 mUScale = value;
 
-            if (mScaleV)
+            if( mScaleV )
                 mVScale = value;
 
-            if (mRotate)
-                mRotation = Radian(value * Math::TWO_PI);
+            if( mRotate )
+                mRotation = Radian( value * Math::TWO_PI );
         }
 
         recalcTextureMatrix();
     }
     //-----------------------------------------------------------------------------------
-    void TextureAnimationControllerValue::scaleAnimation(bool scaleU, bool scaleV)
+    void TextureAnimationControllerValue::scaleAnimation( bool scaleU, bool scaleV )
     {
-         mScaleU = scaleU;
-         mScaleV = scaleV;
+        mScaleU = scaleU;
+        mScaleV = scaleV;
     }
     //-----------------------------------------------------------------------------------
-    void TextureAnimationControllerValue::scrollAnimation(bool translateU, bool translateV)
+    void TextureAnimationControllerValue::scrollAnimation( bool translateU, bool translateV )
     {
         mTransU = translateU;
         mTransV = translateV;
     }
     //-----------------------------------------------------------------------------------
-    void TextureAnimationControllerValue::rotationAnimation(bool rotate)
-    {
-        mRotate = rotate;
-    }
+    void TextureAnimationControllerValue::rotationAnimation( bool rotate ) { mRotate = rotate; }
     //-----------------------------------------------------------------------------------
     void TextureAnimationControllerValue::tiledAnimation( uint16 numFramesHorizontal,
                                                           uint16 numFramesVertical )
@@ -128,21 +130,21 @@ namespace Ogre {
         Matrix4 xform;
 
         xform = Matrix4::IDENTITY;
-        if (mUScale != 1 || mVScale != 1)
+        if( mUScale != 1 || mVScale != 1 )
         {
             // Offset to center of texture
             xform[0][0] = 1 / mUScale;
             xform[1][1] = 1 / mVScale;
 
-            if (mNumFramesHorizontal == 0) // no tex tile animation
+            if( mNumFramesHorizontal == 0 )  // no tex tile animation
             {
                 //// Skip matrix concat since first matrix update
-                xform[0][3] = (-0.5f * xform[0][0]) + 0.5f;
-                xform[1][3] = (-0.5f * xform[1][1]) + 0.5f;
+                xform[0][3] = ( -0.5f * xform[0][0] ) + 0.5f;
+                xform[1][3] = ( -0.5f * xform[1][1] ) + 0.5f;
             }
         }
 
-        if (mUMod || mVMod)
+        if( mUMod != 0.0 || mVMod != 0.0 )
         {
             Matrix4 xlate = Matrix4::IDENTITY;
 
@@ -152,27 +154,27 @@ namespace Ogre {
             xform = xlate * xform;
         }
 
-        if (mRotation != Radian(0))
+        if( mRotation != Radian( 0 ) )
         {
             Matrix4 rot = Matrix4::IDENTITY;
-            Radian theta(mRotation);
-            Real cosTheta = Math::Cos(theta);
-            Real sinTheta = Math::Sin(theta);
+            Radian theta( mRotation );
+            Real cosTheta = Math::Cos( theta );
+            Real sinTheta = Math::Sin( theta );
 
             rot[0][0] = cosTheta;
             rot[0][1] = -sinTheta;
             rot[1][0] = sinTheta;
             rot[1][1] = cosTheta;
             // Offset center of rotation to center of texture
-            rot[0][3] = 0.5f + ((-0.5f * cosTheta) - (-0.5f * sinTheta));
-            rot[1][3] = 0.5f + ((-0.5f * sinTheta) + (-0.5f * cosTheta));
+            rot[0][3] = 0.5f + ( ( -0.5f * cosTheta ) - ( -0.5f * sinTheta ) );
+            rot[1][3] = 0.5f + ( ( -0.5f * sinTheta ) + ( -0.5f * cosTheta ) );
 
             xform = rot * xform;
         }
 
         mTexModMatrix = xform;
 
-        HlmsUnlitDatablock *datablockUnlit = (HlmsUnlitDatablock*)mDatablock;
-        datablockUnlit->setAnimationMatrix(mTextureUnit, mTexModMatrix);
+        HlmsUnlitDatablock *datablockUnlit = (HlmsUnlitDatablock *)mDatablock;
+        datablockUnlit->setAnimationMatrix( mTextureUnit, mTexModMatrix );
     }
-}
+}  // namespace Ogre

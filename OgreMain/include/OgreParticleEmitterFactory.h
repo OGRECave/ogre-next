@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,59 +28,61 @@ THE SOFTWARE.
 #ifndef __ParticleEmitterFactory_H__
 #define __ParticleEmitterFactory_H__
 
-
 #include "OgrePrerequisites.h"
+
 #include "OgreParticleEmitter.h"
 #include "OgreString.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
-    /** Abstract class defining the interface to be implemented by creators of ParticleEmitter subclasses.
+     *  @{
+     */
+    /** Abstract class defining the interface to be implemented by creators of ParticleEmitter
+    subclasses.
     @remarks
         Plugins or 3rd party applications can add new types of particle emitters to Ogre by creating
         subclasses of the ParticleEmitter class. Because multiple instances of these emitters may be
-        required, a factory class to manage the instances is also required. 
+        required, a factory class to manage the instances is also required.
     @par
         ParticleEmitterFactory subclasses must allow the creation and destruction of ParticleEmitter
         subclasses. They must also be registered with the ParticleSystemManager. All factories have
-        a name which identifies them, examples might be 'point', 'cone', or 'box', and these can be 
+        a name which identifies them, examples might be 'point', 'cone', or 'box', and these can be
         also be used from particle system scripts.
     */
-    class _OgreExport ParticleEmitterFactory : public FXAlloc
+    class _OgreExport ParticleEmitterFactory : public OgreAllocatedObj
     {
     protected:
-        vector<ParticleEmitter*>::type mEmitters;
+        vector<ParticleEmitter *>::type mEmitters;
+
     public:
         ParticleEmitterFactory() {}
         virtual ~ParticleEmitterFactory();
 
-        /** Returns the name of the factory, the name which identifies the particle emitter type this factory creates. */
+        /** Returns the name of the factory, the name which identifies the particle emitter type this
+         * factory creates. */
         virtual String getName() const = 0;
 
         /** Creates a new emitter instance.
         @remarks
             The subclass MUST add a pointer to the created instance to mEmitters.
         */
-        virtual ParticleEmitter* createEmitter(ParticleSystem* psys) = 0;
+        virtual ParticleEmitter *createEmitter( ParticleSystem *psys ) = 0;
 
         /** Destroys the emitter pointed to by the parameter (for early clean up if required). */
-        virtual void destroyEmitter(ParticleEmitter* e);
-
+        virtual void destroyEmitter( ParticleEmitter *e );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-

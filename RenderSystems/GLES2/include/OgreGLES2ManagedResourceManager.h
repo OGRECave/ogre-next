@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -37,7 +37,7 @@ namespace Ogre {
     class EGLContext;
     class GLES2ManagedResource;
     
-    class _OgrePrivate GLES2ManagedResourceManager : public ResourceAlloc
+    class _OgrePrivate GLES2ManagedResourceManager : public OgreAllocatedObj
     {
     // Interface.
     public:

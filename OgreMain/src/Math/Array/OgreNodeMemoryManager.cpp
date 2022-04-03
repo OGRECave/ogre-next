@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -35,12 +35,12 @@ THE SOFTWARE.
 namespace Ogre
 {
     NodeMemoryManager::NodeMemoryManager() :
-            mDummyNode( 0 ),
-            mMemoryManagerType( SCENE_DYNAMIC ),
-            mTwinMemoryManager( 0 )
+        mDummyNode( 0 ),
+        mMemoryManagerType( SCENE_DYNAMIC ),
+        mTwinMemoryManager( 0 )
     {
-        //Manually allocate the memory for the dummy scene nodes (since we can't pass ourselves
-        //or yet another object) We only allocate what's needed to prevent access violations.
+        // Manually allocate the memory for the dummy scene nodes (since we can't pass ourselves
+        // or yet another object) We only allocate what's needed to prevent access violations.
         /*mDummyTransformPtrs.mPosition = reinterpret_cast<ArrayVector3*>( OGRE_MALLOC_SIMD(
                                                 sizeof( ArrayVector3 ), MEMCATEGORY_SCENE_OBJECTS ) );
         mDummyTransformPtrs.mOrientation = reinterpret_cast<ArrayQuaternion*>( OGRE_MALLOC_SIMD(
@@ -48,15 +48,14 @@ namespace Ogre
         mDummyTransformPtrs.mScale = reinterpret_cast<ArrayVector3*>( OGRE_MALLOC_SIMD(
                                                 sizeof( ArrayVector3 ), MEMCATEGORY_SCENE_OBJECTS ) );*/
 
-        mDummyTransformPtrs.mDerivedPosition    = reinterpret_cast<ArrayVector3*>( OGRE_MALLOC_SIMD(
-                                                sizeof( ArrayVector3 ), MEMCATEGORY_SCENE_OBJECTS ) );
-        mDummyTransformPtrs.mDerivedOrientation= reinterpret_cast<ArrayQuaternion*>( OGRE_MALLOC_SIMD(
-                                                sizeof( ArrayQuaternion ), MEMCATEGORY_SCENE_OBJECTS ) );
-        mDummyTransformPtrs.mDerivedScale       = reinterpret_cast<ArrayVector3*>( OGRE_MALLOC_SIMD(
-                                                sizeof( ArrayVector3 ), MEMCATEGORY_SCENE_OBJECTS ) );
-        mDummyTransformPtrs.mDerivedTransform   = reinterpret_cast<Matrix4*>( OGRE_MALLOC_SIMD(
-                                                sizeof( Matrix4 ) * ARRAY_PACKED_REALS,
-                                                MEMCATEGORY_SCENE_OBJECTS ) );
+        mDummyTransformPtrs.mDerivedPosition = reinterpret_cast<ArrayVector3 *>(
+            OGRE_MALLOC_SIMD( sizeof( ArrayVector3 ), MEMCATEGORY_SCENE_OBJECTS ) );
+        mDummyTransformPtrs.mDerivedOrientation = reinterpret_cast<ArrayQuaternion *>(
+            OGRE_MALLOC_SIMD( sizeof( ArrayQuaternion ), MEMCATEGORY_SCENE_OBJECTS ) );
+        mDummyTransformPtrs.mDerivedScale = reinterpret_cast<ArrayVector3 *>(
+            OGRE_MALLOC_SIMD( sizeof( ArrayVector3 ), MEMCATEGORY_SCENE_OBJECTS ) );
+        mDummyTransformPtrs.mDerivedTransform = reinterpret_cast<Matrix4 *>(
+            OGRE_MALLOC_SIMD( sizeof( Matrix4 ) * ARRAY_PACKED_REALS, MEMCATEGORY_SCENE_OBJECTS ) );
 
         /*mDummyTransformPtrs.mDerivedTransform = reinterpret_cast<ArrayMatrix4*>( OGRE_MALLOC_SIMD(
                                                 sizeof( ArrayMatrix4 ), MEMCATEGORY_SCENE_OBJECTS ) );
@@ -65,10 +64,10 @@ namespace Ogre
         mDummyTransformPtrs.mInheritScale       = OGRE_MALLOC_SIMD( sizeof( bool ) * ARRAY_PACKED_REALS,
                                                                     MEMCATEGORY_SCENE_OBJECTS );*/
 
-        *mDummyTransformPtrs.mDerivedPosition       = ArrayVector3::ZERO;
-        *mDummyTransformPtrs.mDerivedOrientation    = ArrayQuaternion::IDENTITY;
-        *mDummyTransformPtrs.mDerivedScale          = ArrayVector3::UNIT_SCALE;
-        for( int i=0; i<ARRAY_PACKED_REALS; ++i )
+        *mDummyTransformPtrs.mDerivedPosition = ArrayVector3::ZERO;
+        *mDummyTransformPtrs.mDerivedOrientation = ArrayQuaternion::IDENTITY;
+        *mDummyTransformPtrs.mDerivedScale = ArrayVector3::UNIT_SCALE;
+        for( int i = 0; i < ARRAY_PACKED_REALS; ++i )
             mDummyTransformPtrs.mDerivedTransform[i] = Matrix4::IDENTITY;
 
         mDummyNode = new SceneNode( mDummyTransformPtrs );
@@ -77,9 +76,9 @@ namespace Ogre
     NodeMemoryManager::~NodeMemoryManager()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->destroy();
             ++itor;
@@ -105,7 +104,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void NodeMemoryManager::_setTwin( SceneMemoryMgrTypes memoryManagerType,
-                                        NodeMemoryManager *twinMemoryManager )
+                                      NodeMemoryManager *twinMemoryManager )
     {
         mMemoryManagerType = memoryManagerType;
         mTwinMemoryManager = twinMemoryManager;
@@ -113,13 +112,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void NodeMemoryManager::growToDepth( size_t newDepth )
     {
-        //TODO: (dark_sylinc) give a specialized hint for each depth
+        // TODO: (dark_sylinc) give a specialized hint for each depth
         while( newDepth >= mMemoryManagers.size() )
         {
-            mMemoryManagers.push_back( NodeArrayMemoryManager( mMemoryManagers.size(), 100,
-                                                                mDummyNode, 100,
-                                                                ArrayMemoryManager::MAX_MEMORY_SLOTS,
-                                                                this ) );
+            mMemoryManagers.push_back(
+                NodeArrayMemoryManager( (uint16)mMemoryManagers.size(), 100, mDummyNode, 100,
+                                        ArrayMemoryManager::MAX_MEMORY_SLOTS, this ) );
             mMemoryManagers.back().initialize();
         }
     }
@@ -128,7 +126,7 @@ namespace Ogre
     {
         growToDepth( depth );
 
-        NodeArrayMemoryManager& mgr = mMemoryManagers[depth];
+        NodeArrayMemoryManager &mgr = mMemoryManagers[depth];
         mgr.createNewNode( outTransform );
     }
     //-----------------------------------------------------------------------------------
@@ -172,24 +170,24 @@ namespace Ogre
         inOutTransform = tmp;
     }
     //-----------------------------------------------------------------------------------
-    void NodeMemoryManager::defragment(void)
+    void NodeMemoryManager::defragment()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->defragment();
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void NodeMemoryManager::shrinkToFit(void)
+    void NodeMemoryManager::shrinkToFit()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->shrinkToFit();
             ++itor;
@@ -197,7 +195,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void NodeMemoryManager::migrateTo( Transform &inOutTransform, size_t depth,
-                                        NodeMemoryManager *dstNodeMemoryManager )
+                                       NodeMemoryManager *dstNodeMemoryManager )
     {
         migrateTo( inOutTransform, depth, depth, dstNodeMemoryManager );
     }
@@ -205,7 +203,7 @@ namespace Ogre
     void NodeMemoryManager::migrateTo( Transform &inOutTransform, size_t oldDepth, size_t newDepth,
                                        NodeMemoryManager *dstNodeMemoryManager )
     {
-        assert( (newDepth == oldDepth || newDepth != 0) &&
+        assert( ( newDepth == oldDepth || newDepth != 0 ) &&
                 "When newDepth = 0, oldDepth must be 0 too!" );
 
         Transform tmp;
@@ -240,19 +238,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t NodeMemoryManager::getNumDepths() const
     {
-        size_t retVal = -1;
-        ArrayMemoryManagerVec::const_iterator begin= mMemoryManagers.begin();
+        size_t retVal = std::numeric_limits<size_t>::max();
+        ArrayMemoryManagerVec::const_iterator begin = mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::const_iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->getUsedMemory() )
-                retVal = itor - begin;
+                retVal = static_cast<size_t>( itor - begin );
             ++itor;
         }
 
-        return retVal + 1;
+        return retVal + 1u;
     }
     //-----------------------------------------------------------------------------------
     size_t NodeMemoryManager::getFirstNode( Transform &outTransform, size_t depth )
@@ -263,8 +261,8 @@ namespace Ogre
     void NodeMemoryManager::buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,
                                            ArrayMemoryManager::PtrdiffVec &outDiffsList )
     {
-        //We don't need to build the diff list as we've access to the Node through mOwner
-        //and access to the actual Node with the right pointers.
+        // We don't need to build the diff list as we've access to the Node through mOwner
+        // and access to the actual Node with the right pointers.
         /*Transform transform;
         const size_t numNodes = this->getFirstNode( transform, level );
 
@@ -288,13 +286,13 @@ namespace Ogre
         Transform transform;
         const size_t numNodes = this->getFirstNode( transform, level );
 
-        for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
+        for( size_t i = 0; i < numNodes; i += ARRAY_PACKED_REALS )
         {
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( transform.mOwner[j] )
                 {
-                    transform.mIndex = j;
+                    transform.mIndex = (uint8)j;
                     transform.mOwner[j]->_getTransform() = transform;
                     transform.mOwner[j]->_callMemoryChangeListeners();
                 }
@@ -305,8 +303,8 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     void NodeMemoryManager::performCleanup( uint16 level, const MemoryPoolVec &basePtrs,
-                                            size_t const *elementsMemSizes,
-                                            size_t startInstance, size_t diffInstances )
+                                            size_t const *elementsMemSizes, size_t startInstance,
+                                            size_t diffInstances )
     {
         Transform transform;
         const size_t numNodes = this->getFirstNode( transform, level );
@@ -315,13 +313,13 @@ namespace Ogre
 
         transform.advancePack( roundedStart );
 
-        for( size_t i=roundedStart * ARRAY_PACKED_REALS; i<numNodes; i += ARRAY_PACKED_REALS )
+        for( size_t i = roundedStart * ARRAY_PACKED_REALS; i < numNodes; i += ARRAY_PACKED_REALS )
         {
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( transform.mOwner[j] )
                 {
-                    transform.mIndex = j;
+                    transform.mIndex = (uint8)j;
                     transform.mOwner[j]->_getTransform() = transform;
                     transform.mOwner[j]->_callMemoryChangeListeners();
                 }
@@ -330,4 +328,4 @@ namespace Ogre
             transform.advancePack();
         }
     }
-}
+}  // namespace Ogre

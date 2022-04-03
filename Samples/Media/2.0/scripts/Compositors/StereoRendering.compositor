@@ -22,6 +22,8 @@ compositor_node StereoRenderingNode
 				depth	store
 				stencil	store
 			}
+
+			profiling_id "Clear both eyes"
 		}
 
 		//Eye render
@@ -41,6 +43,8 @@ compositor_node StereoRenderingNode
 				depth	store
 				stencil	store
 			}
+
+			profiling_id "Eye-specific pass"
 		}
 
 		//Render overlays last on the entire screen
@@ -55,6 +59,8 @@ compositor_node StereoRenderingNode
 			rq_last		255
 			
 			overlays	on
+
+			profiling_id "Overlays"
 		}
 	}
 }

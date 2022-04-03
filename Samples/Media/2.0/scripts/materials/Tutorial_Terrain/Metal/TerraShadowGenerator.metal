@@ -17,6 +17,8 @@ struct Params
 
 	//Rendering uniforms
 	float heightDelta;
+
+	uint resolutionShift;
 };
 
 struct PerGroupData
@@ -40,7 +42,7 @@ float2 calcShadow( int2 xyPos, float2 prevHeight,
 	prevHeight.x -= p.heightDelta;
 	prevHeight.y = prevHeight.y * 0.985 - p.heightDelta; //Used for the penumbra region
 
-	float currHeight = heightMap.read( uint2( xyPos ), 0 ).x;
+	float currHeight = heightMap.read( uint2( xyPos ) << p.resolutionShift, 0 ).x;
 
 	float shadowValue = smoothstep( prevHeight.y, prevHeight.x, currHeight + 0.001 );
 	prevHeight.x = currHeight >= prevHeight.x ? currHeight : prevHeight.x;

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -31,19 +31,20 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include "OgreNode.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
-    typedef vector<Bone*>::type BoneVec;
-    typedef map<SkeletonInstance*, BoneVec>::type BonesPerSkeletonInstance;
+namespace Ogre
+{
+    typedef vector<Bone *>::type                   BoneVec;
+    typedef map<SkeletonInstance *, BoneVec>::type BonesPerSkeletonInstance;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /** Class representing a node in the scene graph.
         @remarks
             A SceneNode is a type of Node which is used to organise objects in a scene.
@@ -56,19 +57,19 @@ namespace Ogre {
     class _OgreExport SceneNode : public Node
     {
     public:
-        typedef vector<MovableObject*>::type ObjectVec;
-        typedef VectorIterator<ObjectVec> ObjectIterator;
+        typedef vector<MovableObject *>::type  ObjectVec;
+        typedef VectorIterator<ObjectVec>      ObjectIterator;
         typedef ConstVectorIterator<ObjectVec> ConstObjectIterator;
 
     protected:
-        ObjectVec mAttachments;
-        BonesPerSkeletonInstance    mBoneChildren;
+        ObjectVec                mAttachments;
+        BonesPerSkeletonInstance mBoneChildren;
 
         /// SceneManager which created this node
-        SceneManager* mCreator;
+        SceneManager *mCreator;
 
         /** See Node. */
-        Node* createChildImpl( SceneMemoryMgrTypes sceneType );
+        Node *createChildImpl( SceneMemoryMgrTypes sceneType ) override;
 
         /// Whether to yaw around a fixed axis.
         bool mYawFixed;
@@ -79,58 +80,59 @@ namespace Ogre {
         @remarks Retrieves by object name, see alternate version to retrieve by index.
         Retrieving by name forces a linear search O(N), prefer using the index, which is O(1)
         */
-        ObjectVec::iterator getAttachedObjectIt( const String& name );
-        ObjectVec::const_iterator getAttachedObjectIt( const String& name ) const;
+        ObjectVec::iterator       getAttachedObjectIt( const String &name );
+        ObjectVec::const_iterator getAttachedObjectIt( const String &name ) const;
+
     public:
         /** Constructor, only to be called by the creator SceneManager. */
-        SceneNode( IdType id, SceneManager* creator, NodeMemoryManager *nodeMemoryManager,
-                    SceneNode *parent );
+        SceneNode( IdType id, SceneManager *creator, NodeMemoryManager *nodeMemoryManager,
+                   SceneNode *parent );
 
         /** Don't use this constructor unless you know what you're doing.
             @See NodeMemoryManager::mDummyNode
         */
         SceneNode( const Transform &transformPtrs );
 
-        virtual ~SceneNode();
+        ~SceneNode() override;
 
         /// @copydoc Node::setStatic
-        virtual bool setStatic( bool bStatic );
+        bool setStatic( bool bStatic ) override;
 
         /// @copydoc Node::_notifyStaticDirty
-        virtual void _notifyStaticDirty(void) const;
+        void _notifyStaticDirty() const override;
 
         /** Adds an instance of a scene object to this node.
         @remarks
-            Scene objects can include Entity objects, Camera objects, Light objects, 
+            Scene objects can include Entity objects, Camera objects, Light objects,
             ParticleSystem objects etc. Anything that subclasses from MovableObject.
         */
-        virtual_l2 void attachObject(MovableObject* obj);
+        virtual_l2 void attachObject( MovableObject *obj );
 
         /** Reports the number of objects attached to this node.
-        */
-        size_t numAttachedObjects(void) const                       { return mAttachments.size(); }
+         */
+        size_t numAttachedObjects() const { return mAttachments.size(); }
 
         /** Retrieves a pointer to an attached object.
         @remarks Retrieves by index, see alternate version to retrieve by name. The index
         of an object may change as other objects are added / removed.
         */
-        MovableObject* getAttachedObject( size_t index )            { return mAttachments[index]; }
+        MovableObject *getAttachedObject( size_t index ) { return mAttachments[index]; }
 
         /** Retrieves a pointer to an attached object.
         @remarks Retrieves by object name, see alternate version to retrieve by index.
         Retrieving by name forces a linear search O(N), prefer using the index, which is O(1)
         */
-        MovableObject* getAttachedObject( const String& name );
+        MovableObject *getAttachedObject( const String &name );
 
         /** Detaches an object by pointer.
         @remarks
             It's fast, takes only O(1)
         */
-        virtual_l2 void detachObject(MovableObject* obj);
+        virtual_l2 void detachObject( MovableObject *obj );
 
         /** Detaches all objects attached to this node.
-        */
-        virtual void detachAllObjects(void);
+         */
+        virtual void detachAllObjects();
 
         /// Attaches a bone to this SceneNode. Don't use directly.
         /// @see SkeletonInstance::setSceneNodeAsParentOfBone
@@ -145,12 +147,12 @@ namespace Ogre {
         virtual_l1 void _detachAllBones( SkeletonInstance *skeletonInstance );
 
         /// Detaches all bones from from this SceneNode. It is safe to use directly.
-        virtual void detachAllBones(void);
+        virtual void detachAllBones();
 
         /// @copydoc Node::_callMemoryChangeListeners
-        virtual void _callMemoryChangeListeners(void);
+        void _callMemoryChangeListeners() override;
 
-        /** Retrieves an iterator which can be used to efficiently step through the objects 
+        /** Retrieves an iterator which can be used to efficiently step through the objects
             attached to this node.
         @remarks
             This is a much faster way to go through <B>all</B> the objects attached to the node
@@ -160,8 +162,8 @@ namespace Ogre {
             until the end, or retrieve a new iterator after making the change. Making changes to
             the object returned through the iterator is OK though.
         */
-        virtual ObjectIterator getAttachedObjectIterator(void);
-        /** Retrieves an iterator which can be used to efficiently step through the objects 
+        virtual ObjectIterator getAttachedObjectIterator();
+        /** Retrieves an iterator which can be used to efficiently step through the objects
             attached to this node.
         @remarks
             This is a much faster way to go through <B>all</B> the objects attached to the node
@@ -171,22 +173,22 @@ namespace Ogre {
             until the end, or retrieve a new iterator after making the change. Making changes to
             the object returned through the iterator is OK though.
         */
-        virtual ConstObjectIterator getAttachedObjectIterator(void) const;
+        virtual ConstObjectIterator getAttachedObjectIterator() const;
 
-        /** Gets the creator of this scene node. 
+        /** Gets the creator of this scene node.
         @remarks
             This method returns the SceneManager which created this node.
             This can be useful for destroying this node.
         */
-        SceneManager* getCreator(void) const { return mCreator; }
+        SceneManager *getCreator() const { return mCreator; }
 
         /** This method removes and destroys the child and all of its children.
         @remarks
             Unlike removeChild, which removes a single child from this
             node but does not destroy it, this method destroys the child
-            and all of it's children. 
+            and all of it's children.
         @par
-            Use this if you wish to recursively destroy a node as well as 
+            Use this if you wish to recursively destroy a node as well as
             detaching it from it's parent. Note that any objects attached to
             the nodes will be detached but will not themselves be destroyed.
         @param
@@ -200,7 +202,7 @@ namespace Ogre {
             them from the scene graph. Note that all objects attached to this
             node will be detached but will not be destroyed.
         */
-        virtual void removeAndDestroyAllChildren(void);
+        virtual void removeAndDestroyAllChildren();
 
         /** Creates an unnamed new SceneNode as a child of this node.
         @param
@@ -208,18 +210,17 @@ namespace Ogre {
         @param
             rotate Initial rotation relative to parent
         */
-        virtual SceneNode* createChildSceneNode(
-                SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC,
-                const Vector3& translate = Vector3::ZERO, 
-                const Quaternion& rotate = Quaternion::IDENTITY );
+        virtual SceneNode *createChildSceneNode( SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC,
+                                                 const Vector3      &translate = Vector3::ZERO,
+                                                 const Quaternion   &rotate = Quaternion::IDENTITY );
 
-        virtual void setListener( Listener* listener );
+        void setListener( Listener *listener ) override;
 
         /** Tells the node whether to yaw around it's own local Y axis or a fixed axis of choice.
         @remarks
         This method allows you to change the yaw behaviour of the node - by default, it
         yaws around it's own local Y axis when told to yaw with TS_LOCAL, this makes it
-        yaw around a fixed axis. 
+        yaw around a fixed axis.
         You only really need this when you're using auto tracking (see setAutoTracking,
         because when you're manually rotating a node you can specify the TransformSpace
         in which you wish to work anyway.
@@ -229,56 +230,55 @@ namespace Ogre {
         @param
         fixedAxis The axis to use if the first parameter is true.
         */
-        void setFixedYawAxis( bool useFixed, const Vector3& fixedAxis = Vector3::UNIT_Y );
+        void setFixedYawAxis( bool useFixed, const Vector3 &fixedAxis = Vector3::UNIT_Y );
 
-        bool isYawFixed(void) const                                     { return mYawFixed; }
+        bool isYawFixed() const { return mYawFixed; }
 
         /** Rotate the node around the Y-axis.
-        */
-        void yaw(const Radian& angle, TransformSpace relativeTo = TS_LOCAL);
+         */
+        void yaw( const Radian &angle, TransformSpace relativeTo = TS_LOCAL );
         /** Sets the node's direction vector ie it's local -z.
         @remarks
-        Note that the 'up' vector for the orientation will automatically be 
-        recalculated based on the current 'up' vector (i.e. the roll will 
+        Note that the 'up' vector for the orientation will automatically be
+        recalculated based on the current 'up' vector (i.e. the roll will
         remain the same). If you need more control, use setOrientation.
         @param x,y,z The components of the direction vector
         @param relativeTo The space in which this direction vector is expressed
         @param localDirectionVector The vector which normally describes the natural
         direction of the node, usually -Z
         */
-        virtual void setDirection(Real x, Real y, Real z, 
-            TransformSpace relativeTo = TS_LOCAL, 
-            const Vector3& localDirectionVector = Vector3::NEGATIVE_UNIT_Z);
+        virtual void setDirection( Real x, Real y, Real z, TransformSpace relativeTo = TS_LOCAL,
+                                   const Vector3 &localDirectionVector = Vector3::NEGATIVE_UNIT_Z );
 
         /** Sets the node's direction vector ie it's local -z.
         @remarks
-        Note that the 'up' vector for the orientation will automatically be 
-        recalculated based on the current 'up' vector (i.e. the roll will 
+        Note that the 'up' vector for the orientation will automatically be
+        recalculated based on the current 'up' vector (i.e. the roll will
         remain the same). If you need more control, use setOrientation.
         @param vec The direction vector
         @param relativeTo The space in which this direction vector is expressed
         @param localDirectionVector The vector which normally describes the natural
         direction of the node, usually -Z
         */
-        virtual void setDirection(const Vector3& vec, TransformSpace relativeTo = TS_LOCAL, 
-            const Vector3& localDirectionVector = Vector3::NEGATIVE_UNIT_Z);
+        virtual void setDirection( const Vector3 &vec, TransformSpace relativeTo = TS_LOCAL,
+                                   const Vector3 &localDirectionVector = Vector3::NEGATIVE_UNIT_Z );
         /** Points the local -Z direction of this node at a point in space.
         @param targetPoint A vector specifying the look at point.
         @param relativeTo The space in which the point resides
         @param localDirectionVector The vector which normally describes the natural
         direction of the node, usually -Z
         */
-        virtual void lookAt( const Vector3& targetPoint, TransformSpace relativeTo,
-            const Vector3& localDirectionVector = Vector3::NEGATIVE_UNIT_Z);
+        virtual void lookAt( const Vector3 &targetPoint, TransformSpace relativeTo,
+                             const Vector3 &localDirectionVector = Vector3::NEGATIVE_UNIT_Z );
         /** Enables / disables automatic tracking of another SceneNode.
         @remarks
         If you enable auto-tracking, this SceneNode will automatically rotate to
-        point it's -Z at the target SceneNode every frame, no matter how 
-        it or the other SceneNode move. Note that by default the -Z points at the 
-        origin of the target SceneNode, if you want to tweak this, provide a 
+        point it's -Z at the target SceneNode every frame, no matter how
+        it or the other SceneNode move. Note that by default the -Z points at the
+        origin of the target SceneNode, if you want to tweak this, provide a
         vector in the 'offset' parameter and the target point will be adjusted.
-        @param enabled If true, tracking will be enabled and the next 
-        parameter cannot be null. If false tracking will be disabled and the 
+        @param enabled If true, tracking will be enabled and the next
+        parameter cannot be null. If false tracking will be disabled and the
         current orientation will be maintained.
         @param target Pointer to the SceneNode to track. Make sure you don't
         delete this SceneNode before turning off tracking (e.g. SceneManager::clearScene will
@@ -288,44 +288,43 @@ namespace Ogre {
         @param offset If supplied, this is the target point in local space of the target node
         instead of the origin of the target node. Good for fine tuning the look at point.
         */
-        virtual void setAutoTracking(bool enabled, SceneNode* const target = 0, 
-            const Vector3& localDirectionVector = Vector3::NEGATIVE_UNIT_Z,
-            const Vector3& offset = Vector3::ZERO);
+        virtual void setAutoTracking( bool enabled, SceneNode *const target = 0,
+                                      const Vector3 &localDirectionVector = Vector3::NEGATIVE_UNIT_Z,
+                                      const Vector3 &offset = Vector3::ZERO );
 
         /** Gets the parent of this SceneNode. */
-        SceneNode* getParentSceneNode(void) const;
+        SceneNode *getParentSceneNode() const;
         /** Makes all objects attached to this node become visible / invisible.
-        @remarks    
+        @remarks
             This is a shortcut to calling setVisible() on the objects attached
             to this node, and optionally to all objects attached to child
-            nodes. 
+            nodes.
         @param visible Whether the objects are to be made visible or invisible
         @param cascade If true, this setting cascades into child nodes too.
         */
-        virtual void setVisible(bool visible, bool cascade = true);
+        virtual void setVisible( bool visible, bool cascade = true );
         /** Inverts the visibility of all objects attached to this node.
-        @remarks    
+        @remarks
         This is a shortcut to calling setVisible(!isVisible()) on the objects attached
         to this node, and optionally to all objects attached to child
-        nodes. 
+        nodes.
         @param cascade If true, this setting cascades into child nodes too.
         */
-        virtual void flipVisibility(bool cascade = true);
+        virtual void flipVisibility( bool cascade = true );
 
         /// As Node::getDebugRenderable, except scaling is automatically determined
-        //virtual DebugRenderable* getDebugRenderable();
+        // virtual DebugRenderable* getDebugRenderable();
 
-        virtual NodeMemoryManager* getDefaultNodeMemoryManager( SceneMemoryMgrTypes sceneType );
+        NodeMemoryManager *getDefaultNodeMemoryManager( SceneMemoryMgrTypes sceneType ) override;
 
 #if OGRE_DEBUG_MODE
-        virtual void _setCachedTransformOutOfDate(void);
+        void _setCachedTransformOutOfDate() override;
 #endif
     };
     /** @} */
     /** @} */
 
-
-}// namespace
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

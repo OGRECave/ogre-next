@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -42,7 +42,7 @@ namespace Volume {
 
     //-----------------------------------------------------------------------
     
-    unsigned long SimplexNoise::random(void)
+    unsigned long SimplexNoise::random()
     {
         // Simple XORShift random number generator like in http://www.jstatsoft.org/v08/i14/paper
         mSeed ^= mSeed << 13;
@@ -70,7 +70,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
     
-    SimplexNoise::SimplexNoise(void)
+    SimplexNoise::SimplexNoise()
     {
         init((unsigned long)time(0));
     }
@@ -232,7 +232,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
     
-    long SimplexNoise::getSeed(void) const
+    long SimplexNoise::getSeed() const
     {
         return mSeed;
     }

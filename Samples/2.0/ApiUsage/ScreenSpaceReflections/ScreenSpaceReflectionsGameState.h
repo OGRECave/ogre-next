@@ -9,7 +9,19 @@
 
 #include "SdlEmulationLayer.h"
 #if OGRE_USE_SDL2
-    #include "SDL_keyboard.h"
+#    if defined( __clang__ )
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wimplicit-fallthrough"
+#    elif defined( __GNUC__ )
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#    endif
+#    include "SDL_keyboard.h"
+#    if defined( __clang__ )
+#        pragma clang diagnostic pop
+#    elif defined( __GNUC__ )
+#        pragma GCC diagnostic pop
+#    endif
 #endif
 
 namespace Ogre
@@ -21,21 +33,21 @@ namespace Demo
 {
     class ScreenSpaceReflectionsGameState : public TutorialGameState
     {
-        ScreenSpaceReflections  *mScreenSpaceReflections;
-        Ogre::HlmsPbsDatablock  *mMaterials[4];
+        ScreenSpaceReflections *mScreenSpaceReflections;
+        Ogre::HlmsPbsDatablock *mMaterials[4];
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         ScreenSpaceReflectionsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif
