@@ -38,6 +38,6 @@ but will be turned on by default in OgreNext 2.5**
 
 **The CMake option is scheduled for removal in OgreNext 2.6**
 
-`EmptyProject`'s scripts have been updated to autodetect which name is being used and select between Ogre and OgreNext and CMake config time.
+`EmptyProject`'s and Android's scripts have been updated to autodetect which name is being used and select between Ogre and OgreNext and CMake config time.
 
-Make sure to upgrade to latest EmptyProject's scripts if you're using them; to be ready for all changes.
+Make sure to upgrade to latest CMake scripts if you're using them; to be ready for all changes.
