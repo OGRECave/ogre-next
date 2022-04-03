@@ -88,7 +88,11 @@ https://www.ogre3d.org/download/sdk/sdk-ogre-next
 @addtogroup DownloadingOgreCommon
 @ingroup MdInternal
 @{
-Most dependencies are conveniently stored in its own repository called "ogredeps" for you to download.
+Ogre Next source is located at [Github/OGRECave/ogre-next](https://github.com/OGRECave/ogre-next)
+
+Ogre Next dependencies are located at [Github/OGRECave/ogre-next-deps](https://github.com/OGRECave/ogre-next-deps)
+
+Download the source code or you can fork it to your own repository and clone it locally with [Github Desktop](https://desktop.github.com/) or the command line.
 
 **IMPORTANT:** Do NOT use the the "Download" feature from Github. It will not follow subrepositories.
 

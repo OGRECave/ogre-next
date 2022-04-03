@@ -1,6 +1,6 @@
 # Manual {#manual}
 
-This manual is aimed at making the transition to Ogre 2.0 as less
+This manual is aimed at making the transition to Ogre 2.3 as less
 painful and traumatic as possible.
 
 - @subpage Samples

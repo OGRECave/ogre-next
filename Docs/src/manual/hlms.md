@@ -40,7 +40,7 @@ thus it is now properly supported. As a result:
 
 ## A lot of data is stored in "Blocks" {#HlmsChangesBlocks}
 
-Described in detail in the [Blocks section](#9.3.Blocks|outline), many
+Described in detail in the [Blocks section](#HlmsBlocks), many
 parameters have been grouped into blocks. Changing depth checks means
 changing the whole Macroblock.
 
@@ -187,7 +187,15 @@ Technically on OpenGL render systems (GL3+, GLES2) you could `const_cast`
 the pointers, change the block's parameters (mind you, the pointer is
 shared by other datablocks, so you will be changing them as well as side
 effect) and it would probably work. But it will definitely fail on D3D11
-render system.
+render system.  
+
+Refer to the following pages for parameter references:
+- @subpage hlmsblendblockref
+- @subpage hlmspbsdatablockref
+- @subpage hlmsunlitdatablockref
+- @subpage hlmsterradatablockref
+- @subpage hlmsmacroblockref
+- @subpage hlmssamplerref
 
 ## Datablocks {#HlmsBlocksDatablocks}
 
