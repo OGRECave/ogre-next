@@ -168,7 +168,7 @@ Viewports and Scissor tests</h2>
 </ul>
 <h2><a class="anchor" id="HlmsChangesBlocks"></a>
 A lot of data is stored in "Blocks"</h2>
-<p >Described in detail in the 9.3.Blocks|outline "Blocks section", many parameters have been grouped into blocks. Changing depth checks means changing the whole Macroblock.</p>
+<p >Described in detail in the <a class="el" href="hlms.html#HlmsBlocks">Blocks section</a>, many parameters have been grouped into blocks. Changing depth checks means changing the whole Macroblock.</p>
 <p >You could be thinking the reason I came up with these two is to fit with D3D11′s grand scheme of things while being compatible with OpenGL. But that's a half truth and an awesome side effect. I've been developing the Hlms using OpenGL this whole time.</p>
 <p >An OpenGL fan will tell you that grouping these together in single call like D3D11 did barely reduces API overhead in practice (as long as you keep sorting by state), and they're right about that.</p>
 <p >However, there are big advantages for using blocks:</p>
@@ -207,7 +207,16 @@ The three components</h1>
    <h1><a class="anchor" id="HlmsBlocks"></a>
 Blocks</h1>
 <p >We're introducing the concept of blocks, most of them are immutable. Being immutable means you can't change the Macro- Blend- &amp; Samplerblocks after being created. If you want to make a change, you have to create a new block and assign the new one. The previous one won't be destroyed until asked explicitly.</p>
-<p >Technically on OpenGL render systems (GL3+, GLES2) you could <code>const_cast</code> the pointers, change the block's parameters (mind you, the pointer is shared by other datablocks, so you will be changing them as well as side effect) and it would probably work. But it will definitely fail on D3D11 render system.</p>
+<p >Technically on OpenGL render systems (GL3+, GLES2) you could <code>const_cast</code> the pointers, change the block's parameters (mind you, the pointer is shared by other datablocks, so you will be changing them as well as side effect) and it would probably work. But it will definitely fail on D3D11 render system. <br  />
+</p>
+<p >Refer to the following pages for parameter references:</p><ul>
+<li><a class="el" href="hlmsblendblockref.html">Reference Guide: HLMS Blendblock</a></li>
+<li><a class="el" href="hlmspbsdatablockref.html">Reference Guide: HLMS PBS Datablock</a></li>
+<li><a class="el" href="hlmsunlitdatablockref.html">Reference Guide: HLMS Unlit Datablock</a></li>
+<li><a class="el" href="hlmsterradatablockref.html">Reference Guide: HLMS Terra Datablock</a></li>
+<li><a class="el" href="hlmsmacroblockref.html">Reference Guide: HLMS Macroblock</a></li>
+<li><a class="el" href="hlmssamplerref.html">Reference Guide: HLMS Samplerblock</a></li>
+</ul>
 <h2><a class="anchor" id="HlmsBlocksDatablocks"></a>
 Datablocks</h2>
 <p >A Datablock is a "material" from the user's perspective. It is the only mutable block. It holds data (i.e. material properties) that will be passed directly to the shaders, and also holds which Macroblock, Blendblocks and Samplerblocks are assigned to it.</p>

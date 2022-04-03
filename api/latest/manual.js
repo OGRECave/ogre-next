@@ -202,67 +202,7 @@ var manual =
       [ "Thread safety of SceneNodes", "threading.html#ThreadSafetySceneNodes", null ]
     ] ],
     [ "Performance Hints", "performance.html", null ],
-    [ "HLMS: High Level Material System", "hlms.html", [
-      [ "Fundamental changes", "hlms.html#HlmsChanges", [
-        [ "Viewports and Scissor tests", "hlms.html#HlmsChangesViewports", null ],
-        [ "A lot of data is stored in \"Blocks\"", "hlms.html#HlmsChangesBlocks", null ],
-        [ "Materials are still alive", "hlms.html#HlmsChangesMaterialsAlive", null ],
-        [ "Fixed Function has been removed", "hlms.html#HlmsChangesFFP", null ]
-      ] ],
-      [ "The three components", "hlms.html#HlmsComponents", null ],
-      [ "Blocks", "hlms.html#HlmsBlocks", [
-        [ "Datablocks", "hlms.html#HlmsBlocksDatablocks", null ],
-        [ "Macroblocks", "hlms.html#HlmsBlocksMacroblocks", null ],
-        [ "Blendblocks", "hlms.html#HlmsBlocksBlendblocks", null ],
-        [ "Samplerblocks", "hlms.html#HlmsBlocksSampleblocks", null ]
-      ] ],
-      [ "Hlms templates", "hlms.html#HlmsTemplates", null ],
-      [ "The Hlms preprocessor", "hlms.html#HlmsPreprocessor", [
-        [ "Preprocessor syntax", "hlms.html#HlmsPreprocessorSyntax", [
-          [ "@property( expression )", "hlms.html#HlmsPreprocessorSyntaxProperty", null ],
-          [ "@foreach( count, scopedVar, [start] )", "hlms.html#HlmsPreprocessorSyntaxForeach", null ],
-          [ "@counter( variable )", "hlms.html#HlmsPreprocessorSyntaxCounter", null ],
-          [ "@value( variable )", "hlms.html#HlmsPreprocessorSyntaxValue", null ],
-          [ "@set add sub mul div mod min max", "hlms.html#HlmsPreprocessorSyntaxSetEtc", null ],
-          [ "@piece( nameOfPiece )", "hlms.html#HlmsPreprocessorSyntaxPiece", null ],
-          [ "@insertpiece( nameOfPiece )", "hlms.html#HlmsPreprocessorSyntaxInsertpiece", null ],
-          [ "@undefpiece( nameOfPiece )", "hlms.html#HlmsPreprocessorSyntaxUndefpiece", null ],
-          [ "@pset padd psub pmul pdiv pmod pmin pmax", "hlms.html#HlmsPreprocessorSyntaxPsetEtc", null ]
-        ] ]
-      ] ],
-      [ "Creation of shaders", "hlms.html#HlmsCreationOfShaders", [
-        [ "C++ interaction with shader templates", "hlms.html#HlmsCreationOfShadersCpp", null ],
-        [ "Common conventions", "hlms.html#HlmsCreationOfShadersConventions", null ],
-        [ "Hot reloading", "hlms.html#HlmsCreationOfShadersHotReloading", null ],
-        [ "Disabling a stage", "hlms.html#HlmsCreationOfShadersDisablingStage", null ],
-        [ "Customizing an existing implementation", "hlms.html#HlmsCreationOfShadersCustomizing", null ]
-      ] ],
-      [ "Run-time rendering", "hlms.html#HlmsRuntimeRendering", [
-        [ "preparePassHash", "hlms.html#HlmsRuntimeRenderingPreparePassHash", null ],
-        [ "fillBuffersFor", "hlms.html#HlmsRuntimeRenderingFillBuffersFor", null ]
-      ] ],
-      [ "Using the HLMS implementations", "hlms.html#UsingHlmsImplementation", [
-        [ "Initialization", "hlms.html#UsingHlmsImplementationInitialization", null ],
-        [ "Deinitialization", "hlms.html#UsingHlmsImplementationDeinitilization", null ],
-        [ "Creating a datablock", "hlms.html#UsingHlmsImplementationCreatingDatablock", null ]
-      ] ],
-      [ "The Hlms Texture Manager", "hlms.html#HlmsTextureManager", [
-        [ "Automatic batching", "hlms.html#HlmsTextureManagerAutomaticBatching", [
-          [ "Texture types", "hlms.html#HlmsTextureManagerAutomaticBatchingTextureTypes", null ],
-          [ "Automatic parameters", "hlms.html#HlmsTextureManagerAutomaticBatchingAutoParams", null ],
-          [ "Loading a texture twice (i.e. with a different format) via aliasing", "hlms.html#HlmsTextureManagerAutomaticBatchingLoadingTwice", null ]
-        ] ],
-        [ "Manual: Texture packs", "hlms.html#HlmsTextureManagerTexturePacks", null ],
-        [ "Watching out for memory consumption", "hlms.html#HlmsTextureManagerWatchOutMemory", [
-          [ "Additional memory considerations", "hlms.html#HlmsTextureManagerWatchOutMemoryConsiderations", null ],
-          [ "setWorkerThreadMinimumBudget warning", "hlms.html#setWorkerThreadMinimumBudget", null ]
-        ] ]
-      ] ],
-      [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
-        [ "My shadows don't show up or are very glitchy", "hlms.html#HlmsTroubleshootingShadow", null ]
-      ] ],
-      [ "Precision / Quality", "hlms.html#autotoc_md21", null ]
-    ] ],
+    [ "HLMS: High Level Material System", "hlms.html", "hlms" ],
     [ "AZDO changes (Aproaching Zero Driver Overhead)", "azdo.html", [
       [ "V2 and v1 objects", "azdo.html#V2AndV1Objects", [
         [ "Longevity of the v1 objects and deprecation", "azdo.html#V2AndV1ObjectsV1Longevity", null ]
