@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,20 +29,20 @@ THE SOFTWARE.
 #ifndef __ShadowCameraSetupFocused_H__
 #define __ShadowCameraSetupFocused_H__
 
-#include "OgrePrerequisites.h"
 #include "OgreShadowCameraSetup.h"
 
-#include "OgreHeaderPrefix.h"
 #include "OgreAxisAlignedBox.h"
 
-namespace Ogre {
+#include "OgreHeaderPrefix.h"
 
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /** Implements the uniform shadow mapping algorithm in focused mode.
     @remarks
         Differs from the default shadow mapping projection in that it focuses the
@@ -61,19 +61,19 @@ namespace Ogre {
         @remarks
             Temporary frustum and camera set up here.
         */
-        FocusedShadowCameraSetup(void);
+        FocusedShadowCameraSetup();
 
         /** Default destructor.
         @remarks
             Temporary frustum and camera destroyed here.
         */
-        virtual ~FocusedShadowCameraSetup(void);
+        ~FocusedShadowCameraSetup() override;
 
         /** Returns a uniform shadow camera with a focused view.
-        */
-        virtual void getShadowCamera( const SceneManager *sm, const Camera *cam,
-                                      const Light *light, Camera *texCam, size_t iteration,
-                                      const Vector2 &viewportRealSize ) const;
+         */
+        void getShadowCamera( const SceneManager *sm, const Camera *cam, const Light *light,
+                              Camera *texCam, size_t iteration,
+                              const Vector2 &viewportRealSize ) const override;
 
         /**
         @brief setXYPadding
@@ -99,8 +99,8 @@ namespace Ogre {
     /** @} */
     /** @} */
 
-} // namespace Ogre
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
-#endif // __ShadowCameraSetupFocused_H__
+#endif  // __ShadowCameraSetupFocused_H__

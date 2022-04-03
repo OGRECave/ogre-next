@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreNULLStagingTexture_H_
 
 #include "OgreNULLPrerequisites.h"
+
 #include "OgreStagingTextureBufferImpl.h"
 
 #include "OgreHeaderPrefix.h"
@@ -38,18 +39,19 @@ namespace Ogre
 {
     class _OgreNULLExport NULLStagingTexture : public StagingTextureBufferImpl
     {
-        uint8   *mDynamicBuffer;
-        void    *mMappedPtr;
-        void    *mLastMappedPtr;
+        uint8 *mDynamicBuffer;
+        void  *mMappedPtr;
+        void  *mLastMappedPtr;
 
-        virtual bool belongsToUs( const TextureBox &box );
-        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr(void);
+        bool belongsToUs( const TextureBox &box ) override;
+
+        void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
     public:
         NULLStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t size );
-        virtual ~NULLStagingTexture();
+        ~NULLStagingTexture() override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

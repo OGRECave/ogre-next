@@ -8,8 +8,8 @@ namespace Demo
     public:
         static void init( Ogre::uint8 fsaa );
 
-        static void setSkyColour( const Ogre::ColourValue &colour,
-                                  float multiplier, Ogre::CompositorWorkspace *workspace );
+        static void setSkyColour( const Ogre::ColourValue &colour, float multiplier,
+                                  Ogre::CompositorWorkspace *workspace );
 
         /** Modifies the HDR Materials for the new exposure parameters
             By default the HDR implementation will try to auto adjust the
@@ -61,4 +61,4 @@ namespace Demo
         */
         static void setBloomThreshold( float minThreshold, float fullColourThreshold );
     };
-}
+}  // namespace Demo

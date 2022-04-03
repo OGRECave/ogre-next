@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,21 +26,22 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreRoot.h"
 #include "OgreGLES2Plugin.h"
+#include "OgreRoot.h"
 
-namespace Ogre {
-    static GLES2Plugin* plugin;
+namespace Ogre
+{
+    static GLES2Plugin *plugin;
 
-    extern "C" void _OgreGLES2Export dllStartPlugin(void) throw()
+    extern "C" void _OgreGLES2Export dllStartPlugin( void ) throw()
     {
         plugin = OGRE_NEW GLES2Plugin();
-        Root::getSingleton().installPlugin(plugin);
+        Root::getSingleton().installPlugin( plugin );
     }
 
-    extern "C" void _OgreGLES2Export dllStopPlugin(void)
+    extern "C" void _OgreGLES2Export dllStopPlugin( void )
     {
-        Root::getSingleton().uninstallPlugin(plugin);
+        Root::getSingleton().uninstallPlugin( plugin );
         OGRE_DELETE plugin;
     }
-}
+}  // namespace Ogre

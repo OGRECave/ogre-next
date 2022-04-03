@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -402,7 +402,7 @@ namespace Ogre
 
             String matName = "Ogre/G2D/Debug";
             MaterialPtr mat = MaterialManager::getSingleton().getByName(matName);
-            if (mat.isNull())
+            if (!mat)
             {
                 mat = MaterialManager::getSingleton().create(matName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
                 Pass* pass = mat->getTechnique(0)->getPass(0);

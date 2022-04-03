@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,20 +30,20 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgrePlane.h"
-#include "OgreMovableObject.h"
 #include "OgreAxisAlignedBox.h"
+#include "OgreMovableObject.h"
+#include "OgrePlane.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /** Definition of a Plane that may be attached to a node, and the derived
         details of it retrieved simply.
     @remarks
@@ -55,37 +55,38 @@ namespace Ogre {
     class _OgreExport MovablePlane : public Plane, public MovableObject
     {
     protected:
-        mutable Plane mDerivedPlane;
-        mutable Vector3 mLastTranslate;
+        mutable Plane      mDerivedPlane;
+        mutable Vector3    mLastTranslate;
         mutable Quaternion mLastRotate;
-        AxisAlignedBox mNullBB;
-        mutable bool mDirty;
-        static String msMovableType;
-    public:
+        AxisAlignedBox     mNullBB;
+        mutable bool       mDirty;
+        static String      msMovableType;
 
+    public:
         MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-                      const Plane& rhs );
+                      const Plane &rhs );
         /** Construct a plane through a normal, and a distance to move the plane along the normal.*/
         MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-                      const Vector3& rkNormal, Real fConstant );
+                      const Vector3 &rkNormal, Real fConstant );
         MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-                      const Vector3& rkNormal, const Vector3& rkPoint );
+                      const Vector3 &rkNormal, const Vector3 &rkPoint );
         MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-                      const Vector3& rkPoint0, const Vector3& rkPoint1, const Vector3& rkPoint2 );
-        ~MovablePlane() {}
+                      const Vector3 &rkPoint0, const Vector3 &rkPoint1, const Vector3 &rkPoint2 );
+
+        ~MovablePlane() override {}
         /// Overridden from MovableObject
-        const AxisAlignedBox& getBoundingBox(void) const { return mNullBB; }
+        const AxisAlignedBox &getBoundingBox() const { return mNullBB; }
         /// Overridden from MovableObject
-        void _updateRenderQueue(RenderQueue*, Camera *camera, const Camera *lodCamera) { /* do nothing */}
+        void _updateRenderQueue( RenderQueue *, Camera *, const Camera * ) override {}
         /// Overridden from MovableObject
-        const String& getMovableType(void) const;
-        /// Get the derived plane as transformed by its parent node. 
-        const Plane& _getDerivedPlane(void) const;
+        const String &getMovableType() const override;
+        /// Get the derived plane as transformed by its parent node.
+        const Plane &_getDerivedPlane() const;
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

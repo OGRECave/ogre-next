@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,42 +30,44 @@ THE SOFTWARE.
 #define _OgreMetalAsyncTextureTicket_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreAsyncTextureTicket.h"
+
 #include "OgreTextureBox.h"
+
 #include <dispatch/dispatch.h>
 
 namespace Ogre
 {
     /** See AsyncTextureTicket
-    */
-    class _OgreMetalExport MetalAsyncTextureTicket : public AsyncTextureTicket
+     */
+    class _OgreMetalExport MetalAsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
-        id<MTLBuffer>   mVboName;
+        id<MTLBuffer> mVboName;
 
-        uint32                  mDownloadFrame;
-        dispatch_semaphore_t    mAccurateFence;
-        MetalVaoManager         *mVaoManager;
-        MetalDevice             *mDevice;
+        uint32               mDownloadFrame;
+        dispatch_semaphore_t mAccurateFence;
+        MetalVaoManager     *mVaoManager;
+        MetalDevice         *mDevice;
 
-        virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl(void);
+        TextureBox mapImpl( uint32 slice ) override;
+        void       unmapImpl() override;
 
-        void waitForDownloadToFinish(void);
+        void waitForDownloadToFinish();
 
-        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
-                                      bool accurateTracking, TextureBox *srcBox=0 );
+        void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                              TextureBox *srcBox = 0 ) override;
 
     public:
         MetalAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                  TextureTypes::TextureTypes textureType,
-                                 PixelFormatGpu pixelFormatFamily,
-                                 MetalVaoManager *vaoManager,
+                                 PixelFormatGpu pixelFormatFamily, MetalVaoManager *vaoManager,
                                  MetalDevice *device );
-        virtual ~MetalAsyncTextureTicket();
+        ~MetalAsyncTextureTicket() override;
 
-        virtual bool queryIsTransferDone(void);
+        bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

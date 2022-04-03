@@ -1,0 +1,25 @@
+// Translates a 3D textures by an UVW offset
+// Matias N. Goldberg Copyright (c) 2021-present
+
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+
+// These defines are ignored since they're not part of any piece,
+// but they make syntax highlighters happy
+#define p_startOffset uint3( 0u, 0u, 0u )
+#define p_pixelsToClear uint3( 1u, 1u, 1u )
+
+//in uvec3 gl_GlobalInvocationID;
+
+//@piece( BodyCS )
+	if( gl_GlobalInvocationID.x < p_pixelsToClear.x &&  //
+		gl_GlobalInvocationID.y < p_pixelsToClear.y &&  //
+		gl_GlobalInvocationID.z < p_pixelsToClear.z )
+	{
+		OGRE_imageWrite3D4( dstTex0, gl_GlobalInvocationID + p_startOffset,
+							float4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+		OGRE_imageWrite3D4( dstTex1, gl_GlobalInvocationID + p_startOffset,
+							float4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+		OGRE_imageWrite3D4( dstTex2, gl_GlobalInvocationID + p_startOffset,
+							float4( 0.5f, 0.5f, 0.5f, 0.0f ) );
+	}
+//@end

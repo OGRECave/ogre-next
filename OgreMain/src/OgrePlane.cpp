@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,41 +26,44 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
-#include "OgrePlane.h"
-#include "OgreMatrix3.h"
-#include "OgreAxisAlignedBox.h" 
 
-namespace Ogre {
+#include "OgrePlane.h"
+
+#include "OgreAxisAlignedBox.h"
+#include "OgreMatrix3.h"
+
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    Plane::Side Plane::getSide (const AxisAlignedBox& box) const
+    Plane::Side Plane::getSide( const AxisAlignedBox &box ) const
     {
-        if (box.isNull()) 
+        if( box.isNull() )
             return NO_SIDE;
-        if (box.isInfinite())
+        if( box.isInfinite() )
             return BOTH_SIDE;
 
-        return getSide(box.getCenter(), box.getHalfSize());
+        return getSide( box.getCenter(), box.getHalfSize() );
     }
     //-----------------------------------------------------------------------
-    Plane::Side Plane::getSide (const Vector3& centre, const Vector3& halfSize) const
+    Plane::Side Plane::getSide( const Vector3 &centre, const Vector3 &halfSize ) const
     {
         // Calculate the distance between box centre and the plane
-        Real dist = getDistance(centre);
+        Real dist = getDistance( centre );
 
         // Calculate the maximise allows absolute distance for
         // the distance between box centre and plane
-        Real maxAbsDist = normal.absDotProduct(halfSize);
+        Real maxAbsDist = normal.absDotProduct( halfSize );
 
-        if (dist < -maxAbsDist)
+        if( dist < -maxAbsDist )
             return Plane::NEGATIVE_SIDE;
 
-        if (dist > +maxAbsDist)
+        if( dist > +maxAbsDist )
             return Plane::POSITIVE_SIDE;
 
         return Plane::BOTH_SIDE;
     }
     //-----------------------------------------------------------------------
-    Vector3 Plane::projectVector(const Vector3& p) const
+    Vector3 Plane::projectVector( const Vector3 &p ) const
     {
         // We know plane normal is unit length, so use simple method
         Matrix3 xform;
@@ -74,17 +77,16 @@ namespace Ogre {
         xform[2][1] = -normal.z * normal.y;
         xform[2][2] = 1.0f - normal.z * normal.z;
         return xform * p;
-
     }
     //-----------------------------------------------------------------------
-    Real Plane::normalise(void)
+    Real Plane::normalise()
     {
         Real fLength = normal.length();
 
         // Will also work for zero-sized vectors, but will change nothing
         // We're not using epsilons because we don't need to.
         // Read http://www.ogre3d.org/forums/viewtopic.php?f=4&t=61259
-        if ( fLength > Real(0.0f) )
+        if( fLength > Real( 0.0f ) )
         {
             Real fInvLength = 1.0f / fLength;
             normal *= fInvLength;
@@ -93,4 +95,4 @@ namespace Ogre {
 
         return fLength;
     }
-} // namespace Ogre
+}  // namespace Ogre

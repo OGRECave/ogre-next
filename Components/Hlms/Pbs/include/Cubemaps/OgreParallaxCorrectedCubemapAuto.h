@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,10 +29,13 @@ THE SOFTWARE.
 #define _OgreParallaxCorrectedCubemapAuto_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
+
 #include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
+
+#include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "OgreFrameListener.h"
 #include "OgreGpuProgramParams.h"
-#include "Compositor/OgreCompositorWorkspaceListener.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -69,16 +72,18 @@ namespace Ogre
 
         /// This variable should be updated every frame and often represents the camera position,
         /// but it can also be used set to other things like the player's character position.
-        public: Vector3                 mTrackedPosition;
-    private:
-        TextureGpu                      *mRenderTarget;
-        TextureGpu                      *mIblTarget;
+    public:
+        Vector3 mTrackedPosition;
 
-        vector<uint64>::type            mReservedSlotBitset;
+    private:
+        TextureGpu *mRenderTarget;
+        TextureGpu *mIblTarget;
+
+        vector<uint64>::type mReservedSlotBitset;
 
         ParallaxCorrectedCubemapAutoListener *mListener;
 
-        void updateSceneGraph(void);
+        void updateSceneGraph();
         /// Probes with a large number of iterations will blow up our memory consumption
         /// because too many commands will be queued up before flushing the command buffer
         /// (e.g. a probe with 32 iterations 5 shadow maps per face will consume
@@ -88,28 +93,28 @@ namespace Ogre
         /// skyrocket. Furthermore this allows GPU & CPU to work in parallel.
         /// This function must NOT be called after the Compositor started updating workspaces.
         void updateExpensiveCollectedDirtyProbes( uint16 iterationThreshold );
-        void updateRender(void);
+        void updateRender();
 
     public:
         ParallaxCorrectedCubemapAuto( IdType id, Root *root, SceneManager *sceneManager,
                                       const CompositorWorkspaceDef *probeWorkspaceDef );
-        ~ParallaxCorrectedCubemapAuto();
+        ~ParallaxCorrectedCubemapAuto() override;
 
-        virtual void destroyProbe( CubemapProbe *probe );
+        void destroyProbe( CubemapProbe *probe ) override;
 
         void setListener( ParallaxCorrectedCubemapAutoListener *listener ) { mListener = listener; }
-        ParallaxCorrectedCubemapAutoListener *getListener( void ) const { return mListener; }
+        ParallaxCorrectedCubemapAutoListener *getListener() const { return mListener; }
 
-        virtual TextureGpu* _acquireTextureSlot( uint16 &outTexSlot );
-        virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
+        TextureGpu *_acquireTextureSlot( uint16 &outTexSlot ) override;
+        void        _releaseTextureSlot( TextureGpu *texture, uint32 texSlot ) override;
 
-        virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
-        virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+        TextureGpu *findTmpRtt( const TextureGpu *baseParams ) override;
+        void        releaseTmpRtt( const TextureGpu *tmpRtt ) override;
 
-        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
-        virtual void releaseIbl( const TextureGpu *tmpRtt );
+        TextureGpu *findIbl( const TextureGpu *baseParams ) override;
+        void        releaseIbl( const TextureGpu *tmpRtt ) override;
 
-        virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
+        void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx ) override;
 
         /** Will update both mTrackedPosition with appropiate settings
             every time it's called. Must be called every time the camera changes.
@@ -143,7 +148,7 @@ namespace Ogre
         */
         void setEnabled( bool bEnabled, uint32 width, uint32 height, uint32 maxNumProbes,
                          PixelFormatGpu pixelFormat );
-        bool getEnabled(void) const;
+        bool getEnabled() const;
 
         /** Whether we should use Dual Paraboloid Mapping with 2D Array instead of Cubemap Arrays
         @remarks
@@ -167,22 +172,22 @@ namespace Ogre
         /// This can cause noticeable stalls. Use this function to regenerate them all
         /// at once (i.e. at loading time)
         /// This function also uses a memory-friendly way of updating the probes.
-        void updateAllDirtyProbes(void);
+        void updateAllDirtyProbes() override;
 
-        //CompositorWorkspaceListener overloads
-        virtual void allWorkspacesBeforeBeginUpdate(void);
-        virtual void allWorkspacesBeginUpdate(void);
+        // CompositorWorkspaceListener overloads
+        void allWorkspacesBeforeBeginUpdate() override;
+        void allWorkspacesBeginUpdate() override;
 
-        virtual void passPreExecute( CompositorPass *pass );
+        void passPreExecute( CompositorPass *pass ) override;
 
-        //FrameListener overloads
-        virtual bool frameStarted( const FrameEvent& evt );
+        // FrameListener overloads
+        bool frameStarted( const FrameEvent &evt ) override;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

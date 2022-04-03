@@ -1,7 +1,6 @@
 # Manual {#manual}
 
-This manual is aimed at making the transition to OgreNext as less
-painful and traumatic as possible.
+This manual is aimed at making the transition to OgreNext as painless as possible.
 
 **Overview**
 - @subpage WhatsNew
@@ -15,6 +14,7 @@ painful and traumatic as possible.
 
 **Core Concepts**
 - @subpage GiMethods
+- @subpage ImageVoxelConeTracing
 - @subpage instancing
 - @subpage threading
 - @subpage azdo
@@ -26,3 +26,7 @@ painful and traumatic as possible.
 - @subpage performance
 - @subpage TuningMemoryResources
 - @subpage BehavorStagingTextureD3D11
+- @subpage Ogre23Changes
+- @subpage RootLayouts
+- @subpage ResolvingMergeConflicts24
+- @subpage Ogre24Changes

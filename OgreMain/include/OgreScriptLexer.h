@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,32 +30,34 @@ THE SOFTWARE.
 #define __ScriptLexer_H_
 
 #include "OgrePrerequisites.h"
+
 #include <string.h>
 
 #include "ogrestd/vector.h"
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** These codes represent token IDs which are numerical translations of
         specific lexemes. Specific compilers using the lexer can register their
         own token IDs which are given precedence over these built-in ones.
     */
-    enum{
-        TID_LBRACKET = 0, // {
-        TID_RBRACKET, // }
-        TID_COLON, // :
-        TID_VARIABLE, // $...
-        TID_WORD, // *
-        TID_QUOTE, // "*"
-        TID_NEWLINE, // \n
+    enum
+    {
+        TID_LBRACKET = 0,  // {
+        TID_RBRACKET,      // }
+        TID_COLON,         // :
+        TID_VARIABLE,      // $...
+        TID_WORD,          // *
+        TID_QUOTE,         // "*"
+        TID_NEWLINE,       // \n
         TID_UNKNOWN,
         TID_END
     };
@@ -66,37 +68,41 @@ namespace Ogre {
     struct ScriptToken
     {
         /// This is the lexeme for this token, points into ScriptLexer::lexemeStorage
-        const char* lexemePtr;
-        uint32 lexemeLen;
-        String lexeme(bool unquote = false) const { return String(lexemePtr + unquote, lexemeLen - 2 * unquote); }
-        bool lexemeEquals(const char* str) const { return 0 == strncmp(str, lexemePtr, lexemeLen); }
+        const char *lexemePtr;
+        uint32      lexemeLen;
+        String      lexeme( bool unquote = false ) const
+        {
+            return String( lexemePtr + unquote, lexemeLen - 2 * unquote );
+        }
+        bool lexemeEquals( const char *str ) const { return 0 == strncmp( str, lexemePtr, lexemeLen ); }
         /// This is the id associated with the lexeme, which comes from a lexeme-token id mapping
         uint32 type;
         /// This holds the line number of the input stream where the token was found.
         uint32 line;
     };
-    typedef vector<ScriptToken>::type ScriptTokenList;
+    typedef vector<ScriptToken>::type  ScriptTokenList;
     typedef SharedPtr<ScriptTokenList> ScriptTokenListPtr;
 
-    class _OgreExport ScriptLexer : public ScriptCompilerAlloc
+    class _OgreExport ScriptLexer : public OgreAllocatedObj
     {
     public:
         ScriptLexer();
         virtual ~ScriptLexer() {}
 
         /** Tokenizes the given input and returns the list of tokens found */
-        ScriptTokenListPtr tokenize(const String &str);
-    private: // Private utility operations
-        void setToken(const String &lexeme, uint32 line, ScriptTokenList *tokens);
-        bool isWhitespace(Ogre::String::value_type c) const;
-        bool isNewline(Ogre::String::value_type c) const;
+        ScriptTokenListPtr tokenize( const String &str );
+
+    private:  // Private utility operations
+        void setToken( const String &lexeme, uint32 line, ScriptTokenList *tokens );
+        bool isWhitespace( Ogre::String::value_type c ) const;
+        bool isNewline( Ogre::String::value_type c ) const;
 
         String lexemeStorage;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

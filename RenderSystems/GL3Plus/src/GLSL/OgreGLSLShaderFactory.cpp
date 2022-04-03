@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -28,73 +28,41 @@
 
 #include "OgreGLSLShaderFactory.h"
 #include "OgreGLSLMonolithicProgramManager.h"
-#include "OgreGLSLSeparableProgramManager.h"
 #include "OgreGLSLShader.h"
 #include "OgreRoot.h"
 
-namespace Ogre 
+namespace Ogre
 {
+    GLSLMonolithicProgramManager *GLSLShaderFactory::mMonolithicProgramManager = NULL;
 
-    GLSLMonolithicProgramManager* GLSLShaderFactory::mMonolithicProgramManager = NULL;
-    GLSLSeparableProgramManager* GLSLShaderFactory::mSeparableProgramManager = NULL;
-    
     String GLSLShaderFactory::mLanguageName = "glsl";
-    
 
-    GLSLShaderFactory::GLSLShaderFactory(const GL3PlusSupport& support)
+    GLSLShaderFactory::GLSLShaderFactory( const GL3PlusSupport &support )
     {
-        if (mMonolithicProgramManager == NULL)
+        if( mMonolithicProgramManager == NULL )
         {
-            mMonolithicProgramManager = new GLSLMonolithicProgramManager(support);
-        }
-        if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
-        {
-            if (mSeparableProgramManager == NULL)
-            {
-                mSeparableProgramManager = new GLSLSeparableProgramManager(support);
-            }
+            mMonolithicProgramManager = new GLSLMonolithicProgramManager( support );
         }
     }
-    
 
-    GLSLShaderFactory::~GLSLShaderFactory(void)
+    GLSLShaderFactory::~GLSLShaderFactory()
     {
-        if (mMonolithicProgramManager)
+        if( mMonolithicProgramManager )
         {
             delete mMonolithicProgramManager;
             mMonolithicProgramManager = NULL;
         }
-
-        if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
-        {
-            if (mSeparableProgramManager)
-            {
-                delete mSeparableProgramManager;
-                mSeparableProgramManager = NULL;
-            }
-        }
     }
-    
 
-    const String& GLSLShaderFactory::getLanguage(void) const
+    const String &GLSLShaderFactory::getLanguage() const { return mLanguageName; }
+
+    HighLevelGpuProgram *GLSLShaderFactory::create( ResourceManager *creator, const String &name,
+                                                    ResourceHandle handle, const String &group,
+                                                    bool isManual, ManualResourceLoader *loader )
     {
-        return mLanguageName;
+        return OGRE_NEW GLSLShader( creator, name, handle, group, isManual, loader );
     }
-    
 
-    HighLevelGpuProgram* GLSLShaderFactory::create(
-        ResourceManager* creator,
-        const String& name, ResourceHandle handle,
-        const String& group, bool isManual, ManualResourceLoader* loader)
-    {
-        return OGRE_NEW GLSLShader(creator, name, handle, group, isManual, loader);
-    }
-    
+    void GLSLShaderFactory::destroy( HighLevelGpuProgram *prog ) { OGRE_DELETE prog; }
 
-    void GLSLShaderFactory::destroy(HighLevelGpuProgram* prog)
-    {
-        OGRE_DELETE prog;
-    }
-    
-
-}
+}  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -39,7 +39,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 namespace Ogre
 {
     class VulkanWin32Window;
-    class _OgreVulkanExport VulkanWin32Support : public VulkanSupport
+    class _OgreVulkanExport VulkanWin32Support final : public VulkanSupport
     {
     public:
         VulkanWin32Support();
@@ -48,9 +48,9 @@ namespace Ogre
          * Must have a "Full Screen" value that is a bool and a "Video Mode" value
          * that is a string in the form of wxhxb
          */
-        virtual void addConfig( VulkanRenderSystem *renderSystem );
+        void addConfig( VulkanRenderSystem *renderSystem ) override;
 
-        virtual void setConfigOption( const String &name, const String &value );
+        void setConfigOption( const String &name, const String &value ) override;
 
     private:
         // Allowed video modes

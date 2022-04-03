@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -81,7 +81,7 @@ namespace Ogre
         return vandq_u32( vandq_u32( maskX, maskY ), maskZ );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayAabb::volume(void) const
+    inline ArrayReal ArrayAabb::volume() const
     {
         ArrayReal w = vaddq_f32( mHalfSize.mChunkBase[0], mHalfSize.mChunkBase[0] ); // x * 2
         ArrayReal h = vaddq_f32( mHalfSize.mChunkBase[1], mHalfSize.mChunkBase[1] ); // y * 2

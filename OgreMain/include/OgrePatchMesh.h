@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,61 +29,63 @@ THE SOFTWARE.
 #define __PatchMesh_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreMesh.h"
 #include "OgrePatchSurface.h"
 
-namespace Ogre {
-namespace v1 {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup LOD
-    *  @{
-    */
-    /** Patch specialisation of Mesh. 
-    @remarks
-        Instances of this class should be created by calling MeshManager::createBezierPatch.
-    */
-    class _OgreExport PatchMesh : public Mesh
+namespace Ogre
+{
+    namespace v1
     {
-    protected:
-        /// Internal surface definition
-        PatchSurface mSurface;
-        /// Vertex declaration, cloned from the input
-        VertexDeclaration* mDeclaration;
-    public:
-        /// Constructor
-        PatchMesh(ResourceManager* creator, const String& name, ResourceHandle handle,
-            const String& group);
-        /// Update the mesh with new control points positions.
-        void update(void* controlPointBuffer, size_t width, size_t height, 
-                    size_t uMaxSubdivisionLevel, size_t vMaxSubdivisionLevel, 
-                    PatchSurface::VisibleSide visibleSide);
-        /// Define the patch, as defined in MeshManager::createBezierPatch
-        void define(void* controlPointBuffer, 
-            VertexDeclaration *declaration, size_t width, size_t height,
-            size_t uMaxSubdivisionLevel = PatchSurface::AUTO_LEVEL, 
-            size_t vMaxSubdivisionLevel = PatchSurface::AUTO_LEVEL,
-            PatchSurface::VisibleSide visibleSide = PatchSurface::VS_FRONT,
-            HardwareBuffer::Usage vbUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY, 
-            HardwareBuffer::Usage ibUsage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY,
-            bool vbUseShadow = false, bool ibUseShadow = false);
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup LOD
+         *  @{
+         */
+        /** Patch specialisation of Mesh.
+        @remarks
+            Instances of this class should be created by calling MeshManager::createBezierPatch.
+        */
+        class _OgreExport PatchMesh : public Mesh
+        {
+        protected:
+            /// Internal surface definition
+            PatchSurface mSurface;
+            /// Vertex declaration, cloned from the input
+            VertexDeclaration *mDeclaration;
 
-        /* Sets the current subdivision level as a proportion of full detail.
-        @param factor Subdivision factor as a value from 0 (control points only) to 1 (maximum
-            subdivision). */
-        void setSubdivision(Real factor);
-    protected:
-        /// Overridden from Resource
-        void loadImpl(void);
-        /// Overridden from Resource - do nothing (no disk caching)
-        void prepareImpl(void) {}
+        public:
+            /// Constructor
+            PatchMesh( ResourceManager *creator, const String &name, ResourceHandle handle,
+                       const String &group );
+            /// Update the mesh with new control points positions.
+            void update( void *controlPointBuffer, size_t width, size_t height,
+                         size_t uMaxSubdivisionLevel, size_t vMaxSubdivisionLevel,
+                         PatchSurface::VisibleSide visibleSide );
+            /// Define the patch, as defined in MeshManager::createBezierPatch
+            void define( void *controlPointBuffer, VertexDeclaration *declaration, size_t width,
+                         size_t height, size_t uMaxSubdivisionLevel = (size_t)PatchSurface::AUTO_LEVEL,
+                         size_t vMaxSubdivisionLevel = (size_t)PatchSurface::AUTO_LEVEL,
+                         PatchSurface::VisibleSide visibleSide = PatchSurface::VS_FRONT,
+                         HardwareBuffer::Usage     vbUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
+                         HardwareBuffer::Usage     ibUsage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY,
+                         bool vbUseShadow = false, bool ibUseShadow = false );
 
-    };
-    /** @} */
-    /** @} */
-}
-}
+            /* Sets the current subdivision level as a proportion of full detail.
+            @param factor Subdivision factor as a value from 0 (control points only) to 1 (maximum
+                subdivision). */
+            void setSubdivision( Real factor );
+
+        protected:
+            /// Overridden from Resource
+            void loadImpl() override;
+            /// Overridden from Resource - do nothing (no disk caching)
+            void prepareImpl() override {}
+        };
+        /** @} */
+        /** @} */
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

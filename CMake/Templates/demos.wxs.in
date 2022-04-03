@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="473b6488-10a0-4ecc-8521-88478e4117ad" 
-   Name="OGRE Demos @OGRE_VERSION@" Language="1033" Version="@OGRE_VERSION@" 
+	<Product Id="473b6488-10a0-4ecc-8521-88478e4117ad"
+   Name="OGRE-Next Demos @OGRE_VERSION@" Language="1033" Version="@OGRE_VERSION@"
    Manufacturer="OGRE Team" UpgradeCode="5fde4847-ecfa-453b-8026-d5d354db5992">
 
 
@@ -10,11 +10,11 @@
 	<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
 	<WixVariable Id="WixUILicenseRtf" Value="DemoLicense.rtf" />
-	
+
 	<Directory Id="TARGETDIR" Name="SourceDir">
 
       <Directory Id="ProgramFilesFolder">
-		<Directory Id="INSTALLLOCATION" Name="Ogre Demos @OGRE_VERSION@">
+		<Directory Id="INSTALLLOCATION" Name="OGRE-Next Demos @OGRE_VERSION@">
           <Component Id='OgreDemosComp' Guid='41AA9D3F-80EF-420c-BDC8-EF631628AE68'>
             <File Source='..\bin\release\OgreMain.dll' Vital='yes' />
             <File Source='..\bin\release\Plugin_BSPSceneManager.dll' Vital='yes' />
@@ -29,7 +29,7 @@
             <File Source='..\bin\release\OgreTerrain.dll' Vital='yes' />
             <File Source='..\bin\release\OgreProperty.dll' Vital='yes' />
             <File Source='..\bin\release\OgreRTShaderSystem.dll' Vital='yes' />
-			
+
 			<!--
             <File Source='..\..\Readme.html' Vital='yes'>
               <Shortcut Id="ReadmeShortcut" Directory="OGREProgramMenuDir" Name="Readme"/>
@@ -75,7 +75,7 @@
             <File Source='..\bin\release\Sample_Transparency.dll' Vital='yes' />
             <File Source='..\bin\release\Sample_VolumeTex.dll' Vital='yes' />
             <File Source='..\bin\release\Sample_Water.dll' Vital='yes' />
-			
+
             <File Source='..\bin\release\OIS.dll' Vital='yes' />
             <File Source='..\bin\release\cg.dll' Vital='yes' />
 
@@ -84,7 +84,7 @@
 
 		<!-- Start menu -->
 		<Directory Id="ProgramMenuFolder">
-		  <Directory Id="OGREProgramMenuDir" Name='OGRE Demos @OGRE_VERSION@'>
+		  <Directory Id="OGREProgramMenuDir" Name='OGRE-Next Demos @OGRE_VERSION@'>
 		  </Directory>
 		</Directory>
 
@@ -93,9 +93,9 @@
 
 	<DirectoryRef Id="OGREProgramMenuDir">
 		<Component Id="SampleBrowserShortcutComp" Guid="{B090B62F-222D-4a42-B106-6BB9F8174AC7}">
-			<Shortcut Id="SampleBrowserShortcut" 
+			<Shortcut Id="SampleBrowserShortcut"
 			  Name="Sample Browser"
-			  Description="Browser to allow you to run the OGRE samples"
+			  Description="Browser to allow you to run the OGRE-Next samples"
 			  Target="[INSTALLLOCATION]SampleBrowser.exe"
 			  WorkingDirectory="INSTALLLOCATION"/>
 			<RemoveFolder Id="OGREProgramMenuDir" On="uninstall"/>
@@ -104,7 +104,7 @@
 	</DirectoryRef>
 
     <Feature Id='DemosFeature' Level='1' ConfigurableDirectory="INSTALLLOCATION" Title='Demos'
-      Description='OGRE Demos'
+      Description='OGRE-Next Demos'
       Absent='disallow' AllowAdvertise='no' >
       <ComponentRef Id='OgreDemosComp' />
       <ComponentRef Id='SampleBrowserShortcutComp' />
@@ -112,7 +112,7 @@
       <MergeRef Id='CRT' />
       <MergeRef Id='CRT Policy' />
     </Feature>
-	
+
 	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
 	<UIRef Id="WixUI_InstallDir" />
 

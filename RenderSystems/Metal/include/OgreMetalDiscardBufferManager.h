@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -30,12 +30,13 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #define _OgreMetalDiscardBufferManager_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "Vao/OgreMetalVaoManager.h"
 
 namespace Ogre
 {
     class MetalDiscardBuffer;
-    typedef vector<MetalDiscardBuffer*>::type MetalDiscardBufferVec;
+    typedef vector<MetalDiscardBuffer *>::type MetalDiscardBufferVec;
 
     /// Metal doesn't support "DISCARD" like D3D9/D3D11 (and OpenGL but often it's broken)
     /// where we requested to map a write-only buffer and the API would discard the previous
@@ -43,7 +44,7 @@ namespace Ogre
     ///
     /// We need Discard for the v1 interfaces. So we need to emulate it.
     /// This class does exactly this.
-    class _OgreMetalExport MetalDiscardBufferManager : public BufferAlloc
+    class _OgreMetalExport MetalDiscardBufferManager : public OgreAllocatedObj
     {
     public:
         struct UnsafeBlock : public MetalVaoManager::Block
@@ -51,9 +52,12 @@ namespace Ogre
             uint32 lastFrameUsed;
 
             UnsafeBlock( size_t _offset, size_t _size, uint32 _lastFrameUsed ) :
-                MetalVaoManager::Block( _offset, _size ), lastFrameUsed( _lastFrameUsed ) {}
+                MetalVaoManager::Block( _offset, _size ),
+                lastFrameUsed( _lastFrameUsed )
+            {
+            }
 
-            bool operator < ( const UnsafeBlock &other ) const
+            bool operator<( const UnsafeBlock &other ) const
             {
                 return this->lastFrameUsed < other.lastFrameUsed;
             }
@@ -61,14 +65,14 @@ namespace Ogre
         typedef vector<UnsafeBlock>::type UnsafeBlockVec;
 
     private:
-        id<MTLBuffer>   mBuffer;
-        MetalDevice     *mDevice;
-        VaoManager      *mVaoManager;
-        MetalVaoManager::BlockVec   mFreeBlocks;
+        id<MTLBuffer>             mBuffer;
+        MetalDevice              *mDevice;
+        VaoManager               *mVaoManager;
+        MetalVaoManager::BlockVec mFreeBlocks;
 
-        UnsafeBlockVec  mUnsafeBlocks;
+        UnsafeBlockVec mUnsafeBlocks;
 
-        MetalDiscardBufferVec   mDiscardBuffers;
+        MetalDiscardBufferVec mDiscardBuffers;
 
         /** Moves our current mBuffer into a new one (bigger one). Used when we've ran
             out of usable space. This operation can be slow and will increase GPU memory
@@ -84,13 +88,13 @@ namespace Ogre
         void growToFit( size_t extraBytes, MetalDiscardBuffer *forDiscardBuffer );
 
         /// Puts unsafe blocks that are now safe back to the free blocks pool.
-        void updateUnsafeBlocks(void);
+        void updateUnsafeBlocks();
 
     public:
         MetalDiscardBufferManager( MetalDevice *device, VaoManager *vaoManager );
         ~MetalDiscardBufferManager();
 
-        void _notifyDeviceStalled(void);
+        void _notifyDeviceStalled();
 
         /** For internal use. Retrieves a fresh new block. The old block will be returned
             to a pool until it's safe to reuse again. Used by the DiscardBuffer when
@@ -108,7 +112,7 @@ namespace Ogre
         @return
             A new MetalDiscardBuffer
         */
-        MetalDiscardBuffer* createDiscardBuffer( size_t bufferSize, uint16 alignment );
+        MetalDiscardBuffer *createDiscardBuffer( size_t bufferSize, uint16 alignment );
 
         /** Destroys an existing MetalDiscardBuffer, releasing its memory.
         @param discardBuffer
@@ -116,24 +120,25 @@ namespace Ogre
         */
         void destroyDiscardBuffer( MetalDiscardBuffer *discardBuffer );
 
-        MetalDevice* getDevice(void) const          { return mDevice; }
-        VaoManager* getVaoManager(void) const       { return mVaoManager; }
+        MetalDevice *getDevice() const { return mDevice; }
+        VaoManager  *getVaoManager() const { return mVaoManager; }
     };
 
-    class _OgreMetalExport MetalDiscardBuffer : public BufferAlloc
+    class _OgreMetalExport MetalDiscardBuffer : public OgreAllocatedObj
     {
         friend class MetalDiscardBufferManager;
 
         __unsafe_unretained id<MTLBuffer> mBuffer;
-        size_t          mBlockPrePadding;
-        size_t          mBufferOffset;
-        size_t          mBufferSize;
 
-        uint16          mAlignment;
-        uint32          mLastFrameUsed;
+        size_t mBlockPrePadding;
+        size_t mBufferOffset;
+        size_t mBufferSize;
 
-        VaoManager                  *mVaoManager;
-        MetalDiscardBufferManager   *mOwner;
+        uint16 mAlignment;
+        uint32 mLastFrameUsed;
+
+        VaoManager                *mVaoManager;
+        MetalDiscardBufferManager *mOwner;
 
     public:
         MetalDiscardBuffer( size_t bufferSize, uint16 alignment, VaoManager *vaoManager,
@@ -144,14 +149,14 @@ namespace Ogre
             When true, noOverwrite is slow
         @return
         */
-        void* map( bool noOverwrite );
-        void unmap(void);
+        void *map( bool noOverwrite );
+        void  unmap();
 
-        uint16 getAlignment(void) const         { return mAlignment; }
+        uint16 getAlignment() const { return mAlignment; }
         /// Size of the buffer, may be bigger than requested due to 4-byte alignment required by Metal.
-        size_t getSizeBytes(void) const         { return mBufferSize; }
+        size_t getSizeBytes() const { return mBufferSize; }
 
-        size_t getOffset(void) const            { return mBufferOffset; }
+        size_t getOffset() const { return mBufferOffset; }
         /** Returns the actual API buffer, but first sets mLastFrameUsed as we
             assume you're calling this function to use the buffer in the GPU.
         @param outOffset
@@ -163,11 +168,11 @@ namespace Ogre
         id<MTLBuffer> getBufferName( size_t &outOffset );
 
         /// For internal use by MetalDiscardBufferManager
-        size_t getBlockStart(void) const        { return mBufferOffset - mBlockPrePadding; }
-        size_t getBlockSize(void) const         { return mBufferSize + mBlockPrePadding; }
+        size_t getBlockStart() const { return mBufferOffset - mBlockPrePadding; }
+        size_t getBlockSize() const { return mBufferSize + mBlockPrePadding; }
 
-        MetalDiscardBufferManager* getOwner(void)   { return mOwner; }
+        MetalDiscardBufferManager *getOwner() { return mOwner; }
     };
-}
+}  // namespace Ogre
 
 #endif

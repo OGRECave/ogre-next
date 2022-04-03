@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,27 +29,30 @@ THE SOFTWARE.
 #define _OgreHlmsCommon_H_
 
 #include "OgrePrerequisites.h"
-#include "OgreIdString.h"
+
 #include "OgreBlendMode.h"
-#include "OgreVector3.h"
 #include "OgreHlmsPso.h"
+#include "OgreIdString.h"
+#include "OgreVector3.h"
+
 #include <stddef.h>
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     class SubStringRef
     {
         String const *mOriginal;
-        size_t  mStart;
-        size_t  mEnd;
+        size_t        mStart;
+        size_t        mEnd;
 
     public:
         SubStringRef( const String *original, size_t start ) :
@@ -71,12 +74,12 @@ namespace Ogre
 
         SubStringRef( const String *original, String::const_iterator _start ) :
             mOriginal( original ),
-            mStart( _start - original->begin() ),
+            mStart( static_cast<size_t>( _start - original->begin() ) ),
             mEnd( original->size() )
         {
         }
 
-        size_t find( const char *value, size_t pos=0 ) const
+        size_t find( const char *value, size_t pos = 0 ) const
         {
             size_t retVal = mOriginal->find( value, mStart + pos );
             if( retVal >= mEnd )
@@ -112,7 +115,7 @@ namespace Ogre
         bool matchEqual( const char *stringCompare ) const
         {
             const char *origStr = mOriginal->c_str() + mStart;
-            ptrdiff_t length = mEnd - mStart;
+            size_t      length = mEnd - mStart;
             while( *origStr == *stringCompare && *origStr && --length )
             {
                 ++origStr;
@@ -133,31 +136,36 @@ namespace Ogre
                             stringCompare.size() ) == 0;
         }
 
-        void setStart( size_t newStart )            { mStart = std::min( newStart, mOriginal->size() ); }
-        void setEnd( size_t newEnd )                { mEnd = std::min( newEnd, mOriginal->size() ); }
-        size_t getStart(void) const                 { return mStart; }
-        size_t getEnd(void) const                   { return mEnd; }
-        size_t getSize(void) const                  { return mEnd - mStart; }
-        String::const_iterator begin() const        { return mOriginal->begin() + mStart; }
-        String::const_iterator end() const          { return mOriginal->begin() + mEnd; }
-        const String& getOriginalBuffer() const     { return *mOriginal; }
+        void   setStart( size_t newStart ) { mStart = std::min( newStart, mOriginal->size() ); }
+        void   setEnd( size_t newEnd ) { mEnd = std::min( newEnd, mOriginal->size() ); }
+        size_t getStart() const { return mStart; }
+        size_t getEnd() const { return mEnd; }
+        size_t getSize() const { return mEnd - mStart; }
+        String::const_iterator begin() const
+        {
+            return mOriginal->begin() + static_cast<ptrdiff_t>( mStart );
+        }
+        String::const_iterator end() const
+        {
+            return mOriginal->begin() + static_cast<ptrdiff_t>( mEnd );
+        }
+        const String &getOriginalBuffer() const { return *mOriginal; }
     };
 
     struct _OgreExport HlmsProperty
     {
-        IdString    keyName;
-        int32       value;
+        IdString keyName;
+        int32    value;
 
-        HlmsProperty( IdString _keyName, int32 _value ) :
-            keyName( _keyName ), value( _value ) {}
+        HlmsProperty( IdString _keyName, int32 _value ) : keyName( _keyName ), value( _value ) {}
 
-        bool operator == ( const HlmsProperty &_r) const
+        bool operator==( const HlmsProperty &_r ) const
         {
             return this->keyName == _r.keyName && this->value == _r.value;
         }
     };
 
-    typedef vector<HlmsProperty>::type HlmsPropertyVec;
+    typedef vector<HlmsProperty>::type  HlmsPropertyVec;
     typedef map<IdString, String>::type PiecesMap;
 
     inline bool OrderPropertyByIdString( const HlmsProperty &_left, const HlmsProperty &_right )
@@ -165,7 +173,7 @@ namespace Ogre
         return _left.keyName < _right.keyName;
     }
 
-    typedef vector< std::pair<IdString, String> >::type HlmsParamVec;
+    typedef vector<std::pair<IdString, String> >::type HlmsParamVec;
 
     inline bool OrderParamVecByKey( const std::pair<IdString, String> &_left,
                                     const std::pair<IdString, String> &_right )
@@ -178,10 +186,10 @@ namespace Ogre
     */
     enum HlmsTypes
     {
-        HLMS_LOW_LEVEL, /// Proxy that redirects to a regular Material
-        HLMS_PBS,       /// Physically Based Shader Generator
-        HLMS_TOON,      /// Toon shading / Cel shading
-        HLMS_UNLIT,     /// Made for GUIs, overlays, particle FXs, self-iluminating billboards
+        HLMS_LOW_LEVEL,  /// Proxy that redirects to a regular Material
+        HLMS_PBS,        /// Physically Based Shader Generator
+        HLMS_TOON,       /// Toon shading / Cel shading
+        HLMS_UNLIT,      /// Made for GUIs, overlays, particle FXs, self-iluminating billboards
 
         HLMS_USER0,
         HLMS_USER1,
@@ -199,16 +207,20 @@ namespace Ogre
         HlmsTypes       type;
         HlmsPropertyVec setProperties;
 
-        HlmsPso         pso;
+        HlmsPso pso;
 
         HlmsCache() : hash( 0 ), type( HLMS_MAX ) {}
         HlmsCache( uint32 _hash, HlmsTypes _type, const HlmsPso &_pso ) :
-            hash( _hash ), type( _type ), pso( _pso ) {}
+            hash( _hash ),
+            type( _type ),
+            pso( _pso )
+        {
+        }
     };
 
-    #define OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( x ) (x >> 29)
+#define OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( x ) ( x >> 29 )
 
-    typedef vector<HlmsCache*>::type HlmsCacheVec;
+    typedef vector<HlmsCache *>::type HlmsCacheVec;
 
     inline bool OrderCacheByHash( const HlmsCache *_left, const HlmsCache *_right )
     {
@@ -218,7 +230,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

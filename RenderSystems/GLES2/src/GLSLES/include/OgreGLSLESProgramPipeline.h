@@ -1,6 +1,6 @@
 /*
  -----------------------------------------------------------------------------
- This source file is part of OGRE
+ This source file is part of OGRE-Next
  (Object-oriented Graphics Rendering Engine)
  For the latest info, see http://www.ogre3d.org/
  
@@ -37,7 +37,7 @@ namespace Ogre
         programs via the Open GL program pipeline.
 
         Separable programs consist of shader objects which have been
-        individually linked. This allows for invidual shaders in a
+        individually linked. This allows for individual shaders in a
         program pipeline to be swapped without recompiling the program
         object, as would be necessary with monolithic programs. This
         is especially useful in the common case of only entities which
@@ -101,7 +101,7 @@ namespace Ogre
         /** Makes a program pipeline object active by making sure it
         is linked and then putting it in use.
          */
-        void activate(void);
+        void activate();
 
         /** Get the index of a non-standard attribute bound in the
          linked code.
@@ -113,12 +113,12 @@ namespace Ogre
         GLuint mGLProgramPipelineHandle;
 
         /// Compiles and links the separate programs.
-        void compileAndLink(void);
+        void compileAndLink();
         void loadIndividualProgram(GLSLESShader *program);
         /// Put a program pipeline in use
-        void _useProgram(void);
+        void _useProgram();
         /// Build uniform references from active named uniforms
-        void buildGLUniformReferences(void);
+        void buildGLUniformReferences();
     };
 }
 

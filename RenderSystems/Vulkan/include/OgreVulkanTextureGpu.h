@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -100,49 +100,49 @@ namespace Ogre
         VkImageLayout mNextLayout;
 
     protected:
-        virtual void createInternalResourcesImpl( void );
-        virtual void destroyInternalResourcesImpl( void );
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
-        virtual void createMsaaSurface( void );
-        virtual void destroyMsaaSurface( void );
+        virtual void createMsaaSurface();
+        virtual void destroyMsaaSurface();
 
     public:
         VulkanTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
                           IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                           TextureGpuManager *textureManager );
-        virtual ~VulkanTextureGpu();
+        ~VulkanTextureGpu() override;
 
         PixelFormatGpu getWorkaroundedPixelFormat( const PixelFormatGpu pixelFormat ) const;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual ResourceLayout::Layout getCurrentLayout( void ) const;
+        ResourceLayout::Layout getCurrentLayout() const override;
 
-        virtual void copyTo(
+        void copyTo(
             TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
             uint8 srcMipLevel, bool keepResolvedTexSynced = true,
             CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode = CopyEncTransitionMode::Auto,
             CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
-                CopyEncTransitionMode::Auto );
+                CopyEncTransitionMode::Auto ) override;
 
-        virtual void _setNextLayout( ResourceLayout::Layout layout );
+        void _setNextLayout( ResourceLayout::Layout layout ) override;
 
-        virtual void _autogenerateMipmaps(
-            CopyEncTransitionMode::CopyEncTransitionMode transitionMode = CopyEncTransitionMode::Auto );
+        void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                                       CopyEncTransitionMode::Auto ) override;
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
 
-        virtual void notifyDataIsReady( void );
-        virtual bool _isDataReadyImpl( void ) const;
+        void notifyDataIsReady() override;
+        bool _isDataReadyImpl() const override;
 
-        virtual void _setToDisplayDummyTexture( void );
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setToDisplayDummyTexture() override;
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
 
-        VkImageSubresourceRange getFullSubresourceRange( void ) const;
+        VkImageSubresourceRange getFullSubresourceRange() const;
 
-        VkImageType getVulkanTextureType( void ) const;
+        VkImageType getVulkanTextureType() const;
 
-        VkImageViewType getInternalVulkanTextureViewType( void ) const;
+        VkImageViewType getInternalVulkanTextureViewType() const;
 
         VkImageView _createView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
                                  uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav,
@@ -151,8 +151,8 @@ namespace Ogre
         VkImageView createView( const DescriptorSetTexture2::TextureSlot &texSlot,
                                 bool bUseCache = true ) const;
         VkImageView createView( DescriptorSetUav::TextureSlot texSlot, bool bUseCache = true );
-        VkImageView createView( void ) const;
-        VkImageView getDefaultDisplaySrv( void ) const { return mDefaultDisplaySrv; }
+        VkImageView createView() const;
+        VkImageView getDefaultDisplaySrv() const { return mDefaultDisplaySrv; }
 
         void destroyView( VkImageView imageView );
         void destroyView( DescriptorSetTexture2::TextureSlot texSlot, VkImageView imageView );
@@ -160,11 +160,11 @@ namespace Ogre
 
         /// Returns a fresh VkImageMemoryBarrier filled with common data.
         /// srcAccessMask, dstAccessMask, oldLayout and newLayout must be filled by caller
-        VkImageMemoryBarrier getImageMemoryBarrier( void ) const;
+        VkImageMemoryBarrier getImageMemoryBarrier() const;
 
-        VkImage getDisplayTextureName( void ) const { return mDisplayTextureName; }
-        VkImage getFinalTextureName( void ) const { return mFinalTextureName; }
-        VkImage getMsaaFramebufferName( void ) const { return mMsaaFramebufferName; }
+        VkImage getDisplayTextureName() const { return mDisplayTextureName; }
+        VkImage getFinalTextureName() const { return mFinalTextureName; }
+        VkImage getMsaaFramebufferName() const { return mMsaaFramebufferName; }
     };
 
     class _OgreVulkanExport VulkanTextureGpuRenderTarget : public VulkanTextureGpu
@@ -180,25 +180,25 @@ namespace Ogre
         OrientationMode mOrientationMode;
 #endif
 
-        virtual void createMsaaSurface( void );
-        virtual void destroyMsaaSurface( void );
+        void createMsaaSurface() override;
+        void destroyMsaaSurface() override;
 
     public:
         VulkanTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                       VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                       TextureTypes::TextureTypes initialType,
                                       TextureGpuManager *textureManager );
-        virtual ~VulkanTextureGpuRenderTarget();
+        ~VulkanTextureGpuRenderTarget() override;
 
-        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId( void ) const;
-        virtual bool getPreferDepthTexture( void ) const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat( void ) const;
+        void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                      PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16 getDepthBufferPoolId() const override;
+        bool getPreferDepthTexture() const override;
+        PixelFormatGpu getDesiredDepthBufferFormat() const override;
 
-        virtual void setOrientationMode( OrientationMode orientationMode );
+        void setOrientationMode( OrientationMode orientationMode ) override;
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        virtual OrientationMode getOrientationMode( void ) const;
+        OrientationMode getOrientationMode() const override;
 #endif
     };
 

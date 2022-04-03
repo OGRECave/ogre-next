@@ -2,8 +2,8 @@
 #ifndef _Demo_GameEntityManager_H_
 #define _Demo_GameEntityManager_H_
 
-#include "Threading/MessageQueueSystem.h"
 #include "GameEntity.h"
+#include "Threading/MessageQueueSystem.h"
 
 namespace Demo
 {
@@ -15,7 +15,7 @@ namespace Demo
     public:
         struct CreatedGameEntity
         {
-            GameEntity          *gameEntity;
+            GameEntity *        gameEntity;
             GameEntityTransform initialTransform;
         };
 
@@ -36,29 +36,28 @@ namespace Demo
             }
         };
 
-        //We assume mCurrentId never wraps
-        Ogre::uint32    mCurrentId;
-        GameEntityVec   mGameEntities[Ogre::NUM_SCENE_MEMORY_MANAGER_TYPES];
+        // We assume mCurrentId never wraps
+        Ogre::uint32  mCurrentId;
+        GameEntityVec mGameEntities[Ogre::NUM_SCENE_MEMORY_MANAGER_TYPES];
 
-        std::vector<GameEntityTransform*>   mTransformBuffers;
-        std::vector<Region>                 mAvailableTransforms;
+        std::vector<GameEntityTransform *> mTransformBuffers;
+        std::vector<Region>                mAvailableTransforms;
 
         GameEntityVecVec    mScheduledForRemoval;
         size_t              mScheduledForRemovalCurrentSlot;
         std::vector<size_t> mScheduledForRemovalAvailableSlots;
 
-        Mq::MessageQueueSystem  *mGraphicsSystem;
-        LogicSystem             *mLogicSystem;
+        Mq::MessageQueueSystem *mGraphicsSystem;
+        LogicSystem *           mLogicSystem;
 
-        Ogre::uint32 getScheduledForRemovalAvailableSlot(void);
-        void destroyAllGameEntitiesIn( GameEntityVec &container );
+        size_t getScheduledForRemovalAvailableSlot();
+        void   destroyAllGameEntitiesIn( GameEntityVec &container );
 
         void aquireTransformSlot( size_t &outSlot, size_t &outBufferIdx );
         void releaseTransformSlot( size_t bufferIdx, GameEntityTransform *transform );
 
     public:
-        GameEntityManager( Mq::MessageQueueSystem *graphicsSystem,
-                           LogicSystem *logicSystem );
+        GameEntityManager( Mq::MessageQueueSystem *graphicsSystem, LogicSystem *logicSystem );
         ~GameEntityManager();
 
         /** Creates a GameEntity, adding it to the world, and scheduling for the Graphics
@@ -78,10 +77,9 @@ namespace Demo
             not all of its pointers may filled yet (the ones that are not meant to
             be used by the logic thread)
         */
-        GameEntity* addGameEntity( Ogre::SceneMemoryMgrTypes type,
+        GameEntity *addGameEntity( Ogre::SceneMemoryMgrTypes      type,
                                    const MovableObjectDefinition *moDefinition,
-                                   const Ogre::Vector3 &initialPos,
-                                   const Ogre::Quaternion &initialRot,
+                                   const Ogre::Vector3 &initialPos, const Ogre::Quaternion &initialRot,
                                    const Ogre::Vector3 &initialScale );
 
         /** Removes the GameEntity from the world. The pointer is not immediately destroyed,
@@ -95,8 +93,8 @@ namespace Demo
         void _notifyGameEntitiesRemoved( size_t slot );
 
         /// Must be called every frame from the LOGIC THREAD.
-        void finishFrameParallel(void);
+        void finishFrameParallel();
     };
-}
+}  // namespace Demo
 
 #endif

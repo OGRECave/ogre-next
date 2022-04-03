@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,11 +34,12 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Timer class */
-    class _OgreExport Timer : public TimerAlloc
+    class _OgreExport Timer : public OgreAllocatedObj
     {
     private:
         struct timeval start;
-        clock_t zeroClock;
+        clock_t        zeroClock;
+
     public:
         Timer();
         ~Timer();
@@ -57,8 +58,12 @@ namespace Ogre
             @par
                 On failure, false is returned.
         */
-        bool setOption( const String& strKey, const void* pValue )
-        { (void)strKey; (void)pValue; return false; }
+        bool setOption( const String &strKey, const void *pValue )
+        {
+            (void)strKey;
+            (void)pValue;
+            return false;
+        }
 
         /** Resets timer */
         void reset();
@@ -69,11 +74,11 @@ namespace Ogre
         /** Returns microseconds since initialisation or last reset */
         uint64 getMicroseconds();
 
-        /** Returns milliseconds since initialisation or last reset, only CPU time measured */  
+        /** Returns milliseconds since initialisation or last reset, only CPU time measured */
         uint64 getMillisecondsCPU();
 
-        /** Returns microseconds since initialisation or last reset, only CPU time measured */  
+        /** Returns microseconds since initialisation or last reset, only CPU time measured */
         uint64 getMicrosecondsCPU();
     };
-}
+}  // namespace Ogre
 #endif

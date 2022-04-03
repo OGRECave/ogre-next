@@ -3,18 +3,16 @@
 
 #include "OgreWireAabb.h"
 
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
 
-#include "OgreSceneManager.h"
-
-#include "OgreRoot.h"
-#include "OgreHlms.h"
-#include "OgreHlmsManager.h"
-
 namespace Ogre
 {
-    WireAabb::WireAabb( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager) :
+    WireAabb::WireAabb( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager ) :
         MovableObject( id, objectMemoryManager, manager, 10u ),
         Renderable(),
         mTrackedObject( 0 )
@@ -30,19 +28,19 @@ namespace Ogre
         setCastShadows( false );
         mRenderables.push_back( this );
 
-        this->setDatablock( Root::getSingleton().getHlmsManager()->
-                            getHlms( HLMS_UNLIT )->getDefaultDatablock() );
+        this->setDatablock(
+            Root::getSingleton().getHlmsManager()->getHlms( HLMS_UNLIT )->getDefaultDatablock() );
     }
     //-----------------------------------------------------------------------------------
     WireAabb::~WireAabb()
     {
-        track( (MovableObject*)0 );
+        track( (MovableObject *)0 );
 
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
         VertexArrayObjectArray::const_iterator itor = mVaoPerLod[0].begin();
-        VertexArrayObjectArray::const_iterator end  = mVaoPerLod[0].end();
-        while( itor != end )
+        VertexArrayObjectArray::const_iterator endt = mVaoPerLod[0].end();
+        while( itor != endt )
         {
             VertexArrayObject *vao = *itor;
 
@@ -78,14 +76,14 @@ namespace Ogre
 
         if( !mTrackedObject && mParentNode )
         {
-            //Not tracking anymore, need to get rid of our SceneNode
+            // Not tracking anymore, need to get rid of our SceneNode
             SceneNode *sceneNode = getParentSceneNode();
             sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
             mParentNode = 0;
         }
         else if( mTrackedObject && !mParentNode )
         {
-            //Started tracking, we need a node of our own.
+            // Started tracking, we need a node of our own.
             SceneNode *newNode = mManager->getRootSceneNode()->createChildSceneNode();
             newNode->attachObject( this );
         }
@@ -94,11 +92,11 @@ namespace Ogre
     void WireAabb::setToAabb( const Aabb &aabb )
     {
         if( mTrackedObject )
-            track( (MovableObject*)0 );
+            track( (MovableObject *)0 );
 
         if( !mParentNode )
         {
-            //We need a node of our own.
+            // We need a node of our own.
             SceneNode *newNode = mManager->getRootSceneNode()->createChildSceneNode();
             newNode->attachObject( this );
         }
@@ -108,7 +106,7 @@ namespace Ogre
         mParentNode->setScale( aabb.mHalfSize );
     }
     //-----------------------------------------------------------------------------------
-    void WireAabb::_updateTracking(void)
+    void WireAabb::_updateTracking()
     {
         if( !mTrackedObject->isAttached() )
         {
@@ -116,15 +114,16 @@ namespace Ogre
         }
         else
         {
-            this->setVisible( mTrackedObject->isVisible() );
+            this->setVisible( mTrackedObject->getVisible() );
             Aabb trackedAabb = mTrackedObject->getWorldAabb();
             mParentNode->setPosition( trackedAabb.mCenter );
             mParentNode->setScale( trackedAabb.mHalfSize );
         }
     }
     //-----------------------------------------------------------------------------------
-    void WireAabb::createBuffers(void)
+    void WireAabb::createBuffers()
     {
+        // clang-format off
         const float c_vertexData[8*3] =
         {
             -1, -1,  1,
@@ -140,14 +139,14 @@ namespace Ogre
         //Create the indices.
         const Ogre::uint16 c_indexData[2 * 4 * 3] =
         {
-            0, 1,   1, 2,   2, 3,   3, 0,	//Front
-            4, 5,   5, 6,   6, 7,   7, 4,	//Back
+            0, 1,   1, 2,   2, 3,   3, 0,	// Front
+            4, 5,   5, 6,   6, 7,   7, 4,	// Back
             0, 4,   1, 5,   2, 6,   3, 7
         };
+        // clang-format on
 
-        Ogre::uint16 *cubeIndices = reinterpret_cast<Ogre::uint16*>( OGRE_MALLOC_SIMD(
-                                                                         sizeof(Ogre::uint16) * 2 * 4 * 3,
-                                                                         Ogre::MEMCATEGORY_GEOMETRY ) );
+        Ogre::uint16 *cubeIndices = reinterpret_cast<Ogre::uint16 *>(
+            OGRE_MALLOC_SIMD( sizeof( Ogre::uint16 ) * 2 * 4 * 3, Ogre::MEMCATEGORY_GEOMETRY ) );
         memcpy( cubeIndices, c_indexData, sizeof( c_indexData ) );
 
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
@@ -155,12 +154,11 @@ namespace Ogre
 
         try
         {
-            indexBuffer = vaoManager->createIndexBuffer( Ogre::IndexBufferPacked::IT_16BIT,
-                                                         2 * 4 * 3,
-                                                         Ogre::BT_IMMUTABLE,
-                                                         cubeIndices, true );
+            indexBuffer = vaoManager->createIndexBuffer( Ogre::IndexBufferPacked::IT_16BIT,  //
+                                                         2 * 4 * 3,                          //
+                                                         Ogre::BT_IMMUTABLE, cubeIndices, true );
         }
-        catch( Ogre::Exception& )
+        catch( Ogre::Exception & )
         {
             // When keepAsShadow = true, the memory will be freed when the index buffer is destroyed.
             // However if for some weird reason there is an exception raised, the memory will
@@ -171,102 +169,92 @@ namespace Ogre
             throw;
         }
 
-        //Create the vertex buffer
+        // Create the vertex buffer
 
-        //Vertex declaration
+        // Vertex declaration
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_FLOAT3, VES_POSITION ) );
 
-        //For immutable buffers, it is mandatory that cubeVertices is not a null pointer.
-        float *cubeVertices = reinterpret_cast<float*>( OGRE_MALLOC_SIMD( sizeof(float) * 8 * 3,
-                                                                          Ogre::MEMCATEGORY_GEOMETRY ) );
-        //Fill the data.
-        memcpy( cubeVertices, c_vertexData, sizeof(float) * 8 * 3 );
+        // For immutable buffers, it is mandatory that cubeVertices is not a null pointer.
+        float *cubeVertices = reinterpret_cast<float *>(
+            OGRE_MALLOC_SIMD( sizeof( float ) * 8 * 3, Ogre::MEMCATEGORY_GEOMETRY ) );
+        // Fill the data.
+        memcpy( cubeVertices, c_vertexData, sizeof( float ) * 8 * 3 );
 
         Ogre::VertexBufferPacked *vertexBuffer = 0;
         try
         {
-            //Create the actual vertex buffer.
-            vertexBuffer = vaoManager->createVertexBuffer( vertexElements, 8,
-                                                           BT_IMMUTABLE,
-                                                           cubeVertices, true );
+            // Create the actual vertex buffer.
+            vertexBuffer =
+                vaoManager->createVertexBuffer( vertexElements, 8, BT_IMMUTABLE, cubeVertices, true );
         }
-        catch( Ogre::Exception& )
+        catch( Ogre::Exception & )
         {
             OGRE_FREE_SIMD( vertexBuffer, Ogre::MEMCATEGORY_GEOMETRY );
             vertexBuffer = 0;
             throw;
         }
 
-        //Now the Vao. We'll just use one vertex buffer source
+        // Now the Vao. We'll just use one vertex buffer source
         VertexBufferPackedVec vertexBuffers;
         vertexBuffers.push_back( vertexBuffer );
-        Ogre::VertexArrayObject *vao = vaoManager->createVertexArrayObject(
-                    vertexBuffers, indexBuffer, OT_LINE_LIST );
+        Ogre::VertexArrayObject *vao =
+            vaoManager->createVertexArrayObject( vertexBuffers, indexBuffer, OT_LINE_LIST );
 
         mVaoPerLod[0].push_back( vao );
         mVaoPerLod[1].push_back( vao );
     }
     //-----------------------------------------------------------------------------------
-    const String& WireAabb::getMovableType(void) const
+    const String &WireAabb::getMovableType() const { return WireAabbFactory::FACTORY_TYPE_NAME; }
+    //-----------------------------------------------------------------------------------
+    const LightList &WireAabb::getLights() const
     {
-        return WireAabbFactory::FACTORY_TYPE_NAME;
+        return this->queryLights();  // Return the data from our MovableObject base class.
     }
     //-----------------------------------------------------------------------------------
-    const LightList& WireAabb::getLights(void) const
-    {
-        return this->queryLights(); //Return the data from our MovableObject base class.
-    }
-    //-----------------------------------------------------------------------------------
-    void WireAabb::getRenderOperation( v1::RenderOperation& op , bool casterPass )
+    void WireAabb::getRenderOperation( v1::RenderOperation &op, bool casterPass )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                        "WireAabb do not implement getRenderOperation."
-                        " You've put a v2 object in "
-                        "the wrong RenderQueue ID (which is set to be compatible with "
-                        "v1::Entity). Do not mix v2 and v1 objects",
-                        "WireAabb::getRenderOperation" );
+                     "WireAabb do not implement getRenderOperation."
+                     " You've put a v2 object in "
+                     "the wrong RenderQueue ID (which is set to be compatible with "
+                     "v1::Entity). Do not mix v2 and v1 objects",
+                     "WireAabb::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    void WireAabb::getWorldTransforms( Matrix4* xform ) const
+    void WireAabb::getWorldTransforms( Matrix4 *xform ) const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                        "WireAabb do not implement getWorldTransforms."
-                        " You've put a v2 object in "
-                        "the wrong RenderQueue ID (which is set to be compatible with "
-                        "v1::Entity). Do not mix v2 and v1 objects",
-                        "WireAabb::getRenderOperation" );
+                     "WireAabb do not implement getWorldTransforms."
+                     " You've put a v2 object in "
+                     "the wrong RenderQueue ID (which is set to be compatible with "
+                     "v1::Entity). Do not mix v2 and v1 objects",
+                     "WireAabb::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    bool WireAabb::getCastsShadows(void) const
+    bool WireAabb::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                        "WireAabb do not implement getCastsShadows."
-                        " You've put a v2 object in "
-                        "the wrong RenderQueue ID (which is set to be compatible with "
-                        "v1::Entity). Do not mix v2 and v1 objects",
-                        "WireAabb::getRenderOperation" );
+                     "WireAabb do not implement getCastsShadows."
+                     " You've put a v2 object in "
+                     "the wrong RenderQueue ID (which is set to be compatible with "
+                     "v1::Entity). Do not mix v2 and v1 objects",
+                     "WireAabb::getRenderOperation" );
     }
 
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     String WireAabbFactory::FACTORY_TYPE_NAME = "WireAabb";
     //-----------------------------------------------------------------------
-    const String& WireAabbFactory::getType(void) const
-    {
-        return FACTORY_TYPE_NAME;
-    }
+    const String &WireAabbFactory::getType() const { return FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------
-    MovableObject* WireAabbFactory::createInstanceImpl( IdType id,
-                                                              ObjectMemoryManager *objectMemoryManager,
-                                                              SceneManager *manager,
-                                                              const NameValuePairList* params )
+    MovableObject *WireAabbFactory::createInstanceImpl( IdType id,
+                                                        ObjectMemoryManager *objectMemoryManager,
+                                                        SceneManager *manager,
+                                                        const NameValuePairList *params )
     {
         return OGRE_NEW WireAabb( id, objectMemoryManager, manager );
     }
     //-----------------------------------------------------------------------
-    void WireAabbFactory::destroyInstance( MovableObject* obj )
-    {
-        OGRE_DELETE obj;
-    }
-}
+    void WireAabbFactory::destroyInstance( MovableObject *obj ) { OGRE_DELETE obj; }
+}  // namespace Ogre

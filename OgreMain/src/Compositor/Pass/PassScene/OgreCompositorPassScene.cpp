@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,36 +29,35 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
+
+#include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-#include "Compositor/OgreCompositorShadowNode.h"
-
 #include "OgreCamera.h"
-#include "OgreViewport.h"
-#include "OgreSceneManager.h"
-
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreSceneManager.h"
+#include "OgreViewport.h"
 
 namespace Ogre
 {
     CompositorPassScene::CompositorPassScene( const CompositorPassSceneDef *definition,
                                               Camera *defaultCamera, const RenderTargetViewDef *rtv,
                                               CompositorNode *parentNode ) :
-                CompositorPass( definition, parentNode ),
-                mDefinition( definition ),
-                mShadowNode( 0 ),
-                mCamera( 0 ),
-                mLodCamera( 0 ),
-                mCullCamera( 0 ),
-                mUpdateShadowNode( false ),
-                mPrePassTextures( 0 ),
-                mPrePassDepthTexture( 0 ),
-                mSsrTexture( 0 ),
-                mDepthTextureNoMsaa( 0 ),
-                mRefractionsTexture( 0 ),
-                mHlmsManager( Root::getSingleton().getHlmsManager() )
+        CompositorPass( definition, parentNode ),
+        mDefinition( definition ),
+        mShadowNode( 0 ),
+        mCamera( 0 ),
+        mLodCamera( 0 ),
+        mCullCamera( 0 ),
+        mUpdateShadowNode( false ),
+        mPrePassTextures( 0 ),
+        mPrePassDepthTexture( 0 ),
+        mSsrTexture( 0 ),
+        mDepthTextureNoMsaa( 0 ),
+        mRefractionsTexture( 0 ),
+        mHlmsManager( Root::getSingleton().getHlmsManager() )
     {
         initialize( rtv );
 
@@ -67,8 +66,8 @@ namespace Ogre
         if( mDefinition->mShadowNode != IdString() )
         {
             bool shadowNodeCreated;
-            mShadowNode = workspace->findOrCreateShadowNode( mDefinition->mShadowNode,
-                                                             shadowNodeCreated );
+            mShadowNode =
+                workspace->findOrCreateShadowNode( mDefinition->mShadowNode, shadowNodeCreated );
 
             // Passes with "first_only" option are set in CompositorWorkspace::setupPassesShadowNodes
             if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_FIRST_ONLY )
@@ -140,41 +139,39 @@ namespace Ogre
             mRefractionsTexture = parentNode->getDefinedTexture( mDefinition->mRefractionsTexture );
     }
     //-----------------------------------------------------------------------------------
-    CompositorPassScene::~CompositorPassScene()
-    {
-    }
+    CompositorPassScene::~CompositorPassScene() {}
     //-----------------------------------------------------------------------------------
-    void CompositorPassScene::notifyPassSceneAfterShadowMapsListeners(void)
+    void CompositorPassScene::notifyPassSceneAfterShadowMapsListeners()
     {
-        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+        const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->passSceneAfterShadowMaps( this );
+            ( *itor )->passSceneAfterShadowMaps( this );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassScene::notifyPassSceneAfterFrustumCullingListeners(void)
+    void CompositorPassScene::notifyPassSceneAfterFrustumCullingListeners()
     {
-        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+        const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->passSceneAfterFrustumCulling( this );
+            ( *itor )->passSceneAfterFrustumCulling( this );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassScene::execute( const Camera *lodCamera )
     {
-        //Execute a limited number of times?
+        // Execute a limited number of times?
         if( mNumPassesLeft != std::numeric_limits<uint32>::max() )
         {
             if( !mNumPassesLeft )
@@ -193,14 +190,14 @@ namespace Ogre
             usedLodCamera = lodCamera;
 
 #if TODO_OGRE_2_2
-        //store the viewports current material scheme and use the one set in the scene pass def
+        // store the viewports current material scheme and use the one set in the scene pass def
         String oldViewportMatScheme = mViewport->getMaterialScheme();
-        mViewport->setMaterialScheme(mDefinition->mMaterialScheme);
+        mViewport->setMaterialScheme( mDefinition->mMaterialScheme );
 #endif
 
         const Quaternion oldCameraOrientation( mCamera->getOrientation() );
 
-        //We have to do this first in case usedLodCamera == mCamera
+        // We have to do this first in case usedLodCamera == mCamera
         if( mDefinition->mCameraCubemapReorient )
         {
             uint32 sliceIdx = std::min<uint32>( mDefinition->getRtIndex(), 5 );
@@ -228,15 +225,16 @@ namespace Ogre
             mLodCamera->_notifyViewport( viewport );
         }
 
-        //Passes belonging to a ShadowNode should not override their parent.
-        CompositorShadowNode* shadowNode = (mShadowNode && mShadowNode->getEnabled()) ? mShadowNode : 0;
+        // Passes belonging to a ShadowNode should not override their parent.
+        CompositorShadowNode *shadowNode =
+            ( mShadowNode && mShadowNode->getEnabled() ) ? mShadowNode : 0;
         if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_CASTER_PASS )
         {
-            sceneManager->_setCurrentShadowNode( shadowNode, mDefinition->mShadowNodeRecalculation ==
-                                                                                    SHADOW_NODE_REUSE );
+            sceneManager->_setCurrentShadowNode(
+                shadowNode, mDefinition->mShadowNodeRecalculation == SHADOW_NODE_REUSE );
         }
 
-        //Fire the listener in case it wants to change anything
+        // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
 
         if( mUpdateShadowNode && shadowNode )
@@ -250,28 +248,28 @@ namespace Ogre
                              "CompositorPassScene::execute" );
             }
 
-            //Save the value in case the listener changed it
+            // Save the value in case the listener changed it
             const uint32 oldVisibilityMask = viewport->getVisibilityMask();
             const uint32 oldLightVisibilityMask = viewport->getLightVisibilityMask();
 
-            // use culling camera for shadows, so if shadows are re used for slightly different camera (ie VR)
-            // shadows are not 'over culled'
-            mCullCamera->_notifyViewport(viewport);
+            // use culling camera for shadows, so if shadows are re used for slightly different camera
+            // (ie VR) shadows are not 'over culled'
+            mCullCamera->_notifyViewport( viewport );
 
-            shadowNode->_update(mCullCamera, usedLodCamera, sceneManager);
+            shadowNode->_update( mCullCamera, usedLodCamera, sceneManager );
 
-            //ShadowNode passes may've overriden these settings.
-            sceneManager->_setCurrentShadowNode( shadowNode, mDefinition->mShadowNodeRecalculation ==
-                                                                                    SHADOW_NODE_REUSE );
+            // ShadowNode passes may've overriden these settings.
+            sceneManager->_setCurrentShadowNode(
+                shadowNode, mDefinition->mShadowNodeRecalculation == SHADOW_NODE_REUSE );
             viewport->_setVisibilityMask( oldVisibilityMask, oldLightVisibilityMask );
-            mCullCamera->_notifyViewport(viewport);
+            mCullCamera->_notifyViewport( viewport );
 
             if( mDefinition->mFlushCommandBuffersAfterShadowNode )
             {
                 RenderSystem *renderSystem = mParentNode->getRenderSystem();
                 renderSystem->flushCommands();
             }
-            //We need to restore the previous RT's update
+            // We need to restore the previous RT's update
         }
 
         notifyPassSceneAfterShadowMapsListeners();
@@ -281,32 +279,31 @@ namespace Ogre
         setRenderPassDescToCurrent();
 
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );
-        sceneManager->_setPrePassMode( mDefinition->mPrePassMode, mPrePassTextures,
-                                       mPrePassDepthTexture, mSsrTexture );
+        sceneManager->_setPrePassMode( mDefinition->mPrePassMode, mPrePassTextures, mPrePassDepthTexture,
+                                       mSsrTexture );
         sceneManager->_setRefractions( mDepthTextureNoMsaa, mRefractionsTexture );
         sceneManager->_setCurrentCompositorPass( this );
 
-        viewport->_updateCullPhase01( mCamera, mCullCamera, usedLodCamera,
-                                      mDefinition->mFirstRQ, mDefinition->mLastRQ,
-                                      mDefinition->mReuseCullData );
+        viewport->_updateCullPhase01( mCamera, mCullCamera, usedLodCamera, mDefinition->mFirstRQ,
+                                      mDefinition->mLastRQ, mDefinition->mReuseCullData );
 
         notifyPassSceneAfterFrustumCullingListeners();
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
 #endif
-        viewport->_updateRenderPhase02( mCamera, usedLodCamera,
-                                        mDefinition->mFirstRQ, mDefinition->mLastRQ );
+        viewport->_updateRenderPhase02( mCamera, usedLodCamera, mDefinition->mFirstRQ,
+                                        mDefinition->mLastRQ );
 
         if( mDefinition->mCameraCubemapReorient )
         {
-            //Restore orientation
+            // Restore orientation
             mCamera->setOrientation( oldCameraOrientation );
         }
 
 #if TODO_OGRE_2_2
-        //restore viewport material scheme
-        mViewport->setMaterialScheme(oldViewportMatScheme);
+        // restore viewport material scheme
+        mViewport->setMaterialScheme( oldViewportMatScheme );
 #endif
 
         sceneManager->_setPrePassMode( PrePassNone, TextureGpuVec(), 0, 0 );
@@ -417,9 +414,9 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassScene::notifyCleared(void)
+    void CompositorPassScene::notifyCleared()
     {
-        mShadowNode = 0; //Allow changes to our shadow nodes too.
+        mShadowNode = 0;  // Allow changes to our shadow nodes too.
         CompositorPass::notifyCleared();
     }
-}
+}  // namespace Ogre

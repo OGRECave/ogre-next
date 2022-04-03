@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,23 +29,27 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Animation/OgreSkeletonInstance.h"
-#include "Animation/OgreSkeletonDef.h"
+
 #include "Animation/OgreSkeletonAnimationDef.h"
+#include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonManager.h"
-
 #include "OgreId.h"
-
 #include "OgreOldBone.h"
 #include "OgreSceneNode.h"
 #include "OgreSkeleton.h"
+
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
 
 namespace Ogre
 {
     SkeletonInstance::SkeletonInstance( const SkeletonDef *skeletonDef,
                                         BoneMemoryManager *boneMemoryManager ) :
-            mDefinition( skeletonDef ),
-            mParentNode( 0 ),
-            mRefCount( 1 )
+        mDefinition( skeletonDef ),
+        mParentNode( 0 ),
+        mRefCount( 1 )
     {
         mBones.resize( mDefinition->getBones().size(), Bone() );
 
@@ -55,9 +59,9 @@ namespace Ogre
         while( itDepth != enDepth )
         {
             list<size_t>::type::const_iterator itor = itDepth->begin();
-            list<size_t>::type::const_iterator end  = itDepth->end();
+            list<size_t>::type::const_iterator endt = itDepth->end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 Bone *parent = 0;
                 size_t parentIdx = mDefinition->mBones[*itor].parent;
@@ -88,8 +92,8 @@ namespace Ogre
             mBoneStartTransforms.reserve( depthLevelInfo.size() );
 
             mManualBones = RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION>(
-                                mDefinition->getNumberOfBoneBlocks( depthLevelInfo.size() ) );
-            Real *manualBones = reinterpret_cast<Real*>( mManualBones.get() );
+                mDefinition->getNumberOfBoneBlocks( depthLevelInfo.size() ) );
+            Real *manualBones = reinterpret_cast<Real *>( mManualBones.get() );
 
             // FIXME: manualBones could possibly be null. What to do?
 
@@ -99,22 +103,22 @@ namespace Ogre
             ArrayMatrixAf4x3 const *reverseBindPose = mDefinition->mReverseBindPose.get();
 
             SkeletonDef::DepthLevelInfoVec::const_iterator itor = depthLevelInfo.begin();
-            SkeletonDef::DepthLevelInfoVec::const_iterator end  = depthLevelInfo.end();
+            SkeletonDef::DepthLevelInfoVec::const_iterator endt = depthLevelInfo.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const BoneTransform &firstBoneTransform = mBones[itor->firstBoneIndex]._getTransform();
                 mBoneStartTransforms.push_back( firstBoneTransform );
                 mSlotStarts.push_back( firstBoneTransform.mIndex );
 
-                assert( (itor->numBonesInLevel <= (ARRAY_PACKED_REALS >> 1)) ||
+                assert( ( itor->numBonesInLevel <= ( ARRAY_PACKED_REALS >> 1 ) ) ||
                         !firstBoneTransform.mIndex );
 
-                if( itor->numBonesInLevel > (ARRAY_PACKED_REALS >> 1) )
+                if( itor->numBonesInLevel > ( ARRAY_PACKED_REALS >> 1 ) )
                 {
-                    //TODO: Reserve enough space in mUnusedNodes (amount can be cached in SkeletonDef)
-                    size_t unusedSlots = ARRAY_PACKED_REALS -
-                                            (itor->numBonesInLevel % ARRAY_PACKED_REALS);
+                    // TODO: Reserve enough space in mUnusedNodes (amount can be cached in SkeletonDef)
+                    size_t unusedSlots =
+                        ARRAY_PACKED_REALS - ( itor->numBonesInLevel % ARRAY_PACKED_REALS );
 
                     // When x is a multiple of ARRAY_PACKED_REALS, then the formula gives:
                     //      ARRAY_PACKED_REALS - x % ARRAY_PACKED_REALS = ARRAY_PACKED_REALS;
@@ -122,17 +126,17 @@ namespace Ogre
                     // aligned to the block
                     if( unusedSlots != ARRAY_PACKED_REALS )
                     {
-                        for( size_t i=0; i<unusedSlots; ++i )
+                        for( size_t i = 0; i < unusedSlots; ++i )
                         {
-                            //Dummy bones need the right parent so they
-                            //consume memory from the right depth level
+                            // Dummy bones need the right parent so they
+                            // consume memory from the right depth level
                             Bone *parent = 0;
                             if( itor != depthLevelInfo.begin() )
-                                parent = &mBones[(itor-1)->firstBoneIndex];
+                                parent = &mBones[( itor - 1 )->firstBoneIndex];
 
                             Bone &unused = mUnusedNodes[currentUnusedSlotIdx];
-                            unused._initialize( Id::generateNewId<Node>(), boneMemoryManager,
-                                                parent, 0 );
+                            unused._initialize( Id::generateNewId<Node>(), boneMemoryManager, parent,
+                                                0 );
                             unused.setName( "Unused" );
                             unused.mGlobalIndex = i;
 
@@ -141,26 +145,26 @@ namespace Ogre
                     }
                 }
 
-                //Prepare for default pose, 0.0f for manually animated or a slot that
-                //doesn't belong to us, 1.0f when we should apply animation
+                // Prepare for default pose, 0.0f for manually animated or a slot that
+                // doesn't belong to us, 1.0f when we should apply animation
                 size_t slotStart = firstBoneTransform.mIndex;
-                size_t remainder = (slotStart + itor->numBonesInLevel) % ARRAY_PACKED_REALS;
-                for( size_t i=0; i<slotStart; ++i )
+                size_t remainder = ( slotStart + itor->numBonesInLevel ) % ARRAY_PACKED_REALS;
+                for( size_t i = 0; i < slotStart; ++i )
                     *manualBones++ = 0.0f;
-                for( size_t i=slotStart; i<slotStart + itor->numBonesInLevel; ++i )
+                for( size_t i = slotStart; i < slotStart + itor->numBonesInLevel; ++i )
                     *manualBones++ = 1.0f;
                 if( remainder != 0 )
                 {
-                    for( size_t i=0; i<ARRAY_PACKED_REALS - remainder; ++i )
+                    for( size_t i = 0; i < ARRAY_PACKED_REALS - remainder; ++i )
                         *manualBones++ = 0.0f;
                 }
 
-                //Take advantage that all Bones in mOwner are planar in memory
+                // Take advantage that all Bones in mOwner are planar in memory
                 Bone **bonesPtr = firstBoneTransform.mOwner;
-                for( size_t i=slotStart; i<slotStart + itor->numBonesInLevel; ++i )
+                for( size_t i = slotStart; i < slotStart + itor->numBonesInLevel; ++i )
                 {
                     bonesPtr[i]->_setReverseBindPtr( reverseBindPose );
-                    if( !( (i+1) % ARRAY_PACKED_REALS) )
+                    if( !( ( i + 1 ) % ARRAY_PACKED_REALS ) )
                         ++reverseBindPose;
                 }
 
@@ -175,11 +179,11 @@ namespace Ogre
         mAnimations.reserve( animationDefs.size() );
 
         SkeletonAnimationDefVec::const_iterator itor = animationDefs.begin();
-        SkeletonAnimationDefVec::const_iterator end  = animationDefs.end();
+        SkeletonAnimationDefVec::const_iterator endt = animationDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            SkeletonAnimation animation( &(*itor), &mSlotStarts, this );
+            SkeletonAnimation animation( &( *itor ), &mSlotStarts, this );
             mAnimations.push_back( animation );
             mAnimations.back()._initialize();
             ++itor;
@@ -190,18 +194,20 @@ namespace Ogre
     {
         {
             SceneNodeBonePairVec::iterator itor = mCustomParentSceneNodes.begin();
-            SceneNodeBonePairVec::iterator end  = mCustomParentSceneNodes.end();
-            while( itor != end )
+            SceneNodeBonePairVec::iterator endt = mCustomParentSceneNodes.end();
+            while( itor != endt )
             {
                 itor->sceneNodeParent->_detachAllBones( this );
                 ++itor;
             }
         }
 
-        //Detach all bones in the reverse order they were attached (LIFO!!!)
+        // Detach all bones in the reverse order they were attached (LIFO!!!)
         size_t currentDepth = mDefinition->mBonesPerDepth.size() - 1;
-        vector<list<size_t>::type>::type::const_reverse_iterator ritDepth = mDefinition->mBonesPerDepth.rbegin();
-        vector<list<size_t>::type>::type::const_reverse_iterator renDepth = mDefinition->mBonesPerDepth.rend();
+        vector<list<size_t>::type>::type::const_reverse_iterator ritDepth =
+            mDefinition->mBonesPerDepth.rbegin();
+        vector<list<size_t>::type>::type::const_reverse_iterator renDepth =
+            mDefinition->mBonesPerDepth.rend();
 
         BoneVec::reverse_iterator ritUnusedNodes = mUnusedNodes.rbegin();
         BoneVec::reverse_iterator renUnusedNodes = mUnusedNodes.rend();
@@ -215,8 +221,8 @@ namespace Ogre
             }
 
             list<size_t>::type::const_reverse_iterator ritor = ritDepth->rbegin();
-            list<size_t>::type::const_reverse_iterator rend  = ritDepth->rend();
-            while( ritor != rend )
+            list<size_t>::type::const_reverse_iterator rendt = ritDepth->rend();
+            while( ritor != rendt )
             {
                 mBones[*ritor]._deinitialize();
                 ++ritor;
@@ -232,43 +238,43 @@ namespace Ogre
         mBones.clear();
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::update(void)
+    void SkeletonInstance::update()
     {
         if( !mActiveAnimations.empty() )
             resetToPose();
 
         ActiveAnimationsVec::iterator itor = mActiveAnimations.begin();
-        ActiveAnimationsVec::iterator end  = mActiveAnimations.end();
+        ActiveAnimationsVec::iterator endt = mActiveAnimations.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->_applyAnimation( mBoneStartTransforms );
+            ( *itor )->_applyAnimation( mBoneStartTransforms );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::resetToPose(void)
+    void SkeletonInstance::resetToPose()
     {
-        KfTransform const * RESTRICT_ALIAS bindPose = mDefinition->getBindPose();
-        ArrayReal const * RESTRICT_ALIAS manualBones = mManualBones.get();
+        KfTransform const *RESTRICT_ALIAS bindPose = mDefinition->getBindPose();
+        ArrayReal const *RESTRICT_ALIAS manualBones = mManualBones.get();
 
         SkeletonDef::DepthLevelInfoVec::const_iterator itDepthLevelInfo =
-                                                mDefinition->getDepthLevelInfo().begin();
+            mDefinition->getDepthLevelInfo().begin();
 
         TransformArray::iterator itor = mBoneStartTransforms.begin();
-        TransformArray::iterator end  = mBoneStartTransforms.end();
+        TransformArray::iterator endt = mBoneStartTransforms.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             BoneTransform t = *itor;
-            for( size_t i=0; i<itDepthLevelInfo->numBonesInLevel; i += ARRAY_PACKED_REALS )
+            for( size_t i = 0; i < itDepthLevelInfo->numBonesInLevel; i += ARRAY_PACKED_REALS )
             {
-                OGRE_PREFETCH_T0( (const char*)(t.mPosition + 4) );
-                OGRE_PREFETCH_T0( (const char*)(t.mOrientation + 4) );
-                OGRE_PREFETCH_T0( (const char*)(t.mScale + 4) );
-                OGRE_PREFETCH_T0( (const char*)(t.mPosition + 8) );
-                OGRE_PREFETCH_T0( (const char*)(t.mOrientation + 8) );
-                OGRE_PREFETCH_T0( (const char*)(t.mScale + 8) );
+                OGRE_PREFETCH_T0( (const char *)( t.mPosition + 4 ) );
+                OGRE_PREFETCH_T0( (const char *)( t.mOrientation + 4 ) );
+                OGRE_PREFETCH_T0( (const char *)( t.mScale + 4 ) );
+                OGRE_PREFETCH_T0( (const char *)( t.mPosition + 8 ) );
+                OGRE_PREFETCH_T0( (const char *)( t.mOrientation + 8 ) );
+                OGRE_PREFETCH_T0( (const char *)( t.mScale + 8 ) );
 
                 *t.mPosition = Math::lerp( *t.mPosition, bindPose->mPosition, *manualBones );
                 *t.mOrientation = Math::lerp( *t.mOrientation, bindPose->mOrientation, *manualBones );
@@ -291,18 +297,18 @@ namespace Ogre
         uint32 depthLevel = bone->getDepthLevel();
         Bone &firstBone = mBones[mDefinition->getDepthLevelInfo()[depthLevel].firstBoneIndex];
 
-        const BoneTransform &boneTransf      = bone->_getTransform();
+        const BoneTransform &boneTransf = bone->_getTransform();
         const BoneTransform &firstBoneTransf = firstBone._getTransform();
 
-        //Get bone offset relative to the beginning of its depth level.
-        uintptr_t diff = (boneTransf.mOwner - firstBoneTransf.mOwner) + boneTransf.mIndex;
-        //Offset by all past bones from parent levels.
+        // Get bone offset relative to the beginning of its depth level.
+        ptrdiff_t diff = ( boneTransf.mOwner - firstBoneTransf.mOwner ) + boneTransf.mIndex;
+        // Offset by all past bones from parent levels.
         diff += mDefinition->getNumberOfBoneBlocks( depthLevel ) * ARRAY_PACKED_REALS;
 
-        assert( diff < mManualBones.size() * ARRAY_PACKED_REALS &&
+        assert( static_cast<size_t>( diff ) < mManualBones.size() * ARRAY_PACKED_REALS &&
                 "Offset incorrectly calculated. manualBones[diff] will overflow!" );
 
-        Real *manualBones = reinterpret_cast<Real*>( mManualBones.get() );
+        Real *manualBones = reinterpret_cast<Real *>( mManualBones.get() );
         manualBones[diff] = isManual ? 0.0f : 1.0f;
     }
     //-----------------------------------------------------------------------------------
@@ -313,18 +319,18 @@ namespace Ogre
         uint32 depthLevel = bone->getDepthLevel();
         Bone &firstBone = mBones[mDefinition->getDepthLevelInfo()[depthLevel].firstBoneIndex];
 
-        const BoneTransform &boneTransf      = bone->_getTransform();
+        const BoneTransform &boneTransf = bone->_getTransform();
         const BoneTransform &firstBoneTransf = firstBone._getTransform();
 
-        //Get bone offset relative to the beginning of its depth level.
-        uintptr_t diff = (boneTransf.mOwner - firstBoneTransf.mOwner) + boneTransf.mIndex;
-        //Offset by all past bones from parent levels.
+        // Get bone offset relative to the beginning of its depth level.
+        ptrdiff_t diff = ( boneTransf.mOwner - firstBoneTransf.mOwner ) + boneTransf.mIndex;
+        // Offset by all past bones from parent levels.
         diff += mDefinition->getNumberOfBoneBlocks( depthLevel ) * ARRAY_PACKED_REALS;
 
-        assert( diff < mManualBones.size() * ARRAY_PACKED_REALS &&
+        assert( static_cast<size_t>( diff ) < mManualBones.size() * ARRAY_PACKED_REALS &&
                 "Offset incorrectly calculated. manualBones[diff] will overflow!" );
 
-        const Real *manualBones = reinterpret_cast<const Real*>( mManualBones.get() );
+        const Real *manualBones = reinterpret_cast<const Real *>( mManualBones.get() );
         return manualBones[diff] == 0.0f;
     }
     //-----------------------------------------------------------------------------------
@@ -333,11 +339,11 @@ namespace Ogre
         assert( &mBones[bone->mGlobalIndex] == bone && "The bone doesn't belong to this instance!" );
 
         SceneNodeBonePairVec::iterator itor = mCustomParentSceneNodes.begin();
-        SceneNodeBonePairVec::iterator end  = mCustomParentSceneNodes.end();
-        while( itor != end && itor->boneChild != bone )
+        SceneNodeBonePairVec::iterator endt = mCustomParentSceneNodes.end();
+        while( itor != endt && itor->boneChild != bone )
             ++itor;
 
-        if( itor != end && itor->boneChild == bone )
+        if( itor != endt && itor->boneChild == bone )
         {
             itor->sceneNodeParent->_detachBone( this, itor->boneChild );
             efficientVectorRemove( mCustomParentSceneNodes, itor );
@@ -358,90 +364,85 @@ namespace Ogre
     bool SkeletonInstance::hasBone( IdString boneName ) const
     {
         return mDefinition->mBoneIndexByName.find( boneName ) != mDefinition->mBoneIndexByName.end();
-    }      
+    }
     //-----------------------------------------------------------------------------------
-    Bone* SkeletonInstance::getBone( IdString boneName )
+    Bone *SkeletonInstance::getBone( IdString boneName )
     {
         SkeletonDef::BoneNameMap::const_iterator itor = mDefinition->mBoneIndexByName.find( boneName );
 
         if( itor == mDefinition->mBoneIndexByName.end() )
         {
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                             "Can't find bone with name '" + boneName.getFriendlyText() + "'",
-                             "SkeletonInstance::getBone" );
+                         "Can't find bone with name '" + boneName.getFriendlyText() + "'",
+                         "SkeletonInstance::getBone" );
         }
 
         return &mBones[itor->second];
     }
     //-----------------------------------------------------------------------------------
-    Bone* SkeletonInstance::getBone( size_t index )
-    {
-        return &mBones[index];
-    }
+    Bone *SkeletonInstance::getBone( size_t index ) { return &mBones[index]; }
     //-----------------------------------------------------------------------------------
-    size_t SkeletonInstance::getNumBones(void) const
-    {
-        return mBones.size();
-    }
+    size_t SkeletonInstance::getNumBones() const { return mBones.size(); }
     //-----------------------------------------------------------------------------------
     bool SkeletonInstance::hasAnimation( IdString name ) const
     {
         SkeletonAnimationVec::const_iterator itor = mAnimations.begin();
-        SkeletonAnimationVec::const_iterator end  = mAnimations.end();
+        SkeletonAnimationVec::const_iterator endt = mAnimations.end();
 
-        while( itor != end && itor->getName() != name )
+        while( itor != endt && itor->getName() != name )
             ++itor;
 
-        return itor != end;
+        return itor != endt;
     }
     //-----------------------------------------------------------------------------------
-    SkeletonAnimation* SkeletonInstance::getAnimation( IdString name )
+    SkeletonAnimation *SkeletonInstance::getAnimation( IdString name )
     {
         SkeletonAnimationVec::iterator itor = mAnimations.begin();
-        SkeletonAnimationVec::iterator end  = mAnimations.end();
+        SkeletonAnimationVec::iterator endt = mAnimations.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->getName() == name )
-                return &(*itor);
+                return &( *itor );
             ++itor;
         }
 
         OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                      "Can't find animation '" + name.getFriendlyText() + "'",
                      "SkeletonInstance::getAnimation" );
-        return 0;    
+        return 0;
     }
     //-----------------------------------------------------------------------------------
     void SkeletonInstance::addAnimationsFromSkeleton( const String &skelName, const String &groupName )
     {
-        //First save BoneWeightPtr which would otherwise be freed during mAnimations' resize
-        //SkeletonAnimation does not follow the rule of 3
-        //https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming)
-        typedef vector< RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> >::type BoneWeightPtrVec;
+        // First save BoneWeightPtr which would otherwise be freed during mAnimations' resize
+        // SkeletonAnimation does not follow the rule of 3
+        // https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming)
+        typedef vector<RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> >::type BoneWeightPtrVec;
         const size_t oldNumAnimations = mAnimations.size();
         BoneWeightPtrVec boneWeightPtrs( mAnimations.size() );
 
-        for( size_t i=0; i<oldNumAnimations; ++i )
+        for( size_t i = 0; i < oldNumAnimations; ++i )
             mAnimations[i]._swapBoneWeightsUniquePtr( boneWeightPtrs[i] );
 
-        SkeletonDefPtr definition = SkeletonManager::getSingleton().getSkeletonDef(skelName, groupName);
+        SkeletonDefPtr definition =
+            SkeletonManager::getSingleton().getSkeletonDef( skelName, groupName );
 
         const SkeletonAnimationDefVec &animationDefs = definition->getAnimationDefs();
         mAnimations.reserve( mAnimations.size() + animationDefs.size() );
 
         SkeletonAnimationDefVec::const_iterator itor = animationDefs.begin();
-        SkeletonAnimationDefVec::const_iterator end  = animationDefs.end();
-        while( itor != end )
+        SkeletonAnimationDefVec::const_iterator endt = animationDefs.end();
+        while( itor != endt )
         {
-            SkeletonAnimation animation( &(*itor), &mSlotStarts, this );
+            SkeletonAnimation animation( &( *itor ), &mSlotStarts, this );
             mAnimations.push_back( animation );
             mAnimations.back()._initialize();
             ++itor;
         }
 
-        //Restore the BoneWeightPtr
-        for( size_t i=0; i<oldNumAnimations; ++i )
+        // Restore the BoneWeightPtr
+        for( size_t i = 0; i < oldNumAnimations; ++i )
             mAnimations[i]._swapBoneWeightsUniquePtr( boneWeightPtrs[i] );
     }
     //-----------------------------------------------------------------------------------
@@ -452,8 +453,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void SkeletonInstance::_disableAnimation( SkeletonAnimation *animation )
     {
-        ActiveAnimationsVec::iterator it = std::find( mActiveAnimations.begin(), mActiveAnimations.end(),
-                                                        animation );
+        ActiveAnimationsVec::iterator it =
+            std::find( mActiveAnimations.begin(), mActiveAnimations.end(), animation );
         if( it != mActiveAnimations.end() )
             efficientVectorRemove( mActiveAnimations, it );
     }
@@ -464,9 +465,9 @@ namespace Ogre
 
         {
             BoneVec::iterator itor = mBones.begin();
-            BoneVec::iterator end  = mBones.end();
+            BoneVec::iterator endt = mBones.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 itor->_setNodeParent( mParentNode );
                 ++itor;
@@ -474,10 +475,10 @@ namespace Ogre
         }
 
         {
-            //Restore the bones with custom scene nodes.
+            // Restore the bones with custom scene nodes.
             SceneNodeBonePairVec::iterator itor = mCustomParentSceneNodes.begin();
-            SceneNodeBonePairVec::iterator end  = mCustomParentSceneNodes.end();
-            while( itor != end )
+            SceneNodeBonePairVec::iterator endt = mCustomParentSceneNodes.end();
+            while( itor != endt )
             {
                 itor->boneChild->_setNodeParent( itor->sceneNodeParent );
                 ++itor;
@@ -485,20 +486,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::getTransforms( SimpleMatrixAf4x3 * RESTRICT_ALIAS outTransform,
-                                            const FastArray<unsigned short> &usedBones ) const
+    void SkeletonInstance::getTransforms( SimpleMatrixAf4x3 *RESTRICT_ALIAS outTransform,
+                                          const FastArray<unsigned short> &usedBones ) const
     {
         FastArray<unsigned short>::const_iterator itor = usedBones.begin();
-        FastArray<unsigned short>::const_iterator end  = usedBones.end();
+        FastArray<unsigned short>::const_iterator endt = usedBones.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             *outTransform++ = mBones[*itor]._getFullTransform();
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::_updateBoneStartTransforms(void)
+    void SkeletonInstance::_updateBoneStartTransforms()
     {
         // mIndex has shifted so the following needs to be changed:
         //  - mBoneStartTransforms: It literally marks when our bones start in the SIMD group
@@ -561,29 +562,24 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const void* SkeletonInstance::_getMemoryBlock(void) const
+    const void *SkeletonInstance::_getMemoryBlock() const
     {
-        return reinterpret_cast<const void*>( mBoneStartTransforms[0].mOwner );
+        return reinterpret_cast<const void *>( mBoneStartTransforms[0].mOwner );
     }
     //-----------------------------------------------------------------------------------
-    const void* SkeletonInstance::_getMemoryUniqueOffset(void) const
+    const void *SkeletonInstance::_getMemoryUniqueOffset() const
     {
-        return reinterpret_cast<const void*>(
-                        mBoneStartTransforms[0].mOwner + mBoneStartTransforms[0].mIndex );
+        return reinterpret_cast<const void *>( mBoneStartTransforms[0].mOwner +
+                                               mBoneStartTransforms[0].mIndex );
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::_incrementRefCount(void) 
-    {
-        mRefCount++;
-    }
+    void SkeletonInstance::_incrementRefCount() { mRefCount++; }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::_decrementRefCount(void) 
-    {
-        mRefCount--;
-    }
+    void SkeletonInstance::_decrementRefCount() { mRefCount--; }
     //-----------------------------------------------------------------------------------
-    uint16 SkeletonInstance::_getRefCount(void) const 
-    {
-        return mRefCount;
-    }
-}
+    uint16 SkeletonInstance::_getRefCount() const { return mRefCount; }
+}  // namespace Ogre
+
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif

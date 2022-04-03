@@ -1,6 +1,6 @@
 /*
  -----------------------------------------------------------------------------
- This source file is part of OGRE
+ This source file is part of OGRE-Next
  (Object-oriented Graphics Rendering Engine)
  For the latest info, see http://www.ogre3d.org/
  
@@ -74,7 +74,7 @@ namespace Ogre {
         }
     }
     
-    GLSLESProgramCommon::~GLSLESProgramCommon(void)
+    GLSLESProgramCommon::~GLSLESProgramCommon()
     {
         OGRE_CHECK_GL_ERROR(glDeleteProgram(mGLProgramHandle));
     }
@@ -178,7 +178,7 @@ namespace Ogre {
         return getAttributeIndex(semantic, index) != NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX;
     }
 
-    void GLSLESProgramCommon::getMicrocodeFromCache(void)
+    void GLSLESProgramCommon::getMicrocodeFromCache()
     {
         GpuProgramManager::Microcode cacheMicrocode =
             GpuProgramManager::getSingleton().getMicrocodeFromCache(getCombinedSource());
@@ -217,7 +217,7 @@ namespace Ogre {
         }
     }
 
-    void GLSLESProgramCommon::extractLayoutQualifiers(void)
+    void GLSLESProgramCommon::extractLayoutQualifiers()
     {
         // Format is:
         //      layout(location = 0) attribute vec4 vertex;

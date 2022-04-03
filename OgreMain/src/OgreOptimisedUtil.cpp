@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -40,12 +40,12 @@ namespace Ogre {
 
     //---------------------------------------------------------------------
     // External functions
-    extern OptimisedUtil* _getOptimisedUtilGeneral(void);
+    extern OptimisedUtil* _getOptimisedUtilGeneral();
 #if __OGRE_HAVE_SSE
-    extern OptimisedUtil* _getOptimisedUtilSSE(void);
+    extern OptimisedUtil* _getOptimisedUtilSSE();
 #endif
 #if __OGRE_HAVE_DIRECTXMATH
-    extern OptimisedUtil* _getOptimisedUtilDirectXMath(void);
+    extern OptimisedUtil* _getOptimisedUtilDirectXMath();
 #endif
 
 #ifdef __DO_PROFILE__
@@ -54,7 +54,7 @@ namespace Ogre {
     typedef unsigned __int64 uint64;
 #pragma warning(push)
 #pragma warning(disable: 4035)  // no return value
-    static FORCEINLINE uint64 getCpuTimestamp(void)
+    static FORCEINLINE uint64 getCpuTimestamp()
     {
         __asm rdtsc
         // Return values in edx:eax, No return statement requirement here for VC.
@@ -63,7 +63,7 @@ namespace Ogre {
 
 #elif (OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG)
     typedef unsigned long long uint64;
-    static FORCEINLINE uint64 getCpuTimestamp(void)
+    static FORCEINLINE uint64 getCpuTimestamp()
     {
         uint64 result;
         __asm__ __volatile__ ( "rdtsc" : "=A" (result) );
@@ -93,7 +93,7 @@ namespace Ogre {
             uint64 mTotalTicks;
             uint64 mStartTick;
 
-            ProfileItem(void)
+            ProfileItem()
                 : mAvgTicks()
                 , mCount()
                 , mTotalTicks()
@@ -101,12 +101,12 @@ namespace Ogre {
             {
             }
 
-            void begin(void)
+            void begin()
             {
                 mStartTick = getCpuTimestamp();
             }
 
-            void end(void)
+            void end()
             {
                 uint64 ticks = getCpuTimestamp() - mStartTick;
                 mTotalTicks += ticks;
@@ -121,7 +121,7 @@ namespace Ogre {
         OptimisedUtilList mOptimisedUtils;
 
     public:
-        OptimisedUtilProfiler(void)
+        OptimisedUtilProfiler()
         {
             mOptimisedUtils.push_back(_getOptimisedUtilGeneral());
 #if __OGRE_HAVE_SSE
@@ -337,7 +337,7 @@ namespace Ogre {
     OptimisedUtil* OptimisedUtil::msImplementation = OptimisedUtil::_detectImplementation();
 
     //---------------------------------------------------------------------
-    OptimisedUtil* OptimisedUtil::_detectImplementation(void)
+    OptimisedUtil* OptimisedUtil::_detectImplementation()
     {
         //
         // Some speed test results (averaged number of CPU timestamp (RDTSC) per-function call):

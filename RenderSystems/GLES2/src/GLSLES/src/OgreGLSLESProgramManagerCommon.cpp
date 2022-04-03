@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 namespace Ogre {
 
-    GLSLESProgramManagerCommon::GLSLESProgramManagerCommon(void) : mActiveVertexShader(NULL),
+    GLSLESProgramManagerCommon::GLSLESProgramManagerCommon() : mActiveVertexShader(NULL),
         mActiveFragmentShader(NULL)
     {
         // Fill in the relationship between type names and enums
@@ -93,7 +93,7 @@ namespace Ogre {
 #endif
     }
 
-    GLSLESProgramManagerCommon::~GLSLESProgramManagerCommon(void)
+    GLSLESProgramManagerCommon::~GLSLESProgramManagerCommon()
     {
 #if !OGRE_NO_GLES2_GLSL_OPTIMISER
         if(mGLSLOptimiserContext)
@@ -559,7 +559,7 @@ namespace Ogre {
                 }
 
                 // Special handling for shared parameters
-                if(sharedParams.isNull())
+                if(!sharedParams)
                 {
                     // Complete def and add
                     // increment physical buffer location

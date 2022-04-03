@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,22 +33,23 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 
 #ifdef __OBJC__
-    @protocol MTLBlitCommandEncoder;
-    @protocol MTLBuffer;
-    @protocol MTLCommandBuffer;
-    @protocol MTLCommandQueue;
-    @protocol MTLComputeCommandEncoder;
-    @protocol MTLComputePipelineState;
-    @protocol MTLDepthStencilState;
-    @protocol MTLDevice;
-    @protocol MTLRenderCommandEncoder;
-    @protocol MTLTexture;
+@protocol MTLBlitCommandEncoder;
+@protocol MTLBuffer;
+@protocol MTLCommandBuffer;
+@protocol MTLCommandQueue;
+@protocol MTLComputeCommandEncoder;
+@protocol MTLComputePipelineState;
+@protocol MTLDepthStencilState;
+@protocol MTLDevice;
+@protocol MTLRenderCommandEncoder;
+@protocol MTLTexture;
 
-    @class MTLRenderPassColorAttachmentDescriptor;
-    @class MTLRenderPassDepthAttachmentDescriptor;
-    @class MTLRenderPassStencilAttachmentDescriptor;
+@class MTLRenderPassColorAttachmentDescriptor;
+@class MTLRenderPassDepthAttachmentDescriptor;
+@class MTLRenderPassStencilAttachmentDescriptor;
 #endif
 
+// clang-format off
 #define OGRE_METAL_CONST_SLOT_START     16u
 #define OGRE_METAL_TEX_SLOT_START       24u
 #define OGRE_METAL_PARAMETER_SLOT       23u
@@ -58,6 +59,7 @@ THE SOFTWARE.
 #define OGRE_METAL_CS_CONST_SLOT_START  0u
 #define OGRE_METAL_CS_UAV_SLOT_START    8u
 #define OGRE_METAL_CS_TEX_SLOT_START    16u
+// clang-format on
 
 namespace Ogre
 {
@@ -77,22 +79,22 @@ namespace Ogre
     class MetalVaoManager;
     class MetalWindow;
 
-#ifdef OGRE_DEPRECATED_2_2
-    class MetalDepthBuffer;
-#endif
-
     namespace v1
     {
         class MetalHardwareBufferCommon;
         class MetalHardwareIndexBuffer;
         class MetalHardwareVertexBuffer;
-    }
-}
+    }  // namespace v1
+}  // namespace Ogre
 
-#if defined ( OGRE_GCC_VISIBILITY )
-#    define _OgreMetalExport  __attribute__ ((visibility("default")))
+#if defined( OGRE_GCC_VISIBILITY )
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreMetalExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreMetalExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
 #    define _OgreMetalExport
 #endif
 
-#endif //#ifndef _OgreMetalPrerequisites_H_
+#endif  //#ifndef _OgreMetalPrerequisites_H_

@@ -2,8 +2,8 @@
 #include "GraphicsGameState.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
 #include "OgreTextAreaOverlayElement.h"
 
@@ -31,12 +31,12 @@ namespace Demo
         outText += "\nPress F4 to enable interpolation. ";
         outText += mEnableInterpolation ? "[On]" : "[Off]";
 
-        //Show the current weight.
-        //The text doesn't get updated every frame while displaying
-        //help, so don't show the weight as it is inaccurate.
+        // Show the current weight.
+        // The text doesn't get updated every frame while displaying
+        // help, so don't show the weight as it is inaccurate.
         if( mDisplayHelpMode != 0 )
         {
-            float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / cFrametime;
+            float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / (float)cFrametime;
             weight = std::min( 1.0f, weight );
 
             if( !mEnableInterpolation )
@@ -49,7 +49,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GraphicsGameState::update( float timeSinceLast )
     {
-        float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / cFrametime;
+        float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / (float)cFrametime;
         weight = std::min( 1.0f, weight );
 
         if( !mEnableInterpolation )
@@ -63,7 +63,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GraphicsGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -86,4 +86,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

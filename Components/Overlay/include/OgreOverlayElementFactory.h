@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,90 +29,89 @@ THE SOFTWARE.
 #define __OverlayElementFactory_H__
 
 #include "OgreOverlayPrerequisites.h"
+
+#include "OgreBorderPanelOverlayElement.h"
 #include "OgreOverlayElement.h"
 #include "OgrePanelOverlayElement.h"
-#include "OgreBorderPanelOverlayElement.h"
 #include "OgreTextAreaOverlayElement.h"
 
-namespace Ogre {
-namespace v1 {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Overlays
-    *  @{
-    */
-    /** Defines the interface which all components wishing to 
-        supply OverlayElement subclasses must implement.
-    @remarks
-        To allow the OverlayElement types available for inclusion on 
-        overlays to be extended, OGRE allows external apps or plugins
-        to register their ability to create custom OverlayElements with
-        the OverlayManager, using the addOverlayElementFactory method. Classes
-        wanting to do this must implement this interface.
-    @par
-        Each OverlayElementFactory creates a single type of OverlayElement, 
-        identified by a 'type name' which must be unique.
-    */
-    class _OgreOverlayExport OverlayElementFactory : public OverlayAlloc
+namespace Ogre
+{
+    namespace v1
     {
-    public:
-        /** Destroy the overlay element factory */
-        virtual ~OverlayElementFactory () {}
-        /** Creates a new OverlayElement instance with the name supplied. */
-        virtual OverlayElement* createOverlayElement(const String& instanceName) = 0;
-        /** Destroys a OverlayElement which this factory created previously. */
-        virtual void destroyOverlayElement(OverlayElement* pElement) { delete pElement; }
-        /** Gets the string uniquely identifying the type of element this factory creates. */
-        virtual const String& getTypeName(void) const = 0;
-    };
-
-
-    /** Factory for creating PanelOverlayElement instances. */
-    class _OgreOverlayExport PanelOverlayElementFactory: public OverlayElementFactory
-    {
-    public:
-        /** See OverlayElementFactory */
-        OverlayElement* createOverlayElement(const String& instanceName)
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Overlays
+         *  @{
+         */
+        /** Defines the interface which all components wishing to
+            supply OverlayElement subclasses must implement.
+        @remarks
+            To allow the OverlayElement types available for inclusion on
+            overlays to be extended, OGRE allows external apps or plugins
+            to register their ability to create custom OverlayElements with
+            the OverlayManager, using the addOverlayElementFactory method. Classes
+            wanting to do this must implement this interface.
+        @par
+            Each OverlayElementFactory creates a single type of OverlayElement,
+            identified by a 'type name' which must be unique.
+        */
+        class _OgreOverlayExport OverlayElementFactory : public OgreAllocatedObj
         {
-            return OGRE_NEW PanelOverlayElement(instanceName);
-        }
-        /** See OverlayElementFactory */
-        virtual const String& getTypeName(void) const;
-    };
+        public:
+            /** Destroy the overlay element factory */
+            virtual ~OverlayElementFactory() {}
+            /** Creates a new OverlayElement instance with the name supplied. */
+            virtual OverlayElement *createOverlayElement( const String &instanceName ) = 0;
+            /** Destroys a OverlayElement which this factory created previously. */
+            virtual void destroyOverlayElement( OverlayElement *pElement ) { delete pElement; }
+            /** Gets the string uniquely identifying the type of element this factory creates. */
+            virtual const String &getTypeName() const = 0;
+        };
 
-    /** Factory for creating BorderPanelOverlayElement instances. */
-    class _OgreOverlayExport BorderPanelOverlayElementFactory: public OverlayElementFactory
-    {
-    public:
-        /** See OverlayElementFactory */
-        OverlayElement* createOverlayElement(const String& instanceName)
+        /** Factory for creating PanelOverlayElement instances. */
+        class _OgreOverlayExport PanelOverlayElementFactory final : public OverlayElementFactory
         {
-            return OGRE_NEW BorderPanelOverlayElement(instanceName);
-        }
-        /** See OverlayElementFactory */
-        virtual const String& getTypeName(void) const;
-    };
+        public:
+            /** See OverlayElementFactory */
+            OverlayElement *createOverlayElement( const String &instanceName ) override
+            {
+                return OGRE_NEW PanelOverlayElement( instanceName );
+            }
+            /** See OverlayElementFactory */
+            const String &getTypeName() const override;
+        };
 
-    /** Factory for creating TextAreaOverlayElement instances. */
-    class _OgreOverlayExport TextAreaOverlayElementFactory: public OverlayElementFactory
-    {
-    public:
-        /** See OverlayElementFactory */
-        OverlayElement* createOverlayElement(const String& instanceName)
+        /** Factory for creating BorderPanelOverlayElement instances. */
+        class _OgreOverlayExport BorderPanelOverlayElementFactory final : public OverlayElementFactory
         {
-            return OGRE_NEW TextAreaOverlayElement(instanceName);
-        }
-        /** See OverlayElementFactory */
-        virtual const String& getTypeName(void) const;
-    };
-    /** @} */
-    /** @} */
+        public:
+            /** See OverlayElementFactory */
+            OverlayElement *createOverlayElement( const String &instanceName ) override
+            {
+                return OGRE_NEW BorderPanelOverlayElement( instanceName );
+            }
+            /** See OverlayElementFactory */
+            const String &getTypeName() const override;
+        };
 
-}
-}
+        /** Factory for creating TextAreaOverlayElement instances. */
+        class _OgreOverlayExport TextAreaOverlayElementFactory final : public OverlayElementFactory
+        {
+        public:
+            /** See OverlayElementFactory */
+            OverlayElement *createOverlayElement( const String &instanceName ) override
+            {
+                return OGRE_NEW TextAreaOverlayElement( instanceName );
+            }
+            /** See OverlayElementFactory */
+            const String &getTypeName() const override;
+        };
+        /** @} */
+        /** @} */
 
-
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -85,7 +85,8 @@ namespace Ogre
 
     struct float4x4
     {
-        union {
+        union
+        {
             float m[4][4];
             float _m[16];
         };
@@ -99,7 +100,8 @@ namespace Ogre
     };
     struct float4x3
     {
-        union {
+        union
+        {
             float m[3][4];
             float _m[12];
         };

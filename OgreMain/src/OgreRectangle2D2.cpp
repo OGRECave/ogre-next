@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,15 +29,13 @@ THE SOFTWARE.
 
 #include "OgreRectangle2D2.h"
 
-#include "Vao/OgreStagingBuffer.h"
-#include "Vao/OgreVaoManager.h"
-#include "Vao/OgreVertexArrayObject.h"
-
-#include "OgreSceneManager.h"
-
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreVaoManager.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 namespace Ogre
 {
@@ -92,23 +90,23 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::isQuad( void ) const { return ( mGeometryFlags & GeometryFlagQuad ) != 0u; }
+    bool Rectangle2D::isQuad() const { return ( mGeometryFlags & GeometryFlagQuad ) != 0u; }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::isStereo( void ) const { return ( mGeometryFlags & GeometryFlagStereo ) != 0u; }
+    bool Rectangle2D::isStereo() const { return ( mGeometryFlags & GeometryFlagStereo ) != 0u; }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::hasNormals( void ) const { return ( mGeometryFlags & GeometryFlagNormals ) != 0u; }
+    bool Rectangle2D::hasNormals() const { return ( mGeometryFlags & GeometryFlagNormals ) != 0u; }
     //-----------------------------------------------------------------------------------
-    BufferType Rectangle2D::getBufferType( void ) const
+    BufferType Rectangle2D::getBufferType() const
     {
         return static_cast<BufferType>( ( mGeometryFlags & GeometryFlagReserved0 ) >> 3u );
     }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::isHollowFullscreenRect( void ) const
+    bool Rectangle2D::isHollowFullscreenRect() const
     {
         return ( mGeometryFlags & GeometryFlagHollowFsRect ) != 0u;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Rectangle2D::calculateNumVertices( void ) const
+    uint32 Rectangle2D::calculateNumVertices() const
     {
         uint32 numVertices = isQuad() ? 4u : 3u;
         if( isHollowFullscreenRect() )
@@ -118,7 +116,7 @@ namespace Ogre
         return numVertices;
     }
     //-----------------------------------------------------------------------------------
-    void Rectangle2D::createBuffers( void )
+    void Rectangle2D::createBuffers()
     {
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -172,8 +170,9 @@ namespace Ogre
         Vector2 posCenter[2] = { mPosition, mSize };
 
         const size_t numIterations = isStereo() ? 2u : 1u;
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
         const float *vertexDataStart = vertexData;
-
+#endif
         for( size_t i = 0u; i < numIterations; ++i )
         {
             posCenter[i].y = -posCenter[i].y;
@@ -219,13 +218,14 @@ namespace Ogre
             *vertexData++ = radius + posCenter[i].y;
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) == maxElements * 2u );
+        OGRE_ASSERT_LOW( (size_t)( vertexData - vertexDataStart ) == maxElements * 2u );
     }
     //-----------------------------------------------------------------------------------
     void Rectangle2D::fillBuffer( float *RESTRICT_ALIAS vertexData, size_t maxElements )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
         const float *vertexDataStart = vertexData;
-
+#endif
         const size_t numIterations = isStereo() ? 2u : 1u;
         const bool bHasNormals = hasNormals();
 
@@ -279,7 +279,7 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) ==
+        OGRE_ASSERT_LOW( (size_t)( vertexData - vertexDataStart ) ==
                          maxElements * ( hasNormals() ? 7u : 4u ) );
     }
     //-----------------------------------------------------------------------------------
@@ -322,7 +322,7 @@ namespace Ogre
         mChanged = false;
     }
     //-----------------------------------------------------------------------------------
-    void Rectangle2D::update( void )
+    void Rectangle2D::update()
     {
         if( !mChanged )
             return;
@@ -363,12 +363,9 @@ namespace Ogre
         mChanged = false;
     }
     //-----------------------------------------------------------------------------------
-    const String &Rectangle2D::getMovableType( void ) const
-    {
-        return Rectangle2DFactory::FACTORY_TYPE_NAME;
-    }
+    const String &Rectangle2D::getMovableType() const { return Rectangle2DFactory::FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------------------
-    const LightList &Rectangle2D::getLights( void ) const
+    const LightList &Rectangle2D::getLights() const
     {
         return this->queryLights();  // Return the data from our MovableObject base class.
     }
@@ -393,7 +390,7 @@ namespace Ogre
                      "Rectangle2D::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::getCastsShadows( void ) const
+    bool Rectangle2D::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "Rectangle2D do not implement getCastsShadows."
@@ -406,7 +403,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     String Rectangle2DFactory::FACTORY_TYPE_NAME = "Rectangle2Dv2";
     //-----------------------------------------------------------------------------------
-    const String &Rectangle2DFactory::getType( void ) const { return FACTORY_TYPE_NAME; }
+    const String &Rectangle2DFactory::getType() const { return FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------------------
     MovableObject *Rectangle2DFactory::createInstanceImpl( IdType id,
                                                            ObjectMemoryManager *objectMemoryManager,

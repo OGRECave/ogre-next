@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -31,24 +31,25 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include "OgreCommon.h"
+#include "OgreSharedPtr.h"
 #include "OgreSingleton.h"
 #include "OgreTextureUnitState.h"
-#include "OgreSharedPtr.h"
 
 #include "ogrestd/set.h"
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
-    typedef SharedPtr< ControllerValue<Real> > ControllerValueRealPtr;
-    typedef SharedPtr< ControllerFunction<Real> > ControllerFunctionRealPtr;
+    typedef SharedPtr<ControllerValue<Real> >    ControllerValueRealPtr;
+    typedef SharedPtr<ControllerFunction<Real> > ControllerFunctionRealPtr;
 
     /** Class for managing Controller instances.
     @remarks
@@ -56,15 +57,15 @@ namespace Ogre {
         and updating them when requested. It also provides a number of convenience methods
         for creating commonly used controllers (such as texture animators).
     */
-    class _OgreExport ControllerManager : public Singleton<ControllerManager>, public ControllerAlloc
+    class _OgreExport ControllerManager : public Singleton<ControllerManager>, public OgreAllocatedObj
     {
     protected:
-        typedef set<Controller<Real>*>::type ControllerList;
-        ControllerList mControllers;
+        typedef set<Controller<Real> *>::type ControllerList;
+        ControllerList                        mControllers;
 
         /// Global predefined controller
         ControllerValueRealPtr mFrameTimeController;
-        
+
         /// Global predefined controller
         ControllerFunctionRealPtr mPassthroughFunction;
 
@@ -76,101 +77,106 @@ namespace Ogre {
         ~ControllerManager();
 
         /** Creates a new controller and registers it with the manager.
-        */
-        Controller<Real>* createController(const ControllerValueRealPtr& src,
-            const ControllerValueRealPtr& dest, const ControllerFunctionRealPtr& func);
+         */
+        Controller<Real> *createController( const ControllerValueRealPtr    &src,
+                                            const ControllerValueRealPtr    &dest,
+                                            const ControllerFunctionRealPtr &func );
 
         /** Creates a new controller use frame time source and passthrough controller function.
-        */
-        Controller<Real>* createFrameTimePassthroughController(
-            const ControllerValueRealPtr& dest);
+         */
+        Controller<Real> *createFrameTimePassthroughController( const ControllerValueRealPtr &dest );
 
         /** Destroys all the controllers in existence.
-        */
-        void clearControllers(void);
+         */
+        void clearControllers();
 
         /** Updates all the registered controllers.
-        */
-        void updateAllControllers(void);
+         */
+        void updateAllControllers();
 
-
-        /** Returns a ControllerValue which provides the time since the last frame as a control value source.
+        /** Returns a ControllerValue which provides the time since the last frame as a control value
+        source.
         @remarks
-            A common source value to use to feed into a controller is the time since the last frame. This method
-            returns a pointer to a common source value which provides this information.
+            A common source value to use to feed into a controller is the time since the last frame. This
+        method returns a pointer to a common source value which provides this information.
         @par
-            Remember the value will only be up to date after the RenderSystem::beginFrame method is called.
+            Remember the value will only be up to date after the RenderSystem::beginFrame method is
+        called.
         @see
             RenderSystem::beginFrame
         */
-        const ControllerValueRealPtr& getFrameTimeSource(void) const;
+        const ControllerValueRealPtr &getFrameTimeSource() const;
 
         /** Retrieve a simple passthrough controller function. */
-        const ControllerFunctionRealPtr& getPassthroughControllerFunction(void) const;
+        const ControllerFunctionRealPtr &getPassthroughControllerFunction() const;
 
         /** Creates a texture layer animator controller.
         @remarks
-            This helper method creates the Controller, ControllerValue and ControllerFunction classes required
-            to animate a texture.
+            This helper method creates the Controller, ControllerValue and ControllerFunction classes
+        required to animate a texture.
         @param layer
             TextureUnitState object to animate
         @param sequenceTime
             The amount of time in seconds it will take to loop through all the frames.
         */
-        Controller<Real>* createTextureAnimator(TextureUnitState* layer, Real sequenceTime);
+        Controller<Real> *createTextureAnimator( TextureUnitState *layer, Real sequenceTime );
 
-        /** Creates a basic time-based texture uv coordinate modifier designed for creating scrolling textures.
+        /** Creates a basic time-based texture uv coordinate modifier designed for creating scrolling
+        textures.
         @remarks
-            This simple method allows you to easily create constant-speed uv scrolling textures. If you want to 
-            specify different speed values for horizontal and vertical scroll, use the specific methods
-            ControllerManager::createTextureUScroller and ControllerManager::createTextureVScroller.
-            If you want more control, look up the ControllerManager::createTextureWaveTransformer 
+            This simple method allows you to easily create constant-speed uv scrolling textures. If you
+        want to specify different speed values for horizontal and vertical scroll, use the specific
+        methods ControllerManager::createTextureUScroller and ControllerManager::createTextureVScroller.
+            If you want more control, look up the ControllerManager::createTextureWaveTransformer
             for more complex wave-based scrollers / stretchers / rotators.
         @param layer
             The texture layer to animate.
         @param speed
             Speed of horizontal (u-coord) and vertical (v-coord) scroll, in complete wraps per second.
         */
-        Controller<Real>* createTextureUVScroller(TextureUnitState* layer, Real speed);
+        Controller<Real> *createTextureUVScroller( TextureUnitState *layer, Real speed );
 
-        /** Creates a basic time-based texture u coordinate modifier designed for creating scrolling textures.
+        /** Creates a basic time-based texture u coordinate modifier designed for creating scrolling
+        textures.
         @remarks
-            This simple method allows you to easily create constant-speed u scrolling textures. If you want more
-            control, look up the ControllerManager::createTextureWaveTransformer for more complex wave-based
-            scrollers / stretchers / rotators.
+            This simple method allows you to easily create constant-speed u scrolling textures. If you
+        want more control, look up the ControllerManager::createTextureWaveTransformer for more complex
+        wave-based scrollers / stretchers / rotators.
         @param layer
             The texture layer to animate.
         @param uSpeed
             Speed of horizontal (u-coord) scroll, in complete wraps per second.
         */
-        Controller<Real>* createTextureUScroller(TextureUnitState* layer, Real uSpeed);
+        Controller<Real> *createTextureUScroller( TextureUnitState *layer, Real uSpeed );
 
-        /** Creates a basic time-based texture v coordinate modifier designed for creating scrolling textures.
+        /** Creates a basic time-based texture v coordinate modifier designed for creating scrolling
+        textures.
         @remarks
-            This simple method allows you to easily create constant-speed v scrolling textures. If you want more
-            control, look up the ControllerManager::createTextureWaveTransformer for more complex wave-based
-            scrollers / stretchers / rotators.
+            This simple method allows you to easily create constant-speed v scrolling textures. If you
+        want more control, look up the ControllerManager::createTextureWaveTransformer for more complex
+        wave-based scrollers / stretchers / rotators.
         @param layer
             The texture layer to animate.
         @param vSpeed
             Speed of vertical (v-coord) scroll, in complete wraps per second.
         */
-        Controller<Real>* createTextureVScroller(TextureUnitState* layer, Real vSpeed);
+        Controller<Real> *createTextureVScroller( TextureUnitState *layer, Real vSpeed );
 
-        /** Creates a basic time-based texture coordinate modifier designed for creating rotating textures.
+        /** Creates a basic time-based texture coordinate modifier designed for creating rotating
+        textures.
         @return
-            This simple method allows you to easily create constant-speed rotating textures. If you want more
-            control, look up the ControllerManager::createTextureWaveTransformer for more complex wave-based
-            scrollers / stretchers / rotators.
+            This simple method allows you to easily create constant-speed rotating textures. If you want
+        more control, look up the ControllerManager::createTextureWaveTransformer for more complex
+        wave-based scrollers / stretchers / rotators.
         @param layer
             The texture layer to rotate.
         @param speed
             Speed of rotation, in complete anticlockwise revolutions per second.
         */
-        Controller<Real>* createTextureRotater(TextureUnitState* layer, Real speed);
+        Controller<Real> *createTextureRotater( TextureUnitState *layer, Real speed );
 
-        /** Creates a very flexible time-based texture transformation which can alter the scale, position or
-            rotation of a texture based on a wave function.
+        /** Creates a very flexible time-based texture transformation which can alter the scale, position
+        or rotation of a texture based on a wave function.
         @param layer
             The texture layer to affect.
         @param ttype
@@ -184,12 +190,17 @@ namespace Ogre {
         @param phase
             The offset of the start of the wave, e.g. 0.5 to start half-way through the wave.
         @param amplitude
-            Scales the output so that instead of lying within 0..1 it lies within 0..1*amplitude for exaggerated effects.
+            Scales the output so that instead of lying within 0..1 it lies within 0..1*amplitude for
+        exaggerated effects.
         */
-        Controller<Real>* createTextureWaveTransformer(TextureUnitState* layer, TextureUnitState::TextureTransformType ttype,
-            WaveformType waveType, Real base = 0, Real frequency = 1, Real phase = 0, Real amplitude = 1);
+        Controller<Real> *createTextureWaveTransformer( TextureUnitState                      *layer,
+                                                        TextureUnitState::TextureTransformType ttype,
+                                                        WaveformType waveType, Real base = 0,
+                                                        Real frequency = 1, Real phase = 0,
+                                                        Real amplitude = 1 );
 
-        /** Creates a controller for passing a frame time value through to a vertex / fragment program parameter.
+        /** Creates a controller for passing a frame time value through to a vertex / fragment program
+        parameter.
         @remarks
             The destination parameter is expected to be a float, and the '.x' attribute will be populated
             with the appropriately scaled time value.
@@ -201,18 +212,18 @@ namespace Ogre {
         @param timeFactor
             The factor by which to adjust the time elapsed by before passing it to the program.
         */
-        Controller<Real>* createGpuProgramTimerParam(GpuProgramParametersSharedPtr params, size_t paramIndex,
-            Real timeFactor = 1.0f);
+        Controller<Real> *createGpuProgramTimerParam( GpuProgramParametersSharedPtr params,
+                                                      size_t paramIndex, Real timeFactor = 1.0f );
 
         /** Removes & destroys the controller passed in as a pointer.
-        */
-        void destroyController(Controller<Real>* controller);
+         */
+        void destroyController( Controller<Real> *controller );
 
         /** Return relative speed of time as perceived by time based controllers.
         @remarks
             See setTimeFactor for full information on the meaning of this value.
         */
-        Real getTimeFactor(void) const;
+        Real getTimeFactor() const;
 
         /** Set the relative speed to update frame time based controllers.
         @remarks
@@ -223,13 +234,13 @@ namespace Ogre {
         @param tf
             The virtual speed of time (1.0 is real time).
         */
-        void setTimeFactor(Real tf);
+        void setTimeFactor( Real tf );
 
         /** Gets the constant that is added to time lapsed between each frame.
         @remarks
             See setFrameDelay for full information on the meaning of this value.
         */
-        Real getFrameDelay(void) const;
+        Real getFrameDelay() const;
 
         /** Sets a constant frame rate.
         @remarks
@@ -239,17 +250,17 @@ namespace Ogre {
             It will ensure that scrolling textures and animations
             move at a constant frame rate.
         @param fd
-            The delay in seconds wanted between each frame 
-            (1.0f / 25.0f means a seconds worth of animation is done 
+            The delay in seconds wanted between each frame
+            (1.0f / 25.0f means a seconds worth of animation is done
             in 25 frames).
         */
-        void setFrameDelay(Real fd);
+        void setFrameDelay( Real fd );
 
         /** Return the elapsed time.
         @remarks
             See setElapsedTime for full information on the meaning of this value.
         */
-        Real getElapsedTime(void) const;
+        Real getElapsedTime() const;
 
         /** Set the elapsed time.
         @remarks
@@ -259,7 +270,7 @@ namespace Ogre {
         @param elapsedTime
             The new elapsed time.
         */
-        void setElapsedTime(Real elapsedTime);
+        void setElapsedTime( Real elapsedTime );
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -276,7 +287,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ControllerManager& getSingleton(void);
+        static ControllerManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -292,14 +303,14 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ControllerManager* getSingletonPtr(void);
+        static ControllerManager *getSingletonPtr();
     };
 
     /** @} */
     /** @} */
 
-} // namespace Ogre
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
-#endif // __ControllerManager_H__
+#endif  // __ControllerManager_H__

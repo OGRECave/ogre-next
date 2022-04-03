@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,38 +33,39 @@ THE SOFTWARE.
 #include "OgreLodStrategy.h"
 #include "OgreSingleton.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup LOD
-    *  @{
-    */
+     *  @{
+     */
 
     class AbsolutePixelCountLodStrategy;
     /// Backward compatible name for Distance_Box strategy.
     typedef AbsolutePixelCountLodStrategy PixelCountLodStrategy;
 
-    /** Abstract base class for level of detail strategy based on pixel count approximations from bounding sphere projection. */
+    /** Abstract base class for level of detail strategy based on pixel count approximations from
+     * bounding sphere projection. */
     class _OgreExport PixelCountLodStrategyBase : public LodStrategy
     {
     public:
         /** Default constructor. */
-        PixelCountLodStrategyBase(const String& name);
+        PixelCountLodStrategyBase( const String &name );
 
         /// @copydoc LodStrategy::getBaseValue
-        virtual Real getBaseValue() const;
+        Real getBaseValue() const override;
 
         /// @copydoc LodStrategy::transformBias
-        virtual Real transformBias(Real factor) const;
+        Real transformBias( Real factor ) const override;
 
         /** Transform user supplied value to internal value.
         @remarks
             Do not throw exceptions for invalid values here, as the LOD strategy
             may be changed such that the values become valid.
         */
-        virtual Real transformUserValue(Real userValue) const               { return -userValue; }
+        Real transformUserValue( Real userValue ) const override { return -userValue; }
     };
     /** @} */
     /** @} */
@@ -85,10 +86,10 @@ namespace Ogre {
         AbsolutePixelCountLodStrategy();
 
         /// @copydoc LodStrategy::getValueImpl
-        Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const;
+        Real getValueImpl( const MovableObject *movableObject, const Camera *camera ) const override;
 
-        virtual void lodUpdateImpl( const size_t numNodes, ObjectData t,
-                                    const Camera *camera, Real bias ) const;
+        void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,
+                            Real bias ) const override;
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -105,7 +106,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static AbsolutePixelCountLodStrategy& getSingleton(void);
+        static AbsolutePixelCountLodStrategy &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -121,7 +122,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static AbsolutePixelCountLodStrategy* getSingletonPtr(void);
+        static AbsolutePixelCountLodStrategy *getSingletonPtr();
     };
     /** @} */
     /** @} */
@@ -145,10 +146,10 @@ namespace Ogre {
         ScreenRatioPixelCountLodStrategy();
 
         /// @copydoc LodStrategy::getValueImpl
-        Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const;
+        Real getValueImpl( const MovableObject *movableObject, const Camera *camera ) const override;
 
-        virtual void lodUpdateImpl( const size_t numNodes, ObjectData t,
-                                    const Camera *camera, Real bias ) const;
+        void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,
+                            Real bias ) const override;
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -165,7 +166,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ScreenRatioPixelCountLodStrategy& getSingleton(void);
+        static ScreenRatioPixelCountLodStrategy &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -181,11 +182,11 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ScreenRatioPixelCountLodStrategy* getSingletonPtr(void);
+        static ScreenRatioPixelCountLodStrategy *getSingletonPtr();
     };
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif

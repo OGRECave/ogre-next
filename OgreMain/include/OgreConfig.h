@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -37,12 +37,12 @@ THE SOFTWARE.
 /** If set to 1, profiling code will be included in the application. When you
     are deploying your application you will probably want to set this to 0 */
 #ifndef OGRE_PROFILING
-#define OGRE_PROFILING 0
+#    define OGRE_PROFILING 0
 #endif
 
-#define OGRE_PROFILING_NONE             0
-#define OGRE_PROFILING_INTERNAL         1
-#define OGRE_PROFILING_REMOTERY         2
+#define OGRE_PROFILING_NONE 0
+#define OGRE_PROFILING_INTERNAL 1
+#define OGRE_PROFILING_REMOTERY 2
 #define OGRE_PROFILING_INTERNAL_OFFLINE 3
 
 /** There are three modes for handling asserts in OGRE:
@@ -51,7 +51,7 @@ THE SOFTWARE.
 2 - EXCEPTIONS - Exceptions in debug builds, exceptions in release builds
 */
 #ifndef OGRE_ASSERT_MODE
-#define OGRE_ASSERT_MODE 0
+#    define OGRE_ASSERT_MODE 0
 #endif
 
 /** If set to >0, OGRE will always 'think' that the graphics card only has the
@@ -65,74 +65,69 @@ THE SOFTWARE.
     GPU still operates in single-precision mode.
 */
 #ifndef OGRE_DOUBLE_PRECISION
-#define OGRE_DOUBLE_PRECISION 0
+#    define OGRE_DOUBLE_PRECISION 0
 #endif
 
 /** Define number of texture coordinate sets allowed per vertex.
-*/
+ */
 #define OGRE_MAX_TEXTURE_COORD_SETS 8
 
 /** Define max number of texture layers allowed per pass on any card.
-*/
+ */
 #define OGRE_MAX_TEXTURE_LAYERS 128
 
 /** Define max number of lights allowed per pass.
-*/
+ */
 #define OGRE_MAX_SIMULTANEOUS_LIGHTS 8
 
 /** Define max number of blending weights allowed per vertex.
-*/
+ */
 #define OGRE_MAX_BLEND_WEIGHTS 4
 
 /** Define max number of poses per item.
-*/
+ */
 #define OGRE_MAX_POSES 16
 
 // define the memory allocator configuration to use
+#define OGRE_MEMORY_ALLOCATOR_NONE 0
 #define OGRE_MEMORY_ALLOCATOR_STD 1
-#define OGRE_MEMORY_ALLOCATOR_NED 2
 #define OGRE_MEMORY_ALLOCATOR_USER 3
-#define OGRE_MEMORY_ALLOCATOR_NEDPOOLING 4
 #define OGRE_MEMORY_ALLOCATOR_TRACK 5
-
-#ifndef OGRE_MEMORY_ALLOCATOR
-#  define OGRE_MEMORY_ALLOCATOR OGRE_MEMORY_ALLOCATOR_NEDPOOLING
-#endif
 
 // Whether to use the custom memory allocator in STL containers
 #ifndef OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-#  define OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR 1
+#    define OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR 1
 #endif
 
-//if you want to make Ogre::String use the custom memory allocator then set:
+// if you want to make Ogre::String use the custom memory allocator then set:
 //#define OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR 1
 // Doing this will mean Ogre's strings will not be compatible with std::string however
 #ifndef OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
-#   define OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR 0
+#    define OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR 0
 #endif
 
 // enable or disable the memory tracker, recording the memory allocations & tracking leaks
 // default is to disable since it's expensive, but you can enable if needed per build target
 
 #ifndef OGRE_MEMORY_TRACKER_DEBUG_MODE
-#  define OGRE_MEMORY_TRACKER_DEBUG_MODE 0
+#    define OGRE_MEMORY_TRACKER_DEBUG_MODE 0
 #endif
 
 #ifndef OGRE_MEMORY_TRACKER_RELEASE_MODE
-#  define OGRE_MEMORY_TRACKER_RELEASE_MODE 0
+#    define OGRE_MEMORY_TRACKER_RELEASE_MODE 0
 #endif
 /** Define max number of multiple render targets (MRTs) to render to at once.
-*/
+ */
 #define OGRE_MAX_MULTIPLE_RENDER_TARGETS 8
 
 /** Support for multithreading, there are 3 options
 
 OGRE_THREAD_SUPPORT = 0
-    No support for threading.       
+    No support for threading.
 OGRE_THREAD_SUPPORT = 1
     Thread support for background loading, by both loading and constructing resources
     in a background thread. Resource management and SharedPtr handling becomes
-    thread-safe, and resources may be completely loaded in the background. 
+    thread-safe, and resources may be completely loaded in the background.
     The places where threading is available are clearly
     marked, you should assume state is NOT thread safe unless otherwise
     stated in relation to this flag.
@@ -145,10 +140,10 @@ OGRE_THREAD_SUPPORT = 2
     to be done in the background.
 */
 #ifndef OGRE_THREAD_SUPPORT
-#define OGRE_THREAD_SUPPORT 0
+#    define OGRE_THREAD_SUPPORT 0
 #endif
 #if OGRE_THREAD_SUPPORT != 0 && OGRE_THREAD_SUPPORT != 1 && OGRE_THREAD_SUPPORT != 2
-#define OGRE_THREAD_SUPPORT 0
+#    define OGRE_THREAD_SUPPORT 0
 #endif
 
 /** Provider for threading functionality, there are 4 options.
@@ -156,7 +151,7 @@ OGRE_THREAD_SUPPORT = 2
 OGRE_THREAD_PROVIDER = 0
     No support for threading.
 OGRE_THREAD_PROVIDER = 1
-    Boost libraries provide threading functionality.
+    Used to belong to Boost. Removed.
 OGRE_THREAD_PROVIDER = 2
     Poco libraries provide threading functionality.
 OGRE_THREAD_PROVIDER = 3
@@ -165,42 +160,42 @@ OGRE_THREAD_PROVIDER = 4
     Standard library provides threading functionality. (requires compiler support)
 */
 #ifndef OGRE_THREAD_PROVIDER
-#define OGRE_THREAD_PROVIDER 0
+#    define OGRE_THREAD_PROVIDER 0
 #endif
 
 /** Disables use of the FreeImage image library for loading images.
 WARNING: Use only when you want to provide your own image loading code via codecs.
 */
 #ifndef OGRE_NO_FREEIMAGE
-#define OGRE_NO_FREEIMAGE 0
+#    define OGRE_NO_FREEIMAGE 0
 #endif
 
 /** Disables use of the internal image codec for loading DDS files.
 WARNING: Use only when you want to provide your own image loading code via codecs.
 */
 #ifndef OGRE_NO_DDS_CODEC
-#define OGRE_NO_DDS_CODEC 0
+#    define OGRE_NO_DDS_CODEC 0
 #endif
 
 /** Disables use of the internal image codec for loading ETC files.
  WARNING: Use only when you want to provide your own image loading code via codecs.
  */
 #ifndef OGRE_NO_ETC_CODEC
-#define OGRE_NO_ETC_CODEC 1
+#    define OGRE_NO_ETC_CODEC 1
 #endif
 
 /** Disables use of the internal image codec for loading image files.
  WARNING: Use only when you want to provide your own image loading code via codecs.
  */
 #ifndef OGRE_NO_STBI_CODEC
-#define OGRE_NO_STBI_CODEC 1
+#    define OGRE_NO_STBI_CODEC 1
 #endif
 
 /** Disables use of the ZIP archive support.
 WARNING: Disabling this will make the samples unusable.
 */
 #ifndef OGRE_NO_ZIP_ARCHIVE
-#define OGRE_NO_ZIP_ARCHIVE 0
+#    define OGRE_NO_ZIP_ARCHIVE 0
 #endif
 
 #endif

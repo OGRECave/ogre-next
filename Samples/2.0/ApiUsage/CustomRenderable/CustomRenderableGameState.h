@@ -14,14 +14,14 @@ namespace Demo
 {
     class CustomRenderableGameState : public TutorialGameState
     {
-        Ogre::MyCustomRenderable    *mMyCustomRenderable;
+        Ogre::MyCustomRenderable *mMyCustomRenderable;
 
     public:
         CustomRenderableGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        void createScene01() override;
+        void destroyScene() override;
     };
-}
+}  // namespace Demo
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreGL3PlusRenderPassDescriptor_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreRenderPassDescriptor.h"
 
 #include "OgreHeaderPrefix.h"
@@ -37,16 +38,16 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     struct GL3PlusFrameBufferDescValue
     {
-        GLuint  fboName;
-        uint16  refCount;
+        GLuint fboName;
+        uint16 refCount;
         GL3PlusFrameBufferDescValue();
     };
 
@@ -56,30 +57,30 @@ namespace Ogre
         same FBO setup. This doesn't mean these RenderPassDescriptor are exactly the
         same, as they may have different clear, loadAction or storeAction values.
     */
-    class _OgreGL3PlusExport GL3PlusRenderPassDescriptor : public RenderPassDescriptor
+    class _OgreGL3PlusExport GL3PlusRenderPassDescriptor final : public RenderPassDescriptor
     {
     protected:
-        GLuint  mFboName;
-        GLuint  mFboMsaaResolve;
-        bool    mAllClearColoursSetAndIdentical;
-        bool    mAnyColourLoadActionsSetToClear;
-        bool    mHasRenderWindow;
-        bool    mHasSRGB;
+        GLuint mFboName;
+        GLuint mFboMsaaResolve;
+        bool   mAllClearColoursSetAndIdentical;
+        bool   mAnyColourLoadActionsSetToClear;
+        bool   mHasRenderWindow;
+        bool   mHasSRGB;
 
         GL3PlusFrameBufferDescMap::iterator mSharedFboItor;
 
         GL3PlusRenderSystem *mRenderSystem;
 
-        void checkRenderWindowStatus(void);
-        void switchToRenderWindow(void);
-        void switchToFBO(void);
+        void checkRenderWindowStatus();
+        void switchToRenderWindow();
+        void switchToFBO();
         /// Sets mAllClearColoursSetAndIdentical & mAnyColourLoadActionsSetToClear
         /// which can be used for quickly taking fast paths during rendering.
-        void analyzeClearColour(void);
+        void analyzeClearColour();
 
         void updateColourFbo( uint8 lastNumColourEntries );
-        void updateDepthFbo(void);
-        void updateStencilFbo(void);
+        void updateDepthFbo();
+        void updateStencilFbo();
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.
@@ -89,14 +90,14 @@ namespace Ogre
 
     public:
         GL3PlusRenderPassDescriptor( GL3PlusRenderSystem *renderSystem );
-        virtual ~GL3PlusRenderPassDescriptor();
+        ~GL3PlusRenderPassDescriptor() override;
 
-        GLuint getFboName(void) const       { return mFboName; }
+        GLuint getFboName() const { return mFboName; }
 
-        virtual void entriesModified( uint32 entryTypes );
+        void entriesModified( uint32 entryTypes ) override;
 
-        virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
-        virtual void setClearColour( const ColourValue &clearColour );
+        void setClearColour( uint8 idx, const ColourValue &clearColour ) override;
+        void setClearColour( const ColourValue &clearColour ) override;
 
         uint32 willSwitchTo( GL3PlusRenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 
@@ -107,7 +108,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

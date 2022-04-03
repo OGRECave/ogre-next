@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,51 +26,46 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreConfigDialog.h"
-#include "OgreRoot.h"
-#include "OgreRenderSystem.h"
+
 #include "OgreException.h"
+#include "OgreRenderSystem.h"
+#include "OgreRoot.h"
 #include "resource.h"
 
 namespace
 {
-    Ogre::ConfigDialog* dlg;  // This is a pointer to instance, since this is a static member
+    Ogre::ConfigDialog *dlg;  // This is a pointer to instance, since this is a static member
 }
-
 
 namespace Ogre
 {
-    ConfigDialog::ConfigDialog()
-    {
-        mSelectedRenderSystem = 0;
-    }
+    ConfigDialog::ConfigDialog() { mSelectedRenderSystem = 0; }
 
-    ConfigDialog::~ConfigDialog()
-    {
-    }
+    ConfigDialog::~ConfigDialog() {}
 
-
-    bool ConfigDialog::display(void)
+    bool ConfigDialog::display( void )
     {
-        if(Root::getSingleton().getRenderSystem() != NULL)
+        if( Root::getSingleton().getRenderSystem() != NULL )
         {
             return true;
         }
 
         // just select the first available render system for now.
-        const RenderSystemList* lstRend;
+        const RenderSystemList *lstRend;
         RenderSystemList::const_iterator pRend;
 
         lstRend = &Root::getSingleton().getAvailableRenderers();
-        pRend = lstRend->begin();            
+        pRend = lstRend->begin();
 
-        if (pRend != lstRend->end())
+        if( pRend != lstRend->end() )
         {
-            Root::getSingleton().setRenderSystem((*pRend));
+            Root::getSingleton().setRenderSystem( ( *pRend ) );
 
             return true;
         }
 
         return false;
     }
-}
+}  // namespace Ogre

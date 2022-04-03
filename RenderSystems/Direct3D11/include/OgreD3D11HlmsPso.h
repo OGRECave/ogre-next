@@ -29,16 +29,17 @@ THE SOFTWARE.
 #define _OgreD3D11HlmsPso_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /// @See HlmsPso. We cache some conversion values here
     /// to avoid doing it every time we set the Pso
@@ -48,7 +49,7 @@ namespace Ogre
         ComPtr<ID3D11InputLayout>       inputLayout;
         ComPtr<ID3D11DepthStencilState> depthStencilState;
 
-        //Shader
+        // Shader
         D3D11HLSLProgram *vertexShader;
         D3D11HLSLProgram *geometryShader;
         D3D11HLSLProgram *hullShader;
@@ -61,7 +62,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

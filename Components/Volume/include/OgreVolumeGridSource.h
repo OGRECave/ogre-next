@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -143,7 +143,7 @@ namespace Volume {
 
         /** Destructor.
         */
-        virtual ~GridSource(void);
+        virtual ~GridSource();
 
         /** Overridden from VolumeSource.
         */
@@ -157,19 +157,19 @@ namespace Volume {
         @return
             The width of the texture.
         */
-        size_t getWidth(void) const;
+        size_t getWidth() const;
         
         /** Gets the height of the texture.
         @return
             The height of the texture.
         */
-        size_t getHeight(void) const;
+        size_t getHeight() const;
         
         /** Gets the depth of the texture.
         @return
             The depth of the texture.
         */
-        size_t getDepth(void) const;
+        size_t getDepth() const;
 
         /** Updates this grid with another source in a certain area. Use
         it for example to add spheres as a brush.
@@ -190,7 +190,7 @@ namespace Volume {
         
         /** Overridden from VolumeSource.
         */
-        Real getVolumeSpaceToWorldSpaceFactor(void) const;
+        Real getVolumeSpaceToWorldSpaceFactor() const;
 
     };
 

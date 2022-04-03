@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -35,14 +35,12 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    GL3PlusAsyncTicket::GL3PlusAsyncTicket( BufferPacked *creator,
-                                            StagingBuffer *stagingBuffer,
-                                            size_t elementStart,
-                                            size_t elementCount ) :
+    GL3PlusAsyncTicket::GL3PlusAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
+                                            size_t elementStart, size_t elementCount ) :
         AsyncTicket( creator, stagingBuffer, elementStart, elementCount ),
         mFenceName( 0 )
     {
-        //Base constructor has already called _asyncDownload. We should now place a fence.
+        // Base constructor has already called _asyncDownload. We should now place a fence.
         OCGE( mFenceName = glFenceSync( GL_SYNC_GPU_COMMANDS_COMPLETE, 0 ) );
     }
     //-----------------------------------------------------------------------------------
@@ -55,7 +53,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const void* GL3PlusAsyncTicket::mapImpl(void)
+    const void *GL3PlusAsyncTicket::mapImpl()
     {
         if( mFenceName )
             mFenceName = GL3PlusVaoManager::waitFor( mFenceName );
@@ -64,13 +62,13 @@ namespace Ogre
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusAsyncTicket::queryIsTransferDone(void)
+    bool GL3PlusAsyncTicket::queryIsTransferDone()
     {
         bool retVal = false;
 
         if( mFenceName )
         {
-            //Ask GL API to return immediately and tells us about the fence
+            // Ask GL API to return immediately and tells us about the fence
             GLenum waitRet = glClientWaitSync( mFenceName, 0, 0 );
             if( waitRet == GL_ALREADY_SIGNALED || waitRet == GL_CONDITION_SATISFIED )
             {
@@ -86,4 +84,4 @@ namespace Ogre
 
         return retVal;
     }
-}
+}  // namespace Ogre

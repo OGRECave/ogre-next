@@ -13,11 +13,11 @@ namespace Demo
 
     class GraphicsGameState : public TutorialGameState
     {
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         GraphicsGameState( const Ogre::String &helpDescription );
     };
-}
+}  // namespace Demo
 
 #endif

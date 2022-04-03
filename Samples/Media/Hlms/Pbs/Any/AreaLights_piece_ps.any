@@ -13,14 +13,14 @@
 		@end
 		@property( syntax == hlsl )
 			@property( !hlms_lights_area_tex_colour )
-				Texture2DArray<float> areaLightMasks	: register(t@value(areaLightMasks));
+				Texture2DArray<midf> areaLightMasks	: register(t@value(areaLightMasks));
 			@else
-				Texture2DArray<float3> areaLightMasks	: register(t@value(areaLightMasks));
+				Texture2DArray<midf3> areaLightMasks: register(t@value(areaLightMasks));
 			@end
 			SamplerState areaLightMasksSampler		: register(s@value(areaLightMasks));
 		@end
 		@property( syntax == metal )
-			, texture2d_array<float> areaLightMasks	[[texture(@value(areaLightMasks))]]
+			, texture2d_array<midf> areaLightMasks	[[texture(@value(areaLightMasks))]]
 			, sampler areaLightMasksSampler			[[sampler(@value(areaLightMasks))]]
 		@end
 	@end
@@ -43,9 +43,9 @@
 		fDistance = length( lightDir );
 
 		@property( obb_restraint_approx )
-			float obbRestraintFade = getObbRestraintFade( light1Buf.areaApproxLights[i].obbRestraint, inPs.pos,
-														  light1Buf.areaApproxLights[i].obbFadeFactorApprox.xyz );
-			@piece( obbRestraintTestApprox )&& obbRestraintFade > 0.0@end
+			midf obbRestraintFade = getObbRestraintFade( light1Buf.areaApproxLights[i].obbRestraint, inPs.pos,
+														 light1Buf.areaApproxLights[i].obbFadeFactorApprox.xyz );
+			@piece( obbRestraintTestApprox )&& obbRestraintFade > _h( 0.0 )@end
 		@end
 
 		if( fDistance <= light1Buf.areaApproxLights[i].attenuation.x
@@ -67,18 +67,18 @@
 			//a surface is close and perpendicular to the light. This is fully a hack and
 			//the values (e.g. 0.25) is completely eye balled.
 			lightUVForTex.xy = lightUV.xy;
-			lightUV.xy += float2( dot( light1Buf.areaApproxLights[i].tangent.xyz, pixelData.normal ),
-								  dot( areaLightBitangent, pixelData.normal ) ) * 3.75 * invHalfRectSize.xy;
+			lightUV.xy += float2( dot( ( light1Buf.areaApproxLights[i].tangent.xyz ), float3( pixelData.normal ) ),
+								  dot( areaLightBitangent, float3( pixelData.normal ) ) ) * 3.75 * invHalfRectSize.xy;
 			lightUV.xy = clamp( lightUV.xy, -0.5f, 0.5f );
 			lightUVForTex = clamp( lightUVForTex.xy, -0.5f, 0.5f );
 	//		float booster = 1.0f - smoothstep( 0.2f, 1.9f, max( abs( lightUV.x ), abs( lightUV.y ) ) );
 	//		booster = 1.0f + booster * 2.25f;
-			float booster = lerp( 1.0f, 4.0f, pixelData.roughness );
+			midf booster = lerp( _h( 1.0f ), _h( 4.0f ), pixelData.roughness );
 
 		@property( !hlms_lights_area_tex_colour || !hlms_lights_area_tex_mask )
-			float diffuseMask = 1.0f;
+			midf diffuseMask = _h( 1.0f );
 		@else
-			float3 diffuseMask = float3( 1.0f, 1.0f, 1.0f );
+			midf3 diffuseMask = midf3_c( 1.0f, 1.0f, 1.0f );
 		@end
 		@property( hlms_lights_area_tex_mask )
 			if( i < floatBitsToInt( light1Buf.numAreaApproxLightsWithMask ) )
@@ -86,11 +86,11 @@
 				// 1 / (1 - 0.02) = 1.020408163
 				float diffuseMipsLeft = light1Buf.areaLightNumMipmapsSpecFactor * 0.5 -
 										light1Buf.areaLightDiffuseMipmapStart * 1.020408163f;
-				diffuseMask = OGRE_SampleArray2DLevel( areaLightMasks, areaLightMasksSampler,
-													   lightUVForTex + 0.5f,
-													   light1Buf.areaApproxLights[i].attenuation.w,
-													   light1Buf.areaLightDiffuseMipmapStart +
-													   (pixelData.roughness - 0.02f) * diffuseMipsLeft ).AREA_LIGHTS_TEX_SWIZZLE;
+				diffuseMask = OGRE_SampleArray2DLevelF16( areaLightMasks, areaLightMasksSampler,
+														  lightUVForTex + 0.5f,
+														  light1Buf.areaApproxLights[i].attenuation.w,
+														  light1Buf.areaLightDiffuseMipmapStart +
+														  (pixelData.roughness - 0.02f) * diffuseMipsLeft ).AREA_LIGHTS_TEX_SWIZZLE;
 			}
 		@end
 
@@ -102,20 +102,20 @@
 			lightDir = closestPoint.xyz - inPs.pos;
 			fDistance= length( lightDir );
 
-			float3 toShapeLight = reflect( -pixelData.viewDir, pixelData.normal );
-			float denom = dot( toShapeLight, -light1Buf.areaApproxLights[i].direction.xyz );
+			midf3 toShapeLight = reflect( -pixelData.viewDir, pixelData.normal );
+			midf denom = dot( toShapeLight, midf3_c( -light1Buf.areaApproxLights[i].direction.xyz ) );
 			@property( !hlms_lights_area_tex_mask || !hlms_lights_area_tex_colour )
-				float specCol = 0;
+				midf specCol = _h( 0 );
 			@else
-				float3 specCol = float3( 0, 0, 0 );
+				midf3 specCol = midf3_c( 0, 0, 0 );
 			@end
 			if( denom > 1e-6f || light1Buf.areaApproxLights[i].doubleSided.x != 0.0f )
 			{
 				float3 p0l0 = light1Buf.areaApproxLights[i].position.xyz - inPs.pos;
-				float t = dot( p0l0, -light1Buf.areaApproxLights[i].direction.xyz ) / denom;
+				float t = dot( p0l0, -light1Buf.areaApproxLights[i].direction.xyz ) / float( denom );
 				if( t >= 0 )
 				{
-					float3 posInShape = inPs.pos.xyz + toShapeLight.xyz * t - light1Buf.areaApproxLights[i].position.xyz;
+					float3 posInShape = inPs.pos.xyz + float3( toShapeLight.xyz ) * t - light1Buf.areaApproxLights[i].position.xyz;
 					float2 reflClipSpace;
 					reflClipSpace.x = dot( light1Buf.areaApproxLights[i].tangent.xyz, posInShape );
 					reflClipSpace.y = dot( areaLightBitangent, posInShape );
@@ -129,19 +129,19 @@
 					specVal = pow( specVal, areaPower ) * min( areaPower * areaPower, 1.0f );
 
 					@property( !hlms_lights_area_tex_mask || !hlms_lights_area_tex_colour )
-						specCol = specVal;
+						specCol = midf_c( specVal );
 					@else
-						specCol = float3( specVal, specVal, specVal );
+						specCol = midf3_c( specVal, specVal, specVal );
 					@end
 
 					@property( hlms_lights_area_tex_mask )
 						if( i < floatBitsToInt( light1Buf.numAreaApproxLightsWithMask ) )
 						{
-							specCol *= OGRE_SampleArray2DLevel( areaLightMasks, areaLightMasksSampler,
-																reflClipSpace * invHalfRectSize + 0.5f,
-																light1Buf.areaApproxLights[i].attenuation.w,
-																(pixelData.roughness - 0.02f) *
-																light1Buf.areaLightNumMipmapsSpecFactor ).AREA_LIGHTS_TEX_SWIZZLE;
+							specCol *= OGRE_SampleArray2DLevelF16( areaLightMasks, areaLightMasksSampler,
+																   reflClipSpace * invHalfRectSize + 0.5f,
+																   light1Buf.areaApproxLights[i].attenuation.w,
+																   (pixelData.roughness - _h( 0.02f )) *
+																   light1Buf.areaLightNumMipmapsSpecFactor ).AREA_LIGHTS_TEX_SWIZZLE;
 						}
 					@end
 				}
@@ -151,13 +151,13 @@
 			//float fAreaW = dot( lightDir, -light1Buf.areaApproxLights[i].direction.xyz ) * 0.5f + 0.5f;
 			//lightDir = (-light1Buf.areaApproxLights[i].direction.xyz + lightDir) * 0.50f;
 			//lightDir = lerp( lightDir2, lightDir, fAreaW );
-			float globalDot = saturate( dot( -lightDir, light1Buf.areaApproxLights[i].direction.xyz ) );
-			globalDot = light1Buf.areaApproxLights[i].doubleSided.x != 0.0f ? 1.0f : globalDot;
-			tmpColour = BRDF_AreaLightApprox( lightDir,
-											  light1Buf.areaApproxLights[i].diffuse.xyz * diffuseMask,
-											  light1Buf.areaApproxLights[i].specular.xyz * specCol,
+			midf globalDot = midf_c( saturate( dot( -lightDir, light1Buf.areaApproxLights[i].direction.xyz ) ) );
+			globalDot = light1Buf.areaApproxLights[i].doubleSided.x != 0.0f ? _h( 1.0f ) : globalDot;
+			tmpColour = BRDF_AreaLightApprox( midf3_c( lightDir ),
+											  midf3_c( light1Buf.areaApproxLights[i].diffuse.xyz ) * diffuseMask,
+											  midf3_c( light1Buf.areaApproxLights[i].specular.xyz ) * specCol,
 											  pixelData ) * ( globalDot * globalDot ) * booster;
-			float atten = 1.0 / (0.5 + (light1Buf.areaApproxLights[i].attenuation.y + light1Buf.areaApproxLights[i].attenuation.z * fDistance) * fDistance );
+			midf atten = midf_c( 1.0 / (0.5 + (light1Buf.areaApproxLights[i].attenuation.y + light1Buf.areaApproxLights[i].attenuation.z * fDistance) * fDistance ) );
 
 			@property( obb_restraint_approx )
 				atten *= obbRestraintFade;
@@ -173,38 +173,38 @@
 @end
 
 @piece( DeclareBRDF_AreaLightApprox )
-INLINE float3 BRDF_AreaLightApprox
+INLINE midf3 BRDF_AreaLightApprox
 (
-	float3 lightDir, float3 lightDiffuse, float3 lightSpecular, PixelData pixelData
+	midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData
 )
 {
-	float3 halfWay= normalize( lightDir + pixelData.viewDir );
-	float NdotL = saturate( dot( pixelData.normal, lightDir ) );
-	float VdotH = saturate( dot( pixelData.viewDir, halfWay ) );
+	midf3 halfWay= normalize( lightDir + pixelData.viewDir );
+	midf NdotL = saturate( dot( pixelData.normal, lightDir ) );
+	midf VdotH = saturate( dot( pixelData.viewDir, halfWay ) );
 
 	//Formula:
 	//	fresnelS = lerp( (1 - V*H)^5, 1, F0 )
 	float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
 
 	//We should divide Rs by PI, but it was done inside G for performance
-	float3 Rs = fresnelS * pixelData.specular.xyz * lightSpecular;
+	midf3 Rs = fresnelS * pixelData.specular.xyz * lightSpecular;
 
 	//Diffuse BRDF (*Normalized* Disney, see course_notes_moving_frostbite_to_pbr.pdf
 	//"Moving Frostbite to Physically Based Rendering" Sebastien Lagarde & Charles de Rousiers)
-	float energyBias	= pixelData.roughness * 0.5;
-	float energyFactor	= lerp( 1.0, 1.0 / 1.51, pixelData.roughness );
-	float fd90			= energyBias + 2.0 * VdotH * VdotH * pixelData.roughness;
-	float lightScatter	= 1.0 + (fd90 - 1.0) * pow( 1.0 - NdotL, 5.0 );
-	float viewScatter	= 1.0 + (fd90 - 1.0) * pow( 1.0 - pixelData.NdotV, 5.0 );
+	midf energyBias	= pixelData.roughness * _h( 0.5 );
+	midf energyFactor	= lerp( _h( 1.0 ), _h( 1.0 / 1.51 ), pixelData.roughness );
+	midf fd90			= energyBias + _h( 2.0 ) * VdotH * VdotH * pixelData.roughness;
+	midf lightScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - NdotL, _h( 5.0 ) );
+	midf viewScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - pixelData.NdotV, _h( 5.0 ) );
 
 @property( fresnel_separate_diffuse )
 	float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
 @else
-	float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+	midf fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
 @end
 
 	//We should divide Rd by PI, but it is already included in kD
-	float3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz * lightDiffuse;
+	midf3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz * lightDiffuse;
 
 	return NdotL * (Rs + Rd);
 }

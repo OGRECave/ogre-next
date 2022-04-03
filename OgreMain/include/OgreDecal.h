@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -76,24 +76,24 @@ namespace Ogre
         will be overwritten instead, and the metalness value of the decal will
         act as a fresnel value, overwriting the original fresnel.
     */
-    class _OgreExport Decal : public MovableObject, public TextureGpuListener
+    class _OgreExport Decal final : public MovableObject, public TextureGpuListener
     {
     protected:
-        TextureGpu  *mDiffuseTexture;
-        TextureGpu  *mNormalTexture;
-        TextureGpu  *mEmissiveTexture;
+        TextureGpu *mDiffuseTexture;
+        TextureGpu *mNormalTexture;
+        TextureGpu *mEmissiveTexture;
 
     public:
         uint16 mDiffuseIdx;
         uint16 mNormalMapIdx;
         uint16 mEmissiveIdx;
         uint16 mIgnoreDiffuseAlpha;
-        float mMetalness;
-        float mRoughness;
+        float  mMetalness;
+        float  mRoughness;
 
     public:
-        Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );
-        virtual ~Decal();
+        Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
+        ~Decal() override;
 
         /// Call this family of functions if the input texture is automatically batched
         /// We will listen for residency changes and change the internal slice accordingly
@@ -108,9 +108,9 @@ namespace Ogre
         void setNormalTextureRaw( TextureGpu *normalTex, uint32 sliceIdx );
         void setEmissiveTextureRaw( TextureGpu *emissiveTex, uint32 sliceIdx );
 
-        TextureGpu* getDiffuseTexture(void) const;
-        TextureGpu* getNormalTexture(void) const;
-        TextureGpu* getEmissiveTexture(void) const;
+        TextureGpu *getDiffuseTexture() const;
+        TextureGpu *getNormalTexture() const;
+        TextureGpu *getEmissiveTexture() const;
 
         /** When diffuse textures are used (globally), the alpha component of the diffuse texture
             will be used to mask all the other textures (e.g. normal & emissive maps).
@@ -121,15 +121,15 @@ namespace Ogre
             True to ignore the alpha on the other maps. False otherwise. Default: False
         */
         void setIgnoreAlphaDiffuse( bool bIgnore );
-        bool getIgnoreAlphaDiffuse(void) const;
+        bool getIgnoreAlphaDiffuse() const;
 
         /// Value for Metalness. Must be in range [0; 1]
-        void setMetalness( float value );
-        float getMetalness(void) const              { return mMetalness; }
+        void  setMetalness( float value );
+        float getMetalness() const { return mMetalness; }
 
         /// Value for Roughness. Valid range depends on the BRDF used.
-        void setRoughness( float roughness );
-        float getRoughness(void) const              { return mRoughness; }
+        void  setRoughness( float roughness );
+        float getRoughness() const { return mRoughness; }
 
         /** Helper function to set width, height and depth of the decal.
             This is a helper function because these parameters actually live in the parent scene node
@@ -149,30 +149,31 @@ namespace Ogre
         */
         void setRectSize( Vector2 planeDimensions, Real depth );
 
-        //Overrides from MovableObject
-        virtual const String& getMovableType(void) const;
+        // Overrides from MovableObject
+        const String &getMovableType() const override;
 
         /// Decals only allow ForwardPlusBase::MinDecalRq <= queueID < ForwardPlusBase::MaxDecalRq
-        virtual void setRenderQueueGroup(uint8 queueID);
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void setRenderQueueGroup( uint8 queueID ) override;
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
     };
 
-    class _OgreExport DecalFactory : public MovableObjectFactory
+    class _OgreExport DecalFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager            *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         DecalFactory() {}
-        virtual ~DecalFactory() {}
+        ~DecalFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
-        void destroyInstance(MovableObject* obj);
+        const String &getType() const override;
+        void          destroyInstance( MovableObject *obj ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

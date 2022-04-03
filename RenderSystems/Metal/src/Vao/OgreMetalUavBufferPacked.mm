@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -38,41 +38,36 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    MetalUavBufferPacked::MetalUavBufferPacked(
-                size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                uint32 bindFlags, void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, MetalBufferInterface *bufferInterface,
-                MetalDevice *device ) :
-        UavBufferPacked( internalBufStartBytes, numElements, bytesPerElement, bindFlags,
-                         initialData, keepAsShadow, vaoManager, bufferInterface ),
+    MetalUavBufferPacked::MetalUavBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                                uint32 bytesPerElement, uint32 bindFlags,
+                                                void *initialData, bool keepAsShadow,
+                                                VaoManager *vaoManager,
+                                                MetalBufferInterface *bufferInterface,
+                                                MetalDevice *device ) :
+        UavBufferPacked( internalBufStartBytes, numElements, bytesPerElement, bindFlags, initialData,
+                         keepAsShadow, vaoManager, bufferInterface ),
         mDevice( device )
     {
     }
     //-----------------------------------------------------------------------------------
-    MetalUavBufferPacked::~MetalUavBufferPacked()
-    {
-    }
+    MetalUavBufferPacked::~MetalUavBufferPacked() {}
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* MetalUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
+    TexBufferPacked *MetalUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
-        OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
 
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
-
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         TexBufferPacked *retVal = OGRE_NEW MetalTexBufferPacked(
-                                                        mInternalBufferStart * mBytesPerElement,
-                                                        mNumElements, mBytesPerElement, 0,
-                                                        mBufferType, (void*)0, false,
-                                                        (VaoManager*)0, bufferInterface, pixelFormat,
-                                                        mDevice );
-        //We were overriden by the BufferPacked we just created. Restore this back!
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VaoManager *)0, bufferInterface, pixelFormat, mDevice );
+        // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ReadOnlyBufferPacked *MetalUavBufferPacked::getAsReadOnlyBufferImpl( void )
+    ReadOnlyBufferPacked *MetalUavBufferPacked::getAsReadOnlyBufferImpl()
     {
         OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
 
@@ -81,7 +76,7 @@ namespace Ogre
         ReadOnlyBufferPacked *retVal = OGRE_NEW MetalReadOnlyBufferPacked(
             mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
             (void *)0, false, (VaoManager *)0, bufferInterface, PFG_NULL, mDevice );
-        // We were overriden by the BufferPacked we just created. Restore this back!
+        // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;
@@ -90,8 +85,8 @@ namespace Ogre
     void MetalUavBufferPacked::bindBufferAllRenderStages( uint16 slot, size_t offset )
     {
         assert( mDevice->mRenderEncoder || mDevice->mFrameAborted );
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         [mDevice->mRenderEncoder setVertexBuffer:bufferInterface->getVboName()
                                           offset:mFinalBufferStart * mBytesPerElement + offset
@@ -104,8 +99,8 @@ namespace Ogre
     void MetalUavBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
     {
         assert( mDevice->mRenderEncoder || mDevice->mFrameAborted );
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         [mDevice->mRenderEncoder setVertexBuffer:bufferInterface->getVboName()
                                           offset:mFinalBufferStart * mBytesPerElement + offset
@@ -115,8 +110,8 @@ namespace Ogre
     void MetalUavBufferPacked::bindBufferPS( uint16 slot, size_t offset, size_t sizeBytes )
     {
         assert( mDevice->mRenderEncoder || mDevice->mFrameAborted );
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         [mDevice->mRenderEncoder setFragmentBuffer:bufferInterface->getVboName()
                                             offset:mFinalBufferStart * mBytesPerElement + offset
@@ -125,22 +120,21 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalUavBufferPacked::bindBufferCS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
 
-        __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder =
-                mDevice->getComputeEncoder();
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder = mDevice->getComputeEncoder();
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         [computeEncoder setBuffer:bufferInterface->getVboName()
                            offset:mFinalBufferStart * mBytesPerElement + offset
                           atIndex:slot + OGRE_METAL_CS_UAV_SLOT_START];
     }
     //-----------------------------------------------------------------------------------
-    void MetalUavBufferPacked::bindBufferForDescriptor( __unsafe_unretained id <MTLBuffer> *buffers,
+    void MetalUavBufferPacked::bindBufferForDescriptor( __unsafe_unretained id<MTLBuffer> *buffers,
                                                         NSUInteger *offsets, size_t offset )
     {
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+        assert( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
 
         *buffers = bufferInterface->getVboName();
         *offsets = mFinalBufferStart * mBytesPerElement + offset;

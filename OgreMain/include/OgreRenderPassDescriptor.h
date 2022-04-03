@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreRenderPassDescriptor_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreColourValue.h"
 #include "OgreIdString.h"
 
@@ -38,11 +39,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     namespace LoadAction
     {
@@ -115,22 +116,22 @@ namespace Ogre
 
     struct _OgreExport RenderPassTargetBase
     {
-        TextureGpu  *texture;
-        TextureGpu  *resolveTexture;
+        TextureGpu *texture;
+        TextureGpu *resolveTexture;
 
-        uint8       mipLevel;
-        uint8       resolveMipLevel;
+        uint8 mipLevel;
+        uint8 resolveMipLevel;
 
-        uint16      slice;
-        uint16      resolveSlice;
+        uint16 slice;
+        uint16 resolveSlice;
 
-        LoadAction::LoadAction      loadAction;
-        StoreAction::StoreAction    storeAction;
+        LoadAction::LoadAction   loadAction;
+        StoreAction::StoreAction storeAction;
 
         RenderPassTargetBase();
 
-        bool operator != ( const RenderPassTargetBase &other ) const;
-        bool operator < ( const RenderPassTargetBase &other ) const;
+        bool operator!=( const RenderPassTargetBase &other ) const;
+        bool operator<( const RenderPassTargetBase &other ) const;
     };
 
     struct _OgreExport RenderPassColourTarget : RenderPassTargetBase
@@ -138,41 +139,41 @@ namespace Ogre
         ColourValue clearColour;
         /// When true, slice will be ignored, and
         /// all slices will be attached instead.
-        bool        allLayers;
+        bool allLayers;
         RenderPassColourTarget();
     };
     struct _OgreExport RenderPassDepthTarget : RenderPassTargetBase
     {
-        Real    clearDepth;
+        Real clearDepth;
         /// Assume attachment is read only (it's a hint, not an enforcement)
-        bool    readOnly;
+        bool readOnly;
         RenderPassDepthTarget();
     };
     struct _OgreExport RenderPassStencilTarget : RenderPassTargetBase
     {
-        uint32  clearStencil;
+        uint32 clearStencil;
         /// Assume attachment is read only (it's a hint, not an enforcement)
-        bool    readOnly;
+        bool readOnly;
         RenderPassStencilTarget();
     };
 
-    class _OgreExport RenderPassDescriptor : public RenderSysAlloc
+    class _OgreExport RenderPassDescriptor : public OgreAllocatedObj
     {
     public:
         enum EntryTypes
         {
-            Colour0     = 1u << 0u,
-            Colour1     = 1u << 1u,
-            Colour2     = 1u << 2u,
-            Colour3     = 1u << 3u,
-            Colour4     = 1u << 4u,
-            Colour5     = 1u << 5u,
-            Colour6     = 1u << 6u,
-            Colour7     = 1u << 7u,
-            Depth       = 1u << 30u,
-            Stencil     = 1u << 31u,
-            Colour      = Colour0|Colour1|Colour2|Colour3|Colour4|Colour5|Colour6|Colour7,
-            All         = Colour|Depth|Stencil
+            Colour0 = 1u << 0u,
+            Colour1 = 1u << 1u,
+            Colour2 = 1u << 2u,
+            Colour3 = 1u << 3u,
+            Colour4 = 1u << 4u,
+            Colour5 = 1u << 5u,
+            Colour6 = 1u << 6u,
+            Colour7 = 1u << 7u,
+            Depth = 1u << 30u,
+            Stencil = 1u << 31u,
+            Colour = Colour0 | Colour1 | Colour2 | Colour3 | Colour4 | Colour5 | Colour6 | Colour7,
+            All = Colour | Depth | Stencil
         };
 
         RenderPassColourTarget  mColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
@@ -180,25 +181,28 @@ namespace Ogre
         RenderPassStencilTarget mStencil;
 
     protected:
-        uint8                   mNumColourEntries;
-        bool                    mRequiresTextureFlipping;
+        uint8 mNumColourEntries;
+        bool  mRequiresTextureFlipping;
         /// When true, if we have a RenderWindow among our colour entries, then this
         /// pass is the last one to render to it and should ready the surface for
         /// presentation/swapping. After changing this flag you MUST call entriesModified( Colour );
         ///
         /// This value will be automatically reset to false if no entry is a RenderWindow
-        public: bool            mReadyWindowForPresent;
+    public:
+        bool mReadyWindowForPresent;
         /// When true, beginRenderPassDescriptor & endRenderPassDescriptor won't actually
         /// load/store this pass descriptor; but will still set the mCurrentRenderPassDescriptor
         /// so we have required information by some passes.
         /// Examples of these are stencil passes.
-        public: bool            mInformationOnly;
+    public:
+        bool mInformationOnly;
 
     public:
         void checkWarnIfRtvWasFlushed( uint32 entriesToFlush );
+
     protected:
-        void checkRequiresTextureFlipping(void);
-        virtual void colourEntriesModified(void);
+        void         checkRequiresTextureFlipping();
+        virtual void colourEntriesModified();
 
     public:
         RenderPassDescriptor();
@@ -229,10 +233,10 @@ namespace Ogre
 
         bool hasAttachment( const TextureGpu *texture ) const;
 
-        uint8 getNumColourEntries(void) const       { return mNumColourEntries; }
-        bool requiresTextureFlipping(void) const    { return mRequiresTextureFlipping; }
+        uint8 getNumColourEntries() const { return mNumColourEntries; }
+        bool  requiresTextureFlipping() const { return mRequiresTextureFlipping; }
         /// Returns true if either Stencil is set, or if Depth is set with depth-stencil attachment.
-        bool hasStencilFormat(void) const;
+        bool hasStencilFormat() const;
 
         /// Finds the first non-null texture and outputs it
         /// May return nullptr if nothing is bound
@@ -253,22 +257,22 @@ namespace Ogre
 
     struct _OgreExport FrameBufferDescKey
     {
-        bool                    readyWindowForPresent;
-        uint8                   numColourEntries;
-        bool                    allLayers[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        RenderPassTargetBase    colour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        RenderPassTargetBase    depth;
-        RenderPassTargetBase    stencil;
+        bool                 readyWindowForPresent;
+        uint8                numColourEntries;
+        bool                 allLayers[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        RenderPassTargetBase colour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        RenderPassTargetBase depth;
+        RenderPassTargetBase stencil;
 
         FrameBufferDescKey();
         FrameBufferDescKey( const RenderPassDescriptor &desc );
 
-        bool operator < ( const FrameBufferDescKey &other ) const;
+        bool operator<( const FrameBufferDescKey &other ) const;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

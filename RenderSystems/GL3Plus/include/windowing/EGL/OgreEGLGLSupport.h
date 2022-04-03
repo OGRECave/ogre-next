@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -37,7 +37,7 @@ namespace Ogre
 {
     class _OgrePrivate EGLGLSupport : public GL3PlusSupport
     {
-        FastArray<String> mDeviceNames;
+        FastArray<String>       mDeviceNames;
         FastArray<EGLDeviceEXT> mDevices;
 
         EGLDisplay mEglDisplay;
@@ -45,17 +45,17 @@ namespace Ogre
         /**
          * Refresh config options to reflect dependencies
          */
-        void refreshConfig( void );
+        void refreshConfig();
 
     public:
         EGLGLSupport();
         ~EGLGLSupport();
 
         /// @copydoc see GL3PlusSupport::addConfig
-        void addConfig( void );
+        void addConfig();
 
         /// @copydoc see GL3PlusSupport::validateConfig
-        String validateConfig( void );
+        String validateConfig();
 
         /// @copydoc see GL3PlusSupport::setConfigOption
         void setConfigOption( const String &name, const String &value );
@@ -82,9 +82,9 @@ namespace Ogre
 
         /// Get the Display connection used for rendering
         /// This function establishes the initial connection when necessary.
-        EGLDisplay getGLDisplay( void );
+        EGLDisplay getGLDisplay();
 
-        uint32 getSelectedDeviceIdx( void ) const;
+        uint32 getSelectedDeviceIdx() const;
     };
 }  // namespace Ogre
 

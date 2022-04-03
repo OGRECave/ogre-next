@@ -10,12 +10,11 @@ namespace Demo
     {
         Ogre::GpuProgramParametersSharedPtr mPsParams[2];
 
-        Ogre::Matrix4   mLastUvSpaceViewProjMatrix;
-        Ogre::Real      mRsDepthRange;
+        Ogre::Matrix4 mLastUvSpaceViewProjMatrix;
+        Ogre::Real    mRsDepthRange;
 
     public:
-        ScreenSpaceReflections( Ogre::TextureGpu *globalCubemap,
-                                Ogre::RenderSystem *renderSystem );
+        ScreenSpaceReflections( Ogre::TextureGpu *globalCubemap, Ogre::RenderSystem *renderSystem );
 
         void update( Ogre::Camera *camera );
 
@@ -96,14 +95,10 @@ namespace Demo
             scenario (improving performance).
             Value is in pixels. You may want to adapt this value based on resolution.
         */
-        static void setupSSRValues( double equivalentMetersInCurrentUnit,
-                                    double zThickness = 0.25,
-                                    double zThicknessBiasAmount = 2.0,
-                                    double zThicknessBiasStart = 10.0,
-                                    double zThicknessBiasEnd = 100.0,
-                                    float maxDistance = 10000.0f,
-                                    float reprojectionMaxDistanceError = 2.0f,
-                                    Ogre::uint16 pixelStride = 4,
-                                    Ogre::uint16 maxSteps = 200 );
+        static void setupSSRValues( double equivalentMetersInCurrentUnit, double zThickness = 0.25,
+                                    double zThicknessBiasAmount = 2.0, double zThicknessBiasStart = 10.0,
+                                    double zThicknessBiasEnd = 100.0, float maxDistance = 10000.0f,
+                                    float        reprojectionMaxDistanceError = 2.0f,
+                                    Ogre::uint16 pixelStride = 4, Ogre::uint16 maxSteps = 200 );
     };
-}
+}  // namespace Demo

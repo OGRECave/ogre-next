@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -41,10 +41,10 @@ namespace Ogre
     protected:
         static String sLanguageName;
     public:
-        GLSLESShaderFactory(void);
-        ~GLSLESShaderFactory(void);
+        GLSLESShaderFactory();
+        ~GLSLESShaderFactory();
         /// Get the name of the language this factory creates shaders for.
-        const String& getLanguage(void) const;
+        const String& getLanguage() const;
         /// Create an instance of GLSLESShader.
         HighLevelGpuProgram* create(ResourceManager* creator, 
             const String& name, ResourceHandle handle,

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -54,7 +54,7 @@ namespace Ogre {
     {
     }
 
-    void EGLSupport::addConfig(void)
+    void EGLSupport::addConfig()
     {
         ConfigOption optFullScreen;
         ConfigOption optVideoMode;
@@ -126,7 +126,7 @@ namespace Ogre {
         refreshConfig();
     }
 
-    void EGLSupport::refreshConfig(void) 
+    void EGLSupport::refreshConfig()
     {
         ConfigOptionMap::iterator optVideoMode = mOptions.find("Video Mode");
         ConfigOptionMap::iterator optDisplayFrequency = mOptions.find("Display Frequency");
@@ -171,13 +171,13 @@ namespace Ogre {
         }
     }
 
-    String EGLSupport::validateConfig(void)
+    String EGLSupport::validateConfig()
     {
         // TODO
         return BLANKSTRING;
     }
 
-    EGLDisplay EGLSupport::getGLDisplay(void)
+    EGLDisplay EGLSupport::getGLDisplay()
     {
         EGLint major = 0, minor = 0;
 
@@ -202,7 +202,7 @@ namespace Ogre {
     }
 
 
-    String EGLSupport::getDisplayName(void)
+    String EGLSupport::getDisplayName()
     {
         return "todo";
     }
@@ -426,7 +426,7 @@ namespace Ogre {
         return glConfig;
     }
 
-    void EGLSupport::switchMode(void)
+    void EGLSupport::switchMode()
     {
         return switchMode(mOriginalMode.first.first,
                           mOriginalMode.first.second, mOriginalMode.second);

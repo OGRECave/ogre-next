@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -88,7 +88,7 @@ namespace Ogre
     typedef map<VulkanFrameBufferDescKey, VulkanFrameBufferDescValue>::type VulkanFrameBufferDescMap;
     typedef map<FrameBufferDescKey, VulkanFlushOnlyDescValue>::type VulkanFlushOnlyDescMap;
 
-    class _OgreVulkanExport VulkanRenderPassDescriptor : public RenderPassDescriptor
+    class _OgreVulkanExport VulkanRenderPassDescriptor final : public RenderPassDescriptor
     {
     protected:
         // 1 per MRT
@@ -122,9 +122,9 @@ namespace Ogre
         size_t mNumCallstackEntries;
 #endif
 
-        void checkRenderWindowStatus( void );
-        void calculateSharedKey( void );
-        void calculateSharedFlushOnlyKey( void );
+        void checkRenderWindowStatus();
+        void calculateSharedKey();
+        void calculateSharedFlushOnlyKey();
 
         static VkAttachmentLoadOp get( LoadAction::LoadAction action );
         static VkAttachmentStoreOp get( StoreAction::StoreAction action, bool bResolveTarget );
@@ -140,7 +140,7 @@ namespace Ogre
         VkImageView setupDepthAttachment( VkAttachmentDescription &attachment );
 
         void setupFbo( VulkanFrameBufferDescValue &fboDesc );
-        void releaseFbo( void );
+        void releaseFbo();
         static void destroyFbo( VulkanQueue *queue, VulkanFrameBufferDescValue &fboDesc );
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
@@ -148,26 +148,26 @@ namespace Ogre
         /// If using MRT, each colour is evaluated independently (only the ones marked
         /// as clear will be cleared).
         uint32 checkForClearActions( VulkanRenderPassDescriptor *other ) const;
-        bool cannotInterruptRendering( void ) const;
+        bool cannotInterruptRendering() const;
 
     public:
         VulkanRenderPassDescriptor( VulkanQueue *graphicsQueue, VulkanRenderSystem *renderSystem );
-        virtual ~VulkanRenderPassDescriptor();
+        ~VulkanRenderPassDescriptor() override;
 
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
         void notifyRenderTextureNonResident( VulkanTextureGpu *texture );
 
-        virtual void entriesModified( uint32 entryTypes );
+        void entriesModified( uint32 entryTypes ) override;
 
-        virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
-        virtual void setClearDepth( Real clearDepth );
-        virtual void setClearStencil( uint32 clearStencil );
+        void setClearColour( uint8 idx, const ColourValue &clearColour ) override;
+        void setClearDepth( Real clearDepth ) override;
+        void setClearStencil( uint32 clearStencil ) override;
 
         /// Sets the clear colour to all entries. In some APIs may be faster
         /// than calling setClearColour( idx, clearColour ) for each entry
         /// individually.
-        virtual void setClearColour( const ColourValue &clearColour );
+        void setClearColour( const ColourValue &clearColour ) override;
 
         uint32 willSwitchTo( VulkanRenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,28 +29,29 @@ THE SOFTWARE.
 #define __ParticleSystemRenderer_H__
 
 #include "OgrePrerequisites.h"
-#include "OgreStringInterface.h"
+
+#include "OgreCommon.h"
 #include "OgreFactoryObj.h"
 #include "OgreRenderQueue.h"
-#include "OgreCommon.h"
 #include "OgreRenderable.h"
+#include "OgreStringInterface.h"
 
 #include "ogrestd/list.h"
 
-namespace Ogre {
-
-    typedef FastArray<Renderable*> RenderableArray;
+namespace Ogre
+{
+    typedef FastArray<Renderable *> RenderableArray;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
     /** Abstract class defining the interface required to be implemented
         by classes which provide rendering capability to ParticleSystem instances.
     */
-    class _OgreExport ParticleSystemRenderer : public StringInterface, public FXAlloc
+    class _OgreExport ParticleSystemRenderer : public StringInterface, public OgreAllocatedObj
     {
     public:
         /// Constructor
@@ -59,41 +60,41 @@ namespace Ogre {
         virtual ~ParticleSystemRenderer() {}
 
         /** Gets the type of this renderer - must be implemented by subclasses */
-        virtual const String& getType(void) const = 0;
+        virtual const String &getType() const = 0;
 
         /** Delegated to by ParticleSystem::_updateRenderQueue
         @remarks
             The subclass must update the render queue using whichever Renderable
             instance(s) it wishes.
         */
-        virtual void _updateRenderQueue(RenderQueue* queue, Camera *camera,
-            const Camera *lodCamera, list<Particle*>::type& currentParticles,
-            bool cullIndividually, RenderableArray &outRenderables ) = 0;
+        virtual void _updateRenderQueue( RenderQueue *queue, Camera *camera, const Camera *lodCamera,
+                                         list<Particle *>::type &currentParticles, bool cullIndividually,
+                                         RenderableArray &outRenderables ) = 0;
 
         /** Sets the HLMS material this renderer must use; called by ParticleSystem. */
         virtual void _setDatablock( HlmsDatablock *datablock ) = 0;
         /** Sets the material this renderer must use; called by ParticleSystem. */
         virtual void _setMaterialName( const String &matName, const String &resourceGroup ) = 0;
         /** Delegated to by ParticleSystem::_notifyCurrentCamera */
-        virtual void _notifyCurrentCamera(const Camera* camera, const Camera* lodCamera) = 0;
+        virtual void _notifyCurrentCamera( const Camera *camera, const Camera *lodCamera ) = 0;
         /** Delegated to by ParticleSystem::_notifyAttached */
-        virtual void _notifyAttached(Node* parent) = 0;
+        virtual void _notifyAttached( Node *parent ) = 0;
         /** Optional callback notified when particles are rotated */
-        virtual void _notifyParticleRotated(void) {}
+        virtual void _notifyParticleRotated() {}
         /** Optional callback notified when particles are resized individually */
-        virtual void _notifyParticleResized(void) {}
+        virtual void _notifyParticleResized() {}
         /** Tells the renderer that the particle quota has changed */
-        virtual void _notifyParticleQuota(size_t quota) = 0;
+        virtual void _notifyParticleQuota( size_t quota ) = 0;
         /** Tells the renderer that the particle default size has changed */
-        virtual void _notifyDefaultDimensions(Real width, Real height) = 0;
+        virtual void _notifyDefaultDimensions( Real width, Real height ) = 0;
         /** Optional callback notified when particle emitted */
-        virtual void _notifyParticleEmitted(Particle* particle) {}
+        virtual void _notifyParticleEmitted( Particle *particle ) {}
         /** Optional callback notified when particle expired */
-        virtual void _notifyParticleExpired(Particle* particle) {}
+        virtual void _notifyParticleExpired( Particle *particle ) {}
         /** Optional callback notified when particles moved */
-        virtual void _notifyParticleMoved(list<Particle*>::type& currentParticles) {}
+        virtual void _notifyParticleMoved( list<Particle *>::type &currentParticles ) {}
         /** Optional callback notified when particles cleared */
-        virtual void _notifyParticleCleared(list<Particle*>::type& currentParticles) {}
+        virtual void _notifyParticleCleared( list<Particle *>::type &currentParticles ) {}
         /** Create a new ParticleVisualData instance for attachment to a particle.
         @remarks
             If this renderer needs additional data in each particle, then this should
@@ -101,7 +102,7 @@ namespace Ogre {
             should be overridden to return a new instance of it. The default
             behaviour is to return null.
         */
-        virtual ParticleVisualData* _createVisualData(void) { return 0; }
+        virtual ParticleVisualData *_createVisualData() { return 0; }
         /** Destroy a ParticleVisualData instance.
         @remarks
             If this renderer needs additional data in each particle, then this should
@@ -109,30 +110,30 @@ namespace Ogre {
             should be overridden to destroy an instance of it. The default
             behaviour is to do nothing.
         */
-        virtual void _destroyVisualData(ParticleVisualData* vis) { assert (vis == 0); }
+        virtual void _destroyVisualData( ParticleVisualData *vis ) { assert( vis == 0 ); }
 
         /** Sets which render queue group this renderer should target with it's
             output.
         */
-        virtual void setRenderQueueGroup(uint8 queueID) = 0;
+        virtual void setRenderQueueGroup( uint8 queueID ) = 0;
 
         virtual void setRenderQueueSubGroup( uint8 subGroupId ) = 0;
 
         /** Setting carried over from ParticleSystem.
-        */
-        virtual void setKeepParticlesInLocalSpace(bool keepLocal) = 0;
+         */
+        virtual void setKeepParticlesInLocalSpace( bool keepLocal ) = 0;
 
         /** Gets the desired particles sort mode of this renderer */
-        virtual SortMode _getSortMode(void) const = 0;
-
+        virtual SortMode _getSortMode() const = 0;
     };
 
     /** Abstract class definition of a factory object for ParticleSystemRenderer. */
-    class _OgreExport ParticleSystemRendererFactory : public FactoryObj<ParticleSystemRenderer>, public FXAlloc
+    class _OgreExport ParticleSystemRendererFactory : public FactoryObj<ParticleSystemRenderer>,
+                                                      public OgreAllocatedObj
     {
     public:
         // No methods, must just override all methods inherited from FactoryObj
-        ParticleSystemRendererFactory() : mCurrentSceneManager(0) {}
+        ParticleSystemRendererFactory() : mCurrentSceneManager( 0 ) {}
 
         /// Needs to be set directly before calling createInstance
         SceneManager *mCurrentSceneManager;
@@ -140,6 +141,6 @@ namespace Ogre {
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif

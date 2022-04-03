@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -463,7 +463,7 @@ void PlayPen_testMorphAnimationWithNormals::setupContent()
     // Unload old mesh to force reload
     MeshManager::getSingleton().remove(mesh->getHandle());
     mesh->unload();
-    mesh.setNull();
+    mesh.reset();
 
     Entity* e = mSceneMgr->createEntity("test", morphName);
     mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(e);
@@ -602,7 +602,7 @@ void PlayPen_testMorphAnimationWithoutNormals::setupContent()
     // Unload old mesh to force reload
     MeshManager::getSingleton().remove(mesh->getHandle());
     mesh->unload();
-    mesh.setNull();
+    mesh.reset();
 
     Entity* e = mSceneMgr->createEntity("test", morphName);
     mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(e);
@@ -735,7 +735,7 @@ void PlayPen_testPoseAnimationWithNormals::setupContent()
     // Unload old mesh to force reload
     MeshManager::getSingleton().remove(mesh->getHandle());
     mesh->unload();
-    mesh.setNull();
+    mesh.reset();
 
     Entity*  e;
     AnimationState* animState;
@@ -868,7 +868,7 @@ void PlayPen_testPoseAnimationWithoutNormals::setupContent()
     // Unload old mesh to force reload
     MeshManager::getSingleton().remove(mesh->getHandle());
     mesh->unload();
-    mesh.setNull();
+    mesh.reset();
 
     Entity*  e;
     AnimationState* animState;

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -31,11 +31,11 @@ THE SOFTWARE.
 
 #if __OGRE_HAVE_NEON
 
-#ifndef __Mathlib_H__
-    #error "Don't include this file directly. include Math/Array/OgreMathlib.h"
-#endif
+#    ifndef __Mathlib_H__
+#        error "Don't include this file directly. include Math/Array/OgreMathlib.h"
+#    endif
 
-#include "OgrePrerequisites.h"
+#    include "OgrePrerequisites.h"
 
 namespace Ogre
 {
@@ -46,7 +46,7 @@ namespace Ogre
     static inline uint32 vmovemaskq_u32( uint32x4_t conditions )
     {
         static const uint32x4_ct qMask = { 1, 2, 4, 8 };
-        const uint32x4_t qAnded = vandq_u32( conditions, qMask );
+        const uint32x4_t         qAnded = vandq_u32( conditions, qMask );
 
         // These two are no-ops, they only tell compiler to treat Q register as two D regs
         const uint32x2_t dHigh = vget_high_u32( qAnded );
@@ -60,65 +60,65 @@ namespace Ogre
         return vget_lane_u32( dMask, 0 );
     }
 
-    static inline ArrayInt vnand_s32(ArrayInt a, ArrayInt b)
+    static inline ArrayInt vnand_s32( ArrayInt a, ArrayInt b ) { return vandq_s32( vmvnq_s32( a ), b ); }
+
+    static inline ArrayReal vnand_f32( ArrayReal a, ArrayReal b )
     {
-        return vandq_s32(vmvnq_s32(a), b);
+        return vreinterpretq_f32_u32(
+            vandq_u32( vmvnq_u32( vreinterpretq_u32_f32( a ) ), vreinterpretq_u32_f32( b ) ) );
     }
 
-    static inline ArrayReal vnand_f32(ArrayReal a, ArrayReal b)
+#    define vnand_u32( a, b ) vandq_u32( vmvnq_u32( a ), b )
+
+    static inline ArrayReal vorrq_f32( ArrayReal a, ArrayReal b )
     {
-        return vreinterpretq_f32_u32( vandq_u32( vmvnq_u32(vreinterpretq_u32_f32(a)),
-                                                 vreinterpretq_u32_f32(b) ) );
+        return (ArrayReal)vorrq_s32( (ArrayInt)a, (ArrayInt)b );
     }
 
-#define vnand_u32( a, b ) vandq_u32( vmvnq_u32(a), b )
-
-    static inline ArrayReal vorrq_f32(ArrayReal a, ArrayReal b)
-    {
-        return (ArrayReal)vorrq_s32((ArrayInt)a, (ArrayInt)b);
-    }
-
-#if OGRE_ARCH_TYPE != OGRE_ARCHITECTURE_64 // ARM64 has native vdivq_f32
+#    if OGRE_ARCH_TYPE != OGRE_ARCHITECTURE_64  // ARM64 has native vdivq_f32
     static inline ArrayReal vdivq_f32( ArrayReal num, ArrayReal den )
     {
-        const ArrayReal inv0 = vrecpeq_f32(den);
-        const ArrayReal step0 = vrecpsq_f32(inv0, den);
+        const ArrayReal inv0 = vrecpeq_f32( den );
+        const ArrayReal step0 = vrecpsq_f32( inv0, den );
 
-        const ArrayReal inv1 = vmulq_f32(step0, inv0);
+        const ArrayReal inv1 = vmulq_f32( step0, inv0 );
         return vmulq_f32( num, inv1 );
     }
-#endif
+#    endif
 
-#define vandq_f32( a, b ) vreinterpretq_f32_u32( vandq_u32( vreinterpretq_u32_f32( a ), vreinterpretq_u32_f32( b ) ) )
-#define veorq_f32( a, b ) vreinterpretq_f32_u32( veorq_u32( vreinterpretq_u32_f32( a ), vreinterpretq_u32_f32( b ) ) )
-#define vandq_f32u32( a, b ) vreinterpretq_f32_u32( vandq_u32( vreinterpretq_u32_f32( a ), b ) )
+#    define vandq_f32( a, b ) \
+        vreinterpretq_f32_u32( vandq_u32( vreinterpretq_u32_f32( a ), vreinterpretq_u32_f32( b ) ) )
+#    define veorq_f32( a, b ) \
+        vreinterpretq_f32_u32( veorq_u32( vreinterpretq_u32_f32( a ), vreinterpretq_u32_f32( b ) ) )
+#    define vandq_f32u32( a, b ) vreinterpretq_f32_u32( vandq_u32( vreinterpretq_u32_f32( a ), b ) )
 
-#define _MM_SHUFFLE(fp3,fp2,fp1,fp0) (((fp3) << 6) | ((fp2) << 4) | ((fp1) << 2) | ((fp0)))
-#define vshuf_f32(a, b, imm) vshuf_f32_<imm>((a), (b))
+#    define _MM_SHUFFLE( fp3, fp2, fp1, fp0 ) \
+        ( ( ( fp3 ) << 6 ) | ( ( fp2 ) << 4 ) | ( ( fp1 ) << 2 ) | ( ( fp0 ) ) )
+#    define vshuf_f32( a, b, imm ) vshuf_f32_<imm>( ( a ), ( b ) )
 
-    template<unsigned char idx>
-    ArrayReal vshuf_f32_(ArrayReal a, ArrayReal b)
+    template <unsigned char idx>
+    ArrayReal vshuf_f32_( ArrayReal a, ArrayReal b )
     {
-#if defined(_MSC_VER) && defined(_M_ARM64)
+#    if defined( _MSC_VER ) && defined( _M_ARM64 )
         float32x4_t t = vdupq_laneq_f32( a, idx & 0x03 );
         t = vcopyq_laneq_f32( t, 1, a, ( idx >> 2 ) & 0x03 );
         t = vcopyq_laneq_f32( t, 2, b, ( idx >> 4 ) & 0x03 );
         t = vcopyq_laneq_f32( t, 3, b, ( idx >> 6 ) & 0x03 );
         return t;
-#else
+#    else
         // It's enough for Clang and GCC to generate the best code, optimized for specific value of idx
         float x, y, z, w;
-        x = vgetq_lane_f32(a, idx & 0x03);
-        y = vgetq_lane_f32(a, (idx >> 2) & 0x03);
-        z = vgetq_lane_f32(b, (idx >> 4) & 0x03);
-        w = vgetq_lane_f32(b, (idx >> 6) & 0x03);
-        return (ArrayReal) { x, y, z, w };
-#endif
+        x = vgetq_lane_f32( a, idx & 0x03 );
+        y = vgetq_lane_f32( a, ( idx >> 2 ) & 0x03 );
+        z = vgetq_lane_f32( b, ( idx >> 4 ) & 0x03 );
+        w = vgetq_lane_f32( b, ( idx >> 6 ) & 0x03 );
+        return ( ArrayReal ){ x, y, z, w };
+#    endif
     }
 
-    inline uint32x4_t vcneqq_f32(ArrayReal a, ArrayReal b)
+    inline uint32x4_t vcneqq_f32( ArrayReal a, ArrayReal b )
     {
-        return vceqq_u32(vceqq_f32(a, b), vdupq_n_u32( 0 ));
+        return vceqq_u32( vceqq_f32( a, b ), vdupq_n_u32( 0 ) );
     }
 
     class ArrayRadian
@@ -126,61 +126,71 @@ namespace Ogre
         ArrayReal mRad;
 
     public:
-        explicit ArrayRadian ( ArrayReal r ) : mRad( r ) {}
-        //ArrayRadian ( const ArrayDegree& d );
-        ArrayRadian& operator = ( const ArrayReal &f )      { mRad = f; return *this; }
-        ArrayRadian& operator = ( const ArrayRadian &r )    { mRad = r.mRad; return *this; }
-        //ArrayRadian& operator = ( const ArrayDegree& d );
+        explicit ArrayRadian( ArrayReal r ) : mRad( r ) {}
+        // ArrayRadian ( const ArrayDegree& d );
+        ArrayRadian &operator=( const ArrayReal &f )
+        {
+            mRad = f;
+            return *this;
+        }
+        ArrayRadian &operator=( const ArrayRadian &r )
+        {
+            mRad = r.mRad;
+            return *this;
+        }
+        // ArrayRadian& operator = ( const ArrayDegree& d );
 
-        //ArrayReal valueDegrees() const; // see bottom of this file
-        ArrayReal valueRadians() const                      { return mRad; }
+        // ArrayReal valueDegrees() const; // see bottom of this file
+        ArrayReal valueRadians() const { return mRad; }
 
-        inline const ArrayRadian& operator + () const;
-        inline ArrayRadian operator + ( const ArrayRadian& r ) const;
-        //inline ArrayRadian operator + ( const ArrayDegree& d ) const;
-        inline ArrayRadian& operator += ( const ArrayRadian& r );
-        //inline ArrayRadian& operator += ( const ArrayDegree& d );
-        inline ArrayRadian operator - () const;
-        inline ArrayRadian operator - ( const ArrayRadian& r ) const;
-        //inline ArrayRadian operator - ( const ArrayDegree& d ) const;
-        inline ArrayRadian& operator -= ( const ArrayRadian& r );
-        //inline ArrayRadian& operator -= ( const ArrayDegree& d );
-        inline ArrayRadian operator * ( ArrayReal f ) const;
-        inline ArrayRadian operator * ( const ArrayRadian& f ) const;
-        inline ArrayRadian& operator *= ( ArrayReal f );
-        inline ArrayRadian operator / ( ArrayReal f ) const;
-        inline ArrayRadian& operator /= ( ArrayReal f );
+        inline const ArrayRadian &operator+() const;
+        inline ArrayRadian        operator+( const ArrayRadian &r ) const;
+        // inline ArrayRadian operator + ( const ArrayDegree& d ) const;
+        inline ArrayRadian &operator+=( const ArrayRadian &r );
+        // inline ArrayRadian& operator += ( const ArrayDegree& d );
+        inline ArrayRadian operator-() const;
+        inline ArrayRadian operator-( const ArrayRadian &r ) const;
+        // inline ArrayRadian operator - ( const ArrayDegree& d ) const;
+        inline ArrayRadian &operator-=( const ArrayRadian &r );
+        // inline ArrayRadian& operator -= ( const ArrayDegree& d );
+        inline ArrayRadian  operator*( ArrayReal f ) const;
+        inline ArrayRadian  operator*( const ArrayRadian &f ) const;
+        inline ArrayRadian &operator*=( ArrayReal f );
+        inline ArrayRadian  operator/( ArrayReal f ) const;
+        inline ArrayRadian &operator/=( ArrayReal f );
 
-        inline ArrayMaskR operator <  ( const ArrayRadian& r ) const;
-        inline ArrayMaskR operator <= ( const ArrayRadian& r ) const;
-        inline ArrayMaskR operator == ( const ArrayRadian& r ) const;
-        inline ArrayMaskR operator != ( const ArrayRadian& r ) const;
-        inline ArrayMaskR operator >= ( const ArrayRadian& r ) const;
-        inline ArrayMaskR operator >  ( const ArrayRadian& r ) const;
+        inline ArrayMaskR operator<( const ArrayRadian &r ) const;
+        inline ArrayMaskR operator<=( const ArrayRadian &r ) const;
+        inline ArrayMaskR operator==( const ArrayRadian &r ) const;
+        inline ArrayMaskR operator!=( const ArrayRadian &r ) const;
+        inline ArrayMaskR operator>=( const ArrayRadian &r ) const;
+        inline ArrayMaskR operator>( const ArrayRadian &r ) const;
     };
 
     class _OgreExport MathlibNEON
     {
     public:
-        static const float32x4_ct HALF;        //0.5f, 0.5f, 0.5f, 0.5f
-        static const float32x4_ct ONE;         //1.0f, 1.0f, 1.0f, 1.0f
-        static const float32x4_ct THREE;       //3.0f, 3.0f, 3.0f, 3.0f
-        static const float32x4_ct NEG_ONE;     //-1.0f, -1.0f, -1.0f, -1.0f
-        static const float32x4_ct PI;          //PI, PI, PI, PI
-        static const float32x4_ct TWO_PI;      //2*PI, 2*PI, 2*PI, 2*PI
-        static const float32x4_ct ONE_DIV_2PI; //1 / 2PI, 1 / 2PI, 1 / 2PI, 1 / 2PI
-        static const float32x4_ct fEpsilon;    //1e-6f, 1e-6f, 1e-6f, 1e-6f
-        static const float32x4_ct fSqEpsilon;  //1e-12f, 1e-12f, 1e-12f, 1e-12f
-        static const float32x4_ct OneMinusEpsilon;//1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f
-        static const float32x4_ct fDeg2Rad;    //Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
-        static const float32x4_ct fRad2Deg;    //Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
-        static const float32x4_ct FLOAT_MIN;   //FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
-        static const float32x4_ct SIGN_MASK;   //0x80000000, 0x80000000, 0x80000000, 0x80000000
-        //INFINITE is taken in Windows, INFINITY by C99 (bloody macros). A joke on Infinite Tea
-        static const float32x4_ct INFINITEA;   //Inf, Inf, Inf, Inf
-        static const float32x4_ct MAX_NEG;     //Max negative number (x4)
-        static const float32x4_ct MAX_POS;     //Max negative number (x4)
-        static const float32x4_ct LAST_AFFINE_COLUMN;//0, 0, 0, 1
+        static const float32x4_ct HALF;             // 0.5f, 0.5f, 0.5f, 0.5f
+        static const float32x4_ct ONE;              // 1.0f, 1.0f, 1.0f, 1.0f
+        static const float32x4_ct THREE;            // 3.0f, 3.0f, 3.0f, 3.0f
+        static const float32x4_ct NEG_ONE;          //-1.0f, -1.0f, -1.0f, -1.0f
+        static const float32x4_ct PI;               // PI, PI, PI, PI
+        static const float32x4_ct TWO_PI;           // 2*PI, 2*PI, 2*PI, 2*PI
+        static const float32x4_ct ONE_DIV_2PI;      // 1 / 2PI, 1 / 2PI, 1 / 2PI, 1 / 2PI
+        static const float32x4_ct fEpsilon;         // 1e-6f, 1e-6f, 1e-6f, 1e-6f
+        static const float32x4_ct fSqEpsilon;       // 1e-12f, 1e-12f, 1e-12f, 1e-12f
+        static const float32x4_ct OneMinusEpsilon;  // 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f
+        static const float32x4_ct
+            fDeg2Rad;  // Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
+        static const float32x4_ct
+            fRad2Deg;  // Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
+        static const float32x4_ct FLOAT_MIN;  // FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
+        static const float32x4_ct SIGN_MASK;  // 0x80000000, 0x80000000, 0x80000000, 0x80000000
+        // INFINITE is taken in Windows, INFINITY by C99 (bloody macros). A joke on Infinite Tea
+        static const float32x4_ct INFINITEA;           // Inf, Inf, Inf, Inf
+        static const float32x4_ct MAX_NEG;             // Max negative number (x4)
+        static const float32x4_ct MAX_POS;             // Max negative number (x4)
+        static const float32x4_ct LAST_AFFINE_COLUMN;  // 0, 0, 0, 1
 
         /** Returns the absolute values of each 4 floats
             @param
@@ -188,10 +198,7 @@ namespace Ogre
             @return
                 abs( a )
         */
-        static inline ArrayReal Abs4( ArrayReal a )
-        {
-            return vnand_f32( vdupq_n_f32( -0.0f ), a );
-        }
+        static inline ArrayReal Abs4( ArrayReal a ) { return vnand_f32( vdupq_n_f32( -0.0f ), a ); }
 
         /** Branchless conditional move for 4 floating point values
             @remarks
@@ -216,18 +223,17 @@ namespace Ogre
         static inline ArrayReal Cmov4( ArrayReal arg1, ArrayReal arg2, ArrayMaskR mask )
         {
             assert( vmovemaskq_u32( vceqq_f32( arg1, arg1 ) ) == 0x0f &&
-                    vmovemaskq_u32( vceqq_f32( arg2, arg2 ) ) == 0x0f &&
-                    "Passing NaN values to CMov4" );
-#ifndef  NDEBUG
-            ArrayReal newNan1 = vmulq_f32( arg1, vdupq_n_f32(0.0f) ); //+-Inf * 0 = nan
-            ArrayReal newNan2 = vmulq_f32( arg2, vdupq_n_f32(0.0f) ); //+-Inf * 0 = nan
+                    vmovemaskq_u32( vceqq_f32( arg2, arg2 ) ) == 0x0f && "Passing NaN values to CMov4" );
+#    ifndef NDEBUG
+            ArrayReal newNan1 = vmulq_f32( arg1, vdupq_n_f32( 0.0f ) );  //+-Inf * 0 = nan
+            ArrayReal newNan2 = vmulq_f32( arg2, vdupq_n_f32( 0.0f ) );  //+-Inf * 0 = nan
             assert( vmovemaskq_u32( vceqq_f32( newNan1, newNan1 ) ) == 0x0f &&
                     vmovemaskq_u32( vceqq_f32( newNan2, newNan2 ) ) == 0x0f &&
                     "Passing +/- Infinity values to CMov4" );
-#endif
+#    endif
 
             ArrayReal t = vsubq_f32( arg1, arg2 );              // t = arg1 - arg2
-            return vaddq_f32( arg2, vandq_f32u32( t, mask ) ); // r = arg2 + (t & mask)
+            return vaddq_f32( arg2, vandq_f32u32( t, mask ) );  // r = arg2 + (t & mask)
         }
 
         /** Robust, branchless conditional move for a 128-bit value.
@@ -259,30 +265,24 @@ namespace Ogre
         static inline ArrayReal CmovRobust( ArrayReal arg1, ArrayReal arg2, ArrayMaskR mask )
         {
             return vreinterpretq_f32_u32(
-                    vorrq_u32( vandq_u32( vreinterpretq_u32_f32( arg1 ), mask ),
-                               vnand_u32( mask, vreinterpretq_u32_f32( arg2 ) ) ) );
+                vorrq_u32( vandq_u32( vreinterpretq_u32_f32( arg1 ), mask ),
+                           vnand_u32( mask, vreinterpretq_u32_f32( arg2 ) ) ) );
         }
-#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
+#    ifndef _MSC_VER  // everything is __n128 on MSVC, so extra overloads are not allowed
         static inline ArrayInt CmovRobust( ArrayInt arg1, ArrayInt arg2, ArrayMaskI mask )
         {
             return vorrq_s32( vandq_s32( arg1, vreinterpretq_s32_u32( mask ) ),
                               vnand_s32( vreinterpretq_s32_u32( mask ), arg2 ) );
         }
-#endif
+#    endif
 
         /** Returns the result of "a & b"
         @return
             r[i] = a[i] & b[i];
         */
-        static inline ArrayReal And( ArrayReal a, ArrayReal b )
-        {
-            return vandq_f32( a, b );
-        }
-#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
-        static inline ArrayInt And( ArrayInt a, ArrayInt b )
-        {
-            return vandq_s32( a, b );
-        }
+        static inline ArrayReal And( ArrayReal a, ArrayReal b ) { return vandq_f32( a, b ); }
+#    ifndef _MSC_VER  // everything is __n128 on MSVC, so extra overloads are not allowed
+        static inline ArrayInt And( ArrayInt a, ArrayInt b ) { return vandq_s32( a, b ); }
         static inline ArrayInt And( ArrayInt a, ArrayMaskI b )
         {
             return vandq_s32( a, vreinterpretq_s32_u32( b ) );
@@ -291,20 +291,14 @@ namespace Ogre
         {
             return vreinterpretq_u32_s32( vandq_s32( vreinterpretq_s32_u32( a ), b ) );
         }
-        static inline ArrayMaskI And( ArrayMaskI a, ArrayMaskI b )
-        {
-            return vandq_u32( a, b );
-        }
-#endif
+        static inline ArrayMaskI And( ArrayMaskI a, ArrayMaskI b ) { return vandq_u32( a, b ); }
+#    endif
 
         /** Returns the result of "a & b"
         @return
             r[i] = a[i] & b;
         */
-        static inline ArrayInt And( ArrayInt a, uint32 b )
-        {
-            return vandq_s32( a, vdupq_n_s32( b ) );
-        }
+        static inline ArrayInt And( ArrayInt a, uint32 b ) { return vandq_s32( a, vdupq_n_u32( b ) ); }
 
         /** Test if "a AND b" will result in non-zero, returning 0xffffffff on those cases
         @remarks
@@ -319,24 +313,24 @@ namespace Ogre
         static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayInt b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
-            return veorq_u32( vceqq_s32( vandq_s32( a, b ), vdupq_n_s32(0) ),
-                                    vdupq_n_u32( ~0 ) );
+            return veorq_u32( vceqq_s32( vandq_s32( a, b ), vdupq_n_s32( 0 ) ),
+                              vdupq_n_u32( 0xFFFFFFFF ) );
         }
-#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
+#    ifndef _MSC_VER  // everything is __n128 on MSVC, so extra overloads are not allowed
         static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayMaskI b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
-            return veorq_u32( vceqq_u32( vandq_u32( vreinterpretq_u32_s32( a ), b ),
-                                     vdupq_n_u32(0) ), vdupq_n_u32( ~0 ) );
+            return veorq_u32(
+                vceqq_u32( vandq_u32( vreinterpretq_u32_s32( a ), b ), vdupq_n_u32( 0 ) ),
+                vdupq_n_u32( 0xFFFFFFFF ) );
         }
-        static inline ArrayMaskI TestFlags4( ArrayMaskI a,  ArrayInt b )
+        static inline ArrayMaskI TestFlags4( ArrayMaskI a, ArrayInt b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
-            return veorq_u32( vceqq_u32( vandq_u32( a, vreinterpretq_u32_s32( b ) ),
-                                     vdupq_n_u32(0) ), vdupq_n_u32( ~0 ) );
+            return veorq_u32( vceqq_u32( vandq_u32( a, vreinterpretq_u32_s32( b ) ), vdupq_n_u32( 0 ) ),
+                              vdupq_n_u32( 0xFFFFFFFF ) );
         }
-#endif
-
+#    endif
 
         /** Returns the result of "a & ~b"
         @return
@@ -346,38 +340,23 @@ namespace Ogre
         {
             return vnand_s32( b, a );
         }*/
-        static inline ArrayMaskI AndNot( ArrayMaskI a, ArrayMaskI b )
-        {
-            return vnand_u32( b, a );
-        }
+        static inline ArrayMaskI AndNot( ArrayMaskI a, ArrayMaskI b ) { return vnand_u32( b, a ); }
 
         /** Returns the result of "a | b"
         @return
             r[i] = a[i] | b[i];
         */
-        static inline ArrayReal Or( ArrayReal a, ArrayReal b )
-        {
-            return vorrq_f32( a, b );
-        }
-#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
-        static inline ArrayInt Or( ArrayInt a, ArrayInt b )
-        {
-            return vorrq_s32( a, b );
-        }
-        static inline ArrayMaskI Or( ArrayMaskI a, ArrayMaskI b )
-        {
-            return vorrq_u32( a, b );
-        }
-#endif
+        static inline ArrayReal Or( ArrayReal a, ArrayReal b ) { return vorrq_f32( a, b ); }
+#    ifndef _MSC_VER  // everything is __n128 on MSVC, so extra overloads are not allowed
+        static inline ArrayInt   Or( ArrayInt a, ArrayInt b ) { return vorrq_s32( a, b ); }
+        static inline ArrayMaskI Or( ArrayMaskI a, ArrayMaskI b ) { return vorrq_u32( a, b ); }
+#    endif
 
         /** Returns the result of "a < b"
         @return
             r[i] = a[i] < b[i] ? 0xffffffff : 0;
         */
-        static inline ArrayMaskR CompareLess( ArrayReal a, ArrayReal b )
-        {
-            return vcltq_f32( a, b );
-        }
+        static inline ArrayMaskR CompareLess( ArrayReal a, ArrayReal b ) { return vcltq_f32( a, b ); }
 
         /** Returns the result of "a <= b"
          @return
@@ -392,10 +371,7 @@ namespace Ogre
         @return
             r[i] = a[i] > b[i] ? 0xffffffff : 0;
         */
-        static inline ArrayMaskR CompareGreater( ArrayReal a, ArrayReal b )
-        {
-            return vcgtq_f32( a, b );
-        }
+        static inline ArrayMaskR CompareGreater( ArrayReal a, ArrayReal b ) { return vcgtq_f32( a, b ); }
 
         /** Returns the result of "a >= b"
         @return
@@ -406,19 +382,13 @@ namespace Ogre
             return vcgeq_f32( a, b );
         }
 
-        static inline ArrayReal SetAll( Real val )
-        {
-            return vdupq_n_f32( val );
-        }
+        static inline ArrayReal SetAll( Real val ) { return vdupq_n_f32( val ); }
 
-        static inline ArrayInt SetAll( uint32 val )
-        {
-            return vdupq_n_s32( val );
-        }
+        static inline ArrayInt SetAll( uint32 val ) { return vdupq_n_u32( val ); }
 
         static inline void Set( ArrayReal &_dst, Real val, size_t index )
         {
-            float *dst = reinterpret_cast<float*>( &_dst );
+            float *dst = reinterpret_cast<float *>( &_dst );
             dst[index] = val;
         }
 
@@ -432,16 +402,10 @@ namespace Ogre
         }
 
         /// Returns the maximum value between a and b
-        static inline ArrayReal Max( ArrayReal a, ArrayReal b )
-        {
-            return vmaxq_f32( a, b );
-        }
+        static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return vmaxq_f32( a, b ); }
 
-		/// Returns the minimum value between a and b
-        static inline ArrayReal Min( ArrayReal a, ArrayReal b )
-        {
-            return vminq_f32( a, b );
-        }
+        /// Returns the minimum value between a and b
+        static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return vminq_f32( a, b ); }
 
         /** Returns the minimum value of all elements in a
         @return
@@ -450,12 +414,12 @@ namespace Ogre
         static inline Real CollapseMin( ArrayReal a )
         {
             float32x2_t a_lo, a_hi, min;
-            a_lo = vget_low_f32(a);
-            a_hi = vget_high_f32(a);
-            min = vpmin_f32(a_lo, a_hi);
-            min = vpmin_f32(min, min);
+            a_lo = vget_low_f32( a );
+            a_hi = vget_high_f32( a );
+            min = vpmin_f32( a_lo, a_hi );
+            min = vpmin_f32( min, min );
 
-            return vget_lane_f32(min, 0);
+            return vget_lane_f32( min, 0 );
         }
 
         /** Returns the maximum value of all elements in a
@@ -465,12 +429,12 @@ namespace Ogre
         static inline Real CollapseMax( ArrayReal a )
         {
             float32x2_t a_lo, a_hi, max;
-            a_lo = vget_low_f32(a);
-            a_hi = vget_high_f32(a);
-            max = vpmax_f32(a_lo, a_hi);
-            max = vpmax_f32(max, max);
+            a_lo = vget_low_f32( a );
+            a_hi = vget_high_f32( a );
+            max = vpmax_f32( a_lo, a_hi );
+            max = vpmax_f32( max, max );
 
-            return vget_lane_f32(max, 0);
+            return vget_lane_f32( max, 0 );
         }
 
         /** Returns the reciprocal of x
@@ -480,7 +444,7 @@ namespace Ogre
 
                 Use SSE Newton-Raphson reciprocal estimate, accurate to 23 significant
                 bits of the mantissa after an extra iteration, instead of the little
-                12 bits of accuracy that vrecpsq_f32 gives us 
+                12 bits of accuracy that vrecpsq_f32 gives us
                 In short, one Newton-Raphson Iteration:
                  f( i+1 ) = 2 * rcp( f ) - f * rcp( f ) * rcp( f )
                 See Intel AP-803 (Application note), Order N¡ 243637-002 (if you can get it!)
@@ -497,11 +461,11 @@ namespace Ogre
         static inline ArrayReal Inv4( ArrayReal val )
         {
             ArrayReal inv = vrecpeq_f32( val );
-            ArrayReal twoRcp    = vaddq_f32( inv, inv );                    //2 * rcp( f )
-            ArrayReal rightSide = vmulq_f32( val, vmulq_f32( inv, inv ) );  //f * rcp( f ) * rcp( f )
+            ArrayReal twoRcp = vaddq_f32( inv, inv );                       // 2 * rcp( f )
+            ArrayReal rightSide = vmulq_f32( val, vmulq_f32( inv, inv ) );  // f * rcp( f ) * rcp( f )
             rightSide = vreinterpretq_f32_u32(
-                         vandq_u32( vreinterpretq_u32_f32( rightSide ),
-                                    vcneqq_f32( val, vdupq_n_f32(0.0f) ) ) ); //Nuke this NaN
+                vandq_u32( vreinterpretq_u32_f32( rightSide ),
+                           vcneqq_f32( val, vdupq_n_f32( 0.0f ) ) ) );  // Nuke this NaN
             return vsubq_f32( twoRcp, rightSide );
         }
 
@@ -514,7 +478,7 @@ namespace Ogre
 
                 Use SSE Newton-Raphson reciprocal estimate, accurate to 23 significant
                 bits of the mantissa after an extra iteration, instead of the little
-                12 bits of accuracy that vrecpsq_f32 gives us 
+                12 bits of accuracy that vrecpsq_f32 gives us
                 In short, one Newton-Raphson Iteration:
                  f( i+1 ) = 2 * rcp( f ) - f * rcp( f ) * rcp( f )
                 See Intel AP-803 (Application note), Order N¡ 243637-002 (if you can get it!)
@@ -530,8 +494,8 @@ namespace Ogre
         static inline ArrayReal InvNonZero4( ArrayReal val )
         {
             ArrayReal inv = vrecpeq_f32( val );
-            ArrayReal twoRcp    = vaddq_f32( inv, inv );                    //2 * rcp( f )
-            ArrayReal rightSide= vmulq_f32( val, vmulq_f32( inv, inv ) );   //f * rcp( f ) * rcp( f )
+            ArrayReal twoRcp = vaddq_f32( inv, inv );                       // 2 * rcp( f )
+            ArrayReal rightSide = vmulq_f32( val, vmulq_f32( inv, inv ) );  // f * rcp( f ) * rcp( f )
             return vsubq_f32( twoRcp, rightSide );
         }
 
@@ -539,7 +503,7 @@ namespace Ogre
             @remarks
                 Use SSE Newton-Raphson reciprocal estimate, accurate to 23 significant
                 bits of the mantissa after an extra iteration, instead of the little
-                12 bits of accuracy that vrecpsq_f32 gives us 
+                12 bits of accuracy that vrecpsq_f32 gives us
                 In short, one Newton-Raphson Iteration:
                      f( i+1 ) = 0.5 * rsqrt( f ) * ( 3 - f * rsqrt( f ) * rsqrt( f ) )
                 See Intel AP-803 (Application note), Order N¡ 243637-002 (if you can get it!)
@@ -555,15 +519,17 @@ namespace Ogre
         */
         static inline ArrayReal InvSqrt4( ArrayReal f )
         {
-            //TODO NEON has vrsqrtsq_f32 to do this job
-            ArrayReal invSqrt   = vrsqrteq_f32( f );
+            // TODO NEON has vrsqrtsq_f32 to do this job
+            ArrayReal invSqrt = vrsqrteq_f32( f );
 
-            ArrayReal halfInvSqrt= vmulq_f32( HALF, invSqrt );                      //0.5 * rsqrt( f )
-            ArrayReal rightSide  = vmulq_f32( invSqrt, vmulq_f32( f, invSqrt ) );   //f * rsqrt( f ) * rsqrt( f )
+            ArrayReal halfInvSqrt = vmulq_f32( HALF, invSqrt );  // 0.5 * rsqrt( f )
+            ArrayReal rightSide =
+                vmulq_f32( invSqrt, vmulq_f32( f, invSqrt ) );  // f * rsqrt( f ) * rsqrt( f )
             rightSide = vreinterpretq_f32_u32(
-                            vandq_u32( vreinterpretq_u32_f32( rightSide ),
-                                        vcneqq_f32( f, vdupq_n_f32(0.0f) ) ));//Nuke this NaN
-            return vmulq_f32( halfInvSqrt, vsubq_f32( THREE, rightSide ) );     //halfInvSqrt*(3 - rightSide)
+                vandq_u32( vreinterpretq_u32_f32( rightSide ),
+                           vcneqq_f32( f, vdupq_n_f32( 0.0f ) ) ) );  // Nuke this NaN
+            return vmulq_f32( halfInvSqrt,
+                              vsubq_f32( THREE, rightSide ) );  // halfInvSqrt*(3 - rightSide)
         }
 
         /** Returns the squared root of the reciprocal of x
@@ -588,30 +554,32 @@ namespace Ogre
         */
         static inline ArrayReal InvSqrtNonZero4( ArrayReal f )
         {
-            //TODO NEON has vrsqrtsq_f32 to do this job
+            // TODO NEON has vrsqrtsq_f32 to do this job
             ArrayReal invSqrt = vrsqrteq_f32( f );
 
-            ArrayReal halfInvSqrt= vmulq_f32( HALF, invSqrt );                      //0.5 * rsqrt( f )
-            ArrayReal rightSide  = vmulq_f32( invSqrt, vmulq_f32( f, invSqrt ) );   //f * rsqrt( f ) * rsqrt( f )
-            return vmulq_f32( halfInvSqrt, vsubq_f32( THREE, rightSide ) );     //halfInvSqrt*(3 - rightSide)
+            ArrayReal halfInvSqrt = vmulq_f32( HALF, invSqrt );  // 0.5 * rsqrt( f )
+            ArrayReal rightSide =
+                vmulq_f32( invSqrt, vmulq_f32( f, invSqrt ) );  // f * rsqrt( f ) * rsqrt( f )
+            return vmulq_f32( halfInvSqrt,
+                              vsubq_f32( THREE, rightSide ) );  // halfInvSqrt*(3 - rightSide)
         }
 
         static inline ArrayReal Sqrt( ArrayReal f )
         {
-            //Netwon-Raphson, 2 iterations.
+            // Netwon-Raphson, 2 iterations.
             ArrayReal fStep0 = vrsqrteq_f32( f );
-            //Nuke NaN when f == 0
-            fStep0 = vreinterpretq_f32_u32( vandq_u32( vtstq_u32( f, f ),
-                                                       vreinterpretq_u32_f32( fStep0 ) ) );
+            // Nuke NaN when f == 0
+            fStep0 =
+                vreinterpretq_f32_u32( vandq_u32( vtstq_u32( f, f ), vreinterpretq_u32_f32( fStep0 ) ) );
             // step fStep0 = 1 / sqrt(x)
-            const ArrayReal fStepParm0  = vmulq_f32( f, fStep0 );
-            const ArrayReal fStepResult0= vrsqrtsq_f32( fStepParm0, fStep0 );
+            const ArrayReal fStepParm0 = vmulq_f32( f, fStep0 );
+            const ArrayReal fStepResult0 = vrsqrtsq_f32( fStepParm0, fStep0 );
             // step fStep1 = 1 / sqrt(x)
-            const ArrayReal fStep1      = vmulq_f32( fStep0, fStepResult0 );
-            const ArrayReal fStepParm1  = vmulq_f32( f, fStep1 );
-            const ArrayReal fStepResult1= vrsqrtsq_f32( fStepParm1, fStep1 );
+            const ArrayReal fStep1 = vmulq_f32( fStep0, fStepResult0 );
+            const ArrayReal fStepParm1 = vmulq_f32( f, fStep1 );
+            const ArrayReal fStepResult1 = vrsqrtsq_f32( fStepParm1, fStep1 );
             // take the res. fStep2 = 1 / sqrt(x)
-            const ArrayReal fStep2      = vmulq_f32( fStep1, fStepResult1 );
+            const ArrayReal fStep2 = vmulq_f32( fStep1, fStepResult1 );
             // mul by x to get sqrt, not rsqrt
             return vmulq_f32( f, fStep2 );
         }
@@ -662,7 +630,8 @@ namespace Ogre
         static void SinCos4( ArrayReal x, ArrayReal &outSin, ArrayReal &outCos );
     };
 
-#if OGRE_COMPILER != OGRE_COMPILER_CLANG && OGRE_COMPILER != OGRE_COMPILER_GNUC
+#    if OGRE_COMPILER != OGRE_COMPILER_CLANG && OGRE_COMPILER != OGRE_COMPILER_GNUC
+    // clang-format off
     inline ArrayReal operator - ( ArrayReal l )                 { return vnegq_f32( l ); }
 //  inline ArrayReal operator + ( ArrayReal l, Real r )         { return vaddq_f32( l, vdupq_n_f32( r ) ); }
 //  inline ArrayReal operator + ( Real l, ArrayReal r )         { return vaddq_f32( vdupq_n_f32( l ), r ); }
@@ -676,10 +645,11 @@ namespace Ogre
 //  inline ArrayReal operator / ( ArrayReal l, Real r )         { return _mm_div_ps( l, vdupq_n_f32( r ) ); }
 //  inline ArrayReal operator / ( Real l, ArrayReal r )         { return _mm_div_ps( vdupq_n_f32( l ), r ); }
     inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return vdivq_f32( l, r ); }
-#endif
-}
+// clang-format on
+#    endif
+}  // namespace Ogre
 
-#include "OgreMathlibNEON.inl"
+#    include "OgreMathlibNEON.inl"
 
 #endif
 #endif

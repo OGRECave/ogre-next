@@ -4,59 +4,42 @@
 
 #include "OgreMemorySTLAllocator.h"
 
-#if( OGRE_COMPILER == OGRE_COMPILER_GNUC ) && !defined( STLPORT )
-#    if __cplusplus >= 201103L
-#        include <unordered_map>
-#    elif OGRE_COMP_VER >= 430
-#        include <tr1/unordered_map>
-#    else
-#        include <ext/hash_map>
-#    endif
-#elif( OGRE_COMPILER == OGRE_COMPILER_CLANG )
-#    if defined( _LIBCPP_VERSION ) || __cplusplus >= 201103L
-#        include <unordered_map>
-#    else
-#        include <tr1/unordered_map>
-#    endif
-#elif !defined( STLPORT )
-#    if( OGRE_COMPILER == OGRE_COMPILER_MSVC ) && _MSC_FULL_VER >= 150030729  // VC++ 9.0 SP1+
-#        include <unordered_map>
-#    elif OGRE_THREAD_PROVIDER == 1
-#        include <boost/unordered_map.hpp>
-#    else
-#        error "Your compiler doesn't support unordered_map. Try to compile Ogre with Boost or STLPort."
-#    endif
-#endif
+#include <unordered_map>
 
 namespace Ogre
 {
-    template <typename K, typename V, typename H = OGRE_HASH_NAMESPACE::hash<K>,
-              typename E = std::equal_to<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
+#    define OGRE_STL_ALIGNMENT_DEF_ARG , typename A = STLAllocator<std::pair<const K, V>, AllocPolicy>
+#    define OGRE_STL_ALIGNMENT_ARG , typename A
+#    define OGRE_STL_ALIGNMENT_A , A
+#else
+#    define OGRE_STL_ALIGNMENT_DEF_ARG
+#    define OGRE_STL_ALIGNMENT_ARG
+#    define OGRE_STL_ALIGNMENT_A
+#endif
+
+    template <typename K, typename V, typename H = ::std::hash<K>,
+              typename E = std::equal_to<K> OGRE_STL_ALIGNMENT_DEF_ARG>
     struct unordered_map
     {
-#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename OGRE_HASH_NAMESPACE::OGRE_HASHMAP_NAME<K, V, H, E, A> type;
-#else
-        typedef typename OGRE_HASH_NAMESPACE::OGRE_HASHMAP_NAME<K, V, H, E> type;
-#endif
-        typedef typename type::iterator iterator;
-        typedef typename type::const_iterator const_iterator;
+        typedef typename ::std::unordered_map<K, V, H, E OGRE_STL_ALIGNMENT_A> type;
+        typedef typename type::iterator                                        iterator;
+        typedef typename type::const_iterator                                  const_iterator;
     };
 
-    template <typename K, typename V, typename H = OGRE_HASH_NAMESPACE::hash<K>,
-              typename E = std::equal_to<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+    template <typename K, typename V, typename H = ::std::hash<K>,
+              typename E = std::equal_to<K> OGRE_STL_ALIGNMENT_DEF_ARG>
     struct unordered_multimap
     {
-#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename OGRE_HASH_NAMESPACE::OGRE_HASHMULTIMAP_NAME<K, V, H, E, A> type;
-#else
-        typedef typename OGRE_HASH_NAMESPACE::OGRE_HASHMULTIMAP_NAME<K, V, H, E> type;
-#endif
-        typedef typename type::iterator iterator;
-        typedef typename type::const_iterator const_iterator;
+        typedef typename ::std::unordered_multimap<K, V, H, E OGRE_STL_ALIGNMENT_A> type;
+        typedef typename type::iterator                                             iterator;
+        typedef typename type::const_iterator                                       const_iterator;
     };
+
+#undef OGRE_STL_ALIGNMENT_A
+#undef OGRE_STL_ALIGNMENT_ARG
+#undef OGRE_STL_ALIGNMENT_DEF_ARG
+
 }  // namespace Ogre
 
 #endif

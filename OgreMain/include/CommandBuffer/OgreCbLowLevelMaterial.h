@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,7 +34,7 @@ namespace Ogre
 {
     struct _OgreExport CbLowLevelMaterial : CbBase
     {
-        bool                casterPass;
+        bool                 casterPass;
         HlmsLowLevel        *hlmsLowLevel;
         MovableObject const *movableObject;
         Renderable          *renderable;
@@ -42,6 +42,6 @@ namespace Ogre
         CbLowLevelMaterial( bool _casterPass, HlmsLowLevel *_hlmsLowLevel,
                             const MovableObject *_movableObject, Renderable *_renderable );
     };
-}
+}  // namespace Ogre
 
 #endif

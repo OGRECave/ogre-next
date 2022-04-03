@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -49,6 +49,16 @@ namespace Ogre
             SelectedQueue();
         };
 
+        struct ExtraVkFeatures
+        {
+            // VkPhysicalDevice16BitStorageFeatures
+            VkBool32 storageInputOutput16;
+
+            // VkPhysicalDeviceShaderFloat16Int8Features
+            VkBool32 shaderFloat16;
+            VkBool32 shaderInt8;
+        };
+
         // clang-format off
         VkInstance          mInstance;
         VkPhysicalDevice    mPhysicalDevice;
@@ -67,7 +77,11 @@ namespace Ogre
         VkPhysicalDeviceProperties mDeviceProperties;
         VkPhysicalDeviceMemoryProperties mDeviceMemoryProperties;
         VkPhysicalDeviceFeatures mDeviceFeatures;
+        ExtraVkFeatures mDeviceExtraFeatures;
         FastArray<VkQueueFamilyProperties> mQueueProps;
+
+        /// Extensions requested when created. Sorted
+        FastArray<IdString> mDeviceExtensions;
 
         VulkanVaoManager *mVaoManager;
         VulkanRenderSystem *mRenderSystem;
@@ -102,13 +116,17 @@ namespace Ogre
         void createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
                            uint32 maxTransferQueues );
 
-        void initQueues( void );
+        bool hasDeviceExtension( const IdString extension ) const;
+
+        static bool hasInstanceExtension( const IdString extension );
+
+        void initQueues();
 
         void commitAndNextCommandBuffer(
             SubmissionType::SubmissionType submissionType = SubmissionType::FlushOnly );
 
         /// Waits for the GPU to finish all pending commands.
-        void stall( void );
+        void stall();
     };
 
     // Mask away read flags from srcAccessMask

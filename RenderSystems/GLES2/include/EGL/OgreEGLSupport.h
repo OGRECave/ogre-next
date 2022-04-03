@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -47,7 +47,7 @@ namespace Ogre {
     class _OgrePrivate EGLSupport : public GLES2Support
     {
         protected:
-            void refreshConfig(void);
+            void refreshConfig();
 
             EGLDisplay mGLDisplay;
             NativeDisplayType mNativeDisplay;
@@ -68,13 +68,13 @@ namespace Ogre {
             EGLSupport();
             virtual ~EGLSupport();
 
-            void start(void);
-            void stop(void);
-            void addConfig(void);
-            String validateConfig(void);
+            void start();
+            void stop();
+            void addConfig();
+            String validateConfig();
             void setConfigOption(const String &name, const String &value);
-            virtual String getDisplayName (void);
-            EGLDisplay getGLDisplay(void);
+            virtual String getDisplayName ();
+            EGLDisplay getGLDisplay();
             void setGLDisplay(EGLDisplay val);
             EGLConfig* chooseGLConfig(const EGLint *attribList, EGLint *nElements);
             EGLConfig* getConfigs(EGLint *nElements);
@@ -95,7 +95,7 @@ namespace Ogre {
             ::EGLConfig getGLConfigFromDrawable(::EGLSurface drawable,
                                                 unsigned int *w, unsigned int *h);
             ::EGLConfig selectGLConfig (const EGLint* minAttribs, const EGLint *maxAttribs);
-            void switchMode(void);
+            void switchMode();
             virtual void switchMode(uint& width, uint& height, short& frequency) = 0;
            // virtual GLES2PBuffer* createPBuffer(PixelComponentType format,
             //                           size_t width, size_t height) = 0;

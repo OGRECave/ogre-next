@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -57,8 +57,5 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void EglPBufferContext::endCurrent() { eglMakeCurrent( mDeviceData->eglDisplay, 0, 0, 0 ); }
     //-------------------------------------------------------------------------
-    GL3PlusContext *EglPBufferContext::clone() const
-    {
-        return new EglPBufferContext( mGLSupport );
-    }
+    GL3PlusContext *EglPBufferContext::clone() const { return new EglPBufferContext( mGLSupport ); }
 }  // namespace Ogre

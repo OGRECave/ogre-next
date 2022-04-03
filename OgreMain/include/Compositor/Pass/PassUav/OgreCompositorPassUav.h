@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,11 +29,11 @@ THE SOFTWARE.
 #ifndef __CompositorPassUav_H__
 #define __CompositorPassUav_H__
 
-#include "OgreHeaderPrefix.h"
-
-#include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/OgreCompositorCommon.h"
+#include "Compositor/Pass/OgreCompositorPass.h"
 #include "OgreTextureGpuListener.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -44,11 +44,11 @@ namespace Ogre
     class CompositorPassUavDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will set UAVs.
@@ -60,29 +60,30 @@ namespace Ogre
     class _OgreExport CompositorPassUav : public CompositorPass, public TextureGpuListener
     {
         CompositorPassUavDef const *mDefinition;
+
     protected:
         DescriptorSetUav const *mDescriptorSetUav;
 
-        uint32 calculateNumberUavSlots(void) const;
-        void setupDescriptorSetUav(void);
-        void destroyDescriptorSetUav(void);
+        uint32 calculateNumberUavSlots() const;
+        void   setupDescriptorSetUav();
+        void   destroyDescriptorSetUav();
 
     public:
         CompositorPassUav( const CompositorPassUavDef *definition, CompositorNode *parentNode,
                            const RenderTargetViewDef *rtv );
-        virtual ~CompositorPassUav();
+        ~CompositorPassUav() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
 
-        virtual void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer );
+        void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer ) override;
         // TextureGpuListener overloads
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

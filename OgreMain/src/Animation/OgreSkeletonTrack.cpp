@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,16 +30,15 @@ THE SOFTWARE.
 
 #include "Animation/OgreSkeletonTrack.h"
 
-#include "Math/Array/OgreMathlib.h"
 #include "Math/Array/OgreBoneTransform.h"
 #include "Math/Array/OgreKfTransformArrayMemoryManager.h"
-
+#include "Math/Array/OgreMathlib.h"
 #include "OgreException.h"
 
 namespace Ogre
 {
     SkeletonTrack::SkeletonTrack( uint32 boneBlockIdx,
-                                    KfTransformArrayMemoryManager *kfTransformMemoryManager ) :
+                                  KfTransformArrayMemoryManager *kfTransformMemoryManager ) :
         mKeyFrameRigs( 0 ),
         mNumFrames( 0 ),
         mBoneBlockIdx( boneBlockIdx ),
@@ -48,14 +47,9 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    SkeletonTrack::~SkeletonTrack()
-    {
-    }
+    SkeletonTrack::~SkeletonTrack() {}
     //-----------------------------------------------------------------------------------
-    void SkeletonTrack::setNumKeyFrame( size_t numKeyFrames )
-    {
-        mKeyFrameRigs.reserve( numKeyFrames );
-    }
+    void SkeletonTrack::setNumKeyFrame( size_t numKeyFrames ) { mKeyFrameRigs.reserve( numKeyFrames ); }
     //-----------------------------------------------------------------------------------
     void SkeletonTrack::addKeyFrame( Real timestamp, Real frameRate )
     {
@@ -67,20 +61,20 @@ namespace Ogre
         keyFrame.mInvNextFrameDistance = 1.0f;
         if( mKeyFrameRigs.size() > 1 )
         {
-            KeyFrameRig &prevKeyFrame = mKeyFrameRigs[mKeyFrameRigs.size()-2];
-            prevKeyFrame.mInvNextFrameDistance = 1.0f / (keyFrame.mFrame - prevKeyFrame.mFrame);
+            KeyFrameRig &prevKeyFrame = mKeyFrameRigs[mKeyFrameRigs.size() - 2];
+            prevKeyFrame.mInvNextFrameDistance = 1.0f / ( keyFrame.mFrame - prevKeyFrame.mFrame );
         }
 
-        mLocalMemoryManager->createNewNode( (KfTransform**)(&keyFrame.mBoneTransform) );
+        mLocalMemoryManager->createNewNode( &keyFrame.mBoneTransform );
     }
     //-----------------------------------------------------------------------------------
     void SkeletonTrack::setKeyFrameTransform( Real frame, uint32 slot, const Vector3 &vPos,
-                                                const Quaternion &qRot, const Vector3 vScale )
+                                              const Quaternion &qRot, const Vector3 vScale )
     {
         KeyFrameRigVec::iterator itor = mKeyFrameRigs.begin();
-        KeyFrameRigVec::iterator end  = mKeyFrameRigs.end();
+        KeyFrameRigVec::iterator endt = mKeyFrameRigs.end();
 
-        while( itor != end && Math::Abs( itor->mFrame - frame ) < 1e-6f )
+        while( itor != endt && Math::Abs( itor->mFrame - frame ) < 1e-6f )
             ++itor;
 
         if( itor == mKeyFrameRigs.end() )
@@ -93,19 +87,19 @@ namespace Ogre
         itor->mBoneTransform->mOrientation.setFromQuaternion( qRot, slot );
         itor->mBoneTransform->mScale.setFromVector3( vScale, slot );
 
-        mUsedSlots = std::max( slot+1, mUsedSlots );
+        mUsedSlots = std::max( slot + 1, mUsedSlots );
     }
     //-----------------------------------------------------------------------------------
     inline void SkeletonTrack::getKeyFrameRigAt( KeyFrameRigVec::const_iterator &inOutPrevFrame,
-                                                    KeyFrameRigVec::const_iterator &outNextFrame,
-                                                    Real frame ) const
+                                                 KeyFrameRigVec::const_iterator &outNextFrame,
+                                                 Real frame ) const
     {
         KeyFrameRigVec::const_iterator prevFrame = inOutPrevFrame;
         KeyFrameRigVec::const_iterator nextFrame = inOutPrevFrame;
 
         if( frame >= nextFrame->mFrame )
         {
-            while( nextFrame != (mKeyFrameRigs.end() - 1) && nextFrame->mFrame <= frame )
+            while( nextFrame != ( mKeyFrameRigs.end() - 1 ) && nextFrame->mFrame <= frame )
                 prevFrame = nextFrame++;
         }
         else
@@ -114,67 +108,67 @@ namespace Ogre
                 nextFrame = prevFrame--;
         }
 
-        inOutPrevFrame  = prevFrame;
-        outNextFrame    = nextFrame;
+        inOutPrevFrame = prevFrame;
+        outNextFrame = nextFrame;
     }
     //-----------------------------------------------------------------------------------
     void SkeletonTrack::applyKeyFrameRigAt( KeyFrameRigVec::const_iterator &inOutLastKnownKeyFrameRig,
                                             float frame, ArrayReal animWeight,
-                                            const ArrayReal * RESTRICT_ALIAS perBoneWeights,
+                                            const ArrayReal *RESTRICT_ALIAS perBoneWeights,
                                             const TransformArray &boneTransforms ) const
     {
         KeyFrameRigVec::const_iterator prevFrame = inOutLastKnownKeyFrameRig;
         KeyFrameRigVec::const_iterator nextFrame;
         getKeyFrameRigAt( prevFrame, nextFrame, frame );
 
-        const Real scalarW = (frame - prevFrame->mFrame) * prevFrame->mInvNextFrameDistance;
+        const Real scalarW = ( frame - prevFrame->mFrame ) * prevFrame->mInvNextFrameDistance;
         ArrayReal fTimeW = Mathlib::SetAll( scalarW );
 
-        size_t level    = mBoneBlockIdx >> 24;
-        size_t offset   = mBoneBlockIdx & 0x00FFFFFF;
+        size_t level = mBoneBlockIdx >> 24;
+        size_t offset = mBoneBlockIdx & 0x00FFFFFF;
 
-        ArrayVector3 * RESTRICT_ALIAS finalPos      = boneTransforms[level].mPosition + offset;
-        ArrayVector3 * RESTRICT_ALIAS finalScale    = boneTransforms[level].mScale + offset;
-        ArrayQuaternion * RESTRICT_ALIAS finalRot   = boneTransforms[level].mOrientation + offset;
+        ArrayVector3 *RESTRICT_ALIAS finalPos = boneTransforms[level].mPosition + offset;
+        ArrayVector3 *RESTRICT_ALIAS finalScale = boneTransforms[level].mScale + offset;
+        ArrayQuaternion *RESTRICT_ALIAS finalRot = boneTransforms[level].mOrientation + offset;
 
-        KfTransform * RESTRICT_ALIAS prevTransf = prevFrame->mBoneTransform;
-        KfTransform * RESTRICT_ALIAS nextTransf = nextFrame->mBoneTransform;
+        KfTransform *RESTRICT_ALIAS prevTransf = prevFrame->mBoneTransform;
+        KfTransform *RESTRICT_ALIAS nextTransf = nextFrame->mBoneTransform;
 
         ArrayVector3 interpPos, interpScale;
         ArrayQuaternion interpRot;
-        //Interpolate keyframes' rotation not using shortestPath to respect the original animation
-        interpPos   = Math::lerp( prevTransf->mPosition, nextTransf->mPosition, fTimeW );
-        interpRot   = ArrayQuaternion::nlerpShortest( fTimeW,
-                                                      prevTransf->mOrientation,
-                                                      nextTransf->mOrientation );
+        // Interpolate keyframes' rotation not using shortestPath to respect the original animation
+        interpPos = Math::lerp( prevTransf->mPosition, nextTransf->mPosition, fTimeW );
+        interpRot = ArrayQuaternion::nlerpShortest( fTimeW,                    //
+                                                    prevTransf->mOrientation,  //
+                                                    nextTransf->mOrientation );
         interpScale = Math::lerp( prevTransf->mScale, nextTransf->mScale, fTimeW );
 
-        //Combine our internal flag (that prevents blending
-        //unanimated bones) with user's custom weights
-        ArrayReal fW = (*perBoneWeights) * animWeight;
+        // Combine our internal flag (that prevents blending
+        // unanimated bones) with user's custom weights
+        ArrayReal fW = ( *perBoneWeights ) * animWeight;
 
-        //When mixing, also interpolate rotation not using shortest path; as this is usually desired
-        *finalPos   += interpPos * fW;
+        // When mixing, also interpolate rotation not using shortest path; as this is usually desired
+        *finalPos += interpPos * fW;
         *finalScale *= Math::lerp( ArrayVector3::UNIT_SCALE, interpScale, fW );
-        *finalRot   = (*finalRot) * ArrayQuaternion::nlerpShortest( fW, ArrayQuaternion::IDENTITY,
-                                                                    interpRot );
+        *finalRot =
+            ( *finalRot ) * ArrayQuaternion::nlerpShortest( fW, ArrayQuaternion::IDENTITY, interpRot );
 
         inOutLastKnownKeyFrameRig = prevFrame;
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonTrack::_bakeUnusedSlots(void)
+    void SkeletonTrack::_bakeUnusedSlots()
     {
         assert( mUsedSlots <= ARRAY_PACKED_REALS );
 
-        if( mUsedSlots <= (ARRAY_PACKED_REALS >> 1) )
+        if( mUsedSlots <= ( ARRAY_PACKED_REALS >> 1 ) )
         {
             KeyFrameRigVec::const_iterator itor = mKeyFrameRigs.begin();
-            KeyFrameRigVec::const_iterator end  = mKeyFrameRigs.end();
+            KeyFrameRigVec::const_iterator endt = mKeyFrameRigs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                size_t j=0;
-                for( size_t i=mUsedSlots; i<ARRAY_PACKED_REALS; ++i )
+                size_t j = 0;
+                for( size_t i = mUsedSlots; i < ARRAY_PACKED_REALS; ++i )
                 {
                     Vector3 vTmp;
                     Quaternion qTmp;
@@ -185,10 +179,10 @@ namespace Ogre
                     itor->mBoneTransform->mScale.getAsVector3( vTmp, j );
                     itor->mBoneTransform->mScale.setFromVector3( vTmp, i );
 
-                    j = (j+1) % mUsedSlots;
+                    j = ( j + 1 ) % mUsedSlots;
                 }
                 ++itor;
             }
         }
     }
-}
+}  // namespace Ogre

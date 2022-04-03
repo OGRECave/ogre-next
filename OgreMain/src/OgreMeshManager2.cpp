@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,124 +28,108 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreMeshManager2.h"
-#include "OgreMeshManager.h"
 
-#include "OgreMesh2.h"
-#include "OgreSubMesh2.h"
-#include "OgreMatrix4.h"
-#include "OgrePatchMesh.h"
 #include "OgreException.h"
-
+#include "OgreMatrix4.h"
+#include "OgreMesh2.h"
+#include "OgreMeshManager.h"
+#include "OgrePatchMesh.h"
 #include "OgrePrefabFactory.h"
+#include "OgreSubMesh2.h"
 
 namespace Ogre
 {
-    template<> MeshManager* Singleton<MeshManager>::msSingleton = 0;
+    template <>
+    MeshManager *Singleton<MeshManager>::msSingleton = 0;
     //-----------------------------------------------------------------------
-    MeshManager* MeshManager::getSingletonPtr(void)
+    MeshManager *MeshManager::getSingletonPtr() { return msSingleton; }
+    MeshManager &MeshManager::getSingleton()
     {
-        return msSingleton;
-    }
-    MeshManager& MeshManager::getSingleton(void)
-    {  
-        assert( msSingleton );  return ( *msSingleton );  
+        assert( msSingleton );
+        return ( *msSingleton );
     }
     //-----------------------------------------------------------------------
-    MeshManager::MeshManager() :
-        mVaoManager( 0 ),
-        mBoundsPaddingFactor( 0.01 )/*,
-        mListener( 0 )*/
+    MeshManager::MeshManager() : mVaoManager( 0 ), mBoundsPaddingFactor( Real( 0.01 ) )
     {
         mLoadOrder = 300.0f;
         mResourceType = "Mesh2";
 
-        ResourceGroupManager::getSingleton()._registerResourceManager(mResourceType, this);
+        ResourceGroupManager::getSingleton()._registerResourceManager( mResourceType, this );
     }
     //-----------------------------------------------------------------------
     MeshManager::~MeshManager()
     {
-        ResourceGroupManager::getSingleton()._unregisterResourceManager(mResourceType);
+        ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
     }
     //-----------------------------------------------------------------------
-    MeshPtr MeshManager::getByName(const String& name, const String& groupName)
+    MeshPtr MeshManager::getByName( const String &name, const String &groupName )
     {
-        return getResourceByName(name, groupName).staticCast<Mesh>();
+        return std::static_pointer_cast<Mesh>( getResourceByName( name, groupName ) );
     }
     //-----------------------------------------------------------------------
-    void MeshManager::_initialise(void)
-    {
-    }
+    void MeshManager::_initialise() {}
     //-----------------------------------------------------------------------
-    void MeshManager::_setVaoManager( VaoManager *vaoManager )
-    {
-        mVaoManager = vaoManager;
-    }
+    void MeshManager::_setVaoManager( VaoManager *vaoManager ) { mVaoManager = vaoManager; }
     //-----------------------------------------------------------------------
     MeshManager::ResourceCreateOrRetrieveResult MeshManager::createOrRetrieve(
-        const String& name, const String& group,
-        bool isManual, ManualResourceLoader* loader,
-        const NameValuePairList* params,
-        BufferType vertexBufferType,
-        BufferType indexBufferType,
-        bool vertexBufferShadowed, bool indexBufferShadowed)
+        const String &name, const String &group, bool isManual, ManualResourceLoader *loader,
+        const NameValuePairList *params, BufferType vertexBufferType, BufferType indexBufferType,
+        bool vertexBufferShadowed, bool indexBufferShadowed )
     {
-        ResourceCreateOrRetrieveResult res = 
-            ResourceManager::createOrRetrieve(name,group,isManual,loader,params);
-        MeshPtr pMesh = res.first.staticCast<Mesh>();
+        ResourceCreateOrRetrieveResult res =
+            ResourceManager::createOrRetrieve( name, group, isManual, loader, params );
+        MeshPtr pMesh = std::static_pointer_cast<Mesh>( res.first );
         // Was it created?
-        if (res.second)
+        if( res.second )
         {
-            pMesh->setVertexBufferPolicy(vertexBufferType, vertexBufferShadowed);
-            pMesh->setIndexBufferPolicy(indexBufferType, indexBufferShadowed);
+            pMesh->setVertexBufferPolicy( vertexBufferType, vertexBufferShadowed );
+            pMesh->setIndexBufferPolicy( indexBufferType, indexBufferShadowed );
         }
         return res;
-
     }
     //-----------------------------------------------------------------------
-    MeshPtr MeshManager::prepare( const String& filename, const String& groupName, 
-                                  BufferType vertexBufferType,
-                                  BufferType indexBufferType,
-                                  bool vertexBufferShadowed, bool indexBufferShadowed)
+    MeshPtr MeshManager::prepare( const String &filename, const String &groupName,
+                                  BufferType vertexBufferType, BufferType indexBufferType,
+                                  bool vertexBufferShadowed, bool indexBufferShadowed )
     {
-        MeshPtr pMesh = createOrRetrieve( filename, groupName, false, 0, 0,
-                                          vertexBufferType, indexBufferType,
-                                          vertexBufferShadowed, indexBufferShadowed ).
-                        first.staticCast<Mesh>();
+        MeshPtr pMesh = std::static_pointer_cast<Mesh>(
+            createOrRetrieve( filename, groupName, false, 0, 0, vertexBufferType, indexBufferType,
+                              vertexBufferShadowed, indexBufferShadowed )
+                .first );
         pMesh->prepare();
         return pMesh;
     }
     //-----------------------------------------------------------------------
-    MeshPtr MeshManager::load( const String& filename, const String& groupName, 
-                               BufferType vertexBufferType,
-                               BufferType indexBufferType,
-                               bool vertexBufferShadowed, bool indexBufferShadowed)
+    MeshPtr MeshManager::load( const String &filename, const String &groupName,
+                               BufferType vertexBufferType, BufferType indexBufferType,
+                               bool vertexBufferShadowed, bool indexBufferShadowed )
     {
-        MeshPtr pMesh = createOrRetrieve( filename, groupName, false, 0, 0,
-                                          vertexBufferType, indexBufferType,
-                                          vertexBufferShadowed, indexBufferShadowed ).
-                        first.staticCast<Mesh>();
+        MeshPtr pMesh = std::static_pointer_cast<Mesh>(
+            createOrRetrieve( filename, groupName, false, 0, 0, vertexBufferType, indexBufferType,
+                              vertexBufferShadowed, indexBufferShadowed )
+                .first );
         pMesh->load();
         return pMesh;
     }
     //-----------------------------------------------------------------------
-    MeshPtr MeshManager::create( const String& name, const String& group,
-                                    bool isManual, ManualResourceLoader* loader,
-                                    const NameValuePairList* createParams)
+    MeshPtr MeshManager::create( const String &name, const String &group, bool isManual,
+                                 ManualResourceLoader *loader, const NameValuePairList *createParams )
     {
-        return createResource(name,group,isManual,loader,createParams).staticCast<Mesh>();
+        return std::static_pointer_cast<Mesh>(
+            createResource( name, group, isManual, loader, createParams ) );
     }
     //-----------------------------------------------------------------------
-    MeshPtr MeshManager::createManual( const String& name, const String& groupName,
-                                       ManualResourceLoader* loader )
+    MeshPtr MeshManager::createManual( const String &name, const String &groupName,
+                                       ManualResourceLoader *loader )
     {
         // Don't try to get existing, create should fail if already exists
-        if( !this->getResourceByName( name, groupName ).isNull() )
+        if( this->getResourceByName( name, groupName ) )
         {
             OGRE_EXCEPT( Ogre::Exception::ERR_DUPLICATE_ITEM,
                          "v2 Mesh with name '" + name + "' already exists.",
                          "MeshManager::createManual" );
         }
-        return create(name, groupName, true, loader);
+        return create( name, groupName, true, loader );
     }
     //-------------------------------------------------------------------------
     MeshPtr MeshManager::createByImportingV1( const String &name, const String &groupName,
@@ -153,7 +137,7 @@ namespace Ogre
                                               bool qTangents, bool halfPose )
     {
         // Create manual mesh which calls back self to load
-        MeshPtr pMesh = createManual(name, groupName, this);
+        MeshPtr pMesh = createManual( name, groupName, this );
         // store parameters
         V1MeshImportParams params;
         params.name = mesh->getName();
@@ -162,62 +146,51 @@ namespace Ogre
         params.halfTexCoords = halfTexCoords;
         params.qTangents = qTangents;
         params.halfPose = halfPose;
-        mV1MeshImportParams[pMesh.getPointer()] = params;
+        mV1MeshImportParams[pMesh.get()] = params;
 
         return pMesh;
     }
     //-------------------------------------------------------------------------
-    void MeshManager::loadResource(Resource* res)
+    void MeshManager::loadResource( Resource *res )
     {
-        Mesh* mesh = static_cast<Mesh*>(res);
+        Mesh *mesh = static_cast<Mesh *>( res );
 
         // Find build parameters
-        V1MeshImportParamsMap::iterator it = mV1MeshImportParams.find(res);
-        if (it == mV1MeshImportParams.end())
+        V1MeshImportParamsMap::iterator it = mV1MeshImportParams.find( res );
+        if( it == mV1MeshImportParams.end() )
         {
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "Cannot find build parameters for " + res->getName(),
-                "MeshManager::loadResource");
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Cannot find build parameters for " + res->getName(),
+                         "MeshManager::loadResource" );
         }
-        V1MeshImportParams& params = it->second;
+        V1MeshImportParams &params = it->second;
 
         Ogre::v1::MeshPtr meshV1 =
             Ogre::v1::MeshManager::getSingleton().getByName( params.name, params.groupName );
 
-        bool unloadV1 = (meshV1->isReloadable() && meshV1->getLoadingState() == Resource::LOADSTATE_UNLOADED);
+        bool unloadV1 =
+            ( meshV1->isReloadable() && meshV1->getLoadingState() == Resource::LOADSTATE_UNLOADED );
 
-        mesh->importV1(meshV1.get(), params.halfPos, params.halfTexCoords, params.qTangents, params.halfPose);
+        mesh->importV1( meshV1.get(), params.halfPos, params.halfTexCoords, params.qTangents,
+                        params.halfPose );
 
-        if(unloadV1)
+        if( unloadV1 )
             meshV1->unload();
     }
-    //-------------------------------------------------------------------------
-    /*void MeshManager::setListener(MeshSerializerListener *listener)
-    {
-        mListener = listener;
-    }
-    //-------------------------------------------------------------------------
-    MeshSerializerListener *MeshManager::getListener()
-    {
-        return mListener;
-    }*/
     //-----------------------------------------------------------------------
-    Real MeshManager::getBoundsPaddingFactor(void)
-    {
-        return mBoundsPaddingFactor;
-    }
+    Real MeshManager::getBoundsPaddingFactor() { return mBoundsPaddingFactor; }
     //-----------------------------------------------------------------------
-    void MeshManager::setBoundsPaddingFactor(Real paddingFactor)
+    void MeshManager::setBoundsPaddingFactor( Real paddingFactor )
     {
         mBoundsPaddingFactor = paddingFactor;
     }
     //-----------------------------------------------------------------------
-    Resource* MeshManager::createImpl(const String& name, ResourceHandle handle, 
-        const String& group, bool isManual, ManualResourceLoader* loader, 
-        const NameValuePairList* createParams)
+    Resource *MeshManager::createImpl( const String &name, ResourceHandle handle, const String &group,
+                                       bool isManual, ManualResourceLoader *loader,
+                                       const NameValuePairList *createParams )
     {
         // no use for createParams here
-        return OGRE_NEW Mesh(this, name, handle, group, mVaoManager, isManual, loader);
+        return OGRE_NEW Mesh( this, name, handle, group, mVaoManager, isManual, loader );
     }
     //-----------------------------------------------------------------------
-}
+}  // namespace Ogre

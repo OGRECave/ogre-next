@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,94 +26,89 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreUserObjectBindings.h"
 
 #include "ogrestd/map.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     Any UserObjectBindings::msEmptyAny;
-    
-    //--------------------------------------------------------------------------
-    UserObjectBindings::UserObjectBindings()
-    {
-        mAttributes = NULL;
-    }
 
     //--------------------------------------------------------------------------
-    UserObjectBindings::~UserObjectBindings()
-    {
-        clear();
-    }
+    UserObjectBindings::UserObjectBindings() { mAttributes = NULL; }
+
+    //--------------------------------------------------------------------------
+    UserObjectBindings::~UserObjectBindings() { clear(); }
 
     //-----------------------------------------------------------------------
-    void UserObjectBindings::setUserAny( const Any& anything )
+    void UserObjectBindings::setUserAny( const Any &anything )
     {
         // Allocate attributes on demand.
-        if (mAttributes == NULL)
+        if( mAttributes == NULL )
             mAttributes = OGRE_NEW UserObjectBindings::Attributes;
-        
+
         mAttributes->mKeylessAny = anything;
     }
 
     //-----------------------------------------------------------------------
-    const Any& UserObjectBindings::getUserAny( void ) const
+    const Any &UserObjectBindings::getUserAny() const
     {
         // Allocate attributes on demand.
-        if (mAttributes == NULL)
+        if( mAttributes == NULL )
             mAttributes = OGRE_NEW UserObjectBindings::Attributes;
 
         return mAttributes->mKeylessAny;
     }
 
     //-----------------------------------------------------------------------
-    void UserObjectBindings::setUserAny(const String& key, const Any& anything)
+    void UserObjectBindings::setUserAny( const String &key, const Any &anything )
     {
         // Allocate attributes on demand.
-        if (mAttributes == NULL)
+        if( mAttributes == NULL )
             mAttributes = OGRE_NEW UserObjectBindings::Attributes;
 
         // Case map doesn't exists.
-        if (mAttributes->mUserObjectsMap == NULL)
+        if( mAttributes->mUserObjectsMap == NULL )
             mAttributes->mUserObjectsMap = new UserObjectsMap;
 
-        (*mAttributes->mUserObjectsMap)[key] = anything;
-    }   
+        ( *mAttributes->mUserObjectsMap )[key] = anything;
+    }
 
     //-----------------------------------------------------------------------
-    const Any& UserObjectBindings::getUserAny(const String& key) const
+    const Any &UserObjectBindings::getUserAny( const String &key ) const
     {
         // Allocate attributes on demand.
-        if (mAttributes == NULL)
+        if( mAttributes == NULL )
             mAttributes = OGRE_NEW UserObjectBindings::Attributes;
 
         // Case map doesn't exists.
-        if (mAttributes->mUserObjectsMap == NULL)
+        if( mAttributes->mUserObjectsMap == NULL )
             return msEmptyAny;
 
-        UserObjectsMap::const_iterator it = mAttributes->mUserObjectsMap->find(key);
+        UserObjectsMap::const_iterator it = mAttributes->mUserObjectsMap->find( key );
 
         // Case user data found.
-        if (it != mAttributes->mUserObjectsMap->end())
+        if( it != mAttributes->mUserObjectsMap->end() )
         {
             return it->second;
         }
-        
+
         return msEmptyAny;
     }
 
     //-----------------------------------------------------------------------
-    void UserObjectBindings::eraseUserAny(const String& key)
+    void UserObjectBindings::eraseUserAny( const String &key )
     {
         // Case attributes and map allocated.
-        if (mAttributes != NULL && mAttributes->mUserObjectsMap != NULL)
+        if( mAttributes != NULL && mAttributes->mUserObjectsMap != NULL )
         {
-            UserObjectsMap::iterator it = mAttributes->mUserObjectsMap->find(key);
+            UserObjectsMap::iterator it = mAttributes->mUserObjectsMap->find( key );
 
             // Case object found -> erase it from the map.
-            if (it != mAttributes->mUserObjectsMap->end())
+            if( it != mAttributes->mUserObjectsMap->end() )
             {
-                mAttributes->mUserObjectsMap->erase(it);
+                mAttributes->mUserObjectsMap->erase( it );
             }
         }
     }
@@ -121,8 +116,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void UserObjectBindings::clear() const
     {
-        if (mAttributes != NULL)
-        {           
+        if( mAttributes != NULL )
+        {
             OGRE_DELETE mAttributes;
             mAttributes = NULL;
         }
@@ -132,10 +127,10 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     UserObjectBindings::Attributes::~Attributes()
     {
-        if (mUserObjectsMap != NULL)
+        if( mUserObjectsMap != NULL )
         {
             OGRE_DELETE mUserObjectsMap;
             mUserObjectsMap = NULL;
         }
     }
-}
+}  // namespace Ogre

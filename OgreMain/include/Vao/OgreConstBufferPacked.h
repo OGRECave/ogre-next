@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -39,15 +39,15 @@ namespace Ogre
     {
     public:
         ConstBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                           uint32 numElementsPadding, BufferType bufferType,
-                           void *initialData, bool keepAsShadow,
-                           VaoManager *vaoManager, BufferInterface *bufferInterface ) :
+                           uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                           bool keepAsShadow, VaoManager *vaoManager,
+                           BufferInterface *bufferInterface ) :
             BufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                           bufferType, initialData, keepAsShadow, vaoManager, bufferInterface )
         {
         }
 
-        virtual BufferPackedTypes getBufferPackedType(void) const   { return BP_TYPE_CONST; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_CONST; }
 
         /** Binds the constant buffer to the given slot in the
             Vertex/Pixel/Geometry/Hull/Domain/Compute Shader
@@ -66,6 +66,6 @@ namespace Ogre
         virtual void bindBufferDS( uint16 slot ) = 0;
         virtual void bindBufferCS( uint16 slot ) = 0;
     };
-}
+}  // namespace Ogre
 
 #endif

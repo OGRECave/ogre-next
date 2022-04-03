@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -31,11 +31,11 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 #include "OgreMetalPrerequisites.h"
 
-#include "OgrePixelFormatGpu.h"
 #include "OgreBlendMode.h"
-#include "Vao/OgreVertexElements.h"
-#include "OgreHlmsSamplerblock.h"
 #include "OgreGpuProgramParams.h"
+#include "OgreHlmsSamplerblock.h"
+#include "OgrePixelFormatGpu.h"
+#include "Vao/OgreVertexElements.h"
 
 #import <Metal/MTLDepthStencil.h>
 #import <Metal/MTLPixelFormat.h>
@@ -49,9 +49,9 @@ namespace Ogre
     {
     public:
         /// Can throw if PixelFormat is not depth.
-        static void getDepthStencilFormat( PixelFormatGpu pf, MetalDevice *device,
-                                           MTLPixelFormat &outDepth, MTLPixelFormat &outStencil );
-        static MTLBlendFactor get( SceneBlendFactor op );
+        static void              getDepthStencilFormat( PixelFormatGpu pf, MetalDevice *device,
+                                                        MTLPixelFormat &outDepth, MTLPixelFormat &outStencil );
+        static MTLBlendFactor    get( SceneBlendFactor op );
         static MTLBlendOperation get( SceneBlendOperation op );
         /// @see HlmsBlendblock::BlendChannelMasks
         static MTLColorWriteMask get( uint8 mask );
@@ -63,8 +63,8 @@ namespace Ogre
         static MTLVertexFormat get( VertexElementType vertexElemType );
 
         static MTLSamplerMinMagFilter get( FilterOptions filter );
-        static MTLSamplerMipFilter getMipFilter( FilterOptions filter );
-        static MTLSamplerAddressMode get( TextureAddressingMode mode );
+        static MTLSamplerMipFilter    getMipFilter( FilterOptions filter );
+        static MTLSamplerAddressMode  get( TextureAddressingMode mode );
 
         static MTLVertexFormat dataTypeToVertexFormat( MTLDataType dataType );
 
@@ -72,6 +72,6 @@ namespace Ogre
 
         static GpuConstantType get( MTLDataType dataType );
     };
-}
+}  // namespace Ogre
 
 #endif

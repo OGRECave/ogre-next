@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -331,7 +331,7 @@ namespace Ogre
             MathlibSSE2::Abs4( _mm_mul_ps( mChunkBase[2], vec.mChunkBase[2] ) ) );//  abs( z * vec.z )
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector3::normalise( void )
+    inline void ArrayVector3::normalise()
     {
         ArrayReal sqLength = _mm_add_ps( _mm_add_ps(
             _mm_mul_ps( mChunkBase[0], mChunkBase[0] ), //(x * x +
@@ -409,7 +409,7 @@ namespace Ogre
         mChunkBase[2] = _mm_or_ps( MathlibSSE2::ONE, _mm_and_ps( signMask, mChunkBase[2] ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::perpendicular( void ) const
+    inline ArrayVector3 ArrayVector3::perpendicular() const
     {
         ArrayVector3 perp = this->crossProduct( ArrayVector3::UNIT_X );
 
@@ -430,7 +430,7 @@ namespace Ogre
         return perp;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::normalisedCopy( void ) const
+    inline ArrayVector3 ArrayVector3::normalisedCopy() const
     {
         ArrayReal sqLength = _mm_add_ps( _mm_add_ps(
             _mm_mul_ps( mChunkBase[0], mChunkBase[0] ), //(x * x +
@@ -457,7 +457,7 @@ namespace Ogre
         return ( *this - ( _mm_mul_ps( twoPointZero, this->dotProduct( normal ) ) * normal ) );
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector3::inverseLeaveZeroes( void )
+    inline void ArrayVector3::inverseLeaveZeroes()
     {
         //Use InvNonZero, we're gonna nuke the NaNs anyway.
         mChunkBase[0] = MathlibSSE2::CmovRobust( mChunkBase[0], MathlibSSE2::InvNonZero4(mChunkBase[0]),
@@ -468,7 +468,7 @@ namespace Ogre
                                                  _mm_cmpeq_ps( mChunkBase[2], _mm_setzero_ps() ) );
     }
     //-----------------------------------------------------------------------------------
-    inline int ArrayVector3::isNaN( void ) const
+    inline int ArrayVector3::isNaN() const
     {
         ArrayReal mask = _mm_and_ps( _mm_and_ps( 
             _mm_cmpeq_ps( mChunkBase[0], mChunkBase[0] ),
@@ -478,7 +478,7 @@ namespace Ogre
         return _mm_movemask_ps( mask ) ^ 0x0000000f;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::primaryAxis( void ) const
+    inline ArrayVector3 ArrayVector3::primaryAxis() const
     {
         // We could've used some operators, i.e.
         // xVec = MathlibSSE2::Cmov( ArrayVector3::UNIT_X, ArrayVector3::NEGATIVE_UNIT_X )
@@ -522,7 +522,7 @@ namespace Ogre
         return yVec;
     }
     //-----------------------------------------------------------------------------------
-    inline Vector3 ArrayVector3::collapseMin( void ) const
+    inline Vector3 ArrayVector3::collapseMin() const
     {
         OGRE_ALIGNED_DECL( Real, vals[4], OGRE_SIMD_ALIGNMENT );
         ArrayReal aosVec0, aosVec1, aosVec2, aosVec3;
@@ -547,7 +547,7 @@ namespace Ogre
         return Vector3( vals[0], vals[1], vals[2] );
     }
     //-----------------------------------------------------------------------------------
-    inline Vector3 ArrayVector3::collapseMax( void ) const
+    inline Vector3 ArrayVector3::collapseMax() const
     {
         OGRE_ALIGNED_DECL( Real, vals[4], OGRE_SIMD_ALIGNMENT );
         ArrayReal aosVec0, aosVec1, aosVec2, aosVec3;

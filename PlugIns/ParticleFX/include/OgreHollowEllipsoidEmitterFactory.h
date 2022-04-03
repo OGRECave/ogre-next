@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,38 +30,32 @@ THE SOFTWARE.
 #define __HollowEllipsoidEmitterFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleEmitterFactory.h"
+
 #include "OgreHollowEllipsoidEmitter.h"
+#include "OgreParticleEmitterFactory.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for particle emitter of type "HollowEllipsoid".
     @remarks
-        Creates instances of HollowEllipsoidEmitter to be used in particle systems. 
+        Creates instances of HollowEllipsoidEmitter to be used in particle systems.
     */
-    class _OgreParticleFXExport HollowEllipsoidEmitterFactory : public ParticleEmitterFactory
+    class _OgreParticleFXExport HollowEllipsoidEmitterFactory final : public ParticleEmitterFactory
     {
     protected:
-
     public:
         /** See ParticleEmitterFactory */
-        String getName() const
-        { 
-            return "HollowEllipsoid"; 
-        }
+        String getName() const override { return "HollowEllipsoid"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter* createEmitter(ParticleSystem* psys) 
+        ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
-            ParticleEmitter* emit = OGRE_NEW HollowEllipsoidEmitter(psys);
-            mEmitters.push_back(emit);
+            ParticleEmitter *emit = OGRE_NEW HollowEllipsoidEmitter( psys );
+            mEmitters.push_back( emit );
             return emit;
         }
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -41,7 +41,7 @@ namespace v1 {
             PixelBox lockImpl(const Box &lockBox,  LockOptions options);
 
             /// Unlock a box
-            void unlockImpl(void);
+            void unlockImpl();
 
             // Internal buffer; either on-card or in system memory, freed/allocated on demand
             // depending on buffer usage

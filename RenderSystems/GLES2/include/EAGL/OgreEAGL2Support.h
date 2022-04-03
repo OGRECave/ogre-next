@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -49,14 +49,14 @@ namespace Ogre {
             EAGL2Support();
             virtual ~EAGL2Support();
 
-            void start(void);
-            void stop(void);
-            void addConfig(void);
-            String validateConfig(void);
-            virtual String getDisplayName(void);
+            void start();
+            void stop();
+            void addConfig();
+            String validateConfig();
+            virtual String getDisplayName();
             CFDictionaryRef chooseGLConfig(const GLint *attribList, GLint *nElements);
             GLint getGLConfigAttrib(CFDictionaryRef fbConfig, GLint attribute, GLint *value);
-            float getCurrentOSVersion(void) { return mCurrentOSVersion; }
+            float getCurrentOSVersion() { return mCurrentOSVersion; }
             void * getProcAddress(const char* procname) const;
             RenderWindow * createWindow(bool autoCreateWindow,
                                            GLES2RenderSystem *renderSystem,
@@ -68,7 +68,7 @@ namespace Ogre {
                                         const NameValuePairList *miscParams = 0);
 
 #ifdef __OBJC__
-            bool portraitIsSupported(void);
+            bool portraitIsSupported();
             bool interfaceOrientationIsSupported(NSString *orientation);
 
             EAGLES2Context * createNewContext(CAEAGLLayer *drawable, EAGLSharegroup *group) const;

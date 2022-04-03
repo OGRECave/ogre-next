@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -81,7 +81,7 @@ namespace Ogre
         bool dirtyBakedSamplers;
         bool dirtyBakedUavs;
 
-        void reset( void )
+        void reset()
         {
             dirtyParamsBuffer = false;
             minDirtySlotConst = 255u;
@@ -95,7 +95,7 @@ namespace Ogre
             dirtyBakedUavs = false;
         }
 
-        void setAllDirty( void )
+        void setAllDirty()
         {
             dirtyParamsBuffer = true;
             minDirtySlotConst = 0u;

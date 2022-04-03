@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,10 +27,10 @@ THE SOFTWARE.
 */
 
 /*
-The nVidia occlusion query extension is defined in glext.h so you don't 
-need anything else. You do need to look up the function, we provide a 
-GL3PlusSupport class to do this, which has platform implementations for 
-getProcAddress. Check the way that extensions like glActiveTextureARB are 
+The nVidia occlusion query extension is defined in glext.h so you don't
+need anything else. You do need to look up the function, we provide a
+GL3PlusSupport class to do this, which has platform implementations for
+getProcAddress. Check the way that extensions like glActiveTextureARB are
 initialised and used in glRenderSystem and copy what is done there.
 
   To do: fix so dx7 and DX9 checks and flags if HW Occlusion is supported
@@ -41,55 +41,53 @@ initialised and used in glRenderSystem and copy what is done there.
 #define __GL3PlusHARDWAREOCCLUSIONQUERY_H__
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreHardwareOcclusionQuery.h"
 
-
-namespace Ogre { 
-
-
-// If you use multiple rendering passes you can test only the first pass and all other passes don't have to be rendered 
-// if the first pass result has too few pixels visible.
-
-// Be sure to render all occluder first and whats out so the RenderQue don't switch places on 
-// the occluding objects and the tested objects because it thinks it's more effective..
-
-
-/**
-  * This is a class that is the base class of the query class for 
-  * hardware occlusion.
-  *
-  * @author Lee Sandberg email: lee@abcmedia.se
-  * Updated on 13/9/2005 by Tuan Kuranes email: tuan.kuranes@free.fr
-  */
-
-class _OgreGL3PlusExport GL3PlusHardwareOcclusionQuery : public HardwareOcclusionQuery
+namespace Ogre
 {
-//----------------------------------------------------------------------
-// Public methods
-//--
-public:
-    /**
-      * Default object constructor
-      * 
-      */
-    GL3PlusHardwareOcclusionQuery();
-    /**
-      * Object destructor
-      */
-    ~GL3PlusHardwareOcclusionQuery();
+    // If you use multiple rendering passes you can test only the first pass and all other passes don't
+    // have to be rendered if the first pass result has too few pixels visible.
 
-    //------------------------------------------------------------------
-    // Occlusion query functions (see base class documentation for this)
-    //--
-    void beginOcclusionQuery();
-    void endOcclusionQuery();
-    bool pullOcclusionQuery(unsigned int* NumOfFragments);
-    bool isStillOutstanding(void);
+    // Be sure to render all occluder first and what's out so the RenderQue don't switch places on
+    // the occluding objects and the tested objects because it thinks it's more effective..
+
+    /**
+     * This is a class that is the base class of the query class for
+     * hardware occlusion.
+     *
+     * @author Lee Sandberg email: lee@abcmedia.se
+     * Updated on 13/9/2005 by Tuan Kuranes email: tuan.kuranes@free.fr
+     */
+
+    class _OgreGL3PlusExport GL3PlusHardwareOcclusionQuery final : public HardwareOcclusionQuery
+    {
+        //----------------------------------------------------------------------
+        // Public methods
+        //--
+    public:
+        /**
+         * Default object constructor
+         *
+         */
+        GL3PlusHardwareOcclusionQuery();
+        /**
+         * Object destructor
+         */
+        ~GL3PlusHardwareOcclusionQuery() override;
+
+        //------------------------------------------------------------------
+        // Occlusion query functions (see base class documentation for this)
+        //--
+        void beginOcclusionQuery() override;
+        void endOcclusionQuery() override;
+        bool pullOcclusionQuery( unsigned int *NumOfFragments ) override;
+        bool isStillOutstanding() override;
 
     private:
         GLuint mQueryID;
-};
+    };
 
-}
+}  // namespace Ogre
 
-#endif 
+#endif

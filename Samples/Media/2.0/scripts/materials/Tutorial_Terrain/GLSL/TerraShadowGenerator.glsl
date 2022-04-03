@@ -36,6 +36,8 @@ vulkan( layout( ogre_P0 ) uniform Params { )
 
 	//Rendering uniforms
 	uniform float heightDelta;
+
+	uniform uint resolutionShift;
 vulkan( }; )
 
 layout(ogre_B0) uniform StartsBuffer
@@ -61,7 +63,7 @@ vec2 calcShadow( ivec2 xyPos, vec2 prevHeight )
 	prevHeight.x -= heightDelta;
 	prevHeight.y = prevHeight.y * 0.985 - heightDelta; //Used for the penumbra region
 
-	float currHeight = float( texelFetch( heightMap, xyPos, 0 ).x );
+	float currHeight = float( texelFetch( heightMap, xyPos << int( resolutionShift ), 0 ).x );
 
 	//@property( terra_use_uint )
 		currHeight /= 65535.0f;

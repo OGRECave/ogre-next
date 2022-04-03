@@ -57,6 +57,15 @@ if(WIN32)
 			"$ENV{VULKAN_SDK}/Include"
 		)
 
+	find_path(Vulkan_SHADERC_INCLUDE_DIR
+		NAMES shaderc/shaderc.h
+		HINTS
+			"${OGRE_DEPENDENCIES_DIR}/include" "${ENV_OGRE_DEPENDENCIES_DIR}/include"
+			"${OGRE_SOURCE}/Dependencies/include"
+			"${OGRE_VULKAN_SDK}/Include"
+			"$ENV{VULKAN_SDK}/Include"
+		)
+
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		set( VK_BIN "Bin" )
 		set( VK_LIB "Lib" )
@@ -110,6 +119,14 @@ else()
 			"${OGRE_VULKAN_SDK}/${VK_ARCH}/include"
 			"$ENV{VULKAN_SDK}/include"
 		)
+	find_path(Vulkan_SHADERC_INCLUDE_DIR
+		NAMES shaderc/shaderc.h
+		HINTS
+			"${OGRE_DEPENDENCIES_DIR}/lib" "${ENV_OGRE_DEPENDENCIES_DIR}/lib"
+			"${OGRE_SOURCE}/Dependencies/lib"
+			"${OGRE_VULKAN_SDK}/${VK_ARCH}/include"
+			"$ENV{VULKAN_SDK}/include"
+		)
 	find_library(Vulkan_LIBRARY
 		NAMES vulkan
 		HINTS
@@ -136,14 +153,14 @@ else()
 endif()
 
 set(Vulkan_LIBRARIES ${Vulkan_LIBRARY} optimized ${Vulkan_SHADERC_LIB_REL} debug ${Vulkan_SHADERC_LIB_DBG})
-set(Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR})
+set(Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR} ${Vulkan_SHADERC_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Vulkan
   DEFAULT_MSG
   Vulkan_LIBRARY Vulkan_SHADERC_LIB_REL Vulkan_SHADERC_LIB_DBG Vulkan_INCLUDE_DIR)
 
-mark_as_advanced(Vulkan_INCLUDE_DIR Vulkan_LIBRARY Vulkan_SHADERC_LIB_REL Vulkan_SHADERC_LIB_DBG Vulkan_GLSLC_EXECUTABLE)
+mark_as_advanced(Vulkan_INCLUDE_DIR Vulkan_LIBRARY Vulkan_SHADERC_INCLUDE_DIR Vulkan_SHADERC_LIB_REL Vulkan_SHADERC_LIB_DBG Vulkan_GLSLC_EXECUTABLE)
 
 if(Vulkan_FOUND AND NOT TARGET Vulkan::Vulkan)
   add_library(Vulkan::Vulkan UNKNOWN IMPORTED)

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -309,7 +309,7 @@ namespace Ogre
         posChunkBase[2] = chunkBase[11];
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayMatrixAf4x3::setToInverse(void)
+    inline void ArrayMatrixAf4x3::setToInverse()
     {
         ArrayReal m10 = mChunkBase[4], m11 = mChunkBase[5], m12 = mChunkBase[6];
         ArrayReal m20 = mChunkBase[8], m21 = mChunkBase[9], m22 = mChunkBase[10];
@@ -366,7 +366,7 @@ namespace Ogre
         mChunkBase[11]= r23;
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayMatrixAf4x3::setToInverseDegeneratesAsIdentity(void)
+    inline void ArrayMatrixAf4x3::setToInverseDegeneratesAsIdentity()
     {
         ArrayReal m10 = mChunkBase[4], m11 = mChunkBase[5], m12 = mChunkBase[6];
         ArrayReal m20 = mChunkBase[8], m21 = mChunkBase[9], m22 = mChunkBase[10];

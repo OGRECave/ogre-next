@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,8 +27,8 @@ THE SOFTWARE.
 */
 
 #include "OgreGL3PlusStagingTexture.h"
-#include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusMappings.h"
+#include "OgreGL3PlusTextureGpu.h"
 
 #include "Vao/OgreGL3PlusVaoManager.h"
 
@@ -47,8 +47,8 @@ namespace Ogre
         mMappedPtr( 0 ),
         mLastMappedPtr( 0 )
     {
-        const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
-                supportsArbBufferStorage();
+        const bool canPersistentMap =
+            static_cast<GL3PlusVaoManager *>( mVaoManager )->supportsArbBufferStorage();
 
         if( canPersistentMap )
         {
@@ -63,7 +63,7 @@ namespace Ogre
         assert( mUnmapTicket == std::numeric_limits<size_t>::max() );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingTexture::_unmapBuffer(void)
+    void GL3PlusStagingTexture::_unmapBuffer()
     {
         if( mUnmapTicket != std::numeric_limits<size_t>::max() )
         {
@@ -77,20 +77,20 @@ namespace Ogre
     bool GL3PlusStagingTexture::belongsToUs( const TextureBox &box )
     {
         return box.data >= mLastMappedPtr &&
-               box.data <= static_cast<uint8*>( mLastMappedPtr ) + mCurrentOffset;
+               box.data <= static_cast<uint8 *>( mLastMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN GL3PlusStagingTexture::mapRegionImplRawPtr(void)
+    void *RESTRICT_ALIAS_RETURN GL3PlusStagingTexture::mapRegionImplRawPtr()
     {
-        return static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
+        return static_cast<uint8 *>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingTexture::startMapRegion(void)
+    void GL3PlusStagingTexture::startMapRegion()
     {
         StagingTextureBufferImpl::startMapRegion();
 
-        const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
-                supportsArbBufferStorage();
+        const bool canPersistentMap =
+            static_cast<GL3PlusVaoManager *>( mVaoManager )->supportsArbBufferStorage();
 
         if( !canPersistentMap )
         {
@@ -100,10 +100,10 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingTexture::stopMapRegion(void)
+    void GL3PlusStagingTexture::stopMapRegion()
     {
-        const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
-                supportsArbBufferStorage();
+        const bool canPersistentMap =
+            static_cast<GL3PlusVaoManager *>( mVaoManager )->supportsArbBufferStorage();
 
         OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mDynamicBuffer->getVboName() ) );
         mDynamicBuffer->flush( mUnmapTicket, 0, mCurrentOffset );
@@ -119,80 +119,81 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingTexture::uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
-                                               uint8 mipLevel, GLenum format, GLenum type,
-                                               GLint xPos, GLint yPos, GLint slicePos,
-                                               GLsizei width, GLsizei height, GLsizei numSlices )
+                                               uint8 mipLevel, GLenum format, GLenum type, GLint xPos,
+                                               GLint yPos, GLint slicePos, GLsizei width, GLsizei height,
+                                               GLsizei numSlices )
     {
-        const size_t distToStart = static_cast<uint8*>( srcBox.data ) -
-                                    static_cast<uint8*>( mLastMappedPtr );
-        uint8 *offsetPtr = reinterpret_cast<uint8*>( mInternalBufferStart + distToStart );
+        const size_t distToStart = static_cast<size_t>( static_cast<uint8 *>( srcBox.data ) -
+                                                        static_cast<uint8 *>( mLastMappedPtr ) );
+        uint8 *offsetPtr = reinterpret_cast<uint8 *>( mInternalBufferStart + distToStart );
 
         const GLsizei sizeBytes = static_cast<GLsizei>(
-                PixelFormatGpuUtils::getSizeBytes( srcBox.width, srcBox.height, 1u, 1u, pixelFormat ) );
+            PixelFormatGpuUtils::getSizeBytes( srcBox.width, srcBox.height, 1u, 1u, pixelFormat ) );
 
-        for( size_t i=0; i<(size_t)numSlices; ++i )
+        for( size_t i = 0; i < (size_t)numSlices; ++i )
         {
-            const GLenum targetGl = static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i + slicePos );
+            const GLenum targetGl = static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i +
+                                                         static_cast<GLenum>( slicePos ) );
             if( type != GL_NONE )
             {
-                OCGE( glTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height,
-                                       format, type, offsetPtr ) );
+                OCGE( glTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height, format, type,
+                                       offsetPtr ) );
             }
             else
             {
-                OCGE( glCompressedTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height,
-                                                 format, sizeBytes, offsetPtr ) );
+                OCGE( glCompressedTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height, format,
+                                                 sizeBytes, offsetPtr ) );
             }
             offsetPtr += srcBox.bytesPerImage;
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                                        uint8 mipLevel, const TextureBox *cpuSrcBox,
-                                        const TextureBox *dstBox, bool skipSysRamCopy )
+    void GL3PlusStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                                        const TextureBox *cpuSrcBox, const TextureBox *dstBox,
+                                        bool skipSysRamCopy )
     {
-        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel,
-                                          cpuSrcBox, dstBox, skipSysRamCopy );
+        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel, cpuSrcBox, dstBox,
+                                          skipSysRamCopy );
 
         size_t bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() );
 
         assert( !dstTexture->isMultisample() && "Cannot upload to an MSAA texture!" );
 
-        const GLint rowLength   = bytesPerPixel > 0 ? (srcBox.bytesPerRow / bytesPerPixel) : 0;
-        const GLint imageHeight = (srcBox.bytesPerRow > 0) ?
-                                      (srcBox.bytesPerImage / srcBox.bytesPerRow) : 0;
+        const GLint rowLength = bytesPerPixel > 0 ? GLint( srcBox.bytesPerRow / bytesPerPixel ) : 0;
+        const GLint imageHeight =
+            ( srcBox.bytesPerRow > 0 ) ? GLint( srcBox.bytesPerImage / srcBox.bytesPerRow ) : 0;
 
         OCGE( glPixelStorei( GL_UNPACK_ALIGNMENT, 4 ) );
-        OCGE( glPixelStorei( GL_UNPACK_ROW_LENGTH, rowLength) );
+        OCGE( glPixelStorei( GL_UNPACK_ROW_LENGTH, rowLength ) );
         OCGE( glPixelStorei( GL_UNPACK_IMAGE_HEIGHT, imageHeight ) );
 
         const TextureTypes::TextureTypes textureType = dstTexture->getInternalTextureType();
         const PixelFormatGpu pixelFormat = dstTexture->getPixelFormat();
 
-        assert( dynamic_cast<GL3PlusTextureGpu*>( dstTexture ) );
-        GL3PlusTextureGpu *dstTextureGl = static_cast<GL3PlusTextureGpu*>( dstTexture );
+        assert( dynamic_cast<GL3PlusTextureGpu *>( dstTexture ) );
+        GL3PlusTextureGpu *dstTextureGl = static_cast<GL3PlusTextureGpu *>( dstTexture );
 
-        const GLenum targetGl   = dstTextureGl->getGlTextureTarget();
-        const GLuint texName    = dstTextureGl->getFinalTextureName();
+        const GLenum targetGl = dstTextureGl->getGlTextureTarget();
+        const GLuint texName = dstTextureGl->getFinalTextureName();
 
         OCGE( glBindTexture( targetGl, texName ) );
 
         OCGE( glBindBuffer( GL_PIXEL_UNPACK_BUFFER, mDynamicBuffer->getVboName() ) );
 
-        GLint xPos      = static_cast<GLint>( dstBox ? dstBox->x : 0 );
-        GLint yPos      = static_cast<GLint>( dstBox ? dstBox->y : 0 );
-        GLint zPos      = static_cast<GLint>( dstBox ? dstBox->z : 0 );
-        GLint slicePos  = static_cast<GLint>( (dstBox ? dstBox->sliceStart : 0) +
-                                              dstTexture->getInternalSliceStart() );
-        //Dst & src must have the same resolution & number of slices, so just pick src's dimensions.
-        GLsizei width   = static_cast<GLsizei>( srcBox.width );
-        GLsizei height  = static_cast<GLsizei>( srcBox.height  );
-        GLsizei depth   = static_cast<GLsizei>( srcBox.depth );
-        GLsizei numSlices=static_cast<GLsizei>( srcBox.numSlices );
+        GLint xPos = static_cast<GLint>( dstBox ? dstBox->x : 0 );
+        GLint yPos = static_cast<GLint>( dstBox ? dstBox->y : 0 );
+        GLint zPos = static_cast<GLint>( dstBox ? dstBox->z : 0 );
+        GLint slicePos = static_cast<GLint>( ( dstBox ? dstBox->sliceStart : 0 ) +
+                                             dstTexture->getInternalSliceStart() );
+        // Dst & src must have the same resolution & number of slices, so just pick src's dimensions.
+        GLsizei width = static_cast<GLsizei>( srcBox.width );
+        GLsizei height = static_cast<GLsizei>( srcBox.height );
+        GLsizei depth = static_cast<GLsizei>( srcBox.depth );
+        GLsizei numSlices = static_cast<GLsizei>( srcBox.numSlices );
 
-        const size_t distToStart = static_cast<uint8*>( srcBox.data ) -
-                                    static_cast<uint8*>( mLastMappedPtr );
-        const void *offsetPtr = reinterpret_cast<void*>( mInternalBufferStart + distToStart );
+        const size_t distToStart = static_cast<size_t>( static_cast<uint8 *>( srcBox.data ) -
+                                                        static_cast<uint8 *>( mLastMappedPtr ) );
+        const void *offsetPtr = reinterpret_cast<void *>( mInternalBufferStart + distToStart );
 
         if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )
         {
@@ -206,30 +207,27 @@ namespace Ogre
                              "GL3PlusStagingTexture::upload" );
                 break;
             case TextureTypes::Type1D:
-                OCGE( glTexSubImage1D( targetGl, mipLevel, xPos, width,
-                                       format, type, offsetPtr ) );
+                OCGE( glTexSubImage1D( targetGl, mipLevel, xPos, width, format, type, offsetPtr ) );
                 break;
             case TextureTypes::Type1DArray:
-                OCGE( glTexSubImage2D( targetGl, mipLevel, xPos, slicePos, width, numSlices,
-                                       format, type, offsetPtr ) );
+                OCGE( glTexSubImage2D( targetGl, mipLevel, xPos, slicePos, width, numSlices, format,
+                                       type, offsetPtr ) );
                 break;
             case TextureTypes::Type2D:
-                OCGE( glTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height,
-                                       format, type, offsetPtr ) );
+                OCGE( glTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height, format, type,
+                                       offsetPtr ) );
                 break;
             case TextureTypes::TypeCube:
-                uploadCubemap( srcBox, pixelFormat, mipLevel, format, type,
-                               xPos, yPos, slicePos, width, height, numSlices );
+                uploadCubemap( srcBox, pixelFormat, mipLevel, format, type, xPos, yPos, slicePos, width,
+                               height, numSlices );
                 break;
             case TextureTypes::Type2DArray:
             case TextureTypes::TypeCubeArray:
-                OCGE( glTexSubImage3D( targetGl, mipLevel, xPos, yPos, slicePos,
-                                       width, height, numSlices,
-                                       format, type, offsetPtr ) );
+                OCGE( glTexSubImage3D( targetGl, mipLevel, xPos, yPos, slicePos, width, height,
+                                       numSlices, format, type, offsetPtr ) );
                 break;
             case TextureTypes::Type3D:
-                OCGE( glTexSubImage3D( targetGl, mipLevel, xPos, yPos, zPos,
-                                       width, height, depth,
+                OCGE( glTexSubImage3D( targetGl, mipLevel, xPos, yPos, zPos, width, height, depth,
                                        format, type, offsetPtr ) );
                 break;
             }
@@ -238,9 +236,8 @@ namespace Ogre
         {
             GLenum format = GL3PlusMappings::get( pixelFormat );
 
-            const GLsizei sizeBytes = static_cast<GLsizei>(
-                    PixelFormatGpuUtils::getSizeBytes( srcBox.width, srcBox.height, srcBox.depth,
-                                                       srcBox.numSlices, pixelFormat ) );
+            const GLsizei sizeBytes = static_cast<GLsizei>( PixelFormatGpuUtils::getSizeBytes(
+                srcBox.width, srcBox.height, srcBox.depth, srcBox.numSlices, pixelFormat ) );
 
             switch( textureType )
             {
@@ -249,31 +246,29 @@ namespace Ogre
                              "GL3PlusStagingTexture::upload" );
                 break;
             case TextureTypes::Type1D:
-                OCGE( glCompressedTexSubImage1D( targetGl, mipLevel, xPos, width,
-                                                 format, sizeBytes, offsetPtr ) );
+                OCGE( glCompressedTexSubImage1D( targetGl, mipLevel, xPos, width, format, sizeBytes,
+                                                 offsetPtr ) );
                 break;
             case TextureTypes::Type1DArray:
                 OCGE( glCompressedTexSubImage2D( targetGl, mipLevel, xPos, slicePos, width, numSlices,
                                                  format, sizeBytes, offsetPtr ) );
                 break;
             case TextureTypes::Type2D:
-                OCGE( glCompressedTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height,
-                                                 format, sizeBytes, offsetPtr ) );
+                OCGE( glCompressedTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height, format,
+                                                 sizeBytes, offsetPtr ) );
                 break;
             case TextureTypes::TypeCube:
-                uploadCubemap( srcBox, pixelFormat, mipLevel, format, GL_NONE,
-                               xPos, yPos, slicePos, width, height, numSlices );
+                uploadCubemap( srcBox, pixelFormat, mipLevel, format, GL_NONE, xPos, yPos, slicePos,
+                               width, height, numSlices );
                 break;
             case TextureTypes::Type2DArray:
             case TextureTypes::TypeCubeArray:
-                OCGE( glCompressedTexSubImage3D( targetGl, mipLevel, xPos, yPos, slicePos,
-                                                 width, height, numSlices,
-                                                 format, sizeBytes, offsetPtr ) );
+                OCGE( glCompressedTexSubImage3D( targetGl, mipLevel, xPos, yPos, slicePos, width, height,
+                                                 numSlices, format, sizeBytes, offsetPtr ) );
                 break;
             case TextureTypes::Type3D:
-                OCGE( glCompressedTexSubImage3D( targetGl, mipLevel, xPos, yPos, zPos,
-                                                 width, height, depth,
-                                                 format, sizeBytes, offsetPtr ) );
+                OCGE( glCompressedTexSubImage3D( targetGl, mipLevel, xPos, yPos, zPos, width, height,
+                                                 depth, format, sizeBytes, offsetPtr ) );
                 break;
             }
         }
@@ -281,4 +276,4 @@ namespace Ogre
         OCGE( glBindTexture( targetGl, 0 ) );
         OCGE( glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 ) );
     }
-}
+}  // namespace Ogre

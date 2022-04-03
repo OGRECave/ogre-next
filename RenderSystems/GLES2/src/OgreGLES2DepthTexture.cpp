@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -66,7 +66,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     // Creation / loading methods
-    void GLES2DepthTexture::createInternalResourcesImpl(void)
+    void GLES2DepthTexture::createInternalResourcesImpl()
     {
         _createSurfaceList();
 
@@ -159,7 +159,7 @@ namespace v1
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GLES2DepthPixelBuffer::lockImpl" );
     }
     //-----------------------------------------------------------------------------------
-    void GLES2DepthPixelBuffer::unlockImpl(void)
+    void GLES2DepthPixelBuffer::unlockImpl()
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GLES2DepthPixelBuffer::unlockImpl" );
     }
@@ -237,7 +237,7 @@ namespace v1
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void GLES2DepthTextureTarget::detachDepthBuffer(void)
+    void GLES2DepthTextureTarget::detachDepthBuffer()
     {
         RenderTexture::detachDepthBuffer();
         mUltimateTextureOwner->_setGlTextureName( 0 );

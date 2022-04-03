@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,19 +28,19 @@ THE SOFTWARE.
 #ifndef _OgreBoneMemoryManager_H_
 #define _OgreBoneMemoryManager_H_
 
-#include "OgreBoneTransform.h"
 #include "OgreBoneArrayMemoryManager.h"
+#include "OgreBoneTransform.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Memory
-    *  @{
-    */
+     *  @{
+     */
 
     struct BySkeletonDef;
 
@@ -53,13 +53,13 @@ namespace Ogre
         Note that some SceneManager implementations (i.e. Octree like) may want to have more
         than one BoneMemoryManager, for example one per octant.
     */
-    class _OgreExport BoneMemoryManager : ArrayMemoryManager::RebaseListener
+    class _OgreExport BoneMemoryManager final : ArrayMemoryManager::RebaseListener
     {
         typedef vector<BoneArrayMemoryManager>::type ArrayMemoryManagerVec;
         /// ArrayMemoryManagers grouped by hierarchy depth
-        ArrayMemoryManagerVec       mMemoryManagers;
+        ArrayMemoryManagerVec mMemoryManagers;
 
-        BySkeletonDef               *mBoneRebaseListener;
+        BySkeletonDef *mBoneRebaseListener;
 
         /** Makes mMemoryManagers big enough to be able to fulfill mMemoryManagers[newDepth]
         @param newDepth
@@ -159,21 +159,20 @@ namespace Ogre
         */
         size_t getFirstNode( BoneTransform &outTransform, size_t depth );
 
-        void setBoneRebaseListener( BySkeletonDef *l )          { mBoneRebaseListener = l; }
+        void setBoneRebaseListener( BySkeletonDef *l ) { mBoneRebaseListener = l; }
 
-        //Derived from ArrayMemoryManager::RebaseListener
-        virtual void buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,
-                                    ArrayMemoryManager::PtrdiffVec &outDiffsList );
-        virtual void applyRebase( uint16 level, const MemoryPoolVec &newBasePtrs,
-                                  const ArrayMemoryManager::PtrdiffVec &diffsList );
-        virtual void performCleanup( uint16 level, const MemoryPoolVec &basePtrs,
-                                     size_t const *elementsMemSizes,
-                                     size_t startInstance, size_t diffInstances );
+        // Derived from ArrayMemoryManager::RebaseListener
+        void buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,
+                            ArrayMemoryManager::PtrdiffVec &outDiffsList ) override;
+        void applyRebase( uint16 level, const MemoryPoolVec &newBasePtrs,
+                          const ArrayMemoryManager::PtrdiffVec &diffsList ) override;
+        void performCleanup( uint16 level, const MemoryPoolVec &basePtrs, size_t const *elementsMemSizes,
+                             size_t startInstance, size_t diffInstances ) override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

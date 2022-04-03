@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -38,7 +38,7 @@ namespace Ogre
 {
     class _OgreExport ComputeTools
     {
-        HlmsCompute     *mHlmsCompute;
+        HlmsCompute *mHlmsCompute;
 
     public:
         ComputeTools( HlmsCompute *hlmsCompute );
@@ -79,7 +79,7 @@ namespace Ogre
         */
         void clearUavUint( TextureGpu *texture, const uint32 clearValue[4] );
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

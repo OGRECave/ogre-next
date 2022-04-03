@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------
-This source file is a part of OGRE
+This source file is a part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 
 For the latest info, see http://www.ogre3d.org/
@@ -28,39 +28,39 @@ THE SOFTWARE
 #define _FontManager_H__
 
 #include "OgreOverlayPrerequisites.h"
-#include "OgreSingleton.h"
-#include "OgreResourceManager.h"
+
 #include "OgreFont.h"
+#include "OgreResourceManager.h"
+#include "OgreSingleton.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     /** Manages Font resources, parsing .fontdef files and generally organising them.*/
-    class _OgreOverlayExport FontManager : public ResourceManager, public Singleton< FontManager >
+    class _OgreOverlayExport FontManager : public ResourceManager, public Singleton<FontManager>
     {
     public:
-
         FontManager();
-        ~FontManager();
+        ~FontManager() override;
 
         /// Create a new font
         /// @see ResourceManager::createResource
-        FontPtr create (const String& name, const String& group,
-                            bool isManual = false, ManualResourceLoader* loader = 0,
-                            const NameValuePairList* createParams = 0);
+        FontPtr create( const String &name, const String &group, bool isManual = false,
+                        ManualResourceLoader *loader = 0, const NameValuePairList *createParams = 0 );
 
         /// Get a resource by name
         /// @see ResourceManager::getResourceByName
-        FontPtr getByName(const String& name, const String& groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
-
+        FontPtr getByName(
+            const String &name,
+            const String &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
 
         /** @copydoc ScriptLoader::parseScript */
-        void parseScript(DataStreamPtr& stream, const String& groupName);
+        void parseScript( DataStreamPtr &stream, const String &groupName ) override;
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -76,7 +76,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static FontManager& getSingleton(void);
+        static FontManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -92,22 +92,20 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static FontManager* getSingletonPtr(void);
+        static FontManager *getSingletonPtr();
 
     protected:
-
         /// Internal methods
-        Resource* createImpl(const String& name, ResourceHandle handle, 
-            const String& group, bool isManual, ManualResourceLoader* loader, 
-            const NameValuePairList* params);
-        void parseAttribute(const String& line, FontPtr& pFont);
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader,
+                              const NameValuePairList *params ) override;
 
-        void logBadAttrib(const String& line, FontPtr& pFont);
+        void parseAttribute( const String &line, FontPtr &pFont );
 
-
+        void logBadAttrib( const String &line, FontPtr &pFont );
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

@@ -11,25 +11,25 @@ namespace Demo
     class BaseSystem : public Mq::MessageQueueSystem
     {
     protected:
-        GameState   *mCurrentGameState;
+        GameState *mCurrentGameState;
 
     public:
         BaseSystem( GameState *gameState );
-        virtual ~BaseSystem();
+        ~BaseSystem() override;
 
-        virtual void initialize(void);
-        virtual void deinitialize(void);
+        virtual void initialize();
+        virtual void deinitialize();
 
-        virtual void createScene01(void);
-        virtual void createScene02(void);
+        virtual void createScene01();
+        virtual void createScene02();
 
-        virtual void destroyScene(void);
+        virtual void destroyScene();
 
-        void beginFrameParallel(void);
+        void beginFrameParallel();
         void update( float timeSinceLast );
-        void finishFrameParallel(void);
-        void finishFrame(void);
+        void finishFrameParallel();
+        void finishFrame();
     };
-}
+}  // namespace Demo
 
 #endif

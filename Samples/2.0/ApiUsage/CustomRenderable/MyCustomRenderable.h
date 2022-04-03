@@ -7,24 +7,24 @@
 
 namespace Ogre
 {
-    class MyCustomRenderable : public MovableObject, public Renderable
+    class MyCustomRenderable final : public MovableObject, public Renderable
     {
-        void createBuffers(void);
+        void createBuffers();
 
     public:
-        MyCustomRenderable( IdType id, ObjectMemoryManager *objectMemoryManager,
-                            SceneManager* manager, uint8 renderQueueId );
-        virtual ~MyCustomRenderable();
+        MyCustomRenderable( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
+                            uint8 renderQueueId );
+        ~MyCustomRenderable() override;
 
-        //Overrides from MovableObject
-        virtual const String& getMovableType(void) const;
+        // Overrides from MovableObject
+        const String &getMovableType() const override;
 
-        //Overrides from Renderable
-        virtual const LightList& getLights(void) const;
-        virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual bool getCastsShadows(void) const;
+        // Overrides from Renderable
+        const LightList &getLights() const override;
+        void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void getWorldTransforms( Matrix4 *xform ) const override;
+        bool getCastsShadows() const override;
     };
-}
+}  // namespace Ogre
 
 #endif

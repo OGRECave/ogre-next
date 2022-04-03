@@ -168,6 +168,10 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float pssmBlendPoints@n;@end @end
 @property( hlms_pssm_fade )
 	float pssmFadePoint;@end
+@property( hlms_static_branch_shadow_map_lights )
+	float numShadowMapPointLights;
+	float numShadowMapSpotLights;
+@end
 
 @property( !use_light_buffers )
 	@property( hlms_lights_spot )Light lights[@value(hlms_lights_spot)];@end
@@ -401,10 +405,10 @@ struct Material
 	@property( !hlms_shadowcaster )
 		@property( hlms_normal || hlms_qtangent )
 			INTERPOLANT( float3 pos, @counter(texcoord) );
-			INTERPOLANT( float3 normal, @counter(texcoord) );
+			INTERPOLANT( midf3 normal, @counter(texcoord) );
 			@property( normal_map )
-				INTERPOLANT( float3 tangent, @counter(texcoord) );
-				@property( hlms_qtangent || hlms_tangent4 )FLAT_INTERPOLANT( float biNormalReflection, @counter(texcoord) );@end
+				INTERPOLANT( midf3 tangent, @counter(texcoord) );
+				@property( hlms_qtangent || hlms_tangent4 )FLAT_INTERPOLANT( midf biNormalReflection, @counter(texcoord) );@end
 			@end
 		@end
 		@foreach( hlms_uv_count, n )
@@ -420,7 +424,7 @@ struct Material
 			@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
 				INTERPOLANT( float3 worldPos, @counter(texcoord) );
 				@property( hlms_normal || hlms_qtangent )
-					INTERPOLANT( float3 worldNorm, @counter(texcoord) );
+					INTERPOLANT( midf3 worldNorm, @counter(texcoord) );
 				@end
 			@end
 		@end

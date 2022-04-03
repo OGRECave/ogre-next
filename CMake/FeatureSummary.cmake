@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -29,21 +29,6 @@ if (OGRE_BUILD_COMPONENT_PROPERTY)
 endif ()
 if (OGRE_BUILD_COMPONENT_SCENE_FORMAT)
 	set(_components "${_components}  + SceneFormat\n")
-endif ()
-if (OGRE_BUILD_COMPONENT_TERRAIN)
-	set(_components "${_components}  + Terrain\n")
-endif ()
-if (OGRE_BUILD_COMPONENT_RTSHADERSYSTEM)
-	set(_components "${_components}  + RTShader System\n")
-
-	if (OGRE_BUILD_RTSHADERSYSTEM_CORE_SHADERS)
-		set(_components "${_components}  + RTShader System Core Shaders\n")
-	endif ()
-
-	if (OGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS)
-		set(_components "${_components}  + RTShader System Extensions Shaders\n")
-	endif ()
-
 endif ()
 if (OGRE_BUILD_COMPONENT_VOLUME)
 	set(_components "${_components}  + Volume\n")
@@ -180,14 +165,12 @@ macro(var_to_string VAR STR)
 endmacro ()
 
 # allocator settings
-if (OGRE_CONFIG_ALLOCATOR EQUAL 1)
+if (OGRE_CONFIG_ALLOCATOR EQUAL 0)
+    set(_allocator "none")
+elseif (OGRE_CONFIG_ALLOCATOR EQUAL 1)
 	set(_allocator "standard")
-elseif (OGRE_CONFIG_ALLOCATOR EQUAL 2)
-	set(_allocator "nedmalloc")
 elseif (OGRE_CONFIG_ALLOCATOR EQUAL 3)
 	set(_allocator "user")
-elseif (OGRE_CONFIG_ALLOCATOR EQUAL 4)
-    set(_allocator "nedmalloc (pooling)")
 else ()
     set(_allocator "debug allocator tracker")
 endif()
@@ -206,8 +189,6 @@ var_to_string(OGRE_CONFIG_NODE_INHERIT_TRANSFORM _inherit_transform)
 var_to_string(OGRE_CONFIG_MEMTRACK_DEBUG _memtrack_debug)
 var_to_string(OGRE_CONFIG_MEMTRACK_RELEASE _memtrack_release)
 var_to_string(OGRE_CONFIG_STRING_USE_CUSTOM_ALLOCATOR _string)
-var_to_string(OGRE_LEGACY_ANIMATIONS _use_legacy_animations)
-var_to_string(OGRE_USE_BOOST _boost)
 var_to_string(OGRE_SIMD_SSE2 _simdsse2)
 var_to_string(OGRE_SIMD_NEON _simdneon)
 # threading settings
@@ -235,8 +216,6 @@ set(_features "${_features}STL containers use allocator:    ${_containers}\n")
 set(_features "${_features}Strings use allocator:           ${_string}\n")
 set(_features "${_features}Memory tracker (debug):          ${_memtrack_debug}\n")
 set(_features "${_features}Memory tracker (release):        ${_memtrack_release}\n")
-set(_features "${_features}Use 1_x legacy animations:       ${_use_legacy_animations}\n")
-set(_features "${_features}Use Boost:                       ${_boost}\n")
 set(_features "${_features}Use SIMD (SSE2):                 ${_simdsse2}\n")
 set(_features "${_features}Use SIMD (NEON):                 ${_simdneon}\n")
 

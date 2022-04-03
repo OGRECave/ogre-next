@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,30 +29,32 @@ THE SOFTWARE.
 #define _OgreExternalTextureSourceManager_H
 
 /***************************************************************************
-OgreExternalTextureSourceManager.h  -  
+OgreExternalTextureSourceManager.h  -
     Handles the registering / unregistering of texture modifier plugins
 
 -------------------
 date                 : Jan 1 2004
 email                : pjcast@yahoo.com
 ***************************************************************************/
-#include "OgreSingleton.h"
-#include "OgreResourceGroupManager.h"
 #include "OgreExternalTextureSource.h"
+#include "OgreResourceGroupManager.h"
+#include "OgreSingleton.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Materials
-    *  @{
-    */
-    /** 
+     *  @{
+     */
+    /**
     Singleton Class which handles the registering and control of texture plugins. The plugins
     will be mostly controlled via a string interface. */
-    class _OgreExport ExternalTextureSourceManager : public Singleton<ExternalTextureSourceManager>, public ResourceAlloc
+    class _OgreExport ExternalTextureSourceManager : public Singleton<ExternalTextureSourceManager>,
+                                                     public OgreAllocatedObj
     {
     public:
         /** Constructor */
@@ -61,22 +63,24 @@ namespace Ogre
         ~ExternalTextureSourceManager();
 
         /** Sets active plugin (ie. "video", "effect", "generic", etc..) */
-        void setCurrentPlugIn( const String& sTexturePlugInType );
+        void setCurrentPlugIn( const String &sTexturePlugInType );
 
         /** Returns currently selected plugin, may be null if none selected */
-        ExternalTextureSource* getCurrentPlugIn( void ) const { return mCurrExternalTextureSource; }
-    
-        /** Calls the destroy method of all registered plugins... 
-        Only the owner plugin should perform the destroy action. */
-        void destroyAdvancedTexture( const String& sTextureName,
-            const String& groupName = ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+        ExternalTextureSource *getCurrentPlugIn() const { return mCurrExternalTextureSource; }
 
-        /** Returns the plugin which registered itself with a specific name 
+        /** Calls the destroy method of all registered plugins...
+        Only the owner plugin should perform the destroy action. */
+        void destroyAdvancedTexture(
+            const String &sTextureName,
+            const String &groupName = ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+
+        /** Returns the plugin which registered itself with a specific name
         (eg. "video"), or null if specified plugin not found */
-        ExternalTextureSource* getExternalTextureSource( const String& sTexturePlugInType );
+        ExternalTextureSource *getExternalTextureSource( const String &sTexturePlugInType );
 
         /** Called from plugin to register itself */
-        void setExternalTextureSource( const String& sTexturePlugInType, ExternalTextureSource* pTextureSystem );
+        void setExternalTextureSource( const String          &sTexturePlugInType,
+                                       ExternalTextureSource *pTextureSystem );
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -93,7 +97,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ExternalTextureSourceManager& getSingleton(void);
+        static ExternalTextureSourceManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -109,18 +113,19 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ExternalTextureSourceManager* getSingletonPtr(void);
+        static ExternalTextureSourceManager *getSingletonPtr();
+
     protected:
         /// The current texture controller selected
-        ExternalTextureSource* mCurrExternalTextureSource;
-        
+        ExternalTextureSource *mCurrExternalTextureSource;
+
         // Collection of loaded texture System PlugIns, keyed by registered type
-        typedef map< String, ExternalTextureSource*>::type TextureSystemList;
-        TextureSystemList mTextureSystems;
+        typedef map<String, ExternalTextureSource *>::type TextureSystemList;
+        TextureSystemList                                  mTextureSystems;
     };
     /** @} */
     /** @} */
-} 
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

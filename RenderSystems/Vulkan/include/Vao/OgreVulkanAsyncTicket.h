@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -35,20 +35,20 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanAsyncTicket : public AsyncTicket
+    class _OgreVulkanExport VulkanAsyncTicket final : public AsyncTicket
     {
     protected:
         VkFence mFenceName;
         VulkanQueue *mQueue;
 
-        virtual const void *mapImpl( void );
+        const void *mapImpl() override;
 
     public:
         VulkanAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
                            size_t elementCount, VulkanQueue *queue );
-        virtual ~VulkanAsyncTicket();
+        ~VulkanAsyncTicket() override;
 
-        virtual bool queryIsTransferDone( void );
+        bool queryIsTransferDone() override;
     };
 }  // namespace Ogre
 

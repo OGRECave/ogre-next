@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -362,7 +362,7 @@ namespace Ogre
                                     _mm_mul_ps( mChunkBase[3], fInvLength ), _mm_setzero_ps(), mask );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayQuaternion::xAxis( void ) const
+    inline ArrayVector3 ArrayQuaternion::xAxis() const
     {
         ArrayReal fTy  = _mm_add_ps( mChunkBase[2], mChunkBase[2] );        // 2 * y
         ArrayReal fTz  = _mm_add_ps( mChunkBase[3], mChunkBase[3] );        // 2 * z
@@ -379,7 +379,7 @@ namespace Ogre
                 _mm_sub_ps( fTxz, fTwy ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayQuaternion::yAxis( void ) const
+    inline ArrayVector3 ArrayQuaternion::yAxis() const
     {
         ArrayReal fTx  = _mm_add_ps( mChunkBase[1], mChunkBase[1] );        // 2 * x
         ArrayReal fTy  = _mm_add_ps( mChunkBase[2], mChunkBase[2] );        // 2 * y
@@ -397,7 +397,7 @@ namespace Ogre
                 _mm_add_ps( fTyz, fTwx ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayQuaternion::zAxis( void ) const
+    inline ArrayVector3 ArrayQuaternion::zAxis() const
     {
         ArrayReal fTx  = _mm_add_ps( mChunkBase[1], mChunkBase[1] );        // 2 * x
         ArrayReal fTy  = _mm_add_ps( mChunkBase[2], mChunkBase[2] );        // 2 * y
@@ -425,7 +425,7 @@ namespace Ogre
             _mm_mul_ps( mChunkBase[3], rkQ.mChunkBase[3] ) );   //  z * vec.z
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayQuaternion::Norm( void ) const
+    inline ArrayReal ArrayQuaternion::Norm() const
     {
         return
         _mm_add_ps( _mm_add_ps( _mm_add_ps(
@@ -435,7 +435,7 @@ namespace Ogre
             _mm_mul_ps( mChunkBase[3], mChunkBase[3] ) );   //  z * z
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayQuaternion::normalise( void )
+    inline void ArrayQuaternion::normalise()
     {
         ArrayReal sqLength = _mm_add_ps( _mm_add_ps( _mm_add_ps(
             _mm_mul_ps( mChunkBase[0], mChunkBase[0] ) ,    //((w * w   +
@@ -456,7 +456,7 @@ namespace Ogre
         mChunkBase[3] = _mm_mul_ps( mChunkBase[3], invLength ); //z * invLength
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayQuaternion ArrayQuaternion::Inverse( void ) const
+    inline ArrayQuaternion ArrayQuaternion::Inverse() const
     {
         ArrayReal fNorm = _mm_add_ps( _mm_add_ps( _mm_add_ps(
             _mm_mul_ps( mChunkBase[0], mChunkBase[0] ) ,    //((w * w   +
@@ -477,7 +477,7 @@ namespace Ogre
             _mm_mul_ps( mChunkBase[3], negInvNorm ) );  //z * -invNorm
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayQuaternion ArrayQuaternion::UnitInverse( void ) const
+    inline ArrayQuaternion ArrayQuaternion::UnitInverse() const
     {
         return ArrayQuaternion(
             mChunkBase[0],                                          //w
@@ -486,7 +486,7 @@ namespace Ogre
             _mm_mul_ps( mChunkBase[3], MathlibSSE2::NEG_ONE ) );    //-z
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayQuaternion ArrayQuaternion::Exp( void ) const
+    inline ArrayQuaternion ArrayQuaternion::Exp() const
     {
         // If q = A*(x*i+y*j+z*k) where (x,y,z) is unit length, then
         // exp(q) = cos(A)+sin(A)*(x*i+y*j+z*k).  If sin(A) is near zero,
@@ -510,7 +510,7 @@ namespace Ogre
             _mm_mul_ps( mChunkBase[3], coeff ) );       //z * coeff
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayQuaternion ArrayQuaternion::Log( void ) const
+    inline ArrayQuaternion ArrayQuaternion::Log() const
     {
         // If q = cos(A)+sin(A)*(x*i+y*j+z*k) where (x,y,z) is unit length, then
         // log(q) = A*(x*i+y*j+z*k).  If sin(A) is near zero, use log(q) =

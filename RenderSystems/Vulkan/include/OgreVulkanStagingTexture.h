@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanStagingTexture : public StagingTextureBufferImpl
+    class _OgreVulkanExport VulkanStagingTexture final : public StagingTextureBufferImpl
     {
         VkBuffer mVboName;
         VulkanDynamicBuffer *mDynamicBuffer;
@@ -46,31 +46,31 @@ namespace Ogre
         void *mMappedPtr;
         void *mLastMappedPtr;
 
-        virtual bool belongsToUs( const TextureBox &box );
-        virtual void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr( void );
+        bool belongsToUs( const TextureBox &box ) override;
+        void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
     public:
         VulkanStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t size,
                               size_t internalBufferStart, size_t vboPoolIdx, VkBuffer vboName,
                               VulkanDynamicBuffer *dynamicBuffer );
-        virtual ~VulkanStagingTexture();
+        ~VulkanStagingTexture() override;
 
-        void _unmapBuffer( void );
+        void _unmapBuffer();
 
         bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
-                             PixelFormatGpu pixelFormat ) const;
+                             PixelFormatGpu pixelFormat ) const override;
 
-        virtual void startMapRegion( void );
-        virtual void stopMapRegion( void );
+        void startMapRegion() override;
+        void stopMapRegion() override;
 
-        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
-                             const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
-                             bool skipSysRamCopy = false );
+        void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                     const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
+                     bool skipSysRamCopy = false ) override;
 
-        VkBuffer _getVboName( void ) const { return mVboName; }
+        VkBuffer _getVboName() const { return mVboName; }
 
-        VulkanDynamicBuffer *_getDynamicBuffer( void ) { return mDynamicBuffer; }
-        void _resetDynamicBuffer( void ) { mDynamicBuffer = 0; }
+        VulkanDynamicBuffer *_getDynamicBuffer() { return mDynamicBuffer; }
+        void _resetDynamicBuffer() { mDynamicBuffer = 0; }
     };
 }  // namespace Ogre
 

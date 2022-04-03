@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -62,7 +62,7 @@ namespace Ogre
             ++offset;
     }
     //-------------------------------------------------------------------------
-    void IesLoader::verifyDataIsSorted( void ) const
+    void IesLoader::verifyDataIsSorted() const
     {
         FastArray<float>::const_iterator itor = mAngleData.begin();
         FastArray<float>::const_iterator endt = mAngleData.begin() + mNumVertAngles - 1u;
@@ -259,7 +259,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    uint32 IesLoader::getSuggestedTexWidth( void ) const { return mNumVertAngles; }
+    uint32 IesLoader::getSuggestedTexWidth() const { return mNumVertAngles; }
     //-------------------------------------------------------------------------
     void IesLoader::convertToImage1D( Image2 &inOutImage, uint32 row )
     {
@@ -306,7 +306,7 @@ namespace Ogre
             else
             {
                 nextAngle.angle = *itAngle;
-                const size_t idx = ( size_t )( itAngle - mAngleData.begin() );
+                const size_t idx = (size_t)( itAngle - mAngleData.begin() );
                 nextAngle.candela = mCandelaValues[idx];
 
                 if( itAngle != mAngleData.begin() )
@@ -314,7 +314,7 @@ namespace Ogre
                     --itAngle;
 
                     prevAngle.angle = *itAngle;
-                    const size_t idx2 = ( size_t )( itAngle - mAngleData.begin() );
+                    const size_t idx2 = (size_t)( itAngle - mAngleData.begin() );
                     prevAngle.candela = mCandelaValues[idx2];
                 }
                 else

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -53,7 +53,7 @@ namespace Ogre {
             v1::HardwarePixelBufferSharedPtr getBuffer(size_t face, size_t mipmap);
 
             // Takes the OGRE texture type (1d/2d/3d/cube) and returns the appropriate GL one
-            GLenum getGLES2TextureTarget(void) const;
+            GLenum getGLES2TextureTarget() const;
 
             GLuint getGLID() const
             {
@@ -64,15 +64,15 @@ namespace Ogre {
 
         protected:
             /// @copydoc Texture::createInternalResourcesImpl
-            void createInternalResourcesImpl(void);
+            void createInternalResourcesImpl();
             /// @copydoc Resource::prepareImpl
-            void prepareImpl(void);
+            void prepareImpl();
             /// @copydoc Resource::unprepareImpl
-            void unprepareImpl(void);
+            void unprepareImpl();
             /// @copydoc Resource::loadImpl
-            void loadImpl(void);
+            void loadImpl();
             /// @copydoc Resource::freeInternalResourcesImpl
-            void freeInternalResourcesImpl(void);
+            void freeInternalResourcesImpl();
 
             /** Internal method, create GLHardwarePixelBuffers for every face and
              mipmap level. This method must be called after the GL texture object was created,
@@ -81,7 +81,7 @@ namespace Ogre {
              */
             void _createSurfaceList();
 
-            virtual void _autogenerateMipmaps(void);
+            virtual void _autogenerateMipmaps();
 
             /// Used to hold images between calls to prepare and load.
             typedef SharedPtr<vector<Image>::type > LoadedImages;

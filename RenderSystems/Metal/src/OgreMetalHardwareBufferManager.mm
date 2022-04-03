@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -27,106 +27,86 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 */
 
 #include "OgreMetalHardwareBufferManager.h"
+
+#include "OgreMetalDiscardBufferManager.h"
 #include "OgreMetalHardwareIndexBuffer.h"
 #include "OgreMetalHardwareVertexBuffer.h"
-#include "OgreMetalDiscardBufferManager.h"
 
-namespace Ogre {
-namespace v1 {
-    MetalHardwareBufferManagerBase::MetalHardwareBufferManagerBase( MetalDevice *device,
-                                                                    VaoManager *vaoManager ) :
-        mDiscardBufferManager( 0 )
+namespace Ogre
+{
+    namespace v1
     {
-        mDiscardBufferManager = OGRE_NEW MetalDiscardBufferManager( device, vaoManager );
-    }
-    //-----------------------------------------------------------------------------------
-    MetalHardwareBufferManagerBase::~MetalHardwareBufferManagerBase()
-    {
-        destroyAllDeclarations();
-        destroyAllBindings();
-
-        OGRE_DELETE mDiscardBufferManager;
-        mDiscardBufferManager = 0;
-    }
-    //-----------------------------------------------------------------------------------
-    void MetalHardwareBufferManagerBase::_notifyDeviceStalled(void)
-    {
+        MetalHardwareBufferManagerBase::MetalHardwareBufferManagerBase( MetalDevice *device,
+                                                                        VaoManager *vaoManager ) :
+            mDiscardBufferManager( 0 )
         {
-            OGRE_LOCK_MUTEX(mVertexBuffersMutex);
-            VertexBufferList::const_iterator itor = mVertexBuffers.begin();
-            VertexBufferList::const_iterator end  = mVertexBuffers.end();
+            mDiscardBufferManager = OGRE_NEW MetalDiscardBufferManager( device, vaoManager );
+        }
+        //-----------------------------------------------------------------------------------
+        MetalHardwareBufferManagerBase::~MetalHardwareBufferManagerBase()
+        {
+            destroyAllDeclarations();
+            destroyAllBindings();
 
-            while( itor != end )
+            OGRE_DELETE mDiscardBufferManager;
+            mDiscardBufferManager = 0;
+        }
+        //-----------------------------------------------------------------------------------
+        void MetalHardwareBufferManagerBase::_notifyDeviceStalled()
+        {
             {
-                MetalHardwareVertexBuffer *hwBuffer = static_cast<MetalHardwareVertexBuffer*>( *itor );
-                hwBuffer->_notifyDeviceStalled();
-                ++itor;
-            }
-        }
-        {
-            OGRE_LOCK_MUTEX(mIndexBuffersMutex);
-            IndexBufferList::const_iterator itor = mIndexBuffers.begin();
-            IndexBufferList::const_iterator end  = mIndexBuffers.end();
+                OGRE_LOCK_MUTEX( mVertexBuffersMutex );
+                VertexBufferList::const_iterator itor = mVertexBuffers.begin();
+                VertexBufferList::const_iterator endt = mVertexBuffers.end();
 
-            while( itor != end )
+                while( itor != endt )
+                {
+                    MetalHardwareVertexBuffer *hwBuffer =
+                        static_cast<MetalHardwareVertexBuffer *>( *itor );
+                    hwBuffer->_notifyDeviceStalled();
+                    ++itor;
+                }
+            }
             {
-                MetalHardwareIndexBuffer *hwBuffer = static_cast<MetalHardwareIndexBuffer*>( *itor );
-                hwBuffer->_notifyDeviceStalled();
-                ++itor;
-            }
-        }
+                OGRE_LOCK_MUTEX( mIndexBuffersMutex );
+                IndexBufferList::const_iterator itor = mIndexBuffers.begin();
+                IndexBufferList::const_iterator endt = mIndexBuffers.end();
 
-        mDiscardBufferManager->_notifyDeviceStalled();
-    }
-    //-----------------------------------------------------------------------------------
-    HardwareVertexBufferSharedPtr
-    MetalHardwareBufferManagerBase::createVertexBuffer( size_t vertexSize, size_t numVerts,
-                                                        HardwareBuffer::Usage usage,
-                                                        bool useShadowBuffer )
-    {
-        MetalHardwareVertexBuffer* buf =
-            OGRE_NEW MetalHardwareVertexBuffer( this, vertexSize, numVerts, usage, useShadowBuffer );
-        {
-            OGRE_LOCK_MUTEX(mVertexBuffersMutex);
-            mVertexBuffers.insert(buf);
+                while( itor != endt )
+                {
+                    MetalHardwareIndexBuffer *hwBuffer =
+                        static_cast<MetalHardwareIndexBuffer *>( *itor );
+                    hwBuffer->_notifyDeviceStalled();
+                    ++itor;
+                }
+            }
+
+            mDiscardBufferManager->_notifyDeviceStalled();
         }
-        return HardwareVertexBufferSharedPtr(buf);
-    }
-    //-----------------------------------------------------------------------------------
-    HardwareIndexBufferSharedPtr
-    MetalHardwareBufferManagerBase::createIndexBuffer( HardwareIndexBuffer::IndexType itype,
-                                                       size_t numIndexes,
-                                                       HardwareBuffer::Usage usage,
-                                                       bool useShadowBuffer )
-    {
-        MetalHardwareIndexBuffer* buf =
-            OGRE_NEW MetalHardwareIndexBuffer( this, itype, numIndexes, usage, useShadowBuffer );
+        //-----------------------------------------------------------------------------------
+        HardwareVertexBufferSharedPtr MetalHardwareBufferManagerBase::createVertexBuffer(
+            size_t vertexSize, size_t numVerts, HardwareBuffer::Usage usage, bool useShadowBuffer )
         {
-            OGRE_LOCK_MUTEX(mIndexBuffersMutex);
-            mIndexBuffers.insert(buf);
+            MetalHardwareVertexBuffer *buf =
+                OGRE_NEW MetalHardwareVertexBuffer( this, vertexSize, numVerts, usage, useShadowBuffer );
+            {
+                OGRE_LOCK_MUTEX( mVertexBuffersMutex );
+                mVertexBuffers.insert( buf );
+            }
+            return HardwareVertexBufferSharedPtr( buf );
         }
-        return HardwareIndexBufferSharedPtr(buf);
+        //-----------------------------------------------------------------------------------
+        HardwareIndexBufferSharedPtr MetalHardwareBufferManagerBase::createIndexBuffer(
+            HardwareIndexBuffer::IndexType itype, size_t numIndexes, HardwareBuffer::Usage usage,
+            bool useShadowBuffer )
+        {
+            MetalHardwareIndexBuffer *buf =
+                OGRE_NEW MetalHardwareIndexBuffer( this, itype, numIndexes, usage, useShadowBuffer );
+            {
+                OGRE_LOCK_MUTEX( mIndexBuffersMutex );
+                mIndexBuffers.insert( buf );
+            }
+            return HardwareIndexBufferSharedPtr( buf );
+        }
     }
-    //-----------------------------------------------------------------------------------
-    HardwareUniformBufferSharedPtr
-    MetalHardwareBufferManagerBase::createUniformBuffer( size_t sizeBytes,
-                                                         HardwareBuffer::Usage usage,
-                                                         bool useShadowBuffer,
-                                                         const String& name )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Use v2 interfaces.",
-                     "MetalHardwareBufferManagerBase::createUniformBuffer" );
-        return HardwareUniformBufferSharedPtr();
-    }
-    //-----------------------------------------------------------------------------------
-    HardwareCounterBufferSharedPtr
-    MetalHardwareBufferManagerBase::createCounterBuffer( size_t sizeBytes,
-                                                         HardwareBuffer::Usage usage,
-                                                         bool useShadowBuffer,
-                                                         const String& name )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Use v2 interfaces.",
-                     "MetalHardwareBufferManagerBase::createCounterBuffer" );
-    }
-}
 }

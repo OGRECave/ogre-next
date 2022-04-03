@@ -4,27 +4,14 @@
 
 #include "GraphicsSystem.h"
 
-#if __cplusplus <= 199711L
-    #ifndef nullptr
-        #define OgreDemoNullptrDefined
-        #define nullptr (0)
-    #endif
-#endif
 #include "openvr.h"
-#if __cplusplus <= 199711L
-    #ifdef OgreDemoNullptrDefined
-        #undef OgreDemoNullptrDefined
-        #undef nullptr
-    #endif
-#endif
-
 
 namespace Demo
 {
     class NullCompositorListener;
     class OpenVRCompositorListener;
 
-    class Tutorial_OpenVRGraphicsSystem : public GraphicsSystem
+    class Tutorial_OpenVRGraphicsSystem final : public GraphicsSystem
     {
         vr::IVRSystem *mHMD;
         std::string mStrDriver;
@@ -32,24 +19,24 @@ namespace Demo
         std::string mDeviceModelNumber;
         vr::TrackedDevicePose_t mTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
 
-        Ogre::CompositorWorkspace   *mVrWorkspace;
-        Ogre::TextureGpu            *mVrTexture;
-        Ogre::Camera                *mVrCullCamera;
+        Ogre::CompositorWorkspace *mVrWorkspace;
+        Ogre::TextureGpu *mVrTexture;
+        Ogre::Camera *mVrCullCamera;
 
-        OpenVRCompositorListener    *mOvrCompositorListener;
+        OpenVRCompositorListener *mOvrCompositorListener;
         /// Only used if USE_OPEN_VR is defined
-        NullCompositorListener      *mNullCompositorListener;
+        NullCompositorListener *mNullCompositorListener;
 
-        virtual Ogre::CompositorWorkspace* setupCompositor();
+        Ogre::CompositorWorkspace *setupCompositor() override;
 
-        virtual void setupResources(void);
+        void setupResources() override;
 
         static std::string GetTrackedDeviceString( vr::TrackedDeviceIndex_t unDevice,
                                                    vr::TrackedDeviceProperty prop,
                                                    vr::TrackedPropertyError *peError = NULL );
-        void initOpenVR(void);
-        void initCompositorVR(void);
-        void createHiddenAreaMeshVR(void);
+        void initOpenVR();
+        void initCompositorVR();
+        void createHiddenAreaMeshVR();
 
     public:
         Tutorial_OpenVRGraphicsSystem( GameState *gameState ) :
@@ -60,13 +47,13 @@ namespace Demo
             mOvrCompositorListener( 0 ),
             mNullCompositorListener( 0 )
         {
-            memset( mTrackedDevicePose, 0, sizeof (mTrackedDevicePose) );
+            memset( mTrackedDevicePose, 0, sizeof( mTrackedDevicePose ) );
         }
 
-        virtual void deinitialize(void);
+        void deinitialize() override;
 
-        OpenVRCompositorListener* getOvrCompositorListener(void) { return mOvrCompositorListener; }
+        OpenVRCompositorListener *getOvrCompositorListener() { return mOvrCompositorListener; }
     };
-}
+}  // namespace Demo
 
 #endif

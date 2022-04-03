@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -249,7 +249,7 @@ namespace Ogre
                 Math::Abs( (mChunkBase[2] * vec.mChunkBase[2]) );
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector3::normalise( void )
+    inline void ArrayVector3::normalise()
     {
         ArrayReal sqLength = (mChunkBase[0] * mChunkBase[0]) +
                                 (mChunkBase[1] * mChunkBase[1]) +
@@ -319,7 +319,7 @@ namespace Ogre
         mChunkBase[2] = mChunkBase[2] >= 0 ? 1.0f : -1.0f;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::perpendicular( void ) const
+    inline ArrayVector3 ArrayVector3::perpendicular() const
     {
         ArrayVector3 perp = this->crossProduct( ArrayVector3::UNIT_X );
 
@@ -340,7 +340,7 @@ namespace Ogre
         return perp;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::normalisedCopy( void ) const
+    inline ArrayVector3 ArrayVector3::normalisedCopy() const
     {
         ArrayReal sqLength = (mChunkBase[0] * mChunkBase[0]) +
                                 (mChunkBase[1] * mChunkBase[1]) +
@@ -363,7 +363,7 @@ namespace Ogre
         return ( *this - ( 2.0f * this->dotProduct( normal ) ) * normal );
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector3::inverseLeaveZeroes( void )
+    inline void ArrayVector3::inverseLeaveZeroes()
     {
         mChunkBase[0] = MathlibC::CmovRobust( mChunkBase[0], MathlibC::InvNonZero4(mChunkBase[0]),
                                                 mChunkBase[0] == 0.0f );
@@ -373,12 +373,12 @@ namespace Ogre
                                                 mChunkBase[2] == 0.0f );
     }
     //-----------------------------------------------------------------------------------
-    inline int ArrayVector3::isNaN( void ) const
+    inline int ArrayVector3::isNaN() const
     {
         return Math::isNaN( mChunkBase[0] ) | Math::isNaN( mChunkBase[1] ) | Math::isNaN( mChunkBase[2] );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::primaryAxis( void ) const
+    inline ArrayVector3 ArrayVector3::primaryAxis() const
     {
         // We could've used some operators, i.e.
         // xVec = MathlibC::Cmov( ArrayVector3::UNIT_X, ArrayVector3::NEGATIVE_UNIT_X )
@@ -419,12 +419,12 @@ namespace Ogre
         return yVec;
     }
     //-----------------------------------------------------------------------------------
-    inline Vector3 ArrayVector3::collapseMin( void ) const
+    inline Vector3 ArrayVector3::collapseMin() const
     {
         return Vector3( mChunkBase[0], mChunkBase[1], mChunkBase[2] );
     }
     //-----------------------------------------------------------------------------------
-    inline Vector3 ArrayVector3::collapseMax( void ) const
+    inline Vector3 ArrayVector3::collapseMax() const
     {
         return Vector3( mChunkBase[0], mChunkBase[1], mChunkBase[2] );
     }

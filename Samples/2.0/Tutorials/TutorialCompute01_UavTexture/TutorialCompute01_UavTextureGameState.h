@@ -9,16 +9,16 @@ namespace Demo
 {
     class TutorialCompute01_UavTextureGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode;
-        float               mDisplacement;
+        Ogre::SceneNode *mSceneNode;
+        float mDisplacement;
 
     public:
         TutorialCompute01_UavTextureGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
     };
-}
+}  // namespace Demo
 
 #endif

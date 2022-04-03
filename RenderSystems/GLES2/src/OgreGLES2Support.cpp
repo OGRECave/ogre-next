@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -47,12 +47,12 @@ namespace Ogre {
         }
     }
 
-    ConfigOptionMap& GLES2Support::getConfigOptions(void)
+    ConfigOptionMap& GLES2Support::getConfigOptions()
     {
         return mOptions;
     }
 
-    void GLES2Support::initialiseExtensions(void)
+    void GLES2Support::initialiseExtensions()
     {
         String tmpStr;
 #if 1

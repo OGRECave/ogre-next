@@ -29,24 +29,24 @@ namespace Demo
         Ogre::Real mLastCamFar;
         bool mMustSyncAtEndOfFrame;
 
-        void syncCullCamera( void );
+        void syncCullCamera();
         void syncCameraProjection( bool bForceUpdate );
 
     public:
         NullCompositorListener( Ogre::TextureGpu *vrTexture, Ogre::Root *root,
                                 Ogre::CompositorWorkspace *workspace, Ogre::Camera *camera,
                                 Ogre::Camera *cullCamera );
-        virtual ~NullCompositorListener();
+        ~NullCompositorListener() override;
 
-        virtual bool frameStarted( const Ogre::FrameEvent &evt );
-        virtual bool frameRenderingQueued( const Ogre::FrameEvent &evt );
-        virtual bool frameEnded( const Ogre::FrameEvent &evt );
+        bool frameStarted( const Ogre::FrameEvent &evt ) override;
+        bool frameRenderingQueued( const Ogre::FrameEvent &evt ) override;
+        bool frameEnded( const Ogre::FrameEvent &evt ) override;
 
-        virtual void workspacePreUpdate( Ogre::CompositorWorkspace *workspace );
-        virtual void passPreExecute( Ogre::CompositorPass *pass );
+        void workspacePreUpdate( Ogre::CompositorWorkspace *workspace ) override;
+        void passPreExecute( Ogre::CompositorPass *pass ) override;
 
-        virtual void passSceneAfterShadowMaps( Ogre::CompositorPassScene *pass );
-        virtual void passSceneAfterFrustumCulling( Ogre::CompositorPassScene *pass );
+        void passSceneAfterShadowMaps( Ogre::CompositorPassScene *pass ) override;
+        void passSceneAfterFrustumCulling( Ogre::CompositorPassScene *pass ) override;
 
         /** Returns true if the current waiting mode can update the camera immediately,
             false if it must wait until the end of the frame.
@@ -55,7 +55,7 @@ namespace Demo
 
             See NullCompositorListener::setGlitchFree
         */
-        bool canSyncCameraTransformImmediately( void ) const;
+        bool canSyncCameraTransformImmediately() const;
     };
 }  // namespace Demo
 

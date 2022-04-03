@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreTerraShadowMapper_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreMovableObject.h"
 #include "OgreShaderParams.h"
 
@@ -37,32 +38,34 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    typedef TextureGpu* CompositorChannel;
+    typedef TextureGpu *CompositorChannel;
 
     struct TerraSharedResources;
 
     class ShadowMapper
     {
-        Ogre::TextureGpu    *m_heightMapTex;
+        Ogre::TextureGpu *m_heightMapTex;
 
-        ConstBufferPacked   *m_shadowStarts;
-        ConstBufferPacked   *m_shadowPerGroupData;
+        ConstBufferPacked *  m_shadowStarts;
+        ConstBufferPacked *  m_shadowPerGroupData;
         CompositorWorkspace *m_shadowWorkspace;
-        TextureGpu          *m_shadowMapTex;
-        TextureGpu          *m_tmpGaussianFilterTex;
-        HlmsComputeJob      *m_shadowJob;
+        TextureGpu *         m_shadowMapTex;
+        TextureGpu *         m_tmpGaussianFilterTex;
+        HlmsComputeJob *     m_shadowJob;
         ShaderParams::Param *m_jobParamDelta;
         ShaderParams::Param *m_jobParamXYStep;
         ShaderParams::Param *m_jobParamIsStep;
         ShaderParams::Param *m_jobParamHeightDelta;
+        ShaderParams::Param *m_jobParamResolutionShift;
 
-        IdType m_terraId;
-        bool m_minimizeMemoryConsumption;
+        IdType                m_terraId;
+        bool                  m_minimizeMemoryConsumption;
+        bool                  m_lowResShadow;
         TerraSharedResources *m_sharedResources;
 
-        //Ogre stuff
-        SceneManager            *m_sceneManager;
-        CompositorManager2      *m_compositorManager;
+        // Ogre stuff
+        SceneManager *      m_sceneManager;
+        CompositorManager2 *m_compositorManager;
 
         static inline size_t getStartsPtrCount( int32 *starts, int32 *startsBase );
 
@@ -99,7 +102,7 @@ namespace Ogre
         static inline float getErrorAfterXsteps( uint32 xIterationsToSkip, float dx, float dy );
 
         static void setGaussianFilterParams( HlmsComputeJob *job, uint8 kernelRadius,
-                                             float gaussianDeviationFactor=0.5f );
+                                             float gaussianDeviationFactor = 0.5f );
 
         void createCompositorWorkspace();
         void destroyCompositorWorkspace();
@@ -114,7 +117,7 @@ namespace Ogre
         @param gaussianDeviationFactor
             Expressed in terms of gaussianDeviation = kernelRadius * gaussianDeviationFactor
         */
-        void setGaussianFilterParams( uint8 kernelRadius, float gaussianDeviationFactor=0.5f );
+        void setGaussianFilterParams( uint8 kernelRadius, float gaussianDeviationFactor = 0.5f );
 
         /// Don't call this function directly
         ///
@@ -148,14 +151,23 @@ namespace Ogre
         */
         void setMinimizeMemoryConsumption( bool bMinimizeMemoryConsumption );
 
-        void createShadowMap( IdType id, TextureGpu *heightMapTex );
-        void destroyShadowMap(void);
+        /**
+        @param id
+            If for generating unique names
+        @param heightMapTex
+            The original heightmap we'll be raymarching for
+        @param bLowResShadow
+            When true we'll create the shadow map at width / 4 x height / 4
+            This consumes a lot less BW and memory, which can be critical in older mobile
+        */
+        void createShadowMap( IdType id, TextureGpu *heightMapTex, bool bLowResShadow );
+        void destroyShadowMap();
         void updateShadowMap( const Vector3 &lightDir, const Vector2 &xzDimensions, float heightScale );
 
         void fillUavDataForCompositorChannel( TextureGpu **outChannel ) const;
 
-        Ogre::TextureGpu* getShadowMapTex(void) const           { return m_shadowMapTex; }
+        Ogre::TextureGpu *getShadowMapTex() const { return m_shadowMapTex; }
     };
-}
+}  // namespace Ogre
 
 #endif

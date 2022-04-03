@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -31,14 +31,15 @@ THE SOFTWARE.
 
 #include "OgreMetalPrerequisites.h"
 
-#include "Vao/OgreMultiSourceVertexBufferPool.h"
-#include "Vao/OgreMetalVaoManager.h"
+#ifdef _OGRE_MULTISOURCE_VBO
+#    include "Vao/OgreMetalVaoManager.h"
+#    include "Vao/OgreMultiSourceVertexBufferPool.h"
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalMultiSourceVertexBufferPool : public MultiSourceVertexBufferPool
+    class _OgreMetalExport MetalMultiSourceVertexBufferPool final : public MultiSourceVertexBufferPool
     {
-        size_t mVboPoolIndex;
+        size_t        mVboPoolIndex;
         id<MTLBuffer> mVboName;
 
         MetalVaoManager::BlockVec mFreeBlocks;
@@ -58,19 +59,19 @@ namespace Ogre
         /// Deallocates a buffer allocated with @allocateVbo. All params are in vertices, not bytes.
         void deallocateVbo( size_t bufferOffset, size_t numVertices );
 
-        virtual void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers );
+        void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers ) override;
 
     public:
         MetalMultiSourceVertexBufferPool( size_t vboPoolIndex, id<MTLBuffer> vboName,
                                           const VertexElement2VecVec &vertexElementsBySource,
                                           size_t maxVertices, BufferType bufferType,
-                                          size_t internalBufferStart,
-                                          VaoManager *vaoManager );
-        virtual ~MetalMultiSourceVertexBufferPool();
+                                          size_t internalBufferStart, VaoManager *vaoManager );
+        ~MetalMultiSourceVertexBufferPool() override;
 
         void createVertexBuffers( VertexBufferPackedVec &outVertexBuffers, size_t numVertices,
-                                  void * const *initialData, bool keepAsShadow );
+                                  void *const *initialData, bool keepAsShadow );
     };
-}
+}  // namespace Ogre
 
+#endif
 #endif

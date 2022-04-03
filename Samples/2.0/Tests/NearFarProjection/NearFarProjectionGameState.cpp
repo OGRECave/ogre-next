@@ -21,7 +21,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void NearFarProjectionGameState::createScene01( void )
+    void NearFarProjectionGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -34,7 +34,6 @@ namespace Demo
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
             "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
             true, true );
-
 
         {
             // We must alter the AABB because we want to always pass frustum culling

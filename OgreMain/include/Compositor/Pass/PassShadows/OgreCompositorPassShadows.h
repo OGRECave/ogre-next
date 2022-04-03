@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -82,9 +82,9 @@ namespace Ogre
     public:
         CompositorPassShadows( const CompositorPassShadowsDef *definition, Camera *defaultCamera,
                                CompositorNode *parentNode, const RenderTargetViewDef *rtv );
-        virtual ~CompositorPassShadows();
+        ~CompositorPassShadows() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
 
         Camera *getCullCamera() const { return mCullCamera; }
 

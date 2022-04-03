@@ -2,19 +2,19 @@
 #ifndef _Demo_TutorialCompute02_UavBufferGameState_H_
 #define _Demo_TutorialCompute02_UavBufferGameState_H_
 
+#include "OgreMaterial.h"
 #include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
-#include "OgreMaterial.h"
 
 namespace Demo
 {
     class TutorialCompute02_UavBufferGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode;
-        float               mDisplacement;
+        Ogre::SceneNode *mSceneNode;
+        float mDisplacement;
 
-        Ogre::MaterialPtr       mDrawFromUavBufferMat;
-        Ogre::HlmsComputeJob    *mComputeJob;
+        Ogre::MaterialPtr mDrawFromUavBufferMat;
+        Ogre::HlmsComputeJob *mComputeJob;
 
         Ogre::uint32 mLastWindowWidth;
         Ogre::uint32 mLastWindowHeight;
@@ -22,11 +22,11 @@ namespace Demo
     public:
         TutorialCompute02_UavBufferGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
     };
-}
+}  // namespace Demo
 
 #endif

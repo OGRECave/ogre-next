@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,14 +33,14 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    
-    class AndroidLogListener : public Ogre::LogListener, public Ogre::LogAlloc
+    class AndroidLogListener : public Ogre::LogListener, public Ogre::OgreAllocatedObj
     {
     public:
         AndroidLogListener();
-    
-        virtual void messageLogged(const Ogre::String& message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool& skipThisMessage );
+
+        virtual void messageLogged( const Ogre::String &message, Ogre::LogMessageLevel lml,
+                                    bool maskDebug, const Ogre::String &logName, bool &skipThisMessage );
     };
-}
+}  // namespace Ogre
 
 #endif

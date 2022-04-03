@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,21 +28,19 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#include "Compositor/Pass/PassCompute/OgreCompositorPassCompute.h"
+
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-#include "Compositor/Pass/PassCompute/OgreCompositorPassCompute.h"
 #include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
-
+#include "OgreCamera.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
 #include "OgreRoot.h"
-
-#include "OgreCamera.h"
-
 #include "Vao/OgreUavBufferPacked.h"
 
 namespace Ogre
@@ -58,7 +56,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassComputeDef::addTextureSource( uint32 texUnitIdx, const String &textureName,
-                                                     int32 textureArrayIndex, int32 mipmapLevel,
+                                                     uint16 textureArrayIndex, uint8 mipmapLevel,
                                                      PixelFormatGpu pixelFormat )
     {
         mTextureSources.push_back( ComputeTextureSource( texUnitIdx, textureName, ResourceAccess::Read,
@@ -68,7 +66,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassComputeDef::addUavSource( uint32 texUnitIdx, const String &textureName,
                                                  ResourceAccess::ResourceAccess access,
-                                                 int32 textureArrayIndex, int32 mipmapLevel,
+                                                 uint16 textureArrayIndex, uint8 mipmapLevel,
                                                  PixelFormatGpu pixelFormat, bool allowWriteAfterWrite )
     {
         assert( access != ResourceAccess::Undefined );
@@ -119,8 +117,8 @@ namespace Ogre
         const CompositorPassComputeDef::TextureSources &textureSources =
             mDefinition->getTextureSources();
         CompositorPassComputeDef::TextureSources::const_iterator itor = textureSources.begin();
-        CompositorPassComputeDef::TextureSources::const_iterator end = textureSources.end();
-        while( itor != end )
+        CompositorPassComputeDef::TextureSources::const_iterator endt = textureSources.end();
+        while( itor != endt )
         {
             TextureGpu *channel = mParentNode->getDefinedTexture( itor->textureName );
             CompositorTextureVec::const_iterator it = mTextureDependencies.begin();
@@ -166,22 +164,22 @@ namespace Ogre
             const CompositorPassComputeDef::TextureSources &textureSources =
                 mDefinition->getTextureSources();
             CompositorPassComputeDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassComputeDef::TextureSources::const_iterator end = textureSources.end();
-            while( itor != end )
+            CompositorPassComputeDef::TextureSources::const_iterator endt = textureSources.end();
+            while( itor != endt )
             {
                 DescriptorSetTexture2::TextureSlot texSlot(
                     DescriptorSetTexture2::TextureSlot::makeEmpty() );
-                mComputeJob->setTexture( itor->texUnitIdx, texSlot );
+                mComputeJob->setTexture( (uint8)itor->texUnitIdx, texSlot );
                 ++itor;
             }
 
             const CompositorPassComputeDef::TextureSources &uavSources = mDefinition->getUavSources();
             itor = uavSources.begin();
-            end = uavSources.end();
-            while( itor != end )
+            endt = uavSources.end();
+            while( itor != endt )
             {
                 DescriptorSetUav::TextureSlot texSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
-                mComputeJob->_setUavTexture( itor->texUnitIdx, texSlot );
+                mComputeJob->_setUavTexture( (uint8)itor->texUnitIdx, texSlot );
                 ++itor;
             }
         }
@@ -190,25 +188,25 @@ namespace Ogre
             const CompositorPassComputeDef::BufferSourceVec &bufferSources =
                 mDefinition->getBufferSources();
             CompositorPassComputeDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
-            CompositorPassComputeDef::BufferSourceVec::const_iterator end = bufferSources.end();
+            CompositorPassComputeDef::BufferSourceVec::const_iterator endt = bufferSources.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
-                mComputeJob->_setUavBuffer( itor->slotIdx, bufferSlot );
+                mComputeJob->_setUavBuffer( (uint8)itor->slotIdx, bufferSlot );
                 ++itor;
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassCompute::setResourcesToJob( void )
+    void CompositorPassCompute::setResourcesToJob()
     {
         {
             const CompositorPassComputeDef::TextureSources &textureSources =
                 mDefinition->getTextureSources();
             CompositorPassComputeDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassComputeDef::TextureSources::const_iterator end = textureSources.end();
-            while( itor != end )
+            CompositorPassComputeDef::TextureSources::const_iterator endt = textureSources.end();
+            while( itor != endt )
             {
                 DescriptorSetTexture2::TextureSlot texSlot(
                     DescriptorSetTexture2::TextureSlot::makeEmpty() );
@@ -219,14 +217,14 @@ namespace Ogre
                     texSlot.textureArrayIndex = static_cast<uint16>( itor->textureArrayIndex );
                     texSlot.pixelFormat = itor->pixelFormat;
                 }
-                mComputeJob->setTexture( itor->texUnitIdx, texSlot );
+                mComputeJob->setTexture( (uint8)itor->texUnitIdx, texSlot );
                 ++itor;
             }
 
             const CompositorPassComputeDef::TextureSources &uavSources = mDefinition->getUavSources();
             itor = uavSources.begin();
-            end = uavSources.end();
-            while( itor != end )
+            endt = uavSources.end();
+            while( itor != endt )
             {
                 TextureGpu *texture = mParentNode->getDefinedTexture( itor->textureName );
                 DescriptorSetUav::TextureSlot texSlot;
@@ -235,7 +233,7 @@ namespace Ogre
                 texSlot.mipmapLevel = itor->mipmapLevel;
                 texSlot.textureArrayIndex = itor->textureArrayIndex;
                 texSlot.pixelFormat = itor->pixelFormat;
-                mComputeJob->_setUavTexture( itor->texUnitIdx, texSlot );
+                mComputeJob->_setUavTexture( (uint8)itor->texUnitIdx, texSlot );
                 ++itor;
             }
         }
@@ -244,9 +242,9 @@ namespace Ogre
             const CompositorPassComputeDef::BufferSourceVec &bufferSources =
                 mDefinition->getBufferSources();
             CompositorPassComputeDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
-            CompositorPassComputeDef::BufferSourceVec::const_iterator end = bufferSources.end();
+            CompositorPassComputeDef::BufferSourceVec::const_iterator endt = bufferSources.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 UavBufferPacked *uavBuffer = mParentNode->getDefinedBuffer( itor->bufferName );
                 DescriptorSetUav::BufferSlot bufferSlot;
@@ -254,7 +252,7 @@ namespace Ogre
                 bufferSlot.offset = itor->offset;
                 bufferSlot.sizeBytes = itor->sizeBytes;
                 bufferSlot.access = itor->access;
-                mComputeJob->_setUavBuffer( itor->slotIdx, bufferSlot );
+                mComputeJob->_setUavBuffer( (uint8)itor->slotIdx, bufferSlot );
                 ++itor;
             }
         }

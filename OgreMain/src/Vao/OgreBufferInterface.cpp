@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,20 +27,19 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Vao/OgreBufferInterface.h"
-#include "Vao/OgreVaoManager.h"
+
 #include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
-    BufferInterface::BufferInterface() :
-        mBuffer( 0 )
-    {
-    }
+    BufferInterface::BufferInterface() : mBuffer( 0 ) {}
     //-----------------------------------------------------------------------------------
     void BufferInterface::upload( const void *data, size_t elementStart, size_t elementCount )
     {
-        if( mBuffer->mBufferType >= BT_DYNAMIC_DEFAULT )
+        if( mBuffer->mBufferType >= BT_DEFAULT_SHARED )
         {
             assert( mBuffer->mMappingState == MS_UNMAPPED );
             void *dstData = this->map( elementStart, elementCount, mBuffer->mMappingState );
@@ -51,25 +50,21 @@ namespace Ogre
         {
             size_t bytesPerElement = mBuffer->mBytesPerElement;
 
-            //Get a staging buffer
+            // Get a staging buffer
             VaoManager *vaoManager = mBuffer->mVaoManager;
-            StagingBuffer *stagingBuffer = vaoManager->getStagingBuffer( elementCount * bytesPerElement,
-                                                                         true );
+            StagingBuffer *stagingBuffer =
+                vaoManager->getStagingBuffer( elementCount * bytesPerElement, true );
 
-            //Map and memcpy the data (CPU -> GPU)
+            // Map and memcpy the data (CPU -> GPU)
             void *dstData = stagingBuffer->map( elementCount * bytesPerElement );
             memcpy( dstData, data, elementCount * bytesPerElement );
-            //Copy data from Staging to real buffer (GPU -> GPU)
-            stagingBuffer->unmap( StagingBuffer::Destination( mBuffer,
-                                                              elementStart * bytesPerElement,
-                                                              0,
+            // Copy data from Staging to real buffer (GPU -> GPU)
+            stagingBuffer->unmap( StagingBuffer::Destination( mBuffer, elementStart * bytesPerElement, 0,
                                                               elementCount * bytesPerElement ) );
             stagingBuffer->removeReferenceCount();
         }
     }
     //-----------------------------------------------------------------------------------
-    void BufferInterface::_ensureDelayedImmutableBuffersAreReady(void)
-    {
-    }
+    void BufferInterface::_ensureDelayedImmutableBuffersAreReady() {}
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

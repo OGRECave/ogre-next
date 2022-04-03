@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,7 +27,9 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreGpuResource.h"
+
 #include "Vao/OgreVaoManager.h"
 
 namespace Ogre
@@ -60,48 +62,34 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    GpuResource::~GpuResource()
-    {
-    }
+    GpuResource::~GpuResource() {}
     //-----------------------------------------------------------------------------------
     void GpuResource::_setNextResidencyStatus( GpuResidency::GpuResidency nextResidency )
     {
         mNextResidencyStatus = nextResidency;
     }
     //-----------------------------------------------------------------------------------
-    GpuResidency::GpuResidency GpuResource::getResidencyStatus(void) const
-    {
-        return mResidencyStatus;
-    }
+    GpuResidency::GpuResidency GpuResource::getResidencyStatus() const { return mResidencyStatus; }
     //-----------------------------------------------------------------------------------
-    GpuResidency::GpuResidency GpuResource::getNextResidencyStatus(void) const
+    GpuResidency::GpuResidency GpuResource::getNextResidencyStatus() const
     {
         return mNextResidencyStatus;
     }
     //-----------------------------------------------------------------------------------
-    GpuPageOutStrategy::GpuPageOutStrategy GpuResource::getGpuPageOutStrategy(void) const
+    GpuPageOutStrategy::GpuPageOutStrategy GpuResource::getGpuPageOutStrategy() const
     {
         return mPageOutStrategy;
     }
     //-----------------------------------------------------------------------------------
-    void GpuResource::_addPendingResidencyChanges( uint32 value )
-    {
-        mPendingResidencyChanges += value;
-    }
+    void GpuResource::_addPendingResidencyChanges( uint32 value ) { mPendingResidencyChanges += value; }
     //-----------------------------------------------------------------------------------
-    uint32 GpuResource::getPendingResidencyChanges(void) const
-    {
-        return mPendingResidencyChanges;
-    }
+    uint32 GpuResource::getPendingResidencyChanges() const { return mPendingResidencyChanges; }
     //-----------------------------------------------------------------------------------
-    IdString GpuResource::getName(void) const
-    {
-        return mName;
-    }
+    IdString GpuResource::getName() const { return mName; }
     //-----------------------------------------------------------------------------------
-    String GpuResource::getNameStr(void) const
+    String GpuResource::getNameStr() const
     {
-        //TODO: Get friendly name from manager which will be kept in a std::map
+        // TODO: Get friendly name from manager which will be kept in a std::map
         return mName.getFriendlyText();
     }
-}
+}  // namespace Ogre

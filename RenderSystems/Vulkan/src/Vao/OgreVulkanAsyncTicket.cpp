@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -53,7 +53,7 @@ namespace Ogre
             mQueue->releaseFence( mFenceName );
     }
     //-----------------------------------------------------------------------------------
-    const void *VulkanAsyncTicket::mapImpl( void )
+    const void *VulkanAsyncTicket::mapImpl()
     {
         if( mFenceName )
             mFenceName = VulkanVaoManager::waitFor( mFenceName, mQueue );
@@ -62,7 +62,7 @@ namespace Ogre
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanAsyncTicket::queryIsTransferDone( void )
+    bool VulkanAsyncTicket::queryIsTransferDone()
     {
         bool retVal = false;
 

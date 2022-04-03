@@ -3,28 +3,28 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
+#include "OgreMesh2.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
-#include "OgreMesh2.h"
 
 #include "OgreCamera.h"
 
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
 
-#include "OgreRoot.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlmsPbs.h"
+#include "OgreRoot.h"
 
-#include "OgreTextureGpuManager.h"
 #include "OgreTextureFilters.h"
+#include "OgreTextureGpuManager.h"
 
+#include "OgreForwardPlusBase.h"
 #include "OgreSceneFormatExporter.h"
 #include "OgreSceneFormatImporter.h"
-#include "OgreForwardPlusBase.h"
 
 #include "../LocalCubemaps/LocalCubemapScene.h"
 #include "Compositor/OgreCompositorManager2.h"
@@ -34,8 +34,8 @@
 #include "OgreIrradianceVolume.h"
 
 #include "OgreDecal.h"
-#include "OgreWireAabb.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreWireAabb.h"
 
 #include "OgreFileSystemLayer.h"
 
@@ -53,7 +53,7 @@ namespace Demo
         mFullpathToFile = filesystemLayer.getWritablePath( "scene_format_test_scene" );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::destroyInstantRadiosity(void)
+    void SceneFormatGameState::destroyInstantRadiosity()
     {
         if( mIrradianceVolume )
         {
@@ -61,9 +61,9 @@ namespace Demo
             {
                 Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
                 Ogre::Hlms *hlms = hlmsManager->getHlms( Ogre::HLMS_PBS );
-                assert( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
+                assert( dynamic_cast<Ogre::HlmsPbs *>( hlms ) );
 
-                Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlms );
+                Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlms );
 
                 if( hlmsPbs && hlmsPbs->getIrradianceVolume() == mIrradianceVolume )
                     hlmsPbs->setIrradianceVolume( 0 );
@@ -77,15 +77,15 @@ namespace Demo
         mInstantRadiosity = 0;
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::destroyParallaxCorrectCubemaps(void)
+    void SceneFormatGameState::destroyParallaxCorrectCubemaps()
     {
         if( mParallaxCorrectedCubemap )
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
             Ogre::Hlms *hlms = hlmsManager->getHlms( Ogre::HLMS_PBS );
-            assert( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
+            assert( dynamic_cast<Ogre::HlmsPbs *>( hlms ) );
 
-            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlms );
+            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlms );
 
             if( hlmsPbs && hlmsPbs->getParallaxCorrectedCubemap() == mParallaxCorrectedCubemap )
                 hlmsPbs->setParallaxCorrectedCubemap( 0 );
@@ -95,7 +95,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::resetScene(void)
+    void SceneFormatGameState::resetScene()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         destroyInstantRadiosity();
@@ -113,11 +113,11 @@ namespace Demo
             texture->scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::setupParallaxCorrectCubemaps(void)
+    void SceneFormatGameState::setupParallaxCorrectCubemaps()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
         if( mParallaxCorrectedCubemap )
         {
@@ -129,56 +129,53 @@ namespace Demo
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::CompositorManager2 *compositorManager = root->getCompositorManager2();
-        Ogre::CompositorWorkspaceDef *workspaceDef = compositorManager->getWorkspaceDefinition(
-                    "LocalCubemapsProbeWorkspace" );
+        Ogre::CompositorWorkspaceDef *workspaceDef =
+            compositorManager->getWorkspaceDefinition( "LocalCubemapsProbeWorkspace" );
 
         mParallaxCorrectedCubemap = new Ogre::ParallaxCorrectedCubemap(
-                    Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemap>(),
-                    mGraphicsSystem->getRoot(),
-                    mGraphicsSystem->getSceneManager(),
-                    workspaceDef, 250, 1u << 25u );
+            Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemap>(), mGraphicsSystem->getRoot(),
+            mGraphicsSystem->getSceneManager(), workspaceDef, 250, 1u << 25u );
 
         mParallaxCorrectedCubemap->setEnabled( true, 1024, 1024, Ogre::PFG_RGBA8_UNORM_SRGB );
 
         Ogre::CubemapProbe *probe = 0;
-        Ogre::Aabb roomShape( Ogre::Vector3( -0.505, 3.400016, 5.066226 ),
-                              Ogre::Vector3( 5.064587, 3.891282, 9.556003 ) );
+        Ogre::Aabb roomShape( Ogre::Vector3( -0.505f, 3.400016f, 5.066226f ),
+                              Ogre::Vector3( 5.064587f, 3.891282f, 9.556003f ) );
         Ogre::Aabb probeArea;
-        probeArea.mHalfSize = Ogre::Vector3( 5.064587, 3.891282, 3.891282 );
+        probeArea.mHalfSize = Ogre::Vector3( 5.064587f, 3.891282f, 3.891282f );
 
         const bool useMultipleProbes = true;
 
         if( useMultipleProbes )
         {
-            //Probe 00
+            // Probe 00
             probe = mParallaxCorrectedCubemap->createProbe();
             probe->setTextureParams( 1024, 1024 );
             probe->initWorkspace();
 
-            probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, -0.598495 );
+            probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, -0.598495f );
             probe->set( probeArea.mCenter, probeArea, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                         Ogre::Matrix3::IDENTITY, roomShape );
         }
 
-        //Probe 01
+        // Probe 01
         probe = mParallaxCorrectedCubemap->createProbe();
         probe->setTextureParams( 1024, 1024 );
         probe->initWorkspace();
 
-        probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, 5.423867 );
+        probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, 5.423867f );
         probe->set( useMultipleProbes ? probeArea.mCenter : roomShape.mCenter,
-                    useMultipleProbes ? probeArea : roomShape,
-                    Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
+                    useMultipleProbes ? probeArea : roomShape, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                     Ogre::Matrix3::IDENTITY, roomShape );
 
         if( useMultipleProbes )
         {
-            //Probe 02
+            // Probe 02
             probe = mParallaxCorrectedCubemap->createProbe();
             probe->setTextureParams( 1024, 1024 );
             probe->initWorkspace();
 
-            probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, 10.657585 );
+            probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, 10.657585f );
             probe->set( probeArea.mCenter, probeArea, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                         Ogre::Matrix3::IDENTITY, roomShape );
         }
@@ -186,15 +183,15 @@ namespace Demo
         hlmsPbs->setParallaxCorrectedCubemap( mParallaxCorrectedCubemap );
     }
     //-----------------------------------------------------------------------------------
-    Ogre::TextureGpu* SceneFormatGameState::createRawDecalDiffuseTex()
+    Ogre::TextureGpu *SceneFormatGameState::createRawDecalDiffuseTex()
     {
-        //The diffuse texture create it in RAW mode, just to test it. That is, we create the 2D Array
-        //texture manually, without the aid of HlmsTextureManager.
-        //Because of simplicity, we use two Image instances, one to load the diffuse texture,
-        //another to create an array of 8 slices, with the other 7 slices set to black.
-        //It's not efficient, but this is for testing
+        // The diffuse texture create it in RAW mode, just to test it. That is, we create the 2D Array
+        // texture manually, without the aid of HlmsTextureManager.
+        // Because of simplicity, we use two Image instances, one to load the diffuse texture,
+        // another to create an array of 8 slices, with the other 7 slices set to black.
+        // It's not efficient, but this is for testing
         Ogre::Image2 origImage;
-        //Load floor diffuse
+        // Load floor diffuse
         origImage.load( "floor_diffuse.PNG",
                         Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
         origImage.generateMipmaps( true );
@@ -202,23 +199,21 @@ namespace Demo
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
-        //Create raw texture
-        Ogre::TextureGpu *rawTex =
-                textureMgr->createOrRetrieveTexture(
-                    "RawDecalTextureTest", Ogre::GpuPageOutStrategy::SaveToSystemRam,
-                    Ogre::TextureFlags::ManualTexture, Ogre::TextureTypes::Type2DArray );
+        // Create raw texture
+        Ogre::TextureGpu *rawTex = textureMgr->createOrRetrieveTexture(
+            "RawDecalTextureTest", Ogre::GpuPageOutStrategy::SaveToSystemRam,
+            Ogre::TextureFlags::ManualTexture, Ogre::TextureTypes::Type2DArray );
         rawTex->setResolution( origImage.getWidth(), origImage.getHeight(), 8u );
-        rawTex->setPixelFormat( Ogre::PixelFormatGpuUtils::
-                                getEquivalentSRGB( origImage.getPixelFormat() ) );
+        rawTex->setPixelFormat(
+            Ogre::PixelFormatGpuUtils::getEquivalentSRGB( origImage.getPixelFormat() ) );
         rawTex->setNumMipmaps( origImage.getNumMipmaps() );
         rawTex->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
-        //Upload floor diffuse
+        // Upload floor diffuse
         origImage.uploadTo( rawTex, 0, origImage.getNumMipmaps() - 1u, 0u );
 
-        //Load grass diffuse
-        origImage.load( "grassWalpha.tga",
-                        Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+        // Load grass diffuse
+        origImage.load( "grassWalpha.tga", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
         origImage.generateMipmaps( true );
         origImage.uploadTo( rawTex, 0, origImage.getNumMipmaps() - 1u, 1u );
 
@@ -227,7 +222,7 @@ namespace Demo
         return rawTex;
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::generateScene(void)
+    void SceneFormatGameState::generateScene()
     {
         destroyInstantRadiosity();
         destroyParallaxCorrectCubemaps();
@@ -237,69 +232,64 @@ namespace Demo
         const float armsLength = 2.5f;
 
         {
-            //Ogre::WireAabb *wireAabb = sceneManager->createWireAabb();
+            // Ogre::WireAabb *wireAabb = sceneManager->createWireAabb();
 
-            //Create the floor decal
+            // Create the floor decal
             Ogre::Decal *decal = sceneManager->createDecal();
             Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode()->createChildSceneNode();
             sceneNode->attachObject( decal );
             sceneNode->setPosition( Ogre::Vector3( 0, 0.0, 5.0f ) );
-            sceneNode->setOrientation( Ogre::Quaternion( Ogre::Degree( 45.0f ),
-                                                         Ogre::Vector3::UNIT_Y ) );
+            sceneNode->setOrientation(
+                Ogre::Quaternion( Ogre::Degree( 45.0f ), Ogre::Vector3::UNIT_Y ) );
             sceneNode->setScale( Ogre::Vector3( 5.0f, 0.5f, 5.0f ) );
-            //wireAabb->track( decal );
+            // wireAabb->track( decal );
 
-            Ogre::TextureGpu* rawTex = createRawDecalDiffuseTex();
-            decal->setDiffuseTextureRaw( rawTex, 0u ); //Slice 0 = floor
+            Ogre::TextureGpu *rawTex = createRawDecalDiffuseTex();
+            decal->setDiffuseTextureRaw( rawTex, 0u );  // Slice 0 = floor
 
-            //The normal map create it in managed mode, that is with
-            //the help of TextureGpuManager's AutomaticBatching
+            // The normal map create it in managed mode, that is with
+            // the help of TextureGpuManager's AutomaticBatching
             const Ogre::uint32 decalNormalId = 1;
             Ogre::Root *root = mGraphicsSystem->getRoot();
             Ogre::TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
 
             Ogre::TextureGpu *textureNorm = 0;
             textureNorm = textureManager->createOrRetrieveTexture(
-                              "floor_bump.PNG", Ogre::GpuPageOutStrategy::Discard,
-                              Ogre::CommonTextureTypes::NormalMap,
-                              Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                              decalNormalId );
+                "floor_bump.PNG", Ogre::GpuPageOutStrategy::Discard, Ogre::CommonTextureTypes::NormalMap,
+                Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, decalNormalId );
             textureNorm->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
             decal->setNormalTexture( textureNorm );
             sceneManager->setDecalsNormals( textureNorm );
 
-            //Create the grass decal
+            // Create the grass decal
             decal = sceneManager->createDecal();
             sceneNode = sceneManager->getRootSceneNode()->createChildSceneNode();
             sceneNode->attachObject( decal );
             sceneNode->setPosition( Ogre::Vector3( 0, 0.0, 5.0f ) );
-            sceneNode->setOrientation( Ogre::Quaternion( Ogre::Degree( 45.0f ),
-                                                         Ogre::Vector3::UNIT_Y ) );
+            sceneNode->setOrientation(
+                Ogre::Quaternion( Ogre::Degree( 45.0f ), Ogre::Vector3::UNIT_Y ) );
             sceneNode->setScale( Ogre::Vector3( 2.0f, 0.5f, 2.0f ) );
 
-            decal->setDiffuseTextureRaw( rawTex, 1u ); //Slice 1 = grass
+            decal->setDiffuseTextureRaw( rawTex, 1u );  // Slice 1 = grass
 
-            //The normal map create it in managed mode, that is with
-            //the help of TextureGpuManager's AutomaticBatching
-            //However we create a black image to deal with no normal maps
+            // The normal map create it in managed mode, that is with
+            // the help of TextureGpuManager's AutomaticBatching
+            // However we create a black image to deal with no normal maps
             Ogre::Image2 blackImage;
-            textureNorm->waitForMetadata(); //We need to call getWidth & getHeight
+            textureNorm->waitForMetadata();  // We need to call getWidth & getHeight
             const Ogre::uint32 normalTexWidth = textureNorm->getWidth();
             const Ogre::uint32 normalTexHeight = textureNorm->getHeight();
-            Ogre::uint8 *blackBuffer = reinterpret_cast<Ogre::uint8*>(
-                                           OGRE_MALLOC_SIMD( normalTexWidth * normalTexHeight * 2u,
-                                                             Ogre::MEMCATEGORY_RESOURCE ) );
+            Ogre::uint8 *blackBuffer = reinterpret_cast<Ogre::uint8 *>(
+                OGRE_MALLOC_SIMD( normalTexWidth * normalTexHeight * 2u, Ogre::MEMCATEGORY_RESOURCE ) );
             memset( blackBuffer, 0, normalTexWidth * normalTexHeight * 2u );
             blackImage.loadDynamicImage( blackBuffer, normalTexWidth, normalTexHeight, 1u,
                                          Ogre::TextureTypes::Type2D, Ogre::PFG_RG8_SNORM, true );
             blackImage.generateMipmaps( false, Ogre::Image2::FILTER_NEAREST );
             textureNorm = textureManager->createOrRetrieveTexture(
-                               "decals_disabled_normals",
-                               Ogre::GpuPageOutStrategy::Discard,
-                               Ogre::TextureFlags::AutomaticBatching |
-                               Ogre::TextureFlags::ManualTexture,
-                               Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, decalNormalId );
+                "decals_disabled_normals", Ogre::GpuPageOutStrategy::Discard,
+                Ogre::TextureFlags::AutomaticBatching | Ogre::TextureFlags::ManualTexture,
+                Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, decalNormalId );
             textureNorm->setResolution( blackImage.getWidth(), blackImage.getHeight() );
             textureNorm->setNumMipmaps( blackImage.getNumMipmaps() );
             textureNorm->setPixelFormat( blackImage.getPixelFormat() );
@@ -311,32 +301,31 @@ namespace Demo
 
         {
             Ogre::Item *item = sceneManager->createItem(
-                                   "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                   Ogre::SCENE_DYNAMIC );
+                "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, Ogre::SCENE_DYNAMIC );
             item->setDatablock( "Marble" );
-            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                                                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                             ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1.5, 0 );
             sceneNode->attachObject( item );
 
-            //Change the addressing mode of the roughness map to wrap via code.
-            //Detail maps default to wrap, but the rest to clamp.
-            assert( dynamic_cast<Ogre::HlmsPbsDatablock*>( item->getSubItem(0)->getDatablock() ) );
-            Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                                                            item->getSubItem(0)->getDatablock() );
-            //Make a hard copy of the sampler block
+            // Change the addressing mode of the roughness map to wrap via code.
+            // Detail maps default to wrap, but the rest to clamp.
+            assert( dynamic_cast<Ogre::HlmsPbsDatablock *>( item->getSubItem( 0 )->getDatablock() ) );
+            Ogre::HlmsPbsDatablock *datablock =
+                static_cast<Ogre::HlmsPbsDatablock *>( item->getSubItem( 0 )->getDatablock() );
+            // Make a hard copy of the sampler block
             Ogre::HlmsSamplerblock samplerblock( *datablock->getSamplerblock( Ogre::PBSM_ROUGHNESS ) );
             samplerblock.mU = Ogre::TAM_WRAP;
             samplerblock.mV = Ogre::TAM_WRAP;
             samplerblock.mW = Ogre::TAM_WRAP;
-            //Set the new samplerblock. The Hlms system will
-            //automatically create the API block if necessary
+            // Set the new samplerblock. The Hlms system will
+            // automatically create the API block if necessary
             datablock->setSamplerblock( Ogre::PBSM_ROUGHNESS, samplerblock );
         }
 
-        for( int i=0; i<4; ++i )
+        for( int i = 0; i < 4; ++i )
         {
-            for( int j=0; j<4; ++j )
+            for( int j = 0; j < 4; ++j )
             {
                 Ogre::String meshName;
 
@@ -345,10 +334,9 @@ namespace Demo
                 else
                     meshName = "Cube_d.mesh";
 
-                Ogre::Item *item = sceneManager->createItem( meshName,
-                                                             Ogre::ResourceGroupManager::
-                                                             AUTODETECT_RESOURCE_GROUP_NAME,
-                                                             Ogre::SCENE_DYNAMIC );
+                Ogre::Item *item = sceneManager->createItem(
+                    meshName, Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    Ogre::SCENE_DYNAMIC );
                 if( i % 2 == 0 )
                     item->setDatablock( "Rocks" );
                 else
@@ -356,14 +344,12 @@ namespace Demo
 
                 item->setVisibilityFlags( 0x000000001 );
 
-                size_t idx = i * 4 + j;
+                const size_t idx = static_cast<size_t>( i * 4 + j );
 
-                Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                                             createChildSceneNode( Ogre::SCENE_DYNAMIC );
+                Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                                 ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                sceneNode->setPosition( (i - 1.5f) * armsLength,
-                                        2.0f,
-                                        (j - 1.5f) * armsLength );
+                sceneNode->setPosition( ( i - 1.5f ) * armsLength, 2.0f, ( j - 1.5f ) * armsLength );
                 sceneNode->setScale( 0.65f, 0.65f, 0.65f );
 
                 sceneNode->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -375,67 +361,63 @@ namespace Demo
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
-            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
 
-            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            Ogre::HlmsPbs *hlmsPbs =
+                static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
             const int numX = 8;
             const int numZ = 8;
 
-            const float armsLength = 1.0f;
-            const float startX = (numX-1) / 2.0f;
-            const float startZ = (numZ-1) / 2.0f;
+            const float armsLengthSphere = 1.0f;
+            const float startX = ( numX - 1 ) / 2.0f;
+            const float startZ = ( numZ - 1 ) / 2.0f;
 
             Ogre::Root *root = mGraphicsSystem->getRoot();
             Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
             size_t numSpheres = 0;
 
-            for( int x=0; x<numX; ++x )
+            for( int x = 0; x < numX; ++x )
             {
-                for( int z=0; z<numZ; ++z )
+                for( int z = 0; z < numZ; ++z )
                 {
-                    Ogre::String datablockName = "Test" + Ogre::StringConverter::toString( numSpheres++ );
-                    Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                                hlmsPbs->getDatablock( datablockName ) );
+                    Ogre::String datablockName =
+                        "Test" + Ogre::StringConverter::toString( numSpheres++ );
+                    Ogre::HlmsPbsDatablock *datablock =
+                        static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( datablockName ) );
 
                     if( !datablock )
                     {
-                        datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                                        hlmsPbs->createDatablock( datablockName,
-                                                                  datablockName,
-                                                                  Ogre::HlmsMacroblock(),
-                                                                  Ogre::HlmsBlendblock(),
-                                                                  Ogre::HlmsParamVec() ) );
+                        datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->createDatablock(
+                            datablockName, datablockName, Ogre::HlmsMacroblock(), Ogre::HlmsBlendblock(),
+                            Ogre::HlmsParamVec() ) );
                     }
 
                     Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
-                                                    "SaintPetersBasilica.dds",
-                                                    Ogre::GpuPageOutStrategy::Discard,
-                                                    Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
-                                                    Ogre::TextureTypes::TypeCube,
-                                                    Ogre::ResourceGroupManager::
-                                                    AUTODETECT_RESOURCE_GROUP_NAME,
-                                                    Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
+                        "SaintPetersBasilica.dds", Ogre::GpuPageOutStrategy::Discard,
+                        Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB, Ogre::TextureTypes::TypeCube,
+                        Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                        Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
 
                     datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
-                    datablock->setRoughness( std::max( 0.02f, x / std::max( 1.0f, (float)(numX-1) ) ) );
-                    datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)(numZ-1) ) ), false );
+                    datablock->setRoughness(
+                        std::max( 0.02f, x / std::max( 1.0f, (float)( numX - 1 ) ) ) );
+                    datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)( numZ - 1 ) ) ),
+                                           false );
 
-                    Ogre::Item *item = sceneManager->createItem( "Sphere1000.mesh",
-                                                                 Ogre::ResourceGroupManager::
-                                                                 AUTODETECT_RESOURCE_GROUP_NAME,
-                                                                 Ogre::SCENE_DYNAMIC );
+                    Ogre::Item *item = sceneManager->createItem(
+                        "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                        Ogre::SCENE_DYNAMIC );
                     item->setDatablock( datablock );
                     item->setVisibilityFlags( 0x000000002 );
 
-                    Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                            createChildSceneNode( Ogre::SCENE_DYNAMIC );
-                    sceneNode->setPosition( Ogre::Vector3( armsLength * x - startX,
-                                                           1.0f,
-                                                           armsLength * z - startZ ) );
+                    Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                                     ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
+                    sceneNode->setPosition( Ogre::Vector3( armsLengthSphere * x - startX, 1.0f,
+                                                           armsLengthSphere * z - startZ ) );
                     sceneNode->attachObject( item );
                 }
             }
@@ -457,7 +439,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.8f, 0.4f, 0.2f ); //Warm
+        light->setDiffuseColour( 0.8f, 0.4f, 0.2f );  // Warm
         light->setSpecularColour( 0.8f, 0.4f, 0.2f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -468,7 +450,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.2f, 0.4f, 0.8f ); //Cold
+        light->setDiffuseColour( 0.2f, 0.4f, 0.8f );  // Cold
         light->setSpecularColour( 0.2f, 0.4f, 0.8f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -490,8 +472,9 @@ namespace Demo
 
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            Ogre::HlmsPbs *hlmsPbs =
+                static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
             Ogre::HlmsBlendblock blendblock;
             Ogre::HlmsMacroblock macroblock;
@@ -502,31 +485,28 @@ namespace Demo
                 Ogre::ColourValue colour;
             };
 
-            DemoMaterials materials[4] =
-            {
+            DemoMaterials materials[4] = {
                 { "Red", Ogre::ColourValue::Red },
                 { "Green", Ogre::ColourValue::Green },
                 { "Blue", Ogre::ColourValue::Blue },
                 { "Cream", Ogre::ColourValue::White },
             };
 
-            for( int i=0; i<4; ++i )
+            for( int i = 0; i < 4; ++i )
             {
                 Ogre::String finalName = materials[i].matName;
 
                 Ogre::HlmsPbsDatablock *datablock;
-                datablock = static_cast<Ogre::HlmsPbsDatablock*>( hlmsPbs->getDatablock( finalName ) );
+                datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( finalName ) );
 
                 if( !datablock )
                 {
-                    datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                                    hlmsPbs->createDatablock( finalName, finalName,
-                                                              macroblock, blendblock,
-                                                              Ogre::HlmsParamVec() ) );
+                    datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->createDatablock(
+                        finalName, finalName, macroblock, blendblock, Ogre::HlmsParamVec() ) );
                 }
                 datablock->setBackgroundDiffuse( materials[i].colour );
                 datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-                datablock->setRoughness( 0.02 );
+                datablock->setRoughness( 0.02f );
             }
 
             ::generateScene( sceneManager );
@@ -534,22 +514,26 @@ namespace Demo
             mInstantRadiosity = new Ogre::InstantRadiosity( sceneManager, hlmsManager );
             mInstantRadiosity->mVplThreshold = 0.0005f;
 
-            //Guide where to shoot the rays for directional lights the 3 windows + the
-            //hole in the ceiling). We use a sphere radius of 30 to ensure when the directional
-            //light's dir is towards -X, we actually hit walls (instead of going through these
-            //walls and generating incorrect results).
+            // Guide where to shoot the rays for directional lights the 3 windows + the
+            // hole in the ceiling). We use a sphere radius of 30 to ensure when the directional
+            // light's dir is towards -X, we actually hit walls (instead of going through these
+            // walls and generating incorrect results).
             mInstantRadiosity->mAoI.push_back( Ogre::InstantRadiosity::AreaOfInterest(
-                        Ogre::Aabb( Ogre::Vector3( -0.746887f, 7.543859f, 5.499001f ),
-                                    Ogre::Vector3( 2.876101f, 2.716137f, 6.059607f ) * 0.5f ), 30.0f ) );
+                Ogre::Aabb( Ogre::Vector3( -0.746887f, 7.543859f, 5.499001f ),
+                            Ogre::Vector3( 2.876101f, 2.716137f, 6.059607f ) * 0.5f ),
+                30.0f ) );
             mInstantRadiosity->mAoI.push_back( Ogre::InstantRadiosity::AreaOfInterest(
-                        Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, 6.628003f ),
-                                    Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ), 30.0f ) );
+                Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, 6.628003f ),
+                            Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ),
+                30.0f ) );
             mInstantRadiosity->mAoI.push_back( Ogre::InstantRadiosity::AreaOfInterest(
-                        Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, 3.083399f ),
-                                    Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ), 30.0f ) );
+                Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, 3.083399f ),
+                            Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ),
+                30.0f ) );
             mInstantRadiosity->mAoI.push_back( Ogre::InstantRadiosity::AreaOfInterest(
-                        Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, -0.415852f ),
-                                    Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ), 30.0f ) );
+                Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, -0.415852f ),
+                            Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ),
+                30.0f ) );
 
             mInstantRadiosity->mNumRays = 128u;
             mInstantRadiosity->mNumRayBounces = 1u;
@@ -557,51 +541,48 @@ namespace Demo
             mInstantRadiosity->build();
 
             sceneManager->setForwardClustered( true, 16, 8, 24, 96, 8, 0, 2, 50 );
-            //Required by InstantRadiosity
+            // Required by InstantRadiosity
             sceneManager->getForwardPlus()->setEnableVpls( true );
         }
 
         setupParallaxCorrectCubemaps();
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::exportScene(void)
+    void SceneFormatGameState::exportScene()
     {
         Ogre::SceneFormatExporter exporter( mGraphicsSystem->getRoot(),
-                                            mGraphicsSystem->getSceneManager(),
-                                            mInstantRadiosity );
+                                            mGraphicsSystem->getSceneManager(), mInstantRadiosity );
         exporter.setUseBinaryFloatingPoint( true );
         exporter.exportSceneToFile( mFullpathToFile );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::importScene(void)
+    void SceneFormatGameState::importScene()
     {
         destroyInstantRadiosity();
         destroyParallaxCorrectCubemaps();
 
         Ogre::SceneFormatImporter importer( mGraphicsSystem->getRoot(),
-                                            mGraphicsSystem->getSceneManager(),
-                                            Ogre::BLANKSTRING );
+                                            mGraphicsSystem->getSceneManager(), Ogre::BLANKSTRING );
         importer.importSceneFromFile( mFullpathToFile );
         importer.getInstantRadiosity( true, &mInstantRadiosity, &mIrradianceVolume );
         mParallaxCorrectedCubemap = importer.getParallaxCorrectedCubemap( true );
 
-//        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
-//        sceneManager->setForwardClustered( true, 16, 8, 24, 96, 2, 50 );
-//        sceneManager->getForwardPlus()->setEnableVpls( true );
+        //        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+        //        sceneManager->setForwardClustered( true, 16, 8, 24, 96, 2, 50 );
+        //        sceneManager->getForwardPlus()->setEnableVpls( true );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::createScene01(void)
+    void SceneFormatGameState::createScene01()
     {
-        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
-                                            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC );
+        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Z, Ogre::v1::HardwareBuffer::HBU_STATIC,
+            Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         generateScene();
         mCameraController = new CameraController( mGraphicsSystem, false );
@@ -625,7 +606,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void SceneFormatGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -650,4 +631,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

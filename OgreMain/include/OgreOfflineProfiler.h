@@ -3,8 +3,9 @@
 #define _OgreOfflineProfiler_H_
 
 #include "OgrePrerequisites.h"
-#include "OgreProfilerCommon.h"
+
 #include "OgreIdString.h"
+#include "OgreProfilerCommon.h"
 #include "Threading/OgreLightweightMutex.h"
 #include "Threading/OgreThreads.h"
 
@@ -28,78 +29,77 @@ namespace Ogre
     {
         struct ProfileSample
         {
-            uint8       nameStr[OGRE_OFFLINE_PROFILER_NAME_STR_LENGTH];
-            IdString    nameHash;
-            uint64      usStart;
-            uint64      usTaken;
+            uint8    nameStr[OGRE_OFFLINE_PROFILER_NAME_STR_LENGTH];
+            IdString nameHash;
+            uint64   usStart;
+            uint64   usTaken;
 
-            ProfileSample               *parent;
-            FastArray<ProfileSample*>   children;
+            ProfileSample             *parent;
+            FastArray<ProfileSample *> children;
         };
 
         class PerThreadData
         {
-            bool                mPaused;
-            bool                mPauseRequest;
-            bool                mResetRequest;
-            ProfileSample       *mRoot;
-            ProfileSample       *mCurrentSample;
-            Timer               *mTimer;
+            bool           mPaused;
+            bool           mPauseRequest;
+            bool           mResetRequest;
+            ProfileSample *mRoot;
+            ProfileSample *mCurrentSample;
+            Timer         *mTimer;
 
-            uint64              mTotalAccumTime;
+            uint64 mTotalAccumTime;
 
-            FastArray<uint8_t*> mMemoryPool;
-            size_t              mCurrMemoryPoolOffset;
-            size_t              mBytesPerPool;
+            FastArray<uint8_t *> mMemoryPool;
+            size_t               mCurrMemoryPoolOffset;
+            size_t               mBytesPerPool;
 
             /** Protects:
-                    * mCurrentSample
-                    * mMemoryPool
-                    * mCurrMemoryPoolOffset
-                    * mTotalAccumTime
-            */
-            LightweightMutex    mMutex;
+             * mCurrentSample
+             * mMemoryPool
+             * mCurrMemoryPoolOffset
+             * mTotalAccumTime
+             */
+            LightweightMutex mMutex;
 
-            void createNewPool(void);
-            void destroyAllPools(void);
-            ProfileSample* allocateSample( ProfileSample *parent );
+            void           createNewPool();
+            void           destroyAllPools();
+            ProfileSample *allocateSample( ProfileSample *parent );
 
             static void destroySampleAndChildren( ProfileSample *sample );
 
-            void dumpSample( ProfileSample *sample, LwString &tmpStr,
-                             String &outCsvString, StdMap<IdString, ProfileSample> &accumStats,
-                             uint32 stackDepth );
+            void dumpSample( ProfileSample *sample, LwString &tmpStr, String &outCsvString,
+                             StdMap<IdString, ProfileSample> &accumStats, uint32 stackDepth );
 
-            void reset(void);
+            void reset();
 
         public:
             PerThreadData( bool startPaused, size_t bytesPerPool );
             ~PerThreadData();
 
             void setPauseRequest( bool bPause );
-            void requestReset(void);
+            void requestReset();
 
             void profileBegin( const char *name, ProfileSampleFlags::ProfileSampleFlags flags );
-            void profileEnd(void);
+            void profileEnd();
 
             void dumpProfileResultsStr( String &outCsvStringPerFrame, String &outCsvStringAccum );
             void dumpProfileResults( const String &fullPathPerFrame, const String &fullPathAccum );
         };
 
-        typedef FastArray<PerThreadData*> PerThreadDataArray;
+        typedef FastArray<PerThreadData *> PerThreadDataArray;
 
-        bool                mPaused;
+        bool mPaused;
 
-        LightweightMutex	mMutex;		//Protects mThreadData
-        TlsHandle			mTlsHandle;
-        PerThreadDataArray	mThreadData;
+        LightweightMutex   mMutex;  // Protects mThreadData
+        TlsHandle          mTlsHandle;
+        PerThreadDataArray mThreadData;
 
-        size_t              mBytesPerPool;
+        size_t mBytesPerPool;
 
-        String              mOnShutdownPerFramePath;
-        String              mOnShutdownAccumPath;
+        String mOnShutdownPerFramePath;
+        String mOnShutdownAccumPath;
 
-        PerThreadData* allocatePerThreadData(void);
+        PerThreadData *allocatePerThreadData();
 
     public:
         OfflineProfiler();
@@ -125,15 +125,15 @@ namespace Ogre
         /// bit of time to resume again)
         ///
         /// @see    OfflineProfiler::setPaused
-        bool isPaused(void) const;
+        bool isPaused() const;
 
         /// Destroys all collected samples and starts over. Worker threads will
         /// honour this request as soon as they see it (which is the next time
         /// they call profileBegin).
-        void reset(void);
+        void reset();
 
         void profileBegin( const char *name, ProfileSampleFlags::ProfileSampleFlags flags );
-        void profileEnd(void);
+        void profileEnd();
 
         /** Dumps CSV data into two CSV files
         @param fullPathPerFrame
@@ -164,6 +164,6 @@ namespace Ogre
         */
         void setDumpPathsOnShutdown( const String &fullPathPerFrame, const String &fullPathAccum );
     };
-}
+}  // namespace Ogre
 
 #endif

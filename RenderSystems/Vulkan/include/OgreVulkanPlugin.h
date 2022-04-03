@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -34,25 +34,28 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Plugin instance for Vulkan Manager */
-    class VulkanPlugin : public Plugin
+    class _OgreVulkanExport VulkanPlugin final : public Plugin
     {
     public:
         VulkanPlugin();
 
         /// @copydoc Plugin::getName
-        const String &getName() const;
+        const String &getName() const override;
 
         /// @copydoc Plugin::install
-        void install();
+        void install() override;
 
         /// @copydoc Plugin::initialise
-        void initialise();
+        void initialise() override;
 
         /// @copydoc Plugin::shutdown
-        void shutdown();
+        void shutdown() override;
 
         /// @copydoc Plugin::uninstall
-        void uninstall();
+        void uninstall() override;
+
+        /// @copydoc Plugin::getAbiCookie
+        void getAbiCookie( AbiCookie &outAbiCookie ) override;
 
     protected:
         VulkanRenderSystem *mRenderSystem;

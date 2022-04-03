@@ -2,11 +2,11 @@
 #ifndef _Demo_Tutorial_TextureBakingGameState_H_
 #define _Demo_Tutorial_TextureBakingGameState_H_
 
-#include "OgrePrerequisites.h"
 #include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
+
 #include "OgreOverlay.h"
 #include "TutorialGameState.h"
-
 
 namespace Demo
 {
@@ -24,26 +24,28 @@ namespace Demo
 
     class Tutorial_TextureBakingGameState : public TutorialGameState
     {
-        Ogre::Light         *mAreaLights[c_numAreaLights];
-        Ogre::TextureGpu    *mAreaMaskTex;
+        Ogre::Light *mAreaLights[c_numAreaLights];
+        Ogre::TextureGpu *mAreaMaskTex;
 
-        Ogre::TextureGpu            *mBakedResult;
-        Ogre::CompositorWorkspace   *mBakedWorkspace;
-        Ogre::CompositorWorkspace   *mShowBakedTexWorkspace;
+        Ogre::TextureGpu *mBakedResult;
+        Ogre::CompositorWorkspace *mBakedWorkspace;
+        Ogre::CompositorWorkspace *mShowBakedTexWorkspace;
 
-        Ogre::Item      *mFloorRender;
-        Ogre::Item      *mFloorBaked;
+        Ogre::ResourceTransitionArray mResourceTransitions;
 
-        RenderingMode::RenderingMode    mRenderingMode;
-        bool            mBakeEveryFrame;
+        Ogre::Item *mFloorRender;
+        Ogre::Item *mFloorBaked;
+
+        RenderingMode::RenderingMode mRenderingMode;
+        bool mBakeEveryFrame;
 
         /// Creates the Mesh for the billboards
-        void createAreaPlaneMesh(void);
+        void createAreaPlaneMesh();
         /// Setups a datablock (material) for the billboard showing where the light is
         /// emitting so that it can use the same texture the light is using.
         ///
         /// Must be called again whenever the texture changes (i.e. setupLightTexture was called)
-        Ogre::HlmsDatablock* setupDatablockTextureForLight( Ogre::Light *light, size_t idx );
+        Ogre::HlmsDatablock *setupDatablockTextureForLight( Ogre::Light *light, size_t idx );
         /// Creates a billboard showing where the given light is emitting
         void createPlaneForAreaLight( Ogre::Light *light, size_t idx );
 
@@ -51,23 +53,23 @@ namespace Demo
         /// Calls createAreaMask and uploads it to the GPU texture.
         void setupLightTexture( size_t idx );
 
-        void createBakingTexture(void);
-        void updateBakingTexture(void);
+        void createBakingTexture();
+        void updateBakingTexture();
 
-        void updateRenderingMode(void);
+        void updateRenderingMode();
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         Tutorial_TextureBakingGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

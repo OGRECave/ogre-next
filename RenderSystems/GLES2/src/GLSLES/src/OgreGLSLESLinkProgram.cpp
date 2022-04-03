@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -52,13 +52,13 @@ namespace Ogre {
         }
     }
 
-    GLSLESLinkProgram::~GLSLESLinkProgram(void)
+    GLSLESLinkProgram::~GLSLESLinkProgram()
     {
         OGRE_CHECK_GL_ERROR(glDeleteProgram(mGLProgramHandle));
         mGLProgramHandle = 0;
     }
 
-    void GLSLESLinkProgram::_useProgram(void)
+    void GLSLESLinkProgram::_useProgram()
     {
         if (mLinked)
         {
@@ -83,7 +83,7 @@ namespace Ogre {
     }
 #endif
 
-    void GLSLESLinkProgram::activate(void)
+    void GLSLESLinkProgram::activate()
     {
         if (!mLinked && !mTriedToLinkAndFailed)
         {
@@ -232,7 +232,7 @@ namespace Ogre {
         }
     }
 
-    void GLSLESLinkProgram::buildGLUniformReferences(void)
+    void GLSLESLinkProgram::buildGLUniformReferences()
     {
         if (!mUniformRefsBuilt)
         {

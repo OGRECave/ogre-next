@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,50 +29,53 @@ THE SOFTWARE.
 #define __GL3PlusHARDWAREVERTEXBUFFER_H__
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreHardwareVertexBuffer.h"
 
-namespace Ogre {
-namespace v1 {
-
-    /// Specialisation of HardwareVertexBuffer for OpenGL
-    class _OgreGL3PlusExport GL3PlusHardwareVertexBuffer : public HardwareVertexBuffer
+namespace Ogre
+{
+    namespace v1
     {
-    private:
-        GLuint mBufferId;
-        // Scratch buffer handling
-        bool mLockedToScratch;
-        size_t mScratchOffset;
-        size_t mScratchSize;
-        void* mScratchPtr;
-        bool mScratchUploadOnUnlock;
+        /// Specialisation of HardwareVertexBuffer for OpenGL
+        class _OgreGL3PlusExport GL3PlusHardwareVertexBuffer final : public HardwareVertexBuffer
+        {
+        private:
+            GLuint mBufferId;
+            // Scratch buffer handling
+            bool   mLockedToScratch;
+            size_t mScratchOffset;
+            size_t mScratchSize;
+            void  *mScratchPtr;
+            bool   mScratchUploadOnUnlock;
 
-    protected:
-        /** See HardwareBuffer. */
-        void* lockImpl(size_t offset, size_t length, LockOptions options);
-        /** See HardwareBuffer. */
-        void unlockImpl(void);
+        protected:
+            /** See HardwareBuffer. */
+            void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
+            /** See HardwareBuffer. */
+            void unlockImpl() override;
 
-    public:
-        GL3PlusHardwareVertexBuffer(HardwareBufferManagerBase* mgr, size_t vertexSize, size_t numVertices,
-                                    HardwareBuffer::Usage usage, bool useShadowBuffer);
-        ~GL3PlusHardwareVertexBuffer();
+        public:
+            GL3PlusHardwareVertexBuffer( HardwareBufferManagerBase *mgr, size_t vertexSize,
+                                         size_t numVertices, HardwareBuffer::Usage usage,
+                                         bool useShadowBuffer );
+            ~GL3PlusHardwareVertexBuffer() override;
 
-        /** See HardwareBuffer. */
-        void readData(size_t offset, size_t length, void* pDest);
+            /** See HardwareBuffer. */
+            void readData( size_t offset, size_t length, void *pDest ) override;
 
-        /** See HardwareBuffer. */
-        void writeData(size_t offset, size_t length,
-                       const void* pSource, bool discardWholeBuffer = false);
+            /** See HardwareBuffer. */
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false ) override;
 
-        /** See HardwareBuffer. */
-        void copyData(HardwareBuffer& srcBuffer, size_t srcOffset,
-                      size_t dstOffset, size_t length, bool discardWholeBuffer = false);
+            /** See HardwareBuffer. */
+            void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset, size_t length,
+                           bool discardWholeBuffer = false ) override;
 
-        /** See HardwareBuffer. */
-        void _updateFromShadow(void);
+            /** See HardwareBuffer. */
+            void _updateFromShadow() override;
 
-        inline GLuint getGLBufferId(void) const { return mBufferId; }
-    };
-}
-}
-#endif // __GL3PlusHARDWAREVERTEXBUFFER_H__
+            inline GLuint getGLBufferId() const { return mBufferId; }
+        };
+    }  // namespace v1
+}  // namespace Ogre
+#endif  // __GL3PlusHARDWAREVERTEXBUFFER_H__

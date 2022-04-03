@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,121 +29,123 @@ THE SOFTWARE.
 #define __D3D11RENDERSYSTEM_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreRenderSystem.h"
+
 #include "OgreD3D11Device.h"
 #include "OgreD3D11DeviceResource.h"
 #include "OgreD3D11Driver.h"
-#include "OgreD3D11RenderPassDescriptor.h"
 #include "OgreD3D11PixelFormatToShaderType.h"
+#include "OgreD3D11RenderPassDescriptor.h"
 
-namespace Ogre 
+namespace Ogre
 {
-	// Enable recognizing SM2.0 HLSL shaders.
-	// (the same shader code could be used by many RenderSystems, directly or via Cg)
-	#define SUPPORT_SM2_0_HLSL_SHADERS  0
+// Enable recognizing SM2.0 HLSL shaders.
+// (the same shader code could be used by many RenderSystems, directly or via Cg)
+#define SUPPORT_SM2_0_HLSL_SHADERS 0
 
     class D3D11DriverList;
     class D3D11Driver;
-	class D3D11StereoDriverBridge;
-	
+    class D3D11StereoDriverBridge;
+
     /**
     Implementation of DirectX11 as a rendering system.
     */
-    class _OgreD3D11Export D3D11RenderSystem
-        : public RenderSystem
-        , protected D3D11DeviceResourceManager
+    class _OgreD3D11Export D3D11RenderSystem : public RenderSystem, protected D3D11DeviceResourceManager
     {
     private:
-        Ogre::String mDriverName;    // it`s hint rather than hard requirement, could be ignored if empty or device removed
-        D3D_DRIVER_TYPE mDriverType; // should be XXX_HARDWARE, XXX_SOFTWARE or XXX_WARP, never XXX_UNKNOWN or XXX_NULL
+        Ogre::String mDriverName;  // it`s hint rather than hard requirement, could be ignored if empty
+                                   // or device removed
+        D3D_DRIVER_TYPE mDriverType;  // should be XXX_HARDWARE, XXX_SOFTWARE or XXX_WARP, never
+                                      // XXX_UNKNOWN or XXX_NULL
         D3D_FEATURE_LEVEL mFeatureLevel;
         D3D_FEATURE_LEVEL mMinRequestedFeatureLevel;
         D3D_FEATURE_LEVEL mMaxRequestedFeatureLevel;
 
         /// Direct3D rendering device
-        D3D11Device     mDevice;
+        D3D11Device mDevice;
 
         D3D11VendorExtension *mVendorExtension;
-        
+
         // Stored options
         ConfigOptionMap mOptions;
 
         /// List of D3D drivers installed (video cards)
-        D3D11DriverList* mDriverList;
+        D3D11DriverList *mDriverList;
         /// Currently active driver
         D3D11Driver mActiveD3DDriver;
         /// NVPerfHUD allowed?
         bool mUseNVPerfHUD;
-		int mSwitchingFullscreenCounter;	// Are we switching from windowed to fullscreen 
+        int  mSwitchingFullscreenCounter;  // Are we switching from windowed to fullscreen
 
-        static void createD3D11Device( D3D11VendorExtension *vendorExtension,
-                                       const String &appName,
-                                       D3D11Driver* d3dDriver, D3D_DRIVER_TYPE driverType,
+        static void createD3D11Device( D3D11VendorExtension *vendorExtension, const String &appName,
+                                       D3D11Driver *d3dDriver, D3D_DRIVER_TYPE driverType,
                                        D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
-                                       D3D_FEATURE_LEVEL* pFeatureLevel,
-                                       ID3D11Device **outDevice );
+                                       D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11Device **outDevice );
 
-        D3D11DriverList* getDirect3DDrivers(bool refreshList = false);
-        void refreshD3DSettings(void);
-        void refreshFSAAOptions(void);
+        D3D11DriverList *getDirect3DDrivers( bool refreshList = false );
 
-        void freeDevice(void);
-        void createDevice( void );
+        void refreshD3DSettings();
+        void refreshFSAAOptions();
 
-        v1::D3D11HardwareBufferManager* mHardwareBufferManager;
-        D3D11GpuProgramManager* mGpuProgramManager;
-        D3D11HLSLProgramFactory* mHLSLProgramFactory;
+        void freeDevice();
+        void createDevice();
+
+        v1::D3D11HardwareBufferManager *mHardwareBufferManager;
+        D3D11GpuProgramManager         *mGpuProgramManager;
+        D3D11HLSLProgramFactory        *mHLSLProgramFactory;
 
         /// Internal method for populating the capabilities structure
-        RenderSystemCapabilities* createRenderSystemCapabilities() const;
+        RenderSystemCapabilities *createRenderSystemCapabilities() const override;
         /** See RenderSystem definition */
-        void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window* primary);
+        void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
+                                                     Window                   *primary ) override;
 
-        void convertVertexShaderCaps(RenderSystemCapabilities* rsc) const;
-        void convertPixelShaderCaps(RenderSystemCapabilities* rsc) const;
-        void convertGeometryShaderCaps(RenderSystemCapabilities* rsc) const;
-        void convertHullShaderCaps(RenderSystemCapabilities* rsc) const;
-        void convertDomainShaderCaps(RenderSystemCapabilities* rsc) const;
-        void convertComputeShaderCaps(RenderSystemCapabilities* rsc) const;
+        void convertVertexShaderCaps( RenderSystemCapabilities *rsc ) const;
+        void convertPixelShaderCaps( RenderSystemCapabilities *rsc ) const;
+        void convertGeometryShaderCaps( RenderSystemCapabilities *rsc ) const;
+        void convertHullShaderCaps( RenderSystemCapabilities *rsc ) const;
+        void convertDomainShaderCaps( RenderSystemCapabilities *rsc ) const;
+        void convertComputeShaderCaps( RenderSystemCapabilities *rsc ) const;
 
-        bool checkVertexTextureFormats(void);
+        bool checkVertexTextureFormats();
 
-        ID3D11Buffer    *mBoundIndirectBuffer;
-        unsigned char   *mSwIndirectBufferPtr;
-        D3D11HlmsPso    *mPso;
-        D3D11HLSLProgram* mBoundComputeProgram;
-        uint32          mMaxBoundUavCS;
+        ID3D11Buffer     *mBoundIndirectBuffer;
+        unsigned char    *mSwIndirectBufferPtr;
+        D3D11HlmsPso     *mPso;
+        D3D11HLSLProgram *mBoundComputeProgram;
+        uint32            mMaxBoundUavCS;
 
-        uint            mNumberOfViews;
+        uint                    mNumberOfViews;
         ID3D11RenderTargetView *mRenderTargetViews[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         ID3D11DepthStencilView *mDepthStencilView;
 
         /// For rendering legacy objects.
-        v1::VertexData  *mCurrentVertexBuffer;
-        v1::IndexData   *mCurrentIndexBuffer;
+        v1::VertexData *mCurrentVertexBuffer;
+        v1::IndexData  *mCurrentIndexBuffer;
 
         TextureUnitState::BindingType mBindingType;
 
-        UINT                        mStencilRef;
+        UINT mStencilRef;
 
         // List of class instances per shader stage
-        ID3D11ClassInstance* mClassInstances[6][8];
+        ID3D11ClassInstance *mClassInstances[6][8];
 
         // Number of class instances per shader stage
         UINT mNumClassInstances[6];
-        
+
         // Store created shader subroutines, to prevent creation and destruction every frame
-        typedef std::map<String, ID3D11ClassInstance*> ClassInstanceMap;
-        typedef std::map<String, ID3D11ClassInstance*>::iterator ClassInstanceIterator;
+        typedef std::map<String, ID3D11ClassInstance *>           ClassInstanceMap;
+        typedef std::map<String, ID3D11ClassInstance *>::iterator ClassInstanceIterator;
+
         ClassInstanceMap mInstanceMap;
 
         D3D11FrameBufferDescMap mFrameBufferDescMap;
 
-
         /// Primary window, the one used to create the device
-        D3D11Window* mPrimaryWindow;
+        D3D11Window *mPrimaryWindow;
 
-        typedef vector<D3D11Window*>::type SecondaryWindowList;
+        typedef vector<D3D11Window *>::type SecondaryWindowList;
         // List of additional windows after the first (swap chains)
         SecondaryWindowList mSecondaryWindows;
 
@@ -152,223 +154,227 @@ namespace Ogre
         D3D11PixelFormatToShaderType mD3D11PixelFormatToShaderType;
 
         ID3D11ShaderResourceView *mNullViews[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
-        uint32 mMaxSrvCount[NumShaderTypes];
-        uint32 mMaxComputeShaderSrvCount;
-		
+        uint32                    mMaxSrvCount[NumShaderTypes];
+        uint32                    mMaxComputeShaderSrvCount;
+
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		D3D11StereoDriverBridge* mStereoDriver;
+        D3D11StereoDriverBridge *mStereoDriver;
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-		Windows::Foundation::EventRegistrationToken suspendingToken, surfaceContentLostToken;
+        Windows::Foundation::EventRegistrationToken suspendingToken, surfaceContentLostToken;
 #endif
 
     protected:
-
-        void setClipPlanesImpl(const PlaneList& clipPlanes);
+        void setClipPlanesImpl( const PlaneList &clipPlanes ) override;
 
     public:
         // constructor
-        D3D11RenderSystem( );
+        D3D11RenderSystem();
 
         // destructor
         ~D3D11RenderSystem();
-		
-		
-		int getSwitchingFullscreenCounter() const					{ return mSwitchingFullscreenCounter; }
-        void addToSwitchingFullscreenCounter()                      { ++mSwitchingFullscreenCounter; }
-		
+
+        int  getSwitchingFullscreenCounter() const { return mSwitchingFullscreenCounter; }
+        void addToSwitchingFullscreenCounter() { ++mSwitchingFullscreenCounter; }
+
         void initRenderSystem();
 
-        void initConfigOptions(void);
+        void initConfigOptions();
 
         // Overridden RenderSystem functions
-        ConfigOptionMap& getConfigOptions(void);
-        String validateConfigOptions(void);
-        Window* _initialise( bool autoCreateWindow, const String& windowTitle = "OGRE Render Window"  );
+        ConfigOptionMap &getConfigOptions() override;
+        String           validateConfigOptions() override;
+
+        Window *_initialise( bool          autoCreateWindow,
+                             const String &windowTitle = "OGRE Render Window" ) override;
         /// @copydoc RenderSystem::_createRenderWindow
-        Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
-                                     bool fullScreen, const NameValuePairList *miscParams = 0 );
-        void _notifyWindowDestroyed( Window *window );
+        Window *_createRenderWindow( const String &name, uint32 width, uint32 height, bool fullScreen,
+                                     const NameValuePairList *miscParams = 0 ) override;
+        void    _notifyWindowDestroyed( Window *window );
 
         /// @copydoc RenderSystem::fireDeviceEvent
-        void fireDeviceEvent( D3D11Device* device, const String & name,
+        void fireDeviceEvent( D3D11Device *device, const String &name,
                               D3D11Window *sendingWindow = NULL );
 
-        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) {}
+        void _setCurrentDeviceFromTexture( TextureGpu *texture ) override {}
 
-        virtual D3D11FrameBufferDescMap& _getFrameBufferDescMap(void)   { return mFrameBufferDescMap; }
-        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 *viewportSizes,
-                                                const Vector4 *scissors,
-                                                uint32 numViewports,
-                                                bool overlaysEnabled,
-                                                bool warnIfRtvWasFlushed );
-        virtual void endRenderPassDescriptor(void);
+        D3D11FrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
+        RenderPassDescriptor    *createRenderPassDescriptor() override;
+        void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
+                                        uint8 mipLevel, const Vector4 *viewportSizes,
+                                        const Vector4 *scissors, uint32 numViewports,
+                                        bool overlaysEnabled, bool warnIfRtvWasFlushed ) override;
+        void endRenderPassDescriptor() override;
 
-        TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                          PixelFormatGpu depthBufferFormat, uint16 poolId );
+        TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                          PixelFormatGpu depthBufferFormat, uint16 poolId ) override;
 
-        const String& getName(void) const;
-		
-		const String& getFriendlyName(void) const;
-		
-        void getCustomAttribute(const String& name, void* pData);
+        const String &getName() const override;
+
+        const String &getFriendlyName() const override;
+
+        void getCustomAttribute( const String &name, void *pData ) override;
         // Low-level overridden members
-        void setConfigOption( const String &name, const String &value );
-        virtual const char* getPriorityConfigOption( size_t idx ) const;
-        virtual size_t getNumPriorityConfigOptions( void ) const;
-        void reinitialise();
-        void shutdown();
-        bool validateDevice(bool forceDeviceElection = false);
-        void handleDeviceLost();
-        void setShadingType( ShadeOptions so );
-        void setLightingEnabled( bool enabled );
-        VertexElementType getColourVertexElementType(void) const;
-        virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
-        void setNormaliseNormals(bool normalise);
+        void        setConfigOption( const String &name, const String &value ) override;
+        const char *getPriorityConfigOption( size_t idx ) const override;
+        size_t      getNumPriorityConfigOptions() const override;
 
-        virtual String getErrorDescription(long errorNumber) const;
+        void              reinitialise() override;
+        void              shutdown() override;
+        bool              validateDevice( bool forceDeviceElection = false ) override;
+        void              handleDeviceLost();
+        void              setShadingType( ShadeOptions so );
+        void              setLightingEnabled( bool enabled );
+        VertexElementType getColourVertexElementType() const override;
+        void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams ) override;
+        void setNormaliseNormals( bool normalise );
+
+        String getErrorDescription( long errorNumber ) const override;
 
         // Low-level overridden members, mainly for internal use
-        D3D11HLSLProgram* _getBoundComputeProgram() const;
-        void _useLights(const LightList& lights, unsigned short limit);
-        void _setWorldMatrix( const Matrix4 &m );
-        void _setViewMatrix( const Matrix4 &m );
-        void _setProjectionMatrix( const Matrix4 &m );
-        void _setSurfaceParams( const ColourValue &ambient, const ColourValue &diffuse, const ColourValue &specular, const ColourValue &emissive, Real shininess, TrackVertexColourType tracking );
-        void _setPointSpritesEnabled(bool enabled);
-        void _setPointParameters(Real size, bool attenuationEnabled, 
-            Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
-        virtual void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly );
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
-                                   uint32 hazardousTexIdx );
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
-        virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
-        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
-        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set );
-        virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
-        virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
-        void _setBindingType(TextureUnitState::BindingType bindingType);
-        void _setVertexTexture(size_t unit, TextureGpu *tex);
-        void _setGeometryTexture(size_t unit, TextureGpu *tex);
-        void _setTessellationHullTexture(size_t unit, TextureGpu *tex);
-        void _setTessellationDomainTexture(size_t unit, TextureGpu *tex);
-        void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m, const Frustum* frustum = 0);
-        void _setTextureBlendMode( size_t unit, const LayerBlendModeEx& bm );
-        void _setTextureMatrix( size_t unit, const Matrix4 &xform );
+        D3D11HLSLProgram *_getBoundComputeProgram() const;
 
-        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
-        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );
-        virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock );
-        virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block );
-        virtual void _hlmsBlendblockCreated( HlmsBlendblock *newBlock );
-        virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block );
-        virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
-        virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
-        virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet );
-        virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set );
-        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
-        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
-        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
-        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
+        void _useLights( const LightList &lights, unsigned short limit ) override;
+        void _setWorldMatrix( const Matrix4 &m ) override;
+        void _setViewMatrix( const Matrix4 &m ) override;
+        void _setProjectionMatrix( const Matrix4 &m ) override;
+        void _setSurfaceParams( const ColourValue &ambient, const ColourValue &diffuse,
+                                const ColourValue &specular, const ColourValue &emissive, Real shininess,
+                                TrackVertexColourType tracking ) override;
+        void _setPointSpritesEnabled( bool enabled ) override;
+        void _setPointParameters( Real size, bool attenuationEnabled, Real constant, Real linear,
+                                  Real quadratic, Real minSize, Real maxSize ) override;
+        void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly ) override;
+        void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
+                           uint32 hazardousTexIdx ) override;
+        void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
+        void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) override;
+        void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) override;
+        void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
+        void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) override;
+        void _setUavCS( uint32 slotStart, const DescriptorSetUav *set ) override;
+        void _setBindingType( TextureUnitState::BindingType bindingType ) override;
+        void _setVertexTexture( size_t unit, TextureGpu *tex ) override;
+        void _setGeometryTexture( size_t unit, TextureGpu *tex ) override;
+        void _setTessellationHullTexture( size_t unit, TextureGpu *tex ) override;
+        void _setTessellationDomainTexture( size_t unit, TextureGpu *tex ) override;
+        void _setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
+                                          const Frustum *frustum = 0 ) override;
+        void _setTextureBlendMode( size_t unit, const LayerBlendModeEx &bm ) override;
+        void _setTextureMatrix( size_t unit, const Matrix4 &xform ) override;
+
+        void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
+        void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) override;
+        void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;
+        void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) override;
+        void _hlmsBlendblockCreated( HlmsBlendblock *newBlock ) override;
+        void _hlmsBlendblockDestroyed( HlmsBlendblock *block ) override;
+        void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) override;
+        void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) override;
+        void _descriptorSetTextureCreated( DescriptorSetTexture *newSet ) override;
+        void _descriptorSetTextureDestroyed( DescriptorSetTexture *set ) override;
+        void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet ) override;
+        void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set ) override;
+        void _descriptorSetUavCreated( DescriptorSetUav *newSet ) override;
+        void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
         void _setHlmsMacroblock( const HlmsMacroblock *macroblock );
         void _setHlmsBlendblock( const HlmsBlendblock *blendblock );
-        virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock );
-        virtual void _setPipelineStateObject( const HlmsPso *pso );
+        void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock ) override;
+        void _setPipelineStateObject( const HlmsPso *pso ) override;
 
-        virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
+        void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) override;
 
-        virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
-        virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso );
-        virtual void _setComputePso( const HlmsComputePso *pso );
+        void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso ) override;
+        void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso ) override;
+        void _setComputePso( const HlmsComputePso *pso ) override;
 
-        void _beginFrame(void);
-        void _endFrame(void);
-        void _setFog( FogMode mode = FOG_NONE, const ColourValue& colour = ColourValue::White, Real expDensity = 1.0, Real linearStart = 0.0, Real linearEnd = 1.0 );
-        void _render(const v1::RenderOperation& op);
+        void _beginFrame() override;
+        void _endFrame() override;
+        void _render( const v1::RenderOperation &op ) override;
 
-        virtual void _dispatch( const HlmsComputePso &pso );
+        void _dispatch( const HlmsComputePso &pso ) override;
 
-        virtual void _setVertexArrayObject( const VertexArrayObject *vao );
-        virtual void _render( const CbDrawCallIndexed *cmd );
-        virtual void _render( const CbDrawCallStrip *cmd );
-        virtual void _renderEmulated( const CbDrawCallIndexed *cmd );
-        virtual void _renderEmulated( const CbDrawCallStrip *cmd );
+        void _setVertexArrayObject( const VertexArrayObject *vao ) override;
+        void _render( const CbDrawCallIndexed *cmd ) override;
+        void _render( const CbDrawCallStrip *cmd ) override;
+        void _renderEmulated( const CbDrawCallIndexed *cmd ) override;
+        void _renderEmulated( const CbDrawCallStrip *cmd ) override;
 
-        virtual void _setRenderOperation( const v1::CbRenderOp *cmd );
-        virtual void _render( const v1::CbDrawCallIndexed *cmd );
-        virtual void _render( const v1::CbDrawCallStrip *cmd );
+        void _setRenderOperation( const v1::CbRenderOp *cmd ) override;
+        void _render( const v1::CbDrawCallIndexed *cmd ) override;
+        void _render( const v1::CbDrawCallStrip *cmd ) override;
         /** See
           RenderSystem
          */
-        void bindGpuProgramParameters(GpuProgramType gptype, GpuProgramParametersSharedPtr params, uint16 mask);
+        void bindGpuProgramParameters( GpuProgramType gptype, GpuProgramParametersSharedPtr params,
+                                       uint16 mask ) override;
         /** See
           RenderSystem
          */
-        void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
+        void bindGpuProgramPassIterationParameters( GpuProgramType gptype ) override;
 
-        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                       TextureGpu *anyTarget, uint8 mipLevel );
-        void setClipPlane (ushort index, Real A, Real B, Real C, Real D);
-        void enableClipPlane (ushort index, bool enable);
-        HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
-        Real getHorizontalTexelOffset(void);
-        Real getVerticalTexelOffset(void);
-        Real getMinimumDepthInputValue(void);
-        Real getMaximumDepthInputValue(void);
-        void registerThread();
-        void unregisterThread();
-        void preExtraThreadsStarted();
-        void postExtraThreadsStarted();
+        void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
+                               uint8 mipLevel ) override;
+        void setClipPlane( ushort index, Real A, Real B, Real C, Real D );
+        void enableClipPlane( ushort index, bool enable );
 
-        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                             PixelFormatGpu format );
+        HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
+
+        Real getHorizontalTexelOffset() override;
+        Real getVerticalTexelOffset() override;
+        Real getMinimumDepthInputValue() override;
+        Real getMaximumDepthInputValue() override;
+        void registerThread() override;
+        void unregisterThread() override;
+        void preExtraThreadsStarted() override;
+        void postExtraThreadsStarted() override;
+
+        SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                     PixelFormatGpu           format ) override;
 
         /// @copydoc RenderSystem::getDisplayMonitorCount
-        unsigned int getDisplayMonitorCount() const;
+        unsigned int getDisplayMonitorCount() const override;
 
         /// @copydoc RenderSystem::hasAnisotropicMipMapFilter
-        virtual bool hasAnisotropicMipMapFilter() const { return true; }  
+        bool hasAnisotropicMipMapFilter() const override { return true; }
 
         D3D11Device &_getDevice() { return mDevice; }
-        
-        
+
         D3D_FEATURE_LEVEL _getFeatureLevel() const { return mFeatureLevel; }
 
         /// @copydoc RenderSystem::setSubroutine
-        void setSubroutine(GpuProgramType gptype, unsigned int slotIndex, const String& subroutineName);
-        
+        void setSubroutine( GpuProgramType gptype, size_t slotIndex, const String &subroutineName );
+
         /// @copydoc RenderSystem::setSubroutineName
-        void setSubroutine(GpuProgramType gptype, const String& slotName, const String& subroutineName);
+        void setSubroutine( GpuProgramType gptype, const String &slotName,
+                            const String &subroutineName );
 
         /// @copydoc RenderSystem::beginProfileEvent
-        virtual void beginProfileEvent( const String &eventName );
+        void beginProfileEvent( const String &eventName ) override;
 
         /// @copydoc RenderSystem::endProfileEvent
-        virtual void endProfileEvent( void );
+        void endProfileEvent() override;
 
         /// @copydoc RenderSystem::markProfileEvent
-        virtual void markProfileEvent( const String &eventName );
+        void markProfileEvent( const String &eventName ) override;
 
-        virtual void debugAnnotationPush( const String &event );
-        virtual void debugAnnotationPop( void );
+        void debugAnnotationPush( const String &event ) override;
+        void debugAnnotationPop() override;
 
-        virtual void initGPUProfiling(void);
-        virtual void deinitGPUProfiling(void);
-        virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
-        virtual void endGPUSampleProfile( const String &name );
-		
-		/// @copydoc RenderSystem::setDrawBuffer
-		virtual bool setDrawBuffer(ColourBufferType colourBuffer);
+        void initGPUProfiling() override;
+        void deinitGPUProfiling() override;
+        void beginGPUSampleProfile( const String &name, uint32 *hashCache ) override;
+        void endGPUSampleProfile( const String &name ) override;
+
+        /// @copydoc RenderSystem::setDrawBuffer
+        bool setDrawBuffer( ColourBufferType colourBuffer ) override;
 
         /// @copydoc RenderSystem::getPixelFormatToShaderType
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
+        const PixelFormatToShaderType *getPixelFormatToShaderType() const override;
 
-        virtual void _clearStateAndFlushCommandBuffer(void);
-        virtual void flushCommands(void);
+        void _clearStateAndFlushCommandBuffer() override;
+        void flushCommands() override;
     };
-}
+}  // namespace Ogre
 #endif

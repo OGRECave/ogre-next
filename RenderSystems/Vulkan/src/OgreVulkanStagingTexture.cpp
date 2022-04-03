@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -60,7 +60,7 @@ namespace Ogre
         mMappedPtr = 0;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanStagingTexture::_unmapBuffer( void )
+    void VulkanStagingTexture::_unmapBuffer()
     {
         if( mUnmapTicket != std::numeric_limits<size_t>::max() )
         {
@@ -92,7 +92,7 @@ namespace Ogre
                box.data <= static_cast<uint8 *>( mLastMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void *RESTRICT_ALIAS_RETURN VulkanStagingTexture::mapRegionImplRawPtr( void )
+    void *RESTRICT_ALIAS_RETURN VulkanStagingTexture::mapRegionImplRawPtr()
     {
         return static_cast<uint8 *>( mMappedPtr ) + mCurrentOffset;
     }
@@ -149,7 +149,7 @@ namespace Ogre
         VulkanTextureGpu *dstTextureVulkan = static_cast<VulkanTextureGpu *>( dstTexture );
 
         const size_t distToStart =
-            ( size_t )( static_cast<uint8 *>( srcBox.data ) - static_cast<uint8 *>( mLastMappedPtr ) );
+            (size_t)( static_cast<uint8 *>( srcBox.data ) - static_cast<uint8 *>( mLastMappedPtr ) );
         const VkDeviceSize offsetPtr = mInternalBufferStart + distToStart;
 
         const uint32 destinationSlice =

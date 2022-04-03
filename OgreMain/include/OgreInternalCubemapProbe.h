@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -43,38 +43,41 @@ namespace Ogre
         This internal class is required because Forward Clustered lives in OgreMain and
         is what allows multiple cubemaps to be used on screen.
     */
-    class _OgreExport InternalCubemapProbe : public MovableObject
+    class _OgreExport InternalCubemapProbe final : public MovableObject
     {
     public:
         float mGpuData[8][4];
 
     public:
-        InternalCubemapProbe( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );
-        virtual ~InternalCubemapProbe();
+        InternalCubemapProbe( IdType id, ObjectMemoryManager *objectMemoryManager,
+                              SceneManager *manager );
+        ~InternalCubemapProbe() override;
 
-        //Overrides from MovableObject
-        virtual const String& getMovableType(void) const;
+        // Overrides from MovableObject
+        const String &getMovableType() const override;
 
         /// InternalCubemapProbes only allow
         /// ForwardPlusBase::MinCubemapProbeRq <= queueID < ForwardPlusBase::MaxCubemapProbeRq
-        virtual void setRenderQueueGroup( uint8 queueID );
+        void setRenderQueueGroup( uint8 queueID ) override;
     };
 
-    class _OgreExport InternalCubemapProbeFactory : public MovableObjectFactory
+    class _OgreExport InternalCubemapProbeFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager            *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         InternalCubemapProbeFactory() {}
-        virtual ~InternalCubemapProbeFactory() {}
+        ~InternalCubemapProbeFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
-        void destroyInstance(MovableObject* obj);
+        const String &getType() const override;
+
+        void destroyInstance( MovableObject *obj ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

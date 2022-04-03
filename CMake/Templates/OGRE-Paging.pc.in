@@ -4,7 +4,7 @@ libdir=${prefix}/@OGRE_LIB_DIRECTORY@
 includedir=${prefix}/include
 
 Name: OGRE-Paging
-Description: General purpose paging component for OGRE
+Description: General purpose paging component for OGRE-Next
 Version: @OGRE_VERSION@
 Requires: OGRE = @OGRE_VERSION@
 Libs: -L${libdir} -lOgrePaging@OGRE_LIB_SUFFIX@

@@ -158,16 +158,10 @@
 
             "uav_units" : 1,
 
-            "textures" :
-            [
-                {},
-                {},
-                {}
-            ],
-
             "properties" :
             {
-                "vct_anisotropic" : 0
+                "vct_anisotropic" : 0,
+                "hlms_num_vct_cascades" : 1
             },
 
             "params" :
@@ -175,14 +169,15 @@
                 ["voxelCellSize",           [1,1,1],    "float"],
                 ["invVoxelResolution",      [1,1,1],    "float"],
                 ["iterationDampening",      [1],        "float"],
-                ["startBias_invStartBias",  [1,1],      "float"]
+                ["startBias_invStartBias_cascadeMaxLod",[1, 1, 256, 0],        "float"],
+
+                ["fromPreviousProbeToNext", [1],        "float"]
             ],
 
             "params_glsl" :
             [
                 ["voxelAlbedoTex",          [0], "int"],
                 ["voxelNormalTex",          [1], "int"],
-                ["vctProbe",                [2], "int"],
 
                 ["lightVoxel",              [0], "int"]
             ]
@@ -230,6 +225,53 @@
             [
                 {}
             ]
-        }
+        },
+
+        "VCT/ImageVoxelizer" :
+		{
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "ImageVoxelizer_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "Matrix_piece_all", "ImageVoxelizer_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+			"uav_units" : 4,
+			
+			"params" :
+            [
+			],
+			
+			"params_glsl" :
+            [
+                ["meshTextures",      	    [1], "int"],
+                ["voxelAlbedoTex",      	[0], "int"],
+                ["voxelNormalTex",  		[1], "int"],
+                ["voxelEmissiveTex",		[2], "int"],
+                ["voxelAccumVal",			[3], "int"]
+			],
+
+            "textures" :
+            [
+                {}
+            ]
+        },
+
+		"VCT/VoxelPartialClear" :
+		{
+			"threads_per_group" : [4, 4, 4],
+
+			"source" : "VoxelPartialClear_cs",
+			"pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "VoxelPartialClear_piece_cs.any"],
+			"inform_shader_of_texture_data_change" : true,
+
+			"uav_units" : 3,
+
+			"params_glsl" :
+			[
+				["dstTex0",      	        [0], "int"],
+				["dstTex1",  		        [1], "int"],
+				["dstTex2",	        	    [2], "int"]
+			]
+		}
 	}
 }

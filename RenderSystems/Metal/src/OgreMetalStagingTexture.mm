@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,9 +27,10 @@ THE SOFTWARE.
 */
 
 #include "OgreMetalStagingTexture.h"
-#include "OgreMetalTextureGpu.h"
 
+#include "OgreException.h"
 #include "OgreMetalDevice.h"
+#include "OgreMetalTextureGpu.h"
 #include "OgreStringConverter.h"
 
 #import "Metal/MTLBlitCommandEncoder.h"
@@ -42,14 +43,15 @@ namespace Ogre
         mMappedPtr( 0 ),
         mDevice( device )
     {
-        MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeWriteCombined |
-                                             MTLResourceStorageModeShared;
+        MTLResourceOptions resourceOptions =
+            MTLResourceCPUCacheModeWriteCombined | MTLResourceStorageModeShared;
         mVboName = [mDevice->mDevice newBufferWithLength:sizeBytes options:resourceOptions];
         if( !mVboName )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Out of GPU memory or driver refused.\n"
-                         "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                         "Requested: " +
+                             StringConverter::toString( sizeBytes ) + " bytes.",
                          "MetalStagingTexture::MetalStagingTexture" );
         }
         mMappedPtr = [mVboName contents];
@@ -63,16 +65,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool MetalStagingTexture::belongsToUs( const TextureBox &box )
     {
-        return box.data >= mMappedPtr &&
-               box.data <= static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
+        return box.data >= mMappedPtr && box.data <= static_cast<uint8 *>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN MetalStagingTexture::mapRegionImplRawPtr(void)
+    void *RESTRICT_ALIAS_RETURN MetalStagingTexture::mapRegionImplRawPtr()
     {
-        return static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
+        return static_cast<uint8 *>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void MetalStagingTexture::stopMapRegion(void)
+    void MetalStagingTexture::stopMapRegion()
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
 //        NSRange range = NSMakeRange( 0, mCurrentOffset );
@@ -81,23 +82,23 @@ namespace Ogre
         StagingTextureBufferImpl::stopMapRegion();
     }
     //-----------------------------------------------------------------------------------
-    void MetalStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                                      uint8 mipLevel, const TextureBox *cpuSrcBox,
-                                      const TextureBox *dstBox, bool skipSysRamCopy )
+    void MetalStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                                      const TextureBox *cpuSrcBox, const TextureBox *dstBox,
+                                      bool skipSysRamCopy )
     {
-        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel,
-                                          cpuSrcBox, dstBox, skipSysRamCopy );
+        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel, cpuSrcBox, dstBox,
+                                          skipSysRamCopy );
 
         __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = mDevice->getBlitEncoder();
 
-        size_t bytesPerRow      = srcBox.bytesPerRow;
-        size_t bytesPerImage    = srcBox.bytesPerImage;
+        size_t bytesPerRow = srcBox.bytesPerRow;
+        size_t bytesPerImage = srcBox.bytesPerImage;
 
         // PVR textures must have 0 on these.
         if( mFormatFamily == PFG_PVRTC2_2BPP || mFormatFamily == PFG_PVRTC2_2BPP_SRGB ||
             mFormatFamily == PFG_PVRTC2_4BPP || mFormatFamily == PFG_PVRTC2_4BPP_SRGB ||
-            mFormatFamily == PFG_PVRTC_RGB2  || mFormatFamily == PFG_PVRTC_RGB2_SRGB  ||
-            mFormatFamily == PFG_PVRTC_RGB4  || mFormatFamily == PFG_PVRTC_RGB4_SRGB  ||
+            mFormatFamily == PFG_PVRTC_RGB2 || mFormatFamily == PFG_PVRTC_RGB2_SRGB ||
+            mFormatFamily == PFG_PVRTC_RGB4 || mFormatFamily == PFG_PVRTC_RGB4_SRGB ||
             mFormatFamily == PFG_PVRTC_RGBA2 || mFormatFamily == PFG_PVRTC_RGBA2_SRGB ||
             mFormatFamily == PFG_PVRTC_RGBA4 || mFormatFamily == PFG_PVRTC_RGBA4_SRGB )
         {
@@ -109,18 +110,18 @@ namespace Ogre
         if( dstTexture->getTextureType() != TextureTypes::Type3D )
             bytesPerImage = 0;
 
-        assert( dynamic_cast<MetalTextureGpu*>( dstTexture ) );
-        MetalTextureGpu *dstTextureMetal = static_cast<MetalTextureGpu*>( dstTexture );
+        assert( dynamic_cast<MetalTextureGpu *>( dstTexture ) );
+        MetalTextureGpu *dstTextureMetal = static_cast<MetalTextureGpu *>( dstTexture );
 
-        const size_t srcOffset = reinterpret_cast<uint8*>( srcBox.data ) -
-                                 reinterpret_cast<uint8*>( mMappedPtr );
-        const NSUInteger destinationSlice = (dstBox ? dstBox->sliceStart : 0) +
-                                            dstTexture->getInternalSliceStart();
+        const size_t srcOffset =
+            size_t( reinterpret_cast<uint8 *>( srcBox.data ) - reinterpret_cast<uint8 *>( mMappedPtr ) );
+        const NSUInteger destinationSlice =
+            ( dstBox ? dstBox->sliceStart : 0 ) + dstTexture->getInternalSliceStart();
         NSUInteger xPos = static_cast<NSUInteger>( dstBox ? dstBox->x : 0 );
         NSUInteger yPos = static_cast<NSUInteger>( dstBox ? dstBox->y : 0 );
         NSUInteger zPos = static_cast<NSUInteger>( dstBox ? dstBox->z : 0 );
 
-        for( NSUInteger i=0; i<srcBox.numSlices; ++i )
+        for( NSUInteger i = 0; i < srcBox.numSlices; ++i )
         {
             [blitEncoder copyFromBuffer:mVboName
                            sourceOffset:srcOffset + srcBox.bytesPerImage * i

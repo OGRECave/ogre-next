@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,12 +29,11 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorShadowNodeDef.h"
+
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
-
 #include "OgreLight.h"
-
-#include "OgreStringConverter.h"
 #include "OgreLogManager.h"
+#include "OgreStringConverter.h"
 
 namespace Ogre
 {
@@ -43,9 +42,11 @@ namespace Ogre
     {
         if( textureSource == TEXTURE_INPUT )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Shadow Nodes don't support input channels!"
-                            " Shadow Node: '" + mNameStr + "'",
-                            "OgreCompositorShadowNodeDef::addTextureSourceName" );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Shadow Nodes don't support input channels!"
+                         " Shadow Node: '" +
+                             mNameStr + "'",
+                         "OgreCompositorShadowNodeDef::addTextureSourceName" );
         }
 
         return CompositorNodeDef::addTextureSourceName( name, mShadowMapTexDefinitions.size() + index,
@@ -54,9 +55,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorShadowNodeDef::addBufferInput( size_t inputChannel, IdString name )
     {
-        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Shadow Nodes don't support input channels!"
-                        " Shadow Node: '" + mNameStr + "'",
-                        "OgreCompositorShadowNodeDef::addBufferInput" );
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                     "Shadow Nodes don't support input channels!"
+                     " Shadow Node: '" +
+                         mNameStr + "'",
+                     "OgreCompositorShadowNodeDef::addBufferInput" );
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNodeDef::setNumShadowTextureDefinitions( size_t numTex )
@@ -64,70 +67,72 @@ namespace Ogre
         mShadowMapTexDefinitions.reserve( numTex );
     }
     //-----------------------------------------------------------------------------------
-    ShadowTextureDefinition* CompositorShadowNodeDef::addShadowTextureDefinition(
-            size_t lightIdx, size_t split, const String &name,
-            const Vector2 &uvOffset, const Vector2 &uvLength, uint8 arrayIdx )
+    ShadowTextureDefinition *CompositorShadowNodeDef::addShadowTextureDefinition(
+        size_t lightIdx, size_t split, const String &name, const Vector2 &uvOffset,
+        const Vector2 &uvLength, uint8 arrayIdx )
     {
         if( name.empty() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                            "Shadow maps used as atlas can't have empty names."
-                            " Light index #" + StringConverter::toString( lightIdx ),
-                            "CompositorShadowNodeDef::addShadowTextureDefinition" );
+                         "Shadow maps used as atlas can't have empty names."
+                         " Light index #" +
+                             StringConverter::toString( lightIdx ),
+                         "CompositorShadowNodeDef::addShadowTextureDefinition" );
         }
         if( name.find( "global_" ) == 0 )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                            "Shadow maps cannot reference global textures!"
-                            " Light index #" + StringConverter::toString( lightIdx ),
-                            "CompositorShadowNodeDef::addShadowTextureDefinition" );
+                         "Shadow maps cannot reference global textures!"
+                         " Light index #" +
+                             StringConverter::toString( lightIdx ),
+                         "CompositorShadowNodeDef::addShadowTextureDefinition" );
         }
 
         ShadowMapTexDefVec::const_iterator itor = mShadowMapTexDefinitions.begin();
-        ShadowMapTexDefVec::const_iterator end  = mShadowMapTexDefinitions.end();
+        ShadowMapTexDefVec::const_iterator endt = mShadowMapTexDefinitions.end();
 
         size_t newLight = 1;
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->light == lightIdx )
                 newLight = 0;
 
             if( itor->light == lightIdx && itor->split == split )
             {
-                OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "There's already a texture for light index #"
-                                + StringConverter::toString( lightIdx ),
-                                "OgreCompositorShadowNodeDef::addShadowTextureDefinition" );
+                OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                             "There's already a texture for light index #" +
+                                 StringConverter::toString( lightIdx ),
+                             "OgreCompositorShadowNodeDef::addShadowTextureDefinition" );
             }
             ++itor;
         }
 
         mNumLights += newLight;
 
-        mShadowMapTexDefinitions.push_back( ShadowTextureDefinition( mDefaultTechnique, name,
-                                                                     uvOffset, uvLength, arrayIdx,
-                                                                     lightIdx, split ) );
+        mShadowMapTexDefinitions.push_back( ShadowTextureDefinition(
+            mDefaultTechnique, name, uvOffset, uvLength, arrayIdx, lightIdx, split ) );
 
         return &mShadowMapTexDefinitions.back();
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNodeDef::postInitializePassDef( CompositorPassDef *passDef )
     {
-        //Shadow nodes usually should be unaffected by these masks.
-        passDef->mExecutionMask         = 0xFF;
-        passDef->mViewportModifierMask  = 0x00;
+        // Shadow nodes usually should be unaffected by these masks.
+        passDef->mExecutionMask = 0xFF;
+        passDef->mViewportModifierMask = 0x00;
 
         passDef->mProfilingId = "Shadow Node " + passDef->mProfilingId;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorShadowNodeDef::_validateAndFinish(void)
+    void CompositorShadowNodeDef::_validateAndFinish()
     {
         mLightTypesMask.resize( mNumLights, 0u );
 
         CompositorTargetDefVec::iterator itor = mTargetPasses.begin();
-        CompositorTargetDefVec::iterator end  = mTargetPasses.end();
+        CompositorTargetDefVec::iterator endt = mTargetPasses.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const CompositorPassDefVec &passDefVec = itor->getCompositorPasses();
             CompositorPassDefVec::const_iterator it = passDefVec.begin();
@@ -137,72 +142,75 @@ namespace Ogre
             {
                 CompositorPassDef *pass = *it;
 
-                //All passes in shadow nodes can't include overlays.
+                // All passes in shadow nodes can't include overlays.
                 if( pass->mIncludeOverlays )
                 {
-                    LogManager::getSingleton().logMessage( "WARNING: All Passes in a Shadow Node "
-                                    "can't include overlays. Turning them off. ShadowNode: '" +
-                                    mName.getFriendlyText() + "'" );
+                    LogManager::getSingleton().logMessage(
+                        "WARNING: All Passes in a Shadow Node "
+                        "can't include overlays. Turning them off. ShadowNode: '" +
+                        mName.getFriendlyText() + "'" );
                 }
 
                 pass->mIncludeOverlays = false;
 
                 if( pass->mShadowMapIdx < mShadowMapTexDefinitions.size() )
                 {
-                    const ShadowTextureDefinition &texDef = mShadowMapTexDefinitions[pass->mShadowMapIdx];
+                    const ShadowTextureDefinition &texDef =
+                        mShadowMapTexDefinitions[pass->mShadowMapIdx];
 
                     if( itor->getRenderTargetName() == texDef.getTextureName() &&
                         !pass->mShadowMapFullViewport )
                     {
-                        //Only force the viewport settings to the passes
-                        //that directly rendering into the atlas
-                        pass->mVpRect[0].mVpLeft   = static_cast<float>( texDef.uvOffset.x );
-                        pass->mVpRect[0].mVpTop    = static_cast<float>( texDef.uvOffset.y );
-                        pass->mVpRect[0].mVpWidth  = static_cast<float>( texDef.uvLength.x );
+                        // Only force the viewport settings to the passes
+                        // that directly rendering into the atlas
+                        pass->mVpRect[0].mVpLeft = static_cast<float>( texDef.uvOffset.x );
+                        pass->mVpRect[0].mVpTop = static_cast<float>( texDef.uvOffset.y );
+                        pass->mVpRect[0].mVpWidth = static_cast<float>( texDef.uvLength.x );
                         pass->mVpRect[0].mVpHeight = static_cast<float>( texDef.uvLength.y );
 
-                        pass->mVpRect[0].mVpScissorLeft   = pass->mVpRect[0].mVpLeft;
-                        pass->mVpRect[0].mVpScissorTop    = pass->mVpRect[0].mVpTop;
-                        pass->mVpRect[0].mVpScissorWidth  = pass->mVpRect[0].mVpWidth;
+                        pass->mVpRect[0].mVpScissorLeft = pass->mVpRect[0].mVpLeft;
+                        pass->mVpRect[0].mVpScissorTop = pass->mVpRect[0].mVpTop;
+                        pass->mVpRect[0].mVpScissorWidth = pass->mVpRect[0].mVpWidth;
                         pass->mVpRect[0].mVpScissorHeight = pass->mVpRect[0].mVpHeight;
                     }
 
                     if( texDef.shadowMapTechnique == SHADOWMAP_PSSM )
                     {
-                        //PSSM only supports directional lights. This is for sure.
+                        // PSSM only supports directional lights. This is for sure.
                         itor->setShadowMapSupportedLightTypes( 1u << Light::LT_DIRECTIONAL );
                     }
                     else if( itor->getShadowMapSupportedLightTypes() == 0 )
                     {
                         OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                            "Pass in shadow node " + mNameStr + " is assigned to shadow "
-                            "maps but says it does not support any light type. "
-                            "Did you forget to call setShadowMapSupportedLightTypes?",
-                            "CompositorShadowNodeDef::_validateAndFinish" );
+                                     "Pass in shadow node " + mNameStr +
+                                         " is assigned to shadow "
+                                         "maps but says it does not support any light type. "
+                                         "Did you forget to call setShadowMapSupportedLightTypes?",
+                                     "CompositorShadowNodeDef::_validateAndFinish" );
                     }
 
-                    //Accumulate the types of lights this shadow map supports
-                    //based on the passes that claim to be compatible with it.
+                    // Accumulate the types of lights this shadow map supports
+                    // based on the passes that claim to be compatible with it.
                     const size_t lightIdx = mShadowMapTexDefinitions[pass->mShadowMapIdx].light;
                     mLightTypesMask[lightIdx] |= itor->getShadowMapSupportedLightTypes();
                 }
 
                 if( pass->getType() == PASS_SCENE )
                 {
-                    //assert( dynamic_cast<CompositorPassSceneDef*>( pass ) );
-                    CompositorPassSceneDef *passScene = static_cast<CompositorPassSceneDef*>( pass );
+                    // assert( dynamic_cast<CompositorPassSceneDef*>( pass ) );
+                    CompositorPassSceneDef *passScene = static_cast<CompositorPassSceneDef *>( pass );
                     mMinRq = std::min<size_t>( mMinRq, passScene->mFirstRQ );
                     mMaxRq = std::max<size_t>( mMaxRq, passScene->mLastRQ );
 
-                    //Regular nodes calculate the LOD values, we just use them.
+                    // Regular nodes calculate the LOD values, we just use them.
                     if( passScene->mLodCameraName == IdString() )
                         passScene->mUpdateLodLists = false;
 
-                    //Set to only render casters
+                    // Set to only render casters
                     passScene->mVisibilityMask |= VisibilityFlags::LAYER_SHADOW_CASTER;
 
-                    //Nested shadow maps are not allowed. Sorry!
-                    passScene->mShadowNode              = IdString();
+                    // Nested shadow maps are not allowed. Sorry!
+                    passScene->mShadowNode = IdString();
                     passScene->mShadowNodeRecalculation = SHADOW_NODE_CASTER_PASS;
                 }
 
@@ -212,7 +220,7 @@ namespace Ogre
             ++itor;
         }
 
-        //See which shadow maps can share the camera setup
+        // See which shadow maps can share the camera setup
         ShadowMapTexDefVec::iterator it1 = mShadowMapTexDefinitions.begin();
         ShadowMapTexDefVec::iterator en1 = mShadowMapTexDefinitions.end();
 
@@ -221,23 +229,24 @@ namespace Ogre
             if( it1->split != 0 && it1->shadowMapTechnique != SHADOWMAP_PSSM )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                    "Trying to use a split with non-PSSM shadow map techniques.",
-                    "CompositorShadowNodeDef::_validateAndFinish");
+                             "Trying to use a split with non-PSSM shadow map techniques.",
+                             "CompositorShadowNodeDef::_validateAndFinish" );
             }
 
 #ifndef OGRE_REMOVE_PSSM_SPLIT_LIMIT
             if( it1->numSplits > 5 )
             {
-                //The risk is that, because of how Ogre deals with constant params, we have no way
-                //to tell whether the shader has enough room to hold all the floats we'll sent.
-                //At 5 splits, we send 4 floats (i.e. a float4). If there were 6 splits, we would
-                //send 5 floats, which means the variable needs to be declared as float [5] or
-                //float4 [2], float4x2 etc. If you're sure the shader has enough room, you
-                //can define this macro to remove the limit.
+                // The risk is that, because of how Ogre deals with constant params, we have no way
+                // to tell whether the shader has enough room to hold all the floats we'll sent.
+                // At 5 splits, we send 4 floats (i.e. a float4). If there were 6 splits, we would
+                // send 5 floats, which means the variable needs to be declared as float [5] or
+                // float4 [2], float4x2 etc. If you're sure the shader has enough room, you
+                // can define this macro to remove the limit.
                 it1->numSplits = 5;
-                LogManager::getSingleton().logMessage( "WARNING: Limiting the number of PSSM splits per "
-                            "light to 5. If you wish to use more & understand the risks, recompile Ogre "
-                            "defining the macro OGRE_REMOVE_PSSM_SPLIT_LIMIT." );
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Limiting the number of PSSM splits per "
+                    "light to 5. If you wish to use more & understand the risks, recompile Ogre "
+                    "defining the macro OGRE_REMOVE_PSSM_SPLIT_LIMIT." );
             }
 #endif
 
@@ -252,29 +261,33 @@ namespace Ogre
                 {
                     if( it2->split == it1->split )
                     {
-                        //Do not share the setups, the user may be trying to do tricky stuff
+                        // Do not share the setups, the user may be trying to do tricky stuff
                         //(like comparing two shadow mapping techniques on the same light)
-                        LogManager::getSingleton().logMessage( "WARNING: Two shadow maps refer to the "
+                        LogManager::getSingleton().logMessage(
+                            "WARNING: Two shadow maps refer to the "
                             "same light & split. Ignore this if it is intentional" );
                     }
                     else if( it2->split != it1->split )
                     {
                         if( it2->numSplits != it1->numSplits )
                         {
-                            LogManager::getSingleton().logMessage( "WARNING: All pssm shadow maps with "
-                                    "the same light but different split must have the same number of "
-                                    "splits. Attempting to fix. ShadowNode: '" +
-                                    mName.getFriendlyText() + "'." );
+                            LogManager::getSingleton().logMessage(
+                                "WARNING: All pssm shadow maps with "
+                                "the same light but different split must have the same number of "
+                                "splits. Attempting to fix. ShadowNode: '" +
+                                mName.getFriendlyText() + "'." );
                             it1->numSplits = it2->numSplits;
                         }
 
-                        it1->_setSharesSetupWithIdx( it2 - mShadowMapTexDefinitions.begin() );
+                        it1->_setSharesSetupWithIdx(
+                            static_cast<size_t>( it2 - mShadowMapTexDefinitions.begin() ) );
                         bShared = true;
                     }
                 }
                 else if( it2->shadowMapTechnique == it1->shadowMapTechnique )
                 {
-                    it1->_setSharesSetupWithIdx( it2 - mShadowMapTexDefinitions.begin() );
+                    it1->_setSharesSetupWithIdx(
+                        static_cast<size_t>( it2 - mShadowMapTexDefinitions.begin() ) );
                     bShared = true;
                 }
                 ++it2;
@@ -284,7 +297,7 @@ namespace Ogre
         }
 
         {
-            //These setups are invalid:
+            // These setups are invalid:
             //  SP  D
             //  S   D
             //  P   D
@@ -299,7 +312,7 @@ namespace Ogre
             // Basically, if lightType N was used for shadowmap A and N-2 was not,
             // the next shadow map cannot use lightType == N-2.
             bool cannotUseType[Light::NUM_LIGHT_TYPES];
-            for( size_t i=0; i<Light::NUM_LIGHT_TYPES; ++i )
+            for( size_t i = 0; i < Light::NUM_LIGHT_TYPES; ++i )
                 cannotUseType[i] = false;
 
             LightTypeMaskVec::const_iterator it = mLightTypesMask.begin();
@@ -308,38 +321,40 @@ namespace Ogre
             while( it != en )
             {
                 bool isError = false;
-                for( size_t i=0; i<Light::NUM_LIGHT_TYPES; ++i )
+                for( size_t i = 0; i < Light::NUM_LIGHT_TYPES; ++i )
                 {
-                    if( *it & (1u << i) && cannotUseType[i] )
+                    if( *it & ( 1u << i ) && cannotUseType[i] )
                         isError = true;
                 }
 
                 if( isError )
                 {
-                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                        "Error in shadow node " + mNameStr + ": Ogre requires lights to be "
-                        "sent to GPU in the following order: Directional, Point, Spotlight. "
-                        "But your shadow node forces this order to be violated. A shadow map"
-                        " that does not support directional lights cannot come before a "
-                        "shadow map that does support them. A shadow map that "
-                        "does not support point lights but supports spotlights cannot "
-                        "come before a shadow map that supports point lights",
+                    OGRE_EXCEPT(
+                        Exception::ERR_INVALIDPARAMS,
+                        "Error in shadow node " + mNameStr +
+                            ": Ogre requires lights to be "
+                            "sent to GPU in the following order: Directional, Point, Spotlight. "
+                            "But your shadow node forces this order to be violated. A shadow map"
+                            " that does not support directional lights cannot come before a "
+                            "shadow map that does support them. A shadow map that "
+                            "does not support point lights but supports spotlights cannot "
+                            "come before a shadow map that supports point lights",
                         "CompositorShadowNodeDef::_validateAndFinish" );
                 }
                 else
                 {
-                    //A shadow map that does not support directional
-                    //lights cannot come before a shadow map that does.
-                    //A shadow map that does not support point lights but supports spotlights
-                    //cannot come before a shadow map that supports point lights.
-                    //for( size_t i=0; i<Light::NUM_LIGHT_TYPES; ++i )
-                    for( size_t i=Light::NUM_LIGHT_TYPES; i--; )
+                    // A shadow map that does not support directional
+                    // lights cannot come before a shadow map that does.
+                    // A shadow map that does not support point lights but supports spotlights
+                    // cannot come before a shadow map that supports point lights.
+                    // for( size_t i=0; i<Light::NUM_LIGHT_TYPES; ++i )
+                    for( size_t i = Light::NUM_LIGHT_TYPES; i--; )
                     {
-                        if( (*it & (1u << i)) )
+                        if( ( *it & ( 1u << i ) ) )
                         {
-                            for( size_t j=i; j--; )
+                            for( size_t j = i; j--; )
                             {
-                                if( !(*it & (1u << j)) )
+                                if( !( *it & ( 1u << j ) ) )
                                     cannotUseType[j] = true;
                             }
                         }
@@ -350,4 +365,4 @@ namespace Ogre
             }
         }
     }
-}
+}  // namespace Ogre

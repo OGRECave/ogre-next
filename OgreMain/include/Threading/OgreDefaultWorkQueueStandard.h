@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------
-This source file is a part of OGRE
+This source file is a part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 
 For the latest info, see http://www.ogre3d.org/
@@ -27,7 +27,7 @@ THE SOFTWARE
 #define __OgreDefaultWorkQueueStandard_H__
 
 #if OGRE_THREAD_SUPPORT
-#include "ogrestd/vector.h"
+#    include "ogrestd/vector.h"
 #endif
 
 #include "../OgreWorkQueue.h"
@@ -36,24 +36,23 @@ namespace Ogre
 {
     /** Implementation of a general purpose request / response style background work queue.
     @remarks
-        This default implementation of a work queue starts a thread pool and 
-        provides queues to process requests. 
+        This default implementation of a work queue starts a thread pool and
+        provides queues to process requests.
     */
     class _OgreExport DefaultWorkQueue : public DefaultWorkQueueBase
     {
     public:
-
-        DefaultWorkQueue(const String& name = BLANKSTRING);
-        virtual ~DefaultWorkQueue(); 
+        DefaultWorkQueue( const String &name = BLANKSTRING );
+        ~DefaultWorkQueue() override;
 
         /// Main function for each thread spawned.
-        virtual void _threadMain();
+        void _threadMain() override;
 
         /// @copydoc WorkQueue::shutdown
-        virtual void shutdown();
+        void shutdown() override;
 
         /// @copydoc WorkQueue::startup
-        virtual void startup(bool forceRestart = true);
+        void startup( bool forceRestart = true ) override;
 
     protected:
         /** To be called by a separate thread; will return immediately if there
@@ -65,22 +64,21 @@ namespace Ogre
         /// Notify that a thread has registered itself with the render system
         virtual void notifyThreadRegistered();
 
-        virtual void notifyWorkers();
+        void notifyWorkers() override;
 
         size_t mNumThreadsRegisteredWithRS;
         /// Init notification mutex (must lock before waiting on initCondition)
-        OGRE_MUTEX(mInitMutex);
-        /// Synchroniser token to wait / notify on thread init 
-        OGRE_THREAD_SYNCHRONISER(mInitSync);
+        OGRE_MUTEX( mInitMutex );
+        /// Synchroniser token to wait / notify on thread init
+        OGRE_THREAD_SYNCHRONISER( mInitSync );
 
-        OGRE_THREAD_SYNCHRONISER(mRequestCondition);
+        OGRE_THREAD_SYNCHRONISER( mRequestCondition );
 #if OGRE_THREAD_SUPPORT
-        typedef vector<OGRE_THREAD_TYPE*>::type WorkerThreadList;
-        WorkerThreadList mWorkers;
+        typedef vector<OGRE_THREAD_TYPE *>::type WorkerThreadList;
+        WorkerThreadList                         mWorkers;
 #endif
-
     };
 
-}
+}  // namespace Ogre
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -36,17 +36,17 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    typedef vector<char*>::type MemoryPoolVec;
+    typedef vector<char *>::type MemoryPoolVec;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Memory
-    *  @{
-    */
+     *  @{
+     */
 
-    typedef void (*CleanupRoutines)( char *dstPtr, size_t indexDst, char *srcPtr, size_t indexSrc,
-                                     size_t numSlots, size_t numFreeSlots, size_t elementsMemSize );
+    typedef void ( *CleanupRoutines )( char *dstPtr, size_t indexDst, char *srcPtr, size_t indexSrc,
+                                       size_t numSlots, size_t numFreeSlots, size_t elementsMemSize );
 
     /** Abstract memory manager for managing large chunks of contiguous memory, optimized for SoA
         (Structure of Arrays) implementations.
@@ -66,7 +66,7 @@ namespace Ogre
     class _OgreExport ArrayMemoryManager
     {
     public:
-        //typedef vector<ptrdiff_t>::type PtrdiffVec; //TODO: Modify for Ogre
+        // typedef vector<ptrdiff_t>::type PtrdiffVec; //TODO: Modify for Ogre
         typedef std::vector<ptrdiff_t> PtrdiffVec;
 
         /** When mUsedMemory >= mMaxMemory (that is, we've exhausted all our preallocated memory)
@@ -140,26 +140,26 @@ namespace Ogre
         };
 
     protected:
-        ///One per memory type
-        MemoryPoolVec               mMemoryPools;
-        size_t const                *mElementsMemSizes;
-        CleanupRoutines const       *mInitRoutines;
-        CleanupRoutines const       *mCleanupRoutines;
-        size_t                      mTotalMemoryMultiplier;
+        /// One per memory type
+        MemoryPoolVec          mMemoryPools;
+        size_t const          *mElementsMemSizes;
+        CleanupRoutines const *mInitRoutines;
+        CleanupRoutines const *mCleanupRoutines;
+        size_t                 mTotalMemoryMultiplier;
 
-        //The following three are measured in instances, not bytes
-        size_t              mUsedMemory;
-        size_t              mMaxMemory;
-        size_t              mMaxHardLimit;
-        size_t              mCleanupThreshold;
-        typedef std::vector<size_t> SlotsVec; //TODO: Modify for Ogre
-        SlotsVec            mAvailableSlots;
-        RebaseListener      *mRebaseListener;
+        // The following three are measured in instances, not bytes
+        size_t                      mUsedMemory;
+        size_t                      mMaxMemory;
+        size_t                      mMaxHardLimit;
+        size_t                      mCleanupThreshold;
+        typedef std::vector<size_t> SlotsVec;  // TODO: Modify for Ogre
+        SlotsVec                    mAvailableSlots;
+        RebaseListener             *mRebaseListener;
 
         /// The hierarchy depth level. This value is not used by the manager,
         /// just passed to the listeners so they can know to which level it
         /// belongs
-        uint16              mLevel;
+        uint16 mLevel;
 
     public:
         static const size_t MAX_MEMORY_SLOTS;
@@ -198,12 +198,12 @@ namespace Ogre
                 The listener to be called when cleaning up or growing the memory pool. If null,
                 cleanupThreshold is set to -1 & maxHardLimit will be set to hintMaxNodes
         */
-        ArrayMemoryManager( size_t const *elementsMemSize,
-                            CleanupRoutines const *initRoutines,
-                            CleanupRoutines const *cleanupRoutines,
-                            size_t numElementsSize, uint16 depthLevel, size_t hintMaxNodes,
-                            size_t cleanupThreshold=100, size_t maxHardLimit=MAX_MEMORY_SLOTS,
-                            RebaseListener *rebaseListener=0 );
+        ArrayMemoryManager( size_t const *elementsMemSize, CleanupRoutines const *initRoutines,
+                            CleanupRoutines const *cleanupRoutines, size_t numElementsSize,
+                            uint16 depthLevel, size_t hintMaxNodes, size_t cleanupThreshold = 100,
+                            size_t maxHardLimit = MAX_MEMORY_SLOTS, RebaseListener *rebaseListener = 0 );
+
+        virtual ~ArrayMemoryManager();
 
         /** Initializes mMemoryPools. Once it has been called, destroy() __must__ be called.
             @See destroy
@@ -228,12 +228,12 @@ namespace Ogre
         ///
         /// ArrayMemoryManager::destroySlot already does this when the number
         /// of fragmented slots reaches mCleanupThreshold
-        void defragment(void);
+        void defragment();
 
         /// Defragments memory, then reallocates a smaller pool that tightly fits
         /// the current number of objects. Useful when you know you won't be creating
         /// more slots and you need to reclaim memory.
-        void shrinkToFit(void);
+        void shrinkToFit();
 
         /// Returns mUsedMemory. When ARRAY_PACKED_REALS = 4, and 4 objects have been
         /// created but the 2nd one has been deleted, getNumUsedSlotsIncludingFragmented
@@ -281,23 +281,20 @@ namespace Ogre
         virtual void initializeEmptySlots( size_t prevNumSlots ) {}
     };
 
-
-
-
     /** Implementation to create the Transform variables needed by Nodes & SceneNodes
     @author
         Matias N. Goldberg
     @version
         1.0
     */
-    class _OgreExport NodeArrayMemoryManager : public ArrayMemoryManager
+    class _OgreExport NodeArrayMemoryManager final : public ArrayMemoryManager
     {
         /// Dummy node where to point Transform::mParents[i] when they're unused slots.
-        Node    *mDummyNode;
+        Node *mDummyNode;
 
     protected:
         /// We overload to set all mParents to point to mDummyNode
-        virtual void initializeEmptySlots( size_t prevNumSlots );
+        void initializeEmptySlots( size_t prevNumSlots ) override;
 
     public:
         enum MemoryTypes
@@ -316,14 +313,14 @@ namespace Ogre
             NumMemoryTypes
         };
 
-        static const size_t ElementsMemSize[NumMemoryTypes];
+        static const size_t          ElementsMemSize[NumMemoryTypes];
         static const CleanupRoutines NodeInitRoutines[NumMemoryTypes];
         static const CleanupRoutines NodeCleanupRoutines[NumMemoryTypes];
 
         /// @copydoc ArrayMemoryManager::ArrayMemoryManager
         NodeArrayMemoryManager( uint16 depthLevel, size_t hintMaxNodes, Node *dummyNode,
-                                size_t cleanupThreshold=100, size_t maxHardLimit=MAX_MEMORY_SLOTS,
-                                RebaseListener *rebaseListener=0 );
+                                size_t cleanupThreshold = 100, size_t maxHardLimit = MAX_MEMORY_SLOTS,
+                                RebaseListener *rebaseListener = 0 );
 
         /** Requests memory for a new SceneNode (for the Array vectors & matrices)
             May be also be used for a new Entity, etc.
@@ -355,23 +352,21 @@ namespace Ogre
         size_t getFirstNode( Transform &outTransform );
     };
 
-
-
     /** Implementation to create the ObjectData variables needed by MovableObjects
     @author
         Matias N. Goldberg
     @version
         1.0
     */
-    class _OgreExport ObjectDataArrayMemoryManager : public ArrayMemoryManager
+    class _OgreExport ObjectDataArrayMemoryManager final : public ArrayMemoryManager
     {
         /// Dummy node where to point ObjectData::mParents[i] when they're unused slots.
-        Node            *mDummyNode;
-        MovableObject   *mDummyObject;
+        Node          *mDummyNode;
+        MovableObject *mDummyObject;
 
     protected:
         /// We overload to set all mParents to point to mDummyNode
-        virtual void initializeEmptySlots( size_t prevNumSlots );
+        void initializeEmptySlots( size_t prevNumSlots ) override;
 
     public:
         enum MemoryTypes
@@ -391,14 +386,14 @@ namespace Ogre
             NumMemoryTypes
         };
 
-        static const size_t ElementsMemSize[NumMemoryTypes];
+        static const size_t          ElementsMemSize[NumMemoryTypes];
         static const CleanupRoutines ObjCleanupRoutines[NumMemoryTypes];
 
         /// @copydoc ArrayMemoryManager::ArrayMemoryManager
         ObjectDataArrayMemoryManager( uint16 depthLevel, size_t hintMaxNodes, Node *dummyNode,
-                                        MovableObject *dummyObject, size_t cleanupThreshold=100,
-                                        size_t maxHardLimit=MAX_MEMORY_SLOTS,
-                                        RebaseListener *rebaseListener=0 );
+                                      MovableObject *dummyObject, size_t cleanupThreshold = 100,
+                                      size_t          maxHardLimit = MAX_MEMORY_SLOTS,
+                                      RebaseListener *rebaseListener = 0 );
 
         /// @copydoc NodeArrayMemoryManager::createNewNode
         void createNewNode( ObjectData &outData );
@@ -419,10 +414,10 @@ namespace Ogre
     extern void cleanerArrayQuaternion( char *dstPtr, size_t indexDst, char *srcPtr, size_t indexSrc,
                                         size_t numSlots, size_t numFreeSlots, size_t elementsMemSize );
     extern void cleanerArrayAabb( char *dstPtr, size_t indexDst, char *srcPtr, size_t indexSrc,
-                                    size_t numSlots, size_t numFreeSlots, size_t elementsMemSize  );
+                                  size_t numSlots, size_t numFreeSlots, size_t elementsMemSize );
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

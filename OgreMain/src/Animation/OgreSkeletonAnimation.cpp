@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,14 +29,20 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Animation/OgreSkeletonAnimation.h"
+
 #include "Animation/OgreSkeletonAnimationDef.h"
 #include "Animation/OgreSkeletonInstance.h"
+
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
 
 namespace Ogre
 {
     SkeletonAnimation::SkeletonAnimation( const SkeletonAnimationDef *definition,
-                                            const FastArray<size_t> *_slotStarts,
-                                            SkeletonInstance *owner ) :
+                                          const FastArray<size_t> *_slotStarts,
+                                          SkeletonInstance *owner ) :
         mDefinition( definition ),
         mBoneWeights( 0 ),
         mCurrentFrame( 0 ),
@@ -50,34 +56,34 @@ namespace Ogre
     {
         mLastKnownKeyFrames.reserve( definition->mTracks.size() );
 #ifndef NDEBUG
-        for( size_t i=0; i<mSlotStarts->size(); ++i )
-            assert( (*mSlotStarts)[i] < ARRAY_PACKED_REALS );
+        for( size_t i = 0; i < mSlotStarts->size(); ++i )
+            assert( ( *mSlotStarts )[i] < ARRAY_PACKED_REALS );
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonAnimation::_initialize(void)
+    void SkeletonAnimation::_initialize()
     {
         const FastArray<size_t> &slotStarts = *mSlotStarts;
 
         mBoneWeights = RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION>( mDefinition->mTracks.size() );
         ArrayReal *boneWeights = mBoneWeights.get();
-        Real *boneWeightsScalar = reinterpret_cast<Real*>( mBoneWeights.get() );
+        Real *boneWeightsScalar = reinterpret_cast<Real *>( mBoneWeights.get() );
 
         SkeletonTrackVec::const_iterator itor = mDefinition->mTracks.begin();
-        SkeletonTrackVec::const_iterator end  = mDefinition->mTracks.end();
+        SkeletonTrackVec::const_iterator endt = mDefinition->mTracks.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            if( itor->getUsedSlots() <= (ARRAY_PACKED_REALS >> 1) )
+            if( itor->getUsedSlots() <= ( ARRAY_PACKED_REALS >> 1 ) )
             {
                 const size_t level = itor->getBoneBlockIdx() >> 24;
                 const size_t slotStart = slotStarts[level];
 
-                for( size_t i=0; i<slotStart; ++i )
+                for( size_t i = 0; i < slotStart; ++i )
                     boneWeightsScalar[i] = 0.0f;
-                for( size_t i=slotStart; i<slotStart + itor->getUsedSlots(); ++i )
+                for( size_t i = slotStart; i < slotStart + itor->getUsedSlots(); ++i )
                     boneWeightsScalar[i] = 1.0f;
-                for( size_t i=slotStart + itor->getUsedSlots(); i<ARRAY_PACKED_REALS; ++i )
+                for( size_t i = slotStart + itor->getUsedSlots(); i < ARRAY_PACKED_REALS; ++i )
                     boneWeightsScalar[i] = 0.0f;
             }
             else
@@ -166,25 +172,19 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    Real SkeletonAnimation::getNumFrames(void) const
-    {
-        return mDefinition->mNumFrames;
-    }
+    Real SkeletonAnimation::getNumFrames() const { return mDefinition->mNumFrames; }
     //-----------------------------------------------------------------------------------
-    Real SkeletonAnimation::getDuration(void) const
-    {
-        return mDefinition->mNumFrames / mFrameRate;
-    }
+    Real SkeletonAnimation::getDuration() const { return mDefinition->mNumFrames / mFrameRate; }
     //-----------------------------------------------------------------------------------
     void SkeletonAnimation::setBoneWeight( IdString boneName, Real weight )
     {
         map<IdString, size_t>::type::const_iterator itor = mDefinition->mBoneToWeights.find( boneName );
         if( itor != mDefinition->mBoneToWeights.end() )
         {
-            size_t level    = itor->second >> 24;
-            size_t offset   = itor->second & 0x00FFFFFF;
-            Real *aliasedBoneWeights = reinterpret_cast<Real*>( mBoneWeights.get() ) +
-                                                offset + (*mSlotStarts)[level];
+            size_t level = itor->second >> 24;
+            size_t offset = itor->second & 0x00FFFFFF;
+            Real *aliasedBoneWeights =
+                reinterpret_cast<Real *>( mBoneWeights.get() ) + offset + ( *mSlotStarts )[level];
             *aliasedBoneWeights = weight;
         }
     }
@@ -196,25 +196,25 @@ namespace Ogre
         map<IdString, size_t>::type::const_iterator itor = mDefinition->mBoneToWeights.find( boneName );
         if( itor != mDefinition->mBoneToWeights.end() )
         {
-            size_t level    = itor->second >> 24;
-            size_t offset   = itor->second & 0x00FFFFFF;
-            const Real *aliasedBoneWeights = reinterpret_cast<const Real*>( mBoneWeights.get() ) +
-                                                            offset + (*mSlotStarts)[level];
+            size_t level = itor->second >> 24;
+            size_t offset = itor->second & 0x00FFFFFF;
+            const Real *aliasedBoneWeights =
+                reinterpret_cast<const Real *>( mBoneWeights.get() ) + offset + ( *mSlotStarts )[level];
             retVal = *aliasedBoneWeights;
         }
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    Real* SkeletonAnimation::getBoneWeightPtr( IdString boneName )
+    Real *SkeletonAnimation::getBoneWeightPtr( IdString boneName )
     {
-        Real* retVal = 0;
+        Real *retVal = 0;
 
         map<IdString, size_t>::type::const_iterator itor = mDefinition->mBoneToWeights.find( boneName );
         if( itor != mDefinition->mBoneToWeights.end() )
         {
-            size_t level    = itor->second >> 24;
-            size_t offset   = itor->second & 0x00FFFFFF;
-            retVal = reinterpret_cast<Real*>( mBoneWeights.get() ) + offset + (*mSlotStarts)[level];
+            size_t level = itor->second >> 24;
+            size_t offset = itor->second & 0x00FFFFFF;
+            retVal = reinterpret_cast<Real *>( mBoneWeights.get() ) + offset + ( *mSlotStarts )[level];
         }
 
         return retVal;
@@ -246,7 +246,7 @@ namespace Ogre
                             reinterpret_cast<const Real *>( mBoneWeights.get() ) + offset +
                             ( *mSlotStarts )[level];
                         const Real boneWeight = *aliasedBoneWeights;
-						finalWeight = Math::lerp( 1.0f - boneWeight, constantWeight, boneWeight );
+                        finalWeight = Math::lerp( 1.0f - boneWeight, constantWeight, boneWeight );
                     }
                     otherAnim->setBoneWeight( itBone->first, finalWeight );
                     ++itBone;
@@ -310,26 +310,29 @@ namespace Ogre
     void SkeletonAnimation::_applyAnimation( const TransformArray &boneTransforms )
     {
         SkeletonTrackVec::const_iterator itor = mDefinition->mTracks.begin();
-        SkeletonTrackVec::const_iterator end  = mDefinition->mTracks.end();
+        SkeletonTrackVec::const_iterator endt = mDefinition->mTracks.end();
 
         KnownKeyFramesVec::iterator itLastKnownKeyFrame = mLastKnownKeyFrames.begin();
 
         ArrayReal simdWeight = Mathlib::SetAll( mWeight );
-        ArrayReal * RESTRICT_ALIAS boneWeights = mBoneWeights.get();
+        ArrayReal *RESTRICT_ALIAS boneWeights = mBoneWeights.get();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            itor->applyKeyFrameRigAt( *itLastKnownKeyFrame, mCurrentFrame, simdWeight,
-                                        boneWeights, boneTransforms );
+            itor->applyKeyFrameRigAt( *itLastKnownKeyFrame, mCurrentFrame, simdWeight, boneWeights,
+                                      boneTransforms );
             ++itLastKnownKeyFrame;
             ++boneWeights;
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonAnimation::_swapBoneWeightsUniquePtr( RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION>
-                                                       &inOutBoneWeights )
+    void SkeletonAnimation::_swapBoneWeightsUniquePtr(
+        RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> &inOutBoneWeights )
     {
         inOutBoneWeights.swap( mBoneWeights );
     }
-}
+}  // namespace Ogre
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif

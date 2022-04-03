@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    /** Vulkan maps per pool, thus mapping the same pool twice is a common ocurrence.
+    /** Vulkan maps per pool, thus mapping the same pool twice is a common occurrence.
     @par
         This class takes care of mapping pools just once while allowing
         BufferInterface to map subregions of it as if they were separate
@@ -90,8 +90,8 @@ namespace Ogre
         /// The ticket becomes invalid after this.
         void unmap( size_t ticket );
 
-        bool isCoherentMemory( void ) const { return mCoherentMemory; }
-        VkDeviceMemory getDeviceMemory( void ) { return mDeviceMemory; }
+        bool isCoherentMemory() const { return mCoherentMemory; }
+        VkDeviceMemory getDeviceMemory() { return mDeviceMemory; }
     };
 }  // namespace Ogre
 

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,40 +26,39 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
-#include "OgreMesh2.h"
 
-#include "OgreSubMesh2.h"
-#include "OgreLogManager.h"
-#include "OgreMesh2Serializer.h"
-#include "OgreMeshManager2.h"
-#include "OgreMeshManager.h"
-#include "OgreMesh.h"
-#include "OgreHardwareBufferManager.h"
-#include "OgreIteratorWrappers.h"
-#include "OgreException.h"
-#include "OgreOptimisedUtil.h"
-#include "OgreSkeleton.h"
-#include "OgreLodStrategyManager.h"
-#include "OgrePixelCountLodStrategy.h"
-#include "OgreMovableObject.h"
+#include "OgreMesh2.h"
 
 #include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonManager.h"
-
+#include "OgreException.h"
+#include "OgreHardwareBufferManager.h"
+#include "OgreIteratorWrappers.h"
+#include "OgreLodStrategyManager.h"
+#include "OgreLogManager.h"
+#include "OgreMesh.h"
+#include "OgreMesh2Serializer.h"
+#include "OgreMeshManager.h"
+#include "OgreMeshManager2.h"
+#include "OgreMovableObject.h"
+#include "OgreOldSkeletonManager.h"
+#include "OgreOptimisedUtil.h"
+#include "OgrePixelCountLodStrategy.h"
+#include "OgreProfiler.h"
+#include "OgreSkeleton.h"
+#include "OgreSubMesh2.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreVertexArrayObject.h"
 
-#include "OgreOldSkeletonManager.h"
-
-#include "OgreProfiler.h"
-
-namespace Ogre {
+namespace Ogre
+{
     bool Mesh::msOptimizeForShadowMapping = false;
+    bool Mesh::msUseTimestampAsHash = false;
 
     //-----------------------------------------------------------------------
-    Mesh::Mesh( ResourceManager* creator, const String& name, ResourceHandle handle,
-                const String& group, VaoManager *vaoManager, bool isManual, ManualResourceLoader* loader )
-        : Resource(creator, name, handle, group, isManual, loader),
+    Mesh::Mesh( ResourceManager *creator, const String &name, ResourceHandle handle, const String &group,
+                VaoManager *vaoManager, bool isManual, ManualResourceLoader *loader ) :
+        Resource( creator, name, handle, group, isManual, loader ),
         mBoundRadius( 0.0f ),
         mLodStrategyName( LodStrategyManager::getSingleton().getDefaultStrategy()->getName() ),
         mVaoManager( vaoManager ),
@@ -68,23 +67,24 @@ namespace Ogre {
         mVertexBufferShadowBuffer( true ),
         mIndexBufferShadowBuffer( true )
     {
+        memset( mHashForCaches, 0, sizeof( mHashForCaches ) );
         mLodValues.push_back( LodStrategyManager::getSingleton().getDefaultStrategy()->getBaseValue() );
     }
     //-----------------------------------------------------------------------
     Mesh::~Mesh()
     {
-        // have to call this here reather than in Resource destructor
+        // have to call this here rather than in Resource destructor
         // since calling virtual methods in base destructors causes crash
         unload();
     }
     //-----------------------------------------------------------------------
-    SubMesh* Mesh::createSubMesh( size_t index )
+    SubMesh *Mesh::createSubMesh( size_t index )
     {
-        SubMesh* sub = OGRE_NEW SubMesh();
+        SubMesh *sub = OGRE_NEW SubMesh();
         sub->mParent = this;
 
         index = std::min( index, mSubMeshes.size() );
-        mSubMeshes.insert( mSubMeshes.begin() + index, sub );
+        mSubMeshes.insert( mSubMeshes.begin() + static_cast<ptrdiff_t>( index ), sub );
 
         if( isLoaded() )
             _dirtyState();
@@ -92,13 +92,11 @@ namespace Ogre {
         return sub;
     }
     //-----------------------------------------------------------------------
-    void Mesh::destroySubMesh(unsigned index)
+    void Mesh::destroySubMesh( unsigned index )
     {
         if( index >= mSubMeshes.size() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "Index out of bounds.",
-                        "Mesh::removeSubMesh");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Index out of bounds.", "Mesh::removeSubMesh" );
         }
 
         SubMeshVec::iterator itor = mSubMeshes.begin() + index;
@@ -106,34 +104,29 @@ namespace Ogre {
 
         mSubMeshes.erase( itor );
 
-        if (isLoaded())
+        if( isLoaded() )
             _dirtyState();
     }
     //-----------------------------------------------------------------------
-    unsigned Mesh::getNumSubMeshes() const
-    {
-        return static_cast< unsigned >( mSubMeshes.size() );
-    }
+    unsigned Mesh::getNumSubMeshes() const { return static_cast<unsigned>( mSubMeshes.size() ); }
     //-----------------------------------------------------------------------
-    SubMesh* Mesh::getSubMesh(unsigned index) const
+    SubMesh *Mesh::getSubMesh( unsigned index ) const
     {
-        if (index >= mSubMeshes.size())
+        if( index >= mSubMeshes.size() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "Index out of bounds.",
-                "Mesh::getSubMesh");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Index out of bounds.", "Mesh::getSubMesh" );
         }
 
         return mSubMeshes[index];
     }
     //-----------------------------------------------------------------------
-    void Mesh::postLoadImpl(void)
+    void Mesh::postLoadImpl()
     {
 #if !OGRE_NO_MESHLOD
         // The loading process accesses LOD usages directly, so
         // transformation of user values must occur after loading is complete.
 
-        LodStrategy *lodStrategy = LodStrategyManager::getSingleton().getDefaultStrategy();
+        // LodStrategy *lodStrategy = LodStrategyManager::getSingleton().getDefaultStrategy();
 
         /*assert( mLodValues.size() == mMeshLodUsageList.size()  );
         LodValueArray::iterator lodValueIt = mLodValues.begin();
@@ -151,41 +144,53 @@ namespace Ogre {
         OgreProfileExhaustive( "Mesh2::prepareImpl" );
 
         // Load from specified 'name'
-        if (getCreator()->getVerbose())
-            LogManager::getSingleton().logMessage("Mesh: Loading "+mName+".");
+        if( getCreator()->getVerbose() )
+            LogManager::getSingleton().logMessage( "Mesh: Loading " + mName + "." );
 
-        mFreshFromDisk =
-            ResourceGroupManager::getSingleton().openResource(
-                mName, mGroup, true, this);
- 
+        mFreshFromDisk = ResourceGroupManager::getSingleton().openResource( mName, mGroup, true, this );
+
         // fully prebuffer into host RAM
-        mFreshFromDisk = DataStreamPtr(OGRE_NEW MemoryDataStream(mName,mFreshFromDisk));
+        mFreshFromDisk = DataStreamPtr( OGRE_NEW MemoryDataStream( mName, mFreshFromDisk ) );
     }
     //-----------------------------------------------------------------------
-    void Mesh::unprepareImpl()
-    {
-        mFreshFromDisk.setNull();
-    }
+    void Mesh::unprepareImpl() { mFreshFromDisk.reset(); }
     //-----------------------------------------------------------------------
     void Mesh::loadImpl()
     {
         OgreProfileExhaustive( "Mesh2::loadImpl" );
 
         MeshSerializer serializer( mVaoManager );
-        //serializer.setListener(MeshManager::getSingleton().getListener());
+        // serializer.setListener(MeshManager::getSingleton().getListener());
 
         // If the only copy is local on the stack, it will be cleaned
         // up reliably in case of exceptions, etc
-        DataStreamPtr data(mFreshFromDisk);
-        mFreshFromDisk.setNull();
+        DataStreamPtr data( mFreshFromDisk );
+        mFreshFromDisk.reset();
 
-        if (data.isNull()) {
-            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
-                        "Data doesn't appear to have been prepared in " + mName,
-                        "Mesh::loadImpl()");
+        if( !data )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "Data doesn't appear to have been prepared in " + mName, "Mesh::loadImpl()" );
         }
 
-        serializer.importMesh(data, this);
+        serializer.importMesh( data, this );
+
+        if( mHashForCaches[0] == 0u && mHashForCaches[1] == 0u && Mesh::msUseTimestampAsHash )
+        {
+            try
+            {
+                LogManager::getSingleton().logMessage( "Using timestamp as hash cache for Mesh " + mName,
+                                                       LML_TRIVIAL );
+                Archive *archive =
+                    ResourceGroupManager::getSingleton()._getArchiveToResource( mName, mGroup, true );
+                mHashForCaches[0] = static_cast<uint64>( archive->getModifiedTime( mName ) );
+            }
+            catch( Exception & )
+            {
+                LogManager::getSingleton().logMessage( "Using timestamp as hash cache for Mesh " + mName,
+                                                       LML_TRIVIAL );
+            }
+        }
     }
     //-----------------------------------------------------------------------
     void Mesh::unloadImpl()
@@ -194,8 +199,8 @@ namespace Ogre {
 
         // Teardown submeshes
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
-        while( itor != end )
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
+        while( itor != endt )
             OGRE_DELETE *itor++;
 
         mSubMeshes.clear();
@@ -208,14 +213,14 @@ namespace Ogre {
         setSkeletonName( BLANKSTRING );
     }
     //-----------------------------------------------------------------------
-    MeshPtr Mesh::clone( const String& newName, const String& newGroup,
-                         int vertexBufferType, int indexBufferType )
+    MeshPtr Mesh::clone( const String &newName, const String &newGroup, int vertexBufferType,
+                         int indexBufferType )
     {
         // This is a bit like a copy constructor, but with the additional
         // aspect of registering the clone with the MeshManager
 
-        //New Mesh is assumed to be manually defined rather
-        //than loaded since you're cloning it for a reason
+        // New Mesh is assumed to be manually defined rather
+        // than loaded since you're cloning it for a reason
         String theGroup;
         if( newGroup.empty() )
             theGroup = this->getGroup();
@@ -228,34 +233,34 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Mesh::copy( const MeshPtr& destination, int vertexBufferType, int indexBufferType )
+    void Mesh::copy( const MeshPtr &destination, int vertexBufferType, int indexBufferType )
     {
         destination->unload();
 
         // Copy submeshes first
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->clone( destination.get(), vertexBufferType, indexBufferType );
+            ( *itor )->clone( destination.get(), vertexBufferType, indexBufferType );
             ++itor;
         }
 
         // Copy bounds
-        destination->mAabb          = mAabb;
-        destination->mBoundRadius   = mBoundRadius;
+        destination->mAabb = mAabb;
+        destination->mBoundRadius = mBoundRadius;
 
-        destination->mSkeletonName  = mSkeletonName;
-        destination->mSkeleton      = mSkeleton;
+        destination->mSkeletonName = mSkeletonName;
+        destination->mSkeleton = mSkeleton;
 
-        destination->mLodStrategyName   = mLodStrategyName;
-        destination->mLodValues         = mLodValues;
+        destination->mLodStrategyName = mLodStrategyName;
+        destination->mLodValues = mLodValues;
 
-        destination->mVertexBufferDefaultType   = mVertexBufferDefaultType;
-        destination->mIndexBufferDefaultType    = mIndexBufferDefaultType;
-        destination->mVertexBufferShadowBuffer  = mVertexBufferShadowBuffer;
-        destination->mIndexBufferShadowBuffer   = mIndexBufferShadowBuffer;
+        destination->mVertexBufferDefaultType = mVertexBufferDefaultType;
+        destination->mIndexBufferDefaultType = mIndexBufferDefaultType;
+        destination->mVertexBufferShadowBuffer = mVertexBufferShadowBuffer;
+        destination->mIndexBufferShadowBuffer = mIndexBufferShadowBuffer;
 
         // Copy submesh names
         destination->mSubMeshNameMap = mSubMeshNameMap;
@@ -265,34 +270,30 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    const Aabb& Mesh::getAabb(void) const
-    {
-        return mAabb;
-    }
+    const Aabb &Mesh::getAabb() const { return mAabb; }
     //-----------------------------------------------------------------------
-    void Mesh::_setBounds(const Aabb& bounds, bool pad)
+    void Mesh::_setBounds( const Aabb &bounds, bool pad )
     {
-        mAabb           = bounds;
-        mBoundRadius    = mAabb.getRadius();
+        mAabb = bounds;
+        mBoundRadius = mAabb.getRadius();
 
-        if (pad)
+        if( pad )
         {
             // Pad out the AABB a little, helps with most bounds tests
-            mAabb.mHalfSize += 2.0f * mAabb.mHalfSize *
-                                MeshManager::getSingleton().getBoundsPaddingFactor();
+            mAabb.mHalfSize +=
+                2.0f * mAabb.mHalfSize * MeshManager::getSingleton().getBoundsPaddingFactor();
             // Pad out the sphere a little too
-            mBoundRadius = mBoundRadius + (mBoundRadius * MeshManager::getSingleton().getBoundsPaddingFactor());
+            mBoundRadius =
+                mBoundRadius + ( mBoundRadius * MeshManager::getSingleton().getBoundsPaddingFactor() );
         }
     }
     //-----------------------------------------------------------------------
-    void Mesh::_setBoundingSphereRadius(Real radius)
-    {
-        mBoundRadius = radius;
-    }
+    void Mesh::_setBoundingSphereRadius( Real radius ) { mBoundRadius = radius; }
     //-----------------------------------------------------------------------
-    void Mesh::_updateBoundsFromVertexBuffers(bool pad)
+    void Mesh::_updateBoundsFromVertexBuffers( bool pad )
     {
-        /*bool extendOnly = false; // First time we need full AABB of the given submesh, but on the second call just extend that one.
+        /*bool extendOnly = false; // First time we need full AABB of the given submesh, but on the
+        second call just extend that one.
 
         for (size_t i = 0; i < mSubMeshes.size(); i++)
         {
@@ -308,20 +309,21 @@ namespace Ogre {
             Vector3 scaler = (max - min) * MeshManager::getSingleton().getBoundsPaddingFactor();
             mAABB.setExtents(min - scaler, max + scaler);
             // Pad out the sphere a little too
-            mBoundRadius = mBoundRadius + (mBoundRadius * MeshManager::getSingleton().getBoundsPaddingFactor());
+            mBoundRadius = mBoundRadius + (mBoundRadius *
+        MeshManager::getSingleton().getBoundsPaddingFactor());
         }*/
     }
     //-----------------------------------------------------------------------
-    void Mesh::setSkeletonName(const String& skelName)
+    void Mesh::setSkeletonName( const String &skelName )
     {
-        if (skelName != mSkeletonName)
+        if( skelName != mSkeletonName )
         {
             mSkeletonName = skelName;
 
-            if (skelName.empty())
+            if( skelName.empty() )
             {
                 // No skeleton
-                mSkeleton.setNull();
+                mSkeleton.reset();
             }
             else
             {
@@ -330,39 +332,32 @@ namespace Ogre {
                 {
                     mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( skelName, mGroup );
                 }
-                catch (...)
+                catch( ... )
                 {
-                    mSkeleton.setNull();
+                    mSkeleton.reset();
                     // Log this error
                     String msg = "Unable to load skeleton ";
-                    msg += skelName + " for Mesh " + mName
-                        + ". This Mesh will not be animated. "
-                        + "You can ignore this message if you are using an offline tool.";
-                    LogManager::getSingleton().logMessage(msg);
+                    msg += skelName + " for Mesh " + mName + ". This Mesh will not be animated. " +
+                           "You can ignore this message if you are using an offline tool.";
+                    LogManager::getSingleton().logMessage( msg );
                 }
             }
-            if (isLoaded())
+            if( isLoaded() )
                 _dirtyState();
         }
     }
     //---------------------------------------------------------------------
-    void Mesh::_notifySkeleton( v1::SkeletonPtr& pSkel )
+    void Mesh::_notifySkeleton( v1::SkeletonPtr &pSkel )
     {
         mSkeletonName = pSkel->getName();
         mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( pSkel.get() );
     }
     //---------------------------------------------------------------------
-    const String& Mesh::getSkeletonName(void) const
-    {
-        return mSkeletonName;
-    }
+    const String &Mesh::getSkeletonName() const { return mSkeletonName; }
     //---------------------------------------------------------------------
-    ushort Mesh::getNumLodLevels(void) const
-    {
-        return static_cast<uint16>( mLodValues.size() );
-    }
+    ushort Mesh::getNumLodLevels() const { return static_cast<uint16>( mLodValues.size() ); }
     //---------------------------------------------------------------------
-    void Mesh::_setLodInfo(unsigned short numLevels)
+    void Mesh::_setLodInfo( unsigned short numLevels )
     {
         /*assert(!mEdgeListsBuilt && "Can't modify LOD after edge lists built");
 
@@ -387,13 +382,14 @@ namespace Ogre {
         assert(mMeshLodUsageList[level].manualName.empty() && "Not using generated LODs!");
         assert(subIdx < mSubMeshes.size() && "Index out of bounds");
         assert(level != 0 && "Can't modify first LOD level (full detail)");
-        assert(level-1 < (unsigned short)mSubMeshes[subIdx]->mLodFaceList.size() && "Index out of bounds");
+        assert(level-1 < (unsigned short)mSubMeshes[subIdx]->mLodFaceList.size() && "Index out of
+    bounds");
 
         SubMesh* sm = mSubMeshes[subIdx];
         sm->mLodFaceList[level - 1] = facedata;
     }*/
     //--------------------------------------------------------------------
-    void Mesh::removeLodLevels(void)
+    void Mesh::removeLodLevels()
     {
 #if !OGRE_NO_MESHLOD
         // Remove data from SubMeshes
@@ -418,52 +414,53 @@ namespace Ogre {
         mLodValues.push_back( lodStrategy->getBaseValue() );*/
 #endif
     }
-
     //---------------------------------------------------------------------
-    Real Mesh::getBoundingSphereRadius(void) const
+    void Mesh::_setHashForCaches( const uint64 hash[2] )
     {
-        return mBoundRadius;
+        mHashForCaches[0] = hash[0];
+        mHashForCaches[1] = hash[1];
     }
+    //---------------------------------------------------------------------
+    Real Mesh::getBoundingSphereRadius() const { return mBoundRadius; }
     //---------------------------------------------------------------------
     void Mesh::setVertexBufferPolicy( BufferType bufferType, bool shadowBuffer )
     {
-        mVertexBufferDefaultType    = bufferType;
-        mVertexBufferShadowBuffer   = shadowBuffer;
+        mVertexBufferDefaultType = bufferType;
+        mVertexBufferShadowBuffer = shadowBuffer;
     }
     //---------------------------------------------------------------------
     void Mesh::setIndexBufferPolicy( BufferType bufferType, bool shadowBuffer )
     {
-        mIndexBufferDefaultType     = bufferType;
-        mIndexBufferShadowBuffer    = shadowBuffer;
+        mIndexBufferDefaultType = bufferType;
+        mIndexBufferShadowBuffer = shadowBuffer;
     }
     //---------------------------------------------------------------------
-    void Mesh::nameSubMesh(const String& name, unsigned index)
+    void Mesh::nameSubMesh( const String &name, unsigned index )
     {
-        if (index >= 65536)
+        if( index >= 65536 )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "Only first 65536 submeshes could be named.",
-                "Mesh::nameSubMesh");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Only first 65536 submeshes could be named.",
+                         "Mesh::nameSubMesh" );
         }
-        mSubMeshNameMap[name] = index;
+        mSubMeshNameMap[name] = static_cast<uint16>( index );
     }
     //---------------------------------------------------------------------
-    void Mesh::unnameSubMesh(const String& name)
+    void Mesh::unnameSubMesh( const String &name )
     {
         SubMeshNameMap::iterator i = mSubMeshNameMap.find( name );
         if( i != mSubMeshNameMap.end() )
-            mSubMeshNameMap.erase(i);
+            mSubMeshNameMap.erase( i );
     }
     //---------------------------------------------------------------------
-    size_t Mesh::calculateSize(void) const
+    size_t Mesh::calculateSize() const
     {
         // calculate GPU size
         size_t retVal = 0;
 
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             SubMesh *s = *itor;
 
@@ -475,7 +472,7 @@ namespace Ogre {
                 numExtraVaos = 1;
             }
 
-            for( size_t i=0; i<numExtraVaos; ++i )
+            for( size_t i = 0; i < numExtraVaos; ++i )
             {
                 VertexArrayObjectArray::const_iterator itVao = s->mVao[i].begin();
                 VertexArrayObjectArray::const_iterator enVao = s->mVao[i].end();
@@ -488,7 +485,7 @@ namespace Ogre {
 
                     while( itVertexBuf != enVertexBuf )
                     {
-                        retVal += (*itVertexBuf)->getTotalSizeBytes();
+                        retVal += ( *itVertexBuf )->getTotalSizeBytes();
                         ++itVertexBuf;
                     }
 
@@ -504,7 +501,8 @@ namespace Ogre {
         return retVal;
     }
     //---------------------------------------------------------------------
-    void Mesh::importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose )
+    void Mesh::importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents,
+                         bool halfPose )
     {
         OgreProfileExhaustive( "Mesh2::importV1" );
 
@@ -534,9 +532,8 @@ namespace Ogre {
             {
                 unsigned short sourceCoordSet;
                 unsigned short index;
-                bool alreadyHasTangents = mesh->suggestTangentVectorBuildParams( VES_TANGENT,
-                                                                                 sourceCoordSet,
-                                                                                 index );
+                bool alreadyHasTangents =
+                    mesh->suggestTangentVectorBuildParams( VES_TANGENT, sourceCoordSet, index );
                 if( !alreadyHasTangents )
                     mesh->buildTangentVectors( VES_TANGENT, sourceCoordSet, index, false, false, true );
             }
@@ -545,7 +542,7 @@ namespace Ogre {
         {
         }
 
-        for( unsigned i=0; i<mesh->getNumSubMeshes(); ++i )
+        for( unsigned i = 0; i < mesh->getNumSubMeshes(); ++i )
         {
             SubMesh *subMesh = createSubMesh();
             subMesh->importFromV1( mesh->getSubMesh( i ), halfPos, halfTexCoords, qTangents, halfPose );
@@ -555,18 +552,22 @@ namespace Ogre {
 
         mSkeletonName = mesh->getSkeletonName();
         v1::SkeletonPtr v1Skeleton = mesh->getOldSkeleton();
-        if( !v1Skeleton.isNull() )
+        if( v1Skeleton )
             mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( v1Skeleton.get() );
 
-        //So far we only import manual LOD levels. If the mesh had manual LOD levels,
-        //mLodValues will have more entries than Vaos, causing an out of bounds exception.
-        //Don't use LOD if the imported mesh had manual levels.
-        //Note: Mesh2 supports LOD levels that have their own vertex and index buffers,
-        //so it should be possible to import them as well.
+        // So far we only import manual LOD levels. If the mesh had manual LOD levels,
+        // mLodValues will have more entries than Vaos, causing an out of bounds exception.
+        // Don't use LOD if the imported mesh had manual levels.
+        // Note: Mesh2 supports LOD levels that have their own vertex and index buffers,
+        // so it should be possible to import them as well.
         if( !mesh->hasManualLodLevel() )
             mLodValues = *mesh->_getLodValueArray();
         else
             mLodValues = MovableObject::c_DefaultLodMesh;
+
+        const uint64 *hash = mesh->getHashForCaches();
+        mHashForCaches[0] = hash[0];
+        mHashForCaches[1] = hash[1];
 
         mIsManual = true;
         setToLoaded();
@@ -575,23 +576,23 @@ namespace Ogre {
     void Mesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )
     {
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->arrangeEfficient( halfPos, halfTexCoords, qTangents );
+            ( *itor )->arrangeEfficient( halfPos, halfTexCoords, qTangents );
             ++itor;
         }
     }
     //---------------------------------------------------------------------
-    void Mesh::dearrangeToInefficient(void)
+    void Mesh::dearrangeToInefficient()
     {
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->dearrangeToInefficient();
+            ( *itor )->dearrangeToInefficient();
             ++itor;
         }
     }
@@ -601,31 +602,31 @@ namespace Ogre {
         OgreProfileExhaustive( "Mesh2::prepareForShadowMapping" );
 
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->_prepareForShadowMapping( forceSameBuffers );
+            ( *itor )->_prepareForShadowMapping( forceSameBuffers );
             ++itor;
         }
     }
     //---------------------------------------------------------------------
-    bool Mesh::hasValidShadowMappingVaos(void) const
+    bool Mesh::hasValidShadowMappingVaos() const
     {
         bool retVal = true;
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end && retVal )
+        while( itor != endt && retVal )
         {
-            retVal &= (*itor)->mVao[VpNormal].size() == (*itor)->mVao[VpShadow].size();
+            retVal &= ( *itor )->mVao[VpNormal].size() == ( *itor )->mVao[VpShadow].size();
             ++itor;
         }
 
         return retVal;
     }
     //---------------------------------------------------------------------
-    bool Mesh::hasIndependentShadowMappingVaos(void) const
+    bool Mesh::hasIndependentShadowMappingVaos() const
     {
         if( !hasValidShadowMappingVaos() )
             return false;
@@ -633,16 +634,16 @@ namespace Ogre {
         bool independent = false;
 
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end && !independent )
+        while( itor != endt && !independent )
         {
-            if( !(*itor)->mVao[VpNormal].empty() )
-                independent |= (*itor)->mVao[VpNormal][0] != (*itor)->mVao[VpShadow][0];
+            if( !( *itor )->mVao[VpNormal].empty() )
+                independent |= ( *itor )->mVao[VpNormal][0] != ( *itor )->mVao[VpShadow][0];
             ++itor;
         }
 
         return independent;
     }
     //---------------------------------------------------------------------
-}
+}  // namespace Ogre

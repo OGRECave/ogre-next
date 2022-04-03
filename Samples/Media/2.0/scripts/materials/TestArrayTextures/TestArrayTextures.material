@@ -1,0 +1,116 @@
+
+// We need a cloned version with a 'high' root layout to match the pixel shader's
+vertex_program Ogre/Compositor/High/Quad_vs_VK glslvk
+{
+	source Quad_vs.glsl
+	root_layout high
+}
+
+vertex_program Ogre/Compositor/High/Quad_vs unified
+{
+	delegate Ogre/Compositor/Quad_vs_GLSL
+	delegate Ogre/Compositor/High/Quad_vs_VK
+	delegate Ogre/Compositor/Quad_vs_HLSL
+	delegate Ogre/Compositor/Quad_vs_Metal
+
+	default_params
+	{
+		param_named_auto worldViewProj worldviewproj_matrix
+	}
+}
+
+fragment_program Tests/ArrayTextures_ps_GLSL glsl
+{
+	source TestArrayTextures_ps.glsl
+
+	default_params
+	{
+		param_named myTexA[0] int 0
+		param_named myTexA[1] int 1
+		param_named myTexB[0] int 2
+		param_named myTexB[1] int 3
+		param_named myTexC int 4
+	}
+}
+
+fragment_program Tests/ArrayTextures_ps_VK glslvk
+{
+	source TestArrayTextures_ps.glsl
+	root_layout high
+	uses_array_bindings true
+}
+
+fragment_program Tests/ArrayTextures_ps_HLSL hlsl
+{
+	source TestArrayTextures_ps.hlsl
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+	entry_point main
+}
+
+fragment_program Tests/ArrayTextures_ps_Metal metal
+{
+	source TestArrayTextures_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/Quad_vs
+}
+
+fragment_program Tests/ArrayTextures_ps unified
+{
+	delegate Tests/ArrayTextures_ps_GLSL
+	delegate Tests/ArrayTextures_ps_VK
+	delegate Tests/ArrayTextures_ps_HLSL
+	delegate Tests/ArrayTextures_ps_Metal
+}
+
+material Tests/ArrayTextures
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			depth_write off
+
+			cull_hardware none
+
+			vertex_program_ref Ogre/Compositor/High/Quad_vs
+			{
+			}
+
+			fragment_program_ref Tests/ArrayTextures_ps
+			{
+			}
+
+			texture_unit
+			{
+				texture A0.png
+				tex_address_mode clamp
+				filtering none
+			}
+			texture_unit
+			{
+				texture A1.png
+				tex_address_mode clamp
+				filtering none
+			}
+			texture_unit
+			{
+				texture B0.png
+				tex_address_mode clamp
+				filtering none
+			}
+			texture_unit
+			{
+				texture B1.png
+				tex_address_mode clamp
+				filtering none
+			}
+			texture_unit
+			{
+				texture C0.png
+				tex_address_mode clamp
+				filtering none
+			}
+
+		}
+	}
+}

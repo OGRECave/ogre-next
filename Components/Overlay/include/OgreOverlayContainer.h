@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,117 +30,113 @@ THE SOFTWARE.
 #define __OverlayContainer_H__
 
 #include "OgreOverlayPrerequisites.h"
-#include "OgreOverlayElement.h"
+
 #include "OgreIteratorWrappers.h"
+#include "OgreOverlayElement.h"
 
-
-namespace Ogre {
-namespace v1 {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Overlays
-    *  @{
-    */
-    /** A 2D element which contains other OverlayElement instances.
-    @remarks
-        This is a specialisation of OverlayElement for 2D elements that contain other
-        elements. These are also the smallest elements that can be attached directly
-        to an Overlay.
-    @remarks
-        OverlayContainers should be managed using OverlayManager. This class is responsible for
-        instantiating / deleting elements, and also for accepting new types of element
-        from plugins etc.
-    */
-    class _OgreOverlayExport OverlayContainer : public OverlayElement
+namespace Ogre
+{
+    namespace v1
     {
-    public:
-        typedef map<String, OverlayElement*>::type ChildMap;
-        typedef MapIterator<ChildMap> ChildIterator;
-        typedef map<String, OverlayContainer*>::type ChildContainerMap;
-        typedef MapIterator<ChildContainerMap> ChildContainerIterator;
-    protected:
-        /// Map of all children
-        ChildMap mChildren;
-        /// Map of container children (subset of mChildren)
-        ChildContainerMap mChildContainers;
-
-        bool mChildrenProcessEvents;
- 
-    public:
-        /// Constructor: do not call direct, use OverlayManager::createOverlayElement
-        OverlayContainer(const String& name);
-        virtual ~OverlayContainer();
-
-        /** Adds another OverlayElement to this container. */
-        virtual void addChild(OverlayElement* elem);
-        /** Adds another OverlayElement to this container. */
-        virtual void addChildImpl(OverlayElement* elem);
-        /** Add a nested container to this container. */
-        virtual void addChildImpl(OverlayContainer* cont);
-        /** Removes a named element from this container. */
-        virtual void removeChild(const String& name);
-        /** Gets the named child of this container. */
-        virtual OverlayElement* getChild(const String& name);
-
-        /** @copydoc OverlayElement::initialise */
-        void initialise(void);
-
-        void _addChild(OverlayElement* elem);
-        void _removeChild(OverlayElement* elem) { _removeChild(elem->getName()); }
-        void _removeChild(const String& name);
-
-        /** Gets an object for iterating over all the children of this object. */
-        virtual ChildIterator getChildIterator(void);
-
-        /** Gets an iterator for just the container children of this object.
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Overlays
+         *  @{
+         */
+        /** A 2D element which contains other OverlayElement instances.
         @remarks
-            Good for cascading updates without having to use RTTI
+            This is a specialisation of OverlayElement for 2D elements that contain other
+            elements. These are also the smallest elements that can be attached directly
+            to an Overlay.
+        @remarks
+            OverlayContainers should be managed using OverlayManager. This class is responsible for
+            instantiating / deleting elements, and also for accepting new types of element
+            from plugins etc.
         */
-        virtual ChildContainerIterator getChildContainerIterator(void);
+        class _OgreOverlayExport OverlayContainer : public OverlayElement
+        {
+        public:
+            typedef map<String, OverlayElement *>::type   ChildMap;
+            typedef MapIterator<ChildMap>                 ChildIterator;
+            typedef map<String, OverlayContainer *>::type ChildContainerMap;
+            typedef MapIterator<ChildContainerMap>        ChildContainerIterator;
 
-        /** Tell the object and its children to recalculate */
-        virtual void _positionsOutOfDate(void);
+        protected:
+            /// Map of all children
+            ChildMap mChildren;
+            /// Map of container children (subset of mChildren)
+            ChildContainerMap mChildContainers;
 
-        /** Overridden from OverlayElement. */
-        virtual void _update(void);
+            bool mChildrenProcessEvents;
 
-        /** Overridden from OverlayElement. */
-        virtual void _notifyViewport();
+        public:
+            /// Constructor: do not call direct, use OverlayManager::createOverlayElement
+            OverlayContainer( const String &name );
+            ~OverlayContainer() override;
 
-        /** Overridden from OverlayElement. */
-        virtual void _notifyParent(OverlayContainer* parent, Overlay* overlay);
+            /** Adds another OverlayElement to this container. */
+            virtual void addChild( OverlayElement *elem );
+            /** Adds another OverlayElement to this container. */
+            virtual void addChildImpl( OverlayElement *elem );
+            /** Add a nested container to this container. */
+            virtual void addChildImpl( OverlayContainer *cont );
+            /** Removes a named element from this container. */
+            virtual void removeChild( const String &name );
+            /** Gets the named child of this container. */
+            virtual OverlayElement *getChild( const String &name );
 
-        /** Overridden from OverlayElement. */
-        virtual void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
+            /** @copydoc OverlayElement::initialise */
+            void initialise() override;
 
-        /** Overridden from OverlayElement. */
-        inline bool isContainer() const
-        { return true; }
+            void _addChild( OverlayElement *elem );
+            void _removeChild( OverlayElement *elem ) { _removeChild( elem->getName() ); }
+            void _removeChild( const String &name );
 
-        /** Should this container pass events to their children */
-        virtual inline bool isChildrenProcessEvents() const
-        { return true; }
+            /** Gets an object for iterating over all the children of this object. */
+            virtual ChildIterator getChildIterator();
 
-        /** Should this container pass events to their children */
-        virtual inline void setChildrenProcessEvents(bool val)
-        { mChildrenProcessEvents = val; }
+            /** Gets an iterator for just the container children of this object.
+            @remarks
+                Good for cascading updates without having to use RTTI
+            */
+            virtual ChildContainerIterator getChildContainerIterator();
 
-        /** This returns a OverlayElement at position x,y. */
-        virtual OverlayElement* findElementAt(Real x, Real y);      // relative to parent
+            /** Tell the object and its children to recalculate */
+            void _positionsOutOfDate() override;
 
-        void copyFromTemplate(OverlayElement* templateOverlay);
-        virtual OverlayElement* clone(const String& instanceName);
+            /** Overridden from OverlayElement. */
+            void _update() override;
 
-    };
+            /** Overridden from OverlayElement. */
+            void _notifyViewport() override;
 
+            /** Overridden from OverlayElement. */
+            void _notifyParent( OverlayContainer *parent, Overlay *overlay ) override;
 
-    /** @} */
-    /** @} */
-}
-}
+            /** Overridden from OverlayElement. */
+            void _updateRenderQueue( RenderQueue *queue, Camera *camera,
+                                     const Camera *lodCamera ) override;
 
+            /** Overridden from OverlayElement. */
+            inline bool isContainer() const override { return true; }
+
+            /** Should this container pass events to their children */
+            virtual inline bool isChildrenProcessEvents() const { return true; }
+
+            /** Should this container pass events to their children */
+            virtual inline void setChildrenProcessEvents( bool val ) { mChildrenProcessEvents = val; }
+
+            /** This returns a OverlayElement at position x,y. */
+            OverlayElement *findElementAt( Real x, Real y ) override;  // relative to parent
+
+            void            copyFromTemplate( OverlayElement *templateOverlay ) override;
+            OverlayElement *clone( const String &instanceName ) override;
+        };
+
+        /** @} */
+        /** @} */
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif
-

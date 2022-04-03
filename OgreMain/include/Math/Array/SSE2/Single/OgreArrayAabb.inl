@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -81,7 +81,7 @@ namespace Ogre
         return _mm_and_ps( _mm_and_ps( maskX, maskY ), maskZ );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayAabb::volume(void) const
+    inline ArrayReal ArrayAabb::volume() const
     {
         ArrayReal w = _mm_add_ps( mHalfSize.mChunkBase[0], mHalfSize.mChunkBase[0] ); // x * 2
         ArrayReal h = _mm_add_ps( mHalfSize.mChunkBase[1], mHalfSize.mChunkBase[1] ); // y * 2

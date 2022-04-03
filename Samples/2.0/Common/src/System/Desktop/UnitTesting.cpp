@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -42,9 +42,14 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
 
-#if !OGRE_NO_JSON
-#    include "rapidjson/document.h"
-#    include "rapidjson/error/en.h"
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
+#include "rapidjson/document.h"
+#include "rapidjson/error/en.h"
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
 #endif
 
 #include <fstream>
@@ -288,7 +293,7 @@ namespace Demo
                          "Could not write to file " + Ogre::String( fullpath ) );
         }
 
-        outFile.write( jsonStr.c_str(), jsonStr.size() );
+        outFile.write( jsonStr.c_str(), static_cast<std::streamsize>( jsonStr.size() ) );
     }
     //-------------------------------------------------------------------------
     bool UnitTest::shouldRecordKey( const SDL_KeyboardEvent &arg )
@@ -429,7 +434,7 @@ namespace Demo
 
             mFrameActivity.reserve( arraySize );
 
-            for( size_t i = 0u; i < arraySize; ++i )
+            for( rapidjson::SizeType i = 0u; i < arraySize; ++i )
             {
                 const rapidjson::Value &frameActObj = frameActObjArray[i];
 
@@ -475,10 +480,10 @@ namespace Demo
                     if( itor != frameActObj.MemberEnd() && itor->value.IsArray() )
                     {
                         const rapidjson::Value &keyStrokeArray = itor->value;
-                        const size_t numCodes = keyStrokeArray.Size();
+                        const rapidjson::SizeType numCodes = keyStrokeArray.Size();
                         frameActivity.keyStrokes.reserve( numCodes );
 
-                        for( size_t j = 0u; j < numCodes; ++j )
+                        for( rapidjson::SizeType j = 0u; j < numCodes; ++j )
                         {
                             if( keyStrokeArray[j].IsObject() )
                             {
@@ -505,9 +510,9 @@ namespace Demo
                     itor = frameActObj.FindMember( "targets" );
                     if( itor != frameActObj.MemberEnd() && itor->value.IsArray() )
                     {
-                        const size_t numCodes = itor->value.Size();
+                        const rapidjson::SizeType numCodes = itor->value.Size();
                         frameActivity.targetsToScreenshot.reserve( numCodes );
-                        for( size_t j = 0u; j < numCodes; ++j )
+                        for( rapidjson::SizeType j = 0u; j < numCodes; ++j )
                         {
                             if( itor->value[j].IsString() )
                             {
@@ -578,6 +583,9 @@ namespace Demo
             mRealMouseListener = inputHandler->getMouseListener();
             inputHandler->_overrideKeyboardListener( this );
             inputHandler->_overrideMouseListener( this );
+
+            renderWindow->setWantsToDownload( true );
+            renderWindow->setManualSwapRelease( true );
 
             const size_t numFrames = mNumFrames;
             MainEntryPoints::Frametime = mFrametime;
@@ -664,7 +672,7 @@ namespace Demo
                     {
                         const Ogre::String frameIdxStr( Ogre::StringConverter::toString( frameIdx ) +
                                                         "_" );
-                        if( frameActivity->screenshotRenderWindow )
+                        if( frameActivity->screenshotRenderWindow && renderWindow->canDownloadData() )
                         {
                             Ogre::Image2 img;
                             Ogre::TextureGpu *texture;
@@ -704,6 +712,8 @@ namespace Demo
                     }
                     ++frameActivity;
                 }
+
+                renderWindow->performManualRelease();
             }
 
             graphicsSystem->destroyScene();

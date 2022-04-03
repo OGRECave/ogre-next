@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -80,46 +80,46 @@ namespace Ogre {
         String getShaderTypeLabel(GpuProgramType programType);
 
         /// Overridden
-        bool getPassTransformStates(void) const;
-        bool getPassSurfaceAndLightStates(void) const;
-        bool getPassFogStates(void) const;
+        bool getPassTransformStates() const;
+        bool getPassSurfaceAndLightStates() const;
+        bool getPassFogStates() const;
 
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines(const String& defines) { mPreprocessorDefines = defines; }
         /// Sets the preprocessor defines use to compile the program.
-        const String& getPreprocessorDefines(void) const { return mPreprocessorDefines; }
+        const String& getPreprocessorDefines() const { return mPreprocessorDefines; }
 
 #if !OGRE_NO_GLES2_GLSL_OPTIMISER
         /// Sets if the GLSL optimiser is enabled.
         void setOptimiserEnabled(bool enabled);
         /// Gets if the GLSL optimiser is enabled.
-        bool getOptimiserEnabled(void) const { return mOptimiserEnabled; }
+        bool getOptimiserEnabled() const { return mOptimiserEnabled; }
         
         /// Sets if the GLSL source has been optimised successfully
         void setIsOptimised(bool flag) { mIsOptimised = flag; }
         /// Gets if the GLSL source has been optimised successfully
-        bool getIsOptimised(void) { return mIsOptimised; }
+        bool getIsOptimised() { return mIsOptimised; }
 
         /// Sets the optimised GLSL source 
         void setOptimisedSource(const String& src) { mOptimisedSource = src; }
         /// Gets he optimised GLSL source 
-        String getOptimisedSource(void) { return mOptimisedSource; }
+        String getOptimisedSource() { return mOptimisedSource; }
 #endif
 
         /// Overridden from GpuProgram
-        const String& getLanguage(void) const;
+        const String& getLanguage() const;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters(void);
+        GpuProgramParametersSharedPtr createParameters();
 
         /// Compile source into shader object
         bool compile( const bool checkErrors = false);
 
 
         /// Bind the shader in OpenGL.
-        void bind(void);
+        void bind();
         /// Unbind the shader in OpenGL.
-        void unbind(void);
-        static void unbindAll(void);
+        void unbind();
+        static void unbindAll();
         /// Execute the param binding functions for this shader.
         void bindParameters(GpuProgramParametersSharedPtr params, uint16 mask);
         /// Execute the pass iteration param binding functions for this shader.
@@ -130,7 +130,7 @@ namespace Ogre {
         /** Return the shader link status.
             Only used for separable programs.
         */
-        GLint isLinked(void) { return mLinked; }
+        GLint isLinked() { return mLinked; }
 
         /** Set the shader link status.
             Only used for separable programs.
@@ -138,10 +138,10 @@ namespace Ogre {
         void setLinked(GLint flag) { mLinked = flag; }
 
         /// Get the OGRE assigned shader ID.
-        GLuint getShaderID(void) const { return mShaderID; }
+        GLuint getShaderID() const { return mShaderID; }
         
         /// Since GLSL has no assembly, use this shader for binding.
-        GpuProgram* _getBindingDelegate(void) { return this; }
+        GpuProgram* _getBindingDelegate() { return this; }
 
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
@@ -151,18 +151,18 @@ namespace Ogre {
 
         /** Internal load implementation, must be implemented by subclasses.
         */
-        void loadFromSource(void);
+        void loadFromSource();
         /** Internal method for creating a dummy low-level program for
             this high-level program. GLSL ES does not give access to the
             low level implementation of the shader so this method
             creates an object sub-classed from GLSLESShader just to
             be compatible with GLES2RenderSystem.
         */
-        void createLowLevelImpl(void);
+        void createLowLevelImpl();
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl(void);
+        void unloadHighLevelImpl();
         /// Overridden from HighLevelGpuProgram
-        void unloadImpl(void);
+        void unloadImpl();
 
         /// Populate the passed parameters with name->index map
         void populateParameterNames(GpuProgramParametersSharedPtr params);

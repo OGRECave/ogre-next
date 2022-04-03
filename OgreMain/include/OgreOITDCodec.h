@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,11 +33,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
 
     // Forward declarations
     struct DXTColourBlock;
@@ -59,38 +59,38 @@ namespace Ogre
         String mType;
 
         // invokes Bitwise::bswapChunks() if OGRE_ENDIAN_BIG
-        static void flipEndian(void * pData, size_t size, size_t count);
+        static void flipEndian( void *pData, size_t size, size_t count );
         // invokes Bitwise::bswapBuffer() if OGRE_ENDIAN_BIG
-        static void flipEndian(void * pData, size_t size);
+        static void flipEndian( void *pData, size_t size );
 
         /// Single registered codec instance
-        static OITDCodec* msInstance;
+        static OITDCodec *msInstance;
+
     public:
         OITDCodec();
-        virtual ~OITDCodec() {}
+        ~OITDCodec() override {}
 
         /// @copydoc Codec::encode
-        virtual DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const;
+        DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const override;
         /// @copydoc Codec::encodeToFile
-        virtual void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
-                                   CodecDataPtr &pData ) const;
+        void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                           CodecDataPtr &pData ) const override;
         /// @copydoc Codec::decode
-        virtual DecodeResult decode( DataStreamPtr &input ) const;
+        DecodeResult decode( DataStreamPtr &input ) const override;
 
         /// @copydoc Codec::magicNumberToFileExt
-        virtual String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const;
+        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const override;
 
-        virtual String getType(void) const;
+        String getType() const override;
 
         /// Static method to startup and register the DDS codec
-        static void startup(void);
+        static void startup();
         /// Static method to shutdown and unregister the DDS codec
-        static void shutdown(void);
+        static void shutdown();
     };
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif
-

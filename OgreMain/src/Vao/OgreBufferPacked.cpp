@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,19 +27,20 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Vao/OgreBufferPacked.h"
-#include "Vao/OgreBufferInterface.h"
-#include "Vao/OgreVaoManager.h"
+
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreSharedPtr.h"
+#include "Vao/OgreBufferInterface.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
     BufferPacked::BufferPacked( size_t internalBufferStartBytes, size_t numElements,
-                                uint32 bytesPerElement, uint32 numElementsPadding,
-                                BufferType bufferType, void *initialData,
-                                bool keepAsShadow, VaoManager *vaoManager,
+                                uint32 bytesPerElement, uint32 numElementsPadding, BufferType bufferType,
+                                void *initialData, bool keepAsShadow, VaoManager *vaoManager,
                                 BufferInterface *bufferInterface ) :
         mInternalBufferStart( internalBufferStartBytes / bytesPerElement ),
         mFinalBufferStart( internalBufferStartBytes / bytesPerElement ),
@@ -54,19 +55,19 @@ namespace Ogre
         mLastMappingCount( 0 ),
         mShadowCopy( 0 )
 #if OGRE_DEBUG_MODE
-    ,   mLastFrameMapped( ~0 ),
-        mLastFrameMappedAndAdvanced( ~0 )
+        ,
+        mLastFrameMapped( std::numeric_limits<uint32>::max() ),
+        mLastFrameMappedAndAdvanced( std::numeric_limits<uint32>::max() )
 #endif
     {
-        assert( !(internalBufferStartBytes % bytesPerElement) );
+        assert( !( internalBufferStartBytes % bytesPerElement ) );
 
         if( mBufferInterface )
             mBufferInterface->_notifyBuffer( this );
 
         if( !initialData && mBufferType == BT_IMMUTABLE )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Immutable buffers MUST provide initial data!",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Immutable buffers MUST provide initial data!",
                          "BufferPacked::BufferPacked" );
         }
 
@@ -74,8 +75,7 @@ namespace Ogre
         {
             if( mBufferType >= BT_DYNAMIC_DEFAULT )
             {
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Dynamic buffers can't have a shadow copy!",
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Dynamic buffers can't have a shadow copy!",
                              "BufferPacked::BufferPacked" );
             }
 
@@ -87,11 +87,12 @@ namespace Ogre
     {
         if( mMappingState != MS_UNMAPPED )
         {
-            LogManager::getSingleton().logMessage( "WARNING: Deleting mapped buffer without "
-                                                   "having it unmapped. This is often sign of"
-                                                   " a resource leak or a bad pattern. "
-                                                   "Umapping the buffer for you...",
-                                                   LML_CRITICAL );
+            LogManager::getSingleton().logMessage(
+                "WARNING: Deleting mapped buffer without "
+                "having it unmapped. This is often sign of"
+                " a resource leak or a bad pattern. "
+                "Umapping the buffer for you...",
+                LML_CRITICAL );
 
             unmap( UO_UNMAP_ALL );
         }
@@ -99,7 +100,7 @@ namespace Ogre
         delete mBufferInterface;
         mBufferInterface = 0;
 
-        //The shadow copy must be destroyed after the mBufferInterface
+        // The shadow copy must be destroyed after the mBufferInterface
         if( mShadowCopy )
         {
             OGRE_FREE_SIMD( mShadowCopy, MEMCATEGORY_GEOMETRY );
@@ -112,15 +113,12 @@ namespace Ogre
         mBufferInterface = bufferInterface;
     }
     //-----------------------------------------------------------------------------------
-    BufferPacked *BufferPacked::getOriginalBufferType( void )
-    {
-        return mBufferInterface->getBufferPacked();
-    }
+    BufferPacked *BufferPacked::getOriginalBufferType() { return mBufferInterface->getBufferPacked(); }
     //-----------------------------------------------------------------------------------
     AsyncTicketPtr BufferPacked::readRequest( size_t elementStart, size_t elementCount )
     {
-        StagingBuffer *stagingBuffer = mVaoManager->getStagingBuffer( elementCount * mBytesPerElement,
-                                                                      false );
+        StagingBuffer *stagingBuffer =
+            mVaoManager->getStagingBuffer( elementCount * mBytesPerElement, false );
 
         return mVaoManager->createAsyncTicket( this, stagingBuffer, elementStart, elementCount );
     }
@@ -129,41 +127,38 @@ namespace Ogre
     {
         if( mBufferType == BT_IMMUTABLE )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Cannot use upload on an immutable buffer!",
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Cannot use upload on an immutable buffer!",
                          "BufferPacked::upload" );
         }
 
         if( elementCount + elementStart > mNumElements )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Size of the provided data goes out of bounds!",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Size of the provided data goes out of bounds!",
                          "BufferPacked::upload" );
         }
 
         if( mShadowCopy )
         {
-            memcpy( (char*)mShadowCopy + elementStart * mBytesPerElement,
-                    data, elementCount * mBytesPerElement );
+            memcpy( (char *)mShadowCopy + elementStart * mBytesPerElement, data,
+                    elementCount * mBytesPerElement );
         }
 
         mBufferInterface->upload( data, elementStart, elementCount );
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN BufferPacked::map( size_t elementStart, size_t elementCount,
+    void *RESTRICT_ALIAS_RETURN BufferPacked::map( size_t elementStart, size_t elementCount,
                                                    bool bAdvanceFrame )
     {
-        if( mBufferType < BT_DYNAMIC_DEFAULT )
+        if( mBufferType < BT_DEFAULT_SHARED )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Only dynamic buffers can be mapped! Use upload instead.",
+                         "Only dynamic or shared buffers can be mapped! Use upload instead.",
                          "BufferPacked::map" );
         }
 
         if( !elementCount )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Mapping 0 bytes is forbidden!",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Mapping 0 bytes is forbidden!",
                          "BufferPacked::map" );
         }
 
@@ -177,23 +172,26 @@ namespace Ogre
         }
 
 #if OGRE_DEBUG_MODE
+        if( mBufferType != BT_DEFAULT_SHARED )
         {
             uint32 currentFrame = mVaoManager->getFrameCount();
             if( mLastFrameMappedAndAdvanced == currentFrame )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Mapping the buffer twice within the same frame detected! "
-                             "This is not allowed.", "BufferPacked::map" );
+                             "This is not allowed.",
+                             "BufferPacked::map" );
             }
 
-            if( //This is a different frame from the last time we called map
+            if(  // This is a different frame from the last time we called map
                 mLastFrameMapped != currentFrame &&
-                //map was called, but bAdvanceFrame was not.
-                (int)(mLastFrameMapped - mLastFrameMappedAndAdvanced) > 0 )
+                // map was called, but bAdvanceFrame was not.
+                (int)( mLastFrameMapped - mLastFrameMappedAndAdvanced ) > 0 )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Last frame called map( bAdvanceFrame = false ) but "
-                             "didn't call advanceFrame!!!.", "BufferPacked::map" );
+                             "didn't call advanceFrame!!!.",
+                             "BufferPacked::map" );
             }
 
             mLastFrameMapped = currentFrame;
@@ -213,9 +211,7 @@ namespace Ogre
     {
         if( mMappingState == MS_UNMAPPED )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Buffer wasn't mapped!",
-                         "BufferPacked::unmap" );
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Buffer wasn't mapped!", "BufferPacked::unmap" );
         }
 
         mBufferInterface->unmap( unmapOption, flushStartElem, flushSizeElem );
@@ -230,7 +226,7 @@ namespace Ogre
         mLastMappingCount = 0;
     }
     //-----------------------------------------------------------------------------------
-    void BufferPacked::advanceFrame(void)
+    void BufferPacked::advanceFrame()
     {
 #if OGRE_DEBUG_MODE
         if( mLastFrameMappedAndAdvanced == mVaoManager->getFrameCount() )
@@ -246,15 +242,14 @@ namespace Ogre
 
         if( isCurrentlyMapped() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Don't advanceFrame while mapped!",
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Don't advanceFrame while mapped!",
                          "BufferPacked::map" );
         }
 
         return mBufferInterface->advanceFrame();
     }
     //-----------------------------------------------------------------------------------
-    void BufferPacked::regressFrame(void)
+    void BufferPacked::regressFrame()
     {
 #if OGRE_DEBUG_MODE
         if( mLastFrameMappedAndAdvanced != mVaoManager->getFrameCount() )
@@ -269,16 +264,15 @@ namespace Ogre
 
         if( isCurrentlyMapped() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Don't regressFrame while mapped!",
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Don't regressFrame while mapped!",
                          "BufferPacked::map" );
         }
 
         return mBufferInterface->regressFrame();
     }
     //-----------------------------------------------------------------------------------
-    void BufferPacked::copyTo( BufferPacked *dstBuffer, size_t dstElemStart,
-                               size_t srcElemStart, size_t srcNumElems )
+    void BufferPacked::copyTo( BufferPacked *dstBuffer, size_t dstElemStart, size_t srcElemStart,
+                               size_t srcNumElems )
     {
         if( srcNumElems > mNumElements || srcElemStart + srcNumElems > mNumElements )
             srcNumElems = mNumElements - srcElemStart;
@@ -288,7 +282,7 @@ namespace Ogre
         OGRE_ASSERT_LOW( srcElemStart <= this->mNumElements );
         OGRE_ASSERT_LOW( dstElemStart <= dstBuffer->mNumElements );
         OGRE_ASSERT_LOW( dstElemStart * dstBuffer->getBytesPerElement() +
-                         srcNumElems * this->getBytesPerElement() <=
+                             srcNumElems * this->getBytesPerElement() <=
                          dstBuffer->mNumElements * dstBuffer->getBytesPerElement() );
 
         if( dstBuffer->mShadowCopy )
@@ -297,12 +291,13 @@ namespace Ogre
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "dstBuffer has a shadow copy. We can only perform this "
-                             "copy if src also has a shadow copy", "BufferPacked::copyTo" );
+                             "copy if src also has a shadow copy",
+                             "BufferPacked::copyTo" );
             }
             else
             {
-                memcpy( (char*)dstBuffer->mShadowCopy + dstElemStart * dstBuffer->mBytesPerElement,
-                        (char*)this->mShadowCopy + srcElemStart * this->mBytesPerElement,
+                memcpy( (char *)dstBuffer->mShadowCopy + dstElemStart * dstBuffer->mBytesPerElement,
+                        (char *)this->mShadowCopy + srcElemStart * this->mBytesPerElement,
                         srcNumElems * this->mBytesPerElement );
             }
         }
@@ -310,15 +305,14 @@ namespace Ogre
         dstBuffer->getBufferInterface()->_ensureDelayedImmutableBuffersAreReady();
         this->mBufferInterface->_ensureDelayedImmutableBuffersAreReady();
 
-        mBufferInterface->copyTo( dstBuffer->getBufferInterface(),
-                                  (dstBuffer->mFinalBufferStart + dstElemStart) *
-                                  dstBuffer->mBytesPerElement,
-                                  (this->mFinalBufferStart + srcElemStart) *
-                                  this->mBytesPerElement,
-                                  srcNumElems * this->getBytesPerElement() );
+        mBufferInterface->copyTo(
+            dstBuffer->getBufferInterface(),
+            ( dstBuffer->mFinalBufferStart + dstElemStart ) * dstBuffer->mBytesPerElement,
+            ( this->mFinalBufferStart + srcElemStart ) * this->mBytesPerElement,
+            srcNumElems * this->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool BufferPacked::isCurrentlyMapped(void) const
+    bool BufferPacked::isCurrentlyMapped() const
     {
         if( mMappingState == MS_UNMAPPED )
             return false;
@@ -330,16 +324,14 @@ namespace Ogre
     }
 
     //-----------------------------------------------------------------------------------
-    void BufferPacked::_setShadowCopy( void* copy )
+    void BufferPacked::_setShadowCopy( void *copy )
     {
         if( mBufferType >= BT_DYNAMIC_DEFAULT )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                "Dynamic buffers can't have a shadow copy!",
-                "BufferPacked::BufferPacked" );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Dynamic buffers can't have a shadow copy!",
+                         "BufferPacked::BufferPacked" );
         }
         mShadowCopy = copy;
     }
 
-}
-
+}  // namespace Ogre

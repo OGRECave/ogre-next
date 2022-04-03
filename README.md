@@ -1,15 +1,14 @@
+# OGRE-Next 3D (Object-Oriented Graphics Rendering Engine Next Generation)
 
-# OGRE3D (Object-Oriented Graphics Rendering Engine)
+Ogre-Next is a 3D graphics rendering engine. Not to be confused with a game engine which provides Networking, Sound, Physics, etc.
 
-Ogre is a 3D graphics rendering engine. Not to be confused with a game engine which provides Networking, Sound, Physics, etc.
-
-Ogre 2.3 has had a substantial overhaul to focus on high performance graphics using Data Oriented Design with:
+Ogre-Next 2.4 has had a substantial overhaul to focus on high performance graphics using Data Oriented Design with:
  * Cache friendly Entity and Node layout
  * Threaded batch processing of Nodes, Frustum Culling and other techniques such as Forward Clustered
  * SIMD processing using AoSoA (Array of Structures of Arrays) memory layout
  * Texture loaded via background streaming
 
-This makes Ogre suitable for projects aiming to have a **large number of objects on screen, or have tight rendering budgets such as VR.**
+This makes Ogre-Next suitable for projects aiming to have a **large number of objects on screen, or have tight rendering budgets such as VR.**
 
 This is the repository where the 2.x branch is actively developed on.
 Active development of the 1.x branch happens in https://github.com/OGRECave/ogre
@@ -21,6 +20,7 @@ differences have diverged long enough.
 
 | Build | Status (github) |
 |-------|-----------------|
+| Linux |[![CI](https://github.com/OGRECave/ogre-next/actions/workflows/linux.build.yml/badge.svg)](https://github.com/OGRECave/ogre-next/actions/workflows/linux.build.yml)|
 | MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=master&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/master)|
 
 ## Supported Backends
@@ -32,24 +32,23 @@ differences have diverged long enough.
 
 ## Supported Platforms
 
- * Windows (XP\*, 7, 8, 10)
+ * Windows (7, 8, 10)
  * Linux
- * macOS\*\*
+ * macOS\*
  * iOS
- * Android\*\*\*
+ * Android\*\*
 
-(\*) XP support is through GL3+. Recent drivers are needed. Old GPUs do not have stable GL drivers capable of running Ogre 2.x.<br/>
-(\*\*) Metal Backend is highly recommended. GL backend is supported in macOS, but the window subsystem hasn't been ported to 2.3 yet.<br/>
-(\*\*\*) Device must be Vulkan-capable. Android 7.0+ is supported; but Android 8.0+ is strongly recommended due to lots of driver bugs in older versions.<br/>
+(\*) Metal Backend is highly recommended. GL backend is supported in macOS, but the window subsystem hasn't been ported to 2.4 yet.<br/>
+(\*\*) Device must be Vulkan-capable. Android 7.0+ is supported; but Android 8.0+ is strongly recommended due to lots of driver bugs in older versions.<br/>
 
 ## Supported Compilers
 
  * Clang 3.3 or newer
  * GCC 5 or newer
- * VS2008 or newer
+ * VS2013 or newer
  
 ## Samples
-For a list of samples and their demonstrated features, refer to the [samples section in the manual.](https://ogrecave.github.io/ogre-next/api/2.3/_samples.html) 
+For a list of samples and their demonstrated features, refer to the [samples section in the manual.](https://ogrecave.github.io/ogre-next/api/latest/_samples.html) 
 
 # Who's using it?
 
@@ -109,9 +108,8 @@ For a list of samples and their demonstrated features, refer to the [samples sec
 
 # Dependencies (Windows)
 
-* Visual Studio 2008 SP1 - 2017 (2019 not tested). MinGW may work but we strongly recommend Visual Studio.
-* [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812). Optional.
-  Needed if you use older Visual Studio versions and want the D3D11 plugin. Also comes with useful tools.
+* Visual Studio 2013 - 2019 (2022 not tested). MinGW may work but we strongly recommend Visual Studio.
+* [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812). Optional. Comes with useful tools.
 * Windows 10 SDK. Contains the latest DirectX SDK, thus recommended over the DX June 2010 SDK,
   but you may still want to install the June 2010 SDK for those tools.
 * Windows 7 or newer is highly recommended. For Windows Vista & 7, you need to have the
@@ -146,11 +144,11 @@ If you're on Linux, make sure to first install the dependencies (i.e. run the su
 
 If for some reason you want to do it by hand, there's no script for your platform,
 or you want to learn what the scripts are actually doing, see
-[Setting Up Ogre](https://ogrecave.github.io/ogre-next/api/2.3/_setting_up_ogre.html) from the Ogre manual.
+[Setting Up Ogre](https://ogrecave.github.io/ogre-next/api/latest/_setting_up_ogre.html) from the Ogre manual.
 
 # Manual
 
-For more information see the [online manual](https://ogrecave.github.io/ogre-next/api/2.3/manual.html).
+For more information see the [online manual](https://ogrecave.github.io/ogre-next/api/latest/manual.html).
 The manual can build on Linux using Doxygen:
 
 ```
@@ -158,12 +156,18 @@ cd build/Debug
 ninja OgreDoc
 ```
 
+# Resolving Merge Conflicts in 2.4
+
+Users who run a customized version of Ogre-Next may found rebasing to the latest version a near impossible job due to the sheer amount of minor merge conflicts when upgrading to Ogre-Next 2.4
+
+See [this guide](https://ogrecave.github.io/ogre-next/api/latest/_resolving_merge_conflicts24.html) on how to deal with them more easily.
+
 # Support and Resources
 
  * [Forums](https://forums.ogre3d.org/viewforum.php?f=25)
  * [Bug Reports](https://github.com/OGRECave/ogre-next/issues)
  * [Contributing via Pull Requests](https://github.com/OGRECave/ogre-next/pulls)
- * [Documentation](https://ogrecave.github.io/ogre-next/api/2.3/)
+ * [Documentation](https://ogrecave.github.io/ogre-next/api/latest/)
  * [Ogre 2.1+ FAQ](http://wiki.ogre3d.org/Ogre+2.1+FAQ)
  * [Older resources for interfaces carried over from 1.x](https://www.ogre3d.org/documentation)
 
@@ -187,7 +191,7 @@ python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOu
 
 # License
 
-OGRE (www.ogre3d.org) is made available under the MIT License.
+OGRE-Next (www.ogre3d.org) is made available under the MIT License.
 
 Copyright (c) 2000-present Torus Knot Software Ltd
 

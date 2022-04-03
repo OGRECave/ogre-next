@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,28 +29,27 @@ THE SOFTWARE.
 #define __RotationAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreParticleAffectorFactory.h"
 #include "OgreRotationAffector.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for RotationAffector. */
-    class _OgreParticleFXExport RotationAffectorFactory : public ParticleAffectorFactory
+    class _OgreParticleFXExport RotationAffectorFactory final : public ParticleAffectorFactory
     {
         /** See ParticleAffectorFactory */
-        String getName() const { return "Rotator"; }
+        String getName() const override { return "Rotator"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
-            ParticleAffector* p = OGRE_NEW RotationAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW RotationAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

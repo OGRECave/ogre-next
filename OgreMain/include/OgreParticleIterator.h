@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,40 +34,39 @@ THE SOFTWARE.
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
     /** Convenience class to make it easy to step through all particles in a ParticleSystem.
-    */
+     */
     class _OgreExport ParticleIterator
     {
         friend class ParticleSystem;
+
     protected:
-        list<Particle*>::type::iterator mPos;
-        list<Particle*>::type::iterator mStart;
-        list<Particle*>::type::iterator mEnd;
+        list<Particle *>::type::iterator mPos;
+        list<Particle *>::type::iterator mStart;
+        list<Particle *>::type::iterator mEnd;
 
         /// Protected constructor, only available from ParticleSystem::getIterator
-        ParticleIterator(list<Particle*>::type::iterator start, list<Particle*>::type::iterator end);
+        ParticleIterator( list<Particle *>::type::iterator start, list<Particle *>::type::iterator end );
 
     public:
         /// Returns true when at the end of the particle list
-        bool end(void);
+        bool end();
 
         /** Returns a pointer to the next particle, and moves the iterator on by 1 element. */
-        Particle* getNext(void);
+        Particle *getNext();
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -38,13 +38,12 @@ namespace Ogre
     struct _OgreNULLExport NULLVertexArrayObject : public VertexArrayObject
     {
         NULLVertexArrayObject( uint32 vaoName, uint32 renderQueueId,
-                                  const VertexBufferPackedVec &vertexBuffers,
-                                  IndexBufferPacked *indexBuffer,
-                                  OperationType opType ) :
+                               const VertexBufferPackedVec &vertexBuffers,
+                               IndexBufferPacked *indexBuffer, OperationType opType ) :
             VertexArrayObject( vaoName, renderQueueId, 0, vertexBuffers, indexBuffer, opType )
         {
         }
     };
-}
+}  // namespace Ogre
 
 #endif

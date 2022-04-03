@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -17,7 +17,7 @@ include_directories(
 )
 
 ogre_add_library(RenderSystem_NULL ${OGRE_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(RenderSystem_NULL OgreMain)
+target_link_libraries(RenderSystem_NULL ${OGRE_NEXT}Main)
 
 if (OGRE_CONFIG_THREADS)
   target_link_libraries(RenderSystem_NULL ${OGRE_THREAD_LIBRARIES})

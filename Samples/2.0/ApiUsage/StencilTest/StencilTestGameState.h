@@ -9,15 +9,15 @@ namespace Demo
 {
     class StencilTestGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode;
+        Ogre::SceneNode *mSceneNode;
 
     public:
         StencilTestGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
     };
-}
+}  // namespace Demo
 
 #endif

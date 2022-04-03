@@ -77,11 +77,11 @@ fragment @insertpiece( output_type ) main_metal
 
 	@property( hlms_use_prepass )
 		@property( !hlms_use_prepass_msaa )
-		, texture2d<float, access::read> gBuf_normals			[[texture(@value(gBuf_normals))]]
-		, texture2d<float, access::read> gBuf_shadowRoughness	[[texture(@value(gBuf_shadowRoughness))]]
+		, texture2d<midf, access::read> gBuf_normals			[[texture(@value(gBuf_normals))]]
+		, texture2d<midf, access::read> gBuf_shadowRoughness	[[texture(@value(gBuf_shadowRoughness))]]
 		@end @property( hlms_use_prepass_msaa )
-		, texture2d_ms<float, access::read> gBuf_normals		[[texture(@value(gBuf_normals))]]
-		, texture2d_ms<float, access::read> gBuf_shadowRoughness[[texture(@value(gBuf_shadowRoughness))]]
+		, texture2d_ms<midf, access::read> gBuf_normals		[[texture(@value(gBuf_normals))]]
+		, texture2d_ms<midf, access::read> gBuf_shadowRoughness[[texture(@value(gBuf_shadowRoughness))]]
 		@end
 
 		@property( hlms_use_ssr )
@@ -98,7 +98,7 @@ fragment @insertpiece( output_type ) main_metal
 				, texture2d<float> depthTextureNoMsaa			[[texture(@value(depthTextureNoMsaa))]]
 			@end
 		@end
-		, texture2d<float>	refractionMap			[[texture(@value(refractionMap))]]
+		, texture2d<midf>	refractionMap			[[texture(@value(refractionMap))]]
 		, sampler			refractionMapSampler	[[sampler(@value(refractionMap))]]
 	@end
 
@@ -107,22 +107,22 @@ fragment @insertpiece( output_type ) main_metal
 	@insertpiece( DeclLightProfilesTexture )
 
 	@property( irradiance_volumes )
-		, texture3d<float>	irradianceVolume		[[texture(@value(irradianceVolume))]]
+		, texture3d<midf>	irradianceVolume		[[texture(@value(irradianceVolume))]]
 		, sampler			irradianceVolumeSampler	[[sampler(@value(irradianceVolume))]]
 	@end
 
 	@foreach( num_textures, n )
-		, texture2d_array<float> textureMaps@n [[texture(@value(textureMaps@n))]]@end
+		, texture2d_array<midf> textureMaps@n [[texture(@value(textureMaps@n))]]@end
 	@property( use_envprobe_map )
 		@property( !hlms_enable_cubemaps_auto )
-			, texturecube<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
+			, texturecube<midf>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
 		@end
 		@property( hlms_enable_cubemaps_auto )
 			@property( !hlms_cubemaps_use_dpm )
-				, texturecube_array<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
+				, texturecube_array<midf>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
 			@end
 			@property( hlms_cubemaps_use_dpm )
-				, texture2d_array<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
+				, texture2d_array<midf>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
 			@end
 		@end
 		@property( envMapRegSampler < samplerStateStart )
@@ -172,7 +172,7 @@ fragment @insertpiece( output_type ) main_metal
 	// END UNIFORM DECLARATION
 
 	@foreach( num_textures, n )
-		, texture2d_array<float> textureMaps@n [[texture(@value(textureMaps@n))]]@end
+		, texture2d_array<midf> textureMaps@n [[texture(@value(textureMaps@n))]]@end
 	@foreach( num_samplers, n )
 		, sampler samplerState@value(samplerStateStart) [[sampler(@counter(samplerStateStart))]]@end
 )

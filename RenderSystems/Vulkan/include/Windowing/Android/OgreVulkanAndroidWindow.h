@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -41,38 +41,37 @@ struct ANativeWindow;
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanAndroidWindow : public VulkanWindow
+    class _OgreVulkanExport VulkanAndroidWindow final : public VulkanWindow
     {
         ANativeWindow *mNativeWindow;
 
         bool mVisible;
         bool mHidden;
-        bool mIsTopLevel;
         bool mIsExternal;
 
     public:
         VulkanAndroidWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        ~VulkanAndroidWindow();
+        ~VulkanAndroidWindow() override;
 
-        static const char *getRequiredExtensionName( void );
+        static const char *getRequiredExtensionName();
 
-        virtual void destroy( void );
-        virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *miscParams );
+        void destroy() override;
+        void _initialize( TextureGpuManager *textureGpuManager,
+                          const NameValuePairList *miscParams ) override;
 
-        virtual void reposition( int32 left, int32 top );
-        virtual void requestResolution( uint32 width, uint32 height );
-        virtual void windowMovedOrResized( void );
+        void reposition( int32 left, int32 top ) override;
+        void requestResolution( uint32 width, uint32 height ) override;
+        void windowMovedOrResized() override;
 
-        virtual void _setVisible( bool visible );
-        virtual bool isVisible( void ) const;
-        virtual void setHidden( bool hidden );
-        virtual bool isHidden( void ) const;
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
 
         /// If the ANativeWindow changes, allows to set a new one.
         void setNativeWindow( ANativeWindow *nativeWindow );
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
 
 }  // namespace Ogre

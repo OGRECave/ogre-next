@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -39,7 +39,7 @@ namespace Ogre
 {
     class VulkanBufferInterface;
 
-    class _OgreVulkanExport VulkanTexBufferPacked : public TexBufferPacked
+    class _OgreVulkanExport VulkanTexBufferPacked final : public TexBufferPacked
     {
         struct CachedResourceView
         {
@@ -62,16 +62,16 @@ namespace Ogre
                                bool keepAsShadow, VulkanRenderSystem *renderSystem,
                                VaoManager *vaoManager, VulkanBufferInterface *bufferInterface,
                                PixelFormatGpu pf );
-        ~VulkanTexBufferPacked();
+        ~VulkanTexBufferPacked() override;
 
         VkBufferView _bindBufferCommon( size_t offset, size_t sizeBytes );
 
-        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
 
         /// Return result is not cached. Calling multiple times
         /// with the same values will create new VkBufferView

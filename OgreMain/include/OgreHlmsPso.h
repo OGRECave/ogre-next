@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,19 +28,20 @@ THE SOFTWARE.
 #ifndef _OgreHlmsPso_H_
 #define _OgreHlmsPso_H_
 
+#include "OgreGpuProgram.h"
 #include "OgrePixelFormatGpu.h"
 #include "Vao/OgreVertexBufferPacked.h"
-#include "OgreGpuProgram.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** IT'S MEMBERS MUST BE KEPT POD (Otherwise HlmsPso needs to be modified).
     @par
@@ -49,7 +50,7 @@ namespace Ogre
     struct HlmsPassPso
     {
         /// Stencil support
-        StencilParams   stencilParams;
+        StencilParams stencilParams;
 
         /// PF_NULL if no colour attachment is used.
         PixelFormatGpu colourFormat[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
@@ -62,7 +63,7 @@ namespace Ogre
         SampleDescription sampleDescription;
 
         /// For multi-GPU support
-        uint32      adapterId;
+        uint32 adapterId;
 
         uint8 strongMacroblockBits;
 
@@ -79,11 +80,8 @@ namespace Ogre
                    this->adapterId == _r.adapterId &&                  //
                    this->strongMacroblockBits == _r.strongMacroblockBits;
         }
-        bool operator != ( const HlmsPassPso &_r ) const
-        {
-            return !(*this == _r);
-        }
-        bool operator < ( const HlmsPassPso &other ) const
+        bool operator!=( const HlmsPassPso &_r ) const { return !( *this == _r ); }
+        bool operator<( const HlmsPassPso &other ) const
         {
             if( this->stencilParams != other.stencilParams )
                 return this->stencilParams < other.stencilParams;
@@ -104,14 +102,16 @@ namespace Ogre
             return this->strongMacroblockBits < other.strongMacroblockBits;
         }
 
-        bool hasStrongMacroblock(void) const    { return strongMacroblockBits != 0u; }
+        bool hasStrongMacroblock() const { return strongMacroblockBits != 0u; }
 
         enum StrongMacroblockBits
         {
+            // clang-format off
             ForceDisableDepthWrites     = 1u << 0u,
             InvertVertexWinding         = 1u << 1u,
             NoDepthBuffer               = 1u << 2u,
             ForceDepthClamp             = 1u << 3u,
+            // clang-format on
         };
     };
 
@@ -128,51 +128,51 @@ namespace Ogre
     */
     struct HlmsPso
     {
-        GpuProgramPtr   vertexShader;
-        GpuProgramPtr   geometryShader;
-        GpuProgramPtr   tesselationHullShader;
-        GpuProgramPtr   tesselationDomainShader;
-        GpuProgramPtr   pixelShader;
+        GpuProgramPtr vertexShader;
+        GpuProgramPtr geometryShader;
+        GpuProgramPtr tesselationHullShader;
+        GpuProgramPtr tesselationDomainShader;
+        GpuProgramPtr pixelShader;
 
-        //Computed from the VertexArrayObject (or v1 equivalent)
-        VertexElement2VecVec    vertexElements;
+        // Computed from the VertexArrayObject (or v1 equivalent)
+        VertexElement2VecVec vertexElements;
         // --- POD part starts here ---
-        OperationType           operationType;
-        bool                    enablePrimitiveRestart;
-        uint8                   clipDistances; //Bitmask. Only needed by GL.
+        OperationType operationType;
+        bool          enablePrimitiveRestart;
+        uint8         clipDistances;  // Bitmask. Only needed by GL.
 
-        HlmsMacroblock const    *macroblock;
-        HlmsBlendblock const    *blendblock;
-        //No independent blenblocks for now
-//      HlmsBlendblock const    *blendblock[8];
-//      bool                    independentBlend;
+        HlmsMacroblock const *macroblock;
+        HlmsBlendblock const *blendblock;
+        // No independent blenblocks for now
+        //      HlmsBlendblock const    *blendblock[8];
+        //      bool                    independentBlend;
 
-        //TODO: Stream Out.
+        // TODO: Stream Out.
         //-dark_sylinc update: Stream Out seems to be dying.
-        //It was hard to setup, applications are limited,
-        //UAVs are easier and more flexible/powerful.
+        // It was hard to setup, applications are limited,
+        // UAVs are easier and more flexible/powerful.
 
         // --- Begin Pass data ---
-        uint32          sampleMask; /// Fixed to 0xffffffff for now
-        HlmsPassPso     pass;
+        uint32      sampleMask;  /// Fixed to 0xffffffff for now
+        HlmsPassPso pass;
         // --- End Pass data ---
 
-        void        *rsData;        /// Render-System specific data
+        void *rsData;  /// Render-System specific data
 
-        //No constructor on purpose. Performance implications
-        //(could get called every object when looking up!)
-        //see Hlms::getShaderCache. Use initialize instead.
-        //HlmsPso();
+        HlmsPso() { initialize(); }
+
+        HlmsPso( const HlmsPso &_r ) { *this = _r; }
 
         void initialize()
         {
             // Zero out POD part including padding bytes.
             memset( &operationType, 0,
-                (const uint8*)this + sizeof(HlmsPso) - (const uint8*)&this->operationType );
+                    static_cast<size_t>( (const uint8 *)this + sizeof( HlmsPso ) -
+                                         (const uint8 *)&this->operationType ) );
             operationType = OT_POINT_LIST;
         }
 
-        HlmsPso& operator = ( const HlmsPso &_r )
+        HlmsPso &operator=( const HlmsPso &_r )
         {
             // Copy non-POD part.
             this->vertexShader = _r.vertexShader;
@@ -183,34 +183,45 @@ namespace Ogre
             this->vertexElements = _r.vertexElements;
 
             // Copy POD part including padding bytes.
-            memcpy( &operationType, &_r.operationType, 
-                (const uint8*)this + sizeof(HlmsPso) - (const uint8*)&this->operationType );
+            memcpy( &operationType, &_r.operationType,
+                    static_cast<size_t>( (const uint8 *)this + sizeof( HlmsPso ) -
+                                         (const uint8 *)&this->operationType ) );
             return *this;
         }
 
         bool equalNonPod( const HlmsPso &_r ) const
         {
-            return this->vertexShader == _r.vertexShader &&
-                   this->geometryShader == _r.geometryShader &&
+            return this->vertexShader == _r.vertexShader && this->geometryShader == _r.geometryShader &&
                    this->tesselationHullShader == _r.tesselationHullShader &&
                    this->tesselationDomainShader == _r.tesselationDomainShader &&
-                   this->pixelShader == _r.pixelShader &&
-                   this->vertexElements == _r.vertexElements;
+                   this->pixelShader == _r.pixelShader && this->vertexElements == _r.vertexElements;
         }
         int lessNonPod( const HlmsPso &_r ) const
         {
-            if( this->vertexShader < _r.vertexShader ) return -1;
-            if( this->vertexShader != _r.vertexShader ) return 1;
-            if( this->geometryShader < _r.geometryShader ) return -1;
-            if( this->geometryShader != _r.geometryShader ) return 1;
-            if( this->tesselationHullShader < _r.tesselationHullShader ) return -1;
-            if( this->tesselationHullShader != _r.tesselationHullShader ) return 1;
-            if( this->tesselationDomainShader < _r.tesselationDomainShader ) return -1;
-            if( this->tesselationDomainShader != _r.tesselationDomainShader ) return 1;
-            if( this->pixelShader < _r.pixelShader ) return -1;
-            if( this->pixelShader != _r.pixelShader ) return 1;
-            if( this->vertexElements < _r.vertexElements ) return -1;
-            if( this->vertexElements != _r.vertexElements ) return 1;
+            if( this->vertexShader < _r.vertexShader )
+                return -1;
+            if( this->vertexShader != _r.vertexShader )
+                return 1;
+            if( this->geometryShader < _r.geometryShader )
+                return -1;
+            if( this->geometryShader != _r.geometryShader )
+                return 1;
+            if( this->tesselationHullShader < _r.tesselationHullShader )
+                return -1;
+            if( this->tesselationHullShader != _r.tesselationHullShader )
+                return 1;
+            if( this->tesselationDomainShader < _r.tesselationDomainShader )
+                return -1;
+            if( this->tesselationDomainShader != _r.tesselationDomainShader )
+                return 1;
+            if( this->pixelShader < _r.pixelShader )
+                return -1;
+            if( this->pixelShader != _r.pixelShader )
+                return 1;
+            if( this->vertexElements < _r.vertexElements )
+                return -1;
+            if( this->vertexElements != _r.vertexElements )
+                return 1;
 
             return 0;
         }
@@ -219,32 +230,31 @@ namespace Ogre
         /// (and is typically part of a renderable with a material already assigned).
         bool equalExcludePassData( const HlmsPso &_r ) const
         {
-            //Non-POD datatypes.
-            return
-            equalNonPod( _r ) &&
-            //POD datatypes
-            memcmp( &this->operationType, &_r.operationType,
-                    (const uint8*)&this->sampleMask -
-                    (const uint8*)&this->operationType ) == 0;
+            // Non-POD datatypes.
+            return equalNonPod( _r ) &&
+                   // POD datatypes
+                   memcmp( &this->operationType, &_r.operationType,
+                           static_cast<size_t>( (const uint8 *)&this->sampleMask -
+                                                (const uint8 *)&this->operationType ) ) == 0;
         }
         /// Compares if this <= _r. See equalExcludePassData
         bool lessThanExcludePassData( const HlmsPso &_r ) const
         {
-            //Non-POD datatypes.
+            // Non-POD datatypes.
             int nonPodResult = lessNonPod( _r );
             if( nonPodResult != 0 )
                 return nonPodResult < 0;
 
-            //POD datatypes
+            // POD datatypes
             return memcmp( &this->operationType, &_r.operationType,
-                           (const uint8*)&this->sampleMask -
-                           (const uint8*)&this->operationType ) < 0;
+                           static_cast<size_t>( (const uint8 *)&this->sampleMask -
+                                                (const uint8 *)&this->operationType ) ) < 0;
         }
     };
 
     struct HlmsComputePso
     {
-        GpuProgramPtr   computeShader;
+        GpuProgramPtr                 computeShader;
         GpuProgramParametersSharedPtr computeParams;
 
         /// XYZ. Metal needs the threads per group on C++ side. HLSL & GLSL want
@@ -254,26 +264,26 @@ namespace Ogre
         /// via @pset( threads_per_group_x, 64 )
         /// (there's also threads_per_group_y & threads_per_group_z)
         /// @see HlmsComputeJob::setThreadsPerGroup
-        uint32  mThreadsPerGroup[3];
+        uint32 mThreadsPerGroup[3];
 
         /// The number of thread groups to dispatch.
         /// eg. Typically:
         ///     mNumThreadGroups[0] = ceil( mThreadsPerGroup[0] / image.width );
         ///     mNumThreadGroups[1] = ceil( mThreadsPerGroup[1] / image.height );
         /// @see HlmsComputeJob::setNumThreadGroups
-        uint32  mNumThreadGroups[3];
+        uint32 mNumThreadGroups[3];
 
-        void        *rsData;    /// Render-System specific data
+        void *rsData;  /// Render-System specific data
 
-        //No constructor on purpose. Performance implications
+        // No constructor on purpose. Performance implications
         //(could get called every object when looking up!)
-        //see Hlms::getShaderCache
-        //HlmsComputePso();
+        // see Hlms::getShaderCache
+        // HlmsComputePso();
 
         void initialize()
         {
-            memset( mThreadsPerGroup, 0, sizeof(mThreadsPerGroup) );
-            memset( mNumThreadGroups, 0, sizeof(mNumThreadGroups) );
+            memset( mThreadsPerGroup, 0, sizeof( mThreadsPerGroup ) );
+            memset( mNumThreadGroups, 0, sizeof( mNumThreadGroups ) );
             rsData = 0;
         }
     };
@@ -281,7 +291,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

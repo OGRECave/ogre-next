@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -29,57 +29,52 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #ifndef _OgreVulkanHardwareBufferManager_H_
 #define _OgreVulkanHardwareBufferManager_H_
 
-#include "OgreVulkanPrerequisites.h"
 #include "OgreHardwareBufferManager.h"
+#include "OgreVulkanPrerequisites.h"
 
 namespace Ogre
 {
-namespace v1
-{
-    class _OgreVulkanExport VulkanHardwareBufferManagerBase : public HardwareBufferManagerBase
+    namespace v1
     {
-    protected:
-        VulkanDiscardBufferManager *mDiscardBufferManager;
-
-    public:
-        VulkanHardwareBufferManagerBase( VulkanDevice *device, VaoManager *vaoManager );
-        virtual ~VulkanHardwareBufferManagerBase();
-
-        void _notifyDeviceStalled( void );
-
-        VulkanDiscardBufferManager *_getDiscardBufferManager( void ) { return mDiscardBufferManager; }
-
-
-        virtual HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,
-            HardwareBuffer::Usage usage, bool useShadowBuffer ) override;
-        virtual HardwareIndexBufferSharedPtr createIndexBuffer( HardwareIndexBuffer::IndexType itype,
-            size_t numIndexes, HardwareBuffer::Usage usage, bool useShadowBuffer ) override;
-        virtual HardwareUniformBufferSharedPtr createUniformBuffer( size_t sizeBytes,
-            HardwareBuffer::Usage usage, bool useShadowBuffer, const String &name ) override;
-        virtual HardwareCounterBufferSharedPtr createCounterBuffer( size_t sizeBytes,
-            HardwareBuffer::Usage usage, bool useShadowBuffer, const String &name ) override;
-    };
-
-    class _OgreVulkanExport VulkanHardwareBufferManager : public HardwareBufferManager
-    {
-    public:
-        VulkanHardwareBufferManager( VulkanDevice *device, VaoManager *vaoManager ) :
-            HardwareBufferManager( OGRE_NEW VulkanHardwareBufferManagerBase( device, vaoManager ) )
+        class _OgreVulkanExport VulkanHardwareBufferManagerBase final : public HardwareBufferManagerBase
         {
-        }
+        protected:
+            VulkanDiscardBufferManager *mDiscardBufferManager;
 
-        virtual ~VulkanHardwareBufferManager()
-        {
-            OGRE_DELETE mImpl;
-        }
+        public:
+            VulkanHardwareBufferManagerBase( VulkanDevice *device, VaoManager *vaoManager );
+            ~VulkanHardwareBufferManagerBase() override;
 
-        void _notifyDeviceStalled( void )
+            void _notifyDeviceStalled();
+
+            VulkanDiscardBufferManager *_getDiscardBufferManager() { return mDiscardBufferManager; }
+
+            HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,
+                                                              HardwareBuffer::Usage usage,
+                                                              bool useShadowBuffer ) override;
+            HardwareIndexBufferSharedPtr createIndexBuffer( HardwareIndexBuffer::IndexType itype,
+                                                            size_t numIndexes,
+                                                            HardwareBuffer::Usage usage,
+                                                            bool useShadowBuffer ) override;
+        };
+
+        class _OgreVulkanExport VulkanHardwareBufferManager final : public HardwareBufferManager
         {
-            static_cast<VulkanHardwareBufferManagerBase *>( mImpl )->_notifyDeviceStalled();
-        }
-    };
-    
-}
-}
+        public:
+            VulkanHardwareBufferManager( VulkanDevice *device, VaoManager *vaoManager ) :
+                HardwareBufferManager( OGRE_NEW VulkanHardwareBufferManagerBase( device, vaoManager ) )
+            {
+            }
+
+            ~VulkanHardwareBufferManager() override { OGRE_DELETE mImpl; }
+
+            void _notifyDeviceStalled()
+            {
+                static_cast<VulkanHardwareBufferManagerBase *>( mImpl )->_notifyDeviceStalled();
+            }
+        };
+
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

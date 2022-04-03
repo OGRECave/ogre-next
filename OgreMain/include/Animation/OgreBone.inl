@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -55,7 +55,7 @@ namespace Ogre
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    inline Vector3 Bone::getPosition(void) const
+    inline Vector3 Bone::getPosition() const
     {
         return mTransform.mPosition->getAsVector3( mTransform.mIndex );
     }
@@ -67,7 +67,7 @@ namespace Ogre
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    inline Vector3 Bone::getScale(void) const
+    inline Vector3 Bone::getScale() const
     {
         return mTransform.mScale->getAsVector3( mTransform.mIndex );
     }

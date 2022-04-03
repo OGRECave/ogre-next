@@ -18,7 +18,7 @@ namespace Demo
     class MouseListener
     {
     public:
-        //Receives SDL_MOUSEMOTION and SDL_MOUSEWHEEL events
+        // Receives SDL_MOUSEMOTION and SDL_MOUSEWHEEL events
         virtual void mouseMoved( const SDL_Event &arg ) {}
         virtual void mousePressed( const SDL_MouseButtonEvent &arg, Ogre::uint8 id ) {}
         virtual void mouseReleased( const SDL_MouseButtonEvent &arg, Ogre::uint8 id ) {}
@@ -27,10 +27,10 @@ namespace Demo
     class KeyboardListener
     {
     public:
-        virtual void textEditing( const SDL_TextEditingEvent& arg ) {}
-        virtual void textInput( const SDL_TextInputEvent& arg ) {}
+        virtual void textEditing( const SDL_TextEditingEvent &arg ) {}
+        virtual void textInput( const SDL_TextInputEvent &arg ) {}
         virtual void keyPressed( const SDL_KeyboardEvent &arg ) {}
-        virtual void keyReleased (const SDL_KeyboardEvent &arg ) {}
+        virtual void keyReleased( const SDL_KeyboardEvent &arg ) {}
     };
 
     class JoystickListener
@@ -41,6 +41,6 @@ namespace Demo
         virtual void joyAxisMoved( const SDL_JoyAxisEvent &arg, int axis ) {}
         virtual void joyPovMoved( const SDL_JoyHatEvent &arg, int index ) {}
     };
-}
+}  // namespace Demo
 
 #endif

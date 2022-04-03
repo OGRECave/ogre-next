@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,55 +30,57 @@ THE SOFTWARE.
 #define _Ogre_D3D11TexBufferPacked_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreD3D11DeviceResource.h"
-#include "Vao/OgreTexBufferPacked.h"
 #include "OgreDescriptorSetTexture.h"
+#include "Vao/OgreTexBufferPacked.h"
 
 namespace Ogre
 {
     class D3D11BufferInterface;
 
-    class _OgreD3D11Export D3D11TexBufferPacked : public TexBufferPacked,
-                                                  protected D3D11DeviceResource
+    class _OgreD3D11Export D3D11TexBufferPacked final : public TexBufferPacked,
+                                                        protected D3D11DeviceResource
     {
-        DXGI_FORMAT mInternalFormat;
+        DXGI_FORMAT  mInternalFormat;
         D3D11Device &mDevice;
 
         struct CachedResourceView
         {
             ComPtr<ID3D11ShaderResourceView> mResourceView;
-            uint32                      mOffset;
-            uint32                      mSize;
+            uint32                           mOffset;
+            uint32                           mSize;
         };
 
-        CachedResourceView  mCachedResourceViews[16];
-        uint8               mCurrentCacheCursor;
+        CachedResourceView mCachedResourceViews[16];
+        uint8              mCurrentCacheCursor;
 
-        bool isD3D11Structured(void) const;
+        bool isD3D11Structured() const;
 
-        ID3D11ShaderResourceView* createResourceView( int cacheIdx, uint32 offset, uint32 sizeBytes );
-        ID3D11ShaderResourceView* bindBufferCommon( size_t offset, size_t sizeBytes );
+        ID3D11ShaderResourceView *createResourceView( int cacheIdx, uint32 offset, uint32 sizeBytes );
+        ID3D11ShaderResourceView *bindBufferCommon( size_t offset, size_t sizeBytes );
 
-        void notifyDeviceLost(D3D11Device* device);
-        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
+        void notifyDeviceLost( D3D11Device *device ) override;
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
 
     public:
         D3D11TexBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                              uint32 numElementsPadding, BufferType bufferType,
-                              void *initialData, bool keepAsShadow,
-                              VaoManager *vaoManager, BufferInterface *bufferInterface,
-                              PixelFormatGpu pf, bool bIsStructured, D3D11Device &device );
-        virtual ~D3D11TexBufferPacked();
+                              uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                              bool keepAsShadow, VaoManager *vaoManager,
+                              BufferInterface *bufferInterface, PixelFormatGpu pf, bool bIsStructured,
+                              D3D11Device &device );
+        ~D3D11TexBufferPacked() override;
 
-        ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::BufferSlot &bufferSlot ) const;
+        ComPtr<ID3D11ShaderResourceView> createSrv(
+            const DescriptorSetTexture2::BufferSlot &bufferSlot ) const;
 
-        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

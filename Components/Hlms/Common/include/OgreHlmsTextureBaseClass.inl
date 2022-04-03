@@ -98,6 +98,11 @@ namespace Ogre
         datablockImpl->scheduleConstBufferUpdate( hasDirtyTextures, hasDirtySamplers );
     }
     //-----------------------------------------------------------------------------------
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::preload()
+    {
+        loadAllTextures();
+    }
+    //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures( const String &folderPath,
                                                      set<String>::type &savedTextures,
                                                      bool saveOitd, bool saveOriginal,
@@ -191,7 +196,7 @@ namespace Ogre
                 //the order of OGRE_HLMS_TEXTURE_BASE_MAX_TEX
                 if( mTexLocationInDescSet[i] == OGRE_HLMS_TEXTURE_BASE_MAX_TEX )
                 {
-                    mTexLocationInDescSet[i] = baseSet.mTextures.size();
+                    mTexLocationInDescSet[i] = (uint8)baseSet.mTextures.size();
                     baseSet.mTextures.push_back( mTextures[i] );
                     if( !hasSeparateSamplers )
                         baseSampler.mSamplers.push_back( mSamplerblocks[i] );
@@ -245,7 +250,7 @@ namespace Ogre
     {
         return _a->mId < _b->mId;
     }
-    bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeSamplers(void)
+    bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeSamplers()
     {
         assert( mCreator->getRenderSystem()->getCapabilities()->
                 hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
@@ -446,7 +451,7 @@ namespace Ogre
                                       sampler, OrderBlockById );
             if( itor != mSamplersDescSet->mSamplers.end() && *itor == sampler )
             {
-                const size_t idx = itor - mSamplersDescSet->mSamplers.begin();
+                const size_t idx = static_cast<size_t>( itor - mSamplersDescSet->mSamplers.begin() );
                 retVal = static_cast<uint8>( idx );
             }
         }
@@ -466,7 +471,7 @@ namespace Ogre
             for( int i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
             {
                 if( mTextures[i] == texture )
-                    setTexture( i, 0, mSamplerblocks[i] );
+                    setTexture( (uint8)i, 0, mSamplerblocks[i] );
             }
         }
 
@@ -487,7 +492,7 @@ namespace Ogre
         return !mLinkedRenderables.empty();
     }
     //-----------------------------------------------------------------------------------
-    void OGRE_HLMS_TEXTURE_BASE_CLASS::loadAllTextures(void)
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::loadAllTextures()
     {
         if( !mAllowTextureResidencyChange )
             return;

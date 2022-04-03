@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -25,31 +25,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreRoot.h"
+
 #include "OgreParticleFXPlugin.h"
+
+#include "OgreRoot.h"
 
 #ifndef OGRE_STATIC_LIB
 
-namespace Ogre {
-
-    ParticleFXPlugin* plugin;
+namespace Ogre
+{
+    static ParticleFXPlugin *plugin;
     //-----------------------------------------------------------------------
-    extern "C" void _OgreParticleFXExport dllStartPlugin(void) throw()
+    extern "C" void _OgreParticleFXExport dllStartPlugin( void ) noexcept( false )
     {
         plugin = OGRE_NEW ParticleFXPlugin();
-        Root::getSingleton().installPlugin(plugin);
+        Root::getSingleton().installPlugin( plugin );
     }
-
     //-----------------------------------------------------------------------
-    extern "C" void _OgreParticleFXExport dllStopPlugin(void)
+    extern "C" void _OgreParticleFXExport dllStopPlugin( void )
     {
-        Root::getSingleton().uninstallPlugin(plugin);
+        Root::getSingleton().uninstallPlugin( plugin );
         OGRE_DELETE plugin;
-
     }
 
-
-}
+}  // namespace Ogre
 
 #endif

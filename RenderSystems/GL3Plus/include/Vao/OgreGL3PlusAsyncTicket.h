@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -38,17 +38,17 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusAsyncTicket : public AsyncTicket
     {
     protected:
-        GLsync  mFenceName;
+        GLsync mFenceName;
 
-        virtual const void* mapImpl(void);
+        const void *mapImpl() override;
 
     public:
-        GL3PlusAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                            size_t elementStart, size_t elementCount );
-        virtual ~GL3PlusAsyncTicket();
+        GL3PlusAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
+                            size_t elementCount );
+        ~GL3PlusAsyncTicket() override;
 
-        virtual bool queryIsTransferDone(void);
+        bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

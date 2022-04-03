@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -38,43 +38,44 @@ namespace Ogre
     /** For Metal, all buffers can be treated with the same code.
         Hence most equivalent functionality is encapsulated here.
     */
-    class _OgreMetalExport MetalBufferInterface : public BufferInterface
+    class _OgreMetalExport MetalBufferInterface final : public BufferInterface
     {
     protected:
-        size_t          mVboPoolIdx;
-        id<MTLBuffer>   mVboName;
-        void            *mMappedPtr;
+        size_t        mVboPoolIdx;
+        id<MTLBuffer> mVboName;
+        void         *mMappedPtr;
 
         size_t              mUnmapTicket;
-        MetalDynamicBuffer  *mDynamicBuffer;
+        MetalDynamicBuffer *mDynamicBuffer;
 
         size_t advanceFrame( bool bAdvanceFrame );
 
     public:
         MetalBufferInterface( size_t vboPoolIdx, id<MTLBuffer> vboName,
                               MetalDynamicBuffer *dynamicBuffer );
-        virtual ~MetalBufferInterface();
+        ~MetalBufferInterface() override;
 
-        size_t getVboPoolIndex(void)                                { return mVboPoolIdx; }
+        size_t getVboPoolIndex() { return mVboPoolIdx; }
         /// Use __unsafe_unretained when possible to avoid unnecessary ARC overhead.
-        id<MTLBuffer> getVboName(void) const                        { return mVboName; }
+        id<MTLBuffer> getVboName() const { return mVboName; }
 
-        void _setVboPoolIndex( size_t newVboPool )                  { mVboPoolIdx = newVboPool; }
+        void _setVboPoolIndex( size_t newVboPool ) { mVboPoolIdx = newVboPool; }
 
         /// Only use this function for the first upload
         void _firstUpload( const void *data, size_t elementStart, size_t elementCount );
 
-        virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
-                                                 MappingState prevMappingState,
-                                                 bool advanceFrame = true );
-        virtual void unmap( UnmapOptions unmapOption,
-                            size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+                                         MappingState prevMappingState,
+                                         bool         advanceFrame = true ) override;
 
-        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
-                             size_t srcOffsetBytes, size_t sizeBytes );
+        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                    size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
+
+        void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
+                     size_t sizeBytes ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

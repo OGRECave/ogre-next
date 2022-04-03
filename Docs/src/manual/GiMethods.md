@@ -271,6 +271,35 @@ Additionally, instead of 3D textures, a 2D texture is used and octahedral maps a
 
 > - See `Samples/2.0/Tests/Voxelizer`
 
+# Cascaded Image Voxel Cone Tracing (CIVCT) {#GiCIVCT}
+
+Image Voxel Cone Tracing is like regular VCT except it bakes every mesh into voxels, and then copies those voxels into the scene.
+
+This makes rebuilding the scene *much* faster at the cost of higher VRAM usage and slightly lower quality.
+
+By being able to revoxelize scenes very fast we can:
+
+ - Support arbitrary scenes (indoor, outdoors)
+ - Support static objects
+ - Optionally support dynamic objects (e.g. revoxelize every frame)
+
+This would make it the best overall GI implementation.
+
+The details are described in @subpage ImageVoxelConeTracing
+
+Cascaded IVCT extends the concept with cascades of varying quality to cover large distances around the camera but at lower resolutions.
+
+Currently CIVCT is in alpha state which means:
+
+ - Vulkan works great, but on low VRAM GPUs you may run out of VRAM and things will become super slow. Specially with e.g. 4 cascades
+ - OpenGL works, same issues as Vulkan. But needs a few workarounds and may run into issues due to the 32 texture unit limit. Also the way OGL calculates mipmaps makes the GI darker and that needs fixing.
+ - D3D11 works with low cascade count (e.g. 2), but breaks at 4 cascades. That's because D3D11 runs out of the 16 samplers because Hlms implementations are currently wasting a lot instead of reusing
+ - Metal does not work because it runs out of UAV texture units (this is an Ogre limitation, not Metal)
+
+Ogre 2.4 will fix most of these issues
+
+> - See `Samples/2.0/ApiUsage/ImageVoxelizer`
+
 # What technique should I choose? {#GiWhatTechniqueChoose}
 
 PCC is what most games use because it's fast, easy to understand, and has predictable results. If the scene is mostly composed of rectangular rooms with little furniture, PCC will also be extremely accurate.

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,14 +29,15 @@ THE SOFTWARE.
 #ifndef __CompositorPassDef_H__
 #define __CompositorPassDef_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "OgrePrerequisites.h"
+
 #include "OgreIdString.h"
-#include "OgreResourceTransition.h"
 #include "OgreRenderPassDescriptor.h"
+#include "OgreResourceTransition.h"
 
 #include "ogrestd/vector.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -44,11 +45,11 @@ namespace Ogre
     class CompositorPassTargetBarrierDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
     enum CompositorPassType
     {
         PASS_INVALID = 0,
@@ -67,7 +68,7 @@ namespace Ogre
         PASS_CUSTOM
     };
 
-    extern const char *CompositorPassTypeEnumNames[PASS_CUSTOM+1u];
+    extern const char *CompositorPassTypeEnumNames[PASS_CUSTOM + 1u];
 
     class CompositorTargetDef;
 
@@ -91,49 +92,55 @@ namespace Ogre
         immediately while not see others (eg. changing CompositorPassSceneDef::mCameraName)
         Also crashes could happen depending on the changes being made.
     */
-    class _OgreExport CompositorPassDef : public CompositorInstAlloc
+    class _OgreExport CompositorPassDef : public OgreAllocatedObj
     {
-        CompositorPassType  mPassType;
+        CompositorPassType mPassType;
 
         CompositorTargetDef *mParentTargetDef;
 
     public:
         struct ViewportRect
         {
-            float               mVpLeft;
-            float               mVpTop;
-            float               mVpWidth;
-            float               mVpHeight;
-            float               mVpScissorLeft;
-            float               mVpScissorTop;
-            float               mVpScissorWidth;
-            float               mVpScissorHeight;
+            float mVpLeft;
+            float mVpTop;
+            float mVpWidth;
+            float mVpHeight;
+            float mVpScissorLeft;
+            float mVpScissorTop;
+            float mVpScissorWidth;
+            float mVpScissorHeight;
 
             ViewportRect() :
-                mVpLeft( 0 ), mVpTop( 0 ),
-                mVpWidth( 1 ), mVpHeight( 1 ),
-                mVpScissorLeft( 0 ), mVpScissorTop( 0 ),
-                mVpScissorWidth( 1 ), mVpScissorHeight( 1 ) {}
+                mVpLeft( 0 ),
+                mVpTop( 0 ),
+                mVpWidth( 1 ),
+                mVpHeight( 1 ),
+                mVpScissorLeft( 0 ),
+                mVpScissorTop( 0 ),
+                mVpScissorWidth( 1 ),
+                mVpScissorHeight( 1 )
+            {
+            }
         };
         /// Viewport's region to draw
-        ViewportRect        mVpRect[16];
-        uint32              mNumViewports;
+        ViewportRect mVpRect[16];
+        uint32       mNumViewports;
 
         /// Shadow map index it belongs to (only filled in passes owned by Shadow Nodes)
-        uint32              mShadowMapIdx;
+        uint32 mShadowMapIdx;
 
         /// Number of times to perform the pass before stopping. -1 to never stop.
-        uint32              mNumInitialPasses;
+        uint32 mNumInitialPasses;
 
         /// Custom value in case there's a listener attached (to identify the pass)
-        uint32              mIdentifier;
+        uint32 mIdentifier;
 
-        ColourValue mClearColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        float       mClearDepth;
-        uint32      mClearStencil;
-        LoadAction::LoadAction mLoadActionColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        LoadAction::LoadAction mLoadActionDepth;
-        LoadAction::LoadAction mLoadActionStencil;
+        ColourValue              mClearColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        float                    mClearDepth;
+        uint32                   mClearStencil;
+        LoadAction::LoadAction   mLoadActionColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        LoadAction::LoadAction   mLoadActionDepth;
+        LoadAction::LoadAction   mLoadActionStencil;
         StoreAction::StoreAction mStoreActionColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         StoreAction::StoreAction mStoreActionDepth;
         StoreAction::StoreAction mStoreActionStencil;
@@ -167,14 +174,14 @@ namespace Ogre
         /// use a null colour buffer instead. Useful for depth prepass, or if
         /// the RTT is actually an UAV.
         /// Some passes may ignore this setting (e.g. Clear passes)
-        bool                mColourWrite;
-        bool                mReadOnlyDepth;
-        bool                mReadOnlyStencil;
+        bool mColourWrite;
+        bool mReadOnlyDepth;
+        bool mReadOnlyStencil;
 
         /** TODO: Refactor OgreOverlay to remove this design atrocity.
             A custom overlay pass is a better alternative (or just use their own RQ)
         */
-        bool                mIncludeOverlays;
+        bool mIncludeOverlays;
 
         /// Whether to flush the command buffer at the end of the pass.
         /// This can incur in a performance overhead (see OpenGL's glFlush and
@@ -186,46 +193,52 @@ namespace Ogre
         ///
         /// The main reason to use this is in CPU-bound scenarios where
         /// the GPU starts too late after sitting idle.
-        bool                mFlushCommandBuffers;
+        bool mFlushCommandBuffers;
 
-        uint8               mExecutionMask;
-        uint8               mViewportModifierMask;
+        uint8 mExecutionMask;
+        uint8 mViewportModifierMask;
 
         /// Only used if mShadowMapIdx is valid (if pass is owned by Shadow Nodes). If true,
         /// we won't force the viewport to fit the region of the UV atlas on the texture,
         /// and respect mVp* settings instead.
-        bool                mShadowMapFullViewport;
+        bool mShadowMapFullViewport;
 
-        IdStringVec         mExposedTextures;
+        IdStringVec mExposedTextures;
 
         struct UavDependency
         {
             /// The slot must be in range [0; 64) and ignores the starting
             /// slot (@see CompositorPassUavDef::mStartingSlot)
-            uint32                          uavSlot;
+            uint32 uavSlot;
 
             /// The UAV pass already sets the texture access.
             /// However two passes in a row may only read from it,
             /// thus having this information is convenient (without
             /// needing to add another bind UAV pass)
-            ResourceAccess::ResourceAccess  access;
-            bool                            allowWriteAfterWrite;
+            ResourceAccess::ResourceAccess access;
+            bool                           allowWriteAfterWrite;
 
             UavDependency( uint32 _uavSlot, ResourceAccess::ResourceAccess _access,
                            bool _allowWriteAfterWrite ) :
-                uavSlot( _uavSlot ), access( _access ), allowWriteAfterWrite( _allowWriteAfterWrite ) {}
+                uavSlot( _uavSlot ),
+                access( _access ),
+                allowWriteAfterWrite( _allowWriteAfterWrite )
+            {
+            }
         };
         typedef vector<UavDependency>::type UavDependencyVec;
-        UavDependencyVec    mUavDependencies;
+        UavDependencyVec                    mUavDependencies;
 
-        String              mProfilingId;
+        String mProfilingId;
 
     public:
         CompositorPassDef( CompositorPassType passType, CompositorTargetDef *parentTargetDef ) :
-            mPassType( passType ), mParentTargetDef( parentTargetDef ),
+            mPassType( passType ),
+            mParentTargetDef( parentTargetDef ),
             mNumViewports( 1u ),
             mShadowMapIdx( ~0U ),
-            mNumInitialPasses( ~0U ), mIdentifier( 0U ),
+            mNumInitialPasses( ~0U ),
+            mIdentifier( 0U ),
             mClearDepth( 1.0f ),
             mClearStencil( 0 ),
             mLoadActionDepth( LoadAction::Load ),
@@ -243,7 +256,7 @@ namespace Ogre
             mViewportModifierMask( 0xFF ),
             mShadowMapFullViewport( false )
         {
-            for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
             {
                 mClearColour[i] = ColourValue::Black;
                 mLoadActionColour[i] = LoadAction::Load;
@@ -256,23 +269,23 @@ namespace Ogre
         void setAllLoadActions( LoadAction::LoadAction loadAction );
         void setAllStoreActions( StoreAction::StoreAction storeAction );
 
-        CompositorPassType getType() const              { return mPassType; }
-        uint32 getRtIndex(void) const;
-        const CompositorTargetDef* getParentTargetDef(void) const;
+        CompositorPassType         getType() const { return mPassType; }
+        uint32                     getRtIndex() const;
+        const CompositorTargetDef *getParentTargetDef() const;
     };
 
-    typedef vector<CompositorPassDef*>::type CompositorPassDefVec;
+    typedef vector<CompositorPassDef *>::type CompositorPassDefVec;
 
-    class _OgreExport CompositorTargetDef : public CompositorInstAlloc
+    class _OgreExport CompositorTargetDef : public OgreAllocatedObj
     {
         /// Name is local to Node! (unless using 'global_' prefix)
-        IdString                mRenderTargetName;
-        String                  mRenderTargetNameStr;
+        IdString mRenderTargetName;
+        String   mRenderTargetNameStr;
 
-        CompositorPassDefVec    mCompositorPasses;
+        CompositorPassDefVec mCompositorPasses;
 
         /// Used for cubemaps and 3D textures.
-        uint32                  mRtIndex;
+        uint32 mRtIndex;
 
         /// Used by shadow map passes only. Determines which light types are supposed
         /// to be run with the current shadow casting light. i.e. usually point lights
@@ -281,27 +294,27 @@ namespace Ogre
         ///     mShadowMapSupportedLightTypes & 1u << Light::LT_DIRECTIONAL
         ///     mShadowMapSupportedLightTypes & 1u << Light::LT_POINT
         ///     mShadowMapSupportedLightTypes & 1u << Light::LT_SPOTLIGHT
-        uint8                   mShadowMapSupportedLightTypes;
+        uint8 mShadowMapSupportedLightTypes;
 
         CompositorPassTargetBarrierDef *mTargetLevelBarrier;
 
-        CompositorNodeDef       *mParentNodeDef;
+        CompositorNodeDef *mParentNodeDef;
 
     public:
-		CompositorTargetDef( const String &renderTargetName, uint32 rtIndex,
-							 CompositorNodeDef *parentNodeDef );
+        CompositorTargetDef( const String &renderTargetName, uint32 rtIndex,
+                             CompositorNodeDef *parentNodeDef );
         ~CompositorTargetDef();
 
-        IdString getRenderTargetName() const            { return mRenderTargetName; }
-        String getRenderTargetNameStr() const           { return mRenderTargetNameStr; }
+        IdString getRenderTargetName() const { return mRenderTargetName; }
+        String   getRenderTargetNameStr() const { return mRenderTargetNameStr; }
 
-        uint32 getRtIndex(void) const                   { return mRtIndex; }
+        uint32 getRtIndex() const { return mRtIndex; }
 
-        void setShadowMapSupportedLightTypes( uint8 types ) { mShadowMapSupportedLightTypes = types; }
-        uint8 getShadowMapSupportedLightTypes(void) const   { return mShadowMapSupportedLightTypes; }
+        void  setShadowMapSupportedLightTypes( uint8 types ) { mShadowMapSupportedLightTypes = types; }
+        uint8 getShadowMapSupportedLightTypes() const { return mShadowMapSupportedLightTypes; }
 
         void setTargetLevelBarrier( bool bBarrier );
-        bool getTargetLevelBarrier( void ) const { return mTargetLevelBarrier != 0; }
+        bool getTargetLevelBarrier() const { return mTargetLevelBarrier != 0; }
 
         /** Reserves enough memory for all passes (efficient allocation)
         @remarks
@@ -309,26 +322,26 @@ namespace Ogre
         @param numPasses
             The number of passes expected to contain.
         */
-        void setNumPasses( size_t numPasses )           { mCompositorPasses.reserve( numPasses ); }
+        void setNumPasses( size_t numPasses ) { mCompositorPasses.reserve( numPasses ); }
 
-        CompositorPassDef* addPass( CompositorPassType passType, IdString customId = IdString() );
+        CompositorPassDef *addPass( CompositorPassType passType, IdString customId = IdString() );
 
-        const CompositorPassTargetBarrierDef *getTargetLevelBarrierDef( void ) const
+        const CompositorPassTargetBarrierDef *getTargetLevelBarrierDef() const
         {
             return mTargetLevelBarrier;
         }
 
-        const CompositorPassDefVec& getCompositorPasses() const { return mCompositorPasses; }
+        const CompositorPassDefVec &getCompositorPasses() const { return mCompositorPasses; }
 
         /// @copydoc CompositorManager2::getNodeDefinitionNonConst
-        CompositorPassDefVec& getCompositorPassesNonConst()     { return mCompositorPasses; }
+        CompositorPassDefVec &getCompositorPassesNonConst() { return mCompositorPasses; }
 
-        const CompositorNodeDef* getParentNodeDef(void) const   { return mParentNodeDef; }
+        const CompositorNodeDef *getParentNodeDef() const { return mParentNodeDef; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -39,11 +39,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    MetalAsyncTicket::MetalAsyncTicket( BufferPacked *creator,
-                                        StagingBuffer *stagingBuffer,
-                                        size_t elementStart,
-                                        size_t elementCount,
-                                        MetalDevice *device ) :
+    MetalAsyncTicket::MetalAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
+                                        size_t elementStart, size_t elementCount, MetalDevice *device ) :
         AsyncTicket( creator, stagingBuffer, elementStart, elementCount ),
         mFenceName( 0 ),
         mDevice( device )
@@ -51,20 +48,16 @@ namespace Ogre
         mFenceName = dispatch_semaphore_create( 0 );
 
         __block dispatch_semaphore_t blockSemaphore = mFenceName;
-        [mDevice->mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
-        {
-            dispatch_semaphore_signal( blockSemaphore );
+        [mDevice->mCurrentCommandBuffer addCompletedHandler:^( id<MTLCommandBuffer> buffer ) {
+          dispatch_semaphore_signal( blockSemaphore );
         }];
-        //Flush now for accuracy with downloads.
+        // Flush now for accuracy with downloads.
         mDevice->commitAndNextCommandBuffer();
     }
     //-----------------------------------------------------------------------------------
-    MetalAsyncTicket::~MetalAsyncTicket()
-    {
-        mFenceName = 0;
-    }
+    MetalAsyncTicket::~MetalAsyncTicket() { mFenceName = 0; }
     //-----------------------------------------------------------------------------------
-    const void* MetalAsyncTicket::mapImpl(void)
+    const void *MetalAsyncTicket::mapImpl()
     {
         if( mFenceName )
             mFenceName = MetalVaoManager::waitFor( mFenceName, mDevice );
@@ -73,13 +66,13 @@ namespace Ogre
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool MetalAsyncTicket::queryIsTransferDone(void)
+    bool MetalAsyncTicket::queryIsTransferDone()
     {
         bool retVal = false;
 
         if( mFenceName )
         {
-            //Ask to return immediately and tell us about the fence
+            // Ask to return immediately and tell us about the fence
             const long result = dispatch_semaphore_wait( mFenceName, DISPATCH_TIME_NOW );
             if( result == 0 )
             {

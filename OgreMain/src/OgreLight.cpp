@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,47 +26,50 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreLight.h"
 
-#include "OgreException.h"
 #include "OgreCamera.h"
+#include "OgreException.h"
 #include "OgreSceneManager.h"
 
-namespace Ogre {
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    Light::Light( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, LT_POINT ),
-          mLightType(LT_POINT),
-          mDiffuse(ColourValue::White),
-          mSpecular(ColourValue::White),
-          mSpotOuter(Degree(40.0f)),
-          mSpotInner(Degree(30.0f)),
-          mTanHalfAngle( Math::Tan( mSpotOuter * 0.5f ) ),
-          mSpotFalloff(1.0f),
-          mSpotNearClip(0.0f),
-          mRange(23.0f),
-          mAttenuationConst(0.5f),
-          mAttenuationLinear(0.0f),
-          mAttenuationQuad(0.5f),
-          mPowerScale(1.0f),
-          mOwnShadowFarDist(false),
-          mAffectParentNode(false),
-          mDoubleSided(false),
-          mRectSize(Vector2::UNIT_SCALE),
-          mTexture( 0 ),
-          mTextureLightMaskIdx( std::numeric_limits<uint16>::max() ),
-          mTexLightMaskDiffuseMipStart( (uint16)(0.95f * 65535) ),
-          mLightProfileIdx( 0u ),
-          mShadowFarDist(0),
-          mShadowFarDistSquared(0),
-          mShadowNearClipDist(-1),
-          mShadowFarClipDist(-1)
-    #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
-        , mObbRestraintSmoothFadeDistance( 0 ),
-          mObbRestraint( 0 )
-    #endif
+    Light::Light( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager ) :
+        MovableObject( id, objectMemoryManager, manager, LT_POINT ),
+        mLightType( LT_POINT ),
+        mDiffuse( ColourValue::White ),
+        mSpecular( ColourValue::White ),
+        mSpotOuter( Degree( 40.0f ) ),
+        mSpotInner( Degree( 30.0f ) ),
+        mTanHalfAngle( Math::Tan( mSpotOuter * 0.5f ) ),
+        mSpotFalloff( 1.0f ),
+        mSpotNearClip( 0.0f ),
+        mRange( 23.0f ),
+        mAttenuationConst( 0.5f ),
+        mAttenuationLinear( 0.0f ),
+        mAttenuationQuad( 0.5f ),
+        mPowerScale( 1.0f ),
+        mOwnShadowFarDist( false ),
+        mAffectParentNode( false ),
+        mDoubleSided( false ),
+        mRectSize( Vector2::UNIT_SCALE ),
+        mTexture( 0 ),
+        mTextureLightMaskIdx( std::numeric_limits<uint16>::max() ),
+        mTexLightMaskDiffuseMipStart( (uint16)( 0.95f * 65535 ) ),
+        mLightProfileIdx( 0u ),
+        mShadowFarDist( 0 ),
+        mShadowFarDistSquared( 0 ),
+        mShadowNearClipDist( -1 ),
+        mShadowFarClipDist( -1 )
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        ,
+        mObbRestraintSmoothFadeDistance( 0 ),
+        mObbRestraint( 0 )
+#endif
     {
-        //mMinPixelSize should always be zero for lights otherwise lights will disapear
+        // mMinPixelSize should always be zero for lights otherwise lights will disapear
         mMinPixelSize = 0;
 
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_LIGHT_DEFAULT_MASK;
@@ -84,7 +87,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Light::setType(LightTypes type)
+    void Light::setType( LightTypes type )
     {
         mLightType = type;
 
@@ -105,31 +108,29 @@ namespace Ogre {
             updateLightBounds();
             break;
         default:
-            //Keep compiler happy
+            // Keep compiler happy
             break;
         }
 
         MovableObject::setRenderQueueGroup( static_cast<uint8>( type ) );
     }
     //-----------------------------------------------------------------------
-    void Light::setRenderQueueGroup(uint8 queueID)
+    void Light::setRenderQueueGroup( uint8 queueID )
     {
-        //Nothing
+        // Nothing
     }
     //-----------------------------------------------------------------------
-    void Light::setDirection(const Vector3& vec)
+    void Light::setDirection( const Vector3 &vec )
     {
-        assert( dynamic_cast<SceneNode*>( mParentNode ) );
-        assert( !static_cast<SceneNode*>( mParentNode )->isYawFixed() && "Attach Lights to a "
+        assert( dynamic_cast<SceneNode *>( mParentNode ) );
+        assert( !static_cast<SceneNode *>( mParentNode )->isYawFixed() &&
+                "Attach Lights to a "
                 "SceneNode without a fixed yaw! (SceneNode::setFixedYawAxis(false))" );
-        static_cast<SceneNode*>( mParentNode )->setDirection( vec, Node::TS_PARENT,
-                                                              Vector3::NEGATIVE_UNIT_Z );
+        static_cast<SceneNode *>( mParentNode )
+            ->setDirection( vec, Node::TS_PARENT, Vector3::NEGATIVE_UNIT_Z );
     }
     //-----------------------------------------------------------------------
-    Vector3 Light::getDirection(void) const
-    {
-        return -mParentNode->getOrientation().zAxis();
-    }
+    Vector3 Light::getDirection() const { return -mParentNode->getOrientation().zAxis(); }
     //-----------------------------------------------------------------------
     void Light::setAffectParentNode( bool bAffect )
     {
@@ -146,7 +147,7 @@ namespace Ogre {
         updateLightBounds();
     }
     //-----------------------------------------------------------------------
-    void Light::setSpotlightRange(const Radian& innerAngle, const Radian& outerAngle, Real falloff)
+    void Light::setSpotlightRange( const Radian &innerAngle, const Radian &outerAngle, Real falloff )
     {
         bool boundsChanged = mSpotOuter != outerAngle;
 
@@ -160,12 +161,9 @@ namespace Ogre {
             updateLightBounds();
     }
     //-----------------------------------------------------------------------
-    void Light::setSpotlightInnerAngle(const Radian& val)
-    {
-        mSpotInner = val;
-    }
+    void Light::setSpotlightInnerAngle( const Radian &val ) { mSpotInner = val; }
     //-----------------------------------------------------------------------
-    void Light::setSpotlightOuterAngle(const Radian& val)
+    void Light::setSpotlightOuterAngle( const Radian &val )
     {
         bool boundsChanged = mSpotOuter != val;
         mSpotOuter = val;
@@ -184,7 +182,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Vector2 Light::getDerivedRectSize(void) const
+    Vector2 Light::getDerivedRectSize() const
     {
         Vector3 parentScale = mParentNode->_getDerivedScale();
         return mRectSize * Vector2( parentScale.x, parentScale.y );
@@ -195,12 +193,12 @@ namespace Ogre {
         assert( radius > 0.0f );
         assert( lumThreshold >= 0.0f && lumThreshold < 1.0f );
 
-		mAttenuationConst   = 0.5f;
-		mAttenuationLinear  = 0.0f;
-		mAttenuationQuad    = 0.5f / (radius * radius);
+        mAttenuationConst = 0.5f;
+        mAttenuationLinear = 0.0f;
+        mAttenuationQuad = 0.5f / ( radius * radius );
 
         /*
-		lumThreshold = 1 / (c + l*d + q*d²)
+        lumThreshold = 1 / (c + l*d + q*d²)
         c + l*d + q*d² = 1 / lumThreshold
 
         if h = c - 1 / lumThreshold then
@@ -208,8 +206,9 @@ namespace Ogre {
             -l +- sqrt( l² - 4qh ) / 2a = d
         */
         Real h = mAttenuationConst - 1.0f / lumThreshold;
-        Real rootPart = std::sqrt( mAttenuationLinear * mAttenuationLinear - 4.0f * mAttenuationQuad * h );
-        mRange = (-mAttenuationLinear + rootPart) / (2.0f * mAttenuationQuad);
+        Real rootPart =
+            std::sqrt( mAttenuationLinear * mAttenuationLinear - 4.0f * mAttenuationQuad * h );
+        mRange = ( -mAttenuationLinear + rootPart ) / ( 2.0f * mAttenuationQuad );
 
         updateLightBounds();
     }
@@ -237,28 +236,27 @@ namespace Ogre {
         }
         else if( mLightType == LT_SPOTLIGHT )
         {
-            mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, 0.5f ),
-                                                       Vector3( 1.0f, 1.0f, 0.5f ) ),
-                                                 mObjectData.mIndex );
+            mObjectData.mLocalAabb->setFromAabb(
+                Aabb( Vector3( 0.0f, 0.0f, 0.5f ), Vector3( 1.0f, 1.0f, 0.5f ) ), mObjectData.mIndex );
         }
         else if( mLightType == LT_AREA_APPROX || mLightType == LT_AREA_LTC )
         {
             if( mDoubleSided )
             {
-                mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, 0.0f ),
-                                                           Vector3( 1.0f, 1.0f, 1.0f ) ),
-                                                     mObjectData.mIndex );
+                mObjectData.mLocalAabb->setFromAabb(
+                    Aabb( Vector3( 0.0f, 0.0f, 0.0f ), Vector3( 1.0f, 1.0f, 1.0f ) ),
+                    mObjectData.mIndex );
             }
             else
             {
-                mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, 0.5f ),
-                                                           Vector3( 1.0f, 1.0f, 0.5f ) ),
-                                                     mObjectData.mIndex );
+                mObjectData.mLocalAabb->setFromAabb(
+                    Aabb( Vector3( 0.0f, 0.0f, 0.5f ), Vector3( 1.0f, 1.0f, 0.5f ) ),
+                    mObjectData.mIndex );
             }
         }
     }
     //-----------------------------------------------------------------------
-    void Light::updateLightBounds(void)
+    void Light::updateLightBounds()
     {
         if( mLightType == LT_POINT || mLightType == LT_VPL )
         {
@@ -277,11 +275,11 @@ namespace Ogre {
         {
             if( !mAffectParentNode )
             {
-                //In local space, lights are centered at origin, facing towards +Z
+                // In local space, lights are centered at origin, facing towards +Z
                 Aabb aabb;
                 Real lenOpposite = mTanHalfAngle * mRange;
-                aabb.mCenter    = Vector3( 0, 0, -mRange * 0.5f );
-                aabb.mHalfSize  = Vector3( lenOpposite, lenOpposite, mRange * 0.5f );
+                aabb.mCenter = Vector3( 0, 0, -mRange * 0.5f );
+                aabb.mHalfSize = Vector3( lenOpposite, lenOpposite, mRange * 0.5f );
                 mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
                 mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
             }
@@ -297,17 +295,15 @@ namespace Ogre {
             {
                 if( mDoubleSided )
                 {
-                    mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, 0.0f ),
-                                                               Vector3( mRange ) ),
-                                                         mObjectData.mIndex );
+                    mObjectData.mLocalAabb->setFromAabb(
+                        Aabb( Vector3( 0.0f, 0.0f, 0.0f ), Vector3( mRange ) ), mObjectData.mIndex );
                 }
                 else
                 {
-                    mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, -mRange * 0.5f ),
-                                                               Vector3( mRange,
-                                                                        mRange,
-                                                                        mRange * 0.5f ) ),
-                                                         mObjectData.mIndex );
+                    mObjectData.mLocalAabb->setFromAabb(
+                        Aabb( Vector3( 0.0f, 0.0f, -mRange * 0.5f ),
+                              Vector3( mRange, mRange, mRange * 0.5f ) ),
+                        mObjectData.mIndex );
                 }
             }
             else
@@ -317,38 +313,32 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Light::setPowerScale(Real power)
-    {
-        mPowerScale = power;
-    }
+    void Light::setPowerScale( Real power ) { mPowerScale = power; }
     //-----------------------------------------------------------------------
-    const String& Light::getMovableType(void) const
-    {
-        return LightFactory::FACTORY_TYPE_NAME;
-    }
+    const String &Light::getMovableType() const { return LightFactory::FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------
-    Vector3 Light::getDerivedDirection(void) const
+    Vector3 Light::getDerivedDirection() const
     {
         return -mParentNode->_getDerivedOrientation().zAxis();
         // Same as:
         // return mParentNode->convertLocalToWorldDirection(Vector3::NEGATIVE_UNIT_Z, false);
     }
     //-----------------------------------------------------------------------
-    Vector3 Light::getDerivedDirectionUpdated(void) const
+    Vector3 Light::getDerivedDirectionUpdated() const
     {
         return -mParentNode->_getDerivedOrientationUpdated().zAxis();
         // Same as:
         // return mParentNode->convertLocalToWorldDirectionUpdated(Vector3::NEGATIVE_UNIT_Z, false);
     }
     //-----------------------------------------------------------------------
-    Vector4 Light::getAs4DVector(void) const
+    Vector4 Light::getAs4DVector() const
     {
         Vector4 ret;
-        if (mLightType == Light::LT_DIRECTIONAL)
+        if( mLightType == Light::LT_DIRECTIONAL )
         {
-            ret = -(getDerivedDirection()); // negate direction as 'position'
-            ret.w = 0.0; // infinite distance
-        }   
+            ret = -( getDerivedDirection() );  // negate direction as 'position'
+            ret.w = 0.0;                       // infinite distance
+        }
         else
         {
             ret = mParentNode->_getDerivedPosition();
@@ -357,238 +347,188 @@ namespace Ogre {
         return ret;
     }
     //---------------------------------------------------------------------
-    void Light::_calcTempSquareDist(const Vector3& worldPos)
+    void Light::_calcTempSquareDist( const Vector3 &worldPos )
     {
-        if (mLightType == LT_DIRECTIONAL)
+        if( mLightType == LT_DIRECTIONAL )
         {
             tempSquareDist = 0;
         }
         else
         {
-            tempSquareDist = 
-                (worldPos - mParentNode->_getDerivedPosition()).squaredLength();
+            tempSquareDist = ( worldPos - mParentNode->_getDerivedPosition() ).squaredLength();
         }
-
     }
     //-----------------------------------------------------------------------
-    class LightDiffuseColourValue : public AnimableValue
+    class LightDiffuseColourValue final : public AnimableValue
     {
     protected:
-        Light* mLight;
-    public:
-        LightDiffuseColourValue(Light* l) :AnimableValue(COLOUR) 
-        { mLight = l; }
-        void setValue(const ColourValue& val)
-        {
-            mLight->setDiffuseColour(val);
-        }
-        void applyDeltaValue(const ColourValue& val)
-        {
-            setValue(mLight->getDiffuseColour() + val);
-        }
-        void setCurrentStateAsBaseValue(void)
-        {
-            setAsBaseValue(mLight->getDiffuseColour());
-        }
+        Light *mLight;
 
+    public:
+        LightDiffuseColourValue( Light *l ) : AnimableValue( COLOUR ) { mLight = l; }
+        void setValue( const ColourValue &val ) override { mLight->setDiffuseColour( val ); }
+        void applyDeltaValue( const ColourValue &val ) override
+        {
+            setValue( mLight->getDiffuseColour() + val );
+        }
+        void setCurrentStateAsBaseValue() override { setAsBaseValue( mLight->getDiffuseColour() ); }
     };
     //-----------------------------------------------------------------------
-    class LightSpecularColourValue : public AnimableValue
+    class LightSpecularColourValue final : public AnimableValue
     {
     protected:
-        Light* mLight;
-    public:
-        LightSpecularColourValue(Light* l) :AnimableValue(COLOUR) 
-        { mLight = l; }
-        void setValue(const ColourValue& val)
-        {
-            mLight->setSpecularColour(val);
-        }
-        void applyDeltaValue(const ColourValue& val)
-        {
-            setValue(mLight->getSpecularColour() + val);
-        }
-        void setCurrentStateAsBaseValue(void)
-        {
-            setAsBaseValue(mLight->getSpecularColour());
-        }
+        Light *mLight;
 
+    public:
+        LightSpecularColourValue( Light *l ) : AnimableValue( COLOUR ) { mLight = l; }
+        void setValue( const ColourValue &val ) override { mLight->setSpecularColour( val ); }
+        void applyDeltaValue( const ColourValue &val ) override
+        {
+            setValue( mLight->getSpecularColour() + val );
+        }
+        void setCurrentStateAsBaseValue() override { setAsBaseValue( mLight->getSpecularColour() ); }
     };
     //-----------------------------------------------------------------------
-    class LightAttenuationValue : public AnimableValue
+    class LightAttenuationValue final : public AnimableValue
     {
     protected:
-        Light* mLight;
-    public:
-        LightAttenuationValue(Light* l) :AnimableValue(VECTOR4) 
-        { mLight = l; }
-        void setValue(const Vector4& val)
-        {
-            mLight->setAttenuation(val.x, val.y, val.z, val.w);
-        }
-        void applyDeltaValue(const Vector4& val)
-        {
-            setValue(mLight->getAs4DVector() + val);
-        }
-        void setCurrentStateAsBaseValue(void)
-        {
-            setAsBaseValue(mLight->getAs4DVector());
-        }
+        Light *mLight;
 
+    public:
+        LightAttenuationValue( Light *l ) : AnimableValue( VECTOR4 ) { mLight = l; }
+        void setValue( const Vector4 &val ) override
+        {
+            mLight->setAttenuation( val.x, val.y, val.z, val.w );
+        }
+        void applyDeltaValue( const Vector4 &val ) override
+        {
+            setValue( mLight->getAs4DVector() + val );
+        }
+        void setCurrentStateAsBaseValue() override { setAsBaseValue( mLight->getAs4DVector() ); }
     };
     //-----------------------------------------------------------------------
-    class LightSpotlightInnerValue : public AnimableValue
+    class LightSpotlightInnerValue final : public AnimableValue
     {
     protected:
-        Light* mLight;
-    public:
-        LightSpotlightInnerValue(Light* l) :AnimableValue(REAL) 
-        { mLight = l; }
-        void setValue(Real val)
-        {
-            mLight->setSpotlightInnerAngle(Radian(val));
-        }
-        void applyDeltaValue(Real val)
-        {
-            setValue(mLight->getSpotlightInnerAngle().valueRadians() + val);
-        }
-        void setCurrentStateAsBaseValue(void)
-        {
-            setAsBaseValue(mLight->getSpotlightInnerAngle().valueRadians());
-        }
+        Light *mLight;
 
+    public:
+        LightSpotlightInnerValue( Light *l ) : AnimableValue( REAL ) { mLight = l; }
+        void setValue( Real val ) override { mLight->setSpotlightInnerAngle( Radian( val ) ); }
+        void applyDeltaValue( Real val ) override
+        {
+            setValue( mLight->getSpotlightInnerAngle().valueRadians() + val );
+        }
+        void setCurrentStateAsBaseValue() override
+        {
+            setAsBaseValue( mLight->getSpotlightInnerAngle().valueRadians() );
+        }
     };
     //-----------------------------------------------------------------------
-    class LightSpotlightOuterValue : public AnimableValue
+    class LightSpotlightOuterValue final : public AnimableValue
     {
     protected:
-        Light* mLight;
-    public:
-        LightSpotlightOuterValue(Light* l) :AnimableValue(REAL) 
-        { mLight = l; }
-        void setValue(Real val)
-        {
-            mLight->setSpotlightOuterAngle(Radian(val));
-        }
-        void applyDeltaValue(Real val)
-        {
-            setValue(mLight->getSpotlightOuterAngle().valueRadians() + val);
-        }
-        void setCurrentStateAsBaseValue(void)
-        {
-            setAsBaseValue(mLight->getSpotlightOuterAngle().valueRadians());
-        }
+        Light *mLight;
 
+    public:
+        LightSpotlightOuterValue( Light *l ) : AnimableValue( REAL ) { mLight = l; }
+        void setValue( Real val ) override { mLight->setSpotlightOuterAngle( Radian( val ) ); }
+        void applyDeltaValue( Real val ) override
+        {
+            setValue( mLight->getSpotlightOuterAngle().valueRadians() + val );
+        }
+        void setCurrentStateAsBaseValue() override
+        {
+            setAsBaseValue( mLight->getSpotlightOuterAngle().valueRadians() );
+        }
     };
     //-----------------------------------------------------------------------
-    class LightSpotlightFalloffValue : public AnimableValue
+    class LightSpotlightFalloffValue final : public AnimableValue
     {
     protected:
-        Light* mLight;
-    public:
-        LightSpotlightFalloffValue(Light* l) :AnimableValue(REAL) 
-        { mLight = l; }
-        void setValue(Real val)
-        {
-            mLight->setSpotlightFalloff(val);
-        }
-        void applyDeltaValue(Real val)
-        {
-            setValue(mLight->getSpotlightFalloff() + val);
-        }
-        void setCurrentStateAsBaseValue(void)
-        {
-            setAsBaseValue(mLight->getSpotlightFalloff());
-        }
+        Light *mLight;
 
+    public:
+        LightSpotlightFalloffValue( Light *l ) : AnimableValue( REAL ) { mLight = l; }
+        void setValue( Real val ) override { mLight->setSpotlightFalloff( val ); }
+        void applyDeltaValue( Real val ) override { setValue( mLight->getSpotlightFalloff() + val ); }
+        void setCurrentStateAsBaseValue() override { setAsBaseValue( mLight->getSpotlightFalloff() ); }
     };
     //-----------------------------------------------------------------------
-    AnimableValuePtr Light::createAnimableValue(const String& valueName)
+    AnimableValuePtr Light::createAnimableValue( const String &valueName )
     {
-        if (valueName == "diffuseColour")
+        if( valueName == "diffuseColour" )
         {
-            return AnimableValuePtr(
-                OGRE_NEW LightDiffuseColourValue(this));
+            return AnimableValuePtr( OGRE_NEW LightDiffuseColourValue( this ) );
         }
-        else if(valueName == "specularColour")
+        else if( valueName == "specularColour" )
         {
-            return AnimableValuePtr(
-                OGRE_NEW LightSpecularColourValue(this));
+            return AnimableValuePtr( OGRE_NEW LightSpecularColourValue( this ) );
         }
-        else if (valueName == "attenuation")
+        else if( valueName == "attenuation" )
         {
-            return AnimableValuePtr(
-                OGRE_NEW LightAttenuationValue(this));
+            return AnimableValuePtr( OGRE_NEW LightAttenuationValue( this ) );
         }
-        else if (valueName == "spotlightInner")
+        else if( valueName == "spotlightInner" )
         {
-            return AnimableValuePtr(
-                OGRE_NEW LightSpotlightInnerValue(this));
+            return AnimableValuePtr( OGRE_NEW LightSpotlightInnerValue( this ) );
         }
-        else if (valueName == "spotlightOuter")
+        else if( valueName == "spotlightOuter" )
         {
-            return AnimableValuePtr(
-                OGRE_NEW LightSpotlightOuterValue(this));
+            return AnimableValuePtr( OGRE_NEW LightSpotlightOuterValue( this ) );
         }
-        else if (valueName == "spotlightFalloff")
+        else if( valueName == "spotlightFalloff" )
         {
-            return AnimableValuePtr(
-                OGRE_NEW LightSpotlightFalloffValue(this));
+            return AnimableValuePtr( OGRE_NEW LightSpotlightFalloffValue( this ) );
         }
         else
         {
-            return MovableObject::createAnimableValue(valueName);
+            return MovableObject::createAnimableValue( valueName );
         }
     }
     //-----------------------------------------------------------------------
-    void Light::setShadowFarDistance(Real distance)
+    void Light::setShadowFarDistance( Real distance )
     {
         mOwnShadowFarDist = true;
         mShadowFarDist = distance;
         mShadowFarDistSquared = distance * distance;
     }
     //-----------------------------------------------------------------------
-    bool Light::_getOwnShadowFarDistance(void) const
-    {
-        return mOwnShadowFarDist;
-    }
+    bool Light::_getOwnShadowFarDistance() const { return mOwnShadowFarDist; }
     //-----------------------------------------------------------------------
-    void Light::resetShadowFarDistance(void)
-    {
-        mOwnShadowFarDist = false;
-    }
+    void Light::resetShadowFarDistance() { mOwnShadowFarDist = false; }
     //-----------------------------------------------------------------------
-    Real Light::getShadowFarDistance(void) const
+    Real Light::getShadowFarDistance() const
     {
-        if (mOwnShadowFarDist)
+        if( mOwnShadowFarDist )
             return mShadowFarDist;
         else
-            return mManager->getShadowFarDistance ();
+            return mManager->getShadowFarDistance();
     }
     //-----------------------------------------------------------------------
-    Real Light::getShadowFarDistanceSquared(void) const
+    Real Light::getShadowFarDistanceSquared() const
     {
-        if (mOwnShadowFarDist)
+        if( mOwnShadowFarDist )
             return mShadowFarDistSquared;
         else
-            return mManager->getShadowFarDistanceSquared ();
+            return mManager->getShadowFarDistanceSquared();
     }
     //---------------------------------------------------------------------
-    Real Light::_deriveShadowNearClipDistance(const Camera* maincam) const
+    Real Light::_deriveShadowNearClipDistance( const Camera *maincam ) const
     {
-        if (mShadowNearClipDist > 0)
+        if( mShadowNearClipDist > 0 )
             return mShadowNearClipDist;
         else
             return maincam->getNearClipDistance();
     }
     //---------------------------------------------------------------------
-    Real Light::_deriveShadowFarClipDistance(const Camera* maincam) const
+    Real Light::_deriveShadowFarClipDistance( const Camera *maincam ) const
     {
-        if (mShadowFarClipDist >= 0)
+        if( mShadowFarClipDist >= 0 )
             return mShadowFarClipDist;
         else
         {
-            if (mLightType == LT_DIRECTIONAL)
+            if( mLightType == LT_DIRECTIONAL )
                 return 0;
             else
                 return mRange;
@@ -596,10 +536,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
-    void Light::setObbRestraint( Node *node )
-    {
-        mObbRestraint = node;
-    }
+    void Light::setObbRestraint( Node *node ) { mObbRestraint = node; }
     //-----------------------------------------------------------------------
     void Light::setObbRestraintSmoothFadeDistance( float smoothFadeDistance )
     {
@@ -607,7 +544,7 @@ namespace Ogre {
         mObbRestraintSmoothFadeDistance = smoothFadeDistance;
     }
     //-----------------------------------------------------------------------
-    Vector3 Light::_getObbRestraintFadeFactor(void) const
+    Vector3 Light::_getObbRestraintFadeFactor() const
     {
         if( !mObbRestraint )
             return Vector3::UNIT_SCALE;
@@ -615,19 +552,19 @@ namespace Ogre {
         const Vector3 halfSize = mObbRestraint->getScale();
         const Vector3 fadeDistanceNormalized = mObbRestraintSmoothFadeDistance / halfSize;
 
-        //Shader code will perform:
+        // Shader code will perform:
         //  (1 - x) * restraintFadeFactor
         //
-        //where x is the distance to center of the OBB, and is in range [0;1];
-        //as values where x >= 1 means the pixel is outside the OBB
+        // where x is the distance to center of the OBB, and is in range [0;1];
+        // as values where x >= 1 means the pixel is outside the OBB
         //
-        //And:
+        // And:
         //  1. For x >= 1 - fadeDistanceNormalized, this formula will give values < 1.
         //  2. For x >= 1, this formula will give <= 0; which means pixel is outside OBB.
         //
-        //Thus we need to find the value that satisfies:
+        // Thus we need to find the value that satisfies:
         //  (1 - (1-fadeDistanceNormalized)) * restraintFadeFactor <= 1
-        //Thus:
+        // Thus:
         //  restraintFadeFactor <= 1 / (1 - (1 - fadeDistanceNormalized))
         //  restraintFadeFactor <= 1 / fadeDistanceNormalized
         const Vector3 restraintFadeFactor = 1.0f / fadeDistanceNormalized;
@@ -635,30 +572,29 @@ namespace Ogre {
     }
 #endif
     //-----------------------------------------------------------------------
-    void Light::setCustomParameter(uint16 index, const Ogre::Vector4 &value)
+    void Light::setCustomParameter( uint16 index, const Ogre::Vector4 &value )
     {
         mCustomParameters[index] = value;
     }
     //-----------------------------------------------------------------------
-    const Vector4 &Light::getCustomParameter(uint16 index) const
+    const Vector4 &Light::getCustomParameter( uint16 index ) const
     {
-        CustomParameterMap::const_iterator i = mCustomParameters.find(index);
-        if (i != mCustomParameters.end())
+        CustomParameterMap::const_iterator i = mCustomParameters.find( index );
+        if( i != mCustomParameters.end() )
         {
             return i->second;
         }
         else
         {
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "Parameter at the given index was not found.",
-                "Light::getCustomParameter");
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Parameter at the given index was not found.",
+                         "Light::getCustomParameter" );
         }
     }
     //-----------------------------------------------------------------------
-    const Vector4* Light::getCustomParameterNoThrow( uint16 index ) const
+    const Vector4 *Light::getCustomParameterNoThrow( uint16 index ) const
     {
         const Vector4 *retVal = 0;
-        CustomParameterMap::const_iterator i = mCustomParameters.find(index);
+        CustomParameterMap::const_iterator i = mCustomParameters.find( index );
         if( i != mCustomParameters.end() )
             retVal = &i->second;
         return retVal;
@@ -668,11 +604,11 @@ namespace Ogre {
                                            const GpuProgramParameters_AutoConstantEntry &constantEntry,
                                            GpuProgramParameters *params ) const
     {
-        CustomParameterMap::const_iterator i = mCustomParameters.find(paramIndex);
-        if (i != mCustomParameters.end())
+        CustomParameterMap::const_iterator i = mCustomParameters.find( paramIndex );
+        if( i != mCustomParameters.end() )
         {
-            params->_writeRawConstant(constantEntry.physicalIndex, i->second, 
-                constantEntry.elementCount);
+            params->_writeRawConstant( constantEntry.physicalIndex, i->second,
+                                       constantEntry.elementCount );
         }
     }
     //-----------------------------------------------------------------------
@@ -701,7 +637,7 @@ namespace Ogre {
     {
         if( mTexture && mTexture->hasAutomaticBatching() )
             mTexture->removeListener( this );
-        OGRE_ASSERT_LOW( (!texture || !texture->hasAutomaticBatching()) &&
+        OGRE_ASSERT_LOW( ( !texture || !texture->hasAutomaticBatching() ) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
         OGRE_ASSERT_LOW( texture->getTextureType() == TextureTypes::Type2DArray );
         mTexture = texture;
@@ -734,86 +670,74 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     String LightFactory::FACTORY_TYPE_NAME = "Light";
     //-----------------------------------------------------------------------
-    const String& LightFactory::getType(void) const
-    {
-        return FACTORY_TYPE_NAME;
-    }
+    const String &LightFactory::getType() const { return FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------
-    MovableObject* LightFactory::createInstanceImpl( IdType id,
-                                                     ObjectMemoryManager *objectMemoryManager,
+    MovableObject *LightFactory::createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
                                                      SceneManager *manager,
-                                                     const NameValuePairList* params )
+                                                     const NameValuePairList *params )
     {
+        Light *light = OGRE_NEW Light( id, objectMemoryManager, manager );
 
-        Light* light = OGRE_NEW Light( id, objectMemoryManager, manager );
- 
-        if(params)
+        if( params )
         {
             NameValuePairList::const_iterator ni;
 
             // Setting the light type first before any property specific to a certain light type
-            if ((ni = params->find("type")) != params->end())
+            if( ( ni = params->find( "type" ) ) != params->end() )
             {
-                if (ni->second == "point")
-                    light->setType(Light::LT_POINT);
-                else if (ni->second == "directional")
-                    light->setType(Light::LT_DIRECTIONAL);
-                else if (ni->second == "spotlight")
-                    light->setType(Light::LT_SPOTLIGHT);
-                else if (ni->second == "area_approx")
-                    light->setType(Light::LT_AREA_APPROX);
-                else if (ni->second == "area_ltc")
-                    light->setType(Light::LT_AREA_LTC);
+                if( ni->second == "point" )
+                    light->setType( Light::LT_POINT );
+                else if( ni->second == "directional" )
+                    light->setType( Light::LT_DIRECTIONAL );
+                else if( ni->second == "spotlight" )
+                    light->setType( Light::LT_SPOTLIGHT );
+                else if( ni->second == "area_approx" )
+                    light->setType( Light::LT_AREA_APPROX );
+                else if( ni->second == "area_ltc" )
+                    light->setType( Light::LT_AREA_LTC );
                 else
-                    OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "Invalid light type '" + ni->second + "'.",
-                        "LightFactory::createInstance");
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Invalid light type '" + ni->second + "'.",
+                                 "LightFactory::createInstance" );
             }
-            if ((ni = params->find("diffuseColour")) != params->end())
-                light->setDiffuseColour(StringConverter::parseColourValue(ni->second));
+            if( ( ni = params->find( "diffuseColour" ) ) != params->end() )
+                light->setDiffuseColour( StringConverter::parseColourValue( ni->second ) );
 
-            if ((ni = params->find("specularColour")) != params->end())
-                light->setSpecularColour(StringConverter::parseColourValue(ni->second));
+            if( ( ni = params->find( "specularColour" ) ) != params->end() )
+                light->setSpecularColour( StringConverter::parseColourValue( ni->second ) );
 
-            if ((ni = params->find("attenuation")) != params->end())
+            if( ( ni = params->find( "attenuation" ) ) != params->end() )
             {
-                Vector4 attenuation = StringConverter::parseVector4(ni->second);
-                light->setAttenuation(attenuation.x, attenuation.y, attenuation.z, attenuation.w);
+                Vector4 attenuation = StringConverter::parseVector4( ni->second );
+                light->setAttenuation( attenuation.x, attenuation.y, attenuation.z, attenuation.w );
             }
 
-            if ((ni = params->find("castShadows")) != params->end())
-                light->setCastShadows(StringConverter::parseBool(ni->second));
+            if( ( ni = params->find( "castShadows" ) ) != params->end() )
+                light->setCastShadows( StringConverter::parseBool( ni->second ) );
 
-            if ((ni = params->find("visible")) != params->end())
-                light->setVisible(StringConverter::parseBool(ni->second));
+            if( ( ni = params->find( "visible" ) ) != params->end() )
+                light->setVisible( StringConverter::parseBool( ni->second ) );
 
-            if ((ni = params->find("powerScale")) != params->end())
-                light->setPowerScale(StringConverter::parseReal(ni->second));
+            if( ( ni = params->find( "powerScale" ) ) != params->end() )
+                light->setPowerScale( StringConverter::parseReal( ni->second ) );
 
-            if ((ni = params->find("shadowFarDistance")) != params->end())
-                light->setShadowFarDistance(StringConverter::parseReal(ni->second));
-
+            if( ( ni = params->find( "shadowFarDistance" ) ) != params->end() )
+                light->setShadowFarDistance( StringConverter::parseReal( ni->second ) );
 
             // Spotlight properties
-            if ((ni = params->find("spotlightInner")) != params->end())
-                light->setSpotlightInnerAngle(StringConverter::parseAngle(ni->second));
+            if( ( ni = params->find( "spotlightInner" ) ) != params->end() )
+                light->setSpotlightInnerAngle( StringConverter::parseAngle( ni->second ) );
 
-            if ((ni = params->find("spotlightOuter")) != params->end())
-                light->setSpotlightOuterAngle(StringConverter::parseAngle(ni->second));
+            if( ( ni = params->find( "spotlightOuter" ) ) != params->end() )
+                light->setSpotlightOuterAngle( StringConverter::parseAngle( ni->second ) );
 
-            if ((ni = params->find("spotlightFalloff")) != params->end())
-                light->setSpotlightFalloff(StringConverter::parseReal(ni->second));
+            if( ( ni = params->find( "spotlightFalloff" ) ) != params->end() )
+                light->setSpotlightFalloff( StringConverter::parseReal( ni->second ) );
         }
 
         return light;
     }
     //-----------------------------------------------------------------------
-    void LightFactory::destroyInstance( MovableObject* obj)
-    {
-        OGRE_DELETE obj;
-    }
+    void LightFactory::destroyInstance( MovableObject *obj ) { OGRE_DELETE obj; }
 
-
-
-
-} // Namespace
+}  // namespace Ogre

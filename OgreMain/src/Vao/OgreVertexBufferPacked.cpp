@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -29,29 +29,33 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Vao/OgreVertexBufferPacked.h"
+
 #include "Vao/OgreIndexBufferPacked.h"
 
 namespace Ogre
 {
     VertexBufferPacked::VertexBufferPacked( size_t internalBufferStartBytes, size_t numElements,
                                             uint32 bytesPerElement, uint32 numElementsPadding,
-                                            BufferType bufferType,
-                                            void *initialData, bool keepAsShadow,
+                                            BufferType bufferType, void *initialData, bool keepAsShadow,
                                             VaoManager *vaoManager, BufferInterface *bufferInterface,
-                                            const VertexElement2Vec &vertexElements,
+                                            const VertexElement2Vec &vertexElements
+#ifdef _OGRE_MULTISOURCE_VBO
+                                            ,
                                             size_t multiSourceId,
-                                            MultiSourceVertexBufferPool *multiSourcePool,
-                                            uint8 sourceIdx ) :
+                                            MultiSourceVertexBufferPool *multiSourcePool, uint8 sourceIdx
+#endif
+                                            ) :
         BufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                       bufferType, initialData, keepAsShadow, vaoManager, bufferInterface ),
-        mVertexElements( vertexElements ),
+        mVertexElements( vertexElements )
+#ifdef _OGRE_MULTISOURCE_VBO
+        ,
         mMultiSourceId( multiSourceId ),
         mMultiSourcePool( multiSourcePool ),
         mSourceIdx( sourceIdx )
+#endif
     {
     }
     //-----------------------------------------------------------------------------------
-    VertexBufferPacked::~VertexBufferPacked()
-    {
-    }
-}
+    VertexBufferPacked::~VertexBufferPacked() {}
+}  // namespace Ogre

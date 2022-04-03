@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,11 +34,13 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const ArrayMatrix4 ArrayMatrix4::IDENTITY( ArrayMatrix4::createAllFromMatrix4(
+    // clang-format off
+	const ArrayMatrix4 ArrayMatrix4::IDENTITY( ArrayMatrix4::createAllFromMatrix4(
                 Matrix4(    1, 0, 0, 0,
                             0, 1, 0, 0,
                             0, 0, 1, 0,
                             0, 0, 0, 1 ) ) );
-}
+    // clang-format on
+}  // namespace Ogre
 
 #endif

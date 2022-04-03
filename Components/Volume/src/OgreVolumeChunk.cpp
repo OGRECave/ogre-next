@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -247,14 +247,14 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    Chunk::Chunk(void) : SimpleRenderable(0, new ObjectMemoryManager()), mNode(0), mError(false), mDualGrid(0), mOctree(0), mChildren(0),
+    Chunk::Chunk() : SimpleRenderable(0, new ObjectMemoryManager()), mNode(0), mError(false), mDualGrid(0), mOctree(0), mChildren(0),
         mInvisible(false), isRoot(false), mShared(0)
     {
     }
     
     //-----------------------------------------------------------------------
 
-    Chunk::~Chunk(void)
+    Chunk::~Chunk()
     {
         OGRE_DELETE mRenderOp.indexData;
         OGRE_DELETE mRenderOp.vertexData;
@@ -288,7 +288,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    const String& Chunk::getMovableType(void) const
+    const String& Chunk::getMovableType() const
     {
         return MOVABLE_TYPE_NAME;
     }
@@ -431,7 +431,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    bool Chunk::getDualGridVisible(void) const
+    bool Chunk::getDualGridVisible() const
     {
         return mShared->dualGridVisible;
     }
@@ -459,14 +459,14 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    bool Chunk::getOctreeVisible(void) const
+    bool Chunk::getOctreeVisible() const
     {
         return mShared->octreeVisible;
     }
     
     //-----------------------------------------------------------------------
 
-    bool Chunk::getVolumeVisible(void) const
+    bool Chunk::getVolumeVisible() const
     {
         return mShared->volumeVisible;
     }
@@ -563,7 +563,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    Chunk* Chunk::createInstance(void)
+    Chunk* Chunk::createInstance()
     {
         return OGRE_NEW Chunk();
     }
@@ -668,7 +668,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    ChunkParameters* Chunk::getChunkParameters(void)
+    ChunkParameters* Chunk::getChunkParameters()
     {
         return mShared->parameters;
     }

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,20 +30,18 @@ THE SOFTWARE.
 
 #include "OgreRadialDensityMask.h"
 
+#include "OgreHlmsCompute.h"
+#include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
 #include "OgreMaterialManager.h"
 #include "OgrePass.h"
 #include "OgreRectangle2D2.h"
 #include "OgreSceneManager.h"
+#include "OgreShaderPrimitives.h"
 #include "OgreTechnique.h"
-
-#include "OgreHlmsCompute.h"
-#include "OgreHlmsComputeJob.h"
-#include "OgreHlmsManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
-
-#include "OgreShaderPrimitives.h"
 
 namespace Ogre
 {
@@ -75,7 +73,7 @@ namespace Ogre
         mRectangle->setGeometry( mLeftEyeCenter, mRightEyeCenter );
         mRectangle->initialize(
             BT_IMMUTABLE, Rectangle2D::GeometryFlagStereo | Rectangle2D::GeometryFlagHollowFsRect );
-        mRectangle->setRenderQueueGroup( 0u ); // Render first!
+        mRectangle->setRenderQueueGroup( 0u );  // Render first!
 
         const String baseMatName = "Ogre/VR/RadialDensityMask";
         const String matName = baseMatName + StringConverter::toString( sceneManager->getId() );
@@ -128,7 +126,7 @@ namespace Ogre
 
         VaoManager *vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
         mJobParams = vaoManager->createConstBuffer(
-            alignToNextMultiple( sizeof( RdmShaderParams ), 16u ), BT_DEFAULT, 0, false );
+            alignToNextMultiple<size_t>( sizeof( RdmShaderParams ), 16u ), BT_DEFAULT, 0, false );
         mReconstructJob->setConstBuffer( 0, mJobParams );
 
         setQuality( RdmHigh );
@@ -175,7 +173,7 @@ namespace Ogre
         setEyeCenter( &leftEyeCenter_rightEyeCenter[2], mRightEyeCenter, viewports[1] );
 
         Vector4 rightEyeStart_radius;
-        rightEyeStart_radius.x = viewports[1].getActualLeft();
+        rightEyeStart_radius.x = (Real)viewports[1].getActualLeft();
         for( size_t i = 0u; i < 3u; ++i )
             rightEyeStart_radius[i + 1u] = mRadius[i] * 0.5f;
 

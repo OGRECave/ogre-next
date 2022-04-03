@@ -15,7 +15,7 @@ compositor_node TutorialUav02_SetupRenderingNode
 		pass bind_uav
 		{
 			starting_slot 1
-			uav 0 testTexture			write
+			uav 0 testTexture			read write
 		}
 
 		pass render_quad

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,19 +34,15 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
-#include "OgreRenderSystem.h"
-
-#include "OgreLwString.h"
-#include "OgreTextureBox.h"
-#include "OgreTextureGpuManager.h"
-
-#include "OgreHlmsManager.h"
-#include "OgreRoot.h"
-
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
+#include "OgreLwString.h"
+#include "OgreRenderSystem.h"
+#include "OgreRoot.h"
+#include "OgreTextureBox.h"
+#include "OgreTextureGpuManager.h"
 
 namespace Ogre
 {
@@ -159,7 +155,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     CompositorPassIblSpecular::~CompositorPassIblSpecular() { destroyComputeShaders(); }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::destroyComputeShaders( void )
+    void CompositorPassIblSpecular::destroyComputeShaders()
     {
         if( !mJobs.empty() )
         {
@@ -180,7 +176,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::setupComputeShaders( void )
+    void CompositorPassIblSpecular::setupComputeShaders()
     {
         destroyComputeShaders();
 
@@ -283,9 +279,10 @@ namespace Ogre
             shaderParams.mParams.push_back( ShaderParams::Param() );
             p = &shaderParams.mParams.back();
             p->name = "params2";
-            p->setManualValue( Vector4( mInputTexture->getWidth(), mInputTexture->getHeight(),
-                                        std::max( mOutputTexture->getWidth() >> mip, 1u ),
-                                        std::max( mOutputTexture->getHeight() >> mip, 1u ) ) );
+            p->setManualValue( Vector4( (Real)mInputTexture->getWidth(),
+                                        (Real)mInputTexture->getHeight(),
+                                        (Real)std::max( mOutputTexture->getWidth() >> mip, 1u ),
+                                        (Real)std::max( mOutputTexture->getHeight() >> mip, 1u ) ) );
 
             shaderParams.mParams.push_back( ShaderParams::Param() );
             p = &shaderParams.mParams.back();
@@ -342,7 +339,10 @@ namespace Ogre
             {
                 // If output has no mipmaps, do a fast path copy
                 if( mOutputTexture->getNumMipmaps() > 1u )
-                    mInputTexture->_autogenerateMipmaps();
+                {
+                    mInputTexture->_autogenerateMipmaps(
+                        CopyEncTransitionMode::AlreadyInLayoutThenManual );
+                }
 
                 {
                     // Prepare mInputTexture for copying. We have to do it here because analyzeBarriers
@@ -359,10 +359,13 @@ namespace Ogre
 
                 for( uint8 mip = 0u; mip < outNumMips; ++mip )
                 {
+                    const CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                        mip == 0u ? CopyEncTransitionMode::AlreadyInLayoutThenAuto
+                                  : CopyEncTransitionMode::Auto;
+
                     TextureBox emptyBox = mOutputTexture->getEmptyBox( mip );
                     mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip, true,
-                                           CopyEncTransitionMode::AlreadyInLayoutThenAuto,
-                                           CopyEncTransitionMode::AlreadyInLayoutThenAuto );
+                                           transitionMode, transitionMode );
                 }
             }
         }
@@ -451,7 +454,7 @@ namespace Ogre
         return usedByUs;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::resetNumPassesLeft( void )
+    void CompositorPassIblSpecular::resetNumPassesLeft()
     {
         vector<HlmsComputeJob *>::const_iterator itor = mJobs.begin();
         vector<HlmsComputeJob *>::const_iterator endt = mJobs.end();

@@ -1,7 +1,7 @@
 
 /*
  * -----------------------------------------------------------------------------
- * This source file is part of OGRE
+ * This source file is part of OGRE-Next
  * (Object-oriented Graphics Rendering Engine)
  * For the latest info, see http://www.ogre3d.org/
  *
@@ -31,27 +31,26 @@
 #define _LodInputProvider_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodData.h"
 
 namespace Ogre
 {
-
     class _OgreLodExport LodInputProvider
     {
     public:
         virtual ~LodInputProvider() {}
         /// Called when the data should be filled with the input.
-        virtual void initData(LodData* data) = 0;
+        virtual void initData( LodData *data ) = 0;
+
     protected:
         // Helper functions
-        void printTriangle(LodData* data, LodData::Triangle* triangle, stringstream& str);
-        void addTriangleToEdges(LodData* data, LodData::Triangle* triangle);
-        bool isDuplicateTriangle(LodData::Triangle* triangle, LodData::Triangle* triangle2);
-        LodData::Triangle* isDuplicateTriangle(LodData* data, LodData::Triangle* triangle);
-        static size_t getTriangleCount(OperationType renderOp, size_t indexCount);
+        void printTriangle( LodData *data, LodData::Triangle *triangle, stringstream &str );
+        void addTriangleToEdges( LodData *data, LodData::Triangle *triangle );
+        bool isDuplicateTriangle( LodData::Triangle *triangle, LodData::Triangle *triangle2 );
+        LodData::Triangle *isDuplicateTriangle( LodData *data, LodData::Triangle *triangle );
+        static size_t      getTriangleCount( OperationType renderOp, size_t indexCount );
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

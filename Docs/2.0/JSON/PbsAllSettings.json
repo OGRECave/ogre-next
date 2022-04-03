@@ -164,6 +164,13 @@ including invalid combinations (i.e. having a Metallic texture and a Specular te
             {
                 "texture" : "cubemap.png",
                 "sampler" : "unique_name"
+            },
+
+            "user_values" :
+            {
+                "0" : [0.0, 0.0, 0.0, 0.0],
+                "1" : [0.0, 0.0, 0.0, 0.0],
+                "2" : [0.0, 0.0, 0.0, 0.0]
             }
         }
     }

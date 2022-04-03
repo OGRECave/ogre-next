@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,16 +26,18 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
-#include "Animation/OgreTagPoint.h"
-#include "Animation/OgreBone.h"
 
+#include "Animation/OgreTagPoint.h"
+
+#include "Animation/OgreBone.h"
 #include "Math/Array/OgreBooleanMask.h"
 #include "Math/Array/OgreNodeMemoryManager.h"
 #include "OgreSceneManager.h"
 
-namespace Ogre {
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    TagPoint::TagPoint( IdType id, SceneManager* creator, NodeMemoryManager *nodeMemoryManager,
+    TagPoint::TagPoint( IdType id, SceneManager *creator, NodeMemoryManager *nodeMemoryManager,
                         SceneNode *parent ) :
         SceneNode( id, creator, nodeMemoryManager, parent ),
         mParentBone( 0 )
@@ -52,27 +54,29 @@ namespace Ogre {
     {
         if( this->mParentBone )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "Node ID: " + StringConverter::toString( this->getId() ) + ", named '" +
-                this->getName() + "' already was a child of Bone ID: " +
-                StringConverter::toString( this->mParentBone->getId() ) + ", named '" +
-                this->mParentBone->getName() + "'.", "TagPoint::_setBoneParent");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Node ID: " + StringConverter::toString( this->getId() ) + ", named '" +
+                             this->getName() + "' already was a child of Bone ID: " +
+                             StringConverter::toString( this->mParentBone->getId() ) + ", named '" +
+                             this->mParentBone->getName() + "'.",
+                         "TagPoint::_setBoneParent" );
         }
 
         if( this->mParent )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "Node ID: " + StringConverter::toString( this->getId() ) + ", named '" +
-                this->getName() + "' already was a child of Node ID: " +
-                StringConverter::toString( this->mParent->getId() ) + ", named '" +
-                this->mParent->getName() + "'.", "TagPoint::_setBoneParent");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Node ID: " + StringConverter::toString( this->getId() ) + ", named '" +
+                             this->getName() + "' already was a child of Node ID: " +
+                             StringConverter::toString( this->mParent->getId() ) + ", named '" +
+                             this->mParent->getName() + "'.",
+                         "TagPoint::_setBoneParent" );
         }
 
         mParentBone = bone;
 
         // Call listener
         if( mListener )
-            mListener->nodeAttached(this);
+            mListener->nodeAttached( this );
 
         assert( mDepthLevel == 0 );
 
@@ -84,7 +88,7 @@ namespace Ogre {
         mParent = mCreator->getDummySceneNode();
     }
     //-----------------------------------------------------------------------
-    void TagPoint::_unsetParentBone(void)
+    void TagPoint::_unsetParentBone()
     {
         if( mParentBone )
         {
@@ -93,7 +97,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Matrix3 TagPoint::_getDerivedOrientationMatrix(void) const
+    Matrix3 TagPoint::_getDerivedOrientationMatrix() const
     {
 #if OGRE_DEBUG_MODE
         assert( !mCachedTransformOutOfDate );
@@ -103,37 +107,37 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void TagPoint::updateFromParentImpl(void)
+    void TagPoint::updateFromParentImpl()
     {
         assert( false && "Not implemented" );
-        //I'm lazy, but before you implement it, remember that the skeleton needs to be updated as well.
+        // I'm lazy, but before you implement it, remember that the skeleton needs to be updated as well.
     }
     //-----------------------------------------------------------------------
     void TagPoint::updateAllTransformsBoneToTag( const size_t numNodes, Transform t )
     {
-        SimpleMatrixAf4x3 const * RESTRICT_ALIAS parentBoneParentNodeTransform[ARRAY_PACKED_REALS];
-        SimpleMatrixAf4x3 const * RESTRICT_ALIAS parentBoneTransform[ARRAY_PACKED_REALS];
+        SimpleMatrixAf4x3 const *RESTRICT_ALIAS parentBoneParentNodeTransform[ARRAY_PACKED_REALS];
+        SimpleMatrixAf4x3 const *RESTRICT_ALIAS parentBoneTransform[ARRAY_PACKED_REALS];
 
-        for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+        for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
         {
-            parentBoneParentNodeTransform[j]    = &SimpleMatrixAf4x3::IDENTITY;
-            parentBoneTransform[j]              = &SimpleMatrixAf4x3::IDENTITY;
+            parentBoneParentNodeTransform[j] = &SimpleMatrixAf4x3::IDENTITY;
+            parentBoneTransform[j] = &SimpleMatrixAf4x3::IDENTITY;
         }
 
-        for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
+        for( size_t i = 0; i < numNodes; i += ARRAY_PACKED_REALS )
         {
-            //Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
+            // Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
             ArrayMatrixAf4x3 finalMat;
             ArrayMatrixAf4x3 parentBone;
 
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( t.mOwner[j] )
                 {
-                    Bone *parentBonePtr = static_cast<TagPoint*>( t.mOwner[j] )->mParentBone;
+                    Bone *parentBonePtr = static_cast<TagPoint *>( t.mOwner[j] )->mParentBone;
                     const BoneTransform &boneTransform = parentBonePtr->_getTransform();
                     parentBoneParentNodeTransform[j] =
-                            boneTransform.mParentNodeTransform[boneTransform.mIndex];
+                        boneTransform.mParentNodeTransform[boneTransform.mIndex];
                     parentBoneTransform[j] = &boneTransform.mDerivedTransform[boneTransform.mIndex];
                 }
             }
@@ -141,33 +145,31 @@ namespace Ogre {
             finalMat.loadFromAoS( parentBoneParentNodeTransform );
             parentBone.loadFromAoS( parentBoneTransform );
 
-            finalMat *= parentBone; //finalMat = parentBoneParentNodeTransform * parentBone;
+            finalMat *= parentBone;  // finalMat = parentBoneParentNodeTransform * parentBone;
 
-            //ArrayMatrixAf4x3::retain is quite lengthy in instruction count, and the
-            //general case is to inherit both attributes. This branch is justified.
+            // ArrayMatrixAf4x3::retain is quite lengthy in instruction count, and the
+            // general case is to inherit both attributes. This branch is justified.
             if( !BooleanMask4::allBitsSet( t.mInheritOrientation, t.mInheritScale ) )
             {
-                ArrayMaskR inheritOrientation   = BooleanMask4::getMask( t.mInheritOrientation );
-                ArrayMaskR inheritScale         = BooleanMask4::getMask( t.mInheritScale );
+                ArrayMaskR inheritOrientation = BooleanMask4::getMask( t.mInheritOrientation );
+                ArrayMaskR inheritScale = BooleanMask4::getMask( t.mInheritScale );
                 finalMat.retain( inheritOrientation, inheritScale );
             }
 
             ArrayMatrixAf4x3 baseTransform;
             baseTransform.makeTransform( *t.mPosition, *t.mScale, *t.mOrientation );
 
-            finalMat *= baseTransform; //finalMat = parentMat * baseTransform;
+            finalMat *= baseTransform;  // finalMat = parentMat * baseTransform;
 
             finalMat.streamToAoS( t.mDerivedTransform );
 
-            finalMat.decomposition( *t.mDerivedPosition,
-                                         *t.mDerivedScale,
-                                         *t.mDerivedOrientation );
+            finalMat.decomposition( *t.mDerivedPosition, *t.mDerivedScale, *t.mDerivedOrientation );
 
 #if OGRE_DEBUG_MODE
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( t.mOwner[j] )
-                    static_cast<TagPoint*>(t.mOwner[j])->mCachedTransformOutOfDate = false;
+                    static_cast<TagPoint *>( t.mOwner[j] )->mCachedTransformOutOfDate = false;
             }
 #endif
 
@@ -177,14 +179,14 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void TagPoint::updateAllTransformsTagOnTag( const size_t numNodes, Transform t )
     {
-        for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
+        for( size_t i = 0; i < numNodes; i += ARRAY_PACKED_REALS )
         {
-            //Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
+            // Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
             ArrayMatrixAf4x3 finalMat;
 
-            Matrix4 const * RESTRICT_ALIAS parentBoneTransform[ARRAY_PACKED_REALS];
+            Matrix4 const *RESTRICT_ALIAS parentBoneTransform[ARRAY_PACKED_REALS];
 
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 Transform &parentTransform = t.mParents[j]->_getTransform();
                 parentBoneTransform[j] = &parentTransform.mDerivedTransform[parentTransform.mIndex];
@@ -192,28 +194,26 @@ namespace Ogre {
 
             finalMat.loadFromAoS( parentBoneTransform );
 
-            //ArrayMatrixAf4x3::retain is quite lengthy in instruction count, and the
-            //general case is to inherit both attributes. This branch is justified.
+            // ArrayMatrixAf4x3::retain is quite lengthy in instruction count, and the
+            // general case is to inherit both attributes. This branch is justified.
             if( !BooleanMask4::allBitsSet( t.mInheritOrientation, t.mInheritScale ) )
             {
-                ArrayMaskR inheritOrientation   = BooleanMask4::getMask( t.mInheritOrientation );
-                ArrayMaskR inheritScale         = BooleanMask4::getMask( t.mInheritScale );
+                ArrayMaskR inheritOrientation = BooleanMask4::getMask( t.mInheritOrientation );
+                ArrayMaskR inheritScale = BooleanMask4::getMask( t.mInheritScale );
                 finalMat.retain( inheritOrientation, inheritScale );
             }
 
             ArrayMatrixAf4x3 baseTransform;
             baseTransform.makeTransform( *t.mPosition, *t.mScale, *t.mOrientation );
 
-            finalMat *= baseTransform; //finalMat = parentMat * baseTransform;
+            finalMat *= baseTransform;  // finalMat = parentMat * baseTransform;
 
             finalMat.streamToAoS( t.mDerivedTransform );
 
-            finalMat.decomposition( *t.mDerivedPosition,
-                                         *t.mDerivedScale,
-                                         *t.mDerivedOrientation );
+            finalMat.decomposition( *t.mDerivedPosition, *t.mDerivedScale, *t.mDerivedOrientation );
 
 #if OGRE_DEBUG_MODE
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( t.mOwner[j] )
                     t.mOwner[j]->mCachedTransformOutOfDate = false;
@@ -224,17 +224,17 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    TagPoint* TagPoint::createChildTagPoint( const Vector3& vPos, const Quaternion& qRot )
+    TagPoint *TagPoint::createChildTagPoint( const Vector3 &vPos, const Quaternion &qRot )
     {
         TagPoint *newNode = mCreator->_createTagPoint( this, mNodeMemoryManager );
         newNode->setPosition( vPos );
         newNode->setOrientation( qRot );
 
         //_createTagPoint must have passed us as parent. It's a special
-        //case to improve memory usage (avoid transfering mTransform)
+        // case to improve memory usage (avoid transfering mTransform)
         mChildren.push_back( newNode );
         newNode->mParentIndex = mChildren.size() - 1;
 
         return newNode;
     }
-}
+}  // namespace Ogre

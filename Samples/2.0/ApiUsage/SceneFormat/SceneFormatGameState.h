@@ -10,38 +10,38 @@ namespace Ogre
     class InstantRadiosity;
     class IrradianceVolume;
     class ParallaxCorrectedCubemap;
-}
+}  // namespace Ogre
 
 namespace Demo
 {
     class SceneFormatGameState : public TutorialGameState
     {
-        Ogre::String            mFullpathToFile;
-        Ogre::InstantRadiosity  *mInstantRadiosity;
-        Ogre::IrradianceVolume  *mIrradianceVolume;
+        Ogre::String mFullpathToFile;
+        Ogre::InstantRadiosity *mInstantRadiosity;
+        Ogre::IrradianceVolume *mIrradianceVolume;
         Ogre::ParallaxCorrectedCubemap *mParallaxCorrectedCubemap;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
-        void resetScene(void);
-        void setupParallaxCorrectCubemaps(void);
-        void destroyInstantRadiosity(void);
-        void destroyParallaxCorrectCubemaps(void);
+        void resetScene();
+        void setupParallaxCorrectCubemaps();
+        void destroyInstantRadiosity();
+        void destroyParallaxCorrectCubemaps();
 
-        Ogre::TextureGpu* createRawDecalDiffuseTex();
-        void generateScene(void);
-        void exportScene(void);
-        void importScene(void);
+        Ogre::TextureGpu *createRawDecalDiffuseTex();
+        void generateScene();
+        void exportScene();
+        void importScene();
 
     public:
         SceneFormatGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

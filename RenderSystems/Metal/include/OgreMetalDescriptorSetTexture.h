@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreMetalDescriptorSetTexture_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreDescriptorSetTexture.h"
 
 #include "OgreHeaderPrefix.h"
@@ -37,33 +38,33 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     struct MetalTexRegion
     {
-        __unsafe_unretained id <MTLTexture> *textures;
-        NSRange range;
-        ShaderType shaderType;
+        __unsafe_unretained id<MTLTexture> *textures;
+        NSRange                             range;
+        ShaderType                          shaderType;
     };
     struct MetalBufferRegion
     {
-        __unsafe_unretained id <MTLBuffer> *buffers;
-        NSUInteger *offsets;
-        NSRange range;
-        ShaderType shaderType;
+        __unsafe_unretained id<MTLBuffer> *buffers;
+        NSUInteger                        *offsets;
+        NSRange                            range;
+        ShaderType                         shaderType;
     };
 
     struct _OgreExport MetalDescriptorSetTexture
     {
-        FastArray<MetalTexRegion> textures;
+        FastArray<MetalTexRegion>    textures;
         FastArray<MetalBufferRegion> buffers;
 
-        __strong id <MTLTexture> *textureViews;
-        size_t numTextureViews;
+        __strong id<MTLTexture> *textureViews;
+        size_t                   numTextureViews;
     };
 
     /** @} */

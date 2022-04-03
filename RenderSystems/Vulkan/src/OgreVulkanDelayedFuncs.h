@@ -14,98 +14,98 @@ namespace Ogre
         virtual void execute() = 0;
     };
 
-    class VulkanDelayed_vkDestroyImage : public VulkanDelayedFuncBase
+    class VulkanDelayed_vkDestroyImage final : public VulkanDelayedFuncBase
     {
     public:
         VkDevice device;
         VkImage image;
         VkAllocationCallbacks const *pAllocator;
 
-        virtual void execute();
+        void execute() override;
     };
     void delayed_vkDestroyImage( VaoManager *vaoMgr, VkDevice device, VkImage image,
                                  VkAllocationCallbacks const *pAllocator );
 
-    class VulkanDelayed_vkDestroyImageView : public VulkanDelayedFuncBase
+    class VulkanDelayed_vkDestroyImageView final : public VulkanDelayedFuncBase
     {
     public:
         VkDevice device;
         VkImageView pView;
         VkAllocationCallbacks const *pAllocator;
 
-        virtual void execute();
+        void execute() override;
     };
     void delayed_vkDestroyImageView( VaoManager *vaoMgr, VkDevice device, VkImageView pView,
                                      VkAllocationCallbacks const *pAllocator );
 
-    class VulkanDelayed_vkDestroyPipeline : public VulkanDelayedFuncBase
+    class VulkanDelayed_vkDestroyPipeline final : public VulkanDelayedFuncBase
     {
     public:
         VkDevice device;
         VkPipeline pipeline;
         VkAllocationCallbacks const *pAllocator;
 
-        virtual void execute();
+        void execute() override;
     };
     void delayed_vkDestroyPipeline( VaoManager *vaoMgr, VkDevice device, VkPipeline pipeline,
                                     VkAllocationCallbacks const *pAllocator );
 
-    class VulkanDelayed_vkDestroySampler : public VulkanDelayedFuncBase
+    class VulkanDelayed_vkDestroySampler final : public VulkanDelayedFuncBase
     {
     public:
         VkDevice device;
         VkSampler sampler;
         VkAllocationCallbacks const *pAllocator;
 
-        virtual void execute();
+        void execute() override;
     };
     void delayed_vkDestroySampler( VaoManager *vaoMgr, VkDevice device, VkSampler sampler,
                                    VkAllocationCallbacks const *pAllocator );
 
-    class VulkanDelayed_vkDestroyBufferView : public VulkanDelayedFuncBase
+    class VulkanDelayed_vkDestroyBufferView final : public VulkanDelayedFuncBase
     {
     public:
         VkDevice device;
         VkBufferView bufferView;
         VkAllocationCallbacks const *pAllocator;
 
-        virtual void execute();
+        void execute() override;
     };
     void delayed_vkDestroyBufferView( VaoManager *vaoMgr, VkDevice device, VkBufferView bufferView,
                                       VkAllocationCallbacks const *pAllocator );
 
-    class VulkanDelayed_vkDestroyShaderModule : public VulkanDelayedFuncBase
+    class VulkanDelayed_vkDestroyShaderModule final : public VulkanDelayedFuncBase
     {
     public:
         VkDevice device;
         VkShaderModule shaderModule;
         VkAllocationCallbacks const *pAllocator;
 
-        virtual void execute();
+        void execute() override;
     };
     void delayed_vkDestroyShaderModule( VaoManager *vaoMgr, VkDevice device, VkShaderModule shaderModule,
                                         VkAllocationCallbacks const *pAllocator );
 
-    class VulkanDelayed_vkDestroyFramebuffer : public VulkanDelayedFuncBase
+    class VulkanDelayed_vkDestroyFramebuffer final : public VulkanDelayedFuncBase
     {
     public:
         VkDevice device;
         VkFramebuffer framebuffer;
         VkAllocationCallbacks const *pAllocator;
 
-        virtual void execute();
+        void execute() override;
     };
     void delayed_vkDestroyFramebuffer( VaoManager *vaoMgr, VkDevice device, VkFramebuffer framebuffer,
                                        VkAllocationCallbacks const *pAllocator );
 
-    class VulkanDelayed_vkDestroyRenderPass : public VulkanDelayedFuncBase
+    class VulkanDelayed_vkDestroyRenderPass final : public VulkanDelayedFuncBase
     {
     public:
         VkDevice device;
         VkRenderPass renderPass;
         VkAllocationCallbacks const *pAllocator;
 
-        virtual void execute();
+        void execute() override;
     };
     void delayed_vkDestroyRenderPass( VaoManager *vaoMgr, VkDevice device, VkRenderPass renderPass,
                                       VkAllocationCallbacks const *pAllocator );

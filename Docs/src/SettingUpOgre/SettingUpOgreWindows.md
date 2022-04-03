@@ -5,7 +5,6 @@
 # Requirements {#RequirementsWindows}
     * [CMake 3.x](https://cmake.org/download/)
     * Git
-    * What you do **NOT** need: Boost. Don't waste your time.
     * Visual Studio 2008 SP1 - 2017 (2019 not tested). MinGW may work but we strongly recommend Visual Studio.
     * [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812). Optional.
       Needed if you use older Visual Studio versions and want the D3D11 plugin. Also comes with useful tools.
@@ -79,7 +78,7 @@ Don't worry, those CMake configs are about the *old threading* model. For more i
 
 # Automatic download & build scripts
 
-We easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder
+We provide easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder
 Download build_ogre_scripts for the branch you need from:
 
 https://www.ogre3d.org/download/sdk/sdk-ogre-next
@@ -89,9 +88,13 @@ https://www.ogre3d.org/download/sdk/sdk-ogre-next
 @addtogroup DownloadingOgreCommon
 @ingroup MdInternal
 @{
-Most dependencies are conveniently stored in its own repository called "ogredeps" for you to download.
+Ogre Next source is located at [Github/OGRECave/ogre-next](https://github.com/OGRECave/ogre-next)
 
-**IMPORTANT:** Do NOT use the the "Download" feature from Bitbucket. It will not follow subrepositories.
+Ogre Next dependencies are located at [Github/OGRECave/ogre-next-deps](https://github.com/OGRECave/ogre-next-deps)
+
+Download the source code or you can fork it to your own repository and clone it locally with [Github Desktop](https://desktop.github.com/) or the command line.
+
+**IMPORTANT:** Do NOT use the the "Download" feature from Github. It will not follow subrepositories.
 
 **Command line**:
 ```sh

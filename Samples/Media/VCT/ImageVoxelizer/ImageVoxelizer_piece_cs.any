@@ -1,0 +1,254 @@
+// Scene voxelizer based on stitching 3D voxel meshes
+// Matias N. Goldberg Copyright (c) 2021-present
+
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+
+// These defines are ignored since they're not part of any piece,
+// but they make syntax highlighters happy
+#define p_instanceStart 0
+#define p_instanceEnd 5
+#define p_voxelOrigin float3( 0, 0, 0 )
+#define p_voxelCellSize float3( 1.0, 1.0, 1.0 )
+#define p_pixelsToWrite uint3( 1u, 1u, 1u )
+// #define gl_WorkGroupSize float3( @value( threads_per_group_x ), @value( threads_per_group_y ), @value( threads_per_group_z ) )
+
+@piece( PreBindingsHeaderCS )
+	struct InstanceBuffer
+	{
+		float4 worldTransformRow0;
+		float4 worldTransformRow1;
+		float4 worldTransformRow2;
+		float4 aabb0;
+		float4 aabb1;
+	};
+@end
+
+@piece( HeaderCS )
+	@insertpiece( Common_Matrix_DeclLoadOgreFloat4x3 )
+	struct Aabb
+	{
+		float3 center;
+		float3 halfSize;
+	};
+
+	struct Instance
+	{
+		ogre_float4x3 worldTransform;
+		uint albedoTexIdx;
+		float alphaExponent;
+		float lodLevel;
+		Aabb bounds;
+	};
+
+	INLINE Instance getInstance( uint instanceIdx PARAMS_ARG_DECL )
+	{
+		Instance retVal;
+
+		retVal.worldTransform = makeOgreFloat4x3( instanceBuffer[instanceIdx].worldTransformRow0,
+												  instanceBuffer[instanceIdx].worldTransformRow1,
+												  instanceBuffer[instanceIdx].worldTransformRow2 );
+
+		retVal.bounds.center = instanceBuffer[instanceIdx].aabb0.xyz;
+		retVal.bounds.halfSize = instanceBuffer[instanceIdx].aabb1.xyz;
+
+		retVal.albedoTexIdx = floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w ) & 0xFFu;
+		retVal.alphaExponent =
+			float( floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w ) >> 8u ) / 10000.0f;
+		retVal.lodLevel = instanceBuffer[instanceIdx].aabb1.w;
+
+		return retVal;
+	}
+
+	INLINE bool intersects( Aabb a, Aabb b )
+	{
+		float3 absDistance = abs( a.center - b.center );
+		float3 sumHalfSizes = a.halfSize + b.halfSize;
+
+		// ( abs( center.x - center2.x ) <= halfSize.x + halfSize2.x &&
+		//   abs( center.y - center2.y ) <= halfSize.y + halfSize2.y &&
+		//   abs( center.z - center2.z ) <= halfSize.z + halfSize2.z )
+		return absDistance.x <= sumHalfSizes.x &&  //
+			   absDistance.y <= sumHalfSizes.y &&  //
+			   absDistance.z <= sumHalfSizes.z;
+	}
+
+	INLINE float3 mixAverage3( float3 newAccumValues, float numHits, float3 oldAveragedValue,
+							   float oldNumHits )
+	{
+		return newAccumValues / ( numHits + oldNumHits ) +
+			   oldAveragedValue * ( oldNumHits / ( numHits + oldNumHits ) );
+	}
+	INLINE float4 mixAverage4( float4 newAccumValues, float numHits, float4 oldAveragedValue,
+							   float oldNumHits )
+	{
+		return newAccumValues / ( numHits + oldNumHits ) +
+			   oldAveragedValue * ( oldNumHits / ( numHits + oldNumHits ) );
+	}
+@end
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+	@property( check_out_of_bounds )
+		if( gl_GlobalInvocationID.x >= p_pixelsToWrite.x ||  //
+			gl_GlobalInvocationID.y >= p_pixelsToWrite.y ||  //
+			gl_GlobalInvocationID.z >= p_pixelsToWrite.z )
+		{
+			return;
+		}
+	@end
+
+	Aabb voxelAabb;
+	voxelAabb.center = p_voxelOrigin + p_voxelCellSize * ( float3( gl_GlobalInvocationID.xyz ) + 0.5f );
+	voxelAabb.halfSize = p_voxelCellSize * 0.5f;
+
+	Aabb groupVoxelAabb;
+	groupVoxelAabb.center =
+		p_voxelOrigin + float3( gl_WorkGroupSize ) * p_voxelCellSize * ( float3( gl_WorkGroupID.xyz ) + 0.5f );
+	groupVoxelAabb.halfSize = float3( gl_WorkGroupSize ) * p_voxelCellSize * 0.5f;
+
+	bool doubleSided = false;
+	float accumHits = 0;
+	float4 voxelAlbedo = float4( 0, 0, 0, 0 );
+	float4 voxelNormal = float4( 0, 0, 0, 0 );
+	float4 voxelEmissive = float4( 0, 0, 0, 0 );
+
+	for( uint i = p_instanceStart; i < p_instanceEnd; ++i )
+	{
+		Instance instance = getInstance( i PARAMS_ARG );
+
+		// Broadphase culling.
+		// Cull against groupVoxelAabb so that anyInvocationARB can work (all lanes
+		// must be active for GroupMemoryBarrierWithGroupSync to work, and even in the
+		// non-emulated version we need all threads to be in the same iteration)
+		if( intersects( groupVoxelAabb, instance.bounds ) )
+		{
+			uint albedoTexIdx = instance.albedoTexIdx;
+			uint normalTexIdx = instance.albedoTexIdx + 1u;
+			uint emissiveIdx = instance.albedoTexIdx + 2u;
+
+			float3 instanceUvw = mul( float4( voxelAabb.center, 1.0f ), instance.worldTransform ).xyz;
+			@property( syntax != hlsl )
+				float4 instanceAlbedo = OGRE_SampleLevel( meshTextures[albedoTexIdx], trilinearSampler,
+														  instanceUvw, instance.lodLevel );
+				float3 instanceEmissive = OGRE_SampleLevel( meshTextures[emissiveIdx], trilinearSampler,
+															instanceUvw, instance.lodLevel )
+											  .xyz;
+				float3 instanceNormal = OGRE_SampleLevel( meshTextures[normalTexIdx], trilinearSampler,
+														  instanceUvw, instance.lodLevel )
+											.xyz;
+			@else
+				float4 instanceAlbedo;
+				float3 instanceEmissive;
+				float3 instanceNormal;
+				[unroll]for( uint i = 0u; i < @value( tex_meshes_per_batch )u; i += 3 )
+				{
+					if( i == albedoTexIdx )
+					{
+						instanceAlbedo = OGRE_SampleLevel( meshTextures[i + 0u], trilinearSampler,
+														   instanceUvw, instance.lodLevel );
+						instanceEmissive = OGRE_SampleLevel( meshTextures[i + 2u], trilinearSampler,
+															 instanceUvw, instance.lodLevel )
+											   .xyz;
+						instanceNormal = OGRE_SampleLevel( meshTextures[i + 1u], trilinearSampler,
+														   instanceUvw, instance.lodLevel )
+											 .xyz;
+					}
+				}
+			@end
+			instanceNormal = ( instanceNormal * 2.0f ) - 1.0f;
+
+			if( instanceUvw.x >= 0.0f && instanceUvw.x <= 1.0f &&  //
+				instanceUvw.y >= 0.0f && instanceUvw.y <= 1.0f &&  //
+				instanceUvw.z >= 0.0f && instanceUvw.z <= 1.0f &&  //
+				abs( instanceAlbedo.a ) +                          //
+						abs( instanceEmissive.x ) +                //
+						abs( instanceEmissive.y ) +                //
+						abs( instanceEmissive.z ) >
+					0.0f )
+			{
+				voxelAlbedo.xyz += instanceAlbedo.xyz / instanceAlbedo.w;
+				voxelAlbedo.w += pow( instanceAlbedo.w, instance.alphaExponent );
+				voxelEmissive.xyz += instanceEmissive.xyz / instanceAlbedo.w;
+
+				instanceNormal = normalize( instanceNormal );
+
+				// voxelNormal is not normalized for properly blend-averaging in multiple
+				// passes. But we need it normalized for this check to work
+				float cosAngle = dot( normalize( voxelNormal.xyz ), instanceNormal );
+				float cos120 = -0.5f;
+				/*Rewrote as ternary operator because it was glitching in iOS Metal
+				if( cosAngle <= cos120 )
+					doubleSided = true;
+				else
+					voxelNormal.xyz += instanceNormal;*/
+				doubleSided = cosAngle <= cos120 ? true : doubleSided;
+				voxelNormal.xyz += cosAngle <= cos120 ? float3( 0, 0, 0 ) : instanceNormal;
+
+				++accumHits;
+			}
+		}
+	}
+
+	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz + ushort3( p_voxelPixelOrigin ) );
+
+	@property( syntax != hlsl || typed_uav_load )
+		float4 origAlbedo	= OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw );
+		float4 origNormal	= OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw );
+		float4 origEmissive = OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw );
+		float origAccumHits = OGRE_imageLoad3D( voxelAccumVal, voxelCelUvw ).x;
+	@else
+		float4 origAlbedo	= unpackUnorm4x8( OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw ) );
+		float4 origNormal	= unpackUnormRGB10A2( OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw ) );
+		float4 origEmissive = unpackUnorm4x8( OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw ) );
+		uint origAccumHitsVal = OGRE_imageLoad3D( voxelAccumVal,
+												  wshort3( voxelCelUvw.x >> 1u, voxelCelUvw.yz ) ).x;
+		float origAccumHits = (gl_LocalInvocationIndex & 0x1u) ? (origAccumHitsVal >> 16u) :
+																 (origAccumHitsVal & 0xFFFFu);
+	@end
+
+	origNormal.xyz = origNormal.xyz * 2.0f - 1.0f;
+
+	if( accumHits + origAccumHits > 0 )
+	{
+		voxelAlbedo			= mixAverage4( voxelAlbedo, accumHits, origAlbedo, origAccumHits );
+		voxelNormal.xyz		= mixAverage3( voxelNormal.xyz, accumHits, origNormal.xyz, origAccumHits );
+		voxelEmissive.xyz	= mixAverage3( voxelEmissive.xyz, accumHits, origEmissive.xyz, origAccumHits );
+
+		voxelNormal.a	= doubleSided ? 1.0f : 0.0f;
+		voxelNormal.a	= max( voxelNormal.a, voxelNormal.a );
+		voxelNormal.xyz	= voxelNormal.xyz * 0.5 + 0.5f;
+
+		@property( syntax != hlsl || typed_uav_load )
+			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, voxelNormal );
+			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
+			OGRE_imageWrite3D1( voxelAccumVal, voxelCelUvw,
+								uint4( accumHits + origAccumHits, 0, 0, 0 ) );
+		@else
+			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, packUnorm4x8( voxelAlbedo ) );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, packUnormRGB10A2( voxelNormal ) );
+			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, packUnorm4x8( voxelEmissive ) );
+		@end
+	}
+
+	@property( syntax == hlsl && !typed_uav_load )
+		if( gl_LocalInvocationIndex & 0x1u )
+			g_voxelAccumValue[gl_LocalInvocationIndex >> 1u] = 0;
+		GroupMemoryBarrier();
+
+		origAccumHitsVal = uint( accumHits + origAccumHits );
+		origAccumHitsVal = (gl_LocalInvocationIndex & 0x1u) ? (origAccumHitsVal << 16u) :
+															  origAccumHitsVal;
+		InterlockedOr( g_voxelAccumValue[gl_LocalInvocationIndex >> 1u], origAccumHitsVal );
+		if( gl_LocalInvocationIndex & 0x1u )
+		{
+			OGRE_imageWrite3D1( voxelAccumVal, wshort3( voxelCelUvw.x >> 1u, voxelCelUvw.yz ),
+								uint4( g_voxelAccumValue[gl_LocalInvocationIndex >> 1u], 0, 0, 0 ) );
+		}
+	@end
+@end

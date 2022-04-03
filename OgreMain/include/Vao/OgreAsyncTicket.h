@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -47,22 +47,22 @@ namespace Ogre
     @par
         Call @BufferPacked::disposeTicket when you're done with this ticket.
     */
-    class _OgreExport AsyncTicket : public RenderSysAlloc
+    class _OgreExport AsyncTicket : public OgreAllocatedObj
     {
     protected:
-        bool mHasBeenMapped;
-        BufferPacked    *mCreator;
-        StagingBuffer   *mStagingBuffer;
+        bool           mHasBeenMapped;
+        BufferPacked  *mCreator;
+        StagingBuffer *mStagingBuffer;
 
         size_t mStagingBufferMapOffset;
         size_t mElementStart;
         size_t mElementCount;
 
-        virtual const void* mapImpl(void) = 0;
+        virtual const void *mapImpl() = 0;
 
     public:
-        AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                     size_t elementStart, size_t elementCount );
+        AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
+                     size_t elementCount );
         virtual ~AsyncTicket();
 
         /** Maps the buffer for CPU access. Will stall if transfer from GPU memory to
@@ -73,13 +73,13 @@ namespace Ogre
         @return
             The pointer with the data read from the GPU. Read only.
         */
-        const void* map(void);
+        const void *map();
 
         /// Unmaps the pointer mapped with map().
-        void unmap(void);
+        void unmap();
 
-        virtual bool queryIsTransferDone(void)              { return true; }
+        virtual bool queryIsTransferDone() { return true; }
     };
-}
+}  // namespace Ogre
 
 #endif

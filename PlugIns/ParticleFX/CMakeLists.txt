@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -17,7 +17,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_definitions(-D_USRDLL)
 
 ogre_add_library(Plugin_ParticleFX ${OGRE_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(Plugin_ParticleFX OgreMain)
+target_link_libraries(Plugin_ParticleFX ${OGRE_NEXT}Main)
 if (NOT OGRE_STATIC)
   set_target_properties(Plugin_ParticleFX PROPERTIES
     COMPILE_DEFINITIONS OGRE_PARTICLEFXPLUGIN_EXPORTS
