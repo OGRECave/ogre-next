@@ -1,5 +1,7 @@
 var NAVTREEINDEX29 =
 {
+"class_ogre_1_1_compositor_pass_scene.html#a74e6432c95ceda7b7ddbc523802deb9a":[5,2,1,18,8],
+"class_ogre_1_1_compositor_pass_scene.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,1,18,23],
 "class_ogre_1_1_compositor_pass_scene.html#a85d32d112dec394ed1122de03ca95ae4":[5,2,1,18,4],
 "class_ogre_1_1_compositor_pass_scene.html#a89274e5d6ad58d7b21609f3cd6aff6e2":[5,2,1,18,6],
 "class_ogre_1_1_compositor_pass_scene.html#a8a84a1b47ca32edebbc95acb770760f1":[5,2,1,18,15],
@@ -247,7 +249,5 @@ var NAVTREEINDEX29 =
 "class_ogre_1_1_compositor_pass_stencil_def.html#ab32b226a745dfd996d7b94a7197044eb":[5,2,1,23,25],
 "class_ogre_1_1_compositor_pass_stencil_def.html#ab422c67a2c8844f410fe822a357cba3b":[5,2,1,23,11],
 "class_ogre_1_1_compositor_pass_stencil_def.html#ab6b2041bfd40579556b2637f9809ec62":[5,2,1,23,16],
-"class_ogre_1_1_compositor_pass_stencil_def.html#abf1c159397e4fa8e205eb3461a6eec8d":[5,2,1,23,42],
-"class_ogre_1_1_compositor_pass_stencil_def.html#ac4a939a87c6557b0a0b58ec9c79657a2":[5,2,1,23,39],
-"class_ogre_1_1_compositor_pass_stencil_def.html#acb37409e6e5fbc0467773942e8c14bdc":[5,2,1,23,19]
+"class_ogre_1_1_compositor_pass_stencil_def.html#abf1c159397e4fa8e205eb3461a6eec8d":[5,2,1,23,42]
 };

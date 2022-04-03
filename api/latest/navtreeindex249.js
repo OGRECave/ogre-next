@@ -1,5 +1,7 @@
 var NAVTREEINDEX249 =
 {
+"gtk_2_ogre_error_dialog_imp_8h.html":[8,0,2,0,7,1],
+"gtk_2_ogre_g_l3_plus_util_8h.html":[8,0,4,1,1,0,2,0],
 "gtk_2_ogre_g_l3_plus_util_8h.html#a7331dc70fef58e0eaac23e887e63ec61":[8,0,4,1,1,0,2,0,0],
 "hierarchy.html":[7,2],
 "hlms.html":[1,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX249 =
 "namespace_ogre.html#a7331dc70fef58e0eaac23e887e63ec61":[6,0,0,1342],
 "namespace_ogre.html#a751d388a0b231360abe5cb03585f762e":[6,0,0,1226],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573":[6,0,0,1240],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a020e54ace2ab2b1659ceff9bf72b2f02":[6,0,0,1240,12],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a058e30c87f886feb8d223b9160095aab":[6,0,0,1240,35],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a0b26eff4f503df70930134ad0442ddba":[6,0,0,1240,17]
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a020e54ace2ab2b1659ceff9bf72b2f02":[6,0,0,1240,12]
 };

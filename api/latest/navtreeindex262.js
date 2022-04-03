@@ -1,5 +1,7 @@
 var NAVTREEINDEX262 =
 {
+"struct_ogre_1_1_rendering_metrics.html#ab4abfdaf1472a2146853cfd2113cbb21":[5,2,2,94,3],
+"struct_ogre_1_1_rendering_metrics.html#aec6cb495fca1733334602271d043cfff":[5,2,2,94,6],
 "struct_ogre_1_1_rendering_metrics.html#af3f28bc50e4dc72e47ff1099fbbb47a2":[5,2,2,94,2],
 "struct_ogre_1_1_resource_group_manager_1_1_resource_declaration.html":[5,2,10,115,0],
 "struct_ogre_1_1_resource_group_manager_1_1_resource_declaration.html#a9322aeaf8777145d9fb4d71d30d133f3":[5,2,10,115,0,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX262 =
 "struct_ogre_1_1_stencil_params.html#a3171a61f29e6563edb2dc9e86326fe3c":[5,2,2,114,7],
 "struct_ogre_1_1_stencil_params.html#a3df6d17bced2516e94b129742485bb06":[5,2,2,114,4],
 "struct_ogre_1_1_stencil_params.html#a49d4a3b268abccd7a6ac9bc284581d0a":[5,2,2,114,1],
-"struct_ogre_1_1_stencil_params.html#a7d95668d775245a469fd5f660e1ebb8a":[5,2,2,114,8],
-"struct_ogre_1_1_stencil_params.html#aafb028e4dfa45cb42589fe1834d916e7":[5,2,2,114,2],
-"struct_ogre_1_1_stencil_params.html#ac5637e019c40a590c2aaa781ea19b51e":[5,2,2,114,6]
+"struct_ogre_1_1_stencil_params.html#a7d95668d775245a469fd5f660e1ebb8a":[5,2,2,114,8]
 };

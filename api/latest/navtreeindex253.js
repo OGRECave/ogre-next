@@ -1,5 +1,7 @@
 var NAVTREEINDEX253 =
 {
+"struct_ogre_1_1_by_skeleton_def.html#a8e8e7f410da5a48b36bc92219f06fe29":[5,2,0,4,1],
+"struct_ogre_1_1_by_skeleton_def.html#a9236a9875296b4440ee42c24882f015e":[5,2,0,4,0],
 "struct_ogre_1_1_by_skeleton_def.html#ab90aa77c9acaf3db04e8e044534d28a9":[5,2,0,4,7],
 "struct_ogre_1_1_by_skeleton_def.html#ac08d5c424ef84e2a2baa14c567fa306d":[5,2,0,4,3],
 "struct_ogre_1_1_by_skeleton_def.html#ac44f65096394c185d48dcb1baad1e95d":[5,2,0,4,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX253 =
 "struct_ogre_1_1_compositor_pass_uav_def_1_1_texture_source.html#abbed37af489bc2967bab2acb12c246ec":[5,2,1,27,1,4],
 "struct_ogre_1_1_compositor_pass_uav_def_1_1_texture_source.html#af9042829bedad027e8d4e16b71a2410e":[5,2,1,27,1,6],
 "struct_ogre_1_1_compositor_texture.html":[5,2,1,31],
-"struct_ogre_1_1_compositor_texture.html#a33b786b70f4f5922dd0ed4a1f04d084f":[5,2,1,31,0],
-"struct_ogre_1_1_compositor_texture.html#a9aacde4ea7d428444692d8d3dd7041d1":[5,2,1,31,2],
-"struct_ogre_1_1_compositor_texture.html#ae3217e823cdaf25e6417c3fb630cc789":[5,2,1,31,1]
+"struct_ogre_1_1_compositor_texture.html#a33b786b70f4f5922dd0ed4a1f04d084f":[5,2,1,31,0]
 };

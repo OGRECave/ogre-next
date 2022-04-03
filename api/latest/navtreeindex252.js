@@ -1,5 +1,7 @@
 var NAVTREEINDEX252 =
 {
+"namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377a8270af4f4f39b583d53d34dd510055ba":[6,0,0,27,165,0],
+"namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377aa8739b4f2e13736bdaed91bb034d9ec7":[6,0,0,27,165,3],
 "namespace_ogre_1_1v1_1_1_overlay_element_commands.html":[5,2,8,0],
 "namespace_profile_sample_flags.html":[6,0,1],
 "namespace_profile_sample_flags.html#ad121424c1c2bcb7cada9bcbc441e2a19":[6,0,1,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX252 =
 "struct_ogre_1_1_build_light_list_request.html#ae71f1afbdfac70a3eb4dae0bc519a89c":[5,0,1,4,2],
 "struct_ogre_1_1_build_light_list_request.html#ae71f1afbdfac70a3eb4dae0bc519a89c":[5,2,11,4,2],
 "struct_ogre_1_1_by_skeleton_def.html":[5,2,0,4],
-"struct_ogre_1_1_by_skeleton_def.html#a03968798df1d6d25f0b1077ff6351ce3":[5,2,0,4,5],
-"struct_ogre_1_1_by_skeleton_def.html#a8e8e7f410da5a48b36bc92219f06fe29":[5,2,0,4,1],
-"struct_ogre_1_1_by_skeleton_def.html#a9236a9875296b4440ee42c24882f015e":[5,2,0,4,0]
+"struct_ogre_1_1_by_skeleton_def.html#a03968798df1d6d25f0b1077ff6351ce3":[5,2,0,4,5]
 };

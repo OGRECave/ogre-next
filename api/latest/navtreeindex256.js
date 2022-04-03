@@ -1,5 +1,7 @@
 var NAVTREEINDEX256 =
 {
+"struct_ogre_1_1_g_l3_plus_vertex_array_object.html#a7cf5f5c840cd810631e93deec71df58d":[6,0,0,368,11],
+"struct_ogre_1_1_g_l3_plus_vertex_array_object.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,341,16],
 "struct_ogre_1_1_g_l3_plus_vertex_array_object.html#a8357fe4fb4849772b94baa4bf47c7ded":[6,0,0,368,16],
 "struct_ogre_1_1_g_l3_plus_vertex_array_object.html#a8a3a9dbd49ddd81cbbb58352d6d622ea":[6,0,0,368,15],
 "struct_ogre_1_1_g_l3_plus_vertex_array_object.html#a8a3a9dbd49ddd81cbbb58352d6d622ea":[7,0,0,341,15],
@@ -247,7 +249,5 @@ var NAVTREEINDEX256 =
 "struct_ogre_1_1_hidden_area_vr_settings.html#af6f880a9fb10883cfdcd0977de3345de":[5,2,10,56,2],
 "struct_ogre_1_1_hidden_area_vr_settings.html#afbda8be8da981a34199b3786bf1660a3":[5,2,10,56,1],
 "struct_ogre_1_1_hlms_1_1_datablock_entry.html":[5,2,10,60,0],
-"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a11f41b74f63b61c81a1e3c36e57c4aaf":[5,2,10,60,0,2],
-"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a1e51eda8b8ef972f565cf79b03a937cf":[5,2,10,60,0,4],
-"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a3e399be6cd4c7fde52af4e3aa78dd35a":[5,2,10,60,0,6]
+"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a11f41b74f63b61c81a1e3c36e57c4aaf":[5,2,10,60,0,2]
 };

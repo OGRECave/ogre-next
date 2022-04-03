@@ -1,5 +1,7 @@
 var NAVTREEINDEX254 =
 {
+"struct_ogre_1_1_compositor_texture.html#a9aacde4ea7d428444692d8d3dd7041d1":[5,2,1,31,2],
+"struct_ogre_1_1_compositor_texture.html#ae3217e823cdaf25e6417c3fb630cc789":[5,2,1,31,1],
 "struct_ogre_1_1_compositor_texture.html#ae722462c5772d860bb095e591b85d0e0":[5,2,1,31,3],
 "struct_ogre_1_1_compositor_workspace_def_1_1_channel_route.html":[5,2,1,33,0],
 "struct_ogre_1_1_compositor_workspace_def_1_1_channel_route.html#a0d1dd2f226307f6ef5efd578184a5637":[5,2,1,33,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX254 =
 "struct_ogre_1_1_descriptor_set_texture2.html#a7a1553b0334e5e27e2394ae90448cadc":[5,2,10,31,11],
 "struct_ogre_1_1_descriptor_set_texture2.html#aace0bd55261403671680d1fe0bd07bf5":[5,2,10,31,8],
 "struct_ogre_1_1_descriptor_set_texture2.html#acade5eb2c2d430d2c60d2ca5d3656b35":[5,2,10,31,10],
-"struct_ogre_1_1_descriptor_set_texture2.html#ad1cb7d878f4703a993f1fe474952fde3":[5,2,10,31,4],
-"struct_ogre_1_1_descriptor_set_texture2.html#ae78cc1a959e88da8a3abda873d04010a":[5,2,10,31,9],
-"struct_ogre_1_1_descriptor_set_texture2_1_1_buffer_slot.html":[5,2,10,31,0]
+"struct_ogre_1_1_descriptor_set_texture2.html#ad1cb7d878f4703a993f1fe474952fde3":[5,2,10,31,4]
 };
