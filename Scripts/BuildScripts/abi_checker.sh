@@ -51,8 +51,9 @@ for file in $FILES
 do
 	# Ignore symlinks
 	if ! [[ -L "$file" ]]; then
-		echo "Checking AbiDump/1/$file.dump vs AbiDump/$1/$file.dump"
-		abi-compliance-checker -l "$file" -old "AbiDump/1/$file.dump" -new "AbiDump/$1/$file.dump" &
+		oldfile="${file%.*}.0"
+		echo "Checking AbiDump/1/$oldfile.dump vs AbiDump/$1/$file.dump"
+		abi-compliance-checker -l "${file%.*}" -old "AbiDump/1/$oldfile.dump" -new "AbiDump/$1/$file.dump" &
 		PIDs+=($!)
 	fi
 done
