@@ -1,4 +1,4 @@
-# What's New In %Ogre 2.3 {#WhatsNew}
+# What's New In %Ogre 2.2 {#Ogre22Changes}
 
 @tableofcontents
 
