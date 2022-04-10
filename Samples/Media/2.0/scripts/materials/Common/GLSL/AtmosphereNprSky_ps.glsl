@@ -1,0 +1,47 @@
+#version ogre_glsl_ver_330
+
+#define float2 vec2
+#define float3 vec3
+#define float4 vec4
+#define lerp mix
+
+vulkan_layout( location = 0 )
+in block
+{
+    vec3 cameraDir;
+} inPs;
+
+vulkan_layout( location = 0 )
+out vec4 fragColour;
+
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float4 packedParams0;
+	uniform float3 skyColour;
+	uniform float3 sunDir;
+	uniform float3 skyLightAbsorption;
+	uniform float3 sunAbsorption;
+	uniform float4 packedParams1;
+vulkan( }; )
+
+#define p_densityCoeff		packedParams0.x
+#define p_lightDensity		packedParams0.y
+#define p_sunHeight			packedParams0.z
+#define p_sunHeightWeight	packedParams0.w
+#define p_skyColour			skyColour
+#define p_sunDir			sunDir
+#define p_skyLightAbsorption	skyLightAbsorption
+#define p_sunAbsorption		sunAbsorption
+#define p_mieAbsorption		packedParams1.xyz
+#define p_finalMultiplier	packedParams1.w
+
+#define HEADER
+#include "AtmosphereNprSky_ps.any"
+#undef HEADER
+
+void main()
+{
+	#include "AtmosphereNprSky_ps.any"
+
+	fragColour.xyz = finalResult;
+	fragColour.w = 1.0f;
+}

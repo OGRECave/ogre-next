@@ -1,0 +1,73 @@
+// NPR = Non-Physically-based Rendering Atmo
+
+//#include "SyntaxHighlightingMisc.h"
+
+#ifdef HEADER
+
+float getSunDisk( const float LdotV, const float sunY )
+{
+	return pow( LdotV, lerp( 4.0f, 8500.0f, sunY ) ) * 50.0f;
+}
+
+float getMie( const float LdotV, const float sunY )
+{
+	return pow( LdotV, lerp( 1.0f, 1.0f, sunY ) );
+}
+
+// See https://en.wikipedia.org/wiki/Rayleigh_distribution
+// It's inspired, not fully based.
+//
+// The formula also gives us the nice property that for inputs
+// where absorption is in range [0; 1] the output i also in range [0; 1]
+float3 getSkyRayleighAbsorption( float3 vDir, const float density )
+{
+	float3 absorption = -density * vDir;
+	absorption = exp2( absorption ) * 2.0f;
+	return absorption;
+}
+
+float3 pow3( float3 v, float e )
+{
+	return float3( pow( v.x, e ), pow( v.y, e ), pow( v.z, e ) );
+}
+
+#else
+
+float3 cameraDir = normalize( inPs.cameraDir );
+// const float3 spherePos = earthRadius * cameraDir;
+cameraDir.y = max( cameraDir.y, 0.025f );
+
+const float LdotV = max( dot( cameraDir, p_sunDir ), 0.0f );
+const float LdotV360 = dot( cameraDir, p_sunDir ) * 0.5f + 0.5f;
+
+// ptDensity gets smaller as sunHeight gets bigger
+// ptDensity gets smaller as cameraDir.y gets bigger
+const float ptDensity =
+	p_densityCoeff / pow( max( cameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ), 0.75f );
+
+const float sunDisk = getSunDisk( LdotV, p_sunHeight );
+
+const float antiMie = max( p_sunHeightWeight, 0.08f );
+
+const float3 skyAbsorption = getSkyRayleighAbsorption( p_skyColour, ptDensity );
+// const float3 skyColourGradient = pow3( exp2( -cameraDir.y / p_skyColour ),
+//										 lerp( 15.5f, 1.5f, pow( p_sunHeightWeight, 0.5f ) ) );
+const float3 skyColourGradient = pow3( exp2( -cameraDir.y / p_skyColour ), 1.5f );
+
+const float mie = getMie( LdotV360, p_sunHeightWeight );
+
+float3 finalResult = float3( 0.0f, 0.0f, 0.0f );
+
+const float3 sharedTerms = skyColourGradient * skyAbsorption;
+
+finalResult += antiMie * sharedTerms * p_sunAbsorption;
+finalResult += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAbsorption;
+finalResult += mie * p_mieAbsorption;
+finalResult *= p_lightDensity;
+
+//const float multiplier = smoothstep( 0.02f, 0.4f, p_sunHeightWeight );
+//finalResult *= 0.5f + multiplier;
+finalResult *= p_finalMultiplier;
+finalResult += sunDisk * p_skyLightAbsorption;
+
+#endif
