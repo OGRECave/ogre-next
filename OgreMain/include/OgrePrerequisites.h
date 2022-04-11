@@ -134,6 +134,7 @@ namespace Ogre
     class ArchiveManager;
     class AsyncTextureTicket;
     class AsyncTicket;
+    class AtmosphereComponent;
     class AutoParamDataSource;
     class AxisAlignedBox;
     class AxisAlignedBoxSceneQuery;

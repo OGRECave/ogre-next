@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreAtmospherePrerequisites.h"
 
+#include "OgreAtmosphereComponent.h"
 #include "OgreColourValue.h"
 #include "OgreSharedPtr.h"
 #include "OgreVector3.h"
@@ -58,7 +59,7 @@ namespace Ogre
 
         A PBR solution is iterative and requires more resources.
     */
-    class _OgreAtmosphereExport AtmosphereNpr
+    class _OgreAtmosphereExport AtmosphereNpr final : public AtmosphereComponent
     {
     public:
         struct Preset
@@ -89,7 +90,7 @@ namespace Ogre
 
     public:
         AtmosphereNpr();
-        ~AtmosphereNpr();
+        ~AtmosphereNpr() override;
 
         void setSky( Ogre::SceneManager *sceneManager, bool bEnabled );
         void destroySky( Ogre::SceneManager *sceneManager );
@@ -123,6 +124,8 @@ namespace Ogre
         void setSunDir( const Ogre::Vector3 &sunDir, const float normalizedTimeOfDay );
 
         void setPreset( const Preset &preset );
+
+        void _update( SceneManager *sceneManager, Camera *camera ) override;
     };
 
     OGRE_ASSUME_NONNULL_END

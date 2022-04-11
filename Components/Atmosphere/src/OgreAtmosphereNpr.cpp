@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreAtmosphereNpr.h"
 
+#include "OgreCamera.h"
 #include "OgreMaterialManager.h"
 #include "OgrePass.h"
 #include "OgreRectangle2D2.h"
@@ -36,7 +37,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    AtmosphereNpr::AtmosphereNpr() : mSunDir( Ogre::Vector3( 0, 1, 1 ).normalisedCopy() ), mPass( 0 )
+    AtmosphereNpr::AtmosphereNpr() :
+        mSunDir( Ogre::Vector3( 0, 1, 1 ).normalisedCopy() ),
+        mNormalizedTimeOfDay( std::asin( mSunDir.y ) ),
+        mLinkedLight( 0 ),
+        mPass( 0 )
     {
         createMaterial();
     }
@@ -72,6 +77,7 @@ namespace Ogre
         mMaterial->load();
 
         mPass = mMaterial->getTechnique( 0u )->getPass( 0u );
+        setPackedParams();
     }
     //-------------------------------------------------------------------------
     inline Vector3 getSkyRayleighAbsorption( const Vector3 &vDir, const float density )
@@ -85,7 +91,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void AtmosphereNpr::setPackedParams()
     {
-        const float sunHeight = std::cos( mNormalizedTimeOfDay * Math::PI );
+        const float sunHeight = std::sin( mNormalizedTimeOfDay * Math::PI );
         const float sunHeightWeight = std::exp2( -1.0f / sunHeight );
         // Gets smaller as sunHeight gets bigger
         const float lightDensity =
@@ -134,6 +140,7 @@ namespace Ogre
             sceneManager->getRootSceneNode( SCENE_STATIC )->attachObject( sky );
 
             sky->setMaterial( mMaterial );
+            mSkies[sceneManager] = sky;
         }
         else
         {
@@ -141,6 +148,10 @@ namespace Ogre
         }
 
         sky->setVisible( bEnabled );
+        if( bEnabled )
+            sceneManager->setAtmosphere( this );
+        else
+            sceneManager->setAtmosphere( nullptr );
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::destroySky( Ogre::SceneManager *sceneManager )
@@ -192,5 +203,25 @@ namespace Ogre
     {
         mPreset = preset;
         setPackedParams();
+    }
+    //-------------------------------------------------------------------------
+    void AtmosphereNpr::_update( SceneManager *sceneManager, Camera *camera )
+    {
+        const Vector3 *corners = camera->getWorldSpaceCorners();
+        const Vector3 &cameraPos = camera->getDerivedPosition();
+
+        const Real invFarPlane = 1.0f / camera->getFarClipDistance();
+        Vector3 cameraDirs[4];
+        cameraDirs[0] = ( corners[5] - cameraPos ) * invFarPlane;
+        cameraDirs[1] = ( corners[6] - cameraPos ) * invFarPlane;
+        cameraDirs[2] = ( corners[4] - cameraPos ) * invFarPlane;
+        cameraDirs[3] = ( corners[7] - cameraPos ) * invFarPlane;
+
+        std::map<Ogre::SceneManager *, Rectangle2D *>::iterator itor = mSkies.find( sceneManager );
+        OGRE_ASSERT_LOW( itor != mSkies.end() );
+        Rectangle2D *sky = itor->second;
+
+        sky->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
+        sky->update();
     }
 }  // namespace Ogre

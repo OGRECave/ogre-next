@@ -438,6 +438,8 @@ namespace Ogre
         TextureGpu   *mPassDepthTextureNoMsaa;
         TextureGpu   *mRefractionsTexture;
 
+        AtmosphereComponent *mAtmosphere;
+
         /// See CompositorPassSceneDef::mUvBakingSet
         uint8   mUvBakingSet;
         Vector2 mUvBakingOffset;
@@ -1337,6 +1339,15 @@ namespace Ogre
         TextureGpu          *getCurrentSsrTexture() const { return mSsrTexture; }
         TextureGpu          *getCurrentPassDepthTextureNoMsaa() const { return mPassDepthTextureNoMsaa; }
         TextureGpu          *getCurrentRefractionsTexture() const { return mRefractionsTexture; }
+
+        /// Sets an external atmosphere provider. The pointer must stay
+        /// valid while it is set.
+        ///
+        /// Multiple SceneManagers can have the same atmosphere
+        void setAtmosphere( AtmosphereComponent *atmosphere );
+
+        /// Gets currently set atmosphere. It's never nullptr.
+        AtmosphereComponent *getAtmosphere() { return mAtmosphere; }
 
         NodeMemoryManager &_getNodeMemoryManager( SceneMemoryMgrTypes sceneType )
         {
