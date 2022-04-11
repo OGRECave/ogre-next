@@ -610,6 +610,10 @@ namespace Ogre
                 // Different mesh, vertex buffers or layout. Make a new draw call.
                 //(or also the the Hlms made a batch-breaking command)
 
+                OGRE_ASSERT_MEDIUM( vao->getVaoName() != 0u &&
+                                    "Invalid Vao name! This can happen if a BT_IMMUTABLE buffer was "
+                                    "recently created and VaoManager::_beginFrame() wasn't called" );
+
                 if( lastVaoName != vao->getVaoName() )
                 {
                     *mCommandBuffer->addCommand<CbVao>() = CbVao( vao );
