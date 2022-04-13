@@ -478,7 +478,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aff6ca0a823b392feeabecb69b3f04bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the depth-adjusted projection matrix for the current rendersystem, but one which still conforms to right-hand rules.  <a href="class_ogre_1_1_frustum.html#aff6ca0a823b392feeabecb69b3f04bef">More...</a><br /></td></tr>
 <tr class="separator:aff6ca0a823b392feeabecb69b3f04bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e735f6ff8626694c3917db599e42dd7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_frustum.html#a0e735f6ff8626694c3917db599e42dd7">getProjectionParamsAB</a> () const</td></tr>
-<tr class="memdesc:a0e735f6ff8626694c3917db599e42dd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the terms projectionA and projectionB in .x and .y respectively, which can be used to reconstruct linear depth from a Z buffer with the following formula: linearDepth = projectionParams.y / (fDepth - projectionParams.x);.  <a href="class_ogre_1_1_frustum.html#a0e735f6ff8626694c3917db599e42dd7">More...</a><br /></td></tr>
+<tr class="memdesc:a0e735f6ff8626694c3917db599e42dd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the terms projectionA and projectionB in .x and .y respectively, which can be used to reconstruct linear depth from a Z buffer.  <a href="class_ogre_1_1_frustum.html#a0e735f6ff8626694c3917db599e42dd7">More...</a><br /></td></tr>
 <tr class="separator:a0e735f6ff8626694c3917db599e42dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac71cd87e8bbc980dffd96b35cd736b2a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="group___math.html#gaf5dd9a3d1fd373b17108baa16065b1ce">ProjectionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_frustum.html#ac71cd87e8bbc980dffd96b35cd736b2a">getProjectionType</a> () const</td></tr>
 <tr class="memdesc:ac71cd87e8bbc980dffd96b35cd736b2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves info on the type of projection used (orthographic or perspective).  <a href="class_ogre_1_1_frustum.html#ac71cd87e8bbc980dffd96b35cd736b2a">More...</a><br /></td></tr>
@@ -5013,8 +5013,10 @@ This parameter is used in min display size calculations. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Returns the terms projectionA and projectionB in .x and .y respectively, which can be used to reconstruct linear depth from a Z buffer with the following formula: linearDepth = projectionParams.y / (fDepth - projectionParams.x);. </p>
-
+<p>Returns the terms projectionA and projectionB in .x and .y respectively, which can be used to reconstruct linear depth from a Z buffer. </p>
+<p >If the projection type is PT_PERSPECTIVE, use the following formula: </p><pre class="fragment">linearDepth = projectionParams.y / (fDepth - projectionParams.x);
+</pre><p> But if the projection type is PT_ORTHOGRAPHIC, use the formula: </p><pre class="fragment">linearDepth = (fDepth - projectionParams.x) / projectionParams.y; 
+</pre> 
 </div>
 </div>
 <a id="ac71cd87e8bbc980dffd96b35cd736b2a" name="ac71cd87e8bbc980dffd96b35cd736b2a"></a>
