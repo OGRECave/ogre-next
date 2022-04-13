@@ -113,15 +113,31 @@ namespace Ogre
         Vector2 retVal;
 
         const RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
-        if( !renderSystem->isReverseDepth() )
+        if(getProjectionType() == PT_PERSPECTIVE)
         {
-            retVal.x = farPlane / ( farPlane - nearPlane );                   // projectionA
-            retVal.y = ( -farPlane * nearPlane ) / ( farPlane - nearPlane );  // projectionB
+            if( !renderSystem->isReverseDepth() )
+            {
+                retVal.x = farPlane / ( farPlane - nearPlane );                   // projectionA
+                retVal.y = ( -farPlane * nearPlane ) / ( farPlane - nearPlane );  // projectionB
+            }
+            else
+            {
+                retVal.x = -nearPlane / ( farPlane - nearPlane );                // projectionA
+                retVal.y = ( farPlane * nearPlane ) / ( farPlane - nearPlane );  // projectionB
+            }
         }
         else
         {
-            retVal.x = -nearPlane / ( farPlane - nearPlane );                // projectionA
-            retVal.y = ( farPlane * nearPlane ) / ( farPlane - nearPlane );  // projectionB
+            if( !renderSystem->isReverseDepth() )
+            {
+                retVal.x = -nearPlane / ( farPlane - nearPlane );                // projectionA
+                retVal.y = 1.0 / ( farPlane - nearPlane );                       // projectionB
+            }
+            else
+            {
+                retVal.x = farPlane / ( farPlane - nearPlane );                   // projectionA
+                retVal.y = -1.0 / ( farPlane - nearPlane );                       // projectionB
+            }
         }
 
         return retVal;
