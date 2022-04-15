@@ -23,6 +23,6 @@ add_recursive( ./ SOURCE_FILES )
 
 ogre_add_executable(Sample_PlanarReflections WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
 
-target_link_libraries(Sample_PlanarReflections ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} OgrePlanarReflections )
+target_link_libraries(Sample_PlanarReflections ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} ${OGRE_NEXT}PlanarReflections )
 ogre_config_sample_lib(Sample_PlanarReflections)
 ogre_config_sample_pkg(Sample_PlanarReflections)

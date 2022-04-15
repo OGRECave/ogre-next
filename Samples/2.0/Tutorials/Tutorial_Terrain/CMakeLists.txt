@@ -29,7 +29,7 @@ ogre_add_executable(Sample_Tutorial_Terrain WIN32 MACOSX_BUNDLE ${SOURCE_FILES} 
 
 target_link_libraries(Sample_Tutorial_Terrain ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} ${OGRE_NEXT}HlmsPbs)
 if( OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS )
-    target_link_libraries( Sample_Tutorial_Terrain OgrePlanarReflections )
+    target_link_libraries( Sample_Tutorial_Terrain ${OGRE_NEXT}PlanarReflections )
 endif()
 ogre_config_sample_lib(Sample_Tutorial_Terrain)
 ogre_config_sample_pkg(Sample_Tutorial_Terrain)
