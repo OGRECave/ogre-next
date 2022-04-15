@@ -1,10 +1,8 @@
-
-Changes: Objects, Scene & Nodes {#Ogre20Changes}
-===============================
+# Changes And Porting Notes From %Ogre {#OgreNextChanges}
 
 @tableofcontents
 
-# Names are now optional {#NamesAreNowOptional}
+## Names are now optional {#NamesAreNowOptional}
 
 Names no longer need to be unique and are optional (ie. two SceneNodes
 can have the same name). To identify uniqueness, classes derive from
@@ -40,7 +38,7 @@ Entity *myEnt = sceneManager->createEntity( "meshName.mesh" );
 myEnt->setName( "myEntityName" ); //This call is optional
 ```
 
-# How to debug MovableObjects' (and Nodes) data {#HowToDebugMovableObjectsData}
+## How to debug MovableObjects' (and Nodes) data {#HowToDebugMovableObjectsData}
 
 All relevant data that needs to be updated every frame is stored in SoA
 form (Structure of Arrays) as opposed to AoS (Arrays of Structures)
@@ -154,7 +152,7 @@ where our data really is. This layout may be a bit hard to grasp at
 first, but it's quite easy once you get used to it. Notice we satisfy a
 very important property: all of our pointers are aligned to 16 bytes.
 
-## Interpreting ArrayVector3 {#InterpretingArrayVector3}
+### Interpreting ArrayVector3 {#InterpretingArrayVector3}
 
 `ArrayVector3`, `ArrayQuaternion` and `ArrayMatrix4` require a bit more of work
 when watching them through the debugger:
@@ -193,7 +191,7 @@ saying:
 
 So, to know the contents of B, you need to look at the 3rd column.
 
-## Dummy pointers instead of NULL {#DummyPointers}
+### Dummy pointers instead of NULL {#DummyPointers}
 
 Seeing a null pointer in `ObjectData::mParents[4]` is most likely a bug
 unless it's temporary. During SoA update; those memory slots that were
@@ -214,7 +212,7 @@ When attached, both variables will point to the same pointer.
 Same happens with other pointers like `ObjectData::mOwner[]` and
 `Transform::mParents[]`
 
-# Attachment and Visibility {#AttachmentAndVisibility}
+## Attachment and Visibility {#AttachmentAndVisibility}
 
 In Ogre 1.x an object "was in the scene" when it was attached to a scene
 node whose ultimate parent was root. Hence a detached entity could never
@@ -233,7 +231,7 @@ previous value of `MovableObject::getVisible` is lost. Furthermore,
 calling `setVisible( true )` while detached is illegal and will result in
 a crash (there is a debug assertion for this).
 
-# Attaching/Detaching is more expensive than hiding {#AttachingDetachingIsMoreExpensive}
+## Attaching/Detaching is more expensive than hiding {#AttachingDetachingIsMoreExpensive}
 
 Due to how slow was Ogre 1.x in traversing SceneNodes (aka the Scene
 Graph), some users recommended to detach its objects or remove the
@@ -247,7 +245,7 @@ hiding objects using setVisible is much more likely to be orders of
 magnitude faster than destroying them (unless they have to be hidden for
 a very long time)
 
-# All MovableObjects require a SceneNode (Lights & Cameras) {#AllMovableObjectsRequireSceneNode}
+## All MovableObjects require a SceneNode (Lights & Cameras) {#AllMovableObjectsRequireSceneNode}
 
 Unless hidden (see [Attachment and
 Visibility](#AttachmentAndVisibility)), all `MovableObejct`s
@@ -284,7 +282,7 @@ your own, you will have to detach it first calling
 well-known exception that the object has already been attached to a
 node.*
 
-# Obtaining derived transforms {#DerivedTransforms}
+## Obtaining derived transforms {#DerivedTransforms}
 
 In the past, obtaining the derived position was a matter of calling
 `SceneNode::_getDerivedPosition`. Ogre would keep a boolean flag to know
@@ -345,7 +343,7 @@ Vector3 derivedScale	= sceneNode->_getDerivedScale();
 `MovableObject`'s world Aabb & radius follows the same pattern and subject
 to the same issues.
 
-# SCENE_STATIC and SCENE_DYNAMIC {#SceneStaticSceneDynamic}
+## SCENE_STATIC and SCENE_DYNAMIC {#SceneStaticSceneDynamic}
 
 Both MovableObjects[^2] and Nodes have a setting upon creation to
 specify whether they're dynamic or static. Static objects are meant to
@@ -356,7 +354,7 @@ performance on CPU side (and sometimes GPU side, for example with some
 instancing techniques) by telling the engine they won't be changing
 often.
 
-## What means a Node to be SCENE_STATIC {#SceneStaticNode}
+### What means a Node to be SCENE_STATIC {#SceneStaticNode}
 
 -   Nodes created with `SCENE_STATIC` won't update their derived
     position/rotation/scale every frame. This means that modifying (eg)
@@ -379,7 +377,7 @@ static clock. Having a static node being child of a dynamic node doesn't
 make much sense, and is probably a bug (unless the parent is the root
 node).
 
-## What means a Entities (and InstancedEntities) to be SCENE_STATIC {#SceneStaticEntities}
+### What means a Entities (and InstancedEntities) to be SCENE_STATIC {#SceneStaticEntities}
 
 Static entities are scheduled for culling and rendering like dynamic
 ones, but won't update their world AABB bounds (even if their scene node
@@ -392,7 +390,7 @@ and hence the entity won't be updated either.
 Static entities can only be attached to static nodes, and dynamic
 entities can only be attached to dynamic nodes.
 
-## General {#SceneStaticGeneral}
+### General {#SceneStaticGeneral}
 
 On most cases, changing a single static entity or node (or creating
 more) can cause a lot of other static objects to be scheduled to update,
@@ -439,7 +437,7 @@ When using normal entities, batch count won't go down when using the
 1.9, because we're skipping the scene node transform & AABB update
 phases, and that takes a lot of CPU time.
 
-# Ogre asserts mCachedAabbOutOfDate or mCachedTransformOutOfDate while in debug mode {#AssersionCachedOutOfDate}
+## Ogre asserts mCachedAabbOutOfDate or mCachedTransformOutOfDate while in debug mode {#AssersionCachedOutOfDate}
 
 If you get assertions that `mCachedAabbOutOfDate` or
 `mCachedTransformOutOfDate` are true, they mean mean that the derived
@@ -486,7 +484,7 @@ They can trigger for various reasons:
     scheduled for refactor we might just fix it by calling
     `getDerivedPositionUpdated`
 
-# Custom classes derived from Renderable or MovableObject {#DerivingRenderable}
+## Custom classes derived from Renderable or MovableObject {#DerivingRenderable}
 
 In Ogre 1.x; advanced users could submit or inject `Renderable`s directly
 to the `RenderQueue` without the need of a `MovableObject`. This was
@@ -516,7 +514,7 @@ populate the `MovableObject::mRenderables` vector instead; which the
 The reason behind this change is performance. The visitor pattern is too
 costly for this task.
 
-# How do I get the vertex information from the new v2 Mesh classes? {#V2MeshInformation}
+## How do I get the vertex information from the new v2 Mesh classes? {#V2MeshInformation}
 
 Once you have the `Mesh` pointer, get the `Submesh`. Then grab the Vao:
 
@@ -550,7 +548,7 @@ for( size_t i=0; i<vertexBuffers.size(); ++i )
 }
 ```
 
-# How do I set the element offsets, vertex buffer's source and index? {#V2MeshElementOffset}
+## How do I set the element offsets, vertex buffer's source and index? {#V2MeshElementOffset}
 
 The v1 interface allowed to explicitly specify this data. However this
 can be automatically calculated:
@@ -618,7 +616,7 @@ You can use the static function `VaoManager::calculateVertexSize( const
 VertexElement2Vec &vertexElements )` to calculate the vertex size in
 bytes that a declaration vector is holding.
 
-# My scene looks too dark or dull! {#SceneLooksDarkDull}
+## My scene looks too dark or dull! {#SceneLooksDarkDull}
 
 1. Check you're using **GAMMA CORRECTION**. If you're letting Ogre
 create the `RenderWindow` through the configuration, this snippet can
@@ -685,7 +683,7 @@ Bottom line, this is an art problem, not a technical one.
 one; set the light's power (`Light::setPowerScale`) to `PI` (3,14159265...)
 to compensate.
 
-# I activated gamma correction, but now my GUI textures look washed out! {#GUIWashedOut}
+## I activated gamma correction, but now my GUI textures look washed out! {#GUIWashedOut}
 
 The `HlmsTextureManager` will load diffuse textures w/ gamma correction to
 avoid the problem.

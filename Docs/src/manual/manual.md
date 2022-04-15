@@ -1,25 +1,36 @@
 # Manual {#manual}
 
-This manual is aimed at making the transition to Ogre 2.3 as less
-painful and traumatic as possible.
+This manual is aimed at making the transition to OgreNext as painless as possible.
 
-- @subpage Samples
-- @subpage Ogre20Changes
+**Overview**
+- @subpage OgreNextChanges
 - @subpage TechnicalOverview
+
+**Whats New**
+- @subpage Ogre24Changes
+- @subpage Ogre23Changes
+- @subpage Ogre22Changes
+
+**Core Components**
 - @subpage compositor
+- @subpage hlms
+- @subpage commandbuffer
+
+**Core Techniques**
 - @subpage GiMethods
 - @subpage ImageVoxelConeTracing
 - @subpage instancing
-- @subpage threading
-- @subpage performance
-- @subpage hlms
+
+**Core Concepts**
 - @subpage azdo
-- @subpage commandbuffer
-- @subpage TerraSystem
-- @subpage TuningMemoryResources
-- @subpage Ogre22Changes
-- @subpage BehavorStagingTextureD3D11
-- @subpage Ogre23Changes
 - @subpage RootLayouts
+- @subpage threading
+
+**Optional Components**
+- @subpage TerraSystem
+
+**Reference Articles**
+- @subpage performance
+- @subpage TuningMemoryResources
+- @subpage BehavorStagingTextureD3D11
 - @subpage ResolvingMergeConflicts24
-- @subpage Ogre24Changes

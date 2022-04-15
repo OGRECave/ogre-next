@@ -1,4 +1,4 @@
-# What's new in Ogre 2.4 {#Ogre24Changes}
+# What's New In %Ogre 2.4 {#Ogre24Changes}
 
 @tableofcontents
 

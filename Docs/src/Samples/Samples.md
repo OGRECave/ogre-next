@@ -1,8 +1,17 @@
+# Samples and Features {#Samples}
 
-Ogre Next Samples (Feature demonstrations) {#Samples}
-==========================================
+Here is a list of all the samples provided with Ogre Next and the features that they demonstrate. They are separated into three categories: Showcases, API usage & Tutorials. The samples can be downloaded as a binary package from [github.](https://github.com/OGRECave/ogre-next/releases). 
 
-Here is a list of all the samples provided with Ogre Next and the features that they demonstrate. They are seperated into three categories: Showcases, API usage & Tutorials. The samples can be downloaded as a binary package from [github.](https://github.com/OGRECave/ogre-next/releases)
+General sample notes:
+- In each sample, there is more information available about the features and techniques being demonstrated by pressing the `F1` key.
+- The shaders can be live edited. After modifying them, press `Shift + F1` through to `Shift + F3` to refresh. If in doubt, the `F1` text will tell you.
+
+The controls for the samples are as follows:
+- Mouse for camera rotation
+- WSAD keys for camera forwards/backwards/strafe left/strafe right movement
+- Page Up/Down to strafe camera up and down
+- Hold shift down for fast camera movement
+- To quit, press `Alt + F4` on Windows & Linux or `Cmd + Q` on Mac.
 
 @tableofcontents
 
@@ -36,7 +45,7 @@ This sample demonstrates multiple ways in which TagPoints are used to attach to 
 
 ![](./SampleImages/api_animationtag.png)
 
-# API Usage: Area Light Approximation {#arealighapprox}
+# API Usage: Area Lights {#arealighapprox}
 This sample demonstrates area light approximation methods.
 
 ![](./SampleImages/api_arealightapprox.png)
@@ -56,7 +65,7 @@ This sample demonstrates creating a Mesh programmatically from code and updating
 
 ![](./SampleImages/api_dynamicgeom.png)
 
-# API Usage: IES Photometric Profiles {#iesprofiles}
+# API Usage: IES Lights {#iesprofiles}
 This sample demonstrates the use of IES photometric profiles.
 
 ![](./SampleImages/api_lesprofiles.png)
@@ -72,19 +81,25 @@ This sample demonstrates instanced stereo rendering. Related to VR.
 # API Usage: Instant Radiosity {#instantradiosity}
 This sample demonstrates the use of 'Instant Radiosity' (IR). IR traces rays in CPU and creates a VPL (Virtual Point Light) at every hit point to mimic the effect of Global Illumination.
 
+For more information see page: [Global Illumination Methods](@ref GiMethods)
+
 ![](./SampleImages/api_ir.png)
 
-# API Usage: Local Reflections Using Parallax Corrected Cubemaps {#localcubemaps}
+# API Usage: Local Reflections {#localcubemaps}
 This sample demonstrates using parallax reflect cubemaps for accurate local reflections.
+
+For more information see page: [Global Illumination Methods](@ref GiMethods)
 
 ![](./SampleImages/api_localcubemap.png)
 
-# API Usage: Local Reflections Using Parallax Corrected Cubemaps With Manual Probes {#localcubemapsmp}
+# API Usage: Local Reflections Using With Manual Probes {#localcubemapsmp}
 This sample demonstrates using parallax reflect cubemaps for accurate local reflections. This time, we showcase the differences between manual and automatic modes. Manual probes are camera independent and work best for static objects.
+
+For more information see page: [Global Illumination Methods](@ref GiMethods)
 
 ![](./SampleImages/api_localcubemap_manual.png)
 
-# API Usage: Automatic LOD Generation {#autolod}
+# API Usage: Automatic LOD {#autolod}
 This sample demonstrates the automatic generation of LODs from an existing mesh.
 
 ![](./SampleImages/api_meshlod.png)
@@ -94,8 +109,8 @@ This sample demonstrates morph animations.
 
 ![](./SampleImages/api_morphanimation.png)
 
-# API Usage: Automatically Placed Parallax Corrected Cubemap Probes Via PccPerPixelGridPlacement {#autopcc}
-This sample demonstrates placing multiple PCC probes automatically.
+# API Usage: Automatically Placed PCC Probes {#autopcc}
+This sample demonstrates placing multiple parallax corrected cubemap probes automatically via PccPerPixelGridPlacement.
 
 ![](./SampleImages/api_autopcc.png)
 
@@ -109,7 +124,7 @@ This sample demonstrates refractions.
 
 ![](./SampleImages/api_refractions.png)
 
-# API Usage: SceneFormat Export / Import Sample {#sceneformat}
+# API Usage: SceneFormat {#sceneformat}
 This sample demonstrates exporting/importing of a scene to JSON format. Includes the exporting of meshes and textures to a binary format.
 
 # API Usage: Screen Space Reflections {#ssreflections}
@@ -152,28 +167,28 @@ This sample demonstrates the use of Ogre V1 objects (e.g. Entity) in Ogre Next.
 
 ![](./SampleImages/api_v1interface.png)
 
-# API Usage: Ogre Next Manual Object {#onmanualobject}
+# API Usage: Manual Object {#onmanualobject}
 This sample demonstrates the use of Ogre Next manual objects. This eases porting code from Ogre V1. For increased speed, see sample: 'Dynamic Geometry'.
 
 ![](./SampleImages/api_v2manualobject.png)
 
-# API Usage: Ogre Next V2 Meshes {#v2Mesh}
+# API Usage: Ogre Next Meshes {#v2Mesh}
 This sample demonstrates converting Ogre V1 meshes to Ogre Next V2 format.
 
 ![](./SampleImages/api_v2mesh.png)
 
-# Tutorial: Tutorial 00 - Basic {#tutorial00}
+# Tutorial: 00 - Basic {#tutorial00}
 This tutorial demonstrates the basic setup of Ogre Next to render to a window. Uses hardcoded paths. See next tutorial to properly handle all OS's setup a render loop.
 
-# Tutorial: Tutorial 01 - Initialisation  {#tutorial01}
+# Tutorial: 01 - Initialisation  {#tutorial01}
 This tutorial demonstrates the setup of Ogre Next in a basis framework.
 
-# Tutorial: Tutorial 02 - Variable Framerate {#tutorial02}
+# Tutorial: 02 - Variable Framerate {#tutorial02}
 This tutorial demonstrates the most basic rendering loop: Variable framerate. Variable framerate means the application adapts to the current frame rendering performance and boosts or decreases the movement speed of objects to maintain the appearance that objects are moving at a constant velocity. Despite what it seems, this is the most basic form of updating. Progress through the tutorials for superior methods of updating the rendering loop. Note: The cube is black because there is no lighting.
 
 ![](./SampleImages/tutorial_02.png)
 
-# Tutorial: Tutorial 03 - Deterministic Loop {#tutorial03}
+# Tutorial: 03 - Deterministic Loop {#tutorial03}
 This is very similar to Tutorial 02, however it uses a fixed framerate instead of a variable one. There are many reasons to using a fixed framerate instead of a variable one:
  - It is more stable. High framerates (i.e. 10000 fps) cause floating point precision issues in 'timeSinceLast' as it becomes very small. The value may even round to 0!
  - Physics stability, physics and logic simulations don't like variable framerate.
@@ -182,17 +197,17 @@ For more information, see [Fix Your TimeStep!](http://gafferongames.com/game-phy
 
 ![](./SampleImages/tutorial_03.png)
 
-# Tutorial: Tutorial 04 - Interpolation Loop {#tutorial04}
+# Tutorial: 04 - Interpolation Loop {#tutorial04}
 This tutorial demonstrates combined fixed and variable framerate: Logic is executed at 25hz, while graphics are being rendered at a variable rate, interpolating between frames to achieve a smooth result. When OGRE or the GPU is taking too long, you will see a 'frame skip' effect, when the CPU is taking too long to process the Logic code, you will see a 'slow motion' effect. This combines the best of both worlds and is the recommended approach for serious game development. The only two disadvantages from this technique are:
 - We introduce 1 frame of latency.
 - Teleporting may be shown as very fast movement; as the graphics state will try to blend between the last and current position. This can be solved though, by writing to both the previous and current position in case of teleportation. We purposely don't do this to show the effect/'glitch'.
 
 ![](./SampleImages/tutorial_04.png)
 
-# Tutorial: Tutorial 05 - Multithreading Basics {#tutorial05}
+# Tutorial: 05 - Multithreading Basics {#tutorial05}
 This tutorial demonstrates how to setup two update loops: One for graphics, another for logic, each in its own thread. We don't render anything because we will now need to do a robust synchronization for creating, destroying and updating Entities. This is potentially too complex to show in just one tutorial step.
 
-# Tutorial: Tutorial 06 - Multithreading {#tutorial06}
+# Tutorial: 06 - Multithreading {#tutorial06}
 This tutorial demonstrates advanced multithreadingl. We introduce the 'GameEntity' structure which encapsulates a game object data. It contains its graphics (i.e. Entity and SceneNode) and its physics/logic data (a transform, the hkpEntity/btRigidBody pointers, etc). The GameEntityManager is responsible for telling the render thread to create the graphics and delays deleting the GameEntity until all threads are done using it.
 
 ![](./SampleImages/tutorial_06.png)
@@ -220,6 +235,11 @@ This tutorial demonstrates how to setup dynamic cubemapping via the compositor, 
 # Tutorial: EGL Headless {#eglheadless}
 This tutorial demonstrates how to run Ogre in EGL headless, which can be useful for running in a VM or in the Cloud.
 
+# Tutorial: Memory Monitor {#memory}
+This tutorial demonstrates how to monitor consumed GPU (& CPU) memory and how to reduce memory consumption.
+
+For more information see page: [Tunning Memory Consumption And Resources](@ref TuningMemoryResources)
+
 # Tutorial: Open VR {#openVR}
 This tutorial demonstrates the use of Open VR.
 
@@ -244,12 +264,14 @@ This tutorial demonstrates SSAO.
 ![](./SampleImages/tutorial_ssao.png)
 
 # Tutorial: Terra Terrain {#terrain}
-This tutorial is advanced and shows several things working together:
+This tutorial demonstrates a terrain implementation. It is advanced and shows several things working together:
  - Own Hlms implementation to render the terrain
  - Vertex buffer-less rendering: The terrain is generated purely using SV_VertexID tricks and a heightmap texture.
  - Hlms customizations to PBS to make terrain shadows affect regular objects
  - Compute Shaders to generate terrain shadows every frame
  - Common terrain functionality such as loading the heightmap, generating normals, LOD.
+ 
+ For more information see page: [Terra System](@ref TerraSystem)
 
 ![](./SampleImages/tutorial_terrain.png)
 
