@@ -1,5 +1,9 @@
 #version ogre_glsl_ver_330
 
+#ifdef GL
+	#define const
+#endif
+
 #define float2 vec2
 #define float3 vec3
 #define float4 vec4

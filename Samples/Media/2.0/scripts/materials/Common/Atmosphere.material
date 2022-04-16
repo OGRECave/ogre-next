@@ -3,6 +3,7 @@
 fragment_program Ogre/Atmo/NprSky_ps_GLSL glsl
 {
 	source AtmosphereNprSky_ps.glsl
+	preprocessor_defines GL
 	enable_include_header true
 }
 
