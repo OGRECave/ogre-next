@@ -1,6 +1,8 @@
 #include <metal_stdlib>
 using namespace metal;
 
+#define lerp mix
+
 struct PS_INPUT
 {
 	float3 cameraDir;
