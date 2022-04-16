@@ -65,10 +65,19 @@ namespace Ogre
         struct Preset
         {
             float         densityCoeff;
+            float         densityDiffusion;
             float         horizonLimit;  // Most relevant in sunsets and sunrises
             Ogre::Vector3 skyColour;
 
-            Preset() : densityCoeff( 0.27f ), horizonLimit( 0.025f ), skyColour( 0.334f, 0.57f, 1.0f ) {}
+            Preset() :
+                // densityCoeff( 0.27f ),
+                // densityDiffusion( 0.75f ),
+                densityCoeff( 0.47f ),
+                densityDiffusion( 2.0f ),
+                horizonLimit( 0.025f ),
+                skyColour( 0.334f, 0.57f, 1.0f )
+            {
+            }
         };
 
         enum AxisConvention

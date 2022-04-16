@@ -127,17 +127,19 @@ namespace Ogre
             Math::lerp( mPreset.skyColour, Vector3::UNIT_SCALE, sunHeightWeight );
         const float finalMultiplier = 0.5f + Math::smoothstep( 0.02f, 0.4f, sunHeightWeight );
         const Vector4 packedParams1( mieAbsorption, finalMultiplier );
+        const Vector4 packedParams2( mSunDir, mPreset.horizonLimit );
+        const Vector4 packedParams3( mPreset.skyColour, mPreset.densityDiffusion );
 
         GpuProgramParametersSharedPtr psParams = mPass->getFragmentProgramParameters();
 
         psParams->setNamedConstant( "packedParams0", packedParams0 );
-        psParams->setNamedConstant( "skyColour", mPreset.skyColour );
         psParams->setNamedConstant( "skyLightAbsorption",
                                     getSkyRayleighAbsorption( mPreset.skyColour, lightDensity ) );
         psParams->setNamedConstant( "sunAbsorption",
                                     getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, lightDensity ) );
         psParams->setNamedConstant( "packedParams1", packedParams1 );
-        psParams->setNamedConstant( "packedParams2", Vector4( mSunDir, mPreset.horizonLimit ) );
+        psParams->setNamedConstant( "packedParams2", packedParams2 );
+        psParams->setNamedConstant( "packedParams3", packedParams3 );
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::setSky( Ogre::SceneManager *sceneManager, bool bEnabled )

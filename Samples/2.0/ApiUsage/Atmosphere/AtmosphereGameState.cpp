@@ -180,7 +180,9 @@ namespace Demo
             outText += StringConverter::toString( mAzimuth * 180.0f / Math::PI ) + "]";
             outText += "\nU/J to change Density. [";
             outText += StringConverter::toString( mAtmosphere->getPreset().densityCoeff ) + "]";
-            outText += "\nI/K to change Horizon Limit. [";
+            outText += "\nI/K to change Density Diffusion. [";
+            outText += StringConverter::toString( mAtmosphere->getPreset().densityDiffusion ) + "]";
+            outText += "\nO/L to change Horizon Limit. [";
             outText += StringConverter::toString( mAtmosphere->getPreset().horizonLimit ) + "]";
             outText += "\n\nCamera: ";
             str.a( "[", LwString::Float( camPos.x, 2, 2 ), ", ", LwString::Float( camPos.y, 2, 2 ), ", ",
@@ -240,6 +242,17 @@ namespace Demo
         {
             Ogre::AtmosphereNpr::Preset preset = mAtmosphere->getPreset();
             if( arg.keysym.sym == SDLK_i )
+                preset.densityDiffusion += 0.25f;
+            else
+                preset.densityDiffusion -= 0.25f;
+
+            mAtmosphere->setPreset( preset );
+
+        }
+        else if( arg.keysym.sym == SDLK_o || arg.keysym.sym == SDLK_l )
+        {
+            Ogre::AtmosphereNpr::Preset preset = mAtmosphere->getPreset();
+            if( arg.keysym.sym == SDLK_o )
                 preset.horizonLimit += 0.005f;
             else
                 preset.horizonLimit -= 0.005f;

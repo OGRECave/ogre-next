@@ -38,6 +38,7 @@ float3 cameraDir = normalize( inPs.cameraDir );
 
 const float LdotV = max( dot( cameraDir, p_sunDir ), 0.0f );
 
+cameraDir.y += p_densityDiffusion * 0.075f * ( 1.0f - cameraDir.y ) * ( 1.0f - cameraDir.y );
 cameraDir += p_cameraDisplacement.xyz;
 cameraDir = normalize( cameraDir );
 
@@ -54,7 +55,7 @@ const float LdotV360 = dot( cameraDir, p_sunDir ) * 0.5f + 0.5f;
 // ptDensity gets smaller as sunHeight gets bigger
 // ptDensity gets smaller as cameraDir.y gets bigger
 const float ptDensity =
-	p_densityCoeff / pow( max( cameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ), 0.75f );
+	p_densityCoeff / pow( max( cameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ), p_densityDiffusion );
 
 const float sunDisk = getSunDisk( LdotV, p_sunHeight );
 
