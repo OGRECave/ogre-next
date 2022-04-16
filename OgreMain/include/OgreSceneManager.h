@@ -1340,11 +1340,15 @@ namespace Ogre
         TextureGpu          *getCurrentPassDepthTextureNoMsaa() const { return mPassDepthTextureNoMsaa; }
         TextureGpu          *getCurrentRefractionsTexture() const { return mRefractionsTexture; }
 
-        /// Sets an external atmosphere provider. The pointer must stay
-        /// valid while it is set.
-        ///
-        /// Multiple SceneManagers can have the same atmosphere
-        void setAtmosphere( AtmosphereComponent *atmosphere );
+        /** Sets an external atmosphere provider.
+            Multiple SceneManagers can have the same atmosphere
+        @remarks
+            The AtmosphereComponent will call this function.
+            Don't call it directly.
+        @param atmosphere
+            The atmosphere to set. Can be nullptr to unset (a default dummy ptr will be set instead).
+        */
+        void _setAtmosphere( AtmosphereComponent *atmosphere );
 
         /// Gets currently set atmosphere. It's never nullptr.
         AtmosphereComponent *getAtmosphere() { return mAtmosphere; }

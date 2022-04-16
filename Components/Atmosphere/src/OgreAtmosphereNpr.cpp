@@ -55,6 +55,16 @@ namespace Ogre
             mMaterial.reset();
             mPass = 0;
         }
+
+        std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator itor = mSkies.begin();
+        std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator endt = mSkies.end();
+
+        while( itor != endt )
+        {
+            if( itor->first->getAtmosphere() == this )
+                itor->first->_setAtmosphere( nullptr );
+            ++itor;
+        }
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::createMaterial()
@@ -149,9 +159,9 @@ namespace Ogre
 
         sky->setVisible( bEnabled );
         if( bEnabled )
-            sceneManager->setAtmosphere( this );
+            sceneManager->_setAtmosphere( this );
         else
-            sceneManager->setAtmosphere( nullptr );
+            sceneManager->_setAtmosphere( nullptr );
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::destroySky( Ogre::SceneManager *sceneManager )

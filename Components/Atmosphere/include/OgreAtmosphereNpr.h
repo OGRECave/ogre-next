@@ -125,6 +125,8 @@ namespace Ogre
 
         void setPreset( const Preset &preset );
 
+        const Preset &getPreset() const { return mPreset; }
+
         void _update( SceneManager *sceneManager, Camera *camera ) override;
     };
 

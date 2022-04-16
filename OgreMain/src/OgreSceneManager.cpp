@@ -1186,7 +1186,7 @@ namespace Ogre
         mRefractionsTexture = refractionsTexture;
     }
     //-----------------------------------------------------------------------
-    void SceneManager::setAtmosphere( AtmosphereComponent *atmosphere )
+    void SceneManager::_setAtmosphere( AtmosphereComponent *atmosphere )
     {
         if( atmosphere )
             mAtmosphere = atmosphere;
