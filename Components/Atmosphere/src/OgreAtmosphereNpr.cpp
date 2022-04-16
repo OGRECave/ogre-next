@@ -41,6 +41,9 @@ namespace Ogre
         mSunDir( Ogre::Vector3( 0, 1, 1 ).normalisedCopy() ),
         mNormalizedTimeOfDay( std::asin( mSunDir.y ) ),
         mLinkedLight( 0 ),
+        mConvention( Yup ),
+        mAtmosphereSeaLevel( 0.0f ),
+        mAtmosphereHeight( 110.0f * 1000.0f ),  // in meters (actually in units)
         mPass( 0 )
     {
         createMaterial();
@@ -129,12 +132,12 @@ namespace Ogre
 
         psParams->setNamedConstant( "packedParams0", packedParams0 );
         psParams->setNamedConstant( "skyColour", mPreset.skyColour );
-        psParams->setNamedConstant( "sunDir", mSunDir );
         psParams->setNamedConstant( "skyLightAbsorption",
                                     getSkyRayleighAbsorption( mPreset.skyColour, lightDensity ) );
         psParams->setNamedConstant( "sunAbsorption",
                                     getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, lightDensity ) );
         psParams->setNamedConstant( "packedParams1", packedParams1 );
+        psParams->setNamedConstant( "packedParams2", Vector4( mSunDir, mPreset.horizonLimit ) );
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::setSky( Ogre::SceneManager *sceneManager, bool bEnabled )
@@ -240,5 +243,16 @@ namespace Ogre
 
         sky->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
         sky->update();
+
+        {
+            float camHeight = cameraPos[mConvention & 0x03u];
+            camHeight *= ( mConvention & NegationFlag ) ? -1.0f : 1.0f;
+            camHeight = ( camHeight - mAtmosphereSeaLevel ) / mAtmosphereHeight;
+            Vector3 cameraDisplacement( Vector3::ZERO );
+            cameraDisplacement[mConvention & 0x03u] = camHeight;
+
+            GpuProgramParametersSharedPtr psParams = mPass->getFragmentProgramParameters();
+            psParams->setNamedConstant( "cameraDisplacement", cameraDisplacement );
+        }
     }
 }  // namespace Ogre

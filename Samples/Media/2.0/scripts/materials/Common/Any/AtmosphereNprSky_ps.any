@@ -35,9 +35,20 @@ float3 pow3( float3 v, float e )
 
 float3 cameraDir = normalize( inPs.cameraDir );
 // const float3 spherePos = earthRadius * cameraDir;
-cameraDir.y = max( cameraDir.y, 0.025f );
 
 const float LdotV = max( dot( cameraDir, p_sunDir ), 0.0f );
+
+cameraDir += p_cameraDisplacement.xyz;
+cameraDir = normalize( cameraDir );
+
+cameraDir.y = max( cameraDir.y, p_borderLimit );
+
+// It's not a mistake. We do this twice. Doing it before p_borderLimit
+// allows the horizon to shift. Doing it after p_borderLimit lets
+// the sky to get darker as we get upwards.
+cameraDir += p_cameraDisplacement.xyz;
+cameraDir = normalize( cameraDir );
+
 const float LdotV360 = dot( cameraDir, p_sunDir ) * 0.5f + 0.5f;
 
 // ptDensity gets smaller as sunHeight gets bigger
@@ -65,8 +76,8 @@ finalResult += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAb
 finalResult += mie * p_mieAbsorption;
 finalResult *= p_lightDensity;
 
-//const float multiplier = smoothstep( 0.02f, 0.4f, p_sunHeightWeight );
-//finalResult *= 0.5f + multiplier;
+// const float multiplier = smoothstep( 0.02f, 0.4f, p_sunHeightWeight );
+// finalResult *= 0.5f + multiplier;
 finalResult *= p_finalMultiplier;
 finalResult += sunDisk * p_skyLightAbsorption;
 

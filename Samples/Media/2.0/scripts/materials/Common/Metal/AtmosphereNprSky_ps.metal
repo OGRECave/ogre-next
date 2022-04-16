@@ -12,10 +12,11 @@ struct Params
 {
 	float4 packedParams0;
 	float3 skyColour;
-	float3 sunDir;
 	float3 skyLightAbsorption;
 	float3 sunAbsorption;
+	float4 cameraDisplacement;
 	float4 packedParams1;
+	float4 packedParams2;
 };
 
 #define p_densityCoeff		p.packedParams0.x
@@ -23,11 +24,13 @@ struct Params
 #define p_sunHeight			p.packedParams0.z
 #define p_sunHeightWeight	p.packedParams0.w
 #define p_skyColour			p.skyColour
-#define p_sunDir			p.sunDir
 #define p_skyLightAbsorption	p.skyLightAbsorption
 #define p_sunAbsorption		p.sunAbsorption
+#define p_cameraDisplacement	p.cameraDisplacement
 #define p_mieAbsorption		p.packedParams1.xyz
 #define p_finalMultiplier	p.packedParams1.w
+#define p_sunDir			p.packedParams2.xyz
+#define p_borderLimit		p.packedParams2.w
 
 #define HEADER
 #include "AtmosphereNprSky_ps.any"

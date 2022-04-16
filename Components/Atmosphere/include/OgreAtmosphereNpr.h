@@ -65,9 +65,22 @@ namespace Ogre
         struct Preset
         {
             float         densityCoeff;
+            float         horizonLimit;  // Most relevant in sunsets and sunrises
             Ogre::Vector3 skyColour;
 
-            Preset() : densityCoeff( 0.27f ), skyColour( 0.334f, 0.57f, 1.0f ) {}
+            Preset() : densityCoeff( 0.27f ), horizonLimit( 0.025f ), skyColour( 0.334f, 0.57f, 1.0f ) {}
+        };
+
+        enum AxisConvention
+        {
+            Xup,
+            Yup,
+            Zup,
+            NegationFlag = ( 1u << 2u ),
+            NegXup = Xup | NegationFlag,
+            NegYup = Yup | NegationFlag,
+            NegZup = Zup | NegationFlag,
+
         };
 
     protected:
@@ -77,6 +90,26 @@ namespace Ogre
         float  mNormalizedTimeOfDay;
         Light *mLinkedLight;
 
+    public:
+        /// PUBLIC VARIABLE. This variable can be altered directly.
+        /// Changes are reflected immediately.
+        AxisConvention mConvention;
+        /// When camera's height == mAtmosphereSeaLevel, the camera is considered to be at the ground
+        /// i.e. camera_height - mAtmosphereSeaLevel = 0
+        ///
+        /// Regarding the unit of measurement, see mAtmosphereHeight
+        float mAtmosphereSeaLevel;
+        /// How big is the "atmosphere". Earth's thermosphere is at about 110 km.
+        ///
+        /// This value must be in "units". If your engine stores the camera in millimeters,
+        /// this value must be in millimeters. If your engine uses meters, this value must
+        /// be in meters.
+        ///
+        /// Thus the visible atmosphere is in range
+        /// [mAtmosphereSeaLevel; mAtmosphereSeaLevel + mAtmosphereHeight)
+        float mAtmosphereHeight;
+
+    protected:
         MaterialPtr         mMaterial;
         Pass *ogre_nullable mPass;
 

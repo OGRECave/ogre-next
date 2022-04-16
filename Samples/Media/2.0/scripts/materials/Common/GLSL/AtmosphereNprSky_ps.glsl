@@ -21,10 +21,11 @@ out vec4 fragColour;
 vulkan( layout( ogre_P0 ) uniform Params { )
 	uniform float4 packedParams0;
 	uniform float3 skyColour;
-	uniform float3 sunDir;
 	uniform float3 skyLightAbsorption;
 	uniform float3 sunAbsorption;
+	uniform float4 cameraDisplacement;
 	uniform float4 packedParams1;
+	uniform float4 packedParams2;
 vulkan( }; )
 
 #define p_densityCoeff		packedParams0.x
@@ -32,11 +33,13 @@ vulkan( }; )
 #define p_sunHeight			packedParams0.z
 #define p_sunHeightWeight	packedParams0.w
 #define p_skyColour			skyColour
-#define p_sunDir			sunDir
 #define p_skyLightAbsorption	skyLightAbsorption
 #define p_sunAbsorption		sunAbsorption
+#define p_cameraDisplacement	cameraDisplacement
 #define p_mieAbsorption		packedParams1.xyz
 #define p_finalMultiplier	packedParams1.w
+#define p_sunDir			packedParams2.xyz
+#define p_borderLimit		packedParams2.w
 
 #define HEADER
 #include "AtmosphereNprSky_ps.any"
