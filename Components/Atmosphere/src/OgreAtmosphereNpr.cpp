@@ -48,14 +48,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     AtmosphereNpr::~AtmosphereNpr()
     {
-        if( mMaterial )
-        {
-            MaterialManager &materialManager = MaterialManager::getSingleton();
-            materialManager.remove( mMaterial );
-            mMaterial.reset();
-            mPass = 0;
-        }
-
         std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator itor = mSkies.begin();
         std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator endt = mSkies.end();
 
@@ -63,7 +55,21 @@ namespace Ogre
         {
             if( itor->first->getAtmosphere() == this )
                 itor->first->_setAtmosphere( nullptr );
+
+            itor->second->detachFromParent();
+            OGRE_DELETE itor->second;
+
             ++itor;
+        }
+
+        mSkies.clear();
+
+        if( mMaterial )
+        {
+            MaterialManager &materialManager = MaterialManager::getSingleton();
+            materialManager.remove( mMaterial );
+            mMaterial.reset();
+            mPass = 0;
         }
     }
     //-------------------------------------------------------------------------
