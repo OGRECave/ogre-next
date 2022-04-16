@@ -208,6 +208,7 @@ namespace Ogre
         mSunDir.normalise();
 
         mNormalizedTimeOfDay = normalizedTimeOfDay;
+        mNormalizedTimeOfDay = std::min( normalizedTimeOfDay, 1.0f - 1e-6f );
 
         setPackedParams();
 
