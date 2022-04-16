@@ -19,7 +19,7 @@ struct PS_INPUT
 #define p_densityDiffusion	packedParams3.w
 
 #define HEADER
-#include "AtmosphereNprSky_ps.any"
+#include "AtmosphereNprSky_piece_ps.any"
 #undef HEADER
 
 float4 main
@@ -36,7 +36,7 @@ float4 main
 {
 	float4 fragColour;
 
-	#include "AtmosphereNprSky_ps.any"
+	#include "AtmosphereNprSky_piece_ps.any"
 
 	fragColour.xyz = finalResult;
 	fragColour.w = 1.0f;

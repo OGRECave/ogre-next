@@ -43,12 +43,12 @@ vulkan( }; )
 #define p_densityDiffusion	packedParams3.w
 
 #define HEADER
-#include "AtmosphereNprSky_ps.any"
+#include "AtmosphereNprSky_piece_ps.any"
 #undef HEADER
 
 void main()
 {
-	#include "AtmosphereNprSky_ps.any"
+	#include "AtmosphereNprSky_piece_ps.any"
 
 	fragColour.xyz = finalResult;
 	fragColour.w = 1.0f;
