@@ -114,7 +114,8 @@ namespace Ogre
         if( !mMaterial )
         {
             OGRE_EXCEPT( Exception::ERR_FILE_NOT_FOUND,
-                         "To use the sky, bundle the resources included in Samples/Media/Common",
+                         "To use the sky, bundle the resources included in Samples/Atmosphere and "
+                         "Samples/Media/Hlms/Pbs/Any/Atmosphere",
                          "AtmosphereNpr::createMaterial" );
         }
 
