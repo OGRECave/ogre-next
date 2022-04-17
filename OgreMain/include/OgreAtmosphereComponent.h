@@ -35,15 +35,28 @@ Torus Knot Software Ltd.
 
 namespace Ogre
 {
-	class _OgreExport AtmosphereComponent
-	{
-	public:
-		virtual ~AtmosphereComponent();
+    class _OgreExport AtmosphereComponent
+    {
+    public:
+        virtual ~AtmosphereComponent();
 
-		/// Called when the scene manager wants to render and needs the component
-		/// to update its buffers
-		virtual void _update( SceneManager *sceneManager, Camera *camera ) = 0;
-	};
+        /// Indicates Hlms implementations this component has Hlms integration
+        virtual bool providesHlmsCode() const { return true; }
+
+        /// Returns getNumConstBuffersSlots
+        virtual uint32 preparePassHash( Hlms *hlms, size_t constBufferSlot ) = 0;
+
+        /// How many additional const buffers are required in our Hlms integration
+        virtual uint32 getNumConstBuffersSlots() const = 0;
+
+        /// Tells the component to bind the buffers
+        /// Returns getNumConstBuffersSlots
+        virtual uint32 bindConstBuffers( CommandBuffer *commandBuffer, size_t slotIdx ) = 0;
+
+        /// Called when the scene manager wants to render and needs the component
+        /// to update its buffers
+        virtual void _update( SceneManager *sceneManager, Camera *camera ) = 0;
+    };
 }  // namespace Ogre
 
 #endif

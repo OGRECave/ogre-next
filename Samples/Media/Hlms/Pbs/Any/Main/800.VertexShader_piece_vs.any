@@ -281,6 +281,8 @@
 	@insertpiece( DoShadowReceiveVS )
 	@insertpiece( DoShadowCasterVS )
 
+	@insertpiece( AtmoSkyFog )
+
 	/// hlms_uv_count will be 0 on shadow caster passes w/out alpha test
 	@foreach( hlms_uv_count, n )
 		outVs.uv@n = inVs_uv@n;@end

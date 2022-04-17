@@ -973,6 +973,7 @@ namespace Ogre
         static const IdString UseSsr;
         // Per pass. Related with ScreenSpaceRefractions
         static const IdString SsRefractionsAvailable;
+        static const IdString Fog;
         static const IdString EnableVpls;
         static const IdString ForwardPlus;
         static const IdString ForwardPlusFlipY;

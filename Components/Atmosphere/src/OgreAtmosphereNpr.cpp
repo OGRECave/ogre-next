@@ -28,24 +28,48 @@ THE SOFTWARE.
 
 #include "OgreAtmosphereNpr.h"
 
+#include "CommandBuffer/OgreCbShaderBuffer.h"
+#include "CommandBuffer/OgreCommandBuffer.h"
 #include "OgreCamera.h"
+#include "OgreHlms.h"
 #include "OgreMaterialManager.h"
 #include "OgrePass.h"
 #include "OgreRectangle2D2.h"
 #include "OgreSceneManager.h"
+#include "OgreShaderPrimitives.h"
 #include "OgreTechnique.h"
+#include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
-    AtmosphereNpr::AtmosphereNpr() :
+    struct AtmoSettingsGpu
+    {
+        float densityCoeff;
+        float lightDensity;
+        float sunHeight;
+        float sunHeightWeight;
+
+        float4 skyLightAbsorption;
+        float4 sunAbsorption;
+        float4 cameraDisplacement;
+        float4 packedParams1;
+        float4 packedParams2;
+        float4 packedParams3;
+    };
+
+    AtmosphereNpr::AtmosphereNpr( VaoManager *vaoManager ) :
         mSunDir( Ogre::Vector3( 0, 1, 1 ).normalisedCopy() ),
         mNormalizedTimeOfDay( std::asin( mSunDir.y ) ),
         mLinkedLight( 0 ),
         mConvention( Yup ),
         mAtmosphereSeaLevel( 0.0f ),
         mAtmosphereHeight( 110.0f * 1000.0f ),  // in meters (actually in units)
-        mPass( 0 )
+        mPass( 0 ),
+        mHlmsBuffer( 0 ),
+        mVaoManager( vaoManager )
     {
+        mHlmsBuffer = vaoManager->createConstBuffer( sizeof( AtmoSettingsGpu ), BT_DEFAULT, 0, false );
         createMaterial();
     }
     //-------------------------------------------------------------------------
@@ -74,6 +98,9 @@ namespace Ogre
             mMaterial.reset();
             mPass = 0;
         }
+
+        mVaoManager->destroyConstBuffer( mHlmsBuffer );
+        mHlmsBuffer = 0;
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::createMaterial()
@@ -246,15 +273,65 @@ namespace Ogre
         sky->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
         sky->update();
 
+        Vector3 cameraDisplacement( Vector3::ZERO );
         {
             float camHeight = cameraPos[mConvention & 0x03u];
             camHeight *= ( mConvention & NegationFlag ) ? -1.0f : 1.0f;
             camHeight = ( camHeight - mAtmosphereSeaLevel ) / mAtmosphereHeight;
-            Vector3 cameraDisplacement( Vector3::ZERO );
             cameraDisplacement[mConvention & 0x03u] = camHeight;
 
             GpuProgramParametersSharedPtr psParams = mPass->getFragmentProgramParameters();
             psParams->setNamedConstant( "cameraDisplacement", cameraDisplacement );
         }
+
+        AtmoSettingsGpu atmoSettingsGpu;
+
+        const float sunHeight = std::sin( mNormalizedTimeOfDay * Math::PI );
+        const float sunHeightWeight = std::exp2( -1.0f / sunHeight );
+        // Gets smaller as sunHeight gets bigger
+        const float lightDensity =
+            mPreset.densityCoeff / std::pow( std::max( sunHeight, 0.0035f ), 0.75f );
+
+        atmoSettingsGpu.densityCoeff = mPreset.densityCoeff;
+        atmoSettingsGpu.lightDensity = lightDensity;
+        atmoSettingsGpu.sunHeight = sunHeight;
+        atmoSettingsGpu.sunHeightWeight = sunHeightWeight;
+
+        const Vector3 mieAbsorption =
+            std::pow( std::max( 1.0f - lightDensity, 0.1f ), 4.0f ) *
+            Math::lerp( mPreset.skyColour, Vector3::UNIT_SCALE, sunHeightWeight );
+        const float finalMultiplier = 0.5f + Math::smoothstep( 0.02f, 0.4f, sunHeightWeight );
+        const Vector4 packedParams1( mieAbsorption, finalMultiplier );
+        const Vector4 packedParams2( mSunDir, mPreset.horizonLimit );
+        const Vector4 packedParams3( mPreset.skyColour, mPreset.densityDiffusion );
+
+        atmoSettingsGpu.skyLightAbsorption =
+            Vector4( getSkyRayleighAbsorption( mPreset.skyColour, lightDensity ) );
+        atmoSettingsGpu.sunAbsorption =
+            Vector4( getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, lightDensity ) );
+        atmoSettingsGpu.cameraDisplacement = Vector4( cameraDisplacement );
+        atmoSettingsGpu.packedParams1 = packedParams1;
+        atmoSettingsGpu.packedParams2 = packedParams2;
+        atmoSettingsGpu.packedParams3 = packedParams3;
+
+        mHlmsBuffer->upload( &atmoSettingsGpu, 0u, sizeof( atmoSettingsGpu ) );
+    }
+    //-------------------------------------------------------------------------
+    uint32 AtmosphereNpr::preparePassHash( Hlms *hlms, size_t constBufferSlot )
+    {
+        hlms->_setProperty( HlmsBaseProp::Fog, 1 );
+        hlms->_setProperty( "atmosky_npr", int32( constBufferSlot ) );
+        return 1u;
+    }
+    //-------------------------------------------------------------------------
+    uint32 AtmosphereNpr::getNumConstBuffersSlots() const { return 1u; }
+    //-------------------------------------------------------------------------
+    uint32 AtmosphereNpr::bindConstBuffers( CommandBuffer *commandBuffer, size_t slotIdx )
+    {
+        *commandBuffer->addCommand<CbShaderBuffer>() =
+            CbShaderBuffer( VertexShader, uint16( slotIdx + 1u ), mHlmsBuffer, 0,
+                            (uint32)mHlmsBuffer->getTotalSizeBytes() );
+
+        return 1u;
     }
 }  // namespace Ogre

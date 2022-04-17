@@ -86,9 +86,17 @@ namespace Ogre
 {
     AtmosphereComponent::~AtmosphereComponent() {}
 
-    class NullAtmosphereComponent final : public AtmosphereComponent
+    class _OgrePrivate NullAtmosphereComponent final : public AtmosphereComponent
     {
     public:
+        bool providesHlmsCode() const override { return false; }
+
+        uint32 preparePassHash( Hlms *, size_t ) override { return 0u; }
+
+        uint32 getNumConstBuffersSlots() const override { return 0u; }
+
+        uint32 bindConstBuffers( CommandBuffer *, size_t ) override { return 0u; }
+
         void _update( SceneManager *sceneManager, Camera *camera ) override;
     };
 

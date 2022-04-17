@@ -122,6 +122,10 @@ namespace Ogre
         MaterialPtr         mMaterial;
         Pass *ogre_nullable mPass;
 
+        /// Contains all settings in a GPU buffer for Hlms to consume
+        ConstBufferPacked *mHlmsBuffer;
+        VaoManager        *mVaoManager;
+
         std::map<Ogre::SceneManager *, Rectangle2D *> mSkies;
 
         // We must clone the material in case there's more than one
@@ -131,7 +135,7 @@ namespace Ogre
         void setPackedParams();
 
     public:
-        AtmosphereNpr();
+        AtmosphereNpr( VaoManager *vaoManager );
         ~AtmosphereNpr() override;
 
         void setSky( Ogre::SceneManager *sceneManager, bool bEnabled );
@@ -170,6 +174,12 @@ namespace Ogre
         const Preset &getPreset() const { return mPreset; }
 
         void _update( SceneManager *sceneManager, Camera *camera ) override;
+
+        uint32 preparePassHash( Hlms *hlms, size_t constBufferSlot ) override;
+
+        uint32 getNumConstBuffersSlots() const override;
+
+        uint32 bindConstBuffers( CommandBuffer *commandBuffer, size_t slotIdx ) override;
     };
 
     OGRE_ASSUME_NONNULL_END

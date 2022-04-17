@@ -137,7 +137,8 @@ namespace Demo
         light->setDirection( Ogre::Vector3( -1, -1, 1 ).normalisedCopy() );
         light->setAttenuationBasedOnRadius( 10.0f, 0.01f );
 
-        mAtmosphere = OGRE_NEW Ogre::AtmosphereNpr();
+        mAtmosphere =
+            OGRE_NEW Ogre::AtmosphereNpr( sceneManager->getDestinationRenderSystem()->getVaoManager() );
         mAtmosphere->setLight( mSunLight );
         mAtmosphere->setSky( sceneManager, true );
 
@@ -247,7 +248,6 @@ namespace Demo
                 preset.densityDiffusion -= 0.25f;
 
             mAtmosphere->setPreset( preset );
-
         }
         else if( arg.keysym.sym == SDLK_o || arg.keysym.sym == SDLK_l )
         {

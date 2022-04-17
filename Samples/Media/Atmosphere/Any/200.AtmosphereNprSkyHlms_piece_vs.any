@@ -1,0 +1,40 @@
+// NPR = Non-Physically-based Rendering Atmo
+
+//#include "SyntaxHighlightingMisc.h"
+
+@property( atmosky_npr )
+
+@piece( AtmoNprSkyStructDecl )
+	struct AtmoSettings
+	{
+		float densityCoeff;
+		float lightDensity;
+		float sunHeight;
+		float sunHeightWeight;
+
+		float4 skyLightAbsorption;
+		float4 sunAbsorption;
+		float4 cameraDisplacement;
+		float4 packedParams1;
+		float4 packedParams2;
+		float4 packedParams3;
+	};
+
+	@property( syntax != metal )
+		CONST_BUFFER( AtmoSettingsBuf, 1 )
+		{
+			AtmoSettings atmoSettings;
+		};
+	@else
+		@piece( AtmoNprSkyDecl )
+			, constant AtmoSettings *atmoSettings [[buffer(CONST_SLOT_START+@value(atmosky_npr))]]
+		@end
+	@end
+@end
+
+
+@piece( DoAtmoNprSky )
+	@insertpiece( AtmoNprSkyCodeInternal )
+@end
+
+@end

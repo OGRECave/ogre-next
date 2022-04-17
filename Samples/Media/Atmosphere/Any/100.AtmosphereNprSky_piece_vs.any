@@ -1,8 +1,15 @@
 // NPR = Non-Physically-based Rendering Atmo
+//
+// This file is used by both Hlms and low level materials
+// Which is why Hlms syntax is in comments
 
 //#include "SyntaxHighlightingMisc.h"
 
+// @property( hlms_atmosky_npr )
+
 #ifdef HEADER
+
+// @piece( AtmoNprSkyFuncs )
 
 float getSunDisk( const float LdotV, const float sunY )
 {
@@ -31,10 +38,14 @@ float3 pow3( float3 v, float e )
 	return float3( pow( v.x, e ), pow( v.y, e ), pow( v.z, e ) );
 }
 
+// @endpiece
+
 #else
 
 float3 cameraDir = normalize( inPs.cameraDir );
 // const float3 spherePos = earthRadius * cameraDir;
+
+// @piece( AtmoNprSkyCodeInternal )
 
 const float LdotV = max( dot( cameraDir, p_sunDir ), 0.0f );
 
@@ -82,4 +93,8 @@ finalResult *= p_lightDensity;
 finalResult *= p_finalMultiplier;
 finalResult += sunDisk * p_skyLightAbsorption;
 
+// @endpiece
+
 #endif
+
+// @end !hlms_atmosky_npr
