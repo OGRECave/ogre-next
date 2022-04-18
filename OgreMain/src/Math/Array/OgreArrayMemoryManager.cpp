@@ -250,6 +250,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void ArrayMemoryManager::neverDefragment()
+    {
+        mCleanupThreshold = std::numeric_limits<size_t>::max();
+    }
+    //-----------------------------------------------------------------------------------
     void ArrayMemoryManager::defragment()
     {
         // Sort, last values first. This may improve performance in some

@@ -246,6 +246,10 @@ namespace Ogre
         mRadialDensityMask = 0;
 
         fireSceneManagerDestroyed();
+        for( size_t i = 0; i < NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+        {
+            mNodeMemoryManager[i].neverDefragment();
+        }
         clearScene( true, false );
         destroyAllCameras();
 

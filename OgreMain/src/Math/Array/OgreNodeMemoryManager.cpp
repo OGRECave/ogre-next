@@ -182,6 +182,18 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void NodeMemoryManager::neverDefragment()
+    {
+        ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
+        ArrayMemoryManagerVec::iterator endt = mMemoryManagers.end();
+
+        while( itor != endt )
+        {
+            itor->neverDefragment();
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void NodeMemoryManager::shrinkToFit()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
