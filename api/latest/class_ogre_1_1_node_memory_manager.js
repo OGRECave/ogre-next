@@ -15,6 +15,7 @@ var class_ogre_1_1_node_memory_manager =
     [ "migrateTo", "class_ogre_1_1_node_memory_manager.html#a5e020556390ffe4f5402d3600211389d", null ],
     [ "migrateToAndAttach", "class_ogre_1_1_node_memory_manager.html#a4829385f3716fde5e5d535d47f9b4880", null ],
     [ "migrateToAndDetach", "class_ogre_1_1_node_memory_manager.html#a31406dd057c91b4679a3e00176f8f9c9", null ],
+    [ "neverDefragment", "class_ogre_1_1_node_memory_manager.html#a27c1a8cd68e6276e07c8806e5248b65b", null ],
     [ "nodeAttached", "class_ogre_1_1_node_memory_manager.html#a246cf28ff463b0233b066c8e2e23d592", null ],
     [ "nodeCreated", "class_ogre_1_1_node_memory_manager.html#a9decd63264c545614941e112519e2f28", null ],
     [ "nodeDestroyed", "class_ogre_1_1_node_memory_manager.html#ab55ba5e4a967cdf32b9de5e062d26582", null ],

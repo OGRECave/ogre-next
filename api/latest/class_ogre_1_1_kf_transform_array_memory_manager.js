@@ -16,6 +16,7 @@ var class_ogre_1_1_kf_transform_array_memory_manager =
     [ "getUsedMemory", "class_ogre_1_1_kf_transform_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881", null ],
     [ "getWastedMemory", "class_ogre_1_1_kf_transform_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032", null ],
     [ "initialize", "class_ogre_1_1_kf_transform_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5", null ],
+    [ "neverDefragment", "class_ogre_1_1_kf_transform_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756", null ],
     [ "shrinkToFit", "class_ogre_1_1_kf_transform_array_memory_manager.html#a1885069fab42349469ea51ea34590bad", null ],
     [ "ElementsMemSize", "class_ogre_1_1_kf_transform_array_memory_manager.html#a5194e2c15170c66442f03c2d5109a74e", null ],
     [ "MAX_MEMORY_SLOTS", "class_ogre_1_1_kf_transform_array_memory_manager.html#a738870646404c47464027863b9dea16c", null ]

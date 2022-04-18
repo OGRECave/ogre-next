@@ -170,6 +170,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad680fce37ec7058f94a5a69be2e2f4c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5">initialize</a> ()</td></tr>
 <tr class="memdesc:ad680fce37ec7058f94a5a69be2e2f4c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes mMemoryPools.  <a href="class_ogre_1_1_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5">More...</a><br /></td></tr>
 <tr class="separator:ad680fce37ec7058f94a5a69be2e2f4c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a443f00a249cbbc4b6edf56632c5e2756"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756">neverDefragment</a> ()</td></tr>
+<tr class="memdesc:a443f00a249cbbc4b6edf56632c5e2756"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prevent defragmentation from ever happening.  <a href="class_ogre_1_1_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756">More...</a><br /></td></tr>
+<tr class="separator:a443f00a249cbbc4b6edf56632c5e2756"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1885069fab42349469ea51ea34590bad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a1885069fab42349469ea51ea34590bad">shrinkToFit</a> ()</td></tr>
 <tr class="memdesc:a1885069fab42349469ea51ea34590bad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defragments memory, then reallocates a smaller pool that tightly fits the current number of objects.  <a href="class_ogre_1_1_array_memory_manager.html#a1885069fab42349469ea51ea34590bad">More...</a><br /></td></tr>
 <tr class="separator:a1885069fab42349469ea51ea34590bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -622,6 +625,33 @@ Static Public Attributes</h2></td></tr>
 
 <p>Initializes mMemoryPools. </p>
 <p >Once it has been called, <a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0" title="Destroys the memory ptrs.">destroy()</a> <b>must</b> be called. @See destroy </p><dl class="section remark"><dt>Remarks</dt><dd>The destructor won't free the data, if you don't call destroy, memory will leak. Calling initialize twice is possible and won't leak, but will free the previous memory ptrs without calling the registered RebaseListener. So if there were slots in use, their pointers will become dangling. An assert will trigger if this happens. </dd></dl>
+
+</div>
+</div>
+<a id="a443f00a249cbbc4b6edf56632c5e2756" name="a443f00a249cbbc4b6edf56632c5e2756"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a443f00a249cbbc4b6edf56632c5e2756">&#9670;&nbsp;</a></span>neverDefragment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::ArrayMemoryManager::neverDefragment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Prevent defragmentation from ever happening. </p>
 
 </div>
 </div>

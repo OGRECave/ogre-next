@@ -1,5 +1,12 @@
 var NAVTREEINDEX267 =
 {
+"struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html#a5954e93eecb14073a924450b86855992":[7,0,0,923,0,4],
+"struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html#a611b4613147837f5f6680ede44b1e60b":[6,0,0,950,0,2],
+"struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html#a611b4613147837f5f6680ede44b1e60b":[7,0,0,923,0,2],
+"struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html#af8d1ef7f342d95472c83ee5ab403548a":[6,0,0,950,0,1],
+"struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html#af8d1ef7f342d95472c83ee5ab403548a":[7,0,0,923,0,1],
+"struct_ogre_1_1_voxelizer_bucket.html":[7,0,0,924],
+"struct_ogre_1_1_voxelizer_bucket.html":[6,0,0,951],
 "struct_ogre_1_1_voxelizer_bucket.html#a23c380ca1220b203228d7ceeb63c93ff":[7,0,0,924,4],
 "struct_ogre_1_1_voxelizer_bucket.html#a23c380ca1220b203228d7ceeb63c93ff":[6,0,0,951,4],
 "struct_ogre_1_1_voxelizer_bucket.html#a3c1cad6128a10f78309502c1cc610790":[7,0,0,924,0],
@@ -242,12 +249,5 @@ var NAVTREEINDEX267 =
 "struct_ogre_1_1_vulkan_queue_1_1_per_frame_data.html#ab594d1a54592764985fe1bb518c1162a":[7,0,0,964,0,2],
 "struct_ogre_1_1_vulkan_queue_1_1_per_frame_data.html#abce447281757ce61c0e85567cdec91b3":[6,0,0,991,0,3],
 "struct_ogre_1_1_vulkan_queue_1_1_per_frame_data.html#abce447281757ce61c0e85567cdec91b3":[7,0,0,964,0,3],
-"struct_ogre_1_1_vulkan_queue_1_1_per_frame_data.html#ae8f51a5ff551f2369d8a55228567457d":[6,0,0,991,0,0],
-"struct_ogre_1_1_vulkan_queue_1_1_per_frame_data.html#ae8f51a5ff551f2369d8a55228567457d":[7,0,0,964,0,0],
-"struct_ogre_1_1_vulkan_raw_buffer.html":[7,0,0,965],
-"struct_ogre_1_1_vulkan_raw_buffer.html":[6,0,0,992],
-"struct_ogre_1_1_vulkan_raw_buffer.html#a062fb507f7bb239eaa8ff90e84d956d3":[6,0,0,992,6],
-"struct_ogre_1_1_vulkan_raw_buffer.html#a062fb507f7bb239eaa8ff90e84d956d3":[7,0,0,965,6],
-"struct_ogre_1_1_vulkan_raw_buffer.html#a105fc067a0f620d6248d5dd8ddd7c32a":[7,0,0,965,0],
-"struct_ogre_1_1_vulkan_raw_buffer.html#a105fc067a0f620d6248d5dd8ddd7c32a":[6,0,0,992,0]
+"struct_ogre_1_1_vulkan_queue_1_1_per_frame_data.html#ae8f51a5ff551f2369d8a55228567457d":[6,0,0,991,0,0]
 };

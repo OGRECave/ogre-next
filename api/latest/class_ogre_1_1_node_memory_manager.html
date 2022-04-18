@@ -148,6 +148,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a31406dd057c91b4679a3e00176f8f9c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#a31406dd057c91b4679a3e00176f8f9c9">migrateToAndDetach</a> (<a class="el" href="struct_ogre_1_1_transform.html">Transform</a> &amp;inOutTransform, size_t depth, <a class="el" href="class_ogre_1_1_node_memory_manager.html">NodeMemoryManager</a> *dstNodeMemoryManager)</td></tr>
 <tr class="memdesc:a31406dd057c91b4679a3e00176f8f9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">It's <em>almost</em> the same as calling: this-&gt;nodeDettached( transform, depth ); this-&gt;migrateTo( transform, 0, dstNodeMemoryManager ); Without unnecessary transfers and setting the correct dstNodeMemoryManager-&gt;mDummyNode.  <a href="class_ogre_1_1_node_memory_manager.html#a31406dd057c91b4679a3e00176f8f9c9">More...</a><br /></td></tr>
 <tr class="separator:a31406dd057c91b4679a3e00176f8f9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27c1a8cd68e6276e07c8806e5248b65b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#a27c1a8cd68e6276e07c8806e5248b65b">neverDefragment</a> ()</td></tr>
+<tr class="memdesc:a27c1a8cd68e6276e07c8806e5248b65b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prevent defragmentation from ever happening.  <a href="class_ogre_1_1_node_memory_manager.html#a27c1a8cd68e6276e07c8806e5248b65b">More...</a><br /></td></tr>
+<tr class="separator:a27c1a8cd68e6276e07c8806e5248b65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a246cf28ff463b0233b066c8e2e23d592"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#a246cf28ff463b0233b066c8e2e23d592">nodeAttached</a> (<a class="el" href="struct_ogre_1_1_transform.html">Transform</a> &amp;outTransform, size_t depth)</td></tr>
 <tr class="memdesc:a246cf28ff463b0233b066c8e2e23d592"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests memory for the given transform to be attached, transferring existing values inside to the new memory block.  <a href="class_ogre_1_1_node_memory_manager.html#a246cf28ff463b0233b066c8e2e23d592">More...</a><br /></td></tr>
 <tr class="separator:a246cf28ff463b0233b066c8e2e23d592"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -681,6 +684,25 @@ Public Member Functions</h2></td></tr>
 
 <p>It's <em>almost</em> the same as calling: this-&gt;nodeDettached( transform, depth ); this-&gt;migrateTo( transform, 0, dstNodeMemoryManager ); Without unnecessary transfers and setting the correct dstNodeMemoryManager-&gt;mDummyNode. </p>
 <p >instead of this-&gt;mDummyNode. </p>
+
+</div>
+</div>
+<a id="a27c1a8cd68e6276e07c8806e5248b65b" name="a27c1a8cd68e6276e07c8806e5248b65b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27c1a8cd68e6276e07c8806e5248b65b">&#9670;&nbsp;</a></span>neverDefragment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::NodeMemoryManager::neverDefragment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prevent defragmentation from ever happening. </p>
 
 </div>
 </div>
