@@ -20,9 +20,9 @@
 		float4 packedParams3;
 
 		float fogDensity;
+		float fogBreakMinBrightness;
+		float fogBreakFalloff;
 		float padding0;
-		float padding1;
-		float padding2;
 	};
 
 	@property( syntax != metal )

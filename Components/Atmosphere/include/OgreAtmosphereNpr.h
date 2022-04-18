@@ -68,7 +68,23 @@ namespace Ogre
             float         densityDiffusion;
             float         horizonLimit;  // Most relevant in sunsets and sunrises
             Ogre::Vector3 skyColour;
-            float         fogDensity;  // Affects objects' fog (not sky)
+            /// Affects objects' fog (not sky)
+            float fogDensity;
+            /// Very bright objects (i.e. reflect lots of light)
+            /// manage to "breakthrough" the fog.
+            ///
+            /// A value of fogBreakMinBrightness = 3 means that pixels
+            /// that have a luminance of >= 3 (i.e. in HDR) will start
+            /// becoming more visible
+            ///
+            /// Range: [0; inf)
+            float fogBreakMinBrightness;
+            /// How fast bright objects appear in fog.
+            /// Small values make objects appear very slowly after luminance > fogBreakMinBrightness
+            /// Large values make objects appear very quickly
+            ///
+            /// Range: (0; inf)
+            float fogBreakFalloff;
 
             Preset() :
                 // densityCoeff( 0.27f ),
@@ -77,7 +93,9 @@ namespace Ogre
                 densityDiffusion( 2.0f ),
                 horizonLimit( 0.025f ),
                 skyColour( 0.334f, 0.57f, 1.0f ),
-                fogDensity( 0.02f )
+                fogDensity( 0.0001f ),
+                fogBreakMinBrightness( 0.25f ),
+                fogBreakFalloff( 0.1f )
             {
             }
         };

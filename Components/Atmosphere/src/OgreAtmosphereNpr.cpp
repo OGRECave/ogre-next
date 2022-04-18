@@ -58,7 +58,9 @@ namespace Ogre
         float4 packedParams3;
 
         float fogDensity;
-        float padding[3];
+        float fogBreakMinBrightness;
+        float fogBreakFalloff;
+        float padding;
     };
 
     AtmosphereNpr::AtmosphereNpr( VaoManager *vaoManager ) :
@@ -318,6 +320,8 @@ namespace Ogre
         atmoSettingsGpu.packedParams2 = packedParams2;
         atmoSettingsGpu.packedParams3 = packedParams3;
         atmoSettingsGpu.fogDensity = mPreset.fogDensity;
+        atmoSettingsGpu.fogBreakMinBrightness = mPreset.fogBreakMinBrightness * mPreset.fogBreakFalloff;
+        atmoSettingsGpu.fogBreakFalloff = -mPreset.fogBreakFalloff;
 
         mHlmsBuffer->upload( &atmoSettingsGpu, 0u, sizeof( atmoSettingsGpu ) );
     }
