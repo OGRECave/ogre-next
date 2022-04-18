@@ -40,6 +40,7 @@
 
 #include "System/Android/AndroidSystems.h"
 
+#include "OgreAtmosphereComponent.h"
 #ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
 #    include "OgreAtmosphereNpr.h"
 #endif

@@ -113,7 +113,7 @@ namespace Ogre
                 if( is_legal )
                 {
                     float bitrate = 128.0f / ( blockdims[i] * blockdims[j] );
-                    float bitrate_error = fabs( bitrate - targetBitrate );
+                    float bitrate_error = std::abs( bitrate - targetBitrate );
                     float aspect = (float)blockdims[j] / blockdims[i];
                     if( bitrate_error < best_error ||
                         ( bitrate_error == best_error && aspect < aspect_of_best ) )
@@ -151,7 +151,7 @@ namespace Ogre
                     if( is_legal )
                     {
                         float bitrate = 128.0f / ( blockdims[i] * blockdims[j] * blockdims[k] );
-                        float bitrate_error = fabs( bitrate - targetBitrate );
+                        float bitrate_error = std::abs( bitrate - targetBitrate );
                         float aspect = (float)blockdims[k] / blockdims[j] +
                                        (float)blockdims[j] / blockdims[i] +
                                        (float)blockdims[k] / blockdims[i];
