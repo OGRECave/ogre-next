@@ -81,8 +81,6 @@ atmoColour += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAbs
 atmoColour += mie * p_mieAbsorption;
 atmoColour *= p_lightDensity;
 
-// const float multiplier = smoothstep( 0.02f, 0.4f, p_sunHeightWeight );
-// atmoColour *= 0.5f + multiplier;
 atmoColour *= p_finalMultiplier;
 atmoColour += sunDisk * p_skyLightAbsorption;
 

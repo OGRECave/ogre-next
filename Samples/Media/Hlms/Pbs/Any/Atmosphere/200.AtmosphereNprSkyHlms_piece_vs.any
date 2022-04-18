@@ -6,11 +6,6 @@
 
 // @piece( DeclAtmosphereNprSkyFuncs )
 
-float getMie( const float LdotV, const float sunY )
-{
-	return pow( LdotV, lerp( 1.0f, 1.0f, sunY ) );
-}
-
 // See https://en.wikipedia.org/wiki/Rayleigh_distribution
 // It's inspired, not fully based.
 //
@@ -31,19 +26,21 @@ float3 pow3( float3 v, float e )
 // @endpiece
 
 // @piece( DoAtmosphereNprSky )
-#define p_densityCoeff atmoSettings.densityCoeff
-#define p_lightDensity atmoSettings.lightDensity
-#define p_sunHeight atmoSettings.sunHeight
-#define p_sunHeightWeight atmoSettings.sunHeightWeight
-#define p_skyLightAbsorption atmoSettings.skyLightAbsorption.xyz
-#define p_sunAbsorption atmoSettings.sunAbsorption.xyz
-#define p_cameraDisplacement atmoSettings.cameraDisplacement
-#define p_mieAbsorption atmoSettings.packedParams1.xyz
-#define p_finalMultiplier atmoSettings.packedParams1.w
-#define p_sunDir atmoSettings.packedParams2.xyz
-#define p_borderLimit atmoSettings.packedParams2.w
-#define p_skyColour atmoSettings.packedParams3.xyz
-#define p_densityDiffusion atmoSettings.packedParams3.w
+// clang-format off
+#define p_densityCoeff			atmoSettings.densityCoeff
+#define p_lightDensity			atmoSettings.lightDensity
+#define p_sunHeight				atmoSettings.sunHeight
+#define p_sunHeightWeight		atmoSettings.sunHeightWeight
+#define p_skyLightAbsorption	atmoSettings.skyLightAbsorption.xyz
+#define p_sunAbsorption			atmoSettings.sunAbsorption.xyz
+#define p_cameraDisplacement	atmoSettings.cameraDisplacement
+#define p_mieAbsorption			atmoSettings.packedParams1.xyz
+#define p_finalMultiplier		atmoSettings.packedParams1.w
+#define p_sunDir				atmoSettings.packedParams2.xyz
+#define p_borderLimit			atmoSettings.packedParams2.w
+#define p_skyColour				atmoSettings.packedParams3.xyz
+#define p_densityDiffusion		atmoSettings.packedParams3.w
+// clang-format on
 
 const float3 cameraPos = float3( atmoSettings.skyLightAbsorption.w, atmoSettings.sunAbsorption.w,
 								 atmoSettings.cameraDisplacement.w );
@@ -58,11 +55,7 @@ atmoCameraDir += p_cameraDisplacement.xyz;
 atmoCameraDir = normalize( atmoCameraDir );
 
 atmoCameraDir.y = max( atmoCameraDir.y, p_borderLimit );
-
-// It's not a mistake. We do this twice. Doing it before p_borderLimit
-// allows the horizon to shift. Doing it after p_borderLimit lets
-// the sky to get darker as we get upwards.
-atmoCameraDir += p_cameraDisplacement.xyz;
+atmoCameraDir.y = atmoCameraDir.y * 0.9f + 0.1f;
 atmoCameraDir = normalize( atmoCameraDir );
 
 const float LdotV360 = dot( atmoCameraDir, p_sunDir ) * 0.5f + 0.5f;
@@ -79,7 +72,7 @@ const float3 skyAbsorption = getSkyRayleighAbsorption( p_skyColour, ptDensity );
 //										 lerp( 15.5f, 1.5f, pow( p_sunHeightWeight, 0.5f ) ) );
 const float3 skyColourGradient = pow3( exp2( -atmoCameraDir.y / p_skyColour ), 1.5f );
 
-const float mie = getMie( LdotV360, p_sunHeightWeight );
+const float mie = LdotV360;
 
 float3 atmoColour = float3( 0.0f, 0.0f, 0.0f );
 
@@ -90,9 +83,9 @@ atmoColour += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAbs
 atmoColour += mie * p_mieAbsorption;
 atmoColour *= p_lightDensity;
 
-// const float multiplier = smoothstep( 0.02f, 0.4f, p_sunHeightWeight );
-// atmoColour *= 0.5f + multiplier;
 atmoColour *= p_finalMultiplier;
+
+outVs.fog.xyz = atmoColour;
 // @end
 
 // @end
