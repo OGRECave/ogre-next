@@ -41,7 +41,7 @@ var searchData=
   ['what_38',['what',['../class_ogre_1_1_exception.html#acbe69e666d3a027c6b753a0cb29c8e18',1,'Ogre::Exception']]],
   ['what_27s_20new_20in_20ogre_202_2e2_39',['What&apos;s new in Ogre 2.2',['../_ogre22_changes.html',1,'manual']]],
   ['what_27s_20new_20in_20ogre_202_2e3_40',['What&apos;s new in Ogre 2.3',['../_ogre23_changes.html',1,'manual']]],
-  ['what_27s_20new_20in_20ogre_202_2e4_41',['What&apos;s new in Ogre 2.4',['../_ogre24_changes.html',1,'manual']]],
+  ['what_27s_20new_20in_20ogre_203_2e0_41',['What&apos;s new in Ogre 3.0',['../_ogre30_changes.html',1,'manual']]],
   ['white_42',['White',['../class_ogre_1_1_colour_value.html#a8eba66b2908f44f00f8d9c9ec25877de',1,'Ogre::ColourValue']]],
   ['width_43',['width',['../class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#a22393a2787e8c59c4727375920c28854',1,'Ogre::TextureDefinitionBase::TextureDefinition::width()'],['../struct_x_window_attributes.html#a91f82bf8c5f24831d54f0e8f925456b5',1,'XWindowAttributes::width()'],['../struct_x_r_r_screen_size.html#a02a27d346b7436632a7e2a7cb2939b5d',1,'XRRScreenSize::width()'],['../struct_ogre_1_1_t_rect.html#a007a629729ff41b80dee4f5536303a48',1,'Ogre::TRect::width()']]],
   ['width_44',['Width',['../struct_d_x_g_i___s_w_a_p___c_h_a_i_n___d_e_s_c1.html#a96775b0417b0429fa5cb429fd2e1e8d7',1,'DXGI_SWAP_CHAIN_DESC1']]],

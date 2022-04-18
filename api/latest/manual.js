@@ -302,11 +302,11 @@ var manual =
         ] ]
       ] ]
     ] ],
-    [ "Resolving Merge Conflicts in Ogre-Next 2.4", "_resolving_merge_conflicts24.html", [
-      [ "Notes:", "_resolving_merge_conflicts24.html#autotoc_md58", null ],
-      [ "Batch Script", "_resolving_merge_conflicts24.html#autotoc_md59", null ]
+    [ "Resolving Merge Conflicts in Ogre-Next 3.0", "_resolving_merge_conflicts30.html", [
+      [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md58", null ],
+      [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md59", null ]
     ] ],
-    [ "What's new in Ogre 2.4", "_ogre24_changes.html", [
-      [ "Ogre to OgreNext name migration", "_ogre24_changes.html#autotoc_md57", null ]
+    [ "What's new in Ogre 3.0", "_ogre30_changes.html", [
+      [ "Ogre to OgreNext name migration", "_ogre30_changes.html#autotoc_md57", null ]
     ] ]
 ];

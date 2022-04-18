@@ -3,7 +3,7 @@ var searchData=
   ['ogre_2eh_0',['Ogre.h',['../_ogre_8h.html',1,'']]],
   ['ogre2_2e2_2echanges_2emd_1',['Ogre2.2.Changes.md',['../_ogre2_82_8_changes_8md.html',1,'']]],
   ['ogre2_2e3_2echanges_2emd_2',['Ogre2.3.Changes.md',['../_ogre2_83_8_changes_8md.html',1,'']]],
-  ['ogre2_2e4_2echanges_2emd_3',['Ogre2.4.Changes.md',['../_ogre2_84_8_changes_8md.html',1,'']]],
+  ['ogre3_2e0_2echanges_2emd_3',['Ogre3.0.Changes.md',['../_ogre3_80_8_changes_8md.html',1,'']]],
   ['ogreaabb_2eh_4',['OgreAabb.h',['../_ogre_aabb_8h.html',1,'']]],
   ['ogreabiutils_2eh_5',['OgreAbiUtils.h',['../_ogre_abi_utils_8h.html',1,'']]],
   ['ogrealignedallocator_2eh_6',['OgreAlignedAllocator.h',['../_ogre_aligned_allocator_8h.html',1,'']]],
