@@ -335,6 +335,8 @@ namespace Ogre
     {
         *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
             VertexShader, uint16( slotIdx ), mHlmsBuffer, 0, (uint32)mHlmsBuffer->getTotalSizeBytes() );
+        *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+            PixelShader, uint16( slotIdx ), mHlmsBuffer, 0, (uint32)mHlmsBuffer->getTotalSizeBytes() );
 
         return 1u;
     }

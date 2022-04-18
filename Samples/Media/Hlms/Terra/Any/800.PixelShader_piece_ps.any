@@ -363,6 +363,12 @@
 		@property( needs_env_brdf )
 			@insertpiece( BRDF_EnvMap )
 		@end
+
+		@property( hlms_fog )
+			const float distToCamera = length( inPs.pos.xyz );
+			const midf fogWeight = midf_c( exp2( -distToCamera * atmoSettings.fogDensity ) );
+			finalColour.xyz = lerp( inPs.fog.xyz, finalColour.xyz, fogWeight );
+		@end
 	@end ///!hlms_prepass
 
 	@property( !hlms_render_depth_only )
