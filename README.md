@@ -2,7 +2,7 @@
 
 Ogre-Next is a 3D graphics rendering engine. Not to be confused with a game engine which provides Networking, Sound, Physics, etc.
 
-Ogre-Next 2.4 has had a substantial overhaul to focus on high performance graphics using Data Oriented Design with:
+Ogre-Next 3.0 has had a substantial overhaul to focus on high performance graphics using Data Oriented Design with:
  * Cache friendly Entity and Node layout
  * Threaded batch processing of Nodes, Frustum Culling and other techniques such as Forward Clustered
  * SIMD processing using AoSoA (Array of Structures of Arrays) memory layout
@@ -38,7 +38,7 @@ differences have diverged long enough.
  * iOS
  * Android\*\*
 
-(\*) Metal Backend is highly recommended. GL backend is supported in macOS, but the window subsystem hasn't been ported to 2.4 yet.<br/>
+(\*) Metal Backend is highly recommended. GL backend is supported in macOS, but the window subsystem hasn't been ported to 3.0 yet.<br/>
 (\*\*) Device must be Vulkan-capable. Android 7.0+ is supported; but Android 8.0+ is strongly recommended due to lots of driver bugs in older versions.<br/>
 
 ## Supported Compilers
@@ -156,11 +156,40 @@ cd build/Debug
 ninja OgreDoc
 ```
 
-# Resolving Merge Conflicts in 2.4
+# Resolving Merge Conflicts in 3.0
 
-Users who run a customized version of Ogre-Next may found rebasing to the latest version a near impossible job due to the sheer amount of minor merge conflicts when upgrading to Ogre-Next 2.4
+Users who run a customized version of Ogre-Next may found rebasing to the latest version a near impossible job due to the sheer amount of minor merge conflicts when upgrading to Ogre-Next 3.0
 
-See [this guide](https://ogrecave.github.io/ogre-next/api/latest/_resolving_merge_conflicts24.html) on how to deal with them more easily.
+See [this guide](https://ogrecave.github.io/ogre-next/api/latest/_resolving_merge_conflicts30.html) on how to deal with them more easily.
+
+
+# OgreNext 3.0 changes
+
+For details see [What's new?](https://ogrecave.github.io/ogre-next/api/latest/_ogre30_changes.html) from our manual.
+
+
+## OgreNext versioning
+
+Since OgreNext 3.0 we've modified our versioning scheme to be more consistent with other projects and what developers expect.
+
+Our [Github ticket](https://github.com/OGRECave/ogre-next/issues/259#issuecomment-1086954560) and [Forum post](https://forums.ogre3d.org/viewtopic.php?t=96660) explain it in detail. Basically it boils down to:
+
+OgreNext now uses a *modified* variation of [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH).
+
+ - PATCH can only be bumped as long as ABI compatibility remains 100%.
+ - MINOR bumps as long as API compatibility stays >= 95% for all components and plugins, according to abi-compliance-checker. Measured against MAJOR.0.0
+   - This is not strictly in compliance to SemVer, but stays close to its spirit
+ - MAJOR bumps when API compatibility is < 95%. Although MAJOR can be bumped even if compat >= 95% at the dev's discretion.
+
+As a result:
+
+ - Patch +1 bumps can be release for hot fixes. Bugs that are easy to fix without breaking ABI and deploy everywhere.
+ - Minor +1 tells our users upgrading is painless. A recompilation is necessary. Build errors may appear, but they should be very quick & easy to fix.
+ Projects like Ignition which have strong ABI requirements can leverage whether to move to Minor+1 if they have to when a certain bugfix is too important and can't be done without breaking OgreNext's ABI.
+ Main focus for minor bumps will be for fixing bugs that can't be or are too hard to fix without breaking ABI.
+ - Major +1 tells our users to prepare for larger upgrading efforts. Although not necessarily too large if we release more often.
+
+For OgreNext <= 2.3 the versioning stays the same.
 
 # Support and Resources
 

@@ -1,4 +1,4 @@
-# What's new in Ogre 2.4 {#Ogre24Changes}
+# What's new in Ogre 3.0 {#Ogre30Changes}
 
 @tableofcontents
 
@@ -33,10 +33,10 @@ When enabled, the project names will be `OgreNext` instead of `Ogre`. e.g. the f
 
 We understand this change can wreak havoc on our users who have scripts expecting to find OgreMain instead of OgreNextMain.
 
-**Which is why this option will be off by default in OgreNext 2.4;
-but will be turned on by default in OgreNext 2.5**
+**Which is why this option will be off by default in OgreNext 3.0;
+but will be turned on by default in OgreNext 4.0**
 
-**The CMake option is scheduled for removal in OgreNext 2.6**
+**The CMake option is scheduled for removal in OgreNext 5.0**
 
 `EmptyProject`'s and Android's scripts have been updated to autodetect which name is being used and select between Ogre and OgreNext and CMake config time.
 
