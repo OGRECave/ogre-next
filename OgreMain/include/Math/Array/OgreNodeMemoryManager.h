@@ -190,6 +190,9 @@ namespace Ogre
 
         /// @copydoc ArrayMemoryManager::defragment
         void defragment();
+        
+        /// @copydoc ArrayMemoryManager::neverDefragment
+        void neverDefragment();
 
         /// @copydoc ArrayMemoryManager::shrinkToFit
         void shrinkToFit();
