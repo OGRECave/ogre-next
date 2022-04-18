@@ -9,8 +9,6 @@
 
 #ifdef HEADER
 
-// @piece( DeclAtmosphereNprSkyFuncs )
-
 float getSunDisk( const float LdotV, const float sunY )
 {
 	return pow( LdotV, lerp( 4.0f, 8500.0f, sunY ) ) * 50.0f;
@@ -38,44 +36,39 @@ float3 pow3( float3 v, float e )
 	return float3( pow( v.x, e ), pow( v.y, e ), pow( v.z, e ) );
 }
 
-// @endpiece
-
 #else
 
-float3 cameraDir = normalize( inPs.cameraDir );
-// const float3 spherePos = earthRadius * cameraDir;
+float3 atmoCameraDir = normalize( inPs.cameraDir );
 
-// @piece( AtmoNprSkyCodeInternal )
+const float LdotV = max( dot( atmoCameraDir, p_sunDir ), 0.0f );
 
-const float LdotV = max( dot( cameraDir, p_sunDir ), 0.0f );
+atmoCameraDir.y += p_densityDiffusion * 0.075f * ( 1.0f - atmoCameraDir.y ) * ( 1.0f - atmoCameraDir.y );
+atmoCameraDir += p_cameraDisplacement.xyz;
+atmoCameraDir = normalize( atmoCameraDir );
 
-cameraDir.y += p_densityDiffusion * 0.075f * ( 1.0f - cameraDir.y ) * ( 1.0f - cameraDir.y );
-cameraDir += p_cameraDisplacement.xyz;
-cameraDir = normalize( cameraDir );
-
-cameraDir.y = max( cameraDir.y, p_borderLimit );
+atmoCameraDir.y = max( atmoCameraDir.y, p_borderLimit );
 
 // It's not a mistake. We do this twice. Doing it before p_borderLimit
 // allows the horizon to shift. Doing it after p_borderLimit lets
 // the sky to get darker as we get upwards.
-cameraDir += p_cameraDisplacement.xyz;
-cameraDir = normalize( cameraDir );
+atmoCameraDir += p_cameraDisplacement.xyz;
+atmoCameraDir = normalize( atmoCameraDir );
 
-const float LdotV360 = dot( cameraDir, p_sunDir ) * 0.5f + 0.5f;
+const float LdotV360 = dot( atmoCameraDir, p_sunDir ) * 0.5f + 0.5f;
 
 // ptDensity gets smaller as sunHeight gets bigger
-// ptDensity gets smaller as cameraDir.y gets bigger
+// ptDensity gets smaller as atmoCameraDir.y gets bigger
 const float ptDensity =
-	p_densityCoeff / pow( max( cameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ), p_densityDiffusion );
+	p_densityCoeff / pow( max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ), p_densityDiffusion );
 
 const float sunDisk = getSunDisk( LdotV, p_sunHeight );
 
 const float antiMie = max( p_sunHeightWeight, 0.08f );
 
 const float3 skyAbsorption = getSkyRayleighAbsorption( p_skyColour, ptDensity );
-// const float3 skyColourGradient = pow3( exp2( -cameraDir.y / p_skyColour ),
+// const float3 skyColourGradient = pow3( exp2( -atmoCameraDir.y / p_skyColour ),
 //										 lerp( 15.5f, 1.5f, pow( p_sunHeightWeight, 0.5f ) ) );
-const float3 skyColourGradient = pow3( exp2( -cameraDir.y / p_skyColour ), 1.5f );
+const float3 skyColourGradient = pow3( exp2( -atmoCameraDir.y / p_skyColour ), 1.5f );
 
 const float mie = getMie( LdotV360, p_sunHeightWeight );
 
@@ -92,8 +85,6 @@ atmoColour *= p_lightDensity;
 // atmoColour *= 0.5f + multiplier;
 atmoColour *= p_finalMultiplier;
 atmoColour += sunDisk * p_skyLightAbsorption;
-
-// @endpiece
 
 #endif
 

@@ -34,7 +34,7 @@ struct Params
 #define p_densityDiffusion	p.packedParams3.w
 
 #define HEADER
-#include "100.AtmosphereNprSky_piece_vs.any"
+#include "AtmosphereNprSky_ps.any"
 #undef HEADER
 
 fragment float4 main_metal
@@ -46,7 +46,7 @@ fragment float4 main_metal
 {
 	float4 fragColour;
 
-	#include "100.AtmosphereNprSky_piece_vs.any"
+	#include "AtmosphereNprSky_ps.any"
 
 	fragColour.xyz = atmoColour;
 	fragColour.w = 1.0f;
