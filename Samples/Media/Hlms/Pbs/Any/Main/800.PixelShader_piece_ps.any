@@ -9,6 +9,7 @@
 		@end
 		@insertpiece( MaterialStructDecl )
 		@insertpiece( InstanceStructDecl )
+		@insertpiece( AtmosphereNprSkyStructDecl )
 	@end
 	@insertpiece( custom_ps_uniformStructDeclaration )
 	// END UNIFORM DECLARATION
@@ -900,6 +901,12 @@
 			@end
 
 			@insertpiece( applyRefractions )
+
+			@property( hlms_fog )
+				const float distToCamera = length( inPs.pos.xyz );
+				const midf fogWeight = midf_c( exp2( -distToCamera * atmoSettings.fogDensity ) );
+				finalColour.xyz = lerp( inPs.fog.xyz, finalColour.xyz, fogWeight );
+			@end
 		@end ///!hlms_prepass
 
 	@end ///!hlms_normal || hlms_qtangent

@@ -56,6 +56,9 @@ namespace Ogre
         float4 packedParams1;
         float4 packedParams2;
         float4 packedParams3;
+
+        float fogDensity;
+        float padding[3];
     };
 
     AtmosphereNpr::AtmosphereNpr( VaoManager *vaoManager ) :
@@ -307,13 +310,14 @@ namespace Ogre
         const Vector4 packedParams3( mPreset.skyColour, mPreset.densityDiffusion );
 
         atmoSettingsGpu.skyLightAbsorption =
-            Vector4( getSkyRayleighAbsorption( mPreset.skyColour, lightDensity ) );
+            Vector4( getSkyRayleighAbsorption( mPreset.skyColour, lightDensity ), cameraPos.x );
         atmoSettingsGpu.sunAbsorption =
-            Vector4( getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, lightDensity ) );
-        atmoSettingsGpu.cameraDisplacement = Vector4( cameraDisplacement );
+            Vector4( getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, lightDensity ), cameraPos.y );
+        atmoSettingsGpu.cameraDisplacement = Vector4( cameraDisplacement, cameraPos.z );
         atmoSettingsGpu.packedParams1 = packedParams1;
         atmoSettingsGpu.packedParams2 = packedParams2;
         atmoSettingsGpu.packedParams3 = packedParams3;
+        atmoSettingsGpu.fogDensity = mPreset.fogDensity;
 
         mHlmsBuffer->upload( &atmoSettingsGpu, 0u, sizeof( atmoSettingsGpu ) );
     }
@@ -329,9 +333,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     uint32 AtmosphereNpr::bindConstBuffers( CommandBuffer *commandBuffer, size_t slotIdx )
     {
-        *commandBuffer->addCommand<CbShaderBuffer>() =
-            CbShaderBuffer( VertexShader, uint16( slotIdx + 1u ), mHlmsBuffer, 0,
-                            (uint32)mHlmsBuffer->getTotalSizeBytes() );
+        *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+            VertexShader, uint16( slotIdx ), mHlmsBuffer, 0, (uint32)mHlmsBuffer->getTotalSizeBytes() );
 
         return 1u;
     }

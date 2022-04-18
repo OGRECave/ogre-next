@@ -168,6 +168,7 @@ fragment @insertpiece( output_type ) main_metal
 	@property( hlms_shadowcaster_point )
 		@insertpiece( PassDecl )
 	@end
+	@insertpiece( AtmosphereNprSkyDecl )
 	@insertpiece( custom_ps_uniformDeclaration )
 	// END UNIFORM DECLARATION
 

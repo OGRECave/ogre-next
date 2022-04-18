@@ -50,6 +50,6 @@ void main()
 {
 	#include "100.AtmosphereNprSky_piece_vs.any"
 
-	fragColour.xyz = finalResult;
+	fragColour.xyz = atmoColour;
 	fragColour.w = 1.0f;
 }

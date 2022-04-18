@@ -179,12 +179,14 @@ namespace Demo
             outText += StringConverter::toString( mTimeOfDay * 180.0f / Math::PI ) + "]";
             outText += "\n9/6 to change azimuth. [";
             outText += StringConverter::toString( mAzimuth * 180.0f / Math::PI ) + "]";
-            outText += "\nU/J to change Density. [";
+            outText += "\n[Shift+]Y to change Density. [";
             outText += StringConverter::toString( mAtmosphere->getPreset().densityCoeff ) + "]";
-            outText += "\nI/K to change Density Diffusion. [";
+            outText += "\n[Shift+]U to change Density Diffusion. [";
             outText += StringConverter::toString( mAtmosphere->getPreset().densityDiffusion ) + "]";
-            outText += "\nO/L to change Horizon Limit. [";
+            outText += "\n[Shift+]I to change Horizon Limit. [";
             outText += StringConverter::toString( mAtmosphere->getPreset().horizonLimit ) + "]";
+            outText += "\n[Shift+]O to change Fog Density. [";
+            outText += StringConverter::toString( mAtmosphere->getPreset().fogDensity ) + "]";
             outText += "\n\nCamera: ";
             str.a( "[", LwString::Float( camPos.x, 2, 2 ), ", ", LwString::Float( camPos.y, 2, 2 ), ", ",
                    LwString::Float( camPos.z, 2, 2 ), "]" );
@@ -200,7 +202,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void AtmosphereGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS | KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -229,33 +231,45 @@ namespace Demo
             if( mAzimuth < 0 )
                 mAzimuth = Ogre::Math::TWO_PI + mAzimuth;
         }
-        else if( arg.keysym.sym == SDLK_u || arg.keysym.sym == SDLK_j )
+        else if( arg.keysym.sym == SDLK_y )
         {
             Ogre::AtmosphereNpr::Preset preset = mAtmosphere->getPreset();
-            if( arg.keysym.sym == SDLK_u )
+            if( !( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) )
                 preset.densityCoeff += 0.05f;
             else
                 preset.densityCoeff -= 0.05f;
 
             mAtmosphere->setPreset( preset );
         }
-        else if( arg.keysym.sym == SDLK_i || arg.keysym.sym == SDLK_k )
+        else if( arg.keysym.sym == SDLK_u )
         {
             Ogre::AtmosphereNpr::Preset preset = mAtmosphere->getPreset();
-            if( arg.keysym.sym == SDLK_i )
+            if( !( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) )
                 preset.densityDiffusion += 0.25f;
             else
                 preset.densityDiffusion -= 0.25f;
 
             mAtmosphere->setPreset( preset );
         }
-        else if( arg.keysym.sym == SDLK_o || arg.keysym.sym == SDLK_l )
+        else if( arg.keysym.sym == SDLK_i )
         {
             Ogre::AtmosphereNpr::Preset preset = mAtmosphere->getPreset();
-            if( arg.keysym.sym == SDLK_o )
+            if( !( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) )
                 preset.horizonLimit += 0.005f;
             else
                 preset.horizonLimit -= 0.005f;
+
+            mAtmosphere->setPreset( preset );
+        }
+        else if( arg.keysym.sym == SDLK_o )
+        {
+            Ogre::AtmosphereNpr::Preset preset = mAtmosphere->getPreset();
+            if( !( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) )
+                preset.fogDensity += 0.005f;
+            else
+                preset.fogDensity -= 0.005f;
+
+            preset.fogDensity = std::max( preset.fogDensity, 0.0f );
 
             mAtmosphere->setPreset( preset );
         }

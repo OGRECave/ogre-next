@@ -68,6 +68,7 @@ namespace Ogre
             float         densityDiffusion;
             float         horizonLimit;  // Most relevant in sunsets and sunrises
             Ogre::Vector3 skyColour;
+            float         fogDensity;  // Affects objects' fog (not sky)
 
             Preset() :
                 // densityCoeff( 0.27f ),
@@ -75,7 +76,8 @@ namespace Ogre
                 densityCoeff( 0.47f ),
                 densityDiffusion( 2.0f ),
                 horizonLimit( 0.025f ),
-                skyColour( 0.334f, 0.57f, 1.0f )
+                skyColour( 0.334f, 0.57f, 1.0f ),
+                fogDensity( 0.02f )
             {
             }
         };

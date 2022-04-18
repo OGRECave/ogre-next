@@ -4,37 +4,31 @@
 
 @property( atmosky_npr )
 
-@piece( AtmoNprSkyStructDecl )
-	struct AtmoSettings
-	{
-		float densityCoeff;
-		float lightDensity;
-		float sunHeight;
-		float sunHeightWeight;
+@piece( DoAtmosphereNprSky )
+	#define p_densityCoeff		atmoSettings.densityCoeff
+	#define p_lightDensity		atmoSettings.lightDensity
+	#define p_sunHeight			atmoSettings.sunHeight
+	#define p_sunHeightWeight	atmoSettings.sunHeightWeight
+	#define p_skyLightAbsorption	atmoSettings.skyLightAbsorption.xyz
+	#define p_sunAbsorption		atmoSettings.sunAbsorption.xyz
+	#define p_cameraDisplacement	atmoSettings.cameraDisplacement
+	#define p_mieAbsorption		atmoSettings.packedParams1.xyz
+	#define p_finalMultiplier	atmoSettings.packedParams1.w
+	#define p_sunDir			atmoSettings.packedParams2.xyz
+	#define p_borderLimit		atmoSettings.packedParams2.w
+	#define p_skyColour			atmoSettings.packedParams3.xyz
+	#define p_densityDiffusion	atmoSettings.packedParams3.w
 
-		float4 skyLightAbsorption;
-		float4 sunAbsorption;
-		float4 cameraDisplacement;
-		float4 packedParams1;
-		float4 packedParams2;
-		float4 packedParams3;
-	};
+	const float3 cameraPos = float3( atmoSettings.skyLightAbsorption.w, atmoSettings.sunAbsorption.w,
+									 atmoSettings.cameraDisplacement.w );
+	float3 cameraDir = worldPos.xyz - cameraPos;
+	float distToCamera = length( cameraDir );
+	cameraDir = cameraDir * ( 1.0f / distToCamera );
 
-	@property( syntax != metal )
-		CONST_BUFFER( AtmoSettingsBuf, 1 )
-		{
-			AtmoSettings atmoSettings;
-		};
-	@else
-		@piece( AtmoNprSkyDecl )
-			, constant AtmoSettings *atmoSettings [[buffer(CONST_SLOT_START+@value(atmosky_npr))]]
-		@end
-	@end
-@end
-
-
-@piece( DoAtmoNprSky )
 	@insertpiece( AtmoNprSkyCodeInternal )
+
+	outVs.fog.xyz = atmoColour;
+	//outVs.fog.w = 1.0f / exp( distToCamera * 0.02 );
 @end
 
 @end

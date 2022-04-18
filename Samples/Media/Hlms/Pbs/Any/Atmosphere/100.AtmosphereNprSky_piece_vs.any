@@ -5,11 +5,11 @@
 
 //#include "SyntaxHighlightingMisc.h"
 
-// @property( hlms_atmosky_npr )
+// @property( atmosky_npr )
 
 #ifdef HEADER
 
-// @piece( AtmoNprSkyFuncs )
+// @piece( DeclAtmosphereNprSkyFuncs )
 
 float getSunDisk( const float LdotV, const float sunY )
 {
@@ -79,22 +79,22 @@ const float3 skyColourGradient = pow3( exp2( -cameraDir.y / p_skyColour ), 1.5f 
 
 const float mie = getMie( LdotV360, p_sunHeightWeight );
 
-float3 finalResult = float3( 0.0f, 0.0f, 0.0f );
+float3 atmoColour = float3( 0.0f, 0.0f, 0.0f );
 
 const float3 sharedTerms = skyColourGradient * skyAbsorption;
 
-finalResult += antiMie * sharedTerms * p_sunAbsorption;
-finalResult += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAbsorption;
-finalResult += mie * p_mieAbsorption;
-finalResult *= p_lightDensity;
+atmoColour += antiMie * sharedTerms * p_sunAbsorption;
+atmoColour += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAbsorption;
+atmoColour += mie * p_mieAbsorption;
+atmoColour *= p_lightDensity;
 
 // const float multiplier = smoothstep( 0.02f, 0.4f, p_sunHeightWeight );
-// finalResult *= 0.5f + multiplier;
-finalResult *= p_finalMultiplier;
-finalResult += sunDisk * p_skyLightAbsorption;
+// atmoColour *= 0.5f + multiplier;
+atmoColour *= p_finalMultiplier;
+atmoColour += sunDisk * p_skyLightAbsorption;
 
 // @endpiece
 
 #endif
 
-// @end !hlms_atmosky_npr
+// @end !atmosky_npr
