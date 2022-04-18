@@ -158,7 +158,7 @@ namespace Demo
         const Ogre::Vector3 sunDir(
             Ogre::Quaternion( Ogre::Radian( mAzimuth ), Ogre::Vector3::UNIT_Y ) *
             Ogre::Vector3( cosf( mTimeOfDay ), -sinf( mTimeOfDay ), 0.0 ).normalisedCopy() );
-        mAtmosphere->setSunDir( -sunDir, mTimeOfDay / Ogre::Math::PI );
+        mAtmosphere->setSunDir( sunDir, mTimeOfDay / Ogre::Math::PI );
 
         TutorialGameState::update( timeSinceLast );
     }

@@ -13,6 +13,7 @@ endmacro()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+
 add_recursive( ./src SOURCE_FILES )
 add_recursive( ./include HEADER_FILES )
 set( SOURCE_FILES ${SOURCE_FILES} ${HEADER_FILES} )
@@ -21,6 +22,9 @@ include_directories( ./include )
 include_directories( ./include/Hlms )
 ogre_add_component_include_dir(Hlms/Common)
 ogre_add_component_include_dir(Hlms/Pbs)
+if( OGRE_BUILD_COMPONENT_ATMOSPHERE )
+	ogre_add_component_include_dir(Atmosphere)
+endif()
 if( OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS )
     ogre_add_component_include_dir( PlanarReflections )
 endif()

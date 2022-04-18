@@ -185,6 +185,8 @@ namespace Demo
                                        Ogre::ColourValue( 0.6f, 0.45f, 0.3f ) * 0.065f * 0.75f,
                                        -light->getDirection() + Ogre::Vector3::UNIT_Y * 0.2f );
 
+        mGraphicsSystem->createAtmosphere( light );
+
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );

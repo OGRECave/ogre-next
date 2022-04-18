@@ -237,12 +237,12 @@ namespace Ogre
 
         Ogre::Vector3 sunDir( sinSunAzimuth * cosSunAltitude, sinSunAltitude,
                               cosSunAzimuth * cosSunAltitude );
-        setSunDir( sunDir, sunAltitude.valueRadians() / Math::PI );
+        setSunDir( -sunDir, sunAltitude.valueRadians() / Math::PI );
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::setSunDir( const Ogre::Vector3 &sunDir, const float normalizedTimeOfDay )
     {
-        mSunDir = sunDir;
+        mSunDir = -sunDir;
         mSunDir.normalise();
 
         mNormalizedTimeOfDay = normalizedTimeOfDay;

@@ -183,7 +183,7 @@ namespace Ogre
 
         /** More direct approach on setting time of day.
         @param sunDir
-            Direction. Will be normalized.
+            Sun's light direction. Will be normalized.
         @param normalizedTimeOfDay
             In range [0; 1] where 0 is when the sun goes out and 1 when it's gone.
         */
