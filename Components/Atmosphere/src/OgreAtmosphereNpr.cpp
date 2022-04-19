@@ -175,6 +175,46 @@ namespace Ogre
         psParams->setNamedConstant( "packedParams3", packedParams3 );
     }
     //-------------------------------------------------------------------------
+    void AtmosphereNpr::syncToLight()
+    {
+        if( !mLinkedLight )
+            return;
+
+        mLinkedLight->setType( Light::LT_DIRECTIONAL );
+        mLinkedLight->setDirection( -mSunDir );
+
+        Vector3 sunColour3 = getAtmosphereAt( mSunDir );
+        const Real maxPower = std::max( std::max( sunColour3.x, sunColour3.y ), sunColour3.z );
+        sunColour3 /= maxPower;
+        const ColourValue sunColour( sunColour3.x, sunColour3.y, sunColour3.z );
+        mLinkedLight->setDiffuseColour( sunColour );
+        mLinkedLight->setSpecularColour( sunColour );
+        mLinkedLight->setPowerScale( mPreset.linkedLightPower );
+
+        const Vector3 upperHemi3 = getAtmosphereAt( Vector3::UNIT_Y, true ) *
+                                   ( mPreset.linkedSceneAmbientUpperPower / maxPower );
+        const Vector3 lowerHemi3 = getAtmosphereAt( Vector3::UNIT_X + Vector3( 0, 0.1f, 0 ), true ) *
+                                   ( mPreset.linkedSceneAmbientLowerPower / maxPower );
+
+        const ColourValue upperHemi( upperHemi3.x, upperHemi3.y, upperHemi3.z );
+        const ColourValue lowerHemi( lowerHemi3.x, lowerHemi3.y, lowerHemi3.z );
+
+        Vector3 hemiDir( Vector3::ZERO );
+        hemiDir[mConvention & 0x3u] = ( mConvention & NegationFlag ) ? -1.0f : 1.0f;
+        hemiDir += Quaternion( Degree( 180.0f ), hemiDir ) * mSunDir;
+        hemiDir.normalise();
+
+        std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator itor = mSkies.begin();
+        std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator endt = mSkies.end();
+
+        while( itor != endt )
+        {
+            if( itor->first->getAtmosphere() == this )
+                itor->first->setAmbientLight( upperHemi, lowerHemi, hemiDir );
+            ++itor;
+        }
+    }
+    //-------------------------------------------------------------------------
     void AtmosphereNpr::setSky( Ogre::SceneManager *sceneManager, bool bEnabled )
     {
         Rectangle2D *sky = 0;
@@ -206,6 +246,8 @@ namespace Ogre
             sceneManager->_setAtmosphere( this );
         else
             sceneManager->_setAtmosphere( nullptr );
+
+        syncToLight();
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::destroySky( Ogre::SceneManager *sceneManager )
@@ -221,11 +263,7 @@ namespace Ogre
     void AtmosphereNpr::setLight( Light *light )
     {
         mLinkedLight = light;
-        if( mLinkedLight )
-        {
-            mLinkedLight->setType( Light::LT_DIRECTIONAL );
-            mLinkedLight->setDirection( -mSunDir );
-        }
+        syncToLight();
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::setSunDir( const Radian sunAltitude, const Radian azimuth )
@@ -249,9 +287,7 @@ namespace Ogre
         mNormalizedTimeOfDay = std::min( normalizedTimeOfDay, 1.0f - 1e-6f );
 
         setPackedParams();
-
-        if( mLinkedLight )
-            mLinkedLight->setDirection( -mSunDir );
+        syncToLight();
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::setPreset( const Preset &preset )
@@ -343,5 +379,91 @@ namespace Ogre
             PixelShader, uint16( slotIdx ), mHlmsBuffer, 0, (uint32)mHlmsBuffer->getTotalSizeBytes() );
 
         return 1u;
+    }
+    //-------------------------------------------------------------------------
+    inline float getSunDisk( const float LdotV, const float sunY )
+    {
+        return std::pow( LdotV, Math::lerp( 4.0f, 8500.0f, sunY ) ) * 50.0f;
+    }
+    //-------------------------------------------------------------------------
+    inline float getMie( const float LdotV ) { return LdotV; }
+    //-------------------------------------------------------------------------
+    inline Vector3 pow3( Vector3 v, float e )
+    {
+        return Vector3( std::pow( v.x, e ), std::pow( v.y, e ), std::pow( v.z, e ) );
+    }
+    //-------------------------------------------------------------------------
+    inline Vector3 exp2( Vector3 v )
+    {
+        return Vector3( std::exp2( v.x ), std::exp2( v.y ), std::exp2( v.z ) );
+    }
+    //-------------------------------------------------------------------------
+    Vector3 AtmosphereNpr::getAtmosphereAt( const Vector3 cameraDir, bool bSkipSun )
+    {
+        Vector3 atmoCameraDir = cameraDir.normalisedCopy();
+
+        const Vector3 p_sunDir = mSunDir;
+        const float p_densityDiffusion = mPreset.densityDiffusion;
+        const float p_borderLimit = mPreset.horizonLimit;
+        const float p_densityCoeff = mPreset.densityCoeff;
+        const float p_sunHeight = std::sin( mNormalizedTimeOfDay * Math::PI );
+        const float p_sunHeightWeight = std::exp2( -1.0f / p_sunHeight );
+        // Gets smaller as sunHeight gets bigger
+        const float p_lightDensity =
+            mPreset.densityCoeff / std::pow( std::max( p_sunHeight, 0.0035f ), 0.75f );
+        const Vector3 p_skyColour = mPreset.skyColour;
+        const float p_finalMultiplier = 0.5f + Math::smoothstep( 0.02f, 0.4f, p_sunHeightWeight );
+        const Vector3 p_sunAbsorption =
+            getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, p_lightDensity );
+        const Vector3 p_mieAbsorption =
+            std::pow( std::max( 1.0f - p_lightDensity, 0.1f ), 4.0f ) *
+            Math::lerp( mPreset.skyColour, Vector3::UNIT_SCALE, p_sunHeightWeight );
+        const Vector3 p_skyLightAbsorption =
+            getSkyRayleighAbsorption( mPreset.skyColour, p_lightDensity );
+
+        const float LdotV = std::max( atmoCameraDir.dotProduct( p_sunDir ), 0.0f );
+
+        atmoCameraDir.y +=
+            p_densityDiffusion * 0.075f * ( 1.0f - atmoCameraDir.y ) * ( 1.0f - atmoCameraDir.y );
+        atmoCameraDir.normalise();
+
+        atmoCameraDir.y = std::max( atmoCameraDir.y, p_borderLimit );
+
+        // It's not a mistake. We do this twice. Doing it before p_borderLimit
+        // allows the horizon to shift. Doing it after p_borderLimit lets
+        // the sky to get darker as we get upwards.
+        atmoCameraDir.normalise();
+
+        const float LdotV360 = atmoCameraDir.dotProduct( p_sunDir ) * 0.5f + 0.5f;
+
+        // ptDensity gets smaller as sunHeight gets bigger
+        // ptDensity gets smaller as atmoCameraDir.y gets bigger
+        const float ptDensity =
+            p_densityCoeff / std::pow( std::max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ),
+                                       p_densityDiffusion );
+
+        const float sunDisk = getSunDisk( LdotV, p_sunHeight );
+
+        const float antiMie = std::max( p_sunHeightWeight, 0.08f );
+
+        const Vector3 skyAbsorption = getSkyRayleighAbsorption( p_skyColour, ptDensity );
+        const Vector3 skyColourGradient = pow3( exp2( -atmoCameraDir.y / p_skyColour ), 1.5f );
+
+        const float mie = getMie( LdotV360 );
+
+        Vector3 atmoColour = Vector3( 0.0f, 0.0f, 0.0f );
+
+        const Vector3 sharedTerms = skyColourGradient * skyAbsorption;
+
+        atmoColour += antiMie * sharedTerms * p_sunAbsorption;
+        atmoColour += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAbsorption;
+        atmoColour += mie * p_mieAbsorption;
+        atmoColour *= p_lightDensity;
+
+        atmoColour *= p_finalMultiplier;
+        if( !bSkipSun )
+            atmoColour += sunDisk * p_skyLightAbsorption;
+
+        return atmoColour;
     }
 }  // namespace Ogre

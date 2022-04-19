@@ -86,6 +86,13 @@ namespace Ogre
             /// Range: (0; inf)
             float fogBreakFalloff;
 
+            /// Power scale for the linked light
+            float linkedLightPower;
+            /// Power scale for the upper hemisphere ambient light
+            float linkedSceneAmbientUpperPower;
+            /// Power scale for the lower hemisphere ambient light
+            float linkedSceneAmbientLowerPower;
+
             Preset() :
                 // densityCoeff( 0.27f ),
                 // densityDiffusion( 0.75f ),
@@ -95,7 +102,10 @@ namespace Ogre
                 skyColour( 0.334f, 0.57f, 1.0f ),
                 fogDensity( 0.0001f ),
                 fogBreakMinBrightness( 0.25f ),
-                fogBreakFalloff( 0.1f )
+                fogBreakFalloff( 0.1f ),
+                linkedLightPower( Math::PI ),
+                linkedSceneAmbientUpperPower( 5.0f * Math::PI ),
+                linkedSceneAmbientLowerPower( 0.5f * Math::PI )
             {
             }
         };
@@ -154,6 +164,8 @@ namespace Ogre
 
         void setPackedParams();
 
+        void syncToLight();
+
     public:
         AtmosphereNpr( VaoManager *vaoManager );
         ~AtmosphereNpr() override;
@@ -200,6 +212,18 @@ namespace Ogre
         uint32 getNumConstBuffersSlots() const override;
 
         uint32 bindConstBuffers( CommandBuffer *commandBuffer, size_t slotIdx ) override;
+
+        /**
+        @remarks
+            We assume camera displacement is 0.
+        @param cameraDir
+            Point to look at
+        @param bSkipSun
+            When true, the sun disk is skipped
+        @return
+            The value at that camera direction, given the current parameters
+        */
+        Vector3 getAtmosphereAt( const Vector3 cameraDir, bool bSkipSun = false );
     };
 
     OGRE_ASSUME_NONNULL_END

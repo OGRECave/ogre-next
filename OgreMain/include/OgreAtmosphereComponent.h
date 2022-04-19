@@ -35,7 +35,7 @@ Torus Knot Software Ltd.
 
 namespace Ogre
 {
-    class _OgreExport AtmosphereComponent
+    class _OgreExport AtmosphereComponent : public OgreAllocatedObj
     {
     public:
         virtual ~AtmosphereComponent();
