@@ -1,6 +1,7 @@
 var _ogre_prerequisites_8h =
 [
     [ "OGRE_FALLTHROUGH", "_ogre_prerequisites_8h.html#af56e69ee080587cf0f82cab0908e528f", null ],
+    [ "OGRE_MAKE_VERSION", "_ogre_prerequisites_8h.html#ac5d8528b58a77684f51e3a42620e1b7a", null ],
     [ "OGRE_MEMORY_TRACKER", "_ogre_prerequisites_8h.html#a7087d2ed9eb4e1f820fd300d85df375d", null ],
     [ "OGRE_UNUSED_VAR", "_ogre_prerequisites_8h.html#a0a4a25196c102869505a54bc533455c6", null ],
     [ "OGRE_VERSION", "_ogre_prerequisites_8h.html#a3f631403da0a255c201870bfd068f8c5", null ],

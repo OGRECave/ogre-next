@@ -1,5 +1,6 @@
 var NAVTREEINDEX257 =
 {
+"struct_ogre_1_1_g_l_uniform_reference.html#af895033109bbba669cdaa19710aca90b":[7,0,0,391,0],
 "struct_ogre_1_1_gpu_constant_definition.html":[5,2,5,3],
 "struct_ogre_1_1_gpu_constant_definition.html#a134c40a7f7baddf559a6a771c0cd9149":[5,2,5,3,9],
 "struct_ogre_1_1_gpu_constant_definition.html#a13ed935cc299f0b4bfdd2b308e96e459":[5,2,5,3,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX257 =
 "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ac8d76a4ebf8091387f274324723e12d3":[5,2,10,64,0,5],
 "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ae7be1138987febe83dc15887b4bae057":[5,2,10,64,0,2],
 "struct_ogre_1_1_hlms_blendblock.html#a8dbf13c2d554ba4945031e0f309e82a4":[5,2,10,64,20],
-"struct_ogre_1_1_hlms_blendblock.html#a90c4eb9d310e3b3c6713acf92dd1bd06":[5,2,10,64,6],
-"struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e":[5,2,10,64,1]
+"struct_ogre_1_1_hlms_blendblock.html#a90c4eb9d310e3b3c6713acf92dd1bd06":[5,2,10,64,6]
 };

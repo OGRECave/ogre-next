@@ -1,5 +1,6 @@
 var NAVTREEINDEX237 =
 {
+"class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,8,14,4],
 "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#ad1f1a983f9e2dfddee802c47bb0b1ca9":[5,2,8,14,8],
 "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#adce32528577d71b228692df906ecd17c":[5,2,8,14,11],
 "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#aed1464ac3de21ff20db8f9f1f8608dc7":[5,2,8,14,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX237 =
 "class_ogre_1_1v1_1_1_vertex_morph_key_frame.html#ad1f1a983f9e2dfddee802c47bb0b1ca9":[5,2,0,31,10],
 "class_ogre_1_1v1_1_1_vertex_morph_key_frame.html#ad47f3d2ee60027bc982acbb9a8c002e5":[5,2,0,31,15],
 "class_ogre_1_1v1_1_1_vertex_morph_key_frame.html#adce32528577d71b228692df906ecd17c":[5,2,0,31,13],
-"class_ogre_1_1v1_1_1_vertex_morph_key_frame.html#aed1464ac3de21ff20db8f9f1f8608dc7":[5,2,0,31,14],
-"class_ogre_1_1v1_1_1_vertex_pose_key_frame.html":[5,2,0,32]
+"class_ogre_1_1v1_1_1_vertex_morph_key_frame.html#aed1464ac3de21ff20db8f9f1f8608dc7":[5,2,0,31,14]
 };
