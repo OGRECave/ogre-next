@@ -55,6 +55,7 @@ namespace Ogre
 #define OGRE_VERSION_SUFFIX "unstable"
 #define OGRE_VERSION_NAME "E"
 
+#define OGRE_MAKE_VERSION( maj, min, patch ) ( ( maj << 16 ) | ( min << 8 ) | patch )
 #define OGRE_VERSION ( ( OGRE_VERSION_MAJOR << 16 ) | ( OGRE_VERSION_MINOR << 8 ) | OGRE_VERSION_PATCH )
 
 #define OGRE_UNUSED_VAR( x ) ( (void)x )
