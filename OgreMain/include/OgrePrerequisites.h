@@ -70,6 +70,7 @@ namespace Ogre {
     #define OGRE_VERSION_SUFFIX ""
     #define OGRE_VERSION_NAME "Cerberus"
 
+    #define OGRE_MAKE_VERSION( maj, min, patch ) ((maj << 16) | (min << 8) | patch)
     #define OGRE_VERSION    ((OGRE_VERSION_MAJOR << 16) | (OGRE_VERSION_MINOR << 8) | OGRE_VERSION_PATCH)
 
     // define the real number values to be used
