@@ -1,5 +1,6 @@
 var NAVTREEINDEX344 =
 {
+"group___resources.html#gga7b904fc5463a8ef1e61f6de39b603fc4a01f2b01f3e06759d098d315355aa704d":[5,2,11,183,4],
 "group___resources.html#gga7b904fc5463a8ef1e61f6de39b603fc4a05282af650e923e0cbff1bc35e19eb21":[5,2,11,183,41],
 "group___resources.html#gga7b904fc5463a8ef1e61f6de39b603fc4a061bd3bd94e92d0d31a76b1030d28a8b":[5,2,11,183,11],
 "group___resources.html#gga7b904fc5463a8ef1e61f6de39b603fc4a06f1e8f333e075e3c50c1d6857423a3c":[5,2,11,183,24],
@@ -248,6 +249,5 @@ var NAVTREEINDEX344 =
 "interface_ogre_view.html#acbcc094c9b4b1bf3ebd024641350966f":[7,0,26,2],
 "interface_ogre_view.html#ae18e13649647cf066b4eeec93e240205":[7,0,26,5],
 "interface_ogre_view.html#ae35c09558b4b5334f7db17db3172c11a":[7,0,26,4],
-"interface_ogre_window.html":[7,0,27],
-"manual.html":[1]
+"interface_ogre_window.html":[7,0,27]
 };
