@@ -593,7 +593,8 @@ namespace Ogre
         rsc->setCapability( RSC_VBO );
         rsc->setCapability( RSC_TWO_SIDED_STENCIL );
         rsc->setCapability( RSC_STENCIL_WRAP );
-        rsc->setCapability( RSC_USER_CLIP_PLANES );
+        if( mActiveDevice->mDeviceFeatures.shaderClipDistance )
+            rsc->setCapability( RSC_USER_CLIP_PLANES );
         rsc->setCapability( RSC_VERTEX_FORMAT_UBYTE4 );
         rsc->setCapability( RSC_INFINITE_FAR_PLANE );
         rsc->setCapability( RSC_TEXTURE_3D );
