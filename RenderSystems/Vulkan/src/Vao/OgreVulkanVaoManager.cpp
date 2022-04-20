@@ -135,6 +135,11 @@ namespace Ogre
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
                                    mDevice->mDeviceFeatures.drawIndirectFirstInstance;
 
+#ifdef OGRE_VK_WORKAROUND_ADRENO_618_0VERTEX_INDIRECT
+        if( Workarounds::mAdreno618_0VertexIndirect )
+            mSupportsIndirectBuffers = false;
+#endif
+
         mReadOnlyIsTexBuffer = false;
         mReadOnlyBufferMaxSize = mUavBufferMaxSize;
 
