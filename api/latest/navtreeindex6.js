@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"_ogre_scale_affector_8h.html":[8,0,3,1,0,31],
 "_ogre_scale_affector_factory_8h.html":[8,0,3,1,0,32],
 "_ogre_scene_format_base_8h.html":[8,0,0,6,0,0],
 "_ogre_scene_format_base_8h.html#af3190017d83d94455e645c506aa1681b":[8,0,0,6,0,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "_ogre_thread_defines_poco_8h.html#a8b873e0e48fc343f9553e1dc526ff6f3":[8,0,2,0,11,7,3],
 "_ogre_thread_defines_poco_8h.html#a91ea768464f54b7215ce6ddce806d168":[8,0,2,0,11,7,37],
 "_ogre_thread_defines_poco_8h.html#a94e5c080fee840c4ee87132157cc3eda":[8,0,2,0,11,7,8],
-"_ogre_thread_defines_poco_8h.html#a9501d2980e624057c7701c0b3b539c3c":[8,0,2,0,11,7,25],
-"_ogre_thread_defines_poco_8h.html#a9ea1b6f845efd15c581b914ac84b93a3":[8,0,2,0,11,7,12]
+"_ogre_thread_defines_poco_8h.html#a9501d2980e624057c7701c0b3b539c3c":[8,0,2,0,11,7,25]
 };

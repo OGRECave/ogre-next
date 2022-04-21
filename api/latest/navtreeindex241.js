@@ -1,5 +1,6 @@
 var NAVTREEINDEX241 =
 {
+"compositor.html#CompositorShadowNodesAtlasAndPointLights":[1,3,1,2],
 "compositor.html#CompositorShadowNodesExample":[1,3,1,1],
 "compositor.html#CompositorShadowNodesReuseEtc":[1,3,1,3],
 "compositor.html#CompositorShadowNodesSetup":[1,3,1,0],
@@ -189,8 +190,8 @@ var NAVTREEINDEX241 =
 "functions_eval_w.html":[7,3,5,21],
 "functions_eval_z.html":[7,3,5,22],
 "functions_f.html":[7,3,0,6],
-"functions_func.html":[7,3,1,0],
 "functions_func.html":[7,3,1],
+"functions_func.html":[7,3,1,0],
 "functions_func_a.html":[7,3,1,1],
 "functions_func_b.html":[7,3,1,2],
 "functions_func_c.html":[7,3,1,3],
@@ -230,8 +231,8 @@ var NAVTREEINDEX241 =
 "functions_prop.html":[7,3,6],
 "functions_q.html":[7,3,0,17],
 "functions_r.html":[7,3,0,18],
-"functions_rela.html":[7,3,7],
 "functions_rela.html":[7,3,7,0],
+"functions_rela.html":[7,3,7],
 "functions_rela_b.html":[7,3,7,1],
 "functions_rela_c.html":[7,3,7,2],
 "functions_rela_d.html":[7,3,7,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX241 =
 "functions_rela_s.html":[7,3,7,14],
 "functions_rela_t.html":[7,3,7,15],
 "functions_rela_v.html":[7,3,7,16],
-"functions_rela_w.html":[7,3,7,17],
-"functions_s.html":[7,3,0,19]
+"functions_rela_w.html":[7,3,7,17]
 };
