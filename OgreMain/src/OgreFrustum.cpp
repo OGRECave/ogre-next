@@ -131,12 +131,12 @@ namespace Ogre
             if( !renderSystem->isReverseDepth() )
             {
                 retVal.x = -nearPlane / ( farPlane - nearPlane );                // projectionA
-                retVal.y = 1.0 / ( farPlane - nearPlane );                       // projectionB
+                retVal.y = Real( -1.0 ) / ( farPlane - nearPlane );              // projectionB
             }
             else
             {
                 retVal.x = farPlane / ( farPlane - nearPlane );                   // projectionA
-                retVal.y = -1.0 / ( farPlane - nearPlane );                       // projectionB
+                retVal.y = Real( -1.0 ) / ( farPlane - nearPlane );               // projectionB
             }
         }
 
