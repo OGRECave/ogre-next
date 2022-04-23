@@ -1,5 +1,13 @@
 var NAVTREEINDEX259 =
 {
+"struct_ogre_1_1_irradiance_field_settings.html#ab5716c07be8f8f2c91ca4ea56a07b3af":[6,0,0,510,1],
+"struct_ogre_1_1_irradiance_field_settings.html#ab5716c07be8f8f2c91ca4ea56a07b3af":[7,0,0,483,1],
+"struct_ogre_1_1_irradiance_field_settings.html#ab7bfe67c1073974636773e2c88388838":[7,0,0,483,5],
+"struct_ogre_1_1_irradiance_field_settings.html#ab7bfe67c1073974636773e2c88388838":[6,0,0,510,5],
+"struct_ogre_1_1_irradiance_field_settings.html#ab9bd18b1c51c273dbcfd37437a9894d7":[7,0,0,483,14],
+"struct_ogre_1_1_irradiance_field_settings.html#ab9bd18b1c51c273dbcfd37437a9894d7":[6,0,0,510,14],
+"struct_ogre_1_1_irradiance_field_settings.html#ac9d89490c778a2dc326136ac9dd74d44":[6,0,0,510,16],
+"struct_ogre_1_1_irradiance_field_settings.html#ac9d89490c778a2dc326136ac9dd74d44":[7,0,0,483,16],
 "struct_ogre_1_1_key_frame_rig.html":[7,0,0,504],
 "struct_ogre_1_1_key_frame_rig.html":[6,0,0,531],
 "struct_ogre_1_1_key_frame_rig.html#a19259e95a79790ae9df29b28b85f6d20":[6,0,0,531,2],
@@ -241,13 +249,5 @@ var NAVTREEINDEX259 =
 "struct_ogre_1_1_lod_input_buffer.html#ac889e3caaa0b8fef6a9c2c14e52112ca":[7,0,0,531,6],
 "struct_ogre_1_1_lod_input_buffer_1_1_submesh.html":[7,0,0,531,0],
 "struct_ogre_1_1_lod_input_buffer_1_1_submesh.html":[6,0,0,558,0],
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a45430c40a1beecf29b83ea08f06ef88b":[7,0,0,531,0,3],
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a45430c40a1beecf29b83ea08f06ef88b":[6,0,0,558,0,3],
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a575926e31feb1cc9bfebab8a13fded97":[7,0,0,531,0,2],
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a575926e31feb1cc9bfebab8a13fded97":[6,0,0,558,0,2],
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a5b697e26b5de9178966bcbf3206235e8":[7,0,0,531,0,0],
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a5b697e26b5de9178966bcbf3206235e8":[6,0,0,558,0,0],
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#acd6671985bd3fb61fbc47c564de0449d":[6,0,0,558,0,1],
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#acd6671985bd3fb61fbc47c564de0449d":[7,0,0,531,0,1],
-"struct_ogre_1_1_lod_level.html":[7,0,0,535]
+"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a45430c40a1beecf29b83ea08f06ef88b":[7,0,0,531,0,3]
 };

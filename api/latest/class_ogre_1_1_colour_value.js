@@ -1,6 +1,10 @@
 var class_ogre_1_1_colour_value =
 [
     [ "ColourValue", "class_ogre_1_1_colour_value.html#acc033c4828ad9f7469269933d24850f5", null ],
+    [ "ColourValue", "class_ogre_1_1_colour_value.html#a7f1e157fca4b23e9679fe6976113a1b4", null ],
+    [ "ColourValue", "class_ogre_1_1_colour_value.html#a42f301cfd7ad74e9cb2dc4533134a689", null ],
+    [ "fromVector3", "class_ogre_1_1_colour_value.html#a9f44e6344b6884ac0d314b98cf995229", null ],
+    [ "fromVector4", "class_ogre_1_1_colour_value.html#a66871c71f2c89d5f63e030bd6ca27b97", null ],
     [ "getAsABGR", "class_ogre_1_1_colour_value.html#aca5f1d6fce186cca7ed00623a4956d1d", null ],
     [ "getAsARGB", "class_ogre_1_1_colour_value.html#ae349d2a6afb7e34d617677f4a959127d", null ],
     [ "getAsBGRA", "class_ogre_1_1_colour_value.html#a03b2c6c3e74c68dfb0288d14ce55ff9c", null ],
@@ -29,6 +33,8 @@ var class_ogre_1_1_colour_value =
     [ "setAsBGRA", "class_ogre_1_1_colour_value.html#afceb18ee8660573973f6a430e75f73c0", null ],
     [ "setAsRGBA", "class_ogre_1_1_colour_value.html#a0772677c217e45f2be90f187f5aaac9a", null ],
     [ "setHSB", "class_ogre_1_1_colour_value.html#a35b3e77e76f7584bdf83c9a3b1c7c1dc", null ],
+    [ "toVector3", "class_ogre_1_1_colour_value.html#ac1bc60bc83acaf557ee08a4ea0c330ef", null ],
+    [ "toVector4", "class_ogre_1_1_colour_value.html#aa6d17f8195103430ba44c69f80b30eae", null ],
     [ "operator*", "class_ogre_1_1_colour_value.html#a5b0ed5d4289ec1f56295380a0a334e4f", null ],
     [ "operator<<", "class_ogre_1_1_colour_value.html#a0ce74e1bea2a97f0b22d5df241d33779", null ],
     [ "a", "class_ogre_1_1_colour_value.html#a854058a76927880ae345ac1c465f9713", null ],

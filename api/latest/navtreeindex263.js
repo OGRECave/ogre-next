@@ -1,5 +1,13 @@
 var NAVTREEINDEX263 =
 {
+"struct_ogre_1_1_shader_params_1_1_auto_param.html#abad2321c8335dafea11440bba9d0037c":[5,0,0,18,0,2],
+"struct_ogre_1_1_shader_params_1_1_auto_param.html#ae0c5af0b812fce550aa24ef8eb748ee0":[5,0,0,18,0,0],
+"struct_ogre_1_1_shader_params_1_1_manual_param.html":[5,0,0,18,1],
+"struct_ogre_1_1_shader_params_1_1_manual_param.html#a1320e0b6cc0a86e1e6360f4b32173e40":[5,0,0,18,1,1],
+"struct_ogre_1_1_shader_params_1_1_manual_param.html#a880e52a307999acf9db0b87be8d5a5a8":[5,0,0,18,1,0],
+"struct_ogre_1_1_shader_params_1_1_manual_param.html#ad3c1b40f03373dff27823554d2ffa935":[5,0,0,18,1,2],
+"struct_ogre_1_1_shader_params_1_1_manual_param_ex.html":[5,0,0,18,2],
+"struct_ogre_1_1_shader_params_1_1_manual_param_ex.html#a13528eb335f8064e9a84cd7c83a5492b":[5,0,0,18,2,1],
 "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html#a49b917c271ea3b0b46b6da50c8d4f9bd":[5,0,0,18,2,0],
 "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html#a8802f287351b1847ea18f24fe924add8":[5,0,0,18,2,2],
 "struct_ogre_1_1_shader_params_1_1_param.html":[5,0,0,18,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX263 =
 "struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,52,0,4],
 "struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html#acbca4282f62a0871c6afa2beea6e553f":[5,2,1,52,0,15],
 "struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html#ad1f1a983f9e2dfddee802c47bb0b1ca9":[5,2,1,52,0,8],
-"struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html#adce32528577d71b228692df906ecd17c":[5,2,1,52,0,11],
-"struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html#aed1464ac3de21ff20db8f9f1f8608dc7":[5,2,1,52,0,12],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html":[5,2,10,127,0],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#a3b305a772837b369ed09c53a11e6f052":[5,2,10,127,0,5],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#a42597201e679c6c7dbf6ed444c8c6d54":[5,2,10,127,0,3],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#a9af6fe4aa8ffa90842005a79cb01edb8":[5,2,10,127,0,2],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#abd718312943eabec0d581cc55afeab06":[5,2,10,127,0,1],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#aed752397a852938c6beb11898a68b5eb":[5,2,10,127,0,0],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#af08b993255a42fef9937a2671f2eee13":[5,2,10,127,0,4]
+"struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html#adce32528577d71b228692df906ecd17c":[5,2,1,52,0,11]
 };

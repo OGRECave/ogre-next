@@ -8,6 +8,8 @@ var class_ogre_1_1_vector3 =
     [ "Vector3", "class_ogre_1_1_vector3.html#a84db6b6e0412f7a2e91e50649d6d9794", null ],
     [ "absDotProduct", "class_ogre_1_1_vector3.html#a5c942df8fa6e15d5a6300effcb2bf991", null ],
     [ "angleBetween", "class_ogre_1_1_vector3.html#aa353bdc212097f903b7edf4171ddc257", null ],
+    [ "collapseMax", "class_ogre_1_1_vector3.html#a900d8f2931e8c69fec828980ef53c282", null ],
+    [ "collapseMin", "class_ogre_1_1_vector3.html#afefe2929782f80f685885be661e0255b", null ],
     [ "crossProduct", "class_ogre_1_1_vector3.html#a2500548e775c294aab7bff6f7f8f312a", null ],
     [ "directionEquals", "class_ogre_1_1_vector3.html#a1818c9740f43005be86f9c9c78316ae1", null ],
     [ "distance", "class_ogre_1_1_vector3.html#a4f589cffa205896c40a04b8f1355ad3c", null ],

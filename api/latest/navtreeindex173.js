@@ -1,5 +1,11 @@
 var NAVTREEINDEX173 =
 {
+"class_ogre_1_1_texture_gpu_manager.html#a34ac834c93bbe00900232169bd8b3b53":[5,2,10,127,76],
+"class_ogre_1_1_texture_gpu_manager.html#a3796bc1de6a5a6efc208620686982b54":[5,2,10,127,66],
+"class_ogre_1_1_texture_gpu_manager.html#a3886c70b1674b192547c407edeb4c67e":[5,2,10,127,45],
+"class_ogre_1_1_texture_gpu_manager.html#a38a3edb2437dae48c14a0d20c50877fa":[5,2,10,127,11],
+"class_ogre_1_1_texture_gpu_manager.html#a40cd14ba1ba374c0bf5d0774a79b1290":[5,2,10,127,73],
+"class_ogre_1_1_texture_gpu_manager.html#a423e53613f85ab74171ac4bb291c2555":[5,2,10,127,51],
 "class_ogre_1_1_texture_gpu_manager.html#a435b32507353f22b8428e6f9d849e7e1":[5,2,10,127,13],
 "class_ogre_1_1_texture_gpu_manager.html#a45819a2f57371a1d5ae1d026a21510ab":[5,2,10,127,38],
 "class_ogre_1_1_texture_gpu_manager.html#a46f6c11e4af75070ada1e868e7b24412":[5,2,10,127,14],
@@ -243,11 +249,5 @@ var NAVTREEINDEX173 =
 "class_ogre_1_1_texture_unit_state.html#af2075a4593cb4c422ac653d2954f3659":[5,2,5,20,23],
 "class_ogre_1_1_texture_unit_state.html#af56112cb1e6d144b8fd63b280d8ae350":[5,2,5,20,118],
 "class_ogre_1_1_texture_unit_state.html#af73cbd6d4bc2dbf21596da3a8d0dc4fd":[5,2,5,20,116],
-"class_ogre_1_1_texture_unit_state.html#af825d87034ec5f4afddb43542aafff42":[5,2,5,20,47],
-"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7d":[5,2,5,20,5],
-"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da058c0eecb9f3f188fccc4d0018bf337b":[5,2,5,20,5,2],
-"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47":[5,2,5,20,5,6],
-"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82":[5,2,5,20,5,0],
-"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604":[5,2,5,20,5,7],
-"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da55066351a26967068b944c2170e51af1":[5,2,5,20,5,3]
+"class_ogre_1_1_texture_unit_state.html#af825d87034ec5f4afddb43542aafff42":[5,2,5,20,47]
 };

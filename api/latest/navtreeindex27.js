@@ -1,5 +1,11 @@
 var NAVTREEINDEX27 =
 {
+"class_ogre_1_1_compositor_pass_compute.html#a6f43846a1bb675c3ba19a8d3f41c6510":[5,2,1,7,12],
+"class_ogre_1_1_compositor_pass_compute.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,1,7,17],
+"class_ogre_1_1_compositor_pass_compute.html#a8a84a1b47ca32edebbc95acb770760f1":[5,2,1,7,10],
+"class_ogre_1_1_compositor_pass_compute.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,1,7,20],
+"class_ogre_1_1_compositor_pass_compute.html#a9f7ab3e159808c63ff31ac799e476c66":[5,2,1,7,14],
+"class_ogre_1_1_compositor_pass_compute.html#aa27ade5fa223d3d3e92fdea2a00bfdd6":[5,2,1,7,28],
 "class_ogre_1_1_compositor_pass_compute.html#aa824b4dbf60f853f28fcef5a8008333e":[5,2,1,7,6],
 "class_ogre_1_1_compositor_pass_compute.html#ab422c67a2c8844f410fe822a357cba3b":[5,2,1,7,23],
 "class_ogre_1_1_compositor_pass_compute.html#ac5b7bb6ef01b82ccaed9250630b4807b":[5,2,1,7,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX27 =
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#a59e9bca410727e2b8b891dd9a1f0c1ad":[5,2,1,13,6],
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#a5b72f1a56bcbd829fc60fa21afde5927":[5,2,1,13,23],
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#a63fc6bdc2eb6aeac24898a77ec5e2023":[5,2,1,13,15],
-"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a6e881a7f92659dabfe52eefec2ccf603":[5,2,1,13,38],
-"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a70ba2384e061021d6eceb5dd20b66d47":[5,2,1,13,37],
-"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a7446207e62dfceb532bd3dc3cf78039b":[5,2,1,13,36],
-"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a7731386fe3b2ac2cdb4a8be6e4e138b2":[5,2,1,13,49],
-"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a7dab1aea94564e8353f04602f2d4b979":[5,2,1,13,21],
-"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,1,13,8],
-"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a8c3285eeb1ee8a3538f327ff8d556c53":[5,2,1,13,5]
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a6e881a7f92659dabfe52eefec2ccf603":[5,2,1,13,38]
 };

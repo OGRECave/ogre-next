@@ -1,8 +1,14 @@
 var NAVTREEINDEX64 =
 {
+"class_ogre_1_1_focused_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[5,0,1,20,3],
+"class_ogre_1_1_focused_shadow_camera_setup.html#adce32528577d71b228692df906ecd17c":[5,2,11,20,14],
+"class_ogre_1_1_focused_shadow_camera_setup.html#adce32528577d71b228692df906ecd17c":[5,0,1,20,14],
+"class_ogre_1_1_focused_shadow_camera_setup.html#addd8f399731c4868d147ae308d521da8":[5,2,11,20,0],
+"class_ogre_1_1_focused_shadow_camera_setup.html#addd8f399731c4868d147ae308d521da8":[5,0,1,20,0],
 "class_ogre_1_1_focused_shadow_camera_setup.html#aed1464ac3de21ff20db8f9f1f8608dc7":[5,2,11,20,15],
-"class_ogre_1_1_focused_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d":[5,2,11,20,17],
+"class_ogre_1_1_focused_shadow_camera_setup.html#aed1464ac3de21ff20db8f9f1f8608dc7":[5,0,1,20,15],
 "class_ogre_1_1_focused_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d":[5,0,1,20,17],
+"class_ogre_1_1_focused_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d":[5,2,11,20,17],
 "class_ogre_1_1_font.html":[5,2,10,39],
 "class_ogre_1_1_font.html#a01a6e571941916969316ab23c5ee4739":[5,2,10,39,37],
 "class_ogre_1_1_font.html#a07e619aa09d3bc6789a6667cb4fc572c":[5,2,10,39,6],
@@ -243,11 +249,5 @@ var NAVTREEINDEX64 =
 "class_ogre_1_1_forward_clustered.html#a9e327e8b2c00343fc28aca6877e16a9d":[5,2,10,42,43],
 "class_ogre_1_1_forward_clustered.html#aa1ab1da53c3e868e41187368b9c9b135":[5,2,10,42,25],
 "class_ogre_1_1_forward_clustered.html#aa1df081eab00adc8627af9f443c4f46c":[5,2,10,42,14],
-"class_ogre_1_1_forward_clustered.html#aa439cebd12e355190a361d06fe9486e2":[5,2,10,42,1],
-"class_ogre_1_1_forward_clustered.html#aa439cebd12e355190a361d06fe9486e2a764d1a4f051d1b411a48ea2d69963ff9":[5,2,10,42,1,0],
-"class_ogre_1_1_forward_clustered.html#aa439cebd12e355190a361d06fe9486e2a98c8d76dea9b04102dc00bb463bdc3e9":[5,2,10,42,1,1],
-"class_ogre_1_1_forward_clustered.html#aa439cebd12e355190a361d06fe9486e2ac25e587dc8bc6baf59e29a70a7dc243c":[5,2,10,42,1,2],
-"class_ogre_1_1_forward_clustered.html#aa9d7d72f1f4fe72949a8b0006b91024c":[5,2,10,42,6],
-"class_ogre_1_1_forward_clustered.html#aab10c992600476f4227e8205bb383293":[5,2,10,42,42],
-"class_ogre_1_1_forward_clustered.html#aadd8ac3d6f3c664ea8a76b414811fb91":[5,2,10,42,45]
+"class_ogre_1_1_forward_clustered.html#aa439cebd12e355190a361d06fe9486e2":[5,2,10,42,1]
 };
