@@ -364,11 +364,8 @@ namespace Demo
 
         if( mSceneManager )
         {
-            Ogre::AtmosphereComponent *atmosphere = mSceneManager->getAtmosphere();
-            if( atmosphere )
-            {
-                OGRE_DELETE atmosphere;
-            }
+            Ogre::AtmosphereComponent *atmosphere = mSceneManager->getAtmosphereRaw();
+            OGRE_DELETE atmosphere;
 
             mSceneManager->removeRenderQueueListener( mOverlaySystem );
         }
@@ -896,6 +893,11 @@ namespace Demo
     void GraphicsSystem::createAtmosphere( Ogre::Light *sunLight )
     {
 #ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        {
+            Ogre::AtmosphereComponent *atmosphere = mSceneManager->getAtmosphereRaw();
+            OGRE_DELETE atmosphere;
+        }
+
         Ogre::AtmosphereNpr *atmosphere =
             OGRE_NEW Ogre::AtmosphereNpr( mRoot->getRenderSystem()->getVaoManager() );
         atmosphere->setSunDir(

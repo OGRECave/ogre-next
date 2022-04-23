@@ -1353,6 +1353,9 @@ namespace Ogre
         /// Gets currently set atmosphere. It's never nullptr.
         AtmosphereComponent *getAtmosphere() { return mAtmosphere; }
 
+        /// Gets currently set atmosphere. Can be nullptr if none is set.
+        AtmosphereComponent *getAtmosphereRaw();
+
         NodeMemoryManager &_getNodeMemoryManager( SceneMemoryMgrTypes sceneType )
         {
             return mNodeMemoryManager[sceneType];

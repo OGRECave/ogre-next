@@ -1202,6 +1202,13 @@ namespace Ogre
             mAtmosphere = &c_nullAtmosphere;
     }
     //-----------------------------------------------------------------------
+    AtmosphereComponent *SceneManager::getAtmosphereRaw()
+    {
+        if( mAtmosphere == &c_nullAtmosphere )
+            return nullptr;
+        return mAtmosphere;
+    }
+    //-----------------------------------------------------------------------
     void SceneManager::setDecalsDiffuse( TextureGpu *tex )
     {
         if( tex )
