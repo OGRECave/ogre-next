@@ -49,10 +49,10 @@ namespace Demo
 
             for( int i = 0; i < 2; ++i )
             {
-                const Ogre::Vector3 camPos( eyeDistance * ( i * 2 - 1 ), 0, 0 );
+                const Ogre::Vector3 camPos( eyeDistance * ( Ogre::Real( i ) * 2 - 1 ), 0, 0 );
                 mEyeCameras[i]->setPosition( camPos );
 
-                Ogre::Vector3 lookAt( eyeFocusDistance * ( i * 2 - 1 ), -5, -15 );
+                Ogre::Vector3 lookAt( eyeFocusDistance * ( Ogre::Real( i ) * 2 - 1 ), -5, -15 );
                 // Ogre::Vector3 lookAt( 0, 0, 0 );
 
                 // Look back along -Z

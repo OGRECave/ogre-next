@@ -252,7 +252,7 @@ namespace Ogre
             float p_convolutionSampleCount = mDefinition->mSamplesPerIteration;
             float p_convolutionMaxSamples =
                 mDefinition->mNumInitialPasses != std::numeric_limits<uint32>::max()
-                    ? ( mDefinition->mSamplesPerIteration * mDefinition->mNumInitialPasses )
+                    ? ( mDefinition->mSamplesPerIteration * float( mDefinition->mNumInitialPasses ) )
                     : mDefinition->mSamplesPerIteration;
             const float p_convolutionRoughness = mip / static_cast<float>( outNumMips - 1u );
 

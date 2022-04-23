@@ -2131,8 +2131,8 @@ namespace Ogre
                     shadowNode->getIndexToContiguousShadowMapTex( (size_t)shadowMapTexIdx );
                 uint32 texWidth = contiguousShadowMapTex[shadowMapTexContigIdx]->getWidth();
                 uint32 texHeight = contiguousShadowMapTex[shadowMapTexContigIdx]->getHeight();
-                *passBufferPtr++ = 1.0f / texWidth;
-                *passBufferPtr++ = 1.0f / texHeight;
+                *passBufferPtr++ = 1.0f / float( texWidth );
+                *passBufferPtr++ = 1.0f / float( texHeight );
                 *passBufferPtr++ = static_cast<float>( texWidth );
                 *passBufferPtr++ = static_cast<float>( texHeight );
 
@@ -2143,9 +2143,9 @@ namespace Ogre
             if( passSceneDef && passSceneDef->mUvBakingSet != 0xFF )
             {
                 *passBufferPtr++ = static_cast<float>( passSceneDef->mUvBakingOffset.x * Real( 2.0 ) /
-                                                       renderTarget->getWidth() );
+                                                       Real( renderTarget->getWidth() ) );
                 *passBufferPtr++ = static_cast<float>( passSceneDef->mUvBakingOffset.y * Real( 2.0 ) /
-                                                       renderTarget->getHeight() );
+                                                       Real( renderTarget->getHeight() ) );
                 *passBufferPtr++ = 0.0f;
                 *passBufferPtr++ = 0.0f;
             }
@@ -2334,7 +2334,7 @@ namespace Ogre
             {
                 float invHeightLightProfileTex = 1.0f;
                 if( mLightProfilesTexture )
-                    invHeightLightProfileTex = 1.0f / mLightProfilesTexture->getHeight();
+                    invHeightLightProfileTex = 1.0f / float( mLightProfilesTexture->getHeight() );
 
                 // All directional lights (caster and non-caster) are sent.
                 // Then non-directional shadow-casting shadow lights are sent.

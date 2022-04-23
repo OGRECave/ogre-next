@@ -209,9 +209,9 @@ namespace Ogre
     {
         m_width = image.getWidth();
         m_depth = image.getHeight();
-        m_depthWidthRatio = m_depth / (float)( m_width );
-        m_invWidth = 1.0f / m_width;
-        m_invDepth = 1.0f / m_depth;
+        m_depthWidthRatio = float( m_depth ) / float( m_width );
+        m_invWidth = 1.0f / float( m_width );
+        m_invDepth = 1.0f / float( m_depth );
 
         // image.generateMipmaps( false, Image::FILTER_NEAREST );
 
@@ -361,7 +361,7 @@ namespace Ogre
 
         const uint32 basePixelDimension = m_basePixelDimension;
         const uint32 vertPixelDimension =
-            static_cast<uint32>( m_basePixelDimension * m_depthWidthRatio );
+            static_cast<uint32>( float( m_basePixelDimension ) * m_depthWidthRatio );
 
         for( size_t y = vertPixelDimension - 1u; y < m_depth - 1u; y += vertPixelDimension )
         {
@@ -426,8 +426,8 @@ namespace Ogre
         const float fWidth = static_cast<float>( m_width );
         const float fDepth = static_cast<float>( m_depth );
 
-        retVal.x = ( gPos.x / fWidth ) * m_xzDimensions.x + m_terrainOrigin.x;
-        retVal.y = ( gPos.z / fDepth ) * m_xzDimensions.y + m_terrainOrigin.z;
+        retVal.x = ( float( gPos.x ) / fWidth ) * m_xzDimensions.x + m_terrainOrigin.x;
+        retVal.y = ( float( gPos.z ) / fDepth ) * m_xzDimensions.y + m_terrainOrigin.z;
 
         return retVal;
     }
@@ -444,8 +444,8 @@ namespace Ogre
         //        return true;
 
         const Vector2 cellPos = gridToWorld( gPos );
-        const Vector2 cellSize( ( gSize.x + 1 ) * m_xzRelativeSize.x,
-                                ( gSize.z + 1 ) * m_xzRelativeSize.y );
+        const Vector2 cellSize( Real( gSize.x + 1 ) * m_xzRelativeSize.x,
+                                Real( gSize.z + 1 ) * m_xzRelativeSize.y );
 
         const Vector3 vHalfSizeYUp = Vector3( cellSize.x, m_height, cellSize.y ) * 0.5f;
         const Vector3 vCenter =
@@ -547,7 +547,8 @@ namespace Ogre
         const Vector3 camPos = toYUp( m_camera->getDerivedPosition() );
 
         const int32 basePixelDimension = static_cast<int32>( m_basePixelDimension );
-        const int32 vertPixelDimension = static_cast<int32>( m_basePixelDimension * m_depthWidthRatio );
+        const int32 vertPixelDimension =
+            static_cast<int32>( float( m_basePixelDimension ) * m_depthWidthRatio );
 
         GridPoint cellSize;
         cellSize.x = basePixelDimension;
@@ -740,8 +741,8 @@ namespace Ogre
         {
             const Vector2 vPos2D = gridToWorld( pos2D );
 
-            const float dx = ( vPos.x - vPos2D.x ) * m_width * m_xzInvDimensions.x;
-            const float dz = ( vPos.z - vPos2D.y ) * m_depth * m_xzInvDimensions.y;
+            const float dx = ( vPos.x - vPos2D.x ) * float( m_width ) * m_xzInvDimensions.x;
+            const float dz = ( vPos.z - vPos2D.y ) * float( m_depth ) * m_xzInvDimensions.y;
 
             float a, b, c;
             const float h00 = m_heightMap[size_t( pos2D.z * iWidth + pos2D.x )];

@@ -166,8 +166,8 @@ namespace Ogre
         else
         {
             float scale = getViewPointToPixelScale();
-            width = (uint32)floorf( mRequestedWidth * scale + 0.5f );
-            height = (uint32)floorf( mRequestedHeight * scale + 0.5f );
+            width = (uint32)floorf( float( mRequestedWidth ) * scale + 0.5f );
+            height = (uint32)floorf( float( mRequestedHeight ) * scale + 0.5f );
         }
     }
     //-----------------------------------------------------------------------------------

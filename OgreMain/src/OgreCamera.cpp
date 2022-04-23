@@ -360,11 +360,12 @@ namespace Ogre
         // update the pixel display ratio
         if( mProjType == Ogre::PT_PERSPECTIVE )
         {
-            mPixelDisplayRatio = ( 2 * Ogre::Math::Tan( mFOVy * Real( 0.5 ) ) ) / vp->getActualHeight();
+            mPixelDisplayRatio =
+                ( Real( 2 ) * Ogre::Math::Tan( mFOVy * Real( 0.5 ) ) ) / Real( vp->getActualHeight() );
         }
         else
         {
-            mPixelDisplayRatio = ( mTop - mBottom ) / vp->getActualHeight();
+            mPixelDisplayRatio = ( mTop - mBottom ) / Real( vp->getActualHeight() );
         }
 
         // notify prerender scene

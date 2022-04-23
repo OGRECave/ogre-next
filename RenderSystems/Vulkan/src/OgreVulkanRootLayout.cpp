@@ -39,8 +39,16 @@ THE SOFTWARE.
 #include "OgreLwString.h"
 #include "OgreStringConverter.h"
 
+#if defined( __clang__ )
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#    pragma clang diagnostic ignored "-Wdeprecated-copy"
+#endif
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
+#if defined( __clang__ )
+#    pragma clang diagnostic pop
+#endif
 
 #include "vulkan/vulkan_core.h"
 
@@ -532,7 +540,7 @@ namespace Ogre
             size_t numWriteDescSets = 0u;
             uint32 currBinding = 0u;
             // ParamBuffer consumes up to 1 per stage (not just 1)
-            VkWriteDescriptorSet writeDescSets[DescBindingTypes::Sampler + NumShaderTypes];
+            VkWriteDescriptorSet writeDescSets[DescBindingTypes::Sampler + uint32( NumShaderTypes )];
 
             // Note: We must bind in the same order as DescBindingTypes
             if( !mBaked[i] )

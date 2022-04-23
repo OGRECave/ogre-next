@@ -64,7 +64,7 @@ namespace Ogre
 
             // The current animation frame.
             uint32 currentFrame =
-                static_cast<uint32>( value * mNumFramesHorizontal ) % mNumFramesHorizontal;
+                static_cast<uint32>( value * Real( mNumFramesHorizontal ) ) % mNumFramesHorizontal;
 
             if( mLastFrame == 0 && currentFrame == ( mNumFramesHorizontal - 1u ) )
             {

@@ -170,9 +170,9 @@ namespace Ogre
     inline Vector3 quantToVec3( const Grid3D position, const Vector3 voxelCellSize )
     {
         Vector3 retVal;
-        retVal.x = position.x * voxelCellSize.x;
-        retVal.y = position.y * voxelCellSize.y;
-        retVal.z = position.z * voxelCellSize.z;
+        retVal.x = Real( position.x ) * voxelCellSize.x;
+        retVal.y = Real( position.y ) * voxelCellSize.y;
+        retVal.z = Real( position.z ) * voxelCellSize.z;
 
         return retVal;
     }
@@ -395,9 +395,9 @@ namespace Ogre
             const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
             const Grid3D oldPos = quantizePosition( cascade.lastCameraPosition, voxelCellSize );
 
-            return abs( newPos.x - oldPos.x ) >= cascade.cameraStepSize.x ||  //
-                   abs( newPos.y - oldPos.y ) >= cascade.cameraStepSize.y ||  //
-                   abs( newPos.z - oldPos.z ) >= cascade.cameraStepSize.z;
+            return Real( abs( newPos.x - oldPos.x ) ) >= cascade.cameraStepSize.x ||  //
+                   Real( abs( newPos.y - oldPos.y ) ) >= cascade.cameraStepSize.y ||  //
+                   Real( abs( newPos.z - oldPos.z ) ) >= cascade.cameraStepSize.z;
         }
     }
     //-------------------------------------------------------------------------
@@ -474,9 +474,10 @@ namespace Ogre
                 //      2. De-amplify cascade i + 1 when we have enough lighting information
                 //         accumulated (via 1.0 - result.alpha). Done in shader
                 const uint32 numBounces =
-                    mNumBounces == 0u ? 0u
-                                      : static_cast<uint32>( roundf(
-                                            std::sqrt( ( ( mNumBounces + 1u ) * factor ) - 1.0f ) ) );
+                    mNumBounces == 0u
+                        ? 0u
+                        : static_cast<uint32>(
+                              roundf( std::sqrt( ( Real( mNumBounces + 1u ) * factor ) - 1.0f ) ) );
 
                 mCascades[i]->update( sceneManager, numBounces, cascade.thinWallCounter,
                                       cascade.bAutoMultiplier, cascade.rayMarchStepScale,

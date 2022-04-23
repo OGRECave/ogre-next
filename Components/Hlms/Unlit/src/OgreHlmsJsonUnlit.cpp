@@ -39,7 +39,15 @@ THE SOFTWARE.
 #        pragma GCC diagnostic push
 #        pragma GCC diagnostic ignored "-Wclass-memaccess"
 #    endif
+#    if defined( __clang__ )
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#        pragma clang diagnostic ignored "-Wdeprecated-copy"
+#    endif
 #    include "rapidjson/document.h"
+#    if defined( __clang__ )
+#        pragma clang diagnostic pop
+#    endif
 #    if defined( __GNUC__ ) && !defined( __clang__ )
 #        pragma GCC diagnostic pop
 #    endif

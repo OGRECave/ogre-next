@@ -1968,11 +1968,12 @@ namespace Ogre
                 if( mDerivedDepthBias && mCurrentPassIterationNum > 0 )
                 {
                     const float biasSign = mReverseDepth ? 1.0f : -1.0f;
-                    vkCmdSetDepthBias( cmdBuffer,
-                                       ( mDerivedDepthBiasBase +
-                                         mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
-                                           biasSign,
-                                       0.f, mDerivedDepthBiasSlopeScale * biasSign );
+                    vkCmdSetDepthBias(
+                        cmdBuffer,
+                        ( mDerivedDepthBiasBase +
+                          mDerivedDepthBiasMultiplier * float( mCurrentPassIterationNum ) ) *
+                            biasSign,
+                        0.f, mDerivedDepthBiasSlopeScale * biasSign );
                 }
 
                 vkCmdDrawIndexed( cmdBuffer, (uint32)mCurrentIndexBuffer->indexCount,
@@ -1988,11 +1989,12 @@ namespace Ogre
                 if( mDerivedDepthBias && mCurrentPassIterationNum > 0 )
                 {
                     const float biasSign = mReverseDepth ? 1.0f : -1.0f;
-                    vkCmdSetDepthBias( cmdBuffer,
-                                       ( mDerivedDepthBiasBase +
-                                         mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
-                                           biasSign,
-                                       0.0f, mDerivedDepthBiasSlopeScale * biasSign );
+                    vkCmdSetDepthBias(
+                        cmdBuffer,
+                        ( mDerivedDepthBiasBase +
+                          mDerivedDepthBiasMultiplier * float( mCurrentPassIterationNum ) ) *
+                            biasSign,
+                        0.0f, mDerivedDepthBiasSlopeScale * biasSign );
                 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS

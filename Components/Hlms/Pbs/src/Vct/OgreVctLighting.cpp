@@ -955,8 +955,8 @@ namespace Ogre
             autoMultiplierValue = mBakingMultiplier;
         mInvBakingMultiplier = 1.0f / autoMultiplierValue;
 
-        const Vector3 voxelRes( mLightVoxel[0]->getWidth(), mLightVoxel[0]->getHeight(),
-                                mLightVoxel[0]->getDepth() );
+        const Vector3 voxelRes( Real( mLightVoxel[0]->getWidth() ), Real( mLightVoxel[0]->getHeight() ),
+                                Real( mLightVoxel[0]->getDepth() ) );
         const Vector3 voxelCellSize( mVoxelizer->getVoxelCellSize() );
 
         Vector3 dirCorrection( 1.0f / voxelCellSize );

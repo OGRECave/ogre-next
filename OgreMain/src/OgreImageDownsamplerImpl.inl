@@ -205,7 +205,7 @@ namespace Ogre
                     }
 
 #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
-                    float invDivisor = 1.0f / divisor;
+                    float invDivisor = 1.0f / float( divisor );
 #endif
 
 #ifdef OGRE_DOWNSAMPLE_R
@@ -257,8 +257,8 @@ namespace Ogre
         Quaternion kRotations[5][5];
 
         {
-            Radian xRadStep( Ogre::Math::PI / ( srcWidth * 2.0f ) );
-            Radian yRadStep( Ogre::Math::PI / ( srcHeight * 2.0f ) );
+            Radian xRadStep( Ogre::Math::PI / ( float( srcWidth ) * 2.0f ) );
+            Radian yRadStep( Ogre::Math::PI / ( float( srcHeight ) * 2.0f ) );
 
             for( int y = kernelStartY; y <= kernelEndY; ++y )
             {
@@ -273,8 +273,8 @@ namespace Ogre
 
         const FaceSwizzle &faceSwizzle = c_faceSwizzles[currentFace];
 
-        Real invSrcWidth = 1.0f / srcWidth;
-        Real invSrcHeight = 1.0f / srcHeight;
+        Real invSrcWidth = 1.0f / float( srcWidth );
+        Real invSrcHeight = 1.0f / float( srcHeight );
 
         int32 dstBytesPerRowSkip = dstBytesPerRow - dstWidth * OGRE_TOTAL_SIZE;
 
@@ -299,8 +299,8 @@ namespace Ogre
 
                 OGRE_UINT32 divisor = 0;
 
-                Vector3 vForwardSample( ( x * 2 + 0.5f ) * invSrcWidth * 2.0f - 1.0f,
-                                        ( y * 2 + 0.5f ) * invSrcHeight * -2.0f + 1.0f, 1.0f );
+                Vector3 vForwardSample( ( float( x ) * 2 + 0.5f ) * invSrcWidth * 2.0f - 1.0f,
+                                        ( float( y ) * 2 + 0.5f ) * invSrcHeight * -2.0f + 1.0f, 1.0f );
 
                 for( int k_y = kernelStartY; k_y <= kernelEndY; ++k_y )
                 {
@@ -317,10 +317,10 @@ namespace Ogre
 
                         CubemapUVI uvi = cubeMapProject( vSample );
 
-                        int iu =
-                            std::min( static_cast<int>( floorf( uvi.u * srcWidth ) ), srcWidth - 1 );
-                        int iv =
-                            std::min( static_cast<int>( floorf( uvi.v * srcHeight ) ), srcHeight - 1 );
+                        int iu = std::min( static_cast<int>( floorf( uvi.u * float( srcWidth ) ) ),
+                                           srcWidth - 1 );
+                        int iv = std::min( static_cast<int>( floorf( uvi.v * float( srcHeight ) ) ),
+                                           srcHeight - 1 );
 
                         srcPtr = allPtr[uvi.face] + iv * srcBytesPerRow + iu * OGRE_TOTAL_SIZE;
 
@@ -346,20 +346,20 @@ namespace Ogre
                 }
 
 #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
-                float invDivisor = 1.0f / divisor;
+                float invDivisor = 1.0f / float( divisor );
 #endif
 
 #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumR ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumG ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumB ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
@@ -430,20 +430,20 @@ namespace Ogre
                 }
 
 #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
-                float invDivisor = 1.0f / divisor;
+                float invDivisor = 1.0f / float( divisor );
 #endif
 
 #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumR ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumG ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumB ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
@@ -508,20 +508,20 @@ namespace Ogre
                 }
 
 #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
-                float invDivisor = 1.0f / divisor;
+                float invDivisor = 1.0f / float( divisor );
 #endif
 
 #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumR ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumG ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumB ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
@@ -592,20 +592,20 @@ namespace Ogre
                 }
 
 #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
-                float invDivisor = 1.0f / divisor;
+                float invDivisor = 1.0f / float( divisor );
 #endif
 
 #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumR ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumG ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumB ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
@@ -667,20 +667,20 @@ namespace Ogre
                 }
 
 #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
-                float invDivisor = 1.0f / divisor;
+                float invDivisor = 1.0f / float( divisor );
 #endif
 
 #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumR ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumG ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( float( accumB ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =

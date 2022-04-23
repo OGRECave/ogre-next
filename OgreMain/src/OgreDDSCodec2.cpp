@@ -667,7 +667,8 @@ namespace Ogre
             for( size_t i = 1u; i < 7u; ++i )
             {
                 derivedAlphas[i + 1] =
-                    ( derivedAlphas[0] * ( 7 - i ) + derivedAlphas[1] * i ) * ( 1.0f / 7.0f );
+                    ( derivedAlphas[0] * float( 7 - i ) + derivedAlphas[1] * float( i ) ) *
+                    ( 1.0f / 7.0f );
             }
         }
         else
@@ -679,7 +680,8 @@ namespace Ogre
             for( size_t i = 1u; i < 5u; ++i )
             {
                 derivedAlphas[i + 1] =
-                    ( derivedAlphas[0] * ( 5 - i ) + derivedAlphas[1] * i ) * ( 1.0f / 5.0f );
+                    ( derivedAlphas[0] * float( 5 - i ) + derivedAlphas[1] * float( i ) ) *
+                    ( 1.0f / 5.0f );
             }
 
             derivedAlphas[6] = 0.0f;

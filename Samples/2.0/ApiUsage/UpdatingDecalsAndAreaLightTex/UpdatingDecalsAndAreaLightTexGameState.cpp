@@ -110,7 +110,7 @@ namespace Demo
         {
             for( size_t x = 0; x < texWidth; ++x )
             {
-                const Ogre::Vector2 uv( x * invTexWidth, y * invTexHeight );
+                const Ogre::Vector2 uv( Ogre::Real( x ) * invTexWidth, Ogre::Real( y ) * invTexHeight );
 
                 const float d = sdAnnularBox( uv, Ogre::Vector2( 0.5f ), Ogre::Vector2( 0.3f ), radius );
                 if( d <= 0 )
@@ -403,7 +403,9 @@ namespace Demo
 
         for( size_t i = 0; i < c_numAreaLights; ++i )
         {
-            createLight( Ogre::Vector3( ( i - ( c_numAreaLights - 1u ) * 0.5f ) * 10, 4.0f, 0.0f ), i );
+            createLight(
+                Ogre::Vector3( ( Ogre::Real( i ) - ( c_numAreaLights - 1u ) * 0.5f ) * 10, 4.0f, 0.0f ),
+                i );
             setupLightTexture( i );
         }
 

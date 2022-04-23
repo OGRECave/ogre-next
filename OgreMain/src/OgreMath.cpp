@@ -71,7 +71,7 @@ namespace Ogre
     {
         msAngleUnit = AU_DEGREE;
         mTrigTableSize = static_cast<int>( trigTableSize );
-        mTrigTableFactor = mTrigTableSize / Math::TWO_PI;
+        mTrigTableFactor = Real( mTrigTableSize ) / Math::TWO_PI;
 
         mSinTable = OGRE_ALLOC_T( Real, trigTableSize, MEMCATEGORY_GENERAL );
         mTanTable = OGRE_ALLOC_T( Real, trigTableSize, MEMCATEGORY_GENERAL );
@@ -96,7 +96,7 @@ namespace Ogre
         Real angle;
         for( int i = 0; i < mTrigTableSize; ++i )
         {
-            angle = Math::TWO_PI * i / mTrigTableSize;
+            angle = Math::TWO_PI * Real( i ) / Real( mTrigTableSize );
             mSinTable[i] = std::sin( angle );
             mTanTable[i] = std::tan( angle );
         }

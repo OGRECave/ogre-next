@@ -1059,7 +1059,7 @@ namespace Ogre
         // Remove old times
         times.erase( times.begin(), it );
 
-        return Real( times.back() - times.front() ) / ( ( times.size() - 1 ) * 1000 );
+        return Real( times.back() - times.front() ) / Real( ( times.size() - 1u ) * 1000 );
     }
     //-----------------------------------------------------------------------
     void Root::queueEndRendering( bool state /* = true */ ) { mQueuedEnd = state; }

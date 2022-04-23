@@ -155,14 +155,14 @@ namespace Ogre
         void RibbonTrail::setTrailLength( Real len )
         {
             mTrailLength = len;
-            mElemLength = mTrailLength / mMaxElementsPerChain;
+            mElemLength = mTrailLength / Real( mMaxElementsPerChain );
             mSquaredElemLength = mElemLength * mElemLength;
         }
         //-----------------------------------------------------------------------
         void RibbonTrail::setMaxChainElements( size_t maxElements )
         {
             BillboardChain::setMaxChainElements( maxElements );
-            mElemLength = mTrailLength / mMaxElementsPerChain;
+            mElemLength = mTrailLength / Real( mMaxElementsPerChain );
             mSquaredElemLength = mElemLength * mElemLength;
 
             resetAllTrails();

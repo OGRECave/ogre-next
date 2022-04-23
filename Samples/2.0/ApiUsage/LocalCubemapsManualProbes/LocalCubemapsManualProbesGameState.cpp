@@ -294,7 +294,7 @@ namespace Demo
         // Whether they look better or worse depends on how good you've subdivided the
         // scene and assigned the manual probes.
         const Ogre::CubemapProbeVec &probes = mParallaxCorrectedCubemap->getProbes();
-        for( int i = 0; i < 4 * 4; ++i )
+        for( size_t i = 0; i < 4 * 4; ++i )
             mMaterials[i]->setCubemapProbe( probes[i % 4] );
     }
     //-----------------------------------------------------------------------------------
@@ -319,7 +319,7 @@ namespace Demo
         /*if( mAnimateObjects )
         {
             for( int i=0; i<16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * i * 0.125f) );
+                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * float( i ) * 0.125f) );
         }*/
 
         // Have the parallax corrected cubemap system keep track of the camera.
@@ -393,7 +393,7 @@ namespace Demo
             if( !mPerPixelReflections )
             {
                 const Ogre::CubemapProbeVec &probes = mParallaxCorrectedCubemap->getProbes();
-                for( int i = 0; i < 4 * 4; ++i )
+                for( size_t i = 0; i < 4 * 4; ++i )
                 {
                     if( mMaterials[i]->getCubemapProbe() )
                         mMaterials[i]->setCubemapProbe( 0 );
@@ -429,7 +429,7 @@ namespace Demo
             {
                 // Restore manual probes
                 const Ogre::CubemapProbeVec &probes = mParallaxCorrectedCubemap->getProbes();
-                for( int i = 0; i < 4 * 4; ++i )
+                for( size_t i = 0; i < 4 * 4; ++i )
                     mMaterials[i]->setCubemapProbe( probes[i % 4] );
             }
         }

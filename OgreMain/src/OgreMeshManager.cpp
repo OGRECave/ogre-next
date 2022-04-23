@@ -510,12 +510,12 @@ namespace Ogre
             // Lock the whole buffer
             HardwareBufferLockGuard vbufLock( vbuf, HardwareBuffer::HBL_DISCARD );
             float *pReal = static_cast<float *>( vbufLock.pData );
-            Real xSpace = params.width / params.xsegments;
-            Real ySpace = params.height / params.ysegments;
+            Real xSpace = params.width / Real( params.xsegments );
+            Real ySpace = params.height / Real( params.ysegments );
             Real halfWidth = params.width / 2;
             Real halfHeight = params.height / 2;
-            Real xTex = ( 1.0f * params.xTile ) / params.xsegments;
-            Real yTex = ( 1.0f * params.yTile ) / params.ysegments;
+            Real xTex = ( 1.0f * params.xTile ) / Real( params.xsegments );
+            Real yTex = ( 1.0f * params.yTile ) / Real( params.ysegments );
             Vector3 vec;
             Vector3 min = Vector3::ZERO, max = Vector3::UNIT_SCALE;
             Real maxSquaredLength = 0;
@@ -526,8 +526,8 @@ namespace Ogre
                 for( uint32 x = 0u; x < params.xsegments + 1u; ++x )
                 {
                     // Work out centered on origin
-                    vec.x = ( x * xSpace ) - halfWidth;
-                    vec.y = ( y * ySpace ) - halfHeight;
+                    vec.x = ( Real( x ) * xSpace ) - halfWidth;
+                    vec.y = ( Real( y ) * ySpace ) - halfHeight;
                     vec.z = 0.0f;
                     // Transform by orientation and distance
                     vec = xform.transformAffine( vec );
@@ -565,8 +565,8 @@ namespace Ogre
 
                     for( unsigned short i = 0; i < params.numTexCoordSets; ++i )
                     {
-                        *pReal++ = x * xTex;
-                        *pReal++ = 1 - ( y * yTex );
+                        *pReal++ = Real( x ) * xTex;
+                        *pReal++ = 1 - ( Real( y ) * yTex );
                     }
 
                 }  // x
@@ -654,12 +654,12 @@ namespace Ogre
             // Generate vertex data
             HardwareBufferLockGuard vbufLock( vbuf, HardwareBuffer::HBL_DISCARD );
             float *pFloat = static_cast<float *>( vbufLock.pData );
-            Real xSpace = params.width / params.xsegments;
-            Real ySpace = params.height / params.ysegments;
+            Real xSpace = params.width / Real( params.xsegments );
+            Real ySpace = params.height / Real( params.ysegments );
             Real halfWidth = params.width / 2;
             Real halfHeight = params.height / 2;
-            Real xTex = ( 1.0f * params.xTile ) / params.xsegments;
-            Real yTex = ( 1.0f * params.yTile ) / params.ysegments;
+            Real xTex = ( 1.0f * params.xTile ) / Real( params.xsegments );
+            Real yTex = ( 1.0f * params.yTile ) / Real( params.ysegments );
             Vector3 vec;
 
             Vector3 min = Vector3::ZERO, max = Vector3::UNIT_SCALE;
@@ -673,13 +673,13 @@ namespace Ogre
                 for( uint32 x = 0u; x < params.xsegments + 1; ++x )
                 {
                     // Work out centered on origin
-                    vec.x = ( x * xSpace ) - halfWidth;
-                    vec.y = ( y * ySpace ) - halfHeight;
+                    vec.x = ( Real( x ) * xSpace ) - halfWidth;
+                    vec.y = ( Real( y ) * ySpace ) - halfHeight;
 
                     // Here's where curved plane is different from standard plane.  Amazing, I know.
-                    diff_x = ( x - ( ( params.xsegments ) / 2u ) ) /
+                    diff_x = Real( x - ( ( params.xsegments ) / 2u ) ) /
                              static_cast<Real>( ( params.xsegments ) );
-                    diff_y = ( y - ( ( params.ysegments ) / 2u ) ) /
+                    diff_y = Real( y - ( ( params.ysegments ) / 2u ) ) /
                              static_cast<Real>( ( params.ysegments ) );
                     dist = std::sqrt( diff_x * diff_x + diff_y * diff_y );
                     vec.z = ( -std::sin( ( 1 - dist ) * ( Math::PI / 2 ) ) * params.curvature ) +
@@ -725,8 +725,8 @@ namespace Ogre
 
                     for( unsigned short i = 0; i < params.numTexCoordSets; ++i )
                     {
-                        *pFloat++ = x * xTex;
-                        *pFloat++ = 1 - ( y * yTex );
+                        *pFloat++ = Real( x ) * xTex;
+                        *pFloat++ = 1 - ( Real( y ) * yTex );
                     }
 
                 }  // x
@@ -844,8 +844,8 @@ namespace Ogre
             // Lock the whole buffer
             HardwareBufferLockGuard vbufLock( vbuf, HardwareBuffer::HBL_DISCARD );
             float *pFloat = static_cast<float *>( vbufLock.pData );
-            Real xSpace = params.width / params.xsegments;
-            Real ySpace = params.height / params.ysegments;
+            Real xSpace = params.width / Real( params.xsegments );
+            Real ySpace = params.height / Real( params.ysegments );
             Real halfWidth = params.width / 2;
             Real halfHeight = params.height / 2;
             Vector3 vec, norm;
@@ -858,8 +858,8 @@ namespace Ogre
                 for( uint32 x = 0; x < params.xsegments + 1u; ++x )
                 {
                     // Work out centered on origin
-                    vec.x = ( x * xSpace ) - halfWidth;
-                    vec.y = ( y * ySpace ) - halfHeight;
+                    vec.x = ( Real( x ) * xSpace ) - halfWidth;
+                    vec.y = ( Real( y ) * ySpace ) - halfHeight;
                     vec.z = 0.0f;
                     // Transform by orientation and distance
                     vec = xform.transformAffine( vec );

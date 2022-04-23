@@ -222,7 +222,8 @@ namespace Ogre
 
                     paramLodIdx.setManualValue( (float)mip );
                     paramOutputSize.setManualValue( Vector4( (float)currWidth, (float)currHeight,
-                                                             1.0f / currWidth, 1.0f / currHeight ) );
+                                                             1.0f / (float)currWidth,
+                                                             1.0f / (float)currHeight ) );
                     paramDstLodIdx.setManualValue( (uint32)mip );
 
                     shaderParams = &blurH2->getShaderParams( "default" );
@@ -238,7 +239,8 @@ namespace Ogre
 
                     currWidth = std::max( currWidth >> 1u, 1u );
                     paramOutputSize.setManualValue( Vector4( (float)currWidth, (float)currHeight,
-                                                             1.0f / currWidth, 1.0f / currHeight ) );
+                                                             1.0f / (float)currWidth,
+                                                             1.0f / (float)currHeight ) );
                     paramDstLodIdx.setManualValue( (uint32)( mip + 1u ) );
 
                     shaderParams = &blurV2->getShaderParams( "default" );
@@ -304,7 +306,7 @@ namespace Ogre
         float fWeightSum = 0;
         for( uint32 i = 0; i < kernelRadius + 1u; ++i )
         {
-            const float val = i - fKernelRadius + ( 1.0f - 1.0f / stepSize );
+            const float val = float( i ) - fKernelRadius + ( 1.0f - 1.0f / stepSize );
             float fWeight = 1.0f / std::sqrt( 2.0f * Math::PI * gaussianDeviation * gaussianDeviation );
             fWeight *= expf( -( val * val ) / ( 2.0f * gaussianDeviation * gaussianDeviation ) );
 

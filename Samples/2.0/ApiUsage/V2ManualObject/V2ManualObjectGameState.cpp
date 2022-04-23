@@ -102,10 +102,14 @@ namespace Demo
         {
             for( size_t j = 0; j < GridSize; j++ )
             {
-                mVertices.push_back( Ogre::Vector3( GridStep * i, GridStep * j, 0.0f ) );
-                mVertices.push_back( Ogre::Vector3( GridStep * ( i + 1 ), GridStep * j, 0.0f ) );
-                mVertices.push_back( Ogre::Vector3( GridStep * i, GridStep * ( j + 1 ), 0.0f ) );
-                mVertices.push_back( Ogre::Vector3( GridStep * ( i + 1 ), GridStep * ( j + 1 ), 0.0f ) );
+                const Ogre::Real fI = Ogre::Real( i );
+                const Ogre::Real fJ = Ogre::Real( j );
+
+                mVertices.push_back( Ogre::Vector3( GridStep * fI, GridStep * fJ, 0.0f ) );
+                mVertices.push_back( Ogre::Vector3( GridStep * ( fI + 1 ), GridStep * fJ, 0.0f ) );
+                mVertices.push_back( Ogre::Vector3( GridStep * fI, GridStep * ( fJ + 1 ), 0.0f ) );
+                mVertices.push_back(
+                    Ogre::Vector3( GridStep * ( fI + 1 ), GridStep * ( fJ + 1 ), 0.0f ) );
             }
         }
 
@@ -170,7 +174,7 @@ namespace Demo
             // Simple forward/backward moving quad animation
             for( size_t i = 0; i < mVertices.size(); i++ )
             {
-                mVertices[i].z = Ogre::Math::Sin( mAccumulator ) * i * 0.002f;
+                mVertices[i].z = Ogre::Math::Sin( mAccumulator ) * Ogre::Real( i ) * 0.002f;
             }
 
             mAccumulator += timeSinceLast;

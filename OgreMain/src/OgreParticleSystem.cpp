@@ -493,11 +493,11 @@ namespace Ogre
             ratio = (Real)emissionAllowed / (Real)totalRequested;
             for( i = 0; i < emitterCount; ++i )
             {
-                requested[i] = static_cast<unsigned>( requested[i] * ratio );
+                requested[i] = static_cast<unsigned>( Real( requested[i] ) * ratio );
             }
             for( i = 0; i < emittedEmitterCount; ++i )
             {
-                emittedRequested[i] = static_cast<unsigned>( emittedRequested[i] * ratio );
+                emittedRequested[i] = static_cast<unsigned>( Real( emittedRequested[i] ) * ratio );
             }
         }
 
@@ -529,7 +529,7 @@ namespace Ogre
         if( !requested )
             return;
 
-        Real timeInc = timeElapsed / requested;
+        Real timeInc = timeElapsed / Real( requested );
 
         // TODO: (dark_sylinc) Refactor this. ControllerManager gets executed before us
         //(because it doesn't know if we'll update a SceneNode)

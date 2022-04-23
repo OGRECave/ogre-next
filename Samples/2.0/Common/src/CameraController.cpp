@@ -54,7 +54,8 @@ namespace Demo
 
         if( camMovementZ || camMovementX || slideUpDown )
         {
-            Ogre::Vector3 camMovementDir( camMovementX, slideUpDown, camMovementZ );
+            Ogre::Vector3 camMovementDir( (Ogre::Real)camMovementX, (Ogre::Real)slideUpDown,
+                                          (Ogre::Real)camMovementZ );
             camMovementDir.normalise();
             camMovementDir *=
                 timeSinceLast * mCameraBaseSpeed * ( 1 + mSpeedMofifier * mCameraSpeedBoost );
@@ -122,7 +123,7 @@ namespace Demo
         float width = static_cast<float>( mGraphicsSystem->getRenderWindow()->getWidth() );
         float height = static_cast<float>( mGraphicsSystem->getRenderWindow()->getHeight() );
 
-        mCameraYaw += -arg.motion.xrel / width;
-        mCameraPitch += -arg.motion.yrel / height;
+        mCameraYaw += float( -arg.motion.xrel ) / width;
+        mCameraPitch += float( -arg.motion.yrel ) / height;
     }
 }  // namespace Demo

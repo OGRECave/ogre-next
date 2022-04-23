@@ -119,7 +119,7 @@ namespace Ogre
         const uint32 bandMask = bandPoints - 2u;
         const uint32 sectionsInBand = ( bandPoints / 2u ) - 1u;
         const uint32 totalPoints = sectionsInBand * bandPoints;
-        const float sectionArc = Math::TWO_PI / sectionsInBand;
+        const float sectionArc = Math::TWO_PI / float( sectionsInBand );
 
         const uint bandMaskPower[3] = { bandMask, bandPower, totalPoints };
         const Vector2 sectionsBandArc( static_cast<float>( sectionsInBand ), sectionArc );

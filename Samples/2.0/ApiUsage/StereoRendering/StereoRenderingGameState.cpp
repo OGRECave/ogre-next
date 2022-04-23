@@ -37,10 +37,10 @@ namespace Demo
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 0.0f,
-                                              ( j - 1.5f ) * armsLength );
+                mSceneNode[idx]->setPosition( ( float( i ) - 1.5f ) * armsLength, 0.0f,
+                                              ( float( j ) - 1.5f ) * armsLength );
 
-                mSceneNode[idx]->roll( Ogre::Radian( idx ) );
+                mSceneNode[idx]->roll( Ogre::Radian( Ogre::Real( idx ) ) );
 
                 mSceneNode[idx]->attachObject( item );
             }
@@ -62,7 +62,7 @@ namespace Demo
     void StereoRenderingGameState::update( float timeSinceLast )
     {
         for( int i = 0; i < 16; ++i )
-            mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.25f ) );
+            mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * float( i ) * 0.25f ) );
 
         TutorialGameState::update( timeSinceLast );
     }

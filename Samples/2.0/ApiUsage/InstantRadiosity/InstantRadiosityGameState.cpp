@@ -217,7 +217,7 @@ namespace Demo
         /*if( mAnimateObjects )
         {
             for( int i=0; i<16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * i * 0.125f) );
+                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * float( i ) * 0.125f) );
         }*/
 
         std::map<SDL_Keycode, SDL_Keysym>::const_iterator itor = mKeysHold.begin();

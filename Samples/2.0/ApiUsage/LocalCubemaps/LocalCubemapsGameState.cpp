@@ -301,7 +301,7 @@ namespace Demo
         /*if( mAnimateObjects )
         {
             for( int i=0; i<16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * i * 0.125f) );
+                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * float( i ) * 0.125f) );
         }*/
 
         // Have the parallax corrected cubemap system keep track of the camera.

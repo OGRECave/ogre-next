@@ -326,9 +326,9 @@ namespace Ogre
 
         // Would we benefit from using a non-square texture (2X width)
         uint32 finalWidth, finalHeight;
-        if( roundUpSize * roundUpSize * 0.5 >= rawSize )
+        if( ( ( roundUpSize * roundUpSize ) >> 1u ) >= rawSize )
         {
-            finalHeight = static_cast<uint32>( roundUpSize * 0.5 );
+            finalHeight = roundUpSize >> 1u;
         }
         else
         {
@@ -425,8 +425,8 @@ namespace Ogre
                     (Real)l / (Real)finalWidth,   // u1
                     (Real)m / (Real)finalHeight,  // v1
                     (Real)( l + static_cast<size_t>( face->glyph->advance.x >> 6 ) ) /
-                        (Real)finalWidth,                                                // u2
-                    ( m + static_cast<size_t>( max_height >> 6 ) ) / (Real)finalHeight,  // v2
+                        (Real)finalWidth,                                                    // u2
+                    Real( m + static_cast<size_t>( max_height >> 6 ) ) / (Real)finalHeight,  // v2
                     textureAspect );
 
                 // Advance a column

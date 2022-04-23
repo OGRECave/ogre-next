@@ -17,7 +17,7 @@ namespace Demo
         {
             Ogre::uint64 endTime = mExternalTimer->getMicroseconds();
 
-            while( frameTime * 1000000.0 > ( endTime - startTime ) )
+            while( frameTime * 1000000.0 > double( endTime - startTime ) )
             {
                 endTime = mExternalTimer->getMicroseconds();
 
