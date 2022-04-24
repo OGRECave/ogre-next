@@ -9,9 +9,9 @@
 
 #ifdef HEADER
 
-float getSunDisk( const float LdotV, const float sunY )
+float getSunDisk( const float LdotV, const float sunY, const float sunPower )
 {
-	return pow( LdotV, lerp( 4.0f, 8500.0f, sunY ) ) * 50.0f;
+    return pow( LdotV, lerp( 4.0f, 8500.0f, sunY )*0.25f ) * sunPower;
 }
 
 float getMie( const float LdotV, const float sunY )
@@ -61,7 +61,7 @@ const float LdotV360 = dot( atmoCameraDir, p_sunDir ) * 0.5f + 0.5f;
 const float ptDensity =
 	p_densityCoeff / pow( max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ), p_densityDiffusion );
 
-const float sunDisk = getSunDisk( LdotV, p_sunHeight );
+const float sunDisk = getSunDisk( LdotV, p_sunHeight, p_sunPower );
 
 const float antiMie = max( p_sunHeightWeight, 0.08f );
 

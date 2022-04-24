@@ -67,7 +67,9 @@ namespace Ogre
             float         densityCoeff;
             float         densityDiffusion;
             float         horizonLimit;  // Most relevant in sunsets and sunrises
-            Ogre::Vector3 skyColour;
+            float         sunPower;      // For HDR (affects the sun on the sky)
+            float         skyPower;      // For HDR (affects skyColour)
+            Ogre::Vector3 skyColour;     // In range [0; 1]
             /// Affects objects' fog (not sky)
             float fogDensity;
             /// Very bright objects (i.e. reflect lots of light)
@@ -92,6 +94,8 @@ namespace Ogre
             float linkedSceneAmbientUpperPower;
             /// Power scale for the lower hemisphere ambient light
             float linkedSceneAmbientLowerPower;
+            /// Value to send to SceneManager::setAmbientLight
+            float envmapScale;
 
             Preset() :
                 // densityCoeff( 0.27f ),
@@ -99,13 +103,16 @@ namespace Ogre
                 densityCoeff( 0.47f ),
                 densityDiffusion( 2.0f ),
                 horizonLimit( 0.025f ),
+                sunPower( 1.0f ),
+                skyPower( 1.0f ),
                 skyColour( 0.334f, 0.57f, 1.0f ),
                 fogDensity( 0.0001f ),
                 fogBreakMinBrightness( 0.25f ),
                 fogBreakFalloff( 0.1f ),
                 linkedLightPower( Math::PI ),
                 linkedSceneAmbientUpperPower( 5.0f * Math::PI ),
-                linkedSceneAmbientLowerPower( 0.5f * Math::PI )
+                linkedSceneAmbientLowerPower( 0.5f * Math::PI ),
+                envmapScale( 1.0f )
             {
             }
         };

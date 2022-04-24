@@ -30,6 +30,9 @@ namespace Demo
 {
     HdrGameState::HdrGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        mAtmosphere( 0 ),
+#endif
         mAnimateObjects( true ),
         mCurrentPreset( std::numeric_limits<Ogre::uint32>::max() ),
         mExposure( 0.0f ),
@@ -157,9 +160,9 @@ namespace Demo
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
                     datablock->setRoughness(
-						std::max( 0.02f, float( x ) / std::max( 1.0f, (float)( numX - 1 ) ) ) );
-					datablock->setFresnel(
-						Ogre::Vector3( float( z ) / std::max( 1.0f, (float)( numZ - 1 ) ) ), false );
+                        std::max( 0.02f, float( x ) / std::max( 1.0f, (float)( numX - 1 ) ) ) );
+                    datablock->setFresnel(
+                        Ogre::Vector3( float( z ) / std::max( 1.0f, (float)( numZ - 1 ) ) ), false );
 
                     Ogre::Item *item = sceneManager->createItem(
                         "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
@@ -169,9 +172,9 @@ namespace Demo
 
                     Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-					sceneNode->setPosition(
-						Ogre::Vector3( armsLengthSphere * Ogre::Real( x ) - startX, 1.0f,
-									   armsLengthSphere * Ogre::Real( z ) - startZ ) );
+                    sceneNode->setPosition(
+                        Ogre::Vector3( armsLengthSphere * Ogre::Real( x ) - startX, 1.0f,
+                                       armsLengthSphere * Ogre::Real( z ) - startZ ) );
                     sceneNode->attachObject( item );
                 }
             }
@@ -418,6 +421,26 @@ namespace Demo
         sceneManager->setAmbientLight( preset.ambLowerHemisphere, preset.ambUpperHemisphere,
                                        sceneManager->getAmbientLightHemisphereDir(),
                                        preset.envmapScale );
+
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        if( !mAtmosphere )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<Ogre::Light *>( mLightNodes[0]->getAttachedObject( 0u ) ) );
+            mGraphicsSystem->createAtmosphere(
+                static_cast<Ogre::Light *>( mLightNodes[0]->getAttachedObject( 0u ) ) );
+            OGRE_ASSERT_HIGH( dynamic_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() ) );
+            mAtmosphere = static_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() );
+        }
+
+        Ogre::AtmosphereNpr::Preset atmoPreset = mAtmosphere->getPreset();
+        atmoPreset.densityDiffusion = 1.25f;
+        atmoPreset.sunPower = preset.lightPower[0];
+        atmoPreset.skyPower = preset.skyColour.toVector3().collapseMax();
+        atmoPreset.skyColour = preset.skyColour.toVector3() / atmoPreset.skyPower;
+        atmoPreset.linkedLightPower = preset.lightPower[0];
+        atmoPreset.envmapScale = preset.envmapScale;
+        mAtmosphere->setPreset( atmoPreset );
+#endif
     }
     //-----------------------------------------------------------------------------------
     void HdrGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )

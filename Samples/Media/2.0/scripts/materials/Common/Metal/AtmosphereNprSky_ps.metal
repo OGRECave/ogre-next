@@ -12,7 +12,7 @@ struct Params
 {
 	float4 packedParams0;
 	float3 skyLightAbsorption;
-	float3 sunAbsorption;
+	float4 sunAbsorption;
 	float4 cameraDisplacement;
 	float4 packedParams1;
 	float4 packedParams2;
@@ -24,7 +24,8 @@ struct Params
 #define p_sunHeight			p.packedParams0.z
 #define p_sunHeightWeight	p.packedParams0.w
 #define p_skyLightAbsorption	p.skyLightAbsorption
-#define p_sunAbsorption		p.sunAbsorption
+#define p_sunAbsorption		p.sunAbsorption.xyz
+#define p_sunPower			p.sunAbsorption.w
 #define p_cameraDisplacement	p.cameraDisplacement
 #define p_mieAbsorption		p.packedParams1.xyz
 #define p_finalMultiplier	p.packedParams1.w

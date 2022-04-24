@@ -21,7 +21,7 @@ out vec4 fragColour;
 vulkan( layout( ogre_P0 ) uniform Params { )
 	uniform float4 packedParams0;
 	uniform float3 skyLightAbsorption;
-	uniform float3 sunAbsorption;
+	uniform float4 sunAbsorption;
 	uniform float4 cameraDisplacement;
 	uniform float4 packedParams1;
 	uniform float4 packedParams2;
@@ -33,7 +33,8 @@ vulkan( }; )
 #define p_sunHeight			packedParams0.z
 #define p_sunHeightWeight	packedParams0.w
 #define p_skyLightAbsorption	skyLightAbsorption
-#define p_sunAbsorption		sunAbsorption
+#define p_sunAbsorption		sunAbsorption.xyz
+#define p_sunPower			sunAbsorption.w
 #define p_cameraDisplacement	cameraDisplacement
 #define p_mieAbsorption		packedParams1.xyz
 #define p_finalMultiplier	packedParams1.w

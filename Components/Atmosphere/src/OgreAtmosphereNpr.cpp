@@ -158,7 +158,8 @@ namespace Ogre
         const Vector3 mieAbsorption =
             std::pow( std::max( 1.0f - lightDensity, 0.1f ), 4.0f ) *
             Math::lerp( mPreset.skyColour, Vector3::UNIT_SCALE, sunHeightWeight );
-        const float finalMultiplier = 0.5f + Math::smoothstep( 0.02f, 0.4f, sunHeightWeight );
+        const float finalMultiplier =
+            ( 0.5f + Math::smoothstep( 0.02f, 0.4f, sunHeightWeight ) ) * mPreset.skyPower;
         const Vector4 packedParams1( mieAbsorption, finalMultiplier );
         const Vector4 packedParams2( mSunDir, mPreset.horizonLimit );
         const Vector4 packedParams3( mPreset.skyColour, mPreset.densityDiffusion );
@@ -168,8 +169,9 @@ namespace Ogre
         psParams->setNamedConstant( "packedParams0", packedParams0 );
         psParams->setNamedConstant( "skyLightAbsorption",
                                     getSkyRayleighAbsorption( mPreset.skyColour, lightDensity ) );
-        psParams->setNamedConstant( "sunAbsorption",
-                                    getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, lightDensity ) );
+        psParams->setNamedConstant(
+            "sunAbsorption", Vector4( getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, lightDensity ),
+                                      mPreset.sunPower ) );
         psParams->setNamedConstant( "packedParams1", packedParams1 );
         psParams->setNamedConstant( "packedParams2", packedParams2 );
         psParams->setNamedConstant( "packedParams3", packedParams3 );
@@ -204,13 +206,14 @@ namespace Ogre
         hemiDir += Quaternion( Degree( 180.0f ), hemiDir ) * mSunDir;
         hemiDir.normalise();
 
+        const float envmapScale = mPreset.envmapScale;
         std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator itor = mSkies.begin();
         std::map<Ogre::SceneManager *, Rectangle2D *>::const_iterator endt = mSkies.end();
 
         while( itor != endt )
         {
             if( itor->first->getAtmosphere() == this )
-                itor->first->setAmbientLight( upperHemi, lowerHemi, hemiDir );
+                itor->first->setAmbientLight( upperHemi, lowerHemi, hemiDir, envmapScale );
             ++itor;
         }
     }
@@ -294,6 +297,7 @@ namespace Ogre
     {
         mPreset = preset;
         setPackedParams();
+        syncToLight();
     }
     //-------------------------------------------------------------------------
     void AtmosphereNpr::_update( SceneManager *sceneManager, Camera *camera )
@@ -342,7 +346,8 @@ namespace Ogre
         const Vector3 mieAbsorption =
             std::pow( std::max( 1.0f - lightDensity, 0.1f ), 4.0f ) *
             Math::lerp( mPreset.skyColour, Vector3::UNIT_SCALE, sunHeightWeight );
-        const float finalMultiplier = 0.5f + Math::smoothstep( 0.02f, 0.4f, sunHeightWeight );
+        const float finalMultiplier =
+            ( 0.5f + Math::smoothstep( 0.02f, 0.4f, sunHeightWeight ) ) * mPreset.skyPower;
         const Vector4 packedParams1( mieAbsorption, finalMultiplier );
         const Vector4 packedParams2( mSunDir, mPreset.horizonLimit );
         const Vector4 packedParams3( mPreset.skyColour, mPreset.densityDiffusion );
@@ -381,9 +386,9 @@ namespace Ogre
         return 1u;
     }
     //-------------------------------------------------------------------------
-    inline float getSunDisk( const float LdotV, const float sunY )
+    inline float getSunDisk( const float LdotV, const float sunY, const float sunPower )
     {
-        return std::pow( LdotV, Math::lerp( 4.0f, 8500.0f, sunY ) ) * 50.0f;
+        return std::pow( LdotV, Math::lerp( 4.0f, 8500.0f, sunY ) ) * sunPower;
     }
     //-------------------------------------------------------------------------
     inline float getMie( const float LdotV ) { return LdotV; }
@@ -412,7 +417,8 @@ namespace Ogre
         const float p_lightDensity =
             mPreset.densityCoeff / std::pow( std::max( p_sunHeight, 0.0035f ), 0.75f );
         const Vector3 p_skyColour = mPreset.skyColour;
-        const float p_finalMultiplier = 0.5f + Math::smoothstep( 0.02f, 0.4f, p_sunHeightWeight );
+        const float p_finalMultiplier =
+            ( 0.5f + Math::smoothstep( 0.02f, 0.4f, p_sunHeightWeight ) ) * mPreset.skyPower;
         const Vector3 p_sunAbsorption =
             getSkyRayleighAbsorption( 1.0f - mPreset.skyColour, p_lightDensity );
         const Vector3 p_mieAbsorption =
@@ -442,7 +448,7 @@ namespace Ogre
             p_densityCoeff / std::pow( std::max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ),
                                        p_densityDiffusion );
 
-        const float sunDisk = getSunDisk( LdotV, p_sunHeight );
+        const float sunDisk = getSunDisk( LdotV, p_sunHeight, mPreset.sunPower );
 
         const float antiMie = std::max( p_sunHeightWeight, 0.08f );
 

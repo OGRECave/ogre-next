@@ -93,7 +93,8 @@ namespace Demo
                 Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                                  ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                sceneNode->setPosition( ( i - 1.5f ) * armsLength, 2.0f, ( j - 1.5f ) * armsLength );
+                sceneNode->setPosition( ( float( i ) - 1.5f ) * armsLength, 2.0f,
+                                        ( float( j ) - 1.5f ) * armsLength );
                 sceneNode->setScale( 0.65f, 0.65f, 0.65f );
 
                 sceneNode->roll( Ogre::Radian( (Ogre::Real)idx ) );
