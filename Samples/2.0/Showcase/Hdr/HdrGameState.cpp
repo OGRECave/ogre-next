@@ -188,6 +188,8 @@ namespace Demo
         light->setPowerScale( 97.0f );
         light->setType( Ogre::Light::LT_DIRECTIONAL );
         light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
+        // light->setDirection( Ogre::Vector3( 0, -1, 0 ).normalisedCopy() );
+        // light->setDirection( Ogre::Vector3( 0, -1, -0.5 ).normalisedCopy() );
 
         mLightNodes[0] = lightNode;
 
@@ -432,22 +434,56 @@ namespace Demo
             mAtmosphere = static_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() );
         }
 
-        Ogre::AtmosphereNpr::Preset atmoPreset = mAtmosphere->getPreset();
-        if( mCurrentPreset == 2u )
-        {
-            atmoPreset.densityCoeff = 0.25f;
-            atmoPreset.densityDiffusion = 0.25f;
-            atmoPreset.linkedSceneAmbientUpperPower *= 0.5f;
-        }
-        else
-        {
-            atmoPreset.densityDiffusion = 1.25f;
-        }
+        Ogre::AtmosphereNpr::Preset atmoPreset;
         atmoPreset.sunPower = preset.lightPower[0];
-        atmoPreset.skyPower = preset.skyColour.toVector3().collapseMax();
+        atmoPreset.skyPower = preset.skyColour.toVector3().collapseMax() * 2.0f;
         atmoPreset.skyColour = preset.skyColour.toVector3() / atmoPreset.skyPower;
         atmoPreset.linkedLightPower = preset.lightPower[0];
         atmoPreset.envmapScale = preset.envmapScale;
+
+        // The colour we pass to Atmosphere is too greenish when displayed. Correct it a bit.
+        atmoPreset.skyColour *= Ogre::Vector3( 1.0f, 0.9f, 1.0f );
+
+        // The most arbitrary variable to tweak is linkedSceneAmbient*; because
+        // it's a fake GI and is derived out of a few math formulas. The way this
+        // was adjusted was to look at the output of sceneManager->getAmbientLightLowerHemisphere()
+        // (and Upper) before & after calling mAtmosphere->setPreset; and then scaling
+        // linkedSceneAmbient* to the desired values.
+        //
+        // The rest of the tweaks:
+        //
+        //      - Heavy overcast affects density due to its very nature
+        //          - Increased fogDensity to match the style
+        //      - Night time rquires different settings (see Atmosphere demo)
+        //      - JJ Abrams is just an artistic style hence no physics involved
+        if( mCurrentPreset == 2u )
+        {
+            // Heavy overcast day
+            atmoPreset.densityCoeff = 0.25f;
+            atmoPreset.densityDiffusion = 0.25f;
+            atmoPreset.linkedSceneAmbientUpperPower *= 0.5f;
+            atmoPreset.fogDensity = 0.025f;
+        }
+        else if( mCurrentPreset == 3u || mCurrentPreset == 4u )
+        {
+            // Gibbous moon night series. Night always requires quite the parameter changes
+            atmoPreset.sunPower = 0.25f;
+            atmoPreset.skyPower = 0.07f;
+            atmoPreset.densityCoeff = 0.08f;
+            atmoPreset.linkedSceneAmbientUpperPower *= 0.0025f;
+            atmoPreset.linkedSceneAmbientLowerPower *= 0.0025f;
+        }
+        else if( mCurrentPreset == 5u )
+        {
+            atmoPreset.densityCoeff = 0.38f;
+            atmoPreset.linkedSceneAmbientUpperPower *= 0.5f;
+            atmoPreset.linkedSceneAmbientLowerPower *= 0.02f;
+        }
+        else
+        {
+            atmoPreset.linkedSceneAmbientUpperPower *= 8.0f;
+            atmoPreset.linkedSceneAmbientLowerPower *= 2.0f;
+        }
         mAtmosphere->setPreset( atmoPreset );
 #endif
     }
