@@ -122,7 +122,7 @@ namespace Demo
         lightNode->attachObject( light );
         light->setDiffuseColour( 0.8f, 0.4f, 0.2f );  // Warm
         light->setSpecularColour( 0.8f, 0.4f, 0.2f );
-        light->setPowerScale( Ogre::Math::PI * 1 );
+        light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
         lightNode->setPosition( -10.0f, 10.0f, 10.0f );
         light->setDirection( Ogre::Vector3( 1, -1, -1 ).normalisedCopy() );
@@ -133,7 +133,7 @@ namespace Demo
         lightNode->attachObject( light );
         light->setDiffuseColour( 0.2f, 0.4f, 0.8f );  // Cold
         light->setSpecularColour( 0.2f, 0.4f, 0.8f );
-        light->setPowerScale( Ogre::Math::PI * 1 );
+        light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
         lightNode->setPosition( 10.0f, 10.0f, -10.0f );
         light->setDirection( Ogre::Vector3( -1, -1, 1 ).normalisedCopy() );

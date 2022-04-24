@@ -65,7 +65,16 @@ namespace Demo
                                          GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
         AtmosphereGameState *gfxGameState = new AtmosphereGameState(
-            ""
+            "Shows how to use the Atmosphere NPR (non-physically-based-render) Component\n"
+            "Despite being NPR (because it's not based on a physical model), it is quite convincing\n"
+            "and can be used in PBS and HDR samples. There is HlmsPbs & HlmsTerra integration\n"
+            "so that there is fog applied to objects based on the atmosphere\n"
+            "\n"
+            "It supports blending between multiple presets at different Times of Day (day & night).\n"
+            "This allows fine tunning the brightness at different timedays, specially the fake GI\n"
+            "multipliers in LDR.\n"
+            "PbsMaterials, HDR & Terrain sample will try to use this component when possible\n"
+            "to showcase its use and integration."
             "\n"
             "This sample depends on the media files:\n"
             "   * Samples/Media/2.0/scripts/materials/Common/Atmosphere.material\n"
