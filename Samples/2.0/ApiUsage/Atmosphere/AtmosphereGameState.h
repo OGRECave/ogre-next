@@ -14,8 +14,15 @@ namespace Demo
     {
         float mTimeOfDay;
         float mAzimuth;
+
+        bool mMultiplePresets;
+
         Ogre::AtmosphereNpr *mAtmosphere;
         Ogre::Light *mSunLight;
+
+        template <typename T>
+        void description( const char *keys, const char *setting, T value, Ogre::String &outText,
+                          bool bForce = false ) const;
 
         void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 

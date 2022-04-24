@@ -11,7 +11,7 @@
 
 float getSunDisk( const float LdotV, const float sunY, const float sunPower )
 {
-    return pow( LdotV, lerp( 4.0f, 8500.0f, sunY )*0.25f ) * sunPower;
+    return pow( LdotV, lerp( 4.0f, 8500.0f, sunY ) * 0.25f ) * sunPower;
 }
 
 float getMie( const float LdotV, const float sunY )
@@ -59,7 +59,8 @@ const float LdotV360 = dot( atmoCameraDir, p_sunDir ) * 0.5f + 0.5f;
 // ptDensity gets smaller as sunHeight gets bigger
 // ptDensity gets smaller as atmoCameraDir.y gets bigger
 const float ptDensity =
-	p_densityCoeff / pow( max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ), p_densityDiffusion );
+    p_densityCoeff / pow( max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ),
+                          lerp( 0.10f, p_densityDiffusion, pow( atmoCameraDir.y, 0.3f ) ) );
 
 const float sunDisk = getSunDisk( LdotV, p_sunHeight, p_sunPower );
 

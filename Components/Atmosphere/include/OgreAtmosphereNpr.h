@@ -64,6 +64,7 @@ namespace Ogre
     public:
         struct Preset
         {
+            /// Must be in range [-1; 1] where range [-1; 0] is night and [0; 1] is day
             float time;
 
             float         densityCoeff;
@@ -119,12 +120,25 @@ namespace Ogre
             {
             }
 
+            /// Sets this = lerp( a, b, w );
+            /// where:
+            ///     a = lerp( a, b, 0 );
+            ///     b = lerp( a, b, 1 );
+            ///
+            /// 'time' is interpolated in a special manner to wrap around
+            /// in range [-1; 1]. Thus if a.time > b.time, then we wrap around
+            /// so that:
+            ///     time = lerp( 0.8, -0.8, 0.25 ) =  0.9
+            ///     time = lerp( 0.8, -0.8, 0.50 ) =  Either 1.0 or -1.0
+            ///     time = lerp( 0.8, -0.8, 0.75 ) = -0.9
             void lerp( const Preset &a, const Preset &b, const float w );
 
             bool operator()( const Preset &a, const Preset &b ) const { return a.time < b.time; }
             bool operator()( const float a, const Preset &b ) const { return a < b.time; }
             bool operator()( const Preset &a, const float b ) const { return a.time < b; }
         };
+
+        typedef FastArray<Preset> PresetArray;
 
         enum AxisConvention
         {
@@ -139,8 +153,6 @@ namespace Ogre
         };
 
     protected:
-        typedef FastArray<Preset> PresetArray;
-
         PresetArray mPresets;
 
         Preset  mPreset;
@@ -215,7 +227,7 @@ namespace Ogre
 
         /** More direct approach on setting time of day.
         @param sunDir
-            Sun's light direction. Will be normalized.
+            Sun's light direction (or moon). Will be normalized.
         @param normalizedTimeOfDay
             In range [0; 1] where 0 is when the sun goes out and 1 when it's gone.
         */
@@ -227,9 +239,17 @@ namespace Ogre
         /// You must call AtmosphereNpr::updatePreset to take effect
         void setPresets( const PresetArray &presets );
 
-        /// After having called AtmosphereNpr::setPresets, this function will interpolate
-        /// between mPresets[fTime] and mPresets[fTime+1].
-        void updatePreset( const float fTime );
+        const PresetArray &getPresets() const { return mPresets; }
+
+        /** After having called AtmosphereNpr::setPresets, this function will interpolate
+            between mPresets[fTime] and mPresets[fTime+1].
+        @param sunDir
+            Sun's light direction (or moon). Will be normalized.
+        @param fTime
+            Param. Should be in range [-1; 1] where [-1; 0] is meant
+            to be night and [0; 1] is day
+        */
+        void updatePreset( const Ogre::Vector3 &sunDir, const float fTime );
 
         /// Sets a specific preset as current.
         void setPreset( const Preset &preset );

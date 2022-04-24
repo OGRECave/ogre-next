@@ -287,7 +287,6 @@ namespace Ogre
         mSunDir = -sunDir;
         mSunDir.normalise();
 
-        mNormalizedTimeOfDay = normalizedTimeOfDay;
         mNormalizedTimeOfDay = std::min( normalizedTimeOfDay, 1.0f - 1e-6f );
 
         setPackedParams();
@@ -297,10 +296,24 @@ namespace Ogre
     void AtmosphereNpr::setPresets( const PresetArray &presets )
     {
         mPresets = presets;
+
+        PresetArray::const_iterator itor = mPresets.begin();
+        PresetArray::const_iterator endt = mPresets.end();
+
+        while( itor != endt )
+        {
+            if( fabsf( itor->time ) > 1.0f )
+            {
+                LogManager::getSingleton().logMessage(
+                    "Preset outside range [-1; 1] in AtmosphereNpr::setPresets" );
+            }
+            ++itor;
+        }
+
         std::sort( mPresets.begin(), mPresets.end(), Preset() );
     }
     //-------------------------------------------------------------------------
-    void AtmosphereNpr::updatePreset( const float fTime )
+    void AtmosphereNpr::updatePreset( const Vector3 &sunDir, const float fTime )
     {
         if( mPresets.empty() )
         {
@@ -316,17 +329,33 @@ namespace Ogre
         if( itor == mPresets.end() )
             itor = mPresets.end() - 1u;
 
+        float prevTime = itor->time;
         PresetArray::const_iterator prevIt = itor;
         if( prevIt != mPresets.begin() )
+        {
             --prevIt;
+            prevTime = prevIt->time;
+        }
+        else
+        {
+            prevIt = mPresets.end() - 1u;
+            prevTime = prevIt->time - 2.0f;
+        }
 
         // Interpolate
-        float timeLength = ( itor->time - prevIt->time );
+        float timeLength = ( itor->time - prevTime );
         if( timeLength == 0.0f )
             timeLength = 1.0f;
 
         Preset result;
-        result.lerp( *prevIt, *itor, ( fTime - prevIt->time ) / timeLength );
+        const float fW = Math::saturate( ( fTime - prevTime ) / timeLength );
+        result.lerp( *prevIt, *itor, fW );
+
+        // Manually set the sun dir so that later setPreset syncs to light
+        mSunDir = -sunDir;
+        mSunDir.normalise();
+
+        mNormalizedTimeOfDay = std::min( fabsf( result.time ), 1.0f - 1e-6f );
 
         // Set the interpolated result
         setPreset( result );
@@ -484,8 +513,9 @@ namespace Ogre
         // ptDensity gets smaller as sunHeight gets bigger
         // ptDensity gets smaller as atmoCameraDir.y gets bigger
         const float ptDensity =
-            p_densityCoeff / std::pow( std::max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ),
-                                       p_densityDiffusion );
+            p_densityCoeff /
+            std::pow( std::max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ),
+                      Math::lerp( 0.10f, p_densityDiffusion, std::pow( atmoCameraDir.y, 0.3f ) ) );
 
         const float sunDisk = getSunDisk( LdotV, p_sunHeight, mPreset.sunPower );
 
@@ -515,6 +545,16 @@ namespace Ogre
     void AtmosphereNpr::Preset::lerp( const Preset &a, const Preset &b, const float w )
     {
 #define LERP_VALUE( x ) this->x = Math::lerp( a.x, b.x, w )
+        if( a.time > b.time )
+        {
+            this->time = Math::lerp( a.time - 2.0f, b.time, w );
+            if( this->time < -1.0f )
+                this->time += 2.0f;
+        }
+        else
+        {
+            LERP_VALUE( time );
+        }
         LERP_VALUE( densityCoeff );
         LERP_VALUE( densityDiffusion );
         LERP_VALUE( horizonLimit );
