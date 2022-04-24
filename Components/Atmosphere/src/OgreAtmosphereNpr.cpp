@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "OgreCamera.h"
 #include "OgreHlms.h"
+#include "OgreLogManager.h"
 #include "OgreMaterialManager.h"
 #include "OgrePass.h"
 #include "OgreRectangle2D2.h"
@@ -293,6 +294,44 @@ namespace Ogre
         syncToLight();
     }
     //-------------------------------------------------------------------------
+    void AtmosphereNpr::setPresets( const PresetArray &presets )
+    {
+        mPresets = presets;
+        std::sort( mPresets.begin(), mPresets.end(), Preset() );
+    }
+    //-------------------------------------------------------------------------
+    void AtmosphereNpr::updatePreset( const float fTime )
+    {
+        if( mPresets.empty() )
+        {
+            LogManager::getSingleton().logMessage(
+                "AtmosphereNpr::updatePreset but mPresets is empty!" );
+            return;
+        }
+
+        // Find presets
+        PresetArray::const_iterator itor =
+            std::lower_bound( mPresets.begin(), mPresets.end(), fTime, Preset() );
+
+        if( itor == mPresets.end() )
+            itor = mPresets.end() - 1u;
+
+        PresetArray::const_iterator prevIt = itor;
+        if( prevIt != mPresets.begin() )
+            --prevIt;
+
+        // Interpolate
+        float timeLength = ( itor->time - prevIt->time );
+        if( timeLength == 0.0f )
+            timeLength = 1.0f;
+
+        Preset result;
+        result.lerp( *prevIt, *itor, ( fTime - prevIt->time ) / timeLength );
+
+        // Set the interpolated result
+        setPreset( result );
+    }
+    //-------------------------------------------------------------------------
     void AtmosphereNpr::setPreset( const Preset &preset )
     {
         mPreset = preset;
@@ -471,5 +510,24 @@ namespace Ogre
             atmoColour += sunDisk * p_skyLightAbsorption;
 
         return atmoColour;
+    }
+    //-------------------------------------------------------------------------
+    void AtmosphereNpr::Preset::lerp( const Preset &a, const Preset &b, const float w )
+    {
+#define LERP_VALUE( x ) this->x = Math::lerp( a.x, b.x, w )
+        LERP_VALUE( densityCoeff );
+        LERP_VALUE( densityDiffusion );
+        LERP_VALUE( horizonLimit );
+        LERP_VALUE( sunPower );
+        LERP_VALUE( skyPower );
+        LERP_VALUE( skyColour );
+        LERP_VALUE( fogDensity );
+        LERP_VALUE( fogBreakMinBrightness );
+        LERP_VALUE( fogBreakFalloff );
+        LERP_VALUE( linkedLightPower );
+        LERP_VALUE( linkedSceneAmbientUpperPower );
+        LERP_VALUE( linkedSceneAmbientLowerPower );
+        LERP_VALUE( envmapScale );
+#undef LERP_VALUE
     }
 }  // namespace Ogre

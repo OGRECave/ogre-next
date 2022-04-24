@@ -64,6 +64,8 @@ namespace Ogre
     public:
         struct Preset
         {
+            float time;
+
             float         densityCoeff;
             float         densityDiffusion;
             float         horizonLimit;  // Most relevant in sunsets and sunrises
@@ -98,6 +100,7 @@ namespace Ogre
             float envmapScale;
 
             Preset() :
+                time( 0.0f ),
                 // densityCoeff( 0.27f ),
                 // densityDiffusion( 0.75f ),
                 densityCoeff( 0.47f ),
@@ -115,6 +118,12 @@ namespace Ogre
                 envmapScale( 1.0f )
             {
             }
+
+            void lerp( const Preset &a, const Preset &b, const float w );
+
+            bool operator()( const Preset &a, const Preset &b ) const { return a.time < b.time; }
+            bool operator()( const float a, const Preset &b ) const { return a < b.time; }
+            bool operator()( const Preset &a, const float b ) const { return a.time < b; }
         };
 
         enum AxisConvention
@@ -130,6 +139,10 @@ namespace Ogre
         };
 
     protected:
+        typedef FastArray<Preset> PresetArray;
+
+        PresetArray mPresets;
+
         Preset  mPreset;
         Vector3 mSunDir;
         /// In range [0; 1] where
@@ -208,6 +221,17 @@ namespace Ogre
         */
         void setSunDir( const Ogre::Vector3 &sunDir, const float normalizedTimeOfDay );
 
+        /// Sets multiple presets at different times for interpolation
+        /// We will sort the array.
+        ///
+        /// You must call AtmosphereNpr::updatePreset to take effect
+        void setPresets( const PresetArray &presets );
+
+        /// After having called AtmosphereNpr::setPresets, this function will interpolate
+        /// between mPresets[fTime] and mPresets[fTime+1].
+        void updatePreset( const float fTime );
+
+        /// Sets a specific preset as current.
         void setPreset( const Preset &preset );
 
         const Preset &getPreset() const { return mPreset; }

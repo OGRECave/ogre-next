@@ -433,7 +433,16 @@ namespace Demo
         }
 
         Ogre::AtmosphereNpr::Preset atmoPreset = mAtmosphere->getPreset();
-        atmoPreset.densityDiffusion = 1.25f;
+        if( mCurrentPreset == 2u )
+        {
+            atmoPreset.densityCoeff = 0.25f;
+            atmoPreset.densityDiffusion = 0.25f;
+            atmoPreset.linkedSceneAmbientUpperPower *= 0.5f;
+        }
+        else
+        {
+            atmoPreset.densityDiffusion = 1.25f;
+        }
         atmoPreset.sunPower = preset.lightPower[0];
         atmoPreset.skyPower = preset.skyColour.toVector3().collapseMax();
         atmoPreset.skyColour = preset.skyColour.toVector3() / atmoPreset.skyPower;
