@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zlib_0',['ZLib',['../class_ogre_1_1_deflate_stream.html#aa0d681e30262c74b6c1f2ecacc85908caab547cd040a3b61b6df82af4cf202692',1,'Ogre::DeflateStream']]]
+  ['xup_0',['Xup',['../class_ogre_1_1_atmosphere_npr.html#adf6a2d87b48065fefef1059258d03f25a0ce5f447eae2834604a7eeaaa75bf5d5',1,'Ogre::AtmosphereNpr']]]
 ];

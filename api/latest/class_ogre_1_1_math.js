@@ -76,6 +76,7 @@ var class_ogre_1_1_math =
     [ "Sign", "class_ogre_1_1_math.html#a6e0e74db303c82ffa5a1623c14505455", null ],
     [ "Sin", "class_ogre_1_1_math.html#aa6562b753755c2e21200b7d4479c2dcd", null ],
     [ "Sin", "class_ogre_1_1_math.html#a87fdeb1d010d7297868125ff624b496d", null ],
+    [ "smoothstep", "class_ogre_1_1_math.html#a7c0c927f77aa83dabc9c06d780d07af5", null ],
     [ "Sqr", "class_ogre_1_1_math.html#a626ae51af294ae54cee7e1e530937d7e", null ],
     [ "Sqrt", "class_ogre_1_1_math.html#a0945a29fc442a83685cff2998b02c348", null ],
     [ "Sqrt", "class_ogre_1_1_math.html#a6bd8cafd36d77c6132c8e0d5061bf6d6", null ],

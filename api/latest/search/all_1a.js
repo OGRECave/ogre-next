@@ -10,7 +10,8 @@ var searchData=
   ['zipdatastream_7',['ZipDataStream',['../class_ogre_1_1_zip_data_stream.html',1,'Ogre::ZipDataStream'],['../class_ogre_1_1_zip_data_stream.html#a469d266bf656ebc0bbc63f006a001844',1,'Ogre::ZipDataStream::ZipDataStream(ZZIP_FILE *zzipFile, size_t uncompressedSize)'],['../class_ogre_1_1_zip_data_stream.html#aa59e9bbc5a05c5560191e721cace8f09',1,'Ogre::ZipDataStream::ZipDataStream(const String &amp;name, ZZIP_FILE *zzipFile, size_t uncompressedSize)']]],
   ['zlib_8',['ZLib',['../class_ogre_1_1_deflate_stream.html#aa0d681e30262c74b6c1f2ecacc85908caab547cd040a3b61b6df82af4cf202692',1,'Ogre::DeflateStream']]],
   ['zoffset_9',['zoffset',['../struct_ogre_1_1_g_l_e_s2_surface_desc.html#ac973faa7257ff00e5fee1870324d69db',1,'Ogre::GLES2SurfaceDesc']]],
-  ['zzip_5fdir_10',['ZZIP_DIR',['../_ogre_zip_8h.html#a8cee87e0d5584ff66b56196eec9758c4',1,'OgreZip.h']]],
-  ['zzip_5ffile_11',['ZZIP_FILE',['../_ogre_zip_8h.html#a83aee2653632d452e58ac776fde409ea',1,'OgreZip.h']]],
-  ['zzip_5fplugin_5fio_5fhandlers_12',['zzip_plugin_io_handlers',['../_ogre_zip_8h.html#aca6c71c876a785a50b45f36e29b27c09',1,'OgreZip.h']]]
+  ['zup_10',['Zup',['../class_ogre_1_1_atmosphere_npr.html#adf6a2d87b48065fefef1059258d03f25ac34f6305945e3d5ab95ef049530456ad',1,'Ogre::AtmosphereNpr']]],
+  ['zzip_5fdir_11',['ZZIP_DIR',['../_ogre_zip_8h.html#a8cee87e0d5584ff66b56196eec9758c4',1,'OgreZip.h']]],
+  ['zzip_5ffile_12',['ZZIP_FILE',['../_ogre_zip_8h.html#a83aee2653632d452e58ac776fde409ea',1,'OgreZip.h']]],
+  ['zzip_5fplugin_5fio_5fhandlers_13',['zzip_plugin_io_handlers',['../_ogre_zip_8h.html#aca6c71c876a785a50b45f36e29b27c09',1,'OgreZip.h']]]
 ];

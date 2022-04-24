@@ -74,6 +74,7 @@ var struct_ogre_1_1_pbs_property =
     [ "NormalWeightDetail2", "struct_ogre_1_1_pbs_property.html#aa7d37ede7ffa8cedc1458737da57b17a", null ],
     [ "NormalWeightDetail3", "struct_ogre_1_1_pbs_property.html#ad11465f82f5aec22a8ba07ea023bf171", null ],
     [ "NormalWeightTex", "struct_ogre_1_1_pbs_property.html#a826ab00bef2581ae9697d4237d236c19", null ],
+    [ "NumPassConstBuffers", "struct_ogre_1_1_pbs_property.html#a015a2bb38af77714063cb5ab3bc8d3c1", null ],
     [ "NumSamplers", "struct_ogre_1_1_pbs_property.html#ac58efdd7c3371702a326f4dfa345bf1d", null ],
     [ "NumTextures", "struct_ogre_1_1_pbs_property.html#aa00d5f0944e6c9afda83f945852b10b3", null ],
     [ "ObbRestraintApprox", "struct_ogre_1_1_pbs_property.html#a76601affe857ff3684109561f0728b3f", null ],

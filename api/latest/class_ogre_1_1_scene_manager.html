@@ -254,6 +254,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a27f763bb92fef8b1238e2272889ba58d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a27f763bb92fef8b1238e2272889ba58d">_resumeRendering</a> (<a class="el" href="struct_ogre_1_1_scene_manager_1_1_render_context.html">RenderContext</a> *context)</td></tr>
 <tr class="memdesc:a27f763bb92fef8b1238e2272889ba58d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resume rendering of the frame.  <a href="class_ogre_1_1_scene_manager.html#a27f763bb92fef8b1238e2272889ba58d">More...</a><br /></td></tr>
 <tr class="separator:a27f763bb92fef8b1238e2272889ba58d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae57a38bd2f7b48366ccd62ef42e7d72f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ae57a38bd2f7b48366ccd62ef42e7d72f">_setAtmosphere</a> (<a class="el" href="class_ogre_1_1_atmosphere_component.html">AtmosphereComponent</a> *atmosphere)</td></tr>
+<tr class="memdesc:ae57a38bd2f7b48366ccd62ef42e7d72f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets an external atmosphere provider.  <a href="class_ogre_1_1_scene_manager.html#ae57a38bd2f7b48366ccd62ef42e7d72f">More...</a><br /></td></tr>
+<tr class="separator:ae57a38bd2f7b48366ccd62ef42e7d72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9899cd0badfaa70088d4a27b8592eb82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a9899cd0badfaa70088d4a27b8592eb82">_setCamerasInProgress</a> (const <a class="el" href="struct_ogre_1_1_cameras_in_progress.html">CamerasInProgress</a> &amp;cameras)</td></tr>
 <tr class="separator:a9899cd0badfaa70088d4a27b8592eb82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdd809e69cbbc4b565a27b8edef98ad1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#acdd809e69cbbc4b565a27b8edef98ad1">_setCurrentCompositorPass</a> (<a class="el" href="class_ogre_1_1_compositor_pass.html">CompositorPass</a> *pass)</td></tr>
@@ -531,6 +534,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab0360b83e6d67faae01f70ea7b925146"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___animation.html#ga6c8619d12ac269631ef4f400ea2e2ba3">v1::AnimationStateIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ab0360b83e6d67faae01f70ea7b925146">getAnimationStateIterator</a> ()</td></tr>
 <tr class="memdesc:ab0360b83e6d67faae01f70ea7b925146"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a specialised <a class="el" href="class_ogre_1_1_map_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying key-value container.">MapIterator</a> over all animation states in the scene.  <a href="class_ogre_1_1_scene_manager.html#ab0360b83e6d67faae01f70ea7b925146">More...</a><br /></td></tr>
 <tr class="separator:ab0360b83e6d67faae01f70ea7b925146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1aa76d962057bf5dab222e7ddc001f2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_atmosphere_component.html">AtmosphereComponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa1aa76d962057bf5dab222e7ddc001f2">getAtmosphere</a> ()</td></tr>
+<tr class="memdesc:aa1aa76d962057bf5dab222e7ddc001f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets currently set atmosphere. It's never nullptr.  <a href="class_ogre_1_1_scene_manager.html#aa1aa76d962057bf5dab222e7ddc001f2">More...</a><br /></td></tr>
+<tr class="separator:aa1aa76d962057bf5dab222e7ddc001f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8afa979cfab6ba8c0fdeda2f11e28db7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_atmosphere_component.html">AtmosphereComponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a8afa979cfab6ba8c0fdeda2f11e28db7">getAtmosphereRaw</a> ()</td></tr>
+<tr class="memdesc:a8afa979cfab6ba8c0fdeda2f11e28db7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets currently set atmosphere. Can be nullptr if none is set.  <a href="class_ogre_1_1_scene_manager.html#a8afa979cfab6ba8c0fdeda2f11e28db7">More...</a><br /></td></tr>
+<tr class="separator:a8afa979cfab6ba8c0fdeda2f11e28db7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82f2e6f1a388c3b1937039cf0e42c63c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_scene_manager.html#a460e50da4b97d1beaef1a64bfa039928">CameraIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a82f2e6f1a388c3b1937039cf0e42c63c">getCameraIterator</a> ()</td></tr>
 <tr class="memdesc:a82f2e6f1a388c3b1937039cf0e42c63c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a specialised <a class="el" href="class_ogre_1_1_map_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying key-value container.">MapIterator</a> over all cameras in the scene.  <a href="class_ogre_1_1_scene_manager.html#a82f2e6f1a388c3b1937039cf0e42c63c">More...</a><br /></td></tr>
 <tr class="separator:a82f2e6f1a388c3b1937039cf0e42c63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2230,6 +2239,33 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 <p >This has to be called after a _pauseRendering call </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">context</td><td>The rendring context, as returned by the _pauseRendering call </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae57a38bd2f7b48366ccd62ef42e7d72f" name="ae57a38bd2f7b48366ccd62ef42e7d72f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae57a38bd2f7b48366ccd62ef42e7d72f">&#9670;&nbsp;</a></span>_setAtmosphere()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::_setAtmosphere </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_atmosphere_component.html">AtmosphereComponent</a> *&#160;</td>
+          <td class="paramname"><em>atmosphere</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets an external atmosphere provider. </p>
+<p >Multiple SceneManagers can have the same atmosphere </p><dl class="section remark"><dt>Remarks</dt><dd>The <a class="el" href="class_ogre_1_1_atmosphere_component.html">AtmosphereComponent</a> will call this function. Don't call it directly. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">atmosphere</td><td>The atmosphere to set. Can be nullptr to unset (a default dummy ptr will be set instead). </td></tr>
   </table>
   </dd>
 </dl>
@@ -5274,6 +5310,52 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </div><div class="memdoc">
 
 <p>Returns a specialised <a class="el" href="class_ogre_1_1_map_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying key-value container.">MapIterator</a> over all animation states in the scene. </p>
+
+</div>
+</div>
+<a id="aa1aa76d962057bf5dab222e7ddc001f2" name="aa1aa76d962057bf5dab222e7ddc001f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1aa76d962057bf5dab222e7ddc001f2">&#9670;&nbsp;</a></span>getAtmosphere()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_atmosphere_component.html">AtmosphereComponent</a> * Ogre::SceneManager::getAtmosphere </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets currently set atmosphere. It's never nullptr. </p>
+
+</div>
+</div>
+<a id="a8afa979cfab6ba8c0fdeda2f11e28db7" name="a8afa979cfab6ba8c0fdeda2f11e28db7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8afa979cfab6ba8c0fdeda2f11e28db7">&#9670;&nbsp;</a></span>getAtmosphereRaw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_atmosphere_component.html">AtmosphereComponent</a> * Ogre::SceneManager::getAtmosphereRaw </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets currently set atmosphere. Can be nullptr if none is set. </p>
 
 </div>
 </div>

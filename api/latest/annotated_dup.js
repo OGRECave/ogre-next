@@ -262,6 +262,8 @@ var annotated_dup =
       [ "ASTCCodec", "class_ogre_1_1_a_s_t_c_codec.html", "class_ogre_1_1_a_s_t_c_codec" ],
       [ "AsyncTextureTicket", "class_ogre_1_1_async_texture_ticket.html", "class_ogre_1_1_async_texture_ticket" ],
       [ "AsyncTicket", "class_ogre_1_1_async_ticket.html", "class_ogre_1_1_async_ticket" ],
+      [ "AtmosphereComponent", "class_ogre_1_1_atmosphere_component.html", "class_ogre_1_1_atmosphere_component" ],
+      [ "AtmosphereNpr", "class_ogre_1_1_atmosphere_npr.html", "class_ogre_1_1_atmosphere_npr" ],
       [ "AtomAbstractNode", "class_ogre_1_1_atom_abstract_node.html", "class_ogre_1_1_atom_abstract_node" ],
       [ "AtomicObject", "class_ogre_1_1_atomic_object.html", "class_ogre_1_1_atomic_object" ],
       [ "AtomicScalar", "class_ogre_1_1_atomic_scalar.html", "class_ogre_1_1_atomic_scalar" ],

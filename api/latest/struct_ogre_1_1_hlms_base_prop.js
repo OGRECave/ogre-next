@@ -17,6 +17,7 @@ var struct_ogre_1_1_hlms_base_prop =
     [ "EnableVpls", "struct_ogre_1_1_hlms_base_prop.html#aec485191b959843f9bda48c39808f7d8", null ],
     [ "FastShaderBuildHack", "struct_ogre_1_1_hlms_base_prop.html#a90f5a82a25543ff50bbb459172ece38b", null ],
     [ "FineLightMask", "struct_ogre_1_1_hlms_base_prop.html#aebb44a4d9255a4d33551837c41171ce4", null ],
+    [ "Fog", "struct_ogre_1_1_hlms_base_prop.html#aa12034d57dcaebc70a33f6a0f0c6920b", null ],
     [ "Forward3D", "struct_ogre_1_1_hlms_base_prop.html#a3e8220675b550c77bc578c371b22818f", null ],
     [ "Forward3DNumSlices", "struct_ogre_1_1_hlms_base_prop.html#af80d0c1a77cb043ea7ced6d36f077a2f", null ],
     [ "ForwardClustered", "struct_ogre_1_1_hlms_base_prop.html#af9065a5fc6a14cf5f48312edd6998136", null ],

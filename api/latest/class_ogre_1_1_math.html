@@ -316,6 +316,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a87fdeb1d010d7297868125ff624b496d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a87fdeb1d010d7297868125ff624b496d">Sin</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> fValue, bool useTables=false)</td></tr>
 <tr class="memdesc:a87fdeb1d010d7297868125ff624b496d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sine function.  <a href="class_ogre_1_1_math.html#a87fdeb1d010d7297868125ff624b496d">More...</a><br /></td></tr>
 <tr class="separator:a87fdeb1d010d7297868125ff624b496d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c0c927f77aa83dabc9c06d780d07af5"><td class="memTemplParams" colspan="2">template&lt;typename T , typename S &gt; </td></tr>
+<tr class="memitem:a7c0c927f77aa83dabc9c06d780d07af5"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="_ogre_platform_8h.html#a724fb9f82013c782db5c3c12ea36aac8">FORCEINLINE</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a7c0c927f77aa83dabc9c06d780d07af5">smoothstep</a> (const T &amp;edge0, const T &amp;edge1, const S &amp;x)</td></tr>
+<tr class="memdesc:a7c0c927f77aa83dabc9c06d780d07af5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs smooth Hermite interpolation between 0 and 1 when edge0 &lt; x &lt; edge1.  <a href="class_ogre_1_1_math.html#a7c0c927f77aa83dabc9c06d780d07af5">More...</a><br /></td></tr>
+<tr class="separator:a7c0c927f77aa83dabc9c06d780d07af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a626ae51af294ae54cee7e1e530937d7e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a626ae51af294ae54cee7e1e530937d7e">Sqr</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> fValue)</td></tr>
 <tr class="memdesc:a626ae51af294ae54cee7e1e530937d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Squared function.  <a href="class_ogre_1_1_math.html#a626ae51af294ae54cee7e1e530937d7e">More...</a><br /></td></tr>
 <tr class="separator:a626ae51af294ae54cee7e1e530937d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3100,6 +3104,53 @@ template&lt;typename T , typename S &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a7c0c927f77aa83dabc9c06d780d07af5" name="a7c0c927f77aa83dabc9c06d780d07af5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c0c927f77aa83dabc9c06d780d07af5">&#9670;&nbsp;</a></span>smoothstep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename S &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="_ogre_platform_8h.html#a724fb9f82013c782db5c3c12ea36aac8">FORCEINLINE</a> T Ogre::Math::smoothstep </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>edge0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>edge1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const S &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Performs smooth Hermite interpolation between 0 and 1 when edge0 &lt; x &lt; edge1. </p>
+<p >This is useful in cases where a threshold function with a smooth transition is desired. </p>
 
 </div>
 </div>

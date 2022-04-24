@@ -31,6 +31,9 @@ var dir_9ba68fabe7d45cd05996335e8214ea54 =
       [ "Ogre::AsyncTextureTicket", "class_ogre_1_1_async_texture_ticket.html", "class_ogre_1_1_async_texture_ticket" ],
       [ "Ogre::AsyncTextureTicket::DelayedDownload", "struct_ogre_1_1_async_texture_ticket_1_1_delayed_download.html", "struct_ogre_1_1_async_texture_ticket_1_1_delayed_download" ]
     ] ],
+    [ "OgreAtmosphereComponent.h", "_ogre_atmosphere_component_8h.html", [
+      [ "Ogre::AtmosphereComponent", "class_ogre_1_1_atmosphere_component.html", "class_ogre_1_1_atmosphere_component" ]
+    ] ],
     [ "OgreAtomicObject.h", "_ogre_atomic_object_8h.html", null ],
     [ "OgreAtomicScalar.h", "_ogre_atomic_scalar_8h.html", null ],
     [ "OgreAutoParamDataSource.h", "_ogre_auto_param_data_source_8h.html", null ],

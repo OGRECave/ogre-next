@@ -21,10 +21,11 @@ var searchData=
   ['hlmstypeshift_18',['HlmsTypeShift',['../struct_ogre_1_1_hlms_bits.html#ad0c6f98536709c96db518d331980a0c7',1,'Ogre::HlmsBits']]],
   ['hlsl_19',['Hlsl',['../struct_ogre_1_1_hlms_base_prop.html#a3080bd3f9d8c3d908b01aabf65004d5d',1,'Ogre::HlmsBaseProp']]],
   ['hlslvk_20',['Hlslvk',['../struct_ogre_1_1_hlms_base_prop.html#ab338aaa04dc8d24f62a698bdcbaff7b5',1,'Ogre::HlmsBaseProp']]],
-  ['hullshader_21',['hullShader',['../struct_ogre_1_1_d3_d11_hlms_pso.html#a57bca08c58c1e3451d8272b6721642b1',1,'Ogre::D3D11HlmsPso::hullShader()'],['../struct_ogre_1_1_g_l3_plus_hlms_pso.html#a6a615dd3bb44f97bad9bff3633142d76',1,'Ogre::GL3PlusHlmsPso::hullShader()']]],
-  ['hwanimationdatalist_22',['hwAnimationDataList',['../class_ogre_1_1v1_1_1_vertex_data.html#aeadf70c2ff3915db8662963301f3b709',1,'Ogre::v1::VertexData']]],
-  ['hwanimdataitemsused_23',['hwAnimDataItemsUsed',['../class_ogre_1_1v1_1_1_vertex_data.html#ab526658d0bb89b267332251afafd1d9c',1,'Ogre::v1::VertexData']]],
-  ['hwgammacorrection_24',['hwGammaCorrection',['../struct_ogre_1_1_hlms_texture_pack.html#acf3710397f0d53b3557e30083c8520c8',1,'Ogre::HlmsTexturePack']]],
-  ['hwgammaread_25',['HwGammaRead',['../struct_ogre_1_1_pbs_property.html#aab3d0cdca500724d171f005429f636a6',1,'Ogre::PbsProperty::HwGammaRead()'],['../struct_ogre_1_1_unlit_property.html#a8d2a9993a056eba4047ad05c12a888b1',1,'Ogre::UnlitProperty::HwGammaRead()']]],
-  ['hwgammawrite_26',['HwGammaWrite',['../struct_ogre_1_1_pbs_property.html#aeaa497522759691052990d656683cb1e',1,'Ogre::PbsProperty::HwGammaWrite()'],['../struct_ogre_1_1_unlit_property.html#aa79107c2d56a34a83c70df5b6b442e05',1,'Ogre::UnlitProperty::HwGammaWrite()']]]
+  ['horizonlimit_21',['horizonLimit',['../struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a0c77846085ecabce3da1141d3e164883',1,'Ogre::AtmosphereNpr::Preset']]],
+  ['hullshader_22',['hullShader',['../struct_ogre_1_1_d3_d11_hlms_pso.html#a57bca08c58c1e3451d8272b6721642b1',1,'Ogre::D3D11HlmsPso::hullShader()'],['../struct_ogre_1_1_g_l3_plus_hlms_pso.html#a6a615dd3bb44f97bad9bff3633142d76',1,'Ogre::GL3PlusHlmsPso::hullShader()']]],
+  ['hwanimationdatalist_23',['hwAnimationDataList',['../class_ogre_1_1v1_1_1_vertex_data.html#aeadf70c2ff3915db8662963301f3b709',1,'Ogre::v1::VertexData']]],
+  ['hwanimdataitemsused_24',['hwAnimDataItemsUsed',['../class_ogre_1_1v1_1_1_vertex_data.html#ab526658d0bb89b267332251afafd1d9c',1,'Ogre::v1::VertexData']]],
+  ['hwgammacorrection_25',['hwGammaCorrection',['../struct_ogre_1_1_hlms_texture_pack.html#acf3710397f0d53b3557e30083c8520c8',1,'Ogre::HlmsTexturePack']]],
+  ['hwgammaread_26',['HwGammaRead',['../struct_ogre_1_1_pbs_property.html#aab3d0cdca500724d171f005429f636a6',1,'Ogre::PbsProperty::HwGammaRead()'],['../struct_ogre_1_1_unlit_property.html#a8d2a9993a056eba4047ad05c12a888b1',1,'Ogre::UnlitProperty::HwGammaRead()']]],
+  ['hwgammawrite_27',['HwGammaWrite',['../struct_ogre_1_1_pbs_property.html#aeaa497522759691052990d656683cb1e',1,'Ogre::PbsProperty::HwGammaWrite()'],['../struct_ogre_1_1_unlit_property.html#aa79107c2d56a34a83c70df5b6b442e05',1,'Ogre::UnlitProperty::HwGammaWrite()']]]
 ];

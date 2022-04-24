@@ -1,9 +1,15 @@
 var _ogre_prerequisites_8h =
 [
+    [ "OGRE_ASSUME_NONNULL_BEGIN", "_ogre_prerequisites_8h.html#a658fb361b2b5d7b6f676a8d3c8ad413e", null ],
+    [ "OGRE_ASSUME_NONNULL_END", "_ogre_prerequisites_8h.html#a6909c8eb9463bed314f8ff9e80449e15", null ],
     [ "OGRE_FALLTHROUGH", "_ogre_prerequisites_8h.html#af56e69ee080587cf0f82cab0908e528f", null ],
+    [ "ogre_likely", "_ogre_prerequisites_8h.html#afa791dd7bf9dd1fbfb73f70f0d6e7c12", null ],
     [ "OGRE_MAKE_VERSION", "_ogre_prerequisites_8h.html#ac5d8528b58a77684f51e3a42620e1b7a", null ],
     [ "OGRE_MEMORY_TRACKER", "_ogre_prerequisites_8h.html#a7087d2ed9eb4e1f820fd300d85df375d", null ],
     [ "OGRE_NEXT_VERSION", "_ogre_prerequisites_8h.html#a56c05bd8f11850ed0ac2f88fd442403a", null ],
+    [ "ogre_nonnull", "_ogre_prerequisites_8h.html#a42d4c8966d36b2ffe72a5cdbf66b307c", null ],
+    [ "ogre_nullable", "_ogre_prerequisites_8h.html#a309bade5bfd3b8e9630f497e27e0bd6b", null ],
+    [ "ogre_unlikely", "_ogre_prerequisites_8h.html#a486e3592494ba8c927f40c6393e53279", null ],
     [ "OGRE_UNUSED_VAR", "_ogre_prerequisites_8h.html#a0a4a25196c102869505a54bc533455c6", null ],
     [ "OGRE_VERSION", "_ogre_prerequisites_8h.html#a3f631403da0a255c201870bfd068f8c5", null ],
     [ "OGRE_VERSION_MAJOR", "_ogre_prerequisites_8h.html#ae5b524dcaad06fe829b6a1952cc6f7cf", null ],
