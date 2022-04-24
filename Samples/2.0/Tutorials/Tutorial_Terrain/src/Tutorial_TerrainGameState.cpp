@@ -56,6 +56,10 @@ THE SOFTWARE.
 
 #include "OgreItem.h"
 
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+#    include "OgreAtmosphereNpr.h"
+#endif
+
 using namespace Demo;
 
 namespace Demo
@@ -125,6 +129,17 @@ namespace Demo
                                        Ogre::ColourValue( 0.02f, 0.53f, 0.96f ) * 0.01f,
                                        Ogre::Vector3::UNIT_Y );
 
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        mGraphicsSystem->createAtmosphere( mSunLight );
+        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() ) );
+        Ogre::AtmosphereNpr *atmosphere =
+            static_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() );
+        Ogre::AtmosphereNpr::Preset p = atmosphere->getPreset();
+        p.fogDensity = 0.0005f;
+        p.fogBreakMinBrightness = 0.05f;
+        atmosphere->setPreset( p );
+#endif
+
         mCameraController = new CameraController( mGraphicsSystem, false );
         mGraphicsSystem->getCamera()->setFarClipDistance( 100000.0f );
         mGraphicsSystem->getCamera()->setPosition( -10.0f, 80.0f, 10.0f );
@@ -184,6 +199,14 @@ namespace Demo
             Ogre::Quaternion( Ogre::Radian( mAzimuth ), Ogre::Vector3::UNIT_Y ) *
             Ogre::Vector3( cosf( mTimeOfDay ), -sinf( mTimeOfDay ), 0.0 ).normalisedCopy() );
         // mSunLight->setDirection( -Ogre::Vector3::UNIT_Y );
+
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() ) );
+        Ogre::AtmosphereNpr *atmosphere =
+            static_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() );
+        atmosphere->setSunDir( mSunLight->getDirection(), mTimeOfDay / Ogre::Math::PI );
+#endif
 
         // Do not call update() while invisible, as it will cause an assert because the frames
         // are not advancing, but we're still mapping the same GPU region over and over.

@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "OgreAnimation.h"
+#include "OgreAtmosphereComponent.h"
 #include "OgreBillboardChain.h"
 #include "OgreBillboardSet.h"
 #include "OgreCamera.h"
@@ -83,6 +84,26 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    AtmosphereComponent::~AtmosphereComponent() {}
+
+    class _OgrePrivate NullAtmosphereComponent final : public AtmosphereComponent
+    {
+    public:
+        bool providesHlmsCode() const override { return false; }
+
+        uint32 preparePassHash( Hlms *, size_t ) override { return 0u; }
+
+        uint32 getNumConstBuffersSlots() const override { return 0u; }
+
+        uint32 bindConstBuffers( CommandBuffer *, size_t ) override { return 0u; }
+
+        void _update( SceneManager *sceneManager, Camera *camera ) override;
+    };
+
+    void NullAtmosphereComponent::_update( SceneManager *, Camera * ) {}
+
+    static NullAtmosphereComponent c_nullAtmosphere;
+
     //-----------------------------------------------------------------------
     uint32 SceneManager::QUERY_ENTITY_DEFAULT_MASK = 0x80000000;
     uint32 SceneManager::QUERY_FX_DEFAULT_MASK = 0x40000000;
@@ -99,6 +120,7 @@ namespace Ogre
         mPrePassMode( PrePassNone ),
         mSsrTexture( 0 ),
         mRefractionsTexture( 0 ),
+        mAtmosphere( &c_nullAtmosphere ),
         mName( name ),
         mRenderQueue( 0 ),
         mForwardPlusSystem( 0 ),
@@ -1172,6 +1194,21 @@ namespace Ogre
         mRefractionsTexture = refractionsTexture;
     }
     //-----------------------------------------------------------------------
+    void SceneManager::_setAtmosphere( AtmosphereComponent *atmosphere )
+    {
+        if( atmosphere )
+            mAtmosphere = atmosphere;
+        else
+            mAtmosphere = &c_nullAtmosphere;
+    }
+    //-----------------------------------------------------------------------
+    AtmosphereComponent *SceneManager::getAtmosphereRaw()
+    {
+        if( mAtmosphere == &c_nullAtmosphere )
+            return nullptr;
+        return mAtmosphere;
+    }
+    //-----------------------------------------------------------------------
     void SceneManager::setDecalsDiffuse( TextureGpu *tex )
     {
         if( tex )
@@ -1358,20 +1395,25 @@ namespace Ogre
                 }
             }
 
-            if( mSky && mIlluminationStage != IRS_RENDER_TO_TEXTURE )
+            if( mIlluminationStage != IRS_RENDER_TO_TEXTURE )
             {
-                const Vector3 *corners = camera->getWorldSpaceCorners();
-                const Vector3 &cameraPos = camera->getDerivedPosition();
+                mAtmosphere->_update( this, camera );
 
-                const Real invFarPlane = 1.0f / camera->getFarClipDistance();
-                Vector3 cameraDirs[4];
-                cameraDirs[0] = ( corners[5] - cameraPos ) * invFarPlane;
-                cameraDirs[1] = ( corners[6] - cameraPos ) * invFarPlane;
-                cameraDirs[2] = ( corners[4] - cameraPos ) * invFarPlane;
-                cameraDirs[3] = ( corners[7] - cameraPos ) * invFarPlane;
+                if( mSky )
+                {
+                    const Vector3 *corners = camera->getWorldSpaceCorners();
+                    const Vector3 &cameraPos = camera->getDerivedPosition();
 
-                mSky->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
-                mSky->update();
+                    const Real invFarPlane = 1.0f / camera->getFarClipDistance();
+                    Vector3 cameraDirs[4];
+                    cameraDirs[0] = ( corners[5] - cameraPos ) * invFarPlane;
+                    cameraDirs[1] = ( corners[6] - cameraPos ) * invFarPlane;
+                    cameraDirs[2] = ( corners[4] - cameraPos ) * invFarPlane;
+                    cameraDirs[3] = ( corners[7] - cameraPos ) * invFarPlane;
+
+                    mSky->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
+                    mSky->update();
+                }
             }
 
             if( mRadialDensityMask && mIlluminationStage != IRS_RENDER_TO_TEXTURE &&

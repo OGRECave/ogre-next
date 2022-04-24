@@ -14,6 +14,7 @@
 	// START UNIFORM DECLARATION
 	@insertpiece( PassStructDecl )
 	@property( hlms_skeleton || hlms_shadowcaster || hlms_pose )@insertpiece( InstanceStructDecl )@end
+	@insertpiece( AtmosphereNprSkyStructDecl )
 	@insertpiece( custom_vs_uniformStructDeclaration )
 	// END UNIFORM DECLARATION
 
@@ -25,6 +26,7 @@
 	@end
 
     @insertpiece( DeclShadowMapMacros )
+	@insertpiece( DeclAtmosphereNprSkyFuncs )
 @end
 
 @property( !hlms_skeleton )
@@ -280,6 +282,8 @@
 
 	@insertpiece( DoShadowReceiveVS )
 	@insertpiece( DoShadowCasterVS )
+
+	@insertpiece( DoAtmosphereNprSky )
 
 	/// hlms_uv_count will be 0 on shadow caster passes w/out alpha test
 	@foreach( hlms_uv_count, n )

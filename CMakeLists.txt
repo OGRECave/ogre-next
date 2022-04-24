@@ -464,6 +464,7 @@ option(OGRE_BUILD_PLUGIN_PFX "Build ParticleFX plugin" TRUE)
 
 option( OGRE_ADDRESS_SANITIZER_ASAN "Build with Asan (Address Sanitizer)" OFF )
 
+option( OGRE_BUILD_COMPONENT_ATMOSPHERE "Component to use atmosphere (e.g. sky), can be used by HlmsPbs" TRUE )
 cmake_dependent_option(OGRE_BUILD_COMPONENT_HLMS_PBS
 "PBS Stands for Physically Based Shading and it's the default material for most entities and meshes. This is the 'desktop' version for OpenGL 3.3+ and D3D11." TRUE "" FALSE)
 cmake_dependent_option(OGRE_BUILD_COMPONENT_HLMS_UNLIT

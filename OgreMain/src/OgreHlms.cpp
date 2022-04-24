@@ -153,6 +153,7 @@ namespace Ogre
     const IdString HlmsBaseProp::UseSsr = IdString( "hlms_use_ssr" );
     const IdString HlmsBaseProp::SsRefractionsAvailable = IdString( "hlms_ss_refractions_available" );
     const IdString HlmsBaseProp::EnableVpls = IdString( "hlms_enable_vpls" );
+    const IdString HlmsBaseProp::Fog = IdString( "hlms_fog" );
     const IdString HlmsBaseProp::ForwardPlus = IdString( "hlms_forwardplus" );
     const IdString HlmsBaseProp::ForwardPlusFlipY = IdString( "hlms_forwardplus_flipY" );
     const IdString HlmsBaseProp::ForwardPlusDebug = IdString( "hlms_forwardplus_debug" );

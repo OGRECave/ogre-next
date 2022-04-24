@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
+#include "OgreAtmosphereComponent.h"
 #include "OgreCamera.h"
 #include "OgreForward3D.h"
 #include "OgreHighLevelGpuProgram.h"
@@ -476,10 +477,37 @@ namespace Ogre
             *commandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( PixelShader, 0, passBuffer, 0, (uint32)passBuffer->getTotalSizeBytes() );
 
+            uint32 constBufferSlot = 3u;
+
+            if( mUseLightBuffers )
+            {
+                ConstBufferPacked *light0Buffer = mLight0Buffers[mCurrentPassBuffer - 1];
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    VertexShader, 3, light0Buffer, 0, (uint32)light0Buffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    PixelShader, 3, light0Buffer, 0, (uint32)light0Buffer->getTotalSizeBytes() );
+
+                ConstBufferPacked *light1Buffer = mLight1Buffers[mCurrentPassBuffer - 1];
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    VertexShader, 4, light1Buffer, 0, (uint32)light1Buffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    PixelShader, 4, light1Buffer, 0, (uint32)light1Buffer->getTotalSizeBytes() );
+
+                ConstBufferPacked *light2Buffer = mLight2Buffers[mCurrentPassBuffer - 1];
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    VertexShader, 5, light2Buffer, 0, (uint32)light2Buffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    PixelShader, 5, light2Buffer, 0, (uint32)light2Buffer->getTotalSizeBytes() );
+
+                constBufferSlot = 6u;
+            }
+
             size_t texUnit = mReservedTexBufferSlots;
 
             if( !casterPass )
             {
+                constBufferSlot += mAtmosphere->bindConstBuffers( commandBuffer, constBufferSlot );
+
                 if( mGridBuffer )
                 {
                     *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -717,6 +745,9 @@ namespace Ogre
         outLibraryFoldersPaths.push_back( "Hlms/Common/" + shaderSyntax );
         outLibraryFoldersPaths.push_back( "Hlms/Common/Any" );
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any" );
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Atmosphere" );
+#endif
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Main" );
         outLibraryFoldersPaths.push_back( "Hlms/Terra/Any" );
 

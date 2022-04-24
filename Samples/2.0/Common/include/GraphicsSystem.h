@@ -149,6 +149,13 @@ namespace Demo
         SdlInputHandler *getInputHandler() { return mInputHandler; }
 #endif
 
+        /// Creates an atmosphere and binds it to the SceneManager
+        /// You can use SceneManager::getAtmosphere to retrieve it.
+        ///
+        /// The input light will be bound to the atmosphere component.
+        /// Can be nullptr.
+        void createAtmosphere( Ogre::Light *sunLight );
+
         void setQuit() { mQuit = true; }
         bool getQuit() const { return mQuit; }
 

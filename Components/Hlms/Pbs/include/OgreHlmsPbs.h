@@ -171,6 +171,13 @@ namespace Ogre
         LightArray              mAreaLights;
         bool                    mUsingAreaLightMasks;
 
+        /// There may be MORE const buffers than mNumPassConstBuffers.
+        /// But those extra const buffers are not per-pass
+        /// i.e. the manual probe's const buffer is currently the only one.
+        uint32 mNumPassConstBuffers;
+
+        AtmosphereComponent *mAtmosphere;  /// This value is never nullptr during a render pass
+
         TextureGpu *mLightProfilesTexture;
 
         bool mSkipRequestSlotInChangeRS;
@@ -492,6 +499,8 @@ namespace Ogre
         static const IdString DebugPssmSplits;
         static const IdString PerceptualRoughness;
         static const IdString HasPlanarReflections;
+
+        static const IdString NumPassConstBuffers;
 
         static const IdString Set0TextureSlotEnd;
         static const IdString Set1TextureSlotEnd;

@@ -1,0 +1,90 @@
+// NPR = Non-Physically-based Rendering Atmo
+//
+// This file is used by both Hlms and low level materials
+// Which is why Hlms syntax is in comments
+
+//#include "SyntaxHighlightingMisc.h"
+
+// @property( atmosky_npr )
+
+#ifdef HEADER
+
+float getSunDisk( const float LdotV, const float sunY, const float sunPower )
+{
+    return pow( LdotV, lerp( 4.0f, 8500.0f, sunY ) * 0.25f ) * sunPower;
+}
+
+float getMie( const float LdotV, const float sunY )
+{
+	return pow( LdotV, lerp( 1.0f, 1.0f, sunY ) );
+}
+
+// See https://en.wikipedia.org/wiki/Rayleigh_distribution
+// It's inspired, not fully based.
+//
+// The formula also gives us the nice property that for inputs
+// where absorption is in range [0; 1] the output i also in range [0; 1]
+float3 getSkyRayleighAbsorption( float3 vDir, const float density )
+{
+	float3 absorption = -density * vDir;
+	absorption = exp2( absorption ) * 2.0f;
+	return absorption;
+}
+
+float3 pow3( float3 v, float e )
+{
+	return float3( pow( v.x, e ), pow( v.y, e ), pow( v.z, e ) );
+}
+
+#else
+
+float3 atmoCameraDir = normalize( inPs.cameraDir );
+
+const float LdotV = max( dot( atmoCameraDir, p_sunDir ), 0.0f );
+
+atmoCameraDir.y += p_densityDiffusion * 0.075f * ( 1.0f - atmoCameraDir.y ) * ( 1.0f - atmoCameraDir.y );
+atmoCameraDir += p_cameraDisplacement.xyz;
+atmoCameraDir = normalize( atmoCameraDir );
+
+atmoCameraDir.y = max( atmoCameraDir.y, p_borderLimit );
+
+// It's not a mistake. We do this twice. Doing it before p_borderLimit
+// allows the horizon to shift. Doing it after p_borderLimit lets
+// the sky to get darker as we get upwards.
+atmoCameraDir += p_cameraDisplacement.xyz;
+atmoCameraDir = normalize( atmoCameraDir );
+
+const float LdotV360 = dot( atmoCameraDir, p_sunDir ) * 0.5f + 0.5f;
+
+// ptDensity gets smaller as sunHeight gets bigger
+// ptDensity gets smaller as atmoCameraDir.y gets bigger
+const float ptDensity =
+    p_densityCoeff / pow( max( atmoCameraDir.y / ( 1.0f - p_sunHeight ), 0.0035f ),
+                          lerp( 0.10f, p_densityDiffusion, pow( atmoCameraDir.y, 0.3f ) ) );
+
+const float sunDisk = getSunDisk( LdotV, p_sunHeight, p_sunPower );
+
+const float antiMie = max( p_sunHeightWeight, 0.08f );
+
+const float3 skyAbsorption = getSkyRayleighAbsorption( p_skyColour, ptDensity );
+// const float3 skyColourGradient = pow3( exp2( -atmoCameraDir.y / p_skyColour ),
+//										 lerp( 15.5f, 1.5f, pow( p_sunHeightWeight, 0.5f ) ) );
+const float3 skyColourGradient = pow3( exp2( -atmoCameraDir.y / p_skyColour ), 1.5f );
+
+const float mie = getMie( LdotV360, p_sunHeightWeight );
+
+float3 atmoColour = float3( 0.0f, 0.0f, 0.0f );
+
+const float3 sharedTerms = skyColourGradient * skyAbsorption;
+
+atmoColour += antiMie * sharedTerms * p_sunAbsorption;
+atmoColour += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAbsorption;
+atmoColour += mie * p_mieAbsorption;
+atmoColour *= p_lightDensity;
+
+atmoColour *= p_finalMultiplier;
+atmoColour += sunDisk * p_skyLightAbsorption;
+
+#endif
+
+// @end !atmosky_npr

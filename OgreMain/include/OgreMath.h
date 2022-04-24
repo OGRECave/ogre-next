@@ -449,6 +449,15 @@ namespace Ogre
             return a + w * ( b - a );
         }
 
+        /// Performs smooth Hermite interpolation between 0 and 1 when edge0 < x < edge1.
+        /// This is useful in cases where a threshold function with a smooth transition is desired.
+        template <typename T, typename S>
+        static FORCEINLINE T smoothstep( const T &edge0, const T &edge1, const S &x )
+        {
+            const T t = saturate( ( x - edge0 ) / ( edge1 - edge0 ) );
+            return t * t * ( Real( 3.0 ) - Real( 2.0 ) * t );
+        }
+
         /** Sine function.
             @param fValue
                 Angle in radians
