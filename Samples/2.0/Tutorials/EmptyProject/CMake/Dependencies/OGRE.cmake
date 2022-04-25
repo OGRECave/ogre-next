@@ -257,6 +257,7 @@ endif()
 # Parse OgreBuildSettings.h to see if it's a static build
 set( OGRE_DEPENDENCY_LIBS "" )
 file( READ "${OGRE_BINARIES}/include/OgreBuildSettings.h" OGRE_BUILD_SETTINGS_STR )
+string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_COMPONENT_ATMOSPHERE" OGRE_BUILD_COMPONENT_ATMOSPHERE )
 string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_STATIC_LIB" OGRE_STATIC )
 if( NOT OGRE_STATIC EQUAL -1 )
 	message( STATUS "Detected static build of Ogre" )
@@ -302,6 +303,14 @@ if( ${OGRE_USE_PLANAR_REFLECTIONS} )
 	set( OGRE_LIBRARIES ${OGRE_LIBRARIES}
 		debug ${OGRE_NEXT}PlanarReflections${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
 		optimized ${OGRE_NEXT}PlanarReflections${OGRE_STATIC}
+		)
+endif()
+
+if( OGRE_BUILD_COMPONENT_ATMOSPHERE )
+	message( STATUS "Detected Atmosphere Component. Linking against it." )
+	set( OGRE_LIBRARIES ${OGRE_LIBRARIES}
+		debug ${OGRE_NEXT}Atmosphere${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+		optimized ${OGRE_NEXT}Atmosphere${OGRE_STATIC}
 		)
 endif()
 
