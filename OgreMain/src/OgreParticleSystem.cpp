@@ -718,13 +718,12 @@ namespace Ogre {
         if (mSorted)
             _sortParticles(camera);
 
-        if (mRenderer)
+        // We cannot render until mIsRendererConfigured = true
+        // and we can NOT call configureRenderer from inside _updateRenderQueue
+        if( mRenderer && mIsRendererConfigured )
         {
-            if (!mIsRendererConfigured)
-                configureRenderer();
-
-            mRenderer->_updateRenderQueue(queue, camera, lodCamera, mActiveParticles, mCullIndividual,
-                                          mRenderables);
+            mRenderer->_updateRenderQueue( queue, camera, lodCamera, mActiveParticles, mCullIndividual,
+                                           mRenderables );
         }
     }
     //---------------------------------------------------------------------
