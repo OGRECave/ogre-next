@@ -111,10 +111,8 @@
 	// Base on GGX example in:                                                            //
 	// http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
 	//------------------------------------------------------------------------------------//
-	INLINE float3 importanceSampleGGX( float2 Xi, float roughness, float3 N )
+	INLINE float3 importanceSampleGGX( float2 Xi, float a, float3 N )
 	{
-		float a = roughness * roughness;
-
 		float Phi = 2 * PI * Xi.x;
 		// NOTE: (aa-1) == (a-1)(a+1) produces better fp accuracy
 		float CosTheta = sqrt( ( 1 - Xi.y ) / ( 1 + ( a + 1 ) * ( ( a - 1 ) * Xi.y ) ) );
@@ -140,10 +138,8 @@
 	}
 
 	// Smoth GGX
-	INLINE float specularD( float roughness, float NoH )
+	INLINE float specularD( float a, float NoH )
 	{
-		float a = roughness * roughness;
-
 		// NOTE: (aa-1) == (a-1)(a+1) produces better fp accuracy
 		float f = ( a - 1 ) * ( ( a + 1 ) * ( NoH * NoH ) ) + 1;
 		return ( a * a ) / ( PI * f * f );
