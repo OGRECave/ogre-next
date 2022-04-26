@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -29,24 +29,27 @@ THE SOFTWARE.
 #define _OgreItem_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCommon.h"
 
+#include "OgreHardwareBufferManager.h"
 #include "OgreMovableObject.h"
 #include "OgreQuaternion.h"
-#include "OgreVector3.h"
-#include "OgreHardwareBufferManager.h"
 #include "OgreRenderable.h"
 #include "OgreResourceGroupManager.h"
 #include "OgreSubItem.h"
+#include "OgreVector3.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /** Defines an instance of a discrete, movable object based on a Mesh.
     @remarks
         Ogre generally divides renderable objects into 2 groups, discrete
@@ -83,57 +86,57 @@ namespace Ogre {
         // Allow ItemFItemy full access
         friend class ItemFactory;
         friend class SubItem;
+
     public:
-        //typedef set<Item*>::type ItemSet;
+        // typedef set<Item*>::type ItemSet;
 
     protected:
-
         /** Private constructor (instances cannot be created directly).
-        */
+         */
         Item( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         /** Private constructor.
-        */
+         */
         Item( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-              const MeshPtr& mesh );
+              const MeshPtr &mesh );
 
         /** The Mesh that this Item is based on.
-        */
+         */
         MeshPtr mMesh;
 
         /** List of SubEntities (point to SubMeshes).
-        */
+         */
         typedef vector<SubItem>::type SubItemVec;
-        SubItemVec mSubItems;
+        SubItemVec                    mSubItems;
 
         /** A set of all the entities which shares a single OldSkeletonInstance.
             This is only created if the Item is in fact sharing it's OldSkeletonInstance with
             other Entities.
         */
-        //ItemSet* mSharedSkeletonEntities;
+        // ItemSet* mSharedSkeletonEntities;
 
         /// Has this Item been initialised yet?
         bool mInitialised;
 
         /** Builds a list of SubItems based on the SubMeshes contained in the Mesh. */
-        void buildSubItems( vector<String>::type* materialsList = 0 );
+        void buildSubItems( vector<String>::type *materialsList = 0 );
 
     public:
         /** Default destructor.
-        */
-        ~Item();
+         */
+        ~Item() override;
 
         /** Gets the Mesh that this Item is based on.
-        */
-        const MeshPtr& getMesh(void) const;
+         */
+        const MeshPtr &getMesh() const;
 
         /** Gets a pointer to a SubItem, ie a part of an Item.
-        */
-        SubItem* getSubItem(size_t index);
-        const SubItem* getSubItem(size_t index) const;
+         */
+        SubItem       *getSubItem( size_t index );
+        const SubItem *getSubItem( size_t index ) const;
 
         /** Retrieves the number of SubItem objects making up this Item.
-        */
-        size_t getNumSubItems(void) const;
+         */
+        size_t getNumSubItems() const;
 
         /// Sets the given HLMS databloock to all SubEntities
         void setDatablock( HlmsDatablock *datablock );
@@ -150,7 +153,7 @@ namespace Ogre {
         @param newName
             Name for the new Item.
         */
-        Item* clone( const String& newName ) const;
+        Item *clone( const String &newName ) const;
 
         /** Sets the material to use for the whole of this Item.
         @remarks
@@ -160,8 +163,9 @@ namespace Ogre {
             is only one. Otherwise call getSubItem() and call the same
             method on the individual SubItem.
         */
-        void setDatablockOrMaterialName( const String& name,
-                                         const String& groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+        void setDatablockOrMaterialName(
+            const String &name,
+            const String &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
 
         /** Sets the material to use for the whole of this Item.
         @remarks
@@ -171,8 +175,10 @@ namespace Ogre {
             is only one. Otherwise call getSubItem() and call the same
             method on the individual SubItem.
         */
-        void setMaterialName( const String& name, const String& groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
-        
+        void setMaterialName(
+            const String &name,
+            const String &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+
         /** Sets the material to use for the whole of this Item.
         @remarks
             This is a shortcut method to set all the materials for all
@@ -181,13 +187,13 @@ namespace Ogre {
             is only one. Otherwise call getSubItem() and call the same
             method on the individual SubItem.
         */
-        void setMaterial(const MaterialPtr& material);
+        void setMaterial( const MaterialPtr &material );
 
         /** @copydoc MovableObject::getMovableType */
-        const String& getMovableType(void) const;
+        const String &getMovableType() const override;
 
         /** Returns whether or not this Item is skeletally animated. */
-        bool hasSkeleton(void) const                    { return mSkeletonInstance != 0; }
+        bool hasSkeleton() const { return mSkeletonInstance != 0; }
 
         /** Starts using the SkeletonInstance from 'master' instead of using our own.
             Useful when multiple Items can use exactly the same skeleton (e.g. on
@@ -210,38 +216,39 @@ namespace Ogre {
             Failure to do so could cause Ogre to cull some of those objects because
             it thinks they're located somewhere else.
         */
-        void useSkeletonInstanceFrom( Item* master );
+        void useSkeletonInstanceFrom( Item *master );
 
         /// Stops sharing the SkeletonInstance with other Items. @see useSkeletonInstanceFrom
         void stopUsingSkeletonInstanceFromMaster();
 
         /** Returns whether this Item shares it's SkeltonInstance with other Item instances.
-        */
+         */
         bool sharesSkeletonInstance() const;
 
         /** Returns whether or not this Item is either morph or pose animated.
-        */
-        //bool hasVertexAnimation(void) const;
+         */
+        // bool hasVertexAnimation() const;
 
         /** Returns a pointer to the set of entities which share a OldSkeletonInstance.
-            If this instance does not share it's OldSkeletonInstance with other instances @c NULL will be returned
+            If this instance does not share it's OldSkeletonInstance with other instances @c NULL will be
+           returned
         */
-        //const ItemSet* getSkeletonInstanceSharingSet() const    { return mSharedSkeletonEntities; }
+        // const ItemSet* getSkeletonInstanceSharingSet() const    { return mSharedSkeletonEntities; }
 
         /** Has this Item been initialised yet?
         @remarks
             If this returns false, it means this Item hasn't been completely
-            constructed yet from the underlying resources (Mesh, Skeleton), which 
+            constructed yet from the underlying resources (Mesh, Skeleton), which
             probably means they were delay-loaded and aren't available yet. This
             Item won't render until it has been successfully initialised, nor
             will many of the manipulation methods function.
         */
-        bool isInitialised(void) const { return mInitialised; }
+        bool isInitialised() const { return mInitialised; }
 
         /** Try to initialise the Item from the underlying resources.
         @remarks
             This method builds the internal structures of the Item based on it
-            resources (Mesh, Skeleton). This may or may not succeed if the 
+            resources (Mesh, Skeleton). This may or may not succeed if the
             resources it references have been earmarked for background loading,
             so you should check isInitialised afterwards to see if it was successful.
         @param forceReinitialise
@@ -249,38 +256,39 @@ namespace Ogre {
             internal structures and try to rebuild them. Useful if you changed the
             content of a Mesh or Skeleton at runtime.
         */
-        void _initialise(bool forceReinitialise = false);
+        void _initialise( bool forceReinitialise = false );
         /** Tear down the internal structures of this Item, rendering it uninitialised. */
-        void _deinitialise(void);
+        void _deinitialise();
 
         /** Resource::Listener hook to notify Entity that a Mesh is (re)loaded. */
-        void loadingComplete(Resource* res);
+        void loadingComplete( Resource *res ) override;
 
-        virtual void _notifyParentNodeMemoryChanged(void);
+        void _notifyParentNodeMemoryChanged() override;
     };
 
     /** FItemy object for creating Item instances */
-    class _OgreExport ItemFactory : public MovableObjectFactory
+    class _OgreExport ItemFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager            *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         ItemFactory() {}
-        ~ItemFactory() {}
+        ~ItemFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
-        void destroyInstance( MovableObject* obj);
+        const String &getType() const override;
 
+        void destroyInstance( MovableObject *obj ) override;
     };
     /** @} */
     /** @} */
 
-} // namespace Ogre
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
-#endif // __Item_H__
+#endif  // __Item_H__

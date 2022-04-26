@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,7 +30,9 @@ THE SOFTWARE.
 #define _OgreMetalTextureGpu_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreTextureGpu.h"
+
 #include "OgreDescriptorSetTexture.h"
 #include "OgreDescriptorSetUav.h"
 
@@ -50,7 +52,7 @@ namespace Ogre
         ///     * A 4x4 dummy texture (now owned by us).
         ///     * A 64x64 mipmapped texture of us (but now owned by us).
         ///     * A GL texture not owned by us, but contains the final information.
-        id<MTLTexture>  mDisplayTextureName;
+        id<MTLTexture> mDisplayTextureName;
 
         /// When we're transitioning to GpuResidency::Resident but we're not there yet,
         /// we will be either displaying a 4x4 dummy texture or a 64x64 one. However
@@ -62,55 +64,59 @@ namespace Ogre
         ///     2. The texture
         ///     3. An msaa texture (hasMsaaExplicitResolves == true)
         ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
-        id<MTLTexture>  mFinalTextureName;
+        id<MTLTexture> mFinalTextureName;
         /// Only used when hasMsaaExplicitResolves() == false.
-        id<MTLTexture>  mMsaaFramebufferName;
+        id<MTLTexture> mMsaaFramebufferName;
 
-        virtual void createInternalResourcesImpl(void);
-        virtual void destroyInternalResourcesImpl(void);
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
-        MTLTextureType getMetalTextureType(void) const;
+        MTLTextureType getMetalTextureType() const;
 
     public:
-        MetalTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                         VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                         TextureTypes::TextureTypes initialType,
+        MetalTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
+                         IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                          TextureGpuManager *textureManager );
-        virtual ~MetalTextureGpu();
+        ~MetalTextureGpu() override;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true,
-                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
+        void copyTo(
+            TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
+            uint8 srcMipLevel, bool keepResolvedTexSynced = true,
+            CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode = CopyEncTransitionMode::Auto,
+            CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
+                CopyEncTransitionMode::Auto ) override;
 
-        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
+        void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                                       CopyEncTransitionMode::Auto ) override;
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
 
-        virtual void notifyDataIsReady(void);
-        virtual bool _isDataReadyImpl(void) const;
+        void notifyDataIsReady() override;
+        bool _isDataReadyImpl() const override;
 
-        virtual void _setToDisplayDummyTexture(void);
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setToDisplayDummyTexture() override;
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
 
         id<MTLTexture> getView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
                                 uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav );
         id<MTLTexture> getView( DescriptorSetTexture2::TextureSlot texSlot );
         id<MTLTexture> getView( DescriptorSetUav::TextureSlot uavSlot );
 
-        id<MTLTexture> getDisplayTextureName(void) const    { return mDisplayTextureName; }
-        id<MTLTexture> getFinalTextureName(void) const      { return mFinalTextureName; }
-        id<MTLTexture> getMsaaFramebufferName(void) const   { return mMsaaFramebufferName; }
+        id<MTLTexture> getDisplayTextureName() const { return mDisplayTextureName; }
+        id<MTLTexture> getFinalTextureName() const { return mFinalTextureName; }
+        id<MTLTexture> getMsaaFramebufferName() const { return mMsaaFramebufferName; }
+
+        virtual void getCustomAttribute( IdString name, void *pData ) override;
     };
 
     class _OgreMetalExport MetalTextureGpuRenderTarget : public MetalTextureGpu
     {
     protected:
-        uint16          mDepthBufferPoolId;
-        bool            mPreferDepthTexture;
-        PixelFormatGpu  mDesiredDepthBufferFormat;
+        uint16         mDepthBufferPoolId;
+        bool           mPreferDepthTexture;
+        PixelFormatGpu mDesiredDepthBufferFormat;
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         OrientationMode mOrientationMode;
 #endif
@@ -119,20 +125,20 @@ namespace Ogre
         MetalTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                      VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                      TextureTypes::TextureTypes initialType,
-                                     TextureGpuManager *textureManager );
+                                     TextureGpuManager         *textureManager );
 
-        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId(void) const;
-        virtual bool getPreferDepthTexture(void) const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+        void           _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                                PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16         getDepthBufferPoolId() const override;
+        bool           getPreferDepthTexture() const override;
+        PixelFormatGpu getDesiredDepthBufferFormat() const override;
 
-        virtual void setOrientationMode( OrientationMode orientationMode );
+        void setOrientationMode( OrientationMode orientationMode ) override;
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        virtual OrientationMode getOrientationMode( void ) const;
+        OrientationMode getOrientationMode() const override;
 #endif
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

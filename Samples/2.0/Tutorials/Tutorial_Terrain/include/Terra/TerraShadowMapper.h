@@ -1,8 +1,36 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE-Next
+    (Object-oriented Graphics Rendering Engine)
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-2021 Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
 
 #ifndef _OgreTerraShadowMapper_H_
 #define _OgreTerraShadowMapper_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreMovableObject.h"
 #include "OgreShaderParams.h"
 
@@ -10,32 +38,34 @@
 
 namespace Ogre
 {
-    typedef TextureGpu* CompositorChannel;
+    typedef TextureGpu *CompositorChannel;
 
     struct TerraSharedResources;
 
     class ShadowMapper
     {
-        Ogre::TextureGpu    *m_heightMapTex;
+        Ogre::TextureGpu *m_heightMapTex;
 
-        ConstBufferPacked   *m_shadowStarts;
-        ConstBufferPacked   *m_shadowPerGroupData;
+        ConstBufferPacked *  m_shadowStarts;
+        ConstBufferPacked *  m_shadowPerGroupData;
         CompositorWorkspace *m_shadowWorkspace;
-        TextureGpu          *m_shadowMapTex;
-        TextureGpu          *m_tmpGaussianFilterTex;
-        HlmsComputeJob      *m_shadowJob;
+        TextureGpu *         m_shadowMapTex;
+        TextureGpu *         m_tmpGaussianFilterTex;
+        HlmsComputeJob *     m_shadowJob;
         ShaderParams::Param *m_jobParamDelta;
         ShaderParams::Param *m_jobParamXYStep;
         ShaderParams::Param *m_jobParamIsStep;
         ShaderParams::Param *m_jobParamHeightDelta;
+        ShaderParams::Param *m_jobParamResolutionShift;
 
-        IdType m_terraId;
-        bool m_minimizeMemoryConsumption;
+        IdType                m_terraId;
+        bool                  m_minimizeMemoryConsumption;
+        bool                  m_lowResShadow;
         TerraSharedResources *m_sharedResources;
 
-        //Ogre stuff
-        SceneManager            *m_sceneManager;
-        CompositorManager2      *m_compositorManager;
+        // Ogre stuff
+        SceneManager *      m_sceneManager;
+        CompositorManager2 *m_compositorManager;
 
         static inline size_t getStartsPtrCount( int32 *starts, int32 *startsBase );
 
@@ -72,7 +102,7 @@ namespace Ogre
         static inline float getErrorAfterXsteps( uint32 xIterationsToSkip, float dx, float dy );
 
         static void setGaussianFilterParams( HlmsComputeJob *job, uint8 kernelRadius,
-                                             float gaussianDeviationFactor=0.5f );
+                                             float gaussianDeviationFactor = 0.5f );
 
         void createCompositorWorkspace();
         void destroyCompositorWorkspace();
@@ -87,7 +117,7 @@ namespace Ogre
         @param gaussianDeviationFactor
             Expressed in terms of gaussianDeviation = kernelRadius * gaussianDeviationFactor
         */
-        void setGaussianFilterParams( uint8 kernelRadius, float gaussianDeviationFactor=0.5f );
+        void setGaussianFilterParams( uint8 kernelRadius, float gaussianDeviationFactor = 0.5f );
 
         /// Don't call this function directly
         ///
@@ -121,14 +151,23 @@ namespace Ogre
         */
         void setMinimizeMemoryConsumption( bool bMinimizeMemoryConsumption );
 
-        void createShadowMap( IdType id, TextureGpu *heightMapTex );
-        void destroyShadowMap(void);
+        /**
+        @param id
+            If for generating unique names
+        @param heightMapTex
+            The original heightmap we'll be raymarching for
+        @param bLowResShadow
+            When true we'll create the shadow map at width / 4 x height / 4
+            This consumes a lot less BW and memory, which can be critical in older mobile
+        */
+        void createShadowMap( IdType id, TextureGpu *heightMapTex, bool bLowResShadow );
+        void destroyShadowMap();
         void updateShadowMap( const Vector3 &lightDir, const Vector2 &xzDimensions, float heightScale );
 
         void fillUavDataForCompositorChannel( TextureGpu **outChannel ) const;
 
-        Ogre::TextureGpu* getShadowMapTex(void) const           { return m_shadowMapTex; }
+        Ogre::TextureGpu *getShadowMapTex() const { return m_shadowMapTex; }
     };
-}
+}  // namespace Ogre
 
 #endif

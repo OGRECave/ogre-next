@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -197,10 +197,10 @@ namespace Ogre
             return "SPV_REFLECT_RESULT_ERROR_SPIRV_UNEXPECTED_BLOCK_DATA";
         case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_BLOCK_MEMBER_REFERENCE:
             return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_BLOCK_MEMBER_REFERENCE";
-            /*case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_ENTRY_POINT:
-                return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_ENTRY_POINT";
-            case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_EXECUTION_MODE:
-                return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_EXECUTION_MODE";*/
+        case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_ENTRY_POINT:
+            return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_ENTRY_POINT";
+        case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_EXECUTION_MODE:
+            return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_EXECUTION_MODE";
         }
 
         return "SPV_REFLECT_INVALID_ERROR_CODE";

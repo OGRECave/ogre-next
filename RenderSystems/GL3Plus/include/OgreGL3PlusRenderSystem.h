@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -31,15 +31,16 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreGL3PlusPrerequisites.h"
 
-#include "OgreMaterialManager.h"
-#include "OgreRenderSystem.h"
-#include "OgreHlmsSamplerblock.h"
 #include "OgreDescriptorSetUav.h"
-#include "OgreGLSLShader.h"
 #include "OgreGL3PlusPixelFormatToShaderType.h"
 #include "OgreGL3PlusRenderPassDescriptor.h"
+#include "OgreGLSLShader.h"
+#include "OgreHlmsSamplerblock.h"
+#include "OgreMaterialManager.h"
+#include "OgreRenderSystem.h"
 
-namespace Ogre {
+namespace Ogre
+{
     class GL3PlusContext;
     class GL3PlusSupport;
     class GLSLShaderManager;
@@ -53,7 +54,7 @@ namespace Ogre {
     /**
        Implementation of GL 3 as a rendering system.
     */
-    class _OgreGL3PlusExport GL3PlusRenderSystem : public RenderSystem
+    class _OgreGL3PlusExport GL3PlusRenderSystem final : public RenderSystem
     {
     private:
         /// Rendering loop control
@@ -85,7 +86,7 @@ namespace Ogre {
         /// Number of fixed-function texture units
         unsigned short mFixedFunctionTextureUnits;
 
-        void initConfigOptions(void);
+        void initConfigOptions();
 
         /// Store last colour write state
         uint8 mBlendChannelMask;
@@ -100,6 +101,8 @@ namespace Ogre {
 
         bool mUseAutoTextureMatrix;
 
+        bool mSupportsTargetIndependentRasterization;
+
         /// GL support class, used for creating windows etc.
         GL3PlusSupport *mGLSupport;
 
@@ -109,25 +112,25 @@ namespace Ogre {
         /* The current GL context  - main thread only */
         GL3PlusContext *mCurrentContext;
 
-        typedef list<GL3PlusContext*>::type GL3PlusContextList;
+        typedef list<GL3PlusContext *>::type GL3PlusContextList;
         /// List of background thread contexts
         GL3PlusContextList mBackgroundContextList;
 
         /// For rendering legacy objects.
-        GLuint  mGlobalVao;
-        v1::VertexData  *mCurrentVertexBuffer;
-        v1::IndexData   *mCurrentIndexBuffer;
+        GLuint          mGlobalVao;
+        v1::VertexData *mCurrentVertexBuffer;
+        v1::IndexData  *mCurrentIndexBuffer;
         GLenum          mCurrentPolygonMode;
 
-        GLSLShaderManager *mShaderManager;
-        GLSLShaderFactory* mGLSLShaderFactory;
-        v1::HardwareBufferManager* mHardwareBufferManager;
+        GLSLShaderManager         *mShaderManager;
+        GLSLShaderFactory         *mGLSLShaderFactory;
+        v1::HardwareBufferManager *mHardwareBufferManager;
 
         /** These variables are used for caching RenderSystem state.
             They are cached because OpenGL state changes can be quite expensive,
             which is especially important on mobile or embedded systems.
         */
-        GLenum mActiveTextureUnit;
+        GLenum        mActiveTextureUnit;
         BindBufferMap mActiveBufferMap;
 
         /// Check if the GL system has already been initialised
@@ -144,55 +147,53 @@ namespace Ogre {
         vector<GLuint>::type mRenderAttribsBound;
         vector<GLuint>::type mRenderInstanceAttribsBound;
 
-        GLint getCombinedMinMipFilter(void) const;
+        GLint getCombinedMinMipFilter() const;
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		/// @copydoc RenderSystem::setDrawBuffer
-		virtual bool setDrawBuffer(ColourBufferType colourBuffer);
+        /// @copydoc RenderSystem::setDrawBuffer
+        bool setDrawBuffer( ColourBufferType colourBuffer ) override;
 #endif
 
         /// @copydoc RenderSystem::checkExtension
-        virtual bool checkExtension( const String &ext ) const;
+        bool checkExtension( const String &ext ) const override;
 
         /// @copydoc RenderSystem::getPixelFormatToShaderType
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
+        const PixelFormatToShaderType *getPixelFormatToShaderType() const override;
 
-        virtual void _clearStateAndFlushCommandBuffer(void);
+        void _clearStateAndFlushCommandBuffer() override;
 
-        virtual void flushCommands(void);
+        void flushCommands() override;
 
         unsigned char *mSwIndirectBufferPtr;
 
-        uint8   mFirstUavBoundSlot;
-        uint8   mLastUavBoundPlusOne;
+        uint8 mFirstUavBoundSlot;
+        uint8 mLastUavBoundPlusOne;
 
-        uint8                   mClipDistances;
-        GL3PlusHlmsPso const    *mPso;
-        GLSLShader *mCurrentComputeShader;
+        uint8                 mClipDistances;
+        GL3PlusHlmsPso const *mPso;
+        GLSLShader           *mCurrentComputeShader;
 
-        GLuint  mNullColourFramebuffer;
+        GLuint mNullColourFramebuffer;
 
         GL3PlusPixelFormatToShaderType mPixelFormatToShaderType;
 
         GL3PlusFrameBufferDescMap mFrameBufferDescMap;
 
-        GLint getTextureAddressingMode(TextureAddressingMode tam) const;
-        static GLenum getBlendMode(SceneBlendFactor ogreBlend);
+        GLint         getTextureAddressingMode( TextureAddressingMode tam ) const;
+        static GLenum getBlendMode( SceneBlendFactor ogreBlend );
         static GLenum getBlendOperation( SceneBlendOperation op );
 
-        bool activateGLTextureUnit(size_t unit);
-        void bindVertexElementToGpu( const v1::VertexElement &elem,
+        bool activateGLTextureUnit( size_t unit );
+        void bindVertexElementToGpu( const v1::VertexElement          &elem,
                                      v1::HardwareVertexBufferSharedPtr vertexBuffer,
-                                     const size_t vertexStart,
-                                     vector<GLuint>::type &attribsBound,
-                                     vector<GLuint>::type &instanceAttribsBound,
-                                     bool updateVAO);
+                                     const size_t vertexStart, vector<GLuint>::type &attribsBound,
+                                     vector<GLuint>::type &instanceAttribsBound, bool updateVAO );
 
         void transformViewportCoords( int x, int &y, int width, int height );
 
     public:
         // Default constructor / destructor
         GL3PlusRenderSystem();
-        ~GL3PlusRenderSystem();
+        ~GL3PlusRenderSystem() override;
 
         friend class ShaderGeneratorTechniqueResolverListener;
 
@@ -202,80 +203,79 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        const String& getName(void) const;
+        const String &getName() const override;
         /** See
             RenderSystem
         */
-            const String& getFriendlyName(void) const;
+        const String &getFriendlyName() const override;
         /** See
             RenderSystem
         */
-        ConfigOptionMap& getConfigOptions(void);
+        ConfigOptionMap &getConfigOptions() override;
         /** See
             RenderSystem
         */
-        void setConfigOption(const String &name, const String &value);
+        void setConfigOption( const String &name, const String &value ) override;
 
-        virtual const char* getPriorityConfigOption( size_t idx ) const;
+        const char *getPriorityConfigOption( size_t idx ) const override;
 
-        virtual size_t getNumPriorityConfigOptions( void ) const;
+        size_t getNumPriorityConfigOptions() const override;
 
         /** See
             RenderSystem
         */
-        String validateConfigOptions(void);
+        String validateConfigOptions() override;
         /** See
             RenderSystem
         */
-        Window* _initialise( bool autoCreateWindow, const String& windowTitle = "OGRE Render Window" );
+        Window *_initialise( bool          autoCreateWindow,
+                             const String &windowTitle = "OGRE Render Window" ) override;
         /** See
             RenderSystem
         */
-        virtual RenderSystemCapabilities* createRenderSystemCapabilities() const;
+        RenderSystemCapabilities *createRenderSystemCapabilities() const override;
         /** See
             RenderSystem
         */
-        void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window* primary);
+        void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
+                                                     Window                   *primary ) override;
         /** See
             RenderSystem
         */
-        void reinitialise(void); // Used if settings changed mid-rendering
+        void reinitialise() override;  // Used if settings changed mid-rendering
         /** See
             RenderSystem
         */
-        void shutdown(void);
+        void shutdown() override;
 
         /// @copydoc RenderSystem::_createRenderWindow
-        Window *_createRenderWindow( const String &name, uint32 width, uint32 height,
-                                     bool fullScreen, const NameValuePairList *miscParams = 0 );
+        Window *_createRenderWindow( const String &name, uint32 width, uint32 height, bool fullScreen,
+                                     const NameValuePairList *miscParams = 0 ) override;
 
         /// @copydoc RenderSystem::_createRenderWindows
         bool _createRenderWindows( const RenderWindowDescriptionList &renderWindowDescriptions,
-                                   WindowList &createdWindows );
+                                   WindowList                        &createdWindows ) override;
 
-        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
-        virtual GL3PlusFrameBufferDescMap& _getFrameBufferDescMap(void) { return mFrameBufferDescMap; }
-        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 *viewportSizes,
-                                                const Vector4 *scissors,
-                                                uint32 numViewports,
-                                                bool overlaysEnabled,
-                                                bool warnIfRtvWasFlushed );
-        virtual void endRenderPassDescriptor(void);
+        void                       _setCurrentDeviceFromTexture( TextureGpu *texture ) override;
+        GL3PlusFrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
+        RenderPassDescriptor      *createRenderPassDescriptor() override;
+        void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
+                                        uint8 mipLevel, const Vector4 *viewportSizes,
+                                        const Vector4 *scissors, uint32 numViewports,
+                                        bool overlaysEnabled, bool warnIfRtvWasFlushed ) override;
+        void endRenderPassDescriptor() override;
 
-        TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                          PixelFormatGpu depthBufferFormat, uint16 poolId );
+        TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                          PixelFormatGpu depthBufferFormat, uint16 poolId ) override;
 
         /** See
             RenderSystem
         */
-        String getErrorDescription(long errorNumber) const;
+        String getErrorDescription( long errorNumber ) const override;
         /** See
             RenderSystem
         */
-        VertexElementType getColourVertexElementType(void) const;
+        VertexElementType getColourVertexElementType() const override;
 
         // -----------------------------
         // Low-level overridden members
@@ -283,187 +283,193 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _useLights(const LightList& lights, unsigned short limit) { };   // Not supported
+        void _useLights( const LightList & /*lights*/, unsigned short /*limit*/ ) override {
+        }  // Not supported
         /** See
             RenderSystem
         */
-        bool areFixedFunctionLightsInViewSpace() const { return true; }
+        bool areFixedFunctionLightsInViewSpace() const override { return true; }
         /** See
             RenderSystem
         */
-        void _setWorldMatrix(const Matrix4 &m);
+        void _setWorldMatrix( const Matrix4 &m ) override;
         /** See
             RenderSystem
         */
-        void _setViewMatrix(const Matrix4 &m);
+        void _setViewMatrix( const Matrix4 &m ) override;
         /** See
             RenderSystem
         */
-        void _setProjectionMatrix(const Matrix4 &m);
+        void _setProjectionMatrix( const Matrix4 &m ) override;
         /** See
             RenderSystem
         */
-        void _setSurfaceParams(const ColourValue &ambient,
-                               const ColourValue &diffuse, const ColourValue &specular,
-                               const ColourValue &emissive, Real shininess,
-                               TrackVertexColourType tracking) {}
+        void _setSurfaceParams( const ColourValue &ambient, const ColourValue &diffuse,
+                                const ColourValue &specular, const ColourValue &emissive, Real shininess,
+                                TrackVertexColourType tracking ) override
+        {
+        }
         /** See
             RenderSystem
         */
-        void _setPointParameters(Real size, bool attenuationEnabled,
-                                 Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
+        void _setPointParameters( Real size, bool attenuationEnabled, Real constant, Real linear,
+                                  Real quadratic, Real minSize, Real maxSize ) override;
         /** See
             RenderSystem
         */
-        void _setPointSpritesEnabled(bool enabled);
+        void _setPointSpritesEnabled( bool enabled ) override;
         /** See
          RenderSystem
          */
-        void _setVertexTexture(size_t unit, TextureGpu *tex);
+        void _setVertexTexture( size_t unit, TextureGpu *tex ) override;
         /** See
          RenderSystem
          */
-        void _setGeometryTexture(size_t unit, TextureGpu *tex);
+        void _setGeometryTexture( size_t unit, TextureGpu *tex ) override;
         /** See
          RenderSystem
          */
-        void _setTessellationHullTexture(size_t unit, TextureGpu *tex);
+        void _setTessellationHullTexture( size_t unit, TextureGpu *tex ) override;
         /** See
          RenderSystem
          */
-        void _setTessellationDomainTexture(size_t unit, TextureGpu *tex);
+        void _setTessellationDomainTexture( size_t unit, TextureGpu *tex ) override;
         /** See
             RenderSystem
         */
-        void _setTexture( size_t unit, TextureGpu *tex, bool bDepthReadOnly );
+        void _setTexture( size_t unit, TextureGpu *tex, bool bDepthReadOnly ) override;
         /// See RenderSystem
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
-                                   uint32 hazardousTexIdx );
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
-        virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
-        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
-        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set );
-        virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
+        void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
+                           uint32 hazardousTexIdx ) override;
+        void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
+        void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) override;
+        void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) override;
+        void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
+        void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) override;
+
     protected:
-        virtual void setBufferUavCS( uint32 slot, const DescriptorSetUav::BufferSlot &bufferSlot );
-        virtual void setTextureUavCS( uint32 slot, const DescriptorSetUav::TextureSlot &texSlot,
-                                      GLuint srvView );
+        void setBufferUavCS( uint32 slot, const DescriptorSetUav::BufferSlot &bufferSlot );
+        void setTextureUavCS( uint32 slot, const DescriptorSetUav::TextureSlot &texSlot,
+                              GLuint srvView );
+
     public:
-        virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
+        void _setUavCS( uint32 slotStart, const DescriptorSetUav *set ) override;
         /** See
             RenderSystem
         */
-        void _setTextureCoordCalculation(size_t stage, TexCoordCalcMethod m,
-                                         const Frustum* frustum = 0) { };   // Not supported
+        void _setTextureCoordCalculation( size_t stage, TexCoordCalcMethod m,
+                                          const Frustum *frustum = 0 ) override
+        {
+        }  // Not supported
         /** See
             RenderSystem
         */
-        void _setTextureBlendMode(size_t stage, const LayerBlendModeEx& bm) { };   // Not supported
+        void _setTextureBlendMode( size_t stage, const LayerBlendModeEx &bm ) override {
+        }  // Not supported
         /** See
             RenderSystem
         */
-        void _setTextureMatrix(size_t stage, const Matrix4& xform) { };   // Not supported
+        void _setTextureMatrix( size_t stage, const Matrix4 &xform ) override{};  // Not supported
 
-        void flushUAVs( void );
+        void flushUAVs();
 
-        virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
+        void executeResourceTransition( const ResourceTransitionArray &rstCollection ) override;
 
-        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
-        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );
-        virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock );
-        virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block );
-        virtual void _hlmsBlendblockCreated( HlmsBlendblock *newBlock );
-        virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block );
-        virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
-        virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
-        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
-        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
-        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
-        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
+        void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
+        void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) override;
+        void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;
+        void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) override;
+        void _hlmsBlendblockCreated( HlmsBlendblock *newBlock ) override;
+        void _hlmsBlendblockDestroyed( HlmsBlendblock *block ) override;
+        void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) override;
+        void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) override;
+        void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet ) override;
+        void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set ) override;
+        void _descriptorSetUavCreated( DescriptorSetUav *newSet ) override;
+        void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
         void _setHlmsMacroblock( const HlmsMacroblock *macroblock, const GL3PlusHlmsPso *pso );
         void _setHlmsBlendblock( const HlmsBlendblock *blendblock, const GL3PlusHlmsPso *pso );
-        virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock );
-        virtual void _setPipelineStateObject( const HlmsPso *pso );
+        void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock ) override;
+        void _setPipelineStateObject( const HlmsPso *pso ) override;
 
-        virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
+        void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) override;
 
-        virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
-        virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso );
-        virtual void _setComputePso( const HlmsComputePso *pso );
+        void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso ) override;
+        void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso ) override;
+        void _setComputePso( const HlmsComputePso *pso ) override;
         /** See
             RenderSystem
         */
-        void _beginFrame(void);
+        void _beginFrame() override;
         /** See
             RenderSystem
         */
-        void _endFrame(void);
+        void _endFrame() override;
         /** See
             RenderSystem
         */
-        void _setDepthBias(float constantBias, float slopeScaleBias);
-        virtual void _makeRsProjectionMatrix( const Matrix4& matrix,
-                                              Matrix4& dest, Real nearPlane,
-                                              Real farPlane, ProjectionType projectionType );
+        void _setDepthBias( float constantBias, float slopeScaleBias );
+        void _makeRsProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest, Real nearPlane,
+                                      Real farPlane, ProjectionType projectionType ) override;
         /** See
             RenderSystem
         */
-        virtual void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
-        virtual void _convertOpenVrProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
-        virtual Real getRSDepthRange(void) const;
+        void _convertProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest ) override;
+        void _convertOpenVrProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest ) override;
+        Real getRSDepthRange() const override;
         /** See
             RenderSystem
         */
-        void setClipPlane (ushort index, Real A, Real B, Real C, Real D);
+        void setClipPlane( ushort index, Real A, Real B, Real C, Real D );
         /** See
             RenderSystem
         */
-        void enableClipPlane (ushort index, bool enable);
+        void enableClipPlane( ushort index, bool enable );
         /** See
             RenderSystem.
         */
-        virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
+        void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams ) override;
         /** See
             RenderSystem
         */
-        void _render(const v1::RenderOperation& op);
+        void _render( const v1::RenderOperation &op ) override;
 
-        virtual void _dispatch( const HlmsComputePso &pso );
+        void _dispatch( const HlmsComputePso &pso ) override;
 
-        virtual void _setVertexArrayObject( const VertexArrayObject *vao );
-        virtual void _render( const CbDrawCallIndexed *cmd );
-        virtual void _render( const CbDrawCallStrip *cmd );
-        virtual void _renderEmulated( const CbDrawCallIndexed *cmd );
-        virtual void _renderEmulated( const CbDrawCallStrip *cmd );
-        virtual void _renderEmulatedNoBaseInstance( const CbDrawCallIndexed *cmd );
-        virtual void _renderEmulatedNoBaseInstance( const CbDrawCallStrip *cmd );
+        void _setVertexArrayObject( const VertexArrayObject *vao ) override;
+        void _render( const CbDrawCallIndexed *cmd ) override;
+        void _render( const CbDrawCallStrip *cmd ) override;
+        void _renderEmulated( const CbDrawCallIndexed *cmd ) override;
+        void _renderEmulated( const CbDrawCallStrip *cmd ) override;
+        void _renderEmulatedNoBaseInstance( const CbDrawCallIndexed *cmd ) override;
+        void _renderEmulatedNoBaseInstance( const CbDrawCallStrip *cmd ) override;
 
-        virtual void _startLegacyV1Rendering(void);
-        virtual void _setRenderOperation( const v1::CbRenderOp *cmd );
-        virtual void _render( const v1::CbDrawCallIndexed *cmd );
-        virtual void _render( const v1::CbDrawCallStrip *cmd );
-        virtual void _renderNoBaseInstance( const v1::CbDrawCallIndexed *cmd );
-        virtual void _renderNoBaseInstance( const v1::CbDrawCallStrip *cmd );
+        void _startLegacyV1Rendering() override;
+        void _setRenderOperation( const v1::CbRenderOp *cmd ) override;
+        void _render( const v1::CbDrawCallIndexed *cmd ) override;
+        void _render( const v1::CbDrawCallStrip *cmd ) override;
+        void _renderNoBaseInstance( const v1::CbDrawCallIndexed *cmd ) override;
+        void _renderNoBaseInstance( const v1::CbDrawCallStrip *cmd ) override;
 
-        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                       TextureGpu *anyTarget, uint8 mipLevel );
-        HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
-        Real getHorizontalTexelOffset(void) { return 0.0; }               // No offset in GL
-        Real getVerticalTexelOffset(void) { return 0.0; }                 // No offset in GL
-        Real getMinimumDepthInputValue(void);
-        Real getMaximumDepthInputValue(void);
-        OGRE_MUTEX(mThreadInitMutex);
-        void registerThread();
-        void unregisterThread();
-        void preExtraThreadsStarted();
-        void postExtraThreadsStarted();
-        void setClipPlanesImpl(const Ogre::PlaneList& planeList);
+        void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
+                               uint8 mipLevel ) override;
+        HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
+        Real                    getHorizontalTexelOffset() override { return 0.0; }  // No offset in GL
+        Real                    getVerticalTexelOffset() override { return 0.0; }    // No offset in GL
+        Real                    getMinimumDepthInputValue() override;
+        Real                    getMaximumDepthInputValue() override;
+        OGRE_MUTEX( mThreadInitMutex );
+        void registerThread() override;
+        void unregisterThread() override;
+        void preExtraThreadsStarted() override;
+        void postExtraThreadsStarted() override;
+        void setClipPlanesImpl( const Ogre::PlaneList &planeList ) override;
 
         // ----------------------------------
         // GL3PlusRenderSystem specific members
         // ----------------------------------
         /** Returns the main context */
-        GL3PlusContext* _getMainContext() { return mMainContext; }
+        GL3PlusContext *_getMainContext() { return mMainContext; }
         /** Unregister a render target->context mapping. If the context of target
             is the current context, change the context to the main context so it
             can be destroyed safely.
@@ -471,50 +477,63 @@ namespace Ogre {
             @note This is automatically called by the destructor of
             GL3PlusContext.
         */
-        void _unregisterContext(GL3PlusContext *context);
+        void _unregisterContext( GL3PlusContext *context );
         /** Switch GL context, dealing with involved internal cached states too
          */
-        void _switchContext(GL3PlusContext *context);
+        void _switchContext( GL3PlusContext *context );
         /** One time initialization for the RenderState of a context. Things that
             only need to be set once, like the LightingModel can be defined here.
         */
         void _oneTimeContextInitialization();
         void initialiseContext( Window *primary );
 
-        GLint convertCompareFunction(CompareFunction func) const;
-        GLint convertStencilOp(StencilOperation op) const;
+        GLenum convertCompareFunction( CompareFunction func ) const;
+        GLenum convertStencilOp( StencilOperation op ) const;
 
-        const GL3PlusSupport* getGLSupport(void) const { return mGLSupport; }
+        bool supportsTargetIndependentRasterization() const
+        {
+            return mSupportsTargetIndependentRasterization;
+        }
 
-        void bindGpuProgramParameters(GpuProgramType gptype, GpuProgramParametersSharedPtr params, uint16 mask);
-        void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
+        const GL3PlusSupport *getGLSupport() const { return mGLSupport; }
+
+        void bindGpuProgramParameters( GpuProgramType gptype, GpuProgramParametersSharedPtr params,
+                                       uint16 mask ) override;
+        void bindGpuProgramPassIterationParameters( GpuProgramType gptype ) override;
 
         /// @copydoc RenderSystem::_setSceneBlending
-        void _setSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor, SceneBlendOperation op );
+        void _setSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor,
+                                SceneBlendOperation op );
         /// @copydoc RenderSystem::_setSeparateSceneBlending
-        void _setSeparateSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor, SceneBlendFactor sourceFactorAlpha, SceneBlendFactor destFactorAlpha, SceneBlendOperation op, SceneBlendOperation alphaOp );
+        void _setSeparateSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor,
+                                        SceneBlendFactor sourceFactorAlpha,
+                                        SceneBlendFactor destFactorAlpha, SceneBlendOperation op,
+                                        SceneBlendOperation alphaOp );
         /// @copydoc RenderSystem::getDisplayMonitorCount
-        unsigned int getDisplayMonitorCount() const;
+        unsigned int getDisplayMonitorCount() const override;
 
-        void _setSceneBlendingOperation(SceneBlendOperation op);
-        void _setSeparateSceneBlendingOperation(SceneBlendOperation op, SceneBlendOperation alphaOp);
+        void _setSceneBlendingOperation( SceneBlendOperation op );
+        void _setSeparateSceneBlendingOperation( SceneBlendOperation op, SceneBlendOperation alphaOp );
         /// @copydoc RenderSystem::hasAnisotropicMipMapFilter
-        virtual bool hasAnisotropicMipMapFilter() const { return false; }
+        bool hasAnisotropicMipMapFilter() const override { return false; }
 
         /// @copydoc RenderSystem::beginProfileEvent
-        virtual void beginProfileEvent( const String &eventName );
+        void beginProfileEvent( const String &eventName ) override;
 
         /// @copydoc RenderSystem::endProfileEvent
-        virtual void endProfileEvent( void );
+        void endProfileEvent() override;
 
         /// @copydoc RenderSystem::markProfileEvent
-        virtual void markProfileEvent( const String &eventName );
+        void markProfileEvent( const String &eventName ) override;
 
-        virtual void initGPUProfiling(void);
-        virtual void deinitGPUProfiling(void);
-        virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
-        virtual void endGPUSampleProfile( const String &name );
+        void debugAnnotationPush( const String &event ) override;
+        void debugAnnotationPop() override;
+
+        void initGPUProfiling() override;
+        void deinitGPUProfiling() override;
+        void beginGPUSampleProfile( const String &name, uint32 *hashCache ) override;
+        void endGPUSampleProfile( const String &name ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

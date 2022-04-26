@@ -4,59 +4,30 @@
 
 namespace Demo
 {
-    BaseSystem::BaseSystem( GameState *gameState ) :
-        mCurrentGameState( gameState )
-    {
-    }
+    BaseSystem::BaseSystem( GameState *gameState ) : mCurrentGameState( gameState ) {}
     //-----------------------------------------------------------------------------------
-    BaseSystem::~BaseSystem()
-    {
-    }
+    BaseSystem::~BaseSystem() {}
     //-----------------------------------------------------------------------------------
-    void BaseSystem::initialize(void)
-    {
-        mCurrentGameState->initialize();
-    }
+    void BaseSystem::initialize() { mCurrentGameState->initialize(); }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::deinitialize(void)
-    {
-        mCurrentGameState->deinitialize();
-    }
+    void BaseSystem::deinitialize() { mCurrentGameState->deinitialize(); }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::createScene01(void)
-    {
-        mCurrentGameState->createScene01();
-    }
+    void BaseSystem::createScene01() { mCurrentGameState->createScene01(); }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::createScene02(void)
-    {
-        mCurrentGameState->createScene02();
-    }
+    void BaseSystem::createScene02() { mCurrentGameState->createScene02(); }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::destroyScene(void)
-    {
-        mCurrentGameState->destroyScene();
-    }
+    void BaseSystem::destroyScene() { mCurrentGameState->destroyScene(); }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::beginFrameParallel(void)
-    {
-        this->processIncomingMessages();
-    }
+    void BaseSystem::beginFrameParallel() { this->processIncomingMessages(); }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::update( float timeSinceLast )
-    {
-        mCurrentGameState->update( timeSinceLast );
-    }
+    void BaseSystem::update( float timeSinceLast ) { mCurrentGameState->update( timeSinceLast ); }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::finishFrameParallel(void)
+    void BaseSystem::finishFrameParallel()
     {
         mCurrentGameState->finishFrameParallel();
 
         this->flushQueuedMessages();
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::finishFrame(void)
-    {
-        mCurrentGameState->finishFrame();
-    }
-}
+    void BaseSystem::finishFrame() { mCurrentGameState->finishFrame(); }
+}  // namespace Demo

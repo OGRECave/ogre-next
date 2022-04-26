@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,26 +29,28 @@ THE SOFTWARE.
 #define _StringVector_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreSharedPtr.h"
 
 #include "ogrestd/vector.h"
 
-namespace Ogre {
+namespace Ogre
+{
     typedef _StringBase String;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
-    typedef vector<String>::type StringVector;
+    typedef vector<String>::type    StringVector;
     typedef SharedPtr<StringVector> StringVectorPtr;
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif

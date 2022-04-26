@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------------
- * This source file is part of OGRE
+ * This source file is part of OGRE-Next
  * (Object-oriented Graphics Rendering Engine)
  * For the latest info, see http://www.ogre3d.org/
  *
@@ -33,15 +33,14 @@
 
 namespace Ogre
 {
-
     class _OgreLodExport LodWorkQueueInjectorListener
     {
     public:
         LodWorkQueueInjectorListener() {}
         virtual ~LodWorkQueueInjectorListener() {}
-        virtual bool shouldInject(LodWorkQueueRequest* request) = 0;
-        virtual void injectionCompleted(LodWorkQueueRequest* request) = 0;
+        virtual bool shouldInject( LodWorkQueueRequest *request ) = 0;
+        virtual void injectionCompleted( LodWorkQueueRequest *request ) = 0;
     };
 
-}
+}  // namespace Ogre
 #endif

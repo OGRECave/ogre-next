@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -111,7 +111,7 @@ namespace Ogre
                 ( Math::Abs( dist.z ) <= sumHalfSizes.z );
     }
     //-----------------------------------------------------------------------------------
-    inline Real Aabb::volume(void) const
+    inline Real Aabb::volume() const
     {
         const Vector3 size = mHalfSize * 2.0f;
         return size.x * size.y * size.z; // w * h * d

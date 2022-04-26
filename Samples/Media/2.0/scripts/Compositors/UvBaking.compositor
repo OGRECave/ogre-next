@@ -56,6 +56,8 @@ compositor_node BakingNode
 
 			material	Ogre/TextureBaking/DilationDownsample
 			input		0	lightBake
+
+			profiling_id "Downsample & Dilate"
 		}
 	}
 
@@ -77,6 +79,8 @@ compositor_node BakingNode
 
 			material	Ogre/TextureBaking/Dilation
 			input		0	downsampledDilation
+
+			profiling_id "Dilate"
 		}
 	}
 }
@@ -119,6 +123,8 @@ compositor_node ShowBakingTextureNode
 			}
 			overlays	on
 			rq_first	250
+
+			profiling_id "Overlays"
 		}
 	}
 }

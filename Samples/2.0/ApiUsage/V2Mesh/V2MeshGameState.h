@@ -12,8 +12,8 @@ namespace Demo
     public:
         V2MeshGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
     };
-}
+}  // namespace Demo
 
 #endif

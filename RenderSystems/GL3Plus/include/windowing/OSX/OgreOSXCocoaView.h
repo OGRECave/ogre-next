@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,23 +29,22 @@ THE SOFTWARE.
 #ifndef __OSXCocoaView_H__
 #define __OSXCocoaView_H__
 
-#include "OgreRenderWindow.h"
 #include <AppKit/NSOpenGLView.h>
+#include "OgreWindow.h"
 
 @interface OgreGL3PlusView : NSOpenGLView
 {
-    Ogre::RenderWindow *window;
+    Ogre::Window *ogreWindow;
 }
 
-- (id)initWithFrame:(NSRect)f;
-- (id)initWithGLOSXWindow:(Ogre::RenderWindow*)w;
+- (id)initWithFrame:(NSRect)frameRect;
 
-- (void)setOgreWindow:(Ogre::RenderWindow*)w;
-- (Ogre::RenderWindow*)ogreWindow;
+- (void)setOgreWindow:(Ogre::Window *)newWindow;
 
-- (void)setFrameSize:(NSSize)s;
+- (Ogre::Window *)ogreWindow;
+
+- (void)setFrameSize:(NSSize)newSize;
 
 @end
 
-#endif
-
+#endif  // __OSXCocoaView_H__

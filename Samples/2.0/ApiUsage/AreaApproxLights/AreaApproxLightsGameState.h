@@ -2,42 +2,43 @@
 #ifndef _Demo_AreaApproxLightsGameState_H_
 #define _Demo_AreaApproxLightsGameState_H_
 
-#include "OgrePrerequisites.h"
 #include "OgreOverlayPrerequisites.h"
+
+#include "OgrePrerequisites.h"
+
 #include "OgreOverlay.h"
 #include "TutorialGameState.h"
-
 
 namespace Demo
 {
     class AreaApproxLightsGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
-        Ogre::Light         *mAreaLights[2];
+        Ogre::SceneNode *mLightNodes[3];
+        Ogre::Light *mAreaLights[2];
         Ogre::HlmsUnlitDatablock *mAreaLightPlaneDatablocks[2];
 
-        bool                mAnimateObjects;
+        bool mAnimateObjects;
 
-        Ogre::TextureGpu    *mAreaMaskTex;
+        Ogre::TextureGpu *mAreaMaskTex;
 
-        void createAreaMask(void);
-        void createAreaPlaneMesh(void);
-        Ogre::HlmsUnlitDatablock* createPlaneForAreaLight( Ogre::Light *light );
+        void createAreaMask();
+        void createAreaPlaneMesh();
+        Ogre::HlmsUnlitDatablock *createPlaneForAreaLight( Ogre::Light *light );
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         AreaApproxLightsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

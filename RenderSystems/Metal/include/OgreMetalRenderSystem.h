@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -30,11 +30,12 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #define _OgreMetalRenderSystem_H_
 
 #include "OgreMetalPrerequisites.h"
-#include "OgreMetalPixelFormatToShaderType.h"
-#include "OgreMetalRenderPassDescriptor.h"
 
 #include "OgreRenderSystem.h"
+
 #include "OgreMetalDevice.h"
+#include "OgreMetalPixelFormatToShaderType.h"
+#include "OgreMetalRenderPassDescriptor.h"
 
 #import <Metal/MTLRenderCommandEncoder.h>
 #import <dispatch/dispatch.h>
@@ -49,20 +50,20 @@ namespace Ogre
     /**
        Implementation of Metal as a rendering system.
     */
-    class _OgreMetalExport MetalRenderSystem : public RenderSystem
+    class _OgreMetalExport MetalRenderSystem final : public RenderSystem
     {
         struct CachedDepthStencilState
         {
-            uint16                      refCount;
-            bool                        depthWrite;
-            CompareFunction             depthFunc;
-            StencilParams               stencilParams;
+            uint16          refCount;
+            bool            depthWrite;
+            CompareFunction depthFunc;
+            StencilParams   stencilParams;
 
-            id<MTLDepthStencilState>    depthStencilState;
+            id<MTLDepthStencilState> depthStencilState;
 
             CachedDepthStencilState() : refCount( 0 ) {}
 
-            bool operator < ( const CachedDepthStencilState &other ) const
+            bool operator<( const CachedDepthStencilState &other ) const
             {
                 if( this->depthWrite != other.depthWrite )
                     return this->depthWrite < other.depthWrite;
@@ -72,10 +73,10 @@ namespace Ogre
                 return this->stencilParams < other.stencilParams;
             }
 
-            bool operator != ( const CachedDepthStencilState &other ) const
+            bool operator!=( const CachedDepthStencilState &other ) const
             {
-                return this->depthWrite != other.depthWrite ||
-                       this->depthFunc != other.depthFunc ||
+                return this->depthWrite != other.depthWrite ||  //
+                       this->depthFunc != other.depthFunc ||    //
                        this->stencilParams != other.stencilParams;
             }
         };
@@ -83,253 +84,251 @@ namespace Ogre
         typedef vector<CachedDepthStencilState>::type CachedDepthStencilStateVec;
 
     private:
-        String mDeviceName;    // it`s hint rather than hard requirement, could be ignored if empty or device removed
-        bool mInitialized;
-        v1::HardwareBufferManager   *mHardwareBufferManager;
-        MetalGpuProgramManager      *mShaderManager;
-        MetalProgramFactory         *mMetalProgramFactory;
+        String mDeviceName;  // it`s hint rather than hard requirement, could be ignored if empty or
+                             // device removed
+        bool                       mInitialized;
+        v1::HardwareBufferManager *mHardwareBufferManager;
+        MetalGpuProgramManager    *mShaderManager;
+        MetalProgramFactory       *mMetalProgramFactory;
 
         ConfigOptionMap mOptions;
 
         MetalPixelFormatToShaderType mPixelFormatToShaderType;
 
-        __unsafe_unretained id<MTLBuffer>   mIndirectBuffer;
-        unsigned char                       *mSwIndirectBufferPtr;
-        CachedDepthStencilStateVec          mDepthStencilStates;
-        MetalHlmsPso const                  *mPso;
-        HlmsComputePso const                *mComputePso;
-        
-        bool mStencilEnabled;
+        __unsafe_unretained id<MTLBuffer> mIndirectBuffer;
+        unsigned char                    *mSwIndirectBufferPtr;
+        CachedDepthStencilStateVec        mDepthStencilStates;
+        MetalHlmsPso const               *mPso;
+        HlmsComputePso const             *mComputePso;
+
+        bool     mStencilEnabled;
         uint32_t mStencilRefValue;
 
-        //For v1 rendering.
-        v1::IndexData       *mCurrentIndexBuffer;
-        v1::VertexData      *mCurrentVertexBuffer;
-        MTLPrimitiveType    mCurrentPrimType;
+        // For v1 rendering.
+        v1::IndexData   *mCurrentIndexBuffer;
+        v1::VertexData  *mCurrentVertexBuffer;
+        MTLPrimitiveType mCurrentPrimType;
 
-        //TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
-        typedef vector<ConstBufferPacked*>::type ConstBufferPackedVec;
-        ConstBufferPackedVec    mAutoParamsBuffer;
-        size_t                  mAutoParamsBufferIdx;
-        uint8                   *mCurrentAutoParamsBufferPtr;
-        size_t                  mCurrentAutoParamsBufferSpaceLeft;
-        size_t                  mHistoricalAutoParamsSize[60];
+        // TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
+        typedef vector<ConstBufferPacked *>::type ConstBufferPackedVec;
 
-        uint8           mNumMRTs;
-        MetalRenderTargetCommon     *mCurrentColourRTs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        MetalDeviceList             mDeviceList;
-        MetalDevice                 *mActiveDevice;
+        ConstBufferPackedVec mAutoParamsBuffer;
+        size_t               mAutoParamsBufferIdx;
+        uint8               *mCurrentAutoParamsBufferPtr;
+        size_t               mCurrentAutoParamsBufferSpaceLeft;
+        size_t               mHistoricalAutoParamsSize[60];
+
+        MetalDeviceList     mDeviceList;
+        MetalDevice        *mActiveDevice;
         __unsafe_unretained id<MTLRenderCommandEncoder> mActiveRenderEncoder;
 
-        MetalDevice             mDevice;
-        dispatch_semaphore_t    mMainGpuSyncSemaphore;
-        bool                    mMainSemaphoreAlreadyWaited;
-        bool                    mBeginFrameOnceStarted;
+        MetalDevice          mDevice;
+        dispatch_semaphore_t mMainGpuSyncSemaphore;
+        bool                 mMainSemaphoreAlreadyWaited;
+        bool                 mBeginFrameOnceStarted;
 
         MetalFrameBufferDescMap mFrameBufferDescMap;
         uint32                  mEntriesToFlush;
         bool                    mVpChanged;
         bool                    mInterruptedRenderCommandEncoder;
 
-        MetalDeviceList* getDeviceList( bool refreshList = false );
-        void refreshFSAAOptions(void);
+        MetalDeviceList *getDeviceList( bool refreshList = false );
+
+        void refreshFSAAOptions();
 
         void setActiveDevice( MetalDevice *device );
 
         id<MTLDepthStencilState> getDepthStencilState( HlmsPso *pso );
-        void removeDepthStencilState( HlmsPso *pso );
+        void                     removeDepthStencilState( HlmsPso *pso );
 
-        void cleanAutoParamsBuffers(void);
+        void cleanAutoParamsBuffers();
 
     public:
         MetalRenderSystem();
-        virtual ~MetalRenderSystem();
+        ~MetalRenderSystem() override;
 
-        virtual void shutdown(void);
+        void shutdown() override;
 
-        virtual const String& getName(void) const;
-        virtual const String& getFriendlyName(void) const;
-        void initConfigOptions();
-        virtual ConfigOptionMap& getConfigOptions(void) { return mOptions; }
-        virtual void setConfigOption(const String &name, const String &value);
+        const String &getName() const override;
+        const String &getFriendlyName() const override;
 
-        virtual HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
+        void             initConfigOptions();
+        ConfigOptionMap &getConfigOptions() override { return mOptions; }
+        void             setConfigOption( const String &name, const String &value ) override;
 
-        virtual String validateConfigOptions(void)  { return BLANKSTRING; }
+        HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
 
-        virtual RenderSystemCapabilities* createRenderSystemCapabilities(void) const;
+        String validateConfigOptions() override { return BLANKSTRING; }
 
-        virtual void reinitialise(void);
+        RenderSystemCapabilities *createRenderSystemCapabilities() const override;
 
-        virtual Window* _initialise( bool autoCreateWindow,
-                                     const String& windowTitle = "OGRE Render Window" );
+        void reinitialise() override;
 
-        virtual Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
-                                             bool fullScreen, const NameValuePairList *miscParams = 0 );
+        Window *_initialise( bool          autoCreateWindow,
+                             const String &windowTitle = "OGRE Render Window" ) override;
 
-        virtual String getErrorDescription(long errorNumber) const;
+        Window *_createRenderWindow( const String &name, uint32 width, uint32 height, bool fullScreen,
+                                     const NameValuePairList *miscParams = 0 ) override;
 
-        bool hasStoreAndMultisampleResolve(void) const;
+        String getErrorDescription( long errorNumber ) const override;
 
-        virtual void _useLights(const LightList& lights, unsigned short limit);
-        virtual void _setWorldMatrix(const Matrix4 &m);
-        virtual void _setViewMatrix(const Matrix4 &m);
-        virtual void _setProjectionMatrix(const Matrix4 &m);
+        bool hasStoreAndMultisampleResolve() const;
 
-        virtual void _setSurfaceParams( const ColourValue &ambient,
-                                const ColourValue &diffuse, const ColourValue &specular,
-                                const ColourValue &emissive, Real shininess,
-                                TrackVertexColourType tracking = TVC_NONE );
-        virtual void _setPointSpritesEnabled(bool enabled);
-        virtual void _setPointParameters(Real size, bool attenuationEnabled,
-            Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
+        void _useLights( const LightList &lights, unsigned short limit ) override;
+        void _setWorldMatrix( const Matrix4 &m ) override;
+        void _setViewMatrix( const Matrix4 &m ) override;
+        void _setProjectionMatrix( const Matrix4 &m ) override;
 
-        void flushUAVs( void );
+        void _setSurfaceParams( const ColourValue &ambient, const ColourValue &diffuse,
+                                const ColourValue &specular, const ColourValue &emissive, Real shininess,
+                                TrackVertexColourType tracking = TVC_NONE ) override;
+        void _setPointSpritesEnabled( bool enabled ) override;
+        void _setPointParameters( Real size, bool attenuationEnabled, Real constant, Real linear,
+                                  Real quadratic, Real minSize, Real maxSize ) override;
 
-        virtual void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly );
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
-                                   uint32 hazardousTexIdx );
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
-        virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
-        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
-        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set );
-        virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
-        virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
+        void flushUAVs();
 
-        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
-        virtual MetalFrameBufferDescMap& _getFrameBufferDescMap(void)   { return mFrameBufferDescMap; }
-        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 *viewportSizes,
-                                                const Vector4 *scissors,
-                                                uint32 numViewports,
-                                                bool overlaysEnabled,
-                                                bool warnIfRtvWasFlushed );
-        void executeRenderPassDescriptorDelayedActions( bool officialCall );
-        virtual void executeRenderPassDescriptorDelayedActions(void);
+        void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly ) override;
+        void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
+                           uint32 hazardousTexIdx ) override;
+        void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
+        void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) override;
+        void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) override;
+        void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
+        void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) override;
+        void _setUavCS( uint32 slotStart, const DescriptorSetUav *set ) override;
+
+        void                     _setCurrentDeviceFromTexture( TextureGpu *texture ) override;
+        MetalFrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
+        RenderPassDescriptor    *createRenderPassDescriptor() override;
+        void        beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
+                                               uint8 mipLevel, const Vector4 *viewportSizes,
+                                               const Vector4 *scissors, uint32 numViewports,
+                                               bool overlaysEnabled, bool warnIfRtvWasFlushed ) override;
+        void        executeRenderPassDescriptorDelayedActions( bool officialCall );
+        void        executeRenderPassDescriptorDelayedActions() override;
         inline void endRenderPassDescriptor( bool isInterruptingRender );
-        virtual void endRenderPassDescriptor(void);
+        void        endRenderPassDescriptor() override;
+
     protected:
-        virtual TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                                  PixelFormatGpu depthBufferFormat, uint16 poolId );
+        TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                          PixelFormatGpu depthBufferFormat, uint16 poolId ) override;
 
     public:
-        virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,
-                                                 const Frustum* frustum = 0);
-        virtual void _setTextureBlendMode(size_t unit, const LayerBlendModeEx& bm);
-        virtual void _setTextureMatrix(size_t unit, const Matrix4& xform);
+        void _setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
+                                          const Frustum *frustum = 0 ) override;
+        void _setTextureBlendMode( size_t unit, const LayerBlendModeEx &bm ) override;
+        void _setTextureMatrix( size_t unit, const Matrix4 &xform ) override;
 
-        virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
+        void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) override;
 
-        virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
-        virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *pso );
+        void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso ) override;
+        void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *pso ) override;
 
-        virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
+        void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams ) override;
 
         /// See VaoManager::waitForTailFrameToFinish
-        virtual void _waitForTailFrameToFinish(void);
+        void _waitForTailFrameToFinish();
 
-        virtual void _beginFrameOnce(void);
-        virtual void _endFrameOnce(void);
+        void _beginFrameOnce() override;
+        void _endFrameOnce() override;
 
-        virtual void _beginFrame(void);
-        virtual void _endFrame(void);
+        void _beginFrame() override;
+        void _endFrame() override;
 
-        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
-        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );
-        virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
-        virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
+        void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
+        void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) override;
+        void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) override;
+        void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) override;
+
     protected:
-        template <typename TDescriptorSetTexture,
-                  typename TTexSlot,
-                  typename TBufferPacked,
-                  bool isUav>
-        void _descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
+        template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked, bool isUav>
+        void _descriptorSetTextureCreated( TDescriptorSetTexture     *newSet,
                                            const FastArray<TTexSlot> &texContainer,
-                                           uint16 *shaderTypeTexCount );
+                                           uint16                    *shaderTypeTexCount );
         void destroyMetalDescriptorSetTexture( MetalDescriptorSetTexture *metalSet );
+
     public:
-        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
-        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
-        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
-        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
+        void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet ) override;
+        void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set ) override;
+        void _descriptorSetUavCreated( DescriptorSetUav *newSet ) override;
+        void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
 
-        virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock );
-        virtual void _setPipelineStateObject( const HlmsPso *pso );
-        virtual void _setComputePso( const HlmsComputePso *pso );
+        void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock ) override;
+        void _setPipelineStateObject( const HlmsPso *pso ) override;
+        void _setComputePso( const HlmsComputePso *pso ) override;
 
-        virtual VertexElementType getColourVertexElementType(void) const;
+        VertexElementType getColourVertexElementType() const override;
 
-        virtual void _dispatch( const HlmsComputePso &pso );
+        void _dispatch( const HlmsComputePso &pso ) override;
 
-        virtual void _setVertexArrayObject( const VertexArrayObject *vao );
+        void _setVertexArrayObject( const VertexArrayObject *vao ) override;
 
-        virtual void _render( const CbDrawCallIndexed *cmd );
-        virtual void _render( const CbDrawCallStrip *cmd );
-        virtual void _renderEmulated( const CbDrawCallIndexed *cmd );
-        virtual void _renderEmulated( const CbDrawCallStrip *cmd );
+        void _render( const CbDrawCallIndexed *cmd ) override;
+        void _render( const CbDrawCallStrip *cmd ) override;
+        void _renderEmulated( const CbDrawCallIndexed *cmd ) override;
+        void _renderEmulated( const CbDrawCallStrip *cmd ) override;
 
-        virtual void _setRenderOperation( const v1::CbRenderOp *cmd );
-        virtual void _render( const v1::CbDrawCallIndexed *cmd );
-        virtual void _render( const v1::CbDrawCallStrip *cmd );
-        virtual void _render( const v1::RenderOperation &op );
+        void _setRenderOperation( const v1::CbRenderOp *cmd ) override;
+        void _render( const v1::CbDrawCallIndexed *cmd ) override;
+        void _render( const v1::CbDrawCallStrip *cmd ) override;
+        void _render( const v1::RenderOperation &op ) override;
 
-        virtual void bindGpuProgramParameters(GpuProgramType gptype,
-            GpuProgramParametersSharedPtr params, uint16 variabilityMask);
-        virtual void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
+        void bindGpuProgramParameters( GpuProgramType gptype, GpuProgramParametersSharedPtr params,
+                                       uint16 variabilityMask ) override;
+        void bindGpuProgramPassIterationParameters( GpuProgramType gptype ) override;
 
-        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
-                                       uint8 mipLevel );
+        void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
+                               uint8 mipLevel ) override;
 
-        virtual Real getHorizontalTexelOffset(void);
-        virtual Real getVerticalTexelOffset(void);
-        virtual Real getMinimumDepthInputValue(void);
-        virtual Real getMaximumDepthInputValue(void);
+        Real getHorizontalTexelOffset() override;
+        Real getVerticalTexelOffset() override;
+        Real getMinimumDepthInputValue() override;
+        Real getMaximumDepthInputValue() override;
 
-        virtual void preExtraThreadsStarted();
-        virtual void postExtraThreadsStarted();
-        virtual void registerThread();
-        virtual void unregisterThread();
-        virtual unsigned int getDisplayMonitorCount() const     { return 1; }
+        void preExtraThreadsStarted() override;
+        void postExtraThreadsStarted() override;
+        void registerThread() override;
+        void unregisterThread() override;
 
-        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                             PixelFormatGpu format );
+        unsigned int getDisplayMonitorCount() const override { return 1; }
 
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
+        SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                     PixelFormatGpu           format ) override;
 
-        virtual void beginProfileEvent( const String &eventName );
-        virtual void endProfileEvent( void );
-        virtual void markProfileEvent( const String &event );
+        const PixelFormatToShaderType *getPixelFormatToShaderType() const override;
 
-        virtual void initGPUProfiling(void);
-        virtual void deinitGPUProfiling(void);
-        virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
-        virtual void endGPUSampleProfile( const String &name );
+        void beginProfileEvent( const String &eventName ) override;
+        void endProfileEvent() override;
+        void markProfileEvent( const String &event ) override;
 
-        virtual bool hasAnisotropicMipMapFilter() const         { return true; }
+        void initGPUProfiling() override;
+        void deinitGPUProfiling() override;
+        void beginGPUSampleProfile( const String &name, uint32 *hashCache ) override;
+        void endGPUSampleProfile( const String &name ) override;
 
-        virtual void setClipPlanesImpl(const PlaneList& clipPlanes);
-        virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities* caps,
-                                                             Window *primary );
-        virtual void updateCompositorManager( CompositorManager2 *compositorManager );
-        virtual void compositorWorkspaceBegin( CompositorWorkspace *workspace,
-                                               const bool forceBeginFrame );
-        virtual void compositorWorkspaceUpdate( CompositorWorkspace *workspace );
-        virtual void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame );
+        bool hasAnisotropicMipMapFilter() const override { return true; }
 
-        virtual void flushCommands(void);
+        void setClipPlanesImpl( const PlaneList &clipPlanes ) override;
+        void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
+                                                     Window                   *primary ) override;
+        void updateCompositorManager( CompositorManager2 *compositorManager ) override;
+        void compositorWorkspaceBegin( CompositorWorkspace *workspace,
+                                       const bool           forceBeginFrame ) override;
+        void compositorWorkspaceUpdate( CompositorWorkspace *workspace ) override;
+        void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame ) override;
 
-        MetalDevice* getActiveDevice(void)                      { return mActiveDevice; }
-        MetalProgramFactory* getMetalProgramFactory(void)       { return mMetalProgramFactory; }
+        void flushCommands() override;
+
+        MetalDevice *getActiveDevice() { return mActiveDevice; }
+
+        MetalProgramFactory *getMetalProgramFactory() { return mMetalProgramFactory; }
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
-        void _notifyActiveComputeEnded(void);
-        void _notifyNewCommandBuffer(void);
-        void _notifyDeviceStalled(void);
-
-
+        void _notifyActiveComputeEnded();
+        void _notifyNewCommandBuffer();
+        void _notifyDeviceStalled();
     };
-}
+}  // namespace Ogre
 
 #endif

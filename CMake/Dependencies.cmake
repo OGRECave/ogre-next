@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -13,7 +13,7 @@
 
 # OGRE_DEPENDENCIES_DIR can be used to specify a single base
 # folder where the required dependencies may be found.
-set(OGRE_DEPENDENCIES_DIR "" CACHE PATH "Path to prebuilt OGRE dependencies")
+set(OGRE_DEPENDENCIES_DIR "" CACHE PATH "Path to prebuilt OGRE-Next dependencies")
 include(FindPkgMacros)
 getenv_path(OGRE_DEPENDENCIES_DIR)
 if(OGRE_BUILD_PLATFORM_EMSCRIPTEN)
@@ -126,23 +126,18 @@ endif()
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL 3+" "Support for the OpenGL 3+ render system" "http://www.opengl.org/" FALSE "" "")
 
-# Find OpenGL ES 1.x
-find_package(OpenGLES)
-macro_log_feature(OPENGLES_FOUND "OpenGL ES 1.x" "Support for the OpenGL ES 1.x render system (DEPRECATED)" "http://www.khronos.org/opengles/" FALSE "" "")
+if(NOT OGRE_SKIP_GLES_SEARCHING)
+	# Find OpenGL ES 2.x
+	find_package(OpenGLES2)
+	macro_log_feature(OPENGLES2_FOUND "OpenGL ES 2.x" "Support for the OpenGL ES 2.x render system" "http://www.khronos.org/opengles/" FALSE "" "")
 
-# Find OpenGL ES 2.x
-find_package(OpenGLES2)
-macro_log_feature(OPENGLES2_FOUND "OpenGL ES 2.x" "Support for the OpenGL ES 2.x render system" "http://www.khronos.org/opengles/" FALSE "" "")
-
-# Find OpenGL ES 3.x
-find_package(OpenGLES3)
-macro_log_feature(OPENGLES3_FOUND "OpenGL ES 3.x" "Support for the OpenGL ES 2.x render system with OpenGL ES 3 support" "http://www.khronos.org/opengles/" FALSE "" "")
+	# Find OpenGL ES 3.x
+	find_package(OpenGLES3)
+	macro_log_feature(OPENGLES3_FOUND "OpenGL ES 3.x" "Support for the OpenGL ES 2.x render system with OpenGL ES 3 support" "http://www.khronos.org/opengles/" FALSE "" "")
+endif()
 
 # Find DirectX
 if(WIN32)
-	find_package(DirectX)
-	macro_log_feature(DirectX9_FOUND "DirectX9" "Support for the DirectX render system" "http://msdn.microsoft.com/en-us/directx/" FALSE "" "")
-	
 	find_package(DirectX11)
 	macro_log_feature(DirectX11_FOUND "DirectX11" "Support for the DirectX11 render system" "http://msdn.microsoft.com/en-us/directx/" FALSE "" "")
 
@@ -180,67 +175,6 @@ if( Remotery_LIBRARIES )
     if( APPLE )
         set( Remotery_LIBRARIES ${Remotery_LIBRARIES} "-framework Metal" )
     endif()
-endif()
-
-# Find Boost
-# Prefer static linking in all cases
-if (WIN32 OR APPLE)
-	set(Boost_USE_STATIC_LIBS TRUE)
-else ()
-	# Statically linking boost to a dynamic Ogre build doesn't work on Linux 64bit
-	set(Boost_USE_STATIC_LIBS ${OGRE_STATIC})
-endif ()
-if (APPLE AND OGRE_BUILD_PLATFORM_APPLE_IOS)
-    set(Boost_USE_MULTITHREADED OFF)
-endif()
-
-if(ANDROID)
-    # FindBoost needs extra hint on android 
-    set(Boost_COMPILER -gcc)
-endif()
-
-set(Boost_ADDITIONAL_VERSIONS "1.57" "1.57.0" "1.56" "1.56.0" "1.55" "1.55.0" "1.54" "1.54.0" "1.53" "1.53.0" "1.52" "1.52.0" "1.51" "1.51.0" "1.50" "1.50.0" "1.49" "1.49.0" "1.48" "1.48.0" "1.47" "1.47.0" "1.46" "1.46.0" "1.45" "1.45.0" "1.44" "1.44.0" "1.42" "1.42.0" "1.41.0" "1.41" "1.40.0" "1.40")
-# Components that need linking (NB does not include header-only components like bind)
-set(OGRE_BOOST_COMPONENTS thread date_time)
-find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-if (NOT Boost_FOUND)
-	# Try again with the other type of libs
-	if(Boost_USE_STATIC_LIBS)
-		set(Boost_USE_STATIC_LIBS OFF)
-	else()
-		set(Boost_USE_STATIC_LIBS ON)
-	endif()
-	find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-endif()
-
-if(Boost_FOUND AND Boost_VERSION GREATER 104900)
-    if(Boost_VERSION GREATER 105300)
-        set(OGRE_BOOST_COMPONENTS thread date_time system atomic chrono)
-    else()
-        set(OGRE_BOOST_COMPONENTS thread date_time system chrono)
-    endif()
-    find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-endif()
-
-if(Boost_VERSION GREATER 105200)
-	# Use boost threading version 4 for boost 1.53 and above
-	add_definitions( -DBOOST_THREAD_VERSION=4 )
-endif()
-
-if(Boost_FOUND AND NOT WIN32)
-  list(REMOVE_DUPLICATES Boost_LIBRARIES)
-endif()
-
-# Optional Boost libs (Boost_${COMPONENT}_FOUND
-macro_log_feature(Boost_FOUND "boost" "Boost (general)" "http://boost.org" FALSE "" "")
-macro_log_feature(Boost_THREAD_FOUND "boost-thread" "Used for threading support" "http://boost.org" FALSE "" "")
-macro_log_feature(Boost_DATE_TIME_FOUND "boost-date_time" "Used for threading support" "http://boost.org" FALSE "" "")
-if(Boost_VERSION GREATER 104900)
-    macro_log_feature(Boost_SYSTEM_FOUND "boost-system" "Used for threading support" "http://boost.org" FALSE "" "")
-    macro_log_feature(Boost_CHRONO_FOUND "boost-chrono" "Used for threading support" "http://boost.org" FALSE "" "")
-	if(Boost_VERSION GREATER 105300)
-		macro_log_feature(Boost_ATOMIC_FOUND "boost-atomic" "Used for threading support" "http://boost.org" FALSE "" "")
-	endif()
 endif()
 
 # POCO
@@ -321,7 +255,6 @@ include_directories(
   ${OPENGLES2_INCLUDE_DIRS}
   ${OPENGLES3_INCLUDE_DIRS}
   ${X11_INCLUDE_DIR}
-  ${DirectX_INCLUDE_DIRS}
   ${CppUnit_INCLUDE_DIRS}
   ${GLSL_Optimizer_INCLUDE_DIRS}
   ${HLSL2GLSL_INCLUDE_DIRS}
@@ -329,15 +262,8 @@ include_directories(
 
 link_directories(
   ${OPENGL_LIBRARY_DIRS}
-  ${OPENGLES_LIBRARY_DIRS}
   ${OPENGLES2_LIBRARY_DIRS}
   ${OPENGLES3_LIBRARY_DIRS}
   ${X11_LIBRARY_DIRS}
-  ${DirectX_LIBRARY_DIRS}
   ${CppUnit_LIBRARY_DIRS}
 )
-
-if (Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-  link_directories(${Boost_LIBRARY_DIRS})
-endif ()

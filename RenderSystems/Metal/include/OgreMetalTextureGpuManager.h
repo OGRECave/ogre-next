@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreMetalTextureGpuManager_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreTextureGpuManager.h"
 
 #include "OgreTextureGpu.h"
@@ -39,53 +40,54 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
-    class _OgreMetalExport MetalTextureGpuManager : public TextureGpuManager
+     *  @{
+     */
+    class _OgreMetalExport MetalTextureGpuManager final : public TextureGpuManager
     {
     protected:
         /// 4x4 texture for when we have nothing to display.
-        id<MTLTexture>  mBlankTexture[TextureTypes::Type3D + 1u];
+        id<MTLTexture> mBlankTexture[TextureTypes::Type3D + 1u];
 
         MetalDevice *mDevice;
 
-        virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                               IdString name, uint32 textureFlags,
-                                               TextureTypes::TextureTypes initialType );
-        virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
-                                                          uint32 slices, PixelFormatGpu pixelFormat );
-        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture );
+        TextureGpu     *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                           IdString name, uint32 textureFlags,
+                                           TextureTypes::TextureTypes initialType ) override;
+        StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                  uint32 slices, PixelFormatGpu pixelFormat ) override;
+        void            destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
-        virtual AsyncTextureTicket* createAsyncTextureTicketImpl (uint32 width, uint32 height,
-                                                                  uint32 depthOrSlices,
-                                                                  TextureTypes::TextureTypes textureType,
-                                                                  PixelFormatGpu pixelFormatFamily );
+        AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
+                                                          uint32                     depthOrSlices,
+                                                          TextureTypes::TextureTypes textureType,
+                                                          PixelFormatGpu pixelFormatFamily ) override;
 
     public:
         MetalTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
                                 MetalDevice *device );
-        virtual ~MetalTextureGpuManager();
+        ~MetalTextureGpuManager() override;
 
         /** Creates a special MetalTextureGpuWindow pointer, to be used by Ogre::Window.
             The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
-            If caller doesnt' delete it, it will leak.
+            If caller doesn't delete it, it will leak.
         */
-        TextureGpu* createTextureGpuWindow( MetalWindow *window );
-        TextureGpu* createWindowDepthBuffer(void);
+        TextureGpu *createTextureGpuWindow( MetalWindow *window );
+        TextureGpu *createWindowDepthBuffer();
 
         id<MTLTexture> getBlankTextureMetalName( TextureTypes::TextureTypes textureType ) const;
 
-        virtual bool checkSupport( PixelFormatGpu format, uint32 textureFlags ) const;
+        bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
+                           uint32 textureFlags ) const override;
 
-        MetalDevice* getDevice(void) const          { return mDevice; }
+        MetalDevice *getDevice() const { return mDevice; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

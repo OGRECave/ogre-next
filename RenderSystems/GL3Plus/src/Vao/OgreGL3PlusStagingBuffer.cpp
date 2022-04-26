@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,9 +27,10 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreGL3PlusStagingBuffer.h"
-#include "Vao/OgreGL3PlusVaoManager.h"
 #include "Vao/OgreGL3PlusBufferInterface.h"
+#include "Vao/OgreGL3PlusVaoManager.h"
 
+#include "OgreException.h"
 #include "OgreStringConverter.h"
 
 namespace Ogre
@@ -70,33 +71,33 @@ namespace Ogre
         if( mUnfencedBytes >= mFenceThreshold || forceFence )
         {
             GLFenceVec::const_iterator itor = mUnfencedHazards.begin();
-            GLFenceVec::const_iterator end  = mUnfencedHazards.end();
+            GLFenceVec::const_iterator end = mUnfencedHazards.end();
 
             size_t startRange = itor->start;
-            size_t endRange   = itor->end;
+            size_t endRange = itor->end;
 
             while( itor != end )
             {
                 if( endRange <= itor->end )
                 {
-                    //Keep growing (merging) the fences into one fence
+                    // Keep growing (merging) the fences into one fence
                     endRange = itor->end;
                 }
                 else
                 {
-                    //We wrapped back to 0. Can't keep merging. Make a fence.
+                    // We wrapped back to 0. Can't keep merging. Make a fence.
                     GLFence fence( startRange, endRange );
                     OCGE( fence.fenceName = glFenceSync( GL_SYNC_GPU_COMMANDS_COMPLETE, 0 ) );
                     mFences.push_back( fence );
 
-                    startRange  = itor->start;
-                    endRange    = itor->end;
+                    startRange = itor->start;
+                    endRange = itor->end;
                 }
 
                 ++itor;
             }
 
-            //Make the last fence.
+            // Make the last fence.
             GLFence fence( startRange, endRange );
             OCGE( fence.fenceName = glFenceSync( GL_SYNC_GPU_COMMANDS_COMPLETE, 0 ) );
             mFences.push_back( fence );
@@ -108,8 +109,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingBuffer::wait( GLsync syncObj )
     {
-        GLbitfield waitFlags    = 0;
-        GLuint64 waitDuration   = 0;
+        GLbitfield waitFlags = 0;
+        GLuint64 waitDuration = 0;
         while( true )
         {
             GLenum waitRet = glClientWaitSync( syncObj, waitFlags, waitDuration );
@@ -123,7 +124,8 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                              "Failure while waiting for a GL GLFence. Could be out of GPU memory. "
                              "Update your video card drivers. If that doesn't help, "
-                             "contact the developers.", "GL3PlusStagingBuffer::wait" );
+                             "contact the developers.",
+                             "GL3PlusStagingBuffer::wait" );
                 return;
             }
 
@@ -144,30 +146,30 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingBuffer::waitIfNeeded(void)
+    void GL3PlusStagingBuffer::waitIfNeeded()
     {
         assert( mUploadOnly );
 
         size_t mappingStart = mMappingStart;
-        size_t sizeBytes    = mMappingCount;
+        size_t sizeBytes = mMappingCount;
 
         if( mappingStart + sizeBytes > mSizeBytes )
         {
             if( !mUnfencedHazards.empty() )
             {
-                //mUnfencedHazards will be cleared in addFence
+                // mUnfencedHazards will be cleared in addFence
                 addFence( mUnfencedHazards.front().start, mSizeBytes - 1, true );
             }
 
-            //Wraps around the ring buffer. Sadly we can't do advanced virtual memory
-            //manipulation to keep the virtual space contiguous, so we'll have to reset to 0
+            // Wraps around the ring buffer. Sadly we can't do advanced virtual memory
+            // manipulation to keep the virtual space contiguous, so we'll have to reset to 0
             mappingStart = 0;
         }
 
         GLFence regionToMap( mappingStart, mappingStart + sizeBytes );
 
         GLFenceVec::iterator itor = mFences.begin();
-        GLFenceVec::iterator end  = mFences.end();
+        GLFenceVec::iterator end = mFences.end();
 
         GLFenceVec::iterator lastWaitableFence = end;
 
@@ -189,20 +191,22 @@ namespace Ogre
         mMappingStart = mappingStart;
     }
     //-----------------------------------------------------------------------------------
-    void* GL3PlusStagingBuffer::mapImpl( size_t sizeBytes )
+    void *GL3PlusStagingBuffer::mapImpl( size_t sizeBytes )
     {
         assert( mUploadOnly );
 
-        GLbitfield flags = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT |
-                           GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_FLUSH_EXPLICIT_BIT;
+        GLbitfield flags = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT | GL_MAP_UNSYNCHRONIZED_BIT |
+                           GL_MAP_FLUSH_EXPLICIT_BIT;
 
         mMappingCount = sizeBytes;
 
-        waitIfNeeded(); //Will fill mMappingStart
+        waitIfNeeded();  // Will fill mMappingStart
 
         OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mVboName ) );
-        OCGE( mMappedPtr = glMapBufferRange( GL_COPY_WRITE_BUFFER, mInternalBufferStart + mMappingStart,
-                                              mMappingCount, flags ) );
+        OCGE( mMappedPtr =
+                  glMapBufferRange( GL_COPY_WRITE_BUFFER,                                           //
+                                    static_cast<GLintptr>( mInternalBufferStart + mMappingStart ),  //
+                                    static_cast<GLsizeiptr>( mMappingCount ), flags ) );
 
         return mMappedPtr;
     }
@@ -216,35 +220,36 @@ namespace Ogre
 
         if( mUploadOnly )
         {
-            OCGE( glFlushMappedBufferRange( target,
-                                            0 /*mInternalBufferStart + mMappingStart*/,
-                                            mMappingCount ) );
+            OCGE( glFlushMappedBufferRange( target, 0 /*mInternalBufferStart + mMappingStart*/,
+                                            static_cast<GLsizeiptr>( mMappingCount ) ) );
         }
 
         OCGE( glUnmapBuffer( target ) );
         mMappedPtr = 0;
 
-        for( size_t i=0; i<numDestinations; ++i )
+        for( size_t i = 0; i < numDestinations; ++i )
         {
             const Destination &dst = destinations[i];
 
-            GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
-                                                        dst.destination->getBufferInterface() );
+            GL3PlusBufferInterface *bufferInterface =
+                static_cast<GL3PlusBufferInterface *>( dst.destination->getBufferInterface() );
 
             assert( dst.destination->getBufferType() == BT_DEFAULT );
 
-            GLintptr dstOffset = dst.dstOffset + dst.destination->_getInternalBufferStart() *
-                                                        dst.destination->getBytesPerElement();
+            const GLintptr dstOffset =
+                static_cast<GLintptr>( dst.dstOffset + dst.destination->_getInternalBufferStart() *
+                                                           dst.destination->getBytesPerElement() );
 
             OCGE( glBindBuffer( oppositeTarget, bufferInterface->getVboName() ) );
-            OCGE( glCopyBufferSubData( target, oppositeTarget,
-                                        mInternalBufferStart + mMappingStart + dst.srcOffset,
-                                        dstOffset, dst.length ) );
+            OCGE( glCopyBufferSubData(
+                target, oppositeTarget,
+                static_cast<GLintptr>( mInternalBufferStart + mMappingStart + dst.srcOffset ), dstOffset,
+                static_cast<GLsizeiptr>( dst.length ) ) );
         }
 
         if( mUploadOnly )
         {
-            //Add fence to this region (or at least, track the hazard).
+            // Add fence to this region (or at least, track the hazard).
             addFence( mMappingStart, mMappingStart + mMappingCount - 1, false );
         }
     }
@@ -277,7 +282,7 @@ namespace Ogre
         GLFence regionToMap( mappingStart, mappingStart + sizeBytes );
 
         GLFenceVec::const_iterator itor = mFences.begin();
-        GLFenceVec::const_iterator end  = mFences.end();
+        GLFenceVec::const_iterator end = mFences.end();
 
         GLFenceVec::const_iterator lastWaitableFence = end;
 
@@ -291,7 +296,7 @@ namespace Ogre
 
         if( lastWaitableFence != end )
         {
-            //Ask GL API to return immediately and tells us about the fence
+            // Ask GL API to return immediately and tells us about the fence
             GLenum waitRet = glClientWaitSync( lastWaitableFence->fenceName, 0, 0 );
             if( waitRet != GL_ALREADY_SIGNALED && waitRet != GL_CONDITION_SATISFIED )
                 retVal = STALL_PARTIAL;
@@ -300,7 +305,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingBuffer::cleanUnfencedHazards(void)
+    void GL3PlusStagingBuffer::cleanUnfencedHazards()
     {
         if( !mUnfencedHazards.empty() )
             addFence( mUnfencedHazards.front().start, mUnfencedHazards.back().end, true );
@@ -315,52 +320,56 @@ namespace Ogre
     {
         size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
 
-        if( freeRegionOffset == (size_t)(-1) )
+        if( freeRegionOffset == (size_t)( -1 ) )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Cannot download the request amount of " +
-                         StringConverter::toString( srcLength ) + " bytes to this staging buffer. "
-                         "Try another one (we're full of requests that haven't been read by CPU yet)",
-                         "GL3PlusStagingBuffer::_asyncDownload" );
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Cannot download the request amount of " + StringConverter::toString( srcLength ) +
+                    " bytes to this staging buffer. "
+                    "Try another one (we're full of requests that haven't been read by CPU yet)",
+                "GL3PlusStagingBuffer::_asyncDownload" );
         }
 
         assert( !mUploadOnly );
-        assert( dynamic_cast<GL3PlusBufferInterface*>( source->getBufferInterface() ) );
-        assert( (srcOffset + srcLength) <= source->getTotalSizeBytes() );
+        assert( dynamic_cast<GL3PlusBufferInterface *>( source->getBufferInterface() ) );
+        assert( ( srcOffset + srcLength ) <= source->getTotalSizeBytes() );
 
-        GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
-                                                            source->getBufferInterface() );
+        GL3PlusBufferInterface *bufferInterface =
+            static_cast<GL3PlusBufferInterface *>( source->getBufferInterface() );
 
         OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mVboName ) );
         OCGE( glBindBuffer( GL_COPY_READ_BUFFER, bufferInterface->getVboName() ) );
 
-        OCGE( glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
-                                   source->_getFinalBufferStart() *
-                                    source->getBytesPerElement() + srcOffset,
-                                   mInternalBufferStart + freeRegionOffset,
-                                   srcLength ) );
+        OCGE( glCopyBufferSubData(
+            GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
+            static_cast<GLintptr>( source->_getFinalBufferStart() * source->getBytesPerElement() +
+                                   srcOffset ),
+            static_cast<GLintptr>( mInternalBufferStart + freeRegionOffset ),
+            static_cast<GLsizeiptr>( srcLength ) ) );
 
         return freeRegionOffset;
     }
     //-----------------------------------------------------------------------------------
-    const void* GL3PlusStagingBuffer::_mapForReadImpl( size_t offset, size_t sizeBytes )
+    const void *GL3PlusStagingBuffer::_mapForReadImpl( size_t offset, size_t sizeBytes )
     {
         assert( !mUploadOnly );
         GLbitfield flags;
 
-        //TODO: Reading + Persistency is supported, unsynchronized is not.
+        // TODO: Reading + Persistency is supported, unsynchronized is not.
         flags = GL_MAP_READ_BIT;
 
         mMappingStart = offset;
         mMappingCount = sizeBytes;
 
         OCGE( glBindBuffer( GL_COPY_READ_BUFFER, mVboName ) );
-        OCGE( mMappedPtr = glMapBufferRange( GL_COPY_READ_BUFFER, mInternalBufferStart + mMappingStart,
-                                             mMappingCount, flags ) );
+        OCGE( mMappedPtr =
+                  glMapBufferRange( GL_COPY_READ_BUFFER,  //
+                                    static_cast<GLintptr>( mInternalBufferStart + mMappingStart ),
+                                    static_cast<GLsizeiptr>( mMappingCount ), flags ) );
 
-        //Put the mapped region back to our records as "available" for subsequent _asyncDownload
+        // Put the mapped region back to our records as "available" for subsequent _asyncDownload
         _cancelDownload( offset, sizeBytes );
 
         return mMappedPtr;
     }
-}
+}  // namespace Ogre

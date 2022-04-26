@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -19,7 +19,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR     
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR     WISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR      DEALINGS IN
   THE SOFTWARE.
@@ -27,33 +27,35 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreItem.h"
 
-#include "OgreMeshManager.h"
-#include "OgreMesh2.h"
-#include "OgreSubMesh2.h"
-#include "OgreSubItem.h"
-#include "OgreHlmsManager.h"
-#include "OgreException.h"
-#include "OgreSceneManager.h"
-#include "OgreLogManager.h"
 #include "Animation/OgreSkeletonInstance.h"
-#include "OgreRoot.h"
-#include "OgreSceneNode.h"
+#include "OgreException.h"
+#include "OgreHlmsManager.h"
+#include "OgreLogManager.h"
+#include "OgreMesh2.h"
+#include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreSceneNode.h"
+#include "OgreSubItem.h"
+#include "OgreSubMesh2.h"
 
-namespace Ogre {
+namespace Ogre
+{
     extern const FastArray<Real> c_DefaultLodMesh;
     //-----------------------------------------------------------------------
-    Item::Item( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, 10u ),
-          mInitialised( false )
+    Item::Item( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager ) :
+        MovableObject( id, objectMemoryManager, manager, 10u ),
+        mInitialised( false )
     {
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_ENTITY_DEFAULT_MASK;
     }
     //-----------------------------------------------------------------------
     Item::Item( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-                const MeshPtr& mesh ) :
+                const MeshPtr &mesh ) :
         MovableObject( id, objectMemoryManager, manager, 10u ),
         mMesh( mesh ),
         mInitialised( false )
@@ -62,44 +64,44 @@ namespace Ogre {
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_ENTITY_DEFAULT_MASK;
     }
     //-----------------------------------------------------------------------
-    void Item::loadingComplete(Resource* res)
+    void Item::loadingComplete( Resource *res )
     {
-        if(res == mMesh.get() && mInitialised)
+        if( res == mMesh.get() && mInitialised )
         {
-            _initialise(true);
+            _initialise( true );
         }
     }
     //-----------------------------------------------------------------------
-    void Item::_initialise(bool forceReinitialise)
+    void Item::_initialise( bool forceReinitialise )
     {
         vector<String>::type prevMaterialsList;
         if( forceReinitialise )
         {
-            if (mMesh->getNumSubMeshes() == mSubItems.size())
+            if( mMesh->getNumSubMeshes() == mSubItems.size() )
             {
                 SubItemVec::iterator seend = mSubItems.end();
-                for(SubItemVec::iterator i = mSubItems.begin(); i != seend; ++i)
-                    prevMaterialsList.push_back(i->getDatablockOrMaterialName());
+                for( SubItemVec::iterator i = mSubItems.begin(); i != seend; ++i )
+                    prevMaterialsList.push_back( i->getDatablockOrMaterialName() );
             }
             _deinitialise();
         }
 
-        if (mInitialised)
+        if( mInitialised )
             return;
 
         // register for a callback when mesh is finished loading
-        mMesh->addListener(this);
-        
+        mMesh->addListener( this );
+
         // On-demand load
         mMesh->load();
         // If loading failed, or deferred loading isn't done yet, defer
         // Will get a callback in the case of deferred loading
         // Skeletons are cascade-loaded so no issues there
-        if (!mMesh->isLoaded())
+        if( !mMesh->isLoaded() )
             return;
 
         // Is mesh skeletally animated?
-        if( mMesh->hasSkeleton() && !mMesh->getSkeleton().isNull() && mManager )
+        if( mMesh->hasSkeleton() && mMesh->getSkeleton() && mManager )
         {
             const SkeletonDef *skeletonDef = mMesh->getSkeleton().get();
             mSkeletonInstance = mManager->createSkeletonInstance( skeletonDef );
@@ -111,14 +113,14 @@ namespace Ogre {
         buildSubItems( prevMaterialsList.empty() ? 0 : &prevMaterialsList );
 
         {
-            //Without filling the renderables list, the RenderQueue won't
-            //catch our sub entities and thus we won't be rendered
+            // Without filling the renderables list, the RenderQueue won't
+            // catch our sub entities and thus we won't be rendered
             mRenderables.reserve( mSubItems.size() );
             SubItemVec::iterator itor = mSubItems.begin();
-            SubItemVec::iterator end  = mSubItems.end();
-            while( itor != end )
+            SubItemVec::iterator endt = mSubItems.end();
+            while( itor != endt )
             {
-                mRenderables.push_back( &(*itor) );
+                mRenderables.push_back( &( *itor ) );
                 ++itor;
             }
         }
@@ -137,9 +139,9 @@ namespace Ogre {
         mInitialised = true;
     }
     //-----------------------------------------------------------------------
-    void Item::_deinitialise(void)
+    void Item::_deinitialise()
     {
-        if (!mInitialised)
+        if( !mInitialised )
             return;
 
         // Delete submeshes
@@ -164,43 +166,33 @@ namespace Ogre {
     {
         _deinitialise();
         // Unregister our listener
-        mMesh->removeListener(this);
+        mMesh->removeListener( this );
     }
     //-----------------------------------------------------------------------
-    const MeshPtr& Item::getMesh(void) const
-    {
-        return mMesh;
-    }
+    const MeshPtr &Item::getMesh() const { return mMesh; }
     //-----------------------------------------------------------------------
-    SubItem* Item::getSubItem(size_t index)
+    SubItem *Item::getSubItem( size_t index )
     {
-        if (index >= mSubItems.size())
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "Index out of bounds.",
-                        "Item::getSubItem");
+        if( index >= mSubItems.size() )
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Index out of bounds.", "Item::getSubItem" );
         return &mSubItems[index];
     }
     //-----------------------------------------------------------------------
-    const SubItem* Item::getSubItem(size_t index) const
+    const SubItem *Item::getSubItem( size_t index ) const
     {
-        if (index >= mSubItems.size())
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-            "Index out of bounds.",
-            "Item::getSubItem");
+        if( index >= mSubItems.size() )
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Index out of bounds.", "Item::getSubItem" );
         return &mSubItems[index];
     }
     //-----------------------------------------------------------------------
-    size_t Item::getNumSubItems(void) const
-    {
-        return mSubItems.size();
-    }
+    size_t Item::getNumSubItems() const { return mSubItems.size(); }
     //-----------------------------------------------------------------------
     void Item::setDatablock( HlmsDatablock *datablock )
     {
         SubItemVec::iterator itor = mSubItems.begin();
-        SubItemVec::iterator end  = mSubItems.end();
+        SubItemVec::iterator endt = mSubItems.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->setDatablock( datablock );
             ++itor;
@@ -239,58 +231,59 @@ namespace Ogre {
     }
 #endif
     //-----------------------------------------------------------------------
-    void Item::setDatablockOrMaterialName( const String& name, const String& groupName /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */)
+    void Item::setDatablockOrMaterialName(
+        const String &name,
+        const String &groupName /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */ )
     {
         // Set for all subentities
         SubItemVec::iterator i;
-        for (i = mSubItems.begin(); i != mSubItems.end(); ++i)
+        for( i = mSubItems.begin(); i != mSubItems.end(); ++i )
         {
-            i->setDatablockOrMaterialName(name, groupName);
+            i->setDatablockOrMaterialName( name, groupName );
         }
     }
     //-----------------------------------------------------------------------
-    void Item::setMaterialName( const String& name, const String& groupName /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */)
+    void Item::setMaterialName(
+        const String &name,
+        const String &groupName /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */ )
     {
         // Set for all subentities
         SubItemVec::iterator i;
-        for (i = mSubItems.begin(); i != mSubItems.end(); ++i)
+        for( i = mSubItems.begin(); i != mSubItems.end(); ++i )
         {
-            i->setMaterialName(name, groupName);
+            i->setMaterialName( name, groupName );
         }
     }
     //-----------------------------------------------------------------------
-    void Item::setMaterial( const MaterialPtr& material )
+    void Item::setMaterial( const MaterialPtr &material )
     {
         // Set for all subentities
         SubItemVec::iterator i;
-        for (i = mSubItems.begin(); i != mSubItems.end(); ++i)
+        for( i = mSubItems.begin(); i != mSubItems.end(); ++i )
         {
-            i->setMaterial(material);
+            i->setMaterial( material );
         }
     }
     //-----------------------------------------------------------------------
-    const String& Item::getMovableType(void) const
-    {
-        return ItemFactory::FACTORY_TYPE_NAME;
-    }
+    const String &Item::getMovableType() const { return ItemFactory::FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------
-    void Item::buildSubItems( vector<String>::type* materialsList )
+    void Item::buildSubItems( vector<String>::type *materialsList )
     {
         // Create SubEntities
-        size_t numSubMeshes = mMesh->getNumSubMeshes();
+        unsigned numSubMeshes = mMesh->getNumSubMeshes();
         mSubItems.reserve( numSubMeshes );
-        for( size_t i=0; i<numSubMeshes; ++i )
+        for( unsigned i = 0; i < numSubMeshes; ++i )
         {
-            SubMesh *subMesh = mMesh->getSubMesh(i);
+            SubMesh *subMesh = mMesh->getSubMesh( i );
             mSubItems.push_back( SubItem( this, subMesh ) );
 
-            //Try first Hlms materials, then the low level ones.
+            // Try first Hlms materials, then the low level ones.
             mSubItems.back().setDatablockOrMaterialName(
-                materialsList ? (*materialsList)[i] : subMesh->mMaterialName, mMesh->getGroup() );
+                materialsList ? ( *materialsList )[i] : subMesh->mMaterialName, mMesh->getGroup() );
         }
     }
     //-----------------------------------------------------------------------
-    void Item::useSkeletonInstanceFrom(Item* master)
+    void Item::useSkeletonInstanceFrom( Item *master )
     {
         if( mMesh->getSkeletonName() != master->mMesh->getSkeletonName() )
         {
@@ -326,12 +319,12 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool Item::sharesSkeletonInstance() const             
-    { 
+    bool Item::sharesSkeletonInstance() const
+    {
         return mSkeletonInstance && mSkeletonInstance->_getRefCount() > 1u;
     }
     //-----------------------------------------------------------------------
-    void Item::_notifyParentNodeMemoryChanged(void)
+    void Item::_notifyParentNodeMemoryChanged()
     {
         if( mSkeletonInstance /*&& !mSharedTransformEntity*/ )
         {
@@ -343,52 +336,43 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     String ItemFactory::FACTORY_TYPE_NAME = "Item";
     //-----------------------------------------------------------------------
-    const String& ItemFactory::getType(void) const
-    {
-        return FACTORY_TYPE_NAME;
-    }
+    const String &ItemFactory::getType() const { return FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------
-    MovableObject* ItemFactory::createInstanceImpl( IdType id,
-                                                    ObjectMemoryManager *objectMemoryManager,
+    MovableObject *ItemFactory::createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
                                                     SceneManager *manager,
-                                                    const NameValuePairList* params )
+                                                    const NameValuePairList *params )
     {
         // must have mesh parameter
         MeshPtr pMesh;
-        if (params != 0)
+        if( params != 0 )
         {
             String groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
 
             NameValuePairList::const_iterator ni;
 
-            ni = params->find("resourceGroup");
-            if (ni != params->end())
+            ni = params->find( "resourceGroup" );
+            if( ni != params->end() )
             {
                 groupName = ni->second;
             }
 
-            ni = params->find("mesh");
-            if (ni != params->end())
+            ni = params->find( "mesh" );
+            if( ni != params->end() )
             {
                 // Get mesh (load if required)
                 pMesh = MeshManager::getSingleton().load( ni->second, groupName );
             }
-
         }
-        if (pMesh.isNull())
+        if( !pMesh )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "'mesh' parameter required when constructing an Item.",
-                "ItemFactory::createInstance");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "'mesh' parameter required when constructing an Item.",
+                         "ItemFactory::createInstance" );
         }
 
         return OGRE_NEW Item( id, objectMemoryManager, manager, pMesh );
     }
     //-----------------------------------------------------------------------
-    void ItemFactory::destroyInstance( MovableObject* obj)
-    {
-        OGRE_DELETE obj;
-    }
+    void ItemFactory::destroyInstance( MovableObject *obj ) { OGRE_DELETE obj; }
 
-
-}
+}  // namespace Ogre

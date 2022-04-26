@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,36 +34,36 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const size_t KfTransformArrayMemoryManager::ElementsMemSize[KfTransformArrayMemoryManager::NumMemoryTypes] =
-    {
-        (3 + 4 + 3) * sizeof( Ogre::Real ),     //ArrayMemoryManager::KfTransformType
-    };
+    const size_t
+        KfTransformArrayMemoryManager::ElementsMemSize[KfTransformArrayMemoryManager::NumMemoryTypes] = {
+            ( 3 + 4 + 3 ) * sizeof( Ogre::Real ),  // ArrayMemoryManager::KfTransformType
+        };
     //-----------------------------------------------------------------------------------
     KfTransformArrayMemoryManager::KfTransformArrayMemoryManager( uint16 depthLevel, size_t hintMaxNodes,
-                                                    size_t cleanupThreshold, size_t maxHardLimit,
-                                                    RebaseListener *rebaseListener ) :
-            ArrayMemoryManager( ElementsMemSize, 0, 0,
-                                sizeof( ElementsMemSize ) / sizeof( size_t ), depthLevel,
-                                hintMaxNodes, cleanupThreshold, maxHardLimit, rebaseListener )
+                                                                  size_t cleanupThreshold,
+                                                                  size_t maxHardLimit,
+                                                                  RebaseListener *rebaseListener ) :
+        ArrayMemoryManager( ElementsMemSize, 0, 0, sizeof( ElementsMemSize ) / sizeof( size_t ),
+                            depthLevel, hintMaxNodes, cleanupThreshold, maxHardLimit, rebaseListener )
     {
     }
     //-----------------------------------------------------------------------------------
-    void KfTransformArrayMemoryManager::createNewNode( KfTransform **outTransform )
+    void KfTransformArrayMemoryManager::createNewNode( KfTransform *RESTRICT_ALIAS *outTransform )
     {
         const size_t nextSlot = createNewSlot();
-        for( size_t i=0; i<ARRAY_PACKED_REALS - 1; ++i )
+        for( size_t i = 0; i < ARRAY_PACKED_REALS - 1; ++i )
             createNewSlot();
 
         const unsigned char nextSlotIdx = nextSlot % ARRAY_PACKED_REALS;
-        const size_t nextSlotBase       = nextSlot - nextSlotIdx;
+        const size_t nextSlotBase = nextSlot - nextSlotIdx;
 
-        //Set memory ptrs
-        *outTransform = reinterpret_cast<KfTransform*>( mMemoryPools[KfTransformType] +
-                                                    nextSlotBase * mElementsMemSizes[KfTransformType] );
+        // Set memory ptrs
+        *outTransform = reinterpret_cast<KfTransform * RESTRICT_ALIAS>(
+            mMemoryPools[KfTransformType] + nextSlotBase * mElementsMemSizes[KfTransformType] );
 
-        //Set default values
-        (*outTransform)->mPosition      = ArrayVector3::ZERO;
-        (*outTransform)->mOrientation   = ArrayQuaternion::IDENTITY;
-        (*outTransform)->mScale         = ArrayVector3::UNIT_SCALE;
+        // Set default values
+        ( *outTransform )->mPosition = ArrayVector3::ZERO;
+        ( *outTransform )->mOrientation = ArrayQuaternion::IDENTITY;
+        ( *outTransform )->mScale = ArrayVector3::UNIT_SCALE;
     }
-}
+}  // namespace Ogre

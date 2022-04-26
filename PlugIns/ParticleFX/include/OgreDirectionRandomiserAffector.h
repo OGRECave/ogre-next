@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,81 +29,79 @@ THE SOFTWARE.
 #define __DirectionRandomiserAffector_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreParticleAffector.h"
 #include "OgreVector3.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** This class defines a ParticleAffector which applies randomness to the movement of the particles.
     @remarks
         This affector (see ParticleAffector) applies randomness to the movement of the particles by
         changing the direction vectors.
     @par
-        The most important parameter to control the effect is randomness. It controls the range in which changes
-        are applied to each axis of the direction vector.
-        The parameter scope can be used to limit the effect to a certain percentage of the particles.
+        The most important parameter to control the effect is randomness. It controls the range in which
+    changes are applied to each axis of the direction vector. The parameter scope can be used to limit
+    the effect to a certain percentage of the particles.
     */
     class _OgreParticleFXExport DirectionRandomiserAffector : public ParticleAffector
     {
     public:
         /** Command object for randomness (see ParamCommand).*/
-        class CmdRandomness : public ParamCommand
+        class CmdRandomness final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for scope (see ParamCommand).*/
-        class CmdScope : public ParamCommand
+        class CmdScope final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for keep_velocity (see ParamCommand).*/
-        class CmdKeepVelocity : public ParamCommand
+        class CmdKeepVelocity final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /// Default constructor
-        DirectionRandomiserAffector(ParticleSystem* psys);
+        DirectionRandomiserAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles(ParticleSystem* pSystem, Real timeElapsed);
-
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         /** Sets the randomness to apply to the particles in a system. */
-        void setRandomness(Real force);
+        void setRandomness( Real force );
         /** Sets the scope (percentage of particles which are randomised). */
-        void setScope(Real force);
+        void setScope( Real force );
         /** Set flag which detemines whether particle speed is changed. */
-        void setKeepVelocity(bool keepVelocity);
+        void setKeepVelocity( bool keepVelocity );
 
         /** Gets the randomness to apply to the particles in a system. */
-        Real getRandomness(void) const;
+        Real getRandomness() const;
         /** Gets the scope (percentage of particles which are randomised). */
-        Real getScope(void) const;
+        Real getScope() const;
         /** Gets flag which detemines whether particle speed is changed. */
-        bool getKeepVelocity(void) const;
+        bool getKeepVelocity() const;
 
         /// Command objects
-        static CmdRandomness msRandomnessCmd;
-        static CmdScope msScopeCmd;
+        static CmdRandomness   msRandomnessCmd;
+        static CmdScope        msScopeCmd;
         static CmdKeepVelocity msKeepVelocityCmd;
 
     protected:
         Real mRandomness;
         Real mScope;
         bool mKeepVelocity;
-
     };
 
-}
+}  // namespace Ogre
 
 #endif

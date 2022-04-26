@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -37,6 +37,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     RenderSystemCapabilities::RenderSystemCapabilities()
         : mVendor(GPU_UNKNOWN)
+        , mDeviceId(0)
         , mNumWorldMatrices(0)
         , mNumTextureUnits(0)
         , mStencilBufferBitDepth(0)
@@ -64,6 +65,10 @@ namespace Ogre {
         mMaxThreadsPerThreadgroupAxis[0] = 1024u;
         mMaxThreadsPerThreadgroupAxis[1] = 1024u;
         mMaxThreadsPerThreadgroupAxis[2] = 64u;
+
+        // OpenGL & Vulkan guarantee at least 16. D3D11 at least 128. Metal 31
+        for( size_t i = 0u; i < NumShaderTypes + 1u; ++i )
+            mNumTexturesInTextureDescriptor[i] = 16u;
     }
     //-----------------------------------------------------------------------
     RenderSystemCapabilities::~RenderSystemCapabilities()
@@ -316,6 +321,9 @@ namespace Ogre {
             " * Hardware Atomic Counters: "
             + StringConverter::toString(hasCapability(RSC_ATOMIC_COUNTERS), true));
 
+        pLog->logMessage( " * Shader 16-bit floating point (half): " +
+                          StringConverter::toString( hasCapability( RSC_SHADER_FLOAT16 ), true ) );
+
         if( hasCapability( RSC_COMPUTE_PROGRAM ) )
         {
             pLog->logMessage(
@@ -352,9 +360,6 @@ namespace Ogre {
             pLog->logMessage(
                 " * Vertex Array Objects: "
                 + StringConverter::toString(hasCapability(RSC_VAO), true));
-            pLog->logMessage(
-                " * Separate shader objects: "
-                + StringConverter::toString(hasCapability(RSC_SEPARATE_SHADER_OBJECTS), true));
         }
 
         if (mCategoryRelevant[CAPS_CATEGORY_D3D9])
@@ -373,12 +378,12 @@ namespace Ogre {
         GPUVendor ret = GPU_UNKNOWN;
         String cmpString = vendorString;
         StringUtil::toLowerCase(cmpString);
-        for (int i = 0; i < GPU_VENDOR_COUNT; ++i)
+        for( size_t i = 0; i < GPU_VENDOR_COUNT; ++i )
         {
             // case insensitive (lower case)
-            if (msGPUVendorStrings[i] == cmpString)
+            if( msGPUVendorStrings[i] == cmpString )
             {
-                ret = static_cast<GPUVendor>(i);
+                ret = static_cast<GPUVendor>( i );
                 break;
             }
         }

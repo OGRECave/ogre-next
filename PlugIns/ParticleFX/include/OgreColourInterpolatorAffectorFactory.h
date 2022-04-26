@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,28 +29,27 @@ THE SOFTWARE.
 #define __ColourInterpolatorAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreColourInterpolatorAffector.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for ColourInterpolatorAffector. */
-    class _OgreParticleFXExport ColourInterpolatorAffectorFactory : public ParticleAffectorFactory
+    class _OgreParticleFXExport ColourInterpolatorAffectorFactory final : public ParticleAffectorFactory
     {
         /** See ParticleAffectorFactory */
-        String getName() const { return "ColourInterpolator"; }
+        String getName() const override { return "ColourInterpolator"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
-            ParticleAffector* p = new ColourInterpolatorAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = new ColourInterpolatorAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

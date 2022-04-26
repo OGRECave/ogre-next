@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreVector3.h"
 
 namespace Ogre
@@ -35,8 +36,8 @@ namespace Ogre
     const Vector3 Vector3::UNIT_X( 1, 0, 0 );
     const Vector3 Vector3::UNIT_Y( 0, 1, 0 );
     const Vector3 Vector3::UNIT_Z( 0, 0, 1 );
-    const Vector3 Vector3::NEGATIVE_UNIT_X( -1,  0,  0 );
-    const Vector3 Vector3::NEGATIVE_UNIT_Y(  0, -1,  0 );
-    const Vector3 Vector3::NEGATIVE_UNIT_Z(  0,  0, -1 );
-    const Vector3 Vector3::UNIT_SCALE(1, 1, 1);
-}
+    const Vector3 Vector3::NEGATIVE_UNIT_X( -1, 0, 0 );
+    const Vector3 Vector3::NEGATIVE_UNIT_Y( 0, -1, 0 );
+    const Vector3 Vector3::NEGATIVE_UNIT_Z( 0, 0, -1 );
+    const Vector3 Vector3::UNIT_SCALE( 1, 1, 1 );
+}  // namespace Ogre

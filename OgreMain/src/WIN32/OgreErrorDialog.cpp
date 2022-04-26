@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,86 +26,85 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreErrorDialog.h"
+
 #include "resource.h"
 
-namespace {
-    Ogre::ErrorDialog* errdlg;  // This is a pointer to instance, since this is a static member
+namespace
+{
+    Ogre::ErrorDialog *errdlg;  // This is a pointer to instance, since this is a static member
 }
 
 namespace Ogre
 {
     ErrorDialog::ErrorDialog()
     {
-		#ifdef __MINGW32__
-			#ifdef OGRE_STATIC_LIB
-        		mHInstance = GetModuleHandle( NULL );
-			#else
-				#if OGRE_DEBUG_MODE == 1
-					mHInstance = GetModuleHandle("OgreMain_d.dll");
-				#else
-					mHInstance = GetModuleHandle("OgreMain.dll");
-				#endif
-			#endif
-		#else
-			static const TCHAR staticVar;
-			GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, &staticVar, &mHInstance);
-		#endif
+#ifdef __MINGW32__
+#    ifdef OGRE_STATIC_LIB
+        mHInstance = GetModuleHandle( NULL );
+#    else
+#        if OGRE_DEBUG_MODE == 1
+        mHInstance = GetModuleHandle( "OgreMain_d.dll" );
+#        else
+        mHInstance = GetModuleHandle( "OgreMain.dll" );
+#        endif
+#    endif
+#else
+        static const TCHAR staticVar;
+        GetModuleHandleEx(
+            GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+            &staticVar, &mHInstance );
+#endif
     }
 
 #if OGRE_ARCHITECTURE_64 == OGRE_ARCH_TYPE
-    INT_PTR CALLBACK ErrorDialog::DlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+    INT_PTR CALLBACK ErrorDialog::DlgProc( HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam )
 #else
-    BOOL CALLBACK ErrorDialog::DlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+    BOOL CALLBACK ErrorDialog::DlgProc( HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam )
 #endif
     {
         HWND hwndDlgItem;
 
-        switch (iMsg)
+        switch( iMsg )
         {
-
         case WM_INITDIALOG:
             // Center myself
             int x, y, screenWidth, screenHeight;
             RECT rcDlg;
-            GetWindowRect(hDlg, &rcDlg);
-            screenWidth = GetSystemMetrics(SM_CXFULLSCREEN);
-            screenHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+            GetWindowRect( hDlg, &rcDlg );
+            screenWidth = GetSystemMetrics( SM_CXFULLSCREEN );
+            screenHeight = GetSystemMetrics( SM_CYFULLSCREEN );
 
-            x = (screenWidth / 2) - ((rcDlg.right - rcDlg.left) / 2);
-            y = (screenHeight / 2) - ((rcDlg.bottom - rcDlg.top) / 2);
+            x = ( screenWidth / 2 ) - ( ( rcDlg.right - rcDlg.left ) / 2 );
+            y = ( screenHeight / 2 ) - ( ( rcDlg.bottom - rcDlg.top ) / 2 );
 
-            MoveWindow(hDlg, x, y, (rcDlg.right - rcDlg.left),
-                (rcDlg.bottom - rcDlg.top), TRUE);
+            MoveWindow( hDlg, x, y, ( rcDlg.right - rcDlg.left ), ( rcDlg.bottom - rcDlg.top ), TRUE );
 
             // Fill in details of error
-            hwndDlgItem = GetDlgItem(hDlg, IDC_ERRMSG);
-            SetWindowText(hwndDlgItem, errdlg->mErrorMsg.c_str());
+            hwndDlgItem = GetDlgItem( hDlg, IDC_ERRMSG );
+            SetWindowText( hwndDlgItem, errdlg->mErrorMsg.c_str() );
 
             return TRUE;
         case WM_COMMAND:
-            switch (LOWORD(wParam))
+            switch( LOWORD( wParam ) )
             {
             case IDOK:
 
-                EndDialog(hDlg, TRUE);
+                EndDialog( hDlg, TRUE );
                 return TRUE;
             }
         }
 
         return FALSE;
-
     }
 
-
-    void ErrorDialog::display(const String& errorMessage, String logName)
+    void ErrorDialog::display( const String &errorMessage, String logName )
     {
         // Display dialog
         // Don't return to caller until dialog dismissed
         errdlg = this;
         mErrorMsg = errorMessage;
-        DialogBox(mHInstance, MAKEINTRESOURCE(IDD_DLG_ERROR), NULL, DlgProc);
-
-
+        DialogBox( mHInstance, MAKEINTRESOURCE( IDD_DLG_ERROR ), NULL, DlgProc );
     }
-}
+}  // namespace Ogre

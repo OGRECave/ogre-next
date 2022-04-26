@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,32 +29,30 @@ THE SOFTWARE.
 #define __BoxEmitter_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreAreaEmitter.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Particle emitter which emits particles randomly from points inside a box.
     @remarks
         This basic particle emitter emits particles from a box area. The
         initial direction of these particles can either be a single direction (i.e. a line),
-        a random scattering inside a cone, or a random scattering in all directions, 
-        depending the 'angle' parameter, which is the angle across which to scatter the 
-        particles either side of the base direction of the emitter. 
+        a random scattering inside a cone, or a random scattering in all directions,
+        depending the 'angle' parameter, which is the angle across which to scatter the
+        particles either side of the base direction of the emitter.
     */
     class _OgreParticleFXExport BoxEmitter : public AreaEmitter
     {
     public:
-
-        BoxEmitter(ParticleSystem* psys);
+        BoxEmitter( ParticleSystem *psys );
 
         /** See ParticleEmitter. */
-        void _initParticle(Particle* pParticle);
+        void _initParticle( Particle *pParticle ) override;
 
     protected:
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

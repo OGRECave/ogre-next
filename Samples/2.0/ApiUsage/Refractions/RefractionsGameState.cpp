@@ -84,7 +84,7 @@ namespace Demo
         sceneNode->attachObject( item );
     }
     //-----------------------------------------------------------------------------------
-    void RefractionsGameState::createRefractiveWall( void )
+    void RefractionsGameState::createRefractiveWall()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
@@ -152,8 +152,8 @@ namespace Demo
 
         Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                          ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-        sceneNode->setPosition(
-            Ogre::Vector3( armsLength * x - startX, 1.0f, armsLength * z - startZ ) );
+        sceneNode->setPosition( Ogre::Vector3( armsLength * Ogre::Real( x ) - startX, 1.0f,
+                                               armsLength * Ogre::Real( z ) - startZ ) );
         sceneNode->attachObject( item );
 
         // Create the refractive material for this sphere
@@ -171,8 +171,9 @@ namespace Demo
         datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
         datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
-        datablock->setRoughness( std::max( 0.02f, x / std::max( 1.0f, (float)( numX - 1 ) ) ) );
-        datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)( numZ - 1 ) ) ), false );
+        datablock->setRoughness( std::max( 0.02f, float( x ) / std::max( 1.0f, (float)( numX - 1 ) ) ) );
+        datablock->setFresnel( Ogre::Vector3( float( z ) / std::max( 1.0f, (float)( numZ - 1 ) ) ),
+                               false );
 
         // Do not cast shadows!
         item->setCastShadows( false );
@@ -193,7 +194,7 @@ namespace Demo
         ++mNumSpheres;
     }
     //-----------------------------------------------------------------------------------
-    void RefractionsGameState::createScene01( void )
+    void RefractionsGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -206,8 +207,8 @@ namespace Demo
             Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-            planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
@@ -255,13 +256,13 @@ namespace Demo
 
                 item->setVisibilityFlags( 0x000000001 );
 
-                size_t idx = i * 4 + j;
+                const size_t idx = static_cast<size_t>( i * 4 + j );
 
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 2.0f,
-                                              ( j - 1.5f ) * armsLength );
+                mSceneNode[idx]->setPosition( ( float( i ) - 1.5f ) * armsLength, 2.0f,
+                                              ( float( j ) - 1.5f ) * armsLength );
                 mSceneNode[idx]->setScale( 0.65f, 0.65f, 0.65f );
 
                 mSceneNode[idx]->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -276,14 +277,14 @@ namespace Demo
             const int numX = 8;
             const int numZ = 8;
 
-            const float armsLength = 1.0f;
+            const float armsLengthSpheres = 1.0f;
             const float startX = ( numX - 1 ) / 2.0f;
             const float startZ = ( numZ - 1 ) / 2.0f;
 
             for( int x = 0; x < numX; ++x )
             {
                 for( int z = 0; z < numZ; ++z )
-                    createRefractiveSphere( x, z, numX, numZ, armsLength, startX, startZ );
+                    createRefractiveSphere( x, z, numX, numZ, armsLengthSpheres, startX, startZ );
             }
         }
 
@@ -338,7 +339,7 @@ namespace Demo
         if( mAnimateObjects )
         {
             for( int i = 0; i < 16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.125f ) );
+                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * float( i ) * 0.125f ) );
         }
 
         TutorialGameState::update( timeSinceLast );
@@ -364,7 +365,7 @@ namespace Demo
         outText += Ogre::StringConverter::toString( mTransparencyValue ) + "]";
     }
     //-----------------------------------------------------------------------------------
-    void RefractionsGameState::setTransparencyToMaterials( void )
+    void RefractionsGameState::setTransparencyToMaterials()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -31,19 +31,19 @@ THE SOFTWARE.
 #include "../OgrePrerequisites.h"
 
 #define WIN32_LEAN_AND_MEAN
-#if !defined(NOMINMAX) && defined(_MSC_VER)
-#   define NOMINMAX // required to stop windows.h messing up std::min
+#if !defined( NOMINMAX ) && defined( _MSC_VER )
+#    define NOMINMAX  // required to stop windows.h messing up std::min
 #endif
 #include <windows.h>
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
     /** Defines the behaviour of an automatic renderer configuration dialog.
     @remarks
@@ -56,12 +56,12 @@ namespace Ogre
     @author
         Steven J. Streeting
     */
-    class _OgreExport ConfigDialog : public UtilityAlloc
+    class _OgreExport ConfigDialog : public OgreAllocatedObj
     {
     public:
         ConfigDialog();
         virtual ~ConfigDialog();
-        
+
         /** Displays the dialog.
         @remarks
             This method displays the dialog and from then on the dialog
@@ -82,14 +82,14 @@ namespace Ogre
     protected:
         /** Callback to process window events */
 #if OGRE_ARCHITECTURE_64 == OGRE_ARCH_TYPE
-        static INT_PTR CALLBACK DlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
+        static INT_PTR CALLBACK DlgProc( HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam );
 #else
-        static BOOL CALLBACK DlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
+        static BOOL CALLBACK DlgProc( HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam );
 #endif
-        RenderSystem* mSelectedRenderSystem;
-        HINSTANCE mHInstance; // HInstance of application, for dialog
+        RenderSystem *mSelectedRenderSystem;
+        HINSTANCE     mHInstance;  // HInstance of application, for dialog
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 #endif

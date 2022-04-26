@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,52 +29,48 @@ THE SOFTWARE.
 #define __ColourImageAffector_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffector.h"
-#include "OgreStringInterface.h"
+
 #include "OgreColourValue.h"
 #include "OgreImage2.h"
+#include "OgreParticleAffector.h"
+#include "OgreStringInterface.h"
 
-namespace Ogre {
-
-
+namespace Ogre
+{
     class _OgreParticleFXExport ColourImageAffector : public ParticleAffector
     {
     public:
         /** Command object for red adjust (see ParamCommand).*/
-        class CmdImageAdjust : public ParamCommand
+        class CmdImageAdjust final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Default constructor. */
-        ColourImageAffector(ParticleSystem* psys);
+        ColourImageAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _initParticle(Particle* pParticle);
+        void _initParticle( Particle *pParticle ) override;
 
         /** See ParticleAffector. */
-        void _affectParticles(ParticleSystem* pSystem, Real timeElapsed);
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
-        void setImageAdjust(String name);
-        String getImageAdjust(void) const;
-        
-        
-        static CmdImageAdjust   msImageCmd;
+        void   setImageAdjust( String name );
+        String getImageAdjust() const;
+
+        static CmdImageAdjust msImageCmd;
 
     protected:
-        Image2                  mColourImage;
-        bool                    mColourImageLoaded;
-        String                  mColourImageName;
+        Image2 mColourImage;
+        bool   mColourImageLoaded;
+        String mColourImageName;
 
         /** Internal method to load the image */
-        void _loadImage(void);
+        void _loadImage();
     };
 
-
-}
-
+}  // namespace Ogre
 
 #endif
-

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreTimer.h"
+
 #include "OgreBitwise.h"
 
 using namespace Ogre;
@@ -34,7 +36,8 @@ using namespace Ogre;
 //-------------------------------------------------------------------------
 Timer::Timer()
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    : mTimerMask( 0 )
+    :
+    mTimerMask( 0 )
 #endif
 {
     reset();
@@ -46,18 +49,18 @@ Timer::~Timer()
 }
 
 //-------------------------------------------------------------------------
-bool Timer::setOption( const String & key, const void * val )
+bool Timer::setOption( const String &key, const void *val )
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    if ( key == "QueryAffinityMask" )
+    if( key == "QueryAffinityMask" )
     {
         // Telling timer what core to use for a timer read
-        DWORD newTimerMask = * static_cast < const DWORD * > ( val );
+        DWORD newTimerMask = *static_cast<const DWORD *>( val );
 
         // Get the current process core mask
         DWORD_PTR procMask;
         DWORD_PTR sysMask;
-        GetProcessAffinityMask(GetCurrentProcess(), &procMask, &sysMask);
+        GetProcessAffinityMask( GetCurrentProcess(), &procMask, &sysMask );
 
         // If new mask is 0, then set to default behavior, otherwise check
         // to make sure new timer core mask overlaps with process core mask
@@ -81,11 +84,11 @@ void Timer::reset()
     // Get the current process core mask
     DWORD_PTR procMask;
     DWORD_PTR sysMask;
-    GetProcessAffinityMask(GetCurrentProcess(), &procMask, &sysMask);
+    GetProcessAffinityMask( GetCurrentProcess(), &procMask, &sysMask );
 
     // If procMask is 0, consider there is only one core available
     // (using 0 as procMask will cause an infinite loop below)
-    if (procMask == 0)
+    if( procMask == 0 )
         procMask = 1;
 
     // Find the lowest core that this process uses
@@ -101,19 +104,19 @@ void Timer::reset()
     HANDLE thread = GetCurrentThread();
 
     // Set affinity to the first core
-    DWORD_PTR oldMask = SetThreadAffinityMask(thread, mTimerMask);
+    DWORD_PTR oldMask = SetThreadAffinityMask( thread, mTimerMask );
 #endif
 
     // Get the constant frequency
-    QueryPerformanceFrequency(&mFrequency);
+    QueryPerformanceFrequency( &mFrequency );
 
     // Query the timer
-    QueryPerformanceCounter(&mStartTime);
+    QueryPerformanceCounter( &mStartTime );
     mStartTick = GetTickCount();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
     // Reset affinity
-    SetThreadAffinityMask(thread, oldMask);
+    SetThreadAffinityMask( thread, oldMask );
 #endif
 
     mLastTime = 0;
@@ -129,35 +132,35 @@ uint64 Timer::getMilliseconds()
     HANDLE thread = GetCurrentThread();
 
     // Set affinity to the first core
-    DWORD_PTR oldMask = SetThreadAffinityMask(thread, mTimerMask);
+    DWORD_PTR oldMask = SetThreadAffinityMask( thread, mTimerMask );
 #endif
 
     // Query the timer
-    QueryPerformanceCounter(&curTime);
+    QueryPerformanceCounter( &curTime );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
     // Reset affinity
-    SetThreadAffinityMask(thread, oldMask);
+    SetThreadAffinityMask( thread, oldMask );
 #endif
 
     LONGLONG newTime = curTime.QuadPart - mStartTime.QuadPart;
-    
+
     // scale by 1000 for milliseconds
-    unsigned long newTicks = (unsigned long) (1000 * newTime / mFrequency.QuadPart);
+    unsigned long newTicks = (unsigned long)( 1000 * newTime / mFrequency.QuadPart );
 
     // detect and compensate for performance counter leaps
     // (surprisingly common, see Microsoft KB: Q274323)
     unsigned long check = GetTickCount() - mStartTick;
-    signed long msecOff = (signed long)(newTicks - check);
-    if (msecOff < -100 || msecOff > 100)
+    signed long msecOff = (signed long)( newTicks - check );
+    if( msecOff < -100 || msecOff > 100 )
     {
         // We must keep the timer running forward :)
-        LONGLONG adjust = (std::min)(msecOff * mFrequency.QuadPart / 1000, newTime - mLastTime);
+        LONGLONG adjust = ( std::min )( msecOff * mFrequency.QuadPart / 1000, newTime - mLastTime );
         mStartTime.QuadPart += adjust;
         newTime -= adjust;
 
         // Re-calculate milliseconds
-        newTicks = (unsigned long) (1000 * newTime / mFrequency.QuadPart);
+        newTicks = (unsigned long)( 1000 * newTime / mFrequency.QuadPart );
     }
 
     // Record last time for adjust
@@ -175,30 +178,30 @@ uint64 Timer::getMicroseconds()
     HANDLE thread = GetCurrentThread();
 
     // Set affinity to the first core
-    DWORD_PTR oldMask = SetThreadAffinityMask(thread, mTimerMask);
+    DWORD_PTR oldMask = SetThreadAffinityMask( thread, mTimerMask );
 #endif
 
     // Query the timer
-    QueryPerformanceCounter(&curTime);
+    QueryPerformanceCounter( &curTime );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
     // Reset affinity
-    SetThreadAffinityMask(thread, oldMask);
+    SetThreadAffinityMask( thread, oldMask );
 #endif
 
     LONGLONG newTime = curTime.QuadPart - mStartTime.QuadPart;
-    
+
     // get milliseconds to check against GetTickCount
-    unsigned long newTicks = (unsigned long) (1000 * newTime / mFrequency.QuadPart);
-    
+    unsigned long newTicks = (unsigned long)( 1000 * newTime / mFrequency.QuadPart );
+
     // detect and compensate for performance counter leaps
     // (surprisingly common, see Microsoft KB: Q274323)
     unsigned long check = GetTickCount() - mStartTick;
-    signed long msecOff = (signed long)(newTicks - check);
-    if (msecOff < -100 || msecOff > 100)
+    signed long msecOff = (signed long)( newTicks - check );
+    if( msecOff < -100 || msecOff > 100 )
     {
         // We must keep the timer running forward :)
-        LONGLONG adjust = (std::min)(msecOff * mFrequency.QuadPart / 1000, newTime - mLastTime);
+        LONGLONG adjust = ( std::min )( msecOff * mFrequency.QuadPart / 1000, newTime - mLastTime );
         mStartTime.QuadPart += adjust;
         newTime -= adjust;
     }
@@ -207,7 +210,7 @@ uint64 Timer::getMicroseconds()
     mLastTime = newTime;
 
     // scale by 1000000 for microseconds
-    uint64 newMicro = (uint64) (1000000 * newTime / mFrequency.QuadPart);
+    uint64 newMicro = (uint64)( 1000000 * newTime / mFrequency.QuadPart );
 
     return newMicro;
 }
@@ -216,12 +219,12 @@ uint64 Timer::getMicroseconds()
 uint64 Timer::getMillisecondsCPU()
 {
     clock_t newClock = clock();
-    return (uint64)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000.0 ) ) ;
+    return (uint64)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000.0 ) );
 }
 
 //-------------------------------------------------------------------------
 uint64 Timer::getMicrosecondsCPU()
 {
     clock_t newClock = clock();
-    return (uint64)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000000.0 ) ) ;
+    return (uint64)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000000.0 ) );
 }

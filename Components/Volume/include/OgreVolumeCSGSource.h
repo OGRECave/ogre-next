@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -186,7 +186,7 @@ namespace Volume {
         /** Constructor, sets the sources to null.
         Protected to be callable from child classes.
         */
-        CSGOperationSource(void);
+        CSGOperationSource();
     public:
         
         /** Gets the first operator source.
@@ -205,7 +205,7 @@ namespace Volume {
         @return
             The second operator source.
         */
-        virtual const Source* getSourceB(void) const;
+        virtual const Source* getSourceB() const;
         
         /** Sets the second operator source.
         @param b
@@ -230,7 +230,7 @@ namespace Volume {
 
         /** Constructor, sets the sources to null.
         */
-        CSGIntersectionSource(void);
+        CSGIntersectionSource();
         
         /** Overridden from Source.
         */
@@ -257,7 +257,7 @@ namespace Volume {
 
         /** Constructor, sets the sources to null.
         */
-        CSGUnionSource(void);
+        CSGUnionSource();
         
         /** Overridden from Source.
         */
@@ -285,7 +285,7 @@ namespace Volume {
 
         /** Constructor, sets the sources to null.
         */
-        CSGDifferenceSource(void);
+        CSGDifferenceSource();
         
         /** Overridden from Source.
         */
@@ -314,7 +314,7 @@ namespace Volume {
         /** Constructor. Sets the source to null.
         Protected to be callable from child classes.
         */
-        CSGUnarySource(void);
+        CSGUnarySource();
 
     public:
 
@@ -322,7 +322,7 @@ namespace Volume {
         @return
             The source.
         */
-        virtual const Source* getSource(void) const;
+        virtual const Source* getSource() const;
         
         /** Sets the source.
         @param a
@@ -345,7 +345,7 @@ namespace Volume {
         
         /** Constructor. Sets the source to null.
         */
-        CSGNegateSource(void);
+        CSGNegateSource();
         
         /** Overridden from Source.
         */
@@ -406,7 +406,7 @@ namespace Volume {
         long mSeed;
 
         /// Prepares the node members.
-        void setData(void);
+        void setData();
 
         /* Gets the density value.
         @param position
@@ -464,7 +464,7 @@ namespace Volume {
         @return
             The initial seed.
         */
-        long getSeed(void) const;
+        long getSeed() const;
     };
 
 }

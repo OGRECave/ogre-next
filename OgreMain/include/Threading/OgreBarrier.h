@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -32,21 +32,21 @@ THE SOFTWARE.
 #include "OgrePlatform.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    //No need to include the heavy windows.h header for something like this!
-    typedef long LONG;
-    typedef void* HANDLE;
+// No need to include the heavy windows.h header for something like this!
+typedef long  LONG;
+typedef void *HANDLE;
 #else
-    #include <pthread.h>
-    #if( defined( ANDROID ) && __ANDROID_API__ < __ANDROID_API_N__ ) || \
+#    include <pthread.h>
+#    if( defined( ANDROID ) && __ANDROID_API__ < __ANDROID_API_N__ ) || \
         OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-    typedef struct
-    {
-        pthread_mutex_t mutex;
-        pthread_cond_t cond;
-        int count;
-        int tripCount;
-    } pthread_barrier_t;
-#endif
+typedef struct
+{
+    pthread_mutex_t mutex;
+    pthread_cond_t  cond;
+    unsigned int    count;
+    unsigned int    tripCount;
+} pthread_barrier_t;
+#    endif
 #endif
 
 namespace Ogre
@@ -63,12 +63,12 @@ namespace Ogre
     class _OgreExport Barrier
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        size_t                  mNumThreads;
-        size_t                  mIndex;
-        OGRE_ALIGNED_DECL( volatile LONG,   mLockCount,     4 );
-        HANDLE                  mSemaphores[2];
+        size_t mNumThreads;
+        size_t mIndex;
+        OGRE_ALIGNED_DECL( volatile LONG, mLockCount, 4 );
+        HANDLE mSemaphores[2];
 #else
-        pthread_barrier_t       mBarrier;
+        pthread_barrier_t mBarrier;
 #endif
 
     public:
@@ -78,8 +78,8 @@ namespace Ogre
         /** When calling this function, it will block until all N threads reach this point; where
             N is the thread count passed to the Barrier's constructor.
         */
-        void sync(void);
+        void sync();
     };
-}
+}  // namespace Ogre
 
 #endif

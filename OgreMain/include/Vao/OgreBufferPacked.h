@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -47,6 +47,42 @@ namespace Ogre
             i.e. live video capture)
         */
         BT_DEFAULT,
+        
+        /** Read and write access from GPU/CPU.
+        @remarks
+            This functionality was written for UMA (Unified Memory Architecture),
+            like the iPhone and most Android phones; and a few desktop iGPUs.
+
+            Its main implementation purpose is to be able to access vertex & index
+            buffers from meshes (which are either BT_IMMUTABLE or BT_DEFAULT and never
+            modified again after the first upload).
+
+            The main advantage of this buffer type is that apps can read the (vertex/index)
+            data from CPU without neither waiting nor needing a shadow copy
+            (which wastes precious RAM on mobile).
+
+            There is no synchronization going on thus if you write to a BT_DEFAULT_SHARED
+            buffer from GPU (e.g. BufferPacked::copyTo) you're going to have to manually
+            wait for that transfer (using VaoManager::waitForSpecificFrameToFinish).
+
+            And if you're reading from GPU from that buffer (e.g. rendering),
+            you're also going to have to manually wait for those reads
+            (using VaoManager::waitForSpecificFrameToFinish) before writing to this
+            buffer.
+
+            Ogre won't use any staging buffers to upload and download contents.
+            It's fast on UMA and slow on other archs.
+
+            Theretically better synchronization could be implemented on top of this
+            buffer type to be multi-purpose, but it would complicate things.
+
+            Basically it's the perfect replacement for BT_IMMUTABLE if you want
+            stall-free access to GPU data from within the CPU without consuming
+            extra RAM.
+
+            See Capabilities::RSC_UMA to check support.
+        */
+        BT_DEFAULT_SHARED,
 
         /// Read access from GPU. Write access for CPU.
         /// i.e. Particles, dynamic textures. Dynamic buffers don't put a
@@ -93,6 +129,7 @@ namespace Ogre
 
     enum BufferBindFlags
     {
+        // clang-format off
         BB_FLAG_VERTEX      = 1u << BP_TYPE_VERTEX,
         BB_FLAG_INDEX       = 1u << BP_TYPE_INDEX,
         BB_FLAG_CONST       = 1u << BP_TYPE_CONST,
@@ -100,6 +137,7 @@ namespace Ogre
         BB_FLAG_READONLY    = 1u << BP_TYPE_READONLY,
         BB_FLAG_UAV         = 1u << BP_TYPE_UAV,
         BB_FLAG_INDIRECT    = 1u << BP_TYPE_INDIRECT
+        // clang-format on
     };
 
     /** Helper class to that will free the pointer on the destructor. Usage:
@@ -128,12 +166,12 @@ namespace Ogre
         }
 
     private:
-        //Prevent being able to copy this object
-        FreeOnDestructor(const FreeOnDestructor&);
-        FreeOnDestructor& operator=(const FreeOnDestructor&);
+        // Prevent being able to copy this object
+        FreeOnDestructor( const FreeOnDestructor & );
+        FreeOnDestructor &operator=( const FreeOnDestructor & );
     };
 
-    class _OgreExport BufferPacked : public GpuTrackedResource, public BufferPackedAlloc
+    class _OgreExport BufferPacked : public GpuTrackedResource, public OgreAllocatedObj
     {
         friend class BufferInterface;
         friend class D3D11BufferInterfaceBase;
@@ -149,20 +187,20 @@ namespace Ogre
         size_t mInternalBufferStart;  /// In elements
         size_t mFinalBufferStart;     /// In elements, includes dynamic buffer frame offset
         size_t mNumElements;
-        size_t mBytesPerElement;
-        size_t mNumElementsPadding;
+        uint32 mBytesPerElement;
+        uint32 mNumElementsPadding;
 
-        BufferType      mBufferType;
-        VaoManager      *mVaoManager;
+        BufferType  mBufferType;
+        VaoManager *mVaoManager;
 
-        MappingState    mMappingState;
+        MappingState mMappingState;
 
         BufferInterface *mBufferInterface;
 
         /// Stores the range of the last map() call so that
         /// we can flush it correctly when calling unmap
-        size_t          mLastMappingStart;
-        size_t          mLastMappingCount;
+        size_t mLastMappingStart;
+        size_t mLastMappingCount;
 
         void *mShadowCopy;
 
@@ -173,7 +211,6 @@ namespace Ogre
 #endif
 
     public:
-
         /** Generic constructor.
         @param initialData
             Initial data to populate. If bufferType == BT_IMMUTABLE, can't be null.
@@ -194,23 +231,23 @@ namespace Ogre
             Must be false if bufferType >= BT_DYNAMIC
         */
         BufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                      uint32 numElementsPadding, BufferType bufferType,
-                      void *initialData, bool keepAsShadow,
-                      VaoManager *vaoManager, BufferInterface *bufferInterface );
+                      uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                      bool keepAsShadow, VaoManager *vaoManager, BufferInterface *bufferInterface );
         virtual ~BufferPacked();
 
         /// Useful to query which one is the derived class.
-        virtual BufferPackedTypes getBufferPackedType(void) const = 0;
+        virtual BufferPackedTypes getBufferPackedType() const = 0;
 
         /// For internal use.
         void _setBufferInterface( BufferInterface *bufferInterface );
 
-        BufferType getBufferType(void) const                    { return mBufferType; }
-        BufferInterface* getBufferInterface(void) const         { return mBufferInterface; }
+        BufferType getBufferType() const { return mBufferType; }
+
+        BufferInterface *getBufferInterface() const { return mBufferInterface; }
 
         /// If this buffer has been reinterpreted from an UavBufferPacked,
         /// returns the original version, otherwise returns 'this'
-        virtual BufferPacked *getOriginalBufferType( void );
+        virtual BufferPacked *getOriginalBufferType();
 
         /// Async data read request. A ticket will be returned. Once the async transfer finishes,
         /// you can use the ticket to read the data from CPU. @See AsyncTicket
@@ -248,12 +285,12 @@ namespace Ogre
             Calling this with false allows to call map multiple times. However ater calling unmap,
             you must call advanceFrame. THIS IS ONLY FOR VERY ADVANCED USERS.
         */
-        void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount, bool bAdvanceFrame=true );
+        void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+                                         bool bAdvanceFrame = true );
 
-        /** Unmaps or flushes the region mapped with @see map. Alternatively, you can flush a smaller region
-            (i.e. you didn't know which regions you were to update when mapping, but now that you're done,
-            you know).
-            The region being flushed is [flushStart; flushStart + flushSize)
+        /** Unmaps or flushes the region mapped with @see map. Alternatively, you can flush a smaller
+            region (i.e. you didn't know which regions you were to update when mapping, but now that
+            you're done, you know). The region being flushed is [flushStart; flushStart + flushSize)
         @param unmapOption
             When using persistent mapping, UO_KEEP_PERSISTENT will keep the map alive; but you will
             have to call map again to use it. This requirement allows Ogre to:
@@ -271,12 +308,12 @@ namespace Ogre
 
         /// @see map. Do NOT call this function more than once per frame,
         /// or if you've called map( advanceFrame = true )
-        void advanceFrame(void);
+        void advanceFrame();
 
         /// Performs the opposite of @see advanceFrame. Only call this after having called
         /// advanceFrame. i.e. restore the buffer to the state it was before calling
         /// advanceFrame.
-        void regressFrame(void);
+        void regressFrame();
 
         /** Copies the contents of this buffer to another, using GPU -> GPU transfers.
 
@@ -300,42 +337,44 @@ namespace Ogre
             When this value is out of bounds, it gets clamped.
             See remarks.
         */
-        void copyTo( BufferPacked *dstBuffer, size_t dstElemStart=0,
-                     size_t srcElemStart=0, size_t srcNumElems=std::numeric_limits<size_t>::max() );
+        void copyTo( BufferPacked *dstBuffer, size_t dstElemStart = 0, size_t srcElemStart = 0,
+                     size_t srcNumElems = std::numeric_limits<size_t>::max() );
 
         /// Returns the mapping state. Note that if you call map with MS_PERSISTENT_INCOHERENT or
         /// MS_PERSISTENT_COHERENT, then call unmap( UO_KEEP_PERSISTENT ); the returned value will
         /// still be MS_PERSISTENT_INCOHERENT/_COHERENT when persistent mapping is supported.
         /// This differs from isCurrentlyMapped
-        MappingState getMappingState(void) const                { return mMappingState; }
+        MappingState getMappingState() const { return mMappingState; }
 
         /// Returns whether the buffer is currently mapped. If you've persistently mapped the buffer
         /// and then called unmap( UO_KEEP_PERSISTENT ); this function will return false; which
         /// differs from getMappingState's behavior.
-        bool isCurrentlyMapped(void) const;
+        bool isCurrentlyMapped() const;
 
-        size_t getNumElements(void) const       { return mNumElements; }
-        size_t getBytesPerElement(void) const   { return mBytesPerElement; }
-        size_t getTotalSizeBytes(void) const    { return mNumElements * mBytesPerElement; }
+        size_t getNumElements() const { return mNumElements; }
+        uint32 getBytesPerElement() const { return mBytesPerElement; }
+        size_t getTotalSizeBytes() const { return mNumElements * mBytesPerElement; }
 
-        size_t _getInternalBufferStart(void) const              { return mInternalBufferStart; }
-        size_t _getFinalBufferStart(void) const                 { return mFinalBufferStart; }
-        size_t _getInternalTotalSizeBytes(void) const   { return (mNumElements + mNumElementsPadding) *
-                                                                 mBytesPerElement; }
-        size_t _getInternalNumElements(void) const      { return mNumElements + mNumElementsPadding; }
+        size_t _getInternalBufferStart() const { return mInternalBufferStart; }
+        size_t _getFinalBufferStart() const { return mFinalBufferStart; }
+        size_t _getInternalTotalSizeBytes() const
+        {
+            return ( mNumElements + mNumElementsPadding ) * mBytesPerElement;
+        }
+        size_t _getInternalNumElements() const { return mNumElements + mNumElementsPadding; }
 
-        const void* getShadowCopy(void) const   { return mShadowCopy; }
+        const void *getShadowCopy() const { return mShadowCopy; }
 
         /// This will not delete the existing shadow copy so it can be used for other purposes
         /// if it is not needed call OGRE_FREE_SIMD( m->getShadowCopy(), MEMCATEGORY_GEOMETRY )
         /// before calling this function.
         /// This will also not automatically upload the shadow data to the GPU. The user must call
         /// upload or use a staging buffer themselves to achieve this.
-        void _setShadowCopy( void* copy );
+        void _setShadowCopy( void *copy );
     };
 
-    typedef StdVector<BufferPacked*>BufferPackedVec;
-    typedef StdUnorderedSet<BufferPacked*> BufferPackedSet;
-}
+    typedef StdVector<BufferPacked *>       BufferPackedVec;
+    typedef StdUnorderedSet<BufferPacked *> BufferPackedSet;
+}  // namespace Ogre
 
 #endif

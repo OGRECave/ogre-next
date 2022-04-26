@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -73,7 +73,7 @@ namespace Ogre
         MaterialManager::getSingleton().remove( matName );
     }
     //-----------------------------------------------------------------------------------
-    void IfdProbeVisualizer::createBuffers( void )
+    void IfdProbeVisualizer::createBuffers()
     {
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -96,15 +96,14 @@ namespace Ogre
 
         const size_t stringNameBaseSize = matName.size();
         matName += StringConverter::toString( getId() );
-        MaterialPtr mat = MaterialManager::getSingleton()
-                              .getByName( matName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME )
-                              .staticCast<Material>();
-        if( mat.isNull() )
+        MaterialPtr mat = std::static_pointer_cast<Material>( MaterialManager::getSingleton().getByName(
+            matName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ) );
+        if( !mat )
         {
-            MaterialPtr baseMat = MaterialManager::getSingleton()
-                                      .load( matName.substr( 0u, stringNameBaseSize ),
-                                             ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME )
-                                      .staticCast<Material>();
+            MaterialPtr baseMat =
+                std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+                    matName.substr( 0u, stringNameBaseSize ),
+                    ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ) );
             mat = baseMat->clone( matName );
             mat->load();
         }
@@ -120,7 +119,7 @@ namespace Ogre
         const uint32 bandMask = bandPoints - 2u;
         const uint32 sectionsInBand = ( bandPoints / 2u ) - 1u;
         const uint32 totalPoints = sectionsInBand * bandPoints;
-        const float sectionArc = Math::TWO_PI / sectionsInBand;
+        const float sectionArc = Math::TWO_PI / float( sectionsInBand );
 
         const uint bandMaskPower[3] = { bandMask, bandPower, totalPoints };
         const Vector2 sectionsBandArc( static_cast<float>( sectionsInBand ), sectionArc );
@@ -155,9 +154,9 @@ namespace Ogre
         mObjectData.mWorldRadius[mObjectData.mIndex] = aabb.getRadius();
     }
     //-----------------------------------------------------------------------------------
-    const String &IfdProbeVisualizer::getMovableType( void ) const { return BLANKSTRING; }
+    const String &IfdProbeVisualizer::getMovableType() const { return BLANKSTRING; }
     //-----------------------------------------------------------------------------------
-    const LightList &IfdProbeVisualizer::getLights( void ) const
+    const LightList &IfdProbeVisualizer::getLights() const
     {
         return this->queryLights();  // Return the data from our MovableObject base class.
     }
@@ -182,7 +181,7 @@ namespace Ogre
                      "IfdProbeVisualizer::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    bool IfdProbeVisualizer::getCastsShadows( void ) const
+    bool IfdProbeVisualizer::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "IfdProbeVisualizer do not implement getCastsShadows."

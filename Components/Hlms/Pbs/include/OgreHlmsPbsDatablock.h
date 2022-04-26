@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,13 +29,14 @@ THE SOFTWARE.
 #define _OgreHlmsPbsDatablock_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
+
 #include "OgreHlmsDatablock.h"
 
 #define _OgreHlmsTextureBaseClassExport _OgreHlmsPbsExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock
 #define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_PBSM_TEXTURE_TYPES
 #define OGRE_HLMS_CREATOR_CLASS HlmsPbs
-    #include "OgreHlmsTextureBaseClass.h"
+#include "OgreHlmsTextureBaseClass.h"
 #undef _OgreHlmsTextureBaseClassExport
 #undef OGRE_HLMS_TEXTURE_BASE_CLASS
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
@@ -46,128 +47,129 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     namespace PbsBrdf
     {
-    enum PbsBrdf
-    {
-        FLAG_UNCORRELATED                           = 0x80000000,
-        FLAG_SPERATE_DIFFUSE_FRESNEL                = 0x40000000,
-        FLAG_LEGACY_MATH                            = 0x20000000,
-        FLAG_FULL_LEGACY                            = 0x08000000,
-        BRDF_MASK                                   = 0x00000FFF,
+        enum PbsBrdf
+        {
+            FLAG_UNCORRELATED = 0x80000000,
+            FLAG_SPERATE_DIFFUSE_FRESNEL = 0x40000000,
+            FLAG_LEGACY_MATH = 0x20000000,
+            FLAG_FULL_LEGACY = 0x08000000,
+            BRDF_MASK = 0x00000FFF,
 
-        /// Most physically accurate BRDF we have. Good for representing
-        /// the majority of materials.
-        /// Uses:
-        ///     * Roughness/Distribution/NDF term: GGX
-        ///     * Geometric/Visibility term: Smith GGX Height-Correlated
-        ///     * Normalized Disney Diffuse BRDF,see
-        ///         "Moving Frostbite to Physically Based Rendering" from
-        ///         Sebastien Lagarde & Charles de Rousiers
-        Default         = 0x00000000,
+            /// Most physically accurate BRDF we have. Good for representing
+            /// the majority of materials.
+            /// Uses:
+            ///     * Roughness/Distribution/NDF term: GGX
+            ///     * Geometric/Visibility term: Smith GGX Height-Correlated
+            ///     * Normalized Disney Diffuse BRDF,see
+            ///         "Moving Frostbite to Physically Based Rendering" from
+            ///         Sebastien Lagarde & Charles de Rousiers
+            Default = 0x00000000,
 
-        /// Implements Cook-Torrance BRDF.
-        /// Uses:
-        ///     * Roughness/Distribution/NDF term: Beckmann
-        ///     * Geometric/Visibility term: Cook-Torrance
-        ///     * Lambertian Diffuse.
-        ///
-        /// Ideal for silk (use high roughness values), synthetic fabric
-        CookTorrance    = 0x00000001,
+            /// Implements Cook-Torrance BRDF.
+            /// Uses:
+            ///     * Roughness/Distribution/NDF term: Beckmann
+            ///     * Geometric/Visibility term: Cook-Torrance
+            ///     * Lambertian Diffuse.
+            ///
+            /// Ideal for silk (use high roughness values), synthetic fabric
+            CookTorrance = 0x00000001,
 
-        /// Implements Normalized Blinn Phong using a normalization
-        /// factor of (n + 8) / (8 * pi)
-        /// The main reason to use this BRDF is performance. It's cheaper,
-        /// while still looking somewhat similar to Default.
-        /// If you still need more performance, see BlinnPhongLegacy
-        BlinnPhong      = 0x00000002,
+            /// Implements Normalized Blinn Phong using a normalization
+            /// factor of (n + 8) / (8 * pi)
+            /// The main reason to use this BRDF is performance. It's cheaper,
+            /// while still looking somewhat similar to Default.
+            /// If you still need more performance, see BlinnPhongLegacy
+            BlinnPhong = 0x00000002,
 
-        /// Same as Default, but the geometry term is not height-correlated
-        /// which most notably causes edges to be dimmer and is less correct.
-        /// Unity (Marmoset too?) use an uncorrelated term, so you may want to
-        /// use this BRDF to get the closest look for a nice exchangeable
-        /// pipeline workflow.
-        DefaultUncorrelated             = Default|FLAG_UNCORRELATED,
+            /// Same as Default, but the geometry term is not height-correlated
+            /// which most notably causes edges to be dimmer and is less correct.
+            /// Unity (Marmoset too?) use an uncorrelated term, so you may want to
+            /// use this BRDF to get the closest look for a nice exchangeable
+            /// pipeline workflow.
+            DefaultUncorrelated = Default | FLAG_UNCORRELATED,
 
-        /// Same as Default but the fresnel of the diffuse is calculated
-        /// differently. Normally the diffuse component would be multiplied against
-        /// the inverse of the specular's fresnel to maintain energy conservation.
-        /// This has the nice side effect that to achieve a perfect mirror effect,
-        /// you just need to raise the fresnel term to 1; which is very intuitive
-        /// to artists (specially if using coloured fresnel)
-        ///
-        /// When using this BRDF, the diffuse fresnel will be calculated differently,
-        /// causing the diffuse component to still affect the colour even when
-        /// the fresnel = 1 (although subtly). To achieve a perfect mirror you will
-        /// have to set the fresnel to 1 *and* the diffuse colour to black;
-        /// which can be unintuitive for artists.
-        ///
-        /// This BRDF is very useful for representing surfaces with complex refractions
-        /// and reflections like glass, transparent plastics, fur, and surface with
-        /// refractions and multiple rescattering that cannot be represented well
-        /// with the default BRDF.
-        DefaultSeparateDiffuseFresnel   = Default|FLAG_SPERATE_DIFFUSE_FRESNEL,
+            /// Same as Default but the fresnel of the diffuse is calculated
+            /// differently. Normally the diffuse component would be multiplied against
+            /// the inverse of the specular's fresnel to maintain energy conservation.
+            /// This has the nice side effect that to achieve a perfect mirror effect,
+            /// you just need to raise the fresnel term to 1; which is very intuitive
+            /// to artists (specially if using coloured fresnel)
+            ///
+            /// When using this BRDF, the diffuse fresnel will be calculated differently,
+            /// causing the diffuse component to still affect the colour even when
+            /// the fresnel = 1 (although subtly). To achieve a perfect mirror you will
+            /// have to set the fresnel to 1 *and* the diffuse colour to black;
+            /// which can be unintuitive for artists.
+            ///
+            /// This BRDF is very useful for representing surfaces with complex refractions
+            /// and reflections like glass, transparent plastics, fur, and surface with
+            /// refractions and multiple rescattering that cannot be represented well
+            /// with the default BRDF.
+            DefaultSeparateDiffuseFresnel = Default | FLAG_SPERATE_DIFFUSE_FRESNEL,
 
-        /// @see DefaultSeparateDiffuseFresnel. This is the same
-        /// but the Cook Torrance model is used instead.
-        ///
-        /// Ideal for shiny objects like glass toy marbles, some types of rubber.
-        /// silk, synthetic fabric.
-        CookTorranceSeparateDiffuseFresnel  = CookTorrance|FLAG_SPERATE_DIFFUSE_FRESNEL,
+            /// @see DefaultSeparateDiffuseFresnel. This is the same
+            /// but the Cook Torrance model is used instead.
+            ///
+            /// Ideal for shiny objects like glass toy marbles, some types of rubber.
+            /// silk, synthetic fabric.
+            CookTorranceSeparateDiffuseFresnel = CookTorrance | FLAG_SPERATE_DIFFUSE_FRESNEL,
 
-        /// Like DefaultSeparateDiffuseFresnel, but uses BlinnPhong as base.
-        BlinnPhongSeparateDiffuseFresnel    = BlinnPhong|FLAG_SPERATE_DIFFUSE_FRESNEL,
+            /// Like DefaultSeparateDiffuseFresnel, but uses BlinnPhong as base.
+            BlinnPhongSeparateDiffuseFresnel = BlinnPhong | FLAG_SPERATE_DIFFUSE_FRESNEL,
 
-        /// Implements traditional / the original non-PBR blinn phong:
-        ///     * Looks more like a 2000-2005's game
-        ///     * Ignores fresnel completely.
-        ///     * Works with Roughness in range (0; 1]. We automatically convert
-        ///       this parameter for you to shininess.
-        ///     * Assumes your Light power is set to PI (or a multiple) like with
-        ///       most other Brdfs.
-        ///     * Diffuse & Specular will automatically be
-        ///       multiplied/divided by PI for you (assuming you
-        ///       set your Light power to PI).
-        /// The main scenario to use this BRDF is:
-        ///     * Performance. This is the fastest BRDF.
-        ///     * You were using Default, but are ok with how this one looks,
-        ///       so you switch to this one instead.
-        BlinnPhongLegacyMath                = BlinnPhong|FLAG_LEGACY_MATH,
+            /// Implements traditional / the original non-PBR blinn phong:
+            ///     * Looks more like a 2000-2005's game
+            ///     * Ignores fresnel completely.
+            ///     * Works with Roughness in range (0; 1]. We automatically convert
+            ///       this parameter for you to shininess.
+            ///     * Assumes your Light power is set to PI (or a multiple) like with
+            ///       most other Brdfs.
+            ///     * Diffuse & Specular will automatically be
+            ///       multiplied/divided by PI for you (assuming you
+            ///       set your Light power to PI).
+            /// The main scenario to use this BRDF is:
+            ///     * Performance. This is the fastest BRDF.
+            ///     * You were using Default, but are ok with how this one looks,
+            ///       so you switch to this one instead.
+            BlinnPhongLegacyMath = BlinnPhong | FLAG_LEGACY_MATH,
 
-        /// Implements traditional / the original non-PBR blinn phong:
-        ///     * Looks more like a 2000-2005's game
-        ///     * Ignores fresnel completely.
-        ///     * Roughness is actually the shininess parameter; which is in range (0; inf)
-        ///       although most used ranges are in (0; 500].
-        ///     * Assumes your Light power is set to 1.0.
-        ///     * Diffuse & Specular is unmodified.
-        /// There are two possible reasons to use this BRDF:
-        ///     * Performance. This is the fastest BRDF.
-        ///     * You're porting your app from Ogre 1.x and want to maintain that
-        ///       Fixed-Function look for some odd reason, and your materials
-        ///       already dealt in shininess, and your lights are already calibrated.
-        ///
-        /// Important: If switching from Default to BlinnPhongFullLegacy, you'll probably see
-        /// that your scene is too bright. This is probably because Default divides diffuse
-        /// by PI and you usually set your lights' power to a multiple of PI to compensate.
-        /// If your scene is too bright, kist divide your lights by PI.
-        /// BlinnPhongLegacyMath performs that conversion for you automatically at
-        /// material level instead of doing it at light level.
-        BlinnPhongFullLegacy                = BlinnPhongLegacyMath|FLAG_FULL_LEGACY,
-    };
+            /// Implements traditional / the original non-PBR blinn phong:
+            ///     * Looks more like a 2000-2005's game
+            ///     * Ignores fresnel completely.
+            ///     * Roughness is actually the shininess parameter; which is in range (0; inf)
+            ///       although most used ranges are in (0; 500].
+            ///     * Assumes your Light power is set to 1.0.
+            ///     * Diffuse & Specular is unmodified.
+            /// There are two possible reasons to use this BRDF:
+            ///     * Performance. This is the fastest BRDF.
+            ///     * You're porting your app from Ogre 1.x and want to maintain that
+            ///       Fixed-Function look for some odd reason, and your materials
+            ///       already dealt in shininess, and your lights are already calibrated.
+            ///
+            /// Important: If switching from Default to BlinnPhongFullLegacy, you'll probably see
+            /// that your scene is too bright. This is probably because Default divides diffuse
+            /// by PI and you usually set your lights' power to a multiple of PI to compensate.
+            /// If your scene is too bright, kist divide your lights by PI.
+            /// BlinnPhongLegacyMath performs that conversion for you automatically at
+            /// material level instead of doing it at light level.
+            BlinnPhongFullLegacy = BlinnPhongLegacyMath | FLAG_FULL_LEGACY,
+        };
     }
 
     /** Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ & D3D11+
-    */
+     */
     class _OgreHlmsPbsExport HlmsPbsDatablock : public HlmsPbsBaseTextureDatablock
     {
         friend class HlmsPbs;
+
     public:
         enum TransparencyModes
         {
@@ -210,49 +212,49 @@ namespace Ogre
     protected:
         /// [0] = Regular one.
         /// [1] = Used during shadow mapping
-        //uint16  mFullParametersBytes[2];
-        uint8   mUvSource[NUM_PBSM_SOURCES];
-        uint8   mBlendModes[4];
-        uint8   mFresnelTypeSizeBytes;              //4 if mFresnel is float, 12 if it is vec3
-        bool    mTwoSided;
-        bool    mUseAlphaFromTextures;
-        uint8	mWorkflow;
-        bool    mReceiveShadows;
-        uint8   mCubemapIdxInDescSet;
-        bool    mUseEmissiveAsLightmap;
-        bool    mUseDiffuseMapAsGrayscale;
+        // uint16  mFullParametersBytes[2];
+        uint8             mUvSource[NUM_PBSM_SOURCES];
+        uint8             mBlendModes[4];
+        uint8             mFresnelTypeSizeBytes;  // 4 if mFresnel is float, 12 if it is vec3
+        bool              mTwoSided;
+        bool              mUseAlphaFromTextures;
+        uint8             mWorkflow;
+        bool              mReceiveShadows;
+        uint8             mCubemapIdxInDescSet;
+        bool              mUseEmissiveAsLightmap;
+        bool              mUseDiffuseMapAsGrayscale;
         TransparencyModes mTransparencyMode;
 
-        float	mBgDiffuse[4];
-        float   mkDr, mkDg, mkDb;                   //kD
-        float   _padding0;
-        float   mkSr, mkSg, mkSb;                   //kS
-        float   mRoughness;
-        float   mFresnelR, mFresnelG, mFresnelB;    //F0
-        float   mTransparencyValue;
-        float   mDetailNormalWeight[4];
-        float   mDetailWeight[4];
-        float   mDetailsOffsetScale[4][4];
-        float   mEmissive[3];
-        float   mNormalMapWeight;
-        float   mRefractionStrength;
-        float   mClearCoat;
-        float   mClearCoatRoughness;
-        float   _padding1;
-        float   mUserValue[3][4]; //can be used in custom pieces
-        //uint16  mTexIndices[NUM_PBSM_TEXTURE_TYPES];
+        float mBgDiffuse[4];
+        float mkDr, mkDg, mkDb;  // kD
+        float _padding0;
+        float mkSr, mkSg, mkSb;  // kS
+        float mRoughness;
+        float mFresnelR, mFresnelG, mFresnelB;  // F0
+        float mTransparencyValue;
+        float mDetailNormalWeight[4];
+        float mDetailWeight[4];
+        float mDetailsOffsetScale[4][4];
+        float mEmissive[3];
+        float mNormalMapWeight;
+        float mRefractionStrength;
+        float mClearCoat;
+        float mClearCoatRoughness;
+        float _padding1;
+        float mUserValue[3][4];  // can be used in custom pieces
+        // uint16  mTexIndices[NUM_PBSM_TEXTURE_TYPES];
 
         CubemapProbe *mCubemapProbe;
 
         /// @see PbsBrdf::PbsBrdf
-        uint32  mBrdf;
+        uint32 mBrdf;
 
-        virtual void cloneImpl( HlmsDatablock *datablock ) const;
+        void cloneImpl( HlmsDatablock *datablock ) const override;
 
-        virtual bool bakeTextures( bool hasSeparateSamplers );
-        void scheduleConstBufferUpdate(void);
-        virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
-        virtual void notifyOptimizationStrategyChanged(void);
+        bool bakeTextures( bool hasSeparateSamplers ) override;
+        void scheduleConstBufferUpdate();
+        void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags ) override;
+        void notifyOptimizationStrategyChanged() override;
 
     public:
         /** Valid parameters in params:
@@ -358,39 +360,38 @@ namespace Ogre
               When set to false transparency calculations ignore the alpha channel in
               the textures
         */
-        HlmsPbsDatablock( IdString name, HlmsPbs *creator,
-                          const HlmsMacroblock *macroblock,
-                          const HlmsBlendblock *blendblock,
-                          const HlmsParamVec &params );
-        virtual ~HlmsPbsDatablock();
+        HlmsPbsDatablock( IdString name, HlmsPbs *creator, const HlmsMacroblock *macroblock,
+                          const HlmsBlendblock *blendblock, const HlmsParamVec &params );
+        ~HlmsPbsDatablock() override;
 
         /// Sets the diffuse background colour. When no diffuse texture is present, this
         /// solid colour replaces it, and can act as a background for the detail maps.
-        void setBackgroundDiffuse( const ColourValue &bgDiffuse );
-        ColourValue getBackgroundDiffuse(void) const;
+        void        setBackgroundDiffuse( const ColourValue &bgDiffuse );
+        ColourValue getBackgroundDiffuse() const;
 
-        /// Sets the diffuse colour (final multiplier). The colour will be divided by PI for energy conservation.
-        void setDiffuse( const Vector3 &diffuseColour );
-        Vector3 getDiffuse(void) const;
+        /// Sets the diffuse colour (final multiplier). The colour will be divided by PI for energy
+        /// conservation.
+        void    setDiffuse( const Vector3 &diffuseColour );
+        Vector3 getDiffuse() const;
 
         /// Sets the specular colour.
-        void setSpecular( const Vector3 &specularColour );
-        Vector3 getSpecular(void) const;
+        void    setSpecular( const Vector3 &specularColour );
+        Vector3 getSpecular() const;
 
         /// Sets the roughness
-        void setRoughness( float roughness );
-        float getRoughness(void) const;
+        void  setRoughness( float roughness );
+        float getRoughness() const;
 
         /// Sets emissive colour (e.g. a firefly). Emissive colour has no physical basis.
         /// Though in HDR, if you're working in lumens, this value should probably be in lumens too.
         /// To disable emissive, setEmissive( Vector3::ZERO ) and unset any texture
         /// in PBSM_EMISSIVE slot.
-        void setEmissive( const Vector3 &emissiveColour );
-        Vector3 getEmissive(void) const;
+        void    setEmissive( const Vector3 &emissiveColour );
+        Vector3 getEmissive() const;
         /// Returns true iif getEmissive is non-zero
-        bool hasEmissiveConstant(void) const;
+        bool hasEmissiveConstant() const;
         /// Returns true if getEmissive is non-zero or if there is an emissive texture set
-        bool _hasEmissive(void) const;
+        bool _hasEmissive() const;
 
         /** Sets whether to use a specular workflow, or a metallic workflow.
         @remarks
@@ -410,8 +411,8 @@ namespace Ogre
             it could cause a stall.
         @param bEnableMetallic
         */
-        void setWorkflow( Workflows workflow );
-        Workflows getWorkflow(void) const;
+        void      setWorkflow( Workflows workflow );
+        Workflows getWorkflow() const;
 
         /** Sets the metalness in a metallic workflow.
         @remarks
@@ -420,8 +421,8 @@ namespace Ogre
         @param metalness
             Value in range [0; 1]
         */
-        void setMetalness( float metalness );
-        float getMetalness(void) const;
+        void  setMetalness( float metalness );
+        float getMetalness() const;
 
         /** Calculates fresnel (F0 in most books) based on the IOR.
             The formula used is ( (1 - idx) / (1 + idx) )²
@@ -454,14 +455,14 @@ namespace Ogre
         /// the Y and Z components still correspond to mFresnelG & mFresnelB just
         /// in case you want to preserve this data (i.e. toggling separate fresnel
         /// often (which is not a good idea though, in terms of performance)
-        Vector3 getFresnel(void) const;
+        Vector3 getFresnel() const;
 
         /// Whether the same fresnel term is used for RGB, or individual ones for each channel
-        bool hasSeparateFresnel(void) const;
+        bool hasSeparateFresnel() const;
 
         using HlmsPbsBaseTextureDatablock::setTexture;
         void setTexture( PbsTextureTypes texUnit, const String &name,
-                         const HlmsSamplerblock *refParams=0 );
+                         const HlmsSamplerblock *refParams = 0 );
 
         /** Sets which UV set to use for the given texture.
             Calling this function triggers a HlmsDatablock::flushRenderables.
@@ -515,7 +516,7 @@ namespace Ogre
         void setNormalMapWeight( Real weight );
 
         /// Returns the detail normal maps' weight
-        Real getNormalMapWeight(void) const;
+        Real getNormalMapWeight() const;
 
         /** Sets the weight of detail map. Affects both diffuse and
             normal at the same time.
@@ -545,7 +546,7 @@ namespace Ogre
             ZW = Constains the UV scale.
             Default value is Vector4( 0, 0, 1, 1 )
         */
-        void setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale );
+        void    setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale );
         Vector4 getDetailMapOffsetScale( uint8 detailMap ) const;
 
         /** Allows support for two sided lighting. Disabled by default (faster)
@@ -558,18 +559,16 @@ namespace Ogre
             or set it to false to leave the current macroblock as is.
         @param oneSidedShadowCast
             If changeMacroblock == true; this parameter controls the culling mode of the
-            shadow caster (the setting of HlmsManager::setShadowMappingUseBackFaces is ignored!).
+            shadow caster.
             While oneSidedShadowCast == CULL_NONE is usually the "correct" option, setting
             oneSidedShadowCast=CULL_ANTICLOCKWISE can prevent ugly self-shadowing on interiors.
         */
-        void setTwoSidedLighting( bool twoSided, bool changeMacroblock=true,
-                                  CullingMode oneSidedShadowCast=CULL_ANTICLOCKWISE );
-        bool getTwoSidedLighting(void) const;
+        void setTwoSidedLighting( bool twoSided, bool changeMacroblock = true,
+                                  CullingMode oneSidedShadowCast = CULL_NONE );
+        bool getTwoSidedLighting() const;
 
-        virtual bool hasCustomShadowMacroblock(void) const;
-
-        virtual void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
-                                   bool useAlphaFromTextures = true );
+        void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
+                           bool useAlphaFromTextures = true ) override;
 
         /** @see HlmsDatablock::setAlphaTest
         @remarks
@@ -579,7 +578,7 @@ namespace Ogre
             If there are no diffuse nor detail-diffuse maps, the alpha test is
             compared against the value 1.0
         */
-        virtual void setAlphaTestThreshold( float threshold );
+        void setAlphaTestThreshold( float threshold ) override;
 
         /** Makes the material transparent, and sets the amount of transparency
         @param transparency
@@ -599,9 +598,9 @@ namespace Ogre
         void setTransparency( float transparency, TransparencyModes mode = Transparent,
                               bool useAlphaFromTextures = true, bool changeBlendblock = true );
 
-        float getTransparency(void) const                           { return mTransparencyValue; }
-        TransparencyModes getTransparencyMode(void) const           { return mTransparencyMode; }
-        bool getUseAlphaFromTextures(void) const                    { return mUseAlphaFromTextures; }
+        float             getTransparency() const { return mTransparencyValue; }
+        TransparencyModes getTransparencyMode() const { return mTransparencyMode; }
+        bool              getUseAlphaFromTextures() const { return mUseAlphaFromTextures; }
 
         /** Sets the strength of the refraction, i.e. how much displacement in screen space.
 
@@ -613,8 +612,8 @@ namespace Ogre
             we have to fallback to regular alpha blending due to the screen space pixel landing
             outside the screen)
         */
-        void setRefractionStrength( float strength );
-        float getRefractionStrength( void ) const                   { return mRefractionStrength; }
+        void  setRefractionStrength( float strength );
+        float getRefractionStrength() const { return mRefractionStrength; }
 
         /** Sets the strength of the of the clear coat layer and its roughness.
         @param strength
@@ -622,10 +621,10 @@ namespace Ogre
             useful to control transitions between parts of the surface that have a clear coat layers and
             parts that don't.
         */
-        void setClearCoat( float clearCoat );
-        void setClearCoatRoughness( float roughness );
-        float getClearCoat( void ) const               { return mClearCoat; }
-        float getClearCoatRoughness( void ) const      { return mClearCoatRoughness; }
+        void  setClearCoat( float clearCoat );
+        void  setClearCoatRoughness( float roughness );
+        float getClearCoat() const { return mClearCoat; }
+        float getClearCoatRoughness() const { return mClearCoatRoughness; }
 
         /** When false, objects with this material will not receive shadows (independent of
             whether they case shadows or not)
@@ -637,13 +636,13 @@ namespace Ogre
             Whether to enable or disable receiving shadows.
         */
         void setReceiveShadows( bool receiveShadows );
-        bool getReceiveShadows(void) const;
+        bool getReceiveShadows() const;
 
         /** Sets the value of the userValue, this can be used in a custom piece
         @param userValueIdx
             Which userValue to modify, in the range [0; 3)
         */
-        void setUserValue( uint8 userValueIdx, const Vector4 &value );
+        void    setUserValue( uint8 userValueIdx, const Vector4 &value );
         Vector4 getUserValue( uint8 userValueIdx ) const;
 
         /** When set, it treats the emissive map as a lightmap; which means it will
@@ -653,7 +652,7 @@ namespace Ogre
             thus set it to 1 to avoid surprises.
         */
         void setUseEmissiveAsLightmap( bool bUseEmissiveAsLightmap );
-        bool getUseEmissiveAsLightmap(void) const;
+        bool getUseEmissiveAsLightmap() const;
 
         /** When set, it treats the diffuse map as a grayscale map; which means it will
             spread red component to all rgb channels.
@@ -661,7 +660,7 @@ namespace Ogre
             With this option you can use PFG_R8_UNORM for diffuse map in the same way as old PF_L8 format
         */
         void setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale );
-        bool getUseDiffuseMapAsGrayscale( void ) const;
+        bool getUseDiffuseMapAsGrayscale() const;
 
         /** Manually set a probe to affect this particular material.
         @remarks
@@ -711,13 +710,13 @@ namespace Ogre
             The probe that should affect this material to enable manual mode.
             Null pointer to disable manual mode and switch to auto.
         */
-        void setCubemapProbe( CubemapProbe *probe );
-        CubemapProbe* getCubemapProbe(void) const;
+        void          setCubemapProbe( CubemapProbe *probe );
+        CubemapProbe *getCubemapProbe() const;
 
         /// Changes the BRDF in use. Calling this function may trigger an
         /// HlmsDatablock::flushRenderables
-        void setBrdf( PbsBrdf::PbsBrdf brdf );
-        uint32 getBrdf(void) const;
+        void   setBrdf( PbsBrdf::PbsBrdf brdf );
+        uint32 getBrdf() const;
 
         /** Helper function to import & convert values from Unity (specular workflow).
         @param changeBrdf
@@ -743,27 +742,27 @@ namespace Ogre
             You could create an alias however, and thus have two copies of the same texture with
             different loading parameters.
         */
-        bool suggestUsingSRGB( PbsTextureTypes type ) const;
+        bool   suggestUsingSRGB( PbsTextureTypes type ) const;
         uint32 suggestFiltersForType( PbsTextureTypes type ) const;
 
-        virtual ColourValue getDiffuseColour(void) const;
-        virtual ColourValue getEmissiveColour(void) const;
-        virtual TextureGpu* getDiffuseTexture(void) const;
-        virtual TextureGpu* getEmissiveTexture(void) const;
+        ColourValue getDiffuseColour() const override;
+        ColourValue getEmissiveColour() const override;
+        TextureGpu *getDiffuseTexture() const override;
+        TextureGpu *getEmissiveTexture() const override;
 
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
 
-        virtual void calculateHash();
+        void calculateHash() override;
 
-        static const size_t MaterialSizeInGpu;
-        static const size_t MaterialSizeInGpuAligned;
+        static const uint32 MaterialSizeInGpu;
+        static const uint32 MaterialSizeInGpuAligned;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

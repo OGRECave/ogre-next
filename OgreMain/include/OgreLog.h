@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,34 +30,29 @@ THE SOFTWARE.
 #define __Log_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCommon.h"
 #include "Threading/OgreLightweightMutex.h"
 
-#include "ogrestd/vector.h"
 #include <iosfwd>
+
+#include "ogrestd/vector.h"
 
 #include "OgreHeaderPrefix.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_NACL
-namespace pp
+namespace Ogre
 {
-    class Instance;
-}
-#endif
-
-namespace Ogre {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup General
-    *  @{
-    */
-    // LogMessageLevel + LoggingLevel > OGRE_LOG_THRESHOLD = message logged
-    #define OGRE_LOG_THRESHOLD 4
+/** \addtogroup Core
+ *  @{
+ */
+/** \addtogroup General
+ *  @{
+ */
+// LogMessageLevel + LoggingLevel > OGRE_LOG_THRESHOLD = message logged
+#define OGRE_LOG_THRESHOLD 4
 
     /** The level of detail to which the log will go into.
-    */
+     */
     enum LoggingLevel
     {
         LL_LOW = 1,
@@ -66,7 +61,7 @@ namespace Ogre {
     };
 
     /** The importance of a logged message.
-    */
+     */
     enum LogMessageLevel
     {
         LML_TRIVIAL = 1,
@@ -74,7 +69,8 @@ namespace Ogre {
         LML_CRITICAL = 3
     };
 
-    /** @remarks Pure Abstract class, derive this class and register to the Log to listen to log messages */
+    /** @remarks Pure Abstract class, derive this class and register to the Log to listen to log messages
+     */
     class _OgreExport LogListener
     {
     public:
@@ -90,13 +86,14 @@ namespace Ogre {
         @param maskDebug
             If we are printing to the console or not
         @param logName
-            The name of this log (so you can have several listeners for different logs, and identify them)
+            The name of this log (so you can have several listeners for different logs, and identify
+        them)
         @param skipThisMessage
             If set to true by the messageLogged() implementation message will not be logged
         */
-        virtual void messageLogged( const String& message, LogMessageLevel lml, bool maskDebug, const String &logName, bool& skipThisMessage ) = 0;
+        virtual void messageLogged( const String &message, LogMessageLevel lml, bool maskDebug,
+                                    const String &logName, bool &skipThisMessage ) = 0;
     };
-
 
     /**
     @remarks
@@ -104,29 +101,29 @@ namespace Ogre {
     @note
         <br>Should not be used directly, but trough the LogManager class.
     */
-    class _OgreExport Log : public LogAlloc
+    class _OgreExport Log : public OgreAllocatedObj
     {
     protected:
-        std::ofstream   *mLog;
-        LoggingLevel    mLogLevel;
-        bool            mDebugOut;
-        bool            mSuppressFile;
-        bool            mTimeStamp;
-        String          mLogName;
+        std::ofstream *mLog;
+        LoggingLevel   mLogLevel;
+        bool           mDebugOut;
+        bool           mSuppressFile;
+        bool           mTimeStamp;
+        String         mLogName;
 
-        typedef vector<LogListener*>::type mtLogListener;
-        mtLogListener mListeners;
+        typedef vector<LogListener *>::type mtLogListener;
+        mtLogListener                       mListeners;
+
     public:
-
         class Stream;
 
-        LightweightMutex mMutex; // public to allow external locking
+        LightweightMutex mMutex;  // public to allow external locking
 
         /**
         @remarks
             Usual constructor - called by LogManager.
         */
-        Log( const String& name, bool debugOutput = true, bool suppressFileOutput = false);
+        Log( const String &name, bool debugOutput = true, bool suppressFileOutput = false );
 
         /**
         @remarks
@@ -135,7 +132,7 @@ namespace Ogre {
         ~Log();
 
         /// Return the name of the log
-        const String& getName() const { return mLogName; }
+        const String &getName() const { return mLogName; }
         /// Get whether debug output is enabled for this log
         bool isDebugOutputEnabled() const { return mDebugOut; }
         /// Get whether file output is suppressed for this log
@@ -146,28 +143,29 @@ namespace Ogre {
         /** Log a message to the debugger and to log file (the default is
             "<code>OGRE.log</code>"),
         */
-        void logMessage( const String& message, LogMessageLevel lml = LML_NORMAL, bool maskDebug = false );
+        void logMessage( const String &message, LogMessageLevel lml = LML_NORMAL,
+                         bool maskDebug = false );
 
         /** Get a stream object targeting this log. */
-        Stream stream(LogMessageLevel lml = LML_NORMAL, bool maskDebug = false);
+        Stream stream( LogMessageLevel lml = LML_NORMAL, bool maskDebug = false );
 
         /**
         @remarks
             Enable or disable outputting log messages to the debugger.
         */
-        void setDebugOutputEnabled(bool debugOutput);
+        void setDebugOutputEnabled( bool debugOutput );
         /**
         @remarks
             Sets the level of the log detail.
         */
-        void setLogDetail(LoggingLevel ll);
+        void setLogDetail( LoggingLevel ll );
         /**
         @remarks
             Enable or disable time stamps.
         */
-        void setTimeStampEnabled(bool timeStamp);
+        void setTimeStampEnabled( bool timeStamp );
         /** Gets the level of the log detail.
-        */
+         */
         LoggingLevel getLogDetail() const { return mLogLevel; }
         /**
         @remarks
@@ -175,7 +173,7 @@ namespace Ogre {
         @param listener
             A valid listener derived class
         */
-        void addListener(LogListener* listener);
+        void addListener( LogListener *listener );
 
         /**
         @remarks
@@ -183,20 +181,20 @@ namespace Ogre {
         @param listener
             A valid listener derived class
         */
-        void removeListener(LogListener* listener);
+        void removeListener( LogListener *listener );
 
         /** Stream object which targets a log.
         @remarks
-            A stream logger object makes it simpler to send various things to 
-            a log. You can just use the operator<< implementation to stream 
+            A stream logger object makes it simpler to send various things to
+            a log. You can just use the operator<< implementation to stream
             anything to the log, which is cached until a Stream::Flush is
-            encountered, or the stream itself is destroyed, at which point the 
+            encountered, or the stream itself is destroyed, at which point the
             cached contents are sent to the underlying log. You can use Log::stream()
             directly without assigning it to a local variable and as soon as the
             streaming is finished, the object will be destroyed and the message
             logged.
         @par
-            You can stream control operations to this object too, such as 
+            You can stream control operations to this object too, such as
             std::setw() and std::setfill() to control formatting.
         @note
             Each Stream object is not thread safe, so do not pass it between
@@ -206,11 +204,12 @@ namespace Ogre {
         class _OgreExport Stream
         {
         protected:
-            Log* mTarget;
+            Log            *mTarget;
             LogMessageLevel mLevel;
-            bool mMaskDebug;
+            bool            mMaskDebug;
+
             typedef StringStream BaseStream;
-            BaseStream *mCache;
+            BaseStream          *mCache;
 
         public:
             Stream( Log *target, LogMessageLevel lml, bool maskDebug );
@@ -219,23 +218,16 @@ namespace Ogre {
             ~Stream();
 
             template <typename T>
-            _OgrePrivate Stream& operator<< (const T& v)
+            _OgrePrivate Stream &operator<<( const T &v )
             {
                 *mCache << v;
                 return *this;
             }
         };
-#if OGRE_PLATFORM == OGRE_PLATFORM_NACL
-    protected:
-        static pp::Instance* mInstance;
-    public:
-        static void setInstance(pp::Instance* instance) {mInstance = instance;};
-#endif
-
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

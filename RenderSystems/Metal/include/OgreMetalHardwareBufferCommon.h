@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,69 +30,70 @@ THE SOFTWARE.
 #define _OgreMetalHardwareBufferCommon_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreHardwareBuffer.h"
 
 namespace Ogre
 {
-namespace v1
-{
-    /// Common buffer operations for most v1 buffer interfaces used in Metal
-    /// This implementation treats:
-    ///		Ignores STATIC and DYNAMIC bit in buffers
-    ///		Lack of WRITE_ONLY and DISCARDABLE buffer puts it in slowest path.
-    ///		Puts WRITE_ONLY in device memory and uses staging buffers to avoid blocking.
-    ///			Use WRITE_ONLY when possible.
-    ///		When DISCARDABLE bit is set, it uses MetalDiscardBuffer.
-    class _OgreMetalExport MetalHardwareBufferCommon
+    namespace v1
     {
-    private:
-        id<MTLBuffer>       mBuffer;
-        size_t              mSizeBytes;
-        MetalDevice         *mDevice;
-        MetalDiscardBuffer  *mDiscardBuffer;
-        VaoManager          *mVaoManager;
-        StagingBuffer       *mStagingBuffer;
-        uint32              mLastFrameUsed;
-        uint32              mLastFrameGpuWrote;
+        /// Common buffer operations for most v1 buffer interfaces used in Metal
+        /// This implementation treats:
+        ///		Ignores STATIC and DYNAMIC bit in buffers
+        ///		Lack of WRITE_ONLY and DISCARDABLE buffer puts it in slowest path.
+        ///		Puts WRITE_ONLY in device memory and uses staging buffers to avoid blocking.
+        ///			Use WRITE_ONLY when possible.
+        ///		When DISCARDABLE bit is set, it uses MetalDiscardBuffer.
+        class _OgreMetalExport MetalHardwareBufferCommon
+        {
+        private:
+            id<MTLBuffer>       mBuffer;
+            size_t              mSizeBytes;
+            MetalDevice        *mDevice;
+            MetalDiscardBuffer *mDiscardBuffer;
+            VaoManager         *mVaoManager;
+            StagingBuffer      *mStagingBuffer;
+            uint32              mLastFrameUsed;
+            uint32              mLastFrameGpuWrote;
 
-    public:
-        MetalHardwareBufferCommon( size_t sizeBytes, HardwareBuffer::Usage usage, uint16 alignment,
-                                   MetalDiscardBufferManager *discardBufferManager,
-                                   MetalDevice *device );
-        virtual ~MetalHardwareBufferCommon();
+        public:
+            MetalHardwareBufferCommon( size_t sizeBytes, HardwareBuffer::Usage usage, uint16 alignment,
+                                       MetalDiscardBufferManager *discardBufferManager,
+                                       MetalDevice               *device );
+            virtual ~MetalHardwareBufferCommon();
 
-        void _notifyDeviceStalled(void);
+            void _notifyDeviceStalled();
 
-        /** Returns the actual API buffer, but first sets mLastFrameUsed as we
-            assume you're calling this function to use the buffer in the GPU.
-        @param outOffset
-            Out. Guaranteed to be written. Used by HBU_DISCARDABLE buffers which
-            need an offset to the internal ring buffer we've allocated.
-        @return
-            The MTLBuffer in question.
-        */
-        id<MTLBuffer> getBufferName( size_t &outOffset );
-        id<MTLBuffer> getBufferNameForGpuWrite(void);
+            /** Returns the actual API buffer, but first sets mLastFrameUsed as we
+                assume you're calling this function to use the buffer in the GPU.
+            @param outOffset
+                Out. Guaranteed to be written. Used by HBU_DISCARDABLE buffers which
+                need an offset to the internal ring buffer we've allocated.
+            @return
+                The MTLBuffer in question.
+            */
+            id<MTLBuffer> getBufferName( size_t &outOffset );
+            id<MTLBuffer> getBufferNameForGpuWrite();
 
-        /// @see HardwareBuffer.
-        void* lockImpl( size_t offset, size_t length,
-                        HardwareBuffer::LockOptions options, bool isLocked );
-        /// @see HardwareBuffer.
-        void unlockImpl( size_t lockStart, size_t lockSize );
+            /// @see HardwareBuffer.
+            void *lockImpl( size_t offset, size_t length, HardwareBuffer::LockOptions options,
+                            bool isLocked );
+            /// @see HardwareBuffer.
+            void unlockImpl( size_t lockStart, size_t lockSize );
 
-        /// @see HardwareBuffer.
-        void readData( size_t offset, size_t length, void* pDest );
+            /// @see HardwareBuffer.
+            void readData( size_t offset, size_t length, void *pDest );
 
-        /// @see HardwareBuffer.
-        void writeData( size_t offset, size_t length,
-                        const void* pSource, bool discardWholeBuffer = false );
-        /// @see HardwareBuffer.
-        void copyData( MetalHardwareBufferCommon *srcBuffer, size_t srcOffset,
-                       size_t dstOffset, size_t length, bool discardWholeBuffer = false );
+            /// @see HardwareBuffer.
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false );
+            /// @see HardwareBuffer.
+            void copyData( MetalHardwareBufferCommon *srcBuffer, size_t srcOffset, size_t dstOffset,
+                           size_t length, bool discardWholeBuffer = false );
 
-        size_t getSizeBytes(void) const         { return mSizeBytes; }
-    };
-}
-}
+            size_t getSizeBytes() const { return mSizeBytes; }
+        };
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -133,13 +133,13 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    CSGOperationSource::CSGOperationSource(void) : mA(0), mB(0)
+    CSGOperationSource::CSGOperationSource() : mA(0), mB(0)
     {
     }
     
     //-----------------------------------------------------------------------
 
-    const Source* CSGOperationSource::getSourceA(void) const
+    const Source* CSGOperationSource::getSourceA() const
     {
         return mA;
     }
@@ -153,7 +153,7 @@ namespace Volume {
 
     //-----------------------------------------------------------------------
 
-    const Source* CSGOperationSource::getSourceB(void) const
+    const Source* CSGOperationSource::getSourceB() const
     {
         return mB;
     }
@@ -173,7 +173,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    CSGIntersectionSource::CSGIntersectionSource(void) : CSGOperationSource()
+    CSGIntersectionSource::CSGIntersectionSource() : CSGOperationSource()
     {
     }
     
@@ -211,7 +211,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    CSGUnionSource::CSGUnionSource(void) : CSGOperationSource()
+    CSGUnionSource::CSGUnionSource() : CSGOperationSource()
     {
     }
     
@@ -249,7 +249,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    CSGDifferenceSource::CSGDifferenceSource(void) : CSGOperationSource()
+    CSGDifferenceSource::CSGDifferenceSource() : CSGOperationSource()
     {
     }
     
@@ -287,13 +287,13 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    CSGUnarySource::CSGUnarySource(void) : mSrc(0)
+    CSGUnarySource::CSGUnarySource() : mSrc(0)
     {
     }
     
     //-----------------------------------------------------------------------
 
-    const Source* CSGUnarySource::getSource(void) const
+    const Source* CSGUnarySource::getSource() const
     {
         return mSrc;
     }
@@ -313,7 +313,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    CSGNegateSource::CSGNegateSource(void) : CSGUnarySource()
+    CSGNegateSource::CSGNegateSource() : CSGUnarySource()
     {
     }
     
@@ -353,7 +353,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    void CSGNoiseSource::setData(void)
+    void CSGNoiseSource::setData()
     {
         mGradientOff = fabs(mFrequencies[0]);
         for (size_t i = 1; i < mNumOctaves; ++i)
@@ -403,7 +403,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    long CSGNoiseSource::getSeed(void) const
+    long CSGNoiseSource::getSeed() const
     {
         return mSeed;
     }

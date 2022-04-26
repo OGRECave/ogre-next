@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,10 +26,11 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgrePredefinedControllers.h"
 
-#include "OgreRoot.h"
 #include "OgreMath.h"
+#include "OgreRoot.h"
 #include "OgreTextureUnitState.h"
 
 namespace Ogre
@@ -40,23 +41,22 @@ namespace Ogre
     FrameTimeControllerValue::FrameTimeControllerValue()
     {
         // Register self
-        Root::getSingleton().addFrameListener(this);
+        Root::getSingleton().addFrameListener( this );
         mFrameTime = 0;
         mTimeFactor = 1;
         mFrameDelay = 0;
         mElapsedTime = 0;
-
     }
     //-----------------------------------------------------------------------
-    bool FrameTimeControllerValue::frameStarted(const FrameEvent &evt)
+    bool FrameTimeControllerValue::frameStarted( const FrameEvent &evt )
     {
-        if(mFrameDelay) 
+        if( mFrameDelay != 0.0 )
         {
             // Fixed frame time
             mFrameTime = mFrameDelay;
-            mTimeFactor =  mFrameDelay / evt.timeSinceLastFrame;
+            mTimeFactor = mFrameDelay / evt.timeSinceLastFrame;
         }
-        else 
+        else
         {
             // Save the time value after applying time factor
             mFrameTime = mTimeFactor * evt.timeSinceLastFrame;
@@ -66,75 +66,64 @@ namespace Ogre
         return true;
     }
     //-----------------------------------------------------------------------
-    bool FrameTimeControllerValue::frameEnded(const FrameEvent &evt)
-    {
-        return true;
-    }
+    bool FrameTimeControllerValue::frameEnded( const FrameEvent &evt ) { return true; }
     //-----------------------------------------------------------------------
-    Real FrameTimeControllerValue::getValue() const
-    {
-        return mFrameTime;
-    }
+    Real FrameTimeControllerValue::getValue() const { return mFrameTime; }
     //-----------------------------------------------------------------------
-    void FrameTimeControllerValue::setValue(Real value)
+    void FrameTimeControllerValue::setValue( Real value )
     {
         // Do nothing - value is set from frame listener
     }
     //-----------------------------------------------------------------------
-    Real FrameTimeControllerValue::getTimeFactor(void) const {
-        return mTimeFactor;
-    }
+    Real FrameTimeControllerValue::getTimeFactor() const { return mTimeFactor; }
     //-----------------------------------------------------------------------
-    void FrameTimeControllerValue::setTimeFactor(Real tf) {
-        if(tf >= 0) 
+    void FrameTimeControllerValue::setTimeFactor( Real tf )
+    {
+        if( tf >= 0 )
         {
             mTimeFactor = tf;
             mFrameDelay = 0;
         }
     }
     //-----------------------------------------------------------------------
-    Real FrameTimeControllerValue::getFrameDelay(void) const {
-        return mFrameDelay;
-    }
+    Real FrameTimeControllerValue::getFrameDelay() const { return mFrameDelay; }
     //-----------------------------------------------------------------------
-    void FrameTimeControllerValue::setFrameDelay(Real fd) {
+    void FrameTimeControllerValue::setFrameDelay( Real fd )
+    {
         mTimeFactor = 0;
         mFrameDelay = fd;
     }
     //-----------------------------------------------------------------------
-    Real FrameTimeControllerValue::getElapsedTime(void) const
-    {
-        return mElapsedTime;
-    }
+    Real FrameTimeControllerValue::getElapsedTime() const { return mElapsedTime; }
     //-----------------------------------------------------------------------
-    void FrameTimeControllerValue::setElapsedTime(Real elapsedTime)
-    {
-        mElapsedTime = elapsedTime;
-    }
+    void FrameTimeControllerValue::setElapsedTime( Real elapsedTime ) { mElapsedTime = elapsedTime; }
     //-----------------------------------------------------------------------
     // TextureFrameControllerValue
     //-----------------------------------------------------------------------
-    TextureFrameControllerValue::TextureFrameControllerValue(TextureUnitState* t)
+    TextureFrameControllerValue::TextureFrameControllerValue( TextureUnitState *t )
     {
         mTextureLayer = t;
     }
     //-----------------------------------------------------------------------
-    Real TextureFrameControllerValue::getValue(void) const
+    Real TextureFrameControllerValue::getValue() const
     {
-        int numFrames = mTextureLayer->getNumFrames();
-        return ((Real)mTextureLayer->getCurrentFrame() / (Real)numFrames);
+        const unsigned int numFrames = mTextureLayer->getNumFrames();
+        return ( (Real)mTextureLayer->getCurrentFrame() / (Real)numFrames );
     }
     //-----------------------------------------------------------------------
-    void TextureFrameControllerValue::setValue(Real value)
+    void TextureFrameControllerValue::setValue( Real value )
     {
-        int numFrames = mTextureLayer->getNumFrames();
-        mTextureLayer->setCurrentFrame((int)(value * numFrames) % numFrames);
+        const unsigned int numFrames = mTextureLayer->getNumFrames();
+        mTextureLayer->setCurrentFrame( static_cast<unsigned int>( value * Real( numFrames ) ) %
+                                        numFrames );
     }
     //-----------------------------------------------------------------------
     // TexCoordModifierControllerValue
     //-----------------------------------------------------------------------
-    TexCoordModifierControllerValue::TexCoordModifierControllerValue(TextureUnitState* t,
-        bool translateU, bool translateV, bool scaleU, bool scaleV, bool rotate )
+    TexCoordModifierControllerValue::TexCoordModifierControllerValue( TextureUnitState *t,
+                                                                      bool translateU, bool translateV,
+                                                                      bool scaleU, bool scaleV,
+                                                                      bool rotate )
     {
         mTextureLayer = t;
         mTransU = translateU;
@@ -146,20 +135,20 @@ namespace Ogre
     //-----------------------------------------------------------------------
     Real TexCoordModifierControllerValue::getValue() const
     {
-        const Matrix4& pMat = mTextureLayer->getTextureTransform();
-        if (mTransU)
+        const Matrix4 &pMat = mTextureLayer->getTextureTransform();
+        if( mTransU )
         {
             return pMat[0][3];
         }
-        else if (mTransV)
+        else if( mTransV )
         {
             return pMat[1][3];
         }
-        else if (mScaleU)
+        else if( mScaleU )
         {
             return pMat[0][0];
         }
-        else if (mScaleV)
+        else if( mScaleV )
         {
             return pMat[1][1];
         }
@@ -167,111 +156,106 @@ namespace Ogre
         return 0;
     }
     //-----------------------------------------------------------------------
-    void TexCoordModifierControllerValue::setValue(Real value)
+    void TexCoordModifierControllerValue::setValue( Real value )
     {
-        if (mTransU)
+        if( mTransU )
         {
-            mTextureLayer->setTextureUScroll(value);
+            mTextureLayer->setTextureUScroll( value );
         }
-        if (mTransV)
+        if( mTransV )
         {
-            mTextureLayer->setTextureVScroll(value);
+            mTextureLayer->setTextureVScroll( value );
         }
-        if (mScaleU)
+        if( mScaleU )
         {
-            mTextureLayer->setTextureUScale(value);
+            mTextureLayer->setTextureUScale( value );
         }
-        if (mScaleV)
+        if( mScaleV )
         {
-            mTextureLayer->setTextureVScale(value);
+            mTextureLayer->setTextureVScale( value );
         }
-        if (mRotate)
+        if( mRotate )
         {
-            mTextureLayer->setTextureRotate(Radian(value * Math::TWO_PI));
+            mTextureLayer->setTextureRotate( Radian( value * Math::TWO_PI ) );
         }
     }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     FloatGpuParameterControllerValue::FloatGpuParameterControllerValue(
-            GpuProgramParametersSharedPtr params, size_t index) :
-        mParams(params), mParamIndex(index)
+        GpuProgramParametersSharedPtr params, size_t index ) :
+        mParams( params ),
+        mParamIndex( index )
     {
     }
     //-----------------------------------------------------------------------
-    Real FloatGpuParameterControllerValue::getValue(void) const
+    Real FloatGpuParameterControllerValue::getValue() const
     {
         // do nothing, reading from a set of params not supported
         return 0.0f;
     }
     //-----------------------------------------------------------------------
-    void FloatGpuParameterControllerValue::setValue(Real val)
+    void FloatGpuParameterControllerValue::setValue( Real val )
     {
-        Vector4 v4 = Vector4(0,0,0,0);
+        Vector4 v4 = Vector4( 0, 0, 0, 0 );
         v4.x = val;
-        mParams->setConstant(mParamIndex, v4);
+        mParams->setConstant( mParamIndex, v4 );
     }
     //-----------------------------------------------------------------------
     // PassthroughControllerFunction
     //-----------------------------------------------------------------------
-    PassthroughControllerFunction::PassthroughControllerFunction(bool delta) 
-        : ControllerFunction<Real>(delta)
+    PassthroughControllerFunction::PassthroughControllerFunction( bool delta ) :
+        ControllerFunction<Real>( delta )
     {
     }
     //-----------------------------------------------------------------------
-    Real PassthroughControllerFunction::calculate(Real source)
-    {
-        return getAdjustedInput(source);
-
-    }
+    Real PassthroughControllerFunction::calculate( Real source ) { return getAdjustedInput( source ); }
     //-----------------------------------------------------------------------
     // AnimationControllerFunction
     //-----------------------------------------------------------------------
-    AnimationControllerFunction::AnimationControllerFunction(Real sequenceTime, Real timeOffset) 
-        : ControllerFunction<Real>(false)
+    AnimationControllerFunction::AnimationControllerFunction( Real sequenceTime, Real timeOffset ) :
+        ControllerFunction<Real>( false )
     {
         mSeqTime = sequenceTime;
         mTime = timeOffset;
     }
     //-----------------------------------------------------------------------
-    Real AnimationControllerFunction::calculate(Real source)
+    Real AnimationControllerFunction::calculate( Real source )
     {
         // Assume source is time since last update
         mTime += source;
         // Wrap
-        while (mTime >= mSeqTime) mTime -= mSeqTime;
-        while (mTime < 0) mTime += mSeqTime;
+        while( mTime >= mSeqTime )
+            mTime -= mSeqTime;
+        while( mTime < 0 )
+            mTime += mSeqTime;
 
         // Return parametric
         return mTime / mSeqTime;
     }
     //-----------------------------------------------------------------------
-    void AnimationControllerFunction::setTime(Real timeVal)
-    {
-        mTime = timeVal;
-    }
+    void AnimationControllerFunction::setTime( Real timeVal ) { mTime = timeVal; }
     //-----------------------------------------------------------------------
-    void AnimationControllerFunction::setSequenceTime(Real seqVal)
-    {
-        mSeqTime = seqVal;
-    }
+    void AnimationControllerFunction::setSequenceTime( Real seqVal ) { mSeqTime = seqVal; }
     //-----------------------------------------------------------------------
     // ScaleControllerFunction
     //-----------------------------------------------------------------------
-    ScaleControllerFunction::ScaleControllerFunction(Real factor, bool delta) : ControllerFunction<Real>(delta)
+    ScaleControllerFunction::ScaleControllerFunction( Real factor, bool delta ) :
+        ControllerFunction<Real>( delta )
     {
         mScale = factor;
     }
     //-----------------------------------------------------------------------
-    Real ScaleControllerFunction::calculate(Real source)
+    Real ScaleControllerFunction::calculate( Real source )
     {
-        return getAdjustedInput(source * mScale);
-
+        return getAdjustedInput( source * mScale );
     }
     //-----------------------------------------------------------------------
     // WaveformControllerFunction
     //-----------------------------------------------------------------------
-    WaveformControllerFunction::WaveformControllerFunction(WaveformType wType, Real base,  Real frequency, Real phase, Real amplitude, bool delta, Real dutyCycle)
-        :ControllerFunction<Real>(delta)
+    WaveformControllerFunction::WaveformControllerFunction( WaveformType wType, Real base,
+                                                            Real frequency, Real phase, Real amplitude,
+                                                            bool delta, Real dutyCycle ) :
+        ControllerFunction<Real>( delta )
     {
         mWaveType = wType;
         mBase = base;
@@ -282,13 +266,13 @@ namespace Ogre
         mDutyCycle = dutyCycle;
     }
     //-----------------------------------------------------------------------
-    Real WaveformControllerFunction::getAdjustedInput(Real input)
+    Real WaveformControllerFunction::getAdjustedInput( Real input )
     {
-        Real adjusted = ControllerFunction<Real>::getAdjustedInput(input);
+        Real adjusted = ControllerFunction<Real>::getAdjustedInput( input );
 
         // If not delta, adjust by phase here
         // (delta inputs have it adjusted at initialisation)
-        if (!mDeltaInput)
+        if( !mDeltaInput )
         {
             adjusted += mPhase;
         }
@@ -296,43 +280,40 @@ namespace Ogre
         return adjusted;
     }
     //-----------------------------------------------------------------------
-    Real WaveformControllerFunction::calculate(Real source)
+    Real WaveformControllerFunction::calculate( Real source )
     {
-        Real input = getAdjustedInput(source * mFrequency);
+        Real input = getAdjustedInput( source * mFrequency );
         Real output = 0;
-        // For simplicity, factor input down to {0,1)
-        // Use looped subtract rather than divide / round
-        while (input >= 1.0)
-            input -= 1.0;
-        while (input < 0.0)
-            input += 1.0;
+
+        // For simplicity, factor input down to [0,1)
+        input = Math::Wrap( input );
 
         // Calculate output in -1..1 range
-        switch (mWaveType)
+        switch( mWaveType )
         {
         case WFT_SINE:
-            output = Math::Sin(Radian(input * Math::TWO_PI));
+            output = Math::Sin( Radian( input * Math::TWO_PI ) );
             break;
         case WFT_TRIANGLE:
-            if (input < 0.25)
+            if( input < 0.25 )
                 output = input * 4;
-            else if (input >= 0.25 && input < 0.75)
-                output = 1.0f - ((input - 0.25f) * 4.0f);
+            else if( input >= 0.25 && input < 0.75 )
+                output = 1.0f - ( ( input - 0.25f ) * 4.0f );
             else
-                output = ((input - 0.75f) * 4.0f) - 1.0f;
+                output = ( ( input - 0.75f ) * 4.0f ) - 1.0f;
 
             break;
         case WFT_SQUARE:
-            if (input <= 0.5f)
+            if( input <= 0.5f )
                 output = 1.0f;
             else
                 output = -1.0f;
             break;
         case WFT_SAWTOOTH:
-            output = (input * 2.0f) - 1.0f;
+            output = ( input * 2.0f ) - 1.0f;
             break;
         case WFT_INVERSE_SAWTOOTH:
-            output = -((input * 2.0f) - 1.0f);
+            output = -( ( input * 2.0f ) - 1.0f );
             break;
         case WFT_PWM:
             if( input <= mDutyCycle )
@@ -343,28 +324,32 @@ namespace Ogre
         }
 
         // Scale output into 0..1 range and then by base + amplitude
-        return mBase + ((output + 1.0f) * 0.5f * mAmplitude);
-
-
+        return mBase + ( ( output + 1.0f ) * 0.5f * mAmplitude );
     }
     //-----------------------------------------------------------------------
     // LinearControllerFunction
     //-----------------------------------------------------------------------
-    LinearControllerFunction::LinearControllerFunction(const std::vector<Real>& keys, const std::vector<Real>& values, Real frequency, bool deltaInput) :
-            ControllerFunction<Real>(deltaInput), mFrequency(frequency), mKeys(keys), mValues(values) {
-        assert(mKeys.size() == mValues.size());
+    LinearControllerFunction::LinearControllerFunction( const std::vector<Real> &keys,
+                                                        const std::vector<Real> &values, Real frequency,
+                                                        bool deltaInput ) :
+        ControllerFunction<Real>( deltaInput ),
+        mFrequency( frequency ),
+        mKeys( keys ),
+        mValues( values )
+    {
+        assert( mKeys.size() == mValues.size() );
     }
     //-----------------------------------------------------------------------
-    Real LinearControllerFunction::calculate(Real source) {
-        Real input = getAdjustedInput(source*mFrequency);
+    Real LinearControllerFunction::calculate( Real source )
+    {
+        Real input = getAdjustedInput( source * mFrequency );
 
-        std::vector<Real>::iterator ifirst = std::lower_bound(mKeys.begin(), mKeys.end(), input);
-        size_t idx = ifirst - mKeys.begin() - 1;
+        std::vector<Real>::iterator ifirst = std::lower_bound( mKeys.begin(), mKeys.end(), input );
+        const size_t idx = static_cast<size_t>( ifirst - mKeys.begin() ) - 1u;
 
-        assert(ifirst != mKeys.end());
+        assert( ifirst != mKeys.end() );
 
-        Real alpha = (input - mKeys[idx])/(mKeys[idx + 1] - mKeys[idx]);
-        return mValues[idx] + alpha * (mValues[idx + 1] - mValues[idx]);
+        Real alpha = ( input - mKeys[idx] ) / ( mKeys[idx + 1] - mKeys[idx] );
+        return mValues[idx] + alpha * ( mValues[idx + 1] - mValues[idx] );
     }
-}
-
+}  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -31,13 +31,10 @@
 
 #include "OgreGLXGLSupport.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    inline GL3PlusSupport *getGLSupport() { return new GLXGLSupport(); }
 
-    inline GL3PlusSupport* getGLSupport()
-    {
-        return new GLXGLSupport();
-    }
+}  // namespace Ogre
 
-}
-
-#endif // INCL_OGRE_GLUTIL_H
+#endif  // INCL_OGRE_GLUTIL_H

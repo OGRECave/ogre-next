@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -31,34 +31,35 @@ THE SOFTWARE.
 #include "OgreGL3PlusContext.h"
 #include "OgreGLXGLSupport.h"
 
-namespace Ogre {
-
-    class _OgrePrivate GLXContext: public GL3PlusContext
+namespace Ogre
+{
+    class _OgrePrivate GLXContext final : public GL3PlusContext
     {
     public:
-        GLXContext(GLXGLSupport* glsupport, ::GLXFBConfig fbconfig, ::GLXDrawable drawable, ::GLXContext context = 0);
-        
-        virtual ~GLXContext();
-        
-        /// @copydoc GL3PlusContext::setCurrent
-        virtual void setCurrent();
-        
-        /// @copydoc GL3PlusContext::endCurrent
-        virtual void endCurrent();
-        
-        /// @copydoc GL3PlusContext::clone
-        GL3PlusContext* clone() const;
+        GLXContext( GLXGLSupport *glsupport, ::GLXFBConfig fbconfig, ::GLXDrawable drawable,
+                    ::GLXContext context = 0 );
 
-        ::GLXFBConfig _getFbConfig(void) const  { return mFBConfig; }
-        
-        ::GLXDrawable  mDrawable;
-        ::GLXContext   mContext;
-        
+        ~GLXContext() override;
+
+        /// @copydoc GL3PlusContext::setCurrent
+        void setCurrent() override;
+
+        /// @copydoc GL3PlusContext::endCurrent
+        void endCurrent() override;
+
+        /// @copydoc GL3PlusContext::clone
+        GL3PlusContext *clone() const override;
+
+        ::GLXFBConfig _getFbConfig() const { return mFBConfig; }
+
+        ::GLXDrawable mDrawable;
+        ::GLXContext  mContext;
+
     private:
-        ::GLXFBConfig  mFBConfig;
-        GLXGLSupport*  mGLSupport;
-        bool mExternalContext;
+        ::GLXFBConfig mFBConfig;
+        GLXGLSupport *mGLSupport;
+        bool          mExternalContext;
     };
-}
+}  // namespace Ogre
 
 #endif

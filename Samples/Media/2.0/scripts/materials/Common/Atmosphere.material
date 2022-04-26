@@ -1,0 +1,62 @@
+
+// GLSL shaders
+fragment_program Ogre/Atmo/NprSky_ps_GLSL glsl
+{
+	source AtmosphereNprSky_ps.glsl
+	preprocessor_defines GL
+	enable_include_header true
+}
+
+fragment_program Ogre/Atmo/NprSky_ps_VK glslvk
+{
+	source AtmosphereNprSky_ps.glsl
+	enable_include_header true
+}
+
+// HLSL shaders
+fragment_program Ogre/Atmo/NprSky_ps_HLSL hlsl
+{
+	source AtmosphereNprSky_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+// Metal shaders
+fragment_program Ogre/Atmo/NprSky_ps_Metal metal
+{
+	source AtmosphereNprSky_ps.metal
+	enable_include_header true
+	shader_reflection_pair_hint Ogre/Compositor/QuadCameraDirNoUV_vs
+}
+
+// Unified definitions
+fragment_program Ogre/Atmo/NprSky_ps unified
+{
+	delegate Ogre/Atmo/NprSky_ps_HLSL
+	delegate Ogre/Atmo/NprSky_ps_VK
+	delegate Ogre/Atmo/NprSky_ps_GLSL
+	delegate Ogre/Atmo/NprSky_ps_Metal
+}
+
+// Material definition
+material Ogre/Atmo/NprSky
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write off
+
+			cull_hardware none
+
+			vertex_program_ref Ogre/Compositor/QuadCameraDirNoUV_vs
+			{
+			}
+
+			fragment_program_ref Ogre/Atmo/NprSky_ps
+			{
+			}
+		}
+	}
+}

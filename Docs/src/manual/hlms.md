@@ -40,7 +40,7 @@ thus it is now properly supported. As a result:
 
 ## A lot of data is stored in "Blocks" {#HlmsChangesBlocks}
 
-Described in detail in the [Blocks section](#9.3.Blocks|outline), many
+Described in detail in the [Blocks section](#HlmsBlocks), many
 parameters have been grouped into blocks. Changing depth checks means
 changing the whole Macroblock.
 
@@ -187,7 +187,15 @@ Technically on OpenGL render systems (GL3+, GLES2) you could `const_cast`
 the pointers, change the block's parameters (mind you, the pointer is
 shared by other datablocks, so you will be changing them as well as side
 effect) and it would probably work. But it will definitely fail on D3D11
-render system.
+render system.  
+
+Refer to the following pages for parameter references:
+- @subpage hlmsblendblockref
+- @subpage hlmspbsdatablockref
+- @subpage hlmsunlitdatablockref
+- @subpage hlmsterradatablockref
+- @subpage hlmsmacroblockref
+- @subpage hlmssamplerref
 
 ## Datablocks {#HlmsBlocksDatablocks}
 
@@ -838,6 +846,7 @@ customized:
 | custom_ps_posExecution       |  Executed after all code from the Pixel Shader has been performed.|
 | custom_ps_uv_modifier_macros |  PBS specific. Allows you to override the macros defined in Samples/Media/Hlms/Pbs/Any/UvModifierMacros_piece_ps.any so you can apply custom transformations to each UV. e.g. `#undef UV_DIFFUSE #define UV_DIFFUSE( x ) ((x) * 2.0)` |
 | custom_ps_functions          | Used to declare functions outside the main body of the shader |
+| custom_ps_pixelData          | Declare additional data in `struct PixelData` from Pixel Shader |
 
 # Run-time rendering {#HlmsRuntimeRendering}
 
@@ -1383,6 +1392,37 @@ Although modern cards have &gt;= 1GB of available GPU memory, there
 still has to be room for geometry and RTTs (Render To Texture). Remember
 to keep an eye on your memory consumption at all times.
 
+
+### setWorkerThreadMinimumBudget warning {#setWorkerThreadMinimumBudget}
+
+If you're here, it's because you saw this warning in the Ogre.log:
+
+```
+setWorkerThreadMinimumBudget called with minNumSlices = 1 and minResolution = 4096
+which can be suboptimal given that maxSplitResolution = 2048
+```
+
+First, it's nothing serious.
+
+Second:
+
+- `maxSplitResolution` indicates when a texture is considered "too big". If it's too big, then it will be considered as an abnormality. This affects how we allocate memory for streaming.
+  - The problem is that a 4096x4096 RGBA8_UNORM texture is 64MB. If we'd expect this to be normal, then we expect a lot of textures like that to be streamed in and may reserve a lot of memory for a long of time, even if it goes unused.
+  - It is important to note that [GART/GTT size is 256 MB](https://en.wikipedia.org/wiki/Graphics_address_remapping_table), so with just one 4096² texture we're already close to that limit. Drivers can handle more, but they more work and having so much memory mapped either causes slowdowns, out of memory errors, or reveals driver bugs. [Resizable BAR](https://docs.microsoft.com/en-us/windows-hardware/drivers/display/resizable-bar-support) is meant to address this, but it's too recent (e.g. AMD calls it Smart Access Memory aka SAM, and you need Ryzen 5xxxx + AMD Radeon 6xxxx XT; they came out end of last year, if you manage to buy one).
+    - It shouldn't be a problem on Vulkan because we explicitly control which heap is used, and we [try to avoid](https://github.com/OGRECave/ogre-next/blob/646f6ecd774af6b1690bc2169bc013b459499dc5/RenderSystems/Vulkan/src/Vao/OgreVulkanVaoManager.cpp#L384) the [GPU-local, CPU visible](https://vulkan.gpuinfo.org/displayreport.php?id=11317#memory) heap for staging area.
+  - If you load many 4096² textures we should handle it fine, but quickly after the textures stop coming in, we'll deallocate resources because we don't expect this to repeat again soon (and if it repeats, then we'll reallocate).
+  - A better approximation would be to use total memory in bytes instead of a single texture dimension. Unfortunately D3D11 uses the notion of StagingTextures, and while a 4096x16 texture consumes little memory (which GL, Vulkan, Metal and D3D12 would handle just fine, because all transfers are 1D instead of 2D and 3D), D3D11 needs a StagingTexture of 4096x16 or bigger, causing a lot of waste. So it's better to consider this 4096x16 texture an abnormality too.
+    - To explain why: Let's say there's a 4096x16 texture; and a 4096² was already available. We will consume a fraction of that, and leave 4096x4080 for next transfers. If two 2048² appear in a row, that D3D11 StagingTexture can be reused. That means the 4096² staging texture was used for 3 transfers.
+    - But if a 4096² appears after the 4096x16 (instead of two 2048²) then we need to allocate another StagingTexture of 4096². And that's how memory consumption can easily blow up if the 4096x16 isn't considered an abnormality
+- `minResolution = 4096; minNumSlices = 2;` means if we encounter a 4096x4096 texture, we should reserve GPU memory to allocate two of them together (i.e. we'll create a 2D texture array of 4096x4096x2). That means, we expect them to be at least 2 4096x4096 textures. Which sort of contradicts the previous statement that 4096² textures are an abnormality.
+  - Originally minNumSlices was 1 for 4096; but it was raised to 2 because 4096² textures are not _that_ uncommon. Larger values like 4 would blow up memory consumption with diminishing returns (the point of packing textures together is to reduce texture state switches to avoid being CPU bound. But if you have many 4096² textures, then you're likely to be GPU-bound by bandwidth)
+  - However it is common these 4096² textures to be compressed or single channel. That means actual consumption is between 16-32MB per texture. These are fine.
+
+
+OK, now that I laid out the reasoning, perhaps the warning is too exaggerated in your case. Perhaps it's not. minNumSlices > 1 and minResolution >= maxSplitResolution are not entirely contradictory.
+
+But having minNumSlices > very_large and minResolution >= maxSplitResolution may indicate something is incorrectly setup (but not necessarily. If you're very tight on memory you may wanna treat lots of textures as spikes; and hurt streaming performance in exchange for... not crashing your app because you're already close to the memory limit)
+
 # Troubleshooting {#HlmsTroubleshooting}
 
 ## My shadows don't show up or are very glitchy {#HlmsTroubleshootingShadow}
@@ -1397,16 +1437,50 @@ mSceneManager->setShadowDirectionalLightExtrusionDistance( 500.0f );
 mSceneManager->setShadowFarDistance( 500.0f );
 ```
 
-3.  Try toggling `HlmsManager::setShadowMappingUseBackFaces`
-4.  The default shadow bias for every material is 0.01f. Perhaps this is
+3.  The default shadow bias for every material is 0.01f. Perhaps this is
     too much/little for you? Adjust it via
     `HlmsDatablock::mShadowConstantBias`.
-5.  Use `PF_FLOAT32_R` for rendering shadow maps until you get it to
+4.  Use `PF_FLOAT32_R` for rendering shadow maps until you get it to
     look correct. Then you can start worrying about lowering precision
     to get better performance.
-6.  Checkout the `Sample_ShadowMapDebugging` sample on how to debug
+5.  Checkout the `Sample_ShadowMapDebugging` sample on how to debug
     shadows. Those techniques may give you useful hints about what's
     going on.
 
 [^12]: GL3+ and GLES3: extension ARB\_sampler\_objects. D3D11:
     ID3D11SamplerState
+
+# Precision / Quality
+
+Ogre 2.4 added `Hlms::setPrecisionMode` with the following options:
+
+ - `PrecisionFull32`
+     - `midf` datatype maps to float (i.e. 32-bit)
+     - This setting is always supported
+ - `PrecisionMidf16`
+     - `midf` datatype maps to float16_t (i.e. forced 16-bit)
+     - It forces the driver to produce 16-bit code, even if unoptimal
+     - Great for testing quality downgrades caused by 16-bit support
+     - This depends on `RSC_SHADER_FLOAT16`
+     - If unsupported, we fallback to `PrecisionRelaxed`
+     - If unsupported, we then fallback to `PrecisionFull32`
+ - `PrecisionRelaxed`
+     - `midf` datatype maps to mediump float / min16float
+     - The driver is allowed to work in either 16-bit or 32-bit code
+     - This depends on `RSC_SHADER_RELAXED_FLOAT`
+     - If unsupported, we fallback to `PrecisionMidf16`
+     - If unsupported, we then fallback to `PrecisionFull32`
+
+We use the keyword "midf" because "half" is already taken on Metal.
+
+The default is `PrecisionFull32` which always works and ensures no quality problems.
+
+`PrecisionMidf16` & `PrecisionRelaxed` may need more testing but may help with either performance or battery usage in mobile at the cost of quality which may be unnoticeable on most cases.
+
+`PrecisionRelaxed` is supported by D3D11 however it's force-disabled because of fxc bugs.
+
+Only Vulkan and Metal can currently take advantage of these settings and is likely to stay that way.
+
+Support is very new: we've encountered various bugs (in drivers, in [spirv-reflect](https://github.com/KhronosGroup/SPIRV-Reflect/issues/134), in [fxc](https://twitter.com/matiasgoldberg/status/1485758709473189888), in [RenderDoc](https://github.com/baldurk/renderdoc/issues/2466)) **so users are advised to test this option thoroughly before deploying it to end users.**
+
+Metal is likely the API with best half 16-bit support at the moment.

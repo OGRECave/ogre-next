@@ -1,8 +1,36 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE-Next
+    (Object-oriented Graphics Rendering Engine)
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-2021 Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
 
 #ifndef _OgreTerrainCell_H_
 #define _OgreTerrainCell_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreRenderable.h"
 
 namespace Ogre
@@ -15,10 +43,10 @@ namespace Ogre
         int32  m_gridX;
         int32  m_gridZ;
         uint32 m_lodLevel;
-        uint32  m_verticesPerLine;
+        uint32 m_verticesPerLine;
 
-        uint32  m_sizeX;
-        uint32  m_sizeZ;
+        uint32 m_sizeX;
+        uint32 m_sizeZ;
 
         VaoManager *m_vaoManager;
 
@@ -28,14 +56,16 @@ namespace Ogre
 
     public:
         TerrainCell( Terra *parentTerra );
-        virtual ~TerrainCell();
+        ~TerrainCell() override;
 
-        bool getUseSkirts(void) const                   { return m_useSkirts; }
+        bool getUseSkirts() const { return m_useSkirts; }
+
+        bool isZUp() const;
 
         void initialize( VaoManager *vaoManager, bool useSkirts );
 
-        void setOrigin( const GridPoint &gridPos, uint32 horizontalPixelDim,
-                        uint32 verticalPixelDim, uint32 lodLevel );
+        void setOrigin( const GridPoint &gridPos, uint32 horizontalPixelDim, uint32 verticalPixelDim,
+                        uint32 lodLevel );
 
         /** Merges another TerrainCell into 'this' for reducing batch counts.
             e.g.
@@ -52,16 +82,16 @@ namespace Ogre
         */
         bool merge( TerrainCell *next );
 
-        void uploadToGpu( uint32 * RESTRICT_ALIAS gpuPtr ) const;
+        void uploadToGpu( uint32 *RESTRICT_ALIAS gpuPtr ) const;
 
-        Terra *getParentTerra( void ) const { return m_parentTerra; }
+        Terra *getParentTerra() const { return m_parentTerra; }
 
-        //Renderable overloads
-        virtual const LightList& getLights(void) const;
-        virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual bool getCastsShadows(void) const;
+        // Renderable overloads
+        const LightList &getLights() const override;
+        void             getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void             getWorldTransforms( Matrix4 *xform ) const override;
+        bool             getCastsShadows() const override;
     };
-}
+}  // namespace Ogre
 
 #endif

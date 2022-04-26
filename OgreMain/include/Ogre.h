@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -40,7 +40,6 @@ THE SOFTWARE.
 #include "OgreBillboard.h"
 #include "OgreBillboardChain.h"
 #include "OgreBillboardSet.h"
-#include "OgreOldBone.h"
 #include "OgreCamera.h"
 #include "OgreConfigFile.h"
 #include "OgreControllerManager.h"
@@ -69,8 +68,11 @@ THE SOFTWARE.
 #include "OgreMatrix4.h"
 #include "OgreMesh.h"
 #include "OgreMeshManager.h"
-#include "OgreMovablePlane.h"
 #include "OgreMeshSerializer.h"
+#include "OgreMovablePlane.h"
+#include "OgreOldBone.h"
+#include "OgreOldSkeletonInstance.h"
+#include "OgreOldSkeletonManager.h"
 #include "OgreParticleAffector.h"
 #include "OgreParticleEmitter.h"
 #include "OgreParticleSystem.h"
@@ -79,8 +81,8 @@ THE SOFTWARE.
 #include "OgrePatchMesh.h"
 #include "OgrePatchSurface.h"
 #include "OgreRadixSort.h"
-#include "OgreRenderQueueListener.h"
 #include "OgreRenderObjectListener.h"
+#include "OgreRenderQueueListener.h"
 #include "OgreRenderSystem.h"
 #include "OgreResourceBackgroundQueue.h"
 #include "OgreResourceGroupManager.h"
@@ -89,12 +91,12 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreSceneManagerEnumerator.h"
 #include "OgreSceneNode.h"
+#include "OgreShadowCameraSetup.h"
+#include "OgreShadowCameraSetupFocused.h"
+#include "OgreShadowCameraSetupPlaneOptimal.h"
 #include "OgreSimpleRenderable.h"
 #include "OgreSkeleton.h"
-#include "OgreOldSkeletonInstance.h"
-#include "OgreOldSkeletonManager.h"
 #include "OgreSkeletonSerializer.h"
-#include "OgreStaticGeometry.h"
 #include "OgreStringConverter.h"
 #include "OgreStringVector.h"
 #include "OgreSubEntity.h"
@@ -105,11 +107,6 @@ THE SOFTWARE.
 #include "OgreVector2.h"
 #include "OgreViewport.h"
 #include "OgreWindowEventUtilities.h"
-#include "OgreShadowCameraSetup.h"
-#include "OgreShadowCameraSetupFocused.h"
-/*#include "OgreShadowCameraSetupLiSPSM.h"
-#include "OgreShadowCameraSetupPlaneOptimal.h"
-#include "OgreShadowCameraSetupPSSM.h"*/
 // .... more to come
 
 #endif

@@ -1,6 +1,6 @@
 /*
  -----------------------------------------------------------------------------
- This source file is part of OGRE
+ This source file is part of OGRE-Next
  (Object-oriented Graphics Rendering Engine)
  For the latest info, see http://www.ogre3d.org/
  
@@ -65,14 +65,14 @@ namespace Ogre
 
     public:
 
-        GLSLESProgramPipelineManager(void);
-        ~GLSLESProgramPipelineManager(void);
+        GLSLESProgramPipelineManager();
+        ~GLSLESProgramPipelineManager();
 
         /** Get the program pipeline that combines the current program
             objects. If the program pipeline object was not already
             created a new one is created.
          */
-        GLSLESProgramPipeline* getActiveProgramPipeline(void);
+        GLSLESProgramPipeline* getActiveProgramPipeline();
 
         /** Set the active vertex and fragment link programs for the next rendering state.
          The active program pipeline object will be cleared.
@@ -82,8 +82,8 @@ namespace Ogre
         void setActiveVertexShader(GLSLESShader* vertexShader);
         void setActiveFragmentShader(GLSLESShader* fragmentShader);
 
-        static GLSLESProgramPipelineManager& getSingleton(void);
-        static GLSLESProgramPipelineManager* getSingletonPtr(void);
+        static GLSLESProgramPipelineManager& getSingleton();
+        static GLSLESProgramPipelineManager* getSingletonPtr();
     };
 }
 

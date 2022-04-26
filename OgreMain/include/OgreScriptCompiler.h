@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,11 +29,11 @@ THE SOFTWARE.
 #ifndef __SCRIPTCOMPILER_H_
 #define __SCRIPTCOMPILER_H_
 
+#include "OgreAny.h"
+#include "OgreGpuProgram.h"
+#include "OgreScriptLoader.h"
 #include "OgreSharedPtr.h"
 #include "OgreSingleton.h"
-#include "OgreScriptLoader.h"
-#include "OgreGpuProgram.h"
-#include "OgreAny.h"
 #include "Threading/OgreThreadHeaders.h"
 
 #include "ogrestd/list.h"
@@ -43,11 +43,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** These enums hold the types of the concrete parsed nodes */
     enum ConcreteNodeType
     {
@@ -63,16 +63,16 @@ namespace Ogre
 
     /** The ConcreteNode is the struct that holds an un-conditioned sub-tree of parsed input */
     struct ConcreteNode;
-    typedef SharedPtr<ConcreteNode> ConcreteNodePtr;
+    typedef SharedPtr<ConcreteNode>     ConcreteNodePtr;
     typedef list<ConcreteNodePtr>::type ConcreteNodeList;
     typedef SharedPtr<ConcreteNodeList> ConcreteNodeListPtr;
-    struct ConcreteNode : public ScriptCompilerAlloc
+    struct ConcreteNode : public OgreAllocatedObj
     {
-        String token, file;
-        unsigned int line;
+        String           token, file;
+        unsigned int     line;
         ConcreteNodeType type;
         ConcreteNodeList children;
-        ConcreteNode *parent;
+        ConcreteNode    *parent;
     };
 
     /** This enum holds the types of the possible abstract nodes */
@@ -87,21 +87,21 @@ namespace Ogre
         ANT_VARIABLE_ACCESS
     };
     class AbstractNode;
-    typedef SharedPtr<AbstractNode> AbstractNodePtr;
+    typedef SharedPtr<AbstractNode>     AbstractNodePtr;
     typedef list<AbstractNodePtr>::type AbstractNodeList;
     typedef SharedPtr<AbstractNodeList> AbstractNodeListPtr;
 
-    class _OgreExport AbstractNode : public AbstractNodeAlloc
+    class _OgreExport AbstractNode : public OgreAllocatedObj
     {
     public:
-        String file;
-        unsigned int line;
+        String           file;
+        unsigned int     line;
         AbstractNodeType type;
-        AbstractNode *parent;
-        Any context; // A holder for translation context data
+        AbstractNode    *parent;
+        Any              context;  // A holder for translation context data
     public:
-        AbstractNode(AbstractNode *ptr);
-        virtual ~AbstractNode(){}
+        AbstractNode( AbstractNode *ptr );
+        virtual ~AbstractNode() {}
         /// Returns a new AbstractNode which is a replica of this one.
         virtual AbstractNode *clone() const = 0;
         /// Returns a string value depending on the type of the AbstractNode.
@@ -114,10 +114,12 @@ namespace Ogre
     public:
         String value;
         uint32 id;
+
     public:
-        AtomAbstractNode(AbstractNode *ptr);
-        AbstractNode *clone() const;
-        String getValue() const;
+        AtomAbstractNode( AbstractNode *ptr );
+        AbstractNode *clone() const override;
+        String        getValue() const override;
+
     private:
         void parseNumber() const;
     };
@@ -126,37 +128,39 @@ namespace Ogre
     class _OgreExport ObjectAbstractNode : public AbstractNode
     {
     private:
-        map<String,String>::type mEnv;
-    public:
-        String name, cls;
-        vector<String>::type bases;
-        uint32 id;
-        bool abstract;
-        AbstractNodeList children;
-        AbstractNodeList values;
-        AbstractNodeList overrides; // For use when processing object inheritance and overriding
-    public:
-        ObjectAbstractNode(AbstractNode *ptr);
-        AbstractNode *clone() const;
-        String getValue() const;
+        map<String, String>::type mEnv;
 
-        void addVariable(const String &name);
-        void setVariable(const String &name, const String &value);
-        std::pair<bool,String> getVariable(const String &name) const;
-        const map<String,String>::type &getVariables() const;
+    public:
+        String               name, cls;
+        vector<String>::type bases;
+        uint32               id;
+        bool                 abstract;
+        AbstractNodeList     children;
+        AbstractNodeList     values;
+        AbstractNodeList     overrides;  // For use when processing object inheritance and overriding
+    public:
+        ObjectAbstractNode( AbstractNode *ptr );
+        AbstractNode *clone() const override;
+        String        getValue() const override;
+
+        void                             addVariable( const String &name );
+        void                             setVariable( const String &name, const String &value );
+        std::pair<bool, String>          getVariable( const String &name ) const;
+        const map<String, String>::type &getVariables() const;
     };
 
     /** This abstract node represents a script property */
     class _OgreExport PropertyAbstractNode : public AbstractNode
     {
     public:
-        String name;
-        uint32 id;
+        String           name;
+        uint32           id;
         AbstractNodeList values;
+
     public:
-        PropertyAbstractNode(AbstractNode *ptr);
-        AbstractNode *clone() const;
-        String getValue() const;
+        PropertyAbstractNode( AbstractNode *ptr );
+        AbstractNode *clone() const override;
+        String        getValue() const override;
     };
 
     /** This abstract node represents an import statement */
@@ -164,10 +168,11 @@ namespace Ogre
     {
     public:
         String target, source;
+
     public:
         ImportAbstractNode();
-        AbstractNode *clone() const;
-        String getValue() const;
+        AbstractNode *clone() const override;
+        String        getValue() const override;
     };
 
     /** This abstract node represents a variable assignment */
@@ -175,10 +180,11 @@ namespace Ogre
     {
     public:
         String name;
+
     public:
-        VariableAccessAbstractNode(AbstractNode *ptr);
-        AbstractNode *clone() const;
-        String getValue() const;
+        VariableAccessAbstractNode( AbstractNode *ptr );
+        AbstractNode *clone() const override;
+        String        getValue() const override;
     };
 
     class ScriptCompilerEvent;
@@ -188,24 +194,25 @@ namespace Ogre
         and processes the CST into an AST and then uses translators
         to translate the AST into the final resources.
     */
-    class _OgreExport ScriptCompiler : public ScriptCompilerAlloc
+    class _OgreExport ScriptCompiler : public OgreAllocatedObj
     {
-    public: // Externally accessible types
-        //typedef map<String,uint32>::type IdMap;
-        typedef unordered_map<String,uint32>::type IdMap;
+    public:  // Externally accessible types
+        // typedef map<String,uint32>::type IdMap;
+        typedef unordered_map<String, uint32>::type IdMap;
 
         // The container for errors
-        struct Error : public ScriptCompilerAlloc
+        struct Error : public OgreAllocatedObj
         {
-            String file, message;
-            int line;
-            uint32 code;
+            String       file, message;
+            unsigned int line;
+            uint32       code;
         };
-        typedef SharedPtr<Error> ErrorPtr;
+        typedef SharedPtr<Error>     ErrorPtr;
         typedef list<ErrorPtr>::type ErrorList;
 
         // These are the built-in error codes
-        enum{
+        enum
+        {
             CE_STRINGEXPECTED,
             CE_NUMBEREXPECTED,
             CE_FEWERPARAMETERSEXPECTED,
@@ -220,7 +227,8 @@ namespace Ogre
             CE_UNSUPPORTEDBYRENDERSYSTEM,
             CE_REFERENCETOANONEXISTINGOBJECT
         };
-        static String formatErrorCode(uint32 code);
+        static String formatErrorCode( uint32 code );
+
     public:
         ScriptCompiler();
         virtual ~ScriptCompiler() {}
@@ -231,17 +239,20 @@ namespace Ogre
          * @param source The source of the script code (e.g. a script file)
          * @param group The resource group to place the compiled resources into
          */
-        bool compile(const String &str, const String &source, const String &group);
+        bool compile( const String &str, const String &source, const String &group );
         /// Compiles resources from the given concrete node list
-        bool compile(const ConcreteNodeListPtr &nodes, const String &group);
+        bool compile( const ConcreteNodeListPtr &nodes, const String &group );
         /// Generates the AST from the given string script
-        AbstractNodeListPtr _generateAST(const String &str, const String &source, bool doImports = false, bool doObjects = false, bool doVariables = false);
+        AbstractNodeListPtr _generateAST( const String &str, const String &source,
+                                          bool doImports = false, bool doObjects = false,
+                                          bool doVariables = false );
         /// Compiles the given abstract syntax tree
-        bool _compile(AbstractNodeListPtr nodes, const String &group, bool doImports = true, bool doObjects = true, bool doVariables = true);
+        bool _compile( AbstractNodeListPtr nodes, const String &group, bool doImports = true,
+                       bool doObjects = true, bool doVariables = true );
         /// Adds the given error to the compiler's list of errors
-        void addError(uint32 code, const String &file, int line, const String &msg = "");
+        void addError( uint32 code, const String &file, unsigned int line, const String &msg = "" );
         /// Sets the listener used by the compiler
-        void setListener(ScriptCompilerListener *listener);
+        void setListener( ScriptCompilerListener *listener );
         /// Returns the currently set listener
         ScriptCompilerListener *getListener();
         /// Returns the resource group currently set for this compiler
@@ -252,60 +263,62 @@ namespace Ogre
          * names. This means that excluded types will always have empty names.
          * All values in the object header are stored as object values.
          */
-        void addNameExclusion(const String &type);
+        void addNameExclusion( const String &type );
         /// Removes a name exclusion
-        void removeNameExclusion(const String &type);
+        void removeNameExclusion( const String &type );
         /// Internal method for firing the handleEvent method
-        bool _fireEvent(ScriptCompilerEvent *evt, void *retval);
+        bool _fireEvent( ScriptCompilerEvent *evt, void *retval );
 
-		/// Adds a custom word id which can be used for custom script translators
-		/** 
-		@param
-		word The word to be registered.
+        /// Adds a custom word id which can be used for custom script translators
+        /**
+        @param
+        word The word to be registered.
 
-		@return
-		The word id for the registered word.
-		
-		@note
-		If the word is already registered, the already registered id is returned.
-		*/
-		uint32 registerCustomWordId(const String &word);
+        @return
+        The word id for the registered word.
 
-    private: // Tree processing
-        AbstractNodeListPtr convertToAST(const ConcreteNodeListPtr &nodes);
+        @note
+        If the word is already registered, the already registered id is returned.
+        */
+        uint32 registerCustomWordId( const String &word );
+
+    private:  // Tree processing
+        AbstractNodeListPtr convertToAST( const ConcreteNodeListPtr &nodes );
         /// This built-in function processes import nodes
-        void processImports(AbstractNodeListPtr &nodes);
+        void processImports( AbstractNodeListPtr &nodes );
         /// Loads the requested script and converts it to an AST
-        AbstractNodeListPtr loadImportPath(const String &name);
+        AbstractNodeListPtr loadImportPath( const String &name );
         /// Returns the abstract nodes from the given tree which represent the target
-        AbstractNodeListPtr locateTarget(AbstractNodeList *nodes, const String &target);
+        AbstractNodeListPtr locateTarget( AbstractNodeList *nodes, const String &target );
         /// Handles object inheritance and variable expansion
-        void processObjects(AbstractNodeList *nodes, const AbstractNodeListPtr &top);
+        void processObjects( AbstractNodeList *nodes, const AbstractNodeListPtr &top );
         /// Handles processing the variables
-        void processVariables(AbstractNodeList *nodes);
+        void processVariables( AbstractNodeList *nodes );
         /// This function overlays the given object on the destination object following inheritance rules
-        void overlayObject(const AbstractNodePtr &source, ObjectAbstractNode *dest);
+        void overlayObject( const AbstractNodePtr &source, ObjectAbstractNode *dest );
         /// Returns true if the given class is name excluded
-        bool isNameExcluded(const String &cls, AbstractNode *parent);
+        bool isNameExcluded( const String &cls, AbstractNode *parent );
         /// This function sets up the initial values in word id map
         void initWordMap();
+
     private:
         // Resource group
         String mGroup;
         // The word -> id conversion table
         IdMap mIds;
 
-		// The largest registered id
-		uint32 mLargestRegisteredWordId;
+        // The largest registered id
+        uint32 mLargestRegisteredWordId;
 
         // This is an environment map
-        typedef map<String,String>::type Environment;
-        Environment mEnv;
+        typedef map<String, String>::type Environment;
+        Environment                       mEnv;
 
-        typedef map<String,AbstractNodeListPtr>::type ImportCacheMap;
-        ImportCacheMap mImports; // The set of imported scripts to avoid circular dependencies
-        typedef multimap<String,String>::type ImportRequestMap;
-        ImportRequestMap mImportRequests; // This holds the target objects for each script to be imported
+        typedef map<String, AbstractNodeListPtr>::type ImportCacheMap;
+        ImportCacheMap mImports;  // The set of imported scripts to avoid circular dependencies
+        typedef multimap<String, String>::type ImportRequestMap;
+        ImportRequestMap
+            mImportRequests;  // This holds the target objects for each script to be imported
 
         // This stores the imports of the scripts, so they are separated and can be treated specially
         AbstractNodeList mImportTable;
@@ -315,21 +328,24 @@ namespace Ogre
 
         // The listener
         ScriptCompilerListener *mListener;
-    private: // Internal helper classes and processors
+
+    private:  // Internal helper classes and processors
         class AbstractTreeBuilder
         {
         private:
             AbstractNodeListPtr mNodes;
-            AbstractNode *mCurrent;
-            ScriptCompiler *mCompiler;
+            AbstractNode       *mCurrent;
+            ScriptCompiler     *mCompiler;
+
         public:
-            AbstractTreeBuilder(ScriptCompiler *compiler);
+            AbstractTreeBuilder( ScriptCompiler *compiler );
             const AbstractNodeListPtr &getResult() const;
-            void visit(ConcreteNode *node);
-            static void visit(AbstractTreeBuilder *visitor, const ConcreteNodeList &nodes);
+            void                       visit( ConcreteNode *node );
+            static void visit( AbstractTreeBuilder *visitor, const ConcreteNodeList &nodes );
         };
         friend class AbstractTreeBuilder;
-    public: // Public translator definitions
+
+    public:  // Public translator definitions
         // This enum are built-in word id values
         enum
         {
@@ -339,7 +355,7 @@ namespace Ogre
             ID_FALSE = 2,
             ID_YES = 1,
             ID_NO = 2
-        };  
+        };
     };
 
     /**
@@ -352,11 +368,12 @@ namespace Ogre
     public:
         String mType;
 
-        ScriptCompilerEvent(const String &type):mType(type){}
-        virtual ~ScriptCompilerEvent(){}
-    private: // Non-copyable
-        ScriptCompilerEvent(const ScriptCompilerEvent&);
-        ScriptCompilerEvent &operator = (const ScriptCompilerEvent&);
+        ScriptCompilerEvent( const String &type ) : mType( type ) {}
+        virtual ~ScriptCompilerEvent() {}
+
+    private:  // Non-copyable
+        ScriptCompilerEvent( const ScriptCompilerEvent & );
+        ScriptCompilerEvent &operator=( const ScriptCompilerEvent & );
     };
 
     /** This is a listener for the compiler. The compiler can be customized with
@@ -370,9 +387,9 @@ namespace Ogre
         virtual ~ScriptCompilerListener() {}
 
         /// Returns the concrete node list from the given file
-        virtual ConcreteNodeListPtr importFile(ScriptCompiler *compiler, const String &name);
+        virtual ConcreteNodeListPtr importFile( ScriptCompiler *compiler, const String &name );
         /// Allows for responding to and overriding behavior before a CST is translated into an AST
-        virtual void preConversion(ScriptCompiler *compiler, ConcreteNodeListPtr nodes);
+        virtual void preConversion( ScriptCompiler *compiler, ConcreteNodeListPtr nodes );
         /// Allows vetoing of continued compilation after the entire AST conversion process finishes
         /**
          @remarks   Once the script is turned completely into an AST, including import
@@ -380,9 +397,10 @@ namespace Ogre
                     the compilation process.
          @return True continues compilation, false aborts
          */
-        virtual bool postConversion(ScriptCompiler *compiler, const AbstractNodeListPtr&);
+        virtual bool postConversion( ScriptCompiler *compiler, const AbstractNodeListPtr & );
         /// Called when an error occurred
-        virtual void handleError(ScriptCompiler *compiler, uint32 code, const String &file, int line, const String &msg);
+        virtual void handleError( ScriptCompiler *compiler, uint32 code, const String &file,
+                                  unsigned int line, const String &msg );
         /// Called when an event occurs during translation, return true if handled
         /**
          @remarks   This function is called from the translators when an event occurs that
@@ -393,7 +411,7 @@ namespace Ogre
          @arg retval A possible return value from handlers
          @return True if the handler processed the event
         */
-        virtual bool handleEvent(ScriptCompiler *compiler, ScriptCompilerEvent *evt, void *retval);
+        virtual bool handleEvent( ScriptCompiler *compiler, ScriptCompilerEvent *evt, void *retval );
     };
 
     class ScriptTranslator;
@@ -402,10 +420,12 @@ namespace Ogre
     /** Manages threaded compilation of scripts. This script loader forwards
         scripts compilations to a specific compiler instance.
     */
-    class _OgreExport ScriptCompilerManager : public Singleton<ScriptCompilerManager>, public ScriptLoader, public ScriptCompilerAlloc
+    class _OgreExport ScriptCompilerManager : public Singleton<ScriptCompilerManager>,
+                                              public ScriptLoader,
+                                              public OgreAllocatedObj
     {
     private:
-            OGRE_AUTO_MUTEX;
+        OGRE_AUTO_MUTEX;
 
         // A list of patterns loaded by this compiler manager
         StringVector mScriptPatterns;
@@ -414,52 +434,53 @@ namespace Ogre
         ScriptCompilerListener *mListener;
 
         // Stores a map from object types to the translators that handle them
-        vector<ScriptTranslatorManager*>::type mManagers;
+        vector<ScriptTranslatorManager *>::type mManagers;
 
         // A pointer to the built-in ScriptTranslatorManager
         ScriptTranslatorManager *mBuiltinTranslatorManager;
 
         // A pointer to the specific compiler instance used
-        OGRE_THREAD_POINTER(ScriptCompiler, mScriptCompiler);
+        OGRE_THREAD_POINTER( ScriptCompiler, mScriptCompiler );
+
     public:
         ScriptCompilerManager();
-        virtual ~ScriptCompilerManager();
+        ~ScriptCompilerManager() override;
 
         /// Sets the listener used for compiler instances
-        void setListener(ScriptCompilerListener *listener);
+        void setListener( ScriptCompilerListener *listener );
         /// Returns the currently set listener used for compiler instances
         ScriptCompilerListener *getListener();
 
         /// Adds the given translator manager to the list of managers
-        void addTranslatorManager(ScriptTranslatorManager *man);
+        void addTranslatorManager( ScriptTranslatorManager *man );
         /// Removes the given translator manager from the list of managers
-        void removeTranslatorManager(ScriptTranslatorManager *man);
+        void removeTranslatorManager( ScriptTranslatorManager *man );
         /// Clears all translator managers
         void clearTranslatorManagers();
         /// Retrieves a ScriptTranslator from the supported managers
-        ScriptTranslator *getTranslator(const AbstractNodePtr &node);
+        ScriptTranslator *getTranslator( const AbstractNodePtr &node );
 
-		/// Adds a custom word id which can be used for custom script translators
-		/** 
-		@param
-		word The word to be registered.
+        /// Adds a custom word id which can be used for custom script translators
+        /**
+        @param
+        word The word to be registered.
 
-		@return
-		The word id for the registered word.
-		
-		@note
-		If the word is already registered, the already registered id is returned.
-		*/
-		uint32 registerCustomWordId(const String &word);
+        @return
+        The word id for the registered word.
+
+        @note
+        If the word is already registered, the already registered id is returned.
+        */
+        uint32 registerCustomWordId( const String &word );
 
         /// Adds a script extension that can be handled (e.g. *.material, *.pu, etc.)
-        void addScriptPattern(const String &pattern);
+        void addScriptPattern( const String &pattern );
         /// @copydoc ScriptLoader::getScriptPatterns
-        const StringVector& getScriptPatterns(void) const;
+        const StringVector &getScriptPatterns() const override;
         /// @copydoc ScriptLoader::parseScript
-        void parseScript(DataStreamPtr& stream, const String& groupName);
+        void parseScript( DataStreamPtr &stream, const String &groupName ) override;
         /// @copydoc ScriptLoader::getLoadingOrder
-        Real getLoadingOrder(void) const;
+        Real getLoadingOrder() const override;
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -476,7 +497,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ScriptCompilerManager& getSingleton(void);
+        static ScriptCompilerManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -492,19 +513,24 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ScriptCompilerManager* getSingletonPtr(void);
+        static ScriptCompilerManager *getSingletonPtr();
     };
 
     // Standard event types
     class _OgreExport PreApplyTextureAliasesScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        Material *mMaterial;
+        Material                 *mMaterial;
         AliasTextureNamePairList *mAliases;
-        static String eventType;
+        static String             eventType;
 
-        PreApplyTextureAliasesScriptCompilerEvent(Material *material, AliasTextureNamePairList *aliases)
-            :ScriptCompilerEvent(eventType), mMaterial(material), mAliases(aliases){}
+        PreApplyTextureAliasesScriptCompilerEvent( Material                 *material,
+                                                   AliasTextureNamePairList *aliases ) :
+            ScriptCompilerEvent( eventType ),
+            mMaterial( material ),
+            mAliases( aliases )
+        {
+        }
     };
 
     class _OgreExport ProcessResourceNameScriptCompilerEvent : public ScriptCompilerEvent
@@ -519,96 +545,144 @@ namespace Ogre
             UAV_BUFFER,
             COMPOSITOR
         };
-        ResourceType mResourceType;
-        String mName;
+        ResourceType  mResourceType;
+        String        mName;
         static String eventType;
 
-        ProcessResourceNameScriptCompilerEvent(ResourceType resourceType, const String &name)
-            :ScriptCompilerEvent(eventType), mResourceType(resourceType), mName(name){}     
+        ProcessResourceNameScriptCompilerEvent( ResourceType resourceType, const String &name ) :
+            ScriptCompilerEvent( eventType ),
+            mResourceType( resourceType ),
+            mName( name )
+        {
+        }
     };
 
     class _OgreExport ProcessNameExclusionScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        String mClass;
+        String        mClass;
         AbstractNode *mParent;
         static String eventType;
 
-        ProcessNameExclusionScriptCompilerEvent(const String &cls, AbstractNode *parent)
-            :ScriptCompilerEvent(eventType), mClass(cls), mParent(parent){}     
+        ProcessNameExclusionScriptCompilerEvent( const String &cls, AbstractNode *parent ) :
+            ScriptCompilerEvent( eventType ),
+            mClass( cls ),
+            mParent( parent )
+        {
+        }
     };
 
     class _OgreExport CreateMaterialScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        String mFile, mName, mResourceGroup;
+        String        mFile, mName, mResourceGroup;
         static String eventType;
 
-        CreateMaterialScriptCompilerEvent(const String &file, const String &name, const String &resourceGroup)
-            :ScriptCompilerEvent(eventType), mFile(file), mName(name), mResourceGroup(resourceGroup){}  
+        CreateMaterialScriptCompilerEvent( const String &file, const String &name,
+                                           const String &resourceGroup ) :
+            ScriptCompilerEvent( eventType ),
+            mFile( file ),
+            mName( name ),
+            mResourceGroup( resourceGroup )
+        {
+        }
     };
 
     class _OgreExport CreateGpuProgramScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        String mFile, mName, mResourceGroup, mSource, mSyntax;
+        String         mFile, mName, mResourceGroup, mSource, mSyntax;
         GpuProgramType mProgramType;
-        static String eventType;
+        static String  eventType;
 
-        CreateGpuProgramScriptCompilerEvent(const String &file, const String &name, const String &resourceGroup, const String &source, 
-            const String &syntax, GpuProgramType programType)
-            :ScriptCompilerEvent(eventType), mFile(file), mName(name), mResourceGroup(resourceGroup), mSource(source), 
-             mSyntax(syntax), mProgramType(programType)
-        {}  
+        CreateGpuProgramScriptCompilerEvent( const String &file, const String &name,
+                                             const String &resourceGroup, const String &source,
+                                             const String &syntax, GpuProgramType programType ) :
+            ScriptCompilerEvent( eventType ),
+            mFile( file ),
+            mName( name ),
+            mResourceGroup( resourceGroup ),
+            mSource( source ),
+            mSyntax( syntax ),
+            mProgramType( programType )
+        {
+        }
     };
 
     class _OgreExport CreateHighLevelGpuProgramScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        String mFile, mName, mResourceGroup, mSource, mLanguage;
+        String         mFile, mName, mResourceGroup, mSource, mLanguage;
         GpuProgramType mProgramType;
-        static String eventType;
+        static String  eventType;
 
-        CreateHighLevelGpuProgramScriptCompilerEvent(const String &file, const String &name, const String &resourceGroup, const String &source, 
-            const String &language, GpuProgramType programType)
-            :ScriptCompilerEvent(eventType), mFile(file), mName(name), mResourceGroup(resourceGroup), mSource(source), 
-             mLanguage(language), mProgramType(programType)
-        {}  
+        CreateHighLevelGpuProgramScriptCompilerEvent( const String &file, const String &name,
+                                                      const String &resourceGroup, const String &source,
+                                                      const String  &language,
+                                                      GpuProgramType programType ) :
+            ScriptCompilerEvent( eventType ),
+            mFile( file ),
+            mName( name ),
+            mResourceGroup( resourceGroup ),
+            mSource( source ),
+            mLanguage( language ),
+            mProgramType( programType )
+        {
+        }
     };
 
     class _OgreExport CreateGpuSharedParametersScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        String mFile, mName, mResourceGroup;
+        String        mFile, mName, mResourceGroup;
         static String eventType;
 
-        CreateGpuSharedParametersScriptCompilerEvent(const String &file, const String &name, const String &resourceGroup)
-            :ScriptCompilerEvent(eventType), mFile(file), mName(name), mResourceGroup(resourceGroup){}  
+        CreateGpuSharedParametersScriptCompilerEvent( const String &file, const String &name,
+                                                      const String &resourceGroup ) :
+            ScriptCompilerEvent( eventType ),
+            mFile( file ),
+            mName( name ),
+            mResourceGroup( resourceGroup )
+        {
+        }
     };
 
     class _OgreExport CreateParticleSystemScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        String mFile, mName, mResourceGroup;
+        String        mFile, mName, mResourceGroup;
         static String eventType;
 
-        CreateParticleSystemScriptCompilerEvent(const String &file, const String &name, const String &resourceGroup)
-            :ScriptCompilerEvent(eventType), mFile(file), mName(name), mResourceGroup(resourceGroup){}  
+        CreateParticleSystemScriptCompilerEvent( const String &file, const String &name,
+                                                 const String &resourceGroup ) :
+            ScriptCompilerEvent( eventType ),
+            mFile( file ),
+            mName( name ),
+            mResourceGroup( resourceGroup )
+        {
+        }
     };
 
     class _OgreExport CreateCompositorScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        String mFile, mName, mResourceGroup;
+        String        mFile, mName, mResourceGroup;
         static String eventType;
 
-        CreateCompositorScriptCompilerEvent(const String &file, const String &name, const String &resourceGroup)
-            :ScriptCompilerEvent(eventType), mFile(file), mName(name), mResourceGroup(resourceGroup){}  
+        CreateCompositorScriptCompilerEvent( const String &file, const String &name,
+                                             const String &resourceGroup ) :
+            ScriptCompilerEvent( eventType ),
+            mFile( file ),
+            mName( name ),
+            mResourceGroup( resourceGroup )
+        {
+        }
     };
 
     /// This enum defines the integer ids for keywords this compiler handles
     enum
     {
+        // clang-format off
         ID_MATERIAL = 3,
         ID_VERTEX_PROGRAM,
         ID_GEOMETRY_PROGRAM,
@@ -622,7 +696,7 @@ namespace Ogre
         ID_SHADOW_CASTER_VERTEX_PROGRAM_REF,
         ID_SHADOW_CASTER_FRAGMENT_PROGRAM_REF,
         ID_SHADOW_CASTER_MATERIAL,
-        
+
         ID_LOD_VALUES,
         ID_LOD_STRATEGY,
         ID_LOD_DISTANCES,
@@ -642,8 +716,8 @@ namespace Ogre
         ID_LOD_INDEX,
         ID_GPU_VENDOR_RULE,
         ID_GPU_DEVICE_RULE,
-        ID_INCLUDE, 
-        ID_EXCLUDE, 
+        ID_INCLUDE,
+        ID_EXCLUDE,
 
         ID_AMBIENT,
         ID_DIFFUSE,
@@ -850,6 +924,7 @@ namespace Ogre
                 ID_TARGET_HEIGHT,
                 ID_TARGET_WIDTH_SCALED,
                 ID_TARGET_HEIGHT_SCALED,
+                ID_TARGET_ORIENTATION_MODE,
                 ID_TARGET_FORMAT,
             //  ID_GAMMA,
                 ID_NO_GAMMA,
@@ -870,6 +945,7 @@ namespace Ogre
 
                 ID_NO_AUTOMIPMAPS,
             ID_TARGET,
+                ID_TARGET_LEVEL_BARRIER,
         //  ID_PASS,
                 ID_CLEAR,
                 ID_STENCIL,
@@ -888,6 +964,7 @@ namespace Ogre
                         ID_CLEAR_STENCIL,
                         ID_WARN_IF_RTV_WAS_FLUSHED,
                     ID_STORE,
+                    ID_SKIP_LOAD_STORE_SEMANTICS,
                     ID_VIEWPORT,
                     ID_NUM_INITIAL,
                     ID_FLUSH_COMMAND_BUFFERS,
@@ -1021,9 +1098,6 @@ namespace Ogre
 
         ID_HLMS,
 
-#ifdef RTSHADER_SYSTEM_BUILD_CORE_SHADERS
-        ID_RT_SHADER_SYSTEM,
-#endif
         /// Suport for shader model 5.0
         // More program IDs
         ID_TESSELLATION_HULL_PROGRAM,
@@ -1042,10 +1116,11 @@ namespace Ogre
         ID_SUBROUTINE,
 
         ID_END_BUILTIN_IDS
+        // clang-format on
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

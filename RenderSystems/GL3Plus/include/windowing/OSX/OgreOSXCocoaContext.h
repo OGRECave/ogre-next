@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,41 +28,37 @@ THE SOFTWARE.
 #ifndef __OgreOSXCocoaContext_H__
 #define __OgreOSXCocoaContext_H__
 
-#include "OgreGL3PlusContext.h"
 #import <AppKit/NSOpenGL.h>
+#include "OgreGL3PlusContext.h"
 
-namespace Ogre {
-
-    class _OgreGL3PlusExport CocoaContext : public GL3PlusContext, public GeneralAllocatedObject
+namespace Ogre
+{
+    class _OgrePrivate CocoaContext : public GL3PlusContext, public OgreAllocatedObj
     {
     public:
-        CocoaContext(NSOpenGLContext *context, NSOpenGLPixelFormat *pixelFormat);
+        CocoaContext( NSOpenGLContext *context, NSOpenGLPixelFormat *pixelFormat );
 
         virtual ~CocoaContext();
 
-        /** See GL3PlusContext */
+        /// @copydoc GL3PlusContext::setCurrent
         virtual void setCurrent();
-        /**
-         * This is called before another context is made current. By default,
-         * nothing is done here.
-         */
+
+        /// @copydoc GL3PlusContext::endCurrent
         virtual void endCurrent();
-        /** Create a new context based on the same window/pbuffer as this
-            context - mostly useful for additional threads.
-        @note The caller is responsible for deleting the returned context.
-        */
-        virtual GL3PlusContext* clone() const;
 
-        /** Grab the NSOpenGLContext if it exists */
-        NSOpenGLContext* getContext();
-        
-        /** Grab the NSOpenGLPixelFormat if it exists */
-        NSOpenGLPixelFormat* getPixelFormat();
-        
+        /// @copydoc GL3PlusContext::clone
+        virtual GL3PlusContext *clone() const;
+
+        /// Grab the NSOpenGLContext if it exists
+        NSOpenGLContext *getContext();
+
+        /// Grab the NSOpenGLPixelFormat if it exists
+        NSOpenGLPixelFormat *getPixelFormat();
+
     private:
-        NSOpenGLContext* mNSGLContext;
-        NSOpenGLPixelFormat *mNSGLPixelFormat;
+        NSOpenGLContext     *mNSGLContext{ NULL };
+        NSOpenGLPixelFormat *mNSGLPixelFormat{ NULL };
     };
-}
+}  // namespace Ogre
 
-#endif
+#endif  // __OgreOSXCocoaContext_H__

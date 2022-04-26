@@ -3,28 +3,28 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
+#include "OgreMesh2.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
-#include "OgreMesh2.h"
 
 #include "OgreCamera.h"
 
 #include "OgreHlmsPbsDatablock.h"
 
-#include "OgreRoot.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlmsPbs.h"
+#include "OgreRoot.h"
 
 #include "OgreLwString.h"
 
 #include "../LocalCubemaps/LocalCubemapScene.h"
 
 #include "InstantRadiosity/OgreInstantRadiosity.h"
-#include "OgreIrradianceVolume.h"
 #include "OgreForward3D.h"
+#include "OgreIrradianceVolume.h"
 
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
@@ -40,13 +40,13 @@ namespace Demo
         mCurrentType( Ogre::Light::LT_SPOTLIGHT ),
         mInstantRadiosity( 0 ),
         mIrradianceVolume( 0 ),
-        mIrradianceCellSize(1.5f)
+        mIrradianceCellSize( 1.5f )
     {
-        mDisplayHelpMode        = 2;
-        mNumDisplayHelpModes    = 3;
+        mDisplayHelpMode = 2;
+        mNumDisplayHelpModes = 3;
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosityGameState::createLight(void)
+    void InstantRadiosityGameState::createLight()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         Ogre::SceneNode *rootNode = sceneManager->getRootSceneNode();
@@ -70,12 +70,12 @@ namespace Demo
         case Ogre::Light::LT_SPOTLIGHT:
             mLight->setType( Ogre::Light::LT_SPOTLIGHT );
             mLight->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
-            mLightNode->setPosition( Ogre::Vector3( -0.505, 3.400016, 5.423867 ) );
+            mLightNode->setPosition( Ogre::Vector3( -0.505f, 3.400016f, 5.423867f ) );
             mLight->setAttenuation( 23.0f, 0.5f, 0.0f, 0.5f );
             break;
         case Ogre::Light::LT_POINT:
             mLight->setType( Ogre::Light::LT_POINT );
-            mLightNode->setPosition( Ogre::Vector3( -0.505, 3.400016, 5.423867 ) );
+            mLightNode->setPosition( Ogre::Vector3( -0.505f, 3.400016f, 5.423867f ) );
             mLight->setAttenuation( 23.0f, 0.5f, 0.0f, 0.5f );
             break;
         case Ogre::Light::LT_DIRECTIONAL:
@@ -88,11 +88,11 @@ namespace Demo
         mInstantRadiosity->build();
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosityGameState::updateIrradianceVolume(void)
+    void InstantRadiosityGameState::updateIrradianceVolume()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
         if( !hlmsPbs->getIrradianceVolume() )
             return;
@@ -101,36 +101,34 @@ namespace Demo
         Ogre::Real lightMaxPower;
         Ogre::uint32 numBlocksX, numBlocksY, numBlocksZ;
         mInstantRadiosity->suggestIrradianceVolumeParameters( Ogre::Vector3( mIrradianceCellSize ),
-                                                              volumeOrigin, lightMaxPower,
-                                                              numBlocksX, numBlocksY, numBlocksZ);
-        mIrradianceVolume->createIrradianceVolumeTexture(numBlocksX, numBlocksY, numBlocksZ);
-        mInstantRadiosity->fillIrradianceVolume( mIrradianceVolume,
-                                                 Ogre::Vector3(mIrradianceCellSize),
+                                                              volumeOrigin, lightMaxPower, numBlocksX,
+                                                              numBlocksY, numBlocksZ );
+        mIrradianceVolume->createIrradianceVolumeTexture( numBlocksX, numBlocksY, numBlocksZ );
+        mInstantRadiosity->fillIrradianceVolume( mIrradianceVolume, Ogre::Vector3( mIrradianceCellSize ),
                                                  volumeOrigin, lightMaxPower, false );
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosityGameState::createScene01(void)
+    void InstantRadiosityGameState::createScene01()
     {
-        //Setup a scene similar to that of PBS sample, except
-        //we apply the cubemap to everything via C++ code
+        // Setup a scene similar to that of PBS sample, except
+        // we apply the cubemap to everything via C++ code
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
-        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
-                                            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC );
+        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Z, Ogre::v1::HardwareBuffer::HBU_STATIC,
+            Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    planeMeshV1.get(), true, true, true );
-
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            Ogre::HlmsPbs *hlmsPbs =
+                static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
             Ogre::HlmsBlendblock blendblock;
             Ogre::HlmsMacroblock macroblock;
@@ -141,26 +139,23 @@ namespace Demo
                 Ogre::ColourValue colour;
             };
 
-            DemoMaterials materials[4] =
-            {
+            DemoMaterials materials[4] = {
                 { "Red", Ogre::ColourValue::Red },
                 { "Green", Ogre::ColourValue::Green },
                 { "Blue", Ogre::ColourValue::Blue },
                 { "Cream", Ogre::ColourValue::White },
             };
 
-            for( int i=0; i<4; ++i )
+            for( int i = 0; i < 4; ++i )
             {
                 Ogre::String finalName = materials[i].matName;
 
                 Ogre::HlmsPbsDatablock *datablock;
-                datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                            hlmsPbs->createDatablock( finalName, finalName,
-                                                      macroblock, blendblock,
-                                                      Ogre::HlmsParamVec() ) );
+                datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->createDatablock(
+                    finalName, finalName, macroblock, blendblock, Ogre::HlmsParamVec() ) );
                 datablock->setBackgroundDiffuse( materials[i].colour );
                 datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-                datablock->setRoughness( 0.02 );
+                datablock->setRoughness( 0.02f );
             }
         }
 
@@ -170,22 +165,26 @@ namespace Demo
         mInstantRadiosity = new Ogre::InstantRadiosity( sceneManager, hlmsManager );
         mInstantRadiosity->mVplThreshold = 0.0005f;
 
-        //Guide where to shoot the rays for directional lights the 3 windows + the
-        //hole in the ceiling). We use a sphere radius of 30 to ensure when the directional
-        //light's dir is towards -X, we actually hit walls (instead of going through these
-        //walls and generating incorrect results).
+        // Guide where to shoot the rays for directional lights the 3 windows + the
+        // hole in the ceiling). We use a sphere radius of 30 to ensure when the directional
+        // light's dir is towards -X, we actually hit walls (instead of going through these
+        // walls and generating incorrect results).
         mInstantRadiosity->mAoI.push_back( Ogre::InstantRadiosity::AreaOfInterest(
-                    Ogre::Aabb( Ogre::Vector3( -0.746887f, 7.543859f, 5.499001f ),
-                                Ogre::Vector3( 2.876101f, 2.716137f, 6.059607f ) * 0.5f ), 30.0f ) );
+            Ogre::Aabb( Ogre::Vector3( -0.746887f, 7.543859f, 5.499001f ),
+                        Ogre::Vector3( 2.876101f, 2.716137f, 6.059607f ) * 0.5f ),
+            30.0f ) );
         mInstantRadiosity->mAoI.push_back( Ogre::InstantRadiosity::AreaOfInterest(
-                    Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, 6.628003f ),
-                                Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ), 30.0f ) );
+            Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, 6.628003f ),
+                        Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ),
+            30.0f ) );
         mInstantRadiosity->mAoI.push_back( Ogre::InstantRadiosity::AreaOfInterest(
-                    Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, 3.083399f ),
-                                Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ), 30.0f ) );
+            Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, 3.083399f ),
+                        Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ),
+            30.0f ) );
         mInstantRadiosity->mAoI.push_back( Ogre::InstantRadiosity::AreaOfInterest(
-                    Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, -0.415852f ),
-                                Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ), 30.0f ) );
+            Ogre::Aabb( Ogre::Vector3( -6.26f, 3.969576f, -0.415852f ),
+                        Ogre::Vector3( 1.673888f, 6.04f, 1.3284f ) * 0.5f ),
+            30.0f ) );
 
         createLight();
 
@@ -194,20 +193,20 @@ namespace Demo
         mCameraController->mCameraSpeedBoost = 10.0f;
 
         sceneManager->setForwardClustered( true, 16, 8, 24, 96, 0, 0, 2, 50 );
-        //Required by InstantRadiosity
+        // Required by InstantRadiosity
         sceneManager->getForwardPlus()->setEnableVpls( true );
 
-        mIrradianceVolume = new Ogre::IrradianceVolume(hlmsManager);
+        mIrradianceVolume = new Ogre::IrradianceVolume( hlmsManager );
 
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosityGameState::destroyScene(void)
+    void InstantRadiosityGameState::destroyScene()
     {
-//        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-//        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-//        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
-//        hlmsPbs->setParallaxCorrectedCubemap( 0 );
+        //        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        //        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        //        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>(
+        //        hlmsManager->getHlms(Ogre::HLMS_PBS) ); hlmsPbs->setParallaxCorrectedCubemap( 0 );
 
         delete mInstantRadiosity;
         mInstantRadiosity = 0;
@@ -218,11 +217,11 @@ namespace Demo
         /*if( mAnimateObjects )
         {
             for( int i=0; i<16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * i * 0.125f) );
+                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * float( i ) * 0.125f) );
         }*/
 
         std::map<SDL_Keycode, SDL_Keysym>::const_iterator itor = mKeysHold.begin();
-        std::map<SDL_Keycode, SDL_Keysym>::const_iterator end  = mKeysHold.end();
+        std::map<SDL_Keycode, SDL_Keysym>::const_iterator end = mKeysHold.end();
 
         bool needsIrradianceVolumeRebuild = false;
         bool changedVplSetting = false;
@@ -230,20 +229,20 @@ namespace Demo
         while( itor != end )
         {
             const SDL_Keysym &keySym = itor->second;
-            const bool reverse = (keySym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) != 0;
+            const bool reverse = ( keySym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0;
             const float modPerFrame = reverse ? -timeSinceLast : timeSinceLast;
             if( keySym.scancode == SDL_SCANCODE_H )
             {
                 mInstantRadiosity->mCellSize += modPerFrame;
-                mInstantRadiosity->mCellSize = std::max( mInstantRadiosity->mCellSize,
-                                                          Ogre::Real(0.001f) );
+                mInstantRadiosity->mCellSize =
+                    std::max( mInstantRadiosity->mCellSize, Ogre::Real( 0.001f ) );
                 needsRebuild = true;
             }
             if( keySym.scancode == SDL_SCANCODE_J )
             {
                 mInstantRadiosity->mBias += modPerFrame;
                 mInstantRadiosity->mBias = Ogre::Math::Clamp( mInstantRadiosity->mBias,
-                                                              Ogre::Real(0.0f), Ogre::Real(1.0f) );
+                                                              Ogre::Real( 0.0f ), Ogre::Real( 1.0f ) );
                 needsRebuild = true;
             }
             if( keySym.scancode == SDL_SCANCODE_U )
@@ -267,14 +266,14 @@ namespace Demo
             {
                 mInstantRadiosity->mVplIntensityRangeMultiplier += modPerFrame * 10.0;
                 mInstantRadiosity->mVplIntensityRangeMultiplier =
-                        std::max( mInstantRadiosity->mVplIntensityRangeMultiplier, 0.01 );
+                    std::max( mInstantRadiosity->mVplIntensityRangeMultiplier, 0.01 );
                 changedVplSetting = true;
                 needsIrradianceVolumeRebuild = true;
             }
             if( keySym.scancode == SDL_SCANCODE_M )
             {
                 mIrradianceCellSize += modPerFrame * 10.0f;
-                mIrradianceCellSize = std::max( mIrradianceCellSize, Ogre::Real(0.1f) );
+                mIrradianceCellSize = std::max( mIrradianceCellSize, Ogre::Real( 0.1f ) );
                 needsIrradianceVolumeRebuild = true;
             }
 
@@ -300,8 +299,8 @@ namespace Demo
             return;
 
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
         outText += "\nF2 to toggle debug VPL markers ";
         outText += mInstantRadiosity->getEnableDebugMarkers() ? "[On]" : "[Off]";
@@ -334,8 +333,8 @@ namespace Demo
         if( mInstantRadiosity->mVplUseIntensityForMaxRange )
         {
             outText += "\nVPL Intensity Range Multiplier [P]: ";
-            outText += Ogre::StringConverter::toString(
-                        mInstantRadiosity->mVplIntensityRangeMultiplier );
+            outText +=
+                Ogre::StringConverter::toString( mInstantRadiosity->mVplIntensityRangeMultiplier );
         }
 
         outText += "\nNum Rays [G]: ";
@@ -358,8 +357,8 @@ namespace Demo
         Ogre::Camera *camera = mGraphicsSystem->getCamera();
         outText += "\nCamera: ";
         outText += Ogre::StringConverter::toString( camera->getPosition().x ) + ", " +
-                Ogre::StringConverter::toString( camera->getPosition().y ) + ", " +
-                Ogre::StringConverter::toString( camera->getPosition().z );
+                   Ogre::StringConverter::toString( camera->getPosition().y ) + ", " +
+                   Ogre::StringConverter::toString( camera->getPosition().z );
     }
     //-----------------------------------------------------------------------------------
     void InstantRadiosityGameState::keyPressed( const SDL_KeyboardEvent &arg )
@@ -372,7 +371,7 @@ namespace Demo
     {
         mKeysHold.erase( arg.keysym.scancode );
 
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS|KMOD_LSHIFT|KMOD_RSHIFT)) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS | KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -384,45 +383,46 @@ namespace Demo
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_F3 )
         {
-            mCurrentType = static_cast<Ogre::Light::LightTypes>( (mCurrentType + 1) %
-                                                                 Ogre::Light::LT_VPL );
+            mCurrentType =
+                static_cast<Ogre::Light::LightTypes>( ( mCurrentType + 1 ) % Ogre::Light::LT_VPL );
             createLight();
             updateIrradianceVolume();
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_F4 )
         {
             mInstantRadiosity->mVplUseIntensityForMaxRange =
-                    !mInstantRadiosity->mVplUseIntensityForMaxRange;
+                !mInstantRadiosity->mVplUseIntensityForMaxRange;
             mInstantRadiosity->updateExistingVpls();
             updateIrradianceVolume();
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_F5 )
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            Ogre::HlmsPbs *hlmsPbs =
+                static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
             if( !hlmsPbs->getIrradianceVolume() )
             {
                 hlmsPbs->setIrradianceVolume( mIrradianceVolume );
                 updateIrradianceVolume();
-                mInstantRadiosity->setUseIrradianceVolume(true);
+                mInstantRadiosity->setUseIrradianceVolume( true );
             }
             else
             {
                 hlmsPbs->setIrradianceVolume( 0 );
-                mInstantRadiosity->setUseIrradianceVolume(false);
+                mInstantRadiosity->setUseIrradianceVolume( false );
             }
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_G )
         {
-            const bool reverse = (arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) != 0;
+            const bool reverse = ( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0;
             if( reverse )
                 mInstantRadiosity->mNumRays >>= 1u;
             else
                 mInstantRadiosity->mNumRays <<= 1u;
 
-            //Too many rays and the app will become unresponsive
+            // Too many rays and the app will become unresponsive
             mInstantRadiosity->mNumRays = std::max<size_t>( mInstantRadiosity->mNumRays, 1u );
             mInstantRadiosity->mNumRays = std::min<size_t>( mInstantRadiosity->mNumRays, 32768u );
 
@@ -431,7 +431,7 @@ namespace Demo
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_K )
         {
-            const bool reverse = (arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) != 0;
+            const bool reverse = ( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0;
             if( reverse )
             {
                 if( mInstantRadiosity->mNumSpreadIterations )
@@ -448,7 +448,7 @@ namespace Demo
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_L )
         {
-            const bool reverse = (arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) != 0;
+            const bool reverse = ( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0;
             if( reverse )
             {
                 if( mInstantRadiosity->mNumRayBounces )
@@ -468,4 +468,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

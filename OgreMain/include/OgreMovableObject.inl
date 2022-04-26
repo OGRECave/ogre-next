@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -40,12 +40,12 @@ namespace Ogre
                                       ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS );
     }
     //-----------------------------------------------------------------------------------
-    inline RealAsUint MovableObject::getCachedDistanceToCamera(void) const
+    inline RealAsUint MovableObject::getCachedDistanceToCamera() const
     {
         return mObjectData.mDistanceToCamera[mObjectData.mIndex];
     }
     //-----------------------------------------------------------------------------------
-    inline Real MovableObject::getCachedDistanceToCameraAsReal(void) const
+    inline Real MovableObject::getCachedDistanceToCameraAsReal() const
     {
         return (reinterpret_cast<Real*RESTRICT_ALIAS>(mObjectData.mDistanceToCamera))[mObjectData.mIndex];
     }
@@ -70,7 +70,7 @@ namespace Ogre
                                         ~(flags & VisibilityFlags::RESERVED_VISIBILITY_FLAGS);
     }
     //-----------------------------------------------------------------------------------
-    inline uint32 MovableObject::getVisibilityFlags(void) const
+    inline uint32 MovableObject::getVisibilityFlags() const
     {
         return mObjectData.mVisibilityFlags[mObjectData.mIndex] &
                                                     VisibilityFlags::RESERVED_VISIBILITY_FLAGS;
@@ -91,7 +91,7 @@ namespace Ogre
         mObjectData.mQueryFlags[mObjectData.mIndex] &= ~flags;
     }
     //-----------------------------------------------------------------------------------
-    inline uint32 MovableObject::getQueryFlags(void) const
+    inline uint32 MovableObject::getQueryFlags() const
     {
         return mObjectData.mQueryFlags[mObjectData.mIndex];
     }
@@ -116,7 +116,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    inline Real MovableObject::getRenderingDistance(void) const
+    inline Real MovableObject::getRenderingDistance() const
     {
         return mObjectData.mUpperDistance[0][mObjectData.mIndex];
     }
@@ -130,7 +130,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    inline Real MovableObject::getShadowRenderingDistance(void) const
+    inline Real MovableObject::getShadowRenderingDistance() const
     {
         return mObjectData.mUpperDistance[1][mObjectData.mIndex];
     }
@@ -146,7 +146,7 @@ namespace Ogre
             mObjectData.mVisibilityFlags[mObjectData.mIndex] &= ~VisibilityFlags::LAYER_VISIBILITY;
     }
     //-----------------------------------------------------------------------------------
-    inline bool MovableObject::getVisible(void) const
+    inline bool MovableObject::getVisible() const
     {
         return (mObjectData.mVisibilityFlags[mObjectData.mIndex] &
                                                     VisibilityFlags::LAYER_VISIBILITY) != 0;
@@ -160,18 +160,18 @@ namespace Ogre
             mObjectData.mVisibilityFlags[mObjectData.mIndex] &= ~VisibilityFlags::LAYER_SHADOW_CASTER;
     }
     //-----------------------------------------------------------------------------------
-    inline bool MovableObject::getCastShadows(void) const
+    inline bool MovableObject::getCastShadows() const
     {
         return (mObjectData.mVisibilityFlags[mObjectData.mIndex] &
                                                     VisibilityFlags::LAYER_SHADOW_CASTER) != 0;
     }
     //-----------------------------------------------------------------------------------
-    inline uint8 MovableObject::getRenderQueueGroup(void) const
+    inline uint8 MovableObject::getRenderQueueGroup() const
     {
         return mRenderQueueID;
     }
     //-----------------------------------------------------------------------------------
-    inline SceneNode* MovableObject::getParentSceneNode(void) const
+    inline SceneNode* MovableObject::getParentSceneNode() const
     {
         assert( !mParentNode || dynamic_cast<SceneNode*>( mParentNode ) );
         return static_cast<SceneNode*>( mParentNode );

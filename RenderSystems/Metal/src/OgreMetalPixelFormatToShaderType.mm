@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -34,24 +34,19 @@ Copyright (c) 2000-2017 Torus Knot Software Ltd
 
 namespace Ogre
 {
-    static const char c_pixelFormatTypes[PixelFormatDataTypes::NumPixelFormatDataTypes][8] =
-    {
-        { "float" },
-        { "half" },
+    static const char c_pixelFormatTypes[PixelFormatDataTypes::NumPixelFormatDataTypes][8] = {
+        { "float" }, { "half" },
 
-        { "int" },
-        { "unit" },
+        { "int" },   { "unit" },
 
-        { "short" },
-        { "ushort" },
+        { "short" }, { "ushort" },
 
-        { "char" },
-        { "uchar" }
+        { "char" },  { "uchar" }
     };
 
     //-------------------------------------------------------------------------
     PixelFormatDataTypes::PixelFormatDataTypes MetalPixelFormatToShaderType::getPixelFormatDataType(
-            PixelFormatGpu pixelFormat )
+        PixelFormatGpu pixelFormat )
     {
         switch( pixelFormat )
         {
@@ -132,20 +127,34 @@ namespace Ogre
         case PFG_ATC_RGB:
         case PFG_ATC_RGBA_EXPLICIT_ALPHA:
         case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
-        case PFG_ASTC_RGBA_UNORM_4X4_LDR:   case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
-        case PFG_ASTC_RGBA_UNORM_5X4_LDR:   case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
-        case PFG_ASTC_RGBA_UNORM_5X5_LDR:   case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
-        case PFG_ASTC_RGBA_UNORM_6X5_LDR:   case PFG_ASTC_RGBA_UNORM_6X5_sRGB:
-        case PFG_ASTC_RGBA_UNORM_6X6_LDR:   case PFG_ASTC_RGBA_UNORM_6X6_sRGB:
-        case PFG_ASTC_RGBA_UNORM_8X5_LDR:   case PFG_ASTC_RGBA_UNORM_8X5_sRGB:
-        case PFG_ASTC_RGBA_UNORM_8X6_LDR:   case PFG_ASTC_RGBA_UNORM_8X6_sRGB:
-        case PFG_ASTC_RGBA_UNORM_8X8_LDR:   case PFG_ASTC_RGBA_UNORM_8X8_sRGB:
-        case PFG_ASTC_RGBA_UNORM_10X5_LDR:  case PFG_ASTC_RGBA_UNORM_10X5_sRGB:
-        case PFG_ASTC_RGBA_UNORM_10X6_LDR:  case PFG_ASTC_RGBA_UNORM_10X6_sRGB:
-        case PFG_ASTC_RGBA_UNORM_10X8_LDR:  case PFG_ASTC_RGBA_UNORM_10X8_sRGB:
-        case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
-        case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
-        case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
+        case PFG_ASTC_RGBA_UNORM_4X4_LDR:
+        case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X4_LDR:
+        case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_6X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_6X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X8_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X8_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X10_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X10_LDR:
+        case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X12_LDR:
+        case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
             return PixelFormatDataTypes::Float;
 
         case PFG_RGBA16_FLOAT:
@@ -192,7 +201,7 @@ namespace Ogre
         return PixelFormatDataTypes::NumPixelFormatDataTypes;
     }
     //-------------------------------------------------------------------------
-    const char* MetalPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
+    const char *MetalPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
     {
         PixelFormatDataTypes::PixelFormatDataTypes pfDataType = getPixelFormatDataType( pixelFormat );
 
@@ -202,9 +211,8 @@ namespace Ogre
         return c_pixelFormatTypes[pfDataType];
     }
     //-------------------------------------------------------------------------
-    const char* MetalPixelFormatToShaderType::getDataType( PixelFormatGpu pixelFormat,
-                                                           uint32 textureType,
-                                                           bool isMsaa,
+    const char *MetalPixelFormatToShaderType::getDataType( PixelFormatGpu pixelFormat,
+                                                           uint32 textureType, bool isMsaa,
                                                            ResourceAccess::ResourceAccess access ) const
     {
         if( textureType == TextureTypes::Unknown )
@@ -252,7 +260,7 @@ namespace Ogre
             }
 
             size_t dataTypeIdx = 9u * PixelFormatDataTypes::NumPixelFormatDataTypes * 4u +
-                                 (textureType - 9u) * 4u + accessIdx;
+                                 ( textureType - 9u ) * 4u + accessIdx;
             return c_dataTypes[dataTypeIdx];
         }
     }

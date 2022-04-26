@@ -8,11 +8,7 @@ using namespace Demo;
 
 namespace Demo
 {
-    LogicGameState::LogicGameState() :
-        mDisplacement( 0 ),
-        mGraphicsGameState( 0 )
-    {
-    }
+    LogicGameState::LogicGameState() : mDisplacement( 0 ), mGraphicsGameState( 0 ) {}
     //-----------------------------------------------------------------------------------
     void LogicGameState::_notifyGraphicsGameState( GraphicsGameState *graphicsGameState )
     {
@@ -33,4 +29,4 @@ namespace Demo
 
         GameState::update( timeSinceLast );
     }
-}
+}  // namespace Demo

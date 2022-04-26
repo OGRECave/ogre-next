@@ -3,6 +3,7 @@
 #define _OgreTextureAnimationControllerValue_H_
 
 #include "OgreHlmsUnlitPrerequisites.h"
+
 #include "OgreController.h"
 #include "OgreMatrix4.h"
 
@@ -25,12 +26,12 @@ namespace Ogre
         bool mScaleU, mScaleV;
         bool mRotate;
 
-        uint8           mTextureUnit;
-        HlmsDatablock   *mDatablock;
+        uint8          mTextureUnit;
+        HlmsDatablock *mDatablock;
 
-        Real    mUMod, mVMod;
-        Real    mUScale, mVScale;
-        Radian  mRotation;
+        Real            mUMod, mVMod;
+        Real            mUScale, mVScale;
+        Radian          mRotation;
         mutable Matrix4 mTexModMatrix;
 
         //---- Tiled Texture
@@ -44,11 +45,11 @@ namespace Ogre
         @param textureUnit
             textureUnit to apply the modification to.
         */
-        TextureAnimationControllerValue(Ogre::HlmsDatablock *datablock, Ogre::uint8 textureUnit);
+        TextureAnimationControllerValue( Ogre::HlmsDatablock *datablock, Ogre::uint8 textureUnit );
 
-        Ogre::Real getValue(void) const;
+        Ogre::Real getValue() const override;
 
-        void setValue(Ogre::Real value);
+        void setValue( Ogre::Real value ) override;
 
         /** scaleAnimation.
         @param scaleU
@@ -56,7 +57,7 @@ namespace Ogre
         @param scaleV
             If true, the v coordinates will be scaled by the modification.
         */
-        void scaleAnimation(bool scaleU, bool scaleV);
+        void scaleAnimation( bool scaleU, bool scaleV );
 
         /** scrollAnimation.
         @param textureUnit
@@ -64,13 +65,13 @@ namespace Ogre
         @param translateV
             If true, the v coordinates will be translated by the modification.
         */
-        void scrollAnimation(bool translateU, bool translateV);
+        void scrollAnimation( bool translateU, bool translateV );
 
         /** rotationAnimation.
         @param rotate
             If true, the texture will be rotated by the modification.
         */
-        void rotationAnimation(bool rotate);
+        void rotationAnimation( bool rotate );
 
         /** tiledAnimation.
         @param numFramesHorizontal
@@ -78,12 +79,12 @@ namespace Ogre
         @param numFramesVertical
             number of vertical tiles.
         */
-        void tiledAnimation(Ogre::uint16 numFramesHorizontal, Ogre::uint16 numFramesVertical);
+        void tiledAnimation( Ogre::uint16 numFramesHorizontal, Ogre::uint16 numFramesVertical );
 
     private:
         void recalcTextureMatrix() const;
     };
 
-}
+}  // namespace Ogre
 
 #endif

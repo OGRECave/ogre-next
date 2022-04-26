@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreNULLTextureGpu_H_
 
 #include "OgreNULLPrerequisites.h"
+
 #include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
@@ -37,57 +38,57 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreNULLExport NULLTextureGpu : public TextureGpu
     {
     protected:
-        virtual void createInternalResourcesImpl(void);
-        virtual void destroyInternalResourcesImpl(void);
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
     public:
-        NULLTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                        VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                        TextureTypes::TextureTypes initialType,
+        NULLTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
+                        IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                         TextureGpuManager *textureManager );
-        virtual ~NULLTextureGpu();
+        ~NULLTextureGpu() override;
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
-        virtual void notifyDataIsReady(void);
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
+        void notifyDataIsReady() override;
 
-        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
-        virtual void _setToDisplayDummyTexture(void);
+        void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                                       CopyEncTransitionMode::Auto ) override;
+        void _setToDisplayDummyTexture() override;
 
-        virtual bool _isDataReadyImpl(void) const;
+        bool _isDataReadyImpl() const override;
     };
 
     class _OgreNULLExport NULLTextureGpuRenderTarget : public NULLTextureGpu
     {
     protected:
-        uint16          mDepthBufferPoolId;
-        bool            mPreferDepthTexture;
-        PixelFormatGpu  mDesiredDepthBufferFormat;
+        uint16         mDepthBufferPoolId;
+        bool           mPreferDepthTexture;
+        PixelFormatGpu mDesiredDepthBufferFormat;
 
     public:
         NULLTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                     VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                     TextureTypes::TextureTypes initialType,
-                                    TextureGpuManager *textureManager );
+                                    TextureGpuManager         *textureManager );
 
-        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId(void) const;
-        virtual bool getPreferDepthTexture(void) const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+        void           _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                                PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16         getDepthBufferPoolId() const override;
+        bool           getPreferDepthTexture() const override;
+        PixelFormatGpu getDesiredDepthBufferFormat() const override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

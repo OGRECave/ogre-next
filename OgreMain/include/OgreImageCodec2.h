@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -32,14 +32,14 @@ THE SOFTWARE.
 #include "OgreTextureBox.h"
 #include "OgreTextureGpu.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
     /** Codec specialized in images.
         @remarks
             The users implementing subclasses of ImageCodec2 are required to return
@@ -48,7 +48,7 @@ namespace Ogre {
     class _OgreExport ImageCodec2 : public Codec
     {
     public:
-        virtual ~ImageCodec2();
+        ~ImageCodec2() override;
         /** Codec return class for images. Has information about the size and the
             pixel format of the image. */
         class _OgrePrivate ImageData2 : public Codec::CodecData
@@ -61,7 +61,7 @@ namespace Ogre {
                 freeOnDestruction( true )
             {
             }
-            virtual ~ImageData2()
+            ~ImageData2() override
             {
                 if( freeOnDestruction && box.data )
                 {
@@ -70,28 +70,22 @@ namespace Ogre {
                 }
             }
 
-            TextureBox                  box;
-            TextureTypes::TextureTypes  textureType;
-            PixelFormatGpu              format;
-            uint8                       numMipmaps;
-            bool                        freeOnDestruction;
+            TextureBox                 box;
+            TextureTypes::TextureTypes textureType;
+            PixelFormatGpu             format;
+            uint8                      numMipmaps;
+            bool                       freeOnDestruction;
 
         public:
-            virtual String dataType() const
-            {
-                return "ImageData2";
-            }
+            String dataType() const override { return "ImageData2"; }
         };
 
     public:
-        virtual String getDataType() const
-        {
-            return "ImageCodec2";
-        }
+        String getDataType() const override { return "ImageCodec2"; }
     };
 
     /** @} */
     /** @} */
-} // namespace
+}  // namespace Ogre
 
 #endif

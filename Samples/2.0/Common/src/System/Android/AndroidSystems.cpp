@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -43,8 +43,8 @@ namespace Demo
     static AndroidSystems g_andrSystem;
 #endif
 
-    AndroidSystems::AndroidSystems() : mAndroidApp( 0 ), mNativeWindow( 0 ) {}
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+    AndroidSystems::AndroidSystems() : mAndroidApp( 0 ), mNativeWindow( 0 ) {}
     //-------------------------------------------------------------------------
     void AndroidSystems::setAndroidApp( android_app *androidApp )
     {
@@ -56,9 +56,9 @@ namespace Demo
         g_andrSystem.mNativeWindow = nativeWindow;
     }
     //-------------------------------------------------------------------------
-    ANativeWindow *AndroidSystems::getNativeWindow( void ) { return g_andrSystem.mNativeWindow; }
+    ANativeWindow *AndroidSystems::getNativeWindow() { return g_andrSystem.mNativeWindow; }
     //-------------------------------------------------------------------------
-    void AndroidSystems::registerArchiveFactories( void )
+    void AndroidSystems::registerArchiveFactories()
     {
         AAssetManager *assetMgr = g_andrSystem.mAndroidApp->activity->assetManager;
         Ogre::ArchiveManager &archiveManager = Ogre::ArchiveManager::getSingleton();
@@ -87,10 +87,11 @@ namespace Demo
     bool AndroidSystems::isAndroid() { return true; }
 #else
     //-------------------------------------------------------------------------
-    void AndroidSystems::setAndroidApp( android_app *androidApp ) {}
-    void AndroidSystems::setNativeWindow( ANativeWindow *nativeWindow ) {}
-    ANativeWindow *AndroidSystems::getNativeWindow( void ) { return 0; }
+    AndroidSystems::AndroidSystems() {}
+    void AndroidSystems::setAndroidApp( android_app * ) {}
+    void AndroidSystems::setNativeWindow( ANativeWindow * ) {}
+    ANativeWindow *AndroidSystems::getNativeWindow() { return 0; }
     bool AndroidSystems::isAndroid() { return false; }
-    void AndroidSystems::registerArchiveFactories( void ) {}
+    void AndroidSystems::registerArchiveFactories() {}
 #endif
 }  // namespace Demo

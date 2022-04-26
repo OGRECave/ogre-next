@@ -15,6 +15,8 @@ compositor_node TutorialSky_PostprocessRenderingNode
 			overlays	off
 			rq_first	0
 			rq_last		2
+
+			profiling_id "Opaque Objects"
 		}
 		
 		//Render sky after opaque stuff (performance optimization)
@@ -22,6 +24,8 @@ compositor_node TutorialSky_PostprocessRenderingNode
 		{
 			quad_normals	camera_direction
 			material SkyPostprocess
+
+			profiling_id "Sky"
 		}
 		
 		//Render transparent stuff after sky
@@ -29,6 +33,8 @@ compositor_node TutorialSky_PostprocessRenderingNode
 		{
 			overlays	on
 			rq_first	2
+
+			profiling_id "Transparents"
 		}
 	}
 }

@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -26,3 +26,6 @@ ogre_add_executable(Sample_Tutorial00_Basic WIN32 MACOSX_BUNDLE ${SOURCE_FILES} 
 target_link_libraries(Sample_Tutorial00_Basic ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Sample_Tutorial00_Basic)
 
+if( APPLE )
+	set_target_properties( Sample_Tutorial00_Basic PROPERTIES RESOURCE "${TUTORIAL_RESOURCES}" )
+endif()

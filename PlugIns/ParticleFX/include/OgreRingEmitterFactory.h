@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,38 +30,32 @@ THE SOFTWARE.
 #define __RingEmitterFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreParticleEmitterFactory.h"
 #include "OgreRingEmitter.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for particle emitter of type "Ring".
     @remarks
-        Creates instances of RingEmitter to be used in particle systems. 
+        Creates instances of RingEmitter to be used in particle systems.
     */
-    class _OgreParticleFXExport RingEmitterFactory : public ParticleEmitterFactory
+    class _OgreParticleFXExport RingEmitterFactory final : public ParticleEmitterFactory
     {
     protected:
-
     public:
         /** See ParticleEmitterFactory */
-        String getName() const
-        { 
-            return "Ring"; 
-        }
+        String getName() const override { return "Ring"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter* createEmitter(ParticleSystem* psys) 
+        ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
-            ParticleEmitter* emit = OGRE_NEW RingEmitter(psys);
-            mEmitters.push_back(emit);
+            ParticleEmitter *emit = OGRE_NEW RingEmitter( psys );
+            mEmitters.push_back( emit );
             return emit;
         }
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

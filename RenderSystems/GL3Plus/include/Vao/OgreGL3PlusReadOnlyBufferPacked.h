@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -37,7 +37,7 @@ namespace Ogre
 {
     class GL3PlusBufferInterface;
 
-    class _OgreGL3PlusExport GL3PlusReadOnlyTexBufferPacked : public ReadOnlyBufferPacked
+    class _OgreGL3PlusExport GL3PlusReadOnlyTexBufferPacked final : public ReadOnlyBufferPacked
     {
         GLuint mTexName;
         GLenum mInternalFormat;
@@ -50,19 +50,19 @@ namespace Ogre
                                         BufferType bufferType, void *initialData, bool keepAsShadow,
                                         VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface,
                                         PixelFormatGpu pf );
-        virtual ~GL3PlusReadOnlyTexBufferPacked();
+        ~GL3PlusReadOnlyTexBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
 
-        virtual void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes );
+        void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes ) override;
     };
 
-    class _OgreGL3PlusExport GL3PlusReadOnlyUavBufferPacked : public ReadOnlyBufferPacked
+    class _OgreGL3PlusExport GL3PlusReadOnlyUavBufferPacked final : public ReadOnlyBufferPacked
     {
         inline void bindBuffer( uint16 slot, size_t offset, size_t sizeBytes );
 
@@ -72,19 +72,19 @@ namespace Ogre
                                         BufferType bufferType, void *initialData, bool keepAsShadow,
                                         VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface,
                                         PixelFormatGpu pf );
-        virtual ~GL3PlusReadOnlyUavBufferPacked();
+        ~GL3PlusReadOnlyUavBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
 
-        virtual void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes );
+        void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes ) override;
     };
 
-    class _OgreGL3PlusExport GL3PlusReadOnlyBufferEmulatedPacked : public ReadOnlyBufferPacked
+    class _OgreGL3PlusExport GL3PlusReadOnlyBufferEmulatedPacked final : public ReadOnlyBufferPacked
     {
         GLuint mTexName;
         GLenum mInternalFormat;
@@ -102,19 +102,19 @@ namespace Ogre
         GL3PlusReadOnlyBufferEmulatedPacked( size_t internalBufStartBytes, size_t numElements,
                                              uint32 bytesPerElement, uint32 numElementsPadding,
                                              BufferType bufferType, void *initialData, bool keepAsShadow,
-                                             VaoManager *vaoManager,
+                                             VaoManager             *vaoManager,
                                              GL3PlusBufferInterface *bufferInterface,
-                                             PixelFormatGpu pf );
-        virtual ~GL3PlusReadOnlyBufferEmulatedPacked();
+                                             PixelFormatGpu          pf );
+        ~GL3PlusReadOnlyBufferEmulatedPacked() override;
 
-        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
 
-        virtual void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes );
+        void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes ) override;
     };
 }  // namespace Ogre
 

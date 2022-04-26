@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -37,21 +37,21 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalAsyncTicket : public AsyncTicket
+    class _OgreMetalExport MetalAsyncTicket final : public AsyncTicket
     {
     protected:
-        dispatch_semaphore_t    mFenceName;
-        MetalDevice             *mDevice;
+        dispatch_semaphore_t mFenceName;
+        MetalDevice         *mDevice;
 
-        virtual const void* mapImpl(void);
+        const void *mapImpl() override;
 
     public:
-        MetalAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                          size_t elementStart, size_t elementCount, MetalDevice *device );
-        virtual ~MetalAsyncTicket();
+        MetalAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
+                          size_t elementCount, MetalDevice *device );
+        ~MetalAsyncTicket() override;
 
-        virtual bool queryIsTransferDone(void);
+        bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

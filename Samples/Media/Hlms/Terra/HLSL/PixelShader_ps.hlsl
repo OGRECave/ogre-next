@@ -2,15 +2,22 @@
 @insertpiece( DeclareUvModifierMacros )
 
 @insertpiece( DefaultTerraHeaderPS )
+
+
+// START UNIFORM DECLARATION
 @insertpiece( custom_ps_uniformDeclaration )
+// END UNIFORM DECLARATION
 
 @insertpiece( PccManualProbeDecl )
+
 struct PS_INPUT
 {
 	@insertpiece( Terra_VStoPS_block )
 };
 
 @pset( currSampler, samplerStateStart )
+
+@property( !hlms_shadowcaster )
 
 @property( !hlms_render_depth_only )
 	@property( hlms_gen_normals_gbuffer )
@@ -112,3 +119,22 @@ SamplerState samplerStateTerra		: register(s@value(terrainNormals));
 	return outPs;
 @end
 }
+@else ///!hlms_shadowcaster
+
+@insertpiece( DeclOutputType )
+
+@insertpiece( output_type ) main( PS_INPUT inPs )
+{
+@property( !hlms_render_depth_only || exponential_shadow_maps || hlms_shadowcaster_point )
+	PS_OUTPUT outPs;
+@end
+
+	@insertpiece( custom_ps_preExecution )
+	@insertpiece( DefaultBodyPS )
+	@insertpiece( custom_ps_posExecution )
+
+@property( !hlms_render_depth_only || exponential_shadow_maps || hlms_shadowcaster_point )
+	return outPs;
+@end
+}
+@end

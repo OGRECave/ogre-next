@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,23 +27,22 @@ THE SOFTWARE.
 */
 #include "OgreStableHeaders.h"
 
+#include "OgreRenderSystemCapabilitiesManager.h"
+
 #include "OgreStringVector.h"
 #include "OgreArchiveManager.h"
 #include "OgreArchive.h"
-#include "OgreRenderSystemCapabilitiesManager.h"
 #include "OgreRenderSystemCapabilitiesSerializer.h"
-
-
 
 namespace Ogre {
 
     //-----------------------------------------------------------------------
     template<> RenderSystemCapabilitiesManager* Singleton<RenderSystemCapabilitiesManager>::msSingleton = 0;
-    RenderSystemCapabilitiesManager* RenderSystemCapabilitiesManager::getSingletonPtr(void)
+    RenderSystemCapabilitiesManager* RenderSystemCapabilitiesManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    RenderSystemCapabilitiesManager& RenderSystemCapabilitiesManager::getSingleton(void)
+    RenderSystemCapabilitiesManager& RenderSystemCapabilitiesManager::getSingleton()
     {
         assert( msSingleton );  return ( *msSingleton );
     }

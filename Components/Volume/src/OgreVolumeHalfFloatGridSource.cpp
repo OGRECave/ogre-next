@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -122,14 +122,14 @@ namespace Volume {
     //-----------------------------------------------------------------------
 
 
-    Real HalfFloatGridSource::getMaxClampedAbsoluteDensity(void) const
+    Real HalfFloatGridSource::getMaxClampedAbsoluteDensity() const
     {
         return mMaxClampedAbsoluteDensity;
     }
 
     //-----------------------------------------------------------------------
 
-    HalfFloatGridSource::~HalfFloatGridSource(void)
+    HalfFloatGridSource::~HalfFloatGridSource()
     {
         OGRE_FREE(mData, MEMCATEGORY_GENERAL);
     }

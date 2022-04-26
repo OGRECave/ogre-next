@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -34,55 +34,43 @@ THE SOFTWARE.
 namespace Ogre
 {
     class GL3PlusPBuffer;
-    
-class OSXGL3PlusSupport : public GL3PlusSupport
-{
-public:
-    OSXGL3PlusSupport();
-    ~OSXGL3PlusSupport();
 
-    /**
-    * Add any special config values to the system.
-    * Must have a "Full Screen" value that is a bool and a "Video Mode" value
-    * that is a string in the form of wxh
-    */
-    void addConfig( void );
+    class OSXGL3PlusSupport : public GL3PlusSupport
+    {
+    public:
+        OSXGL3PlusSupport();
 
-    /**
-    * Make sure all the extra options are valid
-    */
-    String validateConfig( void );
+        virtual ~OSXGL3PlusSupport();
 
-    /// @copydoc GL3PlusSupport::createWindow
-    RenderWindow* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle );
-    
-    /// @copydoc RenderSystem::createRenderWindow
-    virtual RenderWindow* newWindow( const String &name, unsigned int width, unsigned int height, 
-        bool fullScreen, const NameValuePairList *miscParams = 0 );
-    
-    /**
-    * Start anything special
-    */
-    void start();
+        /// @copydoc GL3PlusSupport::addConfig
+        void addConfig() override;
 
-    /**
-    * Stop anything special
-    */
-    void stop();
+        /// @copydoc GL3PlusSupport::validateConfig
+        String validateConfig() override;
 
-    /**
-    * Get the address of a function
-    */
-    void* getProcAddress(const char *procname) const;
+        /// @copydoc GL3PlusSupport::createWindow
+        Window *createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
+                              const String &windowTitle ) override;
 
-    // Core Foundation Array callback function for sorting, must be static for the function ptr
-    static CFComparisonResult _compareModes (const void *val1, const void *val2, void *context);
-    // Core Fondation Dictionary helper functions, also static for ease of use in above static
-    static Boolean _getDictionaryBoolean(CFDictionaryRef dict, const void* key);
-    static long _getDictionaryLong(CFDictionaryRef dict, const void* key);
+        /// @copydoc GL3PlusSupport::newWindow
+        virtual Window *newWindow( const String &name, unsigned int width, unsigned int height,
+                                   bool fullScreen, const NameValuePairList *miscParams = 0 ) override;
 
-}; // class OSXGL3PlusSupport
+        /// @copydoc GL3PlusSupport::start
+        void start() override;
 
-} // namespace Ogre
+        /// @copydoc GL3PlusSupport::stop
+        void stop() override;
 
-#endif // OGRE_OSXGLSupport_H
+        /// @copydoc GL3PlusSupport::getProcAddress
+        void *getProcAddress( const char *procname ) const override;
+
+    private:
+        // Core Foundation Array callback function for sorting, must be static for the function ptr
+        static CFComparisonResult _compareModes( const void *val1, const void *val2, void *context );
+
+    };  // class OSXGL3PlusSupport
+
+}  // namespace Ogre
+
+#endif  // OGRE_OSXGLSupport_H

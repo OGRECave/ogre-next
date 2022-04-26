@@ -36,22 +36,22 @@ namespace Demo
         void createRefractivePlaceholder( Ogre::Item *item, Ogre::SceneNode *sceneNode,
                                           Ogre::HlmsPbsDatablock *datablock );
 
-        void createRefractiveWall( void );
+        void createRefractiveWall();
         void createRefractiveSphere( const int x, const int z, const int numX, const int numZ,
                                      const float armsLength, const float startX, const float startZ );
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
-        void setTransparencyToMaterials( void );
+        void setTransparencyToMaterials();
 
     public:
         RefractionsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01( void );
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
 }  // namespace Demo
 

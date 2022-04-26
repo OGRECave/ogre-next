@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,30 +29,31 @@ THE SOFTWARE.
 #define __ShadowCameraSetup_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /** This class allows you to plug in new ways to define the camera setup when
         rendering and projecting shadow textures.
     @remarks
         The default projection used when rendering shadow textures is a uniform
-        frustum. This is pretty straight forward but doesn't make the best use of 
-        the space in the shadow map since texels closer to the camera will be larger, 
+        frustum. This is pretty straight forward but doesn't make the best use of
+        the space in the shadow map since texels closer to the camera will be larger,
         resulting in 'jaggies'. There are several ways to distribute the texels
         in the shadow texture differently, and this class allows you to override
-        that. 
+        that.
     @par
         Ogre is provided with several alternative shadow camera setups, including
         LiSPSM (LiSPSMShadowCameraSetup) and Plane Optimal (PlaneOptimalShadowCameraSetup).
-        Others can of course be written to incorporate other algorithms. All you 
-        have to do is instantiate one of these classes and enable it using 
+        Others can of course be written to incorporate other algorithms. All you
+        have to do is instantiate one of these classes and enable it using
         SceneManager::setShadowCameraSetup (global) or Light::setCustomShadowCameraSetup
         (per light). In both cases the instance is wrapped in a SharedPtr which means
         it will  be deleted automatically when no more references to it exist.
@@ -60,10 +61,10 @@ namespace Ogre {
         Shadow map matrices, being projective matrices, have 15 degrees of freedom.
         3 of these degrees of freedom are fixed by the light's position.  4 are used to
         affinely affect z values.  6 affinely affect u,v sampling.  2 are projective
-        degrees of freedom.  This class is meant to allow custom methods for 
+        degrees of freedom.  This class is meant to allow custom methods for
         handling optimization.
     */
-    class _OgreExport ShadowCameraSetup : public ShadowDataAlloc
+    class _OgreExport ShadowCameraSetup : public OgreAllocatedObj
     {
     protected:
         /// Defines the min & max frustum distance. TODO: put as output from getShadowCamera
@@ -74,25 +75,23 @@ namespace Ogre {
 
     public:
         /// Function to implement -- must set the shadow camera properties
-        virtual void getShadowCamera( const SceneManager *sm, const Camera *cam,
-                                      const Light *light, Camera *texCam, size_t iteration,
+        virtual void getShadowCamera( const SceneManager *sm, const Camera *cam, const Light *light,
+                                      Camera *texCam, size_t iteration,
                                       const Vector2 &viewportRealSize ) const = 0;
         ShadowCameraSetup() : mMinDistance( 0.0f ), mMaxDistance( 1000000.0f ) {}
         /// Need virtual destructor in case subclasses use it
         virtual ~ShadowCameraSetup() {}
 
-        Real getMinDistance() const         { return mMinDistance; }
-        Real getMaxDistance() const         { return mMaxDistance; }
+        Real getMinDistance() const { return mMinDistance; }
+        Real getMaxDistance() const { return mMaxDistance; }
 
-        static void setUseEsm(bool useEsm)  { mUseEsm = useEsm; }
+        static void setUseEsm( bool useEsm ) { mUseEsm = useEsm; }
     };
-
-
 
     /** Implements default shadow camera setup
         @remarks
             This implements the default shadow camera setup algorithm.  This is what might
-            be referred to as "normal" shadow mapping.  
+            be referred to as "normal" shadow mapping.
     */
     class _OgreExport DefaultShadowCameraSetup : public ShadowCameraSetup
     {
@@ -100,18 +99,18 @@ namespace Ogre {
         /// Default constructor
         DefaultShadowCameraSetup();
         /// Destructor
-        virtual ~DefaultShadowCameraSetup();
+        ~DefaultShadowCameraSetup() override;
 
         /// Default shadow camera setup
-        virtual void getShadowCamera( const SceneManager *sm, const Camera *cam,
-                                      const Light *light, Camera *texCam, size_t iteration,
-                                      const Vector2 &viewportRealSize ) const;
+        void getShadowCamera( const SceneManager *sm, const Camera *cam, const Light *light,
+                              Camera *texCam, size_t iteration,
+                              const Vector2 &viewportRealSize ) const override;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -2,14 +2,14 @@
 #include "GraphicsSystem.h"
 #include "MemoryCleanupGameState.h"
 
-#include "OgreSceneManager.h"
-#include "OgreCamera.h"
-#include "OgreRoot.h"
-#include "OgreWindow.h"
-#include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreCamera.h"
+#include "OgreConfigFile.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreWindow.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
@@ -26,7 +26,7 @@ namespace Demo
 {
     class MemoryCleanupGraphicsSystem : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace* setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
@@ -34,15 +34,15 @@ namespace Demo
             return mWorkspace;
         }
 
-        virtual void initMiscParamsListener( Ogre::NameValuePairList &params )
+        void initMiscParamsListener( Ogre::NameValuePairList &params ) override
         {
-            //Used by GL3+ & Metal
+            // Used by GL3+ & Metal
             params["VaoManager::CPU_INACCESSIBLE"] = "0";
             params["VaoManager::CPU_ACCESSIBLE_DEFAULT"] = "0";
             params["VaoManager::CPU_ACCESSIBLE_PERSISTENT"] = "0";
             params["VaoManager::CPU_ACCESSIBLE_PERSISTENT_COHERENT"] = "0";
 
-            //Used by D3D11
+            // Used by D3D11
             params["VaoManager::VERTEX_IMMUTABLE"] = "0";
             params["VaoManager::VERTEX_DEFAULT"] = "0";
             params["VaoManager::VERTEX_DYNAMIC"] = "0";
@@ -55,19 +55,14 @@ namespace Demo
         }
 
     public:
-        MemoryCleanupGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState )
-        {
-        }
+        MemoryCleanupGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}
     };
 
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
-        MemoryCleanupGameState *gfxGameState = new MemoryCleanupGameState(
-        "" );
+        MemoryCleanupGameState *gfxGameState = new MemoryCleanupGameState( "" );
 
         GraphicsSystem *graphicsSystem = new MemoryCleanupGraphicsSystem( gfxGameState );
 
@@ -77,17 +72,12 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
-    {
-        return "Memory Cleanup";
-    }
-}
+    const char *MainEntryPoints::getWindowTitle() { return "Memory Cleanup"; }
+}  // namespace Demo

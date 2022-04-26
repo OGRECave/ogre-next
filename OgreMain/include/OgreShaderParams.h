@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,16 +29,17 @@ THE SOFTWARE.
 #define _OgreShaderParams_H_
 
 #include "OgreGpuProgramParams.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     /** The purpose of this class is to contain a set of both auto and
         manual parameters that may apply to multiple shaders; without
@@ -49,7 +50,7 @@ namespace Ogre
     @par
         Parameters are kept unsorted in mParams
     */
-    class _OgreExport ShaderParams : public PassAlloc
+    class _OgreExport ShaderParams : public OgreAllocatedObj
     {
     public:
         enum ElementType
@@ -61,29 +62,39 @@ namespace Ogre
 
         struct AutoParam
         {
-            ElementType                             extraParamType;
-            double                                  extraParamValue;
-            GpuProgramParameters::AutoConstantType  acType;
+            ElementType                            extraParamType;
+            double                                 extraParamValue;
+            GpuProgramParameters::AutoConstantType acType;
         };
         struct ManualParam
         {
             ElementType elementType;
             /// Size in bytes from dataBytes
-            uint8       dataSizeBytes;
+            uint8 dataSizeBytes;
             /// Enough data to cover up to a 4x4 matrix.
             /// Gets reinterpret_cast'ed based on elementType
-            uint8       dataBytes[64];
+            uint32 dataBytes[16];
+        };
+        struct ManualParamEx
+        {
+            ElementType elementType;
+            /// Size in bytes from dataBytes
+            uint16 dataSizeBytes;
+            /// Pointer to externally owned memory. We won't free it.
+            void const *dataBytes;
         };
         struct _OgreExport Param
         {
-            String  name;
-            bool    isAutomatic;
-            bool    isDirty;
+            String name;
+            bool   isAutomatic;
+            bool   isEx;
+            bool   isDirty;
 
             union
             {
-                AutoParam ap;
-                ManualParam mp;
+                AutoParam     ap;
+                ManualParam   mp;
+                ManualParamEx mpEx;
             };
 
             template <typename T>
@@ -121,27 +132,44 @@ namespace Ogre
             template <typename T>
             void getManualValue( T &value ) const
             {
-                assert( !isAutomatic && sizeof(T) <= mp.dataSizeBytes );
-                memcpy( &value, mp.dataBytes, sizeof(T) );
+                assert( !isAutomatic && !isEx && sizeof( T ) <= mp.dataSizeBytes );
+                memcpy( &value, mp.dataBytes, sizeof( T ) );
             }
             /// See other overload.
             /// Examples:
             ///     uint32 myVal = param->getManualValue();
             ///     Vector4 myVector4 = param->getManualValue();
             template <typename T>
-            T getManualValue(void) const
+            T getManualValue() const
             {
                 T retVal;
                 getManualValue( retVal );
                 return retVal;
             }
+
+            template <typename T>
+            void setManualValueEx( const T *value, uint32 numValues, ElementType elementType );
+
+            /** Shortcut for setting an array with a custom pointer. We won't free it.
+                Caller is responsible for keeping the pointer alive while
+                this Params hold it.
+            @remarks
+                This version is meant to be used when setManualValue's limit of 16 values
+                is not enough for you.
+
+                Remember to call @see ShaderParams::setDirty otherwise
+                changes won't take effect.
+            */
+            void setManualValueEx( const float *value, uint32 numValues );
+            void setManualValueEx( const int32 *value, uint32 numValues );
+            void setManualValueEx( const uint32 *value, uint32 numValues );
         };
 
         typedef vector<Param>::type ParamVec;
 
         /// Don't log exceptions about missing parameters
-        bool mSilenceMissingParameterWarnings;
-        uint32 mUpdateCounter;
+        bool     mSilenceMissingParameterWarnings;
+        uint32   mUpdateCounter;
         ParamVec mParams;
 
         ShaderParams();
@@ -149,14 +177,14 @@ namespace Ogre
         void updateParameters( GpuProgramParametersSharedPtr params, bool bForce );
 
         /// Call this whenever you've updated a parameter in mParams
-        void setDirty(void)                         { ++mUpdateCounter; }
-        uint32 getUpdateCounter(void) const         { return mUpdateCounter; }
+        void   setDirty() { ++mUpdateCounter; }
+        uint32 getUpdateCounter() const { return mUpdateCounter; }
 
         /// Finds a parameter. Returns null if not found.
         /// This operation is O(N) as it makes a linear search.
         /// You can cache the return pointer (as long as the
         /// iterators from mParams aren't invalidated)
-        Param* findParameter( const String &name );
+        Param *findParameter( const String &name );
 
         /** Removes a parameter if it matches the name
         @remarks
@@ -177,7 +205,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

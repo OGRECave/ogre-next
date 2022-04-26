@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -42,12 +42,10 @@ macro(create_android_proj ANDROID_PROJECT_TARGET)
     ##################################################################    
     	
 	if(OGRE_BUILD_RENDERSYSTEM_GLES2)
-	    SET(DEPENDENCIES OgreMain RenderSystem_GLES2)
-	else()
-	    SET(DEPENDENCIES OgreMain RenderSystem_GLES)		
+	    SET(DEPENDENCIES ${OGRE_NEXT}Main RenderSystem_GLES2)
 	endif()
 	
-	SET(DEPENDENCIES ${DEPENDENCIES} OgreTerrain OgreRTShaderSystem OgreMeshLodGenerator OgreOverlay OgrePaging OgreVolume Plugin_ParticleFX Plugin_OctreeSceneManager)
+	SET(DEPENDENCIES ${DEPENDENCIES} ${OGRE_NEXT}MeshLodGenerator ${OGRE_NEXT}Overlay ${OGRE_NEXT}Paging ${OGRE_NEXT}Volume Plugin_ParticleFX)
 	add_dependencies(${ANDROID_PROJECT_TARGET} ${DEPENDENCIES})
 	set(DEPEND_STATIC_LIBS "")	
 	foreach(DEPENDENCY ${DEPENDENCIES})

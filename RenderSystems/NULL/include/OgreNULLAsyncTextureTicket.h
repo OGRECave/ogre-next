@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,29 +30,30 @@ THE SOFTWARE.
 #define _OgreNULLAsyncTextureTicket_H_
 
 #include "OgreNULLPrerequisites.h"
+
 #include "OgreAsyncTextureTicket.h"
 #include "OgreTextureBox.h"
 
 namespace Ogre
 {
     /** See AsyncTextureTicket
-    */
-    class _OgreNULLExport NULLAsyncTextureTicket : public AsyncTextureTicket
+     */
+    class _OgreNULLExport NULLAsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
-        uint8           *mVboName;
+        uint8 *mVboName;
 
-        virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl(void);
+        TextureBox mapImpl( uint32 slice ) override;
+        void       unmapImpl() override;
 
     public:
         NULLAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                 TextureTypes::TextureTypes textureType,
-                                PixelFormatGpu pixelFormatFamily );
-        virtual ~NULLAsyncTextureTicket();
+                                PixelFormatGpu             pixelFormatFamily );
+        ~NULLAsyncTextureTicket() override;
 
-        virtual bool queryIsTransferDone(void);
+        bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

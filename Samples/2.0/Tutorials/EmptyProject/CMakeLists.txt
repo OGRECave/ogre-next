@@ -41,6 +41,8 @@ else()
 endif()
 
 include_directories( "./include" )
+# Ogre doesn't need this include, but we do because of Rapidjson in UnitTesting.cpp
+include_directories( "./Dependencies/Ogre/Dependencies/include" )
 
 add_recursive( ./src SOURCES )
 add_recursive( ./include HEADERS )

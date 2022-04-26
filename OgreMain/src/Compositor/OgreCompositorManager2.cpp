@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,49 +29,47 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorManager2.h"
+
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorShadowNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
-
 #include "Math/Array/OgreObjectMemoryManager.h"
-
-#include "OgreRectangle2D.h"
-#include "OgreTextureGpuManager.h"
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
 #include "OgrePixelFormatGpuUtils.h"
-#include "OgreStagingTexture.h"
+#include "OgreRectangle2D.h"
 #include "OgreRenderSystem.h"
 #include "OgreSceneManagerEnumerator.h"
-#include "OgreHlmsManager.h"
-#include "OgreHlms.h"
+#include "OgreStagingTexture.h"
+#include "OgreTextureGpuManager.h"
 
 namespace Ogre
 {
-    template<typename T>
-    void deleteAllSecondClear( T& container )
+    template <typename T>
+    void deleteAllSecondClear( T &container )
     {
-        //Delete all workspace definitions
+        // Delete all workspace definitions
         typename T::const_iterator itor = container.begin();
-        typename T::const_iterator end  = container.end();
-        while( itor != end )
+        typename T::const_iterator endt = container.end();
+        while( itor != endt )
         {
             OGRE_DELETE itor->second;
             ++itor;
         }
         container.clear();
     }
-    template<typename T>
-    void deleteAllClear( T& container )
+    template <typename T>
+    void deleteAllClear( T &container )
     {
-        //Delete all workspace definitions
+        // Delete all workspace definitions
         typename T::const_iterator itor = container.begin();
-        typename T::const_iterator end  = container.end();
-        while( itor != end )
+        typename T::const_iterator endt = container.end();
+        while( itor != endt )
             OGRE_DELETE *itor++;
         container.clear();
     }
@@ -87,8 +85,8 @@ namespace Ogre
         mRenderWindowsPresentBarrierDirty( false )
     {
         mDummyObjectMemoryManager = new ObjectMemoryManager();
-        mSharedTriangleFS   = OGRE_NEW v1::Rectangle2D( false, 0, mDummyObjectMemoryManager, 0 );
-        mSharedQuadFS       = OGRE_NEW v1::Rectangle2D( true, 0, mDummyObjectMemoryManager, 0 );
+        mSharedTriangleFS = OGRE_NEW v1::Rectangle2D( false, 0, mDummyObjectMemoryManager, 0 );
+        mSharedQuadFS = OGRE_NEW v1::Rectangle2D( true, 0, mDummyObjectMemoryManager, 0 );
 
         //----------------------------------------------------------------
         // Create a default Node & Workspace for basic rendering:
@@ -98,7 +96,7 @@ namespace Ogre
         //----------------------------------------------------------------
         CompositorNodeDef *nodeDef = this->addNodeDefinition( "Default Node RenderScene" );
 
-        //Input texture
+        // Input texture
         nodeDef->addTextureSourceName( "WindowRT", 0, TextureDefinitionBase::TEXTURE_INPUT );
 
         nodeDef->setNumTargetPass( 1 );
@@ -107,14 +105,17 @@ namespace Ogre
             targetDef->setNumPasses( 2 );
             {
                 {
-                    CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>( targetDef->addPass( PASS_CLEAR ) );
+                    CompositorPassClearDef *passClear =
+                        static_cast<CompositorPassClearDef *>( targetDef->addPass( PASS_CLEAR ) );
                     passClear->setAllClearColours( ColourValue( 0.6f, 0.0f, 0.6f ) );
                 }
                 {
-                    CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( targetDef->addPass( PASS_QUAD ) );
+                    CompositorPassQuadDef *passQuad =
+                        static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
                     passQuad->mMaterialName = "MyQuadTest";
                 }
-                CompositorPassSceneDef *passScene = static_cast<CompositorPassSceneDef*>( targetDef->addPass( PASS_SCENE ) );
+                CompositorPassSceneDef *passScene =
+                    static_cast<CompositorPassSceneDef *>( targetDef->addPass( PASS_SCENE ) );
 
                 passScene->mShadowNode = "Default Shadow Node";
             }
@@ -123,9 +124,10 @@ namespace Ogre
         //-------
         /*CompositorShadowNodeDef *shadowNode = this->addShadowNodeDefinition( "Default Shadow Node" );
         shadowNode->setNumShadowTextureDefinitions( 3 );
-        
+
         {
-            ShadowTextureDefinition *texDef = shadowNode->addShadowTextureDefinition( 0, 0, "MyFirstTex", false );
+            ShadowTextureDefinition *texDef =
+                shadowNode->addShadowTextureDefinition( 0, 0, "MyFirstTex", false );
             texDef->width   = 2048;
             texDef->height  = 2048;
             texDef->formatList.push_back( PF_FLOAT32_R );
@@ -133,7 +135,8 @@ namespace Ogre
             texDef->shadowMapTechnique = SHADOWMAP_FOCUSED;
         }
         {
-            ShadowTextureDefinition *texDef = shadowNode->addShadowTextureDefinition( 1, 0, "MyFirstTex2", false );
+            ShadowTextureDefinition *texDef =
+                shadowNode->addShadowTextureDefinition( 1, 0, "MyFirstTex2", false );
             texDef->width   = 1024;
             texDef->height  = 1024;
             texDef->formatList.push_back( PF_FLOAT32_R );
@@ -141,7 +144,8 @@ namespace Ogre
             texDef->shadowMapTechnique = SHADOWMAP_FOCUSED;
         }
         {
-            ShadowTextureDefinition *texDef = shadowNode->addShadowTextureDefinition( 2, 0, "MyFirstTex3", false );
+            ShadowTextureDefinition *texDef =
+                shadowNode->addShadowTextureDefinition( 2, 0, "MyFirstTex3", false );
             texDef->width   = 1024;
             texDef->height  = 1024;
             texDef->formatList.push_back( PF_FLOAT32_R );
@@ -225,16 +229,16 @@ namespace Ogre
         return mNodeDefinitions.find( nodeDefName ) != mNodeDefinitions.end();
     }
     //-----------------------------------------------------------------------------------
-    CompositorNodeDef* CompositorManager2::getNodeDefinitionNonConst( IdString nodeDefName ) const
+    CompositorNodeDef *CompositorManager2::getNodeDefinitionNonConst( IdString nodeDefName ) const
     {
         CompositorNodeDef *retVal = 0;
 
         CompositorNodeDefMap::const_iterator itor = mNodeDefinitions.find( nodeDefName );
         if( itor == mNodeDefinitions.end() )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Node definition with name '" +
-                            nodeDefName.getFriendlyText() + "' not found",
-                            "CompositorManager2::getNodeDefinitionNonConst" );
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Node definition with name '" + nodeDefName.getFriendlyText() + "' not found",
+                         "CompositorManager2::getNodeDefinitionNonConst" );
         }
         else
         {
@@ -244,16 +248,16 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    const CompositorNodeDef* CompositorManager2::getNodeDefinition( IdString nodeDefName ) const
+    const CompositorNodeDef *CompositorManager2::getNodeDefinition( IdString nodeDefName ) const
     {
         CompositorNodeDef const *retVal = 0;
-        
+
         CompositorNodeDefMap::const_iterator itor = mNodeDefinitions.find( nodeDefName );
         if( itor == mNodeDefinitions.end() )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Node definition with name '" +
-                            nodeDefName.getFriendlyText() + "' not found",
-                            "CompositorManager2::getNodeDefinition" );
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Node definition with name '" + nodeDefName.getFriendlyText() + "' not found",
+                         "CompositorManager2::getNodeDefinition" );
         }
         else
         {
@@ -263,7 +267,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    CompositorNodeDef* CompositorManager2::addNodeDefinition( const String &name )
+    CompositorNodeDef *CompositorManager2::addNodeDefinition( const String &name )
     {
         CompositorNodeDef *retVal = 0;
 
@@ -274,8 +278,9 @@ namespace Ogre
         }
         else
         {
-            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "A node definition with name '" +
-                         name + "' already exists", "CompositorManager2::addNodeDefinition" );
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "A node definition with name '" + name + "' already exists",
+                         "CompositorManager2::addNodeDefinition" );
         }
 
         return retVal;
@@ -291,9 +296,9 @@ namespace Ogre
         }
         else
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Node definition with name '" +
-                            nodeDefName.getFriendlyText() + "' not found",
-                            "CompositorManager2::removeNodeDefinition" );
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Node definition with name '" + nodeDefName.getFriendlyText() + "' not found",
+                         "CompositorManager2::removeNodeDefinition" );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -302,17 +307,18 @@ namespace Ogre
         return mShadowNodeDefs.find( nodeDefName ) != mShadowNodeDefs.end();
     }
     //-----------------------------------------------------------------------------------
-    const CompositorShadowNodeDef* CompositorManager2::getShadowNodeDefinition(
-                                                                    IdString nodeDefName ) const
+    const CompositorShadowNodeDef *CompositorManager2::getShadowNodeDefinition(
+        IdString nodeDefName ) const
     {
         CompositorShadowNodeDef const *retVal = 0;
-        
+
         CompositorShadowNodeDefMap::const_iterator itor = mShadowNodeDefs.find( nodeDefName );
         if( itor == mShadowNodeDefs.end() )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "ShadowNode definition with name '" +
-                         nodeDefName.getFriendlyText() + "' not found",
-                         "CompositorManager2::getShadowNodeDefinition" );
+            OGRE_EXCEPT(
+                Exception::ERR_ITEM_NOT_FOUND,
+                "ShadowNode definition with name '" + nodeDefName.getFriendlyText() + "' not found",
+                "CompositorManager2::getShadowNodeDefinition" );
         }
         else
         {
@@ -320,27 +326,29 @@ namespace Ogre
 
             if( !retVal )
             {
-                OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "ShadowNode definition with name '" +
-                            nodeDefName.getFriendlyText() + "' was found but not validated.\n"
-                            "Did you call validateAllObjects?",
-                            "CompositorManager2::getShadowNodeDefinition" );
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "ShadowNode definition with name '" + nodeDefName.getFriendlyText() +
+                                 "' was found but not validated.\n"
+                                 "Did you call validateAllObjects?",
+                             "CompositorManager2::getShadowNodeDefinition" );
             }
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    CompositorShadowNodeDef* CompositorManager2::getShadowNodeDefinitionNonConst(
-                                                                    IdString nodeDefName ) const
+    CompositorShadowNodeDef *CompositorManager2::getShadowNodeDefinitionNonConst(
+        IdString nodeDefName ) const
     {
         CompositorShadowNodeDef *retVal = 0;
-        
+
         CompositorShadowNodeDefMap::const_iterator itor = mShadowNodeDefs.find( nodeDefName );
         if( itor == mShadowNodeDefs.end() )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "ShadowNode definition with name '" +
-                         nodeDefName.getFriendlyText() + "' not found",
-                         "CompositorManager2::getShadowNodeDefinition" );
+            OGRE_EXCEPT(
+                Exception::ERR_ITEM_NOT_FOUND,
+                "ShadowNode definition with name '" + nodeDefName.getFriendlyText() + "' not found",
+                "CompositorManager2::getShadowNodeDefinition" );
         }
         else
         {
@@ -348,30 +356,32 @@ namespace Ogre
 
             if( !retVal )
             {
-                OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "ShadowNode definition with name '" +
-                            nodeDefName.getFriendlyText() + "' was found but not validated.\n"
-                            "Did you call validateAllObjects?",
-                            "CompositorManager2::getShadowNodeDefinition" );
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "ShadowNode definition with name '" + nodeDefName.getFriendlyText() +
+                                 "' was found but not validated.\n"
+                                 "Did you call validateAllObjects?",
+                             "CompositorManager2::getShadowNodeDefinition" );
             }
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    CompositorShadowNodeDef* CompositorManager2::addShadowNodeDefinition( const String &name )
+    CompositorShadowNodeDef *CompositorManager2::addShadowNodeDefinition( const String &name )
     {
         CompositorShadowNodeDef *retVal = 0;
 
         if( mShadowNodeDefs.find( name ) == mShadowNodeDefs.end() )
         {
             retVal = OGRE_NEW CompositorShadowNodeDef( name, this );
-            mShadowNodeDefs[name] = 0; //Fill with a null ptr, it will later be validated
+            mShadowNodeDefs[name] = 0;  // Fill with a null ptr, it will later be validated
             mUnfinishedShadowNodes.push_back( retVal );
         }
         else
         {
-            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "A shadow node definition with name '" +
-                         name + "' already exists", "CompositorManager2::addShadowNodeDefinition" );
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "A shadow node definition with name '" + name + "' already exists",
+                         "CompositorManager2::addShadowNodeDefinition" );
         }
 
         return retVal;
@@ -392,7 +402,7 @@ namespace Ogre
                 CompositorShadowNodeDefVec::iterator enUnf = mUnfinishedShadowNodes.end();
                 while( itUnf != enUnf )
                 {
-                    if( (*itUnf)->getName() == nodeDefName )
+                    if( ( *itUnf )->getName() == nodeDefName )
                     {
                         OGRE_DELETE *itUnf;
                         mUnfinishedShadowNodes.erase( itUnf );
@@ -407,13 +417,14 @@ namespace Ogre
         }
         else
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "ShadowNode definition with name '" +
-                         nodeDefName.getFriendlyText() + "' not found",
-                         "CompositorManager2::removeShadowNodeDefinition" );
+            OGRE_EXCEPT(
+                Exception::ERR_ITEM_NOT_FOUND,
+                "ShadowNode definition with name '" + nodeDefName.getFriendlyText() + "' not found",
+                "CompositorManager2::removeShadowNodeDefinition" );
         }
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspaceDef* CompositorManager2::addWorkspaceDefinition( const String& name )
+    CompositorWorkspaceDef *CompositorManager2::addWorkspaceDefinition( const String &name )
     {
         CompositorWorkspaceDef *retVal = 0;
 
@@ -424,9 +435,9 @@ namespace Ogre
         }
         else
         {
-            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "A workspace with name '" +
-                            name + "' already exists",
-                            "CompositorManager2::addWorkspaceDefinition" );
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "A workspace with name '" + name + "' already exists",
+                         "CompositorManager2::addWorkspaceDefinition" );
         }
 
         return retVal;
@@ -442,9 +453,9 @@ namespace Ogre
         }
         else
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Workspace definition with name '" +
-                            name.getFriendlyText() + "' not found",
-                            "CompositorManager2::removeWorkspaceDefinition" );
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Workspace definition with name '" + name.getFriendlyText() + "' not found",
+                         "CompositorManager2::removeWorkspaceDefinition" );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -453,20 +464,20 @@ namespace Ogre
         return mWorkspaceDefs.find( name ) != mWorkspaceDefs.end();
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspaceDef* CompositorManager2::getWorkspaceDefinition( IdString name ) const
+    CompositorWorkspaceDef *CompositorManager2::getWorkspaceDefinition( IdString name ) const
     {
         CompositorWorkspaceDef *retVal = getWorkspaceDefinitionNoThrow( name );
         if( !retVal )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Workspace definition with name '" +
-                            name.getFriendlyText() + "' not found",
-                            "CompositorManager2::getWorkspaceDefinition" );
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Workspace definition with name '" + name.getFriendlyText() + "' not found",
+                         "CompositorManager2::getWorkspaceDefinition" );
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspaceDef* CompositorManager2::getWorkspaceDefinitionNoThrow( IdString name ) const
+    CompositorWorkspaceDef *CompositorManager2::getWorkspaceDefinitionNoThrow( IdString name ) const
     {
         CompositorWorkspaceDef *retVal = 0;
         CompositorWorkspaceDefMap::const_iterator itor = mWorkspaceDefs.find( name );
@@ -501,9 +512,9 @@ namespace Ogre
         CompositorWorkspaceDefMap::const_iterator itor = mWorkspaceDefs.find( definitionName );
         if( itor == mWorkspaceDefs.end() )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Workspace definition '" +
-                            definitionName.getFriendlyText() + "' not found",
-                            "CompositorManager2::addWorkspace" );
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Workspace definition '" + definitionName.getFriendlyText() + "' not found",
+                         "CompositorManager2::addWorkspace" );
         }
         else
         {
@@ -521,14 +532,14 @@ namespace Ogre
         return workspace;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::addQueuedWorkspaces(void)
+    void CompositorManager2::addQueuedWorkspaces()
     {
         QueuedWorkspaceVec::const_iterator itor = mQueuedWorkspaces.begin();
-        QueuedWorkspaceVec::const_iterator end  = mQueuedWorkspaces.end();
+        QueuedWorkspaceVec::const_iterator endt = mQueuedWorkspaces.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            int position = std::min<int>( itor->position, mWorkspaces.size() );
+            const int position = std::min<int>( itor->position, (int)mWorkspaces.size() );
 
             if( position < 0 )
                 mWorkspaces.push_back( itor->workspace );
@@ -553,51 +564,47 @@ namespace Ogre
 
             if( it == mQueuedWorkspaces.end() )
             {
-                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Workspace not created with this "
-                             "Compositor Manager", "CompositorManager2::removeWorkspace" );
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Workspace not created with this "
+                             "Compositor Manager",
+                             "CompositorManager2::removeWorkspace" );
             }
             else
             {
-                //Make sure a RenderPassDescriptor isn't bound and becomes dangling
+                // Make sure a RenderPassDescriptor isn't bound and becomes dangling
                 mRenderSystem->endRenderPassDescriptor();
                 OGRE_DELETE it->workspace;
-                mQueuedWorkspaces.erase( it ); //Preserve the order of workspace execution
+                mQueuedWorkspaces.erase( it );  // Preserve the order of workspace execution
             }
         }
         else
         {
-            //Make sure a RenderPassDescriptor isn't bound and becomes dangling
+            // Make sure a RenderPassDescriptor isn't bound and becomes dangling
             mRenderSystem->endRenderPassDescriptor();
             OGRE_DELETE *itor;
-            mWorkspaces.erase( itor ); //Preserve the order of workspace execution
+            mWorkspaces.erase( itor );  // Preserve the order of workspace execution
         }
 
         mRenderWindowsPresentBarrierDirty = true;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::removeAllWorkspaces(void)
+    void CompositorManager2::removeAllWorkspaces()
     {
         addQueuedWorkspaces();
         deleteAllClear( mWorkspaces );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::removeAllWorkspaceDefinitions(void)
-    {
-        deleteAllSecondClear( mWorkspaceDefs );
-    }
+    void CompositorManager2::removeAllWorkspaceDefinitions() { deleteAllSecondClear( mWorkspaceDefs ); }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::removeAllShadowNodeDefinitions(void)
+    void CompositorManager2::removeAllShadowNodeDefinitions()
     {
         deleteAllClear( mUnfinishedShadowNodes );
         deleteAllSecondClear( mShadowNodeDefs );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::removeAllNodeDefinitions(void)
-    {
-        deleteAllSecondClear( mNodeDefinitions );
-    }
+    void CompositorManager2::removeAllNodeDefinitions() { deleteAllSecondClear( mNodeDefinitions ); }
     //-----------------------------------------------------------------------------------
-    TextureGpu* CompositorManager2::getNullShadowTexture( PixelFormatGpu format )
+    TextureGpu *CompositorManager2::getNullShadowTexture( PixelFormatGpu format )
     {
         for( TextureGpuVec::iterator t = mNullTextureList.begin(); t != mNullTextureList.end(); ++t )
         {
@@ -615,14 +622,14 @@ namespace Ogre
         // A 1x1 texture of the correct format, not a render target
         static const String baseName = "Ogre/ShadowTextureNull";
         String targName = baseName + StringConverter::toString( mNullTextureList.size() );
-        TextureGpu *shadowTex = textureManager->createTexture( targName, GpuPageOutStrategy::Discard,
-                                                               0, TextureTypes::Type2D );
+        TextureGpu *shadowTex = textureManager->createTexture( targName, GpuPageOutStrategy::Discard, 0,
+                                                               TextureTypes::Type2D );
         shadowTex->setResolution( 1u, 1u, 1u );
         shadowTex->setPixelFormat( format );
         mNullTextureList.push_back( shadowTex );
 
-        StagingTexture *stagingTexture = textureManager->getStagingTexture( 1u, 1u, 1u, 1u,
-                                                                            shadowTex->getPixelFormat() );
+        StagingTexture *stagingTexture =
+            textureManager->getStagingTexture( 1u, 1u, 1u, 1u, shadowTex->getPixelFormat() );
         stagingTexture->startMapRegion();
         TextureBox texBox = stagingTexture->mapRegion( 1u, 1u, 1u, 1u, shadowTex->getPixelFormat() );
 
@@ -639,13 +646,13 @@ namespace Ogre
     void CompositorManager2::validateAllNodes()
     {
         CompositorShadowNodeDefVec::iterator itor = mUnfinishedShadowNodes.begin();
-        CompositorShadowNodeDefVec::iterator end  = mUnfinishedShadowNodes.end();
+        CompositorShadowNodeDefVec::iterator endt = mUnfinishedShadowNodes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->_validateAndFinish();
-            mShadowNodeDefs[(*itor)->getName()] = *itor;
-            //Nullify in case next iterator's call throws: we would free previous pointers twice
+            ( *itor )->_validateAndFinish();
+            mShadowNodeDefs[( *itor )->getName()] = *itor;
+            // Nullify in case next iterator's call throws: we would free previous pointers twice
             *itor = 0;
             ++itor;
         }
@@ -653,7 +660,7 @@ namespace Ogre
         mUnfinishedShadowNodes.clear();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::prepareRenderWindowsForPresent( void )
+    void CompositorManager2::prepareRenderWindowsForPresent()
     {
         if( !mRenderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
             return;
@@ -696,38 +703,38 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_update( void )
+    void CompositorManager2::_update()
     {
-        //The Apple render systems need to run the update in a special way.
-        //So we defer to the render system.
-        //If the render system doesn't need to do anything special it
-        //should just call compositorManager->_updateImplementation.
+        // The Apple render systems need to run the update in a special way.
+        // So we defer to the render system.
+        // If the render system doesn't need to do anything special it
+        // should just call compositorManager->_updateImplementation.
         mRenderSystem->updateCompositorManager( this );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_updateImplementation( void )
+    void CompositorManager2::_updateImplementation()
     {
         addQueuedWorkspaces();
 
         WorkspaceVec::const_iterator itor = mWorkspaces.begin();
-        WorkspaceVec::const_iterator end  = mWorkspaces.end();
+        WorkspaceVec::const_iterator endt = mWorkspaces.end();
 
         // We need to validate the device (D3D9) before calling _beginFrame()
-        while( itor != end )
+        while( itor != endt )
         {
-            CompositorWorkspace *workspace = (*itor);
+            CompositorWorkspace *workspace = ( *itor );
             if( workspace->getEnabled() )
                 workspace->_validateFinalTarget();
             ++itor;
         }
 
         {
-            //Notify the listeners
+            // Notify the listeners
             CompositorWorkspaceListenerVec::const_iterator itListener = mListeners.begin();
             CompositorWorkspaceListenerVec::const_iterator enListener = mListeners.end();
             while( itListener != enListener )
             {
-                (*itListener)->allWorkspacesBeforeBeginUpdate();
+                ( *itListener )->allWorkspacesBeforeBeginUpdate();
                 ++itListener;
             }
         }
@@ -736,9 +743,9 @@ namespace Ogre
 
         itor = mWorkspaces.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            CompositorWorkspace *workspace = (*itor);
+            CompositorWorkspace *workspace = ( *itor );
             if( workspace->getEnabled() )
             {
                 if( workspace->isValid() )
@@ -747,7 +754,7 @@ namespace Ogre
                 }
                 else
                 {
-                    //TODO: We may end up recreating this every frame for invalid workspaces
+                    // TODO: We may end up recreating this every frame for invalid workspaces
                     workspace->recreateAllNodes();
                     if( workspace->isValid() )
                         workspace->_beginUpdate( false, true );
@@ -763,34 +770,34 @@ namespace Ogre
         }
 
         {
-            //Notify the listeners
+            // Notify the listeners
             CompositorWorkspaceListenerVec::const_iterator itListener = mListeners.begin();
             CompositorWorkspaceListenerVec::const_iterator enListener = mListeners.end();
             while( itListener != enListener )
             {
-                (*itListener)->allWorkspacesBeginUpdate();
+                ( *itListener )->allWorkspacesBeginUpdate();
                 ++itListener;
             }
         }
 
-        //The actual update
+        // The actual update
         itor = mWorkspaces.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            CompositorWorkspace *workspace = (*itor);
+            CompositorWorkspace *workspace = ( *itor );
             if( workspace->getEnabled() && workspace->isValid() )
-                    workspace->_update( true );
+                workspace->_update( true );
             ++itor;
         }
 
         itor = mWorkspaces.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            CompositorWorkspace *workspace = (*itor);
+            CompositorWorkspace *workspace = ( *itor );
             if( workspace->getEnabled() && workspace->isValid() )
-                    workspace->_endUpdate( false, true );
+                workspace->_endUpdate( false, true );
             ++itor;
         }
 
@@ -801,17 +808,17 @@ namespace Ogre
         ++mFrameCount;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_swapAllFinalTargets(void)
+    void CompositorManager2::_swapAllFinalTargets()
     {
         WorkspaceVec::const_iterator itor = mWorkspaces.begin();
-        WorkspaceVec::const_iterator end  = mWorkspaces.end();
+        WorkspaceVec::const_iterator endt = mWorkspaces.end();
 
-        vector<TextureGpu*>::type swappedTargets;
+        vector<TextureGpu *>::type swappedTargets;
         swappedTargets.reserve( mWorkspaces.size() * 2u );
 
-        while( itor != end )
+        while( itor != endt )
         {
-            CompositorWorkspace *workspace = (*itor);
+            CompositorWorkspace *workspace = ( *itor );
             if( workspace->getEnabled() && workspace->isValid() )
                 workspace->_swapFinalTarget( swappedTargets );
 
@@ -822,13 +829,13 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void CompositorManager2::createBasicWorkspaceDef( const String &workspaceDefName,
-                                                        const ColourValue &backgroundColour,
-                                                        IdString shadowNodeName )
+                                                      const ColourValue &backgroundColour,
+                                                      IdString shadowNodeName )
     {
-        CompositorNodeDef *nodeDef = this->addNodeDefinition( "AutoGen " + IdString(workspaceDefName +
-                                                                "/Node").getReleaseText() );
+        CompositorNodeDef *nodeDef = this->addNodeDefinition(
+            "AutoGen " + IdString( workspaceDefName + "/Node" ).getReleaseText() );
 
-        //Input texture
+        // Input texture
         nodeDef->addTextureSourceName( "WindowRT", 0, TextureDefinitionBase::TEXTURE_INPUT );
 
         nodeDef->setNumTargetPass( 1 );
@@ -837,13 +844,13 @@ namespace Ogre
             targetDef->setNumPasses( 1 );
             {
                 {
-                    CompositorPassSceneDef *passScene = static_cast<CompositorPassSceneDef*>
-                                                                ( targetDef->addPass( PASS_SCENE ) );
+                    CompositorPassSceneDef *passScene =
+                        static_cast<CompositorPassSceneDef *>( targetDef->addPass( PASS_SCENE ) );
                     passScene->mShadowNode = shadowNodeName;
                     passScene->setAllClearColours( backgroundColour );
                     passScene->setAllLoadActions( LoadAction::Clear );
-                    passScene->mStoreActionDepth    = StoreAction::DontCare;
-                    passScene->mStoreActionStencil  = StoreAction::DontCare;
+                    passScene->mStoreActionDepth = StoreAction::DontCare;
+                    passScene->mStoreActionStencil = StoreAction::DontCare;
                 }
             }
         }
@@ -857,7 +864,7 @@ namespace Ogre
         mCompositorPassProvider = passProvider;
     }
     //-----------------------------------------------------------------------------------
-    CompositorPassProvider* CompositorManager2::getCompositorPassProvider(void) const
+    CompositorPassProvider *CompositorManager2::getCompositorPassProvider() const
     {
         return mCompositorPassProvider;
     }
@@ -869,22 +876,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorManager2::removeListener( CompositorWorkspaceListener *listener )
     {
-        CompositorWorkspaceListenerVec::iterator itor = std::find( mListeners.begin(),
-                                                                   mListeners.end(),
-                                                                   listener );
+        CompositorWorkspaceListenerVec::iterator itor =
+            std::find( mListeners.begin(), mListeners.end(), listener );
 
-        //Preserve order.
+        // Preserve order.
         if( itor != mListeners.end() )
             mListeners.erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_notifyBarriersDirty( void )
-    {
-        mRenderWindowsPresentBarrierDirty = true;
-    }
+    void CompositorManager2::_notifyBarriersDirty() { mRenderWindowsPresentBarrierDirty = true; }
     //-----------------------------------------------------------------------------------
-    RenderSystem* CompositorManager2::getRenderSystem(void) const
-    {
-        return mRenderSystem;
-    }
-}
+    RenderSystem *CompositorManager2::getRenderSystem() const { return mRenderSystem; }
+}  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,20 +30,26 @@ THE SOFTWARE.
 #define _SkeletonInstance2_H__
 
 #include "OgreSkeletonAnimation.h"
+
 #include "Animation/OgreBone.h"
 
 namespace Ogre
 {
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
+
     class SkeletonDef;
-    typedef vector<SkeletonAnimation>::type SkeletonAnimationVec;
-    typedef vector<SkeletonAnimation*>::type ActiveAnimationsVec;
+    typedef vector<SkeletonAnimation>::type   SkeletonAnimationVec;
+    typedef vector<SkeletonAnimation *>::type ActiveAnimationsVec;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
 
     /** Instance of a Skeleton, main external interface for retrieving bone positions and applying
         animations.
@@ -68,42 +74,45 @@ namespace Ogre
         history, go to:
             https://bitbucket.org/dark_sylinc/ogreanimation
     */
-    class _OgreExport SkeletonInstance : public MovableAlloc
+    class _OgreExport SkeletonInstance : public OgreAllocatedObj
     {
     public:
         typedef vector<Bone>::type BoneVec;
 
     protected:
-        BoneVec             mBones;
-        TransformArray      mBoneStartTransforms; /// The start of Transform at each depth level
+        BoneVec        mBones;
+        TransformArray mBoneStartTransforms;  /// The start of Transform at each depth level
 
         RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> mManualBones;
 
-        FastArray<size_t>       mSlotStarts;
+        FastArray<size_t> mSlotStarts;
 
-        SkeletonAnimationVec    mAnimations;
-        ActiveAnimationsVec     mActiveAnimations;
+        SkeletonAnimationVec mAnimations;
+        ActiveAnimationsVec  mActiveAnimations;
 
-        SkeletonDef const       *mDefinition;
+        SkeletonDef const *mDefinition;
 
         /** Unused slots for each parent depth level that had more bones
             than >= ARRAY_PACKED_REALS /2 but less than < ARRAY_PACKED_REALS (or a multiple of it)
         */
-        BoneVec                 mUnusedNodes;
+        BoneVec mUnusedNodes;
 
         /// Node this SkeletonInstance is attached to (so we can work in world space)
-        Node                    *mParentNode;
+        Node *mParentNode;
 
         struct SceneNodeBonePair
         {
-            Bone        *boneChild;
-            SceneNode   *sceneNodeParent;
+            Bone      *boneChild;
+            SceneNode *sceneNodeParent;
             SceneNodeBonePair( Bone *_boneChild, SceneNode *_sceneNodeParent ) :
-                boneChild( _boneChild ), sceneNodeParent( _sceneNodeParent ) {}
+                boneChild( _boneChild ),
+                sceneNodeParent( _sceneNodeParent )
+            {
+            }
         };
         typedef vector<SceneNodeBonePair>::type SceneNodeBonePairVec;
-                
-        SceneNodeBonePairVec    mCustomParentSceneNodes;
+
+        SceneNodeBonePairVec mCustomParentSceneNodes;
 
         uint16 mRefCount;
 
@@ -111,12 +120,12 @@ namespace Ogre
         SkeletonInstance( const SkeletonDef *skeletonDef, BoneMemoryManager *boneMemoryManager );
         ~SkeletonInstance();
 
-        const SkeletonDef* getDefinition(void) const                { return mDefinition; }
+        const SkeletonDef *getDefinition() const { return mDefinition; }
 
-        void update(void);
+        void update();
 
         /// Resets the transform of all bones to the binding pose. Manual bones are not reset
-        void resetToPose(void);
+        void resetToPose();
 
         /** Sets the given node to manual. Manual bones won't be reset to binding pose
             (see resetToPose) and thus are suitable for manual control. However if the
@@ -149,34 +158,34 @@ namespace Ogre
         void setSceneNodeAsParentOfBone( Bone *bone, SceneNode *nodeParent );
 
         /// Gets full transform of a bone by its index.
-        FORCEINLINE const SimpleMatrixAf4x3& _getBoneFullTransform( size_t index ) const
+        FORCEINLINE const SimpleMatrixAf4x3 &_getBoneFullTransform( size_t index ) const
         {
             return mBones[index]._getFullTransform();
         }
 
         bool hasBone( IdString name ) const;
         /// Gets the bone with given name. Throws if not found.
-        Bone* getBone( IdString boneName );
+        Bone *getBone( IdString boneName );
 
         /// Gets the bone from its index. Don't overflow!. @see getNumBones
-        Bone* getBone( size_t index );
+        Bone *getBone( size_t index );
 
         /// Gets the number of bones.
-        size_t getNumBones(void) const;
+        size_t getNumBones() const;
 
         bool hasAnimation( IdString name ) const;
         /// Returns the requested animations. Throws if not found. O(N) Linear search
-        SkeletonAnimation* getAnimation( IdString name );
+        SkeletonAnimation *getAnimation( IdString name );
 
         /// Return all animations associated with this skeleton
-        const SkeletonAnimationVec &getAnimations( void ) const { return mAnimations; }
+        const SkeletonAnimationVec &getAnimations() const { return mAnimations; }
 
         /// Return all animations associated with this skeleton
         /// Be careful with this one! Do not insert/remove elements
-        SkeletonAnimationVec &getAnimationsNonConst( void ) { return mAnimations; }
+        SkeletonAnimationVec &getAnimationsNonConst() { return mAnimations; }
 
         /// Returns all animations that are currently active
-        const ActiveAnimationsVec &getActiveAnimations( void ) const { return mActiveAnimations; }
+        const ActiveAnimationsVec &getActiveAnimations() const { return mActiveAnimations; }
 
         /**    Add all animation clips found in skelName.
         @remarks
@@ -200,34 +209,38 @@ namespace Ogre
         void setParentNode( Node *parentNode );
 
         /// Returns our parent node. May be null.
-        Node* getParentNode(void) const                                     { return mParentNode; }
+        Node *getParentNode() const { return mParentNode; }
 
-        void getTransforms( SimpleMatrixAf4x3 * RESTRICT_ALIAS outTransform,
-                            const FastArray<unsigned short> &usedBones ) const;
+        void getTransforms( SimpleMatrixAf4x3 *RESTRICT_ALIAS outTransform,
+                            const FastArray<unsigned short>  &usedBones ) const;
 
         /** Updates the contents of @mBoneStartTransforms. Needed when our
             memory manager performs a cleanup or similar memory change.
         */
-        void _updateBoneStartTransforms(void);
+        void _updateBoneStartTransforms();
 
-        const TransformArray& _getTransformArray() const        { return mBoneStartTransforms; }
+        const TransformArray &_getTransformArray() const { return mBoneStartTransforms; }
 
-        const void* _getMemoryBlock(void) const;
-        const void* _getMemoryUniqueOffset(void) const;
+        const void *_getMemoryBlock() const;
+        const void *_getMemoryUniqueOffset() const;
 
-        void _incrementRefCount(void);
-        void _decrementRefCount(void);
-        uint16 _getRefCount(void) const;
+        void   _incrementRefCount();
+        void   _decrementRefCount();
+        uint16 _getRefCount() const;
     };
 
     inline bool OrderSkeletonInstanceByMemory( const SkeletonInstance *_left,
-                                                const SkeletonInstance *_right )
+                                               const SkeletonInstance *_right )
     {
         return _left->_getMemoryUniqueOffset() < _right->_getMemoryUniqueOffset();
     }
 
     /** @} */
     /** @} */
-}
+
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif
+}  // namespace Ogre
 
 #endif

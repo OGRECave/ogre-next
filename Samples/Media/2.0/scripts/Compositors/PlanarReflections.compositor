@@ -22,6 +22,8 @@ compositor_node PlanarReflectionsStandardRenderingNode
 
 			//Used by C++ to identify this pass wants planar reflections
 			identifier	25001
+
+			profiling_id "Main Render"
 		}
 	}
 }
@@ -49,11 +51,15 @@ compositor_node PlanarReflectionsReflectiveRenderingNode
 			overlays		off
 			visibility_mask 0xfffffffe
 			shadows			PlanarReflectionsShadowNode
+
+			profiling_id "Reflective pass"
 		}
 
 		pass generate_mipmaps
 		{
 			mipmap_method compute_hq
+
+			profiling_id "Mipmap Generation (HQ)"
 		}
 	}
 }

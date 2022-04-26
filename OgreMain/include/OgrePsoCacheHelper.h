@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,18 +28,19 @@ THE SOFTWARE.
 #ifndef _OgrePsoCacheHelper_H_
 #define _OgrePsoCacheHelper_H_
 
-#include "Vao/OgreVertexBufferPacked.h"
 #include "OgreHlmsPso.h"
+#include "Vao/OgreVertexBufferPacked.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** Utility class to cache PSOs. Useful for porting v1 libraries (eg. Gorilla) that
         render in "immediate mode" style and weren't build with PSOs in mind.
@@ -119,7 +120,7 @@ namespace Ogre
                 }
             }
     */
-    class _OgreExport PsoCacheHelper : public PassAlloc
+    class _OgreExport PsoCacheHelper : public OgreAllocatedObj
     {
         static const uint32 RenderableBits;
         static const uint32 PassBits;
@@ -131,15 +132,9 @@ namespace Ogre
             uint32  hash;
             HlmsPso pso;
 
-            bool operator ()( uint32 _l, const PsoCacheEntry &_r ) const
-            {
-                return _l < _r.hash;
-            }
-            bool operator ()( const PsoCacheEntry &_l, uint32 _r ) const
-            {
-                return _l.hash < _r;
-            }
-            bool operator ()( const PsoCacheEntry &_l, const PsoCacheEntry &_r ) const
+            bool operator()( uint32 _l, const PsoCacheEntry &_r ) const { return _l < _r.hash; }
+            bool operator()( const PsoCacheEntry &_l, uint32 _r ) const { return _l.hash < _r; }
+            bool operator()( const PsoCacheEntry &_l, const PsoCacheEntry &_r ) const
             {
                 return _l.hash < _r.hash;
             }
@@ -149,46 +144,43 @@ namespace Ogre
             HlmsPassPso passKey;
             uint32      hashToMainCache;
 
-            bool operator < ( const PassCacheEntry &_r ) const
-            {
-                return this->passKey < _r.passKey;
-            }
+            bool operator<( const PassCacheEntry &_r ) const { return this->passKey < _r.passKey; }
         };
         struct RenderableCacheEntry
         {
             HlmsPso psoRenderableKey;
             uint32  hashToMainCache;
 
-            bool operator < ( const RenderableCacheEntry &_r ) const
+            bool operator<( const RenderableCacheEntry &_r ) const
             {
-                return this->psoRenderableKey.lessThanExcludePassData(_r.psoRenderableKey );
+                return this->psoRenderableKey.lessThanExcludePassData( _r.psoRenderableKey );
             }
         };
-        typedef vector<PsoCacheEntry>::type PsoCacheEntryVec;
-        typedef vector<PassCacheEntry>::type PassCacheEntryVec;
+        typedef vector<PsoCacheEntry>::type        PsoCacheEntryVec;
+        typedef vector<PassCacheEntry>::type       PassCacheEntryVec;
         typedef vector<RenderableCacheEntry>::type RenderableCacheEntryVec;
 
         PsoCacheEntryVec        mPsoCache;
         PassCacheEntryVec       mPassCache;
         RenderableCacheEntryVec mRenderableCache;
 
-        uint32  mPassHashCounter;
-        uint32  mRenderableHashCounter;
+        uint32 mPassHashCounter;
+        uint32 mRenderableHashCounter;
 
-        uint32      mCurrentPassHash;
-        uint32      mLastFinalHash;
-        HlmsPso     mCurrentState;
-        HlmsPso     *mLastPso;
+        uint32   mCurrentPassHash;
+        uint32   mLastFinalHash;
+        HlmsPso  mCurrentState;
+        HlmsPso *mLastPso;
 
         RenderSystem *mRenderSystem;
 
-        uint32 getPassHash(void);
+        uint32 getPassHash();
 
     public:
         PsoCacheHelper( RenderSystem *renderSystem );
         ~PsoCacheHelper();
 
-        void clearState(void);
+        void clearState();
 
         /** Returns a hash value you can cache into a Renderable (or whatever you're rendering).
             This hash will contain VertexFormat, Macroblock, Blendblock information and shaders
@@ -210,7 +202,7 @@ namespace Ogre
         @return
             The hash containing all the information.
         */
-        uint32 getRenderableHash(void);
+        uint32 getRenderableHash();
 
         /** You must call this function every frame, and every time the RenderTarget changes.
         @remarks
@@ -224,8 +216,7 @@ namespace Ogre
 
         /// This function can be skipped if no vertex buffer is used (e.g.
         /// you use gl_VertexID or other trickery) or if you have a renderableHash.
-        void setVertexFormat( const VertexElement2VecVec &vertexElements,
-                              OperationType operationType,
+        void setVertexFormat( const VertexElement2VecVec &vertexElements, OperationType operationType,
                               bool enablePrimitiveRestart );
 
         /// Calls to this function cannot be skipped unless you have a renderableHash.
@@ -257,7 +248,7 @@ namespace Ogre
             The HlmsPso to use. Do NOT persistently store this pointer. It may
             be invalidated if the next getPso call needs to create a new PSO.
         */
-        HlmsPso* getPso( uint32 renderableHash, bool renderableCacheAlreadySet=false );
+        HlmsPso *getPso( uint32 renderableHash, bool renderableCacheAlreadySet = false );
 
         /** Returns an HlmsPso you can set via renderSystem->_setPipelineStateObject
             based on all past calls to setRenderTarget + setVertexFormat + setMacroblock + etc.
@@ -267,13 +258,13 @@ namespace Ogre
             The HlmsPso to use. Do NOT persistently store this pointer. It may
             be invalidated if the next getPso call needs to create a new PSO.
         */
-        HlmsPso* getPso(void);
+        HlmsPso *getPso();
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

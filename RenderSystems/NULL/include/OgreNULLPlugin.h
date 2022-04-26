@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -29,35 +29,38 @@ THE SOFTWARE.
 #define __NULLPlugin_H__
 
 #include "OgrePlugin.h"
+
 #include "OgreNULLRenderSystem.h"
 
 namespace Ogre
 {
-
     /** Plugin instance for NULL Manager */
-    class NULLPlugin : public Plugin
+    class NULLPlugin final : public Plugin
     {
     public:
         NULLPlugin();
 
-
         /// @copydoc Plugin::getName
-        const String& getName() const;
+        const String &getName() const override;
 
         /// @copydoc Plugin::install
-        void install();
+        void install() override;
 
         /// @copydoc Plugin::initialise
-        void initialise();
+        void initialise() override;
 
         /// @copydoc Plugin::shutdown
-        void shutdown();
+        void shutdown() override;
 
         /// @copydoc Plugin::uninstall
-        void uninstall();
+        void uninstall() override;
+
+        /// @copydoc Plugin::getAbiCookie
+        void getAbiCookie( AbiCookie &outAbiCookie ) override;
+
     protected:
-        NULLRenderSystem* mRenderSystem;
+        NULLRenderSystem *mRenderSystem;
     };
-}
+}  // namespace Ogre
 
 #endif

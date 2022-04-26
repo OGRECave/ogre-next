@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -57,7 +57,7 @@ namespace Ogre
     /**
     @class IesLoader
     */
-    class _OgreHlmsPbsExport IesLoader : public UtilityAlloc
+    class _OgreHlmsPbsExport IesLoader : public OgreAllocatedObj
     {
         float mCandelaMult;
         /// Vertical angle aka Cone Angle
@@ -67,7 +67,7 @@ namespace Ogre
         float mBallastFactor;
         float mBallastLampPhotometricFactor;
 
-        LampConeType::LampConeType mLampConeType;
+        LampConeType::LampConeType   mLampConeType;
         LampHorizType::LampHorizType mLampHorizType;
 
         FastArray<float> mAngleData;
@@ -77,15 +77,15 @@ namespace Ogre
 
         static void skipWhitespace( const char *text, size_t &offset );
 
-        void verifyDataIsSorted( void ) const;
+        void verifyDataIsSorted() const;
         void loadFromString( const char *iesTextData );
 
     public:
         IesLoader( const String &filename, const char *iesTextData );
 
-        const String &getName( void ) const { return mFilename; }
+        const String &getName() const { return mFilename; }
 
-        uint32 getSuggestedTexWidth( void ) const;
+        uint32 getSuggestedTexWidth() const;
 
         void convertToImage1D( Image2 &inOutImage, uint32 row );
     };

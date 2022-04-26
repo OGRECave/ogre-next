@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -31,59 +31,41 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    GL3PlusConstBufferPacked::GL3PlusConstBufferPacked(
-                size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, BufferInterface *bufferInterface ) :
+    GL3PlusConstBufferPacked::GL3PlusConstBufferPacked( size_t internalBufferStartBytes,
+                                                        size_t numElements, uint32 bytesPerElement,
+                                                        uint32 numElementsPadding, BufferType bufferType,
+                                                        void *initialData, bool keepAsShadow,
+                                                        VaoManager *vaoManager,
+                                                        BufferInterface *bufferInterface ) :
         ConstBufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                            bufferType, initialData, keepAsShadow, vaoManager, bufferInterface )
     {
     }
     //-----------------------------------------------------------------------------------
-    GL3PlusConstBufferPacked::~GL3PlusConstBufferPacked()
-    {
-    }
+    GL3PlusConstBufferPacked::~GL3PlusConstBufferPacked() {}
     //-----------------------------------------------------------------------------------
     inline void GL3PlusConstBufferPacked::bindBuffer( uint16 slot )
     {
-        assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
 
-        GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
-                                                                      mBufferInterface );
+        GL3PlusBufferInterface *bufferInterface =
+            static_cast<GL3PlusBufferInterface *>( mBufferInterface );
 
-        OCGE(
-          glBindBufferRange( GL_UNIFORM_BUFFER, slot, bufferInterface->getVboName(),
-                             mFinalBufferStart * mBytesPerElement, mNumElements * mBytesPerElement ) );
+        OCGE( glBindBufferRange( GL_UNIFORM_BUFFER, slot, bufferInterface->getVboName(),
+                                 static_cast<GLintptr>( mFinalBufferStart * mBytesPerElement ),
+                                 static_cast<GLsizeiptr>( mNumElements * mBytesPerElement ) ) );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusConstBufferPacked::bindBufferVS( uint16 slot )
-    {
-        bindBuffer( slot );
-    }
+    void GL3PlusConstBufferPacked::bindBufferVS( uint16 slot ) { bindBuffer( slot ); }
     //-----------------------------------------------------------------------------------
-    void GL3PlusConstBufferPacked::bindBufferPS( uint16 slot )
-    {
-        bindBuffer( slot );
-    }
+    void GL3PlusConstBufferPacked::bindBufferPS( uint16 slot ) { bindBuffer( slot ); }
     //-----------------------------------------------------------------------------------
-    void GL3PlusConstBufferPacked::bindBufferGS( uint16 slot )
-    {
-        bindBuffer( slot );
-    }
+    void GL3PlusConstBufferPacked::bindBufferGS( uint16 slot ) { bindBuffer( slot ); }
     //-----------------------------------------------------------------------------------
-    void GL3PlusConstBufferPacked::bindBufferHS( uint16 slot )
-    {
-        bindBuffer( slot );
-    }
+    void GL3PlusConstBufferPacked::bindBufferHS( uint16 slot ) { bindBuffer( slot ); }
     //-----------------------------------------------------------------------------------
-    void GL3PlusConstBufferPacked::bindBufferDS( uint16 slot )
-    {
-        bindBuffer( slot );
-    }
+    void GL3PlusConstBufferPacked::bindBufferDS( uint16 slot ) { bindBuffer( slot ); }
     //-----------------------------------------------------------------------------------
-    void GL3PlusConstBufferPacked::bindBufferCS( uint16 slot )
-    {
-        bindBuffer( slot );
-    }
+    void GL3PlusConstBufferPacked::bindBufferCS( uint16 slot ) { bindBuffer( slot ); }
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -38,7 +38,7 @@ struct VkDescriptorBufferInfo;
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanConstBufferPacked : public ConstBufferPacked
+    class _OgreVulkanExport VulkanConstBufferPacked final : public ConstBufferPacked
     {
         VulkanRenderSystem *mRenderSystem;
 
@@ -50,16 +50,16 @@ namespace Ogre
                                  BufferType bufferType, void *initialData, bool keepAsShadow,
                                  VulkanRenderSystem *renderSystem, VaoManager *vaoManager,
                                  BufferInterface *bufferInterface );
-        ~VulkanConstBufferPacked();
+        ~VulkanConstBufferPacked() override;
 
         void getBufferInfo( VkDescriptorBufferInfo &outBufferInfo ) const;
 
-        virtual void bindBufferVS( uint16 slot );
-        virtual void bindBufferPS( uint16 slot );
-        virtual void bindBufferGS( uint16 slot );
-        virtual void bindBufferHS( uint16 slot );
-        virtual void bindBufferDS( uint16 slot );
-        virtual void bindBufferCS( uint16 slot );
+        void bindBufferVS( uint16 slot ) override;
+        void bindBufferPS( uint16 slot ) override;
+        void bindBufferGS( uint16 slot ) override;
+        void bindBufferHS( uint16 slot ) override;
+        void bindBufferDS( uint16 slot ) override;
+        void bindBufferCS( uint16 slot ) override;
 
         void bindAsParamBuffer( GpuProgramType shaderStage, size_t offsetBytes, size_t sizeBytes );
     };

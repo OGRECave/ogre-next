@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -44,11 +44,15 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
     bool Workarounds::mAdreno5xx6xxMinCaps = false;
 #endif
+#ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
+    bool Workarounds::mBad3DBlit = false;
+#endif
+#ifdef OGRE_VK_WORKAROUND_ADRENO_618_0VERTEX_INDIRECT
+    bool Workarounds::mAdreno618_0VertexIndirect = true;
+#endif
 
-    void Workarounds::dump( void *outStrVoid )
+    void Workarounds::dump( String &outStr )
     {
-        String &outStr = *reinterpret_cast<String *>( outStrVoid );
-
 #ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
         outStr +=
             "\n - mAdrenoUbo64kLimit: " + StringConverter::toString( Workarounds::mAdrenoUbo64kLimit );
@@ -60,6 +64,13 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
         outStr += "\n - mAdreno5xx6xxMinCaps: " +
                   StringConverter::toString( Workarounds::mAdreno5xx6xxMinCaps );
+#endif
+#ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
+        outStr += "\n - mBad3DBlit: " + StringConverter::toString( Workarounds::mBad3DBlit );
+#endif
+#ifdef OGRE_VK_WORKAROUND_ADRENO_618_0VERTEX_INDIRECT
+        outStr += "\n - mAdreno618_0VertexIndirect: " +
+                  StringConverter::toString( Workarounds::mAdreno618_0VertexIndirect );
 #endif
     }
 }  // namespace Ogre

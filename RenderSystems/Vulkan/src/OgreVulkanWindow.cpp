@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -142,7 +142,7 @@ namespace Ogre
         return pixelFormat;
     }
     //-------------------------------------------------------------------------
-    void VulkanWindow::createSwapchain( void )
+    void VulkanWindow::createSwapchain()
     {
         mSuboptimal = false;
 
@@ -355,7 +355,7 @@ namespace Ogre
         mDevice->mRenderSystem->notifySwapchainCreated( this );
     }
     //-------------------------------------------------------------------------
-    void VulkanWindow::destroySwapchain( void )
+    void VulkanWindow::destroySwapchain()
     {
         mDevice->mRenderSystem->notifySwapchainDestroyed( this );
 
@@ -374,7 +374,7 @@ namespace Ogre
         mSwapchainStatus = SwapchainReleased;
     }
     //-------------------------------------------------------------------------
-    void VulkanWindow::acquireNextSwapchain( void )
+    void VulkanWindow::acquireNextSwapchain()
     {
         OGRE_ASSERT_LOW( mSwapchainStatus == SwapchainReleased );
         OGRE_ASSERT_MEDIUM( !mSwapchainSemaphore );
@@ -415,7 +415,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanWindow::destroy( void )
+    void VulkanWindow::destroy()
     {
         destroySwapchain();
         if( mSurfaceKHR )
@@ -438,7 +438,7 @@ namespace Ogre
                      "VulkanWindow::_initialize" );
     }
     //-------------------------------------------------------------------------
-    VkSemaphore VulkanWindow::getImageAcquiredSemaphore( void )
+    VkSemaphore VulkanWindow::getImageAcquiredSemaphore()
     {
         OGRE_ASSERT_LOW( mSwapchainStatus != SwapchainReleased );
         // It's weird that mSwapchainStatus would be in SwapchainPendingSwap here,
@@ -459,7 +459,7 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    bool VulkanWindow::isClosed( void ) const { return mClosed; }
+    bool VulkanWindow::isClosed() const { return mClosed; }
     //-------------------------------------------------------------------------
     void VulkanWindow::setVSync( bool vSync, uint32 vSyncInterval )
     {
@@ -483,7 +483,7 @@ namespace Ogre
         createSwapchain();
     }
     //-------------------------------------------------------------------------
-    void VulkanWindow::swapBuffers( void )
+    void VulkanWindow::swapBuffers()
     {
         if( mSwapchainStatus == SwapchainAcquired || mSwapchainStatus == SwapchainPendingSwap )
         {

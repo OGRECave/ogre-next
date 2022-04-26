@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,12 +27,12 @@ THE SOFTWARE.
 */
 
 #include "OgreGL3PlusTextureGpuManager.h"
+#include "OgreGL3PlusAsyncTextureTicket.h"
 #include "OgreGL3PlusMappings.h"
+#include "OgreGL3PlusStagingTexture.h"
+#include "OgreGL3PlusSupport.h"
 #include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusTextureGpuWindow.h"
-#include "OgreGL3PlusStagingTexture.h"
-#include "OgreGL3PlusAsyncTextureTicket.h"
-#include "OgreGL3PlusSupport.h"
 
 #include "Vao/OgreGL3PlusVaoManager.h"
 
@@ -49,31 +49,28 @@ namespace Ogre
         TextureGpuManager( vaoManager, renderSystem ),
         mSupport( support )
     {
-        memset( mBlankTexture, 0, sizeof(mBlankTexture) );
-        memset( mTmpFbo, 0, sizeof(mTmpFbo) );
+        memset( mBlankTexture, 0, sizeof( mBlankTexture ) );
+        memset( mTmpFbo, 0, sizeof( mTmpFbo ) );
 
         OCGE( glGenTextures( TextureTypes::Type3D, &mBlankTexture[1u] ) );
         mBlankTexture[TextureTypes::Unknown] = mBlankTexture[TextureTypes::Type2D];
 
-        const GLenum targets[] =
-        {
-            GL_NONE,
-            GL_TEXTURE_1D,
-            GL_TEXTURE_1D_ARRAY,
-            GL_TEXTURE_2D,
-            GL_TEXTURE_2D_ARRAY,
-            GL_TEXTURE_CUBE_MAP,
-            GL_TEXTURE_CUBE_MAP_ARRAY,
-            GL_TEXTURE_3D
-        };
+        const GLenum targets[] = { GL_NONE,
+                                   GL_TEXTURE_1D,
+                                   GL_TEXTURE_1D_ARRAY,
+                                   GL_TEXTURE_2D,
+                                   GL_TEXTURE_2D_ARRAY,
+                                   GL_TEXTURE_CUBE_MAP,
+                                   GL_TEXTURE_CUBE_MAP_ARRAY,
+                                   GL_TEXTURE_3D };
 
-        //Must be large enough to hold the biggest transfer we'll do.
-        uint8 c_whiteData[4*4*6*4];
-        uint8 c_blackData[4*4*6*4];
+        // Must be large enough to hold the biggest transfer we'll do.
+        uint8 c_whiteData[4 * 4 * 6 * 4];
+        uint8 c_blackData[4 * 4 * 6 * 4];
         memset( c_whiteData, 0xff, sizeof( c_whiteData ) );
         memset( c_blackData, 0x00, sizeof( c_blackData ) );
 
-        for( int i=1; i<=TextureTypes::Type3D; ++i )
+        for( int i = 1; i <= TextureTypes::Type3D; ++i )
         {
             OCGE( glBindTexture( targets[i], mBlankTexture[i] ) );
             OCGE( glTexParameteri( targets[i], GL_TEXTURE_BASE_LEVEL, 0 ) );
@@ -90,25 +87,24 @@ namespace Ogre
             case TextureTypes::Unknown:
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Ogre should never hit this path",
                              "GL3PlusTextureGpuManager::GL3PlusTextureGpuManager" );
-                break;
             case TextureTypes::Type1D:
                 OCGE( glTexStorage1D( targets[i], 1, GL_RGBA8, 4 ) );
-                OCGE( glTexSubImage1D( targets[i], 0, 0, 4, GL_RGBA,
-                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                OCGE( glTexSubImage1D( targets[i], 0, 0, 4, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                                       c_whiteData ) );
                 break;
             case TextureTypes::Type1DArray:
                 OCGE( glTexStorage2D( targets[i], 1, GL_RGBA8, 4, 1 ) );
-                OCGE( glTexSubImage2D( targets[i], 0, 0, 0, 4, 1, GL_RGBA,
-                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                OCGE( glTexSubImage2D( targets[i], 0, 0, 0, 4, 1, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                                       c_whiteData ) );
                 break;
             case TextureTypes::Type2D:
                 OCGE( glTexStorage2D( targets[i], 1, GL_RGBA8, 4, 4 ) );
-                OCGE( glTexSubImage2D( targets[i], 0, 0, 0, 4, 4, GL_RGBA,
-                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                OCGE( glTexSubImage2D( targets[i], 0, 0, 0, 4, 4, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                                       c_whiteData ) );
                 break;
             case TextureTypes::TypeCube:
                 OCGE( glTexStorage2D( targets[i], 1, GL_RGBA8, 4, 4 ) );
-                for( int j=0; j<6; ++j )
+                for( uint32 j = 0; j < 6; ++j )
                 {
                     OCGE( glTexSubImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, 0, 0, 0, 4, 4, GL_RGBA,
                                            GL_UNSIGNED_INT_8_8_8_8_REV, c_blackData ) );
@@ -136,25 +132,23 @@ namespace Ogre
         destroyAll();
 
         OCGE( glDeleteFramebuffers( 2u, mTmpFbo ) );
-        memset( mTmpFbo, 0, sizeof(mTmpFbo) );
+        memset( mTmpFbo, 0, sizeof( mTmpFbo ) );
 
         OCGE( glDeleteTextures( TextureTypes::Type3D - 1u, &mBlankTexture[1u] ) );
-        memset( mBlankTexture, 0, sizeof(mBlankTexture) );
+        memset( mBlankTexture, 0, sizeof( mBlankTexture ) );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* GL3PlusTextureGpuManager::createTextureGpuWindow( GL3PlusContext *context,
+    TextureGpu *GL3PlusTextureGpuManager::createTextureGpuWindow( GL3PlusContext *context,
                                                                   Window *window )
     {
-        //GL3+ needs to set MsaaExplicitResolve so that "resolveTexture" in RenderPassDescriptor
-        //can remain empty (because the system will be performing the resolve).
-        return OGRE_NEW GL3PlusTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
-                                                 "RenderWindow",
-                                                 TextureFlags::NotTexture|
-                                                 TextureFlags::RenderToTexture|
-                                                 TextureFlags::MsaaExplicitResolve|
-                                                 TextureFlags::RenderWindowSpecific|
-                                                 TextureFlags::DiscardableContent,
-                                                 TextureTypes::Type2D, this, context, window );
+        // GL3+ needs to set MsaaExplicitResolve so that "resolveTexture" in RenderPassDescriptor
+        // can remain empty (because the system will be performing the resolve).
+        return OGRE_NEW GL3PlusTextureGpuWindow(
+            GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow",
+            TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                TextureFlags::MsaaExplicitResolve | TextureFlags::RenderWindowSpecific |
+                TextureFlags::DiscardableContent,
+            TextureTypes::Type2D, this, context, window );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu *GL3PlusTextureGpuManager::createTextureGpuHeadlessWindow( GL3PlusContext *context,
@@ -170,65 +164,79 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     GLuint GL3PlusTextureGpuManager::getBlankTextureGlName(
-            TextureTypes::TextureTypes textureType ) const
+        TextureTypes::TextureTypes textureType ) const
     {
         return mBlankTexture[textureType];
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* GL3PlusTextureGpuManager::createTextureImpl(
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
+    TextureGpu *GL3PlusTextureGpuManager::createTextureImpl(
+        GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, IdString name, uint32 textureFlags,
+        TextureTypes::TextureTypes initialType )
     {
         GL3PlusTextureGpu *retVal = 0;
         if( textureFlags & TextureFlags::RenderToTexture )
         {
             retVal = OGRE_NEW GL3PlusTextureGpuRenderTarget(
-                         pageOutStrategy, mVaoManager, name,
-                         textureFlags | TextureFlags::RequiresTextureFlipping,
-                         initialType, this );
+                pageOutStrategy, mVaoManager, name, textureFlags | TextureFlags::RequiresTextureFlipping,
+                initialType, this );
         }
         else
         {
-            retVal = OGRE_NEW GL3PlusTextureGpu(
-                         pageOutStrategy, mVaoManager, name,
-                         textureFlags | TextureFlags::RequiresTextureFlipping,
-                         initialType, this );
+            retVal = OGRE_NEW GL3PlusTextureGpu( pageOutStrategy, mVaoManager, name,
+                                                 textureFlags | TextureFlags::RequiresTextureFlipping,
+                                                 initialType, this );
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    StagingTexture* GL3PlusTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
-                                                                        uint32 depth,
-                                                                        uint32 slices,
+    StagingTexture *GL3PlusTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
+                                                                        uint32 depth, uint32 slices,
                                                                         PixelFormatGpu pixelFormat )
     {
         const uint32 rowAlignment = 4u;
-        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
-                                                                    pixelFormat, rowAlignment );
+        const size_t sizeBytes =
+            PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat, rowAlignment );
 
-        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( mVaoManager );
+        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager *>( mVaoManager );
         return vaoManager->createStagingTexture( PixelFormatGpuUtils::getFamily( pixelFormat ),
                                                  sizeBytes );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )
     {
-        assert( dynamic_cast<GL3PlusStagingTexture*>( stagingTexture ) );
+        assert( dynamic_cast<GL3PlusStagingTexture *>( stagingTexture ) );
 
-        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( mVaoManager );
-        vaoManager->destroyStagingTexture( static_cast<GL3PlusStagingTexture*>( stagingTexture ) );
+        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager *>( mVaoManager );
+        vaoManager->destroyStagingTexture( static_cast<GL3PlusStagingTexture *>( stagingTexture ) );
     }
     //-----------------------------------------------------------------------------------
-    AsyncTextureTicket* GL3PlusTextureGpuManager::createAsyncTextureTicketImpl(
-            uint32 width, uint32 height, uint32 depthOrSlices,
-            TextureTypes::TextureTypes textureType, PixelFormatGpu pixelFormatFamily )
+    AsyncTextureTicket *GL3PlusTextureGpuManager::createAsyncTextureTicketImpl(
+        uint32 width, uint32 height, uint32 depthOrSlices, TextureTypes::TextureTypes textureType,
+        PixelFormatGpu pixelFormatFamily )
     {
-        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( mVaoManager );
+        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager *>( mVaoManager );
         bool supportsGetTextureSubImage = mSupport.hasMinGLVersion( 4, 5 ) ||
                                           mSupport.checkExtension( "GL_ARB_get_texture_sub_image" );
         return OGRE_NEW GL3PlusAsyncTextureTicket( width, height, depthOrSlices, textureType,
                                                    pixelFormatFamily, vaoManager,
                                                    supportsGetTextureSubImage );
     }
-}
+    //-----------------------------------------------------------------------------------
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+    bool GL3PlusTextureGpuManager::checkSupport( PixelFormatGpu format,
+                                                 TextureTypes::TextureTypes textureType,
+                                                 uint32 textureFlags ) const
+    {
+        if( ( textureFlags & ( TextureFlags::AllowAutomipmaps | TextureFlags::RenderToTexture ) ) ==
+            TextureFlags::AllowAutomipmaps )
+        {
+            // Disable hardware mipmap generation on macOS while there is no fallback
+            // for OpenGL < 4.2 implemented in TextureGpuManager::copyTo
+            return false;
+        }
+
+        return TextureGpuManager::checkSupport( format, textureType, textureFlags );
+    }
+#endif
+}  // namespace Ogre

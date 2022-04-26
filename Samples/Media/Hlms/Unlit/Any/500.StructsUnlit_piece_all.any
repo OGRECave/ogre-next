@@ -94,10 +94,12 @@
 		@property( syntax != metal )
 			FLAT_INTERPOLANT( uint drawId, @counter(texcoord) );
 		@else
-			FLAT_INTERPOLANT( ushort materialId, @counter(texcoord) );
+			@property( !lower_gpu_overhead )
+				FLAT_INTERPOLANT( ushort materialId, @counter(texcoord) );
+			@end
 		@end
 		@property( hlms_colour )
-			INTERPOLANT( float4 colour, @counter(texcoord) );
+			INTERPOLANT( midf4 colour, @counter(texcoord) );
 		@end
 		@foreach( out_uv_half_count, n )
 			INTERPOLANT( float@value( out_uv_half_count@n ) uv@n, @counter(texcoord) );@end

@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -29,43 +29,46 @@
 #ifndef __GLSLShaderManager_H__
 #define __GLSLShaderManager_H__
 
-#include "OgreGpuProgramManager.h"
 #include "OgreGL3PlusPrerequisites.h"
 
-namespace Ogre {
+#include "OgreGpuProgramManager.h"
 
-    //TODO A brief description of what purpose this class serves in GL3+.
+namespace Ogre
+{
+    // TODO A brief description of what purpose this class serves in GL3+.
     // Seems to primarily serve the purpose of creating GpuProgram's based
     // on material script programs. Also handles cache creation.
-    class _OgreGL3PlusExport GLSLShaderManager : public GpuProgramManager
+    class _OgreGL3PlusExport GLSLShaderManager final : public GpuProgramManager
     {
     public:
-        typedef GpuProgram* (*CreateGpuProgramCallback)(ResourceManager* creator,
-                                                        const String& name, ResourceHandle handle,
-                                                        const String& group, bool isManual, ManualResourceLoader* loader,
-                                                        GpuProgramType gptype, const String& syntaxCode);
+        typedef GpuProgram *( *CreateGpuProgramCallback )( ResourceManager *creator, const String &name,
+                                                           ResourceHandle handle, const String &group,
+                                                           bool isManual, ManualResourceLoader *loader,
+                                                           GpuProgramType gptype,
+                                                           const String  &syntaxCode );
 
     private:
         typedef map<String, CreateGpuProgramCallback>::type ShaderMap;
-        ShaderMap mShaderMap;
+        ShaderMap                                           mShaderMap;
 
     protected:
         /// @copydoc ResourceManager::createImpl
-        Resource* createImpl(const String& name, ResourceHandle handle,
-                             const String& group, bool isManual, ManualResourceLoader* loader,
-                             const NameValuePairList* params);
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader,
+                              const NameValuePairList *params ) override;
         /// Specialised create method with specific parameters.
-        Resource* createImpl(const String& name, ResourceHandle handle,
-                             const String& group, bool isManual, ManualResourceLoader* loader,
-                             GpuProgramType gptype, const String& syntaxCode);
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader, GpuProgramType gptype,
+                              const String &syntaxCode ) override;
 
     public:
         GLSLShaderManager();
-        virtual ~GLSLShaderManager();
-        bool registerShaderFactory(const String& syntaxCode, CreateGpuProgramCallback createFn);
-        bool unregisterShaderFactory(const String& syntaxCode);
+        ~GLSLShaderManager() override;
+
+        bool registerShaderFactory( const String &syntaxCode, CreateGpuProgramCallback createFn );
+        bool unregisterShaderFactory( const String &syntaxCode );
     };
 
-}
+}  // namespace Ogre
 
 #endif

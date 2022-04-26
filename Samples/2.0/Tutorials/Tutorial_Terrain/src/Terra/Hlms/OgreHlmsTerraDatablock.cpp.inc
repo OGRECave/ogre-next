@@ -3,7 +3,7 @@
 
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -40,7 +40,7 @@ namespace Ogre
         datablockImpl->mkDr = mkDr;
         datablockImpl->mkDg = mkDg;
         datablockImpl->mkDb = mkDb;
-        datablockImpl->_padding0 = _padding0;
+        datablockImpl->mShadowConstantBiasGpu = mShadowConstantBiasGpu;
         datablockImpl->mBrdf = mBrdf;
 
         for( size_t i=0; i<4; ++i )

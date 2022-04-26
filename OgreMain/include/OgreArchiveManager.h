@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,38 +30,40 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreIteratorWrappers.h"
+#include "OgreSingleton.h"
+
 #include "ogrestd/map.h"
 
-#include "OgreSingleton.h"
-#include "OgreIteratorWrappers.h"
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
-    /** This class manages the available ArchiveFactory plugins. 
-    */
-    class _OgreExport ArchiveManager : public Singleton<ArchiveManager>, public ArchiveAlloc
+     *  @{
+     */
+    /** This class manages the available ArchiveFactory plugins.
+     */
+    class _OgreExport ArchiveManager : public Singleton<ArchiveManager>, public OgreAllocatedObj
     {
     protected:
-        typedef map<String, ArchiveFactory*>::type ArchiveFactoryMap;
-        /// Factories available to create archives, indexed by archive type (String identifier e.g. 'Zip')
+        typedef map<String, ArchiveFactory *>::type ArchiveFactoryMap;
+        /// Factories available to create archives, indexed by archive type (String identifier e.g.
+        /// 'Zip')
         ArchiveFactoryMap mArchFactories;
         /// Currently loaded archives
-        typedef map<String, Archive*>::type ArchiveMap;
-        ArchiveMap mArchives;
+        typedef map<String, Archive *>::type ArchiveMap;
+        ArchiveMap                           mArchives;
 
     public:
         /** Default constructor - should never get called by a client app.
-        */
+         */
         ArchiveManager();
         /** Default destructor.
-        */
+         */
         virtual ~ArchiveManager();
 
         /** Opens an archive for file reading.
@@ -78,21 +80,21 @@ namespace Ogre {
             @par
                 If the function fails, an exception is thrown.
         */
-        Archive* load( const String& filename, const String& archiveType, bool readOnly);
+        Archive *load( const String &filename, const String &archiveType, bool readOnly );
 
         /** Unloads an archive.
         @remarks
             You must ensure that this archive is not being used before removing it.
         */
-        void unload(Archive* arch);
+        void unload( Archive *arch );
         /** Unloads an archive by name.
         @remarks
             You must ensure that this archive is not being used before removing it.
         */
-        void unload(const String& filename);
+        void                            unload( const String &filename );
         typedef MapIterator<ArchiveMap> ArchiveMapIterator;
         /** Get an iterator over the Archives in this Manager. */
-        ArchiveMapIterator getArchiveIterator(void);
+        ArchiveMapIterator getArchiveIterator();
 
         /** Adds a new ArchiveFactory to the list of available factories.
             @remarks
@@ -100,7 +102,7 @@ namespace Ogre {
                 this after defining their ArchiveFactory subclass and
                 Archive subclasses for their archive type.
         */
-        void addArchiveFactory(ArchiveFactory* factory);
+        void addArchiveFactory( ArchiveFactory *factory );
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -116,7 +118,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ArchiveManager& getSingleton(void);
+        static ArchiveManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -132,12 +134,12 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ArchiveManager* getSingletonPtr(void);
+        static ArchiveManager *getSingletonPtr();
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

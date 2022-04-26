@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,84 +33,86 @@ THE SOFTWARE.
 #include "OgreResourceManager.h"
 #include "OgreSingleton.h"
 
-namespace Ogre {
-namespace v1 {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Animation
-    *  @{
-    */
-    /** Handles the management of skeleton resources.
-        @remarks
-            This class deals with the runtime management of
-            skeleton data; like other resource managers it handles
-            the creation of resources (in this case skeleton data),
-            working within a fixed memory budget.
-    */
-    class _OgreExport OldSkeletonManager: public ResourceManager, public Singleton<OldSkeletonManager>
+namespace Ogre
+{
+    namespace v1
     {
-    public:
-        /// Constructor
-        OldSkeletonManager();
-        ~OldSkeletonManager();
-
-        /// Create a new skeleton
-        /// @see ResourceManager::createResource
-        SkeletonPtr create (const String& name, const String& group,
-                            bool isManual = false, ManualResourceLoader* loader = 0,
-                            const NameValuePairList* createParams = 0);
-
-        /// Get a resource by name
-        /// @see ResourceManager::getResourceByName
-        SkeletonPtr getByName(const String& name, const String& groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
-
-        /** Override standard Singleton retrieval.
-        @remarks
-        Why do we do this? Well, it's because the Singleton
-        implementation is in a .h file, which means it gets compiled
-        into anybody who includes it. This is needed for the
-        Singleton template to work, but we actually only want it
-        compiled into the implementation of the class based on the
-        Singleton, not all of them. If we don't change this, we get
-        link errors when trying to use the Singleton-based class from
-        an outside dll.
-        @par
-        This method just delegates to the template version anyway,
-        but the implementation stays in this single compilation unit,
-        preventing link errors.
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Animation
+         *  @{
+         */
+        /** Handles the management of skeleton resources.
+            @remarks
+                This class deals with the runtime management of
+                skeleton data; like other resource managers it handles
+                the creation of resources (in this case skeleton data),
+                working within a fixed memory budget.
         */
-        static OldSkeletonManager& getSingleton(void);
-        /** Override standard Singleton retrieval.
-        @remarks
-        Why do we do this? Well, it's because the Singleton
-        implementation is in a .h file, which means it gets compiled
-        into anybody who includes it. This is needed for the
-        Singleton template to work, but we actually only want it
-        compiled into the implementation of the class based on the
-        Singleton, not all of them. If we don't change this, we get
-        link errors when trying to use the Singleton-based class from
-        an outside dll.
-        @par
-        This method just delegates to the template version anyway,
-        but the implementation stays in this single compilation unit,
-        preventing link errors.
-        */
-        static OldSkeletonManager* getSingletonPtr(void);
-    protected:
+        class _OgreExport OldSkeletonManager final : public ResourceManager,
+                                                     public Singleton<OldSkeletonManager>
+        {
+        public:
+            /// Constructor
+            OldSkeletonManager();
+            ~OldSkeletonManager() override;
 
-        /// @copydoc ResourceManager::createImpl
-        Resource* createImpl(const String& name, ResourceHandle handle, 
-            const String& group, bool isManual, ManualResourceLoader* loader, 
-            const NameValuePairList* createParams);
+            /// Create a new skeleton
+            /// @see ResourceManager::createResource
+            SkeletonPtr create( const String &name, const String &group, bool isManual = false,
+                                ManualResourceLoader    *loader = 0,
+                                const NameValuePairList *createParams = 0 );
 
-    };
+            /// Get a resource by name
+            /// @see ResourceManager::getResourceByName
+            SkeletonPtr getByName(
+                const String &name,
+                const String &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
 
-    /** @} */
-    /** @} */
-}
-}
+            /** Override standard Singleton retrieval.
+            @remarks
+            Why do we do this? Well, it's because the Singleton
+            implementation is in a .h file, which means it gets compiled
+            into anybody who includes it. This is needed for the
+            Singleton template to work, but we actually only want it
+            compiled into the implementation of the class based on the
+            Singleton, not all of them. If we don't change this, we get
+            link errors when trying to use the Singleton-based class from
+            an outside dll.
+            @par
+            This method just delegates to the template version anyway,
+            but the implementation stays in this single compilation unit,
+            preventing link errors.
+            */
+            static OldSkeletonManager &getSingleton();
+            /** Override standard Singleton retrieval.
+            @remarks
+            Why do we do this? Well, it's because the Singleton
+            implementation is in a .h file, which means it gets compiled
+            into anybody who includes it. This is needed for the
+            Singleton template to work, but we actually only want it
+            compiled into the implementation of the class based on the
+            Singleton, not all of them. If we don't change this, we get
+            link errors when trying to use the Singleton-based class from
+            an outside dll.
+            @par
+            This method just delegates to the template version anyway,
+            but the implementation stays in this single compilation unit,
+            preventing link errors.
+            */
+            static OldSkeletonManager *getSingletonPtr();
 
+        protected:
+            /// @copydoc ResourceManager::createImpl
+            Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                                  bool isManual, ManualResourceLoader *loader,
+                                  const NameValuePairList *createParams ) override;
+        };
+
+        /** @} */
+        /** @} */
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

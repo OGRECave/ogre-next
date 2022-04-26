@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,21 +30,19 @@ THE SOFTWARE.
 
 #include "OgrePlatform.h"
 
-//Bring in the specific platform's header file
+// Bring in the specific platform's header file
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-# include "WIN32/OgreTimerImp.h"
+#    include "WIN32/OgreTimerImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
-# include "GLX/OgreTimerImp.h"
-#elif OGRE_PLATFORM == OGRE_PLATFORM_NACL  
-# include "NaCl/OgreTimerImp.h"
+#    include "GLX/OgreTimerImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-# include "OSX/OgreTimerImp.h"
+#    include "OSX/OgreTimerImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-# include "iOS/OgreTimerImp.h"
+#    include "iOS/OgreTimerImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-# include "Android/OgreTimerImp.h"
+#    include "Android/OgreTimerImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-# include "Emscripten/OgreTimerImp.h"
+#    include "Emscripten/OgreTimerImp.h"
 #endif
 
 #endif

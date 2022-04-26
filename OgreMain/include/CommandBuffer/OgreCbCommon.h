@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -80,10 +80,10 @@ namespace Ogre
 
     struct _OgreExport CbBase
     {
-        uint16  commandType;
+        uint16 commandType;
 
         CbBase( uint16 cmdType ) : commandType( cmdType ) {}
     };
-}
+}  // namespace Ogre
 
 #endif

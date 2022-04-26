@@ -32,6 +32,8 @@ compositor_node RefractionsRenderingNode
 			shadows		RefractionsShadowNode
 
 			rq_last		199
+
+			profiling_id "Opaque + Regular Transparents"
 		}
 	}
 
@@ -54,6 +56,8 @@ compositor_node RefractionsMsaaDepthResolve
 			load { all dont_care }
 			material Ogre/Resolve/1xFP32_Subsample0
 			input 0 gBufferDepthBuffer
+
+			profiling_id "Resolve Depth Buffer"
 		}
 	}
 
@@ -85,6 +89,8 @@ compositor_node RefractionsRefractionsNode
 		{
 			in	rtt01
 			out rtt_final
+
+			profiling_id "Copy / Clone rtt01"
 		}
 
 		// Pass with refractive objects
@@ -106,6 +112,8 @@ compositor_node RefractionsRefractionsNode
 			overlays		on
 			shadows			RefractionsShadowNode reuse
 			use_refractions	depthBufferNoMsaa rtt01
+
+			profiling_id "Refractive Objects"
 		}
 	}
 
@@ -117,6 +125,8 @@ compositor_node RefractionsRefractionsNode
 			load { all dont_care }
 			material Ogre/Copy/4xFP32
 			input 0 rtt_final
+
+			profiling_id "Copy to Window"
 		}
 	}
 }

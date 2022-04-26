@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -27,12 +27,13 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 */
 
 #include "OgreMetalDevice.h"
+
 #include "OgreMetalRenderSystem.h"
 #include "OgreProfiler.h"
 
-#import <Metal/MTLDevice.h>
-#import <Metal/MTLCommandQueue.h>
 #import <Metal/MTLCommandBuffer.h>
+#import <Metal/MTLCommandQueue.h>
+#import <Metal/MTLDevice.h>
 
 namespace Ogre
 {
@@ -73,7 +74,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::endBlitEncoder(void)
+    void MetalDevice::endBlitEncoder()
     {
         if( mBlitEncoder )
         {
@@ -94,7 +95,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::endComputeEncoder(void)
+    void MetalDevice::endComputeEncoder()
     {
         if( mComputeEncoder )
         {
@@ -113,10 +114,10 @@ namespace Ogre
         endComputeEncoder();
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::commitAndNextCommandBuffer(void)
+    void MetalDevice::commitAndNextCommandBuffer()
     {
         endAllEncoders();
-        //Push the command buffer to the GPU
+        // Push the command buffer to the GPU
         [mCurrentCommandBuffer commit];
         @autoreleasepool
         {
@@ -129,7 +130,7 @@ namespace Ogre
         mRenderSystem->_notifyNewCommandBuffer();
     }
     //-------------------------------------------------------------------------
-    id<MTLBlitCommandEncoder> MetalDevice::getBlitEncoder(void)
+    id<MTLBlitCommandEncoder> MetalDevice::getBlitEncoder()
     {
         if( !mBlitEncoder )
         {
@@ -145,7 +146,7 @@ namespace Ogre
         return mBlitEncoder;
     }
     //-------------------------------------------------------------------------
-    id<MTLComputeCommandEncoder> MetalDevice::getComputeEncoder(void)
+    id<MTLComputeCommandEncoder> MetalDevice::getComputeEncoder()
     {
         if( !mComputeEncoder )
         {
@@ -158,12 +159,11 @@ namespace Ogre
         return mComputeEncoder;
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::stall(void)
+    void MetalDevice::stall()
     {
         __block dispatch_semaphore_t blockSemaphore = mStallSemaphore;
-        [mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
-        {
-            dispatch_semaphore_signal( blockSemaphore );
+        [mCurrentCommandBuffer addCompletedHandler:^( id<MTLCommandBuffer> buffer ) {
+          dispatch_semaphore_signal( blockSemaphore );
         }];
         commitAndNextCommandBuffer();
 
@@ -174,7 +174,8 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Failure while waiting for a MetalFence. Could be out of GPU memory. "
                          "Update your video card drivers. If that doesn't help, "
-                         "contact the developers. Error code: " + StringConverter::toString( result ),
+                         "contact the developers. Error code: " +
+                             StringConverter::toString( result ),
                          "MetalDevice::stall" );
         }
 
@@ -183,13 +184,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     // MARK: -
     //-------------------------------------------------------------------------
-    MetalDeviceItem::MetalDeviceItem()
-        : mSameNameAdapterIndex(0)
-    {
-    }
+    MetalDeviceItem::MetalDeviceItem() : mSameNameAdapterIndex( 0 ) {}
     //-------------------------------------------------------------------------
-    MetalDeviceItem::MetalDeviceItem( id<MTLDevice> device, unsigned sameNameIndex )
-        : mDevice( device ), mSameNameAdapterIndex( sameNameIndex )
+    MetalDeviceItem::MetalDeviceItem( id<MTLDevice> device, unsigned sameNameIndex ) :
+        mDevice( device ),
+        mSameNameAdapterIndex( sameNameIndex )
     {
     }
     //-------------------------------------------------------------------------
@@ -205,17 +204,11 @@ namespace Ogre
         return desc;
     }
     //-------------------------------------------------------------------------
-    id<MTLDevice> MetalDeviceItem::getMTLDevice() const
-    {
-        return mDevice;
-    }
+    id<MTLDevice> MetalDeviceItem::getMTLDevice() const { return mDevice; }
     //-------------------------------------------------------------------------
     // MARK: -
     //-------------------------------------------------------------------------
-    void MetalDeviceList::clear()
-    {
-        mItems.clear();
-    }
+    void MetalDeviceList::clear() { mItems.clear(); }
     //-------------------------------------------------------------------------
     void MetalDeviceList::refresh()
     {
@@ -224,7 +217,7 @@ namespace Ogre
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         LogManager::getSingleton().logMessage( "Metal: Devices Detection Starts" );
-        
+
         NSArray<id<MTLDevice>> *availableDevices = MTLCopyAllDevices();
         for( id<MTLDevice> device in availableDevices )
         {
@@ -235,29 +228,23 @@ namespace Ogre
 
             mItems.push_back( MetalDeviceItem( device, sameNameIndex ) );
 
-            LogManager::getSingleton().logMessage("Metal: \"" + mItems.back().getDescription() + "\"");
+            LogManager::getSingleton().logMessage( "Metal: \"" + mItems.back().getDescription() + "\"" );
         }
         LogManager::getSingleton().logMessage( "Metal: Devices Detection Ends" );
 #endif
     }
     //-------------------------------------------------------------------------
-    size_t MetalDeviceList::count() const
-    {
-        return mItems.size();
-    }
+    size_t MetalDeviceList::count() const { return mItems.size(); }
     //-------------------------------------------------------------------------
-    const MetalDeviceItem* MetalDeviceList::item( size_t index ) const
-    {
-        return &mItems.at( index );
-    }
+    const MetalDeviceItem *MetalDeviceList::item( size_t index ) const { return &mItems.at( index ); }
     //-------------------------------------------------------------------------
-    const MetalDeviceItem* MetalDeviceList::item( const String &name ) const
+    const MetalDeviceItem *MetalDeviceList::item( const String &name ) const
     {
         vector<MetalDeviceItem>::type::const_iterator it = mItems.begin(), it_end = mItems.end();
         for( ; it != it_end; ++it )
             if( it->getDescription() == name )
                 return &*it;
-        
+
         return NULL;
     }
 }

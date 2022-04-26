@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,23 +27,21 @@ THE SOFTWARE.
 */
 
 #include "OgreMetalAsyncTextureTicket.h"
-#include "OgreMetalTextureGpu.h"
-#include "OgreMetalMappings.h"
-#include "Vao/OgreMetalVaoManager.h"
 
 #include "OgreMetalDevice.h"
+#include "OgreMetalMappings.h"
+#include "OgreMetalTextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
-
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
+#include "Vao/OgreMetalVaoManager.h"
 
 #import "Metal/MTLBlitCommandEncoder.h"
 
 namespace Ogre
 {
-    MetalAsyncTextureTicket::MetalAsyncTextureTicket( uint32 width, uint32 height,
-                                                      uint32 depthOrSlices,
+    MetalAsyncTextureTicket::MetalAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                                       TextureTypes::TextureTypes textureType,
                                                       PixelFormatGpu pixelFormatFamily,
                                                       MetalVaoManager *vaoManager,
@@ -56,18 +54,18 @@ namespace Ogre
         mDevice( device )
     {
         const uint32 rowAlignment = 4u;
-        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depthOrSlices,
-                                                                    1u, mPixelFormatFamily,
-                                                                    rowAlignment );
+        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depthOrSlices, 1u,
+                                                                    mPixelFormatFamily, rowAlignment );
 
-        MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeDefaultCache |
-                                             MTLResourceStorageModeShared;
+        MTLResourceOptions resourceOptions =
+            MTLResourceCPUCacheModeDefaultCache | MTLResourceStorageModeShared;
         mVboName = [mDevice->mDevice newBufferWithLength:sizeBytes options:resourceOptions];
         if( !mVboName )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Out of GPU memory or driver refused.\n"
-                         "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                         "Requested: " +
+                             StringConverter::toString( sizeBytes ) + " bytes.",
                          "MetalAsyncTextureTicket::MetalAsyncTextureTicket" );
         }
     }
@@ -98,21 +96,22 @@ namespace Ogre
         else
         {
             srcTextureBox = *srcBox;
-            srcTextureBox.bytesPerRow   = fullSrcTextureBox.bytesPerRow;
+            srcTextureBox.bytesPerRow = fullSrcTextureBox.bytesPerRow;
             srcTextureBox.bytesPerPixel = fullSrcTextureBox.bytesPerPixel;
             srcTextureBox.bytesPerImage = fullSrcTextureBox.bytesPerImage;
         }
 
         if( textureSrc->hasAutomaticBatching() )
         {
-//            fullSrcTextureBox.sliceStart= textureSrc->getInternalSliceStart();
-//            fullSrcTextureBox.numSlices = textureSrc->getTexturePool()->masterTexture->getNumSlices();
+            // fullSrcTextureBox.sliceStart= textureSrc->getInternalSliceStart();
+            // fullSrcTextureBox.numSlices =
+            // textureSrc->getTexturePool()->masterTexture->getNumSlices();
 
             srcTextureBox.sliceStart += textureSrc->getInternalSliceStart();
         }
 
-        assert( dynamic_cast<MetalTextureGpu*>( textureSrc ) );
-        MetalTextureGpu *srcTextureMetal = static_cast<MetalTextureGpu*>( textureSrc );
+        assert( dynamic_cast<MetalTextureGpu *>( textureSrc ) );
+        MetalTextureGpu *srcTextureMetal = static_cast<MetalTextureGpu *>( textureSrc );
 
         __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = mDevice->getBlitEncoder();
 
@@ -121,8 +120,8 @@ namespace Ogre
 
         if( mPixelFormatFamily == PFG_PVRTC2_2BPP || mPixelFormatFamily == PFG_PVRTC2_2BPP_SRGB ||
             mPixelFormatFamily == PFG_PVRTC2_4BPP || mPixelFormatFamily == PFG_PVRTC2_4BPP_SRGB ||
-            mPixelFormatFamily == PFG_PVRTC_RGB2  || mPixelFormatFamily == PFG_PVRTC_RGB2_SRGB  ||
-            mPixelFormatFamily == PFG_PVRTC_RGB4  || mPixelFormatFamily == PFG_PVRTC_RGB4_SRGB  ||
+            mPixelFormatFamily == PFG_PVRTC_RGB2 || mPixelFormatFamily == PFG_PVRTC_RGB2_SRGB ||
+            mPixelFormatFamily == PFG_PVRTC_RGB4 || mPixelFormatFamily == PFG_PVRTC_RGB4_SRGB ||
             mPixelFormatFamily == PFG_PVRTC_RGBA2 || mPixelFormatFamily == PFG_PVRTC_RGBA2_SRGB ||
             mPixelFormatFamily == PFG_PVRTC_RGBA4 || mPixelFormatFamily == PFG_PVRTC_RGBA4_SRGB )
         {
@@ -131,10 +130,9 @@ namespace Ogre
         }
 
         MTLOrigin mtlOrigin = MTLOriginMake( srcTextureBox.x, srcTextureBox.y, srcTextureBox.z );
-        MTLSize mtlSize     = MTLSizeMake( srcTextureBox.width, srcTextureBox.height,
-                                           srcTextureBox.depth );
+        MTLSize mtlSize = MTLSizeMake( srcTextureBox.width, srcTextureBox.height, srcTextureBox.depth );
 
-        for( NSUInteger i=0; i<srcTextureBox.numSlices; ++i )
+        for( NSUInteger i = 0; i < srcTextureBox.numSlices; ++i )
         {
             [blitEncoder copyFromTexture:srcTextureMetal->getFinalTextureName()
                              sourceSlice:srcTextureBox.sliceStart + i
@@ -156,12 +154,11 @@ namespace Ogre
         {
             mAccurateFence = dispatch_semaphore_create( 0 );
             __weak dispatch_semaphore_t blockSemaphore = mAccurateFence;
-            [mDevice->mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
-            {
-                if( blockSemaphore )
-                    dispatch_semaphore_signal( blockSemaphore );
+            [mDevice->mCurrentCommandBuffer addCompletedHandler:^( id<MTLCommandBuffer> buffer ) {
+              if( blockSemaphore )
+                  dispatch_semaphore_signal( blockSemaphore );
             }];
-            //Flush now for accuracy with downloads.
+            // Flush now for accuracy with downloads.
             mDevice->commitAndNextCommandBuffer();
         }
     }
@@ -186,14 +183,12 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void MetalAsyncTextureTicket::unmapImpl(void)
-    {
-    }
+    void MetalAsyncTextureTicket::unmapImpl() {}
     //-----------------------------------------------------------------------------------
-    void MetalAsyncTextureTicket::waitForDownloadToFinish(void)
+    void MetalAsyncTextureTicket::waitForDownloadToFinish()
     {
         if( mStatus != Downloading )
-            return; //We're done.
+            return;  // We're done.
 
         if( mAccurateFence )
         {
@@ -208,12 +203,12 @@ namespace Ogre
         mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
-    bool MetalAsyncTextureTicket::queryIsTransferDone(void)
+    bool MetalAsyncTextureTicket::queryIsTransferDone()
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {
-            //Early out. The texture is not even finished being ready.
-            //We didn't even start the actual download.
+            // Early out. The texture is not even finished being ready.
+            // We didn't even start the actual download.
             return false;
         }
 
@@ -225,7 +220,7 @@ namespace Ogre
         }
         else if( mAccurateFence )
         {
-            //Ask GL API to return immediately and tells us about the fence
+            // Ask GL API to return immediately and tells us about the fence
             long result = dispatch_semaphore_wait( mAccurateFence, DISPATCH_TIME_NOW );
             if( result == 0 )
             {
@@ -241,32 +236,33 @@ namespace Ogre
             {
                 if( mNumInaccurateQueriesWasCalledInIssuingFrame > 3 )
                 {
-                    //Use is not calling vaoManager->update(). Likely it's stuck in an
-                    //infinite loop checking if we're done, but we'll always return false.
-                    //If so, switch to accurate tracking.
+                    // Use is not calling vaoManager->update(). Likely it's stuck in an
+                    // infinite loop checking if we're done, but we'll always return false.
+                    // If so, switch to accurate tracking.
                     mAccurateFence = dispatch_semaphore_create( 0 );
                     __weak dispatch_semaphore_t blockSemaphore = mAccurateFence;
-                    [mDevice->mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
-                    {
-                        if( blockSemaphore )
-                            dispatch_semaphore_signal( blockSemaphore );
-                    }];
-                    //Flush now for accuracy with downloads.
+                    [mDevice->mCurrentCommandBuffer
+                        addCompletedHandler:^( id<MTLCommandBuffer> buffer ) {
+                          if( blockSemaphore )
+                              dispatch_semaphore_signal( blockSemaphore );
+                        }];
+                    // Flush now for accuracy with downloads.
                     mDevice->commitAndNextCommandBuffer();
 
                     LogManager::getSingleton().logMessage(
-                                "WARNING: Calling AsyncTextureTicket::queryIsTransferDone too "
-                                "often with innacurate tracking in the same frame this transfer "
-                                "was issued. Switching to accurate tracking. If this is an accident, "
-                                "wait until you've rendered a few frames before checking if it's done. "
-                                "If this is on purpose, consider calling AsyncTextureTicket::download()"
-                                " with accurate tracking enabled.", LML_CRITICAL );
+                        "WARNING: Calling AsyncTextureTicket::queryIsTransferDone too "
+                        "often with inaccurate tracking in the same frame this transfer "
+                        "was issued. Switching to accurate tracking. If this is an accident, "
+                        "wait until you've rendered a few frames before checking if it's done. "
+                        "If this is on purpose, consider calling AsyncTextureTicket::download()"
+                        " with accurate tracking enabled.",
+                        LML_CRITICAL );
                 }
 
                 ++mNumInaccurateQueriesWasCalledInIssuingFrame;
             }
 
-            //We're downloading but have no fence. That means we don't have accurate tracking.
+            // We're downloading but have no fence. That means we don't have accurate tracking.
             retVal = mVaoManager->isFrameFinished( mDownloadFrame );
             ++mNumInaccurateQueriesWasCalledInIssuingFrame;
         }

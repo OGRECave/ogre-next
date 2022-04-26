@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsSamplerblock.h"
+
 #include <float.h>
 
 namespace Ogre
@@ -84,4 +85,4 @@ namespace Ogre
         mV = addressingMode;
         mW = addressingMode;
     }
-}
+}  // namespace Ogre

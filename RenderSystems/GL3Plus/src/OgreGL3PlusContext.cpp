@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -28,23 +28,13 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreGL3PlusContext.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     // Empty base class
-    GL3PlusContext::GL3PlusContext()
-        : initialized(false)
-    {
-    }
+    GL3PlusContext::GL3PlusContext() : initialized( false ) {}
 
+    GL3PlusContext::~GL3PlusContext() {}
 
-    GL3PlusContext::~GL3PlusContext()
-    {
-    }
+    void GL3PlusContext::endCurrent() {}
 
-
-    void GL3PlusContext::endCurrent() 
-    {
-    }
-
-
-}
+}  // namespace Ogre

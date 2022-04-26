@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -19,7 +19,7 @@ ogre_add_component_include_dir(Hlms/Pbs)
 add_recursive( ./ SOURCE_FILES )
 
 set( RESTART_RESOURCES ${SAMPLE_COMMON_RESOURCES} )
-if( OGRE_BUILD_PLATFORM_APPLE_IOS )
+if( APPLE AND OGRE_BUILD_PLATFORM_APPLE_IOS)
 	set( RESTART_RESOURCES ${RESTART_RESOURCES}
 		 ${CMAKE_CURRENT_SOURCE_DIR}/iOS/Restart.storyboard )
 	set( SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/iOS/RestartViewController.mm )

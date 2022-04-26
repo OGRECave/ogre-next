@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -126,7 +126,7 @@ namespace Volume {
 
     /** Class to build up a mesh with vertices and indices.
     */
-    class _OgreVolumeExport MeshBuilder : public UtilityAlloc
+    class _OgreVolumeExport MeshBuilder : public OgreAllocatedObj
     {
     protected:
 
@@ -273,7 +273,7 @@ namespace Volume {
 
         /** Constructor.
         */
-        MeshBuilder(void);
+        MeshBuilder();
         
         /** Adds a triangle to the mesh with reusing already existent vertices via their index.
         @param v0
@@ -321,7 +321,7 @@ namespace Volume {
         @return
             The bounding box.
         */
-        AxisAlignedBox getBoundingBox(void);
+        AxisAlignedBox getBoundingBox();
 
         /** Executes a MeshBuilderCallback on this instance.
         @param callback

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -43,9 +43,10 @@ namespace Ogre
         static GLenum get( TextureTypes::TextureTypes textureType, bool cubemapsAs2DArrays );
         /// Returns GL internal format
         static GLenum get( PixelFormatGpu pf );
+
         static void getFormatAndType( PixelFormatGpu pf, GLenum &format, GLenum &type );
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

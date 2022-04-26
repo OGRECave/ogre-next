@@ -11,36 +11,36 @@ namespace Ogre
     class ParallaxCorrectedCubemapAuto;
     class ParallaxCorrectedCubemapBase;
     class HlmsPbsDatablock;
-}
+}  // namespace Ogre
 
 namespace Demo
 {
     class LocalCubemapsManualProbesGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        Ogre::ParallaxCorrectedCubemapBase  *mParallaxCorrectedCubemap;
-        Ogre::ParallaxCorrectedCubemapAuto  *mParallaxCorrectedCubemapAuto;
-        Ogre::ParallaxCorrectedCubemap      *mParallaxCorrectedCubemapOrig;
-        Ogre::HlmsPbsDatablock          *mMaterials[4*4];
-        bool                            mPerPixelReflections;
+        Ogre::ParallaxCorrectedCubemapBase *mParallaxCorrectedCubemap;
+        Ogre::ParallaxCorrectedCubemapAuto *mParallaxCorrectedCubemapAuto;
+        Ogre::ParallaxCorrectedCubemap *mParallaxCorrectedCubemapOrig;
+        Ogre::HlmsPbsDatablock *mMaterials[4 * 4];
+        bool mPerPixelReflections;
         /// True if we were using manual probes before mPerPixelReflections became true
-        bool                            mWasManualProbe;
+        bool mWasManualProbe;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
-        void setupParallaxCorrectCubemaps(void);
+        void setupParallaxCorrectCubemaps();
 
     public:
         LocalCubemapsManualProbesGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

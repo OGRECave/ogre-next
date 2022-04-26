@@ -23,11 +23,13 @@ struct Params
 	uint2 instanceStart_instanceEnd;
 	float3 voxelOrigin;
 	float3 voxelCellSize;
+	uint3 voxelPixelOrigin;
 };
 
-#if defined(__HAVE_SIMDGROUP_BALLOT__)
+// Do not use __HAVE_SIMDGROUP_BALLOT__, see GLSL comments
+/*#if defined(__HAVE_SIMDGROUP_BALLOT__)
 	#define anyInvocationARB( value ) simd_any( value )
-#else
+#else*/
 	//At least on High Sierra AMD, when using a threadgroup uchar or bool,
 	//it crashes the Metal compiler so we're using ushort instead
 	inline bool emulatedAnyInvocationARB( bool value, ushort gl_LocalInvocationIndex,
@@ -53,7 +55,7 @@ struct Params
 
 	#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex, g_emulatedGroupVote )
 	#define EMULATING_anyInvocationARB
-#endif
+//#endif
 
 /*inline float4 unpackUnormRGB10A2( uint v )
 {
@@ -85,6 +87,7 @@ inline uint packUnormRGB10A2( float4 v )
 #define p_numInstances p.numInstances
 #define p_voxelOrigin p.voxelOrigin
 #define p_voxelCellSize p.voxelCellSize
+#define p_voxelPixelOrigin p.voxelPixelOrigin
 
 kernel void main_metal
 (
@@ -111,8 +114,8 @@ kernel void main_metal
 	ushort gl_LocalInvocationIndex	[[thread_index_in_threadgroup]]
 )
 {
-	#if !defined(__HAVE_SIMDGROUP_BALLOT__)
+	//#if !defined(__HAVE_SIMDGROUP_BALLOT__)
 		threadgroup ushort g_emulatedGroupVote[64];
-	#endif
+	//#endif
 	@insertpiece( BodyCS )
 }

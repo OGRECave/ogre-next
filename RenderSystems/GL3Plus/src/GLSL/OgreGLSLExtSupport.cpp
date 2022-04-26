@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -30,85 +30,71 @@
 #include "OgreLogManager.h"
 #include "OgreRoot.h"
 
-namespace Ogre {
-
-    String logObjectInfo(const String& msg, const GLuint obj)
+namespace Ogre
+{
+    String logObjectInfo( const String &msg, const GLuint obj )
     {
         String logMessage = msg;
 
         // Invalid object.
-        if (obj <= 0)
+        if( obj <= 0 )
         {
             return logMessage;
         }
 
         GLint infologLength = 0;
 
-        GLboolean isShader = glIsShader(obj);
-        GLboolean isProgramPipeline = glIsProgramPipeline(obj);
-        GLboolean isProgram = glIsProgram(obj);
+        GLboolean isShader = glIsShader( obj );
+        GLboolean isProgram = glIsProgram( obj );
 
-        if (isShader)
+        if( isShader )
         {
-            OGRE_CHECK_GL_ERROR(glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &infologLength));
+            OGRE_CHECK_GL_ERROR( glGetShaderiv( obj, GL_INFO_LOG_LENGTH, &infologLength ) );
         }
-        else if (isProgramPipeline &&
-                 Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
+        else if( isProgram )
         {
-            //FIXME Crashes on NVIDIA? See GL3+ GSoC forum
-            // posts around 2013-11-25.
-            OGRE_CHECK_GL_ERROR(glGetProgramPipelineiv(obj, GL_INFO_LOG_LENGTH, &infologLength));
-        }
-        else if (isProgram)
-        {
-            OGRE_CHECK_GL_ERROR(glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &infologLength));
+            OGRE_CHECK_GL_ERROR( glGetProgramiv( obj, GL_INFO_LOG_LENGTH, &infologLength ) );
         }
 
         // No info log available.
         // if (infologLength <= 1)
-        if (infologLength < 1)
+        if( infologLength < 1 )
         {
             return logMessage;
         }
 
-        GLint charsWritten  = 0;
+        GLint charsWritten = 0;
 
-        char * infoLog = new char [infologLength];
+        char *infoLog = new char[static_cast<size_t>( infologLength )];
         infoLog[0] = 0;
 
-        if (isShader)
+        if( isShader )
         {
-            OGRE_CHECK_GL_ERROR(glGetShaderInfoLog(obj, infologLength, &charsWritten, infoLog));
+            OGRE_CHECK_GL_ERROR( glGetShaderInfoLog( obj, infologLength, &charsWritten, infoLog ) );
         }
-        else if (isProgramPipeline &&
-                 Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
+        else if( isProgram )
         {
-            OGRE_CHECK_GL_ERROR(glGetProgramPipelineInfoLog(obj, infologLength, &charsWritten, infoLog));
-        }
-        else if (isProgram)
-        {
-            OGRE_CHECK_GL_ERROR(glGetProgramInfoLog(obj, infologLength, &charsWritten, infoLog));
+            OGRE_CHECK_GL_ERROR( glGetProgramInfoLog( obj, infologLength, &charsWritten, infoLog ) );
         }
 
-        if (strlen(infoLog) > 0)
+        if( strlen( infoLog ) > 0 )
         {
-            logMessage += "\n" + String(infoLog);
+            logMessage += "\n" + String( infoLog );
         }
 
-        delete [] infoLog;
+        delete[] infoLog;
 
-        if (logMessage.size() > 0)
+        if( logMessage.size() > 0 )
         {
             // Remove empty lines from the end of the log.
-            while (logMessage[logMessage.size() - 1] == '\n')
+            while( logMessage[logMessage.size() - 1] == '\n' )
             {
-                logMessage.erase(logMessage.size() - 1, 1);
+                logMessage.erase( logMessage.size() - 1, 1 );
             }
-            LogManager::getSingleton().logMessage(logMessage);
+            LogManager::getSingleton().logMessage( logMessage );
         }
 
         return logMessage;
     }
 
-
-}
+}  // namespace Ogre

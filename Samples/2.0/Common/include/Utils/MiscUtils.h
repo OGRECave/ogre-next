@@ -7,6 +7,7 @@ namespace Demo
     {
         static int retrievePreprocessorParameter( const Ogre::String &preprocessDefines,
                                                   const Ogre::String &paramName );
+
     public:
         /**
         @param job
@@ -29,7 +30,8 @@ namespace Demo
                                                 float gaussianDeviationFactor, Ogre::uint16 K );
 
         /// Adjusts the material (pixel shader variation). See other overload for param description.
-        static void setGaussianLogFilterParams( const Ogre::String &materialName, Ogre::uint8 kernelRadius,
-                                                float gaussianDeviationFactor, Ogre::uint16 K );
+        static void setGaussianLogFilterParams( const Ogre::String &materialName,
+                                                Ogre::uint8 kernelRadius, float gaussianDeviationFactor,
+                                                Ogre::uint16 K );
     };
-}
+}  // namespace Demo

@@ -2,8 +2,8 @@
 #define __NSIGHTCHECKER_H__
 
 namespace Ogre
-{ 
-	bool IsWorkingUnderNsight(); // caches result internally
+{
+    bool IsWorkingUnderNsight();  // caches result internally
 }
 
 #endif

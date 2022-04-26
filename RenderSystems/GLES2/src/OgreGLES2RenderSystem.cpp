@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -160,19 +160,19 @@ namespace Ogre {
 #endif
     }
 
-    const String& GLES2RenderSystem::getName(void) const
+    const String& GLES2RenderSystem::getName() const
     {
         static String strName("OpenGL ES 2.x Rendering Subsystem");
         return strName;
     }
 
-    const String& GLES2RenderSystem::getFriendlyName(void) const
+    const String& GLES2RenderSystem::getFriendlyName() const
     {
         static String strName("OpenGL ES 2.x");
         return strName;
     }
 
-    ConfigOptionMap& GLES2RenderSystem::getConfigOptions(void)
+    ConfigOptionMap& GLES2RenderSystem::getConfigOptions()
     {
         return mGLSupport->getConfigOptions();
     }
@@ -182,7 +182,7 @@ namespace Ogre {
         mGLSupport->setConfigOption(name, value);
     }
 
-    String GLES2RenderSystem::validateConfigOptions(void)
+    String GLES2RenderSystem::validateConfigOptions()
     {
         // XXX Return an error string if something is invalid
         return mGLSupport->validateConfig();
@@ -513,13 +513,13 @@ namespace Ogre {
         mGLInitialised = true;
     }
 
-    void GLES2RenderSystem::reinitialise(void)
+    void GLES2RenderSystem::reinitialise()
     {
         this->shutdown();
         this->_initialise(true);
     }
 
-    void GLES2RenderSystem::shutdown(void)
+    void GLES2RenderSystem::shutdown()
     {
         // Deleting the GLSL shader factory
         if (mGLSLESShaderFactory)
@@ -823,7 +823,7 @@ namespace Ogre {
         return BLANKSTRING;
     }
 
-    VertexElementType GLES2RenderSystem::getColourVertexElementType(void) const
+    VertexElementType GLES2RenderSystem::getColourVertexElementType() const
     {
         return VET_COLOUR_ABGR;
     }
@@ -907,7 +907,7 @@ namespace Ogre {
     {
     }
 
-    void GLES2RenderSystem::clearUAVs(void)
+    void GLES2RenderSystem::clearUAVs()
     {
     }
 
@@ -1245,12 +1245,12 @@ namespace Ogre {
         // Shader stuff
         //
 
-        if( !newBlock->vertexShader.isNull() )
+        if( newBlock->vertexShader )
         {
             pso->vertexShader = static_cast<GLSLESShader*>( newBlock->vertexShader->
                                                           _getBindingDelegate() );
         }
-        if( !newBlock->pixelShader.isNull() )
+        if( newBlock->pixelShader )
         {
             pso->pixelShader = static_cast<GLSLESShader*>( newBlock->pixelShader->
                                                          _getBindingDelegate() );
@@ -1597,11 +1597,11 @@ namespace Ogre {
         }
     }
 
-    void GLES2RenderSystem::_beginFrame(void)
+    void GLES2RenderSystem::_beginFrame()
     {
     }
 
-    void GLES2RenderSystem::_endFrame(void)
+    void GLES2RenderSystem::_endFrame()
     {
         // unbind PSO programs at end of frame
         // this is mostly to avoid holding bound programs that might get deleted
@@ -1645,7 +1645,7 @@ namespace Ogre {
     }
 
     //---------------------------------------------------------------------
-    HardwareOcclusionQuery* GLES2RenderSystem::createHardwareOcclusionQuery(void)
+    HardwareOcclusionQuery* GLES2RenderSystem::createHardwareOcclusionQuery()
     {
         if(mGLSupport->checkExtension("GL_EXT_occlusion_query_boolean") || gleswIsSupported(3, 0))
         {
@@ -1751,7 +1751,7 @@ namespace Ogre {
         }
     }
 
-    GLint GLES2RenderSystem::getCombinedMinMipFilter(void) const
+    GLint GLES2RenderSystem::getCombinedMinMipFilter() const
     {
         switch(mMinFilter)
         {
@@ -1801,15 +1801,11 @@ namespace Ogre {
         // Create variables related to instancing.
         v1::HardwareVertexBufferSharedPtr globalInstanceVertexBuffer;
         v1::VertexDeclaration* globalVertexDeclaration = 0;
-        bool hasInstanceData = false;
-        size_t numberOfInstances = 0;
+        size_t numberOfInstances = 1;
         if(hasMinGLVersion(3, 0) || checkExtension("GL_EXT_instanced_arrays"))
         {
             globalInstanceVertexBuffer = getGlobalInstanceVertexBuffer();
             globalVertexDeclaration = getGlobalInstanceVertexBufferVertexDeclaration();
-            hasInstanceData = (op.useGlobalInstancingVertexBufferIsAvailable &&
-                                !globalInstanceVertexBuffer.isNull() && (globalVertexDeclaration != NULL))
-                                || op.vertexData->vertexBufferBinding->getHasInstanceData();
 
             numberOfInstances = op.numberOfInstances;
 
@@ -1845,7 +1841,7 @@ namespace Ogre {
 
         if(hasMinGLVersion(3, 0) || checkExtension("GL_EXT_instanced_arrays"))
         {
-            if( !globalInstanceVertexBuffer.isNull() && globalVertexDeclaration != NULL )
+            if( globalInstanceVertexBuffer && globalVertexDeclaration )
             {
                 elemEnd = globalVertexDeclaration->getElements().end();
                 for (elemIter = globalVertexDeclaration->getElements().begin(); elemIter != elemEnd; ++elemIter)
@@ -1902,7 +1898,7 @@ namespace Ogre {
                                   mDerivedDepthBiasSlopeScale);
                 }
 
-                if(hasInstanceData && (hasMinGLVersion(3, 0) || checkExtension("GL_EXT_instanced_arrays")))
+                if(numberOfInstances > 1)
                 {
                     OGRE_CHECK_GL_ERROR(glDrawElementsInstancedEXT(primType, static_cast<GLsizei>(op.indexData->indexCount), indexType, pBufferData, static_cast<GLsizei>(numberOfInstances)));
                 }
@@ -1925,7 +1921,7 @@ namespace Ogre {
                                   mDerivedDepthBiasSlopeScale);
                 }
 
-                if(hasInstanceData && (hasMinGLVersion(3, 0) || checkExtension("GL_EXT_instanced_arrays")))
+                if(numberOfInstances > 1)
                 {
                     OGRE_CHECK_GL_ERROR(glDrawArraysInstancedEXT(primType, 0, static_cast<GLsizei>(op.vertexData->vertexCount), static_cast<GLsizei>(numberOfInstances)));
                 }
@@ -2126,7 +2122,7 @@ namespace Ogre {
         }
     }
 
-    void GLES2RenderSystem::_startLegacyV1Rendering(void)
+    void GLES2RenderSystem::_startLegacyV1Rendering()
     {
         glBindVertexArray( mGlobalVao );
     }
@@ -2871,7 +2867,7 @@ namespace Ogre {
             glPushGroupMarkerEXT(0, eventName.c_str());
     }
     //---------------------------------------------------------------------
-    void GLES2RenderSystem::endProfileEvent( void )
+    void GLES2RenderSystem::endProfileEvent()
     {
         if(checkExtension("GL_EXT_debug_marker"))
             glPopGroupMarkerEXT();
@@ -2920,11 +2916,11 @@ namespace Ogre {
     }
 #endif
 
-    void GLES2RenderSystem::initGPUProfiling(void)
+    void GLES2RenderSystem::initGPUProfiling()
     {
     }
 
-    void GLES2RenderSystem::deinitGPUProfiling(void)
+    void GLES2RenderSystem::deinitGPUProfiling()
     {
     }
 
@@ -3047,7 +3043,7 @@ namespace Ogre {
         }
     }
 
-    const PixelFormatToShaderType* GLES2RenderSystem::getPixelFormatToShaderType(void) const
+    const PixelFormatToShaderType* GLES2RenderSystem::getPixelFormatToShaderType() const
     {
         return &mPixelFormatToShaderType;
     }

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -27,62 +27,61 @@ THE SOFTWARE.
 */
 
 #import "OgreMetalGpuProgramManager.h"
-#import "OgreMetalProgram.h"
-#import "OgreLogManager.h"
 
-namespace Ogre {
-    MetalGpuProgramManager::MetalGpuProgramManager( MetalDevice *device ) :
-        mDevice( device )
+#import "OgreLogManager.h"
+#import "OgreMetalProgram.h"
+
+namespace Ogre
+{
+    MetalGpuProgramManager::MetalGpuProgramManager( MetalDevice *device ) : mDevice( device )
     {
         // Superclass sets up members
 
         // Register with resource group manager
-        ResourceGroupManager::getSingleton()._registerResourceManager(mResourceType, this);
+        ResourceGroupManager::getSingleton()._registerResourceManager( mResourceType, this );
     }
 
     MetalGpuProgramManager::~MetalGpuProgramManager()
     {
         // Unregister with resource group manager
-        ResourceGroupManager::getSingleton()._unregisterResourceManager(mResourceType);
+        ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
     }
 
-    bool MetalGpuProgramManager::registerProgramFactory(const String& syntaxCode,
-                                                     CreateGpuProgramCallback createFn)
+    bool MetalGpuProgramManager::registerProgramFactory( const String &syntaxCode,
+                                                         CreateGpuProgramCallback createFn )
     {
-        return mProgramMap.insert(ProgramMap::value_type(syntaxCode, createFn)).second;
+        return mProgramMap.insert( ProgramMap::value_type( syntaxCode, createFn ) ).second;
     }
 
-    bool MetalGpuProgramManager::unregisterProgramFactory(const String& syntaxCode)
+    bool MetalGpuProgramManager::unregisterProgramFactory( const String &syntaxCode )
     {
-        return mProgramMap.erase(syntaxCode) != 0;
+        return mProgramMap.erase( syntaxCode ) != 0;
     }
 
-    Resource* MetalGpuProgramManager::createImpl(const String& name,
-                                                ResourceHandle handle,
-                                                const String& group, bool isManual,
-                                                ManualResourceLoader* loader,
-                                                const NameValuePairList* params)
+    Resource *MetalGpuProgramManager::createImpl( const String &name, ResourceHandle handle,
+                                                  const String &group, bool isManual,
+                                                  ManualResourceLoader *loader,
+                                                  const NameValuePairList *params )
     {
         NameValuePairList::const_iterator paramSyntax, paramType;
 
-        if (!params || (paramSyntax = params->find("syntax")) == params->end() ||
-            (paramType = params->find("type")) == params->end())
+        if( !params || ( paramSyntax = params->find( "syntax" ) ) == params->end() ||
+            ( paramType = params->find( "type" ) ) == params->end() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must supply 'syntax' and 'type' parameters",
-                "MetalGpuProgramManager::createImpl");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must supply 'syntax' and 'type' parameters",
+                         "MetalGpuProgramManager::createImpl" );
         }
 
-        ProgramMap::const_iterator iter = mProgramMap.find(paramSyntax->second);
-        if(iter == mProgramMap.end())
+        ProgramMap::const_iterator iter = mProgramMap.find( paramSyntax->second );
+        if( iter == mProgramMap.end() )
         {
             // No factory, this is an unsupported syntax code, probably for another rendersystem
             // Create a basic one, it doesn't matter what it is since it won't be used
-            return new MetalProgram(this, name, handle, group, isManual, loader, mDevice);
+            return new MetalProgram( this, name, handle, group, isManual, loader, mDevice );
         }
 
         GpuProgramType gpt;
-        if (paramType->second == "vertex_program")
+        if( paramType->second == "vertex_program" )
         {
             gpt = GPT_VERTEX_PROGRAM;
         }
@@ -91,25 +90,22 @@ namespace Ogre {
             gpt = GPT_FRAGMENT_PROGRAM;
         }
 
-        return (iter->second)(this, name, handle, group, isManual,
-                              loader, gpt, paramSyntax->second);
+        return ( iter->second )( this, name, handle, group, isManual, loader, gpt, paramSyntax->second );
     }
 
-    Resource* MetalGpuProgramManager::createImpl(const String& name,
-                                                ResourceHandle handle,
-                                                const String& group, bool isManual,
-                                                ManualResourceLoader* loader,
-                                                GpuProgramType gptype,
-                                                const String& syntaxCode)
+    Resource *MetalGpuProgramManager::createImpl( const String &name, ResourceHandle handle,
+                                                  const String &group, bool isManual,
+                                                  ManualResourceLoader *loader, GpuProgramType gptype,
+                                                  const String &syntaxCode )
     {
-        ProgramMap::const_iterator iter = mProgramMap.find(syntaxCode);
-        if(iter == mProgramMap.end())
+        ProgramMap::const_iterator iter = mProgramMap.find( syntaxCode );
+        if( iter == mProgramMap.end() )
         {
             // No factory, this is an unsupported syntax code, probably for another rendersystem
             // Create a basic one, it doesn't matter what it is since it won't be used
-            return new MetalProgram(this, name, handle, group, isManual, loader, mDevice);
+            return new MetalProgram( this, name, handle, group, isManual, loader, mDevice );
         }
-        
-        return (iter->second)(this, name, handle, group, isManual, loader, gptype, syntaxCode);
+
+        return ( iter->second )( this, name, handle, group, isManual, loader, gptype, syntaxCode );
     }
 }

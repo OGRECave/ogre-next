@@ -1,0 +1,91 @@
+// NPR = Non-Physically-based Rendering Atmo
+
+//#include "SyntaxHighlightingMisc.h"
+
+// @property( atmosky_npr )
+
+// @piece( DeclAtmosphereNprSkyFuncs )
+
+// See https://en.wikipedia.org/wiki/Rayleigh_distribution
+// It's inspired, not fully based.
+//
+// The formula also gives us the nice property that for inputs
+// where absorption is in range [0; 1] the output i also in range [0; 1]
+midf3 getSkyRayleighAbsorption( midf3 vDir, const midf density )
+{
+	midf3 absorption = -density * vDir;
+	absorption = exp2( absorption ) * _h( 2.0 );
+	return absorption;
+}
+
+midf3 pow3( midf3 v, midf e )
+{
+	return midf3_c( pow( v.x, e ), pow( v.y, e ), pow( v.z, e ) );
+}
+
+// @endpiece
+
+// @piece( DoAtmosphereNprSky )
+// clang-format off
+#define p_densityCoeff			midf_c( atmoSettings.densityCoeff )
+#define p_lightDensity			midf_c( atmoSettings.lightDensity )
+#define p_sunHeight				midf_c( atmoSettings.sunHeight )
+#define p_sunHeightWeight		midf_c( atmoSettings.sunHeightWeight )
+#define p_skyLightAbsorption	midf3_c( atmoSettings.skyLightAbsorption.xyz )
+#define p_sunAbsorption			midf3_c( atmoSettings.sunAbsorption.xyz )
+#define p_cameraDisplacement	midf3_c( atmoSettings.cameraDisplacement.xyz )
+#define p_mieAbsorption			midf3_c( atmoSettings.packedParams1.xyz )
+#define p_finalMultiplier		midf_c( atmoSettings.packedParams1.w )
+#define p_sunDir				midf3_c( atmoSettings.packedParams2.xyz )
+#define p_borderLimit			midf_c( atmoSettings.packedParams2.w )
+#define p_skyColour				midf3_c( atmoSettings.packedParams3.xyz )
+#define p_densityDiffusion		midf_c( atmoSettings.packedParams3.w )
+// clang-format on
+
+const float3 cameraPos = float3( atmoSettings.skyLightAbsorption.w, atmoSettings.sunAbsorption.w,
+								 atmoSettings.cameraDisplacement.w );
+float3 cameraDir = worldPos.xyz - cameraPos;
+float distToCamera = length( cameraDir );
+midf3 atmoCameraDir = midf3_c( cameraDir * ( 1.0f / distToCamera ) );
+
+const midf LdotV = max( dot( atmoCameraDir, p_sunDir ), _h( 0.0 ) );
+
+atmoCameraDir.y +=
+	p_densityDiffusion * _h( 0.075 ) * ( _h( 1.0 ) - atmoCameraDir.y ) * ( _h( 1.0 ) - atmoCameraDir.y );
+atmoCameraDir += p_cameraDisplacement;
+atmoCameraDir = normalize( atmoCameraDir );
+
+atmoCameraDir.y = max( atmoCameraDir.y, p_borderLimit );
+atmoCameraDir.y = atmoCameraDir.y * _h( 0.9 ) + _h( 0.1 );
+atmoCameraDir = normalize( atmoCameraDir );
+
+const midf LdotV360 = dot( atmoCameraDir, p_sunDir ) * _h( 0.5 ) + _h( 0.5 );
+
+// ptDensity gets smaller as sunHeight gets bigger
+// ptDensity gets smaller as atmoCameraDir.y gets bigger
+const midf ptDensity =
+	p_densityCoeff /
+	pow( max( atmoCameraDir.y / ( _h( 1.0 ) - p_sunHeight ), _h( 0.0035 ) ), p_densityDiffusion );
+
+const midf antiMie = max( p_sunHeightWeight, _h( 0.08 ) );
+
+const midf3 skyAbsorption = getSkyRayleighAbsorption( p_skyColour, ptDensity );
+const midf3 skyColourGradient = pow3( exp2( -atmoCameraDir.y / p_skyColour ), _h( 1.5 ) );
+
+const midf mie = LdotV360;
+
+midf3 atmoColour = midf3_c( 0.0f, 0.0f, 0.0f );
+
+const midf3 sharedTerms = skyColourGradient * skyAbsorption;
+
+atmoColour += antiMie * sharedTerms * p_sunAbsorption;
+atmoColour += ( mie * ptDensity * p_lightDensity ) * sharedTerms * p_skyLightAbsorption;
+atmoColour += mie * p_mieAbsorption;
+atmoColour *= p_lightDensity;
+
+atmoColour *= p_finalMultiplier;
+
+outVs.fog.xyz = atmoColour;
+// @end
+
+// @end

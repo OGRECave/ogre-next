@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,26 +29,27 @@ THE SOFTWARE.
 #define __DirectionRandomiserAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreDirectionRandomiserAffector.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for DirectionRandomiserAffector. */
-    class _OgreParticleFXExport DirectionRandomiserAffectorFactory : public ParticleAffectorFactory
+    class _OgreParticleFXExport DirectionRandomiserAffectorFactory final : public ParticleAffectorFactory
     {
         /** See ParticleAffectorFactory */
-        String getName() const { return "DirectionRandomiser"; }
+        String getName() const override { return "DirectionRandomiser"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
-            ParticleAffector* p = OGRE_NEW DirectionRandomiserAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW DirectionRandomiserAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-}
+}  // namespace Ogre
 
 #endif

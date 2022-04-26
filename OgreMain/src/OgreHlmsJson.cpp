@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,24 +30,41 @@ THE SOFTWARE.
 
 #if !OGRE_NO_JSON
 
-#include "OgreHlmsJson.h"
-#include "OgreHlmsJsonCompute.h"
-#include "OgreHlmsManager.h"
-#include "OgreHlms.h"
-#include "OgreRenderSystem.h"
-#include "OgreVector2.h"
-#include "OgreLwString.h"
-#include "OgreStringConverter.h"
-#include "OgreLogManager.h"
+#    include "OgreHlmsJson.h"
 
-#include "rapidjson/document.h"
-#include "rapidjson/error/en.h"
+#    include "OgreHlms.h"
+#    include "OgreHlmsJsonCompute.h"
+#    include "OgreHlmsManager.h"
+#    include "OgreLogManager.h"
+#    include "OgreLwString.h"
+#    include "OgreRenderSystem.h"
+#    include "OgreStringConverter.h"
+#    include "OgreVector2.h"
+
+#    if defined( __GNUC__ ) && !defined( __clang__ )
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wclass-memaccess"
+#    endif
+#    if defined( __clang__ )
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#        pragma clang diagnostic ignored "-Wdeprecated-copy"
+#    endif
+#    include "rapidjson/document.h"
+#    include "rapidjson/error/en.h"
+#    if defined( __clang__ )
+#        pragma clang diagnostic pop
+#    endif
+#    if defined( __GNUC__ ) && !defined( __clang__ )
+#        pragma GCC diagnostic pop
+#    endif
 
 namespace Ogre
 {
     static HlmsJsonListener sDefaultHlmsJsonListener;
 
-    const char* c_filterOptions[FO_ANISOTROPIC+1] =
+    // clang-format off
+    static const char* c_filterOptions[FO_ANISOTROPIC+1] =
     {
         "none",
         "point",
@@ -55,7 +72,7 @@ namespace Ogre
         "anisotropic"
     };
 
-    const char* c_textureAddressingMode[TAM_BORDER+1] =
+    static const char* c_textureAddressingMode[TAM_BORDER+1] =
     {
         "wrap",
         "mirror",
@@ -63,7 +80,7 @@ namespace Ogre
         "border"
     };
 
-    const char* c_compareFunctions[NUM_COMPARE_FUNCTIONS+1] =
+    static const char* c_compareFunctions[NUM_COMPARE_FUNCTIONS+1] =
     {
         "never",
         "always",
@@ -76,7 +93,7 @@ namespace Ogre
         "disabled"
     };
 
-    const char* c_cullModes[CULL_ANTICLOCKWISE+1] =
+    static const char* c_cullModes[CULL_ANTICLOCKWISE+1] =
     {
         "INVALID_CULL_MODE",
         "none",
@@ -84,7 +101,7 @@ namespace Ogre
         "anticlockwise"
     };
 
-    const char* c_polygonModes[PM_SOLID+1] =
+    static const char* c_polygonModes[PM_SOLID+1] =
     {
         "INVALID_POLYGON_MODE",
         "points",
@@ -92,7 +109,7 @@ namespace Ogre
         "solid"
     };
 
-    const char* c_sceneBlendFactor[SBF_ONE_MINUS_SOURCE_ALPHA+1] =
+    static const char* c_sceneBlendFactor[SBF_ONE_MINUS_SOURCE_ALPHA+1] =
     {
         "one",
         "zero",
@@ -106,7 +123,7 @@ namespace Ogre
         "one_minus_src_alpha"
     };
 
-    const char* c_sceneBlendOperation[SBO_MAX+1] =
+    static const char* c_sceneBlendOperation[SBO_MAX+1] =
     {
         "add",
         "subtract",
@@ -114,6 +131,7 @@ namespace Ogre
         "min",
         "max"
     };
+    // clang-format on
 
     HlmsJson::HlmsJson( HlmsManager *hlmsManager, HlmsJsonListener *listener ) :
         mHlmsManager( hlmsManager ),
@@ -123,9 +141,7 @@ namespace Ogre
             mListener = &sDefaultHlmsJsonListener;
     }
     //-----------------------------------------------------------------------------------
-    HlmsJson::~HlmsJson()
-    {
-    }
+    HlmsJson::~HlmsJson() {}
     //-----------------------------------------------------------------------------------
     FilterOptions HlmsJson::parseFilterOptions( const char *value )
     {
@@ -247,150 +263,157 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsJson::loadSampler( const rapidjson::Value &samplers, HlmsSamplerblock &samplerblock )
     {
-        rapidjson::Value::ConstMemberIterator itor = samplers.FindMember("min");
+        rapidjson::Value::ConstMemberIterator itor = samplers.FindMember( "min" );
         if( itor != samplers.MemberEnd() && itor->value.IsString() )
             samplerblock.mMinFilter = parseFilterOptions( itor->value.GetString() );
 
-        itor = samplers.FindMember("mag");
+        itor = samplers.FindMember( "mag" );
         if( itor != samplers.MemberEnd() && itor->value.IsString() )
             samplerblock.mMagFilter = parseFilterOptions( itor->value.GetString() );
 
-        itor = samplers.FindMember("mip");
+        itor = samplers.FindMember( "mip" );
         if( itor != samplers.MemberEnd() && itor->value.IsString() )
             samplerblock.mMipFilter = parseFilterOptions( itor->value.GetString() );
 
-        itor = samplers.FindMember("u");
+        itor = samplers.FindMember( "u" );
         if( itor != samplers.MemberEnd() && itor->value.IsString() )
             samplerblock.mU = parseTextureAddressingMode( itor->value.GetString() );
 
-        itor = samplers.FindMember("v");
+        itor = samplers.FindMember( "v" );
         if( itor != samplers.MemberEnd() && itor->value.IsString() )
             samplerblock.mV = parseTextureAddressingMode( itor->value.GetString() );
 
-        itor = samplers.FindMember("w");
+        itor = samplers.FindMember( "w" );
         if( itor != samplers.MemberEnd() && itor->value.IsString() )
             samplerblock.mW = parseTextureAddressingMode( itor->value.GetString() );
 
-        itor = samplers.FindMember("miplodbias");
+        itor = samplers.FindMember( "miplodbias" );
         if( itor != samplers.MemberEnd() && itor->value.IsNumber() )
             samplerblock.mMipLodBias = static_cast<float>( itor->value.GetDouble() );
 
-        itor = samplers.FindMember("max_anisotropic");
+        itor = samplers.FindMember( "max_anisotropic" );
         if( itor != samplers.MemberEnd() && itor->value.IsNumber() )
             samplerblock.mMaxAnisotropy = static_cast<float>( itor->value.GetDouble() );
 
-        itor = samplers.FindMember("compare_function");
+        itor = samplers.FindMember( "compare_function" );
         if( itor != samplers.MemberEnd() && itor->value.IsString() )
             samplerblock.mCompareFunction = parseCompareFunction( itor->value.GetString() );
 
-        itor = samplers.FindMember("border");
+        itor = samplers.FindMember( "border" );
         if( itor != samplers.MemberEnd() && itor->value.IsArray() )
         {
-            const rapidjson::Value& array = itor->value;
+            const rapidjson::Value &array = itor->value;
             const rapidjson::SizeType arraySize = std::min( 4u, array.Size() );
-            for( rapidjson::SizeType i=0; i<arraySize; ++i )
+            for( rapidjson::SizeType i = 0; i < arraySize; ++i )
             {
                 if( array[i].IsNumber() )
                     samplerblock.mBorderColour[i] = static_cast<float>( array[i].GetDouble() );
             }
         }
 
-        itor = samplers.FindMember("min_lod");
+        itor = samplers.FindMember( "min_lod" );
         if( itor != samplers.MemberEnd() && itor->value.IsNumber() )
             samplerblock.mMinLod = static_cast<float>( itor->value.GetDouble() );
 
-        itor = samplers.FindMember("max_lod");
+        itor = samplers.FindMember( "max_lod" );
         if( itor != samplers.MemberEnd() && itor->value.IsNumber() )
             samplerblock.mMaxLod = static_cast<float>( itor->value.GetDouble() );
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::loadMacroblock( const rapidjson::Value &macroblocksJson, HlmsMacroblock &macroblock )
     {
-        rapidjson::Value::ConstMemberIterator itor = macroblocksJson.FindMember("scissor_test");
+        rapidjson::Value::ConstMemberIterator itor = macroblocksJson.FindMember( "scissor_test" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsBool() )
             macroblock.mScissorTestEnabled = itor->value.GetBool();
 
-        itor = macroblocksJson.FindMember("depth_clamp");
+        itor = macroblocksJson.FindMember( "depth_clamp" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsBool() )
             macroblock.mDepthClamp = itor->value.GetBool();
 
-        itor = macroblocksJson.FindMember("depth_check");
+        itor = macroblocksJson.FindMember( "depth_check" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsBool() )
             macroblock.mDepthCheck = itor->value.GetBool();
 
-        itor = macroblocksJson.FindMember("depth_write");
+        itor = macroblocksJson.FindMember( "depth_write" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsBool() )
             macroblock.mDepthWrite = itor->value.GetBool();
 
-        itor = macroblocksJson.FindMember("depth_function");
+        itor = macroblocksJson.FindMember( "depth_function" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsString() )
             macroblock.mDepthFunc = parseCompareFunction( itor->value.GetString() );
 
-        itor = macroblocksJson.FindMember("depth_bias_constant");
+        itor = macroblocksJson.FindMember( "depth_bias_constant" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsNumber() )
             macroblock.mDepthBiasConstant = static_cast<float>( itor->value.GetDouble() );
 
-        itor = macroblocksJson.FindMember("depth_bias_slope_scale");
+        itor = macroblocksJson.FindMember( "depth_bias_slope_scale" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsNumber() )
             macroblock.mDepthBiasSlopeScale = static_cast<float>( itor->value.GetDouble() );
 
-        itor = macroblocksJson.FindMember("cull_mode");
+        itor = macroblocksJson.FindMember( "cull_mode" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsString() )
             macroblock.mCullMode = parseCullMode( itor->value.GetString() );
 
-        itor = macroblocksJson.FindMember("polygon_mode");
+        itor = macroblocksJson.FindMember( "polygon_mode" );
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsString() )
             macroblock.mPolygonMode = parsePolygonMode( itor->value.GetString() );
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::loadBlendblock( const rapidjson::Value &blendblocksJson, HlmsBlendblock &blendblock )
     {
-        rapidjson::Value::ConstMemberIterator itor = blendblocksJson.FindMember("alpha_to_coverage");
+        rapidjson::Value::ConstMemberIterator itor = blendblocksJson.FindMember( "alpha_to_coverage" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsBool() )
             blendblock.mAlphaToCoverageEnabled = itor->value.GetBool();
 
-        itor = blendblocksJson.FindMember("blendmask");
+        itor = blendblocksJson.FindMember( "blendmask" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
         {
             uint8 mask = 0;
             const char *blendmask = itor->value.GetString();
-            if( strchr( blendmask, 'r' ) )
-                mask |= HlmsBlendblock::BlendChannelRed;
-            if( strchr( blendmask, 'g' ) )
-                mask |= HlmsBlendblock::BlendChannelGreen;
-            if( strchr( blendmask, 'b' ) )
-                mask |= HlmsBlendblock::BlendChannelBlue;
-            if( strchr( blendmask, 'a' ) )
-                mask |= HlmsBlendblock::BlendChannelAlpha;
+            if( !strcmp( blendmask, "force_disabled" ) )
+            {
+                mask = HlmsBlendblock::BlendChannelForceDisabled;
+            }
+            else
+            {
+                if( strchr( blendmask, 'r' ) )
+                    mask |= HlmsBlendblock::BlendChannelRed;
+                if( strchr( blendmask, 'g' ) )
+                    mask |= HlmsBlendblock::BlendChannelGreen;
+                if( strchr( blendmask, 'b' ) )
+                    mask |= HlmsBlendblock::BlendChannelBlue;
+                if( strchr( blendmask, 'a' ) )
+                    mask |= HlmsBlendblock::BlendChannelAlpha;
+            }
 
             blendblock.mBlendChannelMask = mask;
         }
 
-        itor = blendblocksJson.FindMember("separate_blend");
+        itor = blendblocksJson.FindMember( "separate_blend" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsBool() )
             blendblock.mSeparateBlend = itor->value.GetBool();
 
-        itor = blendblocksJson.FindMember("src_blend_factor");
+        itor = blendblocksJson.FindMember( "src_blend_factor" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
             blendblock.mSourceBlendFactor = parseBlendFactor( itor->value.GetString() );
 
-        itor = blendblocksJson.FindMember("dst_blend_factor");
+        itor = blendblocksJson.FindMember( "dst_blend_factor" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
             blendblock.mDestBlendFactor = parseBlendFactor( itor->value.GetString() );
 
-        itor = blendblocksJson.FindMember("src_alpha_blend_factor");
+        itor = blendblocksJson.FindMember( "src_alpha_blend_factor" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
             blendblock.mSourceBlendFactorAlpha = parseBlendFactor( itor->value.GetString() );
 
-        itor = blendblocksJson.FindMember("dst_alpha_blend_factor");
+        itor = blendblocksJson.FindMember( "dst_alpha_blend_factor" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
             blendblock.mDestBlendFactorAlpha = parseBlendFactor( itor->value.GetString() );
 
-        itor = blendblocksJson.FindMember("blend_operation");
+        itor = blendblocksJson.FindMember( "blend_operation" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
             blendblock.mBlendOperation = parseBlendOperation( itor->value.GetString() );
 
-        itor = blendblocksJson.FindMember("blend_operation_alpha");
+        itor = blendblocksJson.FindMember( "blend_operation_alpha" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
             blendblock.mBlendOperationAlpha = parseBlendOperation( itor->value.GetString() );
     }
@@ -398,32 +421,32 @@ namespace Ogre
     void HlmsJson::loadDatablockCommon( const rapidjson::Value &json, const NamedBlocks &blocks,
                                         HlmsDatablock *datablock )
     {
-        //Support both:
+        // Support both:
         //  "macroblock" : "unique_name"
-        //and:
+        // and:
         //  "macroblock" : ["unique_name", "unique_name_for_shadows"],
-        rapidjson::Value::ConstMemberIterator itor = json.FindMember("macroblock");
+        rapidjson::Value::ConstMemberIterator itor = json.FindMember( "macroblock" );
         if( itor != json.MemberEnd() )
         {
             if( itor->value.IsString() )
             {
-                map<LwConstString, const HlmsMacroblock*>::type::const_iterator it =
-                        blocks.macroblocks.find( LwConstString( itor->value.GetString(),
-                                                                itor->value.GetStringLength() + 1u ) );
+                map<LwConstString, const HlmsMacroblock *>::type::const_iterator it =
+                    blocks.macroblocks.find(
+                        LwConstString( itor->value.GetString(), itor->value.GetStringLength() + 1u ) );
                 if( it != blocks.macroblocks.end() )
                     datablock->setMacroblock( it->second );
             }
             else if( itor->value.IsArray() )
             {
-                const rapidjson::Value& array = itor->value;
+                const rapidjson::Value &array = itor->value;
                 const rapidjson::SizeType arraySize = std::min( 2u, array.Size() );
-                for( rapidjson::SizeType i=0; i<arraySize; ++i )
+                for( rapidjson::SizeType i = 0; i < arraySize; ++i )
                 {
                     if( array[i].IsString() )
                     {
-                        map<LwConstString, const HlmsMacroblock*>::type::const_iterator it =
-                                blocks.macroblocks.find( LwConstString( array[i].GetString(),
-                                                                        array[i].GetStringLength() + 1u ) );
+                        map<LwConstString, const HlmsMacroblock *>::type::const_iterator it =
+                            blocks.macroblocks.find(
+                                LwConstString( array[i].GetString(), array[i].GetStringLength() + 1u ) );
                         if( it != blocks.macroblocks.end() )
                             datablock->setMacroblock( it->second, i != 0 );
                     }
@@ -431,29 +454,28 @@ namespace Ogre
             }
         }
 
-        itor = json.FindMember("blendblock");
+        itor = json.FindMember( "blendblock" );
         if( itor != json.MemberEnd() )
         {
             if( itor->value.IsString() )
             {
-                map<LwConstString, const HlmsBlendblock*>::type::const_iterator it =
-                        blocks.blendblocks.find( LwConstString( itor->value.GetString(),
-                                                                itor->value.GetStringLength() + 1u ) );
+                map<LwConstString, const HlmsBlendblock *>::type::const_iterator it =
+                    blocks.blendblocks.find(
+                        LwConstString( itor->value.GetString(), itor->value.GetStringLength() + 1u ) );
                 if( it != blocks.blendblocks.end() )
                     datablock->setBlendblock( it->second );
             }
             else if( itor->value.IsArray() )
             {
-                const rapidjson::Value& array = itor->value;
+                const rapidjson::Value &array = itor->value;
                 const rapidjson::SizeType arraySize = std::min( 2u, array.Size() );
-                for( rapidjson::SizeType i=0; i<arraySize; ++i )
+                for( rapidjson::SizeType i = 0; i < arraySize; ++i )
                 {
                     if( array[i].IsString() )
                     {
-                        map<LwConstString, const HlmsBlendblock*>::type::const_iterator it =
-                                blocks.blendblocks.find(
-                                    LwConstString( array[i].GetString(),
-                                                   array[i].GetStringLength() + 1u ) );
+                        map<LwConstString, const HlmsBlendblock *>::type::const_iterator it =
+                            blocks.blendblocks.find(
+                                LwConstString( array[i].GetString(), array[i].GetStringLength() + 1u ) );
                         if( it != blocks.blendblocks.end() )
                             datablock->setBlendblock( it->second, i != 0 );
                     }
@@ -461,10 +483,10 @@ namespace Ogre
             }
         }
 
-        itor = json.FindMember("alpha_test");
+        itor = json.FindMember( "alpha_test" );
         if( itor != json.MemberEnd() && itor->value.IsArray() )
         {
-            const rapidjson::Value& array = itor->value;
+            const rapidjson::Value &array = itor->value;
             const rapidjson::SizeType arraySize = array.Size();
             if( arraySize > 0 && array[0].IsString() )
             {
@@ -483,7 +505,7 @@ namespace Ogre
                 datablock->setAlphaTestThreshold( static_cast<float>( array[1].GetDouble() ) );
         }
 
-        itor = json.FindMember("shadow_const_bias");
+        itor = json.FindMember( "shadow_const_bias" );
         if( itor != json.MemberEnd() && itor->value.IsNumber() )
             datablock->mShadowConstantBias = static_cast<float>( itor->value.GetDouble() );
     }
@@ -493,27 +515,26 @@ namespace Ogre
                                    const String &additionalTextureExtension )
     {
         rapidjson::Value::ConstMemberIterator itor = json.MemberBegin();
-        rapidjson::Value::ConstMemberIterator end  = json.MemberEnd();
+        rapidjson::Value::ConstMemberIterator endt = json.MemberEnd();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->value.IsObject() )
             {
                 const char *datablockName = itor->name.GetString();
                 try
                 {
-                    HlmsDatablock *datablock = hlms->createDatablock( datablockName, datablockName,
-                                                                      HlmsMacroblock(), HlmsBlendblock(),
-                                                                      HlmsParamVec(), true,
-                                                                      filename, resourceGroup );
+                    HlmsDatablock *datablock = hlms->createDatablock(
+                        datablockName, datablockName, HlmsMacroblock(), HlmsBlendblock(), HlmsParamVec(),
+                        true, filename, resourceGroup );
                     loadDatablockCommon( itor->value, blocks, datablock );
 
-                    hlms->_loadJson( itor->value, blocks, datablock, resourceGroup,
-                                     mListener, additionalTextureExtension );
+                    hlms->_loadJson( itor->value, blocks, datablock, resourceGroup, mListener,
+                                     additionalTextureExtension );
                 }
                 catch( Exception &e )
                 {
-                    //Ignore datablocks that already exist (useful for reloading materials)
+                    // Ignore datablocks that already exist (useful for reloading materials)
                     if( e.getNumber() != Exception::ERR_DUPLICATE_ITEM )
                         throw;
                     else
@@ -526,25 +547,23 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::loadMaterials( const String &filename, const String &resourceGroup,
-                                  const char *jsonString,
-                                  const String &additionalTextureExtension )
+                                  const char *jsonString, const String &additionalTextureExtension )
     {
         rapidjson::Document d;
         d.Parse( jsonString );
 
         if( d.HasParseError() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "HlmsJson::loadMaterials",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "HlmsJson::loadMaterials",
                          "Invalid JSON string in file " + filename + " at line " +
-                         StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
-                         rapidjson::GetParseError_En( d.GetParseError() ) );
+                             StringConverter::toString( d.GetErrorOffset() ) +
+                             " Reason: " + rapidjson::GetParseError_En( d.GetParseError() ) );
         }
 
         NamedBlocks blocks;
 
-        //Load samplerblocks
-        rapidjson::Value::ConstMemberIterator itor = d.FindMember("samplers");
+        // Load samplerblocks
+        rapidjson::Value::ConstMemberIterator itor = d.FindMember( "samplers" );
         if( itor != d.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &samplers = itor->value;
@@ -566,8 +585,8 @@ namespace Ogre
             }
         }
 
-        //Load macroblocks
-        itor = d.FindMember("macroblocks");
+        // Load macroblocks
+        itor = d.FindMember( "macroblocks" );
         if( itor != d.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &macroblocksJson = itor->value;
@@ -580,8 +599,8 @@ namespace Ogre
                 HlmsMacroblock macroblock;
                 loadMacroblock( itMacros->value, macroblock );
 
-                LwConstString keyName( LwConstString( itMacros->name.GetString(),
-                                                      itMacros->name.GetStringLength() + 1u ) );
+                LwConstString keyName(
+                    LwConstString( itMacros->name.GetString(), itMacros->name.GetStringLength() + 1u ) );
 
                 blocks.macroblocks[keyName] = mHlmsManager->getMacroblock( macroblock );
 
@@ -589,8 +608,8 @@ namespace Ogre
             }
         }
 
-        //Load blendblocks
-        itor = d.FindMember("blendblocks");
+        // Load blendblocks
+        itor = d.FindMember( "blendblocks" );
         if( itor != d.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &blendblocksJson = itor->value;
@@ -603,8 +622,8 @@ namespace Ogre
                 HlmsBlendblock blendblock;
                 loadBlendblock( itBlends->value, blendblock );
 
-                LwConstString keyName( LwConstString( itBlends->name.GetString(),
-                                                      itBlends->name.GetStringLength() + 1u ) );
+                LwConstString keyName(
+                    LwConstString( itBlends->name.GetString(), itBlends->name.GetStringLength() + 1u ) );
 
                 blocks.blendblocks[keyName] = mHlmsManager->getBlendblock( blendblock );
 
@@ -619,7 +638,7 @@ namespace Ogre
         {
             const IdString typeName( itDatablock->name.GetString() );
 
-            for( int i=0; i<HLMS_MAX; ++i )
+            for( int i = 0; i < HLMS_MAX; ++i )
             {
                 Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
 
@@ -641,10 +660,10 @@ namespace Ogre
         }
 
         {
-            map<LwConstString, const HlmsMacroblock*>::type::const_iterator it =
-                    blocks.macroblocks.begin();
-            map<LwConstString, const HlmsMacroblock*>::type::const_iterator en =
-                    blocks.macroblocks.end();
+            map<LwConstString, const HlmsMacroblock *>::type::const_iterator it =
+                blocks.macroblocks.begin();
+            map<LwConstString, const HlmsMacroblock *>::type::const_iterator en =
+                blocks.macroblocks.end();
 
             while( it != en )
             {
@@ -655,10 +674,10 @@ namespace Ogre
             blocks.macroblocks.clear();
         }
         {
-            map<LwConstString, const HlmsBlendblock*>::type::const_iterator it =
-                    blocks.blendblocks.begin();
-            map<LwConstString, const HlmsBlendblock*>::type::const_iterator en =
-                    blocks.blendblocks.end();
+            map<LwConstString, const HlmsBlendblock *>::type::const_iterator it =
+                blocks.blendblocks.begin();
+            map<LwConstString, const HlmsBlendblock *>::type::const_iterator en =
+                blocks.blendblocks.end();
 
             while( it != en )
             {
@@ -669,10 +688,10 @@ namespace Ogre
             blocks.blendblocks.clear();
         }
         {
-            map<LwConstString, const HlmsSamplerblock*>::type::const_iterator it =
-                    blocks.samplerblocks.begin();
-            map<LwConstString, const HlmsSamplerblock*>::type::const_iterator en =
-                    blocks.samplerblocks.end();
+            map<LwConstString, const HlmsSamplerblock *>::type::const_iterator it =
+                blocks.samplerblocks.begin();
+            map<LwConstString, const HlmsSamplerblock *>::type::const_iterator en =
+                blocks.samplerblocks.end();
 
             while( it != en )
             {
@@ -887,14 +906,21 @@ namespace Ogre
         outString += blendblock->mAlphaToCoverageEnabled ? "true" : "false";
 
         outString += ",\n\t\t\t\"blendmask\" : \"";
-        if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelRed )
-            outString += 'r';
-        if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelGreen )
-            outString += 'g';
-        if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelBlue )
-            outString += 'b';
-        if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelAlpha )
-            outString += 'a';
+        if( blendblock->mBlendChannelMask == HlmsBlendblock::BlendChannelForceDisabled )
+        {
+            outString += "force_disabled";
+        }
+        else
+        {
+            if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelRed )
+                outString += 'r';
+            if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelGreen )
+                outString += 'g';
+            if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelBlue )
+                outString += 'b';
+            if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelAlpha )
+                outString += 'a';
+        }
         outString += "\"";
 
         outString += ",\n\t\t\t\"separate_blend\" : ";
@@ -939,9 +965,9 @@ namespace Ogre
         if( datablock->hasCustomShadowMacroblock() )
         {
             outString += '[';
-            outString += getName( datablock->getMacroblock(false) );
+            outString += getName( datablock->getMacroblock( false ) );
             outString += ", ";
-            outString += getName( datablock->getMacroblock(true) );
+            outString += getName( datablock->getMacroblock( true ) );
             outString += ']';
         }
         else
@@ -954,9 +980,9 @@ namespace Ogre
         if( datablock->getBlendblock( false ) != datablock->getBlendblock( true ) )
         {
             outString += '[';
-            outString += getName( datablock->getBlendblock(false) );
+            outString += getName( datablock->getBlendblock( false ) );
             outString += ", ";
-            outString += getName( datablock->getBlendblock(true) );
+            outString += getName( datablock->getBlendblock( true ) );
             outString += ']';
         }
         else
@@ -992,15 +1018,15 @@ namespace Ogre
 
         const Hlms::HlmsDatablockMap &datablockMap = hlms->getDatablockMap();
 
-        set<const HlmsMacroblock*>::type macroblocks;
-        set<const HlmsBlendblock*>::type blendblocks;
-        set<const HlmsSamplerblock*>::type samplerblocks;
+        set<const HlmsMacroblock *>::type macroblocks;
+        set<const HlmsBlendblock *>::type blendblocks;
+        set<const HlmsSamplerblock *>::type samplerblocks;
 
         {
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
-            Hlms::HlmsDatablockMap::const_iterator end  = datablockMap.end();
+            Hlms::HlmsDatablockMap::const_iterator endt = datablockMap.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const HlmsDatablock *datablock = itor->second.datablock;
 
@@ -1024,52 +1050,52 @@ namespace Ogre
         }
 
         {
-            set<const HlmsSamplerblock*>::type::const_iterator itor = samplerblocks.begin();
-            set<const HlmsSamplerblock*>::type::const_iterator end  = samplerblocks.end();
+            set<const HlmsSamplerblock *>::type::const_iterator itor = samplerblocks.begin();
+            set<const HlmsSamplerblock *>::type::const_iterator endt = samplerblocks.end();
 
             if( !samplerblocks.empty() )
                 outString += "\n\t\"samplers\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveSamplerblock( *itor++, outString );
 
             if( !samplerblocks.empty() )
             {
-                outString.erase( outString.size() - 1 ); //Remove an extra comma
+                outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }
 
         {
-            set<const HlmsMacroblock*>::type::const_iterator itor = macroblocks.begin();
-            set<const HlmsMacroblock*>::type::const_iterator end  = macroblocks.end();
+            set<const HlmsMacroblock *>::type::const_iterator itor = macroblocks.begin();
+            set<const HlmsMacroblock *>::type::const_iterator endt = macroblocks.end();
 
             if( !macroblocks.empty() )
                 outString += "\n\n\t\"macroblocks\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveMacroblock( *itor++, outString );
 
             if( !macroblocks.empty() )
             {
-                outString.erase( outString.size() - 1 ); //Remove an extra comma
+                outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }
 
         {
-            set<const HlmsBlendblock*>::type::const_iterator itor = blendblocks.begin();
-            set<const HlmsBlendblock*>::type::const_iterator end  = blendblocks.end();
+            set<const HlmsBlendblock *>::type::const_iterator itor = blendblocks.begin();
+            set<const HlmsBlendblock *>::type::const_iterator endt = blendblocks.end();
 
             if( !blendblocks.empty() )
                 outString += "\n\n\t\"blendblocks\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveBlendblock( *itor++, outString );
 
             if( !blendblocks.empty() )
             {
-                outString.erase( outString.size() - 1 ); //Remove an extra comma
+                outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }
@@ -1086,9 +1112,9 @@ namespace Ogre
             const HlmsDatablock *defaultDatablock = hlms->getDefaultDatablock();
 
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
-            Hlms::HlmsDatablockMap::const_iterator end  = datablockMap.end();
+            Hlms::HlmsDatablockMap::const_iterator endt = datablockMap.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const HlmsDatablock *datablock = itor->second.datablock;
 
@@ -1099,12 +1125,12 @@ namespace Ogre
 
             if( numDatablocks > 1u )
             {
-                outString.erase( outString.size() - 1 ); //Remove an extra comma
+                outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }
 
-        outString.erase( outString.size() - 1 ); //Remove an extra comma
+        outString.erase( outString.size() - 1 );  // Remove an extra comma
         if( !outString.empty() )
             outString += "\n}";
         else
@@ -1118,9 +1144,9 @@ namespace Ogre
 
         const Hlms *hlms = datablock->getCreator();
 
-        set<const HlmsMacroblock*>::type macroblocks;
-        set<const HlmsBlendblock*>::type blendblocks;
-        set<const HlmsSamplerblock*>::type samplerblocks;
+        set<const HlmsMacroblock *>::type macroblocks;
+        set<const HlmsBlendblock *>::type blendblocks;
+        set<const HlmsSamplerblock *>::type samplerblocks;
 
         {
             const HlmsMacroblock *macroblock = datablock->getMacroblock( false );
@@ -1140,52 +1166,52 @@ namespace Ogre
         }
 
         {
-            set<const HlmsSamplerblock*>::type::const_iterator itor = samplerblocks.begin();
-            set<const HlmsSamplerblock*>::type::const_iterator end  = samplerblocks.end();
+            set<const HlmsSamplerblock *>::type::const_iterator itor = samplerblocks.begin();
+            set<const HlmsSamplerblock *>::type::const_iterator endt = samplerblocks.end();
 
             if( !samplerblocks.empty() )
                 outString += "\n\t\"samplers\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveSamplerblock( *itor++, outString );
 
             if( !samplerblocks.empty() )
             {
-                outString.erase( outString.size() - 1 ); //Remove an extra comma
+                outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }
 
         {
-            set<const HlmsMacroblock*>::type::const_iterator itor = macroblocks.begin();
-            set<const HlmsMacroblock*>::type::const_iterator end  = macroblocks.end();
+            set<const HlmsMacroblock *>::type::const_iterator itor = macroblocks.begin();
+            set<const HlmsMacroblock *>::type::const_iterator endt = macroblocks.end();
 
             if( !macroblocks.empty() )
                 outString += "\n\n\t\"macroblocks\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveMacroblock( *itor++, outString );
 
             if( !macroblocks.empty() )
             {
-                outString.erase( outString.size() - 1 ); //Remove an extra comma
+                outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }
 
         {
-            set<const HlmsBlendblock*>::type::const_iterator itor = blendblocks.begin();
-            set<const HlmsBlendblock*>::type::const_iterator end  = blendblocks.end();
+            set<const HlmsBlendblock *>::type::const_iterator itor = blendblocks.begin();
+            set<const HlmsBlendblock *>::type::const_iterator endt = blendblocks.end();
 
             if( !blendblocks.empty() )
                 outString += "\n\n\t\"blendblocks\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveBlendblock( *itor++, outString );
 
             if( !blendblocks.empty() )
             {
-                outString.erase( outString.size() - 1 ); //Remove an extra comma
+                outString.erase( outString.size() - 1 );  // Remove an extra comma
                 outString += "\n\t},";
             }
         }
@@ -1205,15 +1231,15 @@ namespace Ogre
 
             saveDatablock( datablockName, datablock, outString, additionalTextureExtension );
 
-            outString.erase( outString.size() - 1 ); //Remove an extra comma
+            outString.erase( outString.size() - 1 );  // Remove an extra comma
             outString += "\n\t},";
         }
 
-        outString.erase( outString.size() - 1 ); //Remove an extra comma
+        outString.erase( outString.size() - 1 );  // Remove an extra comma
         if( !outString.empty() )
             outString += "\n}";
         else
             outString += "{}";
     }
-}
+}  // namespace Ogre
 #endif

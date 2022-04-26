@@ -3,7 +3,7 @@
 
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -59,6 +59,10 @@ namespace Ogre
         datablockImpl->mFresnelB = mFresnelB;
         datablockImpl->mTransparencyValue = mTransparencyValue;
         datablockImpl->mNormalMapWeight = mNormalMapWeight;
+        datablockImpl->mRefractionStrength = mRefractionStrength;
+        datablockImpl->mClearCoat = mClearCoat;
+        datablockImpl->mClearCoatRoughness = mClearCoatRoughness;
+        datablockImpl->_padding1 = _padding1;
         datablockImpl->mCubemapProbe = mCubemapProbe;
         datablockImpl->mBrdf = mBrdf;
 

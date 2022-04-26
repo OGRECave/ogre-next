@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -39,11 +39,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     class ConstBufferPoolUser;
 
@@ -59,10 +59,10 @@ namespace Ogre
     public:
         struct BufferPool
         {
-            uint32                  hash;
-            vector<uint32>::type    freeSlots;
-            ConstBufferPacked       *materialBuffer;
-            BufferPacked            *extraBuffer;
+            uint32               hash;
+            vector<uint32>::type freeSlots;
+            ConstBufferPacked   *materialBuffer;
+            BufferPacked        *extraBuffer;
 
             BufferPool( uint32 _hash, uint32 slotsPerPool, ConstBufferPacked *_materialBuffer,
                         BufferPacked *_extraBuffer );
@@ -70,9 +70,9 @@ namespace Ogre
 
         struct _OgreExport ExtraBufferParams
         {
-            size_t      bytesPerSlot;
-            BufferType  bufferType;
-            bool        useReadOnlyBuffers;
+            size_t     bytesPerSlot;
+            BufferType bufferType;
+            bool       useReadOnlyBuffers;
 
             ExtraBufferParams( size_t _bytesPerSlot = 0, BufferType _bufferType = BT_DEFAULT,
                                bool _useReadOnlyBuffers = true );
@@ -95,37 +95,38 @@ namespace Ogre
 
         enum DirtyFlags
         {
-            DirtyNone           = 0u,
-            DirtyConstBuffer    = 1u << 0u,
-            DirtyTextures       = 1u << 1u,
-            DirtySamplers       = 1u << 2u
+            DirtyNone = 0u,
+            DirtyConstBuffer = 1u << 0u,
+            DirtyTextures = 1u << 1u,
+            DirtySamplers = 1u << 2u
         };
 
     protected:
-        typedef vector<BufferPool*>::type           BufferPoolVec;
-        typedef map<uint32, BufferPoolVec>::type    BufferPoolVecMap;
+        typedef vector<BufferPool *>::type       BufferPoolVec;
+        typedef map<uint32, BufferPoolVec>::type BufferPoolVecMap;
 
-        typedef vector<ConstBufferPoolUser*>::type  ConstBufferPoolUserVec;
+        typedef vector<ConstBufferPoolUser *>::type ConstBufferPoolUserVec;
 
-        BufferPoolVecMap    mPools;
-        uint32              mBytesPerSlot;
-        uint32              mSlotsPerPool;
-        size_t              mBufferSize;
-        ExtraBufferParams   mExtraBufferParams;
+        BufferPoolVecMap  mPools;
+        uint32            mBytesPerSlot;
+        uint32            mSlotsPerPool;
+        size_t            mBufferSize;
+        ExtraBufferParams mExtraBufferParams;
+
     private:
-        VaoManager          *_mVaoManager;
-    protected:
+        VaoManager *_mVaoManager;
 
+    protected:
         ConstBufferPoolUserVec mDirtyUsers;
         ConstBufferPoolUserVec mDirtyUsersTmp;
         ConstBufferPoolUserVec mUsers;
 
-        OptimizationStrategy    mOptimizationStrategy;
+        OptimizationStrategy mOptimizationStrategy;
 
-        void destroyAllPools(void);
+        void destroyAllPools();
 
-        void uploadDirtyDatablocks(void);
-        void uploadDirtyDatablocksImpl(void);
+        void uploadDirtyDatablocks();
+        void uploadDirtyDatablocksImpl();
 
     public:
         ConstBufferPool( uint32 bytesPerSlot, const ExtraBufferParams &extraBufferParams );
@@ -136,7 +137,7 @@ namespace Ogre
         /// Releases a slot requested with requestSlot.
         void releaseSlot( ConstBufferPoolUser *user );
 
-        void scheduleForUpdate( ConstBufferPoolUser *dirtyUser, uint8 dirtyFlags=DirtyConstBuffer );
+        void scheduleForUpdate( ConstBufferPoolUser *dirtyUser, uint8 dirtyFlags = DirtyConstBuffer );
 
         /// Gets an ID corresponding to the pool this user was assigned to, unique per hash.
         size_t getPoolIndex( ConstBufferPoolUser *user ) const;
@@ -148,7 +149,7 @@ namespace Ogre
         @par
             Implementations that don't support different strategies can overload this function.
         */
-        virtual void setOptimizationStrategy( OptimizationStrategy optimizationStrategy );
+        virtual void         setOptimizationStrategy( OptimizationStrategy optimizationStrategy );
         OptimizationStrategy getOptimizationStrategy() const;
 
         virtual void _changeRenderSystem( RenderSystem *newRs );
@@ -157,30 +158,31 @@ namespace Ogre
     class _OgreExport ConstBufferPoolUser
     {
         friend class ConstBufferPool;
+
     protected:
         friend bool OrderConstBufferPoolUserByPoolThenSlot( const ConstBufferPoolUser *_l,
                                                             const ConstBufferPoolUser *_r );
 
-        uint32                      mAssignedSlot;
+        uint32                       mAssignedSlot;
         ConstBufferPool::BufferPool *mAssignedPool;
-        size_t                      mGlobalIndex;
-        //ConstBufferPool             *mPoolOwner;
-        uint8                       mDirtyFlags;
+        ptrdiff_t                    mGlobalIndex;
+        // ConstBufferPool             *mPoolOwner;
+        uint8 mDirtyFlags;
 
         /// Derived class must fill dstPtr. Amount of bytes written can't
         /// exceed the value passed to ConstBufferPool::uploadDirtyDatablocks
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags ) = 0;
         virtual void uploadToExtraBuffer( char *dstPtr ) {}
 
-        virtual void notifyOptimizationStrategyChanged(void) {}
+        virtual void notifyOptimizationStrategyChanged() {}
 
     public:
         ConstBufferPoolUser();
 
-        uint32 getAssignedSlot(void) const                              { return mAssignedSlot; }
-        const ConstBufferPool::BufferPool* getAssignedPool(void) const  { return mAssignedPool; }
+        uint32                             getAssignedSlot() const { return mAssignedSlot; }
+        const ConstBufferPool::BufferPool *getAssignedPool() const { return mAssignedPool; }
 
-        uint8 getDirtyFlags(void) const                                 { return mDirtyFlags; }
+        uint8 getDirtyFlags() const { return mDirtyFlags; }
     };
 
     inline bool OrderConstBufferPoolUserByPoolThenSlot( const ConstBufferPoolUser *_l,
@@ -192,7 +194,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

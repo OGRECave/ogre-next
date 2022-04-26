@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,28 +29,27 @@ THE SOFTWARE.
 #define __ColourFaderAffectorFactory2_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreColourFaderAffector2.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for ColourFaderAffector. */
-    class _OgreParticleFXExport ColourFaderAffectorFactory2 : public ParticleAffectorFactory
+    class _OgreParticleFXExport ColourFaderAffectorFactory2 final : public ParticleAffectorFactory
     {
         /** See ParticleAffectorFactory */
-        String getName() const { return "ColourFader2"; }
+        String getName() const override { return "ColourFader2"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
-            ParticleAffector* p = OGRE_NEW ColourFaderAffector2(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW ColourFaderAffector2( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

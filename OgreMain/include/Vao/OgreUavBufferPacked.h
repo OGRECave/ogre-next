@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -29,8 +29,8 @@ THE SOFTWARE.
 #ifndef _Ogre_UavBufferPacked_H_
 #define _Ogre_UavBufferPacked_H_
 
-#include "Vao/OgreBufferPacked.h"
 #include "OgrePixelFormatGpu.h"
+#include "Vao/OgreBufferPacked.h"
 
 #include "ogrestd/vector.h"
 
@@ -42,21 +42,21 @@ namespace Ogre
     class _OgreExport UavBufferPacked : public BufferPacked
     {
     protected:
-        uint32  mBindFlags; /// @see BufferBindFlags
-        vector<TexBufferPacked*>::type  mTexBufferViews;
+        uint32                          mBindFlags;  /// @see BufferBindFlags
+        vector<TexBufferPacked *>::type mTexBufferViews;
 
-        virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat ) = 0;
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl( void ) = 0;
+        virtual TexBufferPacked      *getAsTexBufferImpl( PixelFormatGpu pixelFormat ) = 0;
+        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() = 0;
 
     public:
         UavBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                         uint32 bindFlags, void *initialData, bool keepAsShadow,
-                         VaoManager *vaoManager, BufferInterface *bufferInterface );
-        virtual ~UavBufferPacked();
+                         uint32 bindFlags, void *initialData, bool keepAsShadow, VaoManager *vaoManager,
+                         BufferInterface *bufferInterface );
+        ~UavBufferPacked() override;
 
-        virtual BufferPackedTypes getBufferPackedType(void) const   { return BP_TYPE_UAV; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_UAV; }
 
-        //ConstBufferPacked* getAsConstBuffer(void);
+        // ConstBufferPacked* getAsConstBuffer();
 
         /** Returns a TexBufferPacked for binding to the GPU as a texture w/ read-only access.
             Buffer must've been created with BB_FLAG_TEX.
@@ -73,7 +73,7 @@ namespace Ogre
             A TexBufferPacked to be used to bind to the different stages. Do not destroy
             this buffer via VaoManager::destroyTexBuffer. See UavBufferPacked::destroyTexBufferView
         */
-        TexBufferPacked* getAsTexBufferView( PixelFormatGpu pixelFormat );
+        TexBufferPacked *getAsTexBufferView( PixelFormatGpu pixelFormat );
 
         /// Frees memory from a view created by getAsTexBufferView
         /// Does nothing if a view of the given pixel format did not exist.
@@ -95,15 +95,15 @@ namespace Ogre
             this buffer via VaoManager::destroyReadOnlyBuffer.
             See UavBufferPacked::destroyReadOnlyBufferView
         */
-        ReadOnlyBufferPacked *getAsReadOnlyBufferView( void );
+        ReadOnlyBufferPacked *getAsReadOnlyBufferView();
 
         /// Frees memory from the view created by getAsReadOnlyBufferView
         /// Does nothing if the view wasn't created
-        void destroyReadOnlyBufferView( void );
+        void destroyReadOnlyBufferView();
 
         /// See destroyTexBufferView and getAsReadOnlyBufferView,
         /// this one does it on all the creates views.
-        void destroyAllBufferViews( void );
+        void destroyAllBufferViews();
 
         /** Binds the texture buffer to the given slot in the
             Vertex/Pixel/Geometry/Hull/Domain/Compute Shader
@@ -123,13 +123,13 @@ namespace Ogre
             Size in bytes to bind the tex buffer. When zero,
             binds from offset until the end of the buffer.
         */
-//        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-//        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-//        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-//        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-//        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
+        // virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
+        // virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
+        // virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
+        // virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
+        // virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
+        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) = 0;
     };
-}
+}  // namespace Ogre
 
 #endif

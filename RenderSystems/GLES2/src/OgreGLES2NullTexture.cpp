@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
@@ -68,7 +68,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     // Creation / loading methods
-    void GLES2NullTexture::createInternalResourcesImpl(void)
+    void GLES2NullTexture::createInternalResourcesImpl()
     {
         _createSurfaceList();
 
@@ -156,7 +156,7 @@ namespace v1
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GLES2NullPixelBuffer::lockImpl" );
     }
     //-----------------------------------------------------------------------------------
-    void GLES2NullPixelBuffer::unlockImpl(void)
+    void GLES2NullPixelBuffer::unlockImpl()
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GLES2NullPixelBuffer::unlockImpl" );
     }

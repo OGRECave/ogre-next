@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -75,7 +75,7 @@ namespace Volume {
         
         /** Destructor.
         */
-        virtual ~Source(void);
+        virtual ~Source();
 
         /** Gets the density value and gradient at a specific position.
         @param position
@@ -148,7 +148,7 @@ namespace Volume {
         @return
             The factor, 1.0 in the default implementation.
         */
-        Real getVolumeSpaceToWorldSpaceFactor(void) const;
+        Real getVolumeSpaceToWorldSpaceFactor() const;
     };
 
 }

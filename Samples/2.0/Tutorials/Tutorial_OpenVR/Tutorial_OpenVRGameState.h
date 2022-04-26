@@ -9,31 +9,31 @@ namespace Demo
 {
     class Tutorial_OpenVRGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
+        bool mAnimateObjects;
 
-        size_t          mNumSpheres;
-        Ogre::uint8     mTransparencyMode;
-        float           mTransparencyValue;
+        size_t mNumSpheres;
+        Ogre::uint8 mTransparencyMode;
+        float mTransparencyValue;
 
-        Ogre::Item      *mHiddenAreaMeshVr;
+        Ogre::Item *mHiddenAreaMeshVr;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
-        void setTransparencyToMaterials(void);
+        void setTransparencyToMaterials();
 
     public:
         Tutorial_OpenVRGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,18 +33,14 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
-#include "OgreRenderSystem.h"
-
-#include "OgreLwString.h"
-#include "OgreTextureGpuManager.h"
-
-#include "OgreHlmsManager.h"
-#include "OgreRoot.h"
-
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
+#include "OgreLwString.h"
+#include "OgreRenderSystem.h"
+#include "OgreRoot.h"
+#include "OgreTextureGpuManager.h"
 
 namespace Ogre
 {
@@ -93,7 +89,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     CompositorPassMipmap::~CompositorPassMipmap() { destroyComputeShaders(); }
     //-----------------------------------------------------------------------------------
-    void CompositorPassMipmap::destroyComputeShaders( void )
+    void CompositorPassMipmap::destroyComputeShaders()
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
 
@@ -124,7 +120,7 @@ namespace Ogre
         mTmpTextures.clear();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassMipmap::setupComputeShaders( void )
+    void CompositorPassMipmap::setupComputeShaders()
     {
         destroyComputeShaders();
 
@@ -226,7 +222,8 @@ namespace Ogre
 
                     paramLodIdx.setManualValue( (float)mip );
                     paramOutputSize.setManualValue( Vector4( (float)currWidth, (float)currHeight,
-                                                             1.0f / currWidth, 1.0f / currHeight ) );
+                                                             1.0f / (float)currWidth,
+                                                             1.0f / (float)currHeight ) );
                     paramDstLodIdx.setManualValue( (uint32)mip );
 
                     shaderParams = &blurH2->getShaderParams( "default" );
@@ -242,8 +239,9 @@ namespace Ogre
 
                     currWidth = std::max( currWidth >> 1u, 1u );
                     paramOutputSize.setManualValue( Vector4( (float)currWidth, (float)currHeight,
-                                                             1.0f / currWidth, 1.0f / currHeight ) );
-                    paramDstLodIdx.setManualValue( ( uint32 )( mip + 1u ) );
+                                                             1.0f / (float)currWidth,
+                                                             1.0f / (float)currHeight ) );
+                    paramDstLodIdx.setManualValue( (uint32)( mip + 1u ) );
 
                     shaderParams = &blurV2->getShaderParams( "default" );
                     shaderParams->mParams.push_back( paramLodIdx );
@@ -308,9 +306,9 @@ namespace Ogre
         float fWeightSum = 0;
         for( uint32 i = 0; i < kernelRadius + 1u; ++i )
         {
-            const float val = i - fKernelRadius + ( 1.0f - 1.0f / stepSize );
+            const float val = float( i ) - fKernelRadius + ( 1.0f - 1.0f / stepSize );
             float fWeight = 1.0f / std::sqrt( 2.0f * Math::PI * gaussianDeviation * gaussianDeviation );
-            fWeight *= exp( -( val * val ) / ( 2.0f * gaussianDeviation * gaussianDeviation ) );
+            fWeight *= expf( -( val * val ) / ( 2.0f * gaussianDeviation * gaussianDeviation ) );
 
             fWeightSum += fWeight;
             weights[i] = fWeight;
@@ -362,7 +360,8 @@ namespace Ogre
             shaderParams.mParams.push_back( p );
             ShaderParams::Param *param = &shaderParams.mParams.back();
 
-            param->setManualValue( &weights[i], std::min<uint32>( floatsPerParam, weights.size() - i ) );
+            param->setManualValue( &weights[i],
+                                   std::min( floatsPerParam, uint32( weights.size() - i ) ) );
         }
 
         shaderParams.setDirty();
@@ -400,7 +399,10 @@ namespace Ogre
                 if( ( *itor )->getNumMipmaps() > 1u )
                 {
                     if( ( *itor )->allowsAutoMipmaps() )
-                        ( *itor )->_autogenerateMipmaps();
+                    {
+                        ( *itor )->_autogenerateMipmaps(
+                            CopyEncTransitionMode::AlreadyInLayoutThenAuto );
+                    }
                     else if( !mWarnedNoAutomipmapsAlready )
                     {
                         LogManager::getSingleton().logMessage(
@@ -439,15 +441,16 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassMipmap::analyzeBarriers( void )
+    void CompositorPassMipmap::analyzeBarriers( const bool bClearBarriers )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->flushPendingAutoResourceLayouts();
+        renderSystem->endCopyEncoder();
 
-        mResourceTransitions.clear();
+        if( bClearBarriers )
+            mResourceTransitions.clear();
 
         // Do not use base class'
-        // CompositorPass::analyzeBarriers();
+        // CompositorPass::analyzeBarriers( bClearBarriers );
 
         const bool usesCompute = !mJobs.empty();
 

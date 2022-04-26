@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,16 +30,17 @@ THE SOFTWARE.
 
 #include "OgreHlmsDatablock.h"
 #include "OgreMatrix4.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     /// Contains information needed by the UI (2D) for OpenGL ES 2.0
     class _OgreExport HlmsLowLevelDatablock : public HlmsDatablock
@@ -49,17 +50,15 @@ namespace Ogre
     public:
         Material *mProxyMaterial;
 
-        HlmsLowLevelDatablock( IdString name, Hlms *creator,
-                               const HlmsMacroblock *macroblock,
-                               const HlmsBlendblock *blendblock,
-                               const HlmsParamVec &params );
+        HlmsLowLevelDatablock( IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
+                               const HlmsBlendblock *blendblock, const HlmsParamVec &params );
         virtual ~HlmsLowLevelDatablock();
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,27 +30,28 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreIdString.h"
 #include "OgreResourceManager.h"
 #include "OgreSingleton.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
     /** Handles the management of skeleton resources.
         @remarks
             This class deals with the runtime management of
             skeleton data; like other resource managers it handles
             the creation of resources (in this case skeleton data).
     */
-    class _OgreExport SkeletonManager : public Singleton<SkeletonManager>, public ResourceAlloc
+    class _OgreExport SkeletonManager : public Singleton<SkeletonManager>, public OgreAllocatedObj
     {
         typedef map<IdString, SkeletonDefPtr>::type SkeletonDefMap;
-        SkeletonDefMap mSkeletonDefs;
+        SkeletonDefMap                              mSkeletonDefs;
 
     public:
         /// Constructor
@@ -63,8 +64,9 @@ namespace Ogre {
         SkeletonDefPtr getSkeletonDef( v1::Skeleton *oldSkeletonBase );
 
         /// Create a new skeleton or retrieves an existing one. Will throw if can't find the skeleton.
-        SkeletonDefPtr getSkeletonDef( const String &name,
-                        const String& groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+        SkeletonDefPtr getSkeletonDef(
+            const String &name,
+            const String &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
 
         /** Adds an external pointer for us to track. Throws
             if a skeleton with the same name already exists
@@ -91,7 +93,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static SkeletonManager& getSingleton(void);
+        static SkeletonManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -107,13 +109,12 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static SkeletonManager* getSingletonPtr(void);
+        static SkeletonManager *getSingletonPtr();
     };
 
     /** @} */
     /** @} */
 
-}
-
+}  // namespace Ogre
 
 #endif

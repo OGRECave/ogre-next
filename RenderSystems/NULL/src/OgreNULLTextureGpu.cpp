@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,11 +26,10 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "OgreNULLTextureGpu.h"
-#include "OgreVector2.h"
+
 #include "OgreException.h"
+#include "OgreVector2.h"
 
 namespace Ogre
 {
@@ -42,78 +41,65 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    NULLTextureGpu::~NULLTextureGpu()
-    {
-    }
+    NULLTextureGpu::~NULLTextureGpu() {}
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::createInternalResourcesImpl(void)
-    {
-    }
+    void NULLTextureGpu::createInternalResourcesImpl() {}
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::destroyInternalResourcesImpl(void)
-    {
-    }
+    void NULLTextureGpu::destroyInternalResourcesImpl() {}
     //-----------------------------------------------------------------------------------
     void NULLTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
         locations.reserve( mSampleDescription.getColourSamples() );
-        for( size_t i=0; i<mSampleDescription.getColourSamples(); ++i )
+        for( size_t i = 0; i < mSampleDescription.getColourSamples(); ++i )
             locations.push_back( Vector2( 0, 0 ) );
     }
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::notifyDataIsReady(void)
+    void NULLTextureGpu::notifyDataIsReady()
+    {
+        OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
+                         "Calling notifyDataIsReady too often! Remove this call"
+                         "See https://github.com/OGRECave/ogre-next/issues/101" );
+        --mDataPreparationsPending;
+    }
+    //-----------------------------------------------------------------------------------
+    void NULLTextureGpu::_autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode
+                                               /*transitionMode*/ )
     {
     }
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
-    {
-    }
+    void NULLTextureGpu::_setToDisplayDummyTexture() {}
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::_setToDisplayDummyTexture(void)
-    {
-    }
-    //-----------------------------------------------------------------------------------
-    bool NULLTextureGpu::_isDataReadyImpl(void) const
-    {
-        return true;
-    }
+    bool NULLTextureGpu::_isDataReadyImpl() const { return true && mDataPreparationsPending == 0u; }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     NULLTextureGpuRenderTarget::NULLTextureGpuRenderTarget(
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            VaoManager *vaoManager, IdString name, uint32 textureFlags,
-            TextureTypes::TextureTypes initialType,
-            TextureGpuManager *textureManager ) :
-        NULLTextureGpu( pageOutStrategy, vaoManager, name,
-                        textureFlags, initialType, textureManager ),
+        GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager, IdString name,
+        uint32 textureFlags, TextureTypes::TextureTypes initialType,
+        TextureGpuManager *textureManager ) :
+        NULLTextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager ),
         mDepthBufferPoolId( 1u ),
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
     {
     }
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpuRenderTarget::_setDepthBufferDefaults(
-            uint16 depthBufferPoolId, bool preferDepthTexture, PixelFormatGpu desiredDepthBufferFormat )
+    void NULLTextureGpuRenderTarget::_setDepthBufferDefaults( uint16 depthBufferPoolId,
+                                                              bool preferDepthTexture,
+                                                              PixelFormatGpu desiredDepthBufferFormat )
     {
         assert( isRenderToTexture() );
-        mDepthBufferPoolId          = depthBufferPoolId;
-        mPreferDepthTexture         = preferDepthTexture;
-        mDesiredDepthBufferFormat   = desiredDepthBufferFormat;
+        mDepthBufferPoolId = depthBufferPoolId;
+        mPreferDepthTexture = preferDepthTexture;
+        mDesiredDepthBufferFormat = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 NULLTextureGpuRenderTarget::getDepthBufferPoolId(void) const
-    {
-        return mDepthBufferPoolId;
-    }
+    uint16 NULLTextureGpuRenderTarget::getDepthBufferPoolId() const { return mDepthBufferPoolId; }
     //-----------------------------------------------------------------------------------
-    bool NULLTextureGpuRenderTarget::getPreferDepthTexture(void) const
-    {
-        return mPreferDepthTexture;
-    }
+    bool NULLTextureGpuRenderTarget::getPreferDepthTexture() const { return mPreferDepthTexture; }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu NULLTextureGpuRenderTarget::getDesiredDepthBufferFormat(void) const
+    PixelFormatGpu NULLTextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
         return mDesiredDepthBufferFormat;
     }
-}
+}  // namespace Ogre

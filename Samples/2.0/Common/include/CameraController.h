@@ -9,21 +9,25 @@ namespace Demo
 {
     class CameraController
     {
-        bool                mUseSceneNode;
+        bool mUseSceneNode;
 
-        bool                mSpeedMofifier;
-        bool                mWASD[4];
-        bool                mSlideUpDown[2];
-        float               mCameraYaw;
-        float               mCameraPitch;
-        public: float       mCameraBaseSpeed;
-        public: float       mCameraSpeedBoost;
-
-    private:
-        GraphicsSystem      *mGraphicsSystem;
+        bool  mSpeedMofifier;
+        bool  mWASD[4];
+        bool  mSlideUpDown[2];
+        float mCameraYaw;
+        float mCameraPitch;
 
     public:
-        CameraController( GraphicsSystem *graphicsSystem, bool useSceneNode=false );
+        float mCameraBaseSpeed;
+
+    public:
+        float mCameraSpeedBoost;
+
+    private:
+        GraphicsSystem *mGraphicsSystem;
+
+    public:
+        CameraController( GraphicsSystem *graphicsSystem, bool useSceneNode = false );
 
         void update( float timeSinceLast );
 
@@ -34,6 +38,6 @@ namespace Demo
 
         void mouseMoved( const SDL_Event &arg );
     };
-}
+}  // namespace Demo
 
 #endif

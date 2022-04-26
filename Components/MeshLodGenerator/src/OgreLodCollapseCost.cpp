@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------------
- * This source file is part of OGRE
+ * This source file is part of OGRE-Next
  * (Object-oriented Graphics Rendering Engine)
  * For the latest info, see http://www.ogre3d.org/
  *
@@ -34,16 +34,17 @@
 
 namespace Ogre
 {
-    void LodCollapseCost::initCollapseCosts( LodData* data )
+    void LodCollapseCost::initCollapseCosts( LodData *data )
     {
         data->mCollapseCostHeap.clear();
         LodData::VertexList::iterator it = data->mVertexList.begin();
         LodData::VertexList::iterator itEnd = data->mVertexList.end();
-        for (; it != itEnd; it++)
+        LodData::VertexI vi = 0;
+        for( ; it != itEnd; ++it, ++vi )
         {
-            if (!it->edges.empty())
+            if( !it->edges.empty() )
             {
-                initVertexCollapseCost(data, &*it);
+                initVertexCollapseCost( data, vi );
             }
             else
             {
@@ -59,68 +60,73 @@ namespace Ogre
         }
     }
 
-    void LodCollapseCost::computeVertexCollapseCost( LodData* data, LodData::Vertex* vertex, Real& collapseCost, LodData::Vertex*& collapseTo )
+    void LodCollapseCost::computeVertexCollapseCost( LodData *data, LodData::VertexI vertexi,
+                                                     Real &collapseCost, LodData::VertexI &collapseToi )
     {
+        LodData::Vertex *vertex = &data->mVertexList[vertexi];
         LodData::VEdges::iterator it = vertex->edges.begin();
-        for (; it != vertex->edges.end(); ++it)
+        for( ; it != vertex->edges.end(); ++it )
         {
-            it->collapseCost = computeEdgeCollapseCost(data, vertex, &*it);
-            if (collapseCost > it->collapseCost)
+            it->collapseCost = computeEdgeCollapseCost( data, vertexi, &*it );
+            if( collapseCost > it->collapseCost )
             {
                 collapseCost = it->collapseCost;
-                collapseTo = it->dst;
+                collapseToi = it->dsti;
             }
         }
     }
-    void LodCollapseCost::initVertexCollapseCost( LodData* data, LodData::Vertex* vertex )
+    void LodCollapseCost::initVertexCollapseCost( LodData *data, LodData::VertexI vertexi )
     {
-        OgreAssert(!vertex->edges.empty(), "");
+        LodData::Vertex *vertex = &data->mVertexList[vertexi];
+        OgreAssert( !vertex->edges.empty(), "" );
 
         Real collapseCost = LodData::UNINITIALIZED_COLLAPSE_COST;
-        LodData::Vertex* collapseTo = NULL;
-        computeVertexCollapseCost(data, vertex, collapseCost, collapseTo);
+        LodData::VertexI collapseToi = LodData::InvalidIndex;
+        computeVertexCollapseCost( data, vertexi, collapseCost, collapseToi );
 
-        vertex->collapseTo = collapseTo;
-        vertex->costHeapPosition = data->mCollapseCostHeap.insert(LodData::CollapseCostHeap::value_type(collapseCost, vertex));
+        vertex->collapseToi = collapseToi;
+        vertex->costHeapPosition = data->mCollapseCostHeap.insert(
+            LodData::CollapseCostHeap::value_type( collapseCost, vertexi ) );
     }
 
-    void LodCollapseCost::updateVertexCollapseCost( LodData* data, LodData::Vertex* vertex )
+    void LodCollapseCost::updateVertexCollapseCost( LodData *data, LodData::VertexI vertexi )
     {
         Real collapseCost = LodData::UNINITIALIZED_COLLAPSE_COST;
-        LodData::Vertex* collapseTo = NULL;
-        computeVertexCollapseCost(data, vertex, collapseCost, collapseTo);
+        LodData::VertexI collapseToi = LodData::InvalidIndex;
+        computeVertexCollapseCost( data, vertexi, collapseCost, collapseToi );
 
-        if (vertex->collapseTo != collapseTo || collapseCost != vertex->costHeapPosition->first)
+        LodData::Vertex *vertex = &data->mVertexList[vertexi];
+        if( vertex->collapseToi != collapseToi || collapseCost != vertex->costHeapPosition->first )
         {
-            OgreAssert(vertex->costHeapPosition != data->mCollapseCostHeap.end(), "");
-            data->mCollapseCostHeap.erase(vertex->costHeapPosition);
-            if (collapseCost != LodData::UNINITIALIZED_COLLAPSE_COST)
+            OgreAssert( vertex->costHeapPosition != data->mCollapseCostHeap.end(), "" );
+            data->mCollapseCostHeap.erase( vertex->costHeapPosition );
+            if( collapseCost != LodData::UNINITIALIZED_COLLAPSE_COST )
             {
-                vertex->collapseTo = collapseTo;
-                vertex->costHeapPosition = data->mCollapseCostHeap.insert(LodData::CollapseCostHeap::value_type(collapseCost, vertex));
+                vertex->collapseToi = collapseToi;
+                vertex->costHeapPosition = data->mCollapseCostHeap.insert(
+                    LodData::CollapseCostHeap::value_type( collapseCost, vertexi ) );
             }
             else
             {
 #if OGRE_DEBUG_MODE
-                vertex->collapseTo = NULL;
+                vertex->collapseToi = LodData::InvalidIndex;
                 vertex->costHeapPosition = data->mCollapseCostHeap.end();
 #endif
             }
         }
     }
 
-    bool LodCollapseCost::isBorderVertex(const LodData::Vertex* vertex) const
+    bool LodCollapseCost::isBorderVertex( const LodData::Vertex *vertex ) const
     {
         LodData::VEdges::const_iterator it = vertex->edges.begin();
         LodData::VEdges::const_iterator itEnd = vertex->edges.end();
-        for (; it != itEnd; ++it)
+        for( ; it != itEnd; ++it )
         {
-            if (it->refCount == 1)
+            if( it->refCount == 1 )
             {
                 return true;
             }
         }
         return false;
     }
-}
-
+}  // namespace Ogre

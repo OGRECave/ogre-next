@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,19 +30,20 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreRenderable.h"
 #include "OgreHardwareBufferManager.h"
+#include "OgreRenderable.h"
 #include "OgreResourceGroupManager.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /** Utility class which defines the sub-parts of an Item.
         @remarks
             Just as meshes are split into submeshes, an Item is made up of
@@ -59,59 +60,60 @@ namespace Ogre {
             the same time as their parent Item by the SceneManager method
             createItem.
     */
-    class _OgreExport SubItem : public RenderableAnimated, public SubEntityAlloc
+    class _OgreExport SubItem : public RenderableAnimated, public OgreAllocatedObj
     {
         // Note no virtual functions for efficiency
         friend class Item;
         friend class SceneManager;
+
     protected:
         /** Private constructor - don't allow creation by anybody else.
-        */
-        SubItem(Item* parent, SubMesh* subMeshBasis);
+         */
+        SubItem( Item *parent, SubMesh *subMeshBasis );
 
     public:
         /** Destructor.
-        */
-        virtual ~SubItem();
+         */
+        ~SubItem() override;
 
     protected:
         /// Pointer to parent.
-        Item* mParentItem;
+        Item *mParentItem;
 
         /// Pointer to the SubMesh defining geometry.
-        SubMesh         *mSubMesh;
-        unsigned char   mMaterialLodIndex;
+        SubMesh      *mSubMesh;
+        unsigned char mMaterialLodIndex;
 
     public:
         /** Accessor method to read mesh data.
-        */
-        SubMesh* getSubMesh(void) const;
+         */
+        SubMesh *getSubMesh() const;
 
-        virtual void _setHlmsHashes( uint32 hash, uint32 casterHash );
+        void _setHlmsHashes( uint32 hash, uint32 casterHash ) override;
 
         /** Accessor to get parent Item */
-        Item* getParent(void) const { return mParentItem; }
+        Item *getParent() const { return mParentItem; }
 
         /** @copydoc Renderable::getLights */
-        const LightList& getLights(void) const;
+        const LightList &getLights() const override;
 
-        virtual void getRenderOperation(v1::RenderOperation& op, bool casterPass);
-        virtual void getWorldTransforms(Matrix4* xform) const;
-        virtual bool getCastsShadows(void) const;
-        
+        void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void getWorldTransforms( Matrix4 *xform ) const override;
+        bool getCastsShadows() const override;
+
         // needs this to not hide the base class' methods with same name
+        using Renderable::addPoseWeight;
         using Renderable::getPoseWeight;
         using Renderable::setPoseWeight;
-        using Renderable::addPoseWeight;
-        
-        float getPoseWeight(const Ogre::String& poseName) const;
-        void setPoseWeight(const Ogre::String& poseName, float w);
-        void addPoseWeight(const Ogre::String& poseName, float w);
+
+        float getPoseWeight( const Ogre::String &poseName ) const;
+        void  setPoseWeight( const Ogre::String &poseName, float w );
+        void  addPoseWeight( const Ogre::String &poseName, float w );
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

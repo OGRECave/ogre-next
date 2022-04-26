@@ -2,8 +2,8 @@
 #include "MyGameState.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
 #include "OgreTextAreaOverlayElement.h"
 
@@ -18,17 +18,16 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void MyGameState::createScene01(void)
+    void MyGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
-        Ogre::Item *item = sceneManager->createItem( "Cube_d.mesh",
-                                                     Ogre::ResourceGroupManager::
-                                                     AUTODETECT_RESOURCE_GROUP_NAME,
-                                                     Ogre::SCENE_DYNAMIC );
+        Ogre::Item *item = sceneManager->createItem(
+            "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            Ogre::SCENE_DYNAMIC );
 
-        mSceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        mSceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                         ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
         mSceneNode->attachObject( item );
 
@@ -46,4 +45,4 @@ namespace Demo
 
         TutorialGameState::update( timeSinceLast );
     }
-}
+}  // namespace Demo

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,21 +29,21 @@ THE SOFTWARE.
 #ifndef __CompositorPassStencil_H__
 #define __CompositorPassStencil_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class RenderTarget;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will clear the RenderTarget using the parameters from definition
@@ -60,19 +60,19 @@ namespace Ogre
     protected:
         RenderSystem *mRenderSystem;
 
-        virtual void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc );
+        void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc ) override;
 
     public:
         CompositorPassStencil( const CompositorPassStencilDef *definition,
                                const RenderTargetViewDef *rtv, CompositorNode *parentNode,
                                RenderSystem *renderSystem );
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -5,7 +5,7 @@ struct Material
 	/* kD is already divided by PI to make it energy conserving.
 	  (formula is finalDiffuse = NdotL * surfaceDiffuse / PI)
 	*/
-	float4 kD; //kD.w is padding
+	float4 kD; //kD.w is shadowConstantBias
 	float4 roughness;
 	float4 metalness;
 	float4 detailOffsetScale[4];

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,10 +30,11 @@ THE SOFTWARE.
 #define __EllipsoidEmitter_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreAreaEmitter.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Particle emitter which emits particles randomly from points inside an ellipsoid.
     @remarks
         This basic particle emitter emits particles from a ellipsoid area.
@@ -41,19 +42,18 @@ namespace Ogre {
         direction (i.e. a line), a random scattering inside a cone, or a random
         scattering in all directions, depending the 'angle' parameter, which
         is the angle across which to scatter the particles either side of the
-        base direction of the emitter. 
+        base direction of the emitter.
     */
     class _OgreParticleFXExport EllipsoidEmitter : public AreaEmitter
     {
     public:
         /** See AreaEmitter. */
-        EllipsoidEmitter(ParticleSystem* psys);
+        EllipsoidEmitter( ParticleSystem *psys );
 
         /** See ParticleEmitter. */
-        void _initParticle(Particle* pParticle);
+        void _initParticle( Particle *pParticle ) override;
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

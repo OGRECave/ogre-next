@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,32 +29,32 @@ THE SOFTWARE.
 #ifndef __CompositorPassStencilDef_H__
 #define __CompositorPassStencilDef_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
 #include "OgreCommon.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport CompositorPassStencilDef : public CompositorPassDef
     {
     public:
-        StencilParams           mStencilParams;
-        uint32                  mStencilRef;
+        StencilParams mStencilParams;
+        uint32        mStencilRef;
 
         CompositorPassStencilDef( CompositorTargetDef *parentTargetDef );
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,15 +30,17 @@ THE SOFTWARE.
 
 #include "OgrePsoCacheHelper.h"
 
-#include "OgreRenderSystem.h"
 #include "OgreRenderPassDescriptor.h"
+#include "OgreRenderSystem.h"
 
 namespace Ogre
 {
+    // clang-format off
     const uint32 PsoCacheHelper::RenderableBits = 22u;
     const uint32 PsoCacheHelper::PassBits       = 10u;
     const uint32 PsoCacheHelper::RenderableMask = (1u << RenderableBits) - 1u;
     const uint32 PsoCacheHelper::PassMask       = (1u << PassBits) - 1u;
+    // clang-format on
 
     PsoCacheHelper::PsoCacheHelper( RenderSystem *renderSystem ) :
         mPassHashCounter( 0 ),
@@ -54,9 +56,9 @@ namespace Ogre
     PsoCacheHelper::~PsoCacheHelper()
     {
         PsoCacheEntryVec::iterator itor = mPsoCache.begin();
-        PsoCacheEntryVec::iterator end  = mPsoCache.end();
+        PsoCacheEntryVec::iterator endt = mPsoCache.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             mRenderSystem->_hlmsPipelineStateObjectDestroyed( &itor->pso );
             ++itor;
@@ -65,7 +67,7 @@ namespace Ogre
         mPsoCache.clear();
     }
     //-----------------------------------------------------------------------------------
-    void PsoCacheHelper::clearState(void)
+    void PsoCacheHelper::clearState()
     {
         mCurrentPassHash = std::numeric_limits<uint32>::max();
         mLastFinalHash = std::numeric_limits<uint32>::max();
@@ -73,17 +75,17 @@ namespace Ogre
         mCurrentState.initialize();
     }
     //-----------------------------------------------------------------------------------
-    uint32 PsoCacheHelper::getPassHash(void)
+    uint32 PsoCacheHelper::getPassHash()
     {
         PassCacheEntry entry;
         entry.passKey = mCurrentState.pass;
-        PassCacheEntryVec::iterator itor = std::lower_bound( mPassCache.begin(),
-                                                             mPassCache.end(), entry );
+        PassCacheEntryVec::iterator itor =
+            std::lower_bound( mPassCache.begin(), mPassCache.end(), entry );
 
         if( itor == mPassCache.end() || itor->passKey != entry.passKey )
         {
             entry.hashToMainCache = mPassHashCounter++;
-            const size_t idx = itor - mPassCache.begin();
+            const ptrdiff_t idx = itor - mPassCache.begin();
             mPassCache.insert( itor, 1u, entry );
             itor = mPassCache.begin() + idx;
         }
@@ -91,18 +93,18 @@ namespace Ogre
         return itor->hashToMainCache;
     }
     //-----------------------------------------------------------------------------------
-    uint32 PsoCacheHelper::getRenderableHash(void)
+    uint32 PsoCacheHelper::getRenderableHash()
     {
         RenderableCacheEntry entry;
         entry.psoRenderableKey = mCurrentState;
-        RenderableCacheEntryVec::iterator itor = std::lower_bound( mRenderableCache.begin(),
-                                                                   mRenderableCache.end(), entry );
+        RenderableCacheEntryVec::iterator itor =
+            std::lower_bound( mRenderableCache.begin(), mRenderableCache.end(), entry );
 
         if( itor == mRenderableCache.end() ||
-            itor->psoRenderableKey.equalExcludePassData( entry.psoRenderableKey ) )
+            !itor->psoRenderableKey.equalExcludePassData( entry.psoRenderableKey ) )
         {
             entry.hashToMainCache = mRenderableHashCounter++;
-            const size_t idx = itor - mRenderableCache.begin();
+            const ptrdiff_t idx = itor - mRenderableCache.begin();
             mRenderableCache.insert( itor, 1u, entry );
             itor = mRenderableCache.begin() + idx;
         }
@@ -116,14 +118,14 @@ namespace Ogre
         mLastPso = 0;
         mCurrentState.pass.stencilParams = mRenderSystem->getStencilBufferParams();
 
-        for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+        for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
         {
             if( renderPassDesc->mColour[i].texture )
             {
                 mCurrentState.pass.colourFormat[i] =
-                        renderPassDesc->mColour[i].texture->getPixelFormat();
+                    renderPassDesc->mColour[i].texture->getPixelFormat();
                 mCurrentState.pass.sampleDescription =
-                        renderPassDesc->mColour[i].texture->getSampleDescription();
+                    renderPassDesc->mColour[i].texture->getSampleDescription();
             }
             else
                 mCurrentState.pass.colourFormat[i] = PFG_NULL;
@@ -132,19 +134,19 @@ namespace Ogre
         mCurrentState.pass.depthFormat = PFG_NULL;
         if( renderPassDesc->mDepth.texture )
         {
-            mCurrentState.pass.depthFormat          = renderPassDesc->mDepth.texture->getPixelFormat();
-            mCurrentState.pass.sampleDescription    = renderPassDesc->mDepth.texture->getSampleDescription();
+            mCurrentState.pass.depthFormat = renderPassDesc->mDepth.texture->getPixelFormat();
+            mCurrentState.pass.sampleDescription =
+                renderPassDesc->mDepth.texture->getSampleDescription();
         }
 
-        mCurrentState.pass.adapterId = 1; //TODO: Ask RenderSystem current adapter ID.
-        mCurrentState.sampleMask = 0xffffffff; //TODO
+        mCurrentState.pass.adapterId = 1;       // TODO: Ask RenderSystem current adapter ID.
+        mCurrentState.sampleMask = 0xffffffff;  // TODO
 
         mCurrentPassHash = getPassHash();
     }
     //-----------------------------------------------------------------------------------
     void PsoCacheHelper::setVertexFormat( const VertexElement2VecVec &vertexElements,
-                                          OperationType operationType,
-                                          bool enablePrimitiveRestart )
+                                          OperationType operationType, bool enablePrimitiveRestart )
     {
         if( mCurrentState.operationType != operationType )
         {
@@ -206,21 +208,18 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    HlmsPso* PsoCacheHelper::getPso( uint32 renderableHash, bool renderableCacheAlreadySet )
+    HlmsPso *PsoCacheHelper::getPso( uint32 renderableHash, bool renderableCacheAlreadySet )
     {
         assert( mCurrentPassHash != std::numeric_limits<uint32>::max() &&
-                "You must have called setRenderTarget first!!!");
+                "You must have called setRenderTarget first!!!" );
 
         const uint32 finalHash =
-                ((mCurrentPassHash & PassMask) << RenderableBits) |
-                (renderableHash & RenderableMask);
+            ( ( mCurrentPassHash & PassMask ) << RenderableBits ) | ( renderableHash & RenderableMask );
 
         if( mLastFinalHash != finalHash )
         {
-            PsoCacheEntryVec::iterator itor = std::lower_bound( mPsoCache.begin(),
-                                                                mPsoCache.end(),
-                                                                finalHash,
-                                                                PsoCacheEntry() );
+            PsoCacheEntryVec::iterator itor =
+                std::lower_bound( mPsoCache.begin(), mPsoCache.end(), finalHash, PsoCacheEntry() );
 
             if( itor == mPsoCache.end() || itor->hash != finalHash )
             {
@@ -232,7 +231,8 @@ namespace Ogre
                     while( it != en && it->hashToMainCache != renderableHash )
                         ++it;
 
-                    assert( it != en && "Bad / corrupted renderableHash!!! "
+                    assert( it != en &&
+                            "Bad / corrupted renderableHash!!! "
                             "Maybe it belongs to a different PsoCacheHelper?" );
 
                     HlmsPassPso savedPassPart = mCurrentState.pass;
@@ -240,11 +240,11 @@ namespace Ogre
                     mCurrentState.pass = savedPassPart;
                 }
 
-                //Create the PSO
+                // Create the PSO
                 PsoCacheEntry entry;
                 entry.hash = finalHash;
                 entry.pso = mCurrentState;
-                const size_t idx = itor - mPsoCache.begin();
+                const ptrdiff_t idx = itor - mPsoCache.begin();
                 mPsoCache.insert( itor, 1u, entry );
                 itor = mPsoCache.begin() + idx;
 
@@ -258,7 +258,7 @@ namespace Ogre
         return mLastPso;
     }
     //-----------------------------------------------------------------------------------
-    HlmsPso* PsoCacheHelper::getPso(void)
+    HlmsPso *PsoCacheHelper::getPso()
     {
         if( !mLastPso )
         {
@@ -268,4 +268,4 @@ namespace Ogre
 
         return mLastPso;
     }
-}
+}  // namespace Ogre

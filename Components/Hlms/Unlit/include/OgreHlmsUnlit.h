@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,11 +29,13 @@ THE SOFTWARE.
 #define _OgreHlmsUnlit_H_
 
 #include "OgreHlmsUnlitPrerequisites.h"
-#include "OgreHlmsBufferManager.h"
+
 #include "OgreConstBufferPool.h"
+#include "OgreHlmsBufferManager.h"
 #include "OgreMatrix4.h"
-#include "OgreHeaderPrefix.h"
 #include "OgreRoot.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -41,11 +43,11 @@ namespace Ogre
     struct QueuedRenderable;
 
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     class HlmsUnlitDatablock;
 
@@ -56,7 +58,7 @@ namespace Ogre
     class _OgreHlmsUnlitExport HlmsUnlit : public HlmsBufferManager, public ConstBufferPool
     {
     protected:
-        typedef vector<HlmsDatablock*>::type HlmsDatablockVec;
+        typedef vector<HlmsDatablock *>::type HlmsDatablockVec;
 
         struct PassData
         {
@@ -69,114 +71,110 @@ namespace Ogre
             Matrix4 viewProjMatrix[5];
         };
 
-        PassData                mPreparedPass;
-        ConstBufferPackedVec    mPassBuffers;
-        uint32                  mCurrentPassBuffer;     /// Resets to zero every new frame.
+        PassData             mPreparedPass;
+        ConstBufferPackedVec mPassBuffers;
+        uint32               mCurrentPassBuffer;  /// Resets to zero every new frame.
 
         ConstBufferPool::BufferPool const *mLastBoundPool;
 
-        bool mHasSeparateSamplers;
+        bool                        mHasSeparateSamplers;
         DescriptorSetTexture const *mLastDescTexture;
         DescriptorSetSampler const *mLastDescSampler;
 
         float mConstantBiasScale;
-        bool mUsingInstancedStereo;
+        bool  mUsingInstancedStereo;
 
-        bool    mUsingExponentialShadowMaps;
-        uint16  mEsmK; /// K parameter for ESM.
-        uint32  mTexUnitSlotStart;
-        uint32  mSamplerUnitSlotStart;
+        bool   mUsingExponentialShadowMaps;
+        uint16 mEsmK;  /// K parameter for ESM.
+        uint32 mTexUnitSlotStart;
+        uint32 mSamplerUnitSlotStart;
 
-        virtual void setupRootLayout( RootLayout &rootLayout );
+        void setupRootLayout( RootLayout &rootLayout ) override;
 
-        virtual const HlmsCache* createShaderCacheEntry( uint32 renderableHash,
-                                                         const HlmsCache &passCache,
-                                                         uint32 finalHash,
-                                                         const QueuedRenderable &queuedRenderable );
+        const HlmsCache *createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
+                                                 uint32                  finalHash,
+                                                 const QueuedRenderable &queuedRenderable ) override;
 
-        virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
-                                                    const HlmsMacroblock *macroblock,
-                                                    const HlmsBlendblock *blendblock,
-                                                    const HlmsParamVec &paramVec );
+        HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
+                                            const HlmsBlendblock *blendblock,
+                                            const HlmsParamVec   &paramVec ) override;
 
         void setTextureProperty( LwString &propertyName, HlmsUnlitDatablock *datablock, uint8 texType );
 
-        virtual void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash );
-        virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
-        virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
+        void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash ) override;
+        void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override;
+        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) override;
 
-        virtual void notifyPropertiesMergedPreGenerationStep( void );
+        void notifyPropertiesMergedPreGenerationStep() override;
 
-        virtual void destroyAllBuffers(void);
+        void destroyAllBuffers() override;
 
-        FORCEINLINE uint32 fillBuffersFor( const HlmsCache *cache,
-                                           const QueuedRenderable &queuedRenderable,
-                                           bool casterPass, uint32 lastCacheHash,
-                                           CommandBuffer *commandBuffer, bool isV1 );
+        FORCEINLINE uint32 fillBuffersFor( const HlmsCache        *cache,
+                                           const QueuedRenderable &queuedRenderable, bool casterPass,
+                                           uint32 lastCacheHash, CommandBuffer *commandBuffer,
+                                           bool isV1 );
+
+        HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, uint32 constBufferSize );
+        HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, HlmsTypes type,
+                   const String &typeName, uint32 constBufferSize );
 
     public:
         HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders );
-        HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders,
-                   HlmsTypes type, const String &typeName );
-        virtual ~HlmsUnlit();
+        HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, HlmsTypes type,
+                   const String &typeName );
+        ~HlmsUnlit() override;
 
-        virtual void _changeRenderSystem( RenderSystem *newRs );
+        void _changeRenderSystem( RenderSystem *newRs ) override;
 
         /// Not supported
-        virtual void setOptimizationStrategy( OptimizationStrategy optimizationStrategy ) {}
+        void setOptimizationStrategy( OptimizationStrategy ) override {}
 
-        virtual HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode,
-                                           bool casterPass, bool dualParaboloid,
-                                           SceneManager *sceneManager );
+        HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode, bool casterPass,
+                                   bool dualParaboloid, SceneManager *sceneManager ) override;
 
-        virtual uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
-                                       bool casterPass, uint32 lastCacheHash,
-                                       uint32 lastTextureHash );
+        uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
+                               bool casterPass, uint32 lastCacheHash, uint32 lastTextureHash ) override;
 
-        virtual uint32 fillBuffersForV1( const HlmsCache *cache,
-                                         const QueuedRenderable &queuedRenderable,
-                                         bool casterPass, uint32 lastCacheHash,
-                                         CommandBuffer *commandBuffer );
+        uint32 fillBuffersForV1( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
+                                 bool casterPass, uint32 lastCacheHash,
+                                 CommandBuffer *commandBuffer ) override;
 
-        virtual uint32 fillBuffersForV2( const HlmsCache *cache,
-                                         const QueuedRenderable &queuedRenderable,
-                                         bool casterPass, uint32 lastCacheHash,
-                                         CommandBuffer *commandBuffer );
+        uint32 fillBuffersForV2( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
+                                 bool casterPass, uint32 lastCacheHash,
+                                 CommandBuffer *commandBuffer ) override;
 
-        virtual void frameEnded(void);
+        void frameEnded() override;
 
         void setShadowSettings( bool useExponentialShadowMaps );
-        bool getShadowFilter(void) const                    { return mUsingExponentialShadowMaps; }
+        bool getShadowFilter() const { return mUsingExponentialShadowMaps; }
 
         /// @copydoc HlmsPbs::setEsmK
-        void setEsmK( uint16 K );
-        uint16 getEsmK(void) const                          { return mEsmK; }
+        void   setEsmK( uint16 K );
+        uint16 getEsmK() const { return mEsmK; }
 
         /// @copydoc HlmsPbs::getDefaultPaths
-        static void getDefaultPaths( String& outDataFolderPath, StringVector& outLibraryFoldersPaths );
+        static void getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths );
 
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
-        virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
-                                HlmsDatablock *datablock, const String &resourceGroup,
-                                HlmsJsonListener *listener, const String &additionalTextureExtension ) const;
+        void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
+                        HlmsDatablock *datablock, const String &resourceGroup,
+                        HlmsJsonListener *listener,
+                        const String     &additionalTextureExtension ) const override;
         /// @copydoc Hlms::_saveJson
-        virtual void _saveJson( const HlmsDatablock *datablock, String &outString,
-                                HlmsJsonListener *listener,
-                                const String &additionalTextureExtension ) const;
+        void _saveJson( const HlmsDatablock *datablock, String &outString, HlmsJsonListener *listener,
+                        const String &additionalTextureExtension ) const override;
 
-		/// @copydoc Hlms::_collectSamplerblocks
-		virtual void _collectSamplerblocks(set<const HlmsSamplerblock*>::type &outSamplerblocks,
-			const HlmsDatablock *datablock) const;
+        /// @copydoc Hlms::_collectSamplerblocks
+        void _collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
+                                    const HlmsDatablock                 *datablock ) const override;
 #endif
-	};
-
- 
+    };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

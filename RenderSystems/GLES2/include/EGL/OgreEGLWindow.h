@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -75,9 +75,9 @@ namespace Ogre {
 //                        bool fullScreen, const NameValuePairList *miscParams);
 
             virtual void setFullscreen (bool fullscreen, uint width, uint height);
-            void destroy(void);
-            bool isClosed(void) const;
-            bool isVisible(void) const;
+            void destroy();
+            bool isClosed() const;
+            bool isVisible() const;
             void setVisible(bool visible);
             void swapBuffers();
             void copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer);

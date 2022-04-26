@@ -1,7 +1,7 @@
 
 /*
  * -----------------------------------------------------------------------------
- * This source file is part of OGRE
+ * This source file is part of OGRE-Next
  * (Object-oriented Graphics Rendering Engine)
  * For the latest info, see http://www.ogre3d.org/
  *
@@ -31,46 +31,50 @@
 #define _LodCollapseCostProfiler_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodCollapseCost.h"
-#include "OgreLodData.h"
 #include "OgreLodConfig.h"
+#include "OgreLodData.h"
 
 #include "ogrestd/unordered_map.h"
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodCollapseCostProfiler :
-        public LodCollapseCost
+    class _OgreLodExport LodCollapseCostProfiler : public LodCollapseCost
     {
     public:
-        LodCollapseCostProfiler(LodProfile& profile, LodCollapseCostPtr& costCalculator) : mProfile(profile), mCostCalculator(costCalculator) {}
-        virtual void initCollapseCosts(LodData* data);
-        virtual void computeVertexCollapseCost(LodData* data, LodData::Vertex* vertex, Real& collapseCost, LodData::Vertex*& collapseTo);
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::Vertex* src, LodData::Edge* dstEdge);
-    protected:
+        LodCollapseCostProfiler( LodProfile &profile, LodCollapseCostPtr &costCalculator ) :
+            mProfile( profile ),
+            mCostCalculator( costCalculator )
+        {
+        }
+        void initCollapseCosts( LodData *data ) override;
+        void computeVertexCollapseCost( LodData *data, LodData::VertexI vertexi, Real &collapseCost,
+                                        LodData::VertexI &collapseToi ) override;
+        Real computeEdgeCollapseCost( LodData *data, LodData::VertexI srci,
+                                      LodData::Edge *dstEdge ) override;
 
+    protected:
         struct ProfiledEdge
         {
-            LodData::Vertex* dst;
-            Real cost;
+            LodData::VertexI dsti;
+            Real             cost;
         };
 
         typedef vector<bool>::type HasVertexProfileList;
 
         HasVertexProfileList mHasProfile;
 
-        typedef unordered_multimap<LodData::Vertex*, ProfiledEdge>::type ProfileLookup;
+        typedef unordered_multimap<LodData::VertexI, ProfiledEdge>::type ProfileLookup;
+
         ProfileLookup mProfileLookup;
-        LodProfile mProfile;
+        LodProfile    mProfile;
 
         // If an edge doesn't have a profile, this collapsecost algorithm will be used.
         LodCollapseCostPtr mCostCalculator;
 
-        void injectProfile(LodData* data);
+        void injectProfile( LodData *data );
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

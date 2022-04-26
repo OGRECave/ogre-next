@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -62,7 +62,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GLES2DefaultHardwareVertexBuffer::unlockImpl(void)
+    void GLES2DefaultHardwareVertexBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -73,7 +73,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GLES2DefaultHardwareVertexBuffer::unlock(void)
+    void GLES2DefaultHardwareVertexBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -126,7 +126,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GLES2DefaultHardwareIndexBuffer::unlockImpl(void)
+    void GLES2DefaultHardwareIndexBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -137,7 +137,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GLES2DefaultHardwareIndexBuffer::unlock(void)
+    void GLES2DefaultHardwareIndexBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -186,7 +186,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GLES2DefaultHardwareUniformBuffer::unlockImpl(void)
+    void GLES2DefaultHardwareUniformBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -197,7 +197,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GLES2DefaultHardwareUniformBuffer::unlock(void)
+    void GLES2DefaultHardwareUniformBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -262,7 +262,7 @@ namespace v1 {
         return HardwareUniformBufferSharedPtr(new GLES2DefaultHardwareUniformBuffer(this, sizeBytes, usage, useShadowBuffer, name));
     }
     
-    RenderToVertexBufferSharedPtr GLES2DefaultHardwareBufferManagerBase::createRenderToVertexBuffer( void )
+    RenderToVertexBufferSharedPtr GLES2DefaultHardwareBufferManagerBase::createRenderToVertexBuffer()
     {
         OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                 "Cannot create RenderToVertexBuffer in GLES2DefaultHardwareBufferManagerBase", 

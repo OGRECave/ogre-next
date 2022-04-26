@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -34,8 +34,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const ArrayQuaternion ArrayQuaternion::ZERO( _mm_setzero_ps(), _mm_setzero_ps(), _mm_setzero_ps(), _mm_setzero_ps() );
-    const ArrayQuaternion ArrayQuaternion::IDENTITY( _mm_set_ps1( 1.0f ), _mm_setzero_ps(), _mm_setzero_ps(), _mm_setzero_ps() );
-}
+    const ArrayQuaternion ArrayQuaternion::ZERO( _mm_setzero_ps(), _mm_setzero_ps(), _mm_setzero_ps(),
+                                                 _mm_setzero_ps() );
+    const ArrayQuaternion ArrayQuaternion::IDENTITY( _mm_set_ps1( 1.0f ), _mm_setzero_ps(),
+                                                     _mm_setzero_ps(), _mm_setzero_ps() );
+}  // namespace Ogre
 
 #endif

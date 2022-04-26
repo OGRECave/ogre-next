@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,16 +29,18 @@ THE SOFTWARE.
 #define _OgreCubemapProbe_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
-#include "OgreVector3.h"
+
+#include "Compositor/OgreCompositorChannel.h"
 #include "Math/Simple/OgreAabb.h"
 #include "OgreIdString.h"
 #include "OgreTextureGpu.h"
+#include "OgreVector3.h"
+
 #include "OgreHeaderPrefix.h"
-#include "Compositor/OgreCompositorChannel.h"
 
 namespace Ogre
 {
-    class _OgreHlmsPbsExport CubemapProbe : public UtilityAlloc
+    class _OgreHlmsPbsExport CubemapProbe : public OgreAllocatedObj
     {
         friend class ParallaxCorrectedCubemapBase;
         friend class ParallaxCorrectedCubemap;
@@ -47,48 +49,48 @@ namespace Ogre
         /// Where to position the camera while constructing the probe.
         Vector3 mProbeCameraPos;
         /// When the camera enters this area, the probe is collected for blending.
-        Aabb    mArea;
+        Aabb mArea;
         /// Value between [0; 1] per axis. At 1, the inner region matches mArea (the outer region)
         Vector3 mAreaInnerRegion;
         /// Orientationt. These are not AABBs, but rather OBB (oriented bounding boxes).
         Matrix3 mOrientation;
         Matrix3 mInvOrientation;
         /// The general shape this probe is supposed to represent.
-        Aabb    mProbeShape;
+        Aabb mProbeShape;
 
-        TextureGpu  *mTexture;
-        uint16      mCubemapArrayIdx;
+        TextureGpu       *mTexture;
+        uint16            mCubemapArrayIdx;
         SampleDescription mSampleDescription;
 
-        IdString            mWorkspaceDefName;
+        IdString             mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
         CompositorWorkspace *mWorkspace;
         Camera              *mCamera;
 
         ParallaxCorrectedCubemapBase *mCreator;
 
-        InternalCubemapProbe    *mInternalProbe;
+        InternalCubemapProbe *mInternalProbe;
 
-        ConstBufferPacked   *mConstBufferForManualProbes;
-        uint32              mNumDatablockUsers;
+        ConstBufferPacked *mConstBufferForManualProbes;
+        uint32             mNumDatablockUsers;
 
-        uint16  mPriority;
+        uint16 mPriority;
 
         /// False if it should be updated every frame. True if only updated when dirty
-        bool    mStatic;
+        bool mStatic;
 
     public:
         /// While disabled, this probe won't be updated (even if dirty) and won't be considered
         /// for blending (i.e. won't be used at all).
-        bool    mEnabled;
+        bool mEnabled;
         /// True if we must re-render to update the texture's contents. False when we don't.
-        bool    mDirty;
+        bool mDirty;
         /// Number of iterations. The more iterations, the more light bounces and
         /// light reflections we can capture (i.e. mirror of mirrors), but it will
         /// take longer to rebuild the probe.
         /// Default value is 32.
         /// For non-static probes, you should set this value to 1 for performance.
-        uint16  mNumIterations;
+        uint16 mNumIterations;
 
         /// Mask to group probes. This probe will only be updated (even if dirty) and
         /// blended if mMask & system->mMask is non-zero.
@@ -98,18 +100,19 @@ namespace Ogre
         /// Or if you have per room probes, but during a panoramic shot where many rooms
         /// are in sight, and you want a more "global" probe.
         /// Defaults to 0xffffffff
-        uint32  mMask;
+        uint32 mMask;
 
-        void destroyWorkspace(void);
+        void destroyWorkspace();
+
     protected:
-        void destroyTexture(void);
+        void destroyTexture();
 
-        void acquireTextureAuto(void);
-        void releaseTextureAuto(void);
-        void createInternalProbe(void);
-        void destroyInternalProbe(void);
-        void switchInternalProbeStaticValue(void);
-        void syncInternalProbe(void);
+        void acquireTextureAuto();
+        void releaseTextureAuto();
+        void createInternalProbe();
+        void destroyInternalProbe();
+        void switchInternalProbeStaticValue();
+        void syncInternalProbe();
 
         void restoreFromClearScene( SceneNode *rootNode );
 
@@ -136,9 +139,9 @@ namespace Ogre
             mipmaps at the probe level. User is responsible for supplying a workspace
             definition that will generate mipmaps though!
         */
-        void setTextureParams( uint32 width, uint32 height, bool useManual=false,
-                               PixelFormatGpu pf=PFG_RGBA8_UNORM_SRGB, bool isStatic=true,
-                               SampleDescription sampleDesc=SampleDescription() );
+        void setTextureParams( uint32 width, uint32 height, bool useManual = false,
+                               PixelFormatGpu pf = PFG_RGBA8_UNORM_SRGB, bool isStatic = true,
+                               SampleDescription sampleDesc = SampleDescription() );
 
         /** Initializes the workspace so we can actually render to the cubemap.
             You must call setTextureParams first.
@@ -159,10 +162,10 @@ namespace Ogre
             This value allows you to override it with a different workspace definition.
         */
         void initWorkspace( float cameraNear = 0.5f, float cameraFar = 500.0f,
-                            IdString workspaceDefOverride = IdString(),
+                            IdString                    workspaceDefOverride = IdString(),
                             const CompositorChannelVec &additionalChannels = CompositorChannelVec(),
-                            uint8 executionMask = 0xFF );
-        bool isInitialized(void) const;
+                            uint8                       executionMask = 0xFF );
+        bool isInitialized() const;
 
         /** Sets cubemap probe's parameters.
         @param cameraPos
@@ -184,8 +187,7 @@ namespace Ogre
             The OBB should closely match the shape of the environment around it. The better it fits,
             the more accurate the reflections.
         */
-        void set( const Vector3 &cameraPos,
-                  const Aabb &area, const Vector3 &areaInnerRegion,
+        void set( const Vector3 &cameraPos, const Aabb &area, const Vector3 &areaInnerRegion,
                   const Matrix3 &orientation, const Aabb &probeShape );
 
         /** Set to False if it should be updated every frame. True if only updated when dirty
@@ -193,7 +195,7 @@ namespace Ogre
             This call is not cheap.
         */
         void setStatic( bool isStatic );
-        bool getStatic(void) const          { return mStatic; }
+        bool getStatic() const { return mStatic; }
 
         /** When two probes overlap, you may want one probe to have particularly more influence
             than the others. Use this value to decrease/increase the weight when blending the probes.
@@ -203,10 +205,10 @@ namespace Ogre
             A value in range [1; 65535]
             A higher value means the probe should have a stronger influence over the others.
         */
-        void setPriority( uint16 priority );
-        uint16_t getPriority(void) const;
+        void     setPriority( uint16 priority );
+        uint16_t getPriority() const;
 
-        Aabb getAreaLS(void) const          { return Aabb( Vector3::ZERO, mArea.mHalfSize ); }
+        Aabb getAreaLS() const { return Aabb( Vector3::ZERO, mArea.mHalfSize ); }
 
         /** Gets the Normalized Distance Function.
         @param posLS
@@ -219,32 +221,33 @@ namespace Ogre
         */
         Real getNDF( const Vector3 &posLS ) const;
 
-        void _prepareForRendering(void);
-        void _clearCubemap(void);
-        void _updateRender(void);
+        void _prepareForRendering();
+        void _clearCubemap();
+        void _updateRender();
 
-        const Vector3& getProbeCameraPos(void) const        { return mProbeCameraPos; }
-        const Aabb& getArea(void) const                     { return mArea; }
-        const Vector3& getAreaInnerRegion(void) const       { return mAreaInnerRegion; }
-        const Matrix3& getOrientation(void) const           { return mOrientation; }
-        const Matrix3& getInvOrientation(void) const        { return mInvOrientation; }
-        const Aabb& getProbeShape(void) const               { return mProbeShape; }
+        const Vector3 &getProbeCameraPos() const { return mProbeCameraPos; }
+        const Aabb    &getArea() const { return mArea; }
+        const Vector3 &getAreaInnerRegion() const { return mAreaInnerRegion; }
+        const Matrix3 &getOrientation() const { return mOrientation; }
+        const Matrix3 &getInvOrientation() const { return mInvOrientation; }
+        const Aabb    &getProbeShape() const { return mProbeShape; }
 
-        CompositorWorkspace *getWorkspace(void) const       { return mWorkspace; }
+        CompositorWorkspace *getWorkspace() const { return mWorkspace; }
 
-        TextureGpu* getInternalTexture(void) const          { return mTexture; }
-        void _addReference(void);
-        void _removeReference(void);
+        TextureGpu *getInternalTexture() const { return mTexture; }
 
-        const SceneNode* getInternalCubemapProbeSceneNode(void) const;
+        void _addReference();
+        void _removeReference();
 
-        uint16 getInternalSliceToArrayTexture(void) const   { return mCubemapArrayIdx; }
+        const SceneNode *getInternalCubemapProbeSceneNode() const;
 
-        ConstBufferPacked* getConstBufferForManualProbes(void)  { return mConstBufferForManualProbes; }
+        uint16 getInternalSliceToArrayTexture() const { return mCubemapArrayIdx; }
 
-        ParallaxCorrectedCubemapBase* getCreator(void)      { return mCreator; }
+        ConstBufferPacked *getConstBufferForManualProbes() { return mConstBufferForManualProbes; }
+
+        ParallaxCorrectedCubemapBase *getCreator() { return mCreator; }
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

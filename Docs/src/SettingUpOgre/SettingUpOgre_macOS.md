@@ -8,17 +8,43 @@ If you do not already have `cmake`, install it with `brew` or whatever your favo
 brew install cmake
 ```
 
+@copydoc DownloadingOgreScriptsCommon
+
 # Install dependencies
-Ogre have some dependencies (depending on which components you choose to build). You can find them at [https://bitbucket.org/cabalistic/ogredeps/src/default/src/](https://bitbucket.org/cabalistic/ogredeps/src/default/src/). This guide won't escribe in detail on how to install them, but the author recommends using `brew` to install them, e.g.
+
+Clone dependencies from [ogre-next-deps](https://github.com/OGRECave/ogre-next-deps) and build the `ALL` target and then the `INSTALL` target:
+
 ```bash
-brew install libzzip
-brew install freetype
-brew install rapidjson
-# [...more if needed...]
+git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps
+cd ogre-next-deps
+mkdir build
+cd build
+cmake ../ -G Xcode
+cmake --build . --target ALL --config Debug
+cmake --build . --target install --config Debug
+cmake --build . --target ALL --config Release
+cmake --build . --target install --config Release
 ```
-and cmake should be able to find them automatically.
+
+This will generate Dependencies under `ogre-next-deps/build/ogrenext`.
+You will have to copy (or symlink) that folder into the OgreRepo and rename it to dependencies so that they the folder `ogre-next-deps/build/ogrenext` is now `OgreSrcRepo/Dependencies`
+
+
+## Install SDL2 using brew
+
+SDL2 is not built by ogre-next-deps in macOS, use brew instead:
+
+```bash
+brew install sdl2
+```
+
 
 # Build Ogre
+
+> **Note:** XCode generator is supported
+>
+> **Note 2:** Unless STATIC libs setting is used, XCode project dependencies are not properly setup thus e.g. if you try to build a sample, it won't compile RenderSystem_Metal which is needed (and possibly other components). Make sure to first build "ALL" target to build everything before trying the samples
+
 Make sure you have set the current working directory to ogre's source directory:
 ```bash
 cd ogre

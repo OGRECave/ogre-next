@@ -13,25 +13,25 @@ namespace Ogre
 {
     class _OgreHlmsPbsExport VoxelVisualizer : public MovableObject, public Renderable
     {
-        void createBuffers(void);
+        void createBuffers();
 
     public:
-        VoxelVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager,
-                         SceneManager* manager, uint8 renderQueueId );
-        virtual ~VoxelVisualizer();
+        VoxelVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
+                         uint8 renderQueueId );
+        ~VoxelVisualizer() override;
 
         void setTrackingVoxel( TextureGpu *opacityTex, TextureGpu *texture, bool anyColour );
 
-        //Overrides from MovableObject
-        virtual const String& getMovableType(void) const;
+        // Overrides from MovableObject
+        const String &getMovableType() const override;
 
-        //Overrides from Renderable
-        virtual const LightList& getLights(void) const;
-        virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual bool getCastsShadows(void) const;
+        // Overrides from Renderable
+        const LightList &getLights() const override;
+        void             getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void             getWorldTransforms( Matrix4 *xform ) const override;
+        bool             getCastsShadows() const override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

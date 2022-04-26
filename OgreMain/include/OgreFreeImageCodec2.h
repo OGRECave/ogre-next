@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -35,14 +35,14 @@ THE SOFTWARE.
 // Forward-declaration to avoid external dependency on FreeImage
 struct FIBITMAP;
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
     /** Codec specialized in images loaded using FreeImage.
         @remarks
             The users implementing subclasses of ImageCodec are required to return
@@ -51,39 +51,39 @@ namespace Ogre {
     class _OgreExport FreeImageCodec2 : public ImageCodec2
     {
     private:
-        String mType;
+        String       mType;
         unsigned int mFreeImageType;
 
-        typedef list<ImageCodec2*>::type RegisteredCodecList;
-        static RegisteredCodecList msCodecList;
+        typedef list<ImageCodec2 *>::type RegisteredCodecList;
+        static RegisteredCodecList        msCodecList;
 
     public:
-        FreeImageCodec2(const String &type, unsigned int fiType);
-        virtual ~FreeImageCodec2() { }
+        FreeImageCodec2( const String &type, unsigned int fiType );
+        ~FreeImageCodec2() override {}
 
         /** Common encoding routine. */
-        FIBITMAP* encodeBitmap(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
+        FIBITMAP *encodeBitmap( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const;
         /// @copydoc Codec::encode
-        DataStreamPtr encode(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
+        DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const override;
         /// @copydoc Codec::encodeToFile
-        void encodeToFile(MemoryDataStreamPtr& input, const String& outFileName, CodecDataPtr& pData) const;
+        void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                           CodecDataPtr &pData ) const override;
         /// @copydoc Codec::decode
-        DecodeResult decode(DataStreamPtr& input) const;
+        DecodeResult decode( DataStreamPtr &input ) const override;
 
-        
-        virtual String getType() const;        
+        virtual String getType() const override;
 
         /// @copydoc Codec::magicNumberToFileExt
-        String magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const;
+        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const override;
 
         /// Static method to startup FreeImage and register the FreeImage codecs
-        static void startup(void);
+        static void startup();
         /// Static method to shutdown FreeImage and unregister the FreeImage codecs
-        static void shutdown(void);
+        static void shutdown();
     };
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif

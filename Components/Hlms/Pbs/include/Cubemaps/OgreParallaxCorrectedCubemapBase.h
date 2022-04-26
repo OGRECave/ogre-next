@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,17 +29,19 @@ THE SOFTWARE.
 #define _OgreParallaxCorrectedCubemapBase_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
-#include "OgreRenderSystem.h"
-#include "Cubemaps/OgreCubemapProbe.h"
+
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-#include "OgreIdString.h"
+#include "Cubemaps/OgreCubemapProbe.h"
 #include "OgreId.h"
+#include "OgreIdString.h"
+#include "OgreRenderSystem.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class CompositorWorkspaceDef;
-    typedef vector<CubemapProbe*>::type CubemapProbeVec;
+    typedef vector<CubemapProbe *>::type CubemapProbeVec;
 
     /**
     @see HlmsPbsDatablock::setCubemapProbe
@@ -49,40 +51,44 @@ namespace Ogre
                                                             public CompositorWorkspaceListener
     {
     protected:
-        TextureGpu                      *mBindTexture;
-        HlmsSamplerblock const          *mSamplerblockTrilinear;
+        TextureGpu             *mBindTexture;
+        HlmsSamplerblock const *mSamplerblockTrilinear;
 
         CubemapProbeVec mProbes;
         bool            mAutomaticMode;
         bool            mUseDpm2DArray;
 
-        bool            mIsRendering;
-        public: bool                    mPaused;
-        public: uint32                  mMask; /// @see CubemapProbe::mMask
-    protected:
-        Root                            *mRoot;
-        SceneManager                    *mSceneManager;
-        CompositorWorkspaceDef const    *mDefaultWorkspaceDef;
+        bool mIsRendering;
 
-        Pass            *mPccCompressorPass;
-        CubemapProbe    *mProbeRenderInProgress;
+    public:
+        bool mPaused;
+
+    public:
+        uint32 mMask;  /// @see CubemapProbe::mMask
+    protected:
+        Root                         *mRoot;
+        SceneManager                 *mSceneManager;
+        CompositorWorkspaceDef const *mDefaultWorkspaceDef;
+
+        Pass         *mPccCompressorPass;
+        CubemapProbe *mProbeRenderInProgress;
 
     public:
         ParallaxCorrectedCubemapBase( IdType id, Root *root, SceneManager *sceneManager,
                                       const CompositorWorkspaceDef *probeWorkspaceDef,
-                                      bool automaticMode );
-        virtual ~ParallaxCorrectedCubemapBase();
+                                      bool                          automaticMode );
+        ~ParallaxCorrectedCubemapBase() override;
 
         virtual void _releaseManualHardwareResources();
         virtual void _restoreManualHardwareResources();
 
-        uint32 getIblTargetTextureFlags( PixelFormatGpu pixelFormat ) const;
+        uint32       getIblTargetTextureFlags( PixelFormatGpu pixelFormat ) const;
         static uint8 getIblNumMipmaps( uint32 width, uint32 height );
 
         /// Adds a cubemap probe.
-        CubemapProbe* createProbe(void);
-        virtual void destroyProbe( CubemapProbe *probe );
-        virtual void destroyAllProbes(void);
+        CubemapProbe *createProbe();
+        virtual void  destroyProbe( CubemapProbe *probe );
+        virtual void  destroyAllProbes();
 
         /// Destroys the Proxy Items. Useful if you need to call sceneManager->clearScene();
         /// The you MUST call this function before. i.e.
@@ -91,39 +97,39 @@ namespace Ogre
         ///     pcc->restoreFromClearScene();
         /// Updating ParallaxCorrectedCubemap without calling prepareForClearScene/restoreFromClearScene
         /// will result in a crash.
-        virtual void prepareForClearScene(void);
-        virtual void restoreFromClearScene(void);
+        virtual void prepareForClearScene();
+        virtual void restoreFromClearScene();
 
-        const CubemapProbeVec& getProbes(void) const        { return mProbes; }
+        const CubemapProbeVec &getProbes() const { return mProbes; }
 
-        bool getAutomaticMode(void) const               { return mAutomaticMode; }
-        bool getUseDpm2DArray(void) const               { return mUseDpm2DArray; }
+        bool getAutomaticMode() const { return mAutomaticMode; }
+        bool getUseDpm2DArray() const { return mUseDpm2DArray; }
 
-        TextureGpu* getBindTexture(void) const          { return mBindTexture; }
-        const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
-                                                        { return mSamplerblockTrilinear; }
+        TextureGpu             *getBindTexture() const { return mBindTexture; }
+        const HlmsSamplerblock *getBindTrilinearSamplerblock() { return mSamplerblockTrilinear; }
 
         /// By default the probes will be constructed when the user enters its vecinity.
         /// This can cause noticeable stalls. Use this function to regenerate them all
         /// at once (i.e. at loading time)
-        virtual void updateAllDirtyProbes(void) = 0;
+        virtual void updateAllDirtyProbes() = 0;
 
         virtual void _notifyPreparePassHash( const Matrix4 &viewMatrix );
-        virtual size_t getConstBufferSize(void);
-        virtual void fillConstBufferData( const Matrix4 &viewMatrix,
-                                          float * RESTRICT_ALIAS passBufferPtr ) const;
-        static void fillConstBufferData( const CubemapProbe &probe,
-                                         const Matrix4 &viewMatrix,
-                                         const Matrix3 &invViewMat3,
-                                         float * RESTRICT_ALIAS passBufferPtr );
+
+        virtual size_t getConstBufferSize();
+
+        virtual void fillConstBufferData( const Matrix4        &viewMatrix,
+                                          float *RESTRICT_ALIAS passBufferPtr ) const;
+        static void  fillConstBufferData( const CubemapProbe &probe, const Matrix4 &viewMatrix,
+                                          const Matrix3        &invViewMat3,
+                                          float *RESTRICT_ALIAS passBufferPtr );
 
         /// See mTmpRtt. Finds an RTT that is compatible to copy to baseParams.
         /// Creates one if none found.
-        virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
-        virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+        virtual TextureGpu *findTmpRtt( const TextureGpu *baseParams );
+        virtual void        releaseTmpRtt( const TextureGpu *tmpRtt );
 
-        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
-        virtual void releaseIbl( const TextureGpu *tmpRtt );
+        virtual TextureGpu *findIbl( const TextureGpu *baseParams );
+        virtual void        releaseIbl( const TextureGpu *tmpRtt );
 
         virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
 
@@ -133,33 +139,34 @@ namespace Ogre
         @return
             Texture. Can be nullptr if ran out of slots.
         */
-        virtual TextureGpu* _acquireTextureSlot( uint16 &outTexSlot );
-        virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
+        virtual TextureGpu *_acquireTextureSlot( uint16 &outTexSlot );
+        virtual void        _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
 
         virtual void _addManuallyActiveProbe( CubemapProbe *probe );
         virtual void _removeManuallyActiveProbe( CubemapProbe *probe );
 
-        void _setIsRendering( bool bIsRendering )       { mIsRendering = bIsRendering; }
+        void _setIsRendering( bool bIsRendering ) { mIsRendering = bIsRendering; }
         /// Inform whether we're currently updating a probe. Some Hlms / PCC combinations
         /// should not perform PCC while rendering, either because the RenderTarget is the same
         /// as the cubemap texture, or because other glitches may occur
-        bool isRendering(void) const                    { return mIsRendering; }
+        bool isRendering() const { return mIsRendering; }
 
-        void _setProbeRenderInProgress( CubemapProbe *probe )   { mProbeRenderInProgress = probe; }
+        void _setProbeRenderInProgress( CubemapProbe *probe ) { mProbeRenderInProgress = probe; }
 
-        SceneManager* getSceneManager(void) const;
-        const CompositorWorkspaceDef* getDefaultWorkspaceDef(void) const;
+        SceneManager *getSceneManager() const;
 
-        virtual void passPreExecute( CompositorPass *pass );
+        const CompositorWorkspaceDef *getDefaultWorkspaceDef() const;
 
-        //RenderSystem::Listener overloads
-        virtual void eventOccurred( const String& eventName, const NameValuePairList* parameters );
+        void passPreExecute( CompositorPass *pass ) override;
+
+        // RenderSystem::Listener overloads
+        void eventOccurred( const String &eventName, const NameValuePairList *parameters ) override;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

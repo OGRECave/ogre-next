@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,25 +30,21 @@ THE SOFTWARE.
 
 #include "Vct/OgreVctMaterial.h"
 
-#include "Vao/OgreVaoManager.h"
-#include "Vao/OgreConstBufferPacked.h"
-
-#include "OgreHlms.h"
-#include "OgreHlmsPbsDatablock.h"
-
-#include "OgreTextureGpuManager.h"
-#include "OgreTextureBox.h"
-#include "OgreSceneManager.h"
-
-#include "OgreMaterialManager.h"
-#include "OgreTechnique.h"
-#include "OgrePass.h"
-#include "OgreTextureUnitState.h"
-#include "OgreDepthBuffer.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
-
+#include "OgreDepthBuffer.h"
+#include "OgreHlms.h"
+#include "OgreHlmsPbsDatablock.h"
 #include "OgreLogManager.h"
+#include "OgreMaterialManager.h"
+#include "OgrePass.h"
+#include "OgreSceneManager.h"
+#include "OgreTechnique.h"
+#include "OgreTextureBox.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreTextureUnitState.h"
+#include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
@@ -79,21 +75,19 @@ namespace Ogre
         mDownsampleWorkspace2D( 0 )
     {
         MaterialPtr mat;
-        mat = MaterialManager::getSingleton().load(
-                  "Ogre/Copy/4xFP32_2DArray",
-                  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ).staticCast<Material>();
+        mat = std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+            "Ogre/Copy/4xFP32_2DArray", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ) );
         mDownsampleMatPass2DArray = mat->getTechnique( 0 )->getPass( 0 );
 
-        mat = MaterialManager::getSingleton().load(
-                  "Ogre/Copy/4xFP32",
-                  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ).staticCast<Material>();
+        mat = std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+            "Ogre/Copy/4xFP32", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ) );
         mDownsampleMatPass2D = mat->getTechnique( 0 )->getPass( 0 );
     }
     //-------------------------------------------------------------------------
     VctMaterial::~VctMaterial()
     {
         BucketVec::const_iterator itor = mBuckets.begin();
-        BucketVec::const_iterator end  = mBuckets.end();
+        BucketVec::const_iterator end = mBuckets.end();
 
         while( itor != end )
         {
@@ -119,12 +113,12 @@ namespace Ogre
         OGRE_ASSERT_MEDIUM( usedSlots < c_numDatablocksPerConstBuffer );
 
         ShaderVctMaterial shaderMaterial;
-        memset( &shaderMaterial, 0, sizeof(shaderMaterial) );
+        memset( &shaderMaterial, 0, sizeof( shaderMaterial ) );
 
         {
             ColourValue diffuseCol = datablock->getDiffuseColour();
             ColourValue emissiveCol = datablock->getEmissiveColour();
-            for( size_t i=0; i<4; ++i )
+            for( size_t i = 0; i < 4; ++i )
             {
                 shaderMaterial.bgDiffuse[i] = 1.0f;
                 shaderMaterial.diffuse[i] = diffuseCol[i];
@@ -136,13 +130,13 @@ namespace Ogre
 
         if( datablock->getCreator()->getType() == HLMS_PBS )
         {
-            OGRE_ASSERT_HIGH( dynamic_cast<HlmsPbsDatablock*>( datablock ) );
-            HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock*>( datablock );
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsPbsDatablock *>( datablock ) );
+            HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock *>( datablock );
 
             ColourValue bgDiffuse = pbsDatablock->getBackgroundDiffuse();
             float transparency = pbsDatablock->getTransparency();
 
-            for( size_t i=0; i<4; ++i )
+            for( size_t i = 0; i < 4; ++i )
                 shaderMaterial.bgDiffuse[i] = bgDiffuse[i];
             shaderMaterial.diffuse[3] = transparency;
             shaderMaterial.emissive[3] = 1.0f;
@@ -152,8 +146,8 @@ namespace Ogre
         TextureGpu *emissiveTex = datablock->getEmissiveTexture();
 
         DatablockConversionResult conversionResult;
-        conversionResult.slotIdx        = static_cast<uint32>( usedSlots );
-        conversionResult.constBuffer    = bucket.buffer;
+        conversionResult.slotIdx = static_cast<uint32>( usedSlots );
+        conversionResult.constBuffer = bucket.buffer;
         if( diffuseTex )
         {
             conversionResult.diffuseTexIdx = getPoolSliceIdxForTexture( diffuseTex );
@@ -178,7 +172,7 @@ namespace Ogre
     {
         TextureToPoolEntryMap::const_iterator itor = mTextureToPoolEntry.find( texture );
         if( itor != mTextureToPoolEntry.end() )
-            return itor->second; //We already copied that texture. We're done
+            return itor->second;  // We already copied that texture. We're done
 
         if( !mTexturePool || mNumUsedPoolSlices >= mTexturePool->getNumSlices() )
             resizeTexturePool();
@@ -188,7 +182,7 @@ namespace Ogre
         if( texture->getInternalTextureType() == TextureTypes::Type2DArray )
         {
             GpuProgramParametersSharedPtr psParams =
-                    mDownsampleMatPass2DArray->getFragmentProgramParameters();
+                mDownsampleMatPass2DArray->getFragmentProgramParameters();
             psParams->setNamedConstant( "sliceIdx",
                                         static_cast<float>( texture->getInternalSliceStart() ) );
             mDownsampleMatPass2DArray->getTextureUnitState( 0 )->setTexture( texture );
@@ -206,32 +200,24 @@ namespace Ogre
         dstBox.sliceStart = sliceIdx;
         dstBox.numSlices = 1u;
 
-        RenderSystem *renderSystem = mTextureGpuManager->getRenderSystem();
-        BarrierSolver &solver = renderSystem->getBarrierSolver();
-        ResourceTransitionArray &barrier = solver.getNewResourceTransitionsArrayTmp();
-        solver.resolveTransition( barrier, mDownsampleTex, ResourceLayout::CopySrc, ResourceAccess::Read,
-                                  0u );
-        renderSystem->executeResourceTransition( barrier );
-        mDownsampleTex->copyTo( mTexturePool, dstBox, 0u, mDownsampleTex->getEmptyBox( 0u ), 0u, true,
-                                ResourceAccess::Write );
+        mDownsampleTex->copyTo( mTexturePool, dstBox, 0u, mDownsampleTex->getEmptyBox( 0u ), 0u, true );
 
         mTextureToPoolEntry[texture] = sliceIdx;
         return sliceIdx;
     }
     //-------------------------------------------------------------------------
-    void VctMaterial::resizeTexturePool(void)
+    void VctMaterial::resizeTexturePool()
     {
         String texName = "VctMaterial" + StringConverter::toString( getId() ) + "/" +
                          StringConverter::toString( mNumUsedPoolSlices );
-        TextureGpu *newPool = mTextureGpuManager->createTexture( texName, texName,
-                                                                 GpuPageOutStrategy::Discard,
-                                                                 TextureFlags::ManualTexture,
-                                                                 TextureTypes::Type2DArray );
+        TextureGpu *newPool =
+            mTextureGpuManager->createTexture( texName, texName, GpuPageOutStrategy::Discard,
+                                               TextureFlags::ManualTexture, TextureTypes::Type2DArray );
         newPool->setResolution( 64u, 64u, 64u );
         newPool->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
         if( mTexturePool )
         {
-            //We use quadratic growth because AMD GCN cards already round up to the next power of 2.
+            // We use quadratic growth because AMD GCN cards already round up to the next power of 2.
             newPool->setResolution( 64u, 64u, mTexturePool->getDepthOrSlices() << 1u );
         }
         newPool->scheduleTransitionTo( GpuResidency::Resident );
@@ -246,25 +232,24 @@ namespace Ogre
         mTexturePool = newPool;
     }
     //-------------------------------------------------------------------------
-    VctMaterial::MaterialBucket* VctMaterial::findFreeBucketFor( HlmsDatablock *datablock )
+    VctMaterial::MaterialBucket *VctMaterial::findFreeBucketFor( HlmsDatablock *datablock )
     {
         const bool needsDiffuse = datablock->getDiffuseTexture() != 0;
         const bool needsEmissive = datablock->getEmissiveTexture() != 0;
 
         BucketVec::iterator itor = mBuckets.begin();
-        BucketVec::iterator end  = mBuckets.end();
+        BucketVec::iterator end = mBuckets.end();
 
         while( itor != end &&
-               (itor->datablocks.size() >= c_numDatablocksPerConstBuffer ||
-                itor->hasDiffuse != needsDiffuse ||
-                itor->hasEmissive != needsEmissive) )
+               ( itor->datablocks.size() >= c_numDatablocksPerConstBuffer ||
+                 itor->hasDiffuse != needsDiffuse || itor->hasEmissive != needsEmissive ) )
         {
             ++itor;
         }
 
         MaterialBucket *retVal = 0;
         if( itor != end )
-            retVal = &(*itor);
+            retVal = &( *itor );
 
         return retVal;
     }
@@ -275,23 +260,21 @@ namespace Ogre
             "VctMaterialDownsampleTex", "VctMaterialDownsampleTex", GpuPageOutStrategy::Discard,
             TextureFlags::RenderToTexture | TextureFlags::DiscardableContent, TextureTypes::Type2D );
         mDownsampleTex->setResolution( 64u, 64u );
-		mDownsampleTex->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
-		mDownsampleTex->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
+        mDownsampleTex->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+        mDownsampleTex->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
         mDownsampleTex->scheduleTransitionTo( GpuResidency::Resident );
 
         Camera *dummyCamera = sceneManager->createCamera( "VctMaterialCam" );
 
-        mDownsampleWorkspace2DArray =
-                mCompositorManager->addWorkspace(
-                    sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false,
-                    -1, 0, 0, Vector4::ZERO, 0x00, 0x01 );
-        mDownsampleWorkspace2D =
-                mCompositorManager->addWorkspace(
-                    sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false,
-                    -1, 0, 0, Vector4::ZERO, 0x00, 0x02 );
+        mDownsampleWorkspace2DArray = mCompositorManager->addWorkspace(
+            sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false, -1, 0, 0,
+            Vector4::ZERO, 0x00, 0x01 );
+        mDownsampleWorkspace2D = mCompositorManager->addWorkspace(
+            sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false, -1, 0, 0,
+            Vector4::ZERO, 0x00, 0x02 );
     }
     //-------------------------------------------------------------------------
-    void VctMaterial::destroyTempResources(void)
+    void VctMaterial::destroyTempResources()
     {
         mTextureGpuManager->destroyTexture( mDownsampleTex );
         mDownsampleTex = 0;
@@ -313,7 +296,7 @@ namespace Ogre
         DatablockConversionResult retVal;
 
         DatablockConversionResultMap::const_iterator itResult =
-                mDatablockConversionResults.find( datablock );
+            mDatablockConversionResults.find( datablock );
         if( itResult != mDatablockConversionResults.end() )
             retVal = itResult->second;
         else
@@ -321,11 +304,10 @@ namespace Ogre
             MaterialBucket *bucket = findFreeBucketFor( datablock );
             if( !bucket )
             {
-                //Create a new bucket
+                // Create a new bucket
                 MaterialBucket newBucket;
-                newBucket.buffer = mVaoManager->createConstBuffer( c_numDatablocksPerConstBuffer *
-                                                                   sizeof(ShaderVctMaterial),
-                                                                   BT_DEFAULT, 0, false );
+                newBucket.buffer = mVaoManager->createConstBuffer(
+                    c_numDatablocksPerConstBuffer * sizeof( ShaderVctMaterial ), BT_DEFAULT, 0, false );
                 newBucket.hasDiffuse = datablock->getDiffuseTexture() != 0;
                 newBucket.hasEmissive = datablock->getEmissiveTexture() != 0;
                 mBuckets.push_back( newBucket );
@@ -337,4 +319,4 @@ namespace Ogre
 
         return retVal;
     }
-}
+}  // namespace Ogre

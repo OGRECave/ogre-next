@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -65,18 +65,18 @@ namespace Ogre
         In short, it may be possible, but there are several issues to workaround,
         hence it is just easier to render the information we need
     */
-    class _OgreHlmsPbsExport IrradianceFieldRaster : public UtilityAlloc
+    class _OgreHlmsPbsExport IrradianceFieldRaster : public OgreAllocatedObj
     {
         IrradianceField *mCreator;
 
-        TextureGpu *mCubemap;
-        TextureGpu *mDepthCubemap;
+        TextureGpu          *mCubemap;
+        TextureGpu          *mDepthCubemap;
         CompositorWorkspace *mRenderWorkspace;
         CompositorWorkspace *mConvertToIfdWorkspace;
         CompositorWorkspace *mIfdIntegrationWorkspace;
 
-        HlmsComputeJob *mConvertToIfdJob;
-        ShaderParams *mShaderParamsConvertToIfd;
+        HlmsComputeJob      *mConvertToIfdJob;
+        ShaderParams        *mShaderParamsConvertToIfd;
         ShaderParams::Param *mProbeIdxParam;
         ShaderParams::Param *mProjectionABParam;
         ShaderParams::Param *mNumProbesParam;
@@ -89,8 +89,8 @@ namespace Ogre
         IrradianceFieldRaster( IrradianceField *creator );
         virtual ~IrradianceFieldRaster();
 
-        void createWorkspace( void );
-        void destroyWorkspace( void );
+        void createWorkspace();
+        void destroyWorkspace();
 
         void renderProbes( uint32 probesPerFrame );
     };

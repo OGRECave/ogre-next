@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,38 +28,37 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "OgrePrerequisites.h"
-
 #include "OgreCommon.h"
+
 #include "OgreString.h"
 
+#include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgreLwString.h"
 #include "OgreStringConverter.h"
 
-#include "OgreLwString.h"
-
-namespace Ogre 
+namespace Ogre
 {
-    int findCommandLineOpts(int numargs, char** argv, UnaryOptionList& unaryOptList, 
-        BinaryOptionList& binOptList)
+    int findCommandLineOpts( int numargs, char **argv, UnaryOptionList &unaryOptList,
+                             BinaryOptionList &binOptList )
     {
         int startIndex = 1;
-        for (int i = 1; i < numargs; ++i)
+        for( int i = 1; i < numargs; ++i )
         {
-            String tmp(argv[i]);
-            if (StringUtil::startsWith(tmp, "-"))
+            String tmp( argv[i] );
+            if( StringUtil::startsWith( tmp, "-" ) )
             {
                 int indexIncrement = 0;
-                UnaryOptionList::iterator ui = unaryOptList.find(argv[i]);
-                if(ui != unaryOptList.end())
+                UnaryOptionList::iterator ui = unaryOptList.find( argv[i] );
+                if( ui != unaryOptList.end() )
                 {
                     ui->second = true;
                     indexIncrement = 1;
                 }
-                BinaryOptionList::iterator bi = binOptList.find(argv[i]);
-                if(bi != binOptList.end())
+                BinaryOptionList::iterator bi = binOptList.find( argv[i] );
+                if( bi != binOptList.end() )
                 {
-                    bi->second = argv[i+1];
+                    bi->second = argv[i + 1];
                     indexIncrement = 2;
                     ++i;
                 }
@@ -69,9 +68,8 @@ namespace Ogre
                 if( !indexIncrement )
                 {
                     // Invalid option
-                    LogManager::getSingleton().logMessage("Invalid option " + tmp, LML_CRITICAL);
+                    LogManager::getSingleton().logMessage( "Invalid option " + tmp, LML_CRITICAL );
                 }
-
             }
         }
         return startIndex;
@@ -94,10 +92,7 @@ namespace Ogre
         mPattern = pattern;
     }
     //-----------------------------------------------------------------------------------
-    bool SampleDescription::isMsaa( void ) const
-    {
-        return mCoverageSamples == 0u;
-    }
+    bool SampleDescription::isMsaa() const { return mCoverageSamples == 0u; }
     //-----------------------------------------------------------------------------------
     void SampleDescription::setCsaa( uint8 samples, bool bQuality )
     {
@@ -121,7 +116,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void SampleDescription::parseString( const String &fsaaSetting )
     {
-        const uint8 samples = std::max( 1u, StringConverter::parseUnsignedInt( fsaaSetting ) );
+        const uint8 samples =
+            static_cast<uint8>( std::max( 1u, StringConverter::parseUnsignedInt( fsaaSetting ) ) );
         const bool csaa = fsaaSetting.find( "CSAA" ) != String::npos;
         const bool eqaa = fsaaSetting.find( "EQAA" ) != String::npos;
 
@@ -135,27 +131,26 @@ namespace Ogre
         else if( eqaa )
         {
             // "2f4x EQAA", "4f8x EQAA", "4f16x EQAA", "8f16x EQAA", but not Dx9 only "2f8x EQAA"
-            if( fsaaSetting.find("4f16x") != String::npos )
+            if( fsaaSetting.find( "4f16x" ) != String::npos )
                 setEqaa( 4, 16 );
             else
                 setEqaa( samples, static_cast<uint8>( samples << 1u ) );
         }
         else
-            setMsaa( samples ); // "Nx MSAA", also "Nx", "N"
+            setMsaa( samples );  // "Nx MSAA", also "Nx", "N"
     }
     //-----------------------------------------------------------------------------------
-    bool SampleDescription::isCsaa( void ) const
+    bool SampleDescription::isCsaa() const
     {
-        // {4,8} {8,8} {4,16} {8,16} 
-        return ( mCoverageSamples == 8u || mCoverageSamples == 16u )
-            && ( mColourSamples == 4u || mColourSamples == 8u );
+        // {4,8} {8,8} {4,16} {8,16}
+        return ( mCoverageSamples == 8u || mCoverageSamples == 16u ) &&
+               ( mColourSamples == 4u || mColourSamples == 8u );
     }
     //-----------------------------------------------------------------------------------
-    bool SampleDescription::isCsaaQuality( void ) const
+    bool SampleDescription::isCsaaQuality() const
     {
-        // {8,8} {8,16}, but not the {4,8} {4,16} 
-        return ( mCoverageSamples == 8u || mCoverageSamples == 16u )
-            && mColourSamples == 8u;
+        // {8,8} {8,16}, but not the {4,8} {4,16}
+        return ( mCoverageSamples == 8u || mCoverageSamples == 16u ) && mColourSamples == 8u;
     }
     //-----------------------------------------------------------------------------------
     void SampleDescription::getFsaaDesc( LwString &outFsaaSetting ) const

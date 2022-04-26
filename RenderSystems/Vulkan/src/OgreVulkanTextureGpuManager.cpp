@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -326,7 +326,7 @@ namespace Ogre
                                                 TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer( void )
+    TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer()
     {
         return OGRE_NEW VulkanTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
                                                       "RenderWindow DepthBuffer",          //
@@ -493,11 +493,24 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpuManager::checkSupport( PixelFormatGpu format, uint32 textureFlags ) const
+    bool VulkanTextureGpuManager::checkSupport( PixelFormatGpu format,
+                                                TextureTypes::TextureTypes textureType,
+                                                uint32 textureFlags ) const
     {
         OGRE_ASSERT_LOW(
             textureFlags != TextureFlags::NotTexture &&
             "Invalid textureFlags combination. Asking to check if format is supported to do nothing" );
+
+#ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
+        if( Workarounds::mBad3DBlit && ( textureFlags & TextureFlags::AllowAutomipmaps ) &&
+            textureType == TextureTypes::Type3D )
+        {
+            // Mipmaps are broken for 3D textures
+            return false;
+        }
+#else
+        OGRE_UNUSED( textureType );
+#endif
 
         const VkFormat vkFormat = VulkanMappings::get( format );
 

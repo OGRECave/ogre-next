@@ -29,30 +29,30 @@ struct CubemapProbe
 
 	The w component contains the distance from pos to intersection walking across reflDir
 */
-INLINE float4 localCorrect( float3 reflDir, float3 posLS, CubemapProbe probe )
+INLINE midf4 localCorrect( midf3 reflDir, midf3 posLS, CubemapProbe probe )
 {
-	float3 probeShapeHalfSize	= probe.halfSize.xyz;
-	float3x3 viewSpaceToProbeLocal = buildFloat3x3( probe.row0_centerX.xyz,
-													probe.row1_centerY.xyz,
-													probe.row2_centerZ.xyz );
-	float3 reflDirLS = mul( reflDir, viewSpaceToProbeLocal );
+	midf3 probeShapeHalfSize	= midf3_c( probe.halfSize.xyz );
+	midf3x3 viewSpaceToProbeLocal = buildMidf3x3( probe.row0_centerX.xyz,
+												  probe.row1_centerY.xyz,
+												  probe.row2_centerZ.xyz );
+	midf3 reflDirLS = mul( reflDir, viewSpaceToProbeLocal );
 
 	//Find the ray intersection with box plane
-	float3 invReflDirLS = float3( 1.0, 1.0, 1.0 ) / reflDirLS;
-	float3 intersectAtMinPlane = ( -probeShapeHalfSize - posLS ) * invReflDirLS;
-	float3 intersectAtMaxPlane = (  probeShapeHalfSize - posLS ) * invReflDirLS;
+	midf3 invReflDirLS = midf3_c( 1.0, 1.0, 1.0 ) / reflDirLS;
+	midf3 intersectAtMinPlane = ( -probeShapeHalfSize - posLS ) * invReflDirLS;
+	midf3 intersectAtMaxPlane = (  probeShapeHalfSize - posLS ) * invReflDirLS;
 	//Get the largest intersection values (we are not intersted in negative values)
-	float3 largestIntersect = max( intersectAtMaxPlane.xyz, intersectAtMinPlane.xyz );
+	midf3 largestIntersect = max( intersectAtMaxPlane.xyz, intersectAtMinPlane.xyz );
 	//Get the closest of all solutions
-	float distance = min( min( largestIntersect.x, largestIntersect.y ), largestIntersect.z );
+	midf distance = min( min( largestIntersect.x, largestIntersect.y ), largestIntersect.z );
 	//Get the intersection position
-	float3 intersectPositionLS = posLS.xyz + reflDirLS.xyz * distance;
+	midf3 intersectPositionLS = posLS.xyz + reflDirLS.xyz * distance;
 	//Get corrected vector
-	float3 localCorrectedVec = intersectPositionLS.xyz - probe.cubemapPosLS.xyz;
+	midf3 localCorrectedVec = intersectPositionLS.xyz - midf3_c( probe.cubemapPosLS.xyz );
 
 	//Make it left-handed.
 	localCorrectedVec.z = -localCorrectedVec.z;
-	return float4( localCorrectedVec, distance );
+	return midf4_c( localCorrectedVec, distance );
 }
 
 /** Converts a position from view space to probe's local space.
@@ -93,20 +93,20 @@ INLINE float4 localCorrect( float3 reflDir, float3 posLS, CubemapProbe probe )
 /// 1 means being at the center of the probe.
 /// 0 means being at the edge of the probe
 /// <0 means position is outside the probe.
-@property( syntax == metal )inline @end float getProbeFade( float3 posLS, CubemapProbe probe )
+@property( syntax == metal )inline @end midf getProbeFade( midf3 posLS, CubemapProbe probe )
 {
-	float3 vDiff = ( probe.halfSize.xyz - abs( posLS.xyz ) ) / probe.halfSize.xyz;
+	midf3 vDiff = ( midf3_c( probe.halfSize.xyz ) - abs( posLS.xyz ) ) / midf3_c( probe.halfSize.xyz );
 	return min( min( vDiff.x, vDiff.y ), vDiff.z );
 }
 
-INLINE float getProbeNDF( float3 posLS, float3 probeToAreaCenterOffsetLS,
-						  float3 innerRange, float3 outerRange )
+INLINE midf getProbeNDF( midf3 posLS, midf3 probeToAreaCenterOffsetLS,
+						 midf3 innerRange, midf3 outerRange )
 {
-	float3 areaPosLS = posLS.xyz - probeToAreaCenterOffsetLS.xyz;
-	//float3 areaPosLS = posLS.xyz - float3( 0, 0, -5 );
-	float3 dist = abs( areaPosLS.xyz );
+	midf3 areaPosLS = posLS.xyz - probeToAreaCenterOffsetLS.xyz;
+	//midf3 areaPosLS = posLS.xyz - midf3_c( 0, 0, -5 );
+	midf3 dist = abs( areaPosLS.xyz );
 	//1e-6f avoids division by zero.
-	float3 ndf = (dist - innerRange) / (outerRange - innerRange + 1e-6f);
+	midf3 ndf = (dist - innerRange) / (outerRange - innerRange + _h( 1e-6f ));
 
 	return max3( ndf.x, ndf.y, ndf.z );
 }

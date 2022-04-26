@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -30,11 +30,12 @@ THE SOFTWARE.
 #define _Ogre_GL3PlusConstBufferPacked_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "Vao/OgreConstBufferPacked.h"
 
 namespace Ogre
 {
-    class _OgreGL3PlusExport GL3PlusConstBufferPacked : public ConstBufferPacked
+    class _OgreGL3PlusExport GL3PlusConstBufferPacked final : public ConstBufferPacked
     {
         inline void bindBuffer( uint16 slot );
 
@@ -43,15 +44,15 @@ namespace Ogre
                                   uint32 bytesPerElement, uint32 numElementsPadding,
                                   BufferType bufferType, void *initialData, bool keepAsShadow,
                                   VaoManager *vaoManager, BufferInterface *bufferInterface );
-        virtual ~GL3PlusConstBufferPacked();
+        ~GL3PlusConstBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot );
-        virtual void bindBufferPS( uint16 slot );
-        virtual void bindBufferGS( uint16 slot );
-        virtual void bindBufferHS( uint16 slot );
-        virtual void bindBufferDS( uint16 slot );
-        virtual void bindBufferCS( uint16 slot );
+        void bindBufferVS( uint16 slot ) override;
+        void bindBufferPS( uint16 slot ) override;
+        void bindBufferGS( uint16 slot ) override;
+        void bindBufferHS( uint16 slot ) override;
+        void bindBufferDS( uint16 slot ) override;
+        void bindBufferCS( uint16 slot ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

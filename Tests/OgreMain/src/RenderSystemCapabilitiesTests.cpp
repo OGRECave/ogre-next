@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -687,7 +687,7 @@ void RenderSystemCapabilitiesTests::testWriteAndReadComplexCapabilities()
     CPPUNIT_ASSERT_EQUAL(caps.getDriverVersion().release, caps2.getDriverVersion().release);
     CPPUNIT_ASSERT_EQUAL(0, caps2.getDriverVersion().build);
 
-    dataStreamPtr.setNull();
+    dataStreamPtr.reset();
 }
 //--------------------------------------------------------------------------
 

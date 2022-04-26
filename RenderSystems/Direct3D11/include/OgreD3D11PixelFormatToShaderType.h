@@ -30,6 +30,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #define _OgreD3D11PixelFormatToShaderType_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgrePixelFormatGpu.h"
 
 namespace Ogre
@@ -66,15 +67,16 @@ namespace Ogre
         };
     }
 
-    class _OgreD3D11Export D3D11PixelFormatToShaderType : public PixelFormatToShaderType
+    class _OgreD3D11Export D3D11PixelFormatToShaderType final : public PixelFormatToShaderType
     {
         static PixelFormatDataTypes::PixelFormatDataTypes getPixelFormatDataType(
-                PixelFormatGpu pixelFormat );
+            PixelFormatGpu pixelFormat );
+
     public:
-        virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const;
-        virtual const char* getDataType( PixelFormatGpu pixelFormat, uint32 textureType,
-                                         bool isMsaa, ResourceAccess::ResourceAccess access ) const;
+        const char *getPixelFormatType( PixelFormatGpu pixelFormat ) const override;
+        const char *getDataType( PixelFormatGpu pixelFormat, uint32 textureType, bool isMsaa,
+                                 ResourceAccess::ResourceAccess access ) const override;
     };
-}
+}  // namespace Ogre
 
 #endif

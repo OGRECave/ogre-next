@@ -1,7 +1,7 @@
 
 /*
  * -----------------------------------------------------------------------------
- * This source file is part of OGRE
+ * This source file is part of OGRE-Next
  * (Object-oriented Graphics Rendering Engine)
  * For the latest info, see http://www.ogre3d.org/
  *
@@ -31,20 +31,18 @@
 #define _LodCollapseCostCurvature_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodCollapseCost.h"
 #include "OgreLodData.h"
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodCollapseCostCurvature :
-        public LodCollapseCost
+    class _OgreLodExport LodCollapseCostCurvature : public LodCollapseCost
     {
     public:
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::Vertex* src, LodData::Edge* dstEdge);
+        Real computeEdgeCollapseCost( LodData *data, LodData::VertexI srci,
+                                      LodData::Edge *dstEdge ) override;
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

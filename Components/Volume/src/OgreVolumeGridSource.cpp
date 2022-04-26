@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -84,7 +84,7 @@ namespace Volume {
 
     //-----------------------------------------------------------------------
 
-    GridSource::~GridSource(void)
+    GridSource::~GridSource()
     {
     }
     
@@ -198,21 +198,21 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
     
-    size_t GridSource::getWidth(void) const
+    size_t GridSource::getWidth() const
     {
         return mWidth;
     }
     
     //-----------------------------------------------------------------------
     
-    size_t GridSource::getHeight(void) const
+    size_t GridSource::getHeight() const
     {
         return mHeight;
     }
     
     //-----------------------------------------------------------------------
     
-    size_t GridSource::getDepth(void) const
+    size_t GridSource::getDepth() const
     {
         return mDepth;
     }
@@ -261,7 +261,7 @@ namespace Volume {
  
     //-----------------------------------------------------------------------
 
-    Real GridSource::getVolumeSpaceToWorldSpaceFactor(void) const
+    Real GridSource::getVolumeSpaceToWorldSpaceFactor() const
     {
         return mVolumeSpaceToWorldSpaceFactor;
     }

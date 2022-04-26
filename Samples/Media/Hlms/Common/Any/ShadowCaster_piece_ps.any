@@ -37,7 +37,7 @@
 			outDepth = (distanceToCamera - passBuf.depthRange.x) * passBuf.depthRange.y;
 		@end
 
-		@property( !hlms_no_reverse_depth )
+		@property( !hlms_no_reverse_depth && !exponential_shadow_maps )
 			outDepth = 1.0 - outDepth;
 		@end
 	@end

@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -32,7 +32,7 @@ clear_if_changed(ZZip_PREFIX_PATH
   ZZip_INCLUDE_DIR
 )
 
-set(ZZip_LIBRARY_NAMES zziplib zzip)
+set(ZZip_LIBRARY_NAMES zziplib zzip zzip-0)
 get_debug_names(ZZip_LIBRARY_NAMES)
 
 use_pkgconfig(ZZip_PKGC zziplib)

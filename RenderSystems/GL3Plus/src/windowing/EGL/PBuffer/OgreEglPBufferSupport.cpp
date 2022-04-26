@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -143,7 +143,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     EglPBufferSupport::~EglPBufferSupport() {}
     //-------------------------------------------------------------------------
-    void EglPBufferSupport::addConfig( void )
+    void EglPBufferSupport::addConfig()
     {
         ConfigOption optDevices;
         ConfigOption optFSAA;
@@ -183,7 +183,7 @@ namespace Ogre
         refreshConfig();
     }
     //-------------------------------------------------------------------------
-    void EglPBufferSupport::refreshConfig( void )
+    void EglPBufferSupport::refreshConfig()
     {
         ConfigOptionMap::iterator optFSAA = mOptions.find( "FSAA" );
 
@@ -225,7 +225,7 @@ namespace Ogre
             refreshConfig();
     }
     //-------------------------------------------------------------------------
-    String EglPBufferSupport::validateConfig( void )
+    String EglPBufferSupport::validateConfig()
     {
         // TODO
         return BLANKSTRING;
@@ -233,7 +233,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     const char *EglPBufferSupport::getPriorityConfigOption( size_t ) const { return "Device"; }
     //-------------------------------------------------------------------------
-    size_t EglPBufferSupport::getNumPriorityConfigOptions( void ) const { return 1u; }
+    size_t EglPBufferSupport::getNumPriorityConfigOptions() const { return 1u; }
     //-------------------------------------------------------------------------
     Window *EglPBufferSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
                                              const String &windowTitle )
@@ -428,7 +428,7 @@ namespace Ogre
         deviceData.eglDisplay = 0;
     }
     //-------------------------------------------------------------------------
-    const EglPBufferSupport::DeviceData *EglPBufferSupport::getCurrentDevice( void )
+    const EglPBufferSupport::DeviceData *EglPBufferSupport::getCurrentDevice()
     {
         const size_t selectedDeviceIdx = getSelectedDeviceIdx();
         if( !mDeviceData[selectedDeviceIdx].eglDisplay )
@@ -436,7 +436,7 @@ namespace Ogre
         return &mDeviceData[selectedDeviceIdx];
     }
     //-------------------------------------------------------------------------
-    EGLDisplay EglPBufferSupport::getGLDisplay( void )
+    EGLDisplay EglPBufferSupport::getGLDisplay()
     {
         const size_t selectedDeviceIdx = getSelectedDeviceIdx();
         if( mDeviceData[selectedDeviceIdx].eglDisplay )
@@ -445,7 +445,7 @@ namespace Ogre
         return mDeviceData[selectedDeviceIdx].eglDisplay;
     }
     //-------------------------------------------------------------------------
-    uint32 EglPBufferSupport::getSelectedDeviceIdx( void ) const
+    uint32 EglPBufferSupport::getSelectedDeviceIdx() const
     {
         uint32 deviceIdx = 0u;
 

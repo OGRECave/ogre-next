@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -43,7 +43,7 @@ namespace Ogre
         mVboPoolIdx( vboPoolIdx ),
         mVboName( vboName ),
         mMappedPtr( 0 ),
-        mUnmapTicket( (size_t)-1 ),
+        mUnmapTicket( std::numeric_limits<size_t>::max() ),
         mDynamicBuffer( dynamicBuffer )
     {
     }
@@ -138,7 +138,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VulkanBufferInterface::advanceFrame( void ) { advanceFrame( true ); }
+    void VulkanBufferInterface::advanceFrame() { advanceFrame( true ); }
     //-----------------------------------------------------------------------------------
     size_t VulkanBufferInterface::advanceFrame( bool bAdvanceFrame )
     {
@@ -157,7 +157,7 @@ namespace Ogre
         return dynamicCurrentFrame;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanBufferInterface::regressFrame( void )
+    void VulkanBufferInterface::regressFrame()
     {
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
@@ -176,8 +176,10 @@ namespace Ogre
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mBuffer->mVaoManager );
         VulkanDevice *device = vaoManager->getDevice();
 
-        device->mGraphicsQueue.getCopyEncoder( this->getBufferPacked(), 0, true );
-        device->mGraphicsQueue.getCopyEncoder( dstBuffer->getBufferPacked(), 0, false );
+        device->mGraphicsQueue.getCopyEncoder( this->getBufferPacked(), 0, true,
+                                               CopyEncTransitionMode::Auto );
+        device->mGraphicsQueue.getCopyEncoder( dstBuffer->getBufferPacked(), 0, false,
+                                               CopyEncTransitionMode::Auto );
 
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( dstBuffer ) );
         VulkanBufferInterface *dstBufferVk = static_cast<VulkanBufferInterface *>( dstBuffer );

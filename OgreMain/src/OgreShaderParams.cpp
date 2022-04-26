@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,27 +29,23 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreShaderParams.h"
+
 #include "OgreGpuProgram.h"
 #include "OgreLogManager.h"
-
+#include "OgreMatrix4.h"
 #include "OgreVector2.h"
 #include "OgreVector3.h"
-#include "OgreMatrix4.h"
 
 namespace Ogre
 {
-    ShaderParams::ShaderParams() :
-        mSilenceMissingParameterWarnings( false ),
-        mUpdateCounter( 0 )
-    {
-    }
+    ShaderParams::ShaderParams() : mSilenceMissingParameterWarnings( false ), mUpdateCounter( 0 ) {}
     //-----------------------------------------------------------------------------------
     void ShaderParams::updateParameters( GpuProgramParametersSharedPtr params, bool bForce )
     {
         ParamVec::iterator itor = mParams.begin();
-        ParamVec::iterator end  = mParams.end();
+        ParamVec::iterator endt = mParams.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->isDirty || bForce )
             {
@@ -58,38 +54,62 @@ namespace Ogre
                 {
                     if( !itor->isAutomatic )
                     {
-                        if( itor->mp.elementType == ElementInt )
+                        if( !itor->isEx )
                         {
-                            params->setNamedConstant( itor->name,
-                                                      reinterpret_cast<const int*>(itor->mp.dataBytes),
-                                                      itor->mp.dataSizeBytes / sizeof(int), 1 );
+                            switch( itor->mp.elementType )
+                            {
+                            case ElementInt:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const int *>( itor->mp.dataBytes ),
+                                    itor->mp.dataSizeBytes / sizeof( int ), 1 );
+                                break;
+                            case ElementUInt:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const uint *>( itor->mp.dataBytes ),
+                                    itor->mp.dataSizeBytes / sizeof( uint ), 1 );
+                                break;
+                            case ElementFloat:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const float *>( itor->mp.dataBytes ),
+                                    itor->mp.dataSizeBytes / sizeof( float ), 1 );
+                                break;
+                            }
                         }
-                        else if( itor->mp.elementType == ElementUInt )
+                        else
                         {
-                            params->setNamedConstant( itor->name,
-                                                      reinterpret_cast<const uint*>(itor->mp.dataBytes),
-                                                      itor->mp.dataSizeBytes / sizeof(uint), 1 );
-                        }
-                        else if( itor->mp.elementType == ElementFloat )
-                        {
-                            params->setNamedConstant( itor->name,
-                                                      reinterpret_cast<const float*>(itor->mp.dataBytes),
-                                                      itor->mp.dataSizeBytes / sizeof(float), 1 );
+                            switch( itor->mpEx.elementType )
+                            {
+                            case ElementInt:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const int *>( itor->mpEx.dataBytes ),
+                                    itor->mpEx.dataSizeBytes / sizeof( int ), 1 );
+                                break;
+                            case ElementUInt:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const uint *>( itor->mpEx.dataBytes ),
+                                    itor->mpEx.dataSizeBytes / sizeof( uint ), 1 );
+                                break;
+                            case ElementFloat:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const float *>( itor->mpEx.dataBytes ),
+                                    itor->mpEx.dataSizeBytes / sizeof( float ), 1 );
+                                break;
+                            }
                         }
                     }
                     else
                     {
                         if( itor->ap.extraParamType != ElementFloat )
                         {
-                            params->setNamedAutoConstant( itor->name, itor->ap.acType,
-                                                          static_cast<size_t>(
-                                                              itor->ap.extraParamValue) );
+                            params->setNamedAutoConstant(
+                                itor->name, itor->ap.acType,
+                                static_cast<size_t>( itor->ap.extraParamValue ) );
                         }
                         else
                         {
-                            params->setNamedAutoConstantReal( itor->name, itor->ap.acType,
-                                                              static_cast<Real>(
-                                                                  itor->ap.extraParamValue) );
+                            params->setNamedAutoConstantReal(
+                                itor->name, itor->ap.acType,
+                                static_cast<Real>( itor->ap.extraParamValue ) );
                         }
                     }
                 }
@@ -108,18 +128,18 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    ShaderParams::Param* ShaderParams::findParameter( const String &name )
+    ShaderParams::Param *ShaderParams::findParameter( const String &name )
     {
         ShaderParams::Param *retVal = 0;
 
         ParamVec::iterator itor = mParams.begin();
-        ParamVec::iterator end  = mParams.end();
+        ParamVec::iterator endt = mParams.end();
 
-        while( itor != end && itor->name != name )
+        while( itor != endt && itor->name != name )
             ++itor;
 
-        if( itor != end )
-            retVal = &(*itor);
+        if( itor != endt )
+            retVal = &( *itor );
 
         return retVal;
     }
@@ -129,12 +149,12 @@ namespace Ogre
         bool wasRemoved = false;
 
         ParamVec::iterator itor = mParams.begin();
-        ParamVec::iterator end  = mParams.end();
+        ParamVec::iterator endt = mParams.end();
 
-        while( itor != end && itor->name != name )
+        while( itor != endt && itor->name != name )
             ++itor;
 
-        if( itor != end )
+        if( itor != endt )
         {
             efficientVectorRemove( mParams, itor );
             wasRemoved = true;
@@ -147,82 +167,88 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ShaderParams::Param::setManualValue( const Vector2 &value )
     {
-        this->isAutomatic   = false;
-        this->isDirty       = true;
+        this->isAutomatic = false;
+        this->isEx = false;
+        this->isDirty = true;
         mp.elementType = ElementFloat;
-        mp.dataSizeBytes = sizeof(float) * 2u;
+        mp.dataSizeBytes = sizeof( float ) * 2u;
 #if !OGRE_DOUBLE_PRECISION
-        memcpy( mp.dataBytes, value.ptr(), sizeof(float) * 2u );
+        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 2u );
 #else
-        for( int i=0; i<2; ++i )
-            reinterpret_cast<float*>(mp.dataBytes)[i] = static_cast<float>( value[i] );
+        for( int i = 0; i < 2; ++i )
+            reinterpret_cast<float *>( mp.dataBytes )[i] = static_cast<float>( value[i] );
 #endif
     }
     //-----------------------------------------------------------------------------------
     void ShaderParams::Param::setManualValue( const Vector3 &value )
     {
-        this->isAutomatic   = false;
-        this->isDirty       = true;
+        this->isAutomatic = false;
+        this->isEx = false;
+        this->isDirty = true;
         mp.elementType = ElementFloat;
-        mp.dataSizeBytes = sizeof(float) * 3u;
+        mp.dataSizeBytes = sizeof( float ) * 3u;
 #if !OGRE_DOUBLE_PRECISION
-        memcpy( mp.dataBytes, value.ptr(), sizeof(float) * 3u );
+        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 3u );
 #else
-        for( int i=0; i<3; ++i )
-            reinterpret_cast<float*>(mp.dataBytes)[i] = static_cast<float>( value[i] );
+        for( int i = 0; i < 3; ++i )
+            reinterpret_cast<float *>( mp.dataBytes )[i] = static_cast<float>( value[i] );
 #endif
     }
     //-----------------------------------------------------------------------------------
     void ShaderParams::Param::setManualValue( const Vector4 &value )
     {
-        this->isAutomatic   = false;
-        this->isDirty       = true;
+        this->isAutomatic = false;
+        this->isEx = false;
+        this->isDirty = true;
         mp.elementType = ElementFloat;
-        mp.dataSizeBytes = sizeof(float) * 4u;
+        mp.dataSizeBytes = sizeof( float ) * 4u;
 #if !OGRE_DOUBLE_PRECISION
-        memcpy( mp.dataBytes, value.ptr(), sizeof(float) * 4u );
+        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 4u );
 #else
-        for( int i=0; i<4; ++i )
-            reinterpret_cast<float*>(mp.dataBytes)[i] = static_cast<float>( value[i] );
+        for( int i = 0; i < 4; ++i )
+            reinterpret_cast<float *>( mp.dataBytes )[i] = static_cast<float>( value[i] );
 #endif
     }
     //-----------------------------------------------------------------------------------
     void ShaderParams::Param::setManualValue( const Matrix3 &_value )
     {
-        this->isAutomatic   = false;
-        this->isDirty       = true;
+        this->isAutomatic = false;
+        this->isEx = false;
+        this->isDirty = true;
         mp.elementType = ElementFloat;
-        mp.dataSizeBytes = sizeof(float) * 9u;
-        const Real * RESTRICT_ALIAS value = reinterpret_cast<const Real * RESTRICT_ALIAS>( &_value );
-        float * RESTRICT_ALIAS dstValue = reinterpret_cast<float*RESTRICT_ALIAS>( mp.dataBytes );
+        mp.dataSizeBytes = sizeof( float ) * 9u;
+        const Real *RESTRICT_ALIAS value = reinterpret_cast<const Real * RESTRICT_ALIAS>( &_value );
+        float *RESTRICT_ALIAS dstValue = reinterpret_cast<float * RESTRICT_ALIAS>( mp.dataBytes );
 
-        for( int i=0; i<9; ++i )
+        for( int i = 0; i < 9; ++i )
             dstValue[i] = static_cast<float>( value[i] );
     }
     //-----------------------------------------------------------------------------------
     void ShaderParams::Param::setManualValue( const Matrix4 &_value )
     {
-        this->isAutomatic   = false;
-        this->isDirty       = true;
+        this->isAutomatic = false;
+        this->isEx = false;
+        this->isDirty = true;
         mp.elementType = ElementFloat;
-        mp.dataSizeBytes = sizeof(float) * 16u;
+        mp.dataSizeBytes = sizeof( float ) * 16u;
 
-        const Real * RESTRICT_ALIAS value = reinterpret_cast<const Real * RESTRICT_ALIAS>( &_value );
+        const Real *RESTRICT_ALIAS value = reinterpret_cast<const Real * RESTRICT_ALIAS>( &_value );
 #if !OGRE_DOUBLE_PRECISION
-        memcpy( mp.dataBytes, value, sizeof(float) * 16u );
+        memcpy( mp.dataBytes, value, sizeof( float ) * 16u );
 #else
-        for( int i=0; i<16; ++i )
-            reinterpret_cast<float*>(mp.dataBytes)[i] = static_cast<float>( value[i] );
+        for( int i = 0; i < 16; ++i )
+            reinterpret_cast<float *>( mp.dataBytes )[i] = static_cast<float>( value[i] );
 #endif
     }
     //-----------------------------------------------------------------------------------
     template <typename T>
     void ShaderParams::Param::setManualValue( T value, uint32 numValues, ElementType elementType )
     {
-        this->isAutomatic   = false;
-        this->isDirty       = true;
+        this->isAutomatic = false;
+        this->isEx = false;
+        this->isDirty = true;
         mp.elementType = elementType;
-        mp.dataSizeBytes = std::min( 4u * numValues, 64u ); //Don't overflow
+        mp.dataSizeBytes = static_cast<uint8>( std::min( 4u * numValues, 64u ) );  // Don't overflow
         memcpy( mp.dataBytes, value, mp.dataSizeBytes );
     }
     //-----------------------------------------------------------------------------------
@@ -236,10 +262,7 @@ namespace Ogre
         setManualValue( value, numValues, ElementFloat );
     }
     //-----------------------------------------------------------------------------------
-    void ShaderParams::Param::setManualValue( int32 value )
-    {
-        setManualValue( &value, 1u, ElementInt );
-    }
+    void ShaderParams::Param::setManualValue( int32 value ) { setManualValue( &value, 1u, ElementInt ); }
     //-----------------------------------------------------------------------------------
     void ShaderParams::Param::setManualValue( const int32 *value, uint32 numValues )
     {
@@ -255,4 +278,32 @@ namespace Ogre
     {
         setManualValue( value, numValues, ElementUInt );
     }
-}
+    //-----------------------------------------------------------------------------------
+    template <typename T>
+    void ShaderParams::Param::setManualValueEx( const T *value, uint32 numValues,
+                                                ElementType elementType )
+    {
+        this->isAutomatic = false;
+        this->isEx = true;
+        this->isDirty = true;
+        mpEx.elementType = elementType;
+        mpEx.dataSizeBytes = static_cast<uint16>( std::min<uint32>(
+            sizeof( T ) * numValues, std::numeric_limits<uint16>::max() ) );  // Don't overflow
+        mpEx.dataBytes = value;
+    }
+    //-----------------------------------------------------------------------------------
+    void ShaderParams::Param::setManualValueEx( const float *value, uint32 numValues )
+    {
+        setManualValueEx( value, numValues, ElementFloat );
+    }
+    //-----------------------------------------------------------------------------------
+    void ShaderParams::Param::setManualValueEx( const int32 *value, uint32 numValues )
+    {
+        setManualValueEx( value, numValues, ElementInt );
+    }
+    //-----------------------------------------------------------------------------------
+    void ShaderParams::Param::setManualValueEx( const uint32 *value, uint32 numValues )
+    {
+        setManualValueEx( value, numValues, ElementUInt );
+    }
+}  // namespace Ogre

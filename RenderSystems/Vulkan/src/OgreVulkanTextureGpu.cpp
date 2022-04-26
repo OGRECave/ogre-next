@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -79,7 +79,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::createInternalResourcesImpl( void )
+    void VulkanTextureGpu::createInternalResourcesImpl()
     {
         if( mPixelFormat == PFG_NULL )
             return;  // Nothing to do
@@ -216,7 +216,7 @@ namespace Ogre
             createMsaaSurface();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::destroyInternalResourcesImpl( void )
+    void VulkanTextureGpu::destroyInternalResourcesImpl()
     {
         // If 'this' is being destroyed: We must call notifyTextureDestroyed
         //
@@ -238,6 +238,12 @@ namespace Ogre
         VulkanDevice *device = textureManager->getDevice();
         device->mGraphicsQueue.notifyTextureDestroyed( this );
 
+        // RenderPassDescriptors have internal caches that need to be released
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanRenderSystem *>( textureManager->getRenderSystem() ) );
+        VulkanRenderSystem *renderSystem =
+            static_cast<VulkanRenderSystem *>( textureManager->getRenderSystem() );
+        renderSystem->notifyRenderTextureNonResident( this );
+
         if( mDefaultDisplaySrv && mOwnsSrv )
         {
             destroyView( mDefaultDisplaySrv );
@@ -247,9 +253,6 @@ namespace Ogre
 
         if( !hasAutomaticBatching() )
         {
-            VulkanTextureGpuManager *textureManager =
-                static_cast<VulkanTextureGpuManager *>( mTextureManager );
-            VulkanDevice *device = textureManager->getDevice();
             if( mFinalTextureName )
             {
                 VkMemoryRequirements memRequirements;
@@ -285,11 +288,11 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::createMsaaSurface( void ) {}
+    void VulkanTextureGpu::createMsaaSurface() {}
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::destroyMsaaSurface( void ) {}
+    void VulkanTextureGpu::destroyMsaaSurface() {}
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::notifyDataIsReady( void )
+    void VulkanTextureGpu::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
@@ -300,6 +303,11 @@ namespace Ogre
             mDefaultDisplaySrv = 0;
             mOwnsSrv = false;
         }
+
+        OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
+                         "Calling notifyDataIsReady too often! Remove this call"
+                         "See https://github.com/OGRECave/ogre-next/issues/101" );
+        --mDataPreparationsPending;
 
         mDisplayTextureName = mFinalTextureName;
 
@@ -324,12 +332,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpu::_isDataReadyImpl( void ) const
+    bool VulkanTextureGpu::_isDataReadyImpl() const
     {
-        return mDisplayTextureName == mFinalTextureName;
+        return mDisplayTextureName == mFinalTextureName && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::_setToDisplayDummyTexture( void )
+    void VulkanTextureGpu::_setToDisplayDummyTexture()
     {
         if( !mTextureManager )
         {
@@ -388,8 +396,10 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::PoolTextureSlotChanged );
     }
     //-----------------------------------------------------------------------------------
-    ResourceLayout::Layout VulkanTextureGpu::getCurrentLayout( void ) const
+    ResourceLayout::Layout VulkanTextureGpu::getCurrentLayout() const
     {
+        // These are usually counterpart of VulkanMappings::get.
+        // Otherwise there could be asserts triggering in our validations
         switch( mCurrLayout )
         {
         case VK_IMAGE_LAYOUT_UNDEFINED:
@@ -419,7 +429,20 @@ namespace Ogre
         case VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
         case VK_IMAGE_LAYOUT_MAX_ENUM:
             return ResourceLayout::Undefined;
+
+        case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL:
+        case VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL:
+            // We literally never set these layouts. This case is here to silence the compiler
+            OGRE_ASSERT_MEDIUM( false && "Unimplemented. How are you here?" );
+            return ResourceLayout::RenderTarget;
+        case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL:
+        case VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL:
+            // We literally never set these layouts. This case is here to silence the compiler
+            OGRE_ASSERT_MEDIUM( false && "Unimplemented. How are you here?" );
+            return ResourceLayout::RenderTargetReadOnly;
         }
+
+        return ResourceLayout::Undefined;
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::setTextureType( TextureTypes::TextureTypes textureType )
@@ -434,9 +457,11 @@ namespace Ogre
     void VulkanTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                    const TextureBox &srcBox, uint8 srcMipLevel,
                                    bool keepResolvedTexSynced,
-                                   ResourceAccess::ResourceAccess issueBarriers )
+                                   CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode,
+                                   CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode )
     {
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, issueBarriers );
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, srcTransitionMode,
+                            dstTransitionMode );
 
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( dst ) );
 
@@ -445,17 +470,8 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( mTextureManager );
         VulkanDevice *device = textureManager->getDevice();
 
-        if( issueBarriers & ResourceAccess::Read )
-            device->mGraphicsQueue.getCopyEncoder( 0, this, true );
-        else
-        {
-            // This won't generate barriers, but it will close all other encoders
-            // and open the copy one
-            device->mGraphicsQueue.getCopyEncoder( 0, 0, true );
-        }
-
-        if( issueBarriers & ResourceAccess::Write )
-            device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false );
+        device->mGraphicsQueue.getCopyEncoder( 0, this, true, srcTransitionMode );
+        device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false, dstTransitionMode );
 
         VkImageCopy region;
 
@@ -477,9 +493,9 @@ namespace Ogre
         region.dstSubresource.baseArrayLayer = destinationSlice;
         region.dstSubresource.layerCount = numSlices;
 
-        region.dstOffset.x = dstBox.x;
-        region.dstOffset.y = dstBox.y;
-        region.dstOffset.z = dstBox.z;
+        region.dstOffset.x = static_cast<int32_t>( dstBox.x );
+        region.dstOffset.y = static_cast<int32_t>( dstBox.y );
+        region.dstOffset.z = static_cast<int32_t>( dstBox.z );
 
         region.extent.width = srcBox.width;
         region.extent.height = srcBox.height;
@@ -527,14 +543,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::_setNextLayout( ResourceLayout::Layout layout )
     {
-        OGRE_ASSERT_LOW( ( layout != ResourceLayout::CopySrc && layout != ResourceLayout::CopyDst &&
-                           layout != ResourceLayout::CopyEnd ) &&
-                         "CopySrc/Dst layouts are automanaged. "
-                         "Cannot explicitly transition to these layouts" );
+        TextureGpu::_setNextLayout( layout );
         mNextLayout = VulkanMappings::get( layout, this );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
+    void VulkanTextureGpu::_autogenerateMipmaps(
+        CopyEncTransitionMode::CopyEncTransitionMode transitionMode )
     {
         OGRE_ASSERT_LOW( allowsAutoMipmaps() );
 
@@ -546,29 +560,7 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( mTextureManager );
         VulkanDevice *device = textureManager->getDevice();
 
-        if( bUseBarrierSolver )
-        {
-            RenderSystem *renderSystem = textureManager->getRenderSystem();
-            ResourceTransitionArray resourceTransitions;
-            renderSystem->getBarrierSolver().resolveTransition(
-                resourceTransitions, this, ResourceLayout::MipmapGen, ResourceAccess::ReadWrite, 0u );
-            renderSystem->executeResourceTransition( resourceTransitions );
-        }
-        else
-        {
-            const bool callerIsCompositor = mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-
-            if( callerIsCompositor )
-                device->mGraphicsQueue.getCopyEncoder( 0, 0, true );
-            else
-            {
-                // We must transition to VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-                // By the time we exit _autogenerateMipmaps, the texture will
-                // still be in VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, thus
-                // endCopyEncoder will perform as expected
-                device->mGraphicsQueue.getCopyEncoder( 0, this, true );
-            }
-        }
+        device->mGraphicsQueue.getCopyEncoder( 0, this, true, transitionMode );
 
         const size_t numMipmaps = mNumMipmaps;
         const uint32 numSlices = getNumSlices();
@@ -639,7 +631,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange( void ) const
+    VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange() const
     {
         VkImageSubresourceRange retVal;
         retVal.aspectMask = VulkanMappings::getImageAspect( getWorkaroundedPixelFormat( mPixelFormat ) );
@@ -658,7 +650,7 @@ namespace Ogre
             locations.push_back( Vector2( 0, 0 ) );
     }
     //-----------------------------------------------------------------------------------
-    VkImageType VulkanTextureGpu::getVulkanTextureType( void ) const
+    VkImageType VulkanTextureGpu::getVulkanTextureType() const
     {
         // clang-format off
         switch( mTextureType )
@@ -677,7 +669,7 @@ namespace Ogre
         return VK_IMAGE_TYPE_2D;
     }
     //-----------------------------------------------------------------------------------
-    VkImageViewType VulkanTextureGpu::getInternalVulkanTextureViewType( void ) const
+    VkImageViewType VulkanTextureGpu::getInternalVulkanTextureViewType() const
     {
         // clang-format off
         switch( getInternalTextureType() )
@@ -804,7 +796,7 @@ namespace Ogre
         textureManager->destroyView( texSlot, imageView );
     }
     //-----------------------------------------------------------------------------------
-    VkImageView VulkanTextureGpu::createView( void ) const
+    VkImageView VulkanTextureGpu::createView() const
     {
         OGRE_ASSERT_MEDIUM( isTexture() &&
                             "This texture is marked as 'TextureFlags::NotTexture', which "
@@ -846,7 +838,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VkImageMemoryBarrier VulkanTextureGpu::getImageMemoryBarrier( void ) const
+    VkImageMemoryBarrier VulkanTextureGpu::getImageMemoryBarrier() const
     {
         VkImageMemoryBarrier imageMemBarrier;
         makeVkStruct( imageMemBarrier, VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER );
@@ -879,6 +871,8 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    VulkanTextureGpuRenderTarget::~VulkanTextureGpuRenderTarget() { destroyInternalResourcesImpl(); }
+    //-----------------------------------------------------------------------------------
     void VulkanTextureGpuRenderTarget::_setDepthBufferDefaults( uint16 depthBufferPoolId,
                                                                 bool preferDepthTexture,
                                                                 PixelFormatGpu desiredDepthBufferFormat )
@@ -889,22 +883,16 @@ namespace Ogre
         mDesiredDepthBufferFormat = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 VulkanTextureGpuRenderTarget::getDepthBufferPoolId( void ) const
-    {
-        return mDepthBufferPoolId;
-    }
+    uint16 VulkanTextureGpuRenderTarget::getDepthBufferPoolId() const { return mDepthBufferPoolId; }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpuRenderTarget::getPreferDepthTexture( void ) const
-    {
-        return mPreferDepthTexture;
-    }
+    bool VulkanTextureGpuRenderTarget::getPreferDepthTexture() const { return mPreferDepthTexture; }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu VulkanTextureGpuRenderTarget::getDesiredDepthBufferFormat( void ) const
+    PixelFormatGpu VulkanTextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
         return mDesiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuRenderTarget::createMsaaSurface( void )
+    void VulkanTextureGpuRenderTarget::createMsaaSurface()
     {
         const PixelFormatGpu finalPixelFormat = getWorkaroundedPixelFormat( mPixelFormat );
 
@@ -965,7 +953,7 @@ namespace Ogre
                               0, 0u, 0, 0u, 0, 1u, &imageBarrier );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuRenderTarget::destroyMsaaSurface( void )
+    void VulkanTextureGpuRenderTarget::destroyMsaaSurface()
     {
         if( mMsaaFramebufferName )
         {
@@ -996,9 +984,6 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-    OrientationMode VulkanTextureGpuRenderTarget::getOrientationMode( void ) const
-    {
-        return mOrientationMode;
-    }
+    OrientationMode VulkanTextureGpuRenderTarget::getOrientationMode() const { return mOrientationMode; }
 #endif
 }  // namespace Ogre

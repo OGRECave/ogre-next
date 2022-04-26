@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,16 +28,15 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHiddenAreaMeshVr.h"
-#include "OgreRoot.h"
-#include "Vao/OgreVaoManager.h"
-
-#include "OgreMesh2.h"
-#include "OgreMeshManager2.h"
-#include "OgreSubMesh2.h"
 
 #include "OgreConfigFile.h"
 #include "OgreLogManager.h"
+#include "OgreMesh2.h"
+#include "OgreMeshManager2.h"
+#include "OgreRoot.h"
 #include "OgreString.h"
+#include "OgreSubMesh2.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
@@ -46,20 +45,20 @@ namespace Ogre
                                                                   ConfigFile &configFile )
     {
         HiddenAreaVrSettings retVal;
-        memset( &retVal, 0, sizeof( retVal ) );
+        silent_memset( &retVal, 0, sizeof( retVal ) );
 
         ConfigFile::SectionIterator itor = configFile.getSectionIterator();
 
         String bestMatch;
         String deviceConfigName;
         String deviceNameUpper = deviceName;
-        StringUtil::toUpperCase(deviceNameUpper);
+        StringUtil::toUpperCase( deviceNameUpper );
         while( itor.hasMoreElements() )
         {
             deviceConfigName = itor.peekNextKey();
             String deviceConfigNameUpper = deviceConfigName;
-            StringUtil::toUpperCase(deviceConfigNameUpper);
-            if( deviceNameUpper.find( deviceConfigNameUpper)  != String::npos &&
+            StringUtil::toUpperCase( deviceConfigNameUpper );
+            if( deviceNameUpper.find( deviceConfigNameUpper ) != String::npos &&
                 deviceConfigName.size() > bestMatch.size() )
             {
                 bestMatch = deviceConfigName;
@@ -144,7 +143,7 @@ namespace Ogre
 
         const uint32 numUsedVertices = static_cast<uint32>( vertexData - vertexDataStart ) / 4u;
 
-        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) <= numVertices * 4u );
+        OGRE_ASSERT_LOW( (size_t)( vertexData - vertexDataStart ) <= numVertices * 4u );
 
         VaoManager *vaoManager = Root::getSingleton().getRenderSystem()->getVaoManager();
         VertexElement2Vec vertexElements;
@@ -176,7 +175,7 @@ namespace Ogre
         //  3. Use an extremely large value, it breaks GPUs (vertex ends up collapsing to origin).
         const float c_veryLargeValue = 65000.0f;
 
-        const float fCircleStep = Math::PI / ( tessellation - 1u ) * circleDir;
+        const float fCircleStep = Math::PI / float( tessellation - 1u ) * circleDir;
 
         Vector2 circlePos[2];
         circlePos[0].x = sinf( 0 );

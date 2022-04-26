@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -32,18 +32,19 @@ THE SOFTWARE.
 
 #include "OgreVertexBoneAssignment.h"
 #include "Vao/OgreVertexArrayObject.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
-    typedef FastArray<VertexArrayObject*> VertexArrayObjectArray;
+namespace Ogre
+{
+    typedef FastArray<VertexArrayObject *> VertexArrayObjectArray;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     /** Defines a part of a complete mesh.
         @remarks
             Meshes which make up the definition of a discrete 3D object
@@ -57,12 +58,13 @@ namespace Ogre {
             their material differences on a per-object basis if required.
             See the SubEntity class for more information.
     */
-    class _OgreExport SubMesh : public SubMeshAlloc
+    class _OgreExport SubMesh : public OgreAllocatedObj
     {
         friend class Mesh;
         friend class MeshSerializerImpl;
+
     public:
-        typedef FastArray<unsigned short> IndexMap;
+        typedef FastArray<unsigned short>          IndexMap;
         typedef vector<VertexBoneAssignment>::type VertexBoneAssignmentVec;
 
         /// VAO to render the submesh. One per LOD level. Each LOD may or
@@ -72,7 +74,7 @@ namespace Ogre {
         /// Note that mVao[1] = mVao[0] is valid.
         /// But if they're not exactly the same VertexArrayObject pointers,
         /// then they won't share any pointer.
-        VertexArrayObjectArray  mVao[NumVertexPass];
+        VertexArrayObjectArray mVao[NumVertexPass];
 
         /** Dedicated index map for translate blend index to bone index
             @par
@@ -94,33 +96,33 @@ namespace Ogre {
         IndexMap mBlendIndexToBoneIndexMap;
 
         /// Name of the material this SubMesh uses.
-        String  mMaterialName;
+        String mMaterialName;
 
         /// Reference to parent Mesh (not a smart pointer so child does not keep parent alive).
-        Mesh    *mParent;
+        Mesh *mParent;
 
     protected:
         VertexBoneAssignmentVec mBoneAssignments;
 
         /// Flag indicating that bone assignments need to be recompiled
-        bool    mBoneAssignmentsOutOfDate;
+        bool mBoneAssignmentsOutOfDate;
 
         /// Limits mBoneAssignments to OGRE_MAX_BLEND_WEIGHTS and
         /// if we need to strip, normalizes all weights to sum 1.
-        uint8 rationaliseBoneAssignments(void);
-        
-        uint16 mNumPoses;
-        bool mPoseHalfPrecision;
-        bool mPoseNormals;
+        uint8 rationaliseBoneAssignments();
+
+        uint16                         mNumPoses;
+        bool                           mPoseHalfPrecision;
+        bool                           mPoseNormals;
         std::map<Ogre::String, size_t> mPoseIndexMap;
-        TexBufferPacked *mPoseTexBuffer;
+        TexBufferPacked               *mPoseTexBuffer;
 
     public:
         SubMesh();
         ~SubMesh();
 
-        /** Assigns a vertex to a bone with a given weight, for skeletal animation. 
-        @remarks    
+        /** Assigns a vertex to a bone with a given weight, for skeletal animation.
+        @remarks
             This method is only valid after calling setSkeletonName.
             Since this is a one-off process there exists only 'addBoneAssignment' and
             'clearBoneAssignments' methods, no 'editBoneAssignment'. You should not need
@@ -131,31 +133,31 @@ namespace Ogre {
             This method is for assigning weights to the dedicated geometry of the SubMesh. To assign
             weights to the shared Mesh geometry, see the equivalent methods on Mesh.
         */
-        void addBoneAssignment(const VertexBoneAssignment& vertBoneAssign);
+        void addBoneAssignment( const VertexBoneAssignment &vertBoneAssign );
 
-        /** Removes all bone assignments for this mesh. 
+        /** Removes all bone assignments for this mesh.
         @par
             This method is for assigning weights to the dedicated geometry of the SubMesh. To assign
             weights to the shared Mesh geometry, see the equivalent methods on Mesh.
         */
-        void clearBoneAssignments(void);
+        void clearBoneAssignments();
 
         /** Gets a const reference to the list of bone assignments
-        */
-        const VertexBoneAssignmentVec& getBoneAssignments() { return mBoneAssignments; }
+         */
+        const VertexBoneAssignmentVec &getBoneAssignments() { return mBoneAssignments; }
 
         /// Call this function if you've manually called addBoneAssignment to setup
         /// bones for vertices.
         /// WARNING: Will destroy LODs.
-        void _compileBoneAssignments(void);
+        void _compileBoneAssignments();
 
         /// Builds mBlendIndexToBoneIndexMap based on mBoneAssignments.
         /// mBlendIndexToBoneIndexMap is necessary for enabling skeletal animation.
-        void _buildBoneIndexMap(void);
+        void _buildBoneIndexMap();
 
         /// Populates mBoneAssignments by reading the vertex data.
         /// See the other overload.
-        void _buildBoneAssignmentsFromVertexData(void);
+        void _buildBoneAssignmentsFromVertexData();
 
         /** Populates mBoneAssignments by reading the vertex data.
             This version accepts an external buffer in case you already have
@@ -182,13 +184,14 @@ namespace Ogre {
             See BufferType. Must be set to a valid BufferType. Pass a negative
             value to keep the same type of the original buffer being cloned.
         */
-        SubMesh* clone( Mesh *parentMesh = 0, int vertexBufferType = -1, int indexBufferType = -1 );
+        SubMesh *clone( Mesh *parentMesh = 0, int vertexBufferType = -1, int indexBufferType = -1 );
 
-        void setMaterialName( const String &name )          { mMaterialName = name; }
-        String getMaterialName(void) const                  { return mMaterialName; }
+        void   setMaterialName( const String &name ) { mMaterialName = name; }
+        String getMaterialName() const { return mMaterialName; }
 
         /// Imports a v1 SubMesh @See Mesh::importV1. Automatically performs what arrangeEfficient does.
-        void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose );
+        void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
+                           bool halfPose );
 
         /// Converts this SubMesh to an efficient arrangement. @See Mesh::importV1 for an
         /// explanation on the parameters. @see dearrangeEfficientToInefficient
@@ -198,33 +201,36 @@ namespace Ogre {
         /// Reverts the effects from arrangeEfficient by converting all 16-bit half float back
         /// to 32-bit float; and QTangents to Normal, Tangent + Reflection representation,
         /// which are more compatible for doing certain operations vertex operations in the CPU.
-        void dearrangeToInefficient(void);
+        void dearrangeToInefficient();
 
         void _prepareForShadowMapping( bool forceSameBuffers );
-        
+
         uint16 getNumPoses() { return mNumPoses; }
-        
+
         bool getPoseHalfPrecision() { return mPoseHalfPrecision; }
 
         bool getPoseNormals() { return mPoseNormals; }
-        
-        size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap.count(name) ? mPoseIndexMap[name] : SIZE_MAX; }
-        
-        TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
+
+        size_t getPoseIndex( const Ogre::String &name )
+        {
+            return mPoseIndexMap.count( name ) ? mPoseIndexMap[name] : SIZE_MAX;
+        }
+
+        TexBufferPacked *getPoseTexBuffer() { return mPoseTexBuffer; }
 
         /** Fills the pose animation buffer with the given poseData.
         @param positionData
             Array with a pointer to a block of data for each pose, and each pose
-            should contain (x,y,z) offsets for each vertex in sequence. The size of each block 
+            should contain (x,y,z) offsets for each vertex in sequence. The size of each block
             of data must be equals to numVertices * 3 * sizeof(float) or else a buffer overrun
-            shall occur. 
+            shall occur.
         @param normalData
             Similar to positionData however should contain normal offsets and
             can be nullptr if morphing normals is not desired and it will also save memory.
         @param numPoses
             Number of poses.
         @param numVertices
-            Number of vertices 
+            Number of vertices
         @param names
             Array containing the name of each pose or null. If not null must contain `numPoses`
             elements.
@@ -233,17 +239,18 @@ namespace Ogre {
             which uses significantly less memory. Otherwise it is created with pixel
             format PF_FLOAT32_RGBA. Rarely the extra precision is needed.
          */
-        void createPoses( const float** positionData, const float** normalData, size_t numPoses, size_t numVertices, 
-                          const String* names = 0, bool halfPrecision = true );
+        void createPoses( const float **positionData, const float **normalData, size_t numPoses,
+                          size_t numVertices, const String *names = 0, bool halfPrecision = true );
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
-                                  bool halfPose, size_t vaoPassIdx);
+                                  bool halfPose, size_t vaoPassIdx );
 
         /// Converts a v1 IndexBuffer to a v2 format. Returns nullptr if indexData is also nullptr
-        IndexBufferPacked* importFromV1( v1::IndexData *indexData );
+        IndexBufferPacked *importFromV1( v1::IndexData *indexData );
 
-        void importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer, bool halfPrecision );
+        void importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer,
+                                bool halfPrecision );
 
         /** @see arrangeEfficient overload
         @param vao
@@ -258,10 +265,10 @@ namespace Ogre {
             New Vao containing the dearranged buffers. It will share the index buffers
             with the original vao.
         */
-        static VertexArrayObject* arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents,
-                                                    VertexArrayObject *vao,
+        static VertexArrayObject *arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents,
+                                                    VertexArrayObject     *vao,
                                                     SharedVertexBufferMap &sharedBuffers,
-                                                    VaoManager *vaoManager );
+                                                    VaoManager            *vaoManager );
 
         /** @see dearrangeEfficientToInefficient. Works on an individual VertexArrayObject.
             Delegates work to the generic method @see _dearrangeEfficient which
@@ -278,19 +285,23 @@ namespace Ogre {
             New Vao containing the dearranged buffers. It will share the index buffers
             with the original vao.
         */
-        static VertexArrayObject* dearrangeEfficient( const VertexArrayObject *vao,
-                                                      SharedVertexBufferMap &sharedBuffers,
-                                                      VaoManager *vaoManager );
+        static VertexArrayObject *dearrangeEfficient( const VertexArrayObject *vao,
+                                                      SharedVertexBufferMap   &sharedBuffers,
+                                                      VaoManager              *vaoManager );
 
     public:
         struct SourceData
         {
-            char const      *data;
-            size_t          bytesPerVertex;
-            VertexElement2  element;
+            char const    *data;
+            size_t         bytesPerVertex;
+            VertexElement2 element;
 
             SourceData( char const *_data, size_t _bytesPerVertex, VertexElement2 _element ) :
-                data( _data ), bytesPerVertex( _bytesPerVertex ), element( _element ) {}
+                data( _data ),
+                bytesPerVertex( _bytesPerVertex ),
+                element( _element )
+            {
+            }
         };
 
         typedef FastArray<SourceData> SourceDataArray;
@@ -312,7 +323,7 @@ namespace Ogre {
             Buffer pointer with reorganized data.
             Caller MUST free the pointer with OGRE_FREE_SIMD( MEMCATEGORY_GEOMETRY ).
         */
-        static char* _arrangeEfficient( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
+        static char *_arrangeEfficient( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
                                         bool qTangents, VertexElement2Vec *outVertexElements,
                                         size_t vaoPassIdx );
 
@@ -333,9 +344,8 @@ namespace Ogre {
         static char* _arrangeEfficient( SourceDataArray srcData,
             Caller MUST free the pointer with OGRE_FREE_SIMD( MEMCATEGORY_GEOMETRY ).
         */
-        static char* _arrangeEfficient( SourceDataArray srcData,
-                                        const VertexElement2Vec &vertexElements,
-                                        uint32 vertexCount );
+        static char *_arrangeEfficient( SourceDataArray srcData, const VertexElement2Vec &vertexElements,
+                                        size_t vertexCount );
 
         /** Generic form that does the actual job for both v1 and v2 objects
             @see dearrangeEfficientToInefficient.
@@ -350,20 +360,20 @@ namespace Ogre {
         @return
             Pointer to the decompressed/dearranged data, interleaved in a single buffer.
         */
-        static char* _dearrangeEfficient( char const * RESTRICT_ALIAS srcData, uint32 numElements,
+        static char *_dearrangeEfficient( char const *RESTRICT_ALIAS srcData, size_t numElements,
                                           const VertexElement2Vec &vertexElements,
-                                          VertexElement2Vec *outVertexElements );
+                                          VertexElement2Vec       *outVertexElements );
 
         static void destroyVaos( VertexArrayObjectArray &vaos, VaoManager *vaoManager,
                                  bool destroyIndexBuffer = true );
 
     protected:
-        void destroyShadowMappingVaos(void);
+        void destroyShadowMappingVaos();
     };
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

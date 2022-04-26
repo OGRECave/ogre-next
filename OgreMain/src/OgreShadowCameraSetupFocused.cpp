@@ -1,11 +1,11 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2014 Torus Knot Software Ltd
-Copyright (c) 2006 Matthias Fink, netAllied GmbH <matthias.fink@web.de>                             
+Copyright (c) 2006 Matthias Fink, netAllied GmbH <matthias.fink@web.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,27 +28,24 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreShadowCameraSetupFocused.h"
+
+#include "OgreCamera.h"
+#include "OgreConvexBody.h"
+#include "OgreLight.h"
+#include "OgreLogManager.h"
+#include "OgrePlane.h"
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
-#include "OgreCamera.h"
-#include "OgreLight.h"
-#include "OgrePlane.h"
-#include "OgreConvexBody.h"
-#include "OgreLogManager.h"
-
 
 namespace Ogre
 {
-    FocusedShadowCameraSetup::FocusedShadowCameraSetup(void)
-    {
-    }
+    FocusedShadowCameraSetup::FocusedShadowCameraSetup() : mXYPadding( 1.5f ) {}
     //-----------------------------------------------------------------------
-    FocusedShadowCameraSetup::~FocusedShadowCameraSetup(void)
-    {
-    }
+    FocusedShadowCameraSetup::~FocusedShadowCameraSetup() {}
     /*void FocusedShadowCameraSetup::calculateShadowMappingMatrix(const SceneManager& sm,
-        const Camera& cam, const Light& light, Matrix4 *out_view, Matrix4 *out_proj, 
+        const Camera& cam, const Light& light, Matrix4 *out_view, Matrix4 *out_proj,
         Camera *out_cam) const
     {
         // get the shadow frustum's far distance
@@ -67,7 +64,7 @@ namespace Ogre
             if (out_view != NULL)
             {
                 *out_view = buildViewMatrix(cam.getDerivedPosition(),
-                                            light.getDerivedDirection(), 
+                                            light.getDerivedDirection(),
                                             cam.getDerivedUp());
             }
 
@@ -95,7 +92,7 @@ namespace Ogre
             // Calculate look at position
             // We want to look at a spot shadowOffset away from near plane
             // 0.5 is a little too close for angles
-            Vector3 target = cam.getDerivedPosition() + 
+            Vector3 target = cam.getDerivedPosition() +
                 (cam.getDerivedDirection() * shadowOffset);
             Vector3 lightDir = target - lightDerivedPos;
             lightDir.normalise();
@@ -134,7 +131,7 @@ namespace Ogre
             if (out_view != NULL)
             {
                 *out_view = buildViewMatrix( lightDerivedPos,
-                                            light.getDerivedDirection(), 
+                                            light.getDerivedDirection(),
                                             cam.getDerivedUp());
             }
 
@@ -142,7 +139,8 @@ namespace Ogre
             if (out_proj != NULL)
             {
                 // set FOV slightly larger than spotlight range
-                mTempFrustum->setFOVy(Ogre::Math::Clamp<Radian>(light.getSpotlightOuterAngle() * 1.2, Radian(0), Radian(Math::PI/2.0f)));
+                mTempFrustum->setFOVy(Ogre::Math::Clamp<Radian>(light.getSpotlightOuterAngle() * 1.2,
+    Radian(0), Radian(Math::PI/2.0f)));
 
                 mTempFrustum->setNearClipDistance(light._deriveShadowNearClipDistance(&cam));
                 mTempFrustum->setFarClipDistance(light._deriveShadowFarClipDistance(&cam));
@@ -156,7 +154,8 @@ namespace Ogre
                 out_cam->setProjectionType(PT_PERSPECTIVE);
                 out_cam->setDirection(light.getDerivedDirection());
                 out_cam->setPosition(lightDerivedPos);
-                out_cam->setFOVy(Ogre::Math::Clamp<Radian>(light.getSpotlightOuterAngle() * 1.2, Radian(0), Radian(Math::PI/2.0f)));
+                out_cam->setFOVy(Ogre::Math::Clamp<Radian>(light.getSpotlightOuterAngle() * 1.2,
+    Radian(0), Radian(Math::PI/2.0f)));
                 out_cam->setNearClipDistance(light._deriveShadowNearClipDistance(&cam));
                 out_cam->setFarClipDistance(light._deriveShadowFarClipDistance(&cam));
             }
@@ -168,24 +167,24 @@ namespace Ogre
                                                     const Vector2 &viewportRealSize ) const
     {
         // check availability - viewport not needed
-        OgreAssert(sm != NULL, "SceneManager is NULL");
-        OgreAssert(cam != NULL, "Camera (viewer) is NULL");
-        OgreAssert(light != NULL, "Light is NULL");
-        OgreAssert(texCam != NULL, "Camera (texture) is NULL");
+        OgreAssert( sm != NULL, "SceneManager is NULL" );
+        OgreAssert( cam != NULL, "Camera (viewer) is NULL" );
+        OgreAssert( light != NULL, "Light is NULL" );
+        OgreAssert( texCam != NULL, "Camera (texture) is NULL" );
 
         if( light->getType() != Light::LT_DIRECTIONAL )
         {
-            DefaultShadowCameraSetup::getShadowCamera( sm, cam, light, texCam,
-                                                       iteration, viewportRealSize );
+            DefaultShadowCameraSetup::getShadowCamera( sm, cam, light, texCam, iteration,
+                                                       viewportRealSize );
             return;
         }
 
-        texCam->setNearClipDistance(light->_deriveShadowNearClipDistance(cam));
-        texCam->setFarClipDistance(light->_deriveShadowFarClipDistance(cam));
+        texCam->setNearClipDistance( light->_deriveShadowNearClipDistance( cam ) );
+        texCam->setFarClipDistance( light->_deriveShadowFarClipDistance( cam ) );
 
         const AxisAlignedBox &casterBox = sm->getCurrentCastersBox();
 
-        //Will be overriden, but not always (in case we early out to use uniform shadows)
+        // Will be overriden, but not always (in case we early out to use uniform shadows)
         mMaxDistance = casterBox.getMinimum().distance( casterBox.getMaximum() );
 
         // in case the casterBox is empty (e.g. there are no casters) simply
@@ -214,7 +213,7 @@ namespace Ogre
         }
 
         const Node *lightNode = light->getParentNode();
-        const Real farDistance= std::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
+        const Real farDistance = std::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
         const Quaternion scalarLightSpaceToWorld( lightNode->_getDerivedOrientation() );
         const Quaternion scalarWorldToLightSpace( scalarLightSpaceToWorld.Inverse() );
         ArrayQuaternion worldToLightSpace;
@@ -223,14 +222,14 @@ namespace Ogre
         ArrayVector3 vMinBounds( Mathlib::MAX_POS, Mathlib::MAX_POS, Mathlib::MAX_POS );
         ArrayVector3 vMaxBounds( Mathlib::MAX_NEG, Mathlib::MAX_NEG, Mathlib::MAX_NEG );
 
-        #define NUM_ARRAY_VECTORS (8 + ARRAY_PACKED_REALS - 1) / ARRAY_PACKED_REALS
+#define NUM_ARRAY_VECTORS ( 8 + ARRAY_PACKED_REALS - 1 ) / ARRAY_PACKED_REALS
 
-        //Take the 8 camera frustum's corners, transform to
-        //light space, and compute its AABB in light space
+        // Take the 8 camera frustum's corners, transform to
+        // light space, and compute its AABB in light space
         ArrayVector3 corners[NUM_ARRAY_VECTORS];
         cam->getCustomWorldSpaceCorners( corners, farDistance );
 
-        for( size_t i=0; i<NUM_ARRAY_VECTORS; ++i )
+        for( size_t i = 0; i < NUM_ARRAY_VECTORS; ++i )
         {
             ArrayVector3 lightSpacePoint = worldToLightSpace * corners[i];
             vMinBounds.makeFloor( lightSpacePoint );
@@ -241,10 +240,10 @@ namespace Ogre
         Vector3 vMaxCamFrustumLS = vMaxBounds.collapseMax();
 
         Vector3 casterAabbCornersLS[8];
-        for( size_t i=0; i<8; ++i )
+        for( size_t i = 0; i < 8; ++i )
         {
             casterAabbCornersLS[i] = scalarWorldToLightSpace *
-                                    casterBox.getCorner( static_cast<AxisAlignedBox::CornerEnum>( i ) );
+                                     casterBox.getCorner( static_cast<AxisAlignedBox::CornerEnum>( i ) );
         }
 
         ConvexBody convexBody;
@@ -267,11 +266,11 @@ namespace Ogre
         Vector3 vMax( -std::numeric_limits<Real>::max(), -std::numeric_limits<Real>::max(),
                       -std::numeric_limits<Real>::max() );
 
-        for( size_t i=0; i<convexBody.getPolygonCount(); ++i )
+        for( size_t i = 0; i < convexBody.getPolygonCount(); ++i )
         {
-            const Polygon& polygon = convexBody.getPolygon( i );
+            const Polygon &polygon = convexBody.getPolygon( i );
 
-            for( size_t j=0; j<polygon.getVertexCount(); ++j )
+            for( size_t j = 0; j < polygon.getVertexCount(); ++j )
             {
                 const Vector3 &point = polygon.getVertex( j );
                 vMin.makeFloor( point );
@@ -281,14 +280,14 @@ namespace Ogre
 
         if( vMin > vMax )
         {
-            //There are no casters that will affect the viewing frustum
+            // There are no casters that will affect the viewing frustum
             //(or something went wrong with the clipping).
-            //Rollback to something valid
+            // Rollback to something valid
             vMin = vMinCamFrustumLS;
             vMax = vMaxCamFrustumLS;
 
-            //Add some padding to prevent negative depth (i.e. "the sun is below the floor")
-            vMax.z += 5.0f; // Backwards is towards +Z!
+            // Add some padding to prevent negative depth (i.e. "the sun is below the floor")
+            vMax.z += 5.0f;  // Backwards is towards +Z!
         }
 
         vMin.z = std::min( vMin.z, vMinCamFrustumLS.z );
@@ -300,15 +299,15 @@ namespace Ogre
             vMax.z = std::max( vMax.z, vMaxCamFrustumLS.z );
         }
 
-        //Some padding
-        vMax += 1.5f;
-        vMin -= 1.5f;
+        // Some padding
+        vMax += mXYPadding;
+        vMin -= mXYPadding;
 
         const float zPadding = 2.0f;
 
         texCam->setProjectionType( PT_ORTHOGRAPHIC );
-        Vector3 shadowCameraPos = (vMin + vMax) * 0.5f;
-        shadowCameraPos.z       = vMax.z + zPadding; // Backwards is towards +Z!
+        Vector3 shadowCameraPos = ( vMin + vMax ) * 0.5f;
+        shadowCameraPos.z = vMax.z + zPadding;  // Backwards is towards +Z!
 
         // Round local x/y position based on a world-space texel; this helps to reduce
         // jittering caused by the projection moving with the camera
@@ -319,17 +318,18 @@ namespace Ogre
         shadowCameraPos.x -= std::fmod( shadowCameraPos.x, worldTexelSizeX );
         shadowCameraPos.y -= std::fmod( shadowCameraPos.y, worldTexelSizeY );
 
-        //Go back from light space to world space
+        // Go back from light space to world space
         shadowCameraPos = scalarLightSpaceToWorld * shadowCameraPos;
         texCam->setPosition( shadowCameraPos );
-        texCam->setOrthoWindow( (vMax.x - vMin.x), (vMax.y - vMin.y) );
+        texCam->setOrthoWindow( ( vMax.x - vMin.x ), ( vMax.y - vMin.y ) );
 
         mMinDistance = 1.0f;
-        mMaxDistance = vMax.z - vMin.z + zPadding; //We just went backwards, we need to enlarge our depth
+        mMaxDistance =
+            vMax.z - vMin.z + zPadding;  // We just went backwards, we need to enlarge our depth
         texCam->setNearClipDistance( mMinDistance );
         texCam->setFarClipDistance( mMaxDistance );
 
-        //Update the AABB. Note: Non-shadow caster cameras are forbidden to change mid-render
+        // Update the AABB. Note: Non-shadow caster cameras are forbidden to change mid-render
         texCam->getWorldAabbUpdated();
     }
-}
+}  // namespace Ogre

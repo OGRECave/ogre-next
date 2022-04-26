@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -40,6 +40,6 @@ namespace Ogre
         ArrayQuaternion mOrientation;
         ArrayVector3    mScale;
     };
-}
+}  // namespace Ogre
 
 #endif

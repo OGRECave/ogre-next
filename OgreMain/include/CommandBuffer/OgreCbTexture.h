@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -36,18 +36,18 @@ namespace Ogre
     {
         uint16                  texUnit;
         bool                    bDepthReadOnly;
-        TextureGpu              *texture;
-        HlmsSamplerblock const  *samplerBlock;
+        TextureGpu             *texture;
+        HlmsSamplerblock const *samplerBlock;
 
         CbTexture( uint16 _texUnit, TextureGpu *_texture, const HlmsSamplerblock *_samplerBlock = 0,
-                   bool bDepthReadOnly = false );
+                   bool _bDepthReadOnly = false );
     };
 
     struct _OgreExport CbTextures : public CbBase
     {
         uint16                      texUnit;
         uint16                      hazardousTexIdx;
-        const DescriptorSetTexture  *descSet;
+        const DescriptorSetTexture *descSet;
 
         CbTextures( uint16 _texUnit, uint16 _hazardousTexIdx, const DescriptorSetTexture *_descSet );
     };
@@ -59,6 +59,6 @@ namespace Ogre
 
         CbSamplers( uint16 _texUnit, const DescriptorSetSampler *_descSet );
     };
-}
+}  // namespace Ogre
 
 #endif

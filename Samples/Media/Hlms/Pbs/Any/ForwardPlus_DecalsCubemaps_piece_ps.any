@@ -8,10 +8,10 @@
 	@insertpiece( forward3dHeader )
 
 	@property( hlms_decals_normals && normal_map )
-		float3 finalDecalTsNormal = float3( 0.0f, 0.0f, 1.0f );
+		midf3 finalDecalTsNormal = midf3_c( 0.0f, 0.0f, 1.0f );
 	@end
 	@property( hlms_decals_emissive )
-		float3 finalDecalEmissive = float3( 0.0f, 0.0f, 0.0f );
+		midf3 finalDecalEmissive = midf3_c( 0.0f, 0.0f, 0.0f );
 	@end
 
 	ushort numLightsInGrid = bufferFetch1( f3dGrid, int(sampleOffset + @value(hlms_forwardplus_decals_slot_offset)u) );
@@ -47,18 +47,18 @@
 
 		@property( hlms_decals_diffuse )
 			ushort decalDiffuseIdx = floatBitsToUint( texIndices.x ) & 0xFFFFu;
-			float4 decalDiffuse = OGRE_SampleArray2DGrad( decalsDiffuseTex, decalsSampler, decalUV.xy,
-														  decalDiffuseIdx, decalUvDdx, decalUvDdy ).xyzw;
+			midf4 decalDiffuse = OGRE_SampleArray2DGradF16( decalsDiffuseTex, decalsSampler, decalUV.xy,
+															decalDiffuseIdx, decalUvDdx, decalUvDdy ).xyzw;
 		@end
 		@property( hlms_decals_normals && normal_map )
 			ushort decalNormalsIdx = floatBitsToUint( texIndices.x ) >> 16u;
-			float2 decalNormals = OGRE_SampleArray2DGrad( decalsNormalsTex, decalsSampler, decalUV.xy,
-														  decalNormalsIdx, decalUvDdx, decalUvDdy ).xy;
+			midf2 decalNormals = OGRE_SampleArray2DGradF16( decalsNormalsTex, decalsSampler, decalUV.xy,
+															decalNormalsIdx, decalUvDdx, decalUvDdy ).xy;
 		@end
 		@property( hlms_decals_emissive )
 			ushort decalEmissiveIdx = floatBitsToUint( texIndices.y ) & 0xFFFFu;
-			float3 decalEmissive = OGRE_SampleArray2DGrad( decalsEmissiveTex, decalsSampler, decalUV.xy,
-														   decalEmissiveIdx, decalUvDdx, decalUvDdy ).xyz;
+			midf3 decalEmissive = OGRE_SampleArray2DGradF16( decalsEmissiveTex, decalsSampler, decalUV.xy,
+															 decalEmissiveIdx, decalUvDdx, decalUvDdy ).xyz;
 		@end
 
 		@property( hlms_decals_diffuse && (hlms_decals_normals || hlms_decals_emissive) )
@@ -77,27 +77,27 @@
 		//
 		//Use a smooth fade to avoid flickering due to floating point precision when the normal
 		//and the decal are perpendicular to each other. (tolerance set to 0.0002)
-		float3 decalDir = normalize( float3( invWorldView1.xyz ) );
+		midf3 decalDir = normalize( midf3_c( invWorldView1.xyz ) );
 		//isOutsideDecal = dot( decalDir.xyz, inPs.normal.xyz ) <= 0.0 ? true : isOutsideDecal;
-		float normalAway = saturate( (dot( decalDir.xyz, inPs.normal.xyz ) + 0.0002) / 0.0002 );
-		normalAway = isOutsideDecal ? 0.0f : normalAway;
+		midf normalAway = saturate( (dot( decalDir.xyz, inPs.normal.xyz ) + _h( 0.0002 ) ) / _h( 0.0002 ) );
+		normalAway = isOutsideDecal ? _h( 0.0f ) : normalAway;
 
-		float decalMask = normalAway;
+		midf decalMask = normalAway;
 
 		@property( hlms_decals_diffuse )
 			decalMask *= decalDiffuse.w;
-			float decalMetalness = texIndices.z;
-			float3 decalF0 = lerp( float3( 0.03f, 0.03f, 0.03f ), decalDiffuse.xyz, decalMetalness );
+			midf decalMetalness = midf_c( texIndices.z );
+			midf3 decalF0 = lerp( midf3_c( 0.03f, 0.03f, 0.03f ), decalDiffuse.xyz, decalMetalness );
 			decalDiffuse.xyz = decalDiffuse.xyz - decalDiffuse.xyz * decalMetalness;
 
-			pixelData.diffuse.xyz	= lerp( pixelData.diffuse.xyz, decalDiffuse.xyz * 0.318309886f, decalMask );
-			pixelData.roughness		= lerp( pixelData.roughness, texIndices.w, decalMask );
+			pixelData.diffuse.xyz	= lerp( pixelData.diffuse.xyz, decalDiffuse.xyz * _h( 0.318309886f ), decalMask );
+			pixelData.roughness		= lerp( pixelData.roughness, midf_c( texIndices.w ), decalMask );
 
 			@property( !metallic_workflow && !fresnel_workflow && !fresnel_scalar )
 				pixelData.specular	= lerp( pixelData.specular.xyz, decalF0, decalMask );
 				pixelData.F0		= lerp( pixelData.F0, decalMetalness, decalMask );
 			@else
-				pixelData.specular	= lerp( pixelData.specular.xyz, float3( 1.0f, 1.0f, 1.0f ), decalMask );
+				pixelData.specular	= lerp( pixelData.specular.xyz, midf3_c( 1.0f, 1.0f, 1.0f ), decalMask );
 				pixelData.F0.xyz	= lerp( pixelData.F0.xyz, decalF0.xyz, decalMask );
 			@end
 
@@ -111,7 +111,7 @@
 		@end
 		@property( hlms_decals_emissive )
 			finalDecalEmissive	+= (absLocalPos.x > 0.5f || absLocalPos.y > 0.5f ||
-									absLocalPos.z > 0.5f) ? float3( 0.0f, 0.0f, 0.0f ) :
+									absLocalPos.z > 0.5f) ? midf3_c( 0.0f, 0.0f, 0.0f ) :
 															(decalEmissive.xyz * decalMask);
 		@end
 
@@ -140,13 +140,13 @@
 
 	@property( hlms_forwardplus_debug )totalNumLightsInGrid += numLightsInGrid;@end
 
-	float cubemapAccumWeight = 0;
+	midf cubemapAccumWeight = _h( 0 );
 
-	float3 pccEnvS = float3( 0, 0, 0 );
-	float3 pccEnvD = float3( 0, 0, 0 );
+	midf3 pccEnvS = midf3_c( 0, 0, 0 );
+	midf3 pccEnvD = midf3_c( 0, 0, 0 );
 
 	@property( clear_coat )
-		float3 clearCoatPccEnvS = float3( 0, 0, 0 );
+		midf3 clearCoatPccEnvS = midf3_c( 0, 0, 0 );
 	@end
 
 	@property( vct_num_probes )
@@ -171,46 +171,46 @@
 		float4 probeInnerRange = readOnlyFetch( f3dLightList, int(idx + 6u) ).xyzw;
 		float4 probeOuterRange = readOnlyFetch( f3dLightList, int(idx + 7u) ).xyzw;
 
-		float3 posInProbSpace = toProbeLocalSpace( inPs.pos, probe );
-		float probeFade = getProbeFade( posInProbSpace, probe );
+		midf3 posInProbSpace = midf3_c( toProbeLocalSpace( inPs.pos, probe ) );
+		midf probeFade = getProbeFade( posInProbSpace, probe );
 
-		if( probeFade > 0 )
+		if( probeFade > _h( 0 ) )
 		{
 			float2 cubemapIdx_priority = unpackUshort2ToFloat2( floatBitsToUint( probe.halfSize.w ) );
 			float probeCubemapIdx   = cubemapIdx_priority.x;
 			float probePriority     = cubemapIdx_priority.y;
 
-			float3 probeToAreaCenterOffsetLS = float3( probe.cubemapPosLS.w,
+			midf3 probeToAreaCenterOffsetLS = midf3_c( probe.cubemapPosLS.w,
 													   probe.cubemapPosVS.w,
 													   probeInnerRange.w );
-			float ndf = getProbeNDF( posInProbSpace.xyz, probeToAreaCenterOffsetLS.xyz,
-									 probeInnerRange.xyz, probeOuterRange.xyz );
+			midf ndf = getProbeNDF( posInProbSpace.xyz, probeToAreaCenterOffsetLS.xyz,
+									midf3_c( probeInnerRange.xyz ), midf3_c( probeOuterRange.xyz ) );
 			ndf = saturate( ndf );
-			probeFade = 1.0 - ndf;
+			probeFade = _h( 1.0 ) - ndf;
 			probeFade = probeFade * probeFade;
 			probeFade = probeFade * probeFade;
-			probeFade *= probePriority;
+			probeFade *= midf_c( probePriority );
 
 			@property( vct_num_probes )
-				float4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, probe );
-				float3 reflDirLS = reflDirLS_dist.xyz;
+				midf4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, probe );
+				midf3 reflDirLS = reflDirLS_dist.xyz;
 			@else
-				float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe ).xyz;
+				midf3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe ).xyz;
 			@end
-			float3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe ).xyz;
+			midf3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe ).xyz;
 
-			float4 pccSingleEnvS;
+			midf4 pccSingleEnvS;
 
 			@property( clear_coat )
-				float3 clearCoatPccSingleEnvS;
+				midf3 clearCoatPccSingleEnvS;
 			@end
 
 			@property( !hlms_cubemaps_use_dpm )
-				pccSingleEnvS = OGRE_SampleArrayCubeLevel(
-					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
+				pccSingleEnvS = OGRE_SampleArrayCubeLevelF16(
+					texEnvProbeMap, samplerState@value(envMapRegSampler), float3( reflDirLS ),
 					probeCubemapIdx, @insertpiece( envSpecularRoughness ) );
 				@property( cubemaps_as_diffuse_gi )
-					pccEnvD += OGRE_SampleArrayCubeLevel(
+					pccEnvD += OGRE_SampleArrayCubeLevelF16(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), normalLS,
 						probeCubemapIdx, 11.0 ).xyz
 						@insertpiece( ApplyEnvMapScale ) * probeFade;
@@ -218,34 +218,34 @@
 
 				@property( clear_coat )
 					clearCoatPccSingleEnvS = OGRE_SampleArrayCubeLevel( texEnvProbeMap, samplerState@value( envMapRegSampler ),
-																		reflDirLS,
+																		float3( reflDirLS ),
 																		probeCubemapIdx,
 																		@insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 					clearCoatPccSingleEnvS *= probeFade;
 				@end
 			@else
-				pccSingleEnvS = OGRE_SampleArray2DLevel(
+				pccSingleEnvS = OGRE_SampleArray2DLevelF16(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
 					probeCubemapIdx, @insertpiece( envSpecularRoughness ) );
 				@property( cubemaps_as_diffuse_gi )
-					pccEnvD += OGRE_SampleArray2DLevel(
+					pccEnvD += OGRE_SampleArray2DLevelF16(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( normalLS ),
 						probeCubemapIdx, 11.0 ).xyz
 						@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@end
 
 				@property( clear_coat )
-					clearCoatPccSingleEnvS = OGRE_SampleArray2DLevel( texEnvProbeMap, samplerState@value( envMapRegSampler ),
-																	  mapCubemapToDpm( reflDirLS ),
-																	  probeCubemapIdx,
-																	  @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
+					clearCoatPccSingleEnvS = OGRE_SampleArray2DLevelF16( texEnvProbeMap, samplerState@value( envMapRegSampler ),
+																		 mapCubemapToDpm( reflDirLS ),
+																		 probeCubemapIdx,
+																		 @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 					clearCoatPccSingleEnvS *= probeFade;
 				@end
 			@end
 
 			pccSingleEnvS.xyz *= probeFade;
 			@property( envmap_scale )
-				pccSingleEnvS.xyz *= passBuf.ambientUpperHemi.w;
+				pccSingleEnvS.xyz *= midf_c( passBuf.ambientUpperHemi.w );
 			@end
 
 			@property( vct_num_probes )
@@ -278,9 +278,9 @@
 	}
 
 	@property( cubemaps_as_diffuse_gi )
-		pccEnvD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+		pccEnvD.xyz *= cubemapAccumWeight == _h( 0.0f ) ? _h( 1.0f ) : (_h( 1.0f ) / cubemapAccumWeight);
 	@end
-	pccEnvS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+	pccEnvS.xyz *= cubemapAccumWeight == _h( 0.0f ) ? _h( 1.0f ) : (_h( 1.0f ) / cubemapAccumWeight);
 
 	@property( clear_coat )
 		clearCoatPccEnvS *= cubemapAccumWeight == 0.0f ? 1.0f : ( 1.0f / cubemapAccumWeight );
@@ -292,7 +292,7 @@
 									 pixelData.envColourS * (numProbesVctLerp - accumVctLerp) ) /
 								   numProbesVctLerp;
 		@property( cubemaps_as_diffuse_gi )
-			pixelData.envColourD += vctSpecular.w > 0 ? float3( 0, 0, 0 ) : pccEnvD;
+			pixelData.envColourD += vctSpecular.w > 0 ? midf3_c( 0, 0, 0 ) : pccEnvD;
 		@end
 
 		@property( clear_coat )

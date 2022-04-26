@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -33,84 +33,85 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
 #define OGRE_FRAME_STATS_SAMPLES 60
     /** All return values are either in milliseconds or frames per second;
         but they're internally stored in microseconds
     */
-    class _OgreExport FrameStats : public ProfilerAlloc
+    class _OgreExport FrameStats : public OgreAllocatedObj
     {
-        int mNextFrame;
+        int           mNextFrame;
         unsigned long mBestFrameTime;
         unsigned long mWorstFrameTime;
-        uint64 mLastTime;
+        uint64        mLastTime;
         unsigned long mFrameTimes[OGRE_FRAME_STATS_SAMPLES];
-        size_t mFramesSampled;
+        size_t        mFramesSampled;
 
     public:
-        FrameStats(void)
+        FrameStats() { reset( 0 ); }
+
+        float getFps() const { return 1000.0f / getLastTime(); }
+        float getAvgFps() const { return 1000.0f / getAvgTime(); }
+
+        float getBestTime() const { return float( mBestFrameTime ) * 0.001f; }
+        float getWorstTime() const { return float( mWorstFrameTime ) * 0.001f; }
+        float getLastTime() const
         {
-            reset( 0 );
+            return float( mFrameTimes[( mNextFrame + OGRE_FRAME_STATS_SAMPLES - 1 ) %
+                                      OGRE_FRAME_STATS_SAMPLES] ) *
+                   0.001f;
         }
 
-        float getFps(void) const                { return 1000.0f / getLastTime(); }
-        float getAvgFps(void) const             { return 1000.0f / getAvgTime(); }
+        uint64 getLastTimeRawMicroseconds() const { return mLastTime; }
 
-        float getBestTime(void) const   { return mBestFrameTime * 0.001f; }
-        float getWorstTime(void) const  { return mWorstFrameTime * 0.001f; }
-        float getLastTime(void) const
-        {
-            return mFrameTimes[(mNextFrame + OGRE_FRAME_STATS_SAMPLES - 1) %
-                                OGRE_FRAME_STATS_SAMPLES] * 0.001f;
-        }
-
-        float getAvgTime(void) const
+        float getAvgTime() const
         {
             if( !mFramesSampled )
                 return 0.0f;
 
             unsigned long avg = 0;
 
-            for( size_t i=0; i<mFramesSampled; ++i )
+            for( size_t i = 0; i < mFramesSampled; ++i )
             {
-                //idx is first in the range [(mNextFrame - mFramesSampled); mNextFrame),
-                //but then warped around mNextFrame
-                size_t idx = (i + mNextFrame + (mFramesSampled * 2 - 1)) % mFramesSampled;
+                // idx is first in the range [(mNextFrame - mFramesSampled); mNextFrame),
+                // but then warped around mNextFrame
+                size_t idx = ( i + static_cast<size_t>( mNextFrame ) + ( mFramesSampled * 2u - 1u ) ) %
+                             mFramesSampled;
                 avg += mFrameTimes[idx];
             }
 
-            return avg / (float)mFramesSampled * 0.001f;
+            return float( avg ) / (float)mFramesSampled * 0.001f;
         }
 
         /// Adds a new measured time, in *microseconds*
         void addSample( uint64 timeMs )
         {
-            unsigned long frameTimeMs = static_cast<unsigned long>(timeMs - mLastTime);
-            mFrameTimes[mNextFrame]  = frameTimeMs;
-            mBestFrameTime              = std::min( frameTimeMs, mBestFrameTime );
-            mWorstFrameTime             = std::max( frameTimeMs, mWorstFrameTime );
+            unsigned long frameTimeMs = static_cast<unsigned long>( timeMs - mLastTime );
+            mFrameTimes[mNextFrame] = frameTimeMs;
+            mBestFrameTime = std::min( frameTimeMs, mBestFrameTime );
+            mWorstFrameTime = std::max( frameTimeMs, mWorstFrameTime );
 
-            mFramesSampled = std::min<size_t>( (mFramesSampled + 1), OGRE_FRAME_STATS_SAMPLES );
-            mNextFrame = (mNextFrame + 1) % OGRE_FRAME_STATS_SAMPLES;
+            mFramesSampled = std::min<size_t>( ( mFramesSampled + 1 ), OGRE_FRAME_STATS_SAMPLES );
+            mNextFrame = ( mNextFrame + 1 ) % OGRE_FRAME_STATS_SAMPLES;
 
             mLastTime = timeMs;
         }
 
         void reset( uint64 timeMs )
         {
-            mNextFrame   = 0;
-            mBestFrameTime  = std::numeric_limits<unsigned long>::max();
+            mNextFrame = 0;
+            mBestFrameTime = std::numeric_limits<unsigned long>::max();
             mWorstFrameTime = 0;
-            mLastTime       = timeMs;
+            mLastTime = timeMs;
             memset( mFrameTimes, 0, sizeof( unsigned long ) * OGRE_FRAME_STATS_SAMPLES );
-            mFramesSampled  = 0;
+            mFramesSampled = 0;
         }
     };
 
-} // Namespace Ogre
+}  // Namespace Ogre
 #endif

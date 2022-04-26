@@ -16,4 +16,4 @@ namespace Demo
         */
         static void importV1Mesh( const Ogre::String &meshName, const Ogre::String &groupName );
     };
-}
+}  // namespace Demo

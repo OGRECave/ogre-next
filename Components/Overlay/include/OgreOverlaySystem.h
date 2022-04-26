@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,56 +30,57 @@ THE SOFTWARE.
 #define __OverlaySystem_H__
 
 #include "OgreOverlayPrerequisites.h"
+
 #include "OgreRenderQueueListener.h"
 #include "OgreRenderSystem.h"
 
 #if OGRE_PROFILING
-#include "OgreOverlayProfileSessionListener.h"
+#    include "OgreOverlayProfileSessionListener.h"
 #endif
 
-namespace Ogre {
-namespace v1 {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Overlays
-    *  @{
-    */
-    /** This class simplify initialization / finalization of the overlay system. 
-        OGRE root did this steps before the overlay system transformed into a component.
-    @remarks
-        Before you create a concrete instance of the OverlaySystem the OGRE::Root must be created
-        but not initialized. In the ctor all relevant systems are created and registered. The dtor
-        must be called before you delete OGRE::Root.
-        To make the overlays visible (= render into your viewports) you have to register this
-        instance as a RenderQueueListener in your scenemanager(s).
-    */
-    class _OgreOverlayExport OverlaySystem
-        : public OverlayAlloc
-        , public Ogre::RenderQueueListener
-        , public Ogre::RenderSystem::Listener
+namespace Ogre
+{
+    namespace v1
     {
-    public:
-        OverlaySystem();
-        virtual ~OverlaySystem();
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Overlays
+         *  @{
+         */
+        /** This class simplify initialization / finalization of the overlay system.
+            OGRE root did this steps before the overlay system transformed into a component.
+        @remarks
+            Before you create a concrete instance of the OverlaySystem the OGRE::Root must be created
+            but not initialized. In the ctor all relevant systems are created and registered. The dtor
+            must be called before you delete OGRE::Root.
+            To make the overlays visible (= render into your viewports) you have to register this
+            instance as a RenderQueueListener in your scenemanager(s).
+        */
+        class _OgreOverlayExport OverlaySystem : public OgreAllocatedObj,
+                                                 public Ogre::RenderQueueListener,
+                                                 public Ogre::RenderSystem::Listener
+        {
+        public:
+            OverlaySystem();
+            ~OverlaySystem() override;
 
-        /// @see RenderQueueListener
-        virtual void renderQueueStarted( RenderQueue *rq, uint8 queueGroupId, const String& invocation,
-                                         bool& skipThisInvocation);
+            /// @see RenderQueueListener
+            void renderQueueStarted( RenderQueue *rq, uint8 queueGroupId, const String &invocation,
+                                     bool &skipThisInvocation ) override;
 
-        /// @see RenderSystem::Listener
-        virtual void eventOccurred(const String& eventName, const NameValuePairList* parameters);
+            /// @see RenderSystem::Listener
+            void eventOccurred( const String &eventName, const NameValuePairList *parameters ) override;
 
-    private:
-        OverlayManager* mOverlayManager;
-        FontManager* mFontManager;
+        private:
+            OverlayManager *mOverlayManager;
+            FontManager    *mFontManager;
 
 #if OGRE_PROFILING
-        OverlayProfileSessionListener* mProfileListener;
+            OverlayProfileSessionListener *mProfileListener;
 #endif
-    };
+        };
 
-}
-}
+    }  // namespace v1
+}  // namespace Ogre
 #endif

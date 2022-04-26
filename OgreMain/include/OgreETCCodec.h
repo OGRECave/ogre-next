@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,13 +30,14 @@ THE SOFTWARE.
 
 #include "OgreImageCodec2.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
 
     /** Codec specialized in loading ETC (Ericsson Texture Compression) images.
     @remarks
@@ -47,42 +48,44 @@ namespace Ogre {
     {
     protected:
         String mType;
-        
-		static void flipEndian(void * pData, size_t size, size_t count);	// invokes Bitwise::bswapChunks() if OGRE_ENDIAN_BIG
-		static void flipEndian(void * pData, size_t size);					// invokes Bitwise::bswapBuffer() if OGRE_ENDIAN_BIG
+
+        static void flipEndian( void *pData, size_t size,
+                                size_t count );  // invokes Bitwise::bswapChunks() if OGRE_ENDIAN_BIG
+        static void flipEndian( void  *pData,
+                                size_t size );  // invokes Bitwise::bswapBuffer() if OGRE_ENDIAN_BIG
 
         /// Single registered codec instance
-        static ETCCodec* msPKMInstance;
-        static ETCCodec* msKTXInstance;
+        static ETCCodec *msPKMInstance;
+        static ETCCodec *msKTXInstance;
 
     public:
-        ETCCodec(const String &type);
-        virtual ~ETCCodec() { }
+        ETCCodec( const String &type );
+        ~ETCCodec() override {}
 
         /// @copydoc Codec::encode
-        DataStreamPtr encode(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
+        DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const override;
         /// @copydoc Codec::encodeToFile
-        void encodeToFile(MemoryDataStreamPtr& input, const String& outFileName, CodecDataPtr& pData) const;
+        void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                           CodecDataPtr &pData ) const override;
         /// @copydoc Codec::decode
-        DecodeResult decode(DataStreamPtr& input) const;
+        DecodeResult decode( DataStreamPtr &input ) const override;
         /// @copydoc Codec::magicNumberToFileExt
-        String magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const;
-        
-        virtual String getType() const;        
+        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const override;
+
+        String getType() const override;
 
         /// Static method to startup and register the ETC codec
-        static void startup(void);
+        static void startup();
         /// Static method to shutdown and unregister the ETC codec
-        static void shutdown(void);
-    private:
-        bool decodePKM(DataStreamPtr& input, DecodeResult& result) const;
-        bool decodeKTX(DataStreamPtr& input, DecodeResult& result) const;
+        static void shutdown();
 
+    private:
+        bool decodePKM( DataStreamPtr &input, DecodeResult &result ) const;
+        bool decodeKTX( DataStreamPtr &input, DecodeResult &result ) const;
     };
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif
-

@@ -44,12 +44,12 @@
 		return (inX >= 0) ? res : 3.14159265359f - res; // Undo range reduction
 	}
 
-	float getPhotometricAttenuation( float cosAngle, float profileIdx OGRE_PHOTOMETRIC_ARG_DECL )
+	midf getPhotometricAttenuation( float cosAngle, float profileIdx OGRE_PHOTOMETRIC_ARG_DECL )
 	{
 		//float angle = acos( clamp( cosAngle, -1.0, 1.0 ) ) * ( 1.0 / 3.14159265359f );
 		float angle = fast_acos( clamp( cosAngle, -1.0, 1.0 ) ) * ( 1.0 / 3.14159265359f );
-		return OGRE_SampleLevel( lightProfiles, lightProfilesSampler,
-								 float2( angle, profileIdx ), 0.0 ).r;
+		return OGRE_SampleLevelF16( lightProfiles, lightProfilesSampler,
+									float2( angle, profileIdx ), 0.0 ).r;
 	}
 @end
 

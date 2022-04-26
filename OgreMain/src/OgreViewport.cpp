@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,70 +26,36 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreViewport.h"
 
-#include "OgreLogManager.h"
 #include "OgreCamera.h"
-#include "OgreRoot.h"
+#include "OgreLogManager.h"
 #include "OgreMaterialManager.h"
 #include "OgreRenderSystem.h"
+#include "OgreRoot.h"
+
 #include <iomanip>
 
-namespace Ogre {
+namespace Ogre
+{
     //---------------------------------------------------------------------
-    Viewport::Viewport(Real left, Real top, Real width, Real height)
-        : mGlobalIndex( -1 )
-        , mRelLeft(left)
-        , mRelTop(top)
-        , mRelWidth(width)
-        , mRelHeight(height)
-        , mActLeft(0)
-        , mActTop(0)
-        , mActWidth(0)
-        , mActHeight(0)
-        , mCurrentTarget( 0 )
-        , mCurrentMip( 0 )
-        , mScissorRelLeft(left)
-        , mScissorRelTop(top)
-        , mScissorRelWidth(width)
-        , mScissorRelHeight(height)
-        , mScissorActLeft(0)
-        , mScissorActTop(0)
-        , mScissorActWidth(0)
-        , mScissorActHeight(0)
-        , mCoversEntireTarget( true )
-        , mScissorsMatchViewport( true )
-        // Actual dimensions will update later
-        , mUpdated(false)
-        , mShowOverlays(true)
-        , mVisibilityMask(0)
-        , mMaterialSchemeName(MaterialManager::DEFAULT_SCHEME_NAME)
-        , mColourBuffer(CBT_BACK)
-    {
-        // Set the default material scheme
-        //RenderSystem* rs = Root::getSingleton().getRenderSystem();
-        //mMaterialSchemeName = rs->_getDefaultViewportMaterialScheme();
-        
-        // Calculate actual dimensions
-        _updateDimensions();
-    }
-    //---------------------------------------------------------------------
-    Viewport::Viewport() :
-        mGlobalIndex( -1 ),
-        mRelLeft( 0 ),
-        mRelTop( 0 ),
-        mRelWidth( 0 ),
-        mRelHeight( 0 ),
+    Viewport::Viewport( Real left, Real top, Real width, Real height ) :
+        mGlobalIndex( std::numeric_limits<size_t>::max() ),
+        mRelLeft( left ),
+        mRelTop( top ),
+        mRelWidth( width ),
+        mRelHeight( height ),
         mActLeft( 0 ),
         mActTop( 0 ),
         mActWidth( 0 ),
         mActHeight( 0 ),
         mCurrentTarget( 0 ),
         mCurrentMip( 0 ),
-        mScissorRelLeft( 0 ),
-        mScissorRelTop( 0 ),
-        mScissorRelWidth( 0 ),
-        mScissorRelHeight( 0 ),
+        mScissorRelLeft( left ),
+        mScissorRelTop( top ),
+        mScissorRelWidth( width ),
+        mScissorRelHeight( height ),
         mScissorActLeft( 0 ),
         mScissorActTop( 0 ),
         mScissorActWidth( 0 ),
@@ -104,118 +70,83 @@ namespace Ogre {
         mMaterialSchemeName( MaterialManager::DEFAULT_SCHEME_NAME ),
         mColourBuffer( CBT_BACK )
     {
+        // Set the default material scheme
+        // RenderSystem* rs = Root::getSingleton().getRenderSystem();
+        // mMaterialSchemeName = rs->_getDefaultViewportMaterialScheme();
+
+        // Calculate actual dimensions
+        _updateDimensions();
     }
     //---------------------------------------------------------------------
-    Viewport::~Viewport()
-    {
-    }
+    Viewport::Viewport() : Viewport( 0, 0, 0, 0 ) {}
     //---------------------------------------------------------------------
-    bool Viewport::_isUpdated(void) const
-    {
-        return mUpdated;
-    }
+    Viewport::~Viewport() {}
     //---------------------------------------------------------------------
-    void Viewport::_clearUpdatedFlag(void)
-    {
-        mUpdated = false;
-    }
+    bool Viewport::_isUpdated() const { return mUpdated; }
     //---------------------------------------------------------------------
-    void Viewport::_updateDimensions(void)
+    void Viewport::_clearUpdatedFlag() { mUpdated = false; }
+    //---------------------------------------------------------------------
+    void Viewport::_updateDimensions()
     {
         if( !mCurrentTarget )
         {
-            mActLeft    = 0;
-            mActTop     = 0;
-            mActWidth   = 0;
-            mActHeight  = 0;
-            mScissorActLeft     = 0;
-            mScissorActTop      = 0;
-            mScissorActWidth    = 0;
-            mScissorActHeight   = 0;
+            mActLeft = 0;
+            mActTop = 0;
+            mActWidth = 0;
+            mActHeight = 0;
+            mScissorActLeft = 0;
+            mScissorActTop = 0;
+            mScissorActWidth = 0;
+            mScissorActHeight = 0;
 
             mScissorsMatchViewport = true;
             mCoversEntireTarget = true;
             return;
         }
-        Real height = (Real) (mCurrentTarget->getHeight() >> mCurrentMip);
-        Real width = (Real) (mCurrentTarget->getWidth() >> mCurrentMip);
+        const Real height = (Real)( mCurrentTarget->getHeight() >> mCurrentMip );
+        const Real width = (Real)( mCurrentTarget->getWidth() >> mCurrentMip );
 
-        assert( mScissorRelLeft >= mRelLeft     &&
-                mScissorRelTop >= mRelTop       &&
-                mScissorRelWidth <= mRelWidth   &&
-                mScissorRelHeight <= mRelHeight &&
+        assert( mScissorRelLeft >= mRelLeft && mScissorRelTop >= mRelTop &&
+                mScissorRelWidth <= mRelWidth && mScissorRelHeight <= mRelHeight &&
                 "Scissor rectangle must be inside Viewport's!" );
 
-        mActLeft = (int) (mRelLeft * width);
-        mActTop = (int) (mRelTop * height);
-        mActWidth = (int) (mRelWidth * width);
-        mActHeight = (int) (mRelHeight * height);
+        mActLeft = (int)( mRelLeft * width );
+        mActTop = (int)( mRelTop * height );
+        mActWidth = (int)( mRelWidth * width );
+        mActHeight = (int)( mRelHeight * height );
 
-        mScissorActLeft     = (int)( mScissorRelLeft * width );
-        mScissorActTop      = (int)( mScissorRelTop * height );
-        mScissorActWidth    = (int)( mScissorRelWidth * width );
-        mScissorActHeight   = (int)( mScissorRelHeight * height );
+        mScissorActLeft = (int)( mScissorRelLeft * width );
+        mScissorActTop = (int)( mScissorRelTop * height );
+        mScissorActWidth = (int)( mScissorRelWidth * width );
+        mScissorActHeight = (int)( mScissorRelHeight * height );
 
-        mScissorsMatchViewport =
-                mActLeft == mScissorActLeft && mActTop == mScissorActTop &&
-                mActWidth == mScissorActWidth && mActHeight == mScissorActHeight;
-        mCoversEntireTarget =
-                mActLeft == 0 && mActTop == 0 &&
-                mActWidth == width && mActHeight == height &&
-                mScissorsMatchViewport;
+        mScissorsMatchViewport = mActLeft == mScissorActLeft && mActTop == mScissorActTop &&
+                                 mActWidth == mScissorActWidth && mActHeight == mScissorActHeight;
+        mCoversEntireTarget = mActLeft == 0 && mActTop == 0 && mActWidth == int( width ) &&
+                              mActHeight == int( height ) && mScissorsMatchViewport;
 
         mUpdated = true;
     }
     //---------------------------------------------------------------------
-    Real Viewport::getLeft(void) const
-    {
-        return mRelLeft;
-    }
+    Real Viewport::getLeft() const { return mRelLeft; }
     //---------------------------------------------------------------------
-    Real Viewport::getTop(void) const
-    {
-        return mRelTop;
-    }
+    Real Viewport::getTop() const { return mRelTop; }
     //---------------------------------------------------------------------
-    Real Viewport::getWidth(void) const
-    {
-        return mRelWidth;
-    }
+    Real Viewport::getWidth() const { return mRelWidth; }
     //---------------------------------------------------------------------
-    Real Viewport::getHeight(void) const
-    {
-        return mRelHeight;
-    }
+    Real Viewport::getHeight() const { return mRelHeight; }
     //---------------------------------------------------------------------
-    int Viewport::getActualLeft(void) const
-    {
-        return mActLeft;
-    }
+    int Viewport::getActualLeft() const { return mActLeft; }
     //---------------------------------------------------------------------
-    int Viewport::getActualTop(void) const
-    {
-        return mActTop;
-    }
+    int Viewport::getActualTop() const { return mActTop; }
     //---------------------------------------------------------------------
-    int Viewport::getActualWidth(void) const
-    {
-        return mActWidth;
-    }
+    int Viewport::getActualWidth() const { return mActWidth; }
     //---------------------------------------------------------------------
-    int Viewport::getActualHeight(void) const
-    {
-        return mActHeight;
-    }
+    int Viewport::getActualHeight() const { return mActHeight; }
     //---------------------------------------------------------------------
-    bool Viewport::coversEntireTarget(void) const
-    {
-        return mCoversEntireTarget;
-    }
+    bool Viewport::coversEntireTarget() const { return mCoversEntireTarget; }
     //---------------------------------------------------------------------
-    bool Viewport::scissorsMatchViewport(void) const
-    {
-        return mScissorsMatchViewport;
-    }
+    bool Viewport::scissorsMatchViewport() const { return mScissorsMatchViewport; }
     //---------------------------------------------------------------------
     void Viewport::setDimensions( TextureGpu *newTarget, const Vector4 &relativeVp,
                                   const Vector4 &scissors, uint8 mipLevel )
@@ -223,33 +154,33 @@ namespace Ogre {
         mCurrentTarget = newTarget;
         mCurrentMip = mipLevel;
 
-        mRelLeft    = relativeVp.x;
-        mRelTop     = relativeVp.y;
-        mRelWidth   = relativeVp.z;
-        mRelHeight  = relativeVp.w;
+        mRelLeft = relativeVp.x;
+        mRelTop = relativeVp.y;
+        mRelWidth = relativeVp.z;
+        mRelHeight = relativeVp.w;
 
-        mScissorRelLeft     = scissors.x;
-        mScissorRelTop      = scissors.y;
-        mScissorRelWidth    = scissors.z;
-        mScissorRelHeight   = scissors.w;
+        mScissorRelLeft = scissors.x;
+        mScissorRelTop = scissors.y;
+        mScissorRelWidth = scissors.z;
+        mScissorRelHeight = scissors.w;
 
         _updateDimensions();
     }
     //---------------------------------------------------------------------
     void Viewport::setScissors( Real left, Real top, Real width, Real height )
     {
-        mScissorRelLeft     = left;
-        mScissorRelTop      = top;
-        mScissorRelWidth    = width;
-        mScissorRelHeight   = height;
+        mScissorRelLeft = left;
+        mScissorRelTop = top;
+        mScissorRelWidth = width;
+        mScissorRelHeight = height;
         _updateDimensions();
     }
     //---------------------------------------------------------------------
-    void Viewport::_updateCullPhase01( Camera* renderCamera, Camera *cullCamera, const Camera *lodCamera,
+    void Viewport::_updateCullPhase01( Camera *renderCamera, Camera *cullCamera, const Camera *lodCamera,
                                        uint8 firstRq, uint8 lastRq, bool reuseCullData )
     {
         // Automatic AR cameras are useful for cameras that draw into multiple viewports
-        const Real aspectRatio = (Real) mActWidth / (Real) std::max( 1, mActHeight );
+        const Real aspectRatio = (Real)mActWidth / (Real)std::max( 1, mActHeight );
         if( cullCamera->getAutoAspectRatio() && cullCamera->getAspectRatio() != aspectRatio )
             cullCamera->setAspectRatio( aspectRatio );
 
@@ -261,18 +192,18 @@ namespace Ogre {
         }
 #endif
         // Tell Camera to render into me
-        cullCamera->_notifyViewport(this);
+        cullCamera->_notifyViewport( this );
 
         cullCamera->_cullScenePhase01( renderCamera, lodCamera, this, firstRq, lastRq, reuseCullData );
     }
     //---------------------------------------------------------------------
-    void Viewport::_updateRenderPhase02( Camera* camera, const Camera *lodCamera,
-                                         uint8 firstRq, uint8 lastRq )
+    void Viewport::_updateRenderPhase02( Camera *camera, const Camera *lodCamera, uint8 firstRq,
+                                         uint8 lastRq )
     {
         camera->_renderScenePhase02( lodCamera, firstRq, lastRq, mShowOverlays );
     }
     //---------------------------------------------------------------------
-    void Viewport::getActualDimensions(int &left, int&top, int &width, int &height) const
+    void Viewport::getActualDimensions( int &left, int &top, int &width, int &height ) const
     {
         left = mActLeft;
         top = mActTop;
@@ -280,15 +211,9 @@ namespace Ogre {
         height = mActHeight;
     }
     //---------------------------------------------------------------------
-    void Viewport::setOverlaysEnabled(bool enabled)
-    {
-        mShowOverlays = enabled;
-    }
+    void Viewport::setOverlaysEnabled( bool enabled ) { mShowOverlays = enabled; }
     //---------------------------------------------------------------------
-    bool Viewport::getOverlaysEnabled(void) const
-    {
-        return mShowOverlays;
-    }
+    bool Viewport::getOverlaysEnabled() const { return mShowOverlays; }
     //-----------------------------------------------------------------------
     void Viewport::_setVisibilityMask( uint32 mask, uint32 lightMask )
     {
@@ -296,28 +221,28 @@ namespace Ogre {
         mLightVisibilityMask = lightMask;
     }
     //-----------------------------------------------------------------------
-    void Viewport::pointOrientedToScreen(const Vector2 &v, int orientationMode, Vector2 &outv)
+    void Viewport::pointOrientedToScreen( const Vector2 &v, int orientationMode, Vector2 &outv )
     {
-        pointOrientedToScreen(v.x, v.y, orientationMode, outv.x, outv.y);
+        pointOrientedToScreen( v.x, v.y, orientationMode, outv.x, outv.y );
     }
     //-----------------------------------------------------------------------
-    void Viewport::pointOrientedToScreen(Real orientedX, Real orientedY, int orientationMode,
-                                         Real &screenX, Real &screenY)
+    void Viewport::pointOrientedToScreen( Real orientedX, Real orientedY, int orientationMode,
+                                          Real &screenX, Real &screenY )
     {
         Real orX = orientedX;
         Real orY = orientedY;
-        switch (orientationMode)
+        switch( orientationMode )
         {
         case 1:
             screenX = orY;
-            screenY = Real(1.0) - orX;
+            screenY = Real( 1.0 ) - orX;
             break;
         case 2:
-            screenX = Real(1.0) - orX;
-            screenY = Real(1.0) - orY;
+            screenX = Real( 1.0 ) - orX;
+            screenY = Real( 1.0 ) - orY;
             break;
         case 3:
-            screenX = Real(1.0) - orY;
+            screenX = Real( 1.0 ) - orY;
             screenY = orX;
             break;
         default:
@@ -327,14 +252,8 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Viewport::setDrawBuffer(ColourBufferType colourBuffer) 
-    {
-        mColourBuffer = colourBuffer;
-    }
+    void Viewport::setDrawBuffer( ColourBufferType colourBuffer ) { mColourBuffer = colourBuffer; }
     //-----------------------------------------------------------------------
-    ColourBufferType Viewport::getDrawBuffer() const
-    {
-        return mColourBuffer;
-    }
+    ColourBufferType Viewport::getDrawBuffer() const { return mColourBuffer; }
     //-----------------------------------------------------------------------
-}
+}  // namespace Ogre

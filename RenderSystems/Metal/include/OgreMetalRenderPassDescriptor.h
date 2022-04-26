@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,7 +30,9 @@ THE SOFTWARE.
 #define _OgreMetalRenderPassDescriptor_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreRenderPassDescriptor.h"
+
 #include "OgreCommon.h"
 
 #import <Metal/MTLRenderPass.h>
@@ -40,11 +42,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     struct MetalFrameBufferDescValue
     {
@@ -54,53 +56,54 @@ namespace Ogre
 
     typedef map<FrameBufferDescKey, MetalFrameBufferDescValue>::type MetalFrameBufferDescMap;
 
-    class _OgreMetalExport MetalRenderPassDescriptor : public RenderPassDescriptor
+    class _OgreMetalExport MetalRenderPassDescriptor final : public RenderPassDescriptor
     {
     protected:
-        MTLRenderPassColorAttachmentDescriptor  *mColourAttachment[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        MTLRenderPassDepthAttachmentDescriptor  *mDepthAttachment;
-        MTLRenderPassStencilAttachmentDescriptor*mStencilAttachment;
+        MTLRenderPassColorAttachmentDescriptor   *mColourAttachment[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        MTLRenderPassDepthAttachmentDescriptor   *mDepthAttachment;
+        MTLRenderPassStencilAttachmentDescriptor *mStencilAttachment;
+
         /// Only used if we need to emulate StoreAndMultisampleResolve
-        MTLRenderPassColorAttachmentDescriptor  *mResolveColourAttachm[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        bool mRequiresManualResolve;
+        MTLRenderPassColorAttachmentDescriptor *mResolveColourAttachm[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        bool                                    mRequiresManualResolve;
 
         MetalFrameBufferDescMap::iterator mSharedFboItor;
 
-        MetalDevice         *mDevice;
-        MetalRenderSystem   *mRenderSystem;
+        MetalDevice       *mDevice;
+        MetalRenderSystem *mRenderSystem;
 
 #if OGRE_DEBUG_MODE
-        void *mCallstackBacktrace[32];
+        void  *mCallstackBacktrace[32];
         size_t mNumCallstackEntries;
 #endif
 
-        void checkRenderWindowStatus(void);
-        void calculateSharedKey(void);
+        void checkRenderWindowStatus();
+        void calculateSharedKey();
 
-        static MTLLoadAction get( LoadAction::LoadAction action );
+        static MTLLoadAction  get( LoadAction::LoadAction action );
         static MTLStoreAction get( StoreAction::StoreAction action );
 
         void sanitizeMsaaResolve( size_t colourIdx );
         void updateColourRtv( uint8 lastNumColourEntries );
-        void updateDepthRtv(void);
-        void updateStencilRtv(void);
+        void updateDepthRtv();
+        void updateStencilRtv();
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.
         /// If using MRT, each colour is evaluated independently (only the ones marked
         /// as clear will be cleared).
         uint32 checkForClearActions( MetalRenderPassDescriptor *other ) const;
-        bool cannotInterruptRendering(void) const;
+        bool   cannotInterruptRendering() const;
 
     public:
         MetalRenderPassDescriptor( MetalDevice *device, MetalRenderSystem *renderSystem );
-        virtual ~MetalRenderPassDescriptor();
+        ~MetalRenderPassDescriptor() override;
 
-        virtual void entriesModified( uint32 entryTypes );
+        void entriesModified( uint32 entryTypes ) override;
 
-        virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
-        virtual void setClearDepth( Real clearDepth );
-        virtual void setClearStencil( uint32 clearStencil );
+        void setClearColour( uint8 idx, const ColourValue &clearColour ) override;
+        void setClearDepth( Real clearDepth ) override;
+        void setClearStencil( uint32 clearStencil ) override;
 
         uint32 willSwitchTo( MetalRenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 
@@ -110,7 +113,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

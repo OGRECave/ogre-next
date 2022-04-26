@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,28 +26,23 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreParticleIterator.h"
+
 #include "OgreParticle.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    ParticleIterator::ParticleIterator(list<Particle*>::type::iterator start, 
-        list<Particle*>::type::iterator last)
+    ParticleIterator::ParticleIterator( list<Particle *>::type::iterator start,
+                                        list<Particle *>::type::iterator last )
     {
         mStart = mPos = start;
         mEnd = last;
     }
     //-----------------------------------------------------------------------
-    bool ParticleIterator::end(void)
-    {
-        return (mPos == mEnd);
-    }
+    bool ParticleIterator::end() { return ( mPos == mEnd ); }
     //-----------------------------------------------------------------------
-    Particle* ParticleIterator::getNext(void)
-    {
-        return static_cast<Particle*>(*mPos++);
-    }
+    Particle *ParticleIterator::getNext() { return static_cast<Particle *>( *mPos++ ); }
 
-
-}
+}  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,19 +29,21 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorNodeDef.h"
+
+#include "OgreException.h"
 #include "OgreStringConverter.h"
 
 namespace Ogre
 {
     void CompositorNodeDef::getTextureSource( size_t outputChannel, size_t &index,
-                                                TextureSource &textureSource ) const
+                                              TextureSource &textureSource ) const
     {
         decodeTexSource( mOutChannelMapping[outputChannel], index, textureSource );
         assert( textureSource != TEXTURE_GLOBAL && "Can't use global textures in the output channel!" );
     }
     //-----------------------------------------------------------------------------------
-    CompositorTargetDef* CompositorNodeDef::addTargetPass( const String &renderTargetName,
-                                                            uint32 rtIndex )
+    CompositorTargetDef *CompositorNodeDef::addTargetPass( const String &renderTargetName,
+                                                           uint32 rtIndex )
     {
         assert( mTargetPasses.size() < mTargetPasses.capacity() &&
                 "setNumTargetPass called improperly!" );
@@ -53,7 +55,7 @@ namespace Ogre
         return &mTargetPasses.back();
     }
     //-----------------------------------------------------------------------------------
-    size_t CompositorNodeDef::calculateNumPasses( void ) const
+    size_t CompositorNodeDef::calculateNumPasses() const
     {
         size_t numPasses = 0u;
         CompositorTargetDefVec::const_iterator itor = mTargetPasses.begin();
@@ -74,7 +76,7 @@ namespace Ogre
         TextureSource textureSource;
         getTextureSource( textureName, index, textureSource );
 
-        mOutChannelMapping.resize( outChannel+1 );
+        mOutChannelMapping.resize( outChannel + 1 );
 
         if( textureSource != TEXTURE_GLOBAL )
         {
@@ -83,8 +85,9 @@ namespace Ogre
         else
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                        "Can't use global textures as an output channel!. Node: '" +
-                        mName.getFriendlyText() + "'", "CompositorNodeDef::mapOutputChannel" );
+                         "Can't use global textures as an output channel!. Node: '" +
+                             mName.getFriendlyText() + "'",
+                         "CompositorNodeDef::mapOutputChannel" );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -96,13 +99,13 @@ namespace Ogre
 
         assert( mDefaultLocalTextureSource == TEXTURE_LOCAL );
 
-        //Update the references from the output channels to our local textures
+        // Update the references from the output channels to our local textures
         if( textureSource == mDefaultLocalTextureSource )
         {
             ChannelMappings::iterator itor = mOutChannelMapping.begin();
-            ChannelMappings::iterator end  = mOutChannelMapping.end();
+            ChannelMappings::iterator endt = mOutChannelMapping.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 size_t otherIndex;
                 decodeTexSource( *itor, otherIndex, textureSource );
@@ -115,8 +118,8 @@ namespace Ogre
                     }
                     else
                     {
-                        //Purposedly cause a crash if left unfilled. This
-                        //entry will only be removed if it's the last one.
+                        // Purposedly cause a crash if left unfilled. This
+                        // entry will only be removed if it's the last one.
                         *itor = encodeTexSource( 0x3FFFFFFF, textureSource );
                     }
                 }
@@ -124,13 +127,13 @@ namespace Ogre
                 ++itor;
             }
 
-            //Mappings in the last channels that are no longer valid can be removed
+            // Mappings in the last channels that are no longer valid can be removed
             bool stopIterating = false;
             size_t mappingsToRemove = 0;
             ChannelMappings::const_reverse_iterator ritor = mOutChannelMapping.rbegin();
-            ChannelMappings::const_reverse_iterator rend  = mOutChannelMapping.rend();
+            ChannelMappings::const_reverse_iterator rendt = mOutChannelMapping.rend();
 
-            while( ritor != rend && !stopIterating )
+            while( ritor != rendt && !stopIterating )
             {
                 size_t otherIndex;
                 decodeTexSource( *ritor, otherIndex, textureSource );
@@ -146,9 +149,10 @@ namespace Ogre
                 ++ritor;
             }
 
-            mOutChannelMapping.erase( mOutChannelMapping.begin() +
-                                        (mOutChannelMapping.size() - mappingsToRemove),
-                                      mOutChannelMapping.end() );
+            mOutChannelMapping.erase(
+                mOutChannelMapping.begin() +
+                    static_cast<ptrdiff_t>( mOutChannelMapping.size() - mappingsToRemove ),
+                mOutChannelMapping.end() );
         }
 
         TextureDefinitionBase::removeTexture( name );
@@ -156,28 +160,28 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorNodeDef::mapOutputBufferChannel( size_t outChannel, IdString bufferName )
     {
-        IdStringVec::const_iterator inputIt = std::find( mInputBuffers.begin(),
-                                                         mInputBuffers.end(), bufferName );
+        IdStringVec::const_iterator inputIt =
+            std::find( mInputBuffers.begin(), mInputBuffers.end(), bufferName );
 
         if( inputIt == mInputBuffers.end() )
         {
             BufferDefinitionVec::const_iterator itor = mLocalBufferDefs.begin();
-            BufferDefinitionVec::const_iterator end  = mLocalBufferDefs.end();
+            BufferDefinitionVec::const_iterator endt = mLocalBufferDefs.end();
 
-            while( itor != end && itor->getName() != bufferName )
+            while( itor != endt && itor->getName() != bufferName )
                 ++itor;
 
             if( itor == mLocalBufferDefs.end() )
             {
-                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Trying to map buffer '" +
-                             bufferName.getFriendlyText() + "' to input channel #" +
-                             StringConverter::toString( outChannel ) +
-                             " but no buffer with such name exists.",
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Trying to map buffer '" + bufferName.getFriendlyText() +
+                                 "' to input channel #" + StringConverter::toString( outChannel ) +
+                                 " but no buffer with such name exists.",
                              "CompositorNodeDef::mapOutputBufferChannel" );
             }
         }
 
-        mOutBufferChannelMapping.resize( outChannel+1u );
+        mOutBufferChannelMapping.resize( outChannel + 1u );
 
         mOutBufferChannelMapping[outChannel] = bufferName;
     }
@@ -186,9 +190,9 @@ namespace Ogre
     {
         size_t passCount = 0;
         CompositorTargetDefVec::const_iterator itor = mTargetPasses.begin();
-        CompositorTargetDefVec::const_iterator end  = mTargetPasses.end();
+        CompositorTargetDefVec::const_iterator endt = mTargetPasses.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorPassDefVec::const_iterator itPassDef = itor->getCompositorPasses().begin();
             CompositorPassDefVec::const_iterator enPassDef = itor->getCompositorPasses().end();
@@ -204,6 +208,6 @@ namespace Ogre
             ++itor;
         }
 
-        return -1;
+        return std::numeric_limits<size_t>::max();
     }
-}
+}  // namespace Ogre

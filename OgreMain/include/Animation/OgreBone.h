@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,23 +30,23 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreId.h"
 #include "Math/Array/OgreBoneTransform.h"
+#include "OgreId.h"
 
 #if OGRE_DEBUG_MODE
-    #include "OgreNode.h"
+#    include "OgreNode.h"
 #endif
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
 
     /** Class representing a Bone in the join hierarchy of a skeleton.
         @remarks
@@ -58,50 +58,50 @@ namespace Ogre {
             mDerivedPosition, mDeriverdOrientation and mDerivedScale are still in world space
             though, it's only the 4x4 matrix we send to the GPU that is in a different space.
     */
-    class _OgreExport Bone : public NodeAlloc, public IdObject
+    class _OgreExport Bone : public OgreAllocatedObj, public IdObject
     {
     public:
-        typedef vector<Bone*>::type BoneVec;
-        typedef vector<TagPoint*>::type TagPointVec;
+        typedef vector<Bone *>::type     BoneVec;
+        typedef vector<TagPoint *>::type TagPointVec;
 
     protected:
-        ArrayMatrixAf4x3 const * RESTRICT_ALIAS mReverseBind;
-        BoneTransform                           mTransform;
+        ArrayMatrixAf4x3 const *RESTRICT_ALIAS mReverseBind;
+        BoneTransform                          mTransform;
 
 #if OGRE_DEBUG_MODE
         mutable bool mCachedTransformOutOfDate;
         Node        *mDebugParentNode;
-        bool        mInitialized;
+        bool         mInitialized;
 #endif
 
         /// Depth level in the hierarchy tree (0: Root node, 1: Child of root, etc)
-        uint16  mDepthLevel;
+        uint16 mDepthLevel;
         /// Pointer to parent node
-        Bone    *mParent;
+        Bone *mParent;
         /// Collection of pointers to direct children
         BoneVec mChildren;
         /// TagPoints attached to us
         TagPointVec mTagPointChildren;
 
-        String  mName;
+        String mName;
 
         /// The memory manager used to allocate the Transform.
         BoneMemoryManager *mBoneMemoryManager;
 
         /// @copydoc Node::_updateFromParent
-        void _updateFromParent(void);
+        void _updateFromParent();
 
         /// @copydoc Node::updateFromParentImpl.
-        void updateFromParentImpl(void);
+        void updateFromParentImpl();
 
-        void setCachedTransformOutOfDate(void) const;
+        void setCachedTransformOutOfDate() const;
 
-        void resetParentTransformPtr(void);
+        void resetParentTransformPtr();
 
         /** For debug use ONLY. Bones don't support dynamically changing their hierarchy structure.
             It can mess with the memory layout of neighbouring SkeletonInstances
         */
-        void removeChild( Bone* child );
+        void removeChild( Bone *child );
 
     public:
         /** Index in the vector holding this node reference (could be our parent node, or a global array
@@ -117,48 +117,62 @@ namespace Ogre {
         Bone();
         virtual ~Bone();
 
-        void _initialize( IdType id, BoneMemoryManager *boneMemoryManager,
-                            Bone *parent, ArrayMatrixAf4x3 const * RESTRICT_ALIAS reverseBind );
-        void _deinitialize( bool debugCheckLifoOrder=true );
+        void _initialize( IdType id, BoneMemoryManager *boneMemoryManager, Bone *parent,
+                          ArrayMatrixAf4x3 const *RESTRICT_ALIAS reverseBind );
+        void _deinitialize( bool debugCheckLifoOrder = true );
 
         /// Returns how deep in the hierarchy we are (eg. 0 -> root node, 1 -> child of root)
-        uint16 getDepthLevel() const                                { return mDepthLevel; }
+        uint16 getDepthLevel() const { return mDepthLevel; }
 
         /// Returns a direct access to the Transform state
-        BoneTransform& _getTransform()                              { return mTransform; }
+        BoneTransform &_getTransform() { return mTransform; }
 
         /// Internal use. Called from BoneMemoryManager's rebases (i.e. cleanups, grows)
-        void _memoryRebased(void);
+        void _memoryRebased();
 
-        void _setReverseBindPtr( const ArrayMatrixAf4x3 *ptr )      { mReverseBind = ptr; }
+        void _setReverseBindPtr( const ArrayMatrixAf4x3 *ptr ) { mReverseBind = ptr; }
 
         /// Sets a custom name for this node. Doesn't have to be unique
-        void setName( const String &name )                          { mName = name; }
+        void setName( const String &name ) { mName = name; }
 
         /// Returns the name of the node.
-        const String& getName(void) const                           { return mName; }
+        const String &getName() const { return mName; }
 
         /// Gets this Bones's parent (NULL if this is the root).
-        Bone* getParent(void) const                                 { return mParent; }
+        Bone *getParent() const { return mParent; }
 
         /// Reports the number of child nodes under this one.
-        size_t getNumChildren(void) const                           { return mChildren.size(); }
+        size_t getNumChildren() const { return mChildren.size(); }
 
         /// Gets a pointer to a child node.
-        Bone* getChild(size_t index)                                { return mChildren[index]; }
-        const Bone* getChild(size_t index) const                    { return mChildren[index]; }
+        Bone       *getChild( size_t index ) { return mChildren[index]; }
+        const Bone *getChild( size_t index ) const { return mChildren[index]; }
 
         /** Retrieves the container for efficiently iterating through all children of this bone.
         @remarks
             Using this is faster than repeatedly calling getChild if you want to go through
             all (or most of) the children of this bone.
         */
-        const BoneVec& getChildren(void)                            { return mChildren; }
+        const BoneVec &getChildren() { return mChildren; }
 
         /// Makes the TagPoint child of this Bone.
         void addTagPoint( TagPoint *tagPoint );
 
         void removeTagPoint( TagPoint *tagPoint );
+
+        /// Reports the number of tag points under this one.
+        size_t getNumTagPoints() const { return mTagPointChildren.size(); }
+
+        /// Gets a pointer to a child tag point.
+        TagPoint       *getTagPoint( size_t index ) { return mTagPointChildren[index]; }
+        const TagPoint *getTagPoint( size_t index ) const { return mTagPointChildren[index]; }
+
+        /** Retrieves the container for efficiently iterating through all tag points of this bone.
+        @remarks
+            Using this is faster than repeatedly calling getTagPoint if you want to go through
+            all (or most of) the tag points of this bone.
+        */
+        const TagPointVec &getTagPoints() { return mTagPointChildren; }
 
         /** Sets a regular Node to be parent of this Bone.
             DO NOT USE THIS FUNCTION IF YOU DON'T KNOW WHAT YOU'RE DOING. If you want
@@ -191,25 +205,25 @@ namespace Ogre {
         @remarks
             Don't call this function too often, as we need to convert to SoA
         */
-        inline void setPosition( const Vector3& pos );
+        inline void setPosition( const Vector3 &pos );
 
         /** Gets the position of the node relative to its parent.
         @remarks
             Don't call this function too often, as we need to convert from SoA
         */
-        inline Vector3 getPosition(void) const;
+        inline Vector3 getPosition() const;
 
         /** Sets the scale of the node relative to its parent.
         @remarks
             Don't call this function too often, as we need to convert to SoA
         */
-        inline void setScale( const Vector3& pos );
+        inline void setScale( const Vector3 &pos );
 
         /** Gets the scale of the node relative to its parent.
         @remarks
             Don't call this function too often, as we need to convert from SoA
         */
-        inline Vector3 getScale(void) const;
+        inline Vector3 getScale() const;
 
         /** Tells the Bone whether it should inherit orientation from it's parent node.
         @remarks
@@ -225,13 +239,13 @@ namespace Ogre {
         @param inherit If true, this node's orientation will be affected by its parent's orientation.
             If false, it will not be affected.
         */
-        void setInheritOrientation(bool inherit);
+        void setInheritOrientation( bool inherit );
 
         /** Returns true if this node is affected by orientation applied to the parent node.
         @remarks
             @See setInheritOrientation for more info.
         */
-        bool getInheritOrientation(void) const;
+        bool getInheritOrientation() const;
 
         /** Tells the node whether it should inherit scaling factors from it's parent node.
         @remarks
@@ -239,13 +253,13 @@ namespace Ogre {
         @param inherit If true, this node's scale will be affected by its parent's scale. If false,
             it will not be affected.
         */
-        void setInheritScale(bool inherit);
+        void setInheritScale( bool inherit );
 
         /** Returns true if this node is affected by scaling factors applied to the parent node.
         @remarks
             @See setInheritOrientation for more info.
         */
-        bool getInheritScale(void) const;
+        bool getInheritScale() const;
 
         /** Gets the derived transform in world space
         @remarks
@@ -254,7 +268,7 @@ namespace Ogre {
             which doesn't translate well to a scale/orientation paradigm (not a problem
             if the bones don't use scaling, or if scale is not inherited).
         */
-        Matrix4 _getDerivedTransform(void) const;
+        Matrix4 _getDerivedTransform() const;
 
         /** Gets the transformation matrix for this bone in local space (i.e. as if the
             skeleton wasn't attached to a SceneNode).
@@ -265,10 +279,10 @@ namespace Ogre {
         @par
             Assumes the caches are already updated.
         */
-        FORCEINLINE const SimpleMatrixAf4x3& _getLocalSpaceTransform(void) const
+        FORCEINLINE const SimpleMatrixAf4x3 &_getLocalSpaceTransform() const
         {
 #if OGRE_DEBUG_MODE
-          assert( !mCachedTransformOutOfDate );
+            assert( !mCachedTransformOutOfDate );
 #endif
             return mTransform.mDerivedTransform[mTransform.mIndex];
         }
@@ -285,40 +299,39 @@ namespace Ogre {
             _setNodeParent( nullptr ) in which case the transform will be in
             local bone space.
         */
-        FORCEINLINE const SimpleMatrixAf4x3& _getFullTransform(void) const
+        FORCEINLINE const SimpleMatrixAf4x3 &_getFullTransform() const
         {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             assert( !mCachedTransformOutOfDate &&
-                    (!mDebugParentNode || !mDebugParentNode->isCachedTransformOutOfDate()) );
+                    ( !mDebugParentNode || !mDebugParentNode->isCachedTransformOutOfDate() ) );
 #endif
             return mTransform.mFinalTransform[mTransform.mIndex];
         }
 
         /** @See _getDerivedScaleUpdated remarks. @See _getFullTransform */
-        const SimpleMatrixAf4x3& _getFullTransformUpdated(void);
+        const SimpleMatrixAf4x3 &_getFullTransformUpdated();
 
         /** TODO
-        */
+         */
         /*virtual SceneNode* createChildSceneNode(
                 SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC,
-                const Vector3& translate = Vector3::ZERO, 
+                const Vector3& translate = Vector3::ZERO,
                 const Quaternion& rotate = Quaternion::IDENTITY );*/
 
         /// @See Node::updateAllTransforms
         static void updateAllTransforms( const size_t numNodes, BoneTransform t,
-                                         ArrayMatrixAf4x3 const * RESTRICT_ALIAS reverseBind,
-                                         size_t numBinds );
+                                         ArrayMatrixAf4x3 const *RESTRICT_ALIAS reverseBind,
+                                         size_t                                 numBinds );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        virtual void _setCachedTransformOutOfDate(void);
-        bool isCachedTransformOutOfDate(void) const             { return mCachedTransformOutOfDate; }
+        virtual void _setCachedTransformOutOfDate();
+        bool         isCachedTransformOutOfDate() const { return mCachedTransformOutOfDate; }
 #endif
     };
     /** @} */
     /** @} */
 
-
-}// namespace
+}  // namespace Ogre
 
 #include "OgreBone.inl"
 

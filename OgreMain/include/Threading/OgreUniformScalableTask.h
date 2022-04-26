@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -55,6 +55,6 @@ namespace Ogre
         */
         virtual void execute( size_t threadId, size_t numThreads ) = 0;
     };
-};
+};  // namespace Ogre
 
 #endif

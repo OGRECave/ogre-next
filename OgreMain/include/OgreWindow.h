@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -38,45 +38,45 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
-    class _OgreExport Window : public RenderSysAlloc
+    class _OgreExport Window : public OgreAllocatedObj
     {
     protected:
         String      mTitle;
-        TextureGpu  *mTexture;
-        TextureGpu  *mDepthBuffer;
-        TextureGpu  *mStencilBuffer;
+        TextureGpu *mTexture;
+        TextureGpu *mDepthBuffer;
+        TextureGpu *mStencilBuffer;
 
         /** 0/0 is legal and will be interpreted as 0/1.
             0/anything is interpreted as zero.
             If you are representing a whole number, the denominator should be 1.
         */
-        uint32  mFrequencyNumerator;
-        uint32  mFrequencyDenominator;
+        uint32 mFrequencyNumerator;
+        uint32 mFrequencyDenominator;
 
-        uint32  mRequestedWidth; // in view points
-        uint32  mRequestedHeight; // in view points
+        uint32 mRequestedWidth;   // in view points
+        uint32 mRequestedHeight;  // in view points
 
-        SampleDescription mRequestedSampleDescription; // requested FSAA mode
-        SampleDescription mSampleDescription; // effective FSAA mode, limited by hardware capabilities
+        SampleDescription mRequestedSampleDescription;  // requested FSAA mode
+        SampleDescription mSampleDescription;  // effective FSAA mode, limited by hardware capabilities
 
-        bool    mFullscreenMode;
-        bool    mRequestedFullscreenMode;
-        bool    mBorderless;
+        bool mFullscreenMode;
+        bool mRequestedFullscreenMode;
+        bool mBorderless;
 
-        bool    mFocused;
-        bool    mIsPrimary;
+        bool mFocused;
+        bool mIsPrimary;
 
-        bool    mVSync;
-        uint32  mVSyncInterval;
+        bool   mVSync;
+        uint32 mVSyncInterval;
 
-        int32 mLeft; // in pixels
-        int32 mTop; // in pixels
+        int32 mLeft;  // in pixels
+        int32 mTop;   // in pixels
 
         void setFinalResolution( uint32 widthPx, uint32 heightPx );
 
@@ -84,28 +84,28 @@ namespace Ogre
         Window( const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode );
         virtual ~Window();
 
-        virtual void destroy(void) = 0;
+        virtual void destroy() = 0;
 
-        virtual void setTitle( const String &title );
-        const String& getTitle(void) const;
+        virtual void  setTitle( const String &title );
+        const String &getTitle() const;
 
         /** Many windowing systems that support HiDPI displays use special points to specify
             size of the windows and controls, so that windows and controls with hardcoded
             sizes does not become too small on HiDPI displays. Such points have constant density
             ~ 100 points per inch (probably 96 on Windows and 72 on Mac), that is independent
             of pixel density of real display, and are used through the all windowing system.
-            
+
             Sometimes, such view points are choosen bigger for output devices that are viewed
             from larger distances, like 30" TV comparing to 30" monitor, therefore maintaining
             constant points angular density rather than constant linear density.
-            
+
             In any case, all such windowing system provides the way to convert such view points
             to pixels, be it DisplayProperties::LogicalDpi on WinRT or backingScaleFactor on MacOSX.
             We use pixels consistently through the Ogre, but window/view management functions
             takes view points for convenience, as does the rest of windowing system. Such parameters
             are named using xxxxPt pattern, and should not be mixed with pixels without being
             converted using getViewPointToPixelScale() function.
-            
+
             Sometimes such scale factor can change on-the-fly, for example if window is dragged
             to monitor with different DPI. In such situation, window size in view points is usually
             preserved by windowing system, and Ogre should adjust pixel size of RenderWindow.
@@ -143,8 +143,8 @@ namespace Ogre
             New frequency (fullscreen only). Leave 0 if you don't care.
         */
         virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                              uint32 widthPt, uint32 heightPt,
-                                              uint32 frequencyNumerator, uint32 frequencyDenominator );
+                                              uint32 widthPt, uint32 heightPt, uint32 frequencyNumerator,
+                                              uint32 frequencyDenominator );
 
         /** Turns VSync on/off
         @param vSync
@@ -160,51 +160,112 @@ namespace Ogre
             be used (which doesn't limit the framerate)
         */
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
-        bool getVSync(void) const;
-        uint32 getVSyncInterval(void) const;
+        bool         getVSync() const;
+        uint32       getVSyncInterval() const;
 
         virtual void setBorderless( bool borderless );
-        bool getBorderless(void) const;
+        bool         getBorderless() const;
 
-        uint32 getWidth(void) const;
-        uint32 getHeight(void) const;
-        PixelFormatGpu getPixelFormat(void) const;
+        /** Metal doesn't want us to hold on to a drawable after presenting
+
+            If you want to take a screenshot capture of the window this is a
+            problem because we no longer have a pointer of the backbuffer to
+            download from.
+
+            You can either take your screenshot before swapBuffers() gets called,
+            or, if you intend to take a screenshot, do the following:
+
+            @code
+                window->setWantsToDownload( true );
+                window->setManualSwapRelease( true );
+                mRoot->renderOneFrame();
+
+                if( window->canDownloadData() )
+                {
+                    Ogre::Image2 img;
+                    Ogre::TextureGpu *texture = window->getTexture();
+                    img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
+                }
+
+                window->performManualRelease();
+                window->setManualSwapRelease( false );
+            @endcode
+
+            Technically you can do setManualSwapRelease( true ) and leave it like that,
+            but then you MUST call performManualRelease and that's bug prone.
+
+        @remarks
+            Incorrect usage of this functionality may result in crashes or leaks
+
+            Alternatively you can avoid setManualSwapRelease by taking pictures
+            before calling Window::swapBuffers.
+
+            To do that use FrameListener::frameRenderingQueued listener,
+            *but* you still have to call setWantsToDownload( true ) and
+            check canDownloadData returns true.
+        */
+        virtual void setManualSwapRelease( bool bManualRelease );
+
+        /// Returns the value set by setManualSwapRelease when supported
+        virtual bool isManualSwapRelease() const { return false; }
+
+        /// See Window::setManualSwapRelease
+        virtual void performManualRelease();
+
+        /// On Metal you must call this function and set it to true in order
+        /// to take pictures.
+        ///
+        /// If you no longer need that functionality,
+        /// set it to false to improve performance
+        virtual void setWantsToDownload( bool bWantsToDownload );
+
+        /// Returns true if you can download to CPU (i.e. transfer it via AsyncTextureTicket)
+        /// If it returns false, attempting to do so could result in a crash
+        ///
+        /// See Window::setWantsToDownload
+        /// See Window::setManualSwapRelease
+        virtual bool canDownloadData() const;
+
+        uint32 getWidth() const;
+        uint32 getHeight() const;
+
+        PixelFormatGpu getPixelFormat() const;
 
         /** Set the FSAA mode to be used if hardware support it.
-            This option will be ignored if the hardware does not support it 
-            or setting can not be changed on the fly on per-target level. 
+            This option will be ignored if the hardware does not support it
+            or setting can not be changed on the fly on per-target level.
             @param fsaa Requesed FSAA mode (@see Root::createRenderWindow)
         */
-        virtual void setFsaa(const String& fsaa) {}
-        SampleDescription getSampleDescription(void) const;
-        bool isMultisample(void) const;
+        virtual void      setFsaa( const String &fsaa ) {}
+        SampleDescription getSampleDescription() const;
+        bool              isMultisample() const;
 
-        uint32 getFrequencyNumerator(void) const;
-        uint32 getFrequencyDenominator(void) const;
+        uint32 getFrequencyNumerator() const;
+        uint32 getFrequencyDenominator() const;
 
-        uint32 getRequestedWidthPt(void) const;
-        uint32 getRequestedHeightPt(void) const;
+        uint32 getRequestedWidthPt() const;
+        uint32 getRequestedHeightPt() const;
 
         /// Returns true if we are currently in fullscreen mode.
-        bool isFullscreen(void) const;
+        bool isFullscreen() const;
         /// Returns true if we are in windowed mode right now, but want to go fullscreen.
-        bool wantsToGoFullscreen(void) const;
+        bool wantsToGoFullscreen() const;
         /// Returns true if we are in fullscreen mode right now, but want to go windowed mode.
-        bool wantsToGoWindowed(void) const;
+        bool wantsToGoWindowed() const;
 
         /** Notify that the window has been resized
         @remarks
             You don't need to call this unless you created the window externally.
         */
-        virtual void windowMovedOrResized(void) {}
+        virtual void windowMovedOrResized() {}
 
         /// Indicates whether the window has been closed by the user.
-        virtual bool isClosed(void) const = 0;
+        virtual bool isClosed() const = 0;
 
         /// Internal method to notify the window it has been obscured or minimized
         virtual void _setVisible( bool visible ) = 0;
         ////Indicates whether the window is visible (not minimized or fully obscured)
-        virtual bool isVisible(void) const = 0;
+        virtual bool isVisible() const = 0;
 
         /** Hide (or show) the window. If called with hidden=true, this
             will make the window completely invisible to the user.
@@ -216,15 +277,15 @@ namespace Ogre
         */
         virtual void setHidden( bool hidden ) = 0;
         /// Indicates whether the window was set to hidden (not displayed)
-        virtual bool isHidden(void) const = 0;
+        virtual bool isHidden() const = 0;
 
         virtual void setFocused( bool focused );
-        bool isFocused(void) const;
+        bool         isFocused() const;
 
         /// Indicates that this is the primary window.
         /// Only to be called by Ogre::Root
-        void _setPrimary(void);
-        bool isPrimary(void) const;
+        void _setPrimary();
+        bool isPrimary() const;
 
         virtual void _initialize( TextureGpuManager *textureGpuManager ) = 0;
 
@@ -234,18 +295,18 @@ namespace Ogre
 
         /// WARNING: Attempting to change the TextureGpu (e.g. setResolution, setPixelFormat)
         /// is undefined behavior
-        TextureGpu* getTexture(void) const;
-        TextureGpu* getDepthBuffer(void) const;
-        TextureGpu* getStencilBuffer(void) const;
+        TextureGpu *getTexture() const;
+        TextureGpu *getDepthBuffer() const;
+        TextureGpu *getStencilBuffer() const;
 
-        virtual void getCustomAttribute( IdString name, void* pData ) {}
+        virtual void getCustomAttribute( IdString name, void *pData ) {}
 
-        virtual void swapBuffers(void) = 0;
+        virtual void swapBuffers() = 0;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

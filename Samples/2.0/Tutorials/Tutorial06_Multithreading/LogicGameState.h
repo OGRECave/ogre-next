@@ -13,21 +13,21 @@ namespace Demo
 
     class LogicGameState : public GameState
     {
-        float               mDisplacement;
-        GameEntity              *mCubeEntity;
+        float mDisplacement;
+        GameEntity *mCubeEntity;
         MovableObjectDefinition *mCubeMoDef;
 
-        LogicSystem         *mLogicSystem;
+        LogicSystem *mLogicSystem;
 
     public:
         LogicGameState();
-        ~LogicGameState();
+        ~LogicGameState() override;
 
-        void _notifyLogicSystem( LogicSystem *logicSystem )     { mLogicSystem = logicSystem; }
+        void _notifyLogicSystem( LogicSystem *logicSystem ) { mLogicSystem = logicSystem; }
 
-        virtual void createScene01(void);
-        virtual void update( float timeSinceLast );
+        void createScene01() override;
+        void update( float timeSinceLast ) override;
     };
-}
+}  // namespace Demo
 
 #endif

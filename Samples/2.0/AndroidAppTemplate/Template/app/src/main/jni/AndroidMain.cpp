@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -157,16 +157,16 @@ void handle_cmd( android_app *app, int32_t cmd )
         g_appController.init();
         break;
     case APP_CMD_TERM_WINDOW:
-		__android_log_print( ANDROID_LOG_INFO, "OgreSamples", "g_appController.destroy(): %d", cmd );
+        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "g_appController.destroy(): %d", cmd );
         g_appController.destroy();
         break;
     case APP_CMD_CONTENT_RECT_CHANGED:
     case APP_CMD_WINDOW_RESIZED:
-		__android_log_print( ANDROID_LOG_INFO, "OgreSamples", "windowMovedOrResized: %d", cmd );
+        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "windowMovedOrResized: %d", cmd );
         g_appController.mGraphicsSystem->getRenderWindow()->windowMovedOrResized();
         break;
     default:
-		__android_log_print( ANDROID_LOG_INFO, "OgreSamples", "event not handled: %d", cmd );
+        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "event not handled: %d", cmd );
     }
 }
 
@@ -184,7 +184,7 @@ void android_main( struct android_app *app )
     // Main loop
     do
     {
-        if( ALooper_pollAll( Demo::AndroidSystems::getNativeWindow() ? 1 : 0, nullptr, &events,
+        if( ALooper_pollAll( Demo::AndroidSystems::getNativeWindow() ? 0 : -1, nullptr, &events,
                              (void **)&source ) >= 0 )
         {
             if( source != NULL )

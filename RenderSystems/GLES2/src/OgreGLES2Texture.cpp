@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -86,7 +86,7 @@ namespace Ogre {
         }
     }
 
-    GLenum GLES2Texture::getGLES2TextureTarget(void) const
+    GLenum GLES2Texture::getGLES2TextureTarget() const
     {
         switch(mTextureType)
         {
@@ -344,7 +344,7 @@ namespace Ogre {
     }
     
     // Creation / loading methods
-    void GLES2Texture::createInternalResourcesImpl(void)
+    void GLES2Texture::createInternalResourcesImpl()
     {
         _createGLTexResource();
         
@@ -354,7 +354,7 @@ namespace Ogre {
         mFormat = getBuffer(0,0)->getFormat();
     }
 
-    void GLES2Texture::createRenderTexture(void)
+    void GLES2Texture::createRenderTexture()
     {
         // Create the GL texture
         // This already does everything necessary
@@ -440,7 +440,7 @@ namespace Ogre {
 
     void GLES2Texture::unprepareImpl()
     {
-        mLoadedImages.setNull();
+        mLoadedImages.reset();
     }
 
     void GLES2Texture::loadImpl()
@@ -454,7 +454,7 @@ namespace Ogre {
         // Now the only copy is on the stack and will be cleaned in case of
         // exceptions being thrown from _loadImages
         LoadedImages loadedImages = mLoadedImages;
-        mLoadedImages.setNull();
+        mLoadedImages.reset();
 
         // Call internal _loadImages, not loadImage since that's external and 
         // will determine load status etc again
@@ -509,7 +509,7 @@ namespace Ogre {
             
             for(size_t i = 0; i < mSurfaceList.size(); i++)
             {
-                static_cast<GLES2TextureBuffer*>(mSurfaceList[i].getPointer())->updateTextureId(mTextureID);
+                static_cast<GLES2TextureBuffer*>(mSurfaceList[i].get())->updateTextureId(mTextureID);
             }
             
             if (mLoader)
@@ -571,7 +571,7 @@ namespace Ogre {
         }
     }
 
-    void GLES2Texture::_autogenerateMipmaps(void)
+    void GLES2Texture::_autogenerateMipmaps()
     {
         const GLenum texTarget = getGLES2TextureTarget();
         OCGE( glBindTexture( texTarget, mTextureID ) );

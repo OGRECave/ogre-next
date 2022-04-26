@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,14 +28,14 @@ THE SOFTWARE.
 
 #include "OgreMetalRenderPassDescriptor.h"
 
+#include "OgreMetalRenderSystem.h"
 #include "OgreMetalTextureGpu.h"
 #include "OgreMetalTextureGpuWindow.h"
-#include "OgreMetalRenderSystem.h"
 
 #include "OgreHlmsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
 
-#include <execinfo.h> //backtrace
+#include <execinfo.h>  //backtrace
 
 namespace Ogre
 {
@@ -47,9 +47,10 @@ namespace Ogre
         mSharedFboItor( renderSystem->_getFrameBufferDescMap().end() ),
         mDevice( device ),
         mRenderSystem( renderSystem )
-  #if OGRE_DEBUG_MODE
-      , mNumCallstackEntries( 0 )
-  #endif
+#if OGRE_DEBUG_MODE
+        ,
+        mNumCallstackEntries( 0 )
+#endif
     {
 #if OGRE_DEBUG_MODE
         memset( mCallstackBacktrace, 0, sizeof( mCallstackBacktrace ) );
@@ -58,7 +59,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     MetalRenderPassDescriptor::~MetalRenderPassDescriptor()
     {
-        for( size_t i=0u; i<mNumColourEntries; ++i )
+        for( size_t i = 0u; i < mNumColourEntries; ++i )
         {
             mColourAttachment[i] = 0;
             mResolveColourAttachm[i] = 0;
@@ -76,11 +77,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::checkRenderWindowStatus(void)
+    void MetalRenderPassDescriptor::checkRenderWindowStatus()
     {
-        if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||
-            (mDepth.texture && mDepth.texture->isRenderWindowSpecific()) ||
-            (mStencil.texture && mStencil.texture->isRenderWindowSpecific()) )
+        if( ( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() ) ||
+            ( mDepth.texture && mDepth.texture->isRenderWindowSpecific() ) ||
+            ( mStencil.texture && mStencil.texture->isRenderWindowSpecific() ) )
         {
             if( mNumColourEntries > 1u )
             {
@@ -89,13 +90,13 @@ namespace Ogre
                              "MetalRenderPassDescriptor::colourEntriesModified" );
             }
 
-            if( (mNumColourEntries > 0 && !mColour[0].texture->isRenderWindowSpecific()) ||
-                (mDepth.texture && !mDepth.texture->isRenderWindowSpecific()) ||
-                (mStencil.texture && !mStencil.texture->isRenderWindowSpecific()) )
+            if( ( mNumColourEntries > 0 && !mColour[0].texture->isRenderWindowSpecific() ) ||
+                ( mDepth.texture && !mDepth.texture->isRenderWindowSpecific() ) ||
+                ( mStencil.texture && !mStencil.texture->isRenderWindowSpecific() ) )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Cannot mix RenderWindow colour texture with depth or stencil buffer "
-                             "that aren't for RenderWindows, or viceversa",
+                             "that aren't for RenderWindows, or vice-versa",
                              "MetalRenderPassDescriptor::checkRenderWindowStatus" );
             }
         }
@@ -103,7 +104,7 @@ namespace Ogre
         calculateSharedKey();
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::calculateSharedKey(void)
+    void MetalRenderPassDescriptor::calculateSharedKey()
     {
         FrameBufferDescKey key( *this );
         MetalFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
@@ -165,7 +166,7 @@ namespace Ogre
             return MTLStoreActionStoreAndMultisampleResolve;
         case StoreAction::StoreOrResolve:
             assert( false && "StoreOrResolve is invalid. "
-                    "Compositor should've set one or the other already!" );
+                             "Compositor should've set one or the other already!" );
             return MTLStoreActionStore;
         }
 
@@ -176,12 +177,12 @@ namespace Ogre
     {
         const size_t i = colourIdx;
 
-        //iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
+        // iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
         if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
             !mRenderSystem->hasStoreAndMultisampleResolve() &&
-            (mColour[i].texture->isMultisample() && mColour[i].resolveTexture) )
+            ( mColour[i].texture->isMultisample() && mColour[i].resolveTexture ) )
         {
-            //Must emulate the behavior (slower)
+            // Must emulate the behavior (slower)
             mColourAttachment[i].storeAction = MTLStoreActionStore;
             mColourAttachment[i].resolveTexture = nil;
             mResolveColourAttachm[i] = [mColourAttachment[i] copy];
@@ -202,7 +203,7 @@ namespace Ogre
         mRequiresManualResolve = false;
         if( mNumColourEntries < lastNumColourEntries )
         {
-            for( size_t i=mNumColourEntries; i<lastNumColourEntries; ++i )
+            for( size_t i = mNumColourEntries; i < lastNumColourEntries; ++i )
             {
                 mColourAttachment[i] = 0;
                 mResolveColourAttachm[i] = 0;
@@ -211,17 +212,18 @@ namespace Ogre
 
         bool hasRenderWindow = false;
 
-        for( size_t i=0; i<mNumColourEntries; ++i )
+        for( size_t i = 0; i < mNumColourEntries; ++i )
         {
             if( mColour[i].texture->getResidencyStatus() != GpuResidency::Resident )
             {
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
-                             mColour[i].texture->getNameStr() + "' must be resident!",
-                             "MetalRenderPassDescriptor::updateColourRtv" );
+                OGRE_EXCEPT(
+                    Exception::ERR_INVALIDPARAMS,
+                    "RenderTexture '" + mColour[i].texture->getNameStr() + "' must be resident!",
+                    "MetalRenderPassDescriptor::updateColourRtv" );
             }
             if( i > 0 && hasRenderWindow != mColour[i].texture->isRenderWindowSpecific() )
             {
-                //This is a GL restriction actually, which we mimic for consistency
+                // This is a GL restriction actually, which we mimic for consistency
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Cannot use RenderWindow as MRT with other colour textures",
                              "MetalRenderPassDescriptor::updateColourRtv" );
@@ -238,16 +240,17 @@ namespace Ogre
 
             if( !mColour[i].texture->isRenderWindowSpecific() )
             {
-                assert( dynamic_cast<MetalTextureGpu*>( mColour[i].texture ) );
-                MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mColour[i].texture );
+                assert( dynamic_cast<MetalTextureGpu *>( mColour[i].texture ) );
+                MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu *>( mColour[i].texture );
 
                 if( mColour[i].texture->isMultisample() )
                 {
                     MetalTextureGpu *resolveTexture = 0;
-                    if( mColour[i].resolveTexture )
+                    if( mColour[i].resolveTexture &&
+                        !mColour[i].resolveTexture->isRenderWindowSpecific() )
                     {
-                        assert( dynamic_cast<MetalTextureGpu*>( mColour[i].resolveTexture ) );
-                        resolveTexture = static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
+                        OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpu *>( mColour[i].resolveTexture ) );
+                        resolveTexture = static_cast<MetalTextureGpu *>( mColour[i].resolveTexture );
                     }
 
                     if( !mColour[i].texture->hasMsaaExplicitResolves() )
@@ -255,7 +258,7 @@ namespace Ogre
                     else
                         mColourAttachment[i].texture = textureMetal->getFinalTextureName();
 
-                    if( mColour[i].resolveTexture )
+                    if( resolveTexture )
                         mColourAttachment[i].resolveTexture = resolveTexture->getFinalTextureName();
                 }
                 else
@@ -264,13 +267,12 @@ namespace Ogre
                 }
             }
 
-            mColourAttachment[i].clearColor = MTLClearColorMake( mColour[i].clearColour.r,
-                                                                 mColour[i].clearColour.g,
-                                                                 mColour[i].clearColour.b,
-                                                                 mColour[i].clearColour.a );
+            mColourAttachment[i].clearColor =
+                MTLClearColorMake( mColour[i].clearColour.r, mColour[i].clearColour.g,
+                                   mColour[i].clearColour.b, mColour[i].clearColour.a );
 
-            mColourAttachment[i].level          = mColour[i].mipLevel;
-            mColourAttachment[i].resolveLevel   = mColour[i].resolveMipLevel;
+            mColourAttachment[i].level = mColour[i].mipLevel;
+            mColourAttachment[i].resolveLevel = mColour[i].resolveMipLevel;
 
             if( mColour[i].texture->getTextureType() == TextureTypes::Type3D )
                 mColourAttachment[i].depthPlane = mColour[i].slice;
@@ -289,18 +291,18 @@ namespace Ogre
             mColourAttachment[i].storeAction = MetalRenderPassDescriptor::get( mColour[i].storeAction );
 
             if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
-                (!mColour[i].texture->isMultisample() || !mColour[i].resolveTexture) )
+                ( !mColour[i].texture->isMultisample() || !mColour[i].resolveTexture ) )
             {
-                //Ogre allows non-MSAA textures to use this flag. Metal may complain.
+                // Ogre allows non-MSAA textures to use this flag. Metal may complain.
                 mColourAttachment[i].storeAction = MTLStoreActionStore;
             }
 
-            //iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
+            // iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
             if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
                 !mRenderSystem->hasStoreAndMultisampleResolve() &&
-                (mColour[i].texture->isMultisample() && mColour[i].resolveTexture) )
+                ( mColour[i].texture->isMultisample() && mColour[i].resolveTexture ) )
             {
-                //Must emulate the behavior (slower)
+                // Must emulate the behavior (slower)
                 mColourAttachment[i].storeAction = MTLStoreActionStore;
                 mColourAttachment[i].resolveTexture = nil;
                 mResolveColourAttachm[i] = [mColourAttachment[i] copy];
@@ -314,7 +316,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::updateDepthRtv(void)
+    void MetalRenderPassDescriptor::updateDepthRtv()
     {
         mDepthAttachment = 0;
 
@@ -324,8 +326,8 @@ namespace Ogre
             if( mStencil.texture )
             {
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "Stencil without depth (RenderTexture '" +
-                             mStencil.texture->getNameStr() + "'). This is not supported by macOS",
+                             "Stencil without depth (RenderTexture '" + mStencil.texture->getNameStr() +
+                                 "'). This is not supported by macOS",
                              "MetalRenderPassDescriptor::updateDepthRtv" );
             }
 #endif
@@ -334,13 +336,13 @@ namespace Ogre
 
         if( mDepth.texture->getResidencyStatus() != GpuResidency::Resident )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
-                         mDepth.texture->getNameStr() + "' must be resident!",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "RenderTexture '" + mDepth.texture->getNameStr() + "' must be resident!",
                          "MetalRenderPassDescriptor::updateDepthRtv" );
         }
 
-        assert( dynamic_cast<MetalTextureGpu*>( mDepth.texture ) );
-        MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mDepth.texture );
+        assert( dynamic_cast<MetalTextureGpu *>( mDepth.texture ) );
+        MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu *>( mDepth.texture );
 
         mDepthAttachment = [MTLRenderPassDepthAttachmentDescriptor alloc];
         mDepthAttachment.texture = textureMetal->getFinalTextureName();
@@ -354,14 +356,14 @@ namespace Ogre
         mDepthAttachment.storeAction = MetalRenderPassDescriptor::get( mDepth.storeAction );
 
         if( mDepth.storeAction == StoreAction::StoreAndMultisampleResolve &&
-            (!mDepth.texture->isMultisample() || !mDepth.resolveTexture) )
+            ( !mDepth.texture->isMultisample() || !mDepth.resolveTexture ) )
         {
-            //Ogre allows non-MSAA textures to use this flag. Metal may complain.
+            // Ogre allows non-MSAA textures to use this flag. Metal may complain.
             mDepthAttachment.storeAction = MTLStoreActionStore;
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::updateStencilRtv(void)
+    void MetalRenderPassDescriptor::updateStencilRtv()
     {
         mStencilAttachment = 0;
 
@@ -370,13 +372,13 @@ namespace Ogre
 
         if( mStencil.texture->getResidencyStatus() != GpuResidency::Resident )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
-                         mStencil.texture->getNameStr() + "' must be resident!",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "RenderTexture '" + mStencil.texture->getNameStr() + "' must be resident!",
                          "MetalRenderPassDescriptor::updateStencilRtv" );
         }
 
-        assert( dynamic_cast<MetalTextureGpu*>( mStencil.texture ) );
-        MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mStencil.texture );
+        assert( dynamic_cast<MetalTextureGpu *>( mStencil.texture ) );
+        MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu *>( mStencil.texture );
 
         mStencilAttachment = [MTLRenderPassStencilAttachmentDescriptor alloc];
         mStencilAttachment.texture = textureMetal->getFinalTextureName();
@@ -386,9 +388,9 @@ namespace Ogre
         mStencilAttachment.storeAction = MetalRenderPassDescriptor::get( mStencil.storeAction );
 
         if( mStencil.storeAction == StoreAction::StoreAndMultisampleResolve &&
-            (!mStencil.texture->isMultisample() || !mStencil.resolveTexture) )
+            ( !mStencil.texture->isMultisample() || !mStencil.resolveTexture ) )
         {
-            //Ogre allows non-MSAA textures to use this flag. Metal may complain.
+            // Ogre allows non-MSAA textures to use this flag. Metal may complain.
             mStencilAttachment.storeAction = MTLStoreActionStore;
         }
     }
@@ -417,8 +419,8 @@ namespace Ogre
         if( mColourAttachment[idx] )
         {
             mColourAttachment[idx] = [mColourAttachment[idx] copy];
-            mColourAttachment[idx].clearColor = MTLClearColorMake( clearColour.r, clearColour.g,
-                                                                   clearColour.b, clearColour.a );
+            mColourAttachment[idx].clearColor =
+                MTLClearColorMake( clearColour.r, clearColour.g, clearColour.b, clearColour.a );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -457,25 +459,25 @@ namespace Ogre
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
 
-        for( size_t i=0; i<mNumColourEntries; ++i )
+        for( size_t i = 0; i < mNumColourEntries; ++i )
         {
-            //this->mColour[i].allLayers doesn't need to be analyzed
-            //because it requires a different FBO.
+            // this->mColour[i].allLayers doesn't need to be analyzed
+            // because it requires a different FBO.
             if( other->mColour[i].loadAction == LoadAction::Clear ||
-                (isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers) )
+                ( isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers ) )
             {
                 entriesToFlush |= RenderPassDescriptor::Colour0 << i;
             }
         }
 
         if( other->mDepth.loadAction == LoadAction::Clear ||
-            (isTiler && mDepth.loadAction == LoadAction::ClearOnTilers) )
+            ( isTiler && mDepth.loadAction == LoadAction::ClearOnTilers ) )
         {
             entriesToFlush |= RenderPassDescriptor::Depth;
         }
 
         if( other->mStencil.loadAction == LoadAction::Clear ||
-            (isTiler && mStencil.loadAction == LoadAction::ClearOnTilers) )
+            ( isTiler && mStencil.loadAction == LoadAction::ClearOnTilers ) )
         {
             entriesToFlush |= RenderPassDescriptor::Stencil;
         }
@@ -488,9 +490,8 @@ namespace Ogre
     {
         uint32 entriesToFlush = 0;
 
-        if( !newDesc ||
-            this->mSharedFboItor != newDesc->mSharedFboItor ||
-            this->mInformationOnly || newDesc->mInformationOnly )
+        if( !newDesc || this->mSharedFboItor != newDesc->mSharedFboItor || this->mInformationOnly ||
+            newDesc->mInformationOnly )
         {
             entriesToFlush = RenderPassDescriptor::All;
         }
@@ -503,11 +504,11 @@ namespace Ogre
         return entriesToFlush;
     }
     //-----------------------------------------------------------------------------------
-    bool MetalRenderPassDescriptor::cannotInterruptRendering(void) const
+    bool MetalRenderPassDescriptor::cannotInterruptRendering() const
     {
         bool cannotInterrupt = false;
 
-        for( size_t i=0; i<mNumColourEntries && !cannotInterrupt; ++i )
+        for( size_t i = 0; i < mNumColourEntries && !cannotInterrupt; ++i )
         {
             if( mColour[i].storeAction != StoreAction::Store &&
                 mColour[i].storeAction != StoreAction::StoreAndMultisampleResolve )
@@ -516,12 +517,10 @@ namespace Ogre
             }
         }
 
-        cannotInterrupt |= (mDepth.texture &&
-                            mDepth.storeAction != StoreAction::Store &&
-                            mDepth.storeAction != StoreAction::StoreAndMultisampleResolve) ||
-                           (mStencil.texture &&
-                            mStencil.storeAction != StoreAction::Store &&
-                            mStencil.storeAction != StoreAction::StoreAndMultisampleResolve);
+        cannotInterrupt |= ( mDepth.texture && mDepth.storeAction != StoreAction::Store &&
+                             mDepth.storeAction != StoreAction::StoreAndMultisampleResolve ) ||
+                           ( mStencil.texture && mStencil.storeAction != StoreAction::Store &&
+                             mStencil.storeAction != StoreAction::StoreAndMultisampleResolve );
 
         return cannotInterrupt;
     }
@@ -532,26 +531,41 @@ namespace Ogre
         if( mInformationOnly )
             return;
 
-        for( size_t i=0; i<mNumColourEntries; ++i )
+        for( size_t i = 0; i < mNumColourEntries; ++i )
             passDesc.colorAttachments[i] = mColourAttachment[i];
 
-        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() )
+        if( mNumColourEntries > 0 &&
+            ( mColour[0].texture->isRenderWindowSpecific() ||
+              ( mColour[0].resolveTexture && mColour[0].resolveTexture->isRenderWindowSpecific() ) ) )
         {
-            //The RenderWindow's MetalDrawable changes every frame. We need a
-            //hard copy since the previous descriptor may still be in flight.
-            //Also ensure we do not retain current drawable's texture beyond the frame.
+            // The RenderWindow's MetalDrawable changes every frame. We need a
+            // hard copy since the previous descriptor may still be in flight.
+            // Also ensure we do not retain current drawable's texture beyond the frame.
             passDesc.colorAttachments[0] = [mColourAttachment[0] copy];
-            MetalTextureGpuWindow *textureMetal =
-                    static_cast<MetalTextureGpuWindow*>( mColour[0].texture );
-            textureMetal->nextDrawable();
-            if( textureMetal->isMultisample() )
+            MetalTextureGpuWindow *textureMetal = 0;
+
+            if( mColour[0].texture->isRenderWindowSpecific() )
             {
-                passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
+                OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mColour[0].texture ) );
+                textureMetal = static_cast<MetalTextureGpuWindow *>( mColour[0].texture );
+            }
+            else
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mColour[0].resolveTexture ) );
+                textureMetal = static_cast<MetalTextureGpuWindow *>( mColour[0].resolveTexture );
+            }
+
+            textureMetal->nextDrawable();
+            if( mColour[0].texture->isMultisample() )
+            {
+                if( mColour[0].texture->isRenderWindowSpecific() )
+                    passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
+
                 passDesc.colorAttachments[0].resolveTexture = textureMetal->getFinalTextureName();
                 if( mColour[0].storeAction == StoreAction::DontCare ||
                     mColour[0].storeAction == StoreAction::Store ||
-                    (mColour[0].storeAction == StoreAction::StoreAndMultisampleResolve &&
-                     !mRenderSystem->hasStoreAndMultisampleResolve()) )
+                    ( mColour[0].storeAction == StoreAction::StoreAndMultisampleResolve &&
+                      !mRenderSystem->hasStoreAndMultisampleResolve() ) )
                 {
                     passDesc.colorAttachments[0].resolveTexture = nil;
                 }
@@ -567,7 +581,7 @@ namespace Ogre
 
         if( renderingWasInterrupted )
         {
-            for( size_t i=0; i<mNumColourEntries; ++i )
+            for( size_t i = 0; i < mNumColourEntries; ++i )
             {
                 passDesc.colorAttachments[i] = [passDesc.colorAttachments[i] copy];
                 passDesc.colorAttachments[i].loadAction = MTLLoadActionLoad;
@@ -591,23 +605,24 @@ namespace Ogre
             if( !warnedOnce || cannotInterrupt )
             {
                 LogManager::getSingleton().logMessage(
-                            "WARNING: Rendering was interrupted. Likely because a StagingBuffer "
-                            "was used while inside HlmsPbs::fillBuffersFor; but could be caused "
-                            "by other reasons such as mipmaps being generated in a listener, "
-                            "buffer transfer/copies, manually dispatching a compute shader, etc."
-                            " Performance will be degraded. This message will only appear once.",
-                            LML_CRITICAL );
+                    "WARNING: Rendering was interrupted. Likely because a StagingBuffer "
+                    "was used while inside HlmsPbs::fillBuffersFor; but could be caused "
+                    "by other reasons such as mipmaps being generated in a listener, "
+                    "buffer transfer/copies, manually dispatching a compute shader, etc."
+                    " Performance will be degraded. This message will only appear once.",
+                    LML_CRITICAL );
 
 #if OGRE_DEBUG_MODE
                 LogManager::getSingleton().logMessage(
-                            "Dumping callstack at the time rendering was interrupted: ", LML_CRITICAL );
+                    "Dumping callstack at the time rendering was interrupted: ", LML_CRITICAL );
 
-                char **translatedCS = backtrace_symbols( mCallstackBacktrace, mNumCallstackEntries );
+                char **translatedCS =
+                    backtrace_symbols( mCallstackBacktrace, (int)mNumCallstackEntries );
 
-                for( size_t i=0; i<mNumCallstackEntries; ++i )
+                for( size_t i = 0; i < mNumCallstackEntries; ++i )
                     LogManager::getSingleton().logMessage( translatedCS[i], LML_CRITICAL );
 
-                memset( mCallstackBacktrace, 0, sizeof(mCallstackBacktrace) );
+                memset( mCallstackBacktrace, 0, sizeof( mCallstackBacktrace ) );
                 mNumCallstackEntries = 0;
 #endif
                 warnedOnce = true;
@@ -636,24 +651,24 @@ namespace Ogre
         if( isInterruptingRendering )
         {
 #if OGRE_DEBUG_MODE
-            //Save the backtrace to report it later
+            // Save the backtrace to report it later
             const bool cannotInterrupt = cannotInterruptRendering();
             static bool warnedOnce = false;
             if( !warnedOnce || cannotInterrupt )
             {
-                mNumCallstackEntries = backtrace( mCallstackBacktrace, 32 );
+                mNumCallstackEntries = static_cast<size_t>( backtrace( mCallstackBacktrace, 32 ) );
                 warnedOnce = true;
             }
 #endif
             return;
         }
 
-        //End (if exists) the render command encoder tied to this RenderPassDesc.
-        //Another encoder will have to be created, and don't let ours linger
-        //since mCurrentRenderPassDescriptor probably doesn't even point to 'this'
+        // End (if exists) the render command encoder tied to this RenderPassDesc.
+        // Another encoder will have to be created, and don't let ours linger
+        // since mCurrentRenderPassDescriptor probably doesn't even point to 'this'
         mDevice->endAllEncoders( false );
 
-        if( !(entriesToFlush & Colour) )
+        if( !( entriesToFlush & Colour ) )
             return;
 
         if( !mRequiresManualResolve )
@@ -665,7 +680,7 @@ namespace Ogre
         MTLRenderPassDescriptor *passDesc = [MTLRenderPassDescriptor renderPassDescriptor];
         size_t currentColourIdx = 0;
 
-        for( size_t i=0; i<mNumColourEntries; ++i )
+        for( size_t i = 0; i < mNumColourEntries; ++i )
         {
             if( mColour[i].resolveTexture &&
                 mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve )
@@ -675,18 +690,34 @@ namespace Ogre
             }
         }
 
-        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() )
+        if( mNumColourEntries > 0 &&
+            ( mColour[0].texture->isRenderWindowSpecific() ||
+              ( mColour[0].resolveTexture && mColour[0].resolveTexture->isRenderWindowSpecific() ) ) )
         {
-            //RenderWindows are a special case. Do not retain.
+            // RenderWindows are a special case. We don't retain them so
+            // mResolveColourAttachm doesn't have their ptrs.
             passDesc.colorAttachments[0] = [passDesc copy];
-            MetalTextureGpuWindow *textureMetal =
-                    static_cast<MetalTextureGpuWindow*>( mColour[0].texture );
-            passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
+
+            MetalTextureGpuWindow *textureMetal = 0;
+
+            if( mColour[0].texture->isRenderWindowSpecific() )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mColour[0].texture ) );
+                textureMetal = static_cast<MetalTextureGpuWindow *>( mColour[0].texture );
+            }
+            else
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mColour[0].resolveTexture ) );
+                textureMetal = static_cast<MetalTextureGpuWindow *>( mColour[0].resolveTexture );
+            }
+
+            if( mColour[0].texture->isRenderWindowSpecific() )
+                passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
             passDesc.colorAttachments[0].resolveTexture = textureMetal->getFinalTextureName();
         }
 
         mDevice->mRenderEncoder =
-                [mDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
+            [mDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
         mDevice->endRenderEncoder( false );
     }
     //-----------------------------------------------------------------------------------

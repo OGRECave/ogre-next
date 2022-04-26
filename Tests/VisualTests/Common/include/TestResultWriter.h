@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "TestBatch.h"
 
 /** Abstract class for outputting test results in some format */
-class TestResultWriter : public Ogre::GeneralAllocatedObject
+class TestResultWriter : public Ogre::AllocPolicy
 {
 public:
 

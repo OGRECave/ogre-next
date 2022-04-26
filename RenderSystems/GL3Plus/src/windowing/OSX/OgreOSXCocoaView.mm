@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -31,47 +31,42 @@ THE SOFTWARE.
 
 @implementation OgreGL3PlusView
 
-- (id)initWithFrame:(NSRect)f
+- (id)initWithFrame:(NSRect)frameRect
 {
-	if((self = [super initWithFrame:f]))
+    if( ( self = [super initWithFrame:frameRect] ) )
     {
         NSApplicationLoad();
-        
-        window = 0;
+
+        ogreWindow = NULL;
     }
-	return self;
+    return self;
 }
 
-- (id)initWithGLOSXWindow:(Ogre::RenderWindow*)w
+- (void)setOgreWindow:(Ogre::Window *)newWindow
 {
-	if((self = [super initWithFrame:NSMakeRect(0, 0, w->getWidth(), w->getHeight())]))
+    ogreWindow = newWindow;
+}
+
+- (Ogre::Window *)ogreWindow
+{
+    return ogreWindow;
+}
+
+- (void)setFrameSize:(NSSize)newSize
+{
+    [super setFrameSize:newSize];
+    if( ogreWindow )
     {
-        window = w;
+        ogreWindow->windowMovedOrResized();
     }
-	return self;
 }
 
-- (void)setOgreWindow:(Ogre::RenderWindow*)w
+- (void)drawRect:(NSRect)dirtyRect
 {
-	window = w;
-}
-
-- (Ogre::RenderWindow*)ogreWindow
-{
-	return window;
-}
-
-- (void)setFrameSize:(NSSize)s
-{
-	[super setFrameSize:s];
-    if (window)
-        window->windowMovedOrResized();
-}
-
-- (void)drawRect:(NSRect)r
-{
-	if(window)
-		window->swapBuffers();
+    if( ogreWindow )
+    {
+        ogreWindow->swapBuffers();
+    }
 }
 
 - (BOOL)acceptsFirstResponder

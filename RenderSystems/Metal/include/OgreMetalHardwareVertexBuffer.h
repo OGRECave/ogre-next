@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,44 +28,48 @@ THE SOFTWARE.
 #ifndef _OgreMetalHardwareVertexBuffer_H_
 #define _OgreMetalHardwareVertexBuffer_H_
 
-#include "OgreMetalHardwareBufferCommon.h"
 #include "OgreHardwareVertexBuffer.h"
 
-namespace Ogre {
-namespace v1 {
-    /// Specialisation of HardwareVertexBuffer for Metal
-    class _OgreMetalExport MetalHardwareVertexBuffer : public HardwareVertexBuffer
+#include "OgreMetalHardwareBufferCommon.h"
+#include "OgreMetalHardwareBufferManager.h"
+
+namespace Ogre
+{
+    namespace v1
     {
-    private:
-        MetalHardwareBufferCommon mMetalHardwareBufferCommon;
+        /// Specialisation of HardwareVertexBuffer for Metal
+        class _OgreMetalExport MetalHardwareVertexBuffer final : public HardwareVertexBuffer
+        {
+        private:
+            MetalHardwareBufferCommon mMetalHardwareBufferCommon;
 
-    protected:
-        virtual void* lockImpl( size_t offset, size_t length, LockOptions options );
-        virtual void unlockImpl(void);
+        protected:
+            void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
+            void  unlockImpl() override;
 
-    public:
-        MetalHardwareVertexBuffer( MetalHardwareBufferManagerBase *mgr, size_t vertexSize,
-                                   size_t numVertices, HardwareBuffer::Usage usage,
-                                   bool useShadowBuffer );
-        virtual ~MetalHardwareVertexBuffer();
+        public:
+            MetalHardwareVertexBuffer( MetalHardwareBufferManagerBase *mgr, size_t vertexSize,
+                                       size_t numVertices, HardwareBuffer::Usage usage,
+                                       bool useShadowBuffer );
+            ~MetalHardwareVertexBuffer() override;
 
-        void _notifyDeviceStalled(void);
+            void _notifyDeviceStalled();
 
-        /// @copydoc MetalHardwareBufferCommon::getBufferName
-        id<MTLBuffer> getBufferName( size_t &outOffset );
-        /// @copydoc MetalHardwareBufferCommon::getBufferNameForGpuWrite
-        id<MTLBuffer> getBufferNameForGpuWrite(void);
+            /// @copydoc MetalHardwareBufferCommon::getBufferName
+            id<MTLBuffer> getBufferName( size_t &outOffset );
+            /// @copydoc MetalHardwareBufferCommon::getBufferNameForGpuWrite
+            id<MTLBuffer> getBufferNameForGpuWrite();
 
-        virtual void readData( size_t offset, size_t length, void* pDest );
-        virtual void writeData( size_t offset, size_t length,
-                                const void* pSource, bool discardWholeBuffer = false );
-        virtual void copyData( HardwareBuffer& srcBuffer, size_t srcOffset,
-                               size_t dstOffset, size_t length, bool discardWholeBuffer = false );
+            void readData( size_t offset, size_t length, void *pDest ) override;
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false ) override;
+            void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset, size_t length,
+                           bool discardWholeBuffer = false ) override;
 
-        virtual void _updateFromShadow(void);
+            void _updateFromShadow() override;
 
-        virtual void* getRenderSystemData(void);
-    };
-}
-}
-#endif // __MetalHARDWAREVERTEXBUFFER_H__
+            void *getRenderSystemData() override;
+        };
+    }  // namespace v1
+}  // namespace Ogre
+#endif  // __MetalHARDWAREVERTEXBUFFER_H__

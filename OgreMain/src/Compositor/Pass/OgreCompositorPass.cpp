@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,21 +28,20 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#include "Compositor/Pass/OgreCompositorPass.h"
+
 #include "Compositor/OgreCompositorChannel.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-#include "Compositor/Pass/OgreCompositorPass.h"
-
+#include "OgreLogManager.h"
 #include "OgrePixelFormatGpuUtils.h"
-#include "OgreViewport.h"
-
 #include "OgreProfiler.h"
 #include "OgreRenderSystem.h"
-
 #include "OgreStringConverter.h"
+#include "OgreViewport.h"
 
 namespace Ogre
 {
@@ -85,7 +84,8 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "No RenderTargetViewDef provided to this compositor pass "
                          "(e.g. you wrote target {} instead of target myTexture {}.\n"
-                         "Only a few compositor passes support this (e.g. Compute passes)\n"
+                         "Only a few compositor passes support this "
+                         "(e.g. Compute passes, Shadows passes)\n"
                          "Node with error: " +
                              mDefinition->getParentTargetDef()->getParentNodeDef()->getNameStr() + "\n",
                          "CompositorPass::CompositorPass" );
@@ -135,8 +135,37 @@ namespace Ogre
         outVp->setDimensions( mAnyTargetTexture, vpSize, scissors, mAnyMipLevel );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::setRenderPassDescToCurrent( void )
+    void CompositorPass::setRenderPassDescToCurrent()
     {
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        if( mDefinition->mSkipLoadStoreSemantics )
+        {
+            OGRE_ASSERT_MEDIUM(
+                ( mDefinition->getType() == PASS_QUAD || mDefinition->getType() == PASS_SCENE ||
+                  mDefinition->getType() == PASS_CUSTOM ) &&
+                "mSkipLoadStoreSemantics is only intended for use with pass quad, scene & custom" );
+
+            const RenderPassDescriptor *currRenderPassDesc = renderSystem->getCurrentPassDescriptor();
+            if( !currRenderPassDesc )
+            {
+                LogManager::getSingleton().logMessage(
+                    "mSkipLoadStoreSemantics was requested but there is no active render pass "
+                    "descriptor. Disable this setting for pass " +
+                        mDefinition->mProfilingId + " with RT " +
+                        mDefinition->getParentTargetDef()->getRenderTargetNameStr() +
+                        "\n - Check the contents of CompositorPass::mResourceTransitions to see if you "
+                        "can "
+                        "move them to a barrier pass",
+                    LML_CRITICAL );
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "mSkipLoadStoreSemantics was requested but there is no active render pass "
+                             "descriptor.\nSee Ogre.log for details",
+                             "CompositorPass::setRenderPassDescToCurrent" );
+            }
+
+            return;
+        }
+
         CompositorWorkspace *workspace = mParentNode->getWorkspace();
         uint8 workspaceVpMask = workspace->getViewportModifierMask();
 
@@ -163,7 +192,6 @@ namespace Ogre
             scissors[i] = Vector4( scLeft, scTop, scWidth, scHeight );
         }
 
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->beginRenderPassDescriptor(
             mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel, vpSize, scissors, numViewports,
             mDefinition->mIncludeOverlays, mDefinition->mWarnIfRtvWasFlushed );
@@ -431,7 +459,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::profilingBegin( void )
+    void CompositorPass::profilingBegin()
     {
 #if OGRE_PROFILING
         if( !mParentNode->getWorkspace()->getAmalgamatedProfiling() )
@@ -440,10 +468,22 @@ namespace Ogre
             OgreProfileGpuBeginDynamic( mDefinition->mProfilingId );
         }
 #endif
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        {
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            renderSystem->debugAnnotationPush( mDefinition->mProfilingId );
+        }
+#endif
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::profilingEnd( void )
+    void CompositorPass::profilingEnd()
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        {
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            renderSystem->debugAnnotationPop();
+        }
+#endif
         if( mDefinition->mFlushCommandBuffers )
         {
             RenderSystem *renderSystem = mParentNode->getRenderSystem();
@@ -458,7 +498,7 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::populateTextureDependenciesFromExposedTextures( void )
+    void CompositorPass::populateTextureDependenciesFromExposedTextures()
     {
         IdStringVec::const_iterator itor = mDefinition->mExposedTextures.begin();
         IdStringVec::const_iterator endt = mDefinition->mExposedTextures.end();
@@ -472,48 +512,51 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::executeResourceTransitions( void )
+    void CompositorPass::executeResourceTransitions()
     {
+        OGRE_ASSERT_MEDIUM( ( mResourceTransitions.empty() || !mDefinition->mSkipLoadStoreSemantics ) &&
+                            "Cannot set mSkipLoadStoreSemantics if there will be resource "
+                            "transitions. Try englobing all affected passes in a barrier pass" );
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->executeResourceTransition( mResourceTransitions );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassEarlyPreExecuteListeners( void )
+    void CompositorPass::notifyPassEarlyPreExecuteListeners()
     {
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             ( *itor )->passEarlyPreExecute( this );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassPreExecuteListeners( void )
+    void CompositorPass::notifyPassPreExecuteListeners()
     {
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             ( *itor )->passPreExecute( this );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassPosExecuteListeners( void )
+    void CompositorPass::notifyPassPosExecuteListeners()
     {
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             ( *itor )->passPosExecute( this );
             ++itor;
@@ -532,14 +575,15 @@ namespace Ogre
         mBarrierSolver.resolveTransition( mResourceTransitions, bufferRes, access, stageMask );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::analyzeBarriers( void )
+    void CompositorPass::analyzeBarriers( const bool bClearBarriers )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->flushPendingAutoResourceLayouts();
+        renderSystem->endCopyEncoder();
 
-        mResourceTransitions.clear();
+        if( bClearBarriers )
+            mResourceTransitions.clear();
 
-        if( mRenderPassDesc )
+        if( mRenderPassDesc && !mDefinition->mSkipLoadStoreSemantics )
         {
             // Check <anything> -> RT
             for( int i = 0; i < mRenderPassDesc->getNumColourEntries(); ++i )
@@ -748,7 +792,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::notifyDestroyed( const UavBufferPacked *buffer ) {}
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyCleared( void )
+    void CompositorPass::notifyCleared()
     {
         if( mRenderPassDesc )
         {
@@ -758,13 +802,13 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::resetNumPassesLeft( void ) { mNumPassesLeft = mDefinition->mNumInitialPasses; }
+    void CompositorPass::resetNumPassesLeft() { mNumPassesLeft = mDefinition->mNumInitialPasses; }
     //-----------------------------------------------------------------------------------
-    Vector2 CompositorPass::getActualDimensions( void ) const
+    Vector2 CompositorPass::getActualDimensions() const
     {
-        return Vector2( floorf( ( mAnyTargetTexture->getWidth() >> mAnyMipLevel ) *
+        return Vector2( floorf( float( mAnyTargetTexture->getWidth() >> mAnyMipLevel ) *
                                 mDefinition->mVpRect[0].mVpWidth ),
-                        floorf( ( mAnyTargetTexture->getHeight() >> mAnyMipLevel ) *
+                        floorf( float( mAnyTargetTexture->getHeight() >> mAnyMipLevel ) *
                                 mDefinition->mVpRect[0].mVpHeight ) );
     }
 }  // namespace Ogre

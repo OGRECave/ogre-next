@@ -259,18 +259,122 @@ Note: When the target is a 3D/Cubemap/array texture, if the slice goes
 out of bounds, an exception will be raised. If the target is a 2D or 1D
 texture, this value is silently ignored. Default: slice = 0
 
+At the moment there is only one setting:
+
+-   target\_level\_barrier \[yes|no\];
+
+Default value is no.
+
+When yes, this setting is meant to be used with `skip_load_store_semantics` for
+optimization on mobile/TBDR targets, but should be used with care.
+
+`skip_load_store_semantics` allows Ogre to execute multiple consecutive passes
+as if they were only one.
+
+An obstacle for this is that barriers from all theses passes mut be issued
+*before* the first pass executes; otherwise the passes need to be internally
+broken up and Ogre will complain if `skip_load_store_semantics on` but we can't
+merge the passes.
+
+`target_level_barrier yes` means that an extra hidden pass will be inserted at
+the beginning of the target and issue all necessary barriers from subsequent passes:
+
+```cpp
+target rt_renderwindow
+{
+    // By having this set to true or yes, a barrier will be issued
+    // to cover all 4 passes in this target, which happens
+    // before the first render_quad
+    target_level_barrier true
+
+    pass render_quad
+    {
+        load
+        {
+            all		dont_care
+        }
+        store
+        {
+            all		dont_care
+            colour	store
+        }
+
+        material MyMaterial
+    }
+
+    pass render_scene
+    {
+        skip_load_store_semantics true
+
+        rq_first	0
+        rq_last		5
+
+        shadows		MainCharacter reuse
+    }
+
+    pass render_quad
+    {
+        skip_load_store_semantics true
+        material Compositor/UpsampleDepth
+        input 0 worldRt_depth
+    }
+
+    pass render_scene
+    {
+        skip_load_store_semantics true
+
+        rq_first	14
+        rq_last		249
+
+        shadows		NormalShadows reuse
+    }
+}
+```
+
+**Note that not always `target_level_barrier yes` can be successful.**
+
+For example if pass `A` needs texture `X` to be in state `Texture` for sampling
+but pass `C` needs that same texture in state `Uav` then we have a contradiction
+as we can't transition to two states at the same time.
+
+The only solution is to break up the passes and issue two barriers.
+Note that you can however issue break ups manually:
+
+```cpp
+target rt_renderwindow
+{
+    target_level_barrier true
+    // Pass A
+    pass render_quad {}
+    // Pass B
+    pass render_quad {skip_load_store_semantics true}
+}
+
+target rt_renderwindow
+{
+    target_level_barrier true
+    // Pass C
+    pass render_quad {}
+    // Pass D
+    pass render_quad {skip_load_store_semantics true}
+}
+```
+
+
 ## Passes {#CompositorNodesPasses}
 
 Passes are the same as they were in Ogre 1.x. At the time of writing
-there are 8 types of passes:
+there are 10 types of passes:
 
 -   clear (PASS\_CLEAR)
 -   generate\_mipmaps (PASS\_MIPMAP)
 -   quad (PASS\_QUAD)
 -   resolve (PASS\_RESOLVE)
 -   render\_scene (PASS\_SCENE)
+-   shadows (PASS\_SHADOWS)
 -   stencil (PASS\_STENCIL)
 -   uav\_queue (PASS\_UAV)
+-   compute (PASS\_COMPUTE)
 -   custom (PASS\_CUSTOM)
 
 More passes are planned including the ability for users to extend with
@@ -448,6 +552,92 @@ know which textures may or will be used during the pass so resource
 transitions and barriers can be issued in explicit APIs like DX12 and
 Vulkan.
 
+-   skip\_load\_store\_semantics \[yes|no\];
+
+When yes, the load and store semantics will be ignored. Use with care
+as improper usage may lead to rendering bugs or crashes.
+
+Normally Ogre tries to merge passes when possible but certain advanced
+uses are impossible or difficult to get automatically merged, thus this
+flag indicates we want
+e.g.
+
+```cpp
+compositor_node MyNode
+{
+	in 0 rtt
+
+	target rtt
+	{
+		pass render_quad
+		{
+			load
+			{
+				// Do not load or clear anything to colour, this pass will overwrite everything
+				all		clear
+				colour	dont_care
+			}
+			store
+			{
+				// Only save colour, don't care about depth/stencil
+				all		dont_care
+				colour	store
+			}
+
+			material MaterialThatWritesToEveryColourPixel
+		}
+
+		pass render_scene
+		{
+			// Inherit the same semantics of the previous pass
+			skip_load_store_semantics true
+
+			rq_first 0
+			rq_last max
+
+			// We can NOT use recalculate or first, because
+			// doing so will end the pass, and we're explicitly
+			// asking Ogre to not close the pass.
+			shadows		MyShadowNode reuse
+		}
+	}
+}
+```
+
+The reason you should be careful is that we assume you know where you're drawing.
+Consider the following example:
+
+```cpp
+target TargetA
+{
+    pass render_quad {}
+}
+
+target UnrelatedTargetB
+{
+    pass render_quad { skip_load_store_semantics true }
+}
+```
+
+This script will *not* behave as expected because **both render\_quad passes
+will draw to TargetA!**
+
+This is because with `skip_load_store_semantics` you're telling Ogre not to
+set `UnrelatedTargetB` as the current target *because Ogre should assume it already
+is* the current target.
+
+Likewise there should be no barriers to execute because barriers force the pass
+to 'close' which means store semantics must be executed; and to open another
+pass we must execute load semantics again (see `target_level_barrier` to
+solve this problem).
+
+We try to perform validation checks in Debug mode to avoid these type of errors,
+but we can't cover them all.
+
+This setting is an optimization specifically aimed at mobile and you
+should pay attention to errors, the Ogre.log, Vulkan Validation Layers, and tools
+like RenderDoc to be sure rendering is happening as intended.
+
 The following setting was available in Ogre 1.x; but was not documented:
 
 -   quad\_normals
@@ -512,6 +702,10 @@ Replaces first\_render\_queue. The default is 0. Must be a value between
 Replaces last\_render\_queue. The default is `max` which is a special
 parameter that implies the last active render queue ID. If numeric,
 value must be between 0 and 255. The value is **not** inclusive.
+
+-   skip\_load\_store\_semantics \[yes|no\];
+
+See render\_quad.
 
 -   viewport \[idx\] \<left\>; \<top\>; \<width\>; \<height\>;
     \[\<scissor\_left\>; \<scissor\_top\>; \<scissor\_width\>;
@@ -582,6 +776,15 @@ it. Very useful for reflection passes (mirrors, water) where the user
 wants to be in control of the camera, while the Compositor is associated
 with it. The Camera must be created by the user before the workspace is
 instantiated and remain valid until the workspace is destroyed.
+
+-   cull\_camera \<camera\_name\>;
+
+In VR we want to reuse the same cull list for both eyes. Additionally we'd like
+to calculate shadows for both eyes once, rather than once per eye.
+This setting allows setting a cull camera different from the rendering
+camera that should be placed in such a way that the cull camera's frustum encompases
+both left and right eye. When this string is empty, the regular camera is used.
+Default: Empty string.
 
 -   lod\_camera \<camera\_name\>;
 
@@ -668,6 +871,47 @@ SSR (Screen Space Reflections).
 
 Whether to use instanced stereo, for VR rendering. See InstancedStereo and OpenVR samples.
 You will probably want to also set multiple viewports, at the very least viewports 0 and 1
+
+### shadows {#CompositorNodesPassesShadows}
+
+This pass enables force-updating multiple shadow nodes in batch in its own pass
+
+This is useful because shadow nodes may "break" a render pass in 3:
+
+ - Normal rendering to RT
+ - Shadow node update
+ - Continue Normal rendering to the same RT
+
+This is an unnecessary performance hit on mobile (TBDR) thus executing them
+earlier allows for a smooth:
+
+ - Shadow node update (all of them? Up to you)
+ - Normal rendering to RT
+
+Don't forget to set shadow nodes to reuse in the pass scene passes or
+else you may overwrite them unnecessarily
+
+Usage is simple:
+
+```cpp
+// This pass supports being part of a nameless target
+target
+{
+	pass shadows
+	{
+		// We can update multiple shadow nodes
+		shadows	MyShadowNode_0
+		shadows	MyShadowNode_1
+		shadows	MyShadowNode_2
+
+		// These 4 parameters are the same as in pass_scene
+		camera		CameraName
+		lod_camera	CameraName
+		cull_camera	CameraName
+		visibility_mask	0xffffffff
+	}
+}
+```
 
 ### stencil {#CompositorNodesPassesStencil}
 

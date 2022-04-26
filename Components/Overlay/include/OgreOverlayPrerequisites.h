@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -44,43 +44,47 @@ namespace Ogre
         class OverlayElementFactory;
         class OverlayManager;
         class OverlaySystem;
-    }
+    }  // namespace v1
 
     typedef SharedPtr<Font> FontPtr;
-}
+}  // namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-#   if defined( OGRE_STATIC_LIB )
-#       define _OgreOverlayExport
-#   else
-#       if defined( OGRE_OVERLAY_EXPORTS )
-#           define _OgreOverlayExport __declspec( dllexport )
-#       else
-#           if defined( __MINGW32__ )
-#               define _OgreOverlayExport
-#           else
-#               define _OgreOverlayExport __declspec( dllimport )
-#           endif
-#       endif
-#   endif
-#elif defined ( OGRE_GCC_VISIBILITY )
-#   define _OgreOverlayExport __attribute__ ((visibility("default")))
+#    if defined( OGRE_STATIC_LIB )
+#        define _OgreOverlayExport
+#    else
+#        if defined( OGRE_OVERLAY_EXPORTS )
+#            define _OgreOverlayExport __declspec( dllexport )
+#        else
+#            if defined( __MINGW32__ )
+#                define _OgreOverlayExport
+#            else
+#                define _OgreOverlayExport __declspec( dllimport )
+#            endif
+#        endif
+#    endif
+#elif defined( OGRE_GCC_VISIBILITY )
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreOverlayExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreOverlayExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
-#   define _OgreOverlayExport
-#endif 
-
-#ifdef OGRE_BUILD_COMPONENT_HLMS_UNLIT
-    namespace Ogre
-    {
-        class HlmsUnlitDatablock;
-        typedef HlmsUnlitDatablock OverlayUnlitDatablock;
-    }
-#else
-    namespace Ogre
-    {
-        class HlmsUnlitMobileDatablock;
-        typedef HlmsUnlitMobileDatablock OverlayUnlitDatablock;
-    }
+#    define _OgreOverlayExport
 #endif
 
-#endif 
+#ifdef OGRE_BUILD_COMPONENT_HLMS_UNLIT
+namespace Ogre
+{
+    class HlmsUnlitDatablock;
+    typedef HlmsUnlitDatablock OverlayUnlitDatablock;
+}  // namespace Ogre
+#else
+namespace Ogre
+{
+    class HlmsUnlitMobileDatablock;
+    typedef HlmsUnlitMobileDatablock OverlayUnlitDatablock;
+}  // namespace Ogre
+#endif
+
+#endif

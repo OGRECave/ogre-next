@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,30 +30,33 @@ THE SOFTWARE.
 #define __SCRIPTTRANSLATOR_H_
 
 #include "OgrePrerequisites.h"
+
 #include "Compositor/OgreCompositorCommon.h"
+#include "OgreBlendMode.h"
 #include "OgreRenderPassDescriptor.h"
 #include "OgreScriptCompiler.h"
-#include "OgreBlendMode.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre{
-	struct IdString;
+namespace Ogre
+{
+    struct IdString;
     class TextureDefinitionBase;
     struct RenderTargetViewDef;
     struct RenderTargetViewEntry;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** This class translates script AST (abstract syntax tree) into
      *  Ogre resources. It defines a common interface for subclasses
      *  which perform the actual translation.
      */
 
-    class _OgreExport ScriptTranslator : public ScriptTranslatorAlloc
+    class _OgreExport ScriptTranslator : public OgreAllocatedObj
     {
     public:
         /**
@@ -61,56 +64,64 @@ namespace Ogre{
          * @param compiler The compiler invoking this translator
          * @param node The current AST node to be translated
          */
-        virtual void translate(ScriptCompiler *compiler, const AbstractNodePtr &node) = 0;
+        virtual void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) = 0;
+
     protected:
         // needs virtual destructor
         virtual ~ScriptTranslator() {}
         /// Retrieves a new translator from the factories and uses it to process the give node
-        void processNode(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void processNode( ScriptCompiler *compiler, const AbstractNodePtr &node );
 
         /// Retrieves the node iterator at the given index
-        static AbstractNodeList::const_iterator getNodeAt(const AbstractNodeList &nodes, int index);
+        static AbstractNodeList::const_iterator getNodeAt( const AbstractNodeList &nodes, int index );
         /// Converts the node to a boolean and returns true if successful
-        static bool getBoolean(const AbstractNodePtr &node, bool *result);
+        static bool getBoolean( const AbstractNodePtr &node, bool *result );
         /// Converts the node to a string and returns true if successful
-        static bool getString(const AbstractNodePtr &node, String *result);
-		/// Converts the node to an IdString and returns true if successful
-        static bool getIdString(const AbstractNodePtr &node, IdString *result);
+        static bool getString( const AbstractNodePtr &node, String *result );
+        /// Converts the node to an IdString and returns true if successful
+        static bool getIdString( const AbstractNodePtr &node, IdString *result );
         /// Converts the node to a Real and returns true if successful
-        static bool getReal(const AbstractNodePtr &node, Real *result);
+        static bool getReal( const AbstractNodePtr &node, Real *result );
         /// Converts the node to a float and returns true if successful
-        static bool getFloat(const AbstractNodePtr &node, float *result);
+        static bool getFloat( const AbstractNodePtr &node, float *result );
         /// Converts the node to a float and returns true if successful
-        static bool getDouble(const AbstractNodePtr &node, double *result);
+        static bool getDouble( const AbstractNodePtr &node, double *result );
         /// Converts the node to an integer and returns true if successful
-        static bool getInt(const AbstractNodePtr &node, int *result); 
+        static bool getInt( const AbstractNodePtr &node, int *result );
         /// Converts the node to an unsigned integer and returns true if successful
-        static bool getUInt(const AbstractNodePtr &node, uint32 *result); 
-		/// Converts the node to a an integer (from hexadecimal) and returns true if successful
-        static bool getHex(const AbstractNodePtr &node, uint32 *result);
+        static bool getUInt( const AbstractNodePtr &node, uint32 *result );
+        /// Converts the node to a an integer (from hexadecimal) and returns true if successful
+        static bool getHex( const AbstractNodePtr &node, uint32 *result );
         /// Converts the range of nodes to a ColourValue and returns true if successful
-        static bool getColour(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end, ColourValue *result, int maxEntries = 4);
+        static bool getColour( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                               ColourValue *result, int maxEntries = 4 );
         /// Converts the node to a SceneBlendFactor enum and returns true if successful
-        static bool getSceneBlendFactor(const AbstractNodePtr &node, SceneBlendFactor *sbf);
+        static bool getSceneBlendFactor( const AbstractNodePtr &node, SceneBlendFactor *sbf );
         /// Converts the node to a CompareFunction enum and returns true if successful
-        static bool getCompareFunction(const AbstractNodePtr &node, CompareFunction *func);
+        static bool getCompareFunction( const AbstractNodePtr &node, CompareFunction *func );
         /// Converts the range of nodes to a Matrix4 and returns true if successful
-        static bool getMatrix4(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end, Matrix4 *m);
+        static bool getMatrix4( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                                Matrix4 *m );
         /// Converts the range of nodes to an array of ints and returns true if successful
-        static bool getInts(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end, int *vals, int count);
+        static bool getInts( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                             int *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getFloats(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end, float *vals, int count);
+        static bool getFloats( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                               float *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getDoubles(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end, double *vals, int count);
+        static bool getDoubles( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                                double *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getUInts(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end, uint *vals, int count);
-        /// Converts the range of nodes to an array of uint-stored boolean values and returns true if successful
-        static bool getBooleans(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end, uint *vals, int count);
+        static bool getUInts( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                              uint *vals, uint32 count );
+        /// Converts the range of nodes to an array of uint-stored boolean values and returns true if
+        /// successful
+        static bool getBooleans( AbstractNodeList::const_iterator i,
+                                 AbstractNodeList::const_iterator end, uint *vals, uint32 count );
         /// Converts the node to a StencilOperation enum and returns true if successful
-        static bool getStencilOp(const AbstractNodePtr &node, StencilOperation *op); 
+        static bool getStencilOp( const AbstractNodePtr &node, StencilOperation *op );
         /// Converts the node to a GpuConstantType enum and returns true if successful
-        static bool getConstantType(AbstractNodeList::const_iterator i, GpuConstantType *op); 
-
+        static bool getConstantType( AbstractNodeList::const_iterator i, GpuConstantType *op );
     };
 
     /** The ScriptTranslatorManager manages the lifetime and access to
@@ -118,7 +129,7 @@ namespace Ogre{
      *  ScriptCompilerManager tied to specific object types.
      *  Each manager may manage multiple types.
      */
-    class ScriptTranslatorManager : public ScriptTranslatorAlloc
+    class ScriptTranslatorManager : public OgreAllocatedObj
     {
     public:
         // required - virtual destructor
@@ -127,126 +138,142 @@ namespace Ogre{
         /// Returns the number of translators being managed
         virtual size_t getNumTranslators() const = 0;
         /// Returns a manager for the given object abstract node, or null if it is not supported
-        virtual ScriptTranslator *getTranslator(const AbstractNodePtr&) = 0;
+        virtual ScriptTranslator *getTranslator( const AbstractNodePtr & ) = 0;
     };
 
     /**************************************************************************
      * HLMS compilation section
      *************************************************************************/
-    class _OgreExport HlmsTranslator : public ScriptTranslator
+    class _OgreExport HlmsTranslator final : public ScriptTranslator
     {
     public:
-        //HlmsTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        // HlmsTranslator();
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
 
     /**************************************************************************
      * Material compilation section
      *************************************************************************/
-    class _OgreExport MaterialTranslator : public ScriptTranslator
+    class _OgreExport MaterialTranslator final : public ScriptTranslator
     {
     protected:
-        Material *mMaterial;
+        Material                      *mMaterial;
         Ogre::AliasTextureNamePairList mTextureAliases;
+
     public:
         MaterialTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-        
-    class _OgreExport TechniqueTranslator : public ScriptTranslator
+
+    class _OgreExport TechniqueTranslator final : public ScriptTranslator
     {
     protected:
         Technique *mTechnique;
+
     public:
         TechniqueTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    
-    class _OgreExport PassTranslator : public ScriptTranslator
+
+    class _OgreExport PassTranslator final : public ScriptTranslator
     {
     protected:
         Pass *mPass;
+
     public:
         PassTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
+
     protected:
-        void translateVertexProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node);
-        void translateGeometryProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node);
-        void translateFragmentProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node);
-        void translateTessellationHullProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node);
-        void translateTessellationDomainProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node);
-        void translateComputeProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node);
-        void translateShadowCasterVertexProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node);
-        void translateShadowCasterFragmentProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node);
+        void translateVertexProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
+        void translateGeometryProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
+        void translateFragmentProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
+        void translateTessellationHullProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
+        void translateTessellationDomainProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
+        void translateComputeProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
+        void translateShadowCasterVertexProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
+        void translateShadowCasterFragmentProgramRef( ScriptCompiler     *compiler,
+                                                      ObjectAbstractNode *node );
     };
 
-    class _OgreExport TextureUnitTranslator : public ScriptTranslator
+    class _OgreExport TextureUnitTranslator final : public ScriptTranslator
     {
     protected:
         TextureUnitState *mUnit;
+
     public:
         TextureUnitTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
 
-    class _OgreExport TextureSourceTranslator : public ScriptTranslator
+    class _OgreExport TextureSourceTranslator final : public ScriptTranslator
     {
     public:
         TextureSourceTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
 
-    class _OgreExport GpuProgramTranslator : public ScriptTranslator
-    {   
+    class _OgreExport GpuProgramTranslator final : public ScriptTranslator
+    {
     public:
         GpuProgramTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
+
     protected:
-        void translateGpuProgram(ScriptCompiler *compiler, ObjectAbstractNode *obj);
-        void translateHighLevelGpuProgram(ScriptCompiler *compiler, ObjectAbstractNode *obj);
-        void translateUnifiedGpuProgram(ScriptCompiler *compiler, ObjectAbstractNode *obj);
+        void translateGpuProgram( ScriptCompiler *compiler, ObjectAbstractNode *obj );
+        void translateHighLevelGpuProgram( ScriptCompiler *compiler, ObjectAbstractNode *obj );
+        void translateUnifiedGpuProgram( ScriptCompiler *compiler, ObjectAbstractNode *obj );
+
     public:
-        static void translateProgramParameters(ScriptCompiler *compiler, GpuProgramParametersSharedPtr params, ObjectAbstractNode *obj);
+        static void translateProgramParameters( ScriptCompiler               *compiler,
+                                                GpuProgramParametersSharedPtr params,
+                                                ObjectAbstractNode           *obj );
     };
 
-    class _OgreExport SharedParamsTranslator : public ScriptTranslator
-    {   
+    class _OgreExport SharedParamsTranslator final : public ScriptTranslator
+    {
     public:
         SharedParamsTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
         template <class T, BaseConstantType baseType>
-        void translateSharedParamNamed(ScriptCompiler *compiler, GpuSharedParameters *sharedParams, PropertyAbstractNode *prop, String pName, GpuConstantType constType);
+        void translateSharedParamNamed( ScriptCompiler *compiler, GpuSharedParameters *sharedParams,
+                                        PropertyAbstractNode *prop, String pName,
+                                        GpuConstantType constType );
         template <class T, BaseConstantType baseType>
-        T parseParameter(const String& param);
+        T parseParameter( const String &param );
+
     protected:
     };
 
     /**************************************************************************
      * Particle System section
      *************************************************************************/
-    class _OgreExport ParticleSystemTranslator : public ScriptTranslator
+    class _OgreExport ParticleSystemTranslator final : public ScriptTranslator
     {
     protected:
         Ogre::ParticleSystem *mSystem;
+
     public:
         ParticleSystemTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport ParticleEmitterTranslator : public ScriptTranslator
+    class _OgreExport ParticleEmitterTranslator final : public ScriptTranslator
     {
     protected:
         Ogre::ParticleEmitter *mEmitter;
+
     public:
         ParticleEmitterTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport ParticleAffectorTranslator : public ScriptTranslator
+    class _OgreExport ParticleAffectorTranslator final : public ScriptTranslator
     {
     protected:
         Ogre::ParticleAffector *mAffector;
+
     public:
         ParticleAffectorTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
 
     /**************************************************************************
@@ -256,37 +283,40 @@ namespace Ogre{
     {
     protected:
         void translateTextureProperty( TextureDefinitionBase *defBase, PropertyAbstractNode *prop,
-                                        ScriptCompiler *compiler ) const;
+                                       ScriptCompiler *compiler ) const;
         void translateBufferProperty( TextureDefinitionBase *defBase, PropertyAbstractNode *prop,
                                       ScriptCompiler *compiler ) const;
     };
-    class _OgreExport CompositorWorkspaceTranslator : public CompositorTextureBaseTranslator
+    class _OgreExport CompositorWorkspaceTranslator final : public CompositorTextureBaseTranslator
     {
     protected:
         CompositorWorkspaceDef *mWorkspaceDef;
+
     public:
         CompositorWorkspaceTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorNodeTranslator : public CompositorTextureBaseTranslator
+    class _OgreExport CompositorNodeTranslator final : public CompositorTextureBaseTranslator
     {
     protected:
         CompositorNodeDef *mNodeDef;
+
     public:
         CompositorNodeTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorShadowNodeTranslator : public CompositorTextureBaseTranslator
+    class _OgreExport CompositorShadowNodeTranslator final : public CompositorTextureBaseTranslator
     {
     protected:
         CompositorShadowNodeDef *mShadowNodeDef;
         void translateShadowMapProperty( PropertyAbstractNode *prop, ScriptCompiler *compiler,
                                          const ShadowTextureDefinition &defaultParams ) const;
+
     public:
         CompositorShadowNodeTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorRenderTargetViewTranslator : public ScriptTranslator
+    class _OgreExport CompositorRenderTargetViewTranslator final : public ScriptTranslator
     {
     protected:
         RenderTargetViewDef *mRtv;
@@ -297,57 +327,62 @@ namespace Ogre{
 
     public:
         CompositorRenderTargetViewTranslator();
-        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node );
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorTargetTranslator : public ScriptTranslator
+    class _OgreExport CompositorTargetTranslator final : public ScriptTranslator
     {
     protected:
         CompositorTargetDef *mTargetDef;
+
     public:
         CompositorTargetTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorShadowMapTargetTypeTranslator : public ScriptTranslator
+    class _OgreExport CompositorShadowMapTargetTypeTranslator final : public ScriptTranslator
     {
     public:
         CompositorShadowMapTargetTypeTranslator();
         static size_t calculateNumTargets( const AbstractNodePtr &node );
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void          translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorShadowMapRepeatTranslator : public ScriptTranslator
+    class _OgreExport CompositorShadowMapRepeatTranslator final : public ScriptTranslator
     {
     public:
         CompositorShadowMapRepeatTranslator();
         static size_t calculateNumTargets( const AbstractNodePtr &node );
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void          translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorShadowMapTargetTranslator : public ScriptTranslator
+    class _OgreExport CompositorShadowMapTargetTranslator final : public ScriptTranslator
     {
     protected:
         CompositorTargetDef *mTargetDef;
+
     public:
         CompositorShadowMapTargetTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorLoadActionTranslator : public ScriptTranslator
+    class _OgreExport CompositorLoadActionTranslator final : public ScriptTranslator
     {
     protected:
         CompositorPassDef *mPassDef;
         static bool getLoadAction( const Ogre::AbstractNodePtr &node, LoadAction::LoadAction *result );
+
     public:
         CompositorLoadActionTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorStoreActionTranslator : public ScriptTranslator
+    class _OgreExport CompositorStoreActionTranslator final : public ScriptTranslator
     {
     protected:
         CompositorPassDef *mPassDef;
-        static bool getStoreAction( const Ogre::AbstractNodePtr &node, StoreAction::StoreAction *result );
+        static bool        getStoreAction( const Ogre::AbstractNodePtr &node,
+                                           StoreAction::StoreAction    *result );
+
     public:
         CompositorStoreActionTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
-    class _OgreExport CompositorPassTranslator : public ScriptTranslator
+    class _OgreExport CompositorPassTranslator final : public ScriptTranslator
     {
     protected:
         CompositorPassDef *mPassDef;
@@ -360,6 +395,8 @@ namespace Ogre{
                                  CompositorTargetDef *targetDef );
         void translateScene( ScriptCompiler *compiler, const AbstractNodePtr &node,
                              CompositorTargetDef *targetDef );
+        void translateShadows( ScriptCompiler *compiler, const AbstractNodePtr &node,
+                               CompositorTargetDef *targetDef );
         void translateStencil( ScriptCompiler *compiler, const AbstractNodePtr &node,
                                CompositorTargetDef *targetDef );
         void translateStencilFace( ScriptCompiler *compiler, const AbstractNodePtr &node,
@@ -375,50 +412,50 @@ namespace Ogre{
 
     public:
         CompositorPassTranslator();
-        void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
 
     /**************************************************************************
      * BuiltinScriptTranslatorManager
      *************************************************************************/
     /// This class manages the builtin translators
-    class _OgreExport BuiltinScriptTranslatorManager : public ScriptTranslatorManager
+    class _OgreExport BuiltinScriptTranslatorManager final : public ScriptTranslatorManager
     {
     private:
-        HlmsTranslator      mHlmsTranslator;
-        MaterialTranslator mMaterialTranslator;
-        TechniqueTranslator mTechniqueTranslator;
-        PassTranslator mPassTranslator;
-        TextureUnitTranslator mTextureUnitTranslator;
-        TextureSourceTranslator mTextureSourceTranslator;
-        GpuProgramTranslator mGpuProgramTranslator;
-        SharedParamsTranslator mSharedParamsTranslator;
-        ParticleSystemTranslator mParticleSystemTranslator;
-        ParticleEmitterTranslator mParticleEmitterTranslator;
-        ParticleAffectorTranslator mParticleAffectorTranslator;
-        CompositorWorkspaceTranslator mCompositorWorkspaceTranslator;
-        CompositorNodeTranslator mCompositorNodeTranslator;
-        CompositorShadowNodeTranslator mCompositorShadowNodeTranslator;
-        CompositorRenderTargetViewTranslator mCompositorRenderTargetViewTranslator;
-        CompositorTargetTranslator mCompositorTargetTranslator;
+        HlmsTranslator                          mHlmsTranslator;
+        MaterialTranslator                      mMaterialTranslator;
+        TechniqueTranslator                     mTechniqueTranslator;
+        PassTranslator                          mPassTranslator;
+        TextureUnitTranslator                   mTextureUnitTranslator;
+        TextureSourceTranslator                 mTextureSourceTranslator;
+        GpuProgramTranslator                    mGpuProgramTranslator;
+        SharedParamsTranslator                  mSharedParamsTranslator;
+        ParticleSystemTranslator                mParticleSystemTranslator;
+        ParticleEmitterTranslator               mParticleEmitterTranslator;
+        ParticleAffectorTranslator              mParticleAffectorTranslator;
+        CompositorWorkspaceTranslator           mCompositorWorkspaceTranslator;
+        CompositorNodeTranslator                mCompositorNodeTranslator;
+        CompositorShadowNodeTranslator          mCompositorShadowNodeTranslator;
+        CompositorRenderTargetViewTranslator    mCompositorRenderTargetViewTranslator;
+        CompositorTargetTranslator              mCompositorTargetTranslator;
         CompositorShadowMapTargetTypeTranslator mCompositorShadowMapTargetTypeTranslator;
-        CompositorShadowMapRepeatTranslator mCompositorShadowMapRepeatTranslator;
-        CompositorShadowMapTargetTranslator mCompositorShadowMapTargetTranslator;
-        CompositorLoadActionTranslator mCompositorLoadActionTranslator;
-        CompositorStoreActionTranslator mCompositorStoreActionTranslator;
-        CompositorPassTranslator mCompositorPassTranslator;
+        CompositorShadowMapRepeatTranslator     mCompositorShadowMapRepeatTranslator;
+        CompositorShadowMapTargetTranslator     mCompositorShadowMapTargetTranslator;
+        CompositorLoadActionTranslator          mCompositorLoadActionTranslator;
+        CompositorStoreActionTranslator         mCompositorStoreActionTranslator;
+        CompositorPassTranslator                mCompositorPassTranslator;
+
     public:
         BuiltinScriptTranslatorManager();
         /// Returns the number of translators being managed
-        virtual size_t getNumTranslators() const;
+        size_t getNumTranslators() const override;
         /// Returns a manager for the given object abstract node, or null if it is not supported
-        virtual ScriptTranslator *getTranslator(const AbstractNodePtr &node);
+        ScriptTranslator *getTranslator( const AbstractNodePtr &node ) override;
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-

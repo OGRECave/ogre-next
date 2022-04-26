@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -40,19 +40,15 @@ namespace Ogre
         return mMasks[idx];
     }
 	//--------------------------------------------------------------------------------------
-	inline ArrayMaskR BooleanMask4::getAllSetMask(void)
+    inline ArrayMaskR BooleanMask4::getAllSetMask()
 	{
 		return mMasks[MASK_XYZW];
 	}
     //--------------------------------------------------------------------------------------
     inline bool BooleanMask4::allBitsSet( bool mask0[4], bool mask1[4] )
     {
-#if __cplusplus > 199711L //C++11
         static_assert( sizeof(bool) == 1 && sizeof(uint32) == 4,
                       "This code relies on correct casting!" );
-#else
-        assert( sizeof(bool) == 1 && sizeof(uint32) == 4 && "This code relies on correct casting!" );
-#endif
         return ( *reinterpret_cast<uint32*>(mask0) & *reinterpret_cast<uint32*>(mask1) ) == 0x01010101;
     }
     //--------------------------------------------------------------------------------------

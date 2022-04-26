@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -38,7 +38,7 @@ typedef Ogre::SharedPtr<TestBatchSet> TestBatchSetPtr;
 
 /** Represents the output from running a batch of tests
  *        (i.e. a single run of the TestContext) */
-class TestBatch : public Ogre::GeneralAllocatedObject
+class TestBatch : public Ogre::AllocPolicy
 {
 public:
 
@@ -129,7 +129,7 @@ public:
         ComparisonResultVectorPtr out(OGRE_NEW_T(ComparisonResultVector, Ogre::MEMCATEGORY_GENERAL)(), Ogre::SPFM_DELETE_T);
         if (!canCompareWith(other))
         {
-            out.setNull();
+            out.reset();
         }
         else
         {

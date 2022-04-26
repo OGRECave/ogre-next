@@ -6,12 +6,17 @@
 
 @insertpiece( DefaultTerraHeaderPS )
 
+// START UNIFORM STRUCT DECLARATION
+// END UNIFORM STRUCT DECLARATION
+
 struct PS_INPUT
 {
 	@insertpiece( Terra_VStoPS_block )
 };
 
 @pset( currSampler, samplerStateStart )
+
+@property( !hlms_shadowcaster )
 
 @property( !hlms_render_depth_only )
 	@property( hlms_gen_normals_gbuffer )
@@ -67,11 +72,12 @@ fragment @insertpiece( output_type ) main_metal
 		@insertpiece( TerraMaterialDecl )
 		@insertpiece( PccManualProbeDecl )
 	@end
+	@insertpiece( AtmosphereNprSkyDecl )
 	@insertpiece( custom_ps_uniformDeclaration )
 	// END UNIFORM DECLARATION
 
-	, texture2d<float> terrainNormals	[[texture(@value(terrainNormals))]]
-	, texture2d<float> terrainShadows	[[texture(@value(terrainShadows))]]
+	, texture2d<midf> terrainNormals	[[texture(@value(terrainNormals))]]
+	, texture2d<midf> terrainShadows	[[texture(@value(terrainShadows))]]
 	, sampler samplerStateTerra			[[sampler(@value(terrainNormals))]]
 
 	@property( hlms_forwardplus )
@@ -81,11 +87,11 @@ fragment @insertpiece( output_type ) main_metal
 
 	@property( hlms_use_prepass )
 		@property( !hlms_use_prepass_msaa )
-		, texture2d<float, access::read> gBuf_normals			[[texture(@value(gBuf_normals))]]
-		, texture2d<float, access::read> gBuf_shadowRoughness	[[texture(@value(gBuf_shadowRoughness))]]
+		, texture2d<midf, access::read> gBuf_normals			[[texture(@value(gBuf_normals))]]
+		, texture2d<midf, access::read> gBuf_shadowRoughness	[[texture(@value(gBuf_shadowRoughness))]]
 		@end @property( hlms_use_prepass_msaa )
-		, texture2d_ms<float, access::read> gBuf_normals		[[texture(@value(gBuf_normals))]]
-		, texture2d_ms<float, access::read> gBuf_shadowRoughness[[texture(@value(gBuf_shadowRoughness))]]
+		, texture2d_ms<midf, access::read> gBuf_normals		[[texture(@value(gBuf_normals))]]
+		, texture2d_ms<midf, access::read> gBuf_shadowRoughness[[texture(@value(gBuf_shadowRoughness))]]
 		@end
 
 		@property( hlms_use_ssr )
@@ -98,20 +104,20 @@ fragment @insertpiece( output_type ) main_metal
 
 
 	@property( irradiance_volumes )
-		, texture3d<float>	irradianceVolume		[[texture(@value(irradianceVolume))]]
+		, texture3d<midf>	irradianceVolume		[[texture(@value(irradianceVolume))]]
 		, sampler			irradianceVolumeSampler	[[sampler(@value(irradianceVolume))]]
 	@end
 
 	@foreach( num_textures, n )
-		, texture2d_array<float> textureMaps@n [[texture(@value(textureMaps@n))]]@end
+		, texture2d_array<midf> textureMaps@n [[texture(@value(textureMaps@n))]]@end
 	@property( use_envprobe_map )
 		@property( !hlms_enable_cubemaps_auto )
-			, texturecube<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
+			, texturecube<midf>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
 		@else
 			@property( !hlms_cubemaps_use_dpm )
-				, texturecube_array<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
+				, texturecube_array<midf>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
 			@else
-				, texture2d_array<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
+				, texture2d_array<midf>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
 			@end
 		@end
 		@property( envMapRegSampler < samplerStateStart )
@@ -136,3 +142,32 @@ fragment @insertpiece( output_type ) main_metal
 	return outPs;
 @end
 }
+@else ///!hlms_shadowcaster
+
+@insertpiece( DeclOutputType )
+
+fragment @insertpiece( output_type ) main_metal
+(
+	PS_INPUT inPs [[stage_in]]
+
+	// START UNIFORM DECLARATION
+	@property( hlms_shadowcaster_point )
+		@insertpiece( PassDecl )
+	@end
+	@insertpiece( custom_ps_uniformDeclaration )
+	// END UNIFORM DECLARATION
+)
+{
+@property( !hlms_render_depth_only || exponential_shadow_maps || hlms_shadowcaster_point )
+	PS_OUTPUT outPs;
+@end
+
+	@insertpiece( custom_ps_preExecution )
+	@insertpiece( DefaultBodyPS )
+	@insertpiece( custom_ps_posExecution )
+
+@property( !hlms_render_depth_only || exponential_shadow_maps || hlms_shadowcaster_point )
+	return outPs;
+@end
+}
+@end

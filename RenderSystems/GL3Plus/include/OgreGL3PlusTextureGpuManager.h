@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreGL3PlusTextureGpuManager_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreTextureGpuManager.h"
 
 #include "OgreTextureGpu.h"
@@ -39,58 +40,63 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
-    class _OgreGL3PlusExport GL3PlusTextureGpuManager : public TextureGpuManager
+     *  @{
+     */
+    class _OgreGL3PlusExport GL3PlusTextureGpuManager final : public TextureGpuManager
     {
     protected:
         /// 4x4 texture for when we have nothing to display.
-        GLuint  mBlankTexture[TextureTypes::Type3D + 1u];
-        GLuint  mTmpFbo[2];
+        GLuint mBlankTexture[TextureTypes::Type3D + 1u];
+        GLuint mTmpFbo[2];
 
         const GL3PlusSupport &mSupport;
 
-        virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                               IdString name, uint32 textureFlags,
-                                               TextureTypes::TextureTypes initialType );
-        virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
-                                                          uint32 slices, PixelFormatGpu pixelFormat );
-        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture );
+        TextureGpu     *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                           IdString name, uint32 textureFlags,
+                                           TextureTypes::TextureTypes initialType ) override;
+        StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                  uint32 slices, PixelFormatGpu pixelFormat ) override;
+        void            destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
-        virtual AsyncTextureTicket* createAsyncTextureTicketImpl (uint32 width, uint32 height,
-                                                                  uint32 depthOrSlices,
-                                                                  TextureTypes::TextureTypes textureType,
-                                                                  PixelFormatGpu pixelFormatFamily );
+        AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
+                                                          uint32                     depthOrSlices,
+                                                          TextureTypes::TextureTypes textureType,
+                                                          PixelFormatGpu pixelFormatFamily ) override;
 
     public:
         GL3PlusTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
                                   const GL3PlusSupport &support );
-        virtual ~GL3PlusTextureGpuManager();
+        ~GL3PlusTextureGpuManager() override;
 
         /** Creates a special GL3PlusTextureGpuWindow pointer, to be used by Ogre::Window.
             The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
-            If caller doesnt' delete it, it will leak.
+            If caller doesn't delete it, it will leak.
         */
-        TextureGpu* createTextureGpuWindow( GL3PlusContext *context, Window *window );
+        TextureGpu *createTextureGpuWindow( GL3PlusContext *context, Window *window );
 
         /// See EglPBufferWindow. We do not track this pointer.
-        /// If caller doesnt' delete it, it will leak.
-        TextureGpu* createTextureGpuHeadlessWindow( GL3PlusContext *context, Window *window );
+        /// If caller doesn't delete it, it will leak.
+        TextureGpu *createTextureGpuHeadlessWindow( GL3PlusContext *context, Window *window );
 
         GLuint getBlankTextureGlName( TextureTypes::TextureTypes textureType ) const;
 
         /// fboIdx must be in range [0; 1]
-        GLuint getTemporaryFbo( uint32 fboIdx ) const           { return mTmpFbo[fboIdx]; }
+        GLuint getTemporaryFbo( uint32 fboIdx ) const { return mTmpFbo[fboIdx]; }
 
-        const GL3PlusSupport& getGlSupport(void) const          { return mSupport; }
+        const GL3PlusSupport &getGlSupport() const { return mSupport; }
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+        virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
+                                   uint32 textureFlags ) const;
+#endif
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -28,11 +28,11 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreRenderSystemCapabilitiesSerializer.h"
+
 #include "OgreRenderSystemCapabilitiesManager.h"
 #include "OgreLogManager.h"
 #include "OgreIteratorWrappers.h"
 #include "OgreRenderSystemCapabilities.h"
-
 #include "OgreDataStream.h"
 #include "OgreString.h"
 
@@ -46,7 +46,7 @@ namespace Ogre
     RenderSystemCapabilitiesSerializer::RenderSystemCapabilitiesSerializer() : mCurrentLineNumber(0), mCurrentLine(0),
         mCurrentCapabilities(0)
     {
-        mCurrentStream.setNull();
+        mCurrentStream.reset();
 
         initialiaseDispatchTables();
     }
@@ -120,7 +120,6 @@ namespace Ogre
         file << "\t" << "gl1_5_nohwocclusion " << StringConverter::toString(caps->hasCapability(RSC_GL1_5_NOHWOCCLUSION)) << endl;
         file << "\t" << "perstageconstant " << StringConverter::toString(caps->hasCapability(RSC_PERSTAGECONSTANT)) << endl;
         file << "\t" << "vao " << StringConverter::toString(caps->hasCapability(RSC_VAO)) << endl;
-        file << "\t" << "separate_shader_objects " << StringConverter::toString(caps->hasCapability(RSC_SEPARATE_SHADER_OBJECTS)) << endl;
         file << endl;
 
         RenderSystemCapabilities::ShaderProfiles profiles = caps->getSupportedShaderProfiles();
@@ -198,7 +197,7 @@ namespace Ogre
         // reset parsing data to NULL
         mCurrentLineNumber = 0;
         mCurrentLine = 0;
-        mCurrentStream.setNull();
+        mCurrentStream.reset();
         mCurrentCapabilities = 0;
 
         mCurrentStream = stream;
@@ -524,8 +523,6 @@ namespace Ogre
         addCapabilitiesMapping("gl1_5_nohwocclusion", RSC_GL1_5_NOHWOCCLUSION);
         addCapabilitiesMapping("perstageconstant", RSC_PERSTAGECONSTANT);
         addCapabilitiesMapping("vao", RSC_VAO);
-        addCapabilitiesMapping("separate_shader_objects", RSC_SEPARATE_SHADER_OBJECTS);
-
     }
 
     void RenderSystemCapabilitiesSerializer::parseCapabilitiesLines(CapabilitiesLinesList& lines)
@@ -602,13 +599,13 @@ namespace Ogre
     void RenderSystemCapabilitiesSerializer::logParseError(const String& error) const
     {
         // log the line with error in it if the current line is available
-        if (mCurrentLine != 0 && !mCurrentStream.isNull())
+        if (mCurrentLine != 0 && mCurrentStream)
         {
             LogManager::getSingleton().logMessage(
                 "Error in .rendercaps " + mCurrentStream->getName() + ":" + StringConverter::toString(mCurrentLineNumber) +
                 " : " + error);
         }
-        else if (!mCurrentStream.isNull())
+        else if (mCurrentStream)
         {
             LogManager::getSingleton().logMessage(
                 "Error in .rendercaps " + mCurrentStream->getName() +

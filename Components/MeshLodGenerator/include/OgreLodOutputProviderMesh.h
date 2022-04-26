@@ -1,7 +1,7 @@
 
 /*
  * -----------------------------------------------------------------------------
- * This source file is part of OGRE
+ * This source file is part of OGRE-Next
  * (Object-oriented Graphics Rendering Engine)
  * For the latest info, see http://www.ogre3d.org/
  *
@@ -31,26 +31,25 @@
 #define _LodOutputProviderMesh_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodOutputProvider.h"
 #include "OgreSharedPtr.h"
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodOutputProviderMesh :
-        public LodOutputProvider
+    class _OgreLodExport LodOutputProviderMesh : public LodOutputProvider
     {
     public:
-        LodOutputProviderMesh(v1::MeshPtr mesh) : mMesh(mesh) {}
-        virtual void prepare(LodData* data);
-        virtual void finalize(LodData* data) {}
-        virtual void bakeManualLodLevel(LodData* data, String& manualMeshName, int lodIndex);
-        virtual void bakeLodLevel(LodData* data, int lodIndex);
+        LodOutputProviderMesh( v1::MeshPtr mesh ) : mMesh( mesh ) {}
+
+        void prepare( LodData *data ) override;
+        void finalize( LodData *data ) override {}
+        void bakeManualLodLevel( LodData *data, String &manualMeshName, int lodIndex ) override;
+        void bakeLodLevel( LodData *data, int lodIndex ) override;
+
     protected:
         v1::MeshPtr mMesh;
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

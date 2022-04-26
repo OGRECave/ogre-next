@@ -11,14 +11,15 @@
 //---------------------------------------------------------------------------------------
 
 #include "GraphicsSystem.h"
+
 #include "GameState.h"
 
-#include "OgreWindow.h"
 #include "OgreTimer.h"
+#include "OgreWindow.h"
 
 #include "Threading/OgreThreads.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
@@ -26,22 +27,21 @@ using namespace Demo;
 
 namespace Demo
 {
-    class MyGraphicsSystem : public GraphicsSystem
+    class MyGraphicsSystem final : public GraphicsSystem
     {
         // No resources. They're not needed and a potential point of failure.
         // This is a very simple project
-        virtual void setupResources(void) {}
+        void setupResources() override {}
+
     public:
-        MyGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState ) {}
+        MyGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}
     };
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || \
     OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
         GameState *gfxGameState = new GameState();
         GraphicsSystem *graphicsSystem = new MyGraphicsSystem( gfxGameState );
@@ -50,30 +50,25 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 
 #    if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-    const char* MainEntryPoints::getWindowTitle(void)
-    {
-        return "Tutorial 01: Initialization";
-    }
+    const char *MainEntryPoints::getWindowTitle() { return "Tutorial 01: Initialization"; }
 #    endif
 #endif
-}
+}  // namespace Demo
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
-#else
+#    else
 int mainApp( int argc, const char *argv[] )
-#endif
+#    endif
 {
     GameState gameState;
     MyGraphicsSystem graphicsSystem( &gameState );
@@ -87,7 +82,7 @@ int mainApp( int argc, const char *argv[] )
     if( graphicsSystem.getQuit() )
     {
         graphicsSystem.deinitialize();
-        return 0; //User cancelled config
+        return 0;  // User cancelled config
     }
 
     Ogre::Window *renderWindow = graphicsSystem.getRenderWindow();
@@ -109,13 +104,13 @@ int mainApp( int argc, const char *argv[] )
 
         if( !renderWindow->isVisible() )
         {
-            //Don't burn CPU cycles unnecessary when we're minimized.
+            // Don't burn CPU cycles unnecessary when we're minimized.
             Ogre::Threads::Sleep( 500 );
         }
 
         Ogre::uint64 endTime = timer.getMicroseconds();
-        timeSinceLast = (endTime - startTime) / 1000000.0;
-        timeSinceLast = std::min( 1.0, timeSinceLast ); //Prevent from going haywire.
+        timeSinceLast = double( endTime - startTime ) / 1000000.0;
+        timeSinceLast = std::min( 1.0, timeSinceLast );  // Prevent from going haywire.
         startTime = endTime;
     }
 

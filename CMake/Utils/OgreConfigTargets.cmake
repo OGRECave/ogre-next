@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -17,7 +17,7 @@ if(APPLE)
 
   if(NOT OGRE_BUILD_PLATFORM_ANDROID AND NOT OGRE_BUILD_PLATFORM_APPLE_IOS)
     set(PLATFORM_NAME "macosx")
-  elseif(OGRE_BUILD_PLATFORM_APPLE_IOS)
+  elseif(OGRE_BUILD_PLATFORM_APPLE_IOS AND NOT CMAKE_GENERATOR STREQUAL "Ninja")
     set(PLATFORM_NAME "$(PLATFORM_NAME)")
   endif()
 endif()
@@ -175,14 +175,12 @@ function(ogre_config_common TARGETNAME)
     set_target_properties( ${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_VALID_ARCHS "arm64" )
   endif(OGRE_BUILD_PLATFORM_APPLE_IOS)
 
-  if(NOT OGRE_STATIC AND (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
-    set_target_properties(${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH "NO")
-    # add GCC visibility flags to shared library build
-    set_target_properties(${TARGETNAME} PROPERTIES COMPILE_FLAGS "${OGRE_GCC_VISIBILITY_FLAGS}")
-    set_target_properties(${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN "${XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN}")
-    set_target_properties(${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_INLINES_ARE_PRIVATE_EXTERN "${XCODE_ATTRIBUTE_GCC_INLINES_ARE_PRIVATE_EXTERN}")
-    #set_target_properties(${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_INLINES_ARE_PRIVATE_EXTERN[arch=x86_64] "YES")
-  endif()
+  set_target_properties(${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH "NO")
+  # add GCC visibility flags to shared library build
+  set_target_properties(${TARGETNAME} PROPERTIES COMPILE_FLAGS "${OGRE_GCC_VISIBILITY_FLAGS}")
+  set_target_properties(${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN "${XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN}")
+  set_target_properties(${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_INLINES_ARE_PRIVATE_EXTERN "${XCODE_ATTRIBUTE_GCC_INLINES_ARE_PRIVATE_EXTERN}")
+  #set_target_properties(${TARGETNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_INLINES_ARE_PRIVATE_EXTERN[arch=x86_64] "YES")
 
   ogre_create_vcproj_userfile(${TARGETNAME})
 endfunction(ogre_config_common)
@@ -244,10 +242,11 @@ function(ogre_config_framework LIBNAME)
          PROPERTIES BUILD_WITH_INSTALL_RPATH 1
          INSTALL_NAME_DIR "@executable_path/../Frameworks"
       )
-      set_target_properties(${LIBNAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES};${PLATFORM_HEADERS};" )
       set_target_properties(${LIBNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_PRECOMPILE_PREFIX_HEADER "YES")
       set_target_properties(${LIBNAME} PROPERTIES XCODE_ATTRIBUTE_GCC_PREFIX_HEADER "${OGRE_SOURCE_DIR}/OgreMain/include/OgreStableHeaders.h")
       set_target_properties(${LIBNAME} PROPERTIES RESOURCE "${RESOURCE_FILES}")
+      set_source_files_properties("${HEADER_FILES}" PROPERTIES MACOSX_PACKAGE_LOCATION Headers)
+      set_source_files_properties("${PLATFORM_HEADERS}" PROPERTIES MACOSX_PACKAGE_LOCATION Headers)
       set_source_files_properties("${RESOURCE_FILES}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
       set_target_properties(${LIBNAME} PROPERTIES OUTPUT_NAME ${LIBNAME})

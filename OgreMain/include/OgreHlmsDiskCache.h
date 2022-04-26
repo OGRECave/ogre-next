@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -30,16 +30,17 @@ THE SOFTWARE.
 
 #include "OgreHlms.h"
 #include "OgreHlmsDatablock.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** @class HlmsDiskCache
 
@@ -128,13 +129,13 @@ namespace Ogre
                                     to the internal ISA.
     @endcode
     */
-    class _OgreExport HlmsDiskCache : public HlmsAlloc
+    class _OgreExport HlmsDiskCache : public OgreAllocatedObj
     {
     public:
         struct SourceCode
         {
-            Hlms::RenderableCache   mergedCache;
-            String                  sourceFile[NumShaderTypes];
+            Hlms::RenderableCache mergedCache;
+            String                sourceFile[NumShaderTypes];
 
             SourceCode();
             SourceCode( const Hlms::ShaderCodeCache &shaderCodeCache );
@@ -144,11 +145,11 @@ namespace Ogre
 
         struct Pso
         {
-            Hlms::RenderableCache   renderableCache;
-            HlmsPropertyVec         passProperties;
-            HlmsPso                 pso;
-            HlmsMacroblock          macroblock;
-            HlmsBlendblock          blendblock;
+            Hlms::RenderableCache renderableCache;
+            HlmsPropertyVec       passProperties;
+            HlmsPso               pso;
+            HlmsMacroblock        macroblock;
+            HlmsBlendblock        blendblock;
 
             Pso();
             Pso( const Hlms::RenderableCache &srcRenderableCache, const Hlms::PassCache &srcPassCache,
@@ -159,17 +160,20 @@ namespace Ogre
 
         struct Cache
         {
-            uint64          templateHash[2]; //128 bit hash
-            uint8           type;           /// See HlmsTypes
-            SourceCodeVec   sourceCode;
-            PsoVec          pso;
+            uint64        templateHash[2];  // 128 bit hash
+            uint8         type;             /// See HlmsTypes
+            SourceCodeVec sourceCode;
+            PsoVec        pso;
         };
 
-        bool        mTemplatesOutOfDate;
-        Cache       mCache;
+        bool         mTemplatesOutOfDate;
+        Cache        mCache;
         HlmsManager *mHlmsManager;
-        String      mShaderProfile;
-        uint16      mDebugStrSize;
+        String       mShaderProfile;
+        uint16       mNativeShadingLangVer;
+        uint8        mPrecisionMode;
+        bool         mFastShaderBuildHack;
+        uint16       mDebugStrSize;
 
         void save( DataStreamPtr &dataStream, const IdString &hashedString );
         void save( DataStreamPtr &dataStream, const String &string );
@@ -185,7 +189,7 @@ namespace Ogre
         HlmsDiskCache( HlmsManager *hlmsManager );
         ~HlmsDiskCache();
 
-        void clearCache(void);
+        void clearCache();
 
         void copyFrom( Hlms *hlms );
         void applyTo( Hlms *hlms );
@@ -197,7 +201,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

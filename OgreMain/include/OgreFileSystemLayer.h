@@ -1,21 +1,21 @@
 /*
  -----------------------------------------------------------------------------
- This source file is part of OGRE
+ This source file is part of OGRE-Next
  (Object-oriented Graphics Rendering Engine)
  For the latest info, see http://www.ogre3d.org/
- 
+
  Copyright (c) 2000-2014 Torus Knot Software Ltd
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,14 +39,14 @@ namespace Ogre
             In modern multi-user OS, a standard user account will often not
             have write access to the path where the SampleBrowser is stored.
             In order to still be able to store graphics settings and log
-            output and for the user to overwrite the default Ogre config files, 
-            this class tries to create a folder inside the user's home directory. 
+            output and for the user to overwrite the default Ogre config files,
+            this class tries to create a folder inside the user's home directory.
             Specialised implementations for each individual platform must
             subclass this abstract interface.
       */
 
     /** Implementation for the FileSystemLayer interface. */
-    class _OgreExport FileSystemLayer : public FileSystemLayerAlloc
+    class _OgreExport FileSystemLayer : public OgreAllocatedObj
     {
     public:
         /** Creates a concrete platform-dependent implementation of FileSystemLayer.
@@ -54,14 +54,14 @@ namespace Ogre
          A subdirectory inside the user's path to distinguish between
          different Ogre releases.
          */
-        FileSystemLayer(const Ogre::String& subdir)
+        FileSystemLayer( const Ogre::String &subdir )
         {
             // determine directories to search for config files
             getConfigPaths();
             // prepare write location in user directory
-            prepareUserHome(subdir);
+            prepareUserHome( subdir );
         }
-        
+
         /** Search for the given config file in the user's home path. If it can't
          be found there, the function falls back to the system-wide install
          path for Ogre config files. (Usually the same place where the
@@ -71,35 +71,36 @@ namespace Ogre
          @return
          The full path to the config file.
          */
-        const Ogre::String getConfigFilePath(Ogre::String filename) const
+        const Ogre::String getConfigFilePath( Ogre::String filename ) const
         {
-            #if OGRE_DEBUG_MODE == 1 && (OGRE_PLATFORM != OGRE_PLATFORM_APPLE && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS)
-                // add OGRE_BUILD_SUFFIX (default: "_d") to config file names
-                Ogre::String::size_type pos = filename.rfind('.');
-                if (pos != Ogre::String::npos)
-                    filename = filename.substr(0, pos) + OGRE_BUILD_SUFFIX + filename.substr(pos);
-            #endif
+#if OGRE_DEBUG_MODE == 1 && \
+    ( OGRE_PLATFORM != OGRE_PLATFORM_APPLE && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS )
+            // add OGRE_BUILD_SUFFIX (default: "_d") to config file names
+            Ogre::String::size_type pos = filename.rfind( '.' );
+            if( pos != Ogre::String::npos )
+                filename = filename.substr( 0, pos ) + OGRE_BUILD_SUFFIX + filename.substr( pos );
+#endif
 
             // look for the requested file in several locations:
-            
+
             // 1. in the writable path (so user can provide custom files)
-            Ogre::String path = getWritablePath(filename);
-            if (fileExists(path))
+            Ogre::String path = getWritablePath( filename );
+            if( fileExists( path ) )
                 return path;
-            
+
             // 2. in the config file search paths
-            for (size_t i = 0; i < mConfigPaths.size(); ++i)
+            for( size_t i = 0; i < mConfigPaths.size(); ++i )
             {
                 path = mConfigPaths[i] + filename;
-                if (fileExists(path))
+                if( fileExists( path ) )
                     return path;
             }
-            
+
             // 3. fallback to current working dir
             return filename;
         }
-        
-        /** Find a path where the given filename can be written to. This path 
+
+        /** Find a path where the given filename can be written to. This path
          will usually be in the user's home directory. This function should
          be used for any output like logs and graphics settings.
          @param filename
@@ -107,42 +108,37 @@ namespace Ogre
          @return
          The full path to a writable location for the given filename.
          */
-        const Ogre::String getWritablePath(const Ogre::String& filename) const
+        const Ogre::String getWritablePath( const Ogre::String &filename ) const
         {
             return mHomePath + filename;
         }
-        
-        void setConfigPaths(const Ogre::StringVector &paths){
-            mConfigPaths = paths;
-        }
-        
-        void setHomePath(const Ogre::String &path){
-            mHomePath = path;
-        }
-        
+
+        void setConfigPaths( const Ogre::StringVector &paths ) { mConfigPaths = paths; }
+
+        void setHomePath( const Ogre::String &path ) { mHomePath = path; }
+
         /** Create a directory. */
-        static bool createDirectory(const Ogre::String& name);
+        static bool createDirectory( const Ogre::String &name );
         /** Delete a directory. Should be empty */
-        static bool removeDirectory(const Ogre::String& name);
+        static bool removeDirectory( const Ogre::String &name );
         /** Test if the given file exists. */
-        static bool fileExists(const Ogre::String& path);
+        static bool fileExists( const Ogre::String &path );
         /** Delete a file. */
-        static bool removeFile(const Ogre::String& path);
+        static bool removeFile( const Ogre::String &path );
         /** Rename a file. */
-        static bool renameFile(const Ogre::String& oldpath, const Ogre::String& newpath);
+        static bool renameFile( const Ogre::String &oldpath, const Ogre::String &newpath );
 
     private:
         Ogre::StringVector mConfigPaths;
-        Ogre::String mHomePath;
-        
+        Ogre::String       mHomePath;
+
         /** Determine config search paths. */
         void getConfigPaths();
-        
+
         /** Create an Ogre directory and the given subdir in the user's home. */
-        void prepareUserHome(const Ogre::String& subdir);
+        void prepareUserHome( const Ogre::String &subdir );
     };
 
-}
-
+}  // namespace Ogre
 
 #endif

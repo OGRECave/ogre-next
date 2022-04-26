@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -31,11 +31,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
     /** Range is [kernelStart; kernelEnd]
     @param dstPtr
     @param srcPtr
@@ -47,12 +47,11 @@ namespace Ogre
     @param kernelStartY
     @param kernelEndY
      */
-    typedef void (ImageDownsampler2D)( uint8 *dstPtr, uint8 const *srcPtr,
-                                       int32 dstWidth, int32 dstHeight, int32 dstBytesPerRow,
-                                       int32 srcWidth, int32 srcBytesPerRow,
-                                       const uint8 kernel[5][5],
-                                       const int8 kernelStartX, const int8 kernelEndX,
-                                       const int8 kernelStartY, const int8 kernelEndY );
+    typedef void( ImageDownsampler2D )( uint8 *dstPtr, uint8 const *srcPtr, int32 dstWidth,
+                                        int32 dstHeight, int32 dstBytesPerRow, int32 srcWidth,
+                                        int32 srcBytesPerRow, const uint8 kernel[5][5],
+                                        const int8 kernelStartX, const int8 kernelEndX,
+                                        const int8 kernelStartY, const int8 kernelEndY );
 
     ImageDownsampler2D downscale2x_XXXA8888;
     ImageDownsampler2D downscale2x_XXX888;
@@ -62,16 +61,34 @@ namespace Ogre
     ImageDownsampler2D downscale2x_XA88;
 
     //
+    //  3D versions
+    //
+
+    /** Bilinear 3D downsampler
+     */
+    typedef void( ImageDownsampler3D )( uint8 *dstPtr, uint8 const *srcPtr, int32 dstWidth,
+                                        int32 dstHeight, int32 dstDepth, int32 dstBytesPerRow,
+                                        int32 dstBytesPerImage, int32 srcWidth, int32 srcHeight,
+                                        int32 srcBytesPerRow, int32 srcBytesPerImage );
+
+    ImageDownsampler3D downscale3D2x_X8;
+    ImageDownsampler3D downscale3D2x_XXXA8888;
+    ImageDownsampler3D downscale3D2x_XXX888;
+    ImageDownsampler3D downscale3D2x_XX88;
+    ImageDownsampler3D downscale3D2x_X8;
+    ImageDownsampler3D downscale3D2x_A8;
+    ImageDownsampler3D downscale3D2x_XA88;
+
+    //
     //  CUBEMAP versions
     //
 
-    typedef void (ImageDownsamplerCube)( uint8 *dstPtr, uint8 const **srcPtr,
-                                       int32 dstWidth, int32 dstHeight, int32 dstBytesPerRow,
-                                       int32 srcWidth, int32 srcHeight, int32 srcBytesPerRow,
-                                       const uint8 kernel[5][5],
-                                       const int8 kernelStartX, const int8 kernelEndX,
-                                       const int8 kernelStartY, const int8 kernelEndY,
-                                       uint8 currentFace );
+    typedef void( ImageDownsamplerCube )( uint8 *dstPtr, uint8 const **srcPtr, int32 dstWidth,
+                                          int32 dstHeight, int32 dstBytesPerRow, int32 srcWidth,
+                                          int32 srcHeight, int32 srcBytesPerRow,
+                                          const uint8 kernel[5][5], const int8 kernelStartX,
+                                          const int8 kernelEndX, const int8 kernelStartY,
+                                          const int8 kernelEndY, uint8 currentFace );
 
     ImageDownsamplerCube downscale2x_XXXA8888_cube;
     ImageDownsamplerCube downscale2x_XXX888_cube;
@@ -91,10 +108,9 @@ namespace Ogre
     @param kernelStart
     @param kernelEnd
      */
-    typedef void (ImageBlur2D)( uint8 *_tmpPtr, uint8 *_srcDstPtr,
-                                int32 width, int32 height, int32 bytesPerRow,
-                                const uint8 kernel[5],
-                                const int8 kernelStart, const int8 kernelEnd );
+    typedef void( ImageBlur2D )( uint8 *_tmpPtr, uint8 *_srcDstPtr, int32 width, int32 height,
+                                 int32 bytesPerRow, const uint8 kernel[5], const int8 kernelStart,
+                                 const int8 kernelEnd );
 
     ImageBlur2D separableBlur_XXXA8888;
     ImageBlur2D separableBlur_XXX888;
@@ -104,9 +120,8 @@ namespace Ogre
     ImageBlur2D separableBlur_XA88;
 
     //-----------------------------------------------------------------------------------
-    //Signed versions
+    // Signed versions
     //-----------------------------------------------------------------------------------
-
 
     ImageDownsampler2D downscale2x_Signed_XXXA8888;
     ImageDownsampler2D downscale2x_Signed_XXX888;
@@ -114,6 +129,17 @@ namespace Ogre
     ImageDownsampler2D downscale2x_Signed_X8;
     ImageDownsampler2D downscale2x_Signed_A8;
     ImageDownsampler2D downscale2x_Signed_XA88;
+
+    //
+    // 3D Signed versions
+    //
+
+    ImageDownsampler3D downscale3D2x_Signed_XXXA8888;
+    ImageDownsampler3D downscale3D2x_Signed_XXX888;
+    ImageDownsampler3D downscale3D2x_Signed_XX88;
+    ImageDownsampler3D downscale3D2x_Signed_X8;
+    ImageDownsampler3D downscale3D2x_Signed_A8;
+    ImageDownsampler3D downscale3D2x_Signed_XA88;
 
     //
     //  CUBEMAP Signed versions
@@ -138,9 +164,8 @@ namespace Ogre
     ImageBlur2D separableBlur_Signed_XA88;
 
     //-----------------------------------------------------------------------------------
-    //Float32 versions
+    // Float32 versions
     //-----------------------------------------------------------------------------------
-
 
     ImageDownsampler2D downscale2x_Float32_XXXA;
     ImageDownsampler2D downscale2x_Float32_XXX;
@@ -148,6 +173,17 @@ namespace Ogre
     ImageDownsampler2D downscale2x_Float32_X;
     ImageDownsampler2D downscale2x_Float32_A;
     ImageDownsampler2D downscale2x_Float32_XA;
+
+    //
+    //  3D Float32 versions
+    //
+
+    ImageDownsampler3D downscale3D2x_Float32_XXXA;
+    ImageDownsampler3D downscale3D2x_Float32_XXX;
+    ImageDownsampler3D downscale3D2x_Float32_XX;
+    ImageDownsampler3D downscale3D2x_Float32_X;
+    ImageDownsampler3D downscale3D2x_Float32_A;
+    ImageDownsampler3D downscale3D2x_Float32_XA;
 
     //
     //  CUBEMAP Float32 versions
@@ -172,9 +208,8 @@ namespace Ogre
     ImageBlur2D separableBlur_Float32_XA;
 
     //-----------------------------------------------------------------------------------
-    //sRGB versions
+    // sRGB versions
     //-----------------------------------------------------------------------------------
-
 
     ImageDownsampler2D downscale2x_sRGB_XXXA8888;
     ImageDownsampler2D downscale2x_sRGB_AXXX8888;
@@ -184,6 +219,19 @@ namespace Ogre
     ImageDownsampler2D downscale2x_sRGB_A8;
     ImageDownsampler2D downscale2x_sRGB_XA88;
     ImageDownsampler2D downscale2x_sRGB_AX88;
+
+    //
+    //  3D sRGB versions
+    //
+
+    ImageDownsampler3D downscale3D2x_sRGB_XXXA8888;
+    ImageDownsampler3D downscale3D2x_sRGB_AXXX8888;
+    ImageDownsampler3D downscale3D2x_sRGB_XXX888;
+    ImageDownsampler3D downscale3D2x_sRGB_XX88;
+    ImageDownsampler3D downscale3D2x_sRGB_X8;
+    ImageDownsampler3D downscale3D2x_sRGB_A8;
+    ImageDownsampler3D downscale3D2x_sRGB_XA88;
+    ImageDownsampler3D downscale3D2x_sRGB_AX88;
 
     //
     //  CUBEMAP sRGB versions
@@ -213,24 +261,24 @@ namespace Ogre
 
     struct FilterKernel
     {
-        uint8   kernel[5][5];
-        int8    kernelStartX;
-        int8    kernelEndX;
-        int8    kernelStartY;
-        int8    kernelEndY;
+        uint8 kernel[5][5];
+        int8  kernelStartX;
+        int8  kernelEndX;
+        int8  kernelStartY;
+        int8  kernelEndY;
     };
     struct FilterSeparableKernel
     {
-        uint8   kernel[5];
-        int8    kernelStart;
-        int8    kernelEnd;
+        uint8 kernel[5];
+        int8  kernelStart;
+        int8  kernelEnd;
     };
 
-    extern const FilterKernel c_filterKernels[3];
+    extern const FilterKernel          c_filterKernels[3];
     extern const FilterSeparableKernel c_filterSeparableKernels[1];
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

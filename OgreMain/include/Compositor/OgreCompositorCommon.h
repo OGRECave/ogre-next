@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -44,7 +44,7 @@ namespace Ogre
     class CompositorWorkspace;
     class CompositorWorkspaceListener;
     class TextureGpu;
-    typedef TextureGpu* CompositorChannel;
+    typedef TextureGpu *CompositorChannel;
 
     class CompositorNodeDef;
     class CompositorShadowNodeDef;
@@ -56,11 +56,11 @@ namespace Ogre
 
     class CompositorManager2;
 
-    typedef vector<CompositorNode*>::type              CompositorNodeVec;
-    typedef vector<CompositorPass*>::type              CompositorPassVec;
-    typedef vector<CompositorShadowNode*>::type        CompositorShadowNodeVec;
-    typedef vector<CompositorWorkspaceListener*>::type CompositorWorkspaceListenerVec;
-}
+    typedef vector<CompositorNode *>::type              CompositorNodeVec;
+    typedef vector<CompositorPass *>::type              CompositorPassVec;
+    typedef vector<CompositorShadowNode *>::type        CompositorShadowNodeVec;
+    typedef vector<CompositorWorkspaceListener *>::type CompositorWorkspaceListenerVec;
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

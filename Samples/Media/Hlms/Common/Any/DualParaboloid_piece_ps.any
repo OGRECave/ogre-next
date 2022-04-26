@@ -4,13 +4,13 @@
 
 /// Converts UVW coordinates that would be used for sampling a cubemap,
 /// and returns UV coordinates to sample a dual paraboloid in 2D
-INLINE float2 mapCubemapToDpm( float3 cubemapDir )
+INLINE midf2 mapCubemapToDpm( midf3 cubemapDir )
 {
     cubemapDir = normalize( cubemapDir );
-	float2 retVal;
-    retVal.x = (cubemapDir.x / (1.0 + abs( cubemapDir.z ))) * 0.25 +
-			   (cubemapDir.z < 0.0 ? 0.75 : 0.25 );
-	retVal.y = (cubemapDir.y / (1.0 + abs( cubemapDir.z ))) * 0.5 + 0.5;
+	midf2 retVal;
+	retVal.x = (cubemapDir.x / (_h( 1.0 ) + abs( cubemapDir.z ))) * _h( 0.25 ) +
+			   (cubemapDir.z < _h( 0.0 ) ? _h( 0.75 ) : _h( 0.25 ) );
+	retVal.y = (cubemapDir.y / (_h( 1.0 ) + abs( cubemapDir.z ))) * _h( 0.5 ) + _h( 0.5 );
 	return retVal;
 }
 

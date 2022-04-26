@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------
-This source file is a part of OGRE
+This source file is a part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 
 For the latest info, see http://www.ogre3d.org/
@@ -26,9 +26,10 @@ THE SOFTWARE
 #ifndef __OgreThreadHeadersSTD_H__
 #define __OgreThreadHeadersSTD_H__
 
-#include <memory>
-#include <thread>
-#include <mutex>
 #include <condition_variable>
+#include <memory>
+#include <mutex>
+#include <shared_mutex>
+#include <thread>
 
 #endif

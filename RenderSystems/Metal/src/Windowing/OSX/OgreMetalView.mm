@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,8 +28,8 @@ THE SOFTWARE.
 
 #import "OgreMetalView.h"
 
-#import <SpriteKit/SpriteKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import <SpriteKit/SpriteKit.h>
 
 @implementation OgreMetalView
 {
@@ -44,13 +44,13 @@ THE SOFTWARE.
 {
     self.layer = [CAMetalLayer layer];
     self.wantsLayer = YES;
-    
+
     _layerSizeDidUpdate = YES;
 }
 
 - (void)viewDidMoveToWindow
 {
-    //if(self.scaleToNative)
+    // if(self.scaleToNative)
     //    [setContentScaleFactor:self.window.screen.backingScaleFactor * self.nativeScaleFactor];
     _layerSizeDidUpdate = YES;
 }
@@ -62,19 +62,19 @@ THE SOFTWARE.
 #endif
 {
     self = [super initWithFrame:frame];
-    
+
     if( self )
     {
         [self initCommon];
     }
-    
+
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
-    
+
     if( self )
     {
         [self initCommon];
@@ -84,9 +84,12 @@ THE SOFTWARE.
 
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
 {
-    if(self.superview == nil) {
+    if( self.superview == nil )
+    {
         return NO;
-    } else {
+    }
+    else
+    {
         return [self.superview acceptsFirstMouse:theEvent];
     }
 }

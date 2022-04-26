@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,20 +27,21 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreNULLStagingBuffer.h"
-#include "Vao/OgreNULLVaoManager.h"
-#include "Vao/OgreNULLBufferInterface.h"
 
+#include "OgreException.h"
 #include "OgreStringConverter.h"
+#include "Vao/OgreNULLBufferInterface.h"
+#include "Vao/OgreNULLVaoManager.h"
 
 namespace Ogre
 {
     NULLStagingBuffer::NULLStagingBuffer( size_t internalBufferStart, size_t sizeBytes,
-                                                VaoManager *vaoManager, bool uploadOnly ) :
+                                          VaoManager *vaoManager, bool uploadOnly ) :
         StagingBuffer( internalBufferStart, sizeBytes, vaoManager, uploadOnly ),
         mMappedPtr( 0 ),
         mNullDataPtr( 0 )
     {
-        mNullDataPtr = reinterpret_cast<uint8*>( OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RENDERSYS ) );
+        mNullDataPtr = reinterpret_cast<uint8 *>( OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RENDERSYS ) );
     }
     //-----------------------------------------------------------------------------------
     NULLStagingBuffer::~NULLStagingBuffer()
@@ -49,7 +50,7 @@ namespace Ogre
         mNullDataPtr = 0;
     }
     //-----------------------------------------------------------------------------------
-    void* NULLStagingBuffer::mapImpl( size_t sizeBytes )
+    void *NULLStagingBuffer::mapImpl( size_t sizeBytes )
     {
         assert( mUploadOnly );
 
@@ -65,23 +66,22 @@ namespace Ogre
     {
         mMappedPtr = 0;
 
-        for( size_t i=0; i<numDestinations; ++i )
+        for( size_t i = 0; i < numDestinations; ++i )
         {
             const Destination &dst = destinations[i];
 
-            NULLBufferInterface *bufferInterface = static_cast<NULLBufferInterface*>(
-                                                        dst.destination->getBufferInterface() );
+            NULLBufferInterface *bufferInterface =
+                static_cast<NULLBufferInterface *>( dst.destination->getBufferInterface() );
 
             assert( dst.destination->getBufferType() == BT_DEFAULT );
 
             size_t dstOffset = dst.dstOffset + dst.destination->_getInternalBufferStart() *
-                                                        dst.destination->getBytesPerElement();
+                                                   dst.destination->getBytesPerElement();
 
             uint8 *dstPtr = bufferInterface->getNullDataPtr();
 
             memcpy( dstPtr + dstOffset,
-                    mNullDataPtr + mInternalBufferStart + mMappingStart + dst.srcOffset,
-                    dst.length );
+                    mNullDataPtr + mInternalBufferStart + mMappingStart + dst.srcOffset, dst.length );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -95,27 +95,27 @@ namespace Ogre
     //  DOWNLOADS
     //
     //-----------------------------------------------------------------------------------
-    size_t NULLStagingBuffer::_asyncDownload( BufferPacked *source, size_t srcOffset,
-                                                 size_t srcLength )
+    size_t NULLStagingBuffer::_asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength )
     {
         size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
-        size_t errorCode = -1; // dodge comile error about signed/unsigned compare
+        size_t errorCode = std::numeric_limits<size_t>::max();
 
         if( freeRegionOffset == errorCode )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Cannot download the request amount of " +
-                         StringConverter::toString( srcLength ) + " bytes to this staging buffer. "
-                         "Try another one (we're full of requests that haven't been read by CPU yet)",
-                         "NULLStagingBuffer::_asyncDownload" );
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Cannot download the request amount of " + StringConverter::toString( srcLength ) +
+                    " bytes to this staging buffer. "
+                    "Try another one (we're full of requests that haven't been read by CPU yet)",
+                "NULLStagingBuffer::_asyncDownload" );
         }
 
         assert( !mUploadOnly );
-        assert( dynamic_cast<NULLBufferInterface*>( source->getBufferInterface() ) );
-        assert( (srcOffset + srcLength) <= source->getTotalSizeBytes() );
+        assert( dynamic_cast<NULLBufferInterface *>( source->getBufferInterface() ) );
+        assert( ( srcOffset + srcLength ) <= source->getTotalSizeBytes() );
 
-        NULLBufferInterface *bufferInterface = static_cast<NULLBufferInterface*>(
-                                                            source->getBufferInterface() );
+        NULLBufferInterface *bufferInterface =
+            static_cast<NULLBufferInterface *>( source->getBufferInterface() );
 
         uint8 *srcPtr = bufferInterface->getNullDataPtr();
 
@@ -126,7 +126,7 @@ namespace Ogre
         return freeRegionOffset;
     }
     //-----------------------------------------------------------------------------------
-    const void* NULLStagingBuffer::_mapForReadImpl( size_t offset, size_t sizeBytes )
+    const void *NULLStagingBuffer::_mapForReadImpl( size_t offset, size_t sizeBytes )
     {
         assert( !mUploadOnly );
 
@@ -135,9 +135,9 @@ namespace Ogre
 
         mMappedPtr = mNullDataPtr + mInternalBufferStart + mMappingStart;
 
-        //Put the mapped region back to our records as "available" for subsequent _asyncDownload
+        // Put the mapped region back to our records as "available" for subsequent _asyncDownload
         _cancelDownload( offset, sizeBytes );
 
         return mMappedPtr;
     }
-}
+}  // namespace Ogre

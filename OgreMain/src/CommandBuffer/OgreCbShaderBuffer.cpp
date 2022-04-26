@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,21 +28,20 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
 
+#include "CommandBuffer/OgreCommandBuffer.h"
+#include "OgreRenderSystem.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
 
-#include "OgreRenderSystem.h"
-
 namespace Ogre
 {
     CbShaderBuffer::CbShaderBuffer( ShaderType shaderType, uint16 _slot,
-                                    ConstBufferPacked *_bufferPacked,
-                                    uint32 _bindOffset, uint32 _bindSizeBytes ) :
-        CbBase( CB_SET_CONSTANT_BUFFER_VS + shaderType ),
+                                    ConstBufferPacked *_bufferPacked, uint32 _bindOffset,
+                                    uint32 _bindSizeBytes ) :
+        CbBase( CB_SET_CONSTANT_BUFFER_VS + uint16( shaderType ) ),
         slot( _slot ),
         bufferPacked( _bufferPacked ),
         bindOffset( _bindOffset ),
@@ -52,59 +51,58 @@ namespace Ogre
     }
 
     void CommandBuffer::execute_setConstantBufferVS( CommandBuffer *_this,
-                                                     const CbBase * RESTRICT_ALIAS _cmd )
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
-        assert( dynamic_cast<ConstBufferPacked*>( cmd->bufferPacked ) );
-        static_cast<ConstBufferPacked*>( cmd->bufferPacked )->bindBufferVS( cmd->slot );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+        assert( dynamic_cast<ConstBufferPacked *>( cmd->bufferPacked ) );
+        static_cast<ConstBufferPacked *>( cmd->bufferPacked )->bindBufferVS( cmd->slot );
     }
     void CommandBuffer::execute_setConstantBufferPS( CommandBuffer *_this,
-                                                     const CbBase * RESTRICT_ALIAS _cmd )
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
-        assert( dynamic_cast<ConstBufferPacked*>( cmd->bufferPacked ) );
-        static_cast<ConstBufferPacked*>( cmd->bufferPacked )->bindBufferPS( cmd->slot );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+        assert( dynamic_cast<ConstBufferPacked *>( cmd->bufferPacked ) );
+        static_cast<ConstBufferPacked *>( cmd->bufferPacked )->bindBufferPS( cmd->slot );
     }
     void CommandBuffer::execute_setConstantBufferGS( CommandBuffer *_this,
-                                                     const CbBase * RESTRICT_ALIAS _cmd )
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
-        assert( dynamic_cast<ConstBufferPacked*>( cmd->bufferPacked ) );
-        static_cast<ConstBufferPacked*>( cmd->bufferPacked )->bindBufferGS( cmd->slot );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+        assert( dynamic_cast<ConstBufferPacked *>( cmd->bufferPacked ) );
+        static_cast<ConstBufferPacked *>( cmd->bufferPacked )->bindBufferGS( cmd->slot );
     }
     void CommandBuffer::execute_setConstantBufferHS( CommandBuffer *_this,
-                                                     const CbBase * RESTRICT_ALIAS _cmd )
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
-        assert( dynamic_cast<ConstBufferPacked*>( cmd->bufferPacked ) );
-        static_cast<ConstBufferPacked*>( cmd->bufferPacked )->bindBufferHS( cmd->slot );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+        assert( dynamic_cast<ConstBufferPacked *>( cmd->bufferPacked ) );
+        static_cast<ConstBufferPacked *>( cmd->bufferPacked )->bindBufferHS( cmd->slot );
     }
     void CommandBuffer::execute_setConstantBufferDS( CommandBuffer *_this,
-                                                     const CbBase * RESTRICT_ALIAS _cmd )
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
-        assert( dynamic_cast<ConstBufferPacked*>( cmd->bufferPacked ) );
-        static_cast<ConstBufferPacked*>( cmd->bufferPacked )->bindBufferDS( cmd->slot );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+        assert( dynamic_cast<ConstBufferPacked *>( cmd->bufferPacked ) );
+        static_cast<ConstBufferPacked *>( cmd->bufferPacked )->bindBufferDS( cmd->slot );
     }
     void CommandBuffer::execute_setConstantBufferCS( CommandBuffer *_this,
-                                                     const CbBase * RESTRICT_ALIAS _cmd )
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
-        assert( dynamic_cast<ConstBufferPacked*>( cmd->bufferPacked ) );
-        static_cast<ConstBufferPacked*>( cmd->bufferPacked )->bindBufferCS( cmd->slot );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+        assert( dynamic_cast<ConstBufferPacked *>( cmd->bufferPacked ) );
+        static_cast<ConstBufferPacked *>( cmd->bufferPacked )->bindBufferCS( cmd->slot );
     }
     void CommandBuffer::execute_setConstantBufferInvalid( CommandBuffer *_this,
-                                                          const CbBase * RESTRICT_ALIAS _cmd )
+                                                          const CbBase *RESTRICT_ALIAS _cmd )
     {
         OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                      "'NumShaderTypes' is not a valid parameter for this command!!!",
                      "CommandBuffer::execute_setConstantBufferInvalid" );
     }
 
-    CbShaderBuffer::CbShaderBuffer( ShaderType shaderType, uint16 _slot,
-                                    TexBufferPacked *_bufferPacked,
+    CbShaderBuffer::CbShaderBuffer( ShaderType shaderType, uint16 _slot, TexBufferPacked *_bufferPacked,
                                     uint32 _bindOffset, uint32 _bindSizeBytes ) :
-        CbBase( CB_SET_TEXTURE_BUFFER_VS + shaderType ),
+        CbBase( CB_SET_TEXTURE_BUFFER_VS + uint16( shaderType ) ),
         slot( _slot ),
         bufferPacked( _bufferPacked ),
         bindOffset( _bindOffset ),
@@ -115,67 +113,67 @@ namespace Ogre
     }
 
     void CommandBuffer::execute_setTextureBufferVS( CommandBuffer *_this,
-                                                    const CbBase * RESTRICT_ALIAS _cmd )
+                                                    const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
 
-        assert( dynamic_cast<TexBufferPacked*>( cmd->bufferPacked ) );
+        assert( dynamic_cast<TexBufferPacked *>( cmd->bufferPacked ) );
 
-        TexBufferPacked *texBuffer = static_cast<TexBufferPacked*>( cmd->bufferPacked );
+        TexBufferPacked *texBuffer = static_cast<TexBufferPacked *>( cmd->bufferPacked );
         texBuffer->bindBufferVS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
     }
     void CommandBuffer::execute_setTextureBufferPS( CommandBuffer *_this,
-                                                    const CbBase * RESTRICT_ALIAS _cmd )
+                                                    const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
 
-        assert( dynamic_cast<TexBufferPacked*>( cmd->bufferPacked ) );
+        assert( dynamic_cast<TexBufferPacked *>( cmd->bufferPacked ) );
 
-        TexBufferPacked *texBuffer = static_cast<TexBufferPacked*>( cmd->bufferPacked );
+        TexBufferPacked *texBuffer = static_cast<TexBufferPacked *>( cmd->bufferPacked );
         texBuffer->bindBufferPS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
     }
     void CommandBuffer::execute_setTextureBufferGS( CommandBuffer *_this,
-                                                    const CbBase * RESTRICT_ALIAS _cmd )
+                                                    const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
 
-        assert( dynamic_cast<TexBufferPacked*>( cmd->bufferPacked ) );
+        assert( dynamic_cast<TexBufferPacked *>( cmd->bufferPacked ) );
 
-        TexBufferPacked *texBuffer = static_cast<TexBufferPacked*>( cmd->bufferPacked );
+        TexBufferPacked *texBuffer = static_cast<TexBufferPacked *>( cmd->bufferPacked );
         texBuffer->bindBufferGS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
     }
     void CommandBuffer::execute_setTextureBufferHS( CommandBuffer *_this,
-                                                    const CbBase * RESTRICT_ALIAS _cmd )
+                                                    const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
 
-        assert( dynamic_cast<TexBufferPacked*>( cmd->bufferPacked ) );
+        assert( dynamic_cast<TexBufferPacked *>( cmd->bufferPacked ) );
 
-        TexBufferPacked *texBuffer = static_cast<TexBufferPacked*>( cmd->bufferPacked );
+        TexBufferPacked *texBuffer = static_cast<TexBufferPacked *>( cmd->bufferPacked );
         texBuffer->bindBufferHS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
     }
     void CommandBuffer::execute_setTextureBufferDS( CommandBuffer *_this,
-                                                    const CbBase * RESTRICT_ALIAS _cmd )
+                                                    const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
 
-        assert( dynamic_cast<TexBufferPacked*>( cmd->bufferPacked ) );
+        assert( dynamic_cast<TexBufferPacked *>( cmd->bufferPacked ) );
 
-        TexBufferPacked *texBuffer = static_cast<TexBufferPacked*>( cmd->bufferPacked );
+        TexBufferPacked *texBuffer = static_cast<TexBufferPacked *>( cmd->bufferPacked );
         texBuffer->bindBufferDS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
     }
     void CommandBuffer::execute_setTextureBufferCS( CommandBuffer *_this,
-                                                    const CbBase * RESTRICT_ALIAS _cmd )
+                                                    const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer*>( _cmd );
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
 
-        assert( dynamic_cast<TexBufferPacked*>( cmd->bufferPacked ) );
+        assert( dynamic_cast<TexBufferPacked *>( cmd->bufferPacked ) );
 
-        TexBufferPacked *texBuffer = static_cast<TexBufferPacked*>( cmd->bufferPacked );
+        TexBufferPacked *texBuffer = static_cast<TexBufferPacked *>( cmd->bufferPacked );
         texBuffer->bindBufferCS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
     }
     void CommandBuffer::execute_setTextureBufferInvalid( CommandBuffer *_this,
-                                                         const CbBase * RESTRICT_ALIAS _cmd )
+                                                         const CbBase *RESTRICT_ALIAS _cmd )
     {
         OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                      "'NumShaderTypes' is not a valid parameter for this command!!!",
@@ -185,7 +183,7 @@ namespace Ogre
     CbShaderBuffer::CbShaderBuffer( ShaderType shaderType, uint16 _slot,
                                     ReadOnlyBufferPacked *_bufferPacked, uint32 _bindOffset,
                                     uint32 _bindSizeBytes ) :
-        CbBase( CB_SET_READONLY_BUFFER_VS + shaderType ),
+        CbBase( CB_SET_READONLY_BUFFER_VS + uint16( shaderType ) ),
         slot( _slot ),
         bufferPacked( _bufferPacked ),
         bindOffset( _bindOffset ),
@@ -270,9 +268,9 @@ namespace Ogre
     }
 
     void CommandBuffer::execute_setIndirectBuffer( CommandBuffer *_this,
-                                                   const CbBase * RESTRICT_ALIAS _cmd )
+                                                   const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbIndirectBuffer *cmd = static_cast<const CbIndirectBuffer*>( _cmd );
+        const CbIndirectBuffer *cmd = static_cast<const CbIndirectBuffer *>( _cmd );
         _this->mRenderSystem->_setIndirectBuffer( cmd->indirectBuffer );
     }
-}
+}  // namespace Ogre

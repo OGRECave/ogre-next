@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -26,35 +26,26 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreNULLPrerequisites.h"
-
 #include "Vao/OgreNULLAsyncTicket.h"
-#include "Vao/OgreNULLVaoManager.h"
 
+#include "Vao/OgreNULLVaoManager.h"
 #include "Vao/OgreStagingBuffer.h"
 
 namespace Ogre
 {
-    NULLAsyncTicket::NULLAsyncTicket( BufferPacked *creator,
-                                            StagingBuffer *stagingBuffer,
-                                            size_t elementStart,
-                                            size_t elementCount ) :
+    NULLAsyncTicket::NULLAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
+                                      size_t elementStart, size_t elementCount ) :
         AsyncTicket( creator, stagingBuffer, elementStart, elementCount )
     {
     }
     //-----------------------------------------------------------------------------------
-    NULLAsyncTicket::~NULLAsyncTicket()
-    {
-    }
+    NULLAsyncTicket::~NULLAsyncTicket() {}
     //-----------------------------------------------------------------------------------
-    const void* NULLAsyncTicket::mapImpl(void)
+    const void *NULLAsyncTicket::mapImpl()
     {
         return mStagingBuffer->_mapForRead( mStagingBufferMapOffset,
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool NULLAsyncTicket::queryIsTransferDone(void)
-    {
-        return true;
-    }
-}
+    bool NULLAsyncTicket::queryIsTransferDone() { return true; }
+}  // namespace Ogre

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -101,17 +101,17 @@ namespace Volume {
         
         /** Initializes the WorkQueue (once).
         */
-        void init(void);
+        void init();
 
     public:
         
         /** Constructor
         */
-        ChunkHandler(void);
+        ChunkHandler();
 
         /** Destructor.
         */
-        virtual ~ChunkHandler(void);
+        virtual ~ChunkHandler();
         
         /** Adds a new ChunkRequest to be loaded to the WorkQueue.
         @param req
@@ -121,7 +121,7 @@ namespace Volume {
 
         /** Calls the process-update of the WorkQueue so it doesn't block.
         */
-        void processWorkQueue(void);
+        void processWorkQueue();
 
         /// Implementation for WorkQueue::RequestHandler
         WorkQueue::Response* handleRequest(const WorkQueue::Request* req, const WorkQueue* srcQ);

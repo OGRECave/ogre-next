@@ -1,20 +1,27 @@
 
-#ifndef _Demo_HdrGameState_H_
-#define _Demo_HdrGameState_H_
+#ifndef Demo_HdrGameState_H_
+#define Demo_HdrGameState_H_
 
 #include "OgrePrerequisites.h"
+
+#include "OgreAtmosphereNpr.h"
+
 #include "TutorialGameState.h"
 
 namespace Demo
 {
     class HdrGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
-        Ogre::uint32        mCurrentPreset;
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        Ogre::AtmosphereNpr *mAtmosphere;
+#endif
+
+        bool mAnimateObjects;
+        Ogre::uint32 mCurrentPreset;
 
         Ogre::String mPresetName;
         float mExposure;
@@ -22,19 +29,19 @@ namespace Demo
         float mMaxAutoExposure;
         float mBloomFullThreshold;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
-        void switchPreset( int direction=1 );
+        void switchPreset( int direction = 1 );
 
     public:
         HdrGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

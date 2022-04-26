@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -26,63 +26,53 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreRotationalSpline.h"
 
-
-
-namespace Ogre {
-
+namespace Ogre
+{
     //---------------------------------------------------------------------
-    RotationalSpline::RotationalSpline()
-        : mAutoCalc(true)
-    {
-    }
+    RotationalSpline::RotationalSpline() : mAutoCalc( true ) {}
     //---------------------------------------------------------------------
-    RotationalSpline::~RotationalSpline()
-    {
-    }
+    RotationalSpline::~RotationalSpline() {}
     //---------------------------------------------------------------------
-    void RotationalSpline::addPoint(const Quaternion& p)
+    void RotationalSpline::addPoint( const Quaternion &p )
     {
-        mPoints.push_back(p);
-        if (mAutoCalc)
+        mPoints.push_back( p );
+        if( mAutoCalc )
         {
             recalcTangents();
         }
     }
     //---------------------------------------------------------------------
-    Quaternion RotationalSpline::interpolate(Real t, bool useShortestPath)
+    Quaternion RotationalSpline::interpolate( Real t, bool useShortestPath )
     {
         // Work out which segment this is in
-        Real fSeg = t * (mPoints.size() - 1);
+        Real fSeg = t * Real( mPoints.size() - 1u );
         unsigned int segIdx = (unsigned int)fSeg;
-        // Apportion t 
-        t = fSeg - segIdx;
+        // Apportion t
+        t = fSeg - Real( segIdx );
 
-        return interpolate(segIdx, t, useShortestPath);
-
+        return interpolate( segIdx, t, useShortestPath );
     }
     //---------------------------------------------------------------------
-    Quaternion RotationalSpline::interpolate(unsigned int fromIndex, Real t,
-        bool useShortestPath)
+    Quaternion RotationalSpline::interpolate( unsigned int fromIndex, Real t, bool useShortestPath )
     {
         // Bounds check
-        assert (fromIndex < mPoints.size() &&
-            "fromIndex out of bounds");
+        assert( fromIndex < mPoints.size() && "fromIndex out of bounds" );
 
-        if ((fromIndex + 1) == mPoints.size())
+        if( ( fromIndex + 1 ) == mPoints.size() )
         {
             // Duff request, cannot blend to nothing
             // Just return source
             return mPoints[fromIndex];
-
         }
         // Fast special cases
-        if (t == 0.0f)
+        if( t == 0.0f )
         {
             return mPoints[fromIndex];
         }
-        else if(t == 1.0f)
+        else if( t == 1.0f )
         {
             return mPoints[fromIndex + 1];
         }
@@ -90,16 +80,15 @@ namespace Ogre {
         // Real interpolation
         // Use squad using tangents we've already set up
         Quaternion &p = mPoints[fromIndex];
-        Quaternion &q = mPoints[fromIndex+1];
+        Quaternion &q = mPoints[fromIndex + 1];
         Quaternion &a = mTangents[fromIndex];
-        Quaternion &b = mTangents[fromIndex+1];
+        Quaternion &b = mTangents[fromIndex + 1];
 
         // NB interpolate to nearest rotation
-        return Quaternion::Squad(t, p, a, b, q, useShortestPath);
-
+        return Quaternion::Squad( t, p, a, b, q, useShortestPath );
     }
     //---------------------------------------------------------------------
-    void RotationalSpline::recalcTangents(void)
+    void RotationalSpline::recalcTangents()
     {
         // ShoeMake (1987) approach
         // Just like Catmull-Rom really, just more gnarly
@@ -115,15 +104,15 @@ namespace Ogre {
 
         numPoints = (unsigned int)mPoints.size();
 
-        if (numPoints < 2)
+        if( numPoints < 2 )
         {
             // Can't do anything yet
             return;
         }
 
-        mTangents.resize(numPoints);
+        mTangents.resize( numPoints );
 
-        if (mPoints[0] == mPoints[numPoints-1])
+        if( mPoints[0] == mPoints[numPoints - 1] )
         {
             isClosed = true;
         }
@@ -133,93 +122,77 @@ namespace Ogre {
         }
 
         Quaternion invp, part1, part2, preExp;
-        for(i = 0; i < numPoints; ++i)
+        for( i = 0; i < numPoints; ++i )
         {
             Quaternion &p = mPoints[i];
             invp = p.Inverse();
 
-            if (i ==0)
+            if( i == 0 )
             {
                 // special case start
-                part1 = (invp * mPoints[i+1]).Log();
-                if (isClosed)
+                part1 = ( invp * mPoints[i + 1] ).Log();
+                if( isClosed )
                 {
                     // Use numPoints-2 since numPoints-1 == end == start == this one
-                    part2 = (invp * mPoints[numPoints-2]).Log();
+                    part2 = ( invp * mPoints[numPoints - 2] ).Log();
                 }
                 else
                 {
-                    part2 = (invp * p).Log();
+                    part2 = ( invp * p ).Log();
                 }
             }
-            else if (i == numPoints-1)
+            else if( i == numPoints - 1 )
             {
                 // special case end
-                if (isClosed)
+                if( isClosed )
                 {
                     // Wrap to [1] (not [0], this is the same as end == this one)
-                    part1 = (invp * mPoints[1]).Log();
+                    part1 = ( invp * mPoints[1] ).Log();
                 }
                 else
                 {
-                    part1 = (invp * p).Log();
+                    part1 = ( invp * p ).Log();
                 }
-                part2 = (invp * mPoints[i-1]).Log();
+                part2 = ( invp * mPoints[i - 1] ).Log();
             }
             else
             {
-                part1 = (invp * mPoints[i+1]).Log();
-                part2 = (invp * mPoints[i-1]).Log();
+                part1 = ( invp * mPoints[i + 1] ).Log();
+                part2 = ( invp * mPoints[i - 1] ).Log();
             }
 
-            preExp = -0.25 * (part1 + part2);
+            preExp = -0.25 * ( part1 + part2 );
             mTangents[i] = p * preExp.Exp();
-            
         }
-
-
-
     }
     //---------------------------------------------------------------------
-    const Quaternion& RotationalSpline::getPoint(unsigned short index) const
+    const Quaternion &RotationalSpline::getPoint( unsigned short index ) const
     {
-        assert (index < mPoints.size() && "Point index is out of bounds!!");
+        assert( index < mPoints.size() && "Point index is out of bounds!!" );
 
         return mPoints[index];
     }
     //---------------------------------------------------------------------
-    unsigned short RotationalSpline::getNumPoints(void) const
-    {
-        return (unsigned short)mPoints.size();
-    }
+    unsigned short RotationalSpline::getNumPoints() const { return (unsigned short)mPoints.size(); }
     //---------------------------------------------------------------------
-    void RotationalSpline::clear(void)
+    void RotationalSpline::clear()
     {
         mPoints.clear();
         mTangents.clear();
     }
     //---------------------------------------------------------------------
-    void RotationalSpline::updatePoint(unsigned short index, const Quaternion& value)
+    void RotationalSpline::updatePoint( unsigned short index, const Quaternion &value )
     {
-        assert (index < mPoints.size() && "Point index is out of bounds!!");
+        assert( index < mPoints.size() && "Point index is out of bounds!!" );
 
         mPoints[index] = value;
-        if (mAutoCalc)
+        if( mAutoCalc )
         {
             recalcTangents();
         }
     }
     //---------------------------------------------------------------------
-    void RotationalSpline::setAutoCalculate(bool autoCalc)
-    {
-        mAutoCalc = autoCalc;
-    }
+    void RotationalSpline::setAutoCalculate( bool autoCalc ) { mAutoCalc = autoCalc; }
     //---------------------------------------------------------------------
 
-
-
-}
-
-
-
-
+}  // namespace Ogre

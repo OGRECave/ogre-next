@@ -2,24 +2,24 @@
 #include "GraphicsSystem.h"
 #include "ScreenSpaceReflectionsGameState.h"
 
-#include "OgreSceneManager.h"
-#include "OgreCamera.h"
-#include "OgreRoot.h"
-#include "OgreWindow.h"
-#include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreCamera.h"
+#include "OgreConfigFile.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreWindow.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
-#else
+#    else
 int mainApp( int argc, const char *argv[] )
-#endif
+#    endif
 {
     return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
@@ -27,9 +27,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class ScreenSpaceReflectionsGraphicsSystem : public GraphicsSystem
+    class ScreenSpaceReflectionsGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace* setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             const bool useMsaa = mRenderWindow->isMultisample();
@@ -40,11 +40,11 @@ namespace Demo
             if( useMsaa )
                 compositorName = "ScreenSpaceReflectionsWorkspaceMsaa";
 
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
-                                                    mCamera, compositorName, true );
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
+                                                    compositorName, true );
         }
 
-        virtual void setupResources(void)
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 
@@ -55,18 +55,17 @@ namespace Demo
 
             if( originalDataFolder.empty() )
                 originalDataFolder = AndroidSystems::isAndroid() ? "/" : "./";
-            else if( *(originalDataFolder.end() - 1) != '/' )
+            else if( *( originalDataFolder.end() - 1 ) != '/' )
                 originalDataFolder += "/";
 
-            const char *c_locations[4] =
-            {
+            const char *c_locations[4] = {
                 "2.0/scripts/materials/ScreenSpaceReflections",
                 "2.0/scripts/materials/ScreenSpaceReflections/GLSL",
                 "2.0/scripts/materials/ScreenSpaceReflections/HLSL",
                 "2.0/scripts/materials/ScreenSpaceReflections/Metal",
             };
 
-            for( size_t i=0; i<4; ++i )
+            for( size_t i = 0; i < 4; ++i )
             {
                 Ogre::String dataFolder = originalDataFolder + c_locations[i];
                 addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
@@ -74,20 +73,16 @@ namespace Demo
         }
 
     public:
-        ScreenSpaceReflectionsGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState )
-        {
-        }
+        ScreenSpaceReflectionsGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}
     };
 
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
         ScreenSpaceReflectionsGameState *gfxGameState = new ScreenSpaceReflectionsGameState(
-        "TBD\n"
-        "\n" );
+            "TBD\n"
+            "\n" );
 
         GraphicsSystem *graphicsSystem = new ScreenSpaceReflectionsGraphicsSystem( gfxGameState );
 
@@ -97,17 +92,12 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
-    {
-        return "Screen Space Reflections";
-    }
-}
+    const char *MainEntryPoints::getWindowTitle() { return "Screen Space Reflections"; }
+}  // namespace Demo

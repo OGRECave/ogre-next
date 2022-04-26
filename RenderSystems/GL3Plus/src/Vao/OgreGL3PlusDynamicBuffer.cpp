@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,8 +27,8 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreGL3PlusDynamicBuffer.h"
-#include "Vao/OgreGL3PlusVaoManager.h"
 #include "Vao/OgreGL3PlusStagingBuffer.h"
+#include "Vao/OgreGL3PlusVaoManager.h"
 
 namespace Ogre
 {
@@ -44,11 +44,9 @@ namespace Ogre
             mPersistentMethod = BT_DYNAMIC_DEFAULT;
     }
     //-----------------------------------------------------------------------------------
-    GL3PlusDynamicBuffer::~GL3PlusDynamicBuffer()
-    {
-    }
+    GL3PlusDynamicBuffer::~GL3PlusDynamicBuffer() {}
     //-----------------------------------------------------------------------------------
-    size_t GL3PlusDynamicBuffer::addMappedRange(size_t start, size_t count )
+    size_t GL3PlusDynamicBuffer::addMappedRange( size_t start, size_t count )
     {
         size_t ticket;
 
@@ -67,7 +65,7 @@ namespace Ogre
         return ticket;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN GL3PlusDynamicBuffer::map( size_t start, size_t count,
+    void *RESTRICT_ALIAS_RETURN GL3PlusDynamicBuffer::map( size_t start, size_t count,
                                                            size_t &outTicket )
     {
         assert( start <= mVboSize && start + count <= mVboSize );
@@ -93,7 +91,7 @@ namespace Ogre
 
         outTicket = addMappedRange( start, count );
 
-        return static_cast<uint8*>(mMappedPtr) + start;
+        return static_cast<uint8 *>( mMappedPtr ) + start;
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusDynamicBuffer::flush( size_t ticket, size_t start, size_t count )
@@ -101,8 +99,8 @@ namespace Ogre
         assert( start <= mMappedRanges[ticket].count && start + count <= mMappedRanges[ticket].count );
 
         OCGE( glFlushMappedBufferRange( GL_COPY_WRITE_BUFFER,
-                                        mMappedRanges[ticket].start + start,
-                                        count ) );
+                                        static_cast<GLintptr>( mMappedRanges[ticket].start + start ),
+                                        static_cast<GLsizeiptr>( count ) ) );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusDynamicBuffer::unmap( size_t ticket )
@@ -119,4 +117,4 @@ namespace Ogre
             mMappedPtr = 0;
         }
     }
-}
+}  // namespace Ogre

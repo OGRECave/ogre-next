@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -54,8 +54,9 @@ namespace Ogre
 
         /// @copydoc ArrayMemoryManager::ArrayMemoryManager
         KfTransformArrayMemoryManager( uint16 depthLevel, size_t hintMaxNodes,
-                                size_t cleanupThreshold=100, size_t maxHardLimit=MAX_MEMORY_SLOTS,
-                                RebaseListener *rebaseListener=0 );
+                                       size_t          cleanupThreshold = 100,
+                                       size_t          maxHardLimit = MAX_MEMORY_SLOTS,
+                                       RebaseListener *rebaseListener = 0 );
 
         virtual ~KfTransformArrayMemoryManager() {}
 
@@ -67,11 +68,11 @@ namespace Ogre
         @param outTransform
             Out: The transform with filled memory pointers
         */
-        void createNewNode( KfTransform **outTransform );
+        void createNewNode( KfTransform *RESTRICT_ALIAS *outTransform );
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

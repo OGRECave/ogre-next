@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -28,16 +28,19 @@ THE SOFTWARE.
 #include <CoreFoundation/CoreFoundation.h>
 #include "../OgrePrerequisites.h"
 
-namespace Ogre {
-
-    CFBundleRef mac_loadExeBundle(const char *path);
-    void * mac_getBundleSym(CFBundleRef bundle, const char *name);
-    bool mac_unloadExeBundle(CFBundleRef bundle);
-    void* mac_loadDylib(const char* name);
-    void* mac_loadFramework(String name);
+namespace Ogre
+{
+    CFBundleRef        mac_loadExeBundle( const char *path );
+    void              *mac_getBundleSym( CFBundleRef bundle, const char *name );
+    bool               mac_unloadExeBundle( CFBundleRef bundle );
+    void              *mac_loadDylib( const char *name );
+    void              *mac_loadFramework( String name );
     _OgreExport String macPluginPath();
     _OgreExport String macBundlePath();
     _OgreExport String macFrameworksPath();
-    _OgreExport String macCachePath();
-    _OgreExport String macTempFileName(void);
-}
+    _OgreExport String macCachePath( bool bAutoCreate = true );
+    _OgreExport String macTempFileName();
+    _OgreExport String macResourcesPath();
+    _OgreExport String macLogPath();
+    _OgreExport void   mac_dispatchOneEvent();
+}  // namespace Ogre

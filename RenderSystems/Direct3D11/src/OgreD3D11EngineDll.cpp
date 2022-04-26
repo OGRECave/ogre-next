@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -25,24 +25,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#include "OgreRoot.h"
 #include "OgreD3D11Plugin.h"
 
-#ifndef OGRE_STATIC_LIB
-namespace Ogre 
-{
-    D3D11Plugin* plugin;
+#include "OgreRoot.h"
 
-    extern "C" void _OgreD3D11Export dllStartPlugin(void) throw()
+#ifndef OGRE_STATIC_LIB
+namespace Ogre
+{
+    static D3D11Plugin *plugin;
+
+#    if __cplusplus >= 201103L
+    extern "C" void _OgreD3D11Export dllStartPlugin( void ) noexcept( false )
+#    else
+    extern "C" void _OgreD3D11Export dllStartPlugin( void ) throw( Exception )
+#    endif
     {
         plugin = new D3D11Plugin();
-        Root::getSingleton().installPlugin(plugin);
+        Root::getSingleton().installPlugin( plugin );
     }
 
-    extern "C" void _OgreD3D11Export dllStopPlugin(void)
+    extern "C" void _OgreD3D11Export dllStopPlugin( void )
     {
-        Root::getSingleton().uninstallPlugin(plugin);
+        Root::getSingleton().uninstallPlugin( plugin );
         delete plugin;
     }
-}
+}  // namespace Ogre
 #endif

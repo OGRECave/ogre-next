@@ -32,7 +32,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void IesProfilesGameState::createScene01( void )
+    void IesProfilesGameState::createScene01()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
@@ -54,8 +54,8 @@ namespace Demo
             Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-            planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         {
             // Floor
@@ -89,7 +89,7 @@ namespace Demo
         // clang-format off
         const LightProfileParams lightProfiles[c_numAreaLights] =
         {
-            { 0, Ogre::Math::PI },
+            { 0, (float)Ogre::Math::PI },
             { "x-arrow-soft.ies", 180.0f },
             { "bollard.ies", 18.0f },
             { "star-focused.ies", 700.0f }
@@ -101,7 +101,7 @@ namespace Demo
             Ogre::Light *light = sceneManager->createLight();
             Ogre::SceneNode *lightNode = rootNode->createChildSceneNode();
             lightNode->attachObject( light );
-            lightNode->setPosition( ( i - c_numAreaLights * 0.5f ) * 6.0f, 8.0f, -0.5f );
+            lightNode->setPosition( ( float( i ) - c_numAreaLights * 0.5f ) * 6.0f, 8.0f, -0.5f );
             light->setPowerScale( lightProfiles[i].power );
             light->setType( Ogre::Light::LT_SPOTLIGHT );
             light->setDirection( Ogre::Vector3( 0, -1, 0 ).normalisedCopy() );
@@ -127,7 +127,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void IesProfilesGameState::destroyScene( void )
+    void IesProfilesGameState::destroyScene()
     {
         OGRE_DELETE mLightProfiles;
         mLightProfiles = 0;

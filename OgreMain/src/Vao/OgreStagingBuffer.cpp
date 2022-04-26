@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -27,16 +27,18 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Vao/OgreStagingBuffer.h"
-#include "Vao/OgreVaoManager.h"
+
 #include "OgreException.h"
 #include "OgreStringConverter.h"
 #include "OgreTimer.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
-    StagingBuffer::StagingBuffer( size_t internalBufferStart, size_t sizeBytes,
-                                  VaoManager *vaoManager, bool uploadOnly ) :
+    StagingBuffer::StagingBuffer( size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
+                                  bool uploadOnly ) :
         mInternalBufferStart( internalBufferStart ),
         mSizeBytes( sizeBytes ),
         mUploadOnly( uploadOnly ),
@@ -53,16 +55,13 @@ namespace Ogre
             mAvailableDownloadRegions.push_back( Fence( 0, mSizeBytes ) );
     }
     //-----------------------------------------------------------------------------------
-    StagingBuffer::~StagingBuffer()
-    {
-    }
+    StagingBuffer::~StagingBuffer() {}
     //-----------------------------------------------------------------------------------
     void StagingBuffer::mapChecks( size_t sizeBytes )
     {
         if( !sizeBytes )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "StagingBuffer cannot map 0 bytes",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "StagingBuffer cannot map 0 bytes",
                          "StagingBuffer::mapChecks" );
         }
 
@@ -70,8 +69,8 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "StagingBuffer (" + StringConverter::toString( mSizeBytes ) +
-                         " bytes) is smaller than the mapping request (" +
-                         StringConverter::toString( sizeBytes ) + ")",
+                             " bytes) is smaller than the mapping request (" +
+                             StringConverter::toString( sizeBytes ) + ")",
                          "StagingBuffer::mapChecks" );
         }
 
@@ -90,14 +89,13 @@ namespace Ogre
         return STALL_PARTIAL;
     }
     //-----------------------------------------------------------------------------------
-    void* StagingBuffer::map( size_t sizeBytes )
+    void *StagingBuffer::map( size_t sizeBytes )
     {
         assert( mUploadOnly );
 
         if( mMappingState != MS_UNMAPPED )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Buffer already mapped!",
-                         "StagingBuffer::map" );
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Buffer already mapped!", "StagingBuffer::map" );
         }
 
         mapChecks( sizeBytes );
@@ -113,8 +111,8 @@ namespace Ogre
                          "StagingBuffer::unmap" );
         }
 
-        assert( ( (!mUploadOnly && !destinations && !numDestinations) ||
-                  (mUploadOnly && destinations && numDestinations) ) &&
+        assert( ( ( !mUploadOnly && !destinations && !numDestinations ) ||
+                  ( mUploadOnly && destinations && numDestinations ) ) &&
                 "Using an upload staging-buffer for downloads or vice-versa." );
 
         unmapImpl( destinations, numDestinations );
@@ -126,7 +124,7 @@ namespace Ogre
             mMappingStart = 0;
     }
     //-----------------------------------------------------------------------------------
-    void StagingBuffer::addReferenceCount(void)
+    void StagingBuffer::addReferenceCount()
     {
         ++mRefCount;
 
@@ -134,7 +132,7 @@ namespace Ogre
             mVaoManager->_notifyStagingBufferLeftZeroRef( this );
     }
     //-----------------------------------------------------------------------------------
-    void StagingBuffer::removeReferenceCount(void)
+    void StagingBuffer::removeReferenceCount()
     {
         Timer *timer = mVaoManager->getTimer();
         --mRefCount;
@@ -155,23 +153,23 @@ namespace Ogre
         assert( !mUploadOnly );
 
         FenceVec::const_iterator itor = mAvailableDownloadRegions.begin();
-        FenceVec::const_iterator end  = mAvailableDownloadRegions.end();
+        FenceVec::const_iterator endt = mAvailableDownloadRegions.end();
 
-        while( itor != end && length > itor->length() )
+        while( itor != endt && length > itor->length() )
             ++itor;
 
-        return itor != end;
+        return itor != endt;
     }
     //-----------------------------------------------------------------------------------
     void StagingBuffer::_cancelDownload( size_t offset, size_t sizeBytes )
     {
-        //Put the mapped region back to our records as "available" for subsequent _asyncDownload
+        // Put the mapped region back to our records as "available" for subsequent _asyncDownload
         Fence mappedArea( offset, offset + sizeBytes );
 #if OGRE_DEBUG_MODE
         FenceVec::const_iterator itor = mAvailableDownloadRegions.begin();
-        FenceVec::const_iterator end  = mAvailableDownloadRegions.end();
+        FenceVec::const_iterator endt = mAvailableDownloadRegions.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             assert( !itor->overlaps( mappedArea ) &&
                     "Already called _mapForReadImpl on this area (or part of it!) before!" );
@@ -184,7 +182,7 @@ namespace Ogre
         mergeContiguousBlocks( mAvailableDownloadRegions.end() - 1, mAvailableDownloadRegions );
     }
     //-----------------------------------------------------------------------------------
-    const void* StagingBuffer::_mapForRead( size_t offset, size_t sizeBytes )
+    const void *StagingBuffer::_mapForRead( size_t offset, size_t sizeBytes )
     {
         assert( !mUploadOnly );
 
@@ -201,14 +199,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t StagingBuffer::getFreeDownloadRegion( size_t length )
     {
-        //Grab the smallest region that fits the request.
+        // Grab the smallest region that fits the request.
         size_t lowestLength = std::numeric_limits<size_t>::max();
         FenceVec::iterator itor = mAvailableDownloadRegions.begin();
-        FenceVec::iterator end  = mAvailableDownloadRegions.end();
+        FenceVec::iterator endt = mAvailableDownloadRegions.end();
 
-        FenceVec::iterator itLowest = end;
+        FenceVec::iterator itLowest = endt;
 
-        while( itor != end )
+        while( itor != endt )
         {
             size_t freeRegionLength = itor->length();
             if( length <= freeRegionLength && freeRegionLength < lowestLength )
@@ -220,15 +218,15 @@ namespace Ogre
             ++itor;
         }
 
-        size_t retVal = -1;
+        size_t retVal = std::numeric_limits<size_t>::max();
 
-        if( itLowest != end )
+        if( itLowest != endt )
         {
-            //Got a region! Shrink our records
+            // Got a region! Shrink our records
             retVal = itLowest->start;
             itLowest->start += length;
 
-            //This region is empty. Remove it.
+            // This region is empty. Remove it.
             if( itLowest->start == itLowest->end )
                 efficientVectorRemove( mAvailableDownloadRegions, itLowest );
         }
@@ -239,41 +237,41 @@ namespace Ogre
     void StagingBuffer::mergeContiguousBlocks( FenceVec::iterator blockToMerge, FenceVec &blocks )
     {
         FenceVec::iterator itor = blocks.begin();
-        FenceVec::iterator end  = blocks.end();
+        FenceVec::iterator endt = blocks.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->end == blockToMerge->start )
             {
                 itor->end = blockToMerge->end;
-                size_t idx = itor - blocks.begin();
+                ptrdiff_t idx = itor - blocks.begin();
 
-                //When blockToMerge is the last one, its index won't be the same
-                //after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                // When blockToMerge is the last one, its index won't be the same
+                // after removing the other iterator, they will swap.
+                if( static_cast<size_t>( idx ) == blocks.size() - 1u )
                     idx = blockToMerge - blocks.begin();
 
                 efficientVectorRemove( blocks, blockToMerge );
 
                 blockToMerge = blocks.begin() + idx;
                 itor = blocks.begin();
-                end  = blocks.end();
+                endt = blocks.end();
             }
             else if( blockToMerge->end == itor->start )
             {
                 blockToMerge->end = itor->end;
-                size_t idx = blockToMerge - blocks.begin();
+                ptrdiff_t idx = blockToMerge - blocks.begin();
 
-                //When blockToMerge is the last one, its index won't be the same
-                //after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                // When blockToMerge is the last one, its index won't be the same
+                // after removing the other iterator, they will swap.
+                if( static_cast<size_t>( idx ) == blocks.size() - 1u )
                     idx = itor - blocks.begin();
 
                 efficientVectorRemove( blocks, itor );
 
                 blockToMerge = blocks.begin() + idx;
                 itor = blocks.begin();
-                end  = blocks.end();
+                endt = blocks.end();
             }
             else
             {
@@ -281,4 +279,4 @@ namespace Ogre
             }
         }
     }
-}
+}  // namespace Ogre

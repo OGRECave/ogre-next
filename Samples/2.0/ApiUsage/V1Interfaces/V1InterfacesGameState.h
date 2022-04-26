@@ -12,8 +12,8 @@ namespace Demo
     public:
         V1InterfacesGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        void createScene01() override;
     };
-}
+}  // namespace Demo
 
 #endif

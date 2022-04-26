@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,40 +29,52 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreTextureGpuManager.h"
-#include "OgreTextureGpuManagerListener.h"
-#include "OgreObjCmdBuffer.h"
-#include "OgreTextureGpu.h"
+
 #include "OgreAsyncTextureTicket.h"
-#include "OgreStagingTexture.h"
-#include "OgrePixelFormatGpuUtils.h"
-
-#include "OgreId.h"
-#include "OgreLwString.h"
-#include "OgreCommon.h"
+#include "OgreBitset.inl"
 #include "OgreBitwise.h"
-
-#include "Vao/OgreVaoManager.h"
-#include "OgreResourceGroupManager.h"
-#include "OgreImage2.h"
-#include "OgreTextureFilters.h"
-
-#include "OgreHlmsDatablock.h"
-
-#include "Threading/OgreThreads.h"
-
-#include "OgreRenderSystem.h"
+#include "OgreCommon.h"
 #include "OgreException.h"
+#include "OgreHlmsDatablock.h"
+#include "OgreId.h"
+#include "OgreImage2.h"
 #include "OgreLogManager.h"
-#include "OgreString.h"
-
+#include "OgreLwString.h"
+#include "OgreObjCmdBuffer.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreProfiler.h"
+#include "OgreRenderSystem.h"
+#include "OgreResourceGroupManager.h"
+#include "OgreStagingTexture.h"
+#include "OgreString.h"
+#include "OgreTextureFilters.h"
+#include "OgreTextureGpu.h"
+#include "OgreTextureGpuManagerListener.h"
+#include "Threading/OgreThreads.h"
+#include "Vao/OgreVaoManager.h"
 
 #include <fstream>
 
 #if !OGRE_NO_JSON
-    #include "rapidjson/document.h"
-    #include "rapidjson/error/en.h"
-    #include "OgreStringConverter.h"
+#    include "OgreStringConverter.h"
+#
+#    if defined( __GNUC__ ) && !defined( __clang__ )
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wclass-memaccess"
+#    endif
+#    if defined( __clang__ )
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#        pragma clang diagnostic ignored "-Wdeprecated-copy"
+#    endif
+#    include "rapidjson/document.h"
+#    include "rapidjson/error/en.h"
+#    if defined( __clang__ )
+#        pragma clang diagnostic pop
+#    endif
+#    if defined( __GNUC__ ) && !defined( __clang__ )
+#        pragma GCC diagnostic pop
+#    endif
 #endif
 
 //#define OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD 1
@@ -86,18 +98,18 @@ namespace Ogre
         mShuttingDown( false ),
         mTryLockMutexFailureCount( 0u ),
         mTryLockMutexFailureLimit( 1200u ),
+        mLoadRequestsCounter( 0u ),
+        mLastUpdateIsStreamingDone( true ),
         mAddedNewLoadRequests( false ),
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion( false ),
         mEntriesToProcessPerIteration( 3u ),
-        mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
+        mMaxPreloadBytes( 256u * 1024u * 1024u ),  // A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( &sDefaultTextureGpuManagerListener ),
-    #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && \
-        OGRE_PLATFORM != OGRE_PLATFORM_ANDROID && \
-        OGRE_ARCH_TYPE != OGRE_ARCHITECTURE_32
-            mStagingTextureMaxBudgetBytes( 256u * 1024u * 1024u ),
-    #else
-            mStagingTextureMaxBudgetBytes( 128u * 1024u * 1024u ),
-    #endif
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && OGRE_PLATFORM != OGRE_PLATFORM_ANDROID && \
+    OGRE_ARCH_TYPE != OGRE_ARCHITECTURE_32
+        mStagingTextureMaxBudgetBytes( 256u * 1024u * 1024u ),
+#else
+        mStagingTextureMaxBudgetBytes( 128u * 1024u * 1024u ),
+#endif
         mDelayListenerCalls( false ),
         mIgnoreScheduledTasks( false ),
         mIgnoreSRgbPreference( false ),
@@ -108,53 +120,55 @@ namespace Ogre
 
         PixelFormatGpu format;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-    #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+#    if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
         // 32-bit have tighter limited addresse memory. They pay the price
         // in slower streaming (more round trips between main and worker threads)
         mStreamingData.maxSplitResolution = 2048u;
-    #else
+#    else
         // 64-bit have plenty of virtual addresss to spare. We can reserve much more.
         mStreamingData.maxSplitResolution = 4096u;
-    #endif
+#    endif
         const uint32 maxResolution = mStreamingData.maxSplitResolution;
-        //32MB / 128MB for RGBA8, that's two 4096x4096 / 2048x2048 texture.
+        // 32MB / 128MB for RGBA8, that's two 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_RGBA8_UNORM );
         mBudget.push_back( BudgetEntry( format, maxResolution, 2u ) );
-        //4MB / 16MB for BC1, that's two 4096x4096 / 2048x2048 texture.
+        // 4MB / 16MB for BC1, that's two 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_BC1_UNORM );
         mBudget.push_back( BudgetEntry( format, maxResolution, 2u ) );
-        //4MB / 16MB for BC3, that's one 4096x4096 / 2048x2048 texture.
+        // 4MB / 16MB for BC3, that's one 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_BC3_UNORM );
         mBudget.push_back( BudgetEntry( format, maxResolution, 1u ) );
-        //4MB / 16MB for BC5, that's one 4096x4096 / 2048x2048 texture.
+        // 4MB / 16MB for BC5, that's one 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_BC5_UNORM );
         mBudget.push_back( BudgetEntry( format, maxResolution, 1u ) );
 #else
         mStreamingData.maxSplitResolution = 2048u;
-        //Mobile platforms don't support compressed formats, and have tight memory constraints
-        //8MB for RGBA8, that's two 2048x2048 texture.
+        // Mobile platforms don't support compressed formats, and have tight memory constraints
+        // 8MB for RGBA8, that's two 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_RGBA8_UNORM );
         mBudget.push_back( BudgetEntry( format, 2048u, 2u ) );
 #endif
 
-        //Sort in descending order.
+        // Sort in descending order.
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        //Mobile platforms are tight on memory. Keep the limits low.
+        // Mobile platforms are tight on memory. Keep the limits low.
         mMaxPreloadBytes = 32u * 1024u * 1024u;
 #else
-        #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-            //32-bit architectures are more limited.
-            //The default 256MB can cause Out of Memory conditions due to memory fragmentation.
-            mMaxPreloadBytes = 128u * 1024u * 1024u;
-        #endif
+#    if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+        // 32-bit architectures are more limited.
+        // The default 256MB can cause Out of Memory conditions due to memory fragmentation.
+        mMaxPreloadBytes = 128u * 1024u * 1024u;
+#    endif
 #endif
 
+        // Starts as true so fullfillBudget can run at least once
+        mStreamingData.workerThreadRan = true;
         mStreamingData.bytesPreloaded = 0;
         mStreamingData.maxPerStagingTextureRequestBytes = 64u * 1024u * 1024u;
 
-        for( int i=0; i<2; ++i )
+        for( int i = 0; i < 2; ++i )
             mThreadData[i].objCmdBuffer = new ObjCmdBuffer();
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN && !OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
@@ -171,7 +185,7 @@ namespace Ogre
         assert( mEntries.empty() && "Derived class didn't call destroyAll!" );
         assert( mTexturePool.empty() && "Derived class didn't call destroyAll!" );
 
-        for( int i=0; i<2; ++i )
+        for( int i = 0; i < 2; ++i )
         {
             delete mThreadData[i].objCmdBuffer;
             mThreadData[i].objCmdBuffer = 0;
@@ -180,7 +194,7 @@ namespace Ogre
         mTextureGpuManagerListener = 0;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::shutdown(void)
+    void TextureGpuManager::shutdown()
     {
         if( !mShuttingDown )
         {
@@ -192,7 +206,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAll(void)
+    void TextureGpuManager::destroyAll()
     {
         mMutex.lock();
         abortAllRequests();
@@ -203,15 +217,17 @@ namespace Ogre
         mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::abortAllRequests( void )
+    void TextureGpuManager::abortAllRequests()
     {
         ThreadData &workerData = mThreadData[c_workerThread];
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
-        mainData.loadRequests.clear();  // TODO: if( loadRequest.autoDeleteImage ) delete loadRequest.image;
+        mainData.loadRequests
+            .clear();  // TODO: if( loadRequest.autoDeleteImage ) delete loadRequest.image;
         mainData.objCmdBuffer->clear();
         mainData.usedStagingTex.clear();
-        workerData.loadRequests.clear();  // TODO: if( loadRequest.autoDeleteImage ) delete loadRequest.image;
+        workerData.loadRequests
+            .clear();  // TODO: if( loadRequest.autoDeleteImage ) delete loadRequest.image;
         workerData.objCmdBuffer->clear();
         workerData.usedStagingTex.clear();
         mLoadRequestsMutex.unlock();
@@ -240,23 +256,23 @@ namespace Ogre
         mScheduledTasks.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAllStagingBuffers(void)
+    void TextureGpuManager::destroyAllStagingBuffers()
     {
         StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
-        StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
+        StagingTextureVec::iterator endt = mStreamingData.availableStagingTex.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            (*itor)->stopMapRegion();
+            ( *itor )->stopMapRegion();
             ++itor;
         }
 
         mStreamingData.availableStagingTex.clear();
 
         itor = mAvailableStagingTextures.begin();
-        end  = mAvailableStagingTextures.end();
+        endt = mAvailableStagingTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             destroyStagingTextureImpl( *itor );
             delete *itor;
@@ -266,9 +282,9 @@ namespace Ogre
         mAvailableStagingTextures.clear();
 
         itor = mUsedStagingTextures.begin();
-        end  = mUsedStagingTextures.end();
+        endt = mUsedStagingTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             destroyStagingTextureImpl( *itor );
             delete *itor;
@@ -278,12 +294,12 @@ namespace Ogre
         mUsedStagingTextures.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAllTextures(void)
+    void TextureGpuManager::destroyAllTextures()
     {
         ResourceEntryMap::const_iterator itor = mEntries.begin();
-        ResourceEntryMap::const_iterator end  = mEntries.end();
+        ResourceEntryMap::const_iterator endt = mEntries.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const ResourceEntry &entry = itor->second;
             delete entry.texture;
@@ -293,12 +309,12 @@ namespace Ogre
         mEntries.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAllPools(void)
+    void TextureGpuManager::destroyAllPools()
     {
         TexturePoolList::const_iterator itor = mTexturePool.begin();
-        TexturePoolList::const_iterator end  = mTexturePool.end();
+        TexturePoolList::const_iterator endt = mTexturePool.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             delete itor->masterTexture;
             ++itor;
@@ -307,20 +323,18 @@ namespace Ogre
         mTexturePool.clear();
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::reservePoolId( uint32 poolId, uint32 width, uint32 height,
+    TextureGpu *TextureGpuManager::reservePoolId( uint32 poolId, uint32 width, uint32 height,
                                                   uint32 numSlices, uint8 numMipmaps,
                                                   PixelFormatGpu pixelFormat )
     {
         IdType newId = Id::generateNewId<TextureGpuManager>();
         char tmpBuffer[64];
-        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
         texName.a( "_ReservedTex", newId );
 
         TexturePool newPool;
-        newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard,
-                                                   texName.c_str(),
-                                                   TextureFlags::PoolOwner,
-                                                   TextureTypes::Type2DArray );
+        newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard, texName.c_str(),
+                                                   TextureFlags::PoolOwner, TextureTypes::Type2DArray );
         newPool.manuallyReserved = true;
         newPool.usedMemory = 0;
         newPool.usedSlots.reserve( numSlices );
@@ -339,8 +353,8 @@ namespace Ogre
         return newPool.masterTexture;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::hasPoolId( uint32 poolId, uint32 width, uint32 height,
-                                       uint8 numMipmaps, PixelFormatGpu pixelFormat ) const
+    bool TextureGpuManager::hasPoolId( uint32 poolId, uint32 width, uint32 height, uint8 numMipmaps,
+                                       PixelFormatGpu pixelFormat ) const
     {
         bool retVal = false;
 
@@ -350,8 +364,7 @@ namespace Ogre
         while( itPool != enPool && !retVal )
         {
             const TexturePool &pool = *itPool;
-            if( pool.masterTexture->getWidth() == width &&
-                pool.masterTexture->getHeight() == height &&
+            if( pool.masterTexture->getWidth() == width && pool.masterTexture->getHeight() == height &&
                 pool.masterTexture->getPixelFormat() == pixelFormat &&
                 pool.masterTexture->getNumMipmaps() == numMipmaps &&
                 pool.masterTexture->getTexturePoolId() == poolId )
@@ -365,12 +378,12 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::createTexture( const String &name, const String &aliasName,
+    TextureGpu *TextureGpuManager::createTexture( const String &name, const String &aliasName,
                                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                   uint32 textureFlags,
                                                   TextureTypes::TextureTypes initialType,
-                                                  const String &resourceGroup,
-                                                  uint32 filters, uint32 poolId )
+                                                  const String &resourceGroup, uint32 filters,
+                                                  uint32 poolId )
     {
         OgreProfileExhaustive( "TextureGpuManager::createTexture" );
 
@@ -379,8 +392,8 @@ namespace Ogre
         if( mEntries.find( aliasName ) != mEntries.end() )
         {
             OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
-                         "A texture with name '" + aliasName +
-                         "' already exists. (Real tex name: '" + name + "')",
+                         "A texture with name '" + aliasName + "' already exists. (Real tex name: '" +
+                             name + "')",
                          "TextureGpuManager::createTexture" );
         }
 
@@ -406,21 +419,22 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::createTexture( const String &name,
+    TextureGpu *TextureGpuManager::createTexture( const String &name,
                                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                   uint32 textureFlags,
                                                   TextureTypes::TextureTypes initialType,
-                                                  const String &resourceGroup,
-                                                  uint32 filters, uint32 poolId )
+                                                  const String &resourceGroup, uint32 filters,
+                                                  uint32 poolId )
     {
-        return createTexture( name, name, pageOutStrategy, textureFlags,
-                              initialType, resourceGroup, filters, poolId );
+        return createTexture( name, name, pageOutStrategy, textureFlags, initialType, resourceGroup,
+                              filters, poolId );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::createOrRetrieveTexture( const String &name, const String &aliasName,
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            uint32 textureFlags, TextureTypes::TextureTypes initialType, const String &resourceGroup,
-            uint32 filters, uint32 poolId )
+    TextureGpu *TextureGpuManager::createOrRetrieveTexture(
+        const String &name, const String &aliasName,
+        GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, uint32 textureFlags,
+        TextureTypes::TextureTypes initialType, const String &resourceGroup, uint32 filters,
+        uint32 poolId )
     {
         TextureGpu *retVal = 0;
 
@@ -434,33 +448,33 @@ namespace Ogre
         {
             if( itor != mEntries.end() )
             {
-                //The use requested to destroy the texture. It will soon become a dangling pointer
-                //and invalidate the iterator. Wait for that to happen.
-                //We can't use TextureGpu::waitForData because 'this' will become dangling while
-                //inside that function
+                // The use requested to destroy the texture. It will soon become a dangling pointer
+                // and invalidate the iterator. Wait for that to happen.
+                // We can't use TextureGpu::waitForData because 'this' will become dangling while
+                // inside that function
                 waitForStreamingCompletion();
             }
 
-            retVal = createTexture( name, aliasName, pageOutStrategy, textureFlags,
-                                    initialType, resourceGroup, filters, poolId );
+            retVal = createTexture( name, aliasName, pageOutStrategy, textureFlags, initialType,
+                                    resourceGroup, filters, poolId );
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::createOrRetrieveTexture(
-            const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            uint32 textureFlags, TextureTypes::TextureTypes initialType, const String &resourceGroup,
-            uint32 filters, uint32 poolId )
+    TextureGpu *TextureGpuManager::createOrRetrieveTexture(
+        const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, uint32 textureFlags,
+        TextureTypes::TextureTypes initialType, const String &resourceGroup, uint32 filters,
+        uint32 poolId )
     {
-        return createOrRetrieveTexture( name, name, pageOutStrategy, textureFlags,
-                                        initialType, resourceGroup, filters, poolId );
+        return createOrRetrieveTexture( name, name, pageOutStrategy, textureFlags, initialType,
+                                        resourceGroup, filters, poolId );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::createOrRetrieveTexture(
-            const String &name, const String &aliasName,
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            CommonTextureTypes::CommonTextureTypes type, const String &resourceGroup, uint32 poolId )
+    TextureGpu *TextureGpuManager::createOrRetrieveTexture(
+        const String &name, const String &aliasName,
+        GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+        CommonTextureTypes::CommonTextureTypes type, const String &resourceGroup, uint32 poolId )
     {
         uint32 textureFlags = TextureFlags::AutomaticBatching;
         uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
@@ -477,18 +491,18 @@ namespace Ogre
             texType = TextureTypes::TypeCube;
         }
 
-        return createOrRetrieveTexture( name, aliasName, pageOutStrategy, textureFlags,
-                                        texType, resourceGroup, filters, poolId );
+        return createOrRetrieveTexture( name, aliasName, pageOutStrategy, textureFlags, texType,
+                                        resourceGroup, filters, poolId );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::createOrRetrieveTexture(
-            const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            CommonTextureTypes::CommonTextureTypes type, const String &resourceGroup, uint32 poolId )
+    TextureGpu *TextureGpuManager::createOrRetrieveTexture(
+        const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+        CommonTextureTypes::CommonTextureTypes type, const String &resourceGroup, uint32 poolId )
     {
         return createOrRetrieveTexture( name, name, pageOutStrategy, type, resourceGroup, poolId );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::findTextureNoThrow( IdString name ) const
+    TextureGpu *TextureGpuManager::findTextureNoThrow( IdString name ) const
     {
         TextureGpu *retVal = 0;
         ResourceEntryMap::const_iterator itor = mEntries.find( name );
@@ -509,7 +523,7 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                          "Texture with name '" + texture->getName().getFriendlyText() +
-                         "' not found. Perhaps already destroyed?",
+                             "' not found. Perhaps already destroyed?",
                          "TextureGpuManager::destroyTextureImmediate" );
         }
 
@@ -528,14 +542,14 @@ namespace Ogre
     {
         if( !texture->isPoolOwner() )
         {
-            //Almost all textures
+            // Almost all textures
             ResourceEntryMap::iterator itor = mEntries.find( texture->getName() );
 
             if( itor == mEntries.end() )
             {
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                              "Texture with name '" + texture->getName().getFriendlyText() +
-                             "' not found. Perhaps already destroyed?",
+                                 "' not found. Perhaps already destroyed?",
                              "TextureGpuManager::destroyTexture" );
             }
 
@@ -543,7 +557,7 @@ namespace Ogre
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Texture with name '" + texture->getName().getFriendlyText() +
-                             "' has already been scheduled for destruction!",
+                                 "' has already been scheduled for destruction!",
                              "TextureGpuManager::destroyTexture" );
             }
 
@@ -554,23 +568,24 @@ namespace Ogre
 
             if( texture->getPendingResidencyChanges() == 0 )
             {
-                //If the TextureGpu is in the worker thread, the following may be true:
+                // If the TextureGpu is in the worker thread, the following may be true:
                 //  1. Texture is not yet Resident. Thus getPendingResidencyChanges cannot be 0
                 //  2. Texture is Resident, but being loaded. Thus getPendingResidencyChanges will be 0
                 //     but _isDataReadyImpl returns false
                 //  3. Texture will become OnSystemRam, after it finishes loading. Thus
                 //     getPendingResidencyChanges cannot be 0
                 //
-                //Thus we know for sure the TextureGpu is not in the worker thread with this if statement
+                // Thus we know for sure the TextureGpu is not in the worker thread with this if
+                // statement
                 if( texture->_isDataReadyImpl() ||
                     texture->getResidencyStatus() != GpuResidency::Resident )
                 {
-                    //There are no pending tasks. We can execute it right now
+                    // There are no pending tasks. We can execute it right now
                     executeTask( texture, TextureGpuListener::ReadyForRendering, task );
                 }
                 else
                 {
-                    //No pending tasks, but the texture is being loaded. Delay execution
+                    // No pending tasks, but the texture is being loaded. Delay execution
                     texture->_addPendingResidencyChanges( 1u );
                     mScheduledTasks[texture].push_back( task );
                 }
@@ -583,25 +598,26 @@ namespace Ogre
         }
         else
         {
-            //Textures that are owners of a pool that were created
-            //with reservePoolId. Texture pool owners that weren't
-            //created with that function (i.e. automatically / on demand)
-            //are released automatically in _releaseSlotFromTexture
+            // Textures that are owners of a pool that were created
+            // with reservePoolId. Texture pool owners that weren't
+            // created with that function (i.e. automatically / on demand)
+            // are released automatically in _releaseSlotFromTexture
             TexturePoolList::iterator itor = mTexturePool.begin();
-            TexturePoolList::iterator end  = mTexturePool.end();
+            TexturePoolList::iterator endt = mTexturePool.end();
 
-            while( itor != end && itor->masterTexture != texture )
+            while( itor != endt && itor->masterTexture != texture )
                 ++itor;
 
             if( itor == mTexturePool.end() )
             {
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                              "Texture with name '" + texture->getName().getFriendlyText() +
-                             "' owner of a TexturePool not found. Perhaps already destroyed?",
+                                 "' owner of a TexturePool not found. Perhaps already destroyed?",
                              "TextureGpuManager::destroyTexture" );
             }
 
-            OGRE_ASSERT_LOW( itor->manuallyReserved && "Pools that were created automatically "
+            OGRE_ASSERT_LOW( itor->manuallyReserved &&
+                             "Pools that were created automatically "
                              "should not be destroyed manually via TextureGpuManager::destroyTexture."
                              " These pools will be destroyed automatically once they're empty" );
 
@@ -609,9 +625,9 @@ namespace Ogre
             {
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                              "Texture with name '" + texture->getName().getFriendlyText() +
-                             "' cannot be deleted! It's a TexturePool and it still has "
-                             "live textures using it! You must release those first by "
-                             "removing them from being Resident",
+                                 "' cannot be deleted! It's a TexturePool and it still has "
+                                 "live textures using it! You must release those first by "
+                                 "removing them from being Resident",
                              "TextureGpuManager::destroyTexture" );
             }
 
@@ -635,9 +651,8 @@ namespace Ogre
         return resourceGroupManager.resourceExists( resourceGroup, aliasName );
     }
     //-----------------------------------------------------------------------------------
-    StagingTexture* TextureGpuManager::getStagingTexture( uint32 width, uint32 height,
-                                                          uint32 depth, uint32 slices,
-                                                          PixelFormatGpu pixelFormat,
+    StagingTexture *TextureGpuManager::getStagingTexture( uint32 width, uint32 height, uint32 depth,
+                                                          uint32 slices, PixelFormatGpu pixelFormat,
                                                           size_t minConsumptionRatioThreshold )
     {
         OgreProfileExhaustive( "TextureGpuManager::getStagingTexture" );
@@ -646,27 +661,28 @@ namespace Ogre
 #if OGRE_DEBUG_MEMORY_CONSUMPTION
         {
             char tmpBuffer[512];
-            LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             text.a( "TextureGpuManager::getStagingTexture: ", width, "x", height, "x" );
             text.a( depth, "x", slices, " ", PixelFormatGpuUtils::toString( pixelFormat ) );
-            text.a( " (", (uint32)PixelFormatGpuUtils::getSizeBytes( width, height, depth,
-                                                                     slices, pixelFormat, 4u ) /
-                    1024u / 1024u,
-                    " MB)");
+            text.a( " (",
+                    (uint32)PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat,
+                                                               4u ) /
+                        1024u / 1024u,
+                    " MB)" );
             LogManager::getSingleton().logMessage( text.c_str() );
         }
 #endif
 
         StagingTextureVec::iterator bestCandidate = mAvailableStagingTextures.end();
         StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
-        StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+        StagingTextureVec::iterator endt = mAvailableStagingTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             StagingTexture *stagingTexture = *itor;
 
             if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) &&
-                (bestCandidate == end || stagingTexture->isSmallerThan( *bestCandidate )) )
+                ( bestCandidate == endt || stagingTexture->isSmallerThan( *bestCandidate ) ) )
             {
                 if( !stagingTexture->uploadWillStall() )
                     bestCandidate = itor;
@@ -677,16 +693,16 @@ namespace Ogre
 
         StagingTexture *retVal = 0;
 
-        if( bestCandidate != end && minConsumptionRatioThreshold != 0u )
+        if( bestCandidate != endt && minConsumptionRatioThreshold != 0u )
         {
-            const size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth,
-                                                                           slices, pixelFormat, 4u );
-            const size_t ratio = (requiredSize * 100u) / (*bestCandidate)->_getSizeBytes();
+            const size_t requiredSize =
+                PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat, 4u );
+            const size_t ratio = ( requiredSize * 100u ) / ( *bestCandidate )->_getSizeBytes();
             if( ratio < minConsumptionRatioThreshold )
-                bestCandidate = end;
+                bestCandidate = endt;
         }
 
-        if( bestCandidate != end )
+        if( bestCandidate != endt )
         {
             retVal = *bestCandidate;
             mUsedStagingTextures.push_back( *bestCandidate );
@@ -694,14 +710,14 @@ namespace Ogre
         }
         else
         {
-            //Couldn't find an existing StagingTexture that could handle our request.
-            //Check that our memory budget isn't exceeded.
+            // Couldn't find an existing StagingTexture that could handle our request.
+            // Check that our memory budget isn't exceeded.
             retVal = checkStagingTextureLimits( width, height, depth, slices, pixelFormat,
                                                 minConsumptionRatioThreshold );
             if( !retVal )
             {
-                //We haven't yet exceeded our budget, or we did exceed it and
-                //checkStagingTextureLimits freed some memory. Either way, create a new one.
+                // We haven't yet exceeded our budget, or we did exceed it and
+                // checkStagingTextureLimits freed some memory. Either way, create a new one.
                 retVal = createStagingTextureImpl( width, height, depth, slices, pixelFormat );
                 mUsedStagingTextures.push_back( retVal );
             }
@@ -712,11 +728,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::removeStagingTexture( StagingTexture *stagingTexture )
     {
-        //Reverse search to speed up since most removals are
-        //likely to remove what has just been requested.
-        StagingTextureVec::reverse_iterator ritor = std::find( mUsedStagingTextures.rbegin(),
-                                                               mUsedStagingTextures.rend(),
-                                                               stagingTexture );
+        // Reverse search to speed up since most removals are
+        // likely to remove what has just been requested.
+        StagingTextureVec::reverse_iterator ritor =
+            std::find( mUsedStagingTextures.rbegin(), mUsedStagingTextures.rend(), stagingTexture );
         assert( ritor != mUsedStagingTextures.rend() &&
                 "StagingTexture does not belong to this TextureGpuManager or already removed" );
 
@@ -726,14 +741,14 @@ namespace Ogre
         mAvailableStagingTextures.push_back( stagingTexture );
     }
     //-----------------------------------------------------------------------------------
-    AsyncTextureTicket* TextureGpuManager::createAsyncTextureTicket( uint32 width, uint32 height,
+    AsyncTextureTicket *TextureGpuManager::createAsyncTextureTicket( uint32 width, uint32 height,
                                                                      uint32 depthOrSlices,
                                                                      TextureTypes::TextureTypes texType,
                                                                      PixelFormatGpu pixelFormatFamily )
     {
         pixelFormatFamily = PixelFormatGpuUtils::getFamily( pixelFormatFamily );
-        AsyncTextureTicket *retVal = createAsyncTextureTicketImpl( width, height, depthOrSlices,
-                                                                   texType, pixelFormatFamily );
+        AsyncTextureTicket *retVal =
+            createAsyncTextureTicketImpl( width, height, depthOrSlices, texType, pixelFormatFamily );
 
         mAsyncTextureTickets.push_back( retVal );
         return retVal;
@@ -741,10 +756,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyAsyncTextureTicket( AsyncTextureTicket *ticket )
     {
-        //Reverse search to speed up since most removals are
-        //likely to remove what has just been requested.
-        AsyncTextureTicketVec::reverse_iterator ritor = std::find( mAsyncTextureTickets.rbegin(),
-                                                                   mAsyncTextureTickets.rend(), ticket );
+        // Reverse search to speed up since most removals are
+        // likely to remove what has just been requested.
+        AsyncTextureTicketVec::reverse_iterator ritor =
+            std::find( mAsyncTextureTickets.rbegin(), mAsyncTextureTickets.rend(), ticket );
 
         assert( ritor != mAsyncTextureTickets.rend() &&
                 "AsyncTextureTicket does not belong to this TextureGpuManager or already removed" );
@@ -755,12 +770,12 @@ namespace Ogre
         efficientVectorRemove( mAsyncTextureTickets, itor );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAllAsyncTextureTicket(void)
+    void TextureGpuManager::destroyAllAsyncTextureTicket()
     {
         AsyncTextureTicketVec::const_iterator itor = mAsyncTextureTickets.begin();
-        AsyncTextureTicketVec::const_iterator end  = mAsyncTextureTickets.end();
+        AsyncTextureTicketVec::const_iterator endt = mAsyncTextureTickets.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             OGRE_DELETE *itor;
             ++itor;
@@ -775,7 +790,7 @@ namespace Ogre
     {
         String resourceName = texture->getRealResourceNameStr();
 
-        //Render Targets are... complicated. Let's not, for now.
+        // Render Targets are... complicated. Let's not, for now.
         if( savedTextures.find( resourceName ) != savedTextures.end() || texture->isRenderToTexture() )
             return;
 
@@ -786,8 +801,7 @@ namespace Ogre
             String savingFilename = resourceName;
             if( listener )
             {
-                listener->savingChangeTextureNameOriginal( aliasName, resourceName,
-                                                           savingFilename );
+                listener->savingChangeTextureNameOriginal( aliasName, resourceName, savingFilename );
             }
 
             try
@@ -796,35 +810,35 @@ namespace Ogre
                 if( resourceGroup.empty() )
                     resourceGroup = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
 
-                inFile = ResourceGroupManager::getSingleton().openResource(
-                             resourceName, resourceGroup );
+                inFile =
+                    ResourceGroupManager::getSingleton().openResource( resourceName, resourceGroup );
             }
             catch( FileNotFoundException &e )
             {
-                //Try opening as an absolute path
+                // Try opening as an absolute path
                 std::fstream *ifs = OGRE_NEW_T( std::fstream, MEMCATEGORY_GENERAL )(
-                                        resourceName.c_str(),
-                                        std::ios::binary|std::ios::in );
+                    resourceName.c_str(), std::ios::binary | std::ios::in );
 
                 if( ifs->is_open() )
                 {
-                    inFile = DataStreamPtr( OGRE_NEW FileStreamDataStream( resourceName,
-                                                                           ifs, true ) );
+                    inFile = DataStreamPtr( OGRE_NEW FileStreamDataStream( resourceName, ifs, true ) );
                 }
                 else
                 {
-                    LogManager::getSingleton().logMessage(
-                                "WARNING: Could not find texture file " + aliasName +
-                                " (" + resourceName + ") for copying to export location. "
-                                "Error: " + e.getFullDescription() );
+                    LogManager::getSingleton().logMessage( "WARNING: Could not find texture file " +
+                                                           aliasName + " (" + resourceName +
+                                                           ") for copying to export location. "
+                                                           "Error: " +
+                                                           e.getFullDescription() );
                 }
             }
             catch( Exception &e )
             {
-                LogManager::getSingleton().logMessage(
-                            "WARNING: Could not find texture file " + aliasName +
-                            " (" + resourceName + ") for copying to export location. "
-                            "Error: " + e.getFullDescription() );
+                LogManager::getSingleton().logMessage( "WARNING: Could not find texture file " +
+                                                       aliasName + " (" + resourceName +
+                                                       ") for copying to export location. "
+                                                       "Error: " +
+                                                       e.getFullDescription() );
             }
 
             if( inFile )
@@ -833,9 +847,10 @@ namespace Ogre
                 vector<uint8>::type fileData;
                 fileData.resize( fileSize );
                 inFile->read( &fileData[0], fileData.size() );
-                std::ofstream outFile( (folderPath + "/" + savingFilename).c_str(),
+                std::ofstream outFile( ( folderPath + "/" + savingFilename ).c_str(),
                                        std::ios::binary | std::ios::out );
-                outFile.write( (const char*)&fileData[0], fileData.size() );
+                outFile.write( (const char *)&fileData[0],
+                               static_cast<std::streamsize>( fileData.size() ) );
                 outFile.close();
             }
         }
@@ -858,7 +873,8 @@ namespace Ogre
         savedTextures.insert( resourceName );
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::checkSupport( PixelFormatGpu format, uint32 textureFlags ) const
+    bool TextureGpuManager::checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes,
+                                          uint32 textureFlags ) const
     {
         OGRE_ASSERT_LOW(
             textureFlags != TextureFlags::NotTexture &&
@@ -909,7 +925,7 @@ namespace Ogre
         {
             MetadataCacheEntry entry;
             entry.aliasName = itor->second.alias;
-            //entry.resourceName = itor->second.name;
+            // entry.resourceName = itor->second.name;
             entry.width = texture->getWidth();
             entry.height = texture->getHeight();
             entry.depthOrSlices = texture->getDepthOrSlices();
@@ -936,11 +952,10 @@ namespace Ogre
 
         if( d.HasParseError() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "TextureGpuManager::importTextureMetadataCache",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "TextureGpuManager::importTextureMetadataCache",
                          "Invalid JSON string in file " + filename + " at line " +
-                         StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
-                         rapidjson::GetParseError_En( d.GetParseError() ) );
+                             StringConverter::toString( d.GetErrorOffset() ) +
+                             " Reason: " + rapidjson::GetParseError_En( d.GetParseError() ) );
         }
 
         rapidjson::Value::ConstMemberIterator itor;
@@ -950,7 +965,7 @@ namespace Ogre
         {
             const rapidjson::Value &jsonVal = itor->value;
             const rapidjson::SizeType arraySize = jsonVal.Size();
-            for( rapidjson::SizeType i=0; i<arraySize; ++i )
+            for( rapidjson::SizeType i = 0; i < arraySize; ++i )
             {
                 if( jsonVal[i].IsObject() )
                 {
@@ -961,9 +976,9 @@ namespace Ogre
                         entry.poolId = itor->value.GetUint();
 
                     itor = jsonVal[i].FindMember( "resolution" );
-                    if( itor != jsonVal[i].MemberEnd() &&
-                        itor->value.IsArray() && itor->value.Size() >= 3u &&
-                        itor->value[0].IsUint() && itor->value[1].IsUint() && itor->value[2].IsUint() )
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsArray() &&
+                        itor->value.Size() >= 3u && itor->value[0].IsUint() && itor->value[1].IsUint() &&
+                        itor->value[2].IsUint() )
                     {
                         entry.width = itor->value[0].GetUint();
                         entry.height = itor->value[1].GetUint();
@@ -979,16 +994,16 @@ namespace Ogre
                     if( itor != jsonVal[i].MemberEnd() && itor->value.IsString() )
                     {
                         entry.pixelFormat =
-                                PixelFormatGpuUtils::getFormatFromName( itor->value.GetString() );
+                            PixelFormatGpuUtils::getFormatFromName( itor->value.GetString() );
                     }
 
                     if( entry.width > 0u && entry.height > 0u && entry.depthOrSlices > 0u &&
                         entry.pixelFormat != PFG_UNKNOWN &&
-                        !hasPoolId( entry.poolId, entry.width, entry.height,
-                                    entry.numMipmaps, entry.pixelFormat ) )
+                        !hasPoolId( entry.poolId, entry.width, entry.height, entry.numMipmaps,
+                                    entry.pixelFormat ) )
                     {
-                        reservePoolId( entry.poolId, entry.width, entry.height,
-                                       entry.depthOrSlices, entry.numMipmaps, entry.pixelFormat );
+                        reservePoolId( entry.poolId, entry.width, entry.height, entry.depthOrSlices,
+                                       entry.numMipmaps, entry.pixelFormat );
                     }
                 }
             }
@@ -1018,14 +1033,13 @@ namespace Ogre
                     if( itor != itTex->value.MemberEnd() && itor->value.IsUint() )
                     {
                         entry.textureType = static_cast<TextureTypes::TextureTypes>(
-                                                Math::Clamp<uint32>( itor->value.GetUint(),
-                                                                     0u, TextureTypes::Type3D ) );
+                            Math::Clamp<uint32>( itor->value.GetUint(), 0u, TextureTypes::Type3D ) );
                     }
 
                     itor = itTex->value.FindMember( "resolution" );
-                    if( itor != itTex->value.MemberEnd() &&
-                        itor->value.IsArray() && itor->value.Size() >= 3u &&
-                        itor->value[0].IsUint() && itor->value[1].IsUint() && itor->value[2].IsUint() )
+                    if( itor != itTex->value.MemberEnd() && itor->value.IsArray() &&
+                        itor->value.Size() >= 3u && itor->value[0].IsUint() && itor->value[1].IsUint() &&
+                        itor->value[2].IsUint() )
                     {
                         entry.width = itor->value[0].GetUint();
                         entry.height = itor->value[1].GetUint();
@@ -1041,7 +1055,7 @@ namespace Ogre
                     if( itor != itTex->value.MemberEnd() && itor->value.IsString() )
                     {
                         entry.pixelFormat =
-                                PixelFormatGpuUtils::getFormatFromName( itor->value.GetString() );
+                            PixelFormatGpuUtils::getFormatFromName( itor->value.GetString() );
                     }
 
                     mMetadataCache[aliasName] = entry;
@@ -1060,7 +1074,7 @@ namespace Ogre
     void TextureGpuManager::exportTextureMetadataCache( String &outJson )
     {
         char tmpBuffer[4096];
-        LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
         jsonStr.a( "{" );
         jsonStr.a( "\n\t\"reserved_pool_ids\" :\n\t[" );
@@ -1068,9 +1082,9 @@ namespace Ogre
         bool firstIteration = true;
         {
             TexturePoolList::const_iterator itor = mTexturePool.begin();
-            TexturePoolList::const_iterator end  = mTexturePool.end();
+            TexturePoolList::const_iterator endt = mTexturePool.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const TexturePool &pool = *itor;
                 if( pool.manuallyReserved )
@@ -1078,8 +1092,7 @@ namespace Ogre
                     if( !firstIteration )
                         jsonStr.a( "," );
                     jsonStr.a( "\n\t\t{\n\t\t\t\"poolId\" : ", pool.masterTexture->getTexturePoolId() );
-                    jsonStr.a( ",\n\t\t\t\"resolution\" : [",
-                               pool.masterTexture->getWidth(), ", ",
+                    jsonStr.a( ",\n\t\t\t\"resolution\" : [", pool.masterTexture->getWidth(), ", ",
                                pool.masterTexture->getHeight(), ", ",
                                pool.masterTexture->getDepthOrSlices(), "]" );
                     jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", pool.masterTexture->getNumMipmaps() );
@@ -1099,9 +1112,9 @@ namespace Ogre
         jsonStr.a( "\n\t],\n\t\"textures\" :\n\t{" );
         firstIteration = true;
         MetadataCacheMap::const_iterator itor = mMetadataCache.begin();
-        MetadataCacheMap::const_iterator end  = mMetadataCache.end();
+        MetadataCacheMap::const_iterator endt = mMetadataCache.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const MetadataCacheEntry &entry = itor->second;
 
@@ -1109,14 +1122,12 @@ namespace Ogre
                 jsonStr.a( "," );
 
             jsonStr.a( "\n\t\t\"", entry.aliasName.c_str(), "\" : \n\t\t{" );
-            //jsonStr.a( "\n\t\t\t\"resource\" : \"", entry.resourceName.c_str(), "\"" );
-            jsonStr.a( "\n\t\t\t\"resolution\" : [",
-                       entry.width, ", ",
-                       entry.height, ", ",
+            // jsonStr.a( "\n\t\t\t\"resource\" : \"", entry.resourceName.c_str(), "\"" );
+            jsonStr.a( "\n\t\t\t\"resolution\" : [", entry.width, ", ", entry.height, ", ",
                        entry.depthOrSlices, "]" );
             jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", entry.numMipmaps );
-            jsonStr.a( ",\n\t\t\t\"format\" : \"",
-                       PixelFormatGpuUtils::toString( entry.pixelFormat ), "\"" );
+            jsonStr.a( ",\n\t\t\t\"format\" : \"", PixelFormatGpuUtils::toString( entry.pixelFormat ),
+                       "\"" );
             jsonStr.a( ",\n\t\t\t\"texture_type\" : ", (int)entry.textureType );
             jsonStr.a( ",\n\t\t\t\"poolId\" : ", entry.poolId );
             jsonStr.a( "\n\t\t}" );
@@ -1144,9 +1155,9 @@ namespace Ogre
         size_t textureBytesGpu = 0;
 
         ResourceEntryMap::const_iterator itor = mEntries.begin();
-        ResourceEntryMap::const_iterator end  = mEntries.end();
+        ResourceEntryMap::const_iterator endt = mEntries.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const ResourceEntry &entry = itor->second;
             GpuResidency::GpuResidency residency = entry.texture->getResidencyStatus();
@@ -1158,7 +1169,7 @@ namespace Ogre
 
                 if( residency == GpuResidency::OnSystemRam ||
                     entry.texture->getGpuPageOutStrategy() ==
-                    GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                        GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
                 {
                     textureBytesCpu += sizeBytes;
                 }
@@ -1171,10 +1182,10 @@ namespace Ogre
         outTextureBytesGpu = textureBytesGpu;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::dumpStats(void) const
+    void TextureGpuManager::dumpStats() const
     {
         char tmpBuffer[512];
-        LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
         LogManager &logMgr = LogManager::getSingleton();
 
@@ -1183,33 +1194,33 @@ namespace Ogre
 
         text.clear();
         text.a( "Available Staging Textures\t|", (uint32)mAvailableStagingTextures.size(), "|",
-                (uint32)availSizeBytes  / (1024u * 1024u), " MB\t\t |In use:\t|",
-                (uint32)usedSizeBytes  / (1024u * 1024u), " MB");
+                (uint32)availSizeBytes / ( 1024u * 1024u ), " MB\t\t |In use:\t|",
+                (uint32)usedSizeBytes / ( 1024u * 1024u ), " MB" );
         logMgr.logMessage( text.c_str() );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::dumpMemoryUsage( Log *log, uint32 mask ) const
     {
-        Log* logActual = log == NULL ? LogManager::getSingleton().getDefaultLog() : log;
+        Log *logActual = log == NULL ? LogManager::getSingleton().getDefaultLog() : log;
 
         logActual->logMessage(
-                    "==============================="
-                    "Start dump of TextureGpuManager"
-                    "===============================",
-                    LML_CRITICAL );
+            "==============================="
+            "Start dump of TextureGpuManager"
+            "===============================",
+            LML_CRITICAL );
 
         logActual->logMessage( "== Dumping Pools ==" );
 
         logActual->logMessage(
-                    "||Width|Height|Format|Mipmaps|Size in bytes|"
-                    "Num. active textures|Total texture capacity|Pool ID|Texture Names",
-                    LML_CRITICAL );
+            "||Width|Height|Format|Mipmaps|Size in bytes|"
+            "Num. active textures|Total texture capacity|Pool ID|Texture Names",
+            LML_CRITICAL );
 
         size_t bytesInPoolInclWaste = 0;
         size_t bytesInPoolExclWaste = 0;
 
         vector<char>::type tmpBuffer;
-        tmpBuffer.resize( 512 * 1024 ); //512kb per line should be way more than enough
+        tmpBuffer.resize( 512 * 1024 );  // 512kb per line should be way more than enough
         LwString text( LwString::FromEmptyPointer( &tmpBuffer[0], tmpBuffer.size() ) );
 
         TexturePoolList::const_iterator itPool = mTexturePool.begin();
@@ -1249,9 +1260,9 @@ namespace Ogre
         size_t bytesOutsidePool = 0;
 
         logActual->logMessage(
-                    "|Alias|Resource Name|Width|Height|Depth|Num Slices|Format|Mipmaps|MSAA|Size in bytes|"
-                    "RTT|UAV|Manual|MSAA Explicit|Reinterpretable|AutomaticBatched|Residency",
-                    LML_CRITICAL );
+            "|Alias|Resource Name|Width|Height|Depth|Num Slices|Format|Mipmaps|MSAA|Size in bytes|"
+            "RTT|UAV|Manual|MSAA Explicit|Reinterpretable|AutomaticBatched|Residency",
+            LML_CRITICAL );
 
         ResourceEntryMap::const_iterator itEntry = mEntries.begin();
         ResourceEntryMap::const_iterator enEntry = mEntries.end();
@@ -1275,15 +1286,13 @@ namespace Ogre
             text.a( entry.texture->getDepth(), "|", entry.texture->getNumSlices(), "|" );
             text.a( PixelFormatGpuUtils::toString( entry.texture->getPixelFormat() ), "|",
                     entry.texture->getNumMipmaps(), "|" );
-            text.a( entry.texture->getSampleDescription().getColourSamples(), "|",
-                    (uint32)bytesTexture, "|" );
-            text.a( entry.texture->isRenderToTexture(), "|",
-                    entry.texture->isUav(), "|",
+            text.a( entry.texture->getSampleDescription().getColourSamples(), "|", (uint32)bytesTexture,
+                    "|" );
+            text.a( entry.texture->isRenderToTexture(), "|", entry.texture->isUav(), "|",
                     entry.texture->_isManualTextureFlagPresent(), "|" );
-            text.a( entry.texture->hasMsaaExplicitResolves(), "|",
-                    entry.texture->isReinterpretable(), "|",
-                    entry.texture->hasAutomaticBatching(), "|",
-                    GpuResidency::toString( entry.texture->getResidencyStatus()) );
+            text.a( entry.texture->hasMsaaExplicitResolves(), "|", entry.texture->isReinterpretable(),
+                    "|", entry.texture->hasAutomaticBatching(), "|",
+                    GpuResidency::toString( entry.texture->getResidencyStatus() ) );
 
             if( !entry.texture->hasAutomaticBatching() )
                 bytesOutsidePool += bytesTexture;
@@ -1293,9 +1302,9 @@ namespace Ogre
             ++itEntry;
         }
 
-        float fMBytesInPoolInclWaste = bytesInPoolInclWaste / (1024.0f * 1024.0f);
-        float fMBytesInPoolExclWaste = bytesInPoolExclWaste / (1024.0f * 1024.0f);
-        float fMBytesOutsidePool = bytesOutsidePool  / (1024.0f * 1024.0f);
+        float fMBytesInPoolInclWaste = float( bytesInPoolInclWaste ) / ( 1024.0f * 1024.0f );
+        float fMBytesInPoolExclWaste = float( bytesInPoolExclWaste ) / ( 1024.0f * 1024.0f );
+        float fMBytesOutsidePool = float( bytesOutsidePool ) / ( 1024.0f * 1024.0f );
 
         text.clear();
         text.a( "\n|MBs in pools (excluding waste):|", LwString::Float( fMBytesInPoolExclWaste, 2 ),
@@ -1310,10 +1319,10 @@ namespace Ogre
         dumpStats();
 
         logActual->logMessage(
-                    "============================="
-                    "End dump of TextureGpuManager"
-                    "=============================",
-                    LML_CRITICAL );
+            "============================="
+            "End dump of TextureGpuManager"
+            "=============================",
+            LML_CRITICAL );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setTextureGpuManagerListener( TextureGpuManagerListener *listener )
@@ -1335,32 +1344,40 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setWorkerThreadMaxPerStagingTextureRequestBytes(
-            size_t maxPerStagingTextureRequestBytes )
+        size_t maxPerStagingTextureRequestBytes )
     {
         assert( maxPerStagingTextureRequestBytes > 0 && "Value cannot be 0!" );
         mStreamingData.maxPerStagingTextureRequestBytes =
-                std::max<size_t>( 1u, maxPerStagingTextureRequestBytes );
+            std::max<size_t>( 1u, maxPerStagingTextureRequestBytes );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget,
-                                                          size_t maxSplitResolution )
+                                                          uint32 maxSplitResolution )
     {
         if( maxSplitResolution == 0 )
             maxSplitResolution = mStreamingData.maxSplitResolution;
 
         BudgetEntryVec::const_iterator itor = budget.begin();
-        BudgetEntryVec::const_iterator end  = budget.end();
+        BudgetEntryVec::const_iterator endt = budget.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            if( itor->minNumSlices > 1u && itor->minResolution >= maxSplitResolution )
+            if( ( itor->minNumSlices > 2u && itor->minResolution >= maxSplitResolution ) ||
+                ( itor->minNumSlices > 1u && itor->minResolution > maxSplitResolution ) )
             {
                 LogManager::getSingleton().logMessage(
-                            "[WARNING] setWorkerThreadMinimumBudget called with minNumSlices = " +
-                            StringConverter::toString( itor->minNumSlices ) + " and minResolution = " +
-                            StringConverter::toString( itor->minResolution ) + " which can be very "
-                            "suboptimal given that maxSplitResolution = " +
-                            StringConverter::toString( maxSplitResolution ), LML_CRITICAL );
+                    "[WARNING] setWorkerThreadMinimumBudget called with minNumSlices = " +
+                        StringConverter::toString( itor->minNumSlices ) +
+                        " and minResolution = " + StringConverter::toString( itor->minResolution ) +
+                        " which can be "
+                        "suboptimal given that maxSplitResolution = " +
+                        StringConverter::toString( maxSplitResolution ) +
+                        "\n"
+                        "See "
+                        "https://ogrecave.github.io/ogre-next/api/2.2/"
+                        "hlms.html#setWorkerThreadMinimumBudget or "
+                        "https://github.com/OGRECave/ogre-next/issues/198",
+                    LML_CRITICAL );
             }
             ++itor;
         }
@@ -1368,21 +1385,18 @@ namespace Ogre
         mStreamingData.maxSplitResolution = maxSplitResolution;
 
         mBudget = budget;
-        //Sort in descending order.
+        // Sort in descending order.
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
     }
     //-----------------------------------------------------------------------------------
-    const TextureGpuManager::BudgetEntryVec& TextureGpuManager::getBudget(void) const
-    {
-        return mBudget;
-    }
+    const TextureGpuManager::BudgetEntryVec &TextureGpuManager::getBudget() const { return mBudget; }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setTrylockMutexFailureLimit( uint32 tryLockFailureLimit )
     {
         mTryLockMutexFailureLimit = tryLockFailureLimit;
     }
     //-----------------------------------------------------------------------------------
-    const String* TextureGpuManager::findAliasNameStr( IdString idName ) const
+    const String *TextureGpuManager::findAliasNameStr( IdString idName ) const
     {
         const String *retVal = 0;
 
@@ -1396,7 +1410,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    const String* TextureGpuManager::findResourceNameStr( IdString idName ) const
+    const String *TextureGpuManager::findResourceNameStr( IdString idName ) const
     {
         const String *retVal = 0;
 
@@ -1410,7 +1424,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    const String* TextureGpuManager::findResourceGroupStr( IdString idName ) const
+    const String *TextureGpuManager::findResourceGroupStr( IdString idName ) const
     {
         const String *retVal = 0;
 
@@ -1424,22 +1438,24 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::taskLoadToSysRamOrResident( TextureGpu *texture,
-                                                        const ScheduledTasks &task )
+    void TextureGpuManager::taskLoadToSysRamOrResident( TextureGpu *texture, const ScheduledTasks &task )
     {
         OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition );
 
         const GpuResidency::GpuResidency targetResidency = task.residencyTransitionTask.targetResidency;
 
-        if( texture->getResidencyStatus() == GpuResidency::OnStorage )
+        if( texture->getResidencyStatus() == GpuResidency::OnStorage ||
+            task.residencyTransitionTask.reuploadOnly )
         {
             OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::Resident ||
                                 targetResidency == GpuResidency::OnSystemRam );
+            OGRE_ASSERT_MEDIUM( !task.residencyTransitionTask.reuploadOnly ||
+                                texture->getResidencyStatus() == GpuResidency::Resident );
 
-            scheduleLoadRequest( texture,
-                                 task.residencyTransitionTask.image,
+            scheduleLoadRequest( texture, task.residencyTransitionTask.image,
                                  task.residencyTransitionTask.autoDeleteImage,
-                                 targetResidency == GpuResidency::OnSystemRam );
+                                 targetResidency == GpuResidency::OnSystemRam,
+                                 task.residencyTransitionTask.reuploadOnly );
         }
         else
         {
@@ -1448,18 +1464,17 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::taskToUnloadOrDestroy( TextureGpu *texture,
-                                                   const ScheduledTasks &task )
+    void TextureGpuManager::taskToUnloadOrDestroy( TextureGpu *texture, const ScheduledTasks &task )
     {
         OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition ||
                             task.tasksType == TaskTypeDestroyTexture );
         if( task.tasksType == TaskTypeResidencyTransition )
         {
             const GpuResidency::GpuResidency targetResidency =
-                    task.residencyTransitionTask.targetResidency;
+                task.residencyTransitionTask.targetResidency;
             OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::OnStorage ||
-                                (texture->getResidencyStatus() == GpuResidency::Resident &&
-                                 targetResidency == GpuResidency::OnSystemRam) );
+                                ( texture->getResidencyStatus() == GpuResidency::Resident &&
+                                  targetResidency == GpuResidency::OnSystemRam ) );
 
             texture->_transitionTo( targetResidency, texture->_getSysRamCopy( 0 ) );
         }
@@ -1479,9 +1494,9 @@ namespace Ogre
         switch( reason )
         {
         case TextureGpuListener::FromStorageToSysRam:
-            //Possible transitions we can do from here:
-            //OnSystemRam   -> OnStorage
-            //OnSystemRam   -> Resident
+            // Possible transitions we can do from here:
+            // OnSystemRam   -> OnStorage
+            // OnSystemRam   -> Resident
 
             if( task.tasksType == TaskTypeResidencyTransition )
             {
@@ -1497,9 +1512,9 @@ namespace Ogre
             break;
 
         case TextureGpuListener::FromSysRamToStorage:
-            //Possible transitions we can do from here:
-            //OnStorage     -> OnSystemRam
-            //OnStorage     -> Resident
+            // Possible transitions we can do from here:
+            // OnStorage     -> OnSystemRam
+            // OnStorage     -> Resident
             if( task.tasksType == TaskTypeResidencyTransition )
             {
                 if( task.residencyTransitionTask.targetResidency == GpuResidency::Resident ||
@@ -1513,11 +1528,11 @@ namespace Ogre
             break;
 
         case TextureGpuListener::LostResidency:
-            //Possible transitions we can do from here:
-            //OnStorage     -> OnSystemRam
-            //OnStorage     -> Resident
-            //OnSystemRam   -> OnStorage
-            //OnSystemRam   -> Resident
+            // Possible transitions we can do from here:
+            // OnStorage     -> OnSystemRam
+            // OnStorage     -> Resident
+            // OnSystemRam   -> OnStorage
+            // OnSystemRam   -> Resident
             if( task.tasksType == TaskTypeResidencyTransition )
             {
                 if( task.residencyTransitionTask.targetResidency == GpuResidency::Resident ||
@@ -1534,9 +1549,9 @@ namespace Ogre
 
         case TextureGpuListener::ResidentToSysRamSync:
         case TextureGpuListener::ReadyForRendering:
-            //Possible transitions we can do from here:
-            //Resident      -> OnSystemRam
-            //Resident      -> OnStorage
+            // Possible transitions we can do from here:
+            // Resident      -> OnSystemRam
+            // Resident      -> OnStorage
             if( task.tasksType == TaskTypeResidencyTransition ||
                 task.tasksType == TaskTypeDestroyTexture )
             {
@@ -1552,16 +1567,14 @@ namespace Ogre
         return taskExecuted;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::notifyTextureChanged( TextureGpu *texture,
-                                                  TextureGpuListener::Reason reason,
+    void TextureGpuManager::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                                   void *extraData )
     {
         notifyTextureChanged( texture, reason, false );
         mTextureGpuManagerListener->notifyTextureChanged( texture, reason, extraData );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::notifyTextureChanged( TextureGpu *texture,
-                                                  TextureGpuListener::Reason reason,
+    void TextureGpuManager::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                                   bool ignoreDelay )
     {
         if( mIgnoreScheduledTasks )
@@ -1569,7 +1582,7 @@ namespace Ogre
 
         if( mDelayListenerCalls && !ignoreDelay )
         {
-            //Nested notifyTextureChanged calls is a problem. We will execute them later
+            // Nested notifyTextureChanged calls is a problem. We will execute them later
             mMissedListenerCalls.push_back( MissedListenerCall( texture, reason ) );
         }
         else
@@ -1587,9 +1600,9 @@ namespace Ogre
                     if( itor->second.empty() )
                         mScheduledTasks.erase( itor );
 
-                    //If ignoreDelay == true, then our caller is already executing this loop.
-                    //Leave the task of executing those delayed calls to our caller. If we
-                    //do it, we'll corrupt mMissedListenerCallsTmp/mMissedListenerCalls
+                    // If ignoreDelay == true, then our caller is already executing this loop.
+                    // Leave the task of executing those delayed calls to our caller. If we
+                    // do it, we'll corrupt mMissedListenerCallsTmp/mMissedListenerCalls
                     if( !ignoreDelay )
                     {
                         mMissedListenerCallsTmp.swap( mMissedListenerCalls );
@@ -1598,8 +1611,8 @@ namespace Ogre
                             const MissedListenerCall &missed = mMissedListenerCallsTmp.front();
                             this->notifyTextureChanged( missed.texture, missed.reason, true );
                             mMissedListenerCallsTmp.pop_front();
-                            //This iteration may have added more entries to mMissedListenerCalls
-                            //We need to execute them right after this entry.
+                            // This iteration may have added more entries to mMissedListenerCalls
+                            // We need to execute them right after this entry.
                             mMissedListenerCallsTmp.insert( mMissedListenerCallsTmp.begin(),
                                                             mMissedListenerCalls.begin(),
                                                             mMissedListenerCalls.end() );
@@ -1612,26 +1625,19 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    RenderSystem* TextureGpuManager::getRenderSystem(void) const
-    {
-        return mRenderSystem;
-    }
+    RenderSystem *TextureGpuManager::getRenderSystem() const { return mRenderSystem; }
     //-----------------------------------------------------------------------------------
-    VaoManager* TextureGpuManager::getVaoManager(void) const
-    {
-        return mVaoManager;
-    }
+    VaoManager *TextureGpuManager::getVaoManager() const { return mVaoManager; }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture,
-                                                 const String &name,
-                                                 const String &resourceGroup,
-                                                 uint32 filters,
-                                                 Image2 *image,
-                                                 bool autoDeleteImage,
-                                                 bool toSysRam,
-                                                 bool skipMetadataCache,
+    void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, const String &name,
+                                                 const String &resourceGroup, uint32 filters,
+                                                 Image2 *image, bool autoDeleteImage, bool toSysRam,
+                                                 bool reuploadOnly, bool skipMetadataCache,
                                                  uint32 sliceOrDepth )
     {
+        // These two can't be true at the same time
+        OGRE_ASSERT_MEDIUM( !( toSysRam && reuploadOnly ) );
+
         Archive *archive = 0;
         ResourceLoadingListener *loadingListener = 0;
         if( resourceGroup != BLANKSTRING )
@@ -1646,10 +1652,43 @@ namespace Ogre
             }
 
             if( !providedByListener )
-                archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+            {
+                try
+                {
+                    archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+                }
+                catch( Exception &e )
+                {
+                    // Log the exception (probably file not found)
+                    LogManager::getSingleton().logMessage( e.getFullDescription() );
+                    texture->notifyAllListenersTextureChanged( TextureGpuListener::ExceptionThrown, &e );
+
+                    archive = 0;
+
+                    if( !image )
+                    {
+                        image = new Image2();
+
+                        PixelFormatGpu fallbackFormat = PFG_RGBA8_UNORM_SRGB;
+
+                        // Filters will complain if they need to run but Image2::getAutoDelete
+                        // returns false. So we tell them it's already in the
+                        // format they expect
+                        if( filters & TextureFilter::TypeLeaveChannelR )
+                            fallbackFormat = PFG_R8_UNORM;
+                        else if( filters & TextureFilter::TypePrepareForNormalMapping )
+                            fallbackFormat = PFG_RG8_SNORM;
+
+                        // Continue loading using a fallback
+                        image->loadDynamicImage( mErrorFallbackTexData, 2u, 2u, 1u,
+                                                 texture->getTextureType(), fallbackFormat, false, 1u );
+                        autoDeleteImage = true;
+                    }
+                }
+            }
         }
 
-        if( !skipMetadataCache && !toSysRam &&
+        if( !skipMetadataCache && !toSysRam && !reuploadOnly &&
             texture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
         {
             bool metadataSuccess = applyMetadataCacheTo( texture );
@@ -1658,20 +1697,38 @@ namespace Ogre
         }
 
         mAddedNewLoadRequests = true;
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion = true;
+        ++mLoadRequestsCounter;
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
-            mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image,
-                                                          texture, sliceOrDepth, filters,
-                                                          autoDeleteImage, toSysRam ) );
+        mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image, texture,
+                                                      sliceOrDepth, filters, autoDeleteImage,
+                                                      toSysRam ) );
+        mLoadRequestsMutex.unlock();
+        mWorkerWaitableEvent.wake();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_scheduleUpdate( TextureGpu *texture, uint32 filters, Image2 *image,
+                                             bool autoDeleteImage, bool skipMetadataCache,
+                                             uint32 sliceOrDepth )
+    {
+        Archive *archive = 0;
+        ResourceLoadingListener *loadingListener = 0;
+
+        mAddedNewLoadRequests = true;
+        ++mLoadRequestsCounter;
+        ThreadData &mainData = mThreadData[c_mainThread];
+        mLoadRequestsMutex.lock();
+        mainData.loadRequests.push_back( LoadRequest( "", archive, loadingListener, image, texture,
+                                                      sliceOrDepth, filters, autoDeleteImage, false ) );
         mLoadRequestsMutex.unlock();
         mWorkerWaitableEvent.wake();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, Image2 *image,
-                                                 bool autoDeleteImage, bool toSysRam )
+                                                 bool autoDeleteImage, bool toSysRam, bool reuploadOnly )
     {
-        OGRE_ASSERT_LOW( texture->getResidencyStatus() == GpuResidency::OnStorage );
+        OGRE_ASSERT_LOW( ( texture->getResidencyStatus() == GpuResidency::OnStorage && !reuploadOnly ) ||
+                         ( texture->getResidencyStatus() == GpuResidency::Resident && reuploadOnly ) );
 
         String name, resourceGroup;
         uint32 filters = 0;
@@ -1685,8 +1742,8 @@ namespace Ogre
 
         if( texture->getTextureType() != TextureTypes::TypeCube )
         {
-            scheduleLoadRequest( texture, name, resourceGroup, filters,
-                                 image, autoDeleteImage, toSysRam );
+            scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage, toSysRam,
+                                 reuploadOnly );
         }
         else
         {
@@ -1695,8 +1752,8 @@ namespace Ogre
             String::size_type pos = name.find_last_of( '.' );
             if( pos != String::npos )
             {
-                baseName    = name.substr( 0, pos );
-                ext         = name.substr( pos + 1u );
+                baseName = name.substr( 0, pos );
+                ext = name.substr( pos + 1u );
             }
             else
             {
@@ -1710,19 +1767,19 @@ namespace Ogre
             {
                 // XX HACK there should be a better way to specify whether
                 // all faces are in the same file or not
-                scheduleLoadRequest( texture, name, resourceGroup, filters,
-                                     image, autoDeleteImage, toSysRam );
+                scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage,
+                                     toSysRam, reuploadOnly );
             }
             else
             {
                 static const String suffixes[6] = { "_rt.", "_lf.", "_up.", "_dn.", "_fr.", "_bk." };
 
-                for( uint32 i=0; i<6u; ++i )
+                for( uint32 i = 0; i < 6u; ++i )
                 {
                     const bool skipMetadataCache = i != 0;
-                    scheduleLoadRequest( texture, baseName + suffixes[i] + ext,
-                                         resourceGroup, filters, i == 0 ? image : 0,
-                                         autoDeleteImage, toSysRam, skipMetadataCache, i );
+                    scheduleLoadRequest( texture, baseName + suffixes[i] + ext, resourceGroup, filters,
+                                         i == 0 ? image : 0, autoDeleteImage, toSysRam, reuploadOnly,
+                                         skipMetadataCache, i );
                 }
             }
         }
@@ -1734,7 +1791,7 @@ namespace Ogre
 
         Image2 *image = new Image2();
         const bool autoDeleteInternalPtr =
-                texture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
+            texture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
         uint8 *rawBuffer = texture->_getSysRamCopy( 0 );
         image->loadDynamicImage( rawBuffer, autoDeleteInternalPtr, texture );
 
@@ -1747,13 +1804,13 @@ namespace Ogre
             filters = itor->second.filters;
         }
 
-        //Only allow applying mipmap generation filter, since it's the only filter
-        //that may have been skipped when loading from OnStorage -> OnSystemRam
+        // Only allow applying mipmap generation filter, since it's the only filter
+        // that may have been skipped when loading from OnStorage -> OnSystemRam
         filters &= TextureFilter::TypeGenerateDefaultMipmaps;
         if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
         {
-            //We will transition to Resident, we must ensure the number of mipmaps is set
-            //as the HW mipmap filter cannot change it from the background thread.
+            // We will transition to Resident, we must ensure the number of mipmaps is set
+            // as the HW mipmap filter cannot change it from the background thread.
             uint8 numMipmaps = texture->getNumMipmaps();
             PixelFormatGpu pixelFormat = texture->getPixelFormat();
             TextureFilter::FilterBase::simulateFiltersForCacheConsistency( filters, *image, this,
@@ -1762,9 +1819,9 @@ namespace Ogre
             {
                 const bool oldValue = mIgnoreScheduledTasks;
                 mIgnoreScheduledTasks = true;
-                //These _transitionTo calls are unscheduled and will decrease mPendingResidencyChanges
-                //to wrong values that would cause _scheduleTransitionTo to think the TextureGpu
-                //is done, thus we need to counter that.
+                // These _transitionTo calls are unscheduled and will decrease mPendingResidencyChanges
+                // to wrong values that would cause _scheduleTransitionTo to think the TextureGpu
+                // is done, thus we need to counter that.
                 texture->_addPendingResidencyChanges( 2u );
                 texture->_transitionTo( GpuResidency::OnStorage, rawBuffer, false );
                 texture->setNumMipmaps( numMipmaps );
@@ -1776,39 +1833,41 @@ namespace Ogre
         texture->_transitionTo( GpuResidency::Resident, texture->_getSysRamCopy( 0 ), false );
 
         mAddedNewLoadRequests = true;
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion = true;
+        ++mLoadRequestsCounter;
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
-            mainData.loadRequests.push_back( LoadRequest( name, 0, 0, image, texture,
-                                                          0, filters, true, false ) );
+        mainData.loadRequests.push_back(
+            LoadRequest( name, 0, 0, image, texture, 0, filters, true, false ) );
         mLoadRequestsMutex.unlock();
         mWorkerWaitableEvent.wake();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
                                                    GpuResidency::GpuResidency targetResidency,
-                                                   Image2 *image, bool autoDeleteImage )
+                                                   Image2 *image, bool autoDeleteImage,
+                                                   bool reuploadOnly )
     {
         ScheduledTasks task;
         task.tasksType = TaskTypeResidencyTransition;
-        task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage );
+        task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage, reuploadOnly );
 
-        //getPendingResidencyChanges should be > 1 because it gets incremented by caller
-        OGRE_ASSERT_MEDIUM( texture->getPendingResidencyChanges() != 0u );
+        // getPendingResidencyChanges should be > 1 because it gets incremented by caller
+        OGRE_ASSERT_MEDIUM( texture->getPendingResidencyChanges() != 0u || reuploadOnly );
 
-        if( texture->getPendingResidencyChanges() == 1u || mIgnoreScheduledTasks )
+        if( texture->getPendingResidencyChanges() == 1u ||
+            ( reuploadOnly && texture->getPendingResidencyChanges() == 0u ) || mIgnoreScheduledTasks )
         {
-            //If we're here, there are no pending tasks that will perform further work
-            //on the texture (with one exception: if _isDataReadyImpl does not return true; which
-            //means the texture is still in the worker thread and will later get stuffed with
-            //the actual data)
+            // If we're here, there are no pending tasks that will perform further work
+            // on the texture (with one exception: if _isDataReadyImpl does not return true; which
+            // means the texture is still in the worker thread and will later get stuffed with
+            // the actual data)
 
             if( targetResidency == GpuResidency::Resident )
             {
-                //If we're here then we're doing one of the following transitions:
-                //OnStorage     -> Resident
-                //OnSystemRam   -> Resident
-                //If we're going to Resident, then we're currently not. Start loading
+                // If we're here then we're doing one of the following transitions:
+                // OnStorage     -> Resident
+                // OnSystemRam   -> Resident
+                // If we're going to Resident, then we're currently not. Start loading
                 executeTask( texture, TextureGpuListener::LostResidency, task );
             }
             else if( targetResidency == GpuResidency::OnSystemRam )
@@ -1816,37 +1875,37 @@ namespace Ogre
                 const GpuResidency::GpuResidency currentResidency = texture->getResidencyStatus();
                 if( currentResidency == GpuResidency::OnStorage )
                 {
-                    //OnStorage     -> OnSystemRam
+                    // OnStorage     -> OnSystemRam
                     executeTask( texture, TextureGpuListener::FromSysRamToStorage, task );
                 }
                 else if( currentResidency == GpuResidency::Resident )
                 {
-                    //Resident      -> OnSystemRam
+                    // Resident      -> OnSystemRam
                     if( texture->_isDataReadyImpl() || mIgnoreScheduledTasks )
                         executeTask( texture, TextureGpuListener::ReadyForRendering, task );
                     else
                     {
-                        //No pending tasks, but the texture is being loaded. Delay execution
+                        // No pending tasks, but the texture is being loaded. Delay execution
                         mScheduledTasks[texture].push_back( task );
                     }
                 }
             }
-            else //if( targetResidency == GpuResidency::OnStorage )
+            else  // if( targetResidency == GpuResidency::OnStorage )
             {
                 const GpuResidency::GpuResidency currentResidency = texture->getResidencyStatus();
                 if( currentResidency == GpuResidency::OnSystemRam )
                 {
-                    //OnSystemRam   -> OnStorage
+                    // OnSystemRam   -> OnStorage
                     executeTask( texture, TextureGpuListener::FromStorageToSysRam, task );
                 }
                 else if( currentResidency == GpuResidency::Resident )
                 {
-                    //Resident      -> OnStorage
+                    // Resident      -> OnStorage
                     if( texture->_isDataReadyImpl() || mIgnoreScheduledTasks )
                         executeTask( texture, TextureGpuListener::ReadyForRendering, task );
                     else
                     {
-                        //No pending tasks, but the texture is being loaded. Delay execution
+                        // No pending tasks, but the texture is being loaded. Delay execution
                         mScheduledTasks[texture].push_back( task );
                     }
                 }
@@ -1870,13 +1929,13 @@ namespace Ogre
     {
         DownloadToRamEntry entry;
 
-        entry.texture   = texture;
+        entry.texture = texture;
 
         const size_t sizeBytes = texture->getSizeBytes();
         if( !resyncOnly )
         {
-            entry.sysRamPtr = reinterpret_cast<uint8*>( OGRE_MALLOC_SIMD( sizeBytes,
-                                                                          MEMCATEGORY_RESOURCE ) );
+            entry.sysRamPtr =
+                reinterpret_cast<uint8 *>( OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE ) );
         }
         else
             entry.sysRamPtr = texture->_getSysRamCopy( 0 );
@@ -1884,16 +1943,15 @@ namespace Ogre
 
         const uint8 numMips = texture->getNumMipmaps();
 
-        for( uint8 mip=0; mip<numMips; ++mip )
+        for( uint8 mip = 0; mip < numMips; ++mip )
         {
-            uint32 width        = std::max( texture->getWidth() >> mip, 1u );
-            uint32 height       = std::max( texture->getHeight() >> mip, 1u );
-            uint32 depthOrSlices= std::max( texture->getDepth() >> mip, 1u );
+            uint32 width = std::max( texture->getWidth() >> mip, 1u );
+            uint32 height = std::max( texture->getHeight() >> mip, 1u );
+            uint32 depthOrSlices = std::max( texture->getDepth() >> mip, 1u );
             depthOrSlices = std::max( depthOrSlices, texture->getNumSlices() );
 
-            AsyncTextureTicket* asyncTicket = createAsyncTextureTicket( width, height, depthOrSlices,
-                                                                        texture->getTextureType(),
-                                                                        texture->getPixelFormat() );
+            AsyncTextureTicket *asyncTicket = createAsyncTextureTicket(
+                width, height, depthOrSlices, texture->getTextureType(), texture->getPixelFormat() );
             asyncTicket->download( texture, mip, false, 0, true );
             entry.asyncTickets.push_back( asyncTicket );
         }
@@ -1907,19 +1965,19 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setDefaultMipmapGeneration(
-            DefaultMipmapGen::DefaultMipmapGen defaultMipmapGen,
-            DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenCubemaps )
+        DefaultMipmapGen::DefaultMipmapGen defaultMipmapGen,
+        DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenCubemaps )
     {
         mDefaultMipmapGen = defaultMipmapGen;
         mDefaultMipmapGenCubemaps = defaultMipmapGenCubemaps;
     }
     //-----------------------------------------------------------------------------------
-    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGeneration(void) const
+    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGeneration() const
     {
         return mDefaultMipmapGen;
     }
     //-----------------------------------------------------------------------------------
-    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGenerationCubemaps(void) const
+    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGenerationCubemaps() const
     {
         return mDefaultMipmapGenCubemaps;
     }
@@ -1929,19 +1987,17 @@ namespace Ogre
         bool matchFound = false;
 
         TexturePoolList::iterator itor = mTexturePool.begin();
-        TexturePoolList::iterator end  = mTexturePool.end();
+        TexturePoolList::iterator endt = mTexturePool.end();
 
-        while( itor != end && !matchFound )
+        while( itor != endt && !matchFound )
         {
             const TexturePool &pool = *itor;
 
-            matchFound =
-                    pool.hasFreeSlot() &&
-                    pool.masterTexture->getWidth() == texture->getWidth() &&
-                    pool.masterTexture->getHeight() == texture->getHeight() &&
-                    pool.masterTexture->getPixelFormat() == texture->getPixelFormat() &&
-                    pool.masterTexture->getNumMipmaps() == texture->getNumMipmaps() &&
-                    pool.masterTexture->getTexturePoolId() == texture->getTexturePoolId();
+            matchFound = pool.hasFreeSlot() && pool.masterTexture->getWidth() == texture->getWidth() &&
+                         pool.masterTexture->getHeight() == texture->getHeight() &&
+                         pool.masterTexture->getPixelFormat() == texture->getPixelFormat() &&
+                         pool.masterTexture->getNumMipmaps() == texture->getNumMipmaps() &&
+                         pool.masterTexture->getTexturePoolId() == texture->getTexturePoolId();
 
             TODO_grow_pool;
 
@@ -1949,19 +2005,19 @@ namespace Ogre
                 ++itor;
         }
 
-        if( itor == end )
+        if( itor == endt )
         {
             IdType newId = Id::generateNewId<TextureGpuManager>();
             char tmpBuffer[64];
-            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             texName.a( "_InternalTex", newId );
 
             TexturePool newPool;
-            newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard,
-                                                       texName.c_str(),
-                                                       TextureFlags::PoolOwner,
-                                                       TextureTypes::Type2DArray );
-            const uint16 numSlices = mTextureGpuManagerListener->getNumSlicesFor( texture, this );
+            newPool.masterTexture =
+                createTextureImpl( GpuPageOutStrategy::Discard, texName.c_str(), TextureFlags::PoolOwner,
+                                   TextureTypes::Type2DArray );
+            const uint16 numSlices =
+                (uint16)mTextureGpuManagerListener->getNumSlicesFor( texture, this );
             newPool.masterTexture->_setSourceType( TextureSourceType::PoolOwner );
 
             newPool.manuallyReserved = false;
@@ -1981,7 +2037,7 @@ namespace Ogre
         }
 
         uint16 sliceIdx = 0;
-        //See if we can reuse a slot that was previously acquired and released
+        // See if we can reuse a slot that was previously acquired and released
         if( !itor->availableSlots.empty() )
         {
             sliceIdx = itor->availableSlots.back();
@@ -1992,16 +2048,16 @@ namespace Ogre
             sliceIdx = itor->usedMemory++;
         }
         itor->usedSlots.push_back( texture );
-        texture->_notifyTextureSlotChanged( &(*itor), sliceIdx );
+        texture->_notifyTextureSlotChanged( &( *itor ), sliceIdx );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_releaseSlotFromTexture( TextureGpu *texture )
     {
-        //const_cast? Yes. We own it. We could do a linear search to mTexturePool;
-        //but it's O(N) vs O(1); and O(N) can quickly turn into O(N!).
-        TexturePool *texturePool = const_cast<TexturePool*>( texture->getTexturePool() );
-        TextureGpuVec::iterator itor = std::find( texturePool->usedSlots.begin(),
-                                                  texturePool->usedSlots.end(), texture );
+        // const_cast? Yes. We own it. We could do a linear search to mTexturePool;
+        // but it's O(N) vs O(1); and O(N) can quickly turn into O(N!).
+        TexturePool *texturePool = const_cast<TexturePool *>( texture->getTexturePool() );
+        TextureGpuVec::iterator itor =
+            std::find( texturePool->usedSlots.begin(), texturePool->usedSlots.end(), texture );
         assert( itor != texturePool->usedSlots.end() );
         efficientVectorRemove( texturePool->usedSlots, itor );
 
@@ -2013,11 +2069,11 @@ namespace Ogre
 
         if( texturePool->empty() && !texturePool->manuallyReserved )
         {
-            //Destroy the pool if it's no longer needed
+            // Destroy the pool if it's no longer needed
             delete texturePool->masterTexture;
             TexturePoolList::iterator itPool = mTexturePool.begin();
             TexturePoolList::iterator enPool = mTexturePool.end();
-            while( itPool != enPool && &(*itPool) != texturePool )
+            while( itPool != enPool && &( *itPool ) != texturePool )
                 ++itPool;
             mTexturePool.erase( itPool );
         }
@@ -2025,7 +2081,7 @@ namespace Ogre
         texture->_notifyTextureSlotChanged( 0, 0 );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::fulfillUsageStats(void)
+    void TextureGpuManager::fulfillUsageStats()
     {
         UsageStatsVec::iterator itStats = mStreamingData.prevStats.begin();
         UsageStatsVec::iterator enStats = mStreamingData.prevStats.end();
@@ -2035,38 +2091,37 @@ namespace Ogre
             --itStats->loopCount;
             if( itStats->loopCount == 0 )
             {
-                //This record has been here too long without the worker thread touching it.
-                //Remove it.
+                // This record has been here too long without the worker thread touching it.
+                // Remove it.
                 itStats = efficientVectorRemove( mStreamingData.prevStats, itStats );
                 enStats = mStreamingData.prevStats.end();
             }
             else
             {
                 const uint32 rowAlignment = 4u;
-                size_t oneSliceBytes = PixelFormatGpuUtils::getSizeBytes( itStats->width,
-                                                                          itStats->height,
-                                                                          1u, 1u, itStats->formatFamily,
-                                                                          rowAlignment );
+                size_t oneSliceBytes = PixelFormatGpuUtils::getSizeBytes(
+                    itStats->width, itStats->height, 1u, 1u, itStats->formatFamily, rowAlignment );
 
-                //Round up.
-                const size_t numSlices = (itStats->accumSizeBytes + oneSliceBytes - 1u) / oneSliceBytes;
+                // Round up.
+                const uint32 numSlices =
+                    uint32( ( itStats->accumSizeBytes + oneSliceBytes - 1u ) / oneSliceBytes );
 
                 bool isSupported = false;
 
                 StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
-                StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
+                StagingTextureVec::iterator endt = mStreamingData.availableStagingTex.end();
 
-                while( itor != end && !isSupported )
+                while( itor != endt && !isSupported )
                 {
-                    //Check if the free StagingTextures can take the current usage load.
-                    isSupported = (*itor)->supportsFormat( itStats->width, itStats->height, 1u,
-                                                           numSlices, itStats->formatFamily );
+                    // Check if the free StagingTextures can take the current usage load.
+                    isSupported = ( *itor )->supportsFormat( itStats->width, itStats->height, 1u,
+                                                             numSlices, itStats->formatFamily );
 
                     if( isSupported )
                     {
                         mTmpAvailableStagingTex.push_back( *itor );
                         itor = mStreamingData.availableStagingTex.erase( itor );
-                        end  = mStreamingData.availableStagingTex.end();
+                        endt = mStreamingData.availableStagingTex.end();
                     }
                     else
                     {
@@ -2076,11 +2131,10 @@ namespace Ogre
 
                 if( !isSupported )
                 {
-                    //It cannot. We need a bigger StagingTexture (or one that supports a specific format)
-                    StagingTexture *newStagingTexture = getStagingTexture( itStats->width,
-                                                                           itStats->height,
-                                                                           1u, numSlices,
-                                                                           itStats->formatFamily, 50u );
+                    // It cannot. We need a bigger StagingTexture (or one that supports a specific
+                    // format)
+                    StagingTexture *newStagingTexture = getStagingTexture(
+                        itStats->width, itStats->height, 1u, numSlices, itStats->formatFamily, 50u );
                     newStagingTexture->startMapRegion();
                     mTmpAvailableStagingTex.push_back( newStagingTexture );
                 }
@@ -2090,7 +2144,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::fulfillMinimumBudget(void)
+    void TextureGpuManager::fulfillMinimumBudget()
     {
         BudgetEntryVec::const_iterator itBudget = mBudget.begin();
         BudgetEntryVec::const_iterator enBudget = mBudget.end();
@@ -2100,23 +2154,23 @@ namespace Ogre
             bool isSupported = false;
 
             StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
-            StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
+            StagingTextureVec::iterator endt = mStreamingData.availableStagingTex.end();
 
-            while( itor != end && !isSupported )
+            while( itor != endt && !isSupported )
             {
-                if( (*itor)->getFormatFamily() == itBudget->formatFamily )
+                if( ( *itor )->getFormatFamily() == itBudget->formatFamily )
                 {
-                    isSupported = (*itor)->supportsFormat( itBudget->minResolution,
-                                                           itBudget->minResolution, 1u,
-                                                           itBudget->minNumSlices,
-                                                           itBudget->formatFamily );
+                    isSupported = ( *itor )->supportsFormat( itBudget->minResolution,      //
+                                                             itBudget->minResolution, 1u,  //
+                                                             itBudget->minNumSlices,       //
+                                                             itBudget->formatFamily );
                 }
 
                 if( isSupported )
                 {
                     mTmpAvailableStagingTex.push_back( *itor );
                     itor = mStreamingData.availableStagingTex.erase( itor );
-                    end  = mStreamingData.availableStagingTex.end();
+                    endt = mStreamingData.availableStagingTex.end();
                 }
                 else
                 {
@@ -2124,19 +2178,19 @@ namespace Ogre
                 }
             }
 
-            //We now have to look in mTmpAvailableStagingTex in case fulfillUsageStats
-            //already created a staging texture that fulfills the minimum budget.
+            // We now have to look in mTmpAvailableStagingTex in case fulfillUsageStats
+            // already created a staging texture that fulfills the minimum budget.
             itor = mTmpAvailableStagingTex.begin();
-            end  = mTmpAvailableStagingTex.end();
+            endt = mTmpAvailableStagingTex.end();
 
-            while( itor != end && !isSupported )
+            while( itor != endt && !isSupported )
             {
-                if( (*itor)->getFormatFamily() == itBudget->formatFamily )
+                if( ( *itor )->getFormatFamily() == itBudget->formatFamily )
                 {
-                    isSupported = (*itor)->supportsFormat( itBudget->minResolution,
-                                                           itBudget->minResolution, 1u,
-                                                           itBudget->minNumSlices,
-                                                           itBudget->formatFamily );
+                    isSupported = ( *itor )->supportsFormat( itBudget->minResolution,      //
+                                                             itBudget->minResolution, 1u,  //
+                                                             itBudget->minNumSlices,       //
+                                                             itBudget->formatFamily );
                 }
 
                 ++itor;
@@ -2144,9 +2198,9 @@ namespace Ogre
 
             if( !isSupported )
             {
-                StagingTexture *newStagingTexture = getStagingTexture( itBudget->minResolution,
-                                                                       itBudget->minResolution, 1u,
-                                                                       itBudget->minNumSlices,
+                StagingTexture *newStagingTexture = getStagingTexture( itBudget->minResolution,      //
+                                                                       itBudget->minResolution, 1u,  //
+                                                                       itBudget->minNumSlices,       //
                                                                        itBudget->formatFamily, 50u );
                 newStagingTexture->startMapRegion();
                 mTmpAvailableStagingTex.push_back( newStagingTexture );
@@ -2160,26 +2214,25 @@ namespace Ogre
     {
         return _l->isSmallerThan( _r );
     }
-    void TextureGpuManager::fullfillBudget(void)
+    void TextureGpuManager::fullfillBudget()
     {
         OgreProfileExhaustive( "TextureGpuManager::fullfillBudget" );
 
-        //Ensure availableStagingTex is sorted in ascending order
-        std::sort( mStreamingData.availableStagingTex.begin(),
-                   mStreamingData.availableStagingTex.end(),
+        // Ensure availableStagingTex is sorted in ascending order
+        std::sort( mStreamingData.availableStagingTex.begin(), mStreamingData.availableStagingTex.end(),
                    OrderByStagingTexture );
 
         fulfillUsageStats();
         fulfillMinimumBudget();
 
         {
-            //The textures that are left are wasting memory, thus can be removed.
+            // The textures that are left are wasting memory, thus can be removed.
             StagingTextureVec::const_iterator itor = mStreamingData.availableStagingTex.begin();
-            StagingTextureVec::const_iterator end  = mStreamingData.availableStagingTex.end();
+            StagingTextureVec::const_iterator endt = mStreamingData.availableStagingTex.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                (*itor)->stopMapRegion();
+                ( *itor )->stopMapRegion();
                 removeStagingTexture( *itor );
                 ++itor;
             }
@@ -2194,38 +2247,37 @@ namespace Ogre
         mStreamingData.bytesPreloaded = 0;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::mergeUsageStatsIntoPrevStats(void)
+    void TextureGpuManager::mergeUsageStatsIntoPrevStats()
     {
-        //The sole purpose of this function is to perform a moving average
+        // The sole purpose of this function is to perform a moving average
         //(https://en.wikipedia.org/wiki/Moving_average) between past records
-        //of requests and new ones, where the newest request is given full
-        //weight if it needs more memory than past records.
-        //This allows us to accomodate to spikes of RAM demand (i.e. we suddenly
-        //have a lot of textures to load), while slowly dying off the memory
-        //we reserve over time if no more new requests are seen.
+        // of requests and new ones, where the newest request is given full
+        // weight if it needs more memory than past records.
+        // This allows us to accomodate to spikes of RAM demand (i.e. we suddenly
+        // have a lot of textures to load), while slowly dying off the memory
+        // we reserve over time if no more new requests are seen.
         //
-        //There may be more than one entry with the same formatFamily (due to
-        //mStreamingData.maxSplitResolution & maxPerStagingTextureRequestBytes)
-        //but we only perform moving average on one of the entries, while
-        //letting all the other entries to die off quickly (by setting a very
-        //low loopCount)
+        // There may be more than one entry with the same formatFamily (due to
+        // mStreamingData.maxSplitResolution & maxPerStagingTextureRequestBytes)
+        // but we only perform moving average on one of the entries, while
+        // letting all the other entries to die off quickly (by setting a very
+        // low loopCount)
         uint32 c_loopResetValue = 15u;
 
         UsageStatsVec::const_iterator itor = mStreamingData.usageStats.begin();
-        UsageStatsVec::const_iterator end  = mStreamingData.usageStats.end();
+        UsageStatsVec::const_iterator endt = mStreamingData.usageStats.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             UsageStatsVec::iterator itPrev = mStreamingData.prevStats.begin();
             UsageStatsVec::iterator enPrev = mStreamingData.prevStats.end();
 
-            //Look for an older entry that is the same pixel format as itor,
-            //and that isn't about to be destroyed (if loopCount <= 2 then
-            //this entry is very old and should be abandoned, OR it
-            //was a special case due to maxSplitResolution; in any case, skip)
+            // Look for an older entry that is the same pixel format as itor,
+            // and that isn't about to be destroyed (if loopCount <= 2 then
+            // this entry is very old and should be abandoned, OR it
+            // was a special case due to maxSplitResolution; in any case, skip)
             while( itPrev != enPrev &&
-                   (itPrev->formatFamily != itor->formatFamily ||
-                    itPrev->loopCount <= 2u) )
+                   ( itPrev->formatFamily != itor->formatFamily || itPrev->loopCount <= 2u ) )
             {
                 ++itPrev;
             }
@@ -2237,11 +2289,11 @@ namespace Ogre
                 const uint32 blockHeight =
                     PixelFormatGpuUtils::getCompressedBlockHeight( itPrev->formatFamily, false );
 
-                //Average current stats with the previous one.
-                //But if current one's was bigger, keep current.
+                // Average current stats with the previous one.
+                // But if current one's was bigger, keep current.
                 if( blockWidth != 0 )
                 {
-                    itPrev->width  = std::max( itor->width, (itPrev->width + itor->width) >> 1u );
+                    itPrev->width = std::max( itor->width, ( itPrev->width + itor->width ) >> 1u );
                     itPrev->width = alignToNextMultiple( itPrev->width, blockWidth );
                 }
                 else
@@ -2250,15 +2302,15 @@ namespace Ogre
                 }
                 if( blockHeight != 0 )
                 {
-                    itPrev->height  = std::max( itor->height, (itPrev->height + itor->height) >> 1u );
+                    itPrev->height = std::max( itor->height, ( itPrev->height + itor->height ) >> 1u );
                     itPrev->height = alignToNextMultiple( itPrev->height, blockHeight );
                 }
                 else
                 {
                     itPrev->height = itor->height;
                 }
-                itPrev->accumSizeBytes = std::max( itor->accumSizeBytes, (itPrev->accumSizeBytes +
-                                                                          itor->accumSizeBytes) >> 1u );
+                itPrev->accumSizeBytes = std::max(
+                    itor->accumSizeBytes, ( itPrev->accumSizeBytes + itor->accumSizeBytes ) >> 1u );
                 itPrev->loopCount = c_loopResetValue;
             }
             else
@@ -2281,29 +2333,28 @@ namespace Ogre
         mStreamingData.usageStats.clear();
     }
     //-----------------------------------------------------------------------------------
-    TextureBox TextureGpuManager::getStreaming( ThreadData &workerData,
-                                                StreamingData &streamingData,
-                                                const TextureBox &box,
-                                                PixelFormatGpu pixelFormat,
+    TextureBox TextureGpuManager::getStreaming( ThreadData &workerData, StreamingData &streamingData,
+                                                const TextureBox &box, PixelFormatGpu pixelFormat,
                                                 StagingTexture **outStagingTexture )
     {
-        //No need to check if streamingData.bytesPreloaded >= mMaxPreloadBytes because
-        //our caller's caller already does that. Besides this is a static function.
-        //This gives us slightly broader granularity control over memory consumption
+        // No need to check if streamingData.bytesPreloaded >= mMaxPreloadBytes because
+        // our caller's caller already does that. Besides this is a static function.
+        // This gives us slightly broader granularity control over memory consumption
         //(we may to try to preload all the mipmaps even if mMaxPreloadBytes is exceeded)
         TextureBox retVal;
 
         StagingTextureVec::iterator itor = workerData.usedStagingTex.begin();
-        StagingTextureVec::iterator end  = workerData.usedStagingTex.end();
+        StagingTextureVec::iterator endt = workerData.usedStagingTex.end();
 
-        while( itor != end && !retVal.data )
+        while( itor != endt && !retVal.data )
         {
-            //supportsFormat will return false if it could never fit, or the format is not compatible.
-            if( (*itor)->supportsFormat( box.width, box.height, box.depth, box.numSlices, pixelFormat ) )
+            // supportsFormat will return false if it could never fit, or the format is not compatible.
+            if( ( *itor )->supportsFormat( box.width, box.height, box.depth, box.numSlices,
+                                           pixelFormat ) )
             {
-                retVal = (*itor)->mapRegion( box.width, box.height, box.depth,
-                                             box.numSlices, pixelFormat );
-                //retVal.data may be null if there's not enough free space (e.g. it's half empty).
+                retVal =
+                    ( *itor )->mapRegion( box.width, box.height, box.depth, box.numSlices, pixelFormat );
+                // retVal.data may be null if there's not enough free space (e.g. it's half empty).
                 if( retVal.data )
                     *outStagingTexture = *itor;
             }
@@ -2312,22 +2363,23 @@ namespace Ogre
         }
 
         itor = streamingData.availableStagingTex.begin();
-        end  = streamingData.availableStagingTex.end();
+        endt = streamingData.availableStagingTex.end();
 
-        while( itor != end && !retVal.data )
+        while( itor != endt && !retVal.data )
         {
-            if( (*itor)->supportsFormat( box.width, box.height, box.depth, box.numSlices, pixelFormat ) )
+            if( ( *itor )->supportsFormat( box.width, box.height, box.depth, box.numSlices,
+                                           pixelFormat ) )
             {
-                retVal = (*itor)->mapRegion( box.width, box.height, box.depth,
-                                             box.numSlices, pixelFormat );
+                retVal =
+                    ( *itor )->mapRegion( box.width, box.height, box.depth, box.numSlices, pixelFormat );
                 if( retVal.data )
                 {
                     *outStagingTexture = *itor;
 
-                    //We need to move this to the 'used' textures
+                    // We need to move this to the 'used' textures
                     workerData.usedStagingTex.push_back( *itor );
                     itor = efficientVectorRemove( streamingData.availableStagingTex, itor );
-                    end  = streamingData.availableStagingTex.end();
+                    endt = streamingData.availableStagingTex.end();
                 }
                 else
                 {
@@ -2340,12 +2392,12 @@ namespace Ogre
             }
         }
 
-        //Keep track of requests so main thread knows our current workload.
+        // Keep track of requests so main thread knows our current workload.
         const PixelFormatGpu formatFamily = PixelFormatGpuUtils::getFamily( pixelFormat );
         UsageStatsVec::iterator itStats = streamingData.usageStats.begin();
         UsageStatsVec::iterator enStats = streamingData.usageStats.end();
 
-        //Always split tracking of textures that are bigger than c_maxSplitResolution in any dimension
+        // Always split tracking of textures that are bigger than c_maxSplitResolution in any dimension
         if( box.width >= streamingData.maxSplitResolution ||
             box.height >= streamingData.maxSplitResolution )
         {
@@ -2359,16 +2411,13 @@ namespace Ogre
         }
 
         const uint32 rowAlignment = 4u;
-        const size_t requiredBytes = PixelFormatGpuUtils::getSizeBytes( box.width, box.height,
-                                                                        box.depth, box.numSlices,
-                                                                        formatFamily,
-                                                                        rowAlignment );
+        const size_t requiredBytes = PixelFormatGpuUtils::getSizeBytes(
+            box.width, box.height, box.depth, box.numSlices, formatFamily, rowAlignment );
 
         if( itStats == enStats )
         {
-            streamingData.usageStats.push_back( UsageStats( box.width, box.height,
-                                                            box.getDepthOrSlices(),
-                                                            formatFamily ) );
+            streamingData.usageStats.push_back(
+                UsageStats( box.width, box.height, box.getDepthOrSlices(), formatFamily ) );
         }
         else
         {
@@ -2396,25 +2445,28 @@ namespace Ogre
         const uint8 firstMip = queuedImage.getMinMipLevel();
         const uint8 numMips = queuedImage.getMaxMipLevelPlusOne();
 
-        for( uint8 i=firstMip; i<numMips; ++i )
+        for( uint8 i = firstMip; i < numMips; ++i )
         {
             TextureBox srcBox = img.getData( i );
             const uint32 imgDepthOrSlices = srcBox.getDepthOrSlices();
-            for( uint32 z=0; z<imgDepthOrSlices; ++z )
+
+            OGRE_ASSERT_MEDIUM( imgDepthOrSlices < std::numeric_limits<uint8>::max() );
+
+            for( uint32 z = 0; z < imgDepthOrSlices; ++z )
             {
-                if( queuedImage.isMipSliceQueued( i, z ) )
+                if( queuedImage.isMipSliceQueued( i, (uint8)z ) )
                 {
-                    srcBox.z            = is3DVolume ? z : 0;
-                    srcBox.sliceStart   = is3DVolume ? 0 : z;
-                    srcBox.depth        = 1u;
-                    srcBox.numSlices    = 1u;
+                    srcBox.z = is3DVolume ? z : 0;
+                    srcBox.sliceStart = is3DVolume ? 0 : z;
+                    srcBox.depth = 1u;
+                    srcBox.numSlices = 1u;
 
                     StagingTexture *stagingTexture = 0;
                     TextureBox dstBox = getStreaming( workerData, streamingData, srcBox,
                                                       img.getPixelFormat(), &stagingTexture );
                     if( dstBox.data )
                     {
-                        //Upload to staging area. CPU -> GPU
+                        // Upload to staging area. CPU -> GPU
                         dstBox.copyFrom( srcBox );
                         if( queuedImage.dstSliceOrDepth != std::numeric_limits<uint32>::max() )
                         {
@@ -2424,13 +2476,13 @@ namespace Ogre
                                 srcBox.z += queuedImage.dstSliceOrDepth;
                         }
 
-                        //Schedule a command to copy from staging to final texture, GPU -> GPU
-                        ObjCmdBuffer::UploadFromStagingTex *uploadCmd = commandBuffer->addCommand<
-                                                                        ObjCmdBuffer::UploadFromStagingTex>();
-                        new (uploadCmd) ObjCmdBuffer::UploadFromStagingTex( stagingTexture, dstBox,
-                                                                            texture, srcBox, i );
-                        //This mip has been processed, flag it as done.
-                        queuedImage.unqueueMipSlice( i, z );
+                        // Schedule a command to copy from staging to final texture, GPU -> GPU
+                        ObjCmdBuffer::UploadFromStagingTex *uploadCmd =
+                            commandBuffer->addCommand<ObjCmdBuffer::UploadFromStagingTex>();
+                        new( uploadCmd ) ObjCmdBuffer::UploadFromStagingTex( stagingTexture, dstBox,
+                                                                             texture, srcBox, i );
+                        // This mip has been processed, flag it as done.
+                        queuedImage.unqueueMipSlice( i, (uint8)z );
                     }
                 }
             }
@@ -2438,44 +2490,43 @@ namespace Ogre
 
         if( queuedImage.empty() )
         {
-            //We're done uploading this image. Time to run NotifyDataIsReady,
-            //unless there's more QueuedImage like us because the Texture is
-            //being loaded from multiple files.
+            // We're done uploading this image. Time to run NotifyDataIsReady,
+            // unless there's more QueuedImage like us because the Texture is
+            // being loaded from multiple files.
             PartialImageMap::iterator itor = streamingData.partialImages.find( texture );
-            PartialImageMap::iterator end  = streamingData.partialImages.end();
+            PartialImageMap::iterator endt = streamingData.partialImages.end();
 
-            if( itor != end )
+            if( itor != endt )
                 itor->second.numProcessedDepthOrSlices += img.getDepthOrSlices();
 
-            if( itor == end ||
-                itor->second.numProcessedDepthOrSlices == texture->getDepthOrSlices() )
+            if( itor == endt || itor->second.numProcessedDepthOrSlices == texture->getDepthOrSlices() )
             {
-                if( itor != end )
+                if( itor != endt )
                 {
                     if( itor->second.sysRamPtr )
                     {
-                        //We couldn't transition earlier, so we have to do it now that we're done
-                        addTransitionToLoadedCmd( commandBuffer, texture,
-                                                  itor->second.sysRamPtr, itor->second.toSysRam );
+                        // We couldn't transition earlier, so we have to do it now that we're done
+                        addTransitionToLoadedCmd( commandBuffer, texture, itor->second.sysRamPtr,
+                                                  itor->second.toSysRam );
                     }
                     streamingData.partialImages.erase( itor );
                 }
 
-                //Filters will be destroyed by NotifyDataIsReady in main thread
+                // Filters will be destroyed by NotifyDataIsReady in main thread
                 ObjCmdBuffer::NotifyDataIsReady *cmd =
-                        commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
-                new (cmd) ObjCmdBuffer::NotifyDataIsReady( texture, queuedImage.filters );
+                    commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
+                new( cmd ) ObjCmdBuffer::NotifyDataIsReady( texture, queuedImage.filters );
             }
             else
             {
                 TextureFilter::FilterBase::destroyFilters( queuedImage.filters );
             }
 
-            //We don't restore bytesPreloaded because it gets reset to 0 by worker thread.
-            //Doing so could increase throughput of data we can preload. However it can
-            //cause a positive feedback effect where limits don't get respected at all
+            // We don't restore bytesPreloaded because it gets reset to 0 by worker thread.
+            // Doing so could increase throughput of data we can preload. However it can
+            // cause a positive feedback effect where limits don't get respected at all
             //(it keeps preloading more and more)
-            //if( streamingData.bytesPreloaded >= queuedImage.image.getSizeBytes() )
+            // if( streamingData.bytesPreloaded >= queuedImage.image.getSizeBytes() )
             //    streamingData.bytesPreloaded -= queuedImage.image.getSizeBytes();
             queuedImage.destroy();
         }
@@ -2485,16 +2536,16 @@ namespace Ogre
                                                       void *sysRamCopy, bool toSysRam )
     {
         ObjCmdBuffer::TransitionToLoaded *transitionCmd =
-                commandBuffer->addCommand<ObjCmdBuffer::TransitionToLoaded>();
-        const GpuResidency::GpuResidency targetResidency = toSysRam ? GpuResidency::OnSystemRam :
-                                                                      GpuResidency::Resident;
-        new (transitionCmd) ObjCmdBuffer::TransitionToLoaded( texture, sysRamCopy, targetResidency );
+            commandBuffer->addCommand<ObjCmdBuffer::TransitionToLoaded>();
+        const GpuResidency::GpuResidency targetResidency =
+            toSysRam ? GpuResidency::OnSystemRam : GpuResidency::Resident;
+        new( transitionCmd ) ObjCmdBuffer::TransitionToLoaded( texture, sysRamCopy, targetResidency );
     }
     //-----------------------------------------------------------------------------------
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle )
     {
         TextureGpuManager *textureManager =
-                reinterpret_cast<TextureGpuManager*>( threadHandle->getUserParam() );
+            reinterpret_cast<TextureGpuManager *>( threadHandle->getUserParam() );
         return textureManager->_updateStreamingWorkerThread( threadHandle );
     }
     //-----------------------------------------------------------------------------------
@@ -2516,27 +2567,27 @@ namespace Ogre
 
         bool wasRescheduled = false;
 
-        //WARNING: loadRequest.texture->isMetadataReady and
-        //loadRequest.texture->getResidencyStatus are NOT thread safe
-        //if it's in mStreamingData.rescheduledTextures and
-        //loadRequest.sliceOrDepth != 0 or uint32::max
-        set<TextureGpu*>::type::iterator itReschedule =
-                mStreamingData.rescheduledTextures.find( loadRequest.texture );
+        // WARNING: loadRequest.texture->isMetadataReady and
+        // loadRequest.texture->getResidencyStatus are NOT thread safe
+        // if it's in mStreamingData.rescheduledTextures and
+        // loadRequest.sliceOrDepth != 0 or uint32::max
+        set<TextureGpu *>::type::iterator itReschedule =
+            mStreamingData.rescheduledTextures.find( loadRequest.texture );
         if( itReschedule != mStreamingData.rescheduledTextures.end() )
         {
-            if( (loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
-                 loadRequest.sliceOrDepth == 0) )
+            if( ( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
+                  loadRequest.sliceOrDepth == 0 ) )
             {
-                //This is the original first load request that is making it's
-                //roundtrip back to us: Worker -> Main -> Worker
-                //because the metadata cache lied the last time we parsed it
+                // This is the original first load request that is making it's
+                // roundtrip back to us: Worker -> Main -> Worker
+                // because the metadata cache lied the last time we parsed it
                 mStreamingData.rescheduledTextures.erase( itReschedule );
             }
             else
             {
-                //The first slice was already rescheduled. We cannot process this request
-                //further until the first slice comes back to us (which will also request
-                //all the slices again). Drop the whole thing, do not load anything.
+                // The first slice was already rescheduled. We cannot process this request
+                // further until the first slice comes back to us (which will also request
+                // all the slices again). Drop the whole thing, do not load anything.
                 wasRescheduled = true;
             }
         }
@@ -2544,8 +2595,10 @@ namespace Ogre
         if( !loadRequest.archive && !loadRequest.loadingListener && !loadRequest.image )
         {
             LogManager::getSingleton().logMessage(
-                        "ERROR: Did you call createTexture with a valid resourceGroup? "
-                        "Texture: " + loadRequest.name, LML_CRITICAL );
+                "ERROR: Did you call createTexture with a valid resourceGroup? "
+                "Texture: " +
+                    loadRequest.name,
+                LML_CRITICAL );
         }
 
         DataStreamPtr data;
@@ -2553,15 +2606,29 @@ namespace Ogre
             data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
         else if( !loadRequest.image )
         {
-            data = loadRequest.archive->open( loadRequest.name );
-            if( loadRequest.loadingListener )
+            try
             {
-                loadRequest.loadingListener->grouplessResourceOpened( loadRequest.name,
-                                                                      loadRequest.archive, data );
+                data = loadRequest.archive->open( loadRequest.name );
+                if( loadRequest.loadingListener )
+                {
+                    loadRequest.loadingListener->grouplessResourceOpened( loadRequest.name,
+                                                                          loadRequest.archive, data );
+                }
+            }
+            catch( Exception &e )
+            {
+                // Log the exception
+                LogManager::getSingleton().logMessage( e.getFullDescription() );
+                // Tell the main thread this happened
+                ObjCmdBuffer::ExceptionThrown *exceptionCmd =
+                    commandBuffer->addCommand<ObjCmdBuffer::ExceptionThrown>();
+                new( exceptionCmd ) ObjCmdBuffer::ExceptionThrown( loadRequest.texture, e );
+
+                data.reset();
             }
         }
 
-        //Load the image from file into system RAM
+        // Load the image from file into system RAM
         Image2 imgStack;
         Image2 *img = loadRequest.image;
 
@@ -2572,68 +2639,83 @@ namespace Ogre
             {
                 try
                 {
-                    img->load( data );
+                    if( data )
+                        img->load( data );
                 }
                 catch( Exception &e )
                 {
-                    //Log the exception
+                    // Log the exception
                     LogManager::getSingleton().logMessage( e.getFullDescription() );
-                    //Tell the main thread this happened
-                    ObjCmdBuffer::ExceptionThrown *exceptionCmd = commandBuffer->addCommand<
-                                                                  ObjCmdBuffer::ExceptionThrown>();
-                    new (exceptionCmd) ObjCmdBuffer::ExceptionThrown( loadRequest.texture, e );
-                    //Continue loading using a fallback
+                    // Tell the main thread this happened
+                    ObjCmdBuffer::ExceptionThrown *exceptionCmd =
+                        commandBuffer->addCommand<ObjCmdBuffer::ExceptionThrown>();
+                    new( exceptionCmd ) ObjCmdBuffer::ExceptionThrown( loadRequest.texture, e );
+
+                    data.reset();
+                }
+
+                if( !data )
+                {
+                    PixelFormatGpu fallbackFormat = PFG_RGBA8_UNORM_SRGB;
+
+                    // Filters will complain if they need to run but Image2::getAutoDelete
+                    // returns false. So we tell them it's already in the
+                    // format they expect
+                    if( loadRequest.filters & TextureFilter::TypeLeaveChannelR )
+                        fallbackFormat = PFG_R8_UNORM;
+                    else if( loadRequest.filters & TextureFilter::TypePrepareForNormalMapping )
+                        fallbackFormat = PFG_RG8_SNORM;
+
+                    // Continue loading using a fallback
                     img->loadDynamicImage( mErrorFallbackTexData, 2u, 2u, 1u,
-                                           loadRequest.texture->getTextureType(),
-                                           PFG_RGBA8_UNORM_SRGB, false, 1u );
+                                           loadRequest.texture->getTextureType(), fallbackFormat, false,
+                                           1u );
                 }
             }
         }
 
-        if( (loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
-             loadRequest.sliceOrDepth == 0) &&
+        if( ( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
+              loadRequest.sliceOrDepth == 0 ) &&
             loadRequest.texture->getResidencyStatus() != GpuResidency::OnStorage )
         {
             uint8 numMipmaps = img->getNumMipmaps();
             PixelFormatGpu pixelFormat = img->getPixelFormat();
             if( loadRequest.texture->prefersLoadingFromFileAsSRGB() )
                 pixelFormat = PixelFormatGpuUtils::getEquivalentSRGB( pixelFormat );
-            TextureFilter::FilterBase::simulateFiltersForCacheConsistency( loadRequest.filters, *img,
-                                                                           this, numMipmaps,
-                                                                           pixelFormat );
+            TextureFilter::FilterBase::simulateFiltersForCacheConsistency(
+                loadRequest.filters, *img, this, numMipmaps, pixelFormat );
 
-            //Check the metadata cache was not out of date
+            // Check the metadata cache was not out of date
             if( loadRequest.texture->getWidth() != img->getWidth() ||
                 loadRequest.texture->getHeight() != img->getHeight() ||
-                (loadRequest.texture->getDepthOrSlices() != img->getDepthOrSlices() &&
-                 loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max()) ||
+                ( loadRequest.texture->getDepthOrSlices() != img->getDepthOrSlices() &&
+                  loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ) ||
                 loadRequest.texture->getPixelFormat() != pixelFormat ||
                 loadRequest.texture->getNumMipmaps() != numMipmaps ||
-                (loadRequest.texture->getTextureType() != img->getTextureType() &&
-                 loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() &&
-                 (img->getHeight() != 1u ||
-                  loadRequest.texture->getTextureType() != TextureTypes::Type1D) ) )
+                ( loadRequest.texture->getTextureType() != img->getTextureType() &&
+                  loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() &&
+                  ( img->getHeight() != 1u ||
+                    loadRequest.texture->getTextureType() != TextureTypes::Type1D ) ) )
             {
-                //It's out of date. Send it back to the main thread to remove residency,
-                //and they can send it back to us. A ping pong.
-                ObjCmdBuffer::OutOfDateCache *transitionCmd = commandBuffer->addCommand<
-                                                              ObjCmdBuffer::OutOfDateCache>();
-                new (transitionCmd) ObjCmdBuffer::OutOfDateCache( loadRequest.texture, *img );
+                // It's out of date. Send it back to the main thread to remove residency,
+                // and they can send it back to us. A ping pong.
+                ObjCmdBuffer::OutOfDateCache *transitionCmd =
+                    commandBuffer->addCommand<ObjCmdBuffer::OutOfDateCache>();
+                new( transitionCmd ) ObjCmdBuffer::OutOfDateCache( loadRequest.texture, *img );
                 mStreamingData.rescheduledTextures.insert( loadRequest.texture );
                 wasRescheduled = true;
 
-                LogManager::getSingleton().logMessage( "[INFO] Texture Metadata cache out of date for " +
-                                                       loadRequest.name + " (Alias: " +
-                                                       loadRequest.texture->getNameStr() + ")" );
+                LogManager::getSingleton().logMessage(
+                    "[INFO] Texture Metadata cache out of date for " + loadRequest.name +
+                    " (Alias: " + loadRequest.texture->getNameStr() + ")" );
             }
         }
 
         if( !wasRescheduled )
         {
             FilterBaseArray filters;
-            TextureFilter::FilterBase::createFilters( loadRequest.filters, filters,
-                                                      loadRequest.texture, *img,
-                                                      loadRequest.toSysRam );
+            TextureFilter::FilterBase::createFilters( loadRequest.filters, filters, loadRequest.texture,
+                                                      *img, loadRequest.toSysRam );
 
             if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
                 loadRequest.sliceOrDepth == 0 )
@@ -2644,8 +2726,8 @@ namespace Ogre
                                                         img->getDepthOrSlices() );
                     if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() )
                     {
-                        //If the texture had already been set it to 1D
-                        //and it is viable, then keep the 1D setting.
+                        // If the texture had already been set it to 1D
+                        // and it is viable, then keep the 1D setting.
                         if( img->getHeight() != 1u ||
                             loadRequest.texture->getTextureType() != TextureTypes::Type1D )
                         {
@@ -2660,19 +2742,20 @@ namespace Ogre
                 FilterBaseArray::const_iterator enFilters = filters.end();
                 while( itFilters != enFilters )
                 {
-                    (*itFilters)->_executeStreaming( *img, loadRequest.texture );
+                    ( *itFilters )->_executeStreaming( *img, loadRequest.texture );
                     ++itFilters;
                 }
 
                 const bool needsMultipleImages =
-                        img->getTextureType() != loadRequest.texture->getTextureType() &&
-                        loadRequest.texture->getTextureType() != TextureTypes::Type1D;
-                const bool mustKeepSysRamPtr = loadRequest.toSysRam ||
-                                               loadRequest.texture->getGpuPageOutStrategy() ==
-                                               GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
+                    img->getTextureType() != loadRequest.texture->getTextureType() &&
+                    loadRequest.texture->getTextureType() != TextureTypes::Type1D;
+                const bool mustKeepSysRamPtr =
+                    loadRequest.toSysRam || loadRequest.texture->getGpuPageOutStrategy() ==
+                                                GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
 
-                OGRE_ASSERT_MEDIUM( !needsMultipleImages || (needsMultipleImages &&
-                                    loadRequest.sliceOrDepth != std::numeric_limits<uint32>::max()) );
+                OGRE_ASSERT_MEDIUM( !needsMultipleImages ||
+                                    ( needsMultipleImages &&
+                                      loadRequest.sliceOrDepth != std::numeric_limits<uint32>::max() ) );
 
                 void *sysRamCopy = 0;
                 if( mustKeepSysRamPtr )
@@ -2680,35 +2763,35 @@ namespace Ogre
                     if( !needsMultipleImages &&
                         img->getNumMipmaps() == loadRequest.texture->getNumMipmaps() )
                     {
-                        //Pass the raw pointer and transfer ownership to TextureGpu
-                        sysRamCopy = img->getData(0).data;
+                        // Pass the raw pointer and transfer ownership to TextureGpu
+                        sysRamCopy = img->getData( 0 ).data;
                         img->_setAutoDelete( false );
                     }
                     else
                     {
-                        //Posibility 1:
+                        // Posibility 1:
                         //  We're loading this texture in parts, i.e. loading each cubemap face
                         //  from multiple files. Thus the pointer in img is not big enough to hold
                         //  all faces.
                         //
-                        //Posibility 2:
+                        // Posibility 2:
                         //  The texture will use a HW mipmap filter. We need to reallocate sysRamCopy
                         //  into something much bigger that can hold all mips.
                         //  img & imgDst will still think they can hold just 1 mipmap, but the
                         //  internal pointer from sysRamCopy has room for when it gets passed
                         //  to the TextureGpu
                         //
-                        //Both possibilities can happen at the same time
+                        // Both possibilities can happen at the same time
                         const size_t sizeBytes = loadRequest.texture->getSizeBytes();
-                        sysRamCopy = reinterpret_cast<uint8*>(
-                                         OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE ) );
+                        sysRamCopy = reinterpret_cast<uint8 *>(
+                            OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE ) );
 
                         Image2 imgDst;
                         imgDst.loadDynamicImage( sysRamCopy, false, img );
 
                         const uint8 numMips = img->getNumMipmaps();
 
-                        for( uint8 mip=0; mip<numMips; ++mip )
+                        for( uint8 mip = 0; mip < numMips; ++mip )
                         {
                             TextureBox srcBox = img->getData( mip );
                             TextureBox dstBox = imgDst.getData( mip );
@@ -2719,19 +2802,19 @@ namespace Ogre
 
                 if( needsMultipleImages )
                 {
-                    //We'll need more than one Image to load this texture, so track progress
+                    // We'll need more than one Image to load this texture, so track progress
                     mStreamingData.partialImages[loadRequest.texture] =
-                            PartialImage( sysRamCopy, loadRequest.toSysRam );
+                        PartialImage( sysRamCopy, loadRequest.toSysRam );
                 }
 
-                //Note cannot transition yet if this is loaded using multiple images
-                //and we must keep the SysRamPtr from the worker thread
+                // Note cannot transition yet if this is loaded using multiple images
+                // and we must keep the SysRamPtr from the worker thread
                 if( loadRequest.texture->getResidencyStatus() == GpuResidency::OnStorage &&
-                    (!needsMultipleImages || !mustKeepSysRamPtr) )
+                    ( !needsMultipleImages || !mustKeepSysRamPtr ) )
                 {
-                    //We have enough to transition the texture to OnSystemRam / Resident.
-                    addTransitionToLoadedCmd( commandBuffer, loadRequest.texture,
-                                              sysRamCopy, loadRequest.toSysRam );
+                    // We have enough to transition the texture to OnSystemRam / Resident.
+                    addTransitionToLoadedCmd( commandBuffer, loadRequest.texture, sysRamCopy,
+                                              loadRequest.toSysRam );
                 }
             }
             else
@@ -2740,16 +2823,15 @@ namespace Ogre
                 FilterBaseArray::const_iterator enFilters = filters.end();
                 while( itFilters != enFilters )
                 {
-                    (*itFilters)->_executeStreaming( *img, loadRequest.texture );
+                    ( *itFilters )->_executeStreaming( *img, loadRequest.texture );
                     ++itFilters;
                 }
 
-                if( loadRequest.toSysRam ||
-                    loadRequest.texture->getGpuPageOutStrategy() ==
-                    GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                if( loadRequest.toSysRam || loadRequest.texture->getGpuPageOutStrategy() ==
+                                                GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
                 {
                     PartialImageMap::iterator itPartImg =
-                            mStreamingData.partialImages.find( loadRequest.texture );
+                        mStreamingData.partialImages.find( loadRequest.texture );
 
                     OGRE_ASSERT_LOW( itPartImg != mStreamingData.partialImages.end() );
                     OGRE_ASSERT_LOW( itPartImg->second.sysRamPtr );
@@ -2759,7 +2841,7 @@ namespace Ogre
 
                     const uint8 numMips = img->getNumMipmaps();
 
-                    for( uint8 mip=0; mip<numMips; ++mip )
+                    for( uint8 mip = 0; mip < numMips; ++mip )
                     {
                         TextureBox srcBox = img->getData( mip );
                         TextureBox dstBox = imgDst.getData( mip );
@@ -2777,15 +2859,15 @@ namespace Ogre
                         if( itPartImg->second.numProcessedDepthOrSlices ==
                             loadRequest.texture->getDepthOrSlices() )
                         {
-                            //We couldn't transition earlier, so we have to do it now that we're done
+                            // We couldn't transition earlier, so we have to do it now that we're done
                             addTransitionToLoadedCmd( commandBuffer, loadRequest.texture,
                                                       itPartImg->second.sysRamPtr, true );
                             mStreamingData.partialImages.erase( itPartImg );
 
-                            //Filters will be destroyed by NotifyDataIsReady in main thread
+                            // Filters will be destroyed by NotifyDataIsReady in main thread
                             ObjCmdBuffer::NotifyDataIsReady *cmd =
-                                    commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
-                            new (cmd) ObjCmdBuffer::NotifyDataIsReady( loadRequest.texture, filters );
+                                commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
+                            new( cmd ) ObjCmdBuffer::NotifyDataIsReady( loadRequest.texture, filters );
                         }
                         else
                         {
@@ -2797,16 +2879,13 @@ namespace Ogre
 
             if( !loadRequest.toSysRam )
             {
-                //Queue the image for upload to GPU.
-                mStreamingData.queuedImages.push_back( QueuedImage( *img, img->getNumMipmaps(),
-                                                                    img->getDepthOrSlices(),
-                                                                    loadRequest.texture,
-                                                                    loadRequest.sliceOrDepth,
-                                                                    filters ) );
+                // Queue the image for upload to GPU.
+                mStreamingData.queuedImages.push_back(
+                    QueuedImage( *img, loadRequest.texture, loadRequest.sliceOrDepth, filters ) );
                 if( loadRequest.autoDeleteImage )
                     delete loadRequest.image;
 
-                //Try to upload the queued image right now (all of its mipmaps).
+                // Try to upload the queued image right now (all of its mipmaps).
                 processQueuedImage( mStreamingData.queuedImages.back(), workerData, mStreamingData );
 
                 if( mStreamingData.queuedImages.back().empty() )
@@ -2825,7 +2904,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::_updateStreaming(void)
+    void TextureGpuManager::_updateStreaming()
     {
         OgreProfileExhaustive( "TextureGpuManager::_updateStreaming" );
 
@@ -2852,33 +2931,34 @@ namespace Ogre
 
         mMutex.lock();
 
-        ThreadData &workerData  = mThreadData[c_workerThread];
-        ThreadData &mainData    = mThreadData[c_mainThread];
+        mStreamingData.workerThreadRan = true;
+
+        ThreadData &workerData = mThreadData[c_workerThread];
+        ThreadData &mainData = mThreadData[c_mainThread];
 
         mLoadRequestsMutex.lock();
-            //Lock while inside mMutex because _update has access to our
-            //workerData.loadRequests. We still need mLoadRequestsMutex
-            //to keep our access to mainData.loadRequests as short as possible
-            //(we don't want to block the main thread for long).
-            if( workerData.loadRequests.empty() )
-            {
-                workerData.loadRequests.swap( mainData.loadRequests );
-            }
-            else
-            {
-                workerData.loadRequests.insert( workerData.loadRequests.end(),
-                                                mainData.loadRequests.begin(),
-                                                mainData.loadRequests.end() );
-                mainData.loadRequests.clear();
-            }
+        // Lock while inside mMutex because _update has access to our
+        // workerData.loadRequests. We still need mLoadRequestsMutex
+        // to keep our access to mainData.loadRequests as short as possible
+        //(we don't want to block the main thread for long).
+        if( workerData.loadRequests.empty() )
+        {
+            workerData.loadRequests.swap( mainData.loadRequests );
+        }
+        else
+        {
+            workerData.loadRequests.insert( workerData.loadRequests.end(), mainData.loadRequests.begin(),
+                                            mainData.loadRequests.end() );
+            mainData.loadRequests.clear();
+        }
         mLoadRequestsMutex.unlock();
 
         ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
 
-        const bool processedAnyImage = !workerData.loadRequests.empty() ||
-                                       !mStreamingData.queuedImages.empty();
+        const bool processedAnyImage =
+            !workerData.loadRequests.empty() || !mStreamingData.queuedImages.empty();
 
-        //First, try to upload the queued images that failed in the previous iteration.
+        // First, try to upload the queued images that failed in the previous iteration.
         QueuedImageVec::iterator itQueue = mStreamingData.queuedImages.begin();
         QueuedImageVec::iterator enQueue = mStreamingData.queuedImages.end();
 
@@ -2898,12 +2978,11 @@ namespace Ogre
 
         const size_t entriesToProcessPerIteration = mEntriesToProcessPerIteration;
         size_t entriesProcessed = 0;
-        //Now process new requests from main thread
+        // Now process new requests from main thread
         LoadRequestVec::const_iterator itor = workerData.loadRequests.begin();
-        LoadRequestVec::const_iterator end  = workerData.loadRequests.end();
+        LoadRequestVec::const_iterator endt = workerData.loadRequests.end();
 
-        while( itor != end &&
-               entriesProcessed < entriesToProcessPerIteration &&
+        while( itor != endt && entriesProcessed < entriesToProcessPerIteration &&
                mStreamingData.bytesPreloaded < mMaxPreloadBytes )
         {
             processLoadRequest( commandBuffer, workerData, *itor );
@@ -2911,75 +2990,76 @@ namespace Ogre
             ++itor;
         }
 
-        //Two cases:
+        // Two cases:
         //  1. We did something this iteration, and finished 100%.
         //     Main thread could be waiting for us. Let them know.
         //  2. We couldn't do everything in this iteration, which means
         //     we need something from main thread. Wake it up.
-        //Note that normally main thread isn't sleeping, but it could be if
-        //waitForStreamingCompletion was called.
+        // Note that normally main thread isn't sleeping, but it could be if
+        // waitForStreamingCompletion was called.
         bool wakeUpMainThread = false;
-        if( (processedAnyImage && mStreamingData.queuedImages.empty()) ||
+        if( ( processedAnyImage && mStreamingData.queuedImages.empty() ) ||
             !mStreamingData.queuedImages.empty() )
         {
             wakeUpMainThread = true;
         }
 
-        workerData.loadRequests.erase( workerData.loadRequests.begin(),
-                                       workerData.loadRequests.begin() + entriesProcessed );
+        workerData.loadRequests.erase(
+            workerData.loadRequests.begin(),
+            workerData.loadRequests.begin() + static_cast<ptrdiff_t>( entriesProcessed ) );
         mergeUsageStatsIntoPrevStats();
         mMutex.unlock();
 
-        //Wake up outside mMutex to avoid unnecessary contention.
+        // Wake up outside mMutex to avoid unnecessary contention.
         if( wakeUpMainThread )
             mRequestToMainThreadEvent.wake();
     }
     //-----------------------------------------------------------------------------------
     size_t TextureGpuManager::getConsumedMemoryByStagingTextures(
-            const StagingTextureVec &stagingTextures ) const
+        const StagingTextureVec &stagingTextures ) const
     {
         size_t totalSizeBytes = 0;
         StagingTextureVec::const_iterator itor = stagingTextures.begin();
-        StagingTextureVec::const_iterator end  = stagingTextures.end();
-        while( itor != end )
+        StagingTextureVec::const_iterator endt = stagingTextures.end();
+        while( itor != endt )
         {
-            totalSizeBytes += (*itor)->_getSizeBytes();
+            totalSizeBytes += ( *itor )->_getSizeBytes();
             ++itor;
         }
 
         return totalSizeBytes;
     }
     //-----------------------------------------------------------------------------------
-    StagingTexture* TextureGpuManager::checkStagingTextureLimits( uint32 width, uint32 height,
+    StagingTexture *TextureGpuManager::checkStagingTextureLimits( uint32 width, uint32 height,
                                                                   uint32 depth, uint32 slices,
                                                                   PixelFormatGpu pixelFormat,
                                                                   size_t minConsumptionRatioThreshold )
     {
-        const size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
-                                                                       pixelFormat, 4u );
+        const size_t requiredSize =
+            PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat, 4u );
 
         size_t consumedBytes = getConsumedMemoryByStagingTextures( mAvailableStagingTextures );
 
         if( consumedBytes + requiredSize < mStagingTextureMaxBudgetBytes )
-            return 0; //We are OK, below limits
+            return 0;  // We are OK, below limits
 
         LogManager::getSingleton().logMessage( "Texture memory budget exceeded. Stalling GPU." );
 
-        //NVIDIA driver can let the staging textures accumulate and skyrocket the
-        //memory consumption until the process runs out of memory and crashes
+        // NVIDIA driver can let the staging textures accumulate and skyrocket the
+        // memory consumption until the process runs out of memory and crashes
         //(if it has a lot of textures to load).
-        //Worst part this only repros in some machines, not driver specific.
-        //Flushing here fixes it.
+        // Worst part this only repros in some machines, not driver specific.
+        // Flushing here fixes it.
         mRenderSystem->_clearStateAndFlushCommandBuffer();
 
         set<uint32>::type waitedFrames;
 
-        //Before freeing memory, check if we can make some of
-        //the existing staging textures available for use.
+        // Before freeing memory, check if we can make some of
+        // the existing staging textures available for use.
         StagingTextureVec::iterator bestCandidate = mAvailableStagingTextures.end();
         StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
-        StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
-        while( itor != end && bestCandidate == end )
+        StagingTextureVec::iterator endt = mAvailableStagingTextures.end();
+        while( itor != endt && bestCandidate == endt )
         {
             StagingTexture *stagingTexture = *itor;
             const uint32 frameUsed = stagingTexture->getLastFrameUsed();
@@ -2991,9 +3071,9 @@ namespace Ogre
             }
 
             if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) &&
-                (bestCandidate == end || stagingTexture->isSmallerThan( *bestCandidate )) )
+                ( bestCandidate == endt || stagingTexture->isSmallerThan( *bestCandidate ) ) )
             {
-                const size_t ratio = (requiredSize * 100u) / (*itor)->_getSizeBytes();
+                const size_t ratio = ( requiredSize * 100u ) / ( *itor )->_getSizeBytes();
                 if( ratio >= minConsumptionRatioThreshold )
                     bestCandidate = itor;
             }
@@ -3003,16 +3083,16 @@ namespace Ogre
 
         StagingTexture *retVal = 0;
 
-        if( bestCandidate == end )
+        if( bestCandidate == endt )
         {
             LogManager::getSingleton().logMessage( "Stalling was not enough. Freeing memory." );
 
-            //Could not find any best candidate even after stalling.
-            //Start deleting staging textures until we've freed enough space.
+            // Could not find any best candidate even after stalling.
+            // Start deleting staging textures until we've freed enough space.
             itor = mAvailableStagingTextures.begin();
-            while( itor != end && (consumedBytes + requiredSize > mStagingTextureMaxBudgetBytes) )
+            while( itor != endt && ( consumedBytes + requiredSize > mStagingTextureMaxBudgetBytes ) )
             {
-                consumedBytes -= (*itor)->_getSizeBytes();
+                consumedBytes -= ( *itor )->_getSizeBytes();
                 destroyStagingTextureImpl( *itor );
                 delete *itor;
                 ++itor;
@@ -3032,16 +3112,16 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::processDownloadToRamQueue(void)
+    void TextureGpuManager::processDownloadToRamQueue()
     {
         DownloadToRamEntryVec readyTextures;
 
         DownloadToRamEntryVec::iterator itor = mDownloadToRamQueue.begin();
-        DownloadToRamEntryVec::iterator end  = mDownloadToRamQueue.end();
+        DownloadToRamEntryVec::iterator endt = mDownloadToRamQueue.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            Image2 image; //Use an Image2 as helper for calculating offsets
+            Image2 image;  // Use an Image2 as helper for calculating offsets
             image.loadDynamicImage( itor->sysRamPtr, false, itor->texture );
 
             bool hasPendingTransfers = false;
@@ -3052,14 +3132,14 @@ namespace Ogre
             {
                 if( *itTicket )
                 {
-                    if( !(*itTicket)->queryIsTransferDone() )
+                    if( !( *itTicket )->queryIsTransferDone() )
                         hasPendingTransfers = true;
                     else
                     {
                         AsyncTextureTicket *asyncTicket = *itTicket;
 
                         const uint8 currentMip =
-                                static_cast<uint8>( itTicket - itor->asyncTickets.begin() );
+                            static_cast<uint8>( itTicket - itor->asyncTickets.begin() );
                         TextureBox dstBox = image.getData( currentMip );
 
                         if( asyncTicket->canMapMoreThanOneSlice() )
@@ -3072,7 +3152,7 @@ namespace Ogre
                         {
                             const uint32 numSlices = itor->texture->getNumSlices();
 
-                            for( size_t i=0; i<numSlices; ++i )
+                            for( uint32 i = 0; i < numSlices; ++i )
                             {
                                 const TextureBox srcBox = asyncTicket->map( i );
                                 dstBox.copyFrom( srcBox );
@@ -3097,7 +3177,7 @@ namespace Ogre
                 itor->asyncTickets.clear();
                 readyTextures.push_back( *itor );
                 itor = mDownloadToRamQueue.erase( itor );
-                end  = mDownloadToRamQueue.end();
+                endt = mDownloadToRamQueue.end();
             }
             else
             {
@@ -3106,9 +3186,9 @@ namespace Ogre
         }
 
         itor = readyTextures.begin();
-        end  = readyTextures.end();
+        endt = readyTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->texture->_notifySysRamDownloadIsReady( itor->sysRamPtr, itor->resyncOnly );
             ++itor;
@@ -3136,13 +3216,12 @@ namespace Ogre
             {
                 syncWithWorkerThread = true;
                 LogManager::getSingleton().logMessage(
-                            "WARNING: We failed " +
-                            StringConverter::toString( mTryLockMutexFailureCount ) +
-                            " times to acquire lock from texture background streaming thread. "
-                            "Stalling. If you see this message more than once, something is going "
-                            "terribly wrong, or disk loading is incredibly slow. "
-                            "See TextureGpuManager::setTrylockMutexFailureLimit documentation",
-                            LML_CRITICAL );
+                    "WARNING: We failed " + StringConverter::toString( mTryLockMutexFailureCount ) +
+                        " times to acquire lock from texture background streaming thread. "
+                        "Stalling. If you see this message more than once, something is going "
+                        "terribly wrong, or disk loading is incredibly slow. "
+                        "See TextureGpuManager::setTrylockMutexFailureLimit documentation",
+                    LML_CRITICAL );
             }
 
             if( !syncWithWorkerThread )
@@ -3160,10 +3239,13 @@ namespace Ogre
                 mTryLockMutexFailureCount = 0;
                 std::swap( mainData.objCmdBuffer, workerData.objCmdBuffer );
                 mainData.usedStagingTex.swap( workerData.usedStagingTex );
-                fullfillBudget();
+                if( mStreamingData.workerThreadRan )
+                {
+                    fullfillBudget();
+                    mStreamingData.workerThreadRan = false;
+                }
 
-                isDone = mainData.loadRequests.empty() &&
-                         workerData.loadRequests.empty() &&
+                isDone = mainData.loadRequests.empty() && workerData.loadRequests.empty() &&
                          mStreamingData.queuedImages.empty();
                 mMutex.unlock();
             }
@@ -3175,11 +3257,11 @@ namespace Ogre
 
         {
             StagingTextureVec::const_iterator itor = mainData.usedStagingTex.begin();
-            StagingTextureVec::const_iterator end  = mainData.usedStagingTex.end();
+            StagingTextureVec::const_iterator endt = mainData.usedStagingTex.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                (*itor)->stopMapRegion();
+                ( *itor )->stopMapRegion();
                 ++itor;
             }
         }
@@ -3188,13 +3270,13 @@ namespace Ogre
             OgreProfileExhaustive( "TextureGpuManager::_update destroy old StagingTextures" );
 
             StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
-            StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+            StagingTextureVec::iterator endt = mAvailableStagingTextures.end();
 
             const uint32 numFramesThreshold = mVaoManager->getDynamicBufferMultiplier() + 2u;
 
-            //They're kept in order.
-            while( itor != end &&
-                   mVaoManager->getFrameCount() - (*itor)->getLastFrameUsed() > numFramesThreshold )
+            // They're kept in order.
+            while( itor != endt &&
+                   mVaoManager->getFrameCount() - ( *itor )->getLastFrameUsed() > numFramesThreshold )
             {
                 destroyStagingTextureImpl( *itor );
                 delete *itor;
@@ -3212,9 +3294,9 @@ namespace Ogre
 
         {
             StagingTextureVec::const_iterator itor = mainData.usedStagingTex.begin();
-            StagingTextureVec::const_iterator end  = mainData.usedStagingTex.end();
+            StagingTextureVec::const_iterator endt = mainData.usedStagingTex.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 removeStagingTexture( *itor );
                 ++itor;
@@ -3225,11 +3307,11 @@ namespace Ogre
 
         processDownloadToRamQueue();
 
-        //After we've checked mainData.loadRequests.empty() inside the lock;
-        //we may have added more entries to it due to pending ScheduledTasks that got
-        //flushed either by mainData.objCmdBuffer or processDownloadToRamQueue,
-        //thus the worker thread now has more work to do and we can't return
-        //isDone = true.
+        // After we've checked mainData.loadRequests.empty() inside the lock;
+        // we may have added more entries to it due to pending ScheduledTasks that got
+        // flushed either by mainData.objCmdBuffer or processDownloadToRamQueue,
+        // thus the worker thread now has more work to do and we can't return
+        // isDone = true.
         if( mAddedNewLoadRequests )
             isDone = false;
 
@@ -3239,10 +3321,18 @@ namespace Ogre
         dumpStats();
 #endif
 
+        mLastUpdateIsStreamingDone = isDone;
+
         return isDone;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::waitForStreamingCompletion(void)
+    bool TextureGpuManager::isDoneStreaming() const
+    {
+        return mLastUpdateIsStreamingDone && !mAddedNewLoadRequests && mDownloadToRamQueue.empty() &&
+               mScheduledTasks.empty();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::waitForStreamingCompletion()
     {
         OgreProfileExhaustive( "TextureGpuManager::waitForStreamingCompletion" );
 
@@ -3256,20 +3346,19 @@ namespace Ogre
                 mVaoManager->_update();
                 if( !workerThreadDone )
                 {
-                    //We're waiting for worker thread to finish loading from disk/ram into GPU
+                    // We're waiting for worker thread to finish loading from disk/ram into GPU
                     mRequestToMainThreadEvent.wait();
                 }
                 else
                 {
-                    //We're waiting for GPU -> CPU transfers or for the next task to be executed
+                    // We're waiting for GPU -> CPU transfers or for the next task to be executed
                     Threads::Sleep( 1 );
                 }
             }
 #if OGRE_DEBUG_MEMORY_CONSUMPTION
-          dumpStats();
+            dumpStats();
 #endif
         }
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion = false;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_waitFor( TextureGpu *texture, bool metadataOnly )
@@ -3307,15 +3396,15 @@ namespace Ogre
         while( !bDone )
         {
             DownloadToRamEntryVec::iterator itor = mDownloadToRamQueue.begin();
-            DownloadToRamEntryVec::iterator end  = mDownloadToRamQueue.end();
+            DownloadToRamEntryVec::iterator endt = mDownloadToRamQueue.end();
 
-            //Only stall for the texture we're looking for, where resyncOnly == true;
-            //since those are from textures currently Resident that will remain Resident.
-            //The cases where resyncOnly == false are handled by the residency transition
-            while( itor != end && itor->texture != texture && !itor->resyncOnly )
+            // Only stall for the texture we're looking for, where resyncOnly == true;
+            // since those are from textures currently Resident that will remain Resident.
+            // The cases where resyncOnly == false are handled by the residency transition
+            while( itor != endt && itor->texture != texture && !itor->resyncOnly )
                 ++itor;
 
-            if( itor == end )
+            if( itor == endt )
                 bDone = true;
             else
             {
@@ -3328,87 +3417,76 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    bool TexturePool::hasFreeSlot(void) const
+    bool TexturePool::hasFreeSlot() const
     {
         return !availableSlots.empty() || usedMemory < masterTexture->getNumSlices();
     }
     //-----------------------------------------------------------------------------------
-    bool TexturePool::empty(void) const
+    bool TexturePool::empty() const
     {
         const size_t numSlices = masterTexture->getNumSlices();
-        return (availableSlots.size() + (numSlices - usedMemory)) == numSlices;
+        return ( availableSlots.size() + ( numSlices - usedMemory ) ) == numSlices;
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     TextureGpuManager::UsageStats::UsageStats( uint32 _width, uint32 _height, uint32 _depthOrSlices,
-                                                   PixelFormatGpu _formatFamily ) :
+                                               PixelFormatGpu _formatFamily ) :
         width( _width ),
         height( _height ),
         formatFamily( _formatFamily ),
-        accumSizeBytes( PixelFormatGpuUtils::getSizeBytes( _width, _height, _depthOrSlices,
-                                                           1u, _formatFamily, 4u ) ),
+        accumSizeBytes( PixelFormatGpuUtils::getSizeBytes( _width, _height, _depthOrSlices, 1u,
+                                                           _formatFamily, 4u ) ),
         loopCount( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices,
-                                                 TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
+    TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture,
+                                                 uint32 _dstSliceOrDepth,
                                                  FilterBaseArray &inOutFilters ) :
         dstTexture( _dstTexture ),
-        numSlices( _numSlices ),
         autoDeleteImage( srcImage.getAutoDelete() ),
         dstSliceOrDepth( _dstSliceOrDepth )
     {
-        assert( numSlices >= 1u );
+        assert( srcImage.getDepthOrSlices() >= 1u );
 
         filters.swap( inOutFilters );
 
-        //Prevent destroying the internal data in srcImage if QueuedImageVec
-        //holding us gets resized. (we do not follow the rule of 3)
+        // Prevent destroying the internal data in srcImage if QueuedImageVec
+        // holding us gets resized. (we do not follow the rule of 3)
         srcImage._setAutoDelete( false );
         image = srcImage;
 
-        uint64 numMipSlices = numMips * numSlices;
+        const uint8 numMips = image.getNumMipmaps();
+        const uint32 numSlices = image.getDepthOrSlices();
 
-        assert( numMipSlices < 256u );
+        const size_t numMipSlices = numMips * numSlices;
 
-        for( int i=0; i<4; ++i )
-        {
-            if( numMipSlices >= 64u )
-            {
-                mipLevelBitSet[i] = 0xffffffffffffffff;
-                numMipSlices -= 64u;
-            }
-            else
-            {
-                mipLevelBitSet[i] = ( uint64( 1ul ) << numMipSlices ) - uint64( 1ul );
-                numMipSlices = 0;
-            }
-        }
+        mipLevelBitSet.reset( numMipSlices + 1u );
+        mipLevelBitSet.setAllUntil( numMipSlices );
 
         if( srcImage.getTextureType() == TextureTypes::Type3D )
         {
-            //For 3D textures, depth is not constant per mip level. If we don't unqueue those
-            //now we will later get stuck in an infinite loop (empty() will never return true)
+            // For 3D textures, depth is not constant per mip level. If we don't unqueue those
+            // now we will later get stuck in an infinite loop (empty() will never return true)
             uint32 currDepth = std::max<uint32>( numSlices >> 1u, 1u );
-            for( uint8 mip=1u; mip<numMips; ++mip )
+            for( uint8 mip = 1u; mip < numMips; ++mip )
             {
-                for( uint32 slice=currDepth; slice<numSlices; ++slice )
+                for( uint32 slice = currDepth; slice < numSlices; ++slice )
                     unqueueMipSlice( mip, static_cast<uint8>( slice ) );
                 currDepth = std::max<uint32>( currDepth >> 1u, 1u );
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::QueuedImage::destroy(void)
+    void TextureGpuManager::QueuedImage::destroy()
     {
         if( autoDeleteImage &&
             dstTexture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
         {
-            //Do not delete the internal pointer if the TextureGpu will be owning it.
+            // Do not delete the internal pointer if the TextureGpu will be owning it.
             image._setAutoDelete( true );
             image.freeMemory();
         }
@@ -3418,73 +3496,53 @@ namespace Ogre
                 "These filters will leak" );
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::QueuedImage::empty(void) const
-    {
-        return  mipLevelBitSet[0] == 0ul && mipLevelBitSet[1] == 0ul &&
-                mipLevelBitSet[2] == 0ul && mipLevelBitSet[3] == 0ul;
-    }
+    bool TextureGpuManager::QueuedImage::empty() const { return mipLevelBitSet.empty(); }
     //-----------------------------------------------------------------------------------
     bool TextureGpuManager::QueuedImage::isMipSliceQueued( uint8 mipLevel, uint8 slice ) const
     {
-        uint32 mipSlice = mipLevel * numSlices + slice;
-        size_t idx  = mipSlice / 64u;
-        uint64 mask = mipSlice % 64u;
-        mask = ((uint64)1ul) << mask;
-        return (mipLevelBitSet[idx] & mask) != 0;
+        const size_t mipSlice = mipLevel * image.getDepthOrSlices() + slice;
+        return mipLevelBitSet.test( mipSlice );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::QueuedImage::unqueueMipSlice( uint8 mipLevel, uint8 slice )
     {
-        uint32 mipSlice = mipLevel * numSlices + slice;
-        size_t idx  = mipSlice / 64u;
-        uint64 mask = mipSlice % 64u;
-        mask = ((uint64)1ul) << mask;
-        mipLevelBitSet[idx] = mipLevelBitSet[idx] & ~mask;
+        const size_t mipSlice = mipLevel * image.getDepthOrSlices() + slice;
+        return mipLevelBitSet.unset( mipSlice );
     }
     //-----------------------------------------------------------------------------------
-    uint8 TextureGpuManager::QueuedImage::getMinMipLevel(void) const
+    uint8 TextureGpuManager::QueuedImage::getMinMipLevel() const
     {
-        for( size_t i=0; i<4u; ++i )
-        {
-            if( mipLevelBitSet[i] != 0u )
-            {
-                uint8 firstBitSet = static_cast<uint8>( Bitwise::ctz64( mipLevelBitSet[i] ) );
-                return (firstBitSet + 64u * i) / numSlices;
-            }
-        }
-
-        return 255u;
+        return static_cast<uint8>( mipLevelBitSet.findFirstBitSet() / image.getDepthOrSlices() );
     }
     //-----------------------------------------------------------------------------------
-    uint8 TextureGpuManager::QueuedImage::getMaxMipLevelPlusOne(void) const
+    uint8 TextureGpuManager::QueuedImage::getMaxMipLevelPlusOne() const
     {
-        for( size_t i=4u; i--; )
-        {
-            if( mipLevelBitSet[i] != 0u )
-            {
-                uint8 lastBitSet =
-                        static_cast<uint8>( 64u - Bitwise::clz64( mipLevelBitSet[i] ) + 64u * i );
-                return (lastBitSet + numSlices - 1u) / numSlices;
-            }
-        }
-
-        return 0u;
+        return static_cast<uint8>(
+            ( mipLevelBitSet.findLastBitSetPlusOne() + image.getDepthOrSlices() - 1u ) /
+            image.getDepthOrSlices() );
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     TextureGpuManager::PartialImage::PartialImage() :
-        sysRamPtr( 0 ), numProcessedDepthOrSlices( 0 ), toSysRam( false ) {}
+        sysRamPtr( 0 ),
+        numProcessedDepthOrSlices( 0 ),
+        toSysRam( false )
+    {
+    }
     //-----------------------------------------------------------------------------------
     TextureGpuManager::PartialImage::PartialImage( void *_sysRamPtr, bool _toSysRam ) :
-        sysRamPtr( _sysRamPtr ), numProcessedDepthOrSlices( 0 ), toSysRam( _toSysRam ) {}
-    //-----------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::BudgetEntry::operator () ( const BudgetEntry &_l,
-                                                       const BudgetEntry &_r ) const
+        sysRamPtr( _sysRamPtr ),
+        numProcessedDepthOrSlices( 0 ),
+        toSysRam( _toSysRam )
     {
-        //Biggest ones come first
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::BudgetEntry::operator()( const BudgetEntry &_l, const BudgetEntry &_r ) const
+    {
+        // Biggest ones come first
         const size_t lSize = PixelFormatGpuUtils::getSizeBytes( _l.minResolution, _l.minResolution, 1u,
                                                                 _l.minNumSlices, _l.formatFamily, 4u );
         const size_t rSize = PixelFormatGpuUtils::getSizeBytes( _r.minResolution, _r.minResolution, 1u,
@@ -3494,8 +3552,5 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    TextureGpuManager::ScheduledTasks::ScheduledTasks()
-    {
-        memset( this, 0, sizeof( ScheduledTasks ) );
-    }
-}
+    TextureGpuManager::ScheduledTasks::ScheduledTasks() { memset( this, 0, sizeof( ScheduledTasks ) ); }
+}  // namespace Ogre

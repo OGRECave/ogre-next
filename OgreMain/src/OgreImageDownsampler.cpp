@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
-    (Object-oriented Graphics Rendering Engine)
+This source file is part of OGRE-Next
+(Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2014 Torus Knot Software Ltd
@@ -130,11 +130,11 @@ namespace Ogre
         {
             //Point
             {
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 1, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 1, 0, 0 },
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0 }
             },
             0, 0,
             0, 0
@@ -142,11 +142,11 @@ namespace Ogre
         {
             //Linear
             {
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 1, 1, 0,
-                0, 0, 1, 1, 0,
-                0, 0, 0, 0, 0
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 1, 1, 0 },
+                { 0, 0, 1, 1, 0 },
+                { 0, 0, 0, 0, 0 }
             },
             0, 1,
             0, 1
@@ -154,11 +154,11 @@ namespace Ogre
         {
             //Gaussian
             {
-                1,  4,  7,  4, 1,
-                4, 16, 26, 16, 4,
-                7, 26, 41, 26, 7,
-                4, 16, 26, 16, 4,
-                1,  4,  7,  4, 1
+                { 1,  4,  7,  4, 1 },
+                { 4, 16, 26, 16, 4 },
+                { 7, 26, 41, 26, 7 },
+                { 4, 16, 26, 16, 4 },
+                { 1,  4,  7,  4, 1 }
             },
             -2, 2,
             -2, 2
@@ -189,6 +189,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 3
 #define OGRE_TOTAL_SIZE 4
 #define DOWNSAMPLE_NAME downscale2x_XXXA8888
+#define DOWNSAMPLE_3D_NAME downscale3D2x_XXXA8888
 #define DOWNSAMPLE_CUBE_NAME downscale2x_XXXA8888_cube
 #define BLUR_NAME separableBlur_XXXA8888
 #include "OgreImageDownsamplerImpl.inl"
@@ -198,7 +199,8 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_B 2
 #define OGRE_TOTAL_SIZE 3
 #define DOWNSAMPLE_NAME downscale2x_XXX888
-	#define DOWNSAMPLE_CUBE_NAME downscale2x_XXX888_cube
+#define DOWNSAMPLE_3D_NAME downscale3D2x_XXX888
+#define DOWNSAMPLE_CUBE_NAME downscale2x_XXX888_cube
 #define BLUR_NAME separableBlur_XXX888
 #include "OgreImageDownsamplerImpl.inl"
 
@@ -206,21 +208,24 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_G 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_XX88
-	#define DOWNSAMPLE_CUBE_NAME downscale2x_XX88_cube
+#define DOWNSAMPLE_3D_NAME downscale3D2x_XX88
+#define DOWNSAMPLE_CUBE_NAME downscale2x_XX88_cube
 #define BLUR_NAME separableBlur_XX88
 #include "OgreImageDownsamplerImpl.inl"
 
 #define OGRE_DOWNSAMPLE_R 0
 #define OGRE_TOTAL_SIZE 1
 #define DOWNSAMPLE_NAME downscale2x_X8
-	#define DOWNSAMPLE_CUBE_NAME downscale2x_X8_cube
+#define DOWNSAMPLE_3D_NAME downscale3D2x_X8
+#define DOWNSAMPLE_CUBE_NAME downscale2x_X8_cube
 #define BLUR_NAME separableBlur_X8
 #include "OgreImageDownsamplerImpl.inl"
 
 #define OGRE_DOWNSAMPLE_A 0
 #define OGRE_TOTAL_SIZE 1
 #define DOWNSAMPLE_NAME downscale2x_A8
-	#define DOWNSAMPLE_CUBE_NAME downscale2x_A8_cube
+#define DOWNSAMPLE_3D_NAME downscale3D2x_A8
+#define DOWNSAMPLE_CUBE_NAME downscale2x_A8_cube
 #define BLUR_NAME separableBlur_A8
 #include "OgreImageDownsamplerImpl.inl"
 
@@ -228,7 +233,8 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_XA88
-	#define DOWNSAMPLE_CUBE_NAME downscale2x_XA88_cube
+#define DOWNSAMPLE_3D_NAME downscale3D2x_XA88
+#define DOWNSAMPLE_CUBE_NAME downscale2x_XA88_cube
 #define BLUR_NAME separableBlur_XA88
 #include "OgreImageDownsamplerImpl.inl"
 
@@ -247,6 +253,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 3
 #define OGRE_TOTAL_SIZE 4
 #define DOWNSAMPLE_NAME downscale2x_Signed_XXXA8888
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Signed_XXXA8888
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Signed_XXXA8888_cube
 #define BLUR_NAME separableBlur_Signed_XXXA8888
 #include "OgreImageDownsamplerImpl.inl"
@@ -256,6 +263,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_B 2
 #define OGRE_TOTAL_SIZE 3
 #define DOWNSAMPLE_NAME downscale2x_Signed_XXX888
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Signed_XXX888
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Signed_XXX888_cube
 #define BLUR_NAME separableBlur_Signed_XXX888
 #include "OgreImageDownsamplerImpl.inl"
@@ -264,6 +272,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_G 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_Signed_XX88
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Signed_XX88
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Signed_XX88_cube
 #define BLUR_NAME separableBlur_Signed_XX88
 #include "OgreImageDownsamplerImpl.inl"
@@ -271,6 +280,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_R 0
 #define OGRE_TOTAL_SIZE 1
 #define DOWNSAMPLE_NAME downscale2x_Signed_X8
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Signed_X8
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Signed_X8_cube
 #define BLUR_NAME separableBlur_Signed_X8
 #include "OgreImageDownsamplerImpl.inl"
@@ -278,6 +288,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 0
 #define OGRE_TOTAL_SIZE 1
 #define DOWNSAMPLE_NAME downscale2x_Signed_A8
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Signed_A8
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Signed_A8_cube
 #define BLUR_NAME separableBlur_Signed_A8
 #include "OgreImageDownsamplerImpl.inl"
@@ -286,6 +297,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_Signed_XA88
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Signed_XA88
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Signed_XA88_cube
 #define BLUR_NAME separableBlur_Signed_XA88
 #include "OgreImageDownsamplerImpl.inl"
@@ -307,6 +319,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 3
 #define OGRE_TOTAL_SIZE 4
 #define DOWNSAMPLE_NAME downscale2x_Float32_XXXA
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Float32_XXXA
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Float32_XXXA_cube
 #define BLUR_NAME separableBlur_Float32_XXXA
 #include "OgreImageDownsamplerImpl.inl"
@@ -316,6 +329,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_B 2
 #define OGRE_TOTAL_SIZE 3
 #define DOWNSAMPLE_NAME downscale2x_Float32_XXX
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Float32_XXX
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Float32_XXX_cube
 #define BLUR_NAME separableBlur_Float32_XXX
 #include "OgreImageDownsamplerImpl.inl"
@@ -324,6 +338,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_G 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_Float32_XX
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Float32_XX
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Float32_XX_cube
 #define BLUR_NAME separableBlur_Float32_XX
 #include "OgreImageDownsamplerImpl.inl"
@@ -331,6 +346,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_R 0
 #define OGRE_TOTAL_SIZE 1
 #define DOWNSAMPLE_NAME downscale2x_Float32_X
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Float32_X
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Float32_X_cube
 #define BLUR_NAME separableBlur_Float32_X
 #include "OgreImageDownsamplerImpl.inl"
@@ -338,6 +354,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 0
 #define OGRE_TOTAL_SIZE 1
 #define DOWNSAMPLE_NAME downscale2x_Float32_A
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Float32_A
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Float32_A_cube
 #define BLUR_NAME separableBlur_Float32_A
 #include "OgreImageDownsamplerImpl.inl"
@@ -346,6 +363,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_Float32_XA
+#define DOWNSAMPLE_3D_NAME downscale3D2x_Float32_XA
 #define DOWNSAMPLE_CUBE_NAME downscale2x_Float32_XA_cube
 #define BLUR_NAME separableBlur_Float32_XA
 #include "OgreImageDownsamplerImpl.inl"
@@ -372,6 +390,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 3
 #define OGRE_TOTAL_SIZE 4
 #define DOWNSAMPLE_NAME downscale2x_sRGB_XXXA8888
+#define DOWNSAMPLE_3D_NAME downscale3D2x_sRGB_XXXA8888
 #define DOWNSAMPLE_CUBE_NAME downscale2x_sRGB_XXXA8888_cube
 #define BLUR_NAME separableBlur_sRGB_XXXA8888
 #include "OgreImageDownsamplerImpl.inl"
@@ -382,6 +401,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_B 3
 #define OGRE_TOTAL_SIZE 4
 #define DOWNSAMPLE_NAME downscale2x_sRGB_AXXX8888
+#define DOWNSAMPLE_3D_NAME downscale3D2x_sRGB_AXXX8888
 #define DOWNSAMPLE_CUBE_NAME downscale2x_sRGB_AXXX8888_cube
 #define BLUR_NAME separableBlur_sRGB_AXXX8888
 #include "OgreImageDownsamplerImpl.inl"
@@ -391,6 +411,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_B 2
 #define OGRE_TOTAL_SIZE 3
 #define DOWNSAMPLE_NAME downscale2x_sRGB_XXX888
+#define DOWNSAMPLE_3D_NAME downscale3D2x_sRGB_XXX888
 #define DOWNSAMPLE_CUBE_NAME downscale2x_sRGB_XXX888_cube
 #define BLUR_NAME separableBlur_sRGB_XXX888
 #include "OgreImageDownsamplerImpl.inl"
@@ -399,6 +420,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_G 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_sRGB_XX88
+#define DOWNSAMPLE_3D_NAME downscale3D2x_sRGB_XX88
 #define DOWNSAMPLE_CUBE_NAME downscale2x_sRGB_XX88_cube
 #define BLUR_NAME separableBlur_sRGB_XX88
 #include "OgreImageDownsamplerImpl.inl"
@@ -406,6 +428,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_R 0
 #define OGRE_TOTAL_SIZE 1
 #define DOWNSAMPLE_NAME downscale2x_sRGB_X8
+#define DOWNSAMPLE_3D_NAME downscale3D2x_sRGB_X8
 #define DOWNSAMPLE_CUBE_NAME downscale2x_sRGB_X8_cube
 #define BLUR_NAME separableBlur_sRGB_X8
 #include "OgreImageDownsamplerImpl.inl"
@@ -413,6 +436,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 0
 #define OGRE_TOTAL_SIZE 1
 #define DOWNSAMPLE_NAME downscale2x_sRGB_A8
+#define DOWNSAMPLE_3D_NAME downscale3D2x_sRGB_A8
 #define DOWNSAMPLE_CUBE_NAME downscale2x_sRGB_A8_cube
 #define BLUR_NAME separableBlur_sRGB_A8
 #include "OgreImageDownsamplerImpl.inl"
@@ -421,6 +445,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_A 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_sRGB_XA88
+#define DOWNSAMPLE_3D_NAME downscale3D2x_sRGB_XA88
 #define DOWNSAMPLE_CUBE_NAME downscale2x_sRGB_XA88_cube
 #define BLUR_NAME separableBlur_sRGB_XA88
 #include "OgreImageDownsamplerImpl.inl"
@@ -429,6 +454,7 @@ namespace Ogre
 #define OGRE_DOWNSAMPLE_R 1
 #define OGRE_TOTAL_SIZE 2
 #define DOWNSAMPLE_NAME downscale2x_sRGB_AX88
+#define DOWNSAMPLE_3D_NAME downscale3D2x_sRGB_AX88
 #define DOWNSAMPLE_CUBE_NAME downscale2x_sRGB_AX88_cube
 #define BLUR_NAME separableBlur_sRGB_AX88
 #include "OgreImageDownsamplerImpl.inl"

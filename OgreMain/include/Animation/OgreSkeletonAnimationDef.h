@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -29,8 +29,8 @@ THE SOFTWARE.
 #ifndef __SkeletonAnimationDef_H__
 #define __SkeletonAnimationDef_H__
 
-#include "OgreSkeletonTrack.h"
 #include "OgreIdString.h"
+#include "OgreSkeletonTrack.h"
 
 #include "ogrestd/map.h"
 
@@ -41,27 +41,28 @@ namespace Ogre
         class TimeIndex;
     }
 
-    class _OgreExport SkeletonAnimationDef : public AnimationAlloc
+    class _OgreExport SkeletonAnimationDef : public OgreAllocatedObj
     {
         friend class SkeletonAnimation;
+
     protected:
-        SkeletonTrackVec    mTracks;
+        SkeletonTrackVec mTracks;
         /** Number of frames. May not equal the number of keyframes
             (i.e. remain stationary at the end for a long time).
         */
-        Real                mNumFrames;
-        Real                mOriginalFrameRate;
+        Real mNumFrames;
+        Real mOriginalFrameRate;
         /** Converts bone index to consecutive slot (@see SkeletonAnimation::mBoneWeights).
             The parent level depth is in the last 8 bits
         */
         map<IdString, size_t>::type mBoneToWeights;
-        String              mName;
+        String                      mName;
 
-        SkeletonDef const   *mSkeletonDef;
+        SkeletonDef const *mSkeletonDef;
 
         KfTransformArrayMemoryManager *mKfTransformMemoryManager;
 
-        typedef vector<Real>::type TimestampVec;
+        typedef vector<Real>::type              TimestampVec;
         typedef map<size_t, TimestampVec>::type TimestampsPerBlock;
 
         /** Same as @see OldNodeAnimationTrack::getInterpolatedKeyFrame, but doesn't normalize
@@ -70,8 +71,8 @@ namespace Ogre
             the SIMD block.
         */
         static void getInterpolatedUnnormalizedKeyFrame( v1::OldNodeAnimationTrack *oldTrack,
-                                                         const v1::TimeIndex& timeIndex,
-                                                         v1::TransformKeyFrame* kf );
+                                                         const v1::TimeIndex       &timeIndex,
+                                                         v1::TransformKeyFrame     *kf );
 
         /** Allocates enough memory in mKfTransformMemoryManager, creates all the mTracks
             (one per each entry in timestampsByBlock), and allocates all the keyframes
@@ -84,18 +85,18 @@ namespace Ogre
             The original recording framerate.
         */
         void allocateCacheFriendlyKeyframes( const TimestampsPerBlock &timestampsByBlock,
-                                             Real frameRate );
+                                             Real                      frameRate );
 
     public:
         SkeletonAnimationDef();
         ~SkeletonAnimationDef();
 
-        void setName( const String &name )                              { mName = name; }
-        const String& getNameStr(void) const                            { return mName; }
-        void _setSkeletonDef( const SkeletonDef *skeletonDef )          { mSkeletonDef = skeletonDef; }
+        void          setName( const String &name ) { mName = name; }
+        const String &getNameStr() const { return mName; }
+        void          _setSkeletonDef( const SkeletonDef *skeletonDef ) { mSkeletonDef = skeletonDef; }
 
-        Real getNumFrames( void ) const { return mNumFrames; }
-        Real getOriginalFrameRate( void ) const { return mOriginalFrameRate; }
+        Real getNumFrames() const { return mNumFrames; }
+        Real getOriginalFrameRate() const { return mOriginalFrameRate; }
 
         void build( const v1::Skeleton *skeleton, const v1::Animation *animation, Real frameRate );
 
@@ -106,6 +107,6 @@ namespace Ogre
     };
 
     typedef vector<SkeletonAnimationDef>::type SkeletonAnimationDefVec;
-}
+}  // namespace Ogre
 
 #endif

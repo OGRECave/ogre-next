@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
@@ -100,7 +100,7 @@ namespace Ogre
         /// mMappingCount), and stalls if needed (synchronize); also book-keeps mFences and
         /// mUnfencedHazards.
         /// May modify mMappingStart.
-        void waitIfNeeded(void);
+        void waitIfNeeded();
 
         virtual void* mapImpl( size_t sizeBytes );
         virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
@@ -114,11 +114,11 @@ namespace Ogre
 
         virtual StagingStallType uploadWillStall( size_t sizeBytes );
 
-        void cleanUnfencedHazards(void);
+        void cleanUnfencedHazards();
 
         virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
 
-        GLuint getBufferName(void) const           { return mVboName; }
+        GLuint getBufferName() const           { return mVboName; }
     };
 }
 

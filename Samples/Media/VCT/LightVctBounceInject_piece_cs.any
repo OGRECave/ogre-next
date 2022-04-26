@@ -1,9 +1,9 @@
 
-//#include "SyntaxHighlightingMisc.h"
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
 
 @piece( HeaderCS )
 	@property( vct_anisotropic )
-		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_Texture3D_float4 probeX, OGRE_Texture3D_float4 probeY, OGRE_Texture3D_float4 probeZ
+		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_ArrayTex( OGRE_Texture3D_float4, probeX, @value( hlms_num_vct_cascades ) ), OGRE_ArrayTex( OGRE_Texture3D_float4, probeY, @value( hlms_num_vct_cascades ) ), OGRE_ArrayTex( OGRE_Texture3D_float4, probeZ, @value( hlms_num_vct_cascades ) )
 		#define OGRE_VCT_ANISO_PROBE_ARG , probeX, probeY, probeZ
 		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG , vctProbeX, vctProbeY, vctProbeZ
 	@else
@@ -12,40 +12,64 @@
 		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG
 	@end
 
-	INLINE float3 voxelConeTraceDiff
+	struct VctResult
+	{
+		float3 colour;
+		float alpha;
+		float lodLevel;
+		float3 posLS;
+	};
+
+	INLINE VctResult voxelConeTraceDiff
 	(
 		float3 posLS,
 		float3 dirLS, float tanHalfAngle,
-		OGRE_Texture3D_float4 probe
+		float4 localStartBias_invStartBias_cascadeMaxLod, float startingLodLevel,
+		float startingAlpha, int probeIdx,
+		OGRE_ArrayTex( OGRE_Texture3D_float4, probes, @value( hlms_num_vct_cascades ) )
 		OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
-		PARAMS_ARG_DECL
 	)
 	{
-		float dist = p_vctStartBias;
-		float alpha = 0.0;
+		float vctStartBias = localStartBias_invStartBias_cascadeMaxLod.x;
+		float vctInvStartBias = localStartBias_invStartBias_cascadeMaxLod.y;
+		float maxLod = localStartBias_invStartBias_cascadeMaxLod.z;
+
+		float dist = vctStartBias;
+		float alpha = startingAlpha;
 		float3 color = float3( 0.0, 0.0, 0.0 );
 
-		float diameter = max( p_vctStartBias, 2.0 * tanHalfAngle * dist );
+		float diameter = max( vctStartBias, 2.0 * tanHalfAngle * dist );
+		float3 nextPosLS = posLS + dist * dirLS;
 
-		float lodLevel	= 0.0;
+		float lodLevel = startingLodLevel;
 
 		@property( !vct_anisotropic )
-			#define VCT_ANISOTROPIC_EARLY_OUT
+			#define VCT_ANISOTROPIC_EARLY_OUT && lodLevel < maxLod
 		@else
 			#define VCT_ANISOTROPIC_EARLY_OUT && lodLevel <= 0.5
 		@end
-		while( dist < 1.414213562f && alpha < 0.95 VCT_ANISOTROPIC_EARLY_OUT )
+
+		float threshold = 0.5f + diameter * 0.5;
+
+		while( alpha < 0.95 && // Abort once we've gathered enough light
+			   abs( nextPosLS.x - 0.5f ) <= threshold && // Out of bounds
+			   abs( nextPosLS.y - 0.5f ) <= threshold &&
+			   abs( nextPosLS.z - 0.5f ) <= threshold
+			   VCT_ANISOTROPIC_EARLY_OUT ) // Either another cascade will handle, or aniso will
 		{
-			float4 scolor = OGRE_SampleLevel( probe, probeSampler,
-											  posLS + dist * dirLS,
-											  lodLevel );
-			float a = (1.0f - alpha);
-			color += scolor.xyz * a;
-			alpha += a * scolor.w;
-			dist += diameter * 0.5f;
-			diameter = 2.0 * tanHalfAngle * dist;
-			lodLevel = log2( diameter * p_vctInvStartBias );
+			threshold = 0.5f + diameter * 0.5;
+
+			float4 sampleColour = OGRE_SampleLevel( probes[probeIdx], probeSampler, nextPosLS, lodLevel );
+
+			float a = ( 1.0f - alpha );  // Calc. the % left of light we are able to gather
+
+			color += sampleColour.xyz * a;                  // Accumulate colour
+			alpha += a * sampleColour.w;                    // Accumulate opacity
+			dist += diameter * 0.5f;                        // Advance forward
+			nextPosLS = posLS + dist * dirLS;               // Advance forward
+			diameter = 2.0 * tanHalfAngle * dist;           // Calculate next LOD & next fwd step
+			lodLevel = log2( diameter * vctInvStartBias );  // Calculate next LOD
 		}
 
 		@property( vct_anisotropic )
@@ -56,41 +80,74 @@
 
 			float3 dirLSSquared = dirLS.xyz * dirLS.xyz;
 
-			while( dist < 1.414213562f && alpha < 0.95 )
+			while( alpha < 0.95 && // Abort once we've gathered enough light
+				   lodLevel < maxLod && // Past maxLod, another cascade will handle this
+				   abs( nextPosLS.x - 0.5f ) <= threshold && // Out of bounds
+				   abs( nextPosLS.y - 0.5f ) <= threshold &&
+				   abs( nextPosLS.z - 0.5f ) <= threshold )
 			{
-				float3 sampleUVW = posLS + dist * dirLS;
+				threshold = 0.5f + diameter * 0.5;
+
+				float3 sampleUVW = nextPosLS;
 				sampleUVW.x = saturate( sampleUVW.x ) * 0.5;
 
-				float4 xColor = OGRE_SampleLevel( probeX, probeSampler,
+				float4 xColor = OGRE_SampleLevel( probeX[probeIdx], probeSampler,
 												  sampleUVW + float3( isNegative.x, 0, 0 ),
 												  lodLevel );
-				float4 yColor = OGRE_SampleLevel( probeY, probeSampler,
+				float4 yColor = OGRE_SampleLevel( probeY[probeIdx], probeSampler,
 												  sampleUVW + float3( isNegative.y, 0, 0 ),
 												  lodLevel );
-				float4 zColor = OGRE_SampleLevel( probeZ, probeSampler,
+				float4 zColor = OGRE_SampleLevel( probeZ[probeIdx], probeSampler,
 												  sampleUVW + float3( isNegative.z, 0, 0 ),
 												  lodLevel );
 
-				float4 scolor = dirLSSquared.x * xColor +
-								dirLSSquared.y * yColor +
-								dirLSSquared.z * zColor;
-				float a = (1.0f - alpha);
-				color += scolor.xyz * a;
-				alpha += a * scolor.w;
-				dist += diameter * 0.5f;
-				diameter = 2.0 * tanHalfAngle * dist;
-				lodLevel = log2( diameter * p_vctInvStartBias );
+				float4 sampleColour = dirLSSquared.x * xColor +  //
+									  dirLSSquared.y * yColor +  //
+									  dirLSSquared.z * zColor;
+
+				float a = ( 1.0f - alpha );  // Calc. the % left of light we are able to gather
+
+				color += sampleColour.xyz * a;                  // Accumulate colour
+				alpha += a * sampleColour.w;                    // Accumulate opacity
+				dist += diameter * 0.5f;                        // Advance forward
+				nextPosLS = posLS + dist * dirLS;               // Advance forward
+				diameter = 2.0 * tanHalfAngle * dist;           // Calculate next LOD & next fwd step
+				lodLevel = log2( diameter * vctInvStartBias );  // Calculate next LOD
 			}
 		@end
 
-		return color;
+		VctResult result;
+		result.colour = color;
+		result.alpha = alpha;
+		result.lodLevel = lodLevel;
+		result.posLS = nextPosLS;
+
+		return result;
 	}
+
+@property( hlms_num_vct_cascades > 1 )
+	/** Converts pos from Local Space of probeIdx - 1 into the Local Space of probeIdx
+	\param posLS
+		Position in local space of probeIdx - 1
+	\param probeIdx
+		Probe Index to convert to
+	\return
+		Position in local space of probeIdx
+	*/
+	INLINE float3 fromVctProbeToNext( float3 posLS, int probeIdx PARAMS_ARG_DECL )
+	{
+		return posLS * p_vctFromPreviousProbeToNext[probeIdx - 1][0].xyz +
+			   p_vctFromPreviousProbeToNext[probeIdx - 1][1].xyz;
+		return float3( 0, 0, 0 );
+	}
+@end
 
 	INLINE void computeVctProbe
 	(
 		OGRE_INOUT_REF( float3, outDiffuse ),
 		float3 posLS, float3 geomNormal, float3x3 TBN,
-		OGRE_Texture3D_float4 probe OGRE_SAMPLER_ARG_DECL( probeSampler )
+		OGRE_ArrayTex( OGRE_Texture3D_float4, probes, @value( hlms_num_vct_cascades ) )
+		OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
 		PARAMS_ARG_DECL
 	)
@@ -117,18 +174,41 @@
 
 		float coneWeights[6] = OGRE_ARRAY_START( float ) 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
 		float coneAngleTan = 0.577;
-		float minRefTan = 0.0;
 
 		//Radiance / diffuse
 		float3 light = float3( 0.0f, 0.0f, 0.0f );
-		for( int i=0; i<6; ++i )
+		for( int i = 0; i < 6; ++i )
 		{
 			float3 dir = mul( TBN, cone_dirs[i] );
 			dir = normalize( dir );
-			light += coneWeights[i] * voxelConeTraceDiff( posLS, dir,coneAngleTan,
-														  probe OGRE_SAMPLER_ARG( probeSampler )
-														  OGRE_VCT_ANISO_PROBE_ARG
-														  PARAMS_ARG );
+
+			VctResult result = voxelConeTraceDiff(
+				posLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[0], 0.0f, 0.0f, 0,
+				probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG );
+
+			@property( hlms_num_vct_cascades > 1 )
+				for( int j = 1; j < @value( hlms_num_vct_cascades ) && result.alpha < 0.95f; ++j )
+				{
+					float startBias = p_vctStartBias_invStartBias_cascadeMaxLod[j].x;
+					float prevCascadeMaxLod = p_vctStartBias_invStartBias_cascadeMaxLod[j - 1].z;
+
+					float3 newPosLS = fromVctProbeToNext( result.posLS, j PARAMS_ARG ) - dir * startBias;
+
+					VctResult newRes = voxelConeTraceDiff(
+						newPosLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[j],
+						max( result.lodLevel - prevCascadeMaxLod, 0.0f ), result.alpha, j,
+						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG );
+
+					// See VctCascadedVoxelizer::update comments on ( 1.0 - result.alpha )
+					result.colour += newRes.colour * p_vctFromPreviousProbeToNext[j - 1][0].w *
+									 ( 1.0 - result.alpha );
+					result.alpha += newRes.alpha;
+					result.lodLevel = newRes.lodLevel;
+					result.posLS = newRes.posLS;
+				}
+			@end
+
+			light += coneWeights[i] * result.colour;
 		}
 
 		outDiffuse.xyz = light;
@@ -148,7 +228,7 @@
 
 	float4 albedoVal = OGRE_Load3D( voxelAlbedoTex, gl_GlobalInvocationID.xyz, 0 );
 	float4 normalVal = OGRE_Load3D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 );
-	float4 currentLight = OGRE_Load3D( vctProbe, gl_GlobalInvocationID.xyz, 0 );
+	float4 currentLight = OGRE_Load3D( vctProbes[0], gl_GlobalInvocationID.xyz, 0 );
 
 	if( anyInvocationARB( albedoVal.a > 0 ) )
 	{
@@ -163,7 +243,7 @@
 
 		float3 vctDiffuse = float3( 0, 0, 0 );
 		computeVctProbe( vctDiffuse, voxelUvwPos, normalVal.xyz, TBN,
-						 vctProbe OGRE_SAMPLER_ARG( vctProbeSampler )
+						 vctProbes OGRE_SAMPLER_ARG( vctProbeSampler )
 						 OGRE_VCT_ANISO_ROOT_PROBE_ARG PARAMS_ARG );
 		currentLight.xyz += albedoVal.xyz * vctDiffuse.xyz * p_iterationDampening;
 	}

@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of OGRE
+This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 #include "OgreGpuResource.h"
 #include "OgrePixelFormatGpu.h"
-
 #include "Vao/OgreBufferPacked.h"
 
 #include "ogrestd/vector.h"
@@ -42,11 +41,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     namespace TextureTypes
     {
@@ -70,16 +69,19 @@ namespace Ogre
         /// and OpenGL common conventions of being right handed, where -Z = Forward)
         enum CubemapSide
         {
+            // clang-format off
             PX, NX,
             PY, NY,
             PZ, NZ,
+            // clang-format on
         };
-    }
+    }  // namespace CubemapSide
 
     namespace TextureFlags
     {
         enum TextureFlags
         {
+            // clang-format off
             /// Texture cannot be used as a regular texture (bound to SRV in D3D11 terms)
             NotTexture          = 1u << 0u,
             /// Texture can be used as an RTT (FBO in GL terms)
@@ -166,6 +168,7 @@ namespace Ogre
             ///
             /// If this flag is present, either RenderToTexture or Uav must be present
             DiscardableContent  = 1u << 14u
+            // clang-format on
         };
     }
 
@@ -182,6 +185,74 @@ namespace Ogre
             NumTextureSourceTypes
         };
     }
+
+    namespace CopyEncTransitionMode
+    {
+        /// Copy Encoder Transition modes to be used by TextureGpu::copyTo
+        /// and TextureGpu::_autogenerateMipmaps
+        enum CopyEncTransitionMode
+        {
+            /// The texture layout transitions are left to the copy encoder.
+            /// Texture must NOT be in CopySrc or CopyDst.
+            ///
+            /// Texture will be marked as being in ResourceLayout::CopyEncoderManaged
+            /// in the BarrierSolver
+            ///
+            /// Once the copy encoder is closed (e.g. implicitly or calling
+            /// RenderSystem::endCopyEncoder) all auto managed textures will be
+            /// transitioned to a default layout and BarrierSolver will be informed
+            Auto,
+
+            /// Texture is already transitioned directly via BarrierSolver to
+            /// the expected CopySrc/CopyDst/MipmapGen.
+            ///
+            /// Main reason to do this because you were able to group many
+            /// texture transitions together.
+            ///
+            /// Afterwards management is handed off to the Copy encoder: texture is
+            /// tagged in BarrierSolver as CopyEncoderManaged and behaves like
+            /// CopyEncTransitionMode::Auto.
+            ///
+            /// e.g.
+            ///
+            /// @code
+            ///     solver.resolveTransition( resourceTransitions, src, ResourceLayout::CopySrc,
+            ///                               ResourceAccess::Read, 0u );
+            ///     renderSystem->executeResourceTransition( resourceTransitions );
+            ///     src->copyTo( dst, dstBox, 0u, src->getEmptyBox( 0u ), 0u, keepResolvedTexSynced,
+            ///                  CopyEncTransitionMode::AlreadyInLayoutThenAuto,
+            ///                  CopyEncTransitionMode::Auto );
+            /// @endcode
+            AlreadyInLayoutThenAuto,
+
+            /// Texture is already transitioned directly via BarrierSolver to
+            /// the expected CopySrc/CopyDst/MipmapGen.
+            ///
+            /// After the copyTo/_autogenerateMipmaps calls, caller is
+            /// responsible for using BarrierSolver again.
+            ///
+            /// Note that this can be very dangerous and not recommended!
+            /// The following code is for example a race condition:
+            ///
+            /// @code
+            ///     solver.resolveTransition( rt, a, ResourceLayout::CopySrc,
+            ///                               ResourceAccess::Read, 0u );
+            ///     renderSystem->executeResourceTransition( rt );
+            ///     B->copyTo( A, ... );
+            ///     C->copyTo( A, ... );
+            /// @endcode
+            ///
+            /// The reason is that there should be a barrier between
+            /// the 1st and 2nd copy; otherwise C copy into A may start
+            /// before the copy from B into A finishes; thus A may not
+            /// fully end up with C's contents.
+            ///
+            /// But if you're wary of placing the barriers correctly, you
+            /// have full control and group as many layout transitions
+            /// as possible
+            AlreadyInLayoutThenManual
+        };
+    }  // namespace CopyEncTransitionMode
 
     /**
     @remarks
@@ -219,20 +290,20 @@ namespace Ogre
     class _OgreExport TextureGpu : public GpuTrackedResource, public GpuResource
     {
     protected:
-        uint32      mWidth;
-        uint32      mHeight;
+        uint32 mWidth;
+        uint32 mHeight;
         /// For TypeCube this value is 6. For TypeCubeArray,
         /// it contains the number of cubemaps in the array * 6u.
-        uint32      mDepthOrSlices;
+        uint32 mDepthOrSlices;
         /// Set mNumMipmaps = 0 to auto generate until last level.
         /// mNumMipmaps = 1 means no extra mipmaps other than level 0.
-        uint8       mNumMipmaps;
+        uint8             mNumMipmaps;
         SampleDescription mSampleDescription;
         SampleDescription mRequestedSampleDescription;
 
         /// Used when AutomaticBatching is set. It indicates in which slice
         /// our actual data is, inside a texture array which we do not own.
-        uint16      mInternalSliceStart;
+        uint16 mInternalSliceStart;
 
         /// This setting is for where the texture is created, e.g. its a compositor texture, a shadow
         /// texture or standard texture loaded for a mesh etc...
@@ -242,47 +313,56 @@ namespace Ogre
         /// @see    TextureSourceType::TextureSourceType
         uint8 mSourceType;
 
+        /// See TextureGpu::_isDataReadyImpl
+        ///
+        /// It is increased with every scheduleReupload/scheduleTransitionTo (to resident)
+        /// It is decreased every time the loading is done
+        ///
+        /// _isDataReadyImpl can NOT return true if mDataReady != 0
+        /// _isDataReadyImpl CAN return false if mDataReady == 0
+        uint8 mDataPreparationsPending;
+
         /// This setting can only be altered if mResidencyStatus == OnStorage).
-        TextureTypes::TextureTypes  mTextureType;
-        PixelFormatGpu              mPixelFormat;
+        TextureTypes::TextureTypes mTextureType;
+        PixelFormatGpu             mPixelFormat;
 
         /// See TextureFlags::TextureFlags
-        uint32      mTextureFlags;
+        uint32 mTextureFlags;
         /// Used if hasAutomaticBatching() == true
-        uint32		mPoolId;
+        uint32 mPoolId;
 
         /// If this pointer is nullptr and mResidencyStatus == GpuResidency::OnSystemRam
         /// then that means the data is being loaded to SystemRAM
-        uint8       *mSysRamCopy;
+        uint8 *mSysRamCopy;
 
-        TextureGpuManager   *mTextureManager;
+        TextureGpuManager *mTextureManager;
         /// Used if hasAutomaticBatching() == true
-        TexturePool const   *mTexturePool;
+        TexturePool const *mTexturePool;
 
-        vector<TextureGpuListener*>::type mListeners;
+        vector<TextureGpuListener *>::type mListeners;
 
-        virtual void createInternalResourcesImpl(void) = 0;
-        virtual void destroyInternalResourcesImpl(void) = 0;
+        virtual void createInternalResourcesImpl() = 0;
+        virtual void destroyInternalResourcesImpl() = 0;
 
-        void checkValidSettings(void);
-        void transitionToResident(void);
+        void checkValidSettings();
+        void transitionToResident();
 
     public:
-        TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                    VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                    TextureTypes::TextureTypes initialType,
+        TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
+                    IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                     TextureGpuManager *textureManager );
-        virtual ~TextureGpu();
+        ~TextureGpu() override;
 
-        void _resetTextureManager(void);
+        void _resetTextureManager();
 
         /// Note: This returns the alias name of the texture.
         /// See TextureGpuManager::createOrRetrieveTexture
-        virtual String getNameStr(void) const;
+        String getNameStr() const override;
         /// Returns the real name (e.g. disk in file) of the resource.
-        virtual String getRealResourceNameStr(void) const;
-        virtual String getResourceGroupStr(void) const;
-        String getSettingsDesc(void) const;
+        virtual String getRealResourceNameStr() const;
+        virtual String getResourceGroupStr() const;
+
+        String getSettingsDesc() const;
 
         /** Schedules an async transition in residency. If transitioning from
             OnStorage to Resident, it will read from file (ResourceGroup was set in createTexture)
@@ -310,52 +390,86 @@ namespace Ogre
             Otherwise you must listen for TextureGpuListener::ReadyForRendering
             message to know when we're done using the image.
         */
-        void unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
-                                         Image2 *image=0, bool autoDeleteImage=true );
+        void unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image = 0,
+                                         bool autoDeleteImage = true );
 
         /// Same as unsafeScheduleTransitionTo, but first checks if we're already
         /// in the residency state we want to go to, or if it has already
         /// been scheduled; thus it can be called multiple times
-        void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
-                                   Image2 *image=0, bool autoDeleteImage=true );
+        void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image = 0,
+                                   bool autoDeleteImage = true );
+
+        /** There are times where you want to reload a texture again (e.g. file on
+            disk changed, uploading a new Image2, etc) without visual disruption.
+
+            e.g. if you were to call:
+            @code
+                tex->scheduleTransitionTo( GpuResidency::OnStorage );
+                tex->scheduleTransitionTo( GpuResidency::Resident, ... );
+            @endcode
+
+            you'll achieve the same result, however the texture becomes immediately
+            unavailable causing a few frames were all the user sees is a blank texture
+            until it is fully reloaded.
+
+            This routine allows for an in-place hot-reload, where the old texture
+            is swapped for the new one once it's done loading.
+
+            This is also faster because DescriptorTextureSets don't change
+
+        @remarks
+            1. Assumes the last queued transition to perform is into
+               Resident or OnSystemRam
+            2. Visual hitches are unavoidable if metadata changes (e.g. new
+               texture is of different pixel format, different number of
+               mipmaps, resolution, etc)
+               If that's the case, it is faster to transition to OnStorage,
+               remove the metadata entry from cache, then to Resident again
+
+        @param image
+            See TextureGpu::unsafeScheduleTransitionTo
+        @param autoDeleteImage
+            Same TextureGpu::unsafeScheduleTransitionTo
+        */
+        void scheduleReupload( Image2 *image = 0, bool autoDeleteImage = true );
 
         // See isMetadataReady for threadsafety on these functions.
-        void setResolution( uint32 width, uint32 height, uint32 depthOrSlices=1u );
-        uint32 getWidth(void) const;
-        uint32 getHeight(void) const;
-        uint32 getDepthOrSlices(void) const;
+        void   setResolution( uint32 width, uint32 height, uint32 depthOrSlices = 1u );
+        uint32 getWidth() const;
+        uint32 getHeight() const;
+        uint32 getDepthOrSlices() const;
         /// For TypeCube & TypeCubeArray, this value returns 1.
-        uint32 getDepth(void) const;
+        uint32 getDepth() const;
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
-        uint32 getNumSlices(void) const;
+        uint32 getNumSlices() const;
         /// Real API width accounting for TextureGpu::getOrientationMode
         /// If orientation mode is 90° or 270° then getInternalWidth returns the height and
         /// getInternalHeight returns the width
-        uint32 getInternalWidth(void) const;
+        uint32 getInternalWidth() const;
         /// Real API height accounting for TextureGpu::getOrientationMode. See getInternalWidth
-        uint32 getInternalHeight(void) const;
+        uint32 getInternalHeight() const;
 
-        void setNumMipmaps( uint8 numMipmaps );
-        uint8 getNumMipmaps(void) const;
+        void  setNumMipmaps( uint8 numMipmaps );
+        uint8 getNumMipmaps() const;
 
-        uint32 getInternalSliceStart(void) const;
+        uint16 getInternalSliceStart() const;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
-        TextureTypes::TextureTypes getTextureType(void) const;
-        TextureTypes::TextureTypes getInternalTextureType(void) const;
+        virtual void               setTextureType( TextureTypes::TextureTypes textureType );
+        TextureTypes::TextureTypes getTextureType() const;
+        TextureTypes::TextureTypes getInternalTextureType() const;
 
         void _setSourceType( uint8 type );
         /// @copydoc TextureGpu::mSourceType
-        uint8 getSourceType( void ) const;
+        uint8 getSourceType() const;
 
         /** Sets the pixel format.
         @remarks
             If prefersLoadingFromFileAsSRGB() returns true, the format may not be fully honoured
             (as we'll use the equivalent _SRGB variation).
         */
-        void setPixelFormat( PixelFormatGpu pixelFormat );
-        PixelFormatGpu getPixelFormat(void) const;
+        void           setPixelFormat( PixelFormatGpu pixelFormat );
+        PixelFormatGpu getPixelFormat() const;
 
         void setSampleDescription( SampleDescription desc );
         /// For internal use
@@ -363,10 +477,10 @@ namespace Ogre
 
         /// Returns effective sample description supported by the API.
         /// Note it's only useful after having transitioned to resident.
-        SampleDescription getSampleDescription( void ) const;
+        SampleDescription getSampleDescription() const;
         /// Returns original requested sample description, i.e. the raw input to setSampleDescription
-        SampleDescription getRequestedSampleDescription( void ) const;
-        bool isMultisample( void ) const;
+        SampleDescription getRequestedSampleDescription() const;
+        bool              isMultisample() const;
 
         void copyParametersFrom( TextureGpu *src );
         bool hasEquivalentParameters( TextureGpu *other ) const;
@@ -412,11 +526,11 @@ namespace Ogre
                             bool autoDeleteSysRamCopy = true );
 
         /// Notifies it is safe to use the real data. Everything has been uploaded.
-        virtual void notifyDataIsReady(void) = 0;
+        virtual void notifyDataIsReady() = 0;
 
         /// Forces downloading data from GPU to CPU, usually because the data on GPU changed
         /// and we're in strategy AlwaysKeepSystemRamCopy. May stall.
-        void _syncGpuResidentToSystemRam(void);
+        void _syncGpuResidentToSystemRam();
 
     protected:
         /// Stalls until GPU -> CPU transfers (i.e. _syncGpuResidentToSystemRam) are done
@@ -443,31 +557,17 @@ namespace Ogre
 
             Typically the reason to set this to false is if you plane on rendering more
             stuff to dst texture and then resolve.
-        @param issueBarriers
-                - If issueBarriers & ResourceAccess::Read, then
-                  the copy encoder will issue a barrier for 'this'
-                - If issueBarriers & ResourceAccess::Write, then
-                  the copy encoder will issue a barrier for 'dst'
-
-            Defaults to ResourceAccess::ReadWrite to automatically manage barriers on both src & dst.
-
-            The compositor sets this to ResourceAccess::Undefined to manually manage the barriers
-
-            Some users may have to apply a barrier to individual textures
-            e.g. if src is a RenderTexture but the dst is a regular texture then perform:
-
-            @code
-                solver.resolveTransition( resourceTransitions, src, ResourceLayout::CopySrc,
-                                          ResourceAccess::Read, 0u );
-                renderSystem->executeResourceTransition( resourceTransitions );
-                src->copyTo( dst, dstBox, 0u, src->getEmptyBox( 0u ), 0u, keepResolvedTexSynced,
-                             ResourceAccess::Write );
-            @endcode
+        @param srcTransitionMode
+            Transition mode for 'this'
+        @param dstTransitionMode
+            Transition mode for 'dst'
         */
-        virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true,
-                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
+        virtual void copyTo(
+            TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
+            uint8 srcMipLevel, bool keepResolvedTexSynced = true,
+            CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode = CopyEncTransitionMode::Auto,
+            CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
+                CopyEncTransitionMode::Auto );
 
         /** These 3 values  are used as defaults for the compositor to use, but they may be
             explicitly overriden by a RenderPassDescriptor.
@@ -494,11 +594,11 @@ namespace Ogre
                 PFG_D32_FLOAT
                 PFG_D32_FLOAT_X24_S8_UINT
         */
-        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId(void) const;
-        virtual bool getPreferDepthTexture(void) const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+        virtual void   _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                                PixelFormatGpu desiredDepthBufferFormat );
+        virtual uint16 getDepthBufferPoolId() const;
+        virtual bool   getPreferDepthTexture() const;
+        virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
 
         /** Immediately resolves this texture to the resolveTexture argument.
             Source must be MSAA texture, destination must be non-MSAA.
@@ -513,57 +613,39 @@ namespace Ogre
         */
         void _resolveTo( TextureGpu *resolveTexture );
 
-        /** Tells the API to let the HW autogenerate mipmaps. Assumes the
+        /** Tells the API to let the HW autogenerate mipmaps. Assumes
             allowsAutoMipmaps() == true and isRenderToTexture() == true
-        @param bUseBarrierSolver
-            When false, Vulkan will use an heuristic to detect whether this texture
-            is already in MipmapGen (note: MipmapGen may alias to CopySrc).
-                - If it is in MipmapGen/CopySrc, we assume the texture has been already
-                  transitioned externally by a barrier or the copy encoder; thus
-                  no barrier will be issued
-                - If it is not, then we open the copy encoder to take care
-                  of resource transitions; which is desirable if you wish
-                  to use 'this' only as a texture or for copying data around,
-                  but probably undesirable if you wish to do more transitions using
-                  the BarrierSolver for RenderTexture and/or Uav.
-
-            When true, we force a resource transition using the barrier solver.
-            Calling texture->_autogenerateMipmaps( true ) is exactly the same as doing:
-            @code
-                barrierSolver.resolveTransition( resourceTransitions, texture,
-                                                 ResourceLayout::MipmapGen,
-                                                 ResourceAccess::ReadWrite, 0u );
-                renderSystem->executeResourceTransition( resourceTransitions );
-                texture->_autogenerateMipmaps( false );
-            @endcode
+        @param transitionMode
+            See CopyEncTransitionMode::CopyEncTransitionMode
         */
-        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false ) = 0;
+        virtual void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                                               CopyEncTransitionMode::Auto ) = 0;
         /// Only valid for TextureGpu classes.
         /// TODO: This may be moved to a different class.
-        virtual void swapBuffers(void) {}
+        virtual void swapBuffers() {}
 
-        bool hasAutomaticBatching(void) const;
-        bool isTexture(void) const;
-        bool isRenderToTexture(void) const;
-        bool isUav(void) const;
-        bool allowsAutoMipmaps(void) const;
-        bool hasAutoMipmapAuto(void) const;
-        bool hasMsaaExplicitResolves(void) const;
-        bool isReinterpretable(void) const;
-        bool prefersLoadingFromFileAsSRGB(void) const;
-        bool isRenderWindowSpecific(void) const;
-        bool requiresTextureFlipping(void) const;
-        bool _isManualTextureFlagPresent(void) const;
-        bool isManualTexture(void) const;
-        bool isPoolOwner(void) const;
-        bool isDiscardableContent(void) const;
+        bool hasAutomaticBatching() const;
+        bool isTexture() const;
+        bool isRenderToTexture() const;
+        bool isUav() const;
+        bool allowsAutoMipmaps() const;
+        bool hasAutoMipmapAuto() const;
+        bool hasMsaaExplicitResolves() const;
+        bool isReinterpretable() const;
+        bool prefersLoadingFromFileAsSRGB() const;
+        bool isRenderWindowSpecific() const;
+        bool requiresTextureFlipping() const;
+        bool _isManualTextureFlagPresent() const;
+        bool isManualTexture() const;
+        bool isPoolOwner() const;
+        bool isDiscardableContent() const;
 
         /// OpenGL RenderWindows are a bit specific:
         ///     * Their origins are upside down. Which means we need to flip Y.
         ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
         ///     * Headless windows return false since internally they're FBOs. However
         ///       isRenderWindowSpecific will return true
-        virtual bool isOpenGLRenderWindow( void ) const;
+        virtual bool isOpenGLRenderWindow() const;
 
         /// PUBLIC VARIABLE. This variable can be altered directly.
         ///
@@ -589,11 +671,11 @@ namespace Ogre
             This setting has only been tested with Vulkan and is likely to malfunction
             with the other APIs if set to anything other than OR_DEGREE_0
         */
-        virtual void setOrientationMode( OrientationMode orientationMode );
-        virtual OrientationMode getOrientationMode( void ) const;
+        virtual void            setOrientationMode( OrientationMode orientationMode );
+        virtual OrientationMode getOrientationMode() const;
 
-        ResourceLayout::Layout getDefaultLayout( bool bIgnoreDiscardableFlag = false ) const;
-        virtual ResourceLayout::Layout getCurrentLayout( void ) const;
+        ResourceLayout::Layout         getDefaultLayout( bool bIgnoreDiscardableFlag = false ) const;
+        virtual ResourceLayout::Layout getCurrentLayout() const;
 
         /// Sets the layout the texture should be transitioned to after the next copy operation
         /// (once the copy encoder gets closed)
@@ -601,7 +683,7 @@ namespace Ogre
         /// This is specific to Vulkan & D3D12
         virtual void _setNextLayout( ResourceLayout::Layout layout );
 
-        virtual void _setToDisplayDummyTexture(void) = 0;
+        virtual void _setToDisplayDummyTexture() = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
         /** 2D Texture with automatic batching will be merged with other textures into the
@@ -624,45 +706,47 @@ namespace Ogre
         @param poolId
             Arbitrary value. Default value is 0.
         */
-        void setTexturePoolId( uint32 poolId );
-        uint32 getTexturePoolId(void) const						{ return mPoolId; }
-        const TexturePool* getTexturePool(void) const           { return mTexturePool; }
+        void   setTexturePoolId( uint32 poolId );
+        uint32 getTexturePoolId() const { return mPoolId; }
+
+        const TexturePool *getTexturePool() const { return mTexturePool; }
 
         void addListener( TextureGpuListener *listener );
         void removeListener( TextureGpuListener *listener );
-        void notifyAllListenersTextureChanged( uint32 reason, void *extraData=0 );
+        void notifyAllListenersTextureChanged( uint32 reason, void *extraData = 0 );
 
-        const vector<TextureGpuListener*>::type& getListeners(void) const;
+        const vector<TextureGpuListener *>::type &getListeners() const;
 
         virtual bool supportsAsDepthBufferFor( TextureGpu *colourTarget ) const;
 
         /// Writes the current contents of the render target to the named file.
-        void writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip,
-                                  bool automaticResolve=true );
+        void writeContentsToFile( const String &filename, uint8 minMip, uint8 maxMip,
+                                  bool automaticResolve = true );
 
         /// Writes the current contents of the render target to the memory.
-        void copyContentsToMemory(TextureBox src, TextureBox dst, PixelFormatGpu dstFormat,
-                                   bool automaticResolve=true);
+        void copyContentsToMemory( TextureBox src, TextureBox dst, PixelFormatGpu dstFormat,
+                                   bool automaticResolve = true );
 
         static const IdString msFinalTextureBuffer;
         static const IdString msMsaaTextureBuffer;
+
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 
-        virtual bool isTextureGpu( void ) const;
+        bool isTextureGpu() const override;
 
-        TextureGpuManager* getTextureManager(void) const;
+        TextureGpuManager *getTextureManager() const;
 
         TextureBox getEmptyBox( uint8 mipLevel );
         TextureBox _getSysRamCopyAsBox( uint8 mipLevel );
-        uint8* _getSysRamCopy( uint8 mipLevel );
+        uint8     *_getSysRamCopy( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
-        size_t _getSysRamCopyBytesPerRow( uint8 mipLevel );
+        uint32 _getSysRamCopyBytesPerRow( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerImage( uint8 mipLevel );
 
         /// Returns total size in bytes used in GPU by this texture (not by its pool)
         /// including mipmaps.
-        size_t getSizeBytes(void) const;
+        size_t getSizeBytes() const;
 
         /** It is threadsafe to call this function from main thread.
             If this returns false, then the following functions are not threadsafe:
@@ -683,14 +767,14 @@ namespace Ogre
             the texture from file or a listener (i.e. isManualTexture returns false)
             otherwise you don't need to call these functions.
         */
-        bool isMetadataReady(void) const;
+        bool isMetadataReady() const;
 
         /// For internal use. Do not call directly.
         ///
         /// This function is the same isDataReady except it ignores pending residency changes,
         /// which is important when TextureGpuManager needs to know this information but the
         /// TextureGpu is transitioning (thus mPendingResidencyChanges is in an inconsistent state)
-        virtual bool _isDataReadyImpl(void) const = 0;
+        virtual bool _isDataReadyImpl() const = 0;
 
         /// True if this texture is fully ready to be used for displaying.
         ///
@@ -701,24 +785,42 @@ namespace Ogre
         ///
         /// If this is true, then isMetadataReady is also true.
         /// See isMetadataReady.
-        bool isDataReady( void ) const;
+        bool isDataReady() const;
 
         /// Blocks main thread until metadata is ready. Afterwards isMetadataReady
         /// should return true. If it doesn't, then there was a problem loading
         /// the texture.
         /// See isMetadataReady remarks.
-        void waitForMetadata(void);
+        void waitForMetadata();
 
         /// Blocks main thread until data is ready. Afterwards isDataReady
         /// should return true. If it doesn't, then there was a problem loading
         /// the texture.
         /// See isMetadataReady remarks.
-        void waitForData(void);
+        ///
+        /// Q: What's the penalty for calling this function?
+        ///
+        /// A: We need to wait for the worker thread to finish all previous textures
+        /// until it processes this one. The manager only has broad resolution so
+        /// it may be also possible that we even have to wait the worker thread to
+        /// process a few textures that came *after* this one too.
+        ///
+        /// Thus the cost can be anywhere from "very little" to "a lot" depending on the
+        /// order in which other textures have been loaded.
+        ///
+        /// The real cost is that you lose valuable ability to hide loading times.
+        /// If you must call this function, you can mitigate the problem:
+        ///
+        ///     1. All textures you need to wait for, load them *first* together, then
+        ///        call TextureGpuManager::waitForStreamingCompletion (preferred) or
+        ///        this function. Then proceed to load the rest of the textures.
+        ///     2. If you can't do the above, call this function as late as possible
+        void waitForData();
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

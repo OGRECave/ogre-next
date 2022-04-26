@@ -1,6 +1,6 @@
 /*
   -----------------------------------------------------------------------------
-  This source file is part of OGRE
+  This source file is part of OGRE-Next
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
@@ -28,41 +28,37 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGL3PlusVertexArrayObject.h"
 #include "OgreLogManager.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    GL3PlusOldVertexArrayObject::GL3PlusOldVertexArrayObject() :
-        mVAO(0),
-        mInitialised(false)
+    GL3PlusOldVertexArrayObject::GL3PlusOldVertexArrayObject() : mVAO( 0 ), mInitialised( false )
     {
-        OGRE_CHECK_GL_ERROR(glGenVertexArrays(1, &mVAO));
+        OGRE_CHECK_GL_ERROR( glGenVertexArrays( 1, &mVAO ) );
 
-        if (!mVAO)
+        if( !mVAO )
         {
-            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR,
-                        "Cannot create GL Vertex Array Object",
-                        "GL3PlusOldVertexArrayObject::GL3PlusOldVertexArrayObject");
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Cannot create GL Vertex Array Object",
+                         "GL3PlusOldVertexArrayObject::GL3PlusOldVertexArrayObject" );
         }
     }
 
     //-----------------------------------------------------------------------
     GL3PlusOldVertexArrayObject::~GL3PlusOldVertexArrayObject()
     {
-        if(mVAO)
+        if( mVAO )
         {
-            OGRE_CHECK_GL_ERROR(glDeleteVertexArrays(1, &mVAO));
+            OGRE_CHECK_GL_ERROR( glDeleteVertexArrays( 1, &mVAO ) );
             mVAO = 0;
         }
     }
 
     //-----------------------------------------------------------------------
-    void GL3PlusOldVertexArrayObject::bind(void)
+    void GL3PlusOldVertexArrayObject::bind()
     {
-        if (mVAO)
+        if( mVAO )
         {
-            OGRE_CHECK_GL_ERROR(glBindVertexArray(mVAO));
+            OGRE_CHECK_GL_ERROR( glBindVertexArray( mVAO ) );
         }
     }
 
-
-}
+}  // namespace Ogre
