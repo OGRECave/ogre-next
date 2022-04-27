@@ -55,6 +55,13 @@
 		}
 	@end
 
+	INLINE float log4( float x )
+	{
+		// log2(x)/log2(4)
+		// log2(x)/2
+		return log2( x ) * 0.5;
+	}
+
 	//
 	// Attributed to:
 	// http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
@@ -176,8 +183,11 @@
 				float pdf = Dh / 4;
 				float solidAngleTexel = 4 * PI / ( 6 * p_inputResolution.x * p_inputResolution.x );
 				float solidAngleSample = 1.0 / ( p_convolutionSampleCount * pdf );
+
+				// K is a LOD bias that allows a bit of overlapping between samples
+				float K = 4;
 				float lod =
-					p_convolutionRoughness == 0 ? 0 : 0.5 * log2( solidAngleSample / solidAngleTexel );
+					p_convolutionRoughness == 0 ? 0 : log4( solidAngleSample ) - log4( solidAngleTexel ) + log4( K );
 
 				float4 sampleValue = OGRE_SampleLevel( convolutionSrc, EnvMapSampler, L, lod );
 				alphaValue += sampleValue.a * NoL;
