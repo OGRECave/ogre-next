@@ -312,6 +312,8 @@ namespace Ogre
 
         /// See VaoManager::isFrameFinished
         bool isFrameFinished( uint32 frameCount ) override;
+        
+        void waitUntilCommitedCommandBufferCompleted() override;
 
         /** Will stall undefinitely until GPU finishes (signals the sync object).
         @param fenceName
