@@ -595,6 +595,8 @@ namespace Ogre
 
         /// If this returns true, then waitForSpecificFrameToFinish is guaranteed to return immediately.
         virtual bool isFrameFinished( uint32 frameCount ) = 0;
+        
+        virtual void waitUntilCommitedCommandBufferCompleted(){};    //required for BT_DEFAULT_SHARED buffers upload
     };
 }  // namespace Ogre
 

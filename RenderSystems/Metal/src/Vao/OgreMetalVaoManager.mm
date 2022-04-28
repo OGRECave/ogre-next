@@ -1469,6 +1469,13 @@ namespace Ogre
 
         return retVal;
     }
+    
+    void MetalVaoManager::waitUntilCommitedCommandBufferCompleted()
+    {
+        if(mDevice)
+            mDevice->waitUntilCommitedCommandBufferCompleted();
+    }
+
     //-----------------------------------------------------------------------------------
     dispatch_semaphore_t MetalVaoManager::waitFor( dispatch_semaphore_t fenceName, MetalDevice *device )
     {
