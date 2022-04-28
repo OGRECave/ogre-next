@@ -4,7 +4,9 @@
 
 #include "OgrePrerequisites.h"
 
-#include "OgreAtmosphereNpr.h"
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+#    include "OgreAtmosphereNpr.h"
+#endif
 
 #include "TutorialGameState.h"
 
