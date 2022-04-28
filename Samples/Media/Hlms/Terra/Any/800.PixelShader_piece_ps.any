@@ -363,6 +363,18 @@
 		@property( needs_env_brdf )
 			@insertpiece( BRDF_EnvMap )
 		@end
+
+		@property( hlms_fog )
+			const float distToCamera = length( inPs.pos.xyz );
+			const midf luminance = dot( finalColour.xyz,
+										midf3_c( _h( 0.212655 ), _h( 0.715158 ), _h( 0.072187 ) ) );
+			const midf lumFogWeight = max( exp2( atmoSettings.fogBreakFalloff * luminance +
+												 atmoSettings.fogBreakMinBrightness ),
+										   _h( 0.0 ) );
+			midf fogWeight = midf_c( exp2( -distToCamera * atmoSettings.fogDensity ) );
+			fogWeight = lerp( _h( 1.0 ), fogWeight, lumFogWeight );
+			finalColour.xyz = lerp( inPs.fog.xyz, finalColour.xyz, fogWeight );
+		@end
 	@end ///!hlms_prepass
 
 	@property( !hlms_render_depth_only )

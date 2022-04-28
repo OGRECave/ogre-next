@@ -1,6 +1,6 @@
-# Resolving Merge Conflicts in Ogre-Next 2.4 {#ResolvingMergeConflicts24}
+# Resolving Merge Conflicts in Ogre-Next 3.0 {#ResolvingMergeConflicts30}
 
-In Ogre-Next 2.4 we performed multiple changes that affected nearly the entire code base in subtle ways:
+In Ogre-Next 3.0 we performed multiple changes that affected nearly the entire code base in subtle ways:
 
  - Codebase was C++11-fied (e.g. added `override` and `final` keywords)
  - `SharedPtr` was replaced with `std::shared_ptr` and lots of its code was deprecated
@@ -11,14 +11,14 @@ Users who run a customized version of Ogre-Next may found rebasing to the latest
 
 To perform this task with more easily, we recommend the following:
 
- 1. Merge your changes with `master` branch (or 2.4 when it appears)
+ 1. Merge your changes with `master` branch (or 3.0 when it appears)
  2. Resolve all conflicts with `your code`
  3. Apply clang-format-13 again
  4. Inspect the diff again to check for any auto-merge mistakes and fix them
  5. Rebuild code to ensure it still compiles and runs
  6. Commit
 
-Now you have your changes applied on top of Ogre-Next 2.4!
+Now you have your changes applied on top of Ogre-Next 3.0!
 
 ## Notes:
 

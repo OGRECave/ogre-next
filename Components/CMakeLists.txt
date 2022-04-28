@@ -12,6 +12,10 @@
 # Use same build type for components as main build
 set(OGRE_COMP_LIB_TYPE ${OGRE_LIB_TYPE})
 
+if (OGRE_BUILD_COMPONENT_ATMOSPHERE)
+    add_subdirectory(Atmosphere)
+endif ()
+
 if (OGRE_BUILD_COMPONENT_HLMS_PBS)
 	add_subdirectory(Hlms/Pbs)
 endif ()

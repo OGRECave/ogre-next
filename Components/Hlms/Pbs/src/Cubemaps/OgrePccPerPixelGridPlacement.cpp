@@ -243,9 +243,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     Vector3 PccPerPixelGridPlacement::getProbeNormalizedCenter( size_t probeIdx ) const
     {
-        const uint32 xPos = probeIdx % mNumProbes[0];
-        const uint32 yPos = ( probeIdx / mNumProbes[0] ) % mNumProbes[1];
-        const uint32 zPos = static_cast<uint32>( probeIdx / ( mNumProbes[0] * mNumProbes[1] ) );
+        const float xPos = float( probeIdx % mNumProbes[0] );
+        const float yPos = float( ( probeIdx / mNumProbes[0] ) % mNumProbes[1] );
+        const float zPos = float( probeIdx / ( mNumProbes[0] * mNumProbes[1] ) );
 
         const Vector3 normalizedCenter( ( xPos + 0.5f ) / static_cast<float>( mNumProbes[0] ),
                                         ( yPos + 0.5f ) / static_cast<float>( mNumProbes[1] ),

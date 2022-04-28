@@ -73,12 +73,12 @@ namespace Ogre
 
         /** Creates a special GL3PlusTextureGpuWindow pointer, to be used by Ogre::Window.
             The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
-            If caller doesnt' delete it, it will leak.
+            If caller doesn't delete it, it will leak.
         */
         TextureGpu *createTextureGpuWindow( GL3PlusContext *context, Window *window );
 
         /// See EglPBufferWindow. We do not track this pointer.
-        /// If caller doesnt' delete it, it will leak.
+        /// If caller doesn't delete it, it will leak.
         TextureGpu *createTextureGpuHeadlessWindow( GL3PlusContext *context, Window *window );
 
         GLuint getBlankTextureGlName( TextureTypes::TextureTypes textureType ) const;

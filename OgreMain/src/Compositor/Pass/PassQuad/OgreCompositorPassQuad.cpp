@@ -209,8 +209,8 @@ namespace Ogre
 
         if( mHorizonalTexelOffset != 0 || mVerticalTexelOffset != 0 )
         {
-            const Real hOffset = 2.0f * mHorizonalTexelOffset / mAnyTargetTexture->getWidth();
-            const Real vOffset = 2.0f * mVerticalTexelOffset / mAnyTargetTexture->getHeight();
+            const Real hOffset = 2.0f * mHorizonalTexelOffset / Real( mAnyTargetTexture->getWidth() );
+            const Real vOffset = 2.0f * mVerticalTexelOffset / Real( mAnyTargetTexture->getHeight() );
 
             // The rectangle is shared, set the corners each time
             mFsRect->setCorners( 0.0f + hOffset, 0.0f - vOffset, 1.0f, 1.0f );

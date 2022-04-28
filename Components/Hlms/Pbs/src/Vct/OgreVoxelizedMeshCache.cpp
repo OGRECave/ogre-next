@@ -111,7 +111,8 @@ namespace Ogre
     inline uint32 calculateMeshResolution( uint32 width, const float actualLength,
                                            const float referenceLength, uint32 maxWidth )
     {
-        uint32 finalRes = static_cast<uint32>( roundf( width * actualLength / referenceLength ) );
+        uint32 finalRes =
+            static_cast<uint32>( roundf( float( width ) * actualLength / referenceLength ) );
         finalRes = getNextPowerOf2( finalRes );
         finalRes = std::min( finalRes, maxWidth );
         finalRes = std::max( finalRes, 1u );

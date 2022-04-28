@@ -50,6 +50,7 @@ namespace Ogre
      *  @{
      */
 
+    struct AbiCookie;
     class FrameStats;
     typedef vector<RenderSystem *>::type RenderSystemList;
 
@@ -223,6 +224,11 @@ namespace Ogre
 
     public:
         /** Constructor
+        @param abiCookie
+            ABI Cookie for catching ABI mismatches (highly recommended!)
+            Can be nullptr to skip ABI check.
+            See generateAbiCookie
+            See testAbiCookie
         @param pluginFileName The file that contains plugins information.
             Defaults to "plugins.cfg" in release build and to "plugins_d.cfg"
             in debug build. May be left blank to ignore.
@@ -234,7 +240,8 @@ namespace Ogre
             Name for this app. Use this string so driver vendors can create custom driver profiles
             (e.g. through NVIDIA's or AMD's control panel)
         */
-        Root( const String &pluginFileName = "plugins" OGRE_BUILD_SUFFIX ".cfg",
+        Root( const AbiCookie *abiCookie = 0,
+              const String    &pluginFileName = "plugins" OGRE_BUILD_SUFFIX ".cfg",
               const String &configFileName = "ogre.cfg", const String &logFileName = "Ogre.log",
               const String &appName = "" );
         ~Root();

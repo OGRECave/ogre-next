@@ -51,7 +51,7 @@ namespace Ogre
      *     required. This is crucial if, say, GLSL compiler reports you an error
      *     with a line number.
      * <li>#define: Parametrized and non-parametrized macros. Invoking a macro with
-     *     less arguments than it takes assignes empty values to missing arguments.
+     *     less arguments than it takes assigns empty values to missing arguments.
      * <li>#undef: Forget defined macros
      * <li>#ifdef/#ifndef/#else/#endif: Conditional suppression of parts of code.
      * <li>#if: Supports numeric expression of any complexity, also supports the

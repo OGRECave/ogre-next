@@ -122,7 +122,7 @@ int mainApp( int argc, const char *argv[] )
             Ogre::Threads::Sleep( 40 );
 
         Ogre::uint64 endTime = timer.getMicroseconds();
-        timeSinceLast = ( endTime - startTime ) / 1000000.0;
+        timeSinceLast = double( endTime - startTime ) / 1000000.0;
         timeSinceLast = std::min( 1.0, timeSinceLast );  // Prevent from going haywire.
         accumulator += timeSinceLast;
         startTime = endTime;

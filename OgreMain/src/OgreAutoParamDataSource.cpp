@@ -1062,12 +1062,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------
     Real AutoParamDataSource::getInverseViewportWidth() const
     {
-        return 1.0f / mCurrentViewport->getActualWidth();
+        return Real( 1.0 ) / Real( mCurrentViewport->getActualWidth() );
     }
     //-----------------------------------------------------------------------------
     Real AutoParamDataSource::getInverseViewportHeight() const
     {
-        return 1.0f / mCurrentViewport->getActualHeight();
+        return Real( 1.0 ) / Real( mCurrentViewport->getActualHeight() );
     }
     //-----------------------------------------------------------------------------
     Vector3 AutoParamDataSource::getViewDirection() const

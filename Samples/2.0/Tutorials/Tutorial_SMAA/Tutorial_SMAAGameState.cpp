@@ -72,8 +72,8 @@ namespace Demo
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 2.0f,
-                                              ( j - 1.5f ) * armsLength );
+                mSceneNode[idx]->setPosition( ( Ogre::Real( i ) - 1.5f ) * armsLength, 2.0f,
+                                              ( Ogre::Real( j ) - 1.5f ) * armsLength );
                 mSceneNode[idx]->setScale( 0.65f, 0.65f, 0.65f );
 
                 mSceneNode[idx]->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -129,7 +129,7 @@ namespace Demo
         if( mAnimateObjects )
         {
             for( int i = 0; i < 16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.125f ) );
+                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * float( i ) * 0.125f ) );
         }
 
         TutorialGameState::update( timeSinceLast );

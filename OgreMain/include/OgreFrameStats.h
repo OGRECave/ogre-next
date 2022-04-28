@@ -58,12 +58,12 @@ namespace Ogre
         float getFps() const { return 1000.0f / getLastTime(); }
         float getAvgFps() const { return 1000.0f / getAvgTime(); }
 
-        float getBestTime() const { return mBestFrameTime * 0.001f; }
-        float getWorstTime() const { return mWorstFrameTime * 0.001f; }
+        float getBestTime() const { return float( mBestFrameTime ) * 0.001f; }
+        float getWorstTime() const { return float( mWorstFrameTime ) * 0.001f; }
         float getLastTime() const
         {
-            return mFrameTimes[( mNextFrame + OGRE_FRAME_STATS_SAMPLES - 1 ) %
-                               OGRE_FRAME_STATS_SAMPLES] *
+            return float( mFrameTimes[( mNextFrame + OGRE_FRAME_STATS_SAMPLES - 1 ) %
+                                      OGRE_FRAME_STATS_SAMPLES] ) *
                    0.001f;
         }
 
@@ -85,7 +85,7 @@ namespace Ogre
                 avg += mFrameTimes[idx];
             }
 
-            return avg / (float)mFramesSampled * 0.001f;
+            return float( avg ) / (float)mFramesSampled * 0.001f;
         }
 
         /// Adds a new measured time, in *microseconds*

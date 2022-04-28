@@ -1,6 +1,6 @@
 # Manual {#manual}
 
-This manual is aimed at making the transition to Ogre 2.0 as less
+This manual is aimed at making the transition to Ogre 2.3 as less
 painful and traumatic as possible.
 
 - @subpage Samples
@@ -21,4 +21,5 @@ painful and traumatic as possible.
 - @subpage BehavorStagingTextureD3D11
 - @subpage Ogre23Changes
 - @subpage RootLayouts
-- @subpage ResolvingMergeConflicts24
+- @subpage ResolvingMergeConflicts30
+- @subpage Ogre30Changes

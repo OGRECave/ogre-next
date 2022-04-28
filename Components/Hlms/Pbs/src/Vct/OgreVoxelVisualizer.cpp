@@ -137,7 +137,8 @@ namespace Ogre
             pass->getTextureUnitState( 0 )->setTexture( texture );
         }
 
-        Aabb aabb( Vector3( width, height, depth ) * 0.5f, Vector3( width, height, depth ) * 0.5f );
+        Aabb aabb( Vector3( Real( width ), Real( height ), Real( depth ) ) * 0.5f,
+                   Vector3( Real( width ), Real( height ), Real( depth ) ) * 0.5f );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();

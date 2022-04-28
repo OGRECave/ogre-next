@@ -19,7 +19,7 @@ extern "C" {
 /* New types shared by several extensions */
 
 #ifndef __gl3_h_
-/* These are defineed with respect to <inttypes.h> in the
+/* These are defined with respect to <inttypes.h> in the
  * Apple extension spec, but they are also used by non-APPLE
  * extensions, and in the Khronos header we use the Khronos
  * portable types in khrplatform.h, which must be defined.

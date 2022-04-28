@@ -69,7 +69,8 @@ namespace Demo
                 Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                                  ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                sceneNode->setPosition( ( i - 1.5f ) * armsLength, 2.0f, ( j - 1.5f ) * armsLength );
+                sceneNode->setPosition( ( Ogre::Real( i ) - 1.5f ) * armsLength, 2.0f,
+                                        ( Ogre::Real( j ) - 1.5f ) * armsLength );
                 sceneNode->setScale( 0.65f, 0.65f, 0.65f );
 
                 sceneNode->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -94,10 +95,9 @@ namespace Demo
         // We need to set the parameters based on camera to the
         // shader so that the un-projection works as expected
         Ogre::MaterialPtr material =
-                std::static_pointer_cast<Ogre::Material>(
-            Ogre::MaterialManager::getSingleton()
-                .load( "ReconstructPosFromDepth",
-                       Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ));
+            std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                "ReconstructPosFromDepth",
+                Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
         Ogre::GpuProgramParametersSharedPtr psParams = pass->getFragmentProgramParameters();

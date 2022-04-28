@@ -9,7 +9,7 @@
 
 # Configure Ogre HLMS Physically Based Shading for OpenGL 3.3+ and D3D11 build
 
-PROJECT(OgreHlmsPbs)
+PROJECT(${OGRE_NEXT}HlmsPbs)
 
 file(
 	GLOB HEADER_FILES
@@ -40,16 +40,18 @@ if( OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS )
 	ogre_add_component_include_dir( PlanarReflections )
 endif()
 
-ogre_add_library(OgreHlmsPbs ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
-set_target_properties(OgreHlmsPbs PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
-target_link_libraries(OgreHlmsPbs OgreMain)
+add_definitions( -DOgreHlmsPbs_EXPORTS )
+
+ogre_add_library(${OGRE_NEXT}HlmsPbs ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
+set_target_properties(${OGRE_NEXT}HlmsPbs PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
+target_link_libraries(${OGRE_NEXT}HlmsPbs ${OGRE_NEXT}Main)
 
 if( OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS )
-	target_link_libraries( OgreHlmsPbs OgrePlanarReflections )
+	target_link_libraries( ${OGRE_NEXT}HlmsPbs ${OGRE_NEXT}PlanarReflections )
 endif()
 
-ogre_config_framework(OgreHlmsPbs)
-ogre_config_component(OgreHlmsPbs)
+ogre_config_framework(${OGRE_NEXT}HlmsPbs)
+ogre_config_component(${OGRE_NEXT}HlmsPbs)
 
 install (DIRECTORY include/
         DESTINATION include/OGRE/Hlms/Pbs

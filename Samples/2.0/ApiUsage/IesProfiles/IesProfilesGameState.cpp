@@ -101,7 +101,7 @@ namespace Demo
             Ogre::Light *light = sceneManager->createLight();
             Ogre::SceneNode *lightNode = rootNode->createChildSceneNode();
             lightNode->attachObject( light );
-            lightNode->setPosition( ( i - c_numAreaLights * 0.5f ) * 6.0f, 8.0f, -0.5f );
+            lightNode->setPosition( ( float( i ) - c_numAreaLights * 0.5f ) * 6.0f, 8.0f, -0.5f );
             light->setPowerScale( lightProfiles[i].power );
             light->setType( Ogre::Light::LT_SPOTLIGHT );
             light->setDirection( Ogre::Vector3( 0, -1, 0 ).normalisedCopy() );

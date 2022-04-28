@@ -276,10 +276,9 @@ namespace Ogre
         if already created) and change the entire pointer.
     @par
         Each datablock has a pair of macroblocks and blendblocks. One of is for the regular passes,
-        the other is for shadow mapping passes, since often you don't want them to be the same.
-        Shadow mapping often wants to reverse culling (@see HlmsManager::setShadowMappingUseBackFaces)
-        or use some depth bias. As for blendblocks, with transparent objects you may want to
-        turn off alpha blending, but enable alpha testing instead.
+        the other is for shadow mapping passes, since in some cases you don't want them to be the same.
+        As for blendblocks, with transparent objects you may want to turn off alpha blending,
+        but enable alpha testing instead.
     */
     class _OgreExport HlmsDatablock : public OgreAllocatedObj
     {

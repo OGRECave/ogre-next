@@ -464,7 +464,7 @@ namespace Ogre
             instance->history.maxTimeMillisecs = frameTimeMillisecs;
         }
 
-        if( instance->frame.frameTime > maxFrameTime )
+        if( instance->frame.frameTime > uint64( maxFrameTime ) )
             maxFrameTime = (Real)instance->frame.frameTime;
 
         ProfileChildrenVec::iterator it = instance->children.begin(), endit = instance->children.end();
@@ -615,7 +615,7 @@ namespace Ogre
         LogManager::getSingleton().logMessage(
             indent + "Name " + name + " | Min " + StringConverter::toString( history.minTimePercent ) +
             " | Max " + StringConverter::toString( history.maxTimePercent ) + " | Avg " +
-            StringConverter::toString( history.totalTimePercent / history.totalCalls ) );
+            StringConverter::toString( history.totalTimePercent / Real( history.totalCalls ) ) );
 
         for( ProfileChildrenVec::iterator it = children.begin(); it != children.end(); ++it )
         {

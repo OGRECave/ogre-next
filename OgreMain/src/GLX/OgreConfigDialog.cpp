@@ -446,7 +446,7 @@ namespace Ogre
             const size_t width = (size_t)mWidth;
             for( size_t y = 0u; y < height; ++y )
             {
-                const float yGradient = sqrtf( y / (float)height );
+                const float yGradient = sqrtf( float( y ) / (float)height );
                 for( size_t x = 0u; x < width; ++x )
                 {
                     ColourValue colour = dstBox.getColourAt( x, y, 0u, intermediateFormat );

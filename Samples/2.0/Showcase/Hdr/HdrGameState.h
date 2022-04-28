@@ -1,8 +1,11 @@
 
-#ifndef _Demo_HdrGameState_H_
-#define _Demo_HdrGameState_H_
+#ifndef Demo_HdrGameState_H_
+#define Demo_HdrGameState_H_
 
 #include "OgrePrerequisites.h"
+
+#include "OgreAtmosphereNpr.h"
+
 #include "TutorialGameState.h"
 
 namespace Demo
@@ -12,6 +15,10 @@ namespace Demo
         Ogre::SceneNode *mSceneNode[16];
 
         Ogre::SceneNode *mLightNodes[3];
+
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        Ogre::AtmosphereNpr *mAtmosphere;
+#endif
 
         bool mAnimateObjects;
         Ogre::uint32 mCurrentPreset;

@@ -1288,19 +1288,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     const String &RenderSystem::_getDefaultViewportMaterialScheme() const
     {
-#ifdef RTSHADER_SYSTEM_BUILD_CORE_SHADERS
-        if( !( getCapabilities()->hasCapability( Ogre::RSC_FIXED_FUNCTION ) ) )
-        {
-            // I am returning the exact value for now - I don't want to add dependency for the RTSS just
-            // for one string
-            static const String ShaderGeneratorDefaultScheme = "ShaderGeneratorDefaultScheme";
-            return ShaderGeneratorDefaultScheme;
-        }
-        else
-#endif
-        {
-            return MaterialManager::DEFAULT_SCHEME_NAME;
-        }
+        return MaterialManager::DEFAULT_SCHEME_NAME;
     }
     //---------------------------------------------------------------------
     Ogre::v1::HardwareVertexBufferSharedPtr RenderSystem::getGlobalInstanceVertexBuffer() const

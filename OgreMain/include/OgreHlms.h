@@ -80,7 +80,7 @@ namespace Ogre
             that PSOs require additional information, such as HlmsMacroblock. HlmsBlendblock.
             For more information of all that is required, see HlmsPso
     */
-    class _OgreExport Hlms : public OgreAllocatedObj
+    class _OgreExport Hlms : public AllocatedObject<AlignAllocPolicy<>>
     {
     public:
         friend class HlmsDiskCache;
@@ -973,6 +973,7 @@ namespace Ogre
         static const IdString UseSsr;
         // Per pass. Related with ScreenSpaceRefractions
         static const IdString SsRefractionsAvailable;
+        static const IdString Fog;
         static const IdString EnableVpls;
         static const IdString ForwardPlus;
         static const IdString ForwardPlusFlipY;

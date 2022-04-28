@@ -86,7 +86,7 @@ namespace Ogre
         mLibrary = nil;
         mFunction = nil;
 
-        // Have to call this here reather than in Resource destructor
+        // Have to call this here rather than in Resource destructor
         // since calling virtual methods in base destructors causes crash
         if( isLoaded() )
         {
@@ -248,7 +248,7 @@ namespace Ogre
         if( !mFunction )
         {
             mCompiled = false;
-            LogManager::getSingleton().logMessage( "Error retriving entry point '" + mEntryPoint +
+            LogManager::getSingleton().logMessage( "Error retrieving entry point '" + mEntryPoint +
                                                    "' in shader " + mName );
         }
 

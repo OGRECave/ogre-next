@@ -559,15 +559,13 @@ namespace Ogre
             or set it to false to leave the current macroblock as is.
         @param oneSidedShadowCast
             If changeMacroblock == true; this parameter controls the culling mode of the
-            shadow caster (the setting of HlmsManager::setShadowMappingUseBackFaces is ignored!).
+            shadow caster.
             While oneSidedShadowCast == CULL_NONE is usually the "correct" option, setting
             oneSidedShadowCast=CULL_ANTICLOCKWISE can prevent ugly self-shadowing on interiors.
         */
         void setTwoSidedLighting( bool twoSided, bool changeMacroblock = true,
-                                  CullingMode oneSidedShadowCast = CULL_ANTICLOCKWISE );
+                                  CullingMode oneSidedShadowCast = CULL_NONE );
         bool getTwoSidedLighting() const;
-
-        bool hasCustomShadowMacroblock() const override;
 
         void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
                            bool useAlphaFromTextures = true ) override;

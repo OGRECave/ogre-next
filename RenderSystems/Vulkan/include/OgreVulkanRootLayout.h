@@ -72,7 +72,7 @@ namespace Ogre
 
         /// When mArrayRanges is not empty, there's more emulated slots than bindings slots
         /// So when we're filling descriptors via VkWriteDescriptorSet/vkUpdateDescriptorSets
-        /// we must substracts the amount of slots that belong to arrays
+        /// we must subtracts the amount of slots that belong to arrays
         ///
         /// In other words this variable tracks how many slots have been "taken away" by arrays
         ///

@@ -321,13 +321,13 @@ namespace v1 {
 
         // Generate the group of rings for the sphere
         for( int ring = 0; ring <= NUM_RINGS; ring++ ) {
-            float r0 = SPHERE_RADIUS * sinf (ring * fDeltaRingAngle);
-            float y0 = SPHERE_RADIUS * cosf (ring * fDeltaRingAngle);
+            float r0 = SPHERE_RADIUS * sinf( Real( ring ) * fDeltaRingAngle );
+            float y0 = SPHERE_RADIUS * cosf( Real( ring ) * fDeltaRingAngle );
 
             // Generate the group of segments for the current ring
             for(int seg = 0; seg <= NUM_SEGMENTS; seg++) {
-                float x0 = r0 * sinf(seg * fDeltaSegAngle);
-                float z0 = r0 * cosf(seg * fDeltaSegAngle);
+                float x0 = r0 * sinf( Real( seg ) * fDeltaSegAngle );
+                float z0 = r0 * cosf( Real( seg ) * fDeltaSegAngle );
 
                 // Add one vertex to the strip which makes up the sphere
                 *pVertex++ = x0;

@@ -2557,12 +2557,12 @@ namespace Ogre
             break;
         case GPT_HULL_PROGRAM:
             mActiveTessellationHullGpuProgramParameters = params;
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Tesselation is different in Metal.",
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Tessellation is different in Metal.",
                          "MetalRenderSystem::bindGpuProgramParameters" );
             break;
         case GPT_DOMAIN_PROGRAM:
             mActiveTessellationDomainGpuProgramParameters = params;
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Tesselation is different in Metal.",
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Tessellation is different in Metal.",
                          "MetalRenderSystem::bindGpuProgramParameters" );
             break;
         case GPT_COMPUTE_PROGRAM:

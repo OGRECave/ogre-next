@@ -230,19 +230,19 @@ CONST_BUFFER_STRUCT_END( passBuf );
 
 @property( use_light_buffers )
 
-CONST_BUFFER_STRUCT_BEGIN( Light0Buffer, 4 )
+CONST_BUFFER_STRUCT_BEGIN( Light0Buffer, 3 )
 {
 	Light lights[16];
 }
 CONST_BUFFER_STRUCT_END( light0Buf );
 
-CONST_BUFFER_STRUCT_BEGIN( Light1Buffer, 5 )
+CONST_BUFFER_STRUCT_BEGIN( Light1Buffer, 4 )
 {
 	AreaLight areaApproxLights[2];
 }
 CONST_BUFFER_STRUCT_END( light1Buf );
 
-CONST_BUFFER_STRUCT_BEGIN( Light2Buffer, 6 )
+CONST_BUFFER_STRUCT_BEGIN( Light2Buffer, 5 )
 {
 	AreaLtcLight areaLtcLights[2];
 }
@@ -263,9 +263,9 @@ CONST_BUFFER_STRUCT_END( light2Buf );
 	@piece( PassDecl )
 	, constant PassBuffer &passBuf [[buffer(CONST_SLOT_START+0)]]
 	@property( use_light_buffers )
-	, constant Light0Buffer &light0Buf [[buffer(CONST_SLOT_START+4)]]
-	, constant Light1Buffer &light1Buf [[buffer(CONST_SLOT_START+5)]]
-	, constant Light2Buffer &light2Buf [[buffer(CONST_SLOT_START+6)]]
+	, constant Light0Buffer &light0Buf [[buffer(CONST_SLOT_START+3)]]
+	, constant Light1Buffer &light1Buf [[buffer(CONST_SLOT_START+4)]]
+	, constant Light2Buffer &light2Buf [[buffer(CONST_SLOT_START+5)]]
 	@end // use_light_buffers
 	@end
 @end
@@ -372,12 +372,12 @@ struct Material
 @property( envprobe_map && envprobe_map != target_envprobe_map && use_parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 @piece( PccManualProbeDecl )
 	@property( syntax != metal )
-		CONST_BUFFER( ManualProbe, 3 )
+		CONST_BUFFER( ManualProbe, @value( num_pass_const_buffers ) )
 		{
 			CubemapProbe manualProbe;
 		};
 	@else
-		, constant CubemapProbe &manualProbe [[buffer(CONST_SLOT_START+3)]]
+		, constant CubemapProbe &manualProbe [[buffer(CONST_SLOT_START+@value( num_pass_const_buffers ))]]
 	@end
 @end
 @end
@@ -436,6 +436,11 @@ struct Material
 
 		@property( hlms_forwardplus && hlms_instanced_stereo )
 			INTERPOLANT( float3 cullCamPosXY, @counter(texcoord) );
+		@end
+
+		@property( hlms_fog )
+			// fog.xyz = colour
+			INTERPOLANT( midf3 fog, @counter(texcoord) );
 		@end
 	@else
 		@property( alpha_test )

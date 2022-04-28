@@ -89,7 +89,7 @@ namespace Ogre
             if( particle_time < 0.0f )
                 particle_time = 0.0f;
 
-            const Real float_index = particle_time * width;
+            const Real float_index = particle_time * Real( width );
             const size_t index = static_cast<size_t>( float_index );
 
             if( index >= width )

@@ -103,8 +103,8 @@ namespace Ogre
             mCoversEntireTarget = true;
             return;
         }
-        Real height = (Real)( mCurrentTarget->getHeight() >> mCurrentMip );
-        Real width = (Real)( mCurrentTarget->getWidth() >> mCurrentMip );
+        const Real height = (Real)( mCurrentTarget->getHeight() >> mCurrentMip );
+        const Real width = (Real)( mCurrentTarget->getWidth() >> mCurrentMip );
 
         assert( mScissorRelLeft >= mRelLeft && mScissorRelTop >= mRelTop &&
                 mScissorRelWidth <= mRelWidth && mScissorRelHeight <= mRelHeight &&
@@ -122,8 +122,8 @@ namespace Ogre
 
         mScissorsMatchViewport = mActLeft == mScissorActLeft && mActTop == mScissorActTop &&
                                  mActWidth == mScissorActWidth && mActHeight == mScissorActHeight;
-        mCoversEntireTarget = mActLeft == 0 && mActTop == 0 && mActWidth == width &&
-                              mActHeight == height && mScissorsMatchViewport;
+        mCoversEntireTarget = mActLeft == 0 && mActTop == 0 && mActWidth == int( width ) &&
+                              mActHeight == int( height ) && mScissorsMatchViewport;
 
         mUpdated = true;
     }

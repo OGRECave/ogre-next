@@ -381,5 +381,4 @@ namespace Ogre
                 *hue -= 1.0f;
         }
     }
-
 }  // namespace Ogre

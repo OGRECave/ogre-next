@@ -88,7 +88,7 @@ namespace Ogre
         normalizedDepth = Math::Sqrt( normalizedDepth );
 
         normalizedDepth = 1.0f - normalizedDepth;*/
-        Real normalizedDepth = uSlice / static_cast<Real>( mNumSlices - 1 );
+        Real normalizedDepth = Real( uSlice ) / static_cast<Real>( mNumSlices - 1 );
         return -( ( normalizedDepth * mMaxDistance ) - mMinDistance );
     }
     //-----------------------------------------------------------------------------------
@@ -103,15 +103,15 @@ namespace Ogre
         normalizedDepth = 1.0f - normalizedDepth;*/
         Real normalizedDepth = Math::saturate( ( -depth + mMinDistance ) * mInvMaxDistance );
 
-        return static_cast<uint32>( floorf( normalizedDepth * ( mNumSlices - 1 ) ) );
+        return static_cast<uint32>( std::floor( normalizedDepth * Real( mNumSlices - 1u ) ) );
     }
     //-----------------------------------------------------------------------------------
     inline void Forward3D::projectionSpaceToGridSpace( const Vector2 &projSpace, uint32 slice,
                                                        uint32 &outX, uint32 &outY ) const
     {
         const Resolution &res = mResolutionAtSlice[slice];
-        Real fx = Math::saturate( projSpace.x ) * res.width;
-        Real fy = Math::saturate( projSpace.y ) * res.height;
+        Real fx = Math::saturate( projSpace.x ) * Real( res.width );
+        Real fy = Math::saturate( projSpace.y ) * Real( res.height );
         outX = static_cast<uint32>( std::min( std::floor( fx ), Real( res.width - 1 ) ) );
         outY = static_cast<uint32>( std::min( std::floor( fy ), Real( res.height - 1 ) ) );
     }

@@ -37,6 +37,7 @@ vertex PS_INPUT main_metal
 	@property( hlms_shadowcaster )
 		@insertpiece( MaterialDecl )
 	@end
+	@insertpiece( AtmosphereNprSkyDecl )
 	@property( !terra_use_uint )
 		, texture2d<float, access::read> heightMap [[texture(@value(heightMap))]]
 	@else

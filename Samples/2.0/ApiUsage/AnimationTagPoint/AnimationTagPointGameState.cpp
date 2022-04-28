@@ -75,7 +75,7 @@ namespace Demo
             Ogre::TagPoint *tagPoint = sceneManager->createTagPoint();
             tagPoint->attachObject( item );
 
-            const float angleFraction = i / 5.0f * Ogre::Math::TWO_PI;
+            const float angleFraction = float( i ) / 5.0f * Ogre::Math::TWO_PI;
             tagPoint->setPosition( sinf( angleFraction ) * 0.1f, 0.0f, cosf( angleFraction ) * 0.1f );
             tagPoint->scale( 0.1f, 0.1f, 0.1f );
 
@@ -98,7 +98,7 @@ namespace Demo
                 Ogre::SCENE_DYNAMIC );
             Ogre::SceneNode *sceneNode = mCubesNode->createChildSceneNode();
 
-            const float angleFraction = i / 5.0f * Ogre::Math::TWO_PI;
+            const float angleFraction = float( i ) / 5.0f * Ogre::Math::TWO_PI;
             sceneNode->setPosition( sinf( angleFraction ) * 0.1f, 0.0f, cosf( angleFraction ) * 0.1f );
             sceneNode->scale( 0.045f, 0.045f, 0.045f );
 
@@ -132,7 +132,8 @@ namespace Demo
         for( int i = 0; i < 5; ++i )
         {
             const float angleFraction =
-                ( i + mGraphicsSystem->getAccumTimeSinceLastLogicFrame() ) / 4.0f * Ogre::Math::TWO_PI;
+                ( float( i ) + mGraphicsSystem->getAccumTimeSinceLastLogicFrame() ) / 4.0f *
+                Ogre::Math::TWO_PI;
             mSphereNodes[i]->setPosition( sinf( angleFraction ) * 0.1f, 0.0f,
                                           cosf( angleFraction ) * 0.1f );
 

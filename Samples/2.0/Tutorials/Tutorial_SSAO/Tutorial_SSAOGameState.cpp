@@ -128,9 +128,9 @@ namespace Demo
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
                     datablock->setRoughness(
-                        std::max( 0.02f, x / std::max( 1.0f, (float)( numX - 1 ) ) ) );
-                    datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)( numZ - 1 ) ) ),
-                                           false );
+                        std::max( 0.02f, float( x ) / std::max( 1.0f, (float)( numX - 1 ) ) ) );
+                    datablock->setFresnel(
+                        Ogre::Vector3( float( z ) / std::max( 1.0f, (float)( numZ - 1 ) ) ), false );
 
                     std::string meshName;
                     float meshScale = 1.0f;
@@ -156,9 +156,10 @@ namespace Demo
 
                     Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-                    sceneNode->setPosition( Ogre::Vector3( armsLengthSphere * x - startX,
-                                                           0.0f + ( numZ - z ) * 0.5f,
-                                                           armsLengthSphere * z - startZ ) );
+                    sceneNode->setPosition(
+                        Ogre::Vector3( armsLengthSphere * Ogre::Real( x ) - startX,
+                                       0.0f + Ogre::Real( numZ - z ) * 0.5f,
+                                       armsLengthSphere * Ogre::Real( z ) - startZ ) );
                     sceneNode->setScale( Ogre::Vector3( meshScale ) );
                     sceneNode->attachObject( item );
                 }
@@ -305,8 +306,9 @@ namespace Demo
         psParams->setNamedConstant( "kernelRadius", mKernelRadius );
         psParams->setNamedConstant(
             "noiseScale",
-            Ogre::Vector2( ( mGraphicsSystem->getRenderWindow()->getWidth() * 0.5f ) / 2.0f,
-                           ( mGraphicsSystem->getRenderWindow()->getHeight() * 0.5f ) / 2.0f ) );
+            Ogre::Vector2(
+                ( Ogre::Real( mGraphicsSystem->getRenderWindow()->getWidth() ) * 0.5f ) / 2.0f,
+                ( Ogre::Real( mGraphicsSystem->getRenderWindow()->getHeight() ) * 0.5f ) / 2.0f ) );
         psParams->setNamedConstant( "invKernelSize", 1.0f / 64.0f );
         psParams->setNamedConstant( "sampleDirs", (float *)kernelSamples, 64, 4 );
 

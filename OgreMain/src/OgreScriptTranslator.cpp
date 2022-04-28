@@ -358,18 +358,12 @@ namespace Ogre{
         size_t n = 0u;
         while( i != end && n < 16u )
         {
-            if( i != end )
-            {
-                Real r = 0;
-                if( getReal( *i, &r ) )
-                    ( *m )[n / 4u][n % 4u] = r;
-                else
-                    return false;
-            }
-            else
-            {
+            Real r = 0;
+
+            if( !getReal( *i, &r ) )
                 return false;
-            }
+
+            ( *m )[n / 4u][n % 4u] = r;
             ++i;
             ++n;
         }

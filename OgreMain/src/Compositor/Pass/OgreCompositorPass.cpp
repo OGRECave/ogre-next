@@ -806,9 +806,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Vector2 CompositorPass::getActualDimensions() const
     {
-        return Vector2( floorf( ( mAnyTargetTexture->getWidth() >> mAnyMipLevel ) *
+        return Vector2( floorf( float( mAnyTargetTexture->getWidth() >> mAnyMipLevel ) *
                                 mDefinition->mVpRect[0].mVpWidth ),
-                        floorf( ( mAnyTargetTexture->getHeight() >> mAnyMipLevel ) *
+                        floorf( float( mAnyTargetTexture->getHeight() >> mAnyMipLevel ) *
                                 mDefinition->mVpRect[0].mVpHeight ) );
     }
 }  // namespace Ogre

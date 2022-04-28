@@ -237,8 +237,8 @@ namespace Demo
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 2.0f,
-                                              ( j - 1.5f ) * armsLength );
+                mSceneNode[idx]->setPosition( ( Ogre::Real( i ) - 1.5f ) * armsLength, 2.0f,
+                                              ( Ogre::Real( j ) - 1.5f ) * armsLength );
                 mSceneNode[idx]->setScale( 0.65f, 0.65f, 0.65f );
 
                 mSceneNode[idx]->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -285,9 +285,9 @@ namespace Demo
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
                     datablock->setRoughness(
-                        std::max( 0.02f, x / std::max( 1.0f, (float)( numX - 1 ) ) ) );
-                    datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)( numZ - 1 ) ) ),
-                                           false );
+                        std::max( 0.02f, float( x ) / std::max( 1.0f, (float)( numX - 1 ) ) ) );
+                    datablock->setFresnel(
+                        Ogre::Vector3( float( z ) / std::max( 1.0f, (float)( numZ - 1 ) ) ), false );
 
                     Ogre::Item *item = sceneManager->createItem(
                         "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
@@ -297,8 +297,9 @@ namespace Demo
 
                     Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-                    sceneNode->setPosition( Ogre::Vector3( armsLengthSphere * x - startX, 1.0f,
-                                                           armsLengthSphere * z - startZ ) );
+                    sceneNode->setPosition(
+                        Ogre::Vector3( armsLengthSphere * Ogre::Real( x ) - startX, 1.0f,
+                                       armsLengthSphere * Ogre::Real( z ) - startZ ) );
                     sceneNode->attachObject( item );
                     mSpheres.push_back( item );
                 }
@@ -377,7 +378,7 @@ namespace Demo
         if( mAnimateObjects )
         {
             for( int i = 0; i < 16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.125f ) );
+                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * float( i ) * 0.125f ) );
         }
 
         TutorialGameState::update( timeSinceLast );

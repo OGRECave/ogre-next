@@ -173,7 +173,7 @@ namespace Ogre
         mSupportsBaseInstance = _supportsBaseInstance;
 
         // 4096u is a sensible default because most Hlms implementations need 16 bytes per
-        // instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposedly clamps
+        // instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposely clamps
         // its const buffers to 64kb, so that 64kb / 16 = 4096 and thus it can never exceed
         // 4096 instances.
         // However due to instanced stereo, we need twice that

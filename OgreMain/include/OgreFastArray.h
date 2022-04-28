@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreSilentMemory.h"
 
+#include <assert.h>
 #include <stddef.h>
 
 namespace Ogre

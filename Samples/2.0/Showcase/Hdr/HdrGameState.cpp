@@ -30,6 +30,9 @@ namespace Demo
 {
     HdrGameState::HdrGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        mAtmosphere( 0 ),
+#endif
         mAnimateObjects( true ),
         mCurrentPreset( std::numeric_limits<Ogre::uint32>::max() ),
         mExposure( 0.0f ),
@@ -109,8 +112,8 @@ namespace Demo
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 2.0f,
-                                              ( j - 1.5f ) * armsLength );
+                mSceneNode[idx]->setPosition( ( Ogre::Real( i ) - 1.5f ) * armsLength, 2.0f,
+                                              ( Ogre::Real( j ) - 1.5f ) * armsLength );
                 mSceneNode[idx]->setScale( 0.65f, 0.65f, 0.65f );
 
                 mSceneNode[idx]->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -157,9 +160,9 @@ namespace Demo
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
                     datablock->setRoughness(
-                        std::max( 0.02f, x / std::max( 1.0f, (float)( numX - 1 ) ) ) );
-                    datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)( numZ - 1 ) ) ),
-                                           false );
+                        std::max( 0.02f, float( x ) / std::max( 1.0f, (float)( numX - 1 ) ) ) );
+                    datablock->setFresnel(
+                        Ogre::Vector3( float( z ) / std::max( 1.0f, (float)( numZ - 1 ) ) ), false );
 
                     Ogre::Item *item = sceneManager->createItem(
                         "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
@@ -169,8 +172,9 @@ namespace Demo
 
                     Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-                    sceneNode->setPosition( Ogre::Vector3( armsLengthSphere * x - startX, 1.0f,
-                                                           armsLengthSphere * z - startZ ) );
+                    sceneNode->setPosition(
+                        Ogre::Vector3( armsLengthSphere * Ogre::Real( x ) - startX, 1.0f,
+                                       armsLengthSphere * Ogre::Real( z ) - startZ ) );
                     sceneNode->attachObject( item );
                 }
             }
@@ -184,6 +188,8 @@ namespace Demo
         light->setPowerScale( 97.0f );
         light->setType( Ogre::Light::LT_DIRECTIONAL );
         light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
+        // light->setDirection( Ogre::Vector3( 0, -1, 0 ).normalisedCopy() );
+        // light->setDirection( Ogre::Vector3( 0, -1, -0.5 ).normalisedCopy() );
 
         mLightNodes[0] = lightNode;
 
@@ -227,7 +233,7 @@ namespace Demo
         if( mAnimateObjects )
         {
             for( int i = 0; i < 16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.125f ) );
+                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * float( i ) * 0.125f ) );
         }
 
         TutorialGameState::update( timeSinceLast );
@@ -417,6 +423,69 @@ namespace Demo
         sceneManager->setAmbientLight( preset.ambLowerHemisphere, preset.ambUpperHemisphere,
                                        sceneManager->getAmbientLightHemisphereDir(),
                                        preset.envmapScale );
+
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        if( !mAtmosphere )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<Ogre::Light *>( mLightNodes[0]->getAttachedObject( 0u ) ) );
+            mGraphicsSystem->createAtmosphere(
+                static_cast<Ogre::Light *>( mLightNodes[0]->getAttachedObject( 0u ) ) );
+            OGRE_ASSERT_HIGH( dynamic_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() ) );
+            mAtmosphere = static_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() );
+        }
+
+        Ogre::AtmosphereNpr::Preset atmoPreset;
+        atmoPreset.sunPower = preset.lightPower[0];
+        atmoPreset.skyPower = preset.skyColour.toVector3().collapseMax() * 2.0f;
+        atmoPreset.skyColour = preset.skyColour.toVector3() / atmoPreset.skyPower;
+        atmoPreset.linkedLightPower = preset.lightPower[0];
+        atmoPreset.envmapScale = preset.envmapScale;
+
+        // The colour we pass to Atmosphere is too greenish when displayed. Correct it a bit.
+        atmoPreset.skyColour *= Ogre::Vector3( 1.0f, 0.9f, 1.0f );
+
+        // The most arbitrary variable to tweak is linkedSceneAmbient*; because
+        // it's a fake GI and is derived out of a few math formulas. The way this
+        // was adjusted was to look at the output of sceneManager->getAmbientLightLowerHemisphere()
+        // (and Upper) before & after calling mAtmosphere->setPreset; and then scaling
+        // linkedSceneAmbient* to the desired values.
+        //
+        // The rest of the tweaks:
+        //
+        //      - Heavy overcast affects density due to its very nature
+        //          - Increased fogDensity to match the style
+        //      - Night time rquires different settings (see Atmosphere demo)
+        //      - JJ Abrams is just an artistic style hence no physics involved
+        if( mCurrentPreset == 2u )
+        {
+            // Heavy overcast day
+            atmoPreset.densityCoeff = 0.25f;
+            atmoPreset.densityDiffusion = 0.25f;
+            atmoPreset.linkedSceneAmbientUpperPower *= 0.5f;
+            atmoPreset.fogDensity = 0.025f;
+        }
+        else if( mCurrentPreset == 3u || mCurrentPreset == 4u )
+        {
+            // Gibbous moon night series. Night always requires quite the parameter changes
+            atmoPreset.sunPower = 0.25f;
+            atmoPreset.skyPower = 0.07f;
+            atmoPreset.densityCoeff = 0.08f;
+            atmoPreset.linkedSceneAmbientUpperPower *= 0.0025f;
+            atmoPreset.linkedSceneAmbientLowerPower *= 0.0025f;
+        }
+        else if( mCurrentPreset == 5u )
+        {
+            atmoPreset.densityCoeff = 0.38f;
+            atmoPreset.linkedSceneAmbientUpperPower *= 0.5f;
+            atmoPreset.linkedSceneAmbientLowerPower *= 0.02f;
+        }
+        else
+        {
+            atmoPreset.linkedSceneAmbientUpperPower *= 8.0f;
+            atmoPreset.linkedSceneAmbientLowerPower *= 2.0f;
+        }
+        mAtmosphere->setPreset( atmoPreset );
+#endif
     }
     //-----------------------------------------------------------------------------------
     void HdrGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )

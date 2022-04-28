@@ -437,8 +437,8 @@ namespace Ogre
 
                 // Calculate offsets required for mapping texel origins to pixel origins in the
                 // current rendersystem
-                Real hOffset = rSys->getHorizontalTexelOffset() / oMgr.getViewportWidth();
-                Real vOffset = rSys->getVerticalTexelOffset() / oMgr.getViewportHeight();
+                Real hOffset = rSys->getHorizontalTexelOffset() / Real( oMgr.getViewportWidth() );
+                Real vOffset = rSys->getVerticalTexelOffset() / Real( oMgr.getViewportHeight() );
 
                 parentLeft = 0.0f + hOffset;
                 parentTop = 0.0f + vOffset;

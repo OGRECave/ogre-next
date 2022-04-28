@@ -38,7 +38,15 @@ THE SOFTWARE.
 
 #    include "OgreStringConverter.h"
 
+#    if defined( __clang__ )
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#        pragma clang diagnostic ignored "-Wdeprecated-copy"
+#    endif
 #    include "rapidjson/document.h"
+#    if defined( __clang__ )
+#        pragma clang diagnostic pop
+#    endif
 
 namespace Ogre
 {

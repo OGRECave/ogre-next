@@ -177,7 +177,7 @@ namespace Ogre
         for( size_t i = 0u; i < 3u; ++i )
             rightEyeStart_radius[i + 1u] = mRadius[i] * 0.5f;
 
-        const Vector2 invBlockResolution( 8.0f / width, 8.0f / height );
+        const Vector2 invBlockResolution( 8.0f / Real( width ), 8.0f / Real( height ) );
 
         mPsParams->setNamedConstant( "leftEyeCenter_rightEyeCenter", leftEyeCenter_rightEyeCenter );
         mPsParams->setNamedConstant( "rightEyeStart_radius", rightEyeStart_radius );
@@ -187,7 +187,7 @@ namespace Ogre
         shaderParams.rightEyeStart_radius = rightEyeStart_radius;
         shaderParams.leftEyeCenter_rightEyeCenter = leftEyeCenter_rightEyeCenter;
         shaderParams.invBlockResolution_invResolution =
-            float4( invBlockResolution, Vector2( 1.0f / width, 1.0f / height ) );
+            float4( invBlockResolution, Vector2( 1.0f / float( width ), 1.0f / float( height ) ) );
         mJobParams->upload( &shaderParams, 0, sizeof( shaderParams ) );
 
         const uint32 threadGroupsX = ( (uint32)width + mReconstructJob->getThreadsPerGroupX() - 1u ) /

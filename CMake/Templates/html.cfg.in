@@ -1592,8 +1592,6 @@ INCLUDE_FILE_PATTERNS  =
 # instead of the = operator.
 
 PREDEFINED             = OGRE_MEMORY_ALLOCATOR=1 \
-                         RTSHADER_SYSTEM_BUILD_CORE_SHADERS \
-                         RTSHADER_SYSTEM_BUILD_EXT_SHADERS \
                          OGRE_PLATFORM=10 \
                          protected=private
 

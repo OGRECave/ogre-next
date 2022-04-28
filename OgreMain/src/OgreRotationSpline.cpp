@@ -48,10 +48,10 @@ namespace Ogre
     Quaternion RotationalSpline::interpolate( Real t, bool useShortestPath )
     {
         // Work out which segment this is in
-        Real fSeg = t * ( mPoints.size() - 1 );
+        Real fSeg = t * Real( mPoints.size() - 1u );
         unsigned int segIdx = (unsigned int)fSeg;
         // Apportion t
-        t = fSeg - segIdx;
+        t = fSeg - Real( segIdx );
 
         return interpolate( segIdx, t, useShortestPath );
     }

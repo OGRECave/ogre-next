@@ -145,7 +145,7 @@ unsigned long renderThreadApp( Ogre::ThreadHandle *threadHandle )
         }
 
         Ogre::uint64 endTime = timer.getMicroseconds();
-        timeSinceLast = ( endTime - startTime ) / 1000000.0;
+        timeSinceLast = double( endTime - startTime ) / 1000000.0;
         timeSinceLast = std::min( 1.0, timeSinceLast );  // Prevent from going haywire.
         startTime = endTime;
     }

@@ -214,8 +214,14 @@ namespace Ogre
         virtual const Radian &getFOVy() const;
 
         /// Returns the terms projectionA and projectionB in .x and .y respectively, which can
-        /// be used to reconstruct linear depth from a Z buffer with the following formula:
+        /// be used to reconstruct linear depth from a Z buffer.  If the projection type is PT_PERSPECTIVE,
+        /// use the following formula:
+        /// 
         ///     linearDepth = projectionParams.y / (fDepth - projectionParams.x);
+        ///     
+        /// But if the projection type is PT_ORTHOGRAPHIC, use the formula:
+        /// 
+        ///     linearDepth = (fDepth - projectionParams.x) / projectionParams.y;
         Vector2 getProjectionParamsAB() const;
 
         /** Sets the position of the near clipping plane.

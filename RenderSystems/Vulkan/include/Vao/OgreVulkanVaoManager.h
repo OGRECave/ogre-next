@@ -188,7 +188,7 @@ namespace Ogre
         /// Note: mVbos[CPU_INACCESIBLE] may contain some Vbos from memory types which are not
         /// mBestVkMemoryTypeIndex.
         ///
-        /// This can happen if a texture request couldn't be fullfilled but other memory
+        /// This can happen if a texture request couldn't be fulfilled but other memory
         /// types were available. If that's the case, then
         /// Vbo::vkMemoryTypeIdx & mBestVkMemoryTypeIndex[CPU_INACCESIBLE] will be 0
         VboVec mVbos[MAX_VBO_FLAG];

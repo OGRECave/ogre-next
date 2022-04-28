@@ -119,6 +119,24 @@ namespace Ogre
 /// Last seen: 2021-08-27
 #        define OGRE_VK_WORKAROUND_BAD_3D_BLIT
         static bool mBad3DBlit;
+
+/// Adreno 618 will experience a GPU crash when we send a vkCmdDrawIndirect
+/// with 1 command and that command has 0 vertices to render.
+/// Normal vkCmdDraw accepts 0 vertices fine.
+///
+/// Qualcomm has been notified of the bug; but this is likely a HW bug
+/// Adreno 640 doesn't exhibit this behavior (same driver version).
+///
+/// As of Driver 512.502.0 (Android 11), this bug is still present.
+///
+/// Given the little gains that indirect currently give, and indirect
+/// draw sounds like a pandora's box in Android; we force enable
+/// this workaround for all Android devices.
+///
+/// First seen: Unknown
+/// Last seen: 2022-04-20
+#        define OGRE_VK_WORKAROUND_ADRENO_618_0VERTEX_INDIRECT
+        static bool mAdreno618_0VertexIndirect;
 #    endif
 #endif
     };

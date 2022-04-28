@@ -230,7 +230,7 @@ if ((CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX) AND NOT MINGW)
       OUTPUT_VARIABLE OGRE_GCC_VERSION)
     message(STATUS "Detected g++ ${OGRE_GCC_VERSION}")
     message(STATUS "Enabling GCC visibility flags")
-    set(OGRE_GCC_VISIBILITY_FLAGS "-DOGRE_GCC_VISIBILITY -fvisibility=hidden")
+    set(OGRE_GCC_VISIBILITY_FLAGS "-fvisibility=hidden")
     set(XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN "YES")
 
     # check if we can safely add -fvisibility-inlines-hidden
@@ -282,14 +282,24 @@ if (APPLE AND OGRE_BUILD_RENDERSYSTEM_METAL)
   endif ()
 endif (APPLE AND OGRE_BUILD_RENDERSYSTEM_METAL)
 
+# This option needs to be set now
+option(OGRE_USE_NEW_PROJECT_NAME
+	"Libraries containing Ogre name will be called OgreNext, e.g. 'OgreNext.dll' instead of 'Ogre.dll'"
+	FALSE)
+if( OGRE_USE_NEW_PROJECT_NAME )
+	set( OGRE_NEXT "OgreNext" )
+else()
+	set( OGRE_NEXT "Ogre" )
+endif()
+
 # Find dependencies
 include(Dependencies)
 # definitions for samples
-set(OGRE_LIBRARIES OgreMain)
-set(OGRE_MeshLodGenerator_LIBRARIES OgreMeshLodGenerator)
-set(OGRE_Paging_LIBRARIES OgrePaging)
-set(OGRE_Terrain_LIBRARIES OgreTerrain)
-set(OGRE_Volume_LIBRARIES OgreVolume)
+set(OGRE_LIBRARIES ${OGRE_NEXT}Main)
+set(OGRE_MeshLodGenerator_LIBRARIES ${OGRE_NEXT}MeshLodGenerator)
+set(OGRE_Paging_LIBRARIES ${OGRE_NEXT}Paging)
+set(OGRE_Terrain_LIBRARIES ${OGRE_NEXT}Terrain)
+set(OGRE_Volume_LIBRARIES ${OGRE_NEXT}Volume)
 
 # Specify build paths
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OGRE_BINARY_DIR}/lib")
@@ -454,6 +464,7 @@ option(OGRE_BUILD_PLUGIN_PFX "Build ParticleFX plugin" TRUE)
 
 option( OGRE_ADDRESS_SANITIZER_ASAN "Build with Asan (Address Sanitizer)" OFF )
 
+option( OGRE_BUILD_COMPONENT_ATMOSPHERE "Component to use atmosphere (e.g. sky), can be used by HlmsPbs" TRUE )
 cmake_dependent_option(OGRE_BUILD_COMPONENT_HLMS_PBS
 "PBS Stands for Physically Based Shading and it's the default material for most entities and meshes. This is the 'desktop' version for OpenGL 3.3+ and D3D11." TRUE "" FALSE)
 cmake_dependent_option(OGRE_BUILD_COMPONENT_HLMS_UNLIT
@@ -491,6 +502,12 @@ set(OGRE_CONFIG_ALLOCATOR 0 CACHE STRING
 )
 endif ()
 
+set( OGRE_EMBED_DEBUG_MODE auto CACHE STRING
+	"Specify whether OGRE_DEBUG_MODE should be embedded into OgreBuildSettings.h
+	auto - Use 'never' for multi-config generators like MSVC & XCode. Use 'always' for Make & Ninja generators
+	never - Compile headers will determine whether it's a debug build based on macros like _DEBUG, DEBUG & NDEBUG
+	always - OGRE_DEBUG_MODE is embedded into OgreBuildSettings.h, its value is based on CMAKE_BUILD_TYPE"
+)
 set( OGRE_DEBUG_LEVEL_DEBUG 3 CACHE STRING
     "Specify debug level for debug builds:
     0 - None. Disabled. No checks done at all.

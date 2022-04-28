@@ -334,12 +334,13 @@ namespace Ogre
         {
             if( textureDef.width == 0 )
             {
-                width = static_cast<uint32>( ceilf( finalTarget->getWidth() * textureDef.widthFactor ) );
+                width = static_cast<uint32>(
+                    ceilf( float( finalTarget->getWidth() ) * textureDef.widthFactor ) );
             }
             if( textureDef.height == 0 )
             {
-                height =
-                    static_cast<uint32>( ceilf( finalTarget->getHeight() * textureDef.heightFactor ) );
+                height = static_cast<uint32>(
+                    ceilf( float( finalTarget->getHeight() ) * textureDef.heightFactor ) );
             }
         }
 
@@ -579,12 +580,12 @@ namespace Ogre
         if( bufferDef.widthFactor > 0 )
         {
             numElements *=
-                static_cast<size_t>( ceilf( finalTarget->getWidth() * bufferDef.widthFactor ) );
+                static_cast<size_t>( ceilf( float( finalTarget->getWidth() ) * bufferDef.widthFactor ) );
         }
         if( bufferDef.heightFactor > 0 )
         {
-            numElements *=
-                static_cast<size_t>( ceilf( finalTarget->getHeight() * bufferDef.heightFactor ) );
+            numElements *= static_cast<size_t>(
+                ceilf( float( finalTarget->getHeight() ) * bufferDef.heightFactor ) );
         }
 
         return vaoManager->createUavBuffer( numElements, bufferDef.bytesPerElement, bufferDef.bindFlags,

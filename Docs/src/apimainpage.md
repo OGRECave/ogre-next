@@ -3,7 +3,7 @@
 # Introduction
 
 ## What is this?
-This is the complete API reference for <a href="www.ogre3d.org"><b>OGRE</b></a> (<b>O</b>bject-Oriented <b>G</b>raphics <b>R</b>endering <b>E</b>ngine) version **2.1**. Contained within are the 
+This is the complete API reference for <a href="www.ogre3d.org"><b>OGRE</b></a> (<b>O</b>bject-Oriented <b>G</b>raphics <b>R</b>endering <b>E</b>ngine) version **2.3**. Contained within are the 
 specifications for each namespace/module/class and the methods from those which you can refer to when writing code which uses OGRE. 
 
 The API references for some of the previous OGRE versions can be found under the following link: <a href="http://www.ogre3d.org/docs/api/X.Y">www.ogre3d.org/docs/api/X.Y</a> (replace X.Y with the version number, for example 1.7, 1.8, etc.).

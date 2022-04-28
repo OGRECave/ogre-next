@@ -39,7 +39,7 @@ namespace Ogre {
 // If you use multiple rendering passes you can test only the first pass and all other passes don't have to be rendered 
 // if the first pass result has too few pixels visible.
 
-// Be sure to render all occluder first and whats out so the RenderQue don't switch places on 
+// Be sure to render all occluder first and what's out so the RenderQue don't switch places on 
 // the occluding objects and the tested objects because it thinks it's more effective..
 
 class _OgreGLES2Export GLES2HardwareOcclusionQuery : public HardwareOcclusionQuery MANAGED_RESOURCE

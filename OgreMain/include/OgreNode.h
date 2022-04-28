@@ -525,7 +525,7 @@ namespace Ogre
         virtual_l2 void rotate( const Vector3 &axis, const Radian &angle,
                                 TransformSpace relativeTo = TS_LOCAL );
 
-        /** Rotate the node around an aritrary axis using a Quarternion.
+        /** Rotate the node around an arbitrary axis using a Quarternion.
          */
         virtual_l2 void rotate( const Quaternion &q, TransformSpace relativeTo = TS_LOCAL );
 

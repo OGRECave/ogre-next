@@ -9,7 +9,7 @@
 
 # Configure Ogre HLMS User Interface (2D) for OpenGL 3.3+ and D3D11 build
 
-PROJECT(OgreHlmsUnlit)
+PROJECT(${OGRE_NEXT}HlmsUnlit)
 
 file(
     GLOB HEADER_FILES
@@ -26,12 +26,14 @@ file(
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../Common/include)
 
-ogre_add_library(OgreHlmsUnlit ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
-set_target_properties(OgreHlmsUnlit PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
-target_link_libraries(OgreHlmsUnlit OgreMain)
+add_definitions( -DOgreHlmsUnlit_EXPORTS )
 
-ogre_config_framework(OgreHlmsUnlit)
-ogre_config_component(OgreHlmsUnlit)
+ogre_add_library(${OGRE_NEXT}HlmsUnlit ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
+set_target_properties(${OGRE_NEXT}HlmsUnlit PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
+target_link_libraries(${OGRE_NEXT}HlmsUnlit ${OGRE_NEXT}Main)
+
+ogre_config_framework(${OGRE_NEXT}HlmsUnlit)
+ogre_config_component(${OGRE_NEXT}HlmsUnlit)
 
 install (DIRECTORY include/
         DESTINATION include/OGRE/Hlms/Unlit

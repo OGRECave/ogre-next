@@ -339,7 +339,7 @@ namespace Ogre
 
                     LogManager::getSingleton().logMessage(
                         "WARNING: Calling AsyncTextureTicket::queryIsTransferDone too "
-                        "often with innacurate tracking in the same frame this transfer "
+                        "often with inaccurate tracking in the same frame this transfer "
                         "was issued. Switching to accurate tracking. If this is an accident, "
                         "wait until you've rendered a few frames before checking if it's done. "
                         "If this is on purpose, consider calling AsyncTextureTicket::download()"

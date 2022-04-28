@@ -68,7 +68,7 @@ namespace Ogre
     void Log::logMessage( const String &message, LogMessageLevel lml, bool maskDebug )
     {
         ScopedLock scopedLock( mMutex );
-        if( ( mLogLevel + lml ) >= OGRE_LOG_THRESHOLD )
+        if( ( mLogLevel + uint32( lml ) ) >= OGRE_LOG_THRESHOLD )
         {
             bool skipThisMessage = false;
             for( mtLogListener::iterator i = mListeners.begin(); i != mListeners.end(); ++i )

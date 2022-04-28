@@ -60,7 +60,7 @@ namespace Ogre
         uint32 rand() { return static_cast<uint32>( mRng() ); }
 
         /// Returns value in range [0; 1]
-        Real saturatedRand() { return rand() / (Real)mRng.max(); }
+        Real saturatedRand() { return Real( rand() ) / (Real)mRng.max(); }
 
         /// Returns value in range [-1; 1]
         Real boxRand() { return saturatedRand() * Real( 2.0 ) - Real( 1.0 ); }
@@ -406,7 +406,7 @@ namespace Ogre
                 vDirs[i][j].normalise();
         }
 
-        const Real invNumSpreadIterations = Real( 1.0f ) / mNumSpreadIterations;
+        const Real invNumSpreadIterations = Real( 1.0f ) / Real( mNumSpreadIterations );
 
         SparseClusterSet::const_iterator itor = grid0.begin();
         SparseClusterSet::const_iterator end = grid0.end();
@@ -1379,7 +1379,8 @@ namespace Ogre
         if( mSurvivingRayFraction != 1.0f )
         {
             mTotalNumRays = static_cast<size_t>(
-                mNumRays * ( 1.0f - powf( mSurvivingRayFraction, mNumRayBounces + 1u ) ) /
+                Real( mNumRays ) *
+                ( 1.0f - powf( mSurvivingRayFraction, Real( mNumRayBounces + 1u ) ) ) /
                 ( 1.0f - mSurvivingRayFraction ) );
         }
         else

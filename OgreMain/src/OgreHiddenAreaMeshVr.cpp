@@ -175,7 +175,7 @@ namespace Ogre
         //  3. Use an extremely large value, it breaks GPUs (vertex ends up collapsing to origin).
         const float c_veryLargeValue = 65000.0f;
 
-        const float fCircleStep = Math::PI / ( tessellation - 1u ) * circleDir;
+        const float fCircleStep = Math::PI / float( tessellation - 1u ) * circleDir;
 
         Vector2 circlePos[2];
         circlePos[0].x = sinf( 0 );

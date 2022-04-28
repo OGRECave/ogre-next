@@ -53,6 +53,7 @@ vertex PS_INPUT main_metal
 	// START UNIFORM DECLARATION
 	@insertpiece( PassDecl )
 	@insertpiece( InstanceDecl )
+	@insertpiece( AtmosphereNprSkyDecl )
 	, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
 	@property( hlms_pose )
 		@property( !hlms_pose_half )

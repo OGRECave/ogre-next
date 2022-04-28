@@ -123,7 +123,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline float ForwardClustered::getDepthAtSlice( uint32 uSlice ) const
     {
-        return -( powf( 2.0f, mExponentK * uSlice ) + mMinDistance );
+        return -( powf( 2.0f, mExponentK * float( uSlice ) ) + mMinDistance );
     }
     //-----------------------------------------------------------------------------------
     inline uint32 ForwardClustered::getSliceAtDepth( Real depth ) const

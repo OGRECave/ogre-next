@@ -41,7 +41,7 @@ namespace Ogre
     CbShaderBuffer::CbShaderBuffer( ShaderType shaderType, uint16 _slot,
                                     ConstBufferPacked *_bufferPacked, uint32 _bindOffset,
                                     uint32 _bindSizeBytes ) :
-        CbBase( CB_SET_CONSTANT_BUFFER_VS + shaderType ),
+        CbBase( CB_SET_CONSTANT_BUFFER_VS + uint16( shaderType ) ),
         slot( _slot ),
         bufferPacked( _bufferPacked ),
         bindOffset( _bindOffset ),
@@ -102,7 +102,7 @@ namespace Ogre
 
     CbShaderBuffer::CbShaderBuffer( ShaderType shaderType, uint16 _slot, TexBufferPacked *_bufferPacked,
                                     uint32 _bindOffset, uint32 _bindSizeBytes ) :
-        CbBase( CB_SET_TEXTURE_BUFFER_VS + shaderType ),
+        CbBase( CB_SET_TEXTURE_BUFFER_VS + uint16( shaderType ) ),
         slot( _slot ),
         bufferPacked( _bufferPacked ),
         bindOffset( _bindOffset ),
@@ -183,7 +183,7 @@ namespace Ogre
     CbShaderBuffer::CbShaderBuffer( ShaderType shaderType, uint16 _slot,
                                     ReadOnlyBufferPacked *_bufferPacked, uint32 _bindOffset,
                                     uint32 _bindSizeBytes ) :
-        CbBase( CB_SET_READONLY_BUFFER_VS + shaderType ),
+        CbBase( CB_SET_READONLY_BUFFER_VS + uint16( shaderType ) ),
         slot( _slot ),
         bufferPacked( _bufferPacked ),
         bindOffset( _bindOffset ),

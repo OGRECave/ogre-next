@@ -439,6 +439,12 @@ namespace Ogre
             return false;
         }
 
+        /// Returns the maximum value of all components
+        inline Real collapseMax() const { return std::max( std::max( x, y ), z ); }
+
+        /// Returns the minimum value of all components
+        inline Real collapseMin() const { return std::min( std::min( x, y ), z ); }
+
         /** Sets this vector's components to the minimum of its own and the
             ones of the passed in vector.
             @remarks

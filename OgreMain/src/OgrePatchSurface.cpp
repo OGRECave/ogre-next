@@ -249,8 +249,8 @@ namespace Ogre
             assert( factor >= 0.0f && factor <= 1.0f );
 
             mSubdivisionFactor = factor;
-            mULevel = static_cast<size_t>( factor * mMaxULevel );
-            mVLevel = static_cast<size_t>( factor * mMaxVLevel );
+            mULevel = static_cast<size_t>( factor * Real( mMaxULevel ) );
+            mVLevel = static_cast<size_t>( factor * Real( mMaxVLevel ) );
 
             makeTriangles();
         }
@@ -512,12 +512,13 @@ namespace Ogre
                 else
                 {
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4146) // unary minus operator applied to unsigned type, result still unsigned
+#    pragma warning( push )
+#    pragma warning( \
+        disable : 4146 )  // unary minus operator applied to unsigned type, result still unsigned
 #endif
                     vInc = -vStep;
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#pragma warning(pop)
+#    pragma warning( pop )
 #endif
                     v = mMeshHeight - 1;
                 }
@@ -594,12 +595,13 @@ namespace Ogre
                 // Reverse vInc for double sided
                 v = mMeshHeight - 1;
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4146) // unary minus operator applied to unsigned type, result still unsigned
+#    pragma warning( push )
+#    pragma warning( \
+        disable : 4146 )  // unary minus operator applied to unsigned type, result still unsigned
 #endif
                 vInc = -vInc;
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#pragma warning(pop)
+#    pragma warning( pop )
 #endif
             }
         }

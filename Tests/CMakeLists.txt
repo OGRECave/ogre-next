@@ -145,7 +145,7 @@ if (OGRE_BUILD_TESTS)
 	  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Components/Overlay/include
 	    ${OGRE_SOURCE_DIR}/Components/Overlay/include)
 	  
-	  set(OGRE_LIBRARIES ${OGRE_LIBRARIES} OgreOverlay)
+	  set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_NEXT}Overlay)
 	endif ()
 	add_executable(Test_Ogre WIN32 ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES} )
 	ogre_config_sample_exe(Test_Ogre)

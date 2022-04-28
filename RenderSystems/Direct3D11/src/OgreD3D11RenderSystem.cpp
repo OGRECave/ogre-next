@@ -477,7 +477,7 @@ namespace Ogre
         // to GL (which is measured in milliseconds per shader, instead of seconds).
         // There's two possible reasons to disable this hack:
         //  1. Easier debugging. Shader structs like "Material m[256];" get declared
-        //     as "Material m[2];" which cause debuggers to show only 2 entires,
+        //     as "Material m[2];" which cause debuggers to show only 2 entries,
         //     instead of all of them. Some debuggers (like RenderDoc) allow changing
         //     the amount of elements displayed and workaround it; nonetheless
         //     disabling it makes your life easier.

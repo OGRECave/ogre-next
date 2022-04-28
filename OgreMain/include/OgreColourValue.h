@@ -30,6 +30,9 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreVector3.h"
+#include "OgreVector4.h"
+
 namespace Ogre
 {
     /** \addtogroup Core
@@ -73,6 +76,10 @@ namespace Ogre
             a( alpha )
         {
         }
+
+        explicit ColourValue( Vector3 v ) : a( 1.0f ) { this->fromVector3( v ); }
+
+        explicit ColourValue( Vector4 v ) { this->fromVector4( v ); }
 
         bool operator==( const ColourValue &rhs ) const;
         bool operator!=( const ColourValue &rhs ) const;
@@ -310,6 +317,29 @@ namespace Ogre
         @param brightness Output brightness level, [0,1]
         */
         void getHSB( Real *hue, Real *saturation, Real *brightness ) const;
+
+        /// Sets 'this' RGB from xyz. Alpha component is left intact
+        void fromVector3( Vector3 v )
+        {
+            this->r = v.x;
+            this->g = v.y;
+            this->b = v.z;
+        }
+
+        /// Sets 'this' RGBA from xyzw.
+        void fromVector4( Vector4 v )
+        {
+            this->r = v.x;
+            this->g = v.y;
+            this->b = v.z;
+            this->a = v.w;
+        }
+
+        /// Returns the RGB in xyz as a Vector3
+        Vector3 toVector3() const { return Vector3( r, g, b ); }
+
+        /// Returns the RGBA in xyzw component as a Vector4
+        Vector4 toVector4() const { return Vector4( r, g, b, a ); }
 
         /** Function for writing to a stream.
          */

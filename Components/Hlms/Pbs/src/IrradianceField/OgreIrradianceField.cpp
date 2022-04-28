@@ -103,8 +103,8 @@ namespace Ogre
 
             for( size_t i = 0u; i < numGridCells && i < numRaysPerPixel; ++i )
             {
-                mSubsamples[i].x = ( ( i % ( gridSize ) ) + 0.5f ) * invGridSize;
-                mSubsamples[i].y = ( ( i / ( gridSize ) ) + 0.5f ) * invGridSize;
+                mSubsamples[i].x = ( Real( i % ( gridSize ) ) + 0.5f ) * invGridSize;
+                mSubsamples[i].y = ( Real( i / ( gridSize ) ) + 0.5f ) * invGridSize;
             }
         }
     }
@@ -445,8 +445,8 @@ namespace Ogre
 
         const uint32 numRaysPerProbe = depthProbeRes * depthProbeRes * numRaysPerPixel;
 
-        mIfGenParams.invNumRaysPerPixel = 1.0f / numRaysPerPixel;
-        mIfGenParams.invNumRaysPerIrradiancePixel = 1.0f / numRaysPerIrradiancePixel;
+        mIfGenParams.invNumRaysPerPixel = 1.0f / float( numRaysPerPixel );
+        mIfGenParams.invNumRaysPerIrradiancePixel = 1.0f / float( numRaysPerIrradiancePixel );
 
         const TextureGpu *vctLightingTex = mVctLighting->getLightVoxelTextures()[0];
         const float smallestRes = static_cast<float>(

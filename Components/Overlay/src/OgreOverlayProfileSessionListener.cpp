@@ -72,42 +72,45 @@ namespace Ogre
                 // this is for the profile name and the number of times it was called in a frame
                 OverlayElement *element = createTextArea(
                     "profileText" + StringConverter::toString( i ), 90, mBarHeight,
-                    mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * i, 0, 14, "", false );
+                    mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * Real( i ), 0, 14, "", false );
                 mProfileGui->addChild( element );
                 mProfileBars.push_back( element );
 
                 // this indicates the current frame time
                 element = createPanel( "currBar" + StringConverter::toString( i ), 0, mBarHeight,
-                                       mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * i, mBarIndent,
-                                       "Core/ProfilerCurrent", false );
+                                       mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * Real( i ),
+                                       mBarIndent, "Core/ProfilerCurrent", false );
                 mProfileGui->addChild( element );
                 mProfileBars.push_back( element );
 
                 // this indicates the minimum frame time
-                element = createPanel( "minBar" + StringConverter::toString( i ), mBarLineWidth,
-                                       mBarHeight, mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * i, 0,
-                                       "Core/ProfilerMin", false );
+                element =
+                    createPanel( "minBar" + StringConverter::toString( i ), mBarLineWidth, mBarHeight,
+                                 mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * Real( i ), 0,
+                                 "Core/ProfilerMin", false );
                 mProfileGui->addChild( element );
                 mProfileBars.push_back( element );
 
                 // this indicates the maximum frame time
-                element = createPanel( "maxBar" + StringConverter::toString( i ), mBarLineWidth,
-                                       mBarHeight, mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * i, 0,
-                                       "Core/ProfilerMax", false );
+                element =
+                    createPanel( "maxBar" + StringConverter::toString( i ), mBarLineWidth, mBarHeight,
+                                 mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * Real( i ), 0,
+                                 "Core/ProfilerMax", false );
                 mProfileGui->addChild( element );
                 mProfileBars.push_back( element );
 
                 // this indicates the average frame time
-                element = createPanel( "avgBar" + StringConverter::toString( i ), mBarLineWidth,
-                                       mBarHeight, mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * i, 0,
-                                       "Core/ProfilerAvg", false );
+                element =
+                    createPanel( "avgBar" + StringConverter::toString( i ), mBarLineWidth, mBarHeight,
+                                 mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * Real( i ), 0,
+                                 "Core/ProfilerAvg", false );
                 mProfileGui->addChild( element );
                 mProfileBars.push_back( element );
 
                 // this indicates the text of the frame time
                 element = createTextArea( "statText" + StringConverter::toString( i ), 20, mBarHeight,
-                                          mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * i, 0, 14, "",
-                                          false );
+                                          mGuiBorderWidth + ( mBarHeight + mBarSpacing ) * Real( i ), 0,
+                                          14, "", false );
                 mProfileGui->addChild( element );
                 mProfileBars.push_back( element );
             }
@@ -185,7 +188,7 @@ namespace Ogre
             g->setCaption( String( instance->name + " (" +
                                    StringConverter::toString( instance->history.numCallsThisFrame ) +
                                    ")" ) );
-            g->setLeft( 10 + instance->hierarchicalLvl * 15.0f );
+            g->setLeft( 10 + Real( instance->hierarchicalLvl ) * 15.0f );
 
             // display the main bar that show the percentage of the frame time that this
             // profile has taken
@@ -203,7 +206,7 @@ namespace Ogre
                 g->setWidth( ( instance->history.currentTimeMillisecs / maxTimeMillisecs ) * mGuiWidth );
 
             g->setLeft( mGuiWidth );
-            g->setTop( mGuiBorderWidth + profileCount * ( mBarHeight + mBarSpacing ) );
+            g->setTop( mGuiBorderWidth + Real( profileCount ) * ( mBarHeight + mBarSpacing ) );
 
             // display line to indicate the minimum frame time for this profile
             g = *bIter;
@@ -232,12 +235,12 @@ namespace Ogre
             if( instance->history.totalCalls != 0 )
             {
                 if( mDisplayMode == DISPLAY_PERCENTAGE )
-                    g->setLeft( mBarIndent +
-                                ( instance->history.totalTimePercent / instance->history.totalCalls ) *
-                                    mGuiWidth );
+                    g->setLeft( mBarIndent + ( instance->history.totalTimePercent /
+                                               Real( instance->history.totalCalls ) ) *
+                                                 mGuiWidth );
                 else
                     g->setLeft( mBarIndent + ( ( instance->history.totalTimeMillisecs /
-                                                 instance->history.totalCalls ) /
+                                                 Real( instance->history.totalCalls ) ) /
                                                maxTimeMillisecs ) *
                                                  mGuiWidth );
             }

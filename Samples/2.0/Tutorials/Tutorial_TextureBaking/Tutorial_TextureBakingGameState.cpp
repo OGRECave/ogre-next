@@ -369,7 +369,8 @@ namespace Demo
 
         for( size_t i = 0; i < c_numAreaLights; ++i )
         {
-            createLight( Ogre::Vector3( ( i - ( c_numAreaLights - 1u ) * 0.5f ) * 10, 4.0f, 0.0f ), i );
+            createLight(
+                Ogre::Vector3( ( float( i ) - ( c_numAreaLights - 1u ) * 0.5f ) * 10, 4.0f, 0.0f ), i );
             setupLightTexture( i );
         }
 

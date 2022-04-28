@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 #include "OgreD3D11Plugin.h"
 
+#include "OgreAbiUtils.h"
 #include "OgreRoot.h"
 
 namespace Ogre
@@ -60,5 +61,6 @@ namespace Ogre
         delete mRenderSystem;
         mRenderSystem = 0;
     }
-
+    //---------------------------------------------------------------------
+    void D3D11Plugin::getAbiCookie( AbiCookie &outAbiCookie ) { outAbiCookie = generateAbiCookie(); }
 }  // namespace Ogre

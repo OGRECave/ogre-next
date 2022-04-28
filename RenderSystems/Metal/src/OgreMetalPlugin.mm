@@ -28,6 +28,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 #include "OgreMetalPlugin.h"
 
+#include "OgreAbiUtils.h"
 #include "OgreMetalRenderSystem.h"
 #include "OgreRoot.h"
 
@@ -65,4 +66,6 @@ namespace Ogre
         OGRE_DELETE mRenderSystem;
         mRenderSystem = 0;
     }
+    //---------------------------------------------------------------------
+    void MetalPlugin::getAbiCookie( AbiCookie &outAbiCookie ) { outAbiCookie = generateAbiCookie(); }
 }

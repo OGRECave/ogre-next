@@ -360,8 +360,9 @@ namespace Ogre
         */
         Real getSpotlightNearClipDistance() const { return mSpotNearClip; }
 
-        /** For custom 2D shape and area lights, sets the dimensions of the rectangle, in half size
-        @param halfSize
+        /** For custom 2D shape and area lights, sets the dimensions of the rectangle
+        @param rectSize
+            Dimensions of light area.
         */
         void setRectSize( Vector2 rectSize );
 

@@ -75,7 +75,7 @@ namespace Ogre
         TexBufferPacked *retVal = OGRE_NEW D3D11TexBufferPacked(
             mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
             (void *)0, false, (VaoManager *)0, bufferInterface, pixelFormat, true, mDevice );
-        // We were overriden by the BufferPacked we just created. Restore this back!
+        // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;
@@ -91,7 +91,7 @@ namespace Ogre
         ReadOnlyBufferPacked *retVal = OGRE_NEW D3D11ReadOnlyBufferPacked(
             mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
             (void *)0, false, (VaoManager *)0, bufferInterface, PFG_NULL, true, mDevice );
-        // We were overriden by the BufferPacked we just created. Restore this back!
+        // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;

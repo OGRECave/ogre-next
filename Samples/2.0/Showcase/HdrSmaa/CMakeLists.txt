@@ -13,6 +13,9 @@ endmacro()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+if( OGRE_BUILD_COMPONENT_ATMOSPHERE )
+	ogre_add_component_include_dir(Atmosphere)
+endif()
 include_directories(${CMAKE_SOURCE_DIR}/Components/Hlms/Common/include)
 ogre_add_component_include_dir(Hlms/Pbs)
 
@@ -21,5 +24,8 @@ add_recursive( ./ SOURCE_FILES )
 ogre_add_executable(Sample_HdrSmaa WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
 
 target_link_libraries(Sample_HdrSmaa ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
+if( OGRE_BUILD_COMPONENT_ATMOSPHERE )
+	target_link_libraries(Sample_HdrSmaa ${OGRE_NEXT}Atmosphere)
+endif()
 ogre_config_sample_lib(Sample_HdrSmaa)
 ogre_config_sample_pkg(Sample_HdrSmaa)

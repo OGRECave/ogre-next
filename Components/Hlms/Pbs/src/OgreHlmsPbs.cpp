@@ -47,6 +47,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "IrradianceField/OgreIrradianceField.h"
+#include "OgreAtmosphereComponent.h"
 #include "OgreCamera.h"
 #include "OgreForward3D.h"
 #include "OgreHighLevelGpuProgram.h"
@@ -88,6 +89,8 @@ namespace Ogre
     const IdString PbsProperty::DebugPssmSplits = IdString( "debug_pssm_splits" );
     const IdString PbsProperty::PerceptualRoughness = IdString( "perceptual_roughness" );
     const IdString PbsProperty::HasPlanarReflections = IdString( "has_planar_reflections" );
+
+    const IdString PbsProperty::NumPassConstBuffers = IdString( "num_pass_const_buffers" );
 
     const IdString PbsProperty::Set0TextureSlotEnd = IdString( "set0_texture_slot_end" );
     const IdString PbsProperty::Set1TextureSlotEnd = IdString( "set1_texture_slot_end" );
@@ -292,6 +295,8 @@ namespace Ogre
         mAreaLightMasks( 0 ),
         mAreaLightMasksSamplerblock( 0 ),
         mUsingAreaLightMasks( false ),
+        mNumPassConstBuffers( 0u ),
+        mAtmosphere( 0 ),
         mLightProfilesTexture( 0 ),
         mSkipRequestSlotInChangeRS( false ),
         mLtcMatrixTexture( 0 ),
@@ -459,20 +464,16 @@ namespace Ogre
     {
         DescBindingRange *descBindingRanges = rootLayout.mDescBindingRanges[0];
 
-        if( getProperty( PbsProperty::useLightBuffers ) )
-            descBindingRanges[DescBindingTypes::ConstBuffer].end = 7u;
-        else
+        descBindingRanges[DescBindingTypes::ConstBuffer].end =
+            static_cast<uint16>( getProperty( PbsProperty::NumPassConstBuffers ) );
+
+        // PccManualProbeDecl piece uses more conditionals to whether use an extra const buffer
+        // However we don't need to test them all. It's ok to have a few false positives
+        // (it just wastes a little bit more memory)
+        if( getProperty( PbsProperty::UseParallaxCorrectCubemaps ) &&
+            !getProperty( PbsProperty::EnableCubemapsAuto ) )
         {
-            // PccManualProbeDecl piece uses more conditionals to whether use a 4th const buffer
-            // However we don't need to test them all. It's ok to have false positives
-            // (it just wastes a little bit more memory)
-            if( getProperty( PbsProperty::UseParallaxCorrectCubemaps ) &&
-                !getProperty( PbsProperty::EnableCubemapsAuto ) )
-            {
-                descBindingRanges[DescBindingTypes::ConstBuffer].end = 4u;
-            }
-            else
-                descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
+            ++descBindingRanges[DescBindingTypes::ConstBuffer].end;
         }
 
         if( mSetupWorldMatBuf )
@@ -1557,6 +1558,8 @@ namespace Ogre
         if( isInstancedStereo )
             setProperty( HlmsBaseProp::VPos, 1 );
 
+        mAtmosphere = sceneManager->getAtmosphere();
+
         if( !casterPass )
         {
             if( mPerceptualRoughness )
@@ -1678,6 +1681,20 @@ namespace Ogre
             if( mFineLightMaskGranularity )
                 setProperty( HlmsBaseProp::FineLightMask, 1 );
 #endif
+        }
+
+        {
+            uint32 numPassConstBuffers = 3u;
+            if( !casterPass )
+            {
+                if( mUseLightBuffers )
+                    numPassConstBuffers += 3u;
+                numPassConstBuffers += mAtmosphere->preparePassHash( this, numPassConstBuffers );
+            }
+
+            mNumPassConstBuffers = numPassConstBuffers;
+
+            setProperty( PbsProperty::NumPassConstBuffers, int32( numPassConstBuffers ) );
         }
 
         if( mOptimizationStrategy == LowerGpuOverhead )
@@ -2131,8 +2148,8 @@ namespace Ogre
                     shadowNode->getIndexToContiguousShadowMapTex( (size_t)shadowMapTexIdx );
                 uint32 texWidth = contiguousShadowMapTex[shadowMapTexContigIdx]->getWidth();
                 uint32 texHeight = contiguousShadowMapTex[shadowMapTexContigIdx]->getHeight();
-                *passBufferPtr++ = 1.0f / texWidth;
-                *passBufferPtr++ = 1.0f / texHeight;
+                *passBufferPtr++ = 1.0f / float( texWidth );
+                *passBufferPtr++ = 1.0f / float( texHeight );
                 *passBufferPtr++ = static_cast<float>( texWidth );
                 *passBufferPtr++ = static_cast<float>( texHeight );
 
@@ -2143,9 +2160,9 @@ namespace Ogre
             if( passSceneDef && passSceneDef->mUvBakingSet != 0xFF )
             {
                 *passBufferPtr++ = static_cast<float>( passSceneDef->mUvBakingOffset.x * Real( 2.0 ) /
-                                                       renderTarget->getWidth() );
+                                                       Real( renderTarget->getWidth() ) );
                 *passBufferPtr++ = static_cast<float>( passSceneDef->mUvBakingOffset.y * Real( 2.0 ) /
-                                                       renderTarget->getHeight() );
+                                                       Real( renderTarget->getHeight() ) );
                 *passBufferPtr++ = 0.0f;
                 *passBufferPtr++ = 0.0f;
             }
@@ -2334,7 +2351,7 @@ namespace Ogre
             {
                 float invHeightLightProfileTex = 1.0f;
                 if( mLightProfilesTexture )
-                    invHeightLightProfileTex = 1.0f / mLightProfilesTexture->getHeight();
+                    invHeightLightProfileTex = 1.0f / float( mLightProfilesTexture->getHeight() );
 
                 // All directional lights (caster and non-caster) are sent.
                 // Then non-directional shadow-casting shadow lights are sent.
@@ -2953,31 +2970,37 @@ namespace Ogre
             *commandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( PixelShader, 0, passBuffer, 0, (uint32)passBuffer->getTotalSizeBytes() );
 
+            uint32 constBufferSlot = 3u;
+
             if( mUseLightBuffers )
             {
                 ConstBufferPacked *light0Buffer = mLight0Buffers[mCurrentPassBuffer - 1];
                 *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
-                    VertexShader, 4, light0Buffer, 0, (uint32)light0Buffer->getTotalSizeBytes() );
+                    VertexShader, 3, light0Buffer, 0, (uint32)light0Buffer->getTotalSizeBytes() );
                 *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
-                    PixelShader, 4, light0Buffer, 0, (uint32)light0Buffer->getTotalSizeBytes() );
+                    PixelShader, 3, light0Buffer, 0, (uint32)light0Buffer->getTotalSizeBytes() );
 
                 ConstBufferPacked *light1Buffer = mLight1Buffers[mCurrentPassBuffer - 1];
                 *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
-                    VertexShader, 5, light1Buffer, 0, (uint32)light1Buffer->getTotalSizeBytes() );
+                    VertexShader, 4, light1Buffer, 0, (uint32)light1Buffer->getTotalSizeBytes() );
                 *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
-                    PixelShader, 5, light1Buffer, 0, (uint32)light1Buffer->getTotalSizeBytes() );
+                    PixelShader, 4, light1Buffer, 0, (uint32)light1Buffer->getTotalSizeBytes() );
 
                 ConstBufferPacked *light2Buffer = mLight2Buffers[mCurrentPassBuffer - 1];
                 *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
-                    VertexShader, 6, light2Buffer, 0, (uint32)light2Buffer->getTotalSizeBytes() );
+                    VertexShader, 5, light2Buffer, 0, (uint32)light2Buffer->getTotalSizeBytes() );
                 *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
-                    PixelShader, 6, light2Buffer, 0, (uint32)light2Buffer->getTotalSizeBytes() );
+                    PixelShader, 5, light2Buffer, 0, (uint32)light2Buffer->getTotalSizeBytes() );
+
+                constBufferSlot = 6u;
             }
 
             size_t texUnit = mReservedTexBufferSlots;
 
             if( !casterPass )
             {
+                constBufferSlot += mAtmosphere->bindConstBuffers( commandBuffer, constBufferSlot );
+
                 if( mGridBuffer )
                 {
                     *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -3164,7 +3187,7 @@ namespace Ogre
                                   "PCC currently set" );
                 ConstBufferPacked *probeConstBuf = manualProbe->getConstBufferForManualProbes();
                 *commandBuffer->addCommand<CbShaderBuffer>() =
-                    CbShaderBuffer( PixelShader, 3, probeConstBuf, 0, 0 );
+                    CbShaderBuffer( PixelShader, uint16( mNumPassConstBuffers ), probeConstBuf, 0, 0 );
             }
             mLastBoundPool = newPool;
         }
@@ -3741,6 +3764,9 @@ namespace Ogre
         outLibraryFoldersPaths.push_back( "Hlms/Common/" + shaderSyntax );
         outLibraryFoldersPaths.push_back( "Hlms/Common/Any" );
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any" );
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Atmosphere" );
+#endif
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Main" );
 
         // Fill the data folder path

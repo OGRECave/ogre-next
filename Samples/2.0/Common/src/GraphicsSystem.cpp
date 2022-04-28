@@ -6,6 +6,7 @@
 #endif
 #include "GameEntity.h"
 
+#include "OgreAbiUtils.h"
 #include "OgreConfigFile.h"
 #include "OgreException.h"
 #include "OgreRoot.h"
@@ -38,6 +39,11 @@
 #include "OgrePlatformInformation.h"
 
 #include "System/Android/AndroidSystems.h"
+
+#include "OgreAtmosphereComponent.h"
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+#    include "OgreAtmosphereNpr.h"
+#endif
 
 #include <fstream>
 
@@ -152,8 +158,11 @@ namespace Demo
         const Ogre::String cfgPath = "";
 #endif
 
-        mRoot =
-            OGRE_NEW Ogre::Root( pluginsPath, cfgPath, mWriteAccessFolder + "Ogre.log", windowTitle );
+        {
+            const Ogre::AbiCookie abiCookie = Ogre::generateAbiCookie();
+            mRoot = OGRE_NEW Ogre::Root( &abiCookie, pluginsPath, cfgPath,
+                                         mWriteAccessFolder + "Ogre.log", windowTitle );
+        }
 
         AndroidSystems::registerArchiveFactories();
 
@@ -354,7 +363,12 @@ namespace Demo
         saveHlmsDiskCache();
 
         if( mSceneManager )
+        {
+            Ogre::AtmosphereComponent *atmosphere = mSceneManager->getAtmosphereRaw();
+            OGRE_DELETE atmosphere;
+
             mSceneManager->removeRenderQueueListener( mOverlaySystem );
+        }
 
         OGRE_DELETE mOverlaySystem;
         mOverlaySystem = 0;
@@ -875,6 +889,25 @@ namespace Demo
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::initMiscParamsListener( Ogre::NameValuePairList &params ) {}
+    //-----------------------------------------------------------------------------------
+    void GraphicsSystem::createAtmosphere( Ogre::Light *sunLight )
+    {
+#ifdef OGRE_BUILD_COMPONENT_ATMOSPHERE
+        {
+            Ogre::AtmosphereComponent *atmosphere = mSceneManager->getAtmosphereRaw();
+            OGRE_DELETE atmosphere;
+        }
+
+        Ogre::AtmosphereNpr *atmosphere =
+            OGRE_NEW Ogre::AtmosphereNpr( mRoot->getRenderSystem()->getVaoManager() );
+        atmosphere->setSunDir(
+            sunLight->getDirection(),
+            std::asin( Ogre::Math::Clamp( -sunLight->getDirection().y, -1.0f, 1.0f ) ) /
+                Ogre::Math::PI );
+        atmosphere->setLight( sunLight );
+        atmosphere->setSky( mSceneManager, true );
+#endif
+    }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::setAlwaysAskForConfig( bool alwaysAskForConfig )
     {

@@ -579,7 +579,7 @@ namespace Ogre
 
         const Real invSumNdf = Real( 1.0 ) / sumNdf;
 
-        const Real reverseSumNdf = mNumCollectedProbes - sumNdf;
+        const Real reverseSumNdf = Real( mNumCollectedProbes ) - sumNdf;
         const Real invRevSumNdf = Real( 1.0 ) / reverseSumNdf;
 
         Real sumBlendFactor = 0;
@@ -869,7 +869,7 @@ namespace Ogre
             // When mNumCollectedProbes = 4
             // mProbeBlendFactors[0] is in range [0.25; 1] so we need to move it to range [0; 1]
             finalPos = Math::lerp( mTrackedPosition, finalPos,
-                                   mProbeBlendFactors[0] * mNumCollectedProbes - Real( 1.0 ) );
+                                   mProbeBlendFactors[0] * Real( mNumCollectedProbes ) - Real( 1.0 ) );
         }
 
         // TODO: restrict mTrackedPosition to a region between the 4 probes.
@@ -969,7 +969,7 @@ namespace Ogre
             // mProbeBlendFactors[1] is in range [0.25; 0.5] so we need to move it to range [0; 1]
             // mProbeBlendFactors[2] is in range [0.25; 0.333] so we need to move it to range [0; 1]
             // mProbeBlendFactors[3] is in range [0; 0.25] so we need to move it to range [0; 1]
-            Real weight = mProbeBlendFactors[i] * ( i + 1 );
+            Real weight = mProbeBlendFactors[i] * Real( i + 1u );
             if( i != mNumCollectedProbes - 1u )
                 weight -= Real( i + 1 ) / (Real)mNumCollectedProbes;
 

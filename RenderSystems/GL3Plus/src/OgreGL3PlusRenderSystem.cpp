@@ -976,12 +976,12 @@ namespace Ogre
                 if( !desc->requiresTextureFlipping() )
                 {
                     // Convert "upper-left" corner to "lower-left"
-                    xywhVp[i][1] = GLint( anyTarget->getHeight() ) - xywhVp[i][3] - xywhVp[i][1];
+                    xywhVp[i][1] = GLfloat( anyTarget->getHeight() ) - xywhVp[i][3] - xywhVp[i][1];
                     xywhSc[i][1] = GLint( anyTarget->getHeight() ) - xywhSc[i][3] - xywhSc[i][1];
                 }
             }
-            glViewportArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLfloat*>( xywhVp ) );
-            glScissorArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLint*>( xywhSc ) );
+            glViewportArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLfloat *>( xywhVp ) );
+            glScissorArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLint *>( xywhSc ) );
         }
         /*else
         {
@@ -1079,7 +1079,7 @@ namespace Ogre
             // independent size if you're looking for attenuation.
             // So, scale the point size up by viewport size (this is equivalent to
             // what D3D does as standard).
-            size = size * mCurrentRenderViewport[0].getActualHeight();
+            size = size * Real( mCurrentRenderViewport[0].getActualHeight() );
 
             // XXX: why do I need this for results to be consistent with D3D?
             // Equations are supposedly the same once you factor in vp height.
@@ -2736,9 +2736,9 @@ namespace Ogre
                 // Update derived depth bias.
                 if( mDerivedDepthBias && mCurrentPassIterationNum > 0 )
                 {
-                    _setDepthBias(
-                        mDerivedDepthBiasBase + mDerivedDepthBiasMultiplier * mCurrentPassIterationNum,
-                        mDerivedDepthBiasSlopeScale );
+                    _setDepthBias( mDerivedDepthBiasBase +
+                                       mDerivedDepthBiasMultiplier * float( mCurrentPassIterationNum ),
+                                   mDerivedDepthBiasSlopeScale );
                 }
 
                 if( numberOfInstances > 1 )
@@ -2762,9 +2762,9 @@ namespace Ogre
                 // Update derived depth bias.
                 if( mDerivedDepthBias && mCurrentPassIterationNum > 0 )
                 {
-                    _setDepthBias(
-                        mDerivedDepthBiasBase + mDerivedDepthBiasMultiplier * mCurrentPassIterationNum,
-                        mDerivedDepthBiasSlopeScale );
+                    _setDepthBias( mDerivedDepthBiasBase +
+                                       mDerivedDepthBiasMultiplier * float( mCurrentPassIterationNum ),
+                                   mDerivedDepthBiasSlopeScale );
                 }
 
                 if( numberOfInstances > 1 )

@@ -135,6 +135,11 @@ namespace Ogre
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
                                    mDevice->mDeviceFeatures.drawIndirectFirstInstance;
 
+#ifdef OGRE_VK_WORKAROUND_ADRENO_618_0VERTEX_INDIRECT
+        if( Workarounds::mAdreno618_0VertexIndirect )
+            mSupportsIndirectBuffers = false;
+#endif
+
         mReadOnlyIsTexBuffer = false;
         mReadOnlyBufferMaxSize = mUavBufferMaxSize;
 
@@ -2113,6 +2118,7 @@ namespace Ogre
         case BT_DYNAMIC_PERSISTENT:
             vboFlag = CPU_WRITE_PERSISTENT;
             break;
+        case BT_DEFAULT_SHARED:
         case BT_DYNAMIC_PERSISTENT_COHERENT:
             vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
             break;

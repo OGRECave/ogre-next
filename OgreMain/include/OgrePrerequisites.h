@@ -46,16 +46,39 @@ THE SOFTWARE
 #    endif
 #endif
 
+#if __clang__ && !defined( Q_CREATOR_RUN )
+#    define ogre_nullable _Nullable
+#    define ogre_nonnull _Nonnull
+#    define OGRE_ASSUME_NONNULL_BEGIN _Pragma( "clang assume_nonnull begin" )
+#    define OGRE_ASSUME_NONNULL_END _Pragma( "clang assume_nonnull end" )
+#    define ogre_likely( x ) __builtin_expect( ( x ), 1 )
+#    define ogre_unlikely( x ) __builtin_expect( ( x ), 0 )
+#else
+#    define ogre_nullable
+#    define ogre_nonnull
+#    define OGRE_ASSUME_NONNULL_BEGIN
+#    define OGRE_ASSUME_NONNULL_END
+#    if __GNUC__
+#        define ogre_likely( x ) __builtin_expect( ( x ), 1 )
+#        define ogre_unlikely( x ) __builtin_expect( ( x ), 0 )
+#    else
+#        define ogre_likely( x ) ( x )
+#        define ogre_unlikely( x ) ( x )
+#    endif
+#endif
+
 namespace Ogre
 {
 // Define ogre version
-#define OGRE_VERSION_MAJOR 2
-#define OGRE_VERSION_MINOR 4
+#define OGRE_VERSION_MAJOR 3
+#define OGRE_VERSION_MINOR 0
 #define OGRE_VERSION_PATCH 0
 #define OGRE_VERSION_SUFFIX "unstable"
 #define OGRE_VERSION_NAME "E"
 
+#define OGRE_MAKE_VERSION( maj, min, patch ) ( ( maj << 16 ) | ( min << 8 ) | patch )
 #define OGRE_VERSION ( ( OGRE_VERSION_MAJOR << 16 ) | ( OGRE_VERSION_MINOR << 8 ) | OGRE_VERSION_PATCH )
+#define OGRE_NEXT_VERSION OGRE_VERSION
 
 #define OGRE_UNUSED_VAR( x ) ( (void)x )
 
@@ -111,6 +134,7 @@ namespace Ogre
     class ArchiveManager;
     class AsyncTextureTicket;
     class AsyncTicket;
+    class AtmosphereComponent;
     class AutoParamDataSource;
     class AxisAlignedBox;
     class AxisAlignedBoxSceneQuery;
