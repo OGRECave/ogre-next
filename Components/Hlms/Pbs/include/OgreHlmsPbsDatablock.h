@@ -260,7 +260,7 @@ namespace Ogre
         /** Valid parameters in params:
         @param params
             * fresnel <value [g, b]>
-                The IOR. @See setIndexOfRefraction
+                The IOR. @see setIndexOfRefraction
                 When specifying three values, the fresnel is separate for each
                 colour component
 
