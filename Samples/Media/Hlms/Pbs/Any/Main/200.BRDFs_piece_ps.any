@@ -271,11 +271,11 @@ midf3 BRDF_IR( midf3 lightDir, midf3 lightDiffuse, PixelData pixelData )
 
 	@property( ltc_texture_available )
 		#define brdfLUT ltcMatrix
-		midf2 envBRDF = OGRE_SampleArray2DF16( brdfLUT, ltcSampler,
+		midf3 envBRDF = OGRE_SampleArray2DF16( brdfLUT, ltcSampler,
 											   float2( pixelData.NdotV,
-													   1.0 - pixelData.perceptualRoughness ), 2 ).xy;
+													   1.0 - pixelData.perceptualRoughness ), 2 ).xyz;
 	@else
-		midf2 envBRDF = midf2_c( 1.0f, 0.0f );
+		midf3 envBRDF = midf3_c( 1.0f, 0.0f, 1.0f );
 	@end
 
 	@property( fresnel_separate_diffuse )
@@ -285,7 +285,7 @@ midf3 BRDF_IR( midf3 lightDir, midf3 lightDiffuse, PixelData pixelData )
 		midf fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
 	@end
 
-	midf3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * _h( 3.141592654 ) * fresnelD;
+	midf3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * _h( 3.141592654 ) * fresnelD * envBRDF.z;
 	midf3 Rs = pixelData.envColourS * pixelData.specular.xyz * ( pixelData.F0 * envBRDF.x + envBRDF.y );
 
 	@property( clear_coat )
