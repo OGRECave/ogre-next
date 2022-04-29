@@ -90,9 +90,9 @@ namespace Ogre
     public:
         enum TextureSource
         {
-            TEXTURE_INPUT,   /// We got the texture through an input channel
-            TEXTURE_LOCAL,   /// We own the texture
-            TEXTURE_GLOBAL,  /// It's a global texture. Ask the manager for it.
+            TEXTURE_INPUT,   ///< We got the texture through an input channel
+            TEXTURE_LOCAL,   ///< We own the texture
+            TEXTURE_GLOBAL,  ///< It's a global texture. Ask the manager for it.
             NUM_TEXTURES_SOURCES
         };
 

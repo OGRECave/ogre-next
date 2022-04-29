@@ -186,10 +186,10 @@ namespace Ogre
     */
     enum HlmsTypes
     {
-        HLMS_LOW_LEVEL,  /// Proxy that redirects to a regular Material
-        HLMS_PBS,        /// Physically Based Shader Generator
-        HLMS_TOON,       /// Toon shading / Cel shading
-        HLMS_UNLIT,      /// Made for GUIs, overlays, particle FXs, self-iluminating billboards
+        HLMS_LOW_LEVEL,  ///< Proxy that redirects to a regular Material
+        HLMS_PBS,        ///< Physically Based Shader Generator
+        HLMS_TOON,       ///< Toon shading / Cel shading
+        HLMS_UNLIT,      ///< Made for GUIs, overlays, particle FXs, self-iluminating billboards
 
         HLMS_USER0,
         HLMS_USER1,

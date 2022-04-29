@@ -76,7 +76,7 @@ namespace Ogre
             /// This causes vector.z to be always 1, but the length of the vector
             /// itself may not be unit-length.
             VIEW_SPACE_CORNERS_NORMALIZED,
-            VIEW_SPACE_CORNERS_NORMALIZED_LH,  /// Left-handed
+            VIEW_SPACE_CORNERS_NORMALIZED_LH,  ///< Left-handed
             WORLD_SPACE_CORNERS,
             WORLD_SPACE_CORNERS_CENTERED,
             CAMERA_DIRECTION
