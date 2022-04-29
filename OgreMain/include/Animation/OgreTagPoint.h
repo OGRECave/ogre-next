@@ -120,14 +120,14 @@ namespace Ogre
 
         Matrix3 _getDerivedOrientationMatrix() const;
 
-        /// @See Node::updateAllTransforms.
+        /// See Node::updateAllTransforms.
         /// This version grabs the parent Bone of a TagPoint, derives the final transform
         /// in world space (supporting non-uniform scaling), and decomposes the matrix
         /// into derived position/quaternion/scale (the quaternion and scale aren't very
         /// useful *if* the skeleton is actually using non-uniform scaling though)
         static void updateAllTransformsBoneToTag( const size_t numNodes, Transform t );
 
-        /// @See Node::updateAllTransforms.
+        /// See Node::updateAllTransforms.
         /// This version grabs the parent of a TagPoint, and derives the final transform
         /// of another TagPoint, respecting non-uniform scaling.
         static void updateAllTransformsTagOnTag( const size_t numNodes, Transform t );

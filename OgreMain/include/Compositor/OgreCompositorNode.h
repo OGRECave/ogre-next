@@ -175,7 +175,7 @@ namespace Ogre
         */
         void setEnabled( bool bEnabled );
 
-        /// Returns if this instance is enabled. @See setEnabled
+        /// Returns if this instance is enabled. @see setEnabled
         bool getEnabled() const { return mEnabled; }
 
         /** Connects this node (let's call it node 'A') to node 'B', mapping the output
@@ -255,7 +255,7 @@ namespace Ogre
         @remarks
             Call this function after connecting all channels (at least our input)
             otherwise we may bind null pointer RTs to the passes (and then crash)
-            @See connectTo and @see connectFinalRT
+            See connectTo() and connectFinalRT().
         */
         void createPasses();
 

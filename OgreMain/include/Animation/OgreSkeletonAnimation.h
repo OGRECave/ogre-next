@@ -141,7 +141,7 @@ namespace Ogre
         */
         void setLoop( bool bLoop ) { mLoop = bLoop; }
 
-        /** Returns current loop setting. @See setLoop.
+        /** Returns current loop setting. @see setLoop
          */
         bool getLoop() const { return mLoop; }
 

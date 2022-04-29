@@ -346,7 +346,7 @@ namespace Ogre
 
             /** Resets the the target node to the initial state
             @remarks
-                This is called everyframe before the animation is applied. @See setInitialState
+                This is called everyframe before the animation is applied. @see setInitialState
             */
             void resetNodeToInitialState();
 

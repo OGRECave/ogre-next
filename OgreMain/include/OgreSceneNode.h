@@ -89,7 +89,7 @@ namespace Ogre
                    SceneNode *parent );
 
         /** Don't use this constructor unless you know what you're doing.
-            @See NodeMemoryManager::mDummyNode
+            @see NodeMemoryManager::mDummyNode
         */
         SceneNode( const Transform &transformPtrs );
 

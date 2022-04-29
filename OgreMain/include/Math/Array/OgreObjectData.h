@@ -58,7 +58,7 @@ namespace Ogre
 
         // ArraySphere   * RESTRICT_ALIAS    mWorldSphere;
 
-        /** @See mLocalAabb
+        /** @see mLocalAabb
         @remarks
             Its center is at mLocalAabb's center, not at the position or origin
         */

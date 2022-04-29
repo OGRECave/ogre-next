@@ -48,7 +48,7 @@ namespace Ogre
     /** Cache-friendly array of Sphere represented as a SoA array.
         @remarks
             ArraySphere is a SIMD & cache-friendly version of Sphere.
-            @See ArrayVector3 for more information.
+            See ArrayVector3 for more information.
         @par
             Extracting one sphere needs 64 bytes, which is within
             the 64 byte size of common cache lines.

@@ -157,7 +157,7 @@ namespace Ogre
             We need the full name, not just the hash; so we can check whether it has the global_ prefix
         @param rtIndex
             The RT to address if it is intended to use with a 3D texture (or a cubemap or a 2D Array)
-            @See CompositorPassDef::mRtIndex. Default: 0
+            See CompositorPassDef::mRtIndex. Default: 0
         */
         CompositorTargetDef *addTargetPass( const String &renderTargetName, uint32 rtIndex = 0 );
 

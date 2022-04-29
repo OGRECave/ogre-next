@@ -34,7 +34,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous.
-        @See BufferPacked::readRequest to generate a ticket. While the async transfer
+        See BufferPacked::readRequest to generate a ticket. While the async transfer
         is being performed, you should be doing something else.
     @remarks
         If you call map() before the transfer is done, it will produce a stall as the

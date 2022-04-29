@@ -315,7 +315,7 @@ namespace Ogre
     public:
         uint32 mTextureHash;        // TextureHash comes before macroblock for alignment reasons
         uint16 mMacroblockHash[2];  // Not all bits are used
-        uint8  mType;               /// @See HlmsTypes
+        uint8  mType;               /// @see HlmsTypes
     protected:
         HlmsMacroblock const *mMacroblock[2];
         HlmsBlendblock const *mBlendblock[2];
@@ -355,7 +355,7 @@ namespace Ogre
             Runs an O(N) search to get the right block.
             Calling this function triggers a HlmsDatablock::flushRenderables
         @param macroblock
-            @See HlmsManager::getMacroblock
+            @see HlmsManager::getMacroblock
         @param casterBlock
             True to directly set the macroblock to be used during the shadow mapping's caster pass.
             Note that when false, it will automatically reset the caster's block according to
@@ -381,7 +381,7 @@ namespace Ogre
             Runs an O(N) search to get the right block.
             Calling this function triggers a HlmsDatablock::flushRenderables
         @param blendblock
-            @See HlmsManager::getBlendblock
+            @see HlmsManager::getBlendblock
         @param casterBlock
             True to directly set the blendblock to be used during the shadow mapping's caster pass.
             Note that when false, it will reset the caster block to the same as the regular one.

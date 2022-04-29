@@ -48,7 +48,7 @@ namespace Ogre
     /** Cache-friendly array of Aabb represented as a SoA array.
         @remarks
             ArrayAabb is a SIMD & cache-friendly version of AxisAlignedBox.
-            (AABB = Axis aligned bounding box) @See ArrayVector3 for
+            (AABB = Axis aligned bounding box) See ArrayVector3 for
             more information.
         @par
             For performance reasons given the mathematical properties,

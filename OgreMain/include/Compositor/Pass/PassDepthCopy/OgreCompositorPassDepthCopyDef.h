@@ -65,7 +65,7 @@ namespace Ogre
         }
 
         /** Indicates the pass to change the texture units to use the specified texture sources.
-            @See QuadTextureSource for params
+            See CompositorPassQuadDef::QuadTextureSource for params
         */
         void setDepthTextureCopy( const String &srcTextureName, const String &dstTextureName );
     };

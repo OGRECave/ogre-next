@@ -78,7 +78,7 @@ namespace Ogre
         NodeMemoryManager();
         virtual ~NodeMemoryManager();
 
-        /// @See mMemoryManagerType
+        /// @see mMemoryManagerType
         void _setTwin( SceneMemoryMgrTypes memoryManagerType, NodeMemoryManager *twinMemoryManager );
 
         SceneNode *_getDummyNode() const { return mDummyNode; }

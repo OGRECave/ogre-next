@@ -217,7 +217,7 @@ namespace Ogre
         /// @see    destroyMacroblock
         void destroyBlendblock( const HlmsBlendblock *Blendblock );
 
-        /** @See getMacroblock. This is the same for Sampler states
+        /** See getMacroblock(). This is the same for Sampler states
         @remarks
             The block's reference count will be increased. Use destroySamplerblock to decrease it.
             The input is a hard copy because it may be modified if invalid parameters are detected
@@ -226,7 +226,7 @@ namespace Ogre
         */
         const HlmsSamplerblock *getSamplerblock( HlmsSamplerblock baseParams );
 
-        /// @See destroyMacroblock
+        /// @see destroyMacroblock
         void destroySamplerblock( const HlmsSamplerblock *Samplerblock );
 
         const DescriptorSetTexture  *getDescriptorSetTexture( const DescriptorSetTexture &baseParams );
@@ -289,7 +289,7 @@ namespace Ogre
         */
         HlmsDatablock *getDatablock( IdString name ) const;
 
-        /// @See getDatablock. Exactly the same, but returns null pointer if it wasn't found,
+        /// See getDatablock(). Exactly the same, but returns null pointer if it wasn't found,
         /// instead of going fallback to default.
         HlmsDatablock *getDatablockNoDefault( IdString name ) const;
 
@@ -297,7 +297,7 @@ namespace Ogre
         /// @see _datablockAdded, @see _datablockDestroyed
         const HlmsDatablockMap &getDatablocks() const { return mRegisteredDatablocks; }
 
-        /// Alias function. @See getDatablock, as many beginners will probably think of the word
+        /// Alias function. See getDatablock(), as many beginners will probably think of the word
         /// "Material" first. Datablock is a more technical (and accurate) name of what it does
         /// (it's a block.. of data). Prefer calling getDatablock directly.
         HlmsDatablock *getMaterial( IdString name ) const { return getDatablock( name ); }
@@ -320,7 +320,7 @@ namespace Ogre
         void registerHlms( Hlms *provider, bool deleteOnExit = true );
 
         /// Unregisters an HLMS provider of the given type. Does nothing if no provider was registered.
-        /// @See registerHlms for details.
+        /// See registerHlms() for details.
         void unregisterHlms( HlmsTypes type );
 
         void registerComputeHlms( HlmsCompute *provider );

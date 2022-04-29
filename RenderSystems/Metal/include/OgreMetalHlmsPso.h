@@ -41,7 +41,7 @@ namespace Ogre
      *  @{
      */
 
-    /// @See HlmsPso
+    /// @see HlmsPso
     struct _OgreMetalExport MetalHlmsPso
     {
         id<MTLRenderPipelineState> pso;

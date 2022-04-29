@@ -177,7 +177,7 @@ namespace Ogre
         /// Returns the node definition with the given name. Throws if not found
         const CompositorNodeDef *getNodeDefinition( IdString nodeDefName ) const;
 
-        /// @See getNodeDefinition. Returns a non-const pointer. Use this only if you
+        /// See getNodeDefinition(). Returns a non-const pointer. Use this only if you
         /// know what you're doing. Modifying a NodeDef while it's being used by
         /// CompositorNode instances is undefined. It's safe if you're sure it's not
         /// being used.
@@ -198,7 +198,7 @@ namespace Ogre
         /// Returns the node definition with the given name. Throws if not found
         const CompositorShadowNodeDef *getShadowNodeDefinition( IdString nodeDefName ) const;
 
-        /// @See getShadowNodeDefinition. Returns a non-const pointer. Use this only if you
+        /// See getShadowNodeDefinition(). Returns a non-const pointer. Use this only if you
         /// know what you're doing. Modifying a ShadowNodeDef while it's being used by
         /// CompositorShadowNode instances is undefined. It's safe if you're sure it's not
         /// being used.

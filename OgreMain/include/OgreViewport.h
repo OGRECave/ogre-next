@@ -164,7 +164,7 @@ namespace Ogre
             Height of the viewport.
         @param overrideScissors
             When true, the scissor dimensions will be the same as the viewport's
-            @See setScissors
+            @see setScissors
         @note
             Dimensions relative to the size of the target, represented as real values
             between 0 and 1. i.e. the full target area is 0, 0, 1, 1.
@@ -175,10 +175,10 @@ namespace Ogre
         TextureGpu *getCurrentTarget() const { return mCurrentTarget; }
 
         /** Only sets the scissor regions. The scissor rectangle must be fully inside
-            the viewport rectangle. @See setDimensions for param description
+            the viewport rectangle. See setDimensions() for param description
         @remarks
             Only the scissor rect is set here; but the HLMS macroblock controls whether
-            scissor testing is enabled or not (@See HlmsMacroblock). On some RenderSystem
+            scissor testing is enabled or not (See HlmsMacroblock). On some RenderSystem
             implementations (i.e. OpenGL), scissor testing needs to be enabled when
             clearing a region of the screen. In those cases, if scissor testing is disabled at
             the time of the clear, scissor testing will be temporarily enabled and then disabled.

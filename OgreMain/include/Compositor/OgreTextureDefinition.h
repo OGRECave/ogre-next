@@ -320,7 +320,7 @@ namespace Ogre
             WARNING: Calling this function may invalidate all previous returned pointers
             unless you've properly called setLocalTextureDefinitions
         @par
-            @See addTextureSourceName remarks for what it can throw
+            See addTextureSourceName() remarks for what it can throw
         @par
             Textures are local when the derived class is a Node definition, and
             it's global when the derived class is a Workspace definition
@@ -382,7 +382,7 @@ namespace Ogre
         static void              setupTexture( TextureGpu *tex, const TextureDefinition &textureDef,
                                                const TextureGpu *finalTarget );
 
-        /// @See createTextures
+        /// @see createTextures
         static void destroyTextures( CompositorChannelVec &inOutTexContainer, RenderSystem *renderSys );
 
         /** Destroys & recreates only the textures that depend on the main RT

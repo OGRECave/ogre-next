@@ -56,7 +56,7 @@ namespace Ogre
 
         /** Converts a SIMD mask into a mask that fits in 32-bit number
         @remarks
-            @See IS_SET_MASK_X & co. to read the mask, since the result may need
+            See IS_SET_MASK_X & co. to read the mask, since the result may need
             byteswapping in some architectures (i.e. SSE2)
         */
         inline static uint32 getScalarMask( ArrayMaskR mask );

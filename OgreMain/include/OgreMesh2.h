@@ -454,7 +454,7 @@ namespace Ogre
         void importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents,
                        bool halfPose = true );
 
-        /// Converts this SubMesh to an efficient arrangement. @See Mesh::importV1 for an
+        /// Converts this SubMesh to an efficient arrangement. See Mesh::importV1 for an
         /// explanation on the parameters. @see dearrangeEfficientToInefficient
         /// to perform the opposite operation.
         void arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents );

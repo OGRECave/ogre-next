@@ -41,8 +41,9 @@ namespace Ogre
      *  @{
      */
 
-    /// @See HlmsPso. We cache some conversion values here
-    /// to avoid doing it every time we set the Pso
+    /// We cache some conversion values here
+    /// to avoid doing it every time we set the Pso.
+    /// @see HlmsPso
     struct _OgreD3D11Export D3D11HlmsPso
     {
         D3D11_PRIMITIVE_TOPOLOGY        topology;
