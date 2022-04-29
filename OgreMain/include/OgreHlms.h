@@ -674,9 +674,9 @@ namespace Ogre
             useful for UI editors which want to enumerate all existing datablocks and
             display its name to the user.
         @param macroblockRef
-            @See HlmsManager::getMacroblock
+            @see HlmsManager::getMacroblock
         @param blendblockRef
-            @See HlmsManager::getBlendblock
+            @see HlmsManager::getBlendblock
         @param paramVec
             Key - String Value list of paramters. MUST BE SORTED.
         @param visibleToManager

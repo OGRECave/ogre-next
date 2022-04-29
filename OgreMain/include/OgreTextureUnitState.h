@@ -989,7 +989,7 @@ namespace Ogre
         void _setSamplerblock( const HlmsSamplerblock *samplerblock );
 
         /** Retrieves current samplerblock. Don't const_cast the return value to modify it.
-            @See HlmsDatablock remarks.
+            See HlmsDatablock remarks.
         */
         const HlmsSamplerblock *getSamplerblock() const;
 

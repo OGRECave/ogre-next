@@ -61,7 +61,7 @@ namespace Ogre
             fetches for common cache lines of 64 bytes.
             Make sure extractions are made sequentially to avoid cache
             trashing and excessive bandwidth consumption, and prefer
-            working on @See ArrayVector3 & @See ArrayQuaternion instead
+            working on see ArrayVector3 & see ArrayQuaternion instead
             Architectures where the cache line == 32 bytes may want to
             set ARRAY_PACKED_REALS = 2 depending on their needs
     */

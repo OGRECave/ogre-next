@@ -103,7 +103,7 @@ namespace Ogre
                 initialData[1] = out of bounds;
         @param keepAsShadow
             Whether to keep the pointer "initialData" as a shadow copy of the contents.
-            @See BufferPacked::BufferPacked regarding on who is responsible for freeing this pointer
+            See BufferPacked::BufferPacked regarding on who is responsible for freeing this pointer
             and what happens if an exception was raised.
         @return
             The desired vertex buffer pointer

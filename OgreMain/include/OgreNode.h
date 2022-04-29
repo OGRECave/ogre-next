@@ -193,7 +193,7 @@ namespace Ogre
         Node( IdType id, NodeMemoryManager *nodeMemoryManager, Node *parent );
 
         /** Don't use this constructor unless you know what you're doing.
-            @See NodeMemoryManager::mDummyNode
+            @see NodeMemoryManager::mDummyNode
         */
         Node( const Transform &transformPtrs );
 
@@ -228,7 +228,7 @@ namespace Ogre
         */
         void migrateTo( NodeMemoryManager *nodeMemoryManager );
 
-        /// Checks whether this node is static. @See setStatic
+        /// Checks whether this node is static. @see setStatic
         bool isStatic() const;
 
         /** Turns this Node into static or dynamic
@@ -612,7 +612,7 @@ namespace Ogre
         @remarks
             Assumes the caches are already updated. Will trigger an assert
             otherwise.
-            @See _getDerivedOrientationUpdated if you need the update process
+            See _getDerivedOrientationUpdated() if you need the update process
             to be guaranteed
         */
         virtual_l2 Quaternion _getDerivedOrientation() const;
@@ -631,7 +631,7 @@ namespace Ogre
         @remarks
             Assumes the caches are already updated. Will trigger an assert
             otherwise.
-            @See _getDerivedPositionUpdated if you need the update process
+            See _getDerivedPositionUpdated() if you need the update process
             to be guaranteed
         */
         virtual_l2 Vector3 _getDerivedPosition() const;
@@ -650,7 +650,7 @@ namespace Ogre
         @remarks
             Assumes the caches are already updated. Will trigger an assert
             otherwise.
-            @See _getDerivedScaleUpdated if you need the update process
+            See _getDerivedScaleUpdated() if you need the update process
             to be guaranteed
         */
         virtual_l2 Vector3 _getDerivedScale() const;
@@ -683,7 +683,7 @@ namespace Ogre
             return mTransform.mDerivedTransform[mTransform.mIndex];
         }
 
-        /** @See _getDerivedScaleUpdated remarks. @See _getFullTransform */
+        /** See _getDerivedScaleUpdated() remarks. @see _getFullTransform */
         virtual_l2 const Matrix4 &_getFullTransformUpdated();
 
         /** Helper method to update the Node and all children.
@@ -705,7 +705,7 @@ namespace Ogre
          */
         Listener *getListener() const { return mListener; }
 
-        /** @See SceneManager::updateAllTransforms()
+        /** @see SceneManager::updateAllTransforms()
         @remarks
             We don't pass by reference on purpose (avoid implicit aliasing)
         */

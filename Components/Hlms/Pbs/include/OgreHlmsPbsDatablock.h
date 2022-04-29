@@ -115,7 +115,7 @@ namespace Ogre
             /// with the default BRDF.
             DefaultSeparateDiffuseFresnel = Default | FLAG_SPERATE_DIFFUSE_FRESNEL,
 
-            /// @see DefaultSeparateDiffuseFresnel. This is the same
+            /// See #DefaultSeparateDiffuseFresnel. This is the same
             /// but the Cook Torrance model is used instead.
             ///
             /// Ideal for shiny objects like glass toy marbles, some types of rubber.
@@ -407,7 +407,7 @@ namespace Ogre
             setMetalness should not be called in this mode.
         @par
             If "workflow" was different from the current setting, it will call
-            @see HlmsDatablock::flushRenderables. If the another shader must be created,
+            HlmsDatablock::flushRenderables. If the another shader must be created,
             it could cause a stall.
         @param bEnableMetallic
         */
@@ -428,7 +428,7 @@ namespace Ogre
             The formula used is ( (1 - idx) / (1 + idx) )²
         @remarks
             If "separateFresnel" was different from the current setting, it will call
-            @see HlmsDatablock::flushRenderables. If the another shader must be created,
+            HlmsDatablock::flushRenderables(). If the another shader must be created,
             it could cause a stall.
         @param refractionIdx
             The index of refraction of the material for each colour component.
@@ -438,10 +438,10 @@ namespace Ogre
         */
         void setIndexOfRefraction( const Vector3 &refractionIdx, bool separateFresnel );
 
-        /** Sets the fresnel (F0) directly, instead of using the IOR. @See setIndexOfRefraction
+        /** Sets the fresnel (F0) directly, instead of using the IOR. See setIndexOfRefraction().
         @remarks
             If "separateFresnel" was different from the current setting, it will call
-            @see HlmsDatablock::flushRenderables. If the another shader must be created,
+            HlmsDatablock::flushRenderables. If the another shader must be created,
             it could cause a stall.
         @param refractionIdx
             The fresnel of the material for each colour component.
@@ -512,7 +512,7 @@ namespace Ogre
         /// Returns the detail normal maps' weight
         Real getDetailNormalWeight( uint8 detailNormalMapIdx ) const;
 
-        /// @See setDetailNormalWeight. This is the same, but for the main normal map.
+        /// See setDetailNormalWeight(). This is the same, but for the main normal map.
         void setNormalMapWeight( Real weight );
 
         /// Returns the detail normal maps' weight
@@ -523,7 +523,7 @@ namespace Ogre
         @remarks
             A value of 1 will cause a flushRenderables as we remove the code from the
             shader.
-            The weight from @see setNormalMapWeight is multiplied against this value
+            The weight from setNormalMapWeight() is multiplied against this value
             when it comes to the detail normal map.
         @param detailMap
             Value in the range [0; 4)

@@ -250,7 +250,7 @@ namespace Ogre
         virtual BufferPacked *getOriginalBufferType();
 
         /// Async data read request. A ticket will be returned. Once the async transfer finishes,
-        /// you can use the ticket to read the data from CPU. @See AsyncTicket
+        /// you can use the ticket to read the data from CPU. @see AsyncTicket
         AsyncTicketPtr readRequest( size_t elementStart, size_t elementCount );
 
         /** Sends the provided data to the GPU

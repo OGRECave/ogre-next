@@ -138,7 +138,7 @@ namespace Ogre
                             const HlmsBlendblock *blendblock, const HlmsParamVec &params );
         ~HlmsUnlitDatablock() override;
 
-        /// Controls whether the value in @see setColour is used.
+        /// Controls whether the value in setColour() is used.
         /// Calling this function implies calling see HlmsDatablock::flushRenderables.
         void setUseColour( bool useColour );
 

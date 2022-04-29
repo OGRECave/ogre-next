@@ -78,7 +78,7 @@ namespace Ogre
         TrackAllocPolicy() {}
     };
 
-    /** @See TrackAllocPolicy
+    /** @see TrackAllocPolicy
      */
     template <size_t Alignment = 0>
     class TrackAlignedAllocPolicy

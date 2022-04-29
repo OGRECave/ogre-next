@@ -47,7 +47,7 @@ namespace Ogre
 
     typedef vector<TextureGpu *>::type TextureGpuVec;
 
-    /** Shadow Nodes are special nodes (not to be confused with @see CompositorNode)
+    /** Shadow Nodes are special nodes (not to be confused with CompositorNode)
         that are only used for rendering shadow maps.
         Normal Compositor Nodes can share or own a ShadowNode. The ShadowNode will
         render the scene enough times to fill all shadow maps so the main scene pass
@@ -107,7 +107,7 @@ namespace Ogre
             /// Several shadow maps may reference the same texture (i.e. UV atlas)
             /// Hence the need for this idx variable.
             uint32 idxToContiguousTex;
-            /// @See ShadowCameraSetup mMinDistance
+            /// @see ShadowCameraSetup mMinDistance
             Real    minDistance;
             Real    maxDistance;
             Vector2 scenePassesViewportSize[Light::NUM_LIGHT_TYPES];
@@ -201,7 +201,7 @@ namespace Ogre
                                               AutoParamDataSource *autoParamDataSource,
                                               size_t               startLight );
 
-        /// @See mCastersBox
+        /// @see mCastersBox
         const AxisAlignedBox &getCastersBox() const { return mCastersBox; }
 
         bool isShadowMapIdxInValidRange( uint32 shadowMapIdx ) const;

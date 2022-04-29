@@ -274,7 +274,7 @@ namespace Ogre
              */
             SubMesh *clone( const String &newName, Mesh *parentMesh = 0 );
 
-            /// Imports a v2 SubMesh @See Mesh::importV2.
+            /// Imports a v2 SubMesh @see Mesh::importV2.
             void importFromV2( Ogre::SubMesh *subMesh );
 
             void arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents );
@@ -282,7 +282,7 @@ namespace Ogre
             void dearrangeToInefficient();
 
         protected:
-            /// @See v1::Mesh::arrangeEfficient
+            /// @see v1::Mesh::arrangeEfficient
             void arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents, size_t vaoPassIdx );
 
         protected:
@@ -320,9 +320,9 @@ namespace Ogre
                 is destroyed. Caller must reallocate the vertex buffer filled with the returned
                 pointer
             @param halfPos
-                @See Mesh::arrangeEfficientFor
+                @see Mesh::arrangeEfficientFor
             @param halfTexCoords
-                @See Mesh::arrangeEfficientFor
+                @see Mesh::arrangeEfficientFor
             @param outVertexElements [out]
                 Description of the buffer in the new Vao system. Matches the same as
                 vertexData->vertexDeclaration, provided as out param as convenience.

@@ -272,7 +272,7 @@ namespace Ogre
         */
         inline Vector3 collapseMax() const;
 
-        /** Conditional move update. @See MathlibC::Cmov4
+        /** Conditional move update. @see MathlibC::Cmov4
             Changes each of the four vectors contained in 'this' with
             the replacement provided
             @remarks
@@ -294,7 +294,7 @@ namespace Ogre
         */
         inline void Cmov4( ArrayMaskR mask, const ArrayVector3 &replacement );
 
-        /** Conditional move update. @See MathlibC::CmovRobust
+        /** Conditional move update. @see MathlibC::CmovRobust
             Changes each of the four vectors contained in 'this' with
             the replacement provided
             @remarks
@@ -316,7 +316,7 @@ namespace Ogre
         */
         inline void CmovRobust( ArrayMaskR mask, const ArrayVector3 &replacement );
 
-        /** Conditional move. @See MathlibC::Cmov4
+        /** Conditional move. @see MathlibC::Cmov4
             Selects between arg1 & arg2 according to mask
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
@@ -339,7 +339,7 @@ namespace Ogre
         /** Converts 4 ARRAY_PACKED_REALS reals into this ArrayVector3
          @remarks
          'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS Vector3
-         @See Frustum::getCustomWorldSpaceCorners implementation for an actual, advanced use case.
+         See Frustum::getCustomWorldSpaceCorners implementation for an actual, advanced use case.
          */
         inline void loadFromAoS( const Real *RESTRICT_ALIAS src );
 

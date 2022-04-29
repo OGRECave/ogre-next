@@ -35,7 +35,7 @@ namespace Ogre
     struct KfTransform;
 
     /** Implementation to create the KfTransform variables needed by SkeletonTrack
-        @See SkeletonAnimationDef and @see SkeletonTrack
+        See SkeletonAnimationDef and SkeletonTrack
     @author
         Matias N. Goldberg
     @version

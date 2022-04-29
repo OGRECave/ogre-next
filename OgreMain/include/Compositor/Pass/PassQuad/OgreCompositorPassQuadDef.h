@@ -91,7 +91,7 @@ namespace Ogre
             Hence we should skip this pass for those APIs that don't support explicit resolving
             TODO: Not really implemented yet!!!
         @remarks
-            @See TextureDefinitionBase::TextureDefinition::fsaaExplicitResolve
+            See TextureDefinitionBase::TextureDefinition::fsaaExplicitResolve
         */
         bool mIsResolve;
 
@@ -127,7 +127,7 @@ namespace Ogre
         }
 
         /** Indicates the pass to change the texture units to use the specified texture sources.
-            @See QuadTextureSource for params
+            See CompositorPassQuadDef::QuadTextureSource for params
         */
         void addQuadTextureSource( size_t texUnitIdx, const String &textureName );
 

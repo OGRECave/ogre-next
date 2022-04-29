@@ -177,7 +177,7 @@ namespace Ogre
         /** Sets a regular Node to be parent of this Bone.
             DO NOT USE THIS FUNCTION IF YOU DON'T KNOW WHAT YOU'RE DOING. If you want
             to use a regular Node to control a bone,
-            @see SkeletonInstance::setSceneNodeAsParentOfBone instead.
+            see SkeletonInstance::setSceneNodeAsParentOfBone instead.
         @remarks
             1. Multiple calls to _setNodeParent with different arguments will
                silently override previous calls.
@@ -227,7 +227,7 @@ namespace Ogre
 
         /** Tells the Bone whether it should inherit orientation from it's parent node.
         @remarks
-            @See Node::setInheritOrientation remarks.
+            See Node::setInheritOrientation remarks.
             Note that Nodes and bones inherit scale and orientation differently, because
             Bones support non-uniform scaling, whereas Nodes don't.
         @par
@@ -243,13 +243,13 @@ namespace Ogre
 
         /** Returns true if this node is affected by orientation applied to the parent node.
         @remarks
-            @See setInheritOrientation for more info.
+            See setInheritOrientation() for more info.
         */
         bool getInheritOrientation() const;
 
         /** Tells the node whether it should inherit scaling factors from it's parent node.
         @remarks
-            @See setInheritOrientation.
+            See setInheritOrientation().
         @param inherit If true, this node's scale will be affected by its parent's scale. If false,
             it will not be affected.
         */
@@ -257,7 +257,7 @@ namespace Ogre
 
         /** Returns true if this node is affected by scaling factors applied to the parent node.
         @remarks
-            @See setInheritOrientation for more info.
+            See setInheritOrientation() for more info.
         */
         bool getInheritScale() const;
 
@@ -308,7 +308,7 @@ namespace Ogre
             return mTransform.mFinalTransform[mTransform.mIndex];
         }
 
-        /** @See _getDerivedScaleUpdated remarks. @See _getFullTransform */
+        /** See _getDerivedScaleUpdated() remarks. See _getFullTransform() */
         const SimpleMatrixAf4x3 &_getFullTransformUpdated();
 
         /** TODO
@@ -318,7 +318,7 @@ namespace Ogre
                 const Vector3& translate = Vector3::ZERO,
                 const Quaternion& rotate = Quaternion::IDENTITY );*/
 
-        /// @See Node::updateAllTransforms
+        /// @see Node::updateAllTransforms
         static void updateAllTransforms( const size_t numNodes, BoneTransform t,
                                          ArrayMatrixAf4x3 const *RESTRICT_ALIAS reverseBind,
                                          size_t                                 numBinds );

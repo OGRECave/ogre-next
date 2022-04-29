@@ -42,7 +42,7 @@ THE SOFTWARE.
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-/// @See Threads::CreateThread for an example on how to use
+/// See Threads::CreateThread for an example on how to use
 #    define THREAD_DECLARE( threadFunction ) \
         unsigned long OGRE_THREAD_CALL_CONVENTION threadFunction##_internal( void *argName ) \
         { \
@@ -59,7 +59,7 @@ THE SOFTWARE.
             return retVal; \
         }
 #else
-/// @See Threads::CreateThread for an example on how to use
+/// See Threads::CreateThread for an example on how to use
 #    define THREAD_DECLARE( threadFunction ) \
         void *OGRE_THREAD_CALL_CONVENTION threadFunction##_internal( void *argName ) \
         { \

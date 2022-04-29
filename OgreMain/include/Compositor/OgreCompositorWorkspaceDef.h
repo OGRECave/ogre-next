@@ -44,7 +44,7 @@ namespace Ogre
      *  @{
      */
 
-    /** @See CompositorWorkspace. Workspace definitions assume all other definitions are already
+    /** @see CompositorWorkspace. Workspace definitions assume all other definitions are already
         parsed as we need them to perform validation checks.
         Workspace definitions work by assigning aliases to each node. A node whose name is the
         same as its alias is called an implicit alias.
@@ -137,7 +137,7 @@ namespace Ogre
         /** Connects outNode's output channel to inNode's input channel.
         @remarks
             This mapping will later be used to know how connections should be done when
-            instantiating. @See CompositorNode::connectTo
+            instantiating. @see CompositorNode::connectTo
             If outNode & inNode are not yet aliased, an alias for them will be created.
         */
         void connect( IdString outNode, uint32 outChannel, IdString inNode, uint32 inChannel );
@@ -160,7 +160,7 @@ namespace Ogre
         /** Connects outNode's output buffer channel to inNode's input buffer channel.
         @remarks
             This mapping will later be used to know how connections should be done when
-            instantiating. @See CompositorNode::connectBufferTo
+            instantiating. @see CompositorNode::connectBufferTo
             If outNode & inNode are not yet aliased, an alias for them will be created.
         */
         void connectBuffer( IdString outNode, uint32 outChannel, IdString inNode, uint32 inChannel );
@@ -179,7 +179,7 @@ namespace Ogre
         */
         void connectExternalBuffer( uint32 externalBufferIdx, IdString inNode, uint32 inChannel );
 
-        /** Clears all the connection between channels of the nodes (@see connect).
+        /** Clears all the connection between channels of the nodes @see connect
         @remarks
             1. We don't clear the output connection (@see connectOutput, @see clearOutputConnections)
             2. The node aliases (both implicit and explicit) will still exist. @See clearAll.
@@ -192,7 +192,7 @@ namespace Ogre
         void clearAllInterNodeConnections();
 
         /** Clears the connection from the "final output RenderTarget" (i.e. usually the RenderWindow)
-            that goes to the input channel of one of our nodes. @See connectOutput.
+            that goes to the input channel of one of our nodes. @see connectOutput.
         @remarks
             1. We don't clear other type of connections (@see connect, @see clearAllInterNodeConnections)
             2. The node aliases (both implicit and explicit) will still exist. @See clearAll.
@@ -208,7 +208,7 @@ namespace Ogre
         @remarks
             This function shouldn't be called while there are still instantiated workspaces
             It is safe to call this function while there are still workspaces, but you must call
-            @Workspace::recreateAllNodes after you're done setting the new node connections.
+            CompositorWorkspace:recreateAllNodes after you're done setting the new node connections.
         */
         void clearAll();
 

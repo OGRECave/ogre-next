@@ -189,25 +189,25 @@ namespace Ogre
         */
         static inline void mul( const ArrayQuaternion &inQ, ArrayVector3 &inOutVec );
 
-        /// @See Quaternion::Slerp
+        /// @see Quaternion::Slerp
         /// @remarks
         ///     shortestPath is always true
         static inline ArrayQuaternion Slerp( ArrayReal fT, const ArrayQuaternion &rkP,
                                              const ArrayQuaternion &rkQ );
 
-        /// @See Quaternion::nlerp
+        /// @see Quaternion::nlerp
         /// @remarks
         ///     shortestPath is always true
         static inline ArrayQuaternion nlerpShortest( ArrayReal fT, const ArrayQuaternion &rkP,
                                                      const ArrayQuaternion &rkQ );
 
-        /// @See Quaternion::nlerp
+        /// @see Quaternion::nlerp
         /// @remarks
         ///     shortestPath is always false
         static inline ArrayQuaternion nlerp( ArrayReal fT, const ArrayQuaternion &rkP,
                                              const ArrayQuaternion &rkQ );
 
-        /** Conditional move update. @See MathlibSSE2::Cmov4
+        /** Conditional move update. @see MathlibSSE2::Cmov4
             Changes each of the four vectors contained in 'this' with
             the replacement provided
             @remarks
@@ -229,7 +229,7 @@ namespace Ogre
         */
         inline void Cmov4( ArrayMaskR mask, const ArrayQuaternion &replacement );
 
-        /** Conditional move. @See MathlibSSE2::Cmov4
+        /** Conditional move. @see MathlibSSE2::Cmov4
             Selects between arg1 & arg2 according to mask
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's

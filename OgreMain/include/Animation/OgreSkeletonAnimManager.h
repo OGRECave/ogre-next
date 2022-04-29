@@ -55,7 +55,7 @@ namespace Ogre
 
         /** MUST be sorted by location in its BoneMemoryManager's slot
             (in order to update in parallel without causing race conditions)
-            @See threadStarts
+            @see threadStarts
         */
         FastArray<SkeletonInstance *> skeletons;
 

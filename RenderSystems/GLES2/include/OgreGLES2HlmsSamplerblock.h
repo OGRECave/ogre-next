@@ -42,7 +42,7 @@ namespace Ogre
 
     /** A sampler block contains settings that go hand in hand with a texture, and thus
         are common to many textures.
-        This is very analogous to D3D11_SAMPLER_DESC. @See HlmsDatablock
+        This is very analogous to D3D11_SAMPLER_DESC. @see HlmsDatablock
         Up to 32 different blocks are allowed!
     */
     struct _OgreGLES2Export GLES2HlmsSamplerblock
