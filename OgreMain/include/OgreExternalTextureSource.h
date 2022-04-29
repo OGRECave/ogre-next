@@ -60,9 +60,9 @@ namespace Ogre
     /** Enum for type of texture play mode */
     enum eTexturePlayMode
     {
-        TextureEffectPause = 0,        /// Video starts out paused
-        TextureEffectPlay_ASAP = 1,    /// Video starts playing as soon as possible
-        TextureEffectPlay_Looping = 2  /// Video Plays Instantly && Loops
+        TextureEffectPause = 0,        ///< Video starts out paused
+        TextureEffectPlay_ASAP = 1,    ///< Video starts playing as soon as possible
+        TextureEffectPlay_Looping = 2  ///< Video Plays Instantly && Loops
     };
 
     /** IMPORTANT: **Plugins must override default dictionary name!**

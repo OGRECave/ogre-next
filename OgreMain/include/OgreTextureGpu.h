@@ -176,11 +176,11 @@ namespace Ogre
     {
         enum TextureSourceType
         {
-            Standard,           /// Regular texture
-            Shadow,             /// Created by compositor, for shadow mapping
-            Compositor,         /// Created by compositor
-            PoolOwner,          /// TextureFlags::PoolOwner is set
-            SharedDepthBuffer,  /// Created automatically, may be shared and reused by multiple colour
+            Standard,           ///< Regular texture
+            Shadow,             ///< Created by compositor, for shadow mapping
+            Compositor,         ///< Created by compositor
+            PoolOwner,          ///< TextureFlags::PoolOwner is set
+            SharedDepthBuffer,  ///< Created automatically, may be shared and reused by multiple colour
                                 /// targets
             NumTextureSourceTypes
         };
