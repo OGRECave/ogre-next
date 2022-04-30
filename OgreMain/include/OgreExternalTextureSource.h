@@ -169,11 +169,11 @@ namespace Ogre
             const String &groupName = ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ) = 0;
 
     protected:
-        static CmdInputFileName msCmdInputFile;        /// Command for setting input file name
-        static CmdFPS           msCmdFramesPerSecond;  /// Command for setting frames per second
-        static CmdPlayMode      msCmdPlayMode;         /// Command for setting play mode
+        static CmdInputFileName msCmdInputFile;        ///< Command for setting input file name
+        static CmdFPS           msCmdFramesPerSecond;  ///< Command for setting frames per second
+        static CmdPlayMode      msCmdPlayMode;         ///< Command for setting play mode
         static CmdTecPassState
-            msCmdTecPassState;  /// Command for setting the technique, pass, & state level
+            msCmdTecPassState;  ///< Command for setting the technique, pass, & state level
 
         /// String Name of this Plugin
         String mPluginName;

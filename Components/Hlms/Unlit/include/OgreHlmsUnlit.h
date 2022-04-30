@@ -73,7 +73,7 @@ namespace Ogre
 
         PassData             mPreparedPass;
         ConstBufferPackedVec mPassBuffers;
-        uint32               mCurrentPassBuffer;  /// Resets to zero every new frame.
+        uint32               mCurrentPassBuffer;  ///< Resets to zero every new frame.
 
         ConstBufferPool::BufferPool const *mLastBoundPool;
 
@@ -85,7 +85,7 @@ namespace Ogre
         bool  mUsingInstancedStereo;
 
         bool   mUsingExponentialShadowMaps;
-        uint16 mEsmK;  /// K parameter for ESM.
+        uint16 mEsmK;  ///< K parameter for ESM.
         uint32 mTexUnitSlotStart;
         uint32 mSamplerUnitSlotStart;
 

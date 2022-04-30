@@ -70,7 +70,7 @@ namespace Ogre
     {
         uint16 mRefCount;
         uint16 mShaderTypeTexCount[NumShaderTypes];
-        void  *mRsData;  /// Render-System specific data
+        void  *mRsData;  ///< Render-System specific data
 
         FastArray<const TextureGpu *> mTextures;
 
@@ -307,7 +307,7 @@ namespace Ogre
         };
 
         uint16          mRefCount;
-        void           *mRsData;  /// Render-System specific data
+        void           *mRsData;  ///< Render-System specific data
         uint16          mShaderTypeTexCount[NumShaderTypes];
         FastArray<Slot> mTextures;
 

@@ -63,9 +63,9 @@ namespace Ogre
         struct ChannelRoute
         {
             uint32   outChannel;
-            IdString outNode;  /// Name of the alias
+            IdString outNode;  ///< Name of the alias
             uint32   inChannel;
-            IdString inNode;  /// Name of the alias
+            IdString inNode;  ///< Name of the alias
             ChannelRoute( uint32 _outChannel, IdString _outNode, uint32 _inChannel, IdString _inNode ) :
                 outChannel( _outChannel ),
                 outNode( _outNode ),

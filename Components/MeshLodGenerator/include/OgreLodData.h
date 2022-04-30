@@ -116,7 +116,7 @@ namespace Ogre
 
             VertexI                    collapseToi;
             bool                       seam;
-            CollapseCostHeap::iterator costHeapPosition;  /// Iterator pointing to the position in the
+            CollapseCostHeap::iterator costHeapPosition;  ///< Iterator pointing to the position in the
                                                           /// mCollapseCostSet, which allows fast remove.
 
             void addEdge( const Edge &edge );
@@ -127,9 +127,9 @@ namespace Ogre
         {
             VertexI      vertexi[3];
             Vector3      normal;
-            unsigned int submeshIDOrRemovedTag;  /// ID of the submesh. Usable with mMesh.getSubMesh()
+            unsigned int submeshIDOrRemovedTag;  ///< ID of the submesh. Usable with mMesh.getSubMesh()
                                                  /// function. Holds ~0U for removed triangles
-            unsigned int vertexID[3];  /// Vertex ID in the buffer associated with the submeshID.
+            unsigned int vertexID[3];  ///< Vertex ID in the buffer associated with the submeshID.
 
             unsigned int submeshID() const
             {

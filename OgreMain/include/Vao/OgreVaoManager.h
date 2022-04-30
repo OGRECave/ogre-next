@@ -66,7 +66,7 @@ namespace Ogre
 
         BufferPackedSet      mBuffers[NUM_BUFFER_PACKED_TYPES];
         VertexArrayObjectSet mVertexArrayObjects;
-        uint32               mNumGeneratedVaos;  /// Increases on every createVertexArrayObject call
+        uint32               mNumGeneratedVaos;  ///< Increases on every createVertexArrayObject call
 
         struct DelayedBuffer
         {
@@ -184,7 +184,7 @@ namespace Ogre
             uint32 poolIdx;
             size_t offset;
             size_t sizeBytes;
-            size_t poolCapacity;  /// This value is the same for all entries with same getCombinedPoolIdx
+            size_t poolCapacity;  ///< This value is the same for all entries with same getCombinedPoolIdx
             /// Relevant for Vulkan: when this value is true, the whole pool
             /// may contain texture data (not necessarily this block)
             /// See Tutorial_Memory on how to deal with this parameter

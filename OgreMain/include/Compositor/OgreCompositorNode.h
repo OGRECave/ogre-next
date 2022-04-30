@@ -118,7 +118,7 @@ namespace Ogre
 
         CompositorWorkspace *mWorkspace;
 
-        RenderSystem *mRenderSystem;  /// Used to create/destroy MRTs
+        RenderSystem *mRenderSystem;  ///< Used to create/destroy MRTs
 
         /** Fills mOutTextures with the pointers from mInTextures & mLocalTextures according
             to CompositorNodeDef::mOutChannelMapping. Call this immediately after modifying

@@ -78,8 +78,8 @@ namespace Ogre
         protected:
             bool      mOwnDimensions;
             bool      mUseTexcoordRect;
-            uint16    mTexcoordIndex;  /// Index into the BillboardSet array of texture coordinates
-            FloatRect mTexcoordRect;   /// Individual texture coordinates
+            uint16    mTexcoordIndex;  ///< Index into the BillboardSet array of texture coordinates
+            FloatRect mTexcoordRect;   ///< Individual texture coordinates
             Real      mWidth;
             Real      mHeight;
 

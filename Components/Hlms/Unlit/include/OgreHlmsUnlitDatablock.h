@@ -69,7 +69,7 @@ namespace Ogre
 
     protected:
         uint8 mNumEnabledAnimationMatrices;
-        bool  mHasColour;  /// When false; mR, mG, mB & mA aren't passed to the pixel shader
+        bool  mHasColour;  ///< When false; mR, mG, mB & mA aren't passed to the pixel shader
         float mR, mG, mB, mA;
 
         uint8 mUvSource[NUM_UNLIT_TEXTURE_TYPES];

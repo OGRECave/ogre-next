@@ -574,11 +574,11 @@ namespace Ogre
         /// Cached light information, used to tracking light's changes
         struct _OgreExport LightInfo
         {
-            Light  *light;  /// Just a pointer for comparison, the light might destroyed for some reason
-            int     type;   /// Use int instead of Light::LightTypes to avoid header file dependence
-            Real    range;  /// Sets to zero if directional light
-            Vector3 position;   /// Sets to zero if directional light
-            uint32  lightMask;  /// Light mask
+            Light  *light;  ///< Just a pointer for comparison, the light might destroyed for some reason
+            int     type;   ///< Use int instead of Light::LightTypes to avoid header file dependence
+            Real    range;  ///< Sets to zero if directional light
+            Vector3 position;   ///< Sets to zero if directional light
+            uint32  lightMask;  ///< Light mask
 
             bool operator==( const LightInfo &rhs ) const
             {
@@ -803,9 +803,9 @@ namespace Ogre
     protected:
         Real   mDefaultShadowFarDist;
         Real   mDefaultShadowFarDistSquared;
-        Real   mShadowTextureOffset;     /// Proportion of texture offset in view direction e.g. 0.4
-        Real   mShadowTextureFadeStart;  /// As a proportion e.g. 0.6
-        Real   mShadowTextureFadeEnd;    /// As a proportion e.g. 0.9
+        Real   mShadowTextureOffset;     ///< Proportion of texture offset in view direction e.g. 0.4
+        Real   mShadowTextureFadeStart;  ///< As a proportion e.g. 0.6
+        Real   mShadowTextureFadeEnd;    ///< As a proportion e.g. 0.9
         Pass  *mShadowTextureCustomCasterPass;
         String mShadowTextureCustomCasterVertexProgram;
         String mShadowTextureCustomCasterFragmentProgram;

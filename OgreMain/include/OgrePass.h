@@ -72,8 +72,8 @@ namespace Ogre
 
         uint32         mId;
         Technique     *mParent;
-        unsigned short mIndex;  /// Pass index
-        String         mName;   /// Optional name for the pass
+        unsigned short mIndex;  ///< Pass index
+        String         mName;   ///< Optional name for the pass
         //-------------------------------------------------------------------------
         // Colour properties, only applicable in fixed-function passes
         ColourValue           mAmbient;

@@ -81,7 +81,7 @@ namespace Ogre
 
     protected:
         BoneVec        mBones;
-        TransformArray mBoneStartTransforms;  /// The start of Transform at each depth level
+        TransformArray mBoneStartTransforms;  ///< The start of Transform at each depth level
 
         RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> mManualBones;
 

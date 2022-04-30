@@ -166,8 +166,8 @@ namespace Ogre
         Real Norm() const;
         /// Normalises this quaternion, and returns the previous length
         Real       normalise();
-        Quaternion Inverse() const;      /// Apply to non-zero quaternion
-        Quaternion UnitInverse() const;  /// Apply to unit-length quaternion
+        Quaternion Inverse() const;      ///< Apply to non-zero quaternion
+        Quaternion UnitInverse() const;  ///< Apply to unit-length quaternion
         Quaternion Exp() const;
         Quaternion Log() const;
 

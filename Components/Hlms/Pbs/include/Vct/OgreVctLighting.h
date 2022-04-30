@@ -119,7 +119,7 @@ namespace Ogre
         ShaderParams::Param                      *mBounceInvVoxelResolution;
         ShaderParams::Param                      *mBounceIterationDampening;
         ShaderParams::Param                      *mBounceStartBiasInvBiasCascadeMaxLod;
-        ShaderParams::Param *mBounceFromPreviousProbeToNext;  /// Used when cascades > 1
+        ShaderParams::Param *mBounceFromPreviousProbeToNext;  ///< Used when cascades > 1
         ShaderParams        *mBounceShaderParams;
 
         ResourceTransitionArray mResourceTransitions;

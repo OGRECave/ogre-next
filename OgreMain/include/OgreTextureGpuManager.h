@@ -442,10 +442,10 @@ namespace Ogre
         };
         struct StreamingData
         {
-            StagingTextureVec availableStagingTex;  /// Used by both threads. Needs mutex protection.
-            QueuedImageVec    queuedImages;         /// Used by mostly by worker thread. Needs mutex.
-            UsageStatsVec     usageStats;  /// Exclusively used by worker thread. No protection needed.
-            UsageStatsVec     prevStats;   /// Used by both threads.
+            StagingTextureVec availableStagingTex;  ///< Used by both threads. Needs mutex protection.
+            QueuedImageVec    queuedImages;         ///< Used by mostly by worker thread. Needs mutex.
+            UsageStatsVec     usageStats;  ///< Exclusively used by worker thread. No protection needed.
+            UsageStatsVec     prevStats;   ///< Used by both threads.
             /// Set to true when worker thread iterates (meaning prevStats.loopCount
             /// can be decremented).
             /// Set to false by main thread every _update call.

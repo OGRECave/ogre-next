@@ -52,8 +52,8 @@ namespace Ogre
         uint32 height;
         uint32 depthOrSlices;
         uint8 numMipmaps;
-        uint8 textureType;   /// See TextureTypes::TextureTypes
-        uint16 pixelFormat;  /// See PixelFormatGpu
+        uint8 textureType;   ///< See TextureTypes::TextureTypes
+        uint16 pixelFormat;  ///< See PixelFormatGpu
         uint8 version;
 
         uint32 getDepth() const { return ( textureType != TextureTypes::Type3D ) ? 1u : depthOrSlices; }

@@ -153,11 +153,11 @@ namespace Ogre
         // UAVs are easier and more flexible/powerful.
 
         // --- Begin Pass data ---
-        uint32      sampleMask;  /// Fixed to 0xffffffff for now
+        uint32      sampleMask;  ///< Fixed to 0xffffffff for now
         HlmsPassPso pass;
         // --- End Pass data ---
 
-        void *rsData;  /// Render-System specific data
+        void *rsData;  ///< Render-System specific data
 
         HlmsPso() { initialize(); }
 
@@ -273,7 +273,7 @@ namespace Ogre
         /// @see HlmsComputeJob::setNumThreadGroups
         uint32 mNumThreadGroups[3];
 
-        void *rsData;  /// Render-System specific data
+        void *rsData;  ///< Render-System specific data
 
         // No constructor on purpose. Performance implications
         //(could get called every object when looking up!)
