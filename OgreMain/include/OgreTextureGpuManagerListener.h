@@ -52,10 +52,10 @@ namespace Ogre
         /** Ogre normally puts Textures into pools (a Type2DArray texture) for efficient rendering
             Note that only textures of the same resolution and format can be put together in
             the same pool. This creates two issues:
-                * Unless it is known in advance, we do not know how large the array should be.
+                + Unless it is known in advance, we do not know how large the array should be.
                   if we create a pool that can hold 64 entries but only 1 texture is actually
                   needed, then we waste a lot of GPU memory.
-                * Large textures, such as 4096x4096 RGBA8 occupy a lot of memory 64MB.
+                + Large textures, such as 4096x4096 RGBA8 occupy a lot of memory 64MB.
                   These pools should not contain a large number of entries. For example
                   creating a pool of 8 entries of these textures means we'd be asking the
                   OS for 512MB of *contiguous* memory. Due to memory fragmentation, such

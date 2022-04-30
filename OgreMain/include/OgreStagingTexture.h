@@ -72,10 +72,10 @@ namespace Ogre
         in TextureBox::data. If so, that means we have ran out of space.
     @par
         Notably derived classes are:
-            * StagingTextureBufferImpl
-                * GL3PlusStagingTexture
-                * MetalStagingTexture
-            * D3D11StagingTexture
+            + StagingTextureBufferImpl
+                + GL3PlusStagingTexture
+                + MetalStagingTexture
+            + D3D11StagingTexture
     */
     class _OgreExport StagingTexture : public OgreAllocatedObj
     {

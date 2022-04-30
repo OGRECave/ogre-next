@@ -751,12 +751,12 @@ namespace Ogre
         /** It is threadsafe to call this function from main thread.
             If this returns false, then the following functions are not threadsafe:
             Setters must not be called, and getters may change from a worker thread:
-                * setResolution
-                * getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices
-                * set/getPixelFormat
-                * set/getNumMipmaps
-                * set/getTextureType
-                * getTexturePool
+                + setResolution
+                + getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices
+                + set/getPixelFormat
+                + set/getNumMipmaps
+                + set/getTextureType
+                + getTexturePool
             Note that this function may return true but the worker thread
             may still be uploading to this texture. Use isDataReady to
             see if the worker thread is fully done with this texture.

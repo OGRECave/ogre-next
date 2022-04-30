@@ -50,8 +50,8 @@ namespace Ogre
         The older material system is data-driven (thanks to AutoParamDataSource) compared
         to HLMS where the user needs to write its own implementation in C++ (or modify an
         exisiting one). Old material system is still useful for:
-            * Quick prototyping of shaders
-            * Postprocessing effects.
+            + Quick prototyping of shaders
+            + Postprocessing effects.
         Take in mind that the old system is __slow__ compared to Hlms. So don't use this
         proxy for hundreds or more entities.
     @remarks
