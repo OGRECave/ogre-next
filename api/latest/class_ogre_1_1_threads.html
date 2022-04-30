@@ -161,7 +161,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Creates and executes a new thread. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>The function to execute must be declared via THREAD_DECLARE, and the first argument must be provided through THREAD_GET. The following example shows how to use:</dd></dl>
-<p>unsigned long myOwnThread( ThreadHandle *ownThreadHandle ) { Should print "Hello from thread 50" printf( "Hello from thread %i", ownThreadHandle.getThreadIdx() ); return 0; } <a class="el" href="_ogre_threads_8h.html#a9351c49b867fae9e2a0488bf653d8887" title="@See Threads::CreateThread for an example on how to use">THREAD_DECLARE( myOwnThread )</a>;</p>
+<p>unsigned long myOwnThread( ThreadHandle *ownThreadHandle ) { Should print "Hello from thread 50" printf( "Hello from thread %i", ownThreadHandle.getThreadIdx() ); return 0; } <a class="el" href="_ogre_threads_8h.html#a9351c49b867fae9e2a0488bf653d8887" title="See Threads::CreateThread for an example on how to use.">THREAD_DECLARE( myOwnThread )</a>;</p>
 <p >int main() { <a class="el" href="class_ogre_1_1_thread_handle.html">ThreadHandle</a> handle = CreateThread( THREAD_GET( myOwnThread ), 50, 0 ); WaitForThreads( 1, handle ); return 0; }</p>
 <p >It is not possible to retrieve the return value of the function because it's not portable (and trying to emulate it induces to easy-to-cause memory leaks; as we're dealing with C functions + potential race conditions, not C++) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

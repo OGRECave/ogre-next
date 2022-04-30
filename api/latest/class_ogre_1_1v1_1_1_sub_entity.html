@@ -314,7 +314,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af21e01d235207da9d82a7aca439c8ac6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> to be used.  <a href="class_ogre_1_1v1_1_1_sub_entity.html#af21e01d235207da9d82a7aca439c8ac6">More...</a><br /></td></tr>
 <tr class="separator:af21e01d235207da9d82a7aca439c8ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf2a2570b7d6c5dbdb80d8f98e620cbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#adf2a2570b7d6c5dbdb80d8f98e620cbd">setMaterialName</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName)</td></tr>
-<tr class="memdesc:adf2a2570b7d6c5dbdb80d8f98e620cbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the name of the <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> to be used. Prefer using HLMS @See setHlms.  <a href="class_ogre_1_1_renderable.html#adf2a2570b7d6c5dbdb80d8f98e620cbd">More...</a><br /></td></tr>
+<tr class="memdesc:adf2a2570b7d6c5dbdb80d8f98e620cbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the name of the <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> to be used. Prefer using HLMS.  <a href="class_ogre_1_1_renderable.html#adf2a2570b7d6c5dbdb80d8f98e620cbd">More...</a><br /></td></tr>
 <tr class="separator:adf2a2570b7d6c5dbdb80d8f98e620cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2108dfc322953a7bd429be8b62811e56"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a2108dfc322953a7bd429be8b62811e56">setPolygonModeOverrideable</a> (bool override)</td></tr>
 <tr class="memdesc:a2108dfc322953a7bd429be8b62811e56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether this renderable's chosen detail level can be overridden (downgraded) by the camera setting.  <a href="class_ogre_1_1_renderable.html#a2108dfc322953a7bd429be8b62811e56">More...</a><br /></td></tr>
@@ -1100,7 +1100,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retrieves the material this renderable object uses. </p>
-<p >It may be null if it's using the HLMS. @See getDatablock </p>
+<p >It may be null if it's using the HLMS. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_renderable.html#a649c55c1aab4e39c863403cd4e4324d1">getDatablock</a> </dd></dl>
 
 </div>
 </div>
@@ -2610,7 +2610,8 @@ template&lt;class Alloc &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Sets the name of the <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> to be used. Prefer using HLMS @See setHlms. </p>
+<p>Sets the name of the <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> to be used. Prefer using HLMS. </p>
+<dl class="section see"><dt>See also</dt><dd>setHlms </dd></dl>
 
 </div>
 </div>
@@ -2713,10 +2714,11 @@ template&lt;class Alloc &gt; </div>
 <dl class="section user"><dt></dt><dd><a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> Subgroups are useful for manually sorting objects, just like <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> IDs. However, <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> IDs can also be useful for skipping large number of objects through clever compositing and thus a performance optimization. Subgroups cannot be used for such optimizations. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">subGroup</td><td>The sub group. This value can't exceed OGRE_MAKE_MASK( SubRqIdBits ) @See <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> </td></tr>
+    <tr><td class="paramname">subGroup</td><td>The sub group. This value can't exceed OGRE_MAKE_MASK( SubRqIdBits ) </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> </dd></dl>
 
 </div>
 </div>

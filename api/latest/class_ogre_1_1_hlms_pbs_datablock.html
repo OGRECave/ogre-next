@@ -259,7 +259,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad108f03bb54698b7ee801e4bdd78399c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the metalness in a metallic workflow.  <a href="class_ogre_1_1_hlms_pbs_datablock.html#ad108f03bb54698b7ee801e4bdd78399c">More...</a><br /></td></tr>
 <tr class="separator:ad108f03bb54698b7ee801e4bdd78399c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98709511c3cf45d081d5573a50bb71c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a98709511c3cf45d081d5573a50bb71c9">setNormalMapWeight</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> weight)</td></tr>
-<tr class="memdesc:a98709511c3cf45d081d5573a50bb71c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See setDetailNormalWeight. This is the same, but for the main normal map.  <a href="class_ogre_1_1_hlms_pbs_datablock.html#a98709511c3cf45d081d5573a50bb71c9">More...</a><br /></td></tr>
+<tr class="memdesc:a98709511c3cf45d081d5573a50bb71c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a9f262fb3254d858277feae4412b2d5c8" title="Sets the normal mapping weight.">setDetailNormalWeight()</a>. This is the same, but for the main normal map.  <a href="class_ogre_1_1_hlms_pbs_datablock.html#a98709511c3cf45d081d5573a50bb71c9">More...</a><br /></td></tr>
 <tr class="separator:a98709511c3cf45d081d5573a50bb71c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a391527262b73a36a09a3a708e6a46b6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a391527262b73a36a09a3a708e6a46b6a">setReceiveShadows</a> (bool receiveShadows)</td></tr>
 <tr class="memdesc:a391527262b73a36a09a3a708e6a46b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">When false, objects with this material will not receive shadows (independent of whether they case shadows or not)  <a href="class_ogre_1_1_hlms_pbs_datablock.html#a391527262b73a36a09a3a708e6a46b6a">More...</a><br /></td></tr>
@@ -416,10 +416,11 @@ Friends</h2></td></tr>
 <p>Valid parameters in params: </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">params</td><td>fresnel &lt;value [g, b]&gt; The IOR. @See setIndexOfRefraction When specifying three values, the fresnel is separate for each colour component</td></tr>
+    <tr><td class="paramname">params</td><td>fresnel &lt;value [g, b]&gt; The IOR. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a6953dab28239e7672c8a125f515a7743" title="Calculates fresnel (F0 in most books) based on the IOR.">setIndexOfRefraction</a> When specifying three values, the fresnel is separate for each colour component</dd></dl>
 <p>fresnel_coeff &lt;value [g, b]&gt; Directly sets the fresnel values, instead of using IORs "F0" in most books about PBS</p>
 <p >roughness </p>
 <p >Specifies the roughness value. Should be in range (0; inf) Note: Values extremely close to zero could cause NaNs and INFs in the pixel shader, also depends on the GPU's precision.</p>
@@ -1596,8 +1597,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the weight of detail map. </p>
-<p >Affects both diffuse and normal at the same time. </p><dl class="section remark"><dt>Remarks</dt><dd>A value of 1 will cause a flushRenderables as we remove the code from the shader. The weight from </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a98709511c3cf45d081d5573a50bb71c9" title="@See setDetailNormalWeight. This is the same, but for the main normal map.">setNormalMapWeight</a> is multiplied against this value when it comes to the detail normal map. </dd></dl>
+<p >Affects both diffuse and normal at the same time. </p><dl class="section remark"><dt>Remarks</dt><dd>A value of 1 will cause a flushRenderables as we remove the code from the shader. The weight from <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a98709511c3cf45d081d5573a50bb71c9" title="See setDetailNormalWeight(). This is the same, but for the main normal map.">setNormalMapWeight()</a> is multiplied against this value when it comes to the detail normal map. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">detailMap</td><td>Value in the range [0; 4) </td></tr>
@@ -1715,8 +1715,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the fresnel (F0) directly, instead of using the IOR. </p>
-<p >@See setIndexOfRefraction </p><dl class="section remark"><dt>Remarks</dt><dd>If "separateFresnel" was different from the current setting, it will call </dd></dl>
-<dl class="section see"><dt>See also</dt><dd>HlmsDatablock::flushRenderables. If the another shader must be created, it could cause a stall. </dd></dl>
+<p >See <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a6953dab28239e7672c8a125f515a7743" title="Calculates fresnel (F0 in most books) based on the IOR.">setIndexOfRefraction()</a>. </p><dl class="section remark"><dt>Remarks</dt><dd>If "separateFresnel" was different from the current setting, it will call HlmsDatablock::flushRenderables. If the another shader must be created, it could cause a stall. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">refractionIdx</td><td>The fresnel of the material for each colour component. When separateFresnel = false, the Y and Z components are ignored. </td></tr>
@@ -1754,8 +1753,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculates fresnel (F0 in most books) based on the IOR. </p>
-<p >The formula used is ( (1 - idx) / (1 + idx) )² </p><dl class="section remark"><dt>Remarks</dt><dd>If "separateFresnel" was different from the current setting, it will call </dd></dl>
-<dl class="section see"><dt>See also</dt><dd>HlmsDatablock::flushRenderables. If the another shader must be created, it could cause a stall. </dd></dl>
+<p >The formula used is ( (1 - idx) / (1 + idx) )² </p><dl class="section remark"><dt>Remarks</dt><dd>If "separateFresnel" was different from the current setting, it will call HlmsDatablock::flushRenderables(). If the another shader must be created, it could cause a stall. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">refractionIdx</td><td>The index of refraction of the material for each colour component. When separateFresnel = false, the Y and Z components are ignored. </td></tr>
@@ -1810,7 +1808,7 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>@See setDetailNormalWeight. This is the same, but for the main normal map. </p>
+<p>See <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a9f262fb3254d858277feae4412b2d5c8" title="Sets the normal mapping weight.">setDetailNormalWeight()</a>. This is the same, but for the main normal map. </p>
 
 </div>
 </div>
@@ -2179,8 +2177,7 @@ Friends</h2></td></tr>
 <dl class="section remark"><dt>Remarks</dt><dd>The texture types PBSM_SPECULAR &amp; PBSM_METALLIC map to the same value. </dd></dl>
 <dl class="section user"><dt></dt><dd>When in metal workflow, the texture is used as a metallic texture, and is expected to be a monochrome texture. Global specularity's strength can still be affected via setSpecular. The fresnel settings should not be used (metalness is stored where fresnel used to). </dd></dl>
 <dl class="section user"><dt></dt><dd>When in specular workflow, the texture is used as a specular texture, and is expected to be either coloured or monochrome. setMetalness should not be called in this mode. </dd></dl>
-<dl class="section user"><dt></dt><dd>If "workflow" was different from the current setting, it will call </dd></dl>
-<dl class="section see"><dt>See also</dt><dd>HlmsDatablock::flushRenderables. If the another shader must be created, it could cause a stall. </dd></dl>
+<dl class="section user"><dt></dt><dd>If "workflow" was different from the current setting, it will call HlmsDatablock::flushRenderables. If the another shader must be created, it could cause a stall. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bEnableMetallic</td><td></td></tr>

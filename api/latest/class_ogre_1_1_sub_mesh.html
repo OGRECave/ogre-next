@@ -178,7 +178,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a91a1a17293763d5e854b75ed12d71a42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_tex_buffer_packed.html">TexBufferPacked</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_sub_mesh.html#a91a1a17293763d5e854b75ed12d71a42">getPoseTexBuffer</a> ()</td></tr>
 <tr class="separator:a91a1a17293763d5e854b75ed12d71a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a63d3660c6dd9f2b0bfe70333ae468d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_sub_mesh.html#a6a63d3660c6dd9f2b0bfe70333ae468d">importFromV1</a> (<a class="el" href="class_ogre_1_1v1_1_1_sub_mesh.html">v1::SubMesh</a> *subMesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose)</td></tr>
-<tr class="memdesc:a6a63d3660c6dd9f2b0bfe70333ae468d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imports a <a class="el" href="namespace_ogre_1_1v1.html">v1</a> <a class="el" href="class_ogre_1_1_sub_mesh.html" title="Defines a part of a complete mesh.">SubMesh</a> @See <a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a>. Automatically performs what arrangeEfficient does.  <a href="class_ogre_1_1_sub_mesh.html#a6a63d3660c6dd9f2b0bfe70333ae468d">More...</a><br /></td></tr>
+<tr class="memdesc:a6a63d3660c6dd9f2b0bfe70333ae468d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imports a <a class="el" href="namespace_ogre_1_1v1.html">v1</a> <a class="el" href="class_ogre_1_1_sub_mesh.html" title="Defines a part of a complete mesh.">SubMesh</a>.  <a href="class_ogre_1_1_sub_mesh.html#a6a63d3660c6dd9f2b0bfe70333ae468d">More...</a><br /></td></tr>
 <tr class="separator:a6a63d3660c6dd9f2b0bfe70333ae468d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -440,9 +440,27 @@ Friends</h2></td></tr>
 <dl class="section remark"><dt>Remarks</dt><dd>Final work is delegated to the generic overload. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">halfPos</td><td>@See <a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a> </td></tr>
-    <tr><td class="paramname">halfTexCoords</td><td>@See <a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a> </td></tr>
-    <tr><td class="paramname">qTangents</td><td>@See <a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a> </td></tr>
+    <tr><td class="paramname">halfPos</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">halfTexCoords</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">qTangents</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
     <tr><td class="paramname">outVertexElements</td><td>[out] Description of the buffer in the new v2 system. </td></tr>
   </table>
   </dd>
@@ -672,7 +690,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Converts this <a class="el" href="class_ogre_1_1_sub_mesh.html" title="Defines a part of a complete mesh.">SubMesh</a> to an efficient arrangement. </p>
-<p >@See <a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a> for an explanation on the parameters. </p><dl class="section see"><dt>See also</dt><dd>dearrangeEfficientToInefficient to perform the opposite operation. </dd></dl>
+<p >See <a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a> for an explanation on the parameters. </p><dl class="section see"><dt>See also</dt><dd>dearrangeEfficientToInefficient to perform the opposite operation. </dd></dl>
 
 </div>
 </div>
@@ -1089,7 +1107,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Imports a <a class="el" href="namespace_ogre_1_1v1.html">v1</a> <a class="el" href="class_ogre_1_1_sub_mesh.html" title="Defines a part of a complete mesh.">SubMesh</a> @See <a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a>. Automatically performs what arrangeEfficient does. </p>
+<p>Imports a <a class="el" href="namespace_ogre_1_1v1.html">v1</a> <a class="el" href="class_ogre_1_1_sub_mesh.html" title="Defines a part of a complete mesh.">SubMesh</a>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions.">Mesh::importV1</a>. Automatically performs what <a class="el" href="class_ogre_1_1_sub_mesh.html#a27a4e2ae995580908732263c881a4e24" title="Converts this SubMesh to an efficient arrangement.">arrangeEfficient</a> does. </dd></dl>
 
 </div>
 </div>

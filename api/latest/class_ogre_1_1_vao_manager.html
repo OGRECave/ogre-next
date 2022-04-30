@@ -592,7 +592,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates an constant buffer based on the given parameters. </p>
-<p >Behind the scenes, the buffer is actually part of much larger buffer, in order to reduce bindings at runtime. (depends on the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>, on D3D11 we're forced to give its own buffer) </p><dl class="section remark"><dt>Remarks</dt><dd>@See createVertexBuffer for the remaining parameters not documented here. </dd></dl>
+<p >Behind the scenes, the buffer is actually part of much larger buffer, in order to reduce bindings at runtime. (depends on the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>, on D3D11 we're forced to give its own buffer) </p><dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_vao_manager.html#aefabb42c2a1a8f2d71af28ffaa91ba91" title="Creates a vertex buffer based on the given parameters.">createVertexBuffer()</a> for the remaining parameters not documented here. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sizeBytes</td><td>The size in bytes of the given constant buffer. API restrictions may apply. To stay safe keep it multiple of 16, don't request more than 64kb per buffer. </td></tr>
@@ -648,7 +648,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates an index buffer based on the given parameters. </p>
-<p >Behind the scenes, the buffer is actually part of much larger buffer, in order to reduce bindings at runtime. </p><dl class="section remark"><dt>Remarks</dt><dd>@See createVertexBuffer for the remaining parameters not documented here. </dd></dl>
+<p >Behind the scenes, the buffer is actually part of much larger buffer, in order to reduce bindings at runtime. </p><dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_vao_manager.html#aefabb42c2a1a8f2d71af28ffaa91ba91" title="Creates a vertex buffer based on the given parameters.">createVertexBuffer()</a> for the remaining parameters not documented here. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">indexType</td><td>Whether this Index Buffer should be 16-bit (recommended) or 32-bit </td></tr>
@@ -699,7 +699,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates an indirect buffer. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>@See createVertexBuffer for the remaining parameters not documented here. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_vao_manager.html#aefabb42c2a1a8f2d71af28ffaa91ba91" title="Creates a vertex buffer based on the given parameters.">createVertexBuffer()</a> for the remaining parameters not documented here. </dd></dl>
 
 </div>
 </div>
@@ -847,7 +847,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates an constant buffer based on the given parameters. </p>
-<p >Behind the scenes, the buffer is actually part of much larger buffer, in order to reduce bindings at runtime. (depends on the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>, on D3D11 we're forced to give its own buffer) </p><dl class="section remark"><dt>Remarks</dt><dd>@See createVertexBuffer for the remaining parameters not documented here. </dd></dl>
+<p >Behind the scenes, the buffer is actually part of much larger buffer, in order to reduce bindings at runtime. (depends on the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>, on D3D11 we're forced to give its own buffer) </p><dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_vao_manager.html#aefabb42c2a1a8f2d71af28ffaa91ba91" title="Creates a vertex buffer based on the given parameters.">createVertexBuffer()</a> for the remaining parameters not documented here. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pixelFormat</td><td>The pixel format for the texture buffer. </td></tr>
@@ -904,7 +904,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates an UAV buffer based on the given parameters. </p>
-<p >Behind the scenes, the buffer is actually part of much larger buffer, in order to reduce bindings at runtime. (depends on the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>, on D3D11 we're forced to give its own buffer) </p><dl class="section remark"><dt>Remarks</dt><dd>@See createVertexBuffer for the remaining parameters not documented here. There is no BufferType option as the only available one is BT_DEFAULT </dd></dl>
+<p >Behind the scenes, the buffer is actually part of much larger buffer, in order to reduce bindings at runtime. (depends on the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>, on D3D11 we're forced to give its own buffer) </p><dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_vao_manager.html#aefabb42c2a1a8f2d71af28ffaa91ba91" title="Creates a vertex buffer based on the given parameters.">createVertexBuffer()</a> for the remaining parameters not documented here. There is no BufferType option as the only available one is BT_DEFAULT </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sizeBytes</td><td>The size in bytes of the given constant buffer. API restrictions may apply. </td></tr>
@@ -1010,15 +1010,9 @@ Static Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">vertexElements</td><td>A list of element bindings for this vertex buffer. Once created, changing VertexElements is not possible, you'll have to create another Vertex Buffer. </td></tr>
     <tr><td class="paramname">numVertices</td><td>The number of vertices for this vertex </td></tr>
-    <tr><td class="paramname">bufferType</td><td>The type of buffer for this vertex buffer. @See BufferType::BT_DYNAMIC special case. </td></tr>
-    <tr><td class="paramname">initialData</td><td>Initial data the buffer will hold upon creation. Can be null (i.e. you plan to upload later). Cannot be null when bufferType is BT_IMMUTABLE. Must have enough room to prevent an overflow. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_buffer_packed.html#a50d8ee96245a8ac3dd7066eebf1f202d" title="Generic constructor.">BufferPacked::BufferPacked</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">keepAsShadow</td><td>Whether to keep the pointer "initialData" as a shadow copy of the contents. @See <a class="el" href="class_ogre_1_1_buffer_packed.html#a50d8ee96245a8ac3dd7066eebf1f202d" title="Generic constructor.">BufferPacked::BufferPacked</a> regarding on who is responsible for freeing this pointer and what happens if an exception was raised. </td></tr>
+    <tr><td class="paramname">bufferType</td><td>The type of buffer for this vertex buffer. See <a class="el" href="namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9a3c263c60e96eb7ef68ad8886e70c8969" title="Read access from GPU.">BT_DYNAMIC_DEFAULT</a> special case. </td></tr>
+    <tr><td class="paramname">initialData</td><td>Initial data the buffer will hold upon creation. Can be null (i.e. you plan to upload later). Cannot be null when bufferType is <a class="el" href="namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9adb62fa4394e5ed5eb8d45742e6b28719" title="Read access from GPU.">BT_IMMUTABLE</a>. Must have enough room to prevent an overflow. See <a class="el" href="class_ogre_1_1_buffer_packed.html#a50d8ee96245a8ac3dd7066eebf1f202d" title="Generic constructor.">BufferPacked::BufferPacked</a> </td></tr>
+    <tr><td class="paramname">keepAsShadow</td><td>Whether to keep the pointer "initialData" as a shadow copy of the contents. See <a class="el" href="class_ogre_1_1_buffer_packed.html#a50d8ee96245a8ac3dd7066eebf1f202d" title="Generic constructor.">BufferPacked::BufferPacked</a> regarding on who is responsible for freeing this pointer and what happens if an exception was raised. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1516,7 +1510,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retrieves a staging buffer for use. </p>
-<p >We'll search for existing ones that can hold minSizeBytes. We first prioritize those that won't cause a stall at all. Then those that will cause a partial stall, and otherwise return one that will cause full stall. If we can't find any existing buffer that can hold the requested number bytes, we'll create a new one. </p><dl class="section remark"><dt>Remarks</dt><dd>Calling this function causes the reference count of the returned pointer to be increased. You should decrease the reference count after you're done with the returned pointer. @See <a class="el" href="class_ogre_1_1_staging_buffer.html#a9d425e7d85804eaa45c01f6476ec204a" title="Decreases the reference count by one.">StagingBuffer::removeReferenceCount</a> regarding ref. counting. </dd></dl>
+<p >We'll search for existing ones that can hold minSizeBytes. We first prioritize those that won't cause a stall at all. Then those that will cause a partial stall, and otherwise return one that will cause full stall. If we can't find any existing buffer that can hold the requested number bytes, we'll create a new one. </p><dl class="section remark"><dt>Remarks</dt><dd>Calling this function causes the reference count of the returned pointer to be increased. You should decrease the reference count after you're done with the returned pointer. See <a class="el" href="class_ogre_1_1_staging_buffer.html#a9d425e7d85804eaa45c01f6476ec204a" title="Decreases the reference count by one.">StagingBuffer::removeReferenceCount</a> regarding ref. counting. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sizeBytes</td><td>Minimum size, in bytes, of the staging buffer. The returned buffer may be bigger. </td></tr>

@@ -120,7 +120,6 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a592f139a12c32714fbc0337ddd8dfccc"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a592f139a12c32714fbc0337ddd8dfccc">MovableObjectArray</a></td></tr>
-<tr class="memdesc:a592f139a12c32714fbc0337ddd8dfccc"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See SceneManager::cullFrustum  <a href="class_ogre_1_1_movable_object.html#a592f139a12c32714fbc0337ddd8dfccc">More...</a><br /></td></tr>
 <tr class="separator:a592f139a12c32714fbc0337ddd8dfccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -153,7 +152,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a865cb46cc09cbb8bd560abeca1d0d31e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify the object of it's manager (internal use only)  <a href="class_ogre_1_1_movable_object.html#a865cb46cc09cbb8bd560abeca1d0d31e">More...</a><br /></td></tr>
 <tr class="separator:a865cb46cc09cbb8bd560abeca1d0d31e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1f9062242992d47bcd8a48dd7c3a47a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#aa1f9062242992d47bcd8a48dd7c3a47a">_notifyParentNodeMemoryChanged</a> ()</td></tr>
-<tr class="memdesc:aa1f9062242992d47bcd8a48dd7c3a47a"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See <a class="el" href="class_ogre_1_1_node.html#ac5128a3043c814f21ae09c0e4fa6f121" title="Internal use, notifies all attached objects that our memory pointers (i.e.">Node::_callMemoryChangeListeners</a>  <a href="class_ogre_1_1_movable_object.html#aa1f9062242992d47bcd8a48dd7c3a47a">More...</a><br /></td></tr>
 <tr class="separator:aa1f9062242992d47bcd8a48dd7c3a47a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd08983d4f1a71012e2da670be169587"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#abd08983d4f1a71012e2da670be169587">_notifyStaticDirty</a> () const</td></tr>
 <tr class="memdesc:abd08983d4f1a71012e2da670be169587"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> when it is telling we're a static <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> being dirty Don't call this directly.  <a href="class_ogre_1_1_movable_object.html#abd08983d4f1a71012e2da670be169587">More...</a><br /></td></tr>
@@ -261,13 +259,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad42ba158cac70430c34f8a9eac94b237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the bounding Radius scaled by max( scale.x, scale.y, scale.z ).  <a href="class_ogre_1_1_movable_object.html#ad42ba158cac70430c34f8a9eac94b237">More...</a><br /></td></tr>
 <tr class="separator:ad42ba158cac70430c34f8a9eac94b237"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d62d2c3d09910210c948fc660468c46"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a2d62d2c3d09910210c948fc660468c46">instanceBatchCullFrustumThreaded</a> (const <a class="el" href="class_ogre_1_1_frustum.html">Frustum</a> *frustum, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> combinedVisibilityFlags)</td></tr>
-<tr class="memdesc:a2d62d2c3d09910210c948fc660468c46"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See InstancingTheadedCullingMethod,  <a href="class_ogre_1_1_movable_object.html#a2d62d2c3d09910210c948fc660468c46">More...</a><br /></td></tr>
 <tr class="separator:a2d62d2c3d09910210c948fc660468c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f0dcdbc7fc32d4342881c6f8ebd1f6f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a2f0dcdbc7fc32d4342881c6f8ebd1f6f">isAttached</a> () const</td></tr>
 <tr class="memdesc:a2f0dcdbc7fc32d4342881c6f8ebd1f6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this object is attached to a <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a>.  <a href="class_ogre_1_1_movable_object.html#a2f0dcdbc7fc32d4342881c6f8ebd1f6f">More...</a><br /></td></tr>
 <tr class="separator:a2f0dcdbc7fc32d4342881c6f8ebd1f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e3e690195e9d7e14c6ad4e1fe7ba9e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a2e3e690195e9d7e14c6ad4e1fe7ba9e5">isStatic</a> () const</td></tr>
-<tr class="memdesc:a2e3e690195e9d7e14c6ad4e1fe7ba9e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether this <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> is static. @See setStatic.  <a href="class_ogre_1_1_movable_object.html#a2e3e690195e9d7e14c6ad4e1fe7ba9e5">More...</a><br /></td></tr>
+<tr class="memdesc:a2e3e690195e9d7e14c6ad4e1fe7ba9e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether this <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> is static.  <a href="class_ogre_1_1_movable_object.html#a2e3e690195e9d7e14c6ad4e1fe7ba9e5">More...</a><br /></td></tr>
 <tr class="separator:a2e3e690195e9d7e14c6ad4e1fe7ba9e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e10940fd789fbf392c640a3c242e315"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a1e10940fd789fbf392c640a3c242e315">isVisible</a> () const</td></tr>
 <tr class="memdesc:a1e10940fd789fbf392c640a3c242e315"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether or not this object is supposed to be visible or not.  <a href="class_ogre_1_1_movable_object.html#a1e10940fd789fbf392c640a3c242e315">More...</a><br /></td></tr>
@@ -351,14 +348,13 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac4305df204604a027ca27ef77efff295"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295">buildLightList</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, const <a class="el" href="struct_ogre_1_1_light_list_info.html">LightListInfo</a> &amp;globalLightList)</td></tr>
-<tr class="memdesc:ac4305df204604a027ca27ef77efff295"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See SceneManager::buildLightList  <a href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295">More...</a><br /></td></tr>
 <tr class="separator:ac4305df204604a027ca27ef77efff295"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab86b755f38ec01b52ed6a512d9d31ef9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ab86b755f38ec01b52ed6a512d9d31ef9">calculateCastersBox</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> sceneVisibilityFlags, <a class="el" href="class_ogre_1_1_axis_aligned_box.html">AxisAlignedBox</a> *outBox)</td></tr>
 <tr class="separator:ab86b755f38ec01b52ed6a512d9d31ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d491859c987cf03cd2b62121e9bfea0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">cullFrustum</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *frustum, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> sceneVisibilityFlags, <a class="el" href="class_ogre_1_1_movable_object.html#a592f139a12c32714fbc0337ddd8dfccc">MovableObjectArray</a> &amp;outCulledObjects, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)</td></tr>
 <tr class="separator:a7d491859c987cf03cd2b62121e9bfea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4b8f3f72f7bf7a6bc20dd0677e125c1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ac4b8f3f72f7bf7a6bc20dd0677e125c1">cullLights</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> sceneLightMask, <a class="el" href="struct_ogre_1_1_light_list_info.html">LightListInfo</a> &amp;outGlobalLightList, const <a class="el" href="namespace_ogre.html#a4050eee6ae16a1d6c97d826854b1ed32">FrustumVec</a> &amp;frustums, const <a class="el" href="namespace_ogre.html#a4050eee6ae16a1d6c97d826854b1ed32">FrustumVec</a> &amp;cubemapFrustums)</td></tr>
-<tr class="memdesc:ac4b8f3f72f7bf7a6bc20dd0677e125c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See <a class="el" href="class_ogre_1_1_scene_manager.html#a97b975559cf03c869e70fdcbe38c07ce">SceneManager::cullLights</a> &amp;  <a href="class_ogre_1_1_movable_object.html#ac4b8f3f72f7bf7a6bc20dd0677e125c1">More...</a><br /></td></tr>
+<tr class="memdesc:ac4b8f3f72f7bf7a6bc20dd0677e125c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_scene_manager.html#a97b975559cf03c869e70fdcbe38c07ce">SceneManager::cullLights</a> &amp; see <a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">MovableObject::cullFrustum</a>.  <a href="class_ogre_1_1_movable_object.html#ac4b8f3f72f7bf7a6bc20dd0677e125c1">More...</a><br /></td></tr>
 <tr class="separator:ac4b8f3f72f7bf7a6bc20dd0677e125c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a048b8ace0a21cd2ed2c3008941ce3d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a1a048b8ace0a21cd2ed2c3008941ce3d">getDefaultLightMask</a> ()</td></tr>
 <tr class="memdesc:a1a048b8ace0a21cd2ed2c3008941ce3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the default light mask for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> instances.  <a href="class_ogre_1_1_movable_object.html#a1a048b8ace0a21cd2ed2c3008941ce3d">More...</a><br /></td></tr>
@@ -379,7 +375,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac2904cb122ab8c8d5066abefb29dfa96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the default visibility flags for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> instances.  <a href="class_ogre_1_1_movable_object.html#ac2904cb122ab8c8d5066abefb29dfa96">More...</a><br /></td></tr>
 <tr class="separator:ac2904cb122ab8c8d5066abefb29dfa96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add737d6564593333aeac457a1a2c0269"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#add737d6564593333aeac457a1a2c0269">updateAllBounds</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t)</td></tr>
-<tr class="memdesc:add737d6564593333aeac457a1a2c0269"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See <a class="el" href="class_ogre_1_1_scene_manager.html#a5de4ecb4955dcf164cfeb69c457716ee" title="Updates the world aabbs from all entities in the scene.">SceneManager::updateAllBounds</a>  <a href="class_ogre_1_1_movable_object.html#add737d6564593333aeac457a1a2c0269">More...</a><br /></td></tr>
 <tr class="separator:add737d6564593333aeac457a1a2c0269"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -420,8 +415,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>@See SceneManager::cullFrustum </p>
+<dl class="section see"><dt>See also</dt><dd>SceneManager::cullFrustum </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>We don't pass by reference on purpose (avoid implicit aliasing) We perform frustum culling AND test visibility mask at the same time </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -496,7 +490,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Don't use this constructor unless you know what you're doing. </p>
-<p >@See ObjectMemoryManager::mDummyNode </p>
+<dl class="section see"><dt>See also</dt><dd>ObjectMemoryManager::mDummyNode </dd></dl>
 
 </div>
 </div>
@@ -709,8 +703,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See <a class="el" href="class_ogre_1_1_node.html#ac5128a3043c814f21ae09c0e4fa6f121" title="Internal use, notifies all attached objects that our memory pointers (i.e.">Node::_callMemoryChangeListeners</a> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_node.html#ac5128a3043c814f21ae09c0e4fa6f121" title="Internal use, notifies all attached objects that our memory pointers (i.e.">Node::_callMemoryChangeListeners</a> </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_item.html#a560fec5e2aa60edc127ccd0d98f96696">Ogre::Item</a>.</p>
 
@@ -946,8 +939,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See SceneManager::buildLightList </p>
+<dl class="section see"><dt>See also</dt><dd>SceneManager::buildLightList </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>We don't pass by reference on purpose (avoid implicit aliasing) </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1157,17 +1149,17 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>@See <a class="el" href="class_ogre_1_1_scene_manager.html#a97b975559cf03c869e70fdcbe38c07ce">SceneManager::cullLights</a> &amp; </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">MovableObject::cullFrustum</a> Produces the global list of visible lights that is needed in <a class="el" href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295" title="@See SceneManager::buildLightList">buildLightList</a> </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>We don't pass <a class="el" href="struct_ogre_1_1_object_data.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">ObjectData</a> by reference on purpose (avoid implicit aliasing) It's declared here because all affected elements are from <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> IMPORTANT: It is assumed that all objects in <a class="el" href="struct_ogre_1_1_object_data.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">ObjectData</a> are Lights. </dd></dl>
+<p>See <a class="el" href="class_ogre_1_1_scene_manager.html#a97b975559cf03c869e70fdcbe38c07ce">SceneManager::cullLights</a> &amp; see <a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">MovableObject::cullFrustum</a>. </p>
+<p >Produces the global list of visible lights that is needed in buildLightList </p><dl class="section remark"><dt>Remarks</dt><dd>We don't pass <a class="el" href="struct_ogre_1_1_object_data.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">ObjectData</a> by reference on purpose (avoid implicit aliasing) It's declared here because all affected elements are from <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> IMPORTANT: It is assumed that all objects in <a class="el" href="struct_ogre_1_1_object_data.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">ObjectData</a> are Lights. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">outGlobalLightList</td><td>Output, a list of lights, contiguously placed </td></tr>
     <tr><td class="paramname">frustums</td><td>An array of all frustums we need to check against </td></tr>
-    <tr><td class="paramname">cubemapFrustums</td><td>An array of all frustums that are used at least once as cubemaps (@See <a class="el" href="class_ogre_1_1_scene_manager.html#a406c35260ee06d3886218ad0c0f6134c" title="Creates a camera to be managed by this scene manager.">SceneManager::createCamera</a>) </td></tr>
+    <tr><td class="paramname">cubemapFrustums</td><td>An array of all frustums that are used at least once as cubemaps </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_scene_manager.html#a406c35260ee06d3886218ad0c0f6134c" title="Creates a camera to be managed by this scene manager.">SceneManager::createCamera</a> </dd></dl>
 
 </div>
 </div>
@@ -1923,7 +1915,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the axis aligned box in world space. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. @See getWorldAabbUpdated if you need the update process to be guaranteed </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. See <a class="el" href="class_ogre_1_1_movable_object.html#aed8ab393d6f46e865a6753be69f96d8b" title="Gets the axis aligned box in world space.">getWorldAabbUpdated()</a> if you need the update process to be guaranteed </dd></dl>
 
 </div>
 </div>
@@ -1963,7 +1955,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the bounding Radius scaled by max( scale.x, scale.y, scale.z ). </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. @See getWorldRadiusUpdated if you need the update process to be guaranteed </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. See <a class="el" href="class_ogre_1_1_movable_object.html#ad42ba158cac70430c34f8a9eac94b237" title="Gets the bounding Radius scaled by max( scale.x, scale.y, scale.z ).">getWorldRadiusUpdated()</a> if you need the update process to be guaranteed </dd></dl>
 
 </div>
 </div>
@@ -2026,9 +2018,9 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See InstancingTheadedCullingMethod, </p>
-<dl class="section see"><dt>See also</dt><dd>InstanceBatch::instanceBatchCullFrustumThreaded </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>InstancingTheadedCullingMethod, </dd>
+<dd>
+InstanceBatch::instanceBatchCullFrustumThreaded </dd></dl>
 
 </div>
 </div>
@@ -2074,7 +2066,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Checks whether this <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> is static. @See setStatic. </p>
+<p>Checks whether this <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> is static. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#a38f8241458458e4f1235eae7d8f850c3" title="Turns this Node into static or dynamic.">setStatic</a> </dd></dl>
 
 </div>
 </div>
@@ -2589,7 +2582,7 @@ template&lt;class Alloc &gt; </div>
 
 <p>Gets a list of lights, ordered relative to how close they are to this movable object. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>The lights are filled in </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295" title="@See SceneManager::buildLightList">buildLightList</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295">buildLightList</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The list of lights use to lighting this object. </dd></dl>
 
 </div>
@@ -3064,7 +3057,8 @@ template&lt;class Alloc &gt; </div>
 <p>Turns this <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> into static or dynamic. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Switching between dynamic and static has some overhead and forces to update all static scene when converted to static. So don't do it frequently. Static objects are not updated every frame, only when requested explicitly. Use this feature if you plan to have this object unaltered for a very long times </dd></dl>
 <dl class="section user"><dt></dt><dd>Note all MovableObjects support switching between static &amp; dynamic after they have been created (eg. InstancedEntity) </dd></dl>
-<dl class="section user"><dt></dt><dd>Changing this attribute will cause to switch the attribute to our parent node, and as a result, all of its other attached entities. @See <a class="el" href="class_ogre_1_1_node.html#a1f18bc6093c94defdaf64b504df81259" title="Turns this Node into static or dynamic.">Node::setStatic</a> </dd></dl>
+<dl class="section user"><dt></dt><dd>Changing this attribute will cause to switch the attribute to our parent node, and as a result, all of its other attached entities. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_node.html#a1f18bc6093c94defdaf64b504df81259" title="Turns this Node into static or dynamic.">Node::setStatic</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>True if setStatic made an actual change. False otherwise. Can fail because the object was already static/dynamic, or because switching is not supported </dd></dl>
 
 </div>
@@ -3160,8 +3154,7 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See <a class="el" href="class_ogre_1_1_scene_manager.html#a5de4ecb4955dcf164cfeb69c457716ee" title="Updates the world aabbs from all entities in the scene.">SceneManager::updateAllBounds</a> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_scene_manager.html#a5de4ecb4955dcf164cfeb69c457716ee" title="Updates the world aabbs from all entities in the scene.">SceneManager::updateAllBounds</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>We don't pass by reference on purpose (avoid implicit aliasing) </dd></dl>
 
 </div>

@@ -155,7 +155,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a860defea61122d7d8d4dc278c1a876c8"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_compositor_node_def.html">CompositorNodeDef</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a860defea61122d7d8d4dc278c1a876c8">getDefinition</a> () const</td></tr>
 <tr class="separator:a860defea61122d7d8d4dc278c1a876c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7282de98f052c046880aefb7a838e760"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a7282de98f052c046880aefb7a838e760">getEnabled</a> () const</td></tr>
-<tr class="memdesc:a7282de98f052c046880aefb7a838e760"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if this instance is enabled. @See setEnabled.  <a href="class_ogre_1_1_compositor_node.html#a7282de98f052c046880aefb7a838e760">More...</a><br /></td></tr>
+<tr class="memdesc:a7282de98f052c046880aefb7a838e760"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if this instance is enabled.  <a href="class_ogre_1_1_compositor_node.html#a7282de98f052c046880aefb7a838e760">More...</a><br /></td></tr>
 <tr class="separator:a7282de98f052c046880aefb7a838e760"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab152c8f646a835c2f88585ad4fe0413a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">getId</a> () const</td></tr>
 <tr class="memdesc:ab152c8f646a835c2f88585ad4fe0413a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the unique id of this object.  <a href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">More...</a><br /></td></tr>
@@ -588,8 +588,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates all passes based on our definition. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Call this function after connecting all channels (at least our input) otherwise we may bind null pointer RTs to the passes (and then crash) @See connectTo and </dd></dl>
-<dl class="section see"><dt>See also</dt><dd>connectFinalRT </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Call this function after connecting all channels (at least our input) otherwise we may bind null pointer RTs to the passes (and then crash) See <a class="el" href="class_ogre_1_1_compositor_node.html#a0bfd8041dbce265afd92ac9c11769fbb" title="Connects this node (let&#39;s call it node &#39;A&#39;) to node &#39;B&#39;, mapping the output channel from A into the i...">connectTo()</a> and connectFinalRT(). </dd></dl>
 
 </div>
 </div>
@@ -796,7 +795,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns if this instance is enabled. @See setEnabled. </p>
+<p>Returns if this instance is enabled. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html#a817bc10dbf5427a77912ab3bcd391f69" title="Enables or disables all instances of this node.">setEnabled</a> </dd></dl>
 
 </div>
 </div>

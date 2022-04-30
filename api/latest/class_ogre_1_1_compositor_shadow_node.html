@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_compositor_shadow_node.
 </div><!--header-->
 <div class="contents">
 
-<p>Shadow Nodes are special nodes (not to be confused with.  
+<p>Shadow Nodes are special nodes (not to be confused with <a class="el" href="class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing.">CompositorNode</a>) that are only used for rendering shadow maps.  
  <a href="class_ogre_1_1_compositor_shadow_node.html#details">More...</a></p>
 
 <p><code>#include &lt;OgreCompositorShadowNode.h&gt;</code></p>
@@ -157,7 +157,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2b7e9c885be9aa654b04ac8e98f06630"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_compositor_shadow_node.html#ac572709b6988d13b7e02634914bf531d">LightsBitSet</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#a2b7e9c885be9aa654b04ac8e98f06630">getAffectedLightsBitSet</a> () const</td></tr>
 <tr class="separator:a2b7e9c885be9aa654b04ac8e98f06630"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bbc516312496f857c9b8b07be6c8ce6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_axis_aligned_box.html">AxisAlignedBox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#a2bbc516312496f857c9b8b07be6c8ce6">getCastersBox</a> () const</td></tr>
-<tr class="memdesc:a2bbc516312496f857c9b8b07be6c8ce6"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See mCastersBox  <a href="class_ogre_1_1_compositor_shadow_node.html#a2bbc516312496f857c9b8b07be6c8ce6">More...</a><br /></td></tr>
 <tr class="separator:a2bbc516312496f857c9b8b07be6c8ce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec43a0e8235a792dc1fe9901993716a8"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">TextureGpuVec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#aec43a0e8235a792dc1fe9901993716a8">getContiguousShadowMapTex</a> () const</td></tr>
 <tr class="separator:aec43a0e8235a792dc1fe9901993716a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,7 +171,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a42bf87d732dcc1c49c19aba5eb692de7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_compositor_shadow_node_def.html">CompositorShadowNodeDef</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#a42bf87d732dcc1c49c19aba5eb692de7">getDefinition</a> () const</td></tr>
 <tr class="separator:a42bf87d732dcc1c49c19aba5eb692de7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7282de98f052c046880aefb7a838e760"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a7282de98f052c046880aefb7a838e760">getEnabled</a> () const</td></tr>
-<tr class="memdesc:a7282de98f052c046880aefb7a838e760"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if this instance is enabled. @See setEnabled.  <a href="class_ogre_1_1_compositor_node.html#a7282de98f052c046880aefb7a838e760">More...</a><br /></td></tr>
+<tr class="memdesc:a7282de98f052c046880aefb7a838e760"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if this instance is enabled.  <a href="class_ogre_1_1_compositor_node.html#a7282de98f052c046880aefb7a838e760">More...</a><br /></td></tr>
 <tr class="separator:a7282de98f052c046880aefb7a838e760"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab152c8f646a835c2f88585ad4fe0413a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">getId</a> () const</td></tr>
 <tr class="memdesc:ab152c8f646a835c2f88585ad4fe0413a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the unique id of this object.  <a href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">More...</a><br /></td></tr>
@@ -289,9 +288,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a607c30415819742ad2bcfaa1d3959d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Shadow Nodes are special nodes (not to be confused with. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing.">CompositorNode</a>) that are only used for rendering shadow maps. Normal Compositor Nodes can share or own a ShadowNode. The ShadowNode will render the scene enough times to fill all shadow maps so the main scene pass can use them. </dd></dl>
-<dl class="section user"><dt></dt><dd>ShadowNode are very flexible compared to <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; as they allow mixing multiple shadow camera setups for different lights. </dd></dl>
+<div class="textblock"><p >Shadow Nodes are special nodes (not to be confused with <a class="el" href="class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing.">CompositorNode</a>) that are only used for rendering shadow maps. </p>
+<p >Normal Compositor Nodes can share or own a ShadowNode. The ShadowNode will render the scene enough times to fill all shadow maps so the main scene pass can use them. </p><dl class="section user"><dt></dt><dd>ShadowNode are very flexible compared to <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; as they allow mixing multiple shadow camera setups for different lights. </dd></dl>
 <dl class="section user"><dt></dt><dd>Shadow Nodes derive from nodes so that they can be used as regular nodes </dd></dl>
 <dl class="section user"><dt></dt><dd>During a render with shadow mapping enabled, we render first the Shadow <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a>'s pass, then render the regular scene. In the past there used to be an AABB enclosing all visible objects that receive shadows that was used for calculating the shadow maps. This forced <a class="el" href="namespace_ogre.html">Ogre</a> 2.x to split rendering into two stages: _cullPhase01 &amp; _renderPhase02. This is not needed anymore.</dd></dl>
 <p>To summarize: a normal rendering flow with shadow map looks like this: shadowNode-&gt;setupShadowCamera( normal-&gt;getVisibleBoundsInfo() ); shadowNode-&gt;_cullPhase01(); shadowNode-&gt;_renderPhase02(); normal-&gt;_cullPhase01(); normal-&gt;_renderPhase02(); </p><dl class="section user"><dt></dt><dd></dd></dl>
@@ -785,8 +783,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates all passes based on our definition. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Call this function after connecting all channels (at least our input) otherwise we may bind null pointer RTs to the passes (and then crash) @See connectTo and </dd></dl>
-<dl class="section see"><dt>See also</dt><dd>connectFinalRT </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Call this function after connecting all channels (at least our input) otherwise we may bind null pointer RTs to the passes (and then crash) See <a class="el" href="class_ogre_1_1_compositor_node.html#a0bfd8041dbce265afd92ac9c11769fbb" title="Connects this node (let&#39;s call it node &#39;A&#39;) to node &#39;B&#39;, mapping the output channel from A into the i...">connectTo()</a> and connectFinalRT(). </dd></dl>
 
 </div>
 </div>
@@ -918,8 +915,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See mCastersBox </p>
+<dl class="section see"><dt>See also</dt><dd>mCastersBox </dd></dl>
 
 </div>
 </div>
@@ -1094,7 +1090,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns if this instance is enabled. @See setEnabled. </p>
+<p>Returns if this instance is enabled. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html#a817bc10dbf5427a77912ab3bcd391f69" title="Enables or disables all instances of this node.">setEnabled</a> </dd></dl>
 
 </div>
 </div>

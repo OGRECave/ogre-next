@@ -130,7 +130,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac694ee8d58b6537dec6bfdcaefa5ae52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the full transformation matrix for this node.  <a href="class_ogre_1_1_bone.html#ac694ee8d58b6537dec6bfdcaefa5ae52">More...</a><br /></td></tr>
 <tr class="separator:ac694ee8d58b6537dec6bfdcaefa5ae52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a739a76cf6cf4183c286b841056b622be"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_simple_matrix_af4x3.html">SimpleMatrixAf4x3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a739a76cf6cf4183c286b841056b622be">_getFullTransformUpdated</a> ()</td></tr>
-<tr class="memdesc:a739a76cf6cf4183c286b841056b622be"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See _getDerivedScaleUpdated remarks.  <a href="class_ogre_1_1_bone.html#a739a76cf6cf4183c286b841056b622be">More...</a><br /></td></tr>
+<tr class="memdesc:a739a76cf6cf4183c286b841056b622be"><td class="mdescLeft">&#160;</td><td class="mdescRight">See _getDerivedScaleUpdated() remarks.  <a href="class_ogre_1_1_bone.html#a739a76cf6cf4183c286b841056b622be">More...</a><br /></td></tr>
 <tr class="separator:a739a76cf6cf4183c286b841056b622be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d985b5709d3c6691d7a900f4ec2b92d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#a724fb9f82013c782db5c3c12ea36aac8">FORCEINLINE</a> const <a class="el" href="class_ogre_1_1_simple_matrix_af4x3.html">SimpleMatrixAf4x3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a8d985b5709d3c6691d7a900f4ec2b92d">_getLocalSpaceTransform</a> () const</td></tr>
 <tr class="memdesc:a8d985b5709d3c6691d7a900f4ec2b92d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the transformation matrix for this bone in local space (i.e.  <a href="class_ogre_1_1_bone.html#a8d985b5709d3c6691d7a900f4ec2b92d">More...</a><br /></td></tr>
@@ -428,8 +428,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>@See _getDerivedScaleUpdated remarks. </p>
-<p >@See _getFullTransform </p>
+<p>See _getDerivedScaleUpdated() remarks. </p>
+<p >See <a class="el" href="class_ogre_1_1_bone.html#ac694ee8d58b6537dec6bfdcaefa5ae52" title="Gets the full transformation matrix for this node.">_getFullTransform()</a> </p>
 
 </div>
 </div>
@@ -592,8 +592,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets a regular <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> to be parent of this <a class="el" href="class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton.">Bone</a>. </p>
-<p >DO NOT USE THIS FUNCTION IF YOU DON'T KNOW WHAT YOU'RE DOING. If you want to use a regular <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> to control a bone, </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_skeleton_instance.html#a688c8d85bb2bd4f747fd780872089250" title="Sets a regular SceneNode to be parent of this Bone for manually controlling a bone (e....">SkeletonInstance::setSceneNodeAsParentOfBone</a> instead. </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd><ol type="1">
+<p >DO NOT USE THIS FUNCTION IF YOU DON'T KNOW WHAT YOU'RE DOING. If you want to use a regular <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> to control a bone, see <a class="el" href="class_ogre_1_1_skeleton_instance.html#a688c8d85bb2bd4f747fd780872089250" title="Sets a regular SceneNode to be parent of this Bone for manually controlling a bone (e....">SkeletonInstance::setSceneNodeAsParentOfBone</a> instead. </p><dl class="section remark"><dt>Remarks</dt><dd><ol type="1">
 <li>Multiple calls to _setNodeParent with different arguments will silently override previous calls.</li>
 <li>By the time we update, we assume the <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> has already been updated. (even when calling _getDerivedPositionUpdated and Co)</li>
 <li>Null pointers will "detach", causing derived updates to be in local space</li>
@@ -801,7 +800,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if this node is affected by orientation applied to the parent node. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>@See setInheritOrientation for more info. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_bone.html#af0471d81215141e125483efdb89fccdc" title="Tells the Bone whether it should inherit orientation from it&#39;s parent node.">setInheritOrientation()</a> for more info. </dd></dl>
 
 </div>
 </div>
@@ -821,7 +820,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if this node is affected by scaling factors applied to the parent node. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>@See setInheritOrientation for more info. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_bone.html#af0471d81215141e125483efdb89fccdc" title="Tells the Bone whether it should inherit orientation from it&#39;s parent node.">setInheritOrientation()</a> for more info. </dd></dl>
 
 </div>
 </div>
@@ -1625,7 +1624,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Tells the <a class="el" href="class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton.">Bone</a> whether it should inherit orientation from it's parent node. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>@See <a class="el" href="class_ogre_1_1_node.html#a60c305942b550d110b85c5da64a0a5f6" title="Tells the node whether it should inherit orientation from it&#39;s parent node.">Node::setInheritOrientation</a> remarks. Note that Nodes and bones inherit scale and orientation differently, because Bones support non-uniform scaling, whereas Nodes don't. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_node.html#a60c305942b550d110b85c5da64a0a5f6" title="Tells the node whether it should inherit orientation from it&#39;s parent node.">Node::setInheritOrientation</a> remarks. Note that Nodes and bones inherit scale and orientation differently, because Bones support non-uniform scaling, whereas Nodes don't. </dd></dl>
 <dl class="section user"><dt></dt><dd>They may behave differently, because we assume inherited scale is never negative (due to this information being lost when embedded into a matrix. This mimics the behavior of major 3D modeling tools. i.e. scaling by x = -1 &amp; y = -1 is the same as rotating 180° around Z axis) Default is true. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1653,7 +1652,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Tells the node whether it should inherit scaling factors from it's parent node. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>@See setInheritOrientation. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>See <a class="el" href="class_ogre_1_1_bone.html#af0471d81215141e125483efdb89fccdc" title="Tells the Bone whether it should inherit orientation from it&#39;s parent node.">setInheritOrientation()</a>. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inherit</td><td>If true, this node's scale will be affected by its parent's scale. If false, it will not be affected. </td></tr>
@@ -1825,7 +1824,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>TODO. </p>
-<p >@See <a class="el" href="class_ogre_1_1_node.html#a0d44ecad702257bcf68140063ee4bc42" title="@See SceneManager::updateAllTransforms()">Node::updateAllTransforms</a> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_node.html#a0d44ecad702257bcf68140063ee4bc42">Node::updateAllTransforms</a> </dd></dl>
 
 </div>
 </div>

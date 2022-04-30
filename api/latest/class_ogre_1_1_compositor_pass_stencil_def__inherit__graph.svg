@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="class_ogre_1_1_compositor_pass_def.html" target="_top" xlink:title="Interface to abstract all types of pass definitions (.">
+<g id="a_node2"><a xlink:href="class_ogre_1_1_compositor_pass_def.html" target="_top" xlink:title="Interface to abstract all types of pass definitions (see CompositorPassType): PASS_SCENE (see Composi...">
 <polygon fill="none" stroke="black" points="15,-56.5 15,-75.5 144,-75.5 144,-56.5 15,-56.5"/>
 <text text-anchor="middle" x="79.5" y="-63.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::CompositorPassDef</text>
 </a>

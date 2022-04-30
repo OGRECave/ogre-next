@@ -12,7 +12,7 @@
 <area shape="rect" id="node40" href="$class_ogre_1_1_vct_material.html" title=" " alt="" coords="219,1221,341,1248"/>
 <area shape="rect" id="node41" href="$class_ogre_1_1_vct_voxelizer_source_base.html" title="This class contains shared functionality between voxelizer; and is used by VctLighting to source its ..." alt="" coords="181,1272,379,1299"/>
 <area shape="rect" id="node44" href="$class_ogre_1_1_voxelized_mesh_cache.html" title="Uses a VctVoxelizer to convert a single mesh made up of triangles into a voxel 3D texture representat..." alt="" coords="190,1323,370,1349"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with." alt="" coords="469,5,669,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render..." alt="" coords="469,5,669,32"/>
 <area shape="rect" id="node8" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="525,56,614,83"/>
 <area shape="rect" id="node9" href="$class_ogre_1_1_frustum.html" title="A frustum represents a pyramid, capped at the near and far end which is used to represent either a vi..." alt="" coords="517,107,621,133"/>
 <area shape="rect" id="node11" href="$class_ogre_1_1_ifd_probe_visualizer.html" title=" " alt="" coords="489,157,650,184"/>

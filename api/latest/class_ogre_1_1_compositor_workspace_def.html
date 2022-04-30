@@ -96,9 +96,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_compositor_workspace_de
 </div><!--header-->
 <div class="contents">
 
-<p>@See <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a>.  
- <a href="class_ogre_1_1_compositor_workspace_def.html#details">More...</a></p>
-
 <p><code>#include &lt;OgreCompositorWorkspaceDef.h&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ogre::CompositorWorkspaceDef:</div>
@@ -163,7 +160,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7e2c3115029d7ae4fb4a2f66e949b52d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears everything: All node aliases, and their connections (including output connection).  <a href="class_ogre_1_1_compositor_workspace_def.html#a7e2c3115029d7ae4fb4a2f66e949b52d">More...</a><br /></td></tr>
 <tr class="separator:a7e2c3115029d7ae4fb4a2f66e949b52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bc829d1e5e9f66dd00111145c4bb665"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a5bc829d1e5e9f66dd00111145c4bb665">clearAllInterNodeConnections</a> ()</td></tr>
-<tr class="memdesc:a5bc829d1e5e9f66dd00111145c4bb665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears all the connection between channels of the nodes (.  <a href="class_ogre_1_1_compositor_workspace_def.html#a5bc829d1e5e9f66dd00111145c4bb665">More...</a><br /></td></tr>
+<tr class="memdesc:a5bc829d1e5e9f66dd00111145c4bb665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears all the connection between channels of the nodes.  <a href="class_ogre_1_1_compositor_workspace_def.html#a5bc829d1e5e9f66dd00111145c4bb665">More...</a><br /></td></tr>
 <tr class="separator:a5bc829d1e5e9f66dd00111145c4bb665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c4f8fc157552a3434997af3ca7d4bde"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a1c4f8fc157552a3434997af3ca7d4bde">clearOutputConnections</a> ()</td></tr>
 <tr class="memdesc:a1c4f8fc157552a3434997af3ca7d4bde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the connection from the "final output RenderTarget" (i.e.  <a href="class_ogre_1_1_compositor_workspace_def.html#a1c4f8fc157552a3434997af3ca7d4bde">More...</a><br /></td></tr>
@@ -283,7 +280,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a491f3ccf401762343436ee19f13632a3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a491f3ccf401762343436ee19f13632a3">destroyBuffers</a> (const <a class="el" href="class_ogre_1_1_texture_definition_base.html#a7c2e6e1337065e18f6bc0abe8cd6428a">BufferDefinitionVec</a> &amp;bufferDefs, <a class="el" href="group___effects.html#gabe54b22d0cf0eb77a49fed877816fe2d">CompositorNamedBufferVec</a> &amp;inOutBufContainer, <a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *renderSys)</td></tr>
 <tr class="separator:a491f3ccf401762343436ee19f13632a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1d4d17aeeacb92b400d2ff31c6cdea0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#ac1d4d17aeeacb92b400d2ff31c6cdea0">destroyTextures</a> (<a class="el" href="group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3">CompositorChannelVec</a> &amp;inOutTexContainer, <a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *renderSys)</td></tr>
-<tr class="memdesc:ac1d4d17aeeacb92b400d2ff31c6cdea0"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See createTextures  <a href="class_ogre_1_1_texture_definition_base.html#ac1d4d17aeeacb92b400d2ff31c6cdea0">More...</a><br /></td></tr>
 <tr class="separator:ac1d4d17aeeacb92b400d2ff31c6cdea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebb03a9eb9c262f64ffaf4c333449941"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#aebb03a9eb9c262f64ffaf4c333449941">recreateResizableBuffers</a> (const <a class="el" href="class_ogre_1_1_texture_definition_base.html#a7c2e6e1337065e18f6bc0abe8cd6428a">BufferDefinitionVec</a> &amp;bufferDefs, <a class="el" href="group___effects.html#gabe54b22d0cf0eb77a49fed877816fe2d">CompositorNamedBufferVec</a> &amp;inOutBufContainer, const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *finalTarget, <a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *renderSys, const <a class="el" href="namespace_ogre.html#a567f111ecc371fa9ab8b4bb8216d35ce">CompositorNodeVec</a> &amp;connectedNodes, const <a class="el" href="namespace_ogre.html#aa09712589d0e729a928ed664b98e30a7">CompositorPassVec</a> *passes)</td></tr>
 <tr class="memdesc:aebb03a9eb9c262f64ffaf4c333449941"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys &amp; recreates only the buffers that depend on the main RT (i.e.  <a href="class_ogre_1_1_texture_definition_base.html#aebb03a9eb9c262f64ffaf4c333449941">More...</a><br /></td></tr>
@@ -303,8 +299,8 @@ Friends</h2></td></tr>
 <tr class="separator:a87d95f1066f10ce9e0fd54d6ec545633"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >@See <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a>. </p>
-<p >Workspace definitions assume all other definitions are already parsed as we need them to perform validation checks. Workspace definitions work by assigning aliases to each node. A node whose name is the same as its alias is called an implicit alias. </p><dl class="section remark"><dt>Remarks</dt><dd>Aliasing nodes allows having more than one instance of the same node. </dd></dl>
+<div class="textblock"><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a>. Workspace definitions assume all other definitions are already parsed as we need them to perform validation checks. Workspace definitions work by assigning aliases to each node. A node whose name is the same as its alias is called an implicit alias. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Aliasing nodes allows having more than one instance of the same node. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Matias N. Goldberg </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.1 </dd></dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
@@ -744,7 +740,7 @@ Friends</h2></td></tr>
 
 <p>Creates a TextureDefinition with a given name, must be unique. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>WARNING: Calling this function may invalidate all previous returned pointers unless you've properly called setLocalTextureDefinitions </dd></dl>
-<dl class="section user"><dt></dt><dd>@See addTextureSourceName remarks for what it can throw </dd></dl>
+<dl class="section user"><dt></dt><dd>See <a class="el" href="class_ogre_1_1_texture_definition_base.html#a02ec073273bf07eb78122ddb2a4606f1" title="Adds a texture name, whether a real one or an alias, and where to grab it from.">addTextureSourceName()</a> remarks for what it can throw </dd></dl>
 <dl class="section user"><dt></dt><dd>Textures are local when the derived class is a <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> definition, and it's global when the derived class is a Workspace definition </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -829,7 +825,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Clears everything: All node aliases, and their connections (including output connection). </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This function shouldn't be called while there are still instantiated workspaces It is safe to call this function while there are still workspaces, but you must call @Workspace::recreateAllNodes after you're done setting the new node connections. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This function shouldn't be called while there are still instantiated workspaces It is safe to call this function while there are still workspaces, but you must call <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a>:recreateAllNodes after you're done setting the new node connections. </dd></dl>
 
 </div>
 </div>
@@ -848,8 +844,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Clears all the connection between channels of the nodes (. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a4ae38b595a596cc3e7c320458e25f9b3" title="Connects outNode&#39;s output channel to inNode&#39;s input channel.">connect</a>). </dd></dl>
+<p>Clears all the connection between channels of the nodes. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a4ae38b595a596cc3e7c320458e25f9b3" title="Connects outNode&#39;s output channel to inNode&#39;s input channel.">connect</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd><ol type="1">
 <li>We don't clear the output connection (</li>
 </ol>
@@ -857,7 +853,11 @@ Friends</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd>connectOutput, </dd>
 <dd>
 <a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a1c4f8fc157552a3434997af3ca7d4bde" title="Clears the connection from the &quot;final output RenderTarget&quot; (i.e.">clearOutputConnections</a>)<ol type="1">
-<li>The node aliases (both implicit and explicit) will still exist. @See <a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a7e2c3115029d7ae4fb4a2f66e949b52d" title="Clears everything: All node aliases, and their connections (including output connection).">clearAll</a>.</li>
+<li>The node aliases (both implicit and explicit) will still exist. </li>
+</ol>
+</dd>
+<dd>
+<a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a7e2c3115029d7ae4fb4a2f66e949b52d" title="Clears everything: All node aliases, and their connections (including output connection).">clearAll</a>.<ol type="1">
 <li>A node with incomplete inputs should be disabled before the workspace is instantiated (</li>
 </ol>
 </dd>
@@ -887,14 +887,19 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Clears the connection from the "final output RenderTarget" (i.e. </p>
-<p >usually the RenderWindow) that goes to the input channel of one of our nodes. @See connectOutput. </p><dl class="section remark"><dt>Remarks</dt><dd><ol type="1">
+<p >usually the RenderWindow) that goes to the input channel of one of our nodes. </p><dl class="section see"><dt>See also</dt><dd>connectOutput. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd><ol type="1">
 <li>We don't clear other type of connections (</li>
 </ol>
 </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a4ae38b595a596cc3e7c320458e25f9b3" title="Connects outNode&#39;s output channel to inNode&#39;s input channel.">connect</a>, </dd>
 <dd>
-<a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a5bc829d1e5e9f66dd00111145c4bb665" title="Clears all the connection between channels of the nodes (.">clearAllInterNodeConnections</a>)<ol type="1">
-<li>The node aliases (both implicit and explicit) will still exist. @See <a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a7e2c3115029d7ae4fb4a2f66e949b52d" title="Clears everything: All node aliases, and their connections (including output connection).">clearAll</a>.</li>
+<a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a5bc829d1e5e9f66dd00111145c4bb665" title="Clears all the connection between channels of the nodes.">clearAllInterNodeConnections</a>)<ol type="1">
+<li>The node aliases (both implicit and explicit) will still exist. </li>
+</ol>
+</dd>
+<dd>
+<a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a7e2c3115029d7ae4fb4a2f66e949b52d" title="Clears everything: All node aliases, and their connections (including output connection).">clearAll</a>.<ol type="1">
 <li>A node with incomplete inputs should be disabled before the workspace is instantiated (</li>
 </ol>
 </dd>
@@ -978,7 +983,8 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Connects outNode's output channel to inNode's input channel. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This mapping will later be used to know how connections should be done when instantiating. @See <a class="el" href="class_ogre_1_1_compositor_node.html#a0bfd8041dbce265afd92ac9c11769fbb" title="Connects this node (let&#39;s call it node &#39;A&#39;) to node &#39;B&#39;, mapping the output channel from A into the i...">CompositorNode::connectTo</a> If outNode &amp; inNode are not yet aliased, an alias for them will be created. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This mapping will later be used to know how connections should be done when instantiating. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html#a0bfd8041dbce265afd92ac9c11769fbb" title="Connects this node (let&#39;s call it node &#39;A&#39;) to node &#39;B&#39;, mapping the output channel from A into the i...">CompositorNode::connectTo</a> If outNode &amp; inNode are not yet aliased, an alias for them will be created. </dd></dl>
 
 </div>
 </div>
@@ -1052,7 +1058,8 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Connects outNode's output buffer channel to inNode's input buffer channel. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This mapping will later be used to know how connections should be done when instantiating. @See <a class="el" href="class_ogre_1_1_compositor_node.html#a5dd2960e9ca1de509c9c3ff36d847997" title="Connects this node (let&#39;s call it node &#39;A&#39;) to node &#39;B&#39;, mapping the output channel from A into the i...">CompositorNode::connectBufferTo</a> If outNode &amp; inNode are not yet aliased, an alias for them will be created. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This mapping will later be used to know how connections should be done when instantiating. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html#a5dd2960e9ca1de509c9c3ff36d847997" title="Connects this node (let&#39;s call it node &#39;A&#39;) to node &#39;B&#39;, mapping the output channel from A into the i...">CompositorNode::connectBufferTo</a> If outNode &amp; inNode are not yet aliased, an alias for them will be created. </dd></dl>
 
 </div>
 </div>
@@ -1416,8 +1423,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See createTextures </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_texture_definition_base.html#a3dd5a18207b6fca4f39c679c1c82ff77" title="Utility function to create the textures based on a given set of texture definitions and put them in a...">createTextures</a> </dd></dl>
 
 </div>
 </div>

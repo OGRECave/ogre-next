@@ -35,7 +35,7 @@
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
-<g id="a_node3"><a xlink:href="class_ogre_1_1_kf_transform_array_memory_manager.html" target="_top" xlink:title="Implementation to create the KfTransform variables needed by SkeletonTrack @See SkeletonAnimationDef ...">
+<g id="a_node3"><a xlink:href="class_ogre_1_1_kf_transform_array_memory_manager.html" target="_top" xlink:title="Implementation to create the KfTransform variables needed by SkeletonTrack See SkeletonAnimationDef a...">
 <polygon fill="none" stroke="black" points="176.5,-88.5 176.5,-118.5 329.5,-118.5 329.5,-88.5 176.5,-88.5"/>
 <text text-anchor="start" x="184.5" y="-106.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::KfTransformArrayMemory</text>
 <text text-anchor="middle" x="253" y="-95.5" font-family="Helvetica,sans-Serif" font-size="10.00">Manager</text>

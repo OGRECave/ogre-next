@@ -624,7 +624,7 @@
 <!-- Node352 -->
 <g id="node126" class="node">
 <title>Node352</title>
-<g id="a_node126"><a xlink:href="class_ogre_1_1_compositor_pass_def.html" target="_top" xlink:title="Interface to abstract all types of pass definitions (.">
+<g id="a_node126"><a xlink:href="class_ogre_1_1_compositor_pass_def.html" target="_top" xlink:title="Interface to abstract all types of pass definitions (see CompositorPassType): PASS_SCENE (see Composi...">
 <polygon fill="none" stroke="black" points="229.5,-3161.5 229.5,-3180.5 358.5,-3180.5 358.5,-3161.5 229.5,-3161.5"/>
 <text text-anchor="middle" x="294" y="-3168.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::CompositorPassDef</text>
 </a>
@@ -4100,7 +4100,7 @@
 <!-- Node351 -->
 <g id="node113" class="node">
 <title>Node351</title>
-<g id="a_node113"><a xlink:href="class_ogre_1_1_compositor_shadow_node.html" target="_top" xlink:title="Shadow Nodes are special nodes (not to be confused with.">
+<g id="a_node113"><a xlink:href="class_ogre_1_1_compositor_shadow_node.html" target="_top" xlink:title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render...">
 <polygon fill="none" stroke="black" points="436,-11774.5 436,-11793.5 586,-11793.5 586,-11774.5 436,-11774.5"/>
 <text text-anchor="middle" x="511" y="-11781.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::CompositorShadowNode</text>
 </a>
@@ -7894,7 +7894,7 @@
 <!-- Node635 -->
 <g id="node471" class="node">
 <title>Node635</title>
-<g id="a_node471"><a xlink:href="class_ogre_1_1_compositor_workspace_def.html" target="_top" xlink:title="@See CompositorWorkspace.">
+<g id="a_node471"><a xlink:href="class_ogre_1_1_compositor_workspace_def.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="433.5,-7060.5 433.5,-7079.5 588.5,-7079.5 588.5,-7060.5 433.5,-7060.5"/>
 <text text-anchor="middle" x="511" y="-7067.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::CompositorWorkspaceDef</text>
 </a>

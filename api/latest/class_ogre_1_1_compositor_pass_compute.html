@@ -133,15 +133,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a220924c4a37f7cf458646522bc5cc72f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___effects.html#ga6f176e5de375550ba7f1c8dccde8345a">CompositorPassType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a220924c4a37f7cf458646522bc5cc72f">getType</a> () const</td></tr>
 <tr class="separator:a220924c4a37f7cf458646522bc5cc72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f43846a1bb675c3ba19a8d3f41c6510"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a6f43846a1bb675c3ba19a8d3f41c6510">notifyCleared</a> ()</td></tr>
-<tr class="memdesc:a6f43846a1bb675c3ba19a8d3f41c6510"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See <a class="el" href="class_ogre_1_1_compositor_node.html#aff6ad71b3359a4bc626aacfb034557dc" title="Internal Use.">CompositorNode::_notifyCleared</a>  <a href="class_ogre_1_1_compositor_pass.html#a6f43846a1bb675c3ba19a8d3f41c6510">More...</a><br /></td></tr>
 <tr class="separator:a6f43846a1bb675c3ba19a8d3f41c6510"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a109f49cb2e6f8a9c0e1377817bcb9e6d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a109f49cb2e6f8a9c0e1377817bcb9e6d">notifyDestroyed</a> (const <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> *buffer)</td></tr>
 <tr class="separator:a109f49cb2e6f8a9c0e1377817bcb9e6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f7ab3e159808c63ff31ac799e476c66"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a9f7ab3e159808c63ff31ac799e476c66">notifyDestroyed</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *channel)</td></tr>
-<tr class="memdesc:a9f7ab3e159808c63ff31ac799e476c66"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See <a class="el" href="class_ogre_1_1_compositor_node.html#ae72f2d56524f23dc474d2634b06aeeeb" title="Call this function when caller has destroyed a RenderTarget in which the callee may have a reference ...">CompositorNode::notifyDestroyed</a>  <a href="class_ogre_1_1_compositor_pass.html#a9f7ab3e159808c63ff31ac799e476c66">More...</a><br /></td></tr>
 <tr class="separator:a9f7ab3e159808c63ff31ac799e476c66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0234978d9674bb285541bb7a3d244c55"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a0234978d9674bb285541bb7a3d244c55">notifyRecreated</a> (const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *channel)</td></tr>
-<tr class="memdesc:a0234978d9674bb285541bb7a3d244c55"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See <a class="el" href="class_ogre_1_1_compositor_node.html#a17e701215d769e1890329c6e3e4a4ac9" title="Call this function when you&#39;re replacing the textures from oldChannel with the ones in newChannel.">CompositorNode::notifyRecreated</a>  <a href="class_ogre_1_1_compositor_pass.html#a0234978d9674bb285541bb7a3d244c55">More...</a><br /></td></tr>
 <tr class="separator:a0234978d9674bb285541bb7a3d244c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac92baa443272b1bb6a1b703b570267f3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#ac92baa443272b1bb6a1b703b570267f3">notifyRecreated</a> (const <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> *oldBuffer, <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> *newBuffer)</td></tr>
 <tr class="separator:ac92baa443272b1bb6a1b703b570267f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -535,8 +532,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See <a class="el" href="class_ogre_1_1_compositor_node.html#aff6ad71b3359a4bc626aacfb034557dc" title="Internal Use.">CompositorNode::_notifyCleared</a> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html#aff6ad71b3359a4bc626aacfb034557dc" title="Internal Use.">CompositorNode::_notifyCleared</a> </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_compositor_pass_scene.html#a2ee04e4380f2fe5b4b58c2de5be03675">Ogre::CompositorPassScene</a>.</p>
 
@@ -591,8 +587,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See <a class="el" href="class_ogre_1_1_compositor_node.html#ae72f2d56524f23dc474d2634b06aeeeb" title="Call this function when caller has destroyed a RenderTarget in which the callee may have a reference ...">CompositorNode::notifyDestroyed</a> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html#ae72f2d56524f23dc474d2634b06aeeeb" title="Call this function when caller has destroyed a RenderTarget in which the callee may have a reference ...">CompositorNode::notifyDestroyed</a> </dd></dl>
 
 </div>
 </div>
@@ -619,8 +614,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See <a class="el" href="class_ogre_1_1_compositor_node.html#a17e701215d769e1890329c6e3e4a4ac9" title="Call this function when you&#39;re replacing the textures from oldChannel with the ones in newChannel.">CompositorNode::notifyRecreated</a> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html#a17e701215d769e1890329c6e3e4a4ac9" title="Call this function when you&#39;re replacing the textures from oldChannel with the ones in newChannel.">CompositorNode::notifyRecreated</a> </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular.html#a3043efb06c0d45b1cd8b75470226389c">Ogre::CompositorPassIblSpecular</a>, and <a class="el" href="class_ogre_1_1_compositor_pass_mipmap.html#a01d1084cc00ea9966c340a35f5577bf9">Ogre::CompositorPassMipmap</a>.</p>
 

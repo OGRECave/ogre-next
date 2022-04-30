@@ -1188,8 +1188,20 @@ Static Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">name</td><td>Name of the Datablock, must be unique within all <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> types, not just this one. 99% you want this to be IdString( refName ); however this is not enforced. </td></tr>
     <tr><td class="paramname">refName</td><td>Name of the Datablock. The engine doesn't use this value at all. It is only useful for UI editors which want to enumerate all existing datablocks and display its name to the user. </td></tr>
-    <tr><td class="paramname">macroblockRef</td><td>@See <a class="el" href="class_ogre_1_1_hlms_manager.html#a064c7cfc9fb3ac1e9690f6c39a5d1449" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a> </td></tr>
-    <tr><td class="paramname">blendblockRef</td><td>@See <a class="el" href="class_ogre_1_1_hlms_manager.html#a38fca7caf3b7ab2ce0365a1392f98af5" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> </td></tr>
+    <tr><td class="paramname">macroblockRef</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_manager.html#a064c7cfc9fb3ac1e9690f6c39a5d1449" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">blendblockRef</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_manager.html#a38fca7caf3b7ab2ce0365a1392f98af5" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
     <tr><td class="paramname">paramVec</td><td>Key - String Value list of paramters. MUST BE SORTED. </td></tr>
     <tr><td class="paramname">visibleToManager</td><td>When false, <a class="el" href="class_ogre_1_1_hlms_manager.html#a41cdb9c3f864cccc6736928779862722" title="Retrieves an exisiting datablock (i.e.">HlmsManager::getDatablock</a> won't find this datablock. True by default </td></tr>
     <tr><td class="paramname">filename</td><td>Filename in which it was defined, so that this information can be retrieved later by the user if needed. This is only for informational purposes. </td></tr>

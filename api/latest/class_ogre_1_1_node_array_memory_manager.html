@@ -294,7 +294,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
-<p >@See intialize. @See destroy. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >See intialize(). See <a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0" title="Destroys the memory ptrs.">destroy()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">elementsMemSize</td><td>Array containing the size in bytes of each element type (i.e. NodeElementsMemSize) </td></tr>
     <tr><td class="paramname">initRoutines</td><td>Array containing the cleanup function that will be called when default initializing memory. Unlike cleanupRoutines, just leave the function pointer null if all you want is just to initialize to 0. </td></tr>
@@ -397,7 +397,8 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Destroys the memory ptrs. </p>
-<p >@See initialize </p><dl class="section remark"><dt>Remarks</dt><dd>If there were slots in use, make sure they're no longer used, as their ptrs will become dangling ptrs. We don't assert because this may be valid behavior (i.e. on shutdown) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5" title="Initializes mMemoryPools.">initialize</a> </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>If there were slots in use, make sure they're no longer used, as their ptrs will become dangling ptrs. We don't assert because this may be valid behavior (i.e. on shutdown) </dd></dl>
 
 </div>
 </div>
@@ -473,7 +474,8 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retrieves a <a class="el" href="struct_ogre_1_1_transform.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">Transform</a> pointing to the first <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a>. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>@See NodeMemoryManager::getStart </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd></dd></dl>
+<dl class="section see"><dt>See also</dt><dd>NodeMemoryManager::getStart </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">outTransform</td><td>[out] <a class="el" href="struct_ogre_1_1_transform.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">Transform</a> with filled pointers to the first <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> in this depth </td></tr>
@@ -617,7 +619,8 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Initializes mMemoryPools. </p>
-<p >Once it has been called, <a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0" title="Destroys the memory ptrs.">destroy()</a> <b>must</b> be called. @See destroy </p><dl class="section remark"><dt>Remarks</dt><dd>The destructor won't free the data, if you don't call destroy, memory will leak. Calling initialize twice is possible and won't leak, but will free the previous memory ptrs without calling the registered RebaseListener. So if there were slots in use, their pointers will become dangling. An assert will trigger if this happens. </dd></dl>
+<p >Once it has been called, <a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0" title="Destroys the memory ptrs.">destroy()</a> <b>must</b> be called. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0" title="Destroys the memory ptrs.">destroy</a> </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The destructor won't free the data, if you don't call destroy, memory will leak. Calling initialize twice is possible and won't leak, but will free the previous memory ptrs without calling the registered RebaseListener. So if there were slots in use, their pointers will become dangling. An assert will trigger if this happens. </dd></dl>
 
 </div>
 </div>

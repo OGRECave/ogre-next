@@ -40,7 +40,7 @@
 <area shape="rect" id="node111" href="$class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes." alt="" coords="308,10065,487,10092"/>
 <area shape="rect" id="node112" href="$class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing." alt="" coords="321,2324,474,2351"/>
 <area shape="rect" id="node114" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="321,8044,473,8071"/>
-<area shape="rect" id="node126" href="$class_ogre_1_1_compositor_pass_def.html" title="Interface to abstract all types of pass definitions (." alt="" coords="311,13699,483,13725"/>
+<area shape="rect" id="node126" href="$class_ogre_1_1_compositor_pass_def.html" title="Interface to abstract all types of pass definitions (see CompositorPassType): PASS_SCENE (see Composi..." alt="" coords="311,13699,483,13725"/>
 <area shape="rect" id="node138" href="$class_ogre_1_1_compositor_pass_provider.html" title="Base class that users can derive from in order to implement custom passes for the compositor." alt="" coords="297,10116,497,10143"/>
 <area shape="rect" id="node139" href="$class_ogre_1_1_compositor_target_def.html" title=" " alt="" coords="308,10217,487,10244"/>
 <area shape="rect" id="node140" href="$class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="304,2593,491,2620"/>
@@ -269,7 +269,7 @@
 <area shape="rect" id="node107" href="$class_ogre_1_1_p_v_r_t_c_codec.html" title="Codec specialized in loading PVRTC (PowerVR) images." alt="" coords="899,13131,1036,13157"/>
 <area shape="rect" id="node108" href="$class_ogre_1_1_s_t_b_i_image_codec.html" title="Codec specialized in images loaded using stbi (https://github.com/nothings/stb)." alt="" coords="888,13181,1047,13208"/>
 <area shape="rect" id="node110" href="$class_ogre_1_1_image_codec2_1_1_image_data2.html" title="Codec return class for images." alt="" coords="615,12897,758,12938"/>
-<area shape="rect" id="node113" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with." alt="" coords="587,2215,787,2241"/>
+<area shape="rect" id="node113" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render..." alt="" coords="587,2215,787,2241"/>
 <area shape="rect" id="node115" href="$class_ogre_1_1_compositor_pass_clear.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="595,7943,778,7969"/>
 <area shape="rect" id="node116" href="$class_ogre_1_1_compositor_pass_compute.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="585,7993,789,8020"/>
 <area shape="rect" id="node117" href="$class_ogre_1_1_compositor_pass_depth_copy.html" title="Implementation of CompositorPass This implementation will copy one DepthBuffer to another DepthBuffer..." alt="" coords="579,8044,794,8071"/>
@@ -518,7 +518,7 @@
 <area shape="rect" id="node461" href="$class_ogre_1_1_n_u_l_l_staging_texture.html" title=" " alt="" coords="878,8340,1057,8367"/>
 <area shape="rect" id="node462" href="$class_ogre_1_1_vulkan_staging_texture.html" title=" " alt="" coords="876,8188,1059,8215"/>
 <area shape="rect" id="node469" href="$class_ogre_1_1_compositor_node_def.html" title="Compositor nodes are the core subject of compositing." alt="" coords="600,8449,773,8476"/>
-<area shape="rect" id="node471" href="$class_ogre_1_1_compositor_workspace_def.html" title="@See CompositorWorkspace." alt="" coords="583,8500,790,8527"/>
+<area shape="rect" id="node471" href="$class_ogre_1_1_compositor_workspace_def.html" title=" " alt="" coords="583,8500,790,8527"/>
 <area shape="rect" id="node470" href="$class_ogre_1_1_compositor_shadow_node_def.html" title="Shadow Nodes are special nodes (not to be confused with." alt="" coords="857,8457,1077,8484"/>
 <area shape="rect" id="node475" href="$class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html" title=" " alt="" coords="609,8653,764,8694"/>
 <area shape="rect" id="node476" href="$class_ogre_1_1_texture_filter_1_1_generate_sw_mipmaps.html" title=" " alt="" coords="610,8718,763,8759"/>

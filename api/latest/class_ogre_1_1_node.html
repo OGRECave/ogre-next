@@ -166,7 +166,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac99f11674e411c0881fceb091d4ffbbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the full transformation matrix for this node.  <a href="class_ogre_1_1_node.html#ac99f11674e411c0881fceb091d4ffbbb">More...</a><br /></td></tr>
 <tr class="separator:ac99f11674e411c0881fceb091d4ffbbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa91924737799c5970402778eca91f8a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8">virtual_l2</a> const <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#aa91924737799c5970402778eca91f8a0">_getFullTransformUpdated</a> ()</td></tr>
-<tr class="memdesc:aa91924737799c5970402778eca91f8a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See _getDerivedScaleUpdated remarks.  <a href="class_ogre_1_1_node.html#aa91924737799c5970402778eca91f8a0">More...</a><br /></td></tr>
+<tr class="memdesc:aa91924737799c5970402778eca91f8a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_node.html#ab74ff3f5276ed7358dce2e5681f3114c" title="Gets the scalling factor of the node as derived from all parents.">_getDerivedScaleUpdated()</a> remarks.  <a href="class_ogre_1_1_node.html#aa91924737799c5970402778eca91f8a0">More...</a><br /></td></tr>
 <tr class="separator:aa91924737799c5970402778eca91f8a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afca3fed33def0a61c677f3f1599859b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_transform.html">Transform</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#afca3fed33def0a61c677f3f1599859b0">_getTransform</a> ()</td></tr>
 <tr class="memdesc:afca3fed33def0a61c677f3f1599859b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a direct access to the <a class="el" href="struct_ogre_1_1_transform.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">Transform</a> state.  <a href="class_ogre_1_1_node.html#afca3fed33def0a61c677f3f1599859b0">More...</a><br /></td></tr>
@@ -282,7 +282,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa26ad04301cff9834e9cbec7e4f8cada"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an instance of user objects binding associated with this class.  <a href="class_ogre_1_1_node.html#aa26ad04301cff9834e9cbec7e4f8cada">More...</a><br /></td></tr>
 <tr class="separator:aa26ad04301cff9834e9cbec7e4f8cada"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2045217c742576f9a82e4070da277e89"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#a2045217c742576f9a82e4070da277e89">isStatic</a> () const</td></tr>
-<tr class="memdesc:a2045217c742576f9a82e4070da277e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether this node is static. @See setStatic.  <a href="class_ogre_1_1_node.html#a2045217c742576f9a82e4070da277e89">More...</a><br /></td></tr>
+<tr class="memdesc:a2045217c742576f9a82e4070da277e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether this node is static.  <a href="class_ogre_1_1_node.html#a2045217c742576f9a82e4070da277e89">More...</a><br /></td></tr>
 <tr class="separator:a2045217c742576f9a82e4070da277e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f5fc23a04991fc7a524763b0bdf829c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#a6f5fc23a04991fc7a524763b0bdf829c">migrateTo</a> (<a class="el" href="class_ogre_1_1_node_memory_manager.html">NodeMemoryManager</a> *nodeMemoryManager)</td></tr>
 <tr class="memdesc:a6f5fc23a04991fc7a524763b0bdf829c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Migrates the node and all of its children to the new memory manager, at the same depth level.  <a href="class_ogre_1_1_node.html#a6f5fc23a04991fc7a524763b0bdf829c">More...</a><br /></td></tr>
@@ -401,7 +401,6 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0d44ecad702257bcf68140063ee4bc42"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#a0d44ecad702257bcf68140063ee4bc42">updateAllTransforms</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_transform.html">Transform</a> t)</td></tr>
-<tr class="memdesc:a0d44ecad702257bcf68140063ee4bc42"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See <a class="el" href="class_ogre_1_1_scene_manager.html#a1f59ebdfaadbe33f713d754737041654" title="Updates the derived transforms of all nodes in the scene.">SceneManager::updateAllTransforms()</a>  <a href="class_ogre_1_1_node.html#a0d44ecad702257bcf68140063ee4bc42">More...</a><br /></td></tr>
 <tr class="separator:a0d44ecad702257bcf68140063ee4bc42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -545,7 +544,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Don't use this constructor unless you know what you're doing. </p>
-<p >@See NodeMemoryManager::mDummyNode </p>
+<dl class="section see"><dt>See also</dt><dd>NodeMemoryManager::mDummyNode </dd></dl>
 
 </div>
 </div>
@@ -621,7 +620,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the orientation of the node as derived from all parents. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. @See _getDerivedOrientationUpdated if you need the update process to be guaranteed </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. See <a class="el" href="class_ogre_1_1_node.html#a52966eed31d26431889bab047bc8cef6" title="Gets the orientation of the node as derived from all parents.">_getDerivedOrientationUpdated()</a> if you need the update process to be guaranteed </dd></dl>
 
 </div>
 </div>
@@ -661,7 +660,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the position of the node as derived from all parents. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. @See _getDerivedPositionUpdated if you need the update process to be guaranteed </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. See <a class="el" href="class_ogre_1_1_node.html#ae7fb5e2347952b43bfb7b91139364e2b" title="Gets the position of the node as derived from all parents.">_getDerivedPositionUpdated()</a> if you need the update process to be guaranteed </dd></dl>
 
 </div>
 </div>
@@ -701,7 +700,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the scaling factor of the node as derived from all parents. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. @See _getDerivedScaleUpdated if you need the update process to be guaranteed </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Assumes the caches are already updated. Will trigger an assert otherwise. See <a class="el" href="class_ogre_1_1_node.html#ab74ff3f5276ed7358dce2e5681f3114c" title="Gets the scalling factor of the node as derived from all parents.">_getDerivedScaleUpdated()</a> if you need the update process to be guaranteed </dd></dl>
 
 </div>
 </div>
@@ -770,8 +769,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>@See _getDerivedScaleUpdated remarks. </p>
-<p >@See _getFullTransform </p>
+<p>See <a class="el" href="class_ogre_1_1_node.html#ab74ff3f5276ed7358dce2e5681f3114c" title="Gets the scalling factor of the node as derived from all parents.">_getDerivedScaleUpdated()</a> remarks. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_node.html#ac99f11674e411c0881fceb091d4ffbbb" title="Gets the full transformation matrix for this node.">_getFullTransform</a> </dd></dl>
 
 </div>
 </div>
@@ -1829,7 +1828,8 @@ See setInheritOrientation for more info. </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Checks whether this node is static. @See setStatic. </p>
+<p>Checks whether this node is static. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_node.html#a1f18bc6093c94defdaf64b504df81259" title="Turns this Node into static or dynamic.">setStatic</a> </dd></dl>
 
 </div>
 </div>
@@ -3236,8 +3236,7 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>@See <a class="el" href="class_ogre_1_1_scene_manager.html#a1f59ebdfaadbe33f713d754737041654" title="Updates the derived transforms of all nodes in the scene.">SceneManager::updateAllTransforms()</a> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_scene_manager.html#a1f59ebdfaadbe33f713d754737041654" title="Updates the derived transforms of all nodes in the scene.">SceneManager::updateAllTransforms()</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>We don't pass by reference on purpose (avoid implicit aliasing) </dd></dl>
 
 </div>

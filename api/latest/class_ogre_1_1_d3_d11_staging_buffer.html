@@ -127,7 +127,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8047cc93c004c2f6c5700aca44e35b2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maps the buffer for read acces for the CPU.  <a href="class_ogre_1_1_staging_buffer.html#a8047cc93c004c2f6c5700aca44e35b2a">More...</a><br /></td></tr>
 <tr class="separator:a8047cc93c004c2f6c5700aca44e35b2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1facd7ade881eff937cd4ccfa998b83c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a1facd7ade881eff937cd4ccfa998b83c">addReferenceCount</a> ()</td></tr>
-<tr class="memdesc:a1facd7ade881eff937cd4ccfa998b83c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a reference count to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a>. @See removeReferenceCount.  <a href="class_ogre_1_1_staging_buffer.html#a1facd7ade881eff937cd4ccfa998b83c">More...</a><br /></td></tr>
+<tr class="memdesc:a1facd7ade881eff937cd4ccfa998b83c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a reference count to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a>.  <a href="class_ogre_1_1_staging_buffer.html#a1facd7ade881eff937cd4ccfa998b83c">More...</a><br /></td></tr>
 <tr class="separator:a1facd7ade881eff937cd4ccfa998b83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad844466b16d039d78fe762a3e32f92c2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#ad844466b16d039d78fe762a3e32f92c2">canDownload</a> (size_t length) const</td></tr>
 <tr class="memdesc:ad844466b16d039d78fe762a3e32f92c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if this staging buffer has enough free space to use _asyncDownload.  <a href="class_ogre_1_1_staging_buffer.html#ad844466b16d039d78fe762a3e32f92c2">More...</a><br /></td></tr>
@@ -182,7 +182,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9d425e7d85804eaa45c01f6476ec204a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decreases the reference count by one.  <a href="class_ogre_1_1_staging_buffer.html#a9d425e7d85804eaa45c01f6476ec204a">More...</a><br /></td></tr>
 <tr class="separator:a9d425e7d85804eaa45c01f6476ec204a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a438d82f09b5f657be30c30d7d1c0801d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a438d82f09b5f657be30c30d7d1c0801d">unmap</a> (const <a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a> &amp;destination)</td></tr>
-<tr class="memdesc:a438d82f09b5f657be30c30d7d1c0801d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmaps the mapped region and copies the data to the given region. @See <a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a>.  <a href="class_ogre_1_1_staging_buffer.html#a438d82f09b5f657be30c30d7d1c0801d">More...</a><br /></td></tr>
+<tr class="memdesc:a438d82f09b5f657be30c30d7d1c0801d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmaps the mapped region and copies the data to the given region.  <a href="class_ogre_1_1_staging_buffer.html#a438d82f09b5f657be30c30d7d1c0801d">More...</a><br /></td></tr>
 <tr class="separator:a438d82f09b5f657be30c30d7d1c0801d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c8e2853c21a7418218605a0b9cdf461"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a9c8e2853c21a7418218605a0b9cdf461">unmap</a> (const <a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a> *destinations, size_t numDestinations)</td></tr>
 <tr class="separator:a9c8e2853c21a7418218605a0b9cdf461"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -462,7 +462,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Adds a reference count to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a>. @See removeReferenceCount. </p>
+<p>Adds a reference count to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_staging_buffer.html#a9d425e7d85804eaa45c01f6476ec204a" title="Decreases the reference count by one.">removeReferenceCount</a> </dd></dl>
 
 </div>
 </div>
@@ -741,7 +742,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Maps the given amount of bytes. </p>
-<p >May block if not ready. @See uploadWillStall if you wish to know. </p><dl class="section remark"><dt>Remarks</dt><dd>Will throw if sizeBytes &gt; this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a6558ff3b1a53431ffa195b647be7a2a8">getMaxSize()</a> </dd></dl>
+<p >May block if not ready. See <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a994aff1bc112598af02d3a75c53a4752" title="Returns true if our next call to @map() with the same parameters will stall.">uploadWillStall()</a> if you wish to know. </p><dl class="section remark"><dt>Remarks</dt><dd>Will throw if sizeBytes &gt; this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a6558ff3b1a53431ffa195b647be7a2a8">getMaxSize()</a> </dd></dl>
 
 </div>
 </div>
@@ -1193,7 +1194,8 @@ template&lt;class Alloc &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Unmaps the mapped region and copies the data to the given region. @See Destination. </p>
+<p>Unmaps the mapped region and copies the data to the given region. </p>
+<dl class="section see"><dt>See also</dt><dd>Destination </dd></dl>
 
 <p class="reference">References <a class="el" href="class_ogre_1_1_staging_buffer.html#a438d82f09b5f657be30c30d7d1c0801d">Ogre::StagingBuffer::unmap()</a>.</p>
 
@@ -1291,7 +1293,8 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Returns true if our next call to @map() with the same parameters will stall. </p>
-<p >@See StagingStallType </p><dl class="section remark"><dt>Remarks</dt><dd>Not all RenderSystems can accurately give this information and will always return STALL_PARTIAL (i.e. GLES2) The chances of getting a STALL_FULL get higher as sizeBytes gets closer to this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a6558ff3b1a53431ffa195b647be7a2a8">getMaxSize()</a> mUploadOnly must be false. It is the counter side of </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespace_ogre.html#af48b48d39914b067541a62b674b80935">StagingStallType</a> </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Not all RenderSystems can accurately give this information and will always return STALL_PARTIAL (i.e. GLES2) The chances of getting a STALL_FULL get higher as sizeBytes gets closer to this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a6558ff3b1a53431ffa195b647be7a2a8">getMaxSize()</a> mUploadOnly must be false. It is the counter side of </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_staging_buffer.html#ad844466b16d039d78fe762a3e32f92c2" title="Checks if this staging buffer has enough free space to use _asyncDownload.">canDownload</a> </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_staging_buffer.html#ababb860ddfb4ecdf054766f145848465">Ogre::StagingBuffer</a>.</p>

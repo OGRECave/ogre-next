@@ -811,7 +811,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if the bone is manually controlled. </p>
-<p >@See setManualBone </p><dl class="params"><dt>Parameters</dt><dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_skeleton_instance.html#acd5c0bc5e5d086187407903c50b4bbbd" title="Sets the given node to manual.">setManualBone</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bone</td><td><a class="el" href="class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton.">Bone</a> to query if manual. Must belong to this <a class="el" href="class_ogre_1_1_skeleton_instance.html" title="Instance of a Skeleton, main external interface for retrieving bone positions and applying animations...">SkeletonInstance</a>. </td></tr>
   </table>
@@ -1261,7 +1262,8 @@ template&lt;class Alloc &gt; </div>
 
 <p>Sets the given node to manual. </p>
 <p >Manual bones won't be reset to binding pose (see resetToPose) and thus are suitable for manual control. However if the bone is animated, you're responsible for resetting the position/rotation/scale before each call to </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_skeleton_instance.html#ab7af08a3f6ad223b877a4dcbf9ad421b">update</a> </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>You can prevent the bone from receiving animation by setting the bone weight to zero. @See <a class="el" href="class_ogre_1_1_skeleton_animation.html#abc00cab93445029b2c4776cef27829ea" title="Sets the per-bone weight to a particular bone.">SkeletonAnimation::setBoneWeight</a> </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>You can prevent the bone from receiving animation by setting the bone weight to zero. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_skeleton_animation.html#abc00cab93445029b2c4776cef27829ea" title="Sets the per-bone weight to a particular bone.">SkeletonAnimation::setBoneWeight</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bone</td><td><a class="el" href="class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton.">Bone</a> to set/unset to manual. Must belong to this <a class="el" href="class_ogre_1_1_skeleton_instance.html" title="Instance of a Skeleton, main external interface for retrieving bone positions and applying animations...">SkeletonInstance</a> (an assert is triggered on non-release builds). Behavior is undefined if node doesn't belong to this instance. </td></tr>

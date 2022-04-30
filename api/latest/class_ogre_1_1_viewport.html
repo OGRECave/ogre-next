@@ -1618,10 +1618,11 @@ template&lt;class Alloc &gt; </div>
     <tr><td class="paramname">top</td><td>Top point of the viewport. </td></tr>
     <tr><td class="paramname">width</td><td>Width of the viewport. </td></tr>
     <tr><td class="paramname">height</td><td>Height of the viewport. </td></tr>
-    <tr><td class="paramname">overrideScissors</td><td>When true, the scissor dimensions will be the same as the viewport's @See setScissors </td></tr>
+    <tr><td class="paramname">overrideScissors</td><td>When true, the scissor dimensions will be the same as the viewport's </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_viewport.html#a31babbfc1a637c25fda94ce8d67aee54" title="Only sets the scissor regions.">setScissors</a> </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Dimensions relative to the size of the target, represented as real values between 0 and 1. i.e. the full target area is 0, 0, 1, 1. </dd></dl>
 
 </div>
@@ -1749,7 +1750,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Only sets the scissor regions. </p>
-<p >The scissor rectangle must be fully inside the viewport rectangle. @See setDimensions for param description </p><dl class="section remark"><dt>Remarks</dt><dd>Only the scissor rect is set here; but the HLMS macroblock controls whether scissor testing is enabled or not (@See <a class="el" href="struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials.">HlmsMacroblock</a>). On some <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> implementations (i.e. OpenGL), scissor testing needs to be enabled when clearing a region of the screen. In those cases, if scissor testing is disabled at the time of the clear, scissor testing will be temporarily enabled and then disabled. </dd></dl>
+<p >The scissor rectangle must be fully inside the viewport rectangle. See <a class="el" href="class_ogre_1_1_viewport.html#aa424cbdaeba6a5edb723620e1964a624" title="Sets the dimensions (after creation).">setDimensions()</a> for param description </p><dl class="section remark"><dt>Remarks</dt><dd>Only the scissor rect is set here; but the HLMS macroblock controls whether scissor testing is enabled or not (See <a class="el" href="struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials.">HlmsMacroblock</a>). On some <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> implementations (i.e. OpenGL), scissor testing needs to be enabled when clearing a region of the screen. In those cases, if scissor testing is disabled at the time of the clear, scissor testing will be temporarily enabled and then disabled. </dd></dl>
 
 </div>
 </div>
