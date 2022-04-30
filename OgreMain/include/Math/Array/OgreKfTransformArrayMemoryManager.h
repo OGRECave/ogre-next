@@ -70,9 +70,6 @@ namespace Ogre
         */
         void createNewNode( KfTransform *RESTRICT_ALIAS *outTransform );
     };
-
-    /** @} */
-    /** @} */
 }  // namespace Ogre
 
 #endif

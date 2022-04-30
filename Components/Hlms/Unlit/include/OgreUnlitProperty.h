@@ -137,9 +137,6 @@ namespace Ogre
         static const DiffuseMapPtr DiffuseMapPtrs[NUM_UNLIT_TEXTURE_TYPES];
     };
 
-    /** @} */
-    /** @} */
-
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"

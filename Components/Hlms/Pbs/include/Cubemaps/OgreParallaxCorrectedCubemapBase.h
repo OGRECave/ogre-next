@@ -163,9 +163,6 @@ namespace Ogre
         void eventOccurred( const String &eventName, const NameValuePairList *parameters ) override;
     };
 
-    /** @} */
-    /** @} */
-
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
