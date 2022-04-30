@@ -582,7 +582,7 @@ namespace std
 // are passed by reference & need to be everywhere in headers (thus affecting compilation times)
 namespace Ogre
 {
-#if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_NONE
+#if !OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
     template <typename T>
     class StdVector;
 
