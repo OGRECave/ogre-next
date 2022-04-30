@@ -1,5 +1,7 @@
 var NAVTREEINDEX249 =
 {
+"group___resources.html#gab81cd5b5485edb1ffa4c27c7fd8921bc":[5,2,10,180],
+"group___resources.html#gab881163687bedff909edce16d11d9127":[5,2,10,183],
 "group___resources.html#gac0ae983b2d4882ce8b9891d6a46299e1":[5,2,10,213],
 "group___resources.html#gac224d1943fe269a125e10f02c8b8bc8a":[5,2,10,193],
 "group___resources.html#gac56fd5a93b0000f2487e2ca968784df3":[5,2,10,168],
@@ -247,7 +249,5 @@ var NAVTREEINDEX249 =
 "hlmsterradatablockref.html#dbtCommonParameters":[1,9,14,0],
 "hlmsterradatablockref.html#dbtExample":[1,9,14,2],
 "hlmsterradatablockref.html#dbtParamBRDF":[1,9,14,1,0],
-"hlmsterradatablockref.html#dbtParamDetailDiffuse":[1,9,14,1,1],
-"hlmsterradatablockref.html#dbtParamDetailWeight":[1,9,14,1,2],
-"hlmsterradatablockref.html#dbtParamDiffuse":[1,9,14,1,3]
+"hlmsterradatablockref.html#dbtParamDetailDiffuse":[1,9,14,1,1]
 };

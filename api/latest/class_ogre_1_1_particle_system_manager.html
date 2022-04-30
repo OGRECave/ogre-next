@@ -187,6 +187,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7efb718ba201a18f362ed1221964dabf"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager.html#a7efb718ba201a18f362ed1221964dabf">getScriptPatterns</a> () const override</td></tr>
 <tr class="memdesc:a7efb718ba201a18f362ed1221964dabf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the file patterns which should be used to find scripts for this class.  <a href="class_ogre_1_1_particle_system_manager.html#a7efb718ba201a18f362ed1221964dabf">More...</a><br /></td></tr>
 <tr class="separator:a7efb718ba201a18f362ed1221964dabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35d266a48065e568d23743cd9c4d487d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager.html#a35d266a48065e568d23743cd9c4d487d">getSimulationTickRate</a> () const</td></tr>
+<tr class="memdesc:a35d266a48065e568d23743cd9c4d487d"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_particle_system_manager.html#a8df1b956a8ca7eafd0df029e00acd959" title="Sets the simulation tick rate.">setSimulationTickRate()</a>  <a href="class_ogre_1_1_particle_system_manager.html#a35d266a48065e568d23743cd9c4d487d">More...</a><br /></td></tr>
+<tr class="separator:a35d266a48065e568d23743cd9c4d487d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5dd540ada81625567d0e9d2a144c8071"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_particle_system.html">ParticleSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager.html#a5dd540ada81625567d0e9d2a144c8071">getTemplate</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name)</td></tr>
 <tr class="memdesc:a5dd540ada81625567d0e9d2a144c8071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a particle system template for possible modification.  <a href="class_ogre_1_1_particle_system_manager.html#a5dd540ada81625567d0e9d2a144c8071">More...</a><br /></td></tr>
 <tr class="separator:a5dd540ada81625567d0e9d2a144c8071"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,6 +231,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7647aebf518f60116028f5b6c76305a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager.html#a7647aebf518f60116028f5b6c76305a3">removeTemplatesByResourceGroup</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;resourceGroup)</td></tr>
 <tr class="memdesc:a7647aebf518f60116028f5b6c76305a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all templates that belong to a secific <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> Group from the <a class="el" href="class_ogre_1_1_particle_system_manager.html" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa...">ParticleSystemManager</a>.  <a href="class_ogre_1_1_particle_system_manager.html#a7647aebf518f60116028f5b6c76305a3">More...</a><br /></td></tr>
 <tr class="separator:a7647aebf518f60116028f5b6c76305a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8df1b956a8ca7eafd0df029e00acd959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_manager.html#a8df1b956a8ca7eafd0df029e00acd959">setSimulationTickRate</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> tickRate)</td></tr>
+<tr class="memdesc:a8df1b956a8ca7eafd0df029e00acd959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the simulation tick rate.  <a href="class_ogre_1_1_particle_system_manager.html#a8df1b956a8ca7eafd0df029e00acd959">More...</a><br /></td></tr>
+<tr class="separator:a8df1b956a8ca7eafd0df029e00acd959"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -927,6 +933,33 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a35d266a48065e568d23743cd9c4d487d" name="a35d266a48065e568d23743cd9c4d487d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35d266a48065e568d23743cd9c4d487d">&#9670;&nbsp;</a></span>getSimulationTickRate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> Ogre::ParticleSystemManager::getSimulationTickRate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="class_ogre_1_1_particle_system_manager.html#a8df1b956a8ca7eafd0df029e00acd959" title="Sets the simulation tick rate.">setSimulationTickRate()</a> </p>
+
+</div>
+</div>
 <a id="a2ac4ff567b7c08b4d8e841b260018166" name="a2ac4ff567b7c08b4d8e841b260018166"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2ac4ff567b7c08b4d8e841b260018166">&#9670;&nbsp;</a></span>getSingleton()</h2>
 
@@ -1563,6 +1596,44 @@ template&lt;class Alloc &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a8df1b956a8ca7eafd0df029e00acd959" name="a8df1b956a8ca7eafd0df029e00acd959"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8df1b956a8ca7eafd0df029e00acd959">&#9670;&nbsp;</a></span>setSimulationTickRate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::ParticleSystemManager::setSimulationTickRate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td>
+          <td class="paramname"><em>tickRate</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the simulation tick rate. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Toggling tickRate from variable to fixed will not affect existing particles, only new ones.</dd></dl>
+<p>However for particle FXs which were created as fixed tick rate, changes take effect immediately. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tickRate</td><td>A value &lt;= 0 means we will use variable rate. That means that if a second has elapsed between two frames, then we will issue a single update() call with 1 second to the particle FXs.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>A value &gt; 0 means we will use fixed tick rate / time step. That means that if a second has elapsed between two frames and the value is 0.1f, then we will issue 10 updates of 10ms each to simulate the particle FXs.</p>
+<p >Fixed tick rate is much more stable but may consume more resources. It also allows for deterministic simulations, which is impossible with variable rate.</p>
+<p >The default value is 0 A sensible value is 1.0 / 60.0 (for 60hz updates) </p>
 
 </div>
 </div>
