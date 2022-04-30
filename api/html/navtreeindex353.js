@@ -1,5 +1,7 @@
 var NAVTREEINDEX353 =
 {
+"struct_ogre_1_1_gpu_named_constants.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,5,6,8],
+"struct_ogre_1_1_gpu_named_constants.html#aa78a9520e9515038318893626480112c":[5,2,5,6,21],
 "struct_ogre_1_1_gpu_named_constants.html#ab422c67a2c8844f410fe822a357cba3b":[5,2,5,6,11],
 "struct_ogre_1_1_gpu_named_constants.html#ac0e05654af490172ac33e0248198c5fb":[5,2,5,6,0],
 "struct_ogre_1_1_gpu_named_constants.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,5,6,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX353 =
 "struct_ogre_1_1_hlms_pass_pso.html#a3931e31bb2d0b7e23e33b21249a29c40":[5,2,11,73,6],
 "struct_ogre_1_1_hlms_pass_pso.html#a4ee0425ddb698aebcecada4f182565da":[5,2,11,73,8],
 "struct_ogre_1_1_hlms_pass_pso.html#a700f3b53a9344ae0d4089dc723a0e536":[5,2,11,73,7],
-"struct_ogre_1_1_hlms_pass_pso.html#a9a9b1b99d1cf98165d58ba99a6837549":[5,2,11,73,9],
-"struct_ogre_1_1_hlms_pass_pso.html#a9b81b28296baf5d32c06ef3686883339":[5,2,11,73,1],
-"struct_ogre_1_1_hlms_pass_pso.html#ab44e93ca2135b4c6cf1b9c7e1e514e7c":[5,2,11,73,5]
+"struct_ogre_1_1_hlms_pass_pso.html#a9a9b1b99d1cf98165d58ba99a6837549":[5,2,11,73,9]
 };

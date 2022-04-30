@@ -137,6 +137,6 @@ var searchData=
   ['supportsskeletalanimation_134',['supportsSkeletalAnimation',['../struct_ogre_1_1_material_script_program_definition.html#ae1581e882fed968d73656a5a389679ca',1,'Ogre::MaterialScriptProgramDefinition']]],
   ['surface_5fflags_135',['surface_flags',['../structbsp__shader__t.html#a9eac62663f32b081217e959edd6fb636',1,'bsp_shader_t']]],
   ['swapeffect_136',['SwapEffect',['../struct_d_x_g_i___s_w_a_p___c_h_a_i_n___d_e_s_c1.html#ac2d372889178e2ad9048550f303a9f9f',1,'DXGI_SWAP_CHAIN_DESC1']]],
-  ['syntax_137',['syntax',['../struct_ogre_1_1_material_script_program_definition.html#a8392666564161eed2e77efed86ead9fd',1,'Ogre::MaterialScriptProgramDefinition']]],
-  ['syntax_138',['Syntax',['../struct_ogre_1_1_hlms_base_prop.html#a2cd566a2316cec4b2e0e9aab58993dca',1,'Ogre::HlmsBaseProp']]]
+  ['syntax_137',['Syntax',['../struct_ogre_1_1_hlms_base_prop.html#a2cd566a2316cec4b2e0e9aab58993dca',1,'Ogre::HlmsBaseProp']]],
+  ['syntax_138',['syntax',['../struct_ogre_1_1_material_script_program_definition.html#a8392666564161eed2e77efed86ead9fd',1,'Ogre::MaterialScriptProgramDefinition']]]
 ];

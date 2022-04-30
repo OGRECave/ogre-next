@@ -28,6 +28,7 @@ var class_ogre_1_1_particle_system_manager =
     [ "getLoadingOrder", "class_ogre_1_1_particle_system_manager.html#ad20f774c66daf6c5194fd7656a95cd86", null ],
     [ "getRendererFactoryIterator", "class_ogre_1_1_particle_system_manager.html#a641d951f1c3f9693be0ca7bdedcf80fc", null ],
     [ "getScriptPatterns", "class_ogre_1_1_particle_system_manager.html#a042ba1e90127c38da8bf8429469cf2b0", null ],
+    [ "getSimulationTickRate", "class_ogre_1_1_particle_system_manager.html#a35d266a48065e568d23743cd9c4d487d", null ],
     [ "getSingleton", "class_ogre_1_1_particle_system_manager.html#a7cd19584bb1dcf9c08f021065fca9d0f", null ],
     [ "getSingletonPtr", "class_ogre_1_1_particle_system_manager.html#a8f422da63d9c8f915db07c14f53e3e3d", null ],
     [ "getTemplate", "class_ogre_1_1_particle_system_manager.html#a5dd540ada81625567d0e9d2a144c8071", null ],
@@ -46,5 +47,6 @@ var class_ogre_1_1_particle_system_manager =
     [ "removeAllTemplates", "class_ogre_1_1_particle_system_manager.html#a7ae8a858947a4ad156f3ededf641be61", null ],
     [ "removeTemplate", "class_ogre_1_1_particle_system_manager.html#a5a28bfef2b541e7d98d89c753ac4edde", null ],
     [ "removeTemplatesByResourceGroup", "class_ogre_1_1_particle_system_manager.html#a7647aebf518f60116028f5b6c76305a3", null ],
+    [ "setSimulationTickRate", "class_ogre_1_1_particle_system_manager.html#a8df1b956a8ca7eafd0df029e00acd959", null ],
     [ "ParticleSystemFactory", "class_ogre_1_1_particle_system_manager.html#ab020c8dc08fa7956c9b1fb400a99a027", null ]
 ];

@@ -1,5 +1,7 @@
 var NAVTREEINDEX354 =
 {
+"struct_ogre_1_1_hlms_pass_pso.html#a9b81b28296baf5d32c06ef3686883339":[5,2,11,73,1],
+"struct_ogre_1_1_hlms_pass_pso.html#ab44e93ca2135b4c6cf1b9c7e1e514e7c":[5,2,11,73,5],
 "struct_ogre_1_1_hlms_pass_pso.html#ac0a8ef4ecbe4fe6014cde50d1e180057":[5,2,11,73,3],
 "struct_ogre_1_1_hlms_pass_pso.html#ac97312e889518a263ee5d7910225b876":[5,2,11,73,10],
 "struct_ogre_1_1_hlms_pass_pso.html#ae1ae72c43d27ce38b055ec96a2f8b40f":[5,2,11,73,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX354 =
 "struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#a433c84c8a42109d4f1e0987c063b0eee":[6,0,0,623,0,7],
 "struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#a5bbe0b22b07477f9c3c85386ddc92ea4":[7,0,0,600,0,5],
 "struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#a5bbe0b22b07477f9c3c85386ddc92ea4":[6,0,0,623,0,5],
-"struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#a8f6afddc2684f600eecf1b7e3b54cde2":[7,0,0,600,0,0],
-"struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#a8f6afddc2684f600eecf1b7e3b54cde2":[6,0,0,623,0,0],
-"struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#acaec158cb30ee047996b3c28014354bf":[6,0,0,623,0,3]
+"struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#a8f6afddc2684f600eecf1b7e3b54cde2":[7,0,0,600,0,0]
 };
