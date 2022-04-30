@@ -137,9 +137,9 @@ namespace Ogre
 
     /** A blend block contains settings that rarely change, and thus are common to many materials.
         The reasons this structure isn't joined with HlmsMacroblock is that:
-            * The D3D11 API makes this distinction (much higher API overhead if we
+            + The D3D11 API makes this distinction (much higher API overhead if we
               change i.e. depth settings) due to D3D11_RASTERIZER_DESC.
-            * This block contains information of whether the material is transparent.
+            + This block contains information of whether the material is transparent.
               Transparent materials are sorted differently than opaque ones.
         Up to 32 different blocks are allowed!
     */
@@ -257,10 +257,11 @@ namespace Ogre
     };
 
     /** An hlms datablock contains individual information about a specific material. It consists of:
-            * A const pointer to an @HlmsMacroblock we do not own and may be shared by other datablocks.
-            * A const pointer to an @HlmsBlendblock we do not own and may be shared by other datablocks.
-            * The original properties from which this datablock was constructed.
-            * This type may be derived to contain additional information.
+            + A const pointer to an HlmsMacroblock we do not own and may be shared by other datablocks.
+            + A const pointer to an HlmsBlendblock we do not own and may be shared by other datablocks.
+            + The original properties from which this datablock was constructed.
+            + This type may be derived to contain additional information.
+                 
         Derived types can cache information present in mOriginalProperties as strings, like diffuse
         colour values, etc.
 

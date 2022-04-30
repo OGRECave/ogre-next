@@ -331,9 +331,9 @@ namespace Ogre
 
             Performance: Whether this setting results in higher or lower performance depends on:
 
-                1. Vertex count of the scene (high vertex count benefit from bInPixelShader = true)
-                2. Screen resolution (large resolutions benefit from bInPixelShader = false)
-                3. Number of shadow mapping lights (large numbers benefit from bInPixelShader = true)
+            1. Vertex count of the scene (high vertex count benefit from bInPixelShader = true)
+            2. Screen resolution (large resolutions benefit from bInPixelShader = false)
+            3. Number of shadow mapping lights (large numbers benefit from bInPixelShader = true)
 
             You will have to profile which setting gives you better performance, although
             generally speaking for low number of lights (e.g. < 5)

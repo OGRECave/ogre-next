@@ -759,9 +759,9 @@ namespace Ogre
         /** Culls the scene in a high level fashion (i.e. Octree, Portal, etc.) by taking into account
           all registered cameras. Produces a list of culled Entities & SceneNodes that must follow a very
             strict set of rules:
-                * Entities are separated by RenderQueue
-                * Entities sharing the same skeleton need to be adjacent (TODO: Required? dark_sylinc)
-                * SceneNodes must be separated by hierarchy depth and must be contiguous within the same
+                + Entities are separated by RenderQueue
+                + Entities sharing the same skeleton need to be adjacent (TODO: Required? dark_sylinc)
+                + SceneNodes must be separated by hierarchy depth and must be contiguous within the same
                   depth level. (@see mNodeMemoryManagerCulledList)
           @remarks
             The default implementation just returns all nodes in the scene. @see updateAllTransforms

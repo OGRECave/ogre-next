@@ -201,9 +201,9 @@ namespace Ogre
             Combination of SceneFlags::SceneFlags, to know what to export and what to exclude.
             Defaults to importing everything.
             Note that some combinations can cause issues:
-                * Excluding scene nodes
-                * Excluding meshes without excluding Items and Entities.
-                * etc
+                + Excluding scene nodes
+                + Excluding meshes without excluding Items and Entities.
+                + etc
 
             By default LightsVpl is not set so that InstantRadiosity is regenerated.
             By setting LightsVpl and unsetting SceneFlags::BuildInstantRadiosity, you can speed up

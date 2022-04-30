@@ -50,10 +50,10 @@ namespace Ogre
             this version stores the box in the form "center + halfSize"
             instead of the form "minimum, maximum" that is present in
             AxisAlignedBox:
-                * Merging is slightly more expensive
-                * intersects() is much cheaper
-                * Naturally deals with infinite boxes (no need for branches)
-                * Transform is cheaper (a common operation)
+                + Merging is slightly more expensive
+                + intersects() is much cheaper
+                + Naturally deals with infinite boxes (no need for branches)
+                + Transform is cheaper (a common operation)
         @par
         This class represents a simple box which is aligned with the
         axes. Internally it only stores 2 points as the center of
@@ -62,12 +62,12 @@ namespace Ogre
         collision and visibility determination.
         @par
         Main differences with AxisAlignedBox:
-            * Aabb doesn't support null boxes as AxisAlignedBox did. Although
+            + Aabb doesn't support null boxes as AxisAlignedBox did. Although
               if the center iszero and half size is set to negative infinity,
               it may mimic the behavior. Another possibility is to just use NaNs,
               because they would cause false on all tests. However this would
               be horrible slow.
-            * BOX_INFINITE represents a truly infinite box and behaves exactly
+            + BOX_INFINITE represents a truly infinite box and behaves exactly
               the same as an infinite AxisAlignedBox. However, setting the latter
               to infinite still holds information in min & max variables, while
               aabb destroys all information present.

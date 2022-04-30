@@ -59,10 +59,10 @@ namespace Ogre
         https://home.comcast.net/~tom_forsyth/blog.wiki.html#[[A%20sprintf%20that%20isn%27t%20as%20ugly]]
 
         The goals are:
-            * No dynamic allocation.
-            * Easier to read and control than sprintf()
-            * Type-safe (in as much as C can ever be type-safe - bloody auto-converts).
-            * Overflow-safe (i.e. it will refuse to scribble, and will assert in debug mode).
+            + No dynamic allocation.
+            + Easier to read and control than sprintf()
+            + Type-safe (in as much as C can ever be type-safe - bloody auto-converts).
+            + Overflow-safe (i.e. it will refuse to scribble, and will assert in debug mode).
 
         LwString needs to be fed a pointer and a maximum length size. The pointer's
         preexisting contents will be preserved. For example:
