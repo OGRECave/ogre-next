@@ -124,8 +124,6 @@ namespace Ogre
         */
         static AbsolutePixelCountLodStrategy *getSingletonPtr();
     };
-    /** @} */
-    /** @} */
 
     /**
     @brief The ScreenRatioPixelCountLodStrategy class
@@ -184,8 +182,6 @@ namespace Ogre
         */
         static ScreenRatioPixelCountLodStrategy *getSingletonPtr();
     };
-    /** @} */
-    /** @} */
 
 }  // namespace Ogre
 

@@ -158,9 +158,10 @@ namespace Ogre
     };
 
 #endif
+#if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_STD
     /** @} */
     /** @} */
-
+#endif
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
