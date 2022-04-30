@@ -54,7 +54,7 @@ namespace Ogre
         return ( *msSingleton );
     }
     //-----------------------------------------------------------------------
-    ParticleSystemManager::ParticleSystemManager()
+    ParticleSystemManager::ParticleSystemManager() : mSimulationTickRate( 0.0 )
     {
         OGRE_LOCK_AUTO_MUTEX;
         mFactory = OGRE_NEW ParticleSystemFactory();
