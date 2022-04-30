@@ -3003,7 +3003,14 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>It is threadsafe to call this function from main thread. </p>
-<p >If this returns false, then the following functions are not threadsafe: Setters must not be called, and getters may change from a worker thread: setResolution getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices set/getPixelFormat set/getNumMipmaps set/getTextureType getTexturePool Note that this function may return true but the worker thread may still be uploading to this texture. Use isDataReady to see if the worker thread is fully done with this texture.</p>
+<p >If this returns false, then the following functions are not threadsafe: Setters must not be called, and getters may change from a worker thread:</p><ul>
+<li>setResolution</li>
+<li>getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices</li>
+<li>set/getPixelFormat</li>
+<li>set/getNumMipmaps</li>
+<li>set/getTextureType</li>
+<li>getTexturePool Note that this function may return true but the worker thread may still be uploading to this texture. Use isDataReady to see if the worker thread is fully done with this texture.</li>
+</ul>
 <dl class="section remark"><dt>Remarks</dt><dd>Function for querying/waiting for data and metadata to be ready are for blocking the main thread when a worker thread is loading the texture from file or a listener (i.e. isManualTexture returns false) otherwise you don't need to call these functions. </dd></dl>
 
 </div>

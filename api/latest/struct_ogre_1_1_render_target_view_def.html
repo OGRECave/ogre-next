@@ -105,7 +105,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a865c94e28bf61e18445c9d26510356fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience routine to setup an RTV that renders directly to a texture defined by the provided TextureDefinition; which is the most common case.  <a href="struct_ogre_1_1_render_target_view_def.html#a865c94e28bf61e18445c9d26510356fe">More...</a><br /></td></tr>
 <tr class="separator:a865c94e28bf61e18445c9d26510356fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6ea3c7e635033ef74f8fe61d9640b6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_render_target_view_def.html#ac6ea3c7e635033ef74f8fe61d9640b6b">setRuntimeAnalyzed</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> texName)</td></tr>
-<tr class="memdesc:ac6ea3c7e635033ef74f8fe61d9640b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the texture comes from an input channel, we don't have yet enough information, as we're missing: Whether the texture is colour or depth The default depth settings (prefersDepthTexture, depth format, etc) Use this function to force the given texture to be analyzed at runtime when creating the pass.  <a href="struct_ogre_1_1_render_target_view_def.html#ac6ea3c7e635033ef74f8fe61d9640b6b">More...</a><br /></td></tr>
+<tr class="memdesc:ac6ea3c7e635033ef74f8fe61d9640b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the texture comes from an input channel, we don't have yet enough information, as we're missing:  <a href="struct_ogre_1_1_render_target_view_def.html#ac6ea3c7e635033ef74f8fe61d9640b6b">More...</a><br /></td></tr>
 <tr class="separator:ac6ea3c7e635033ef74f8fe61d9640b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -234,8 +234,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>If the texture comes from an input channel, we don't have yet enough information, as we're missing: Whether the texture is colour or depth The default depth settings (prefersDepthTexture, depth format, etc) Use this function to force the given texture to be analyzed at runtime when creating the pass. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Cannot be used for MRT. </dd></dl>
+<p>If the texture comes from an input channel, we don't have yet enough information, as we're missing: </p>
+<ul>
+<li>Whether the texture is colour or depth</li>
+<li>The default depth settings (prefersDepthTexture, depth format, etc)</li>
+</ul>
+<p >Use this function to force the given texture to be analyzed at runtime when creating the pass. </p><dl class="section remark"><dt>Remarks</dt><dd>Cannot be used for MRT. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">texName</td><td></td></tr>

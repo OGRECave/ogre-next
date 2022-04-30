@@ -1269,7 +1269,14 @@ This should usually be called from the dllStartPlugin() function of an extension
 <p>Creates multiple rendering windows. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">renderWindowDescriptions</td><td>Array of structures containing the descriptions of each render window. The structure's members are the same as the parameters of _createRenderWindow: name width height fullScreen miscParams See _createRenderWindow for details about each member. </td></tr>
+    <tr><td class="paramname">renderWindowDescriptions</td><td>Array of structures containing the descriptions of each render window. The structure's members are the same as the parameters of _createRenderWindow:<ul>
+<li>name</li>
+<li>width</li>
+<li>height</li>
+<li>fullScreen</li>
+<li>miscParams</li>
+</ul>
+See _createRenderWindow for details about each member. </td></tr>
     <tr><td class="paramname">createdWindows</td><td>This array will hold the created render windows. </td></tr>
   </table>
   </dd>

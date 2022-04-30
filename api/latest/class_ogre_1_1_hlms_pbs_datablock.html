@@ -416,34 +416,37 @@ Friends</h2></td></tr>
 <p>Valid parameters in params: </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">params</td><td>fresnel &lt;value [g, b]&gt; The IOR. </td></tr>
+    <tr><td class="paramname">params</td><td><ul>
+<li>fresnel &lt;value [g, b]&gt; The IOR. See <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a6953dab28239e7672c8a125f515a7743" title="Calculates fresnel (F0 in most books) based on the IOR.">setIndexOfRefraction()</a> When specifying three values, the fresnel is separate for each colour component</li>
+<li>fresnel_coeff &lt;value [g, b]&gt; Directly sets the fresnel values, instead of using IORs "F0" in most books about PBS</li>
+<li>roughness &lt;value&gt; Specifies the roughness value. Should be in range (0; inf) Note: Values extremely close to zero could cause NaNs and INFs in the pixel shader, also depends on the GPU's precision.</li>
+<li>background_diffuse &lt;r g b a&gt; Specifies diffuse colour to use as a background when diffuse texture are not present. Does not replace 'diffuse &lt;r g b&gt;' Default: background_diffuse 1 1 1 1</li>
+<li>diffuse &lt;r g b&gt; Specifies the RGB diffuse colour. "kD" in most books about PBS Default: diffuse 1 1 1 1 Note: Internally the diffuse colour is divided by PI.</li>
+<li>diffuse_map &lt;texture name&gt; Name of the diffuse texture for the base image (optional)</li>
+<li>diffuse_map_grayscale &lt;true, false&gt; When set to true diffuse map would be sampled with .rrra swizzle Default: false</li>
+<li>specular &lt;r g b&gt; Specifies the RGB specular colour. "kS" in most books about PBS Default: specular 1 1 1 1</li>
+<li>specular_map &lt;texture name&gt; Name of the specular texture for the base image (optional).</li>
+<li>roughness_map &lt;texture name&gt; Name of the roughness texture for the base image (optional) Note: Only the Red channel will be used, and the texture will be converted to an efficient monochrome representation.</li>
+<li>normal_map &lt;texture name&gt; Name of the normal texture for the base image (optional) for normal mapping</li>
+<li>detail_weight_map &lt;texture name&gt; Texture that when present, will be used as mask/weight for the 4 detail maps. The R channel is used for detail map #0; the G for detail map #1, B for #2, and Alpha for #3. This affects both the diffuse and normal-mapped detail maps.</li>
+<li>detail_map0 &lt;texture name&gt; Similar: detail_map1, detail_map2, detail_map3 Name of the detail map to be used on top of the diffuse colour. There can be gaps (i.e. set detail maps 0 and 2 but not 1)</li>
+<li>detail_blend_mode0 &lt;blend_mode&gt; Similar: detail_blend_mode1, detail_blend_mode2, detail_blend_mode3 Blend mode to use for each detail map. Valid values are: "NormalNonPremul", "NormalPremul", "Add", "Subtract", "Multiply", "Multiply2x", "Screen", "Overlay", "Lighten", "Darken", "GrainExtract", "GrainMerge", "Difference"</li>
+<li>detail_offset_scale0 &lt;offset_u&gt; &lt;offset_v&gt; &lt;scale_u&gt; &lt;scale_v&gt; Similar: detail_offset_scale1, detail_offset_scale2, detail_offset_scale3 Sets the UV offset and scale of the detail maps.</li>
+<li>detail_normal_map0 &lt;texture name&gt; Similar: detail_normal_map1, detail_normal_map2, detail_normal_map3 Name of the detail map's normal map to be used. It's not affected by blend mode. May be used even if there is no detail_map</li>
+<li>detail_normal_offset_scale0 &lt;offset_u&gt; &lt;offset_v&gt; &lt;scale_u&gt; &lt;scale_v&gt; Similar: detail_normal_offset_scale1, detail_normal_offset_scale2, detail_normal_offset_scale3 Sets the UV offset and scale of the detail normal maps.</li>
+<li>reflection_map &lt;texture name&gt; Name of the reflection map. Must be a cubemap. Doesn't use an UV set because the tex. coords are automatically calculated.</li>
+<li>uv_diffuse_map &lt;uv&gt; Similar: uv_specular_map, uv_normal_map, uv_detail_mapN, uv_detail_normal_mapN, uv_detail_weight_map where N is a number between 0 and 3. UV set to use for the particular texture map. The UV value must be in range [0; 8)</li>
+<li>transparency &lt;value&gt; Specifies the transparency amount. Value in range [0; 1] where 0 = full transparency and 1 = fully opaque.</li>
+<li>transparency_mode &lt;transparent, none, fade&gt; Specifies the transparency mode. </li>
+</ul>
+</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a6953dab28239e7672c8a125f515a7743" title="Calculates fresnel (F0 in most books) based on the IOR.">setIndexOfRefraction</a> When specifying three values, the fresnel is separate for each colour component</dd></dl>
-<p>fresnel_coeff &lt;value [g, b]&gt; Directly sets the fresnel values, instead of using IORs "F0" in most books about PBS</p>
-<p >roughness </p>
-<p >Specifies the roughness value. Should be in range (0; inf) Note: Values extremely close to zero could cause NaNs and INFs in the pixel shader, also depends on the GPU's precision.</p>
-<p >background_diffuse &lt;r g b a&gt; Specifies diffuse colour to use as a background when diffuse texture are not present. Does not replace 'diffuse &lt;r g b&gt;' Default: background_diffuse 1 1 1 1</p>
-<p >diffuse &lt;r g b&gt; Specifies the RGB diffuse colour. "kD" in most books about PBS Default: diffuse 1 1 1 1 Note: Internally the diffuse colour is divided by PI.</p>
-<p >diffuse_map &lt;texture name&gt; Name of the diffuse texture for the base image (optional)</p>
-<p >diffuse_map_grayscale &lt;true, false&gt; When set to true diffuse map would be sampled with .rrra swizzle Default: false</p>
-<p >specular &lt;r g b&gt; Specifies the RGB specular colour. "kS" in most books about PBS Default: specular 1 1 1 1</p>
-<p >specular_map &lt;texture name&gt; Name of the specular texture for the base image (optional).</p>
-<p >roughness_map &lt;texture name&gt; Name of the roughness texture for the base image (optional) Note: Only the Red channel will be used, and the texture will be converted to an efficient monochrome representation.</p>
-<p >normal_map &lt;texture name&gt; Name of the normal texture for the base image (optional) for normal mapping</p>
-<p >detail_weight_map &lt;texture name&gt; Texture that when present, will be used as mask/weight for the 4 detail maps. The R channel is used for detail map #0; the G for detail map #1, B for #2, and Alpha for #3. This affects both the diffuse and normal-mapped detail maps.</p>
-<p >detail_map0 &lt;texture name&gt; Similar: detail_map1, detail_map2, detail_map3 Name of the detail map to be used on top of the diffuse colour. There can be gaps (i.e. set detail maps 0 and 2 but not 1)</p>
-<p >detail_blend_mode0 &lt;blend_mode&gt; Similar: detail_blend_mode1, detail_blend_mode2, detail_blend_mode3 Blend mode to use for each detail map. Valid values are: "NormalNonPremul", "NormalPremul", "Add", "Subtract", "Multiply", "Multiply2x", "Screen", "Overlay", "Lighten", "Darken", "GrainExtract", "GrainMerge", "Difference"</p>
-<p >detail_offset_scale0 &lt;offset_u&gt; &lt;offset_v&gt; &lt;scale_u&gt; &lt;scale_v&gt; Similar: detail_offset_scale1, detail_offset_scale2, detail_offset_scale3 Sets the UV offset and scale of the detail maps.</p>
-<p >detail_normal_map0 &lt;texture name&gt; Similar: detail_normal_map1, detail_normal_map2, detail_normal_map3 Name of the detail map's normal map to be used. It's not affected by blend mode. May be used even if there is no detail_map</p>
-<p >detail_normal_offset_scale0 &lt;offset_u&gt; &lt;offset_v&gt; &lt;scale_u&gt; &lt;scale_v&gt; Similar: detail_normal_offset_scale1, detail_normal_offset_scale2, detail_normal_offset_scale3 Sets the UV offset and scale of the detail normal maps.</p>
-<p >reflection_map &lt;texture name&gt; Name of the reflection map. Must be a cubemap. Doesn't use an UV set because the tex. coords are automatically calculated.</p>
-<p >uv_diffuse_map &lt;uv&gt; Similar: uv_specular_map, uv_normal_map, uv_detail_mapN, uv_detail_normal_mapN, uv_detail_weight_map where N is a number between 0 and 3. UV set to use for the particular texture map. The UV value must be in range [0; 8)</p>
-<p >transparency </p>
-<p >Specifies the transparency amount. Value in range [0; 1] where 0 = full transparency and 1 = fully opaque.</p>
-<p >transparency_mode &lt;transparent, none, fade&gt; Specifies the transparency mode. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382ceb">TransparencyModes</a></dd></dl>
-<p>alpha_from_textures &lt;true, false&gt; When set to false transparency calculations ignore the alpha channel in the textures </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382ceb">TransparencyModes</a></dd></dl>
+<ul>
+<li>alpha_from_textures &lt;true, false&gt; When set to false transparency calculations ignore the alpha channel in the textures </li>
+</ul>
 
 </div>
 </div>
@@ -1482,8 +1485,27 @@ Friends</h2></td></tr>
 
 <p>Manually set a probe to affect this particular material. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>PCC (Parallax Corrected Cubemaps) have two main forms of operation: Auto and manual. They both have advantages and disadvantages. This method allows you to enable the manual mode of operation. </dd></dl>
-<dl class="section user"><dt></dt><dd>Manual Advantages: It's independent of camera position. The reflections are always visible and working on the object. Works best for static objects Also works well on dynamic objects that you can guarantee are going to be constrained to the probe's area. Manual Disadvantages: Needs to be manually applied on the material by the user. Can produce harsh lighting/reflection seams when two objects affected by different probes are close together. Sucks for dynamic objects.</dd></dl>
-<p>To use manual probes just call: datablock-&gt;setCubemapProbe( probe ); </p><dl class="section user"><dt></dt><dd>Auto Advantages: Smoothly blends between probes, making smooth transitions Avoids seams. No need to change anything on the material or the object, you don't need to do anything. Works best for dynamic objects (eg. characters) Also works well on static objects if the camera is inside rooms/corridors, thus blocking the view from distant rooms that aren't receiving reflections. Auto Disadvantages: Objects that are further away won't have reflections as only one probe can be active. It depends on the camera's position. Doesn't work well if the user can see many distant objects at once, as they won't have reflections until you get close.</dd></dl>
+<dl class="section user"><dt></dt><dd>Manual Advantages:<ul>
+<li>It's independent of camera position.</li>
+<li>The reflections are always visible and working on the object.</li>
+<li>Works best for static objects</li>
+<li>Also works well on dynamic objects that you can guarantee are going to be constrained to the probe's area. Manual Disadvantages:</li>
+<li>Needs to be manually applied on the material by the user.</li>
+<li>Can produce harsh lighting/reflection seams when two objects affected by different probes are close together.</li>
+<li>Sucks for dynamic objects.</li>
+</ul>
+</dd></dl>
+<p>To use manual probes just call: datablock-&gt;setCubemapProbe( probe ); </p><dl class="section user"><dt></dt><dd>Auto Advantages:<ul>
+<li>Smoothly blends between probes, making smooth transitions</li>
+<li>Avoids seams.</li>
+<li>No need to change anything on the material or the object, you don't need to do anything.</li>
+<li>Works best for dynamic objects (eg. characters)</li>
+<li>Also works well on static objects if the camera is inside rooms/corridors, thus blocking the view from distant rooms that aren't receiving reflections. Auto Disadvantages:</li>
+<li>Objects that are further away won't have reflections as only one probe can be active.</li>
+<li>It depends on the camera's position.</li>
+<li>Doesn't work well if the user can see many distant objects at once, as they won't have reflections until you get close.</li>
+</ul>
+</dd></dl>
 <p>To use Auto you don't need to do anything. Just enable PCC: hlmsPbs-&gt;setParallaxCorrectedCubemap( mParallaxCorrectedCubemap ); and leave PBSM_REFLECTION empty and don't enable manual mode. </p><dl class="section user"><dt></dt><dd>When other reflection methods can be used as fallback (Planar reflections, SSR), then usually auto will be the preferred choice. But if multiple reflections/fallbacks aren't available, you'll likely have to make good use of manual and auto </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

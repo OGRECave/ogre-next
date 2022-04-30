@@ -256,7 +256,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p><a class="el" href="namespace_ogre.html">Ogre</a> normally puts Textures into pools (a Type2DArray texture) for efficient rendering Note that only textures of the same resolution and format can be put together in the same pool. </p>
-<p >This creates two issues: Unless it is known in advance, we do not know how large the array should be. if we create a pool that can hold 64 entries but only 1 texture is actually needed, then we waste a lot of GPU memory. Large textures, such as 4096x4096 RGBA8 occupy a lot of memory 64MB. These pools should not contain a large number of entries. For example creating a pool of 8 entries of these textures means we'd be asking the OS for 512MB of <em>contiguous</em> memory. Due to memory fragmentation, such request is likely to fail and cause Out of Memory conditions. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >This creates two issues:</p><ul>
+<li>Unless it is known in advance, we do not know how large the array should be. if we create a pool that can hold 64 entries but only 1 texture is actually needed, then we waste a lot of GPU memory.</li>
+<li>Large textures, such as 4096x4096 RGBA8 occupy a lot of memory 64MB. These pools should not contain a large number of entries. For example creating a pool of 8 entries of these textures means we'd be asking the OS for 512MB of <em>contiguous</em> memory. Due to memory fragmentation, such request is likely to fail and cause Out of Memory conditions. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">texture</td><td>The first texture to which will be creating a pool based on its parameters </td></tr>
     <tr><td class="paramname">textureManager</td><td>The manager, in case you need more info. </td></tr>
@@ -264,6 +266,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>How many entries the pool should be able to hold. </dd></dl>
+</li>
+</ul>
 
 <p>Implemented in <a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a6947566c623e6b83eebf4635360c81fe">Ogre::DefaultTextureGpuManagerListener</a>.</p>
 

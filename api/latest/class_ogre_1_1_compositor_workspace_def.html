@@ -2531,12 +2531,17 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>WARNING: Be very careful with this function. </p>
-<p >Removes a texture. If the texture is from an input channel (TEXTURE_INPUT), the input channel is removed. If the texture is a local definition (TEXTURE_LOCAL) the texture definition is removed and all the references to mLocalTextureDefs[i+1] ... mLocalTextureDefs[i+n] are updated. However, the output channels will now contain an invalid index and will only be removed if it was the last output channel (since we can't alter the order). It is your responsability to call <a class="el" href="class_ogre_1_1_compositor_node_def.html#a6c9e43cc146b6a057a18a864340c10d1" title="Maps the output channel to the given texture name, which can be either a local texture or a reference...">CompositorNodeDef::mapOutputChannel</a> again with a valid texture name to the channel it was occupying. If the texture is a global texture (TEXTURE_GLOBAL), the global texture can no longer be accessed until addTextureSourceName( name, 0, TEXTURE_GLOBAL ) is called again. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >Removes a texture.</p><ul>
+<li>If the texture is from an input channel (TEXTURE_INPUT), the input channel is removed.</li>
+<li>If the texture is a local definition (TEXTURE_LOCAL) the texture definition is removed and all the references to mLocalTextureDefs[i+1] ... mLocalTextureDefs[i+n] are updated. However, the output channels will now contain an invalid index and will only be removed if it was the last output channel (since we can't alter the order). It is your responsability to call <a class="el" href="class_ogre_1_1_compositor_node_def.html#a6c9e43cc146b6a057a18a864340c10d1" title="Maps the output channel to the given texture name, which can be either a local texture or a reference...">CompositorNodeDef::mapOutputChannel</a> again with a valid texture name to the channel it was occupying.</li>
+<li>If the texture is a global texture (TEXTURE_GLOBAL), the global texture can no longer be accessed until addTextureSourceName( name, 0, TEXTURE_GLOBAL ) is called again. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>Name of the texture to remove. </td></tr>
   </table>
   </dd>
 </dl>
+</li>
+</ul>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_compositor_node_def.html#a1df44271ff48b2f986f30e8fb9233b15">Ogre::CompositorNodeDef</a>.</p>
 

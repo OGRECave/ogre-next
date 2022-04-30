@@ -949,7 +949,10 @@ Static Public Attributes</h2></td></tr>
 <p>Toggles anisotropic mips. </p>
 <p >Anisotropic mips provide much higher quality and generally lower light leaking. However it costs a bit more performance, and increases memory consumption.</p>
 <p >Normally regular mipmaps of 3D textures increase memory consumption by 1/7 Anisotropic mipmaps of 3D textures increase memory consumption by 6/7</p>
-<p >Isotropic 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+1/7) = 64 MB * 1.143 = 73.14MB Anisotrop 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+6/7) = 64 MB * 1.857 = 118.85MB</p>
+<ul>
+<li>Isotropic 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+1/7) = 64 MB * 1.143 = 73.14MB</li>
+<li>Anisotrop 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+6/7) = 64 MB * 1.857 = 118.85MB</li>
+</ul>
 <dl class="section remark"><dt>Remarks</dt><dd>After changing this setting, <a class="el" href="class_ogre_1_1_vct_lighting.html#a4f8115c79c05f8a897764b5e23e2a817">VctLighting::update</a> must* be called again to repopulate the light data. </dd></dl>
 
 </div>

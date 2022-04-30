@@ -40,7 +40,7 @@
 <area shape="rect" id="node111" href="$class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes." alt="" coords="308,10065,487,10092"/>
 <area shape="rect" id="node112" href="$class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing." alt="" coords="321,2324,474,2351"/>
 <area shape="rect" id="node114" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="321,8044,473,8071"/>
-<area shape="rect" id="node126" href="$class_ogre_1_1_compositor_pass_def.html" title="Interface to abstract all types of pass definitions (see CompositorPassType): PASS_SCENE (see Composi..." alt="" coords="311,13699,483,13725"/>
+<area shape="rect" id="node126" href="$class_ogre_1_1_compositor_pass_def.html" title="Interface to abstract all types of pass definitions (see CompositorPassType):" alt="" coords="311,13699,483,13725"/>
 <area shape="rect" id="node138" href="$class_ogre_1_1_compositor_pass_provider.html" title="Base class that users can derive from in order to implement custom passes for the compositor." alt="" coords="297,10116,497,10143"/>
 <area shape="rect" id="node139" href="$class_ogre_1_1_compositor_target_def.html" title=" " alt="" coords="308,10217,487,10244"/>
 <area shape="rect" id="node140" href="$class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="304,2593,491,2620"/>

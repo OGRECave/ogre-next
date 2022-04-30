@@ -258,9 +258,33 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Main system for managing Render Targets through the use of nodes. </p>
-<p >All applications must at least define a workspace definition and create a workspace instance in order to start rendering. </p><dl class="section remark"><dt>Remarks</dt><dd>The <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> works by defining definitions which tell how the instance will behave. The top down view is the following: Workspace <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> Target PASS_SCENE PASS_QUAD PASS_CLEAR PASS_STENCIL PASS_RESOLVE Shadow <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> A <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> definition must be created first. Inside the <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> Def. different passes can be defined including which targets they should render to. Once the definitions are set, a workspace instance must be created using addWorkspace and rendering will start automatically. Each definition is shared by all instances, and is assumed to be immutable (read only) for the life time of those objects. </dd></dl>
-<dl class="section user"><dt></dt><dd>If you wish to change the definitions, you should destroy all instances first. In theory many changes can actually happen in real time without any harm, but that depends on how the code was written and thus the behavior is undefined. </dd></dl>
-<dl class="section user"><dt></dt><dd>A node has inputs (textures), local textures, and outputs. It can also directly global textures that are defined in a workspace definition. There a few basic rules: Global Textures use the "global_" prefix. For example "global_myRT" is a global texture. Trying to create a Local texture with that name will throw. Global Textures can't be used as node input nor output. Textures that came as Input can be used as Output. A node may have no Input nor Output. Shadow Nodes can't have input, but can have output to be used with other nodes. </dd></dl>
+<p >All applications must at least define a workspace definition and create a workspace instance in order to start rendering. </p><dl class="section remark"><dt>Remarks</dt><dd>The <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> works by defining definitions which tell how the instance will behave. The top down view is the following:<ul>
+<li>Workspace<ul>
+<li><a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a><ul>
+<li>Target<ul>
+<li>PASS_SCENE</li>
+<li>PASS_QUAD</li>
+<li>PASS_CLEAR</li>
+<li>PASS_STENCIL</li>
+<li>PASS_RESOLVE</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Shadow <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a></li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<p>A <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> definition must be created first. Inside the <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> Def. different passes can be defined including which targets they should render to. Once the definitions are set, a workspace instance must be created using addWorkspace and rendering will start automatically. Each definition is shared by all instances, and is assumed to be immutable (read only) for the life time of those objects. </p><dl class="section user"><dt></dt><dd>If you wish to change the definitions, you should destroy all instances first. In theory many changes can actually happen in real time without any harm, but that depends on how the code was written and thus the behavior is undefined. </dd></dl>
+<dl class="section user"><dt></dt><dd>A node has inputs (textures), local textures, and outputs. It can also directly global textures that are defined in a workspace definition. There a few basic rules:<ul>
+<li>Global Textures use the "global_" prefix. For example "global_myRT" is a global texture. Trying to create a Local texture with that name will throw.</li>
+<li>Global Textures can't be used as node input nor output.</li>
+<li>Textures that came as Input can be used as Output.</li>
+<li>A node may have no Input nor Output.</li>
+<li>Shadow Nodes can't have input, but can have output to be used with other nodes. </li>
+</ul>
+</dd></dl>
 <dl class="section user"><dt></dt><dd>Shadow Nodes are particular case of Nodes which are used for rendering shadow maps, and can only be references from a PASS_SCENE object; and will be executed when that pass is. After the pass is executed, its output can be used for other regular Nodes (i.e. for postprocessing), which enables the possibility of easily creating RSM (Reflective Shadow Maps) for Global Illumination calculations. </dd></dl>
 <dl class="section user"><dt></dt><dd>For more information </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing.">CompositorNode</a> &amp; </dd>

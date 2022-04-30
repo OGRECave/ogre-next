@@ -231,7 +231,13 @@ Friends</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >An hlms datablock contains individual information about a specific material. </p>
-<p >It consists of: A const pointer to an @HlmsMacroblock we do not own and may be shared by other datablocks. A const pointer to an @HlmsBlendblock we do not own and may be shared by other datablocks. The original properties from which this datablock was constructed. This type may be derived to contain additional information. Derived types can cache information present in mOriginalProperties as strings, like diffuse colour values, etc.</p>
+<p >It consists of:</p><ul>
+<li>A const pointer to an <a class="el" href="struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials.">HlmsMacroblock</a> we do not own and may be shared by other datablocks.</li>
+<li>A const pointer to an <a class="el" href="struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials.">HlmsBlendblock</a> we do not own and may be shared by other datablocks.</li>
+<li>The original properties from which this datablock was constructed.</li>
+<li>This type may be derived to contain additional information.</li>
+</ul>
+<p >Derived types can cache information present in mOriginalProperties as strings, like diffuse colour values, etc.</p>
 <p >A datablock is the internal representation of the surface parameters (depth settings, textures to be used, diffuse colour, specular colour, etc). The notion of a datablock is the closest you'll get to a "material" </p><dl class="section remark"><dt>Remarks</dt><dd>Macro- &amp; Blendblocks are immutable, hence const pointers. Trying to const cast these pointers in order to modify them may work on certain RenderSystems (i.e. GLES2) but will seriously break on other RenderSystems (i.e. D3D11). </dd></dl>
 <dl class="section user"><dt></dt><dd>If you need to change a macroblock, create a new one (<a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a> keeps them cached if already created) and change the entire pointer. </dd></dl>
 <dl class="section user"><dt></dt><dd>Each datablock has a pair of macroblocks and blendblocks. One of is for the regular passes, the other is for shadow mapping passes, since in some cases you don't want them to be the same. As for blendblocks, with transparent objects you may want to turn off alpha blending, but enable alpha testing instead. </dd></dl>

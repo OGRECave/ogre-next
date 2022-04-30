@@ -190,7 +190,10 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >A blend block contains settings that rarely change, and thus are common to many materials. </p>
-<p >The reasons this structure isn't joined with <a class="el" href="struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials.">HlmsMacroblock</a> is that: The D3D11 API makes this distinction (much higher API overhead if we change i.e. depth settings) due to D3D11_RASTERIZER_DESC. This block contains information of whether the material is transparent. Transparent materials are sorted differently than opaque ones. Up to 32 different blocks are allowed! </p>
+<p >The reasons this structure isn't joined with <a class="el" href="struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials.">HlmsMacroblock</a> is that:</p><ul>
+<li>The D3D11 API makes this distinction (much higher API overhead if we change i.e. depth settings) due to D3D11_RASTERIZER_DESC.</li>
+<li>This block contains information of whether the material is transparent. Transparent materials are sorted differently than opaque ones. Up to 32 different blocks are allowed! </li>
+</ul>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a893b37752fa27b00400cf4e2ab4cf4c1" name="a893b37752fa27b00400cf4e2ab4cf4c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a893b37752fa27b00400cf4e2ab4cf4c1">&#9670;&nbsp;</a></span>BlendChannelMasks</h2>

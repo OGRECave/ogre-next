@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_raw_simd_unique_ptr.htm
 </div><!--header-->
 <div class="contents">
 
-<p>Similar to std::unique_ptr, but: Uses a custom allocator (OGRE_MALLOC_SIMD) Pointers must be really unique (RESTRICT_ALIAS modifier is used!) To access the pointer, use <a class="el" href="class_ogre_1_1_raw_simd_unique_ptr.html#a270e66ed29239e13285c9ced13860a01">get()</a>; instead of using this container directly The purpose of this container is to enclose a raw pointer while avoiding breaking the rule of 3 when copying.  
+<p>Similar to std::unique_ptr, but:  
  <a href="class_ogre_1_1_raw_simd_unique_ptr.html#details">More...</a></p>
 
 <p><code>#include &lt;OgreRawPtr.h&gt;</code></p>
@@ -120,8 +120,13 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename T, <a class="el" href="group___memory.html#ga830fab51be174d6f2849857cb1abb36a">MemoryCategory</a> M_CATEGORY&gt;<br />
-class Ogre::RawSimdUniquePtr&lt; T, M_CATEGORY &gt;</div><p >Similar to std::unique_ptr, but: Uses a custom allocator (OGRE_MALLOC_SIMD) Pointers must be really unique (RESTRICT_ALIAS modifier is used!) To access the pointer, use <a class="el" href="class_ogre_1_1_raw_simd_unique_ptr.html#a270e66ed29239e13285c9ced13860a01">get()</a>; instead of using this container directly The purpose of this container is to enclose a raw pointer while avoiding breaking the rule of 3 when copying. </p>
-<p >When defining the macro "OGRE_RAW_PTR_PROFILE", this container will raise an exception if the copy constructor or the assignment operator are used. </p>
+class Ogre::RawSimdUniquePtr&lt; T, M_CATEGORY &gt;</div><p >Similar to std::unique_ptr, but: </p>
+<ul>
+<li>Uses a custom allocator (OGRE_MALLOC_SIMD)</li>
+<li>Pointers must be really unique (RESTRICT_ALIAS modifier is used!)</li>
+<li>To access the pointer, use <a class="el" href="class_ogre_1_1_raw_simd_unique_ptr.html#a270e66ed29239e13285c9ced13860a01">get()</a>; instead of using this container directly</li>
+</ul>
+<p >The purpose of this container is to enclose a raw pointer while avoiding breaking the rule of 3 when copying. When defining the macro "OGRE_RAW_PTR_PROFILE", this container will raise an exception if the copy constructor or the assignment operator are used. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acfde81a2790efeceb7c0b81b4b1ba5c4" name="acfde81a2790efeceb7c0b81b4b1ba5c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acfde81a2790efeceb7c0b81b4b1ba5c4">&#9670;&nbsp;</a></span>RawSimdUniquePtr() <span class="overload">[1/3]</span></h2>

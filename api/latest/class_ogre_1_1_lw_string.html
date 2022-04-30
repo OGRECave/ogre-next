@@ -232,7 +232,12 @@ Static Public Member Functions</h2></td></tr>
 <div class="textblock"><p >This is a Light-weight string wrapper around the C string interface. </p>
 <p >This class is heavily influenced by Tom Forsyth's article "A sprintf
         that isn't as ugly" <a href="https://home.comcast.net/~tom_forsyth/blog.wiki.html#">https://home.comcast.net/~tom_forsyth/blog.wiki.html#</a>[[A%20sprintf%20that%20isn%27t%20as%20ugly]]</p>
-<p >The goals are: No dynamic allocation. Easier to read and control than sprintf() Type-safe (in as much as C can ever be type-safe - bloody auto-converts). Overflow-safe (i.e. it will refuse to scribble, and will assert in debug mode).</p>
+<p >The goals are:</p><ul>
+<li>No dynamic allocation.</li>
+<li>Easier to read and control than sprintf()</li>
+<li>Type-safe (in as much as C can ever be type-safe - bloody auto-converts).</li>
+<li>Overflow-safe (i.e. it will refuse to scribble, and will assert in debug mode).</li>
+</ul>
 <p ><a class="el" href="class_ogre_1_1_lw_string.html" title="This is a Light-weight string wrapper around the C string interface.">LwString</a> needs to be fed a pointer and a maximum length size. The pointer's preexisting contents will be preserved. For example: char buf[1024]; buf[0] = '\0'; <a class="el" href="class_ogre_1_1_lw_string.html" title="This is a Light-weight string wrapper around the C string interface.">LwString</a> myStr( buf, 1024 );</p>
 <p >{ char *buf = new char[1024]; <a class="el" href="class_ogre_1_1_lw_string.html" title="This is a Light-weight string wrapper around the C string interface.">LwString</a> myStr( buf, 1024 ); delete buf; //This class will never deallocate the pointer. }</p>
 <p >char buf[512]; buf[0] = 'H'; buf[1] = 'i'; buf[2] = '!'; buf[3] = '\0'; <a class="el" href="class_ogre_1_1_lw_string.html" title="This is a Light-weight string wrapper around the C string interface.">LwString</a> myStr( buf, 512 ); printf( myStr.c_str() ) //Hi!</p>

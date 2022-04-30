@@ -4195,10 +4195,13 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Toggles whether light-space position is calculated in vertex or pixel shader. </p>
 <p >This position is used for evaluating shadow mapping </p><dl class="section remark"><dt>Remarks</dt><dd>Set this setting to true if you need to support a very large number of shadow mapped lights (e.g. &gt; 30) because otherwise you will hit HW limits on how much data we can send from Vertex to Pixel shader.</dd></dl>
-<p>Performance: Whether this setting results in higher or lower performance depends on: </p><pre class="fragment">1. Vertex count of the scene (high vertex count benefit from bInPixelShader = true)
-2. Screen resolution (large resolutions benefit from bInPixelShader = false)
-3. Number of shadow mapping lights (large numbers benefit from bInPixelShader = true)
-</pre><p> You will have to profile which setting gives you better performance, although generally speaking for low number of lights (e.g. &lt; 5) bInPixelShader = false is more likely to win. </p>
+<p>Performance: Whether this setting results in higher or lower performance depends on:</p>
+<ol type="1">
+<li>Vertex count of the scene (high vertex count benefit from bInPixelShader = true)</li>
+<li>Screen resolution (large resolutions benefit from bInPixelShader = false)</li>
+<li>Number of shadow mapping lights (large numbers benefit from bInPixelShader = true)</li>
+</ol>
+<p >You will have to profile which setting gives you better performance, although generally speaking for low number of lights (e.g. &lt; 5) bInPixelShader = false is more likely to win. </p>
 
 </div>
 </div>
