@@ -257,12 +257,13 @@ Public Member Functions</h2></td></tr>
 <p>Requested stream type. </p>
 <p >All are essentially the same deflate stream with varying wrapping. ZLib is used by default. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa0d681e30262c74b6c1f2ecacc85908ca855b85480a0c741d3cb3e10c83a35838" name="aa0d681e30262c74b6c1f2ecacc85908ca855b85480a0c741d3cb3e10c83a35838"></a>Invalid&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="aa0d681e30262c74b6c1f2ecacc85908cad3be223c328c7637519421e4ce552ef1" name="aa0d681e30262c74b6c1f2ecacc85908cad3be223c328c7637519421e4ce552ef1"></a>Deflate&#160;</td><td class="fielddoc"><p >Unexpected stream type or uncompressed data. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa0d681e30262c74b6c1f2ecacc85908ca855b85480a0c741d3cb3e10c83a35838" name="aa0d681e30262c74b6c1f2ecacc85908ca855b85480a0c741d3cb3e10c83a35838"></a>Invalid&#160;</td><td class="fielddoc"><p >Unexpected stream type or uncompressed data. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aa0d681e30262c74b6c1f2ecacc85908caab547cd040a3b61b6df82af4cf202692" name="aa0d681e30262c74b6c1f2ecacc85908caab547cd040a3b61b6df82af4cf202692"></a>ZLib&#160;</td><td class="fielddoc"><p >no header, no checksum, rfc1951 </p>
+<tr><td class="fieldname"><a id="aa0d681e30262c74b6c1f2ecacc85908cad3be223c328c7637519421e4ce552ef1" name="aa0d681e30262c74b6c1f2ecacc85908cad3be223c328c7637519421e4ce552ef1"></a>Deflate&#160;</td><td class="fielddoc"><p >no header, no checksum, rfc1951 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aa0d681e30262c74b6c1f2ecacc85908ca6d7007604fcbeb05fd8f27baac7eed9b" name="aa0d681e30262c74b6c1f2ecacc85908ca6d7007604fcbeb05fd8f27baac7eed9b"></a>GZip&#160;</td><td class="fielddoc"><p >2 byte header, 4 byte footer with adler32 checksum, rfc1950 </p>
+<tr><td class="fieldname"><a id="aa0d681e30262c74b6c1f2ecacc85908caab547cd040a3b61b6df82af4cf202692" name="aa0d681e30262c74b6c1f2ecacc85908caab547cd040a3b61b6df82af4cf202692"></a>ZLib&#160;</td><td class="fielddoc"><p >2 byte header, 4 byte footer with adler32 checksum, rfc1950 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aa0d681e30262c74b6c1f2ecacc85908ca6d7007604fcbeb05fd8f27baac7eed9b" name="aa0d681e30262c74b6c1f2ecacc85908ca6d7007604fcbeb05fd8f27baac7eed9b"></a>GZip&#160;</td><td class="fielddoc"><p >10 byte header, 8 byte footer with crc32 checksum and unpacked size, rfc1952 </p>
 </td></tr>
 </table>
 
