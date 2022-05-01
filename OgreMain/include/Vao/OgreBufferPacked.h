@@ -47,7 +47,7 @@ namespace Ogre
             i.e. live video capture)
         */
         BT_DEFAULT,
-        
+
         /** Read and write access from GPU/CPU.
         @remarks
             This functionality was written for UMA (Unified Memory Architecture),
@@ -184,8 +184,8 @@ namespace Ogre
         friend class VulkanBufferInterface;
 
     protected:
-        size_t mInternalBufferStart;  /// In elements
-        size_t mFinalBufferStart;     /// In elements, includes dynamic buffer frame offset
+        size_t mInternalBufferStart;  ///< In elements
+        size_t mFinalBufferStart;     ///< In elements, includes dynamic buffer frame offset
         size_t mNumElements;
         uint32 mBytesPerElement;
         uint32 mNumElementsPadding;

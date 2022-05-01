@@ -105,7 +105,7 @@ namespace Ogre
         /// not just the textures referenced by the compositor
         bool mAnalyzeAllTextureLayouts;
 
-        bool   mMaterialIsHlms;  /// If true, mMaterialName is an Hlms material
+        bool   mMaterialIsHlms;  ///< If true, mMaterialName is an Hlms material
         String mMaterialName;
 
         /** Type of frustum corners to pass in the quad normals.

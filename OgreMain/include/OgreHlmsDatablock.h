@@ -52,7 +52,7 @@ namespace Ogre
 
     struct _OgreExport BasicBlock
     {
-        void  *mRsData;  /// Render-System specific data
+        void  *mRsData;  ///< Render-System specific data
         uint16 mRefCount;
         /// The mId is only valid while mRefCount > 0; which means mRsData
         /// may contain valid data, else it's null.
@@ -61,7 +61,7 @@ namespace Ogre
         /// HlmsManager. This guarantees HlmsMacroblock & HlmsBlendblock pointers are always
         /// valid, although they may be inactive (i.e. mId invalid, mRefCount = 0 and mRsData = 0)
         uint16 mLifetimeId;
-        uint8  mBlockType;  /// @see HlmsBasicBlock
+        uint8  mBlockType;  ///< @see HlmsBasicBlock
 
         /// When zero, HlmsManager cannot override the block's values with
         /// enforced global settings. (such as lower quality texture filtering or
@@ -316,7 +316,7 @@ namespace Ogre
     public:
         uint32 mTextureHash;        // TextureHash comes before macroblock for alignment reasons
         uint16 mMacroblockHash[2];  // Not all bits are used
-        uint8  mType;               /// @see HlmsTypes
+        uint8  mType;               ///< @see HlmsTypes
     protected:
         HlmsMacroblock const *mMacroblock[2];
         HlmsBlendblock const *mBlendblock[2];
@@ -327,7 +327,7 @@ namespace Ogre
 
     protected:
         bool  mIgnoreFlushRenderables;
-        uint8 mAlphaTestCmp;  /// @see CompareFunction
+        uint8 mAlphaTestCmp;  ///< @see CompareFunction
         bool  mAlphaTestShadowCasterOnly;
         float mAlphaTestThreshold;
 

@@ -124,8 +124,8 @@ namespace Ogre
             HlmsDatablock *datablock;
             bool           visibleToManager;
             String         name;
-            String         srcFile;           /// Filename in which it was defined, if any
-            String         srcResourceGroup;  /// ResourceGroup in which it was defined, if any
+            String         srcFile;           ///< Filename in which it was defined, if any
+            String         srcResourceGroup;  ///< ResourceGroup in which it was defined, if any
             DatablockEntry() : datablock( 0 ), visibleToManager( false ) {}
             DatablockEntry( HlmsDatablock *_datablock, bool _visibleToManager, const String &_name,
                             const String &_srcFile, const String &_srcGroup ) :
@@ -256,15 +256,15 @@ namespace Ogre
 
         HlmsDatablockMap mDatablocks;
 
-        String        mShaderProfile;  /// "glsl", "glsles", "hlsl"
+        String        mShaderProfile;  ///< "glsl", "glsles", "hlsl"
         IdString      mShaderSyntax;
         IdStringVec   mRsSpecificExtensions;
         String const *mShaderTargets[NumShaderTypes];  ///[0] = "vs_4_0", etc. Only used by D3D
-        String        mShaderFileExt;                  /// Either glsl or hlsl
+        String        mShaderFileExt;                  ///< Either glsl or hlsl
         String        mOutputPath;
         bool          mDebugOutput;
         bool          mDebugOutputProperties;
-        uint8         mPrecisionMode;  /// See PrecisionMode
+        uint8         mPrecisionMode;  ///< See PrecisionMode
         bool          mFastShaderBuildHack;
 
         /// The default datablock occupies the name IdString(); which is not the same as IdString("")

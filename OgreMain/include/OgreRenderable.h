@@ -461,7 +461,7 @@ namespace Ogre
         uint32                 mHlmsHash;
         uint32                 mHlmsCasterHash;
         HlmsDatablock         *mHlmsDatablock;
-        MaterialPtr            mMaterial;  /// Only valid when using low level materials
+        MaterialPtr            mMaterial;  ///< Only valid when using low level materials
         // clang-format off
         public: uint8 mCustomParameter;
         // clang-format on
@@ -495,7 +495,7 @@ namespace Ogre
         bool               mPolygonModeOverrideable;
         bool               mUseIdentityProjection;
         bool               mUseIdentityView;
-        UserObjectBindings mUserObjectBindings;  /// User objects binding.
+        UserObjectBindings mUserObjectBindings;  ///< User objects binding.
 
         struct PoseData
         {

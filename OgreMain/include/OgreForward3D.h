@@ -50,7 +50,7 @@ namespace Ogre
         {
             uint32 width;
             uint32 height;
-            Real   zEnd;  /// Depth at which this slice ends, in view space.
+            Real   zEnd;  ///< Depth at which this slice ends, in view space.
             Resolution() : width( 0 ), height( 0 ), zEnd( 0 ) {}
             Resolution( uint32 w, uint32 h, Real _zEnd ) : width( w ), height( h ), zEnd( _zEnd ) {}
         };
@@ -59,7 +59,7 @@ namespace Ogre
         uint32 mHeight;
         uint32 mNumSlices;
         uint32 mLightsPerCell;
-        uint32 mTableSize;  /// Automatically calculated, size of the first table, elements.
+        uint32 mTableSize;  ///< Automatically calculated, size of the first table, elements.
 
         FastArray<Resolution> mResolutionAtSlice;
 

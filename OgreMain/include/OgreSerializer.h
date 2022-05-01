@@ -77,7 +77,7 @@ namespace Ogre
         uint32        mCurrentstreamLen;
         DataStreamPtr mStream;
         String        mVersion;
-        bool          mFlipEndian;  /// Default to native endian, derive from header
+        bool          mFlipEndian;  ///< Default to native endian, derive from header
 
         // Internal methods
         virtual void   writeFileHeader();
