@@ -110,25 +110,26 @@ namespace Ogre
         void createTriangle(
             CHVertexI v1, CHVertexI v2,
             CHVertexI v3 );  ///< Sets the vertices of a triangle (called from initHull only).
-        Real   getTetrahedronVolume( CHVertex *v0, CHVertex *v1, CHVertex *v2, CHVertex *v3 );
-        Real   getPointToLineSqraredDistance( CHVertex *x1, CHVertex *x2, CHVertex *vertex );
-        void   generateHull();                 ///< Generates the hull.
-        size_t addVertex( CHVertex *vertex );  ///< Adds vertex to hull.
-        void   addEdge( CHEdgeList &edges, CHVertexI a,
-                        CHVertexI b );  ///< Add edge to the list of removable edges.
-        void   cleanHull();  ///< Removes Triangles, which are having CHTriangle::removed = true.
-        bool isVisible( CHTriangle *triangle, Vector3 &vertex );  ///< Whether face is visible from point.
-        CHVertex *getFurthestVertex( CHTriangle *hull );          ///< Gets furthest vertex from face.
+        Real      getTetrahedronVolume( CHVertex *v0, CHVertex *v1, CHVertex *v2, CHVertex *v3 );
+        Real      getPointToLineSqraredDistance( CHVertex *x1, CHVertex *x2, CHVertex *vertex );
+        void      generateHull();                 ///< Generates the hull.
+        size_t    addVertex( CHVertex *vertex );  ///< Adds vertex to hull.
+        void      addEdge( CHEdgeList &edges, CHVertexI a,
+                           CHVertexI b );  ///< Add edge to the list of removable edges.
+        void      cleanHull();  ///< Removes Triangles, which are having CHTriangle::removed = true.
+        bool      isVisible( CHTriangle *triangle,
+                             Vector3    &vertex );           ///< Whether face is visible from point.
+        CHVertex *getFurthestVertex( CHTriangle *hull );  ///< Gets furthest vertex from face.
         void      getVisibleTriangles(
                  const CHVertex *target,
-                 CHTrianglePList
-                     &visibleTriangles );  ///< Adds visible edges to the list, when viewing from target point.
+                 CHTrianglePList      &
+                visibleTriangles );  ///< Adds visible edges to the list, when viewing from target point.
         void getHorizon( const CHTrianglePList &tri,
                          CHEdgeList & );  ///< Removes edges, which are not on the horizon.
         void fillHorizon( CHEdgeList &e,
                           CHVertex *target );  ///< Caps the hole with faces connecting to target vertex.
-        void markVertices();  ///< if we have the convex hull, this will walk on the faces which have less
-                              ///< then 90 degree difference.
+        void markVertices();  ///< if we have the convex hull, this will walk on the faces which have
+                              ///< less then 90 degree difference.
         template <typename T>
         void addHullTriangleVertices(
             std::vector<CHVertex *> &stack,
@@ -143,8 +144,9 @@ namespace Ogre
         bool isInsideLine( const Vector3 &ptarget, const Vector3 &p0,
                            const Vector3 &p1 );  ///< Whether ptarget is between p0 and p1. Assuming they
                                                  ///< are on the same line.
-        bool isSamePosition( const Vector3 &p0,
-                             const Vector3 &p1 );  ///< Whether p0 = p1 with mEpsilon allowed float error.
+        bool isSamePosition(
+            const Vector3 &p0,
+            const Vector3 &p1 );  ///< Whether p0 = p1 with mEpsilon allowed float error.
     };
 }  // namespace Ogre
 

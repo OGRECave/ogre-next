@@ -184,7 +184,8 @@ namespace Ogre
             uint32 poolIdx;
             size_t offset;
             size_t sizeBytes;
-            size_t poolCapacity;  ///< This value is the same for all entries with same getCombinedPoolIdx
+            size_t
+                poolCapacity;  ///< This value is the same for all entries with same getCombinedPoolIdx
             /// Relevant for Vulkan: when this value is true, the whole pool
             /// may contain texture data (not necessarily this block)
             /// See Tutorial_Memory on how to deal with this parameter
@@ -287,8 +288,8 @@ namespace Ogre
             The type of buffer for this vertex buffer. See #BT_DYNAMIC_DEFAULT special case.
         @param initialData
             Initial data the buffer will hold upon creation. Can be null (i.e. you plan to upload later).
-            Cannot be null when bufferType is #BT_IMMUTABLE. Must have enough room to prevent an overflow.
-            See BufferPacked::BufferPacked
+            Cannot be null when bufferType is #BT_IMMUTABLE. Must have enough room to prevent an
+        overflow. See BufferPacked::BufferPacked
         @param keepAsShadow
             Whether to keep the pointer "initialData" as a shadow copy of the contents.
             See BufferPacked::BufferPacked regarding on who is responsible for freeing this pointer
