@@ -261,7 +261,7 @@ namespace Ogre
         @param elementStart
             The start region, usually zero.
         @param elementCount
-            Size, in number of elements, of data. Must be less than @getNumElements - elementStart
+            Size, in number of elements, of data. Must be less than getNumElements() - elementStart
         */
         virtual void upload( const void *data, size_t elementStart, size_t elementCount );
 

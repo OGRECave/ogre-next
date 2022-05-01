@@ -503,10 +503,10 @@ namespace Ogre
          */
         static uint32 getDefaultQueryFlags() { return msDefaultQueryFlags; }
 
-        /// Returns the distance to camera as calculated in @cullFrustum
+        /// Returns the distance to camera as calculated in cullFrustum()
         inline RealAsUint getCachedDistanceToCamera() const;
 
-        /// Returns the distance to camera as calculated in @cullFrustum
+        /// Returns the distance to camera as calculated in cullFrustum()
         inline Real getCachedDistanceToCameraAsReal() const;
 
         /** Sets the visibility flags for this object.

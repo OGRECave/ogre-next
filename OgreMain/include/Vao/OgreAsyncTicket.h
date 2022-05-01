@@ -40,12 +40,12 @@ namespace Ogre
         If you call map() before the transfer is done, it will produce a stall as the
         CPU must wait for the GPU to finish all its pending operations.
     @par
-        Use @queryIsTransferDone to query if the transfer has finished. Beware not all
+        Use queryIsTransferDone() to query if the transfer has finished. Beware not all
         APIs support querying async transfer status. In those cases there is no reliable
         way to determine when the transfer is done. An almost safe bet is to wait two
         frames before mapping.
     @par
-        Call @BufferPacked::disposeTicket when you're done with this ticket.
+        Call BufferPacked::disposeTicket when you're done with this ticket.
     */
     class _OgreExport AsyncTicket : public OgreAllocatedObj
     {

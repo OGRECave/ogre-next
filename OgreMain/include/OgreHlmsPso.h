@@ -260,8 +260,8 @@ namespace Ogre
         /// XYZ. Metal needs the threads per group on C++ side. HLSL & GLSL want
         /// the thread count on shader side, thus we allow users to tell us
         /// the thread count to C++, and send it to the shaders via
-        /// @value( threads_per_group_x ); OR let the shader tell C++ the threadcount
-        /// via @pset( threads_per_group_x, 64 )
+        /// \@value( threads_per_group_x ); OR let the shader tell C++ the threadcount
+        /// via \@pset( threads_per_group_x, 64 )
         /// (there's also threads_per_group_y & threads_per_group_z)
         /// @see HlmsComputeJob::setThreadsPerGroup
         uint32 mThreadsPerGroup[3];

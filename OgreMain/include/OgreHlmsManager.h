@@ -261,7 +261,7 @@ namespace Ogre
         uint16 _getInputLayoutId( const VertexElement2VecVec &vertexElements, OperationType opType );
 
         /** Internal function used by Hlms types to tell us a datablock has been created
-            so that we can return it when the user calls @getDatablock.
+            so that we can return it when the user calls getDatablock().
         @remarks
             Throws if a datablock with the same name has already been registered.
             Don't call this function directly unless you know what you're doing.
@@ -276,7 +276,7 @@ namespace Ogre
         @remarks
             If the datablock was created with the flag visibleByManager = false; you can't
             retrieve it using this function. If that's the case, get the appropiate Hlms
-            using @getHlms and then call @Hlms::getDatablock on it
+            using getHlms() and then call Hlms::getDatablock on it
         @par
             If the material/datablock with that name wasn't found, returns a default one
             (note that Hlms::getDatablock doesn't do this!!!)

@@ -703,7 +703,7 @@ namespace Ogre
         HlmsDatablock *getDatablock( IdString name ) const;
 
         /// Returns the string name associated with its hashed name (this was
-        /// passed as refName in @createDatablock). Returns null ptr if
+        /// passed as refName in createDatablock()). Returns null ptr if
         /// not found.
         /// The reason this String doesn't live in HlmsDatablock is to prevent
         /// cache trashing (datablocks are hot iterated every frame, and the
@@ -711,7 +711,7 @@ namespace Ogre
         const String *getNameStr( IdString name ) const;
 
         /// Returns the filaname & resource group a datablock was created from, and
-        /// is associated with its hashed name (this was passed as in @createDatablock).
+        /// is associated with its hashed name (this was passed as in createDatablock()).
         /// Returns null ptr if not found. Note that it may also be a valid pointer but
         /// contain an empty string.
         /// The reason this String doesn't live in HlmsDatablock is to prevent
@@ -735,7 +735,7 @@ namespace Ogre
         */
         void destroyDatablock( IdString name );
 
-        /// Destroys all datablocks created with @createDatablock. Caller is responsible
+        /// Destroys all datablocks created with createDatablock(). Caller is responsible
         /// for ensuring those pointers aren't still in use (i.e. dangling pointers)
         /// The default datablock will be recreated.
         void destroyAllDatablocks();
@@ -775,7 +775,7 @@ namespace Ogre
         @param shadowNode
             The shadow node currently in effect. Can be null.
         @return
-            A hash and cached property parameters. Unlike @calculateHashFor, the cache
+            A hash and cached property parameters. Unlike calculateHashFor(), the cache
             must be kept by the caller and not by us (because it may change every frame
             and is one for the whole pass, but Mesh' properties usually stay consistent
             through its lifetime but may differ per mesh)
@@ -790,7 +790,7 @@ namespace Ogre
         @param lastReturnedValue
             The last value returned by getMaterial.
         @param passCache
-            The cache returned by @preparePassHash.
+            The cache returned by preparePassHash().
         @param renderable
             The renderable the caller wants us to give the shaders.
         @param movableObject

@@ -129,7 +129,7 @@ namespace Ogre
                                    ArrayQuaternion &orientation ) const;
 
         /** Calculates the inverse of the matrix. If used against degenerate matrices,
-            it may cause NaNs and Infs on those. Use @setToInverseDegeneratesAsIdentity
+            it may cause NaNs and Infs on those. Use setToInverseDegeneratesAsIdentity()
             if you want to deal with degenerate matrices.
         */
         inline void setToInverse();

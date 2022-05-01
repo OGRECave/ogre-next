@@ -146,7 +146,7 @@ namespace Ogre
             The default initial query mask of a SceneQuery is
             SceneManager::QUERY_ENTITY_DEFAULT_MASK
         @note
-            By default, Ogre uses @SceneManager::QUERY_ENTITY_DEFAULT_MASK and Co.
+            By default, Ogre uses SceneManager::QUERY_ENTITY_DEFAULT_MASK and Co.
             to set each type of MovableObject's default query mask. This behavior
             can be overriden though, just set the masks you don't need to 0 before
             creating those objects.

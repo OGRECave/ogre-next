@@ -187,7 +187,7 @@ namespace Ogre
                (@see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
                the node instance should be disabled, @see CompositorNode::setEnabled)
             4. It is safe to call this function while there are still workspaces, but you must call
-               @Workspace::reconnectAllNodes after you're done setting the new node connections
+               CompositorWorkspace::reconnectAllNodes after you're done setting the new node connections
         */
         void clearAllInterNodeConnections();
 
@@ -200,7 +200,7 @@ namespace Ogre
                (@see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
                the node instance should be disabled, @see CompositorNode::setEnabled)
             4. It is safe to call this function while there are still workspaces, but you must call
-               @Workspace::reconnectAllNodes after you're done setting the new node connections
+               CompositorWorkspace::reconnectAllNodes after you're done setting the new node connections
         */
         void clearOutputConnections();
 
@@ -235,7 +235,7 @@ namespace Ogre
 
         /** Gets read-only access to the map to all added nodes and their aliases.
             Useful to know which nodes are in use by this compositor.
-            Use @addNodeAlias @removeNodeAlias and @connect to safely modify the map.
+            Use addNodeAlias() removeNodeAlias() and connect() to safely modify the map.
         */
         const NodeAliasMap &getNodeAliasMap() { return mAliasedNodes; }
 
