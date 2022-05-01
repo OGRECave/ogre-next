@@ -47,7 +47,7 @@ namespace Ogre
             i.e. live video capture)
         */
         BT_DEFAULT,
-        
+
         /** Read and write access from GPU/CPU.
         @remarks
             This functionality was written for UMA (Unified Memory Architecture),
