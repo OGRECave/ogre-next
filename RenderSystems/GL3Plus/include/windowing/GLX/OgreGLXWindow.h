@@ -69,30 +69,30 @@ namespace Ogre
                                       uint32 width, uint32 height, uint32 frequencyNumerator,
                                       uint32 frequencyDenominator ) override;
 
-        /** @copydoc see RenderWindow::destroy */
+        /** @copydoc Window::destroy */
         virtual void destroy() override;
 
-        /** @copydoc see RenderWindow::isClosed */
+        /** @copydoc Window::isClosed */
         virtual bool isClosed() const override;
 
-        /** @copydoc see RenderWindow::isVisible */
+        /** @copydoc Window::isVisible */
         bool isVisible() const override;
 
         virtual void _setVisible( bool visible ) override;
 
-        /** @copydoc see RenderWindow::isHidden */
+        /** @copydoc Window::isHidden */
         bool isHidden() const override { return mHidden; }
 
-        /** @copydoc see RenderWindow::setHidden */
+        /** @copydoc Window::setHidden */
         void setHidden( bool hidden ) override;
 
-        /** @copydoc see RenderWindow::resize */
+        /** @copydoc Window::requestResolution */
         void requestResolution( uint32 width, uint32 height ) override;
 
-        /** @copydoc see RenderWindow::windowMovedOrResized */
+        /** @copydoc Window::windowMovedOrResized */
         void windowMovedOrResized() override;
 
-        /** @copydoc see RenderWindow::swapBuffers */
+        /** @copydoc Window::swapBuffers */
         void swapBuffers() override;
 
         /**

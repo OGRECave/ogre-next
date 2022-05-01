@@ -44,10 +44,8 @@ namespace v1 {
                            GLint format, GLint face, GLint level, Usage usage, bool softwareMipmap, bool writeGamma, uint fsaa);
         virtual ~GLES2TextureBuffer();
 
-        /// @copydoc HardwarePixelBuffer::bindToFramebuffer
         virtual void bindToFramebuffer(GLenum attachment, uint32 zoffset);
 
-        /// @copydoc HardwarePixelBuffer::getRenderTarget
         RenderTexture* getRenderTarget(size_t slice);
 
         /// Upload a box of pixels to this buffer on the card
@@ -68,7 +66,6 @@ namespace v1 {
         // Copy from framebuffer
         void copyFromFramebuffer(uint32 zoffset);
 
-        /// @copydoc HardwarePixelBuffer::blit
         void blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox);
         // Blitting implementation
         void blitFromTexture(GLES2TextureBuffer *src, const Box &srcBox, const Box &dstBox);

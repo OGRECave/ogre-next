@@ -735,23 +735,15 @@ namespace Ogre
         void setNamedConstant( const String &name, const Vector2 &vec );
         /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const Matrix4& m) */
         void setNamedConstant( const String &name, const Matrix4 &m );
-        /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const Matrix4* m, size_t
-         * numEntries) */
+        /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const Matrix4* m,
+         size_t numEntries) */
         void setNamedConstant( const String &name, const Matrix4 *m, size_t numEntries );
-        /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const float *val, size_t
-         * count) */
         void setNamedConstant( const String &name, const float *val, size_t count );
-        /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const double *val, size_t
-         * count) */
         void setNamedConstant( const String &name, const double *val, size_t count );
         /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const ColourValue&
          * colour) */
         void setNamedConstant( const String &name, const ColourValue &colour );
-        /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const int *val, size_t
-         * count) */
         void setNamedConstant( const String &name, const int *val, size_t count );
-        /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const uint *val, size_t
-         * count) */
         void setNamedConstant( const String &name, const uint *val, size_t count );
         // /** @copydoc GpuProgramParameters::setNamedConstant(const String& name, const bool *val,
         // size_t count) */ void setNamedConstant(const String& name, const bool *val, size_t count);

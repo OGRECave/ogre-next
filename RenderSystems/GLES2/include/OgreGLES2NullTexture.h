@@ -99,7 +99,6 @@ namespace v1
 
         virtual bool requiresTextureFlipping() const { return true; }
 
-        /// @copydoc RenderTarget::getForceDisableColourWrites
         virtual bool getForceDisableColourWrites() const    { return true; }
 
         /// Null buffers never resolve; only colour buffers do. (we need mFsaaResolveDirty to be always

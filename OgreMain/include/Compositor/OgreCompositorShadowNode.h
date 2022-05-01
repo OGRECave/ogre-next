@@ -335,7 +335,7 @@ namespace Ogre
         /// to call it for every shadow map (otherwise you will trigger a O(N^2) behavior).
         void setStaticShadowMapDirty( size_t shadowMapIdx, bool includeLinked = true );
 
-        /// @copydoc CompositorNode::finalTargetResized
+        /// @copydoc CompositorNode::finalTargetResized01
         void finalTargetResized01( const TextureGpu *finalTarget ) override;
     };
 

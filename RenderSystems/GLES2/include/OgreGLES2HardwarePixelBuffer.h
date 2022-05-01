@@ -66,10 +66,8 @@ namespace v1 {
                                   PixelFormat mFormat, bool hwGamma,
                                   HardwareBuffer::Usage usage);
 
-            /// @copydoc HardwarePixelBuffer::blitFromMemory
             void blitFromMemory(const PixelBox &src, const Box &dstBox);
 
-            /// @copydoc HardwarePixelBuffer::blitToMemory
             void blitToMemory(const Box &srcBox, const PixelBox &dst);
 
             virtual ~GLES2HardwarePixelBuffer();

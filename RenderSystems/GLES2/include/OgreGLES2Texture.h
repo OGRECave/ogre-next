@@ -49,7 +49,6 @@ namespace Ogre {
             virtual ~GLES2Texture();
 
             void createRenderTexture();
-            /// @copydoc Texture::getBuffer
             v1::HardwarePixelBufferSharedPtr getBuffer(size_t face, size_t mipmap);
 
             // Takes the OGRE texture type (1d/2d/3d/cube) and returns the appropriate GL one

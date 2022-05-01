@@ -133,14 +133,14 @@ namespace Ogre
         using RootLayout::getDescBindingRanges;
         using RootLayout::validateArrayBindings;
 
-        /// @copydoc VulkanRootLayout::copyFrom
+        /// @copydoc RootLayout::copyFrom
         void copyFrom( const RootLayout &rootLayout, bool bIncludeArrayBindings = true );
 
         /// Performs outRootLayout.copyFrom( this )
         /// This function is necessary because RootLayout is a protected base class
         void copyTo( RootLayout &outRootLayout, bool bIncludeArrayBindings );
 
-        /// @copydoc VulkanRootLayout::parseRootLayout
+        /// @copydoc RootLayout::parseRootLayout
         void parseRootLayout( const char *rootLayout, const bool bCompute, const String &filename );
 
         /** Generates all the macros for compiling shaders, based on our layout

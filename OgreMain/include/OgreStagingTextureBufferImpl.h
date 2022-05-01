@@ -69,7 +69,7 @@ namespace Ogre
         bool   isSmallerThan( const StagingTexture *other ) const override;
         size_t _getSizeBytes() override;
 
-        /// @copydoc StagingTexture::notifyStartMapRegion
+        /// @copydoc StagingTexture::startMapRegion
         void startMapRegion() override;
 
         size_t _getInternalTotalSizeBytes() const { return mSize; }

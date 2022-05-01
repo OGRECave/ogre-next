@@ -217,14 +217,12 @@ namespace Ogre {
             RenderWindow* _createRenderWindow(const String &name, unsigned int width, unsigned int height, 
                 bool fullScreen, const NameValuePairList *miscParams = 0);
 
-            /// @copydoc RenderSystem::_createDepthBufferFor
             DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget, bool exactMatchFormat );
 
             /// Mimics D3D9RenderSystem::_getDepthStencilFormatFor, if no FBO RTT manager, outputs GL_NONE
             void _getDepthStencilFormatFor( GLenum internalColourFormat, GLenum *depthFormat,
                                             GLenum *stencilFormat );
 
-            /// @copydoc RenderSystem::createMultiRenderTarget
             virtual MultiRenderTarget * createMultiRenderTarget(const String & name);
 
             /** See
@@ -465,9 +463,7 @@ namespace Ogre {
             void bindGpuProgramParameters(GpuProgramType gptype, GpuProgramParametersSharedPtr params, uint16 mask);
             void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
 
-            /// @copydoc RenderSystem::_setSceneBlending
             void _setSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor, SceneBlendOperation op );
-            /// @copydoc RenderSystem::_setSeparateSceneBlending
             void _setSeparateSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor, SceneBlendFactor sourceFactorAlpha, SceneBlendFactor destFactorAlpha, SceneBlendOperation op, SceneBlendOperation alphaOp );
             /// @copydoc RenderSystem::getDisplayMonitorCount
             unsigned int getDisplayMonitorCount() const;

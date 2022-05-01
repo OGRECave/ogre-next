@@ -70,9 +70,7 @@ namespace Ogre
         /** Overridden - see RenderTarget. */
         void copyContentsToMemory( const Box &src, const PixelBox &dst, FrameBuffer buffer );
 
-        /** @copydoc see RenderWindow::setVSyncEnabled */
         void setVSyncEnabled( bool vsync );
-        /** @copydoc see RenderWindow::isVSyncEnabled */
         bool isVSyncEnabled() const;
 
         /** Overridden - see RenderTarget.

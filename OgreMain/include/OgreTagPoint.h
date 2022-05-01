@@ -96,7 +96,7 @@ namespace Ogre
             /** Gets the transform of this node just for the skeleton (not entity) */
             const Matrix4 &_getFullLocalTransform() const;
 
-            /** @copydoc Node::needUpdate */
+            /** @copydoc OldNode::needUpdate */
             void needUpdate( bool forceParentUpdate = false ) override;
 
             /** Overridden from Node in order to include parent Entity transform. */

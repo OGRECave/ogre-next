@@ -85,7 +85,6 @@ namespace Ogre
         /** Default constructor. */
         AbsolutePixelCountLodStrategy();
 
-        /// @copydoc LodStrategy::getValueImpl
         Real getValueImpl( const MovableObject *movableObject, const Camera *camera ) const override;
 
         void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,
@@ -143,7 +142,6 @@ namespace Ogre
         /** Default constructor. */
         ScreenRatioPixelCountLodStrategy();
 
-        /// @copydoc LodStrategy::getValueImpl
         Real getValueImpl( const MovableObject *movableObject, const Camera *camera ) const override;
 
         void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,

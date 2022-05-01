@@ -550,14 +550,10 @@ namespace Ogre
          */
         bool getIsAlpha() const;
 
-        /// @copydoc Texture::getGamma
         Real getGamma() const { return mGamma; }
-        /// @copydoc Texture::setGamma
         void setGamma( Real gamma ) { mGamma = gamma; }
 
-        /// @copydoc Texture::setHardwareGammaEnabled
         void setHardwareGammaEnabled( bool enabled );
-        /// @copydoc Texture::isHardwareGammaEnabled
         bool isHardwareGammaEnabled() const;
 
         /** Gets the index of the set of texture co-ords this layer uses.

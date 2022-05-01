@@ -41,9 +41,9 @@ namespace Ogre {
         EXRCodec();
         virtual ~EXRCodec();
 
-        /// @copydoc Codec::code
+        /// @copydoc Codec::encode
         DataStreamPtr code(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
-        /// @copydoc Codec::codeToFile
+        /// @copydoc Codec::encodeToFile
         void codeToFile(MemoryDataStreamPtr& input, const String& outFileName, CodecDataPtr& pData) const;
         /// @copydoc Codec::decode
         DecodeResult decode(DataStreamPtr& input) const;

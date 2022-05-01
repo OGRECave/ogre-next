@@ -59,7 +59,6 @@ namespace Ogre
                           PixelFormat pixelFormat, bool isDepthTexture, bool isManual );
         ~GLES2DepthBuffer();
 
-        /// @copydoc DepthBuffer::isCompatible
         virtual bool isCompatible( RenderTarget *renderTarget, bool exactFormatMatch ) const;
 
         void bindToFramebuffer( GLenum target = GL_FRAMEBUFFER );
