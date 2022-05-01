@@ -485,7 +485,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa613e5ffb08b95a90644a61ac10c9b5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a>.  <a href="class_ogre_1_1_scene_manager.html#aa613e5ffb08b95a90644a61ac10c9b5c">More...</a><br /></td></tr>
 <tr class="separator:aa613e5ffb08b95a90644a61ac10c9b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a911db15a672db3ebb4837840ed2c5bf0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a911db15a672db3ebb4837840ed2c5bf0">destroySkeletonInstance</a> (<a class="el" href="class_ogre_1_1_skeleton_instance.html">SkeletonInstance</a> *skeletonInstance)</td></tr>
-<tr class="memdesc:a911db15a672db3ebb4837840ed2c5bf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys an instance of a skeleton created with @createSkeletonInstance.  <a href="class_ogre_1_1_scene_manager.html#a911db15a672db3ebb4837840ed2c5bf0">More...</a><br /></td></tr>
+<tr class="memdesc:a911db15a672db3ebb4837840ed2c5bf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys an instance of a skeleton created with <a class="el" href="class_ogre_1_1_scene_manager.html#a5fdfd9e790d2630ce07fffd8fb5a84f1" title="Creates an instance of a skeleton based on the given definition.">createSkeletonInstance()</a>.  <a href="class_ogre_1_1_scene_manager.html#a911db15a672db3ebb4837840ed2c5bf0">More...</a><br /></td></tr>
 <tr class="separator:a911db15a672db3ebb4837840ed2c5bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa12bb6b0b9cf79cf8aaa1f454cea9116"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa12bb6b0b9cf79cf8aaa1f454cea9116">destroyWireAabb</a> (<a class="el" href="class_ogre_1_1_wire_aabb.html">WireAabb</a> *wireAabb)</td></tr>
 <tr class="memdesc:aa12bb6b0b9cf79cf8aaa1f454cea9116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys an <a class="el" href="class_ogre_1_1_wire_aabb.html" title="Helper class to display the Aabb of a MovableObject as lines.">WireAabb</a> from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>.  <a href="class_ogre_1_1_scene_manager.html#aa12bb6b0b9cf79cf8aaa1f454cea9116">More...</a><br /></td></tr>
@@ -2120,7 +2120,7 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">camera</td><td>Pointer to a camera from whose viewpoint the scene is to be rendered. </td></tr>
-    <tr><td class="paramname">lodCamera</td><td>Pointer to a camera from whose LOD calculations will be based upon. Can't be null; can be equal to @camera. </td></tr>
+    <tr><td class="paramname">lodCamera</td><td>Pointer to a camera from whose LOD calculations will be based upon. Can't be null; can be equal to camera. </td></tr>
     <tr><td class="paramname">vp</td><td>The target viewport </td></tr>
     <tr><td class="paramname">firstRq</td><td>first render queue ID to render (gets clamped if too big) </td></tr>
     <tr><td class="paramname">lastRq</td><td>last render queue ID to render (gets clamped if too big) </td></tr>
@@ -3695,7 +3695,13 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 <p>Creates an instance of a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a>. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Note that this does not add the <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> to the scene hierarchy. This method is for convenience, since it allows an instance to be created for which the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> is responsible for allocating and releasing memory, which is convenient in complex scenes. </dd></dl>
 <dl class="section user"><dt></dt><dd>To include the returned <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> in the scene, use the addChild method of the <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> which is to be it's parent. </dd></dl>
-<dl class="section user"><dt></dt><dd>Note that this method takes no parameters, and the node created is unnamed (it is actually given a generated name, which you can retrieve if you want). If you wish to create a node with a specific name, call the alternative method which takes a name parameter. @params sceneType Dynamic if this node is to be updated frequently. Static if you don't plan to be updating this node in a long time (performance optimization). </dd></dl>
+<dl class="section user"><dt></dt><dd>Note that this method takes no parameters, and the node created is unnamed (it is actually given a generated name, which you can retrieve if you want). If you wish to create a node with a specific name, call the alternative method which takes a name parameter. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sceneType</td><td>Dynamic if this node is to be updated frequently. Static if you don't plan to be updating this node in a long time (performance optimization). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -4837,7 +4843,7 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Destroys an instance of a skeleton created with @createSkeletonInstance. </p>
+<p>Destroys an instance of a skeleton created with <a class="el" href="class_ogre_1_1_scene_manager.html#a5fdfd9e790d2630ce07fffd8fb5a84f1" title="Creates an instance of a skeleton based on the given definition.">createSkeletonInstance()</a>. </p>
 
 </div>
 </div>

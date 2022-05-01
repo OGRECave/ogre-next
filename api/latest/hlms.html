@@ -274,7 +274,7 @@ Preprocessor syntax</h2>
 </ul>
 <h3><a class="anchor" id="HlmsPreprocessorSyntaxProperty"></a>
 @property( expression )</h3>
-<p >Checks whether the variables in the expression are true, if so, the text inside the block is printed. Must be finazlied with @end. The expression is case sensitive. When the variable hasn't been declared, it evaluates to false.</p>
+<p >Checks whether the variables in the expression are true, if so, the text inside the block is printed. Must be finalized with @end. The expression is case sensitive. When the variable hasn't been declared, it evaluates to false.</p>
 <p >The logical operands <code>&amp;&amp; || !</code> are valid.</p>
 <p >Examples:</p>
 <div class="fragment"><div class="line">\<span class="keyword">@property</span>( hlms_skeleton )</div>
@@ -508,7 +508,8 @@ Preprocessor syntax</h2>
 <p >Analogous to 9.4.1.5.@set add sub mul div mod|outline "the family of math functions without the 'p' prefix". The difference is that the math is evaluated before anything else. There is no much use to these functions, probably except for quickly testing whether a given flag/variable is being properly set from C++ without having to recompile.</p>
 <p >i.e. If you suspect <code>hlms_normal</code> is never being set, try <code>@pset(
 hlms_normal, 1 )</code></p>
-<p >One important use worth mentioning, is that variables retain their values across shader stages. First the vertex shader template is parsed, then the pixel shader one. If 'myVal' is 0 and the vertex shader contains @counter( myVal ); when the pixel shader is parsed @value( myVal ) will return 1, not 0.</p>
+<p >One important use worth mentioning, is that variables retain their values across shader stages. First the vertex shader template is parsed, then the pixel shader one. If 'myVal' is 0 and the vertex shader contains @counter( myVal ); when the pixel shader is parsed @value(
+myVal ) will return 1, not 0.</p>
 <p >If you need to reset these variables across shader stages, you can use pset( myVal, 0 ); which is guaranteed to reset your variable to 0 before anything else happens; even if the pset is stored in a piece file.</p>
 <h1><a class="anchor" id="HlmsCreationOfShaders"></a>
 Creation of shaders</h1>

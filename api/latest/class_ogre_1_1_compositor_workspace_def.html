@@ -865,7 +865,7 @@ Friends</h2></td></tr>
 <a class="el" href="class_ogre_1_1_compositor_node_def.html#abdaf6d8ca26ad0396e2a6efbe8d75a29" title="Whether the node should be start as enabled when instantiated.">CompositorNodeDef::setStartEnabled</a>). If the workspace has already been instantiated, the node instance should be disabled, </dd>
 <dd>
 <a class="el" href="class_ogre_1_1_compositor_node.html#a817bc10dbf5427a77912ab3bcd391f69" title="Enables or disables all instances of this node.">CompositorNode::setEnabled</a>)<ol type="1">
-<li>It is safe to call this function while there are still workspaces, but you must call @Workspace::reconnectAllNodes after you're done setting the new node connections </li>
+<li>It is safe to call this function while there are still workspaces, but you must call <a class="el" href="class_ogre_1_1_compositor_workspace.html#a42fa8f13cefe564e86b7df9d836ebb86" title="Reconnects all nodes.">CompositorWorkspace::reconnectAllNodes</a> after you're done setting the new node connections </li>
 </ol>
 </dd></dl>
 
@@ -907,7 +907,7 @@ Friends</h2></td></tr>
 <a class="el" href="class_ogre_1_1_compositor_node_def.html#abdaf6d8ca26ad0396e2a6efbe8d75a29" title="Whether the node should be start as enabled when instantiated.">CompositorNodeDef::setStartEnabled</a>). If the workspace has already been instantiated, the node instance should be disabled, </dd>
 <dd>
 <a class="el" href="class_ogre_1_1_compositor_node.html#a817bc10dbf5427a77912ab3bcd391f69" title="Enables or disables all instances of this node.">CompositorNode::setEnabled</a>)<ol type="1">
-<li>It is safe to call this function while there are still workspaces, but you must call @Workspace::reconnectAllNodes after you're done setting the new node connections </li>
+<li>It is safe to call this function while there are still workspaces, but you must call <a class="el" href="class_ogre_1_1_compositor_workspace.html#a42fa8f13cefe564e86b7df9d836ebb86" title="Reconnects all nodes.">CompositorWorkspace::reconnectAllNodes</a> after you're done setting the new node connections </li>
 </ol>
 </dd></dl>
 
@@ -1667,7 +1667,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets read-only access to the map to all added nodes and their aliases. </p>
-<p >Useful to know which nodes are in use by this compositor. Use @addNodeAlias @removeNodeAlias and @connect to safely modify the map. </p>
+<p >Useful to know which nodes are in use by this compositor. Use <a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a8f157f9532ff02f2dde6fca13022fd23" title="An alias is explicitly used when the user wants to use multiple, independent instances of the same no...">addNodeAlias()</a> <a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a33890e3adb7d67644644c2f6e6231b91" title="Removes a particular Node.">removeNodeAlias()</a> and <a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a4ae38b595a596cc3e7c320458e25f9b3" title="Connects outNode&#39;s output channel to inNode&#39;s input channel.">connect()</a> to safely modify the map. </p>
 
 </div>
 </div>

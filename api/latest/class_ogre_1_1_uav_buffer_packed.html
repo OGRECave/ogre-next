@@ -1630,7 +1630,7 @@ template&lt;class Alloc &gt; </div>
   <table class="params">
     <tr><td class="paramname">data</td><td>The data to transfer to the GPU. Caller is responsible for freeing the pointer. "data" starts at offset zero. i.e. dst[elementStart * mBytesPerElement] = data[0]; </td></tr>
     <tr><td class="paramname">elementStart</td><td>The start region, usually zero. </td></tr>
-    <tr><td class="paramname">elementCount</td><td>Size, in number of elements, of data. Must be less than @getNumElements - elementStart </td></tr>
+    <tr><td class="paramname">elementCount</td><td>Size, in number of elements, of data. Must be less than <a class="el" href="class_ogre_1_1_buffer_packed.html#a024eb2f73c90ee052b3b1b275b0c83ef">getNumElements()</a> - elementStart </td></tr>
   </table>
   </dd>
 </dl>

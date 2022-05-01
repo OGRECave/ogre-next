@@ -1,5 +1,6 @@
 var group___paging =
 [
+    [ "OgrePageFileFormats.h", "_ogre_page_file_formats_8h.html", null ],
     [ "Ogre::Grid2DPageStrategy", "class_ogre_1_1_grid2_d_page_strategy.html", [
       [ "Grid2DPageStrategy", "class_ogre_1_1_grid2_d_page_strategy.html#acf674f30c1a9445835648942de7974ba", null ],
       [ "~Grid2DPageStrategy", "class_ogre_1_1_grid2_d_page_strategy.html#ab58cfc457126e2666a8cef29ea9895b0", null ],

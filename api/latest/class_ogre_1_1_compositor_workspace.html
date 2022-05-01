@@ -399,7 +399,7 @@ Public Member Functions</h2></td></tr>
 <p>Call before _update unless the final render target is not a render window. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">forceBeginFrame</td><td>Forces a beginFrame call to the D3D9 API, even if the final render target is not a RenderWindow (not recommended). To avoid forcing extra begin/end frame pairs, update your manual workspaces inside @CompositorWorkspaceListener::workspacePreUpdate (performance optimization) </td></tr>
+    <tr><td class="paramname">forceBeginFrame</td><td>Forces a beginFrame call to the D3D9 API, even if the final render target is not a RenderWindow (not recommended). To avoid forcing extra begin/end frame pairs, update your manual workspaces inside <a class="el" href="class_ogre_1_1_compositor_workspace_listener.html#aad6aea0f666028295c3efa9dc41eaceb" title="Called before all nodes are going to be updated.">CompositorWorkspaceListener::workspacePreUpdate</a> (performance optimization) </td></tr>
     <tr><td class="paramname">bInsideAutoreleasePool</td><td>If manually updating the workspace, leave this to default.</td></tr>
   </table>
   </dd>
