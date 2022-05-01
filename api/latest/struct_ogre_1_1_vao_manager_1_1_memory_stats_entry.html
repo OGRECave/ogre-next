@@ -106,11 +106,12 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a4783bbeba030c4027342a61fbc552e98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a4783bbeba030c4027342a61fbc552e98">bPoolHasTextures</a></td></tr>
-<tr class="memdesc:a4783bbeba030c4027342a61fbc552e98"><td class="mdescLeft">&#160;</td><td class="mdescRight">This value is the same for all entries with same getCombinedPoolIdx.  <a href="struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a4783bbeba030c4027342a61fbc552e98">More...</a><br /></td></tr>
+<tr class="memdesc:a4783bbeba030c4027342a61fbc552e98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relevant for Vulkan: when this value is true, the whole pool may contain texture data (not necessarily this block) See Tutorial_Memory on how to deal with this parameter.  <a href="struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a4783bbeba030c4027342a61fbc552e98">More...</a><br /></td></tr>
 <tr class="separator:a4783bbeba030c4027342a61fbc552e98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79a50788e2c67e0854b8b9f7f568909e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a79a50788e2c67e0854b8b9f7f568909e">offset</a></td></tr>
 <tr class="separator:a79a50788e2c67e0854b8b9f7f568909e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50dd8f02c454f68a88b99cfcb714fa51"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a50dd8f02c454f68a88b99cfcb714fa51">poolCapacity</a></td></tr>
+<tr class="memdesc:a50dd8f02c454f68a88b99cfcb714fa51"><td class="mdescLeft">&#160;</td><td class="mdescRight">This value is the same for all entries with same getCombinedPoolIdx.  <a href="struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a50dd8f02c454f68a88b99cfcb714fa51">More...</a><br /></td></tr>
 <tr class="separator:a50dd8f02c454f68a88b99cfcb714fa51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69ff8ae9ded00889a05b53bc46899186"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a69ff8ae9ded00889a05b53bc46899186">poolIdx</a></td></tr>
 <tr class="separator:a69ff8ae9ded00889a05b53bc46899186"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,8 +240,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>This value is the same for all entries with same getCombinedPoolIdx. </p>
-<p >Relevant for Vulkan: when this value is true, the whole pool may contain texture data (not necessarily this block) See Tutorial_Memory on how to deal with this parameter </p>
+<p>Relevant for Vulkan: when this value is true, the whole pool may contain texture data (not necessarily this block) See Tutorial_Memory on how to deal with this parameter. </p>
 
 </div>
 </div>
@@ -269,6 +269,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>This value is the same for all entries with same getCombinedPoolIdx. </p>
 
 </div>
 </div>

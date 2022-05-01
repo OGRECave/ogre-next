@@ -701,7 +701,7 @@ Public Attributes</h2></td></tr>
 
 <p>Destroys a macroblock created by <a class="el" href="class_ogre_1_1_hlms_manager.html#a064c7cfc9fb3ac1e9690f6c39a5d1449" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a>. </p>
 <p >Blocks are manually reference counted and calling this function will decrease the count.</p>
-<p >The internal object (<a class="el" href="struct_ogre_1_1_basic_block.html#a21bbcc9c98f74ec12230597d9a3e7e6d">BasicBlock::mRsData</a>) will actually be destroyed when the count reaches 0; however the actual pointer is never deallocated throghout the lifetime of <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>, it is only deactivated.</p>
+<p >The internal object (<a class="el" href="struct_ogre_1_1_basic_block.html#a21bbcc9c98f74ec12230597d9a3e7e6d" title="Render-System specific data.">BasicBlock::mRsData</a>) will actually be destroyed when the count reaches 0; however the actual pointer is never deallocated throghout the lifetime of <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>, it is only deactivated.</p>
 <p >This guarantees caches of <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a> that once a Macroblock is created, its pointer always valid.</p>
 <p >When count reaches 0, it will perform an O(N) search but N &lt;= OGRE_HLMS_NUM_MACROBLOCKS </p>
 

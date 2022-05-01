@@ -131,7 +131,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aaf249bc76b399f92c0c2f93377b032ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equality with tolerance (tolerance is max angle difference)  <a href="class_ogre_1_1_quaternion.html#aaf249bc76b399f92c0c2f93377b032ab">More...</a><br /></td></tr>
 <tr class="separator:aaf249bc76b399f92c0c2f93377b032ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9c8590b89ed8c8b48a5f188383aeadc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#ae9c8590b89ed8c8b48a5f188383aeadc">Exp</a> () const</td></tr>
-<tr class="memdesc:ae9c8590b89ed8c8b48a5f188383aeadc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply to unit-length quaternion.  <a href="class_ogre_1_1_quaternion.html#ae9c8590b89ed8c8b48a5f188383aeadc">More...</a><br /></td></tr>
 <tr class="separator:ae9c8590b89ed8c8b48a5f188383aeadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3328c1bb86d17e870c57d52720e2e32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#ac3328c1bb86d17e870c57d52720e2e32">FromAngleAxis</a> (const <a class="el" href="class_ogre_1_1_radian.html">Radian</a> &amp;rfAngle, const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;rkAxis)</td></tr>
 <tr class="memdesc:ac3328c1bb86d17e870c57d52720e2e32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setups the quaternion using the supplied vector, and "roll" around that vector by the specified radians.  <a href="class_ogre_1_1_quaternion.html#ac3328c1bb86d17e870c57d52720e2e32">More...</a><br /></td></tr>
@@ -153,6 +152,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a15c912e62c9abcb3335de205cdf30c2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the local yaw element of this quaternion.  <a href="class_ogre_1_1_quaternion.html#a15c912e62c9abcb3335de205cdf30c2d">More...</a><br /></td></tr>
 <tr class="separator:a15c912e62c9abcb3335de205cdf30c2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae370a6b879cf4d03fb85d8ce510705c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#ae370a6b879cf4d03fb85d8ce510705c1">Inverse</a> () const</td></tr>
+<tr class="memdesc:ae370a6b879cf4d03fb85d8ce510705c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply to non-zero quaternion.  <a href="class_ogre_1_1_quaternion.html#ae370a6b879cf4d03fb85d8ce510705c1">More...</a><br /></td></tr>
 <tr class="separator:ae370a6b879cf4d03fb85d8ce510705c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac566d9e46f5c1b6368047c132e82a829"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#ac566d9e46f5c1b6368047c132e82a829">isNaN</a> () const</td></tr>
 <tr class="memdesc:ac566d9e46f5c1b6368047c132e82a829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether this quaternion contains valid values.  <a href="class_ogre_1_1_quaternion.html#ac566d9e46f5c1b6368047c132e82a829">More...</a><br /></td></tr>
@@ -211,7 +211,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6005735392c9b07901b8fe160c959f46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#a6005735392c9b07901b8fe160c959f46">ToRotationMatrix</a> (<a class="el" href="class_ogre_1_1_matrix3.html">Matrix3</a> &amp;kRot) const</td></tr>
 <tr class="separator:a6005735392c9b07901b8fe160c959f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a821a464cce9a81d5d20c620025043851"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#a821a464cce9a81d5d20c620025043851">UnitInverse</a> () const</td></tr>
-<tr class="memdesc:a821a464cce9a81d5d20c620025043851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply to non-zero quaternion.  <a href="class_ogre_1_1_quaternion.html#a821a464cce9a81d5d20c620025043851">More...</a><br /></td></tr>
+<tr class="memdesc:a821a464cce9a81d5d20c620025043851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply to unit-length quaternion.  <a href="class_ogre_1_1_quaternion.html#a821a464cce9a81d5d20c620025043851">More...</a><br /></td></tr>
 <tr class="separator:a821a464cce9a81d5d20c620025043851"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5e21a3d70d015b252b60a4fc95efd1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#ac5e21a3d70d015b252b60a4fc95efd1f">xAxis</a> () const</td></tr>
 <tr class="memdesc:ac5e21a3d70d015b252b60a4fc95efd1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the X orthonormal axis defining the quaternion.  <a href="class_ogre_1_1_quaternion.html#ac5e21a3d70d015b252b60a4fc95efd1f">More...</a><br /></td></tr>
@@ -583,8 +583,6 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Apply to unit-length quaternion. </p>
-
 </div>
 </div>
 <a id="ac3328c1bb86d17e870c57d52720e2e32" name="ac3328c1bb86d17e870c57d52720e2e32"></a>
@@ -840,6 +838,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Apply to non-zero quaternion. </p>
 
 </div>
 </div>
@@ -1641,7 +1641,7 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Apply to non-zero quaternion. </p>
+<p>Apply to unit-length quaternion. </p>
 
 </div>
 </div>

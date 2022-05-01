@@ -103,12 +103,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9ed12c63e911c6a05d376f5ddf9abc29"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_outside_marker.html#a9ed12c63e911c6a05d376f5ddf9abc29">LodOutsideMarker</a> (<a class="el" href="struct_ogre_1_1_lod_data.html#a32cd8e13260aee70438200ab684d235c">LodData::VertexList</a> &amp;vertexList, <a class="el" href="struct_ogre_1_1_lod_data.html#a5348da65897ff8c17af1ada6f3d1be3f">LodData::TriangleList</a> &amp;triangleList, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> boundingSphereRadius, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> walkAngle)</td></tr>
 <tr class="separator:a9ed12c63e911c6a05d376f5ddf9abc29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca910316d85300475e4d5a4658f27513"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre_1_1v1.html#a500ac3b30068793f1dda3f0627c5cf67">v1::MeshPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_outside_marker.html#aca910316d85300475e4d5a4658f27513">createConvexHullMesh</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;meshName, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;resourceGroupName=<a class="el" href="class_ogre_1_1_resource_group_manager.html#a813da407fd91dc1afee86103d3a4f5cc">ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME</a>)</td></tr>
-<tr class="memdesc:aca910316d85300475e4d5a4658f27513"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark vertices, which are visible from outside.  <a href="class_ogre_1_1_lod_outside_marker.html#aca910316d85300475e4d5a4658f27513">More...</a><br /></td></tr>
+<tr class="memdesc:aca910316d85300475e4d5a4658f27513"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a mesh containing the Convex Hull shape.  <a href="class_ogre_1_1_lod_outside_marker.html#aca910316d85300475e4d5a4658f27513">More...</a><br /></td></tr>
 <tr class="separator:aca910316d85300475e4d5a4658f27513"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05e6374a8d4df03160d5fbbf46338b24"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_outside_marker.html#a05e6374a8d4df03160d5fbbf46338b24">isVertexOutside</a> (<a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a> v)</td></tr>
-<tr class="memdesc:a05e6374a8d4df03160d5fbbf46338b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a mesh containing the Convex Hull shape.  <a href="class_ogre_1_1_lod_outside_marker.html#a05e6374a8d4df03160d5fbbf46338b24">More...</a><br /></td></tr>
 <tr class="separator:a05e6374a8d4df03160d5fbbf46338b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29dd4b0f1d314671a8eb66a6ae260f93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_outside_marker.html#a29dd4b0f1d314671a8eb66a6ae260f93">markOutside</a> ()</td></tr>
+<tr class="memdesc:a29dd4b0f1d314671a8eb66a6ae260f93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark vertices, which are visible from outside.  <a href="class_ogre_1_1_lod_outside_marker.html#a29dd4b0f1d314671a8eb66a6ae260f93">More...</a><br /></td></tr>
 <tr class="separator:a29dd4b0f1d314671a8eb66a6ae260f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -189,7 +189,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Mark vertices, which are visible from outside. </p>
+<p>Returns a mesh containing the Convex Hull shape. </p>
 
 </div>
 </div>
@@ -217,8 +217,6 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns a mesh containing the Convex Hull shape. </p>
-
 </div>
 </div>
 <a id="a29dd4b0f1d314671a8eb66a6ae260f93" name="a29dd4b0f1d314671a8eb66a6ae260f93"></a>
@@ -235,6 +233,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Mark vertices, which are visible from outside. </p>
 
 </div>
 </div>

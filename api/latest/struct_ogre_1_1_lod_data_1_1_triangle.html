@@ -110,7 +110,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab8191f26f8cff8e435c382cbe5a45cf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_lod_data_1_1_triangle.html#ab8191f26f8cff8e435c382cbe5a45cf2">setRemoved</a> ()</td></tr>
 <tr class="separator:ab8191f26f8cff8e435c382cbe5a45cf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f06249cd6d988838a6b0674d7eb5796"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_lod_data_1_1_triangle.html#a8f06249cd6d988838a6b0674d7eb5796">submeshID</a> () const</td></tr>
-<tr class="memdesc:a8f06249cd6d988838a6b0674d7eb5796"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">Vertex</a> ID in the buffer associated with the submeshID.  <a href="struct_ogre_1_1_lod_data_1_1_triangle.html#a8f06249cd6d988838a6b0674d7eb5796">More...</a><br /></td></tr>
 <tr class="separator:a8f06249cd6d988838a6b0674d7eb5796"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -118,11 +117,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ac177a86ec820bd4bdf9ab1578132885e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_lod_data_1_1_triangle.html#ac177a86ec820bd4bdf9ab1578132885e">normal</a></td></tr>
 <tr class="separator:ac177a86ec820bd4bdf9ab1578132885e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e13621fd2152e78b60f7f3a3678e1ae"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_lod_data_1_1_triangle.html#a0e13621fd2152e78b60f7f3a3678e1ae">submeshIDOrRemovedTag</a></td></tr>
+<tr class="memdesc:a0e13621fd2152e78b60f7f3a3678e1ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID of the submesh.  <a href="struct_ogre_1_1_lod_data_1_1_triangle.html#a0e13621fd2152e78b60f7f3a3678e1ae">More...</a><br /></td></tr>
 <tr class="separator:a0e13621fd2152e78b60f7f3a3678e1ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aead4b68416ce44e112bc0f260a219379"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">VertexI</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_lod_data_1_1_triangle.html#aead4b68416ce44e112bc0f260a219379">vertexi</a> [3]</td></tr>
 <tr class="separator:aead4b68416ce44e112bc0f260a219379"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff1395c324d8808f43dcc76b8a5cdb3b"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_lod_data_1_1_triangle.html#aff1395c324d8808f43dcc76b8a5cdb3b">vertexID</a> [3]</td></tr>
-<tr class="memdesc:aff1395c324d8808f43dcc76b8a5cdb3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID of the submesh.  <a href="struct_ogre_1_1_lod_data_1_1_triangle.html#aff1395c324d8808f43dcc76b8a5cdb3b">More...</a><br /></td></tr>
+<tr class="memdesc:aff1395c324d8808f43dcc76b8a5cdb3b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">Vertex</a> ID in the buffer associated with the submeshID.  <a href="struct_ogre_1_1_lod_data_1_1_triangle.html#aff1395c324d8808f43dcc76b8a5cdb3b">More...</a><br /></td></tr>
 <tr class="separator:aff1395c324d8808f43dcc76b8a5cdb3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -278,8 +278,6 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">Vertex</a> ID in the buffer associated with the submeshID. </p>
-
 <p class="reference">References <a class="el" href="_ogre_exception_8h.html#a8d9e90638349c941f0cc0af76cad1ae4">OgreAssert</a>.</p>
 
 </div>
@@ -311,6 +309,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>ID of the submesh. </p>
+<p >Usable with mMesh.getSubMesh() function. Holds ~0U for removed triangles </p>
+
 </div>
 </div>
 <a id="aead4b68416ce44e112bc0f260a219379" name="aead4b68416ce44e112bc0f260a219379"></a>
@@ -339,8 +340,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>ID of the submesh. </p>
-<p >Usable with mMesh.getSubMesh() function. Holds ~0U for removed triangles </p>
+<p><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">Vertex</a> ID in the buffer associated with the submeshID. </p>
 
 </div>
 </div>
