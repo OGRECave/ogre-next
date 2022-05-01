@@ -80,8 +80,7 @@ namespace Ogre
         {
             name += ".so.";
             name += StringConverter::toString( OGRE_VERSION_MAJOR ) + ".";
-            name += StringConverter::toString( OGRE_VERSION_MINOR ) + ".";
-            name += StringConverter::toString( OGRE_VERSION_PATCH );
+            name += StringConverter::toString( OGRE_VERSION_MINOR );
         }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
         // dlopen() does not add .dylib to the filename, like windows does for .dll
