@@ -184,7 +184,7 @@ namespace Ogre
 
         MappingState getMappingState() const { return mMappingState; }
 
-        /** Returns true if our next call to @map() with the same parameters will stall.
+        /** Returns true if our next call to map() with the same parameters will stall.
             @see StagingStallType
         @remarks
             Not all RenderSystems can accurately give this information and will always

@@ -168,7 +168,7 @@ namespace Ogre
         void setInformHlmsOfTextureData( bool bInformHlms );
 
         /** Sets the number of threads per group. Note the actual value may be
-            changed by the shader template using the @pset() function.
+            changed by the shader template using the \@pset() function.
             These values are passed to the template as:
                 + threads_per_group_x
                 + threads_per_group_y
@@ -189,7 +189,7 @@ namespace Ogre
         const uint32 *getThreadsPerGroup() const { return mThreadsPerGroup; }
 
         /** Sets the number of groups of threads to dispatch. Note the actual value may be
-            changed by the shader template using the @pset() function.
+            changed by the shader template using the \@pset() function.
             These values are passed to the template as:
                 + num_thread_groups_x
                 + num_thread_groups_y
@@ -252,7 +252,7 @@ namespace Ogre
         void  setProperty( IdString key, int32 value );
         int32 getProperty( IdString key, int32 defaultVal = 0 ) const;
 
-        /** Defines a piece, i.e. the same as doing @piece( pieceName )pieceContent@end
+        /** Defines a piece, i.e. the same as doing \@piece( pieceName )pieceContent\@end
             If the piece doesn't exist, it gets created.
             If the piece already exists, it gets overwritten.
         @remarks

@@ -1141,7 +1141,7 @@ namespace Ogre
                 actually given a generated name, which you can retrieve if you want).
                 If you wish to create a node with a specific name, call the alternative method
                 which takes a name parameter.
-            @params sceneType
+            @param sceneType
                 Dynamic if this node is to be updated frequently. Static if you don't plan to be
                 updating this node in a long time (performance optimization).
         */
@@ -1541,7 +1541,7 @@ namespace Ogre
 
         /// Creates an instance of a skeleton based on the given definition.
         SkeletonInstance *createSkeletonInstance( const SkeletonDef *skeletonDef );
-        /// Destroys an instance of a skeleton created with @createSkeletonInstance.
+        /// Destroys an instance of a skeleton created with createSkeletonInstance().
         void destroySkeletonInstance( SkeletonInstance *skeletonInstance );
         /// Removes a skeleton definition from its memory manager.
         void _removeSkeletonDef( const SkeletonDef *skeletonDef );
@@ -1903,7 +1903,7 @@ namespace Ogre
             @param camera Pointer to a camera from whose viewpoint the scene is to
                 be rendered.
             @param lodCamera Pointer to a camera from whose LOD calculations will be
-                based upon. Can't be null; can be equal to @camera.
+                based upon. Can't be null; can be equal to camera.
             @param vp The target viewport
             @param firstRq first render queue ID to render (gets clamped if too big)
             @param lastRq last render queue ID to render (gets clamped if too big)

@@ -335,7 +335,7 @@ case sensitive. The following keywords are recognized:
 ### \@property( expression ) {#HlmsPreprocessorSyntaxProperty}
 
 Checks whether the variables in the expression are true, if so, the text
-inside the block is printed. Must be finazlied with @end. The expression
+inside the block is printed. Must be finalized with \@end. The expression
 is case sensitive. When the variable hasn't been declared, it evaluates
 to false.
 
@@ -629,7 +629,7 @@ output showed the overriden `Hello` version.
 ### @pset padd psub pmul pdiv pmod pmin pmax {#HlmsPreprocessorSyntaxPsetEtc}
 
 Analogous to [the family of math functions without the 'p'
-prefix](#9.4.1.5.@set add sub mul div mod|outline). The difference is
+prefix](#9.4.1.5.\@set add sub mul div mod|outline). The difference is
 that the math is evaluated before anything else. There is no much use to
 these functions, probably except for quickly testing whether a given
 flag/variable is being properly set from C++ without having to
@@ -641,7 +641,7 @@ hlms_normal, 1 )`
 One important use worth mentioning, is that variables retain their
 values across shader stages. First the vertex shader template is parsed,
 then the pixel shader one. If 'myVal' is 0 and the vertex shader
-contains @counter( myVal ); when the pixel shader is parsed @value(
+contains \@counter( myVal ); when the pixel shader is parsed \@value(
 myVal ) will return 1, not 0.
 
 If you need to reset these variables across shader stages, you can use
@@ -721,7 +721,7 @@ more control but you'll have to do some of the work the base class does.
 For some particularly complex features, the Hlms preprocessor may not be
 enough, too difficult, or just impossible to implement, and thus you can
 generate the string from C++ and send it as a piece. The template shader
-can insert it using @insertpiece.
+can insert it using \@insertpiece.
 
 The function `Hlms::createShaderCacheEntry` is the main responsible for
 generating the shaders and parsing the template through the Hlms
@@ -767,7 +767,7 @@ shader will be created. However there are times where you want to use a
 template but only use this stage in particular scenarios (e.g. toggled
 by a material parameter, disable it for shadow mapping, etc.). In this
 case, set the property `hlms_disable_stage` to non-zero from within the
-template (i.e. using @set) . The value of this property is reset to 0
+template (i.e. using \@set) . The value of this property is reset to 0
 for every stage.
 
 Note that even when disabled, the Hlms template will be fully parsed and

@@ -288,7 +288,7 @@ namespace Ogre
         void notifyDestroyed( const UavBufferPacked *buffer );
 
         /** Internal Use. Called when connections are all being zero'ed. We rely our
-            caller is doing this to all nodes, hence we do not notify our @mConnectedNodes
+            caller is doing this to all nodes, hence we do not notify our CompositorNode#mConnectedNodes
             nodes. Failing to clear them too may leave dangling pointers or graphical glitches
         @remarks
             Destroys all of our passes.

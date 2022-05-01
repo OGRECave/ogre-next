@@ -58,7 +58,7 @@ namespace Ogre
         pass them to the output channels.
     @par
         How nodes input and output channels are wired together depends on the Workspace (See
-        @CompositorWorkspace and @CompositorWorkspaceDef)
+        CompositorWorkspace and CompositorWorkspaceDef)
         A node cannot receive input from two nodes in the same channel, but it can send output
         to more than one node using the same output channel.
     @par
@@ -66,8 +66,8 @@ namespace Ogre
         and unless it is disabled, the Compositor will be unable to render.
     @par
         The other core feature of nodes (besides textures and channels) is that they perform
-        passes on RTs. A pass is the basic way to render: it can be a @PASS_SCENE, @PASS_QUAD,
-        @PASS_CLEAR, @PASS_STENCIL, @PASS_RESOLVE
+        passes on RTs. A pass is the basic way to render: it can be a #PASS_SCENE, #PASS_QUAD,
+        #PASS_CLEAR, #PASS_STENCIL, #PASS_RESOLVE
     @par
         This is the definition. For the instantiation, @see CompositorNode
     @remarks

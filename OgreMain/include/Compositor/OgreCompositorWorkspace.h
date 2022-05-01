@@ -231,7 +231,7 @@ namespace Ogre
         @param forceBeginFrame
             Forces a beginFrame call to the D3D9 API, even if the final render target is not
             a RenderWindow (not recommended). To avoid forcing extra begin/end frame pairs,
-            update your manual workspaces inside @CompositorWorkspaceListener::workspacePreUpdate
+            update your manual workspaces inside CompositorWorkspaceListener::workspacePreUpdate
             (performance optimization)
         @param bInsideAutoreleasePool
             If manually updating the workspace, leave this to default.
