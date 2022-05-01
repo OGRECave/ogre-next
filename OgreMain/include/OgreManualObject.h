@@ -461,7 +461,7 @@ namespace Ogre
                 void getRenderOperation( RenderOperation &op, bool casterPass ) override;
                 /** @copydoc Renderable::getWorldTransforms. */
                 void getWorldTransforms( Matrix4 *xform ) const override;
-                 Real getSquaredViewDepth( const Ogre::Camera * ) const;
+                Real getSquaredViewDepth( const Ogre::Camera * ) const;
                 /** @copydoc Renderable::getLights. */
                 const LightList &getLights() const override;
             };
