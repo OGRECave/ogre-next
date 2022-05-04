@@ -286,7 +286,7 @@ midf3 BRDF_IR( midf3 lightDir, midf3 lightDiffuse, PixelData pixelData )
 	@end
 
 	midf3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * _h( 3.141592654 ) * fresnelD;
-	midf3 Rs = pixelData.envColourS * pixelData.specular.xyz * ( fresnelS * envBRDF.x + envBRDF.y );
+	midf3 Rs = pixelData.envColourS * pixelData.specular.xyz * ( pixelData.F0 * envBRDF.x + envBRDF.y );
 
 	@property( clear_coat )
 		@property( normal_map )
