@@ -267,7 +267,6 @@ midf3 BRDF_IR( midf3 lightDir, midf3 lightDiffuse, PixelData pixelData )
 	//	H = geomNormal
 	//Thus H = N, and therefore we use VdotN (NdotV)
 	//float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
-	float_fresnel fresnelS = @insertpiece( getSpecularFresnelWithRoughness );
 
 	@property( ltc_texture_available )
 		#define brdfLUT ltcMatrix
@@ -278,14 +277,7 @@ midf3 BRDF_IR( midf3 lightDir, midf3 lightDiffuse, PixelData pixelData )
 		midf3 envBRDF = midf3_c( 1.0f, 0.0f, 1.0f );
 	@end
 
-	@property( fresnel_separate_diffuse )
-		midf NdotL = saturate( dot( pixelData.normal, pixelData.reflDir ) );
-		float_fresnel fresnelD = @insertpiece( getDiffuseFresnelWithRoughness );
-	@else
-		midf fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
-	@end
-
-	midf3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * _h( 3.141592654 ) * fresnelD * envBRDF.z;
+	midf3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * _h( 3.141592654 ) * envBRDF.z;
 	midf3 Rs = pixelData.envColourS * pixelData.specular.xyz * ( pixelData.F0 * envBRDF.x + envBRDF.y );
 
 	@property( clear_coat )
