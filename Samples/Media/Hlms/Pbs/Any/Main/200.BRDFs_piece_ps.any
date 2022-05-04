@@ -197,14 +197,8 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
 	midf lightScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - NdotL, _h( 5.0 ) );
 	midf viewScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - pixelData.NdotV, _h( 5.0 ) );
 
-    @property( fresnel_separate_diffuse )
-        float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
-    @else
-		midf fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
-    @end
-
 	//We should divide Rd by PI, but it is already included in kD
-	midf3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz;
+	midf3 Rd = (lightScatter * viewScatter * energyFactor) * pixelData.diffuse.xyz;
 
 	@property( clear_coat )
 		midf3 color = Rd + Rs;
