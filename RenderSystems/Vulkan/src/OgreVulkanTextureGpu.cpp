@@ -635,7 +635,7 @@ namespace Ogre
             imageBarrier[0].subresourceRange.baseMipLevel = static_cast<uint32_t>( i );
             imageBarrier[1].subresourceRange.baseMipLevel = static_cast<uint32_t>( i + 1u );
 
-            const uint32 numBarriers = i == (numMipmaps - 1u) ? 1u : 2u;
+            const uint32 numBarriers = i == ( numMipmaps - 1u ) ? 1u : 2u;
 
             // Wait for vkCmdBlitImage on mip i to finish before advancing to mip i+1
             // Also transition src mip 'i' to TRANSFER_SRC_OPTIMAL
@@ -783,6 +783,12 @@ namespace Ogre
         VkImageView imageView;
         VkResult result = vkCreateImageView( device->mDevice, &imageViewCi, 0, &imageView );
         checkVkResult( result, "vkCreateImageView" );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        const String textureName = getNameStr() + "(View)";
+        setObjectName( device->mDevice, (uint64_t)imageView, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT,
+                       textureName.c_str() );
+#endif
 
         return imageView;
     }
