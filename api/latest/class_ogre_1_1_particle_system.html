@@ -537,6 +537,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a22cc682d26dc6a3502632829323464d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the render queue group this entity will be rendered through.  <a href="class_ogre_1_1_particle_system.html#a22cc682d26dc6a3502632829323464d8">More...</a><br /></td></tr>
 <tr class="separator:a22cc682d26dc6a3502632829323464d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59ee8a596d0ba5ca8d333aebc3a971a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a59ee8a596d0ba5ca8d333aebc3a971a7">setRenderQueueSubGroup</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> subGroup)</td></tr>
+<tr class="memdesc:a59ee8a596d0ba5ca8d333aebc3a971a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the render queue sub group.  <a href="class_ogre_1_1_particle_system.html#a59ee8a596d0ba5ca8d333aebc3a971a7">More...</a><br /></td></tr>
 <tr class="separator:a59ee8a596d0ba5ca8d333aebc3a971a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cd15e3a5caae8ae786bd752c6b27f26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a7cd15e3a5caae8ae786bd752c6b27f26">setShadowRenderingDistance</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> dist)</td></tr>
 <tr class="memdesc:a7cd15e3a5caae8ae786bd752c6b27f26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the distance at which the object is no longer casting shadows.  <a href="class_ogre_1_1_movable_object.html#a7cd15e3a5caae8ae786bd752c6b27f26">More...</a><br /></td></tr>
@@ -5073,7 +5074,16 @@ template&lt;class Alloc &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Sets the render queue sub group. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Within the same <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> ID, you may want to have the renderables to have a specific order (i.e. have a mesh, but the hair submesh with alpha blending needs to be rendered last). </dd></dl>
+<dl class="section user"><dt></dt><dd><a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> Subgroups are useful for manually sorting objects, just like <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> IDs. However, <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> IDs can also be useful for skipping large number of objects through clever compositing and thus a performance optimization. Subgroups cannot be used for such optimizations. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">subGroup</td><td>The sub group. This value can't exceed OGRE_MAKE_MASK( SubRqIdBits ) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> </dd></dl>
 
 </div>
 </div>

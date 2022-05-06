@@ -151,6 +151,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a53dac90cc026287b9b0aee9264e9059f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a53dac90cc026287b9b0aee9264e9059f">destroyAllPasses</a> ()</td></tr>
 <tr class="separator:a53dac90cc026287b9b0aee9264e9059f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e91b900d7e9d85bafd312929f4724d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#a5e91b900d7e9d85bafd312929f4724d4">finalTargetResized01</a> (const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *finalTarget) override</td></tr>
+<tr class="memdesc:a5e91b900d7e9d85bafd312929f4724d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> when (i.e.) the RenderWindow was resized, thus our RTs that depend on their resolution need to be recreated.  <a href="class_ogre_1_1_compositor_shadow_node.html#a5e91b900d7e9d85bafd312929f4724d4">More...</a><br /></td></tr>
 <tr class="separator:a5e91b900d7e9d85bafd312929f4724d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b44e15ffbff3bd7006aa45a6676d47f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a9b44e15ffbff3bd7006aa45a6676d47f">finalTargetResized02</a> (const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *finalTarget)</td></tr>
 <tr class="separator:a9b44e15ffbff3bd7006aa45a6676d47f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +199,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a422f16656a84122e0d253eff22fb8d07"><td class="mdescLeft">&#160;</td><td class="mdescRight">The return value may change in the future, which happens when the number of lights changes to or from a value lower than the supported shadow casting lights by the definition.  <a href="class_ogre_1_1_compositor_shadow_node.html#a422f16656a84122e0d253eff22fb8d07">More...</a><br /></td></tr>
 <tr class="separator:a422f16656a84122e0d253eff22fb8d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a329444d41283a85be5e6191c525aedef"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a329444d41283a85be5e6191c525aedef">getPassNumber</a> (<a class="el" href="class_ogre_1_1_compositor_pass.html">CompositorPass</a> *pass) const</td></tr>
+<tr class="memdesc:a329444d41283a85be5e6191c525aedef"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_compositor_node_def.html#a6fa98a167d723f5296d48926980aa4f6" title="Returns the pass # of the given pass definition in this node.">CompositorNodeDef::getPassNumber</a>.  <a href="class_ogre_1_1_compositor_node.html#a329444d41283a85be5e6191c525aedef">More...</a><br /></td></tr>
 <tr class="separator:a329444d41283a85be5e6191c525aedef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa14189ecdcfc0f73c86aa992871fc54b"><td class="memItemLeft" align="right" valign="top">const vector&lt; <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;::type *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#aa14189ecdcfc0f73c86aa992871fc54b">getPssmBlends</a> (size_t shadowMapIdx) const</td></tr>
 <tr class="memdesc:aa14189ecdcfc0f73c86aa992871fc54b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of points with the blend band boundaries of the closest N-1 PSSM split in projection space for the given shadow map index.  <a href="class_ogre_1_1_compositor_shadow_node.html#aa14189ecdcfc0f73c86aa992871fc54b">More...</a><br /></td></tr>
@@ -836,7 +838,15 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Called by <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> when (i.e.) the RenderWindow was resized, thus our RTs that depend on their resolution need to be recreated. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>We inform all connected nodes and passes related to us of RenderTargets/Textures that may have been recreated (pointers could become danlging otherwise). </dd></dl>
+<dl class="section user"><dt></dt><dd>This is divided in two steps: recreateResizableTextures01 &amp; recreateResizableTextures02 since in some cases in <a class="el" href="class_ogre_1_1_render_pass_descriptor.html">RenderPassDescriptor</a>, setting up MRT and depth textures requires all textures to be up to date, otherwise validation errors would occur since we'll have partial data (e.g. MRT 0 is 1024x768 while MRT 1 is 800x600) </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">finalTarget</td><td>The Final Target (i.e. RenderWindow) from which we'll base our local textures' resolution. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_compositor_node.html#ab5c743a62e8a202dc5816f0bd01fe8b9">Ogre::CompositorNode</a>.</p>
 
@@ -1376,7 +1386,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>See <a class="el" href="class_ogre_1_1_compositor_node_def.html#a6fa98a167d723f5296d48926980aa4f6" title="Returns the pass # of the given pass definition in this node.">CompositorNodeDef::getPassNumber</a>. </p>
 
 </div>
 </div>

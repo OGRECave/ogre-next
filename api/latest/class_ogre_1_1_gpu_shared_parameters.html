@@ -222,6 +222,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac912b1953576dd4b34e1019019952738"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a <a class="el" href="class_ogre_1_1_matrix4.html" title="Class encapsulating a standard 4x4 homogeneous matrix.">Matrix4</a> parameter to the program.  <a href="class_ogre_1_1_gpu_shared_parameters.html#ac912b1953576dd4b34e1019019952738">More...</a><br /></td></tr>
 <tr class="separator:ac912b1953576dd4b34e1019019952738"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6be98a104e13cbd4c9c550ee88cac6de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#a6be98a104e13cbd4c9c550ee88cac6de">setNamedConstant</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> *m, size_t numEntries)</td></tr>
+<tr class="memdesc:a6be98a104e13cbd4c9c550ee88cac6de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a list of <a class="el" href="class_ogre_1_1_matrix4.html" title="Class encapsulating a standard 4x4 homogeneous matrix.">Matrix4</a> parameters to the program.  <a href="class_ogre_1_1_gpu_shared_parameters.html#a6be98a104e13cbd4c9c550ee88cac6de">More...</a><br /></td></tr>
 <tr class="separator:a6be98a104e13cbd4c9c550ee88cac6de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ec33fb8190dc9956427fdc4c39cd152"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#a8ec33fb8190dc9956427fdc4c39cd152">setNamedConstant</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> *val, size_t count)</td></tr>
 <tr class="separator:a8ec33fb8190dc9956427fdc4c39cd152"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1393,8 +1394,6 @@ template&lt;class Alloc &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p></p>
-
 </div>
 </div>
 <a id="ac60bc2d912c0610ff23d03fc53341d0c" name="ac60bc2d912c0610ff23d03fc53341d0c"></a>
@@ -1429,8 +1428,6 @@ template&lt;class Alloc &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p></p>
-
 </div>
 </div>
 <a id="aa738d63d8a5fdbe3095a73d1824e4497" name="aa738d63d8a5fdbe3095a73d1824e4497"></a>
@@ -1464,8 +1461,6 @@ template&lt;class Alloc &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p></p>
 
 </div>
 </div>
@@ -1538,7 +1533,15 @@ template&lt;class Alloc &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Sets a list of <a class="el" href="class_ogre_1_1_matrix4.html" title="Class encapsulating a standard 4x4 homogeneous matrix.">Matrix4</a> parameters to the program. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the parameter; this must be the first index of an array, for examples 'matrices[0]' NB since a <a class="el" href="class_ogre_1_1_matrix4.html" title="Class encapsulating a standard 4x4 homogeneous matrix.">Matrix4</a> is 16 floats long, so each entry will take up 4 indexes. </td></tr>
+    <tr><td class="paramname">m</td><td>Pointer to an array of matrices to set </td></tr>
+    <tr><td class="paramname">numEntries</td><td>Number of <a class="el" href="class_ogre_1_1_matrix4.html" title="Class encapsulating a standard 4x4 homogeneous matrix.">Matrix4</a> entries </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1573,8 +1576,6 @@ template&lt;class Alloc &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p></p>
 
 </div>
 </div>

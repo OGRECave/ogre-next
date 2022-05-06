@@ -112,8 +112,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4eac3e66e0b4c384fc4a6720b73294f8"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_x_r_codec.html#a4eac3e66e0b4c384fc4a6720b73294f8">~EXRCodec</a> ()</td></tr>
 <tr class="separator:a4eac3e66e0b4c384fc4a6720b73294f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad03f4fc0732f947afa3eec332fc82545"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_x_r_codec.html#ad03f4fc0732f947afa3eec332fc82545">code</a> (<a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a> &amp;input, CodecDataPtr &amp;pData) const</td></tr>
+<tr class="memdesc:ad03f4fc0732f947afa3eec332fc82545"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data in the input stream and saves the result in the output stream.  <a href="class_ogre_1_1_e_x_r_codec.html#ad03f4fc0732f947afa3eec332fc82545">More...</a><br /></td></tr>
 <tr class="separator:ad03f4fc0732f947afa3eec332fc82545"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a665bbd9523035f3e3a520ca3955e5bcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_x_r_codec.html#a665bbd9523035f3e3a520ca3955e5bcc">codeToFile</a> (<a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a> &amp;input, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outFileName, CodecDataPtr &amp;pData) const</td></tr>
+<tr class="memdesc:a665bbd9523035f3e3a520ca3955e5bcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data in the input chunk and saves the result in the output filename provided.  <a href="class_ogre_1_1_e_x_r_codec.html#a665bbd9523035f3e3a520ca3955e5bcc">More...</a><br /></td></tr>
 <tr class="separator:a665bbd9523035f3e3a520ca3955e5bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeea8d5d42e94d56d1fbd900aa69116bc"><td class="memItemLeft" align="right" valign="top">DecodeResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_x_r_codec.html#aeea8d5d42e94d56d1fbd900aa69116bc">decode</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;input) const</td></tr>
 <tr class="memdesc:aeea8d5d42e94d56d1fbd900aa69116bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data from the input chunk into the output chunk.  <a href="class_ogre_1_1_e_x_r_codec.html#aeea8d5d42e94d56d1fbd900aa69116bc">More...</a><br /></td></tr>
@@ -196,7 +198,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Codes the data in the input stream and saves the result in the output stream. </p>
 
 </div>
 </div>
@@ -232,7 +234,15 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Codes the data in the input chunk and saves the result in the output filename provided. </p>
+<p >Provided for efficiency since coding to memory is progressive therefore memory required is unknown leading to reallocations. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>The input data </td></tr>
+    <tr><td class="paramname">outFileName</td><td>The filename to write to </td></tr>
+    <tr><td class="paramname">pData</td><td>Extra information to be passed to the codec (codec type specific) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

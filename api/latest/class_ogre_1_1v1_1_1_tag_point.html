@@ -267,6 +267,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a6a9e7fcd31c5a82527a09ef553477a7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for mManuallyControlled Flag.  <a href="class_ogre_1_1v1_1_1_old_bone.html#a6a9e7fcd31c5a82527a09ef553477a7c">More...</a><br /></td></tr>
 <tr class="separator:a6a9e7fcd31c5a82527a09ef553477a7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab7f0b1349a21b1702791a394f53a863"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_tag_point.html#aab7f0b1349a21b1702791a394f53a863">needUpdate</a> (bool forceParentUpdate=false) override</td></tr>
+<tr class="memdesc:aab7f0b1349a21b1702791a394f53a863"><td class="mdescLeft">&#160;</td><td class="mdescRight">To be called in the event of transform changes to this <a class="el" href="class_ogre_1_1v1_1_1_old_node.html" title="Class representing a general-purpose OldNode an articulated scene graph.">OldNode</a> that require it's recalculation.  <a href="class_ogre_1_1v1_1_1_tag_point.html#aab7f0b1349a21b1702791a394f53a863">More...</a><br /></td></tr>
 <tr class="separator:aab7f0b1349a21b1702791a394f53a863"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06c81493701d12d0288586ea6d694651"><td class="memItemLeft" align="right" valign="top">virtual unsigned short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a06c81493701d12d0288586ea6d694651">numChildren</a> () const</td></tr>
 <tr class="memdesc:a06c81493701d12d0288586ea6d694651"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the number of child OldNodes under this one.  <a href="class_ogre_1_1v1_1_1_old_node.html#a06c81493701d12d0288586ea6d694651">More...</a><br /></td></tr>
@@ -1883,7 +1884,14 @@ See setInheritOrientation for more info. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>To be called in the event of transform changes to this <a class="el" href="class_ogre_1_1v1_1_1_old_node.html" title="Class representing a general-purpose OldNode an articulated scene graph.">OldNode</a> that require it's recalculation. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>This not only tags the <a class="el" href="class_ogre_1_1v1_1_1_old_node.html" title="Class representing a general-purpose OldNode an articulated scene graph.">OldNode</a> state as being 'dirty', it also requests it's parent to know about it's dirtiness so it will get an update next time. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forceParentUpdate</td><td>Even if the <a class="el" href="class_ogre_1_1v1_1_1_old_node.html" title="Class representing a general-purpose OldNode an articulated scene graph.">OldNode</a> thinks it has already told it's parent, tell it anyway </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1v1_1_1_old_bone.html#a750bfb42b8b4fc335f4c51a753ce5479">Ogre::v1::OldBone</a>.</p>
 
@@ -2400,7 +2408,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Queue a 'needUpdate' call to a <a class="el" href="class_ogre_1_1v1_1_1_old_node.html" title="Class representing a general-purpose OldNode an articulated scene graph.">OldNode</a> safely. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>You can't call <a class="el" href="class_ogre_1_1v1_1_1_tag_point.html#aab7f0b1349a21b1702791a394f53a863">needUpdate()</a> during the scene graph update, e.g. in response to a <a class="el" href="class_ogre_1_1v1_1_1_old_node_1_1_listener.html" title="Listener which gets called back on OldNode events.">OldNode::Listener</a> hook, because the graph is already being updated, and update flag changes cannot be made reliably in that context. Call this method if you need to queue a needUpdate call in this case. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>You can't call <a class="el" href="class_ogre_1_1v1_1_1_tag_point.html#aab7f0b1349a21b1702791a394f53a863" title="To be called in the event of transform changes to this OldNode that require it&#39;s recalculation.">needUpdate()</a> during the scene graph update, e.g. in response to a <a class="el" href="class_ogre_1_1v1_1_1_old_node_1_1_listener.html" title="Listener which gets called back on OldNode events.">OldNode::Listener</a> hook, because the graph is already being updated, and update flag changes cannot be made reliably in that context. Call this method if you need to queue a needUpdate call in this case. </dd></dl>
 
 </div>
 </div>

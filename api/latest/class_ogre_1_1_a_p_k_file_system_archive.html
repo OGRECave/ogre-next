@@ -171,6 +171,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">More...</a><br /></td></tr>
 <tr class="separator:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d8c6606a0574f6e0a1909c5cb4e0ba3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_a_p_k_file_system_archive.html#a0d8c6606a0574f6e0a1909c5cb4e0ba3">remove</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename)</td></tr>
+<tr class="memdesc:a0d8c6606a0574f6e0a1909c5cb4e0ba3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete a named file.  <a href="class_ogre_1_1_a_p_k_file_system_archive.html#a0d8c6606a0574f6e0a1909c5cb4e0ba3">More...</a><br /></td></tr>
 <tr class="separator:a0d8c6606a0574f6e0a1909c5cb4e0ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab0eeb38f3941f9aedd66c858d86fc8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_a_p_k_file_system_archive.html#aab0eeb38f3941f9aedd66c858d86fc8a">unload</a> ()</td></tr>
 <tr class="memdesc:aab0eeb38f3941f9aedd66c858d86fc8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads the archive.  <a href="class_ogre_1_1_a_p_k_file_system_archive.html#aab0eeb38f3941f9aedd66c858d86fc8a">More...</a><br /></td></tr>
@@ -1143,7 +1144,14 @@ template&lt;class Alloc &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Delete a named file. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Not possible on read-only archives </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>The fully qualified name of the file </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_archive.html#a7d03ab8a7ef32e314a5efbbf036f104e">Ogre::Archive</a>.</p>
 

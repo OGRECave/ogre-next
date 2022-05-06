@@ -159,6 +159,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">More...</a><br /></td></tr>
 <tr class="separator:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c573cac40239aaf12890ddd316514f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_staging_texture.html#a2c573cac40239aaf12890ddd316514f6">startMapRegion</a> () override</td></tr>
+<tr class="memdesc:a2c573cac40239aaf12890ddd316514f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be called from main thread when the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> is grabbed.  <a href="class_ogre_1_1_vulkan_staging_texture.html#a2c573cac40239aaf12890ddd316514f6">More...</a><br /></td></tr>
 <tr class="separator:a2c573cac40239aaf12890ddd316514f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cfba3cf4d4e23ad8b9884cac4b72a79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_staging_texture.html#a2cfba3cf4d4e23ad8b9884cac4b72a79">stopMapRegion</a> () override</td></tr>
 <tr class="memdesc:a2cfba3cf4d4e23ad8b9884cac4b72a79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be called from main thread when the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> is released.  <a href="class_ogre_1_1_vulkan_staging_texture.html#a2cfba3cf4d4e23ad8b9884cac4b72a79">More...</a><br /></td></tr>
@@ -1013,7 +1014,8 @@ template&lt;class Alloc &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Must be called from main thread when the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> is grabbed. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Calling this function if you've already called <a class="el" href="class_ogre_1_1_vulkan_staging_texture.html#ad100e5a4bba138fa86e945ee8eaaf3ed" title="Uploads a region of data in srcBox (which must have been created with mapRegion) into dstTexture.">upload()</a> may stall. Grab another <a class="el" href="class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU.">StagingTexture</a> to prevent stall. See uploadWillStall. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_staging_texture_buffer_impl.html#ad2f3c66603fc7e844e0b45c52b1ca5ef">Ogre::StagingTextureBufferImpl</a>.</p>
 

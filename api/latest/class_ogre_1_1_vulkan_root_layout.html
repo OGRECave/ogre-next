@@ -113,6 +113,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a916a788bbf6b7d28d82a7a55c40bdef2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes an emulated D3D11/Metal-style table and binds it according to this layout's rules.  <a href="class_ogre_1_1_vulkan_root_layout.html#a916a788bbf6b7d28d82a7a55c40bdef2">More...</a><br /></td></tr>
 <tr class="separator:a916a788bbf6b7d28d82a7a55c40bdef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef40f58e9a630efbd881f99a5b81e7df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#aef40f58e9a630efbd881f99a5b81e7df">copyFrom</a> (const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;rootLayout, bool bIncludeArrayBindings=true)</td></tr>
+<tr class="memdesc:aef40f58e9a630efbd881f99a5b81e7df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies all our parameters from 'other' Does NOT call <a class="el" href="class_ogre_1_1_root_layout.html#a3de2623ecb78001c7df226de5975002d">validate()</a>  <a href="class_ogre_1_1_vulkan_root_layout.html#aef40f58e9a630efbd881f99a5b81e7df">More...</a><br /></td></tr>
 <tr class="separator:aef40f58e9a630efbd881f99a5b81e7df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79f0e0981e96957aa9a39719b8e70444"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#a79f0e0981e96957aa9a39719b8e70444">copyTo</a> (<a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;outRootLayout, bool bIncludeArrayBindings)</td></tr>
 <tr class="memdesc:a79f0e0981e96957aa9a39719b8e70444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs outRootLayout.copyFrom( this ) This function is necessary because <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> is a protected base class.  <a href="class_ogre_1_1_vulkan_root_layout.html#a79f0e0981e96957aa9a39719b8e70444">More...</a><br /></td></tr>
@@ -162,6 +163,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a361b85faf30f42c8ac64156cfe5a95a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#a361b85faf30f42c8ac64156cfe5a95a3">operator&lt;</a> (const <a class="el" href="class_ogre_1_1_vulkan_root_layout.html">VulkanRootLayout</a> &amp;other) const</td></tr>
 <tr class="separator:a361b85faf30f42c8ac64156cfe5a95a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf9d8c87c8aefe908e3214d60a2d7d9c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c">parseRootLayout</a> (const char *rootLayout, const bool bCompute, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename)</td></tr>
+<tr class="memdesc:abf9d8c87c8aefe908e3214d60a2d7d9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a root layout definition from a JSON string The JSON string:  <a href="class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c">More...</a><br /></td></tr>
 <tr class="separator:abf9d8c87c8aefe908e3214d60a2d7d9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ace64a521d831703a6f6881f0d1e318"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#a8ace64a521d831703a6f6881f0d1e318">validateArrayBindings</a> (const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;groundTruth, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename) const</td></tr>
 <tr class="memdesc:a8ace64a521d831703a6f6881f0d1e318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that the array bindings in groundTruth.mArrayRanges are included in this-&gt;mArrayRanges.  <a href="class_ogre_1_1_vulkan_root_layout.html#a8ace64a521d831703a6f6881f0d1e318">More...</a><br /></td></tr>
@@ -280,7 +282,14 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Copies all our parameters from 'other' Does NOT call <a class="el" href="class_ogre_1_1_root_layout.html#a3de2623ecb78001c7df226de5975002d">validate()</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td></td></tr>
+    <tr><td class="paramname">bIncludeArrayBindings</td><td>When false, mArrayRanges are not included </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -330,7 +339,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates most of our Vulkan handles required to build a PSO. </p>
-<p >This function is not called by parseRootLayout because if two <a class="el" href="class_ogre_1_1_root.html" title="The root class of the Ogre system.">Root</a> Layouts are identical, then after calling a-&gt;<a class="el" href="class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c">parseRootLayout()</a>, instead of calling a-&gt;<a class="el" href="class_ogre_1_1_vulkan_root_layout.html#afdece0a0a4fde3e1666003e10293d4e2" title="Creates most of our Vulkan handles required to build a PSO.">createVulkanHandles()</a> we first must look for an already existing <a class="el" href="class_ogre_1_1_vulkan_root_layout.html">VulkanRootLayout</a> and reuse it. </p><dl class="section return"><dt>Returns</dt><dd>VkPipelineLayout handle for building the PSO. </dd></dl>
+<p >This function is not called by parseRootLayout because if two <a class="el" href="class_ogre_1_1_root.html" title="The root class of the Ogre system.">Root</a> Layouts are identical, then after calling a-&gt;<a class="el" href="class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c" title="Parses a root layout definition from a JSON string The JSON string:">parseRootLayout()</a>, instead of calling a-&gt;<a class="el" href="class_ogre_1_1_vulkan_root_layout.html#afdece0a0a4fde3e1666003e10293d4e2" title="Creates most of our Vulkan handles required to build a PSO.">createVulkanHandles()</a> we first must look for an already existing <a class="el" href="class_ogre_1_1_vulkan_root_layout.html">VulkanRootLayout</a> and reuse it. </p><dl class="section return"><dt>Returns</dt><dd>VkPipelineLayout handle for building the PSO. </dd></dl>
 
 </div>
 </div>
@@ -1051,7 +1060,36 @@ template&lt;class Alloc &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Parses a root layout definition from a JSON string The JSON string: </p>
+<div class="fragment"><div class="line">{</div>
+<div class="line">    <span class="stringliteral">&quot;0&quot;</span> :</div>
+<div class="line">    {</div>
+<div class="line">        <span class="stringliteral">&quot;has_params&quot;</span> : [<span class="stringliteral">&quot;all&quot;</span>, <span class="stringliteral">&quot;vs&quot;</span>, <span class="stringliteral">&quot;gs&quot;</span>, <span class="stringliteral">&quot;hs&quot;</span>, <span class="stringliteral">&quot;ds&quot;</span>, <span class="stringliteral">&quot;ps&quot;</span>, <span class="stringliteral">&quot;cs&quot;</span>],</div>
+<div class="line">        <span class="stringliteral">&quot;const_buffers&quot;</span> : [0, 16],</div>
+<div class="line">        <span class="stringliteral">&quot;tex_buffers&quot;</span> : [1, 16],</div>
+<div class="line">        <span class="stringliteral">&quot;textures&quot;</span> : [0, 1],</div>
+<div class="line">        <span class="stringliteral">&quot;samplers&quot;</span> : [0, 1],</div>
+<div class="line">        <span class="stringliteral">&quot;uav_buffers&quot;</span> : [0, 16]</div>
+<div class="line">        <span class="stringliteral">&quot;uav_textures&quot;</span> : [16, 32],</div>
+<div class="line">        <span class="stringliteral">&quot;baked&quot;</span> : <span class="keyword">false</span></div>
+<div class="line">    },</div>
+<div class="line"> </div>
+<div class="line">    <span class="stringliteral">&quot;arrays&quot;</span> :</div>
+<div class="line">    {</div>
+<div class="line">        <span class="stringliteral">&quot;tex_buffers&quot;</span> : [[4, 5], [10, 2]],</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --><p >has_params can establish which shader stages allow parameters.</p><ul>
+<li>"all" means all shader stages (vs through ps for graphics, cs for compute)</li>
+</ul>
+<p >Note that for compatibility with other APIs, textures and tex_buffers cannot overlap Same with uav_buffers and uav_textures </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rootLayout</td><td>JSON string containing root layout </td></tr>
+    <tr><td class="paramname">bCompute</td><td>True if this is meant for compute. False for graphics </td></tr>
+    <tr><td class="paramname">filename</td><td>Filename for logging purposes if errors are found </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

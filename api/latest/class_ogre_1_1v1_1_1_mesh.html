@@ -642,6 +642,7 @@ Public Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:ae01d3bddf8aac16dc4d8f5923843fa98"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_mesh.html#ae01d3bddf8aac16dc4d8f5923843fa98">msOptimizeForShadowMapping</a></td></tr>
+<tr class="memdesc:ae01d3bddf8aac16dc4d8f5923843fa98"><td class="mdescLeft">&#160;</td><td class="mdescRight">When this bool is false, prepareForShadowMapping will use the same Vaos for both regular and shadow mapping rendering.  <a href="class_ogre_1_1v1_1_1_mesh.html#ae01d3bddf8aac16dc4d8f5923843fa98">More...</a><br /></td></tr>
 <tr class="separator:ae01d3bddf8aac16dc4d8f5923843fa98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
@@ -5736,7 +5737,11 @@ template&lt;class Alloc &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>When this bool is false, prepareForShadowMapping will use the same Vaos for both regular and shadow mapping rendering. </p>
+<p >When it's true, it will calculate an optimized version to speed up shadow map rendering (uses a bit more GPU VRAM). Large meshes can take long to optimize thus it is recommended to perform this offline and save it into the mesh file. It's off by default.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_mesh.html#a6f201fa17002cc71492edb7da0b69b53" title="When this bool is false, prepareForShadowMapping will use the same Vaos for both regular and shadow m...">Ogre::Mesh::msOptimizeForShadowMapping</a> for the v2 version </dd>
+<dd>
+<a class="el" href="class_ogre_1_1v1_1_1_mesh.html#ae01d3bddf8aac16dc4d8f5923843fa98" title="When this bool is false, prepareForShadowMapping will use the same Vaos for both regular and shadow m...">Ogre::v1::Mesh::msOptimizeForShadowMapping</a> for the <a class="el" href="namespace_ogre_1_1v1.html">v1</a> version </dd></dl>
 
 </div>
 </div>
