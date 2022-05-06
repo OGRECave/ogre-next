@@ -28,11 +28,10 @@ THE SOFTWARE.
 #ifndef __GLES2DepthBuffer_H__
 #define __GLES2DepthBuffer_H__
 
-#include "OgreGLES2Prerequisites.h"
 #include "OgreDepthBuffer.h"
+#include "OgreGLES2Prerequisites.h"
 
-
-namespace Ogre 
+namespace Ogre
 {
     class GLES2Context;
     class GLES2RenderSystem;
@@ -52,31 +51,29 @@ namespace Ogre
         GLuint createRenderBuffer( GLenum format );
 
     public:
-        GLES2DepthBuffer( uint16 poolId, GLES2RenderSystem *renderSystem,
-                          GLES2Context *creatorContext,
-                          GLenum depthFormat, GLenum stencilFormat,
-                          uint32 width, uint32 height, uint32 fsaa, uint32 multiSampleQuality,
-                          PixelFormat pixelFormat, bool isDepthTexture, bool isManual );
+        GLES2DepthBuffer( uint16 poolId, GLES2RenderSystem *renderSystem, GLES2Context *creatorContext,
+                          GLenum depthFormat, GLenum stencilFormat, uint32 width, uint32 height,
+                          uint32 fsaa, uint32 multiSampleQuality, PixelFormat pixelFormat,
+                          bool isDepthTexture, bool isManual );
         ~GLES2DepthBuffer();
 
-        /// @copydoc DepthBuffer::isCompatible
         virtual bool isCompatible( RenderTarget *renderTarget, bool exactFormatMatch ) const;
 
         void bindToFramebuffer( GLenum target = GL_FRAMEBUFFER );
 
-        GLES2Context* getGLContext() const { return mCreatorContext; }
-        GLuint getDepthBuffer() const  { return mDepthBufferName; }
+        GLES2Context *getGLContext() const { return mCreatorContext; }
+        GLuint getDepthBuffer() const { return mDepthBufferName; }
         GLuint getStencilBuffer() const { return mStencilBufferName; }
 
         bool hasSeparateStencilBuffer() const;
 
     protected:
-        uint32                      mMultiSampleQuality;
-        GLES2Context                *mCreatorContext;
-        GLuint                      mDepthBufferName;
-        GLuint                      mStencilBufferName;
+        uint32 mMultiSampleQuality;
+        GLES2Context *mCreatorContext;
+        GLuint mDepthBufferName;
+        GLuint mStencilBufferName;
 
         virtual bool copyToImpl( DepthBuffer *destination );
     };
-}
+}  // namespace Ogre
 #endif

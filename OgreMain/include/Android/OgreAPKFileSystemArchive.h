@@ -59,7 +59,7 @@ namespace Ogre
         /// @copydoc Archive::create
         DataStreamPtr create( const String &filename );
 
-        /// @copydoc Archive::delete
+        /// @copydoc Archive::remove
         void remove( const String &filename );
 
         /// @copydoc Archive::list

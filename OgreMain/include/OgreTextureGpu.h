@@ -460,7 +460,10 @@ namespace Ogre
         TextureTypes::TextureTypes getInternalTextureType() const;
 
         void _setSourceType( uint8 type );
-        /// @copydoc TextureGpu::mSourceType
+        /// This setting is for where the texture is created, e.g. its a compositor texture, a shadow
+        /// texture or standard texture loaded for a mesh etc...
+        ///
+        /// This value is merely for statistical tracking purposes
         uint8 getSourceType() const;
 
         /** Sets the pixel format.

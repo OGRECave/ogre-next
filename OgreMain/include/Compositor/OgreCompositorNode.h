@@ -315,7 +315,7 @@ namespace Ogre
         /// @copydoc CompositorWorkspace::resetAllNumPassesLeft
         void resetAllNumPassesLeft();
 
-        /// @copydoc CompositorPassDef::getPassNumber
+        /// See CompositorNodeDef::getPassNumber
         size_t getPassNumber( CompositorPass *pass ) const;
 
         /// Returns our parent workspace

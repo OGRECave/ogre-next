@@ -30,40 +30,40 @@ THE SOFTWARE.
 #define __GLES2TextureManager_H__
 
 #include "OgreGLES2Prerequisites.h"
-#include "OgreTextureManager.h"
-#include "OgreGLES2Texture.h"
 #include "OgreGLES2Support.h"
+#include "OgreGLES2Texture.h"
+#include "OgreTextureManager.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** GL ES-specific implementation of a TextureManager */
     class _OgreGLES2Export GLES2TextureManager : public TextureManager
     {
-        public:
-            GLES2TextureManager(GLES2Support& support);
-            virtual ~GLES2TextureManager();
+    public:
+        GLES2TextureManager( GLES2Support &support );
+        virtual ~GLES2TextureManager();
 
-            GLuint getWarningTextureID() { return mWarningTextureID; }
+        GLuint getWarningTextureID() { return mWarningTextureID; }
 
-            /// @copydoc TextureManager::getNativeFormat
-            PixelFormat getNativeFormat(TextureType ttype, PixelFormat format, int usage);
+        PixelFormat getNativeFormat( TextureType ttype, PixelFormat format, int usage );
 
-            /// @copydoc TextureManager::isHardwareFilteringSupported
-            bool isHardwareFilteringSupported(TextureType ttype, PixelFormat format, int usage,
-                                              bool preciseFormatOnly = false);
+        bool isHardwareFilteringSupported( TextureType ttype, PixelFormat format, int usage,
+                                           bool preciseFormatOnly = false );
+
     protected:
         friend class GLES2RenderSystem;
-        
+
         /// @copydoc ResourceManager::createImpl
-        Resource* createImpl(const String& name, ResourceHandle handle,
-                             const String& group, bool isManual, ManualResourceLoader* loader, 
-                             const NameValuePairList* createParams);
-        
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader,
+                              const NameValuePairList *createParams );
+
         /// Internal method to create a warning texture (bound when a texture unit is blank)
         void createWarningTexture();
-        
-        GLES2Support& mGLSupport;
+
+        GLES2Support &mGLSupport;
         GLuint mWarningTextureID;
     };
-}
+}  // namespace Ogre
 
 #endif

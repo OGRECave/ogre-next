@@ -724,7 +724,7 @@ namespace Ogre
             void mergeAdjacentTexcoords( unsigned short finalTexCoordSet,
                                          unsigned short texCoordSetToDestroy );
 
-            /// @copydoc Mesh::msOptimizeForShadowMapping
+            /// @copydoc Ogre::Mesh::msOptimizeForShadowMapping
             static bool msOptimizeForShadowMapping;
 
             void prepareForShadowMapping( bool forceSameBuffers );

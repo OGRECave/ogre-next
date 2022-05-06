@@ -29,88 +29,84 @@ THE SOFTWARE.
 #ifndef __GLES2Texture_H__
 #define __GLES2Texture_H__
 
+#include "OgreGLES2ManagedResource.h"
 #include "OgreGLES2Prerequisites.h"
 #include "OgreGLES2Support.h"
+#include "OgreHardwarePixelBuffer.h"
 #include "OgrePlatform.h"
 #include "OgreRenderTexture.h"
 #include "OgreTexture.h"
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreGLES2ManagedResource.h"
 
-namespace Ogre {
+namespace Ogre
+{
     class _OgreGLES2Export GLES2Texture : public Texture MANAGED_RESOURCE
     {
-        public:
-            // Constructor
-            GLES2Texture(ResourceManager* creator, const String& name, ResourceHandle handle,
-                const String& group, bool isManual, ManualResourceLoader* loader, 
-                GLES2Support& support);
+    public:
+        // Constructor
+        GLES2Texture( ResourceManager *creator, const String &name, ResourceHandle handle,
+                      const String &group, bool isManual, ManualResourceLoader *loader,
+                      GLES2Support &support );
 
-            virtual ~GLES2Texture();
+        virtual ~GLES2Texture();
 
-            void createRenderTexture();
-            /// @copydoc Texture::getBuffer
-            v1::HardwarePixelBufferSharedPtr getBuffer(size_t face, size_t mipmap);
+        void createRenderTexture();
+        v1::HardwarePixelBufferSharedPtr getBuffer( size_t face, size_t mipmap );
 
-            // Takes the OGRE texture type (1d/2d/3d/cube) and returns the appropriate GL one
-            GLenum getGLES2TextureTarget() const;
+        // Takes the OGRE texture type (1d/2d/3d/cube) and returns the appropriate GL one
+        GLenum getGLES2TextureTarget() const;
 
-            GLuint getGLID() const
-            {
-                return mTextureID;
-            }
-            
-            void getCustomAttribute(const String& name, void* pData);
+        GLuint getGLID() const { return mTextureID; }
 
-        protected:
-            /// @copydoc Texture::createInternalResourcesImpl
-            void createInternalResourcesImpl();
-            /// @copydoc Resource::prepareImpl
-            void prepareImpl();
-            /// @copydoc Resource::unprepareImpl
-            void unprepareImpl();
-            /// @copydoc Resource::loadImpl
-            void loadImpl();
-            /// @copydoc Resource::freeInternalResourcesImpl
-            void freeInternalResourcesImpl();
+        void getCustomAttribute( const String &name, void *pData );
 
-            /** Internal method, create GLHardwarePixelBuffers for every face and
-             mipmap level. This method must be called after the GL texture object was created,
-             the number of mipmaps was set (GL_TEXTURE_MAX_LEVEL) and glTexImageXD was called to
-             actually allocate the buffer
-             */
-            void _createSurfaceList();
+    protected:
+        /// @copydoc Texture::createInternalResourcesImpl
+        void createInternalResourcesImpl();
+        /// @copydoc Resource::prepareImpl
+        void prepareImpl();
+        /// @copydoc Resource::unprepareImpl
+        void unprepareImpl();
+        /// @copydoc Resource::loadImpl
+        void loadImpl();
+        /// @copydoc Resource::freeInternalResourcesImpl
+        void freeInternalResourcesImpl();
 
-            virtual void _autogenerateMipmaps();
+        /** Internal method, create GLHardwarePixelBuffers for every face and
+         mipmap level. This method must be called after the GL texture object was created,
+         the number of mipmaps was set (GL_TEXTURE_MAX_LEVEL) and glTexImageXD was called to
+         actually allocate the buffer
+         */
+        void _createSurfaceList();
 
-            /// Used to hold images between calls to prepare and load.
-            typedef SharedPtr<vector<Image>::type > LoadedImages;
+        virtual void _autogenerateMipmaps();
 
-            /** Vector of images that were pulled from disk by
-             prepareLoad but have yet to be pushed into texture memory
-             by loadImpl.  Images should be deleted by loadImpl and unprepareImpl.
-             */
-            LoadedImages mLoadedImages;
+        /// Used to hold images between calls to prepare and load.
+        typedef SharedPtr<vector<Image>::type> LoadedImages;
 
-            /// Create gl texture
-            void _createGLTexResource();
-        
+        /** Vector of images that were pulled from disk by
+         prepareLoad but have yet to be pushed into texture memory
+         by loadImpl.  Images should be deleted by loadImpl and unprepareImpl.
+         */
+        LoadedImages mLoadedImages;
+
+        /// Create gl texture
+        void _createGLTexResource();
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-            /** See AndroidResource. */
-            virtual void notifyOnContextLost();
-        
-            /** See AndroidResource. */
-            virtual void notifyOnContextReset();
+        /** See AndroidResource. */
+        virtual void notifyOnContextLost();
+
+        /** See AndroidResource. */
+        virtual void notifyOnContextReset();
 #endif
 
-            GLuint mTextureID;
-            GLES2Support& mGLSupport;
-            
-            /// Vector of pointers to subsurfaces
-            typedef vector<v1::HardwarePixelBufferSharedPtr>::type SurfaceList;
-            SurfaceList mSurfaceList;
+        GLuint mTextureID;
+        GLES2Support &mGLSupport;
 
+        /// Vector of pointers to subsurfaces
+        typedef vector<v1::HardwarePixelBufferSharedPtr>::type SurfaceList;
+        SurfaceList mSurfaceList;
     };
-}
+}  // namespace Ogre
 
 #endif

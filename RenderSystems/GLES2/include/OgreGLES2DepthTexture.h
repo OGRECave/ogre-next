@@ -37,15 +37,15 @@ namespace Ogre
     {
     public:
         // Constructor
-        GLES2DepthTexture( bool shareableDepthBuffer, ResourceManager* creator, const String& name,
-                             ResourceHandle handle, const String& group, bool isManual,
-                             ManualResourceLoader* loader, GLES2Support& support );
+        GLES2DepthTexture( bool shareableDepthBuffer, ResourceManager *creator, const String &name,
+                           ResourceHandle handle, const String &group, bool isManual,
+                           ManualResourceLoader *loader, GLES2Support &support );
 
         virtual ~GLES2DepthTexture();
 
         void _setGlTextureName( GLuint textureName );
 
-        bool getShareableDepthBuffer() const        { return mShareableDepthBuffer; }
+        bool getShareableDepthBuffer() const { return mShareableDepthBuffer; }
 
     protected:
         bool mShareableDepthBuffer;
@@ -68,49 +68,47 @@ namespace Ogre
         virtual void _autogenerateMipmaps() {}
     };
 
-namespace v1
-{
-    class _OgreGLES2Export GLES2DepthPixelBuffer : public HardwarePixelBuffer
+    namespace v1
     {
-    protected:
-        RenderTexture   *mDummyRenderTexture;
+        class _OgreGLES2Export GLES2DepthPixelBuffer : public HardwarePixelBuffer
+        {
+        protected:
+            RenderTexture *mDummyRenderTexture;
 
-        virtual PixelBox lockImpl( const Box &lockBox, LockOptions options );
-        virtual void unlockImpl();
+            virtual PixelBox lockImpl( const Box &lockBox, LockOptions options );
+            virtual void unlockImpl();
 
-        /// Notify HardwarePixelBuffer of destruction of render target.
-        virtual void _clearSliceRTT( size_t zoffset );
+            /// Notify HardwarePixelBuffer of destruction of render target.
+            virtual void _clearSliceRTT( size_t zoffset );
 
-    public:
-        GLES2DepthPixelBuffer( GLES2DepthTexture *parentTexture, const String &baseName,
-                                 uint32 width, uint32 height, uint32 depth, PixelFormat format );
-        virtual ~GLES2DepthPixelBuffer();
+        public:
+            GLES2DepthPixelBuffer( GLES2DepthTexture *parentTexture, const String &baseName,
+                                   uint32 width, uint32 height, uint32 depth, PixelFormat format );
+            virtual ~GLES2DepthPixelBuffer();
 
-        virtual void blitFromMemory( const PixelBox &src, const Box &dstBox );
-        virtual void blitToMemory( const Box &srcBox, const PixelBox &dst );
-        virtual RenderTexture* getRenderTarget( size_t slice=0 );
-    };
-}
+            virtual void blitFromMemory( const PixelBox &src, const Box &dstBox );
+            virtual void blitToMemory( const Box &srcBox, const PixelBox &dst );
+            virtual RenderTexture *getRenderTarget( size_t slice = 0 );
+        };
+    }  // namespace v1
 
-    class _OgreGLES2Export GLES2DepthTextureTarget : public RenderTexture //GLES2RenderTexture
+    class _OgreGLES2Export GLES2DepthTextureTarget : public RenderTexture  // GLES2RenderTexture
     {
         GLES2DepthTexture *mUltimateTextureOwner;
 
     public:
-        GLES2DepthTextureTarget( GLES2DepthTexture *ultimateTextureOwner,
-                                   const String &name, v1::HardwarePixelBuffer *buffer,
-                                   uint32 zoffset );
+        GLES2DepthTextureTarget( GLES2DepthTexture *ultimateTextureOwner, const String &name,
+                                 v1::HardwarePixelBuffer *buffer, uint32 zoffset );
         virtual ~GLES2DepthTextureTarget();
 
-        virtual bool requiresTextureFlipping() const        { return true; }
+        virtual bool requiresTextureFlipping() const { return true; }
 
-        /// @copydoc RenderTarget::getForceDisableColourWrites
-        virtual bool getForceDisableColourWrites() const    { return true; }
+        virtual bool getForceDisableColourWrites() const { return true; }
 
         /// Depth buffers never resolve; only colour buffers do. (we need mFsaaResolveDirty to be always
         /// true so that the proper path is taken in GLES2Texture::getGLID)
-        virtual void setFsaaResolveDirty()  {}
-        virtual void setFsaaResolved()          {}
+        virtual void setFsaaResolveDirty() {}
+        virtual void setFsaaResolved() {}
 
         virtual void setDepthBufferPool( uint16 poolId );
 
@@ -121,8 +119,8 @@ namespace v1
         virtual void getFormatsForPso( PixelFormat outFormats[OGRE_MAX_MULTIPLE_RENDER_TARGETS],
                                        bool outHwGamma[OGRE_MAX_MULTIPLE_RENDER_TARGETS] ) const;
 
-        void getCustomAttribute( const String& name, void* pData );
+        void getCustomAttribute( const String &name, void *pData );
     };
-}
+}  // namespace Ogre
 
 #endif

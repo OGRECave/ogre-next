@@ -193,7 +193,6 @@ namespace Ogre
                                      const NameValuePairList *miscParams = 0 ) override;
         void    _notifyWindowDestroyed( Window *window );
 
-        /// @copydoc RenderSystem::fireDeviceEvent
         void fireDeviceEvent( D3D11Device *device, const String &name,
                               D3D11Window *sendingWindow = NULL );
 
@@ -343,10 +342,8 @@ namespace Ogre
 
         D3D_FEATURE_LEVEL _getFeatureLevel() const { return mFeatureLevel; }
 
-        /// @copydoc RenderSystem::setSubroutine
         void setSubroutine( GpuProgramType gptype, size_t slotIndex, const String &subroutineName );
 
-        /// @copydoc RenderSystem::setSubroutineName
         void setSubroutine( GpuProgramType gptype, const String &slotName,
                             const String &subroutineName );
 

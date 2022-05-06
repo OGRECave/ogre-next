@@ -30,9 +30,10 @@ THE SOFTWARE.
 
 #include "OgreImageCodec.h"
 
-namespace Ogre {
+namespace Ogre
+{
 
-    /** 
+    /**
      * Codec specialized in loading OpenEXR high dynamic range images.
      */
     class EXRCodec : public ImageCodec
@@ -41,18 +42,19 @@ namespace Ogre {
         EXRCodec();
         virtual ~EXRCodec();
 
-        /// @copydoc Codec::code
-        DataStreamPtr code(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
-        /// @copydoc Codec::codeToFile
-        void codeToFile(MemoryDataStreamPtr& input, const String& outFileName, CodecDataPtr& pData) const;
+        /// @copydoc Codec::encode
+        DataStreamPtr code( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const;
+        /// @copydoc Codec::encodeToFile
+        void codeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                         CodecDataPtr &pData ) const;
         /// @copydoc Codec::decode
-        DecodeResult decode(DataStreamPtr& input) const;
+        DecodeResult decode( DataStreamPtr &input ) const;
         /// @copydoc Codec::magicNumberToFileExt
-        String magicNumberToFileExt(const char* magicNumberPtr, size_t maxbytes) const;
+        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const;
 
         String getType() const;
     };
 
-} // namespace
+}  // namespace Ogre
 
 #endif

@@ -51,30 +51,30 @@ namespace Ogre
         EGLGLSupport();
         ~EGLGLSupport();
 
-        /// @copydoc see GL3PlusSupport::addConfig
+        /// @copydoc GL3PlusSupport::addConfig
         void addConfig();
 
-        /// @copydoc see GL3PlusSupport::validateConfig
+        /// @copydoc GL3PlusSupport::validateConfig
         String validateConfig();
 
-        /// @copydoc see GL3PlusSupport::setConfigOption
+        /// @copydoc GL3PlusSupport::setConfigOption
         void setConfigOption( const String &name, const String &value );
 
         /// @copydoc GL3PlusSupport::createWindow
         Window *createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
                               const String &windowTitle );
 
-        /// @copydoc RenderSystem::createRenderWindow
+        /// @copydoc Root::createRenderWindow
         Window *newWindow( const String &name, uint32 width, uint32 height, bool fullScreen,
                            const NameValuePairList *miscParams = 0 );
 
-        /// @copydoc see GL3PlusSupport::start
+        /// @copydoc GL3PlusSupport::start
         void start();
 
-        /// @copydoc see GL3PlusSupport::stop
+        /// @copydoc GL3PlusSupport::stop
         void stop();
 
-        /// @copydoc see GL3PlusSupport::getProcAddress
+        /// @copydoc GL3PlusSupport::getProcAddress
         void *getProcAddress( const char *procname ) const;
 
         ::EGLContext createNewContext( EGLDisplay eglDisplay, EGLConfig eglCfg,

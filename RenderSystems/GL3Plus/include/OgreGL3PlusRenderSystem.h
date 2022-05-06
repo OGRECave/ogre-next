@@ -501,10 +501,8 @@ namespace Ogre
                                        uint16 mask ) override;
         void bindGpuProgramPassIterationParameters( GpuProgramType gptype ) override;
 
-        /// @copydoc RenderSystem::_setSceneBlending
         void _setSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor,
                                 SceneBlendOperation op );
-        /// @copydoc RenderSystem::_setSeparateSceneBlending
         void _setSeparateSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor,
                                         SceneBlendFactor sourceFactorAlpha,
                                         SceneBlendFactor destFactorAlpha, SceneBlendOperation op,

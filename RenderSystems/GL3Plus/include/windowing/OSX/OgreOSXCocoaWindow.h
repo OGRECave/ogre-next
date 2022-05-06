@@ -82,43 +82,43 @@ namespace Ogre
         CocoaWindow( const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode );
         virtual ~CocoaWindow();
 
-        /** @copydoc see Window::_initialize */
+        /** @copydoc Window::_initialize */
         void _initialize( TextureGpuManager *textureManager ) override;
 
-        /** @copydoc see Window::setVSync */
+        /** @copydoc Window::setVSync */
         // void setVSync(bool vSync, uint32 vSyncInterval) override;
 
-        /** @copydoc see Window::getViewPointToPixelScale */
+        /** @copydoc Window::getViewPointToPixelScale */
         float getViewPointToPixelScale() const override;
 
-        /** @copydoc see Window::destroy */
+        /** @copydoc Window::destroy */
         void destroy() override;
 
-        /** @copydoc see Window::isVisible */
+        /** @copydoc Window::isVisible */
         bool isVisible() const override;
 
-        /** @copydoc see Window::_setVisible */
+        /** @copydoc Window::_setVisible */
         void _setVisible( bool visible ) override;
 
-        /** @copydoc see Window::isClosed */
+        /** @copydoc Window::isClosed */
         bool isClosed() const override;
 
-        /** @copydoc see Window::isHidden */
+        /** @copydoc Window::isHidden */
         bool isHidden() const override { return mHidden; }
 
-        /** @copydoc see RenderWindow::setHidden */
+        /** @copydoc Window::setHidden */
         void setHidden( bool hidden ) override;
 
-        /** @copydoc see Window::reposition */
+        /** @copydoc Window::reposition */
         void reposition( int leftPt, int topPt ) override;
 
-        /** @copydoc see Window::swapBuffers */
+        /** @copydoc Window::swapBuffers */
         void swapBuffers() override;
 
-        /** @copydoc see Window::windowMovedOrResized */
+        /** @copydoc Window::windowMovedOrResized */
         void windowMovedOrResized() override;
 
-        /** @copydoc see Window::getCustomAttribute */
+        /** @copydoc Window::getCustomAttribute */
         /**
            @remarks
            * Get custom attribute; the following attributes are valid:

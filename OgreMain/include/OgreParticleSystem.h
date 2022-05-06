@@ -538,7 +538,7 @@ namespace Ogre
 
         /** @copydoc MovableObject::setRenderQueueGroup */
         void setRenderQueueGroup( uint8 queueID ) override;
-        /** @copydoc MovableObject::setRenderQueueGroupAndPriority */
+        /** @copydoc Renderable::setRenderQueueSubGroup */
         void setRenderQueueSubGroup( uint8 subGroup );
 
         /** Set whether or not particles are sorted according to the camera.

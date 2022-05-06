@@ -31,74 +31,71 @@
 
 #include "OgreGLES2HardwarePixelBuffer.h"
 
-namespace Ogre {
-namespace v1 {
-    /** Texture surface.
-     */
-    class _OgreGLES2Export GLES2TextureBuffer: public GLES2HardwarePixelBuffer
+namespace Ogre
+{
+    namespace v1
     {
-    public:
-        /** Texture constructor */
-        GLES2TextureBuffer(const String &baseName, GLenum target, GLuint id,
-                           GLint width, GLint height, GLint depth, GLint internalFormat,
-                           GLint format, GLint face, GLint level, Usage usage, bool softwareMipmap, bool writeGamma, uint fsaa);
-        virtual ~GLES2TextureBuffer();
-
-        /// @copydoc HardwarePixelBuffer::bindToFramebuffer
-        virtual void bindToFramebuffer(GLenum attachment, uint32 zoffset);
-
-        /// @copydoc HardwarePixelBuffer::getRenderTarget
-        RenderTexture* getRenderTarget(size_t slice);
-
-        /// Upload a box of pixels to this buffer on the card
-        virtual void upload(const PixelBox &data, const Box &dest);
-
-        /// Download a box of pixels from the card
-        virtual void download(const PixelBox &data);
-
-        /// Hardware implementation of blitFromMemory
-        virtual void blitFromMemory(const PixelBox &src_orig, const Box &dstBox);
-
-        /// Notify TextureBuffer of destruction of render target
-        void _clearSliceRTT(size_t zoffset)
+        /** Texture surface.
+         */
+        class _OgreGLES2Export GLES2TextureBuffer : public GLES2HardwarePixelBuffer
         {
-            mSliceTRT[zoffset] = 0;
-        }
+        public:
+            /** Texture constructor */
+            GLES2TextureBuffer( const String &baseName, GLenum target, GLuint id, GLint width,
+                                GLint height, GLint depth, GLint internalFormat, GLint format,
+                                GLint face, GLint level, Usage usage, bool softwareMipmap,
+                                bool writeGamma, uint fsaa );
+            virtual ~GLES2TextureBuffer();
 
-        // Copy from framebuffer
-        void copyFromFramebuffer(uint32 zoffset);
+            virtual void bindToFramebuffer( GLenum attachment, uint32 zoffset );
 
-        /// @copydoc HardwarePixelBuffer::blit
-        void blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox);
-        // Blitting implementation
-        void blitFromTexture(GLES2TextureBuffer *src, const Box &srcBox, const Box &dstBox);
-        
+            RenderTexture *getRenderTarget( size_t slice );
+
+            /// Upload a box of pixels to this buffer on the card
+            virtual void upload( const PixelBox &data, const Box &dest );
+
+            /// Download a box of pixels from the card
+            virtual void download( const PixelBox &data );
+
+            /// Hardware implementation of blitFromMemory
+            virtual void blitFromMemory( const PixelBox &src_orig, const Box &dstBox );
+
+            /// Notify TextureBuffer of destruction of render target
+            void _clearSliceRTT( size_t zoffset ) { mSliceTRT[zoffset] = 0; }
+
+            // Copy from framebuffer
+            void copyFromFramebuffer( uint32 zoffset );
+
+            void blit( const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox );
+            // Blitting implementation
+            void blitFromTexture( GLES2TextureBuffer *src, const Box &srcBox, const Box &dstBox );
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-    // Friends.
-    protected:
-        friend class GLES2Texture;
-            
-        void updateTextureId(GLuint textureID);
+            // Friends.
+        protected:
+            friend class GLES2Texture;
+
+            void updateTextureId( GLuint textureID );
 #endif
-            
-    protected:
-        // In case this is a texture level
-        GLenum mTarget;
-        GLenum mFaceTarget; // same as mTarget in case of GL_TEXTURE_xD, but cubemap face for cubemaps
-        GLuint mTextureID;
-        GLuint mBufferId;
-        GLint mFace;
-        GLint mLevel;
-        bool mSoftwareMipmap;
-            
-        typedef vector<RenderTexture*>::type SliceTRT;
-        SliceTRT mSliceTRT;
 
-        void buildMipmaps(const PixelBox &data);
-    };
+        protected:
+            // In case this is a texture level
+            GLenum mTarget;
+            GLenum
+                mFaceTarget;  // same as mTarget in case of GL_TEXTURE_xD, but cubemap face for cubemaps
+            GLuint mTextureID;
+            GLuint mBufferId;
+            GLint mFace;
+            GLint mLevel;
+            bool mSoftwareMipmap;
 
-}
-}
+            typedef vector<RenderTexture *>::type SliceTRT;
+            SliceTRT mSliceTRT;
+
+            void buildMipmaps( const PixelBox &data );
+        };
+
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif
- 
