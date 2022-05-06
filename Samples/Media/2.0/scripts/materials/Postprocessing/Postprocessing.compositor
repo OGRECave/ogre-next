@@ -14,6 +14,7 @@ compositor_node Bloom
 		// "Bright" pass
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/BrightPass2
 			input 0 rt_input
@@ -25,6 +26,7 @@ compositor_node Bloom
 		// Vertical blur pass
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/BlurV
 			input 0 rt0
@@ -36,6 +38,7 @@ compositor_node Bloom
 		// Horizontal blur pass
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/BlurH
 			input 0 rt1
@@ -47,6 +50,7 @@ compositor_node Bloom
 		// Draw a fullscreen quad
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/BloomBlend2
 			input 0 rt_input
@@ -69,6 +73,7 @@ compositor_node Glass
 	{
 		pass render_quad
 		{
+			load { all dont_care }
 			material Postprocess/Glass
 			input 0 rt_input
 		}
@@ -89,6 +94,7 @@ compositor_node "Old TV"
 	{
 		pass render_quad
 		{
+			load { all dont_care }
 			// convert the previous render target to a black and white image, add some noise, distort it,
 			// then render to scene aligned quad
 			material Postprocess/OldTV
@@ -114,6 +120,7 @@ compositor_node B&W
 		// Draw a fullscreen quad with the black and white image
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/BlackAndWhite
 			input 0 rt_input
@@ -193,6 +200,7 @@ compositor_node Embossed
 		// Draw a fullscreen quad with the black and white image
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/Embossed
 			input 0 rt_input
@@ -216,6 +224,7 @@ compositor_node "Sharpen Edges"
 		// Draw a fullscreen quad with the black and white image
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/SharpenEdges
 			input 0 rt_input
@@ -238,6 +247,7 @@ compositor_node Invert
 	{
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/Invert
 			input 0 rt_input
@@ -260,6 +270,7 @@ compositor_node Posterize
 	{
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/Posterize
 			input 0 rt_input
@@ -283,6 +294,7 @@ compositor_node Laplace
 		// Draw a fullscreen quad with the black and white image
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/Laplace
 			input 0 rt_input
@@ -305,6 +317,7 @@ compositor_node Tiling
 	{
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/Tiling
 			input 0 rt_input
@@ -328,6 +341,7 @@ compositor_node "Old Movie"
 		// Draw a fullscreen quad with the old-movie-looking image
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/OldMovie
 			input 0 rt_input
@@ -393,6 +407,7 @@ compositor_node "Radial Blur"
 		// Apply radial blur
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/RadialBlur
 			input 0 rt_input
@@ -415,6 +430,7 @@ compositor_node ASCII
 	{
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/ASCII
 			input 0 rt_input
@@ -437,6 +453,7 @@ compositor_node Halftone
 	{
 		pass render_quad
 		{
+			load { all dont_care }
 			// Renders a fullscreen quad with a material
 			material Postprocess/Halftone
 			input 0 rt_input
@@ -459,6 +476,7 @@ compositor_node "Night Vision"
 	{
 	    pass render_quad
 	    {
+			load { all dont_care }
 			material Postprocess/NightVision
 	    	input 0 rt_input
 	    }
@@ -480,6 +498,7 @@ compositor_node Dither
 	{
 	    pass render_quad
 	    {
+			load { all dont_care }
 			material Postprocess/Dither
 	    	input 0 rt_input
 	    }
@@ -509,6 +528,15 @@ compositor_node FinalComposition
 		
 		pass render_scene
 		{
+			// We should be using skip_load_store_semantics
+			// but that breaks the Overlays. Unfortunately
+			// they are legacy Overlays and they're not Mobile-friendly
+			//
+			// If you want an alternative see
+			// https://github.com/darksylinc/colibrigui
+
+			// skip_load_store_semantics true
+
 			lod_update_list	off
 
 			//Render Overlays

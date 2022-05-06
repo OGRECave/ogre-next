@@ -437,6 +437,7 @@ namespace Demo
                 {
                     CompositorPassQuadDef *passQuad;
                     passQuad = static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
+                    passQuad->setAllLoadActions( LoadAction::DontCare );
                     passQuad->mMaterialName = "Postprocess/BrightPass2";
                     passQuad->addQuadTextureSource( 0, "rt_input" );
                 }
@@ -447,6 +448,7 @@ namespace Demo
                 {
                     CompositorPassQuadDef *passQuad;
                     passQuad = static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
+                    passQuad->setAllLoadActions( LoadAction::DontCare );
                     passQuad->mMaterialName = "Postprocess/BlurV";
                     passQuad->addQuadTextureSource( 0, "rt0" );
                 }
@@ -457,6 +459,7 @@ namespace Demo
                 {
                     CompositorPassQuadDef *passQuad;
                     passQuad = static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
+                    passQuad->setAllLoadActions( LoadAction::DontCare );
                     passQuad->mMaterialName = "Postprocess/BluH";
                     passQuad->addQuadTextureSource( 0, "rt1" );
                 }
@@ -467,6 +470,7 @@ namespace Demo
                 {
                     CompositorPassQuadDef *passQuad;
                     passQuad = static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
+                    passQuad->setAllLoadActions( LoadAction::DontCare );
                     passQuad->mMaterialName = "Postprocess/BloomBlend2";
                     passQuad->addQuadTextureSource( 0, "rt_input" );
                     passQuad->addQuadTextureSource( 1, "rt0" );
@@ -498,6 +502,7 @@ namespace Demo
                 {
                     CompositorPassQuadDef *passQuad;
                     passQuad = static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
+                    passQuad->setAllLoadActions( LoadAction::DontCare );
                     passQuad->mMaterialName = "Postprocess/Glass";
                     passQuad->addQuadTextureSource( 0, "rt_input" );
                 }
@@ -545,6 +550,7 @@ namespace Demo
                 {
                     CompositorPassQuadDef *passQuad;
                     passQuad = static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
+                    passQuad->setAllLoadActions( LoadAction::DontCare );
                     passQuad->mNumInitialPasses = 1;
                     passQuad->mMaterialName = "Ogre/Copy/4xFP32";
                     passQuad->addQuadTextureSource( 0, "rt_input" );
@@ -557,6 +563,7 @@ namespace Demo
                 {
                     CompositorPassQuadDef *passQuad;
                     passQuad = static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
+                    passQuad->setAllLoadActions( LoadAction::DontCare );
                     passQuad->mMaterialName = "Postprocess/Combine";
                     passQuad->addQuadTextureSource( 0, "rt_input" );
                     passQuad->addQuadTextureSource( 1, "sum" );
@@ -569,6 +576,7 @@ namespace Demo
                 {
                     CompositorPassQuadDef *passQuad;
                     passQuad = static_cast<CompositorPassQuadDef *>( targetDef->addPass( PASS_QUAD ) );
+                    passQuad->setAllLoadActions( LoadAction::DontCare );
                     passQuad->mMaterialName = "Ogre/Copy/4xFP32";
                     passQuad->addQuadTextureSource( 0, "rt_output" );
                 }
