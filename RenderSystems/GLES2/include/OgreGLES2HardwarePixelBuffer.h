@@ -32,13 +32,15 @@ THE SOFTWARE.
 #include "OgreGLES2Prerequisites.h"
 #include "OgreHardwarePixelBuffer.h"
 
-namespace Ogre {
-namespace v1 {
-    class _OgreGLES2Export GLES2HardwarePixelBuffer: public HardwarePixelBuffer
+namespace Ogre
+{
+    namespace v1
     {
+        class _OgreGLES2Export GLES2HardwarePixelBuffer : public HardwarePixelBuffer
+        {
         protected:
             /// Lock a box
-            PixelBox lockImpl(const Box &lockBox,  LockOptions options);
+            PixelBox lockImpl( const Box &lockBox, LockOptions options );
 
             /// Unlock a box
             void unlockImpl();
@@ -46,7 +48,7 @@ namespace v1 {
             // Internal buffer; either on-card or in system memory, freed/allocated on demand
             // depending on buffer usage
             PixelBox mBuffer;
-            GLenum mGLInternalFormat; // GL internal format
+            GLenum mGLInternalFormat;  // GL internal format
             LockOptions mCurrentLockOptions;
 
             // Buffer allocation/freeage
@@ -55,48 +57,45 @@ namespace v1 {
             void freeBuffer();
 
             // Upload a box of pixels to this buffer on the card
-            virtual void upload(const PixelBox &data, const Box &dest);
+            virtual void upload( const PixelBox &data, const Box &dest );
 
             // Download a box of pixels from the card
-            virtual void download(const PixelBox &data);
-        
+            virtual void download( const PixelBox &data );
+
         public:
             /// Should be called by HardwareBufferManager
-            GLES2HardwarePixelBuffer(uint32 mWidth, uint32 mHeight, uint32 mDepth,
-                                  PixelFormat mFormat, bool hwGamma,
-                                  HardwareBuffer::Usage usage);
+            GLES2HardwarePixelBuffer( uint32 mWidth, uint32 mHeight, uint32 mDepth, PixelFormat mFormat,
+                                      bool hwGamma, HardwareBuffer::Usage usage );
 
-            /// @copydoc HardwarePixelBuffer::blitFromMemory
-            void blitFromMemory(const PixelBox &src, const Box &dstBox);
+            void blitFromMemory( const PixelBox &src, const Box &dstBox );
 
-            /// @copydoc HardwarePixelBuffer::blitToMemory
-            void blitToMemory(const Box &srcBox, const PixelBox &dst);
+            void blitToMemory( const Box &srcBox, const PixelBox &dst );
 
             virtual ~GLES2HardwarePixelBuffer();
 
             /** Bind surface to frame buffer. Needs FBO extension.
-            */
-            virtual void bindToFramebuffer(GLenum attachment, uint32 zoffset);
+             */
+            virtual void bindToFramebuffer( GLenum attachment, uint32 zoffset );
             GLenum getGLFormat() { return mGLInternalFormat; }
-    };
+        };
 
-     /** Renderbuffer surface.  Needs FBO extension.
-     */
-    class _OgreGLES2Export GLES2RenderBuffer: public GLES2HardwarePixelBuffer
-    {
+        /** Renderbuffer surface.  Needs FBO extension.
+         */
+        class _OgreGLES2Export GLES2RenderBuffer : public GLES2HardwarePixelBuffer
+        {
         public:
-            GLES2RenderBuffer(GLenum format, uint32 width, uint32 height, GLsizei numSamples);
+            GLES2RenderBuffer( GLenum format, uint32 width, uint32 height, GLsizei numSamples );
             virtual ~GLES2RenderBuffer();
 
             /// @copydoc GLES2HardwarePixelBuffer::bindToFramebuffer
-            virtual void bindToFramebuffer(GLenum attachment, uint32 zoffset);
+            virtual void bindToFramebuffer( GLenum attachment, uint32 zoffset );
 
         protected:
             // In case this is a render buffer
             GLuint mRenderbufferID;
             GLsizei mNumSamples;
-    };
-}
-}
+        };
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

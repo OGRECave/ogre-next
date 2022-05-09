@@ -129,15 +129,15 @@ namespace Ogre
         ConstBufferPackedVec    mLight0Buffers;             // lights
         ConstBufferPackedVec    mLight1Buffers;             // areaApproxLights
         ConstBufferPackedVec    mLight2Buffers;             // areaLtcLights
-        HlmsSamplerblock const *mShadowmapSamplerblock;     /// GL3+ only when not using depth textures
-        HlmsSamplerblock const *mShadowmapCmpSamplerblock;  /// For depth textures & D3D11
-        HlmsSamplerblock const *mShadowmapEsmSamplerblock;  /// For ESM.
+        HlmsSamplerblock const *mShadowmapSamplerblock;     ///< GL3+ only when not using depth textures
+        HlmsSamplerblock const *mShadowmapCmpSamplerblock;  ///< For depth textures & D3D11
+        HlmsSamplerblock const *mShadowmapEsmSamplerblock;  ///< For ESM.
         HlmsSamplerblock const *mCurrentShadowmapSamplerblock;
         ParallaxCorrectedCubemapBase *mParallaxCorrectedCubemap;
         float                         mPccVctMinDistance;
         float                         mInvPccVctInvDistance;
 
-        uint32 mCurrentPassBuffer;  /// Resets to zero every new frame.
+        uint32 mCurrentPassBuffer;  ///< Resets to zero every new frame.
 
         TexBufferPacked      *mGridBuffer;
         ReadOnlyBufferPacked *mGlobalLightListBuffer;
@@ -176,7 +176,7 @@ namespace Ogre
         /// i.e. the manual probe's const buffer is currently the only one.
         uint32 mNumPassConstBuffers;
 
-        AtmosphereComponent *mAtmosphere;  /// This value is never nullptr during a render pass
+        AtmosphereComponent *mAtmosphere;  ///< This value is never nullptr during a render pass
 
         TextureGpu *mLightProfilesTexture;
 
@@ -217,7 +217,7 @@ namespace Ogre
         bool mUseLightBuffers;
 
         ShadowFilter     mShadowFilter;
-        uint16           mEsmK;  /// K parameter for ESM.
+        uint16           mEsmK;  ///< K parameter for ESM.
         AmbientLightMode mAmbientLightMode;
 
         void setupRootLayout( RootLayout &rootLayout ) override;
@@ -331,9 +331,9 @@ namespace Ogre
 
             Performance: Whether this setting results in higher or lower performance depends on:
 
-                1. Vertex count of the scene (high vertex count benefit from bInPixelShader = true)
-                2. Screen resolution (large resolutions benefit from bInPixelShader = false)
-                3. Number of shadow mapping lights (large numbers benefit from bInPixelShader = true)
+            1. Vertex count of the scene (high vertex count benefit from bInPixelShader = true)
+            2. Screen resolution (large resolutions benefit from bInPixelShader = false)
+            3. Number of shadow mapping lights (large numbers benefit from bInPixelShader = true)
 
             You will have to profile which setting gives you better performance, although
             generally speaking for low number of lights (e.g. < 5)

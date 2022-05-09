@@ -78,6 +78,38 @@ namespace Ogre
 
         void setValue( Real value ) override { mTarget->_update( value ); }
     };
+
+    class ParticleSystemUpdateValueDeterministic : public ControllerValue<Real>
+    {
+    protected:
+        ParticleSystem *mTarget;
+        Real mLeftOver;
+
+    public:
+        ParticleSystemUpdateValueDeterministic( ParticleSystem *target ) :
+            mTarget( target ),
+            mLeftOver( 0 )
+        {
+        }
+
+        Real getValue() const override { return 0; }  // N/A
+
+        void setValue( Real value ) override
+        {
+            value += mLeftOver;
+            Real timeStep = ParticleSystemManager::getSingleton().getSimulationTickRate();
+
+            if( timeStep <= 0.0f )
+                timeStep = 1.0f;
+
+            const size_t numIterations = static_cast<size_t>( value / timeStep );
+
+            for( size_t i = 0u; i < numIterations; ++i )
+                mTarget->_update( timeStep );
+
+            mLeftOver = value - static_cast<Real>( numIterations ) * timeStep;
+        }
+    };
     //-----------------------------------------------------------------------
     ParticleSystem::ParticleSystem( IdType id, ObjectMemoryManager *objectMemoryManager,
                                     SceneManager *manager, const String &resourceGroup ) :
@@ -920,7 +952,12 @@ namespace Ogre
 
             // Create time controller when attached
             ControllerManager &mgr = ControllerManager::getSingleton();
-            ControllerValueRealPtr updValue( OGRE_NEW ParticleSystemUpdateValue( this ) );
+            ControllerValueRealPtr updValue;
+
+            if( ParticleSystemManager::getSingleton().getSimulationTickRate() <= Real( 0.0 ) )
+                updValue.reset( OGRE_NEW ParticleSystemUpdateValue( this ) );
+            else
+                updValue.reset( OGRE_NEW ParticleSystemUpdateValueDeterministic( this ) );
             mTimeController = mgr.createFrameTimePassthroughController( updValue );
         }
         else if( !parent && mTimeController )

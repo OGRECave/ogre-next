@@ -109,6 +109,8 @@ namespace Ogre
 
         ObjectMemoryManager mTemplatesObjectMemMgr;
 
+        Real mSimulationTickRate;
+
         /** Internal script parsing method. */
         void parseNewEmitter( const String &type, DataStreamPtr &chunk, ParticleSystem *sys );
         /** Internal script parsing method. */
@@ -137,6 +139,33 @@ namespace Ogre
     public:
         ParticleSystemManager();
         ~ParticleSystemManager() override;
+
+        /** Sets the simulation tick rate.
+        @remarks
+            Toggling tickRate from variable to fixed will not affect
+            existing particles, only new ones.
+
+            However for particle FXs which were created as fixed tick rate,
+            changes take effect immediately.
+        @param tickRate
+            A value <= 0 means we will use variable rate.
+            That means that if a second has elapsed between two frames, then
+            we will issue a single update() call with 1 second to the particle FXs.
+
+            A value > 0 means we will use fixed tick rate / time step.
+            That means that if a second has elapsed between two frames and the value is 0.1f, then
+            we will issue 10 updates of 10ms each to simulate the particle FXs.
+
+            Fixed tick rate is much more stable but may consume more resources.
+            It also allows for deterministic simulations, which is impossible with variable rate.
+
+            The default value is 0
+            A sensible value is 1.0 / 60.0 (for 60hz updates)
+        */
+        void setSimulationTickRate( Real tickRate ) { mSimulationTickRate = tickRate; }
+
+        /// See setSimulationTickRate()
+        Real getSimulationTickRate() const { return mSimulationTickRate; }
 
         /** Adds a new 'factory' object for emitters to the list of available emitter types.
         @remarks

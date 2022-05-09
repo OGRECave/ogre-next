@@ -48,7 +48,7 @@ namespace Ogre
     public:
         /** Called before all nodes are going to be updated. Use this place to update your own,
             manually updated Workspaces without having to call
-            @CompositorWorkspace::_beginUpdate( forceBeginFrame=true )
+            CompositorWorkspace::_beginUpdate( forceBeginFrame=true )
         */
         virtual void workspacePreUpdate( CompositorWorkspace *workspace ) {}
         /** Called after all nodes has been updated.

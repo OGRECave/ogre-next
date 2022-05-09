@@ -73,14 +73,14 @@ namespace Ogre
         /** Virtual destructor needed as class has virtual methods. */
         virtual ~Renderable();
 
-        /// Sets the name of the Material to be used. Prefer using HLMS @See setHlms
+        /// Sets the name of the Material to be used. Prefer using HLMS @see setHlms
         void setMaterialName( const String &name, const String &groupName );
 
         /// Sets the given material. Overrides HLMS materials.
         virtual void setMaterial( const MaterialPtr &material );
 
         /** Retrieves the material this renderable object uses. It may be null if it's using
-            the HLMS. @See getDatablock
+            the HLMS. @see getDatablock
         */
         MaterialPtr getMaterial() const;
 
@@ -432,7 +432,7 @@ namespace Ogre
             optimization. Subgroups cannot be used for such optimizations.
         @param subGroup
             The sub group. This value can't exceed OGRE_MAKE_MASK( SubRqIdBits )
-            @See RenderQueue
+            @see RenderQueue
         */
         void  setRenderQueueSubGroup( uint8 subGroup ) { mRenderQueueSubGroup = subGroup; }
         uint8 getRenderQueueSubGroup() const { return mRenderQueueSubGroup; }
@@ -461,7 +461,7 @@ namespace Ogre
         uint32                 mHlmsHash;
         uint32                 mHlmsCasterHash;
         HlmsDatablock         *mHlmsDatablock;
-        MaterialPtr            mMaterial;  /// Only valid when using low level materials
+        MaterialPtr            mMaterial;  ///< Only valid when using low level materials
         // clang-format off
         public: uint8 mCustomParameter;
         // clang-format on
@@ -495,7 +495,7 @@ namespace Ogre
         bool               mPolygonModeOverrideable;
         bool               mUseIdentityProjection;
         bool               mUseIdentityView;
-        UserObjectBindings mUserObjectBindings;  /// User objects binding.
+        UserObjectBindings mUserObjectBindings;  ///< User objects binding.
 
         struct PoseData
         {

@@ -127,13 +127,13 @@ namespace Ogre
 
         TextureGpuManager uses a worker thread to load textures in the background.
         There are several restrictions the implementation needs to account for:
-            * D3D11 does not support persistent mapping. This means we must call unmap
+            + D3D11 does not support persistent mapping. This means we must call unmap
               on a StagingTexture before we can copy it to the final texture.
-            * Calling map/unmap from multiple threads is nearly impossible in OpenGL.
+            + Calling map/unmap from multiple threads is nearly impossible in OpenGL.
               This means map/unmap calls must happen in the main thread.
-            * ResourceGroupManager is not thread-friendly (building with thread
+            + ResourceGroupManager is not thread-friendly (building with thread
               support fills ResourceGroupManager with huge fat mutexes)
-            * Most APIs allow using a simple buffer to store all sorts of staging
+            + Most APIs allow using a simple buffer to store all sorts of staging
               data (regardless of format and resolution), but D3D11 is very inflexible
               about this, requiring StagingTextures to have a 2D resolution (rather
               than being a 1D buffer with just bytes), and must match the same
@@ -442,10 +442,10 @@ namespace Ogre
         };
         struct StreamingData
         {
-            StagingTextureVec availableStagingTex;  /// Used by both threads. Needs mutex protection.
-            QueuedImageVec    queuedImages;         /// Used by mostly by worker thread. Needs mutex.
-            UsageStatsVec     usageStats;  /// Exclusively used by worker thread. No protection needed.
-            UsageStatsVec     prevStats;   /// Used by both threads.
+            StagingTextureVec availableStagingTex;  ///< Used by both threads. Needs mutex protection.
+            QueuedImageVec    queuedImages;         ///< Used by mostly by worker thread. Needs mutex.
+            UsageStatsVec     usageStats;  ///< Exclusively used by worker thread. No protection needed.
+            UsageStatsVec     prevStats;   ///< Used by both threads.
             /// Set to true when worker thread iterates (meaning prevStats.loopCount
             /// can be decremented).
             /// Set to false by main thread every _update call.
@@ -686,10 +686,10 @@ namespace Ogre
         /// destroyed.
         size_t getConsumedMemoryByStagingTextures( const StagingTextureVec &stagingTextures ) const;
         /** Checks if we've exceeded our memory budget for available staging textures.
-                * If we haven't, it early outs and returns nullptr.
-                * If we have, we'll start stalling the GPU until we find a StagingTexture that
+                + If we haven't, it early outs and returns nullptr.
+                + If we have, we'll start stalling the GPU until we find a StagingTexture that
                   can fit the requirements, and return that pointer.
-                * If we couldn't find a fit, we start removing StagingTextures until we've
+                + If we couldn't find a fit, we start removing StagingTextures until we've
                   freed enough to stay below the budget; and return a nullptr.
         */
         StagingTexture *checkStagingTextureLimits( uint32 width, uint32 height, uint32 depth,

@@ -119,7 +119,7 @@ namespace Ogre
         ShaderParams::Param                      *mBounceInvVoxelResolution;
         ShaderParams::Param                      *mBounceIterationDampening;
         ShaderParams::Param                      *mBounceStartBiasInvBiasCascadeMaxLod;
-        ShaderParams::Param *mBounceFromPreviousProbeToNext;  /// Used when cascades > 1
+        ShaderParams::Param *mBounceFromPreviousProbeToNext;  ///< Used when cascades > 1
         ShaderParams        *mBounceShaderParams;
 
         ResourceTransitionArray mResourceTransitions;
@@ -318,8 +318,8 @@ namespace Ogre
             Normally regular mipmaps of 3D textures increase memory consumption by 1/7
             Anisotropic mipmaps of 3D textures increase memory consumption by 6/7
 
-             * Isotropic 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+1/7) = 64 MB * 1.143 =  73.14MB
-             * Anisotrop 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+6/7) = 64 MB * 1.857 = 118.85MB
+             + Isotropic 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+1/7) = 64 MB * 1.143 =  73.14MB
+             + Anisotrop 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+6/7) = 64 MB * 1.857 = 118.85MB
 
         @remarks
             After changing this setting, VctLighting::update

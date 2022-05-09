@@ -137,7 +137,7 @@ namespace Ogre
         }
 
         /** Indicates the pass to change the texture units to use the specified texture sources.
-            @See ComputeTextureSource for params
+            See CompositorPassComputeDef::ComputeTextureSource for params
         */
         void addTextureSource( uint32 texUnitIdx, const String &textureName );
         void addTextureSource( uint32 texUnitIdx, const String &textureName, uint16 textureArrayIndex,

@@ -91,27 +91,27 @@ namespace Ogre
                                       uint32 width, uint32 height, uint32 frequencyNumerator,
                                       uint32 frequencyDenominator );
 
-        /** @copydoc see RenderWindow::destroy */
+        /** @copydoc Window::destroy */
         virtual void destroy();
 
-        /** @copydoc see RenderWindow::isClosed */
+        /** @copydoc Window::isClosed */
         virtual bool isClosed() const;
 
-        /** @copydoc see RenderWindow::isVisible */
+        /** @copydoc Window::isVisible */
         bool isVisible() const;
 
         virtual void _setVisible( bool visible );
 
-        /** @copydoc see RenderWindow::isHidden */
+        /** @copydoc Window::isHidden */
         bool isHidden() const { return mHidden; }
 
-        /** @copydoc see RenderWindow::setHidden */
+        /** @copydoc Window::setHidden */
         void setHidden( bool hidden );
 
-        /** @copydoc see RenderWindow::resize */
+        /** @copydoc Window::requestResolution */
         void requestResolution( uint32 width, uint32 height );
 
-        /** @copydoc see RenderWindow::swapBuffers */
+        /** @copydoc Window::swapBuffers */
         void swapBuffers();
 
         /**

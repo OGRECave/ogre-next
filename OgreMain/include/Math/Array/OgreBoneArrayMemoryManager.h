@@ -93,7 +93,7 @@ namespace Ogre
 
         /** Retrieves a BoneTransform pointing to the first Bone
         @remarks
-            @See BoneMemoryManager::getStart
+            @see BoneMemoryManager::getStart
         @param outTransform
             [out] Transform with filled pointers to the first Node in this depth
         @return

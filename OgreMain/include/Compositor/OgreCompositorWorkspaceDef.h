@@ -44,7 +44,7 @@ namespace Ogre
      *  @{
      */
 
-    /** @See CompositorWorkspace. Workspace definitions assume all other definitions are already
+    /** @see CompositorWorkspace. Workspace definitions assume all other definitions are already
         parsed as we need them to perform validation checks.
         Workspace definitions work by assigning aliases to each node. A node whose name is the
         same as its alias is called an implicit alias.
@@ -63,9 +63,9 @@ namespace Ogre
         struct ChannelRoute
         {
             uint32   outChannel;
-            IdString outNode;  /// Name of the alias
+            IdString outNode;  ///< Name of the alias
             uint32   inChannel;
-            IdString inNode;  /// Name of the alias
+            IdString inNode;  ///< Name of the alias
             ChannelRoute( uint32 _outChannel, IdString _outNode, uint32 _inChannel, IdString _inNode ) :
                 outChannel( _outChannel ),
                 outNode( _outNode ),
@@ -137,7 +137,7 @@ namespace Ogre
         /** Connects outNode's output channel to inNode's input channel.
         @remarks
             This mapping will later be used to know how connections should be done when
-            instantiating. @See CompositorNode::connectTo
+            instantiating. @see CompositorNode::connectTo
             If outNode & inNode are not yet aliased, an alias for them will be created.
         */
         void connect( IdString outNode, uint32 outChannel, IdString inNode, uint32 inChannel );
@@ -160,7 +160,7 @@ namespace Ogre
         /** Connects outNode's output buffer channel to inNode's input buffer channel.
         @remarks
             This mapping will later be used to know how connections should be done when
-            instantiating. @See CompositorNode::connectBufferTo
+            instantiating. @see CompositorNode::connectBufferTo
             If outNode & inNode are not yet aliased, an alias for them will be created.
         */
         void connectBuffer( IdString outNode, uint32 outChannel, IdString inNode, uint32 inChannel );
@@ -179,28 +179,28 @@ namespace Ogre
         */
         void connectExternalBuffer( uint32 externalBufferIdx, IdString inNode, uint32 inChannel );
 
-        /** Clears all the connection between channels of the nodes (@see connect).
+        /** Clears all the connection between channels of the nodes @see connect
         @remarks
             1. We don't clear the output connection (@see connectOutput, @see clearOutputConnections)
-            2. The node aliases (both implicit and explicit) will still exist. @See clearAll.
+            2. The node aliases (both implicit and explicit) will still exist. @see clearAll.
             3. A node with incomplete inputs should be disabled before the workspace is instantiated
                (@see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
                the node instance should be disabled, @see CompositorNode::setEnabled)
             4. It is safe to call this function while there are still workspaces, but you must call
-               @Workspace::reconnectAllNodes after you're done setting the new node connections
+               CompositorWorkspace::reconnectAllNodes after you're done setting the new node connections
         */
         void clearAllInterNodeConnections();
 
         /** Clears the connection from the "final output RenderTarget" (i.e. usually the RenderWindow)
-            that goes to the input channel of one of our nodes. @See connectOutput.
+            that goes to the input channel of one of our nodes. @see connectOutput.
         @remarks
             1. We don't clear other type of connections (@see connect, @see clearAllInterNodeConnections)
-            2. The node aliases (both implicit and explicit) will still exist. @See clearAll.
+            2. The node aliases (both implicit and explicit) will still exist. @see clearAll.
             3. A node with incomplete inputs should be disabled before the workspace is instantiated
                (@see CompositorNodeDef::setStartEnabled). If the workspace has already been instantiated,
                the node instance should be disabled, @see CompositorNode::setEnabled)
             4. It is safe to call this function while there are still workspaces, but you must call
-               @Workspace::reconnectAllNodes after you're done setting the new node connections
+               CompositorWorkspace::reconnectAllNodes after you're done setting the new node connections
         */
         void clearOutputConnections();
 
@@ -208,7 +208,7 @@ namespace Ogre
         @remarks
             This function shouldn't be called while there are still instantiated workspaces
             It is safe to call this function while there are still workspaces, but you must call
-            @Workspace::recreateAllNodes after you're done setting the new node connections.
+            CompositorWorkspace:recreateAllNodes after you're done setting the new node connections.
         */
         void clearAll();
 
@@ -235,7 +235,7 @@ namespace Ogre
 
         /** Gets read-only access to the map to all added nodes and their aliases.
             Useful to know which nodes are in use by this compositor.
-            Use @addNodeAlias @removeNodeAlias and @connect to safely modify the map.
+            Use addNodeAlias() removeNodeAlias() and connect() to safely modify the map.
         */
         const NodeAliasMap &getNodeAliasMap() { return mAliasedNodes; }
 

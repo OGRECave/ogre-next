@@ -396,8 +396,6 @@ namespace Ogre
 
         void destroyInstance( MovableObject *obj ) override;
     };
-    /** @} */
-    /** @} */
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"

@@ -212,19 +212,19 @@ namespace Ogre
             */
             struct CommonVertex
             {
-                Vector3 position;       /// Location of point in euclidean space
-                size_t  index;          /// Place of vertex in common vertex list
-                size_t  vertexSet;      /// The vertex set this came from
-                size_t  indexSet;       /// The index set this was referenced (first) from
-                size_t  originalIndex;  /// Place of vertex in original vertex set
+                Vector3 position;       ///< Location of point in euclidean space
+                size_t  index;          ///< Place of vertex in common vertex list
+                size_t  vertexSet;      ///< The vertex set this came from
+                size_t  indexSet;       ///< The index set this was referenced (first) from
+                size_t  originalIndex;  ///< Place of vertex in original vertex set
             };
             /** A set of indexed geometry data */
             struct Geometry
             {
-                size_t           vertexSet;  /// The vertex data set this geometry data refers to
-                size_t           indexSet;   /// The index data set this geometry data refers to
-                const IndexData *indexData;  /// The index information which describes the triangles.
-                OperationType    opType;     /// The operation type used to render this geometry
+                size_t           vertexSet;  ///< The vertex data set this geometry data refers to
+                size_t           indexSet;   ///< The index data set this geometry data refers to
+                const IndexData *indexData;  ///< The index information which describes the triangles.
+                OperationType    opType;     ///< The operation type used to render this geometry
             };
             /** Comparator for sorting geometries by vertex set */
             struct geometryLess

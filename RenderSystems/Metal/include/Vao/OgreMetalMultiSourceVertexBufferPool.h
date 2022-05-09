@@ -44,7 +44,7 @@ namespace Ogre
 
         MetalVaoManager::BlockVec mFreeBlocks;
 
-        /** @See MetalVaoManager::allocateVbo. This is very similar, except we don't have to deal with
+        /** @see MetalVaoManager::allocateVbo This is very similar, except we don't have to deal with
             stride changes (as the vertex format remains the same) and we can't request another
             pool if we're out of space (in other words, it's simpler).
         @param numVertices

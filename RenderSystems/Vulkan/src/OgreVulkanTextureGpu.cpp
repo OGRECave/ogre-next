@@ -565,27 +565,37 @@ namespace Ogre
         const size_t numMipmaps = mNumMipmaps;
         const uint32 numSlices = getNumSlices();
 
-        VkImageMemoryBarrier imageBarrier = getImageMemoryBarrier();
+        VkImageMemoryBarrier imageBarrier[2];
+        imageBarrier[0] = getImageMemoryBarrier();
+        imageBarrier[1] = imageBarrier[0];
 
-        imageBarrier.subresourceRange.levelCount = 1u;
+        imageBarrier[0].subresourceRange.levelCount = 1u;
+        imageBarrier[1].subresourceRange.levelCount = 1u;
+
+        imageBarrier[0].subresourceRange.baseMipLevel = 1u;
+        imageBarrier[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        imageBarrier[0].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+        imageBarrier[0].srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        imageBarrier[0].dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+
+        if( numMipmaps > 1u )
+        {
+            // getCopyEncoder transitioned mip 1 into SRC. We need it in DST.
+            imageBarrier[1].subresourceRange.baseMipLevel = 1u;
+            imageBarrier[1].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            imageBarrier[1].newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+            imageBarrier[1].srcAccessMask = 0;
+            imageBarrier[1].dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+            vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
+                                  VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u,
+                                  0, 0u, 0, 1u, &imageBarrier[1] );
+        }
 
         const uint32 internalWidth = getInternalWidth();
         const uint32 internalHeight = getInternalHeight();
 
         for( size_t i = 1u; i < numMipmaps; ++i )
         {
-            // Convert the dst mipmap 'i' to TRANSFER_DST_OPTIMAL. Does not have to wait
-            // on anything because previous barriers (compositor or getCopyEncoder)
-            // have already waited
-            imageBarrier.subresourceRange.baseMipLevel = static_cast<uint32_t>( i );
-            imageBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-            imageBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-            imageBarrier.srcAccessMask = 0;
-            imageBarrier.dstAccessMask = 0;
-            vkCmdPipelineBarrier(
-                device->mGraphicsQueue.mCurrentCmdBuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0u, 0, 0u, 0, 1u, &imageBarrier );
-
             VkImageBlit region;
 
             region.srcSubresource.aspectMask = VulkanMappings::getImageAspect( this->getPixelFormat() );
@@ -619,15 +629,20 @@ namespace Ogre
                             mFinalTextureName, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1u, &region,
                             VK_FILTER_LINEAR );
 
+            // Convert the dst mipmap 'i' to TRANSFER_DST_OPTIMAL. Does not have to wait
+            // on anything because previous barriers (compositor or getCopyEncoder)
+            // have already waited
+            imageBarrier[0].subresourceRange.baseMipLevel = static_cast<uint32_t>( i );
+            imageBarrier[1].subresourceRange.baseMipLevel = static_cast<uint32_t>( i + 1u );
+
+            const uint32 numBarriers = i == ( numMipmaps - 1u ) ? 1u : 2u;
+
             // Wait for vkCmdBlitImage on mip i to finish before advancing to mip i+1
             // Also transition src mip 'i' to TRANSFER_SRC_OPTIMAL
-            imageBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-            imageBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-            imageBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-            imageBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+            // Also transition src mip 'i+1' to TRANSFER_DST_OPTIMAL
             vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u,
-                                  0, 0u, 0, 1u, &imageBarrier );
+                                  0, 0u, 0, numBarriers, imageBarrier );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -768,6 +783,12 @@ namespace Ogre
         VkImageView imageView;
         VkResult result = vkCreateImageView( device->mDevice, &imageViewCi, 0, &imageView );
         checkVkResult( result, "vkCreateImageView" );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        const String textureName = getNameStr() + "(View)";
+        setObjectName( device->mDevice, (uint64_t)imageView, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT,
+                       textureName.c_str() );
+#endif
 
         return imageView;
     }

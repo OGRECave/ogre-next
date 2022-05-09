@@ -156,7 +156,7 @@ namespace Ogre
                        uint8 renderQueueId );
 
         /** Don't use this constructor unless you know what you're doing.
-            @See ObjectMemoryManager::mDummyNode
+            @see ObjectMemoryManager::mDummyNode
         */
         MovableObject( ObjectData *objectDataPtrs );
 
@@ -209,12 +209,12 @@ namespace Ogre
         /** Detaches an object from a parent SceneNode if attached. */
         void detachFromParent();
 
-        /// @See Node::_callMemoryChangeListeners
+        /// @see Node::_callMemoryChangeListeners
         virtual void _notifyParentNodeMemoryChanged() {}
 
         unsigned char getCurrentMeshLod() const { return mCurrentMeshLod; }
 
-        /// Checks whether this MovableObject is static. @See setStatic
+        /// Checks whether this MovableObject is static. @see setStatic
         bool isStatic() const;
 
         /** Turns this Node into static or dynamic
@@ -228,7 +228,7 @@ namespace Ogre
             have been created (eg. InstancedEntity)
         @par
             Changing this attribute will cause to switch the attribute to our parent node,
-            and as a result, all of its other attached entities. @See Node::setStatic
+            and as a result, all of its other attached entities. @see Node::setStatic
         @return
             True if setStatic made an actual change. False otherwise. Can fail because the
             object was already static/dynamic, or because switching is not supported
@@ -248,7 +248,7 @@ namespace Ogre
         */
         virtual void _updateRenderQueue( RenderQueue *queue, Camera *camera, const Camera *lodCamera ) {}
 
-        /** @See SceneManager::updateAllBounds
+        /** @see SceneManager::updateAllBounds
         @remarks
             We don't pass by reference on purpose (avoid implicit aliasing)
         */
@@ -262,7 +262,7 @@ namespace Ogre
                                                          ArrayReal *RESTRICT_ALIAS worldRadius );
 
     public:
-        /** @See SceneManager::cullFrustum
+        /** @see SceneManager::cullFrustum
         @remarks
             We don't pass by reference on purpose (avoid implicit aliasing)
             We perform frustum culling AND test visibility mask at the same time
@@ -284,13 +284,13 @@ namespace Ogre
                                  uint32 sceneVisibilityFlags, MovableObjectArray &outCulledObjects,
                                  const Camera *lodCamera );
 
-        /// @See InstancingTheadedCullingMethod, @see InstanceBatch::instanceBatchCullFrustumThreaded
+        /// @see InstancingTheadedCullingMethod, @see InstanceBatch::instanceBatchCullFrustumThreaded
         virtual void instanceBatchCullFrustumThreaded( const Frustum *frustum, const Camera *lodCamera,
                                                        uint32 combinedVisibilityFlags )
         {
         }
 
-        /** @See SceneManager::cullLights & @see MovableObject::cullFrustum
+        /** See SceneManager::cullLights & see MovableObject::cullFrustum.
             Produces the global list of visible lights that is needed in buildLightList
         @remarks
             We don't pass ObjectData by reference on purpose (avoid implicit aliasing)
@@ -302,13 +302,13 @@ namespace Ogre
             An array of all frustums we need to check against
         @param cubemapFrustums
             An array of all frustums that are used at least once as cubemaps
-            (@See SceneManager::createCamera)
+            @see SceneManager::createCamera
         */
         static void cullLights( const size_t numNodes, ObjectData t, uint32 sceneLightMask,
                                 LightListInfo &outGlobalLightList, const FrustumVec &frustums,
                                 const FrustumVec &cubemapFrustums );
 
-        /** @See SceneManager::buildLightList
+        /** @see SceneManager::buildLightList
         @remarks
             We don't pass by reference on purpose (avoid implicit aliasing)
         @param globalLightList
@@ -441,7 +441,7 @@ namespace Ogre
         /** Gets the axis aligned box in world space.
         @remarks
             Assumes the caches are already updated. Will trigger an assert
-            otherwise. @See getWorldAabbUpdated if you need the update process
+            otherwise. See getWorldAabbUpdated() if you need the update process
             to be guaranteed
         */
         Aabb getWorldAabb() const;
@@ -461,7 +461,7 @@ namespace Ogre
         /** Gets the bounding Radius scaled by max( scale.x, scale.y, scale.z ).
         @remarks
             Assumes the caches are already updated. Will trigger an assert
-            otherwise. @See getWorldRadiusUpdated if you need the update process
+            otherwise. See getWorldRadiusUpdated() if you need the update process
             to be guaranteed
         */
         float getWorldRadius() const;
@@ -503,10 +503,10 @@ namespace Ogre
          */
         static uint32 getDefaultQueryFlags() { return msDefaultQueryFlags; }
 
-        /// Returns the distance to camera as calculated in @cullFrustum
+        /// Returns the distance to camera as calculated in cullFrustum()
         inline RealAsUint getCachedDistanceToCamera() const;
 
-        /// Returns the distance to camera as calculated in @cullFrustum
+        /// Returns the distance to camera as calculated in cullFrustum()
         inline Real getCachedDistanceToCameraAsReal() const;
 
         /** Sets the visibility flags for this object.

@@ -52,7 +52,7 @@ namespace Ogre
 
     struct _OgreExport BasicBlock
     {
-        void  *mRsData;  /// Render-System specific data
+        void  *mRsData;  ///< Render-System specific data
         uint16 mRefCount;
         /// The mId is only valid while mRefCount > 0; which means mRsData
         /// may contain valid data, else it's null.
@@ -61,7 +61,7 @@ namespace Ogre
         /// HlmsManager. This guarantees HlmsMacroblock & HlmsBlendblock pointers are always
         /// valid, although they may be inactive (i.e. mId invalid, mRefCount = 0 and mRsData = 0)
         uint16 mLifetimeId;
-        uint8  mBlockType;  /// @see HlmsBasicBlock
+        uint8  mBlockType;  ///< @see HlmsBasicBlock
 
         /// When zero, HlmsManager cannot override the block's values with
         /// enforced global settings. (such as lower quality texture filtering or
@@ -137,9 +137,9 @@ namespace Ogre
 
     /** A blend block contains settings that rarely change, and thus are common to many materials.
         The reasons this structure isn't joined with HlmsMacroblock is that:
-            * The D3D11 API makes this distinction (much higher API overhead if we
+            + The D3D11 API makes this distinction (much higher API overhead if we
               change i.e. depth settings) due to D3D11_RASTERIZER_DESC.
-            * This block contains information of whether the material is transparent.
+            + This block contains information of whether the material is transparent.
               Transparent materials are sorted differently than opaque ones.
         Up to 32 different blocks are allowed!
     */
@@ -257,10 +257,11 @@ namespace Ogre
     };
 
     /** An hlms datablock contains individual information about a specific material. It consists of:
-            * A const pointer to an @HlmsMacroblock we do not own and may be shared by other datablocks.
-            * A const pointer to an @HlmsBlendblock we do not own and may be shared by other datablocks.
-            * The original properties from which this datablock was constructed.
-            * This type may be derived to contain additional information.
+            + A const pointer to an HlmsMacroblock we do not own and may be shared by other datablocks.
+            + A const pointer to an HlmsBlendblock we do not own and may be shared by other datablocks.
+            + The original properties from which this datablock was constructed.
+            + This type may be derived to contain additional information.
+                 
         Derived types can cache information present in mOriginalProperties as strings, like diffuse
         colour values, etc.
 
@@ -315,7 +316,7 @@ namespace Ogre
     public:
         uint32 mTextureHash;        // TextureHash comes before macroblock for alignment reasons
         uint16 mMacroblockHash[2];  // Not all bits are used
-        uint8  mType;               /// @See HlmsTypes
+        uint8  mType;               ///< @see HlmsTypes
     protected:
         HlmsMacroblock const *mMacroblock[2];
         HlmsBlendblock const *mBlendblock[2];
@@ -326,7 +327,7 @@ namespace Ogre
 
     protected:
         bool  mIgnoreFlushRenderables;
-        uint8 mAlphaTestCmp;  /// @see CompareFunction
+        uint8 mAlphaTestCmp;  ///< @see CompareFunction
         bool  mAlphaTestShadowCasterOnly;
         float mAlphaTestThreshold;
 
@@ -355,7 +356,7 @@ namespace Ogre
             Runs an O(N) search to get the right block.
             Calling this function triggers a HlmsDatablock::flushRenderables
         @param macroblock
-            @See HlmsManager::getMacroblock
+            @see HlmsManager::getMacroblock
         @param casterBlock
             True to directly set the macroblock to be used during the shadow mapping's caster pass.
             Note that when false, it will automatically reset the caster's block according to
@@ -381,7 +382,7 @@ namespace Ogre
             Runs an O(N) search to get the right block.
             Calling this function triggers a HlmsDatablock::flushRenderables
         @param blendblock
-            @See HlmsManager::getBlendblock
+            @see HlmsManager::getBlendblock
         @param casterBlock
             True to directly set the blendblock to be used during the shadow mapping's caster pass.
             Note that when false, it will reset the caster block to the same as the regular one.

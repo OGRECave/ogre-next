@@ -81,7 +81,7 @@ namespace Ogre
 
     protected:
         BoneVec        mBones;
-        TransformArray mBoneStartTransforms;  /// The start of Transform at each depth level
+        TransformArray mBoneStartTransforms;  ///< The start of Transform at each depth level
 
         RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> mManualBones;
 
@@ -133,7 +133,7 @@ namespace Ogre
             before each call to @see update
         @remarks
             You can prevent the bone from receiving animation by setting the bone weight
-            to zero. @See SkeletonAnimation::setBoneWeight
+            to zero. @see SkeletonAnimation::setBoneWeight
         @param bone
             Bone to set/unset to manual. Must belong to this SkeletonInstance (an assert
             is triggered on non-release builds). Behavior is undefined if node doesn't
@@ -143,7 +143,7 @@ namespace Ogre
         */
         void setManualBone( Bone *bone, bool isManual );
 
-        /** Returns true if the bone is manually controlled. @See setManualBone
+        /** Returns true if the bone is manually controlled. @see setManualBone
         @param bone
             Bone to query if manual. Must belong to this SkeletonInstance.
         */
@@ -214,7 +214,7 @@ namespace Ogre
         void getTransforms( SimpleMatrixAf4x3 *RESTRICT_ALIAS outTransform,
                             const FastArray<unsigned short>  &usedBones ) const;
 
-        /** Updates the contents of @mBoneStartTransforms. Needed when our
+        /** Updates the contents of SkeletonInstance#mBoneStartTransforms. Needed when our
             memory manager performs a cleanup or similar memory change.
         */
         void _updateBoneStartTransforms();

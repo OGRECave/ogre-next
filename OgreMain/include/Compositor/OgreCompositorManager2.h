@@ -68,15 +68,16 @@ namespace Ogre
         The CompositorManager2 works by defining definitions which tell how the instance will
         behave.
         The top down view is the following:
-            * Workspace
-                * Node
-                    * Target
-                        * PASS_SCENE
-                        * PASS_QUAD
-                        * PASS_CLEAR
-                        * PASS_STENCIL
-                        * PASS_RESOLVE
-                * Shadow Node
+            + Workspace
+                + Node
+                    + Target
+                        + PASS_SCENE
+                        + PASS_QUAD
+                        + PASS_CLEAR
+                        + PASS_STENCIL
+                        + PASS_RESOLVE
+                + Shadow Node
+                
         A Node definition must be created first. Inside the Node Def. different passes can be defined
         including which targets they should render to.
         Once the definitions are set, a workspace instance must be created using addWorkspace
@@ -90,12 +91,12 @@ namespace Ogre
     @par
         A node has inputs (textures), local textures, and outputs. It can also directly global textures
         that are defined in a workspace definition. There a few basic rules:
-            * Global Textures use the "global_" prefix. For example "global_myRT" is a global texture.
+            + Global Textures use the "global_" prefix. For example "global_myRT" is a global texture.
               Trying to create a Local texture with that name will throw.
-            * Global Textures can't be used as node input nor output.
-            * Textures that came as Input can be used as Output.
-            * A node may have no Input nor Output.
-            * Shadow Nodes can't have input, but can have output to be used with other nodes.
+            + Global Textures can't be used as node input nor output.
+            + Textures that came as Input can be used as Output.
+            + A node may have no Input nor Output.
+            + Shadow Nodes can't have input, but can have output to be used with other nodes.
     @par
         Shadow Nodes are particular case of Nodes which are used for rendering shadow maps, and can
         only be references from a PASS_SCENE object; and will be executed when that pass is.
@@ -177,7 +178,7 @@ namespace Ogre
         /// Returns the node definition with the given name. Throws if not found
         const CompositorNodeDef *getNodeDefinition( IdString nodeDefName ) const;
 
-        /// @See getNodeDefinition. Returns a non-const pointer. Use this only if you
+        /// See getNodeDefinition(). Returns a non-const pointer. Use this only if you
         /// know what you're doing. Modifying a NodeDef while it's being used by
         /// CompositorNode instances is undefined. It's safe if you're sure it's not
         /// being used.
@@ -198,7 +199,7 @@ namespace Ogre
         /// Returns the node definition with the given name. Throws if not found
         const CompositorShadowNodeDef *getShadowNodeDefinition( IdString nodeDefName ) const;
 
-        /// @See getShadowNodeDefinition. Returns a non-const pointer. Use this only if you
+        /// See getShadowNodeDefinition(). Returns a non-const pointer. Use this only if you
         /// know what you're doing. Modifying a ShadowNodeDef while it's being used by
         /// CompositorShadowNode instances is undefined. It's safe if you're sure it's not
         /// being used.

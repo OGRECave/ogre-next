@@ -76,7 +76,7 @@ namespace Ogre
             /// This causes vector.z to be always 1, but the length of the vector
             /// itself may not be unit-length.
             VIEW_SPACE_CORNERS_NORMALIZED,
-            VIEW_SPACE_CORNERS_NORMALIZED_LH,  /// Left-handed
+            VIEW_SPACE_CORNERS_NORMALIZED_LH,  ///< Left-handed
             WORLD_SPACE_CORNERS,
             WORLD_SPACE_CORNERS_CENTERED,
             CAMERA_DIRECTION
@@ -91,7 +91,7 @@ namespace Ogre
             Hence we should skip this pass for those APIs that don't support explicit resolving
             TODO: Not really implemented yet!!!
         @remarks
-            @See TextureDefinitionBase::TextureDefinition::fsaaExplicitResolve
+            See TextureDefinitionBase::TextureDefinition::fsaaExplicitResolve
         */
         bool mIsResolve;
 
@@ -105,7 +105,7 @@ namespace Ogre
         /// not just the textures referenced by the compositor
         bool mAnalyzeAllTextureLayouts;
 
-        bool   mMaterialIsHlms;  /// If true, mMaterialName is an Hlms material
+        bool   mMaterialIsHlms;  ///< If true, mMaterialName is an Hlms material
         String mMaterialName;
 
         /** Type of frustum corners to pass in the quad normals.
@@ -127,7 +127,7 @@ namespace Ogre
         }
 
         /** Indicates the pass to change the texture units to use the specified texture sources.
-            @See QuadTextureSource for params
+            See CompositorPassQuadDef::QuadTextureSource for params
         */
         void addQuadTextureSource( size_t texUnitIdx, const String &textureName );
 

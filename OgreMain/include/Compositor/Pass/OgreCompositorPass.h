@@ -162,15 +162,15 @@ namespace Ogre
 
         virtual void execute( const Camera *lodCameraconst ) = 0;
 
-        /// @See CompositorNode::notifyRecreated
+        /// @see CompositorNode::notifyRecreated
         virtual bool notifyRecreated( const TextureGpu *channel );
         virtual void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer );
 
-        /// @See CompositorNode::notifyDestroyed
+        /// @see CompositorNode::notifyDestroyed
         virtual void notifyDestroyed( TextureGpu *channel );
         virtual void notifyDestroyed( const UavBufferPacked *buffer );
 
-        /// @See CompositorNode::_notifyCleared
+        /// @see CompositorNode::_notifyCleared
         virtual void notifyCleared();
 
         virtual void resetNumPassesLeft();

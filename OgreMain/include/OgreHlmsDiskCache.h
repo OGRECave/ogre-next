@@ -161,7 +161,7 @@ namespace Ogre
         struct Cache
         {
             uint64        templateHash[2];  // 128 bit hash
-            uint8         type;             /// See HlmsTypes
+            uint8         type;             ///< See HlmsTypes
             SourceCodeVec sourceCode;
             PsoVec        pso;
         };

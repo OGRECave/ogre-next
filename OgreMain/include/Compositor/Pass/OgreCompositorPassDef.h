@@ -72,16 +72,17 @@ namespace Ogre
 
     class CompositorTargetDef;
 
-    /** Interface to abstract all types of pass definitions (@see CompositorPassType):
-            * PASS_SCENE (@See CompositorPassSceneDef)
-            * PASS_QUAD (@See CompositorPassQuadDef)
-            * PASS_CLEAR (@See CompositorPassClearDef)
-            * PASS_STENCIL (@See CompositorPassStencilDef)
-            * PASS_DEPTHCOPY (@See CompositorPassDepthCopy)
-            * PASS_UAV (@See CompositorPassUavDef)
-            * PASS_COMPUTE (@See CompositorPassComputeDef)
-            * PASS_SHADOWS (@See CompositorPassShadowsDef)
-            * PASS_MIPMAP (@See CompositorPassMipmapDef)
+    /** Interface to abstract all types of pass definitions (see CompositorPassType):
+            + PASS_SCENE (see CompositorPassSceneDef)
+            + PASS_QUAD (see CompositorPassQuadDef)
+            + PASS_CLEAR (see CompositorPassClearDef)
+            + PASS_STENCIL (see CompositorPassStencilDef)
+            + PASS_DEPTHCOPY (see CompositorPassDepthCopy)
+            + PASS_UAV (see CompositorPassUavDef)
+            + PASS_COMPUTE (see CompositorPassComputeDef)
+            + PASS_SHADOWS (see CompositorPassShadowsDef)
+            + PASS_MIPMAP (see CompositorPassMipmapDef)
+            
         This class doesn't do much on its own. See the derived types for more information
         A definition is shared by all pass instantiations (i.e. Five CompositorPassScene can
         share the same CompositorPassSceneDef) and are assumed to remain const throughout

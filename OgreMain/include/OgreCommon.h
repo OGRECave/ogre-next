@@ -1005,7 +1005,7 @@ namespace Ogre
     protected:
         uint8 mColourSamples;
         uint8 mCoverageSamples;
-        uint8 mPattern;  /// See MsaaPatterns::MsaaPatterns
+        uint8 mPattern;  ///< See MsaaPatterns::MsaaPatterns
         uint8 mPadding;
 
     public:

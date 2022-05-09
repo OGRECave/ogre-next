@@ -184,9 +184,6 @@ namespace Ogre
         bool frameStarted( const FrameEvent &evt ) override;
     };
 
-    /** @} */
-    /** @} */
-
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"

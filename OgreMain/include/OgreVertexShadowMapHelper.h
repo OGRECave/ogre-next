@@ -151,8 +151,6 @@ namespace Ogre
             static bool findFirstAppearance( const GeometryVec &geom, const VertexData *vertexBuffer,
                                              size_t &outVaoIdx );
         };
-        /** @} */
-        /** @} */
 
     }  // namespace v1
 }  // namespace Ogre

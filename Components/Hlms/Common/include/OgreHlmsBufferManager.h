@@ -82,8 +82,8 @@ namespace Ogre
 
         VaoManager *mVaoManager;
 
-        uint32 mCurrentConstBuffer;  /// Resets every to zero every new frame.
-        uint32 mCurrentTexBuffer;    /// Resets every to zero every new frame.
+        uint32 mCurrentConstBuffer;  ///< Resets every to zero every new frame.
+        uint32 mCurrentTexBuffer;    ///< Resets every to zero every new frame.
         ConstBufferPackedVec mConstBuffers;
         ReadOnlyBufferPackedVec mTexBuffers;
 

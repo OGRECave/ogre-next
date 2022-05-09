@@ -96,7 +96,7 @@ namespace Ogre
 
             Furthermore, it would be confusing, because it would be not clear whether
             those two options should memcpy memory, or rebase the pointers, hence
-            explicit functions are much preferred. @See rebasePtrs
+            explicit functions are much preferred. @see rebasePtrs
 
             Note that we do NOT copy the mIndex member.
         */

@@ -189,11 +189,11 @@ namespace Ogre
         void   setMaterialName( const String &name ) { mMaterialName = name; }
         String getMaterialName() const { return mMaterialName; }
 
-        /// Imports a v1 SubMesh @See Mesh::importV1. Automatically performs what arrangeEfficient does.
+        /// Imports a v1 SubMesh @see Mesh::importV1. Automatically performs what arrangeEfficient does.
         void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
                            bool halfPose );
 
-        /// Converts this SubMesh to an efficient arrangement. @See Mesh::importV1 for an
+        /// Converts this SubMesh to an efficient arrangement. See Mesh::importV1 for an
         /// explanation on the parameters. @see dearrangeEfficientToInefficient
         /// to perform the opposite operation.
         void arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents );
@@ -312,11 +312,11 @@ namespace Ogre
         @remarks
             Final work is delegated to the generic overload.
         @param halfPos
-            @See Mesh::importV1
+            @see Mesh::importV1
         @param halfTexCoords
-            @See Mesh::importV1
+            @see Mesh::importV1
         @param qTangents
-            @See Mesh::importV1
+            @see Mesh::importV1
         @param outVertexElements [out]
             Description of the buffer in the new v2 system.
         @return

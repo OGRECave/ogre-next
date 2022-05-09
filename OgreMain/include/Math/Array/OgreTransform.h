@@ -98,7 +98,7 @@ namespace Ogre
 
             Furthermore, it would be confusing, because it would be not clear whether
             those two options should memcpy memory, or rebase the pointers, hence
-            explicit functions are much preferred. @See rebasePtrs
+            explicit functions are much preferred. @see rebasePtrs
 
             Note that we do NOT copy the mIndex member.
         */
@@ -144,7 +144,7 @@ namespace Ogre
             calculated from a base pointer, and a difference offset. The index (i.e.
             mPosition._getIndex()) is assumed to stay the same
         @remarks
-            @See RebaseListener This function is intended to be used when the pool memory is growing
+            See RebaseListener. This function is intended to be used when the pool memory is growing
             hence the memory base address may change, so we need to reallocate and update all pointers
             accordingly
         */

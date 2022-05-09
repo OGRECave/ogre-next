@@ -55,7 +55,7 @@ namespace Ogre
 
         /** MUST be sorted by location in its BoneMemoryManager's slot
             (in order to update in parallel without causing race conditions)
-            @See threadStarts
+            @see threadStarts
         */
         FastArray<SkeletonInstance *> skeletons;
 
@@ -92,7 +92,7 @@ namespace Ogre
         that (e.g.) if skeletons[0] and skeletons[1] share the same memory block (which
         is granted by the BoneMemoryManager), they get updated in the same thread.
         Otherwise race conditions will ensue, due to SIMD branchless selections inside
-        @SkeletonInstance::update.
+        SkeletonInstance::update.
     @par
         Just like other managers (@see mNodeMemoryManager), SceneManager implementations may
         want to provide more than one SkeletonAnimManager (i.e. one per octant)

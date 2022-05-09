@@ -84,7 +84,7 @@ namespace Ogre
         ObjectMemoryManager();
         virtual ~ObjectMemoryManager();
 
-        /// @See mMemoryManagerType
+        /// @see mMemoryManagerType
         void _setTwin( SceneMemoryMgrTypes memoryManagerType, ObjectMemoryManager *twinMemoryManager );
 
         /// Note the return value can be null

@@ -64,7 +64,7 @@ namespace Ogre
         bool mPaused;
 
     public:
-        uint32 mMask;  /// @see CubemapProbe::mMask
+        uint32 mMask;  ///< @see CubemapProbe::mMask
     protected:
         Root                         *mRoot;
         SceneManager                 *mSceneManager;
@@ -162,9 +162,6 @@ namespace Ogre
         // RenderSystem::Listener overloads
         void eventOccurred( const String &eventName, const NameValuePairList *parameters ) override;
     };
-
-    /** @} */
-    /** @} */
 
 }  // namespace Ogre
 

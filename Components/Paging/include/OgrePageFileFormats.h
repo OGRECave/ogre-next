@@ -37,7 +37,7 @@ THE SOFTWARE.
 /** \addtogroup Paging
 *  Some details on paging component
 */
-/*@{*/
+/**@{*/
 
 
 /** @file
@@ -216,8 +216,8 @@ THE SOFTWARE.
     </table>
 */
 
-/*@}*/
-/*@}*/
+/**@}*/
+/**@}*/
 
 
 #endif 

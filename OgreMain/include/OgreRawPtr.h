@@ -40,9 +40,10 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Similar to std::unique_ptr, but:
-            * Uses a custom allocator (OGRE_MALLOC_SIMD)
-            * Pointers must be really unique (RESTRICT_ALIAS modifier is used!)
-            * To access the pointer, use get(); instead of using this container directly
+            + Uses a custom allocator (OGRE_MALLOC_SIMD)
+            + Pointers must be really unique (RESTRICT_ALIAS modifier is used!)
+            + To access the pointer, use get(); instead of using this container directly
+            
         The purpose of this container is to enclose a raw pointer while avoiding breaking
         the rule of 3 when copying.
         When defining the macro "OGRE_RAW_PTR_PROFILE", this container will raise an exception

@@ -169,7 +169,7 @@ namespace Ogre
          @param apiStrict
             When true, obeys the rules of most APIs (i.e. ETC1 can't update subregions according to
             GLES specs). When false, becomes more practical if manipulating by hand (i.e. ETC1's
-            subregions can be updated just fine by @bulkCompressedSubregion)
+            subregions can be updated just fine by bulkCompressedSubregion())
          @return
             The width of compression block, in pixels. Can be 0 (see remarks). If format is not
             compressed, returns 1.

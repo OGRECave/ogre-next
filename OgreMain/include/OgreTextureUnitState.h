@@ -550,14 +550,10 @@ namespace Ogre
          */
         bool getIsAlpha() const;
 
-        /// @copydoc Texture::getGamma
         Real getGamma() const { return mGamma; }
-        /// @copydoc Texture::setGamma
         void setGamma( Real gamma ) { mGamma = gamma; }
 
-        /// @copydoc Texture::setHardwareGammaEnabled
         void setHardwareGammaEnabled( bool enabled );
-        /// @copydoc Texture::isHardwareGammaEnabled
         bool isHardwareGammaEnabled() const;
 
         /** Gets the index of the set of texture co-ords this layer uses.
@@ -989,7 +985,7 @@ namespace Ogre
         void _setSamplerblock( const HlmsSamplerblock *samplerblock );
 
         /** Retrieves current samplerblock. Don't const_cast the return value to modify it.
-            @See HlmsDatablock remarks.
+            See HlmsDatablock remarks.
         */
         const HlmsSamplerblock *getSamplerblock() const;
 
@@ -1089,11 +1085,11 @@ namespace Ogre
 
         /// Duration of animation in seconds.
         Real mAnimDuration;
-        bool mCubic;  /// Is this a series of 6 2D textures to make up a cube?
+        bool mCubic;  ///< Is this a series of 6 2D textures to make up a cube?
 
         bool                       mAutomaticBatching;
         TextureTypes::TextureTypes mTextureType;
-        int                        mTextureSrcMipmaps;  /// Request number of mipmaps.
+        int                        mTextureSrcMipmaps;  ///< Request number of mipmaps.
 
         unsigned int            mTextureCoordSetIndex;
         HlmsSamplerblock const *mSamplerblock;

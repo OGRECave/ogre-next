@@ -49,12 +49,12 @@ namespace Ogre
          */
         LodOutsideMarker( LodData::VertexList &vertexList, LodData::TriangleList &triangleList,
                           Real boundingSphereRadius, Real walkAngle );
-        void        markOutside();  /// Mark vertices, which are visible from outside.
+        void        markOutside();  ///< Mark vertices, which are visible from outside.
         v1::MeshPtr createConvexHullMesh(
             const String &meshName,
             const String &resourceGroupName =
-                ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );  /// Returns a mesh containing the
-                                                                      /// Convex Hull shape.
+                ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );  ///< Returns a mesh containing the
+                                                                      ///< Convex Hull shape.
 
         bool isVertexOutside( LodData::VertexI v ) { return getOutsideData( v )->isOuterWallVertex; }
 
@@ -83,18 +83,18 @@ namespace Ogre
         typedef vector<std::pair<CHVertexI, CHVertexI> >::type CHEdgeList;
 
         const Real
-            mEpsilon;  /// Amount of allowed floating point error if 4 vertices are on the same plane.
-        CHTriangleList  mHull;              /// Contains the current triangles of the convex hull.
-        CHTrianglePList mVisibleTriangles;  /// Temporary vector for addVisibleEdges function (prevent
-                                            /// allocation every call).
-        CHEdgeList mEdges;  /// Temporary vector for the horizon edges, when inserting a new vertex into
-                            /// the hull.
-        LodData::VertexList   &mVertexListOrig;    /// Source of input and output of the algorithm.
-        LodData::TriangleList &mTriangleListOrig;  /// Source of input and output of the algorithm.
+            mEpsilon;  ///< Amount of allowed floating point error if 4 vertices are on the same plane.
+        CHTriangleList  mHull;              ///< Contains the current triangles of the convex hull.
+        CHTrianglePList mVisibleTriangles;  ///< Temporary vector for addVisibleEdges function (prevent
+                                            ///< allocation every call).
+        CHEdgeList mEdges;  ///< Temporary vector for the horizon edges, when inserting a new vertex into
+                            ///< the hull.
+        LodData::VertexList   &mVertexListOrig;    ///< Source of input and output of the algorithm.
+        LodData::TriangleList &mTriangleListOrig;  ///< Source of input and output of the algorithm.
 
         OutsideDataList mOutsideData;
-        Vector3         mCentroid;   /// Centroid of the convex hull.
-        Real            mWalkAngle;  /// Angle limit, when walking inside for marking vertices.
+        Vector3         mCentroid;   ///< Centroid of the convex hull.
+        Real            mWalkAngle;  ///< Angle limit, when walking inside for marking vertices.
 
         LodData::Vertex *getVertex( OutsideData *d )
         {
@@ -106,45 +106,47 @@ namespace Ogre
         }
         OutsideData *getOutsideData( LodData::VertexI vi ) { return &mOutsideData[vi]; }
 
-        void initHull();  /// Initializes the hull for expansion.
+        void initHull();  ///< Initializes the hull for expansion.
         void createTriangle(
             CHVertexI v1, CHVertexI v2,
-            CHVertexI v3 );  /// Sets the vertices of a triangle (called from initHull only).
-        Real   getTetrahedronVolume( CHVertex *v0, CHVertex *v1, CHVertex *v2, CHVertex *v3 );
-        Real   getPointToLineSqraredDistance( CHVertex *x1, CHVertex *x2, CHVertex *vertex );
-        void   generateHull();                 /// Generates the hull.
-        size_t addVertex( CHVertex *vertex );  /// Adds vertex to hull.
-        void   addEdge( CHEdgeList &edges, CHVertexI a,
-                        CHVertexI b );  /// Add edge to the list of removable edges.
-        void   cleanHull();  /// Removes Triangles, which are having CHTriangle::removed = true.
-        bool isVisible( CHTriangle *triangle, Vector3 &vertex );  /// Whether face is visible from point.
-        CHVertex *getFurthestVertex( CHTriangle *hull );          /// Gets furthest vertex from face.
+            CHVertexI v3 );  ///< Sets the vertices of a triangle (called from initHull only).
+        Real      getTetrahedronVolume( CHVertex *v0, CHVertex *v1, CHVertex *v2, CHVertex *v3 );
+        Real      getPointToLineSqraredDistance( CHVertex *x1, CHVertex *x2, CHVertex *vertex );
+        void      generateHull();                 ///< Generates the hull.
+        size_t    addVertex( CHVertex *vertex );  ///< Adds vertex to hull.
+        void      addEdge( CHEdgeList &edges, CHVertexI a,
+                           CHVertexI b );  ///< Add edge to the list of removable edges.
+        void      cleanHull();  ///< Removes Triangles, which are having CHTriangle::removed = true.
+        bool      isVisible( CHTriangle *triangle,
+                             Vector3    &vertex );           ///< Whether face is visible from point.
+        CHVertex *getFurthestVertex( CHTriangle *hull );  ///< Gets furthest vertex from face.
         void      getVisibleTriangles(
                  const CHVertex *target,
-                 CHTrianglePList
-                     &visibleTriangles );  /// Adds visible edges to the list, when viewing from target point.
+                 CHTrianglePList      &
+                visibleTriangles );  ///< Adds visible edges to the list, when viewing from target point.
         void getHorizon( const CHTrianglePList &tri,
-                         CHEdgeList & );  /// Removes edges, which are not on the horizon.
+                         CHEdgeList & );  ///< Removes edges, which are not on the horizon.
         void fillHorizon( CHEdgeList &e,
-                          CHVertex *target );  /// Caps the hole with faces connecting to target vertex.
-        void markVertices();  /// if we have the convex hull, this will walk on the faces which have less
-                              /// then 90 degree difference.
+                          CHVertex *target );  ///< Caps the hole with faces connecting to target vertex.
+        void markVertices();  ///< if we have the convex hull, this will walk on the faces which have
+                              ///< less then 90 degree difference.
         template <typename T>
         void addHullTriangleVertices(
             std::vector<CHVertex *> &stack,
-            T                        tri );  /// Add triangle to stack (called from markVertices only).
+            T                        tri );  ///< Add triangle to stack (called from markVertices only).
         /// Determines whether ptarget is on the same side of the p0-p1 line as p2. Assuming each point
         /// is on the same plane.
         Real pointToLineDir( const Vector3 &ptarget, const Vector3 &p0, const Vector3 &p1,
                              const Vector3 &p2, const Vector3 &n );
         bool isInsideTriangle( const Vector3    &ptarget,
-                               const CHTriangle &tri );  /// Whether the vertex is inside the triangle.
-                                                         /// We assume that it is on the same plane
+                               const CHTriangle &tri );  ///< Whether the vertex is inside the triangle.
+                                                         ///< We assume that it is on the same plane
         bool isInsideLine( const Vector3 &ptarget, const Vector3 &p0,
-                           const Vector3 &p1 );  /// Whether ptarget is between p0 and p1. Assuming they
-                                                 /// are on the same line.
-        bool isSamePosition( const Vector3 &p0,
-                             const Vector3 &p1 );  /// Whether p0 = p1 with mEpsilon allowed float error.
+                           const Vector3 &p1 );  ///< Whether ptarget is between p0 and p1. Assuming they
+                                                 ///< are on the same line.
+        bool isSamePosition(
+            const Vector3 &p0,
+            const Vector3 &p1 );  ///< Whether p0 = p1 with mEpsilon allowed float error.
     };
 }  // namespace Ogre
 

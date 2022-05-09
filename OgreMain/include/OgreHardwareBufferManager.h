@@ -425,7 +425,7 @@ namespace Ogre
                 return mImpl->createIndexBuffer( itype, numIndexes, usage, useShadowBuffer );
             }
 
-            /** @copydoc HardwareBufferManagerInterface::createVertexDeclaration */
+            /** @copydoc HardwareBufferManagerBase::createVertexDeclaration */
             VertexDeclaration *createVertexDeclaration() override
             {
                 return mImpl->createVertexDeclaration();

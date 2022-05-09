@@ -418,9 +418,9 @@ namespace Ogre
             */
             void setPolygonModeOverrideable( bool PolygonModeOverrideable );
 
-            /** @copydoc ShadowCaster::getEdgeList. */
+            /** @copydoc v1::ManualObject::getEdgeList */
             EdgeData *getEdgeList();
-            /** @copydoc ShadowCaster::hasEdgeList. */
+            /** @copydoc v1::ManualObject::hasEdgeList */
             bool hasEdgeList();
 
             /** Internal method for retrieving bone matrix information. */

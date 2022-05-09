@@ -164,7 +164,7 @@ namespace Ogre
     public:
         static const size_t MAX_MEMORY_SLOTS;
 
-        /** Constructor. @See intialize. @See destroy.
+        /** Constructor. See intialize(). See destroy().
             @param elementsMemSize
                 Array containing the size in bytes of each element type (i.e. NodeElementsMemSize)
             @param initRoutines
@@ -206,7 +206,7 @@ namespace Ogre
         virtual ~ArrayMemoryManager();
 
         /** Initializes mMemoryPools. Once it has been called, destroy() __must__ be called.
-            @See destroy
+            @see destroy
         @remarks
             The destructor won't free the data, if you don't call destroy, memory will leak.
             Calling initialize twice is possible and won't leak, but will free the previous
@@ -215,7 +215,7 @@ namespace Ogre
         */
         void initialize();
 
-        /** Destroys the memory ptrs. @See initialize
+        /** Destroys the memory ptrs. @see initialize
         @remarks
             If there were slots in use, make sure they're no longer used, as their ptrs will
             become dangling ptrs. We don't assert because this may be valid behavior (i.e.
@@ -346,7 +346,7 @@ namespace Ogre
 
         /** Retrieves a Transform pointing to the first Node
         @remarks
-            @See NodeMemoryManager::getStart
+            @see NodeMemoryManager::getStart
         @param outTransform
             [out] Transform with filled pointers to the first Node in this depth
         @return

@@ -41,14 +41,14 @@ namespace Ogre
     /// Thread-safe buffer for storing Hardware index buffer
     struct _OgreLodExport LodIndexBuffer
     {
-        size_t indexSize;        /// Index size: 2 or 4 byte/index is supported only.
-        size_t indexCount;       /// index count from indexStart.
-        size_t indexStart;       /// Offset from the start of the indexBuffer
-        size_t indexBufferSize;  /// size of the index buffer in bytes
+        size_t indexSize;        ///< Index size: 2 or 4 byte/index is supported only.
+        size_t indexCount;       ///< index count from indexStart.
+        size_t indexStart;       ///< Offset from the start of the indexBuffer
+        size_t indexBufferSize;  ///< size of the index buffer in bytes
         Ogre::SharedPtr<unsigned char>
-             indexBuffer;  /// if NULL, then the previous Lod level's buffer is used. (compression)
-        void fillBuffer( Ogre::v1::IndexData *data );  /// Fills the buffer from an Ogre::IndexData. Call
-                                                       /// this on Ogre main thread only
+             indexBuffer;  ///< if NULL, then the previous Lod level's buffer is used. (compression)
+        void fillBuffer( Ogre::v1::IndexData *data );  ///< Fills the buffer from an Ogre::IndexData.
+                                                       ///< Call this on Ogre main thread only
     };
     /// Thread-safe buffer for storing Hardware vertex buffer
     struct _OgreLodExport LodVertexBuffer

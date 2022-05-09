@@ -37,14 +37,13 @@ namespace Ogre
     {
     public:
         // Constructor
-        GLES2NullTexture( ResourceManager* creator, const String& name,
-                             ResourceHandle handle, const String& group, bool isManual,
-                             ManualResourceLoader* loader, GLES2Support& support );
+        GLES2NullTexture( ResourceManager *creator, const String &name, ResourceHandle handle,
+                          const String &group, bool isManual, ManualResourceLoader *loader,
+                          GLES2Support &support );
 
         virtual ~GLES2NullTexture();
 
     protected:
-
         /// @copydoc Texture::createInternalResourcesImpl
         virtual void createInternalResourcesImpl();
         /// @copydoc Resource::freeInternalResourcesImpl
@@ -63,55 +62,53 @@ namespace Ogre
         void _createSurfaceList();
     };
 
-namespace v1
-{
-    class _OgreGLES2Export GLES2NullPixelBuffer : public HardwarePixelBuffer
+    namespace v1
     {
-    protected:
-        RenderTexture   *mDummyRenderTexture;
+        class _OgreGLES2Export GLES2NullPixelBuffer : public HardwarePixelBuffer
+        {
+        protected:
+            RenderTexture *mDummyRenderTexture;
 
-        virtual PixelBox lockImpl( const Box &lockBox, LockOptions options );
-        virtual void unlockImpl();
+            virtual PixelBox lockImpl( const Box &lockBox, LockOptions options );
+            virtual void unlockImpl();
 
-        /// Notify HardwarePixelBuffer of destruction of render target.
-        virtual void _clearSliceRTT( size_t zoffset );
+            /// Notify HardwarePixelBuffer of destruction of render target.
+            virtual void _clearSliceRTT( size_t zoffset );
 
-    public:
-        GLES2NullPixelBuffer( GLES2NullTexture *parentTexture, const String &baseName,
-                                 uint32 width, uint32 height, uint32 Null, PixelFormat format );
-        virtual ~GLES2NullPixelBuffer();
+        public:
+            GLES2NullPixelBuffer( GLES2NullTexture *parentTexture, const String &baseName, uint32 width,
+                                  uint32 height, uint32 Null, PixelFormat format );
+            virtual ~GLES2NullPixelBuffer();
 
-        virtual void blitFromMemory( const PixelBox &src, const Box &dstBox );
-        virtual void blitToMemory( const Box &srcBox, const PixelBox &dst );
-        virtual RenderTexture* getRenderTarget( size_t slice=0 );
-    };
-}
+            virtual void blitFromMemory( const PixelBox &src, const Box &dstBox );
+            virtual void blitToMemory( const Box &srcBox, const PixelBox &dst );
+            virtual RenderTexture *getRenderTarget( size_t slice = 0 );
+        };
+    }  // namespace v1
 
-    class _OgreGLES2Export GLES2NullTextureTarget : public RenderTexture //GLES2RenderTexture
+    class _OgreGLES2Export GLES2NullTextureTarget : public RenderTexture  // GLES2RenderTexture
     {
         GLES2NullTexture *mUltimateTextureOwner;
 
     public:
-        GLES2NullTextureTarget( GLES2NullTexture *ultimateTextureOwner,
-                                   const String &name, v1::HardwarePixelBuffer *buffer,
-                                   uint32 zoffset );
+        GLES2NullTextureTarget( GLES2NullTexture *ultimateTextureOwner, const String &name,
+                                v1::HardwarePixelBuffer *buffer, uint32 zoffset );
         virtual ~GLES2NullTextureTarget();
 
         virtual bool requiresTextureFlipping() const { return true; }
 
-        /// @copydoc RenderTarget::getForceDisableColourWrites
-        virtual bool getForceDisableColourWrites() const    { return true; }
+        virtual bool getForceDisableColourWrites() const { return true; }
 
         /// Null buffers never resolve; only colour buffers do. (we need mFsaaResolveDirty to be always
         /// true so that the proper path is taken in GLES2Texture::getGLID)
-        virtual void setFsaaResolveDirty()  {}
-        virtual void setFsaaResolved()          {}
+        virtual void setFsaaResolveDirty() {}
+        virtual void setFsaaResolved() {}
 
         /// Notifies the ultimate texture owner the buffer changed
         virtual bool attachDepthBuffer( DepthBuffer *depthBuffer, bool exactFormatMatch );
 
-        void getCustomAttribute( const String& name, void* pData );
+        void getCustomAttribute( const String &name, void *pData );
     };
-}
+}  // namespace Ogre
 
 #endif

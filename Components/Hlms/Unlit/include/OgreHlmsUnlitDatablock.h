@@ -69,7 +69,7 @@ namespace Ogre
 
     protected:
         uint8 mNumEnabledAnimationMatrices;
-        bool  mHasColour;  /// When false; mR, mG, mB & mA aren't passed to the pixel shader
+        bool  mHasColour;  ///< When false; mR, mG, mB & mA aren't passed to the pixel shader
         float mR, mG, mB, mA;
 
         uint8 mUvSource[NUM_UNLIT_TEXTURE_TYPES];
@@ -87,13 +87,13 @@ namespace Ogre
     public:
         /** Valid parameters in params:
         @param params
-            * diffuse [r g b [a]]
+            + diffuse [r g b [a]]
                 If absent, the values of mR, mG, mB & mA will be ignored by the pixel shader.
                 When present, the rgba values can be specified.
                 Default: Absent
                 Default (when present): diffuse 1 1 1 1
 
-            * diffuse_map [texture name] [#uv]
+            + diffuse_map [texture name] [#uv]
                 Name of the diffuse texture for the base image (optional, otherwise a dummy is set)
                 The #uv parameter is optional, and specifies the texcoord set that will
                 be used. Valid range is [0; 8)
@@ -101,7 +101,7 @@ namespace Ogre
 
                 Note: The UV set is evaluated when creating the Renderable cache.
 
-            * diffuse_map1 [texture name] [blendmode] [#uv]
+            + diffuse_map1 [texture name] [blendmode] [#uv]
                 Name of the diffuse texture that will be layered on top of the base image.
                 The #uv parameter is optional. Valid range is [0; 8)
                 The blendmode parameter is optional. Valid values are:
@@ -114,19 +114,19 @@ namespace Ogre
                 Default uv:             0
                 Example: diffuse_map1 myTexture.png Add 3
 
-             * diffuse_map2 through diffuse_map16
+			+ diffuse_map2 through diffuse_map16
                 Same as diffuse_map1 but for subsequent layers to be applied on top of the previous
                 images. You can't leave gaps (i.e. specify diffuse_map0 & diffuse_map2 but not
                 diffuse_map1).
                 Note that not all mobile HW supports 16 textures at the same time, thus we will
                 just cut/ignore the extra textures that won't fit (we log a warning though).
 
-             * animate <#tex_unit> [<#tex_unit> <#tex_unit> ... <#tex_unit>]
+			+ animate <#tex_unit> [<#tex_unit> <#tex_unit> ... <#tex_unit>]
                 Enables texture animation through a 4x4 matrix for the specified textures.
                 Default: All texture animation/manipulation disabled.
                 Example: animate 0 1 2 3 4 14 15
 
-             * alpha_test [compare_func] [threshold]
+			+ alpha_test [compare_func] [threshold]
                 When present, mAlphaTestThreshold is used.
                 compare_func is optional. Valid values are:
                     less, less_equal, equal, greater, greater_equal, not_equal
@@ -138,7 +138,7 @@ namespace Ogre
                             const HlmsBlendblock *blendblock, const HlmsParamVec &params );
         ~HlmsUnlitDatablock() override;
 
-        /// Controls whether the value in @see setColour is used.
+        /// Controls whether the value in setColour() is used.
         /// Calling this function implies calling see HlmsDatablock::flushRenderables.
         void setUseColour( bool useColour );
 

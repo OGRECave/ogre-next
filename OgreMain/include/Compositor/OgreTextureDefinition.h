@@ -90,9 +90,9 @@ namespace Ogre
     public:
         enum TextureSource
         {
-            TEXTURE_INPUT,   /// We got the texture through an input channel
-            TEXTURE_LOCAL,   /// We own the texture
-            TEXTURE_GLOBAL,  /// It's a global texture. Ask the manager for it.
+            TEXTURE_INPUT,   ///< We got the texture through an input channel
+            TEXTURE_LOCAL,   ///< We own the texture
+            TEXTURE_GLOBAL,  ///< It's a global texture. Ask the manager for it.
             NUM_TEXTURES_SOURCES
         };
 
@@ -268,9 +268,9 @@ namespace Ogre
 
         /** WARNING: Be very careful with this function.
             Removes a texture.
-            * If the texture is from an input channel (TEXTURE_INPUT),
+            + If the texture is from an input channel (TEXTURE_INPUT),
               the input channel is removed.
-            * If the texture is a local definition (TEXTURE_LOCAL) the texture definition
+            + If the texture is a local definition (TEXTURE_LOCAL) the texture definition
               is removed and all the references to mLocalTextureDefs[i+1] ...
               mLocalTextureDefs[i+n] are updated.
               However, the output channels will now contain an invalid index and will
@@ -278,7 +278,7 @@ namespace Ogre
               the order). It is your responsability to call
               CompositorNodeDef::mapOutputChannel again with a valid texture name to
               the channel it was occupying.
-            * If the texture is a global texture (TEXTURE_GLOBAL), the global texture
+            + If the texture is a global texture (TEXTURE_GLOBAL), the global texture
               can no longer be accessed until
               addTextureSourceName( name, 0, TEXTURE_GLOBAL ) is called again.
         @param name
@@ -320,7 +320,7 @@ namespace Ogre
             WARNING: Calling this function may invalidate all previous returned pointers
             unless you've properly called setLocalTextureDefinitions
         @par
-            @See addTextureSourceName remarks for what it can throw
+            See addTextureSourceName() remarks for what it can throw
         @par
             Textures are local when the derived class is a Node definition, and
             it's global when the derived class is a Workspace definition
@@ -382,7 +382,7 @@ namespace Ogre
         static void              setupTexture( TextureGpu *tex, const TextureDefinition &textureDef,
                                                const TextureGpu *finalTarget );
 
-        /// @See createTextures
+        /// @see createTextures
         static void destroyTextures( CompositorChannelVec &inOutTexContainer, RenderSystem *renderSys );
 
         /** Destroys & recreates only the textures that depend on the main RT
@@ -566,8 +566,9 @@ namespace Ogre
 
         /** If the texture comes from an input channel, we don't have yet enough information,
             as we're missing:
-                * Whether the texture is colour or depth
-                * The default depth settings (prefersDepthTexture, depth format, etc)
+                + Whether the texture is colour or depth
+                + The default depth settings (prefersDepthTexture, depth format, etc)
+                
             Use this function to force the given texture to be analyzed at runtime when
             creating the pass.
         @remarks

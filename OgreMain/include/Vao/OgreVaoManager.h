@@ -66,7 +66,7 @@ namespace Ogre
 
         BufferPackedSet      mBuffers[NUM_BUFFER_PACKED_TYPES];
         VertexArrayObjectSet mVertexArrayObjects;
-        uint32               mNumGeneratedVaos;  /// Increases on every createVertexArrayObject call
+        uint32               mNumGeneratedVaos;  ///< Increases on every createVertexArrayObject call
 
         struct DelayedBuffer
         {
@@ -184,7 +184,8 @@ namespace Ogre
             uint32 poolIdx;
             size_t offset;
             size_t sizeBytes;
-            size_t poolCapacity;  /// This value is the same for all entries with same getCombinedPoolIdx
+            size_t
+                poolCapacity;  ///< This value is the same for all entries with same getCombinedPoolIdx
             /// Relevant for Vulkan: when this value is true, the whole pool
             /// may contain texture data (not necessarily this block)
             /// See Tutorial_Memory on how to deal with this parameter
@@ -284,14 +285,14 @@ namespace Ogre
         @param numVertices
             The number of vertices for this vertex
         @param bufferType
-            The type of buffer for this vertex buffer. @See BufferType::BT_DYNAMIC special case.
+            The type of buffer for this vertex buffer. See #BT_DYNAMIC_DEFAULT special case.
         @param initialData
             Initial data the buffer will hold upon creation. Can be null (i.e. you plan to upload later).
-            Cannot be null when bufferType is BT_IMMUTABLE. Must have enough room to prevent an overflow.
-            @see BufferPacked::BufferPacked
+            Cannot be null when bufferType is #BT_IMMUTABLE. Must have enough room to prevent an
+        overflow. See BufferPacked::BufferPacked
         @param keepAsShadow
             Whether to keep the pointer "initialData" as a shadow copy of the contents.
-            @See BufferPacked::BufferPacked regarding on who is responsible for freeing this pointer
+            See BufferPacked::BufferPacked regarding on who is responsible for freeing this pointer
             and what happens if an exception was raised.
         @return
             The desired vertex buffer pointer
@@ -317,7 +318,7 @@ namespace Ogre
         /** Creates an index buffer based on the given parameters. Behind the scenes, the buffer
             is actually part of much larger buffer, in order to reduce bindings at runtime.
         @remarks
-            @See createVertexBuffer for the remaining parameters not documented here.
+            See createVertexBuffer() for the remaining parameters not documented here.
         @param indexType
             Whether this Index Buffer should be 16-bit (recommended) or 32-bit
         @param numIndices
@@ -339,7 +340,7 @@ namespace Ogre
             is actually part of much larger buffer, in order to reduce bindings at runtime.
             (depends on the RenderSystem, on D3D11 we're forced to give its own buffer)
         @remarks
-            @See createVertexBuffer for the remaining parameters not documented here.
+            See createVertexBuffer() for the remaining parameters not documented here.
         @param sizeBytes
             The size in bytes of the given constant buffer. API restrictions may apply.
             To stay safe keep it multiple of 16, don't request more than 64kb per buffer.
@@ -359,7 +360,7 @@ namespace Ogre
             is actually part of much larger buffer, in order to reduce bindings at runtime.
             (depends on the RenderSystem, on D3D11 we're forced to give its own buffer)
         @remarks
-            @See createVertexBuffer for the remaining parameters not documented here.
+            See createVertexBuffer() for the remaining parameters not documented here.
         @param pixelFormat
             The pixel format for the texture buffer.
         @param sizeBytes
@@ -402,7 +403,7 @@ namespace Ogre
             is actually part of much larger buffer, in order to reduce bindings at runtime.
             (depends on the RenderSystem, on D3D11 we're forced to give its own buffer)
         @remarks
-            @See createVertexBuffer for the remaining parameters not documented here.
+            See createVertexBuffer() for the remaining parameters not documented here.
             There is no BufferType option as the only available one is BT_DEFAULT
         @param sizeBytes
             The size in bytes of the given constant buffer. API restrictions may apply.
@@ -422,7 +423,7 @@ namespace Ogre
 
         /** Creates an indirect buffer.
         @remarks
-            @See createVertexBuffer for the remaining parameters not documented here.
+            See createVertexBuffer() for the remaining parameters not documented here.
         */
         IndirectBufferPacked *createIndirectBuffer( size_t sizeBytes, BufferType bufferType,
                                                     void *initialData, bool keepAsShadow );
@@ -476,7 +477,7 @@ namespace Ogre
             Calling this function causes the reference count of the returned pointer to
             be increased.
             You should decrease the reference count after you're done with the returned
-            pointer. @See StagingBuffer::removeReferenceCount regarding ref. counting.
+            pointer. See StagingBuffer::removeReferenceCount regarding ref. counting.
         @param sizeBytes
             Minimum size, in bytes, of the staging buffer.
             The returned buffer may be bigger.

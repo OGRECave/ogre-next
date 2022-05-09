@@ -153,11 +153,11 @@ namespace Ogre
         // UAVs are easier and more flexible/powerful.
 
         // --- Begin Pass data ---
-        uint32      sampleMask;  /// Fixed to 0xffffffff for now
+        uint32      sampleMask;  ///< Fixed to 0xffffffff for now
         HlmsPassPso pass;
         // --- End Pass data ---
 
-        void *rsData;  /// Render-System specific data
+        void *rsData;  ///< Render-System specific data
 
         HlmsPso() { initialize(); }
 
@@ -260,8 +260,8 @@ namespace Ogre
         /// XYZ. Metal needs the threads per group on C++ side. HLSL & GLSL want
         /// the thread count on shader side, thus we allow users to tell us
         /// the thread count to C++, and send it to the shaders via
-        /// @value( threads_per_group_x ); OR let the shader tell C++ the threadcount
-        /// via @pset( threads_per_group_x, 64 )
+        /// \@value( threads_per_group_x ); OR let the shader tell C++ the threadcount
+        /// via \@pset( threads_per_group_x, 64 )
         /// (there's also threads_per_group_y & threads_per_group_z)
         /// @see HlmsComputeJob::setThreadsPerGroup
         uint32 mThreadsPerGroup[3];
@@ -273,7 +273,7 @@ namespace Ogre
         /// @see HlmsComputeJob::setNumThreadGroups
         uint32 mNumThreadGroups[3];
 
-        void *rsData;  /// Render-System specific data
+        void *rsData;  ///< Render-System specific data
 
         // No constructor on purpose. Performance implications
         //(could get called every object when looking up!)

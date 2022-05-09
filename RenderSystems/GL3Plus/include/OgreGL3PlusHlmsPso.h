@@ -41,8 +41,9 @@ namespace Ogre
      *  @{
      */
 
-    /// @See HlmsPso. We cache some conversion values here
-    /// to avoid doing it every time we set the Pso
+    /// We cache some conversion values here
+    /// to avoid doing it every time we set the Pso.
+    /// @see HlmsPso
     struct _OgreGL3PlusExport GL3PlusHlmsPso
     {
         // Macroblock data

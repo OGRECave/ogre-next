@@ -184,8 +184,8 @@ namespace Ogre
 
         MappingState getMappingState() const { return mMappingState; }
 
-        /** Returns true if our next call to @map() with the same parameters will stall.
-            @See StagingStallType
+        /** Returns true if our next call to map() with the same parameters will stall.
+            @see StagingStallType
         @remarks
             Not all RenderSystems can accurately give this information and will always
             return STALL_PARTIAL (i.e. GLES2)
@@ -248,7 +248,7 @@ namespace Ogre
         const void *_mapForRead( size_t offset, size_t sizeBytes );
 
         /** Maps the given amount of bytes. May block if not ready.
-            @See uploadWillStall if you wish to know.
+            See uploadWillStall() if you wish to know.
         @remarks
             Will throw if sizeBytes > this->getMaxSize()
         */
@@ -256,7 +256,7 @@ namespace Ogre
 
         void unmap( const Destination *destinations, size_t numDestinations );
 
-        /// Unmaps the mapped region and copies the data to the given region. @See Destination
+        /// Unmaps the mapped region and copies the data to the given region. @see Destination
         void unmap( const Destination &destination ) { unmap( &destination, 1 ); }
 
         /// Unmaps the mapped region and copies the data to multiple buffers. Useful when
@@ -268,7 +268,7 @@ namespace Ogre
 
         size_t getMaxSize() { return mSizeBytes; }
 
-        /// Adds a reference count to the StagingBuffer. @See removeReferenceCount
+        /// Adds a reference count to the StagingBuffer. @see removeReferenceCount
         void addReferenceCount();
 
         /** Decreases the reference count by one. StagingBuffers are manually reference counted.

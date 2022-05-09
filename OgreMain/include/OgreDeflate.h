@@ -64,10 +64,10 @@ namespace Ogre
         */
         enum StreamType
         {
-            Invalid = -1,  /// Unexpected stream type or uncompressed data
-            Deflate = 0,   /// no header, no checksum, rfc1951
-            ZLib = 1,      /// 2 byte header, 4 byte footer with adler32 checksum, rfc1950
-            GZip = 2,  /// 10 byte header, 8 byte footer with crc32 checksum and unpacked size, rfc1952
+            Invalid = -1,  ///< Unexpected stream type or uncompressed data
+            Deflate = 0,   ///< no header, no checksum, rfc1951
+            ZLib = 1,      ///< 2 byte header, 4 byte footer with adler32 checksum, rfc1950
+            GZip = 2,  ///< 10 byte header, 8 byte footer with crc32 checksum and unpacked size, rfc1952
         };
 
     protected:

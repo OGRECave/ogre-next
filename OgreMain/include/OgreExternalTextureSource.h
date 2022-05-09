@@ -60,9 +60,9 @@ namespace Ogre
     /** Enum for type of texture play mode */
     enum eTexturePlayMode
     {
-        TextureEffectPause = 0,        /// Video starts out paused
-        TextureEffectPlay_ASAP = 1,    /// Video starts playing as soon as possible
-        TextureEffectPlay_Looping = 2  /// Video Plays Instantly && Loops
+        TextureEffectPause = 0,        ///< Video starts out paused
+        TextureEffectPlay_ASAP = 1,    ///< Video starts playing as soon as possible
+        TextureEffectPlay_Looping = 2  ///< Video Plays Instantly && Loops
     };
 
     /** IMPORTANT: **Plugins must override default dictionary name!**
@@ -169,11 +169,11 @@ namespace Ogre
             const String &groupName = ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ) = 0;
 
     protected:
-        static CmdInputFileName msCmdInputFile;        /// Command for setting input file name
-        static CmdFPS           msCmdFramesPerSecond;  /// Command for setting frames per second
-        static CmdPlayMode      msCmdPlayMode;         /// Command for setting play mode
+        static CmdInputFileName msCmdInputFile;        ///< Command for setting input file name
+        static CmdFPS           msCmdFramesPerSecond;  ///< Command for setting frames per second
+        static CmdPlayMode      msCmdPlayMode;         ///< Command for setting play mode
         static CmdTecPassState
-            msCmdTecPassState;  /// Command for setting the technique, pass, & state level
+            msCmdTecPassState;  ///< Command for setting the technique, pass, & state level
 
         /// String Name of this Plugin
         String mPluginName;

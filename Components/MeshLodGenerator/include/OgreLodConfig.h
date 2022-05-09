@@ -129,11 +129,11 @@ namespace Ogre
 
     struct _OgreLodExport LodConfig
     {
-        v1::MeshPtr  mesh;      /// The mesh which we want to reduce.
-        LodStrategy *strategy;  /// Lod strategy to use.
+        v1::MeshPtr  mesh;      ///< The mesh which we want to reduce.
+        LodStrategy *strategy;  ///< Lod strategy to use.
 
         typedef vector<LodLevel>::type LodLevelList;
-        LodLevelList                   levels;  /// Info about Lod levels
+        LodLevelList                   levels;  ///< Info about Lod levels
 
         LodConfig( v1::MeshPtr &_mesh, LodStrategy *_strategy = DistanceLodStrategy::getSingletonPtr() );
         LodConfig();

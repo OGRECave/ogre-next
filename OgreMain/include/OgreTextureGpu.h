@@ -176,11 +176,11 @@ namespace Ogre
     {
         enum TextureSourceType
         {
-            Standard,           /// Regular texture
-            Shadow,             /// Created by compositor, for shadow mapping
-            Compositor,         /// Created by compositor
-            PoolOwner,          /// TextureFlags::PoolOwner is set
-            SharedDepthBuffer,  /// Created automatically, may be shared and reused by multiple colour
+            Standard,           ///< Regular texture
+            Shadow,             ///< Created by compositor, for shadow mapping
+            Compositor,         ///< Created by compositor
+            PoolOwner,          ///< TextureFlags::PoolOwner is set
+            SharedDepthBuffer,  ///< Created automatically, may be shared and reused by multiple colour
                                 /// targets
             NumTextureSourceTypes
         };
@@ -460,7 +460,10 @@ namespace Ogre
         TextureTypes::TextureTypes getInternalTextureType() const;
 
         void _setSourceType( uint8 type );
-        /// @copydoc TextureGpu::mSourceType
+        /// This setting is for where the texture is created, e.g. its a compositor texture, a shadow
+        /// texture or standard texture loaded for a mesh etc...
+        ///
+        /// This value is merely for statistical tracking purposes
         uint8 getSourceType() const;
 
         /** Sets the pixel format.
@@ -751,12 +754,12 @@ namespace Ogre
         /** It is threadsafe to call this function from main thread.
             If this returns false, then the following functions are not threadsafe:
             Setters must not be called, and getters may change from a worker thread:
-                * setResolution
-                * getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices
-                * set/getPixelFormat
-                * set/getNumMipmaps
-                * set/getTextureType
-                * getTexturePool
+                + setResolution
+                + getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices
+                + set/getPixelFormat
+                + set/getNumMipmaps
+                + set/getTextureType
+                + getTexturePool
             Note that this function may return true but the worker thread
             may still be uploading to this texture. Use isDataReady to
             see if the worker thread is fully done with this texture.

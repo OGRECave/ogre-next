@@ -118,7 +118,7 @@ namespace Ogre
 
         CompositorWorkspace *mWorkspace;
 
-        RenderSystem *mRenderSystem;  /// Used to create/destroy MRTs
+        RenderSystem *mRenderSystem;  ///< Used to create/destroy MRTs
 
         /** Fills mOutTextures with the pointers from mInTextures & mLocalTextures according
             to CompositorNodeDef::mOutChannelMapping. Call this immediately after modifying
@@ -175,7 +175,7 @@ namespace Ogre
         */
         void setEnabled( bool bEnabled );
 
-        /// Returns if this instance is enabled. @See setEnabled
+        /// Returns if this instance is enabled. @see setEnabled
         bool getEnabled() const { return mEnabled; }
 
         /** Connects this node (let's call it node 'A') to node 'B', mapping the output
@@ -255,7 +255,7 @@ namespace Ogre
         @remarks
             Call this function after connecting all channels (at least our input)
             otherwise we may bind null pointer RTs to the passes (and then crash)
-            @See connectTo and @see connectFinalRT
+            See connectTo() and connectFinalRT().
         */
         void createPasses();
 
@@ -288,7 +288,7 @@ namespace Ogre
         void notifyDestroyed( const UavBufferPacked *buffer );
 
         /** Internal Use. Called when connections are all being zero'ed. We rely our
-            caller is doing this to all nodes, hence we do not notify our @mConnectedNodes
+            caller is doing this to all nodes, hence we do not notify our CompositorNode#mConnectedNodes
             nodes. Failing to clear them too may leave dangling pointers or graphical glitches
         @remarks
             Destroys all of our passes.
@@ -315,7 +315,7 @@ namespace Ogre
         /// @copydoc CompositorWorkspace::resetAllNumPassesLeft
         void resetAllNumPassesLeft();
 
-        /// @copydoc CompositorPassDef::getPassNumber
+        /// See CompositorNodeDef::getPassNumber
         size_t getPassNumber( CompositorPass *pass ) const;
 
         /// Returns our parent workspace

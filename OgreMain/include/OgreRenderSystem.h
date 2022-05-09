@@ -584,11 +584,12 @@ namespace Ogre
         @param
         renderWindowDescriptions Array of structures containing the descriptions of each render window.
         The structure's members are the same as the parameters of _createRenderWindow:
-        * name
-        * width
-        * height
-        * fullScreen
-        * miscParams
+        + name
+        + width
+        + height
+        + fullScreen
+        + miscParams
+		.
         See _createRenderWindow for details about each member.
         @param
         createdWindows This array will hold the created render windows.
@@ -983,11 +984,11 @@ namespace Ogre
         /// See RenderSystem::updateCompositorManager
         virtual void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame );
 
-        /// @See HlmsSamplerblock. This function MUST be called after _setTexture, not before.
+        /// See HlmsSamplerblock. This function MUST be called after _setTexture, not before.
         /// Otherwise not all APIs may see the change.
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) = 0;
 
-        /// @See HlmsPso
+        /// @see HlmsPso
         virtual void _setPipelineStateObject( const HlmsPso *pso );
 
         /// Unlike _setPipelineStateObject, the RenderSystem will check if the PSO
@@ -1393,7 +1394,7 @@ namespace Ogre
 
         /**
          * Marks an instantaneous event for graphics profilers.
-         * This is equivalent to calling @see beginProfileEvent and @see endProfileEvent back to back.
+         * This is equivalent to calling beginProfileEvent() and endProfileEvent() back to back.
          */
         virtual void markProfileEvent( const String &event ) = 0;
 

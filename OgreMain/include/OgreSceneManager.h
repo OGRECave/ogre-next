@@ -574,11 +574,11 @@ namespace Ogre
         /// Cached light information, used to tracking light's changes
         struct _OgreExport LightInfo
         {
-            Light  *light;  /// Just a pointer for comparison, the light might destroyed for some reason
-            int     type;   /// Use int instead of Light::LightTypes to avoid header file dependence
-            Real    range;  /// Sets to zero if directional light
-            Vector3 position;   /// Sets to zero if directional light
-            uint32  lightMask;  /// Light mask
+            Light  *light;  ///< Just a pointer for comparison, the light might destroyed for some reason
+            int     type;   ///< Use int instead of Light::LightTypes to avoid header file dependence
+            Real    range;  ///< Sets to zero if directional light
+            Vector3 position;   ///< Sets to zero if directional light
+            uint32  lightMask;  ///< Light mask
 
             bool operator==( const LightInfo &rhs ) const
             {
@@ -759,12 +759,12 @@ namespace Ogre
         /** Culls the scene in a high level fashion (i.e. Octree, Portal, etc.) by taking into account
           all registered cameras. Produces a list of culled Entities & SceneNodes that must follow a very
             strict set of rules:
-                * Entities are separated by RenderQueue
-                * Entities sharing the same skeleton need to be adjacent (TODO: Required? dark_sylinc)
-                * SceneNodes must be separated by hierarchy depth and must be contiguous within the same
+                + Entities are separated by RenderQueue
+                + Entities sharing the same skeleton need to be adjacent (TODO: Required? dark_sylinc)
+                + SceneNodes must be separated by hierarchy depth and must be contiguous within the same
                   depth level. (@see mNodeMemoryManagerCulledList)
           @remarks
-            The default implementation just returns all nodes in the scene. @See updateAllTransforms
+            The default implementation just returns all nodes in the scene. @see updateAllTransforms
             @see updateSceneGraph
         */
         virtual void highLevelCull();
@@ -803,9 +803,9 @@ namespace Ogre
     protected:
         Real   mDefaultShadowFarDist;
         Real   mDefaultShadowFarDistSquared;
-        Real   mShadowTextureOffset;     /// Proportion of texture offset in view direction e.g. 0.4
-        Real   mShadowTextureFadeStart;  /// As a proportion e.g. 0.6
-        Real   mShadowTextureFadeEnd;    /// As a proportion e.g. 0.9
+        Real   mShadowTextureOffset;     ///< Proportion of texture offset in view direction e.g. 0.4
+        Real   mShadowTextureFadeStart;  ///< As a proportion e.g. 0.6
+        Real   mShadowTextureFadeEnd;    ///< As a proportion e.g. 0.9
         Pass  *mShadowTextureCustomCasterPass;
         String mShadowTextureCustomCasterVertexProgram;
         String mShadowTextureCustomCasterFragmentProgram;
@@ -851,11 +851,11 @@ namespace Ogre
         @rermarks
             Declared here to avoid allocating and deallocating every frame. Declared as array of
             arrays (vector of vectors) for multithreading purposes (put results in one array while
-            another thread stores in the other array). @See cullFrustum
+            another thread stores in the other array). @see cullFrustum
         */
         VisibleObjectsPerThreadArray mVisibleObjects;
 
-        /** @See mVisibleObjects. This one is a variable used for temporary storage by (eg.) Instance
+        /** @see mVisibleObjects. This one is a variable used for temporary storage by (eg.) Instance
             Managers to cull their internal instanced entities from multiple threads. We do not
             guarantee that those who acquired our data retain sole ownership; thus extra care may
             be needed to ensure that no two separate systems request this variable at the same time
@@ -908,7 +908,7 @@ namespace Ogre
         typedef vector<EntityMaterialLodChangedEvent>::type EntityMaterialLodChangedEventList;
         EntityMaterialLodChangedEventList                   mEntityMaterialLodChangedEvents;
 
-        /** Updates the Animations from the given request inside a thread. @See updateAllAnimations
+        /** Updates the Animations from the given request inside a thread. @see updateAllAnimations
         @param threadIdx
             Thread index so we know at which point we should start at.
             Must be unique for each worker thread
@@ -916,9 +916,9 @@ namespace Ogre
         void updateAllAnimationsThread( size_t threadIdx );
         void updateAnimationTransforms( BySkeletonDef &bySkeletonDef, size_t threadIdx );
 
-        /** Updates the Nodes from the given request inside a thread. @See updateAllTransforms
+        /** Updates the Nodes from the given request inside a thread. @see updateAllTransforms
         @param request
-            Fully setup request. @See UpdateTransformRequest.
+            Fully setup request. @see UpdateTransformRequest.
         @param threadIdx
             Thread index so we know at which point we should start at.
             Must be unique for each worker thread
@@ -933,7 +933,7 @@ namespace Ogre
         void updateAllTransformsTagOnTagThread( const UpdateTransformRequest &request,
                                                 size_t                        threadIdx );
 
-        /** Updates the world aabbs from the given request inside a thread. @See updateAllTransforms
+        /** Updates the world aabbs from the given request inside a thread. @see updateAllTransforms
         @param threadIdx
             Thread index so we know at which point we should start at.
             Must be unique for each worker thread
@@ -949,9 +949,9 @@ namespace Ogre
 
         /** Low level culling, culls all objects against the given frustum active cameras. This
             includes checking visibility flags (both scene and viewport's)
-            @See MovableObject::cullFrustum
+            @see MovableObject::cullFrustum
         @param request
-            Fully setup request. @See CullFrustumRequest.
+            Fully setup request. @see CullFrustumRequest.
         @param threadIdx
             Index to mVisibleObjects so we know which array we should start at.
             Must be unique for each worker thread
@@ -962,7 +962,7 @@ namespace Ogre
             Compositor). Then calls MovableObject::buildLightList with that list so that each
             MovableObject gets it's own sorted list of the closest lights.
         @remarks
-            @See MovableObject::buildLightList()
+            @see MovableObject::buildLightList()
         */
         void buildLightList();
 
@@ -1141,7 +1141,7 @@ namespace Ogre
                 actually given a generated name, which you can retrieve if you want).
                 If you wish to create a node with a specific name, call the alternative method
                 which takes a name parameter.
-            @params sceneType
+            @param sceneType
                 Dynamic if this node is to be updated frequently. Static if you don't plan to be
                 updating this node in a long time (performance optimization).
         */
@@ -1239,11 +1239,11 @@ namespace Ogre
         virtual_l1 SceneNodeList findSceneNodes( const String &name ) const;
 
         /** Node listeners need to be registered with us so that they can be successfully called
-            when calling updateAllTransforms. @See updateAllTransforms
+            when calling updateAllTransforms. @see updateAllTransforms
         */
         virtual void registerSceneNodeListener( SceneNode *sceneNode );
 
-        /** Unregisters a registered node for listening. @See registerSceneNodeListener
+        /** Unregisters a registered node for listening. @see registerSceneNodeListener
          */
         virtual void unregisterSceneNodeListener( SceneNode *sceneNode );
 
@@ -1541,7 +1541,7 @@ namespace Ogre
 
         /// Creates an instance of a skeleton based on the given definition.
         SkeletonInstance *createSkeletonInstance( const SkeletonDef *skeletonDef );
-        /// Destroys an instance of a skeleton created with @createSkeletonInstance.
+        /// Destroys an instance of a skeleton created with createSkeletonInstance().
         void destroySkeletonInstance( SkeletonInstance *skeletonInstance );
         /// Removes a skeleton definition from its memory manager.
         void _removeSkeletonDef( const SkeletonDef *skeletonDef );
@@ -1802,7 +1802,7 @@ namespace Ogre
             return false;
         }
 
-        /// @See mTmpVisibleObjects
+        /// @see mTmpVisibleObjects
         VisibleObjectsPerThreadArray &_getTmpVisibleObjectsList() { return mTmpVisibleObjects; }
 
         /** Notifies that the given MovableObject is dirty (i.e. the AABBs have changed).
@@ -1828,7 +1828,7 @@ namespace Ogre
         /** Updates all skeletal animations in the scene. This is typically called once
             per frame during render, but the user might want to manually call this function.
         @remarks
-            mSkeletonAnimManagerCulledList must be set. @See updateAllTransforms remarks
+            mSkeletonAnimManagerCulledList must be set. @see updateAllTransforms remarks
         */
         void updateAllAnimations();
 
@@ -1852,9 +1852,9 @@ namespace Ogre
         void updateAllTagPoints();
 
         /** Updates the world aabbs from all entities in the scene. Ought to be called right after
-            updateAllTransforms. @See updateAllTransforms
+            updateAllTransforms. @see updateAllTransforms
         @remarks
-            @See MovableObject::updateAllBounds
+            @see MovableObject::updateAllBounds
             Don't call this function from another thread other than Ogre's main one (we use worker
             threads that may be in use for something else, and touching the sync barrier
             could deadlock in the best of cases).
@@ -1881,7 +1881,7 @@ namespace Ogre
 
         /** Performs the frustum culling that will later be needed by _renderPhase02
             @remarks
-                @See CompositorShadowNode to understand why rendering is split in two phases
+                See CompositorShadowNode to understand why rendering is split in two phases
             @param camera Pointer to a camera from whose viewpoint the scene is to
                 be rendered.
             @param vp The target viewport
@@ -1903,7 +1903,7 @@ namespace Ogre
             @param camera Pointer to a camera from whose viewpoint the scene is to
                 be rendered.
             @param lodCamera Pointer to a camera from whose LOD calculations will be
-                based upon. Can't be null; can be equal to @camera.
+                based upon. Can't be null; can be equal to camera.
             @param vp The target viewport
             @param firstRq first render queue ID to render (gets clamped if too big)
             @param lastRq last render queue ID to render (gets clamped if too big)
@@ -2578,13 +2578,13 @@ namespace Ogre
         AxisAlignedBox _calculateCurrentCastersBox( uint32 viewportVisibilityMask, uint8 firstRq,
                                                     uint8 lastRq ) const;
 
-        /** @See CompositorShadowNode::getCastersBox
+        /** @see CompositorShadowNode::getCastersBox
         @remarks
             Returns a null box if no active shadow node.
         */
         const AxisAlignedBox &getCurrentCastersBox() const;
 
-        /** @See CompositorShadowNode::getMinMaxDepthRange
+        /** @see CompositorShadowNode::getMinMaxDepthRange
         @remarks
             Outputs 0 & 100000 if no active shadow node or camera not found.
         */
@@ -2619,7 +2619,7 @@ namespace Ogre
             as much as possible to child nodes (including attached Cameras), causing
             the change to become permanent/irreversible. This achieves greater quality
             since translating objects or camera by small amounts now gets more accuracy.
-            @See propagateRelativeOrigin.
+            @see propagateRelativeOrigin.
         */
         virtual void setRelativeOrigin( const Vector3 &relativeOrigin, bool bPermanent );
 

@@ -59,9 +59,9 @@ namespace Ogre
     @par
         A workspace may be instantiated multiple times for different RTs, or using different cameras
         (i.e. multiple monitors, stereo 3D, etc), while they all will share the same definition.
-        A workspace definition (@see CompositorWorkspaceDef) contains all the information needed
+        A workspace definition (see CompositorWorkspaceDef) contains all the information needed
         by this CompositorWorkspace to instantiate and know which nodes to create and how to connect
-        them. @See CompositorNodeDef
+        them. @see CompositorNodeDef
         A workspace may define global textures that are visible to all of its Node instances.
     @par
         If you want to have (e.g.) two monitors rendering the same but with different compositor
@@ -73,7 +73,7 @@ namespace Ogre
         maps, etc); but it is also possible to do things the 1.x way: use additional Workspaces for
         manually rendering and controlling RTTs.
     @par
-        Users with basic needs (no advanced effects) can @see CompositorManager2::createBasicWorkspaceDef
+        Users with basic needs (no advanced effects) can see CompositorManager2::createBasicWorkspaceDef
         for quickly having a basic definition set for them.
     @par
         For more information about Compositors, consult the Ogre 2.0 Porting Manual in the Docs folder.
@@ -98,7 +98,7 @@ namespace Ogre
         CompositorShadowNodeVec  mShadowNodes;
         CompositorChannelVec     mGlobalTextures;
         CompositorNamedBufferVec mGlobalBuffers;
-        Camera       *mDefaultCamera;  /// Could be null. @See CompositorManager2::addWorkspace
+        Camera       *mDefaultCamera;  ///< Could be null. @see CompositorManager2::addWorkspace
         SceneManager *mSceneManager;
         RenderSystem *mRenderSys;
 
@@ -199,7 +199,7 @@ namespace Ogre
             Name of the node instance (they're unique)
         @param includeShadowNodes
             When true, also looks for ShadowNodes with that name, if the instance doesn't exists,
-            it will not be created (default: false). @See findShadowNode
+            it will not be created (default: false). @see findShadowNode
             When a Node has the same name of a Shadow Node, the Node takes precedence.
         @return
             Regular version: Valid pointer. Throws exception if not found.
@@ -231,7 +231,7 @@ namespace Ogre
         @param forceBeginFrame
             Forces a beginFrame call to the D3D9 API, even if the final render target is not
             a RenderWindow (not recommended). To avoid forcing extra begin/end frame pairs,
-            update your manual workspaces inside @CompositorWorkspaceListener::workspacePreUpdate
+            update your manual workspaces inside CompositorWorkspaceListener::workspacePreUpdate
             (performance optimization)
         @param bInsideAutoreleasePool
             If manually updating the workspace, leave this to default.
@@ -257,7 +257,7 @@ namespace Ogre
 
         /** Call after _update unless the final render target is not a render window
         @param forceEndFrame
-            @See _beginUpdate
+            @see _beginUpdate
             !!!WARNING!!! Forcing an end frame can cause API issues w/ D3D9 if Ogre had already
             issued a begin frame automatically (i.e. if you're calling from inside a RenderTarget
             or CompositorWorkspace listener). These API issues may not manifest on all HW/Driver

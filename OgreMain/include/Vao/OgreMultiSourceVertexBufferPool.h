@@ -66,9 +66,9 @@ namespace Ogre
         size_t               mMaxVertices;
         BufferType           mBufferType;
 
-        size_t               mInternalBufferStart;  /// In Vertices
+        size_t               mInternalBufferStart;  ///< In Vertices
         vector<uint32>::type mBytesPerVertexPerSource;
-        vector<size_t>::type mSourceOffset;  /// Where each source starts, in vertices
+        vector<size_t>::type mSourceOffset;  ///< Where each source starts, in vertices
         VaoManager          *mVaoManager;
 
         virtual void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers ) = 0;
@@ -103,7 +103,7 @@ namespace Ogre
                 initialData[1] = out of bounds;
         @param keepAsShadow
             Whether to keep the pointer "initialData" as a shadow copy of the contents.
-            @See BufferPacked::BufferPacked regarding on who is responsible for freeing this pointer
+            See BufferPacked::BufferPacked regarding on who is responsible for freeing this pointer
             and what happens if an exception was raised.
         @return
             The desired vertex buffer pointer

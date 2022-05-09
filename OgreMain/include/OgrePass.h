@@ -72,8 +72,8 @@ namespace Ogre
 
         uint32         mId;
         Technique     *mParent;
-        unsigned short mIndex;  /// Pass index
-        String         mName;   /// Optional name for the pass
+        unsigned short mIndex;  ///< Pass index
+        String         mName;   ///< Optional name for the pass
         //-------------------------------------------------------------------------
         // Colour properties, only applicable in fixed-function passes
         ColourValue           mAmbient;
@@ -673,7 +673,7 @@ namespace Ogre
         void setMacroblock( const HlmsMacroblock &macroblock );
 
         /** Retrieves current macroblock. Don't const_cast the return value to modify it.
-            @See HlmsDatablock remarks.
+            See HlmsDatablock remarks.
         */
         const HlmsMacroblock *getMacroblock() const;
 
@@ -681,7 +681,7 @@ namespace Ogre
         void setBlendblock( const HlmsBlendblock &blendblock );
 
         /** Retrieves current blendblock. Don't const_cast the return value to modify it.
-            @See HlmsDatablock remarks.
+            See HlmsDatablock remarks.
         */
         const HlmsBlendblock *getBlendblock() const;
 
