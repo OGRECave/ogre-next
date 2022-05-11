@@ -31,8 +31,11 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 #include "OgreGpuProgramManager.h"
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
 #include "OgreProfiler.h"
+#include "OgreRoot.h"
 #include "OgreStringConverter.h"
 
 #include <sstream>
@@ -41,6 +44,7 @@ namespace Ogre
 {
     //---------------------------------------------------------------------------
     HighLevelGpuProgram::CmdEnableIncludeHeader HighLevelGpuProgram::msEnableIncludeHeaderCmd;
+    HighLevelGpuProgram::CmdUseHlmsParser HighLevelGpuProgram::msUseHlmsParser;
     //---------------------------------------------------------------------------
     HighLevelGpuProgram::HighLevelGpuProgram( ResourceManager *creator, const String &name,
                                               ResourceHandle handle, const String &group, bool isManual,
@@ -48,6 +52,7 @@ namespace Ogre
         GpuProgram( creator, name, handle, group, isManual, loader ),
         mHighLevelLoaded( false ),
         mEnableIncludeHeader( false ),
+        mUseHlmsParser( false ),
         mAssemblerProgram(),
         mConstantDefsBuilt( false )
     {
@@ -84,6 +89,20 @@ namespace Ogre
                           "Beware included files mess up error reporting (wrong lines)",
                           PT_BOOL ),
             &msEnableIncludeHeaderCmd );
+        dict->addParameter( ParameterDef( "use_hlms_parser",
+                                          "Whether we should run the shader through the Hlms parser.\n"
+                                          "Disabled by default.\n"
+                                          "\n"
+                                          "This parser doesn't yet have access to the entire PSO"
+                                          "(i.e. Pixel Shader can't see Vertex Shader).\n"
+                                          "\n"
+                                          "However it's still useful, specially @foreach()\n"
+                                          "\n"
+                                          "Beware included files mess up error reporting (wrong lines)\n"
+                                          "\n"
+                                          "Beware included files mess up error reporting (wrong lines)",
+                                          PT_BOOL ),
+                            &msUseHlmsParser );
     }
     //---------------------------------------------------------------------------
     void HighLevelGpuProgram::loadImpl()
@@ -211,10 +230,10 @@ namespace Ogre
     //---------------------------------------------------------------------------
     void HighLevelGpuProgram::dumpSourceIfHasIncludeEnabled()
     {
-        if( mEnableIncludeHeader && mCompileError )
+        if( ( mEnableIncludeHeader || mUseHlmsParser ) && mCompileError )
         {
             LogManager::getSingleton().logMessage(
-                "Error found while compiling with enable_include_header. "
+                "Error found while compiling with use_hlms_parser or enable_include_header. "
                 "This is the final output:\n"
                 ">>> BEGIN SOURCE " +
                     mFilename,
@@ -296,6 +315,13 @@ namespace Ogre
 
             if( mEnableIncludeHeader )
                 parseIncludeFile( mSource );
+
+            if( mUseHlmsParser )
+            {
+                Hlms *hlms = Root::getSingletonPtr()->getHlmsManager()->getHlms( HLMS_LOW_LEVEL );
+                String inputStr( mSource );
+                hlms->parseOffline( mName, inputStr, mSource );
+            }
         }
 
         try
@@ -314,6 +340,10 @@ namespace Ogre
     void HighLevelGpuProgram::setEnableIncludeHeader( bool bEnable ) { mEnableIncludeHeader = bEnable; }
     //---------------------------------------------------------------------
     bool HighLevelGpuProgram::getEnableIncludeHeader() const { return mEnableIncludeHeader; }
+    //---------------------------------------------------------------------
+    void HighLevelGpuProgram::setUseHlmsParser( bool bUse ) { mUseHlmsParser = bUse; }
+    //---------------------------------------------------------------------
+    bool HighLevelGpuProgram::getUseHlmsParser() const { return mUseHlmsParser; }
     //---------------------------------------------------------------------
     const GpuNamedConstants &HighLevelGpuProgram::getConstantDefinitions() const
     {
@@ -347,5 +377,17 @@ namespace Ogre
     {
         bool enableIncludeHeader = StringConverter::parseBool( val );
         static_cast<HighLevelGpuProgram *>( target )->setEnableIncludeHeader( enableIncludeHeader );
+    }
+    //-----------------------------------------------------------------------------------
+    String HighLevelGpuProgram::CmdUseHlmsParser::doGet( const void *target ) const
+    {
+        const bool retVal = static_cast<const HighLevelGpuProgram *>( target )->getUseHlmsParser();
+        return StringConverter::toString( retVal );
+    }
+    //-----------------------------------------------------------------------------------
+    void HighLevelGpuProgram::CmdUseHlmsParser::doSet( void *target, const String &val )
+    {
+        const bool bUse = StringConverter::parseBool( val );
+        static_cast<HighLevelGpuProgram *>( target )->setUseHlmsParser( bUse );
     }
 }  // namespace Ogre

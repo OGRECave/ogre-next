@@ -338,9 +338,13 @@ namespace Ogre
         bool parseUndefPieces( String &inBuffer, String &outBuffer );
         bool collectPieces( const String &inBuffer, String &outBuffer );
         bool insertPieces( String &inBuffer, String &outBuffer ) const;
-        bool parseCounter( const String &inBuffer, String &outBuffer );
-        bool parse( const String &inBuffer, String &outBuffer ) const;
+        bool parseCounter( const String &inString, String &outString );
 
+    public:
+        /// For standalone parsing.
+        bool parseOffline( const String &filename, String &inBuffer, String &outBuffer );
+
+    protected:
         /** Goes through 'buffer', starting from startPos (inclusive) looking for the given
             character while skipping whitespace. If any character other than whitespace or
             EOLs if found returns String::npos

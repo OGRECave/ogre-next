@@ -1636,13 +1636,69 @@ namespace Ogre
         return syntaxError;
     }
     //-----------------------------------------------------------------------------------
-    bool Hlms::parse( const String &inBuffer, String &outBuffer ) const
+    bool Hlms::parseOffline( const String &filename, String &inString, String &outString )
     {
-        outBuffer.clear();
-        outBuffer.reserve( inBuffer.size() );
+        mSetProperties.clear();
+        mPieces.clear();
 
-        return parseForEach( inBuffer, outBuffer );
-        // return parseProperties( inBuffer, outBuffer );
+        if( mShaderProfile == "glsl" || mShaderProfile == "glslvk" )  // TODO: String comparision
+        {
+            setProperty( HlmsBaseProp::GL3Plus, mRenderSystem->getNativeShadingLanguageVersion() );
+        }
+        else if( mShaderProfile == "glsles" )  // TODO: String comparision
+        {
+            setProperty( HlmsBaseProp::GLES, mRenderSystem->getNativeShadingLanguageVersion() );
+        }
+
+        setProperty( HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.mHash ) );
+        setProperty( HlmsBaseProp::Hlsl, static_cast<int32>( HlmsBaseProp::Hlsl.mHash ) );
+        setProperty( HlmsBaseProp::Glsl, static_cast<int32>( HlmsBaseProp::Glsl.mHash ) );
+        setProperty( HlmsBaseProp::Glsles, static_cast<int32>( HlmsBaseProp::Glsles.mHash ) );
+        setProperty( HlmsBaseProp::Glslvk, static_cast<int32>( HlmsBaseProp::Glslvk.mHash ) );
+        setProperty( HlmsBaseProp::Hlslvk, static_cast<int32>( HlmsBaseProp::Hlslvk.mHash ) );
+        setProperty( HlmsBaseProp::Metal, static_cast<int32>( HlmsBaseProp::Metal.mHash ) );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        setProperty( HlmsBaseProp::iOS, 1 );
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+        setProperty( HlmsBaseProp::macOS, 1 );
+#endif
+        setProperty( HlmsBaseProp::Full32, static_cast<int32>( HlmsBaseProp::Full32.mHash ) );
+        setProperty( HlmsBaseProp::Midf16, static_cast<int32>( HlmsBaseProp::Midf16.mHash ) );
+        setProperty( HlmsBaseProp::Relaxed, static_cast<int32>( HlmsBaseProp::Relaxed.mHash ) );
+        setProperty( HlmsBaseProp::PrecisionMode, getSupportedPrecisionModeHash() );
+
+        if( mFastShaderBuildHack )
+            setProperty( HlmsBaseProp::FastShaderBuildHack, 1 );
+
+        bool syntaxError = false;
+
+        syntaxError |= this->parseMath( inString, outString );
+        while( !syntaxError && outString.find( "@foreach" ) != String::npos )
+        {
+            syntaxError |= this->parseForEach( outString, inString );
+            inString.swap( outString );
+        }
+        syntaxError |= this->parseProperties( outString, inString );
+        syntaxError |= this->parseUndefPieces( inString, outString );
+        while( !syntaxError && ( outString.find( "@piece" ) != String::npos ||
+                                 outString.find( "@insertpiece" ) != String::npos ) )
+        {
+            syntaxError |= this->collectPieces( outString, inString );
+            syntaxError |= this->insertPieces( inString, outString );
+        }
+        syntaxError |= this->parseCounter( outString, inString );
+
+        outString.swap( inString );
+
+        if( syntaxError )
+        {
+            LogManager::getSingleton().logMessage( "There were HLMS syntax errors while parsing " +
+                                                   filename );
+        }
+
+        return syntaxError;
     }
     //-----------------------------------------------------------------------------------
     uint32 Hlms::addRenderableCache( const HlmsPropertyVec &renderableSetProperties,
