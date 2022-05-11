@@ -340,6 +340,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aafffd5337217b46424f8498d6ccac53f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#aafffd5337217b46424f8498d6ccac53f">getType</a> () const</td></tr>
 <tr class="memdesc:aafffd5337217b46424f8498d6ccac53f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the program type.  <a href="class_ogre_1_1_gpu_program.html#aafffd5337217b46424f8498d6ccac53f">More...</a><br /></td></tr>
 <tr class="separator:aafffd5337217b46424f8498d6ccac53f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bdcae57c7a5aacd52728baed5258186"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_high_level_gpu_program.html#a4bdcae57c7a5aacd52728baed5258186">getUseHlmsParser</a> () const</td></tr>
+<tr class="separator:a4bdcae57c7a5aacd52728baed5258186"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e9f4c4593c9331554ec02eaa124d7b8"><td class="memItemLeft" align="right" valign="top">ID3D11VertexShader *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_h_l_s_l_program.html#a4e9f4c4593c9331554ec02eaa124d7b8">getVertexShader</a> () const</td></tr>
 <tr class="separator:a4e9f4c4593c9331554ec02eaa124d7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a437426b0a896fec884ec738c9c5705a6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a437426b0a896fec884ec738c9c5705a6">hasCompileError</a> () const</td></tr>
@@ -521,6 +523,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad9eab3c93633af5addd6ddd0e7682579"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#ad9eab3c93633af5addd6ddd0e7682579">setUniformBlockBinding</a> (const char *blockName, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> bindingSlot)</td></tr>
 <tr class="memdesc:ad9eab3c93633af5addd6ddd0e7682579"><td class="mdescLeft">&#160;</td><td class="mdescRight">For GL only. Program must be bound when calling.  <a href="class_ogre_1_1_gpu_program.html#ad9eab3c93633af5addd6ddd0e7682579">More...</a><br /></td></tr>
 <tr class="separator:ad9eab3c93633af5addd6ddd0e7682579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27f70603cf5854c6e46755d93d53ebad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_high_level_gpu_program.html#a27f70603cf5854c6e46755d93d53ebad">setUseHlmsParser</a> (bool bUse)</td></tr>
+<tr class="memdesc:a27f70603cf5854c6e46755d93d53ebad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether we should run the shader through the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> parser.  <a href="class_ogre_1_1_high_level_gpu_program.html#a27f70603cf5854c6e46755d93d53ebad">More...</a><br /></td></tr>
+<tr class="separator:a27f70603cf5854c6e46755d93d53ebad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a463bffd1f68fc8ae3c29d64402e9ca8d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a463bffd1f68fc8ae3c29d64402e9ca8d">setVertexTextureFetchRequired</a> (bool r)</td></tr>
 <tr class="memdesc:a463bffd1f68fc8ae3c29d64402e9ca8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether this vertex program requires support for vertex texture fetch from the hardware.  <a href="class_ogre_1_1_gpu_program.html#a463bffd1f68fc8ae3c29d64402e9ca8d">More...</a><br /></td></tr>
 <tr class="separator:a463bffd1f68fc8ae3c29d64402e9ca8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -553,6 +558,8 @@ Public Attributes</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:abe36db3d6c7275c9fd7c50a6ffba6cb8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html">CmdEnableIncludeHeader</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_high_level_gpu_program.html#abe36db3d6c7275c9fd7c50a6ffba6cb8">msEnableIncludeHeaderCmd</a></td></tr>
 <tr class="separator:abe36db3d6c7275c9fd7c50a6ffba6cb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa57b135d2d8427eec4c7933792a93905"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_high_level_gpu_program_1_1_cmd_use_hlms_parser.html">CmdUseHlmsParser</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_high_level_gpu_program.html#aa57b135d2d8427eec4c7933792a93905">msUseHlmsParser</a></td></tr>
+<tr class="separator:aa57b135d2d8427eec4c7933792a93905"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Specialization of <a class="el" href="class_ogre_1_1_high_level_gpu_program.html" title="Abstract base class representing a high-level program (a vertex or fragment program).">HighLevelGpuProgram</a> to provide support for D3D11 High-Level Shader Language (HLSL). </p>
@@ -2487,6 +2494,31 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the program type. </p>
+
+</div>
+</div>
+<a id="a4bdcae57c7a5aacd52728baed5258186" name="a4bdcae57c7a5aacd52728baed5258186"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bdcae57c7a5aacd52728baed5258186">&#9670;&nbsp;</a></span>getUseHlmsParser()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HighLevelGpuProgram::getUseHlmsParser </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -4535,6 +4567,43 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
+<a id="a27f70603cf5854c6e46755d93d53ebad" name="a27f70603cf5854c6e46755d93d53ebad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27f70603cf5854c6e46755d93d53ebad">&#9670;&nbsp;</a></span>setUseHlmsParser()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HighLevelGpuProgram::setUseHlmsParser </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bUse</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether we should run the shader through the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> parser. </p>
+<p >This parser doesn't yet have access to the entire PSO (i.e. Pixel Shader can't see Vertex Shader).</p>
+<p >However it's still useful, specially @foreach() </p><dl class="section remark"><dt>Remarks</dt><dd>This is run after setEnableIncludeHeader </dd></dl>
+<dl class="section user"><dt></dt><dd>Beware included files mess up error reporting (wrong lines) </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bUse</td><td>True to run source code through <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> parser. Must be toggled before loading the source file. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a463bffd1f68fc8ae3c29d64402e9ca8d" name="a463bffd1f68fc8ae3c29d64402e9ca8d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a463bffd1f68fc8ae3c29d64402e9ca8d">&#9670;&nbsp;</a></span>setVertexTextureFetchRequired()</h2>
 
@@ -4704,6 +4773,28 @@ template&lt;class Alloc &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html">CmdEnableIncludeHeader</a> Ogre::HighLevelGpuProgram::msEnableIncludeHeaderCmd</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa57b135d2d8427eec4c7933792a93905" name="aa57b135d2d8427eec4c7933792a93905"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa57b135d2d8427eec4c7933792a93905">&#9670;&nbsp;</a></span>msUseHlmsParser</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_high_level_gpu_program_1_1_cmd_use_hlms_parser.html">CmdUseHlmsParser</a> Ogre::HighLevelGpuProgram::msUseHlmsParser</td>
         </tr>
       </table>
   </td>

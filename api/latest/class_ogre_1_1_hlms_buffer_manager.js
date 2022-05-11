@@ -73,6 +73,7 @@ var class_ogre_1_1_hlms_buffer_manager =
     [ "operator new", "class_ogre_1_1_hlms_buffer_manager.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
     [ "operator new[]", "class_ogre_1_1_hlms_buffer_manager.html#adce32528577d71b228692df906ecd17c", null ],
     [ "operator new[]", "class_ogre_1_1_hlms_buffer_manager.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ],
+    [ "parseOffline", "class_ogre_1_1_hlms_buffer_manager.html#a3be3cc55b1f3d431a23633cd07770cdf", null ],
     [ "postCommandBufferExecution", "class_ogre_1_1_hlms_buffer_manager.html#a8884c9ce9db5b9e6090e4034e873cd63", null ],
     [ "preCommandBufferExecution", "class_ogre_1_1_hlms_buffer_manager.html#afeea1966ecc0c94015c232c841ec8716", null ],
     [ "preparePassHash", "class_ogre_1_1_hlms_buffer_manager.html#a2d0a1980bba548053bc1752a31447b95", null ],

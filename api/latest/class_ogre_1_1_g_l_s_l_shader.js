@@ -83,6 +83,7 @@ var class_ogre_1_1_g_l_s_l_shader =
     [ "getStateCount", "class_ogre_1_1_g_l_s_l_shader.html#ade85e4d5579519e4117a84789c0ae8fd", null ],
     [ "getSyntaxCode", "class_ogre_1_1_g_l_s_l_shader.html#ac83e7ad972146d12bcb450136994d356", null ],
     [ "getType", "class_ogre_1_1_g_l_s_l_shader.html#aafffd5337217b46424f8498d6ccac53f", null ],
+    [ "getUseHlmsParser", "class_ogre_1_1_g_l_s_l_shader.html#a4bdcae57c7a5aacd52728baed5258186", null ],
     [ "hasCompileError", "class_ogre_1_1_g_l_s_l_shader.html#a437426b0a896fec884ec738c9c5705a6", null ],
     [ "hasDefaultParameters", "class_ogre_1_1_g_l_s_l_shader.html#ad32d6024efaa2c26489fcd734533879f", null ],
     [ "isAdjacencyInfoRequired", "class_ogre_1_1_g_l_s_l_shader.html#ac5f89eae6b10645fd069679030d5adf7", null ],
@@ -145,6 +146,7 @@ var class_ogre_1_1_g_l_s_l_shader =
     [ "setSyntaxCode", "class_ogre_1_1_g_l_s_l_shader.html#a48901c745f712840d8ff24cd04e50678", null ],
     [ "setToLoaded", "class_ogre_1_1_g_l_s_l_shader.html#a1b86e7ee9b9fb5df513a95a7eba46889", null ],
     [ "setType", "class_ogre_1_1_g_l_s_l_shader.html#a9792acbeda4a5806ae1ec5c7d4da60b7", null ],
+    [ "setUseHlmsParser", "class_ogre_1_1_g_l_s_l_shader.html#a27f70603cf5854c6e46755d93d53ebad", null ],
     [ "setVertexTextureFetchRequired", "class_ogre_1_1_g_l_s_l_shader.html#a463bffd1f68fc8ae3c29d64402e9ca8d", null ],
     [ "setVpAndRtArrayIndexFromAnyShaderRequired", "class_ogre_1_1_g_l_s_l_shader.html#a633efc296c4dffefe10f7a1e3da26e2d", null ],
     [ "touch", "class_ogre_1_1_g_l_s_l_shader.html#aa518760a9e7988556b78de2ce4da9eca", null ],
@@ -153,5 +155,6 @@ var class_ogre_1_1_g_l_s_l_shader =
     [ "unload", "class_ogre_1_1_g_l_s_l_shader.html#a8660b706f82f66ed7939da460e204e55", null ],
     [ "unsetRootLayout", "class_ogre_1_1_g_l_s_l_shader.html#ab873df85f50cb2b9d5c981e585e32dcb", null ],
     [ "msEnableIncludeHeaderCmd", "class_ogre_1_1_g_l_s_l_shader.html#abe36db3d6c7275c9fd7c50a6ffba6cb8", null ],
+    [ "msUseHlmsParser", "class_ogre_1_1_g_l_s_l_shader.html#aa57b135d2d8427eec4c7933792a93905", null ],
     [ "OGRE_AUTO_MUTEX", "class_ogre_1_1_g_l_s_l_shader.html#a104d9db8bfcff1f37b29157bbe070f7a", null ]
 ];

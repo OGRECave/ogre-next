@@ -119,6 +119,7 @@ var class_ogre_1_1_hlms_pbs =
     [ "operator new", "class_ogre_1_1_hlms_pbs.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
     [ "operator new[]", "class_ogre_1_1_hlms_pbs.html#adce32528577d71b228692df906ecd17c", null ],
     [ "operator new[]", "class_ogre_1_1_hlms_pbs.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ],
+    [ "parseOffline", "class_ogre_1_1_hlms_pbs.html#a3be3cc55b1f3d431a23633cd07770cdf", null ],
     [ "postCommandBufferExecution", "class_ogre_1_1_hlms_pbs.html#a5977a2c286fd961c231908dd57c407de", null ],
     [ "preCommandBufferExecution", "class_ogre_1_1_hlms_pbs.html#afeea1966ecc0c94015c232c841ec8716", null ],
     [ "preparePassHash", "class_ogre_1_1_hlms_pbs.html#a85a58005d874ea0ff1e1d2dd6d6879d2", null ],

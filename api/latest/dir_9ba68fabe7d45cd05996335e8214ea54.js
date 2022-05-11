@@ -140,7 +140,8 @@ var dir_9ba68fabe7d45cd05996335e8214ea54 =
     [ "OgreHeaderSuffix.h", "_ogre_header_suffix_8h.html", null ],
     [ "OgreHiddenAreaMeshVr.h", "_ogre_hidden_area_mesh_vr_8h.html", null ],
     [ "OgreHighLevelGpuProgram.h", "_ogre_high_level_gpu_program_8h.html", [
-      [ "Ogre::HighLevelGpuProgram::CmdEnableIncludeHeader", "class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html", "class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header" ]
+      [ "Ogre::HighLevelGpuProgram::CmdEnableIncludeHeader", "class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html", "class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header" ],
+      [ "Ogre::HighLevelGpuProgram::CmdUseHlmsParser", "class_ogre_1_1_high_level_gpu_program_1_1_cmd_use_hlms_parser.html", "class_ogre_1_1_high_level_gpu_program_1_1_cmd_use_hlms_parser" ]
     ] ],
     [ "OgreHighLevelGpuProgramManager.h", "_ogre_high_level_gpu_program_manager_8h.html", null ],
     [ "OgreHlms.h", "_ogre_hlms_8h.html", [

@@ -1498,6 +1498,7 @@ var hierarchy =
       [ "Ogre::GLSLShader::CmdOutputOperationType", "class_ogre_1_1_g_l_s_l_shader_1_1_cmd_output_operation_type.html", null ],
       [ "Ogre::GLSLShader::CmdPreprocessorDefines", "class_ogre_1_1_g_l_s_l_shader_1_1_cmd_preprocessor_defines.html", null ],
       [ "Ogre::HighLevelGpuProgram::CmdEnableIncludeHeader", "class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html", null ],
+      [ "Ogre::HighLevelGpuProgram::CmdUseHlmsParser", "class_ogre_1_1_high_level_gpu_program_1_1_cmd_use_hlms_parser.html", null ],
       [ "Ogre::HollowEllipsoidEmitter::CmdInnerX", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_x.html", null ],
       [ "Ogre::HollowEllipsoidEmitter::CmdInnerY", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_y.html", null ],
       [ "Ogre::HollowEllipsoidEmitter::CmdInnerZ", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_z.html", null ],
