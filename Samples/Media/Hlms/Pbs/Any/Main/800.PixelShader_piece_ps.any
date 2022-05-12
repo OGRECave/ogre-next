@@ -16,9 +16,11 @@
 
 	@property( !fresnel_scalar )
 		#define float_fresnel midf
+		#define float_fresnel_c( x ) midf_c( x )
 		#define make_float_fresnel( x ) midf_c( x )
 	@else
 		#define float_fresnel midf3
+		#define float_fresnel_c( x ) midf3_c( x )
 		#define make_float_fresnel( x ) midf3_c( x, x, x )
 	@end
 
@@ -297,7 +299,7 @@
 	/// SPECUlAR MAP
 	pixelData.specular.xyz = midf3_c( material.kS.xyz );
 	@property( !metallic_workflow )
-		pixelData.F0 = make_float_fresnel( material.F0.@insertpiece( FresnelSwizzle ) );
+		pixelData.F0 = float_fresnel_c( material.F0.@insertpiece( FresnelSwizzle ) );
 		@property( specular_map && !fresnel_workflow )
 			pixelData.specular.xyz *= SampleSpecular( textureMaps@value( specular_map_idx ),
 													  samplerState@value(specular_map_sampler),

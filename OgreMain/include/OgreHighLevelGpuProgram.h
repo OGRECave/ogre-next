@@ -71,14 +71,24 @@ namespace Ogre
             String doGet( const void *target ) const override;
             void   doSet( void *target, const String &val ) override;
         };
+        /// Command object for using Hlms parser
+        class _OgrePrivate CmdUseHlmsParser final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
 
         static CmdEnableIncludeHeader msEnableIncludeHeaderCmd;
+        static CmdUseHlmsParser       msUseHlmsParser;
 
     protected:
         /// Whether the high-level program (and it's parameter defs) is loaded
         bool mHighLevelLoaded;
-        /// See setEnableIncludeHeader
+        /// See setEnableIncludeHeader()
         bool mEnableIncludeHeader;
+        /// See setUseHlmsParser()
+        bool mUseHlmsParser;
         /// The underlying assembler program
         GpuProgramPtr mAssemblerProgram;
         /// Have we built the name->index parameter map yet?
@@ -161,6 +171,23 @@ namespace Ogre
         */
         void setEnableIncludeHeader( bool bEnable );
         bool getEnableIncludeHeader() const;
+
+        /** Whether we should run the shader through the Hlms parser.
+
+            This parser doesn't yet have access to the entire PSO
+            (i.e. Pixel Shader can't see Vertex Shader).
+
+            However it's still useful, specially @foreach()
+        @remarks
+            This is run after setEnableIncludeHeader
+        @par
+            Beware included files mess up error reporting (wrong lines)
+        @param bUse
+            True to run source code through Hlms parser.
+            Must be toggled before loading the source file.
+        */
+        void setUseHlmsParser( bool bUse );
+        bool getUseHlmsParser() const;
 
         /** Get the full list of GpuConstantDefinition instances.
         @note

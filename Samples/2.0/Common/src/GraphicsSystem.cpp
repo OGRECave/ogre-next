@@ -900,6 +900,14 @@ namespace Demo
 
         Ogre::AtmosphereNpr *atmosphere =
             OGRE_NEW Ogre::AtmosphereNpr( mRoot->getRenderSystem()->getVaoManager() );
+
+        {
+            // Preserve the Power Scale explicitly set by the sample
+            Ogre::AtmosphereNpr::Preset preset = atmosphere->getPreset();
+            preset.linkedLightPower = sunLight->getPowerScale();
+            atmosphere->setPreset( preset );
+        }
+
         atmosphere->setSunDir(
             sunLight->getDirection(),
             std::asin( Ogre::Math::Clamp( -sunLight->getDirection().y, -1.0f, 1.0f ) ) /

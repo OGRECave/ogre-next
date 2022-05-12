@@ -133,11 +133,6 @@ namespace Ogre
             mRad = f;
             return *this;
         }
-        ArrayRadian &operator=( const ArrayRadian &r )
-        {
-            mRad = r.mRad;
-            return *this;
-        }
         // ArrayRadian& operator = ( const ArrayDegree& d );
 
         // ArrayReal valueDegrees() const; // see bottom of this file

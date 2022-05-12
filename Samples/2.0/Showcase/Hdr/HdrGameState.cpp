@@ -444,6 +444,9 @@ namespace Demo
         // The colour we pass to Atmosphere is too greenish when displayed. Correct it a bit.
         atmoPreset.skyColour *= Ogre::Vector3( 1.0f, 0.9f, 1.0f );
 
+        atmoPreset.linkedSceneAmbientUpperPower *= 50.0f;
+        atmoPreset.linkedSceneAmbientLowerPower *= 50.0f;
+
         // The most arbitrary variable to tweak is linkedSceneAmbient*; because
         // it's a fake GI and is derived out of a few math formulas. The way this
         // was adjusted was to look at the output of sceneManager->getAmbientLightLowerHemisphere()

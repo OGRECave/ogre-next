@@ -20,6 +20,10 @@ else()
 	set( OGRE_NEXT "Ogre" )
 endif()
 
+# Read OgreBuildSettings.h to link against optional libraries (only if set)
+file( READ "${OGRE_BINARIES}/include/OgreBuildSettings.h" OGRE_BUILD_SETTINGS_STR )
+string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_COMPONENT_ATMOSPHERE" OGRE_BUILD_COMPONENT_ATMOSPHERE )
+
 include_directories( ${OGRE_SOURCE}/OgreMain/include )
 include_directories( ${OGRE_SOURCE}/RenderSystems/Vulkan/include )
 include_directories( ${OGRE_SOURCE}/Components/Overlay/include )
@@ -42,6 +46,15 @@ set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror  \
 set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG=1 -D_DEBUG=1" )
 set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate" )
 
+set( OGRE_OPTIONAL_LIBS "" )
+
+if( NOT OGRE_BUILD_COMPONENT_ATMOSPHERE EQUAL -1 )
+	set( OGRE_OPTIONAL_LIBS ${OGRE_OPTIONAL_LIBS}
+		optimized ${OGRE_BINARIES}/lib/lib${OGRE_NEXT}AtmosphereStatic.a
+		debug ${OGRE_BINARIES}/lib/lib${OGRE_NEXT}AtmosphereStatic_d.a
+	)
+endif()
+
 # The order in which libs are linked MATTERS
 set( OGRE_LIBS
 	optimized ${OGRE_BINARIES}/lib/lib%%prefixSampleName%%.a
@@ -49,6 +62,8 @@ set( OGRE_LIBS
 
 	optimized ${OGRE_BINARIES}/lib/libOgreSamplesCommon.a
 	debug ${OGRE_BINARIES}/lib/libOgreSamplesCommon_d.a
+
+	${OGRE_OPTIONAL_LIBS}
 
 	optimized ${OGRE_BINARIES}/lib/lib${OGRE_NEXT}HlmsPbsStatic.a
 	optimized ${OGRE_BINARIES}/lib/lib${OGRE_NEXT}HlmsUnlitStatic.a

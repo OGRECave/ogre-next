@@ -30,6 +30,7 @@ float4 main
 	uniform float4 packedParams0,
 	uniform float3 skyLightAbsorption,
 	uniform float4 sunAbsorption,
+	uniform float4 cameraDisplacement,
 	uniform float4 packedParams1,
 	uniform float4 packedParams2,
 	uniform float4 packedParams3

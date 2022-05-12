@@ -114,8 +114,8 @@ namespace Ogre
                 fogBreakMinBrightness( 0.25f ),
                 fogBreakFalloff( 0.1f ),
                 linkedLightPower( Math::PI ),
-                linkedSceneAmbientUpperPower( 5.0f * Math::PI ),
-                linkedSceneAmbientLowerPower( 0.5f * Math::PI ),
+                linkedSceneAmbientUpperPower( 0.1f * Math::PI ),
+                linkedSceneAmbientLowerPower( 0.01f * Math::PI ),
                 envmapScale( 1.0f )
             {
             }
