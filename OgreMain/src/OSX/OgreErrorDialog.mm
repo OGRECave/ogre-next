@@ -45,7 +45,7 @@ void ErrorDialog::display( const String &errorMessage, String logName )
         NSAlert *alert = [[NSAlert alloc] init];
 
         [alert setMessageText:@"An error has occurred!"];
-        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setAlertStyle: NSAlertStyleCritical];
         [alert setInformativeText:[NSString stringWithCString:errorMessage.c_str()
                                                      encoding:NSASCIIStringEncoding]];
         [alert runModal];
