@@ -68,7 +68,7 @@ namespace Ogre
                 retVal = [NSApp runModalSession:modalSession];
 
                 // User pressed a button
-                if( retVal != NSRunContinuesResponse )
+                if( retVal != NSModalResponseContinue )
                     break;
             }
             [NSApp endModalSession:modalSession];
@@ -84,7 +84,7 @@ namespace Ogre
             [[mWindowDelegate getOptionsTable] setDelegate:nil];
         }
 
-        return ( retVal == NSRunStoppedResponse ) ? true : false;
+        return ( retVal == NSModalResponseStop ) ? true : false;
     }
 
 }
@@ -101,8 +101,8 @@ namespace Ogre
         // Construct the window manually
         mConfigWindow =
             [[NSWindow alloc] initWithContentRect:NSMakeRect( 0, 0, 512, 512 )
-                                        styleMask:( NSTitledWindowMask | NSClosableWindowMask |
-                                                    NSMiniaturizableWindowMask )
+                                        styleMask:( NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
+                                                    NSWindowStyleMaskMiniaturizable )
                                           backing:NSBackingStoreBuffered
                                             defer:NO];
 
@@ -111,8 +111,8 @@ namespace Ogre
 
         // First do the buttons
         mOkButton = [[NSButton alloc] initWithFrame:NSMakeRect( 414, 12, 84, 32 )];
-        [mOkButton setButtonType:NSMomentaryPushInButton];
-        [mOkButton setBezelStyle:NSRoundedBezelStyle];
+        [mOkButton setButtonType:NSButtonTypeMomentaryPushIn];
+        [mOkButton setBezelStyle:NSBezelStyleRounded];
         [mOkButton setTitle:NSLocalizedString( @"OK", @"okButtonString" )];
         [mOkButton setAction:@selector( okButtonPressed: )];
         [mOkButton setTarget:self];
@@ -120,8 +120,8 @@ namespace Ogre
         [[mConfigWindow contentView] addSubview:mOkButton];
 
         mCancelButton = [[NSButton alloc] initWithFrame:NSMakeRect( 330, 12, 84, 32 )];
-        [mCancelButton setButtonType:NSMomentaryPushInButton];
-        [mCancelButton setBezelStyle:NSRoundedBezelStyle];
+        [mCancelButton setButtonType:NSButtonTypeMomentaryPushIn];
+        [mCancelButton setBezelStyle:NSBezelStyleRounded];
         [mCancelButton setAction:@selector( cancelButtonPressed: )];
         [mCancelButton setTarget:self];
         [mCancelButton setKeyEquivalent:@"\e"];
@@ -135,7 +135,7 @@ namespace Ogre
 
         NSImage *image = [[NSImage alloc] initWithContentsOfFile:logoPath];
         [mOgreLogo setImage:image];
-        [mOgreLogo setImageScaling:NSScaleToFit];
+        [mOgreLogo setImageScaling:NSImageScaleAxesIndependently];
         [mOgreLogo setEditable:NO];
         [[mConfigWindow contentView] addSubview:mOgreLogo];
 
@@ -153,7 +153,7 @@ namespace Ogre
         [renderSystemLabel setEditable:NO];
         [renderSystemLabel setSelectable:NO];
         [renderSystemLabel setDrawsBackground:NO];
-        [renderSystemLabel setAlignment:NSNaturalTextAlignment];
+        [renderSystemLabel setAlignment:NSTextAlignmentNatural];
         [renderSystemLabel setBezeled:NO];
         [[mConfigWindow contentView] addSubview:renderSystemLabel];
 
@@ -162,8 +162,7 @@ namespace Ogre
         [tableBox setTitle:NSLocalizedString( @"Rendering System Options", @"optionsBoxString" )];
         [tableBox setContentViewMargins:NSMakeSize( 0, 0 )];
         [tableBox setFocusRingType:NSFocusRingTypeNone];
-        [tableBox setBorderType:NSLineBorder];
-
+ 
         // Set up the tableview
         mOptionsTable = [[NSTableView alloc] init];
         [mOptionsTable setDelegate:self];
@@ -196,7 +195,7 @@ namespace Ogre
         [mOptionLabel setEditable:NO];
         [mOptionLabel setSelectable:NO];
         [mOptionLabel setDrawsBackground:NO];
-        [mOptionLabel setAlignment:NSRightTextAlignment];
+        [mOptionLabel setAlignment:NSTextAlignmentRight];
         [mOptionLabel setBezeled:NO];
         [[tableBox contentView] addSubview:mOptionLabel];
 
