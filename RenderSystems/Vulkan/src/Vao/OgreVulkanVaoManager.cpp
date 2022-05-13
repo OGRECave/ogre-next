@@ -134,15 +134,11 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
         if( renderSystem->getCapabilities()->getVendor() == GPU_IMGTEC )
         {
-            Workarounds::mPowerVRAlignment = true;
+            Workarounds::mPowerVRAlignment = 16u;
 
-            mConstBufferAlignment =
-                std::max( mConstBufferAlignment,
-                          (uint32_t)mDevice->mDeviceProperties.limits.minMemoryMapAlignment );
-            mTexBufferAlignment = std::max(
-                mTexBufferAlignment, (uint32_t)mDevice->mDeviceProperties.limits.minMemoryMapAlignment );
-            mUavBufferAlignment = std::max(
-                mUavBufferAlignment, (uint32_t)mDevice->mDeviceProperties.limits.minMemoryMapAlignment );
+            mConstBufferAlignment = std::max( mConstBufferAlignment, Workarounds::mPowerVRAlignment );
+            mTexBufferAlignment = std::max( mTexBufferAlignment, Workarounds::mPowerVRAlignment );
+            mUavBufferAlignment = std::max( mUavBufferAlignment, Workarounds::mPowerVRAlignment );
         }
 #endif
 
@@ -1222,19 +1218,19 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
+        size_t sizeBytes = numElements * bytesPerElement;
         uint32 alignment = bytesPerElement;
         uint32 numElementsPadding = 0u;
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
         if( Workarounds::mPowerVRAlignment )
         {
-            alignment = uint32(
-                Math::lcm( alignment, mDevice->mDeviceProperties.limits.minMemoryMapAlignment ) );
-            numElementsPadding = uint32( numElements * alignment - numElements * bytesPerElement );
+            alignment = uint32( Math::lcm( alignment, Workarounds::mPowerVRAlignment ) );
+            sizeBytes = alignToNextMultiple<size_t>( sizeBytes, alignment );
+            numElementsPadding = uint32( sizeBytes - numElements * bytesPerElement ) / bytesPerElement;
         }
 #endif
 
-        allocateVbo( numElements * alignment, alignment, bufferType, false, false, vboIdx,
-                     bufferOffset );
+        allocateVbo( sizeBytes, alignment, bufferType, false, false, vboIdx, bufferOffset );
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
         Vbo &vbo = mVbos[vboFlag][vboIdx];
@@ -1280,19 +1276,19 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
+        size_t sizeBytes = numElements * bytesPerElement;
         uint32 alignment = bytesPerElement;
         uint32 numElementsPadding = 0u;
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
         if( Workarounds::mPowerVRAlignment )
         {
-            alignment = uint32(
-                Math::lcm( alignment, mDevice->mDeviceProperties.limits.minMemoryMapAlignment ) );
-            numElementsPadding = uint32( numElements * alignment - numElements * bytesPerElement );
+            alignment = uint32( Math::lcm( alignment, Workarounds::mPowerVRAlignment ) );
+            sizeBytes = alignToNextMultiple<size_t>( sizeBytes, alignment );
+            numElementsPadding = uint32( sizeBytes - numElements * bytesPerElement ) / bytesPerElement;
         }
 #endif
 
-        allocateVbo( numElements * alignment, alignment, bufferType, false, false, vboIdx,
-                     bufferOffset );
+        allocateVbo( sizeBytes, alignment, bufferType, false, false, vboIdx, bufferOffset );
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
         Vbo &vbo = mVbos[vboFlag][vboIdx];

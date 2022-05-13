@@ -40,11 +40,7 @@ namespace Ogre
     {
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
 #    define OGRE_VHVB_ALIGNMENT \
-        Workarounds::mPowerVRAlignment \
-            ? uint16_t( mgr->_getDiscardBufferManager() \
-                            ->getDevice() \
-                            ->mDeviceProperties.limits.minMemoryMapAlignment ) \
-            : 16u
+        Workarounds::mPowerVRAlignment ? uint16_t( Workarounds::mPowerVRAlignment ) : 16u
 #else
 #    define OGRE_VHVB_ALIGNMENT 16u
 #endif

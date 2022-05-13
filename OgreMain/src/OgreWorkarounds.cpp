@@ -51,7 +51,7 @@ namespace Ogre
     bool Workarounds::mAdreno618_0VertexIndirect = true;
 #endif
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
-    bool Workarounds::mPowerVRAlignment = false;
+    uint32 Workarounds::mPowerVRAlignment = 0u;
 #endif
 
     void Workarounds::dump( String &outStr )
