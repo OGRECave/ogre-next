@@ -30,16 +30,31 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanDiscardBufferManager.h"
 #include "OgreVulkanHardwareBufferManager.h"
 
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+#    include "OgreVulkanDevice.h"
+#endif
+
 namespace Ogre
 {
     namespace v1
     {
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+#    define OGRE_VHIB_ALIGNMENT \
+        Workarounds::mPowerVRAlignment \
+            ? uint16_t( mgr->_getDiscardBufferManager() \
+                            ->getDevice() \
+                            ->mDeviceProperties.limits.minMemoryMapAlignment ) \
+            : 4u
+#else
+#    define OGRE_VHIB_ALIGNMENT 4u
+#endif
         VulkanHardwareIndexBuffer::VulkanHardwareIndexBuffer( VulkanHardwareBufferManagerBase *mgr,
                                                               IndexType idxType, size_t numIndexes,
                                                               HardwareBuffer::Usage usage,
                                                               bool useShadowBuffer ) :
             HardwareIndexBuffer( mgr, idxType, numIndexes, usage, false, false ),
-            mVulkanHardwareBufferCommon( mSizeInBytes, usage, 4, mgr->_getDiscardBufferManager(),
+            mVulkanHardwareBufferCommon( mSizeInBytes, usage, OGRE_VHIB_ALIGNMENT,
+                                         mgr->_getDiscardBufferManager(),
                                          mgr->_getDiscardBufferManager()->getDevice() )
         {
         }

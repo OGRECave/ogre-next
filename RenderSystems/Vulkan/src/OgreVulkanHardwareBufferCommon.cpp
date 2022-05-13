@@ -63,7 +63,7 @@ namespace Ogre
                 vboFlag = VulkanVaoManager::CPU_WRITE_PERSISTENT;
 
             if( !( usage & HardwareBuffer::HBU_DISCARDABLE ) )
-                mBuffer = vaoManager->allocateRawBuffer( vboFlag, sizeBytes );
+                mBuffer = vaoManager->allocateRawBuffer( vboFlag, sizeBytes, alignment );
             else
                 mDiscardBuffer = discardBufferManager->createDiscardBuffer( sizeBytes, alignment );
         }

@@ -137,6 +137,20 @@ namespace Ogre
 /// Last seen: 2022-04-20
 #        define OGRE_VK_WORKAROUND_ADRENO_618_0VERTEX_INDIRECT
         static bool mAdreno618_0VertexIndirect;
+
+/// PowerVR 8xxx & 9xxx will raise a VK_ERROR_OUT_OF_DEVICE_MEMORY in
+/// vkQueueSubmit when vkCmdCopyBuffer srcOffset or dstOffset aren't
+/// multiple of minMemoryMapAlignment (64 bytes)
+///
+/// Imagination has been notified of the bug and has helped us find it.
+///
+/// As of Driver  1.386.1368, API version 1.1.131 (Android 11),
+/// this bug is still present.
+///
+/// First seen: Unknown
+/// Last seen: 2022-05-13
+#        define OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        static bool mPowerVRAlignment;
 #    endif
 #endif
     };

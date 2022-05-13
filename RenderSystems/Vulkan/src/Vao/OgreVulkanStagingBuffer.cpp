@@ -195,6 +195,16 @@ namespace Ogre
     {
         assert( mUploadOnly );
 
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        if( Workarounds::mPowerVRAlignment )
+        {
+            VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+            VulkanDevice *device = vaoManager->getDevice();
+            sizeBytes =
+                alignToNextMultiple( sizeBytes, device->mDeviceProperties.limits.minMemoryMapAlignment );
+        }
+#endif
+
         mMappingCount = sizeBytes;
 
         OGRE_ASSERT_MEDIUM( mUnmapTicket == std::numeric_limits<size_t>::max() &&
