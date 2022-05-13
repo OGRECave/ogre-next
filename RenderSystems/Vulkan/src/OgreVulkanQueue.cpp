@@ -1180,7 +1180,9 @@ namespace Ogre
         const uint8 dynBufferFrame = mVaoManager->waitForTailFrameToFinish();
         VkFence fence = mCurrentFence;  // Note: mCurrentFence may be nullptr
 
-        vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
+        VkResult result = vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
+        checkVkResult( result, "vkQueueSubmit" );
+
         mGpuWaitSemaphForCurrCmdBuff.clear();
 
         if( mCurrentFence && mCurrentFenceRefCount > 0 )
