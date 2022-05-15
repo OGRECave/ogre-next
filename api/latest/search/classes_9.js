@@ -52,9 +52,5 @@ var searchData=
   ['itemidentityexception_49',['ItemIdentityException',['../class_ogre_1_1_item_identity_exception.html',1,'Ogre']]],
   ['iteratorwrapper_50',['IteratorWrapper',['../class_ogre_1_1_iterator_wrapper.html',1,'Ogre']]],
   ['iteratorwrapper_3c_20t_2c_20iteratortype_2c_20t_3a_3amapped_5ftype_20_3e_51',['IteratorWrapper&lt; T, IteratorType, T::mapped_type &gt;',['../class_ogre_1_1_iterator_wrapper.html',1,'Ogre']]],
-  ['iteratorwrapper_3c_20t_2c_20iteratortype_2c_20t_3a_3avalue_5ftype_20_3e_52',['IteratorWrapper&lt; T, IteratorType, T::value_type &gt;',['../class_ogre_1_1_iterator_wrapper.html',1,'Ogre']]],
-  ['iteratorwrapper_3c_20t_2c_20t_3a_3aconst_5fiterator_2c_20t_3a_3amapped_5ftype_20_3e_53',['IteratorWrapper&lt; T, T::const_iterator, T::mapped_type &gt;',['../class_ogre_1_1_iterator_wrapper.html',1,'Ogre']]],
-  ['iteratorwrapper_3c_20t_2c_20t_3a_3aconst_5fiterator_2c_20t_3a_3avalue_5ftype_20_3e_54',['IteratorWrapper&lt; T, T::const_iterator, T::value_type &gt;',['../class_ogre_1_1_iterator_wrapper.html',1,'Ogre']]],
-  ['iteratorwrapper_3c_20t_2c_20t_3a_3aiterator_2c_20t_3a_3amapped_5ftype_20_3e_55',['IteratorWrapper&lt; T, T::iterator, T::mapped_type &gt;',['../class_ogre_1_1_iterator_wrapper.html',1,'Ogre']]],
-  ['iteratorwrapper_3c_20t_2c_20t_3a_3aiterator_2c_20t_3a_3avalue_5ftype_20_3e_56',['IteratorWrapper&lt; T, T::iterator, T::value_type &gt;',['../class_ogre_1_1_iterator_wrapper.html',1,'Ogre']]]
+  ['iteratorwrapper_3c_20t_2c_20iteratortype_2c_20t_3a_3avalue_5ftype_20_3e_52',['IteratorWrapper&lt; T, IteratorType, T::value_type &gt;',['../class_ogre_1_1_iterator_wrapper.html',1,'Ogre']]]
 ];
