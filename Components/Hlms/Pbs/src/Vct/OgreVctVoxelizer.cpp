@@ -618,6 +618,8 @@ namespace Ogre
     {
         const MeshPtr &mesh = item->getMesh();
 
+        bool bCanAdd = true;
+
         if( indexCountSplit == 0u )
             indexCountSplit = mDefaultIndexCountSplit;
         if( indexCountSplit != std::numeric_limits<uint32>::max() )
@@ -625,42 +627,65 @@ namespace Ogre
 
         MeshPtrMap::iterator itor = mMeshesV2.find( mesh );
 
-        if( !bCompressed )
-        {
-            const bool isNewEntry = itor == mMeshesV2.end();
-            //Force no compression, even if the entry was already there
-            QueuedMesh &queuedMesh = mMeshesV2[mesh];
-            //const bool wasCompressed = queuedMesh.bCompressed;
-            queuedMesh.bCompressed = false;
+        const bool isNewEntry = itor == mMeshesV2.end();
 
-            if( isNewEntry )
+        if( isNewEntry )
+        {
+            const unsigned numSubMeshes = mesh->getNumSubMeshes();
+            for( unsigned i = 0u; i < numSubMeshes && bCanAdd; ++i )
             {
-                queuedMesh.numItems = 0u;
-                queuedMesh.indexCountSplit = indexCountSplit;
-                queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
+                VertexArrayObject *vao = mesh->getSubMesh( i )->mVao[VpNormal].front();
+                if( !vao->getIndexBuffer() )
+                {
+                    bCanAdd = false;
+                    LogManager::getSingleton().logMessage(
+                                "WARNING: Mesh '" + mesh->getName() +
+                                "' contains geometry without index buffers. This is currently not "
+                                "implemented and cannot be added to VctVoxelizer. GI may not look as "
+                                "expected", LML_CRITICAL );
+                }
             }
-
-            ++queuedMesh.numItems;
         }
-        else
+
+        if( bCanAdd )
         {
-            //We can only request with compression if the entry wasn't already there
-            if( itor == mMeshesV2.end() )
+            if( !bCompressed )
             {
-                QueuedMesh queuedMesh;
-                queuedMesh.numItems = 0u;
-                queuedMesh.bCompressed = true;
-                queuedMesh.indexCountSplit = indexCountSplit;
-                queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
-                mMeshesV2[mesh] = queuedMesh;
+                // Force no compression, even if the entry was already there
+                QueuedMesh &queuedMesh = mMeshesV2[mesh];
+                // const bool wasCompressed = queuedMesh.bCompressed;
+                queuedMesh.bCompressed = false;
+
+                if( isNewEntry )
+                {
+                    queuedMesh.numItems = 0u;
+                    queuedMesh.indexCountSplit = indexCountSplit;
+                    queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
+                }
+
+                ++queuedMesh.numItems;
             }
             else
             {
-                ++itor->second.numItems;
-            }
-        }
+                // We can only request with compression if the entry wasn't already there
+                if( isNewEntry )
+                {
+                    QueuedMesh queuedMesh;
+                    queuedMesh.numItems = 0u;
+                    queuedMesh.bCompressed = true;
+                    queuedMesh.indexCountSplit = indexCountSplit;
+                    queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
 
-        mItems.push_back( item );
+                    mMeshesV2[mesh] = queuedMesh;
+                }
+                else
+                {
+                    ++itor->second.numItems;
+                }
+            }
+
+            mItems.push_back( item );
+        }
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::removeItem( Item *item )
