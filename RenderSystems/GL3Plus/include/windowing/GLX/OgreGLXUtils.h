@@ -46,7 +46,7 @@ namespace Ogre
         static PFNGLXGETVISUALFROMFBCONFIGPROC getVisualFromFBConfig;
 
         /**
-         * Get the GLXFBConfig used to create a ::GLXContext
+         * Get the GLXFBConfig used to create a ::%GLXContext
          *
          * @param display   X Display
          * @param drawable   GLXContext

@@ -93,17 +93,17 @@ namespace Ogre
                 Default: Absent
                 Default (when present): diffuse 1 1 1 1
 
-            + diffuse_map [texture name] [#uv]
+            + diffuse_map [texture name] [\#uv]
                 Name of the diffuse texture for the base image (optional, otherwise a dummy is set)
-                The #uv parameter is optional, and specifies the texcoord set that will
+                The \#uv parameter is optional, and specifies the texcoord set that will
                 be used. Valid range is [0; 8)
                 If the Renderable doesn't have enough UV texcoords, HLMS will throw an exception.
 
                 Note: The UV set is evaluated when creating the Renderable cache.
 
-            + diffuse_map1 [texture name] [blendmode] [#uv]
+            + diffuse_map1 [texture name] [blendmode] [\#uv]
                 Name of the diffuse texture that will be layered on top of the base image.
-                The #uv parameter is optional. Valid range is [0; 8)
+                The \#uv parameter is optional. Valid range is [0; 8)
                 The blendmode parameter is optional. Valid values are:
                     NormalNonPremul, NormalPremul, Add, Subtract, Multiply,
                     Multiply2x, Screen, Overlay, Lighten, Darken, GrainExtract,
@@ -121,7 +121,7 @@ namespace Ogre
                 Note that not all mobile HW supports 16 textures at the same time, thus we will
                 just cut/ignore the extra textures that won't fit (we log a warning though).
 
-			+ animate <#tex_unit> [<#tex_unit> <#tex_unit> ... <#tex_unit>]
+			+ animate <\#tex_unit> [<\#tex_unit> <\#tex_unit> ... <\#tex_unit>]
                 Enables texture animation through a 4x4 matrix for the specified textures.
                 Default: All texture animation/manipulation disabled.
                 Example: animate 0 1 2 3 4 14 15
