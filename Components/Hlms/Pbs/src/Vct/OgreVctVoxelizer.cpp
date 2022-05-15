@@ -63,6 +63,7 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
+#include "OgreLogManager.h"
 #include "OgreProfiler.h"
 
 #define TODO_deal_no_index_buffer
@@ -925,7 +926,18 @@ namespace Ogre
         minAabb.makeCeil( mMaxRegion.getMinimum() );
         maxAabb.makeFloor( mMaxRegion.getMaximum() );
 
-        mRegionToVoxelize.setExtents( minAabb, maxAabb );
+        if( minAabb.x > maxAabb.x || minAabb.y > maxAabb.y || minAabb.z > maxAabb.z )
+        {
+            LogManager::getSingleton().logMessage(
+                "WARNING: VctVoxelizer::autoCalculateRegion could not calculate a valid bound! GI won't "
+                "be available or won't look as expected",
+                LML_CRITICAL );
+            mRegionToVoxelize.setExtents( Ogre::Vector3::ZERO, Ogre::Vector3::ZERO );
+        }
+        else
+        {
+            mRegionToVoxelize.setExtents( minAabb, maxAabb );
+        }
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::placeItemsInBuckets()
@@ -1323,6 +1335,7 @@ namespace Ogre
 
         if( mItems.empty() )
         {
+            createVoxelTextures();
             clearVoxels();
             return;
         }
