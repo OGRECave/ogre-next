@@ -145,6 +145,17 @@ namespace Ogre
         /** @copydoc GpuProgram::_getBindingDelegate */
         GpuProgram *_getBindingDelegate() override { return mAssemblerProgram.get(); }
 
+        // This snippet must not be indented, in order for the documentation
+        // of setEnableIncludeHeader to turn out looking right.  So
+        // clang-format must be prevented from changing it.
+        // clang-format off
+        // [setEnableIncludeHeader-doc-snippet]
+/*
+    #include "MyFile.h" --> file will be included anyway.
+*/
+        // [setEnableIncludeHeader-doc-snippet]
+        // clang-format on
+
         /** Whether we should parse the source code looking for include files and
             embedding the file. Disabled by default to avoid slowing down when
             `#include` is not used. Not needed if the API natively supports it (D3D11).
@@ -155,11 +166,7 @@ namespace Ogre
             @endcode
         Block comment lines are not supported, but may not matter if
         the included file does not close the block:
-            @code
-            /*
-                #include "MyFile.h" --> file will be included anyway.
-            */
-            @endcode
+            @snippet this setEnableIncludeHeader-doc-snippet
         Preprocessor macros are not supported, but should not matter:
             @code
             #if SOME_MACRO
