@@ -280,6 +280,9 @@ namespace Ogre
                 // If two shaders have the exact same source code but different
                 // Root Layout, we should treat them differently
                 RootLayout rootLayout;
+                // We MUST memset due to internal padding;
+                // otherwise we'll be hashing uninitialized values
+                memset( &rootLayout, 0, sizeof( rootLayout ) );
                 rootLayout.mCompute = true;
                 job->setupRootLayout( rootLayout );
 
