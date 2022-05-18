@@ -55,6 +55,7 @@ sampleNames = [ \
 	"V1Interfaces",
 	"V2ManualObject",
 	"V2Mesh",
+	["Readback", True]
 ]
 
 templateFiles = list()
@@ -79,6 +80,11 @@ mediaFolders = [ \
 ]
 
 for sampleName in sampleNames:
+	bIsTest = False
+	if type(sampleName) is not str:
+		sampleName = sampleName[0]
+		bIsTest = sampleName[1]
+
 	# Copy media folders into assets folder
 	dstAssetsPath = './Autogen/' + sampleName + "/app/src/main/assets/"
 	os.makedirs( os.path.dirname( dstAssetsPath ), exist_ok=True )
@@ -108,7 +114,10 @@ for sampleName in sampleNames:
 			print( 'Generating ' + templateFile + ' into ' + newPath )
 			fileData = open( templateFile, 'r' ).read()
 			fileData = fileData.replace( '%%sampleName%%', sampleName )
-			fileData = fileData.replace( '%%prefixSampleName%%', 'Sample_' + sampleName )
+			if bIsTest:
+				fileData = fileData.replace( '%%prefixSampleName%%', 'Test_' + sampleName )
+			else:
+				fileData = fileData.replace( '%%prefixSampleName%%', 'Sample_' + sampleName )
 			fileData = fileData.replace( '%%ogreBinaries%%', ogreBinariesPath )
 			fileData = fileData.replace( '%%ogreSource%%', ogreSourcePath )
 			dstFile = open( newPath, 'w' )

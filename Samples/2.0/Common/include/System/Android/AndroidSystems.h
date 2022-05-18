@@ -65,6 +65,21 @@ namespace Demo
         static const Ogre::String &openFile( const Ogre::String &filename ) { return filename; }
 #endif
 
+        /** Returns a R/W folder for private usage
+        @param bInternal
+            When true, returns an internal path that cannot be accessed by users
+            or other apps on non-rooted phones (unless the APK is marked as debuggable)
+
+            When false, returns an external path that can be accessed by users,
+            although most apps are restricted and cannot see (it can often
+            be accessed by hooking the phone to the PC via USB)
+            This folder is usually in
+                /storage/emulated/0/Android/data/com.example.projectname/files
+            But for most users they access it by going to
+                Android/data/com.example.projectname/files
+        */
+        static std::string getFilesDir( const bool bInternal = true );
+
         static bool isAndroid();
 
         static void registerArchiveFactories();
