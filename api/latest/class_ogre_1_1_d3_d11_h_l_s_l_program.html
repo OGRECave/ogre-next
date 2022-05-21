@@ -3839,23 +3839,24 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Whether we should parse the source code looking for include files and embedding the file. </p>
-<p >Disabled by default to avoid slowing down when #include is not used. Not needed if the API natively supports it (D3D11). </p><dl class="section remark"><dt>Remarks</dt><dd>Single line comments are supported: #include "MyFile.h" --&gt; won't be included. <pre class="fragment">        Block comment lines are not supported, but may not matter if
-        the included file does not close the block:
-            / *
-                #include "MyFile.h" --&gt; file will be included anyway.
-              /
-
-        Preprocessor macros are not supported, but should not matter:
-            #if SOME_MACRO
-                #include "MyFile.h" --&gt; file will be included anyway.
-            #endif
-    @par
-        Recursive includes are supported (e.g. header includes a header)
-    @par
-        Beware included files mess up error reporting (wrong lines)
-    @param bEnable
-        True to support #include. Must be toggled before loading the source file.
-</pre> </dd></dl>
+<p >Disabled by default to avoid slowing down when <code>#include</code> is not used. Not needed if the API natively supports it (D3D11). </p><dl class="section remark"><dt>Remarks</dt><dd>Single line comments are supported: <div class="fragment"><div class="line"><span class="comment">// #include &quot;MyFile.h&quot; --&gt; won&#39;t be included.</span></div>
+</div><!-- fragment --> Block comment lines are not supported, but may not matter if the included file does not close the block: <div class="fragment"><div class="line"><span class="comment">/*</span></div>
+<div class="line"><span class="comment">    #include &quot;MyFile.h&quot; --&gt; file will be included anyway.</span></div>
+<div class="line"><span class="comment">*/</span></div>
+</div><!-- fragment --> Preprocessor macros are not supported, but should not matter: <div class="fragment"><div class="line"><span class="preprocessor">#if SOME_MACRO</span></div>
+<div class="line"><span class="preprocessor">    #include &quot;MyFile.h&quot;</span> --&gt; file will be included anyway.</div>
+<div class="line">#endif</div>
+</div><!-- fragment --> </dd>
+<dd>
+Recursive includes are supported (e.g. header includes a header) </dd>
+<dd>
+Beware included files mess up error reporting (wrong lines) </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bEnable</td><td>True to support <code>#include</code>. Must be toggled before loading the source file. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

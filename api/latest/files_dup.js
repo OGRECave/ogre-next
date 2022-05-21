@@ -289,6 +289,12 @@ var files_dup =
     [ "OgreAPKZipArchive.h", "_ogre_a_p_k_zip_archive_8h.html", [
       [ "Ogre::APKZipArchiveFactory", "class_ogre_1_1_a_p_k_zip_archive_factory.html", "class_ogre_1_1_a_p_k_zip_archive_factory" ]
     ] ],
+    [ "Android/OgreTimerImp.h", "_android_2_ogre_timer_imp_8h.html", null ],
+    [ "Emscripten/OgreTimerImp.h", "_emscripten_2_ogre_timer_imp_8h.html", null ],
+    [ "GLX/OgreTimerImp.h", "_g_l_x_2_ogre_timer_imp_8h.html", null ],
+    [ "iOS/OgreTimerImp.h", "i_o_s_2_ogre_timer_imp_8h.html", null ],
+    [ "OSX/OgreTimerImp.h", "_o_s_x_2_ogre_timer_imp_8h.html", null ],
+    [ "WIN32/OgreTimerImp.h", "_w_i_n32_2_ogre_timer_imp_8h.html", "_w_i_n32_2_ogre_timer_imp_8h" ],
     [ "OgreBone.h", "_ogre_bone_8h.html", null ],
     [ "OgreSkeletonAnimation.h", "_ogre_skeleton_animation_8h.html", "_ogre_skeleton_animation_8h" ],
     [ "OgreSkeletonAnimationDef.h", "_ogre_skeleton_animation_def_8h.html", "_ogre_skeleton_animation_def_8h" ],
@@ -389,14 +395,27 @@ var files_dup =
     [ "OgreComputeTools.h", "_ogre_compute_tools_8h.html", [
       [ "Ogre::ComputeTools", "class_ogre_1_1_compute_tools.html", "class_ogre_1_1_compute_tools" ]
     ] ],
+    [ "Android/OgreConfigDialogImp.h", "_android_2_ogre_config_dialog_imp_8h.html", null ],
+    [ "Emscripten/OgreConfigDialogImp.h", "_emscripten_2_ogre_config_dialog_imp_8h.html", null ],
+    [ "GLX/OgreConfigDialogImp.h", "_g_l_x_2_ogre_config_dialog_imp_8h.html", null ],
+    [ "gtk/OgreConfigDialogImp.h", "gtk_2_ogre_config_dialog_imp_8h.html", null ],
+    [ "iOS/OgreConfigDialogImp.h", "i_o_s_2_ogre_config_dialog_imp_8h.html", null ],
+    [ "OSX/OgreConfigDialogImp.h", "_o_s_x_2_ogre_config_dialog_imp_8h.html", null ],
+    [ "WIN32/OgreConfigDialogImp.h", "_w_i_n32_2_ogre_config_dialog_imp_8h.html", "_w_i_n32_2_ogre_config_dialog_imp_8h" ],
+    [ "Android/OgreErrorDialogImp.h", "_android_2_ogre_error_dialog_imp_8h.html", null ],
+    [ "Emscripten/OgreErrorDialogImp.h", "_emscripten_2_ogre_error_dialog_imp_8h.html", null ],
+    [ "GLX/OgreErrorDialogImp.h", "_g_l_x_2_ogre_error_dialog_imp_8h.html", null ],
+    [ "gtk/OgreErrorDialogImp.h", "gtk_2_ogre_error_dialog_imp_8h.html", null ],
+    [ "iOS/OgreErrorDialogImp.h", "i_o_s_2_ogre_error_dialog_imp_8h.html", null ],
+    [ "OSX/OgreErrorDialogImp.h", "_o_s_x_2_ogre_error_dialog_imp_8h.html", null ],
+    [ "WIN32/OgreErrorDialogImp.h", "_w_i_n32_2_ogre_error_dialog_imp_8h.html", "_w_i_n32_2_ogre_error_dialog_imp_8h" ],
     [ "OgreOSXCocoaTouchView.h", "_ogre_o_s_x_cocoa_touch_view_8h.html", [
       [ "OgreView", "interface_ogre_view.html", "interface_ogre_view" ],
       [ "OgreWindow", "interface_ogre_window.html", null ]
     ] ],
-    [ "C/OgreArrayAabb.h", "_c_2_ogre_array_aabb_8h.html", null ],
-    [ "NEON/Single/OgreArrayAabb.h", "_n_e_o_n_2_single_2_ogre_array_aabb_8h.html", null ],
-    [ "OgreArrayAabb.h", "_ogre_array_aabb_8h.html", null ],
-    [ "SSE2/Single/OgreArrayAabb.h", "_s_s_e2_2_single_2_ogre_array_aabb_8h.html", null ],
+    [ "OgreMathlibC.h", "_ogre_mathlib_c_8h.html", [
+      [ "Ogre::MathlibC", "class_ogre_1_1_mathlib_c.html", "class_ogre_1_1_mathlib_c" ]
+    ] ],
     [ "C/OgreArrayMatrix4.h", "_c_2_ogre_array_matrix4_8h.html", null ],
     [ "NEON/Single/OgreArrayMatrix4.h", "_n_e_o_n_2_single_2_ogre_array_matrix4_8h.html", null ],
     [ "OgreArrayMatrix4.h", "_ogre_array_matrix4_8h.html", null ],
@@ -427,10 +446,11 @@ var files_dup =
     [ "SSE2/Single/OgreBooleanMask.h", "_s_s_e2_2_single_2_ogre_boolean_mask_8h.html", [
       [ "Ogre::BooleanMask4", "class_ogre_1_1_boolean_mask4.html", "class_ogre_1_1_boolean_mask4" ]
     ] ],
-    [ "OgreMathlibC.h", "_ogre_mathlib_c_8h.html", [
-      [ "Ogre::MathlibC", "class_ogre_1_1_mathlib_c.html", "class_ogre_1_1_mathlib_c" ]
-    ] ],
     [ "OgreMathlibNEON.h", "_ogre_mathlib_n_e_o_n_8h.html", null ],
+    [ "C/OgreArrayAabb.h", "_c_2_ogre_array_aabb_8h.html", null ],
+    [ "NEON/Single/OgreArrayAabb.h", "_n_e_o_n_2_single_2_ogre_array_aabb_8h.html", null ],
+    [ "OgreArrayAabb.h", "_ogre_array_aabb_8h.html", null ],
+    [ "SSE2/Single/OgreArrayAabb.h", "_s_s_e2_2_single_2_ogre_array_aabb_8h.html", null ],
     [ "OgreArrayConfig.h", "_ogre_array_config_8h.html", "_ogre_array_config_8h" ],
     [ "OgreArrayMemoryManager.h", "_ogre_array_memory_manager_8h.html", "_ogre_array_memory_manager_8h" ],
     [ "OgreArrayRay.h", "_ogre_array_ray_8h.html", [
@@ -925,26 +945,6 @@ var files_dup =
       [ "Ogre::WorkQueue::ResponseHandler", "class_ogre_1_1_work_queue_1_1_response_handler.html", "class_ogre_1_1_work_queue_1_1_response_handler" ]
     ] ],
     [ "OgreZip.h", "_ogre_zip_8h.html", "_ogre_zip_8h" ],
-    [ "Android/OgreConfigDialogImp.h", "_android_2_ogre_config_dialog_imp_8h.html", null ],
-    [ "Emscripten/OgreConfigDialogImp.h", "_emscripten_2_ogre_config_dialog_imp_8h.html", null ],
-    [ "GLX/OgreConfigDialogImp.h", "_g_l_x_2_ogre_config_dialog_imp_8h.html", null ],
-    [ "gtk/OgreConfigDialogImp.h", "gtk_2_ogre_config_dialog_imp_8h.html", null ],
-    [ "iOS/OgreConfigDialogImp.h", "i_o_s_2_ogre_config_dialog_imp_8h.html", null ],
-    [ "OSX/OgreConfigDialogImp.h", "_o_s_x_2_ogre_config_dialog_imp_8h.html", null ],
-    [ "WIN32/OgreConfigDialogImp.h", "_w_i_n32_2_ogre_config_dialog_imp_8h.html", "_w_i_n32_2_ogre_config_dialog_imp_8h" ],
-    [ "Android/OgreErrorDialogImp.h", "_android_2_ogre_error_dialog_imp_8h.html", null ],
-    [ "Emscripten/OgreErrorDialogImp.h", "_emscripten_2_ogre_error_dialog_imp_8h.html", null ],
-    [ "GLX/OgreErrorDialogImp.h", "_g_l_x_2_ogre_error_dialog_imp_8h.html", null ],
-    [ "gtk/OgreErrorDialogImp.h", "gtk_2_ogre_error_dialog_imp_8h.html", null ],
-    [ "iOS/OgreErrorDialogImp.h", "i_o_s_2_ogre_error_dialog_imp_8h.html", null ],
-    [ "OSX/OgreErrorDialogImp.h", "_o_s_x_2_ogre_error_dialog_imp_8h.html", null ],
-    [ "WIN32/OgreErrorDialogImp.h", "_w_i_n32_2_ogre_error_dialog_imp_8h.html", "_w_i_n32_2_ogre_error_dialog_imp_8h" ],
-    [ "Android/OgreTimerImp.h", "_android_2_ogre_timer_imp_8h.html", null ],
-    [ "Emscripten/OgreTimerImp.h", "_emscripten_2_ogre_timer_imp_8h.html", null ],
-    [ "GLX/OgreTimerImp.h", "_g_l_x_2_ogre_timer_imp_8h.html", null ],
-    [ "iOS/OgreTimerImp.h", "i_o_s_2_ogre_timer_imp_8h.html", null ],
-    [ "OSX/OgreTimerImp.h", "_o_s_x_2_ogre_timer_imp_8h.html", null ],
-    [ "WIN32/OgreTimerImp.h", "_w_i_n32_2_ogre_timer_imp_8h.html", "_w_i_n32_2_ogre_timer_imp_8h" ],
     [ "OgreBarrier.h", "_ogre_barrier_8h.html", [
       [ "Ogre::Barrier", "class_ogre_1_1_barrier.html", "class_ogre_1_1_barrier" ]
     ] ],
@@ -1408,20 +1408,8 @@ var files_dup =
     [ "Vao/OgreGL3PlusVertexArrayObject.h", "_vao_2_ogre_g_l3_plus_vertex_array_object_8h.html", [
       [ "Ogre::GL3PlusVertexArrayObject", "struct_ogre_1_1_g_l3_plus_vertex_array_object.html", "struct_ogre_1_1_g_l3_plus_vertex_array_object" ]
     ] ],
-    [ "GL3Plus/include/windowing/EGL/OgreEGLContext.h", "_g_l3_plus_2include_2windowing_2_e_g_l_2_ogre_e_g_l_context_8h.html", [
-      [ "Ogre::EGLContext", "class_ogre_1_1_e_g_l_context.html", "class_ogre_1_1_e_g_l_context" ]
-    ] ],
-    [ "GLES2/include/EGL/OgreEGLContext.h", "_g_l_e_s2_2include_2_e_g_l_2_ogre_e_g_l_context_8h.html", [
-      [ "Ogre::EGLContext", "class_ogre_1_1_e_g_l_context.html", "class_ogre_1_1_e_g_l_context" ]
-    ] ],
     [ "OgreEGLGLSupport.h", "_ogre_e_g_l_g_l_support_8h.html", [
       [ "Ogre::EGLGLSupport", "class_ogre_1_1_e_g_l_g_l_support.html", "class_ogre_1_1_e_g_l_g_l_support" ]
-    ] ],
-    [ "GL3Plus/include/windowing/EGL/OgreEGLWindow.h", "_g_l3_plus_2include_2windowing_2_e_g_l_2_ogre_e_g_l_window_8h.html", [
-      [ "Ogre::EGLWindow", "class_ogre_1_1_e_g_l_window.html", "class_ogre_1_1_e_g_l_window" ]
-    ] ],
-    [ "GLES2/include/EGL/OgreEGLWindow.h", "_g_l_e_s2_2include_2_e_g_l_2_ogre_e_g_l_window_8h.html", [
-      [ "Ogre::EGLWindow", "class_ogre_1_1_e_g_l_window.html", "class_ogre_1_1_e_g_l_window" ]
     ] ],
     [ "OgreEglPBufferContext.h", "_ogre_egl_p_buffer_context_8h.html", [
       [ "Ogre::EglPBufferContext", "class_ogre_1_1_egl_p_buffer_context.html", "class_ogre_1_1_egl_p_buffer_context" ]
@@ -1503,8 +1491,20 @@ var files_dup =
       [ "Ogre::EmscriptenEGLSupport", "class_ogre_1_1_emscripten_e_g_l_support.html", "class_ogre_1_1_emscripten_e_g_l_support" ]
     ] ],
     [ "OgreEmscriptenEGLWindow.h", "_ogre_emscripten_e_g_l_window_8h.html", "_ogre_emscripten_e_g_l_window_8h" ],
+    [ "GL3Plus/include/windowing/EGL/OgreEGLContext.h", "_g_l3_plus_2include_2windowing_2_e_g_l_2_ogre_e_g_l_context_8h.html", [
+      [ "Ogre::EGLContext", "class_ogre_1_1_e_g_l_context.html", "class_ogre_1_1_e_g_l_context" ]
+    ] ],
+    [ "GLES2/include/EGL/OgreEGLContext.h", "_g_l_e_s2_2include_2_e_g_l_2_ogre_e_g_l_context_8h.html", [
+      [ "Ogre::EGLContext", "class_ogre_1_1_e_g_l_context.html", "class_ogre_1_1_e_g_l_context" ]
+    ] ],
     [ "OgreEGLRenderTexture.h", "_ogre_e_g_l_render_texture_8h.html", null ],
     [ "OgreEGLSupport.h", "_ogre_e_g_l_support_8h.html", "_ogre_e_g_l_support_8h" ],
+    [ "GL3Plus/include/windowing/EGL/OgreEGLWindow.h", "_g_l3_plus_2include_2windowing_2_e_g_l_2_ogre_e_g_l_window_8h.html", [
+      [ "Ogre::EGLWindow", "class_ogre_1_1_e_g_l_window.html", "class_ogre_1_1_e_g_l_window" ]
+    ] ],
+    [ "GLES2/include/EGL/OgreEGLWindow.h", "_g_l_e_s2_2include_2_e_g_l_2_ogre_e_g_l_window_8h.html", [
+      [ "Ogre::EGLWindow", "class_ogre_1_1_e_g_l_window.html", "class_ogre_1_1_e_g_l_window" ]
+    ] ],
     [ "Android/OgreGLES2Util.h", "_android_2_ogre_g_l_e_s2_util_8h.html", "_android_2_ogre_g_l_e_s2_util_8h" ],
     [ "Emscripten/OgreGLES2Util.h", "_emscripten_2_ogre_g_l_e_s2_util_8h.html", "_emscripten_2_ogre_g_l_e_s2_util_8h" ],
     [ "OgreGLES2Util.h", "_ogre_g_l_e_s2_util_8h.html", "_ogre_g_l_e_s2_util_8h" ],
@@ -1622,6 +1622,12 @@ var files_dup =
     [ "OgreGLES2TextureManager.h", "_ogre_g_l_e_s2_texture_manager_8h.html", [
       [ "Ogre::GLES2TextureManager", "class_ogre_1_1_g_l_e_s2_texture_manager.html", "class_ogre_1_1_g_l_e_s2_texture_manager" ]
     ] ],
+    [ "OgreGLES2VertexArrayObject.h", "_ogre_g_l_e_s2_vertex_array_object_8h.html", [
+      [ "Ogre::GLES2OldVertexArrayObject", "class_ogre_1_1_g_l_e_s2_old_vertex_array_object.html", "class_ogre_1_1_g_l_e_s2_old_vertex_array_object" ]
+    ] ],
+    [ "Vao/OgreGLES2VertexArrayObject.h", "_vao_2_ogre_g_l_e_s2_vertex_array_object_8h.html", [
+      [ "Ogre::GLES2VertexArrayObject", "struct_ogre_1_1_g_l_e_s2_vertex_array_object.html", "struct_ogre_1_1_g_l_e_s2_vertex_array_object" ]
+    ] ],
     [ "OgreGLES2AsyncTicket.h", "_ogre_g_l_e_s2_async_ticket_8h.html", [
       [ "Ogre::GLES2AsyncTicket", "class_ogre_1_1_g_l_e_s2_async_ticket.html", "class_ogre_1_1_g_l_e_s2_async_ticket" ]
     ] ],
@@ -1646,12 +1652,6 @@ var files_dup =
       [ "Ogre::GLES2VaoManager::Block", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_block.html", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_block" ],
       [ "Ogre::GLES2VaoManager::StrideChanger", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_stride_changer.html", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_stride_changer" ],
       [ "Ogre::GLES2VaoManager::Vao::VertexBinding", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_vao_1_1_vertex_binding.html", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_vao_1_1_vertex_binding" ]
-    ] ],
-    [ "OgreGLES2VertexArrayObject.h", "_ogre_g_l_e_s2_vertex_array_object_8h.html", [
-      [ "Ogre::GLES2OldVertexArrayObject", "class_ogre_1_1_g_l_e_s2_old_vertex_array_object.html", "class_ogre_1_1_g_l_e_s2_old_vertex_array_object" ]
-    ] ],
-    [ "Vao/OgreGLES2VertexArrayObject.h", "_vao_2_ogre_g_l_e_s2_vertex_array_object_8h.html", [
-      [ "Ogre::GLES2VertexArrayObject", "struct_ogre_1_1_g_l_e_s2_vertex_array_object.html", "struct_ogre_1_1_g_l_e_s2_vertex_array_object" ]
     ] ],
     [ "OgreGLSLESExtSupport.h", "_ogre_g_l_s_l_e_s_ext_support_8h.html", "_ogre_g_l_s_l_e_s_ext_support_8h" ],
     [ "OgreGLSLESLinkProgram.h", "_ogre_g_l_s_l_e_s_link_program_8h.html", [

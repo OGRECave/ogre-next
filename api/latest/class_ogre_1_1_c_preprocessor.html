@@ -171,25 +171,15 @@ Friends</h2></td></tr>
 <div class="textblock"><p >This is a simplistic C/C++-like preprocessor. </p>
 <p >It takes an non-zero-terminated string on input and outputs a non-zero-terminated string buffer.</p>
 <p >This preprocessor was designed specifically for GLSL shaders, so if you want to use it for other purposes you might want to check if the feature set it provides is enough for you.</p>
-<p >Here's a list of supported features: </p><ul>
-<li>
-Fast memory allocation-less operation (mostly). </li>
-<li>
-Line continuation (backslash-newline) is swallowed. </li>
-<li>
-Line numeration is fully preserved by inserting empty lines where required. This is crucial if, say, GLSL compiler reports you an error with a line number. </li>
-<li>
-#define: Parametrized and non-parametrized macros. Invoking a macro with less arguments than it takes assigns empty values to missing arguments. </li>
-<li>
-#undef: Forget defined macros </li>
-<li>
-#ifdef/#ifndef/#else/#endif: Conditional suppression of parts of code. </li>
-<li>
-#if: Supports numeric expression of any complexity, also supports the defined() pseudo-function. <ul>
-<li>
-</li>
-</ul>
-</li>
+<p >Here's a list of supported features:</p>
+<ul>
+<li>Fast memory allocation-less operation (mostly).</li>
+<li>Line continuation (backslash-newline) is swallowed.</li>
+<li>Line numeration is fully preserved by inserting empty lines where required. This is crucial if, say, GLSL compiler reports you an error with a line number.</li>
+<li>#define: Parametrized and non-parametrized macros. Invoking a macro with less arguments than it takes assigns empty values to missing arguments.</li>
+<li>#undef: Forget defined macros</li>
+<li>#ifdef/#ifndef/#else/#endif: Conditional suppression of parts of code.</li>
+<li>#if: Supports numeric expression of any complexity, also supports the defined() pseudo-function. </li>
 </ul>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ad9572bfcaa1b4a3e290d6d3586664539" name="ad9572bfcaa1b4a3e290d6d3586664539"></a>
