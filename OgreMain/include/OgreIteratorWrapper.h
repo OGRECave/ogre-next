@@ -229,7 +229,7 @@ namespace Ogre
         typedef
             typename IteratorWrapper<T, IteratorType, typename T::mapped_type>::PointerType PointerType;
 
-        /// Unused, just to make it clear that map/set::value_type is not a ValueType
+        /// Unused, just to make it clear that `map`/`set::value_type` is not a ValueType
         typedef typename T::value_type PairType;
         /// Type you expect to get by funktions like peekNextKey
         typedef typename T::key_type KeyType;
