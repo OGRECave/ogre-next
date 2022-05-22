@@ -95,7 +95,7 @@ namespace Ogre
                     The hierarchy depth level
                 @param basePtrs
                     The base pointers from each pool so we can calculate the differences
-                @param utDiffsList
+                @param outDiffsList
                     The list we'll generate. "outDiffsList" already has enough reserved space
             */
             virtual void buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,

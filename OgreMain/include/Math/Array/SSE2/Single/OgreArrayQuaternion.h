@@ -220,9 +220,9 @@ namespace Ogre
                 decide between two ArrayQuaternions, i.e. a = Cmov4( b, c ) then
                 @see Cmov4( const ArrayQuaternion &arg1, const ArrayQuaternion &arg2, ArrayReal mask );
                 instead.
-            @param
+            @param replacement
                 Vectors to be used as replacement if the mask is zero.
-            @param
+            @param mask
                 mask filled with either 0's or 0xFFFFFFFF
             @return
                 this[i] = mask[i] != 0 ? this[i] : replacement[i]
@@ -237,11 +237,11 @@ namespace Ogre
                 If you wanted to do a = cmov4( a, b ), then consider using the update version
                 @see Cmov4( ArrayReal mask, const ArrayQuaternion &replacement );
                 instead.
-            @param
+            @param arg1
                 First array of Vectors
-            @param
+            @param arg2
                 Second array of Vectors
-            @param
+            @param mask
                 mask filled with either 0's or 0xFFFFFFFF
             @return
                 this[i] = mask[i] != 0 ? arg1[i] : arg2[i]

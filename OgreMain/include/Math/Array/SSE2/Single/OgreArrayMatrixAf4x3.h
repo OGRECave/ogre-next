@@ -115,7 +115,7 @@ namespace Ogre
                 This function is defined in ArrayMatrix4 to avoid including this header into
                 ArrayQuaternion. The idea is that ArrayMatrix4 requires ArrayQuaternion, and
                 ArrayQuaternion requires ArrayVector3. Simple dependency order
-            @param
+            @param q
                 The quaternion to convert from.
         */
         inline void fromQuaternion( const ArrayQuaternion &q );

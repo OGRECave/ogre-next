@@ -716,9 +716,9 @@ namespace Ogre
         /** Whether to use HW or SW mipmap generation when specifying
             TextureFilter::TypeGenerateDefaultMipmaps for loading files from textures.
             This setting has no effect for filters explicitly asking for HW mipmap generation.
-        @param hwMipmapGen
+        @param defaultMipmapGen
             Whether to enable HW mipmap generation for textures. Default is true.
-        @param hwMipmapGenCubemaps
+        @param defaultMipmapGenCubemaps
             Whether to enable HW mipmap generation for cubemap textures. Default is false.
         */
         void setDefaultMipmapGeneration( DefaultMipmapGen::DefaultMipmapGen defaultMipmapGen,

@@ -343,7 +343,7 @@ namespace Ogre
         virtual void resetFrustumExtents();
 
         /** Get the extents of the frustum in view space.
-        @param left, right, top, bottom The position where the side clip planes intersect
+        @param outleft, outright, outtop, outbottom The position where the side clip planes intersect
             the near clip plane, in eye space OR the tangent of the half angles from the eye to the edges
             of the near clip plane
         @param frustrumExtentsType

@@ -616,7 +616,7 @@ namespace Ogre
         float getRefractionStrength() const { return mRefractionStrength; }
 
         /** Sets the strength of the of the clear coat layer and its roughness.
-        @param strength
+        @param clearCoat
             This should be treated as a binary value, set to either 0 or 1. Intermediate values are
             useful to control transitions between parts of the surface that have a clear coat layers and
             parts that don't.

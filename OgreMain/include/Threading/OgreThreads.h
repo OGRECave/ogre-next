@@ -176,7 +176,7 @@ namespace Ogre
                                              void *param );
 
         /** Waits until all threads are finished
-        @param numThreadInfos
+        @param numThreadHandles
             Number of ThreadHandle passed in the array as 'threadHandles'
         @param threadHandles
             Array of numThreadHandles or more ThreadHandle

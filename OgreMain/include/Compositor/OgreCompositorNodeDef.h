@@ -174,7 +174,7 @@ namespace Ogre
             using linked lists or other containers with two level of indirections)
         @remarks
             Calling this function is not obligatory, but recommended
-        @param numPasses
+        @param numOuts
             The number of output channels expected to contain.
         */
         void setNumOutputChannels( size_t numOuts ) { mOutChannelMapping.reserve( numOuts ); }
@@ -206,7 +206,7 @@ namespace Ogre
             than using linked lists or other containers with two level of indirections)
         @remarks
             Calling this function is not obligatory, but recommended
-        @param numPasses
+        @param numOuts
             The number of output buffer channels expected to contain.
         */
         void setNumOutputBufferChannels( size_t numOuts )
@@ -225,7 +225,7 @@ namespace Ogre
             channel name hasn't been set yet (declaration order is important!).
         @param outChannel
             Output channel # to map
-        @param textureName
+        @param bufferName
             Name of the buffer
         */
         void mapOutputBufferChannel( size_t outChannel, IdString bufferName );

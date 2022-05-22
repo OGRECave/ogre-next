@@ -133,9 +133,9 @@ namespace Ogre
         @param borderless
             Whether to be borderless. Only useful if goFullscreen == false;
         @param monitorIdx
-        @param width
+        @param widthPt
             New width. Leave 0 if you don't care.
-        @param height
+        @param heightPt
             New height. Leave 0 if you don't care.
         @param frequencyNumerator
             New frequency (fullscreen only). Leave 0 if you don't care.

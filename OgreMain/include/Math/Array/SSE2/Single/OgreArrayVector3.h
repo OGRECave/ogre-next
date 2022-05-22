@@ -331,11 +331,11 @@ namespace Ogre
                 If you wanted to do a = cmov4( a, b ), then consider using the update version
                 @see Cmov4( ArrayReal mask, const ArrayVector3 &replacement );
                 instead.
-            @param
+            @param arg1
                 First array of Vectors
-            @param
+            @param arg2
                 Second array of Vectors
-            @param
+            @param mask
                 mask filled with either 0's or 0xFFFFFFFF
             @return
                 this[i] = mask[i] != 0 ? arg1[i] : arg2[i]

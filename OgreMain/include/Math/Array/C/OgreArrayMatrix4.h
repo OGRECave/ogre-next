@@ -155,7 +155,7 @@ namespace Ogre
         /** Assigns the value of the other matrix. Does not reference the
             ptr address, but rather perform a memory copy
             @param
-                rkmatrix The other matrix
+                rkMatrix The other matrix
         */
         inline ArrayMatrix4 &operator=( const ArrayMatrix4 &rkMatrix )
         {
