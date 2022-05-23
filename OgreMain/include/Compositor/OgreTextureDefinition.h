@@ -566,7 +566,7 @@ namespace Ogre
             as we're missing:
                 + Whether the texture is colour or depth
                 + The default depth settings (prefersDepthTexture, depth format, etc)
-                
+
             Use this function to force the given texture to be analyzed at runtime when
             creating the pass.
         @remarks

@@ -229,7 +229,7 @@ namespace Ogre
         /// ArrayMemoryManager::destroySlot already does this when the number
         /// of fragmented slots reaches mCleanupThreshold
         void defragment();
-        
+
         ///  Prevent defragmentation from ever happening.
         void neverDefragment();
 
