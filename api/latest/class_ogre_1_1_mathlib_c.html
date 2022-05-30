@@ -268,7 +268,7 @@ Static Public Attributes</h2></td></tr>
 <p>Returns the absolute values of each 4 floats. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">4</td><td>floating point values </td></tr>
+    <tr><td class="paramname">a</td><td>4 floating point values </td></tr>
   </table>
   </dd>
 </dl>
@@ -652,9 +652,9 @@ Static Public Attributes</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_mathlib_c.html#adcfb12520c51062df3faff5b12db8a2d" title="Robust, branchless conditional move for a 128-bit value.">CmovRobust</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">4</td><td>floating point values. Can't be NaN or Inf </td></tr>
-    <tr><td class="paramname">4</td><td>floating point values. Can't be NaN or Inf </td></tr>
-    <tr><td class="paramname">4</td><td>values containing either 0 or 0xffffffff <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> other value, the result is undefined </td></tr>
+    <tr><td class="paramname">arg1</td><td>4 floating point values. Can't be NaN or Inf </td></tr>
+    <tr><td class="paramname">arg2</td><td>4 floating point values. Can't be NaN or Inf </td></tr>
+    <tr><td class="paramname">mask</td><td>4 values containing either 0 or 0xffffffff <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> other value, the result is undefined </td></tr>
   </table>
   </dd>
 </dl>
@@ -751,9 +751,9 @@ Static Public Attributes</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_mathlib_c.html#ad1247bb457f65e41e895b4567fe27299" title="Branchless conditional move for 4 floating point values.">Cmov4</a> which is faster. This is because switching between registers flagged as floating point to integer and back has a latency delay</dd></dl>
 <p>For more information refer to Chapter 3.5.2.3 Bypass between Execution Domains, Intel® 64 and IA-32 Architectures Optimization Reference Manual Order Number: 248966-026 April (and also Table 2-12) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">A</td><td>value containing 128 bits </td></tr>
-    <tr><td class="paramname">A</td><td>value containing 128 bits </td></tr>
-    <tr><td class="paramname">Mask,each</td><td>bit is evaluated </td></tr>
+    <tr><td class="paramname">arg1</td><td>A value containing 128 bits </td></tr>
+    <tr><td class="paramname">arg2</td><td>A value containing 128 bits </td></tr>
+    <tr><td class="paramname">mask</td><td>Mask, each bit is evaluated </td></tr>
   </table>
   </dd>
 </dl>

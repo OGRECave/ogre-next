@@ -563,7 +563,7 @@ Friends</h2></td></tr>
 </pre> You're assigning an alias named "myRT" to channel Input #0 For local or global textures, the index parameter documentation</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">fullName</td><td>The name of the texture. Names are usually valid only throughout this node. We need the name, not its hash because we need to validate the global_ prefix is used correctly. </td></tr>
+    <tr><td class="paramname">name</td><td>The name of the texture. Names are usually valid only throughout this node. We need the name, not its hash because we need to validate the global_ prefix is used correctly. </td></tr>
     <tr><td class="paramname">index</td><td>Index in the container where the texture is located, eg. this-&gt;mLocalTextureDefs[index] for local textures, workspace-&gt;mLocalTextureDefs[index] for global textures, and this-&gt;mInTextures[index] for input channels. </td></tr>
     <tr><td class="paramname">textureSource</td><td>Source where the index must be used (eg. TEXTURE_LOCAL means mLocalTextureDefs) </td></tr>
   </table>
@@ -1636,7 +1636,6 @@ template&lt;class Alloc &gt; </div>
     <tr><td class="paramname">textureDefs</td><td>Array of texture definitions, so we know which ones depend on main RT's resolution </td></tr>
     <tr><td class="paramname">inOutTexContainer</td><td>Where we'll replace the RTs &amp; textures </td></tr>
     <tr><td class="paramname">finalTarget</td><td>The final render target (usually the render window) we have to clone parameters from (eg. when using auto width &amp; height, or fsaa settings) </td></tr>
-    <tr><td class="paramname">renderSys</td><td>The <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> to use </td></tr>
   </table>
   </dd>
 </dl>
@@ -1894,7 +1893,7 @@ template&lt;class Alloc &gt; </div>
 <dl class="section remark"><dt>Remarks</dt><dd>Calling this function is not obligatory, but recommended </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numPasses</td><td>The number of texture definitions expected to contain. </td></tr>
+    <tr><td class="paramname">numTDs</td><td>The number of texture definitions expected to contain. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1929,7 +1928,7 @@ template&lt;class Alloc &gt; </div>
 <dl class="section remark"><dt>Remarks</dt><dd>Calling this function is not obligatory, but recommended </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numPasses</td><td>The number of texture definitions expected to contain. </td></tr>
+    <tr><td class="paramname">numTDs</td><td>The number of texture definitions expected to contain. </td></tr>
   </table>
   </dd>
 </dl>

@@ -1865,7 +1865,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">outChannel</td><td>Output channel # to map </td></tr>
-    <tr><td class="paramname">textureName</td><td>Name of the buffer </td></tr>
+    <tr><td class="paramname">bufferName</td><td>Name of the buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -2469,7 +2469,6 @@ template&lt;class Alloc &gt; </div>
     <tr><td class="paramname">textureDefs</td><td>Array of texture definitions, so we know which ones depend on main RT's resolution </td></tr>
     <tr><td class="paramname">inOutTexContainer</td><td>Where we'll replace the RTs &amp; textures </td></tr>
     <tr><td class="paramname">finalTarget</td><td>The final render target (usually the render window) we have to clone parameters from (eg. when using auto width &amp; height, or fsaa settings) </td></tr>
-    <tr><td class="paramname">renderSys</td><td>The <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> to use </td></tr>
   </table>
   </dd>
 </dl>
@@ -2785,7 +2784,7 @@ template&lt;class Alloc &gt; </div>
 <dl class="section remark"><dt>Remarks</dt><dd>Calling this function is not obligatory, but recommended </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numPasses</td><td>The number of texture definitions expected to contain. </td></tr>
+    <tr><td class="paramname">numTDs</td><td>The number of texture definitions expected to contain. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2820,7 +2819,7 @@ template&lt;class Alloc &gt; </div>
 <dl class="section remark"><dt>Remarks</dt><dd>Calling this function is not obligatory, but recommended </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numPasses</td><td>The number of texture definitions expected to contain. </td></tr>
+    <tr><td class="paramname">numTDs</td><td>The number of texture definitions expected to contain. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2855,7 +2854,7 @@ template&lt;class Alloc &gt; </div>
 <dl class="section remark"><dt>Remarks</dt><dd>Calling this function is not obligatory, but recommended </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numPasses</td><td>The number of output buffer channels expected to contain. </td></tr>
+    <tr><td class="paramname">numOuts</td><td>The number of output buffer channels expected to contain. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2890,7 +2889,7 @@ template&lt;class Alloc &gt; </div>
 <dl class="section remark"><dt>Remarks</dt><dd>Calling this function is not obligatory, but recommended </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numPasses</td><td>The number of output channels expected to contain. </td></tr>
+    <tr><td class="paramname">numOuts</td><td>The number of output channels expected to contain. </td></tr>
   </table>
   </dd>
 </dl>

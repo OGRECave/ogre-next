@@ -1383,7 +1383,7 @@ face 1, mip 0 (top), width x height (x depth) </li>
 </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">data</td><td>The data pointer. Must've been allocated with <a class="el" href="_ogre_memory_allocator_config_8h.html#afd7ddaef10ac9ea1ffbd18902167b9a2" title="Allocate a block of raw memory aligned to SIMD boundaries, and indicate the category of usage.">OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE )</a>; and sizeBytes assumes a pitch with row alignment = 4u; Use PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, pixelFormat, 4u ); to get the pitch. </td></tr>
+    <tr><td class="paramname">pData</td><td>The data pointer. Must've been allocated with <a class="el" href="_ogre_memory_allocator_config_8h.html#afd7ddaef10ac9ea1ffbd18902167b9a2" title="Allocate a block of raw memory aligned to SIMD boundaries, and indicate the category of usage.">OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE )</a>; and sizeBytes assumes a pitch with row alignment = 4u; Use PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, pixelFormat, 4u ); to get the pitch. </td></tr>
     <tr><td class="paramname">width</td><td>Width of image </td></tr>
     <tr><td class="paramname">height</td><td>Height of image </td></tr>
     <tr><td class="paramname">depthOrSlices</td><td>Image Depth. For 3D images, it's the depth. For cubemaps it must be 6. For cubemap arrays it must be 6 x num_arrays. For the rest it must be 1. </td></tr>

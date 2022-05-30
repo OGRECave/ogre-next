@@ -1411,7 +1411,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Destroys the given texture buffer created with createTexBuffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">constBuffer</td><td>Texture Buffer created with createTexBuffer </td></tr>
+    <tr><td class="paramname">texBuffer</td><td>Texture Buffer created with createTexBuffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -1445,7 +1445,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Destroys the given UAV buffer created with createUavBuffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">constBuffer</td><td>Uav Buffer created with createUavBuffer </td></tr>
+    <tr><td class="paramname">uavBuffer</td><td>Uav Buffer created with createUavBuffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -1847,7 +1847,7 @@ Static Public Member Functions</h2></td></tr>
 <p >We'll search for existing ones that can hold minSizeBytes. We first prioritize those that won't cause a stall at all. Then those that will cause a partial stall, and otherwise return one that will cause full stall. If we can't find any existing buffer that can hold the requested number bytes, we'll create a new one. </p><dl class="section remark"><dt>Remarks</dt><dd>Calling this function causes the reference count of the returned pointer to be increased. You should decrease the reference count after you're done with the returned pointer. See <a class="el" href="class_ogre_1_1_staging_buffer.html#a9d425e7d85804eaa45c01f6476ec204a" title="Decreases the reference count by one.">StagingBuffer::removeReferenceCount</a> regarding ref. counting. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">sizeBytes</td><td>Minimum size, in bytes, of the staging buffer. The returned buffer may be bigger. </td></tr>
+    <tr><td class="paramname">minSizeBytes</td><td>Minimum size, in bytes, of the staging buffer. The returned buffer may be bigger. </td></tr>
     <tr><td class="paramname">forUpload</td><td>True if it should be used to upload data to GPU, false to download. </td></tr>
   </table>
   </dd>
