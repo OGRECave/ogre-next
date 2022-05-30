@@ -115,7 +115,7 @@ namespace Ogre
         void setTime( Real time ) { setFrame( time * mFrameRate ); }
 
         /** Sets the animation to a particular frame.
-        @param frames
+        @param frame
             Frame to set to, in frames
         */
         void setFrame( Real frame );

@@ -191,7 +191,7 @@ namespace Ogre
             Use this if you wish to recursively destroy a node as well as
             detaching it from it's parent. Note that any objects attached to
             the nodes will be detached but will not themselves be destroyed.
-        @param
+        @param sceneNode
             SceneNode, must be a child of ours
         */
         virtual void removeAndDestroyChild( SceneNode *sceneNode );

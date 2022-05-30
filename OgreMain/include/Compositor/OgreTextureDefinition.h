@@ -250,7 +250,7 @@ namespace Ogre
             You're assigning an alias named "myRT" to channel Input #0
             For local or global textures, the index parameter documentation
 
-        @param fullName
+        @param name
             The name of the texture. Names are usually valid only throughout this node.
             We need the name, not its hash because we need to validate the global_ prefix
             is used correctly.
@@ -310,7 +310,7 @@ namespace Ogre
         /** Reserves enough memory for all texture definitions
         @remarks
             Calling this function is not obligatory, but recommended
-        @param numPasses
+        @param numTDs
             The number of texture definitions expected to contain.
         */
         void setNumLocalTextureDefinitions( size_t numTDs ) { mLocalTextureDefs.reserve( numTDs ); }
@@ -399,8 +399,6 @@ namespace Ogre
         @param finalTarget
             The final render target (usually the render window) we have to clone parameters from
             (eg. when using auto width & height, or fsaa settings)
-        @param renderSys
-            The RenderSystem to use
         */
         static void recreateResizableTextures01( const TextureDefinitionVec &textureDefs,
                                                  CompositorChannelVec       &inOutTexContainer,
@@ -462,7 +460,7 @@ namespace Ogre
         /** Reserves enough memory for all texture definitions
         @remarks
             Calling this function is not obligatory, but recommended
-        @param numPasses
+        @param numTDs
             The number of texture definitions expected to contain.
         */
         void setNumLocalBufferDefinitions( size_t numTDs ) { mLocalBufferDefs.reserve( numTDs ); }
@@ -568,7 +566,7 @@ namespace Ogre
             as we're missing:
                 + Whether the texture is colour or depth
                 + The default depth settings (prefersDepthTexture, depth format, etc)
-                
+
             Use this function to force the given texture to be analyzed at runtime when
             creating the pass.
         @remarks

@@ -49,7 +49,7 @@ namespace Ogre
          * Get the GLXFBConfig used to create a ::%GLXContext
          *
          * @param display   X Display
-         * @param drawable   GLXContext
+         * @param context   GLXContext
          * @returns       GLXFBConfig used to create the context
          */
         static GLXFBConfig getFBConfigFromContext( Display *display, ::GLXContext context );

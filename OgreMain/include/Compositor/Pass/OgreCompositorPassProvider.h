@@ -81,7 +81,7 @@ namespace Ogre
         @param customId
             Arbitrary ID in case there is more than one type of custom pass you want to implement.
             Defaults to IdString()
-        @param rtIndex
+        @param parentTargetDef
         @param parentNodeDef
         @return
         */

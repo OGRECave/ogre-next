@@ -2360,7 +2360,7 @@ namespace Ogre
         */
         size_t _getUnsignedIntConstantPhysicalIndex( size_t logicalIndex, size_t requestedSize,
                                                      uint16 variability );
-        /** Gets the physical buffer index associated with a logical bool constant index.
+        /* Gets the physical buffer index associated with a logical bool constant index.
             @note Only applicable to low-level programs.
             @param logicalIndex The logical parameter index
             @param requestedSize The requested size - pass 0 to ignore missing entries

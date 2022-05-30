@@ -64,7 +64,7 @@ namespace Ogre
         static const ArrayReal MAX_POS;    // Max negative number (x4)
 
         /** Returns the absolute values of each 4 floats
-            @param
+            @param a
                 4 floating point values
             @return
                 abs( a )
@@ -76,11 +76,11 @@ namespace Ogre
                 Will NOT work if any of the arguments contains Infinite
                 or NaNs or non-floating point values. If an exact binary
                 copy is needed, @see CmovRobust
-            @param
+            @param arg1
                 4 floating point values. Can't be NaN or Inf
-            @param
+            @param arg2
                 4 floating point values. Can't be NaN or Inf
-            @param
+            @param mask
                 4 values containing either 0 or 0xffffffff
                 Any other value, the result is undefined
             @return
@@ -115,11 +115,11 @@ namespace Ogre
                 Bypass between Execution Domains, Intel® 64 and IA-32
                 Architectures Optimization Reference Manual Order
                 Number: 248966-026 April (and also Table 2-12)
-            @param
+            @param arg1
                 A value containing 128 bits
-            @param
+            @param arg2
                 A value containing 128 bits
-            @param
+            @param mask
                 Mask, each bit is evaluated
             @return
                 For each bit:
