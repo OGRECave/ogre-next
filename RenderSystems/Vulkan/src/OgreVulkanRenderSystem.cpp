@@ -3214,10 +3214,10 @@ namespace Ogre
     SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
                                                                      PixelFormatGpu format )
     {
-        SampleDescription retVal(
-            getMaxUsableSampleCount( mDevice->mDeviceProperties, sampleDesc.getMaxSamples() ),
-            sampleDesc.getMsaaPattern() );
-        return retVal;
+        uint8 samples = sampleDesc.getMaxSamples();
+        if( mDevice )
+            samples = (uint8)getMaxUsableSampleCount( mDevice->mDeviceProperties, samples );
+        return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
