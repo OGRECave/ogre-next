@@ -48,7 +48,22 @@ add_recursive( ./include HEADERS )
 if( APPLE )
 	file( GLOB_RECURSE RESOURCES ./src/*.storyboard )
 	set( RESOURCES ${RESOURCES} ./Data/Resources.cfg ./bin/Data )
+
+	if( APPLE_IOS )
+		set_source_files_properties(
+			${CMAKE_CURRENT_SOURCE_DIR}/src/System/OSX/OSXUtils.mm
+			PROPERTIES HEADER_FILE_ONLY TRUE
+		)
+	else()
+		set_source_files_properties(
+			${CMAKE_CURRENT_SOURCE_DIR}/src/System/iOS/AppDelegate.mm
+			${CMAKE_CURRENT_SOURCE_DIR}/src/System/iOS/GameViewController.mm
+			${CMAKE_CURRENT_SOURCE_DIR}/src/System/iOS/iOSUtils.mm
+			PROPERTIES HEADER_FILE_ONLY TRUE
+		)
+	endif()
 endif()
+
 
 add_executable( ${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${SOURCES} ${HEADERS} ${RESOURCES} )
 target_link_libraries( ${PROJECT_NAME} ${OGRE_LIBRARIES} )
