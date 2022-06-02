@@ -51,14 +51,14 @@ if( APPLE )
 
 	if( APPLE_IOS )
 		set_source_files_properties(
-			${CMAKE_CURRENT_SOURCE_DIR}/src/System/OSX/OSXUtils.mm
+			${CMAKE_CURRENT_SOURCE_DIR}/src/OgreCommon/System/OSX/OSXUtils.mm
 			PROPERTIES HEADER_FILE_ONLY TRUE
 		)
 	else()
 		set_source_files_properties(
-			${CMAKE_CURRENT_SOURCE_DIR}/src/System/iOS/AppDelegate.mm
-			${CMAKE_CURRENT_SOURCE_DIR}/src/System/iOS/GameViewController.mm
-			${CMAKE_CURRENT_SOURCE_DIR}/src/System/iOS/iOSUtils.mm
+			${CMAKE_CURRENT_SOURCE_DIR}/src/OgreCommon/System/iOS/AppDelegate.mm
+			${CMAKE_CURRENT_SOURCE_DIR}/src/OgreCommon/System/iOS/GameViewController.mm
+			${CMAKE_CURRENT_SOURCE_DIR}/src/OgreCommon/System/iOS/iOSUtils.mm
 			PROPERTIES HEADER_FILE_ONLY TRUE
 		)
 	endif()
