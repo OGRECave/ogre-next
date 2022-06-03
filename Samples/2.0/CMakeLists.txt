@@ -97,6 +97,8 @@ if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
     add_subdirectory(Common)
 endif()
 
+add_definitions( -DUSE_JSON_UNIT_TESTING )
+
 if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
 	set( OGRE_SAMPLES_LIBRARIES "OgreSamplesCommon" "OgreOverlay" )
 

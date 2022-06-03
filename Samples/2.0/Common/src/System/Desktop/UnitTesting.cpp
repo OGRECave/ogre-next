@@ -42,7 +42,7 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
 
-#if !OGRE_NO_JSON
+#if !OGRE_NO_JSON && defined( USE_JSON_UNIT_TESTING )
 #    include "rapidjson/document.h"
 #    include "rapidjson/error/en.h"
 #endif
@@ -379,7 +379,7 @@ namespace Demo
     //-------------------------------------------------------------------------
     int UnitTest::loadFromJson( const char *fullpath, const Ogre::String &outputFolder )
     {
-#if !OGRE_NO_JSON
+#if !OGRE_NO_JSON && defined( USE_JSON_UNIT_TESTING )
         rapidjson::Document d;
 
         std::ifstream inFile( fullpath, std::ios::binary | std::ios::in );
