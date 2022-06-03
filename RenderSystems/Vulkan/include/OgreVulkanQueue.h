@@ -113,7 +113,7 @@ namespace Ogre
         RefCountedFenceMap mRefCountedFences;
 
     public:
-        FastArray<VulkanWindow *> mWindowsPendingSwap;
+        FastArray<VulkanWindowSwapChainBased *> mWindowsPendingSwap;
 
     protected:
         FastArray<VkCommandBuffer> mPendingCmds;

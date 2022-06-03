@@ -107,6 +107,7 @@ namespace Ogre
     class VulkanTextureGpuManager;
     class VulkanVaoManager;
     class VulkanWindow;
+    class VulkanWindowSwapChainBased;
     class VulkanDiscardBuffer;
     class VulkanDiscardBufferManager;
 

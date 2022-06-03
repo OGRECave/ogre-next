@@ -940,13 +940,30 @@ namespace Ogre
                                                      bool fullScreen,
                                                      const NameValuePairList *miscParams )
     {
+        String windowType;
+        if( miscParams )
+        {
+            // Get variable-length params
+            NameValuePairList::const_iterator opt = miscParams->find( "windowType" );
+            if( opt != miscParams->end() )
+                windowType = opt->second;
+        }
+
+        VulkanWindow *win = nullptr;
+        if( windowType == "Null" )
+        {
+            win = OGRE_NEW VulkanWindowNull( name, width, height, fullScreen );
+        }
+        else
+        {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        VulkanWindow *win = OGRE_NEW VulkanWin32Window( name, width, height, fullScreen );
+            win = OGRE_NEW VulkanWin32Window( name, width, height, fullScreen );
 #elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        VulkanWindow *win = OGRE_NEW VulkanAndroidWindow( name, width, height, fullScreen );
+            win = OGRE_NEW VulkanAndroidWindow( name, width, height, fullScreen );
 #else
-        VulkanWindow *win = OGRE_NEW VulkanXcbWindow( name, width, height, fullScreen );
+            win = OGRE_NEW VulkanXcbWindow( name, width, height, fullScreen );
 #endif
+        }
         mWindows.insert( win );
 
         if( !mInitialized )

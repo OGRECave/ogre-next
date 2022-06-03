@@ -44,7 +44,7 @@ typedef uint32_t xcb_atom_t;
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanXcbWindow : public VulkanWindow
+    class _OgreVulkanExport VulkanXcbWindow : public VulkanWindowSwapChainBased
     {
         xcb_connection_t *mConnection;
         xcb_screen_t *mScreen;
