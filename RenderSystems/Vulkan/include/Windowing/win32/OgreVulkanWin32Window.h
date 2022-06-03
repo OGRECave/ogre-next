@@ -34,7 +34,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 namespace Ogre
 {
-    class VulkanWin32Window final : public VulkanWindow
+    class VulkanWin32Window final : public VulkanWindowSwapChainBased
     {
     private:
         HWND mHwnd;  // Win32 Window handle

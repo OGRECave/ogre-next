@@ -314,7 +314,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu *VulkanTextureGpuManager::createTextureGpuWindow( VulkanWindow *window )
+    TextureGpu *VulkanTextureGpuManager::createTextureGpuWindow( VulkanWindowSwapChainBased *window )
     {
         return OGRE_NEW VulkanTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
                                                 "RenderWindow",                      //

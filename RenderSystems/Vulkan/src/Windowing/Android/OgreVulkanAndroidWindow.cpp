@@ -50,7 +50,7 @@ namespace Ogre
 {
     VulkanAndroidWindow::VulkanAndroidWindow( const String &title, uint32 width, uint32 height,
                                               bool fullscreenMode ) :
-        VulkanWindow( title, width, height, fullscreenMode ),
+        VulkanWindowSwapChainBased( title, width, height, fullscreenMode ),
         mNativeWindow( 0 ),
         mVisible( true ),
         mHidden( false ),
@@ -90,7 +90,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanAndroidWindow::destroy()
     {
-        VulkanWindow::destroy();
+        VulkanWindowSwapChainBased::destroy();
 
         if( mClosed )
             return;
@@ -291,7 +291,7 @@ namespace Ogre
         }
         else
         {
-            VulkanWindow::getCustomAttribute( name, pData );
+            VulkanWindowSwapChainBased::getCustomAttribute( name, pData );
         }
     }
 }  // namespace Ogre
