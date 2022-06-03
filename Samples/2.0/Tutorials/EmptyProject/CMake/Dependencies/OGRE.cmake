@@ -433,8 +433,16 @@ macro( addStaticDependencies OGRE_SOURCE, OGRE_BINARIES, OGRE_BUILD_SETTINGS_STR
 			optimized FreeImage )
 	endif()
 
+	string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_COMPONENT_OVERLAY" OGRE_USES_OVERLAYS )
+	if( NOT OGRE_USES_OVERLAYS EQUAL -1 )
+		message( STATUS "Static lib needs FreeType. Linking against it." )
+		set( TMP_DEPENDENCY_LIBS ${TMP_DEPENDENCY_LIBS}
+			debug freetype${OGRE_DEP_DEBUG_SUFFIX}
+			optimized freetype )
+	endif()
+
 	string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_NO_ZIP_ARCHIVE 0" OGRE_USES_ZIP )
-	if( NOT OGRE_USES_FREEIMAGE EQUAL -1 )
+	if( NOT OGRE_USES_ZIP EQUAL -1 )
 		message( STATUS "Static lib needs zzip. Linking against it." )
 		if( UNIX )
 			set( ZZIPNAME zziplib )

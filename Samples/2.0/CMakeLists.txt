@@ -92,6 +92,7 @@ function(ogre_config_sample_pkg SAMPLENAME)
 	endif()
 endfunction(ogre_config_sample_pkg)
 
+add_definitions( -DUSE_JSON_UNIT_TESTING )
 
 if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
     add_subdirectory(Common)
