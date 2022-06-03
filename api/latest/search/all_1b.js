@@ -656,7 +656,7 @@ var searchData=
   ['_7evulkanuavbufferpacked_653',['~VulkanUavBufferPacked',['../class_ogre_1_1_vulkan_uav_buffer_packed.html#a8f11dc664667302241edc498f647893d',1,'Ogre::VulkanUavBufferPacked']]],
   ['_7evulkanvaomanager_654',['~VulkanVaoManager',['../class_ogre_1_1_vulkan_vao_manager.html#abf38e5aef240f24a78412d7ca4e98c47',1,'Ogre::VulkanVaoManager']]],
   ['_7evulkanwin32window_655',['~VulkanWin32Window',['../class_ogre_1_1_vulkan_win32_window.html#af8518f22cca56f8f319737a61b039e9e',1,'Ogre::VulkanWin32Window']]],
-  ['_7evulkanwindow_656',['~VulkanWindow',['../class_ogre_1_1_vulkan_window.html#ab7cd0a1d01fa521b1dc09f8410e6bbeb',1,'Ogre::VulkanWindow']]],
+  ['_7evulkanwindowswapchainbased_656',['~VulkanWindowSwapChainBased',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#acc1f3768bdf583d8818aa6fe8c5453b2',1,'Ogre::VulkanWindowSwapChainBased']]],
   ['_7evulkanxcbwindow_657',['~VulkanXcbWindow',['../class_ogre_1_1_vulkan_xcb_window.html#a8d84e8f257c7a28651186ef10628cdab',1,'Ogre::VulkanXcbWindow']]],
   ['_7ewaitableevent_658',['~WaitableEvent',['../class_ogre_1_1_waitable_event.html#a22e889e3724c8ed0d1d954fb267e75cb',1,'Ogre::WaitableEvent']]],
   ['_7ewin32context_659',['~Win32Context',['../class_ogre_1_1_win32_context.html#ad9815a3c7611621bba3f194b278a70c5',1,'Ogre::Win32Context']]],

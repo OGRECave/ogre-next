@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['backendx11_0',['BackendX11',['../class_ogre_1_1_vulkan_window.html#a2fc0b6db40b34292299d6a6c6c7860f2a0ed28e460846ce7e81d531ecdd52118f',1,'Ogre::VulkanWindow']]],
+  ['backendx11_0',['BackendX11',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#ab12be5918fc0d0c3a827250bf4f4d281a38c0af4dede0c20c83e78cf054666259',1,'Ogre::VulkanWindowSwapChainBased']]],
   ['bb_5fflag_5fconst_1',['BB_FLAG_CONST',['../namespace_ogre.html#af7e92c9a326b9cb618defcbc96e2feaca4f3a68015a1080b9caaa77434a8ba9fe',1,'Ogre']]],
   ['bb_5fflag_5findex_2',['BB_FLAG_INDEX',['../namespace_ogre.html#af7e92c9a326b9cb618defcbc96e2feaca2aa3e93a974e80c817b438e6f7059841',1,'Ogre']]],
   ['bb_5fflag_5findirect_3',['BB_FLAG_INDIRECT',['../namespace_ogre.html#af7e92c9a326b9cb618defcbc96e2feaca1b10675ddac28e5fc4a65e078976f772',1,'Ogre']]],

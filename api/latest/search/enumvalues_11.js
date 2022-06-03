@@ -98,9 +98,9 @@ var searchData=
   ['store_95',['Store',['../namespace_ogre_1_1_store_action.html#a1605e763b81f293b404de4a521f541caad76c8d5000d09a1f83f10813c7ef8ff5',1,'Ogre::StoreAction']]],
   ['storeandmultisampleresolve_96',['StoreAndMultisampleResolve',['../namespace_ogre_1_1_store_action.html#a1605e763b81f293b404de4a521f541caa1db7140816d8021d0f8f5fc47a6efb42',1,'Ogre::StoreAction']]],
   ['storeorresolve_97',['StoreOrResolve',['../namespace_ogre_1_1_store_action.html#a1605e763b81f293b404de4a521f541caae44608ad53aaf0bfa08df78448168e42',1,'Ogre::StoreAction']]],
-  ['swapchainacquired_98',['SwapchainAcquired',['../class_ogre_1_1_vulkan_window.html#a9a8e4223ca67f6f687a5250846708ba1a51f3c1cbe59ee8c4fa79c306bb221c2b',1,'Ogre::VulkanWindow']]],
-  ['swapchainpendingswap_99',['SwapchainPendingSwap',['../class_ogre_1_1_vulkan_window.html#a9a8e4223ca67f6f687a5250846708ba1a9269e9b6d46c95fb190a136ffb31a2f7',1,'Ogre::VulkanWindow']]],
-  ['swapchainreleased_100',['SwapchainReleased',['../class_ogre_1_1_vulkan_window.html#a9a8e4223ca67f6f687a5250846708ba1a73e398eeb322cd6698651280ce120eb1',1,'Ogre::VulkanWindow']]],
-  ['swapchainusedinrendering_101',['SwapchainUsedInRendering',['../class_ogre_1_1_vulkan_window.html#a9a8e4223ca67f6f687a5250846708ba1a7c1e8a746d2c375f52385369d7afec5d',1,'Ogre::VulkanWindow']]],
+  ['swapchainacquired_98',['SwapchainAcquired',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#aadf0d4f9a81f5217c467f3306941d973a7a984b0fc998101009bed7b9e5692ada',1,'Ogre::VulkanWindowSwapChainBased']]],
+  ['swapchainpendingswap_99',['SwapchainPendingSwap',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#aadf0d4f9a81f5217c467f3306941d973a171bcac955fb078e482c0b88805000e7',1,'Ogre::VulkanWindowSwapChainBased']]],
+  ['swapchainreleased_100',['SwapchainReleased',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#aadf0d4f9a81f5217c467f3306941d973ae6e7b9212a61d76de37b5ea4a733a17d',1,'Ogre::VulkanWindowSwapChainBased']]],
+  ['swapchainusedinrendering_101',['SwapchainUsedInRendering',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#aadf0d4f9a81f5217c467f3306941d973a4ff72b5bd88dbf089a83d957e47aab24',1,'Ogre::VulkanWindowSwapChainBased']]],
   ['swmode_102',['SwMode',['../namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fbac2b71398a8d887111207cad2468b7731',1,'Ogre::DefaultMipmapGen']]]
 ];

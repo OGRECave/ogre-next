@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['backend_0',['Backend',['../class_ogre_1_1_vulkan_window.html#a2fc0b6db40b34292299d6a6c6c7860f2',1,'Ogre::VulkanWindow']]],
+  ['backend_0',['Backend',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#ab12be5918fc0d0c3a827250bf4f4d281',1,'Ogre::VulkanWindowSwapChainBased']]],
   ['bakeddescriptorsets_1',['BakedDescriptorSets',['../namespace_ogre_1_1_baked_descriptor_sets.html#a8ea612cd4e3340a99b41fcdbef0c65c5',1,'Ogre::BakedDescriptorSets']]],
   ['baseconstanttype_2',['BaseConstantType',['../group___materials.html#ga31815ee0cc489402a8be91f2c87a84c6',1,'Ogre']]],
   ['billboardorigin_3',['BillboardOrigin',['../group___effects.html#gab8ff161dfa5a04cd890cf1342438ad8e',1,'Ogre::v1']]],

@@ -111,6 +111,8 @@ var searchData=
   ['vulkanwin32support_108',['VulkanWin32Support',['../class_ogre_1_1_vulkan_win32_support.html',1,'Ogre']]],
   ['vulkanwin32window_109',['VulkanWin32Window',['../class_ogre_1_1_vulkan_win32_window.html',1,'Ogre']]],
   ['vulkanwindow_110',['VulkanWindow',['../class_ogre_1_1_vulkan_window.html',1,'Ogre']]],
-  ['vulkanxcbsupport_111',['VulkanXcbSupport',['../class_ogre_1_1_vulkan_xcb_support.html',1,'Ogre']]],
-  ['vulkanxcbwindow_112',['VulkanXcbWindow',['../class_ogre_1_1_vulkan_xcb_window.html',1,'Ogre']]]
+  ['vulkanwindownull_111',['VulkanWindowNull',['../class_ogre_1_1_vulkan_window_null.html',1,'Ogre']]],
+  ['vulkanwindowswapchainbased_112',['VulkanWindowSwapChainBased',['../class_ogre_1_1_vulkan_window_swap_chain_based.html',1,'Ogre']]],
+  ['vulkanxcbsupport_113',['VulkanXcbSupport',['../class_ogre_1_1_vulkan_xcb_support.html',1,'Ogre']]],
+  ['vulkanxcbwindow_114',['VulkanXcbWindow',['../class_ogre_1_1_vulkan_xcb_window.html',1,'Ogre']]]
 ];

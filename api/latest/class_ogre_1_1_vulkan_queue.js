@@ -44,5 +44,5 @@ var class_ogre_1_1_vulkan_queue =
     [ "mOwnerDevice", "class_ogre_1_1_vulkan_queue.html#a77dea2f32c03d2e2b5a408ca80256471", null ],
     [ "mQueue", "class_ogre_1_1_vulkan_queue.html#a6218144526c7c733e9c2c6067193bd5e", null ],
     [ "mQueueIdx", "class_ogre_1_1_vulkan_queue.html#a7cfd51fac6b1ab3356c32cfa2992b475", null ],
-    [ "mWindowsPendingSwap", "class_ogre_1_1_vulkan_queue.html#a02dda70cc44eb081074237da26c0f918", null ]
+    [ "mWindowsPendingSwap", "class_ogre_1_1_vulkan_queue.html#a91aa95835506d65fa451a4842d4bb1ff", null ]
 ];

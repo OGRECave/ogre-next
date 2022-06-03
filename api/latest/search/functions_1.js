@@ -15,7 +15,7 @@ var searchData=
   ['acos_12',['ACos',['../class_ogre_1_1_math.html#a53869f3197b0f991aea7f5edf6b620e2',1,'Ogre::Math']]],
   ['acos4_13',['ACos4',['../class_ogre_1_1_mathlib_c.html#ad177f9a579f78ca3f4256c0d8c6e3660',1,'Ogre::MathlibC']]],
   ['acquirecurrentfence_14',['acquireCurrentFence',['../class_ogre_1_1_vulkan_queue.html#a124b289d45fe42933246053591cb14b5',1,'Ogre::VulkanQueue']]],
-  ['acquirenextswapchain_15',['acquireNextSwapchain',['../class_ogre_1_1_vulkan_window.html#af106a50a4fba40fd1f50331791330f3d',1,'Ogre::VulkanWindow']]],
+  ['acquirenextswapchain_15',['acquireNextSwapchain',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#ab48fc2ff56a29b65220b8c7a69eef8d4',1,'Ogre::VulkanWindowSwapChainBased']]],
   ['activate_16',['activate',['../class_ogre_1_1_g_l_s_l_monolithic_program.html#a64b30fb05b06f897496ee7f873df2769',1,'Ogre::GLSLMonolithicProgram::activate()'],['../class_ogre_1_1_g_l_s_l_program.html#ac226bd79e02f1056d48591f78f483902',1,'Ogre::GLSLProgram::activate()'],['../class_ogre_1_1_g_l_s_l_e_s_link_program.html#afe2da945cd0075475c40dcad96d7ed96',1,'Ogre::GLSLESLinkProgram::activate()'],['../class_ogre_1_1_g_l_s_l_e_s_program_common.html#ac7492c63c5d42f1e9253320f7c77deec',1,'Ogre::GLSLESProgramCommon::activate()'],['../class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#ade8e57832ed2eec9d9816a561a08a3be',1,'Ogre::GLSLESProgramPipeline::activate()']]],
   ['add_17',['add',['../struct_ogre_1_1_vector_set.html#a7049c5387498c49d046222cf2ce9e16c',1,'Ogre::VectorSet::add()'],['../class_ogre_1_1_skeleton_manager.html#ae2477268dc3398b0b32e4f838eb51c16',1,'Ogre::SkeletonManager::add()']]],
   ['add2d_18',['add2D',['../class_ogre_1_1v1_1_1_overlay.html#a6776244eb01e7c1c1fb20644ec109719',1,'Ogre::v1::Overlay']]],

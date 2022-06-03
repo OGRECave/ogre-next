@@ -755,9 +755,12 @@ var hierarchy =
         [ "Ogre::MetalWindow", "class_ogre_1_1_metal_window.html", null ],
         [ "Ogre::NULLWindow", "class_ogre_1_1_n_u_l_l_window.html", null ],
         [ "Ogre::VulkanWindow", "class_ogre_1_1_vulkan_window.html", [
-          [ "Ogre::VulkanAndroidWindow", "class_ogre_1_1_vulkan_android_window.html", null ],
-          [ "Ogre::VulkanWin32Window", "class_ogre_1_1_vulkan_win32_window.html", null ],
-          [ "Ogre::VulkanXcbWindow", "class_ogre_1_1_vulkan_xcb_window.html", null ]
+          [ "Ogre::VulkanWindowNull", "class_ogre_1_1_vulkan_window_null.html", null ],
+          [ "Ogre::VulkanWindowSwapChainBased", "class_ogre_1_1_vulkan_window_swap_chain_based.html", [
+            [ "Ogre::VulkanAndroidWindow", "class_ogre_1_1_vulkan_android_window.html", null ],
+            [ "Ogre::VulkanWin32Window", "class_ogre_1_1_vulkan_win32_window.html", null ],
+            [ "Ogre::VulkanXcbWindow", "class_ogre_1_1_vulkan_xcb_window.html", null ]
+          ] ]
         ] ],
         [ "Ogre::Win32Window", "class_ogre_1_1_win32_window.html", null ]
       ] ],

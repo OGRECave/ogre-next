@@ -28,5 +28,5 @@ var searchData=
   ['streamtype_25',['StreamType',['../class_ogre_1_1_deflate_stream.html#aa0d681e30262c74b6c1f2ecacc85908c',1,'Ogre::DeflateStream']]],
   ['strongmacroblockbits_26',['StrongMacroblockBits',['../struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214b',1,'Ogre::HlmsPassPso']]],
   ['submissiontype_27',['SubmissionType',['../namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e',1,'Ogre::SubmissionType']]],
-  ['swapchainstatus_28',['SwapchainStatus',['../class_ogre_1_1_vulkan_window.html#a9a8e4223ca67f6f687a5250846708ba1',1,'Ogre::VulkanWindow']]]
+  ['swapchainstatus_28',['SwapchainStatus',['../class_ogre_1_1_vulkan_window_swap_chain_based.html#aadf0d4f9a81f5217c467f3306941d973',1,'Ogre::VulkanWindowSwapChainBased']]]
 ];

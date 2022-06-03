@@ -1313,6 +1313,8 @@ var namespace_ogre =
     [ "VulkanWin32Support", "class_ogre_1_1_vulkan_win32_support.html", "class_ogre_1_1_vulkan_win32_support" ],
     [ "VulkanWin32Window", "class_ogre_1_1_vulkan_win32_window.html", "class_ogre_1_1_vulkan_win32_window" ],
     [ "VulkanWindow", "class_ogre_1_1_vulkan_window.html", "class_ogre_1_1_vulkan_window" ],
+    [ "VulkanWindowNull", "class_ogre_1_1_vulkan_window_null.html", "class_ogre_1_1_vulkan_window_null" ],
+    [ "VulkanWindowSwapChainBased", "class_ogre_1_1_vulkan_window_swap_chain_based.html", "class_ogre_1_1_vulkan_window_swap_chain_based" ],
     [ "VulkanXcbSupport", "class_ogre_1_1_vulkan_xcb_support.html", "class_ogre_1_1_vulkan_xcb_support" ],
     [ "VulkanXcbWindow", "class_ogre_1_1_vulkan_xcb_window.html", "class_ogre_1_1_vulkan_xcb_window" ],
     [ "WaitableEvent", "class_ogre_1_1_waitable_event.html", "class_ogre_1_1_waitable_event" ],
