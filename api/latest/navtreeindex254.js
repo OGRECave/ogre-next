@@ -1,5 +1,6 @@
 var NAVTREEINDEX254 =
 {
+"struct_ogre_1_1_aabb.html#afd80b94b06d5e79b1d656f7be3a13fa4":[5,2,6,0,3],
 "struct_ogre_1_1_abi_cookie.html":[6,0,0,33],
 "struct_ogre_1_1_abi_cookie.html":[7,0,0,6],
 "struct_ogre_1_1_abi_cookie.html#a6f4766c20158fe65d2627d4451ae5106":[6,0,0,33,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX254 =
 "struct_ogre_1_1_cb_samplers.html#a88613d122b406c306dd5a69654d01eeb":[7,0,0,84,0],
 "struct_ogre_1_1_cb_samplers.html#af6ced445e1e26b3ae1ebfb526ba49ab1":[6,0,0,111,2],
 "struct_ogre_1_1_cb_samplers.html#af6ced445e1e26b3ae1ebfb526ba49ab1":[7,0,0,84,2],
-"struct_ogre_1_1_cb_shader_buffer.html":[7,0,0,85],
-"struct_ogre_1_1_cb_shader_buffer.html":[6,0,0,112]
+"struct_ogre_1_1_cb_shader_buffer.html":[7,0,0,85]
 };

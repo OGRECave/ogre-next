@@ -1,5 +1,6 @@
 var NAVTREEINDEX259 =
 {
+"struct_ogre_1_1_hlms_bits.html#a68ddd2dbcfd637281cce7fe77bf76557":[5,2,10,63,6],
 "struct_ogre_1_1_hlms_bits.html#a731e3c69bac1bb342b92f3e61ca65655":[5,2,10,63,7],
 "struct_ogre_1_1_hlms_bits.html#a7c4a502448a66c6373a8763b49a12980":[5,2,10,63,9],
 "struct_ogre_1_1_hlms_bits.html#aa95210cbd33619cba7e5b8b22fb291f5":[5,2,10,63,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX259 =
 "struct_ogre_1_1_irradiance_field_settings.html#a3871b731f4ee54e880c3af30f19ba250":[7,0,0,485,15],
 "struct_ogre_1_1_irradiance_field_settings.html#a3871b731f4ee54e880c3af30f19ba250":[6,0,0,512,15],
 "struct_ogre_1_1_irradiance_field_settings.html#a3f0445be193f7e44196dee0e229315f3":[6,0,0,512,10],
-"struct_ogre_1_1_irradiance_field_settings.html#a3f0445be193f7e44196dee0e229315f3":[7,0,0,485,10],
-"struct_ogre_1_1_irradiance_field_settings.html#a513ca58a53f04de8dae548f3c22d0f6d":[7,0,0,485,6]
+"struct_ogre_1_1_irradiance_field_settings.html#a3f0445be193f7e44196dee0e229315f3":[7,0,0,485,10]
 };

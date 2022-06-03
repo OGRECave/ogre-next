@@ -1,5 +1,6 @@
 var NAVTREEINDEX270 =
 {
+"struct_ogre_1_1uint4.html#a9759dcece4503a6123635c9841d0ba79":[7,0,0,891,6],
 "struct_ogre_1_1uint4.html#a9759dcece4503a6123635c9841d0ba79":[6,0,0,918,6],
 "struct_ogre_1_1uint4.html#ad25cdc72c9e44df775fd7f770db2b150":[6,0,0,918,5],
 "struct_ogre_1_1uint4.html#ad25cdc72c9e44df775fd7f770db2b150":[7,0,0,891,5],

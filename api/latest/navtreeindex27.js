@@ -1,5 +1,6 @@
 var NAVTREEINDEX27 =
 {
+"class_ogre_1_1_compositor_pass_clear.html#a06f6772e803d5408499f05fb3bd335a8":[5,2,1,5,0],
 "class_ogre_1_1_compositor_pass_clear.html#a109f49cb2e6f8a9c0e1377817bcb9e6d":[5,2,1,5,11],
 "class_ogre_1_1_compositor_pass_clear.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,1,5,17],
 "class_ogre_1_1_compositor_pass_clear.html#a1e4efabc75d3bf1210c8ec39dece8f05":[5,2,1,5,25],
@@ -248,6 +249,5 @@ var NAVTREEINDEX27 =
 "class_ogre_1_1_compositor_pass_depth_copy_def.html#a1e9e560eddce4c5ac862789a1a752909":[5,2,1,11,36],
 "class_ogre_1_1_compositor_pass_depth_copy_def.html#a313d390f851cc3f0ac463ea78fe5e860":[5,2,1,11,39],
 "class_ogre_1_1_compositor_pass_depth_copy_def.html#a368fcc3ba3874f5ae9f4eaf8eb46652e":[5,2,1,11,35],
-"class_ogre_1_1_compositor_pass_depth_copy_def.html#a4ba939216db7e92e0a0ba4cebe62af5b":[5,2,1,11,24],
-"class_ogre_1_1_compositor_pass_depth_copy_def.html#a5044b7066a60cf46d506e1247b3a58fd":[5,2,1,11,4]
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a4ba939216db7e92e0a0ba4cebe62af5b":[5,2,1,11,24]
 };

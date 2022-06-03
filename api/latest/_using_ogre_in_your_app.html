@@ -91,6 +91,7 @@ $(document).ready(function(){initNavTree('_using_ogre_in_your_app.html',''); ini
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#UsingOgreInYourAppOverview">Overview</a></li>
 <li class="level1"><a href="#SpeedingThingsUp">Speeding things up</a><ul><li class="level2"><a href="#SmallNoteAbout_iOS">Small note about iOS</a></li>
+<li class="level2"><a href="#autotoc_md78">Apple specific</a></li>
 <li class="level2"><a href="#CreatingYourApplication">Creating your application with &#39;EmptyProject&#39; script</a><ul><li class="level3"><a href="#AnoteaboutcopiedfilesfromSamples_20_Common">A note about copied files from Samples/2.0/Common</a></li>
 </ul>
 </li>
@@ -174,7 +175,11 @@ Speeding things up</h1>
 Small note about iOS</h2>
 <p >You will find the first line of CMakeLists.txt to be commented: </p><div class="fragment"><div class="line">#set( CMAKE_TOOLCHAIN_FILE CMake/iOS.cmake )</div>
 </div><!-- fragment --><p> Uncomment it, and run the CMakeLists.txt script.</p>
-<h2><a class="anchor" id="CreatingYourApplication"></a>
+<h2><a class="anchor" id="autotoc_md78"></a>
+Apple specific</h2>
+<p >To use EmptyProject in both iOS and macOS, OgreNext must have been compiled with CMake options: </p><pre class="fragment">* `-DOGRE_BUILD_LIBS_AS_FRAMEWORKS=0`
+* `-DOGRE_STATIC=1`
+</pre> <h2><a class="anchor" id="CreatingYourApplication"></a>
 Creating your application with 'EmptyProject' script</h2>
 <ol type="1">
 <li>Copy Samples/2.0/Tutorials/EmptyProject to wherever you want. We'll refer to its location now as "EmptyProject"</li>

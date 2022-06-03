@@ -1,5 +1,6 @@
 var NAVTREEINDEX260 =
 {
+"struct_ogre_1_1_irradiance_field_settings.html#a513ca58a53f04de8dae548f3c22d0f6d":[7,0,0,485,6],
 "struct_ogre_1_1_irradiance_field_settings.html#a513ca58a53f04de8dae548f3c22d0f6d":[6,0,0,512,6],
 "struct_ogre_1_1_irradiance_field_settings.html#a5c721b7766775f1908111fb51461b64a":[7,0,0,485,11],
 "struct_ogre_1_1_irradiance_field_settings.html#a5c721b7766775f1908111fb51461b64a":[6,0,0,512,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX260 =
 "struct_ogre_1_1_lod_index_buffer.html#a62ca12c5e306a45a9aed557351ef80e3":[7,0,0,532,4],
 "struct_ogre_1_1_lod_index_buffer.html#a7d4f0449f9d4b938d3300ba50ba5f47f":[7,0,0,532,0],
 "struct_ogre_1_1_lod_index_buffer.html#a7d4f0449f9d4b938d3300ba50ba5f47f":[6,0,0,559,0],
-"struct_ogre_1_1_lod_index_buffer.html#a8cbe35c7dbfb55adea2b0c9a47932bce":[7,0,0,532,3],
-"struct_ogre_1_1_lod_index_buffer.html#a8cbe35c7dbfb55adea2b0c9a47932bce":[6,0,0,559,3]
+"struct_ogre_1_1_lod_index_buffer.html#a8cbe35c7dbfb55adea2b0c9a47932bce":[7,0,0,532,3]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX255 =
 {
+"struct_ogre_1_1_cb_shader_buffer.html":[6,0,0,112],
 "struct_ogre_1_1_cb_shader_buffer.html#a0e91440fffe0ddbec5f64cec0a952dd3":[7,0,0,85,7],
 "struct_ogre_1_1_cb_shader_buffer.html#a0e91440fffe0ddbec5f64cec0a952dd3":[6,0,0,112,7],
 "struct_ogre_1_1_cb_shader_buffer.html#a1b56c03e7afca205eddf3f9ee408fed1":[7,0,0,85,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX255 =
 "struct_ogre_1_1_d3_d11_vertex_array_object.html#a3a38cd19836d509277fcd1ee0d1031d1":[6,0,0,246,28],
 "struct_ogre_1_1_d3_d11_vertex_array_object.html#a3e6a56235f1dfb246d9fc91d09cf289f":[6,0,0,246,29],
 "struct_ogre_1_1_d3_d11_vertex_array_object.html#a3e6a56235f1dfb246d9fc91d09cf289f":[7,0,0,219,29],
-"struct_ogre_1_1_d3_d11_vertex_array_object.html#a4032771157feaabebee4944cba08e187":[6,0,0,246,4],
-"struct_ogre_1_1_d3_d11_vertex_array_object.html#a4032771157feaabebee4944cba08e187":[7,0,0,219,4]
+"struct_ogre_1_1_d3_d11_vertex_array_object.html#a4032771157feaabebee4944cba08e187":[6,0,0,246,4]
 };
