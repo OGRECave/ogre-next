@@ -25,6 +25,17 @@
     #include "shlobj.h"
 #endif
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#	include <Foundation/Foundation.h>
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#	include "OSX/macUtils.h"
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#	include "iOS/macUtils.h"
+#endif
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
 #else
@@ -66,7 +77,15 @@ namespace Demo
         EmptyProjectGraphicsSystem( GameState *gameState ) :
             GraphicsSystem( gameState )
         {
+#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+            mResourcePath = "Data/";
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+            mResourcePath = Ogre::macBundlePath() + "/Contents/Resources/Data/";
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+            mResourcePath = Ogre::macBundlePath() + "/Data/";
+#else
             mResourcePath = "../Data/";
+#endif
 
             //It's recommended that you set this path to:
             //	%APPDATA%/EmptyProject/ on Windows
@@ -139,11 +158,15 @@ namespace Demo
                 }
             }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-            mWriteAccessFolder = macCachePath() + "/EmptyProject/";
-            //Create "pathToCache/EmptyProject"
-            mWriteAccessFolder += "/EmptyProject/";
-            result = mkdir( mWriteAccessFolder.c_str(), S_IRWXU|S_IRWXG );
-            errorReason = errno;
+            NSURL *libUrl = [NSFileManager.defaultManager URLForDirectory:NSLibraryDirectory
+                                                                 inDomain:NSUserDomainMask
+                                                        appropriateForURL:nil
+                                                                   create:YES
+                                                                    error:nil];
+            // Create "pathToCache/Alliance-Airwar"
+            mWriteAccessFolder = Ogre::String( libUrl.absoluteURL.path.UTF8String ) + "/EmptyProject/";
+            const int result = mkdir( mWriteAccessFolder.c_str(), S_IRWXU | S_IRWXG );
+            const int errorReason = errno;
 
             if( result && errorReason != EEXIST )
             {
