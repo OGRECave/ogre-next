@@ -259,12 +259,12 @@ namespace Ogre
     public:
         /** Valid parameters in params:
         @param params
-            + fresnel <value [g, b]>
+            + fresnel \<value [g, b]>
                 The IOR. See setIndexOfRefraction()
                 When specifying three values, the fresnel is separate for each
                 colour component
 
-            + fresnel_coeff <value [g, b]>
+            + fresnel_coeff \<value [g, b]>
                 Directly sets the fresnel values, instead of using IORs
                 "F0" in most books about PBS
 
@@ -273,76 +273,76 @@ namespace Ogre
                 Note: Values extremely close to zero could cause NaNs and
                 INFs in the pixel shader, also depends on the GPU's precision.
 
-            + background_diffuse <r g b a>
+            + background_diffuse \<r g b a>
                 Specifies diffuse colour to use as a background when diffuse texture are not present.
-                Does not replace 'diffuse <r g b>'
+                Does not replace 'diffuse \<r g b>'
                 Default: background_diffuse 1 1 1 1
 
-            + diffuse <r g b>
+            + diffuse \<r g b>
                 Specifies the RGB diffuse colour. "kD" in most books about PBS
                 Default: diffuse 1 1 1 1
                 Note: Internally the diffuse colour is divided by PI.
 
-            + diffuse_map <texture name>
+            + diffuse_map \<texture name>
                 Name of the diffuse texture for the base image (optional)
 
-            + diffuse_map_grayscale <true, false>
+            + diffuse_map_grayscale \<true, false>
                 When set to true diffuse map would be sampled with .rrra swizzle
                 Default: false
 
-            + specular <r g b>
+            + specular \<r g b>
                 Specifies the RGB specular colour. "kS" in most books about PBS
                 Default: specular 1 1 1 1
 
-            + specular_map <texture name>
+            + specular_map \<texture name>
                 Name of the specular texture for the base image (optional).
 
-            + roughness_map <texture name>
+            + roughness_map \<texture name>
                 Name of the roughness texture for the base image (optional)
                 Note: Only the Red channel will be used, and the texture will be converted to
                 an efficient monochrome representation.
 
-            + normal_map <texture name>
+            + normal_map \<texture name>
                 Name of the normal texture for the base image (optional) for normal mapping
 
-            + detail_weight_map <texture name>
+            + detail_weight_map \<texture name>
                 Texture that when present, will be used as mask/weight for the 4 detail maps.
                 The R channel is used for detail map #0; the G for detail map #1, B for #2,
                 and Alpha for #3.
                 This affects both the diffuse and normal-mapped detail maps.
 
-            + detail_map0 <texture name>
+            + detail_map0 \<texture name>
               Similar: detail_map1, detail_map2, detail_map3
                 Name of the detail map to be used on top of the diffuse colour.
                 There can be gaps (i.e. set detail maps 0 and 2 but not 1)
 
-            + detail_blend_mode0 <blend_mode>
+            + detail_blend_mode0 \<blend_mode>
               Similar: detail_blend_mode1, detail_blend_mode2, detail_blend_mode3
                 Blend mode to use for each detail map. Valid values are:
                     "NormalNonPremul", "NormalPremul", "Add", "Subtract", "Multiply",
                     "Multiply2x", "Screen", "Overlay", "Lighten", "Darken",
                     "GrainExtract", "GrainMerge", "Difference"
 
-            + detail_offset_scale0 <offset_u> <offset_v> <scale_u> <scale_v>
+            + detail_offset_scale0 \<offset_u> \<offset_v> \<scale_u> \<scale_v>
               Similar: detail_offset_scale1, detail_offset_scale2, detail_offset_scale3
                 Sets the UV offset and scale of the detail maps.
 
-            + detail_normal_map0 <texture name>
+            + detail_normal_map0 \<texture name>
               Similar: detail_normal_map1, detail_normal_map2, detail_normal_map3
                 Name of the detail map's normal map to be used.
                 It's not affected by blend mode. May be used even if
                 there is no detail_map
 
-            + detail_normal_offset_scale0 <offset_u> <offset_v> <scale_u> <scale_v>
+            + detail_normal_offset_scale0 \<offset_u> \<offset_v> \<scale_u> \<scale_v>
               Similar: detail_normal_offset_scale1, detail_normal_offset_scale2,
                        detail_normal_offset_scale3
                 Sets the UV offset and scale of the detail normal maps.
 
-            + reflection_map <texture name>
+            + reflection_map \<texture name>
                 Name of the reflection map. Must be a cubemap. Doesn't use an UV set because
                 the tex. coords are automatically calculated.
 
-            + uv_diffuse_map <uv>
+            + uv_diffuse_map \<uv>
               Similar: uv_specular_map, uv_normal_map, uv_detail_mapN, uv_detail_normal_mapN,
                        uv_detail_weight_map
               where N is a number between 0 and 3.
@@ -353,10 +353,10 @@ namespace Ogre
               Specifies the transparency amount. Value in range [0; 1]
               where 0 = full transparency and 1 = fully opaque.
 
-            + transparency_mode <transparent, none, fade>
+            + transparency_mode \<transparent, none, fade>
               Specifies the transparency mode. @see TransparencyModes
 
-            + alpha_from_textures <true, false>
+            + alpha_from_textures \<true, false>
               When set to false transparency calculations ignore the alpha channel in
               the textures
         */
