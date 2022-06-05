@@ -298,8 +298,6 @@ namespace Ogre
                 Vectors to be used as replacement if the mask is zero.
             @param
                 mask filled with either 0's or 0xFFFFFFFF
-            @return
-                this[i] = mask[i] != 0 ? this[i] : replacement[i]
         */
         inline void Cmov4( ArrayMaskR mask, const ArrayVector3 &replacement );
 
@@ -320,8 +318,6 @@ namespace Ogre
                 Vectors to be used as replacement if the mask is zero.
             @param mask
                 mask filled with either 0's or 0xFFFFFFFF
-            @return
-                this[i] = mask[i] != 0 ? this[i] : replacement[i]
         */
         inline void CmovRobust( ArrayMaskR mask, const ArrayVector3 &replacement );
 
