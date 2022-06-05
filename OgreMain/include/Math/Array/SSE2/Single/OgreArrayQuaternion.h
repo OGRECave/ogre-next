@@ -184,8 +184,6 @@ namespace Ogre
                 memory reside in the heap (it makes better usage of the memory). Long story short,
                 prefer calling this function to using an operator when just updating an ArrayVector3 is
                 involved. (It's fine using operators for ArrayVector3s)
-            @param
-
         */
         static inline void mul( const ArrayQuaternion &inQ, ArrayVector3 &inOutVec );
 
