@@ -132,7 +132,8 @@ namespace Ogre
 #endif
 
 #ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
-        if( renderSystem->getCapabilities()->getVendor() == GPU_IMGTEC )
+        if( renderSystem->getCapabilities()->getVendor() == GPU_IMGTEC &&
+            !renderSystem->getCapabilities()->getDriverVersion().hasMinVersion( 1, 1450, 234 ) )
         {
             Workarounds::mPowerVRAlignment = 16u;
 
