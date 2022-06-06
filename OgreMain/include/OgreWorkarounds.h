@@ -147,7 +147,7 @@ namespace Ogre
 /// As of Driver 1.386.1368, API version 1.1.131 (Android 11),
 /// this bug is still present.
 ///
-/// PowerVR has fixed this in driver version 1.1450.234
+/// PowerVR has fixed this in driver version 1.426.234
 ///
 /// First seen: Unknown
 /// Last seen: 2022-05-13
