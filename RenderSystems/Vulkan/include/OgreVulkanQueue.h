@@ -256,6 +256,7 @@ namespace Ogre
         */
         void getCopyEncoder( const BufferPacked *buffer, TextureGpu *texture, const bool bDownload,
                              CopyEncTransitionMode::CopyEncTransitionMode transitionMode );
+        void getCopyEncoderAsyncTextureTicketUpload();
         void getCopyEncoderV1Buffer( const bool bDownload );
 
         void endCopyEncoder();

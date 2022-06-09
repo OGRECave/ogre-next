@@ -853,6 +853,19 @@ namespace Ogre
                               mImageMemBarrierPtrs.empty() ) );
     }
     //-------------------------------------------------------------------------
+    void VulkanQueue::getCopyEncoderAsyncTextureTicketUpload()
+    {
+        if( mEncoderState != EncoderCopyOpen )
+        {
+            endRenderEncoder();
+            endComputeEncoder();
+
+            mEncoderState = EncoderCopyOpen;
+        }
+
+        mCopyEndReadDstBufferFlags |= VK_ACCESS_TRANSFER_READ_BIT;
+    }
+    //-------------------------------------------------------------------------
     void VulkanQueue::getCopyEncoderV1Buffer( const bool bDownload )
     {
         if( mEncoderState != EncoderCopyOpen )
