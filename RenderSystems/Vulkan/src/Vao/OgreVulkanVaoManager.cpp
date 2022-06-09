@@ -997,8 +997,8 @@ namespace Ogre
             if( vboFlag != CPU_INACCESSIBLE )
             {
                 const bool isCoherent = isVboFlagCoherent( vboFlag );
-                newVbo.dynamicBuffer = new VulkanDynamicBuffer( newVbo.vboName, newVbo.sizeBytes,
-                                                                isCoherent, false, mDevice );
+                newVbo.dynamicBuffer = new VulkanDynamicBuffer(
+                    newVbo.vboName, newVbo.sizeBytes, isCoherent, vboFlag == CPU_READ_WRITE, mDevice );
             }
 
             if( !mUnallocatedVbos[vboFlag].empty() )
