@@ -301,7 +301,7 @@ namespace Ogre
         void beginGPUSampleProfile( const String &name, uint32 *hashCache ) override;
         void endGPUSampleProfile( const String &name ) override;
 
-        void endGpuDebuggerFrameCapture( Window *window ) override;
+        void endGpuDebuggerFrameCapture( Window *window, const bool bDiscard = false ) override;
 
         bool hasAnisotropicMipMapFilter() const override { return true; }
 

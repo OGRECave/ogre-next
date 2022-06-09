@@ -1437,7 +1437,7 @@ namespace Ogre
 
         /// See RenderSystem::startGpuDebuggerFrameCapture
         /// Call this function when you're done capturing a frame.
-        virtual void endGpuDebuggerFrameCapture( Window *window );
+        virtual void endGpuDebuggerFrameCapture( Window *window, const bool bDiscard = false );
 
         /// Explicitly loads RenderDoc. It is not necessary to call this function
         /// unless you want to use RenderSystem::getRenderDocApi before we

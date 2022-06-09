@@ -2179,11 +2179,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::endGPUSampleProfile( const String &name ) {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::endGpuDebuggerFrameCapture( Window *window )
+    void VulkanRenderSystem::endGpuDebuggerFrameCapture( Window *window, const bool bDiscard )
     {
-        if( mRenderDocApi )
+        if( mRenderDocApi && !bDiscard )
             mActiveDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
-        RenderSystem::endGpuDebuggerFrameCapture( window );
+        RenderSystem::endGpuDebuggerFrameCapture( window, bDiscard );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::setClipPlanesImpl( const PlaneList &clipPlanes ) {}

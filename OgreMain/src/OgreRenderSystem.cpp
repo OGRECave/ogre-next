@@ -1343,7 +1343,7 @@ namespace Ogre
         return true;
     }
     //---------------------------------------------------------------------
-    void RenderSystem::endGpuDebuggerFrameCapture( Window *window )
+    void RenderSystem::endGpuDebuggerFrameCapture( Window *window, const bool bDiscard )
     {
         if( !mRenderDocApi )
             return;
@@ -1355,7 +1355,11 @@ namespace Ogre
             window->getCustomAttribute( "RENDERDOC_DEVICE", device );
             window->getCustomAttribute( "RENDERDOC_WINDOW", windowHandle );
         }
-        mRenderDocApi->EndFrameCapture( device, windowHandle );
+
+        if( bDiscard )
+            mRenderDocApi->DiscardFrameCapture( device, windowHandle );
+        else
+            mRenderDocApi->EndFrameCapture( device, windowHandle );
 #endif
     }
     //---------------------------------------------------------------------
