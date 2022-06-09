@@ -27,6 +27,7 @@ var class_ogre_1_1_vulkan_queue =
     [ "endRenderEncoder", "class_ogre_1_1_vulkan_queue.html#add80ec09a31bed7221ce55a639eea902", null ],
     [ "getComputeEncoder", "class_ogre_1_1_vulkan_queue.html#a606c100841cc1a5fd9d335e6b563dacd", null ],
     [ "getCopyEncoder", "class_ogre_1_1_vulkan_queue.html#a036b99841e3865ee04bd05f624fd97c5", null ],
+    [ "getCopyEncoderAsyncTextureTicketUpload", "class_ogre_1_1_vulkan_queue.html#a56cf2386195d4fefc73f0cace3e873d0", null ],
     [ "getCopyEncoderV1Buffer", "class_ogre_1_1_vulkan_queue.html#affa78f52be9822ce962cdc65875edd10", null ],
     [ "getEncoderState", "class_ogre_1_1_vulkan_queue.html#a643ba4b203d2859598a0e483d4e4ca54", null ],
     [ "getFamilyIdx", "class_ogre_1_1_vulkan_queue.html#a424e609f3f750db0c72ad16fb36d3af3", null ],
