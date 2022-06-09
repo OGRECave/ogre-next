@@ -147,7 +147,7 @@ var class_ogre_1_1_g_l_e_s2_render_system =
     [ "discardFrameBuffer", "class_ogre_1_1_g_l_e_s2_render_system.html#ac30a8b8d0da808c96b4c55e7efee7037", null ],
     [ "enableClipPlane", "class_ogre_1_1_g_l_e_s2_render_system.html#aa8952c89e91f4aa10b99fcdab54e1b94", null ],
     [ "endCopyEncoder", "class_ogre_1_1_g_l_e_s2_render_system.html#a30b893cdd07ccd24f95623ebef2668b7", null ],
-    [ "endGpuDebuggerFrameCapture", "class_ogre_1_1_g_l_e_s2_render_system.html#a0a72b69bed67cdf99239d884748bcb08", null ],
+    [ "endGpuDebuggerFrameCapture", "class_ogre_1_1_g_l_e_s2_render_system.html#a9e5253b47e71ab6898705257c5632a6f", null ],
     [ "endGPUSampleProfile", "class_ogre_1_1_g_l_e_s2_render_system.html#a5e5faac2301bbce361f3a1e782d38d2c", null ],
     [ "endProfileEvent", "class_ogre_1_1_g_l_e_s2_render_system.html#ad748d0e10719a6cae6b4fc4a19a137c7", null ],
     [ "endRenderPassDescriptor", "class_ogre_1_1_g_l_e_s2_render_system.html#a2d17f35244df8812c0aa3773f6c920a6", null ],

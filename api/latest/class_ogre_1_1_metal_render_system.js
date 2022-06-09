@@ -118,7 +118,7 @@ var class_ogre_1_1_metal_render_system =
     [ "destroyRenderPassDescriptor", "class_ogre_1_1_metal_render_system.html#a60e5ffa2ec8f2709435c3d11e8a321f6", null ],
     [ "destroyRenderWindow", "class_ogre_1_1_metal_render_system.html#a36a560a1e0e171b9a1a19a2748e6dd15", null ],
     [ "endCopyEncoder", "class_ogre_1_1_metal_render_system.html#a30b893cdd07ccd24f95623ebef2668b7", null ],
-    [ "endGpuDebuggerFrameCapture", "class_ogre_1_1_metal_render_system.html#a0a72b69bed67cdf99239d884748bcb08", null ],
+    [ "endGpuDebuggerFrameCapture", "class_ogre_1_1_metal_render_system.html#a9e5253b47e71ab6898705257c5632a6f", null ],
     [ "endGPUSampleProfile", "class_ogre_1_1_metal_render_system.html#adad63f1f3fbc0f659f9b08f4004cce30", null ],
     [ "endProfileEvent", "class_ogre_1_1_metal_render_system.html#abfc70d28f3375dde4bb77c55108dcce4", null ],
     [ "endRenderPassDescriptor", "class_ogre_1_1_metal_render_system.html#aa7fc9ab2c5f1d1128ec2c9a898a7d8d3", null ],

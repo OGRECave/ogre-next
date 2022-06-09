@@ -404,9 +404,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a30b893cdd07ccd24f95623ebef2668b7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a30b893cdd07ccd24f95623ebef2668b7">endCopyEncoder</a> ()</td></tr>
 <tr class="memdesc:a30b893cdd07ccd24f95623ebef2668b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required when caller will soon start analyzing barriers (e.g.  <a href="class_ogre_1_1_render_system.html#a30b893cdd07ccd24f95623ebef2668b7">More...</a><br /></td></tr>
 <tr class="separator:a30b893cdd07ccd24f95623ebef2668b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a72b69bed67cdf99239d884748bcb08"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a0a72b69bed67cdf99239d884748bcb08">endGpuDebuggerFrameCapture</a> (<a class="el" href="class_ogre_1_1_window.html">Window</a> *window)</td></tr>
-<tr class="memdesc:a0a72b69bed67cdf99239d884748bcb08"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e" title="Programmatically performs a GPU capture when attached to a GPU debugger like RenderDoc or Metal Graph...">RenderSystem::startGpuDebuggerFrameCapture</a> Call this function when you're done capturing a frame.  <a href="class_ogre_1_1_render_system.html#a0a72b69bed67cdf99239d884748bcb08">More...</a><br /></td></tr>
-<tr class="separator:a0a72b69bed67cdf99239d884748bcb08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e5253b47e71ab6898705257c5632a6f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a9e5253b47e71ab6898705257c5632a6f">endGpuDebuggerFrameCapture</a> (<a class="el" href="class_ogre_1_1_window.html">Window</a> *window, const bool bDiscard=false)</td></tr>
+<tr class="memdesc:a9e5253b47e71ab6898705257c5632a6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e" title="Programmatically performs a GPU capture when attached to a GPU debugger like RenderDoc or Metal Graph...">RenderSystem::startGpuDebuggerFrameCapture</a> Call this function when you're done capturing a frame.  <a href="class_ogre_1_1_render_system.html#a9e5253b47e71ab6898705257c5632a6f">More...</a><br /></td></tr>
+<tr class="separator:a9e5253b47e71ab6898705257c5632a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adad63f1f3fbc0f659f9b08f4004cce30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#adad63f1f3fbc0f659f9b08f4004cce30">endGPUSampleProfile</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name) override</td></tr>
 <tr class="separator:adad63f1f3fbc0f659f9b08f4004cce30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfc70d28f3375dde4bb77c55108dcce4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#abfc70d28f3375dde4bb77c55108dcce4">endProfileEvent</a> () override</td></tr>
@@ -4790,8 +4790,8 @@ See _createRenderWindow for details about each member. </td></tr>
 
 </div>
 </div>
-<a id="a0a72b69bed67cdf99239d884748bcb08" name="a0a72b69bed67cdf99239d884748bcb08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a72b69bed67cdf99239d884748bcb08">&#9670;&nbsp;</a></span>endGpuDebuggerFrameCapture()</h2>
+<a id="a9e5253b47e71ab6898705257c5632a6f" name="a9e5253b47e71ab6898705257c5632a6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e5253b47e71ab6898705257c5632a6f">&#9670;&nbsp;</a></span>endGpuDebuggerFrameCapture()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4803,8 +4803,18 @@ See _createRenderWindow for details about each member. </td></tr>
           <td class="memname">virtual void Ogre::RenderSystem::endGpuDebuggerFrameCapture </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_window.html">Window</a> *&#160;</td>
-          <td class="paramname"><em>window</em></td><td>)</td>
+          <td class="paramname"><em>window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bDiscard</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -4816,7 +4826,7 @@ See _createRenderWindow for details about each member. </td></tr>
 
 <p>See <a class="el" href="class_ogre_1_1_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e" title="Programmatically performs a GPU capture when attached to a GPU debugger like RenderDoc or Metal Graph...">RenderSystem::startGpuDebuggerFrameCapture</a> Call this function when you're done capturing a frame. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a25255baded58995fcf1c465cf2cf37eb">Ogre::VulkanRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#ab3d49c3c9bebe25d9caac58bfc3a4b18">Ogre::VulkanRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -7823,7 +7833,7 @@ Once this init sequence is completed the threads are independent but this startu
 </div><div class="memdoc">
 
 <p>Programmatically performs a GPU capture when attached to a GPU debugger like RenderDoc or Metal Graphics Debugger. </p>
-<p >You must call <a class="el" href="class_ogre_1_1_render_system.html#a0a72b69bed67cdf99239d884748bcb08" title="See RenderSystem::startGpuDebuggerFrameCapture Call this function when you&#39;re done capturing a frame.">RenderSystem::endGpuDebuggerFrameCapture</a></p>
+<p >You must call <a class="el" href="class_ogre_1_1_render_system.html#a9e5253b47e71ab6898705257c5632a6f" title="See RenderSystem::startGpuDebuggerFrameCapture Call this function when you&#39;re done capturing a frame.">RenderSystem::endGpuDebuggerFrameCapture</a></p>
 <dl class="section remark"><dt>Remarks</dt><dd>Very big captures (e.g. lots of API calls between start/endGpuDebuggerFrameCapture) may result in the system running out of memory.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
