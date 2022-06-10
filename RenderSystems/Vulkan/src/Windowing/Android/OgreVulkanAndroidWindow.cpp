@@ -215,6 +215,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
+        if( mNativeWindow && !nativeWindow )
+        {
+            // Android is destroying our window. Likely user pressed the home or power
+            // button.
+            //
+            // We must flush all our references to the old swapchain otherwise when
+            // the app goes to foreground again and submit that stale content Mali
+            // will return DEVICE_LOST
+            mDevice->stall();
+        }
+
         destroy();
 
         // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
