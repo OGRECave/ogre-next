@@ -30,10 +30,12 @@
 		{
 			AtmoSettings atmoSettings;
 		};
-	@else
-		@piece( AtmosphereNprSkyDecl )
-			, constant AtmoSettings *atmoSettings [[buffer(CONST_SLOT_START+@value(atmosky_npr))]]
-		@end
+	@end
+@end
+
+@property( syntax == metal )
+	@piece( AtmosphereNprSkyDecl )
+		, constant AtmoSettings &atmoSettings [[buffer(CONST_SLOT_START+@value(atmosky_npr))]]
 	@end
 @end
 
