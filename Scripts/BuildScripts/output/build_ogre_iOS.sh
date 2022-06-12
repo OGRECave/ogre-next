@@ -15,7 +15,7 @@ cd ogre-next-deps
 mkdir build_iOS
 cd build_iOS
 echo "--- Building ogre-next-deps ---"
-cmake -G Xcode .. || exit $?
+cmake -DOGRE_BUILD_PLATFORM_APPLE_IOS=1 -G Xcode .. || exit $?
 cmake --build . --target install --config Debug || exit $?
 cmake --build . --target install --config RelWithDebInfo || exit $?
 
