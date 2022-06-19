@@ -147,6 +147,10 @@ namespace Ogre
         /// Cannot be called after VctCascadedVoxelizer::init
         void addCascade( const VctCascadeSetting &cascadeSetting );
 
+        /// Destroys the last created cascade. VctCascadeSetting::voxelizer must be nullptr
+        /// Cannot be called after VctCascadedVoxelizer::init
+        void popCascade();
+
         /// Alters each cascade's step size. The last cascade is set to stepSize.
         ///
         /// The rest of the cascades are set to step sizes that are >= stepSize
