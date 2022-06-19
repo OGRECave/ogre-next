@@ -22,6 +22,7 @@ var class_ogre_1_1_vct_cascaded_voxelizer =
     [ "passPreExecute", "class_ogre_1_1_vct_cascaded_voxelizer.html#a30e82f9915494734c77e2be6386045bd", null ],
     [ "passSceneAfterFrustumCulling", "class_ogre_1_1_vct_cascaded_voxelizer.html#aa48c3669cc7eea1407af04641a48b955", null ],
     [ "passSceneAfterShadowMaps", "class_ogre_1_1_vct_cascaded_voxelizer.html#a75c7e6c919c3bf55475a0a04160189fc", null ],
+    [ "popCascade", "class_ogre_1_1_vct_cascaded_voxelizer.html#ae64b36d8bd5de87643f36fa43ccde64e", null ],
     [ "removeAllItems", "class_ogre_1_1_vct_cascaded_voxelizer.html#a6ce9e39741870d035877eee531f46efd", null ],
     [ "removeItem", "class_ogre_1_1_vct_cascaded_voxelizer.html#a5226e4319de1b9d8b5b3697224e77c9a", null ],
     [ "reserveNumCascades", "class_ogre_1_1_vct_cascaded_voxelizer.html#a329850bd186e17d94e809197dc088d34", null ],

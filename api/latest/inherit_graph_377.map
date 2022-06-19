@@ -1,34 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,874,112,901"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="178,5,359,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="178,71,359,112"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="177,137,360,163"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="160,188,377,229"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="179,253,359,295"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="179,319,359,360"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="166,385,371,411"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="169,436,368,477"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="188,501,349,543"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="173,567,364,608"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="173,632,364,673"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="164,698,373,725"/>
-<area shape="rect" id="node16" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="173,749,364,791"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="185,815,353,842"/>
-<area shape="rect" id="node18" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="170,867,367,908"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="176,933,361,959"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="181,984,357,1025"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="175,1049,362,1091"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="163,1115,375,1142"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="181,1167,357,1208"/>
-<area shape="rect" id="node24" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="173,1233,364,1259"/>
-<area shape="rect" id="node25" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="181,1284,356,1325"/>
-<area shape="rect" id="node26" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="160,1350,377,1377"/>
-<area shape="rect" id="node27" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="177,1401,361,1443"/>
-<area shape="rect" id="node28" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="165,1467,373,1494"/>
-<area shape="rect" id="node29" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="175,1518,362,1545"/>
-<area shape="rect" id="node30" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="179,1569,358,1611"/>
-<area shape="rect" id="node31" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="187,1635,350,1662"/>
-<area shape="rect" id="node32" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="197,1686,341,1713"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_hardware_index_buffer_shared_ptr.html" title="Shared pointer implementation used to share index buffers." alt="" coords="425,5,623,47"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html" title="Shared pointer implementation used to share vertex buffers." alt="" coords="439,71,609,112"/>
+<area shape="rect" id="node1" href="$class_ogre_1_1_math.html" title="Class to provide access to common mathematical functions." alt="" coords="5,5,91,32"/>
 </map>

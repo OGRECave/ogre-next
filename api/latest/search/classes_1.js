@@ -52,9 +52,13 @@ var searchData=
   ['atomabstractnode_49',['AtomAbstractNode',['../class_ogre_1_1_atom_abstract_node.html',1,'Ogre']]],
   ['atomicobject_50',['AtomicObject',['../class_ogre_1_1_atomic_object.html',1,'Ogre']]],
   ['atomicscalar_51',['AtomicScalar',['../class_ogre_1_1_atomic_scalar.html',1,'Ogre']]],
-  ['autoconstantdefinition_52',['AutoConstantDefinition',['../struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html',1,'Ogre::GpuProgramParameters']]],
-  ['autoparam_53',['AutoParam',['../struct_ogre_1_1_shader_params_1_1_auto_param.html',1,'Ogre::ShaderParams']]],
-  ['autoparamdatasource_54',['AutoParamDataSource',['../class_ogre_1_1_auto_param_data_source.html',1,'Ogre']]],
-  ['axisalignedbox_55',['AxisAlignedBox',['../class_ogre_1_1_axis_aligned_box.html',1,'Ogre']]],
-  ['axisalignedboxscenequery_56',['AxisAlignedBoxSceneQuery',['../class_ogre_1_1_axis_aligned_box_scene_query.html',1,'Ogre']]]
+  ['atomicscalar_3c_20loadingstate_20_3e_52',['AtomicScalar&lt; LoadingState &gt;',['../class_ogre_1_1_atomic_scalar.html',1,'Ogre']]],
+  ['atomicscalar_3c_20resourcehandle_20_3e_53',['AtomicScalar&lt; ResourceHandle &gt;',['../class_ogre_1_1_atomic_scalar.html',1,'Ogre']]],
+  ['atomicscalar_3c_20size_5ft_20_3e_54',['AtomicScalar&lt; size_t &gt;',['../class_ogre_1_1_atomic_scalar.html',1,'Ogre']]],
+  ['atomicscalar_3c_20uint32_20_3e_55',['AtomicScalar&lt; uint32 &gt;',['../class_ogre_1_1_atomic_scalar.html',1,'Ogre']]],
+  ['autoconstantdefinition_56',['AutoConstantDefinition',['../struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html',1,'Ogre::GpuProgramParameters']]],
+  ['autoparam_57',['AutoParam',['../struct_ogre_1_1_shader_params_1_1_auto_param.html',1,'Ogre::ShaderParams']]],
+  ['autoparamdatasource_58',['AutoParamDataSource',['../class_ogre_1_1_auto_param_data_source.html',1,'Ogre']]],
+  ['axisalignedbox_59',['AxisAlignedBox',['../class_ogre_1_1_axis_aligned_box.html',1,'Ogre']]],
+  ['axisalignedboxscenequery_60',['AxisAlignedBoxSceneQuery',['../class_ogre_1_1_axis_aligned_box_scene_query.html',1,'Ogre']]]
 ];

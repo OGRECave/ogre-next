@@ -9,30 +9,18 @@ var dir_2e502a87b3aef26e735de99bc3868624 =
     [ "OgreArrayMatrixAf4x3.h", "_ogre_array_matrix_af4x3_8h.html", null ],
     [ "OgreArrayMemoryManager.h", "_ogre_array_memory_manager_8h.html", "_ogre_array_memory_manager_8h" ],
     [ "OgreArrayQuaternion.h", "_ogre_array_quaternion_8h.html", null ],
-    [ "OgreArrayRay.h", "_ogre_array_ray_8h.html", [
-      [ "Ogre::ArrayRay", "class_ogre_1_1_array_ray.html", "class_ogre_1_1_array_ray" ]
-    ] ],
+    [ "OgreArrayRay.h", "_ogre_array_ray_8h.html", "_ogre_array_ray_8h" ],
     [ "OgreArraySphere.h", "_ogre_array_sphere_8h.html", null ],
     [ "OgreArrayVector3.h", "_ogre_array_vector3_8h.html", null ],
     [ "OgreBoneArrayMemoryManager.h", "_ogre_bone_array_memory_manager_8h.html", null ],
     [ "OgreBoneMemoryManager.h", "_ogre_bone_memory_manager_8h.html", null ],
-    [ "OgreBoneTransform.h", "_ogre_bone_transform_8h.html", [
-      [ "Ogre::BoneTransform", "struct_ogre_1_1_bone_transform.html", "struct_ogre_1_1_bone_transform" ]
-    ] ],
+    [ "OgreBoneTransform.h", "_ogre_bone_transform_8h.html", "_ogre_bone_transform_8h" ],
     [ "OgreBooleanMask.h", "_ogre_boolean_mask_8h.html", null ],
-    [ "OgreKfTransform.h", "_ogre_kf_transform_8h.html", [
-      [ "Ogre::KfTransform", "struct_ogre_1_1_kf_transform.html", "struct_ogre_1_1_kf_transform" ]
-    ] ],
-    [ "OgreKfTransformArrayMemoryManager.h", "_ogre_kf_transform_array_memory_manager_8h.html", [
-      [ "Ogre::KfTransformArrayMemoryManager", "class_ogre_1_1_kf_transform_array_memory_manager.html", "class_ogre_1_1_kf_transform_array_memory_manager" ]
-    ] ],
+    [ "OgreKfTransform.h", "_ogre_kf_transform_8h.html", "_ogre_kf_transform_8h" ],
+    [ "OgreKfTransformArrayMemoryManager.h", "_ogre_kf_transform_array_memory_manager_8h.html", "_ogre_kf_transform_array_memory_manager_8h" ],
     [ "OgreMathlib.h", "_ogre_mathlib_8h.html", "_ogre_mathlib_8h" ],
     [ "OgreNodeMemoryManager.h", "_ogre_node_memory_manager_8h.html", null ],
-    [ "OgreObjectData.h", "_ogre_object_data_8h.html", [
-      [ "Ogre::ObjectData", "struct_ogre_1_1_object_data.html", "struct_ogre_1_1_object_data" ]
-    ] ],
+    [ "OgreObjectData.h", "_ogre_object_data_8h.html", "_ogre_object_data_8h" ],
     [ "OgreObjectMemoryManager.h", "_ogre_object_memory_manager_8h.html", null ],
-    [ "OgreTransform.h", "_ogre_transform_8h.html", [
-      [ "Ogre::Transform", "struct_ogre_1_1_transform.html", "struct_ogre_1_1_transform" ]
-    ] ]
+    [ "OgreTransform.h", "_ogre_transform_8h.html", "_ogre_transform_8h" ]
 ];
