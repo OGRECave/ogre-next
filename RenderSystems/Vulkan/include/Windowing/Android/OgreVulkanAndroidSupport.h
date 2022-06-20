@@ -80,6 +80,9 @@ namespace Ogre
         void addConfig( VulkanRenderSystem *renderSystem );
 
         void setConfigOption( const String &name, const String &value );
+
+        virtual IdString getInterfaceName() const;
+        virtual String getInterfaceNameStr() const;
     };
 
 }  // namespace Ogre

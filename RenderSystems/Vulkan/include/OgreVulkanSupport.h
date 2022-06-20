@@ -32,6 +32,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 #include "OgreVulkanPrerequisites.h"
 
 #include "OgreConfigOptionMap.h"
+#include "OgreIdString.h"
 #include "OgreRenderSystemCapabilities.h"
 
 namespace Ogre
@@ -42,13 +43,18 @@ namespace Ogre
     {
         FastArray<String> mDevices;
 
+        bool mSupported;
+
         void enumerateDevices( VulkanRenderSystem *renderSystem );
 
         void initialize( VulkanRenderSystem *renderSystem );
 
     public:
-        VulkanSupport() {}
+        VulkanSupport() : mSupported( false ) {}
         virtual ~VulkanSupport() {}
+
+        void setSupported();
+        bool isSupported() const { return mSupported; }
 
         /**
          * Add any special config values to the system.
@@ -67,6 +73,9 @@ namespace Ogre
         /// @copydoc RenderSystem::getDisplayMonitorCount
         virtual unsigned int getDisplayMonitorCount() const { return 1; }
 
+        virtual IdString getInterfaceName() const;
+        virtual String getInterfaceNameStr() const;
+
     protected:
         // Stored options
         ConfigOptionMap mOptions;
@@ -74,25 +83,67 @@ namespace Ogre
 }  // namespace Ogre
 
 #ifndef DEFINING_VK_SUPPORT_IMPL
-#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#    ifdef OGRE_VULKAN_WINDOW_WIN32
 #        include "Windowing/win32/OgreVulkanWin32Support.h"
-namespace Ogre
-{
-    inline VulkanSupport *getVulkanSupport() { return new VulkanWin32Support(); }
-}  // namespace Ogre
-#    elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-#        include "Windowing/X11/OgreVulkanXcbSupport.h"
-namespace Ogre
-{
-    inline VulkanSupport *getVulkanSupport() { return new VulkanXcbSupport(); }
-}  // namespace Ogre
-#    elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-#        include "Windowing/Android/OgreVulkanAndroidSupport.h"
-namespace Ogre
-{
-    inline VulkanSupport *getVulkanSupport() { return new VulkanAndroidSupport(); }
-}  // namespace Ogre
 #    endif
+#    ifdef OGRE_VULKAN_WINDOW_XCB
+#        include "Windowing/X11/OgreVulkanXcbSupport.h"
+#    endif
+#    ifdef OGRE_VULKAN_WINDOW_ANDROID
+#        include "Windowing/Android/OgreVulkanAndroidSupport.h"
+#    endif
+
+namespace Ogre
+{
+    inline VulkanSupport *getVulkanSupport( int i )
+    {
+        int currSupport = 0;
+#    ifdef OGRE_VULKAN_WINDOW_NULL
+        {
+            if( i == currSupport++ )
+                return new VulkanSupport();
+        }
+#    endif
+#    ifdef OGRE_VULKAN_WINDOW_WIN32
+        {
+            if( i == currSupport++ )
+                return new VulkanWin32Support();
+        }
+#    endif
+#    ifdef OGRE_VULKAN_WINDOW_XCB
+        {
+            if( i == currSupport++ )
+                return new VulkanXcbSupport();
+        }
+#    endif
+#    ifdef OGRE_VULKAN_WINDOW_ANDROID
+        {
+            if( i == currSupport++ )
+                return new VulkanAndroidSupport();
+        }
+#    endif
+        return 0;
+    }
+
+    inline int getNumVulkanSupports()
+    {
+        return 0
+#    ifdef OGRE_VULKAN_WINDOW_NULL
+               + 1
+#    endif
+#    ifdef OGRE_VULKAN_WINDOW_WIN32
+               + 1
+#    endif
+#    ifdef OGRE_VULKAN_WINDOW_XCB
+               + 1
+#    endif
+#    ifdef OGRE_VULKAN_WINDOW_ANDROID
+               + 1
+#    endif
+            ;
+    }
+}  // namespace Ogre
+
 #endif
 
 #endif

@@ -165,13 +165,21 @@ int main( int argc, const char *argv[] )
     // We can't call root->showConfigDialog() because that needs a GUI
     // We can try calling root->restoreConfig() though
 
-    root->setRenderSystem( root->getRenderSystemByName( "OpenGL 3+ Rendering Subsystem" ) );
+    bool bUseGL = false;
+
+    if( bUseGL )
+        root->setRenderSystem( root->getRenderSystemByName( "OpenGL 3+ Rendering Subsystem" ) );
+    else
+        root->setRenderSystem( root->getRenderSystemByName( "Vulkan Rendering Subsystem" ) );
 
     try
     {
         // This may fail if Ogre was *only* build with EGL support, but in that
         // case we can ignore the error
-        root->getRenderSystem()->setConfigOption( "Interface", "Headless EGL / PBuffer" );
+        if( bUseGL )
+            root->getRenderSystem()->setConfigOption( "Interface", "Headless EGL / PBuffer" );
+        else
+            root->getRenderSystem()->setConfigOption( "Interface", "null" );
     }
     catch( Exception & )
     {

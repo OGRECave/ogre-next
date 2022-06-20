@@ -98,6 +98,7 @@ namespace Ogre
         virtual ~VulkanTextureGpuManager();
 
         TextureGpu *createTextureGpuWindow( VulkanWindowSwapChainBased *window );
+        TextureGpu *createTextureGpuNullWindow();
         TextureGpu *createWindowDepthBuffer();
 
         VkImage getBlankTextureVulkanName( TextureTypes::TextureTypes textureType ) const;

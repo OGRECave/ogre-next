@@ -47,7 +47,6 @@ namespace Ogre
         ConfigOption optVSyncMethod;
         ConfigOption optFSAA;
         ConfigOption optRTTMode;
-        ConfigOption optSRGB;
 
         // Video mode possibilities
         optVideoMode.name = "Video Mode";
@@ -110,13 +109,6 @@ namespace Ogre
         //        }
         optFSAA.currentValue = "1";
 
-        // SRGB on auto window
-        optSRGB.name = "sRGB Gamma Conversion";
-        optSRGB.possibleValues.push_back( "Yes" );
-        optSRGB.possibleValues.push_back( "No" );
-        optSRGB.currentValue = "Yes";
-        optSRGB.immutable = false;
-
         mOptions[optVideoMode.name] = optVideoMode;
         mOptions[optDisplayFrequency.name] = optDisplayFrequency;
         mOptions[optVSync.name] = optVSync;
@@ -124,7 +116,6 @@ namespace Ogre
         mOptions[optVSyncMethod.name] = optVSyncMethod;
         mOptions[optFSAA.name] = optFSAA;
         mOptions[optRTTMode.name] = optRTTMode;
-        mOptions[optSRGB.name] = optSRGB;
 
         refreshConfig();
     }
@@ -219,4 +210,8 @@ namespace Ogre
             }
         }
     }
+    //-------------------------------------------------------------------------
+	IdString VulkanAndroidSupport::getInterfaceName() const { return "android"; }
+    //-------------------------------------------------------------------------
+	String VulkanAndroidSupport::getInterfaceNameStr() const { return "android"; }
 }  // namespace Ogre

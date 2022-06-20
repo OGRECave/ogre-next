@@ -69,7 +69,6 @@ namespace Ogre
         ConfigOption optVSyncInterval;
         ConfigOption optVSyncMethod;
         ConfigOption optFSAA;
-        ConfigOption optSRGB;
 
         // FS setting possibilities
         optFullScreen.name = "Full Screen";
@@ -158,13 +157,6 @@ namespace Ogre
         }
         optFSAA.currentValue = "1";
 
-        // SRGB on auto window
-        optSRGB.name = "sRGB Gamma Conversion";
-        optSRGB.possibleValues.push_back( "Yes" );
-        optSRGB.possibleValues.push_back( "No" );
-        optSRGB.currentValue = "Yes";
-        optSRGB.immutable = false;
-
         mOptions[optFullScreen.name] = optFullScreen;
         mOptions[optVideoMode.name] = optVideoMode;
         mOptions[optColourDepth.name] = optColourDepth;
@@ -173,7 +165,6 @@ namespace Ogre
         mOptions[optVSyncInterval.name] = optVSyncInterval;
         mOptions[optVSyncMethod.name] = optVSyncMethod;
         mOptions[optFSAA.name] = optFSAA;
-        mOptions[optSRGB.name] = optSRGB;
 
         refreshConfig();
     }
@@ -274,4 +265,8 @@ namespace Ogre
             }
         }
     }
+    //-------------------------------------------------------------------------
+    IdString VulkanWin32Support::getInterfaceName() const { return "win32"; }
+    //-------------------------------------------------------------------------
+    String VulkanWin32Support::getInterfaceNameStr() const { return "win32"; }
 }  // namespace Ogre

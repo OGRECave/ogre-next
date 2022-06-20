@@ -35,6 +35,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanVaoManager.h"
 
+#include "OgreDepthBuffer.h"
 #include "OgreException.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreVulkanTextureGpuManager.h"
@@ -47,7 +48,8 @@ namespace Ogre
 {
     VulkanWindow::VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode ) :
         Window( title, width, height, fullscreenMode ),
-        mDevice( 0 )
+        mDevice( 0 ),
+        mHwGamma( false )
     {
     }
     //-------------------------------------------------------------------------
@@ -64,55 +66,120 @@ namespace Ogre
                      "VulkanWindow::_initialize" );
     }
     //-------------------------------------------------------------------------
-    VulkanWindowNull::VulkanWindowNull(const String &title, uint32 width, uint32 height, bool fullscreenMode) :
-            VulkanWindow(title, width, height, fullscreenMode)
+    VulkanWindowNull::VulkanWindowNull( const String &title, uint32 width, uint32 height,
+                                        bool fullscreenMode ) :
+        VulkanWindow( title, width, height, fullscreenMode )
     {
     }
     //-------------------------------------------------------------------------
-    void VulkanWindowNull::destroy()
+    VulkanWindowNull::~VulkanWindowNull()
     {
+        if( mTexture )
+        {
+            mTexture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+            OGRE_DELETE mTexture;
+            mTexture = 0;
+        }
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+        {
+            mStencilBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+            OGRE_DELETE mStencilBuffer;
+            mStencilBuffer = 0;
+        }
+        if( mDepthBuffer )
+        {
+            mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+            OGRE_DELETE mDepthBuffer;
+            mDepthBuffer = 0;
+            mStencilBuffer = 0;
+        }
     }
     //-------------------------------------------------------------------------
-    void VulkanWindowNull::reposition( int32 leftPt, int32 topPt )
-    {
-    }
+    void VulkanWindowNull::destroy() {}
     //-------------------------------------------------------------------------
-    bool VulkanWindowNull::isClosed() const
-    {
-        return false;
-    }
+    void VulkanWindowNull::reposition( int32 leftPt, int32 topPt ) {}
     //-------------------------------------------------------------------------
-    void VulkanWindowNull::_setVisible( bool visible )
-    {
-    }
+    bool VulkanWindowNull::isClosed() const { return false; }
     //-------------------------------------------------------------------------
-    bool VulkanWindowNull::isVisible() const
-    {
-        return false;
-    }
+    void VulkanWindowNull::_setVisible( bool visible ) {}
     //-------------------------------------------------------------------------
-    void VulkanWindowNull::setHidden( bool hidden )
-    {
-    }
+    bool VulkanWindowNull::isVisible() const { return false; }
     //-------------------------------------------------------------------------
-    bool VulkanWindowNull::isHidden() const
-    {
-        return true;
-    }
+    void VulkanWindowNull::setHidden( bool hidden ) {}
+    //-------------------------------------------------------------------------
+    bool VulkanWindowNull::isHidden() const { return true; }
     //-------------------------------------------------------------------------
     void VulkanWindowNull::_initialize( TextureGpuManager *textureGpuManager,
                                         const NameValuePairList *miscParams )
     {
+#ifdef OGRE_VULKAN_WINDOW_NULL
+        if( miscParams )
+        {
+            NameValuePairList::const_iterator opt;
+            NameValuePairList::const_iterator end = miscParams->end();
+
+            opt = miscParams->find( "surface_less" );
+            if( opt != end )
+            {
+                if( StringConverter::parseBool( opt->second ) )
+                    return;
+            }
+
+            opt = miscParams->find( "FSAA" );
+            if( opt != end )
+                mRequestedSampleDescription.parseString( opt->second );
+
+            opt = miscParams->find( "gamma" );
+            if( opt != end )
+                mHwGamma = StringConverter::parseBool( opt->second );
+        }
+
+        setFinalResolution( mRequestedWidth, mRequestedHeight );
+
+        VulkanTextureGpuManager *textureManager =
+            static_cast<VulkanTextureGpuManager *>( textureGpuManager );
+
+        mTexture = textureManager->createTextureGpuNullWindow();
+        if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
+            mDepthBuffer = textureManager->createWindowDepthBuffer();
+        mStencilBuffer = 0;
+
+        setFinalResolution( mRequestedWidth, mRequestedHeight );
+        mTexture->setPixelFormat( mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM );
+        if( mDepthBuffer )
+        {
+            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+                mStencilBuffer = mDepthBuffer;
+        }
+
+        mTexture->setSampleDescription( mRequestedSampleDescription );
+        if( mDepthBuffer )
+            mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
+        mSampleDescription = mRequestedSampleDescription;
+
+        if( mDepthBuffer )
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+                                               mDepthBuffer->getPixelFormat() );
+        }
+        else
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
+        }
+
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+#endif
     }
     //-------------------------------------------------------------------------
-    void VulkanWindowNull::swapBuffers()
-    {
-    }
+    void VulkanWindowNull::swapBuffers() {}
     //-------------------------------------------------------------------------
-    VulkanWindowSwapChainBased::VulkanWindowSwapChainBased( const String &title, uint32 width, uint32 height, bool fullscreenMode ) :
+    VulkanWindowSwapChainBased::VulkanWindowSwapChainBased( const String &title, uint32 width,
+                                                            uint32 height, bool fullscreenMode ) :
         VulkanWindow( title, width, height, fullscreenMode ),
         mLowestLatencyVSync( false ),
-        mHwGamma( false ),
         mClosed( false ),
         mSurfaceKHR( 0 ),
         mSwapchain( 0 ),
@@ -464,7 +531,8 @@ namespace Ogre
             else
             {
                 LogManager::getSingleton().logMessage(
-                    "[VulkanWindowSwapChainBased::acquireNextSwapchain] vkAcquireNextImageKHR failed VkResult = " +
+                    "[VulkanWindowSwapChainBased::acquireNextSwapchain] vkAcquireNextImageKHR failed "
+                    "VkResult = " +
                     vkResultToString( result ) );
             }
         }
@@ -596,7 +664,8 @@ namespace Ogre
         if( result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR && result != VK_ERROR_OUT_OF_DATE_KHR )
         {
             LogManager::getSingleton().logMessage(
-                "[VulkanWindowSwapChainBased::swapBuffers] vkQueuePresentKHR: error presenting VkResult = " +
+                "[VulkanWindowSwapChainBased::swapBuffers] vkQueuePresentKHR: error presenting VkResult "
+                "= " +
                 vkResultToString( result ) );
         }
 

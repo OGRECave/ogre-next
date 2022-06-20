@@ -72,6 +72,8 @@ namespace Ogre
         VkInstance mVkInstance;
         VulkanSupport *mVulkanSupport;
 
+        std::map<IdString, VulkanSupport *> mAvailableVulkanSupports;
+
         // TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
         typedef vector<ConstBufferPacked *>::type ConstBufferPackedVec;
         ConstBufferPackedVec mAutoParamsBuffer;
@@ -119,13 +121,6 @@ namespace Ogre
 
         bool mValidationError;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        bool mHasWin32Support;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        bool mHasAndroidSupport;
-#else
-        bool mHasXcbSupport;
-#endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         bool mHasValidationLayers;
 #endif
