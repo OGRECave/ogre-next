@@ -58,7 +58,6 @@ namespace Ogre
     private:
         // Allowed video modes
         FastArray<DEVMODE> mDevModes;
-        vector<int>::type mFSAALevels;
 
         void refreshConfig();
     };

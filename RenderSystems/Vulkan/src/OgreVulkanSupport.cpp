@@ -97,6 +97,7 @@ namespace Ogre
 
         ConfigOption optDevices;
         ConfigOption optInterfaces;
+        ConfigOption optFSAA;
         ConfigOption optSRGB;
 
         optDevices.name = "Device";
@@ -129,6 +130,25 @@ namespace Ogre
         optInterfaces.currentValue = optInterfaces.possibleValues.front();
         optInterfaces.immutable = false;
 
+        optFSAA.name = "FSAA";
+        optFSAA.immutable = false;
+        optFSAA.possibleValues.push_back( "1" );
+        optFSAA.possibleValues.push_back( "2" );
+        optFSAA.possibleValues.push_back( "4" );
+        optFSAA.possibleValues.push_back( "8" );
+        optFSAA.possibleValues.push_back( "16" );
+        //        for( vector<int>::type::iterator it = mFSAALevels.begin(); it != mFSAALevels.end();
+        //        ++it )
+        //        {
+        //            String val = StringConverter::toString( *it );
+        //            optFSAA.possibleValues.push_back( val );
+        //            /* not implementing CSAA in GL for now
+        //            if (*it >= 8)
+        //                optFSAA.possibleValues.push_back(val + " [Quality]");
+        //            */
+        //        }
+        optFSAA.currentValue = "1";
+
         // SRGB on auto window
         optSRGB.name = "sRGB Gamma Conversion";
         optSRGB.possibleValues.push_back( "Yes" );
@@ -138,6 +158,7 @@ namespace Ogre
 
         mOptions[optDevices.name] = optDevices;
         mOptions[optInterfaces.name] = optInterfaces;
+        mOptions[optFSAA.name] = optFSAA;
         mOptions[optSRGB.name] = optSRGB;
     }
     //-------------------------------------------------------------------------
