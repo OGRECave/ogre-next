@@ -4977,7 +4977,7 @@ This parameter is used in min display size calculations. </dd></dl>
 </div><div class="memdoc">
 
 <p>Gets the depth-adjusted projection matrix for the current rendersystem, but one which still conforms to right-hand rules. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This differs from the rendering-API dependent getProjectionMatrix in that it always returns a right-handed projection matrix result no matter what rendering API is being used - this is required for vertex and fragment programs for example. However, the resulting depth range may still vary between render systems since D3D uses [0,1] and GL uses [-1,1], and the range must be kept the same between programmable and fixed-function pipelines. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This differs from the rendering-API dependent getProjectionMatrix in that it always returns a right-handed projection matrix result no matter what rendering API is being used - this is required for vertex and fragment programs for example. However, the resulting depth range may still vary between render systems since D3D uses [0,1] and GL uses [-1,1]. </dd></dl>
 
 </div>
 </div>

@@ -1,6 +1,5 @@
 var NAVTREEINDEX259 =
 {
-"struct_ogre_1_1_hlms_base_prop.html#a322ec6cb64387f9887a571cdb752efa2":[5,2,10,62,22],
 "struct_ogre_1_1_hlms_base_prop.html#a331c39fb20c11a18fe8677aad9abca78":[5,2,10,62,51],
 "struct_ogre_1_1_hlms_base_prop.html#a3334bb54c4e940796ca27d59a7ab29e4":[5,2,10,62,85],
 "struct_ogre_1_1_hlms_base_prop.html#a3400aace76177d8ce24cc11eb8ef1680":[5,2,10,62,7],
@@ -249,5 +248,6 @@ var NAVTREEINDEX259 =
 "struct_ogre_1_1_hlms_samplerblock.html#a6460eecf70f4f712ea321795b4a75971":[5,2,10,80,2],
 "struct_ogre_1_1_hlms_samplerblock.html#a8202a5d073a92de41e05e2b6fe50ff26":[5,2,10,80,4],
 "struct_ogre_1_1_hlms_samplerblock.html#a8d935b0cc2d1ed94234035ffaf412e79":[5,2,10,80,3],
-"struct_ogre_1_1_hlms_samplerblock.html#a8dbf13c2d554ba4945031e0f309e82a4":[5,2,10,80,9]
+"struct_ogre_1_1_hlms_samplerblock.html#a8dbf13c2d554ba4945031e0f309e82a4":[5,2,10,80,9],
+"struct_ogre_1_1_hlms_samplerblock.html#aa5997a8cd5825b0daceb4d72b0afc858":[5,2,10,80,0]
 };

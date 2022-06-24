@@ -34,6 +34,7 @@ var _ogre_platform_8h =
     [ "OGRE_DEBUG_NONE", "_ogre_platform_8h.html#ab0ade039a02b39757fbd2a8c5f87229a", null ],
     [ "OGRE_DEFAULT_LOCALE", "_ogre_platform_8h.html#a9841c02eaa22e4d4d5067cd6cfa9b38f", null ],
     [ "OGRE_DEPRECATED", "_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb", null ],
+    [ "OGRE_DEPRECATED_VER", "_ogre_platform_8h.html#aa3f232542ea15f70a374031a09ba946b", null ],
     [ "OGRE_ENDIAN", "_ogre_platform_8h.html#a9af9f9208025e8051717aee67e4e7267", null ],
     [ "OGRE_ENDIAN_BIG", "_ogre_platform_8h.html#a077f6bc75ffd397f81a56ec2cd2838c3", null ],
     [ "OGRE_ENDIAN_LITTLE", "_ogre_platform_8h.html#a600c868168881add7117060af46eb666", null ],

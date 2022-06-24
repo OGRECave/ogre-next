@@ -2592,7 +2592,6 @@ var group___general =
       [ "Ogre::ID_CUBIC_TEXTURE", "group___general.html#ggafef752c0acb956e22a95c41e667480abacfd72297a7aa623759ec1aa6e8a850d9", null ],
       [ "Ogre::ID_SEPARATE_UV", "group___general.html#ggafef752c0acb956e22a95c41e667480abae5c96b0da447631e1ecdaed2ce28a07a", null ],
       [ "Ogre::ID_COMBINED_UVW", "group___general.html#ggafef752c0acb956e22a95c41e667480aba44ee309bcdd1c907ab3855c1939824d7", null ],
-      [ "Ogre::ID_TEX_COORD_SET", "group___general.html#ggafef752c0acb956e22a95c41e667480abaff09683a87ae097f0fb37094edee7166", null ],
       [ "Ogre::ID_TEX_ADDRESS_MODE", "group___general.html#ggafef752c0acb956e22a95c41e667480aba69b02d8e36ba665637dde277610c937c", null ],
       [ "Ogre::ID_WRAP", "group___general.html#ggafef752c0acb956e22a95c41e667480aba09fd4aac45669207c805e5fabd5ad5d8", null ],
       [ "Ogre::ID_CLAMP", "group___general.html#ggafef752c0acb956e22a95c41e667480ababaca8e96e359c6c9fc21e247e1f27704", null ],
