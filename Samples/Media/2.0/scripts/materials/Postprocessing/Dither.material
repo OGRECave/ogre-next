@@ -56,7 +56,6 @@ material Postprocess/Dither
 
 			texture_unit RT
 			{
-                tex_coord_set 0
 				tex_address_mode clamp
 				filtering none
 			}

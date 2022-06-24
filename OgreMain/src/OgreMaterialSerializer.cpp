@@ -839,13 +839,6 @@ namespace Ogre
             writeAttribute( 4, "max_anisotropy" );
             writeValue( StringConverter::toString( samplerblock->mMaxAnisotropy ) );
 
-            // texture coordinate set
-            if( mDefaults || pTex->getTextureCoordSet() != 0 )
-            {
-                writeAttribute( 4, "tex_coord_set" );
-                writeValue( StringConverter::toString( pTex->getTextureCoordSet() ) );
-            }
-
             // addressing mode
             if( mDefaults || samplerblock->mU != Ogre::TAM_WRAP || samplerblock->mV != Ogre::TAM_WRAP ||
                 samplerblock->mW != Ogre::TAM_WRAP )

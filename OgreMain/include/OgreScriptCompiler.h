@@ -810,7 +810,6 @@ namespace Ogre
         ID_CUBIC_TEXTURE,
             ID_SEPARATE_UV,
             ID_COMBINED_UVW,
-        ID_TEX_COORD_SET,
         ID_TEX_ADDRESS_MODE,
             ID_WRAP,
             ID_CLAMP,

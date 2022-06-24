@@ -3450,26 +3450,6 @@ namespace Ogre{
                                            "cubic_texture must have at most 7 arguments");
                     }
                     break;
-                case ID_TEX_COORD_SET:
-                    if(prop->values.empty())
-                    {
-                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
-                    }
-                    else if(prop->values.size() > 1)
-                    {
-                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
-                                           "tex_coord_set must have at most 1 argument");
-                    }
-                    else
-                    {
-                        uint32 val = 0;
-                        if(getUInt(prop->values.front(), &val))
-                            mUnit->setTextureCoordSet(val);
-                        else
-                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                               prop->values.front()->getValue() + " is not supported as an integer argument");
-                    }
-                    break;
                 case ID_TEX_ADDRESS_MODE:
                     {
                         if(prop->values.empty())

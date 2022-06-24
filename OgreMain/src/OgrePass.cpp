@@ -440,7 +440,14 @@ namespace Ogre
     {
         TextureUnitState *t = OGRE_NEW TextureUnitState( this );
         t->setTextureName( textureName );
-        t->setTextureCoordSet( texCoordSet );
+        addTextureUnitState( t );
+        return t;
+    }
+    //-----------------------------------------------------------------------
+    TextureUnitState *Pass::createTextureUnitState( const String &textureName )
+    {
+        TextureUnitState *t = OGRE_NEW TextureUnitState( this );
+        t->setTextureName( textureName );
         addTextureUnitState( t );
         return t;
     }

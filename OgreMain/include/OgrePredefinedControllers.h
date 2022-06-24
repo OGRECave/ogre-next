@@ -98,6 +98,16 @@ namespace Ogre
        independently, or 4 if you want separate u and v scales as well as separate u and v offsets.
         @par
             Because of the nature of this value, it can accept values outside the 0..1 parametric range.
+        @par
+            Starting Ogre-Next 2.1 which no longer supports Fixed Function Pipeline this class
+            is still accessible by low level materials by using `param_named_auto texture_matrix`
+
+            However the user-authored shader must be responsible for applying the texture matrix
+        @par
+            HlmsUnlit can generate that automatically and uses a similar class
+            named TextureAnimationControllerValue
+            See TextureAnimationControllerValue.
+            See HlmsUnlitDatablock::setEnableAnimationMatrix & HlmsUnlitDatablock::setAnimationMatrix.
     */
     class _OgreExport TexCoordModifierControllerValue : public ControllerValue<Real>
     {

@@ -49,20 +49,15 @@ namespace Ogre
         a single rendering call.
         @remarks
         Rendering can be repeated with many passes for more complex effects.
-        Each pass is either a fixed-function pass (meaning it does not use
-        a vertex or fragment program) or a programmable pass (meaning it does
-        use either a vertex and fragment program, or both).
+
+        Note: Using multiple passes hasn't been tested in Ogre-Next 2.x at all
+        and may no longer work. It definitely needs at least RenderQueue::V1_LEGACY
         @par
         Programmable passes are complex to define, because they require custom
         programs and you have to set all constant inputs to the programs (like
         the position of lights, any base material colours you wish to use etc), but
         they do give you much total flexibility over the algorithms used to render your
         pass, and you can create some effects which are impossible with a fixed-function pass.
-        On the other hand, you can define a fixed-function pass in very little time, and
-        you can use a range of fixed-function effects like environment mapping very
-        easily, plus your pass will be more likely to be compatible with older hardware.
-        There are pros and cons to both, just remember that if you use a programmable
-        pass to create some great effects, allow more time for definition and testing.
     */
     class _OgreExport Pass : public OgreAllocatedObj
     {
@@ -75,7 +70,7 @@ namespace Ogre
         unsigned short mIndex;  ///< Pass index
         String         mName;   ///< Optional name for the pass
         //-------------------------------------------------------------------------
-        // Colour properties, only applicable in fixed-function passes
+        // Colour properties, only applicable if shader uses them
         ColourValue           mAmbient;
         ColourValue           mDiffuse;
         ColourValue           mSpecular;
@@ -465,11 +460,21 @@ namespace Ogre
             The basic name of the texture e.g. brickwall.jpg, stonefloor.png
             @param texCoordSet
             The index of the texture coordinate set to use.
-            @note
-            Applies to both fixed-function and programmable passes.
         */
+        OGRE_DEPRECATED_VER( 3.0 )
         TextureUnitState *createTextureUnitState( const String  &textureName,
-                                                  unsigned short texCoordSet = 0 );
+                                                  unsigned short texCoordSet );
+
+        /** Inserts a new TextureUnitState object into the Pass.
+            @remarks
+            This unit is is added on top of all previous units.
+            @param textureName
+            The basic name of the texture e.g. brickwall.jpg, stonefloor.png
+            @param texCoordSet
+            The index of the texture coordinate set to use.
+        */
+        TextureUnitState *createTextureUnitState( const String &textureName );
+
         /** Adds the passed in TextureUnitState, to the existing Pass.
         @param
         state The Texture Unit State to be attached to this pass.  It must not be attached to another
@@ -811,8 +816,7 @@ namespace Ogre
             @remarks
             Texture-based shadows require that the caster is rendered to a texture
             in a solid colour (the shadow colour in the case of modulative texture
-            shadows). Whilst Ogre can arrange this for the fixed function
-            pipeline, passes which use vertex programs might need the vertex
+            shadows).Passes which use vertex programs might need the vertex
             programs still to run in order to preserve any deformation etc
             that it does. However, lighting calculations must be a lot simpler,
             with only the ambient colour being used (which the engine will ensure
@@ -831,9 +835,6 @@ namespace Ogre
             to supply an alternative.
             @note
             This is only applicable to programmable passes.
-            @par
-            The default behaviour is for Ogre to switch to fixed-function
-            rendering if an explicit vertex program alternative is not set.
         */
         void setShadowCasterVertexProgram( const String &name );
         /** Sets the vertex program parameters for rendering as a shadow caster.
@@ -856,8 +857,7 @@ namespace Ogre
             @remarks
             Texture-based shadows require that the caster is rendered to a texture
             in a solid colour (the shadow colour in the case of modulative texture
-            shadows). Whilst Ogre can arrange this for the fixed function
-            pipeline, passes which use vertex programs might need the vertex
+            shadows). Passes which use vertex programs might need the vertex
             programs still to run in order to preserve any deformation etc
             that it does. However, lighting calculations must be a lot simpler,
             with only the ambient colour being used (which the engine will ensure
@@ -876,9 +876,6 @@ namespace Ogre
             to supply an alternative.
             @note
             This is only applicable to programmable passes.
-            @par
-            The default behaviour is for Ogre to switch to fixed-function
-            rendering if an explicit fragment program alternative is not set.
         */
         void setShadowCasterFragmentProgram( const String &name );
         /** Sets the fragment program parameters for rendering as a shadow caster.
