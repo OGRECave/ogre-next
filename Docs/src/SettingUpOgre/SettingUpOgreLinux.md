@@ -27,7 +27,6 @@ cd build
 cmake ../
 # Optionally configure build to use distro packages freeimage, freetype, and zlib if installed
 # cmake -D OGREDEPS_BUILD_FREEIMAGE=0 -D OGREDEPS_BUILD_FREETYPE=0 -D OGREDEPS_BUILD_ZLIB=0 ../
-cd build
 make
 make install```
 
@@ -44,12 +43,12 @@ mkdir Debug
 mkdir Release
 # Build Debug
 cd Debug
-cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogredeps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Debug ../../
+cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogre-next-deps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Debug ../../
 make
 make install
 # Build Release
 cd ../Release
-cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogredeps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Release ../../
+cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogre-next-deps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Release ../../
 make
 make install
 ```
