@@ -81,7 +81,7 @@ namespace Ogre
     {
     public:
         OGRE_AUTO_MUTEX;  // public to allow external locking
-        class Listener
+        class _OgreExport Listener
         {
         public:
             Listener() {}
