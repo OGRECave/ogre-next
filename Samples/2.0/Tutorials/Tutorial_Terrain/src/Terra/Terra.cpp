@@ -28,6 +28,8 @@ THE SOFTWARE.
 
 #include "Terra/Terra.h"
 
+#include "Terra/Hlms/OgreHlmsTerraDatablock.h"
+
 #include "Compositor/OgreCompositorChannel.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
