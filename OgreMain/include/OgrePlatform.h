@@ -219,6 +219,7 @@ THE SOFTWARE.
 // For marking functions as deprecated
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 #    define OGRE_DEPRECATED __declspec( deprecated )
+#    define OGRE_DEPRECATED_VER(x) __declspec( deprecated )
 #elif OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
 #    define OGRE_DEPRECATED __attribute__( ( deprecated ) )
 #    define OGRE_DEPRECATED_VER(x) __attribute__( ( deprecated ) )
