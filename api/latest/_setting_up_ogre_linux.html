@@ -120,7 +120,7 @@ Downloading Ogre</h1>
 <p >Download the source code or you can fork it to your own repository and clone it locally with <a href="https://desktop.github.com/">Github Desktop</a> or the command line.</p>
 <p ><b>IMPORTANT:</b> Do NOT use the the "Download" feature from Github. It will not follow subrepositories.</p>
 <p ><b>Command line</b>: </p><div class="fragment"><div class="line">git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps</div>
-<div class="line">git clone --branch v2-2 https://github.com/OGRECave/ogre-next</div>
+<div class="line">git clone --branch master https://github.com/OGRECave/ogre-next</div>
 </div><!-- fragment --><h1><a class="anchor" id="BuildingDependenciesLinux"></a>
 Building Dependencies</h1>
 <div class="fragment"><div class="line">cd Ogre/Dependencies</div>
@@ -129,7 +129,6 @@ Building Dependencies</h1>
 <div class="line">cmake ../</div>
 <div class="line"># Optionally configure build to use distro packages freeimage, freetype, and zlib if installed</div>
 <div class="line"># cmake -D OGREDEPS_BUILD_FREEIMAGE=0 -D OGREDEPS_BUILD_FREETYPE=0 -D OGREDEPS_BUILD_ZLIB=0 ../</div>
-<div class="line">cd build</div>
 <div class="line">make</div>
 <div class="line">make install</div>
 </div><!-- fragment --><h1><a class="anchor" id="BuildingOgreLinux"></a>
@@ -141,12 +140,12 @@ Building Ogre</h1>
 <div class="line">mkdir Release</div>
 <div class="line"># Build Debug</div>
 <div class="line">cd Debug</div>
-<div class="line">cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogredeps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Debug ../../</div>
+<div class="line">cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogre-next-deps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Debug ../../</div>
 <div class="line">make</div>
 <div class="line">make install</div>
 <div class="line"># Build Release</div>
 <div class="line">cd ../Release</div>
-<div class="line">cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogredeps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Release ../../</div>
+<div class="line">cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogre-next-deps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Release ../../</div>
 <div class="line">make</div>
 <div class="line">make install</div>
 </div><!-- fragment --><h1><a class="anchor" id="SettingUpOgreWithQtCreatorLinux"></a>
