@@ -1190,7 +1190,7 @@ A locally unique name must be assigned (and cannot start with *global\_* prefix)
 The dimensions of the render texture. You can either specify a fixed width and height,
 or you can request that the texture is based on the physical dimensions of the viewport
 to which the compositor is attached. The options for the latter are ’target_width’,
-’target_height’, ’target_width_scaled <factor>’ and ’target_height_scaled <factor>’ -
+’target_height’, ’target_width_scaled \<factor\>’ and ’target_height_scaled \<factor\>’ -
 where ’factor’ is the amount by which you wish to multiply the size of the main target
 to derive the dimensions.
 

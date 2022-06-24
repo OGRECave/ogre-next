@@ -183,8 +183,6 @@ namespace Ogre
                 memory reside in the heap (it makes better usage of the memory). Long story short,
                 prefer calling this function to using an operator when just updating an ArrayVector3 is
                 involved. (It's fine using operators for ArrayVector3s)
-            @param
-
         */
         static inline void mul( const ArrayQuaternion &inQ, ArrayVector3 &inOutVec );
 
@@ -206,9 +204,12 @@ namespace Ogre
         static inline ArrayQuaternion nlerp( ArrayReal fT, const ArrayQuaternion &rkP,
                                              const ArrayQuaternion &rkQ );
 
-        /** Conditional move update. @see MathlibNEON::Cmov4
+        /** Conditional move update.
             Changes each of the four vectors contained in 'this' with
-            the replacement provided
+            the replacement provided:
+
+            this[i] = mask[i] != 0 ? this[i] : replacement[i]
+            @see MathlibNEON::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -217,24 +218,25 @@ namespace Ogre
                 i.e. a = Cmov4( a, b )
                 If this vector hasn't been assigned yet any value and want to
                 decide between two ArrayQuaternions, i.e. a = Cmov4( b, c ) then
-                @see Cmov4( const ArrayQuaternion &arg1, const ArrayQuaternion &arg2, ArrayReal mask );
+                see Cmov4( const ArrayQuaternion &arg1, const ArrayQuaternion &arg2, ArrayMaskR mask );
                 instead.
             @param replacement
                 Vectors to be used as replacement if the mask is zero.
             @param mask
                 mask filled with either 0's or 0xFFFFFFFF
-            @return
-                this[i] = mask[i] != 0 ? this[i] : replacement[i]
         */
         inline void Cmov4( ArrayMaskR mask, const ArrayQuaternion &replacement );
 
-        /** Conditional move. @see MathlibNEON::Cmov4
-            Selects between arg1 & arg2 according to mask
+        /** Conditional move.
+            Selects between arg1 & arg2 according to mask:
+
+            this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
+            @see MathlibNEON::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
                 If you wanted to do a = cmov4( a, b ), then consider using the update version
-                @see Cmov4( ArrayReal mask, const ArrayQuaternion &replacement );
+                see Cmov4( ArrayMaskR mask, const ArrayQuaternion &replacement );
                 instead.
             @param arg1
                 First array of Vectors
@@ -242,8 +244,6 @@ namespace Ogre
                 Second array of Vectors
             @param mask
                 mask filled with either 0's or 0xFFFFFFFF
-            @return
-                this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
         */
         inline static ArrayQuaternion Cmov4( const ArrayQuaternion &arg1, const ArrayQuaternion &arg2,
                                              ArrayMaskR mask );

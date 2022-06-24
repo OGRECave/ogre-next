@@ -281,9 +281,12 @@ namespace Ogre
         */
         inline Vector3 collapseMax() const;
 
-        /** Conditional move update. @see MathlibNEON::Cmov4
+        /** Conditional move update.
             Changes each of the four vectors contained in 'this' with
-            the replacement provided
+            the replacement provided:
+
+            this[i] = mask[i] != 0 ? this[i] : replacement[i]
+            @see MathlibNEON::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -292,20 +295,21 @@ namespace Ogre
                 i.e. a = Cmov4( a, b )
                 If this vector hasn't been assigned yet any value and want to
                 decide between two ArrayVector3s, i.e. a = Cmov4( b, c ) then
-                see Cmov4( const ArrayVector3 &arg1, const ArrayVector3 &arg2, ArrayReal mask );
+                see Cmov4( const ArrayVector3 &arg1, const ArrayVector3 &arg2, ArrayMaskR mask );
                 instead.
-            @param
+            @param replacement
                 Vectors to be used as replacement if the mask is zero.
-            @param
+            @param mask
                 mask filled with either 0's or 0xFFFFFFFF
-            @return
-                this[i] = mask[i] != 0 ? this[i] : replacement[i]
         */
         inline void Cmov4( ArrayMaskR mask, const ArrayVector3 &replacement );
 
-        /** Conditional move update. @see MathlibNEON::CmovRobust
+        /** Conditional move update.
             Changes each of the four vectors contained in 'this' with
-            the replacement provided
+            the replacement provided:
+
+            this[i] = mask[i] != 0 ? this[i] : replacement[i]
+            @see MathlibNEON::CmovRobust
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -314,24 +318,25 @@ namespace Ogre
                 i.e. a = CmovRobust( a, b )
                 If this vector hasn't been assigned yet any value and want to
                 decide between two ArrayVector3s, i.e. a = Cmov4( b, c ) then
-                @see Cmov4( const ArrayVector3 &arg1, const ArrayVector3 &arg2, ArrayReal mask );
+                see Cmov4( const ArrayVector3 &arg1, const ArrayVector3 &arg2, ArrayMaskR mask );
                 instead.
             @param replacement
                 Vectors to be used as replacement if the mask is zero.
             @param mask
                 mask filled with either 0's or 0xFFFFFFFF
-            @return
-                this[i] = mask[i] != 0 ? this[i] : replacement[i]
         */
         inline void CmovRobust( ArrayMaskR mask, const ArrayVector3 &replacement );
 
-        /** Conditional move. @see MathlibNEON::Cmov4
-            Selects between arg1 & arg2 according to mask
+        /** Conditional move.
+            Selects between arg1 & arg2 according to mask:
+
+            this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
+            @see MathlibNEON::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
                 If you wanted to do a = cmov4( a, b ), then consider using the update version
-                @see Cmov4( ArrayReal mask, const ArrayVector3 &replacement );
+                see Cmov4( ArrayMaskR mask, const ArrayVector3 &replacement );
                 instead.
             @param arg1
                 First array of Vectors
@@ -339,8 +344,6 @@ namespace Ogre
                 Second array of Vectors
             @param mask
                 mask filled with either 0's or 0xFFFFFFFF
-            @return
-                this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
         */
         inline static ArrayVector3 Cmov4( const ArrayVector3 &arg1, const ArrayVector3 &arg2,
                                           ArrayMaskR mask );

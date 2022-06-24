@@ -232,8 +232,6 @@ namespace Ogre
             IrradianceVolume pointer. Input cannot be null. Output *outIrradianceVolume may be null.
             May be null if the imported scene didn't have IR/IV enabled,
             or if the ownership has already been released.
-        @return
-            InstantRadiosity pointer.
         */
         void getInstantRadiosity( bool releaseOwnership, InstantRadiosity **outInstantRadiosity,
                                   IrradianceVolume **outIrradianceVolume );

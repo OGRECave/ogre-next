@@ -765,7 +765,7 @@ namespace Ogre
             The renderable the material will be used on.
         @param movableObject
             The MovableObject the material will be used on (usually the parent of renderable)
-        @return
+        @param outHash
             A hash. This hash references property parameters that are already cached.
         */
         virtual void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash );
