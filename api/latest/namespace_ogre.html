@@ -5101,8 +5101,12 @@ Functions</h2></td></tr>
 <tr class="separator:a7331dc70fef58e0eaac23e887e63ec61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b493a2b2990de17799a5b5d9f1fab4c"><td class="memItemLeft" align="right" valign="top">VkSampleCountFlagBits&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a2b493a2b2990de17799a5b5d9f1fab4c">getMaxUsableSampleCount</a> (VkPhysicalDeviceProperties &amp;physicalDeviceProperties, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> requestedSampleCount)</td></tr>
 <tr class="separator:a2b493a2b2990de17799a5b5d9f1fab4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72e29d6e624b3a5f073f0da92db461ac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a72e29d6e624b3a5f073f0da92db461ac">getNumVulkanSupports</a> ()</td></tr>
+<tr class="separator:a72e29d6e624b3a5f073f0da92db461ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9d115b4c2f15cfd117e06a64beaf55d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ad9d115b4c2f15cfd117e06a64beaf55d">getSpirvReflectError</a> (SpvReflectResult spirvReflectResult)</td></tr>
 <tr class="separator:ad9d115b4c2f15cfd117e06a64beaf55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e2325616ca7b1b7b67d55c98f2af019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vulkan_support.html">VulkanSupport</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a8e2325616ca7b1b7b67d55c98f2af019">getVulkanSupport</a> (int i)</td></tr>
+<tr class="separator:a8e2325616ca7b1b7b67d55c98f2af019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae1e937aed630bd25446cbef3bdd2cc7c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:gae1e937aed630bd25446cbef3bdd2cc7c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#gae1e937aed630bd25446cbef3bdd2cc7c">HashCombine</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> hashSoFar, const T &amp;data)</td></tr>
 <tr class="memdesc:gae1e937aed630bd25446cbef3bdd2cc7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combine hashes with same style as boost::hash_combine.  <a href="group___general.html#gae1e937aed630bd25446cbef3bdd2cc7c">More...</a><br /></td></tr>
@@ -8027,6 +8031,31 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a72e29d6e624b3a5f073f0da92db461ac" name="a72e29d6e624b3a5f073f0da92db461ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72e29d6e624b3a5f073f0da92db461ac">&#9670;&nbsp;</a></span>getNumVulkanSupports()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Ogre::getNumVulkanSupports </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad9d115b4c2f15cfd117e06a64beaf55d" name="ad9d115b4c2f15cfd117e06a64beaf55d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad9d115b4c2f15cfd117e06a64beaf55d">&#9670;&nbsp;</a></span>getSpirvReflectError()</h2>
 
@@ -8041,6 +8070,32 @@ template&lt;typename T &gt; </div>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8e2325616ca7b1b7b67d55c98f2af019" name="a8e2325616ca7b1b7b67d55c98f2af019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e2325616ca7b1b7b67d55c98f2af019">&#9670;&nbsp;</a></span>getVulkanSupport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_vulkan_support.html">VulkanSupport</a> * Ogre::getVulkanSupport </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

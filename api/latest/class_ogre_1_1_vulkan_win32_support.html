@@ -114,10 +114,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae031d6dfdd4b3f304d76a43d1ba2aae9"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_support.html#ae031d6dfdd4b3f304d76a43d1ba2aae9">getDisplayMonitorCount</a> () const</td></tr>
 <tr class="memdesc:ae031d6dfdd4b3f304d76a43d1ba2aae9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of display monitors.  <a href="class_ogre_1_1_vulkan_support.html#ae031d6dfdd4b3f304d76a43d1ba2aae9">More...</a><br /></td></tr>
 <tr class="separator:ae031d6dfdd4b3f304d76a43d1ba2aae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f07eb14fd8792dac968a09c6434cdb0"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_win32_support.html#a7f07eb14fd8792dac968a09c6434cdb0">getInterfaceName</a> () const</td></tr>
+<tr class="separator:a7f07eb14fd8792dac968a09c6434cdb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcc864490a8e79fb7526045d5326777b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_win32_support.html#adcc864490a8e79fb7526045d5326777b">getInterfaceNameStr</a> () const</td></tr>
+<tr class="separator:adcc864490a8e79fb7526045d5326777b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae65aba81861bb3b9dcf0ec053d0f1abf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_support.html#ae65aba81861bb3b9dcf0ec053d0f1abf">getSelectedDeviceIdx</a> () const</td></tr>
 <tr class="separator:ae65aba81861bb3b9dcf0ec053d0f1abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36fba22aab78a8edf13890ca94622f21"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_support.html#a36fba22aab78a8edf13890ca94622f21">isSupported</a> () const</td></tr>
+<tr class="separator:a36fba22aab78a8edf13890ca94622f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a737d31c242a11ec7dafbf5e53867ba90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_win32_support.html#a737d31c242a11ec7dafbf5e53867ba90">setConfigOption</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;value) override</td></tr>
 <tr class="separator:a737d31c242a11ec7dafbf5e53867ba90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abce0d5d7a77ce2824d5186dfe303d976"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_support.html#abce0d5d7a77ce2824d5186dfe303d976">setSupported</a> ()</td></tr>
+<tr class="separator:abce0d5d7a77ce2824d5186dfe303d976"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ad509fd0f747d2ae0b07e3d83a0d1ab"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_support.html#a5ad509fd0f747d2ae0b07e3d83a0d1ab">validateConfigOptions</a> ()</td></tr>
 <tr class="separator:a5ad509fd0f747d2ae0b07e3d83a0d1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -225,6 +233,60 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a7f07eb14fd8792dac968a09c6434cdb0" name="a7f07eb14fd8792dac968a09c6434cdb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f07eb14fd8792dac968a09c6434cdb0">&#9670;&nbsp;</a></span>getInterfaceName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> Ogre::VulkanWin32Support::getInterfaceName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_vulkan_support.html#a9baf3e657b4ef34f76709cfc0751ff50">Ogre::VulkanSupport</a>.</p>
+
+</div>
+</div>
+<a id="adcc864490a8e79fb7526045d5326777b" name="adcc864490a8e79fb7526045d5326777b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcc864490a8e79fb7526045d5326777b">&#9670;&nbsp;</a></span>getInterfaceNameStr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> Ogre::VulkanWin32Support::getInterfaceNameStr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_vulkan_support.html#a892fd0e6f60c161825d5bb06f2cb8eba">Ogre::VulkanSupport</a>.</p>
+
+</div>
+</div>
 <a id="ae65aba81861bb3b9dcf0ec053d0f1abf" name="ae65aba81861bb3b9dcf0ec053d0f1abf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae65aba81861bb3b9dcf0ec053d0f1abf">&#9670;&nbsp;</a></span>getSelectedDeviceIdx()</h2>
 
@@ -244,6 +306,31 @@ Public Member Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a36fba22aab78a8edf13890ca94622f21" name="a36fba22aab78a8edf13890ca94622f21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36fba22aab78a8edf13890ca94622f21">&#9670;&nbsp;</a></span>isSupported()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::VulkanSupport::isSupported </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -285,6 +372,31 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_vulkan_support.html#a8fe7e04815023b25d4be5454386f6ac2">Ogre::VulkanSupport</a>.</p>
+
+</div>
+</div>
+<a id="abce0d5d7a77ce2824d5186dfe303d976" name="abce0d5d7a77ce2824d5186dfe303d976"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce0d5d7a77ce2824d5186dfe303d976">&#9670;&nbsp;</a></span>setSupported()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanSupport::setSupported </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

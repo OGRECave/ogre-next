@@ -82,7 +82,6 @@ var class_ogre_1_1_vulkan_android_window =
     [ "wantsToGoWindowed", "class_ogre_1_1_vulkan_android_window.html#a3ac8b229b988e8f3e90df82499a2f3ec", null ],
     [ "windowMovedOrResized", "class_ogre_1_1_vulkan_android_window.html#ade143265847db414d9995919f1f61d68", null ],
     [ "mClosed", "class_ogre_1_1_vulkan_android_window.html#a09ff80100ca52995038ce8b404330c24", null ],
-    [ "mHwGamma", "class_ogre_1_1_vulkan_android_window.html#ace5ecdc46aced03c7a93b70625442d5d", null ],
     [ "mLowestLatencyVSync", "class_ogre_1_1_vulkan_android_window.html#aa562105b8ede44dd4bba7704ffcf763c", null ],
     [ "mRebuildingSwapchain", "class_ogre_1_1_vulkan_android_window.html#a452c19b6161f1ae310dfd92b026f7ed9", null ],
     [ "mSuboptimal", "class_ogre_1_1_vulkan_android_window.html#a26e48774201b2ea86d0928ffdda4f583", null ],

@@ -60,6 +60,8 @@ var NAVTREEINDEX8 =
 "_ogre_vulkan_staging_buffer_8h.html":[8,0,4,5,0,0,6],
 "_ogre_vulkan_staging_texture_8h.html":[8,0,4,5,0,26],
 "_ogre_vulkan_support_8h.html":[8,0,4,5,0,27],
+"_ogre_vulkan_support_8h.html#a72e29d6e624b3a5f073f0da92db461ac":[8,0,4,5,0,27,1],
+"_ogre_vulkan_support_8h.html#a8e2325616ca7b1b7b67d55c98f2af019":[8,0,4,5,0,27,2],
 "_ogre_vulkan_tex_buffer_packed_8h.html":[8,0,4,5,0,0,7],
 "_ogre_vulkan_texture_gpu_8h.html":[8,0,4,5,0,28],
 "_ogre_vulkan_texture_gpu_manager_8h.html":[8,0,4,5,0,29],
@@ -247,7 +249,5 @@ var NAVTREEINDEX8 =
 "_samples.html#terrain":[1,0,49],
 "_samples.html#texturebaking":[1,0,50],
 "_samples.html#tut_distortion":[1,0,41],
-"_samples.html#tutorial00":[1,0,32],
-"_samples.html#tutorial01":[1,0,33],
-"_samples.html#tutorial02":[1,0,34]
+"_samples.html#tutorial00":[1,0,32]
 };

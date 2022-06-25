@@ -1,6 +1,7 @@
 var class_ogre_1_1_vulkan_window_null =
 [
     [ "VulkanWindowNull", "class_ogre_1_1_vulkan_window_null.html#a00cc167571a7004b49c8244937810ed0", null ],
+    [ "~VulkanWindowNull", "class_ogre_1_1_vulkan_window_null.html#a3e281b8e1b5fb583b81ee33c9d7b9360", null ],
     [ "_initialize", "class_ogre_1_1_vulkan_window_null.html#a95c79431ef5e02a234b0119e288324ee", null ],
     [ "_initialize", "class_ogre_1_1_vulkan_window_null.html#a6b3888e69c1d17e76737d321d162a095", null ],
     [ "_setDevice", "class_ogre_1_1_vulkan_window_null.html#acd46202d3fd921f029d029fa2f5ed59b", null ],

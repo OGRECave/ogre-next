@@ -80,7 +80,6 @@ var class_ogre_1_1_vulkan_window_swap_chain_based =
     [ "wantsToGoWindowed", "class_ogre_1_1_vulkan_window_swap_chain_based.html#a3ac8b229b988e8f3e90df82499a2f3ec", null ],
     [ "windowMovedOrResized", "class_ogre_1_1_vulkan_window_swap_chain_based.html#acd0cf4cd859f136a8dc5b6a88efdd90d", null ],
     [ "mClosed", "class_ogre_1_1_vulkan_window_swap_chain_based.html#a09ff80100ca52995038ce8b404330c24", null ],
-    [ "mHwGamma", "class_ogre_1_1_vulkan_window_swap_chain_based.html#ace5ecdc46aced03c7a93b70625442d5d", null ],
     [ "mLowestLatencyVSync", "class_ogre_1_1_vulkan_window_swap_chain_based.html#aa562105b8ede44dd4bba7704ffcf763c", null ],
     [ "mRebuildingSwapchain", "class_ogre_1_1_vulkan_window_swap_chain_based.html#a452c19b6161f1ae310dfd92b026f7ed9", null ],
     [ "mSuboptimal", "class_ogre_1_1_vulkan_window_swap_chain_based.html#a26e48774201b2ea86d0928ffdda4f583", null ],
