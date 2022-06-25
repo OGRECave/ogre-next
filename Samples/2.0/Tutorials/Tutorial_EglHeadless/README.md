@@ -3,7 +3,15 @@
 This sample shows how to run Ogre in EGL headless, which can be useful
 for running in a VM or in the Cloud.
 
-Although it could work in Windows, it has been mostly geared towards Linux.
+# Windows
+
+Although the OpenGL version could work in Windows,
+it has been mostly geared towards Linux.
+
+The Vulkan version does work on Windows as long as
+`OGRE_VULKAN_WINDOW_NULL` CMake option is on.
+
+# Linux
 
 X11 does not need to be running, however unless Ogre was build with
 `OGRE_CONFIG_UNIX_NO_X11`, several X11 libraries need to be installed or
@@ -106,7 +114,8 @@ ldd Sample_Tutorial_EglHeadless
 This tutorial is based on Tutorial00_Basic, tweaked to select between EGL devices and
 avoid relying on the default configurator (which requires an active X11 session to run).
 
-To use this sample, Ogre must have been compiled with `OGRE_GLSUPPORT_USE_EGL_HEADLESS`
+To use this sample, Ogre must have either been compiled with `OGRE_GLSUPPORT_USE_EGL_HEADLESS`
+or with `OGRE_VULKAN_WINDOW_NULL`.
 
 # X11 interactions
 
@@ -124,6 +133,9 @@ force-disabled.
 
 When building with `OGRE_CONFIG_UNIX_NO_X11`, `glXGetProcAddressARB` in
 `RenderSystems/GL3Plus/src/gl3w.cpp` gets replaced for `eglGetProcAddress`.
+
+In the case of Vulkan, the CMake option `OGRE_VULKAN_WINDOW_XCB` dictates whether X11 libs
+are used (enabling `OGRE_CONFIG_UNIX_NO_X11` will force-disable `OGRE_VULKAN_WINDOW_XCB`)
 
 # Why building with both X11 and EGL Headless?
 
@@ -157,6 +169,7 @@ To get optimal Headless support:
 
  - Enable OGRE_CONFIG_UNIX_NO_X11
  - Enable OGRE_GLSUPPORT_USE_EGL_HEADLESS
+ - Enable OGRE_VULKAN_WINDOW_NULL
  - Disable OGRE_GLSUPPORT_USE_GLX
 
  To get both x11 and Headless support
@@ -165,3 +178,5 @@ To get optimal Headless support:
  - Disable OGRE_CONFIG_UNIX_NO_X11
  - Enable OGRE_GLSUPPORT_USE_EGL_HEADLESS
  - Enable OGRE_GLSUPPORT_USE_GLX
+ - Enable OGRE_VULKAN_WINDOW_NULL
+ - Enable OGRE_VULKAN_WINDOW_XCB
