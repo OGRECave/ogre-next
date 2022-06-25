@@ -224,7 +224,14 @@ endif()
 # generate OgreBuildSettings.h
 configure_file(${OGRE_TEMPLATES_DIR}/OgreBuildSettings.h.in ${OGRE_BINARY_DIR}/include/OgreBuildSettings.h @ONLY)
 configure_file(${OGRE_TEMPLATES_DIR}/OgreGL3PlusBuildSettings.h.in ${OGRE_BINARY_DIR}/include/OgreGL3PlusBuildSettings.h @ONLY)
-install(FILES ${OGRE_BINARY_DIR}/include/OgreBuildSettings.h DESTINATION include/OGRE)
+configure_file(${OGRE_TEMPLATES_DIR}/OgreVulkanBuildSettings.h.in ${OGRE_BINARY_DIR}/include/OgreVulkanBuildSettings.h @ONLY)
+
+install( FILES
+	${OGRE_BINARY_DIR}/include/OgreBuildSettings.h
+	${OGRE_BINARY_DIR}/include/OgreGL3PlusBuildSettings.h
+	${OGRE_BINARY_DIR}/include/OgreVulkanBuildSettings.h
+	DESTINATION include/OGRE
+)
 
 
 # Create the pkg-config package files on Unix systems

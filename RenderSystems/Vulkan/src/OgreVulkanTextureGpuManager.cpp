@@ -326,6 +326,18 @@ namespace Ogre
                                                 TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
+    TextureGpu *VulkanTextureGpuManager::createTextureGpuNullWindow()
+    {
+        return OGRE_NEW VulkanTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
+                                                      "RenderWindow",                      //
+                                                      TextureFlags::NotTexture |           //
+                                                          TextureFlags::RenderToTexture |  //
+                                                          // TextureFlags::RenderWindowSpecific |
+                                                          TextureFlags::RequiresTextureFlipping |
+                                                          TextureFlags::DiscardableContent,
+                                                      TextureTypes::Type2D, this );
+    }
+    //-----------------------------------------------------------------------------------
     TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer()
     {
         return OGRE_NEW VulkanTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,

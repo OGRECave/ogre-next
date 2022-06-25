@@ -39,6 +39,8 @@ namespace Ogre
     protected:
         VulkanDevice *mDevice;
 
+        bool mHwGamma;
+
     public:
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
 
@@ -52,6 +54,7 @@ namespace Ogre
     {
     public:
         VulkanWindowNull( const String &title, uint32 width, uint32 height, bool fullscreenMode );
+        ~VulkanWindowNull() override;
 
         void destroy() override;
         void reposition( int32 leftPt, int32 topPt ) override;
@@ -94,7 +97,6 @@ namespace Ogre
         };
 
         bool mLowestLatencyVSync;
-        bool mHwGamma;
         bool mClosed;
 
         VkSurfaceKHR mSurfaceKHR;

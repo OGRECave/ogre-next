@@ -69,12 +69,14 @@ THE SOFTWARE.
 #include "OgreDepthBuffer.h"
 #include "OgreRoot.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef OGRE_VULKAN_WINDOW_WIN32
 #    include "Windowing/win32/OgreVulkanWin32Window.h"
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-#    include "Windowing/Android/OgreVulkanAndroidWindow.h"
-#else
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
 #    include "Windowing/X11/OgreVulkanXcbWindow.h"
+#endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+#    include "Windowing/Android/OgreVulkanAndroidWindow.h"
 #endif
 
 #include "OgrePixelFormatGpuUtils.h"
@@ -179,13 +181,6 @@ namespace Ogre
         mVpChanged( false ),
         mInterruptedRenderCommandEncoder( false ),
         mValidationError( false ),
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        mHasWin32Support( false ),
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        mHasAndroidSupport( false ),
-#else
-        mHasXcbSupport( false ),
-#endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         mHasValidationLayers( false ),
 #endif
@@ -212,20 +207,48 @@ namespace Ogre
 
         mInvertedClipSpaceY = true;
 
-        mVulkanSupport = Ogre::getVulkanSupport();
+        const int numVulkanSupports = Ogre::getNumVulkanSupports();
+        for( int i = 0; i < numVulkanSupports; ++i )
+        {
+            VulkanSupport *vulkanSupport = Ogre::getVulkanSupport( i );
+            mAvailableVulkanSupports[vulkanSupport->getInterfaceName()] = vulkanSupport;
+        }
 
         initConfigOptions();
+
+        const ConfigOptionMap &configOptions =
+            mAvailableVulkanSupports.begin()->second->getConfigOptions( this );
+        ConfigOptionMap::const_iterator itInterface = configOptions.find( "Interface" );
+        if( itInterface != configOptions.end() )
+        {
+            const IdString defaultInterface = itInterface->second.currentValue;
+            mVulkanSupport = mAvailableVulkanSupports.find( defaultInterface )->second;
+        }
+        else
+        {
+            LogManager::getSingleton().logMessage(
+                "ERROR: Could NOT find default Interface in Vulkan RenderSystem. Build setting "
+                "misconfiguration!?",
+                LML_CRITICAL );
+            mVulkanSupport = mAvailableVulkanSupports.begin()->second;
+        }
     }
     //-------------------------------------------------------------------------
     VulkanRenderSystem::~VulkanRenderSystem()
     {
         shutdown();
 
-        if( mVulkanSupport )
+        std::map<IdString, VulkanSupport *>::const_iterator itor = mAvailableVulkanSupports.begin();
+        std::map<IdString, VulkanSupport *>::const_iterator endt = mAvailableVulkanSupports.end();
+
+        while( itor != endt )
         {
-            OGRE_DELETE mVulkanSupport;
-            mVulkanSupport = 0;
+            OGRE_DELETE itor->second;
+            ++itor;
         }
+
+        mAvailableVulkanSupports.clear();
+        mVulkanSupport = 0;
 
         if( mDebugReportCallback )
         {
@@ -339,7 +362,18 @@ namespace Ogre
         static String strName( "Vulkan_RS" );
         return strName;
     }
-    void VulkanRenderSystem::initConfigOptions() { mVulkanSupport->addConfig( this ); }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::initConfigOptions()
+    {
+        std::map<IdString, VulkanSupport *>::const_iterator itor = mAvailableVulkanSupports.begin();
+        std::map<IdString, VulkanSupport *>::const_iterator endt = mAvailableVulkanSupports.end();
+
+        while( itor != endt )
+        {
+            itor->second->addConfig( this );
+            ++itor;
+        }
+    }
     //-------------------------------------------------------------------------
     ConfigOptionMap &VulkanRenderSystem::getConfigOptions()
     {
@@ -348,7 +382,25 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::setConfigOption( const String &name, const String &value )
     {
-        mVulkanSupport->setConfigOption( name, value );
+        if( name == "Interface" )
+        {
+            std::map<IdString, VulkanSupport *>::const_iterator itor =
+                mAvailableVulkanSupports.find( value );
+            if( itor != mAvailableVulkanSupports.end() )
+            {
+                mVulkanSupport = itor->second;
+                mVulkanSupport->setConfigOption( name, value );
+            }
+            else
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Option named '" + name + "' does not exist.",
+                             "VulkanRenderSystem::setConfigOption" );
+            }
+        }
+        else
+        {
+            mVulkanSupport->setConfigOption( name, value );
+        }
     }
     //-------------------------------------------------------------------------
     const char *VulkanRenderSystem::getPriorityConfigOption( size_t ) const { return "Device"; }
@@ -761,6 +813,10 @@ namespace Ogre
 
         LogManager::getSingleton().logMessage( "[Vulkan] Initializing VkInstance" );
 
+#ifdef OGRE_VULKAN_WINDOW_NULL
+        mAvailableVulkanSupports["null"]->setSupported();
+#endif
+
         uint32 numExtensions = 0u;
         VkResult result = vkEnumerateInstanceExtensionProperties( 0, &numExtensions, 0 );
         checkVkResult( result, "vkEnumerateInstanceExtensionProperties" );
@@ -778,25 +834,28 @@ namespace Ogre
             const String extensionName = availableExtensions[i].extensionName;
             LogManager::getSingleton().logMessage( "Found instance extension: " + extensionName );
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef OGRE_VULKAN_WINDOW_WIN32
             if( extensionName == VulkanWin32Window::getRequiredExtensionName() )
             {
-                mHasWin32Support = true;
+                mAvailableVulkanSupports["win32"]->setSupported();
                 reqInstanceExtensions.push_back( VulkanWin32Window::getRequiredExtensionName() );
             }
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-            if( extensionName == VulkanAndroidWindow::getRequiredExtensionName() )
-            {
-                mHasAndroidSupport = true;
-                reqInstanceExtensions.push_back( VulkanAndroidWindow::getRequiredExtensionName() );
-            }
-#else
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
             if( extensionName == VulkanXcbWindow::getRequiredExtensionName() )
             {
-                mHasXcbSupport = true;
+                mAvailableVulkanSupports["xcb"]->setSupported();
                 reqInstanceExtensions.push_back( VulkanXcbWindow::getRequiredExtensionName() );
             }
 #endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+            if( extensionName == VulkanAndroidWindow::getRequiredExtensionName() )
+            {
+                mAvailableVulkanSupports["android"]->setSupported();
+                reqInstanceExtensions.push_back( VulkanAndroidWindow::getRequiredExtensionName() );
+            }
+#endif
+
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
             if( extensionName == VK_EXT_DEBUG_REPORT_EXTENSION_NAME )
                 reqInstanceExtensions.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
@@ -813,13 +872,26 @@ namespace Ogre
             }
         }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        if( !mHasWin32Support )
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        if( !mHasAndroidSupport )
-#else
-        if( !mHasXcbSupport )
-#endif
+        bool bAnySupported = false;
+        std::map<IdString, VulkanSupport *>::const_iterator itor = mAvailableVulkanSupports.begin();
+        std::map<IdString, VulkanSupport *>::const_iterator endt = mAvailableVulkanSupports.end();
+
+        while( itor != endt )
+        {
+            if( !itor->second->isSupported() )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Vulkan support for " + itor->second->getInterfaceNameStr() + " not found.",
+                    LML_CRITICAL );
+            }
+            else
+            {
+                bAnySupported = true;
+            }
+            ++itor;
+        }
+
+        if( !bAnySupported )
         {
             LogManager::getSingleton().logMessage(
                 "Vulkan support found but instance is uncapable of "
@@ -964,18 +1036,20 @@ namespace Ogre
         }
 
         VulkanWindow *win = nullptr;
-        if( windowType == "Null" )
+        if( windowType == "null" || mVulkanSupport->getInterfaceName() == "null" )
         {
             win = OGRE_NEW VulkanWindowNull( name, width, height, fullScreen );
         }
         else
         {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef OGRE_VULKAN_WINDOW_WIN32
             win = OGRE_NEW VulkanWin32Window( name, width, height, fullScreen );
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-            win = OGRE_NEW VulkanAndroidWindow( name, width, height, fullScreen );
-#else
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
             win = OGRE_NEW VulkanXcbWindow( name, width, height, fullScreen );
+#endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+            win = OGRE_NEW VulkanAndroidWindow( name, width, height, fullScreen );
 #endif
         }
         mWindows.insert( win );
