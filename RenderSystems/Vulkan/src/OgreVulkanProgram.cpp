@@ -602,12 +602,12 @@ namespace Ogre
         if( !mCompileError )
         {
             // Save any info log that was generated.
-            if( shader.getInfoLog() )
+            if( shader.getInfoLog() && shader.getInfoLog()[0] != '\0' )
             {
                 LogManager::getSingleton().logMessage(
                     "Vulkan GLSL shader messages " + mName + ":\n" + shader.getInfoLog(), LML_TRIVIAL );
             }
-            if( program.getInfoLog() )
+            if( program.getInfoLog() && program.getInfoLog()[0] != '\0' )
             {
                 LogManager::getSingleton().logMessage(
                     "Vulkan GLSL linker messages " + mName + ":\n" + program.getInfoLog(), LML_TRIVIAL );
