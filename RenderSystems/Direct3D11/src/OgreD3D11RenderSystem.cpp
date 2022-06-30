@@ -2142,6 +2142,10 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( block );
+#endif
+
         D3D11HlmsPso *pso = new D3D11HlmsPso();
         memset( pso, 0, sizeof( D3D11HlmsPso ) );
 
@@ -2790,6 +2794,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+#endif
         newPso->rsData = reinterpret_cast<void *>(
             static_cast<D3D11HLSLProgram *>( newPso->computeShader->_getBindingDelegate() ) );
     }

@@ -589,7 +589,7 @@ namespace Ogre
         + height
         + fullScreen
         + miscParams
-		.
+        .
         See _createRenderWindow for details about each member.
         @param
         createdWindows This array will hold the created render windows.
@@ -787,6 +787,9 @@ namespace Ogre
         virtual void endRenderPassDescriptor();
 
     protected:
+        void debugLogPso( const HlmsPso *pso );
+        void debugLogPso( const HlmsComputePso *pso );
+
         /// Reads DepthBuffer::AvailableDepthFormats and alters DepthBuffer::DefaultDepthBufferFormat
         void selectDepthBufferFormat( const uint8 supportedFormats );
 

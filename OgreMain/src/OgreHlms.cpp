@@ -2468,20 +2468,6 @@ namespace Ogre
             }
         }
 
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        {
-            char tmpBuffer[256];
-            LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
-            propName.a( "Hlms: creating PSO for ", finalHash, " with" );
-            for( size_t i = 0u; i < NumShaderTypes; ++i )
-            {
-                if( codeCache.shaders[i] )
-                    propName.a( " ", codeCache.shaders[i]->getName().c_str() );
-            }
-            LogManager::getSingleton().logMessage( propName.c_str(), LML_TRIVIAL );
-        }
-#endif
-
         HlmsPso pso;
         pso.initialize();
         pso.vertexShader = codeCache.shaders[VertexShader];

@@ -1345,6 +1345,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+#endif
+
         MetalProgram *computeShader =
             static_cast<MetalProgram *>( newPso->computeShader->_getBindingDelegate() );
 
@@ -1543,6 +1547,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+#endif
+
         MTLRenderPipelineDescriptor *psd = [[MTLRenderPipelineDescriptor alloc] init];
         [psd
             setSampleCount:newPso->pass.sampleDescription.getColourSamples()];  // aka .rasterSampleCount
