@@ -1626,6 +1626,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+#endif
+
         VkComputePipelineCreateInfo computeInfo;
         makeVkStruct( computeInfo, VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO );
 
@@ -2809,6 +2813,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+#endif
+
         size_t numShaderStages = 0u;
         VkPipelineShaderStageCreateInfo shaderStages[NumShaderTypes];
 

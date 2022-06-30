@@ -1698,6 +1698,10 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newBlock );
+#endif
+
         GL3PlusHlmsPso *pso = new GL3PlusHlmsPso();
         memset( pso, 0, sizeof(GL3PlusHlmsPso) );
 
@@ -2410,8 +2414,11 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso )
     {
-        newPso->rsData = reinterpret_cast<void*>( static_cast<GLSLShader*>(
-                                                      newPso->computeShader->_getBindingDelegate() ) );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+#endif
+        newPso->rsData = reinterpret_cast<void *>(
+            static_cast<GLSLShader *>( newPso->computeShader->_getBindingDelegate() ) );
     }
 
     void GL3PlusRenderSystem::_hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso )

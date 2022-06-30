@@ -788,6 +788,9 @@ namespace Ogre
         virtual void endRenderPassDescriptor(void);
 
     protected:
+        void debugLogPso( const HlmsPso *pso );
+        void debugLogPso( const HlmsComputePso *pso );
+
         /// Reads DepthBuffer::AvailableDepthFormats and alters DepthBuffer::DefaultDepthBufferFormat
         void selectDepthBufferFormat( const uint8 supportedFormats );
 
