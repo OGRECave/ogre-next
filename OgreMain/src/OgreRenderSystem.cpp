@@ -606,7 +606,7 @@ namespace Ogre
     {
         char tmpBuffer[256];
         LwString msg( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
-        msg.a( "Creating PSO with " );
+        msg.a( "Creating PSO with" );
 
         if( pso->vertexShader )
             msg.a( " ", pso->vertexShader->getName().c_str() );
@@ -626,7 +626,7 @@ namespace Ogre
     {
         char tmpBuffer[256];
         LwString msg( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
-        msg.a( "Creating Compute PSO with " );
+        msg.a( "Creating Compute PSO with" );
 
         if( pso->computeShader )
             msg.a( " ", pso->computeShader->getName().c_str() );
