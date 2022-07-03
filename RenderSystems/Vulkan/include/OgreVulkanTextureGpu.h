@@ -138,6 +138,8 @@ namespace Ogre
         virtual void _setToDisplayDummyTexture( void );
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
+        virtual void getCustomAttribute( IdString name, void *pData );
+
         VkImageSubresourceRange getFullSubresourceRange( void ) const;
 
         VkImageType getVulkanTextureType( void ) const;
