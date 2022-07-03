@@ -138,6 +138,8 @@ namespace Ogre
         void _setToDisplayDummyTexture() override;
         void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
 
+        void getCustomAttribute( IdString name, void *pData ) override;
+
         VkImageSubresourceRange getFullSubresourceRange() const;
 
         VkImageType getVulkanTextureType() const;
