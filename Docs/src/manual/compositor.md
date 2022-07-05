@@ -2385,12 +2385,14 @@ compositor_node MyOwnWorkspace_Node
 
 	target renderwindow
 	{
-		pass clear
-		{
-			colour_value 0.6 0 0.6 1
-		}
 		pass render_scene
 		{
+			load
+			{
+				all clear
+				clear_colour 0.6 0 0.6 1
+			}
+
 			rq_first	0
 			rq_last		max
 		}
