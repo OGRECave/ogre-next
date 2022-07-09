@@ -168,21 +168,21 @@ namespace Ogre {
         ogreGlObjectLabel( identifier, name, label.size(), label.c_str() );
     }
 
-    GL3PlusRenderSystem::GL3PlusRenderSystem()
-        : mBlendChannelMask( HlmsBlendblock::BlendChannelAll ),
-          mDepthWrite(true),
-          mScissorsEnabled(false),
-          mSupportsTargetIndependentRasterization(false),
-          mGlobalVao( 0 ),
-          mCurrentVertexBuffer( 0 ),
-          mCurrentIndexBuffer( 0 ),
-          mCurrentPolygonMode( GL_TRIANGLES ),
-          mShaderManager(0),
-          mGLSLShaderFactory(0),
-          mHardwareBufferManager(0),
-          mActiveTextureUnit(0),
-          mHasArbInvalidateSubdata( false ),
-          mNullColourFramebuffer( 0 )
+    GL3PlusRenderSystem::GL3PlusRenderSystem( const NameValuePairList *options ) :
+        mBlendChannelMask( HlmsBlendblock::BlendChannelAll ),
+        mDepthWrite( true ),
+        mScissorsEnabled( false ),
+        mSupportsTargetIndependentRasterization( false ),
+        mGlobalVao( 0 ),
+        mCurrentVertexBuffer( 0 ),
+        mCurrentIndexBuffer( 0 ),
+        mCurrentPolygonMode( GL_TRIANGLES ),
+        mShaderManager( 0 ),
+        mGLSLShaderFactory( 0 ),
+        mHardwareBufferManager( 0 ),
+        mActiveTextureUnit( 0 ),
+        mHasArbInvalidateSubdata( false ),
+        mNullColourFramebuffer( 0 )
     {
         size_t i;
 

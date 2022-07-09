@@ -60,7 +60,7 @@ namespace Ogre
         return sPluginName;
     }
     //---------------------------------------------------------------------
-    void ParticleFXPlugin::install()
+    void ParticleFXPlugin::install( const NameValuePairList * )
     {
         // -- Create all new particle emitter factories --
         ParticleEmitterFactory* pEmitFact;

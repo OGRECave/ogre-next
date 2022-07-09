@@ -43,7 +43,7 @@ namespace Ogre
         return sPluginName;
     }
     //---------------------------------------------------------------------
-    void NULLPlugin::install()
+    void NULLPlugin::install( const NameValuePairList * )
     {
         mRenderSystem = OGRE_NEW NULLRenderSystem();
 

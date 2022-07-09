@@ -148,7 +148,7 @@ namespace Ogre
         void flushRootLayoutCS( void );
 
     public:
-        VulkanRenderSystem();
+        VulkanRenderSystem( const NameValuePairList *options );
         ~VulkanRenderSystem();
 
         virtual void shutdown( void );

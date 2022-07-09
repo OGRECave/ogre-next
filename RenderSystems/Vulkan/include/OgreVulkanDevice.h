@@ -39,6 +39,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    struct _OgreVulkanExport VulkanExternalDevice
+    {
+        VkPhysicalDevice physicalDevice;
+        VkDevice device;
+        FastArray<VkExtensionProperties> deviceExtensions;
+        VkQueue graphicsQueue;
+        uint32_t graphicsQueueFamilyIndex;
+    };
+
     struct _OgreVulkanExport VulkanDevice
     {
         struct SelectedQueue
@@ -88,6 +97,8 @@ namespace Ogre
 
     public:
         VulkanDevice( VkInstance instance, uint32 deviceIdx, VulkanRenderSystem *renderSystem );
+        VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
+                      VulkanRenderSystem *renderSystem );
         ~VulkanDevice();
 
     protected:
@@ -100,8 +111,10 @@ namespace Ogre
                                           PFN_vkDebugReportCallbackEXT debugCallback,
                                           RenderSystem *renderSystem );
 
+    protected:
         void createPhysicalDevice( uint32 deviceIdx );
 
+    public:
         void createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
                            uint32 maxTransferQueues );
 

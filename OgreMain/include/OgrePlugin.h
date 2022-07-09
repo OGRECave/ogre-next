@@ -36,8 +36,12 @@ namespace Ogre
     *  @{
     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
+
+    /// Name / value parameter pair (first = name, second = value)
+    typedef StdMap<String, String> NameValuePairList;
+
     /** Class defining a generic OGRE plugin.
     @remarks
         OGRE is very plugin-oriented and you can customise much of its behaviour
@@ -96,7 +100,7 @@ namespace Ogre
         operations that would create rendersystem-specific objects at this stage,
         that should be done in initialise().
         */
-        virtual void install() = 0;
+        virtual void install( const NameValuePairList *options ) = 0;
 
         /** Perform any tasks the plugin needs to perform on full system
             initialisation.

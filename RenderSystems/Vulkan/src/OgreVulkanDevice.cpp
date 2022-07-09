@@ -57,6 +57,51 @@ namespace Ogre
         createPhysicalDevice( deviceIdx );
     }
     //-------------------------------------------------------------------------
+    VulkanDevice::VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
+                                VulkanRenderSystem *renderSystem ) :
+        mInstance( instance ),
+        mPhysicalDevice( externalDevice.physicalDevice ),
+        mDevice( externalDevice.device ),
+        mPresentQueue( 0 ),
+        mVaoManager( 0 ),
+        mRenderSystem( renderSystem ),
+        mSupportedStages( 0xFFFFFFFF )
+    {
+        LogManager::getSingleton().logMessage( "Creating Vulkan Device from External VkVulkan handle" );
+
+        memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
+
+        vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
+        vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );
+
+        mSupportedStages = 0xFFFFFFFF;
+        if( !mDeviceFeatures.geometryShader )
+            mSupportedStages ^= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        if( !mDeviceFeatures.tessellationShader )
+        {
+            mSupportedStages ^= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+                                VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+        }
+
+        mPresentQueue = externalDevice.graphicsQueue;
+        mGraphicsQueue.setQueueData( this, VulkanQueue::Graphics,
+                                     externalDevice.graphicsQueueFamilyIndex, 0u );
+
+        mDeviceExtensions.reserve( externalDevice.deviceExtensions.size() );
+        FastArray<VkExtensionProperties>::const_iterator itor = externalDevice.deviceExtensions.begin();
+        FastArray<VkExtensionProperties>::const_iterator endt = externalDevice.deviceExtensions.end();
+
+        while( itor != endt )
+        {
+            LogManager::getSingleton().logMessage( "Being told of Device Extension: " +
+                                                   String( itor->extensionName ) );
+            mDeviceExtensions.push_back( itor->extensionName );
+            ++itor;
+        }
+
+        initUtils( mDevice );
+    }
+    //-------------------------------------------------------------------------
     VulkanDevice::~VulkanDevice()
     {
         if( mDevice )

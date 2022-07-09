@@ -43,7 +43,7 @@ namespace Ogre
         return sPluginName;
     }
     //---------------------------------------------------------------------
-    void D3D11Plugin::install()
+    void D3D11Plugin::install( const NameValuePairList * )
     {
         // Create the DirectX 11 rendering api
         mRenderSystem = new D3D11RenderSystem();
