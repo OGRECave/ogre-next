@@ -192,7 +192,7 @@ namespace Ogre
 
     public:
         // Default constructor / destructor
-        GL3PlusRenderSystem();
+        GL3PlusRenderSystem( const NameValuePairList *options );
         ~GL3PlusRenderSystem() override;
 
         friend class ShaderGeneratorTechniqueResolverListener;

@@ -752,7 +752,7 @@ namespace Ogre
             loadPlugin, since the DLL function dllStartPlugin should call this
             method when the DLL is loaded.
         */
-        void installPlugin( Plugin *plugin );
+        void installPlugin( Plugin *plugin, const NameValuePairList *options = 0 );
 
         /** Uninstall an existing plugin.
         @remarks

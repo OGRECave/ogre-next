@@ -59,6 +59,90 @@ namespace Ogre
         createPhysicalDevice( deviceIdx );
     }
     //-------------------------------------------------------------------------
+    VulkanDevice::VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
+                                VulkanRenderSystem *renderSystem ) :
+        mInstance( instance ),
+        mPhysicalDevice( externalDevice.physicalDevice ),
+        mDevice( externalDevice.device ),
+        mPresentQueue( 0 ),
+        mVaoManager( 0 ),
+        mRenderSystem( renderSystem ),
+        mSupportedStages( 0xFFFFFFFF )
+    {
+        LogManager::getSingleton().logMessage( "Creating Vulkan Device from External VkVulkan handle" );
+
+        memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
+
+        vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
+
+        // mDeviceExtraFeatures gets initialized later, once we analyzed all the extensions
+        memset( &mDeviceExtraFeatures, 0, sizeof( mDeviceExtraFeatures ) );
+        vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );
+
+        mSupportedStages = 0xFFFFFFFF;
+        if( !mDeviceFeatures.geometryShader )
+            mSupportedStages ^= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        if( !mDeviceFeatures.tessellationShader )
+        {
+            mSupportedStages ^= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+                                VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+        }
+
+        mPresentQueue = externalDevice.graphicsQueue;
+        mGraphicsQueue.setQueueData( this, VulkanQueue::Graphics,
+                                     externalDevice.graphicsQueueFamilyIndex, 0u );
+
+        mDeviceExtensions.reserve( externalDevice.deviceExtensions.size() );
+        FastArray<VkExtensionProperties>::const_iterator itor = externalDevice.deviceExtensions.begin();
+        FastArray<VkExtensionProperties>::const_iterator endt = externalDevice.deviceExtensions.end();
+
+        while( itor != endt )
+        {
+            LogManager::getSingleton().logMessage( "Being told of Device Extension: " +
+                                                   String( itor->extensionName ) );
+            mDeviceExtensions.push_back( itor->extensionName );
+            ++itor;
+        }
+
+        // Initialize mDeviceExtraFeatures
+        if( hasInstanceExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+        {
+            VkPhysicalDeviceFeatures2 deviceFeatures2;
+            makeVkStruct( deviceFeatures2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 );
+            VkPhysicalDevice16BitStorageFeatures _16BitStorageFeatures;
+            makeVkStruct( _16BitStorageFeatures,
+                          VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES );
+            VkPhysicalDeviceShaderFloat16Int8Features shaderFloat16Int8Features;
+            makeVkStruct( shaderFloat16Int8Features,
+                          VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES );
+
+            PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
+                (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
+                    mInstance, "vkGetPhysicalDeviceFeatures2KHR" );
+
+            void **lastNext = &deviceFeatures2.pNext;
+
+            if( this->hasDeviceExtension( VK_KHR_16BIT_STORAGE_EXTENSION_NAME ) )
+            {
+                *lastNext = &_16BitStorageFeatures;
+                lastNext = &_16BitStorageFeatures.pNext;
+            }
+            if( this->hasDeviceExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME ) )
+            {
+                *lastNext = &shaderFloat16Int8Features;
+                lastNext = &shaderFloat16Int8Features.pNext;
+            }
+
+            GetPhysicalDeviceFeatures2KHR( mPhysicalDevice, &deviceFeatures2 );
+
+            mDeviceExtraFeatures.storageInputOutput16 = _16BitStorageFeatures.storageInputOutput16;
+            mDeviceExtraFeatures.shaderFloat16 = shaderFloat16Int8Features.shaderFloat16;
+            mDeviceExtraFeatures.shaderInt8 = shaderFloat16Int8Features.shaderInt8;
+        }
+
+        initUtils( mDevice );
+    }
+    //-------------------------------------------------------------------------
     VulkanDevice::~VulkanDevice()
     {
         if( mDevice )

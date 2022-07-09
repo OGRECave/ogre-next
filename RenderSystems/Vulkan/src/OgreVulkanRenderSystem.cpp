@@ -150,7 +150,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------
-    VulkanRenderSystem::VulkanRenderSystem() :
+    VulkanRenderSystem::VulkanRenderSystem( const NameValuePairList *options ) :
         RenderSystem(),
         mInitialized( false ),
         mHardwareBufferManager( 0 ),
@@ -1056,16 +1056,27 @@ namespace Ogre
 
         if( !mInitialized )
         {
+            VulkanExternalDevice *externalDevice = 0;
             if( miscParams )
             {
                 NameValuePairList::const_iterator itOption = miscParams->find( "reverse_depth" );
                 if( itOption != miscParams->end() )
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
+
+                itOption = miscParams->find( "external_device" );
+                if( itOption != miscParams->end() )
+                {
+                    externalDevice = reinterpret_cast<VulkanExternalDevice *>(
+                        StringConverter::parseUnsignedLong( itOption->second ) );
+                }
             }
 
             initializeVkInstance();
 
-            mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
+            if( !externalDevice )
+                mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
+            else
+                mDevice = new VulkanDevice( mVkInstance, *externalDevice, this );
             mActiveDevice = mDevice;
 
             mNativeShadingLanguageVersion = 450;
@@ -1073,6 +1084,7 @@ namespace Ogre
             bool bCanRestrictImageViewUsage = false;
 
             FastArray<const char *> deviceExtensions;
+            if( !externalDevice )
             {
                 uint32 numExtensions = 0;
                 vkEnumerateDeviceExtensionProperties( mDevice->mPhysicalDevice, 0, &numExtensions, 0 );
@@ -1120,7 +1132,8 @@ namespace Ogre
                 deviceExtensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 #endif
 
-            mDevice->createDevice( deviceExtensions, 0u, 0u );
+            if( !externalDevice )
+                mDevice->createDevice( deviceExtensions, 0u, 0u );
 
             mRealCapabilities = createRenderSystemCapabilities();
             mCurrentCapabilities = mRealCapabilities;

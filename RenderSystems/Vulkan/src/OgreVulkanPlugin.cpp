@@ -39,9 +39,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     const String &VulkanPlugin::getName() const { return sPluginName; }
     //---------------------------------------------------------------------
-    void VulkanPlugin::install()
+    void VulkanPlugin::install( const NameValuePairList *options )
     {
-        mRenderSystem = OGRE_NEW VulkanRenderSystem();
+        mRenderSystem = OGRE_NEW VulkanRenderSystem( options );
 
         Root::getSingleton().addRenderSystem( mRenderSystem );
     }

@@ -1411,7 +1411,7 @@ namespace Ogre
         return success;
     }
     //---------------------------------------------------------------------
-    void Root::installPlugin( Plugin *plugin )
+    void Root::installPlugin( Plugin *plugin, const NameValuePairList *options )
     {
         LogManager::getSingleton().logMessage( "Installing plugin: " + plugin->getName() );
 
@@ -1421,7 +1421,7 @@ namespace Ogre
         if( testAbiCookie( abiCookie, false ) )
         {
             mPlugins.push_back( plugin );
-            plugin->install();
+            plugin->install( options );
 
             // if rendersystem is already initialised, call rendersystem init too
             if( mIsInitialised )
