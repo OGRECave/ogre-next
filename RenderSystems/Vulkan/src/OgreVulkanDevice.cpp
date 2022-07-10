@@ -245,6 +245,25 @@ namespace Ogre
         return instance;
     }
     //-------------------------------------------------------------------------
+    void VulkanDevice::addExternalInstanceExtensions( FastArray<VkExtensionProperties> &extensions )
+    {
+        msInstanceExtensions.clear();
+        msInstanceExtensions.reserve( extensions.size() );
+
+        FastArray<VkExtensionProperties>::const_iterator itor = extensions.begin();
+        FastArray<VkExtensionProperties>::const_iterator endt = extensions.end();
+
+        while( itor != endt )
+        {
+            LogManager::getSingleton().logMessage( "Externally requested Instance Extension: " +
+                                                   String( itor->extensionName ) );
+            msInstanceExtensions.push_back( itor->extensionName );
+            ++itor;
+        }
+
+        std::sort( msInstanceExtensions.begin(), msInstanceExtensions.end() );
+    }
+    //-------------------------------------------------------------------------
     void VulkanDevice::createPhysicalDevice( uint32 deviceIdx )
     {
         VkResult result = VK_SUCCESS;

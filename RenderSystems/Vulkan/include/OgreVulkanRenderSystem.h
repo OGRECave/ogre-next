@@ -47,6 +47,7 @@ namespace Ogre
         class HardwareBufferManager;
     }
 
+    struct VulkanExternalInstance;
     struct VulkanHlmsPso;
     class VulkanSupport;
 
@@ -98,6 +99,8 @@ namespace Ogre
 
         uint32_t mStencilRefValue;
         bool mStencilEnabled;
+
+        bool mVkInstanceIsExternal;
 
         bool mTableDirty;
         bool mComputeTableDirty;
@@ -172,7 +175,10 @@ namespace Ogre
 
         void reinitialise() override;
 
+        void initializeExternalVkInstance( VulkanExternalInstance *externalInstance );
         void initializeVkInstance();
+
+        void sharedVkInitialization();
 
         VkInstance getVkInstance() const { return mVkInstance; }
 
