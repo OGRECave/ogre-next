@@ -39,6 +39,29 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    /// Use it to pass an external instance
+    ///
+    /// We will verify if the layers and extensions you claim
+    /// were enabled are actually supported.
+    ///
+    /// This is so because in Qt you can request these layers/extensions
+    /// but you get no feedback from Qt whether they were present and
+    /// thus successfully enabled.
+    ///
+    /// However if the instance actually supports the layer/extension
+    /// you requested but the third party library explicitly chose not to
+    /// enable it for any random reason, then we will wrongly think
+    /// it's enabled / present.
+    struct _OgreVulkanExport VulkanExternalInstance
+    {
+        VkInstance instance;
+        FastArray<VkLayerProperties> instanceLayers;
+        FastArray<VkExtensionProperties> instanceExtensions;
+    };
+
+    /// Use it to pass an external device
+    ///
+    /// See VulkanExternalInstance on extensions verification.
     struct _OgreVulkanExport VulkanExternalDevice
     {
         VkPhysicalDevice physicalDevice;
