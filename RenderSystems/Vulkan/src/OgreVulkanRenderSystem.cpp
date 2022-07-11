@@ -208,6 +208,13 @@ namespace Ogre
 
         mInvertedClipSpaceY = true;
 
+        const int numVulkanSupports = Ogre::getNumVulkanSupports();
+        for( int i = 0; i < numVulkanSupports; ++i )
+        {
+            VulkanSupport *vulkanSupport = Ogre::getVulkanSupport( i );
+            mAvailableVulkanSupports[vulkanSupport->getInterfaceName()] = vulkanSupport;
+        }
+
         if( options )
         {
             NameValuePairList::const_iterator itOption = options->find( "external_instance" );
@@ -218,43 +225,32 @@ namespace Ogre
 
                 initializeExternalVkInstance( externalInstance );
 
+#ifndef OGRE_VULKAN_WINDOW_NULL
                 VulkanSupport *vulkanSupport = OGRE_NEW VulkanSupport();
                 vulkanSupport->setSupported();
                 mAvailableVulkanSupports[vulkanSupport->getInterfaceName()] = vulkanSupport;
                 mVulkanSupport = vulkanSupport;
-            }
-        }
-
-        if( !mVkInstanceIsExternal )
-        {
-            const int numVulkanSupports = Ogre::getNumVulkanSupports();
-            for( int i = 0; i < numVulkanSupports; ++i )
-            {
-                VulkanSupport *vulkanSupport = Ogre::getVulkanSupport( i );
-                mAvailableVulkanSupports[vulkanSupport->getInterfaceName()] = vulkanSupport;
+#endif
             }
         }
 
         initConfigOptions();
 
-        if( !mVkInstanceIsExternal )
+        const ConfigOptionMap &configOptions =
+            mAvailableVulkanSupports.begin()->second->getConfigOptions( this );
+        ConfigOptionMap::const_iterator itInterface = configOptions.find( "Interface" );
+        if( itInterface != configOptions.end() )
         {
-            const ConfigOptionMap &configOptions =
-                mAvailableVulkanSupports.begin()->second->getConfigOptions( this );
-            ConfigOptionMap::const_iterator itInterface = configOptions.find( "Interface" );
-            if( itInterface != configOptions.end() )
-            {
-                const IdString defaultInterface = itInterface->second.currentValue;
-                mVulkanSupport = mAvailableVulkanSupports.find( defaultInterface )->second;
-            }
-            else
-            {
-                LogManager::getSingleton().logMessage(
-                    "ERROR: Could NOT find default Interface in Vulkan RenderSystem. Build setting "
-                    "misconfiguration!?",
-                    LML_CRITICAL );
-                mVulkanSupport = mAvailableVulkanSupports.begin()->second;
-            }
+            const IdString defaultInterface = itInterface->second.currentValue;
+            mVulkanSupport = mAvailableVulkanSupports.find( defaultInterface )->second;
+        }
+        else
+        {
+            LogManager::getSingleton().logMessage(
+                "ERROR: Could NOT find default Interface in Vulkan RenderSystem. Build setting "
+                "misconfiguration!?",
+                LML_CRITICAL );
+            mVulkanSupport = mAvailableVulkanSupports.begin()->second;
         }
     }
     //-------------------------------------------------------------------------
@@ -369,10 +365,12 @@ namespace Ogre
         OGRE_DELETE mVulkanProgramFactory0;
         mVulkanProgramFactory0 = 0;
 
+        const bool bIsExternal = mDevice->mIsExternal;
         VkDevice vkDevice = mDevice->mDevice;
         delete mDevice;
         mDevice = 0;
-        vkDestroyDevice( vkDevice, 0 );
+        if( !bIsExternal )
+            vkDestroyDevice( vkDevice, 0 );
     }
     //-------------------------------------------------------------------------
     const String &VulkanRenderSystem::getName() const
@@ -872,6 +870,19 @@ namespace Ogre
             }
 
             VulkanDevice::addExternalInstanceExtensions( externalInstance->instanceExtensions );
+
+#ifdef OGRE_VULKAN_WINDOW_WIN32
+            if( VulkanDevice::hasInstanceExtension( VulkanWin32Window::getRequiredExtensionName() ) )
+                mAvailableVulkanSupports["win32"]->setSupported();
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
+            if( VulkanDevice::hasInstanceExtension( VulkanXcbWindow::getRequiredExtensionName() ) )
+                mAvailableVulkanSupports["xcb"]->setSupported();
+#endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+            if( VulkanDevice::hasInstanceExtension( VulkanAndroidWindow::getRequiredExtensionName() ) )
+                mAvailableVulkanSupports["android"]->setSupported();
+#endif
         }
 
         {
@@ -912,8 +923,6 @@ namespace Ogre
                 {
                     ++itor;
                 }
-
-                ++itor;
             }
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
@@ -1241,6 +1250,11 @@ namespace Ogre
                     else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
                 }
+            }
+            else
+            {
+                if( mDevice->hasDeviceExtension( VK_KHR_MAINTENANCE2_EXTENSION_NAME ) )
+                    bCanRestrictImageViewUsage = true;
             }
 
             if( !bCanRestrictImageViewUsage )

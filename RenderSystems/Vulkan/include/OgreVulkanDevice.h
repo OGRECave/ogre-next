@@ -52,7 +52,7 @@ namespace Ogre
     /// you requested but the third party library explicitly chose not to
     /// enable it for any random reason, then we will wrongly think
     /// it's enabled / present.
-    struct _OgreVulkanExport VulkanExternalInstance
+    struct VulkanExternalInstance
     {
         VkInstance instance;
         FastArray<VkLayerProperties> instanceLayers;
@@ -62,13 +62,13 @@ namespace Ogre
     /// Use it to pass an external device
     ///
     /// See VulkanExternalInstance on extensions verification.
-    struct _OgreVulkanExport VulkanExternalDevice
+    struct VulkanExternalDevice
     {
         VkPhysicalDevice physicalDevice;
         VkDevice device;
         FastArray<VkExtensionProperties> deviceExtensions;
         VkQueue graphicsQueue;
-        uint32_t graphicsQueueFamilyIndex;
+        VkQueue presentQueue;
     };
 
     struct _OgreVulkanExport VulkanDevice
@@ -119,6 +119,8 @@ namespace Ogre
         VulkanRenderSystem *mRenderSystem;
 
         uint32 mSupportedStages;
+
+        bool mIsExternal;
 
         static void destroyQueues( FastArray<VulkanQueue> &queueArray );
 

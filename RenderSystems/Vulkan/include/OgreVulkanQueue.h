@@ -210,6 +210,7 @@ namespace Ogre
         ~VulkanQueue();
 
         void setQueueData( VulkanDevice *owner, QueueFamily family, uint32 familyIdx, uint32 queueIdx );
+        void setExternalQueue( VulkanDevice *owner, QueueFamily family, VkQueue queue );
 
         void init( VkDevice device, VkQueue queue, VulkanRenderSystem *renderSystem );
         void destroy();
