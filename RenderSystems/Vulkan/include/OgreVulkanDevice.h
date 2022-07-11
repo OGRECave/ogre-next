@@ -39,6 +39,38 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    /// Use it to pass an external instance
+    ///
+    /// We will verify if the layers and extensions you claim
+    /// were enabled are actually supported.
+    ///
+    /// This is so because in Qt you can request these layers/extensions
+    /// but you get no feedback from Qt whether they were present and
+    /// thus successfully enabled.
+    ///
+    /// However if the instance actually supports the layer/extension
+    /// you requested but the third party library explicitly chose not to
+    /// enable it for any random reason, then we will wrongly think
+    /// it's enabled / present.
+    struct VulkanExternalInstance
+    {
+        VkInstance instance;
+        FastArray<VkLayerProperties> instanceLayers;
+        FastArray<VkExtensionProperties> instanceExtensions;
+    };
+
+    /// Use it to pass an external device
+    ///
+    /// See VulkanExternalInstance on extensions verification.
+    struct VulkanExternalDevice
+    {
+        VkPhysicalDevice physicalDevice;
+        VkDevice device;
+        FastArray<VkExtensionProperties> deviceExtensions;
+        VkQueue graphicsQueue;
+        VkQueue presentQueue;
+    };
+
     struct _OgreVulkanExport VulkanDevice
     {
         struct SelectedQueue
@@ -88,6 +120,8 @@ namespace Ogre
 
         uint32 mSupportedStages;
 
+        bool mIsExternal;
+
         static void destroyQueues( FastArray<VulkanQueue> &queueArray );
 
         void findGraphicsQueue( FastArray<uint32> &inOutUsedQueueCount );
@@ -99,6 +133,8 @@ namespace Ogre
 
     public:
         VulkanDevice( VkInstance instance, uint32 deviceIdx, VulkanRenderSystem *renderSystem );
+        VulkanDevice( VkInstance instance, const VulkanExternalDevice &externalDevice,
+                      VulkanRenderSystem *renderSystem );
         ~VulkanDevice();
 
     protected:
@@ -111,8 +147,12 @@ namespace Ogre
                                           PFN_vkDebugReportCallbackEXT debugCallback,
                                           RenderSystem *renderSystem );
 
+        static void addExternalInstanceExtensions( FastArray<VkExtensionProperties> &extensions );
+
+    protected:
         void createPhysicalDevice( uint32 deviceIdx );
 
+    public:
         void createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
                            uint32 maxTransferQueues );
 

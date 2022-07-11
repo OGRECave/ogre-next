@@ -44,7 +44,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     const String &MetalPlugin::getName() const { return sPluginName; }
     //---------------------------------------------------------------------
-    void MetalPlugin::install()
+    void MetalPlugin::install( const NameValuePairList * )
     {
         mRenderSystem = OGRE_NEW MetalRenderSystem();
 
