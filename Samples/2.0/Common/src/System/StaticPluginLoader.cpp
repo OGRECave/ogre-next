@@ -107,28 +107,28 @@ namespace Demo
     #ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
         if( !mGL3PlusPlugin )
             mGL3PlusPlugin = OGRE_NEW Ogre::GL3PlusPlugin();
-        root->installPlugin( mGL3PlusPlugin );
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
+        root->installPlugin( mGL3PlusPlugin, nullptr );
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
         if( !mGLES2Plugin )
             mGLES2Plugin = OGRE_NEW Ogre::GLES2Plugin();
-        root->installPlugin( mGLES2Plugin );
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
+        root->installPlugin( mGLES2Plugin, nullptr );
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
         if( !mD3D11PlusPlugin )
             mD3D11PlusPlugin = OGRE_NEW Ogre::D3D11Plugin();
-        root->installPlugin( mD3D11PlusPlugin );
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
+        root->installPlugin( mD3D11PlusPlugin, nullptr );
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_METAL
         if( !mMetalPlugin )
             mMetalPlugin = OGRE_NEW Ogre::MetalPlugin();
-        root->installPlugin( mMetalPlugin );
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+        root->installPlugin( mMetalPlugin, nullptr );
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
         if( !mVulkanPlugin )
             mVulkanPlugin = OGRE_NEW Ogre::VulkanPlugin();
-        root->installPlugin( mVulkanPlugin );
-    #endif
+        root->installPlugin( mVulkanPlugin, nullptr );
+#    endif
 #endif
     }
 }

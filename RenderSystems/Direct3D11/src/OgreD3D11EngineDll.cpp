@@ -34,13 +34,13 @@ namespace Ogre
     D3D11Plugin* plugin;
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreD3D11Export dllStartPlugin( void ) noexcept( false )
+    extern "C" void _OgreD3D11Export dllStartPlugin( const NameValuePairList *options ) noexcept( false )
 #    else
-    extern "C" void _OgreD3D11Export dllStartPlugin( void ) throw( Exception )
+    extern "C" void _OgreD3D11Export dllStartPlugin( const NameValuePairList *options ) throw( Exception )
 #    endif
     {
         plugin = new D3D11Plugin();
-        Root::getSingleton().installPlugin(plugin);
+        Root::getSingleton().installPlugin( plugin, options );
     }
 
     extern "C" void _OgreD3D11Export dllStopPlugin(void)

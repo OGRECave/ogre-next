@@ -43,6 +43,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    static FastArray<IdString> msInstanceExtensions;
+
     VulkanDevice::VulkanDevice( VkInstance instance, uint32 deviceIdx,
                                 VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
@@ -51,7 +53,8 @@ namespace Ogre
         mPresentQueue( 0 ),
         mVaoManager( 0 ),
         mRenderSystem( renderSystem ),
-        mSupportedStages( 0xFFFFFFFF )
+        mSupportedStages( 0xFFFFFFFF ),
+        mIsExternal( false )
     {
         memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
         createPhysicalDevice( deviceIdx );
@@ -65,7 +68,8 @@ namespace Ogre
         mPresentQueue( 0 ),
         mVaoManager( 0 ),
         mRenderSystem( renderSystem ),
-        mSupportedStages( 0xFFFFFFFF )
+        mSupportedStages( 0xFFFFFFFF ),
+        mIsExternal( true )
     {
         LogManager::getSingleton().logMessage( "Creating Vulkan Device from External VkVulkan handle" );
 
@@ -83,20 +87,67 @@ namespace Ogre
                                 VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
         }
 
-        mPresentQueue = externalDevice.graphicsQueue;
-        mGraphicsQueue.setQueueData( this, VulkanQueue::Graphics,
-                                     externalDevice.graphicsQueueFamilyIndex, 0u );
-
-        mDeviceExtensions.reserve( externalDevice.deviceExtensions.size() );
-        FastArray<VkExtensionProperties>::const_iterator itor = externalDevice.deviceExtensions.begin();
-        FastArray<VkExtensionProperties>::const_iterator endt = externalDevice.deviceExtensions.end();
-
-        while( itor != endt )
         {
-            LogManager::getSingleton().logMessage( "Being told of Device Extension: " +
-                                                   String( itor->extensionName ) );
-            mDeviceExtensions.push_back( itor->extensionName );
-            ++itor;
+            uint32 numQueues;
+            vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, NULL );
+            if( numQueues == 0u )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan device is reporting 0 queues!",
+                             "VulkanDevice::createDevice" );
+            }
+            mQueueProps.resize( numQueues );
+            vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, &mQueueProps[0] );
+        }
+
+        mPresentQueue = externalDevice.presentQueue;
+        mGraphicsQueue.setExternalQueue( this, VulkanQueue::Graphics, externalDevice.graphicsQueue );
+        {
+            // Filter wrongly-provided extensions
+            uint32 numExtensions = 0;
+            vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions, 0 );
+
+            FastArray<VkExtensionProperties> availableExtensions;
+            availableExtensions.resize( numExtensions );
+            vkEnumerateDeviceExtensionProperties( mPhysicalDevice, 0, &numExtensions,
+                                                  availableExtensions.begin() );
+            std::set<String> extensions;
+            for( size_t i = 0u; i < numExtensions; ++i )
+            {
+                const String extensionName = availableExtensions[i].extensionName;
+                LogManager::getSingleton().logMessage( "Found device extension: " + extensionName );
+                extensions.insert( extensionName );
+            }
+
+            FastArray<VkExtensionProperties> deviceExtensionsCopy = externalDevice.deviceExtensions;
+            FastArray<VkExtensionProperties>::iterator itor = deviceExtensionsCopy.begin();
+            FastArray<VkExtensionProperties>::iterator endt = deviceExtensionsCopy.end();
+
+            while( itor != endt )
+            {
+                if( extensions.find( itor->extensionName ) == extensions.end() )
+                {
+                    LogManager::getSingleton().logMessage(
+                        "[Vulkan][INFO] External Device claims extension " +
+                        String( itor->extensionName ) +
+                        " is present but it's not. This is normal. Ignoring." );
+                    itor = efficientVectorRemove( deviceExtensionsCopy, itor );
+                    endt = deviceExtensionsCopy.end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+
+            mDeviceExtensions.reserve( deviceExtensionsCopy.size() );
+            itor = deviceExtensionsCopy.begin();
+            while( itor != endt )
+            {
+                LogManager::getSingleton().logMessage( "Externally requested Device Extension: " +
+                                                       String( itor->extensionName ) );
+                mDeviceExtensions.push_back( itor->extensionName );
+                ++itor;
+            }
         }
 
         initUtils( mDevice );
@@ -179,11 +230,48 @@ namespace Ogre
         createInfo.pNext = &debugCb;
 #endif
 
+        {
+            msInstanceExtensions.clear();
+            msInstanceExtensions.reserve( extensions.size() );
+
+            FastArray<const char *>::const_iterator itor = extensions.begin();
+            FastArray<const char *>::const_iterator endt = extensions.end();
+
+            while( itor != endt )
+            {
+                LogManager::getSingleton().logMessage( "Requesting Instance Extension: " +
+                                                       String( *itor ) );
+                msInstanceExtensions.push_back( *itor );
+                ++itor;
+            }
+
+            std::sort( msInstanceExtensions.begin(), msInstanceExtensions.end() );
+        }
+
         VkInstance instance;
         VkResult result = vkCreateInstance( &createInfo, 0, &instance );
         checkVkResult( result, "vkCreateInstance" );
 
         return instance;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::addExternalInstanceExtensions( FastArray<VkExtensionProperties> &extensions )
+    {
+        msInstanceExtensions.clear();
+        msInstanceExtensions.reserve( extensions.size() );
+
+        FastArray<VkExtensionProperties>::const_iterator itor = extensions.begin();
+        FastArray<VkExtensionProperties>::const_iterator endt = extensions.end();
+
+        while( itor != endt )
+        {
+            LogManager::getSingleton().logMessage( "Externally requested Instance Extension: " +
+                                                   String( itor->extensionName ) );
+            msInstanceExtensions.push_back( itor->extensionName );
+            ++itor;
+        }
+
+        std::sort( msInstanceExtensions.begin(), msInstanceExtensions.end() );
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::createPhysicalDevice( uint32 deviceIdx )
@@ -381,11 +469,30 @@ namespace Ogre
         return itor != mDeviceExtensions.end() && *itor == extension;
     }
     //-------------------------------------------------------------------------
+    bool VulkanDevice::hasInstanceExtension( const IdString extension )
+    {
+        FastArray<IdString>::const_iterator itor =
+            std::lower_bound( msInstanceExtensions.begin(), msInstanceExtensions.end(), extension );
+        return itor != msInstanceExtensions.end() && *itor == extension;
+    }
+    //-------------------------------------------------------------------------
     void VulkanDevice::initQueues( void )
     {
+        if( !mIsExternal )
+        {
+            VkQueue queue = 0;
+            vkGetDeviceQueue( mDevice, mGraphicsQueue.mFamilyIdx, mGraphicsQueue.mQueueIdx, &queue );
+            mGraphicsQueue.init( mDevice, queue, mRenderSystem );
+
+            TODO_findRealPresentQueue;
+            mPresentQueue = mGraphicsQueue.mQueue;
+        }
+        else
+        {
+            mGraphicsQueue.init( mDevice, mGraphicsQueue.mQueue, mRenderSystem );
+        }
+
         VkQueue queue = 0;
-        vkGetDeviceQueue( mDevice, mGraphicsQueue.mFamilyIdx, mGraphicsQueue.mQueueIdx, &queue );
-        mGraphicsQueue.init( mDevice, queue, mRenderSystem );
 
         FastArray<VulkanQueue>::iterator itor = mComputeQueues.begin();
         FastArray<VulkanQueue>::iterator endt = mComputeQueues.end();
@@ -406,9 +513,6 @@ namespace Ogre
             itor->init( mDevice, queue, mRenderSystem );
             ++itor;
         }
-
-        TODO_findRealPresentQueue;
-        mPresentQueue = mGraphicsQueue.mQueue;
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::commitAndNextCommandBuffer( SubmissionType::SubmissionType submissionType )

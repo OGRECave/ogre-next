@@ -129,8 +129,8 @@ namespace Ogre {
     }
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_NACL
-    typedef void (*DLL_START_PLUGIN)(void);
-    typedef void (*DLL_STOP_PLUGIN)(void);
+    typedef void ( *DLL_START_PLUGIN )( const NameValuePairList * );
+    typedef void ( *DLL_STOP_PLUGIN )(void);
 #endif
 
     //-----------------------------------------------------------------------
@@ -1232,7 +1232,7 @@ namespace Ogre {
             const StringVector pluginList = cfg.getMultiSetting( "PluginOptional" );
             for( StringVector::const_iterator it = pluginList.begin(); it != pluginList.end(); ++it )
             {
-                loadPlugin( pluginDir + ( *it ), true );
+                loadPlugin( pluginDir + ( *it ), true, nullptr );
             }
         }
         {
@@ -1240,7 +1240,7 @@ namespace Ogre {
             const StringVector pluginList = cfg.getMultiSetting( "Plugin" );
             for( StringVector::const_iterator it = pluginList.begin(); it != pluginList.end(); ++it )
             {
-                loadPlugin( pluginDir + ( *it ), false );
+                loadPlugin( pluginDir + ( *it ), false, nullptr );
             }
         }
     }
@@ -1472,7 +1472,8 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void Root::loadPlugin( const String &pluginName, const bool bOptional )
+    void Root::loadPlugin( const String &pluginName, const bool bOptional,
+                           const NameValuePairList *options )
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_NACL && OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
         // Load plugin library
@@ -1502,7 +1503,7 @@ namespace Ogre {
                 try
                 {
                     // This must call installPlugin
-                    pFunc();
+                    pFunc( options );
                 }
                 catch( Exception &e )
                 {
