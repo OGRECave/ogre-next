@@ -4,7 +4,7 @@ var class_ogre_1_1_d3_d11_plugin =
     [ "getAbiCookie", "class_ogre_1_1_d3_d11_plugin.html#a6610d3f6e56ef80d0d2da96e4f49bc41", null ],
     [ "getName", "class_ogre_1_1_d3_d11_plugin.html#aaadb773ffea9ce7c348cf34cd1282c32", null ],
     [ "initialise", "class_ogre_1_1_d3_d11_plugin.html#aa7d21fe00c22f86aba419faee41f2902", null ],
-    [ "install", "class_ogre_1_1_d3_d11_plugin.html#acab5ecd37c24bff905c4ce66d9c1f100", null ],
+    [ "install", "class_ogre_1_1_d3_d11_plugin.html#a9a11dcbfd89df9de3eda865c971dff8e", null ],
     [ "operator delete", "class_ogre_1_1_d3_d11_plugin.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_d3_d11_plugin.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_d3_d11_plugin.html#a1c727e879a260c37b00ce5505fe8e144", null ],

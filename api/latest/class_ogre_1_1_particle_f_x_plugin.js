@@ -4,7 +4,7 @@ var class_ogre_1_1_particle_f_x_plugin =
     [ "getAbiCookie", "class_ogre_1_1_particle_f_x_plugin.html#a72900e92b80dc2f0d9e6a5b2f472b025", null ],
     [ "getName", "class_ogre_1_1_particle_f_x_plugin.html#ad55eceda1ddfa3d5fd91c1748ce3e7ff", null ],
     [ "initialise", "class_ogre_1_1_particle_f_x_plugin.html#aece7e1d02980600b4a05d3845ccd534b", null ],
-    [ "install", "class_ogre_1_1_particle_f_x_plugin.html#a062957933b7b906c2f68449a7b1be1b7", null ],
+    [ "install", "class_ogre_1_1_particle_f_x_plugin.html#ad116a99711e9621644c9b44ea40b9008", null ],
     [ "operator delete", "class_ogre_1_1_particle_f_x_plugin.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_particle_f_x_plugin.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_particle_f_x_plugin.html#a1c727e879a260c37b00ce5505fe8e144", null ],

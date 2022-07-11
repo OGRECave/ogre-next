@@ -4,7 +4,7 @@ var class_ogre_1_1_vulkan_plugin =
     [ "getAbiCookie", "class_ogre_1_1_vulkan_plugin.html#a147a58329f8319410ff326afc4283389", null ],
     [ "getName", "class_ogre_1_1_vulkan_plugin.html#a4617f6c3dad62cbba43ad77a1f8a1451", null ],
     [ "initialise", "class_ogre_1_1_vulkan_plugin.html#ab92114af325be7bc6e5f3d44fa52f7b7", null ],
-    [ "install", "class_ogre_1_1_vulkan_plugin.html#ae5aa44675992e99775d0e42d955442aa", null ],
+    [ "install", "class_ogre_1_1_vulkan_plugin.html#ac8747e495d6877c20119cbc21a68fbe7", null ],
     [ "operator delete", "class_ogre_1_1_vulkan_plugin.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_vulkan_plugin.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_vulkan_plugin.html#a1c727e879a260c37b00ce5505fe8e144", null ],

@@ -118,9 +118,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aece7e1d02980600b4a05d3845ccd534b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_f_x_plugin.html#aece7e1d02980600b4a05d3845ccd534b">initialise</a> () override</td></tr>
 <tr class="memdesc:aece7e1d02980600b4a05d3845ccd534b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform any tasks the plugin needs to perform on full system initialisation.  <a href="class_ogre_1_1_particle_f_x_plugin.html#aece7e1d02980600b4a05d3845ccd534b">More...</a><br /></td></tr>
 <tr class="separator:aece7e1d02980600b4a05d3845ccd534b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a062957933b7b906c2f68449a7b1be1b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_f_x_plugin.html#a062957933b7b906c2f68449a7b1be1b7">install</a> () override</td></tr>
-<tr class="memdesc:a062957933b7b906c2f68449a7b1be1b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the plugin initial installation sequence.  <a href="class_ogre_1_1_particle_f_x_plugin.html#a062957933b7b906c2f68449a7b1be1b7">More...</a><br /></td></tr>
-<tr class="separator:a062957933b7b906c2f68449a7b1be1b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad116a99711e9621644c9b44ea40b9008"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_f_x_plugin.html#ad116a99711e9621644c9b44ea40b9008">install</a> (const <a class="el" href="group___general.html#gad887d0555b483f6499fcd3a4dab0e0c6">NameValuePairList</a> *options) override</td></tr>
+<tr class="memdesc:ad116a99711e9621644c9b44ea40b9008"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the plugin initial installation sequence.  <a href="class_ogre_1_1_particle_f_x_plugin.html#ad116a99711e9621644c9b44ea40b9008">More...</a><br /></td></tr>
+<tr class="separator:ad116a99711e9621644c9b44ea40b9008"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -262,8 +262,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a062957933b7b906c2f68449a7b1be1b7" name="a062957933b7b906c2f68449a7b1be1b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a062957933b7b906c2f68449a7b1be1b7">&#9670;&nbsp;</a></span>install()</h2>
+<a id="ad116a99711e9621644c9b44ea40b9008" name="ad116a99711e9621644c9b44ea40b9008"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad116a99711e9621644c9b44ea40b9008">&#9670;&nbsp;</a></span>install()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -274,7 +274,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::ParticleFXPlugin::install </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="group___general.html#gad887d0555b483f6499fcd3a4dab0e0c6">NameValuePairList</a> *&#160;</td>
+          <td class="paramname"><em>options</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -288,7 +289,7 @@ Public Member Functions</h2></td></tr>
 <p>Perform the plugin initial installation sequence. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>An implementation must be supplied for this method. It must perform the startup tasks necessary to install any rendersystem customisations or anything else that is not dependent on system initialisation, ie only dependent on the core of <a class="el" href="namespace_ogre.html">Ogre</a>. It must not perform any operations that would create rendersystem-specific objects at this stage, that should be done in <a class="el" href="class_ogre_1_1_particle_f_x_plugin.html#aece7e1d02980600b4a05d3845ccd534b" title="Perform any tasks the plugin needs to perform on full system initialisation.">initialise()</a>. </dd></dl>
 
-<p>Implements <a class="el" href="class_ogre_1_1_plugin.html#a556fd0c6a5a05cce82dc7df998c99c0f">Ogre::Plugin</a>.</p>
+<p>Implements <a class="el" href="class_ogre_1_1_plugin.html#a6b24a7a7634a32b14b95a0d1969fbbab">Ogre::Plugin</a>.</p>
 
 </div>
 </div>

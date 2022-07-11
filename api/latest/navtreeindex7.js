@@ -241,7 +241,7 @@ var NAVTREEINDEX7 =
 "_ogre_vulkan_descriptor_pool_8h.html":[8,0,4,5,0,4],
 "_ogre_vulkan_descriptor_sets_8h.html":[8,0,4,5,0,5],
 "_ogre_vulkan_device_8h.html":[8,0,4,5,0,6],
-"_ogre_vulkan_device_8h.html#ae25fc08466018112ebbfaa616e88b38a":[8,0,4,5,0,6,3],
+"_ogre_vulkan_device_8h.html#ae25fc08466018112ebbfaa616e88b38a":[8,0,4,5,0,6,5],
 "_ogre_vulkan_discard_buffer_manager_8h.html":[8,0,4,5,0,7],
 "_ogre_vulkan_discard_buffer_manager_8h.html#abd073aedc62cca37390dfdd2afb53a70":[8,0,4,5,0,7,3],
 "_ogre_vulkan_dynamic_buffer_8h.html":[8,0,4,5,0,0,3],

@@ -1,6 +1,6 @@
 var class_ogre_1_1_vulkan_render_system =
 [
-    [ "VulkanRenderSystem", "class_ogre_1_1_vulkan_render_system.html#a3256329a9db37b1a3f1d9093d287372c", null ],
+    [ "VulkanRenderSystem", "class_ogre_1_1_vulkan_render_system.html#aa8ff406902ce6c87f4116a6be04fa3c2", null ],
     [ "~VulkanRenderSystem", "class_ogre_1_1_vulkan_render_system.html#aca322b1498a9955fe6f7c485e5b9a738", null ],
     [ "_addMetrics", "class_ogre_1_1_vulkan_render_system.html#a54ebaf329b7173ef06cbfcd0dff64cb5", null ],
     [ "_beginFrame", "class_ogre_1_1_vulkan_render_system.html#a9a155be149f4112b1760cc52cec71464", null ],
@@ -182,6 +182,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "initConfigOptions", "class_ogre_1_1_vulkan_render_system.html#a2ed03ae8d85301b4f0ff8f9600a5d773", null ],
     [ "initGPUProfiling", "class_ogre_1_1_vulkan_render_system.html#ae0d6f4281914c4125791c90493756907", null ],
     [ "initialiseFromRenderSystemCapabilities", "class_ogre_1_1_vulkan_render_system.html#a7f28018141da0116ab351701d159530f", null ],
+    [ "initializeExternalVkInstance", "class_ogre_1_1_vulkan_render_system.html#a8f785531abac2dfbb3c8db20471281e9", null ],
     [ "initializeVkInstance", "class_ogre_1_1_vulkan_render_system.html#a3ec2b18d19494341bde265021a25b523", null ],
     [ "isGpuProgramBound", "class_ogre_1_1_vulkan_render_system.html#a1ac003196b5b51384f714924a0041081", null ],
     [ "isReverseDepth", "class_ogre_1_1_vulkan_render_system.html#a0f6d872e0df3b080da903d9e0f4af6ba", null ],
@@ -228,6 +229,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "setStencilBufferParams", "class_ogre_1_1_vulkan_render_system.html#a09ef8ec23ef96f72756915dbbf79e381", null ],
     [ "setUavStartingSlot", "class_ogre_1_1_vulkan_render_system.html#a2d0de2f7b75ffb2d4048534ebe90bb73", null ],
     [ "setWBufferEnabled", "class_ogre_1_1_vulkan_render_system.html#a01c339f6e89d82b526fb7725424a4263", null ],
+    [ "sharedVkInitialization", "class_ogre_1_1_vulkan_render_system.html#acf4ba4fa8ff3b5387cd18f617538516f", null ],
     [ "shutdown", "class_ogre_1_1_vulkan_render_system.html#a2c7caf82ac2d6d9ddb335f0ee0effb10", null ],
     [ "startGpuDebuggerFrameCapture", "class_ogre_1_1_vulkan_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e", null ],
     [ "unregisterThread", "class_ogre_1_1_vulkan_render_system.html#a6cd050d0488813ce414f5a2bb3e99f38", null ],

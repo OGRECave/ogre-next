@@ -118,9 +118,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5e2debc911a6b18586c1e32663a5b606"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_plugin.html#a5e2debc911a6b18586c1e32663a5b606">initialise</a> () override</td></tr>
 <tr class="memdesc:a5e2debc911a6b18586c1e32663a5b606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform any tasks the plugin needs to perform on full system initialisation.  <a href="class_ogre_1_1_n_u_l_l_plugin.html#a5e2debc911a6b18586c1e32663a5b606">More...</a><br /></td></tr>
 <tr class="separator:a5e2debc911a6b18586c1e32663a5b606"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15de44678cba53534a6be028ce77c106"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_plugin.html#a15de44678cba53534a6be028ce77c106">install</a> () override</td></tr>
-<tr class="memdesc:a15de44678cba53534a6be028ce77c106"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the plugin initial installation sequence.  <a href="class_ogre_1_1_n_u_l_l_plugin.html#a15de44678cba53534a6be028ce77c106">More...</a><br /></td></tr>
-<tr class="separator:a15de44678cba53534a6be028ce77c106"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a465fff6459e13bd8fc3921713d7077a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_plugin.html#a465fff6459e13bd8fc3921713d7077a9">install</a> (const <a class="el" href="group___general.html#gad887d0555b483f6499fcd3a4dab0e0c6">NameValuePairList</a> *options) override</td></tr>
+<tr class="memdesc:a465fff6459e13bd8fc3921713d7077a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the plugin initial installation sequence.  <a href="class_ogre_1_1_n_u_l_l_plugin.html#a465fff6459e13bd8fc3921713d7077a9">More...</a><br /></td></tr>
+<tr class="separator:a465fff6459e13bd8fc3921713d7077a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -262,8 +262,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a15de44678cba53534a6be028ce77c106" name="a15de44678cba53534a6be028ce77c106"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15de44678cba53534a6be028ce77c106">&#9670;&nbsp;</a></span>install()</h2>
+<a id="a465fff6459e13bd8fc3921713d7077a9" name="a465fff6459e13bd8fc3921713d7077a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a465fff6459e13bd8fc3921713d7077a9">&#9670;&nbsp;</a></span>install()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -274,7 +274,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::NULLPlugin::install </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="group___general.html#gad887d0555b483f6499fcd3a4dab0e0c6">NameValuePairList</a> *&#160;</td>
+          <td class="paramname"><em>options</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -288,7 +289,7 @@ Public Member Functions</h2></td></tr>
 <p>Perform the plugin initial installation sequence. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>An implementation must be supplied for this method. It must perform the startup tasks necessary to install any rendersystem customisations or anything else that is not dependent on system initialisation, ie only dependent on the core of <a class="el" href="namespace_ogre.html">Ogre</a>. It must not perform any operations that would create rendersystem-specific objects at this stage, that should be done in <a class="el" href="class_ogre_1_1_n_u_l_l_plugin.html#a5e2debc911a6b18586c1e32663a5b606" title="Perform any tasks the plugin needs to perform on full system initialisation.">initialise()</a>. </dd></dl>
 
-<p>Implements <a class="el" href="class_ogre_1_1_plugin.html#a556fd0c6a5a05cce82dc7df998c99c0f">Ogre::Plugin</a>.</p>
+<p>Implements <a class="el" href="class_ogre_1_1_plugin.html#a6b24a7a7634a32b14b95a0d1969fbbab">Ogre::Plugin</a>.</p>
 
 </div>
 </div>

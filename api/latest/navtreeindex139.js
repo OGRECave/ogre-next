@@ -1,5 +1,7 @@
 var NAVTREEINDEX139 =
 {
+"class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d":[5,2,11,35,29],
+"class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d":[5,0,1,35,29],
 "class_ogre_1_1_p_v_r_t_c_codec.html":[5,2,3,15],
 "class_ogre_1_1_p_v_r_t_c_codec.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,3,15,19],
 "class_ogre_1_1_p_v_r_t_c_codec.html#a21f4b8a16d070793d576f827c9fee218":[5,2,3,15,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX139 =
 "class_ogre_1_1_paged_world_section.html#aa05961d63f7a427e11b96ec9e03578d0":[5,1,0,9,22],
 "class_ogre_1_1_paged_world_section.html#aaa6b154867333965d148b184c5bffb0b":[5,1,0,9,21],
 "class_ogre_1_1_paged_world_section.html#ab6144d3304276aedd2e78d3c0da044cc":[5,1,0,9,28],
-"class_ogre_1_1_paged_world_section.html#ab719550f4970c6ec32e949bd0ab79b4a":[5,1,0,9,7],
-"class_ogre_1_1_paged_world_section.html#abcbf4e5ec184b0b71263a4cbf64a0e17":[5,1,0,9,20],
-"class_ogre_1_1_paged_world_section.html#abdc7575c0502aa8bd7ecb736eb7eb64e":[5,1,0,9,23]
+"class_ogre_1_1_paged_world_section.html#ab719550f4970c6ec32e949bd0ab79b4a":[5,1,0,9,7]
 };

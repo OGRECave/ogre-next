@@ -1,5 +1,7 @@
 var NAVTREEINDEX173 =
 {
+"class_ogre_1_1_texture_gpu.html#a472f6a92131325af1a8f5ba2b78b86eb":[5,2,10,125,29],
+"class_ogre_1_1_texture_gpu.html#a479448e4772db382f106470a94fafa13":[5,2,10,125,32],
 "class_ogre_1_1_texture_gpu.html#a47e1fcc0e8d7a092a55c79ace4564a4a":[5,2,10,125,5],
 "class_ogre_1_1_texture_gpu.html#a494d1ec99e6e6589c4059125a1d10966":[5,2,10,125,46],
 "class_ogre_1_1_texture_gpu.html#a4b75fd64ef4af817e1ce1e881132b78d":[5,2,10,125,63],
@@ -247,7 +249,5 @@ var NAVTREEINDEX173 =
 "class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3a2062c3ecab68e4d86345293283f69a19":[5,2,5,20,6,2],
 "class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3a4459a171ecd0fe942dc5b5f8e517ecb2":[5,2,5,20,6,1],
 "class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3a5044b1ee092361549f2ea953ed344b0a":[5,2,5,20,6,3],
-"class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3a819e8a0cf0892c671d2fb4835780a12a":[5,2,5,20,6,5],
-"class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3aa9d74ce7d0576d0dda5b5046a6434529":[5,2,5,20,6,0],
-"class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3ab085d126cff272045a1e616adbd2d726":[5,2,5,20,6,4]
+"class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3a819e8a0cf0892c671d2fb4835780a12a":[5,2,5,20,6,5]
 };

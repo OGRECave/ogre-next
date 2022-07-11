@@ -20,6 +20,7 @@ var searchData=
   ['glsles_17',['Glsles',['../struct_ogre_1_1_hlms_base_prop.html#a6eb7197cc54a0a47b73548c58af0948d',1,'Ogre::HlmsBaseProp']]],
   ['glslvk_18',['Glslvk',['../struct_ogre_1_1_hlms_base_prop.html#a163015a155429115574d6c3f9730726d',1,'Ogre::HlmsBaseProp']]],
   ['glversion_19',['GLVersion',['../struct_ogre_1_1_hlms_base_prop.html#a853a25c5cf4564534c84c8d77f056708',1,'Ogre::HlmsBaseProp']]],
-  ['green_20',['Green',['../class_ogre_1_1_colour_value.html#a00384a789ac354ea8dd252c62cb17aa4',1,'Ogre::ColourValue']]],
-  ['gridbuffer_21',['gridBuffer',['../struct_ogre_1_1_forward_plus_base_1_1_cached_grid_buffer.html#a3c2d97651d44fdc5ff786331b8387864',1,'Ogre::ForwardPlusBase::CachedGridBuffer']]]
+  ['graphicsqueue_20',['graphicsQueue',['../struct_ogre_1_1_vulkan_external_device.html#a5b0885f035ad244cf6500aa464a9a1d5',1,'Ogre::VulkanExternalDevice']]],
+  ['green_21',['Green',['../class_ogre_1_1_colour_value.html#a00384a789ac354ea8dd252c62cb17aa4',1,'Ogre::ColourValue']]],
+  ['gridbuffer_22',['gridBuffer',['../struct_ogre_1_1_forward_plus_base_1_1_cached_grid_buffer.html#a3c2d97651d44fdc5ff786331b8387864',1,'Ogre::ForwardPlusBase::CachedGridBuffer']]]
 ];

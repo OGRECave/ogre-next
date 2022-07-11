@@ -1,5 +1,13 @@
 var NAVTREEINDEX259 =
 {
+"struct_ogre_1_1_hidden_area_vr_settings.html#aac400000cac5c745ff5980999a3b9181":[5,2,10,56,7],
+"struct_ogre_1_1_hidden_area_vr_settings.html#af6f880a9fb10883cfdcd0977de3345de":[5,2,10,56,2],
+"struct_ogre_1_1_hidden_area_vr_settings.html#afbda8be8da981a34199b3786bf1660a3":[5,2,10,56,1],
+"struct_ogre_1_1_hlms_1_1_datablock_entry.html":[5,2,10,60,0],
+"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a11f41b74f63b61c81a1e3c36e57c4aaf":[5,2,10,60,0,2],
+"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a1e51eda8b8ef972f565cf79b03a937cf":[5,2,10,60,0,4],
+"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a3e399be6cd4c7fde52af4e3aa78dd35a":[5,2,10,60,0,6],
+"struct_ogre_1_1_hlms_1_1_datablock_entry.html#a5c98c3b4cf39ad0b8794103b30a37043":[5,2,10,60,0,3],
 "struct_ogre_1_1_hlms_1_1_datablock_entry.html#abb02492b0853eb14c1380e51fcc6b167":[5,2,10,60,0,0],
 "struct_ogre_1_1_hlms_1_1_datablock_entry.html#abfc1445d21d3fcb1d8d1c63d315e2712":[5,2,10,60,0,1],
 "struct_ogre_1_1_hlms_1_1_datablock_entry.html#aeb2212235161c741e300001bd8f6770e":[5,2,10,60,0,5],
@@ -241,13 +249,5 @@ var NAVTREEINDEX259 =
 "struct_ogre_1_1_hlms_property.html#a9005d115889057d489efbfe1a0b1a2df":[5,2,10,77,1],
 "struct_ogre_1_1_hlms_property.html#a9c044438147b438dabe3ace1ef64e8b8":[5,2,10,77,0],
 "struct_ogre_1_1_hlms_property.html#aecab519ff1990e94966878e0f4ab864a":[5,2,10,77,3],
-"struct_ogre_1_1_hlms_pso.html":[5,2,10,78],
-"struct_ogre_1_1_hlms_pso.html#a01d5b5734bfaa181540788babf7e64dd":[5,2,10,78,14],
-"struct_ogre_1_1_hlms_pso.html#a046e7706148d71b100d97101bb602160":[5,2,10,78,15],
-"struct_ogre_1_1_hlms_pso.html#a085c7aea90c4f79c75b6b57aa9aef617":[5,2,10,78,21],
-"struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a":[5,2,10,78,3],
-"struct_ogre_1_1_hlms_pso.html#a21993177743971b2fc5b88dd9b57cd26":[5,2,10,78,6],
-"struct_ogre_1_1_hlms_pso.html#a516c97b4cd1a313f491e521d1fa29324":[5,2,10,78,18],
-"struct_ogre_1_1_hlms_pso.html#a52cdf4434222602ce1a7b90c9f7be51f":[5,2,10,78,1],
-"struct_ogre_1_1_hlms_pso.html#a5b992d10857a9d5dc699b56983966917":[5,2,10,78,9]
+"struct_ogre_1_1_hlms_pso.html":[5,2,10,78]
 };

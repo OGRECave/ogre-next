@@ -1175,6 +1175,8 @@ var annotated_dup =
       [ "VulkanDiscardBuffer", "class_ogre_1_1_vulkan_discard_buffer.html", "class_ogre_1_1_vulkan_discard_buffer" ],
       [ "VulkanDiscardBufferManager", "class_ogre_1_1_vulkan_discard_buffer_manager.html", "class_ogre_1_1_vulkan_discard_buffer_manager" ],
       [ "VulkanDynamicBuffer", "class_ogre_1_1_vulkan_dynamic_buffer.html", "class_ogre_1_1_vulkan_dynamic_buffer" ],
+      [ "VulkanExternalDevice", "struct_ogre_1_1_vulkan_external_device.html", "struct_ogre_1_1_vulkan_external_device" ],
+      [ "VulkanExternalInstance", "struct_ogre_1_1_vulkan_external_instance.html", "struct_ogre_1_1_vulkan_external_instance" ],
       [ "VulkanFlushOnlyDescValue", "struct_ogre_1_1_vulkan_flush_only_desc_value.html", "struct_ogre_1_1_vulkan_flush_only_desc_value" ],
       [ "VulkanFrameBufferDescKey", "struct_ogre_1_1_vulkan_frame_buffer_desc_key.html", "struct_ogre_1_1_vulkan_frame_buffer_desc_key" ],
       [ "VulkanFrameBufferDescValue", "struct_ogre_1_1_vulkan_frame_buffer_desc_value.html", "struct_ogre_1_1_vulkan_frame_buffer_desc_value" ],
