@@ -158,7 +158,7 @@ namespace Ogre
         ogreGlObjectLabel( identifier, name, (GLsizei)label.size(), label.c_str() );
     }
 
-    GL3PlusRenderSystem::GL3PlusRenderSystem() :
+    GL3PlusRenderSystem::GL3PlusRenderSystem( const NameValuePairList *options ) :
         mBlendChannelMask( HlmsBlendblock::BlendChannelAll ),
         mDepthWrite( true ),
         mScissorsEnabled( false ),

@@ -728,8 +728,10 @@ namespace Ogre
             It should also implement dllStopPlugin (see Root::unloadPlugin)
         @param pluginName Name of the plugin library to load
         @param bOptional When true, we will skip it if it fails to initialize
+        @param options Options to pass onto the loading plugin. Can be nullptr
         */
-        void loadPlugin( const String &pluginName, const bool bOptional );
+        void loadPlugin( const String &pluginName, const bool bOptional,
+                         const NameValuePairList *options );
 
         /** Manually unloads a Plugin contained in a DLL / DSO.
          @remarks
@@ -752,7 +754,7 @@ namespace Ogre
             loadPlugin, since the DLL function dllStartPlugin should call this
             method when the DLL is loaded.
         */
-        void installPlugin( Plugin *plugin );
+        void installPlugin( Plugin *plugin, const NameValuePairList *options );
 
         /** Uninstall an existing plugin.
         @remarks
