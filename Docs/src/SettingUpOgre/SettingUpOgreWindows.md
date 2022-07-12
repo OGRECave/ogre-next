@@ -5,7 +5,7 @@
 # Requirements {#RequirementsWindows}
     * [CMake 3.x](https://cmake.org/download/)
     * Git
-    * Visual Studio 2008 SP1 - 2017 (2019 not tested). MinGW may work but we strongly recommend Visual Studio.
+    * Visual Studio 2013 - 2019 (2022 not tested). MinGW may work but we strongly recommend Visual Studio.
     * [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812). Optional.
       Needed if you use older Visual Studio versions and want the D3D11 plugin. Also comes with useful tools.
     * Windows 10 SDK. Contains the latest DirectX SDK, thus recommended over the DX June 2010 SDK,
@@ -99,7 +99,7 @@ Download the source code or you can fork it to your own repository and clone it 
 **Command line**:
 ```sh
 git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps
-git clone --branch v2-2 https://github.com/OGRECave/ogre-next
+git clone --branch master https://github.com/OGRECave/ogre-next
 ```
 @}
 

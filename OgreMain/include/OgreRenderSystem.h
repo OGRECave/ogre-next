@@ -589,7 +589,7 @@ namespace Ogre
         + height
         + fullScreen
         + miscParams
-		.
+        .
         See _createRenderWindow for details about each member.
         @param
         createdWindows This array will hold the created render windows.
@@ -787,6 +787,9 @@ namespace Ogre
         virtual void endRenderPassDescriptor();
 
     protected:
+        void debugLogPso( const HlmsPso *pso );
+        void debugLogPso( const HlmsComputePso *pso );
+
         /// Reads DepthBuffer::AvailableDepthFormats and alters DepthBuffer::DefaultDepthBufferFormat
         void selectDepthBufferFormat( const uint8 supportedFormats );
 
@@ -1437,7 +1440,7 @@ namespace Ogre
 
         /// See RenderSystem::startGpuDebuggerFrameCapture
         /// Call this function when you're done capturing a frame.
-        virtual void endGpuDebuggerFrameCapture( Window *window );
+        virtual void endGpuDebuggerFrameCapture( Window *window, const bool bDiscard = false );
 
         /// Explicitly loads RenderDoc. It is not necessary to call this function
         /// unless you want to use RenderSystem::getRenderDocApi before we

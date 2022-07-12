@@ -67,15 +67,15 @@ namespace Ogre
     use advanced features. In addition, you also might want lower-detail techniques
     for distant geometry.
     @par
-    Each technique can be made up of multiple passes. A fixed-function pass
-    may combine multiple texture layers using multitexturing, but Ogre can
-    break that into multiple passes automatically if the active card cannot
-    handle that many simultaneous textures. Programmable passes, however, cannot
+    Each technique can be made up of multiple passes. Programmable passes, however, cannot
     be split down automatically, so if the active graphics card cannot handle the
     technique which contains these passes, OGRE will try to find another technique
     which the card can do. If, at the end of the day, the card cannot handle any of the
     techniques which are listed for the material, the engine will render the
     geometry plain white, which should alert you to the problem.
+
+    Note: Using multiple passes hasn't been tested in Ogre-Next 2.x at all
+    and may no longer work. It definitely needs at least RenderQueue::V1_LEGACY
     @par
     Ogre comes configured with a number of default settings for a newly
     created material. These can be changed if you wish by retrieving the

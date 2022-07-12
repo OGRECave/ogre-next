@@ -314,7 +314,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu *VulkanTextureGpuManager::createTextureGpuWindow( VulkanWindow *window )
+    TextureGpu *VulkanTextureGpuManager::createTextureGpuWindow( VulkanWindowSwapChainBased *window )
     {
         return OGRE_NEW VulkanTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
                                                 "RenderWindow",                      //
@@ -324,6 +324,18 @@ namespace Ogre
                                                     TextureFlags::RequiresTextureFlipping |
                                                     TextureFlags::DiscardableContent,
                                                 TextureTypes::Type2D, this, window );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu *VulkanTextureGpuManager::createTextureGpuNullWindow()
+    {
+        return OGRE_NEW VulkanTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
+                                                      "RenderWindow",                      //
+                                                      TextureFlags::NotTexture |           //
+                                                          TextureFlags::RenderToTexture |  //
+                                                          // TextureFlags::RenderWindowSpecific |
+                                                          TextureFlags::RequiresTextureFlipping |
+                                                          TextureFlags::DiscardableContent,
+                                                      TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer()

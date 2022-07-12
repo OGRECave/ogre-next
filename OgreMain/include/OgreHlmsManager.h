@@ -152,7 +152,11 @@ namespace Ogre
 
     public:
         HlmsManager();
-        ~HlmsManager() override;
+        ~HlmsManager()
+#if !OGRE_NO_JSON
+            override
+#endif
+            ;
 
         /// Increments the reference count for the block, despite being const.
         void addReference( const BasicBlock *block );

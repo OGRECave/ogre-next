@@ -50,7 +50,6 @@ namespace Ogre
         mAutomaticBatching( false ),
         mTextureType( TextureTypes::Type2D ),
         mTextureSrcMipmaps( 1u ),
-        mTextureCoordSetIndex( 0 ),
         mSamplerblock( 0 ),
         mTextureLoadFailed( false ),
         mIsAlpha( false ),
@@ -89,13 +88,12 @@ namespace Ogre
     }
 
     //-----------------------------------------------------------------------
-    TextureUnitState::TextureUnitState( Pass *parent, const String &texName, unsigned int texCoordSet ) :
+    TextureUnitState::TextureUnitState( Pass *parent, const String &texName ) :
         mCurrentFrame( 0 ),
         mAnimDuration( 0 ),
         mCubic( false ),
         mTextureType( TextureTypes::Type2D ),
         mTextureSrcMipmaps( 1u ),
-        mTextureCoordSetIndex( 0 ),
         mTextureLoadFailed( false ),
         mIsAlpha( false ),
         mHwGamma( false ),
@@ -120,7 +118,6 @@ namespace Ogre
         setColourOperation( LBO_MODULATE );
 
         setTextureName( texName );
-        setTextureCoordSet( texCoordSet );
 
         HlmsManager *hlmsManager = parent->_getDatablock()->getCreator()->getHlmsManager();
         HlmsSamplerblock samplerblock;
@@ -557,10 +554,6 @@ namespace Ogre
     void TextureUnitState::setHardwareGammaEnabled( bool g ) { mHwGamma = g; }
     //-----------------------------------------------------------------------
     bool TextureUnitState::isHardwareGammaEnabled() const { return mHwGamma; }
-    //-----------------------------------------------------------------------
-    unsigned int TextureUnitState::getTextureCoordSet() const { return mTextureCoordSetIndex; }
-    //-----------------------------------------------------------------------
-    void TextureUnitState::setTextureCoordSet( unsigned int set ) { mTextureCoordSetIndex = set; }
     //-----------------------------------------------------------------------
     void TextureUnitState::setColourOperationEx( LayerBlendOperationEx op, LayerBlendSource source1,
                                                  LayerBlendSource source2, const ColourValue &arg1,

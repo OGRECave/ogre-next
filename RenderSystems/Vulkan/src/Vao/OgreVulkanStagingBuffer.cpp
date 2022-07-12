@@ -195,6 +195,11 @@ namespace Ogre
     {
         assert( mUploadOnly );
 
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        if( Workarounds::mPowerVRAlignment )
+            sizeBytes = alignToNextMultiple<size_t>( sizeBytes, Workarounds::mPowerVRAlignment );
+#endif
+
         mMappingCount = sizeBytes;
 
         OGRE_ASSERT_MEDIUM( mUnmapTicket == std::numeric_limits<size_t>::max() &&
@@ -242,6 +247,12 @@ namespace Ogre
             region.srcOffset = mInternalBufferStart + mMappingStart + dst.srcOffset;
             region.dstOffset = dstOffset;
             region.size = dst.length;
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+            OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
+                              ( region.srcOffset % Workarounds::mPowerVRAlignment ) == 0u );
+            OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
+                              ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
+#endif
             vkCmdCopyBuffer( cmdBuffer, mVboName, bufferInterface->getVboName(), 1u, &region );
         }
 
@@ -293,6 +304,12 @@ namespace Ogre
         region.srcOffset = source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset;
         region.dstOffset = mInternalBufferStart + freeRegionOffset;
         region.size = srcLength;
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
+                          ( region.srcOffset % Workarounds::mPowerVRAlignment ) == 0u );
+        OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
+                          ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
+#endif
         vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, bufferInterface->getVboName(),
                          mVboName, 1u, &region );
 
@@ -328,6 +345,12 @@ namespace Ogre
         region.srcOffset = mInternalBufferStart + mMappingStart;
         region.dstOffset = lockStart + dstOffsetStart;
         region.size = alignToNextMultiple<size_t>( lockSize, 4u );
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
+                          ( region.srcOffset % Workarounds::mPowerVRAlignment ) == 0u );
+        OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
+                          ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
+#endif
         vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName, dstBuffer, 1u, &region );
 
         if( mUploadOnly )
@@ -385,6 +408,12 @@ namespace Ogre
         region.srcOffset = srcOffset + srcOffsetStart;
         region.dstOffset = mInternalBufferStart + freeRegionOffset;
         region.size = alignToNextMultiple<size_t>( srcLength, 4u );
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
+                          ( region.srcOffset % Workarounds::mPowerVRAlignment ) == 0u );
+        OGRE_ASSERT_HIGH( !Workarounds::mPowerVRAlignment ||
+                          ( region.dstOffset % Workarounds::mPowerVRAlignment ) == 0u );
+#endif
         vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, srcBuffer, mVboName, 1u, &region );
 
         return freeRegionOffset + extraOffset;

@@ -82,18 +82,23 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanSupport::initialize( VulkanRenderSystem *renderSystem )
     {
-        if( renderSystem->getVkInstance() )
-            return;
+        if( !renderSystem->getVkInstance() )
+            renderSystem->initializeVkInstance();
 
-        renderSystem->initializeVkInstance();
-        enumerateDevices( renderSystem );
+        if( mDevices.empty() )
+            enumerateDevices( renderSystem );
     }
+    //-------------------------------------------------------------------------
+    void VulkanSupport::setSupported() { mSupported = true; }
     //-------------------------------------------------------------------------
     void VulkanSupport::addConfig( VulkanRenderSystem *renderSystem )
     {
         initialize( renderSystem );
 
         ConfigOption optDevices;
+        ConfigOption optInterfaces;
+        ConfigOption optFSAA;
+        ConfigOption optSRGB;
 
         optDevices.name = "Device";
 
@@ -108,7 +113,53 @@ namespace Ogre
         optDevices.currentValue = mDevices.front();
         optDevices.immutable = false;
 
+        optInterfaces.name = "Interface";
+#ifdef OGRE_VULKAN_WINDOW_WIN32
+        optInterfaces.possibleValues.push_back( "win32" );
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
+        optInterfaces.possibleValues.push_back( "xcb" );
+        // optInterfaces.possibleValues.push_back( "wayland" );
+#endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+        optInterfaces.possibleValues.push_back( "android" );
+#endif
+#ifdef OGRE_VULKAN_WINDOW_NULL
+        optInterfaces.possibleValues.push_back( "null" );
+#endif
+        optInterfaces.currentValue = optInterfaces.possibleValues.front();
+        optInterfaces.immutable = false;
+
+        optFSAA.name = "FSAA";
+        optFSAA.immutable = false;
+        optFSAA.possibleValues.push_back( "1" );
+        optFSAA.possibleValues.push_back( "2" );
+        optFSAA.possibleValues.push_back( "4" );
+        optFSAA.possibleValues.push_back( "8" );
+        optFSAA.possibleValues.push_back( "16" );
+        //        for( vector<int>::type::iterator it = mFSAALevels.begin(); it != mFSAALevels.end();
+        //        ++it )
+        //        {
+        //            String val = StringConverter::toString( *it );
+        //            optFSAA.possibleValues.push_back( val );
+        //            /* not implementing CSAA in GL for now
+        //            if (*it >= 8)
+        //                optFSAA.possibleValues.push_back(val + " [Quality]");
+        //            */
+        //        }
+        optFSAA.currentValue = "1";
+
+        // SRGB on auto window
+        optSRGB.name = "sRGB Gamma Conversion";
+        optSRGB.possibleValues.push_back( "Yes" );
+        optSRGB.possibleValues.push_back( "No" );
+        optSRGB.currentValue = "Yes";
+        optSRGB.immutable = false;
+
         mOptions[optDevices.name] = optDevices;
+        mOptions[optInterfaces.name] = optInterfaces;
+        mOptions[optFSAA.name] = optFSAA;
+        mOptions[optSRGB.name] = optSRGB;
     }
     //-------------------------------------------------------------------------
     void VulkanSupport::setConfigOption( const String &name, const String &value )
@@ -167,4 +218,8 @@ namespace Ogre
         initialize( renderSystem );
         return mOptions;
     }
+    //-------------------------------------------------------------------------
+    IdString VulkanSupport::getInterfaceName() const { return "null"; }
+    //-------------------------------------------------------------------------
+    String VulkanSupport::getInterfaceNameStr() const { return "null"; }
 }  // namespace Ogre

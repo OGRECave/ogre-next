@@ -135,7 +135,7 @@ namespace Ogre
         bool loadIcon( const String &name, Pixmap *pix, Pixmap *mask );
 
         /**
-         * Get the GLXFBConfig used to create a ::GLXContext
+         * Get the GLXFBConfig used to create a ::%GLXContext
          *
          * @param drawable   GLXContext
          * @returns               GLXFBConfig used to create the context

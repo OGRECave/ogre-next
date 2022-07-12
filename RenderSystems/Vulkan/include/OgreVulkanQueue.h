@@ -113,7 +113,7 @@ namespace Ogre
         RefCountedFenceMap mRefCountedFences;
 
     public:
-        FastArray<VulkanWindow *> mWindowsPendingSwap;
+        FastArray<VulkanWindowSwapChainBased *> mWindowsPendingSwap;
 
     protected:
         FastArray<VkCommandBuffer> mPendingCmds;
@@ -210,6 +210,7 @@ namespace Ogre
         ~VulkanQueue();
 
         void setQueueData( VulkanDevice *owner, QueueFamily family, uint32 familyIdx, uint32 queueIdx );
+        void setExternalQueue( VulkanDevice *owner, QueueFamily family, VkQueue queue );
 
         void init( VkDevice device, VkQueue queue, VulkanRenderSystem *renderSystem );
         void destroy();
@@ -256,6 +257,7 @@ namespace Ogre
         */
         void getCopyEncoder( const BufferPacked *buffer, TextureGpu *texture, const bool bDownload,
                              CopyEncTransitionMode::CopyEncTransitionMode transitionMode );
+        void getCopyEncoderAsyncTextureTicketUpload();
         void getCopyEncoderV1Buffer( const bool bDownload );
 
         void endCopyEncoder();

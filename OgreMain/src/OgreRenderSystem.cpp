@@ -601,6 +601,43 @@ namespace Ogre
             OGRE_ASSERT_MEDIUM( depthBuffer->getSourceType() != TextureSourceType::SharedDepthBuffer );
         }
     }
+    //-----------------------------------------------------------------------
+    void RenderSystem::debugLogPso( const HlmsPso *pso )
+    {
+        char tmpBuffer[256];
+        LwString msg( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+        msg.a( "Creating PSO with" );
+
+        if( pso->vertexShader )
+            msg.a( " ", pso->vertexShader->getName().c_str() );
+        if( pso->geometryShader )
+            msg.a( " ", pso->geometryShader->getName().c_str() );
+        if( pso->tesselationHullShader )
+            msg.a( " ", pso->tesselationHullShader->getName().c_str() );
+        if( pso->tesselationDomainShader )
+            msg.a( " ", pso->tesselationDomainShader->getName().c_str() );
+        if( pso->pixelShader )
+            msg.a( " ", pso->pixelShader->getName().c_str() );
+
+        LogManager::getSingleton().logMessage( msg.c_str(), LML_TRIVIAL );
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::debugLogPso( const HlmsComputePso *pso )
+    {
+        char tmpBuffer[256];
+        LwString msg( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+        msg.a( "Creating Compute PSO with" );
+
+        if( pso->computeShader )
+            msg.a( " ", pso->computeShader->getName().c_str() );
+
+        msg.a( " thPerGroup [", pso->mThreadsPerGroup[0], ", ", pso->mThreadsPerGroup[1], ", ",
+               pso->mThreadsPerGroup[2], "]" );
+        msg.a( " numThrGroups [", pso->mNumThreadGroups[0], ", ", pso->mNumThreadGroups[1], ", ",
+               pso->mNumThreadGroups[2], "]" );
+
+        LogManager::getSingleton().logMessage( msg.c_str(), LML_TRIVIAL );
+    }
     //---------------------------------------------------------------------
     void RenderSystem::selectDepthBufferFormat( const uint8 supportedFormats )
     {
@@ -1343,7 +1380,7 @@ namespace Ogre
         return true;
     }
     //---------------------------------------------------------------------
-    void RenderSystem::endGpuDebuggerFrameCapture( Window *window )
+    void RenderSystem::endGpuDebuggerFrameCapture( Window *window, const bool bDiscard )
     {
         if( !mRenderDocApi )
             return;
@@ -1355,7 +1392,11 @@ namespace Ogre
             window->getCustomAttribute( "RENDERDOC_DEVICE", device );
             window->getCustomAttribute( "RENDERDOC_WINDOW", windowHandle );
         }
-        mRenderDocApi->EndFrameCapture( device, windowHandle );
+
+        if( bDiscard )
+            mRenderDocApi->DiscardFrameCapture( device, windowHandle );
+        else
+            mRenderDocApi->EndFrameCapture( device, windowHandle );
 #endif
     }
     //---------------------------------------------------------------------

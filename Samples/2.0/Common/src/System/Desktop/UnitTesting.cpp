@@ -42,22 +42,24 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
 
-#if defined( __GNUC__ ) && !defined( __clang__ )
-#    pragma GCC diagnostic push
-#    pragma GCC diagnostic ignored "-Wclass-memaccess"
-#endif
-#if defined( __clang__ )
-#    pragma clang diagnostic push
-#    pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
-#    pragma clang diagnostic ignored "-Wdeprecated-copy"
-#endif
-#include "rapidjson/document.h"
-#include "rapidjson/error/en.h"
-#if defined( __clang__ )
-#    pragma clang diagnostic pop
-#endif
-#if defined( __GNUC__ ) && !defined( __clang__ )
-#    pragma GCC diagnostic pop
+#if !OGRE_NO_JSON && defined( USE_JSON_UNIT_TESTING )
+#    if defined( __GNUC__ ) && !defined( __clang__ )
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wclass-memaccess"
+#    endif
+#    if defined( __clang__ )
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#        pragma clang diagnostic ignored "-Wdeprecated-copy"
+#    endif
+#    include "rapidjson/document.h"
+#    include "rapidjson/error/en.h"
+#    if defined( __clang__ )
+#        pragma clang diagnostic pop
+#    endif
+#    if defined( __GNUC__ ) && !defined( __clang__ )
+#        pragma GCC diagnostic pop
+#    endif
 #endif
 
 #include <fstream>
@@ -392,7 +394,7 @@ namespace Demo
     //-------------------------------------------------------------------------
     int UnitTest::loadFromJson( const char *fullpath, const Ogre::String &outputFolder )
     {
-#if !OGRE_NO_JSON
+#if !OGRE_NO_JSON && defined( USE_JSON_UNIT_TESTING )
         rapidjson::Document d;
 
         std::ifstream inFile( fullpath, std::ios::binary | std::ios::in );

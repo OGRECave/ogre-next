@@ -1,0 +1,11 @@
+#ifndef OGREVulkan_Custom_Config_H
+#define OGREVulkan_Custom_Config_H
+
+// CMake auto-generated configuration options
+
+#cmakedefine OGRE_VULKAN_WINDOW_NULL
+#cmakedefine OGRE_VULKAN_WINDOW_WIN32
+#cmakedefine OGRE_VULKAN_WINDOW_XCB
+#cmakedefine OGRE_VULKAN_WINDOW_ANDROID
+
+#endif

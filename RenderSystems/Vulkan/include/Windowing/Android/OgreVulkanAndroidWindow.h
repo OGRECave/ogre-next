@@ -41,7 +41,7 @@ struct ANativeWindow;
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanAndroidWindow final : public VulkanWindow
+    class _OgreVulkanExport VulkanAndroidWindow final : public VulkanWindowSwapChainBased
     {
         ANativeWindow *mNativeWindow;
 

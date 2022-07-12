@@ -36,6 +36,40 @@ namespace Ogre
 {
     class VulkanWindow : public Window
     {
+    protected:
+        VulkanDevice *mDevice;
+
+        bool mHwGamma;
+
+    public:
+        VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
+
+        void _setDevice( VulkanDevice *device );
+        void _initialize( TextureGpuManager *textureGpuManager ) override;
+        virtual void _initialize( TextureGpuManager *textureGpuManager,
+                                  const NameValuePairList *miscParams ) = 0;
+    };
+
+    class VulkanWindowNull : public VulkanWindow
+    {
+    public:
+        VulkanWindowNull( const String &title, uint32 width, uint32 height, bool fullscreenMode );
+        ~VulkanWindowNull() override;
+
+        void destroy() override;
+        void reposition( int32 leftPt, int32 topPt ) override;
+        bool isClosed() const override;
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
+        void _initialize( TextureGpuManager *textureGpuManager,
+                          const NameValuePairList *miscParams ) override;
+        void swapBuffers() override;
+    };
+
+    class VulkanWindowSwapChainBased : public VulkanWindow
+    {
     public:
         enum Backend
         {
@@ -43,11 +77,11 @@ namespace Ogre
         };
         enum SwapchainStatus
         {
-            /// We already called VulkanWindow::acquireNextSwapchain.
+            /// We already called VulkanWindowSwapChainBased::acquireNextSwapchain.
             ///
             /// Can only go into this state if we're coming from SwapchainReleased
             SwapchainAcquired,
-            /// We already called VulkanWindow::getImageAcquiredSemaphore.
+            /// We already called VulkanWindowSwapChainBased::getImageAcquiredSemaphore.
             /// Further calls to getImageAcquiredSemaphore will return null.
             /// Ogre is rendering or intends to into this swapchain.
             ///
@@ -63,10 +97,7 @@ namespace Ogre
         };
 
         bool mLowestLatencyVSync;
-        bool mHwGamma;
         bool mClosed;
-
-        VulkanDevice *mDevice;
 
         VkSurfaceKHR mSurfaceKHR;
         VkSwapchainKHR mSwapchain;
@@ -89,15 +120,10 @@ namespace Ogre
         void acquireNextSwapchain();
 
     public:
-        VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        ~VulkanWindow() override;
+        VulkanWindowSwapChainBased( const String &title, uint32 width, uint32 height, bool fullscreenMode );
+        ~VulkanWindowSwapChainBased() override;
 
         void destroy() override;
-
-        void _setDevice( VulkanDevice *device );
-        void _initialize( TextureGpuManager *textureGpuManager ) override;
-        virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *miscParams ) = 0;
 
         /// Returns null if getImageAcquiredSemaphore has already been called during this frame
         VkSemaphore getImageAcquiredSemaphore();

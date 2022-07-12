@@ -1336,7 +1336,7 @@ namespace Ogre
             ACT_PACKED_TEXTURE_SIZE,
 
             /** Provides the current transform matrix of the texture unit (index determined by
-               setAutoConstant call), as seen by the fixed-function pipeline.
+               setAutoConstant call), as it used to be seen by the now-removed fixed-function pipeline.
             */
             ACT_TEXTURE_MATRIX,
 
@@ -2360,7 +2360,7 @@ namespace Ogre
         */
         size_t _getUnsignedIntConstantPhysicalIndex( size_t logicalIndex, size_t requestedSize,
                                                      uint16 variability );
-        /** Gets the physical buffer index associated with a logical bool constant index.
+        /* Gets the physical buffer index associated with a logical bool constant index.
             @note Only applicable to low-level programs.
             @param logicalIndex The logical parameter index
             @param requestedSize The requested size - pass 0 to ignore missing entries

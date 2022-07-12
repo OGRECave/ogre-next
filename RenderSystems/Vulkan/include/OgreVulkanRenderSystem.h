@@ -47,6 +47,7 @@ namespace Ogre
         class HardwareBufferManager;
     }
 
+    struct VulkanExternalInstance;
     struct VulkanHlmsPso;
     class VulkanSupport;
 
@@ -71,6 +72,8 @@ namespace Ogre
 
         VkInstance mVkInstance;
         VulkanSupport *mVulkanSupport;
+
+        std::map<IdString, VulkanSupport *> mAvailableVulkanSupports;
 
         // TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
         typedef vector<ConstBufferPacked *>::type ConstBufferPackedVec;
@@ -97,6 +100,8 @@ namespace Ogre
         uint32_t mStencilRefValue;
         bool mStencilEnabled;
 
+        bool mVkInstanceIsExternal;
+
         bool mTableDirty;
         bool mComputeTableDirty;
         VulkanGlobalBindingTable mGlobalTable;
@@ -119,13 +124,6 @@ namespace Ogre
 
         bool mValidationError;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        bool mHasWin32Support;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        bool mHasAndroidSupport;
-#else
-        bool mHasXcbSupport;
-#endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         bool mHasValidationLayers;
 #endif
@@ -153,7 +151,7 @@ namespace Ogre
         void flushRootLayoutCS();
 
     public:
-        VulkanRenderSystem();
+        VulkanRenderSystem( const NameValuePairList *options );
         ~VulkanRenderSystem() override;
 
         void shutdown() override;
@@ -177,7 +175,10 @@ namespace Ogre
 
         void reinitialise() override;
 
+        void initializeExternalVkInstance( VulkanExternalInstance *externalInstance );
         void initializeVkInstance();
+
+        void sharedVkInitialization();
 
         VkInstance getVkInstance() const { return mVkInstance; }
 
@@ -301,7 +302,7 @@ namespace Ogre
         void beginGPUSampleProfile( const String &name, uint32 *hashCache ) override;
         void endGPUSampleProfile( const String &name ) override;
 
-        void endGpuDebuggerFrameCapture( Window *window ) override;
+        void endGpuDebuggerFrameCapture( Window *window, const bool bDiscard = false ) override;
 
         bool hasAnisotropicMipMapFilter() const override { return true; }
 

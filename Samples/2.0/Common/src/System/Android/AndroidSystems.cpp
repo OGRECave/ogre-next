@@ -84,6 +84,22 @@ namespace Demo
         return stream;
     }
     //-------------------------------------------------------------------------
+    std::string AndroidSystems::getFilesDir( const bool bInternal )
+    {
+        const char *dataPath = bInternal ? g_andrSystem.mAndroidApp->activity->internalDataPath
+                                         : g_andrSystem.mAndroidApp->activity->externalDataPath;
+
+        std::string retVal;
+        if( dataPath )
+        {
+            retVal = dataPath;
+            if( !retVal.empty() && retVal.back() != '/' )
+                retVal.push_back( '/' );
+        }
+
+        return retVal;
+    }
+    //-------------------------------------------------------------------------
     bool AndroidSystems::isAndroid() { return true; }
 #else
     //-------------------------------------------------------------------------
@@ -91,6 +107,7 @@ namespace Demo
     void AndroidSystems::setAndroidApp( android_app * ) {}
     void AndroidSystems::setNativeWindow( ANativeWindow * ) {}
     ANativeWindow *AndroidSystems::getNativeWindow() { return 0; }
+    std::string AndroidSystems::getFilesDir( const bool /*bInternal*/ ) { return ""; }
     bool AndroidSystems::isAndroid() { return false; }
     void AndroidSystems::registerArchiveFactories() {}
 #endif

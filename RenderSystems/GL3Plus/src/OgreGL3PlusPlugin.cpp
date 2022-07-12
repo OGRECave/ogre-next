@@ -39,9 +39,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     const String &GL3PlusPlugin::getName() const { return sPluginName; }
     //---------------------------------------------------------------------
-    void GL3PlusPlugin::install()
+    void GL3PlusPlugin::install( const NameValuePairList *options )
     {
-        mRenderSystem = OGRE_NEW GL3PlusRenderSystem();
+        mRenderSystem = OGRE_NEW GL3PlusRenderSystem( options );
 
         Root::getSingleton().addRenderSystem( mRenderSystem );
     }

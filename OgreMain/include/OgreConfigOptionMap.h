@@ -33,6 +33,8 @@ THE SOFTWARE.
 
 #include "OgreStringVector.h"
 
+#include "ogrestd/map.h"
+
 namespace Ogre
 {
     /** \addtogroup Core

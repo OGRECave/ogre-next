@@ -44,7 +44,7 @@ namespace Ogre
         const String &getName() const override;
 
         /// @copydoc Plugin::install
-        void install() override;
+        void install( const NameValuePairList *options ) override;
 
         /// @copydoc Plugin::initialise
         void initialise() override;

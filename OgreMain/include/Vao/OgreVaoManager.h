@@ -372,7 +372,7 @@ namespace Ogre
                                           BufferType bufferType, void *initialData, bool keepAsShadow );
 
         /** Destroys the given texture buffer created with createTexBuffer.
-        @param constBuffer
+        @param texBuffer
             Texture Buffer created with createTexBuffer
         */
         void destroyTexBuffer( TexBufferPacked *texBuffer );
@@ -416,7 +416,7 @@ namespace Ogre
                                           void *initialData, bool keepAsShadow );
 
         /** Destroys the given UAV buffer created with createUavBuffer.
-        @param constBuffer
+        @param uavBuffer
             Uav Buffer created with createUavBuffer
         */
         void destroyUavBuffer( UavBufferPacked *uavBuffer );
@@ -478,7 +478,7 @@ namespace Ogre
             be increased.
             You should decrease the reference count after you're done with the returned
             pointer. See StagingBuffer::removeReferenceCount regarding ref. counting.
-        @param sizeBytes
+        @param minSizeBytes
             Minimum size, in bytes, of the staging buffer.
             The returned buffer may be bigger.
         @param forUpload

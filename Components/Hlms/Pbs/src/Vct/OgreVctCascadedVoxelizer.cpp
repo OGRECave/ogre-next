@@ -117,6 +117,17 @@ namespace Ogre
         mCascades.push_back( (VctLighting *)0 );
     }
     //-------------------------------------------------------------------------
+    void VctCascadedVoxelizer::popCascade()
+    {
+        if( !mCascades.empty() )
+        {
+            OGRE_ASSERT_LOW( !mCascadeSettings.back().voxelizer );
+            OGRE_ASSERT_LOW( !mCascades.back() );
+            mCascadeSettings.pop_back();
+            mCascades.pop_back();
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::autoCalculateStepSizes( const Vector3 stepSize )
     {
         if( mCascadeSettings.empty() )

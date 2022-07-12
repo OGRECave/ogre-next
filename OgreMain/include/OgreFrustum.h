@@ -214,13 +214,13 @@ namespace Ogre
         virtual const Radian &getFOVy() const;
 
         /// Returns the terms projectionA and projectionB in .x and .y respectively, which can
-        /// be used to reconstruct linear depth from a Z buffer.  If the projection type is PT_PERSPECTIVE,
-        /// use the following formula:
-        /// 
+        /// be used to reconstruct linear depth from a Z buffer.  If the projection type is
+        /// PT_PERSPECTIVE, use the following formula:
+        ///
         ///     linearDepth = projectionParams.y / (fDepth - projectionParams.x);
-        ///     
+        ///
         /// But if the projection type is PT_ORTHOGRAPHIC, use the formula:
-        /// 
+        ///
         ///     linearDepth = (fDepth - projectionParams.x) / projectionParams.y;
         Vector2 getProjectionParamsAB() const;
 
@@ -343,7 +343,7 @@ namespace Ogre
         virtual void resetFrustumExtents();
 
         /** Get the extents of the frustum in view space.
-        @param left, right, top, bottom The position where the side clip planes intersect
+        @param outleft, outright, outtop, outbottom The position where the side clip planes intersect
             the near clip plane, in eye space OR the tangent of the half angles from the eye to the edges
             of the near clip plane
         @param frustrumExtentsType
@@ -362,8 +362,7 @@ namespace Ogre
             no matter what rendering API is being used - this is required for
             vertex and fragment programs for example. However, the resulting depth
             range may still vary between render systems since D3D uses [0,1] and
-            GL uses [-1,1], and the range must be kept the same between programmable
-            and fixed-function pipelines.
+            GL uses [-1,1].
         */
         virtual const Matrix4 &getProjectionMatrixWithRSDepth() const;
         /** Gets the normal projection matrix for this frustum, ie the

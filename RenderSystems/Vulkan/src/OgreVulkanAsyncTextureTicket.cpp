@@ -118,6 +118,9 @@ namespace Ogre
 
         // No need to call mQueue->getCopyEncoder( this, 0, false ); because
         // this is a fresh memory region (unless mStatus == Downloading)
+        // But getCopyEncoderAsyncTextureTicketUpload still tells Vulkan to
+        // flush the caches once we're done writing to mVboName.mVboName
+        mQueue->getCopyEncoderAsyncTextureTicketUpload();
         mQueue->getCopyEncoder( 0, textureSrc, true, CopyEncTransitionMode::Auto );
         if( mStatus == Downloading )
         {

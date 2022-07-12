@@ -30,6 +30,8 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreVulkanBuildSettings.h"
+
 #include "OgreLogManager.h"
 
 #ifdef __MINGW32__
@@ -107,6 +109,7 @@ namespace Ogre
     class VulkanTextureGpuManager;
     class VulkanVaoManager;
     class VulkanWindow;
+    class VulkanWindowSwapChainBased;
     class VulkanDiscardBuffer;
     class VulkanDiscardBufferManager;
 

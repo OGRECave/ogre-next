@@ -50,7 +50,7 @@ namespace Ogre
 {
     VulkanAndroidWindow::VulkanAndroidWindow( const String &title, uint32 width, uint32 height,
                                               bool fullscreenMode ) :
-        VulkanWindow( title, width, height, fullscreenMode ),
+        VulkanWindowSwapChainBased( title, width, height, fullscreenMode ),
         mNativeWindow( 0 ),
         mVisible( true ),
         mHidden( false ),
@@ -90,7 +90,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanAndroidWindow::destroy()
     {
-        VulkanWindow::destroy();
+        VulkanWindowSwapChainBased::destroy();
 
         if( mClosed )
             return;
@@ -215,6 +215,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
+        if( mNativeWindow && !nativeWindow )
+        {
+            // Android is destroying our window. Likely user pressed the home or power
+            // button.
+            //
+            // We must flush all our references to the old swapchain otherwise when
+            // the app goes to foreground again and submit that stale content Mali
+            // will return DEVICE_LOST
+            mDevice->stall();
+        }
+
         destroy();
 
         // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
@@ -291,7 +302,7 @@ namespace Ogre
         }
         else
         {
-            VulkanWindow::getCustomAttribute( name, pData );
+            VulkanWindowSwapChainBased::getCustomAttribute( name, pData );
         }
     }
 }  // namespace Ogre

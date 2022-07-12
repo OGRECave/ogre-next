@@ -53,16 +53,10 @@ namespace Ogre
         Technique, of a Material.
     @remarks
         Texture units are pipelines for retrieving texture data for rendering onto
-        your objects in the world. Using them is common to both the fixed-function and
-        the programmable (vertex and fragment program) pipeline, but some of the
-        settings will only have an effect in the fixed-function pipeline (for example,
-        setting a texture rotation will have no effect if you use the programmable
-        pipeline, because this is overridden by the fragment program). The effect
-        of each setting as regards the 2 pipelines is commented in each setting.
-    @par
-        When I use the term 'fixed-function pipeline' I mean traditional rendering
-        where you do not use vertex or fragment programs (shaders). Programmable
-        pipeline means that for this pass you are using vertex or fragment programs.
+        your objects in the world. Becode Ogre-Next no longer supports the fixed-function
+        pipeline, some of the settings (e.g. setting a texture rotation) will only have an effect
+        if the shader applies receives `param_named_auto texture_matrix` as input and multiplies
+        that matrix against the UVs to apply these transformations.
     */
     class _OgreExport TextureUnitState : public OgreAllocatedObj, public TextureGpuListener
     {
@@ -171,33 +165,25 @@ namespace Ogre
         /** Name-based constructor.
         @param texName
             The basic name of the texture e.g. brickwall.jpg, stonefloor.png.
-        @param texCoordSet
-            The index of the texture coordinate set to use.
         */
-        TextureUnitState( Pass *parent, const String &texName, unsigned int texCoordSet = 0 );
+        TextureUnitState( Pass *parent, const String &texName );
 
         /** Get the name of current texture image for this layer.
         @remarks
             This will either always be a single name for this layer,
             or will be the name of the current frame for an animated
             or otherwise multi-frame texture.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         const String &getTextureName() const;
 
         /** Sets this texture layer to use a single texture, given the
             name of the texture to use on this layer.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         void setTextureName( const String              &name,
                              TextureTypes::TextureTypes ttype = TextureTypes::Type2D );
 
         /** Sets this texture layer to use a single texture, given the
             pointer to the texture to use on this layer.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         void setTexture( TextureGpu *texPtr );
 
@@ -234,8 +220,6 @@ namespace Ogre
             </p>
             </li>
             </ol>
-        @note
-            Applies to both fixed-function and programmable pipeline.
         @param name
             The basic name of the texture e.g. brickwall.jpg, stonefloor.png. There must be 6 versions
             of this texture with the suffixes _fr, _bk, _up, _dn, _lf, and _rt (before the extension)
@@ -281,8 +265,6 @@ namespace Ogre
             </p>
             </li>
             </ol>
-        @note
-            Applies to both fixed-function and programmable pipeline.
         @param names
             The 6 names of the textures which make up the 6 sides of the box. The textures must all
             be the same size and be powers of 2 in width & height.
@@ -326,8 +308,6 @@ namespace Ogre
             </p>
             </li>
             </ol>
-        @note
-            Applies to both fixed-function and programmable pipeline.
         @param texPtrs
             The 6 pointers to the textures which make up the 6 sides of the box. The textures must all
             be the same size and be powers of 2 in width & height.
@@ -349,8 +329,6 @@ namespace Ogre
         @note
             If you can't make your texture images conform to the naming standard laid out here, you
             can call the alternative setAnimatedTextureName method which takes an array of names instead.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         @param name
             The base name of the textures to use e.g. wall.jpg for frames wall_0.jpg, wall_1.jpg etc.
         @param numFrames
@@ -373,8 +351,6 @@ namespace Ogre
         @note
             If you can make your texture images conform to a naming standard of basicName_frame.ext, you
             can call the alternative setAnimatedTextureName method which just takes a base name instead.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         @param names
             Pointer to array of names of the textures to use, in frame order.
         @param numFrames
@@ -394,21 +370,15 @@ namespace Ogre
         @remarks
             An animated texture (or a cubic texture where the images are not combined for 3D use) is made
         up of a number of frames. This method sets the active frame.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         void setCurrentFrame( unsigned int frameNumber );
 
         /** Gets the active frame in an animated or multi-image texture layer.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         unsigned int getCurrentFrame() const;
 
         /** Gets the name of the texture associated with a frame number.
             Throws an exception if frameNumber exceeds the number of stored frames.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         const String &getFrameTextureName( unsigned int frameNumber ) const;
 
@@ -419,15 +389,12 @@ namespace Ogre
             The frame the texture name is to be placed in.
         @note
             Throws an exception if frameNumber exceeds the number of stored frames.
-            Applies to both fixed-function and programmable pipeline.
         */
         void setFrameTextureName( const String &name, unsigned int frameNumber );
 
         /** Add a Texture name to the end of the frame container.
         @param name
             The name of the texture.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         void addFrameTextureName( const String &name );
         /** Deletes a specific texture frame.  The texture used is not deleted but the
@@ -435,13 +402,9 @@ namespace Ogre
             if the frame number exceeds the number of actual frames.
         @param frameNumber
             The frame number of the texture to be deleted.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         void deleteFrameTextureName( const size_t frameNumber );
         /** Gets the number of frames for a texture.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         unsigned int getNumFrames() const;
 
@@ -517,20 +480,14 @@ namespace Ogre
         /** Returns true if this texture unit is either a series of 6 2D textures, each
             in it's own frame, or is a full 3D cube map. You can tell which by checking
             getTextureType.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         bool isCubic() const;
 
         /** Returns true if this texture layer uses a composite 3D cubic texture.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         bool is3D() const;
 
         /** Returns the type of this texture.
-        @note
-            Applies to both fixed-function and programmable pipeline.
         */
         TextureTypes::TextureTypes getTextureType() const;
 
@@ -555,21 +512,6 @@ namespace Ogre
 
         void setHardwareGammaEnabled( bool enabled );
         bool isHardwareGammaEnabled() const;
-
-        /** Gets the index of the set of texture co-ords this layer uses.
-        @note
-        Only applies to the fixed function pipeline and has no effect if a fragment program is used.
-        */
-        unsigned int getTextureCoordSet() const;
-
-        /** Sets the index of the set of texture co-ords this layer uses.
-        @note
-            Default is 0 for all layers. Only change this if you have provided multiple texture co-ords
-        per vertex.
-        @note
-        Only applies to the fixed function pipeline and has no effect if a fragment program is used.
-        */
-        void setTextureCoordSet( unsigned int set );
 
         /** Sets a matrix used to transform any texture coordinates on this layer.
         @remarks
@@ -1091,7 +1033,6 @@ namespace Ogre
         TextureTypes::TextureTypes mTextureType;
         int                        mTextureSrcMipmaps;  ///< Request number of mipmaps.
 
-        unsigned int            mTextureCoordSetIndex;
         HlmsSamplerblock const *mSamplerblock;
 
         LayerBlendModeEx mColourBlendMode;

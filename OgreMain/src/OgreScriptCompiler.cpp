@@ -1121,7 +1121,6 @@ namespace Ogre
         mIds["cubic_texture"] = ID_CUBIC_TEXTURE;
         mIds["separateUV"] = ID_SEPARATE_UV;
         mIds["combinedUVW"] = ID_COMBINED_UVW;
-        mIds["tex_coord_set"] = ID_TEX_COORD_SET;
         mIds["tex_address_mode"] = ID_TEX_ADDRESS_MODE;
         mIds["wrap"] = ID_WRAP;
         mIds["clamp"] = ID_CLAMP;

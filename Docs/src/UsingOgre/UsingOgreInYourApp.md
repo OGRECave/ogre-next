@@ -88,6 +88,12 @@ You will find the first line of CMakeLists.txt to be commented:
 ```
 Uncomment it, and run the CMakeLists.txt script.
 
+## Apple specific
+
+To use EmptyProject in both iOS and macOS, OgreNext must have been compiled with CMake options:
+
+	* `-DOGRE_BUILD_LIBS_AS_FRAMEWORKS=0`
+	* `-DOGRE_STATIC=1`
 
 ## Creating your application with 'EmptyProject' script {#CreatingYourApplication}
     -# Copy Samples/2.0/Tutorials/EmptyProject to wherever you want. We'll refer to its location now as "EmptyProject"
@@ -101,6 +107,7 @@ Uncomment it, and run the CMakeLists.txt script.
        (on Visual Studio, Alt+F7 -> Debugging -> Working Directory)
 
 ### A note about copied files from Samples/2.0/Common {#AnoteaboutcopiedfilesfromSamples_20_Common}
+
 The script will copy all the files from Samples/2.0/Common so you already have a system in place
 that takes care of window management and input and other misc stuff.
 

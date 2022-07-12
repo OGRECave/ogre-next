@@ -128,7 +128,7 @@ namespace Ogre
             The texture access privileges given to the shader.
         @param mipmapLevel
             The texture mipmap level to use.
-        @param format
+        @param pixelFormat
             Texture format to be read in by shader. This may be different than the bound texture format.
             Will be the same is left as PFG_UNKNOWN
         */

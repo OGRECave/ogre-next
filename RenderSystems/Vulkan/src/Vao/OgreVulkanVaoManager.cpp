@@ -131,6 +131,18 @@ namespace Ogre
             mTexBufferMaxSize = std::max<size_t>( mTexBufferMaxSize, 128u * 1024u * 1024u );
 #endif
 
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        if( renderSystem->getCapabilities()->getVendor() == GPU_IMGTEC &&
+            !renderSystem->getCapabilities()->getDriverVersion().hasMinVersion( 1, 426, 234 ) )
+        {
+            Workarounds::mPowerVRAlignment = 16u;
+
+            mConstBufferAlignment = std::max( mConstBufferAlignment, Workarounds::mPowerVRAlignment );
+            mTexBufferAlignment = std::max( mTexBufferAlignment, Workarounds::mPowerVRAlignment );
+            mUavBufferAlignment = std::max( mUavBufferAlignment, Workarounds::mPowerVRAlignment );
+        }
+#endif
+
         mSupportsPersistentMapping = true;
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
                                    mDevice->mDeviceFeatures.drawIndirectFirstInstance;
@@ -985,8 +997,8 @@ namespace Ogre
             if( vboFlag != CPU_INACCESSIBLE )
             {
                 const bool isCoherent = isVboFlagCoherent( vboFlag );
-                newVbo.dynamicBuffer = new VulkanDynamicBuffer( newVbo.vboName, newVbo.sizeBytes,
-                                                                isCoherent, false, mDevice );
+                newVbo.dynamicBuffer = new VulkanDynamicBuffer(
+                    newVbo.vboName, newVbo.sizeBytes, isCoherent, vboFlag == CPU_READ_WRITE, mDevice );
             }
 
             if( !mUnallocatedVbos[vboFlag].empty() )
@@ -1207,17 +1219,28 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        allocateVbo( numElements * bytesPerElement, bytesPerElement, bufferType, false, false, vboIdx,
-                     bufferOffset );
+        size_t sizeBytes = numElements * bytesPerElement;
+        uint32 alignment = bytesPerElement;
+        uint32 numElementsPadding = 0u;
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        if( Workarounds::mPowerVRAlignment )
+        {
+            alignment = uint32( Math::lcm( alignment, Workarounds::mPowerVRAlignment ) );
+            sizeBytes = alignToNextMultiple<size_t>( sizeBytes, alignment );
+            numElementsPadding = uint32( sizeBytes - numElements * bytesPerElement ) / bytesPerElement;
+        }
+#endif
+
+        allocateVbo( sizeBytes, alignment, bufferType, false, false, vboIdx, bufferOffset );
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         VulkanBufferInterface *bufferInterface =
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
 
-        VertexBufferPacked *retVal =
-            OGRE_NEW VertexBufferPacked( bufferOffset, numElements, bytesPerElement, 0, bufferType,
-                                         initialData, keepAsShadow, this, bufferInterface, vElements );
+        VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
+            bufferOffset, numElements, bytesPerElement, numElementsPadding, bufferType, initialData,
+            keepAsShadow, this, bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -1254,8 +1277,19 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        allocateVbo( numElements * bytesPerElement, bytesPerElement, bufferType, false, false, vboIdx,
-                     bufferOffset );
+        size_t sizeBytes = numElements * bytesPerElement;
+        uint32 alignment = bytesPerElement;
+        uint32 numElementsPadding = 0u;
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+        if( Workarounds::mPowerVRAlignment )
+        {
+            alignment = uint32( Math::lcm( alignment, Workarounds::mPowerVRAlignment ) );
+            sizeBytes = alignToNextMultiple<size_t>( sizeBytes, alignment );
+            numElementsPadding = uint32( sizeBytes - numElements * bytesPerElement ) / bytesPerElement;
+        }
+#endif
+
+        allocateVbo( sizeBytes, alignment, bufferType, false, false, vboIdx, bufferOffset );
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
         Vbo &vbo = mVbos[vboFlag][vboIdx];
@@ -1263,8 +1297,8 @@ namespace Ogre
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
 
         IndexBufferPacked *retVal =
-            OGRE_NEW IndexBufferPacked( bufferOffset, numElements, bytesPerElement, 0, bufferType,
-                                        initialData, keepAsShadow, this, bufferInterface );
+            OGRE_NEW IndexBufferPacked( bufferOffset, numElements, bytesPerElement, numElementsPadding,
+                                        bufferType, initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );

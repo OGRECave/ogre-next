@@ -19,6 +19,7 @@ namespace Demo
         Ogre::HlmsUnlitDatablock *mUnlitDatablock;
 
         Ogre::uint32 mRgbaReference;
+        Ogre::uint8 mRgbaResult[4];
         Ogre::TextureBox const *mTextureBox;
         bool mRaceConditionDetected;
 

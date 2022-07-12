@@ -34,12 +34,19 @@ namespace Ogre
 {
     namespace v1
     {
+#ifdef OGRE_VK_WORKAROUND_PVR_ALIGNMENT
+#    define OGRE_VHIB_ALIGNMENT \
+        Workarounds::mPowerVRAlignment ? uint16_t( Workarounds::mPowerVRAlignment ) : 4u
+#else
+#    define OGRE_VHIB_ALIGNMENT 4u
+#endif
         VulkanHardwareIndexBuffer::VulkanHardwareIndexBuffer( VulkanHardwareBufferManagerBase *mgr,
                                                               IndexType idxType, size_t numIndexes,
                                                               HardwareBuffer::Usage usage,
                                                               bool useShadowBuffer ) :
             HardwareIndexBuffer( mgr, idxType, numIndexes, usage, false, false ),
-            mVulkanHardwareBufferCommon( mSizeInBytes, usage, 4, mgr->_getDiscardBufferManager(),
+            mVulkanHardwareBufferCommon( mSizeInBytes, usage, OGRE_VHIB_ALIGNMENT,
+                                         mgr->_getDiscardBufferManager(),
                                          mgr->_getDiscardBufferManager()->getDevice() )
         {
         }

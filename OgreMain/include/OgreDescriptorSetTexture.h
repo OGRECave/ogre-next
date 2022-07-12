@@ -237,13 +237,9 @@ namespace Ogre
             };
 
         public:
-            Slot() { memset( this, 0, sizeof( *this ) ); }
+            Slot() : slotType( SlotTypeBuffer ), buffer{} {}
 
-            Slot( SlotType _slotType )
-            {
-                memset( this, 0, sizeof( *this ) );
-                slotType = _slotType;
-            }
+            Slot( SlotType _slotType ) : slotType( SlotTypeBuffer ), buffer{} { slotType = _slotType; }
 
             bool empty() const { return buffer.buffer == 0 && texture.texture == 0; }
 

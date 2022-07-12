@@ -13,6 +13,7 @@
 #include "OgreCamera.h"
 #include "OgreHlms.h"
 #include "OgreItem.h"
+#include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreMesh.h"
 #include "OgreMesh2.h"
@@ -161,6 +162,14 @@ namespace Demo
 
             mUnlitDatablock->setColour( randColour );
 
+            uint32_t rgba = randColour.getAsABGR();
+            const uint8_t *rgba8 = reinterpret_cast<const uint8_t *>( &rgba );
+
+            Ogre::LogManager::getSingleton().logMessage(
+                "Testing colour: " + std::to_string( rgba8[0] ) + " " + std::to_string( rgba8[1] ) +
+                    " " + std::to_string( rgba8[2] ) + " " + std::to_string( rgba8[3] ),
+                Ogre::LML_CRITICAL );
+
             workspace->_validateFinalTarget();
             workspace->_beginUpdate( false );
             workspace->_update();
@@ -175,10 +184,21 @@ namespace Demo
                 mTextureBox = &box;
 
                 mGraphicsSystem->getSceneManager()->executeUserScalableTask( this, true );
-                //execute(0u,1u);
+                // execute(0u,1u);
 
                 if( mRaceConditionDetected )
                 {
+                    Ogre::LogManager::getSingleton().logMessage(
+                        "Race condition detected!. Expected value: " + std::to_string( rgba8[0] ) + " " +
+                            std::to_string( rgba8[1] ) + " " + std::to_string( rgba8[2] ) + " " +
+                            std::to_string( rgba8[3] ) +
+                            " Got instead: " + std::to_string( mRgbaResult[0] ) + " " +
+                            std::to_string( mRgbaResult[1] ) + " " + std::to_string( mRgbaResult[2] ) +
+                            " " + std::to_string( mRgbaResult[3] ),
+                        Ogre::LML_CRITICAL );
+
+                    mRaceConditionDetected = false;
+
                     OGRE_EXCEPT( Ogre::Exception::ERR_RT_ASSERTION_FAILED, "Race condition detected!",
                                  "Test failed!" );
                 }
@@ -222,6 +242,13 @@ namespace Demo
                 if( dataPtr[0] != refValue[3] || dataPtr[1] != refValue[2] ||
                     dataPtr[2] != refValue[1] || dataPtr[3] != refValue[0] )
                 {
+                    if( !mRaceConditionDetected )
+                    {
+                        mRgbaResult[0] = dataPtr[0];
+                        mRgbaResult[1] = dataPtr[1];
+                        mRgbaResult[2] = dataPtr[2];
+                        mRgbaResult[3] = dataPtr[3];
+                    }
                     mRaceConditionDetected = true;
                 }
             }
@@ -231,7 +258,8 @@ namespace Demo
     void ReadbackGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
     {
         TutorialGameState::generateDebugText( timeSinceLast, outText );
-        outText += "\nThis test draws a random colour to an offscreen RTT and downloads\n"
-                   "its contents. If the colour doesn't match we throw an error.";
+        outText +=
+            "\nThis test draws a random colour to an offscreen RTT and downloads\n"
+            "its contents. If the colour doesn't match we throw an error.";
     }
 }  // namespace Demo

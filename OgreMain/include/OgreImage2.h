@@ -134,7 +134,7 @@ namespace Ogre
             <li>face 1, mip 0 (top), width x height (x depth)</li>
             <li>.. and so on. </li>
             </ul>
-        @param data
+        @param pData
             The data pointer. Must've been allocated with
             OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE );
             and sizeBytes assumes a pitch with row alignment = 4u;

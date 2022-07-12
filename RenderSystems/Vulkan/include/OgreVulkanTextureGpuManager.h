@@ -97,7 +97,8 @@ namespace Ogre
                                  VulkanDevice *device, bool bCanRestrictImageViewUsage );
         ~VulkanTextureGpuManager() override;
 
-        TextureGpu *createTextureGpuWindow( VulkanWindow *window );
+        TextureGpu *createTextureGpuWindow( VulkanWindowSwapChainBased *window );
+        TextureGpu *createTextureGpuNullWindow();
         TextureGpu *createWindowDepthBuffer();
 
         VkImage getBlankTextureVulkanName( TextureTypes::TextureTypes textureType ) const;

@@ -127,7 +127,7 @@ namespace Ogre
         return ( *msSingleton );
     }
 
-    typedef void ( *DLL_START_PLUGIN )();
+    typedef void ( *DLL_START_PLUGIN )( const NameValuePairList * );
     typedef void ( *DLL_STOP_PLUGIN )();
 
     //-----------------------------------------------------------------------
@@ -1206,7 +1206,7 @@ namespace Ogre
             const StringVector pluginList = cfg.getMultiSetting( "PluginOptional" );
             for( StringVector::const_iterator it = pluginList.begin(); it != pluginList.end(); ++it )
             {
-                loadPlugin( pluginDir + ( *it ), true );
+                loadPlugin( pluginDir + ( *it ), true, nullptr );
             }
         }
         {
@@ -1214,7 +1214,7 @@ namespace Ogre
             const StringVector pluginList = cfg.getMultiSetting( "Plugin" );
             for( StringVector::const_iterator it = pluginList.begin(); it != pluginList.end(); ++it )
             {
-                loadPlugin( pluginDir + ( *it ), false );
+                loadPlugin( pluginDir + ( *it ), false, nullptr );
             }
         }
     }
@@ -1411,7 +1411,7 @@ namespace Ogre
         return success;
     }
     //---------------------------------------------------------------------
-    void Root::installPlugin( Plugin *plugin )
+    void Root::installPlugin( Plugin *plugin, const NameValuePairList *options )
     {
         LogManager::getSingleton().logMessage( "Installing plugin: " + plugin->getName() );
 
@@ -1421,7 +1421,7 @@ namespace Ogre
         if( testAbiCookie( abiCookie, false ) )
         {
             mPlugins.push_back( plugin );
-            plugin->install();
+            plugin->install( options );
 
             // if rendersystem is already initialised, call rendersystem init too
             if( mIsInitialised )
@@ -1451,7 +1451,8 @@ namespace Ogre
         LogManager::getSingleton().logMessage( "Plugin successfully uninstalled" );
     }
     //-----------------------------------------------------------------------
-    void Root::loadPlugin( const String &pluginName, const bool bOptional )
+    void Root::loadPlugin( const String &pluginName, const bool bOptional,
+                           const NameValuePairList *options )
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
         // Load plugin library
@@ -1481,7 +1482,7 @@ namespace Ogre
                 try
                 {
                     // This must call installPlugin
-                    pFunc();
+                    pFunc( options );
                 }
                 catch( Exception &e )
                 {

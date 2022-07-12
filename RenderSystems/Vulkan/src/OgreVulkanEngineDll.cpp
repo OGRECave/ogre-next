@@ -35,10 +35,11 @@ namespace Ogre
 {
     static VulkanPlugin *plugin;
 
-    extern "C" void _OgreVulkanExport dllStartPlugin( void ) noexcept( false )
+    extern "C" void _OgreVulkanExport
+    dllStartPlugin( const NameValuePairList *options ) noexcept( false )
     {
         plugin = OGRE_NEW VulkanPlugin();
-        Root::getSingleton().installPlugin( plugin );
+        Root::getSingleton().installPlugin( plugin, options );
     }
 
     extern "C" void _OgreVulkanExport dllStopPlugin( void )

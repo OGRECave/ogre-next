@@ -646,6 +646,22 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::getCustomAttribute( IdString name, void *pData )
+    {
+        if( name == msFinalTextureBuffer )
+        {
+            *static_cast<VkImage *>( pData ) = mFinalTextureName;
+        }
+        else if( name == msMsaaTextureBuffer )
+        {
+            *static_cast<VkImage *>( pData ) = mMsaaFramebufferName;
+        }
+        else
+        {
+            TextureGpu::getCustomAttribute( name, pData );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange() const
     {
         VkImageSubresourceRange retVal;

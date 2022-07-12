@@ -125,8 +125,6 @@ namespace Ogre
         ConfigOption optVSync;
         ConfigOption optVSyncInterval;
         ConfigOption optVSyncMethod;
-        ConfigOption optFSAA;
-        ConfigOption optSRGB;
 
         // FS setting possibilities
         optFullScreen.name = "Full Screen";
@@ -177,40 +175,12 @@ namespace Ogre
         optVSyncMethod.possibleValues.push_back( "Lowest Latency" );
         optVSyncMethod.currentValue = optVSyncMethod.possibleValues.front();
 
-        optFSAA.name = "FSAA";
-        optFSAA.immutable = false;
-        optFSAA.possibleValues.push_back( "1" );
-        optFSAA.possibleValues.push_back( "2" );
-        optFSAA.possibleValues.push_back( "4" );
-        optFSAA.possibleValues.push_back( "8" );
-        optFSAA.possibleValues.push_back( "16" );
-        //        for( vector<int>::type::iterator it = mFSAALevels.begin(); it != mFSAALevels.end();
-        //        ++it )
-        //        {
-        //            String val = StringConverter::toString( *it );
-        //            optFSAA.possibleValues.push_back( val );
-        //            /* not implementing CSAA in GL for now
-        //            if (*it >= 8)
-        //                optFSAA.possibleValues.push_back(val + " [Quality]");
-        //            */
-        //        }
-        optFSAA.currentValue = "1";
-
-        // SRGB on auto window
-        optSRGB.name = "sRGB Gamma Conversion";
-        optSRGB.possibleValues.push_back( "Yes" );
-        optSRGB.possibleValues.push_back( "No" );
-        optSRGB.currentValue = "Yes";
-        optSRGB.immutable = false;
-
         mOptions[optFullScreen.name] = optFullScreen;
         mOptions[optVideoMode.name] = optVideoMode;
         mOptions[optDisplayFrequency.name] = optDisplayFrequency;
         mOptions[optVSync.name] = optVSync;
         mOptions[optVSyncInterval.name] = optVSyncInterval;
         mOptions[optVSyncMethod.name] = optVSyncMethod;
-        mOptions[optFSAA.name] = optFSAA;
-        mOptions[optSRGB.name] = optSRGB;
 
         refreshConfig();
     }
@@ -325,4 +295,8 @@ namespace Ogre
             }
         }
     }
+    //-------------------------------------------------------------------------
+    IdString VulkanXcbSupport::getInterfaceName() const { return "xcb"; }
+    //-------------------------------------------------------------------------
+    String VulkanXcbSupport::getInterfaceNameStr() const { return "xcb"; }
 }  // namespace Ogre

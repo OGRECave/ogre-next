@@ -115,7 +115,7 @@ namespace Ogre
         }
 
         /// memory allocation (elements, used by STL)
-#if __cplusplus >= 201703L
+#if( __cplusplus >= 201703L ) || ( _MSVC_LANG >= 201703L )
         inline pointer allocate( size_type count ){
 #else
         inline pointer allocate( size_type count, typename std::allocator<void>::const_pointer ptr = 0 )

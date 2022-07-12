@@ -9,6 +9,7 @@
 // See the next tutorials on how to handles all OSes and how to properly setup a robust render loop
 //---------------------------------------------------------------------------------------
 
+#include "OgreAbiUtils.h"
 #include "OgreArchiveManager.h"
 #include "OgreCamera.h"
 #include "OgreConfigFile.h"
@@ -23,6 +24,10 @@
 #include "Compositor/OgreCompositorManager2.h"
 
 #include "OgreWindowEventUtilities.h"
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#    include <io.h>
+#endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #    include "OSX/macUtils.h"
@@ -158,20 +163,30 @@ int main( int argc, const char *argv[] )
 #else
     const char *pluginsFile = 0;  // TODO
 #endif
-    Root *root = OGRE_NEW Root( pluginsFolder + pluginsFile,     //
+    const Ogre::AbiCookie abiCookie = Ogre::generateAbiCookie();
+    Root *root = OGRE_NEW Root( &abiCookie,                      //
+                                pluginsFolder + pluginsFile,     //
                                 writeAccessFolder + "ogre.cfg",  //
                                 writeAccessFolder + "Ogre.log" );
 
     // We can't call root->showConfigDialog() because that needs a GUI
     // We can try calling root->restoreConfig() though
 
-    root->setRenderSystem( root->getRenderSystemByName( "OpenGL 3+ Rendering Subsystem" ) );
+    bool bUseGL = false;
+
+    if( bUseGL )
+        root->setRenderSystem( root->getRenderSystemByName( "OpenGL 3+ Rendering Subsystem" ) );
+    else
+        root->setRenderSystem( root->getRenderSystemByName( "Vulkan Rendering Subsystem" ) );
 
     try
     {
         // This may fail if Ogre was *only* build with EGL support, but in that
         // case we can ignore the error
-        root->getRenderSystem()->setConfigOption( "Interface", "Headless EGL / PBuffer" );
+        if( bUseGL )
+            root->getRenderSystem()->setConfigOption( "Interface", "Headless EGL / PBuffer" );
+        else
+            root->getRenderSystem()->setConfigOption( "Interface", "null" );
     }
     catch( Exception & )
     {

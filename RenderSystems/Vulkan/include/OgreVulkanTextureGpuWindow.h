@@ -37,7 +37,7 @@ namespace Ogre
 {
     class _OgreVulkanExport VulkanTextureGpuWindow final : public VulkanTextureGpuRenderTarget
     {
-        VulkanWindow *mWindow;
+        VulkanWindowSwapChainBased *mWindow;
 
         uint32 mCurrentSwapchainIdx;
 
@@ -48,7 +48,7 @@ namespace Ogre
         VulkanTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                 VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                 TextureTypes::TextureTypes initialType,
-                                TextureGpuManager *textureManager, VulkanWindow *window );
+                                TextureGpuManager *textureManager, VulkanWindowSwapChainBased *window );
         ~VulkanTextureGpuWindow() override;
 
         void setTextureType( TextureTypes::TextureTypes textureType ) override;

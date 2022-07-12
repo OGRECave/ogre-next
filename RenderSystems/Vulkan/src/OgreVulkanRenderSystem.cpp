@@ -69,12 +69,14 @@ THE SOFTWARE.
 #include "OgreDepthBuffer.h"
 #include "OgreRoot.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef OGRE_VULKAN_WINDOW_WIN32
 #    include "Windowing/win32/OgreVulkanWin32Window.h"
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-#    include "Windowing/Android/OgreVulkanAndroidWindow.h"
-#else
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
 #    include "Windowing/X11/OgreVulkanXcbWindow.h"
+#endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+#    include "Windowing/Android/OgreVulkanAndroidWindow.h"
 #endif
 
 #include "OgrePixelFormatGpuUtils.h"
@@ -148,7 +150,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------
-    VulkanRenderSystem::VulkanRenderSystem() :
+    VulkanRenderSystem::VulkanRenderSystem( const NameValuePairList *options ) :
         RenderSystem(),
         mInitialized( false ),
         mHardwareBufferManager( 0 ),
@@ -169,6 +171,7 @@ namespace Ogre
         mComputePso( 0 ),
         mStencilRefValue( 0u ),
         mStencilEnabled( false ),
+        mVkInstanceIsExternal( false ),
         mTableDirty( false ),
         mComputeTableDirty( false ),
         mDummyBuffer( 0 ),
@@ -179,13 +182,6 @@ namespace Ogre
         mVpChanged( false ),
         mInterruptedRenderCommandEncoder( false ),
         mValidationError( false ),
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        mHasWin32Support( false ),
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        mHasAndroidSupport( false ),
-#else
-        mHasXcbSupport( false ),
-#endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         mHasValidationLayers( false ),
 #endif
@@ -212,20 +208,67 @@ namespace Ogre
 
         mInvertedClipSpaceY = true;
 
-        mVulkanSupport = Ogre::getVulkanSupport();
+        const int numVulkanSupports = Ogre::getNumVulkanSupports();
+        for( int i = 0; i < numVulkanSupports; ++i )
+        {
+            VulkanSupport *vulkanSupport = Ogre::getVulkanSupport( i );
+            mAvailableVulkanSupports[vulkanSupport->getInterfaceName()] = vulkanSupport;
+        }
+
+        if( options )
+        {
+            NameValuePairList::const_iterator itOption = options->find( "external_instance" );
+            if( itOption != options->end() )
+            {
+                VulkanExternalInstance *externalInstance = reinterpret_cast<VulkanExternalInstance *>(
+                    StringConverter::parseUnsignedLong( itOption->second ) );
+
+                initializeExternalVkInstance( externalInstance );
+
+#ifndef OGRE_VULKAN_WINDOW_NULL
+                VulkanSupport *vulkanSupport = OGRE_NEW VulkanSupport();
+                vulkanSupport->setSupported();
+                mAvailableVulkanSupports[vulkanSupport->getInterfaceName()] = vulkanSupport;
+                mVulkanSupport = vulkanSupport;
+#endif
+            }
+        }
 
         initConfigOptions();
+
+        const ConfigOptionMap &configOptions =
+            mAvailableVulkanSupports.begin()->second->getConfigOptions( this );
+        ConfigOptionMap::const_iterator itInterface = configOptions.find( "Interface" );
+        if( itInterface != configOptions.end() )
+        {
+            const IdString defaultInterface = itInterface->second.currentValue;
+            mVulkanSupport = mAvailableVulkanSupports.find( defaultInterface )->second;
+        }
+        else
+        {
+            LogManager::getSingleton().logMessage(
+                "ERROR: Could NOT find default Interface in Vulkan RenderSystem. Build setting "
+                "misconfiguration!?",
+                LML_CRITICAL );
+            mVulkanSupport = mAvailableVulkanSupports.begin()->second;
+        }
     }
     //-------------------------------------------------------------------------
     VulkanRenderSystem::~VulkanRenderSystem()
     {
         shutdown();
 
-        if( mVulkanSupport )
+        std::map<IdString, VulkanSupport *>::const_iterator itor = mAvailableVulkanSupports.begin();
+        std::map<IdString, VulkanSupport *>::const_iterator endt = mAvailableVulkanSupports.end();
+
+        while( itor != endt )
         {
-            OGRE_DELETE mVulkanSupport;
-            mVulkanSupport = 0;
+            OGRE_DELETE itor->second;
+            ++itor;
         }
+
+        mAvailableVulkanSupports.clear();
+        mVulkanSupport = 0;
 
         if( mDebugReportCallback )
         {
@@ -233,7 +276,7 @@ namespace Ogre
             mDebugReportCallback = 0;
         }
 
-        if( mVkInstance )
+        if( mVkInstance && !mVkInstanceIsExternal )
         {
             vkDestroyInstance( mVkInstance, 0 );
             mVkInstance = 0;
@@ -322,10 +365,12 @@ namespace Ogre
         OGRE_DELETE mVulkanProgramFactory0;
         mVulkanProgramFactory0 = 0;
 
+        const bool bIsExternal = mDevice->mIsExternal;
         VkDevice vkDevice = mDevice->mDevice;
         delete mDevice;
         mDevice = 0;
-        vkDestroyDevice( vkDevice, 0 );
+        if( !bIsExternal )
+            vkDestroyDevice( vkDevice, 0 );
     }
     //-------------------------------------------------------------------------
     const String &VulkanRenderSystem::getName() const
@@ -339,7 +384,18 @@ namespace Ogre
         static String strName( "Vulkan_RS" );
         return strName;
     }
-    void VulkanRenderSystem::initConfigOptions() { mVulkanSupport->addConfig( this ); }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::initConfigOptions()
+    {
+        std::map<IdString, VulkanSupport *>::const_iterator itor = mAvailableVulkanSupports.begin();
+        std::map<IdString, VulkanSupport *>::const_iterator endt = mAvailableVulkanSupports.end();
+
+        while( itor != endt )
+        {
+            itor->second->addConfig( this );
+            ++itor;
+        }
+    }
     //-------------------------------------------------------------------------
     ConfigOptionMap &VulkanRenderSystem::getConfigOptions()
     {
@@ -348,7 +404,25 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::setConfigOption( const String &name, const String &value )
     {
-        mVulkanSupport->setConfigOption( name, value );
+        if( name == "Interface" )
+        {
+            std::map<IdString, VulkanSupport *>::const_iterator itor =
+                mAvailableVulkanSupports.find( value );
+            if( itor != mAvailableVulkanSupports.end() )
+            {
+                mVulkanSupport = itor->second;
+                mVulkanSupport->setConfigOption( name, value );
+            }
+            else
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Option named '" + name + "' does not exist.",
+                             "VulkanRenderSystem::setConfigOption" );
+            }
+        }
+        else
+        {
+            mVulkanSupport->setConfigOption( name, value );
+        }
     }
     //-------------------------------------------------------------------------
     const char *VulkanRenderSystem::getPriorityConfigOption( size_t ) const { return "Device"; }
@@ -382,15 +456,6 @@ namespace Ogre
                 "Debug reporting won't be available" );
             return;
         }
-        // DebugReportMessage =
-        //    (PFN_vkDebugReportMessageEXT)vkGetInstanceProcAddr( mVkInstance, "vkDebugReportMessageEXT"
-        //    );
-        // if( !DebugReportMessage )
-        //{
-        //    LogManager::getSingleton().logMessage(
-        //        "[Vulkan] GetProcAddr: Unable to find DebugReportMessage. "
-        //        "Debug reporting won't be available" );
-        //}
 
         VkDebugReportCallbackCreateInfoEXT dbgCreateInfo;
         PFN_vkDebugReportCallbackEXT callback;
@@ -754,12 +819,131 @@ namespace Ogre
         this->_initialise( true );
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::initializeExternalVkInstance( VulkanExternalInstance *externalInstance )
+    {
+        LogManager::getSingleton().logMessage( "[Vulkan] VkInstance is provided externally" );
+
+        OGRE_ASSERT_LOW( !mVkInstance );
+
+        mVkInstance = externalInstance->instance;
+        mVkInstanceIsExternal = true;
+
+        {
+            // Filter wrongly-provided extensions
+            uint32 numExtensions = 0u;
+            VkResult result = vkEnumerateInstanceExtensionProperties( 0, &numExtensions, 0 );
+            checkVkResult( result, "vkEnumerateInstanceExtensionProperties" );
+
+            FastArray<VkExtensionProperties> availableExtensions;
+            availableExtensions.resize( numExtensions );
+            result =
+                vkEnumerateInstanceExtensionProperties( 0, &numExtensions, availableExtensions.begin() );
+            checkVkResult( result, "vkEnumerateInstanceExtensionProperties" );
+
+            std::set<String> extensions;
+            for( size_t i = 0u; i < numExtensions; ++i )
+            {
+                const String extensionName = availableExtensions[i].extensionName;
+                LogManager::getSingleton().logMessage( "Found instance extension: " + extensionName );
+                extensions.insert( extensionName );
+            }
+
+            FastArray<VkExtensionProperties>::iterator itor =
+                externalInstance->instanceExtensions.begin();
+            FastArray<VkExtensionProperties>::iterator endt = externalInstance->instanceExtensions.end();
+
+            while( itor != endt )
+            {
+                if( extensions.find( itor->extensionName ) == extensions.end() )
+                {
+                    LogManager::getSingleton().logMessage(
+                        "[Vulkan][INFO] External Instance claims extension " +
+                        String( itor->extensionName ) +
+                        " is present but it's not. This is normal. Ignoring." );
+                    itor = efficientVectorRemove( externalInstance->instanceExtensions, itor );
+                    endt = externalInstance->instanceExtensions.end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+
+            VulkanDevice::addExternalInstanceExtensions( externalInstance->instanceExtensions );
+
+#ifdef OGRE_VULKAN_WINDOW_WIN32
+            if( VulkanDevice::hasInstanceExtension( VulkanWin32Window::getRequiredExtensionName() ) )
+                mAvailableVulkanSupports["win32"]->setSupported();
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
+            if( VulkanDevice::hasInstanceExtension( VulkanXcbWindow::getRequiredExtensionName() ) )
+                mAvailableVulkanSupports["xcb"]->setSupported();
+#endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+            if( VulkanDevice::hasInstanceExtension( VulkanAndroidWindow::getRequiredExtensionName() ) )
+                mAvailableVulkanSupports["android"]->setSupported();
+#endif
+        }
+
+        {
+            // Filter wrongly-provided layers
+            uint32 numInstanceLayers = 0u;
+            VkResult result = vkEnumerateInstanceLayerProperties( &numInstanceLayers, 0 );
+            checkVkResult( result, "vkEnumerateInstanceLayerProperties" );
+
+            FastArray<VkLayerProperties> instanceLayerProps;
+            instanceLayerProps.resize( numInstanceLayers );
+            result =
+                vkEnumerateInstanceLayerProperties( &numInstanceLayers, instanceLayerProps.begin() );
+            checkVkResult( result, "vkEnumerateInstanceLayerProperties" );
+
+            std::set<String> layers;
+            FastArray<const char *> instanceLayers;
+            for( size_t i = 0u; i < numInstanceLayers; ++i )
+            {
+                const String layerName = instanceLayerProps[i].layerName;
+                LogManager::getSingleton().logMessage( "Found instance layer: " + layerName );
+                layers.insert( layerName );
+            }
+
+            FastArray<VkLayerProperties>::iterator itor = externalInstance->instanceLayers.begin();
+            FastArray<VkLayerProperties>::iterator endt = externalInstance->instanceLayers.end();
+
+            while( itor != endt )
+            {
+                if( layers.find( itor->layerName ) == layers.end() )
+                {
+                    LogManager::getSingleton().logMessage(
+                        "[Vulkan][INFO] External Instance claims layer " + String( itor->layerName ) +
+                        " is present but it's not. This is normal. Ignoring." );
+                    itor = efficientVectorRemove( externalInstance->instanceLayers, itor );
+                    endt = externalInstance->instanceLayers.end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            if( layers.find( "VK_LAYER_KHRONOS_validation" ) != layers.end() )
+                mHasValidationLayers = true;
+#endif
+        }
+
+        sharedVkInitialization();
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::initializeVkInstance()
     {
         if( mVkInstance )
             return;
 
         LogManager::getSingleton().logMessage( "[Vulkan] Initializing VkInstance" );
+
+#ifdef OGRE_VULKAN_WINDOW_NULL
+        mAvailableVulkanSupports["null"]->setSupported();
+#endif
 
         uint32 numExtensions = 0u;
         VkResult result = vkEnumerateInstanceExtensionProperties( 0, &numExtensions, 0 );
@@ -778,25 +962,28 @@ namespace Ogre
             const String extensionName = availableExtensions[i].extensionName;
             LogManager::getSingleton().logMessage( "Found instance extension: " + extensionName );
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef OGRE_VULKAN_WINDOW_WIN32
             if( extensionName == VulkanWin32Window::getRequiredExtensionName() )
             {
-                mHasWin32Support = true;
+                mAvailableVulkanSupports["win32"]->setSupported();
                 reqInstanceExtensions.push_back( VulkanWin32Window::getRequiredExtensionName() );
             }
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-            if( extensionName == VulkanAndroidWindow::getRequiredExtensionName() )
-            {
-                mHasAndroidSupport = true;
-                reqInstanceExtensions.push_back( VulkanAndroidWindow::getRequiredExtensionName() );
-            }
-#else
+#endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
             if( extensionName == VulkanXcbWindow::getRequiredExtensionName() )
             {
-                mHasXcbSupport = true;
+                mAvailableVulkanSupports["xcb"]->setSupported();
                 reqInstanceExtensions.push_back( VulkanXcbWindow::getRequiredExtensionName() );
             }
 #endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+            if( extensionName == VulkanAndroidWindow::getRequiredExtensionName() )
+            {
+                mAvailableVulkanSupports["android"]->setSupported();
+                reqInstanceExtensions.push_back( VulkanAndroidWindow::getRequiredExtensionName() );
+            }
+#endif
+
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
             if( extensionName == VK_EXT_DEBUG_REPORT_EXTENSION_NAME )
                 reqInstanceExtensions.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
@@ -813,13 +1000,26 @@ namespace Ogre
             }
         }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        if( !mHasWin32Support )
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        if( !mHasAndroidSupport )
-#else
-        if( !mHasXcbSupport )
-#endif
+        bool bAnySupported = false;
+        std::map<IdString, VulkanSupport *>::const_iterator itor = mAvailableVulkanSupports.begin();
+        std::map<IdString, VulkanSupport *>::const_iterator endt = mAvailableVulkanSupports.end();
+
+        while( itor != endt )
+        {
+            if( !itor->second->isSupported() )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Vulkan support for " + itor->second->getInterfaceNameStr() + " not found.",
+                    LML_CRITICAL );
+            }
+            else
+            {
+                bAnySupported = true;
+            }
+            ++itor;
+        }
+
+        if( !bAnySupported )
         {
             LogManager::getSingleton().logMessage(
                 "Vulkan support found but instance is uncapable of "
@@ -865,6 +1065,11 @@ namespace Ogre
         mVkInstance = VulkanDevice::createInstance(
             Root::getSingleton().getAppName(), reqInstanceExtensions, instanceLayers, dbgFunc, this );
 
+        sharedVkInitialization();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::sharedVkInitialization()
+    {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         addInstanceDebugCallback();
 #endif
@@ -886,7 +1091,7 @@ namespace Ogre
             if( enumerateInstanceVersion )
             {
                 uint32_t apiVersion;
-                result = enumerateInstanceVersion( &apiVersion );
+                VkResult result = enumerateInstanceVersion( &apiVersion );
                 if( result == VK_SUCCESS && apiVersion >= VK_MAKE_VERSION( 1, 1, 114 ) )
                 {
                     // Loader version < 1.1.114 is blacklisted as it will just crash.
@@ -954,27 +1159,57 @@ namespace Ogre
                                                      bool fullScreen,
                                                      const NameValuePairList *miscParams )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        VulkanWindow *win = OGRE_NEW VulkanWin32Window( name, width, height, fullScreen );
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        VulkanWindow *win = OGRE_NEW VulkanAndroidWindow( name, width, height, fullScreen );
-#else
-        VulkanWindow *win = OGRE_NEW VulkanXcbWindow( name, width, height, fullScreen );
+        String windowType;
+        if( miscParams )
+        {
+            // Get variable-length params
+            NameValuePairList::const_iterator opt = miscParams->find( "windowType" );
+            if( opt != miscParams->end() )
+                windowType = opt->second;
+        }
+
+        VulkanWindow *win = nullptr;
+        if( windowType == "null" || mVulkanSupport->getInterfaceName() == "null" )
+        {
+            win = OGRE_NEW VulkanWindowNull( name, width, height, fullScreen );
+        }
+        else
+        {
+#ifdef OGRE_VULKAN_WINDOW_WIN32
+            win = OGRE_NEW VulkanWin32Window( name, width, height, fullScreen );
 #endif
+#ifdef OGRE_VULKAN_WINDOW_XCB
+            win = OGRE_NEW VulkanXcbWindow( name, width, height, fullScreen );
+#endif
+#ifdef OGRE_VULKAN_WINDOW_ANDROID
+            win = OGRE_NEW VulkanAndroidWindow( name, width, height, fullScreen );
+#endif
+        }
         mWindows.insert( win );
 
         if( !mInitialized )
         {
+            VulkanExternalDevice *externalDevice = 0;
             if( miscParams )
             {
                 NameValuePairList::const_iterator itOption = miscParams->find( "reverse_depth" );
                 if( itOption != miscParams->end() )
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
+
+                itOption = miscParams->find( "external_device" );
+                if( itOption != miscParams->end() )
+                {
+                    externalDevice = reinterpret_cast<VulkanExternalDevice *>(
+                        StringConverter::parseUnsignedLong( itOption->second ) );
+                }
             }
 
             initializeVkInstance();
 
-            mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
+            if( !externalDevice )
+                mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
+            else
+                mDevice = new VulkanDevice( mVkInstance, *externalDevice, this );
             mActiveDevice = mDevice;
 
             mNativeShadingLanguageVersion = 450;
@@ -982,6 +1217,7 @@ namespace Ogre
             bool bCanRestrictImageViewUsage = false;
 
             FastArray<const char *> deviceExtensions;
+            if( !externalDevice )
             {
                 uint32 numExtensions = 0;
                 vkEnumerateDeviceExtensionProperties( mDevice->mPhysicalDevice, 0, &numExtensions, 0 );
@@ -1000,11 +1236,6 @@ namespace Ogre
                         deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
                         bCanRestrictImageViewUsage = true;
                     }
-                    else if( extensionName == VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME )
-                    {
-                        deviceExtensions.push_back(
-                            VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
-                    }
                     else if( extensionName == VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME );
                     else if( extensionName == VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME )
@@ -1020,6 +1251,11 @@ namespace Ogre
                         deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
                 }
             }
+            else
+            {
+                if( mDevice->hasDeviceExtension( VK_KHR_MAINTENANCE2_EXTENSION_NAME ) )
+                    bCanRestrictImageViewUsage = true;
+            }
 
             if( !bCanRestrictImageViewUsage )
             {
@@ -1034,7 +1270,8 @@ namespace Ogre
                 deviceExtensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 #endif
 
-            mDevice->createDevice( deviceExtensions, 0u, 0u );
+            if( !externalDevice )
+                mDevice->createDevice( deviceExtensions, 0u, 0u );
 
             mRealCapabilities = createRenderSystemCapabilities();
             mCurrentCapabilities = mRealCapabilities;
@@ -1563,6 +1800,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+#endif
+
         VkComputePipelineCreateInfo computeInfo;
         makeVkStruct( computeInfo, VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO );
 
@@ -1629,7 +1870,8 @@ namespace Ogre
         //  * Another encoder was required. Thus we interrupted and callEndRenderPassDesc = true
         //  * endRenderPassDescriptor called us. Thus callEndRenderPassDesc = false
         //  * executeRenderPassDescriptorDelayedActions called us. Thus callEndRenderPassDesc = false
-        // In all cases, when callEndRenderPassDesc = true, it also implies rendering was interrupted.
+        // In all cases, when callEndRenderPassDesc = true, it also implies rendering was
+        // interrupted.
         if( callEndRenderPassDesc )
             endRenderPassDescriptor( true );
 
@@ -2162,11 +2404,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::endGPUSampleProfile( const String &name ) {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::endGpuDebuggerFrameCapture( Window *window )
+    void VulkanRenderSystem::endGpuDebuggerFrameCapture( Window *window, const bool bDiscard )
     {
-        if( mRenderDocApi )
+        if( mRenderDocApi && !bDiscard )
             mActiveDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
-        RenderSystem::endGpuDebuggerFrameCapture( window );
+        RenderSystem::endGpuDebuggerFrameCapture( window, bDiscard );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::setClipPlanesImpl( const PlaneList &clipPlanes ) {}
@@ -2748,6 +2990,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        debugLogPso( newPso );
+#endif
+
         size_t numShaderStages = 0u;
         VkPipelineShaderStageCreateInfo shaderStages[NumShaderTypes];
 
@@ -3244,10 +3490,10 @@ namespace Ogre
     SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
                                                                      PixelFormatGpu format )
     {
-        SampleDescription retVal(
-            (uint8)getMaxUsableSampleCount( mDevice->mDeviceProperties, sampleDesc.getMaxSamples() ),
-            sampleDesc.getMsaaPattern() );
-        return retVal;
+        uint8 samples = sampleDesc.getMaxSamples();
+        if( mDevice )
+            samples = (uint8)getMaxUsableSampleCount( mDevice->mDeviceProperties, samples );
+        return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,

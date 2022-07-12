@@ -145,29 +145,40 @@ namespace Ogre
         /** @copydoc GpuProgram::_getBindingDelegate */
         GpuProgram *_getBindingDelegate() override { return mAssemblerProgram.get(); }
 
+        // This snippet must not be indented, in order for the documentation
+        // of setEnableIncludeHeader to turn out looking right.  So
+        // clang-format must be prevented from changing it.
+        // clang-format off
+        // [setEnableIncludeHeader-doc-snippet]
+/*
+    #include "MyFile.h" --> file will be included anyway.
+*/
+        // [setEnableIncludeHeader-doc-snippet]
+        // clang-format on
+
         /** Whether we should parse the source code looking for include files and
             embedding the file. Disabled by default to avoid slowing down when
-            #include is not used. Not needed if the API natively supports it (D3D11).
+            `#include` is not used. Not needed if the API natively supports it (D3D11).
         @remarks
-            Single line comments are supported:
-                // #include "MyFile.h" --> won't be included.
-
-            Block comment lines are not supported, but may not matter if
-            the included file does not close the block:
-                / *
-                    #include "MyFile.h" --> file will be included anyway.
-                * /
-
-            Preprocessor macros are not supported, but should not matter:
-                #if SOME_MACRO
-                    #include "MyFile.h" --> file will be included anyway.
-                #endif
-        @par
+        Single line comments are supported:
+            @code
+            // #include "MyFile.h" --> won't be included.
+            @endcode
+        Block comment lines are not supported, but may not matter if
+        the included file does not close the block:
+            @snippet this setEnableIncludeHeader-doc-snippet
+        Preprocessor macros are not supported, but should not matter:
+            @code
+            #if SOME_MACRO
+                #include "MyFile.h" --> file will be included anyway.
+            #endif
+            @endcode
+        @remarks
             Recursive includes are supported (e.g. header includes a header)
-        @par
+        @remarks
             Beware included files mess up error reporting (wrong lines)
         @param bEnable
-            True to support #include. Must be toggled before loading the source file.
+            True to support `#include`. Must be toggled before loading the source file.
         */
         void setEnableIncludeHeader( bool bEnable );
         bool getEnableIncludeHeader() const;
@@ -177,7 +188,7 @@ namespace Ogre
             This parser doesn't yet have access to the entire PSO
             (i.e. Pixel Shader can't see Vertex Shader).
 
-            However it's still useful, specially @foreach()
+            However it's still useful, specially \@foreach()
         @remarks
             This is run after setEnableIncludeHeader
         @par
