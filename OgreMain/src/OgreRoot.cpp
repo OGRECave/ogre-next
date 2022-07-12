@@ -1143,7 +1143,7 @@ namespace Ogre
         }
 
         mFrameStats->addSample( mFrameStats->getLastTimeRawMicroseconds() +
-                                static_cast<uint64>( timeSinceLastFrame * 100000.0f ) );
+                                static_cast<uint64>( timeSinceLastFrame * 1000000.0f ) );
         now = mTimer->getMilliseconds();
         evt.timeSinceLastEvent = calculateEventTime( now, FETT_ANY );
 
