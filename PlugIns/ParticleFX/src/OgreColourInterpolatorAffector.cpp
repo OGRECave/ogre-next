@@ -136,6 +136,12 @@ namespace Ogre
     //-----------------------------------------------------------------------
     Real ColourInterpolatorAffector::getTimeAdjust( size_t index ) const { return mTimeAdj[index]; }
 
+	//-----------------------------------------------------------------------
+	void ColourInterpolatorAffector::_initParticle(Ogre::Particle* pParticle)
+	{
+		pParticle->mColour = mColourAdj[0];
+	}
+
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
