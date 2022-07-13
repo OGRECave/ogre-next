@@ -134,7 +134,9 @@ namespace Ogre
         mRenderer( 0 ),
         mCullIndividual( false ),
         mPoolSize( 0 ),
-        mEmittedEmitterPoolSize( 0 )
+        mEmittedEmitterPoolSize( 0 ),
+		mParticleEmitterRootNode( 0 ),
+        mTranslateParticleDirectionIntoWorldSpace( true )
     {
         setDefaultDimensions( 100, 100 );
         setMaterialName( "BaseWhite" );
@@ -180,6 +182,16 @@ namespace Ogre
             ParticleSystemManager::getSingleton()._destroyRenderer( mRenderer );
             mRenderer = 0;
         }
+    }
+    //-----------------------------------------------------------------------
+    SceneNode *ParticleSystem::getParticleEmitterRootNode() const
+	{ 
+		return mParticleEmitterRootNode; 
+	}
+    //-----------------------------------------------------------------------
+    void ParticleSystem::setParticleEmitterRootNode( SceneNode *sceneNode )
+    {
+        mParticleEmitterRootNode = sceneNode;
     }
     //-----------------------------------------------------------------------
     ParticleEmitter *ParticleSystem::addEmitter( const String &emitterType )
@@ -293,6 +305,8 @@ namespace Ogre
         mCullIndividual = rhs.mCullIndividual;
         mSorted = rhs.mSorted;
         mLocalSpace = rhs.mLocalSpace;
+		mParticleEmitterRootNode = rhs.mParticleEmitterRootNode;
+		mTranslateParticleDirectionIntoWorldSpace = rhs.mTranslateParticleDirectionIntoWorldSpace;
         mIterationInterval = rhs.mIterationInterval;
         mIterationIntervalSet = rhs.mIterationIntervalSet;
         mNonvisibleTimeout = rhs.mNonvisibleTimeout;
@@ -565,7 +579,7 @@ namespace Ogre
 
         // TODO: (dark_sylinc) Refactor this. ControllerManager gets executed before us
         //(because it doesn't know if we'll update a SceneNode)
-        const Matrix4 fullTransform = mParentNode->_getFullTransformUpdated();
+        const Matrix4 fullTransformParentNode = mParentNode->_getFullTransformUpdated();
 
         for( unsigned int j = 0; j < requested; ++j )
         {
@@ -585,10 +599,47 @@ namespace Ogre
             emitter->_initParticle( p );
 
             // Translate position & direction into world space
-            if( !mLocalSpace )
+            if (!mLocalSpace)
             {
-                p->mPosition = fullTransform.transformAffine( p->mPosition );
-                p->mDirection = fullTransform.transformDirectionAffine( p->mDirection );
+                if( mParticleEmitterRootNode )
+                {
+                    const Matrix4 fullTransformEmitterRootNode =
+                        mParticleEmitterRootNode->_getFullTransformUpdated();
+                    // Translate position & direction into world space
+                    p->mPosition = fullTransformEmitterRootNode.transformAffine( p->mPosition );
+                    if( mTranslateParticleDirectionIntoWorldSpace )
+                        p->mDirection =
+                            fullTransformEmitterRootNode.transformDirectionAffine( p->mDirection );
+                }
+                else
+                {
+                    // Translate position & direction into world space
+                    p->mPosition = fullTransformParentNode.transformAffine( p->mPosition );
+                    if( mTranslateParticleDirectionIntoWorldSpace )
+                        p->mDirection =
+                            fullTransformParentNode.transformDirectionAffine( p->mDirection );
+                }
+            }
+            else
+            {
+                if( mParticleEmitterRootNode )
+                {
+                    // Emit from mParticleEmitterRootNode into mParentNode space
+                    const Matrix4 fullTransformEmitterRootNode =
+                        mParticleEmitterRootNode->_getFullTransformUpdated();
+                    // Translate position
+                    p->mPosition = mParentNode->getOrientation().Inverse() *
+                                   ( fullTransformEmitterRootNode.transformAffine( p->mPosition ) -
+                                     mParentNode->getPosition() );
+                    if( mTranslateParticleDirectionIntoWorldSpace )
+                        p->mDirection =
+                            mParentNode->getOrientation().Inverse() *
+                            fullTransformEmitterRootNode.transformDirectionAffine( p->mDirection );
+                }
+                else
+            	{
+                    // nothing to do
+                }
             }
 
             // apply partial frame motion to this particle

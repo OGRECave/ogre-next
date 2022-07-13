@@ -377,4 +377,48 @@ particle_system Examples/Snow
 	}
 }
 
+particle_system Examples/Animated/Test1
+{
+	quota	10
+	material	Examples/AnimationParticleTest
+	particle_width	4
+	particle_height	4
+	cull_each	true
+	renderer	billboard
+	sorted	true
+	local_space	true
+	billboard_type	point
+	stacks 4
+    slices 4
+
+	emitter Box
+	{
+		angle	35
+		
+		direction	0 1 0
+		emission_rate	1
+		position	0 0 0
+		velocity_min	1
+		velocity_max	2
+		time_to_live	5
+		duration	0
+		duration_min	0
+		duration_max	0
+
+		width	1
+		height	1
+		depth	1
+	}
+
+	affector ScaleInterpolator
+    {
+        time0 0
+		scale0 1
+		time1 0.8
+		scale1 1
+		time2 1
+		scale2 0.1
+	}
+}
+
 

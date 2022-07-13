@@ -113,6 +113,21 @@ namespace Ogre
                 String doGet( const void *target ) const override;
                 void   doSet( void *target, const String &val ) override;
             };
+			/** Command object for TextureStacks (see ParamCommand).*/
+			class CmdTextureStacks : public Ogre::ParamCommand
+			{
+			public:
+				String doGet(const void* target) const override;
+				void doSet(void* target, const String& val) override;
+			};
+
+			/** Command object for TextureSlices (see ParamCommand).*/
+			class CmdTextureSlices : public Ogre::ParamCommand
+			{
+			public:
+				String doGet(const void* target) const override;
+				void doSet(void* target, const String& val) override;
+			};
 
             /** Sets the type of billboard to render.
             @remarks
@@ -212,6 +227,15 @@ namespace Ogre
             /// @copydoc BillboardSet::isPointRenderingEnabled
             bool isPointRenderingEnabled() const;
 
+			/// @copydoc ParticleSystemRenderer::setTextureStacks
+			void setTextureStacks(int value);
+			/// @copydoc ParticleSystemRenderer::getTextureStacks
+			int getTextureStacks() const;
+			/// @copydoc ParticleSystemRenderer::setTextureSlices
+			void setTextureSlices(int value);
+			/// @copydoc ParticleSystemRenderer::getTextureSlices
+			int getTextureSlices() const;
+
             /// @copydoc ParticleSystemRenderer::getType
             const String &getType() const override;
             /// @copydoc ParticleSystemRenderer::_updateRenderQueue
@@ -254,6 +278,12 @@ namespace Ogre
             static CmdCommonUpVector        msCommonUpVectorCmd;
             static CmdPointRendering        msPointRenderingCmd;
             static CmdAccurateFacing        msAccurateFacingCmd;
+			static CmdTextureStacks	        msTextureStacksCmd;
+			static CmdTextureSlices	        msTextureSlicesCmd;
+
+			//Keep track of Texture Stacks and Slices here, as the underlying BillboradSet does not have function to report it back
+			int mTextureStacks;
+			int mTextureSlices;
         };
 
         /** Factory class for BillboardParticleRenderer */
