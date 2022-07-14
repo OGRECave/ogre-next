@@ -69,7 +69,7 @@ namespace Ogre
             unmap();
 
         if( mVboName.mVboName )
-            mVaoManager->deallocateRawBuffer( mVboName );
+            mVaoManager->deallocateRawBuffer( mVboName, mStatus != Downloading );
 
         if( mAccurateFence )
         {

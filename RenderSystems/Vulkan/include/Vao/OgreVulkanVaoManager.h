@@ -106,8 +106,28 @@ namespace Ogre
             }
         };
 
+        struct DirtyBlock
+        {
+            uint32 frameIdx;
+            VboFlag vboFlag;
+            size_t vboIdx;
+            size_t offset;
+            size_t size;
+
+            DirtyBlock( uint32 _frameIdx, VboFlag _vboFlag, size_t _vboIdx, size_t _offset,
+                        size_t _size ) :
+                frameIdx( _frameIdx ),
+                vboFlag( _vboFlag ),
+                vboIdx( _vboIdx ),
+                offset( _offset ),
+                size( _size )
+            {
+            }
+        };
+
         typedef vector<Block>::type BlockVec;
         typedef vector<StrideChanger>::type StrideChangerVec;
+        typedef FastArray<DirtyBlock> DirtyBlockArray;
 
     protected:
         struct Vbo
@@ -200,6 +220,11 @@ namespace Ogre
         FastArray<uint32> mUnallocatedVbos[MAX_VBO_FLAG];
         size_t mDefaultPoolSize[MAX_VBO_FLAG];
         size_t mUsedHeapMemory[VK_MAX_MEMORY_HEAPS];
+
+        /// See flushAllGpuDelayedBlocks()
+        DirtyBlockArray mDelayedBlocks;
+        size_t mDelayedBlocksSize;
+        size_t mDelayedBlocksFlushThreshold;
 
         /// Holds all VBOs that are empty and target for destruction.
         /// They're empty, but still allocated.
@@ -303,8 +328,8 @@ namespace Ogre
         void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, BufferType bufferType,
                             bool readCapable, bool skipDynBufferMultiplier );
 
-        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
-                            const VboFlag vboFlag );
+        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, const VboFlag vboFlag,
+                            bool bImmediately );
 
         VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                     BufferType bufferType, void *initialData,
@@ -374,6 +399,87 @@ namespace Ogre
         void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
                                      size_t newPoolIdx, BufferPacked *buffer ) override;
 
+        /**
+        @brief flushAllGpuDelayedBlocks
+            In Vulkan almost all GPU -> GPU are potentially in parallel. We need vkCmdPipelineBarrier
+            to prevent work from previous commands to execute after subsequent commands.
+            We also use these barriers to flush caches by hand.
+
+            For a live resource this is 'easy' and BarrierSolver and the CopyEncoder handles
+            this.
+
+            It's easy because we know a TextureGpu can only ever have READ = [transfer | shaders]
+            and WRITE = [transfer] because nothing else writes into them.
+            If the TextureGpu is a RenderTexture, we know we can have
+            READ = [transfer | shaders | framebuffer] and WRITE = [transfer | framebuffer]
+            And so on.
+
+            The same goes for buffers. A vertex buffer can only ever have
+            READ = [transfer | vertex_shader] and WRITE = [transfer].
+
+            This makes automatic barrier management of existing resources relatively easy since
+            only UAVs can destroy parallelism.
+
+            But the problem happens on deallocation. What if User:
+
+             1. Creates an UAV TextureGpu (10 MBs of VRAM)
+             2. Runs compute to write to it
+             3. Deletes the TextureGpu
+             4. Creates an UAV buffer on it (5 MB of VRAM)
+             5. Allocator (VaoManager) decides to reuse 5MB from the 10MB deallocated in step 3
+             6. Runs a compute shader to write to the UAV buffer
+
+            There is no guarantee the Compute Shader in 2 doesn't overlap with the one in 6.
+            This could happen to anything, i.e. it could be a Vertex Buffer instead of an
+            UAV Buffer, and the Compute Shader could overlap with the Transfer operation
+            to fill it.
+
+            This is rare to happen in practice (and most GPUs are not THAT parallel) but you
+            may hit this bug if using various Compute Shaders and allocate -> destroy -> allocate
+            resources too quickly. Specially on AMD.
+
+            But this is hard to manage because READ = anything WRITE = anything.
+
+            So we can solve this in 3 ways:
+
+            1. Track absolutely everything that happened so far for deallocated objects and try
+            to find the least blocking barrier when the next allocation is requested (this is madness)
+            2. Issue a full barrier often, which kills GPU parallelism
+            3. Delay deallocation for a bit. This is what OgreNext does.
+
+            So deallocateVbo() delays the allocation for a frame which should be more or less safe to do
+            (we don't make fully sure it's 100% safe; but in practice this is good enough)
+
+            But to prevent memory from ballooning, if the amount of of delayed memory exceeds
+            mDelayedBlocksFlushThreshold we will issue flushAllGpuDelayedBlocks( true )
+            which frees all delayed deallocations and issues a full GPU -> GPU barrier which
+            makes it safe.
+
+            Note that a GPU -> GPU barrier is not as expensive as a stall; because a stall makes
+            the CPU wait for the GPU.
+        @param bIssueBarrier
+            When true, we issue a barrier and release all delayed deallocations
+            When false, we don't issue a barrier and release all delayed deallocations
+        @return
+            True if we released all delayed deallocations.
+
+            False if bIssueBarrier == true but we couldn't issue the barrier; which means
+            we couldn't honour the request and deallocations are still being delayed.
+        */
+        bool flushAllGpuDelayedBlocks( bool bIssueBarrier );
+
+        /// See flushAllGpuDelayedBlocks(). This routine releases all delayed deallocation
+        /// from the previous frame (which is more or less safe to do, but not 100%*).
+        ///
+        /// This routine does not issue any barrier.
+        ///
+        /// *fixing this could be quite expensive. We have to track all pipeline barriers
+        /// and issue one if we have to (and 99.99999999% of the times, we don't).
+        /// We could wait mDynamicBufferMultiplier frames which is 100% safe. But
+        /// that would be extremely inefficient if *every* deallocation needs to wait
+        /// 3 frames before it can be reused.
+        void flushGpuDelayedBlocks();
+
     public:
         VulkanVaoManager( VulkanDevice *device, VulkanRenderSystem *renderSystem,
                           const NameValuePairList *params );
@@ -387,7 +493,7 @@ namespace Ogre
         void deallocateTexture( size_t vboIdx, size_t bufferOffset, size_t sizeBytes );
 
         VulkanRawBuffer allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes, size_t alignment = 4u );
-        void deallocateRawBuffer( VulkanRawBuffer &rawBuffer );
+        void deallocateRawBuffer( VulkanRawBuffer &rawBuffer, bool bImmediately );
 
         void addDelayedFunc( VulkanDelayedFuncBase *cmd );
 
