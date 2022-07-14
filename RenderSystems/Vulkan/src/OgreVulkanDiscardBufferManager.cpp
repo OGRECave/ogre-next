@@ -57,7 +57,7 @@ namespace Ogre
         mDiscardBuffers.clear();
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-        vaoManager->deallocateRawBuffer( mBuffer );
+        vaoManager->deallocateRawBuffer( mBuffer, false );
     }
 
     void VulkanDiscardBufferManager::growToFit( size_t extraBytes,
@@ -117,7 +117,7 @@ namespace Ogre
         // write to the same resource even if the regions don't overlap.
         mDevice->stall();
 
-        vaoMagr->deallocateRawBuffer( oldBuffer );
+        vaoMagr->deallocateRawBuffer( oldBuffer, true );
 
         mFreeBlocks.push_back( VulkanVaoManager::Block( oldCapacity, newCapacity - oldCapacity ) );
 

@@ -79,7 +79,7 @@ namespace v1
         else
         {
             VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-            vaoManager->deallocateRawBuffer( mBuffer );
+            vaoManager->deallocateRawBuffer( mBuffer, false );
         }
     }
 
