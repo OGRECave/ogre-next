@@ -8758,7 +8758,7 @@ namespace Ogre{
                         else
                         {
                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                               "Number expected, followed by dont_care|load|clear|clear_on_tilers");
+                                               "Number expected, followed by 4 floats");
                         }
                     }
                 }
@@ -8913,7 +8913,7 @@ namespace Ogre{
                         else
                         {
                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                               "Expected dont_care|store|clear|clear_on_tilers" );
+                                               "Expected dont_care|store|resolve|store_or_resolve|store_and_resolve" );
                         }
                     }
                     else
@@ -8936,7 +8936,7 @@ namespace Ogre{
                         else
                         {
                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                               "Number expected, followed by dont_care|store|clear|clear_on_tilers");
+                                               "Number expected, followed by dont_care|store|resolve|store_or_resolve|store_and_resolve");
                         }
                     }
                 }
@@ -8956,7 +8956,7 @@ namespace Ogre{
                     else
                     {
                         compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                           "Expected dont_care|store|clear|clear_on_tilers" );
+                                           "Expected dont_care|store|resolve|store_or_resolve|store_and_resolve" );
                     }
                 }
                     break;
@@ -8975,7 +8975,7 @@ namespace Ogre{
                     else
                     {
                         compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                           "Expected dont_care|store|clear|clear_on_tilers" );
+                                           "Expected dont_care|store|resolve|store_or_resolve|store_and_resolve" );
                     }
                 }
                     break;
