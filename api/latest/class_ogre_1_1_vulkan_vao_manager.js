@@ -1,8 +1,10 @@
 var class_ogre_1_1_vulkan_vao_manager =
 [
     [ "Block", "struct_ogre_1_1_vulkan_vao_manager_1_1_block.html", "struct_ogre_1_1_vulkan_vao_manager_1_1_block" ],
+    [ "DirtyBlock", "struct_ogre_1_1_vulkan_vao_manager_1_1_dirty_block.html", "struct_ogre_1_1_vulkan_vao_manager_1_1_dirty_block" ],
     [ "StrideChanger", "struct_ogre_1_1_vulkan_vao_manager_1_1_stride_changer.html", "struct_ogre_1_1_vulkan_vao_manager_1_1_stride_changer" ],
     [ "BlockVec", "class_ogre_1_1_vulkan_vao_manager.html#a0283b00d7e9d9e2213fb148c0373b3b7", null ],
+    [ "DirtyBlockArray", "class_ogre_1_1_vulkan_vao_manager.html#a856e4c895201840c4a0a956e6831440e", null ],
     [ "MemoryStatsEntryVec", "class_ogre_1_1_vulkan_vao_manager.html#a8a984ae987b00e95b35198131a4e9a6b", null ],
     [ "StrideChangerVec", "class_ogre_1_1_vulkan_vao_manager.html#af11ca95197171f47071cbdfc64244a4f", null ],
     [ "VboFlag", "class_ogre_1_1_vulkan_vao_manager.html#ab58aa47c8a54e57fecd9d7e93b6651a6", [
@@ -40,7 +42,7 @@ var class_ogre_1_1_vulkan_vao_manager =
     [ "createUavBuffer", "class_ogre_1_1_vulkan_vao_manager.html#a0937a414f9da637fb8878e10db724bba", null ],
     [ "createVertexArrayObject", "class_ogre_1_1_vulkan_vao_manager.html#a21be4e3d6b7ad0490c59eb9db1cdcdf7", null ],
     [ "createVertexBuffer", "class_ogre_1_1_vulkan_vao_manager.html#aefabb42c2a1a8f2d71af28ffaa91ba91", null ],
-    [ "deallocateRawBuffer", "class_ogre_1_1_vulkan_vao_manager.html#a3c44f33fd9c8a89eb68c970fab17b7b7", null ],
+    [ "deallocateRawBuffer", "class_ogre_1_1_vulkan_vao_manager.html#a0d085bf800ae5b743106d7494b69f4aa", null ],
     [ "deallocateTexture", "class_ogre_1_1_vulkan_vao_manager.html#a55fb0b0643f47ed4de330528d614ce07", null ],
     [ "deleteStagingBuffers", "class_ogre_1_1_vulkan_vao_manager.html#a204c8055903cea82fe38e6a9fbc62f6d", null ],
     [ "destroyConstBuffer", "class_ogre_1_1_vulkan_vao_manager.html#a51f5147151805c3d294ae200683d76bb", null ],

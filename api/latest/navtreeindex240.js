@@ -1,5 +1,7 @@
 var NAVTREEINDEX240 =
 {
+"class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a704f13dfbb251f877235107f05bd7658":[6,0,0,27,140,3],
+"class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a704f13dfbb251f877235107f05bd7658":[7,0,0,2,140,3],
 "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eb":[6,0,0,27,140,0],
 "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eb":[7,0,0,2,140,0],
 "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eba2b12eec76abb4c56344b6c6ff1cdb65f":[6,0,0,27,140,0,1],
@@ -244,10 +246,8 @@ var NAVTREEINDEX240 =
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,2,143,23],
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6d":[6,0,0,27,143,1],
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6d":[7,0,0,2,143,1],
-"class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6da0c8055304cee698c19e3080e34202430":[7,0,0,2,143,1,0],
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6da0c8055304cee698c19e3080e34202430":[6,0,0,27,143,1,0],
+"class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6da0c8055304cee698c19e3080e34202430":[7,0,0,2,143,1,0],
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6da1de64eadc98dfb60e9dcdf7fe6287c09":[6,0,0,27,143,1,1],
-"class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6da1de64eadc98dfb60e9dcdf7fe6287c09":[7,0,0,2,143,1,1],
-"class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6da3756a6536dc4f8a6c3434b704537c0eb":[6,0,0,27,143,1,6],
-"class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6da3756a6536dc4f8a6c3434b704537c0eb":[7,0,0,2,143,1,6]
+"class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#a87632db14ce9c10e113f1966c6a97c6da1de64eadc98dfb60e9dcdf7fe6287c09":[7,0,0,2,143,1,1]
 };

@@ -110,6 +110,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_vulkan_vao_manager.html
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_block.html">Block</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_dirty_block.html">DirtyBlock</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_stride_changer.html">StrideChanger</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -117,6 +119,8 @@ Classes</h2></td></tr>
 Public Types</h2></td></tr>
 <tr class="memitem:a0283b00d7e9d9e2213fb148c0373b3b7"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_block.html">Block</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a0283b00d7e9d9e2213fb148c0373b3b7">BlockVec</a></td></tr>
 <tr class="separator:a0283b00d7e9d9e2213fb148c0373b3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a856e4c895201840c4a0a956e6831440e"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_dirty_block.html">DirtyBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a856e4c895201840c4a0a956e6831440e">DirtyBlockArray</a></td></tr>
+<tr class="separator:a856e4c895201840c4a0a956e6831440e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a984ae987b00e95b35198131a4e9a6b"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html">MemoryStatsEntry</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vao_manager.html#a8a984ae987b00e95b35198131a4e9a6b">MemoryStatsEntryVec</a></td></tr>
 <tr class="separator:a8a984ae987b00e95b35198131a4e9a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af11ca95197171f47071cbdfc64244a4f"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_stride_changer.html">StrideChanger</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#af11ca95197171f47071cbdfc64244a4f">StrideChangerVec</a></td></tr>
@@ -197,8 +201,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aefabb42c2a1a8f2d71af28ffaa91ba91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vertex_buffer_packed.html">VertexBufferPacked</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vao_manager.html#aefabb42c2a1a8f2d71af28ffaa91ba91">createVertexBuffer</a> (const <a class="el" href="namespace_ogre.html#a03b06afe794fcbba8e2d2172892a80f6">VertexElement2Vec</a> &amp;vertexElements, size_t numVertices, <a class="el" href="namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9">BufferType</a> bufferType, void *initialData, bool keepAsShadow)</td></tr>
 <tr class="memdesc:aefabb42c2a1a8f2d71af28ffaa91ba91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a vertex buffer based on the given parameters.  <a href="class_ogre_1_1_vao_manager.html#aefabb42c2a1a8f2d71af28ffaa91ba91">More...</a><br /></td></tr>
 <tr class="separator:aefabb42c2a1a8f2d71af28ffaa91ba91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c44f33fd9c8a89eb68c970fab17b7b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a3c44f33fd9c8a89eb68c970fab17b7b7">deallocateRawBuffer</a> (<a class="el" href="struct_ogre_1_1_vulkan_raw_buffer.html">VulkanRawBuffer</a> &amp;rawBuffer)</td></tr>
-<tr class="separator:a3c44f33fd9c8a89eb68c970fab17b7b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d085bf800ae5b743106d7494b69f4aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a0d085bf800ae5b743106d7494b69f4aa">deallocateRawBuffer</a> (<a class="el" href="struct_ogre_1_1_vulkan_raw_buffer.html">VulkanRawBuffer</a> &amp;rawBuffer, bool bImmediately)</td></tr>
+<tr class="separator:a0d085bf800ae5b743106d7494b69f4aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55fb0b0643f47ed4de330528d614ce07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a55fb0b0643f47ed4de330528d614ce07">deallocateTexture</a> (size_t vboIdx, size_t bufferOffset, size_t sizeBytes)</td></tr>
 <tr class="separator:a55fb0b0643f47ed4de330528d614ce07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a204c8055903cea82fe38e6a9fbc62f6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vao_manager.html#a204c8055903cea82fe38e6a9fbc62f6d">deleteStagingBuffers</a> ()</td></tr>
@@ -356,6 +360,20 @@ Friends</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_block.html">Block</a>&gt;::type <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a0283b00d7e9d9e2213fb148c0373b3b7">Ogre::VulkanVaoManager::BlockVec</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a856e4c895201840c4a0a956e6831440e" name="a856e4c895201840c4a0a956e6831440e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a856e4c895201840c4a0a956e6831440e">&#9670;&nbsp;</a></span>DirtyBlockArray</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt;<a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_dirty_block.html">DirtyBlock</a>&gt; <a class="el" href="class_ogre_1_1_vulkan_vao_manager.html#a856e4c895201840c4a0a956e6831440e">Ogre::VulkanVaoManager::DirtyBlockArray</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1446,8 +1464,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a3c44f33fd9c8a89eb68c970fab17b7b7" name="a3c44f33fd9c8a89eb68c970fab17b7b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c44f33fd9c8a89eb68c970fab17b7b7">&#9670;&nbsp;</a></span>deallocateRawBuffer()</h2>
+<a id="a0d085bf800ae5b743106d7494b69f4aa" name="a0d085bf800ae5b743106d7494b69f4aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d085bf800ae5b743106d7494b69f4aa">&#9670;&nbsp;</a></span>deallocateRawBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1456,8 +1474,18 @@ Friends</h2></td></tr>
           <td class="memname">void Ogre::VulkanVaoManager::deallocateRawBuffer </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_ogre_1_1_vulkan_raw_buffer.html">VulkanRawBuffer</a> &amp;&#160;</td>
-          <td class="paramname"><em>rawBuffer</em></td><td>)</td>
+          <td class="paramname"><em>rawBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bImmediately</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

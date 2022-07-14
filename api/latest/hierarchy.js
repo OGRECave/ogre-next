@@ -85,6 +85,7 @@ var hierarchy =
     [ "Ogre::FastArray< DescriptorSetTexture2::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DescriptorSetUav::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DEVMODE >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< DirtyBlock >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< EGLDeviceEXT >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< float >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< int32 >", "class_ogre_1_1_fast_array.html", null ],
@@ -1930,6 +1931,7 @@ var hierarchy =
     [ "Ogre::VulkanVaoManager::Block", "struct_ogre_1_1_vulkan_vao_manager_1_1_block.html", [
       [ "Ogre::VulkanDiscardBufferManager::UnsafeBlock", "struct_ogre_1_1_vulkan_discard_buffer_manager_1_1_unsafe_block.html", null ]
     ] ],
+    [ "Ogre::VulkanVaoManager::DirtyBlock", "struct_ogre_1_1_vulkan_vao_manager_1_1_dirty_block.html", null ],
     [ "Ogre::VulkanVaoManager::StrideChanger", "struct_ogre_1_1_vulkan_vao_manager_1_1_stride_changer.html", null ],
     [ "Ogre::VulkanVaoManager::Vao::VertexBinding", "struct_ogre_1_1_vulkan_vao_manager_1_1_vao_1_1_vertex_binding.html", null ],
     [ "Ogre::WaitableEvent", "class_ogre_1_1_waitable_event.html", null ],
