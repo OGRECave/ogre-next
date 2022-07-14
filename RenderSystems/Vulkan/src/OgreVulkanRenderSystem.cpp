@@ -2725,9 +2725,6 @@ namespace Ogre
                             c_srcValidAccessFlags;
                     }
 
-                    imageBarrier.dstAccessMask = VulkanMappings::getAccessFlags(
-                        itor->newLayout, itor->newAccess, texture, true );
-
                     if( itor->oldLayout != ResourceLayout::Texture &&
                         itor->oldLayout != ResourceLayout::Uav )
                     {
@@ -2737,6 +2734,9 @@ namespace Ogre
                     if( itor->oldStageMask != 0u )
                         srcStage |= ogreToVkStageFlags( itor->oldStageMask );
                 }
+
+                imageBarrier.dstAccessMask =
+                    VulkanMappings::getAccessFlags( itor->newLayout, itor->newAccess, texture, true );
 
                 if( itor->newLayout != ResourceLayout::Texture &&
                     itor->newLayout != ResourceLayout::Uav )
