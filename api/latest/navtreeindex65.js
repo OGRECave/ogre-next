@@ -1,5 +1,7 @@
 var NAVTREEINDEX65 =
 {
+"class_ogre_1_1_font_manager.html#abba1bcc1dcff94f7844f4c91bad9c354":[5,2,10,40,26],
+"class_ogre_1_1_font_manager.html#abbb523a827bc6ea90d3b5ec80f0cf770":[5,2,10,40,59],
 "class_ogre_1_1_font_manager.html#abf133777115fbe8c5d40cc6975bdeffc":[5,2,10,40,28],
 "class_ogre_1_1_font_manager.html#abfb0022b18d022a7605f0d19a966f00f":[5,2,10,40,46],
 "class_ogre_1_1_font_manager.html#ac22655af03ecea85d863a1d1d561778c":[5,2,10,40,47],
@@ -247,7 +249,5 @@ var NAVTREEINDEX65 =
 "class_ogre_1_1_frustum.html#a1596384bc7dde0a14cd0c17d4d88f6b2":[5,2,6,13,33],
 "class_ogre_1_1_frustum.html#a164483d42186628f7e14833b2df7a7a7":[5,2,6,13,98],
 "class_ogre_1_1_frustum.html#a173800458c92ecefcff9d037be54afea":[5,2,6,13,178],
-"class_ogre_1_1_frustum.html#a1a048b8ace0a21cd2ed2c3008941ce3d":[5,2,6,13,50],
-"class_ogre_1_1_frustum.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,6,13,139],
-"class_ogre_1_1_frustum.html#a1d0b130ce41fdbe4cb6b8a72cc214728":[5,2,6,13,59]
+"class_ogre_1_1_frustum.html#a1a048b8ace0a21cd2ed2c3008941ce3d":[5,2,6,13,50]
 };

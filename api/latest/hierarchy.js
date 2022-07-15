@@ -810,6 +810,7 @@ var hierarchy =
         [ "Ogre::TextureFilter::GenerateHwMipmaps", "class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html", null ],
         [ "Ogre::TextureFilter::GenerateSwMipmaps", "class_ogre_1_1_texture_filter_1_1_generate_sw_mipmaps.html", null ],
         [ "Ogre::TextureFilter::LeaveChannelR", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html", null ],
+        [ "Ogre::TextureFilter::PremultiplyAlpha", "class_ogre_1_1_texture_filter_1_1_premultiply_alpha.html", null ],
         [ "Ogre::TextureFilter::PrepareForNormalMapping", "class_ogre_1_1_texture_filter_1_1_prepare_for_normal_mapping.html", null ]
       ] ],
       [ "Ogre::TextureGpuManager", "class_ogre_1_1_texture_gpu_manager.html", [

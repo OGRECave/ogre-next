@@ -132,6 +132,9 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae16e3450868d702f4a9d65035bf926f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#ae16e3450868d702f4a9d65035bf926f3">DefaultTextureGpuManagerListener</a> ()</td></tr>
 <tr class="separator:ae16e3450868d702f4a9d65035bf926f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f67c6d9b067a23b128319a754ead88a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a8f67c6d9b067a23b128319a754ead88a">getFiltersFor</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;aliasName, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> filters) const override</td></tr>
+<tr class="memdesc:a8f67c6d9b067a23b128319a754ead88a"><td class="mdescLeft">&#160;</td><td class="mdescRight">getFiltersFor Gets a chance to alter the filters needed for the given texture to load  <a href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a8f67c6d9b067a23b128319a754ead88a">More...</a><br /></td></tr>
+<tr class="separator:a8f67c6d9b067a23b128319a754ead88a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6947566c623e6b83eebf4635360c81fe"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a6947566c623e6b83eebf4635360c81fe">getNumSlicesFor</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_manager.html">TextureGpuManager</a> *textureManager) override</td></tr>
 <tr class="memdesc:a6947566c623e6b83eebf4635360c81fe"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespace_ogre.html">Ogre</a> normally puts Textures into pools (a Type2DArray texture) for efficient rendering Note that only textures of the same resolution and format can be put together in the same pool.  <a href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a6947566c623e6b83eebf4635360c81fe">More...</a><br /></td></tr>
 <tr class="separator:a6947566c623e6b83eebf4635360c81fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -232,6 +235,61 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8f67c6d9b067a23b128319a754ead88a" name="a8f67c6d9b067a23b128319a754ead88a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f67c6d9b067a23b128319a754ead88a">&#9670;&nbsp;</a></span>getFiltersFor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> Ogre::DefaultTextureGpuManagerListener::getFiltersFor </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>aliasName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td>
+          <td class="paramname"><em>filters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>getFiltersFor Gets a chance to alter the filters needed for the given texture to load </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the texture </td></tr>
+    <tr><td class="paramname">aliasName</td><td>Alias name of the texture </td></tr>
+    <tr><td class="paramname">filters</td><td>Current filters that are to be applied </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Actual filters to apply, if the listener modifies them </dd></dl>
+
+<p>Implements <a class="el" href="class_ogre_1_1_texture_gpu_manager_listener.html#a0a8912aab229795e68cdac07dbe7629c">Ogre::TextureGpuManagerListener</a>.</p>
+
+</div>
+</div>
 <a id="a6947566c623e6b83eebf4635360c81fe" name="a6947566c623e6b83eebf4635360c81fe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6947566c623e6b83eebf4635360c81fe">&#9670;&nbsp;</a></span>getNumSlicesFor()</h2>
 

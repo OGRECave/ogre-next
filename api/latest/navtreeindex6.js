@@ -117,12 +117,13 @@ var NAVTREEINDEX6 =
 "_ogre_texture_box_8h.html":[8,0,2,0,272],
 "_ogre_texture_definition_8h.html":[8,0,2,0,3,12],
 "_ogre_texture_filters_8h.html":[8,0,2,0,273],
-"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054":[8,0,2,0,273,5],
-"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a073d1e75c28bd8f29ee7f5362f2a5a47":[8,0,2,0,273,5,0],
-"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a10547fe2a5fe7ddca81652a20651e942":[8,0,2,0,273,5,1],
-"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a4eee0984ffd62a8d1e708047f5183aee":[8,0,2,0,273,5,2],
-"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a537f83d75be40b8f38b5f9dc03912afa":[8,0,2,0,273,5,4],
-"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a8f5040bf17ef190bbc7e50a5e12f193d":[8,0,2,0,273,5,3],
+"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054":[8,0,2,0,273,6],
+"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a073d1e75c28bd8f29ee7f5362f2a5a47":[8,0,2,0,273,6,0],
+"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a10547fe2a5fe7ddca81652a20651e942":[8,0,2,0,273,6,1],
+"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a4eee0984ffd62a8d1e708047f5183aee":[8,0,2,0,273,6,2],
+"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a537f83d75be40b8f38b5f9dc03912afa":[8,0,2,0,273,6,5],
+"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054a8f5040bf17ef190bbc7e50a5e12f193d":[8,0,2,0,273,6,3],
+"_ogre_texture_filters_8h.html#ad1f488159fb867da13bf2ae96f04b054aeae3ac8f86554fa7b0a4d9190c882bcd":[8,0,2,0,273,6,4],
 "_ogre_texture_gpu_8h.html":[8,0,2,0,274],
 "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5a":[8,0,2,0,274,3],
 "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5aa4aae1ed01eda1f2f2e4cd3289d0f3fe6":[8,0,2,0,274,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "_ogre_thread_defines_poco_8h.html#a9ea1b6f845efd15c581b914ac84b93a3":[8,0,2,0,11,7,12],
 "_ogre_thread_defines_poco_8h.html#aa0e31221f53cca1da4a1eaf196122a59":[8,0,2,0,11,7,29],
 "_ogre_thread_defines_poco_8h.html#aa930d7a43e02d7c703548852a55036e1":[8,0,2,0,11,7,34],
-"_ogre_thread_defines_poco_8h.html#aadfaee1c10a53055c49ad591cbbb9e38":[8,0,2,0,11,7,36],
-"_ogre_thread_defines_poco_8h.html#ab0e8c6d123555d7447c38185a1b9105e":[8,0,2,0,11,7,1]
+"_ogre_thread_defines_poco_8h.html#aadfaee1c10a53055c49ad591cbbb9e38":[8,0,2,0,11,7,36]
 };

@@ -31,6 +31,7 @@ var annotated_dup =
         [ "GenerateHwMipmaps", "class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html", "class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps" ],
         [ "GenerateSwMipmaps", "class_ogre_1_1_texture_filter_1_1_generate_sw_mipmaps.html", "class_ogre_1_1_texture_filter_1_1_generate_sw_mipmaps" ],
         [ "LeaveChannelR", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html", "class_ogre_1_1_texture_filter_1_1_leave_channel_r" ],
+        [ "PremultiplyAlpha", "class_ogre_1_1_texture_filter_1_1_premultiply_alpha.html", "class_ogre_1_1_texture_filter_1_1_premultiply_alpha" ],
         [ "PrepareForNormalMapping", "class_ogre_1_1_texture_filter_1_1_prepare_for_normal_mapping.html", "class_ogre_1_1_texture_filter_1_1_prepare_for_normal_mapping" ]
       ] ],
       [ "v1", "namespace_ogre_1_1v1.html", [

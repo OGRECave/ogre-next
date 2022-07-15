@@ -14,7 +14,8 @@ var class_ogre_1_1_texture_gpu_manager_listener =
       [ "ReadyForRendering", "class_ogre_1_1_texture_gpu_manager_listener.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257", null ],
       [ "Deleted", "class_ogre_1_1_texture_gpu_manager_listener.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e", null ]
     ] ],
-    [ "~TextureGpuManagerListener", "class_ogre_1_1_texture_gpu_manager_listener.html#ae2415a848afe044f130e574ba0ddfc19", null ],
+    [ "~TextureGpuManagerListener", "class_ogre_1_1_texture_gpu_manager_listener.html#a886461b2a09b9b3e4277178debcaf70c", null ],
+    [ "getFiltersFor", "class_ogre_1_1_texture_gpu_manager_listener.html#a0a8912aab229795e68cdac07dbe7629c", null ],
     [ "getNumSlicesFor", "class_ogre_1_1_texture_gpu_manager_listener.html#ae9baf391b356408635e3ff8c7522b409", null ],
     [ "notifyTextureChanged", "class_ogre_1_1_texture_gpu_manager_listener.html#aad4e9062c9a92d1e2cc57d4bbe50eb95", null ],
     [ "shouldStayLoaded", "class_ogre_1_1_texture_gpu_manager_listener.html#a1427f0b635a4186cd6083a9bab879fa2", null ]

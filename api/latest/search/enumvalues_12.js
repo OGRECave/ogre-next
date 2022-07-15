@@ -75,5 +75,6 @@ var searchData=
   ['typegeneratehwmipmaps_72',['TypeGenerateHwMipmaps',['../namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054a10547fe2a5fe7ddca81652a20651e942',1,'Ogre::TextureFilter']]],
   ['typegenerateswmipmaps_73',['TypeGenerateSwMipmaps',['../namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054a073d1e75c28bd8f29ee7f5362f2a5a47',1,'Ogre::TextureFilter']]],
   ['typeleavechannelr_74',['TypeLeaveChannelR',['../namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054a8f5040bf17ef190bbc7e50a5e12f193d',1,'Ogre::TextureFilter']]],
-  ['typepreparefornormalmapping_75',['TypePrepareForNormalMapping',['../namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054a4eee0984ffd62a8d1e708047f5183aee',1,'Ogre::TextureFilter']]]
+  ['typepremultiplyalpha_75',['TypePremultiplyAlpha',['../namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054aeae3ac8f86554fa7b0a4d9190c882bcd',1,'Ogre::TextureFilter']]],
+  ['typepreparefornormalmapping_76',['TypePrepareForNormalMapping',['../namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054a4eee0984ffd62a8d1e708047f5183aee',1,'Ogre::TextureFilter']]]
 ];
