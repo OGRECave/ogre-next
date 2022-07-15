@@ -58,6 +58,7 @@ namespace Ogre
             TypeGenerateHwMipmaps               = 1u << 1u,
             TypePrepareForNormalMapping         = 1u << 2u,
             TypeLeaveChannelR                   = 1u << 3u,
+            TypePremultiplyAlpha                = 1u << 4u,
             // clang-format on
 
             TypeGenerateDefaultMipmaps = TypeGenerateSwMipmaps | TypeGenerateHwMipmaps
@@ -149,6 +150,12 @@ namespace Ogre
         public:
             static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
             void                  _executeStreaming( Image2 &image, TextureGpu *texture ) override;
+        };
+        //-----------------------------------------------------------------------------------
+        class _OgreExport PremultiplyAlpha : public FilterBase
+        {
+        public:
+            void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
         };
     }  // namespace TextureFilter
     /** @} */

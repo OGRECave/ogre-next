@@ -73,6 +73,12 @@ namespace Ogre
         return minSlicesPerPool;
     }
     //-----------------------------------------------------------------------------------
+    uint32 DefaultTextureGpuManagerListener::getFiltersFor( const String &, const String &,
+                                                            uint32 filters ) const
+    {
+        return filters;
+    }
+    //-----------------------------------------------------------------------------------
     void DefaultTextureGpuManagerListener::notifyTextureChanged( TextureGpu *texture,
                                                                  TextureGpuListener::Reason reason,
                                                                  void *extraData )

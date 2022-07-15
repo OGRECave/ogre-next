@@ -96,6 +96,10 @@ namespace Ogre
                 finalPixelFormat = LeaveChannelR::getDestinationFormat( finalPixelFormat );
                 filtersVec.push_back( OGRE_NEW TextureFilter::LeaveChannelR() );
             }
+            if( filters & TextureFilter::TypePremultiplyAlpha )
+            {
+                filtersVec.push_back( OGRE_NEW TextureFilter::PremultiplyAlpha() );
+            }
 
             // Add mipmap generation as one of the last steps
             if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
@@ -445,6 +449,49 @@ namespace Ogre
                                     image.getTextureType(), dstFormat, true, numMipmaps );
             if( texture->getPixelFormat() != dstFormat )
                 texture->setPixelFormat( dstFormat );
+        }
+        //-----------------------------------------------------------------------------------
+        void PremultiplyAlpha::_executeStreaming( Image2 &image, TextureGpu * )
+        {
+            OgreProfileExhaustive( "PremultiplyAlpha::_executeStreaming" );
+
+            const PixelFormatGpu srcFormat = image.getPixelFormat();
+
+            // Only RGBA8_UNORM is supported right now
+            if( srcFormat != PixelFormatGpuUtils::getEquivalentLinear( PFG_RGBA8_UNORM ) )
+                return;
+
+            // TODO: This routine is not Endianess-aware. But could be made
+            // so by adding an offset for src[i+offset] in this switch.
+
+            const uint8 numMipmaps = image.getNumMipmaps();
+
+            for( uint8 mip = 0; mip < numMipmaps; ++mip )
+            {
+                TextureBox box = image.getData( mip );
+
+                const uint32 width = box.width;
+                const uint32 height = box.height;
+                const uint32 depthOrSlices = box.getDepthOrSlices();
+
+                for( size_t z = 0; z < depthOrSlices; ++z )
+                {
+                    for( size_t y = 0; y < height; ++y )
+                    {
+                        uint8 *RESTRICT_ALIAS data =
+                            reinterpret_cast<uint8 * RESTRICT_ALIAS>( box.at( 0, y, z ) );
+                        for( size_t x = 0; x < width; ++x )
+                        {
+                            const uint8 a = data[3];
+                            data[0] = data[0] * a / 255u;
+                            data[1] = data[1] * a / 255u;
+                            data[2] = data[2] * a / 255u;
+
+                            data += 4u;
+                        }
+                    }
+                }
+            }
         }
     }  // namespace TextureFilter
 }  // namespace Ogre

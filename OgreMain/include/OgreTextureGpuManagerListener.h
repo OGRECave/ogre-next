@@ -47,7 +47,7 @@ namespace Ogre
     class _OgreExport TextureGpuManagerListener : public TextureGpuListener
     {
     public:
-        virtual ~TextureGpuManagerListener();
+        ~TextureGpuManagerListener() override;
 
         /** Ogre normally puts Textures into pools (a Type2DArray texture) for efficient rendering
             Note that only textures of the same resolution and format can be put together in
@@ -68,6 +68,21 @@ namespace Ogre
             How many entries the pool should be able to hold.
         */
         virtual size_t getNumSlicesFor( TextureGpu *texture, TextureGpuManager *textureManager ) = 0;
+
+        /**
+        @brief getFiltersFor
+            Gets a chance to alter the filters needed for the given texture to load
+        @param name
+            Name of the texture
+        @param aliasName
+            Alias name of the texture
+        @param filters
+            Current filters that are to be applied
+        @return
+            Actual filters to apply, if the listener modifies them
+        */
+        virtual uint32 getFiltersFor( const String &name, const String &aliasName,
+                                      uint32 filters ) const = 0;
     };
 
     /** This is a Default implementation of TextureGpuManagerListener based on heuristics.
@@ -90,6 +105,9 @@ namespace Ogre
         DefaultTextureGpuManagerListener();
 
         size_t getNumSlicesFor( TextureGpu *texture, TextureGpuManager *textureManager ) override;
+
+        uint32 getFiltersFor( const String &name, const String &aliasName,
+                              uint32 filters ) const override;
 
         void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                    void *extraData ) override;
