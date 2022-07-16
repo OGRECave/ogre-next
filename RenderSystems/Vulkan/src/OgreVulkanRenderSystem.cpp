@@ -226,7 +226,7 @@ namespace Ogre
                 initializeExternalVkInstance( externalInstance );
 
 #ifndef OGRE_VULKAN_WINDOW_NULL
-                VulkanSupport *vulkanSupport = OGRE_NEW VulkanSupport();
+                VulkanSupport *vulkanSupport = new VulkanSupport();
                 vulkanSupport->setSupported();
                 mAvailableVulkanSupports[vulkanSupport->getInterfaceName()] = vulkanSupport;
                 mVulkanSupport = vulkanSupport;
@@ -263,7 +263,7 @@ namespace Ogre
 
         while( itor != endt )
         {
-            OGRE_DELETE itor->second;
+            delete itor->second;
             ++itor;
         }
 
