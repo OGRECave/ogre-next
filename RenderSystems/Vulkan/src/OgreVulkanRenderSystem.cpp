@@ -861,9 +861,7 @@ namespace Ogre
                 }
             }
 
-            // This is handled in OgreNext 3.0+. OgreNext 2.3 doesn't yet make use of this.
             VulkanDevice::addExternalInstanceExtensions( externalInstance->instanceExtensions );
-
 
 #ifdef OGRE_VULKAN_WINDOW_WIN32
             if( VulkanDevice::hasInstanceExtension( VulkanWin32Window::getRequiredExtensionName() ) )
