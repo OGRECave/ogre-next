@@ -645,7 +645,7 @@ namespace Ogre
         /** Gets whether particles emitts in direction with is translated into worldspace or not (may
          * only apply to some settings in regards of settings "Localspace" and "ParticleEmitterRootNode")
          */
-        bool getTranslateParticleDirectionIntoWorldSpace( void ) const
+        bool getTranslateParticleDirectionIntoWorldSpace() const
         {
             return mTranslateParticleDirectionIntoWorldSpace;
         }
