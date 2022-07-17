@@ -84,8 +84,8 @@ namespace Ogre
         static CmdColourAdjust msColourCmd[MAX_STAGES];
         static CmdTimeAdjust   msTimeCmd[MAX_STAGES];
 
-		/** See ParticleAffector. */
-		void _initParticle( Ogre::Particle *pParticle ) override;
+        /** See ParticleAffector. */
+        void _initParticle( Ogre::Particle *pParticle ) override;
 
     protected:
         ColourValue mColourAdj[MAX_STAGES];

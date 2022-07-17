@@ -28,11 +28,18 @@ if len(sys.argv) == 2:
         bCompareWithBase = True
 
 g_folders = [
+    'Components/Atmosphere',
+    'Components/Hlms',
+    'Components/MeshLodGenerator',
+    'Components/Overlay',
+    'Components/PlanarReflections',
+    'Components/SceneFormat',
     'OgreMain',
     'RenderSystems/Direct3D11',
     'RenderSystems/GL3Plus',
     'RenderSystems/Metal',
     'RenderSystems/NULL',
+    'PlugIns/ParticleFX',
     'Samples/2.0',
 ]
 

@@ -1,26 +1,27 @@
 
 #ifndef OGRE_HLMS_TEXTURE_BASE_CLASS
-    #include "OgreHlmsTextureBaseClass.h"
-    #include "OgreDescriptorSetTexture.h"
-    #include "OgreDescriptorSetSampler.h"
-    #include "OgreTextureGpu.h"
-    #include "OgreHlms.h"
-    #include "OgreHlmsManager.h"
-    #include "OgreRenderSystem.h"
-    #include "OgreTextureGpuManager.h"
+#    include "OgreDescriptorSetSampler.h"
+#    include "OgreDescriptorSetTexture.h"
+#    include "OgreHlms.h"
+#    include "OgreHlmsManager.h"
+#    include "OgreHlmsTextureBaseClass.h"
+#    include "OgreRenderSystem.h"
+#    include "OgreTextureGpu.h"
+#    include "OgreTextureGpuManager.h"
 #endif
 
 #ifndef OGRE_NumTexIndices
-    #define OGRE_NumTexIndices sizeof(mTexIndices) / sizeof(mTexIndices[0])
+#    define OGRE_NumTexIndices sizeof( mTexIndices ) / sizeof( mTexIndices[0] )
 #endif
 
 namespace Ogre
 {
     static const uint16 ManualTexIndexBit = 0x8000u;
 
-    OGRE_HLMS_TEXTURE_BASE_CLASS::OGRE_HLMS_TEXTURE_BASE_CLASS(
-            IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
-            const HlmsBlendblock *blendblock, const HlmsParamVec &params ) :
+    OGRE_HLMS_TEXTURE_BASE_CLASS::OGRE_HLMS_TEXTURE_BASE_CLASS( IdString name, Hlms *creator,
+                                                                const HlmsMacroblock *macroblock,
+                                                                const HlmsBlendblock *blendblock,
+                                                                const HlmsParamVec &params ) :
         HlmsDatablock( name, creator, macroblock, blendblock, params ),
         mTexturesDescSet( 0 ),
         mSamplersDescSet( 0 )
@@ -29,13 +30,13 @@ namespace Ogre
         memset( mTextures, 0, sizeof( mTextures ) );
         memset( mSamplerblocks, 0, sizeof( mSamplerblocks ) );
 
-        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        for( size_t i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
             mTexLocationInDescSet[i] = OGRE_HLMS_TEXTURE_BASE_MAX_TEX;
     }
     //-----------------------------------------------------------------------------------
     OGRE_HLMS_TEXTURE_BASE_CLASS::~OGRE_HLMS_TEXTURE_BASE_CLASS()
     {
-        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        for( size_t i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             if( mTextures[i] )
                 mTextures[i]->removeListener( this );
@@ -55,7 +56,7 @@ namespace Ogre
                 mSamplersDescSet = 0;
             }
 
-            for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+            for( size_t i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
             {
                 if( mSamplerblocks[i] )
                     hlmsManager->destroySamplerblock( mSamplerblocks[i] );
@@ -66,14 +67,14 @@ namespace Ogre
     void OGRE_HLMS_TEXTURE_BASE_CLASS::cloneImpl( HlmsDatablock *datablock ) const
     {
         OGRE_HLMS_TEXTURE_BASE_CLASS *datablockImpl =
-                static_cast<OGRE_HLMS_TEXTURE_BASE_CLASS*>( datablock );
+            static_cast<OGRE_HLMS_TEXTURE_BASE_CLASS *>( datablock );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
         bool hasDirtyTextures = false;
         bool hasDirtySamplers = false;
 
-        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        for( size_t i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             datablockImpl->mTexIndices[i] = mTexIndices[i];
             datablockImpl->mTextures[i] = mTextures[i];
@@ -98,25 +99,22 @@ namespace Ogre
         datablockImpl->scheduleConstBufferUpdate( hasDirtyTextures, hasDirtySamplers );
     }
     //-----------------------------------------------------------------------------------
-    void OGRE_HLMS_TEXTURE_BASE_CLASS::preload()
-    {
-        loadAllTextures();
-    }
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::preload() { loadAllTextures(); }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures( const String &folderPath,
-                                                     set<String>::type &savedTextures,
-                                                     bool saveOitd, bool saveOriginal,
+                                                     set<String>::type &savedTextures, bool saveOitd,
+                                                     bool saveOriginal,
                                                      HlmsTextureExportListener *listener )
     {
-        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        for( size_t i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             TextureGpu *texture = mTextures[i];
 
             if( texture )
             {
                 TextureGpuManager *textureManager = texture->getTextureManager();
-                textureManager->saveTexture( texture, folderPath, savedTextures,
-                                             saveOitd, saveOriginal, listener );
+                textureManager->saveTexture( texture, folderPath, savedTextures, saveOitd, saveOriginal,
+                                             listener );
             }
         }
     }
@@ -130,7 +128,7 @@ namespace Ogre
         if( updateSamplers )
             flags |= ConstBufferPool::DirtySamplers;
 
-        static_cast<OGRE_HLMS_CREATOR_CLASS*>(mCreator)->scheduleForUpdate( this, flags );
+        static_cast<OGRE_HLMS_CREATOR_CLASS *>( mCreator )->scheduleForUpdate( this, flags );
     }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty )
@@ -141,7 +139,7 @@ namespace Ogre
 
         bool needsRecalculateHash = false;
 
-        if( textureSetDirty || (samplerSetDirty && !hasSeparateSamplers) )
+        if( textureSetDirty || ( samplerSetDirty && !hasSeparateSamplers ) )
             needsRecalculateHash |= bakeTextures( hasSeparateSamplers );
 
         if( samplerSetDirty && hasSeparateSamplers )
@@ -150,9 +148,9 @@ namespace Ogre
         if( needsRecalculateHash )
             calculateHash();
 
-        //When needsRecalculateHash = false, nothing significant has changed. However
-        //this datablock may have been attached to new Items that skipped calculation
-        //due to the datablock being dirty, so we have to flush those renderables
+        // When needsRecalculateHash = false, nothing significant has changed. However
+        // this datablock may have been attached to new Items that skipped calculation
+        // due to the datablock being dirty, so we have to flush those renderables
         //(the ones that have a null Hlms hash)
         const bool onlyNullHashes = needsRecalculateHash == false;
         flushRenderables( onlyNullHashes );
@@ -163,37 +161,37 @@ namespace Ogre
         DescriptorSetTexture baseSet;
         DescriptorSetSampler baseSampler;
 
-        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        for( size_t i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
             mTexLocationInDescSet[i] = OGRE_HLMS_TEXTURE_BASE_MAX_TEX;
 
-        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        for( size_t i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             if( mTextures[i] )
             {
-                //May have changed if the TextureGpuManager updated the Texture.
-                if( !(mTexIndices[i] & ManualTexIndexBit) )
+                // May have changed if the TextureGpuManager updated the Texture.
+                if( !( mTexIndices[i] & ManualTexIndexBit ) )
                     mTexIndices[i] = mTextures[i]->getInternalSliceStart();
 
-                //Look if the texture pool has already been added to the desc set so
-                //we can share the same spot. In OpenGL, we cannot share it if the
-                //samplerblocks are different.
-                for( size_t j=0; j<i; ++j )
+                // Look if the texture pool has already been added to the desc set so
+                // we can share the same spot. In OpenGL, we cannot share it if the
+                // samplerblocks are different.
+                for( size_t j = 0; j < i; ++j )
                 {
-                    if( (mTextures[j] == mTextures[i] ||
-                         (mTextures[j] &&
-                          mTextures[j]->getInternalTextureType() ==
-                          mTextures[i]->getInternalTextureType() &&
-                          mTextures[j]->getTexturePool() &&
-                          mTextures[j]->getTexturePool() == mTextures[i]->getTexturePool())) &&
-                        (mSamplerblocks[i] == mSamplerblocks[j] || hasSeparateSamplers) )
+                    if( ( mTextures[j] == mTextures[i] ||
+                          ( mTextures[j] &&
+                            mTextures[j]->getInternalTextureType() ==
+                                mTextures[i]->getInternalTextureType() &&
+                            mTextures[j]->getTexturePool() &&
+                            mTextures[j]->getTexturePool() == mTextures[i]->getTexturePool() ) ) &&
+                        ( mSamplerblocks[i] == mSamplerblocks[j] || hasSeparateSamplers ) )
                     {
                         mTexLocationInDescSet[i] = mTexLocationInDescSet[j];
                         break;
                     }
                 }
 
-                //It was not. Add it ourself, trying to maintaining
-                //the order of OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+                // It was not. Add it ourself, trying to maintaining
+                // the order of OGRE_HLMS_TEXTURE_BASE_MAX_TEX
                 if( mTexLocationInDescSet[i] == OGRE_HLMS_TEXTURE_BASE_MAX_TEX )
                 {
                     mTexLocationInDescSet[i] = (uint8)baseSet.mTextures.size();
@@ -206,7 +204,7 @@ namespace Ogre
 
         baseSet.mShaderTypeTexCount[PixelShader] = static_cast<uint16>( baseSet.mTextures.size() );
         baseSampler.mShaderTypeSamplerCount[PixelShader] =
-                static_cast<uint16>( baseSampler.mSamplers.size() );
+            static_cast<uint16>( baseSampler.mSamplers.size() );
 
         bool needsRecalculateHash = false;
 
@@ -252,26 +250,25 @@ namespace Ogre
     }
     bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeSamplers()
     {
-        assert( mCreator->getRenderSystem()->getCapabilities()->
-                hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
+        assert( mCreator->getRenderSystem()->getCapabilities()->hasCapability(
+            RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
 
         DescriptorSetSampler baseSampler;
-        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        for( size_t i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             if( mSamplerblocks[i] )
             {
-                //Keep it sorted to maximize sharing of descriptor sets.
-                FastArray<const HlmsSamplerblock*>::iterator itor =
-                        std::lower_bound( baseSampler.mSamplers.begin(),
-                                          baseSampler.mSamplers.end(),
-                                          mSamplerblocks[i], OrderBlockById );
-                if( itor == baseSampler.mSamplers.end() || (*itor) != mSamplerblocks[i] )
+                // Keep it sorted to maximize sharing of descriptor sets.
+                FastArray<const HlmsSamplerblock *>::iterator itor =
+                    std::lower_bound( baseSampler.mSamplers.begin(), baseSampler.mSamplers.end(),
+                                      mSamplerblocks[i], OrderBlockById );
+                if( itor == baseSampler.mSamplers.end() || ( *itor ) != mSamplerblocks[i] )
                     itor = baseSampler.mSamplers.insert( itor, mSamplerblocks[i] );
             }
         }
 
         baseSampler.mShaderTypeSamplerCount[PixelShader] =
-                static_cast<uint16>( baseSampler.mSamplers.size() );
+            static_cast<uint16>( baseSampler.mSamplers.size() );
 
         bool needsRecalculateHash = false;
 
@@ -294,14 +291,13 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::setTexture( uint8 texType, TextureGpu *texture,
-                                                   const HlmsSamplerblock *refParams,
-                                                   uint16 sliceIdx )
+                                                   const HlmsSamplerblock *refParams, uint16 sliceIdx )
     {
         assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
-        //Set the new samplerblock
+        // Set the new samplerblock
         HlmsSamplerblock const *samplerblockPtr = 0;
         if( refParams )
         {
@@ -311,14 +307,14 @@ namespace Ogre
         {
             if( !mSamplerblocks[texType] )
             {
-                //Adding a texture, but the samplerblock doesn't exist. Create a default one.
+                // Adding a texture, but the samplerblock doesn't exist. Create a default one.
                 HlmsSamplerblock defaultSamplerblockRef;
                 samplerblockPtr = hlmsManager->getSamplerblock( defaultSamplerblockRef );
             }
             else
             {
-                //Keeping the current samplerblock. Increase its
-                //ref. count because _setTexture will decrease it.
+                // Keeping the current samplerblock. Increase its
+                // ref. count because _setTexture will decrease it.
                 samplerblockPtr = mSamplerblocks[texType];
                 hlmsManager->addReference( samplerblockPtr );
             }
@@ -338,8 +334,7 @@ namespace Ogre
 
         if( mTextures[texType] != texture )
         {
-            if( (!mTextures[texType] && texture) ||
-                (mTextures[texType] && !texture) )
+            if( ( !mTextures[texType] && texture ) || ( mTextures[texType] && !texture ) )
             {
                 textureSetDirty = true;
             }
@@ -370,10 +365,10 @@ namespace Ogre
             scheduleConstBufferUpdate( textureSetDirty, samplerSetDirty );
         }
 
-        //Set the new samplerblock
+        // Set the new samplerblock
         if( mSamplerblocks[texType] )
         {
-            //Decrease ref count of our old block. The new one already has its ref count increased.
+            // Decrease ref count of our old block. The new one already has its ref count increased.
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
             hlmsManager->destroySamplerblock( mSamplerblocks[texType] );
         }
@@ -391,7 +386,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* OGRE_HLMS_TEXTURE_BASE_CLASS::getTexture( uint8 texType ) const
+    TextureGpu *OGRE_HLMS_TEXTURE_BASE_CLASS::getTexture( uint8 texType ) const
     {
         assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
         return mTextures[texType];
@@ -409,7 +404,7 @@ namespace Ogre
     {
         if( mSamplerblocks[texType] )
         {
-            //Decrease ref count of our old block. The new one already has its ref count increased.
+            // Decrease ref count of our old block. The new one already has its ref count increased.
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
             hlmsManager->destroySamplerblock( mSamplerblocks[texType] );
         }
@@ -421,7 +416,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const HlmsSamplerblock* OGRE_HLMS_TEXTURE_BASE_CLASS::getSamplerblock( uint8 texType ) const
+    const HlmsSamplerblock *OGRE_HLMS_TEXTURE_BASE_CLASS::getSamplerblock( uint8 texType ) const
     {
         assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
         return mSamplerblocks[texType];
@@ -430,7 +425,7 @@ namespace Ogre
     uint8 OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorTexture( uint8 texType )
     {
         assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
-        assert( (mTexturesDescSet || !mTextures[texType]) && "bakeTextures not yet called!" );
+        assert( ( mTexturesDescSet || !mTextures[texType] ) && "bakeTextures not yet called!" );
         return mTexLocationInDescSet[texType];
     }
     //-----------------------------------------------------------------------------------
@@ -442,13 +437,12 @@ namespace Ogre
         const HlmsSamplerblock *sampler = mSamplerblocks[texType];
         if( sampler )
         {
-            assert( mCreator->getRenderSystem()->
-                    getCapabilities()->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
+            assert( mCreator->getRenderSystem()->getCapabilities()->hasCapability(
+                RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
 
-            FastArray<const HlmsSamplerblock*>::const_iterator itor =
-                    std::lower_bound( mSamplersDescSet->mSamplers.begin(),
-                                      mSamplersDescSet->mSamplers.end(),
-                                      sampler, OrderBlockById );
+            FastArray<const HlmsSamplerblock *>::const_iterator itor =
+                std::lower_bound( mSamplersDescSet->mSamplers.begin(), mSamplersDescSet->mSamplers.end(),
+                                  sampler, OrderBlockById );
             if( itor != mSamplersDescSet->mSamplers.end() && *itor == sampler )
             {
                 const size_t idx = static_cast<size_t>( itor - mSamplersDescSet->mSamplers.begin() );
@@ -464,11 +458,11 @@ namespace Ogre
                                                              void *extraData )
     {
         if( reason == TextureGpuListener::FromStorageToSysRam )
-            return; //Does not affect us at all.
+            return;  // Does not affect us at all.
 
         if( reason == TextureGpuListener::Deleted )
         {
-            for( int i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+            for( int i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
             {
                 if( mTextures[i] == texture )
                     setTexture( (uint8)i, 0, mSamplerblocks[i] );
@@ -477,8 +471,8 @@ namespace Ogre
 
         if( mTexturesDescSet )
         {
-            //The texture's baked SRV has changed. We always need a new descriptor,
-            //and DescriptorSetTexture::!= operator won't see this.
+            // The texture's baked SRV has changed. We always need a new descriptor,
+            // and DescriptorSetTexture::!= operator won't see this.
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
             hlmsManager->destroyDescriptorSetTexture( mTexturesDescSet );
             mTexturesDescSet = 0;
@@ -497,10 +491,10 @@ namespace Ogre
         if( !mAllowTextureResidencyChange )
             return;
 
-        for( int i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        for( int i = 0; i < OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             if( mTextures[i] )
                 mTextures[i]->scheduleTransitionTo( GpuResidency::Resident );
         }
     }
-}
+}  // namespace Ogre

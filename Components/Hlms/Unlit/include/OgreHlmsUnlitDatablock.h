@@ -114,19 +114,19 @@ namespace Ogre
                 Default uv:             0
                 Example: diffuse_map1 myTexture.png Add 3
 
-			+ diffuse_map2 through diffuse_map16
+            + diffuse_map2 through diffuse_map16
                 Same as diffuse_map1 but for subsequent layers to be applied on top of the previous
                 images. You can't leave gaps (i.e. specify diffuse_map0 & diffuse_map2 but not
                 diffuse_map1).
                 Note that not all mobile HW supports 16 textures at the same time, thus we will
                 just cut/ignore the extra textures that won't fit (we log a warning though).
 
-			+ animate <\#tex_unit> [<\#tex_unit> <\#tex_unit> ... <\#tex_unit>]
+            + animate <\#tex_unit> [<\#tex_unit> <\#tex_unit> ... <\#tex_unit>]
                 Enables texture animation through a 4x4 matrix for the specified textures.
                 Default: All texture animation/manipulation disabled.
                 Example: animate 0 1 2 3 4 14 15
 
-			+ alpha_test [compare_func] [threshold]
+            + alpha_test [compare_func] [threshold]
                 When present, mAlphaTestThreshold is used.
                 compare_func is optional. Valid values are:
                     less, less_equal, equal, greater, greater_equal, not_equal
