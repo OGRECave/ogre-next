@@ -7,7 +7,7 @@ on:
 
   # Run for all pull requests
   pull_request:
-    branches: '*'
+    branches: 'master'
     types: [opened, synchronize, reopened]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
