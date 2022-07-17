@@ -99,7 +99,7 @@ var class_ogre_1_1_particle_system =
     [ "getSkeletonInstance", "class_ogre_1_1_particle_system.html#adb101ea64ddaf32f7bfd0b6e2c016735", null ],
     [ "getSortingEnabled", "class_ogre_1_1_particle_system.html#abdedb814365c8a7f69b86c0f531e7284", null ],
     [ "getSpeedFactor", "class_ogre_1_1_particle_system.html#a3e27105ab30e9a6fe63818e35c6a219f", null ],
-    [ "getTranslateParticleDirectionIntoWorldSpace", "class_ogre_1_1_particle_system.html#a10a51491571f41769b971528d90bea01", null ],
+    [ "getTranslateParticleDirectionIntoWorldSpace", "class_ogre_1_1_particle_system.html#aa45ac886b0dec13ec28dda2141a6b952", null ],
     [ "getUserObjectBindings", "class_ogre_1_1_particle_system.html#aa6ae8d976be50b007ba1e87732a6397d", null ],
     [ "getUserObjectBindings", "class_ogre_1_1_particle_system.html#a27eb8980ee187b42ea619c582eaebf73", null ],
     [ "getVisibilityFlags", "class_ogre_1_1_particle_system.html#ad215e51b8a9f62f5524ae895ed902fd2", null ],
