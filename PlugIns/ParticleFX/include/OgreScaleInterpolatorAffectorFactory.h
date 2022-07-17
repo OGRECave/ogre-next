@@ -30,8 +30,8 @@ THE SOFTWARE.
 
 #include "OgreParticleFXPrerequisites.h"
 
-#include "OgreScaleInterpolatorAffector.h"
 #include "OgreParticleAffectorFactory.h"
+#include "OgreScaleInterpolatorAffector.h"
 
 namespace Ogre
 {

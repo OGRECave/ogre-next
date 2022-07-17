@@ -69,7 +69,7 @@ namespace Ogre
         };
 
         /** Default constructor. */
-		ScaleInterpolatorAffector( ParticleSystem *psys );
+        ScaleInterpolatorAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
         void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
@@ -81,10 +81,10 @@ namespace Ogre
         Real getTimeAdjust( size_t index ) const;
 
         static CmdScaleAdjust msScaleCmd[MAX_STAGES];
-        static CmdTimeAdjust   msTimeCmd[MAX_STAGES];
+        static CmdTimeAdjust  msTimeCmd[MAX_STAGES];
 
-		/** See ParticleAffector. */
-		void _initParticle(Ogre::Particle* pParticle);
+        /** See ParticleAffector. */
+        void _initParticle( Ogre::Particle *pParticle );
 
     protected:
         Real mScaleAdj[MAX_STAGES];

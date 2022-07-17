@@ -37,10 +37,10 @@ namespace Ogre
 {
     // init statics
     ScaleInterpolatorAffector::CmdScaleAdjust ScaleInterpolatorAffector::msScaleCmd[MAX_STAGES];
-	ScaleInterpolatorAffector::CmdTimeAdjust ScaleInterpolatorAffector::msTimeCmd[MAX_STAGES];
+    ScaleInterpolatorAffector::CmdTimeAdjust ScaleInterpolatorAffector::msTimeCmd[MAX_STAGES];
 
     //-----------------------------------------------------------------------
-	ScaleInterpolatorAffector::ScaleInterpolatorAffector( ParticleSystem *psys ) :
+    ScaleInterpolatorAffector::ScaleInterpolatorAffector( ParticleSystem *psys ) :
         ParticleAffector( psys )
     {
         for( int i = 0; i < MAX_STAGES; i++ )
@@ -85,14 +85,14 @@ namespace Ogre
             const Real life_time = p->mTotalTimeToLive;
             Real particle_time = 1.0f - ( p->mTimeToLive / life_time );
 
-			Real scale;
+            Real scale;
             if( particle_time <= mTimeAdj[0] )
             {
-				scale = mScaleAdj[0];
+                scale = mScaleAdj[0];
             }
             else if( particle_time >= mTimeAdj[MAX_STAGES - 1] )
             {
-				scale = mScaleAdj[MAX_STAGES - 1];
+                scale = mScaleAdj[MAX_STAGES - 1];
             }
             else
             {
@@ -102,37 +102,36 @@ namespace Ogre
                     {
                         particle_time -= mTimeAdj[i];
                         particle_time /= ( mTimeAdj[i + 1] - mTimeAdj[i] );
-						scale = ((mScaleAdj[i + 1] * particle_time) + (mScaleAdj[i] * (1.0f - particle_time)));
+                        scale = ( ( mScaleAdj[i + 1] * particle_time ) +
+                                  ( mScaleAdj[i] * ( 1.0f - particle_time ) ) );
                         break;
                     }
                 }
             }
 
-			p->setDimensions(pSystem->getDefaultWidth() * scale, pSystem->getDefaultHeight() * scale);
+            p->setDimensions( pSystem->getDefaultWidth() * scale, pSystem->getDefaultHeight() * scale );
         }
     }
 
     //-----------------------------------------------------------------------
-    void ScaleInterpolatorAffector::setScaleAdjust( size_t index, Real scale)
+    void ScaleInterpolatorAffector::setScaleAdjust( size_t index, Real scale )
     {
         mScaleAdj[index] = scale;
     }
     //-----------------------------------------------------------------------
-    Real ScaleInterpolatorAffector::getScaleAdjust( size_t index ) const
-    {
-        return mScaleAdj[index];
-    }
+    Real ScaleInterpolatorAffector::getScaleAdjust( size_t index ) const { return mScaleAdj[index]; }
 
     //-----------------------------------------------------------------------
     void ScaleInterpolatorAffector::setTimeAdjust( size_t index, Real time ) { mTimeAdj[index] = time; }
     //-----------------------------------------------------------------------
     Real ScaleInterpolatorAffector::getTimeAdjust( size_t index ) const { return mTimeAdj[index]; }
 
-	//-----------------------------------------------------------------------
-	void ScaleInterpolatorAffector::_initParticle(Ogre::Particle* pParticle)
-	{
-		pParticle->setDimensions(mParent->getDefaultWidth() * mScaleAdj[0], mParent->getDefaultHeight() * mScaleAdj[0]);
-	}
+    //-----------------------------------------------------------------------
+    void ScaleInterpolatorAffector::_initParticle( Ogre::Particle *pParticle )
+    {
+        pParticle->setDimensions( mParent->getDefaultWidth() * mScaleAdj[0],
+                                  mParent->getDefaultHeight() * mScaleAdj[0] );
+    }
 
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
