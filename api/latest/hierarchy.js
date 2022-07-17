@@ -575,7 +575,8 @@ var hierarchy =
         [ "Ogre::DirectionRandomiserAffector", "class_ogre_1_1_direction_randomiser_affector.html", null ],
         [ "Ogre::LinearForceAffector", "class_ogre_1_1_linear_force_affector.html", null ],
         [ "Ogre::RotationAffector", "class_ogre_1_1_rotation_affector.html", null ],
-        [ "Ogre::ScaleAffector", "class_ogre_1_1_scale_affector.html", null ]
+        [ "Ogre::ScaleAffector", "class_ogre_1_1_scale_affector.html", null ],
+        [ "Ogre::ScaleInterpolatorAffector", "class_ogre_1_1_scale_interpolator_affector.html", null ]
       ] ],
       [ "Ogre::ParticleAffectorFactory", "class_ogre_1_1_particle_affector_factory.html", [
         [ "Ogre::ColourFaderAffectorFactory", "class_ogre_1_1_colour_fader_affector_factory.html", null ],
@@ -586,7 +587,8 @@ var hierarchy =
         [ "Ogre::DirectionRandomiserAffectorFactory", "class_ogre_1_1_direction_randomiser_affector_factory.html", null ],
         [ "Ogre::LinearForceAffectorFactory", "class_ogre_1_1_linear_force_affector_factory.html", null ],
         [ "Ogre::RotationAffectorFactory", "class_ogre_1_1_rotation_affector_factory.html", null ],
-        [ "Ogre::ScaleAffectorFactory", "class_ogre_1_1_scale_affector_factory.html", null ]
+        [ "Ogre::ScaleAffectorFactory", "class_ogre_1_1_scale_affector_factory.html", null ],
+        [ "Ogre::ScaleInterpolatorAffectorFactory", "class_ogre_1_1_scale_interpolator_affector_factory.html", null ]
       ] ],
       [ "Ogre::ParticleEmitterFactory", "class_ogre_1_1_particle_emitter_factory.html", [
         [ "Ogre::BoxEmitterFactory", "class_ogre_1_1_box_emitter_factory.html", null ],
@@ -1532,6 +1534,8 @@ var hierarchy =
       [ "Ogre::RotationAffector::CmdRotationSpeedRangeEnd", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html", null ],
       [ "Ogre::RotationAffector::CmdRotationSpeedRangeStart", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html", null ],
       [ "Ogre::ScaleAffector::CmdScaleAdjust", "class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust.html", null ],
+      [ "Ogre::ScaleInterpolatorAffector::CmdScaleAdjust", "class_ogre_1_1_scale_interpolator_affector_1_1_cmd_scale_adjust.html", null ],
+      [ "Ogre::ScaleInterpolatorAffector::CmdTimeAdjust", "class_ogre_1_1_scale_interpolator_affector_1_1_cmd_time_adjust.html", null ],
       [ "Ogre::UnifiedHighLevelGpuProgram::CmdDelegate", "class_ogre_1_1_unified_high_level_gpu_program_1_1_cmd_delegate.html", null ],
       [ "Ogre::VulkanProgram::CmdPreprocessorDefines", "class_ogre_1_1_vulkan_program_1_1_cmd_preprocessor_defines.html", null ],
       [ "Ogre::v1::BillboardParticleRenderer::CmdAccurateFacing", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_accurate_facing.html", null ],
@@ -1541,6 +1545,8 @@ var hierarchy =
       [ "Ogre::v1::BillboardParticleRenderer::CmdCommonDirection", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_common_direction.html", null ],
       [ "Ogre::v1::BillboardParticleRenderer::CmdCommonUpVector", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_common_up_vector.html", null ],
       [ "Ogre::v1::BillboardParticleRenderer::CmdPointRendering", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_point_rendering.html", null ],
+      [ "Ogre::v1::BillboardParticleRenderer::CmdTextureSlices", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_slices.html", null ],
+      [ "Ogre::v1::BillboardParticleRenderer::CmdTextureStacks", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks.html", null ],
       [ "Ogre::v1::BorderPanelOverlayElement::CmdBorderBottomLeftUV", "class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_left_u_v.html", null ],
       [ "Ogre::v1::BorderPanelOverlayElement::CmdBorderBottomRightUV", "class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_right_u_v.html", null ],
       [ "Ogre::v1::BorderPanelOverlayElement::CmdBorderBottomUV", "class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_u_v.html", null ],

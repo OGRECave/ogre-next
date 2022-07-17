@@ -1,5 +1,11 @@
 var NAVTREEINDEX154 =
 {
+"class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a":[5,2,2,93,0,4],
+"class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99":[5,2,2,93,0,7],
+"class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957":[5,2,2,93,0,1],
+"class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090":[5,2,2,93,0,9],
+"class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003":[5,2,2,93,0,5],
+"class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71":[5,2,2,93,0,0],
 "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d":[5,2,2,93,0,8],
 "class_ogre_1_1_rendering_a_p_i_exception.html#aa3f950b457a33a114a74f9b8993a885d":[5,2,2,93,1],
 "class_ogre_1_1_rendering_a_p_i_exception.html#ac275e4f8b432897c55535144c55566cc":[5,2,2,93,8],
@@ -243,11 +249,5 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_resource_manager.html#a6ce966e769770ce9f90d77eddc2c30a3":[5,2,10,117,46],
 "class_ogre_1_1_resource_manager.html#a6dcc6f12ebf2c21d2c162e2147efef96":[5,2,10,117,21],
 "class_ogre_1_1_resource_manager.html#a73a94c11059676dc26516ec33410301a":[5,2,10,117,19],
-"class_ogre_1_1_resource_manager.html#a78c58e988ab21146ddfda0d053fc5564":[5,2,10,117,45],
-"class_ogre_1_1_resource_manager.html#a7913c36c02ef03007ff1a1c76ddf7710":[5,2,10,117,13],
-"class_ogre_1_1_resource_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,10,117,27],
-"class_ogre_1_1_resource_manager.html#a84e25cc5ad09ff7567d1fed7429433a3":[5,2,10,117,40],
-"class_ogre_1_1_resource_manager.html#a9004a1a2f5df115e91f58615958d2784":[5,2,10,117,7],
-"class_ogre_1_1_resource_manager.html#a93b40c858020f2bbbcebcd4dc72a6321":[5,2,10,117,54],
-"class_ogre_1_1_resource_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,10,117,30]
+"class_ogre_1_1_resource_manager.html#a78c58e988ab21146ddfda0d053fc5564":[5,2,10,117,45]
 };

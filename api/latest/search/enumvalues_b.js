@@ -68,7 +68,7 @@ var searchData=
   ['max_65',['Max',['../namespace_ogre_1_1_prefab_root_layout.html#a665760a12d36c016d52459fb4354e524ac771af66d58b27db3b9c64d6be26ff52',1,'Ogre::PrefabRootLayout']]],
   ['max_5fcommand_5fbuffer_66',['MAX_COMMAND_BUFFER',['../namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a83fb65735570cd52de6212753b9f3f7a',1,'Ogre']]],
   ['max_5fforward_5fplus_5flights_67',['MAX_FORWARD_PLUS_LIGHTS',['../class_ogre_1_1_light.html#a4f1dea084d1497c6f49e802ade940dbca82096faf2c3e88def5977c8520a09794',1,'Ogre::Light']]],
-  ['max_5fstages_68',['MAX_STAGES',['../class_ogre_1_1_colour_interpolator_affector.html#acf7373eecf9851413c0daf113ac63dd4a8bf32ea3e3c96b8616c44bdf5d47fb28',1,'Ogre::ColourInterpolatorAffector']]],
+  ['max_5fstages_68',['MAX_STAGES',['../class_ogre_1_1_colour_interpolator_affector.html#acf7373eecf9851413c0daf113ac63dd4a8bf32ea3e3c96b8616c44bdf5d47fb28',1,'Ogre::ColourInterpolatorAffector::MAX_STAGES()'],['../class_ogre_1_1_scale_interpolator_affector.html#a4ff9a73f79a7ead276bb038a47f51a7aacac1e0d1701b5e216d6e6f03a1cfd30c',1,'Ogre::ScaleInterpolatorAffector::MAX_STAGES()']]],
   ['max_5fvbo_5fflag_69',['MAX_VBO_FLAG',['../class_ogre_1_1_vulkan_vao_manager.html#ab58aa47c8a54e57fecd9d7e93b6651a6a1faa3e29dbe49f9f22a09f8d01e18bd0',1,'Ogre::VulkanVaoManager']]],
   ['memcategory_5fanimation_70',['MEMCATEGORY_ANIMATION',['../group___memory.html#gga830fab51be174d6f2849857cb1abb36aa24267bedbd1115a8f208e4ee355693e4',1,'Ogre']]],
   ['memcategory_5fcount_71',['MEMCATEGORY_COUNT',['../group___memory.html#gga830fab51be174d6f2849857cb1abb36aa4ff2b9446477e2ea4170b09d8aaa1b67',1,'Ogre']]],

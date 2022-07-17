@@ -32,5 +32,7 @@ var dir_e62dd509ebfacd0d101cbed051d76b7f =
     [ "OgreRotationAffector.h", "_ogre_rotation_affector_8h.html", "_ogre_rotation_affector_8h" ],
     [ "OgreRotationAffectorFactory.h", "_ogre_rotation_affector_factory_8h.html", "_ogre_rotation_affector_factory_8h" ],
     [ "OgreScaleAffector.h", "_ogre_scale_affector_8h.html", "_ogre_scale_affector_8h" ],
-    [ "OgreScaleAffectorFactory.h", "_ogre_scale_affector_factory_8h.html", "_ogre_scale_affector_factory_8h" ]
+    [ "OgreScaleAffectorFactory.h", "_ogre_scale_affector_factory_8h.html", "_ogre_scale_affector_factory_8h" ],
+    [ "OgreScaleInterpolatorAffector.h", "_ogre_scale_interpolator_affector_8h.html", "_ogre_scale_interpolator_affector_8h" ],
+    [ "OgreScaleInterpolatorAffectorFactory.h", "_ogre_scale_interpolator_affector_factory_8h.html", "_ogre_scale_interpolator_affector_factory_8h" ]
 ];

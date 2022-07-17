@@ -7,6 +7,8 @@ var class_ogre_1_1v1_1_1_billboard_particle_renderer =
     [ "CmdCommonDirection", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_common_direction.html", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_common_direction" ],
     [ "CmdCommonUpVector", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_common_up_vector.html", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_common_up_vector" ],
     [ "CmdPointRendering", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_point_rendering.html", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_point_rendering" ],
+    [ "CmdTextureSlices", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_slices.html", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_slices" ],
+    [ "CmdTextureStacks", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks.html", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks" ],
     [ "BillboardParticleRenderer", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a8eb6906cbc2d334fed1923e9ea5334e5", null ],
     [ "~BillboardParticleRenderer", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a614b5712a438e0e009aef1ab7c722423", null ],
     [ "_createVisualData", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a797b94caf5b57b4ceebef41b9dd66efb", null ],
@@ -37,6 +39,8 @@ var class_ogre_1_1v1_1_1_billboard_particle_renderer =
     [ "getParamDictionary", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a2d36ce7fc120b8a630aa6815eb3887bc", null ],
     [ "getParameter", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a01a6e571941916969316ab23c5ee4739", null ],
     [ "getParameters", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a9d700b6d4cbf4fb3937b7a5950dde761", null ],
+    [ "getTextureSlices", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a754415ab5b23ddf68caf1e8f612fcb86", null ],
+    [ "getTextureStacks", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#ae401df1cd58636b9aff7be65673ffdce", null ],
     [ "getType", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a6e6bf9303487199216f9840e48f236ce", null ],
     [ "getUseAccurateFacing", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a7bcf0c3c1abae443c918e80e87d2e1d7", null ],
     [ "isPointRenderingEnabled", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#afa922653dd726d4c609649b8ad3fa42a", null ],
@@ -61,5 +65,7 @@ var class_ogre_1_1v1_1_1_billboard_particle_renderer =
     [ "setPointRenderingEnabled", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a38c048db259d4a401a67bd400ab8a27c", null ],
     [ "setRenderQueueGroup", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a8930f036b3a1d50786ad939bc70d0e7a", null ],
     [ "setRenderQueueSubGroup", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a6a394f05067cc940200749a8f4639c02", null ],
+    [ "setTextureSlices", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#aa8ccc22c0efe2fada95cc6a12fa78151", null ],
+    [ "setTextureStacks", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a064182399601203c699cd035841cbd3d", null ],
     [ "setUseAccurateFacing", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#ac1916a01b205a61782663bbecee3f0ec", null ]
 ];

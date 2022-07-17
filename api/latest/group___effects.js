@@ -1931,6 +1931,7 @@ var group___effects =
       [ "getParentNode", "class_ogre_1_1_particle_system.html#a791bba58f04a0a7d5eb0429c8b0a9130", null ],
       [ "getParentSceneNode", "class_ogre_1_1_particle_system.html#ae9081d3b9fe88c2fddb5a44bc325ceff", null ],
       [ "getParticle", "class_ogre_1_1_particle_system.html#a0e16a8f7051771fdbf0a4eb93f96ee70", null ],
+      [ "getParticleEmitterRootNode", "class_ogre_1_1_particle_system.html#a606c5a0e189d8b670eb8eb47c7090e83", null ],
       [ "getParticleQuota", "class_ogre_1_1_particle_system.html#a29eb05d857cb8a6281b54a636df4f25d", null ],
       [ "getQueryFlags", "class_ogre_1_1_particle_system.html#a44715489d100f6a6421ea45b0559c83f", null ],
       [ "getRenderer", "class_ogre_1_1_particle_system.html#ad2ac90b715d853440ae5b2a2aae58d40", null ],
@@ -1943,6 +1944,7 @@ var group___effects =
       [ "getSkeletonInstance", "class_ogre_1_1_particle_system.html#adb101ea64ddaf32f7bfd0b6e2c016735", null ],
       [ "getSortingEnabled", "class_ogre_1_1_particle_system.html#abdedb814365c8a7f69b86c0f531e7284", null ],
       [ "getSpeedFactor", "class_ogre_1_1_particle_system.html#a3e27105ab30e9a6fe63818e35c6a219f", null ],
+      [ "getTranslateParticleDirectionIntoWorldSpace", "class_ogre_1_1_particle_system.html#a10a51491571f41769b971528d90bea01", null ],
       [ "getUserObjectBindings", "class_ogre_1_1_particle_system.html#aa6ae8d976be50b007ba1e87732a6397d", null ],
       [ "getUserObjectBindings", "class_ogre_1_1_particle_system.html#a27eb8980ee187b42ea619c582eaebf73", null ],
       [ "getVisibilityFlags", "class_ogre_1_1_particle_system.html#ad215e51b8a9f62f5524ae895ed902fd2", null ],
@@ -1999,6 +2001,7 @@ var group___effects =
       [ "setNonVisibleUpdateTimeout", "class_ogre_1_1_particle_system.html#acbba685176e0d844d8aa82472406595c", null ],
       [ "setParameter", "class_ogre_1_1_particle_system.html#ace884b65b722ead9b920b9abf27bf815", null ],
       [ "setParameterList", "class_ogre_1_1_particle_system.html#ae356913ccefbebc4f0119a0599a406fc", null ],
+      [ "setParticleEmitterRootNode", "class_ogre_1_1_particle_system.html#a750fd44ce67ba960a9dc9bfb4e3d3524", null ],
       [ "setParticleQuota", "class_ogre_1_1_particle_system.html#aa0e2cb40912f330b101b373c84ae1f83", null ],
       [ "setQueryFlags", "class_ogre_1_1_particle_system.html#a77198e02dd65dd368ea4e6af88a93fda", null ],
       [ "setRenderer", "class_ogre_1_1_particle_system.html#a3aa26ab67c0ef0c38512f22f3a9c089f", null ],
@@ -2010,6 +2013,7 @@ var group___effects =
       [ "setSortingEnabled", "class_ogre_1_1_particle_system.html#a976394bc64e81a01338e37c669c8614b", null ],
       [ "setSpeedFactor", "class_ogre_1_1_particle_system.html#afd8ec707603e16d1b0eec2e734486947", null ],
       [ "setStatic", "class_ogre_1_1_particle_system.html#a38f8241458458e4f1235eae7d8f850c3", null ],
+      [ "setTranslateParticleDirectionIntoWorldSpace", "class_ogre_1_1_particle_system.html#abca8b674325dd6c5939b08da97b8a0d7", null ],
       [ "setVisibilityFlags", "class_ogre_1_1_particle_system.html#a28b12f8d0fd7c9da7fcd1e9806dd8064", null ],
       [ "setVisible", "class_ogre_1_1_particle_system.html#ad563191e86e4d119c62ea9acfc2a90d5", null ],
       [ "updateAllBounds", "class_ogre_1_1_particle_system.html#add737d6564593333aeac457a1a2c0269", null ],
@@ -2622,6 +2626,14 @@ var group___effects =
         [ "doGet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_point_rendering.html#ae13826e612f20efbba6f4567d9208e89", null ],
         [ "doSet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_point_rendering.html#afde1d6bdb1a7cca26406b9c48637568d", null ]
       ] ],
+      [ "CmdTextureSlices", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_slices.html", [
+        [ "doGet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_slices.html#ab61717512d42fee4ed5af21b619b5303", null ],
+        [ "doSet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_slices.html#a26444acbd5b4ed2ec3892c4ef6e3d8b4", null ]
+      ] ],
+      [ "CmdTextureStacks", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks.html", [
+        [ "doGet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks.html#a9030895745fc1cfa54e6a72212a84d5f", null ],
+        [ "doSet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks.html#a5950c32d9298b05de33b9b941f04b31b", null ]
+      ] ],
       [ "BillboardParticleRenderer", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a8eb6906cbc2d334fed1923e9ea5334e5", null ],
       [ "~BillboardParticleRenderer", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a614b5712a438e0e009aef1ab7c722423", null ],
       [ "_createVisualData", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a797b94caf5b57b4ceebef41b9dd66efb", null ],
@@ -2652,6 +2664,8 @@ var group___effects =
       [ "getParamDictionary", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a2d36ce7fc120b8a630aa6815eb3887bc", null ],
       [ "getParameter", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a01a6e571941916969316ab23c5ee4739", null ],
       [ "getParameters", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a9d700b6d4cbf4fb3937b7a5950dde761", null ],
+      [ "getTextureSlices", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a754415ab5b23ddf68caf1e8f612fcb86", null ],
+      [ "getTextureStacks", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#ae401df1cd58636b9aff7be65673ffdce", null ],
       [ "getType", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a6e6bf9303487199216f9840e48f236ce", null ],
       [ "getUseAccurateFacing", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a7bcf0c3c1abae443c918e80e87d2e1d7", null ],
       [ "isPointRenderingEnabled", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#afa922653dd726d4c609649b8ad3fa42a", null ],
@@ -2676,6 +2690,8 @@ var group___effects =
       [ "setPointRenderingEnabled", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a38c048db259d4a401a67bd400ab8a27c", null ],
       [ "setRenderQueueGroup", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a8930f036b3a1d50786ad939bc70d0e7a", null ],
       [ "setRenderQueueSubGroup", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a6a394f05067cc940200749a8f4639c02", null ],
+      [ "setTextureSlices", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#aa8ccc22c0efe2fada95cc6a12fa78151", null ],
+      [ "setTextureStacks", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a064182399601203c699cd035841cbd3d", null ],
       [ "setUseAccurateFacing", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#ac1916a01b205a61782663bbecee3f0ec", null ]
     ] ],
     [ "Ogre::v1::BillboardParticleRendererFactory", "class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html", [

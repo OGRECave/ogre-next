@@ -340,6 +340,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0e16a8f7051771fdbf0a4eb93f96ee70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_particle.html">Particle</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a0e16a8f7051771fdbf0a4eb93f96ee70">getParticle</a> (size_t index)</td></tr>
 <tr class="memdesc:a0e16a8f7051771fdbf0a4eb93f96ee70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a particle from the system for manual tweaking.  <a href="class_ogre_1_1_particle_system.html#a0e16a8f7051771fdbf0a4eb93f96ee70">More...</a><br /></td></tr>
 <tr class="separator:a0e16a8f7051771fdbf0a4eb93f96ee70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a606c5a0e189d8b670eb8eb47c7090e83"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a606c5a0e189d8b670eb8eb47c7090e83">getParticleEmitterRootNode</a> () const</td></tr>
+<tr class="memdesc:a606c5a0e189d8b670eb8eb47c7090e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is used to attach the particle Emmiters to an own node independent from the Scenenode the Particlesystem is attached to.  <a href="class_ogre_1_1_particle_system.html#a606c5a0e189d8b670eb8eb47c7090e83">More...</a><br /></td></tr>
+<tr class="separator:a606c5a0e189d8b670eb8eb47c7090e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29eb05d857cb8a6281b54a636df4f25d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a29eb05d857cb8a6281b54a636df4f25d">getParticleQuota</a> () const</td></tr>
 <tr class="memdesc:a29eb05d857cb8a6281b54a636df4f25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum number of particles this system is allowed to have active at once.  <a href="class_ogre_1_1_particle_system.html#a29eb05d857cb8a6281b54a636df4f25d">More...</a><br /></td></tr>
 <tr class="separator:a29eb05d857cb8a6281b54a636df4f25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -375,6 +378,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e27105ab30e9a6fe63818e35c6a219f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a3e27105ab30e9a6fe63818e35c6a219f">getSpeedFactor</a> () const</td></tr>
 <tr class="memdesc:a3e27105ab30e9a6fe63818e35c6a219f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the 'speed factor' on this particle system.  <a href="class_ogre_1_1_particle_system.html#a3e27105ab30e9a6fe63818e35c6a219f">More...</a><br /></td></tr>
 <tr class="separator:a3e27105ab30e9a6fe63818e35c6a219f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10a51491571f41769b971528d90bea01"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a10a51491571f41769b971528d90bea01">getTranslateParticleDirectionIntoWorldSpace</a> (void) const</td></tr>
+<tr class="memdesc:a10a51491571f41769b971528d90bea01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets whether particles emitts in direction with is translated into worldspace or not (may only apply to some settings in regards of settings "Localspace" and "ParticleEmitterRootNode")  <a href="class_ogre_1_1_particle_system.html#a10a51491571f41769b971528d90bea01">More...</a><br /></td></tr>
+<tr class="separator:a10a51491571f41769b971528d90bea01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6ae8d976be50b007ba1e87732a6397d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_user_object_bindings.html">UserObjectBindings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#aa6ae8d976be50b007ba1e87732a6397d">getUserObjectBindings</a> ()</td></tr>
 <tr class="memdesc:aa6ae8d976be50b007ba1e87732a6397d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an instance of user objects binding associated with this class.  <a href="class_ogre_1_1_movable_object.html#aa6ae8d976be50b007ba1e87732a6397d">More...</a><br /></td></tr>
 <tr class="separator:aa6ae8d976be50b007ba1e87732a6397d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -518,6 +524,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae356913ccefbebc4f0119a0599a406fc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#ae356913ccefbebc4f0119a0599a406fc">setParameterList</a> (const <a class="el" href="group___general.html#gad887d0555b483f6499fcd3a4dab0e0c6">NameValuePairList</a> &amp;paramList)</td></tr>
 <tr class="memdesc:ae356913ccefbebc4f0119a0599a406fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic multiple parameter setting method.  <a href="class_ogre_1_1_string_interface.html#ae356913ccefbebc4f0119a0599a406fc">More...</a><br /></td></tr>
 <tr class="separator:ae356913ccefbebc4f0119a0599a406fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a750fd44ce67ba960a9dc9bfb4e3d3524"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#a750fd44ce67ba960a9dc9bfb4e3d3524">setParticleEmitterRootNode</a> (<a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> *sceneNode)</td></tr>
+<tr class="memdesc:a750fd44ce67ba960a9dc9bfb4e3d3524"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is used to attach the particle Emmiters to an own node independent from the Scenenode the Particlesystem is attached to.  <a href="class_ogre_1_1_particle_system.html#a750fd44ce67ba960a9dc9bfb4e3d3524">More...</a><br /></td></tr>
+<tr class="separator:a750fd44ce67ba960a9dc9bfb4e3d3524"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0e2cb40912f330b101b373c84ae1f83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#aa0e2cb40912f330b101b373c84ae1f83">setParticleQuota</a> (size_t quota)</td></tr>
 <tr class="memdesc:aa0e2cb40912f330b101b373c84ae1f83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum number of particles this system is allowed to have active at once.  <a href="class_ogre_1_1_particle_system.html#aa0e2cb40912f330b101b373c84ae1f83">More...</a><br /></td></tr>
 <tr class="separator:aa0e2cb40912f330b101b373c84ae1f83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -551,6 +560,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a38f8241458458e4f1235eae7d8f850c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a38f8241458458e4f1235eae7d8f850c3">setStatic</a> (bool bStatic)</td></tr>
 <tr class="memdesc:a38f8241458458e4f1235eae7d8f850c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns this <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> into static or dynamic.  <a href="class_ogre_1_1_movable_object.html#a38f8241458458e4f1235eae7d8f850c3">More...</a><br /></td></tr>
 <tr class="separator:a38f8241458458e4f1235eae7d8f850c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abca8b674325dd6c5939b08da97b8a0d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system.html#abca8b674325dd6c5939b08da97b8a0d7">setTranslateParticleDirectionIntoWorldSpace</a> (bool value)</td></tr>
+<tr class="memdesc:abca8b674325dd6c5939b08da97b8a0d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether particles emitts in direction with is translated into worldspace or not (may only apply to some settings in regards of settings "Localspace" and "ParticleEmitterRootNode")  <a href="class_ogre_1_1_particle_system.html#abca8b674325dd6c5939b08da97b8a0d7">More...</a><br /></td></tr>
+<tr class="separator:abca8b674325dd6c5939b08da97b8a0d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28b12f8d0fd7c9da7fcd1e9806dd8064"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a28b12f8d0fd7c9da7fcd1e9806dd8064">setVisibilityFlags</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> flags)</td></tr>
 <tr class="memdesc:a28b12f8d0fd7c9da7fcd1e9806dd8064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the visibility flags for this object.  <a href="class_ogre_1_1_movable_object.html#a28b12f8d0fd7c9da7fcd1e9806dd8064">More...</a><br /></td></tr>
 <tr class="separator:a28b12f8d0fd7c9da7fcd1e9806dd8064"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2807,6 +2819,26 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a606c5a0e189d8b670eb8eb47c7090e83" name="a606c5a0e189d8b670eb8eb47c7090e83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a606c5a0e189d8b670eb8eb47c7090e83">&#9670;&nbsp;</a></span>getParticleEmitterRootNode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> * Ogre::ParticleSystem::getParticleEmitterRootNode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is used to attach the particle Emmiters to an own node independent from the Scenenode the Particlesystem is attached to. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>In case this scenenode is not NULL, particles will be emmitted relative to this node instead of relative to the Scenenode the Particlesystem is attached to. </dd></dl>
+
+</div>
+</div>
 <a id="a29eb05d857cb8a6281b54a636df4f25d" name="a29eb05d857cb8a6281b54a636df4f25d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a29eb05d857cb8a6281b54a636df4f25d">&#9670;&nbsp;</a></span>getParticleQuota()</h2>
 
@@ -3103,6 +3135,34 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the 'speed factor' on this particle system. </p>
+
+</div>
+</div>
+<a id="a10a51491571f41769b971528d90bea01" name="a10a51491571f41769b971528d90bea01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10a51491571f41769b971528d90bea01">&#9670;&nbsp;</a></span>getTranslateParticleDirectionIntoWorldSpace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::ParticleSystem::getTranslateParticleDirectionIntoWorldSpace </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets whether particles emitts in direction with is translated into worldspace or not (may only apply to some settings in regards of settings "Localspace" and "ParticleEmitterRootNode") </p>
 
 </div>
 </div>
@@ -4867,6 +4927,27 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
+<a id="a750fd44ce67ba960a9dc9bfb4e3d3524" name="a750fd44ce67ba960a9dc9bfb4e3d3524"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a750fd44ce67ba960a9dc9bfb4e3d3524">&#9670;&nbsp;</a></span>setParticleEmitterRootNode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::ParticleSystem::setParticleEmitterRootNode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> *&#160;</td>
+          <td class="paramname"><em>sceneNode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is used to attach the particle Emmiters to an own node independent from the Scenenode the Particlesystem is attached to. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>In case this scenenode is not NULL, particles will be emmitted relative to this node instead of relative to the Scenenode the Particlesystem is attached to. </dd></dl>
+
+</div>
+</div>
 <a id="aa0e2cb40912f330b101b373c84ae1f83" name="aa0e2cb40912f330b101b373c84ae1f83"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa0e2cb40912f330b101b373c84ae1f83">&#9670;&nbsp;</a></span>setParticleQuota()</h2>
 
@@ -5211,6 +5292,34 @@ template&lt;class Alloc &gt; </div>
 <dl class="section user"><dt></dt><dd>Changing this attribute will cause to switch the attribute to our parent node, and as a result, all of its other attached entities. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_node.html#a1f18bc6093c94defdaf64b504df81259" title="Turns this Node into static or dynamic.">Node::setStatic</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>True if setStatic made an actual change. False otherwise. Can fail because the object was already static/dynamic, or because switching is not supported </dd></dl>
+
+</div>
+</div>
+<a id="abca8b674325dd6c5939b08da97b8a0d7" name="abca8b674325dd6c5939b08da97b8a0d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abca8b674325dd6c5939b08da97b8a0d7">&#9670;&nbsp;</a></span>setTranslateParticleDirectionIntoWorldSpace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::ParticleSystem::setTranslateParticleDirectionIntoWorldSpace </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets whether particles emitts in direction with is translated into worldspace or not (may only apply to some settings in regards of settings "Localspace" and "ParticleEmitterRootNode") </p>
 
 </div>
 </div>

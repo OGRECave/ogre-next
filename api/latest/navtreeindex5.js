@@ -247,7 +247,7 @@ var NAVTREEINDEX5 =
 "_ogre_s_t_b_i_codec_8h.html":[8,0,2,0,258],
 "_ogre_scale_affector_8h.html":[8,0,3,1,0,31],
 "_ogre_scale_affector_factory_8h.html":[8,0,3,1,0,32],
-"_ogre_scene_format_base_8h.html":[8,0,0,7,0,0],
-"_ogre_scene_format_base_8h.html#af3190017d83d94455e645c506aa1681b":[8,0,0,7,0,0,0],
-"_ogre_scene_format_base_8h.html#af3190017d83d94455e645c506aa1681ba1e6762afdbb1f05f51ccc744d361b9ae":[8,0,0,7,0,0,0,12]
+"_ogre_scale_interpolator_affector_8h.html":[8,0,3,1,0,33],
+"_ogre_scale_interpolator_affector_factory_8h.html":[8,0,3,1,0,34],
+"_ogre_scene_format_base_8h.html":[8,0,0,7,0,0]
 };

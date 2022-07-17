@@ -1113,6 +1113,8 @@ var namespace_ogre =
     [ "ScaleAffector", "class_ogre_1_1_scale_affector.html", "class_ogre_1_1_scale_affector" ],
     [ "ScaleAffectorFactory", "class_ogre_1_1_scale_affector_factory.html", "class_ogre_1_1_scale_affector_factory" ],
     [ "ScaleControllerFunction", "class_ogre_1_1_scale_controller_function.html", "class_ogre_1_1_scale_controller_function" ],
+    [ "ScaleInterpolatorAffector", "class_ogre_1_1_scale_interpolator_affector.html", "class_ogre_1_1_scale_interpolator_affector" ],
+    [ "ScaleInterpolatorAffectorFactory", "class_ogre_1_1_scale_interpolator_affector_factory.html", "class_ogre_1_1_scale_interpolator_affector_factory" ],
     [ "SceneFormatBase", "class_ogre_1_1_scene_format_base.html", "class_ogre_1_1_scene_format_base" ],
     [ "SceneFormatExporter", "class_ogre_1_1_scene_format_exporter.html", "class_ogre_1_1_scene_format_exporter" ],
     [ "SceneFormatImporter", "class_ogre_1_1_scene_format_importer.html", "class_ogre_1_1_scene_format_importer" ],
