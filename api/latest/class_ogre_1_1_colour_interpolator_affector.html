@@ -129,9 +129,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8bacf07ce23659bf820510c5f88f6130"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_colour_interpolator_affector.html#a8bacf07ce23659bf820510c5f88f6130">_affectParticles</a> (<a class="el" href="class_ogre_1_1_particle_system.html">ParticleSystem</a> *pSystem, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> timeElapsed) override</td></tr>
 <tr class="memdesc:a8bacf07ce23659bf820510c5f88f6130"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_particle_affector.html" title="Abstract class defining the interface to be implemented by particle affectors.">ParticleAffector</a>.  <a href="class_ogre_1_1_colour_interpolator_affector.html#a8bacf07ce23659bf820510c5f88f6130">More...</a><br /></td></tr>
 <tr class="separator:a8bacf07ce23659bf820510c5f88f6130"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f401d9023e7bb484ff3ff49e70c9510"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_affector.html#a5f401d9023e7bb484ff3ff49e70c9510">_initParticle</a> (<a class="el" href="class_ogre_1_1_particle.html">Particle</a> *pParticle)</td></tr>
-<tr class="memdesc:a5f401d9023e7bb484ff3ff49e70c9510"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called to allow the affector to initialize all newly created particles in the system.  <a href="class_ogre_1_1_particle_affector.html#a5f401d9023e7bb484ff3ff49e70c9510">More...</a><br /></td></tr>
-<tr class="separator:a5f401d9023e7bb484ff3ff49e70c9510"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1c6401b6be6723e331dfe65f74e5442"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_colour_interpolator_affector.html#aa1c6401b6be6723e331dfe65f74e5442">_initParticle</a> (<a class="el" href="class_ogre_1_1_particle.html">Ogre::Particle</a> *pParticle) override</td></tr>
+<tr class="memdesc:aa1c6401b6be6723e331dfe65f74e5442"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_particle_affector.html" title="Abstract class defining the interface to be implemented by particle affectors.">ParticleAffector</a>.  <a href="class_ogre_1_1_colour_interpolator_affector.html#aa1c6401b6be6723e331dfe65f74e5442">More...</a><br /></td></tr>
+<tr class="separator:aa1c6401b6be6723e331dfe65f74e5442"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c600369ab5d6957524125c93915019f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#a3c600369ab5d6957524125c93915019f">copyParametersTo</a> (<a class="el" href="class_ogre_1_1_string_interface.html">StringInterface</a> *dest) const</td></tr>
 <tr class="memdesc:a3c600369ab5d6957524125c93915019f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for copying this object's parameters to another object.  <a href="class_ogre_1_1_string_interface.html#a3c600369ab5d6957524125c93915019f">More...</a><br /></td></tr>
 <tr class="separator:a3c600369ab5d6957524125c93915019f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -280,8 +280,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5f401d9023e7bb484ff3ff49e70c9510" name="a5f401d9023e7bb484ff3ff49e70c9510"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f401d9023e7bb484ff3ff49e70c9510">&#9670;&nbsp;</a></span>_initParticle()</h2>
+<a id="aa1c6401b6be6723e331dfe65f74e5442" name="aa1c6401b6be6723e331dfe65f74e5442"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1c6401b6be6723e331dfe65f74e5442">&#9670;&nbsp;</a></span>_initParticle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -290,30 +290,23 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::ParticleAffector::_initParticle </td>
+          <td class="memname">void Ogre::ColourInterpolatorAffector::_initParticle </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_particle.html">Particle</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_particle.html">Ogre::Particle</a> *&#160;</td>
           <td class="paramname"><em>pParticle</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Method called to allow the affector to initialize all newly created particles in the system. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This is where the affector gets the chance to initialize it's effects to the particles of a system. The affector is expected to initialize some or all of the particles in the system passed to it, depending on the affector's approach. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pParticle</td><td>Pointer to a <a class="el" href="class_ogre_1_1_particle.html" title="Class representing a single particle instance.">Particle</a> to initialize. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>See <a class="el" href="class_ogre_1_1_particle_affector.html" title="Abstract class defining the interface to be implemented by particle affectors.">ParticleAffector</a>. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_colour_image_affector.html#a712aea5134dc25d81d92a0f8d217859f">Ogre::ColourImageAffector</a>, and <a class="el" href="class_ogre_1_1_rotation_affector.html#a148d8778a77a4d8a8f02b6642cad7d23">Ogre::RotationAffector</a>.</p>
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_particle_affector.html#a5f401d9023e7bb484ff3ff49e70c9510">Ogre::ParticleAffector</a>.</p>
 
 </div>
 </div>
