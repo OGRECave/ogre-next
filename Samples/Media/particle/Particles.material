@@ -17,3 +17,13 @@ hlms Examples/Aureola unlit
 
 	diffuse_map aureola.png
 }
+
+hlms Examples/AnimationParticleTest unlit
+{
+	depth_write		off
+	cull_hardware	none
+
+	scene_blend		add
+	
+	diffuse_map flames_anim.png
+}

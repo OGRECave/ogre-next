@@ -25,7 +25,8 @@ using namespace Demo;
 namespace Demo
 {
     ParticleFXGameState::ParticleFXGameState( const Ogre::String &helpDescription ) :
-        TutorialGameState( helpDescription )
+        TutorialGameState( helpDescription ),
+        mTime( 0.0f )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -81,15 +82,52 @@ namespace Demo
 
         Ogre::ParticleSystem *pSystem0 = sceneManager->createParticleSystem( "Examples/PurpleFountain" );
         Ogre::ParticleSystem *pSystem1 = sceneManager->createParticleSystem( "Examples/Aureola" );
+        Ogre::ParticleSystem *pSystem2 = sceneManager->createParticleSystem( "Examples/Animated/Test1" );
+
         Ogre::SceneNode *sceneNode = rootNode->createChildSceneNode();
         sceneNode->attachObject( pSystem0 );
         sceneNode = rootNode->createChildSceneNode();
         sceneNode->attachObject( pSystem1 );
+        sceneNode = rootNode->createChildSceneNode();
+        sceneNode->setPosition( Ogre::Vector3( 10, 0, 0 ) );
+        sceneNode->attachObject( pSystem2 );
+
+        Ogre::Item *particleSystem3_item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
+        particleSystem3_item->setDatablock( "Marble" );
+        mParticleSystem3_RootSceneNode = rootNode->createChildSceneNode();
+        sceneNode = mParticleSystem3_RootSceneNode->createChildSceneNode();
+        sceneNode->setScale( Ogre::Vector3( 0.2f ) );
+        sceneNode->attachObject( particleSystem3_item );
+
+        Ogre::ParticleSystem *pSystem3 = sceneManager->createParticleSystem( "Examples/Animated/Test1" );
+        mParticleSystem3_RootSceneNode->attachObject( pSystem3 );
+        mParticleSystem3_EmmitterSceneNode = mParticleSystem3_RootSceneNode->createChildSceneNode();
+        pSystem3->setParticleEmitterRootNode( mParticleSystem3_EmmitterSceneNode );
+        Ogre::Item *particleSystem3_emmiter_item =
+            sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
+        particleSystem3_emmiter_item->setDatablock( "Marble" );
+        mParticleSystem3_EmmitterSceneNode->setScale( Ogre::Vector3( 0.01f ) );
+        mParticleSystem3_EmmitterSceneNode->attachObject( particleSystem3_emmiter_item );
 
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0.0f, 40.0f, 120.0f ) );
 
         mCameraController = new CameraController( mGraphicsSystem, false );
 
         TutorialGameState::createScene01();
+    }
+
+    void ParticleFXGameState::update( float timeSinceLast )
+    {
+        mTime += timeSinceLast;
+
+        if( mTime > 10.0f )
+            mTime = 0.0f;
+
+        mParticleSystem3_RootSceneNode->setPosition(
+            Ogre::Vector3( -50.0f * mTime / 10.0f + 25.0f, 2, -50 ) );
+        mParticleSystem3_EmmitterSceneNode->setPosition(
+            Ogre::Vector3( 20.0f * mTime / 10.0f - 10.f, 0.5, 20.0f * mTime / 10.0f - 10 ) );
+
+        TutorialGameState::update( timeSinceLast );
     }
 }  // namespace Demo

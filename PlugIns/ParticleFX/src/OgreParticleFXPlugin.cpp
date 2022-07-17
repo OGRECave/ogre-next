@@ -47,6 +47,7 @@ THE SOFTWARE.
 #include "OgreRingEmitterFactory.h"
 #include "OgreRotationAffectorFactory.h"
 #include "OgreScaleAffectorFactory.h"
+#include "OgreScaleInterpolatorAffectorFactory.h"
 
 namespace Ogre
 {
@@ -115,6 +116,11 @@ namespace Ogre
         mAffectorFactories.push_back( pAffFact );
         // ColourInterpolatorAffector
         pAffFact = OGRE_NEW ColourInterpolatorAffectorFactory();
+        ParticleSystemManager::getSingleton().addAffectorFactory( pAffFact );
+        mAffectorFactories.push_back( pAffFact );
+
+        // ScaleInterpolatorAffector
+        pAffFact = OGRE_NEW ScaleInterpolatorAffectorFactory();
         ParticleSystemManager::getSingleton().addAffectorFactory( pAffFact );
         mAffectorFactories.push_back( pAffFact );
 

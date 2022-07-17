@@ -618,6 +618,38 @@ namespace Ogre
         */
         bool getEmitting() const;
 
+        /** This is used to attach the particle Emmiters to an own node independent from the Scenenode
+        the Particlesystem is attached to
+        @remarks
+        In case this scenenode is not NULL, particles will be emmitted relative to this node instead of
+        relative to the Scenenode the Particlesystem is attached to.
+        */
+        void setParticleEmitterRootNode( SceneNode *sceneNode );
+
+        /** This is used to attach the particle Emmiters to an own node independent from the Scenenode
+        the Particlesystem is attached to
+        @remarks
+        In case this scenenode is not NULL, particles will be emmitted relative to this node instead of
+        relative to the Scenenode the Particlesystem is attached to.
+        */
+        SceneNode *getParticleEmitterRootNode() const;  // RTEngine
+
+        /** Sets whether particles emitts in direction with is translated into worldspace or not (may
+         * only apply to some settings in regards of settings "Localspace" and "ParticleEmitterRootNode")
+         */
+        void setTranslateParticleDirectionIntoWorldSpace( bool value )
+        {
+            mTranslateParticleDirectionIntoWorldSpace = value;
+        }
+
+        /** Gets whether particles emitts in direction with is translated into worldspace or not (may
+         * only apply to some settings in regards of settings "Localspace" and "ParticleEmitterRootNode")
+         */
+        bool getTranslateParticleDirectionIntoWorldSpace( void ) const
+        {
+            return mTranslateParticleDirectionIntoWorldSpace;
+        }
+
     protected:
         /// Command objects
         static CmdCull                msCullCmd;
@@ -673,6 +705,10 @@ namespace Ogre
         bool mEmittedEmitterPoolInitialised;
         /// Used to control if the particle system should emit particles or not.
         bool mIsEmitting;
+        /// in case this scenenode is not NULL, particles will be emmited relative to this node
+        SceneNode *mParticleEmitterRootNode;
+        /// Defines whether particles emitts in direction with is translated into worldspace or not
+        bool mTranslateParticleDirectionIntoWorldSpace;
 
         typedef list<Particle *>::type   ActiveParticleList;
         typedef list<Particle *>::type   FreeParticleList;
