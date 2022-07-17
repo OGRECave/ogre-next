@@ -135,7 +135,7 @@ namespace Ogre
         mCullIndividual( false ),
         mPoolSize( 0 ),
         mEmittedEmitterPoolSize( 0 ),
-		mParticleEmitterRootNode( 0 ),
+        mParticleEmitterRootNode( 0 ),
         mTranslateParticleDirectionIntoWorldSpace( true )
     {
         setDefaultDimensions( 100, 100 );
@@ -184,10 +184,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    SceneNode *ParticleSystem::getParticleEmitterRootNode() const
-	{ 
-		return mParticleEmitterRootNode; 
-	}
+    SceneNode *ParticleSystem::getParticleEmitterRootNode() const { return mParticleEmitterRootNode; }
     //-----------------------------------------------------------------------
     void ParticleSystem::setParticleEmitterRootNode( SceneNode *sceneNode )
     {
@@ -305,8 +302,8 @@ namespace Ogre
         mCullIndividual = rhs.mCullIndividual;
         mSorted = rhs.mSorted;
         mLocalSpace = rhs.mLocalSpace;
-		mParticleEmitterRootNode = rhs.mParticleEmitterRootNode;
-		mTranslateParticleDirectionIntoWorldSpace = rhs.mTranslateParticleDirectionIntoWorldSpace;
+        mParticleEmitterRootNode = rhs.mParticleEmitterRootNode;
+        mTranslateParticleDirectionIntoWorldSpace = rhs.mTranslateParticleDirectionIntoWorldSpace;
         mIterationInterval = rhs.mIterationInterval;
         mIterationIntervalSet = rhs.mIterationIntervalSet;
         mNonvisibleTimeout = rhs.mNonvisibleTimeout;
@@ -599,7 +596,7 @@ namespace Ogre
             emitter->_initParticle( p );
 
             // Translate position & direction into world space
-            if (!mLocalSpace)
+            if( !mLocalSpace )
             {
                 if( mParticleEmitterRootNode )
                 {
@@ -637,7 +634,7 @@ namespace Ogre
                             fullTransformEmitterRootNode.transformDirectionAffine( p->mDirection );
                 }
                 else
-            	{
+                {
                     // nothing to do
                 }
             }
