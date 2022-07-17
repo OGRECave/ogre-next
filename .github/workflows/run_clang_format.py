@@ -15,11 +15,17 @@ import threading
 print("Arguments:\n\t{0}\n".format(sys.argv))
 
 bCompareWithBase = False
+bFixBrokenFiles = False
 
 if len(sys.argv) == 2:
     print("Usage:\n\tpython3 run_clang_format.py base_commit_hash")
-    print("Comparing between two commits mode")
-    bCompareWithBase = True
+    print("Usage:\n\tpython3 run_clang_format.py --fix_broken_files")
+    if sys.argv[1] == '--fix_broken_files':
+        print("We will fix broken files")
+        bFixBrokenFiles = True
+    else:
+        print("Comparing between two commits mode")
+        bCompareWithBase = True
 
 g_folders = [
     'OgreMain',
@@ -158,23 +164,24 @@ def collectCppFilesForFormatting():
     return pathsToParse
 
 
-def runClangThread(pathsToParseByThisThread, outChangelist):
+def runClangThread(pathsToParseByThisThread, outChangelist, bFixProblems):
     """
     Thread that runs clang format on the list of files given to it
     """
     for fullpath in pathsToParseByThisThread:
+        command = ['clang-format-13', '--dry-run', fullpath]
+        if bFixProblems:
+            command = ['clang-format-13', '-i', fullpath]
+            print("[CLANG FORMAT INFO]: Fixing: {0}".format(fullpath))
         process = subprocess.Popen(
-            ['clang-format-13', '--dry-run', fullpath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         (output, err) = process.communicate()
-        process.wait()
-        process.stdout.close()
-        process.stderr.close()
         numLines = err.count("\n") + 0
         # print(fullpath + ' line changes: ' + str(numLines))
         outChangelist.append((fullpath, numLines))
 
 
-def runClangMultithreaded(pathsToParse):
+def runClangMultithreaded(pathsToParse, bFixProblems):
     """
     Dispatches one thread for each block files
     """
@@ -186,7 +193,7 @@ def runClangMultithreaded(pathsToParse):
     threads = []
     for i, pathsToParseByThread in enumerate(pathsToParseByEachThread):
         newThread = threading.Thread(
-            target=runClangThread, args=(pathsToParseByThread, changeList[i]))
+            target=runClangThread, args=(pathsToParseByThread, changeList[i], bFixProblems))
         newThread.start()
         threads.append(newThread)
 
@@ -202,7 +209,7 @@ def runClangMultithreaded(pathsToParse):
 
 
 pathsToParse = collectCppFilesForFormatting()
-prChangeList = runClangMultithreaded(pathsToParse)
+prChangeList = runClangMultithreaded(pathsToParse, False)
 
 bHasErrors = False
 if bCompareWithBase:
@@ -225,6 +232,7 @@ if bCompareWithBase:
                     fullpath, prNumLines))
                 bHasErrors = True
 else:
+    pathsToParse = []
     for fullpath, prNumLines in prChangeList.items():
         if prNumLines > 0:
             if fullpath in g_thresholds:
@@ -232,6 +240,7 @@ else:
                 if prNumLines > thresh:
                     print("[CLANG FORMAT ERROR]: {0} has lines: {1} > threshold: {2}".format(
                         fullpath, prNumLines, thresh))
+                    pathsToParse.append(fullpath)
                     bHasErrors = True
                 else:
                     print("[CLANG FORMAT INFO]: {0} has lines: {1} <= threshold: {2}".format(
@@ -239,10 +248,17 @@ else:
             else:
                 print("[CLANG FORMAT ERROR]: NOT in threshold {0} has lines: {1}".format(
                     fullpath, prNumLines))
+                pathsToParse.append(fullpath)
                 bHasErrors = True
 
+    if bFixBrokenFiles:
+        runClangMultithreaded(pathsToParse, True)
+
 if bHasErrors:
-    print("Clang Format Script Failure")
+    if bFixBrokenFiles:
+        print("Clang Format Script had Failures and tried to fix them")
+    else:
+        print("Clang Format Script Failure")
     exit(1)
 else:
     print("Clang Format Script Success!")
