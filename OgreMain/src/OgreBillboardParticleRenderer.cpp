@@ -196,16 +196,14 @@ namespace Ogre
                     bb.mHeight = p->mHeight;
                 }
 
-                if( mTextureStacks != 1 || mTextureSlices != 1 )
+                if( mTextureStacks != 1u || mTextureSlices != 1u )
                 {
                     // set animation frame
-                    int spriteFrame = (int)( ( p->mTimeToLive / p->mTotalTimeToLive ) *
-                                             ( ( mTextureStacks * mTextureSlices ) - 1 ) );
+                    uint32 spriteFrame = uint32( ( p->mTimeToLive / p->mTotalTimeToLive ) *
+                                                 Real( ( mTextureStacks * mTextureSlices ) - 1u ) );
+                    spriteFrame = std::min( spriteFrame, ( mTextureStacks * mTextureSlices ) - 1u );
 
-                    if( spriteFrame >= mTextureStacks * mTextureSlices )
-                        spriteFrame = ( mTextureStacks * mTextureSlices ) - 1;
-
-                    bb.mTexcoordIndex = spriteFrame;
+                    bb.mTexcoordIndex = static_cast<uint16>( spriteFrame );
                     bb.mUseTexcoordRect = false;
                 }
 
@@ -343,21 +341,21 @@ namespace Ogre
             return mBillboardSet->isPointRenderingEnabled();
         }
         //-----------------------------------------------------------------------
-        void BillboardParticleRenderer::setTextureStacks( int value )
+        void BillboardParticleRenderer::setTextureStacks( uint32 value )
         {
             mTextureStacks = value;
-            mBillboardSet->setTextureStacksAndSlices( mTextureStacks, mTextureSlices );
+            mBillboardSet->setTextureStacksAndSlices( uchar( mTextureStacks ), uchar( mTextureSlices ) );
         }
         //-----------------------------------------------------------------------
-        int BillboardParticleRenderer::getTextureStacks() const { return mTextureStacks; }
+        uint32 BillboardParticleRenderer::getTextureStacks() const { return mTextureStacks; }
         //-----------------------------------------------------------------------
-        void BillboardParticleRenderer::setTextureSlices( int value )
+        void BillboardParticleRenderer::setTextureSlices( uint32 value )
         {
             mTextureSlices = value;
-            mBillboardSet->setTextureStacksAndSlices( mTextureStacks, mTextureSlices );
+            mBillboardSet->setTextureStacksAndSlices( uchar( mTextureStacks ), uchar( mTextureSlices ) );
         }
         //-----------------------------------------------------------------------
-        int BillboardParticleRenderer::getTextureSlices() const { return mTextureSlices; }
+        uint32 BillboardParticleRenderer::getTextureSlices() const { return mTextureSlices; }
         //-----------------------------------------------------------------------
         //-----------------------------------------------------------------------
         //-----------------------------------------------------------------------
@@ -397,10 +395,8 @@ namespace Ogre
                 break;
             case BBT_ORIENTED_COMMON:
                 return "oriented_common";
-                break;
             case BBT_ORIENTED_SELF:
                 return "oriented_self";
-                break;
             case BBT_PERPENDICULAR_COMMON:
                 return "perpendicular_common";
             case BBT_PERPENDICULAR_SELF:
@@ -583,7 +579,7 @@ namespace Ogre
         void BillboardParticleRenderer::CmdTextureStacks::doSet( void *target, const Ogre::String &val )
         {
             static_cast<BillboardParticleRenderer *>( target )->setTextureStacks(
-                Ogre::StringConverter::parseInt( val ) );
+                Ogre::StringConverter::parseUnsignedInt( val ) );
         }
         //-----------------------------------------------------------------------
         String BillboardParticleRenderer::CmdTextureSlices::doGet( const void *target ) const
@@ -594,7 +590,7 @@ namespace Ogre
         void BillboardParticleRenderer::CmdTextureSlices::doSet( void *target, const Ogre::String &val )
         {
             static_cast<BillboardParticleRenderer *>( target )->setTextureSlices(
-                Ogre::StringConverter::parseInt( val ) );
+                Ogre::StringConverter::parseUnsignedInt( val ) );
         }
     }  // namespace v1
 }  // namespace Ogre

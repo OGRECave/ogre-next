@@ -131,12 +131,12 @@ namespace Ogre
         mTimeController( 0 ),
         mEmittedEmitterPoolInitialised( false ),
         mIsEmitting( true ),
+        mParticleEmitterRootNode( 0 ),
+        mTranslateParticleDirectionIntoWorldSpace( true ),
         mRenderer( 0 ),
         mCullIndividual( false ),
         mPoolSize( 0 ),
-        mEmittedEmitterPoolSize( 0 ),
-        mParticleEmitterRootNode( 0 ),
-        mTranslateParticleDirectionIntoWorldSpace( true )
+        mEmittedEmitterPoolSize( 0 )
     {
         setDefaultDimensions( 100, 100 );
         setMaterialName( "BaseWhite" );

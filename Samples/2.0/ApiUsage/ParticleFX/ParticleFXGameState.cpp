@@ -96,7 +96,7 @@ namespace Demo
         particleSystem3_item->setDatablock( "Marble" );
         mParticleSystem3_RootSceneNode = rootNode->createChildSceneNode();
         sceneNode = mParticleSystem3_RootSceneNode->createChildSceneNode();
-        sceneNode->setScale( Ogre::Vector3( 0.2 ) );
+        sceneNode->setScale( Ogre::Vector3( 0.2f ) );
         sceneNode->attachObject( particleSystem3_item );
 
         Ogre::ParticleSystem *pSystem3 = sceneManager->createParticleSystem( "Examples/Animated/Test1" );
@@ -106,7 +106,7 @@ namespace Demo
         Ogre::Item *particleSystem3_emmiter_item =
             sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
         particleSystem3_emmiter_item->setDatablock( "Marble" );
-        mParticleSystem3_EmmitterSceneNode->setScale( Ogre::Vector3( 0.01 ) );
+        mParticleSystem3_EmmitterSceneNode->setScale( Ogre::Vector3( 0.01f ) );
         mParticleSystem3_EmmitterSceneNode->attachObject( particleSystem3_emmiter_item );
 
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0.0f, 40.0f, 120.0f ) );
@@ -124,9 +124,9 @@ namespace Demo
             mTime = 0.0f;
 
         mParticleSystem3_RootSceneNode->setPosition(
-            Ogre::Vector3( -50.0 * mTime / 10.0 + 25.0, 2, -50 ) );
+            Ogre::Vector3( -50.0f * mTime / 10.0f + 25.0f, 2, -50 ) );
         mParticleSystem3_EmmitterSceneNode->setPosition(
-            Ogre::Vector3( 20.0 * mTime / 10.0 - 10, 0.5, 20.0 * mTime / 10.0 - 10 ) );
+            Ogre::Vector3( 20.0f * mTime / 10.0f - 10.f, 0.5, 20.0f * mTime / 10.0f - 10 ) );
 
         TutorialGameState::update( timeSinceLast );
     }

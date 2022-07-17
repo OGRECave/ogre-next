@@ -84,7 +84,7 @@ namespace Ogre
         static CmdTimeAdjust  msTimeCmd[MAX_STAGES];
 
         /** See ParticleAffector. */
-        void _initParticle( Ogre::Particle *pParticle );
+        void _initParticle( Ogre::Particle *pParticle ) override;
 
     protected:
         Real mScaleAdj[MAX_STAGES];

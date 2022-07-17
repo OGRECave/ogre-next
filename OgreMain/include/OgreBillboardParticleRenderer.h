@@ -228,13 +228,13 @@ namespace Ogre
             bool isPointRenderingEnabled() const;
 
             /// @copydoc ParticleSystemRenderer::setTextureStacks
-            void setTextureStacks( int value );
+            void setTextureStacks( uint32 value );
             /// @copydoc ParticleSystemRenderer::getTextureStacks
-            int getTextureStacks() const;
+            uint32 getTextureStacks() const;
             /// @copydoc ParticleSystemRenderer::setTextureSlices
-            void setTextureSlices( int value );
+            void setTextureSlices( uint32 value );
             /// @copydoc ParticleSystemRenderer::getTextureSlices
-            int getTextureSlices() const;
+            uint32 getTextureSlices() const;
 
             /// @copydoc ParticleSystemRenderer::getType
             const String &getType() const override;
@@ -283,8 +283,8 @@ namespace Ogre
 
             // Keep track of Texture Stacks and Slices here, as the underlying BillboradSet does not have
             // function to report it back
-            int mTextureStacks;
-            int mTextureSlices;
+            uint32 mTextureStacks;
+            uint32 mTextureSlices;
         };
 
         /** Factory class for BillboardParticleRenderer */

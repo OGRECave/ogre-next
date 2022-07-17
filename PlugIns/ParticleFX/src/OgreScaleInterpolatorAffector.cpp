@@ -96,6 +96,7 @@ namespace Ogre
             }
             else
             {
+                scale = Real( 1.0f );
                 for( int i = 0; i < MAX_STAGES - 1; i++ )
                 {
                     if( particle_time >= mTimeAdj[i] && particle_time < mTimeAdj[i + 1] )
