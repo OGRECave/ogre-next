@@ -408,7 +408,7 @@ namespace Ogre
         if( mIgnoreSRgbPreference )
             textureFlags &= static_cast<uint32>( ~TextureFlags::PrefersLoadingFromFileAsSRGB );
 
-        filters = mTextureGpuManagerListener->getFiltersFor( name, aliasName, textureFlags );
+        filters = mTextureGpuManagerListener->getFiltersFor( name, aliasName, filters );
 
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags, initialType );
         retVal->setTexturePoolId( poolId );
