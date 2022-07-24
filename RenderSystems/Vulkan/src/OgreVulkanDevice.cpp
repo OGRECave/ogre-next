@@ -148,6 +148,8 @@ namespace Ogre
                 mDeviceExtensions.push_back( itor->extensionName );
                 ++itor;
             }
+
+            std::sort( mDeviceExtensions.begin(), mDeviceExtensions.end() );
         }
 
         initUtils( mDevice );
