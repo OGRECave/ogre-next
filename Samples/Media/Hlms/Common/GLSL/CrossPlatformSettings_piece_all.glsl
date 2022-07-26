@@ -309,7 +309,9 @@
 
 #define OGRE_Load3D( tex, iuv, lod ) texelFetch( tex, ivec3( iuv ), lod )
 
-#define bufferFetch1( buffer, idx ) texelFetch( buffer, idx ).x
+@property( GL_ARB_texture_buffer_range )
+	#define bufferFetch1( buffer, idx ) texelFetch( buffer, idx ).x
+@end
 
 @property( syntax != glslvk )
 	#define OGRE_SAMPLER_ARG_DECL( samplerName )
@@ -381,6 +383,22 @@
 		{
 			ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
 			return texelFetch( sampl, pos, 0 );
+		}
+
+		float bufferFetch1( in sampler2D sampl, in int pixelIdx )
+		{
+			ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
+			return texelFetch( sampl, pos, 0 ).x;
+		}
+		int bufferFetch1(in isampler2D sampl, in int pixelIdx)
+		{
+			ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
+			return texelFetch( sampl, pos, 0 ).x;
+		}
+		uint bufferFetch1( in usampler2D sampl, in int pixelIdx )
+		{
+			ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
+			return texelFetch( sampl, pos, 0 ).x;
 		}
 	@end
 @end
