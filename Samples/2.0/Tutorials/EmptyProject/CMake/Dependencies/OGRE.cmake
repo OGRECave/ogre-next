@@ -312,6 +312,7 @@ if( NOT OGRE_BUILD_COMPONENT_ATMOSPHERE EQUAL -1 )
 		debug ${OGRE_NEXT}Atmosphere${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
 		optimized ${OGRE_NEXT}Atmosphere${OGRE_STATIC}
 		)
+	include_directories( "${OGRE_SOURCE}/Components/Atmosphere/include" )
 endif()
 
 if( OGRE_STATIC )
