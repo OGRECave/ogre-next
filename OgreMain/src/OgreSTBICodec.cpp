@@ -158,17 +158,31 @@ namespace Ogre
 
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 
-        if( components != 3 )
-            memcpy( imgData->box.data, pixelData, imgData->box.bytesPerImage );
-        else
+        if( components == 4 )
         {
-            size_t realBytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u,
-                                                                        PFG_RGB8_UNORM, rowAlignment );
+            memcpy( imgData->box.data, pixelData, imgData->box.bytesPerImage );
+        }
+        else if( components != 3 )
+        {
+            const size_t stbiBytesPerRow =
+                PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u, imgData->format, 1u );
 
             for( size_t y = 0; y < (size_t)height; ++y )
             {
                 uint8 *pDst = reinterpret_cast<uint8 *>( imgData->box.at( 0u, y, 0u ) );
-                uint8 const *pSrc = pixelData + y * realBytesPerRow;
+                uint8 const *pSrc = pixelData + y * stbiBytesPerRow;
+                memcpy( pDst, pSrc, stbiBytesPerRow );
+            }
+        }
+        else
+        {
+            const size_t stbiBytesPerRow =
+                PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u, PFG_RGB8_UNORM, 1u );
+
+            for( size_t y = 0; y < (size_t)height; ++y )
+            {
+                uint8 *pDst = reinterpret_cast<uint8 *>( imgData->box.at( 0u, y, 0u ) );
+                uint8 const *pSrc = pixelData + y * stbiBytesPerRow;
                 for( size_t x = 0; x < (size_t)width; ++x )
                 {
                     const uint8 b = *pSrc++;
