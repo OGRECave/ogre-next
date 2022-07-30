@@ -42,6 +42,7 @@ var class_ogre_1_1_image2 =
     [ "getWidth", "class_ogre_1_1_image2.html#a381f06196319f0c93c24cb9d1b1bd74e", null ],
     [ "load", "class_ogre_1_1_image2.html#a2ab92d036f444fc21e273d9ef398fe97", null ],
     [ "load", "class_ogre_1_1_image2.html#acc2e246db6951ea3931ce782bf70608d", null ],
+    [ "load2", "class_ogre_1_1_image2.html#a1d525709c60f0cecd95f50687f13e27a", null ],
     [ "loadDynamicImage", "class_ogre_1_1_image2.html#afe2de619e8267001f7c8690471db77c7", null ],
     [ "loadDynamicImage", "class_ogre_1_1_image2.html#a2b8dc803cebdeef4ae91231aebf483a9", null ],
     [ "loadDynamicImage", "class_ogre_1_1_image2.html#aad896e65db839ac43766ebd1991fc50d", null ],

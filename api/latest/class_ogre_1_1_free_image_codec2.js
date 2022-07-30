@@ -3,6 +3,11 @@ var class_ogre_1_1_free_image_codec2 =
     [ "CodecDataPtr", "class_ogre_1_1_free_image_codec2.html#a29e31ad112b08ea7fb648b63f426ff1f", null ],
     [ "CodecIterator", "class_ogre_1_1_free_image_codec2.html#a21f4b8a16d070793d576f827c9fee218", null ],
     [ "DecodeResult", "class_ogre_1_1_free_image_codec2.html#a8cc81c85bd7d4e25393aa153c5e01454", null ],
+    [ "ValidationStatus", "class_ogre_1_1_free_image_codec2.html#a4c74f9daafec4f0fff30b92baa8fc627", [
+      [ "CodecValid", "class_ogre_1_1_free_image_codec2.html#a4c74f9daafec4f0fff30b92baa8fc627a47a4a53ad7af88177b1dc789714f14f2", null ],
+      [ "CodecInvalid", "class_ogre_1_1_free_image_codec2.html#a4c74f9daafec4f0fff30b92baa8fc627adbfb6433432642b9c1d8ac283c70ae91", null ],
+      [ "CodecUnknown", "class_ogre_1_1_free_image_codec2.html#a4c74f9daafec4f0fff30b92baa8fc627a7ea7bb09b0f8951f18e1cd02147e2316", null ]
+    ] ],
     [ "FreeImageCodec2", "class_ogre_1_1_free_image_codec2.html#a433ec7e313766d79cf17ac480f0bade3", null ],
     [ "~FreeImageCodec2", "class_ogre_1_1_free_image_codec2.html#a4492325ab9cd1de8fd85c55be7d04c7f", null ],
     [ "decode", "class_ogre_1_1_free_image_codec2.html#a9543ecde2b0a4e625dca80f1f1702e0b", null ],
@@ -31,5 +36,6 @@ var class_ogre_1_1_free_image_codec2 =
     [ "registerCodec", "class_ogre_1_1_free_image_codec2.html#a60f445cc6919df56af6611fd14eec47d", null ],
     [ "shutdown", "class_ogre_1_1_free_image_codec2.html#aa673e340c1559bbd366ebe93a80812d7", null ],
     [ "startup", "class_ogre_1_1_free_image_codec2.html#a8e140e18a05fb3ddad3823c8429cd938", null ],
-    [ "unregisterCodec", "class_ogre_1_1_free_image_codec2.html#a7aa2599cd9db05e590fb7f7786076852", null ]
+    [ "unregisterCodec", "class_ogre_1_1_free_image_codec2.html#a7aa2599cd9db05e590fb7f7786076852", null ],
+    [ "validateMagicNumber", "class_ogre_1_1_free_image_codec2.html#a6787ab70d39111d63489f18a838a6144", null ]
 ];

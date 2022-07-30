@@ -123,6 +123,11 @@ Public Types</h2></td></tr>
 <tr class="memitem:a8cc81c85bd7d4e25393aa153c5e01454"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; <a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a>, <a class="el" href="class_ogre_1_1_codec.html#a29e31ad112b08ea7fb648b63f426ff1f">CodecDataPtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a8cc81c85bd7d4e25393aa153c5e01454">DecodeResult</a></td></tr>
 <tr class="memdesc:a8cc81c85bd7d4e25393aa153c5e01454"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of a decoding; both a decoded data stream and <a class="el" href="class_ogre_1_1_codec_1_1_codec_data.html">CodecData</a> metadata.  <a href="class_ogre_1_1_codec.html#a8cc81c85bd7d4e25393aa153c5e01454">More...</a><br /></td></tr>
 <tr class="separator:a8cc81c85bd7d4e25393aa153c5e01454"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c74f9daafec4f0fff30b92baa8fc627"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627">ValidationStatus</a> { <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627a47a4a53ad7af88177b1dc789714f14f2">CodecValid</a>
+, <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627adbfb6433432642b9c1d8ac283c70ae91">CodecInvalid</a>
+, <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627a7ea7bb09b0f8951f18e1cd02147e2316">CodecUnknown</a>
+ }</td></tr>
+<tr class="separator:a4c74f9daafec4f0fff30b92baa8fc627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -172,6 +177,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">More...</a><br /></td></tr>
 <tr class="separator:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f6e6d04e958a22de11daef7881effac"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627">ValidationStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a1f6e6d04e958a22de11daef7881effac">validateMagicNumber</a> (const char *magicNumberPtr, size_t maxbytes) const =0</td></tr>
+<tr class="memdesc:a1f6e6d04e958a22de11daef7881effac"><td class="mdescLeft">&#160;</td><td class="mdescRight">validateMagicNumber Returns whether a magic number header matches this codec.  <a href="class_ogre_1_1_codec.html#a1f6e6d04e958a22de11daef7881effac">More...</a><br /></td></tr>
+<tr class="separator:a1f6e6d04e958a22de11daef7881effac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -269,6 +277,37 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a4c74f9daafec4f0fff30b92baa8fc627" name="a4c74f9daafec4f0fff30b92baa8fc627"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c74f9daafec4f0fff30b92baa8fc627">&#9670;&nbsp;</a></span>ValidationStatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627">Ogre::Codec::ValidationStatus</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4c74f9daafec4f0fff30b92baa8fc627a47a4a53ad7af88177b1dc789714f14f2" name="a4c74f9daafec4f0fff30b92baa8fc627a47a4a53ad7af88177b1dc789714f14f2"></a>CodecValid&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4c74f9daafec4f0fff30b92baa8fc627adbfb6433432642b9c1d8ac283c70ae91" name="a4c74f9daafec4f0fff30b92baa8fc627adbfb6433432642b9c1d8ac283c70ae91"></a>CodecInvalid&#160;</td><td class="fielddoc"><p >Magic number says this codec can open this stream. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4c74f9daafec4f0fff30b92baa8fc627a7ea7bb09b0f8951f18e1cd02147e2316" name="a4c74f9daafec4f0fff30b92baa8fc627a7ea7bb09b0f8951f18e1cd02147e2316"></a>CodecUnknown&#160;</td><td class="fielddoc"><p >Magic number says this codec cannot open this stream. </p>
+<p >Cannot be verified. File may or may not open. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4b049457f90f7b4883d1e00d3294319c" name="a4b049457f90f7b4883d1e00d3294319c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4b049457f90f7b4883d1e00d3294319c">&#9670;&nbsp;</a></span>~ImageCodec2()</h2>
@@ -328,7 +367,7 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#ad5d492ef5f8b9d5f813d53484507baf7">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#a839c01a137e0c72abd646a9a80461799">Ogre::PVRTCCodec</a>, <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a49dfb9df2864db1978dbe32878a9f433">Ogre::STBIImageCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#ab436fb72e2de19b92c27ef23a998eed6">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#aeb986cae26b97d3e8af98759424ea099">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#a9543ecde2b0a4e625dca80f1f1702e0b">Ogre::FreeImageCodec2</a>, and <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#a5ab47106d3d2c701dbcb0515111d2c38">Ogre::OITDCodec</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#a6fa23e05969f19a353ea86da9bbb5c05">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#ab436fb72e2de19b92c27ef23a998eed6">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#aeb986cae26b97d3e8af98759424ea099">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#a9543ecde2b0a4e625dca80f1f1702e0b">Ogre::FreeImageCodec2</a>, <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#a5ab47106d3d2c701dbcb0515111d2c38">Ogre::OITDCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#ae0cf089f0a0417f2241d6a13024544e8">Ogre::PVRTCCodec</a>, and <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a10f3f10c096c4ca87a306e7bb44cdd25">Ogre::STBIImageCodec</a>.</p>
 
 </div>
 </div>
@@ -368,7 +407,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Codes the data in the input stream and saves the result in the output stream. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#a85f9220e2412fe03cfaf56650dd862fb">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#a723481657bfed71fdbdb8669020bebfb">Ogre::PVRTCCodec</a>, <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a96b87a6c9ee11cd4974f21a4dbf4ee9c">Ogre::STBIImageCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#a530de3cf65e02c980fde34264df1a60c">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#a22b13f3e681123a51cacc75b780f7813">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#a62139c7c9f7d8547cb068ed9c776f6a0">Ogre::FreeImageCodec2</a>, and <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#a60b4c9b18603c44f34180ee30849fa25">Ogre::OITDCodec</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#a8480a9a81bcdd6d82f4bb296b79f6d99">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#a530de3cf65e02c980fde34264df1a60c">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#a22b13f3e681123a51cacc75b780f7813">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#a62139c7c9f7d8547cb068ed9c776f6a0">Ogre::FreeImageCodec2</a>, <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#a60b4c9b18603c44f34180ee30849fa25">Ogre::OITDCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#aa223fd206cbeba1fd8fec58e8cdbbaf6">Ogre::PVRTCCodec</a>, and <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#abce9cb32d0341d60f78acd809cad89d6">Ogre::STBIImageCodec</a>.</p>
 
 </div>
 </div>
@@ -422,7 +461,7 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#af1c042a5f0846bff06d46cd0ad2ad0a4">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#a5faa60b11adc70d045cf999b39028dd5">Ogre::PVRTCCodec</a>, <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a2d0d216deb1aca91d356d665c3fde88f">Ogre::STBIImageCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#a28f48c074beb10fc3156899731d8e70c">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#a7309525dabf35d95150f52fefd81e753">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#a74125902e805d855880cc2109b6d6cd5">Ogre::FreeImageCodec2</a>, and <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#ab15ebf2b824dcdd4c208a7b81894ce2d">Ogre::OITDCodec</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#a4284309dea176ea280025696377a4596">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#a28f48c074beb10fc3156899731d8e70c">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#a7309525dabf35d95150f52fefd81e753">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#a74125902e805d855880cc2109b6d6cd5">Ogre::FreeImageCodec2</a>, <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#ab15ebf2b824dcdd4c208a7b81894ce2d">Ogre::OITDCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#a7bf46587572ca597f822315d72108368">Ogre::PVRTCCodec</a>, and <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a7f90416480503b9597164b26e543d308">Ogre::STBIImageCodec</a>.</p>
 
 </div>
 </div>
@@ -607,7 +646,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Returns the type of the codec as a String. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#a02c09d20cedebbd768784f4a07b1d528">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#a9909076c79f9534d2d185a48f7219204">Ogre::PVRTCCodec</a>, <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a1763365ccd236b49d56e9c8b60f16844">Ogre::STBIImageCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#afaa77e740515b6da50a8cf5c74fb2edb">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#a837743cd06b27b1dbb77f6bf1be8629e">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#ad9d112d6e033833873be45f62d232777">Ogre::FreeImageCodec2</a>, and <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#adb1ece7c4cad368b20846c657330aab1">Ogre::OITDCodec</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#a1e6066cde185b04a3aa5ddf713e9b748">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#afaa77e740515b6da50a8cf5c74fb2edb">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#a837743cd06b27b1dbb77f6bf1be8629e">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#ad9d112d6e033833873be45f62d232777">Ogre::FreeImageCodec2</a>, <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#adb1ece7c4cad368b20846c657330aab1">Ogre::OITDCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#a7f440bccbcbbcc0b39d0c0781f9d8c86">Ogre::PVRTCCodec</a>, and <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#af755ac44c449d69d6313e5fbb2d3b179">Ogre::STBIImageCodec</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="class_ogre_1_1_codec.html#a60f445cc6919df56af6611fd14eec47d">Ogre::Codec::registerCodec()</a>, and <a class="el" href="class_ogre_1_1_codec.html#a7aa2599cd9db05e590fb7f7786076852">Ogre::Codec::unregisterCodec()</a>.</p>
 
@@ -679,6 +718,12 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">magicNumberPtr</td><td>Pointer to a stream of bytes which should identify the file. Note that this may be more than needed - each codec may be looking for a different size magic number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Deprecated. Use <a class="el" href="class_ogre_1_1_codec.html#a1f6e6d04e958a22de11daef7881effac" title="validateMagicNumber Returns whether a magic number header matches this codec.">validateMagicNumber()</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
     <tr><td class="paramname">maxbytes</td><td>The number of bytes passed </td></tr>
   </table>
   </dd>
@@ -730,7 +775,7 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A blank string if the magic number was unknown, or a file extension. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#ad9072a8530d43873924eb02ebae91569">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#ad2bb763bae77c3ac206e528ec2c68a4e">Ogre::PVRTCCodec</a>, <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#ad70f382ca4da6f2f55de053f80ebea0e">Ogre::STBIImageCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#ac3b5c1bd858ecb0bdb0a4f44846d3fe0">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#ac04880bda37d419aefd1cb0d24ccf58f">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#af6db7e1f71f235fb9ffd18fcd98026d9">Ogre::FreeImageCodec2</a>, and <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#a888b40b29c14c7eb2f5df013fc3e371f">Ogre::OITDCodec</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#a4c3c34bf75f86ed825e105d782b83b7e">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#ac3b5c1bd858ecb0bdb0a4f44846d3fe0">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#ac04880bda37d419aefd1cb0d24ccf58f">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#af6db7e1f71f235fb9ffd18fcd98026d9">Ogre::FreeImageCodec2</a>, <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#a888b40b29c14c7eb2f5df013fc3e371f">Ogre::OITDCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#a9e3b761e9ddd99627af7241acf8cbf53">Ogre::PVRTCCodec</a>, and <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a27a2d8beba5370e1b0efd9cc56855c0e">Ogre::STBIImageCodec</a>.</p>
 
 </div>
 </div>
@@ -1185,6 +1230,54 @@ template&lt;class Alloc &gt; </div>
 <p>Unregisters a codec from the database. </p>
 
 <p class="reference">References <a class="el" href="class_ogre_1_1_codec.html#ada1a5477ab6a563565f1b3599d7b806a">Ogre::Codec::getType()</a>.</p>
+
+</div>
+</div>
+<a id="a1f6e6d04e958a22de11daef7881effac" name="a1f6e6d04e958a22de11daef7881effac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f6e6d04e958a22de11daef7881effac">&#9670;&nbsp;</a></span>validateMagicNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627">ValidationStatus</a> Ogre::Codec::validateMagicNumber </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>magicNumberPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>maxbytes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>validateMagicNumber Returns whether a magic number header matches this codec. </p>
+<p >At least 4 bytes must be supplied. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">magicNumberPtr</td><td>Pointer to a stream of bytes which should identify the file. Note that this may be more than needed - each codec may be looking for a different size magic number. </td></tr>
+    <tr><td class="paramname">maxbytes</td><td>The number of bytes passed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Validation status. </dd></dl>
+
+<p>Implemented in <a class="el" href="class_ogre_1_1_a_s_t_c_codec.html#a4446f66d50fa4098118aa1158fd7a85d">Ogre::ASTCCodec</a>, <a class="el" href="class_ogre_1_1_d_d_s_codec2.html#af8f01e7b2eaf9c3170354778c4046bfb">Ogre::DDSCodec2</a>, <a class="el" href="class_ogre_1_1_e_t_c_codec.html#a77c8ff271ec0352b97412b9b988be6fe">Ogre::ETCCodec</a>, <a class="el" href="class_ogre_1_1_free_image_codec2.html#a6787ab70d39111d63489f18a838a6144">Ogre::FreeImageCodec2</a>, <a class="el" href="class_ogre_1_1_o_i_t_d_codec.html#a44b6a6d25827a1e54a00a55da0a04bf8">Ogre::OITDCodec</a>, <a class="el" href="class_ogre_1_1_p_v_r_t_c_codec.html#af112968a1ff60cf4581f4f2876f80317">Ogre::PVRTCCodec</a>, and <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a79c977a8a85bed4b4ace35ef5904a3e0">Ogre::STBIImageCodec</a>.</p>
 
 </div>
 </div>

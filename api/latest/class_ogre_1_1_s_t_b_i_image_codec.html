@@ -116,34 +116,39 @@ Public Types</h2></td></tr>
 <tr class="memitem:a8cc81c85bd7d4e25393aa153c5e01454"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; <a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a>, <a class="el" href="class_ogre_1_1_codec.html#a29e31ad112b08ea7fb648b63f426ff1f">CodecDataPtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a8cc81c85bd7d4e25393aa153c5e01454">DecodeResult</a></td></tr>
 <tr class="memdesc:a8cc81c85bd7d4e25393aa153c5e01454"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of a decoding; both a decoded data stream and <a class="el" href="class_ogre_1_1_codec_1_1_codec_data.html">CodecData</a> metadata.  <a href="class_ogre_1_1_codec.html#a8cc81c85bd7d4e25393aa153c5e01454">More...</a><br /></td></tr>
 <tr class="separator:a8cc81c85bd7d4e25393aa153c5e01454"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c74f9daafec4f0fff30b92baa8fc627"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627">ValidationStatus</a> { <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627a47a4a53ad7af88177b1dc789714f14f2">CodecValid</a>
+, <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627adbfb6433432642b9c1d8ac283c70ae91">CodecInvalid</a>
+, <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627a7ea7bb09b0f8951f18e1cd02147e2316">CodecUnknown</a>
+ }</td></tr>
+<tr class="separator:a4c74f9daafec4f0fff30b92baa8fc627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af1f778f6c0c79b362906595051dc018a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#af1f778f6c0c79b362906595051dc018a">STBIImageCodec</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;type)</td></tr>
 <tr class="separator:af1f778f6c0c79b362906595051dc018a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a6786b418be005ff8b75b9152c94898"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a3a6786b418be005ff8b75b9152c94898">~STBIImageCodec</a> ()</td></tr>
-<tr class="separator:a3a6786b418be005ff8b75b9152c94898"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49dfb9df2864db1978dbe32878a9f433"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_codec.html#a8cc81c85bd7d4e25393aa153c5e01454">DecodeResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a49dfb9df2864db1978dbe32878a9f433">decode</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;input) const</td></tr>
-<tr class="memdesc:a49dfb9df2864db1978dbe32878a9f433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data from the input chunk into the output chunk.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a49dfb9df2864db1978dbe32878a9f433">More...</a><br /></td></tr>
-<tr class="separator:a49dfb9df2864db1978dbe32878a9f433"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96b87a6c9ee11cd4974f21a4dbf4ee9c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a96b87a6c9ee11cd4974f21a4dbf4ee9c">encode</a> (<a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a> &amp;input, <a class="el" href="class_ogre_1_1_codec.html#a29e31ad112b08ea7fb648b63f426ff1f">CodecDataPtr</a> &amp;pData) const</td></tr>
-<tr class="memdesc:a96b87a6c9ee11cd4974f21a4dbf4ee9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data in the input stream and saves the result in the output stream.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a96b87a6c9ee11cd4974f21a4dbf4ee9c">More...</a><br /></td></tr>
-<tr class="separator:a96b87a6c9ee11cd4974f21a4dbf4ee9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d0d216deb1aca91d356d665c3fde88f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a2d0d216deb1aca91d356d665c3fde88f">encodeToFile</a> (<a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a> &amp;input, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outFileName, <a class="el" href="class_ogre_1_1_codec.html#a29e31ad112b08ea7fb648b63f426ff1f">CodecDataPtr</a> &amp;pData) const</td></tr>
-<tr class="memdesc:a2d0d216deb1aca91d356d665c3fde88f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data in the input chunk and saves the result in the output filename provided.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a2d0d216deb1aca91d356d665c3fde88f">More...</a><br /></td></tr>
-<tr class="separator:a2d0d216deb1aca91d356d665c3fde88f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b44fa8dca7a3f1825086fdc81cb59ef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a9b44fa8dca7a3f1825086fdc81cb59ef">~STBIImageCodec</a> () override</td></tr>
+<tr class="separator:a9b44fa8dca7a3f1825086fdc81cb59ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10f3f10c096c4ca87a306e7bb44cdd25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_codec.html#a8cc81c85bd7d4e25393aa153c5e01454">DecodeResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a10f3f10c096c4ca87a306e7bb44cdd25">decode</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;input) const override</td></tr>
+<tr class="memdesc:a10f3f10c096c4ca87a306e7bb44cdd25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data from the input chunk into the output chunk.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a10f3f10c096c4ca87a306e7bb44cdd25">More...</a><br /></td></tr>
+<tr class="separator:a10f3f10c096c4ca87a306e7bb44cdd25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abce9cb32d0341d60f78acd809cad89d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#abce9cb32d0341d60f78acd809cad89d6">encode</a> (<a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a> &amp;input, <a class="el" href="class_ogre_1_1_codec.html#a29e31ad112b08ea7fb648b63f426ff1f">CodecDataPtr</a> &amp;pData) const override</td></tr>
+<tr class="memdesc:abce9cb32d0341d60f78acd809cad89d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data in the input stream and saves the result in the output stream.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#abce9cb32d0341d60f78acd809cad89d6">More...</a><br /></td></tr>
+<tr class="separator:abce9cb32d0341d60f78acd809cad89d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f90416480503b9597164b26e543d308"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a7f90416480503b9597164b26e543d308">encodeToFile</a> (<a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a> &amp;input, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outFileName, <a class="el" href="class_ogre_1_1_codec.html#a29e31ad112b08ea7fb648b63f426ff1f">CodecDataPtr</a> &amp;pData) const override</td></tr>
+<tr class="memdesc:a7f90416480503b9597164b26e543d308"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data in the input chunk and saves the result in the output filename provided.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a7f90416480503b9597164b26e543d308">More...</a><br /></td></tr>
+<tr class="separator:a7f90416480503b9597164b26e543d308"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa97f56ecfa6549b0bfef04671e58f6a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_image_codec2.html#aa97f56ecfa6549b0bfef04671e58f6a9">getDataType</a> () const override</td></tr>
 <tr class="memdesc:aa97f56ecfa6549b0bfef04671e58f6a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the data that supported by this codec as a String.  <a href="class_ogre_1_1_image_codec2.html#aa97f56ecfa6549b0bfef04671e58f6a9">More...</a><br /></td></tr>
 <tr class="separator:aa97f56ecfa6549b0bfef04671e58f6a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1763365ccd236b49d56e9c8b60f16844"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a1763365ccd236b49d56e9c8b60f16844">getType</a> () const</td></tr>
-<tr class="memdesc:a1763365ccd236b49d56e9c8b60f16844"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the codec as a String.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a1763365ccd236b49d56e9c8b60f16844">More...</a><br /></td></tr>
-<tr class="separator:a1763365ccd236b49d56e9c8b60f16844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af755ac44c449d69d6313e5fbb2d3b179"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#af755ac44c449d69d6313e5fbb2d3b179">getType</a> () const override</td></tr>
+<tr class="memdesc:af755ac44c449d69d6313e5fbb2d3b179"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the codec as a String.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#af755ac44c449d69d6313e5fbb2d3b179">More...</a><br /></td></tr>
+<tr class="separator:af755ac44c449d69d6313e5fbb2d3b179"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a270be35471eb9ef28fdbd4b7dced21b9"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a270be35471eb9ef28fdbd4b7dced21b9">magicNumberMatch</a> (const char *magicNumberPtr, size_t maxbytes) const</td></tr>
 <tr class="memdesc:a270be35471eb9ef28fdbd4b7dced21b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a magic number header matches this codec.  <a href="class_ogre_1_1_codec.html#a270be35471eb9ef28fdbd4b7dced21b9">More...</a><br /></td></tr>
 <tr class="separator:a270be35471eb9ef28fdbd4b7dced21b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad70f382ca4da6f2f55de053f80ebea0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#ad70f382ca4da6f2f55de053f80ebea0e">magicNumberToFileExt</a> (const char *magicNumberPtr, size_t maxbytes) const</td></tr>
-<tr class="memdesc:ad70f382ca4da6f2f55de053f80ebea0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maps a magic number header to a file extension, if this codec recognises it.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#ad70f382ca4da6f2f55de053f80ebea0e">More...</a><br /></td></tr>
-<tr class="separator:ad70f382ca4da6f2f55de053f80ebea0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27a2d8beba5370e1b0efd9cc56855c0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a27a2d8beba5370e1b0efd9cc56855c0e">magicNumberToFileExt</a> (const char *magicNumberPtr, size_t maxbytes) const override</td></tr>
+<tr class="memdesc:a27a2d8beba5370e1b0efd9cc56855c0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maps a magic number header to a file extension, if this codec recognises it.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a27a2d8beba5370e1b0efd9cc56855c0e">More...</a><br /></td></tr>
+<tr class="separator:a27a2d8beba5370e1b0efd9cc56855c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -167,6 +172,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">More...</a><br /></td></tr>
 <tr class="separator:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79c977a8a85bed4b4ace35ef5904a3e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627">ValidationStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a79c977a8a85bed4b4ace35ef5904a3e0">validateMagicNumber</a> (const char *magicNumberPtr, size_t maxbytes) const override</td></tr>
+<tr class="memdesc:a79c977a8a85bed4b4ace35ef5904a3e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">validateMagicNumber Returns whether a magic number header matches this codec.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a79c977a8a85bed4b4ace35ef5904a3e0">More...</a><br /></td></tr>
+<tr class="separator:a79c977a8a85bed4b4ace35ef5904a3e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -270,6 +278,37 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a4c74f9daafec4f0fff30b92baa8fc627" name="a4c74f9daafec4f0fff30b92baa8fc627"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c74f9daafec4f0fff30b92baa8fc627">&#9670;&nbsp;</a></span>ValidationStatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627">Ogre::Codec::ValidationStatus</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4c74f9daafec4f0fff30b92baa8fc627a47a4a53ad7af88177b1dc789714f14f2" name="a4c74f9daafec4f0fff30b92baa8fc627a47a4a53ad7af88177b1dc789714f14f2"></a>CodecValid&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4c74f9daafec4f0fff30b92baa8fc627adbfb6433432642b9c1d8ac283c70ae91" name="a4c74f9daafec4f0fff30b92baa8fc627adbfb6433432642b9c1d8ac283c70ae91"></a>CodecInvalid&#160;</td><td class="fielddoc"><p >Magic number says this codec can open this stream. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4c74f9daafec4f0fff30b92baa8fc627a7ea7bb09b0f8951f18e1cd02147e2316" name="a4c74f9daafec4f0fff30b92baa8fc627a7ea7bb09b0f8951f18e1cd02147e2316"></a>CodecUnknown&#160;</td><td class="fielddoc"><p >Magic number says this codec cannot open this stream. </p>
+<p >Cannot be verified. File may or may not open. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af1f778f6c0c79b362906595051dc018a" name="af1f778f6c0c79b362906595051dc018a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af1f778f6c0c79b362906595051dc018a">&#9670;&nbsp;</a></span>STBIImageCodec()</h2>
@@ -289,8 +328,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3a6786b418be005ff8b75b9152c94898" name="a3a6786b418be005ff8b75b9152c94898"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a6786b418be005ff8b75b9152c94898">&#9670;&nbsp;</a></span>~STBIImageCodec()</h2>
+<a id="a9b44fa8dca7a3f1825086fdc81cb59ef" name="a9b44fa8dca7a3f1825086fdc81cb59ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b44fa8dca7a3f1825086fdc81cb59ef">&#9670;&nbsp;</a></span>~STBIImageCodec()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -299,7 +338,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual Ogre::STBIImageCodec::~STBIImageCodec </td>
+          <td class="memname">Ogre::STBIImageCodec::~STBIImageCodec </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -307,7 +346,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -315,8 +354,8 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a49dfb9df2864db1978dbe32878a9f433" name="a49dfb9df2864db1978dbe32878a9f433"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49dfb9df2864db1978dbe32878a9f433">&#9670;&nbsp;</a></span>decode()</h2>
+<a id="a10f3f10c096c4ca87a306e7bb44cdd25" name="a10f3f10c096c4ca87a306e7bb44cdd25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10f3f10c096c4ca87a306e7bb44cdd25">&#9670;&nbsp;</a></span>decode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -334,7 +373,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -351,8 +390,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a96b87a6c9ee11cd4974f21a4dbf4ee9c" name="a96b87a6c9ee11cd4974f21a4dbf4ee9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96b87a6c9ee11cd4974f21a4dbf4ee9c">&#9670;&nbsp;</a></span>encode()</h2>
+<a id="abce9cb32d0341d60f78acd809cad89d6" name="abce9cb32d0341d60f78acd809cad89d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce9cb32d0341d60f78acd809cad89d6">&#9670;&nbsp;</a></span>encode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -380,7 +419,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -391,8 +430,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2d0d216deb1aca91d356d665c3fde88f" name="a2d0d216deb1aca91d356d665c3fde88f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d0d216deb1aca91d356d665c3fde88f">&#9670;&nbsp;</a></span>encodeToFile()</h2>
+<a id="a7f90416480503b9597164b26e543d308" name="a7f90416480503b9597164b26e543d308"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f90416480503b9597164b26e543d308">&#9670;&nbsp;</a></span>encodeToFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -426,7 +465,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -601,8 +640,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1763365ccd236b49d56e9c8b60f16844" name="a1763365ccd236b49d56e9c8b60f16844"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1763365ccd236b49d56e9c8b60f16844">&#9670;&nbsp;</a></span>getType()</h2>
+<a id="af755ac44c449d69d6313e5fbb2d3b179" name="af755ac44c449d69d6313e5fbb2d3b179"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af755ac44c449d69d6313e5fbb2d3b179">&#9670;&nbsp;</a></span>getType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -611,7 +650,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> Ogre::STBIImageCodec::getType </td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> Ogre::STBIImageCodec::getType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -619,7 +658,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -696,6 +735,12 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">magicNumberPtr</td><td>Pointer to a stream of bytes which should identify the file. Note that this may be more than needed - each codec may be looking for a different size magic number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Deprecated. Use <a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a79c977a8a85bed4b4ace35ef5904a3e0" title="validateMagicNumber Returns whether a magic number header matches this codec.">validateMagicNumber()</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
     <tr><td class="paramname">maxbytes</td><td>The number of bytes passed </td></tr>
   </table>
   </dd>
@@ -703,8 +748,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad70f382ca4da6f2f55de053f80ebea0e" name="ad70f382ca4da6f2f55de053f80ebea0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad70f382ca4da6f2f55de053f80ebea0e">&#9670;&nbsp;</a></span>magicNumberToFileExt()</h2>
+<a id="a27a2d8beba5370e1b0efd9cc56855c0e" name="a27a2d8beba5370e1b0efd9cc56855c0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27a2d8beba5370e1b0efd9cc56855c0e">&#9670;&nbsp;</a></span>magicNumberToFileExt()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -732,7 +777,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1256,6 +1301,54 @@ template&lt;class Alloc &gt; </div>
 <p>Unregisters a codec from the database. </p>
 
 <p class="reference">References <a class="el" href="class_ogre_1_1_codec.html#ada1a5477ab6a563565f1b3599d7b806a">Ogre::Codec::getType()</a>.</p>
+
+</div>
+</div>
+<a id="a79c977a8a85bed4b4ace35ef5904a3e0" name="a79c977a8a85bed4b4ace35ef5904a3e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79c977a8a85bed4b4ace35ef5904a3e0">&#9670;&nbsp;</a></span>validateMagicNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_codec.html#a4c74f9daafec4f0fff30b92baa8fc627">ValidationStatus</a> Ogre::STBIImageCodec::validateMagicNumber </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>magicNumberPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>maxbytes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>validateMagicNumber Returns whether a magic number header matches this codec. </p>
+<p >At least 4 bytes must be supplied. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">magicNumberPtr</td><td>Pointer to a stream of bytes which should identify the file. Note that this may be more than needed - each codec may be looking for a different size magic number. </td></tr>
+    <tr><td class="paramname">maxbytes</td><td>The number of bytes passed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Validation status. </dd></dl>
+
+<p>Implements <a class="el" href="class_ogre_1_1_codec.html#a1f6e6d04e958a22de11daef7881effac">Ogre::Codec</a>.</p>
 
 </div>
 </div>

@@ -199,6 +199,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acc2e246db6951ea3931ce782bf70608d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_image2.html#acc2e246db6951ea3931ce782bf70608d">load</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;stream, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;type=<a class="el" href="group___general.html#gad842a4b416bd2f3245d2b44826a0aedc">BLANKSTRING</a>)</td></tr>
 <tr class="memdesc:acc2e246db6951ea3931ce782bf70608d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads an image file from a stream.  <a href="class_ogre_1_1_image2.html#acc2e246db6951ea3931ce782bf70608d">More...</a><br /></td></tr>
 <tr class="separator:acc2e246db6951ea3931ce782bf70608d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d525709c60f0cecd95f50687f13e27a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_image2.html#a1d525709c60f0cecd95f50687f13e27a">load2</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;stream, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename)</td></tr>
+<tr class="memdesc:a1d525709c60f0cecd95f50687f13e27a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="class_ogre_1_1_image2.html#a2ab92d036f444fc21e273d9ef398fe97" title="Loads an image file.">load()</a> as but we will try to find the codec by both magic numbers and extension The original <a class="el" href="class_ogre_1_1_image2.html#a2ab92d036f444fc21e273d9ef398fe97" title="Loads an image file.">load()</a> only allows to either use magic number OR name extension This version tries both.  <a href="class_ogre_1_1_image2.html#a1d525709c60f0cecd95f50687f13e27a">More...</a><br /></td></tr>
+<tr class="separator:a1d525709c60f0cecd95f50687f13e27a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe2de619e8267001f7c8690471db77c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_image2.html#afe2de619e8267001f7c8690471db77c7">loadDynamicImage</a> (void *pData, bool autoDelete, const <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image)</td></tr>
 <tr class="separator:afe2de619e8267001f7c8690471db77c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b8dc803cebdeef4ae91231aebf483a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_image2.html#a2b8dc803cebdeef4ae91231aebf483a9">loadDynamicImage</a> (void *pData, bool autoDelete, const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
@@ -1230,6 +1233,36 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd>Image::load( const String&amp; filename ) </dd></dl>
+
+</div>
+</div>
+<a id="a1d525709c60f0cecd95f50687f13e27a" name="a1d525709c60f0cecd95f50687f13e27a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d525709c60f0cecd95f50687f13e27a">&#9670;&nbsp;</a></span>load2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Image2::load2 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Same as <a class="el" href="class_ogre_1_1_image2.html#a2ab92d036f444fc21e273d9ef398fe97" title="Loads an image file.">load()</a> as but we will try to find the codec by both magic numbers and extension The original <a class="el" href="class_ogre_1_1_image2.html#a2ab92d036f444fc21e273d9ef398fe97" title="Loads an image file.">load()</a> only allows to either use magic number OR name extension This version tries both. </p>
 
 </div>
 </div>
