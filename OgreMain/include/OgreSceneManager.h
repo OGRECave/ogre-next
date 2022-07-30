@@ -1388,7 +1388,7 @@ namespace Ogre
         virtual Item *createItem(
             const String       &meshName,
             const String       &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-            SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC );
+            SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC, bool bUseMeshMat = true );
 
         /** Create an Item (instance of a discrete mesh).
             @param

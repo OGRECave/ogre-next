@@ -523,13 +523,15 @@ namespace Ogre
     //-----------------------------------------------------------------------
     Item *SceneManager::createItem(
         const String &meshName,
-        const String &groupName, /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */
-        SceneMemoryMgrTypes sceneType /*= SCENE_DYNAMIC */ )
+        const String &groupName,       /*= ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME*/
+        SceneMemoryMgrTypes sceneType, /*= SCENE_DYNAMIC*/
+        bool bUseMeshMat /*= true */ )
     {
         // delegate to factory implementation
         NameValuePairList params;
         params["mesh"] = meshName;
         params["resourceGroup"] = groupName;
+        params["useMeshMat"] = StringConverter::toString( bUseMeshMat );
         return static_cast<Item *>( createMovableObject( ItemFactory::FACTORY_TYPE_NAME,
                                                          &mEntityMemoryManager[sceneType], &params ) );
     }
@@ -538,6 +540,7 @@ namespace Ogre
     {
         return createItem( pMesh->getName(), pMesh->getGroup(), sceneType );
     }
+
     //-----------------------------------------------------------------------
     void SceneManager::destroyItem( Item *i ) { destroyMovableObject( i ); }
     //-----------------------------------------------------------------------
