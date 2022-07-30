@@ -135,9 +135,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2323c56dfd3aff97f45fcb92b39c85c4"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a2323c56dfd3aff97f45fcb92b39c85c4">_getParentNodeFullTransform</a> () const</td></tr>
 <tr class="memdesc:a2323c56dfd3aff97f45fcb92b39c85c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the full transformation of the parent sceneNode or the attachingPoint node.  <a href="class_ogre_1_1_movable_object.html#a2323c56dfd3aff97f45fcb92b39c85c4">More...</a><br /></td></tr>
 <tr class="separator:a2323c56dfd3aff97f45fcb92b39c85c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4adc0275cc4fb1e0650b3214b0436d94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#a4adc0275cc4fb1e0650b3214b0436d94">_initialise</a> (bool forceReinitialise=false)</td></tr>
-<tr class="memdesc:a4adc0275cc4fb1e0650b3214b0436d94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to initialise the <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> from the underlying resources.  <a href="class_ogre_1_1_item.html#a4adc0275cc4fb1e0650b3214b0436d94">More...</a><br /></td></tr>
-<tr class="separator:a4adc0275cc4fb1e0650b3214b0436d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa99cd1f377e6faf17d853990727f452b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#aa99cd1f377e6faf17d853990727f452b">_initialise</a> (bool forceReinitialise=false, bool bUseMeshMat=true)</td></tr>
+<tr class="memdesc:aa99cd1f377e6faf17d853990727f452b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to initialise the <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> from the underlying resources.  <a href="class_ogre_1_1_item.html#aa99cd1f377e6faf17d853990727f452b">More...</a><br /></td></tr>
+<tr class="separator:aa99cd1f377e6faf17d853990727f452b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c29a048d9254c17c43a9fa313df0a6b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a4c29a048d9254c17c43a9fa313df0a6b">_notifyAttached</a> (<a class="el" href="class_ogre_1_1_node.html">Node</a> *parent)</td></tr>
 <tr class="memdesc:a4c29a048d9254c17c43a9fa313df0a6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method called to notify the object that it has been attached to a node.  <a href="class_ogre_1_1_movable_object.html#a4c29a048d9254c17c43a9fa313df0a6b">More...</a><br /></td></tr>
 <tr class="separator:a4c29a048d9254c17c43a9fa313df0a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -644,8 +644,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a4adc0275cc4fb1e0650b3214b0436d94" name="a4adc0275cc4fb1e0650b3214b0436d94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4adc0275cc4fb1e0650b3214b0436d94">&#9670;&nbsp;</a></span>_initialise()</h2>
+<a id="aa99cd1f377e6faf17d853990727f452b" name="aa99cd1f377e6faf17d853990727f452b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa99cd1f377e6faf17d853990727f452b">&#9670;&nbsp;</a></span>_initialise()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -654,8 +654,18 @@ Friends</h2></td></tr>
           <td class="memname">void Ogre::Item::_initialise </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forceReinitialise</em> = <code>false</code></td><td>)</td>
+          <td class="paramname"><em>forceReinitialise</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bUseMeshMat</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1063,7 +1073,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Clones this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> and returns a pointer to the clone. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Useful method for duplicating an <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a>. The new <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> must be given a unique name, and is not attached to the scene in any way so must be attached to a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> to be visible (exactly as entities returned from <a class="el" href="class_ogre_1_1_scene_manager.html#a096a0b8744464d12eecc7c8bf5059684" title="Create an Item (instance of a discrete mesh).">SceneManager::createItem</a>). </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Useful method for duplicating an <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a>. The new <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> must be given a unique name, and is not attached to the scene in any way so must be attached to a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> to be visible (exactly as entities returned from <a class="el" href="class_ogre_1_1_scene_manager.html#aff2ceebf9755716d814d867e810e0269" title="Create an Item (instance of a discrete mesh).">SceneManager::createItem</a>). </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">newName</td><td>Name for the new <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a>. </td></tr>

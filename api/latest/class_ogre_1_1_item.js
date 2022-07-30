@@ -7,7 +7,7 @@ var class_ogre_1_1_item =
     [ "_getManager", "class_ogre_1_1_item.html#a5000db81de5b2acf806c46ad04d1ada7", null ],
     [ "_getObjectData", "class_ogre_1_1_item.html#ab90b269de93324996df439355dd69dd2", null ],
     [ "_getParentNodeFullTransform", "class_ogre_1_1_item.html#a2323c56dfd3aff97f45fcb92b39c85c4", null ],
-    [ "_initialise", "class_ogre_1_1_item.html#a4adc0275cc4fb1e0650b3214b0436d94", null ],
+    [ "_initialise", "class_ogre_1_1_item.html#aa99cd1f377e6faf17d853990727f452b", null ],
     [ "_notifyAttached", "class_ogre_1_1_item.html#a4c29a048d9254c17c43a9fa313df0a6b", null ],
     [ "_notifyManager", "class_ogre_1_1_item.html#a865cb46cc09cbb8bd560abeca1d0d31e", null ],
     [ "_notifyParentNodeMemoryChanged", "class_ogre_1_1_item.html#a560fec5e2aa60edc127ccd0d98f96696", null ],

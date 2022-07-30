@@ -93,7 +93,7 @@ var class_ogre_1_1_scene_manager =
     [ "createEntity", "class_ogre_1_1_scene_manager.html#a942371c3418e00862e25e3038b8c34dc", null ],
     [ "createIntersectionQuery", "class_ogre_1_1_scene_manager.html#a330ae308e614a06f201e1c460014b8c7", null ],
     [ "createItem", "class_ogre_1_1_scene_manager.html#a2e241b0afc26f04733c70e7c453b8787", null ],
-    [ "createItem", "class_ogre_1_1_scene_manager.html#a096a0b8744464d12eecc7c8bf5059684", null ],
+    [ "createItem", "class_ogre_1_1_scene_manager.html#aff2ceebf9755716d814d867e810e0269", null ],
     [ "createLight", "class_ogre_1_1_scene_manager.html#a7399c836bf57186f171f4eb456c7fe4d", null ],
     [ "createManualObject", "class_ogre_1_1_scene_manager.html#a58defccc8c64e751db9b32a51c39c916", null ],
     [ "createMovableObject", "class_ogre_1_1_scene_manager.html#a70456cfbc5e944ab3e98e8d725e6f761", null ],
