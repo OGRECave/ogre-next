@@ -2642,13 +2642,7 @@ namespace Ogre
                 try
                 {
                     if( data )
-                    {
-                        String strExt;
-                        size_t pos = loadRequest.name.find_last_of( "." );
-                        if( pos != String::npos && pos < ( loadRequest.name.length() - 1u ) )
-                            strExt = loadRequest.name.substr( pos + 1u );
-                        img->load( data, strExt );
-                    }
+                        img->load2( data, loadRequest.name );
                 }
                 catch( Exception &e )
                 {

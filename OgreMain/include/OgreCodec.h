@@ -157,12 +157,16 @@ namespace Ogre
         @param magicNumberPtr Pointer to a stream of bytes which should identify the file.
             Note that this may be more than needed - each codec may be looking for
             a different size magic number.
+        @remarks
+            Deprecated. Use validateMagicNumber()
         @param maxbytes The number of bytes passed
         */
+        OGRE_DEPRECATED_VER( 3 )
         virtual bool magicNumberMatch( const char *magicNumberPtr, size_t maxbytes ) const
         {
             return !magicNumberToFileExt( magicNumberPtr, maxbytes ).empty();
         }
+
         /** Maps a magic number header to a file extension, if this codec recognises it.
         @param magicNumberPtr Pointer to a stream of bytes which should identify the file.
             Note that this may be more than needed - each codec may be looking for
@@ -171,6 +175,29 @@ namespace Ogre
         @return A blank string if the magic number was unknown, or a file extension.
         */
         virtual String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const = 0;
+
+        enum ValidationStatus
+        {
+            CodecValid,    /// Magic number says this codec can open this stream.
+            CodecInvalid,  /// Magic number says this codec cannot open this stream.
+            CodecUnknown   /// Cannot be verified. File may or may not open.
+        };
+
+        /**
+        @brief validateMagicNumber
+            Returns whether a magic number header matches this codec.
+            At least 4 bytes must be supplied.
+        @param magicNumberPtr
+            Pointer to a stream of bytes which should identify the file.
+            Note that this may be more than needed - each codec may be looking for
+            a different size magic number.
+        @param maxbytes
+            The number of bytes passed
+        @return
+            Validation status.
+        */
+        virtual ValidationStatus validateMagicNumber( const char *magicNumberPtr,
+                                                      size_t      maxbytes ) const = 0;
     };
     /** @} */
     /** @} */

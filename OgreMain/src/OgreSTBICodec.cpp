@@ -150,10 +150,11 @@ namespace Ogre
 
         const uint32 rowAlignment = 4u;
         imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
-        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,  //
-                                                                      1u, 1u, 1u,          //
-                                                                      imgData->format,     //
-                                                                      rowAlignment );
+        imgData->box.bytesPerRow =
+            static_cast<uint32>( PixelFormatGpuUtils::getSizeBytes( imgData->box.width,  //
+                                                                    1u, 1u, 1u,          //
+                                                                    imgData->format,     //
+                                                                    rowAlignment ) );
         imgData->box.bytesPerImage = imgData->box.bytesPerRow * imgData->box.height;
 
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
@@ -209,5 +210,11 @@ namespace Ogre
     String STBIImageCodec::magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const
     {
         return BLANKSTRING;
+    }
+    //---------------------------------------------------------------------
+    STBIImageCodec::ValidationStatus STBIImageCodec::validateMagicNumber( const char *magicNumberPtr,
+                                                                          size_t maxbytes ) const
+    {
+        return CodecUnknown;
     }
 }  // namespace Ogre

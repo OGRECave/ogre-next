@@ -648,4 +648,45 @@ namespace Ogre
             return BLANKSTRING;
         }
     }
+    //---------------------------------------------------------------------
+    FreeImageCodec2::ValidationStatus FreeImageCodec2::validateMagicNumber( const char *magicNumberPtr,
+                                                                            size_t maxbytes ) const
+    {
+        FIMEMORY *fiMem = FreeImage_OpenMemory( (BYTE *)const_cast<char *>( magicNumberPtr ),
+                                                static_cast<DWORD>( maxbytes ) );
+
+        const BOOL bValid = FreeImage_ValidateFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
+        FreeImage_CloseMemory( fiMem );
+
+        if( bValid )
+        {
+            return CodecValid;
+        }
+        else
+        {
+            // Unfortunately FreeImage won't tell us when one of its plugin is incapable
+            // of determining validation. So we don't really know whether it's invalid or
+            // FreeImage is uncapable of validating this format.
+
+            // We took a look at FreeImage's source code and these formats have validation
+            // capability. These are popular formats so we return more accurate info
+            switch( mFreeImageType )
+            {
+            case FIF_BMP:
+            case FIF_JPEG:
+            case FIF_J2K:
+            case FIF_PNG:
+            case FIF_DDS:
+            case FIF_EXR:
+            case FIF_PSD:
+            case FIF_TARGA:
+            case FIF_TIFF:
+            case FIF_XPM:
+            case FIF_WEBP:
+                return CodecInvalid;
+            }
+
+            return CodecUnknown;
+        }
+    }
 }  // namespace Ogre
