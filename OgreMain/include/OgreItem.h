@@ -97,8 +97,7 @@ namespace Ogre
         /** Private constructor.
          */
         Item( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-              const MeshPtr &mesh );
-
+              const MeshPtr &mesh, bool bUseMeshMat = true );
         /** The Mesh that this Item is based on.
          */
         MeshPtr mMesh;
@@ -118,7 +117,7 @@ namespace Ogre
         bool mInitialised;
 
         /** Builds a list of SubItems based on the SubMeshes contained in the Mesh. */
-        void buildSubItems( vector<String>::type *materialsList = 0 );
+        void buildSubItems( vector<String>::type *materialsList = 0, bool bUseMeshMat = true );
 
     public:
         /** Default destructor.
@@ -256,7 +255,7 @@ namespace Ogre
             internal structures and try to rebuild them. Useful if you changed the
             content of a Mesh or Skeleton at runtime.
         */
-        void _initialise( bool forceReinitialise = false );
+        void _initialise( bool forceReinitialise = false, bool bUseMeshMat = true );
         /** Tear down the internal structures of this Item, rendering it uninitialised. */
         void _deinitialise();
 
