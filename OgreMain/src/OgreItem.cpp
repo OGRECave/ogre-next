@@ -60,7 +60,7 @@ namespace Ogre
         mMesh( mesh ),
         mInitialised( false )
     {
-        _initialise(false, bUseMeshMat);
+        _initialise( false, bUseMeshMat );
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_ENTITY_DEFAULT_MASK;
     }
 
@@ -110,7 +110,6 @@ namespace Ogre
 
         mLodMesh = mMesh->_getLodValueArray();
 
-
         // Build main subItem list
         buildSubItems( prevMaterialsList.empty() ? 0 : &prevMaterialsList, bUseMeshMat );
 
@@ -140,7 +139,6 @@ namespace Ogre
 
         mInitialised = true;
     }
-
 
     //-----------------------------------------------------------------------
     void Item::_deinitialise()
@@ -271,7 +269,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     const String &Item::getMovableType() const { return ItemFactory::FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------
-    void Item::buildSubItems( vector<String>::type *materialsList, bool bUseMeshMat/* = true*/)
+    void Item::buildSubItems( vector<String>::type *materialsList, bool bUseMeshMat /* = true*/ )
     {
         // Create SubEntities
         unsigned numSubMeshes = mMesh->getNumSubMeshes();
@@ -285,7 +283,9 @@ namespace Ogre
             // Try first Hlms materials, then the low level ones.
 
             mSubItems.back().setDatablockOrMaterialName(
-                materialsList ? ( *materialsList )[i] : (bUseMeshMat ? subMesh->mMaterialName : defaultDatablock), mMesh->getGroup() );
+                materialsList ? ( *materialsList )[i]
+                              : ( bUseMeshMat ? subMesh->mMaterialName : defaultDatablock ),
+                mMesh->getGroup() );
         }
     }
     //-----------------------------------------------------------------------

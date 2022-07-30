@@ -162,7 +162,8 @@ namespace Ogre
             memcpy( imgData->box.data, pixelData, imgData->box.bytesPerImage );
         else
         {
-            size_t realBytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u, PFG_RGB8_UNORM, rowAlignment );
+            size_t realBytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u,
+                                                                        PFG_RGB8_UNORM, rowAlignment );
 
             for( size_t y = 0; y < (size_t)height; ++y )
             {

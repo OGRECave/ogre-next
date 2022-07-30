@@ -1385,11 +1385,10 @@ namespace Ogre
                 meshName The name of the Mesh it is to be based on (e.g. 'knot.oof'). The
                 mesh will be loaded if it is not already.
         */
-         virtual Item *createItem(
-            const String &      meshName,
-            const String &      groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+        virtual Item *createItem(
+            const String       &meshName,
+            const String       &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
             SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC, bool bUseMeshMat = true );
-        
 
         /** Create an Item (instance of a discrete mesh).
             @param

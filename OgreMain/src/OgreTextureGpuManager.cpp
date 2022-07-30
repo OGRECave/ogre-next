@@ -2649,7 +2649,6 @@ namespace Ogre
                             strExt = loadRequest.name.substr( pos + 1u );
                         img->load( data, strExt );
                     }
-                       
                 }
                 catch( Exception &e )
                 {
