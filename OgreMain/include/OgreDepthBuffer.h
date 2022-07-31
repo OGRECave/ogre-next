@@ -103,6 +103,9 @@ namespace Ogre
             /// Samples/Media/2.0/scripts/Compositors/IrradianceFieldRaster.compositor
             /// Samples/Media/2.0/scripts/Compositors/StencilTest.compositor
             /// Samples/Media/2.0/scripts/Compositors/Tutorial_ReconstructPosFromDepth.compositor
+            ///
+            /// See https://ogrecave.github.io/ogre-next/api/latest/_ogre22_changes.html
+            /// for documentation about RTVs.
             POOL_NON_SHAREABLE OGRE_DEPRECATED_VER( 3 ) = 65534,
             /// The depth buffer doesn't come from a pool, either because the TextureGpu
             /// is already a depth buffer, or it's explicitly set in an RTV
