@@ -8,9 +8,9 @@ var class_ogre_1_1_g_l_e_s2_depth_buffer =
     ] ],
     [ "PoolId", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7e", [
       [ "POOL_NO_DEPTH", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea569228ed0fdd8d428a5117026b6d010e", null ],
-      [ "OGRE_DEPRECATED_VER", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2", null ],
+      [ "OGRE_DEPRECATED_ENUM_VER", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea35634a45046af55e08feb81bd5ecbb94", null ],
       [ "POOL_DEFAULT", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea00a687046bfe7a9ebd7f34256d3fbcca", null ],
-      [ "OGRE_DEPRECATED_VER", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2", null ],
+      [ "OGRE_DEPRECATED_ENUM_VER", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea35634a45046af55e08feb81bd5ecbb94", null ],
       [ "NO_POOL_EXPLICIT_RTV", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea5f03ed32b2322daad0f7799072e37cea", null ],
       [ "POOL_INVALID", "class_ogre_1_1_g_l_e_s2_depth_buffer.html#a9854c57374adef41216bae68544a5b7eaf4cd568faf89ee1f03710fefbf8386ca", null ]
     ] ],

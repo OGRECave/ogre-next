@@ -1,5 +1,6 @@
 var NAVTREEINDEX265 =
 {
+"struct_ogre_1_1_s_t_l_allocator_base.html#a3fc45e6ad404fa54ad9246682e7ccd88":[5,2,7,11,0],
 "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html":[5,2,7,12],
 "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html#ad0004d963c1616f06b527bc144bd883f":[5,2,7,12,0],
 "struct_ogre_1_1_sample_description.html":[5,2,2,97],
@@ -248,6 +249,5 @@ var NAVTREEINDEX265 =
 "struct_ogre_1_1_t_rect.html#a4ffdac43c6f8bf4cf11d99b0c8d373e9":[5,2,2,125,6],
 "struct_ogre_1_1_t_rect.html#a54b9de090a6cc533511d51d2bb9b0b82":[5,2,2,125,13],
 "struct_ogre_1_1_t_rect.html#a56b6ad37d298b66bc7366431f6f786b5":[5,2,2,125,12],
-"struct_ogre_1_1_t_rect.html#a79e390fbd62e5a819207d6aee0789ab5":[5,2,2,125,1],
-"struct_ogre_1_1_t_rect.html#a7c3608ca022c17746daba4bc2c9cc684":[5,2,2,125,4]
+"struct_ogre_1_1_t_rect.html#a79e390fbd62e5a819207d6aee0789ab5":[5,2,2,125,1]
 };

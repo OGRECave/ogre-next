@@ -1,5 +1,6 @@
 var NAVTREEINDEX251 =
 {
+"group___resources.html#gab81cd5b5485edb1ffa4c27c7fd8921bc":[5,2,10,180],
 "group___resources.html#gab881163687bedff909edce16d11d9127":[5,2,10,183],
 "group___resources.html#gac0ae983b2d4882ce8b9891d6a46299e1":[5,2,10,213],
 "group___resources.html#gac224d1943fe269a125e10f02c8b8bc8a":[5,2,10,193],
@@ -91,8 +92,8 @@ var NAVTREEINDEX251 =
 "group___scene.html#ga06d6e53236b998db135989521a8ad3ba":[5,0,1,80],
 "group___scene.html#ga10af3296e66966e7c46d61698088090e":[5,2,11,74],
 "group___scene.html#ga10af3296e66966e7c46d61698088090e":[5,0,1,74],
-"group___scene.html#ga1d0db569747448aeff27f36ecd717686":[5,2,11,72],
 "group___scene.html#ga1d0db569747448aeff27f36ecd717686":[5,0,1,72],
+"group___scene.html#ga1d0db569747448aeff27f36ecd717686":[5,2,11,72],
 "group___scene.html#ga21ffab3c275854b773dcd9efeba9152c":[5,2,11,81],
 "group___scene.html#ga21ffab3c275854b773dcd9efeba9152c":[5,0,1,81],
 "group___scene.html#ga2e63733116c49a9931a2989a2cfe1b51":[5,0,1,76],
@@ -101,12 +102,12 @@ var NAVTREEINDEX251 =
 "group___scene.html#ga7383602bd480d43b80c626969b9af914":[5,0,1,82],
 "group___scene.html#ga82154406eaa3f71a7fdfdeb7a2a6e13b":[5,0,1,75],
 "group___scene.html#ga82154406eaa3f71a7fdfdeb7a2a6e13b":[5,2,11,75],
-"group___scene.html#gaa4b6dbd7bf722582a21fcc25d25f73ed":[5,2,11,79],
 "group___scene.html#gaa4b6dbd7bf722582a21fcc25d25f73ed":[5,0,1,79],
+"group___scene.html#gaa4b6dbd7bf722582a21fcc25d25f73ed":[5,2,11,79],
 "group___scene.html#gad79dcd1262d117ecf4d51a5f555d3071":[5,2,11,77],
 "group___scene.html#gad79dcd1262d117ecf4d51a5f555d3071":[5,0,1,77],
-"group___scene.html#gad9005a54a736be79548ebcdf69dfd448":[5,2,11,78],
 "group___scene.html#gad9005a54a736be79548ebcdf69dfd448":[5,0,1,78],
+"group___scene.html#gad9005a54a736be79548ebcdf69dfd448":[5,2,11,78],
 "group___scene.html#gaddcc5a6779ee6a6bb82aeb5f42239a52":[5,2,11,73],
 "group___scene.html#gaddcc5a6779ee6a6bb82aeb5f42239a52":[5,0,1,73],
 "group___scene.html#gga7383602bd480d43b80c626969b9af914a0af8f844019e52fe112e9a946a919fcd":[5,2,11,82,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX251 =
 "hlmsterradatablockref.html#dbtCommonParameters":[1,9,14,0],
 "hlmsterradatablockref.html#dbtExample":[1,9,14,2],
 "hlmsterradatablockref.html#dbtParamBRDF":[1,9,14,1,0],
-"hlmsterradatablockref.html#dbtParamDetailDiffuse":[1,9,14,1,1],
-"hlmsterradatablockref.html#dbtParamDetailWeight":[1,9,14,1,2]
+"hlmsterradatablockref.html#dbtParamDetailDiffuse":[1,9,14,1,1]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX252 =
 {
+"hlmsterradatablockref.html#dbtParamDetailWeight":[1,9,14,1,2],
 "hlmsterradatablockref.html#dbtParamDiffuse":[1,9,14,1,3],
 "hlmsterradatablockref.html#dbtParamReflection":[1,9,14,1,4],
 "hlmsterradatablockref.html#dbtTerraParameters":[1,9,14,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX252 =
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573aefcc66476bb1707163ad161b24c7c227":[6,0,0,1248,40],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573af164b4af402508669d8483fd4333c3db":[6,0,0,1248,1],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573af9348b7cf2cb2ddff17082bac373f8ab":[6,0,0,1248,25],
-"namespace_ogre.html#a7778b9ec36c977594f9637c5dd83af3f":[6,0,0,1196],
-"namespace_ogre.html#a78eec3072ad2dc8efe869c96f09fc5f9":[6,0,0,1393]
+"namespace_ogre.html#a7778b9ec36c977594f9637c5dd83af3f":[6,0,0,1196]
 };
