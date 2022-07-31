@@ -8,9 +8,10 @@ var struct_ogre_1_1_depth_buffer =
     ] ],
     [ "PoolId", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7e", [
       [ "POOL_NO_DEPTH", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea569228ed0fdd8d428a5117026b6d010e", null ],
-      [ "POOL_MANUAL_USAGE", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea2d5409ddce167e1db415f09ee2160440", null ],
+      [ "OGRE_DEPRECATED_VER", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2", null ],
       [ "POOL_DEFAULT", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea00a687046bfe7a9ebd7f34256d3fbcca", null ],
-      [ "POOL_NON_SHAREABLE", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea69bf0bf084d97e612e8badfecc338acb", null ],
+      [ "OGRE_DEPRECATED_VER", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2", null ],
+      [ "NO_POOL_EXPLICIT_RTV", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea5f03ed32b2322daad0f7799072e37cea", null ],
       [ "POOL_INVALID", "struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7eaf4cd568faf89ee1f03710fefbf8386ca", null ]
     ] ],
     [ "AvailableDepthFormats", "struct_ogre_1_1_depth_buffer.html#aab0756add3d02bac99eab8e030434def", null ],

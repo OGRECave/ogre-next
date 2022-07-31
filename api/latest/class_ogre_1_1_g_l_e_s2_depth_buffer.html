@@ -117,11 +117,12 @@ Public Types</h2></td></tr>
 <tr class="separator:a5b113673ee58204611c3435ee59b7225"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9854c57374adef41216bae68544a5b7e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7e">PoolId</a> { <br />
 &#160;&#160;<a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea569228ed0fdd8d428a5117026b6d010e">POOL_NO_DEPTH</a> = 0
-, <a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea2d5409ddce167e1db415f09ee2160440">POOL_MANUAL_USAGE</a> = 0
+, <a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2">OGRE_DEPRECATED_VER</a> =( 3 ) = 0
 , <a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea00a687046bfe7a9ebd7f34256d3fbcca">POOL_DEFAULT</a> = 1
-, <a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea69bf0bf084d97e612e8badfecc338acb">POOL_NON_SHAREABLE</a> = 65534
+, <a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2">OGRE_DEPRECATED_VER</a> =( 3 ) = 0
 , <br />
-&#160;&#160;<a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7eaf4cd568faf89ee1f03710fefbf8386ca">POOL_INVALID</a> = 65535
+&#160;&#160;<a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea5f03ed32b2322daad0f7799072e37cea">NO_POOL_EXPLICIT_RTV</a> = 65534
+, <a class="el" href="struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7eaf4cd568faf89ee1f03710fefbf8386ca">POOL_INVALID</a> = 65535
 <br />
  }</td></tr>
 <tr class="separator:a9854c57374adef41216bae68544a5b7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -215,9 +216,37 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9854c57374adef41216bae68544a5b7ea569228ed0fdd8d428a5117026b6d010e" name="a9854c57374adef41216bae68544a5b7ea569228ed0fdd8d428a5117026b6d010e"></a>POOL_NO_DEPTH&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9854c57374adef41216bae68544a5b7ea2d5409ddce167e1db415f09ee2160440" name="a9854c57374adef41216bae68544a5b7ea2d5409ddce167e1db415f09ee2160440"></a>POOL_MANUAL_USAGE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2" name="a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2"></a>OGRE_DEPRECATED_VER&#160;</td><td class="fielddoc"><p >Deprecated. </p>
+<pre class="fragment">        Do NOT use this flag directly. It made sense in Ogre 2.1
+        It no longer makes sense externally in Ogre 2.2
+
+        Depth buffers are now created like regular TextureGpu and are
+        set directly to RTV (RenderTextureViews) aka RenderPassDescriptor
+
+        See https://forums.ogre3d.org/viewtopic.php?p=548491#p548491
+        See samples that setup depth RTVs such as:
+
+        Samples/Media/2.0/scripts/Compositors/IrradianceFieldRaster.compositor
+        Samples/Media/2.0/scripts/Compositors/StencilTest.compositor
+        Samples/Media/2.0/scripts/Compositors/Tutorial_ReconstructPosFromDepth.compositor 
+</pre> </td></tr>
 <tr><td class="fieldname"><a id="a9854c57374adef41216bae68544a5b7ea00a687046bfe7a9ebd7f34256d3fbcca" name="a9854c57374adef41216bae68544a5b7ea00a687046bfe7a9ebd7f34256d3fbcca"></a>POOL_DEFAULT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9854c57374adef41216bae68544a5b7ea69bf0bf084d97e612e8badfecc338acb" name="a9854c57374adef41216bae68544a5b7ea69bf0bf084d97e612e8badfecc338acb"></a>POOL_NON_SHAREABLE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2" name="a9854c57374adef41216bae68544a5b7ea576dee493b012f1115a4e0e5ad9c1fd2"></a>OGRE_DEPRECATED_VER&#160;</td><td class="fielddoc"><p >Deprecated. </p>
+<pre class="fragment">        Do NOT use this flag directly. It made sense in Ogre 2.1
+        It no longer makes sense externally in Ogre 2.2
+
+        Depth buffers are now created like regular TextureGpu and are
+        set directly to RTV (RenderTextureViews) aka RenderPassDescriptor
+
+        See https://forums.ogre3d.org/viewtopic.php?p=548491#p548491
+        See samples that setup depth RTVs such as:
+
+        Samples/Media/2.0/scripts/Compositors/IrradianceFieldRaster.compositor
+        Samples/Media/2.0/scripts/Compositors/StencilTest.compositor
+        Samples/Media/2.0/scripts/Compositors/Tutorial_ReconstructPosFromDepth.compositor 
+</pre> </td></tr>
+<tr><td class="fieldname"><a id="a9854c57374adef41216bae68544a5b7ea5f03ed32b2322daad0f7799072e37cea" name="a9854c57374adef41216bae68544a5b7ea5f03ed32b2322daad0f7799072e37cea"></a>NO_POOL_EXPLICIT_RTV&#160;</td><td class="fielddoc"><p >The depth buffer doesn't come from a pool, either because the <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> is already a depth buffer, or it's explicitly set in an RTV. </p>
+</td></tr>
 <tr><td class="fieldname"><a id="a9854c57374adef41216bae68544a5b7eaf4cd568faf89ee1f03710fefbf8386ca" name="a9854c57374adef41216bae68544a5b7eaf4cd568faf89ee1f03710fefbf8386ca"></a>POOL_INVALID&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
