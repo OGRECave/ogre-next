@@ -1259,7 +1259,7 @@ namespace Ogre
                 if( !useEsm )
                 {
                     texDef->format = PFG_D32_FLOAT;
-                    texDef->depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                    texDef->depthBufferId = DepthBuffer::NO_POOL_EXPLICIT_RTV;
                 }
                 else
                 {

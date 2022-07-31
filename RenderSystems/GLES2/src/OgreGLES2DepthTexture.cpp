@@ -203,7 +203,7 @@ namespace v1
         mFsaaResolveDirty = true; //Should be permanent true.
 
         if( !ultimateTextureOwner->getShareableDepthBuffer() )
-            mDepthBufferPoolId = DepthBuffer::POOL_NON_SHAREABLE;
+            mDepthBufferPoolId = DepthBuffer::NO_POOL_EXPLICIT_RTV;
     }
     //-----------------------------------------------------------------------------------
     GLES2DepthTextureTarget::~GLES2DepthTextureTarget()

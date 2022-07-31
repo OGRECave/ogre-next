@@ -6504,7 +6504,7 @@ namespace Ogre{
                     if( depthBufferId == DepthBuffer::POOL_INVALID )
                     {
                         if( PixelFormatGpuUtils::isDepth( format ) )
-                            depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                            depthBufferId = DepthBuffer::NO_POOL_EXPLICIT_RTV;
                         else if( format == PFG_NULL )
                             depthBufferId = DepthBuffer::POOL_NO_DEPTH;
                         else
@@ -7963,11 +7963,11 @@ namespace Ogre{
                     break;
                 case ID_DEPTH:
                     translateRenderTargetViewEntry( mRtv->depthAttachment, prop, compiler, false );
-                    mRtv->depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                    mRtv->depthBufferId = DepthBuffer::NO_POOL_EXPLICIT_RTV;
                     break;
                 case ID_STENCIL:
                     translateRenderTargetViewEntry( mRtv->stencilAttachment, prop, compiler, false );
-                    mRtv->depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                    mRtv->depthBufferId = DepthBuffer::NO_POOL_EXPLICIT_RTV;
                     break;
                 case ID_DEPTH_STENCIL:
                     translateRenderTargetViewEntry( mRtv->depthAttachment, prop, compiler, false );
