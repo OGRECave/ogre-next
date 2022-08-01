@@ -106,8 +106,8 @@ namespace Ogre
         //   abs( center.y - center2.y ) <= halfSize.y + halfSize2.y &&
         //   abs( center.z - center2.z ) <= halfSize.z + halfSize2.z )
         //TODO: Profile whether '&&' or '&' is faster. Probably varies per architecture.
-        return ( Math::Abs( dist.x ) <= sumHalfSizes.x ) &
-                ( Math::Abs( dist.y ) <= sumHalfSizes.y ) &
+        return ( Math::Abs( dist.x ) <= sumHalfSizes.x ) &&
+                ( Math::Abs( dist.y ) <= sumHalfSizes.y ) &&
                 ( Math::Abs( dist.z ) <= sumHalfSizes.z );
     }
     //-----------------------------------------------------------------------------------
@@ -127,8 +127,8 @@ namespace Ogre
         // nan instead and return false, when it should return true)
 
         //TODO: Profile whether '&&' or '&' is faster. Probably varies per architecture.
-        return ( Math::Abs( dist.x ) + other.mHalfSize.x <= mHalfSize.x ) &
-                ( Math::Abs( dist.y ) + other.mHalfSize.y <= mHalfSize.y ) &
+        return ( Math::Abs( dist.x ) + other.mHalfSize.x <= mHalfSize.x ) &&
+                ( Math::Abs( dist.y ) + other.mHalfSize.y <= mHalfSize.y ) &&
                 ( Math::Abs( dist.z ) + other.mHalfSize.z <= mHalfSize.z );
     }
     //-----------------------------------------------------------------------------------
@@ -139,8 +139,8 @@ namespace Ogre
         // ( abs( dist.x ) <= mHalfSize.x &&
         //   abs( dist.y ) <= mHalfSize.y &&
         //   abs( dist.z ) <= mHalfSize.z )
-        return ( Math::Abs( dist.x ) <= mHalfSize.x ) &
-                ( Math::Abs( dist.y ) <= mHalfSize.y ) &
+        return ( Math::Abs( dist.x ) <= mHalfSize.x ) &&
+                ( Math::Abs( dist.y ) <= mHalfSize.y ) &&
                 ( Math::Abs( dist.z ) <= mHalfSize.z );
     }
     //-----------------------------------------------------------------------------------

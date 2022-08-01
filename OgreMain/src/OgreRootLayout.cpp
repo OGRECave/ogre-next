@@ -205,7 +205,7 @@ namespace Ogre
                     }
                 }
 
-                const bool texTypesInUse = mDescBindingRanges[i][DescBindingTypes::TexBuffer].isInUse() |
+                const bool texTypesInUse = mDescBindingRanges[i][DescBindingTypes::TexBuffer].isInUse() ||
                                            mDescBindingRanges[i][DescBindingTypes::Texture].isInUse();
                 if( texTypesInUse )
                 {
@@ -238,7 +238,7 @@ namespace Ogre
                     }
                 }
 
-                const bool uavTypesInUse = mDescBindingRanges[i][DescBindingTypes::UavBuffer].isInUse() |
+                const bool uavTypesInUse = mDescBindingRanges[i][DescBindingTypes::UavBuffer].isInUse() ||
                                            mDescBindingRanges[i][DescBindingTypes::UavTexture].isInUse();
                 if( uavTypesInUse )
                 {
