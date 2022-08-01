@@ -992,22 +992,6 @@ namespace Ogre
     {
         const ShadowTextureDefinition &shadowMapDef =
             mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
-
-        float fAutoConstantBiasScale = 1.0f;
-        if( shadowMapDef.autoNormalOffsetBiasScale != 0.0f )
-        {
-            Light const *light = mShadowMapCastingLights[shadowMapDef.light].light;
-            OGRE_ASSERT_HIGH( light && "Can't call this function if isShadowMapIdxActive is false!" );
-
-            const Camera *texCamera = mShadowMapCameras[shadowMapIdx].camera;
-            if( texCamera->getProjectionType() == PT_ORTHOGRAPHIC )
-            {
-                const Real orthoSize =
-                    std::max( texCamera->getOrthoWindowWidth(), texCamera->getOrthoWindowHeight() );
-                float autoFactor = orthoSize / light->getShadowFarDistance();
-                fAutoConstantBiasScale = 1.0f + autoFactor * shadowMapDef.autoNormalOffsetBiasScale;
-            }
-        }
         return shadowMapDef.normalOffsetBias;
     }
     //-----------------------------------------------------------------------------------
