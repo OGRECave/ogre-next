@@ -152,7 +152,7 @@ namespace Ogre
 
         /** Listeners should return the number of extra bytes they wish to allocate for storing
             additional data in the pass buffer.
-        
+
             The actual data will be provided by a preparePassBuffer() override.
         @return
             Number of bytes of additional pass buffer data to allocate.  Must be a multiple of 16.
