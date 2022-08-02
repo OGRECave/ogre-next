@@ -359,9 +359,9 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_unlit_property.html#a6729120f02da69965d3dac23237f2f6c",
 "struct_ogre_1_1_vector_set.html#a60eb6558693ab2020fba03c8ea5038c5",
 "struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89",
-"struct_ogre_1_1_vulkan_device.html#ab4c87165ec889ff2051fbc33ba364043",
-"struct_ogre_1_1float4.html#a455f96a54be42ed640cfbd6fe873f197",
-"struct_ogre_1_1v1_1_1_vertex_data_1_1_hardware_animation_data.html"
+"struct_ogre_1_1_vulkan_device.html#ab3d60c37eccfa0bf7963344e3ef8e5db",
+"struct_ogre_1_1float4.html#a342fc304f58a4a2b379c3a91dc0ae04d",
+"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#adcdaf180a49362ed22c542d5d7a3457e"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
