@@ -11,7 +11,7 @@
 # Overlay optional component
 ############################################################
 
-PROJECT(OgreOverlay)
+PROJECT(${OGRE_NEXT}Overlay)
 
 # define header and source files for the library
 file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -29,16 +29,16 @@ ogre_add_component_include_dir(Hlms/Unlit)
 ogre_add_component_include_dir(Hlms/Common)
 
 # setup target
-ogre_add_library(OgreOverlay ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
-set_target_properties(OgreOverlay PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
-target_link_libraries(OgreOverlay OgreMain ${FREETYPE_LIBRARIES} OgreHlmsUnlit )
+ogre_add_library(${OGRE_NEXT}Overlay ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
+set_target_properties(${OGRE_NEXT}Overlay PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
+target_link_libraries(${OGRE_NEXT}Overlay ${OGRE_NEXT}Main ${FREETYPE_LIBRARIES} ${OGRE_NEXT}HlmsUnlit )
 if (OGRE_CONFIG_THREADS)
-  target_link_libraries(OgreOverlay ${OGRE_THREAD_LIBRARIES})
+  target_link_libraries(${OGRE_NEXT}Overlay ${OGRE_THREAD_LIBRARIES})
 endif ()
 
 # install 
-ogre_config_framework(OgreOverlay)
-ogre_config_component(OgreOverlay)
+ogre_config_framework(${OGRE_NEXT}Overlay)
+ogre_config_component(${OGRE_NEXT}Overlay)
 
 install(FILES ${HEADER_FILES}
   DESTINATION include/OGRE/Overlay

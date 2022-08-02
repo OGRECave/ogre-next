@@ -104,7 +104,7 @@ else()
 	  ${OGRE_LIB_TYPE} ${HEADER_FILES} ${GLSL_SOURCE} ${PLATFORM_HEADERS}
 	  ${PLATFORM_SOURCES} ${SOURCE_FILES})
 endif()
-target_link_libraries(RenderSystem_GL3Plus OgreMain ${OPENGL_LIBRARIES} ${PLATFORM_LIBS})
+target_link_libraries(RenderSystem_GL3Plus ${OGRE_NEXT}Main ${OPENGL_LIBRARIES} ${PLATFORM_LIBS})
 
 if (NOT OGRE_STATIC)
   set_target_properties(RenderSystem_GL3Plus PROPERTIES
