@@ -79,7 +79,7 @@ namespace Ogre
 
         // mDeviceExtraFeatures gets initialized later, once we analyzed all the extensions
         memset( &mDeviceExtraFeatures, 0, sizeof( mDeviceExtraFeatures ) );
-        vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );
+        fillDeviceFeatures();
 
         mSupportedStages = 0xFFFFFFFF;
         if( !mDeviceFeatures.geometryShader )
@@ -209,6 +209,74 @@ namespace Ogre
             mDevice = 0;
             mPhysicalDevice = 0;
         }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::fillDeviceFeatures()
+    {
+#define VK_DEVICEFEATURE_ENABLE_IF( x ) \
+    if( features.x ) \
+    mDeviceFeatures.x = features.x
+
+        VkPhysicalDeviceFeatures features;
+        vkGetPhysicalDeviceFeatures( mPhysicalDevice, &features );
+
+        // Don't opt in to features we don't want / need.
+        memset( &mDeviceFeatures, 0, sizeof( mDeviceFeatures ) );
+        // VK_DEVICEFEATURE_ENABLE_IF( robustBufferAccess );
+        VK_DEVICEFEATURE_ENABLE_IF( fullDrawIndexUint32 );
+        VK_DEVICEFEATURE_ENABLE_IF( imageCubeArray );
+        VK_DEVICEFEATURE_ENABLE_IF( independentBlend );
+        VK_DEVICEFEATURE_ENABLE_IF( geometryShader );
+        VK_DEVICEFEATURE_ENABLE_IF( tessellationShader );
+        VK_DEVICEFEATURE_ENABLE_IF( sampleRateShading );
+        VK_DEVICEFEATURE_ENABLE_IF( dualSrcBlend );
+        // VK_DEVICEFEATURE_ENABLE_IF( logicOp );
+        VK_DEVICEFEATURE_ENABLE_IF( multiDrawIndirect );
+        VK_DEVICEFEATURE_ENABLE_IF( drawIndirectFirstInstance );
+        VK_DEVICEFEATURE_ENABLE_IF( depthClamp );
+        VK_DEVICEFEATURE_ENABLE_IF( depthBiasClamp );
+        VK_DEVICEFEATURE_ENABLE_IF( fillModeNonSolid );
+        VK_DEVICEFEATURE_ENABLE_IF( depthBounds );
+        // VK_DEVICEFEATURE_ENABLE_IF( wideLines );
+        // VK_DEVICEFEATURE_ENABLE_IF( largePoints );
+        VK_DEVICEFEATURE_ENABLE_IF( alphaToOne );
+        VK_DEVICEFEATURE_ENABLE_IF( multiViewport );
+        VK_DEVICEFEATURE_ENABLE_IF( samplerAnisotropy );
+        VK_DEVICEFEATURE_ENABLE_IF( textureCompressionETC2 );
+        VK_DEVICEFEATURE_ENABLE_IF( textureCompressionASTC_LDR );
+        VK_DEVICEFEATURE_ENABLE_IF( textureCompressionBC );
+        // VK_DEVICEFEATURE_ENABLE_IF( occlusionQueryPrecise );
+        // VK_DEVICEFEATURE_ENABLE_IF( pipelineStatisticsQuery );
+        VK_DEVICEFEATURE_ENABLE_IF( vertexPipelineStoresAndAtomics );
+        VK_DEVICEFEATURE_ENABLE_IF( fragmentStoresAndAtomics );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderTessellationAndGeometryPointSize );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderImageGatherExtended );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderStorageImageExtendedFormats );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderStorageImageMultisample );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderStorageImageReadWithoutFormat );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderStorageImageWriteWithoutFormat );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderUniformBufferArrayDynamicIndexing );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderSampledImageArrayDynamicIndexing );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderStorageBufferArrayDynamicIndexing );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderStorageImageArrayDynamicIndexing );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderClipDistance );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderCullDistance );
+        // VK_DEVICEFEATURE_ENABLE_IF( shaderFloat64 );
+        // VK_DEVICEFEATURE_ENABLE_IF( shaderInt64 );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderInt16 );
+        // VK_DEVICEFEATURE_ENABLE_IF( shaderResourceResidency );
+        VK_DEVICEFEATURE_ENABLE_IF( shaderResourceMinLod );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseBinding );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseResidencyBuffer );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseResidencyImage2D );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseResidencyImage3D );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseResidency2Samples );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseResidency4Samples );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseResidency8Samples );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseResidency16Samples );
+        // VK_DEVICEFEATURE_ENABLE_IF( sparseResidencyAliased );
+        VK_DEVICEFEATURE_ENABLE_IF( variableMultisampleRate );
+        // VK_DEVICEFEATURE_ENABLE_IF( inheritedQueries );
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::destroyQueues( FastArray<VulkanQueue> &queueArray )
@@ -355,7 +423,7 @@ namespace Ogre
 
         // mDeviceExtraFeatures gets initialized later, once we analyzed all the extensions
         memset( &mDeviceExtraFeatures, 0, sizeof( mDeviceExtraFeatures ) );
-        vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );
+        fillDeviceFeatures();
 
         mSupportedStages = 0xFFFFFFFF;
         if( !mDeviceFeatures.geometryShader )
@@ -536,6 +604,7 @@ namespace Ogre
             createInfo.pNext = &deviceFeatures2;
 
             GetPhysicalDeviceFeatures2KHR( mPhysicalDevice, &deviceFeatures2 );
+            deviceFeatures2.features = mDeviceFeatures;
 
             mDeviceExtraFeatures.storageInputOutput16 = _16BitStorageFeatures.storageInputOutput16;
             mDeviceExtraFeatures.shaderFloat16 = shaderFloat16Int8Features.shaderFloat16;

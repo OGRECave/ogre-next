@@ -292,7 +292,7 @@ if (UNIX)
     install(FILES ${OGRE_BINARY_DIR}/pkgconfig/OGRE-Volume.pc DESTINATION ${OGRE_LIB_DIRECTORY}/pkgconfig)
   endif ()
 
-  if (OGRE_BUILD_COMPONENT_HLMS)
+  if (OGRE_BUILD_COMPONENT_HLMS_PBS AND OGRE_BUILD_COMPONENT_HLMS_UNLIT)
     configure_file(${OGRE_TEMPLATES_DIR}/OGRE-Hlms.pc.in ${OGRE_BINARY_DIR}/pkgconfig/OGRE-Hlms.pc @ONLY)
     install(FILES ${OGRE_BINARY_DIR}/pkgconfig/OGRE-Hlms.pc DESTINATION ${OGRE_LIB_DIRECTORY}/pkgconfig)
   endif ()
