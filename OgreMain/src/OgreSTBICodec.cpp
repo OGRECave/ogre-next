@@ -155,7 +155,7 @@ namespace Ogre
                                                                     1u, 1u, 1u,          //
                                                                     imgData->format,     //
                                                                     rowAlignment ) );
-        imgData->box.bytesPerImage = imgData->box.bytesPerRow * imgData->box.height;
+        imgData->box.bytesPerImage = size_t(imgData->box.bytesPerRow) * size_t(imgData->box.height);
 
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 

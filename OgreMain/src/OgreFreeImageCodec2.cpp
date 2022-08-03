@@ -605,7 +605,7 @@ namespace Ogre
         imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat );
         imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes(
             imgData->box.width, 1u, 1u, 1u, supportedFormat, rowAlignment );
-        imgData->box.bytesPerImage = imgData->box.bytesPerRow * imgData->box.height;
+        imgData->box.bytesPerImage = size_t(imgData->box.bytesPerRow) * size_t(imgData->box.height);
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 
         // Convert data inverting scanlines
