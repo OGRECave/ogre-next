@@ -103,13 +103,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a516750b25e741d5260ed81d98e0521b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">If hlmsTypeChanged is going to be binding extra textures, override this function to tell us how many textures you will use, so that we don't use those slots.  <a href="class_ogre_1_1_hlms_listener.html#a516750b25e741d5260ed81d98e0521b9">More...</a><br /></td></tr>
 <tr class="separator:a516750b25e741d5260ed81d98e0521b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6908edd7c16efc1ef1638a6a1e08bd9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9">getPassBufferSize</a> (const <a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *shadowNode, bool casterPass, bool dualParaboloid, <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager) const</td></tr>
-<tr class="memdesc:ad6908edd7c16efc1ef1638a6a1e08bd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listeners should return the extra bytes they wish to allocate for storing additional data in the pass buffer.  <a href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9">More...</a><br /></td></tr>
+<tr class="memdesc:ad6908edd7c16efc1ef1638a6a1e08bd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listeners should return the number of extra bytes they wish to allocate for storing additional data in the pass buffer.  <a href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9">More...</a><br /></td></tr>
 <tr class="separator:ad6908edd7c16efc1ef1638a6a1e08bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10609ad741f2c3de7ce3715738cd0bea"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#a10609ad741f2c3de7ce3715738cd0bea">hlmsTypeChanged</a> (bool casterPass, <a class="el" href="class_ogre_1_1_command_buffer.html">CommandBuffer</a> *commandBuffer, const <a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *datablock, size_t texUnit)</td></tr>
 <tr class="memdesc:a10609ad741f2c3de7ce3715738cd0bea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the last <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> processed was of a different <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> type, thus we need to rebind certain buffers (like the pass buffer).  <a href="class_ogre_1_1_hlms_listener.html#a10609ad741f2c3de7ce3715738cd0bea">More...</a><br /></td></tr>
 <tr class="separator:a10609ad741f2c3de7ce3715738cd0bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a857166e748d47c14a6ffbb67a6126468"><td class="memItemLeft" align="right" valign="top">virtual float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#a857166e748d47c14a6ffbb67a6126468">preparePassBuffer</a> (const <a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *shadowNode, bool casterPass, bool dualParaboloid, <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager, float *passBufferPtr)</td></tr>
-<tr class="memdesc:a857166e748d47c14a6ffbb67a6126468"><td class="mdescLeft">&#160;</td><td class="mdescRight">Users can write to passBufferPtr.  <a href="class_ogre_1_1_hlms_listener.html#a857166e748d47c14a6ffbb67a6126468">More...</a><br /></td></tr>
+<tr class="memdesc:a857166e748d47c14a6ffbb67a6126468"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write additional data in the pass buffer.  <a href="class_ogre_1_1_hlms_listener.html#a857166e748d47c14a6ffbb67a6126468">More...</a><br /></td></tr>
 <tr class="separator:a857166e748d47c14a6ffbb67a6126468"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0cc9cdfb4cc2eca0e06ba13a467c7e5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#ab0cc9cdfb4cc2eca0e06ba13a467c7e5">preparePassHash</a> (const <a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *shadowNode, bool casterPass, bool dualParaboloid, <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager, <a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms)</td></tr>
 <tr class="memdesc:ab0cc9cdfb4cc2eca0e06ba13a467c7e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called right before creating the pass cache, to allow the listener to add/remove properties.  <a href="class_ogre_1_1_hlms_listener.html#ab0cc9cdfb4cc2eca0e06ba13a467c7e5">More...</a><br /></td></tr>
@@ -213,8 +213,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Listeners should return the extra bytes they wish to allocate for storing additional data in the pass buffer. </p>
-<p >Return value must be in bytes. </p>
+<p>Listeners should return the number of extra bytes they wish to allocate for storing additional data in the pass buffer. </p>
+<p >The actual data will be provided by a <a class="el" href="class_ogre_1_1_hlms_listener.html#a857166e748d47c14a6ffbb67a6126468" title="Write additional data in the pass buffer.">preparePassBuffer()</a> override. </p><dl class="section return"><dt>Returns</dt><dd>Number of bytes of additional pass buffer data to allocate. Must be a multiple of 16. </dd></dl>
 
 </div>
 </div>
@@ -321,8 +321,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Users can write to passBufferPtr. </p>
-<p >Implementations must ensure they make the buffer big enough via getPassBufferSize. The passBufferPtr is already aligned to 16 bytes. Implementations must return the pointer past the end, aligned to 16 bytes. </p>
+<p>Write additional data in the pass buffer. </p>
+<p >Users can write to passBufferPtr. Implementations must ensure they make the buffer big enough via <a class="el" href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9" title="Listeners should return the number of extra bytes they wish to allocate for storing additional data i...">getPassBufferSize()</a>. The passBufferPtr is already aligned to 16 bytes. </p><dl class="section return"><dt>Returns</dt><dd>Pointer past the end of added data, aligned to 16 bytes. The difference between the result pointer and the input passBufferPtr must equal the value that you returned from <a class="el" href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9" title="Listeners should return the number of extra bytes they wish to allocate for storing additional data i...">getPassBufferSize()</a>. </dd></dl>
 
 </div>
 </div>
