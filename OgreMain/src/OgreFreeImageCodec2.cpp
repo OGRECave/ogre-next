@@ -361,8 +361,8 @@ namespace Ogre
         // Check BPP
         uint32 bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) << 3u;
         if( bpp == 32 && imageType == FIT_BITMAP &&
-            (!FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp )
-             || mFreeImageType == FIF_JPEG /* in FreeImage 3.18.0 it support 32bpp, but only for FIC_CMYK */) &&
+            ( !FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp )
+            || mFreeImageType == FIF_JPEG /* in FreeImage 3.18.0 it support 32bpp, but only for FIC_CMYK */ ) &&
             FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, 24 ) )
         {
             // drop to 24 bit (lose alpha)
@@ -606,7 +606,7 @@ namespace Ogre
         imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat );
         imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes(
             imgData->box.width, 1u, 1u, 1u, supportedFormat, rowAlignment );
-        imgData->box.bytesPerImage = size_t(imgData->box.bytesPerRow) * size_t(imgData->box.height);
+        imgData->box.bytesPerImage = size_t( imgData->box.bytesPerRow ) * size_t( imgData->box.height );
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 
         // Convert data inverting scanlines
