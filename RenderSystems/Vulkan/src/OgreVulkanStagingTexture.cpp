@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreVulkanStagingTexture.h"
 
 #include "OgreVulkanDevice.h"
+#include "OgreVulkanMappings.h"
 #include "OgreVulkanTextureGpu.h"
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreVulkanDynamicBuffer.h"
@@ -169,7 +170,8 @@ namespace Ogre
         }
         region.bufferImageHeight = 0;
 
-        region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.imageSubresource.aspectMask =
+            VulkanMappings::getImageAspect( dstTexture->getPixelFormat() );
         region.imageSubresource.mipLevel = mipLevel;
         region.imageSubresource.baseArrayLayer = destinationSlice;
         region.imageSubresource.layerCount = numSlices;
