@@ -361,8 +361,9 @@ namespace Ogre
         // Check BPP
         uint32 bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) << 3u;
         if( bpp == 32 && imageType == FIT_BITMAP &&
-            ( !FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp )
-            || mFreeImageType == FIF_JPEG /* in FreeImage 3.18.0 it support 32bpp, but only for FIC_CMYK */ ) &&
+            ( !FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp ) ||
+              mFreeImageType ==
+                  FIF_JPEG /* in FreeImage 3.18.0 it support 32bpp, but only for FIC_CMYK */ ) &&
             FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, 24 ) )
         {
             // drop to 24 bit (lose alpha)
