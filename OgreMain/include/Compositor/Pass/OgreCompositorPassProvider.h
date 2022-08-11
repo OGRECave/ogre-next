@@ -76,6 +76,8 @@ namespace Ogre
     class _OgreExport CompositorPassProvider : public OgreAllocatedObj
     {
     public:
+        virtual ~CompositorPassProvider();
+
         /** Called from CompositorTargetDef::addPass when adding a Compositor Pass of type 'custom'
         @param passType
         @param customId
@@ -105,6 +107,25 @@ namespace Ogre
         @param customPassDef    The CompositorPassDef returned in CompositorPassProvider::addPassDef
 
         */
+        virtual void translateCustomPass( ScriptCompiler *compiler, const AbstractNodePtr &node,
+                                          IdString customId, CompositorPassDef *customPassDef )
+        {
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( push, 0 )
+#else
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+            translateCustomPass( node, customPassDef );
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#else
+#    pragma GCC diagnostic pop
+#endif
+        }
+
+        /// @deprecated Use the other overload which has access to a lot more information
+        OGRE_DEPRECATED_VER( 3 )
         virtual void translateCustomPass( const AbstractNodePtr &node, CompositorPassDef *customPassDef )
         {
         }

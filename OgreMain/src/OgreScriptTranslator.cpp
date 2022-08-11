@@ -11111,7 +11111,7 @@ namespace Ogre{
             CompositorPassProvider* passProv = compMgr->getCompositorPassProvider();
             if (passProv)
             {
-                passProv->translateCustomPass(node, mPassDef);
+                passProv->translateCustomPass( compiler, node, customId, mPassDef );
             }
         }
         else

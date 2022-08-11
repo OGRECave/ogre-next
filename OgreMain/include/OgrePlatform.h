@@ -217,19 +217,25 @@ THE SOFTWARE.
 #define OGRE_WARN( x ) message( __FILE__ "(" QUOTE( __LINE__ ) ") : " x "\n" )
 
 // For marking functions as deprecated
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    define OGRE_DEPRECATED __declspec( deprecated )
-#    define OGRE_DEPRECATED_VER( x ) __declspec( deprecated )
-#    define OGRE_DEPRECATED_ENUM_VER( x )
-#elif OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
-#    define OGRE_DEPRECATED __attribute__( ( deprecated ) )
-#    define OGRE_DEPRECATED_VER( x ) __attribute__( ( deprecated ) )
-#    define OGRE_DEPRECATED_ENUM_VER( x ) __attribute__( ( deprecated ) )
+#if __cplusplus >= 201402L
+#    define OGRE_DEPRECATED [[deprecated]]
+#    define OGRE_DEPRECATED_VER( x ) [[deprecated]]
+#    define OGRE_DEPRECATED_ENUM_VER( x ) [[deprecated]]
 #else
-#    pragma message( "WARNING: You need to implement OGRE_DEPRECATED for this compiler" )
-#    define OGRE_DEPRECATED
-#    define OGRE_DEPRECATED_VER( x )
-#    define OGRE_DEPRECATED_ENUM_VER( x )
+#    if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#        define OGRE_DEPRECATED __declspec( deprecated )
+#        define OGRE_DEPRECATED_VER( x ) __declspec( deprecated )
+#        define OGRE_DEPRECATED_ENUM_VER( x )
+#    elif OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
+#        define OGRE_DEPRECATED __attribute__( ( deprecated ) )
+#        define OGRE_DEPRECATED_VER( x ) __attribute__( ( deprecated ) )
+#        define OGRE_DEPRECATED_ENUM_VER( x ) __attribute__( ( deprecated ) )
+#    else
+#        pragma message( "WARNING: You need to implement OGRE_DEPRECATED for this compiler" )
+#        define OGRE_DEPRECATED
+#        define OGRE_DEPRECATED_VER( x )
+#        define OGRE_DEPRECATED_ENUM_VER( x )
+#    endif
 #endif
 // Disable OGRE_WCHAR_T_STRINGS until we figure out what to do about it.
 #define OGRE_WCHAR_T_STRINGS 0
