@@ -1,5 +1,6 @@
 var class_ogre_1_1_compositor_pass_provider =
 [
+    [ "~CompositorPassProvider", "class_ogre_1_1_compositor_pass_provider.html#a220d2b75a54f39299aeb359f56810e58", null ],
     [ "addPass", "class_ogre_1_1_compositor_pass_provider.html#adb4a50957a720e8292cd0eaba116273b", null ],
     [ "addPassDef", "class_ogre_1_1_compositor_pass_provider.html#abcb0e0006a30c29f4df718365b97d6b9", null ],
     [ "operator delete", "class_ogre_1_1_compositor_pass_provider.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
@@ -12,5 +13,6 @@ var class_ogre_1_1_compositor_pass_provider =
     [ "operator new", "class_ogre_1_1_compositor_pass_provider.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
     [ "operator new[]", "class_ogre_1_1_compositor_pass_provider.html#adce32528577d71b228692df906ecd17c", null ],
     [ "operator new[]", "class_ogre_1_1_compositor_pass_provider.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ],
-    [ "translateCustomPass", "class_ogre_1_1_compositor_pass_provider.html#a3faf3c61e46b3ca1d8dd9e40396c82df", null ]
+    [ "translateCustomPass", "class_ogre_1_1_compositor_pass_provider.html#a3faf3c61e46b3ca1d8dd9e40396c82df", null ],
+    [ "translateCustomPass", "class_ogre_1_1_compositor_pass_provider.html#ad4cb882930b2338c0637f5bb4747777c", null ]
 ];

@@ -107,6 +107,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_compositor_pass_provide
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a220d2b75a54f39299aeb359f56810e58"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_provider.html#a220d2b75a54f39299aeb359f56810e58">~CompositorPassProvider</a> ()</td></tr>
+<tr class="separator:a220d2b75a54f39299aeb359f56810e58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb4a50957a720e8292cd0eaba116273b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_compositor_pass.html">CompositorPass</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_provider.html#adb4a50957a720e8292cd0eaba116273b">addPass</a> (const <a class="el" href="class_ogre_1_1_compositor_pass_def.html">CompositorPassDef</a> *definition, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *defaultCamera, <a class="el" href="class_ogre_1_1_compositor_node.html">CompositorNode</a> *parentNode, const <a class="el" href="struct_ogre_1_1_render_target_view_def.html">RenderTargetViewDef</a> *rtvDef, <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager)=0</td></tr>
 <tr class="memdesc:adb4a50957a720e8292cd0eaba116273b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes.">CompositorPass</a> from a <a class="el" href="class_ogre_1_1_compositor_pass_def.html" title="Interface to abstract all types of pass definitions (see CompositorPassType):">CompositorPassDef</a> for Compositor <a class="el" href="class_ogre_1_1_pass.html" title="Class defining a single pass of a Technique (of a Material), i.e.">Pass</a> of type 'custom'.  <a href="class_ogre_1_1_compositor_pass_provider.html#adb4a50957a720e8292cd0eaba116273b">More...</a><br /></td></tr>
 <tr class="separator:adb4a50957a720e8292cd0eaba116273b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,8 +139,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">More...</a><br /></td></tr>
 <tr class="separator:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3faf3c61e46b3ca1d8dd9e40396c82df"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_provider.html#a3faf3c61e46b3ca1d8dd9e40396c82df">translateCustomPass</a> (const <a class="el" href="group___general.html#ga15cfb375beeafed87e1bdd96ef10ff36">AbstractNodePtr</a> &amp;node, <a class="el" href="class_ogre_1_1_compositor_pass_def.html">CompositorPassDef</a> *customPassDef)</td></tr>
-<tr class="memdesc:a3faf3c61e46b3ca1d8dd9e40396c82df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional override which allows users to define custom properties in the compositor scripts for custom passes.  <a href="class_ogre_1_1_compositor_pass_provider.html#a3faf3c61e46b3ca1d8dd9e40396c82df">More...</a><br /></td></tr>
 <tr class="separator:a3faf3c61e46b3ca1d8dd9e40396c82df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4cb882930b2338c0637f5bb4747777c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_provider.html#ad4cb882930b2338c0637f5bb4747777c">translateCustomPass</a> (<a class="el" href="class_ogre_1_1_script_compiler.html">ScriptCompiler</a> *compiler, const <a class="el" href="group___general.html#ga15cfb375beeafed87e1bdd96ef10ff36">AbstractNodePtr</a> &amp;node, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> customId, <a class="el" href="class_ogre_1_1_compositor_pass_def.html">CompositorPassDef</a> *customPassDef)</td></tr>
+<tr class="memdesc:ad4cb882930b2338c0637f5bb4747777c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional override which allows users to define custom properties in the compositor scripts for custom passes.  <a href="class_ogre_1_1_compositor_pass_provider.html#ad4cb882930b2338c0637f5bb4747777c">More...</a><br /></td></tr>
+<tr class="separator:ad4cb882930b2338c0637f5bb4747777c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Base class that users can derive from in order to implement custom passes for the compositor. </p>
@@ -161,7 +165,33 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="class_ogre_1_1_compositor_pass_clear.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters...">CompositorPassClear</a> and </dd>
 <dd>
 <a class="el" href="class_ogre_1_1_compositor_pass_clear_def.html">CompositorPassClearDef</a> for examples on how to implement your own pass. For example, you could literally copy the code from <a class="el" href="class_ogre_1_1_compositor_pass_clear.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters...">CompositorPassClear</a> &amp; <a class="el" href="class_ogre_1_1_compositor_pass_clear_def.html">CompositorPassClearDef</a> and implement your own custom pass that clears the render target. </dd></dl>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a220d2b75a54f39299aeb359f56810e58" name="a220d2b75a54f39299aeb359f56810e58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a220d2b75a54f39299aeb359f56810e58">&#9670;&nbsp;</a></span>~CompositorPassProvider()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Ogre::CompositorPassProvider::~CompositorPassProvider </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="adb4a50957a720e8292cd0eaba116273b" name="adb4a50957a720e8292cd0eaba116273b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adb4a50957a720e8292cd0eaba116273b">&#9670;&nbsp;</a></span>addPass()</h2>
 
@@ -674,7 +704,7 @@ template&lt;class Alloc &gt; </div>
 </div>
 </div>
 <a id="a3faf3c61e46b3ca1d8dd9e40396c82df" name="a3faf3c61e46b3ca1d8dd9e40396c82df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3faf3c61e46b3ca1d8dd9e40396c82df">&#9670;&nbsp;</a></span>translateCustomPass()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3faf3c61e46b3ca1d8dd9e40396c82df">&#9670;&nbsp;</a></span>translateCustomPass() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -687,6 +717,55 @@ template&lt;class Alloc &gt; </div>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="group___general.html#ga15cfb375beeafed87e1bdd96ef10ff36">AbstractNodePtr</a> &amp;&#160;</td>
           <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_pass_def.html">CompositorPassDef</a> *&#160;</td>
+          <td class="paramname"><em>customPassDef</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd>Use the other overload which has access to a lot more information </dd></dl>
+
+</div>
+</div>
+<a id="ad4cb882930b2338c0637f5bb4747777c" name="ad4cb882930b2338c0637f5bb4747777c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4cb882930b2338c0637f5bb4747777c">&#9670;&nbsp;</a></span>translateCustomPass() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::CompositorPassProvider::translateCustomPass </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_script_compiler.html">ScriptCompiler</a> *&#160;</td>
+          <td class="paramname"><em>compiler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group___general.html#ga15cfb375beeafed87e1bdd96ef10ff36">AbstractNodePtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
+          <td class="paramname"><em>customId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

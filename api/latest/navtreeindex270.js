@@ -1,5 +1,9 @@
 var NAVTREEINDEX270 =
 {
+"struct_ogre_1_1_vulkan_device.html#a9a5164e2fdbec15196ad2809148e00ff":[6,0,0,980,29],
+"struct_ogre_1_1_vulkan_device.html#a9fbbb869e1ee3059a20fd44e46b8688a":[6,0,0,980,15],
+"struct_ogre_1_1_vulkan_device.html#a9fbbb869e1ee3059a20fd44e46b8688a":[7,0,0,953,15],
+"struct_ogre_1_1_vulkan_device.html#ab3d60c37eccfa0bf7963344e3ef8e5db":[6,0,0,980,13],
 "struct_ogre_1_1_vulkan_device.html#ab3d60c37eccfa0bf7963344e3ef8e5db":[7,0,0,953,13],
 "struct_ogre_1_1_vulkan_device.html#ab4c87165ec889ff2051fbc33ba364043":[6,0,0,980,19],
 "struct_ogre_1_1_vulkan_device.html#ab4c87165ec889ff2051fbc33ba364043":[7,0,0,953,19],
@@ -245,9 +249,5 @@ var NAVTREEINDEX270 =
 "struct_ogre_1_1float2.html#acc1f836dc566a17404141826fa187759":[7,0,0,293,1],
 "struct_ogre_1_1float2.html#adc33b0e8a1fdd1551c0de5cd3f6576f4":[7,0,0,293,3],
 "struct_ogre_1_1float2.html#adc33b0e8a1fdd1551c0de5cd3f6576f4":[6,0,0,320,3],
-"struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[7,0,0,293,0],
-"struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[6,0,0,320,0],
-"struct_ogre_1_1float4.html":[6,0,0,321],
-"struct_ogre_1_1float4.html":[7,0,0,294],
-"struct_ogre_1_1float4.html#a342fc304f58a4a2b379c3a91dc0ae04d":[7,0,0,294,1]
+"struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[7,0,0,293,0]
 };
