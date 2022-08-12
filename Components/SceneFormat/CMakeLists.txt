@@ -34,5 +34,5 @@ ogre_config_framework(${OGRE_NEXT}SceneFormat)
 ogre_config_component(${OGRE_NEXT}SceneFormat)
 
 install(FILES ${HEADER_FILES}
-  DESTINATION include/OGRE/SceneFormat
+  DESTINATION include/${OGRE_NEXT_PREFIX}/SceneFormat
 )
