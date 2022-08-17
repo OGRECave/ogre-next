@@ -27,5 +27,5 @@ endif ()
 ogre_config_framework(Plugin_ParticleFX)
 
 ogre_config_plugin(Plugin_ParticleFX)
-install(FILES ${HEADER_FILES} DESTINATION include/OGRE/Plugins/ParticleFX)
+install(FILES ${HEADER_FILES} DESTINATION include/${OGRE_NEXT_PREFIX}/Plugins/ParticleFX)
 

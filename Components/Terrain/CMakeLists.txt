@@ -60,6 +60,6 @@ ogre_config_framework(OgreTerrain)
 ogre_config_component(OgreTerrain)
 
 install(FILES ${HEADER_FILES}
-  DESTINATION include/OGRE/Terrain
+  DESTINATION include/${OGRE_NEXT_PREFIX}/Terrain
 )
 

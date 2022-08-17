@@ -3,9 +3,9 @@ exec_prefix=${prefix}
 libdir=${prefix}/@OGRE_LIB_DIRECTORY@
 includedir=${prefix}/include
 
-Name: OGRE-Terrain
+Name: @OGRE_NEXT_PREFIX@-Terrain
 Description: Outdoor terrain component for OGRE
 Version: @OGRE_VERSION@
-Requires: OGRE = @OGRE_VERSION@ @OGRE_PAGING_ADDITIONAL_PACKAGES@
-Libs: -L${libdir} -lOgreTerrain@OGRE_LIB_SUFFIX@
-Cflags: -I${includedir}/OGRE/Terrain @OGRE_CFLAGS@
+Requires: @OGRE_NEXT_PREFIX@ = @OGRE_VERSION@ @OGRE_PAGING_ADDITIONAL_PACKAGES@
+Libs: -L${libdir} -l@OGRE_NEXT@Terrain@OGRE_LIB_SUFFIX@
+Cflags: -I${includedir}/@OGRE_NEXT_PREFIX@/Terrain @OGRE_CFLAGS@

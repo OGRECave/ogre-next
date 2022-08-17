@@ -47,4 +47,4 @@ if(OGRE_CONFIG_ENABLE_QUAD_BUFFER_STEREO)
 endif()
 
 ogre_config_plugin(RenderSystem_Direct3D9)
-install(FILES ${HEADER_FILES} DESTINATION include/OGRE/RenderSystems/Direct3D9)
+install(FILES ${HEADER_FILES} DESTINATION include/${OGRE_NEXT_PREFIX}/RenderSystems/Direct3D9)

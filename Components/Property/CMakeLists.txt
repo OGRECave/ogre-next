@@ -45,6 +45,6 @@ ogre_config_framework(OgreProperty)
 ogre_config_component(OgreProperty)
 
 install(FILES ${HEADER_FILES}
-  DESTINATION include/OGRE/Property
+  DESTINATION include/${OGRE_NEXT_PREFIX}/Property
 )
 
