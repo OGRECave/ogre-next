@@ -26,6 +26,8 @@ file(
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../Common/include)
 
+add_definitions( -DOgreHlmsUnlit_EXPORTS )
+
 ogre_add_library(${OGRE_NEXT}HlmsUnlit ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
 set_target_properties(${OGRE_NEXT}HlmsUnlit PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
 target_link_libraries(${OGRE_NEXT}HlmsUnlit ${OGRE_NEXT}Main)
