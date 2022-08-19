@@ -48,6 +48,19 @@ if (APPLE AND NOT ANDROID)
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 endif ()
 
+# This option needs to be set now
+# OgreAddTargets and OgreConfigTargets make use of OGRE_NEXT and OGRE_NEXT_PREFIX
+option(OGRE_USE_NEW_PROJECT_NAME
+	"Libraries containing Ogre name will be called OgreNext, e.g. 'OgreNext.dll' instead of 'Ogre.dll'"
+	FALSE)
+
+if( OGRE_USE_NEW_PROJECT_NAME )
+	set( OGRE_NEXT "OgreNext" )
+	set( OGRE_NEXT_PREFIX "OGRE-Next")
+else()
+	set( OGRE_NEXT "Ogre" )
+	set( OGRE_NEXT_PREFIX "OGRE" )
+endif()
 
 project(OGRE-Next)
 # capture ogre location, and at the same time hide legacy cache variables
@@ -281,16 +294,6 @@ if (APPLE AND OGRE_BUILD_RENDERSYSTEM_METAL)
     include_directories("${OGRE_SOURCE_DIR}/RenderSystems/Metal/include/Windowing/OSX")
   endif ()
 endif (APPLE AND OGRE_BUILD_RENDERSYSTEM_METAL)
-
-# This option needs to be set now
-option(OGRE_USE_NEW_PROJECT_NAME
-	"Libraries containing Ogre name will be called OgreNext, e.g. 'OgreNext.dll' instead of 'Ogre.dll'"
-	FALSE)
-if( OGRE_USE_NEW_PROJECT_NAME )
-	set( OGRE_NEXT "OgreNext" )
-else()
-	set( OGRE_NEXT "Ogre" )
-endif()
 
 # Find dependencies
 include(Dependencies)

@@ -41,6 +41,6 @@ ogre_config_framework(${OGRE_NEXT}Overlay)
 ogre_config_component(${OGRE_NEXT}Overlay)
 
 install(FILES ${HEADER_FILES}
-  DESTINATION include/OGRE/Overlay
+  DESTINATION include/${OGRE_NEXT_PREFIX}/Overlay
 )
 

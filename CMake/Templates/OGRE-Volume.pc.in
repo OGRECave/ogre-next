@@ -3,9 +3,9 @@ exec_prefix=${prefix}
 libdir=${prefix}/@OGRE_LIB_DIRECTORY@
 includedir=${prefix}/include
 
-Name: OGRE-Volume
-Description: Voxel based terrain component for OGRE-Next
+Name: @OGRE_NEXT_PREFIX@-Volume
+Description: Voxel based terrain component for @OGRE_NEXT_PREFIX@
 Version: @OGRE_VERSION@
-Requires: OGRE = @OGRE_VERSION@
-Libs: -L${libdir} -lOgreVolume@OGRE_LIB_SUFFIX@
-Cflags: -I${includedir}/OGRE/Volume @OGRE_CFLAGS@
+Requires: @OGRE_NEXT_PREFIX@ = @OGRE_VERSION@
+Libs: -L${libdir} -l@OGRE_NEXT@Volume@OGRE_LIB_SUFFIX@
+Cflags: -I${includedir}/@OGRE_NEXT_PREFIX@/Volume @OGRE_CFLAGS@
