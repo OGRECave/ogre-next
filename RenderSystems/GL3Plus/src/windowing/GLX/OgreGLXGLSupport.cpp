@@ -393,11 +393,12 @@ namespace Ogre
                 Ogre::String::size_type widthEnd = val.find( ' ', widthStart );
 
                 // Ignore space around character 'x' in string " width x height",
-                // Note: while length of string height is 3, there will are two space after character 'x'.
+                // Note: while length of string height is 3, there will are two space after character
+                // 'x'.
                 Ogre::String::size_type heightStart = val.find_first_of( "0123456789", widthEnd );
                 // Now we can parse out the values
                 w = Ogre::StringConverter::parseInt( val.substr( widthStart, widthEnd ) );
-                h = Ogre::StringConverter::parseInt(val.substr( heightStart) );
+                h = Ogre::StringConverter::parseInt( val.substr( heightStart ) );
             }
 
             if( ( opt = mOptions.find( "FSAA" ) ) != end )
