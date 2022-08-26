@@ -21,7 +21,7 @@
 # Building Dependencies {#BuildingDependenciesLinux}
 
 ```sh
-cd Ogre/Dependencies
+cd ogre-next-deps
 mkdir build
 cd build
 cmake ../
@@ -36,7 +36,7 @@ make install```
 We'll create both a Release & Debug configuration that match the ones used in Windows.
 This eases portability and cross platform development.
 ```sh
-cd Ogre
+cd ogre-next
 mkdir build
 cd build
 mkdir Debug
