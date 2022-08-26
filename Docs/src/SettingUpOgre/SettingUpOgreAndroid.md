@@ -48,7 +48,7 @@ cmake \
 make -j9
 make install
 
-cd ../../../
+cd ../../../../
 
 # Download ogre-next
 git clone --branch master https://github.com/OGRECave/ogre-next
