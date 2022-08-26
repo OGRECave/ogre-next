@@ -134,18 +134,19 @@ Building Dependencies</h1>
 </div><!-- fragment --><h1><a class="anchor" id="BuildingOgreLinux"></a>
 Building Ogre</h1>
 <p >We'll create both a Release &amp; Debug configuration that match the ones used in Windows. This eases portability and cross platform development. </p><div class="fragment"><div class="line">cd ogre-next</div>
+<div class="line">ln -s ../ogre-next-deps/build/ogredeps Dependencies</div>
 <div class="line">mkdir build</div>
 <div class="line">cd build</div>
 <div class="line">mkdir Debug</div>
 <div class="line">mkdir Release</div>
 <div class="line"># Build Debug</div>
 <div class="line">cd Debug</div>
-<div class="line">cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogre-next-deps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Debug ../../</div>
+<div class="line">cmake -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Debug ../../</div>
 <div class="line">make</div>
 <div class="line">make install</div>
 <div class="line"># Build Release</div>
 <div class="line">cd ../Release</div>
-<div class="line">cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogre-next-deps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Release ../../</div>
+<div class="line">cmake -D OGRE_BUILD_SAMPLES2=1 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Release ../../</div>
 <div class="line">make</div>
 <div class="line">make install</div>
 </div><!-- fragment --><h1><a class="anchor" id="SettingUpOgreWithQtCreatorLinux"></a>
