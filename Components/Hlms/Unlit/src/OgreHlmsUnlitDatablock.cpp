@@ -279,7 +279,8 @@ namespace Ogre
             texture = textureManager->createOrRetrieveTexture(
                 name, GpuPageOutStrategy::Discard,
                 TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB,
-                TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, TextureFilter::TypeGenerateDefaultMipmaps );
+                TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                TextureFilter::TypeGenerateDefaultMipmaps);
         }
         setTexture( texUnit, texture, refParams );
     }
