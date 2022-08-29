@@ -31,6 +31,7 @@ THE SOFTWARE.
 #if !OGRE_NO_JSON
 
 #    include "OgreHlmsManager.h"
+#    include "OgreTextureFilters.h"
 #    include "OgreLwString.h"
 #    include "OgreStringConverter.h"
 #    include "OgreTextureGpuManager.h"
@@ -115,11 +116,13 @@ namespace Ogre
                 textureName = itor->value[0].GetString();
                 aliasName = itor->value[1].GetString();
             }
+            uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
+
             const uint32 textureFlags =
                 TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB;
             texture = mTextureManager->createOrRetrieveTexture(
                 textureName, aliasName, GpuPageOutStrategy::Discard, textureFlags, TextureTypes::Type2D,
-                resourceGroup );
+                resourceGroup, filters );
         }
 
         itor = json.FindMember( "sampler" );

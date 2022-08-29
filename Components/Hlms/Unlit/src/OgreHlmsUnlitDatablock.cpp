@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreString.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreTextureFilters.h"
 
 #define _OgreHlmsTextureBaseClassExport _OgreHlmsUnlitExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock
@@ -278,7 +279,7 @@ namespace Ogre
             texture = textureManager->createOrRetrieveTexture(
                 name, GpuPageOutStrategy::Discard,
                 TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB,
-                TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, TextureFilter::TypeGenerateDefaultMipmaps );
         }
         setTexture( texUnit, texture, refParams );
     }
