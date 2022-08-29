@@ -31,7 +31,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgrePrerequisites.h"
 
 // Precompiler options
-#include "OgreAny.h"
 #include "OgreIteratorWrappers.h"
 #include "OgreSerializer.h"
 #include "OgreSharedPtr.h"

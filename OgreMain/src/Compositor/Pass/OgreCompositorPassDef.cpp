@@ -205,4 +205,8 @@ namespace Ogre
     uint32 CompositorPassDef::getRtIndex() const { return mParentTargetDef->getRtIndex(); }
     //-----------------------------------------------------------------------------------
     const CompositorTargetDef *CompositorPassDef::getParentTargetDef() const { return mParentTargetDef; }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    CompositorPassProvider::~CompositorPassProvider() {}
 }  // namespace Ogre

@@ -3,9 +3,9 @@ exec_prefix=${prefix}
 libdir=${prefix}/@OGRE_LIB_DIRECTORY@
 includedir=${prefix}/include
 
-Name: OGRE-Property
-Description: General purpose property component for OGRE-Next
+Name: @OGRE_NEXT_PREFIX@-Property
+Description: General purpose property component for @OGRE_NEXT_PREFIX@
 Version: @OGRE_VERSION@
-Requires: OGRE = @OGRE_VERSION@
-Libs: -L${libdir} -lOgreProperty@OGRE_LIB_SUFFIX@
-Cflags: -I${includedir}/OGRE/Property @OGRE_CFLAGS@
+Requires: @OGRE_NEXT_PREFIX@ = @OGRE_VERSION@
+Libs: -L${libdir} -l@OGRE_NEXT@Property@OGRE_LIB_SUFFIX@
+Cflags: -I${includedir}/@OGRE_NEXT_PREFIX@/Property @OGRE_CFLAGS@

@@ -708,7 +708,7 @@ namespace Ogre
             return window->getDepthBuffer();
         }
 
-        if( poolId == DepthBuffer::POOL_NON_SHAREABLE )
+        if( poolId == DepthBuffer::NO_POOL_EXPLICIT_RTV )
         {
             TextureGpu *retVal =
                 createDepthBufferFor( colourTexture, preferDepthTexture, depthBufferFormat, poolId );

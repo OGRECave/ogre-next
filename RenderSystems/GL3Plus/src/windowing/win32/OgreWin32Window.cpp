@@ -668,7 +668,7 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+            mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
                                                mDepthBuffer->getPixelFormat() );
         }
         else
@@ -732,6 +732,11 @@ namespace Ogre
         mClosed = true;
         mHDC = 0;  // no release thanks to CS_OWNDC wndclass style
         mHwnd = 0;
+
+        if( mClassRegistered )
+        {
+            UnregisterClassA( "OgreGLWindow", nullptr );
+        }
 
         if( mDeviceName != NULL )
         {

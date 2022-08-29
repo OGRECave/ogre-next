@@ -36,12 +36,12 @@ ogre_config_framework(${OGRE_NEXT}HlmsUnlit)
 ogre_config_component(${OGRE_NEXT}HlmsUnlit)
 
 install (DIRECTORY include/
-        DESTINATION include/OGRE/Hlms/Unlit
+        DESTINATION include/${OGRE_NEXT_PREFIX}/Hlms/Unlit
         FILES_MATCHING PATTERN "*.h"
         )
 
 # also install HLMS Common folder
 install (DIRECTORY ../Common/include/
-        DESTINATION include/OGRE/Hlms/Common
+        DESTINATION include/${OGRE_NEXT_PREFIX}/Hlms/Common
         FILES_MATCHING PATTERN "*.h" PATTERN "*.inl"
         )

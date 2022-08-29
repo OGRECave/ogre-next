@@ -112,9 +112,9 @@ namespace Ogre
 
                 if( is_legal )
                 {
-                    float bitrate = 128.0f / ( blockdims[i] * blockdims[j] );
+                    float bitrate = 128.0f / float( blockdims[i] * blockdims[j] );
                     float bitrate_error = std::abs( bitrate - targetBitrate );
-                    float aspect = (float)blockdims[j] / blockdims[i];
+                    float aspect = (float)blockdims[j] / (float)blockdims[i];
                     if( bitrate_error < best_error ||
                         ( bitrate_error == best_error && aspect < aspect_of_best ) )
                     {
@@ -150,11 +150,11 @@ namespace Ogre
 
                     if( is_legal )
                     {
-                        float bitrate = 128.0f / ( blockdims[i] * blockdims[j] * blockdims[k] );
+                        float bitrate = 128.0f / float( blockdims[i] * blockdims[j] * blockdims[k] );
                         float bitrate_error = std::abs( bitrate - targetBitrate );
-                        float aspect = (float)blockdims[k] / blockdims[j] +
-                                       (float)blockdims[j] / blockdims[i] +
-                                       (float)blockdims[k] / blockdims[i];
+                        float aspect = (float)blockdims[k] / (float)blockdims[j] +
+                                       (float)blockdims[j] / (float)blockdims[i] +
+                                       (float)blockdims[k] / (float)blockdims[i];
 
                         if( bitrate_error < best_error ||
                             ( bitrate_error == best_error && aspect < aspect_of_best ) )
@@ -263,7 +263,7 @@ namespace Ogre
         // For 3D we calculate the bitrate then find the nearest 2D block size.
         if( zdim > 1 )
         {
-            float bitrate = 128.0f / ( xdim * ydim * zdim );
+            float bitrate = 128.0f / float( xdim * ydim * zdim );
             getClosestBlockDim2d( bitrate, &xdim, &ydim );
         }
 
@@ -384,5 +384,21 @@ namespace Ogre
         }
 
         return BLANKSTRING;
+    }
+    //---------------------------------------------------------------------
+    ASTCCodec::ValidationStatus ASTCCodec::validateMagicNumber( const char *magicNumberPtr,
+                                                                size_t maxbytes ) const
+    {
+        if( maxbytes >= sizeof( uint32 ) )
+        {
+            uint32 fileType;
+            memcpy( &fileType, magicNumberPtr, sizeof( uint32 ) );
+            flipEndian( &fileType, sizeof( uint32 ), 1 );
+
+            if( ASTC_MAGIC == fileType )
+                return CodecValid;
+        }
+
+        return CodecInvalid;
     }
 }  // namespace Ogre

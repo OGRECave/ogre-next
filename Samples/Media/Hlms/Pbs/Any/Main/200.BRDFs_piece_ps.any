@@ -20,7 +20,7 @@
 @property( BRDF_BlinnPhong )
 @piece( DeclareBRDF )
 //Blinn-Phong
-INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData )
+INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData PASSBUF_ARG_DECL )
 {
 	midf3 halfWay = normalize( lightDir + pixelData.viewDir );
 	midf NdotL = saturate( dot( pixelData.normal, lightDir ) );						//Diffuse (Lambert)
@@ -70,7 +70,7 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
 @property( BRDF_CookTorrance )
 @piece( DeclareBRDF )
 //Cook-Torrance
-INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData )
+INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData PASSBUF_ARG_DECL )
 {
 	midf3 halfWay = normalize( lightDir + pixelData.viewDir );
 	midf NdotL = saturate( dot( pixelData.normal, lightDir ) );
@@ -136,7 +136,7 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
 @property( BRDF_Default )
 @piece( DeclareBRDF )
 //Default BRDF
-INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData )
+INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData PASSBUF_ARG_DECL )
 {
 	midf3 halfWay = normalize( lightDir + pixelData.viewDir );
 	midf NdotL = saturate( dot( pixelData.normal, lightDir ) );

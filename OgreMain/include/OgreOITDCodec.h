@@ -81,6 +81,10 @@ namespace Ogre
         /// @copydoc Codec::magicNumberToFileExt
         String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const override;
 
+        /// @copydoc Codec::validateMagicNumber
+        ValidationStatus validateMagicNumber( const char *magicNumberPtr,
+                                              size_t      maxbytes ) const override;
+
         String getType() const override;
 
         /// Static method to startup and register the DDS codec

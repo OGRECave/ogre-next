@@ -499,20 +499,20 @@
 		@insertpiece( ObjLightMaskCmp )
 			finalColour += BRDF( midf3_c( light0Buf.lights[0].position.xyz ),
 								 midf3_c( light0Buf.lights[0].diffuse.xyz ),
-								 midf3_c( light0Buf.lights[0].specular ), pixelData ) @insertpiece( DarkenWithShadowFirstLight );
+								 midf3_c( light0Buf.lights[0].specular ), pixelData PASSBUF_ARG ) @insertpiece( DarkenWithShadowFirstLight );
 	@end
 	@foreach( hlms_lights_directional, n, 1 )
 		@insertpiece( ObjLightMaskCmp )
 			finalColour += BRDF( midf3_c( light0Buf.lights[@n].position.xyz ),
 								 midf3_c( light0Buf.lights[@n].diffuse.xyz ),
-								 midf3_c( light0Buf.lights[@n].specular ), pixelData )@insertpiece( DarkenWithShadow );@end
+								 midf3_c( light0Buf.lights[@n].specular ), pixelData PASSBUF_ARG )@insertpiece( DarkenWithShadow );@end
 
 	@property( !hlms_static_branch_lights )
 		@foreach( hlms_lights_directional_non_caster, n, hlms_lights_directional )
 			@insertpiece( ObjLightMaskCmp )
 				finalColour += BRDF( midf3_c( light0Buf.lights[@n].position.xyz ),
 									 midf3_c( light0Buf.lights[@n].diffuse.xyz ),
-									 midf3_c( light0Buf.lights[@n].specular ), pixelData );@end
+									 midf3_c( light0Buf.lights[@n].specular ), pixelData PASSBUF_ARG );@end
 	@else
 		for( int n=0; n<floatBitsToInt( light0Buf.numNonCasterDirectionalLights ); ++n )
 		{
@@ -520,7 +520,7 @@
 			@insertpiece( ObjLightMaskCmpNonCasterLoop )
 				finalColour += BRDF( midf3_c( light0Buf.lights[i].position.xyz ),
 									 midf3_c( light0Buf.lights[i].diffuse.xyz ),
-									 midf3_c( light0Buf.lights[i].specular ), pixelData );
+									 midf3_c( light0Buf.lights[i].specular ), pixelData PASSBUF_ARG );
 		}
 		/// Increase fineMaskLightIdx to keep it working with spot/point lights
 		@insertpiece( ObjLightMaskCmpNonCasterLoopEnd )
@@ -543,7 +543,7 @@
 			lightDir *= 1.0 / fDistance;
 			tmpColour = BRDF( midf3_c( lightDir ), midf3_c( light0Buf.lights[light_idx].diffuse.xyz ),
 							  midf3_c( light0Buf.lights[light_idx].specular ),
-							  pixelData )@insertpiece( DarkenWithShadowPoint_cur_shadow_map );
+							  pixelData PASSBUF_ARG )@insertpiece( DarkenWithShadowPoint_cur_shadow_map );
 			midf atten = midf_c( 1.0 / (0.5 + (light0Buf.lights[light_idx].attenuation.y + light0Buf.lights[light_idx].attenuation.z * fDistance) * fDistance ) );
 			finalColour += tmpColour * atten;
 		}
@@ -558,7 +558,7 @@
 			lightDir *= 1.0 / fDistance;
 			tmpColour = BRDF( midf3_c( lightDir ), midf3_c( light0Buf.lights[@n].diffuse.xyz ),
 							  midf3_c( light0Buf.lights[@n].specular ),
-							  pixelData )@insertpiece( DarkenWithShadowPoint );
+							  pixelData PASSBUF_ARG )@insertpiece( DarkenWithShadowPoint );
 			midf atten = midf_c( 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance ) );
 			finalColour += tmpColour * atten;
 		}
@@ -593,7 +593,7 @@
 
 			tmpColour = BRDF( midf3_c( lightDir ), midf3_c( light0Buf.lights[light_idx].diffuse.xyz ),
 							  midf3_c( light0Buf.lights[light_idx].specular ),
-							  pixelData )@insertpiece( DarkenWithShadow_cur_shadow_map );
+							  pixelData PASSBUF_ARG )@insertpiece( DarkenWithShadow_cur_shadow_map );
 			midf atten = midf_c( 1.0 / (0.5 + (light0Buf.lights[light_idx].attenuation.y + light0Buf.lights[light_idx].attenuation.z * fDistance) * fDistance ) );
 			finalColour += tmpColour * (atten * spotAtten);
 		}
@@ -627,7 +627,7 @@
 
 			tmpColour = BRDF( midf3_c( lightDir ), midf3_c( light0Buf.lights[@n].diffuse.xyz ),
 							  midf3_c( light0Buf.lights[@n].specular ),
-							  pixelData )@insertpiece( DarkenWithShadow );
+							  pixelData PASSBUF_ARG )@insertpiece( DarkenWithShadow );
 			midf atten = midf_c( 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance ) );
 			finalColour += tmpColour * (atten * spotAtten);
 		}

@@ -150,18 +150,28 @@ namespace Ogre
         {
         }
 
-        /// Listeners should return the extra bytes they wish to allocate for storing additional
-        /// data in the pass buffer. Return value must be in bytes.
+        /** Listeners should return the number of extra bytes they wish to allocate for storing
+            additional data in the pass buffer.
+
+            The actual data will be provided by a preparePassBuffer() override.
+        @return
+            Number of bytes of additional pass buffer data to allocate.  Must be a multiple of 16.
+        */
         virtual uint32 getPassBufferSize( const CompositorShadowNode *shadowNode, bool casterPass,
                                           bool dualParaboloid, SceneManager *sceneManager ) const
         {
             return 0;
         }
 
-        /// Users can write to passBufferPtr. Implementations must ensure they make the buffer
-        /// big enough via getPassBufferSize.
-        /// The passBufferPtr is already aligned to 16 bytes.
-        /// Implementations must return the pointer past the end, aligned to 16 bytes.
+        /** Write additional data in the pass buffer.
+
+            Users can write to passBufferPtr. Implementations must ensure they make the buffer
+            big enough via getPassBufferSize(). The passBufferPtr is already aligned to 16 bytes.
+        @return
+            Pointer past the end of added data, aligned to 16 bytes.  The difference between
+            the result pointer and the input passBufferPtr must equal the value that you returned from
+            getPassBufferSize().
+        */
         virtual float *preparePassBuffer( const CompositorShadowNode *shadowNode, bool casterPass,
                                           bool dualParaboloid, SceneManager *sceneManager,
                                           float *passBufferPtr )

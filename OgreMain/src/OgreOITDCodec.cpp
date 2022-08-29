@@ -295,4 +295,20 @@ namespace Ogre
 
         return BLANKSTRING;
     }
+    //---------------------------------------------------------------------
+    OITDCodec::ValidationStatus OITDCodec::validateMagicNumber( const char *magicNumberPtr,
+                                                                size_t maxbytes ) const
+    {
+        if( maxbytes >= sizeof( uint32 ) )
+        {
+            uint32 fileType;
+            memcpy( &fileType, magicNumberPtr, sizeof( uint32 ) );
+            flipEndian( &fileType, sizeof( uint32 ) );
+
+            if( OITD_MAGIC == fileType )
+                return CodecValid;
+        }
+
+        return CodecInvalid;
+    }
 }  // namespace Ogre

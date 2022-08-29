@@ -695,10 +695,74 @@ namespace Ogre
             }
         }
 
+        load( stream, pCodec );
+    }
+    //-----------------------------------------------------------------------------------
+    void Image2::load2( DataStreamPtr &stream, const String &filename )
+    {
+        OgreProfileExhaustive( "Image2::load2" );
+
+        freeMemory();
+
+        Codec *pCodec = 0;
+
+        // read the first 128 bytes or file size, if less
+        const size_t magicLen = std::min( stream->size(), (size_t)128 );
+        char magicBuf[128];
+        stream->read( magicBuf, magicLen );
+        // return to start
+        stream->seek( 0 );
+
+        if( !filename.empty() )
+        {
+            // Check by extension (much faster)
+            String strExt;
+            size_t pos = filename.find_last_of( "." );
+            if( pos != String::npos && pos + 1u < filename.length() )
+                strExt = filename.substr( pos + 1u );
+            else
+                strExt = filename;
+
+            pCodec = Codec::getCodec( strExt );
+
+            if( pCodec )
+            {
+                if( pCodec->validateMagicNumber( magicBuf, magicLen ) == Codec::CodecInvalid )
+                {
+                    // Either the file is invalid, or it was mislabeled (e.g. PNG named file.jpg)
+                    // We will fallback to finding the format via its magic number
+                    pCodec = 0;
+                }
+            }
+        }
+
+        if( !pCodec )
+        {
+            // Extension not available or was invalid.
+            // Derive from magic number (slower)
+            pCodec = Codec::getCodec( magicBuf, magicLen );
+        }
+
+        if( !pCodec )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Unable to load image: Image format is unknown. Unable to identify codec. "
+                         "Check it or specify format explicitly.",
+                         "Image2::load" );
+        }
+
+        load( stream, pCodec );
+    }
+    //-----------------------------------------------------------------------------------
+    void Image2::load( DataStreamPtr &stream, Codec *pCodec )
+    {
+        OgreProfileExhaustive( "Image2::load" );
+
+        freeMemory();
+
         Codec::DecodeResult res = pCodec->decode( stream );
 
-        ImageCodec2::ImageData2 *pData =
-            static_cast<ImageCodec2::ImageData2 *>( res.second.get() );
+        ImageCodec2::ImageData2 *pData = static_cast<ImageCodec2::ImageData2 *>( res.second.get() );
 
         mWidth = pData->box.width;
         mHeight = pData->box.height;

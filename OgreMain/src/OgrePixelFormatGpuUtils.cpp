@@ -79,7 +79,7 @@ namespace Ogre
             size_t retVal = width * getBytesPerPixel( format );
             retVal = alignToNextMultiple<size_t>( retVal, rowAlignment );
 
-            retVal *= height * depth * slices;
+            retVal *= size_t( height ) * size_t( depth ) * size_t( slices );
 
             return retVal;
         }
