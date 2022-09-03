@@ -562,7 +562,7 @@ namespace Ogre
 
         RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
         // API specific for Gpu Programs
-        if( !mObliqueDepthProjection )
+        if( !mObliqueDepthProjection && !mCustomProjMatrix )
         {
             renderSystem->_makeRsProjectionMatrix( mProjMatrix, mProjMatrixRSDepth, mNearDist, mFarDist,
                                                    mProjType );
