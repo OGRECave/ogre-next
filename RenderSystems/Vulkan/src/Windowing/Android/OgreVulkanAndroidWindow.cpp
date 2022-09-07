@@ -105,6 +105,12 @@ namespace Ogre
             // switchFullScreen( false );
             mRequestedFullscreenMode = false;
         }
+
+        if( mNativeWindow )
+        {
+            ANativeWindow_release( mNativeWindow );
+            mNativeWindow = nullptr;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::_initialize( TextureGpuManager *textureGpuManager,
@@ -237,7 +243,14 @@ namespace Ogre
             mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         }
 
-        mNativeWindow = nativeWindow;
+        if( mNativeWindow != nativeWindow )
+        {
+            if( mNativeWindow )
+                ANativeWindow_release( mNativeWindow );
+            mNativeWindow = nativeWindow;
+            if( mNativeWindow )
+                ANativeWindow_acquire( mNativeWindow );
+        }
 
         if( !mNativeWindow )
             return;
