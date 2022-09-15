@@ -79,22 +79,31 @@ namespace Ogre
 		constexpr bool skip_sep(const char*& ptr, const char* last, char SEP) { skip_space(ptr, last, SEP); return ptr < last && *ptr == SEP ? ++ptr, true : false; }
 	}
 
-	/** Scans SEP separated arguments list from the buffer, skipping spaces. */
-	template<char SEP = ' ', typename... Args>
-	from_chars_result from_chars_all(const char* first, const char* last, Args&... args) {
-		from_chars_result res = { first, errc() };
-		return (... && ((res.ptr == first || skip_sep(res.ptr, last, SEP)) && (skip_space(res.ptr, last, SEP), res = from_chars(res.ptr, last, args), res.ec == errc())))
-			? skip_space(res.ptr, last, SEP), res : from_chars_result{ first, errc::invalid_argument };
-	}
+    /** Scans SEP separated arguments list from the buffer, skipping spaces. */
+    template <char SEP = 0, typename... Args>
+    from_chars_result from_chars_all( const char *first, const char *last, Args &...args )
+    {
+        from_chars_result res = { first, errc() };
+        return ( ... && ( ( SEP == 0 || res.ptr == first || skip_sep( res.ptr, last, SEP ) ) &&
+                          ( skip_space( res.ptr, last, SEP ), res = from_chars( res.ptr, last, args ),
+                            res.ec == errc() ) ) )
+               ? skip_space( res.ptr, last, SEP ),
+               res : from_chars_result{ first, errc::invalid_argument };
+    }
 
-	/** Prints SEP separated arguments list into the buffer, with smallest possible precision necessary to restore values exactly. Buffer is NOT zero-terminated. */
-	template<char SEP = ' ', typename... Args>
-	to_chars_result to_chars_all(char* first, char* last, Args... args) {
-		to_chars_result res = { first, errc() };
-		return (... && ((res.ptr == first || (res.ptr < last && (*res.ptr++ = SEP))) && (res = to_chars(res.ptr, last, args), res.ec == errc())))
-			? res : to_chars_result{ last, errc::value_too_large };
-	}
-}
+    /** Prints SEP separated arguments list into the buffer, with smallest possible precision necessary
+     * to restore values exactly. Buffer is NOT zero-terminated. */
+    template <char SEP = 0, typename... Args>
+    to_chars_result to_chars_all( char *first, char *last, Args... args )
+    {
+        to_chars_result res = { first, errc() };
+        return ( ... &&
+                 ( ( res.ptr == first || ( res.ptr < last && ( *res.ptr++ = ( SEP ? SEP : ' ' ) ) ) ) &&
+                   ( res = to_chars( res.ptr, last, args ), res.ec == errc() ) ) )
+                   ? res
+                   : to_chars_result{ last, errc::value_too_large };
+    }
+}  // namespace Ogre
 
 #endif
 
