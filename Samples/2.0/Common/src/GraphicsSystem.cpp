@@ -225,19 +225,16 @@ namespace Demo
         if( opt != cfgOpts.end() && !opt->second.currentValue.empty() )
         {
             // Ignore leading space
-            const Ogre::String::size_type widthStart =
-                opt->second.currentValue.find_first_of( "012356789" );
+            const Ogre::String::size_type widthStart = opt->second.currentValue.find_first_of( "012356789" );
             // Get the width and height
             Ogre::String::size_type widthEnd = opt->second.currentValue.find( ' ', widthStart );
 
             // Ignore space around character 'x' in string " width x height",
             // Note: while length of string height is 3, there will are two space after character 'x'.
-            Ogre::String::size_type heightStart =
-                opt->second.currentValue.find_first_of( "0123456789", widthEnd );
+            Ogre::String::size_type heightStart = opt->second.currentValue.find_first_of( "0123456789", widthEnd );
             // Now we can parse out the values
-            width = Ogre::StringConverter::parseInt(
-                opt->second.currentValue.substr( widthStart, widthEnd ) );
-            height = Ogre::StringConverter::parseInt( opt->second.currentValue.substr( heightStart ) );
+            width = Ogre::StringConverter::parseInt( opt->second.currentValue.substr( widthStart, widthEnd ) );
+            height = Ogre::StringConverter::parseInt(opt->second.currentValue.substr( heightStart) );
         }
 
         Ogre::NameValuePairList params;
