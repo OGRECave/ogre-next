@@ -70,9 +70,9 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-#ifdef OGRE_HAS_CHARCONV_FLOAT
+#    ifdef OGRE_HAS_CHARCONV_FLOAT
     using std::chars_format;
-#endif
+#    endif
     using std::errc;
     using std::from_chars;
     using std::from_chars_result;
