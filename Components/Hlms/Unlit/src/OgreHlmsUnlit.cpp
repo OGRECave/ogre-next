@@ -85,6 +85,7 @@ namespace Ogre
         mLastDescSampler( 0 ),
         mConstantBiasScale( 0.1f ),
         mUsingInstancedStereo( false ),
+        mDefaultGenerateMipmaps( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
         mTexUnitSlotStart( 2u ),
@@ -1094,6 +1095,11 @@ namespace Ogre
     {
         assert( K != 0 && "A value of K = 0 is invalid!" );
         mEsmK = K;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::setDefaultGenerateMipmaps( bool bDefaultGenerateMips )
+    {
+        mDefaultGenerateMipmaps = bDefaultGenerateMips;
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )

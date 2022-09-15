@@ -225,6 +225,9 @@ namespace Ogre
         void setEnablePlanarReflection( uint8 textureUnit, bool bEnable );
         bool getEnablePlanarReflection( uint8 textureUnit ) const;
 
+        /// See HlmsUnlit::getDefaultGenerateMipmaps
+        bool getDefaultGenerateMipmaps() const;
+
         ColourValue getDiffuseColour() const override;
         ColourValue getEmissiveColour() const override;
         TextureGpu *getEmissiveTexture() const override;

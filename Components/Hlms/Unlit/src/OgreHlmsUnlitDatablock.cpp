@@ -417,6 +417,12 @@ namespace Ogre
         return mEnablePlanarReflection[textureUnit];
     }
     //-----------------------------------------------------------------------------------
+    bool HlmsUnlitDatablock::getDefaultGenerateMipmaps() const
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<HlmsUnlit *>( mCreator ) );
+        return static_cast<HlmsUnlit *>( mCreator )->getDefaultGenerateMipmaps();
+    }
+    //-----------------------------------------------------------------------------------
     ColourValue HlmsUnlitDatablock::getDiffuseColour() const { return ColourValue( 0, 0, 0, 0 ); }
     //-----------------------------------------------------------------------------------
     ColourValue HlmsUnlitDatablock::getEmissiveColour() const

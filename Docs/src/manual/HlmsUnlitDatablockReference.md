@@ -60,9 +60,11 @@ Reference Guide: HLMS Unlit Datablock {#hlmsunlitdatablockref}
         - `GrainMerge` :
         - `Difference` :
     - `sampler`: Type string. The name of the sampler block definition to apply to the normal map texture. **OPTIONAL parameter**
-    - `texture`: **OPTIONAL parameter**. Two value variations:
+    - `texture`: **OPTIONAL parameter**. Four value variations:
         - Type 1: Value is type string. Value is the name of a texture. The texture alias name is the same as the texture name. Example: `"texture" : "texture.tga"`
         - Type 2: Value is type string array. The first value is the name of a texture file. The second value is the alias name for the texture. Example: `"texture" : ["texture.tga","Texture_Alias_Name"]`
+        - Type 3: Value is type string array. The first value is the name of a texture file. The second value is a boolean to specify if mipmaps should be generated automatically (only if the texture hasn't already been loaded and the file doesn't have mipmaps). Example: `"texture" : ["texture.tga", true]`
+        - Type 4: Combination of Types 2 + 3. Example: `"texture" : ["texture.tga", "Texture_Alias_Name", true]`
     - `uv`: Type integer. Sets which UV set to use for the given texture. Value must be between in range [0, 8). **DEFAULT=0**
 
 # Example Unlit Datablock Definition: {#dbulExample}
