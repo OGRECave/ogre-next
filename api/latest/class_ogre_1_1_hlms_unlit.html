@@ -205,6 +205,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9df1057f374a54432b012c5e0309107a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a9df1057f374a54432b012c5e0309107a">getDefaultDatablock</a> () const</td></tr>
 <tr class="memdesc:a9df1057f374a54432b012c5e0309107a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Datablock to use when another datablock failed or none was specified.  <a href="class_ogre_1_1_hlms.html#a9df1057f374a54432b012c5e0309107a">More...</a><br /></td></tr>
 <tr class="separator:a9df1057f374a54432b012c5e0309107a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31e98589e7139a182d9486426ec4643b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_unlit.html#a31e98589e7139a182d9486426ec4643b">getDefaultGenerateMipmaps</a> () const</td></tr>
+<tr class="memdesc:a31e98589e7139a182d9486426ec4643b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if automatic mipmap generation when loading textures is on.  <a href="class_ogre_1_1_hlms_unlit.html#a31e98589e7139a182d9486426ec4643b">More...</a><br /></td></tr>
+<tr class="separator:a31e98589e7139a182d9486426ec4643b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad19dec8ef5dd7989c7903727be416549"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_unlit.html#ad19dec8ef5dd7989c7903727be416549">getEsmK</a> () const</td></tr>
 <tr class="separator:ad19dec8ef5dd7989c7903727be416549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a124fd6d17116915b6c407d8743b436cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a124fd6d17116915b6c407d8743b436cb">getFastShaderBuildHack</a> () const</td></tr>
@@ -315,6 +318,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5bd6a05326ef3082d1d88fa5c3ec8c61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a5bd6a05326ef3082d1d88fa5c3ec8c61">setDebugOutputPath</a> (bool enableDebugOutput, bool outputProperties, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;path=<a class="el" href="group___general.html#gad842a4b416bd2f3245d2b44826a0aedc">BLANKSTRING</a>)</td></tr>
 <tr class="memdesc:a5bd6a05326ef3082d1d88fa5c3ec8c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call to output the automatically generated shaders (which are usually made from templates) on the given folder for inspection, analyzing, debugging, etc.  <a href="class_ogre_1_1_hlms.html#a5bd6a05326ef3082d1d88fa5c3ec8c61">More...</a><br /></td></tr>
 <tr class="separator:a5bd6a05326ef3082d1d88fa5c3ec8c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a712375220354a317358a1a54866b45c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_unlit.html#a712375220354a317358a1a54866b45c4">setDefaultGenerateMipmaps</a> (bool bDefaultGenerateMips)</td></tr>
+<tr class="memdesc:a712375220354a317358a1a54866b45c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">By default Unlit does not automatically generate mipmaps for textures loaded (the texture may already have mipmaps though).  <a href="class_ogre_1_1_hlms_unlit.html#a712375220354a317358a1a54866b45c4">More...</a><br /></td></tr>
+<tr class="separator:a712375220354a317358a1a54866b45c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab595bf760782ce4f09b237ef2eaccd3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_unlit.html#ab595bf760782ce4f09b237ef2eaccd3c">setEsmK</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> K)</td></tr>
 <tr class="memdesc:ab595bf760782ce4f09b237ef2eaccd3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the 'K' parameter of ESM filter.  <a href="class_ogre_1_1_hlms_unlit.html#ab595bf760782ce4f09b237ef2eaccd3c">More...</a><br /></td></tr>
 <tr class="separator:ab595bf760782ce4f09b237ef2eaccd3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1676,6 +1682,34 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Datablock to use when another datablock failed or none was specified. </p>
+
+</div>
+</div>
+<a id="a31e98589e7139a182d9486426ec4643b" name="a31e98589e7139a182d9486426ec4643b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31e98589e7139a182d9486426ec4643b">&#9670;&nbsp;</a></span>getDefaultGenerateMipmaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HlmsUnlit::getDefaultGenerateMipmaps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if automatic mipmap generation when loading textures is on. </p>
+<p >See <a class="el" href="class_ogre_1_1_hlms_unlit.html#a712375220354a317358a1a54866b45c4" title="By default Unlit does not automatically generate mipmaps for textures loaded (the texture may already...">setDefaultGenerateMipmaps()</a> </p>
 
 </div>
 </div>
@@ -3296,6 +3330,35 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a712375220354a317358a1a54866b45c4" name="a712375220354a317358a1a54866b45c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a712375220354a317358a1a54866b45c4">&#9670;&nbsp;</a></span>setDefaultGenerateMipmaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsUnlit::setDefaultGenerateMipmaps </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bDefaultGenerateMips</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>By default Unlit does not automatically generate mipmaps for textures loaded (the texture may already have mipmaps though). </p>
+<p >This behavior is the opposite from <a class="el" href="class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys...">HlmsPbs</a>.</p>
+<p >This is because often Unlit will be used for 2D stuff, which doesn't require mipmaps. However for 3D stuff, mipmaps are highly useful.</p>
+<p >JSON materials can override this behavior. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bDefaultGenerateMips</td><td>True to automatically generate mipmaps False to not generate. If the texture was already loaded by <a class="el" href="class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys...">HlmsPbs</a> it may have mipmaps, or if the texture on disk already has mipmaps (e.g. DDS) mipmaps will be loaded.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This setting only affects automatic generation when the texture does not have mipmaps and is being loaded by Unlit. </p>
 
 </div>
 </div>

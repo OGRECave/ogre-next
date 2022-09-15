@@ -6,6 +6,7 @@ var class_ogre_1_1_hlms_unlit_datablock =
     [ "getAnimationMatrix", "class_ogre_1_1_hlms_unlit_datablock.html#a779d8b20f7bae76e46e6c1c030da970b", null ],
     [ "getBlendMode", "class_ogre_1_1_hlms_unlit_datablock.html#a41c859b67953fe8f5f4336e95e78fcb9", null ],
     [ "getColour", "class_ogre_1_1_hlms_unlit_datablock.html#a9c739bf7b59e17251e812c4409bcbe8b", null ],
+    [ "getDefaultGenerateMipmaps", "class_ogre_1_1_hlms_unlit_datablock.html#a90811534672368509e084f3124bd620f", null ],
     [ "getDiffuseColour", "class_ogre_1_1_hlms_unlit_datablock.html#a58ff01d0218a60854258824923831db2", null ],
     [ "getEmissiveColour", "class_ogre_1_1_hlms_unlit_datablock.html#a908cd79563193ca08345ed38eb3f8269", null ],
     [ "getEmissiveTexture", "class_ogre_1_1_hlms_unlit_datablock.html#a2993c0de07a5b3b0e3616bf146727e21", null ],

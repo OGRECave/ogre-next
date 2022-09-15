@@ -1,5 +1,8 @@
 var NAVTREEINDEX245 =
 {
+"group___core.html":[5,2],
+"group___downloading_ogre_common.html":[5,3,0],
+"group___downloading_ogre_scripts_common.html":[5,3,1],
 "group___effects.html":[5,2,1],
 "group___effects.html#ga11f3abbd0f35645ab06412852cc3ab92":[5,2,1,78],
 "group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3":[5,2,1,64],
@@ -246,8 +249,5 @@ var NAVTREEINDEX245 =
 "group___general.html#gga4b8cfe4e77d7d21264a6497c06ed924aa70b475c72e98912203dc005ef4fd9ffb":[5,2,2,184,13],
 "group___general.html#gga4b8cfe4e77d7d21264a6497c06ed924aa7b72a218a6d93dfbcb77e208eaa3feeb":[5,2,2,184,0],
 "group___general.html#gga4b8cfe4e77d7d21264a6497c06ed924aa960735d7150a41f8c25be3e5d459e5ef":[5,2,2,184,3],
-"group___general.html#gga4b8cfe4e77d7d21264a6497c06ed924aa9cde1dc36b3e39a8a4e7a2b9bba6d78d":[5,2,2,184,11],
-"group___general.html#gga4b8cfe4e77d7d21264a6497c06ed924aac1ae17fd22246104d7a7794fcf89e1e1":[5,2,2,184,4],
-"group___general.html#gga4b8cfe4e77d7d21264a6497c06ed924aaca32cf2526bd9f0ec645331b9a1093c1":[5,2,2,184,5],
-"group___general.html#gga4b8cfe4e77d7d21264a6497c06ed924aad1f53213a85c2b5518e8b974cbbbea76":[5,2,2,184,9]
+"group___general.html#gga4b8cfe4e77d7d21264a6497c06ed924aa9cde1dc36b3e39a8a4e7a2b9bba6d78d":[5,2,2,184,11]
 };

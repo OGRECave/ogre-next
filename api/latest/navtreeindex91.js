@@ -244,10 +244,10 @@ var NAVTREEINDEX91 =
 "class_ogre_1_1_gpu_resource.html#a56ccef279ef9251c5a4b40bfaf7b9e05":[6,0,0,436,3],
 "class_ogre_1_1_gpu_resource.html#a595ea4c05da8aa987d3800e65d23355d":[6,0,0,436,14],
 "class_ogre_1_1_gpu_resource.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,409,14],
-"class_ogre_1_1_gpu_resource.html#a63fc6bdc2eb6aeac24898a77ec5e2023":[7,0,0,409,17],
 "class_ogre_1_1_gpu_resource.html#a63fc6bdc2eb6aeac24898a77ec5e2023":[6,0,0,436,17],
+"class_ogre_1_1_gpu_resource.html#a63fc6bdc2eb6aeac24898a77ec5e2023":[7,0,0,409,17],
 "class_ogre_1_1_gpu_resource.html#a8357fe4fb4849772b94baa4bf47c7ded":[6,0,0,436,10],
 "class_ogre_1_1_gpu_resource.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,409,10],
-"class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[6,0,0,436,4],
-"class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[7,0,0,409,4]
+"class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[7,0,0,409,4],
+"class_ogre_1_1_gpu_resource.html#a9311078ea7d4d85ed5cbaae4e641f765":[6,0,0,436,4]
 };

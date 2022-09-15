@@ -172,9 +172,11 @@ Parameter: diffuse_map[X]</h2>
 </ul>
 </li>
 <li><code>sampler</code>: Type string. The name of the sampler block definition to apply to the normal map texture. <b>OPTIONAL parameter</b></li>
-<li><code>texture</code>: <b>OPTIONAL parameter</b>. Two value variations:<ul>
+<li><code>texture</code>: <b>OPTIONAL parameter</b>. Four value variations:<ul>
 <li>Type 1: Value is type string. Value is the name of a texture. The texture alias name is the same as the texture name. Example: <code>"texture" : "texture.tga"</code></li>
 <li>Type 2: Value is type string array. The first value is the name of a texture file. The second value is the alias name for the texture. Example: <code>"texture" : ["texture.tga","Texture_Alias_Name"]</code></li>
+<li>Type 3: Value is type string array. The first value is the name of a texture file. The second value is a boolean to specify if mipmaps should be generated automatically (only if the texture hasn't already been loaded and the file doesn't have mipmaps). Example: <code>"texture" : ["texture.tga", true]</code></li>
+<li>Type 4: Combination of Types 2 + 3. Example: <code>"texture" : ["texture.tga", "Texture_Alias_Name", true]</code></li>
 </ul>
 </li>
 <li><code>uv</code>: Type integer. Sets which UV set to use for the given texture. Value must be between in range [0, 8). <b>DEFAULT=0</b></li>
