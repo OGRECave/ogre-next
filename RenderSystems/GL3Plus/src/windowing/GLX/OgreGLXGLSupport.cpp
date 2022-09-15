@@ -386,18 +386,13 @@ namespace Ogre
             if( ( opt = mOptions.find( "Video Mode" ) ) != end )
             {
                 String val = opt->second.currentValue;
-                // Ignore leading space
-                const Ogre::String::size_type widthStart = val.find_first_of( "012356789" );
+                String::size_type pos = val.find( 'x' );
 
-                // Get the width and height
-                Ogre::String::size_type widthEnd = val.find( ' ', widthStart );
-
-                // Ignore space around character 'x' in string " width x height",
-                // Note: while length of string height is 3, there will are two space after character 'x'.
-                Ogre::String::size_type heightStart = val.find_first_of( "0123456789", widthEnd );
-                // Now we can parse out the values
-                w = Ogre::StringConverter::parseInt( val.substr( widthStart, widthEnd ) );
-                h = Ogre::StringConverter::parseInt(val.substr( heightStart) );
+                if( pos != String::npos )
+                {
+                    w = StringConverter::parseUnsignedInt( val.substr( 0, pos ) );
+                    h = StringConverter::parseUnsignedInt( val.substr( pos + 1 ) );
+                }
             }
 
             if( ( opt = mOptions.find( "FSAA" ) ) != end )
