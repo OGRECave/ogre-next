@@ -130,7 +130,7 @@
 
 	@insertpiece( DoAtmosphereNprSky )
 
-@property( syntax == metal || syntax == glslvk || lower_gpu_overhead )
+@property( syntax == metal || lower_gpu_overhead )
 	@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
 		outVs.objLightMask = worldMaterialIdx[inVs_drawId].z;
 	@end
