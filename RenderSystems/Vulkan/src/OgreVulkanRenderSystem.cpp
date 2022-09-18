@@ -2340,7 +2340,10 @@ namespace Ogre
         return &mPixelFormatToShaderType;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushCommands( void ) {}
+    void VulkanRenderSystem::flushCommands()
+    {
+        mActiveDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::beginProfileEvent( const String &eventName ) {}
     //-------------------------------------------------------------------------
