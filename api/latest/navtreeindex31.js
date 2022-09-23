@@ -133,7 +133,7 @@ var NAVTREEINDEX31 =
 "class_ogre_1_1_compositor_shadow_node.html#a5dd2960e9ca1de509c9c3ff36d847997":[5,2,1,28,9],
 "class_ogre_1_1_compositor_shadow_node.html#a5e91b900d7e9d85bafd312929f4724d4":[5,2,1,28,15],
 "class_ogre_1_1_compositor_shadow_node.html#a5fce9ec85e8404ae2f0855e05f32afce":[5,2,1,28,13],
-"class_ogre_1_1_compositor_shadow_node.html#a607c30415819742ad2bcfaa1d3959d5a":[5,2,1,28,69],
+"class_ogre_1_1_compositor_shadow_node.html#a607c30415819742ad2bcfaa1d3959d5a":[5,2,1,28,68],
 "class_ogre_1_1_compositor_shadow_node.html#a63fc6bdc2eb6aeac24898a77ec5e2023":[5,2,1,28,59],
 "class_ogre_1_1_compositor_shadow_node.html#a69f1fd121847d6d0f349ae207dac52af":[5,2,1,28,6],
 "class_ogre_1_1_compositor_shadow_node.html#a6e812a39d91f5d59b335b81cc45d81a0":[5,2,1,28,11],
@@ -163,7 +163,6 @@ var NAVTREEINDEX31 =
 "class_ogre_1_1_compositor_shadow_node.html#acf4e9f7b9d8e5b8c61bce6d164185e5d":[5,2,1,28,67],
 "class_ogre_1_1_compositor_shadow_node.html#ad1f1a983f9e2dfddee802c47bb0b1ca9":[5,2,1,28,57],
 "class_ogre_1_1_compositor_shadow_node.html#adaafc8f4fd96ecacd724b3a68347deef":[5,2,1,28,40],
-"class_ogre_1_1_compositor_shadow_node.html#adb974a9c21a8ee36e6272dc1be287fe3":[5,2,1,28,68],
 "class_ogre_1_1_compositor_shadow_node.html#adce32528577d71b228692df906ecd17c":[5,2,1,28,60],
 "class_ogre_1_1_compositor_shadow_node.html#add989e48cfe58cfa5639719fd72f6cfa":[5,2,1,28,42],
 "class_ogre_1_1_compositor_shadow_node.html#ae14607795f3aa90c91cdd6274d867899":[5,2,1,28,64],
@@ -249,5 +248,6 @@ var NAVTREEINDEX31 =
 "class_ogre_1_1_compositor_shadow_node_def.html#ae14f3e103c0d007950acbc4a96ac66e8":[5,2,1,29,74],
 "class_ogre_1_1_compositor_shadow_node_def.html#ae3960c5889208ca2c38c96796d403a52":[5,2,1,29,1],
 "class_ogre_1_1_compositor_shadow_node_def.html#ae70fe8c6c0e24395c1f94647c04fb079":[5,2,1,29,3],
-"class_ogre_1_1_compositor_shadow_node_def.html#ae70fe8c6c0e24395c1f94647c04fb079a294f4db86ffc1938eb1fd64b4c90a15a":[5,2,1,29,3,3]
+"class_ogre_1_1_compositor_shadow_node_def.html#ae70fe8c6c0e24395c1f94647c04fb079a294f4db86ffc1938eb1fd64b4c90a15a":[5,2,1,29,3,3],
+"class_ogre_1_1_compositor_shadow_node_def.html#ae70fe8c6c0e24395c1f94647c04fb079a50e816451020212231ab555eb44b070c":[5,2,1,29,3,1]
 };

@@ -68,6 +68,5 @@ var class_ogre_1_1_compositor_shadow_node =
     [ "resetAllNumPassesLeft", "class_ogre_1_1_compositor_shadow_node.html#a07b216e017d9aa22718a5419a1e98a2a", null ],
     [ "setEnabled", "class_ogre_1_1_compositor_shadow_node.html#a817bc10dbf5427a77912ab3bcd391f69", null ],
     [ "setLightFixedToShadowMap", "class_ogre_1_1_compositor_shadow_node.html#acf4e9f7b9d8e5b8c61bce6d164185e5d", null ],
-    [ "setShadowMapsToPass", "class_ogre_1_1_compositor_shadow_node.html#adb974a9c21a8ee36e6272dc1be287fe3", null ],
     [ "setStaticShadowMapDirty", "class_ogre_1_1_compositor_shadow_node.html#a607c30415819742ad2bcfaa1d3959d5a", null ]
 ];

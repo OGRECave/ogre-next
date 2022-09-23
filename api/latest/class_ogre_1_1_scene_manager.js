@@ -274,7 +274,6 @@ var class_ogre_1_1_scene_manager =
     [ "setShadowDirectionalLightExtrusionDistance", "class_ogre_1_1_scene_manager.html#a9d220fa31bf0d95ad65558936c71a194", null ],
     [ "setShadowDirLightTextureOffset", "class_ogre_1_1_scene_manager.html#a893663f55c2b4a29467cff25b9b1b3f4", null ],
     [ "setShadowFarDistance", "class_ogre_1_1_scene_manager.html#a0e593d05e2f892b8fc3bfca917a75fef", null ],
-    [ "setShadowTextureCasterMaterial", "class_ogre_1_1_scene_manager.html#a9f0cde141313583e65561abdfae6a0ec", null ],
     [ "setShadowTextureFadeEnd", "class_ogre_1_1_scene_manager.html#a237a09e65919b808473c543fb886723f", null ],
     [ "setShadowTextureFadeStart", "class_ogre_1_1_scene_manager.html#a72fa019aa4efbc6943842efcf5f38078", null ],
     [ "setSky", "class_ogre_1_1_scene_manager.html#a3dc2f4478ab8741bdcf02c9008ef7809", null ],

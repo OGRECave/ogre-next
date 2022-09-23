@@ -826,9 +826,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0e593d05e2f892b8fc3bfca917a75fef"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a0e593d05e2f892b8fc3bfca917a75fef">setShadowFarDistance</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> distance)</td></tr>
 <tr class="memdesc:a0e593d05e2f892b8fc3bfca917a75fef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the default maximum distance away from the camera that shadows will be visible.  <a href="class_ogre_1_1_scene_manager.html#a0e593d05e2f892b8fc3bfca917a75fef">More...</a><br /></td></tr>
 <tr class="separator:a0e593d05e2f892b8fc3bfca917a75fef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f0cde141313583e65561abdfae6a0ec"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a9f0cde141313583e65561abdfae6a0ec">setShadowTextureCasterMaterial</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name)</td></tr>
-<tr class="memdesc:a9f0cde141313583e65561abdfae6a0ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the default material to use for rendering shadow casters.  <a href="class_ogre_1_1_scene_manager.html#a9f0cde141313583e65561abdfae6a0ec">More...</a><br /></td></tr>
-<tr class="separator:a9f0cde141313583e65561abdfae6a0ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a237a09e65919b808473c543fb886723f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a237a09e65919b808473c543fb886723f">setShadowTextureFadeEnd</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> fadeEnd)</td></tr>
 <tr class="memdesc:a237a09e65919b808473c543fb886723f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the proportional distance at which texture shadows finish to fading out.  <a href="class_ogre_1_1_scene_manager.html#a237a09e65919b808473c543fb886723f">More...</a><br /></td></tr>
 <tr class="separator:a237a09e65919b808473c543fb886723f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -9191,39 +9188,6 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
 <p>Sets the default maximum distance away from the camera that shadows will be visible. </p>
 <p >You have to call this function before you create lights or the default distance of zero will be used. </p><dl class="section remark"><dt>Remarks</dt><dd>Shadow techniques can be expensive, therefore it is a good idea to limit them to being rendered close to the camera if possible, and to skip the expense of rendering shadows for distance objects. This method allows you to set the distance at which shadows will no longer be rendered. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Each shadow technique can interpret this subtely differently. For example, one technique may use this to eliminate casters, another might use it to attenuate the shadows themselves. You should tweak this value to suit your chosen shadow technique and scene setup. </dd></dl>
-
-</div>
-</div>
-<a id="a9f0cde141313583e65561abdfae6a0ec" name="a9f0cde141313583e65561abdfae6a0ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f0cde141313583e65561abdfae6a0ec">&#9670;&nbsp;</a></span>setShadowTextureCasterMaterial()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::SceneManager::setShadowTextureCasterMaterial </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the default material to use for rendering shadow casters. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>By default shadow casters are rendered into the shadow texture using an automatically generated fixed-function pass. This allows basic projective texture shadows, but it's possible to use more advanced shadow techniques by overriding the caster materials, for example providing vertex and fragment programs to implement shadow maps. </dd></dl>
-<dl class="section user"><dt></dt><dd>You can rely on the ambient light in the scene being set to the requested texture shadow colour, if that's useful. </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Individual objects may also override the vertex program in your default material if their materials include shadow_caster_vertex_program_ref, shadow_caster_material entries, so if you use both make sure they are compatible. </dd>
-<dd>
-Only a single pass is allowed in your material, although multiple techniques may be used for hardware fallback. </dd></dl>
 
 </div>
 </div>

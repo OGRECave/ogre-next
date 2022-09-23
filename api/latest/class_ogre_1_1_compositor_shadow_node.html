@@ -283,8 +283,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acf4e9f7b9d8e5b8c61bce6d164185e5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#acf4e9f7b9d8e5b8c61bce6d164185e5d">setLightFixedToShadowMap</a> (size_t shadowMapIdx, <a class="el" href="class_ogre_1_1_light.html">Light</a> *light)</td></tr>
 <tr class="memdesc:acf4e9f7b9d8e5b8c61bce6d164185e5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks a shadow map as statically updated, and ties the given light to always use that shadow map.  <a href="class_ogre_1_1_compositor_shadow_node.html#acf4e9f7b9d8e5b8c61bce6d164185e5d">More...</a><br /></td></tr>
 <tr class="separator:acf4e9f7b9d8e5b8c61bce6d164185e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb974a9c21a8ee36e6272dc1be287fe3"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___general.html#ga9870d1f08a71391b8716b43bb2064b2d">LightList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#adb974a9c21a8ee36e6272dc1be287fe3">setShadowMapsToPass</a> (<a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *rend, const <a class="el" href="class_ogre_1_1_pass.html">Pass</a> *pass, <a class="el" href="class_ogre_1_1_auto_param_data_source.html">AutoParamDataSource</a> *autoParamDataSource, size_t startLight)</td></tr>
-<tr class="separator:adb974a9c21a8ee36e6272dc1be287fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a607c30415819742ad2bcfaa1d3959d5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html#a607c30415819742ad2bcfaa1d3959d5a">setStaticShadowMapDirty</a> (size_t shadowMapIdx, bool includeLinked=true)</td></tr>
 <tr class="memdesc:a607c30415819742ad2bcfaa1d3959d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tags a static shadow map as dirty, causing <a class="el" href="namespace_ogre.html">Ogre</a> to update it on the next time this Shadow node gets executed.  <a href="class_ogre_1_1_compositor_shadow_node.html#a607c30415819742ad2bcfaa1d3959d5a">More...</a><br /></td></tr>
 <tr class="separator:a607c30415819742ad2bcfaa1d3959d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2394,46 +2392,6 @@ template&lt;class Alloc &gt; </div>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="adb974a9c21a8ee36e6272dc1be287fe3" name="adb974a9c21a8ee36e6272dc1be287fe3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb974a9c21a8ee36e6272dc1be287fe3">&#9670;&nbsp;</a></span>setShadowMapsToPass()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="group___general.html#ga9870d1f08a71391b8716b43bb2064b2d">LightList</a> * Ogre::CompositorShadowNode::setShadowMapsToPass </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *&#160;</td>
-          <td class="paramname"><em>rend</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_pass.html">Pass</a> *&#160;</td>
-          <td class="paramname"><em>pass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_auto_param_data_source.html">AutoParamDataSource</a> *&#160;</td>
-          <td class="paramname"><em>autoParamDataSource</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>startLight</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
