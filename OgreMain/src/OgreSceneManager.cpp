@@ -161,7 +161,6 @@ namespace Ogre
         mShadowTextureOffset( Real( 0.6 ) ),
         mShadowTextureFadeStart( Real( 0.7 ) ),
         mShadowTextureFadeEnd( Real( 0.9 ) ),
-        mShadowTextureCustomCasterPass( 0 ),
         mVisibilityMask( 0xFFFFFFFF & VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
         mLightMask( 0xFFFFFFFF ),
         mFindVisibleObjects( true ),
@@ -2695,12 +2694,6 @@ namespace Ogre
                     // Do we need to update GPU program parameters?
                     if( pass->isProgrammable() )
                     {
-                        if( mCurrentShadowNode )
-                        {
-                            pLightListToUse = mCurrentShadowNode->setShadowMapsToPass(
-                                rend, pass, mAutoParamDataSource, pass->getStartLight() );
-                        }
-
                         useLightsGpuProgram( pass, pLightListToUse );
                     }
                     // Do we need to update light states?
@@ -2798,12 +2791,6 @@ namespace Ogre
                     // Do we need to update GPU program parameters?
                     if( pass->isProgrammable() )
                     {
-                        if( mCurrentShadowNode )
-                        {
-                            lightList = mCurrentShadowNode->setShadowMapsToPass(
-                                rend, pass, mAutoParamDataSource, pass->getStartLight() );
-                        }
-
                         useLightsGpuProgram( pass, lightList );
                     }
                     else if( passSurfaceAndLightParams )
@@ -3363,152 +3350,6 @@ namespace Ogre
         mSuppressRenderStateChanges = suppress;
     }
     //---------------------------------------------------------------------
-    const Pass *SceneManager::deriveShadowCasterPass( const Pass *pass )
-    {
-        Pass *retPass;
-        if( pass->getParent()->getShadowCasterMaterial() )
-        {
-            return pass->getParent()->getShadowCasterMaterial()->getBestTechnique()->getPass( 0 );
-        }
-        else
-        {
-            retPass = mShadowTextureCustomCasterPass ? mShadowTextureCustomCasterPass
-                                                     : mShadowCasterPlainBlackPass;
-        }
-
-        // Special case alpha-blended passes
-        /*if ((pass->getSourceBlendFactor() == SBF_SOURCE_ALPHA &&
-            pass->getDestBlendFactor() == SBF_ONE_MINUS_SOURCE_ALPHA))
-            //|| pass->getAlphaRejectFunction() != CMPF_ALWAYS_PASS)
-        {
-            // Alpha blended passes must retain their transparency
-            retPass->setAlphaRejectSettings(pass->getAlphaRejectFunction(),
-                pass->getAlphaRejectValue());
-            retPass->setSceneBlending(pass->getSourceBlendFactor(), pass->getDestBlendFactor());
-            retPass->getParent()->getParent()->setTransparencyCastsShadows(true);
-
-            // So we allow the texture units, but override the colour functions
-            // Copy texture state, shift up one since 0 is shadow texture
-            unsigned short origPassTUCount = pass->getNumTextureUnitStates();
-            for (unsigned short t = 0; t < origPassTUCount; ++t)
-            {
-                TextureUnitState* tex;
-                if (retPass->getNumTextureUnitStates() <= t)
-                {
-                    tex = retPass->createTextureUnitState();
-                }
-                else
-                {
-                    tex = retPass->getTextureUnitState(t);
-                }
-                // copy base state
-                (*tex) = *(pass->getTextureUnitState(t));
-                // override colour function
-                tex->setColourOperationEx( LBX_SOURCE1, LBS_MANUAL, LBS_CURRENT, mShadowColour );
-
-            }
-            // Remove any extras
-            while (retPass->getNumTextureUnitStates() > origPassTUCount)
-            {
-                retPass->removeTextureUnitState(origPassTUCount);
-            }
-
-        }
-        else
-        {
-            // reset
-            retPass->setSceneBlending(SBT_REPLACE);
-            retPass->setAlphaRejectFunction(CMPF_ALWAYS_PASS);
-            while (retPass->getNumTextureUnitStates() > 0)
-            {
-                retPass->removeTextureUnitState(0);
-            }
-        }*/
-
-        // Does incoming pass have a custom shadow caster program?
-        if( !pass->getShadowCasterVertexProgramName().empty() )
-        {
-            // Have to merge the shadow caster vertex program in
-            retPass->setVertexProgram( pass->getShadowCasterVertexProgramName(), false );
-            const GpuProgramPtr &prg = retPass->getVertexProgram();
-            // Load this program if not done already
-            if( !prg->isLoaded() )
-                prg->load();
-            // Copy params
-            retPass->setVertexProgramParameters( pass->getShadowCasterVertexProgramParameters() );
-            // Also have to hack the light autoparams, that is done later
-        }
-        else
-        {
-            if( retPass == mShadowTextureCustomCasterPass )
-            {
-                // reset vp?
-                if( mShadowTextureCustomCasterPass->getVertexProgramName() !=
-                    mShadowTextureCustomCasterVertexProgram )
-                {
-                    mShadowTextureCustomCasterPass->setVertexProgram(
-                        mShadowTextureCustomCasterVertexProgram, false );
-                    if( mShadowTextureCustomCasterPass->hasVertexProgram() )
-                    {
-                        mShadowTextureCustomCasterPass->setVertexProgramParameters(
-                            mShadowTextureCustomCasterVPParams );
-                    }
-                }
-            }
-            else
-            {
-                // Standard shadow caster pass, reset to no vp
-                retPass->setVertexProgram( BLANKSTRING );
-            }
-        }
-
-        if( !pass->getShadowCasterFragmentProgramName().empty() )
-        {
-            // Have to merge the shadow caster fragment program in
-            retPass->setFragmentProgram( pass->getShadowCasterFragmentProgramName(), false );
-            const GpuProgramPtr &prg = retPass->getFragmentProgram();
-            // Load this program if not done already
-            if( !prg->isLoaded() )
-                prg->load();
-            // Copy params
-            retPass->setFragmentProgramParameters( pass->getShadowCasterFragmentProgramParameters() );
-            // Also have to hack the light autoparams, that is done later
-        }
-        else
-        {
-            if( retPass == mShadowTextureCustomCasterPass )
-            {
-                // reset fp?
-                if( mShadowTextureCustomCasterPass->getFragmentProgramName() !=
-                    mShadowTextureCustomCasterFragmentProgram )
-                {
-                    mShadowTextureCustomCasterPass->setFragmentProgram(
-                        mShadowTextureCustomCasterFragmentProgram, false );
-                    if( mShadowTextureCustomCasterPass->hasFragmentProgram() )
-                    {
-                        mShadowTextureCustomCasterPass->setFragmentProgramParameters(
-                            mShadowTextureCustomCasterFPParams );
-                    }
-                }
-            }
-            else
-            {
-                // Standard shadow caster pass, reset to no fp
-                retPass->setFragmentProgram( BLANKSTRING );
-            }
-        }
-
-        // handle the case where there is no fixed pipeline support
-        retPass->getParent()->getParent()->compile();
-        Technique *btech = retPass->getParent()->getParent()->getBestTechnique();
-        if( btech )
-        {
-            retPass = btech->getPass( 0 );
-        }
-
-        return retPass;
-    }
-    //---------------------------------------------------------------------
     const RealRect &SceneManager::getLightScissorRect( const Light *l, const Camera *cam )
     {
         checkCachedLightClippingInfo();
@@ -3887,50 +3728,6 @@ namespace Ogre
     Real SceneManager::getShadowDirectionalLightExtrusionDistance() const
     {
         return mShadowDirLightExtrudeDist;
-    }
-    //---------------------------------------------------------------------
-    void SceneManager::setShadowTextureCasterMaterial( const String &name )
-    {
-        if( name.empty() )
-        {
-            mShadowTextureCustomCasterPass = 0;
-        }
-        else
-        {
-            MaterialPtr mat = MaterialManager::getSingleton().getByName( name );
-            if( !mat )
-            {
-                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                             "Cannot locate material called '" + name + "'",
-                             "SceneManager::setShadowTextureCasterMaterial" );
-            }
-            mat->load();
-            if( !mat->getBestTechnique() )
-            {
-                // unsupported
-                mShadowTextureCustomCasterPass = 0;
-            }
-            else
-            {
-                mShadowTextureCustomCasterPass = mat->getBestTechnique()->getPass( 0 );
-                if( mShadowTextureCustomCasterPass->hasVertexProgram() )
-                {
-                    // Save vertex program and params in case we have to swap them out
-                    mShadowTextureCustomCasterVertexProgram =
-                        mShadowTextureCustomCasterPass->getVertexProgramName();
-                    mShadowTextureCustomCasterVPParams =
-                        mShadowTextureCustomCasterPass->getVertexProgramParameters();
-                }
-                if( mShadowTextureCustomCasterPass->hasFragmentProgram() )
-                {
-                    // Save fragment program and params in case we have to swap them out
-                    mShadowTextureCustomCasterFragmentProgram =
-                        mShadowTextureCustomCasterPass->getFragmentProgramName();
-                    mShadowTextureCustomCasterFPParams =
-                        mShadowTextureCustomCasterPass->getFragmentProgramParameters();
-                }
-            }
-        }
     }
     //---------------------------------------------------------------------
     template <typename T>

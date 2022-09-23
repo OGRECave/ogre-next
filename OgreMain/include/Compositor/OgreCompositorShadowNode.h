@@ -197,10 +197,6 @@ namespace Ogre
         /// We derive so we can override the camera with ours
         void postInitializePass( CompositorPass *pass ) override;
 
-        const LightList *setShadowMapsToPass( Renderable *rend, const Pass *pass,
-                                              AutoParamDataSource *autoParamDataSource,
-                                              size_t               startLight );
-
         /// @see mCastersBox
         const AxisAlignedBox &getCastersBox() const { return mCastersBox; }
 

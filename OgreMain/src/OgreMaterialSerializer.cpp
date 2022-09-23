@@ -686,11 +686,6 @@ namespace Ogre
                 writeGeometryProgramRef( pPass );
             }
 
-            if( pPass->hasShadowCasterVertexProgram() )
-            {
-                writeShadowCasterVertexProgramRef( pPass );
-            }
-
             // Nested texture layers
             Pass::TextureUnitStateIterator it =
                 const_cast<Pass *>( pPass )->getTextureUnitStateIterator();
@@ -1347,19 +1342,6 @@ namespace Ogre
     {
         writeGpuProgramRef( "tessellation_domain_program_ref", pPass->getTessellationDomainProgram(),
                             pPass->getTessellationDomainProgramParameters() );
-    }
-    //-----------------------------------------------------------------------
-    void MaterialSerializer::writeShadowCasterVertexProgramRef( const Pass *pPass )
-    {
-        writeGpuProgramRef( "shadow_caster_vertex_program_ref", pPass->getShadowCasterVertexProgram(),
-                            pPass->getShadowCasterVertexProgramParameters() );
-    }
-    //-----------------------------------------------------------------------
-    void MaterialSerializer::writeShadowCasterFragmentProgramRef( const Pass *pPass )
-    {
-        writeGpuProgramRef( "shadow_caster_fragment_program_ref",
-                            pPass->getShadowCasterFragmentProgram(),
-                            pPass->getShadowCasterFragmentProgramParameters() );
     }
     //-----------------------------------------------------------------------
     void MaterialSerializer::writeGeometryProgramRef( const Pass *pPass )

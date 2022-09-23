@@ -615,16 +615,6 @@ namespace Ogre
 
         /// A pass designed to let us render shadow colour on white for texture shadows
         Pass *mShadowCasterPlainBlackPass;
-        /** Internal method for turning a regular pass into a shadow caster pass.
-        @remarks
-            This is only used for texture shadows, basically we're trying to
-            ensure that objects are rendered solid black.
-            This method will usually return the standard solid black pass for
-            all fixed function passes, but will merge in a vertex program
-            and fudge the AutoParamDataSource to set black lighting for
-            passes with vertex programs.
-        */
-        virtual_l2 const Pass *deriveShadowCasterPass( const Pass *pass );
 
         /** Internal method to validate whether a Pass should be allowed to render.
         @remarks
@@ -806,11 +796,6 @@ namespace Ogre
         Real   mShadowTextureOffset;     ///< Proportion of texture offset in view direction e.g. 0.4
         Real   mShadowTextureFadeStart;  ///< As a proportion e.g. 0.6
         Real   mShadowTextureFadeEnd;    ///< As a proportion e.g. 0.9
-        Pass  *mShadowTextureCustomCasterPass;
-        String mShadowTextureCustomCasterVertexProgram;
-        String mShadowTextureCustomCasterFragmentProgram;
-        GpuProgramParametersSharedPtr mShadowTextureCustomCasterVPParams;
-        GpuProgramParametersSharedPtr mShadowTextureCustomCasterFPParams;
 
         CompositorTextureVec mCompositorTextures;
 
@@ -2342,28 +2327,6 @@ namespace Ogre
         is completely invisible. The default is 0.9.
         */
         virtual void setShadowTextureFadeEnd( Real fadeEnd ) { mShadowTextureFadeEnd = fadeEnd; }
-
-        /** Sets the default material to use for rendering shadow casters.
-        @remarks
-            By default shadow casters are rendered into the shadow texture using
-            an automatically generated fixed-function pass. This allows basic
-            projective texture shadows, but it's possible to use more advanced
-            shadow techniques by overriding the caster materials, for
-            example providing vertex and fragment programs to implement shadow
-            maps.
-        @par
-            You can rely on the ambient light in the scene being set to the
-            requested texture shadow colour, if that's useful.
-        @note
-            Individual objects may also override the vertex program in
-            your default material if their materials include
-            shadow_caster_vertex_program_ref, shadow_caster_material entries,
-            so if you use both make sure they are compatible.
-        @note
-            Only a single pass is allowed in your material, although multiple
-            techniques may be used for hardware fallback.
-        */
-        virtual void setShadowTextureCasterMaterial( const String &name );
 
         void _setCurrentCompositorPass( CompositorPass *pass );
         /// Note: May be null.

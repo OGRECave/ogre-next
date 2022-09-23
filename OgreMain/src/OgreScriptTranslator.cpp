@@ -3123,13 +3123,8 @@ namespace Ogre{
             return;
         }
 
-        Pass *pass = any_cast<Pass*>(node->parent->context);
-        pass->setShadowCasterVertexProgram(evt.mName);
-        if(pass->getShadowCasterVertexProgram()->isSupported())
-        {
-            GpuProgramParametersSharedPtr params = pass->getShadowCasterVertexProgramParameters();
-            GpuProgramTranslator::translateProgramParameters(compiler, params, node);
-        }
+        compiler->addError( ScriptCompiler::CE_UNEXPECTEDTOKEN, node->file, node->line,
+                            "shadow_caster_vertex_program_ref is deprecated and will be ignored" );
     }
     //-------------------------------------------------------------------------
     void PassTranslator::translateShadowCasterFragmentProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node)
@@ -3149,13 +3144,8 @@ namespace Ogre{
             return;
         }
 
-        Pass *pass = any_cast<Pass*>(node->parent->context);
-        pass->setShadowCasterFragmentProgram(evt.mName);
-        if(pass->getShadowCasterFragmentProgram()->isSupported())
-        {
-            GpuProgramParametersSharedPtr params = pass->getShadowCasterFragmentProgramParameters();
-            GpuProgramTranslator::translateProgramParameters(compiler, params, node);
-        }
+        compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, node->file, node->line,
+                            "shadow_caster_fragment_program_ref is deprecated and will be ignored" );
     }
 
     /**************************************************************************
@@ -4503,7 +4493,8 @@ namespace Ogre{
                                 mUnit->setContentType(TextureUnitState::CONTENT_NAMED);
                                 break;
                             case ID_SHADOW:
-                                mUnit->setContentType(TextureUnitState::CONTENT_SHADOW);
+                                compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                    prop->line, atom->value + " is deprecated" );
                                 break;
                             case ID_COMPOSITOR:
                                 mUnit->setContentType(TextureUnitState::CONTENT_COMPOSITOR);
