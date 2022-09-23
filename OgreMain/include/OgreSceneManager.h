@@ -791,11 +791,11 @@ namespace Ogre
         virtual void _resumeRendering( RenderContext *context );
 
     protected:
-        Real   mDefaultShadowFarDist;
-        Real   mDefaultShadowFarDistSquared;
-        Real   mShadowTextureOffset;     ///< Proportion of texture offset in view direction e.g. 0.4
-        Real   mShadowTextureFadeStart;  ///< As a proportion e.g. 0.6
-        Real   mShadowTextureFadeEnd;    ///< As a proportion e.g. 0.9
+        Real mDefaultShadowFarDist;
+        Real mDefaultShadowFarDistSquared;
+        Real mShadowTextureOffset;     ///< Proportion of texture offset in view direction e.g. 0.4
+        Real mShadowTextureFadeStart;  ///< As a proportion e.g. 0.6
+        Real mShadowTextureFadeEnd;    ///< As a proportion e.g. 0.9
 
         CompositorTextureVec mCompositorTextures;
 
