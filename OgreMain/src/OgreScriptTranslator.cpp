@@ -1227,7 +1227,7 @@ namespace Ogre{
                             ++itor;
                         }
                     }
-                    paramVec.push_back( std::pair<IdString, String>( prop->name, value ) );
+                    paramVec.emplace_back( prop->name, value );
                     }
                 }
             }
@@ -1361,7 +1361,7 @@ namespace Ogre{
                         AbstractNodeList::const_iterator i0 = getNodeAt(prop->values, 0), i1 = getNodeAt(prop->values, 1);
                         String name, value;
                         if(getString(*i0, &name) && getString(*i1, &value))
-                            mTextureAliases.insert(std::make_pair(name, value));
+                            mTextureAliases.emplace( name, value );
                         else
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                                 "set_texture_alias must have 2 string argument");
@@ -4749,7 +4749,7 @@ namespace Ogre{
                             value += ((AtomAbstractNode*)(*it).get())->value;
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back( name, value );
                 }
             }
             else if((*i)->type == ANT_OBJECT)
@@ -4827,7 +4827,7 @@ namespace Ogre{
 
                     ProcessResourceNameScriptCompilerEvent evt(ProcessResourceNameScriptCompilerEvent::GPU_PROGRAM, value);
                     compiler->_fireEvent(&evt, 0);
-                    customParameters.push_back(std::make_pair("delegate", evt.mName));
+                    customParameters.emplace_back( "delegate", evt.mName );
                 }
                 else
                 {
@@ -4844,7 +4844,7 @@ namespace Ogre{
                             value += ((AtomAbstractNode*)(*it).get())->value;
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back( name, value );
                 }
             }
             else if((*i)->type == ANT_OBJECT)
@@ -4958,7 +4958,7 @@ namespace Ogre{
                             }
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back( name, value );
                 }
             }
             else if((*i)->type == ANT_OBJECT)

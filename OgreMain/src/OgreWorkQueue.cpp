@@ -45,7 +45,7 @@ namespace Ogre
         ChannelMap::iterator i = mChannelMap.find( channelName );
         if( i == mChannelMap.end() )
         {
-            i = mChannelMap.insert( ChannelMap::value_type( channelName, mNextChannel++ ) ).first;
+            i = mChannelMap.emplace( channelName, mNextChannel++ ).first;
         }
         return i->second;
     }
@@ -131,9 +131,7 @@ namespace Ogre
 
         RequestHandlerListByChannel::iterator i = mRequestHandlers.find( channel );
         if( i == mRequestHandlers.end() )
-            i = mRequestHandlers
-                    .insert( RequestHandlerListByChannel::value_type( channel, RequestHandlerList() ) )
-                    .first;
+            i = mRequestHandlers.emplace( channel, RequestHandlerList() ).first;
 
         RequestHandlerList &handlers = i->second;
         bool duplicate = false;
@@ -175,9 +173,7 @@ namespace Ogre
     {
         ResponseHandlerListByChannel::iterator i = mResponseHandlers.find( channel );
         if( i == mResponseHandlers.end() )
-            i = mResponseHandlers
-                    .insert( ResponseHandlerListByChannel::value_type( channel, ResponseHandlerList() ) )
-                    .first;
+            i = mResponseHandlers.emplace( channel, ResponseHandlerList() ).first;
 
         ResponseHandlerList &handlers = i->second;
         if( std::find( handlers.begin(), handlers.end(), rh ) == handlers.end() )

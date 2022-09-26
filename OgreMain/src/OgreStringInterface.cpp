@@ -58,8 +58,7 @@ namespace Ogre
 
         if( it == msDictionary.end() )
         {
-            mParamDict =
-                &msDictionary.insert( std::make_pair( className, ParamDictionary() ) ).first->second;
+            mParamDict = &msDictionary.emplace( className, ParamDictionary() ).first->second;
             mParamDictName = className;
             return true;
         }

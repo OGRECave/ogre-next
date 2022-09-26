@@ -51,7 +51,7 @@ namespace Ogre
                                                 _In_ LPRECT lprcMonitor, _In_ LPARAM dwData )
     {
         MonitorInfo *_this = (MonitorInfo *)dwData;
-        _this->mMapMonitors.insert( std::make_pair( hMonitor, _this->mCurrentMonitor++ ) );
+        _this->mMapMonitors.emplace( hMonitor, _this->mCurrentMonitor++ );
         return true;
     }
 

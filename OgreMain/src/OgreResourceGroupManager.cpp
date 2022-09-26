@@ -97,7 +97,7 @@ namespace Ogre
         grp->groupStatus = ResourceGroup::UNINITIALSED;
         grp->name = name;
         grp->inGlobalPool = inGlobalPool;
-        mResourceGroupMap.insert( ResourceGroupMap::value_type( name, grp ) );
+        mResourceGroupMap.emplace( name, grp );
     }
     //-----------------------------------------------------------------------
     class ScopedCLocale
@@ -1022,7 +1022,7 @@ namespace Ogre
     {
         OGRE_LOCK_AUTO_MUTEX;
 
-        mScriptLoaderOrderMap.insert( ScriptLoaderOrderMap::value_type( su->getLoadingOrder(), su ) );
+        mScriptLoaderOrderMap.emplace( su->getLoadingOrder(), su );
     }
     //-----------------------------------------------------------------------
     void ResourceGroupManager::_unregisterScriptLoader( ScriptLoader *su )

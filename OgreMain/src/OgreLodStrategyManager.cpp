@@ -80,7 +80,7 @@ namespace Ogre
         }
 
         // Insert the strategy into the map with its name as the key
-        mStrategies.insert( std::make_pair( strategy->getName(), strategy ) );
+        mStrategies.emplace( strategy->getName(), strategy );
     }
     //-----------------------------------------------------------------------
     LodStrategy *LodStrategyManager::removeStrategy( const String &name )
