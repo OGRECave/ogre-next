@@ -390,8 +390,9 @@ namespace Ogre
             // Because the algorithm doesn't care about manifold or not, we just identifying
             // the common vertex by EXACT same position.
             // Hint: We can use quantize method for welding almost same position vertex fastest.
-            std::pair<CommonVertexMap::iterator, bool> inserted = mCommonVertexMap.emplace( vec, mVertices.size() );
+            std::pair<CommonVertexMap::iterator, bool> inserted =
                 mCommonVertexMap.emplace( vec, mVertices.size() );
+            mCommonVertexMap.emplace( vec, mVertices.size() );
             if( !inserted.second )
             {
                 // Already existing, return old one

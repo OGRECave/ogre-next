@@ -204,7 +204,8 @@ namespace Ogre
                 }
 
                 // Insert copy into licensee list
-                mTempVertexBufferLicenses.emplace( vbuf.get(), VertexBufferLicense( sourceBuffer.get(), licenseType,
+                mTempVertexBufferLicenses.emplace(
+                    vbuf.get(), VertexBufferLicense( sourceBuffer.get(), licenseType,
                                                      EXPIRED_DELAY_FRAME_THRESHOLD, vbuf, licensee ) );
                 return vbuf;
             }
