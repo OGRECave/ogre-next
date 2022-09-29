@@ -274,6 +274,16 @@ namespace Ogre
 
         notifyPassSceneAfterShadowMapsListeners();
 
+        {
+            // We must ensure Aspect Ratio is set BEFORE analyzeBarriers
+            // otherwise analyzeBarriers may make the wrong decisions
+            // (e.g. skipping barriers in planar reflections) because the AR
+            // may be used to determine whether a technique is used or not
+            setViewportSizeToViewport( 0u, viewport );
+            mCullCamera->_notifyViewport( viewport );
+            viewport->_setupAspectRatio( mCullCamera );
+        }
+
         analyzeBarriers();
         executeResourceTransitions();
         setRenderPassDescToCurrent();

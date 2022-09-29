@@ -94,6 +94,8 @@ namespace Ogre
         */
         void _updateDimensions();
 
+        void _setupAspectRatio( Camera *cullCamera );
+
         /** Instructs the viewport to updates its contents.
          */
         void _updateCullPhase01( Camera *renderCamera, Camera *cullCamera, const Camera *lodCamera,
