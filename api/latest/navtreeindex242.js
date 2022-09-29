@@ -1,5 +1,6 @@
 var NAVTREEINDEX242 =
 {
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a0ae22596b5bd2a3faf2958ab3d109d1f":[5,0,1,70,106],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a0c726a0326e8a7d9e80d030541b6bddf":[5,0,1,70,110],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a0c726a0326e8a7d9e80d030541b6bddf":[5,2,11,70,110],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a0d11e174f23cf5263bd8965343124ea9":[5,2,11,70,67],
@@ -248,6 +249,5 @@ var NAVTREEINDEX242 =
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#ad12c94f1120305ae108d30bebc5d2e1e":[5,2,11,70,90],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#ad1f1a983f9e2dfddee802c47bb0b1ca9":[5,2,11,70,100],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#ad1f1a983f9e2dfddee802c47bb0b1ca9":[5,0,1,70,100],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#ad215e51b8a9f62f5524ae895ed902fd2":[5,0,1,70,83],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#ad215e51b8a9f62f5524ae895ed902fd2":[5,2,11,70,83]
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#ad215e51b8a9f62f5524ae895ed902fd2":[5,0,1,70,83]
 };

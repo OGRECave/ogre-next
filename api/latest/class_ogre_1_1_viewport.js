@@ -5,6 +5,7 @@ var class_ogre_1_1_viewport =
     [ "~Viewport", "class_ogre_1_1_viewport.html#a7b76633e02431bd4254f6d4629b7672a", null ],
     [ "_clearUpdatedFlag", "class_ogre_1_1_viewport.html#aec26c2dc8b0f2fdaa25cc63b0216dfd7", null ],
     [ "_isUpdated", "class_ogre_1_1_viewport.html#a912bdfa5bb3ef49c213b134dfd11a3ff", null ],
+    [ "_setupAspectRatio", "class_ogre_1_1_viewport.html#a5b215ef84eadb3b258477226c40dc7af", null ],
     [ "_setVisibilityMask", "class_ogre_1_1_viewport.html#af0784ddcabf4398322a9a7bf54c0ddbc", null ],
     [ "_updateCullPhase01", "class_ogre_1_1_viewport.html#a7948a97c2960963d34db6b3f69beb38f", null ],
     [ "_updateDimensions", "class_ogre_1_1_viewport.html#a806ee31e1be59831223649d2b5cc2109", null ],
