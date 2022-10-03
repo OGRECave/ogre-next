@@ -633,7 +633,7 @@ namespace Ogre
         }
 
         // Record new effect
-        mEffects.insert( EffectMap::value_type( effect.type, effect ) );
+        mEffects.emplace( effect.type, effect );
     }
     //-----------------------------------------------------------------------
     void TextureUnitState::removeAllEffects()

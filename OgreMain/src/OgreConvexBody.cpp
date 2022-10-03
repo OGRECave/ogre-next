@@ -900,7 +900,7 @@ namespace Ogre
                 const Vector3 &a = p.getVertex( j );
                 const Vector3 &b = p.getVertex( ( j + 1 ) % p.getVertexCount() );
 
-                edgeMap.insert( Polygon::Edge( a, b ) );
+                edgeMap.emplace( a, b );
             }
         }
 
@@ -1112,8 +1112,7 @@ namespace Ogre
             // insert intersection polygon only, if there are two vertices present
             if( pIntersect->getVertexCount() == 2 )
             {
-                intersectionEdges.insert(
-                    Polygon::Edge( pIntersect->getVertex( 0 ), pIntersect->getVertex( 1 ) ) );
+                intersectionEdges.emplace( pIntersect->getVertex( 0 ), pIntersect->getVertex( 1 ) );
             }
 
             // delete intersection polygon

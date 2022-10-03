@@ -98,10 +98,7 @@ namespace Ogre
 
     String ObjectAbstractNode::getValue() const { return cls; }
 
-    void ObjectAbstractNode::addVariable( const Ogre::String &inName )
-    {
-        mEnv.insert( std::make_pair( inName, "" ) );
-    }
+    void ObjectAbstractNode::addVariable( const Ogre::String &inName ) { mEnv.emplace( inName, "" ); }
 
     void ObjectAbstractNode::setVariable( const Ogre::String &inName, const Ogre::String &value )
     {
@@ -498,7 +495,7 @@ namespace Ogre
                         processObjects( importedNodes.get(), importedNodes );
                     }
                     if( importedNodes && !importedNodes->empty() )
-                        mImports.insert( std::make_pair( import->source, importedNodes ) );
+                        mImports.emplace( import->source, importedNodes );
                 }
 
                 // Handle the target request now
@@ -508,7 +505,7 @@ namespace Ogre
                 {
                     mImportRequests.erase( mImportRequests.lower_bound( import->source ),
                                            mImportRequests.upper_bound( import->source ) );
-                    mImportRequests.insert( std::make_pair( import->source, "*" ) );
+                    mImportRequests.emplace( import->source, "*" );
                 }
                 else
                 {
@@ -516,7 +513,7 @@ namespace Ogre
                                                end = mImportRequests.upper_bound( import->source );
                     if( iter == end || iter->second != "*" )
                     {
-                        mImportRequests.insert( std::make_pair( import->source, import->target ) );
+                        mImportRequests.emplace( import->source, import->target );
                     }
                 }
 
@@ -1485,7 +1482,7 @@ namespace Ogre
             }
             else
             {
-                mCompiler->mEnv.insert( std::make_pair( name, value ) );
+                mCompiler->mEnv.emplace( name, value );
             }
         }
         // variable = $*, no children

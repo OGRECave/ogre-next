@@ -285,7 +285,7 @@ namespace Ogre
                              "OldNode::addChild" );
             }
 
-            mChildren.insert( ChildOldNodeMap::value_type( child->getName(), child ) );
+            mChildren.emplace( child->getName(), child );
             child->setParent( this );
         }
         //-----------------------------------------------------------------------

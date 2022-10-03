@@ -3359,9 +3359,7 @@ namespace Ogre
         if( ci == mLightClippingInfoMap.end() )
         {
             // create new entry
-            ci = mLightClippingInfoMap
-                     .insert( LightClippingInfoMap::value_type( l, LightClippingInfo() ) )
-                     .first;
+            ci = mLightClippingInfoMap.emplace( l, LightClippingInfo() ).first;
         }
         if( !ci->second.scissorValid )
         {
@@ -3585,9 +3583,7 @@ namespace Ogre
         if( ci == mLightClippingInfoMap.end() )
         {
             // create new entry
-            ci = mLightClippingInfoMap
-                     .insert( LightClippingInfoMap::value_type( l, LightClippingInfo() ) )
-                     .first;
+            ci = mLightClippingInfoMap.emplace( l, LightClippingInfo() ).first;
         }
         if( !ci->second.clipPlanesValid )
         {

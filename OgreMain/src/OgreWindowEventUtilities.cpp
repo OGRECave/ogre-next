@@ -144,7 +144,7 @@ namespace Ogre
     //--------------------------------------------------------------------------------//
     void WindowEventUtilities::addWindowEventListener( Window *window, WindowEventListener *listener )
     {
-        _msListeners.insert( std::make_pair( window, listener ) );
+        _msListeners.emplace( window, listener );
     }
 
     //--------------------------------------------------------------------------------//

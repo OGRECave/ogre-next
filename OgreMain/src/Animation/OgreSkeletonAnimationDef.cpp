@@ -106,9 +106,7 @@ namespace Ogre
                     TimestampsPerBlock::iterator itKeyframes = timestampsByBlock.find( blockIdx );
                     if( itKeyframes == timestampsByBlock.end() )
                     {
-                        itKeyframes =
-                            timestampsByBlock.insert( std::make_pair( (size_t)blockIdx, emptyVec ) )
-                                .first;
+                        itKeyframes = timestampsByBlock.emplace( (size_t)blockIdx, emptyVec ).first;
                     }
 
                     itKeyframes->second.reserve( track->getNumKeyFrames() + (size_t)extraKeyFrameAtEnd );

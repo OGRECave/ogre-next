@@ -114,7 +114,7 @@ namespace Ogre
 
         inline void addCapabilitiesMapping( String name, Capabilities cap )
         {
-            mCapabilitiesMap.insert( CapabilitiesMap::value_type( name, cap ) );
+            mCapabilitiesMap.emplace( name, cap );
         }
 
         // capabilities lines for parsing are collected along with their line numbers for debugging
@@ -135,7 +135,7 @@ namespace Ogre
 
         inline void addKeywordType( String keyword, CapabilityKeywordType type )
         {
-            mKeywordTypeMap.insert( KeywordTypeMap::value_type( keyword, type ) );
+            mKeywordTypeMap.emplace( keyword, type );
         }
 
         inline CapabilityKeywordType getKeywordType( const String &keyword ) const
@@ -152,8 +152,7 @@ namespace Ogre
 
         inline void addSetStringMethod( String keyword, SetStringMethod method )
         {
-            mSetStringMethodDispatchTable.insert(
-                SetStringMethodDispatchTable::value_type( keyword, method ) );
+            mSetStringMethodDispatchTable.emplace( keyword, method );
         }
 
         inline void callSetStringMethod( String &keyword, String &val )
@@ -173,8 +172,7 @@ namespace Ogre
 
         inline void addSetIntMethod( String keyword, SetIntMethod method )
         {
-            mSetIntMethodDispatchTable.insert(
-                SetIntMethodDispatchTable::value_type( keyword, method ) );
+            mSetIntMethodDispatchTable.emplace( keyword, method );
         }
 
         inline void callSetIntMethod( String &keyword, ushort val )
@@ -193,8 +191,7 @@ namespace Ogre
 
         inline void addSetBoolMethod( String keyword, SetBoolMethod method )
         {
-            mSetBoolMethodDispatchTable.insert(
-                SetBoolMethodDispatchTable::value_type( keyword, method ) );
+            mSetBoolMethodDispatchTable.emplace( keyword, method );
         }
 
         inline void callSetBoolMethod( String &keyword, bool val )
@@ -214,8 +211,7 @@ namespace Ogre
 
         inline void addSetRealMethod( String keyword, SetRealMethod method )
         {
-            mSetRealMethodDispatchTable.insert(
-                SetRealMethodDispatchTable::value_type( keyword, method ) );
+            mSetRealMethodDispatchTable.emplace( keyword, method );
         }
 
         inline void callSetRealMethod( String &keyword, Real val )

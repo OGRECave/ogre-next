@@ -335,7 +335,7 @@ namespace Ogre
         for( unsigned j = 0; j < driverList->count(); j++ )
         {
             D3D11Driver *driver = driverList->item( j );
-            optDevice.possibleValues.push_back( driver->DriverDescription() );
+            optDevice.possibleValues.emplace_back( driver->DriverDescription() );
         }
         optDevice.immutable = false;
 
@@ -540,7 +540,7 @@ namespace Ogre
                 for( unsigned k = 0; k < driver->getVideoModeList()->count(); k++ )
                 {
                     videoMode = driver->getVideoModeList()->item( k );
-                    optVideoMode->possibleValues.push_back( videoMode->getDescription() );
+                    optVideoMode->possibleValues.emplace_back( videoMode->getDescription() );
                 }
 
                 // Reset video mode to default if previous doesn't avail in new possible values
@@ -3506,7 +3506,7 @@ namespace Ogre
             }
 
             // Store class instance
-            mInstanceMap.insert( std::make_pair( subroutineName, instance ) );
+            mInstanceMap.emplace( subroutineName, instance );
         }
         else
         {

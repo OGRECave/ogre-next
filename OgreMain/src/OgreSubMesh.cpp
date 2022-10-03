@@ -119,8 +119,7 @@ namespace Ogre
                              "must assign bones to the Mesh, not the SubMesh",
                              "SubMesh.addBoneAssignment" );
             }
-            mBoneAssignments.insert(
-                VertexBoneAssignmentList::value_type( vertBoneAssign.vertexIndex, vertBoneAssign ) );
+            mBoneAssignments.emplace( vertBoneAssign.vertexIndex, vertBoneAssign );
             mBoneAssignmentsOutOfDate = true;
         }
         //-----------------------------------------------------------------------
@@ -570,8 +569,7 @@ namespace Ogre
                     assignment.vertexIndex = itor->vertexIndex;
                     assignment.boneIndex = itor->boneIndex;
                     assignment.weight = itor->weight;
-                    mBoneAssignments.insert(
-                        VertexBoneAssignmentList::value_type( itor->vertexIndex, assignment ) );
+                    mBoneAssignments.emplace( itor->vertexIndex, assignment );
                     ++itor;
                 }
             }

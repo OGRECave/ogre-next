@@ -114,7 +114,7 @@ namespace Ogre
         std::pair<ResourceMap::iterator, bool> result;
         if( ResourceGroupManager::getSingleton().isResourceGroupInGlobalPool( res->getGroup() ) )
         {
-            result = mResources.insert( ResourceMap::value_type( res->getName(), res ) );
+            result = mResources.emplace( res->getName(), res );
         }
         else
         {
@@ -124,7 +124,7 @@ namespace Ogre
             if( itGroup == mResourcesWithGroup.end() )
             {
                 ResourceMap dummy;
-                mResourcesWithGroup.insert( ResourceWithGroupMap::value_type( res->getGroup(), dummy ) );
+                mResourcesWithGroup.emplace( res->getGroup(), dummy );
                 itGroup = mResourcesWithGroup.find( res->getGroup() );
             }
             result = itGroup->second.insert( ResourceMap::value_type( res->getName(), res ) );
@@ -144,8 +144,7 @@ namespace Ogre
                     if( ResourceGroupManager::getSingleton().isResourceGroupInGlobalPool(
                             res->getGroup() ) )
                     {
-                        insertResult =
-                            mResources.insert( ResourceMap::value_type( res->getName(), res ) );
+                        insertResult = mResources.emplace( res->getName(), res );
                     }
                     else
                     {
@@ -162,8 +161,7 @@ namespace Ogre
                     }
 
                     std::pair<ResourceHandleMap::iterator, bool> resultHandle =
-                        mResourcesByHandle.insert(
-                            ResourceHandleMap::value_type( res->getHandle(), res ) );
+                        mResourcesByHandle.emplace( res->getHandle(), res );
                     if( !resultHandle.second )
                     {
                         OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
@@ -179,7 +177,7 @@ namespace Ogre
         {
             // Insert the handle
             std::pair<ResourceHandleMap::iterator, bool> resultHandle =
-                mResourcesByHandle.insert( ResourceHandleMap::value_type( res->getHandle(), res ) );
+                mResourcesByHandle.emplace( res->getHandle(), res );
             if( !resultHandle.second )
             {
                 OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
@@ -496,9 +494,7 @@ namespace Ogre
         ResourcePoolMap::iterator i = mResourcePoolMap.find( name );
         if( i == mResourcePoolMap.end() )
         {
-            i = mResourcePoolMap
-                    .insert( ResourcePoolMap::value_type( name, OGRE_NEW ResourcePool( name ) ) )
-                    .first;
+            i = mResourcePoolMap.emplace( name, OGRE_NEW ResourcePool( name ) ).first;
         }
         return i->second;
     }

@@ -90,7 +90,7 @@ namespace Ogre
             else if( pos == String::npos || ( maxSplits && numSplits == maxSplits ) )
             {
                 // Copy the rest of the string
-                ret.push_back( str.substr( start ) );
+                ret.emplace_back( str.begin() + start, str.end() );
                 break;
             }
             else
@@ -107,7 +107,7 @@ namespace Ogre
                     if( delimPos == String::npos )
                     {
                         // Copy the rest of the string
-                        ret.push_back( str.substr( delimStart ) );
+                        ret.emplace_back( str.begin() + delimStart, str.end() );
                     }
                     else
                     {
@@ -168,7 +168,7 @@ namespace Ogre
                     // Missing closer. Warn or throw exception?
                 }
                 // Copy the rest of the string
-                ret.push_back( str.substr( start ) );
+                ret.emplace_back( str.begin() + start, str.end() );
                 break;
             }
             else

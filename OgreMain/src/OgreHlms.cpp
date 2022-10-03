@@ -1021,7 +1021,7 @@ namespace Ogre
         bool syntaxError = false;
 
         outArgs.clear();
-        outArgs.push_back( String() );
+        outArgs.emplace_back();
 
         String::const_iterator it = subString.begin();
         String::const_iterator en = subString.end();
@@ -1042,7 +1042,7 @@ namespace Ogre
             else if( c == ',' )
             {
                 expressionState = 0;
-                outArgs.push_back( String() );
+                outArgs.emplace_back();
             }
             else
             {

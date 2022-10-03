@@ -715,8 +715,7 @@ namespace Ogre
         //-----------------------------------------------------------------------
         void Mesh::addBoneAssignment( const VertexBoneAssignment &vertBoneAssign )
         {
-            mBoneAssignments.insert(
-                VertexBoneAssignmentList::value_type( vertBoneAssign.vertexIndex, vertBoneAssign ) );
+            mBoneAssignments.emplace( vertBoneAssign.vertexIndex, vertBoneAssign );
             mBoneAssignmentsOutOfDate = true;
         }
         //-----------------------------------------------------------------------
