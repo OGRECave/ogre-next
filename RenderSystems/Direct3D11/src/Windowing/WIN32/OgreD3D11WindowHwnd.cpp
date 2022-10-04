@@ -559,7 +559,7 @@ namespace Ogre
                 else
                 {
                     SetWindowPos( mHwnd, HWND_TOPMOST, 0, 0, width, height, SWP_NOACTIVATE );
-                    SetWindowLong( mHwnd, GWL_STYLE, dwStyle );
+                    SetWindowLongPtr( mHwnd, GWL_STYLE, dwStyle );
                     SetWindowPos( mHwnd, 0, 0, 0, 0, 0,
                                   SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER );
                 }
@@ -570,7 +570,7 @@ namespace Ogre
                 winWidth = mRequestedWidth;
                 winHeight = mRequestedHeight;
                 adjustWindow( mRequestedWidth, mRequestedHeight, &winWidth, &winHeight );
-                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
+                SetWindowLongPtr( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
                 SetWindowPos( mHwnd, HWND_NOTOPMOST, 0, 0, winWidth, winHeight,
                               SWP_DRAWFRAME | SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOACTIVATE );
                 updateWindowRect();
@@ -604,7 +604,7 @@ namespace Ogre
         {
             HWND currentWindowHandle = mHwnd;
             while( ( visible = ( IsIconic( currentWindowHandle ) == false ) ) &&
-                   ( GetWindowLong( currentWindowHandle, GWL_STYLE ) & WS_CHILD ) != 0 )
+                   ( GetWindowLongPtr( currentWindowHandle, GWL_STYLE ) & WS_CHILD ) != 0 )
             {
                 currentWindowHandle = GetParent( currentWindowHandle );
             }
