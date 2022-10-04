@@ -61,19 +61,29 @@ namespace Ogre
         /// Construct from an explicit list of values
         inline Quaternion( Real fW, Real fX, Real fY, Real fZ ) : w( fW ), x( fX ), y( fY ), z( fZ ) {}
         /// Construct a quaternion from a rotation matrix
-        inline Quaternion( const Matrix3 &rot ) { this->FromRotationMatrix( rot ); }
+        inline Quaternion( const Matrix3 &rot ) : w( 1 ), x( 0 ), y( 0 ), z( 0 )
+        {
+            this->FromRotationMatrix( rot );
+        }
         /// Construct a quaternion from an angle/axis
         inline Quaternion( const Radian &rfAngle, const Vector3 &rkAxis )
         {
             this->FromAngleAxis( rfAngle, rkAxis );
         }
         /// Construct a quaternion from 3 orthonormal local axes
-        inline Quaternion( const Vector3 &xaxis, const Vector3 &yaxis, const Vector3 &zaxis )
+        inline Quaternion( const Vector3 &xaxis, const Vector3 &yaxis, const Vector3 &zaxis ) :
+            w( 1 ),
+            x( 0 ),
+            y( 0 ),
+            z( 0 )
         {
             this->FromAxes( xaxis, yaxis, zaxis );
         }
         /// Construct a quaternion from 3 orthonormal local axes
-        inline Quaternion( const Vector3 *akAxis ) { this->FromAxes( akAxis ); }
+        inline Quaternion( const Vector3 *akAxis ) : w( 1 ), x( 0 ), y( 0 ), z( 0 )
+        {
+            this->FromAxes( akAxis );
+        }
         /// Construct a quaternion from 4 manual w/x/y/z values
         inline Quaternion( Real *valptr ) { memcpy( &w, valptr, sizeof( Real ) * 4 ); }
 

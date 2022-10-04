@@ -49,7 +49,14 @@ namespace Ogre
             mParent->_notifyDirty();
         }
         //---------------------------------------------------------------------
-        AnimationState::~AnimationState() {}
+        AnimationState::~AnimationState()
+        {
+            if( mBlendMask != NULL )
+            {
+                OGRE_DELETE mBlendMask;
+                mBlendMask = NULL;
+            }
+        }
         //---------------------------------------------------------------------
         AnimationState::AnimationState( const String &animName, AnimationStateSet *parent, Real timePos,
                                         Real length, Real weight, bool enabled ) :
