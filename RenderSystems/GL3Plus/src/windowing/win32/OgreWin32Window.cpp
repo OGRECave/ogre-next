@@ -847,7 +847,11 @@ namespace Ogre
                 mTop = monitorInfo.rcMonitor.top;
                 mLeft = monitorInfo.rcMonitor.left;
 
+#ifdef _WIN64
+                SetWindowLongPtr( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
+#else
                 SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
+#endif
                 SetWindowPos( mHwnd, HWND_TOPMOST, mLeft, mTop, width, height, SWP_NOACTIVATE );
                 setFinalResolution( width, height );
             }
@@ -873,7 +877,11 @@ namespace Ogre
                 int left = ( screenw > (int)winWidth ) ? ( ( screenw - (int)winWidth ) / 2 ) : 0;
                 int top = ( screenh > (int)winHeight ) ? ( ( screenh - (int)winHeight ) / 2 ) : 0;
 
+#ifdef _WIN64
+                SetWindowLongPtr( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
+#else
                 SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
+#endif
                 SetWindowPos( mHwnd, HWND_NOTOPMOST, left, top, winWidth, winHeight,
                               SWP_DRAWFRAME | SWP_FRAMECHANGED | SWP_NOACTIVATE );
                 mLeft = left;
@@ -910,7 +918,11 @@ namespace Ogre
         {
             HWND currentWindowHandle = mHwnd;
             while( ( visible = ( IsIconic( currentWindowHandle ) == false ) ) &&
+#ifdef _WIN64
+                   ( GetWindowLongPtr( currentWindowHandle, GWL_STYLE ) & WS_CHILD ) != 0 )
+#else
                    ( GetWindowLong( currentWindowHandle, GWL_STYLE ) & WS_CHILD ) != 0 )
+#endif
             {
                 currentWindowHandle = GetParent( currentWindowHandle );
             }
