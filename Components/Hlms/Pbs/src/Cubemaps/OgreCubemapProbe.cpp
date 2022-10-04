@@ -115,11 +115,14 @@ namespace Ogre
         {
             if( !mCreator->getAutomaticMode() )
             {
-                const bool useManual = mTexture->getNumMipmaps() > 1u;
-                if( useManual )
+                if( mTexture )
                 {
-                    TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
-                    mCreator->releaseTmpRtt( channel );
+                    const bool useManual = mTexture->getNumMipmaps() > 1u;
+                    if( useManual )
+                    {
+                        TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
+                        mCreator->releaseTmpRtt( channel );
+                    }
                 }
             }
 
