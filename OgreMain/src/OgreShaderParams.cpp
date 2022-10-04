@@ -171,9 +171,9 @@ namespace Ogre
         this->isEx = false;
         this->isDirty = true;
         mp.elementType = ElementFloat;
-        mp.dataSizeBytes = sizeof( float ) * 2u;
+        mp.dataSizeBytes = sizeof( float ) * 2;
 #if !OGRE_DOUBLE_PRECISION
-        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 2u );
+        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 2 );
 #else
         for( int i = 0; i < 2; ++i )
             reinterpret_cast<float *>( mp.dataBytes )[i] = static_cast<float>( value[i] );
@@ -186,9 +186,9 @@ namespace Ogre
         this->isEx = false;
         this->isDirty = true;
         mp.elementType = ElementFloat;
-        mp.dataSizeBytes = sizeof( float ) * 3u;
+        mp.dataSizeBytes = sizeof( float ) * 3;
 #if !OGRE_DOUBLE_PRECISION
-        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 3u );
+        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 3 );
 #else
         for( int i = 0; i < 3; ++i )
             reinterpret_cast<float *>( mp.dataBytes )[i] = static_cast<float>( value[i] );
@@ -201,9 +201,9 @@ namespace Ogre
         this->isEx = false;
         this->isDirty = true;
         mp.elementType = ElementFloat;
-        mp.dataSizeBytes = sizeof( float ) * 4u;
+        mp.dataSizeBytes = sizeof( float ) * 4;
 #if !OGRE_DOUBLE_PRECISION
-        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 4u );
+        memcpy( mp.dataBytes, value.ptr(), sizeof( float ) * 4 );
 #else
         for( int i = 0; i < 4; ++i )
             reinterpret_cast<float *>( mp.dataBytes )[i] = static_cast<float>( value[i] );

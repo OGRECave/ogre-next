@@ -881,7 +881,8 @@ namespace v1 {
         {
             size_t offset = 0;
             // Skip non-vertexbuffer elems
-            if (stricmp(vbElem->Value(), "vertexbuffer")) continue;
+            if( stricmp( vbElem->Value(), "vertexbuffer" ) != 0 )
+                continue;
            
             const char* attrib = vbElem->Attribute("positions");
             if (attrib && StringConverter::parseBool(attrib))

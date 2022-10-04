@@ -47,8 +47,8 @@ namespace Ogre
         Aabb aabb( Vector3( 0.5f ), Vector3( 0.5f ) );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
-        mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
-        mObjectData.mWorldRadius[mObjectData.mIndex] = aabb.getRadius();
+        mObjectData.mWorldRadius[mObjectData.mIndex] = mObjectData.mLocalRadius[mObjectData.mIndex] =
+            aabb.getRadius();
 
         createBuffers();
 
@@ -141,8 +141,8 @@ namespace Ogre
                    Vector3( Real( width ), Real( height ), Real( depth ) ) * 0.5f );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
-        mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
-        mObjectData.mWorldRadius[mObjectData.mIndex] = aabb.getRadius();
+        mObjectData.mWorldRadius[mObjectData.mIndex] = mObjectData.mLocalRadius[mObjectData.mIndex] =
+            aabb.getRadius();
     }
     //-----------------------------------------------------------------------------------
     const String &VoxelVisualizer::getMovableType() const { return BLANKSTRING; }

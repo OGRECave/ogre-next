@@ -129,8 +129,8 @@ namespace Ogre
         Aabb aabb( mMesh->getAabb() );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
-        mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
-        mObjectData.mWorldRadius[mObjectData.mIndex] = aabb.getRadius();
+        mObjectData.mWorldRadius[mObjectData.mIndex] = mObjectData.mLocalRadius[mObjectData.mIndex] =
+            aabb.getRadius();
         if( mParentNode )
         {
             updateSingleWorldAabb();

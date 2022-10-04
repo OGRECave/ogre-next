@@ -20,8 +20,8 @@ namespace Ogre
         Aabb aabb( Vector3::ZERO, Vector3::UNIT_SCALE );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
-        mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
-        mObjectData.mWorldRadius[mObjectData.mIndex] = aabb.getRadius();
+        mObjectData.mWorldRadius[mObjectData.mIndex] = mObjectData.mLocalRadius[mObjectData.mIndex] =
+            aabb.getRadius();
 
         createBuffers();
 
