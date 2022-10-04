@@ -197,9 +197,9 @@ namespace Ogre
     size_t ObjectMemoryManager::getNumRenderQueues() const
     {
         size_t retVal = std::numeric_limits<size_t>::max();
-        ArrayMemoryManagerVec::const_iterator begin = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();
+        ArrayMemoryManagerVec::const_iterator begin = mMemoryManagers.cbegin();
+        ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.cbegin();
+        ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.cend();
 
         while( itor != endt )
         {

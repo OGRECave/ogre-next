@@ -280,8 +280,8 @@ namespace Ogre
         mTexLastOffset = 0;
 
         {
-            ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-            ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.end();
+            ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.cbegin();
+            ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.cend();
 
             while( itor != end )
             {
@@ -295,8 +295,8 @@ namespace Ogre
         }
 
         {
-            ConstBufferPackedVec::const_iterator itor = mConstBuffers.begin();
-            ConstBufferPackedVec::const_iterator end = mConstBuffers.end();
+            ConstBufferPackedVec::const_iterator itor = mConstBuffers.cbegin();
+            ConstBufferPackedVec::const_iterator end = mConstBuffers.cend();
 
             while( itor != end )
             {
@@ -315,8 +315,8 @@ namespace Ogre
         unmapConstBuffer();
         unmapTexBuffer( commandBuffer );
 
-        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.cbegin();
+        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.cend();
 
         while( itor != end )
         {
@@ -327,8 +327,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsBufferManager::postCommandBufferExecution( CommandBuffer *commandBuffer )
     {
-        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.cbegin();
+        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.cend();
 
         while( itor != end )
         {
@@ -343,8 +343,8 @@ namespace Ogre
         mCurrentTexBuffer = 0;
         mTexLastOffset = 0;
 
-        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.cbegin();
+        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.cend();
 
         while( itor != end )
         {

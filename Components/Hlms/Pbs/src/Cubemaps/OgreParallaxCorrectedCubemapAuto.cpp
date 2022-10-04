@@ -284,8 +284,8 @@ namespace Ogre
 
             mRoot->removeFrameListener( this );
 
-            CubemapProbeVec::const_iterator itor = mProbes.begin();
-            CubemapProbeVec::const_iterator end = mProbes.end();
+            CubemapProbeVec::const_iterator itor = mProbes.cbegin();
+            CubemapProbeVec::const_iterator end = mProbes.cend();
 
             while( itor != end )
             {

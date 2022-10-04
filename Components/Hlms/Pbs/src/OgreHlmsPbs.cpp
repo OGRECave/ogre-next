@@ -344,8 +344,8 @@ namespace Ogre
         {
             if( !mSkipRequestSlotInChangeRS )
             {
-                HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-                HlmsDatablockMap::const_iterator end = mDatablocks.end();
+                HlmsDatablockMap::const_iterator itor = mDatablocks.cbegin();
+                HlmsDatablockMap::const_iterator end = mDatablocks.cend();
 
                 while( itor != end )
                 {
@@ -2754,8 +2754,8 @@ namespace Ogre
             {
                 mPreparedPass.shadowMaps.reserve( contiguousShadowMapTex.size() );
 
-                TextureGpuVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
-                TextureGpuVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
+                TextureGpuVec::const_iterator itShadowMap = contiguousShadowMapTex.cbegin();
+                TextureGpuVec::const_iterator enShadowMap = contiguousShadowMapTex.cend();
 
                 while( itShadowMap != enShadowMap )
                 {
@@ -3570,8 +3570,8 @@ namespace Ogre
         mCurrentPassBuffer = 0;
 
         {
-            ConstBufferPackedVec::const_iterator itor = mPassBuffers.begin();
-            ConstBufferPackedVec::const_iterator end = mPassBuffers.end();
+            ConstBufferPackedVec::const_iterator itor = mPassBuffers.cbegin();
+            ConstBufferPackedVec::const_iterator end = mPassBuffers.cend();
 
             while( itor != end )
             {
@@ -3586,8 +3586,8 @@ namespace Ogre
 
         ///////// light buffers
         {
-            ConstBufferPackedVec::const_iterator itor = mLight0Buffers.begin();
-            ConstBufferPackedVec::const_iterator end = mLight0Buffers.end();
+            ConstBufferPackedVec::const_iterator itor = mLight0Buffers.cbegin();
+            ConstBufferPackedVec::const_iterator end = mLight0Buffers.cend();
 
             while( itor != end )
             {
@@ -3600,8 +3600,8 @@ namespace Ogre
             mLight0Buffers.clear();
         }
         {
-            ConstBufferPackedVec::const_iterator itor = mLight1Buffers.begin();
-            ConstBufferPackedVec::const_iterator end = mLight1Buffers.end();
+            ConstBufferPackedVec::const_iterator itor = mLight1Buffers.cbegin();
+            ConstBufferPackedVec::const_iterator end = mLight1Buffers.cend();
 
             while( itor != end )
             {
@@ -3614,8 +3614,8 @@ namespace Ogre
             mLight1Buffers.clear();
         }
         {
-            ConstBufferPackedVec::const_iterator itor = mLight2Buffers.begin();
-            ConstBufferPackedVec::const_iterator end = mLight2Buffers.end();
+            ConstBufferPackedVec::const_iterator itor = mLight2Buffers.cbegin();
+            ConstBufferPackedVec::const_iterator end = mLight2Buffers.cend();
 
             while( itor != end )
             {
@@ -3672,8 +3672,8 @@ namespace Ogre
             mAutoSpecIblMaxMipmap = true;
             mMaxSpecIblMipmap = 1.0f;
 
-            HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-            HlmsDatablockMap::const_iterator endt = mDatablocks.end();
+            HlmsDatablockMap::const_iterator itor = mDatablocks.cbegin();
+            HlmsDatablockMap::const_iterator endt = mDatablocks.cend();
 
             while( itor != endt )
             {

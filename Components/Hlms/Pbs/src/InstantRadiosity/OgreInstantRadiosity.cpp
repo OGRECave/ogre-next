@@ -408,8 +408,8 @@ namespace Ogre
 
         const Real invNumSpreadIterations = Real( 1.0f ) / Real( mNumSpreadIterations );
 
-        SparseClusterSet::const_iterator itor = grid0.begin();
-        SparseClusterSet::const_iterator end = grid0.end();
+        SparseClusterSet::const_iterator itor = grid0.cbegin();
+        SparseClusterSet::const_iterator end = grid0.cend();
 
         while( itor != end )
         {
@@ -463,8 +463,8 @@ namespace Ogre
     {
         const Real cellSize = mCellSize;
 
-        SparseClusterSet::const_iterator itor = spreadCluster.begin();
-        SparseClusterSet::const_iterator end = spreadCluster.end();
+        SparseClusterSet::const_iterator itor = spreadCluster.cbegin();
+        SparseClusterSet::const_iterator end = spreadCluster.cend();
 
         while( itor != end )
         {
@@ -733,7 +733,7 @@ namespace Ogre
     const InstantRadiosity::MeshData *InstantRadiosity::downloadVao( VertexArrayObject *vao )
     {
         MeshDataMapV2::const_iterator itor = mMeshDataMapV2.find( vao );
-        if( itor != mMeshDataMapV2.end() )
+        if( itor != mMeshDataMapV2.cend() )
             return &itor->second;
 
         IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
@@ -753,13 +753,13 @@ namespace Ogre
             if( mUseTextures )
             {
                 VertexElement2VecVec vertexDeclaration = vao->getVertexDeclaration();
-                VertexElement2VecVec::const_iterator it0 = vertexDeclaration.begin();
-                VertexElement2VecVec::const_iterator en0 = vertexDeclaration.end();
+                VertexElement2VecVec::const_iterator it0 = vertexDeclaration.cbegin();
+                VertexElement2VecVec::const_iterator en0 = vertexDeclaration.cend();
 
                 while( it0 != en0 )
                 {
-                    VertexElement2Vec::const_iterator it1 = it0->begin();
-                    VertexElement2Vec::const_iterator en1 = it0->end();
+                    VertexElement2Vec::const_iterator it1 = it0->cbegin();
+                    VertexElement2Vec::const_iterator en1 = it0->cend();
 
                     while( it1 != en1 )
                     {
@@ -888,7 +888,7 @@ namespace Ogre
         const v1::RenderOperation &renderOp )
     {
         MeshDataMapV1::const_iterator itor = mMeshDataMapV1.find( renderOp );
-        if( itor != mMeshDataMapV1.end() )
+        if( itor != mMeshDataMapV1.cend() )
             return &itor->second;
 
         v1::VertexData::ReadRequestsArray readRequests;
@@ -902,8 +902,8 @@ namespace Ogre
             {
                 const v1::VertexDeclaration::VertexElementList &vertexElements =
                     renderOp.vertexData->vertexDeclaration->getElements();
-                v1::VertexDeclaration::VertexElementList::const_iterator it0 = vertexElements.begin();
-                v1::VertexDeclaration::VertexElementList::const_iterator en0 = vertexElements.end();
+                v1::VertexDeclaration::VertexElementList::const_iterator it0 = vertexElements.cbegin();
+                v1::VertexDeclaration::VertexElementList::const_iterator en0 = vertexElements.cend();
 
                 while( it0 != en0 )
                 {
@@ -1342,8 +1342,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void InstantRadiosity::clear()
     {
-        VplVec::const_iterator itor = mVpls.begin();
-        VplVec::const_iterator end = mVpls.end();
+        VplVec::const_iterator itor = mVpls.cbegin();
+        VplVec::const_iterator end = mVpls.cend();
 
         while( itor != end )
         {
@@ -1544,8 +1544,8 @@ namespace Ogre
 
         Hlms *hlms = mHlmsManager->getHlms( HLMS_UNLIT );
 
-        VplVec::const_iterator itor = mVpls.begin();
-        VplVec::const_iterator end = mVpls.end();
+        VplVec::const_iterator itor = mVpls.cbegin();
+        VplVec::const_iterator end = mVpls.cend();
 
         char tmpBuffer[128];
         while( itor != end )
@@ -1590,8 +1590,8 @@ namespace Ogre
     {
         Hlms *hlms = mHlmsManager->getHlms( HLMS_UNLIT );
 
-        vector<Item *>::type::const_iterator itor = mDebugMarkers.begin();
-        vector<Item *>::type::const_iterator end = mDebugMarkers.end();
+        vector<Item *>::type::const_iterator itor = mDebugMarkers.cbegin();
+        vector<Item *>::type::const_iterator end = mDebugMarkers.cend();
 
         while( itor != end )
         {
@@ -1651,8 +1651,8 @@ namespace Ogre
 
         Real lightMaxPower = 0.0f;
 
-        VplVec::const_iterator itor = mVpls.begin();
-        VplVec::const_iterator end = mVpls.end();
+        VplVec::const_iterator itor = mVpls.cbegin();
+        VplVec::const_iterator end = mVpls.cend();
 
         while( itor != end )
         {
@@ -1739,8 +1739,8 @@ namespace Ogre
         const int32 numBlocksY = static_cast<int32>( volume->getNumBlocksY() );
         const int32 numBlocksZ = static_cast<int32>( volume->getNumBlocksZ() );
 
-        VplVec::const_iterator itor = mVpls.begin();
-        VplVec::const_iterator end = mVpls.end();
+        VplVec::const_iterator itor = mVpls.cbegin();
+        VplVec::const_iterator end = mVpls.cend();
 
         volume->clearVolumeData();
 

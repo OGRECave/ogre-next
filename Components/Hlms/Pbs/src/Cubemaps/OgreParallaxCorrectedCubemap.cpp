@@ -192,8 +192,8 @@ namespace Ogre
         {
             TextureGpuManager *textureGpuManager =
                 mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
-            TempRttVec::const_iterator itor = mTmpRtt.begin();
-            TempRttVec::const_iterator end = mTmpRtt.end();
+            TempRttVec::const_iterator itor = mTmpRtt.cbegin();
+            TempRttVec::const_iterator end = mTmpRtt.cend();
             while( itor != end )
             {
                 textureGpuManager->destroyTexture( itor->texture );
@@ -1034,8 +1034,8 @@ namespace Ogre
 
         const uint32 systemMask = mMask;
 
-        CubemapProbeVec::const_iterator itor = mProbes.begin();
-        CubemapProbeVec::const_iterator end = mProbes.end();
+        CubemapProbeVec::const_iterator itor = mProbes.cbegin();
+        CubemapProbeVec::const_iterator end = mProbes.cend();
 
         while( itor != end )
         {
@@ -1072,8 +1072,8 @@ namespace Ogre
                 static_cast<float * RESTRICT_ALIAS>( mStagingBuffer->map( neededBytes ) );
             size_t srcOffset = 0;
 
-            CubemapProbeVec::const_iterator itor = mManuallyActiveProbes.begin();
-            CubemapProbeVec::const_iterator end = mManuallyActiveProbes.end();
+            CubemapProbeVec::const_iterator itor = mManuallyActiveProbes.cbegin();
+            CubemapProbeVec::const_iterator end = mManuallyActiveProbes.cend();
 
             while( itor != end )
             {

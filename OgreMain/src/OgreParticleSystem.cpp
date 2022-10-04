@@ -1144,8 +1144,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParticleSystem::createVisualParticles( size_t poolstart, size_t poolend )
     {
-        ParticlePool::iterator i = mParticlePool.begin();
-        ParticlePool::iterator iend = mParticlePool.begin();
+        ParticlePool::const_iterator i = mParticlePool.cbegin();
+        ParticlePool::const_iterator iend = mParticlePool.cbegin();
         std::advance( i, static_cast<ptrdiff_t>( poolstart ) );
         std::advance( iend, static_cast<ptrdiff_t>( poolend ) );
         for( ; i != iend; ++i )
@@ -1156,8 +1156,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParticleSystem::destroyVisualParticles( size_t poolstart, size_t poolend )
     {
-        ParticlePool::iterator i = mParticlePool.begin();
-        ParticlePool::iterator iend = mParticlePool.begin();
+        ParticlePool::const_iterator i = mParticlePool.cbegin();
+        ParticlePool::const_iterator iend = mParticlePool.cbegin();
         std::advance( i, static_cast<ptrdiff_t>( poolstart ) );
         std::advance( iend, static_cast<ptrdiff_t>( poolend ) );
         for( ; i != iend; ++i )
