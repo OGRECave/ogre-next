@@ -392,7 +392,6 @@ namespace Ogre
             // Hint: We can use quantize method for welding almost same position vertex fastest.
             std::pair<CommonVertexMap::iterator, bool> inserted =
                 mCommonVertexMap.emplace( vec, mVertices.size() );
-            mCommonVertexMap.emplace( vec, mVertices.size() );
             if( !inserted.second )
             {
                 // Already existing, return old one
