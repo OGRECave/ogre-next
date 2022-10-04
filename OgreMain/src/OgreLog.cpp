@@ -42,6 +42,7 @@ namespace Ogre
 {
     //-----------------------------------------------------------------------
     Log::Log( const String &name, bool debuggerOuput, bool suppressFile ) :
+        mLog( nullptr ),
         mLogLevel( LL_NORMAL ),
         mDebugOut( debuggerOuput ),
         mSuppressFile( suppressFile ),

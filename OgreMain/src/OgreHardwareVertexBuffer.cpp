@@ -615,10 +615,8 @@ namespace Ogre
             if( !mElementList.empty() )
             {
                 VertexElementList::const_iterator currElement = mElementList.begin();
-                VertexElementList::const_iterator nextElement = mElementList.begin();
+                VertexElementList::const_iterator nextElement = std::next( currElement );
                 VertexElementList::const_iterator endt = mElementList.end();
-
-                ++nextElement;
 
                 while( nextElement != endt &&
                        VertexDeclaration::vertexElementLessForV2( *currElement, *nextElement ) )
