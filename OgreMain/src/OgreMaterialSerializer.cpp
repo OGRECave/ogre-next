@@ -676,7 +676,7 @@ namespace Ogre
                 writeTessellationHullProgramRef( pPass );
             }
 
-            if( pPass->hasTessellationHullProgram() )
+            if( pPass->hasTessellationDomainProgram() )
             {
                 writeTessellationDomainProgramRef( pPass );
             }
