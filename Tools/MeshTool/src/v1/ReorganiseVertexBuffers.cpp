@@ -199,7 +199,7 @@ void reorganiseVertexBuffers(const String& desc, v1::Mesh& mesh, v1::SubMesh* sm
             else
             {
                 std::cout << "Wrong answer!\n";
-                response = "";
+                response.clear();
             }
 
         }
@@ -254,7 +254,7 @@ void reorganiseVertexBuffers(const String& desc, v1::Mesh& mesh, v1::SubMesh* sm
             else
             {
                 std::cout << "Wrong answer!\n";
-                response = "";
+                response.clear();
             }
         }
 
@@ -355,7 +355,7 @@ void vertexBufferReorg(v1::Mesh& mesh)
             else
             {
                 std::cout << "Wrong answer!\n";
-                response = "";
+                response.clear();
             }
         }
     }

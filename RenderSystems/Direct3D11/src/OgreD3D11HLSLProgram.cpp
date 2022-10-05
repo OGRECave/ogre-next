@@ -1650,7 +1650,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void D3D11HLSLProgram::setTarget( const String &target )
     {
-        mTarget = "";
+        mTarget.clear();
         vector<String>::type profiles = StringUtil::split( target, " " );
         for( unsigned int i = 0; i < profiles.size(); i++ )
         {
@@ -1662,7 +1662,7 @@ namespace Ogre
             }
         }
 
-        if( mTarget == "" )
+        if( mTarget.empty() )
         {
             LogManager::getSingleton().logMessage( "Invalid target for D3D11 shader '" + mName +
                                                    "' - '" + target + "'" );
