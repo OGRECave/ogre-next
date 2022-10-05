@@ -109,7 +109,7 @@ namespace Ogre
         ScopedCLocale( bool changeLocaleTemporarily ) :
             mChangeLocaleTemporarily( changeLocaleTemporarily )
         {
-            memset( mSavedLocale, 0, sizeof( char ) * 64 );
+            memset( mSavedLocale, 0, sizeof( mSavedLocale ) );
             if( mChangeLocaleTemporarily )
             {
                 const char *currentLocale = setlocale( LC_NUMERIC, 0 );

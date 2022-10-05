@@ -51,11 +51,7 @@ namespace Ogre
         //---------------------------------------------------------------------
         AnimationState::~AnimationState()
         {
-            if( mBlendMask != NULL )
-            {
-                OGRE_DELETE mBlendMask;
-                mBlendMask = NULL;
-            }
+            destroyBlendMask();
         }
         //---------------------------------------------------------------------
         AnimationState::AnimationState( const String &animName, AnimationStateSet *parent, Real timePos,
