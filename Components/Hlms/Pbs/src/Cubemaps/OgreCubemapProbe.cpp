@@ -115,14 +115,15 @@ namespace Ogre
         {
             if( !mCreator->getAutomaticMode() )
             {
-                if( mTexture )
+                // A Workspace without a valid texture is never valid. If it happens it
+                // could mean the workspace is internally referencing a dangling pointer.
+                OGRE_ASSERT_LOW( mTexture );
+
+                const bool useManual = mTexture->getNumMipmaps() > 1u;
+                if( useManual )
                 {
-                    const bool useManual = mTexture->getNumMipmaps() > 1u;
-                    if( useManual )
-                    {
-                        TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
-                        mCreator->releaseTmpRtt( channel );
-                    }
+                    TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
+                    mCreator->releaseTmpRtt( channel );
                 }
             }
 
