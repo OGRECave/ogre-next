@@ -121,14 +121,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Node::migrateTo( NodeMemoryManager *nodeMemoryManager )
     {
-        NodeVec::const_iterator itor = mChildren.begin();
-        NodeVec::const_iterator endt = mChildren.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->migrateTo( nodeMemoryManager );
-            ++itor;
-        }
+        for( Node *child : mChildren )
+            child->migrateTo( nodeMemoryManager );
 
         mNodeMemoryManager->migrateTo( mTransform, mDepthLevel, nodeMemoryManager );
         mNodeMemoryManager = nodeMemoryManager;
@@ -188,14 +182,8 @@ namespace Ogre
             if( oldDepthLevel != mDepthLevel || differentNodeMemoryManager )
             {
                 // Propagate the change to our children
-                NodeVec::const_iterator itor = mChildren.begin();
-                NodeVec::const_iterator endt = mChildren.end();
-
-                while( itor != endt )
-                {
-                    ( *itor )->parentDepthLevelChanged();
-                    ++itor;
-                }
+                for( Node *child : mChildren )
+                    child->parentDepthLevelChanged();
 
                 _callMemoryChangeListeners();
             }
@@ -235,14 +223,8 @@ namespace Ogre
                 mDepthLevel = 0;
 
                 // Propagate the change to our children
-                NodeVec::const_iterator itor = mChildren.begin();
-                NodeVec::const_iterator endt = mChildren.end();
-
-                while( itor != endt )
-                {
-                    ( *itor )->parentDepthLevelChanged();
-                    ++itor;
-                }
+                for( Node *child : mChildren )
+                    child->parentDepthLevelChanged();
 
                 _callMemoryChangeListeners();
             }
@@ -267,14 +249,8 @@ namespace Ogre
         _callMemoryChangeListeners();
 
         // Keep propagating changes to our children
-        NodeVec::const_iterator itor = mChildren.begin();
-        NodeVec::const_iterator endt = mChildren.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->parentDepthLevelChanged();
-            ++itor;
-        }
+        for( Node *child : mChildren )
+            child->parentDepthLevelChanged();
     }
     //-----------------------------------------------------------------------
     /*const Matrix4& Node::_getFullTransform() const
@@ -300,14 +276,8 @@ namespace Ogre
         }
 
         // Keep propagating changes to our children
-        NodeVec::iterator itor = mChildren.begin();
-        NodeVec::iterator endt = mChildren.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->_updateChildren();
-            ++itor;
-        }
+        for( Node *child : mChildren )
+            child->_updateChildren();
     }
     //-----------------------------------------------------------------------
     void Node::_updateFromParent()
@@ -587,14 +557,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Node::_notifyStaticDirty() const
     {
-        NodeVec::const_iterator itor = mChildren.begin();
-        NodeVec::const_iterator endt = mChildren.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->_notifyStaticDirty();
-            ++itor;
-        }
+        for( Node *child : mChildren )
+            child->_notifyStaticDirty();
     }
     //-----------------------------------------------------------------------
     Quaternion Node::getOrientation() const
@@ -875,13 +839,10 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Node::removeAllChildren()
     {
-        NodeVec::iterator itor = mChildren.begin();
-        NodeVec::iterator endt = mChildren.end();
-        while( itor != endt )
+        for( Node *child : mChildren )
         {
-            ( *itor )->unsetParent();
-            ( *itor )->mParentIndex = std::numeric_limits<size_t>::max();
-            ++itor;
+            child->unsetParent();
+            child->mParentIndex = std::numeric_limits<size_t>::max();
         }
         mChildren.clear();
     }
@@ -949,14 +910,8 @@ namespace Ogre
         mCachedTransformOutOfDate = true;
 
 #    if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-        NodeVec::const_iterator itor = mChildren.begin();
-        NodeVec::const_iterator endt = mChildren.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->_setCachedTransformOutOfDate();
-            ++itor;
-        }
+        for( Node *child : mChildren )
+            child->_setCachedTransformOutOfDate();
 #    endif
     }
 #endif

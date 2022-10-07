@@ -198,10 +198,8 @@ namespace Ogre
         OgreProfileExhaustive( "Mesh2::unloadImpl" );
 
         // Teardown submeshes
-        SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator endt = mSubMeshes.end();
-        while( itor != endt )
-            OGRE_DELETE *itor++;
+        for( SubMesh *submesh : mSubMeshes )
+            OGRE_DELETE submesh;
 
         mSubMeshes.clear();
 #if !OGRE_NO_MESHLOD
@@ -238,14 +236,8 @@ namespace Ogre
         destination->unload();
 
         // Copy submeshes first
-        SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator endt = mSubMeshes.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->clone( destination.get(), vertexBufferType, indexBufferType );
-            ++itor;
-        }
+        for( SubMesh *submesh : mSubMeshes )
+            submesh->clone( destination.get(), vertexBufferType, indexBufferType );
 
         // Copy bounds
         destination->mAabb = mAabb;
@@ -367,10 +359,9 @@ namespace Ogre
         mNumLods = numLevels;
         mLodValues.resize(numLevels);*/
         // Resize submesh face data lists too
-        /*for (SubMeshList::iterator i = mSubMeshes.begin(); i != mSubMeshes.end(); ++i)
-        {
-            (*i)->mLodFaceList.resize(numLevels - 1);
-        }*/
+        /*for( SubMesh *submesh : mSubMeshList )
+            submesh->mLodFaceList.resize(numLevels - 1);
+        */
     }
     //---------------------------------------------------------------------
     /*void Mesh::_setSubMeshLodFaceList(unsigned short subIdx, unsigned short level,
@@ -393,12 +384,8 @@ namespace Ogre
     {
 #if !OGRE_NO_MESHLOD
         // Remove data from SubMeshes
-        /*SubMeshList::iterator isub, isubend;
-        isubend = mSubMeshes.end();
-        for (isub = mSubMeshes.begin(); isub != isubend; ++isub)
-        {
-            (*isub)->removeLodLevels();
-        }
+        /*for( SubMesh *submesh : mSubMeshList )
+            submesh->removeLodLevels();
 
         freeEdgeList();
         mMeshLodUsageList.clear();
@@ -457,25 +444,20 @@ namespace Ogre
         // calculate GPU size
         size_t retVal = 0;
 
-        SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator endt = mSubMeshes.end();
-
-        while( itor != endt )
+        for( SubMesh *submesh : mSubMeshes )
         {
-            SubMesh *s = *itor;
-
             size_t numExtraVaos = 2;
 
-            if( !s->mVao[VpNormal].empty() && !s->mVao[VpShadow].empty() &&
-                s->mVao[VpNormal][0] == s->mVao[VpShadow][0] )
+            if( !submesh->mVao[VpNormal].empty() && !submesh->mVao[VpShadow].empty() &&
+                submesh->mVao[VpNormal][0] == submesh->mVao[VpShadow][0] )
             {
                 numExtraVaos = 1;
             }
 
             for( size_t i = 0; i < numExtraVaos; ++i )
             {
-                VertexArrayObjectArray::const_iterator itVao = s->mVao[i].begin();
-                VertexArrayObjectArray::const_iterator enVao = s->mVao[i].end();
+                VertexArrayObjectArray::const_iterator itVao = submesh->mVao[i].begin();
+                VertexArrayObjectArray::const_iterator enVao = submesh->mVao[i].end();
 
                 while( itVao != enVao )
                 {
@@ -494,8 +476,6 @@ namespace Ogre
                     ++itVao;
                 }
             }
-
-            ++itor;
         }
 
         return retVal;
@@ -575,55 +555,31 @@ namespace Ogre
     //---------------------------------------------------------------------
     void Mesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )
     {
-        SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator endt = mSubMeshes.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->arrangeEfficient( halfPos, halfTexCoords, qTangents );
-            ++itor;
-        }
+        for( SubMesh *submesh : mSubMeshes )
+            submesh->arrangeEfficient( halfPos, halfTexCoords, qTangents );
     }
     //---------------------------------------------------------------------
     void Mesh::dearrangeToInefficient()
     {
-        SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator endt = mSubMeshes.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->dearrangeToInefficient();
-            ++itor;
-        }
+        for( SubMesh *submesh : mSubMeshes )
+            submesh->dearrangeToInefficient();
     }
     //---------------------------------------------------------------------
     void Mesh::prepareForShadowMapping( bool forceSameBuffers )
     {
         OgreProfileExhaustive( "Mesh2::prepareForShadowMapping" );
 
-        SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator endt = mSubMeshes.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->_prepareForShadowMapping( forceSameBuffers );
-            ++itor;
-        }
+        for( SubMesh *submesh : mSubMeshes )
+            submesh->_prepareForShadowMapping( forceSameBuffers );
     }
     //---------------------------------------------------------------------
     bool Mesh::hasValidShadowMappingVaos() const
     {
-        bool retVal = true;
-        SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator endt = mSubMeshes.end();
+        for( SubMesh *submesh : mSubMeshes )
+            if( submesh->mVao[VpNormal].size() != submesh->mVao[VpShadow].size() )
+                return false;
 
-        while( itor != endt && retVal )
-        {
-            retVal &= ( *itor )->mVao[VpNormal].size() == ( *itor )->mVao[VpShadow].size();
-            ++itor;
-        }
-
-        return retVal;
+        return true;
     }
     //---------------------------------------------------------------------
     bool Mesh::hasIndependentShadowMappingVaos() const
@@ -633,15 +589,13 @@ namespace Ogre
 
         bool independent = false;
 
-        SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator endt = mSubMeshes.end();
-
-        while( itor != endt && !independent )
-        {
-            if( !( *itor )->mVao[VpNormal].empty() )
-                independent |= ( *itor )->mVao[VpNormal][0] != ( *itor )->mVao[VpShadow][0];
-            ++itor;
-        }
+        for( SubMesh *submesh : mSubMeshes )
+            if( !independent && !submesh->mVao[VpNormal].empty() &&
+                submesh->mVao[VpNormal][0] != submesh->mVao[VpShadow][0] )
+            {
+                independent = true;
+                break;
+            }
 
         return independent;
     }

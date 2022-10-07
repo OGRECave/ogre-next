@@ -243,11 +243,10 @@ namespace Ogre
             assert( mLodValues.size() == mMeshLodUsageList.size() );
             LodValueArray::iterator lodValueIt = mLodValues.begin();
             // Transform user LOD values (starting at index 1, no need to transform base value)
-            for( MeshLodUsageList::iterator i = mMeshLodUsageList.begin(); i != mMeshLodUsageList.end();
-                 ++i )
+            for( MeshLodUsage &usage : mMeshLodUsageList )
             {
-                i->value = lodStrategy->transformUserValue( i->userValue );
-                *lodValueIt++ = i->value;
+                usage.value = lodStrategy->transformUserValue( usage.userValue );
+                *lodValueIt++ = usage.value;
             }
             if( !mLodValues.empty() )
             {
@@ -427,14 +426,8 @@ namespace Ogre
                 v1::MeshManager::unshareVertices( this );
             }
 
-            SubMeshList::const_iterator itor = mSubMeshList.begin();
-            SubMeshList::const_iterator endt = mSubMeshList.end();
-
-            while( itor != endt )
-            {
-                ( *itor )->arrangeEfficient( halfPos, halfTexCoords, qTangents );
-                ++itor;
-            }
+            for( SubMesh *submesh : mSubMeshList )
+                submesh->arrangeEfficient( halfPos, halfTexCoords, qTangents );
         }
         //-----------------------------------------------------------------------
         void Mesh::dearrangeToInefficient()
@@ -446,14 +439,8 @@ namespace Ogre
                              "v1::Mesh::dearrangeToInefficient" );
             }
 
-            SubMeshList::const_iterator itor = mSubMeshList.begin();
-            SubMeshList::const_iterator endt = mSubMeshList.end();
-
-            while( itor != endt )
-            {
-                ( *itor )->dearrangeToInefficient();
-                ++itor;
-            }
+            for( SubMesh *submesh : mSubMeshList )
+                submesh->dearrangeToInefficient();
         }
         //-----------------------------------------------------------------------
         MeshPtr Mesh::clone( const String &newName, const String &newGroup )
@@ -482,11 +469,8 @@ namespace Ogre
             newMesh->mIndexBufferShadowBuffer = mIndexBufferShadowBuffer;
 
             // Copy submeshes first
-            vector<SubMesh *>::type::iterator subi;
-            for( subi = mSubMeshList.begin(); subi != mSubMeshList.end(); ++subi )
-            {
-                ( *subi )->clone( "", newMesh.get() );
-            }
+            for( SubMesh *submesh : mSubMeshList )
+                submesh->clone( "", newMesh.get() );
 
             // Copy shared geometry and index map, if any
             if( sharedVertexData[VpNormal] )
@@ -521,13 +505,10 @@ namespace Ogre
             newMesh->mLodValues = mLodValues;
 
             // Unreference edge lists, otherwise we'll delete the same lot twice, build on demand
-            MeshLodUsageList::iterator lodi, lodOldi;
-            lodOldi = mMeshLodUsageList.begin();
-            for( lodi = newMesh->mMeshLodUsageList.begin(); lodi != newMesh->mMeshLodUsageList.end();
-                 ++lodi, ++lodOldi )
+            MeshLodUsageList::iterator lodIt = mMeshLodUsageList.begin();
+            for( MeshLodUsage &newLod : newMesh->mMeshLodUsageList )
             {
-                MeshLodUsage &newLod = *lodi;
-                MeshLodUsage &lod = *lodOldi;
+                MeshLodUsage &lod = *lodIt++;
                 newLod.manualName = lod.manualName;
                 newLod.userValue = lod.userValue;
                 newLod.value = lod.value;
@@ -551,11 +532,9 @@ namespace Ogre
                 newMesh->mAnimationsList[i->second->getName()] = newAnim;
             }
             // Clone pose list
-            for( PoseList::iterator i = mPoseList.begin(); i != mPoseList.end(); ++i )
-            {
-                Pose *newPose = ( *i )->clone();
-                newMesh->mPoseList.push_back( newPose );
-            }
+            for( Pose *pose : mPoseList )
+                newMesh->mPoseList.push_back( pose->clone() );
+
             newMesh->mSharedVertexDataAnimationType = mSharedVertexDataAnimationType;
             newMesh->mAnimationTypesDirty = true;
 
@@ -786,14 +765,9 @@ namespace Ogre
             if( mBoneAssignmentsOutOfDate )
                 _compileBoneAssignments();
 
-            SubMeshList::iterator i;
-            for( i = mSubMeshList.begin(); i != mSubMeshList.end(); ++i )
-            {
-                if( ( *i )->mBoneAssignmentsOutOfDate )
-                {
-                    ( *i )->_compileBoneAssignments();
-                }
-            }
+            for( SubMesh *submesh : mSubMeshList )
+                if( submesh->mBoneAssignmentsOutOfDate )
+                    submesh->_compileBoneAssignments();
 
             prepareForShadowMapping( false );
         }
@@ -1181,12 +1155,8 @@ namespace Ogre
                 }
 
                 // check submesh vertices
-                SubMeshList::const_iterator itor = mSubMeshList.begin();
-                SubMeshList::const_iterator endt = mSubMeshList.end();
-
-                while( itor != endt )
+                for( SubMesh *submesh : mSubMeshList )
                 {
-                    SubMesh *submesh = *itor;
                     if( !submesh->useSharedVertices && submesh->vertexData[VpNormal] )
                     {
                         Real r = _computeBoneBoundingRadiusHelper( submesh->vertexData[VpNormal],
@@ -1194,7 +1164,6 @@ namespace Ogre
                                                                    bonePositions, boneChildren );
                         radius = std::max( radius, r );
                     }
-                    ++itor;
                 }
                 if( radius > Real( 0 ) )
                 {
@@ -1283,10 +1252,10 @@ namespace Ogre
             mMeshLodUsageList.resize( numLevels );
             mLodValues.resize( numLevels );
             // Resize submesh face data lists too
-            for( SubMeshList::iterator i = mSubMeshList.begin(); i != mSubMeshList.end(); ++i )
+            for( SubMesh *submesh : mSubMeshList )
             {
-                ( *i )->mLodFaceList[VpNormal].resize( numLevels - 1 );
-                ( *i )->mLodFaceList[VpShadow].resize( numLevels - 1 );
+                submesh->mLodFaceList[VpNormal].resize( numLevels - 1 );
+                submesh->mLodFaceList[VpShadow].resize( numLevels - 1 );
             }
         }
         //---------------------------------------------------------------------
@@ -1347,12 +1316,8 @@ namespace Ogre
         {
 #if !OGRE_NO_MESHLOD
             // Remove data from SubMeshes
-            SubMeshList::iterator isub, isubend;
-            isubend = mSubMeshList.end();
-            for( isub = mSubMeshList.begin(); isub != isubend; ++isub )
-            {
-                ( *isub )->removeLodLevels();
-            }
+            for( SubMesh *submesh : mSubMeshList )
+                submesh->removeLodLevels();
 
             freeEdgeList();
             mMeshLodUsageList.clear();
@@ -1393,17 +1358,13 @@ namespace Ogre
                 mergeAdjacentTexcoords( finalTexCoordSet, texCoordSetToDestroy,
                                         sharedVertexData[VpNormal] );
 
-            SubMeshList::const_iterator itor = mSubMeshList.begin();
-            SubMeshList::const_iterator endt = mSubMeshList.end();
-
-            while( itor != endt )
+            for( SubMesh *submesh : mSubMeshList )
             {
-                if( !( *itor )->useSharedVertices )
+                if( !submesh->useSharedVertices )
                 {
                     mergeAdjacentTexcoords( finalTexCoordSet, texCoordSetToDestroy,
-                                            ( *itor )->vertexData[VpNormal] );
+                                            submesh->vertexData[VpNormal] );
                 }
-                ++itor;
             }
         }
         //---------------------------------------------------------------------
@@ -1460,34 +1421,24 @@ namespace Ogre
                 OGRE_DELETE sharedVertexData[VpShadow];
             sharedVertexData[VpShadow] = 0;
 
-            SubMeshList::const_iterator itor = mSubMeshList.begin();
-            SubMeshList::const_iterator endt = mSubMeshList.end();
-
-            while( itor != endt )
+            for( SubMesh *submesh : mSubMeshList )
             {
-                if( ( *itor )->vertexData[VpShadow] != ( *itor )->vertexData[VpNormal] )
-                    OGRE_DELETE( *itor )->vertexData[VpShadow];
-                ( *itor )->vertexData[VpShadow] = 0;
+                if( submesh->vertexData[VpShadow] != submesh->vertexData[VpNormal] )
+                    OGRE_DELETE( submesh->vertexData[VpShadow] );
+                submesh->vertexData[VpShadow] = 0;
 
-                if( ( *itor )->indexData[VpShadow] != ( *itor )->indexData[VpNormal] )
-                    OGRE_DELETE( *itor )->indexData[VpShadow];
-                ( *itor )->indexData[VpShadow] = 0;
+                if( submesh->indexData[VpShadow] != submesh->indexData[VpNormal] )
+                    OGRE_DELETE( submesh->indexData[VpShadow] );
+                submesh->indexData[VpShadow] = 0;
 
-                if( ( *itor )->mLodFaceList[VpNormal].empty() ||
-                    ( *itor )->mLodFaceList[VpShadow].empty() ||
-                    ( *itor )->mLodFaceList[VpNormal][0] != ( *itor )->mLodFaceList[VpShadow][0] )
+                if( submesh->mLodFaceList[VpNormal].empty() || submesh->mLodFaceList[VpShadow].empty() ||
+                    submesh->mLodFaceList[VpNormal][0] != submesh->mLodFaceList[VpShadow][0] )
                 {
-                    SubMesh::LODFaceList::const_iterator itLod =
-                        ( *itor )->mLodFaceList[VpShadow].begin();
-                    SubMesh::LODFaceList::const_iterator enLod = ( *itor )->mLodFaceList[VpShadow].end();
-
-                    while( itLod != enLod )
-                        OGRE_DELETE *itLod++;
+                    for( IndexData *lodFace : submesh->mLodFaceList[VpShadow] )
+                        OGRE_DELETE lodFace;
                 }
 
-                ( *itor )->mLodFaceList[VpShadow].clear();
-
-                ++itor;
+                submesh->mLodFaceList[VpShadow].clear();
             }
         }
         //---------------------------------------------------------------------
@@ -1499,21 +1450,13 @@ namespace Ogre
             {
                 sharedVertexData[VpShadow] = sharedVertexData[VpNormal];
 
-                SubMeshList::const_iterator itor = mSubMeshList.begin();
-                SubMeshList::const_iterator endt = mSubMeshList.end();
-
-                while( itor != endt )
+                for( SubMesh *submesh : mSubMeshList )
                 {
-                    ( *itor )->vertexData[VpShadow] = ( *itor )->vertexData[VpNormal];
-                    ( *itor )->indexData[VpShadow] = ( *itor )->indexData[VpNormal];
+                    submesh->vertexData[VpShadow] = submesh->vertexData[VpNormal];
+                    submesh->indexData[VpShadow] = submesh->indexData[VpNormal];
 
-                    SubMesh::LODFaceList::const_iterator itLod =
-                        ( *itor )->mLodFaceList[VpNormal].begin();
-                    SubMesh::LODFaceList::const_iterator enLod = ( *itor )->mLodFaceList[VpNormal].end();
-                    while( itLod != enLod )
-                        ( *itor )->mLodFaceList[VpShadow].push_back( *itLod++ );
-
-                    ++itor;
+                    for( IndexData *lodFace : submesh->mLodFaceList[VpNormal] )
+                        submesh->mLodFaceList[VpShadow].push_back( lodFace );
                 }
             }
             else
@@ -1521,57 +1464,43 @@ namespace Ogre
                 VertexShadowMapHelper::GeometryVec inGeom;
                 VertexShadowMapHelper::GeometryVec outGeom;
 
+                for( SubMesh *submesh : mSubMeshList )
                 {
-                    SubMeshList::const_iterator itor = mSubMeshList.begin();
-                    SubMeshList::const_iterator endt = mSubMeshList.end();
+                    VertexShadowMapHelper::Geometry geom;
 
-                    while( itor != endt )
+                    if( submesh->vertexData[VpNormal] )
+                        geom.vertexData = submesh->vertexData[VpNormal];
+                    else
+                        geom.vertexData = sharedVertexData[VpNormal];
+
+                    geom.indexData = submesh->indexData[VpNormal];
+                    inGeom.push_back( geom );
+
+                    for( IndexData *lodFace : submesh->mLodFaceList[VpNormal] )
                     {
-                        VertexShadowMapHelper::Geometry geom;
-
-                        if( ( *itor )->vertexData[VpNormal] )
-                            geom.vertexData = ( *itor )->vertexData[VpNormal];
-                        else
-                            geom.vertexData = sharedVertexData[VpNormal];
-
-                        geom.indexData = ( *itor )->indexData[VpNormal];
+                        geom.indexData = lodFace;
                         inGeom.push_back( geom );
-
-                        SubMesh::LODFaceList::const_iterator itLod =
-                            ( *itor )->mLodFaceList[VpNormal].begin();
-                        SubMesh::LODFaceList::const_iterator enLod =
-                            ( *itor )->mLodFaceList[VpNormal].end();
-
-                        while( itLod != enLod )
-                        {
-                            geom.indexData = *itLod;
-                            inGeom.push_back( geom );
-                            ++itLod;
-                        }
-
-                        ++itor;
                     }
                 }
 
                 VertexShadowMapHelper::optimizeForShadowMapping( inGeom, outGeom );
 
-                const size_t numSubMeshes = mSubMeshList.size();
                 VertexShadowMapHelper::GeometryVec::const_iterator itGeom = outGeom.begin();
 
-                for( size_t i = 0; i < numSubMeshes; ++i )
+                for( SubMesh *submesh : mSubMeshList )
                 {
-                    if( mSubMeshList[i]->vertexData[VpNormal] )
-                        mSubMeshList[i]->vertexData[VpShadow] = itGeom->vertexData;
+                    if( submesh->vertexData[VpNormal] )
+                        submesh->vertexData[VpShadow] = itGeom->vertexData;
                     else
                         sharedVertexData[VpShadow] = itGeom->vertexData;
 
-                    mSubMeshList[i]->indexData[VpShadow] = itGeom->indexData;
+                    submesh->indexData[VpShadow] = itGeom->indexData;
                     ++itGeom;
 
-                    const size_t numLods = mSubMeshList[i]->mLodFaceList[VpNormal].size();
+                    const size_t numLods = submesh->mLodFaceList[VpNormal].size();
                     for( size_t j = 0; j < numLods; ++j )
                     {
-                        mSubMeshList[i]->mLodFaceList[VpShadow].push_back( itGeom->indexData );
+                        submesh->mLodFaceList[VpShadow].push_back( itGeom->indexData );
                         ++itGeom;
                     }
                 }
@@ -1585,22 +1514,19 @@ namespace Ogre
             retVal &= ( sharedVertexData[VpNormal] == 0 ) ||
                       ( sharedVertexData[VpNormal] != 0 && sharedVertexData[VpShadow] != 0 );
 
-            SubMeshList::const_iterator itor = mSubMeshList.begin();
-            SubMeshList::const_iterator endt = mSubMeshList.end();
-
-            while( itor != endt && retVal )
+            for( SubMesh *submesh : mSubMeshList )
             {
-                retVal &=
-                    ( ( *itor )->vertexData[VpNormal] == 0 ) ||
-                    ( ( *itor )->vertexData[VpNormal] != 0 && ( *itor )->vertexData[VpShadow] != 0 );
-                retVal &= ( ( *itor )->indexData[VpNormal] == 0 ||
-                            !( *itor )->indexData[VpNormal]->indexBuffer ) ||
-                          ( ( *itor )->indexData[VpNormal] != 0 && ( *itor )->indexData[VpShadow] != 0 );
+                if( !retVal )
+                    break;
+
+                retVal &= ( submesh->vertexData[VpNormal] == 0 ) ||
+                          ( submesh->vertexData[VpNormal] != 0 && submesh->vertexData[VpShadow] != 0 );
+                retVal &= ( submesh->indexData[VpNormal] == 0 ||
+                            !submesh->indexData[VpNormal]->indexBuffer ) ||
+                          ( submesh->indexData[VpNormal] != 0 && submesh->indexData[VpShadow] != 0 );
 
                 retVal &=
-                    ( *itor )->mLodFaceList[VpNormal].size() == ( *itor )->mLodFaceList[VpShadow].size();
-
-                ++itor;
+                    submesh->mLodFaceList[VpNormal].size() == submesh->mLodFaceList[VpShadow].size();
             }
 
             return retVal;
@@ -1613,14 +1539,12 @@ namespace Ogre
 
             bool independent = sharedVertexData[VpNormal] != sharedVertexData[VpShadow];
 
-            SubMeshList::const_iterator itor = mSubMeshList.begin();
-            SubMeshList::const_iterator endt = mSubMeshList.end();
-
-            while( itor != endt && !independent )
-            {
-                independent |= ( *itor )->vertexData[VpNormal] != ( *itor )->vertexData[VpShadow];
-                ++itor;
-            }
+            for( SubMesh *submesh : mSubMeshList )
+                if( !independent && submesh->vertexData[VpNormal] != submesh->vertexData[VpShadow] )
+                {
+                    independent = true;
+                    break;
+                }
 
             return independent;
         }
@@ -1713,9 +1637,8 @@ namespace Ogre
             {
                 tangentsCalc.setVertexData( sharedVertexData[VpNormal] );
                 bool found = false;
-                for( SubMeshList::iterator i = mSubMeshList.begin(); i != mSubMeshList.end(); ++i )
+                for( SubMesh *sm : mSubMeshList )
                 {
-                    SubMesh *sm = *i;
                     if( sm->useSharedVertices && ( sm->operationType == OT_TRIANGLE_FAN ||
                                                    sm->operationType == OT_TRIANGLE_LIST ||
                                                    sm->operationType == OT_TRIANGLE_STRIP ) )
@@ -1781,9 +1704,8 @@ namespace Ogre
             }
 
             // Dedicated geometry
-            for( SubMeshList::iterator i = mSubMeshList.begin(); i != mSubMeshList.end(); ++i )
+            for( SubMesh *sm : mSubMeshList )
             {
-                SubMesh *sm = *i;
                 if( !sm->useSharedVertices &&
                     ( sm->operationType == OT_TRIANGLE_FAN || sm->operationType == OT_TRIANGLE_LIST ||
                       sm->operationType == OT_TRIANGLE_STRIP ) )
@@ -1831,11 +1753,8 @@ namespace Ogre
             bool sharedGeometryDone = false;
             bool foundExisting = false;
             bool firstOne = true;
-            SubMeshList::iterator i, iend;
-            iend = mSubMeshList.end();
-            for( i = mSubMeshList.begin(); i != iend; ++i )
+            for( SubMesh *sm : mSubMeshList )
             {
-                SubMesh *sm = *i;
                 VertexData *vertexData;
 
                 if( sm->useSharedVertices )
@@ -1979,11 +1898,8 @@ namespace Ogre
                     }
 
                     // Prepare the builder using the submesh information
-                    SubMeshList::iterator i, iend;
-                    iend = mSubMeshList.end();
-                    for( i = mSubMeshList.begin(); i != iend; ++i )
+                    for( SubMesh *s : mSubMeshList )
                     {
-                        SubMesh *s = *i;
                         if( s->operationType != OT_TRIANGLE_FAN &&
                             s->operationType != OT_TRIANGLE_LIST &&
                             s->operationType != OT_TRIANGLE_STRIP )
@@ -2055,11 +1971,8 @@ namespace Ogre
             }
 
             // Prepare the builder using the submesh information
-            SubMeshList::iterator i, iend;
-            iend = mSubMeshList.end();
-            for( i = mSubMeshList.begin(); i != iend; ++i )
+            for( SubMesh *s : mSubMeshList )
             {
-                SubMesh *s = *i;
                 if( s->operationType != OT_TRIANGLE_FAN && s->operationType != OT_TRIANGLE_LIST &&
                     s->operationType != OT_TRIANGLE_STRIP )
                 {
@@ -2098,13 +2011,9 @@ namespace Ogre
                 return;
 #if !OGRE_NO_MESHLOD
             // Loop over LODs
-            MeshLodUsageList::iterator i, iend;
-            iend = mMeshLodUsageList.end();
             unsigned short index = 0;
-            for( i = mMeshLodUsageList.begin(); i != iend; ++i, ++index )
+            for( MeshLodUsage &usage : mMeshLodUsageList )
             {
-                MeshLodUsage &usage = *i;
-
                 if( usage.manualName.empty() || index == 0 )
                 {
                     // Only delete if we own this data
@@ -2112,6 +2021,7 @@ namespace Ogre
                     OGRE_DELETE usage.edgeData;
                 }
                 usage.edgeData = NULL;
+                ++index;
             }
 #else
             OGRE_DELETE mMeshLodUsageList[0].edgeData;
@@ -2129,11 +2039,8 @@ namespace Ogre
             {
                 sharedVertexData[VpNormal]->prepareForShadowVolume();
             }
-            SubMeshList::iterator i, iend;
-            iend = mSubMeshList.end();
-            for( i = mSubMeshList.begin(); i != iend; ++i )
+            for( SubMesh *s : mSubMeshList )
             {
-                SubMesh *s = *i;
                 if( !s->useSharedVertices &&
                     ( s->operationType == OT_TRIANGLE_FAN || s->operationType == OT_TRIANGLE_LIST ||
                       s->operationType == OT_TRIANGLE_STRIP ) )
@@ -2445,41 +2352,38 @@ namespace Ogre
                 }
             }
 
-            SubMeshList::const_iterator si;
-            for( si = mSubMeshList.begin(); si != mSubMeshList.end(); ++si )
+            for( SubMesh *submesh : mSubMeshList )
             {
                 // Dedicated vertices
-                if( !( *si )->useSharedVertices )
+                if( !submesh->useSharedVertices )
                 {
-                    for( i = 0; i < ( *si )->vertexData[VpNormal]->vertexBufferBinding->getBufferCount();
+                    for( i = 0; i < submesh->vertexData[VpNormal]->vertexBufferBinding->getBufferCount();
                          ++i )
                     {
-                        ret += ( *si )
-                                   ->vertexData[VpNormal]
+                        ret += submesh->vertexData[VpNormal]
                                    ->vertexBufferBinding->getBuffer( i )
                                    ->getSizeInBytes();
                     }
 
-                    if( ( *si )->vertexData[VpNormal] != ( *si )->vertexData[VpShadow] )
+                    if( submesh->vertexData[VpNormal] != submesh->vertexData[VpShadow] )
                     {
                         for( i = 0;
-                             i < ( *si )->vertexData[VpShadow]->vertexBufferBinding->getBufferCount();
+                             i < submesh->vertexData[VpShadow]->vertexBufferBinding->getBufferCount();
                              ++i )
                         {
-                            ret += ( *si )
-                                       ->vertexData[VpShadow]
+                            ret += submesh->vertexData[VpShadow]
                                        ->vertexBufferBinding->getBuffer( i )
                                        ->getSizeInBytes();
                         }
                     }
                 }
-                if( ( *si )->indexData[VpNormal]->indexBuffer )
+                if( submesh->indexData[VpNormal]->indexBuffer )
                 {
                     // Index data
-                    ret += ( *si )->indexData[VpNormal]->indexBuffer->getSizeInBytes();
+                    ret += submesh->indexData[VpNormal]->indexBuffer->getSizeInBytes();
 
-                    if( ( *si )->indexData[VpNormal] != ( *si )->indexData[VpShadow] )
-                        ret += ( *si )->indexData[VpShadow]->indexBuffer->getSizeInBytes();
+                    if( submesh->indexData[VpNormal] != submesh->indexData[VpShadow] )
+                        ret += submesh->indexData[VpShadow]->indexBuffer->getSizeInBytes();
                 }
             }
             return ret;
@@ -2505,10 +2409,10 @@ namespace Ogre
             // Initialise all types to nothing
             mSharedVertexDataAnimationType = VAT_NONE;
             mSharedVertexDataAnimationIncludesNormals = false;
-            for( SubMeshList::const_iterator i = mSubMeshList.begin(); i != mSubMeshList.end(); ++i )
+            for( SubMesh *submesh : mSubMeshList )
             {
-                ( *i )->mVertexAnimationType = VAT_NONE;
-                ( *i )->mVertexAnimationIncludesNormals = false;
+                submesh->mVertexAnimationType = VAT_NONE;
+                submesh->mVertexAnimationIncludesNormals = false;
             }
 
             mPosesIncludeNormals = false;
@@ -2706,11 +2610,9 @@ namespace Ogre
         //---------------------------------------------------------------------
         Pose *Mesh::getPose( const String &name )
         {
-            for( PoseList::iterator i = mPoseList.begin(); i != mPoseList.end(); ++i )
-            {
-                if( ( *i )->getName() == name )
-                    return *i;
-            }
+            for( Pose *pose : mPoseList )
+                if( pose->getName() == name )
+                    return pose;
 
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                          "No pose called " + name + " found in Mesh " + mName, "Mesh::getPose" );
@@ -2745,10 +2647,8 @@ namespace Ogre
         //---------------------------------------------------------------------
         void Mesh::removeAllPoses()
         {
-            for( PoseList::iterator i = mPoseList.begin(); i != mPoseList.end(); ++i )
-            {
-                OGRE_DELETE *i;
-            }
+            for( Pose *pose : mPoseList )
+                OGRE_DELETE pose;
             mPoseList.clear();
         }
         //---------------------------------------------------------------------
@@ -2767,16 +2667,13 @@ namespace Ogre
         void Mesh::updateMaterialForAllSubMeshes()
         {
             // iterate through each sub mesh and request the submesh to update its material
-            vector<SubMesh *>::type::iterator subi;
-            for( subi = mSubMeshList.begin(); subi != mSubMeshList.end(); ++subi )
-            {
-                ( *subi )->updateMaterialUsingTextureAliases();
-            }
+            for( SubMesh *submesh : mSubMeshList )
+                submesh->updateMaterialUsingTextureAliases();
         }
         //---------------------------------------------------------------------
         void Mesh::createAzdoBuffers()
         {
-            // mSubMeshList.begin();
+            // for( SubMesh *submesh : mSubMeshList )
         }
 
         //---------------------------------------------------------------------
