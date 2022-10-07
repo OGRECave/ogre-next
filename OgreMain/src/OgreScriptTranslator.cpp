@@ -1227,7 +1227,7 @@ namespace Ogre{
                             ++itor;
                         }
                     }
-                    paramVec.push_back( std::pair<IdString, String>( prop->name, value ) );
+                    paramVec.emplace_back( prop->name, value );
                     }
                 }
             }
@@ -1361,7 +1361,7 @@ namespace Ogre{
                         AbstractNodeList::const_iterator i0 = getNodeAt(prop->values, 0), i1 = getNodeAt(prop->values, 1);
                         String name, value;
                         if(getString(*i0, &name) && getString(*i1, &value))
-                            mTextureAliases.insert(std::make_pair(name, value));
+                            mTextureAliases.emplace(name, value);
                         else
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                                 "set_texture_alias must have 2 string argument");
@@ -3351,7 +3351,7 @@ namespace Ogre{
                                         }
                                         else
                                         {
-                                            names[n++] = name;
+                                            names[n++] = std::move(name);
                                         }
                                     }
                                     else
@@ -4740,7 +4740,7 @@ namespace Ogre{
                             value += ((AtomAbstractNode*)(*it).get())->value;
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back(name, value);
                 }
             }
             else if((*i)->type == ANT_OBJECT)
@@ -4818,7 +4818,7 @@ namespace Ogre{
 
                     ProcessResourceNameScriptCompilerEvent evt(ProcessResourceNameScriptCompilerEvent::GPU_PROGRAM, value);
                     compiler->_fireEvent(&evt, 0);
-                    customParameters.push_back(std::make_pair("delegate", evt.mName));
+                    customParameters.emplace_back("delegate", evt.mName);
                 }
                 else
                 {
@@ -4835,7 +4835,7 @@ namespace Ogre{
                             value += ((AtomAbstractNode*)(*it).get())->value;
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back(name, value);
                 }
             }
             else if((*i)->type == ANT_OBJECT)
@@ -4949,7 +4949,7 @@ namespace Ogre{
                             }
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back(name, value);
                 }
             }
             else if((*i)->type == ANT_OBJECT)
@@ -6530,7 +6530,7 @@ namespace Ogre{
         td->widthFactor     = widthFactor;
         td->heightFactor    = heightFactor;
         td->format          = format;
-        td->fsaa            = fsaa;
+        td->fsaa            = std::move(fsaa);
         td->textureFlags    = textureFlags;
         td->depthBufferId       = depthBufferId;
         td->preferDepthTexture  = preferDepthTexture;
@@ -7936,7 +7936,7 @@ namespace Ogre{
                                 if( getIdString( *it, &texName ) )
                                 {
                                     if( colourIdx >= mRtv->colourAttachments.size() )
-                                        mRtv->colourAttachments.push_back( RenderTargetViewEntry() );
+                                        mRtv->colourAttachments.emplace_back();
                                     mRtv->colourAttachments.back().textureName = texName;
                                     ++colourIdx;
                                 }
@@ -9287,8 +9287,6 @@ namespace Ogre{
                     else
                     {
                         passQuad->mMaterialIsHlms = prop->id == ID_HLMS;
-
-                        String val;
                         if( !getString(prop->values.front(), &passQuad->mMaterialName) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
@@ -11537,7 +11535,8 @@ namespace Ogre{
                     (parent->id == ID_COMPOSITOR_NODE || parent->id == ID_SHADOW_NODE ||
                      parent->id == ID_SHADOW_MAP_REPEAT))
                 translator = &mCompositorTargetTranslator;
-            else if( obj->id == ID_RTV && (parent->id == ID_COMPOSITOR_NODE ||
+            else if( obj->id == ID_RTV && parent &&
+                     ( parent->id == ID_COMPOSITOR_NODE ||
                                            parent->id == ID_SHADOW_NODE) )
                 translator = &mCompositorRenderTargetViewTranslator;
             else if(obj->id == ID_SHADOW_MAP_TARGET_TYPE && parent && parent->id == ID_SHADOW_NODE)
