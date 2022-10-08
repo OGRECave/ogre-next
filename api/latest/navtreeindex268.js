@@ -1,5 +1,6 @@
 var NAVTREEINDEX268 =
 {
+"struct_ogre_1_1_vector_set.html#a726e02e5ed3fb393ddab4970b92e3906":[6,0,0,943,54],
 "struct_ogre_1_1_vector_set.html#a72a6de6e4343bb9c090400aa05edc234":[6,0,0,943,59],
 "struct_ogre_1_1_vector_set.html#a72a6de6e4343bb9c090400aa05edc234":[7,0,0,916,59],
 "struct_ogre_1_1_vector_set.html#a7f0236907f0642a16747cdbd9a5418c0":[6,0,0,943,50],
@@ -248,6 +249,5 @@ var NAVTREEINDEX268 =
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html#a3e154a179b8c824f79b1b426608743ad":[6,0,0,29,3,10],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html#a4444eac27c71e02886615dcf7fbfed27":[6,0,0,29,3,2],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html#a4444eac27c71e02886615dcf7fbfed27":[7,0,0,3,3,2],
-"struct_ogre_1_1_volume_1_1_chunk_parameters.html#a61d33b21a20c4fe9645545bdfe3029c3":[6,0,0,29,3,3],
-"struct_ogre_1_1_volume_1_1_chunk_parameters.html#a61d33b21a20c4fe9645545bdfe3029c3":[7,0,0,3,3,3]
+"struct_ogre_1_1_volume_1_1_chunk_parameters.html#a61d33b21a20c4fe9645545bdfe3029c3":[6,0,0,29,3,3]
 };

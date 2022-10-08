@@ -1,5 +1,6 @@
 var NAVTREEINDEX256 =
 {
+"struct_ogre_1_1_cb_draw_call_strip.html#a1b56c03e7afca205eddf3f9ee408fed1":[6,0,0,102,1],
 "struct_ogre_1_1_cb_draw_call_strip.html#a1b56c03e7afca205eddf3f9ee408fed1":[7,0,0,75,1],
 "struct_ogre_1_1_cb_draw_call_strip.html#a2fecf25762605aceae5eda1e2812a330":[6,0,0,102,4],
 "struct_ogre_1_1_cb_draw_call_strip.html#a2fecf25762605aceae5eda1e2812a330":[7,0,0,75,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX256 =
 "struct_ogre_1_1_cull_frustum_request.html#a0e98b3dbbac76a171614fcd1000a600e":[5,2,11,10,5],
 "struct_ogre_1_1_cull_frustum_request.html#a0e98b3dbbac76a171614fcd1000a600e":[5,0,1,10,5],
 "struct_ogre_1_1_cull_frustum_request.html#a1d3f5565a1f0cef3c484ac9898121dd6":[5,2,11,10,6],
-"struct_ogre_1_1_cull_frustum_request.html#a1d3f5565a1f0cef3c484ac9898121dd6":[5,0,1,10,6],
-"struct_ogre_1_1_cull_frustum_request.html#a24d96b129c1cf2bf3d6adc81b2950132":[5,0,1,10,1]
+"struct_ogre_1_1_cull_frustum_request.html#a1d3f5565a1f0cef3c484ac9898121dd6":[5,0,1,10,6]
 };

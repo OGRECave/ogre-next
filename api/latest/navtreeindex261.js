@@ -1,5 +1,6 @@
 var NAVTREEINDEX261 =
 {
+"struct_ogre_1_1_hlms_texture_pack_1_1_texture_entry.html":[5,2,10,82,0],
 "struct_ogre_1_1_hlms_texture_pack_1_1_texture_entry.html#a9d0050c27470bec21b0a960151a4bfd9":[5,2,10,82,0,1],
 "struct_ogre_1_1_hlms_texture_pack_1_1_texture_entry.html#ac83c2a22f767e23e0ff84f01c23e0db1":[5,2,10,82,0,0],
 "struct_ogre_1_1_id_string.html":[7,0,0,464],
@@ -248,6 +249,5 @@ var NAVTREEINDEX261 =
 "struct_ogre_1_1_lod_data_1_1_index_buffer_info.html#aef789e3ea55d0d890f1de9434d36a449":[7,0,0,531,1,4],
 "struct_ogre_1_1_lod_data_1_1_index_buffer_info.html#aef789e3ea55d0d890f1de9434d36a449":[6,0,0,558,1,4],
 "struct_ogre_1_1_lod_data_1_1_triangle.html":[7,0,0,531,3],
-"struct_ogre_1_1_lod_data_1_1_triangle.html":[6,0,0,558,3],
-"struct_ogre_1_1_lod_data_1_1_triangle.html#a0e13621fd2152e78b60f7f3a3678e1ae":[7,0,0,531,3,8]
+"struct_ogre_1_1_lod_data_1_1_triangle.html":[6,0,0,558,3]
 };

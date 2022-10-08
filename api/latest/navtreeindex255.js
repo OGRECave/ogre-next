@@ -1,5 +1,6 @@
 var NAVTREEINDEX255 =
 {
+"namespacerapidjson.html":[6,0,2],
 "namespacerapidjson.html#a7ca4364c123ff222a07e03439f039ca2":[6,0,2,4],
 "namespacerapidjson.html#aa65fc9fb381b2cbc54f98673eadd6505":[6,0,2,5],
 "namespaces.html":[6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX255 =
 "struct_ogre_1_1_cb_draw_call_strip.html":[6,0,0,102],
 "struct_ogre_1_1_cb_draw_call_strip.html":[7,0,0,75],
 "struct_ogre_1_1_cb_draw_call_strip.html#a1b552ad218a593d23952482ed9c15396":[6,0,0,102,3],
-"struct_ogre_1_1_cb_draw_call_strip.html#a1b552ad218a593d23952482ed9c15396":[7,0,0,75,3],
-"struct_ogre_1_1_cb_draw_call_strip.html#a1b56c03e7afca205eddf3f9ee408fed1":[6,0,0,102,1]
+"struct_ogre_1_1_cb_draw_call_strip.html#a1b552ad218a593d23952482ed9c15396":[7,0,0,75,3]
 };

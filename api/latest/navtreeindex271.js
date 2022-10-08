@@ -1,5 +1,6 @@
 var NAVTREEINDEX271 =
 {
+"struct_ogre_1_1float4.html#ad25cdc72c9e44df775fd7f770db2b150":[6,0,0,321,5],
 "struct_ogre_1_1float4.html#af2480f9ac2023438ccf3bb3955f65460":[6,0,0,321,7],
 "struct_ogre_1_1float4.html#af2480f9ac2023438ccf3bb3955f65460":[7,0,0,294,7],
 "struct_ogre_1_1float4x3.html":[6,0,0,322],
@@ -248,6 +249,5 @@ var NAVTREEINDEX271 =
 "struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#a41c888a01022a7ad7c0bb5a285a1e9a3":[5,2,9,31,1,4],
 "struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#a82aaf1c352018fe02f86d8c097006592":[5,2,9,31,1,3],
 "struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#aa8287997dd4b37c0d23bbef72637a310":[5,2,9,31,1,0],
-"struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#adcc8e172180de5a0a3023f81aa1f902a":[5,2,9,31,1,2],
-"struct_ogre_1_1v1_1_1_vertex_pose_key_frame_1_1_pose_ref.html":[5,2,0,32,0]
+"struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#adcc8e172180de5a0a3023f81aa1f902a":[5,2,9,31,1,2]
 };

@@ -1173,6 +1173,7 @@ var group___render_system =
       [ "getActualLeft", "class_ogre_1_1_viewport.html#af3afce5301b4520e41202b3ab36e4b1b", null ],
       [ "getActualTop", "class_ogre_1_1_viewport.html#a9dd09c155514091d6c4c7d460606fa00", null ],
       [ "getActualWidth", "class_ogre_1_1_viewport.html#ab8be5c82cd28c1b692a6183a5b183e1c", null ],
+      [ "getCurrentMip", "class_ogre_1_1_viewport.html#a70a90f399b8bd6f6406bba52e3f3f3f8", null ],
       [ "getCurrentTarget", "class_ogre_1_1_viewport.html#aee99f41067d69d461cd25bdde2d9e4e0", null ],
       [ "getDrawBuffer", "class_ogre_1_1_viewport.html#a37c0cea85d6d124a70cf6cd575647638", null ],
       [ "getHeight", "class_ogre_1_1_viewport.html#ab76e18f411441f9a64865e5d637f3860", null ],

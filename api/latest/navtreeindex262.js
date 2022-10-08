@@ -1,5 +1,6 @@
 var NAVTREEINDEX262 =
 {
+"struct_ogre_1_1_lod_data_1_1_triangle.html#a0e13621fd2152e78b60f7f3a3678e1ae":[7,0,0,531,3,8],
 "struct_ogre_1_1_lod_data_1_1_triangle.html#a0e13621fd2152e78b60f7f3a3678e1ae":[6,0,0,558,3,8],
 "struct_ogre_1_1_lod_data_1_1_triangle.html#a4d6fec0a6cf54ee0ee6f6052520f4c61":[7,0,0,531,3,1],
 "struct_ogre_1_1_lod_data_1_1_triangle.html#a4d6fec0a6cf54ee0ee6f6052520f4c61":[6,0,0,558,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX262 =
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a648e8ae541d77f60907e09d11093ed77":[7,0,0,592,0,4],
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a6f72772c23311005c30bda5f1f45b543":[6,0,0,619,0,1],
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a6f72772c23311005c30bda5f1f45b543":[7,0,0,592,0,1],
-"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a88709353f3c121f08e43392024c70aaa":[6,0,0,619,0,2],
-"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a88709353f3c121f08e43392024c70aaa":[7,0,0,592,0,2]
+"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a88709353f3c121f08e43392024c70aaa":[6,0,0,619,0,2]
 };
