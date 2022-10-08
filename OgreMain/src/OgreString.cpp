@@ -90,7 +90,7 @@ namespace Ogre
             else if( pos == String::npos || ( maxSplits && numSplits == maxSplits ) )
             {
                 // Copy the rest of the string
-                ret.emplace_back( str.begin() + start, str.end() );
+                ret.emplace_back( str.begin() + ptrdiff_t( start ), str.end() );
                 break;
             }
             else
@@ -107,7 +107,7 @@ namespace Ogre
                     if( delimPos == String::npos )
                     {
                         // Copy the rest of the string
-                        ret.emplace_back( str.begin() + delimStart, str.end() );
+                        ret.emplace_back( str.begin() + ptrdiff_t( delimStart ), str.end() );
                     }
                     else
                     {
@@ -159,7 +159,7 @@ namespace Ogre
                     curDoubleDelim = curDelim;
                 }
                 // Do nothing
-                start = pos + 1;
+                start = pos + 1u;
             }
             else if( pos == String::npos || ( maxSplits && numSplits == maxSplits ) )
             {
@@ -168,7 +168,7 @@ namespace Ogre
                     // Missing closer. Warn or throw exception?
                 }
                 // Copy the rest of the string
-                ret.emplace_back( str.begin() + start, str.end() );
+                ret.emplace_back( str.begin() + ptrdiff_t( start ), str.end() );
                 break;
             }
             else
