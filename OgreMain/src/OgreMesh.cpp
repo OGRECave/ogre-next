@@ -766,8 +766,10 @@ namespace Ogre
                 _compileBoneAssignments();
 
             for( SubMesh *submesh : mSubMeshList )
+            {
                 if( submesh->mBoneAssignmentsOutOfDate )
                     submesh->_compileBoneAssignments();
+            }
 
             prepareForShadowMapping( false );
         }

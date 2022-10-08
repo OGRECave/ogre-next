@@ -576,8 +576,10 @@ namespace Ogre
     bool Mesh::hasValidShadowMappingVaos() const
     {
         for( SubMesh *submesh : mSubMeshes )
+        {
             if( submesh->mVao[VpNormal].size() != submesh->mVao[VpShadow].size() )
                 return false;
+        }
 
         return true;
     }
@@ -590,12 +592,14 @@ namespace Ogre
         bool independent = false;
 
         for( SubMesh *submesh : mSubMeshes )
+        {
             if( !independent && !submesh->mVao[VpNormal].empty() &&
                 submesh->mVao[VpNormal][0] != submesh->mVao[VpShadow][0] )
             {
                 independent = true;
                 break;
             }
+        }
 
         return independent;
     }
