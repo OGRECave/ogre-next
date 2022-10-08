@@ -274,6 +274,12 @@ namespace Ogre
 
         notifyPassSceneAfterShadowMapsListeners();
 
+        TextureGpu *oldTarget = viewport->getCurrentTarget();
+        const uint8 oldMip = viewport->getCurrentMip();
+        const Vector4 oldVpSize( viewport->getLeft(), viewport->getTop(), viewport->getWidth(),
+                                 viewport->getHeight() );
+        const Vector4 oldScissors( viewport->getScissorLeft(), viewport->getScissorTop(),
+                                   viewport->getScissorWidth(), viewport->getScissorHeight() );
         {
             // We must ensure Aspect Ratio is set BEFORE analyzeBarriers
             // otherwise analyzeBarriers may make the wrong decisions
@@ -286,6 +292,12 @@ namespace Ogre
 
         analyzeBarriers();
         executeResourceTransitions();
+        {
+            // Restore the old viewport settings because we messed up with
+            // RenderSystem::mCurrentRenderViewport (where viewport points to) and some
+            // RenderSystems (D3D11) tracks these settings to see which ones are dirty.
+            viewport->setDimensions( oldTarget, oldVpSize, oldScissors, oldMip );
+        }
         setRenderPassDescToCurrent();
 
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );

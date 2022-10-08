@@ -176,6 +176,8 @@ namespace Ogre
 
         TextureGpu *getCurrentTarget() const { return mCurrentTarget; }
 
+        uint8 getCurrentMip() const { return mCurrentMip; }
+
         /** Only sets the scissor regions. The scissor rectangle must be fully inside
             the viewport rectangle. See setDimensions() for param description
         @remarks
