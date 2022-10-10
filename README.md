@@ -203,7 +203,7 @@ For OgreNext <= 2.3 the versioning stays the same.
 
 # Samples
 
-If you want to test or evaluate Ogre, you can try the [prebuilt samples for Windows](https://bintray.com/darksylinc/ogre-next/download_file?file_path=ogre-samples-windows-x64-vs2015.7z).
+If you want to test or evaluate Ogre, you can try the [prebuilt samples for Windows](https://github.com/OGRECave/ogre-next/releases/download/bin-releases/ogre-samples-windows-x64-vs2015.7z).
 
 # Unit Tests
 
