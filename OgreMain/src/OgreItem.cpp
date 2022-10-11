@@ -80,9 +80,8 @@ namespace Ogre
         {
             if( mMesh->getNumSubMeshes() == mSubItems.size() )
             {
-                SubItemVec::iterator seend = mSubItems.end();
-                for( SubItemVec::iterator i = mSubItems.begin(); i != seend; ++i )
-                    prevMaterialsList.push_back( i->getDatablockOrMaterialName() );
+                for( SubItem &subitem : mSubItems )
+                    prevMaterialsList.push_back( subitem.getDatablockOrMaterialName() );
             }
             _deinitialise();
         }
@@ -117,13 +116,8 @@ namespace Ogre
             // Without filling the renderables list, the RenderQueue won't
             // catch our sub entities and thus we won't be rendered
             mRenderables.reserve( mSubItems.size() );
-            SubItemVec::iterator itor = mSubItems.begin();
-            SubItemVec::iterator endt = mSubItems.end();
-            while( itor != endt )
-            {
-                mRenderables.push_back( &( *itor ) );
-                ++itor;
-            }
+            for( SubItem &subitem : mSubItems )
+                mRenderables.push_back( &subitem );
         }
 
         Aabb aabb( mMesh->getAabb() );
@@ -191,14 +185,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Item::setDatablock( HlmsDatablock *datablock )
     {
-        SubItemVec::iterator itor = mSubItems.begin();
-        SubItemVec::iterator endt = mSubItems.end();
-
-        while( itor != endt )
-        {
-            itor->setDatablock( datablock );
-            ++itor;
-        }
+        for( SubItem &subitem : mSubItems )
+            subitem.setDatablock( datablock );
     }
     //-----------------------------------------------------------------------
     void Item::setDatablock( IdString datablockName )
@@ -223,10 +211,9 @@ namespace Ogre
         if( mInitialised )
         {
             // Copy material settings
-            SubItemVec::const_iterator i;
             unsigned int n = 0;
-            for (i = mSubItems.begin(); i != mSubItems.end(); ++i, ++n)
-                newEnt->getSubItem(n)->setDatablock( i->getDatablock() );
+            for( SubItem &subitem : mSubItems )
+                newEnt->getSubItem(n++)->setDatablock( subitem.getDatablock() );
         }
 
         return newEnt;
@@ -238,11 +225,8 @@ namespace Ogre
         const String &groupName /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */ )
     {
         // Set for all subentities
-        SubItemVec::iterator i;
-        for( i = mSubItems.begin(); i != mSubItems.end(); ++i )
-        {
-            i->setDatablockOrMaterialName( name, groupName );
-        }
+        for( SubItem &subitem : mSubItems )
+            subitem.setDatablockOrMaterialName( name, groupName );
     }
     //-----------------------------------------------------------------------
     void Item::setMaterialName(
@@ -250,21 +234,15 @@ namespace Ogre
         const String &groupName /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */ )
     {
         // Set for all subentities
-        SubItemVec::iterator i;
-        for( i = mSubItems.begin(); i != mSubItems.end(); ++i )
-        {
-            i->setMaterialName( name, groupName );
-        }
+        for( SubItem &subitem : mSubItems )
+            subitem.setMaterialName( name, groupName );
     }
     //-----------------------------------------------------------------------
     void Item::setMaterial( const MaterialPtr &material )
     {
         // Set for all subentities
-        SubItemVec::iterator i;
-        for( i = mSubItems.begin(); i != mSubItems.end(); ++i )
-        {
-            i->setMaterial( material );
-        }
+        for( SubItem &subitem : mSubItems )
+            subitem.setMaterial( material );
     }
     //-----------------------------------------------------------------------
     const String &Item::getMovableType() const { return ItemFactory::FACTORY_TYPE_NAME; }
