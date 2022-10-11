@@ -258,23 +258,19 @@ namespace Ogre
             mComputeProgramUsage = NULL;
         }
 
-        TextureUnitStates::const_iterator i, iend;
-
         // Clear texture units but doesn't notify need recompilation in the case
         // we are cloning, The parent material will take care of this.
-        iend = mTextureUnitStates.end();
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
+        for( TextureUnitState *tus : mTextureUnitStates )
         {
-            OGRE_DELETE *i;
+            OGRE_DELETE tus;
         }
 
         mTextureUnitStates.clear();
 
         // Copy texture units
-        iend = oth.mTextureUnitStates.end();
-        for( i = oth.mTextureUnitStates.begin(); i != iend; ++i )
+        for( TextureUnitState *otus : oth.mTextureUnitStates )
         {
-            TextureUnitState *t = OGRE_NEW TextureUnitState( this, *( *i ) );
+            TextureUnitState *t = OGRE_NEW TextureUnitState( this, *otus );
             mTextureUnitStates.push_back( t );
         }
 
@@ -286,12 +282,9 @@ namespace Ogre
         size_t memSize = 0;
 
         // Tally up TU states
-        TextureUnitStates::const_iterator i, iend;
-        iend = mTextureUnitStates.end();
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
-        {
-            memSize += ( *i )->calculateSize();
-        }
+        for( TextureUnitState *tus : mTextureUnitStates )
+            memSize += tus->calculateSize();
+
         if( mVertexProgramUsage )
             memSize += mVertexProgramUsage->calculateSize();
         if( mFragmentProgramUsage )
@@ -564,11 +557,9 @@ namespace Ogre
     void Pass::removeAllTextureUnitStates()
     {
         OGRE_LOCK_MUTEX( mTexUnitChangeMutex );
-        TextureUnitStates::iterator i, iend;
-        iend = mTextureUnitStates.end();
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
+        for( TextureUnitState *tus : mTextureUnitStates )
         {
-            OGRE_DELETE *i;
+            OGRE_DELETE tus;
         }
         mTextureUnitStates.clear();
     }
@@ -702,23 +693,15 @@ namespace Ogre
         // prepared
 
         // prepare each TextureUnitState
-        TextureUnitStates::iterator i, iend;
-        iend = mTextureUnitStates.end();
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
-        {
-            ( *i )->_prepare();
-        }
+        for( TextureUnitState *tus : mTextureUnitStates )
+            tus->_prepare();
     }
     //-----------------------------------------------------------------------
     void Pass::_unprepare()
     {
         // unprepare each TextureUnitState
-        TextureUnitStates::iterator i, iend;
-        iend = mTextureUnitStates.end();
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
-        {
-            ( *i )->_unprepare();
-        }
+        for( TextureUnitState *tus : mTextureUnitStates )
+            tus->_unprepare();
     }
     //-----------------------------------------------------------------------
     void Pass::_load()
@@ -727,12 +710,8 @@ namespace Ogre
         // loaded
 
         // Load each TextureUnitState
-        TextureUnitStates::iterator i, iend;
-        iend = mTextureUnitStates.end();
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
-        {
-            ( *i )->_load();
-        }
+        for( TextureUnitState *tus : mTextureUnitStates )
+            tus->_load();
 
         // Load programs
         if( mVertexProgramUsage )
@@ -775,12 +754,8 @@ namespace Ogre
     void Pass::_unload()
     {
         // Unload each TextureUnitState
-        TextureUnitStates::iterator i, iend;
-        iend = mTextureUnitStates.end();
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
-        {
-            ( *i )->_unload();
-        }
+        for( TextureUnitState *tus : mTextureUnitStates )
+            tus->_unload();
 
         // Unload programs
         if( mVertexProgramUsage )
@@ -1174,12 +1149,8 @@ namespace Ogre
     {
         OGRE_LOCK_MUTEX( mTexUnitChangeMutex );
 
-        TextureUnitStates::iterator i, iend;
-        iend = mTextureUnitStates.end();
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
-        {
-            ( *i )->setSamplerblock( samplerblock );
-        }
+        for( TextureUnitState *tus : mTextureUnitStates )
+            tus->setSamplerblock( samplerblock );
     }
     //-----------------------------------------------------------------------
     void Pass::_updateAutoParams( const AutoParamDataSource *source, uint16 mask ) const
@@ -1239,13 +1210,11 @@ namespace Ogre
     bool Pass::applyTextureAliases( const AliasTextureNamePairList &aliasList, const bool apply ) const
     {
         // iterate through each texture unit state and apply the texture alias if it applies
-        TextureUnitStates::const_iterator i, iend;
-        iend = mTextureUnitStates.end();
         bool testResult = false;
 
-        for( i = mTextureUnitStates.begin(); i != iend; ++i )
+        for( TextureUnitState *tus : mTextureUnitStates )
         {
-            if( ( *i )->applyTextureAliases( aliasList, apply ) )
+            if( tus->applyTextureAliases( aliasList, apply ) )
                 testResult = true;
         }
 
