@@ -138,7 +138,13 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
     endif()
   endif()
   if (OGRE_GCC_HAS_SSE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2")
+    if(CMAKE_GENERATOR STREQUAL "Xcode")
+      # XCode builds universal binaries, and generates too much warnings when -msse and -msse2 are passed to arm compiler
+      set(CMAKE_XCODE_ATTRIBUTE_ARCH_CXXFLAGS[arch=i386] "-msse -msse2")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} $(ARCH_CXXFLAGS)")
+    else()
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2")
+    endif ()
   endif ()
   # This is a set of sensible warnings that provide meaningful output
   set(OGRE_WARNING_FLAGS
