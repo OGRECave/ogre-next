@@ -86,6 +86,6 @@ var searchData=
   ['logobjectinfo_83',['logObjectInfo',['../namespace_ogre.html#a398609fc7f66939c990741e6878792aa',1,'Ogre']]],
   ['logresults_84',['logResults',['../class_ogre_1_1_profile_instance.html#af43228f1e8e2ab70809bbb14d27ae773',1,'Ogre::ProfileInstance::logResults()'],['../class_ogre_1_1_profiler.html#a456a0f133ccea3eb515626edd22963ec',1,'Ogre::Profiler::logResults()']]],
   ['lookat_85',['lookAt',['../class_ogre_1_1_camera.html#a54542bfe56c8a09949d35d6c75a5045c',1,'Ogre::Camera::lookAt(const Vector3 &amp;targetPoint)'],['../class_ogre_1_1_camera.html#a4d5b3cac0c09c3cc37e36a957dcc7797',1,'Ogre::Camera::lookAt(Real x, Real y, Real z)'],['../class_ogre_1_1_scene_node.html#a4a6e34aab331802bc836668e78a08508',1,'Ogre::SceneNode::lookAt()']]],
-  ['lwconststring_86',['LwConstString',['../class_ogre_1_1_lw_const_string.html#ab7577f7331dca299d1a4b1a7115422cc',1,'Ogre::LwConstString']]],
+  ['lwconststring_86',['LwConstString',['../class_ogre_1_1_lw_const_string.html#ab7577f7331dca299d1a4b1a7115422cc',1,'Ogre::LwConstString::LwConstString(const char *inStr, size_t maxLength)'],['../class_ogre_1_1_lw_const_string.html#a378436d499498161e50a17489d02d297',1,'Ogre::LwConstString::LwConstString(const LwConstString &amp;other)=default']]],
   ['lwstring_87',['LwString',['../class_ogre_1_1_lw_string.html#a58e50e8165a54c9721e84777f5f2341b',1,'Ogre::LwString']]]
 ];

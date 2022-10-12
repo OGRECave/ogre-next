@@ -108,6 +108,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_lw_const_string.html','
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab7577f7331dca299d1a4b1a7115422cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#ab7577f7331dca299d1a4b1a7115422cc">LwConstString</a> (const char *inStr, size_t maxLength)</td></tr>
 <tr class="separator:ab7577f7331dca299d1a4b1a7115422cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a378436d499498161e50a17489d02d297"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#a378436d499498161e50a17489d02d297">LwConstString</a> (const <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> &amp;other)=default</td></tr>
+<tr class="separator:a378436d499498161e50a17489d02d297"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad54127c558d026957cba34080560eba9"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#ad54127c558d026957cba34080560eba9">begin</a> () const</td></tr>
 <tr class="separator:ad54127c558d026957cba34080560eba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aead52aa3878871f67f5daf40c39bc971"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#aead52aa3878871f67f5daf40c39bc971">c_str</a> () const</td></tr>
@@ -134,6 +136,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a14b796aad34dd7db20f7ae07faea9238"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a811b55e86aebefb4d3b7ffe9b80f5e3c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#a811b55e86aebefb4d3b7ffe9b80f5e3c">operator&lt;</a> (const <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> &amp;other) const</td></tr>
 <tr class="separator:a811b55e86aebefb4d3b7ffe9b80f5e3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e3d033be1c17d63528d6636bd7ee6fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#a6e3d033be1c17d63528d6636bd7ee6fc">operator=</a> (const <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> &amp;other)=delete</td></tr>
+<tr class="separator:a6e3d033be1c17d63528d6636bd7ee6fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa07ba0a1102c9a46116846b8ca89fbae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#aa07ba0a1102c9a46116846b8ca89fbae">operator==</a> (const char *other) const</td></tr>
 <tr class="separator:aa07ba0a1102c9a46116846b8ca89fbae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cff35bb452c649676180baee7eaea1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#a2cff35bb452c649676180baee7eaea1f">operator==</a> (const <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> &amp;other) const</td></tr>
@@ -159,7 +163,7 @@ Friends</h2></td></tr>
 <div class="textblock"><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_lw_string.html" title="This is a Light-weight string wrapper around the C string interface.">LwString</a>. This base class exists so that you can wrap around useful functionality around const char pointers, for example: const char myText = "Hello World!"; <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> myString( myText, 13 ); such as comparison, finding, etc. The internal pointer is const_cast'ed because derived class <a class="el" href="class_ogre_1_1_lw_string.html" title="This is a Light-weight string wrapper around the C string interface.">LwString</a> needs it so, however this base class <em>never</em> writes to this pointer or returns a non-const pointer. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab7577f7331dca299d1a4b1a7115422cc" name="ab7577f7331dca299d1a4b1a7115422cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7577f7331dca299d1a4b1a7115422cc">&#9670;&nbsp;</a></span>LwConstString()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7577f7331dca299d1a4b1a7115422cc">&#9670;&nbsp;</a></span>LwConstString() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,6 +192,32 @@ Friends</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a378436d499498161e50a17489d02d297" name="a378436d499498161e50a17489d02d297"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a378436d499498161e50a17489d02d297">&#9670;&nbsp;</a></span>LwConstString() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::LwConstString::LwConstString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -605,6 +635,32 @@ Friends</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6e3d033be1c17d63528d6636bd7ee6fc" name="a6e3d033be1c17d63528d6636bd7ee6fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e3d033be1c17d63528d6636bd7ee6fc">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> &amp; Ogre::LwConstString::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

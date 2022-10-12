@@ -1,6 +1,7 @@
 var class_ogre_1_1_lw_const_string =
 [
     [ "LwConstString", "class_ogre_1_1_lw_const_string.html#ab7577f7331dca299d1a4b1a7115422cc", null ],
+    [ "LwConstString", "class_ogre_1_1_lw_const_string.html#a378436d499498161e50a17489d02d297", null ],
     [ "begin", "class_ogre_1_1_lw_const_string.html#ad54127c558d026957cba34080560eba9", null ],
     [ "c_str", "class_ogre_1_1_lw_const_string.html#aead52aa3878871f67f5daf40c39bc971", null ],
     [ "capacity", "class_ogre_1_1_lw_const_string.html#ac3fa4e2206065c3c93d1ce2f11a1656c", null ],
@@ -15,6 +16,7 @@ var class_ogre_1_1_lw_const_string =
     [ "operator!=", "class_ogre_1_1_lw_const_string.html#a6fecf7ce73bddfc0822decdd0736b35a", null ],
     [ "operator<", "class_ogre_1_1_lw_const_string.html#a14b796aad34dd7db20f7ae07faea9238", null ],
     [ "operator<", "class_ogre_1_1_lw_const_string.html#a811b55e86aebefb4d3b7ffe9b80f5e3c", null ],
+    [ "operator=", "class_ogre_1_1_lw_const_string.html#a6e3d033be1c17d63528d6636bd7ee6fc", null ],
     [ "operator==", "class_ogre_1_1_lw_const_string.html#aa07ba0a1102c9a46116846b8ca89fbae", null ],
     [ "operator==", "class_ogre_1_1_lw_const_string.html#a2cff35bb452c649676180baee7eaea1f", null ],
     [ "operator>", "class_ogre_1_1_lw_const_string.html#a382cc0da35436866b56fc81a5d411e47", null ],
