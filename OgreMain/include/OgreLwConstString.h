@@ -90,6 +90,10 @@ namespace Ogre
 #endif
         }
 
+        // We want copy constructor but not copy assignment
+        LwConstString( const LwConstString &other ) = default;
+        LwConstString &operator=( const LwConstString &other ) = delete;
+
         static LwConstString FromUnsafeCStr( const char *cStr )
         {
             return LwConstString( cStr, strlen( cStr ) + 1 );
@@ -172,19 +176,6 @@ namespace Ogre
         bool operator<( const char *other ) const { return strcmp( mStrPtr, other ) < 0; }
 
         bool operator>( const char *other ) const { return strcmp( mStrPtr, other ) > 0; }
-
-    private:
-        // Forbidden calls
-        // Assignment.
-#if __cplusplus >= 201103L
-        LwConstString &operator=( const LwConstString &other ) = delete;
-#else
-        LwConstString &operator=( const LwConstString &other )
-        {
-            assert( false && "Can't call asignment operator!" );
-            return *this;
-        }
-#endif
     };
 }  // namespace Ogre
 
