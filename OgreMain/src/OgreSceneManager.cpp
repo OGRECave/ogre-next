@@ -3202,29 +3202,23 @@ namespace Ogre
     //---------------------------------------------------------------------
     bool SceneManager::fireRenderQueueStarted( uint8 id, const String &invocation )
     {
-        RenderQueueListenerList::iterator i, iend;
         bool skip = false;
 
         RenderQueue *rq = mRenderQueue;
 
-        iend = mRenderQueueListeners.end();
-        for( i = mRenderQueueListeners.begin(); i != iend; ++i )
-        {
-            ( *i )->renderQueueStarted( rq, id, invocation, skip );
-        }
+        for( RenderQueueListener *li : mRenderQueueListeners )
+            li->renderQueueStarted( rq, id, invocation, skip );
+
         return skip;
     }
     //---------------------------------------------------------------------
     bool SceneManager::fireRenderQueueEnded( uint8 id, const String &invocation )
     {
-        RenderQueueListenerList::iterator i, iend;
         bool repeat = false;
 
-        iend = mRenderQueueListeners.end();
-        for( i = mRenderQueueListeners.begin(); i != iend; ++i )
-        {
-            ( *i )->renderQueueEnded( id, invocation, repeat );
-        }
+        for( RenderQueueListener *li : mRenderQueueListeners )
+            li->renderQueueEnded( id, invocation, repeat );
+
         return repeat;
     }
     //---------------------------------------------------------------------
@@ -3233,75 +3227,44 @@ namespace Ogre
                                                const LightList *pLightList,
                                                bool suppressRenderStateChanges )
     {
-        RenderObjectListenerList::iterator i, iend;
-
-        iend = mRenderObjectListeners.end();
-        for( i = mRenderObjectListeners.begin(); i != iend; ++i )
-        {
-            ( *i )->notifyRenderSingleObject( rend, pass, source, pLightList,
-                                              suppressRenderStateChanges );
-        }
+        for( RenderObjectListener *li : mRenderObjectListeners )
+            li->notifyRenderSingleObject( rend, pass, source, pLightList, suppressRenderStateChanges );
     }
     //---------------------------------------------------------------------
     void SceneManager::fireShadowTexturesUpdated( size_t numberOfShadowTextures )
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->shadowTexturesUpdated( numberOfShadowTextures );
-        }
+        for( Listener *li : listenersCopy )
+            li->shadowTexturesUpdated( numberOfShadowTextures );
     }
     //---------------------------------------------------------------------
     void SceneManager::fireShadowTexturesPreCaster( const Light *light, Camera *camera,
                                                     size_t iteration )
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->shadowTextureCasterPreViewProj( light, camera, iteration );
-        }
+        for( Listener *li : listenersCopy )
+            li->shadowTextureCasterPreViewProj( light, camera, iteration );
     }
     //---------------------------------------------------------------------
     void SceneManager::firePreFindVisibleObjects( Viewport *v )
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->preFindVisibleObjects( this, mIlluminationStage, v );
-        }
+        for( Listener *li : listenersCopy )
+            li->preFindVisibleObjects( this, mIlluminationStage, v );
     }
     //---------------------------------------------------------------------
     void SceneManager::firePostFindVisibleObjects( Viewport *v )
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->postFindVisibleObjects( this, mIlluminationStage, v );
-        }
+        for( Listener *li : listenersCopy )
+            li->postFindVisibleObjects( this, mIlluminationStage, v );
     }
     //---------------------------------------------------------------------
     void SceneManager::fireSceneManagerDestroyed()
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->sceneManagerDestroyed( this );
-        }
+        for( Listener *li : listenersCopy )
+            li->sceneManagerDestroyed( this );
     }
     //---------------------------------------------------------------------
     void SceneManager::setViewports( Viewport **vp, size_t numViewports )
