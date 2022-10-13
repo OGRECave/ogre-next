@@ -13,10 +13,7 @@ var dir_783a6f100e424bd0df5c669517ec192c =
     [ "OgreShaderExPerPixelLighting.h", "_ogre_shader_ex_per_pixel_lighting_8h.html", "_ogre_shader_ex_per_pixel_lighting_8h" ],
     [ "OgreShaderExTextureAtlasSampler.h", "_ogre_shader_ex_texture_atlas_sampler_8h.html", "_ogre_shader_ex_texture_atlas_sampler_8h" ],
     [ "OgreShaderExTriplanarTexturing.h", "_ogre_shader_ex_triplanar_texturing_8h.html", "_ogre_shader_ex_triplanar_texturing_8h" ],
-    [ "OgreShaderFFPAlphaTest.h", "_ogre_shader_f_f_p_alpha_test_8h.html", [
-      [ "Ogre::RTShader::FFPAlphaTest", "class_ogre_1_1_r_t_shader_1_1_f_f_p_alpha_test.html", "class_ogre_1_1_r_t_shader_1_1_f_f_p_alpha_test" ],
-      [ "Ogre::RTShader::FFPAlphaTestFactory", "class_ogre_1_1_r_t_shader_1_1_f_f_p_alpha_test_factory.html", "class_ogre_1_1_r_t_shader_1_1_f_f_p_alpha_test_factory" ]
-    ] ],
+    [ "OgreShaderFFPAlphaTest.h", "_ogre_shader_f_f_p_alpha_test_8h.html", "_ogre_shader_f_f_p_alpha_test_8h" ],
     [ "OgreShaderFFPColour.h", "_ogre_shader_f_f_p_colour_8h.html", null ],
     [ "OgreShaderFFPFog.h", "_ogre_shader_f_f_p_fog_8h.html", null ],
     [ "OgreShaderFFPLighting.h", "_ogre_shader_f_f_p_lighting_8h.html", null ],
