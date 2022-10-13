@@ -412,7 +412,8 @@ namespace Ogre
         }
         else if( name == msMsaaTextureBuffer )
         {
-            *static_cast<const void **>( pData ) = (const void *)CFBridgingRetain( mMsaaFramebufferName );
+            *static_cast<const void **>( pData ) =
+                (const void *)CFBridgingRetain( mMsaaFramebufferName );
         }
     }
 

@@ -2598,7 +2598,7 @@ namespace Ogre
                 const LightList *pLightListToUse;
                 // Start counting from the start light
                 size_t lightIndex = pass->getStartLight();
-                //size_t depthInc = 0;
+                // size_t depthInc = 0;
 
                 while( lightsLeft > 0 )
                 {
@@ -2752,7 +2752,7 @@ namespace Ogre
                     {
                         mDestRenderSystem->setDeriveDepthBias(false);
                     }*/
-                    //depthInc += pass->getPassIterationCount();
+                    // depthInc += pass->getPassIterationCount();
 
                     // Finalise GPU parameter bindings
                     updateGpuProgramParameters( pass );
