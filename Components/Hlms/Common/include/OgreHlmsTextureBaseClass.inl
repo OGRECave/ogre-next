@@ -232,7 +232,10 @@ namespace Ogre
             if( !hasSeparateSamplers )
             {
                 if( mSamplersDescSet )
+                {
                     hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
+                    mSamplersDescSet = 0;
+                }
                 if( !baseSet.mTextures.empty() )
                     mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseSampler );
             }
