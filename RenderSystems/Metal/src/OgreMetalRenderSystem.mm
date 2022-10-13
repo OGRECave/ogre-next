@@ -1386,8 +1386,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *pso )
     {
-        id<MTLComputePipelineState> metalPso =
-            reinterpret_cast<id<MTLComputePipelineState> >( CFBridgingRelease( pso->rsData ) );
+        if( pso->rsData ) // holds id<MTLComputePipelineState>
+            CFRelease( pso->rsData );
         pso->rsData = 0;
     }
     //-------------------------------------------------------------------------
@@ -1769,8 +1769,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_hlmsSamplerblockDestroyed( HlmsSamplerblock *block )
     {
-        id<MTLSamplerState> sampler =
-            reinterpret_cast<id<MTLSamplerState> >( CFBridgingRelease( block->mRsData ) );
+        if( block->mRsData )  // holds id<MTLSamplerState>
+            CFRelease( block->mRsData );
+        block->mRsData = 0;
     }
     //-------------------------------------------------------------------------
     template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked, bool isUav>
