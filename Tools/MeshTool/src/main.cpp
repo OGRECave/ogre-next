@@ -768,11 +768,13 @@ void checkColour(v1::VertexData* vdata, bool& hasColour, bool& hasAmbiguousColou
         {
         case VET_COLOUR:
             hasAmbiguousColour = true;
+            OGRE_FALLTHROUGH;
 
         case VET_COLOUR_ABGR:
         case VET_COLOUR_ARGB:
             hasColour = true;
             originalType = elem.getType();
+            break;
 
         default:
             // do nothing
