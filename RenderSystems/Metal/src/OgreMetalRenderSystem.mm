@@ -2411,7 +2411,7 @@ namespace Ogre
                       indexBuffer:indexBuffer
                 indexBufferOffset:cmd->firstVertexIndex * bytesPerIndexElement + offsetStart
                     instanceCount:cmd->instanceCount
-                       baseVertex:mCurrentVertexBuffer->vertexStart
+                       baseVertex:(NSInteger)mCurrentVertexBuffer->vertexStart
                      baseInstance:cmd->baseInstance];
 #endif
     }
@@ -2500,7 +2500,7 @@ namespace Ogre
                         indexBufferOffset:mCurrentIndexBuffer->indexStart * bytesPerIndexElement +
                                           offsetStart
                             instanceCount:numberOfInstances
-                               baseVertex:mCurrentVertexBuffer->vertexStart
+                               baseVertex:(NSInteger)mCurrentVertexBuffer->vertexStart
                              baseInstance:0];
 #endif
             } while( updatePassIterationRenderState() );

@@ -75,13 +75,13 @@ namespace Ogre
 
             // Set the rendersystem
             String selectedRenderSystemName =
-                String( [[[[mWindowDelegate getRenderSystemsPopUp] selectedItem] title] UTF8String] );
+                String( mWindowDelegate.getRenderSystemsPopUp.selectedItem.title.UTF8String );
             RenderSystem *rs = Root::getSingleton().getRenderSystemByName( selectedRenderSystemName );
             Root::getSingleton().setRenderSystem( rs );
 
             // Relinquish control of the table
-            [[mWindowDelegate getOptionsTable] setDataSource:nil];
-            [[mWindowDelegate getOptionsTable] setDelegate:nil];
+            mWindowDelegate.getOptionsTable.dataSource = nil;
+            mWindowDelegate.getOptionsTable.delegate = nil;
         }
 
         return ( retVal == NSModalResponseStop ) ? true : false;
@@ -111,40 +111,40 @@ namespace Ogre
 
         // First do the buttons
         mOkButton = [[NSButton alloc] initWithFrame:NSMakeRect( 414, 12, 84, 32 )];
-        [mOkButton setButtonType:NSButtonTypeMomentaryPushIn];
-        [mOkButton setBezelStyle:NSBezelStyleRounded];
-        [mOkButton setTitle:NSLocalizedString( @"OK", @"okButtonString" )];
-        [mOkButton setAction:@selector( okButtonPressed: )];
-        [mOkButton setTarget:self];
-        [mOkButton setKeyEquivalent:@"\r"];
-        [[mConfigWindow contentView] addSubview:mOkButton];
+        mOkButton.buttonType = NSButtonTypeMomentaryPushIn;
+        mOkButton.bezelStyle = NSBezelStyleRounded;
+        mOkButton.title = NSLocalizedString( @"OK", @"okButtonString" );
+        mOkButton.action = @selector( okButtonPressed: );
+        mOkButton.target = self;
+        mOkButton.keyEquivalent = @"\r";
+        [mConfigWindow.contentView addSubview:mOkButton];
 
         mCancelButton = [[NSButton alloc] initWithFrame:NSMakeRect( 330, 12, 84, 32 )];
-        [mCancelButton setButtonType:NSButtonTypeMomentaryPushIn];
-        [mCancelButton setBezelStyle:NSBezelStyleRounded];
-        [mCancelButton setAction:@selector( cancelButtonPressed: )];
-        [mCancelButton setTarget:self];
-        [mCancelButton setKeyEquivalent:@"\e"];
-        [mCancelButton setTitle:NSLocalizedString( @"Cancel", @"cancelButtonString" )];
-        [[mConfigWindow contentView] addSubview:mCancelButton];
+        mCancelButton.buttonType = NSButtonTypeMomentaryPushIn;
+        mCancelButton.bezelStyle = NSBezelStyleRounded;
+        mCancelButton.action = @selector( cancelButtonPressed: );
+        mCancelButton.target = self;
+        mCancelButton.keyEquivalent = @"\e";
+        mCancelButton.title = NSLocalizedString( @"Cancel", @"cancelButtonString" );
+        [mConfigWindow.contentView addSubview:mCancelButton];
 
         // Then the Ogre logo out of the framework bundle
         mOgreLogo = [[NSImageView alloc] initWithFrame:NSMakeRect( 0, 295, 512, 220 )];
-        NSMutableString *logoPath = [[[NSBundle bundleForClass:[self class]] resourcePath] mutableCopy];
+        NSMutableString *logoPath = [NSBundle bundleForClass:self.class].resourcePath.mutableCopy;
         [logoPath appendString:@"/ogrelogo.png"];
 
         NSImage *image = [[NSImage alloc] initWithContentsOfFile:logoPath];
-        [mOgreLogo setImage:image];
-        [mOgreLogo setImageScaling:NSImageScaleAxesIndependently];
-        [mOgreLogo setEditable:NO];
-        [[mConfigWindow contentView] addSubview:mOgreLogo];
+        mOgreLogo.image = image;
+        mOgreLogo.imageScaling = NSImageScaleAxesIndependently;
+        mOgreLogo.editable = NO;
+        [mConfigWindow.contentView addSubview:mOgreLogo];
 
         // Popup menu for rendersystems.  On OS X this is always OpenGL
         mRenderSystemsPopUp = [[NSPopUpButton alloc] initWithFrame:NSMakeRect( 168, 259, 327, 26 )
                                                          pullsDown:NO];
-        [[mConfigWindow contentView] addSubview:mRenderSystemsPopUp];
-        [mOptionsPopUp setAction:@selector( renderSystemChanged: )];
-        [mOptionsPopUp setTarget:self];
+        [mConfigWindow.contentView addSubview:mRenderSystemsPopUp];
+        mOptionsPopUp.action = @selector( renderSystemChanged: );
+        mOptionsPopUp.target = self;
 
         NSTextField *renderSystemLabel =
             [[NSTextField alloc] initWithFrame:NSMakeRect( 18, 265, 148, 17 )];
@@ -159,62 +159,57 @@ namespace Ogre
 
         // The pretty box to contain the table and options
         NSBox *tableBox = [[NSBox alloc] initWithFrame:NSMakeRect( 19, 54, 477, 203 )];
-        [tableBox setTitle:NSLocalizedString( @"Rendering System Options", @"optionsBoxString" )];
-        [tableBox setContentViewMargins:NSMakeSize( 0, 0 )];
-        [tableBox setFocusRingType:NSFocusRingTypeNone];
+        tableBox.title = NSLocalizedString( @"Rendering System Options", @"optionsBoxString" );
+        tableBox.contentViewMargins = NSMakeSize( 0, 0 );
+        tableBox.focusRingType = NSFocusRingTypeNone;
  
         // Set up the tableview
         mOptionsTable = [[NSTableView alloc] init];
-        [mOptionsTable setDelegate:self];
-        [mOptionsTable setDataSource:self];
-        [mOptionsTable setHeaderView:nil];
-        [mOptionsTable setUsesAlternatingRowBackgroundColors:YES];
+        mOptionsTable.delegate = self;
+        mOptionsTable.dataSource = self;
+        mOptionsTable.headerView = nil;
+        mOptionsTable.usesAlternatingRowBackgroundColors = YES;
         [mOptionsTable sizeToFit];
 
         // Table column to hold option names
         NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier:@"optionName"];
-        [column setEditable:NO];
-        [column setMinWidth:237];
+        column.editable = NO;
+        column.minWidth = 237;
         [mOptionsTable addTableColumn:column];
         NSTableColumn *column2 = [[NSTableColumn alloc] initWithIdentifier:@"optionValue"];
-        [column2 setEditable:NO];
-        [column2 setMinWidth:200];
+        column2.editable = NO;
+        column2.minWidth = 200;
         [mOptionsTable addTableColumn:column2];
 
         // Scroll view to hold the table in case the list grows some day
         NSScrollView *scrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect( 22, 42, 439, 135 )];
-        [scrollView setBorderType:NSBezelBorder];
-        [scrollView setAutoresizesSubviews:YES];
-        [scrollView setAutohidesScrollers:YES];
-        [scrollView setDocumentView:mOptionsTable];
+        scrollView.borderType = NSBezelBorder;
+        scrollView.autoresizesSubviews = YES;
+        scrollView.autohidesScrollers = YES;
+        scrollView.documentView = mOptionsTable;
 
-        [[tableBox contentView] addSubview:scrollView];
+        [tableBox.contentView addSubview:scrollView];
 
         mOptionLabel = [[NSTextField alloc] initWithFrame:NSMakeRect( 15, 15, 173, 17 )];
-        [mOptionLabel setStringValue:NSLocalizedString( @"Select an Option", @"optionLabelString" )];
-        [mOptionLabel setEditable:NO];
-        [mOptionLabel setSelectable:NO];
-        [mOptionLabel setDrawsBackground:NO];
-        [mOptionLabel setAlignment:NSTextAlignmentRight];
-        [mOptionLabel setBezeled:NO];
-        [[tableBox contentView] addSubview:mOptionLabel];
+        mOptionLabel.stringValue = NSLocalizedString( @"Select an Option", @"optionLabelString" );
+        mOptionLabel.editable = NO;
+        mOptionLabel.selectable = NO;
+        mOptionLabel.drawsBackground = NO;
+        mOptionLabel.alignment = NSTextAlignmentRight;
+        mOptionLabel.bezeled = NO;
+        [tableBox.contentView addSubview:mOptionLabel];
 
         mOptionsPopUp = [[NSPopUpButton alloc] initWithFrame:NSMakeRect( 190, 10, 270, 26 )
                                                    pullsDown:NO];
-        [[tableBox contentView] addSubview:mOptionsPopUp];
-        [mOptionsPopUp setAction:@selector( popUpValueChanged: )];
-        [mOptionsPopUp setTarget:self];
+        [tableBox.contentView addSubview:mOptionsPopUp];
+        mOptionsPopUp.action = @selector( popUpValueChanged: );
+        mOptionsPopUp.target = self;
 
-        [[mConfigWindow contentView] addSubview:tableBox];
+        [mConfigWindow.contentView addSubview:tableBox];
 
         // Add renderers to the drop down
-        const RenderSystemList &renderers = Root::getSingleton().getAvailableRenderers();
-        for( RenderSystemList::const_iterator pRend = renderers.begin(); pRend != renderers.end();
-             ++pRend )
-        {
-            NSString *renderSystemName = [NSString stringWithUTF8String:( *pRend )->getName().c_str()];
-            [mRenderSystemsPopUp addItemWithTitle:renderSystemName];
-        }
+        for( const RenderSystem *rs : Root::getSingleton().getAvailableRenderers() )
+            [mRenderSystemsPopUp addItemWithTitle:@( rs->getName().c_str() )];
 
         // Initalise storage for the table data source
         mOptionsKeys = [[NSMutableArray alloc] init];
@@ -231,13 +226,13 @@ namespace Ogre
     [mOptionsValues removeAllObjects];
 
     // Get detected option values and add them to our config dictionary
-    String selectedRenderSystemName = String( [[[mRenderSystemsPopUp selectedItem] title] UTF8String] );
+    String selectedRenderSystemName = String( mRenderSystemsPopUp.selectedItem.title.UTF8String );
     RenderSystem *rs = Root::getSingleton().getRenderSystemByName( selectedRenderSystemName );
     const ConfigOptionMap &opts = rs->getConfigOptions();
     for( ConfigOptionMap::const_iterator pOpt = opts.begin(); pOpt != opts.end(); ++pOpt )
     {
-        [mOptionsKeys addObject:[NSString stringWithUTF8String:pOpt->first.c_str()]];
-        [mOptionsValues addObject:[NSString stringWithUTF8String:pOpt->second.currentValue.c_str()]];
+        [mOptionsKeys addObject:@( pOpt->first.c_str() )];
+        [mOptionsValues addObject:@( pOpt->second.currentValue.c_str() )];
     }
 
     [mOptionsTable reloadData];
@@ -254,13 +249,13 @@ namespace Ogre
 {
 #pragma unused( sender )
     // Grab a copy of the selected RenderSystem name in String format
-    String selectedRenderSystemName = String( [[[mRenderSystemsPopUp selectedItem] title] UTF8String] );
+    String selectedRenderSystemName = String( mRenderSystemsPopUp.selectedItem.title.UTF8String );
 
     // Save the current config value
-    if( ( 0 <= [mOptionsTable selectedRow] ) && [mOptionsPopUp selectedItem] )
+    if( 0 <= mOptionsTable.selectedRow && mOptionsPopUp.selectedItem )
     {
-        String value = String( [[[mOptionsPopUp selectedItem] title] UTF8String] );
-        String name = String( [[mOptionsKeys objectAtIndex:[mOptionsTable selectedRow]] UTF8String] );
+        String value = String( mOptionsPopUp.selectedItem.title.UTF8String );
+        String name = String( mOptionsKeys[(NSUInteger)mOptionsTable.selectedRow].UTF8String );
 
         Root::getSingleton()
             .getRenderSystemByName( selectedRenderSystemName )
@@ -307,13 +302,14 @@ namespace Ogre
 {
 #pragma unused( aTableView )
     bool valueColumn = [aTableColumn.identifier isEqualToString:@"optionValue"];
-    return valueColumn ? [mOptionsValues objectAtIndex:rowIndex] : [mOptionsKeys objectAtIndex:rowIndex];
+    NSUInteger idx = (NSUInteger)rowIndex;
+    return valueColumn ? mOptionsValues[idx] : mOptionsKeys[idx];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 #pragma unused( aTableView )
-    return [mOptionsKeys count];
+    return (NSInteger)mOptionsKeys.count;
 }
 
 // Intercept the request to select a new row.  Update the popup's values.
@@ -324,34 +320,28 @@ namespace Ogre
     [mOptionsPopUp removeAllItems];
 
     // Get the key for the selected table row
-    NSString *key = [mOptionsKeys objectAtIndex:rowIndex];
+    NSString *key = mOptionsKeys[(NSUInteger)rowIndex];
 
     // Grab a copy of the selected RenderSystem name in String format
-    if( [mRenderSystemsPopUp numberOfItems] > 0 )
+    if( mRenderSystemsPopUp.numberOfItems > 0 )
     {
-        String selectedRenderSystemName =
-            String( [[[mRenderSystemsPopUp selectedItem] title] UTF8String] );
+        String selectedRenderSystemName = String( mRenderSystemsPopUp.selectedItem.title.UTF8String );
         const ConfigOptionMap &opts =
             Root::getSingleton().getRenderSystemByName( selectedRenderSystemName )->getConfigOptions();
 
         // Add the available options
         // Select the item that is the current config option, if there is no current setting, just pick
         // the top of the list
-        ConfigOptionMap::const_iterator it = opts.find( [key UTF8String] );
+        ConfigOptionMap::const_iterator it = opts.find( key.UTF8String );
         if( it != opts.end() )
         {
-            for( uint i = 0; i < it->second.possibleValues.size(); i++ )
-            {
-                NSString *value = [NSString stringWithUTF8String:it->second.possibleValues[i].c_str()];
-                [mOptionsPopUp addItemWithTitle:value];
-            }
+            for( const String &possibleValue : it->second.possibleValues )
+                [mOptionsPopUp addItemWithTitle:@( possibleValue.c_str() )];
 
-            [mOptionsPopUp
-                selectItemWithTitle:[NSString stringWithCString:it->second.currentValue.c_str()
-                                                       encoding:NSASCIIStringEncoding]];
+            [mOptionsPopUp selectItemWithTitle:@( it->second.currentValue.c_str() )];
         }
 
-        if( [mOptionsPopUp indexOfSelectedItem] < 0 )
+        if( mOptionsPopUp.indexOfSelectedItem < 0 )
             [mOptionsPopUp selectItemAtIndex:0];
 
         // Always allow the new selection

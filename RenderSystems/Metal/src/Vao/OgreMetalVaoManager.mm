@@ -260,7 +260,7 @@ namespace Ogre
     {
         NSError *error;
         id<MTLLibrary> library = [mDevice->mDevice
-            newLibraryWithSource:[NSString stringWithUTF8String:c_gpuMemcpyComputeShader]
+            newLibraryWithSource:@( c_gpuMemcpyComputeShader )
                          options:nil
                            error:&error];
 

@@ -584,7 +584,7 @@ namespace Ogre
         }
         else if( name == "UIView" )
         {
-            *static_cast<void **>( pData ) = (void *)CFBridgingRetain( mMetalView );
+            *static_cast<const void **>( pData ) = (const void *)CFBridgingRetain( mMetalView );
         }
         else
         {

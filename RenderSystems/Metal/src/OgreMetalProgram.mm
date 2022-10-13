@@ -137,10 +137,10 @@ namespace Ogre
                     }
                     String tmpStr;
                     tmpStr = mPreprocessorDefines.substr( macro_name_start, macro_name_len );
-                    NSString *key = [NSString stringWithUTF8String:tmpStr.c_str()];
+                    NSString *key = @( tmpStr.c_str() );
 
                     tmpStr = mPreprocessorDefines.substr( macro_val_start, macro_val_len );
-                    NSString *value = [NSString stringWithUTF8String:tmpStr.c_str()];
+                    NSString *value = @( tmpStr.c_str() );
                     inOutMacros[key] = value;
                 }
                 else
@@ -150,7 +150,7 @@ namespace Ogre
 
                     String tmpStr;
                     tmpStr = mPreprocessorDefines.substr( macro_name_start, macro_name_len );
-                    NSString *key = [NSString stringWithUTF8String:tmpStr.c_str()];
+                    NSString *key = @( tmpStr.c_str() );
                     inOutMacros[key] = [NSNumber numberWithUnsignedInt:1];
                 }
             }
@@ -215,7 +215,7 @@ namespace Ogre
 #endif
 
         NSError *error;
-        mLibrary = [mDevice->mDevice newLibraryWithSource:[NSString stringWithUTF8String:mSource.c_str()]
+        mLibrary = [mDevice->mDevice newLibraryWithSource:@( mSource.c_str() )
                                                   options:options
                                                     error:&error];
 
@@ -242,9 +242,9 @@ namespace Ogre
             }
         }
 
-        mLibrary.label = [NSString stringWithUTF8String:mName.c_str()];
+        mLibrary.label = @( mName.c_str() );
 
-        mFunction = [mLibrary newFunctionWithName:[NSString stringWithUTF8String:mEntryPoint.c_str()]];
+        mFunction = [mLibrary newFunctionWithName:@( mEntryPoint.c_str() )];
         if( !mFunction )
         {
             mCompiled = false;
