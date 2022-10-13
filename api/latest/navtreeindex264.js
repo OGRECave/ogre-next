@@ -1,5 +1,7 @@
 var NAVTREEINDEX264 =
 {
+"struct_ogre_1_1_pbs_property.html#a9b47c2d4336fc6fdaa78ffcc51701d2f":[5,0,0,16,56],
+"struct_ogre_1_1_pbs_property.html#a9ca13bcc5ae788d93d77c4c814ed3173":[5,0,0,16,105],
 "struct_ogre_1_1_pbs_property.html#a9e626e77eddbcda2cde0599ca4fbcd2e":[5,0,0,16,47],
 "struct_ogre_1_1_pbs_property.html#aa00d5f0944e6c9afda83f945852b10b3":[5,0,0,16,76],
 "struct_ogre_1_1_pbs_property.html#aa0b9c855539fd6f083759303448e88ed":[5,0,0,16,36],
@@ -247,7 +249,5 @@ var NAVTREEINDEX264 =
 "struct_ogre_1_1_s_t_l_allocator_base_3_01const_01_t_01_4.html#ad0004d963c1616f06b527bc144bd883f":[5,2,7,12,0],
 "struct_ogre_1_1_sample_description.html":[5,2,2,97],
 "struct_ogre_1_1_sample_description.html#a01436775454b160e99dbb48c58dd4ae3":[5,2,2,97,3],
-"struct_ogre_1_1_sample_description.html#a025a8b3c09ee63bfed776b9151c31754":[5,2,2,97,15],
-"struct_ogre_1_1_sample_description.html#a0a3651fdc7967b3157563fbceb687585":[5,2,2,97,7],
-"struct_ogre_1_1_sample_description.html#a128ab28c554a1a984808c83514b81cf8":[5,2,2,97,0]
+"struct_ogre_1_1_sample_description.html#a025a8b3c09ee63bfed776b9151c31754":[5,2,2,97,15]
 };

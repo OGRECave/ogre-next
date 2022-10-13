@@ -1,5 +1,7 @@
 var NAVTREEINDEX252 =
 {
+"hlmsunlitdatablockref.html#dbulExample":[1,9,13,2],
+"hlmsunlitdatablockref.html#dbulParamDetailNormal":[1,9,13,1,1],
 "hlmsunlitdatablockref.html#dbulParamDiffuse":[1,9,13,1,0],
 "hlmsunlitdatablockref.html#dbulUnlitParameters":[1,9,13,1],
 "i_o_s_2_ogre_config_dialog_imp_8h.html":[8,0,2,0,8,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX252 =
 "namespace_ogre.html#a8159a3c5d756ca7ee2e1dfa203498585":[6,0,0,1338],
 "namespace_ogre.html#a85a340f35bf274668aa757bed23b5ff1":[6,0,0,1142],
 "namespace_ogre.html#a85b9cd421a5e843f0ec04472eee48887":[6,0,0,1155],
-"namespace_ogre.html#a865c7fde0adea498fdf7d807dad60701":[6,0,0,1199],
-"namespace_ogre.html#a89b31b859227cdb5cc6321eca16d4a2b":[6,0,0,1358],
-"namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781":[6,0,0,1092]
+"namespace_ogre.html#a865c7fde0adea498fdf7d807dad60701":[6,0,0,1199]
 };
