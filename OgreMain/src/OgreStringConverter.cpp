@@ -366,6 +366,16 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------
+    short StringConverter::parseShort( const String &val, short defaultValue )
+    {
+        return _fromString( val, defaultValue );
+    }
+    //-----------------------------------------------------------------------
+    unsigned short StringConverter::parseUnsignedShort( const String &val, unsigned short defaultValue )
+    {
+        return _fromString( val, defaultValue );
+    }
+    //-----------------------------------------------------------------------
     int StringConverter::parseInt( const String &val, int defaultValue )
     {
         return _fromString( val, defaultValue );

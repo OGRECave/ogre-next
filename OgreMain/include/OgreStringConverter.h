@@ -175,6 +175,16 @@ namespace Ogre
         @return
             0.0 if the value could not be parsed, otherwise the numeric version of the String.
         */
+        static short parseShort( const String &val, short defaultValue = 0 );
+        /** Converts a String to a whole number.
+        @return
+            0.0 if the value could not be parsed, otherwise the numeric version of the String.
+        */
+        static unsigned short parseUnsignedShort( const String &val, unsigned short defaultValue = 0 );
+        /** Converts a String to a whole number.
+        @return
+            0.0 if the value could not be parsed, otherwise the numeric version of the String.
+        */
         static int parseInt( const String &val, int defaultValue = 0 );
         /** Converts a String to a whole number.
         @return

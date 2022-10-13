@@ -38,6 +38,10 @@ String describeSemantic(VertexElementSemantic sem)
         return "Binormals";
     case VES_TANGENT:
         return "Tangents";
+    case VES_BLEND_WEIGHTS2:
+        return "Blend Weights #2";
+    case VES_BLEND_INDICES2:
+        return "Blend Indices #2";
     }
     return "";
 }
@@ -143,7 +147,7 @@ void reorganiseVertexBuffers(const String& desc, v1::Mesh& mesh, v1::SubMesh* sm
                     cin >> moveResp;
                     if (!moveResp.empty())
                     {
-                        int bindex = StringConverter::parseInt(moveResp);
+                        unsigned short bindex = StringConverter::parseUnsignedShort(moveResp);
                         // Move (note offset will be wrong)
                         *movei = v1::VertexElement(bindex, 0, movei->getType(),
                                                    movei->getSemantic(), movei->getIndex());
