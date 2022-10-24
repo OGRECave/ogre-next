@@ -410,9 +410,12 @@ namespace Ogre
                         if( renderPassTargetAttachment->resolveTexture->isMultisample() )
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                         "Cannot specify a non-MSAA texture for resolving an "
-                                         "MSAA texture."
-                                         "\nMSAA Texture: " +
+                                         "Workspace: '" +
+                                             mParentNode->getWorkspace()->getDefinition()->getNameStr() +
+                                             "' Node: '" + mParentNode->getName().getFriendlyText() +
+                                             "'\nCannot specify a non-MSAA texture for resolving an "
+                                             "MSAA texture."
+                                             "\nMSAA Texture: " +
                                              renderPassTargetAttachment->texture->getNameStr() +
                                              "\nBroken Resolve Texture: " +
                                              renderPassTargetAttachment->resolveTexture->getNameStr(),
