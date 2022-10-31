@@ -92,19 +92,19 @@
 
 		@property( pcf < 3 )
 			//2x2 PCF: It's slightly faster to calculate this directly.
-			retVal += mix(
-						mix( c.w, c.z, fW.x ),
-						mix( c.x, c.y, fW.x ),
+			retVal += lerp(
+						lerp( c.w, c.z, fW.x ),
+						lerp( c.x, c.y, fW.x ),
 						fW.y );
 		@else
-			row[0] += mix( c.w, c.z, fW.x );
-			row[1] += mix( c.x, c.y, fW.x );
+			row[0] += lerp( c.w, c.z, fW.x );
+			row[1] += lerp( c.x, c.y, fW.x );
 		@end
 	@end
 
 	@property( pcf >= 3 )
 		//NxN PCF: It's much faster to leave the final mix out of the loop (when N > 2).
-		retVal = mix( row[0], row[1], fW.y );
+		retVal = lerp( row[0], row[1], fW.y );
 	@end
 @end
 @end

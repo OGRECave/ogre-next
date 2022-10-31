@@ -397,7 +397,7 @@
 			@end
 
 			@property( debug_pssm_splits )
-				outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, _h( 0.2f ) );
+				outPs_colour0.xyz = lerp( outPs_colour0.xyz, debugPssmSplit.xyz, _h( 0.2f ) );
 			@end
 
 			@property( hlms_gen_normals_gbuffer )
