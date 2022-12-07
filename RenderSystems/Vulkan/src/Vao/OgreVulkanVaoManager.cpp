@@ -993,7 +993,7 @@ namespace Ogre
                         {
                             // Found one!
                             size_t defaultPoolSize =
-                                std::min( mDefaultPoolSize[vboFlag],
+                                std::min( (VkDeviceSize)mDefaultPoolSize[vboFlag],
                                           memHeaps[memTypes[*itMemTypeIdx].heapIndex].size -
                                               mUsedHeapMemory[heapIdx] );
                             poolSize = std::max( defaultPoolSize, sizeBytes );
@@ -1026,7 +1026,7 @@ namespace Ogre
                                 {
                                     // Found one!
                                     size_t defaultPoolSize =
-                                        std::min( mDefaultPoolSize[vboFlag],
+                                        std::min( (VkDeviceSize)mDefaultPoolSize[vboFlag],
                                                   memHeaps[memTypes[heapIdx].heapIndex].size -
                                                       mUsedHeapMemory[heapIdx] );
                                     chosenMemoryTypeIdx = static_cast<uint32>( i );

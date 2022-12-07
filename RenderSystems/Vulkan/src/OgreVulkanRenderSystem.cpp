@@ -1910,7 +1910,11 @@ namespace Ogre
         }
         else
         {
-            VkSampler textureSampler = reinterpret_cast<VkSampler>( samplerblock->mRsData );
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
+            VkSampler textureSampler = static_cast<VkSampler>( samplerblock->mRsData );
+#else // VK handles are always 64bit, even on 32bit systems
+            VkSampler textureSampler = *static_cast<VkSampler*>( samplerblock->mRsData );
+#endif
             if( mGlobalTable.samplers[texUnit].sampler != textureSampler )
             {
                 mGlobalTable.samplers[texUnit].sampler = textureSampler;
@@ -3390,13 +3394,22 @@ namespace Ogre
             vkCreateSampler( mActiveDevice->mDevice, &samplerDescriptor, 0, &textureSampler );
         checkVkResult( result, "vkCreateSampler" );
 
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         newBlock->mRsData = textureSampler;
+#else // VK handles are always 64bit, even on 32bit systems
+        newBlock->mRsData = new uint64(textureSampler);
+#endif
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsSamplerblockDestroyed( HlmsSamplerblock *block )
     {
         assert( block->mRsData );
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         VkSampler textureSampler = static_cast<VkSampler>( block->mRsData );
+#else // VK handles are always 64bit, even on 32bit systems
+        VkSampler textureSampler = *static_cast<VkSampler*>( block->mRsData );
+        delete (uint64*)block->mRsData;
+#endif
         delayed_vkDestroySampler( mVaoManager, mActiveDevice->mDevice, textureSampler, 0 );
     }
     //-------------------------------------------------------------------------
