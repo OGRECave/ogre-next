@@ -1,7 +1,9 @@
 <map id="Ogre::SmallVector&lt; T, N &gt;" name="Ogre::SmallVector&lt; T, N &gt;">
-<area shape="rect" id="node1" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="29,348,164,389"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="5,273,188,300"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="6,169,187,225"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="6,80,187,121"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="18,5,175,32"/>
+<area shape="rect" id="node1" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="126,343,261,383"/>
+<area shape="rect" id="node6" href="$struct_ogre_1_1_vector_set.html" title=" " alt="" coords="5,438,184,463"/>
+<area shape="rect" id="node7" href="$struct_ogre_1_1_vector_set.html" title=" " alt="" coords="208,431,379,471"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="102,269,285,295"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="103,167,284,221"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="103,79,284,119"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="115,5,272,31"/>
 </map>

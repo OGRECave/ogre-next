@@ -1,6 +1,6 @@
 <map id="Ogre::CompositorPassUav" name="Ogre::CompositorPassUav">
-<area shape="rect" id="node1" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="85,155,261,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="5,80,157,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="19,5,143,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="181,80,352,107"/>
+<area shape="rect" id="node1" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="89,152,265,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="9,79,161,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,164,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="185,79,355,104"/>
 </map>

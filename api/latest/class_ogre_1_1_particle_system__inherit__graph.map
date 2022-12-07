@@ -1,8 +1,8 @@
 <map id="Ogre::ParticleSystem" name="Ogre::ParticleSystem">
-<area shape="rect" id="node1" title="Class defining particle system based special effects." alt="" coords="87,155,231,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,80,147,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="170,80,313,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="7,5,155,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="179,5,303,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="327,5,433,32"/>
+<area shape="rect" id="node1" title="Class defining particle system based special effects." alt="" coords="101,152,245,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="19,79,161,104"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="185,79,328,104"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,31"/>
+<area shape="rect" id="node5" title=" " alt="" coords="177,5,336,31"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="360,5,465,31"/>
 </map>

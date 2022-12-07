@@ -1,5 +1,5 @@
 <map id="Ogre::VulkanVaoManager" name="Ogre::VulkanVaoManager">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,175,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vao_manager.html" title=" " alt="" coords="25,80,155,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="28,5,152,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,152,175,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_vao_manager.html" title=" " alt="" coords="25,79,155,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="11,5,169,31"/>
 </map>

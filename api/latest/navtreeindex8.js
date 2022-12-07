@@ -1,5 +1,11 @@
 var NAVTREEINDEX8 =
 {
+"_ogre_vulkan_device_8h.html":[8,0,4,5,0,6],
+"_ogre_vulkan_device_8h.html#ae25fc08466018112ebbfaa616e88b38a":[8,0,4,5,0,6,5],
+"_ogre_vulkan_discard_buffer_manager_8h.html":[8,0,4,5,0,7],
+"_ogre_vulkan_discard_buffer_manager_8h.html#abd073aedc62cca37390dfdd2afb53a70":[8,0,4,5,0,7,3],
+"_ogre_vulkan_dynamic_buffer_8h.html":[8,0,4,5,0,0,3],
+"_ogre_vulkan_global_binding_table_8h.html":[8,0,4,5,0,8],
 "_ogre_vulkan_global_binding_table_8h.html#a2203355bd205e3cd20447a8b0240ae65":[8,0,4,5,0,8,1],
 "_ogre_vulkan_global_binding_table_8h.html#a29bd5d0a5b4ee9a2e6607a21743b680a":[8,0,4,5,0,8,2],
 "_ogre_vulkan_global_binding_table_8h.html#a3d583602b96bf00ede0043ee91bd8eac":[8,0,4,5,0,8,5],
@@ -243,11 +249,5 @@ var NAVTREEINDEX8 =
 "_samples.html#sceneformat":[1,0,21],
 "_samples.html#shadowdebug":[1,0,23],
 "_samples.html#shadowfromcode":[1,0,24],
-"_samples.html#sharedskeleton":[1,0,11],
-"_samples.html#skypost":[1,0,46],
-"_samples.html#ssao":[1,0,48],
-"_samples.html#ssreflections":[1,0,22],
-"_samples.html#staticshadowmap":[1,0,25],
-"_samples.html#stenciltest":[1,0,26],
-"_samples.html#stereorendering":[1,0,27]
+"_samples.html#sharedskeleton":[1,0,11]
 };

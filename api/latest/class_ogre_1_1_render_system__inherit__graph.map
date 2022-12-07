@@ -1,10 +1,10 @@
 <map id="Ogre::RenderSystem" name="Ogre::RenderSystem">
-<area shape="rect" id="node1" title="Defines the functionality of a 3D API." alt="" coords="177,132,319,159"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_system.html" title="Implementation of DirectX11 as a rendering system." alt="" coords="373,5,553,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_render_system.html" title="Implementation of GL 3 as a rendering system." alt="" coords="367,56,559,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_render_system.html" title="Implementation of GL ES 2.x as a rendering system." alt="" coords="371,107,554,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_render_system.html" title="Implementation of Metal as a rendering system." alt="" coords="376,157,549,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_render_system.html" title="Implementation of NULL as a rendering system." alt="" coords="374,208,551,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_render_system.html" title="Implementation of Vulkan as a rendering system." alt="" coords="372,259,553,285"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,132,129,159"/>
+<area shape="rect" id="node1" title="Defines the functionality of a 3D API." alt="" coords="212,129,353,155"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_system.html" title="Implementation of DirectX11 as a rendering system." alt="" coords="407,5,587,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_render_system.html" title="Implementation of GL 3 as a rendering system." alt="" coords="401,55,593,80"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_render_system.html" title="Implementation of GL ES 2.x as a rendering system." alt="" coords="406,104,589,129"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_render_system.html" title="Implementation of Metal as a rendering system." alt="" coords="411,153,584,179"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_render_system.html" title="Implementation of NULL as a rendering system." alt="" coords="409,203,586,228"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_render_system.html" title="Implementation of Vulkan as a rendering system." alt="" coords="407,252,588,277"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,129,164,155"/>
 </map>

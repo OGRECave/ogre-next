@@ -1,10 +1,10 @@
 <map id="Ogre::VulkanWindow" name="Ogre::VulkanWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="129,155,271,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_vulkan_window_null.html" title=" " alt="" coords="12,237,177,263"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_vulkan_window_swap_chain_based.html" title=" " alt="" coords="201,229,409,271"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_window.html" title=" " alt="" coords="149,80,251,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="138,5,262,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_vulkan_android_window.html" title=" " alt="" coords="5,319,192,345"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_vulkan_win32_window.html" title=" " alt="" coords="216,319,395,345"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_xcb_window.html" title=" " alt="" coords="419,319,584,345"/>
+<area shape="rect" id="node1" title=" " alt="" coords="129,152,271,177"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_vulkan_window_null.html" title=" " alt="" coords="12,233,177,258"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_vulkan_window_swap_chain_based.html" title=" " alt="" coords="201,225,409,265"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_window.html" title=" " alt="" coords="149,79,251,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="121,5,279,31"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_vulkan_android_window.html" title=" " alt="" coords="5,313,192,339"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_vulkan_win32_window.html" title=" " alt="" coords="216,313,395,339"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_xcb_window.html" title=" " alt="" coords="419,313,584,339"/>
 </map>

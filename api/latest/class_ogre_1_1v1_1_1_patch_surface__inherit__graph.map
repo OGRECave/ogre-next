@@ -1,4 +1,4 @@
 <map id="Ogre::v1::PatchSurface" name="Ogre::v1::PatchSurface">
-<area shape="rect" id="node1" title="A surface which is defined by curves of some kind to form a patch, e.g." alt="" coords="5,80,160,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="21,5,145,32"/>
+<area shape="rect" id="node1" title="A surface which is defined by curves of some kind to form a patch, e.g." alt="" coords="7,79,162,104"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,164,31"/>
 </map>

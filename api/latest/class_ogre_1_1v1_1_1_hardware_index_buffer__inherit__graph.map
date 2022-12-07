@@ -1,12 +1,12 @@
 <map id="Ogre::v1::HardwareIndexBuffer" name="Ogre::v1::HardwareIndexBuffer">
-<area shape="rect" id="node1" title="Specialisation of HardwareBuffer for vertex index buffers, still abstract." alt="" coords="392,209,589,235"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_d3_d11_hardware_index_buffer.html" title=" " alt="" coords="643,5,846,47"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_default_hardware_index_buffer.html" title="Specialisation of HardwareIndexBuffer for emulation." alt="" coords="658,71,831,112"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html" title="Specialisation of HardwareIndexBuffer for emulation." alt="" coords="661,136,829,177"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_g_l3_plus_hardware_index_buffer.html" title=" " alt="" coords="653,201,836,243"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_index_buffer.html" title="Specialisation of HardwareIndexBuffer for emulation." alt="" coords="637,267,852,308"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html" title="Specialisation of HardwareIndexBuffer for Metal." alt="" coords="647,332,842,373"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html" title=" " alt="" coords="659,397,831,439"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="177,209,344,235"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,209,129,235"/>
+<area shape="rect" id="node1" title="Specialisation of HardwareBuffer for vertex index buffers, still abstract." alt="" coords="427,205,624,230"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_d3_d11_hardware_index_buffer.html" title=" " alt="" coords="678,5,881,45"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_default_hardware_index_buffer.html" title="Specialisation of HardwareIndexBuffer for emulation." alt="" coords="693,69,866,109"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html" title="Specialisation of HardwareIndexBuffer for emulation." alt="" coords="695,133,863,173"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_g_l3_plus_hardware_index_buffer.html" title=" " alt="" coords="688,197,871,237"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_index_buffer.html" title="Specialisation of HardwareIndexBuffer for emulation." alt="" coords="672,261,887,301"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html" title="Specialisation of HardwareIndexBuffer for Metal." alt="" coords="682,325,877,365"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html" title=" " alt="" coords="693,389,865,429"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="212,205,379,230"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,205,164,230"/>
 </map>

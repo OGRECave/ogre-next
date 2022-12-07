@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_array_quaternion.html" title="Cache&#45;friendly array of Quaternion represented as a SoA array." alt="" coords="5,5,155,32"/>
+<area shape="rect" id="node1" href="$class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html" title="When mUsedMemory &gt;= mMaxMemory (that is, we&#39;ve exhausted all our preallocated memory) ArrayMemoryMana..." alt="" coords="5,47,188,87"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_bone_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="240,5,423,31"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_node_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="240,55,423,80"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_object_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per render queue." alt="" coords="236,104,427,129"/>
 </map>

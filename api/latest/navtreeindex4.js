@@ -26,6 +26,8 @@ var NAVTREEINDEX4 =
 "_ogre_lw_string_8h.html":[8,0,2,0,132],
 "_ogre_lw_string_8h.html#a5a16a58b685bb43e9ecf56e345dcdc1d":[8,0,2,0,132,4],
 "_ogre_lw_string_8h.html#aabb8b876e7495cfb11a152cdf728815c":[8,0,2,0,132,3],
+"_ogre_lw_string_8h.html#ab8d0c29be4a0623c3de58011991e86e9":[8,0,2,0,132,5],
+"_ogre_lw_string_8h.html#ac582131d7a7c8ee57e73180d1714f9d5":[8,0,2,0,132,6],
 "_ogre_manual_object2_8h.html":[8,0,2,0,134],
 "_ogre_manual_object_8h.html":[8,0,2,0,133],
 "_ogre_material_8h.html":[8,0,2,0,135],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "_ogre_patch_mesh_8h.html":[8,0,2,0,180],
 "_ogre_patch_surface_8h.html":[8,0,2,0,181],
 "_ogre_pcc_per_pixel_grid_placement_8h.html":[8,0,0,1,1,0,0,4],
-"_ogre_pixel_conversions_8h.html":[8,0,2,1,1],
-"_ogre_pixel_count_lod_strategy_8h.html":[8,0,2,0,182],
-"_ogre_pixel_format_gpu_8h.html":[8,0,2,0,183]
+"_ogre_pixel_conversions_8h.html":[8,0,2,1,1]
 };

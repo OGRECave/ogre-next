@@ -1,7 +1,7 @@
 <map id="Ogre::WorkQueue::ResponseHandler" name="Ogre::WorkQueue::ResponseHandler">
-<area shape="rect" id="node1" title="Interface definition for a handler of responses." alt="" coords="5,78,193,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_lod_work_queue_injector.html" title="Injects the output of a request to the mesh in a thread safe way." alt="" coords="241,5,431,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_page.html" title="Page class." alt="" coords="293,56,379,83"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_resource_background_queue.html" title="This class is used to perform Resource operations in a background thread." alt="" coords="246,107,426,149"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_chunk_handler.html" title="Handles the WorkQueue management of the chunks." alt="" coords="242,173,430,200"/>
+<area shape="rect" id="node1" title="Interface definition for a handler of responses." alt="" coords="5,77,193,117"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_lod_work_queue_injector.html" title="Injects the output of a request to the mesh in a thread safe way." alt="" coords="241,5,431,31"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_page.html" title="Page class." alt="" coords="293,55,379,80"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_resource_background_queue.html" title="This class is used to perform Resource operations in a background thread." alt="" coords="246,105,426,145"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_chunk_handler.html" title="Handles the WorkQueue management of the chunks." alt="" coords="242,169,430,195"/>
 </map>

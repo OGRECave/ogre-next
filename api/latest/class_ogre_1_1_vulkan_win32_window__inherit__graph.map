@@ -1,7 +1,7 @@
 <map id="Ogre::VulkanWin32Window" name="Ogre::VulkanWin32Window">
-<area shape="rect" id="node1" title=" " alt="" coords="20,319,199,345"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vulkan_window_swap_chain_based.html" title=" " alt="" coords="5,229,213,271"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_vulkan_window.html" title=" " alt="" coords="38,155,181,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_window.html" title=" " alt="" coords="58,80,161,107"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="47,5,171,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="20,313,199,339"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_vulkan_window_swap_chain_based.html" title=" " alt="" coords="5,225,213,265"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_vulkan_window.html" title=" " alt="" coords="38,152,181,177"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_window.html" title=" " alt="" coords="58,79,161,104"/>
+<area shape="rect" id="node5" title=" " alt="" coords="30,5,189,31"/>
 </map>

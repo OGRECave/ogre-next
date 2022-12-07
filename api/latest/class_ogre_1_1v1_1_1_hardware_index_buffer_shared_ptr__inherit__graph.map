@@ -1,5 +1,5 @@
 <map id="Ogre::v1::HardwareIndexBufferSharedPtr" name="Ogre::v1::HardwareIndexBufferSharedPtr">
-<area shape="rect" id="node1" title="Shared pointer implementation used to share index buffers." alt="" coords="5,184,203,225"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="13,95,195,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="17,5,191,47"/>
+<area shape="rect" id="node1" title="Shared pointer implementation used to share index buffers." alt="" coords="5,181,203,221"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="13,93,195,133"/>
+<area shape="rect" id="node3" title=" " alt="" coords="17,5,191,45"/>
 </map>

@@ -1,10 +1,10 @@
 <map id="Ogre::LodStrategy" name="Ogre::LodStrategy">
-<area shape="rect" id="node1" title="Strategy for determining level of detail." alt="" coords="177,85,304,112"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_distance_lod_strategy_base.html" title="Level of detail strategy based on distance from camera." alt="" coords="358,56,565,83"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="352,115,571,141"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,85,129,112"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_distance_lod_box_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding box." alt="" coords="629,5,827,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_distance_lod_sphere_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="619,56,837,83"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_absolute_pixel_count_lod_strategy.html" title="The AbsolutePixelCountLodStrategy class LOD strategy that works like ScreenRatioPixelCountLodStrategy..." alt="" coords="643,107,813,149"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_screen_ratio_pixel_count_lod_strategy.html" title="The ScreenRatioPixelCountLodStrategy class Implement a strategy which calculates LOD ratios based on ..." alt="" coords="633,173,823,214"/>
+<area shape="rect" id="node1" title="Strategy for determining level of detail." alt="" coords="212,84,339,109"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_distance_lod_strategy_base.html" title="Level of detail strategy based on distance from camera." alt="" coords="393,55,599,80"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="387,112,605,137"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,84,164,109"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_distance_lod_box_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding box." alt="" coords="663,5,862,31"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_distance_lod_sphere_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="653,55,872,80"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_absolute_pixel_count_lod_strategy.html" title="The AbsolutePixelCountLodStrategy class LOD strategy that works like ScreenRatioPixelCountLodStrategy..." alt="" coords="678,105,847,145"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_screen_ratio_pixel_count_lod_strategy.html" title="The ScreenRatioPixelCountLodStrategy class Implement a strategy which calculates LOD ratios based on ..." alt="" coords="668,169,857,209"/>
 </map>

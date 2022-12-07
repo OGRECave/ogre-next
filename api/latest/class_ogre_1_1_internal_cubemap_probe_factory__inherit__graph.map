@@ -1,5 +1,5 @@
 <map id="Ogre::InternalCubemapProbeFactory" name="Ogre::InternalCubemapProbeFactory">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,193,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="6,80,193,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="37,5,161,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,152,193,192"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="6,79,193,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="20,5,179,31"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="Ogre::AbstractNode" name="Ogre::AbstractNode">
-<area shape="rect" id="node1" title=" " alt="" coords="177,107,313,133"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_atom_abstract_node.html" title="This is an abstract node which cannot be broken down further." alt="" coords="391,5,558,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_import_abstract_node.html" title="This abstract node represents an import statement." alt="" coords="388,56,561,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_object_abstract_node.html" title="This specific abstract node represents a script object." alt="" coords="387,107,562,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_property_abstract_node.html" title="This abstract node represents a script property." alt="" coords="383,157,567,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_variable_access_abstract_node.html" title="This abstract node represents a variable assignment." alt="" coords="361,208,588,235"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,107,129,133"/>
+<area shape="rect" id="node1" title=" " alt="" coords="177,104,313,129"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_atom_abstract_node.html" title="This is an abstract node which cannot be broken down further." alt="" coords="391,5,558,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_import_abstract_node.html" title="This abstract node represents an import statement." alt="" coords="388,55,561,80"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_object_abstract_node.html" title="This specific abstract node represents a script object." alt="" coords="387,104,562,129"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_property_abstract_node.html" title="This abstract node represents a script property." alt="" coords="383,153,567,179"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_variable_access_abstract_node.html" title="This abstract node represents a variable assignment." alt="" coords="361,203,588,228"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,104,129,129"/>
 </map>

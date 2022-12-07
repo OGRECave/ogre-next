@@ -231,7 +231,6 @@ var annotated_dup =
       [ "AbsolutePixelCountLodStrategy", "class_ogre_1_1_absolute_pixel_count_lod_strategy.html", "class_ogre_1_1_absolute_pixel_count_lod_strategy" ],
       [ "AbstractNode", "class_ogre_1_1_abstract_node.html", "class_ogre_1_1_abstract_node" ],
       [ "ActiveActorData", "struct_ogre_1_1_active_actor_data.html", "struct_ogre_1_1_active_actor_data" ],
-      [ "AlignAllocPolicy", "class_ogre_1_1_align_alloc_policy.html", null ],
       [ "AlignedMemory", "class_ogre_1_1_aligned_memory.html", "class_ogre_1_1_aligned_memory" ],
       [ "AllocatedObject", "class_ogre_1_1_allocated_object.html", "class_ogre_1_1_allocated_object" ],
       [ "AndroidEGLContext", "class_ogre_1_1_android_e_g_l_context.html", "class_ogre_1_1_android_e_g_l_context" ],

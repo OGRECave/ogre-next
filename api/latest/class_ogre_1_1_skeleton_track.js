@@ -11,16 +11,6 @@ var class_ogre_1_1_skeleton_track =
     [ "getKeyFrameRigAt", "class_ogre_1_1_skeleton_track.html#ab56673ba538d0d02e75d4a580f5e793a", null ],
     [ "getKeyFrames", "class_ogre_1_1_skeleton_track.html#abf0bc9a6eab83257040d50308d6c645e", null ],
     [ "getUsedSlots", "class_ogre_1_1_skeleton_track.html#a04a85efe009c94d09de1a8ccd04c8119", null ],
-    [ "operator delete", "class_ogre_1_1_skeleton_track.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
-    [ "operator delete", "class_ogre_1_1_skeleton_track.html#acb46d4b0a597156d9ba5abc39d127792", null ],
-    [ "operator delete", "class_ogre_1_1_skeleton_track.html#a1c727e879a260c37b00ce5505fe8e144", null ],
-    [ "operator delete[]", "class_ogre_1_1_skeleton_track.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
-    [ "operator delete[]", "class_ogre_1_1_skeleton_track.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-    [ "operator new", "class_ogre_1_1_skeleton_track.html#ad1f1a983f9e2dfddee802c47bb0b1ca9", null ],
-    [ "operator new", "class_ogre_1_1_skeleton_track.html#ab422c67a2c8844f410fe822a357cba3b", null ],
-    [ "operator new", "class_ogre_1_1_skeleton_track.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
-    [ "operator new[]", "class_ogre_1_1_skeleton_track.html#adce32528577d71b228692df906ecd17c", null ],
-    [ "operator new[]", "class_ogre_1_1_skeleton_track.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ],
     [ "setKeyFrameTransform", "class_ogre_1_1_skeleton_track.html#ac204bc08343b985668dfd82faa091230", null ],
     [ "setNumKeyFrame", "class_ogre_1_1_skeleton_track.html#a7d2a54ae6a23ea272cbcfcd995d13539", null ]
 ];

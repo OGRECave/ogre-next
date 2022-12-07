@@ -1,6 +1,6 @@
 <map id="Ogre::GL3PlusTextureGpuManager" name="Ogre::GL3PlusTextureGpuManager">
-<area shape="rect" id="node1" title=" " alt="" coords="41,155,265,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e." alt="" coords="66,80,239,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,129,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="154,5,325,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="67,152,291,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e." alt="" coords="93,79,266,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,164,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="189,5,359,31"/>
 </map>

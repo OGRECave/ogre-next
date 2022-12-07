@@ -1,5 +1,5 @@
 <map id="Ogre::v1::TransformKeyFrame" name="Ogre::v1::TransformKeyFrame">
-<area shape="rect" id="node1" title="Specialised KeyFrame which stores a full transform." alt="" coords="5,155,200,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_key_frame.html" title="A key frame in an animation sequence defined by an AnimationTrack." alt="" coords="35,80,170,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="41,5,165,32"/>
+<area shape="rect" id="node1" title="Specialised KeyFrame which stores a full transform." alt="" coords="5,152,200,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_key_frame.html" title="A key frame in an animation sequence defined by an AnimationTrack." alt="" coords="35,79,170,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="23,5,182,31"/>
 </map>

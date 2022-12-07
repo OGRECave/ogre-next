@@ -1,10 +1,10 @@
 <map id="Ogre::HighLevelGpuProgramFactory" name="Ogre::HighLevelGpuProgramFactory">
-<area shape="rect" id="node1" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="177,125,365,166"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_h_l_s_l_program_factory.html" title="Factory class for D3D11 HLSL programs." alt="" coords="413,5,636,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l_s_l_e_s_shader_factory.html" title="Factory class for GLSL ES programs." alt="" coords="429,56,621,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_s_l_shader_factory.html" title="Factory class for GLSL shaders." alt="" coords="437,107,612,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_program_factory.html" title="Factory class for Metal programs." alt="" coords="435,157,615,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_unified_high_level_gpu_program_factory.html" title="Factory class for Unified programs." alt="" coords="435,209,614,250"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_program_factory.html" title="Factory class for Vulkan programs." alt="" coords="431,275,619,301"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,132,129,159"/>
+<area shape="rect" id="node1" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="212,122,400,162"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_h_l_s_l_program_factory.html" title="Factory class for D3D11 HLSL programs." alt="" coords="448,5,671,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l_s_l_e_s_shader_factory.html" title="Factory class for GLSL ES programs." alt="" coords="463,55,655,80"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_s_l_shader_factory.html" title="Factory class for GLSL shaders." alt="" coords="472,104,647,129"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_program_factory.html" title="Factory class for Metal programs." alt="" coords="469,153,649,179"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_unified_high_level_gpu_program_factory.html" title="Factory class for Unified programs." alt="" coords="470,203,649,243"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_program_factory.html" title="Factory class for Vulkan programs." alt="" coords="465,268,653,293"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,129,164,155"/>
 </map>

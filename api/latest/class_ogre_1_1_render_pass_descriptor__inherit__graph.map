@@ -1,8 +1,8 @@
 <map id="Ogre::RenderPassDescriptor" name="Ogre::RenderPassDescriptor">
-<area shape="rect" id="node1" title=" " alt="" coords="177,81,364,108"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="418,5,643,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_render_pass_descriptor.html" title="GL3+ will share FBO handles between all GL3PlusRenderPassDescriptor that share the same FBO setup." alt="" coords="412,56,649,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_metal_render_pass_descriptor.html" title=" " alt="" coords="421,107,640,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_vulkan_render_pass_descriptor.html" title=" " alt="" coords="417,157,644,184"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,81,129,108"/>
+<area shape="rect" id="node1" title=" " alt="" coords="212,80,399,105"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="453,5,678,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_render_pass_descriptor.html" title="GL3+ will share FBO handles between all GL3PlusRenderPassDescriptor that share the same FBO setup." alt="" coords="447,55,684,80"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_metal_render_pass_descriptor.html" title=" " alt="" coords="456,104,675,129"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_vulkan_render_pass_descriptor.html" title=" " alt="" coords="452,153,679,179"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,164,105"/>
 </map>

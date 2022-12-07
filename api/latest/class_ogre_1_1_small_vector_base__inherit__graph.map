@@ -1,19 +1,19 @@
 <map id="Ogre::SmallVectorBase" name="Ogre::SmallVectorBase">
-<area shape="rect" id="node1" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="5,100,163,127"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="211,21,392,62"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="211,93,392,134"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="211,230,392,271"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="440,5,621,61"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_small_vector_impl.html" title=" " alt="" coords="685,13,837,54"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="900,13,1035,54"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="440,85,621,141"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_small_vector_impl.html" title=" " alt="" coords="685,89,837,130"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="900,85,1035,126"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="440,187,621,243"/>
-<area shape="rect" id="node16" href="$class_ogre_1_1_small_vector_template_base.html" title="SmallVectorTemplateBase&lt;isPodLike = false&gt; &#45; This is where we put method implementations that are des..." alt="" coords="440,266,621,307"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html" title="SmallVectorTemplateBase&lt;isPodLike = true&gt; &#45; This is where we put method implementations that are desi..." alt="" coords="440,331,621,373"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="669,212,852,239"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="900,150,1035,191"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_small_vector.html" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="900,215,1035,257"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html" title="Specialize SmallVector at N=0." alt="" coords="900,281,1035,322"/>
+<area shape="rect" id="node1" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="5,234,163,259"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="211,163,392,203"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="211,227,392,267"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="211,291,392,331"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="440,126,621,181"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="440,205,621,259"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="440,283,621,338"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_small_vector_template_base.html" title="SmallVectorTemplateBase&lt;isPodLike = false&gt; &#45; This is where we put method implementations that are des..." alt="" coords="440,363,621,403"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html" title="SmallVectorTemplateBase&lt;isPodLike = true&gt; &#45; This is where we put method implementations that are desi..." alt="" coords="440,427,621,467"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="669,141,852,166"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="900,5,1035,45"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="900,69,1035,109"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="900,133,1035,173"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_small_vector.html" title="SmallVector &#45; This is a &#39;vector&#39; (really, a variable&#45;sized array), optimized for the case when the ar..." alt="" coords="900,197,1035,237"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html" title="Specialize SmallVector at N=0." alt="" coords="900,261,1035,301"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1_small_vector_impl.html" title=" " alt="" coords="685,331,837,371"/>
+<area shape="rect" id="node16" href="$class_ogre_1_1_small_vector_impl.html" title=" " alt="" coords="685,395,837,435"/>
 </map>

@@ -1,10 +1,10 @@
 <map id="Ogre::StagingBuffer" name="Ogre::StagingBuffer">
-<area shape="rect" id="node1" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="177,132,312,159"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_staging_buffer.html" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="366,5,539,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="360,56,545,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="365,107,541,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="369,157,536,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="367,208,538,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="365,259,540,285"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,132,129,159"/>
+<area shape="rect" id="node1" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="212,129,347,155"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_staging_buffer.html" title="NOTE FOR D3D12 PORTING: The GL3Plus implementation should be used as reference, since it is much lowe..." alt="" coords="401,5,574,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="395,55,580,80"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="399,104,575,129"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="404,153,571,179"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="402,203,573,228"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th..." alt="" coords="400,252,575,277"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,129,164,155"/>
 </map>

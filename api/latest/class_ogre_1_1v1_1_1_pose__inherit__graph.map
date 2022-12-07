@@ -1,4 +1,4 @@
 <map id="Ogre::v1::Pose" name="Ogre::v1::Pose">
-<area shape="rect" id="node1" title="A pose is a linked set of vertex offsets applying to one set of vertex data." alt="" coords="14,80,121,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,129,32"/>
+<area shape="rect" id="node1" title="A pose is a linked set of vertex offsets applying to one set of vertex data." alt="" coords="31,79,138,104"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,164,31"/>
 </map>

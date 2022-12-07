@@ -1,5 +1,5 @@
 <map id="Ogre::CompositorTargetTranslator" name="Ogre::CompositorTargetTranslator">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,223,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="40,80,188,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,176,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,152,223,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="40,79,188,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="35,5,193,31"/>
 </map>

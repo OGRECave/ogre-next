@@ -1,7 +1,7 @@
 <map id="Ogre::MaterialManager" name="Ogre::MaterialManager">
-<area shape="rect" id="node1" title="Class for managing Material settings for Ogre." alt="" coords="163,169,315,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="65,87,226,114"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,5,136,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="159,5,283,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="250,80,417,121"/>
+<area shape="rect" id="node1" title="Class for managing Material settings for Ogre." alt="" coords="172,167,324,192"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="74,86,235,111"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,5,136,31"/>
+<area shape="rect" id="node4" title=" " alt="" coords="161,5,319,31"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="259,79,426,119"/>
 </map>

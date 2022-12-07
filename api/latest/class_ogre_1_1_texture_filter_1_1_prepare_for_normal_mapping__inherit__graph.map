@@ -1,5 +1,5 @@
 <map id="Ogre::TextureFilter::PrepareForNormalMapping" name="Ogre::TextureFilter::PrepareForNormalMapping">
-<area shape="rect" id="node1" title=" " alt="" coords="5,169,188,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_texture_filter_1_1_filter_base.html" title=" " alt="" coords="33,80,161,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="35,5,159,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,167,188,207"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_texture_filter_1_1_filter_base.html" title=" " alt="" coords="33,79,161,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="17,5,176,31"/>
 </map>

@@ -1,10 +1,10 @@
 <map id="Ogre::GL3PlusTextureGpu" name="Ogre::GL3PlusTextureGpu">
-<area shape="rect" id="node1" title=" " alt="" coords="157,229,331,256"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l3_plus_texture_gpu_render_target.html" title=" " alt="" coords="137,304,351,345"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="183,155,305,181"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="62,80,245,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="269,80,403,107"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="274,5,398,32"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html" title=" " alt="" coords="5,393,235,435"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_g_l3_plus_texture_gpu_window.html" title=" " alt="" coords="259,401,479,427"/>
+<area shape="rect" id="node1" title=" " alt="" coords="157,225,331,251"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_g_l3_plus_texture_gpu_render_target.html" title=" " alt="" coords="137,299,351,339"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="183,152,305,177"/>
+<area shape="rect" id="node3" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="62,79,245,104"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="269,79,403,104"/>
+<area shape="rect" id="node5" title=" " alt="" coords="257,5,415,31"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html" title=" " alt="" coords="5,387,235,427"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_g_l3_plus_texture_gpu_window.html" title=" " alt="" coords="259,394,479,419"/>
 </map>

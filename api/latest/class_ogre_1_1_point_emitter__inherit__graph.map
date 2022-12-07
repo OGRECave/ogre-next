@@ -1,7 +1,7 @@
 <map id="Ogre::PointEmitter" name="Ogre::PointEmitter">
-<area shape="rect" id="node1" title="Particle emitter which emits particles from a single point." alt="" coords="85,229,211,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_emitter.html" title="Abstract class defining the interface to be implemented by particle emitters." alt="" coords="77,155,219,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,80,147,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_particle.html" title="Class representing a single particle instance." alt="" coords="170,80,270,107"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="158,5,282,32"/>
+<area shape="rect" id="node1" title="Particle emitter which emits particles from a single point." alt="" coords="85,225,211,251"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_particle_emitter.html" title="Abstract class defining the interface to be implemented by particle emitters." alt="" coords="77,152,219,177"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,79,147,104"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_particle.html" title="Class representing a single particle instance." alt="" coords="171,79,271,104"/>
+<area shape="rect" id="node5" title=" " alt="" coords="142,5,301,31"/>
 </map>

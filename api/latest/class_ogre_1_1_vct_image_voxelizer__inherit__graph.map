@@ -1,5 +1,5 @@
 <map id="Ogre::VctImageVoxelizer" name="Ogre::VctImageVoxelizer">
-<area shape="rect" id="node1" title="The image voxelizer aims to be faster than VctImageVoxelizer for the whole scene by following a diffe..." alt="" coords="23,155,187,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vct_voxelizer_source_base.html" title="This class contains shared functionality between voxelizer; and is used by VctLighting to source its ..." alt="" coords="5,80,204,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="52,5,157,32"/>
+<area shape="rect" id="node1" title="The image voxelizer aims to be faster than VctImageVoxelizer for the whole scene by following a diffe..." alt="" coords="23,152,187,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_vct_voxelizer_source_base.html" title="This class contains shared functionality between voxelizer; and is used by VctLighting to source its ..." alt="" coords="5,79,204,104"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="52,5,157,31"/>
 </map>

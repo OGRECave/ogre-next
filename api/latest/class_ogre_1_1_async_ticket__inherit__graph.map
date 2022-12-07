@@ -1,10 +1,10 @@
 <map id="Ogre::AsyncTicket" name="Ogre::AsyncTicket">
-<area shape="rect" id="node1" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous." alt="" coords="177,132,305,159"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_async_ticket.html" title=" " alt="" coords="359,5,526,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_async_ticket.html" title=" " alt="" coords="353,56,532,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_async_ticket.html" title=" " alt="" coords="357,107,528,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_async_ticket.html" title=" " alt="" coords="363,157,523,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_async_ticket.html" title=" " alt="" coords="361,208,525,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_async_ticket.html" title=" " alt="" coords="359,259,527,285"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,132,129,159"/>
+<area shape="rect" id="node1" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous." alt="" coords="212,129,340,155"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_async_ticket.html" title=" " alt="" coords="394,5,561,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_async_ticket.html" title=" " alt="" coords="388,55,567,80"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_async_ticket.html" title=" " alt="" coords="392,104,563,129"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_async_ticket.html" title=" " alt="" coords="397,153,557,179"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_async_ticket.html" title=" " alt="" coords="395,203,559,228"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_async_ticket.html" title=" " alt="" coords="393,252,561,277"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,129,164,155"/>
 </map>

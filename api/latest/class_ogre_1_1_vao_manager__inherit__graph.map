@@ -1,10 +1,10 @@
 <map id="Ogre::VaoManager" name="Ogre::VaoManager">
-<area shape="rect" id="node1" title=" " alt="" coords="177,132,307,159"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_vao_manager.html" title=" " alt="" coords="361,5,529,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_vao_manager.html" title=" " alt="" coords="355,56,535,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_vao_manager.html" title=" " alt="" coords="359,107,530,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_vao_manager.html" title=" " alt="" coords="364,157,525,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_vao_manager.html" title=" " alt="" coords="362,208,527,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_vao_manager.html" title=" " alt="" coords="360,259,529,285"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,132,129,159"/>
+<area shape="rect" id="node1" title=" " alt="" coords="212,129,341,155"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_vao_manager.html" title=" " alt="" coords="395,5,563,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_vao_manager.html" title=" " alt="" coords="389,55,569,80"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_e_s2_vao_manager.html" title=" " alt="" coords="394,104,565,129"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_vao_manager.html" title=" " alt="" coords="399,153,560,179"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_vao_manager.html" title=" " alt="" coords="397,203,562,228"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_vao_manager.html" title=" " alt="" coords="395,252,564,277"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,129,164,155"/>
 </map>

@@ -1,6 +1,6 @@
 <map id="Ogre::SceneManager" name="Ogre::SceneManager">
-<area shape="rect" id="node1" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="87,95,229,121"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_default_scene_manager.html" title="Default scene manager." alt="" coords="66,169,250,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title=" " alt="" coords="5,5,159,47"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="183,13,288,39"/>
+<area shape="rect" id="node1" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="87,93,229,119"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_default_scene_manager.html" title="Default scene manager." alt="" coords="66,167,250,192"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title=" " alt="" coords="5,5,159,45"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="183,13,288,38"/>
 </map>

@@ -1,7 +1,7 @@
 <map id="Ogre::HlmsPbs" name="Ogre::HlmsPbs">
-<area shape="rect" id="node1" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="127,244,238,271"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="5,169,176,196"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="47,95,134,121"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title=" " alt="" coords="14,5,167,47"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_const_buffer_pool.html" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="201,169,351,196"/>
+<area shape="rect" id="node1" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="127,240,238,265"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="5,167,176,192"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="47,93,134,119"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title=" " alt="" coords="14,5,167,45"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_const_buffer_pool.html" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="201,167,351,192"/>
 </map>

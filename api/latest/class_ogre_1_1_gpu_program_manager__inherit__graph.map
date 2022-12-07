@@ -1,12 +1,12 @@
 <map id="Ogre::GpuProgramManager" name="Ogre::GpuProgramManager">
-<area shape="rect" id="node1" title=" " alt="" coords="427,107,605,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="655,5,873,32"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="653,56,875,83"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="673,107,855,133"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="659,157,869,184"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_vulkan_gpu_program_manager.html" title=" " alt="" coords="655,208,873,235"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="201,77,362,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,52,136,79"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="9,103,133,129"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="184,129,379,170"/>
+<area shape="rect" id="node1" title=" " alt="" coords="455,104,633,129"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="683,5,901,31"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="681,55,903,80"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="701,104,883,129"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="687,153,897,179"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_vulkan_gpu_program_manager.html" title=" " alt="" coords="683,203,901,228"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="229,75,390,100"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="19,51,150,76"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,100,164,125"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="212,125,407,165"/>
 </map>

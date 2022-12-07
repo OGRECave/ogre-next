@@ -1,8 +1,8 @@
 <map id="Ogre::VertexArrayObject" name="Ogre::VertexArrayObject">
-<area shape="rect" id="node1" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="177,93,339,120"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_d3_d11_vertex_array_object.html" title=" " alt="" coords="388,5,588,32"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_g_l3_plus_vertex_array_object.html" title=" " alt="" coords="401,57,575,98"/>
-<area shape="rect" id="node5" href="$struct_ogre_1_1_g_l_e_s2_vertex_array_object.html" title=" " alt="" coords="387,123,589,149"/>
-<area shape="rect" id="node6" href="$struct_ogre_1_1_n_u_l_l_vertex_array_object.html" title=" " alt="" coords="389,173,587,200"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,93,129,120"/>
+<area shape="rect" id="node1" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="212,92,373,117"/>
+<area shape="rect" id="node3" href="$struct_ogre_1_1_d3_d11_vertex_array_object.html" title=" " alt="" coords="423,5,623,31"/>
+<area shape="rect" id="node4" href="$struct_ogre_1_1_g_l3_plus_vertex_array_object.html" title=" " alt="" coords="435,55,610,95"/>
+<area shape="rect" id="node5" href="$struct_ogre_1_1_g_l_e_s2_vertex_array_object.html" title=" " alt="" coords="421,120,624,145"/>
+<area shape="rect" id="node6" href="$struct_ogre_1_1_n_u_l_l_vertex_array_object.html" title=" " alt="" coords="424,169,621,195"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,92,164,117"/>
 </map>

@@ -1,4 +1,4 @@
 <map id="Ogre::DepthBuffer" name="Ogre::DepthBuffer">
-<area shape="rect" id="node1" title="An abstract class that contains a depth/stencil buffer." alt="" coords="27,5,151,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_e_s2_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer." alt="" coords="5,80,172,107"/>
+<area shape="rect" id="node1" title="An abstract class that contains a depth/stencil buffer." alt="" coords="27,5,151,31"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_e_s2_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer." alt="" coords="5,79,172,104"/>
 </map>

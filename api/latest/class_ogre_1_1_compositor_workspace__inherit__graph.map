@@ -1,5 +1,5 @@
 <map id="Ogre::CompositorWorkspace" name="Ogre::CompositorWorkspace">
-<area shape="rect" id="node1" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="43,80,230,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,129,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="153,5,259,32"/>
+<area shape="rect" id="node1" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="69,79,255,104"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,164,31"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="188,5,293,31"/>
 </map>

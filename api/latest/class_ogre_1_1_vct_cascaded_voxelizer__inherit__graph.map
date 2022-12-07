@@ -1,4 +1,4 @@
 <map id="Ogre::VctCascadedVoxelizer" name="Ogre::VctCascadedVoxelizer">
-<area shape="rect" id="node1" title="This class manages multiple cascades of Voxels and each cascade can be composed of VctImageVoxelizer." alt="" coords="5,95,192,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_workspace_listener.html" title=" " alt="" coords="5,5,192,47"/>
+<area shape="rect" id="node1" title="This class manages multiple cascades of Voxels and each cascade can be composed of VctImageVoxelizer." alt="" coords="5,93,192,119"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_workspace_listener.html" title=" " alt="" coords="5,5,192,45"/>
 </map>

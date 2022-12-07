@@ -1,7 +1,7 @@
 <map id="Ogre::Archive" name="Ogre::Archive">
-<area shape="rect" id="node1" title="Archive&#45;handling class." alt="" coords="254,80,354,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_a_p_k_file_system_archive.html" title=" " alt="" coords="5,155,197,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_file_system_archive.html" title="Specialisation of the Archive class to allow reading of files from filesystem folders / directories." alt="" coords="221,155,387,181"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_zip_archive.html" title="Specialisation of the Archive class to allow reading of files from a zip format source archive." alt="" coords="410,155,529,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="242,5,366,32"/>
+<area shape="rect" id="node1" title="Archive&#45;handling class." alt="" coords="254,79,354,104"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_a_p_k_file_system_archive.html" title=" " alt="" coords="5,152,197,177"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_file_system_archive.html" title="Specialisation of the Archive class to allow reading of files from filesystem folders / directories." alt="" coords="221,152,387,177"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_zip_archive.html" title="Specialisation of the Archive class to allow reading of files from a zip format source archive." alt="" coords="411,152,530,177"/>
+<area shape="rect" id="node2" title=" " alt="" coords="225,5,383,31"/>
 </map>

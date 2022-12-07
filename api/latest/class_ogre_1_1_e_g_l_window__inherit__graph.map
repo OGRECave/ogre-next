@@ -1,10 +1,10 @@
 <map id="Ogre::EGLWindow" name="Ogre::EGLWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="335,81,463,108"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="521,5,693,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="511,56,704,83"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="525,107,689,133"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="532,157,683,184"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_window.html" title=" " alt="" coords="181,56,283,83"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,56,129,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="177,107,287,133"/>
+<area shape="rect" id="node1" title=" " alt="" coords="369,80,497,105"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="556,5,728,31"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="545,55,739,80"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="560,104,724,129"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="567,153,717,179"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_window.html" title=" " alt="" coords="215,55,318,80"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,55,164,80"/>
+<area shape="rect" id="node4" title=" " alt="" coords="212,104,321,129"/>
 </map>

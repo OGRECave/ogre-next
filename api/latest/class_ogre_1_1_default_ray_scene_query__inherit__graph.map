@@ -1,7 +1,7 @@
 <map id="Ogre::DefaultRaySceneQuery" name="Ogre::DefaultRaySceneQuery">
-<area shape="rect" id="node1" title="Default implementation of RaySceneQuery." alt="" coords="65,229,256,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_ray_scene_query.html" title="Specialises the SceneQuery class for querying along a ray." alt="" coords="86,155,235,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="5,80,132,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="7,5,131,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_ray_scene_query_listener.html" title="Alternative listener class for dealing with RaySceneQuery." alt="" coords="156,80,352,107"/>
+<area shape="rect" id="node1" title="Default implementation of RaySceneQuery." alt="" coords="81,225,272,251"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_ray_scene_query.html" title="Specialises the SceneQuery class for querying along a ray." alt="" coords="102,152,251,177"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="21,79,148,104"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,164,31"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_ray_scene_query_listener.html" title="Alternative listener class for dealing with RaySceneQuery." alt="" coords="172,79,368,104"/>
 </map>

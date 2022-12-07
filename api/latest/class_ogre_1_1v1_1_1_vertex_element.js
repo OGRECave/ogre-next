@@ -21,15 +21,5 @@ var class_ogre_1_1v1_1_1_vertex_element =
     [ "getTypeSize", "class_ogre_1_1v1_1_1_vertex_element.html#a60e69385e3a6d37d2a96b34c1986b546", null ],
     [ "isTypeNormalized", "class_ogre_1_1v1_1_1_vertex_element.html#a6be3dfde7beee81a3082ec6a96715c24", null ],
     [ "multiplyTypeCount", "class_ogre_1_1v1_1_1_vertex_element.html#a83c9abba2d7aab51e22d0a312f657f17", null ],
-    [ "operator delete", "class_ogre_1_1v1_1_1_vertex_element.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
-    [ "operator delete", "class_ogre_1_1v1_1_1_vertex_element.html#acb46d4b0a597156d9ba5abc39d127792", null ],
-    [ "operator delete", "class_ogre_1_1v1_1_1_vertex_element.html#a1c727e879a260c37b00ce5505fe8e144", null ],
-    [ "operator delete[]", "class_ogre_1_1v1_1_1_vertex_element.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
-    [ "operator delete[]", "class_ogre_1_1v1_1_1_vertex_element.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-    [ "operator new", "class_ogre_1_1v1_1_1_vertex_element.html#ad1f1a983f9e2dfddee802c47bb0b1ca9", null ],
-    [ "operator new", "class_ogre_1_1v1_1_1_vertex_element.html#ab422c67a2c8844f410fe822a357cba3b", null ],
-    [ "operator new", "class_ogre_1_1v1_1_1_vertex_element.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
-    [ "operator new[]", "class_ogre_1_1v1_1_1_vertex_element.html#adce32528577d71b228692df906ecd17c", null ],
-    [ "operator new[]", "class_ogre_1_1v1_1_1_vertex_element.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ],
     [ "operator==", "class_ogre_1_1v1_1_1_vertex_element.html#a2218485c7891b9b07f14aea3d41f44a4", null ]
 ];

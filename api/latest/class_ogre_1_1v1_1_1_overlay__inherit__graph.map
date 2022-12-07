@@ -1,7 +1,7 @@
 <map id="Ogre::v1::Overlay" name="Ogre::v1::Overlay">
-<area shape="rect" id="node1" title="Represents a layer which is rendered on top of the &#39;normal&#39; scene contents." alt="" coords="179,155,299,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="168,80,311,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,301,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="325,5,431,32"/>
+<area shape="rect" id="node1" title="Represents a layer which is rendered on top of the &#39;normal&#39; scene contents." alt="" coords="197,152,317,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="185,79,328,104"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,31"/>
+<area shape="rect" id="node4" title=" " alt="" coords="177,5,336,31"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="360,5,465,31"/>
 </map>

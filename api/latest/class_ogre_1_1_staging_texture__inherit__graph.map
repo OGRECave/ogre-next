@@ -1,10 +1,10 @@
 <map id="Ogre::StagingTexture" name="Ogre::StagingTexture">
-<area shape="rect" id="node1" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU." alt="" coords="177,56,320,83"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_staging_texture.html" title=" " alt="" coords="378,31,561,57"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_staging_texture_buffer_impl.html" title="This implementation can be used by all RenderSystem APIs except D3D11, which is why this implementati..." alt="" coords="368,81,571,108"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,56,129,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_staging_texture.html" title=" " alt="" coords="619,5,813,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_staging_texture.html" title=" " alt="" coords="629,56,803,83"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_staging_texture.html" title=" " alt="" coords="627,107,805,133"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_staging_texture.html" title=" " alt="" coords="625,157,807,184"/>
+<area shape="rect" id="node1" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU." alt="" coords="212,56,355,81"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_staging_texture.html" title=" " alt="" coords="413,31,595,56"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_staging_texture_buffer_impl.html" title="This implementation can be used by all RenderSystem APIs except D3D11, which is why this implementati..." alt="" coords="403,80,605,105"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,56,164,81"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_staging_texture.html" title=" " alt="" coords="653,5,848,31"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_staging_texture.html" title=" " alt="" coords="663,55,838,80"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_staging_texture.html" title=" " alt="" coords="661,104,840,129"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_staging_texture.html" title=" " alt="" coords="659,153,842,179"/>
 </map>

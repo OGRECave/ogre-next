@@ -1,5 +1,5 @@
 <map id="Ogre::HlmsLowLevel" name="Ogre::HlmsLowLevel">
-<area shape="rect" id="node1" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="10,169,154,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="39,95,125,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title=" " alt="" coords="5,5,159,47"/>
+<area shape="rect" id="node1" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="10,167,154,192"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="39,93,125,119"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title=" " alt="" coords="5,5,159,45"/>
 </map>

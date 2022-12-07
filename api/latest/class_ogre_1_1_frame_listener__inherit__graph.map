@@ -1,7 +1,7 @@
 <map id="Ogre::FrameListener" name="Ogre::FrameListener">
-<area shape="rect" id="node1" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="5,97,145,123"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_frame_time_controller_value.html" title="Predefined controller value for getting the latest frame time." alt="" coords="225,5,402,47"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="207,71,420,98"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="193,122,433,149"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_chunk.html" title="A single volume chunk mesh." alt="" coords="242,173,385,199"/>
+<area shape="rect" id="node1" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="5,95,145,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_frame_time_controller_value.html" title="Predefined controller value for getting the latest frame time." alt="" coords="225,5,402,45"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="207,70,420,95"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="193,119,433,145"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_chunk.html" title="A single volume chunk mesh." alt="" coords="242,169,385,194"/>
 </map>

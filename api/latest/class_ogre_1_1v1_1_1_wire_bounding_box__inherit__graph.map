@@ -1,9 +1,9 @@
 <map id="Ogre::v1::WireBoundingBox" name="Ogre::v1::WireBoundingBox">
-<area shape="rect" id="node1" title="Allows the rendering of a wireframe bounding box." alt="" coords="227,229,406,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="226,155,407,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="168,80,311,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,301,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="325,5,431,32"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="335,80,456,107"/>
+<area shape="rect" id="node1" title="Allows the rendering of a wireframe bounding box." alt="" coords="245,225,423,251"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="243,152,425,177"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="185,79,328,104"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,31"/>
+<area shape="rect" id="node5" title=" " alt="" coords="177,5,336,31"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="360,5,465,31"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="352,79,473,104"/>
 </map>

@@ -1,8 +1,8 @@
 <map id="Ogre::ZipArchiveFactory" name="Ogre::ZipArchiveFactory">
-<area shape="rect" id="node1" title="Specialisation of ArchiveFactory for Zip files." alt="" coords="107,155,268,181"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_embedded_zip_archive_factory.html" title="Specialisation of ZipArchiveFactory for embedded Zip files." alt="" coords="98,229,277,271"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_archive_factory.html" title="Abstract factory class, archive codec plugins can register concrete subclasses of this." alt="" coords="116,80,259,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,191,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="215,5,339,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_a_p_k_zip_archive_factory.html" title=" " alt="" coords="93,319,281,345"/>
+<area shape="rect" id="node1" title="Specialisation of ArchiveFactory for Zip files." alt="" coords="115,152,276,177"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_embedded_zip_archive_factory.html" title="Specialisation of ZipArchiveFactory for embedded Zip files." alt="" coords="106,225,285,265"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_archive_factory.html" title="Abstract factory class, archive codec plugins can register concrete subclasses of this." alt="" coords="124,79,267,104"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,191,31"/>
+<area shape="rect" id="node4" title=" " alt="" coords="215,5,373,31"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_a_p_k_zip_archive_factory.html" title=" " alt="" coords="101,313,289,339"/>
 </map>

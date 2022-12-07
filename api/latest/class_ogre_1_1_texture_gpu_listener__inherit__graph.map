@@ -1,25 +1,25 @@
 <map id="Ogre::TextureGpuListener" name="Ogre::TextureGpuListener">
-<area shape="rect" id="node1" title=" " alt="" coords="5,376,176,403"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="249,123,419,149"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="246,173,422,200"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="289,224,379,251"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_font.html" title="Class representing a font in the system." alt="" coords="293,275,375,301"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_hlms_compute_job.html" title=" " alt="" coords="254,325,414,352"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="291,376,377,403"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="231,427,437,469"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e." alt="" coords="247,493,421,520"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1_texture_gpu_manager_listener.html" title=" " alt="" coords="224,544,444,571"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1_texture_unit_state.html" title="Class representing the state of a single texture unit during a Pass of a Technique,..." alt="" coords="257,595,411,621"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1_vct_lighting.html" title=" " alt="" coords="273,645,395,672"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="499,5,709,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="511,57,697,98"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_metal_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="503,123,705,149"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_n_u_l_l_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="501,173,707,200"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_vulkan_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="517,225,691,266"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="498,367,710,393"/>
-<area shape="rect" id="node16" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="492,417,716,444"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="501,468,707,495"/>
-<area shape="rect" id="node18" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="499,519,709,545"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1_vulkan_texture_gpu_manager.html" title=" " alt="" coords="497,569,711,596"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1_default_texture_gpu_manager_listener.html" title="This is a Default implementation of TextureGpuManagerListener based on heuristics." alt="" coords="497,621,711,662"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,367,176,392"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="249,120,419,145"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="246,169,422,195"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="289,219,379,244"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_font.html" title="Class representing a font in the system." alt="" coords="293,268,375,293"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_hlms_compute_job.html" title=" " alt="" coords="254,317,414,343"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="291,367,377,392"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="231,417,437,457"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e." alt="" coords="247,481,421,507"/>
+<area shape="rect" id="node20" href="$class_ogre_1_1_texture_gpu_manager_listener.html" title=" " alt="" coords="224,531,444,556"/>
+<area shape="rect" id="node22" href="$class_ogre_1_1_texture_unit_state.html" title="Class representing the state of a single texture unit during a Pass of a Technique,..." alt="" coords="257,580,411,605"/>
+<area shape="rect" id="node23" href="$class_ogre_1_1_vct_lighting.html" title=" " alt="" coords="273,629,395,655"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="499,5,709,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l3_plus_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="511,55,697,95"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_metal_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="503,120,705,145"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_n_u_l_l_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="501,169,707,195"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_vulkan_async_texture_ticket.html" title="See AsyncTextureTicket." alt="" coords="517,219,691,259"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="498,357,710,383"/>
+<area shape="rect" id="node16" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="492,407,716,432"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="501,456,707,481"/>
+<area shape="rect" id="node18" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="499,505,709,531"/>
+<area shape="rect" id="node19" href="$class_ogre_1_1_vulkan_texture_gpu_manager.html" title=" " alt="" coords="497,555,711,580"/>
+<area shape="rect" id="node21" href="$class_ogre_1_1_default_texture_gpu_manager_listener.html" title="This is a Default implementation of TextureGpuManagerListener based on heuristics." alt="" coords="497,605,711,645"/>
 </map>

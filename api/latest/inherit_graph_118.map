@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_custom_composition_pass.html" title="Interface for custom composition passes, allowing custom operations (in addition to the quad,..." alt="" coords="5,5,208,32"/>
+<area shape="rect" id="node1" href="$struct_ogre_1_1_cull_frustum_request.html" title="All variables are read&#45;only for the worker threads." alt="" coords="5,5,180,31"/>
+<area shape="rect" id="node2" href="$struct_ogre_1_1_update_lod_request.html" title=" " alt="" coords="228,5,396,31"/>
 </map>

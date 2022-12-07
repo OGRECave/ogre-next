@@ -1,5 +1,5 @@
 <map id="Ogre::TextureUnitState" name="Ogre::TextureUnitState">
-<area shape="rect" id="node1" title="Class representing the state of a single texture unit during a Pass of a Technique,..." alt="" coords="75,80,230,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,129,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="154,5,325,32"/>
+<area shape="rect" id="node1" title="Class representing the state of a single texture unit during a Pass of a Technique,..." alt="" coords="102,79,257,104"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,164,31"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="189,5,359,31"/>
 </map>

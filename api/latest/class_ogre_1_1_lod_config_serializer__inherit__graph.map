@@ -1,5 +1,5 @@
 <map id="Ogre::LodConfigSerializer" name="Ogre::LodConfigSerializer">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,172,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="34,80,143,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="27,5,151,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,152,172,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="34,79,143,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="9,5,168,31"/>
 </map>

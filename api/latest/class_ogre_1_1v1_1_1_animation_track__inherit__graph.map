@@ -1,8 +1,8 @@
 <map id="Ogre::v1::AnimationTrack" name="Ogre::v1::AnimationTrack">
-<area shape="rect" id="node1" title="A &#39;track&#39; in an animation sequence, i.e." alt="" coords="177,97,344,124"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_node_animation_track.html" title="Specialised AnimationTrack for dealing with node transforms." alt="" coords="392,5,591,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_numeric_animation_track.html" title="Specialised AnimationTrack for dealing with generic animable values." alt="" coords="400,57,583,98"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_old_node_animation_track.html" title="Specialised AnimationTrack for dealing with node transforms." alt="" coords="399,122,584,163"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_vertex_animation_track.html" title="Specialised AnimationTrack for dealing with changing vertex position information." alt="" coords="406,187,577,229"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,97,129,124"/>
+<area shape="rect" id="node1" title="A &#39;track&#39; in an animation sequence, i.e." alt="" coords="212,95,379,120"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_node_animation_track.html" title="Specialised AnimationTrack for dealing with node transforms." alt="" coords="427,5,625,31"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_numeric_animation_track.html" title="Specialised AnimationTrack for dealing with generic animable values." alt="" coords="435,55,617,95"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_old_node_animation_track.html" title="Specialised AnimationTrack for dealing with node transforms." alt="" coords="433,119,619,159"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_vertex_animation_track.html" title="Specialised AnimationTrack for dealing with changing vertex position information." alt="" coords="441,183,611,223"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,164,120"/>
 </map>
