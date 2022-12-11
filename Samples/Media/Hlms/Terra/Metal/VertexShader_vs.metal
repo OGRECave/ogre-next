@@ -17,7 +17,7 @@ struct PS_INPUT
 	@insertpiece( Terra_VStoPS_block )
 	float4 gl_Position [[position]];
 	@foreach( hlms_pso_clip_distances, n )
-		float gl_ClipDistance@n [[clip_distance]];
+		float gl_ClipDistance [[clip_distance]] [@value( hlms_pso_clip_distances )];
 	@end
 };
 
