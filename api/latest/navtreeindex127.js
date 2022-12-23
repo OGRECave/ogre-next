@@ -1,6 +1,5 @@
 var NAVTREEINDEX127 =
 {
-"class_ogre_1_1_point_emitter.html#af5f745e056176373b0896230fe02bd52":[6,0,0,734,16],
 "class_ogre_1_1_point_emitter.html#af845d99f72c9d81ac631f398053a1cb9":[7,0,0,707,9],
 "class_ogre_1_1_point_emitter.html#af845d99f72c9d81ac631f398053a1cb9":[6,0,0,734,9],
 "class_ogre_1_1_point_emitter_factory.html":[7,0,0,708],
@@ -9,8 +8,8 @@ var NAVTREEINDEX127 =
 "class_ogre_1_1_point_emitter_factory.html#a824a03042340b2e6b5336735190573f7":[6,0,0,735,2],
 "class_ogre_1_1_point_emitter_factory.html#adc0b5ab2657292efbdb4bc6e6e6a2462":[7,0,0,708,1],
 "class_ogre_1_1_point_emitter_factory.html#adc0b5ab2657292efbdb4bc6e6e6a2462":[6,0,0,735,1],
-"class_ogre_1_1_point_emitter_factory.html#af42b06f8c584d38b0a97014cf4d34007":[6,0,0,735,0],
 "class_ogre_1_1_point_emitter_factory.html#af42b06f8c584d38b0a97014cf4d34007":[7,0,0,708,0],
+"class_ogre_1_1_point_emitter_factory.html#af42b06f8c584d38b0a97014cf4d34007":[6,0,0,735,0],
 "class_ogre_1_1_polygon.html":[5,2,6,21],
 "class_ogre_1_1_polygon.html#a0d19a9876f714cde041e3b7c4598e3b4":[5,2,6,21,17],
 "class_ogre_1_1_polygon.html#a1530c1d4761371c423916f4b497d612e":[5,2,6,21,3],
@@ -32,8 +31,8 @@ var NAVTREEINDEX127 =
 "class_ogre_1_1_polygon.html#abc7c0f8e319e3a5a14c3a875eb5ab56c":[5,2,6,21,15],
 "class_ogre_1_1_polygon.html#ac18f8f762f8f931ce1d4975d7232e559":[5,2,6,21,7],
 "class_ogre_1_1_polygon.html#ac32b2d0a6e7c0cee21471fdaf6da13c4":[5,2,6,21,10],
-"class_ogre_1_1_pool.html":[7,0,0,710],
 "class_ogre_1_1_pool.html":[6,0,0,737],
+"class_ogre_1_1_pool.html":[7,0,0,710],
 "class_ogre_1_1_pool.html#a31c74c47be2a3c8e5abe93a8ac061bc7":[6,0,0,737,4],
 "class_ogre_1_1_pool.html#a31c74c47be2a3c8e5abe93a8ac061bc7":[7,0,0,710,4],
 "class_ogre_1_1_pool.html#a4fb09f4b25feb32de79b6f578359aab1":[7,0,0,710,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX127 =
 "class_ogre_1_1_quaternion.html#a7ad7ad40e38bf351485c2a906c3949bb":[5,2,6,22,12],
 "class_ogre_1_1_quaternion.html#a7f25c623d95186b58f6367dcd097a5ba":[5,2,6,22,3],
 "class_ogre_1_1_quaternion.html#a814829e953cbf810c80a8b87626f6324":[5,2,6,22,42],
-"class_ogre_1_1_quaternion.html#a821a464cce9a81d5d20c620025043851":[5,2,6,22,46]
+"class_ogre_1_1_quaternion.html#a821a464cce9a81d5d20c620025043851":[5,2,6,22,46],
+"class_ogre_1_1_quaternion.html#a8233292eaf0b5ae0e9f76af16de2e6ba":[5,2,6,22,35]
 };

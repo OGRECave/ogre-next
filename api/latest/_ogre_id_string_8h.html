@@ -101,10 +101,12 @@ $(document).ready(function(){initNavTree('_ogre_id_string_8h.html',''); initResi
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="_ogre_prerequisites_8h.html">OgrePrerequisites.h</a>&quot;</code><br />
+<code>#include &lt;inttypes.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &quot;Hash/MurmurHash3.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="_ogre_assert_8h.html">OgreAssert.h</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -119,10 +121,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ae3f94271f7f89f67005a57e171e59ebb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_id_string_8h.html#ae3f94271f7f89f67005a57e171e59ebb">OGRE_APPEND_DEBUG_STRING</a>(_Expression)&#160;&#160;&#160;( (void)0 )</td></tr>
-<tr class="separator:ae3f94271f7f89f67005a57e171e59ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e70fee37aed5310cd150b404d282b84"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_id_string_8h.html#a1e70fee37aed5310cd150b404d282b84">OGRE_COPY_DEBUG_STRING</a>(_Expression)&#160;&#160;&#160;( (void)0 )</td></tr>
-<tr class="separator:a1e70fee37aed5310cd150b404d282b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76df4aa2317392de6730341e372598ea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_id_string_8h.html#a76df4aa2317392de6730341e372598ea">OGRE_DEBUG_STR_SIZE</a>&#160;&#160;&#160;32</td></tr>
+<tr class="separator:a76df4aa2317392de6730341e372598ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65d81f8d195ea976dbed9daee4cc31f0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_id_string_8h.html#a65d81f8d195ea976dbed9daee4cc31f0">OGRE_HASH_BITS</a>&#160;&#160;&#160;32</td></tr>
 <tr class="separator:a65d81f8d195ea976dbed9daee4cc31f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a295b313eb759fefc52c8e195bb9c8e01"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>&#160;&#160;&#160;MurmurHash3_x86_32</td></tr>
@@ -134,36 +134,14 @@ Typedefs</h2></td></tr>
 <tr class="separator:af5d7e0eaf474c82bfa2bf21d0c624d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ae3f94271f7f89f67005a57e171e59ebb" name="ae3f94271f7f89f67005a57e171e59ebb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3f94271f7f89f67005a57e171e59ebb">&#9670;&#160;</a></span>OGRE_APPEND_DEBUG_STRING</h2>
+<a id="a76df4aa2317392de6730341e372598ea" name="a76df4aa2317392de6730341e372598ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76df4aa2317392de6730341e372598ea">&#9670;&#160;</a></span>OGRE_DEBUG_STR_SIZE</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define OGRE_APPEND_DEBUG_STRING</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_Expression</td><td>)</td>
-          <td>&#160;&#160;&#160;( (void)0 )</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1e70fee37aed5310cd150b404d282b84" name="a1e70fee37aed5310cd150b404d282b84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e70fee37aed5310cd150b404d282b84">&#9670;&#160;</a></span>OGRE_COPY_DEBUG_STRING</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define OGRE_COPY_DEBUG_STRING</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_Expression</td><td>)</td>
-          <td>&#160;&#160;&#160;( (void)0 )</td>
+          <td class="memname">#define OGRE_DEBUG_STR_SIZE&#160;&#160;&#160;32</td>
         </tr>
       </table>
 </div><div class="memdoc">

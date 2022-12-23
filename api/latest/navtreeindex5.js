@@ -1,6 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"_ogre_pixel_count_lod_strategy_8h.html":[8,0,2,0,182],
 "_ogre_pixel_format_gpu_8h.html":[8,0,2,0,183],
 "_ogre_pixel_format_gpu_utils_8h.html":[8,0,2,0,184],
 "_ogre_planar_reflection_actor_8h.html":[8,0,0,5,0,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX5 =
 "_ogre_rotational_spline_8h.html":[8,0,2,0,224],
 "_ogre_s_d_l_g_l_support_8h.html":[8,0,4,1,0,2,4,0],
 "_ogre_s_d_l_prerequisites_8h.html":[8,0,4,1,0,2,4,1],
-"_ogre_s_d_l_window_8h.html":[8,0,4,1,0,2,4,2]
+"_ogre_s_d_l_window_8h.html":[8,0,4,1,0,2,4,2],
+"_ogre_s_i_m_d_helper_8h.html":[8,0,2,1,2]
 };

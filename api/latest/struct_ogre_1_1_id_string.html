@@ -128,6 +128,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75f19b4b08389a6819d02f757488741f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#a75f19b4b08389a6819d02f757488741f">getReleaseText</a> (char *outCStr, size_t stringSize) const</td></tr>
 <tr class="memdesc:a75f19b4b08389a6819d02f757488741f"><td class="mdescLeft">&#160;</td><td class="mdescRight">C String version. Zero allocations. See getFriendlyText.  <a href="struct_ogre_1_1_id_string.html#a75f19b4b08389a6819d02f757488741f">More...</a><br /></td></tr>
 <tr class="separator:a75f19b4b08389a6819d02f757488741f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ddc6fee76630c2aa5cb14e5ff796b37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#a4ddc6fee76630c2aa5cb14e5ff796b37">getU32Value</a> () const</td></tr>
+<tr class="memdesc:a4ddc6fee76630c2aa5cb14e5ff796b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a 32-bit value of the internal hash.  <a href="struct_ogre_1_1_id_string.html#a4ddc6fee76630c2aa5cb14e5ff796b37">More...</a><br /></td></tr>
+<tr class="separator:a4ddc6fee76630c2aa5cb14e5ff796b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8b480f4e1f1f84c85dd6d9d3d720e74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#af8b480f4e1f1f84c85dd6d9d3d720e74">OGRE_APPEND_DEBUG_STRING</a> (const char *string)</td></tr>
+<tr class="separator:af8b480f4e1f1f84c85dd6d9d3d720e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af27bdf10b0d57658ec7933c71c3429a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#af27bdf10b0d57658ec7933c71c3429a6">OGRE_COPY_DEBUG_STRING</a> (const char *string)</td></tr>
+<tr class="separator:af27bdf10b0d57658ec7933c71c3429a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac673a75f9e22e16a6518626c421eb7f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#ac673a75f9e22e16a6518626c421eb7f4">OGRE_COPY_DEBUG_STRING</a> (const std::string &amp;string)</td></tr>
+<tr class="separator:ac673a75f9e22e16a6518626c421eb7f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9c1fc45a5f502a52c3588fb51102057"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#af9c1fc45a5f502a52c3588fb51102057">OGRE_COPY_DEBUG_STRING</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> value)</td></tr>
+<tr class="separator:af9c1fc45a5f502a52c3588fb51102057"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1f1d56fc07be8fcc9f15120c505d00f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#ae1f1d56fc07be8fcc9f15120c505d00f">operator!=</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> idString) const</td></tr>
 <tr class="separator:ae1f1d56fc07be8fcc9f15120c505d00f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbe35aa8a428bd10ca8588921891860f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#afbe35aa8a428bd10ca8588921891860f">operator+</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> idString) const</td></tr>
@@ -141,6 +152,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:ac5e337473b8eea2ad3db87133fda51d1"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a> [<a class="el" href="_ogre_id_string_8h.html#a76df4aa2317392de6730341e372598ea">OGRE_DEBUG_STR_SIZE</a>]</td></tr>
+<tr class="separator:ac5e337473b8eea2ad3db87133fda51d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54eeffe30aae07b2f4b7bf7a8cf10d27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a></td></tr>
 <tr class="separator:a54eeffe30aae07b2f4b7bf7a8cf10d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -187,6 +200,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>.</p>
+
 </div>
 </div>
 <a id="a56caa2838bf509872f4595c183e2fe6f" name="a56caa2838bf509872f4595c183e2fe6f"></a>
@@ -213,7 +228,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, <a class="el" href="_ogre_id_string_8h.html#a1e70fee37aed5310cd150b404d282b84">OGRE_COPY_DEBUG_STRING</a>, <a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#a34d6188685e991789d904b1151d16f07">Seed</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, <a class="el" href="struct_ogre_1_1_id_string.html#af27bdf10b0d57658ec7933c71c3429a6">OGRE_COPY_DEBUG_STRING()</a>, <a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#a34d6188685e991789d904b1151d16f07">Seed</a>.</p>
 
 </div>
 </div>
@@ -241,7 +256,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, <a class="el" href="_ogre_id_string_8h.html#a1e70fee37aed5310cd150b404d282b84">OGRE_COPY_DEBUG_STRING</a>, <a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#a34d6188685e991789d904b1151d16f07">Seed</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, <a class="el" href="struct_ogre_1_1_id_string.html#af27bdf10b0d57658ec7933c71c3429a6">OGRE_COPY_DEBUG_STRING()</a>, <a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#a34d6188685e991789d904b1151d16f07">Seed</a>.</p>
 
 </div>
 </div>
@@ -269,7 +284,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, <a class="el" href="_ogre_id_string_8h.html#a1e70fee37aed5310cd150b404d282b84">OGRE_COPY_DEBUG_STRING</a>, <a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#a34d6188685e991789d904b1151d16f07">Seed</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, <a class="el" href="struct_ogre_1_1_id_string.html#af27bdf10b0d57658ec7933c71c3429a6">OGRE_COPY_DEBUG_STRING()</a>, <a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#a34d6188685e991789d904b1151d16f07">Seed</a>.</p>
 
 </div>
 </div>
@@ -299,7 +314,7 @@ Static Public Attributes</h2></td></tr>
 
 <p>Returns "[Hash 0x0a0100ef]" strings in Release mode, readable string in debug. </p>
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#aedc10c2eb528fe8c1d8d2ab415500d7b">getReleaseText()</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#aedc10c2eb528fe8c1d8d2ab415500d7b">getReleaseText()</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>.</p>
 
 </div>
 </div>
@@ -346,7 +361,7 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#aedc10c2eb528fe8c1d8d2ab415500d7b">getReleaseText()</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#aedc10c2eb528fe8c1d8d2ab415500d7b">getReleaseText()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, and <a class="el" href="_ogre_id_string_8h.html#a76df4aa2317392de6730341e372598ea">OGRE_DEBUG_STR_SIZE</a>.</p>
 
 </div>
 </div>
@@ -421,6 +436,152 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4ddc6fee76630c2aa5cb14e5ff796b37" name="a4ddc6fee76630c2aa5cb14e5ff796b37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ddc6fee76630c2aa5cb14e5ff796b37">&#9670;&#160;</a></span>getU32Value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> Ogre::IdString::getU32Value </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a 32-bit value of the internal hash. </p>
+<p >Note: If hash size is higher than 32 bits; using this value MIGHT still cause collisions that go undetected. </p>
+
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>.</p>
+
+</div>
+</div>
+<a id="af8b480f4e1f1f84c85dd6d9d3d720e74" name="af8b480f4e1f1f84c85dd6d9d3d720e74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8b480f4e1f1f84c85dd6d9d3d720e74">&#9670;&#160;</a></span>OGRE_APPEND_DEBUG_STRING()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::IdString::OGRE_APPEND_DEBUG_STRING </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, and <a class="el" href="_ogre_id_string_8h.html#a76df4aa2317392de6730341e372598ea">OGRE_DEBUG_STR_SIZE</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_id_string.html#a1975a7a2705e2ff8b15c3143636addec">operator+=()</a>.</p>
+
+</div>
+</div>
+<a id="af27bdf10b0d57658ec7933c71c3429a6" name="af27bdf10b0d57658ec7933c71c3429a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af27bdf10b0d57658ec7933c71c3429a6">&#9670;&#160;</a></span>OGRE_COPY_DEBUG_STRING() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::IdString::OGRE_COPY_DEBUG_STRING </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, and <a class="el" href="_ogre_id_string_8h.html#a76df4aa2317392de6730341e372598ea">OGRE_DEBUG_STR_SIZE</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_id_string.html#a56caa2838bf509872f4595c183e2fe6f">IdString()</a>.</p>
+
+</div>
+</div>
+<a id="ac673a75f9e22e16a6518626c421eb7f4" name="ac673a75f9e22e16a6518626c421eb7f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac673a75f9e22e16a6518626c421eb7f4">&#9670;&#160;</a></span>OGRE_COPY_DEBUG_STRING() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::IdString::OGRE_COPY_DEBUG_STRING </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, and <a class="el" href="_ogre_id_string_8h.html#a76df4aa2317392de6730341e372598ea">OGRE_DEBUG_STR_SIZE</a>.</p>
+
+</div>
+</div>
+<a id="af9c1fc45a5f502a52c3588fb51102057" name="af9c1fc45a5f502a52c3588fb51102057"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9c1fc45a5f502a52c3588fb51102057">&#9670;&#160;</a></span>OGRE_COPY_DEBUG_STRING() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::IdString::OGRE_COPY_DEBUG_STRING </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, and <a class="el" href="_ogre_id_string_8h.html#a76df4aa2317392de6730341e372598ea">OGRE_DEBUG_STR_SIZE</a>.</p>
+
+</div>
+</div>
 <a id="ae1f1d56fc07be8fcc9f15120c505d00f" name="ae1f1d56fc07be8fcc9f15120c505d00f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae1f1d56fc07be8fcc9f15120c505d00f">&#9670;&#160;</a></span>operator!=()</h2>
 
@@ -445,7 +606,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, and <a class="el" href="_ogre_platform_8h.html#a5e6437487927f2c3e626bf3d9388ab32">OGRE_ASSERT_MEDIUM</a>.</p>
 
 </div>
 </div>
@@ -499,7 +660,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, <a class="el" href="_ogre_id_string_8h.html#ae3f94271f7f89f67005a57e171e59ebb">OGRE_APPEND_DEBUG_STRING</a>, <a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#a34d6188685e991789d904b1151d16f07">Seed</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, <a class="el" href="struct_ogre_1_1_id_string.html#af8b480f4e1f1f84c85dd6d9d3d720e74">OGRE_APPEND_DEBUG_STRING()</a>, <a class="el" href="_ogre_id_string_8h.html#a295b313eb759fefc52c8e195bb9c8e01">OGRE_HASH_FUNC</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#a34d6188685e991789d904b1151d16f07">Seed</a>.</p>
 
 </div>
 </div>
@@ -527,7 +688,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, and <a class="el" href="_ogre_platform_8h.html#a5e6437487927f2c3e626bf3d9388ab32">OGRE_ASSERT_MEDIUM</a>.</p>
 
 </div>
 </div>
@@ -555,11 +716,27 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_id_string.html#ac5e337473b8eea2ad3db87133fda51d1">mDebugString</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">mHash</a>, and <a class="el" href="_ogre_platform_8h.html#a5e6437487927f2c3e626bf3d9388ab32">OGRE_ASSERT_MEDIUM</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac5e337473b8eea2ad3db87133fda51d1" name="ac5e337473b8eea2ad3db87133fda51d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5e337473b8eea2ad3db87133fda51d1">&#9670;&#160;</a></span>mDebugString</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char Ogre::IdString::mDebugString[<a class="el" href="_ogre_id_string_8h.html#a76df4aa2317392de6730341e372598ea">OGRE_DEBUG_STR_SIZE</a>]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_id_string.html#aafe0decfa1fbd2be4d46609ffc5647d5">IdString()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a58af7942c44e5907144fa4efe18c84a9">getFriendlyText()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#af8b480f4e1f1f84c85dd6d9d3d720e74">OGRE_APPEND_DEBUG_STRING()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#af27bdf10b0d57658ec7933c71c3429a6">OGRE_COPY_DEBUG_STRING()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#ae1f1d56fc07be8fcc9f15120c505d00f">operator!=()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a1975a7a2705e2ff8b15c3143636addec">operator+=()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#aa879e3cd371deb2979f1f5d4b8977d44">operator&lt;()</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#ad8d64faf790e160a7dc4f1ed61598df1">operator==()</a>.</p>
+
+</div>
+</div>
 <a id="a54eeffe30aae07b2f4b7bf7a8cf10d27" name="a54eeffe30aae07b2f4b7bf7a8cf10d27"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a54eeffe30aae07b2f4b7bf7a8cf10d27">&#9670;&#160;</a></span>mHash</h2>
 
@@ -572,7 +749,7 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_id_string.html#a56caa2838bf509872f4595c183e2fe6f">IdString()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#aedc10c2eb528fe8c1d8d2ab415500d7b">getReleaseText()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#ae1f1d56fc07be8fcc9f15120c505d00f">operator!=()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a1975a7a2705e2ff8b15c3143636addec">operator+=()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#aa879e3cd371deb2979f1f5d4b8977d44">operator&lt;()</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#ad8d64faf790e160a7dc4f1ed61598df1">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_id_string.html#a56caa2838bf509872f4595c183e2fe6f">IdString()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#aedc10c2eb528fe8c1d8d2ab415500d7b">getReleaseText()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a4ddc6fee76630c2aa5cb14e5ff796b37">getU32Value()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#ae1f1d56fc07be8fcc9f15120c505d00f">operator!=()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#a1975a7a2705e2ff8b15c3143636addec">operator+=()</a>, <a class="el" href="struct_ogre_1_1_id_string.html#aa879e3cd371deb2979f1f5d4b8977d44">operator&lt;()</a>, and <a class="el" href="struct_ogre_1_1_id_string.html#ad8d64faf790e160a7dc4f1ed61598df1">operator==()</a>.</p>
 
 </div>
 </div>
