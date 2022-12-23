@@ -386,13 +386,13 @@ namespace Ogre
         if( static_cast<HlmsPbs *>( mCreator )->getOptimizationStrategy() == HlmsPbs::LowerGpuOverhead )
         {
             const size_t poolIdx = static_cast<HlmsPbs *>( mCreator )->getPoolIndex( this );
-            const uint32 finalHash = ( hash.mHash & 0xFFFFFE00 ) | ( poolIdx & 0x000001FF );
+            const uint32 finalHash = ( hash.getU32Value() & 0xFFFFFE00 ) | ( poolIdx & 0x000001FF );
             mTextureHash = finalHash;
         }
         else
         {
             const size_t poolIdx = static_cast<HlmsPbs *>( mCreator )->getPoolIndex( this );
-            const uint32 finalHash = ( hash.mHash & 0xFFFFFFF0 ) | ( poolIdx & 0x0000000F );
+            const uint32 finalHash = ( hash.getU32Value() & 0xFFFFFFF0 ) | ( poolIdx & 0x0000000F );
             mTextureHash = finalHash;
         }
 
@@ -401,7 +401,7 @@ namespace Ogre
         if( oldTexHash != mTextureHash && mCubemapProbe )
         {
             IdString probeHash( mCubemapProbe->getInternalTexture()->getName() );
-            static_cast<HlmsPbs *>( mCreator )->requestSlot( probeHash.mHash, this, false );
+            static_cast<HlmsPbs *>( mCreator )->requestSlot( probeHash.getU32Value(), this, false );
         }
     }
     //-----------------------------------------------------------------------------------

@@ -42,7 +42,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const uint16 c_hlmsDiskCacheVersion = 3u;
+    static const uint16 c_hlmsDiskCacheVersion = 4u;
 
     HlmsDiskCache::HlmsDiskCache( HlmsManager *hlmsManager ) :
         mTemplatesOutOfDate( false ),
@@ -180,8 +180,8 @@ namespace Ogre
         {
             mTemplatesOutOfDate = true;
             LogManager::getSingleton().logMessage(
-                "INFO: mPrecisionMode has changed from '" +
-                StringConverter::toString( mPrecisionMode ) + "' to the current value '" +
+                "INFO: mPrecisionMode has changed from '" + StringConverter::toString( mPrecisionMode ) +
+                "' to the current value '" +
                 StringConverter::toString( hlms->getSupportedPrecisionMode() ) +
                 "'. This increases loading times." );
         }
@@ -350,6 +350,7 @@ namespace Ogre
 #else
         write<uint16>( dataStream, 0 );
 #endif
+        write<uint16>( dataStream, OGRE_HASH_BITS );
         write( dataStream, mCache.templateHash );
         write( dataStream, mCache.type );
         save( dataStream, mShaderProfile );
@@ -557,6 +558,17 @@ namespace Ogre
             return;
         }
 #endif
+
+        {
+            const uint16 hashBitSize = read<uint16>( dataStream );
+            if( hashBitSize != OGRE_HASH_BITS )
+            {
+                LogManager::getSingleton().logMessage(
+                    "HlmsDiskCache: This cache was built with a OGRE_HASH_BITS (IdString) of " +
+                    StringConverter::toString( hashBitSize ) + ". It cannot be used. Not loading." );
+                return;
+            }
+        }
 
         read( dataStream, mCache.templateHash );
         read( dataStream, mCache.type );

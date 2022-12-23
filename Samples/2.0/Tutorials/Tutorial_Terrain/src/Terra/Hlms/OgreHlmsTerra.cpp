@@ -341,7 +341,7 @@ namespace Ogre
                 //                if( datablock->getCubemapProbe() )
                 //                    setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
                 setProperty( PbsProperty::EnvProbeMap,
-                             static_cast<int32>( reflectionTexture->getName().mHash ) );
+                             static_cast<int32>( reflectionTexture->getName().getU32Value() ) );
             }
         }
 
@@ -354,9 +354,9 @@ namespace Ogre
         {
             {
                 setProperty( PbsProperty::NormalSamplingFormat,
-                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
                 setProperty( PbsProperty::NormalRgSnorm,
-                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
             }
         }
 

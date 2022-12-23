@@ -933,7 +933,7 @@ namespace Ogre
         ForwardPlusBase::setHlmsPassProperties( hlms );
 
         hlms->_setProperty( HlmsBaseProp::ForwardPlus,
-                            static_cast<int32>( HlmsBaseProp::ForwardClustered.mHash ) );
+                            static_cast<int32>( HlmsBaseProp::ForwardClustered.getU32Value() ) );
 
         hlms->_setProperty( HlmsBaseProp::FwdClusteredWidthxHeight,
                             static_cast<int32>( mWidth * mHeight ) );

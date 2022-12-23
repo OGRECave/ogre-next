@@ -31,19 +31,30 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include <stdio.h>   // sprintf
-#include <string.h>  // strlen
+#include <inttypes.h>  // PRIx64
+#include <stdio.h>     // sprintf
+#include <string.h>    // strlen
 #include <string>
+
 #include "Hash/MurmurHash3.h"
 
-#define OGRE_HASH_FUNC MurmurHash3_x86_32
-#define OGRE_HASH_BITS 32
+#ifdef OGRE_IDSTRING_USE_128
+#    if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+#        define OGRE_HASH_FUNC MurmurHash3_x86_128
+#    else
+#        define OGRE_HASH_FUNC MurmurHash3_x64_128
+#    endif
+#    define OGRE_HASH_BITS 128
+#else
+#    define OGRE_HASH_FUNC MurmurHash3_x86_32
+#    define OGRE_HASH_BITS 32
+#endif
 
-#if OGRE_DEBUG_MODE == 0 && OGRE_IDSTRING_ALWAYS_READABLE == 0
+#if OGRE_DEBUG_MODE < OGRE_DEBUG_MEDIUM && OGRE_IDSTRING_ALWAYS_READABLE == 0
 #    define OGRE_COPY_DEBUG_STRING( _Expression ) ( (void)0 )
 #    define OGRE_APPEND_DEBUG_STRING( _Expression ) ( (void)0 )
 #else
-#    include <assert.h>
+#    include "OgreAssert.h"
 #endif
 
 namespace Ogre
@@ -97,38 +108,43 @@ namespace Ogre
     {
         static const uint32_t Seed = 0x3A8EFA67;  // It's a prime number :)
 
+#ifdef OGRE_IDSTRING_USE_128
+        uint64 mHash[2];
+#else
         uint32 mHash;
-#if OGRE_DEBUG_MODE || OGRE_IDSTRING_ALWAYS_READABLE
+#endif
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM || OGRE_IDSTRING_ALWAYS_READABLE
 #    define OGRE_DEBUG_STR_SIZE 32
         char mDebugString[OGRE_DEBUG_STR_SIZE];
 #endif
 
-        IdString() : mHash( 0 )
+        IdString() : mHash{}
         {
-#if OGRE_DEBUG_MODE || OGRE_IDSTRING_ALWAYS_READABLE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM || OGRE_IDSTRING_ALWAYS_READABLE
             mDebugString[0] = '\0';
 #endif
         }
 
-        IdString( const char *string ) : mHash( 0 )
+        IdString( const char *string ) : mHash{}
         {
             OGRE_HASH_FUNC( string, static_cast<int>( strlen( string ) ), Seed, &mHash );
             OGRE_COPY_DEBUG_STRING( string );
         }
 
-        IdString( const std::string &string ) : mHash( 0 )
+        IdString( const std::string &string ) : mHash{}
         {
             OGRE_HASH_FUNC( string.c_str(), static_cast<int>( string.size() ), Seed, &mHash );
             OGRE_COPY_DEBUG_STRING( string );
         }
 
-        IdString( uint32 value ) : mHash( 0 )
+        IdString( uint32 value ) : mHash{}
         {
             OGRE_HASH_FUNC( &value, sizeof( value ), Seed, &mHash );
             OGRE_COPY_DEBUG_STRING( value );
         }
 
-#if OGRE_DEBUG_MODE || OGRE_IDSTRING_ALWAYS_READABLE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM || OGRE_IDSTRING_ALWAYS_READABLE
 #    if OGRE_COMPILER == OGRE_COMPILER_MSVC
 #        pragma warning( push )
 #        pragma warning( disable : 4996 )  // Unsecure CRT deprecation warning
@@ -208,9 +224,17 @@ namespace Ogre
 
         void operator+=( IdString idString )
         {
+#ifdef OGRE_IDSTRING_USE_128
+            uint64 doubleHash[4];
+            doubleHash[0] = mHash[0];
+            doubleHash[1] = mHash[1];
+            doubleHash[2] = idString.mHash[0];
+            doubleHash[3] = idString.mHash[1];
+#else
             uint32 doubleHash[2];
             doubleHash[0] = mHash;
             doubleHash[1] = idString.mHash;
+#endif
 
             OGRE_HASH_FUNC( &doubleHash, sizeof( doubleHash ), Seed, &mHash );
             OGRE_APPEND_DEBUG_STRING( idString.mDebugString );
@@ -225,36 +249,56 @@ namespace Ogre
 
         bool operator<( IdString idString ) const
         {
-#if OGRE_DEBUG_MODE
             // On highly debug builds, check for collisions
-            assert( !( mHash == idString.mHash && strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
-                    "Collision detected!" );
-#endif
+#ifdef OGRE_IDSTRING_USE_128
+            OGRE_ASSERT_MEDIUM( !( mHash[0] == idString.mHash[0] && mHash[1] == idString.mHash[1] &&
+                                   strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
+                                "Collision detected!" );
+            if( mHash[0] != idString.mHash[0] )
+                return mHash[0] < idString.mHash[0];
+            return mHash[1] < idString.mHash[1];
+#else
+            OGRE_ASSERT_MEDIUM(
+                !( mHash == idString.mHash && strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
+                "Collision detected!" );
             return mHash < idString.mHash;
+#endif
         }
 
         bool operator==( IdString idString ) const
         {
-#if OGRE_DEBUG_MODE
-            assert( !( mHash == idString.mHash && strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
-                    "Collision detected!" );
-#endif
+#ifdef OGRE_IDSTRING_USE_128
+            OGRE_ASSERT_MEDIUM( !( mHash[0] == idString.mHash[0] && mHash[1] == idString.mHash[1] &&
+                                   strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
+                                "Collision detected!" );
+            return mHash[0] == idString.mHash[0] && mHash[1] == idString.mHash[1];
+#else
+            OGRE_ASSERT_MEDIUM(
+                !( mHash == idString.mHash && strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
+                "Collision detected!" );
             return mHash == idString.mHash;
+#endif
         }
 
         bool operator!=( IdString idString ) const
         {
-#if OGRE_DEBUG_MODE
-            assert( !( mHash == idString.mHash && strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
-                    "Collision detected!" );
-#endif
+#ifdef OGRE_IDSTRING_USE_128
+            OGRE_ASSERT_MEDIUM( !( mHash[0] == idString.mHash[0] && mHash[1] == idString.mHash[1] &&
+                                   strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
+                                "Collision detected!" );
+            return mHash[0] != idString.mHash[0] || mHash[1] != idString.mHash[1];
+#else
+            OGRE_ASSERT_MEDIUM(
+                !( mHash == idString.mHash && strcmp( mDebugString, idString.mDebugString ) != 0 ) &&
+                "Collision detected!" );
             return mHash != idString.mHash;
+#endif
         }
 
         /// Returns "[Hash 0x0a0100ef]" strings in Release mode, readable string in debug
         std::string getFriendlyText() const
         {
-#if OGRE_DEBUG_MODE || OGRE_IDSTRING_ALWAYS_READABLE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM || OGRE_IDSTRING_ALWAYS_READABLE
             return std::string( mDebugString );
 #else
             return getReleaseText();
@@ -270,7 +314,11 @@ namespace Ogre
 #endif
 
             char tmp[( OGRE_HASH_BITS >> 2 ) + 10];
+#ifdef OGRE_IDSTRING_USE_128
+            sprintf( tmp, "[Hash 0x%.16" PRIx64 "%.16" PRIx64 "]", mHash[0], mHash[1] );
+#else
             sprintf( tmp, "[Hash 0x%.8x]", mHash );
+#endif
             tmp[( OGRE_HASH_BITS >> 2 ) + 10 - 1] = '\0';
             return std::string( tmp );
 
@@ -287,7 +335,7 @@ namespace Ogre
         */
         void getFriendlyText( char *outCStr, size_t stringSize ) const
         {
-#if OGRE_DEBUG_MODE || OGRE_IDSTRING_ALWAYS_READABLE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM || OGRE_IDSTRING_ALWAYS_READABLE
             size_t minSize = std::min<size_t>( OGRE_DEBUG_STR_SIZE, stringSize );
             memcpy( outCStr, mDebugString, minSize );
             outCStr[minSize - 1u] = '\0';
@@ -308,7 +356,11 @@ namespace Ogre
             {
                 // Not big enough. Use a temp buffer and then copy + truncate.
                 char tmp[( OGRE_HASH_BITS >> 2 ) + 10];
+#ifdef OGRE_IDSTRING_USE_128
+                sprintf( tmp, "[Hash 0x%.16" PRIx64 "%.16" PRIx64 "]", mHash[0], mHash[1] );
+#else
                 sprintf( tmp, "[Hash 0x%.8x]", mHash );
+#endif
                 tmp[( OGRE_HASH_BITS >> 2 ) + 10 - 1] = '\0';
 
                 memcpy( outCStr, tmp, stringSize );
@@ -316,13 +368,32 @@ namespace Ogre
             }
             else
             {
-                // Write directly to the output buffer. It's big enough.
+// Write directly to the output buffer. It's big enough.
+#ifdef OGRE_IDSTRING_USE_128
+                sprintf( outCStr, "[Hash 0x%.16" PRIx64 "%.16" PRIx64 "]", mHash[0], mHash[1] );
+#else
                 sprintf( outCStr, "[Hash 0x%.8x]", mHash );
+#endif
                 outCStr[( OGRE_HASH_BITS >> 2 ) + 10 - 1] = '\0';
             }
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 #    pragma warning( pop )
+#endif
+        }
+
+        /// Return a 32-bit value of the internal hash.
+        ///
+        /// Note: If hash size is higher than 32 bits; using this value
+        /// MIGHT still cause collisions that go undetected.
+        uint32 getU32Value() const
+        {
+#ifdef OGRE_IDSTRING_USE_128
+            uint64 reduced0 = mHash[0] ^ mHash[1];
+            uint32 reduced1 = static_cast<uint32>( ( reduced0 & 0xFFFFFFFFu ) ^ ( reduced0 >> 32u ) );
+            return reduced1;
+#else
+            return mHash;
 #endif
         }
     };
