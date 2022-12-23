@@ -229,9 +229,9 @@ namespace Ogre
             }
         }
 
-        if( mTextureHash != hash.mHash )
+        if( mTextureHash != hash.getU32Value() )
         {
-            mTextureHash = hash.mHash;
+            mTextureHash = hash.getU32Value();
             // static_cast<HlmsUnlit*>(mCreator)->requestSlot( mTextureHash, this );
         }
     }

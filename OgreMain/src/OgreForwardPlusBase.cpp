@@ -566,9 +566,9 @@ namespace Ogre
         hlms->_setProperty( HlmsBaseProp::VPos, 1 );
 
         hlms->_setProperty( HlmsBaseProp::Forward3D,
-                            static_cast<int32>( HlmsBaseProp::Forward3D.mHash ) );
+                            static_cast<int32>( HlmsBaseProp::Forward3D.getU32Value() ) );
         hlms->_setProperty( HlmsBaseProp::ForwardClustered,
-                            static_cast<int32>( HlmsBaseProp::ForwardClustered.mHash ) );
+                            static_cast<int32>( HlmsBaseProp::ForwardClustered.getU32Value() ) );
 
         if( mEnableVpls )
             hlms->_setProperty( HlmsBaseProp::EnableVpls, 1 );

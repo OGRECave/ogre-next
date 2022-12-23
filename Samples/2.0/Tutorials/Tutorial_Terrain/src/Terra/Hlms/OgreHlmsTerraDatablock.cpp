@@ -117,13 +117,13 @@ namespace Ogre
             HlmsTerra::LowerGpuOverhead )
         {
             const size_t poolIdx = static_cast<HlmsTerra *>( mCreator )->getPoolIndex( this );
-            const uint32 finalHash = ( hash.mHash & 0xFFFFFE00 ) | ( poolIdx & 0x000001FF );
+            const uint32 finalHash = ( hash.getU32Value() & 0xFFFFFE00 ) | ( poolIdx & 0x000001FF );
             mTextureHash = finalHash;
         }
         else
         {
             const size_t poolIdx = static_cast<HlmsTerra *>( mCreator )->getPoolIndex( this );
-            const uint32 finalHash = ( hash.mHash & 0xFFFFFFF0 ) | ( poolIdx & 0x0000000F );
+            const uint32 finalHash = ( hash.getU32Value() & 0xFFFFFFF0 ) | ( poolIdx & 0x0000000F );
             mTextureHash = finalHash;
         }
     }
