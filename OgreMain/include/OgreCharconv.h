@@ -97,7 +97,7 @@ namespace Ogre
         constexpr bool skip_sep( const char *&ptr, const char *last, char SEP )
         {
             skip_space( ptr, last, SEP );
-            return ptr < last && *ptr == SEP ? ++ptr, true : false;
+            return ptr < last && *ptr == SEP ? void( ++ptr ), true : false;
         }
     }  // namespace
 
@@ -109,7 +109,7 @@ namespace Ogre
         return ( ... && ( ( SEP == 0 || res.ptr == first || skip_sep( res.ptr, last, SEP ) ) &&
                           ( skip_space( res.ptr, last, SEP ), res = from_chars( res.ptr, last, args ),
                             res.ec == errc() ) ) )
-               ? skip_space( res.ptr, last, SEP ),
+               ? void( skip_space( res.ptr, last, SEP ) ),
                res : from_chars_result{ first, errc::invalid_argument };
     }
 
