@@ -697,6 +697,13 @@ namespace Ogre
             iOS at this time.  An exception is thrown on other platforms.
         */
         OrientationMode getOrientationMode() const;
+
+        /** Get the orientation mode angle of the frustum.
+        @remarks
+            Getting the orientation of a frustum is only supported on
+            iOS at this time.  An exception is thrown on other platforms.
+        */
+        Radian getOrientationModeAngle() const;
     };
 
     /** @} */

@@ -557,7 +557,7 @@ namespace Ogre
 
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         // Deal with orientation mode
-        mProjMatrix = mProjMatrix * Quaternion( Degree( mOrientationMode * 90.f ), Vector3::UNIT_Z );
+        mProjMatrix = mProjMatrix * Quaternion( getOrientationModeAngle(), Vector3::UNIT_Z );
 #endif
 
         RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
@@ -1413,6 +1413,11 @@ namespace Ogre
                      "Getting Frustrum orientation mode is not supported", __FUNCTION__ );
 #endif
         return mOrientationMode;
+    }
+    //---------------------------------------------------------------------
+    Radian Frustum::getOrientationModeAngle() const
+    {
+        return Radian( Real( mOrientationMode ) * Math::HALF_PI );
     }
 
 }  // namespace Ogre
