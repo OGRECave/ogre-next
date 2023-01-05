@@ -111,8 +111,6 @@ $(document).ready(function(){initNavTree('interface_ogre_metal_view.html',''); i
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a283c28df8ca674d6d7e8f8b1efe65f02"><td class="memItemLeft" align="right" valign="top">CGFloat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_ogre_metal_view.html#a283c28df8ca674d6d7e8f8b1efe65f02">contentScaleFactor</a></td></tr>
-<tr class="separator:a283c28df8ca674d6d7e8f8b1efe65f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8109dbb7dbe15e834f8a02a4c93172f0"><td class="memItemLeft" align="right" valign="top">id&lt; MTLDevice &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_ogre_metal_view.html#a8109dbb7dbe15e834f8a02a4c93172f0">device</a></td></tr>
 <tr class="separator:a8109dbb7dbe15e834f8a02a4c93172f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43b0c6402e5a55d1076551fc88dea996"><td class="memItemLeft" align="right" valign="top">BOOL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_ogre_metal_view.html#a43b0c6402e5a55d1076551fc88dea996">layerSizeDidUpdate</a></td></tr>
@@ -128,28 +126,6 @@ Properties</h2></td></tr>
 <tr class="separator:af977854df6e110e17258ee5467d05476"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Property Documentation</h2>
-<a id="a283c28df8ca674d6d7e8f8b1efe65f02" name="a283c28df8ca674d6d7e8f8b1efe65f02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a283c28df8ca674d6d7e8f8b1efe65f02">&#9670;&#160;</a></span>contentScaleFactor</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">- (CGFloat) contentScaleFactor</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">assign</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a8109dbb7dbe15e834f8a02a4c93172f0" name="a8109dbb7dbe15e834f8a02a4c93172f0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8109dbb7dbe15e834f8a02a4c93172f0">&#9670;&#160;</a></span>device</h2>
 
@@ -216,7 +192,8 @@ Properties</h2></td></tr>
 
 <p>When scaleToNative = true, instead of setting self.contentScaleFactor, you should change this setting. </p>
 <p >It's expressed in fractions of the nativeScale.</p>
-<p >For example on an iPad Mini 3 the native factor is 2.0; thus if you set nativeScaleFactor = 1; then contentScaleFactor = 2.0 If you set nativeScaleFactor = 0.5; we'll set contentScaleFactor = 1.0 </p>
+<p >For example on an iPad Mini 3 the native factor is 2.0; thus if you set nativeScaleFactor = 1; then contentScaleFactor = 2.0 If you set nativeScaleFactor = 0.5; we'll set contentScaleFactor = 1.0</p>
+<p >It's expressed in fractions of the nativeScale. </p>
 
 </div>
 </div>
@@ -266,6 +243,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>When true (default), we will try to set the contentScaleFactor to the native's. </p>
+<p >You can use 'nativeScaleFactor' for further control.</p>
 <p >You can use 'nativeScaleFactor' for further control. Note: Changing contentScaleFactor directly will force this value to false. </p>
 
 </div>
