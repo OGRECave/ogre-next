@@ -50,8 +50,6 @@ THE SOFTWARE.
 
 - (void)viewDidMoveToWindow
 {
-    // if(self.scaleToNative)
-    //    [setContentScaleFactor:self.window.screen.backingScaleFactor * self.nativeScaleFactor];
     _layerSizeDidUpdate = YES;
 }
 
@@ -92,13 +90,6 @@ THE SOFTWARE.
     {
         return [self.superview acceptsFirstMouse:theEvent];
     }
-}
-
-- (void)setContentScaleFactor:(CGFloat)contentScaleFactor
-{
-    self.scaleToNative = false;
-    //[super setContentScaleFactor:contentScaleFactor];
-    _layerSizeDidUpdate = YES;
 }
 
 - (void)setFrameSize:(NSSize)newSize
