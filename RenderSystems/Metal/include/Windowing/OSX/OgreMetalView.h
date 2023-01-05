@@ -41,20 +41,12 @@ _OgreMetalExport @interface OgreMetalView : NSView
 
 @property( nonatomic, readwrite ) BOOL layerSizeDidUpdate;
 
-/// When true (default), we will try to set the contentScaleFactor to the native's.
 /// You can use 'nativeScaleFactor' for further control.
-/// Note: Changing contentScaleFactor directly will force this value to false.
 @property( nonatomic ) bool scaleToNative;
 
 /// When scaleToNative = true, instead of setting self.contentScaleFactor, you
 /// should change this setting. It's expressed in fractions of the nativeScale.
-///
-/// For example on an iPad Mini 3 the native factor is 2.0; thus if you set
-/// nativeScaleFactor = 1; then contentScaleFactor = 2.0
-/// If you set nativeScaleFactor = 0.5; we'll set contentScaleFactor = 1.0
 @property( nonatomic ) CGFloat nativeScaleFactor;
-
-@property( nonatomic ) CGFloat contentScaleFactor;
 
 /// The value of presentationTime will be passed to
 /// MTLCommandBuffer::presentDrawable atTime:presentationTime
