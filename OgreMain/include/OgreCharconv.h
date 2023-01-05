@@ -72,12 +72,23 @@ namespace Ogre
 // some utilities
 namespace Ogre
 {
-	namespace
-	{
-		constexpr bool is_space(char c) noexcept { return c == ' ' || ((unsigned)(c - '\t') <= (unsigned)('\r' - '\t')); } // 0x20' ', 0x9'\t', 0xA'\n', 0xB'\v', 0xC'\f', 0xD'\r'
-		constexpr void skip_space(const char*& ptr, const char* last, char SEP) { while (ptr < last && *ptr != SEP && is_space(*ptr)) ++ptr; }
-		constexpr bool skip_sep(const char*& ptr, const char* last, char SEP) { skip_space(ptr, last, SEP); return ptr < last && *ptr == SEP ? ++ptr, true : false; }
-	}
+    namespace
+    {
+        constexpr bool is_space( char c ) noexcept
+        {
+            return c == ' ' || ( (unsigned)( c - '\t' ) <= (unsigned)( '\r' - '\t' ) );
+        }  // 0x20' ', 0x9'\t', 0xA'\n', 0xB'\v', 0xC'\f', 0xD'\r'
+        constexpr void skip_space( const char *&ptr, const char *last, char SEP )
+        {
+            while( ptr < last && *ptr != SEP && is_space( *ptr ) )
+                ++ptr;
+        }
+        constexpr bool skip_sep( const char *&ptr, const char *last, char SEP )
+        {
+            skip_space( ptr, last, SEP );
+            return ptr < last && *ptr == SEP ? void( ++ptr ), true : false;
+        }
+    }  // namespace
 
     /** Scans SEP separated arguments list from the buffer, skipping spaces. */
     template <char SEP = 0, typename... Args>
@@ -87,7 +98,7 @@ namespace Ogre
         return ( ... && ( ( SEP == 0 || res.ptr == first || skip_sep( res.ptr, last, SEP ) ) &&
                           ( skip_space( res.ptr, last, SEP ), res = from_chars( res.ptr, last, args ),
                             res.ec == errc() ) ) )
-               ? skip_space( res.ptr, last, SEP ),
+               ? void( skip_space( res.ptr, last, SEP ) ),
                res : from_chars_result{ first, errc::invalid_argument };
     }
 
