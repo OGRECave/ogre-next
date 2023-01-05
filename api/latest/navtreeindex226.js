@@ -1,5 +1,8 @@
 var NAVTREEINDEX226 =
 {
+"struct_ogre_1_1_id_string.html#af9c1fc45a5f502a52c3588fb51102057":[7,0,0,463,12],
+"struct_ogre_1_1_id_string.html#afbe35aa8a428bd10ca8588921891860f":[6,0,0,490,14],
+"struct_ogre_1_1_id_string.html#afbe35aa8a428bd10ca8588921891860f":[7,0,0,463,14],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html":[5,0,0,13,0],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#aac84518f8d8108d7f7875516128b3474":[5,0,0,13,0,1],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#acd53cb3f6a58dbf08f1baa12bcb03033":[5,0,0,13,0,2],
@@ -246,8 +249,5 @@ var NAVTREEINDEX226 =
 "struct_ogre_1_1_lod_data_1_1_vertex_equal.html#a89e85b5b1eaeb53ab3e6243cb8852f6f":[6,0,0,557,5,3],
 "struct_ogre_1_1_lod_data_1_1_vertex_equal.html#a89e85b5b1eaeb53ab3e6243cb8852f6f":[7,0,0,530,5,3],
 "struct_ogre_1_1_lod_data_1_1_vertex_equal.html#abaaad18e40087e23d8212fd474c9eebb":[7,0,0,530,5,2],
-"struct_ogre_1_1_lod_data_1_1_vertex_equal.html#abaaad18e40087e23d8212fd474c9eebb":[6,0,0,557,5,2],
-"struct_ogre_1_1_lod_data_1_1_vertex_hash.html":[7,0,0,530,6],
-"struct_ogre_1_1_lod_data_1_1_vertex_hash.html":[6,0,0,557,6],
-"struct_ogre_1_1_lod_data_1_1_vertex_hash.html#a2a0bae6ff8fab851d848fb8c225673b8":[7,0,0,530,6,0]
+"struct_ogre_1_1_lod_data_1_1_vertex_equal.html#abaaad18e40087e23d8212fd474c9eebb":[6,0,0,557,5,2]
 };

@@ -78,6 +78,7 @@ var class_ogre_1_1_frustum =
     [ "getNumWorldTransforms", "class_ogre_1_1_frustum.html#a52885f46abdb3e5f850aed9302d666fa", null ],
     [ "getOrientationForViewUpdate", "class_ogre_1_1_frustum.html#a36e44fb51a269f9d429471bb6913b96c", null ],
     [ "getOrientationMode", "class_ogre_1_1_frustum.html#aef3e8ca059898e369ce5da77e785e769", null ],
+    [ "getOrientationModeAngle", "class_ogre_1_1_frustum.html#a580efcd67909c9a95fd4dd94ee1335e8", null ],
     [ "getOrthoWindowHeight", "class_ogre_1_1_frustum.html#ae8a1b90cb3f81ef66987032777681629", null ],
     [ "getOrthoWindowWidth", "class_ogre_1_1_frustum.html#a9294b973fc3bcc7cfa644825a00351db", null ],
     [ "getParentNode", "class_ogre_1_1_frustum.html#a791bba58f04a0a7d5eb0429c8b0a9130", null ],

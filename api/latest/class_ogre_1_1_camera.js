@@ -125,6 +125,7 @@ var class_ogre_1_1_camera =
     [ "getOrientation", "class_ogre_1_1_camera.html#a51a1358e3c8fea46cfb3c3724934a6d8", null ],
     [ "getOrientationForViewUpdate", "class_ogre_1_1_camera.html#ae2d0ec9789f5047cf43070950d53ccac", null ],
     [ "getOrientationMode", "class_ogre_1_1_camera.html#aef3e8ca059898e369ce5da77e785e769", null ],
+    [ "getOrientationModeAngle", "class_ogre_1_1_camera.html#a580efcd67909c9a95fd4dd94ee1335e8", null ],
     [ "getOrthoWindowHeight", "class_ogre_1_1_camera.html#ae8a1b90cb3f81ef66987032777681629", null ],
     [ "getOrthoWindowWidth", "class_ogre_1_1_camera.html#a9294b973fc3bcc7cfa644825a00351db", null ],
     [ "getParentNode", "class_ogre_1_1_camera.html#a791bba58f04a0a7d5eb0429c8b0a9130", null ],

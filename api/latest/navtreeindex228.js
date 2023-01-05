@@ -1,5 +1,8 @@
 var NAVTREEINDEX228 =
 {
+"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a195d638ac120b710ee243ba48676bd96":[6,0,0,668,1,2],
+"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a44e42083526c6f92545361c36b181db2":[7,0,0,641,1,6],
+"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a44e42083526c6f92545361c36b181db2":[6,0,0,668,1,6],
 "struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a74e575b576b618161db20a779ced37cb":[6,0,0,668,1,0],
 "struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a74e575b576b618161db20a779ced37cb":[7,0,0,641,1,0],
 "struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a94dd2552740eb0bcca8dc2ce2efe46b8":[6,0,0,668,1,5],
@@ -246,8 +249,5 @@ var NAVTREEINDEX228 =
 "struct_ogre_1_1_profile_history.html#afe5a58d26a5e496050f8f1d75444f5e3":[5,2,2,87,9],
 "struct_ogre_1_1_profiled_edge.html":[6,0,0,742],
 "struct_ogre_1_1_profiled_edge.html":[7,0,0,715],
-"struct_ogre_1_1_profiled_edge.html#a1f62a56068f71a2040043b22acbd904f":[6,0,0,742,0],
-"struct_ogre_1_1_profiled_edge.html#a1f62a56068f71a2040043b22acbd904f":[7,0,0,715,0],
-"struct_ogre_1_1_profiled_edge.html#a77b8a7e4cfbf39504aa8b806f1cec2ed":[6,0,0,742,1],
-"struct_ogre_1_1_profiled_edge.html#a77b8a7e4cfbf39504aa8b806f1cec2ed":[7,0,0,715,1]
+"struct_ogre_1_1_profiled_edge.html#a1f62a56068f71a2040043b22acbd904f":[6,0,0,742,0]
 };
