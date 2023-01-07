@@ -300,8 +300,12 @@ namespace Ogre
         else if( ( brdf & TerraBrdf::BRDF_MASK ) == TerraBrdf::BlinnPhong )
             setProperty( PbsProperty::BrdfBlinnPhong, 1 );
 
-        if( brdf & TerraBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
-            setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
+        if( brdf & TerraBrdf::FLAG_HAS_DIFFUSE_FRESNEL )
+        {
+            setProperty( PbsProperty::FresnelHasDiffuse, 1 );
+            if( brdf & TerraBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
+                setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
+        }
 
         if( brdf & TerraBrdf::FLAG_LEGACY_MATH )
             setProperty( PbsProperty::LegacyMathBrdf, 1 );
