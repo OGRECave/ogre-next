@@ -3840,7 +3840,13 @@ namespace Ogre
         mUseObbRestraintAreaLtc = areaLtc;
     }
 #endif
+    //-----------------------------------------------------------------------------------
     void HlmsPbs::setUseLightBuffers( bool b ) { mUseLightBuffers = b; }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setDefaultBrdfWithDiffuseFresnel( bool bDefaultToDiffuseFresnel )
+    {
+        mDefaultBrdfWithDiffuseFresnel = bDefaultToDiffuseFresnel;
+    }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsPbs::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,

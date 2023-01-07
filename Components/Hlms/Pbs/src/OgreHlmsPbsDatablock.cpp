@@ -97,7 +97,8 @@ namespace Ogre
         mClearCoatRoughness( 0.0f ),
         _padding1( 0 ),
         mCubemapProbe( 0 ),
-        mBrdf( PbsBrdf::Default )
+        mBrdf( creator->getDefaultBrdfWithDiffuseFresnel() ? PbsBrdf::DefaultHasDiffuseFresnel
+                                                           : PbsBrdf::Default )
     {
         memset( mUvSource, 0, sizeof( mUvSource ) );
         memset( mBlendModes, 0, sizeof( mBlendModes ) );
