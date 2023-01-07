@@ -59,10 +59,11 @@ namespace Ogre
     {
         enum TerraBrdf
         {
-            FLAG_UNCORRELATED = 0x80000000,
-            FLAG_SPERATE_DIFFUSE_FRESNEL = 0x40000000,
-            FLAG_LEGACY_MATH = 0x20000000,
-            FLAG_FULL_LEGACY = 0x08000000,
+            FLAG_UNCORRELATED = 1u << 31u,
+            FLAG_SPERATE_DIFFUSE_FRESNEL = 1u << 30u,
+            FLAG_LEGACY_MATH = 1u << 29u,
+            FLAG_FULL_LEGACY = 1u << 28u,
+            FLAG_HAS_DIFFUSE_FRESNEL = 1u << 27u,
             BRDF_MASK = 0x00000FFF,
 
             /// Most physically accurate BRDF we have. Good for representing
@@ -98,7 +99,22 @@ namespace Ogre
             /// pipeline workflow.
             DefaultUncorrelated = Default | FLAG_UNCORRELATED,
 
-            /// Same as Default but the fresnel of the diffuse is calculated
+            /// This used to be 'Default' in OgreNext 2.4 and earlier.
+            /// The diffuse component is multiplied against
+            /// the inverse of the specular's fresnel to maintain energy conservation.
+            ///
+            /// This has the nice side effect that to achieve a perfect mirror effect,
+            /// you just need to raise the fresnel term to 1; which is very intuitive
+            /// to artists (specially if using coloured fresnel)
+            ///
+            /// However after research and feedback from the community, most
+            /// DCC tools out there (e.g. Marmoset) don't do this; and users
+            /// expect consistency.
+            ///
+            /// Therefore the new Default BRDF in 3.0 does not include diffuse fresnel
+            DefaultHasDiffuseFresnel = Default | FLAG_HAS_DIFFUSE_FRESNEL,
+
+            /// Same as DefaultHasDiffuseFresnel but the fresnel of the diffuse is calculated
             /// differently. Normally the diffuse component would be multiplied against
             /// the inverse of the specular's fresnel to maintain energy conservation.
             /// This has the nice side effect that to achieve a perfect mirror effect,
@@ -115,17 +131,25 @@ namespace Ogre
             /// and reflections like glass, transparent plastics, fur, and surface with
             /// refractions and multiple rescattering that cannot be represented well
             /// with the default BRDF.
-            DefaultSeparateDiffuseFresnel = Default | FLAG_SPERATE_DIFFUSE_FRESNEL,
+            DefaultSeparateDiffuseFresnel =
+                Default | FLAG_HAS_DIFFUSE_FRESNEL | FLAG_SPERATE_DIFFUSE_FRESNEL,
 
-            /// @see DefaultSeparateDiffuseFresnel. This is the same
-            /// but the Cook Torrance model is used instead.
+            /// CookTorrance, but w/ diffuse fresnel. See DefaultHasDiffuseFresnel.
+            CookTorranceHasDiffuseFresnel = CookTorrance | FLAG_HAS_DIFFUSE_FRESNEL,
+
+            /// CookTorrance but w/ separate diffuse fresnel. See DefaultSeparateDiffuseFresnel
             ///
             /// Ideal for shiny objects like glass toy marbles, some types of rubber.
             /// silk, synthetic fabric.
-            CookTorranceSeparateDiffuseFresnel = CookTorrance | FLAG_SPERATE_DIFFUSE_FRESNEL,
+            CookTorranceSeparateDiffuseFresnel =
+                CookTorrance | FLAG_HAS_DIFFUSE_FRESNEL | FLAG_SPERATE_DIFFUSE_FRESNEL,
 
-            /// Like DefaultSeparateDiffuseFresnel, but uses BlinnPhong as base.
-            BlinnPhongSeparateDiffuseFresnel = BlinnPhong | FLAG_SPERATE_DIFFUSE_FRESNEL,
+            /// BlinnPhong but w/ diffuse fresnel. See DefaultHasDiffuseFresnel.
+            BlinnPhongHasDiffuseFresnel = BlinnPhong | FLAG_HAS_DIFFUSE_FRESNEL,
+
+            /// BlinnPhong but w/ diffuse fresnel. See DefaultSeparateDiffuseFresnel.
+            BlinnPhongSeparateDiffuseFresnel =
+                BlinnPhong | FLAG_HAS_DIFFUSE_FRESNEL | FLAG_SPERATE_DIFFUSE_FRESNEL,
 
             /// Implements traditional / the original non-PBR blinn phong:
             ///     * Looks more like a 2000-2005's game

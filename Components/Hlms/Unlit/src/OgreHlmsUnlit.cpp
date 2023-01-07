@@ -678,8 +678,8 @@ namespace Ogre
 
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         identityProjMat =
-            identityProjMat * Quaternion( Degree( cameras.renderingCamera->getOrientationMode() * 90.f ),
-                                          Vector3::UNIT_Z );
+            identityProjMat *
+            Quaternion( cameras.renderingCamera->getOrientationModeAngle(), Vector3::UNIT_Z );
 #endif
 
         if( !isInstancedStereo )

@@ -346,7 +346,7 @@ namespace Ogre
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
                 mProjectionMatrix =
                     mProjectionMatrix *
-                    Quaternion( Degree( mCurrentCamera->getOrientationMode() * 90.f ), Vector3::UNIT_Z );
+                    Quaternion( mCurrentCamera->getOrientationModeAngle(), Vector3::UNIT_Z );
 #endif
             }
             else

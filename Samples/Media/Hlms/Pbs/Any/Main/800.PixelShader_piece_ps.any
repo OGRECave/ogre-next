@@ -1,5 +1,8 @@
-@piece( envSpecularRoughness ) pixelData.perceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) @end
-@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) @end
+// The mapping below is a quadratic fit for log2(perceptualRoughness)+iblRoughnessOneLevel when
+// iblRoughnessOneLevel is 4. We found empirically that this mapping works very well for
+// a 256 cubemap with 5 levels used. But also scales well for other iblRoughnessOneLevel values.
+@piece( envSpecularRoughness ) pixelData.perceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) * ( _h( 2.0 ) - pixelData.perceptualRoughness ) @end
+@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) * ( _h( 2.0 ) - pixelData.clearCoatPerceptualRoughness ) @end
 
 @piece( DefaultHeaderPS )
 	// START UNIFORM DECLARATION
@@ -320,7 +323,7 @@
 										 UV_SPECULAR( inPs.uv@value(uv_specular).xy ),
 										 texIndex_specularIdx ).x;
 		@end
-		pixelData.F0 = lerp( make_float_fresnel( 0.03f ), pixelData.diffuse.xyz * _h( 3.14159f ), metalness );
+		pixelData.F0 = lerp( make_float_fresnel( 0.04f ), pixelData.diffuse.xyz * _h( 3.14159f ), metalness );
 		pixelData.diffuse.xyz = pixelData.diffuse.xyz - pixelData.diffuse.xyz * metalness;
 		@property( hlms_alphablend || hlms_screen_space_refractions )
 			pixelData.F0 *= midf_c( material.F0.w ); ///Should this be done for non-metallic as well???

@@ -193,13 +193,13 @@ namespace Ogre
         if( mShaderProfile == "glsles" )  // TODO: String comparision
             setProperty( HlmsBaseProp::GLES, 300 );
 
-        setProperty( HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.mHash ) );
-        setProperty( HlmsBaseProp::Hlsl, static_cast<int32>( HlmsBaseProp::Hlsl.mHash ) );
-        setProperty( HlmsBaseProp::Glsl, static_cast<int32>( HlmsBaseProp::Glsl.mHash ) );
-        setProperty( HlmsBaseProp::Glslvk, static_cast<int32>( HlmsBaseProp::Glslvk.mHash ) );
-        setProperty( HlmsBaseProp::Hlslvk, static_cast<int32>( HlmsBaseProp::Hlslvk.mHash ) );
-        setProperty( HlmsBaseProp::Glsles, static_cast<int32>( HlmsBaseProp::Glsles.mHash ) );
-        setProperty( HlmsBaseProp::Metal, static_cast<int32>( HlmsBaseProp::Metal.mHash ) );
+        setProperty( HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.getU32Value() ) );
+        setProperty( HlmsBaseProp::Hlsl, static_cast<int32>( HlmsBaseProp::Hlsl.getU32Value() ) );
+        setProperty( HlmsBaseProp::Glsl, static_cast<int32>( HlmsBaseProp::Glsl.getU32Value() ) );
+        setProperty( HlmsBaseProp::Glslvk, static_cast<int32>( HlmsBaseProp::Glslvk.getU32Value() ) );
+        setProperty( HlmsBaseProp::Hlslvk, static_cast<int32>( HlmsBaseProp::Hlslvk.getU32Value() ) );
+        setProperty( HlmsBaseProp::Glsles, static_cast<int32>( HlmsBaseProp::Glsles.getU32Value() ) );
+        setProperty( HlmsBaseProp::Metal, static_cast<int32>( HlmsBaseProp::Metal.getU32Value() ) );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         setProperty( HlmsBaseProp::iOS, 1 );
@@ -207,9 +207,9 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
         setProperty( HlmsBaseProp::macOS, 1 );
 #endif
-        setProperty( HlmsBaseProp::Full32, static_cast<int32>( HlmsBaseProp::Full32.mHash ) );
-        setProperty( HlmsBaseProp::Midf16, static_cast<int32>( HlmsBaseProp::Midf16.mHash ) );
-        setProperty( HlmsBaseProp::Relaxed, static_cast<int32>( HlmsBaseProp::Relaxed.mHash ) );
+        setProperty( HlmsBaseProp::Full32, static_cast<int32>( HlmsBaseProp::Full32.getU32Value() ) );
+        setProperty( HlmsBaseProp::Midf16, static_cast<int32>( HlmsBaseProp::Midf16.getU32Value() ) );
+        setProperty( HlmsBaseProp::Relaxed, static_cast<int32>( HlmsBaseProp::Relaxed.getU32Value() ) );
         setProperty( HlmsBaseProp::PrecisionMode, getSupportedPrecisionModeHash() );
 
         if( mFastShaderBuildHack )

@@ -50,7 +50,7 @@ namespace Ogre
 {
     const Real Math::POS_INFINITY = std::numeric_limits<Real>::infinity();
     const Real Math::NEG_INFINITY = -std::numeric_limits<Real>::infinity();
-    const Real Math::PI = Real( 4.0 * std::atan( 1.0 ) );
+    const Real Math::PI = Real( 3.14159265358979323846264338327950288 );  // enough even for float128
     const Real Math::TWO_PI = Real( 2.0 * PI );
     const Real Math::HALF_PI = Real( 0.5 * PI );
     const Real Math::fDeg2Rad = PI / Real( 180.0 );

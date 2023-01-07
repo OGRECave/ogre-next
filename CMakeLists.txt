@@ -480,6 +480,8 @@ if( APPLE )
 endif()
 option(OGRE_BUILD_PLUGIN_PFX "Build ParticleFX plugin" TRUE)
 
+option(OGRE_IDSTRING_USE_128 "Ogre will use 128 for IdString to reduce chances of collisions. Use this if you have approximately >= 10.000 meshes or materials" FALSE)
+
 option( OGRE_ADDRESS_SANITIZER_ASAN "Build with Asan (Address Sanitizer)" OFF )
 
 option( OGRE_BUILD_COMPONENT_ATMOSPHERE "Component to use atmosphere (e.g. sky), can be used by HlmsPbs" TRUE )

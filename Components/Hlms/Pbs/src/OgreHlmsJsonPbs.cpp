@@ -31,6 +31,7 @@ THE SOFTWARE.
 #if !OGRE_NO_JSON
 
 #    include "OgreHlmsManager.h"
+#    include "OgreHlmsPbs.h"
 #    include "OgreTextureFilters.h"
 #    include "OgreTextureGpuManager.h"
 
@@ -95,10 +96,16 @@ namespace Ogre
             return PbsBrdf::BlinnPhong;
         if( !strcmp( value, "default_uncorrelated" ) )
             return PbsBrdf::DefaultUncorrelated;
+        if( !strcmp( value, "default_had_diffuse_fresnel" ) )
+            return PbsBrdf::DefaultHasDiffuseFresnel;
         if( !strcmp( value, "default_separate_diffuse_fresnel" ) )
             return PbsBrdf::DefaultSeparateDiffuseFresnel;
+        if( !strcmp( value, "cook_torrance_has_diffuse_fresnel" ) )
+            return PbsBrdf::CookTorranceHasDiffuseFresnel;
         if( !strcmp( value, "cook_torrance_separate_diffuse_fresnel" ) )
             return PbsBrdf::CookTorranceSeparateDiffuseFresnel;
+        if( !strcmp( value, "blinn_phong_has_diffuse_fresnel" ) )
+            return PbsBrdf::BlinnPhongHasDiffuseFresnel;
         if( !strcmp( value, "blinn_phong_separate_diffuse_fresnel" ) )
             return PbsBrdf::BlinnPhongSeparateDiffuseFresnel;
         if( !strcmp( value, "blinn_phong_legacy_math" ) )
@@ -322,7 +329,30 @@ namespace Ogre
 
         itor = json.FindMember( "brdf" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
-            pbsDatablock->setBrdf( parseBrdf( itor->value.GetString() ) );
+        {
+            PbsBrdf::PbsBrdf brdf = parseBrdf( itor->value.GetString() );
+
+            if( static_cast<HlmsPbs *>( pbsDatablock->getCreator() )
+                    ->getDefaultBrdfWithDiffuseFresnel() )
+            {
+                switch( brdf )
+                {
+                case PbsBrdf::Default:
+                    brdf = PbsBrdf::DefaultHasDiffuseFresnel;
+                    break;
+                case PbsBrdf::CookTorrance:
+                    brdf = PbsBrdf::CookTorranceHasDiffuseFresnel;
+                    break;
+                case PbsBrdf::BlinnPhong:
+                    brdf = PbsBrdf::BlinnPhongHasDiffuseFresnel;
+                    break;
+                default:
+                    break;
+                }
+            }
+
+            pbsDatablock->setBrdf( brdf );
+        }
 
         itor = json.FindMember( "two_sided" );
         if( itor != json.MemberEnd() && itor->value.IsBool() )
@@ -594,11 +624,20 @@ namespace Ogre
         case PbsBrdf::DefaultUncorrelated:
             outString += "default_uncorrelated";
             break;
+        case PbsBrdf::DefaultHasDiffuseFresnel:
+            outString += "default_has_diffuse_fresnel";
+            break;
         case PbsBrdf::DefaultSeparateDiffuseFresnel:
             outString += "default_separate_diffuse_fresnel";
             break;
+        case PbsBrdf::CookTorranceHasDiffuseFresnel:
+            outString += "cook_torrance_has_diffuse_fresnel";
+            break;
         case PbsBrdf::CookTorranceSeparateDiffuseFresnel:
             outString += "cook_torrance_separate_diffuse_fresnel";
+            break;
+        case PbsBrdf::BlinnPhongHasDiffuseFresnel:
+            outString += "blinn_phong_has_diffuse_fresnel";
             break;
         case PbsBrdf::BlinnPhongSeparateDiffuseFresnel:
             outString += "blinn_phong_separate_diffuse_fresnel";

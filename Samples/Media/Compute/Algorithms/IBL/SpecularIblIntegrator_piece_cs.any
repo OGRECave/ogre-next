@@ -55,6 +55,13 @@
 		}
 	@end
 
+	INLINE float log4( float x )
+	{
+		// log2(x)/log2(4)
+		// log2(x)/2
+		return log2( x ) * 0.5;
+	}
+
 	//
 	// Attributed to:
 	// http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
@@ -111,12 +118,11 @@
 	// Base on GGX example in:                                                            //
 	// http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
 	//------------------------------------------------------------------------------------//
-	INLINE float3 importanceSampleGGX( float2 Xi, float roughness, float3 N )
+	INLINE float3 importanceSampleGGX( float2 Xi, float a, float3 N )
 	{
-		float a = roughness * roughness;
-
 		float Phi = 2 * PI * Xi.x;
-		float CosTheta = sqrt( ( 1 - Xi.y ) / ( 1 + ( a * a - 1 ) * Xi.y ) );
+		// NOTE: (aa-1) == (a-1)(a+1) produces better fp accuracy
+		float CosTheta = sqrt( ( 1 - Xi.y ) / ( 1 + ( a + 1 ) * ( ( a - 1 ) * Xi.y ) ) );
 		float SinTheta = sqrt( 1 - CosTheta * CosTheta );
 
 		float3 H;
@@ -139,11 +145,11 @@
 	}
 
 	// Smoth GGX
-	INLINE float specularD( float roughness, float NoH )
+	INLINE float specularD( float a, float NoH )
 	{
-		float NoH2 = NoH * NoH;
-		float r2 = roughness * roughness;
-		return r2 / pow( NoH2 * ( r2 - 1.0 ) + 1.0, 2.0 );
+		// NOTE: (aa-1) == (a-1)(a+1) produces better fp accuracy
+		float f = ( a - 1 ) * ( ( a + 1 ) * ( NoH * NoH ) ) + 1;
+		return ( a * a ) / ( PI * f * f );
 	}
 
 	INLINE float4 importanceSample( float3 R PARAMS_ARG_DECL )
@@ -165,7 +171,7 @@
 			float NoL = max( dot( N, L ), 0.0 );
 			// float VoL = max( dot( V, L ), 0.0 );
 			float NoH = max( dot( N, H ), 0.0 );
-			float VoH = max( dot( V, H ), 0.0 );
+			// float VoH = max( dot( V, H ), 0.0 );
 			if( NoL > 0 )
 			{
 				//
@@ -174,11 +180,14 @@
 				// http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
 				//
 				float Dh = specularD( p_convolutionRoughness, NoH );
-				float pdf = Dh * NoH / ( 4 * VoH );
+				float pdf = Dh / 4;
 				float solidAngleTexel = 4 * PI / ( 6 * p_inputResolution.x * p_inputResolution.x );
 				float solidAngleSample = 1.0 / ( p_convolutionSampleCount * pdf );
+
+				// K is a LOD bias that allows a bit of overlapping between samples
+				float K = 4;
 				float lod =
-					p_convolutionRoughness == 0 ? 0 : 0.5 * log2( solidAngleSample / solidAngleTexel );
+					p_convolutionRoughness == 0 ? 0 : log4( solidAngleSample ) - log4( solidAngleTexel ) + log4( K );
 
 				float4 sampleValue = OGRE_SampleLevel( convolutionSrc, EnvMapSampler, L, lod );
 				alphaValue += sampleValue.a * NoL;

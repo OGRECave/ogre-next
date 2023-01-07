@@ -216,6 +216,8 @@ namespace Ogre
 
         bool mUseLightBuffers;
 
+        bool mDefaultBrdfWithDiffuseFresnel;
+
         ShadowFilter     mShadowFilter;
         uint16           mEsmK;  ///< K parameter for ESM.
         AmbientLightMode mAmbientLightMode;
@@ -419,9 +421,10 @@ namespace Ogre
             Errors between pccVctMinDistance & pccVctMaxDistance will be faded smoothly
             Use negative pccVctMaxDistance to always use VCT
         */
-        void                          setParallaxCorrectedCubemap( ParallaxCorrectedCubemapBase *pcc,
-                                                                   float                         pccVctMinDistance = 1.0f,
-                                                                   float                         pccVctMaxDistance = 2.0f );
+        void setParallaxCorrectedCubemap( ParallaxCorrectedCubemapBase *pcc,
+                                          float                         pccVctMinDistance = 1.0f,
+                                          float                         pccVctMaxDistance = 2.0f );
+
         ParallaxCorrectedCubemapBase *getParallaxCorrectedCubemap() const
         {
             return mParallaxCorrectedCubemap;
@@ -471,6 +474,23 @@ namespace Ogre
 
         void setUseLightBuffers( bool b );
         bool getUseLightBuffers() { return mUseLightBuffers; }
+
+        /** OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match
+            what most DCC tools (e.g. Marmoset) do.
+
+            However this breaks existing material scripts which were tuned to the old BRDF.
+
+            When enabling this setting, all materials created from scripts (including JSON)
+            will convert Default BRDF to PbsBrdf::DefaultHasDiffuseFresnel which is what
+            was the default on OgreNext 2.4 and earlier.
+
+            The same is done with CookTorrance and BlinnPhong models.
+        @param bDefaultToDiffuseFresnel
+            True to convert Default/CookTorrance/BlinnPhong to DefaultHasDiffuseFresnel & co.
+        */
+        void setDefaultBrdfWithDiffuseFresnel( bool bDefaultToDiffuseFresnel );
+
+        bool getDefaultBrdfWithDiffuseFresnel() const { return mDefaultBrdfWithDiffuseFresnel; }
 
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
@@ -615,6 +635,7 @@ namespace Ogre
         static const IdString BrdfDefault;
         static const IdString BrdfCookTorrance;
         static const IdString BrdfBlinnPhong;
+        static const IdString FresnelHasDiffuse;
         static const IdString FresnelSeparateDiffuse;
         static const IdString GgxHeightCorrelated;
         static const IdString ClearCoat;

@@ -228,7 +228,7 @@ namespace Ogre
         propName.a( "_texture_type" );  //_texture_type
         setProperty(
             propName.c_str(),
-            static_cast<int32>( c_textureTypesProps[texture->getInternalTextureType()].mHash ) );
+            static_cast<int32>( c_textureTypesProps[texture->getInternalTextureType()].getU32Value() ) );
         propName.resize( texturePropSize );
 
         propName.a( "_pf_type" );  // uav0_pf_type
@@ -534,7 +534,7 @@ namespace Ogre
                  ++i )
             {
                 setProperty( c_textureTypesProps[i],
-                             static_cast<int32>( c_textureTypesProps[i].mHash ) );
+                             static_cast<int32>( c_textureTypesProps[i].getU32Value() ) );
             }
 
             const PixelFormatToShaderType *toShaderType = renderSystem->getPixelFormatToShaderType();
