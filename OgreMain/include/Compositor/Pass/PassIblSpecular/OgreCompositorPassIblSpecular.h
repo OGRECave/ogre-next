@@ -72,6 +72,8 @@ namespace Ogre
         void setupComputeShaders();
         void destroyComputeShaders();
 
+        float lodToPerceptualRoughness( float lod ) const;
+
         void analyzeBarriers( const bool bClearBarriers = true ) override;
 
     public:
