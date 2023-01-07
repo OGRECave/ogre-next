@@ -238,6 +238,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6576e38225d9205b428bb909d93c5bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af52b13fdb164291e10a6f61aa0fb8ba4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#af52b13fdb164291e10a6f61aa0fb8ba4">getDebugPssmSplits</a> () const</td></tr>
 <tr class="separator:af52b13fdb164291e10a6f61aa0fb8ba4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69b7fc1f154afce7d12e544a363f7960"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a69b7fc1f154afce7d12e544a363f7960">getDefaultBrdfWithDiffuseFresnel</a> () const</td></tr>
+<tr class="separator:a69b7fc1f154afce7d12e544a363f7960"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9df1057f374a54432b012c5e0309107a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a9df1057f374a54432b012c5e0309107a">getDefaultDatablock</a> () const</td></tr>
 <tr class="memdesc:a9df1057f374a54432b012c5e0309107a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Datablock to use when another datablock failed or none was specified.   <a href="class_ogre_1_1_hlms.html#a9df1057f374a54432b012c5e0309107a">More...</a><br /></td></tr>
 <tr class="separator:a9df1057f374a54432b012c5e0309107a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -382,6 +384,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5bd6a05326ef3082d1d88fa5c3ec8c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bbd17ee07c52afc3f4390ea4f29545c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a9bbd17ee07c52afc3f4390ea4f29545c">setDebugPssmSplits</a> (bool bDebug)</td></tr>
 <tr class="separator:a9bbd17ee07c52afc3f4390ea4f29545c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67bc1d23e1966e7e7363abbf019e06a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a67bc1d23e1966e7e7363abbf019e06a2">setDefaultBrdfWithDiffuseFresnel</a> (bool bDefaultToDiffuseFresnel)</td></tr>
+<tr class="memdesc:a67bc1d23e1966e7e7363abbf019e06a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match what most DCC tools (e.g.  <a href="class_ogre_1_1_hlms_pbs.html#a67bc1d23e1966e7e7363abbf019e06a2">More...</a><br /></td></tr>
+<tr class="separator:a67bc1d23e1966e7e7363abbf019e06a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5e13575a3e3da3b79b59721c7575016"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#ab5e13575a3e3da3b79b59721c7575016">setEsmK</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> K)</td></tr>
 <tr class="memdesc:ab5e13575a3e3da3b79b59721c7575016"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the 'K' parameter of ESM filter.  <a href="class_ogre_1_1_hlms_pbs.html#ab5e13575a3e3da3b79b59721c7575016">More...</a><br /></td></tr>
 <tr class="separator:ab5e13575a3e3da3b79b59721c7575016"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1843,6 +1848,31 @@ Static Public Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool Ogre::HlmsPbs::getDebugPssmSplits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a69b7fc1f154afce7d12e544a363f7960" name="a69b7fc1f154afce7d12e544a363f7960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69b7fc1f154afce7d12e544a363f7960">&#9670;&#160;</a></span>getDefaultBrdfWithDiffuseFresnel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HlmsPbs::getDefaultBrdfWithDiffuseFresnel </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -3838,6 +3868,35 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a67bc1d23e1966e7e7363abbf019e06a2" name="a67bc1d23e1966e7e7363abbf019e06a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67bc1d23e1966e7e7363abbf019e06a2">&#9670;&#160;</a></span>setDefaultBrdfWithDiffuseFresnel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bDefaultToDiffuseFresnel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match what most DCC tools (e.g. </p>
+<p >Marmoset) do.</p>
+<p >However this breaks existing material scripts which were tuned to the old BRDF.</p>
+<p >When enabling this setting, all materials created from scripts (including JSON) will convert Default BRDF to <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67" title="This used to be &#39;Default&#39; in OgreNext 2.4 and earlier.">PbsBrdf::DefaultHasDiffuseFresnel</a> which is what was the default on OgreNext 2.4 and earlier.</p>
+<p >The same is done with CookTorrance and BlinnPhong models. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bDefaultToDiffuseFresnel</td><td>True to convert Default/CookTorrance/BlinnPhong to DefaultHasDiffuseFresnel &amp; co. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

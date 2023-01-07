@@ -1,5 +1,7 @@
 var NAVTREEINDEX229 =
 {
+"struct_ogre_1_1_profile_history.html#a996ed640b5da7fadaa9f829ea99c6526":[5,2,2,87,8],
+"struct_ogre_1_1_profile_history.html#aa867c70fb3bb7c845b68a4379c5f3e22":[5,2,2,87,10],
 "struct_ogre_1_1_profile_history.html#abf859636d5b1532cceeb3b3f12b1cfbc":[5,2,2,87,4],
 "struct_ogre_1_1_profile_history.html#ac23cfe700700a7541c02c56ffdb53846":[5,2,2,87,6],
 "struct_ogre_1_1_profile_history.html#ac2585d85ca3195ef12c7c8cdb75427da":[5,2,2,87,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX229 =
 "struct_ogre_1_1_script_token.html#a3ff89cd1a7a0a9aa09aee101b354d2e3":[5,2,2,106,3],
 "struct_ogre_1_1_script_token.html#a83500d1c1b1528eca630836658a56f90":[5,2,2,106,4],
 "struct_ogre_1_1_script_token.html#aa19ea4cbc50a09c0657bce9ab053a1b6":[5,2,2,106,0],
-"struct_ogre_1_1_script_token.html#ad065a5c8a457b5e951e2e8f7a79d29f4":[5,2,2,106,2],
-"struct_ogre_1_1_shader_params_1_1_auto_param.html":[5,0,0,19,0],
-"struct_ogre_1_1_shader_params_1_1_auto_param.html#a163822e5cd41a88f5fa4049874efb682":[5,0,0,19,0,1]
+"struct_ogre_1_1_script_token.html#ad065a5c8a457b5e951e2e8f7a79d29f4":[5,2,2,106,2]
 };

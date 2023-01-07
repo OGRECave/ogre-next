@@ -1,5 +1,7 @@
 var NAVTREEINDEX231 =
 {
+"struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html":[5,2,10,127,2],
+"struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html#a57b70db621fce937933ae28a255e2925":[5,2,10,127,2,3],
 "struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html#a5cd5227308171e5b2833e9ce6236796d":[5,2,10,127,2,1],
 "struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html#a6120402c2d03d3edf2d35611d89a32cc":[5,2,10,127,2,2],
 "struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html#a699a1757f9144260193c965cf3f31f24":[5,2,10,127,2,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX231 =
 "struct_ogre_1_1_update_lod_request.html#ad989603d5f7c91fe101cd5ad622203f7":[5,0,1,57,10],
 "struct_ogre_1_1_update_lod_request.html#aeeff72fea003054d702406641ec70616":[5,0,1,57,3],
 "struct_ogre_1_1_update_lod_request.html#aeeff72fea003054d702406641ec70616":[5,2,11,57,3],
-"struct_ogre_1_1_update_transform_request.html":[5,0,1,58],
-"struct_ogre_1_1_update_transform_request.html":[5,2,11,58],
-"struct_ogre_1_1_update_transform_request.html#a0421b875a5cf47b200cf0b8c3d25bcb5":[5,0,1,58,4]
+"struct_ogre_1_1_update_transform_request.html":[5,0,1,58]
 };
