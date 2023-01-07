@@ -43,6 +43,7 @@ var struct_ogre_1_1_pbs_property =
     [ "EnvProbeMap", "struct_ogre_1_1_pbs_property.html#a736968f893dc525c0637b8ee8c85f063", null ],
     [ "ExponentialShadowMaps", "struct_ogre_1_1_pbs_property.html#a9257282d35c21d999bc2223be956dad2", null ],
     [ "FirstValidDetailMapNm", "struct_ogre_1_1_pbs_property.html#a6d840163f12f9b604c1e82934320520c", null ],
+    [ "FresnelHasDiffuse", "struct_ogre_1_1_pbs_property.html#a3d39a567fa8751b46ad1b6cc63a7183b", null ],
     [ "FresnelScalar", "struct_ogre_1_1_pbs_property.html#a66f1be11c2d80dd558b54526d01dada0", null ],
     [ "FresnelSeparateDiffuse", "struct_ogre_1_1_pbs_property.html#ade836dc4057a0012a4768a5ecf6a1942", null ],
     [ "FresnelWorkflow", "struct_ogre_1_1_pbs_property.html#a22e5d4bbf625dbabb50d98bd94d93e1a", null ],

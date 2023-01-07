@@ -1,5 +1,9 @@
 var NAVTREEINDEX8 =
 {
+"_ogre_vulkan_delayed_funcs_8h.html#afa2bb027d1c17f8e5600ab0a73455ebd":[8,0,4,5,1,0,14],
+"_ogre_vulkan_descriptor_pool_8h.html":[8,0,4,5,0,4],
+"_ogre_vulkan_descriptor_sets_8h.html":[8,0,4,5,0,5],
+"_ogre_vulkan_device_8h.html":[8,0,4,5,0,6],
 "_ogre_vulkan_device_8h.html#ae25fc08466018112ebbfaa616e88b38a":[8,0,4,5,0,6,5],
 "_ogre_vulkan_discard_buffer_manager_8h.html":[8,0,4,5,0,7],
 "_ogre_vulkan_discard_buffer_manager_8h.html#abd073aedc62cca37390dfdd2afb53a70":[8,0,4,5,0,7,3],
@@ -245,9 +249,5 @@ var NAVTREEINDEX8 =
 "_samples.html#postprocessing":[1,0,4],
 "_samples.html#reconpfromd":[1,0,45],
 "_samples.html#refractions":[1,0,20],
-"_samples.html#sceneformat":[1,0,21],
-"_samples.html#shadowdebug":[1,0,23],
-"_samples.html#shadowfromcode":[1,0,24],
-"_samples.html#sharedskeleton":[1,0,11],
-"_samples.html#skypost":[1,0,46]
+"_samples.html#sceneformat":[1,0,21]
 };

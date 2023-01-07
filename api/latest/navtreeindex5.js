@@ -1,5 +1,9 @@
 var NAVTREEINDEX5 =
 {
+"_ogre_patch_surface_8h.html":[8,0,2,0,181],
+"_ogre_pcc_per_pixel_grid_placement_8h.html":[8,0,0,1,1,0,0,4],
+"_ogre_pixel_conversions_8h.html":[8,0,2,1,1],
+"_ogre_pixel_count_lod_strategy_8h.html":[8,0,2,0,182],
 "_ogre_pixel_format_gpu_8h.html":[8,0,2,0,183],
 "_ogre_pixel_format_gpu_utils_8h.html":[8,0,2,0,184],
 "_ogre_planar_reflection_actor_8h.html":[8,0,0,5,0,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX5 =
 "_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beadd0d59b5d7779947d9218f971e7b224c":[8,0,2,0,223,4,1],
 "_ogre_rotation_affector_8h.html":[8,0,3,1,0,29],
 "_ogre_rotation_affector_factory_8h.html":[8,0,3,1,0,30],
-"_ogre_rotational_spline_8h.html":[8,0,2,0,224],
-"_ogre_s_d_l_g_l_support_8h.html":[8,0,4,1,0,2,4,0],
-"_ogre_s_d_l_prerequisites_8h.html":[8,0,4,1,0,2,4,1],
-"_ogre_s_d_l_window_8h.html":[8,0,4,1,0,2,4,2],
-"_ogre_s_i_m_d_helper_8h.html":[8,0,2,1,2]
+"_ogre_rotational_spline_8h.html":[8,0,2,0,224]
 };

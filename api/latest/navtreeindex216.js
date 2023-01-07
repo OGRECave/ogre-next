@@ -1,5 +1,9 @@
 var NAVTREEINDEX216 =
 {
+"group___resources.html#ga12a49d62c4e3e0f5944b19c89fc7e527":[5,2,10,201],
+"group___resources.html#ga13bade0224fc897d136714b71c9f7985":[5,2,10,175],
+"group___resources.html#ga1c322156ac79aef58c282884bf23cd6e":[5,2,10,186],
+"group___resources.html#ga1d333e3b1280899cce855c563f200938":[5,2,10,179],
 "group___resources.html#ga1e2990ce935b8c9d1c892227f416d461":[5,2,10,206],
 "group___resources.html#ga1e2e9ee3e2ee22a4e792952239d38821":[5,2,10,169],
 "group___resources.html#ga2383862bb5afe60b81e97732356f1980":[5,2,10,204],
@@ -245,9 +249,5 @@ var NAVTREEINDEX216 =
 "hlmspbsdatablockref.html#dbCommonParameters":[1,9,12,0],
 "hlmspbsdatablockref.html#dbExample":[1,9,12,2],
 "hlmspbsdatablockref.html#dbPBSParameters":[1,9,12,1],
-"hlmspbsdatablockref.html#dbParamAlphaTest":[1,9,12,0,0],
-"hlmspbsdatablockref.html#dbParamBRDF":[1,9,12,1,0],
-"hlmspbsdatablockref.html#dbParamBlendBlock":[1,9,12,0,1],
-"hlmspbsdatablockref.html#dbParamDetailDiffuse":[1,9,12,1,1],
-"hlmspbsdatablockref.html#dbParamDetailNormal":[1,9,12,1,2]
+"hlmspbsdatablockref.html#dbParamAlphaTest":[1,9,12,0,0]
 };

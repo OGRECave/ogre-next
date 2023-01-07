@@ -133,20 +133,25 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ae5bb5c2b5a05b4ce98b74822dedf3ffe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffe">Ogre::PbsBrdf::PbsBrdf</a> { <br />
-&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea85e9e6f8a2275531141e312228c8a8be">Ogre::PbsBrdf::FLAG_UNCORRELATED</a> = 0x80000000
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea8d9f24606e3993f9f3a02e2c541145a3">Ogre::PbsBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL</a> = 0x40000000
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaf4b48f93a5cdc5e7d1e38947eff899ec">Ogre::PbsBrdf::FLAG_LEGACY_MATH</a> = 0x20000000
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea78b99e1cf89e9ca9598ba62e6e112859">Ogre::PbsBrdf::FLAG_FULL_LEGACY</a> = 0x08000000
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea85e9e6f8a2275531141e312228c8a8be">Ogre::PbsBrdf::FLAG_UNCORRELATED</a> = 1u &lt;&lt; 31u
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea8d9f24606e3993f9f3a02e2c541145a3">Ogre::PbsBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL</a> = 1u &lt;&lt; 30u
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaf4b48f93a5cdc5e7d1e38947eff899ec">Ogre::PbsBrdf::FLAG_LEGACY_MATH</a> = 1u &lt;&lt; 29u
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea78b99e1cf89e9ca9598ba62e6e112859">Ogre::PbsBrdf::FLAG_FULL_LEGACY</a> = 1u &lt;&lt; 28u
 , <br />
-&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaed39e35f98d267c08f20d8ebb6822c37">Ogre::PbsBrdf::BRDF_MASK</a> = 0x00000FFF
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea698b621373f7a15aabb8045fbd80666c">Ogre::PbsBrdf::FLAG_HAS_DIFFUSE_FRESNEL</a> = 1u &lt;&lt; 27u
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaed39e35f98d267c08f20d8ebb6822c37">Ogre::PbsBrdf::BRDF_MASK</a> = 0x00000FFF
 , <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea0ba85940321ac4c91afe80c2224db5d2">Ogre::PbsBrdf::Default</a> = 0x00000000
 , <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea5cb46b18e4fd5e3821a4342dd42b0697">Ogre::PbsBrdf::CookTorrance</a> = 0x00000001
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaa7cf32a096da6ac2f93c0a8d43728ad7">Ogre::PbsBrdf::BlinnPhong</a> = 0x00000002
 , <br />
-&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea557475047c57ac3aa3067fd144a65c35">Ogre::PbsBrdf::DefaultUncorrelated</a> = Default | FLAG_UNCORRELATED
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949">Ogre::PbsBrdf::DefaultSeparateDiffuseFresnel</a> = Default | FLAG_SPERATE_DIFFUSE_FRESNEL
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea5e46af9ceab547e0713cbbc240efa4b3">Ogre::PbsBrdf::CookTorranceSeparateDiffuseFresnel</a> = CookTorrance | FLAG_SPERATE_DIFFUSE_FRESNEL
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea4ad9cc159387af81440cf905581a2ad1">Ogre::PbsBrdf::BlinnPhongSeparateDiffuseFresnel</a> = BlinnPhong | FLAG_SPERATE_DIFFUSE_FRESNEL
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaa7cf32a096da6ac2f93c0a8d43728ad7">Ogre::PbsBrdf::BlinnPhong</a> = 0x00000002
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea557475047c57ac3aa3067fd144a65c35">Ogre::PbsBrdf::DefaultUncorrelated</a> = Default | FLAG_UNCORRELATED
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67">Ogre::PbsBrdf::DefaultHasDiffuseFresnel</a> = Default | FLAG_HAS_DIFFUSE_FRESNEL
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949">Ogre::PbsBrdf::DefaultSeparateDiffuseFresnel</a>
+, <br />
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab15efade977238ced3e9740bdded9cbb">Ogre::PbsBrdf::CookTorranceHasDiffuseFresnel</a> = CookTorrance | FLAG_HAS_DIFFUSE_FRESNEL
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea5e46af9ceab547e0713cbbc240efa4b3">Ogre::PbsBrdf::CookTorranceSeparateDiffuseFresnel</a>
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea8aeb30f4cff59c3642c1b8031dfbd7ad">Ogre::PbsBrdf::BlinnPhongHasDiffuseFresnel</a> = BlinnPhong | FLAG_HAS_DIFFUSE_FRESNEL
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea4ad9cc159387af81440cf905581a2ad1">Ogre::PbsBrdf::BlinnPhongSeparateDiffuseFresnel</a>
 , <br />
 &#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea2e1b811603889c8526097ac5bda85639">Ogre::PbsBrdf::BlinnPhongLegacyMath</a> = BlinnPhong | FLAG_LEGACY_MATH
 , <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaaedeed1afec63a1109536ce0e5590453">Ogre::PbsBrdf::BlinnPhongFullLegacy</a> = BlinnPhongLegacyMath | FLAG_FULL_LEGACY

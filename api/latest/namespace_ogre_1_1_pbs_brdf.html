@@ -101,20 +101,25 @@ $(document).ready(function(){initNavTree('namespace_ogre_1_1_pbs_brdf.html','');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ae5bb5c2b5a05b4ce98b74822dedf3ffe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffe">PbsBrdf</a> { <br />
-&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea85e9e6f8a2275531141e312228c8a8be">FLAG_UNCORRELATED</a> = 0x80000000
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea8d9f24606e3993f9f3a02e2c541145a3">FLAG_SPERATE_DIFFUSE_FRESNEL</a> = 0x40000000
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaf4b48f93a5cdc5e7d1e38947eff899ec">FLAG_LEGACY_MATH</a> = 0x20000000
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea78b99e1cf89e9ca9598ba62e6e112859">FLAG_FULL_LEGACY</a> = 0x08000000
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea85e9e6f8a2275531141e312228c8a8be">FLAG_UNCORRELATED</a> = 1u &lt;&lt; 31u
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea8d9f24606e3993f9f3a02e2c541145a3">FLAG_SPERATE_DIFFUSE_FRESNEL</a> = 1u &lt;&lt; 30u
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaf4b48f93a5cdc5e7d1e38947eff899ec">FLAG_LEGACY_MATH</a> = 1u &lt;&lt; 29u
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea78b99e1cf89e9ca9598ba62e6e112859">FLAG_FULL_LEGACY</a> = 1u &lt;&lt; 28u
 , <br />
-&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaed39e35f98d267c08f20d8ebb6822c37">BRDF_MASK</a> = 0x00000FFF
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea698b621373f7a15aabb8045fbd80666c">FLAG_HAS_DIFFUSE_FRESNEL</a> = 1u &lt;&lt; 27u
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaed39e35f98d267c08f20d8ebb6822c37">BRDF_MASK</a> = 0x00000FFF
 , <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea0ba85940321ac4c91afe80c2224db5d2">Default</a> = 0x00000000
 , <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea5cb46b18e4fd5e3821a4342dd42b0697">CookTorrance</a> = 0x00000001
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaa7cf32a096da6ac2f93c0a8d43728ad7">BlinnPhong</a> = 0x00000002
 , <br />
-&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea557475047c57ac3aa3067fd144a65c35">DefaultUncorrelated</a> = Default | FLAG_UNCORRELATED
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949">DefaultSeparateDiffuseFresnel</a> = Default | FLAG_SPERATE_DIFFUSE_FRESNEL
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea5e46af9ceab547e0713cbbc240efa4b3">CookTorranceSeparateDiffuseFresnel</a> = CookTorrance | FLAG_SPERATE_DIFFUSE_FRESNEL
-, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea4ad9cc159387af81440cf905581a2ad1">BlinnPhongSeparateDiffuseFresnel</a> = BlinnPhong | FLAG_SPERATE_DIFFUSE_FRESNEL
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaa7cf32a096da6ac2f93c0a8d43728ad7">BlinnPhong</a> = 0x00000002
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea557475047c57ac3aa3067fd144a65c35">DefaultUncorrelated</a> = Default | FLAG_UNCORRELATED
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67">DefaultHasDiffuseFresnel</a> = Default | FLAG_HAS_DIFFUSE_FRESNEL
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949">DefaultSeparateDiffuseFresnel</a>
+, <br />
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab15efade977238ced3e9740bdded9cbb">CookTorranceHasDiffuseFresnel</a> = CookTorrance | FLAG_HAS_DIFFUSE_FRESNEL
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea5e46af9ceab547e0713cbbc240efa4b3">CookTorranceSeparateDiffuseFresnel</a>
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea8aeb30f4cff59c3642c1b8031dfbd7ad">BlinnPhongHasDiffuseFresnel</a> = BlinnPhong | FLAG_HAS_DIFFUSE_FRESNEL
+, <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea4ad9cc159387af81440cf905581a2ad1">BlinnPhongSeparateDiffuseFresnel</a>
 , <br />
 &#160;&#160;<a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffea2e1b811603889c8526097ac5bda85639">BlinnPhongLegacyMath</a> = BlinnPhong | FLAG_LEGACY_MATH
 , <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeaaedeed1afec63a1109536ce0e5590453">BlinnPhongFullLegacy</a> = BlinnPhongLegacyMath | FLAG_FULL_LEGACY
@@ -139,6 +144,7 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea8d9f24606e3993f9f3a02e2c541145a3" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea8d9f24606e3993f9f3a02e2c541145a3"></a>FLAG_SPERATE_DIFFUSE_FRESNEL&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffeaf4b48f93a5cdc5e7d1e38947eff899ec" name="ae5bb5c2b5a05b4ce98b74822dedf3ffeaf4b48f93a5cdc5e7d1e38947eff899ec"></a>FLAG_LEGACY_MATH&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea78b99e1cf89e9ca9598ba62e6e112859" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea78b99e1cf89e9ca9598ba62e6e112859"></a>FLAG_FULL_LEGACY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea698b621373f7a15aabb8045fbd80666c" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea698b621373f7a15aabb8045fbd80666c"></a>FLAG_HAS_DIFFUSE_FRESNEL&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffeaed39e35f98d267c08f20d8ebb6822c37" name="ae5bb5c2b5a05b4ce98b74822dedf3ffeaed39e35f98d267c08f20d8ebb6822c37"></a>BRDF_MASK&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea0ba85940321ac4c91afe80c2224db5d2" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea0ba85940321ac4c91afe80c2224db5d2"></a>Default&#160;</td><td class="fielddoc"><p >Most physically accurate BRDF we have. </p>
 <p >Good for representing the majority of materials. Uses:</p><ul>
@@ -161,16 +167,26 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea557475047c57ac3aa3067fd144a65c35" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea557475047c57ac3aa3067fd144a65c35"></a>DefaultUncorrelated&#160;</td><td class="fielddoc"><p >Same as Default, but the geometry term is not height-correlated which most notably causes edges to be dimmer and is less correct. </p>
 <p >Unity (Marmoset too?) use an uncorrelated term, so you may want to use this BRDF to get the closest look for a nice exchangeable pipeline workflow. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949" name="ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949"></a>DefaultSeparateDiffuseFresnel&#160;</td><td class="fielddoc"><p >Same as Default but the fresnel of the diffuse is calculated differently. </p>
+<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67" name="ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67"></a>DefaultHasDiffuseFresnel&#160;</td><td class="fielddoc"><p >This used to be 'Default' in OgreNext 2.4 and earlier. </p>
+<p >The diffuse component is multiplied against the inverse of the specular's fresnel to maintain energy conservation.</p>
+<p >This has the nice side effect that to achieve a perfect mirror effect, you just need to raise the fresnel term to 1; which is very intuitive to artists (specially if using coloured fresnel)</p>
+<p >However after research and feedback from the community, most DCC tools out there (e.g. Marmoset) don't do this; and users expect consistency.</p>
+<p >Therefore the new Default BRDF in 3.0 does not include diffuse fresnel </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949" name="ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949"></a>DefaultSeparateDiffuseFresnel&#160;</td><td class="fielddoc"><p >Same as DefaultHasDiffuseFresnel but the fresnel of the diffuse is calculated differently. </p>
 <p >Normally the diffuse component would be multiplied against the inverse of the specular's fresnel to maintain energy conservation. This has the nice side effect that to achieve a perfect mirror effect, you just need to raise the fresnel term to 1; which is very intuitive to artists (specially if using coloured fresnel)</p>
 <p >When using this BRDF, the diffuse fresnel will be calculated differently, causing the diffuse component to still affect the colour even when the fresnel = 1 (although subtly). To achieve a perfect mirror you will have to set the fresnel to 1 <em>and</em> the diffuse colour to black; which can be unintuitive for artists.</p>
 <p >This BRDF is very useful for representing surfaces with complex refractions and reflections like glass, transparent plastics, fur, and surface with refractions and multiple rescattering that cannot be represented well with the default BRDF. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea5e46af9ceab547e0713cbbc240efa4b3" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea5e46af9ceab547e0713cbbc240efa4b3"></a>CookTorranceSeparateDiffuseFresnel&#160;</td><td class="fielddoc"><p >See <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeabb24b7391ded61ec714d72fde4822949" title="Same as Default but the fresnel of the diffuse is calculated differently.">DefaultSeparateDiffuseFresnel</a>. </p>
-<p >This is the same but the Cook Torrance model is used instead.</p>
-<p >Ideal for shiny objects like glass toy marbles, some types of rubber. silk, synthetic fabric. </p>
+<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffeab15efade977238ced3e9740bdded9cbb" name="ae5bb5c2b5a05b4ce98b74822dedf3ffeab15efade977238ced3e9740bdded9cbb"></a>CookTorranceHasDiffuseFresnel&#160;</td><td class="fielddoc"><p >CookTorrance, but w/ diffuse fresnel. See DefaultHasDiffuseFresnel. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea4ad9cc159387af81440cf905581a2ad1" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea4ad9cc159387af81440cf905581a2ad1"></a>BlinnPhongSeparateDiffuseFresnel&#160;</td><td class="fielddoc"><p >Like DefaultSeparateDiffuseFresnel, but uses BlinnPhong as base. </p>
+<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea5e46af9ceab547e0713cbbc240efa4b3" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea5e46af9ceab547e0713cbbc240efa4b3"></a>CookTorranceSeparateDiffuseFresnel&#160;</td><td class="fielddoc"><p >CookTorrance but w/ separate diffuse fresnel. </p>
+<p >See DefaultSeparateDiffuseFresnel </p><pre class="fragment">        Ideal for shiny objects like glass toy marbles, some types of rubber.
+        silk, synthetic fabric. 
+</pre> </td></tr>
+<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea8aeb30f4cff59c3642c1b8031dfbd7ad" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea8aeb30f4cff59c3642c1b8031dfbd7ad"></a>BlinnPhongHasDiffuseFresnel&#160;</td><td class="fielddoc"><p >BlinnPhong but w/ diffuse fresnel. See DefaultHasDiffuseFresnel. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea4ad9cc159387af81440cf905581a2ad1" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea4ad9cc159387af81440cf905581a2ad1"></a>BlinnPhongSeparateDiffuseFresnel&#160;</td><td class="fielddoc"><p >BlinnPhong but w/ diffuse fresnel. See DefaultSeparateDiffuseFresnel. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ae5bb5c2b5a05b4ce98b74822dedf3ffea2e1b811603889c8526097ac5bda85639" name="ae5bb5c2b5a05b4ce98b74822dedf3ffea2e1b811603889c8526097ac5bda85639"></a>BlinnPhongLegacyMath&#160;</td><td class="fielddoc"><p >Implements traditional / the original non-PBR blinn phong: </p>
 <ul>
