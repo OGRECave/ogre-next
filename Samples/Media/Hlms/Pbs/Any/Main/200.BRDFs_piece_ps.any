@@ -287,7 +287,16 @@ midf3 BRDF_IR( midf3 lightDir, midf3 lightDiffuse, PixelData pixelData )
 		float attenuation = 1.0 - Fc;
 		Rd *= attenuation;
 		Rs *= attenuation;
-		Rs += pixelData.clearCoatEnvColourS * Fc;
+
+		@property( ltc_texture_available )
+			midf3 clearCoatEnvBRDF = OGRE_SampleArray2DF16( brdfLUT, ltcSampler,
+															float2( clearCoatNoV,
+																	1.0 - pixelData.clearCoatPerceptualRoughness ), 2 ).xyz;
+		@else
+			midf3 clearCoatEnvBRDF = midf3_c( 1.0f, 0.0f, 1.0f );
+		@end
+
+		Rs += pixelData.clearCoatEnvColourS * pixelData.specular.xyz * ( _h ( 0.04 ) * clearCoatEnvBRDF.x + clearCoatEnvBRDF.y ) * pixelData.clearCoat;
 	@end
 
 	finalColour += Rd + Rs;

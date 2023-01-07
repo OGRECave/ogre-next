@@ -2,7 +2,7 @@
 // iblRoughnessOneLevel is 4. We found empirically that this mapping works very well for
 // a 256 cubemap with 5 levels used. But also scales well for other iblRoughnessOneLevel values.
 @piece( envSpecularRoughness ) pixelData.perceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) * ( _h( 2.0 ) - pixelData.perceptualRoughness ) @end
-@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) @end
+@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) * ( _h( 2.0 ) - pixelData.clearCoatPerceptualRoughness ) @end
 
 @piece( DefaultHeaderPS )
 	// START UNIFORM DECLARATION
