@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"_ogre_patch_mesh_8h.html":[8,0,2,0,180],
 "_ogre_patch_surface_8h.html":[8,0,2,0,181],
 "_ogre_pcc_per_pixel_grid_placement_8h.html":[8,0,0,1,1,0,0,4],
 "_ogre_pixel_conversions_8h.html":[8,0,2,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beac9488e21d6dd2a1a3ea05f0ca76a3cbc":[8,0,2,0,223,4,0],
 "_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beadd0d59b5d7779947d9218f971e7b224c":[8,0,2,0,223,4,1],
 "_ogre_rotation_affector_8h.html":[8,0,3,1,0,29],
-"_ogre_rotation_affector_factory_8h.html":[8,0,3,1,0,30],
-"_ogre_rotational_spline_8h.html":[8,0,2,0,224]
+"_ogre_rotation_affector_factory_8h.html":[8,0,3,1,0,30]
 };
