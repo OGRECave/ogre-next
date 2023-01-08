@@ -24,8 +24,8 @@ namespace Demo
         bool mAnimateObjects;
 
         size_t mNumSpheres;
-        Ogre::uint8 mTransparencyMode;
         float mTransparencyValue;
+        Ogre::uint8 mTransparencyMode;
 
         uint8_t mBrdfIdx;
         BrdfDiffuseFresnelMode mBrdfDiffuseFresnelMode;
