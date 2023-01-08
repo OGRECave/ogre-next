@@ -23,3 +23,4 @@ painful and traumatic as possible.
 - @subpage RootLayouts
 - @subpage ResolvingMergeConflicts30
 - @subpage Ogre30Changes
+- @subpage PBSChangesIn30
