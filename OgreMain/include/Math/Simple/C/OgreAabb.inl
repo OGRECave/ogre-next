@@ -30,7 +30,9 @@ THE SOFTWARE.
 
 #if defined( __clang__ )
 #    pragma clang diagnostic push
-#    pragma clang diagnostic ignored "-Wbitwise-instead-of-logical"
+#    if defined( __has_warning ) && __has_warning( "-Wbitwise-instead-of-logical" )
+#        pragma clang diagnostic ignored "-Wbitwise-instead-of-logical"
+#    endif
 #endif
 
 namespace Ogre
