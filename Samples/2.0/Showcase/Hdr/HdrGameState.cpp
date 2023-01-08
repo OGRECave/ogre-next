@@ -164,6 +164,8 @@ namespace Demo
                     datablock->setFresnel(
                         Ogre::Vector3( float( z ) / std::max( 1.0f, (float)( numZ - 1 ) ) ), false );
 
+                    datablock->setBrdf( Ogre::PbsBrdf::DefaultHasDiffuseFresnel );
+
                     Ogre::Item *item = sceneManager->createItem(
                         "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                         Ogre::SCENE_DYNAMIC );
