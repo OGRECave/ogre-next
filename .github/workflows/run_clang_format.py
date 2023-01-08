@@ -65,7 +65,6 @@ g_thresholds = {
     '../../OgreMain/include/OgrePlatform.h': 18,
     '../../OgreMain/include/OgreHlmsDatablock.h': 3,
     '../../OgreMain/include/Animation/OgreBone.inl': 63,
-    '../../OgreMain/include/Math/Simple/C/OgreAabb.inl': 276,
     '../../OgreMain/include/Math/Array/OgreNodeMemoryManager.h': 3,
     '../../OgreMain/include/Math/Array/C/OgreArrayVector3.inl': 849,
     '../../OgreMain/include/Math/Array/C/OgreArraySphere.inl': 24,
