@@ -488,6 +488,8 @@ namespace Ogre
         void initDrawIdVertexBuffer();
         void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer, uint32 binding = 15 );
 
+        VulkanRenderSystem *getVkRenderSystem() { return mVkRenderSystem; }
+
         VkDeviceMemory allocateTexture( const VkMemoryRequirements &memReq, size_t &outVboIdx,
                                         size_t &outBufferOffset );
         void deallocateTexture( size_t vboIdx, size_t bufferOffset, size_t sizeBytes );
