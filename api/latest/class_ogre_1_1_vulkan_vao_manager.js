@@ -74,6 +74,7 @@ var class_ogre_1_1_vulkan_vao_manager =
     [ "getTimer", "class_ogre_1_1_vulkan_vao_manager.html#a9a19823e106f74e9b447d954a0060543", null ],
     [ "getUavBufferAlignment", "class_ogre_1_1_vulkan_vao_manager.html#a0aa4278b6061752264f2887aa3dff7ed", null ],
     [ "getUavBufferMaxSize", "class_ogre_1_1_vulkan_vao_manager.html#a25b3d648f62caca1093fbad2b3b740f0", null ],
+    [ "getVkRenderSystem", "class_ogre_1_1_vulkan_vao_manager.html#a122d982e6f5491252e436af1a24fa4b5", null ],
     [ "initDrawIdVertexBuffer", "class_ogre_1_1_vulkan_vao_manager.html#a7de6fa004417e3ea56cfa925cbb12287", null ],
     [ "isFrameFinished", "class_ogre_1_1_vulkan_vao_manager.html#af84adcd5063ffc4c16f9735b26e07d3b", null ],
     [ "mergeContiguousBlocks", "class_ogre_1_1_vulkan_vao_manager.html#a26844eefd56d60e40f1b13c8c94b2c9f", null ],

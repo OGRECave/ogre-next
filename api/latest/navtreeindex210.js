@@ -1,5 +1,7 @@
 var NAVTREEINDEX210 =
 {
+"globals_defs_v.html":[8,1,5,16],
+"globals_defs_w.html":[8,1,5,17],
 "globals_e.html":[8,1,0,4],
 "globals_enum.html":[8,1,3],
 "globals_eval.html":[8,1,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX210 =
 "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a83859ff3d488ba5f7b9d38a034930392":[5,2,2,182,6],
 "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a8fdc32a1dcb791c1e60f1a2b97f634ff":[5,2,2,182,0],
 "group___general.html#gga0ef99399e9e670e7bb69dc373968a666a94d152f037b84bc88e8b8955b096b309":[5,2,2,182,22],
-"group___general.html#gga0ef99399e9e670e7bb69dc373968a666a9a7a8301d4f956fa3a15de0e27880198":[5,2,2,182,20],
-"group___general.html#gga0ef99399e9e670e7bb69dc373968a666a9f73e4c2475f1113ff17935c30cce4b6":[5,2,2,182,14],
-"group___general.html#gga0ef99399e9e670e7bb69dc373968a666aa1a5ac01c92b3fb3701d5fce1521b84d":[5,2,2,182,37]
+"group___general.html#gga0ef99399e9e670e7bb69dc373968a666a9a7a8301d4f956fa3a15de0e27880198":[5,2,2,182,20]
 };
