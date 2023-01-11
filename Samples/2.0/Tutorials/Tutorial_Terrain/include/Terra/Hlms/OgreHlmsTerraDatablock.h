@@ -207,6 +207,11 @@ namespace Ogre
         /// @see TerraBrdf::TerraBrdf
         uint32 mBrdf;
 
+        bool mDetailTriplanarDiffuseEnabled;
+        bool mDetailTriplanarNormalEnabled;
+        bool mDetailTriplanarRoughnessEnabled;
+        bool mDetailTriplanarMetalnessEnabled;
+
         void cloneImpl( HlmsDatablock *datablock ) const override;
 
         void scheduleConstBufferUpdate();
@@ -261,6 +266,26 @@ namespace Ogre
         /// HlmsDatablock::flushRenderables
         void   setBrdf( TerraBrdf::TerraBrdf brdf );
         uint32 getBrdf() const;
+
+        /// Enables/disables triplanar mapping on detail diffuse maps. Calling this function may trigger
+        /// an HlmsDatablock::flushRenderables
+        void setDetailTriplanarDiffuseEnabled( bool enabled );
+        bool getDetailTriplanarDiffuseEnabled() const { return mDetailTriplanarDiffuseEnabled; };
+
+        /// Enables/disables triplanar mapping on detail normal maps. Calling this function may trigger
+        /// an HlmsDatablock::flushRenderables
+        void setDetailTriplanarNormalEnabled( bool enabled );
+        bool getDetailTriplanarNormalEnabled() const { return mDetailTriplanarNormalEnabled; };
+
+        /// Enables/disables triplanar mapping on detail roughness maps. Calling this function may
+        /// trigger an HlmsDatablock::flushRenderables
+        void setDetailTriplanarRoughnessEnabled( bool enabled );
+        bool getDetailTriplanarRoughnessEnabled() const { return mDetailTriplanarRoughnessEnabled; };
+
+        /// Enables/disables triplanar mapping on detail metalness maps. Calling this function may
+        /// trigger an HlmsDatablock::flushRenderables
+        void setDetailTriplanarMetalnessEnabled( bool enabled );
+        bool getDetailTriplanarMetalnessEnabled() const { return mDetailTriplanarMetalnessEnabled; };
 
         /** Suggests the TextureMapType (aka texture category) for each type of texture
             (i.e. normals should load from TEXTURE_TYPE_NORMALS).
