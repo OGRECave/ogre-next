@@ -86,6 +86,11 @@ struct CellData
 @piece( Terra_VStoPS_block )
 	INTERPOLANT( float3 pos, @counter(texcoord) );
 	INTERPOLANT( float2 uv0, @counter(texcoord) );
+
+	@property( detail_triplanar )
+		INTERPOLANT( float3 worldPos, @counter(texcoord) );
+	@end
+
 	@insertpiece( VStoPS_block )
 @end
 
