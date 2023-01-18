@@ -1,5 +1,6 @@
 var NAVTREEINDEX217 =
 {
+"hlmsblendblockref.html#btTransparentAlpha":[1,9,11,2,0],
 "hlmsblendblockref.html#btTransparentColour":[1,9,11,2,1],
 "hlmsmacroblockref.html":[1,9,15],
 "hlmsmacroblockref.html#mbExample":[1,9,15,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX217 =
 "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9ab90d85a967d1647087d9e525778e9bc1":[6,0,0,1242,2],
 "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9adb62fa4394e5ed5eb8d45742e6b28719":[6,0,0,1242,0],
 "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9aecb23d7992b7bdaf3c01af0759cf527c":[6,0,0,1242,5],
-"namespace_ogre.html#a57ef769e80226674c3971ce58b58c91d":[6,0,0,1144],
-"namespace_ogre.html#a5c4c0c56ea9f824c49e331f6fad33ddb":[6,0,0,1148]
+"namespace_ogre.html#a57ef769e80226674c3971ce58b58c91d":[6,0,0,1144]
 };

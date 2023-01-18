@@ -1,5 +1,6 @@
 var NAVTREEINDEX233 =
 {
+"struct_ogre_1_1_vertex_array_object.html#a6f4485dc112bddf56cbca90d10120ae0":[7,0,0,916,3],
 "struct_ogre_1_1_vertex_array_object.html#a6f4485dc112bddf56cbca90d10120ae0":[6,0,0,943,3],
 "struct_ogre_1_1_vertex_array_object.html#a78b3f477efc20306edc5c2c1112df5bc":[6,0,0,943,15],
 "struct_ogre_1_1_vertex_array_object.html#a78b3f477efc20306edc5c2c1112df5bc":[7,0,0,916,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX233 =
 "struct_ogre_1_1_voxelizer_bucket.html#a23c380ca1220b203228d7ceeb63c93ff":[7,0,0,927,4],
 "struct_ogre_1_1_voxelizer_bucket.html#a23c380ca1220b203228d7ceeb63c93ff":[6,0,0,954,4],
 "struct_ogre_1_1_voxelizer_bucket.html#a3c1cad6128a10f78309502c1cc610790":[7,0,0,927,0],
-"struct_ogre_1_1_voxelizer_bucket.html#a3c1cad6128a10f78309502c1cc610790":[6,0,0,954,0],
-"struct_ogre_1_1_voxelizer_bucket.html#a8210ea049ee9f654d40f8080d64d8142":[7,0,0,927,3]
+"struct_ogre_1_1_voxelizer_bucket.html#a3c1cad6128a10f78309502c1cc610790":[6,0,0,954,0]
 };

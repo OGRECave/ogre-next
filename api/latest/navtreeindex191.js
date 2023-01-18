@@ -1,5 +1,6 @@
 var NAVTREEINDEX191 =
 {
+"class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a9703b048074c1a4a45bd934ebb4d3061":[5,0,1,62,0,17],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a9703b048074c1a4a45bd934ebb4d3061":[5,2,11,62,0,17],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a9f8bcf98e363839c42bd19708a062b3c":[5,2,11,62,0,23],
 "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a9f8bcf98e363839c42bd19708a062b3c":[5,0,1,62,0,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX191 =
 "class_ogre_1_1v1_1_1_mesh_manager.html#a0114cc2df7b2fd296f10d785093b6de6":[5,2,10,134,56],
 "class_ogre_1_1v1_1_1_mesh_manager.html#a0309a16c92035755059fcec5487e6ed0":[5,2,10,134,15],
 "class_ogre_1_1v1_1_1_mesh_manager.html#a0ae07ad35a65f5b09ac358888cc4fb5a":[5,2,10,134,11],
-"class_ogre_1_1v1_1_1_mesh_manager.html#a0e655f4afb2eb68bbcf280f2879e20b6":[5,2,10,134,33],
-"class_ogre_1_1v1_1_1_mesh_manager.html#a117a3887bbf9e83e0585777beb0501dc":[5,2,10,134,4]
+"class_ogre_1_1v1_1_1_mesh_manager.html#a0e655f4afb2eb68bbcf280f2879e20b6":[5,2,10,134,33]
 };

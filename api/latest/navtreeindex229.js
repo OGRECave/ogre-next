@@ -1,5 +1,6 @@
 var NAVTREEINDEX229 =
 {
+"struct_ogre_1_1_pbs_property.html#afd78d0a6ae086dcc90f26016c966a1e3":[5,0,0,16,120],
 "struct_ogre_1_1_planar_reflections_1_1_tracked_renderable.html":[5,0,0,18,0],
 "struct_ogre_1_1_planar_reflections_1_1_tracked_renderable.html#a46c268b34e9b70c53bd7d8d9f0753ebc":[5,0,0,18,0,1],
 "struct_ogre_1_1_planar_reflections_1_1_tracked_renderable.html#a557d8b10d227e322a55e19c534d0dbf9":[5,0,0,18,0,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX229 =
 "struct_ogre_1_1_scene_query_1_1_world_fragment.html#abfe0314db3e89040486ceb1ba36a8682":[5,0,1,51,0,4],
 "struct_ogre_1_1_scene_query_1_1_world_fragment.html#af83de2ae922b7f41d25b930705836378":[5,2,11,51,0,1],
 "struct_ogre_1_1_scene_query_1_1_world_fragment.html#af83de2ae922b7f41d25b930705836378":[5,0,1,51,0,1],
-"struct_ogre_1_1_scene_query_result.html":[5,0,1,53],
-"struct_ogre_1_1_scene_query_result.html":[5,2,11,53]
+"struct_ogre_1_1_scene_query_result.html":[5,0,1,53]
 };
