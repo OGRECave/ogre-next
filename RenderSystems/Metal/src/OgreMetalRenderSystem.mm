@@ -1690,12 +1690,20 @@ namespace Ogre
             {
                 psd.colorAttachments[i].blendingEnabled = YES;
             }
-            psd.colorAttachments[i].rgbBlendOperation           = MetalMappings::get( blendblock->mBlendOperation );
-            psd.colorAttachments[i].alphaBlendOperation         = MetalMappings::get( blendblock->mBlendOperationAlpha );
-            psd.colorAttachments[i].sourceRGBBlendFactor        = MetalMappings::get( blendblock->mSourceBlendFactor );
-            psd.colorAttachments[i].destinationRGBBlendFactor   = MetalMappings::get( blendblock->mDestBlendFactor );
-            psd.colorAttachments[i].sourceAlphaBlendFactor      = MetalMappings::get( blendblock->mSourceBlendFactorAlpha );
-            psd.colorAttachments[i].destinationAlphaBlendFactor = MetalMappings::get( blendblock->mDestBlendFactorAlpha );
+            psd.colorAttachments[i].rgbBlendOperation =
+                MetalMappings::get( blendblock->mBlendOperation );
+            psd.colorAttachments[i].alphaBlendOperation =
+                MetalMappings::get( blendblock->mBlendOperationAlpha );
+            psd.colorAttachments[i].sourceRGBBlendFactor =
+                MetalMappings::get( blendblock->mSourceBlendFactor );
+            psd.colorAttachments[i].destinationRGBBlendFactor =
+                MetalMappings::get( blendblock->mDestBlendFactor );
+            psd.colorAttachments[i].sourceAlphaBlendFactor =
+                MetalMappings::get( blendblock->mSeparateBlend ? blendblock->mSourceBlendFactorAlpha
+                                                               : blendblock->mSourceBlendFactor );
+            psd.colorAttachments[i].destinationAlphaBlendFactor =
+                MetalMappings::get( blendblock->mSeparateBlend ? blendblock->mDestBlendFactorAlpha
+                                                               : blendblock->mDestBlendFactor );
 
             psd.colorAttachments[i].writeMask = MetalMappings::get( blendblock->mBlendChannelMask );
         }
