@@ -1667,9 +1667,11 @@ namespace Ogre
             psd.colorAttachments[i].destinationRGBBlendFactor =
                 MetalMappings::get( blendblock->mDestBlendFactor );
             psd.colorAttachments[i].sourceAlphaBlendFactor =
-                MetalMappings::get( blendblock->mSourceBlendFactorAlpha );
+                MetalMappings::get( blendblock->mSeparateBlend ? blendblock->mSourceBlendFactorAlpha
+                                                               : blendblock->mSourceBlendFactor );
             psd.colorAttachments[i].destinationAlphaBlendFactor =
-                MetalMappings::get( blendblock->mDestBlendFactorAlpha );
+                MetalMappings::get( blendblock->mSeparateBlend ? blendblock->mDestBlendFactorAlpha
+                                                               : blendblock->mDestBlendFactor );
 
             psd.colorAttachments[i].writeMask = MetalMappings::get( blendblock->mBlendChannelMask );
         }
