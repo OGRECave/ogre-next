@@ -404,6 +404,8 @@ namespace Ogre
         if( !bDeviceStall )
             waitForTailFrameToFinish();
 
+        const VkMemoryType *memTypes = mDevice->mDeviceMemoryProperties.memoryTypes;
+
         set<VboIndex>::type::iterator itor = mEmptyVboPools.begin();
         set<VboIndex>::type::iterator endt = mEmptyVboPools.end();
 
@@ -415,6 +417,10 @@ namespace Ogre
 
             if( ( mFrameCount - vbo.emptyFrame ) >= mDynamicBufferMultiplier || bDeviceStall )
             {
+                OGRE_ASSERT_LOW( mUsedHeapMemory[memTypes[vbo.vkMemoryTypeIdx].heapIndex] >=
+                                 vbo.sizeBytes );
+                mUsedHeapMemory[memTypes[vbo.vkMemoryTypeIdx].heapIndex] -= vbo.sizeBytes;
+
                 vkDestroyBuffer( mDevice->mDevice, vbo.vkBuffer, 0 );
                 vkFreeMemory( mDevice->mDevice, vbo.vboName, 0 );
 
