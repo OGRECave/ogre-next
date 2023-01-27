@@ -117,10 +117,10 @@ $(document).ready(function(){initNavTree('_p_b_s_changes_in30.html',''); initRes
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_PbsChanges30"></a></p>
 <p >Raffaele Bratta, aka TaaTT4, made <a href="https://forums.ogre3d.org/viewtopic.php?p=553900#p553900">a lot of PBR</a> research to ensure OgreNext's PBR workflow matches that of standard DCC (Digital Content Creation) tools such as Marmoset.</p>
-<p >But this also means that materials written against OgreNext 2.4 or older will look different in 3.0</p>
+<p >But this also means that materials written against OgreNext 2.3 or older will look different in 3.0</p>
 <h1><a class="anchor" id="autotoc_md59"></a>
 Short version</h1>
-<p ><b>OgreNext 2.4 looked like this:</b></p>
+<p ><b>OgreNext 2.3 looked like this:</b></p>
 <div class="image">
 <img src="ShortVersionOgreNext24.png" alt=""/>
 </div>
@@ -128,7 +128,7 @@ Short version</h1>
 <div class="image">
 <img src="ShortVersionOgreNext30Default.png" alt=""/>
 </div>
-    <p >In order to get very close to the 2.4 look, you can use <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a2d0a4e307644c4b5c28bf4e6fedaac8b" title="Changes the BRDF in use.">Ogre::HlmsPbsDatablock::setBrdf</a> with <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67" title="This used to be &#39;Default&#39; in OgreNext 2.4 and earlier.">Ogre::PbsBrdf::DefaultHasDiffuseFresnel</a> (and use <a class="el" href="class_ogre_1_1_hlms_pbs.html#a67bc1d23e1966e7e7363abbf019e06a2" title="OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match what most DCC tool...">Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel</a> to set defaults)</p>
+    <p >In order to get very close to the 2.3 look, you can use <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a2d0a4e307644c4b5c28bf4e6fedaac8b" title="Changes the BRDF in use.">Ogre::HlmsPbsDatablock::setBrdf</a> with <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67" title="This used to be &#39;Default&#39; in OgreNext 2.4 and earlier.">Ogre::PbsBrdf::DefaultHasDiffuseFresnel</a> (and use <a class="el" href="class_ogre_1_1_hlms_pbs.html#a67bc1d23e1966e7e7363abbf019e06a2" title="OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match what most DCC tool...">Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel</a> to set defaults)</p>
 <p ><b>With DefaultHasDiffuseFresnel OgreNext 3.0 will look like this:</b></p>
 <div class="image">
 <img src="ShortVersionOgreNext30DefaultDiffuseFresnel.png" alt=""/>
@@ -139,7 +139,7 @@ Short version</h1>
 <div class="line"><span class="comment">// Or per datablock</span></div>
 <div class="line">pbsDatablock-&gt;setBrdf( <a class="code hl_enumvalue" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67">Ogre::PbsBrdf::DefaultHasDiffuseFresnel</a> );</div>
 <div class="ttc" id="anamespace_ogre_1_1_pbs_brdf_html_ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67"><div class="ttname"><a href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67">Ogre::PbsBrdf::DefaultHasDiffuseFresnel</a></div><div class="ttdeci">@ DefaultHasDiffuseFresnel</div><div class="ttdoc">This used to be 'Default' in OgreNext 2.4 and earlier.</div><div class="ttdef"><b>Definition:</b> OgreHlmsPbsDatablock.h:113</div></div>
-</div><!-- fragment --><p >Which is a very close look to the version in 2.4</p>
+</div><!-- fragment --><p >Which is a very close look to the version in 2.3</p>
 <p >The reason for these changes is to align with external tools that are standard in the industry.</p>
 <h1><a class="anchor" id="autotoc_md60"></a>
 Long version</h1>
@@ -155,7 +155,7 @@ Fresnel Diffuse is no longer considered</h3>
 <p >Therefore the BRDF equivalences are:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Old OgreNext 2.4   </th><th class="markdownTableHeadNone">New OgreNext 3.0    </th></tr>
+<th class="markdownTableHeadNone">Old OgreNext 2.3   </th><th class="markdownTableHeadNone">New OgreNext 3.0    </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Default   </td><td class="markdownTableBodyNone">DefaultHasDiffuseFresnel    </td></tr>
 <tr class="markdownTableRowEven">
@@ -180,7 +180,7 @@ Default-enable to diffuse fresnel</h4>
 Geometric Term change</h3>
 <p >The <code>Default</code> BRDF <a href="https://github.com/OGRECave/ogre-next/commit/ecf174d8aff2236fbb261692b2efeb6b56383305">had a change in the parametrization</a> of the term <code>k</code> in the computation of the geometric shadowing (specular <code>G</code>).</p>
 <ul>
-<li>OgreNext 2.4 used <code>k = roughness⁴</code></li>
+<li>OgreNext 2.3 used <code>k = roughness⁴</code></li>
 <li>Marmoset uses <code>k = roughness² / 2</code></li>
 <li>For OgreNext 3.0, the "standard" (or at least, the most used value) seems to be <code>k = (roughness + 1)² / 8</code> (see <a href="https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf">s2013_pbs_epic_notes_v2.pdf</a> page 3).</li>
 </ul>
