@@ -4,11 +4,11 @@
 
 Raffaele Bratta, aka TaaTT4, made [a lot of PBR](https://forums.ogre3d.org/viewtopic.php?p=553900#p553900) research to ensure OgreNext's PBR workflow matches that of standard DCC (Digital Content Creation) tools such as Marmoset.
 
-But this also means that materials written against OgreNext 2.4 or older will look different in 3.0
+But this also means that materials written against OgreNext 2.3 or older will look different in 3.0
 
 # Short version
 
-**OgreNext 2.4 looked like this:**
+**OgreNext 2.3 looked like this:**
 
 ![](PbsChanges30/ShortVersionOgreNext24.png)
 
@@ -16,7 +16,7 @@ But this also means that materials written against OgreNext 2.4 or older will lo
 
 ![](PbsChanges30/ShortVersionOgreNext30Default.png)
 
-In order to get very close to the 2.4 look, you can use Ogre::HlmsPbsDatablock::setBrdf with Ogre::PbsBrdf::DefaultHasDiffuseFresnel (and use Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel to set defaults)
+In order to get very close to the 2.3 look, you can use Ogre::HlmsPbsDatablock::setBrdf with Ogre::PbsBrdf::DefaultHasDiffuseFresnel (and use Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel to set defaults)
 
 **With DefaultHasDiffuseFresnel OgreNext 3.0 will look like this:**
 
@@ -30,7 +30,7 @@ hlmsPbs->setDefaultBrdfWithDiffuseFresnel( true );
 pbsDatablock->setBrdf( Ogre::PbsBrdf::DefaultHasDiffuseFresnel );
 ```
 
-Which is a very close look to the version in 2.4
+Which is a very close look to the version in 2.3
 
 The reason for these changes is to align with external tools that are standard in the industry.
 
@@ -54,7 +54,7 @@ However other engines don't do this, so the default no longer uses it.
 
 Therefore the BRDF equivalences are:
 
-| Old OgreNext 2.4 | New OgreNext 3.0              |
+| Old OgreNext 2.3 | New OgreNext 3.0              |
 |------------------|-------------------------------|
 | Default          | DefaultHasDiffuseFresnel      |
 | CookTorrance     | CookTorranceHasDiffuseFresnel |
@@ -83,7 +83,7 @@ This should ease porting forward.
 
 The `Default` BRDF [had a change in the parametrization](https://github.com/OGRECave/ogre-next/commit/ecf174d8aff2236fbb261692b2efeb6b56383305) of the term `k` in the computation of the geometric shadowing (specular `G`).
 
-- OgreNext 2.4 used `k = roughness⁴`
+- OgreNext 2.3 used `k = roughness⁴`
 - Marmoset uses `k = roughness² / 2`
 - For OgreNext 3.0, the "standard" (or at least, the most used value) seems to be `k = (roughness + 1)² / 8` (see [s2013_pbs_epic_notes_v2.pdf](https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf) page 3).
 
