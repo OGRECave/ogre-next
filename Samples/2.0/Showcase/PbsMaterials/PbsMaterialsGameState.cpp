@@ -37,9 +37,9 @@ namespace Demo
         { Ogre::PbsBrdf::Default, "Default" },
         { Ogre::PbsBrdf::CookTorrance, "CookTorrance" },
         { Ogre::PbsBrdf::BlinnPhong, "BlinnPhong" },
-        { Ogre::PbsBrdf::DefaultUncorrelated, "DefaultUncorrelated" },
         { Ogre::PbsBrdf::BlinnPhongLegacyMath, "BlinnPhongLegacyMath" },
         { Ogre::PbsBrdf::BlinnPhongFullLegacy, "BlinnPhongFullLegacy" },
+        { Ogre::PbsBrdf::DefaultUncorrelated, "DefaultUncorrelated" },
     };
 
     PbsMaterialsGameState::PbsMaterialsGameState( const Ogre::String &helpDescription ) :
@@ -169,8 +169,6 @@ namespace Demo
                     datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
-                    datablock->setBrdf( brdf );
-
                     datablock->setRoughness(
                         std::max( 0.02f, float( x ) / std::max( 1.0f, (float)( numX - 1 ) ) ) );
                     datablock->setFresnel(
@@ -236,6 +234,8 @@ namespace Demo
         mLightNodes[2] = lightNode;
 
         mCameraController = new CameraController( mGraphicsSystem, false );
+
+        setBrdfToMaterials();
 
         TutorialGameState::createScene01();
     }
@@ -360,11 +360,17 @@ namespace Demo
                 static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( datablockName ) );
             datablock->setBrdf( brdf );
         }
+
+        Ogre::HlmsPbsDatablock *datablock = 0;
+        datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( "Marble" ) );
+        datablock->setBrdf( brdf );
+        datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( "Rocks" ) );
+        datablock->setBrdf( brdf );
     }
     //-----------------------------------------------------------------------------------
     void PbsMaterialsGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS | KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;

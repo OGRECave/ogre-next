@@ -115,7 +115,7 @@ namespace Ogre
 	OGRE_TEMPL_DECL
 	size_t cbitsetN<OGRE_TEMPL_USE>::numBitsSet( const size_t positionEnd ) const
 	{
-		OGRE_ASSERT_MEDIUM( positionEnd < _N );
+		OGRE_ASSERT_MEDIUM( positionEnd <= _N );
 		size_t retVal = 0u;
 		for( size_t i = 0u; i < positionEnd; )
         {

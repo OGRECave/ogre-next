@@ -334,6 +334,8 @@ namespace Ogre
         const Vector4 &getViewportModifier() const { return mViewportModifier; }
         void           setViewportModifier( const Vector4 &modifier ) { mViewportModifier = modifier; }
 
+        void setExecutionMask( uint8 executionMask ) { mExecutionMask = executionMask; }
+
         uint8 getExecutionMask() const { return mExecutionMask; }
 
         void _notifyBarriersDirty();

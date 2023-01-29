@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanBufferInterface.h"
 #include "Vao/OgreVulkanReadOnlyBufferPacked.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
+#include "Vao/OgreVulkanVaoManager.h"
 
 #include "OgreException.h"
 
@@ -71,9 +72,12 @@ namespace Ogre
         VulkanBufferInterface *bufferInterface =
             static_cast<VulkanBufferInterface *>( mBufferInterface );
 
+        VulkanRenderSystem *vkRenderSystem =
+            static_cast<VulkanVaoManager *>( mVaoManager )->getVkRenderSystem();
+
         ReadOnlyBufferPacked *retVal = OGRE_NEW VulkanReadOnlyBufferPacked(
             mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
-            (void *)0, false, (VulkanRenderSystem *)0, mVaoManager, bufferInterface, PFG_NULL );
+            (void *)0, false, vkRenderSystem, mVaoManager, bufferInterface, PFG_NULL );
         // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 

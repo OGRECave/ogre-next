@@ -357,11 +357,13 @@ namespace Ogre
             want your materials to look exactly how they did in 2.2.0 and 2.1
 
             See https://forums.ogre3d.org/viewtopic.php?f=25&t=95523
+
+            Deprecated in OgreNext 3.0. This function will be forced to true in 4.0
         @param bPerceptualRoughness
             True to enable perceptual roughess (default)
             False to use raw roughess (Ogre 2.1's behavior)
         */
-        void setPerceptualRoughness( bool bPerceptualRoughness );
+        OGRE_DEPRECATED_VER( 3 ) void setPerceptualRoughness( bool bPerceptualRoughness );
         bool getPerceptualRoughness() const;
 
         void         setShadowSettings( ShadowFilter filter );
