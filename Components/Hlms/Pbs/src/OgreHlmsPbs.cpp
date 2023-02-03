@@ -324,6 +324,7 @@ namespace Ogre
         mUseObbRestraintAreaLtc( false ),
 #endif
         mUseLightBuffers( false ),
+        mDefaultBrdfWithDiffuseFresnel( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
         mAmbientLightMode( AmbientAuto )
