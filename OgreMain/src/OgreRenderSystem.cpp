@@ -797,7 +797,11 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_beginFrameOnce() { mVaoManager->_beginFrame(); }
+    void RenderSystem::_beginFrameOnce()
+    {
+        _resetMetrics();
+        mVaoManager->_beginFrame();
+    }
     //-----------------------------------------------------------------------
     void RenderSystem::_endFrameOnce() { queueBindUAVs( 0 ); }
     //-----------------------------------------------------------------------
