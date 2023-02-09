@@ -1,5 +1,7 @@
 var NAVTREEINDEX234 =
 {
+"struct_ogre_1_1_voxelizer_bucket.html#a3c1cad6128a10f78309502c1cc610790":[7,0,0,927,0],
+"struct_ogre_1_1_voxelizer_bucket.html#a3c1cad6128a10f78309502c1cc610790":[6,0,0,954,0],
 "struct_ogre_1_1_voxelizer_bucket.html#a8210ea049ee9f654d40f8080d64d8142":[7,0,0,927,3],
 "struct_ogre_1_1_voxelizer_bucket.html#a8210ea049ee9f654d40f8080d64d8142":[6,0,0,954,3],
 "struct_ogre_1_1_voxelizer_bucket.html#aa5e64dd3767978b9df83956f3b3af454":[6,0,0,954,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX234 =
 "struct_ogre_1_1_vulkan_global_binding_table.html#aa841528501408abda814047dd5d7dbb9":[7,0,0,961,10],
 "struct_ogre_1_1_vulkan_global_binding_table.html#aa841528501408abda814047dd5d7dbb9":[6,0,0,988,10],
 "struct_ogre_1_1_vulkan_global_binding_table.html#acaab6443f64193bc1efa90bd44c6ea0e":[6,0,0,988,1],
-"struct_ogre_1_1_vulkan_global_binding_table.html#acaab6443f64193bc1efa90bd44c6ea0e":[7,0,0,961,1],
-"struct_ogre_1_1_vulkan_global_binding_table.html#aecb5966da51593b7a402e5f7cc98cf39":[6,0,0,988,15],
-"struct_ogre_1_1_vulkan_global_binding_table.html#aecb5966da51593b7a402e5f7cc98cf39":[7,0,0,961,15]
+"struct_ogre_1_1_vulkan_global_binding_table.html#acaab6443f64193bc1efa90bd44c6ea0e":[7,0,0,961,1]
 };

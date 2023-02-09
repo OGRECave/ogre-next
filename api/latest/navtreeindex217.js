@@ -1,5 +1,7 @@
 var NAVTREEINDEX217 =
 {
+"hlmsblendblockref.html#btModulate":[1,9,11,2,3],
+"hlmsblendblockref.html#btReplace":[1,9,11,2,4],
 "hlmsblendblockref.html#btTransparentAlpha":[1,9,11,2,0],
 "hlmsblendblockref.html#btTransparentColour":[1,9,11,2,1],
 "hlmsmacroblockref.html":[1,9,15],
@@ -247,7 +249,5 @@ var NAVTREEINDEX217 =
 "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9a3c263c60e96eb7ef68ad8886e70c8969":[6,0,0,1242,3],
 "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9aa08ceed67b36cee74ed5b98f3864ab6d":[6,0,0,1242,1],
 "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9ab90d85a967d1647087d9e525778e9bc1":[6,0,0,1242,2],
-"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9adb62fa4394e5ed5eb8d45742e6b28719":[6,0,0,1242,0],
-"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9aecb23d7992b7bdaf3c01af0759cf527c":[6,0,0,1242,5],
-"namespace_ogre.html#a57ef769e80226674c3971ce58b58c91d":[6,0,0,1144]
+"namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9adb62fa4394e5ed5eb8d45742e6b28719":[6,0,0,1242,0]
 };

@@ -353,6 +353,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7cd15e3a5caae8ae786bd752c6b27f26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a7cd15e3a5caae8ae786bd752c6b27f26">setShadowRenderingDistance</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> dist)</td></tr>
 <tr class="memdesc:a7cd15e3a5caae8ae786bd752c6b27f26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the distance at which the object is no longer casting shadows.  <a href="class_ogre_1_1_movable_object.html#a7cd15e3a5caae8ae786bd752c6b27f26">More...</a><br /></td></tr>
 <tr class="separator:a7cd15e3a5caae8ae786bd752c6b27f26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d85d65361a3e2d37610e65894bd5478"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#a4d85d65361a3e2d37610e65894bd5478">setSkeletonEnabled</a> (bool bEnable)</td></tr>
+<tr class="memdesc:a4d85d65361a3e2d37610e65894bd5478"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables the skeleton on this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> and all of its SubItems.  <a href="class_ogre_1_1_item.html#a4d85d65361a3e2d37610e65894bd5478">More...</a><br /></td></tr>
+<tr class="separator:a4d85d65361a3e2d37610e65894bd5478"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38f8241458458e4f1235eae7d8f850c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a38f8241458458e4f1235eae7d8f850c3">setStatic</a> (bool bStatic)</td></tr>
 <tr class="memdesc:a38f8241458458e4f1235eae7d8f850c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns this <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> into static or dynamic.  <a href="class_ogre_1_1_movable_object.html#a38f8241458458e4f1235eae7d8f850c3">More...</a><br /></td></tr>
 <tr class="separator:a38f8241458458e4f1235eae7d8f850c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3104,6 +3107,36 @@ InstanceBatch::instanceBatchCullFrustumThreaded </dd></dl>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>ShadowRenderingDistance will be clamped to RenderingDistance value </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#afe1f2a1009e3f14f36e1bcc9b1b9557e" title="Sets the distance at which the object is no longer rendered.">setRenderingDistance</a> </dd></dl>
+
+</div>
+</div>
+<a id="a4d85d65361a3e2d37610e65894bd5478" name="a4d85d65361a3e2d37610e65894bd5478"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d85d65361a3e2d37610e65894bd5478">&#9670;&#160;</a></span>setSkeletonEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Item::setSkeletonEnabled </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bEnable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables or disables the skeleton on this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> and all of its SubItems. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Does nothing if the <a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a> does not have skeletons.</dd></dl>
+<p><a class="el" href="class_ogre_1_1_item.html#abb10bdbe0252561405bdea834b238a98" title="Returns whether this Item shares it&#39;s SkeltonInstance with other Item instances.">sharesSkeletonInstance()</a> must be false when calling this function</p>
+<p >Some meshes only look correct when there is an active skeleton holding all the vertices in place. Hence force-disabling the skeleton may cause the <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> to disappear or look wrong. That depends on how the mesh was modelled and rigged.</p>
+<p >Force-disabling a skeleton may result in further shader recompiles, but may help a lot with mobile performance.</p>
+<p >It's not 100% the same as a <a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a> without skeleton, because we still waste VRAM and Bandwidth in VES_BLEND_WEIGHTS &amp; VES_BLEND_INDICES semantics. However the instruction length of the vertex shader is much lower and no CPU cycles are wasted on updating the skeleton. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bEnable</td><td>True to re-enable the skeleton on this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a>. False to force-disable the skeleton on this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

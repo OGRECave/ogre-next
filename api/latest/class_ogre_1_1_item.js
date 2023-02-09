@@ -90,6 +90,7 @@ var class_ogre_1_1_item =
     [ "setRenderingMinPixelSize", "class_ogre_1_1_item.html#a4d43f57e9abcc21d4bc50e6e6d1b5cc7", null ],
     [ "setRenderQueueGroup", "class_ogre_1_1_item.html#ac5e898937867475e52d350d1f4d75e32", null ],
     [ "setShadowRenderingDistance", "class_ogre_1_1_item.html#a7cd15e3a5caae8ae786bd752c6b27f26", null ],
+    [ "setSkeletonEnabled", "class_ogre_1_1_item.html#a4d85d65361a3e2d37610e65894bd5478", null ],
     [ "setStatic", "class_ogre_1_1_item.html#a38f8241458458e4f1235eae7d8f850c3", null ],
     [ "setVisibilityFlags", "class_ogre_1_1_item.html#a28b12f8d0fd7c9da7fcd1e9806dd8064", null ],
     [ "setVisible", "class_ogre_1_1_item.html#ad563191e86e4d119c62ea9acfc2a90d5", null ],
