@@ -321,8 +321,16 @@ namespace Ogre
 
             for( SubItem &subitem : mSubItems )
             {
+                HlmsDatablock *oldDatablock = subitem.getDatablock();
+
                 subitem.mHasSkeletonAnimation = false;
                 subitem.mBlendIndexToBoneIndexMap = nullptr;
+
+                if( oldDatablock )
+                {
+                    subitem._setNullDatablock();
+                    subitem.setDatablock( oldDatablock );
+                }
             }
         }
         else if( !mSkeletonInstance && mMesh->hasSkeleton() && mMesh->getSkeleton() && bEnable )
@@ -330,7 +338,15 @@ namespace Ogre
             const SkeletonDef *skeletonDef = mMesh->getSkeleton().get();
             mSkeletonInstance = mManager->createSkeletonInstance( skeletonDef );
             for( SubItem &subitem : mSubItems )
+            {
+                HlmsDatablock *oldDatablock = subitem.getDatablock();
                 subitem.setupSkeleton();
+                if( oldDatablock )
+                {
+                    subitem._setNullDatablock();
+                    subitem.setDatablock( oldDatablock );
+                }
+            }
         }
     }
     //-----------------------------------------------------------------------
