@@ -1474,8 +1474,6 @@ namespace Ogre
             }
         }  // end lock on scene graph mutex
 
-        mDestRenderSystem->_resetMetrics();
-
         // Set initial camera state
         mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
 

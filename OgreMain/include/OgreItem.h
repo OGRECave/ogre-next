@@ -224,6 +224,30 @@ namespace Ogre
          */
         bool sharesSkeletonInstance() const;
 
+        /** Enables or disables the skeleton on this Item and all of its SubItems
+        @remarks
+            Does nothing if the Mesh does not have skeletons.
+
+            sharesSkeletonInstance() must be false when calling this function
+
+            Some meshes only look correct when there is an active skeleton holding all
+            the vertices in place. Hence force-disabling the skeleton may cause
+            the Item to disappear or look wrong. That depends on how the mesh
+            was modelled and rigged.
+
+            Force-disabling a skeleton may result in further shader recompiles,
+            but may help a lot with mobile performance.
+
+            It's not 100% the same as a Mesh without skeleton, because we still waste
+            VRAM and Bandwidth in VES_BLEND_WEIGHTS & VES_BLEND_INDICES semantics.
+            However the instruction length of the vertex shader is much lower and
+            no CPU cycles are wasted on updating the skeleton.
+        @param bEnable
+            True to re-enable the skeleton on this Item.
+            False to force-disable the skeleton on this Item.
+        */
+        void setSkeletonEnabled( bool bEnable );
+
         /** Returns whether or not this Item is either morph or pose animated.
          */
         // bool hasVertexAnimation() const;

@@ -308,6 +308,48 @@ namespace Ogre
         return mSkeletonInstance && mSkeletonInstance->_getRefCount() > 1u;
     }
     //-----------------------------------------------------------------------
+    void Item::setSkeletonEnabled( const bool bEnable )
+    {
+        OGRE_ASSERT_LOW( !sharesSkeletonInstance() );
+        if( mSkeletonInstance && !bEnable )
+        {
+            mSkeletonInstance->_decrementRefCount();
+            if( mSkeletonInstance->_getRefCount() == 0u )
+                mManager->destroySkeletonInstance( mSkeletonInstance );
+
+            mSkeletonInstance = 0;
+
+            for( SubItem &subitem : mSubItems )
+            {
+                HlmsDatablock *oldDatablock = subitem.getDatablock();
+
+                subitem.mHasSkeletonAnimation = false;
+                subitem.mBlendIndexToBoneIndexMap = nullptr;
+
+                if( oldDatablock )
+                {
+                    subitem._setNullDatablock();
+                    subitem.setDatablock( oldDatablock );
+                }
+            }
+        }
+        else if( !mSkeletonInstance && mMesh->hasSkeleton() && mMesh->getSkeleton() && bEnable )
+        {
+            const SkeletonDef *skeletonDef = mMesh->getSkeleton().get();
+            mSkeletonInstance = mManager->createSkeletonInstance( skeletonDef );
+            for( SubItem &subitem : mSubItems )
+            {
+                HlmsDatablock *oldDatablock = subitem.getDatablock();
+                subitem.setupSkeleton();
+                if( oldDatablock )
+                {
+                    subitem._setNullDatablock();
+                    subitem.setDatablock( oldDatablock );
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------
     void Item::_notifyParentNodeMemoryChanged()
     {
         if( mSkeletonInstance /*&& !mSharedTransformEntity*/ )
