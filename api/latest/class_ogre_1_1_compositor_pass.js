@@ -12,6 +12,7 @@ var class_ogre_1_1_compositor_pass =
     [ "getResourceTransitions", "class_ogre_1_1_compositor_pass.html#a28214896ad87433dbc44ee5ef33dfc4e", null ],
     [ "getTextureDependencies", "class_ogre_1_1_compositor_pass.html#a8a84a1b47ca32edebbc95acb770760f1", null ],
     [ "getType", "class_ogre_1_1_compositor_pass.html#a220924c4a37f7cf458646522bc5cc72f", null ],
+    [ "getViewportAspectRatio", "class_ogre_1_1_compositor_pass.html#a290f02f08a5dc225841563ea770e7f6f", null ],
     [ "notifyCleared", "class_ogre_1_1_compositor_pass.html#a6f43846a1bb675c3ba19a8d3f41c6510", null ],
     [ "notifyDestroyed", "class_ogre_1_1_compositor_pass.html#a109f49cb2e6f8a9c0e1377817bcb9e6d", null ],
     [ "notifyDestroyed", "class_ogre_1_1_compositor_pass.html#a9f7ab3e159808c63ff31ac799e476c66", null ],

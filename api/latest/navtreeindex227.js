@@ -1,5 +1,17 @@
 var NAVTREEINDEX227 =
 {
+"struct_ogre_1_1_lod_data_1_1_triangle.html#ac177a86ec820bd4bdf9ab1578132885e":[7,0,0,530,3,7],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#ac177a86ec820bd4bdf9ab1578132885e":[6,0,0,557,3,7],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#ac49f589c70d10c49d049a53bd1d8ed0c":[6,0,0,557,3,2],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#ac49f589c70d10c49d049a53bd1d8ed0c":[7,0,0,530,3,2],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#ada58a2be25fb6534b4d7a16c53541861":[7,0,0,530,3,4],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#ada58a2be25fb6534b4d7a16c53541861":[6,0,0,557,3,4],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#aead4b68416ce44e112bc0f260a219379":[7,0,0,530,3,9],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#aead4b68416ce44e112bc0f260a219379":[6,0,0,557,3,9],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#aff1395c324d8808f43dcc76b8a5cdb3b":[7,0,0,530,3,10],
+"struct_ogre_1_1_lod_data_1_1_triangle.html#aff1395c324d8808f43dcc76b8a5cdb3b":[6,0,0,557,3,10],
+"struct_ogre_1_1_lod_data_1_1_vertex.html":[7,0,0,530,4],
+"struct_ogre_1_1_lod_data_1_1_vertex.html":[6,0,0,557,4],
 "struct_ogre_1_1_lod_data_1_1_vertex.html#a0f4e1115ab3949faaf58aff5b08b1cd9":[6,0,0,557,4,3],
 "struct_ogre_1_1_lod_data_1_1_vertex.html#a0f4e1115ab3949faaf58aff5b08b1cd9":[7,0,0,530,4,3],
 "struct_ogre_1_1_lod_data_1_1_vertex.html#a2dd4f26fe6707cac4b003f727271ff5e":[6,0,0,557,4,7],
@@ -237,17 +249,5 @@ var NAVTREEINDEX227 =
 "struct_ogre_1_1_metal_hlms_pso.html#aca67378e57a9a5295769dd68c4c732e0":[5,2,10,96,3],
 "struct_ogre_1_1_metal_hlms_pso.html#ad68072a4e988548a4c4868e9816c449d":[5,2,10,96,0],
 "struct_ogre_1_1_metal_tex_region.html":[5,2,10,98],
-"struct_ogre_1_1_metal_tex_region.html#a31ef1ac128e74df2d3ed27c3d93b42d4":[5,2,10,98,0],
-"struct_ogre_1_1_metal_tex_region.html#a73e95922d328cb80049b2e5f79244b2a":[5,2,10,98,2],
-"struct_ogre_1_1_metal_tex_region.html#af052dbd966d69693abb841bcc52e73d5":[5,2,10,98,1],
-"struct_ogre_1_1_metal_vao_manager_1_1_block.html":[7,0,0,613,0],
-"struct_ogre_1_1_metal_vao_manager_1_1_block.html":[6,0,0,640,0],
-"struct_ogre_1_1_metal_vao_manager_1_1_block.html#a1d62911bfc305a871b5b5e2ba15d7701":[7,0,0,613,0,1],
-"struct_ogre_1_1_metal_vao_manager_1_1_block.html#a1d62911bfc305a871b5b5e2ba15d7701":[6,0,0,640,0,1],
-"struct_ogre_1_1_metal_vao_manager_1_1_block.html#a4757c5ee49a4882f7be52580e22702a6":[7,0,0,613,0,0],
-"struct_ogre_1_1_metal_vao_manager_1_1_block.html#a4757c5ee49a4882f7be52580e22702a6":[6,0,0,640,0,0],
-"struct_ogre_1_1_metal_vao_manager_1_1_block.html#a648e8ae541d77f60907e09d11093ed77":[6,0,0,640,0,2],
-"struct_ogre_1_1_metal_vao_manager_1_1_block.html#a648e8ae541d77f60907e09d11093ed77":[7,0,0,613,0,2],
-"struct_ogre_1_1_metal_vao_manager_1_1_stride_changer.html":[7,0,0,613,1],
-"struct_ogre_1_1_metal_vao_manager_1_1_stride_changer.html":[6,0,0,640,1]
+"struct_ogre_1_1_metal_tex_region.html#a31ef1ac128e74df2d3ed27c3d93b42d4":[5,2,10,98,0]
 };
