@@ -175,6 +175,8 @@ namespace Ogre
 
         virtual void resetNumPassesLeft();
 
+        Real getViewportAspectRatio( size_t vpIdx );
+
         Vector2 getActualDimensions() const;
 
         CompositorPassType getType() const { return mDefinition->getType(); }

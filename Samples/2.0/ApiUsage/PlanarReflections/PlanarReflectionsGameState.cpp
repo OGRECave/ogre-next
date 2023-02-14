@@ -41,7 +41,7 @@ using namespace Demo;
 
 namespace Demo
 {
-    class PlanarReflectionsWorkspaceListener : public Ogre::CompositorWorkspaceListener
+    class PlanarReflectionsWorkspaceListener final : public Ogre::CompositorWorkspaceListener
     {
         Ogre::PlanarReflections *mPlanarReflections;
 
@@ -50,14 +50,14 @@ namespace Demo
             mPlanarReflections( planarReflections )
         {
         }
-        virtual ~PlanarReflectionsWorkspaceListener() {}
+        ~PlanarReflectionsWorkspaceListener() {}
 
-        virtual void workspacePreUpdate( Ogre::CompositorWorkspace *workspace )
+        void workspacePreUpdate( Ogre::CompositorWorkspace *workspace ) override
         {
             mPlanarReflections->beginFrame();
         }
 
-        virtual void passEarlyPreExecute( Ogre::CompositorPass *pass )
+        void passEarlyPreExecute( Ogre::CompositorPass *pass ) override
         {
             // Ignore non-scene passes
             if( pass->getType() != Ogre::PASS_SCENE )
@@ -78,7 +78,9 @@ namespace Demo
             Ogre::Camera *camera = passScene->getCamera();
 
             // Note: The Aspect Ratio must match that of the camera we're reflecting.
-            mPlanarReflections->update( camera, camera->getAspectRatio() );
+            mPlanarReflections->update( camera, camera->getAutoAspectRatio()
+                                                    ? pass->getViewportAspectRatio( 0u )
+                                                    : camera->getAspectRatio() );
         }
     };
 
@@ -231,8 +233,8 @@ namespace Demo
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 2.0f,
-                                              ( j - 1.5f ) * armsLength );
+                mSceneNode[idx]->setPosition( ( (Ogre::Real)i - 1.5f ) * armsLength, 2.0f,
+                                              ( (Ogre::Real)j - 1.5f ) * armsLength );
                 mSceneNode[idx]->setScale( 0.65f, 0.65f, 0.65f );
 
                 mSceneNode[idx]->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -300,7 +302,7 @@ namespace Demo
         if( mAnimateObjects )
         {
             for( int i = 0; i < 16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.125f ) );
+                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * (Ogre::Real)i * 0.125f ) );
         }
 
         TutorialGameState::update( timeSinceLast );

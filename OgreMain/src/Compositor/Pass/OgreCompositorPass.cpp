@@ -807,6 +807,33 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::resetNumPassesLeft() { mNumPassesLeft = mDefinition->mNumInitialPasses; }
     //-----------------------------------------------------------------------------------
+    Real CompositorPass::getViewportAspectRatio( size_t vpIdx )
+    {
+        if( mDefinition->mNumViewports == 0u )
+            return 1.0f;
+
+        CompositorWorkspace *workspace = mParentNode->getWorkspace();
+        uint8 workspaceVpMask = workspace->getViewportModifierMask();
+
+        bool applyModifier = ( workspaceVpMask & mDefinition->mViewportModifierMask ) != 0;
+        Vector4 vpModifier = applyModifier ? workspace->getViewportModifier() : Vector4( 0, 0, 1, 1 );
+
+        vpIdx = std::min<size_t>( vpIdx, mDefinition->mNumViewports - 1u );
+
+        const Real relWidth = mDefinition->mVpRect[vpIdx].mVpWidth * vpModifier.z;
+        const Real relHeight = mDefinition->mVpRect[vpIdx].mVpHeight * vpModifier.w;
+
+        const Real fWidth =
+            mAnyTargetTexture ? (Real)( mAnyTargetTexture->getWidth() >> mAnyMipLevel ) : 0.0f;
+        const Real fHeight =
+            mAnyTargetTexture ? (Real)( mAnyTargetTexture->getHeight() >> mAnyMipLevel ) : 0.0f;
+
+        int actWidth = (int)( relWidth * fWidth );
+        int actHeight = (int)( relHeight * fHeight );
+
+        return (Real)actWidth / (Real)std::max( 1, actHeight );
+    }
+    //-----------------------------------------------------------------------------------
     Vector2 CompositorPass::getActualDimensions() const
     {
         return Vector2( floorf( float( mAnyTargetTexture->getWidth() >> mAnyMipLevel ) *
