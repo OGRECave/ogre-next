@@ -135,7 +135,6 @@ namespace Ogre
         mCurrentViewport0( 0 ),
         mCurrentPass( 0 ),
         mCurrentShadowNode( 0 ),
-        mShadowNodeIsReused( false ),
         mSkyMethod( SkyCubemap ),
         mSky( 0 ),
         mRadialDensityMask( 0 ),
@@ -152,7 +151,6 @@ namespace Ogre
         mDisplayNodes( false ),
         mShowBoundingBoxes( false ),
         mAutoParamDataSource( 0 ),
-        mLateMaterialResolving( false ),
         mShadowColour( ColourValue( 0.25, 0.25, 0.25 ) ),
         mShadowDirLightExtrudeDist( 10000 ),
         mIlluminationStage( IRS_NONE ),
@@ -1543,6 +1541,7 @@ namespace Ogre
 
         const bool casterPass = mIlluminationStage == IRS_RENDER_TO_TEXTURE;
 
+        mRenderQueue->clear();
         mRenderQueue->renderPassPrepare( casterPass, false );
 
         // Quick way of reducing overhead/stress on  calculations (lastRq can be up to 255)
@@ -3340,12 +3339,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     void SceneManager::_setCurrentCompositorPass( CompositorPass *pass ) { mCurrentPass = pass; }
     //---------------------------------------------------------------------
-    void SceneManager::_setCurrentShadowNode( CompositorShadowNode *shadowNode, bool isReused )
+    void SceneManager::_setCurrentShadowNode( CompositorShadowNode *shadowNode )
     {
         mCurrentShadowNode = shadowNode;
-        mShadowNodeIsReused = isReused;
-        if( !shadowNode )
-            mShadowNodeIsReused = false;
         mAutoParamDataSource->setCurrentShadowNode( shadowNode );
     }
     //---------------------------------------------------------------------

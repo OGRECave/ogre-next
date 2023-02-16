@@ -227,7 +227,7 @@ namespace Ogre
         if( sceneManager )
         {
             if( sceneManager->getCurrentShadowNode() == this )
-                sceneManager->_setCurrentShadowNode( 0, false );
+                sceneManager->_setCurrentShadowNode( 0 );
 
             ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
             ShadowMapCameraVec::const_iterator endt = mShadowMapCameras.end();

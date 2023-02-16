@@ -522,6 +522,8 @@ namespace Ogre
             warmUpShaders( casterPass, mPassCache, mRenderQueues[i] );
         }
 
+        --mRenderingStarted;
+
         OgreProfileEndGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
     }
     //-----------------------------------------------------------------------

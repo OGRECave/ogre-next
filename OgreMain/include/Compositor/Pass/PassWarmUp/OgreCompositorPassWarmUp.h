@@ -69,7 +69,10 @@ namespace Ogre
         CompositorPassWarmUpDef const *mDefinition;
 
     protected:
-        Camera *mCamera;
+        CompositorShadowNode *mShadowNode;
+        Camera               *mCamera;
+
+        void notifyPassSceneAfterShadowMapsListeners();
 
     public:
         CompositorPassWarmUp( const CompositorPassWarmUpDef *definition, Camera *defaultCamera,

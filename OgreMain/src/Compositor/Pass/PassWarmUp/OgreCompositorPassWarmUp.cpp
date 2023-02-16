@@ -31,7 +31,9 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUp.h"
 
 #include "Compositor/OgreCompositorNode.h"
+#include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "OgreCamera.h"
 #include "OgreSceneManager.h"
@@ -44,16 +46,31 @@ namespace Ogre
                                                 const RenderTargetViewDef *rtv ) :
         CompositorPass( definition, parentNode ),
         mDefinition( definition ),
+        mShadowNode( 0 ),
         mCamera( 0 )
     {
         initialize( rtv );
 
-        const CompositorWorkspace *workspace = parentNode->getWorkspace();
+        CompositorWorkspace *workspace = parentNode->getWorkspace();
+
+        if( mDefinition->mShadowNode != IdString() )
+        {
+            bool shadowNodeCreated;
+            mShadowNode =
+                workspace->findOrCreateShadowNode( mDefinition->mShadowNode, shadowNodeCreated );
+        }
 
         if( mDefinition->mCameraName != IdString() )
             mCamera = workspace->findCamera( mDefinition->mCameraName );
         else
             mCamera = defaultCamera;
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassWarmUp::notifyPassSceneAfterShadowMapsListeners()
+    {
+        const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
+        for( CompositorWorkspaceListener *listener : listeners )
+            listener->passSceneAfterShadowMaps( nullptr );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassWarmUp::execute( const Camera *lodCamera )
@@ -70,20 +87,58 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
+        SceneManager *sceneManager = mCamera->getSceneManager();
+
+        Viewport *viewport = sceneManager->getCurrentViewport0();
+        viewport->_setVisibilityMask( mDefinition->mVisibilityMask, 0xFFFFFFFFu );
+
+        CompositorShadowNode *shadowNode =
+            ( mShadowNode && mShadowNode->getEnabled() ) ? mShadowNode : 0;
+        sceneManager->_setCurrentShadowNode( shadowNode );
+
+        // Fire the listener in case it wants to change anything
+        notifyPassPreExecuteListeners();
+
+        if( shadowNode )
+        {
+            // We need to prepare for rendering another RT (we broke the contiguous chain)
+            if( mDefinition->mSkipLoadStoreSemantics )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "mSkipLoadStoreSemantics can't be true if updating the shadow node. You "
+                             "can use shadow_node reuse",
+                             "CompositorPassScene::execute" );
+            }
+
+            // Save the value in case the listener changed it
+            const uint32 oldVisibilityMask = viewport->getVisibilityMask();
+            const uint32 oldLightVisibilityMask = viewport->getLightVisibilityMask();
+
+            // use culling camera for shadows, so if shadows are re used for slightly different camera
+            // (ie VR) shadows are not 'over culled'
+            mCamera->_notifyViewport( viewport );
+
+            shadowNode->_update( mCamera, lodCamera, sceneManager );
+
+            // ShadowNode passes may've overriden these settings.
+            sceneManager->_setCurrentShadowNode( shadowNode );
+            viewport->_setVisibilityMask( oldVisibilityMask, oldLightVisibilityMask );
+            mCamera->_notifyViewport( viewport );
+            // We need to restore the previous RT's update
+        }
+
+        notifyPassSceneAfterShadowMapsListeners();
+
         analyzeBarriers();
         executeResourceTransitions();
 
         setRenderPassDescToCurrent();
 
-        SceneManager *sceneManager = mCamera->getSceneManager();
         sceneManager->_setCamerasInProgress( CamerasInProgress( mCamera ) );
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );
         // TODO
         // sceneManager->_setRefractions( mDepthTextureNoMsaa, mRefractionsTexture );
         sceneManager->_setCurrentCompositorPass( this );
-
-        // Fire the listener in case it wants to change anything
-        notifyPassPreExecuteListeners();
 
         RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
         renderSystem->executeRenderPassDescriptorDelayedActions();

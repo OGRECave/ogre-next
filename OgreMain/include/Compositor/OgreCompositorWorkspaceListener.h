@@ -75,6 +75,10 @@ namespace Ogre
             Gets called after passPreExecute and before passSceneAfterFrustumCulling
 
             Warning: calling pass->execute can result in recursive calls.
+
+        @param pass
+            PassScene calling this listener.
+            Can be nullptr if the caller is CompositorPassWarmUp
         */
         virtual void passSceneAfterShadowMaps( CompositorPassScene *pass ) {}
 

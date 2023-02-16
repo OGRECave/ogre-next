@@ -507,7 +507,6 @@ namespace Ogre
 
         CompositorPass       *mCurrentPass;
         CompositorShadowNode *mCurrentShadowNode;
-        bool                  mShadowNodeIsReused;
 
         /// Root scene node
         SceneNode *mSceneRoot[NUM_SCENE_MEMORY_MANAGER_TYPES];
@@ -712,8 +711,6 @@ namespace Ogre
 
         /// Utility class for calculating automatic parameters for gpu programs
         AutoParamDataSource *mAutoParamDataSource;
-
-        bool mLateMaterialResolving;
 
         ColourValue             mShadowColour;
         Real                    mShadowDirLightExtrudeDist;
@@ -2344,22 +2341,10 @@ namespace Ogre
         /// Note: May be null.
         const CompositorPass *getCurrentCompositorPass() const { return mCurrentPass; }
 
-        void _setCurrentShadowNode( CompositorShadowNode *shadowNode, bool isReused );
+        void                        _setCurrentShadowNode( CompositorShadowNode *shadowNode );
         const CompositorShadowNode *getCurrentShadowNode() const { return mCurrentShadowNode; }
-        bool                        isCurrentShadowNodeReused() const { return mShadowNodeIsReused; }
 
         bool isUsingInstancedStereo() const;
-
-        /** Sets whether to use late material resolving or not. If set, materials will be resolved
-            from the materials at the pass-setting stage and not at the render queue building stage.
-            This is useful when the active material scheme during the render queue building stage
-            is different from the one during the rendering stage.
-        */
-        virtual void setLateMaterialResolving( bool isLate ) { mLateMaterialResolving = isLate; }
-
-        /** Gets whether using late material resolving or not.
-            @see setLateMaterialResolving */
-        virtual bool isLateMaterialResolving() const { return mLateMaterialResolving; }
 
         /** Add a listener which will get called back on scene manager events.
          */

@@ -57,6 +57,8 @@ namespace Ogre
         /// Please don't write to this directly. Use setVisibilityMask()
         uint32 mVisibilityMask;
 
+        IdString mShadowNode;
+
         /// When empty, uses the default camera.
         IdString mCameraName;
 
@@ -78,6 +80,8 @@ namespace Ogre
             mLastRQ( (uint8)-1 ),
             mEnableForwardPlus( true )
         {
+            setAllLoadActions( LoadAction::Clear );
+            setAllStoreActions( StoreAction::StoreOrResolve );
         }
 
         void setVisibilityMask( uint32 visibilityMask )

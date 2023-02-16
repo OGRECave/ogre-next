@@ -11101,9 +11101,44 @@ namespace Ogre{
                         compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
                     break;
                 }
+                case ID_SHADOWS_ENABLED:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else if( prop->values.size() > 2 )
+                    {
+                        compiler->addError( ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file,
+                                            prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    AbstractNodeList::const_iterator it1 = it0;
+                    if( prop->values.size() > 1 )
+                        ++it1;
+
+                    String str;
+                    if( getString( *it0, &str ) )
+                    {
+                        if( str == "off" )
+                            passWarmUp->mShadowNode = IdString();
+                        else
+                            passWarmUp->mShadowNode = IdString( str );
+                    }
+                    else
+                    {
+                        compiler->addError(
+                            ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                            "shadow property can be either 'shadow off' or 'shadow myNodeName "
+                            "[first|reuse|recalculate]'" );
+                    }
+                    break;
+                }
                 // case ID_VIEWPORT:
                 case ID_IDENTIFIER:
-                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 case ID_EXECUTION_MASK:
                 case ID_PROFILING_ID:

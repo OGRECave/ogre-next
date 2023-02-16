@@ -46,8 +46,8 @@ namespace Demo
         TutorialGameState( helpDescription ),
         mAnimateObjects( true ),
         mNumSpheres( 0 ),
-        mTransparencyMode( Ogre::HlmsPbsDatablock::None ),
         mTransparencyValue( 1.0f ),
+        mTransparencyMode( Ogre::HlmsPbsDatablock::None ),
         mBrdfIdx( 0u ),
         mBrdfDiffuseFresnelMode( NoDiffuseFresnel )
     {
@@ -147,8 +147,6 @@ namespace Demo
 
             Ogre::Root *root = mGraphicsSystem->getRoot();
             Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
-
-            const Ogre::PbsBrdf::PbsBrdf brdf = static_cast<Ogre::PbsBrdf::PbsBrdf>( getBrdf() );
 
             for( int x = 0; x < numX; ++x )
             {

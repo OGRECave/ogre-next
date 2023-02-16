@@ -229,10 +229,7 @@ namespace Ogre
         CompositorShadowNode *shadowNode =
             ( mShadowNode && mShadowNode->getEnabled() ) ? mShadowNode : 0;
         if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_CASTER_PASS )
-        {
-            sceneManager->_setCurrentShadowNode(
-                shadowNode, mDefinition->mShadowNodeRecalculation == SHADOW_NODE_REUSE );
-        }
+            sceneManager->_setCurrentShadowNode( shadowNode );
 
         // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
@@ -259,8 +256,7 @@ namespace Ogre
             shadowNode->_update( mCullCamera, usedLodCamera, sceneManager );
 
             // ShadowNode passes may've overriden these settings.
-            sceneManager->_setCurrentShadowNode(
-                shadowNode, mDefinition->mShadowNodeRecalculation == SHADOW_NODE_REUSE );
+            sceneManager->_setCurrentShadowNode( shadowNode );
             viewport->_setVisibilityMask( oldVisibilityMask, oldLightVisibilityMask );
             mCullCamera->_notifyViewport( viewport );
 
@@ -333,7 +329,7 @@ namespace Ogre
 
         if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_CASTER_PASS )
         {
-            sceneManager->_setCurrentShadowNode( 0, false );
+            sceneManager->_setCurrentShadowNode( 0 );
             sceneManager->_setForwardPlusEnabledInPass( false );
         }
 
