@@ -44,6 +44,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassTargetBarrier/OgreCompositorPassTargetBarrierDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
+#include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "OgreLwString.h"
 
 namespace Ogre
@@ -143,6 +144,9 @@ namespace Ogre
             break;
         case PASS_IBL_SPECULAR:
             retVal = OGRE_NEW CompositorPassIblSpecularDef( mParentNodeDef, this );
+            break;
+        case PASS_WARM_UP:
+            retVal = OGRE_NEW CompositorPassWarmUpDef( mParentNodeDef, this );
             break;
         case PASS_CUSTOM:
         {

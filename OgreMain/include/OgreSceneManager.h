@@ -815,6 +815,7 @@ namespace Ogre
             UPDATE_ALL_LODS,
             BUILD_LIGHT_LIST01,
             BUILD_LIGHT_LIST02,
+            WARM_UP_SHADERS,
             USER_UNIFORM_SCALABLE_TASK,
             STOP_THREADS,
             NUM_REQUESTS
@@ -954,6 +955,15 @@ namespace Ogre
         void buildLightListThread01( const BuildLightListRequest &buildLightListRequest,
                                      size_t                       threadIdx );
         void buildLightListThread02( size_t threadIdx );
+
+        /** Gathers all objects that match the given scene visibility flags and render queue IDs.
+        @param request
+            Fully setup request. See CullFrustumRequest.
+        @param threadIdx
+            Index to mVisibleObjects so we know which array we should start at.
+            Must be unique for each worker thread
+        */
+        void warmUpShaders( const CullFrustumRequest &request, size_t threadIdx );
 
     public:
         /** Constructor.
@@ -1899,6 +1909,8 @@ namespace Ogre
 
         void cullLights( Camera *camera, Light::LightTypes startType, Light::LightTypes endType,
                          LightArray &outLights );
+
+        void _warmUpShaders( Camera *camera, uint32_t visibilityMask, uint8 firstRq, uint8 lastRq );
 
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
         void _frameEnded();
