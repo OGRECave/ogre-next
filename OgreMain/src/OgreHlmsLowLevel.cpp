@@ -64,7 +64,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     const HlmsCache *HlmsLowLevel::createShaderCacheEntry( uint32 renderableHash,
                                                            const HlmsCache &passCache, uint32 finalHash,
-                                                           const QueuedRenderable &queuedRenderable )
+                                                           const QueuedRenderable &queuedRenderable,
+                                                           const size_t tid )
     {
         Renderable *renderable = queuedRenderable.renderable;
         const MaterialPtr &mat = renderable->getMaterial();
@@ -96,7 +97,7 @@ namespace Ogre
         if( pass->hasFragmentProgram() )
             pso.pixelShader = pass->getFragmentProgram();
 
-        bool casterPass = getProperty( HlmsBaseProp::ShadowCaster ) != 0;
+        bool casterPass = getProperty( tid, HlmsBaseProp::ShadowCaster ) != 0;
 
         const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
         pso.macroblock = datablock->getMacroblock( casterPass );
@@ -136,7 +137,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsLowLevel::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
     {
-        mSetProperties.clear();
+        mSetProperties[kNoTid].clear();
 
         const MaterialPtr &mat = renderable->getMaterial();
 
@@ -161,25 +162,25 @@ namespace Ogre
             }
         }
 
-        setProperty( HlmsPsoProp::Macroblock,
+        setProperty( kNoTid, HlmsPsoProp::Macroblock,
                      renderable->getDatablock()->getMacroblock( false )->mLifetimeId );
-        setProperty( HlmsPsoProp::Blendblock,
+        setProperty( kNoTid, HlmsPsoProp::Blendblock,
                      renderable->getDatablock()->getBlendblock( false )->mLifetimeId );
 
         Technique *technique = mat->getBestTechnique( renderable->getCurrentMaterialLod(), renderable );
         Pass *pass = technique->getPass( 0 );
 
-        setProperty( LowLevelProp::PassId, static_cast<Ogre::int32>( pass->getId() ) );
+        setProperty( kNoTid, LowLevelProp::PassId, static_cast<Ogre::int32>( pass->getId() ) );
 
-        outHash = this->addRenderableCache( mSetProperties, (const PiecesMap *)0 );
+        outHash = this->addRenderableCache( mSetProperties[kNoTid], (const PiecesMap *)0 );
 
-        setProperty( HlmsBaseProp::ShadowCaster, true );
-        setProperty( HlmsPsoProp::Macroblock,
+        setProperty( kNoTid, HlmsBaseProp::ShadowCaster, true );
+        setProperty( kNoTid, HlmsPsoProp::Macroblock,
                      renderable->getDatablock()->getMacroblock( true )->mLifetimeId );
-        setProperty( HlmsPsoProp::Blendblock,
+        setProperty( kNoTid, HlmsPsoProp::Blendblock,
                      renderable->getDatablock()->getBlendblock( true )->mLifetimeId );
 
-        outCasterHash = this->addRenderableCache( mSetProperties, (const PiecesMap *)0 );
+        outCasterHash = this->addRenderableCache( mSetProperties[kNoTid], (const PiecesMap *)0 );
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsLowLevel::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
@@ -376,5 +377,5 @@ namespace Ogre
         return OGRE_NEW HlmsLowLevelDatablock( datablockName, this, macroblock, blendblock, paramVec );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsLowLevel::setupRootLayout( RootLayout &rootLayout ) {}
+    void HlmsLowLevel::setupRootLayout( RootLayout &rootLayout, size_t tid ) {}
 }  // namespace Ogre

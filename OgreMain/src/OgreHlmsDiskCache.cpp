@@ -221,7 +221,7 @@ namespace Ogre
                 if( !mTemplatesOutOfDate )
                 {
                     // Templates haven't changed, send the Hlms-processed shader code for compilation
-                    hlms->_compileShaderFromPreprocessedSource( itor->mergedCache, itor->sourceFile );
+                    hlms->_compileShaderFromPreprocessedSource( itor->mergedCache, itor->sourceFile, Hlms::kNoTid );
                 }
                 else
                 {
@@ -229,7 +229,7 @@ namespace Ogre
                     // preprocessor again before they can be compiled again
                     Hlms::ShaderCodeCache shaderCodeCache( itor->mergedCache.pieces );
                     shaderCodeCache.mergedCache.setProperties = itor->mergedCache.setProperties;
-                    hlms->compileShaderCode( shaderCodeCache );
+                    hlms->compileShaderCode( shaderCodeCache, Hlms::kNoTid );
                 }
                 ++itor;
             }

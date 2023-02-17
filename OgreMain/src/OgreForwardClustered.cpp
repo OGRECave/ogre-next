@@ -928,17 +928,17 @@ namespace Ogre
         *passBufferPtr++ = viewportHeightOffset;
     }
     //-----------------------------------------------------------------------------------
-    void ForwardClustered::setHlmsPassProperties( Hlms *hlms )
+    void ForwardClustered::setHlmsPassProperties( const size_t tid, Hlms *hlms )
     {
-        ForwardPlusBase::setHlmsPassProperties( hlms );
+        ForwardPlusBase::setHlmsPassProperties( tid, hlms );
 
-        hlms->_setProperty( HlmsBaseProp::ForwardPlus,
+        hlms->_setProperty( tid, HlmsBaseProp::ForwardPlus,
                             static_cast<int32>( HlmsBaseProp::ForwardClustered.getU32Value() ) );
 
-        hlms->_setProperty( HlmsBaseProp::FwdClusteredWidthxHeight,
+        hlms->_setProperty( tid, HlmsBaseProp::FwdClusteredWidthxHeight,
                             static_cast<int32>( mWidth * mHeight ) );
-        hlms->_setProperty( HlmsBaseProp::FwdClusteredWidth, static_cast<int32>( mWidth ) );
-        hlms->_setProperty( HlmsBaseProp::FwdClusteredLightsPerCell,
+        hlms->_setProperty( tid, HlmsBaseProp::FwdClusteredWidth, static_cast<int32>( mWidth ) );
+        hlms->_setProperty( tid, HlmsBaseProp::FwdClusteredLightsPerCell,
                             static_cast<int32>( mObjsPerCell ) );
 
         if( mDecalsEnabled )
@@ -947,32 +947,32 @@ namespace Ogre
             int32 numDecalsTex = 0;
             if( mSceneManager->getDecalsDiffuse() && prePassMode != PrePassCreate )
             {
-                hlms->_setProperty( HlmsBaseProp::DecalsDiffuse, 1 );
+                hlms->_setProperty( tid, HlmsBaseProp::DecalsDiffuse, 1 );
                 ++numDecalsTex;
             }
             if( mSceneManager->getDecalsNormals() && prePassMode != PrePassUse )
             {
-                hlms->_setProperty( HlmsBaseProp::DecalsNormals, 2 );
+                hlms->_setProperty( tid, HlmsBaseProp::DecalsNormals, 2 );
                 ++numDecalsTex;
             }
             if( mSceneManager->getDecalsEmissive() && prePassMode != PrePassCreate )
             {
-                hlms->_setProperty( HlmsBaseProp::DecalsEmissive,
+                hlms->_setProperty( tid, HlmsBaseProp::DecalsEmissive,
                                     mSceneManager->isDecalsDiffuseEmissiveMerged() ? 1 : 3 );
                 ++numDecalsTex;
             }
 
             const size_t decalOffsetStart = getDecalsOffsetStart();
-            hlms->_setProperty( HlmsBaseProp::FwdPlusDecalsSlotOffset,
+            hlms->_setProperty( tid, HlmsBaseProp::FwdPlusDecalsSlotOffset,
                                 static_cast<int32>( decalOffsetStart ) );
 
-            hlms->_setProperty( HlmsBaseProp::EnableDecals, numDecalsTex );
+            hlms->_setProperty( tid, HlmsBaseProp::EnableDecals, numDecalsTex );
         }
 
         if( mCubemapProbesEnabled )
         {
             const size_t cubemapOffsetStart = getCubemapProbesOffsetStart();
-            hlms->_setProperty( HlmsBaseProp::FwdPlusCubemapSlotOffset,
+            hlms->_setProperty( tid, HlmsBaseProp::FwdPlusCubemapSlotOffset,
                                 static_cast<int32>( cubemapOffsetStart ) );
         }
     }

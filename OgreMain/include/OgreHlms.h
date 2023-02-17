@@ -140,6 +140,9 @@ namespace Ogre
 
         typedef std::map<IdString, DatablockEntry> HlmsDatablockMap;
 
+        /// For single-threaded operations
+        static constexpr size_t kNoTid = 0u;
+
     protected:
         struct RenderableCache
         {
@@ -218,8 +221,11 @@ namespace Ogre
         TextureNameStrings mTextureNameStrings;
         TextureRegsVec     mTextureRegs[NumShaderTypes];
 
-        HlmsPropertyVec mSetProperties;
-        PiecesMap       mPieces;
+        typedef std::vector<HlmsPropertyVec> HlmsPropertyVecVec;
+        typedef std::vector<PiecesMap>       PiecesMapVec;
+
+        HlmsPropertyVecVec mSetProperties;
+        PiecesMapVec       mPieces;
 
     public:
         struct Library
@@ -274,11 +280,6 @@ namespace Ogre
         IdString  mTypeName;
         String    mTypeNameStr;
 
-        /** Inserts common properties about the current Renderable,
-            such as hlms_skeleton hlms_uv_count, etc
-        */
-        void setCommonProperties();
-
         /** Populates all mPieceFiles with all files in mDataFolder with suffix ending in
                 piece_vs    - Vertex Shader
                 piece_ps    - Pixel Shader
@@ -291,10 +292,10 @@ namespace Ogre
         /// Populates pieceFiles, returns true if found at least one piece file.
         static bool enumeratePieceFiles( Archive *dataFolder, StringVector *pieceFiles );
 
-        void  setProperty( IdString key, int32 value );
-        int32 getProperty( IdString key, int32 defaultVal = 0 ) const;
+        void  setProperty( size_t tid, IdString key, int32 value );
+        int32 getProperty( size_t tid, IdString key, int32 defaultVal = 0 ) const;
 
-        void unsetProperty( IdString key );
+        void unsetProperty( size_t tid, IdString key );
 
         enum ExpressionType
         {
@@ -326,23 +327,23 @@ namespace Ogre
 
         typedef std::vector<Expression> ExpressionVec;
 
-        inline int interpretAsNumberThenAsProperty( const String &argValue ) const;
+        inline int interpretAsNumberThenAsProperty( const String &argValue, size_t tid ) const;
 
         static void copy( String &outBuffer, const SubStringRef &inSubString, size_t length );
         static void repeat( String &outBuffer, const SubStringRef &inSubString, size_t length,
                             size_t passNum, const String &counterVar );
 
-        bool parseMath( const String &inBuffer, String &outBuffer );
-        bool parseForEach( const String &inBuffer, String &outBuffer ) const;
-        bool parseProperties( String &inBuffer, String &outBuffer ) const;
-        bool parseUndefPieces( String &inBuffer, String &outBuffer );
-        bool collectPieces( const String &inBuffer, String &outBuffer );
-        bool insertPieces( String &inBuffer, String &outBuffer ) const;
-        bool parseCounter( const String &inString, String &outString );
+        bool parseMath( const String &inBuffer, String &outBuffer, size_t tid );
+        bool parseForEach( const String &inBuffer, String &outBuffer, size_t tid ) const;
+        bool parseProperties( String &inBuffer, String &outBuffer, size_t tid ) const;
+        bool parseUndefPieces( String &inBuffer, String &outBuffer, size_t tid );
+        bool collectPieces( const String &inBuffer, String &outBuffer, size_t tid );
+        bool insertPieces( String &inBuffer, String &outBuffer, size_t tid ) const;
+        bool parseCounter( const String &inString, String &outString, size_t tid );
 
     public:
         /// For standalone parsing.
-        bool parseOffline( const String &filename, String &inBuffer, String &outBuffer );
+        bool parseOffline( const String &filename, String &inBuffer, String &outBuffer, size_t tid );
 
     protected:
         /** Goes through 'buffer', starting from startPos (inclusive) looking for the given
@@ -359,8 +360,9 @@ namespace Ogre
         static bool findBlockEnd( SubStringRef &outSubString, bool &syntaxError,
                                   bool allowsElse = false );
 
-        bool  evaluateExpression( SubStringRef &outSubString, bool &outSyntaxError ) const;
-        int32 evaluateExpressionRecursive( ExpressionVec &expression, bool &outSyntaxError ) const;
+        bool  evaluateExpression( SubStringRef &outSubString, bool &outSyntaxError, size_t tid ) const;
+        int32 evaluateExpressionRecursive( ExpressionVec &expression, bool &outSyntaxError,
+                                           size_t tid ) const;
         static size_t evaluateExpressionEnd( const SubStringRef &outSubString );
 
         static void evaluateParamArgs( SubStringRef &outSubString, StringVector &outArgs,
@@ -390,11 +392,11 @@ namespace Ogre
         const HlmsCache *getShaderCache( uint32 hash ) const;
         virtual void     clearShaderCache();
 
-        void processPieces( Archive *archive, const StringVector &pieceFiles );
+        void processPieces( Archive *archive, const StringVector &pieceFiles, size_t tid );
         void hashPieceFiles( Archive *archive, const StringVector &pieceFiles,
                              FastArray<uint8> &fileContents ) const;
 
-        void dumpProperties( std::ofstream &outFile );
+        void dumpProperties( std::ofstream &outFile, size_t tid );
 
         /** Modifies the PSO's macroblock if there are reasons to do that, and creates
             a strong reference to the macroblock that the PSO will own.
@@ -403,21 +405,21 @@ namespace Ogre
         */
         void applyStrongMacroblockRules( HlmsPso &pso );
 
-        virtual void setupRootLayout( RootLayout &rootLayout ) = 0;
+        virtual void setupRootLayout( RootLayout &rootLayout, size_t tid ) = 0;
 
         HighLevelGpuProgramPtr compileShaderCode( const String &source,
                                                   const String &debugFilenameOutput, uint32 finalHash,
-                                                  ShaderType shaderType );
+                                                  ShaderType shaderType, size_t tid );
 
     public:
         void _compileShaderFromPreprocessedSource( const RenderableCache &mergedCache,
-                                                   const String           source[NumShaderTypes] );
+                                                   const String source[NumShaderTypes], size_t tid );
 
         /** Compiles input properties and adds it to the shader code cache
         @param codeCache [in/out]
             All variables must be filled except for ShaderCodeCache::shaders which is the output
         */
-        void compileShaderCode( ShaderCodeCache &codeCache );
+        void compileShaderCode( ShaderCodeCache &codeCache, size_t tid );
 
         const ShaderCodeCacheVec &getShaderCodeCache() const { return mShaderCodeCache; }
 
@@ -436,19 +438,22 @@ namespace Ogre
             The renderable who owns the renderableHash. Not used by the base class, but
             derived implementations may overload this function and take advantage of
             some of the direct access it provides.
+        @param threadIdx
+            Thread idx
         @return
             The newly created shader.
         */
         virtual const HlmsCache *createShaderCacheEntry( uint32           renderableHash,
                                                          const HlmsCache &passCache, uint32 finalHash,
-                                                         const QueuedRenderable &queuedRenderable );
+                                                         const QueuedRenderable &queuedRenderable,
+                                                         size_t                  threadIdx );
 
         /// This function gets called right before starting parsing all templates, and after
         /// the renderable properties have been merged with the pass properties.
         ///
         /// Warning: For the HlmsDiskCache to work properly, this function should not rely
         /// on member variables or other state. All state info should come from getProperty()
-        virtual void notifyPropertiesMergedPreGenerationStep();
+        virtual void notifyPropertiesMergedPreGenerationStep( size_t tid );
 
         virtual HlmsDatablock *createDatablockImpl( IdString              datablockName,
                                                     const HlmsMacroblock *macroblock,
@@ -482,7 +487,7 @@ namespace Ogre
         /// so that the template can use it (e.g. D3D11, Metal).
         ///
         /// In OpenGL, applyTextureRegisters will later be called so the params are set
-        void setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit,
+        void setTextureReg( size_t tid, ShaderType shaderType, const char *texName, int32 texUnit,
                             int32 numTexUnits = 1u );
 
         /// See Hlms::setTextureReg
@@ -882,15 +887,15 @@ namespace Ogre
         HlmsListener *getListener() const;
 
         /// For debugging stuff. I.e. the Command line uses it for testing manually set properties
-        void  _setProperty( IdString key, int32 value ) { setProperty( key, value ); }
-        int32 _getProperty( IdString key, int32 defaultVal = 0 ) const
+        void  _setProperty( size_t tid, IdString key, int32 value ) { setProperty( tid, key, value ); }
+        int32 _getProperty( size_t tid, IdString key, int32 defaultVal = 0 ) const
         {
-            return getProperty( key, defaultVal );
+            return getProperty( tid, key, defaultVal );
         }
 
-        void _setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit )
+        void _setTextureReg( size_t tid, ShaderType shaderType, const char *texName, int32 texUnit )
         {
-            setTextureReg( shaderType, texName, texUnit );
+            setTextureReg( tid, shaderType, texName, texUnit );
         }
 
         /// Utility helper, mostly useful to HlmsListener implementations.

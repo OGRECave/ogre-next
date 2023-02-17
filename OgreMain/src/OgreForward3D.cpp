@@ -469,12 +469,12 @@ namespace Ogre
         *passBufferPtr++ = 0;
     }
     //-----------------------------------------------------------------------------------
-    void Forward3D::setHlmsPassProperties( Hlms *hlms )
+    void Forward3D::setHlmsPassProperties( const size_t tid, Hlms *hlms )
     {
-        ForwardPlusBase::setHlmsPassProperties( hlms );
+        ForwardPlusBase::setHlmsPassProperties( tid, hlms );
 
-        hlms->_setProperty( HlmsBaseProp::ForwardPlus,
+        hlms->_setProperty( tid, HlmsBaseProp::ForwardPlus,
                             static_cast<int32>( HlmsBaseProp::Forward3D.getU32Value() ) );
-        hlms->_setProperty( HlmsBaseProp::Forward3DNumSlices, static_cast<int32>( mNumSlices ) );
+        hlms->_setProperty( tid, HlmsBaseProp::Forward3DNumSlices, static_cast<int32>( mNumSlices ) );
     }
 }  // namespace Ogre

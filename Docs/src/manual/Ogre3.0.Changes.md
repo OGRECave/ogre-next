@@ -47,3 +47,19 @@ Make sure to upgrade to latest CMake scripts if you're using them; to be ready f
 Default material BRDF settings have changed in 3.0; thus materials will look different.
 
 See [PBR / PBS Changes in 3.0](@ref PBSChangesIn30) to how make them look like they did in 2.4 and what these changes mean.
+
+# Threaded Hlms
+
+We introduced (limited) threaded shader and Hlms compilation.
+
+This is only used by the new `warm_up` compositor pass (see Ogre::CompositorPassWarmUp and Ogre::CompositorPassWarmUpDef) and by the Hlms Disk Cache.
+
+This means that most Hlms operations gained a `tid` parameter, which contains the thread index in range `[0; num_threads)`.
+
+Operations done in Ogre::Hlms::preparePassHash and Ogre::Hlms::calculateHashFor are single threaded and thus should use Ogre::Hlms::kNoTid.
+
+## Hlms implementations and listeners
+
+Custom Hlms implementations and listeners must update their virtual overload functions to accomodate the tid parameter.
+
+Watch out for calls to `mSetProperties.clear();` which now must be changed to either `mSetProperties[kNoTid].clear();` or `mSetProperties[tid].clear();`
