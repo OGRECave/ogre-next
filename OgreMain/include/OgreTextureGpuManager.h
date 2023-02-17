@@ -402,9 +402,17 @@ namespace Ogre
             /// See LoadRequest::sliceOrDepth
             uint32          dstSliceOrDepth;
             FilterBaseArray filters;
+#ifdef OGRE_PROFILING_TEXTURES
+            uint64 microsecondsTaken;
+#endif
 
             QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
-                         FilterBaseArray &inOutFilters );
+                         FilterBaseArray &inOutFilters
+#ifdef OGRE_PROFILING_TEXTURES
+                         ,
+                         uint64 _microsecondsTaken
+#endif
+            );
             void  destroy();
             bool  empty() const;
             bool  isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;
@@ -583,6 +591,9 @@ namespace Ogre
         MissedListenerCallList mMissedListenerCallsTmp;
         bool                   mDelayListenerCalls;
         bool                   mIgnoreScheduledTasks;
+#ifdef OGRE_PROFILING_TEXTURES
+        bool mProfilingLoadingTime;
+#endif
 
     public:
         /** While true, calls to createTexture & createOrRetrieveTexture will ignore
@@ -618,6 +629,10 @@ namespace Ogre
     protected:
         VaoManager   *mVaoManager;
         RenderSystem *mRenderSystem;
+
+#ifdef OGRE_PROFILING_TEXTURES
+        std::map<IdString, Timer> mProfilingData;
+#endif
 
         // Be able to hold up to a 2x2 cubemap RGBA8 for when a
         // image raises an exception in the worker thread
@@ -1184,6 +1199,20 @@ namespace Ogre
             Use std::numeric_limits<uint32>::max() for no failure limits (i.e. never stall)
         */
         void setTrylockMutexFailureLimit( uint32 tryLockFailureLimit );
+
+        /** When enabled, we will profile the time it takes a texture
+            to go from Resident to Ready and Log it.
+        @param bProfile
+            True to enable. False to disable profiling.
+            Default value depends on Debug mode (default to true on Debug, false on Release)
+        */
+        void setProfileLoadingTime( bool bProfile );
+
+#ifdef OGRE_PROFILING_TEXTURES
+        bool getProfileLoadingTime() const { return mProfilingLoadingTime; }
+#else
+        bool getProfileLoadingTime() const { return false; }
+#endif
 
         /// This function CAN be called from any thread
         const String *findAliasNameStr( IdString idName ) const;
