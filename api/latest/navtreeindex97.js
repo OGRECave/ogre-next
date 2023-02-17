@@ -1,5 +1,9 @@
 var NAVTREEINDEX97 =
 {
+"class_ogre_1_1_material.html#a8660b706f82f66ed7939da460e204e55":[5,2,5,14,92],
+"class_ogre_1_1_material.html#a875b106c151e5545445bc5a88257c0f5":[5,2,5,14,12],
+"class_ogre_1_1_material.html#a893c7a150edb48a25e5df700cfc194eb":[5,2,5,14,8],
+"class_ogre_1_1_material.html#a89c1d9eff4bb9e594d804de95daf56c9":[5,2,5,14,28],
 "class_ogre_1_1_material.html#a8a81c60f958b0f3615c8690583c10d52":[5,2,5,14,66],
 "class_ogre_1_1_material.html#a8c26b7ccb050d96cd031db31bf996b48":[5,2,5,14,80],
 "class_ogre_1_1_material.html#a90e332b7e44b66bc34e3b90d810f7f2e":[5,2,5,14,32],
@@ -237,17 +241,13 @@ var NAVTREEINDEX97 =
 "class_ogre_1_1_math_1_1_random_value_provider.html#a5f20429fc283dba60a65455f32f96278":[5,2,6,14,0,0],
 "class_ogre_1_1_mathlib_c.html":[6,0,0,596],
 "class_ogre_1_1_mathlib_c.html":[7,0,0,569],
-"class_ogre_1_1_mathlib_c.html#a02049fb867cd3392b4205e2e62f353be":[6,0,0,596,53],
 "class_ogre_1_1_mathlib_c.html#a02049fb867cd3392b4205e2e62f353be":[7,0,0,569,53],
-"class_ogre_1_1_mathlib_c.html#a0cf741936ab604ef7354cfbbd55544f2":[7,0,0,569,2],
+"class_ogre_1_1_mathlib_c.html#a02049fb867cd3392b4205e2e62f353be":[6,0,0,596,53],
 "class_ogre_1_1_mathlib_c.html#a0cf741936ab604ef7354cfbbd55544f2":[6,0,0,596,2],
+"class_ogre_1_1_mathlib_c.html#a0cf741936ab604ef7354cfbbd55544f2":[7,0,0,569,2],
 "class_ogre_1_1_mathlib_c.html#a0ebeebd74661e5f1019fa2d2ee3ed272":[7,0,0,569,51],
 "class_ogre_1_1_mathlib_c.html#a0ebeebd74661e5f1019fa2d2ee3ed272":[6,0,0,596,51],
-"class_ogre_1_1_mathlib_c.html#a195c68e8b279bc6a0a2d995bfe5c027e":[6,0,0,596,29],
 "class_ogre_1_1_mathlib_c.html#a195c68e8b279bc6a0a2d995bfe5c027e":[7,0,0,569,29],
-"class_ogre_1_1_mathlib_c.html#a1e752ae6001ef8ec615da79a5492a71c":[7,0,0,569,21],
-"class_ogre_1_1_mathlib_c.html#a1e752ae6001ef8ec615da79a5492a71c":[6,0,0,596,21],
-"class_ogre_1_1_mathlib_c.html#a20cb845a4f6a6e0265d5681ee371cec7":[6,0,0,596,47],
-"class_ogre_1_1_mathlib_c.html#a20cb845a4f6a6e0265d5681ee371cec7":[7,0,0,569,47],
-"class_ogre_1_1_mathlib_c.html#a21fdec2e4734d2ede89ba852f56efd04":[7,0,0,569,44]
+"class_ogre_1_1_mathlib_c.html#a195c68e8b279bc6a0a2d995bfe5c027e":[6,0,0,596,29],
+"class_ogre_1_1_mathlib_c.html#a1e752ae6001ef8ec615da79a5492a71c":[6,0,0,596,21]
 };

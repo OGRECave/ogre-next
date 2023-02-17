@@ -1,5 +1,17 @@
 var NAVTREEINDEX217 =
 {
+"hlms.html#HlmsTextureManagerWatchOutMemoryConsiderations":[1,9,8,2,0],
+"hlms.html#HlmsTroubleshooting":[1,9,9],
+"hlms.html#HlmsTroubleshootingShadow":[1,9,9,0],
+"hlms.html#UsingHlmsImplementation":[1,9,7],
+"hlms.html#UsingHlmsImplementationCreatingDatablock":[1,9,7,2],
+"hlms.html#UsingHlmsImplementationDeinitilization":[1,9,7,1],
+"hlms.html#UsingHlmsImplementationInitialization":[1,9,7,0],
+"hlms.html#autotoc_md21":[1,9,10],
+"hlms.html#setWorkerThreadMinimumBudget":[1,9,8,2,1],
+"hlmsblendblockref.html":[1,9,11],
+"hlmsblendblockref.html#bbBlendtypes":[1,9,11,2],
+"hlmsblendblockref.html#bbExample":[1,9,11,1],
 "hlmsblendblockref.html#bbLinks":[1,9,11,3],
 "hlmsblendblockref.html#bbParamAlphaToCoverage":[1,9,11,0,0],
 "hlmsblendblockref.html#bbParamBlendOperation":[1,9,11,0,7],
@@ -237,17 +249,5 @@ var NAVTREEINDEX217 =
 "namespace_ogre.html#a3d9f5c00761ed1ff7885a805d82f942c":[6,0,0,1055],
 "namespace_ogre.html#a3eb75c921356f9d97d3362299dc6a9ea":[6,0,0,1062],
 "namespace_ogre.html#a4050eee6ae16a1d6c97d826854b1ed32":[6,0,0,1102],
-"namespace_ogre.html#a4304981347643708ee9a7ba8884e5758":[6,0,0,1219],
-"namespace_ogre.html#a43278e35ec4d27a6f37928aa78eded36":[6,0,0,1147],
-"namespace_ogre.html#a439278da9ec600ca236ce06ce5007657":[6,0,0,1344],
-"namespace_ogre.html#a447e51d7625af79716667cebcfa6da57":[6,0,0,1275],
-"namespace_ogre.html#a447e51d7625af79716667cebcfa6da57a67ac0d57b0c790c17be7e64f989989f3":[6,0,0,1275,1],
-"namespace_ogre.html#a447e51d7625af79716667cebcfa6da57a75d156143dfcf82c40f6bd0d350dff9b":[6,0,0,1275,0],
-"namespace_ogre.html#a447e51d7625af79716667cebcfa6da57aea0c0c9e027fc49a40600a564dbe733d":[6,0,0,1275,2],
-"namespace_ogre.html#a4697cc0c72aef3b488c7e058adf734ed":[6,0,0,1177],
-"namespace_ogre.html#a46b90d61319975f55655dff9349deec2":[6,0,0,1065],
-"namespace_ogre.html#a472ecba1ddd158f3f4b0035b5237f5f9":[6,0,0,1337],
-"namespace_ogre.html#a47aa3be163bca4f89016c19f24e3e626":[6,0,0,1192],
-"namespace_ogre.html#a49df4b24acc70e29d353052ab4e3f055":[6,0,0,1373],
-"namespace_ogre.html#a4b3ac5cd3c1499373bbb3ebc3904a418":[6,0,0,1362]
+"namespace_ogre.html#a4304981347643708ee9a7ba8884e5758":[6,0,0,1219]
 };

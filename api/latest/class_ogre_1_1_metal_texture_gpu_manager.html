@@ -241,6 +241,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0e9374e0a6a80f16ef5b3e95f38c2e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3886c70b1674b192547c407edeb4c67e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a3886c70b1674b192547c407edeb4c67e">getMemoryStats</a> (size_t &amp;outTextureBytesCpu, size_t &amp;outTextureBytesGpu, size_t &amp;outUsedStagingTextureBytes, size_t &amp;outAvailableStagingTextureBytes)</td></tr>
 <tr class="separator:a3886c70b1674b192547c407edeb4c67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52d792552906d877cc26b4f0b725a126"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a52d792552906d877cc26b4f0b725a126">getProfileLoadingTime</a> () const</td></tr>
+<tr class="separator:a52d792552906d877cc26b4f0b725a126"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba6d3b3e837106749a77009cc204a63c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#aba6d3b3e837106749a77009cc204a63c">getRenderSystem</a> () const</td></tr>
 <tr class="separator:aba6d3b3e837106749a77009cc204a63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18f2ab9f38f0dbf29a75a82030231a9f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_staging_texture.html">StagingTexture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a18f2ab9f38f0dbf29a75a82030231a9f">getStagingTexture</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> width, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> height, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> depth, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> slices, <a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> pixelFormat, size_t minConsumptionRatioThreshold=25u)</td></tr>
@@ -270,6 +272,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abe21fe76416e68bcfc8fe57f2655e868"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#abe21fe76416e68bcfc8fe57f2655e868">setDefaultMipmapGeneration</a> (<a class="el" href="namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb">DefaultMipmapGen::DefaultMipmapGen</a> defaultMipmapGen, <a class="el" href="namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb">DefaultMipmapGen::DefaultMipmapGen</a> defaultMipmapGenCubemaps)</td></tr>
 <tr class="memdesc:abe21fe76416e68bcfc8fe57f2655e868"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to use HW or SW mipmap generation when specifying <a class="el" href="namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054a537f83d75be40b8f38b5f9dc03912afa">TextureFilter::TypeGenerateDefaultMipmaps</a> for loading files from textures.  <a href="class_ogre_1_1_texture_gpu_manager.html#abe21fe76416e68bcfc8fe57f2655e868">More...</a><br /></td></tr>
 <tr class="separator:abe21fe76416e68bcfc8fe57f2655e868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e35f39923cc1f38d41c4f5fae52dcf9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a4e35f39923cc1f38d41c4f5fae52dcf9">setProfileLoadingTime</a> (bool bProfile)</td></tr>
+<tr class="memdesc:a4e35f39923cc1f38d41c4f5fae52dcf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">When enabled, we will profile the time it takes a texture to go from Resident to Ready and <a class="el" href="class_ogre_1_1_log.html">Log</a> it.  <a href="class_ogre_1_1_texture_gpu_manager.html#a4e35f39923cc1f38d41c4f5fae52dcf9">More...</a><br /></td></tr>
+<tr class="separator:a4e35f39923cc1f38d41c4f5fae52dcf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a164a5285771064ccd10c8c2d9392d9da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a164a5285771064ccd10c8c2d9392d9da">setStagingTextureMaxBudgetBytes</a> (size_t stagingTextureMaxBudgetBytes)</td></tr>
 <tr class="memdesc:a164a5285771064ccd10c8c2d9392d9da"><td class="mdescLeft">&#160;</td><td class="mdescRight">At a high level, texture loading works like this:  <a href="class_ogre_1_1_texture_gpu_manager.html#a164a5285771064ccd10c8c2d9392d9da">More...</a><br /></td></tr>
 <tr class="separator:a164a5285771064ccd10c8c2d9392d9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2002,6 +2007,31 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a52d792552906d877cc26b4f0b725a126" name="a52d792552906d877cc26b4f0b725a126"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52d792552906d877cc26b4f0b725a126">&#9670;&#160;</a></span>getProfileLoadingTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::TextureGpuManager::getProfileLoadingTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aba6d3b3e837106749a77009cc204a63c" name="aba6d3b3e837106749a77009cc204a63c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aba6d3b3e837106749a77009cc204a63c">&#9670;&#160;</a></span>getRenderSystem()</h2>
 
@@ -2534,6 +2564,40 @@ Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">defaultMipmapGen</td><td>Whether to enable HW mipmap generation for textures. Default is true. </td></tr>
     <tr><td class="paramname">defaultMipmapGenCubemaps</td><td>Whether to enable HW mipmap generation for cubemap textures. Default is false. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4e35f39923cc1f38d41c4f5fae52dcf9" name="a4e35f39923cc1f38d41c4f5fae52dcf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e35f39923cc1f38d41c4f5fae52dcf9">&#9670;&#160;</a></span>setProfileLoadingTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::TextureGpuManager::setProfileLoadingTime </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bProfile</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>When enabled, we will profile the time it takes a texture to go from Resident to Ready and <a class="el" href="class_ogre_1_1_log.html">Log</a> it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bProfile</td><td>True to enable. False to disable profiling. Default value depends on Debug mode (default to true on Debug, false on Release) </td></tr>
   </table>
   </dd>
 </dl>
