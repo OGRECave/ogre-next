@@ -1,5 +1,7 @@
 var NAVTREEINDEX225 =
 {
+"struct_ogre_1_1_gpu_named_constants.html#a262a2eea37cc3b2ef0973a625f624ff0":[5,2,5,6,6],
+"struct_ogre_1_1_gpu_named_constants.html#a3e1e7178a176a8e12e9e7491187885de":[5,2,5,6,3],
 "struct_ogre_1_1_gpu_named_constants.html#a4ce0c92c117f2c7dd91acf697821ef67":[5,2,5,6,5],
 "struct_ogre_1_1_gpu_named_constants.html#a5558247a535928116d99c17fdbb4de6f":[5,2,5,6,8],
 "struct_ogre_1_1_gpu_named_constants.html#a6989ab89780218c87936c55c96586a5b":[5,2,5,6,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX225 =
 "struct_ogre_1_1_hlms_macroblock.html#a59013785563e6a19b27a03943b85acdd":[5,2,10,73,0],
 "struct_ogre_1_1_hlms_macroblock.html#a61a8ec44b075bce29ad2b0d65edd14fd":[5,2,10,73,8],
 "struct_ogre_1_1_hlms_macroblock.html#a6992c372553d3cf1045f403bdd1a488c":[5,2,10,73,17],
-"struct_ogre_1_1_hlms_macroblock.html#a8202a5d073a92de41e05e2b6fe50ff26":[5,2,10,73,3],
-"struct_ogre_1_1_hlms_macroblock.html#a84c2808fce656f84311edfba9c5192ae":[5,2,10,73,6],
-"struct_ogre_1_1_hlms_macroblock.html#a8dbf13c2d554ba4945031e0f309e82a4":[5,2,10,73,13]
+"struct_ogre_1_1_hlms_macroblock.html#a8202a5d073a92de41e05e2b6fe50ff26":[5,2,10,73,3]
 };

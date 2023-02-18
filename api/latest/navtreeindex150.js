@@ -1,5 +1,7 @@
 var NAVTREEINDEX150 =
 {
+"class_ogre_1_1_texture_gpu_manager.html#a423e53613f85ab74171ac4bb291c2555":[5,2,10,127,53],
+"class_ogre_1_1_texture_gpu_manager.html#a45819a2f57371a1d5ae1d026a21510ab":[5,2,10,127,39],
 "class_ogre_1_1_texture_gpu_manager.html#a46f6c11e4af75070ada1e868e7b24412":[5,2,10,127,14],
 "class_ogre_1_1_texture_gpu_manager.html#a4e35f39923cc1f38d41c4f5fae52dcf9":[5,2,10,127,61],
 "class_ogre_1_1_texture_gpu_manager.html#a4f6d7560d59263dc303563777b5c61e8":[5,2,10,127,17],
@@ -235,19 +237,17 @@ var NAVTREEINDEX150 =
 "class_ogre_1_1_texture_unit_translator.html#a9c157cbbe70047b1381e07b923064cf4":[5,2,2,123,1],
 "class_ogre_1_1_thread_handle.html":[7,0,0,887],
 "class_ogre_1_1_thread_handle.html":[6,0,0,914],
-"class_ogre_1_1_thread_handle.html#a1b6a58d046b67767627a836d5492fa71":[6,0,0,914,4],
 "class_ogre_1_1_thread_handle.html#a1b6a58d046b67767627a836d5492fa71":[7,0,0,887,4],
+"class_ogre_1_1_thread_handle.html#a1b6a58d046b67767627a836d5492fa71":[6,0,0,914,4],
 "class_ogre_1_1_thread_handle.html#a3cf59841eda1ae9b13da855ae49f87c7":[7,0,0,887,3],
 "class_ogre_1_1_thread_handle.html#a3cf59841eda1ae9b13da855ae49f87c7":[6,0,0,914,3],
 "class_ogre_1_1_thread_handle.html#a8307c96c4a7fefd9bf6589cca9223834":[7,0,0,887,1],
 "class_ogre_1_1_thread_handle.html#a8307c96c4a7fefd9bf6589cca9223834":[6,0,0,914,1],
 "class_ogre_1_1_thread_handle.html#a93ae944bed55ecc09328ddae5f7bdff1":[6,0,0,914,2],
 "class_ogre_1_1_thread_handle.html#a93ae944bed55ecc09328ddae5f7bdff1":[7,0,0,887,2],
-"class_ogre_1_1_thread_handle.html#ade4e910ee6bb374ae353e8e8a86074df":[7,0,0,887,5],
 "class_ogre_1_1_thread_handle.html#ade4e910ee6bb374ae353e8e8a86074df":[6,0,0,914,5],
+"class_ogre_1_1_thread_handle.html#ade4e910ee6bb374ae353e8e8a86074df":[7,0,0,887,5],
 "class_ogre_1_1_thread_handle.html#ae7c32d6deed190aeea73f9a3357a99fd":[6,0,0,914,0],
 "class_ogre_1_1_thread_handle.html#ae7c32d6deed190aeea73f9a3357a99fd":[7,0,0,887,0],
-"class_ogre_1_1_thread_local_ptr.html":[6,0,0,915],
-"class_ogre_1_1_thread_local_ptr.html":[7,0,0,888],
-"class_ogre_1_1_thread_local_ptr.html#a4c85991e69fd3630a3f795896d4ccc62":[7,0,0,888,7]
+"class_ogre_1_1_thread_local_ptr.html":[7,0,0,888]
 };

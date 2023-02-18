@@ -255,6 +255,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5a7a60f98767f21cff7da1f91a3c23fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af316fb5991958874cbdd34323c57fc91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_manager.html">HlmsManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#af316fb5991958874cbdd34323c57fc91">getHlmsManager</a> () const</td></tr>
 <tr class="separator:af316fb5991958874cbdd34323c57fc91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7973d0909cf5fd554f6873d35f913226"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a7973d0909cf5fd554f6873d35f913226">getIndustryCompatible</a> () const</td></tr>
+<tr class="separator:a7973d0909cf5fd554f6873d35f913226"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00f1eaf25a10495630480cead7938d5a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_irradiance_field.html">IrradianceField</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a00f1eaf25a10495630480cead7938d5a">getIrradianceField</a> ()</td></tr>
 <tr class="separator:a00f1eaf25a10495630480cead7938d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a429f72069cc9fb16e23dc23fd8ef233d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_irradiance_volume.html">IrradianceVolume</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a429f72069cc9fb16e23dc23fd8ef233d">getIrradianceVolume</a> () const</td></tr>
@@ -396,6 +398,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2eef435df6f7d35adde2e52fbac2cf39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a2eef435df6f7d35adde2e52fbac2cf39">setFineLightMaskGranularity</a> (bool useFineGranularity)</td></tr>
 <tr class="memdesc:a2eef435df6f7d35adde2e52fbac2cf39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles whether light masks will be obeyed per object by doing: if( movableObject-&gt;getLightMask() &amp; light-&gt;getLightMask() ) doLighting( movableObject light ); Note this toggle only affects forward lights (i.e.  <a href="class_ogre_1_1_hlms_pbs.html#a2eef435df6f7d35adde2e52fbac2cf39">More...</a><br /></td></tr>
 <tr class="separator:a2eef435df6f7d35adde2e52fbac2cf39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e4cd2dfa675cdd9d1c3157e747d1615"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a5e4cd2dfa675cdd9d1c3157e747d1615">setIndustryCompatible</a> (bool bIndustryCompatible)</td></tr>
+<tr class="memdesc:a5e4cd2dfa675cdd9d1c3157e747d1615"><td class="mdescLeft">&#160;</td><td class="mdescRight">There are slight variations between how PBR formulas are handled in OgreNext and other game engines or DCC (Digital Content Creator) tools.  <a href="class_ogre_1_1_hlms_pbs.html#a5e4cd2dfa675cdd9d1c3157e747d1615">More...</a><br /></td></tr>
+<tr class="separator:a5e4cd2dfa675cdd9d1c3157e747d1615"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad956bd132ce0e5b2e6f91a9f9d88cf88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#ad956bd132ce0e5b2e6f91a9f9d88cf88">setIrradianceField</a> (<a class="el" href="class_ogre_1_1_irradiance_field.html">IrradianceField</a> *irradianceField)</td></tr>
 <tr class="separator:ad956bd132ce0e5b2e6f91a9f9d88cf88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a164e56d214fa885ae5d71e4ea7751cf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs.html#a164e56d214fa885ae5d71e4ea7751cf5">setIrradianceVolume</a> (<a class="el" href="class_ogre_1_1_irradiance_volume.html">IrradianceVolume</a> *irradianceVolume)</td></tr>
@@ -2102,6 +2107,31 @@ Static Public Member Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7973d0909cf5fd554f6873d35f913226" name="a7973d0909cf5fd554f6873d35f913226"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7973d0909cf5fd554f6873d35f913226">&#9670;&#160;</a></span>getIndustryCompatible()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HlmsPbs::getIndustryCompatible </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3983,6 +4013,33 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Toggles whether light masks will be obeyed per object by doing: if( movableObject-&gt;getLightMask() &amp; light-&gt;getLightMask() ) doLighting( movableObject light ); Note this toggle only affects forward lights (i.e. </p>
 <p >Directional lights + shadow casting lights). You may want to see <a class="el" href="class_ogre_1_1_forward_plus_base.html#aab10c992600476f4227e8205bb383293" title="Toggles whether light masks will be obeyed per object &amp; per light by doing: if( movableObject-&gt;getLig...">ForwardPlusBase::setFineLightMaskGranularity</a> for control over Forward+ lights. </p>
+
+</div>
+</div>
+<a id="a5e4cd2dfa675cdd9d1c3157e747d1615" name="a5e4cd2dfa675cdd9d1c3157e747d1615"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e4cd2dfa675cdd9d1c3157e747d1615">&#9670;&#160;</a></span>setIndustryCompatible()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsPbs::setIndustryCompatible </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bIndustryCompatible</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>There are slight variations between how PBR formulas are handled in OgreNext and other game engines or DCC (Digital Content Creator) tools. </p>
+<p >Enabling this setting forces OgreNext to mimic as close as possible what popular DCC are doing.</p>
+<p >Enable this option if the art director wants the model to look exactly (or as close as possible) as it looks in Blender/Maya/Marmoset. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bIndustryCompatible</td><td>True to be as close as possible to other DCC. Default is false. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
