@@ -44,7 +44,9 @@ THE SOFTWARE.
 {
     self.layer = [CAMetalLayer layer];
     self.wantsLayer = YES;
-    
+
+    self.presentationTime = -1.0;
+
     _layerSizeDidUpdate = YES;
 }
 
