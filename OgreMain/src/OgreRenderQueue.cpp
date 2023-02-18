@@ -482,6 +482,51 @@ namespace Ogre
         OgreProfileEndGroup( "Command Execution", OGREPROF_RENDERING );
     }
     //-----------------------------------------------------------------------
+    void RenderQueue::warmUpShaders( const uint8 firstRq, const uint8 lastRq, const bool casterPass )
+    {
+        OgreProfileBeginGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
+
+        for( size_t i = firstRq; i < lastRq; ++i )
+        {
+            QueuedRenderableArray &queuedRenderables = mRenderQueues[i].mQueuedRenderables;
+            QueuedRenderableArrayPerThread &perThreadQueue =
+                mRenderQueues[i].mQueuedRenderablesPerThread;
+
+            if( !mRenderQueues[i].mSorted )
+            {
+                OgreProfileGroupAggregate( "Merging per-thread queues", OGREPROF_RENDERING );
+
+                size_t numRenderables = 0;
+                QueuedRenderableArrayPerThread::const_iterator itor = perThreadQueue.begin();
+                QueuedRenderableArrayPerThread::const_iterator endt = perThreadQueue.end();
+
+                while( itor != endt )
+                {
+                    numRenderables += itor->q.size();
+                    ++itor;
+                }
+
+                queuedRenderables.reserve( numRenderables );
+
+                itor = perThreadQueue.begin();
+                while( itor != endt )
+                {
+                    queuedRenderables.appendPOD( itor->q.begin(), itor->q.end() );
+                    ++itor;
+                }
+
+                mRenderQueues[i].mSorted = true;
+            }
+
+            // All render queue modes share the same path
+            warmUpShaders( casterPass, mPassCache, mRenderQueues[i] );
+        }
+
+        --mRenderingStarted;
+
+        OgreProfileEndGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
+    }
+    //-----------------------------------------------------------------------
     void RenderQueue::renderES2( RenderSystem *rs, bool casterPass, bool dualParaboloid,
                                  HlmsCache passCache[HLMS_MAX],
                                  const RenderQueueGroup &renderQueueGroup )
@@ -861,6 +906,32 @@ namespace Ogre
         mLastVertexData = 0;
         mLastIndexData = 0;
         mLastTextureHash = 0;
+    }
+    //-----------------------------------------------------------------------
+    void RenderQueue::warmUpShaders( const bool casterPass, HlmsCache passCache[],
+                                     const RenderQueueGroup &renderQueueGroup )
+    {
+        HlmsCache const *lastHlmsCache = &c_dummyCache;
+        uint32 lastHlmsCacheHash = 0;
+
+        const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
+
+        QueuedRenderableArray::const_iterator itor = queuedRenderables.begin();
+        QueuedRenderableArray::const_iterator endt = queuedRenderables.end();
+
+        while( itor != endt )
+        {
+            const QueuedRenderable &queuedRenderable = *itor;
+
+            const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
+
+            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
+
+            lastHlmsCacheHash = lastHlmsCache->hash;
+            hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
+                               casterPass );
+            ++itor;
+        }
     }
     //-----------------------------------------------------------------------
     void RenderQueue::renderSingleObject( Renderable *pRend, const MovableObject *pMovableObject,

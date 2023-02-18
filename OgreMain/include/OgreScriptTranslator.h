@@ -409,6 +409,8 @@ namespace Ogre
                               CompositorTargetDef *targetDef );
         void translateIblSpecular( ScriptCompiler *compiler, const AbstractNodePtr &node,
                                    CompositorTargetDef *targetDef );
+        void translateWarmUp( ScriptCompiler *compiler, const AbstractNodePtr &node,
+                              CompositorTargetDef *targetDef );
 
     public:
         CompositorPassTranslator();

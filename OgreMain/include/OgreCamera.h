@@ -222,9 +222,6 @@ namespace Ogre
 
         float mConstantBiasScale;
 
-        /// Each frame it is set to all false. After rendering each RQ, it is set to true
-        vector<bool>::type mRenderedRqs;
-
         typedef vector<Listener *>::type ListenerList;
         ListenerList                     mListeners;
 
@@ -763,27 +760,6 @@ namespace Ogre
 
         void  _setConstantBiasScale( const float bias ) { mConstantBiasScale = bias; }
         float _getConstantBiasScale() const { return mConstantBiasScale; }
-
-        /** Called at the beginning of each frame to know which RenderQueue IDs have been rendered
-        @param numRqs
-            Max number of total possible render queues in this frame
-        */
-        void _resetRenderedRqs( size_t numRqs );
-
-        /** Tells the camera that render queues in the range [rqStart; rqEnd) were rendered
-        @remarks
-            This function may be called before having been actually rendered
-            (i.e. during the culling phase 01)
-        @param rqStart
-            The first render queue in the range to be rendered. Inclusive.
-        @param rqEnd
-            Next to last render queue id to be rendered. Must be below or equal than
-            the value passed to @see _resetRenderedRqs
-        */
-        void _setRenderedRqs( size_t rqStart, size_t rqEnd );
-
-        /// Returns true if the asked render queue has been rendered. False otherwise
-        bool isRenderedRq( size_t rqId ) const { return mRenderedRqs[rqId]; }
     };
     /** @} */
     /** @} */
