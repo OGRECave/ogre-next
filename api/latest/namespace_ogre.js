@@ -465,6 +465,8 @@ var namespace_ogre =
     [ "CompositorPassTranslator", "class_ogre_1_1_compositor_pass_translator.html", "class_ogre_1_1_compositor_pass_translator" ],
     [ "CompositorPassUav", "class_ogre_1_1_compositor_pass_uav.html", "class_ogre_1_1_compositor_pass_uav" ],
     [ "CompositorPassUavDef", "class_ogre_1_1_compositor_pass_uav_def.html", "class_ogre_1_1_compositor_pass_uav_def" ],
+    [ "CompositorPassWarmUp", "class_ogre_1_1_compositor_pass_warm_up.html", "class_ogre_1_1_compositor_pass_warm_up" ],
+    [ "CompositorPassWarmUpDef", "class_ogre_1_1_compositor_pass_warm_up_def.html", "class_ogre_1_1_compositor_pass_warm_up_def" ],
     [ "CompositorRenderTargetViewTranslator", "class_ogre_1_1_compositor_render_target_view_translator.html", "class_ogre_1_1_compositor_render_target_view_translator" ],
     [ "CompositorShadowMapRepeatTranslator", "class_ogre_1_1_compositor_shadow_map_repeat_translator.html", "class_ogre_1_1_compositor_shadow_map_repeat_translator" ],
     [ "CompositorShadowMapTargetTranslator", "class_ogre_1_1_compositor_shadow_map_target_translator.html", "class_ogre_1_1_compositor_shadow_map_target_translator" ],
@@ -1763,6 +1765,7 @@ var namespace_ogre =
       [ "PASS_IBL_SPECULAR", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa0fe924f8a19ffe8a3d7c0445946d7ec5", null ],
       [ "PASS_SHADOWS", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa3ec0d9a6e1feeb393d5c3070589c9b60", null ],
       [ "PASS_TARGET_BARRIER", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa6b22361c61fe5c233b17230c5d795bfd", null ],
+      [ "PASS_WARM_UP", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aae53b9df27b85c40f6e48b402ee2714e1", null ],
       [ "PASS_COMPUTE", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa973bc7a5a948dd54130595d7539eb7ba", null ],
       [ "PASS_CUSTOM", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa8be4347345faa339a4c663a8c5da1c51", null ]
     ] ],

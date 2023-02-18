@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"_ogre_g_l_e_s2_prerequisites_8h.html#ae0ec9543ee139c2bbfe563184455d991":[8,0,4,2,0,24,13],
+"_ogre_g_l_e_s2_prerequisites_8h.html#ae299188bc0cd06ab08f50e22bd9cb0da":[8,0,4,2,0,24,39],
 "_ogre_g_l_e_s2_prerequisites_8h.html#ae77ad0a89d8cfab32ad91a456d445637":[8,0,4,2,0,24,57],
 "_ogre_g_l_e_s2_prerequisites_8h.html#aee1bae48ef978e37d265c8d4cca5b895":[8,0,4,2,0,24,49],
 "_ogre_g_l_e_s2_prerequisites_8h.html#af0e9ed90018ed167c2fbc91aa439f7a6":[8,0,4,2,0,24,35],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "_ogre_lod_collapse_cost_quadric_8h.html":[8,0,0,2,0,6],
 "_ogre_lod_collapser_8h.html":[8,0,0,2,0,7],
 "_ogre_lod_config_8h.html":[8,0,0,2,0,8],
-"_ogre_lod_config_8h.html#a8f2ca3c32da32a6a5eb07e12bfdcb1aa":[8,0,0,2,0,8,4],
-"_ogre_lod_config_serializer_8h.html":[8,0,0,2,0,9],
-"_ogre_lod_data_8h.html":[8,0,0,2,0,10]
+"_ogre_lod_config_8h.html#a8f2ca3c32da32a6a5eb07e12bfdcb1aa":[8,0,0,2,0,8,4]
 };

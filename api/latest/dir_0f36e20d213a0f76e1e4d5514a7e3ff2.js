@@ -11,6 +11,7 @@ var dir_0f36e20d213a0f76e1e4d5514a7e3ff2 =
     [ "PassStencil", "dir_b40f8a973276e2e8d1700bae5ae6340f.html", "dir_b40f8a973276e2e8d1700bae5ae6340f" ],
     [ "PassTargetBarrier", "dir_2176e09fd72fbc604f2fc324ce1abe00.html", "dir_2176e09fd72fbc604f2fc324ce1abe00" ],
     [ "PassUav", "dir_01fee6b4718319771aa54ab43cf5f9be.html", "dir_01fee6b4718319771aa54ab43cf5f9be" ],
+    [ "PassWarmUp", "dir_9154b4a4ec4d8d2418c86cadca649fe5.html", "dir_9154b4a4ec4d8d2418c86cadca649fe5" ],
     [ "OgreCompositorPass.h", "_ogre_compositor_pass_8h.html", "_ogre_compositor_pass_8h" ],
     [ "OgreCompositorPassDef.h", "_ogre_compositor_pass_def_8h.html", "_ogre_compositor_pass_def_8h" ],
     [ "OgreCompositorPassProvider.h", "_ogre_compositor_pass_provider_8h.html", null ]

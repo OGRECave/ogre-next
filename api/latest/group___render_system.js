@@ -74,7 +74,8 @@ var group___render_system =
       [ "renderPassPrepare", "class_ogre_1_1_render_queue.html#a98ecbe887b125f095c8625f8a0144101", null ],
       [ "renderSingleObject", "class_ogre_1_1_render_queue.html#a7cdd43e3bd6ce4350d4a4b66b58a934b", null ],
       [ "setRenderQueueMode", "class_ogre_1_1_render_queue.html#a70f6d85d6cde43a1b4badf25ed09fca5", null ],
-      [ "setSortRenderQueue", "class_ogre_1_1_render_queue.html#aeb41ed3f50a9e7e270d81d045e8a23e6", null ]
+      [ "setSortRenderQueue", "class_ogre_1_1_render_queue.html#aeb41ed3f50a9e7e270d81d045e8a23e6", null ],
+      [ "warmUpShaders", "class_ogre_1_1_render_queue.html#acfbbd9218d9c134357c12e12c32733f6", null ]
     ] ],
     [ "Ogre::RenderQueueListener", "class_ogre_1_1_render_queue_listener.html", [
       [ "~RenderQueueListener", "class_ogre_1_1_render_queue_listener.html#aca4ab8444c09caeeff186213a98beb89", null ],

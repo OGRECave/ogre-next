@@ -1637,7 +1637,13 @@ Public Attributes</h2></td></tr>
 
 <p>Called after a pass scene has rendered shadow casting (it gets called even if there is no shadow node). </p>
 <p >Gets called after passPreExecute and before passSceneAfterFrustumCulling</p>
-<p >Warning: calling pass-&gt;execute can result in recursive calls. </p>
+<p >Warning: calling pass-&gt;execute can result in recursive calls.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pass</td><td>PassScene calling this listener. Can be nullptr if the caller is <a class="el" href="class_ogre_1_1_compositor_pass_warm_up.html" title="Implementation of CompositorPass.">CompositorPassWarmUp</a> </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

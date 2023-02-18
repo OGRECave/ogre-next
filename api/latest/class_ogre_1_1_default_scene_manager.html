@@ -258,8 +258,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acdd809e69cbbc4b565a27b8edef98ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77f751eb7bce6624985c304f878d51d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a77f751eb7bce6624985c304f878d51d9">_setCurrentRenderStage</a> (<a class="el" href="class_ogre_1_1_scene_manager.html#a51db39cc4fa15b28086a1793d42fc827">IlluminationRenderStage</a> stage)</td></tr>
 <tr class="separator:a77f751eb7bce6624985c304f878d51d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae333535bc17cb63a4500d4301b7270a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ae333535bc17cb63a4500d4301b7270a0">_setCurrentShadowNode</a> (<a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *shadowNode, bool isReused)</td></tr>
-<tr class="separator:ae333535bc17cb63a4500d4301b7270a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa23534c58043177bd98177efc3b0f34c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa23534c58043177bd98177efc3b0f34c">_setCurrentShadowNode</a> (<a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *shadowNode)</td></tr>
+<tr class="separator:aa23534c58043177bd98177efc3b0f34c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20c0ee49a853145d3350e6e32c59f32"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ab20c0ee49a853145d3350e6e32c59f32">_setDestinationRenderSystem</a> (<a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *sys)</td></tr>
 <tr class="memdesc:ab20c0ee49a853145d3350e6e32c59f32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the scene manager of its destination render system.  <a href="class_ogre_1_1_scene_manager.html#ab20c0ee49a853145d3350e6e32c59f32">More...</a><br /></td></tr>
 <tr class="separator:ab20c0ee49a853145d3350e6e32c59f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -280,6 +280,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9959c0abe638bebd7ad2a30abc23ca2e"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a9959c0abe638bebd7ad2a30abc23ca2e">_updateWorkerThread</a> (<a class="el" href="class_ogre_1_1_thread_handle.html">ThreadHandle</a> *threadHandle)</td></tr>
 <tr class="memdesc:a9959c0abe638bebd7ad2a30abc23ca2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from the worker thread, polls to process frustum culling requests when a sync is performed.  <a href="class_ogre_1_1_scene_manager.html#a9959c0abe638bebd7ad2a30abc23ca2e">More...</a><br /></td></tr>
 <tr class="separator:a9959c0abe638bebd7ad2a30abc23ca2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a452210f8cda18ae14867bb1d637e1ff6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a452210f8cda18ae14867bb1d637e1ff6">_warmUpShaders</a> (<a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, uint32_t visibilityMask, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> firstRq, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> lastRq)</td></tr>
+<tr class="separator:a452210f8cda18ae14867bb1d637e1ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b54e34b6a8e72d4c1456bda016731ad"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a6b54e34b6a8e72d4c1456bda016731ad">addListener</a> (<a class="el" href="class_ogre_1_1_scene_manager_1_1_listener.html">Listener</a> *s)</td></tr>
 <tr class="memdesc:a6b54e34b6a8e72d4c1456bda016731ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a listener which will get called back on scene manager events.  <a href="class_ogre_1_1_scene_manager.html#a6b54e34b6a8e72d4c1456bda016731ad">More...</a><br /></td></tr>
 <tr class="separator:a6b54e34b6a8e72d4c1456bda016731ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -709,13 +711,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af13eb691a7bdd67e17a402dee98c4b5f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#af13eb691a7bdd67e17a402dee98c4b5f">injectMovableObject</a> (<a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> *m)</td></tr>
 <tr class="memdesc:af13eb691a7bdd67e17a402dee98c4b5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inject a <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> instance created externally.  <a href="class_ogre_1_1_scene_manager.html#af13eb691a7bdd67e17a402dee98c4b5f">More...</a><br /></td></tr>
 <tr class="separator:af13eb691a7bdd67e17a402dee98c4b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a431de80d51515c95d6540b1b3e68ab56"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a431de80d51515c95d6540b1b3e68ab56">isCurrentShadowNodeReused</a> () const</td></tr>
-<tr class="separator:a431de80d51515c95d6540b1b3e68ab56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a026ef6835c39e17cb8a3ab485a653b0b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a026ef6835c39e17cb8a3ab485a653b0b">isDecalsDiffuseEmissiveMerged</a> () const</td></tr>
 <tr class="separator:a026ef6835c39e17cb8a3ab485a653b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64a77e6deae28a8fdc8068e3dd063419"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a64a77e6deae28a8fdc8068e3dd063419">isLateMaterialResolving</a> () const</td></tr>
-<tr class="memdesc:a64a77e6deae28a8fdc8068e3dd063419"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets whether using late material resolving or not.  <a href="class_ogre_1_1_scene_manager.html#a64a77e6deae28a8fdc8068e3dd063419">More...</a><br /></td></tr>
-<tr class="separator:a64a77e6deae28a8fdc8068e3dd063419"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca98bc5c9414a63e9e7cd007e2f848ad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aca98bc5c9414a63e9e7cd007e2f848ad">isSkyEnabled</a> () const</td></tr>
 <tr class="separator:aca98bc5c9414a63e9e7cd007e2f848ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a635375da32f1c76624f46b3678ee494d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a635375da32f1c76624f46b3678ee494d">isUsingInstancedStereo</a> () const</td></tr>
@@ -806,9 +803,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7b4cbdad7664b8747f1929dbec29c046"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fd7c7abebcd867e462035b32458983a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a4fd7c7abebcd867e462035b32458983a">setForwardClustered</a> (bool bEnable, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> width, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> height, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> numSlices, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> lightsPerCell, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> decalsPerCell, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> cubemapProbesPerCel, float minDistance, float maxDistance)</td></tr>
 <tr class="separator:a4fd7c7abebcd867e462035b32458983a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86c1371039d40e139a37b2b174538978"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a86c1371039d40e139a37b2b174538978">setLateMaterialResolving</a> (bool isLate)</td></tr>
-<tr class="memdesc:a86c1371039d40e139a37b2b174538978"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether to use late material resolving or not.  <a href="class_ogre_1_1_scene_manager.html#a86c1371039d40e139a37b2b174538978">More...</a><br /></td></tr>
-<tr class="separator:a86c1371039d40e139a37b2b174538978"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafb46b1100b787f2b032407d889251b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8">virtual_l2</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aafb46b1100b787f2b032407d889251b9">setLightMask</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> mask)</td></tr>
 <tr class="memdesc:aafb46b1100b787f2b032407d889251b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a mask which is bitwise 'and'ed with lights' own light masks to determine if the light should be casting light.  <a href="class_ogre_1_1_scene_manager.html#aafb46b1100b787f2b032407d889251b9">More...</a><br /></td></tr>
 <tr class="separator:aafb46b1100b787f2b032407d889251b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2516,8 +2510,8 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 
 </div>
 </div>
-<a id="ae333535bc17cb63a4500d4301b7270a0" name="ae333535bc17cb63a4500d4301b7270a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae333535bc17cb63a4500d4301b7270a0">&#9670;&#160;</a></span>_setCurrentShadowNode()</h2>
+<a id="aa23534c58043177bd98177efc3b0f34c" name="aa23534c58043177bd98177efc3b0f34c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa23534c58043177bd98177efc3b0f34c">&#9670;&#160;</a></span>_setCurrentShadowNode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2529,18 +2523,8 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
           <td class="memname">void Ogre::SceneManager::_setCurrentShadowNode </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *&#160;</td>
-          <td class="paramname"><em>shadowNode</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>shadowNode</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isReused</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -2808,6 +2792,54 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </div><div class="memdoc">
 
 <p>Called from the worker thread, polls to process frustum culling requests when a sync is performed. </p>
+
+</div>
+</div>
+<a id="a452210f8cda18ae14867bb1d637e1ff6" name="a452210f8cda18ae14867bb1d637e1ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a452210f8cda18ae14867bb1d637e1ff6">&#9670;&#160;</a></span>_warmUpShaders()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::_warmUpShaders </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>camera</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>visibilityMask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramname"><em>firstRq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramname"><em>lastRq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -7521,31 +7553,6 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
 
 </div>
 </div>
-<a id="a431de80d51515c95d6540b1b3e68ab56" name="a431de80d51515c95d6540b1b3e68ab56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a431de80d51515c95d6540b1b3e68ab56">&#9670;&#160;</a></span>isCurrentShadowNodeReused()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::SceneManager::isCurrentShadowNodeReused </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a026ef6835c39e17cb8a3ab485a653b0b" name="a026ef6835c39e17cb8a3ab485a653b0b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a026ef6835c39e17cb8a3ab485a653b0b">&#9670;&#160;</a></span>isDecalsDiffuseEmissiveMerged()</h2>
 
@@ -7568,34 +7575,6 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a64a77e6deae28a8fdc8068e3dd063419" name="a64a77e6deae28a8fdc8068e3dd063419"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64a77e6deae28a8fdc8068e3dd063419">&#9670;&#160;</a></span>isLateMaterialResolving()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Ogre::SceneManager::isLateMaterialResolving </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets whether using late material resolving or not. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_scene_manager.html#a86c1371039d40e139a37b2b174538978" title="Sets whether to use late material resolving or not.">setLateMaterialResolving</a> </dd></dl>
 
 </div>
 </div>
@@ -8866,35 +8845,6 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a86c1371039d40e139a37b2b174538978" name="a86c1371039d40e139a37b2b174538978"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86c1371039d40e139a37b2b174538978">&#9670;&#160;</a></span>setLateMaterialResolving()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::SceneManager::setLateMaterialResolving </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isLate</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets whether to use late material resolving or not. </p>
-<p >If set, materials will be resolved from the materials at the pass-setting stage and not at the render queue building stage. This is useful when the active material scheme during the render queue building stage is different from the one during the rendering stage. </p>
 
 </div>
 </div>

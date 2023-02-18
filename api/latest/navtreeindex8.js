@@ -1,5 +1,7 @@
 var NAVTREEINDEX8 =
 {
+"_ogre_vulkan_delayed_funcs_8h.html#a7de04fd70ba4d126cbc0fe7934887186":[8,0,4,5,1,0,11],
+"_ogre_vulkan_delayed_funcs_8h.html#a8159a3c5d756ca7ee2e1dfa203498585":[8,0,4,5,1,0,13],
 "_ogre_vulkan_delayed_funcs_8h.html#ab8c28303f04f47a222edfd79479ca279":[8,0,4,5,1,0,16],
 "_ogre_vulkan_delayed_funcs_8h.html#ad937c7bfa1ff0fc354523f4629fa20a7":[8,0,4,5,1,0,9],
 "_ogre_vulkan_delayed_funcs_8h.html#afa2bb027d1c17f8e5600ab0a73455ebd":[8,0,4,5,1,0,14],
@@ -247,7 +249,5 @@ var NAVTREEINDEX8 =
 "_samples.html#decals":[1,0,8],
 "_samples.html#dynamicgeometry":[1,0,9],
 "_samples.html#dyncubemap":[1,0,42],
-"_samples.html#eglheadless":[1,0,43],
-"_samples.html#forward3d":[1,0,0],
-"_samples.html#hdr":[1,0,1]
+"_samples.html#eglheadless":[1,0,43]
 };

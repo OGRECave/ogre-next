@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"_ogre_rotation_affector_8h.html":[8,0,3,1,0,29],
+"_ogre_rotation_affector_factory_8h.html":[8,0,3,1,0,30],
 "_ogre_rotational_spline_8h.html":[8,0,2,0,224],
 "_ogre_s_d_l_g_l_support_8h.html":[8,0,4,1,0,2,4,0],
 "_ogre_s_d_l_prerequisites_8h.html":[8,0,4,1,0,2,4,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "_ogre_thread_defines_poco_8h.html#a2a5197ca265b2bfc25a5d0aa570d1f31":[8,0,2,0,11,8,33],
 "_ogre_thread_defines_poco_8h.html#a2fb96ea8ad9700f804480d1d7f5d692d":[8,0,2,0,11,8,10],
 "_ogre_thread_defines_poco_8h.html#a30df0c1739013ab3cd4a816e61244146":[8,0,2,0,11,8,35],
-"_ogre_thread_defines_poco_8h.html#a39e611f7baf80408d740fce6a2502414":[8,0,2,0,11,8,7],
-"_ogre_thread_defines_poco_8h.html#a5a4c5f6a9667046f955529291276f3dd":[8,0,2,0,11,8,26],
-"_ogre_thread_defines_poco_8h.html#a615a8a037a8f3290ec86ec0e376042b7":[8,0,2,0,11,8,11]
+"_ogre_thread_defines_poco_8h.html#a39e611f7baf80408d740fce6a2502414":[8,0,2,0,11,8,7]
 };

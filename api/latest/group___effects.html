@@ -177,6 +177,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_uav_def.html">Ogre::CompositorPassUavDef</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_warm_up.html">Ogre::CompositorPassWarmUp</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes.">CompositorPass</a>.  <a href="class_ogre_1_1_compositor_pass_warm_up.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_warm_up_def.html">Ogre::CompositorPassWarmUpDef</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html">Ogre::CompositorShadowNode</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shadow Nodes are special nodes (not to be confused with <a class="el" href="class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing.">CompositorNode</a>) that are only used for rendering shadow maps.  <a href="class_ogre_1_1_compositor_shadow_node.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -349,7 +354,8 @@ Enumerations</h2></td></tr>
 , <a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa3ec0d9a6e1feeb393d5c3070589c9b60">Ogre::PASS_SHADOWS</a>
 , <a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa6b22361c61fe5c233b17230c5d795bfd">Ogre::PASS_TARGET_BARRIER</a>
 , <br />
-&#160;&#160;<a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa973bc7a5a948dd54130595d7539eb7ba">Ogre::PASS_COMPUTE</a>
+&#160;&#160;<a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aae53b9df27b85c40f6e48b402ee2714e1">Ogre::PASS_WARM_UP</a>
+, <a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa973bc7a5a948dd54130595d7539eb7ba">Ogre::PASS_COMPUTE</a>
 , <a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa8be4347345faa339a4c663a8c5da1c51">Ogre::PASS_CUSTOM</a>
 <br />
  }</td></tr>
@@ -634,6 +640,7 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa0fe924f8a19ffe8a3d7c0445946d7ec5" name="gga6f176e5de375550ba7f1c8dccde8345aa0fe924f8a19ffe8a3d7c0445946d7ec5"></a>PASS_IBL_SPECULAR&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa3ec0d9a6e1feeb393d5c3070589c9b60" name="gga6f176e5de375550ba7f1c8dccde8345aa3ec0d9a6e1feeb393d5c3070589c9b60"></a>PASS_SHADOWS&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa6b22361c61fe5c233b17230c5d795bfd" name="gga6f176e5de375550ba7f1c8dccde8345aa6b22361c61fe5c233b17230c5d795bfd"></a>PASS_TARGET_BARRIER&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aae53b9df27b85c40f6e48b402ee2714e1" name="gga6f176e5de375550ba7f1c8dccde8345aae53b9df27b85c40f6e48b402ee2714e1"></a>PASS_WARM_UP&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa973bc7a5a948dd54130595d7539eb7ba" name="gga6f176e5de375550ba7f1c8dccde8345aa973bc7a5a948dd54130595d7539eb7ba"></a>PASS_COMPUTE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa8be4347345faa339a4c663a8c5da1c51" name="gga6f176e5de375550ba7f1c8dccde8345aa8be4347345faa339a4c663a8c5da1c51"></a>PASS_CUSTOM&#160;</td><td class="fielddoc"></td></tr>
 </table>

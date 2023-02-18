@@ -1,9 +1,5 @@
 var NAVTREEINDEX26 =
 {
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a239c724fd1311ee5d1233d0880864d14":[5,2,1,17,3,5],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a54cf847890ead396a9b17ec9158046d4":[5,2,1,17,3,3],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a777963435f79cab3f762f2997813581a":[5,2,1,17,3,4],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9aa9d652cfc683852f1bcb71a6a566e210":[5,2,1,17,3,6],
 "class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9ab3b1383fb726c7e84da6b51d8ece1b5d":[5,2,1,17,3,0],
 "class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9ae5c58ec954fdd48002b374a815ebe56e":[5,2,1,17,3,1],
 "class_ogre_1_1_compositor_pass_quad_def.html#add4535f7f6261397a7720f3b4b41b759":[5,2,1,17,31],
@@ -249,5 +245,9 @@ var NAVTREEINDEX26 =
 "class_ogre_1_1_compositor_pass_target_barrier.html#aa27ade5fa223d3d3e92fdea2a00bfdd6":[5,2,1,24,20],
 "class_ogre_1_1_compositor_pass_target_barrier.html#aa824b4dbf60f853f28fcef5a8008333e":[5,2,1,24,7],
 "class_ogre_1_1_compositor_pass_target_barrier.html#ab91b8c75f9a23ce0d2f45ab832fcf293":[5,2,1,24,0],
-"class_ogre_1_1_compositor_pass_target_barrier.html#ac5b7bb6ef01b82ccaed9250630b4807b":[5,2,1,24,2]
+"class_ogre_1_1_compositor_pass_target_barrier.html#ac5b7bb6ef01b82ccaed9250630b4807b":[5,2,1,24,2],
+"class_ogre_1_1_compositor_pass_target_barrier.html#ac92baa443272b1bb6a1b703b570267f3":[5,2,1,24,18],
+"class_ogre_1_1_compositor_pass_target_barrier.html#ae40f4defcc8f4847f8b80c70992efc09":[5,2,1,24,6],
+"class_ogre_1_1_compositor_pass_target_barrier.html#ae74108e45b903d62124868f9c121b08a":[5,2,1,24,9],
+"class_ogre_1_1_compositor_pass_target_barrier.html#af0d628f807e0bcb2ef5c2782e6245ac3":[5,2,1,24,4]
 };

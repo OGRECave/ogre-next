@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"_ogre_particle_system_renderer_8h.html":[8,0,2,0,178],
+"_ogre_pass_8h.html":[8,0,2,0,179],
 "_ogre_patch_mesh_8h.html":[8,0,2,0,180],
 "_ogre_patch_surface_8h.html":[8,0,2,0,181],
 "_ogre_pcc_per_pixel_grid_placement_8h.html":[8,0,0,1,1,0,0,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6bea627e090a72c5b3f2593c6994f6422ce2":[8,0,2,0,223,4,6],
 "_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beab47a8e4d5684fcd9d3e6aea8884cf5e8":[8,0,2,0,223,4,7],
 "_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beac9488e21d6dd2a1a3ea05f0ca76a3cbc":[8,0,2,0,223,4,0],
-"_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beadd0d59b5d7779947d9218f971e7b224c":[8,0,2,0,223,4,1],
-"_ogre_rotation_affector_8h.html":[8,0,3,1,0,29],
-"_ogre_rotation_affector_factory_8h.html":[8,0,3,1,0,30]
+"_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beadd0d59b5d7779947d9218f971e7b224c":[8,0,2,0,223,4,1]
 };

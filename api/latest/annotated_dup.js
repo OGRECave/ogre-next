@@ -355,6 +355,8 @@ var annotated_dup =
       [ "CompositorPassTranslator", "class_ogre_1_1_compositor_pass_translator.html", "class_ogre_1_1_compositor_pass_translator" ],
       [ "CompositorPassUav", "class_ogre_1_1_compositor_pass_uav.html", "class_ogre_1_1_compositor_pass_uav" ],
       [ "CompositorPassUavDef", "class_ogre_1_1_compositor_pass_uav_def.html", "class_ogre_1_1_compositor_pass_uav_def" ],
+      [ "CompositorPassWarmUp", "class_ogre_1_1_compositor_pass_warm_up.html", "class_ogre_1_1_compositor_pass_warm_up" ],
+      [ "CompositorPassWarmUpDef", "class_ogre_1_1_compositor_pass_warm_up_def.html", "class_ogre_1_1_compositor_pass_warm_up_def" ],
       [ "CompositorRenderTargetViewTranslator", "class_ogre_1_1_compositor_render_target_view_translator.html", "class_ogre_1_1_compositor_render_target_view_translator" ],
       [ "CompositorShadowMapRepeatTranslator", "class_ogre_1_1_compositor_shadow_map_repeat_translator.html", "class_ogre_1_1_compositor_shadow_map_repeat_translator" ],
       [ "CompositorShadowMapTargetTranslator", "class_ogre_1_1_compositor_shadow_map_target_translator.html", "class_ogre_1_1_compositor_shadow_map_target_translator" ],

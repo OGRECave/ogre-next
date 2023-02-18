@@ -166,6 +166,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeb41ed3f50a9e7e270d81d045e8a23e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#aeb41ed3f50a9e7e270d81d045e8a23e6">setSortRenderQueue</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> rqId, <a class="el" href="class_ogre_1_1_render_queue.html#acbc6e62a79b77d38cf3881c796e0078b">RqSortMode</a> sortMode)</td></tr>
 <tr class="memdesc:aeb41ed3f50a9e7e270d81d045e8a23e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether we should sort the render queue ID every frame.  <a href="class_ogre_1_1_render_queue.html#aeb41ed3f50a9e7e270d81d045e8a23e6">More...</a><br /></td></tr>
 <tr class="separator:aeb41ed3f50a9e7e270d81d045e8a23e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfbbd9218d9c134357c12e12c32733f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#acfbbd9218d9c134357c12e12c32733f6">warmUpShaders</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> firstRq, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> lastRq, bool casterPass)</td></tr>
+<tr class="memdesc:acfbbd9218d9c134357c12e12c32733f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulates what <a class="el" href="class_ogre_1_1_render_queue.html#a4556b635533a3b9cc3aee165442e2a4d">render()</a> would do.  <a href="class_ogre_1_1_render_queue.html#acfbbd9218d9c134357c12e12c32733f6">More...</a><br /></td></tr>
+<tr class="separator:acfbbd9218d9c134357c12e12c32733f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class to manage the scene object rendering queue. </p>
@@ -692,6 +695,50 @@ By default, the render queues have the following mode set: <br  />
   <table class="params">
     <tr><td class="paramname">rqId</td><td>ID of the render queue </td></tr>
     <tr><td class="paramname">bSort</td><td>When false, the render queue group won't be sorted. Useful when the RQ needs to be drawn exactly in the order that Renderables were added, or when you have a deep CPU bottleneck where the time taken to sort hurts more than it is supposed to help. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acfbbd9218d9c134357c12e12c32733f6" name="acfbbd9218d9c134357c12e12c32733f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfbbd9218d9c134357c12e12c32733f6">&#9670;&#160;</a></span>warmUpShaders()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::RenderQueue::warmUpShaders </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramname"><em>firstRq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramname"><em>lastRq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>casterPass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Simulates what <a class="el" href="class_ogre_1_1_render_queue.html#a4556b635533a3b9cc3aee165442e2a4d">render()</a> would do. </p>
+<p >But doesn't actually render and skips as much as possible We are only interested in generating the PSOs for compiling them early. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">firstRq</td><td></td></tr>
+    <tr><td class="paramname">lastRq</td><td></td></tr>
+    <tr><td class="paramname">casterPass</td><td></td></tr>
   </table>
   </dd>
 </dl>

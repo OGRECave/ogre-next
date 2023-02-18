@@ -1,5 +1,5 @@
 <map id="Ogre::CompositorPassDef" name="Ogre::CompositorPassDef">
-<area shape="rect" id="node1" title="Interface to abstract all types of pass definitions (see CompositorPassType):" alt="" coords="212,268,384,293"/>
+<area shape="rect" id="node1" title="Interface to abstract all types of pass definitions (see CompositorPassType):" alt="" coords="212,293,384,319"/>
 <area shape="rect" id="node3" href="$class_ogre_1_1_compositor_pass_clear_def.html" title=" " alt="" coords="449,5,652,31"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_compositor_pass_compute_def.html" title=" " alt="" coords="439,55,663,80"/>
 <area shape="rect" id="node5" href="$class_ogre_1_1_compositor_pass_depth_copy_def.html" title=" " alt="" coords="457,105,644,145"/>
@@ -11,5 +11,6 @@
 <area shape="rect" id="node11" href="$class_ogre_1_1_compositor_pass_stencil_def.html" title=" " alt="" coords="445,416,657,441"/>
 <area shape="rect" id="node12" href="$class_ogre_1_1_compositor_pass_target_barrier_def.html" title=" " alt="" coords="456,466,645,506"/>
 <area shape="rect" id="node13" href="$class_ogre_1_1_compositor_pass_uav_def.html" title=" " alt="" coords="453,531,649,556"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,268,164,293"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_compositor_pass_warm_up_def.html" title=" " alt="" coords="457,581,644,621"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,293,164,319"/>
 </map>
