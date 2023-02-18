@@ -1106,6 +1106,17 @@ namespace Ogre
 
             However a Lenovo TB-X6C6X (4C/4T) Android tablet, the same workload cut from
             5 seconds to 1 second, in a Release build.
+        @remarks
+            Because of the multithreaded nature, enabling this feature means textures may be
+            loaded out of order.
+
+            Without this feature, normally textures would be loaded in order, unless there was
+            an issue (e.g. file couldn't be found, raising an exception; the metadata cache
+            was out of date, etc).
+
+            This can have an impact if you rely on the order (e.g. if you are using reservePoolId()).
+            If you need to preserve ordering, you can use TextureGpu::scheduleTransition and
+            set bSkipMultiload = true.
         @param numThreads
             How many number of threads to use for loading multiple textures.
             0 to disable this feature (Default).
