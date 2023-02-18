@@ -50,6 +50,9 @@ THE SOFTWARE.
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManagerListener.h"
+#ifdef OGRE_PROFILING_TEXTURES
+#    include "OgreTimer.h"
+#endif
 #include "Threading/OgreThreads.h"
 #include "Vao/OgreVaoManager.h"
 
@@ -91,16 +94,21 @@ namespace Ogre
 
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle );
     THREAD_DECLARE( updateStreamingWorkerThread );
+    unsigned long updateTextureMultiLoadWorkerThread( ThreadHandle *threadHandle );
+    THREAD_DECLARE( updateTextureMultiLoadWorkerThread );
 
     TextureGpuManager::TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem ) :
         mDefaultMipmapGen( DefaultMipmapGen::HwMode ),
         mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
         mShuttingDown( false ),
+        mUseMultiload( false ),
         mTryLockMutexFailureCount( 0u ),
         mTryLockMutexFailureLimit( 1200u ),
         mLoadRequestsCounter( 0u ),
         mLastUpdateIsStreamingDone( true ),
         mAddedNewLoadRequests( false ),
+        mMultiLoadsSemaphore( 0u ),
+        mPendingMultiLoads( 0u ),
         mEntriesToProcessPerIteration( 3u ),
         mMaxPreloadBytes( 256u * 1024u * 1024u ),  // A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( &sDefaultTextureGpuManagerListener ),
@@ -112,6 +120,9 @@ namespace Ogre
 #endif
         mDelayListenerCalls( false ),
         mIgnoreScheduledTasks( false ),
+#ifdef OGRE_PROFILING_TEXTURES
+        mProfilingLoadingTime( true ),
+#endif
         mIgnoreSRgbPreference( false ),
         mVaoManager( vaoManager ),
         mRenderSystem( renderSystem )
@@ -196,6 +207,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::shutdown()
     {
+        setMultiLoadPool( 0u );
+
         if( !mShuttingDown )
         {
             mShuttingDown = true;
@@ -1353,6 +1366,34 @@ namespace Ogre
             std::max<size_t>( 1u, maxPerStagingTextureRequestBytes );
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setMultiLoadPool( uint32 numThreads )
+    {
+#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN && !OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
+        if( mMultiLoadWorkerThreads.size() == numThreads )
+            return;
+
+        // Stop the threadpool
+        mUseMultiload = false;
+        if( !mMultiLoadWorkerThreads.empty() )
+        {
+            mMultiLoadsSemaphore.increment( static_cast<uint32_t>( mMultiLoadWorkerThreads.size() ) );
+            Threads::WaitForThreads( mMultiLoadWorkerThreads.size(), mMultiLoadWorkerThreads.data() );
+            mMultiLoadWorkerThreads.clear();
+        }
+
+        if( numThreads > 0u )
+        {
+            mUseMultiload = true;
+            mMultiLoadWorkerThreads.resize( numThreads );
+            for( size_t i = 0u; i < numThreads; ++i )
+            {
+                mMultiLoadWorkerThreads[i] =
+                    Threads::CreateThread( THREAD_GET( updateTextureMultiLoadWorkerThread ), i, this );
+            }
+        }
+#endif
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget,
                                                           uint32 maxSplitResolution )
     {
@@ -1396,6 +1437,22 @@ namespace Ogre
     void TextureGpuManager::setTrylockMutexFailureLimit( uint32 tryLockFailureLimit )
     {
         mTryLockMutexFailureLimit = tryLockFailureLimit;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setProfileLoadingTime( bool bProfile )
+    {
+#ifdef OGRE_PROFILING_TEXTURES
+        mProfilingLoadingTime = bProfile;
+        if( !bProfile )
+            mProfilingData.clear();
+#else
+        if( bProfile )
+        {
+            LogManager::getSingleton().logMessage(
+                "[WARN] TextureGpuManager::setProfileLoadingTime ignored. Ogre not compiled with "
+                "OGRE_PROFILING_TEXTURES" );
+        }
+#endif
     }
     //-----------------------------------------------------------------------------------
     const String *TextureGpuManager::findAliasNameStr( IdString idName ) const
@@ -1457,7 +1514,8 @@ namespace Ogre
             scheduleLoadRequest( texture, task.residencyTransitionTask.image,
                                  task.residencyTransitionTask.autoDeleteImage,
                                  targetResidency == GpuResidency::OnSystemRam,
-                                 task.residencyTransitionTask.reuploadOnly );
+                                 task.residencyTransitionTask.reuploadOnly,
+                                 task.residencyTransitionTask.bSkipMultiload );
         }
         else
         {
@@ -1574,6 +1632,40 @@ namespace Ogre
     {
         notifyTextureChanged( texture, reason, false );
         mTextureGpuManagerListener->notifyTextureChanged( texture, reason, extraData );
+
+#ifdef OGRE_PROFILING_TEXTURES
+        if( mProfilingLoadingTime && !texture->isPoolOwner() &&
+            texture->getName() != "___tempMipmapTexture" )
+        {
+            switch( reason )
+            {
+            case TextureGpuListener::GainedResidency:
+                mProfilingData[texture->getName()] = Ogre::Timer();
+                break;
+            case TextureGpuListener::ReadyForRendering:
+            {
+                std::map<IdString, Timer>::iterator itor = mProfilingData.find( texture->getName() );
+                if( itor != mProfilingData.end() )
+                {
+                    uint64 timeMs = itor->second.getMilliseconds();
+                    LogManager::getSingleton().logMessage(
+                        "[LATENCY PROFILE] Took " + std::to_string( timeMs ) +
+                        " ms to go from Resident to Ready. Actual loading time may be lower if system "
+                        "was occupied with another texture. Texture: " +
+                        texture->getNameStr() );
+                }
+                break;
+            }
+            case TextureGpuListener::ExceptionThrown:
+            case TextureGpuListener::LostResidency:
+            case TextureGpuListener::Deleted:
+                mProfilingData.erase( texture->getName() );
+                break;
+            default:
+                break;
+            }
+        }
+#endif
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
@@ -1634,8 +1726,8 @@ namespace Ogre
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, const String &name,
                                                  const String &resourceGroup, uint32 filters,
                                                  Image2 *image, bool autoDeleteImage, bool toSysRam,
-                                                 bool reuploadOnly, bool skipMetadataCache,
-                                                 uint32 sliceOrDepth )
+                                                 bool reuploadOnly, bool bSkipMultiload,
+                                                 bool skipMetadataCache, uint32 sliceOrDepth )
     {
         // These two can't be true at the same time
         OGRE_ASSERT_MEDIUM( !( toSysRam && reuploadOnly ) );
@@ -1700,13 +1792,28 @@ namespace Ogre
 
         mAddedNewLoadRequests = true;
         ++mLoadRequestsCounter;
-        ThreadData &mainData = mThreadData[c_mainThread];
-        mLoadRequestsMutex.lock();
-        mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image, texture,
-                                                      sliceOrDepth, filters, autoDeleteImage,
-                                                      toSysRam ) );
-        mLoadRequestsMutex.unlock();
-        mWorkerWaitableEvent.wake();
+        if( !bSkipMultiload && mUseMultiload && !image &&
+            sliceOrDepth == std::numeric_limits<uint32>::max() )
+        {
+            // Send to multiload threadpool.
+            mMultiLoadsMutex.lock();
+            ++mPendingMultiLoads;
+            mMultiLoads.push_back( LoadRequest( name, archive, loadingListener, image, texture,
+                                                sliceOrDepth, filters, autoDeleteImage, toSysRam ) );
+            mMultiLoadsMutex.unlock();
+            mMultiLoadsSemaphore.increment();
+        }
+        else
+        {
+            // Send to background streaming thread, to be fully processed serially.
+            ThreadData &mainData = mThreadData[c_mainThread];
+            mLoadRequestsMutex.lock();
+            mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image, texture,
+                                                          sliceOrDepth, filters, autoDeleteImage,
+                                                          toSysRam ) );
+            mLoadRequestsMutex.unlock();
+            mWorkerWaitableEvent.wake();
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_scheduleUpdate( TextureGpu *texture, uint32 filters, Image2 *image,
@@ -1727,7 +1834,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, Image2 *image,
-                                                 bool autoDeleteImage, bool toSysRam, bool reuploadOnly )
+                                                 bool autoDeleteImage, bool toSysRam, bool reuploadOnly,
+                                                 bool bSkipMultiload )
     {
         OGRE_ASSERT_LOW( ( texture->getResidencyStatus() == GpuResidency::OnStorage && !reuploadOnly ) ||
                          ( texture->getResidencyStatus() == GpuResidency::Resident && reuploadOnly ) );
@@ -1745,7 +1853,7 @@ namespace Ogre
         if( texture->getTextureType() != TextureTypes::TypeCube )
         {
             scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage, toSysRam,
-                                 reuploadOnly );
+                                 reuploadOnly, bSkipMultiload );
         }
         else
         {
@@ -1770,7 +1878,7 @@ namespace Ogre
                 // XX HACK there should be a better way to specify whether
                 // all faces are in the same file or not
                 scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage,
-                                     toSysRam, reuploadOnly );
+                                     toSysRam, reuploadOnly, bSkipMultiload );
             }
             else
             {
@@ -1781,7 +1889,7 @@ namespace Ogre
                     const bool skipMetadataCache = i != 0;
                     scheduleLoadRequest( texture, baseName + suffixes[i] + ext, resourceGroup, filters,
                                          i == 0 ? image : 0, autoDeleteImage, toSysRam, reuploadOnly,
-                                         skipMetadataCache, i );
+                                         bSkipMultiload, skipMetadataCache, i );
                 }
             }
         }
@@ -1821,9 +1929,9 @@ namespace Ogre
             {
                 const bool oldValue = mIgnoreScheduledTasks;
                 mIgnoreScheduledTasks = true;
-                // These _transitionTo calls are unscheduled and will decrease mPendingResidencyChanges
-                // to wrong values that would cause _scheduleTransitionTo to think the TextureGpu
-                // is done, thus we need to counter that.
+                // These _transitionTo calls are unscheduled and will decrease
+                // mPendingResidencyChanges to wrong values that would cause _scheduleTransitionTo to
+                // think the TextureGpu is done, thus we need to counter that.
                 texture->_addPendingResidencyChanges( 2u );
                 texture->_transitionTo( GpuResidency::OnStorage, rawBuffer, false );
                 texture->setNumMipmaps( numMipmaps );
@@ -1847,11 +1955,12 @@ namespace Ogre
     void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
                                                    GpuResidency::GpuResidency targetResidency,
                                                    Image2 *image, bool autoDeleteImage,
-                                                   bool reuploadOnly )
+                                                   bool reuploadOnly, bool bSkipMultiload )
     {
         ScheduledTasks task;
         task.tasksType = TaskTypeResidencyTransition;
-        task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage, reuploadOnly );
+        task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage, reuploadOnly,
+                                           bSkipMultiload );
 
         // getPendingResidencyChanges should be > 1 because it gets incremented by caller
         OGRE_ASSERT_MEDIUM( texture->getPendingResidencyChanges() != 0u || reuploadOnly );
@@ -2350,7 +2459,8 @@ namespace Ogre
 
         while( itor != endt && !retVal.data )
         {
-            // supportsFormat will return false if it could never fit, or the format is not compatible.
+            // supportsFormat will return false if it could never fit, or the format is not
+            // compatible.
             if( ( *itor )->supportsFormat( box.width, box.height, box.depth, box.numSlices,
                                            pixelFormat ) )
             {
@@ -2399,7 +2509,8 @@ namespace Ogre
         UsageStatsVec::iterator itStats = streamingData.usageStats.begin();
         UsageStatsVec::iterator enStats = streamingData.usageStats.end();
 
-        // Always split tracking of textures that are bigger than c_maxSplitResolution in any dimension
+        // Always split tracking of textures that are bigger than c_maxSplitResolution in any
+        // dimension
         if( box.width >= streamingData.maxSplitResolution ||
             box.height >= streamingData.maxSplitResolution )
         {
@@ -2437,6 +2548,10 @@ namespace Ogre
                                                 StreamingData &streamingData )
     {
         OgreProfileExhaustive( "TextureGpuManager::processQueuedImage" );
+
+#ifdef OGRE_PROFILING_TEXTURES
+        Timer profilingTimer;
+#endif
 
         Image2 &img = queuedImage.image;
         TextureGpu *texture = queuedImage.dstTexture;
@@ -2524,6 +2639,14 @@ namespace Ogre
                 TextureFilter::FilterBase::destroyFilters( queuedImage.filters );
             }
 
+#ifdef OGRE_PROFILING_TEXTURES
+            queuedImage.microsecondsTaken += profilingTimer.getMicroseconds();
+            ObjCmdBuffer::LogProfilingData *cmd =
+                commandBuffer->addCommand<ObjCmdBuffer::LogProfilingData>();
+            new( cmd ) ObjCmdBuffer::LogProfilingData( texture, queuedImage.dstSliceOrDepth,
+                                                       queuedImage.microsecondsTaken );
+#endif
+
             // We don't restore bytesPreloaded because it gets reset to 0 by worker thread.
             // Doing so could increase throughput of data we can preload. However it can
             // cause a positive feedback effect where limits don't get respected at all
@@ -2532,6 +2655,12 @@ namespace Ogre
             //    streamingData.bytesPreloaded -= queuedImage.image.getSizeBytes();
             queuedImage.destroy();
         }
+#ifdef OGRE_PROFILING_TEXTURES
+        else
+        {
+            queuedImage.microsecondsTaken += profilingTimer.getMicroseconds();
+        }
+#endif
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::addTransitionToLoadedCmd( ObjCmdBuffer *commandBuffer, TextureGpu *texture,
@@ -2542,6 +2671,94 @@ namespace Ogre
         const GpuResidency::GpuResidency targetResidency =
             toSysRam ? GpuResidency::OnSystemRam : GpuResidency::Resident;
         new( transitionCmd ) ObjCmdBuffer::TransitionToLoaded( texture, sysRamCopy, targetResidency );
+    }
+    //-----------------------------------------------------------------------------------
+    unsigned long updateTextureMultiLoadWorkerThread( ThreadHandle *threadHandle )
+    {
+        TextureGpuManager *textureManager =
+            reinterpret_cast<TextureGpuManager *>( threadHandle->getUserParam() );
+        return textureManager->_updateTextureMultiLoadWorkerThread( threadHandle );
+    }
+    //-----------------------------------------------------------------------------------
+    unsigned long TextureGpuManager::_updateTextureMultiLoadWorkerThread( ThreadHandle * )
+    {
+        LoadRequest loadRequest( "", 0, 0, 0, 0, 0, 0, false, false );
+        bool bStillHasWork = false;
+
+        while( mUseMultiload || bStillHasWork )
+        {
+            mMultiLoadsSemaphore.decrementOrWait();
+
+            bool bWorkGrabbed = false;
+
+            mMultiLoadsMutex.lock();
+            if( !mMultiLoads.empty() )
+            {
+                loadRequest = std::move( mMultiLoads.back() );
+                mMultiLoads.pop_back();
+                bWorkGrabbed = true;
+            }
+            bStillHasWork = !mMultiLoads.empty();
+            mMultiLoadsMutex.unlock();
+
+            if( bWorkGrabbed )
+            {
+                OGRE_ASSERT_LOW( !loadRequest.image );
+
+                DataStreamPtr data;
+                if( !loadRequest.archive )
+                    data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
+
+                try
+                {
+                    data = loadRequest.archive->open( loadRequest.name );
+                    if( loadRequest.loadingListener )
+                    {
+                        loadRequest.loadingListener->grouplessResourceOpened(
+                            loadRequest.name, loadRequest.archive, data );
+                    }
+                }
+                catch( Exception & )
+                {
+                    // We won't deal with it and just carry it on straight to the streaming thread
+                    // as if multiload was turned off. It will handle this error.
+                    data.reset();
+                }
+
+                Image2 *img = 0;
+
+                if( data )
+                {
+                    img = new Image2();
+
+                    try
+                    {
+                        img->load2( data, loadRequest.name );
+                    }
+                    catch( Exception & )
+                    {
+                        // See exception handler above. Let streaming thread figure this out.
+                        delete img;
+                        img = 0;
+                        data.reset();
+                    }
+                }
+
+                ThreadData &mainData = mThreadData[c_mainThread];
+                mLoadRequestsMutex.lock();
+                mainData.loadRequests.push_back( loadRequest );
+                if( data )
+                {
+                    mainData.loadRequests.back().image = img;
+                    mainData.loadRequests.back().autoDeleteImage = true;
+                }
+                mLoadRequestsMutex.unlock();
+                mWorkerWaitableEvent.wake();
+
+                --mPendingMultiLoads;
+            }
+        }
+        return 0;
     }
     //-----------------------------------------------------------------------------------
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle )
@@ -2634,6 +2851,10 @@ namespace Ogre
         Image2 imgStack;
         Image2 *img = loadRequest.image;
 
+#ifdef OGRE_PROFILING_TEXTURES
+        Timer profilingTimer;
+#endif
+
         if( !img )
         {
             img = &imgStack;
@@ -2722,6 +2943,8 @@ namespace Ogre
             if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
                 loadRequest.sliceOrDepth == 0 )
             {
+                // Single texture or the 1st slice in a cubemap made up of multiple pictures.
+                // We must setup a lot of stuff first (like pixel format, resolution, etc)
                 if( loadRequest.texture->getResidencyStatus() == GpuResidency::OnStorage )
                 {
                     loadRequest.texture->setResolution( img->getWidth(), img->getHeight(),
@@ -2815,12 +3038,17 @@ namespace Ogre
                     ( !needsMultipleImages || !mustKeepSysRamPtr ) )
                 {
                     // We have enough to transition the texture to OnSystemRam / Resident.
+                    //
+                    // This doesn't mean we are loaded. It means there is RAM/VRAM allocated for
+                    // this texture and shaders can start using it. But its pixels are not yet filled.
+                    // That's what NotifyDataIsReady is for.
                     addTransitionToLoadedCmd( commandBuffer, loadRequest.texture, sysRamCopy,
                                               loadRequest.toSysRam );
                 }
             }
             else
             {
+                // Loading a cubemap made of 6 files (the last 5 files will take this path)
                 FilterBaseArray::const_iterator itFilters = filters.begin();
                 FilterBaseArray::const_iterator enFilters = filters.end();
                 while( itFilters != enFilters )
@@ -2861,7 +3089,8 @@ namespace Ogre
                         if( itPartImg->second.numProcessedDepthOrSlices ==
                             loadRequest.texture->getDepthOrSlices() )
                         {
-                            // We couldn't transition earlier, so we have to do it now that we're done
+                            // We couldn't transition earlier, so we have to do it now that we're
+                            // done
                             addTransitionToLoadedCmd( commandBuffer, loadRequest.texture,
                                                       itPartImg->second.sysRamPtr, true );
                             mStreamingData.partialImages.erase( itPartImg );
@@ -2882,8 +3111,13 @@ namespace Ogre
             if( !loadRequest.toSysRam )
             {
                 // Queue the image for upload to GPU.
-                mStreamingData.queuedImages.push_back(
-                    QueuedImage( *img, loadRequest.texture, loadRequest.sliceOrDepth, filters ) );
+                mStreamingData.queuedImages.push_back( QueuedImage( *img, loadRequest.texture,
+                                                                    loadRequest.sliceOrDepth, filters
+#ifdef OGRE_PROFILING_TEXTURES
+                                                                    ,
+                                                                    profilingTimer.getMicroseconds()
+#endif
+                                                                        ) );
                 if( loadRequest.autoDeleteImage )
                     delete loadRequest.image;
 
@@ -3206,6 +3440,14 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
         _updateStreaming();
 #endif
+        // mPendingMultiLoads must be checked BEFORE checking mThreadData[c_workerThread]
+        // Otherwise we may see:
+        //  1. Main thread: workerData.loadRequests.empty()
+        //  2. Multiload thread: Pushes to workerData.loadRequests, decreases mPendingMultiLoads
+        //  3. Main thread: mPendingMultiLoads == 0u
+        //
+        // Thus main thread would see that we are done, when it's not true.
+        const bool isPendingMultiLoadDone = mPendingMultiLoads == 0u;
         bool isDone = false;
 
         ThreadData &mainData = mThreadData[c_mainThread];
@@ -3248,7 +3490,7 @@ namespace Ogre
                 }
 
                 isDone = mainData.loadRequests.empty() && workerData.loadRequests.empty() &&
-                         mStreamingData.queuedImages.empty();
+                         mStreamingData.queuedImages.empty() && isPendingMultiLoadDone;
                 mMutex.unlock();
             }
             else
@@ -3446,11 +3688,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture,
-                                                 uint32 _dstSliceOrDepth,
-                                                 FilterBaseArray &inOutFilters ) :
+                                                 uint32 _dstSliceOrDepth, FilterBaseArray &inOutFilters
+#ifdef OGRE_PROFILING_TEXTURES
+                                                 ,
+                                                 uint64 _microsecondsTaken
+#endif
+                                                 ) :
         dstTexture( _dstTexture ),
         autoDeleteImage( srcImage.getAutoDelete() ),
         dstSliceOrDepth( _dstSliceOrDepth )
+#ifdef OGRE_PROFILING_TEXTURES
+        ,
+        microsecondsTaken( _microsecondsTaken )
+#endif
     {
         assert( srcImage.getDepthOrSlices() >= 1u );
 

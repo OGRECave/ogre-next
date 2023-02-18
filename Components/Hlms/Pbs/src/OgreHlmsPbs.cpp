@@ -3745,9 +3745,9 @@ namespace Ogre
             "brtfLutDfg.dds", GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
             TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, 0, poolId );
 
-        ltcMat0->scheduleTransitionTo( GpuResidency::Resident );
-        ltcMat1->scheduleTransitionTo( GpuResidency::Resident );
-        brtfLut2->scheduleTransitionTo( GpuResidency::Resident );
+        ltcMat0->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
+        ltcMat1->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
+        brtfLut2->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
 
         ltcMat0->waitForMetadata();
         ltcMat1->waitForMetadata();

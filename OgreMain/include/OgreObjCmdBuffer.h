@@ -139,6 +139,20 @@ namespace Ogre
             NotifyDataIsReady( TextureGpu *_textureGpu, FilterBaseArray &inOutFilters );
             void execute() override;
         };
+
+#ifdef OGRE_PROFILING_TEXTURES
+        class LogProfilingData : public Cmd
+        {
+            TextureGpu *texture;
+            uint32      dstSliceOrDepth;
+            uint32      millisecondsTaken;
+
+        public:
+            LogProfilingData( TextureGpu *_textureGpu, uint32 _dstSliceOrDepth,
+                              uint64 microsecondsTaken );
+            void execute() override;
+        };
+#endif
     };
 
     /** @} */
