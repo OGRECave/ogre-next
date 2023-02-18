@@ -291,6 +291,7 @@ namespace Ogre
     class ScriptCompiler;
     class ScriptCompilerManager;
     class ScriptLoader;
+    class Semaphore;
     class Serializer;
     class ShadowCameraSetup;
     class SimpleMatrixAf4x3;

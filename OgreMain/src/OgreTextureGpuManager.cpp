@@ -94,16 +94,21 @@ namespace Ogre
 
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle );
     THREAD_DECLARE( updateStreamingWorkerThread );
+    unsigned long updateTextureMultiLoadWorkerThread( ThreadHandle *threadHandle );
+    THREAD_DECLARE( updateTextureMultiLoadWorkerThread );
 
     TextureGpuManager::TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem ) :
         mDefaultMipmapGen( DefaultMipmapGen::HwMode ),
         mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
         mShuttingDown( false ),
+        mUseMultiload( false ),
         mTryLockMutexFailureCount( 0u ),
         mTryLockMutexFailureLimit( 1200u ),
         mLoadRequestsCounter( 0u ),
         mLastUpdateIsStreamingDone( true ),
         mAddedNewLoadRequests( false ),
+        mMultiLoadsSemaphore( 0u ),
+        mPendingMultiLoads( 0u ),
         mEntriesToProcessPerIteration( 3u ),
         mMaxPreloadBytes( 256u * 1024u * 1024u ),  // A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( &sDefaultTextureGpuManagerListener ),
@@ -202,6 +207,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::shutdown()
     {
+        setMultiLoadPool( 0u );
+
         if( !mShuttingDown )
         {
             mShuttingDown = true;
@@ -1359,6 +1366,34 @@ namespace Ogre
             std::max<size_t>( 1u, maxPerStagingTextureRequestBytes );
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setMultiLoadPool( uint32 numThreads )
+    {
+#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN && !OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
+        if( mMultiLoadWorkerThreads.size() == numThreads )
+            return;
+
+        // Stop the threadpool
+        mUseMultiload = false;
+        if( !mMultiLoadWorkerThreads.empty() )
+        {
+            mMultiLoadsSemaphore.increment( static_cast<uint32_t>( mMultiLoadWorkerThreads.size() ) );
+            Threads::WaitForThreads( mMultiLoadWorkerThreads.size(), mMultiLoadWorkerThreads.data() );
+            mMultiLoadWorkerThreads.clear();
+        }
+
+        if( numThreads > 0u )
+        {
+            mUseMultiload = true;
+            mMultiLoadWorkerThreads.resize( numThreads );
+            for( size_t i = 0u; i < numThreads; ++i )
+            {
+                mMultiLoadWorkerThreads[i] =
+                    Threads::CreateThread( THREAD_GET( updateTextureMultiLoadWorkerThread ), i, this );
+            }
+        }
+#endif
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget,
                                                           uint32 maxSplitResolution )
     {
@@ -1756,13 +1791,27 @@ namespace Ogre
 
         mAddedNewLoadRequests = true;
         ++mLoadRequestsCounter;
-        ThreadData &mainData = mThreadData[c_mainThread];
-        mLoadRequestsMutex.lock();
-        mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image, texture,
-                                                      sliceOrDepth, filters, autoDeleteImage,
-                                                      toSysRam ) );
-        mLoadRequestsMutex.unlock();
-        mWorkerWaitableEvent.wake();
+        if( mUseMultiload && !image && sliceOrDepth == std::numeric_limits<uint32>::max() )
+        {
+            // Send to multiload threadpool.
+            mMultiLoadsMutex.lock();
+            ++mPendingMultiLoads;
+            mMultiLoads.push_back( LoadRequest( name, archive, loadingListener, image, texture,
+                                                sliceOrDepth, filters, autoDeleteImage, toSysRam ) );
+            mMultiLoadsMutex.unlock();
+            mMultiLoadsSemaphore.increment();
+        }
+        else
+        {
+            // Send to background streaming thread, to be fully processed serially.
+            ThreadData &mainData = mThreadData[c_mainThread];
+            mLoadRequestsMutex.lock();
+            mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image, texture,
+                                                          sliceOrDepth, filters, autoDeleteImage,
+                                                          toSysRam ) );
+            mLoadRequestsMutex.unlock();
+            mWorkerWaitableEvent.wake();
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_scheduleUpdate( TextureGpu *texture, uint32 filters, Image2 *image,
@@ -2620,6 +2669,94 @@ namespace Ogre
         new( transitionCmd ) ObjCmdBuffer::TransitionToLoaded( texture, sysRamCopy, targetResidency );
     }
     //-----------------------------------------------------------------------------------
+    unsigned long updateTextureMultiLoadWorkerThread( ThreadHandle *threadHandle )
+    {
+        TextureGpuManager *textureManager =
+            reinterpret_cast<TextureGpuManager *>( threadHandle->getUserParam() );
+        return textureManager->_updateTextureMultiLoadWorkerThread( threadHandle );
+    }
+    //-----------------------------------------------------------------------------------
+    unsigned long TextureGpuManager::_updateTextureMultiLoadWorkerThread( ThreadHandle * )
+    {
+        LoadRequest loadRequest( "", 0, 0, 0, 0, 0, 0, false, false );
+        bool bStillHasWork = false;
+
+        while( mUseMultiload || bStillHasWork )
+        {
+            mMultiLoadsSemaphore.decrementOrWait();
+
+            bool bWorkGrabbed = false;
+
+            mMultiLoadsMutex.lock();
+            if( !mMultiLoads.empty() )
+            {
+                loadRequest = std::move( mMultiLoads.back() );
+                mMultiLoads.pop_back();
+                bWorkGrabbed = true;
+            }
+            bStillHasWork = !mMultiLoads.empty();
+            mMultiLoadsMutex.unlock();
+
+            if( bWorkGrabbed )
+            {
+                OGRE_ASSERT_LOW( !loadRequest.image );
+
+                DataStreamPtr data;
+                if( !loadRequest.archive )
+                    data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
+
+                try
+                {
+                    data = loadRequest.archive->open( loadRequest.name );
+                    if( loadRequest.loadingListener )
+                    {
+                        loadRequest.loadingListener->grouplessResourceOpened(
+                            loadRequest.name, loadRequest.archive, data );
+                    }
+                }
+                catch( Exception & )
+                {
+                    // We won't deal with it and just carry it on straight to the streaming thread
+                    // as if multiload was turned off. It will handle this error.
+                    data.reset();
+                }
+
+                Image2 *img = 0;
+
+                if( data )
+                {
+                    img = new Image2();
+
+                    try
+                    {
+                        img->load2( data, loadRequest.name );
+                    }
+                    catch( Exception & )
+                    {
+                        // See exception handler above. Let streaming thread figure this out.
+                        delete img;
+                        img = 0;
+                        data.reset();
+                    }
+                }
+
+                ThreadData &mainData = mThreadData[c_mainThread];
+                mLoadRequestsMutex.lock();
+                mainData.loadRequests.push_back( loadRequest );
+                if( data )
+                {
+                    mainData.loadRequests.back().image = img;
+                    mainData.loadRequests.back().autoDeleteImage = true;
+                }
+                mLoadRequestsMutex.unlock();
+                mWorkerWaitableEvent.wake();
+
+                --mPendingMultiLoads;
+            }
+        }
+        return 0;
+    }
+    //-----------------------------------------------------------------------------------
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle )
     {
         TextureGpuManager *textureManager =
@@ -3299,6 +3436,14 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
         _updateStreaming();
 #endif
+        // mPendingMultiLoads must be checked BEFORE checking mThreadData[c_workerThread]
+        // Otherwise we may see:
+        //  1. Main thread: workerData.loadRequests.empty()
+        //  2. Multiload thread: Pushes to workerData.loadRequests, decreases mPendingMultiLoads
+        //  3. Main thread: mPendingMultiLoads == 0u
+        //
+        // Thus main thread would see that we are done, when it's not true.
+        const bool isPendingMultiLoadDone = mPendingMultiLoads == 0u;
         bool isDone = false;
 
         ThreadData &mainData = mThreadData[c_mainThread];
@@ -3341,7 +3486,7 @@ namespace Ogre
                 }
 
                 isDone = mainData.loadRequests.empty() && workerData.loadRequests.empty() &&
-                         mStreamingData.queuedImages.empty();
+                         mStreamingData.queuedImages.empty() && isPendingMultiLoadDone;
                 mMutex.unlock();
             }
             else

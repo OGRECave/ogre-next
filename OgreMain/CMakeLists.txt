@@ -268,6 +268,7 @@ if (NOT WIN32)
 endif()
 
 list( APPEND THREAD_SOURCE_FILES
+	src/Threading/OgreSemaphore.cpp
 	src/Threading/OgreWaitableEvent.cpp
 )
 
@@ -276,6 +277,7 @@ list( APPEND THREAD_SOURCE_FILES
 set(THREAD_HEADER_FILES
 	include/Threading/OgreBarrier.h
 	include/Threading/OgreLightweightMutex.h
+	include/Threading/OgreSemaphore.h
 	include/Threading/OgreThreadDefines.h
 	include/Threading/OgreThreadHeaders.h
 	include/Threading/OgreThreads.h
