@@ -498,14 +498,16 @@ namespace Ogre
             Image2                    *image;
             bool                       autoDeleteImage;
             bool                       reuploadOnly;
+            bool                       bSkipMultiload;
 
             void init( GpuResidency::GpuResidency _targetResidency, Image2 *_image,
-                       bool _autoDeleteImage, bool _reuploadOnly )
+                       bool _autoDeleteImage, bool _reuploadOnly, bool _bSkipMultiload )
             {
                 targetResidency = _targetResidency;
                 image = _image;
                 autoDeleteImage = _autoDeleteImage;
                 reuploadOnly = _reuploadOnly;
+                bSkipMultiload = _bSkipMultiload;
             }
         };
 
@@ -1316,7 +1318,7 @@ namespace Ogre
 
     protected:
         void scheduleLoadRequest( TextureGpu *texture, Image2 *image, bool autoDeleteImage,
-                                  bool toSysRam, bool reuploadOnly );
+                                  bool toSysRam, bool reuploadOnly, bool bSkipMultiload );
 
         /// Transitions a texture from OnSystemRam to Resident; and asks the worker thread
         /// to transfer the data in the background.
@@ -1327,7 +1329,8 @@ namespace Ogre
 
         void scheduleLoadRequest( TextureGpu *texture, const String &name, const String &resourceGroup,
                                   uint32 filters, Image2 *image, bool autoDeleteImage, bool toSysRam,
-                                  bool reuploadOnly, bool skipMetadataCache = false,
+                                  bool reuploadOnly, bool bSkipMultiload = false,
+                                  bool   skipMetadataCache = false,
                                   uint32 sliceOrDepth = std::numeric_limits<uint32>::max() );
 
     public:
@@ -1336,7 +1339,8 @@ namespace Ogre
                               uint32 sliceOrDepth = std::numeric_limits<uint32>::max() );
 
         void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency targetResidency,
-                                    Image2 *image, bool autoDeleteImage, bool reuploadOnly );
+                                    Image2 *image, bool autoDeleteImage, bool reuploadOnly,
+                                    bool bSkipMultiload );
         void _queueDownloadToRam( TextureGpu *texture, bool resyncOnly );
         /// When true we will ignore all tasks in mScheduledTasks and execute transitions immediately
         /// Caller is responsible for ensuring this is safe to do.

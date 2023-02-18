@@ -1514,7 +1514,8 @@ namespace Ogre
             scheduleLoadRequest( texture, task.residencyTransitionTask.image,
                                  task.residencyTransitionTask.autoDeleteImage,
                                  targetResidency == GpuResidency::OnSystemRam,
-                                 task.residencyTransitionTask.reuploadOnly );
+                                 task.residencyTransitionTask.reuploadOnly,
+                                 task.residencyTransitionTask.bSkipMultiload );
         }
         else
         {
@@ -1725,8 +1726,8 @@ namespace Ogre
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, const String &name,
                                                  const String &resourceGroup, uint32 filters,
                                                  Image2 *image, bool autoDeleteImage, bool toSysRam,
-                                                 bool reuploadOnly, bool skipMetadataCache,
-                                                 uint32 sliceOrDepth )
+                                                 bool reuploadOnly, bool bSkipMultiload,
+                                                 bool skipMetadataCache, uint32 sliceOrDepth )
     {
         // These two can't be true at the same time
         OGRE_ASSERT_MEDIUM( !( toSysRam && reuploadOnly ) );
@@ -1791,7 +1792,8 @@ namespace Ogre
 
         mAddedNewLoadRequests = true;
         ++mLoadRequestsCounter;
-        if( mUseMultiload && !image && sliceOrDepth == std::numeric_limits<uint32>::max() )
+        if( !bSkipMultiload && mUseMultiload && !image &&
+            sliceOrDepth == std::numeric_limits<uint32>::max() )
         {
             // Send to multiload threadpool.
             mMultiLoadsMutex.lock();
@@ -1832,7 +1834,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, Image2 *image,
-                                                 bool autoDeleteImage, bool toSysRam, bool reuploadOnly )
+                                                 bool autoDeleteImage, bool toSysRam, bool reuploadOnly,
+                                                 bool bSkipMultiload )
     {
         OGRE_ASSERT_LOW( ( texture->getResidencyStatus() == GpuResidency::OnStorage && !reuploadOnly ) ||
                          ( texture->getResidencyStatus() == GpuResidency::Resident && reuploadOnly ) );
@@ -1850,7 +1853,7 @@ namespace Ogre
         if( texture->getTextureType() != TextureTypes::TypeCube )
         {
             scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage, toSysRam,
-                                 reuploadOnly );
+                                 reuploadOnly, bSkipMultiload );
         }
         else
         {
@@ -1875,7 +1878,7 @@ namespace Ogre
                 // XX HACK there should be a better way to specify whether
                 // all faces are in the same file or not
                 scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage,
-                                     toSysRam, reuploadOnly );
+                                     toSysRam, reuploadOnly, bSkipMultiload );
             }
             else
             {
@@ -1886,7 +1889,7 @@ namespace Ogre
                     const bool skipMetadataCache = i != 0;
                     scheduleLoadRequest( texture, baseName + suffixes[i] + ext, resourceGroup, filters,
                                          i == 0 ? image : 0, autoDeleteImage, toSysRam, reuploadOnly,
-                                         skipMetadataCache, i );
+                                         bSkipMultiload, skipMetadataCache, i );
                 }
             }
         }
@@ -1952,11 +1955,12 @@ namespace Ogre
     void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
                                                    GpuResidency::GpuResidency targetResidency,
                                                    Image2 *image, bool autoDeleteImage,
-                                                   bool reuploadOnly )
+                                                   bool reuploadOnly, bool bSkipMultiload )
     {
         ScheduledTasks task;
         task.tasksType = TaskTypeResidencyTransition;
-        task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage, reuploadOnly );
+        task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage, reuploadOnly,
+                                           bSkipMultiload );
 
         // getPendingResidencyChanges should be > 1 because it gets incremented by caller
         OGRE_ASSERT_MEDIUM( texture->getPendingResidencyChanges() != 0u || reuploadOnly );
