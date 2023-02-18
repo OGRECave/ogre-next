@@ -168,8 +168,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a93773f33d6018c991b4fa8c475a8a36d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a93773f33d6018c991b4fa8c475a8a36d">_reserveSlotForTexture</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
 <tr class="memdesc:a93773f33d6018c991b4fa8c475a8a36d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be called from main thread.  <a href="class_ogre_1_1_texture_gpu_manager.html#a93773f33d6018c991b4fa8c475a8a36d">More...</a><br /></td></tr>
 <tr class="separator:a93773f33d6018c991b4fa8c475a8a36d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a435b32507353f22b8428e6f9d849e7e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a435b32507353f22b8428e6f9d849e7e1">_scheduleTransitionTo</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98">GpuResidency::GpuResidency</a> targetResidency, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image, bool autoDeleteImage, bool reuploadOnly)</td></tr>
-<tr class="separator:a435b32507353f22b8428e6f9d849e7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57719d6bae200d39449eb5f98098b1c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a57719d6bae200d39449eb5f98098b1c5">_scheduleTransitionTo</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98">GpuResidency::GpuResidency</a> targetResidency, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image, bool autoDeleteImage, bool reuploadOnly, bool bSkipMultiload)</td></tr>
+<tr class="separator:a57719d6bae200d39449eb5f98098b1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46f6c11e4af75070ada1e868e7b24412"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a46f6c11e4af75070ada1e868e7b24412">_scheduleUpdate</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> filters, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image, bool autoDeleteImage, bool skipMetadataCache=false, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> sliceOrDepth=std::numeric_limits&lt; <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> &gt;::max())</td></tr>
 <tr class="separator:a46f6c11e4af75070ada1e868e7b24412"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae905930e6b79e3a3c3152efc20d5249c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ae905930e6b79e3a3c3152efc20d5249c">_setIgnoreScheduledTasks</a> (bool ignoreSchedTasks)</td></tr>
@@ -184,6 +184,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a71b2dac622f85cd2dec83834ee10fecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f6ee50fe51ac71c60f66e044859bf9d"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a4f6ee50fe51ac71c60f66e044859bf9d">_updateStreamingWorkerThread</a> (<a class="el" href="class_ogre_1_1_thread_handle.html">ThreadHandle</a> *threadHandle)</td></tr>
 <tr class="separator:a4f6ee50fe51ac71c60f66e044859bf9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada01fc57b26dd0f912572c288eb08dac"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ada01fc57b26dd0f912572c288eb08dac">_updateTextureMultiLoadWorkerThread</a> (<a class="el" href="class_ogre_1_1_thread_handle.html">ThreadHandle</a> *threadHandle)</td></tr>
+<tr class="memdesc:ada01fc57b26dd0f912572c288eb08dac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements multiload.  <a href="class_ogre_1_1_texture_gpu_manager.html#ada01fc57b26dd0f912572c288eb08dac">More...</a><br /></td></tr>
+<tr class="separator:ada01fc57b26dd0f912572c288eb08dac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c872d542fd78e2db884ff8904d4c39d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a2c872d542fd78e2db884ff8904d4c39d">_waitFor</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, bool metadataOnly)</td></tr>
 <tr class="memdesc:a2c872d542fd78e2db884ff8904d4c39d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do not use directly. See <a class="el" href="class_ogre_1_1_texture_gpu.html#a13af2e0d5c099c3be71e33c2159b16e9" title="Blocks main thread until metadata is ready.">TextureGpu::waitForMetadata</a> &amp; TextureGpu::waitForDataReady.  <a href="class_ogre_1_1_texture_gpu_manager.html#a2c872d542fd78e2db884ff8904d4c39d">More...</a><br /></td></tr>
 <tr class="separator:a2c872d542fd78e2db884ff8904d4c39d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -277,6 +280,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abe21fe76416e68bcfc8fe57f2655e868"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#abe21fe76416e68bcfc8fe57f2655e868">setDefaultMipmapGeneration</a> (<a class="el" href="namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb">DefaultMipmapGen::DefaultMipmapGen</a> defaultMipmapGen, <a class="el" href="namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb">DefaultMipmapGen::DefaultMipmapGen</a> defaultMipmapGenCubemaps)</td></tr>
 <tr class="memdesc:abe21fe76416e68bcfc8fe57f2655e868"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to use HW or SW mipmap generation when specifying <a class="el" href="namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054a537f83d75be40b8f38b5f9dc03912afa">TextureFilter::TypeGenerateDefaultMipmaps</a> for loading files from textures.  <a href="class_ogre_1_1_texture_gpu_manager.html#abe21fe76416e68bcfc8fe57f2655e868">More...</a><br /></td></tr>
 <tr class="separator:abe21fe76416e68bcfc8fe57f2655e868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ff9f8223324c7091eaa3698bd39efe2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a1ff9f8223324c7091eaa3698bd39efe2">setMultiLoadPool</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> numThreads)</td></tr>
+<tr class="memdesc:a1ff9f8223324c7091eaa3698bd39efe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">OgreNext always performs background streaming to load textures in a worker thread.  <a href="class_ogre_1_1_texture_gpu_manager.html#a1ff9f8223324c7091eaa3698bd39efe2">More...</a><br /></td></tr>
+<tr class="separator:a1ff9f8223324c7091eaa3698bd39efe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e35f39923cc1f38d41c4f5fae52dcf9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a4e35f39923cc1f38d41c4f5fae52dcf9">setProfileLoadingTime</a> (bool bProfile)</td></tr>
 <tr class="memdesc:a4e35f39923cc1f38d41c4f5fae52dcf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">When enabled, we will profile the time it takes a texture to go from Resident to Ready and <a class="el" href="class_ogre_1_1_log.html">Log</a> it.  <a href="class_ogre_1_1_texture_gpu_manager.html#a4e35f39923cc1f38d41c4f5fae52dcf9">More...</a><br /></td></tr>
 <tr class="separator:a4e35f39923cc1f38d41c4f5fae52dcf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -586,8 +592,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a435b32507353f22b8428e6f9d849e7e1" name="a435b32507353f22b8428e6f9d849e7e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a435b32507353f22b8428e6f9d849e7e1">&#9670;&#160;</a></span>_scheduleTransitionTo()</h2>
+<a id="a57719d6bae200d39449eb5f98098b1c5" name="a57719d6bae200d39449eb5f98098b1c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57719d6bae200d39449eb5f98098b1c5">&#9670;&#160;</a></span>_scheduleTransitionTo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -620,7 +626,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>reuploadOnly</em>&#160;</td>
+          <td class="paramname"><em>reuploadOnly</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bSkipMultiload</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -781,6 +793,36 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada01fc57b26dd0f912572c288eb08dac" name="ada01fc57b26dd0f912572c288eb08dac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada01fc57b26dd0f912572c288eb08dac">&#9670;&#160;</a></span>_updateTextureMultiLoadWorkerThread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long Ogre::TextureGpuManager::_updateTextureMultiLoadWorkerThread </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_thread_handle.html">ThreadHandle</a> *&#160;</td>
+          <td class="paramname"><em>threadHandle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implements multiload. </p>
+<p >It is a simple job pool that picks the next request and loads an <a class="el" href="class_ogre_1_1_image2.html" title="Class representing an image file.">Image2</a>.</p>
+<p >Then passes it to the worker thread as if the main thread had requested to load a texture from an <a class="el" href="class_ogre_1_1_image2.html" title="Class representing an image file.">Image2</a> pointer, instead of loading it from file or listener.</p>
+<p >i.e. it pretends the user loaded: tex-&gt;scheduleTransitionTo( <a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98a268f91accb452d1707dd83b5aeb72aa2" title="VRAM and other GPU resources have been allocated for this resource.">GpuResidency::Resident</a>, &amp;image, autoDeleteImage = true );</p>
+<p >If there are any errors we abort and pass the raw LoadRequest to the streaming thread; and the streaming thread, trying to open this texture, should encounter the same error again and handle it properly. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">threadHandle</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Thread's return value. </dd></dl>
 
 </div>
 </div>
@@ -2131,6 +2173,44 @@ Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">defaultMipmapGen</td><td>Whether to enable HW mipmap generation for textures. Default is true. </td></tr>
     <tr><td class="paramname">defaultMipmapGenCubemaps</td><td>Whether to enable HW mipmap generation for cubemap textures. Default is false. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1ff9f8223324c7091eaa3698bd39efe2" name="a1ff9f8223324c7091eaa3698bd39efe2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ff9f8223324c7091eaa3698bd39efe2">&#9670;&#160;</a></span>setMultiLoadPool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::TextureGpuManager::setMultiLoadPool </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramname"><em>numThreads</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>OgreNext always performs background streaming to load textures in a worker thread. </p>
+<p >However there is only ONE background thread performing all work serially while the main thread can do other stuff (like rendering, even if textures aren't ready).</p>
+<p >There are times where you need to load many textures at once and having a threadpool of textures increases throughput.</p>
+<p >The threadpool will load N textures at once into RAM, and then send them to the background thread to upload them to the GPU.</p>
+<p >Once the background thread is ready, the main thread is signalled about the situation.</p>
+<p >Enabling the MultiLoad pool can give performance benefits in the following scenarios:</p>
+<ul>
+<li>You are IO limited: the threadpool gets stalled but in the meantime the background thread still loads what's ready in System RAM into GPU RAM</li>
+<li>You are ALU/CPU limited: Loading PNG/JPG files needs decoding. Loading multiple at once is better use of CPU resources.</li>
+</ul>
+<p >Enabling Multiload pool may increase memory consumption because you may end up with many images (more than numThreads) loaded in RAM.</p>
+<p >You can change this value at any time, but it is an expensive call as we need to synchronize with the threadpool and flush all work.</p>
+<p >Testing shows on an AMD Ryzen 5900X (12C/24T) loading of many PNG &amp; JPG files of varying sizes (up to 2048x2048 RGBA8_UNORM) was cut from 1 second to 0.7 seconds in a Debug build.</p>
+<p >However a Lenovo TB-X6C6X (4C/4T) Android tablet, the same workload cut from 5 seconds to 1 second, in a Release build. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">numThreads</td><td>How many number of threads to use for loading multiple textures. 0 to disable this feature (Default). </td></tr>
   </table>
   </dd>
 </dl>

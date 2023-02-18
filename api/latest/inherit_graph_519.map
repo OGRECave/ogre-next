@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_string_converter.html" title="Class for converting the core Ogre data types to/from Strings." alt="" coords="5,5,152,31"/>
+<area shape="rect" id="node1" href="$struct_ogre_1_1_s_t_l_allocator_base.html" title="Wrapper class for operating as an STL container allocator." alt="" coords="5,13,197,38"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_s_t_l_allocator.html" title=" " alt="" coords="245,5,377,45"/>
 </map>

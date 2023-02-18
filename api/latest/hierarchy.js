@@ -1682,6 +1682,7 @@ var hierarchy =
       [ "Ogre::v1::OverlayManager", "class_ogre_1_1v1_1_1_overlay_manager.html", null ]
     ] ],
     [ "Ogre::ScriptToken", "struct_ogre_1_1_script_token.html", null ],
+    [ "Ogre::Semaphore", "class_ogre_1_1_semaphore.html", null ],
     [ "Ogre::ShaderParams::AutoParam", "struct_ogre_1_1_shader_params_1_1_auto_param.html", null ],
     [ "Ogre::ShaderParams::ManualParam", "struct_ogre_1_1_shader_params_1_1_manual_param.html", null ],
     [ "Ogre::ShaderParams::ManualParamEx", "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html", null ],

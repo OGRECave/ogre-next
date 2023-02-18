@@ -333,12 +333,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae3e0ad601752b91f2851c88f9ed49869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac090ad8bd36b3bc9c4370444f04e943d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#ac090ad8bd36b3bc9c4370444f04e943d">requiresTextureFlipping</a> () const</td></tr>
 <tr class="separator:ac090ad8bd36b3bc9c4370444f04e943d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0729d200bede23e29f5a88f0b9dcb3f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a0729d200bede23e29f5a88f0b9dcb3f6">scheduleReupload</a> (<a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image=0, bool autoDeleteImage=true)</td></tr>
-<tr class="memdesc:a0729d200bede23e29f5a88f0b9dcb3f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">There are times where you want to reload a texture again (e.g.  <a href="class_ogre_1_1_texture_gpu.html#a0729d200bede23e29f5a88f0b9dcb3f6">More...</a><br /></td></tr>
-<tr class="separator:a0729d200bede23e29f5a88f0b9dcb3f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9034d26bf967a6a9ab6a03f3f2a75a88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a9034d26bf967a6a9ab6a03f3f2a75a88">scheduleTransitionTo</a> (<a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98">GpuResidency::GpuResidency</a> nextResidency, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image=0, bool autoDeleteImage=true)</td></tr>
-<tr class="memdesc:a9034d26bf967a6a9ab6a03f3f2a75a88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as unsafeScheduleTransitionTo, but first checks if we're already in the residency state we want to go to, or if it has already been scheduled; thus it can be called multiple times.  <a href="class_ogre_1_1_texture_gpu.html#a9034d26bf967a6a9ab6a03f3f2a75a88">More...</a><br /></td></tr>
-<tr class="separator:a9034d26bf967a6a9ab6a03f3f2a75a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cfbfac96361e544a0298a223250b028"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a3cfbfac96361e544a0298a223250b028">scheduleReupload</a> (<a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image=0, bool autoDeleteImage=true, bool bSkipMultiload=false)</td></tr>
+<tr class="memdesc:a3cfbfac96361e544a0298a223250b028"><td class="mdescLeft">&#160;</td><td class="mdescRight">There are times where you want to reload a texture again (e.g.  <a href="class_ogre_1_1_texture_gpu.html#a3cfbfac96361e544a0298a223250b028">More...</a><br /></td></tr>
+<tr class="separator:a3cfbfac96361e544a0298a223250b028"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32e5eb68dc3ba4521042fa82656a8a53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a32e5eb68dc3ba4521042fa82656a8a53">scheduleTransitionTo</a> (<a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98">GpuResidency::GpuResidency</a> nextResidency, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image=0, bool autoDeleteImage=true, bool bSkipMultiload=false)</td></tr>
+<tr class="memdesc:a32e5eb68dc3ba4521042fa82656a8a53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as unsafeScheduleTransitionTo, but first checks if we're already in the residency state we want to go to, or if it has already been scheduled; thus it can be called multiple times.  <a href="class_ogre_1_1_texture_gpu.html#a32e5eb68dc3ba4521042fa82656a8a53">More...</a><br /></td></tr>
+<tr class="separator:a32e5eb68dc3ba4521042fa82656a8a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ae40391d39c8feae00acaf25839c6f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a6ae40391d39c8feae00acaf25839c6f9">setNumMipmaps</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> numMipmaps)</td></tr>
 <tr class="separator:a6ae40391d39c8feae00acaf25839c6f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2edff152ce3501f2082dc6e142a7ac9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_texture_gpu_render_target.html#ab2edff152ce3501f2082dc6e142a7ac9">setOrientationMode</a> (<a class="el" href="group___general.html#ga86b4672dfa02cea53b10a52bd6344305">OrientationMode</a> orientationMode) override</td></tr>
@@ -361,9 +361,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5af39237440cdd105f1808ba1526bdeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_texture_gpu_window.html#a5af39237440cdd105f1808ba1526bdeb">swapBuffers</a> () override</td></tr>
 <tr class="memdesc:a5af39237440cdd105f1808ba1526bdeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only valid for <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> classes.  <a href="class_ogre_1_1_d3_d11_texture_gpu_window.html#a5af39237440cdd105f1808ba1526bdeb">More...</a><br /></td></tr>
 <tr class="separator:a5af39237440cdd105f1808ba1526bdeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3efd161b3ec98e3a405cf3167b7d022"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#aa3efd161b3ec98e3a405cf3167b7d022">unsafeScheduleTransitionTo</a> (<a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98">GpuResidency::GpuResidency</a> nextResidency, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image=0, bool autoDeleteImage=true)</td></tr>
-<tr class="memdesc:aa3efd161b3ec98e3a405cf3167b7d022"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedules an async transition in residency.  <a href="class_ogre_1_1_texture_gpu.html#aa3efd161b3ec98e3a405cf3167b7d022">More...</a><br /></td></tr>
-<tr class="separator:aa3efd161b3ec98e3a405cf3167b7d022"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aee068205a09b2d3aa61d021c8a62a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a3aee068205a09b2d3aa61d021c8a62a8">unsafeScheduleTransitionTo</a> (<a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98">GpuResidency::GpuResidency</a> nextResidency, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image=0, bool autoDeleteImage=true, bool bSkipMultiload=false)</td></tr>
+<tr class="memdesc:a3aee068205a09b2d3aa61d021c8a62a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedules an async transition in residency.  <a href="class_ogre_1_1_texture_gpu.html#a3aee068205a09b2d3aa61d021c8a62a8">More...</a><br /></td></tr>
+<tr class="separator:a3aee068205a09b2d3aa61d021c8a62a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a236d643259ed803cab8b550af78fc755"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a236d643259ed803cab8b550af78fc755">waitForData</a> ()</td></tr>
 <tr class="memdesc:a236d643259ed803cab8b550af78fc755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocks main thread until data is ready.  <a href="class_ogre_1_1_texture_gpu.html#a236d643259ed803cab8b550af78fc755">More...</a><br /></td></tr>
 <tr class="separator:a236d643259ed803cab8b550af78fc755"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2126,7 +2126,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the number of pending residency changes. </p>
-<p >Residency changes may not be immediate and thus be delayed (e.g. see <a class="el" href="class_ogre_1_1_texture_gpu.html#a9034d26bf967a6a9ab6a03f3f2a75a88" title="Same as unsafeScheduleTransitionTo, but first checks if we&#39;re already in the residency state we want ...">TextureGpu::scheduleTransitionTo</a>).</p>
+<p >Residency changes may not be immediate and thus be delayed (e.g. see <a class="el" href="class_ogre_1_1_texture_gpu.html#a32e5eb68dc3ba4521042fa82656a8a53" title="Same as unsafeScheduleTransitionTo, but first checks if we&#39;re already in the residency state we want ...">TextureGpu::scheduleTransitionTo</a>).</p>
 <p >When this value is 0 it implies that mResidencyStatus == mNextResidencyStatus </p>
 
 </div>
@@ -3179,8 +3179,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0729d200bede23e29f5a88f0b9dcb3f6" name="a0729d200bede23e29f5a88f0b9dcb3f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0729d200bede23e29f5a88f0b9dcb3f6">&#9670;&#160;</a></span>scheduleReupload()</h2>
+<a id="a3cfbfac96361e544a0298a223250b028" name="a3cfbfac96361e544a0298a223250b028"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cfbfac96361e544a0298a223250b028">&#9670;&#160;</a></span>scheduleReupload()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3198,7 +3198,13 @@ Static Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>autoDeleteImage</em> = <code>true</code>&#160;</td>
+          <td class="paramname"><em>autoDeleteImage</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bSkipMultiload</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -3229,16 +3235,17 @@ Static Public Attributes</h2></td></tr>
 </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">image</td><td>See <a class="el" href="class_ogre_1_1_texture_gpu.html#aa3efd161b3ec98e3a405cf3167b7d022" title="Schedules an async transition in residency.">TextureGpu::unsafeScheduleTransitionTo</a> </td></tr>
-    <tr><td class="paramname">autoDeleteImage</td><td>Same <a class="el" href="class_ogre_1_1_texture_gpu.html#aa3efd161b3ec98e3a405cf3167b7d022" title="Schedules an async transition in residency.">TextureGpu::unsafeScheduleTransitionTo</a> </td></tr>
+    <tr><td class="paramname">image</td><td>See <a class="el" href="class_ogre_1_1_texture_gpu.html#a3aee068205a09b2d3aa61d021c8a62a8" title="Schedules an async transition in residency.">TextureGpu::unsafeScheduleTransitionTo</a> </td></tr>
+    <tr><td class="paramname">autoDeleteImage</td><td>Same <a class="el" href="class_ogre_1_1_texture_gpu.html#a3aee068205a09b2d3aa61d021c8a62a8" title="Schedules an async transition in residency.">TextureGpu::unsafeScheduleTransitionTo</a> </td></tr>
+    <tr><td class="paramname">bSkipMultiload</td><td>Same <a class="el" href="class_ogre_1_1_texture_gpu.html#a3aee068205a09b2d3aa61d021c8a62a8" title="Schedules an async transition in residency.">TextureGpu::unsafeScheduleTransitionTo</a> </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a9034d26bf967a6a9ab6a03f3f2a75a88" name="a9034d26bf967a6a9ab6a03f3f2a75a88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9034d26bf967a6a9ab6a03f3f2a75a88">&#9670;&#160;</a></span>scheduleTransitionTo()</h2>
+<a id="a32e5eb68dc3ba4521042fa82656a8a53" name="a32e5eb68dc3ba4521042fa82656a8a53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32e5eb68dc3ba4521042fa82656a8a53">&#9670;&#160;</a></span>scheduleTransitionTo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3262,7 +3269,13 @@ Static Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>autoDeleteImage</em> = <code>true</code>&#160;</td>
+          <td class="paramname"><em>autoDeleteImage</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bSkipMultiload</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -3567,8 +3580,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa3efd161b3ec98e3a405cf3167b7d022" name="aa3efd161b3ec98e3a405cf3167b7d022"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3efd161b3ec98e3a405cf3167b7d022">&#9670;&#160;</a></span>unsafeScheduleTransitionTo()</h2>
+<a id="a3aee068205a09b2d3aa61d021c8a62a8" name="a3aee068205a09b2d3aa61d021c8a62a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3aee068205a09b2d3aa61d021c8a62a8">&#9670;&#160;</a></span>unsafeScheduleTransitionTo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3592,7 +3605,13 @@ Static Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>autoDeleteImage</em> = <code>true</code>&#160;</td>
+          <td class="paramname"><em>autoDeleteImage</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bSkipMultiload</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -3609,12 +3628,13 @@ Static Public Attributes</h2></td></tr>
 
 <p>Schedules an async transition in residency. </p>
 <p >If transitioning from OnStorage to Resident, it will read from file (ResourceGroup was set in createTexture) If transitioning from OnSystemRam to Resident, it will read from the pointer it has. Multiple transitions can be stack together. </p><dl class="section remark"><dt>Remarks</dt><dd>If you're not loading from file (i.e. you're creating it programatically), call _transitionTo &amp; _setNextResidencyStatus directly. Once you've called scheduleTransitionTo at least once, calling _transitionTo is very dangerous, as there are race conditions.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_texture_gpu.html#a9034d26bf967a6a9ab6a03f3f2a75a88" title="Same as unsafeScheduleTransitionTo, but first checks if we&#39;re already in the residency state we want ...">TextureGpu::scheduleTransitionTo</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_texture_gpu.html#a32e5eb68dc3ba4521042fa82656a8a53" title="Same as unsafeScheduleTransitionTo, but first checks if we&#39;re already in the residency state we want ...">TextureGpu::scheduleTransitionTo</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">nextResidency</td><td>The residency to change to. </td></tr>
     <tr><td class="paramname">image</td><td>Pointer to image if you want to load the texture from memory instead of loading it from file or a listener. Pointer must be null if this is a manual texture. Pointer must NOT be a stack variable nor be deleted immediately. The actual loading is postponed until the request reaches the worker thread. That means the image pointer is safe to delete once you receive the <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257" title="This Reason is called when TextureGpu::notifyDataIsReady is called.">TextureGpuListener::Reason::ReadyForRendering</a> message. </td></tr>
     <tr><td class="paramname">autoDeleteImage</td><td>Whether we should call "delete image" once we're done using the image. Otherwise you must listen for <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257" title="This Reason is called when TextureGpu::notifyDataIsReady is called.">TextureGpuListener::ReadyForRendering</a> message to know when we're done using the image. </td></tr>
+    <tr><td class="paramname">bSkipMultiload</td><td>Do not send this texture to be loaded by multiload (see <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a1ff9f8223324c7091eaa3698bd39efe2" title="OgreNext always performs background streaming to load textures in a worker thread.">TextureGpuManager::setMultiLoadPool</a>) Useful if the order in which textures are being created into a pool must be preserved This value is implicitly true if image is not nullptr. </td></tr>
   </table>
   </dd>
 </dl>

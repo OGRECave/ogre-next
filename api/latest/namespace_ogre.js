@@ -1144,6 +1144,7 @@ var namespace_ogre =
     [ "ScriptTranslatorManager", "class_ogre_1_1_script_translator_manager.html", "class_ogre_1_1_script_translator_manager" ],
     [ "SDLGLSupport", "class_ogre_1_1_s_d_l_g_l_support.html", "class_ogre_1_1_s_d_l_g_l_support" ],
     [ "SDLWindow", "class_ogre_1_1_s_d_l_window.html", "class_ogre_1_1_s_d_l_window" ],
+    [ "Semaphore", "class_ogre_1_1_semaphore.html", "class_ogre_1_1_semaphore" ],
     [ "Serializer", "class_ogre_1_1_serializer.html", "class_ogre_1_1_serializer" ],
     [ "ShaderParams", "class_ogre_1_1_shader_params.html", "class_ogre_1_1_shader_params" ],
     [ "ShadowCameraSetup", "class_ogre_1_1_shadow_camera_setup.html", "class_ogre_1_1_shadow_camera_setup" ],

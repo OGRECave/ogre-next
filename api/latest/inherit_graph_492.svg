@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1_skeleton_def_1_1_depth_level_info.html" target="_top" xlink:title=" ">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_skeleton_def_1_1_bone_data.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="100,-30 0,-30 0,0 100,0 100,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::SkeletonDef::</text>
-<text text-anchor="middle" x="50" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">DepthLevelInfo</text>
+<text text-anchor="middle" x="50" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BoneData</text>
 </a>
 </g>
 </g>

@@ -5,6 +5,7 @@ var dir_981382ac5f3a1ca3a953b14216ee58ea =
     [ "OgreDefaultWorkQueueStandard.h", "_ogre_default_work_queue_standard_8h.html", "_ogre_default_work_queue_standard_8h" ],
     [ "OgreDefaultWorkQueueTBB.h", "_ogre_default_work_queue_t_b_b_8h.html", "_ogre_default_work_queue_t_b_b_8h" ],
     [ "OgreLightweightMutex.h", "_ogre_lightweight_mutex_8h.html", "_ogre_lightweight_mutex_8h" ],
+    [ "OgreSemaphore.h", "_ogre_semaphore_8h.html", "_ogre_semaphore_8h" ],
     [ "OgreThreadDefines.h", "_ogre_thread_defines_8h.html", "_ogre_thread_defines_8h" ],
     [ "OgreThreadDefinesNone.h", "_ogre_thread_defines_none_8h.html", "_ogre_thread_defines_none_8h" ],
     [ "OgreThreadDefinesPoco.h", "_ogre_thread_defines_poco_8h.html", "_ogre_thread_defines_poco_8h" ],
