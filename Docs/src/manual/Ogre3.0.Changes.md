@@ -63,3 +63,13 @@ Operations done in Ogre::Hlms::preparePassHash and Ogre::Hlms::calculateHashFor 
 Custom Hlms implementations and listeners must update their virtual overload functions to accomodate the tid parameter.
 
 Watch out for calls to `mSetProperties.clear();` which now must be changed to either `mSetProperties[kNoTid].clear();` or `mSetProperties[tid].clear();`
+
+Most shader compiler errors can be fixed by doing a Find & Replace:
+
+```
+setProperty( -> setProperty( tid, 
+setProperty( -> setProperty( kNoTid, 
+
+getProperty( -> getProperty( tid, 
+getProperty( -> getProperty( kNoTid, 
+```
