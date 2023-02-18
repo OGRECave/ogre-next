@@ -248,6 +248,8 @@ namespace Ogre
 
     static HlmsListener c_defaultListener;
 
+    thread_local uint32 Hlms::msThreadId = 0u;
+
     Hlms::Hlms( HlmsTypes type, const String &typeName, Archive *dataFolder,
                 ArchiveVec *libraryFolders ) :
         mDataFolder( dataFolder ),

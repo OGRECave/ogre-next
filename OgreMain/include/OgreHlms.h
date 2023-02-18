@@ -143,6 +143,8 @@ namespace Ogre
         /// For single-threaded operations
         static constexpr size_t kNoTid = 0u;
 
+        static thread_local uint32 msThreadId;
+
     protected:
         struct RenderableCache
         {
@@ -909,6 +911,32 @@ namespace Ogre
         virtual void _changeRenderSystem( RenderSystem *newRs );
 
         RenderSystem *getRenderSystem() const { return mRenderSystem; }
+
+    protected:
+        /// Backwards-compatible versions of setProperty/getProperty/unsetProperty
+        /// that don't ask for tid and rely instead on Thread Local Storage
+        void  setProperty( IdString key, int32 value ) { setProperty( msThreadId, key, value ); }
+        int32 getProperty( IdString key, int32 defaultVal = 0 ) const
+        {
+            return getProperty( msThreadId, key, defaultVal );
+        }
+        void unsetProperty( IdString key ) { unsetProperty( msThreadId, key ); }
+
+    public:
+        void setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit,
+                            int32 numTexUnits = 1u )
+        {
+            setTextureReg( msThreadId, shaderType, texName, texUnit, numTexUnits );
+        }
+        void  _setProperty( IdString key, int32 value ) { setProperty( msThreadId, key, value ); }
+        int32 _getProperty( IdString key, int32 defaultVal = 0 ) const
+        {
+            return getProperty( msThreadId, key, defaultVal );
+        }
+        void _setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit )
+        {
+            setTextureReg( msThreadId, shaderType, texName, texUnit );
+        }
     };
 
     /// These are "default" or "Base" properties common to many implementations and thus defined here.
