@@ -1,4 +1,4 @@
 <map id="Ogre::ConfigDialog" name="Ogre::ConfigDialog">
-<area shape="rect" id="node1" title="Defines the behaviour of an automatic renderer configuration dialog." alt="" coords="13,80,141,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="35,5,119,32"/>
+<area shape="rect" id="node1" title="Defines the behaviour of an automatic renderer configuration dialog." alt="" coords="13,79,141,104"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="35,5,119,31"/>
 </map>

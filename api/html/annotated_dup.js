@@ -393,8 +393,6 @@ var annotated_dup =
       [ "Camera", "class_ogre_1_1_camera.html", "class_ogre_1_1_camera" ],
       [ "CamerasInProgress", "struct_ogre_1_1_cameras_in_progress.html", "struct_ogre_1_1_cameras_in_progress" ],
       [ "Capsule", "class_ogre_1_1_capsule.html", "class_ogre_1_1_capsule" ],
-      [ "CategorisedAlignAllocPolicy", "class_ogre_1_1_categorised_align_alloc_policy.html", null ],
-      [ "CategorisedAllocPolicy", "class_ogre_1_1_categorised_alloc_policy.html", null ],
       [ "CbBase", "struct_ogre_1_1_cb_base.html", "struct_ogre_1_1_cb_base" ],
       [ "CbDrawCall", "struct_ogre_1_1_cb_draw_call.html", "struct_ogre_1_1_cb_draw_call" ],
       [ "CbDrawCallIndexed", "struct_ogre_1_1_cb_draw_call_indexed.html", "struct_ogre_1_1_cb_draw_call_indexed" ],

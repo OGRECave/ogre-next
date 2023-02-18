@@ -1,7 +1,5 @@
 var _ogre_memory_allocator_config_8h =
 [
-    [ "Ogre::CategorisedAlignAllocPolicy< Cat, align >", "class_ogre_1_1_categorised_align_alloc_policy.html", null ],
-    [ "Ogre::CategorisedAllocPolicy< Cat >", "class_ogre_1_1_categorised_alloc_policy.html", null ],
     [ "OGRE_ALLOC_T", "group___memory.html#ga3211e4a6a806aa789b38dce2432ef472", null ],
     [ "OGRE_ALLOC_T_ALIGN", "group___memory.html#gafc79c14937612b02ac50631c08666b26", null ],
     [ "OGRE_ALLOC_T_SIMD", "group___memory.html#ga728b719dd1425d46a78fe87d6f9ea6a5", null ],

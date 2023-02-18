@@ -1,9 +1,9 @@
 <map id="Ogre::Win32EGLWindow" name="Ogre::Win32EGLWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="54,304,218,331"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="72,229,200,256"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_window.html" title=" " alt="" coords="11,155,114,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,120,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="142,80,277,107"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="138,155,281,181"/>
-<area shape="rect" id="node7" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="145,5,327,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="54,299,218,324"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="72,225,200,251"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_window.html" title=" " alt="" coords="11,152,114,177"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,120,31"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="142,79,277,104"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="138,152,281,177"/>
+<area shape="rect" id="node7" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="145,5,327,31"/>
 </map>

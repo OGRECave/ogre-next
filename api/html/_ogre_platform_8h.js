@@ -1,15 +1,17 @@
 var _ogre_platform_8h =
 [
     [ "__OGRE_HAVE_DIRECTXMATH", "_ogre_platform_8h.html#afc2156f1568d01752c95dc7236018b6d", null ],
+    [ "_CRT_SECURE_NO_WARNINGS", "_ogre_platform_8h.html#af08ec37a8c99d747fb60fa15bc28678b", null ],
     [ "_OGRE_SIMD_ALIGN_ATTRIBUTE", "_ogre_platform_8h.html#a2f0155896e2458b8547f85aa7f82fd02", null ],
+    [ "_SCL_SECURE_NO_WARNINGS", "_ogre_platform_8h.html#abd0a75654ea98e87fa73a854b3f54837", null ],
     [ "DECL_MALLOC", "_ogre_platform_8h.html#aa1730b3ff27777dab53a340f23844db4", null ],
-    [ "FORCEINLINE", "_ogre_platform_8h.html#a724fb9f82013c782db5c3c12ea36aac8", null ],
     [ "OGRE_ARCH_TYPE", "_ogre_platform_8h.html#a4de9497f1c50d8052061e4870d5cdb42", null ],
     [ "OGRE_ARCHITECTURE_32", "_ogre_platform_8h.html#a37b62784316fecdf49524d6492b2f54e", null ],
     [ "OGRE_ARCHITECTURE_64", "_ogre_platform_8h.html#a338389706b17fb84162ebfa9a4c2195a", null ],
-    [ "OGRE_ASSERT_HIGH", "_ogre_platform_8h.html#a24a21e347c69694029d173434b0049c3", null ],
+    [ "OGRE_ASSERT_HIGH", "_ogre_platform_8h.html#a66be15613a592905895dbfe8a29a538b", null ],
     [ "OGRE_ASSERT_LOW", "_ogre_platform_8h.html#af98dd4559cd5a6a26dcce6fc7b63df59", null ],
-    [ "OGRE_ASSERT_MEDIUM", "_ogre_platform_8h.html#a1a71b761de4da71ff1db4be2232e06e7", null ],
+    [ "OGRE_ASSERT_MEDIUM", "_ogre_platform_8h.html#a5e6437487927f2c3e626bf3d9388ab32", null ],
+    [ "OGRE_ASSERTS_ENABLED", "_ogre_platform_8h.html#a70359a87e5c2335b17ec0eca70a3a7cc", null ],
     [ "OGRE_BUILD_SUFFIX", "_ogre_platform_8h.html#a922bb8a4073c0e5b0b48acf831b90a64", null ],
     [ "OGRE_COMPILER_BORL", "_ogre_platform_8h.html#ab912259af4a8a0d36f9b40df0d2eaa9f", null ],
     [ "OGRE_COMPILER_CLANG", "_ogre_platform_8h.html#a1e1b3451f5070fe036ad603e9f3c4fa9", null ],
@@ -52,10 +54,10 @@ var _ogre_platform_8h =
     [ "virtual_l2", "_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8", null ],
     [ "int16", "_ogre_platform_8h.html#a5c8843f6e8086a9239fed14de8b9d859", null ],
     [ "int32", "_ogre_platform_8h.html#a1c37a43c04753c9ae0c17108c9e6c9d2", null ],
-    [ "int64", "_ogre_platform_8h.html#a44bca44dae060c979d0e74cbf77cf4dc", null ],
+    [ "int64", "_ogre_platform_8h.html#a0d87d229c909a3a971c1b2cea5dc1f8f", null ],
     [ "int8", "_ogre_platform_8h.html#acad7c05003308f9b9be289faab5879f9", null ],
     [ "uint16", "_ogre_platform_8h.html#aa8263b218e7d187ad5ef03a73a6ad7fd", null ],
     [ "uint32", "_ogre_platform_8h.html#adf2a0cf2e77143b5ee1d38a75e289545", null ],
-    [ "uint64", "_ogre_platform_8h.html#a7e1487b57f16a1479302d1896c6f4445", null ],
+    [ "uint64", "_ogre_platform_8h.html#af7c8391e4119084465186113a849f065", null ],
     [ "uint8", "_ogre_platform_8h.html#a119732ea9d1e88bbddc47b4ac0fa21cb", null ]
 ];

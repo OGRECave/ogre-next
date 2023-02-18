@@ -16,7 +16,7 @@ var searchData=
   ['instances_13',['Instances',['../class_ogre_1_1_scene_manager_enumerator.html#a5e6ba67f2bf741283f459ed954772926',1,'Ogre::SceneManagerEnumerator']]],
   ['int16_14',['int16',['../namespace_ogre.html#a5c8843f6e8086a9239fed14de8b9d859',1,'Ogre']]],
   ['int32_15',['int32',['../namespace_ogre.html#a1c37a43c04753c9ae0c17108c9e6c9d2',1,'Ogre']]],
-  ['int64_16',['int64',['../namespace_ogre.html#a44bca44dae060c979d0e74cbf77cf4dc',1,'Ogre']]],
+  ['int64_16',['int64',['../namespace_ogre.html#a0d87d229c909a3a971c1b2cea5dc1f8f',1,'Ogre']]],
   ['int8_17',['int8',['../namespace_ogre.html#acad7c05003308f9b9be289faab5879f9',1,'Ogre']]],
   ['intconstantlist_18',['IntConstantList',['../group___materials.html#ga0f6f75258759920f3879eb1b4b590121',1,'Ogre']]],
   ['intersectingobjectset_19',['IntersectingObjectSet',['../class_ogre_1_1_bsp_node.html#aa72c953038f927f46660c1d073b3a076',1,'Ogre::BspNode']]],

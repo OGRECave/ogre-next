@@ -1,5 +1,5 @@
 <map id="Ogre::ConstMapIterator&lt; T &gt;" name="Ogre::ConstMapIterator&lt; T &gt;">
-<area shape="rect" id="node1" title="Concrete IteratorWrapper for const access to the underlying key&#45;value container." alt="" coords="5,199,192,225"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_map_iterator_wrapper.html" title=" " alt="" coords="13,109,184,151"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_iterator_wrapper.html" title=" " alt="" coords="26,5,171,61"/>
+<area shape="rect" id="node1" title="Concrete IteratorWrapper for const access to the underlying key&#45;value container." alt="" coords="5,181,192,207"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_map_iterator_wrapper.html" title=" " alt="" coords="13,93,184,133"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_iterator_wrapper.html" title="Basefunctionality for IteratorWrappers." alt="" coords="7,5,190,45"/>
 </map>
