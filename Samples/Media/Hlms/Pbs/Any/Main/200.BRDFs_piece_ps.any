@@ -302,8 +302,13 @@ midf3 BRDF_IR( midf3 lightDir, midf3 lightDiffuse, PixelData pixelData )
 		midf fresnelD = _h( 1.0f );
 	@end
 
-	midf3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * _h( 3.141592654 ) * fresnelD * envBRDF.z;
-	midf3 Rs = pixelData.envColourS * pixelData.specular.xyz * ( pixelData.F0 * envBRDF.x + envBRDF.y );
+        midf3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * _h( 3.141592654 ) * fresnelD * envBRDF.z;
+        midf3 Rs = pixelData.envColourS * pixelData.specular.xyz *
+    @property( industry_compatible )
+                    ( pixelData.F0 * envBRDF.x + envBRDF.y );
+    @else
+                    ( fresnelS * envBRDF.x + envBRDF.y );
+    @end
 
 	@property( clear_coat )
 		@property( normal_map )
