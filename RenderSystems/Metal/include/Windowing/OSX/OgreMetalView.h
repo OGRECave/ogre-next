@@ -41,13 +41,6 @@ _OgreMetalExport @interface OgreMetalView : NSView
 
 @property( nonatomic, readwrite ) BOOL layerSizeDidUpdate;
 
-/// You can use 'nativeScaleFactor' for further control.
-@property( nonatomic ) bool scaleToNative;
-
-/// When scaleToNative = true, instead of setting self.contentScaleFactor, you
-/// should change this setting. It's expressed in fractions of the nativeScale.
-@property( nonatomic ) CGFloat nativeScaleFactor;
-
 /// The value of presentationTime will be passed to
 /// MTLCommandBuffer::presentDrawable atTime:presentationTime
 /// When negative, it means to present immediately (Ogre will call presentDrawable overload)
