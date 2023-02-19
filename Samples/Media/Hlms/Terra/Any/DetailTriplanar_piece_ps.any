@@ -37,7 +37,7 @@
 
 	@property( detail_triplanar_diffuse )
 		@foreach( detail_maps_diffuse, n )@property( detail_map@n )
-			#define SampleDetailCol@nTriplanar( tex, sampler, uv, arrayIdx ) SampleDetailCol@n( tex,																							  \
+			#define SampleDetailCol@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleDetailCol@n( tex,																							  \
 																								sampler,																						  \
 																								UV_DETAIL@n( GetTriplanarUVSd( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ) ), \
 																								arrayIdx ) * triplanarBlend.x +																	  \
@@ -50,7 +50,7 @@
 																			 SampleDetailCol@n( tex,																							  \
 																								sampler,																						  \
 																								UV_DETAIL@n( GetTriplanarUVFr( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ) ), \
-																								arrayIdx ) * triplanarBlend.z
+																								arrayIdx ) * triplanarBlend.z)
 		@end @end
 	@end
 
@@ -117,7 +117,7 @@
 
 	@property( detail_triplanar_roughness )
 		@foreach( 4, n )@property( roughness_map@n )
-			#define SampleRoughness@nTriplanar( tex, sampler, uv, arrayIdx ) SampleRoughness@n( tex,																			   \
+			#define SampleRoughness@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleRoughness@n( tex,																			   \
 																								sampler,																		   \
 																								GetTriplanarUVSd( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
 																								arrayIdx ) * triplanarBlend.x +													   \
@@ -130,13 +130,13 @@
 																			 SampleRoughness@n( tex,																			   \
 																								sampler,																		   \
 																								GetTriplanarUVFr( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
-																								arrayIdx ) * triplanarBlend.z
+																								arrayIdx ) * triplanarBlend.z)
 		@end @end
 	@end
 
 	@property( detail_triplanar_metalness )
 		@foreach( 4, n )@property( metalness_map@n )
-			#define SampleMetalness@nTriplanar( tex, sampler, uv, arrayIdx ) SampleMetalness@n( tex,																			   \
+			#define SampleMetalness@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleMetalness@n( tex,																			   \
 																								sampler,																		   \
 																								GetTriplanarUVSd( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
 																								arrayIdx ) * triplanarBlend.x +													   \
@@ -149,7 +149,7 @@
 																			 SampleMetalness@n( tex,																			   \
 																								sampler,																		   \
 																								GetTriplanarUVFr( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
-																								arrayIdx ) * triplanarBlend.z
+																								arrayIdx ) * triplanarBlend.z)
 		@end @end
 	@end
 @end

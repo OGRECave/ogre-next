@@ -22,8 +22,6 @@
 		@insertpiece( DeclareBRDF_AreaLightApprox )
 	@end
 
-	@insertpiece( DeclDetailTriplanarFuncs )
-
 	#define SampleMetalness0( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx )
 	#define SampleMetalness1( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx )
 	#define SampleMetalness2( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx )
@@ -36,6 +34,15 @@
 
 	#define OGRE_UNPACK_X_2x16( packedInt ) ((packedInt) & 0x0000FFFFu)
 	#define OGRE_UNPACK_Y_2x16( packedInt ) ((packedInt) >> 16u)
+
+	@insertpiece( DeclDetailTriplanarFuncs )
+
+	@property( detail_triplanar )
+		midf3 pow3( midf3 v, midf e )
+		{
+			return midf3_c( pow( v.x, e ), pow( v.y, e ), pow( v.z, e ) );
+		}
+	@end
 @end
 
 //-----------------------------------------------------------------------------
@@ -189,7 +196,7 @@
 
 	@property( detail_triplanar )
 		// https://bgolus.medium.com/normal-mapping-for-a-triplanar-shader-10bf39dca05a
-		midf3 triplanarBlend = pow( pixelData.geomNormal, _h( 4.0 ) );
+		midf3 triplanarBlend = pow3( pixelData.geomNormal, _h( 4.0 ) );
 		triplanarBlend /= dot( triplanarBlend, midf3_c( 1.0, 1.0, 1.0 ) );
 	@end
 
