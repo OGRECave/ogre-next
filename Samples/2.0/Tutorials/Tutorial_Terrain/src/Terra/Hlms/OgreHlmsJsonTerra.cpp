@@ -313,6 +313,30 @@ namespace Ogre
             const rapidjson::Value &subobj = itor->value;
             loadTexture( subobj, blocks, TERRA_REFLECTION, terraDatablock, resourceGroup );
         }
+
+        itor = json.FindMember( "detail_triplanar_diffuse" );
+        if( itor != json.MemberEnd() && itor->value.IsBool() )
+        {
+            terraDatablock->setDetailTriplanarDiffuseEnabled( itor->value.GetBool() );
+        }
+
+        itor = json.FindMember( "detail_triplanar_normal" );
+        if( itor != json.MemberEnd() && itor->value.IsBool() )
+        {
+            terraDatablock->setDetailTriplanarNormalEnabled( itor->value.GetBool() );
+        }
+
+        itor = json.FindMember( "detail_triplanar_roughness" );
+        if( itor != json.MemberEnd() && itor->value.IsBool() )
+        {
+            terraDatablock->setDetailTriplanarRoughnessEnabled( itor->value.GetBool() );
+        }
+
+        itor = json.FindMember( "detail_triplanar_metalness" );
+        if( itor != json.MemberEnd() && itor->value.IsBool() )
+        {
+            terraDatablock->setDetailTriplanarMetalnessEnabled( itor->value.GetBool() );
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonTerra::saveTexture( const char *blockName, TerraTextureTypes textureType,

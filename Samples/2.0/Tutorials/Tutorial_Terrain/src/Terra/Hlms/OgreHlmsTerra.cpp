@@ -73,6 +73,12 @@ namespace Ogre
     const char *TerraProperty::RoughnessMap = "roughness_map";
     const char *TerraProperty::MetalnessMap = "metalness_map";
 
+    const IdString TerraProperty::DetailTriplanar = IdString( "detail_triplanar" );
+    const IdString TerraProperty::DetailTriplanarDiffuse = IdString( "detail_triplanar_diffuse" );
+    const IdString TerraProperty::DetailTriplanarNormal = IdString( "detail_triplanar_normal" );
+    const IdString TerraProperty::DetailTriplanarRoughness = IdString( "detail_triplanar_roughness" );
+    const IdString TerraProperty::DetailTriplanarMetalness = IdString( "detail_triplanar_metalness" );
+
     HlmsTerra::HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders ) :
         HlmsPbs( dataFolder, libraryFolders ),
         mLastMovableObject( 0 )
@@ -362,6 +368,30 @@ namespace Ogre
                 setProperty( PbsProperty::NormalRgSnorm,
                              static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
             }
+        }
+
+        if( datablock->getDetailTriplanarDiffuseEnabled() )
+        {
+            setProperty( TerraProperty::DetailTriplanar, 1 );
+            setProperty( TerraProperty::DetailTriplanarDiffuse, 1 );
+        }
+
+        if( datablock->getDetailTriplanarNormalEnabled() )
+        {
+            setProperty( TerraProperty::DetailTriplanar, 1 );
+            setProperty( TerraProperty::DetailTriplanarNormal, 1 );
+        }
+
+        if( datablock->getDetailTriplanarRoughnessEnabled() )
+        {
+            setProperty( TerraProperty::DetailTriplanar, 1 );
+            setProperty( TerraProperty::DetailTriplanarRoughness, 1 );
+        }
+
+        if( datablock->getDetailTriplanarMetalnessEnabled() )
+        {
+            setProperty( TerraProperty::DetailTriplanar, 1 );
+            setProperty( TerraProperty::DetailTriplanarMetalness, 1 );
         }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS

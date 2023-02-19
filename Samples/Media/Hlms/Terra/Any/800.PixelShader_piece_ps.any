@@ -34,6 +34,15 @@
 
 	#define OGRE_UNPACK_X_2x16( packedInt ) ((packedInt) & 0x0000FFFFu)
 	#define OGRE_UNPACK_Y_2x16( packedInt ) ((packedInt) >> 16u)
+
+	@insertpiece( DeclDetailTriplanarFuncs )
+
+	@property( detail_triplanar )
+		midf3 pow3( midf3 v, midf e )
+		{
+			return midf3_c( pow( v.x, e ), pow( v.y, e ), pow( v.z, e ) );
+		}
+	@end
 @end
 
 //-----------------------------------------------------------------------------
@@ -127,9 +136,9 @@
 	/// SPECUlAR MAP
 	@foreach( 4, n )
 		@property( metalness_map@n )
-			midf metalness@n = SampleMetalness@n( textureMaps@value( metalness_map@n_idx ),
+			midf metalness@n = SampleMetalness@n@property( detail_triplanar_metalness )Triplanar@end ( textureMaps@value( metalness_map@n_idx ),
 												  samplerState@value(metalness_map@n_sampler),
-												  inPs.uv0.xy * material.detailOffsetScale[@n].zw +
+												  @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@else inPs.uv0.xy@end  * material.detailOffsetScale[@n].zw +
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailMetalnessIdx@n ).x;
 		@else
@@ -152,9 +161,9 @@
 	/// ROUGHNESS MAP
 	@foreach( 4, n )
 		@property( roughness_map@n )
-			midf roughness@n = SampleRoughness@n( textureMaps@value( roughness_map@n_idx ),
+			midf roughness@n = SampleRoughness@n@property( detail_triplanar_roughness )Triplanar@end ( textureMaps@value( roughness_map@n_idx ),
 												  samplerState@value(roughness_map@n_sampler),
-												  inPs.uv0.xy * material.detailOffsetScale[@n].zw +
+												  @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@else inPs.uv0.xy@end  * material.detailOffsetScale[@n].zw +
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailRoughnessIdx@n ).x;
 		@else
@@ -180,8 +189,18 @@
 	@property( z_up )
 		  pixelData.geomNormal.yz = midf2_c( -pixelData.geomNormal.z, pixelData.geomNormal.y );
 	@end
-	pixelData.geomNormal = mul( pixelData.geomNormal, toMidf3x3( passBuf.view ) );
-	@property( normal_map )
+
+	@property( normal_map && detail_triplanar_normal )
+		pixelData.normal = pixelData.geomNormal;
+	@end
+
+	@property( detail_triplanar )
+		// https://bgolus.medium.com/normal-mapping-for-a-triplanar-shader-10bf39dca05a
+		midf3 triplanarBlend = pow3( pixelData.geomNormal, _h( 4.0 ) );
+		triplanarBlend /= dot( triplanarBlend, midf3_c( 1.0, 1.0, 1.0 ) );
+	@end
+
+	@property( normal_map && !detail_triplanar_normal )
 		//Get the TBN matrix
 		midf3 viewSpaceUnitX	= mul( midf3_c( 1, 0, 0 ), toMidf3x3( passBuf.view ) );
 		midf3 vTangent			= normalize( cross( pixelData.geomNormal, viewSpaceUnitX ) );
@@ -201,6 +220,11 @@
 
 	@insertpiece( LoadDetailWeights )
 
+	@property( !hlms_use_prepass )
+		@insertpiece( LoadNormalData )
+		@insertpiece( SampleAndApplyDetailNormalMaps@property( detail_triplanar_normal )Triplanar@end )
+	@end
+
 	@insertpiece( SampleDetailMaps )
 
 	@property( !hlms_prepass )
@@ -213,15 +237,16 @@
 	@insertpiece( forwardPlusDoDecals )
 
 	@property( !hlms_use_prepass )
-		@insertpiece( LoadNormalData )
-		@insertpiece( SampleAndApplyDetailNormalMaps )
-
 		@insertpiece( custom_ps_posSampleNormal )
 
 		@insertpiece( forwardPlusApplyDecalsNormal )
 
 		@property( normal_map )
-			pixelData.normal = normalize( mul( TBN, pixelData.normal ) );
+			@property( detail_triplanar_normal )
+				pixelData.normal = mul( pixelData.normal, toMidf3x3( passBuf.view ) );
+			@else
+				pixelData.normal = normalize( mul( TBN, pixelData.normal ) );
+			@end
 		@end
 
 		@insertpiece( DoDirectionalShadowMaps )
