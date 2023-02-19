@@ -78,9 +78,10 @@ namespace Ogre
         mTargetLevelBarrier( 0 ),
         mParentNodeDef( parentNodeDef )
     {
-        static_assert( sizeof( CompositorPassTypeEnumNames ) /
-                           sizeof( CompositorPassTypeEnumNames[0] ) ==
-                       ( PASS_CUSTOM + 1 ) );
+        static_assert(
+            sizeof( CompositorPassTypeEnumNames ) / sizeof( CompositorPassTypeEnumNames[0] ) ==
+                ( PASS_CUSTOM + 1 ),
+            "CompositorPassTypeEnumNames string was not updated to match all CompositorPassType" );
     }
     //-----------------------------------------------------------------------------------
     CompositorTargetDef::~CompositorTargetDef()
