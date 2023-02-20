@@ -1989,8 +1989,9 @@ namespace Ogre
         HlmsCacheVec::iterator it =
             std::lower_bound( mShaderCache.begin(), mShaderCache.end(), &cache, OrderCacheByHash );
 
-        assert( ( it == mShaderCache.end() || ( *it )->hash != hash ) &&
-                "Can't add the same shader to the cache twice! (or a hash collision happened)" );
+        OGRE_ASSERT_LOW(
+            ( it == mShaderCache.end() || ( *it )->hash != hash ) &&
+            "Can't add the same shader to the cache twice! (or a hash collision happened)" );
 
         HlmsCache *retVal = new HlmsCache( cache );
         mShaderCache.insert( it, retVal );
@@ -3436,13 +3437,11 @@ namespace Ogre
                              : queuedRenderable.renderable->getHlmsHash();
         hash[1] = passCache.hash;
 
-        // MurmurHash3_x86_32( hash, sizeof( hash ), IdString::Seed, &finalHash );
-
         // If this assert triggers, we've created too many shader variations (or bug)
-        assert( ( hash[0] >> HlmsBits::RenderableShift ) <= HlmsBits::RendarebleHlmsTypeMask &&
-                "Too many material / meshes variations" );
-        assert( ( hash[1] >> HlmsBits::PassShift ) <= HlmsBits::PassMask &&
-                "Should never happen (we assert in preparePassHash)" );
+        OGRE_ASSERT_LOW( ( hash[0] >> HlmsBits::RenderableShift ) <= HlmsBits::RendarebleHlmsTypeMask &&
+                         "Too many material / meshes variations" );
+        OGRE_ASSERT_LOW( ( hash[1] >> HlmsBits::PassShift ) <= HlmsBits::PassMask &&
+                         "Should never happen (we assert in preparePassHash)" );
 
         finalHash = hash[0] | hash[1];
 
@@ -3458,6 +3457,54 @@ namespace Ogre
         }
 
         return lastReturnedValue;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 Hlms::getMaterialSerial01( uint32 lastReturnedValue, const HlmsCache &passCache,
+                                      const QueuedRenderable &queuedRenderable, bool casterPass,
+                                      bool &outAlreadySeen ) const
+    {
+        uint32 finalHash;
+        uint32 hash[2];
+        hash[0] = casterPass ? queuedRenderable.renderable->getHlmsCasterHash()
+                             : queuedRenderable.renderable->getHlmsHash();
+        hash[1] = passCache.hash;
+
+        // If this assert triggers, we've created too many shader variations (or bug)
+        OGRE_ASSERT_LOW( ( hash[0] >> HlmsBits::RenderableShift ) <= HlmsBits::RendarebleHlmsTypeMask &&
+                         "Too many material / meshes variations" );
+        OGRE_ASSERT_LOW( ( hash[1] >> HlmsBits::PassShift ) <= HlmsBits::PassMask &&
+                         "Should never happen (we assert in preparePassHash)" );
+
+        finalHash = hash[0] | hash[1];
+
+        bool bAlreadySeen = true;
+
+        if( lastReturnedValue != finalHash )
+        {
+            HlmsCache const *shaderCache = this->getShaderCache( finalHash );
+            if( !shaderCache )
+                bAlreadySeen = false;
+        }
+
+        lastReturnedValue = finalHash;
+        outAlreadySeen = bAlreadySeen;
+
+        return lastReturnedValue;
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::compileShaderParallel02( const HlmsCache &passCache,
+                                        const QueuedRenderable &queuedRenderable, bool casterPass,
+                                        size_t tid )
+    {
+        uint32 finalHash;
+        uint32 hash[2];
+        hash[0] = casterPass ? queuedRenderable.renderable->getHlmsCasterHash()
+                             : queuedRenderable.renderable->getHlmsHash();
+        hash[1] = passCache.hash;
+
+        finalHash = hash[0] | hash[1];
+
+        createShaderCacheEntry( hash[0], passCache, finalHash, queuedRenderable, tid );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::setDebugOutputPath( bool enableDebugOutput, bool outputProperties, const String &path )

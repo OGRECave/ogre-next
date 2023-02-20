@@ -221,7 +221,8 @@ namespace Ogre
                 if( !mTemplatesOutOfDate )
                 {
                     // Templates haven't changed, send the Hlms-processed shader code for compilation
-                    hlms->_compileShaderFromPreprocessedSource( itor->mergedCache, itor->sourceFile, Hlms::kNoTid );
+                    hlms->_compileShaderFromPreprocessedSource( itor->mergedCache, itor->sourceFile,
+                                                                Hlms::kNoTid );
                 }
                 else
                 {

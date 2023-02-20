@@ -908,29 +908,49 @@ namespace Ogre
         mLastTextureHash = 0;
     }
     //-----------------------------------------------------------------------
+    struct ParallelEntry
+    {
+        uint32_t finalHash;
+        QueuedRenderable queuedRenderable;
+
+        bool operator<( const ParallelEntry &b ) const { return this->finalHash < b.finalHash; }
+        bool operator<( const uint32_t otherHash ) const { return this->finalHash < otherHash; }
+    };
+    typedef std::vector<ParallelEntry> ParallelEntryVec;
+
     void RenderQueue::warmUpShaders( const bool casterPass, HlmsCache passCache[],
                                      const RenderQueueGroup &renderQueueGroup )
     {
-        HlmsCache const *lastHlmsCache = &c_dummyCache;
         uint32 lastHlmsCacheHash = 0;
 
-        const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
+        ParallelEntryVec mParallelEntries;
 
-        QueuedRenderableArray::const_iterator itor = queuedRenderables.begin();
-        QueuedRenderableArray::const_iterator endt = queuedRenderables.end();
-
-        while( itor != endt )
+        for( const QueuedRenderable &queuedRenderable : renderQueueGroup.mQueuedRenderables )
         {
-            const QueuedRenderable &queuedRenderable = *itor;
-
             const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
 
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
 
-            lastHlmsCacheHash = lastHlmsCache->hash;
-            hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
-                               casterPass );
-            ++itor;
+            bool bAlreadySeen;
+            lastHlmsCacheHash =
+                hlms->getMaterialSerial01( lastHlmsCacheHash, passCache[datablock->mType],
+                                           queuedRenderable, casterPass, bAlreadySeen );
+            if( !bAlreadySeen )
+            {
+                ParallelEntryVec::iterator itor = std::lower_bound(
+                    mParallelEntries.begin(), mParallelEntries.end(), lastHlmsCacheHash );
+
+                if( itor != mParallelEntries.end() && itor->finalHash != lastHlmsCacheHash )
+                    mParallelEntries.insert( itor, { lastHlmsCacheHash, queuedRenderable } );
+            }
+        }
+
+        for( const ParallelEntry &entry : mParallelEntries )
+        {
+            const HlmsDatablock *datablock = entry.queuedRenderable.renderable->getDatablock();
+            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
+            hlms->compileShaderParallel02( passCache[datablock->mType], entry.queuedRenderable,
+                                           casterPass, 0u );
         }
     }
     //-----------------------------------------------------------------------

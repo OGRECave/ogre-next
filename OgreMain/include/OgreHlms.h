@@ -815,6 +815,43 @@ namespace Ogre
         const HlmsCache *getMaterial( HlmsCache const *lastReturnedValue, const HlmsCache &passCache,
                                       const QueuedRenderable &queuedRenderable, bool casterPass );
 
+        /** Parallel Hlms generation consists in two stages:
+            This is the first stage, serial. See compileShaderParallel02() for 2nd stage.
+        @param lastReturnedValue
+            Hash of the last value we've returned.
+        @param passCache
+            See getMaterial()
+        @param queuedRenderable
+            See getMaterial()
+        @param casterPass
+            See getMaterial()
+        @param outAlreadySeen [out]
+            If true, the shader is already in our cache or has already been seen and must not be
+            compiled.
+            If false, the shader wasn't yet in our cache, but we may have returned this value in a
+            previous call (if that's the case, then it also must not be compiled twice).
+        @return
+            The hash the shader will end up with.
+            Caller must track whether we've already returned this value.
+        */
+        uint32 getMaterialSerial01( uint32 lastReturnedValue, const HlmsCache &passCache,
+                                    const QueuedRenderable &queuedRenderable, bool casterPass,
+                                    bool &outAlreadySeen ) const;
+
+        /** Second Stage, parallel of shader compilation. See getMaterialSerial01() for 1st stage.
+        @param passCache
+            See getMaterial()
+        @param queuedRenderable
+            See getMaterial()
+        @param casterPass
+            See getMaterial()
+        @param tid
+            Thread idx of caller
+        */
+        void compileShaderParallel02( const HlmsCache        &passCache,
+                                      const QueuedRenderable &queuedRenderable, bool casterPass,
+                                      size_t tid );
+
         /** Fills the constant buffers. Gets executed right before drawing the mesh.
         @param cache
             Current cache of Shaders to be used.
