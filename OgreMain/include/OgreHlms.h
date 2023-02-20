@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreHlmsCommon.h"
 #include "OgreHlmsPso.h"
 #include "OgreStringVector.h"
+#include "Threading/OgreLightweightMutex.h"
 #if !OGRE_NO_JSON
 #    include "OgreHlmsJson.h"
 #endif
@@ -231,13 +232,16 @@ namespace Ogre
             HlmsPropertyVec setProperties;
             PiecesMap       pieces;
 
+            uint32_t shadersGenerated;
+
             // Prevent false cache sharing
             uint8_t padding[64];
         };
 
         typedef std::vector<ThreadData> ThreadDataVec;
 
-        ThreadDataVec mT;
+        ThreadDataVec    mT;
+        LightweightMutex mMutex;
 
     public:
         struct Library

@@ -288,6 +288,8 @@ namespace Ogre
         memset( mShaderTargets, 0, sizeof( mShaderTargets ) );
 
         mT.resize( 1u );
+        for( ThreadData &threadData : mT )
+            threadData.shadersGenerated = 0u;
 
         if( libraryFolders )
         {
@@ -1984,6 +1986,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     const HlmsCache *Hlms::addShaderCache( uint32 hash, const HlmsPso &pso )
     {
+        ScopedLock lock( mMutex );
+
         HlmsCache cache( hash, mType, pso );
         HlmsCacheVec::iterator it =
             std::lower_bound( mShaderCache.begin(), mShaderCache.end(), &cache, OrderCacheByHash );
@@ -2164,6 +2168,7 @@ namespace Ogre
             if( pso.pass.strongMacroblockBits & HlmsPassPso::ForceDepthClamp )
                 prepassMacroblock.mDepthClamp = true;
 
+            ScopedLock lock( mMutex );
             pso.macroblock = mHlmsManager->getMacroblock( prepassMacroblock );
         }
     }
@@ -2174,10 +2179,14 @@ namespace Ogre
     {
         HighLevelGpuProgramManager *gpuProgramManager = HighLevelGpuProgramManager::getSingletonPtr();
 
-        HighLevelGpuProgramPtr gp = gpuProgramManager->createProgram(
-            StringConverter::toString( finalHash ) + ShaderFiles[shaderType],
-            ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME, mShaderProfile,
-            static_cast<GpuProgramType>( shaderType ) );
+        HighLevelGpuProgramPtr gp;
+        {
+            ScopedLock lock( mMutex );
+            gp = gpuProgramManager->createProgram(
+                StringConverter::toString( finalHash ) + ShaderFiles[shaderType],
+                ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME, mShaderProfile,
+                static_cast<GpuProgramType>( shaderType ) );
+        }
         gp->setSource( source, debugFilenameOutput );
 
         {
@@ -2212,7 +2221,8 @@ namespace Ogre
     {
         OgreProfileExhaustive( "Hlms::_compileShaderFromPreprocessedSource" );
 
-        const uint32 finalHash = mType * 100000000u + static_cast<uint32>( mShaderCodeCache.size() );
+        const uint32 uniqueName =
+            mType * 100000000u + static_cast<uint32>( tid * 10000000u ) + mT[tid].shadersGenerated++;
 
         ShaderCodeCache codeCache( mergedCache.pieces );
         codeCache.mergedCache.setProperties = mergedCache.setProperties;
@@ -2227,7 +2237,7 @@ namespace Ogre
                 std::ofstream debugDumpFile;
                 if( mDebugOutput )
                 {
-                    debugFilenameOutput = mOutputPath + "./" + StringConverter::toString( finalHash ) +
+                    debugFilenameOutput = mOutputPath + "./" + StringConverter::toString( uniqueName ) +
                                           ShaderFiles[i] + mShaderFileExt;
                     debugDumpFile.open( Ogre::fileSystemPathFromString( debugFilenameOutput ).c_str(),
                                         std::ios::out | std::ios::binary );
@@ -2237,7 +2247,7 @@ namespace Ogre
                 }
 
                 codeCache.shaders[i] =
-                    compileShaderCode( source[i], "", finalHash, static_cast<ShaderType>( i ), tid );
+                    compileShaderCode( source[i], "", uniqueName, static_cast<ShaderType>( i ), tid );
             }
         }
 
@@ -2246,6 +2256,7 @@ namespace Ogre
         // Ensure code didn't accidentally modify mSetProperties
         OGRE_ASSERT_HIGH( codeCache.mergedCache.setProperties == mergedCache.setProperties );
 
+        ScopedLock lock( mMutex );
         mShaderCodeCache.push_back( codeCache );
     }
     //-----------------------------------------------------------------------------------
@@ -2254,7 +2265,8 @@ namespace Ogre
         OgreProfileExhaustive( "Hlms::compileShaderCode" );
 
         // Give the shaders friendly base-10 names
-        const uint32 finalHash = mType * 100000000u + static_cast<uint32>( mShaderCodeCache.size() );
+        const uint32 uniqueName =
+            mType * 100000000u + static_cast<uint32>( tid * 10000000u ) + mT[tid].shadersGenerated++;
 
         mT[tid].setProperties = codeCache.mergedCache.setProperties;
 
@@ -2314,7 +2326,7 @@ namespace Ogre
                 std::ofstream debugDumpFile;
                 if( mDebugOutput )
                 {
-                    debugFilenameOutput = mOutputPath + "./" + StringConverter::toString( finalHash ) +
+                    debugFilenameOutput = mOutputPath + "./" + StringConverter::toString( uniqueName ) +
                                           ShaderFiles[i] + mShaderFileExt;
                     debugDumpFile.open( Ogre::fileSystemPathFromString( debugFilenameOutput ).c_str(),
                                         std::ios::out | std::ios::binary );
@@ -2340,7 +2352,12 @@ namespace Ogre
                 processPieces( mDataFolder, mPieceFiles[i], tid );
 
                 // Generate the shader file.
-                DataStreamPtr inFile = mDataFolder->open( filename );
+                DataStreamPtr inFile;
+
+                {
+                    ScopedLock lock( mMutex );
+                    inFile = mDataFolder->open( filename );
+                }
 
                 String inString;
                 String outString;
@@ -2372,7 +2389,7 @@ namespace Ogre
                 {
                     LogManager::getSingleton().logMessage(
                         "There were HLMS syntax errors while parsing " +
-                        StringConverter::toString( finalHash ) + ShaderFiles[i] );
+                        StringConverter::toString( uniqueName ) + ShaderFiles[i] );
                 }
 
                 // Now dump the processed file.
@@ -2385,7 +2402,7 @@ namespace Ogre
                 // Don't create and compile if template requested not to
                 if( !getProperty( tid, HlmsBaseProp::DisableStage ) )
                 {
-                    codeCache.shaders[i] = compileShaderCode( outString, debugFilenameOutput, finalHash,
+                    codeCache.shaders[i] = compileShaderCode( outString, debugFilenameOutput, uniqueName,
                                                               static_cast<ShaderType>( i ), tid );
                 }
 
@@ -2394,6 +2411,7 @@ namespace Ogre
             }
         }
 
+        ScopedLock lock( mMutex );
         mShaderCodeCache.push_back( codeCache );
     }
     //-----------------------------------------------------------------------------------
@@ -2451,14 +2469,26 @@ namespace Ogre
         unsetProperty( tid, HlmsPsoProp::InputLayoutId );
         codeCache.mergedCache.setProperties.swap( mT[tid].setProperties );
         {
-            ShaderCodeCacheVec::iterator itCodeCache =
-                std::find( mShaderCodeCache.begin(), mShaderCodeCache.end(), codeCache );
-            if( itCodeCache == mShaderCodeCache.end() )
+            bool bIsInCache;
+            {
+                ScopedLock lock( mMutex );
+                ShaderCodeCacheVec::iterator itCodeCache =
+                    std::find( mShaderCodeCache.begin(), mShaderCodeCache.end(), codeCache );
+                bIsInCache = itCodeCache != mShaderCodeCache.end();
+
+                if( bIsInCache )
+                {
+                    // This requires the mutex as itCodeCache could be invalidated
+                    for( size_t i = 0; i < NumShaderTypes; ++i )
+                        codeCache.shaders[i] = itCodeCache->shaders[i];
+                }
+            }
+
+            if( !bIsInCache )
                 compileShaderCode( codeCache, tid );
             else
             {
-                for( size_t i = 0; i < NumShaderTypes; ++i )
-                    codeCache.shaders[i] = itCodeCache->shaders[i];
+                // This can be done in parallel, as we've copied what itCodeCache needed
                 codeCache.mergedCache.setProperties.swap( mT[tid].setProperties );
             }
         }
