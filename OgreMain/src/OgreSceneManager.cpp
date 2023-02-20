@@ -2018,6 +2018,9 @@ namespace Ogre
                     ( camera->getLastViewport()->getVisibilityMask() &
                       ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS ) );
 
+        CullFrustumPreparedData preparedData;
+        MovableObject::cullFrustumPrepare( camera, visibilityMask, lodCamera, preparedData );
+
         ObjectMemoryManagerVec::const_iterator it = request.objectMemManager->begin();
         ObjectMemoryManagerVec::const_iterator en = request.objectMemManager->end();
 
@@ -2037,50 +2040,54 @@ namespace Ogre
                 ObjectData objData;
                 const size_t totalObjs = memoryManager->getFirstObjectData( objData, i );
 
-                // Distribute the work evenly across all threads (not perfect), taking into
-                // account we need to distribute in multiples of ARRAY_PACKED_REALS
-                size_t numObjs = ( totalObjs + ( mNumWorkerThreads - 1 ) ) / mNumWorkerThreads;
-                numObjs =
-                    ( ( numObjs + ARRAY_PACKED_REALS - 1 ) / ARRAY_PACKED_REALS ) * ARRAY_PACKED_REALS;
-
-                const size_t toAdvance = std::min( threadIdx * numObjs, totalObjs );
-
-                // Prevent going out of bounds (usually in the last threadIdx, or
-                // when there are less entities than ARRAY_PACKED_REALS
-                numObjs = std::min( numObjs, totalObjs - toAdvance );
-                objData.advancePack( toAdvance / ARRAY_PACKED_REALS );
-
-                MovableObject::cullFrustum( numObjs, objData, camera, visibilityMask, outVisibleObjects,
-                                            lodCamera );
-
-                const uint8 currRqId = static_cast<uint8>( i );
-
-                if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::FAST &&
-                    request.addToRenderQueue )
+                if( totalObjs > 0u )
                 {
-                    // V2 meshes can be added to the render queue in parallel
-                    bool casterPass = request.casterPass;
-                    MovableObject::MovableObjectArray::const_iterator itor = outVisibleObjects.begin();
-                    MovableObject::MovableObjectArray::const_iterator endt = outVisibleObjects.end();
+                    // Distribute the work evenly across all threads (not perfect), taking into
+                    // account we need to distribute in multiples of ARRAY_PACKED_REALS
+                    size_t numObjs = ( totalObjs + ( mNumWorkerThreads - 1 ) ) / mNumWorkerThreads;
+                    numObjs = ( ( numObjs + ARRAY_PACKED_REALS - 1 ) / ARRAY_PACKED_REALS ) *
+                              ARRAY_PACKED_REALS;
 
-                    while( itor != endt )
+                    const size_t toAdvance = std::min( threadIdx * numObjs, totalObjs );
+
+                    // Prevent going out of bounds (usually in the last threadIdx, or
+                    // when there are less entities than ARRAY_PACKED_REALS
+                    numObjs = std::min( numObjs, totalObjs - toAdvance );
+                    objData.advancePack( toAdvance / ARRAY_PACKED_REALS );
+
+                    MovableObject::cullFrustum( numObjs, objData, camera, outVisibleObjects,
+                                                preparedData );
+
+                    const uint8 currRqId = static_cast<uint8>( i );
+
+                    if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::FAST &&
+                        request.addToRenderQueue )
                     {
-                        RenderableArray::const_iterator itRend = ( *itor )->mRenderables.begin();
-                        RenderableArray::const_iterator enRend = ( *itor )->mRenderables.end();
+                        // V2 meshes can be added to the render queue in parallel
+                        bool casterPass = request.casterPass;
+                        MovableObject::MovableObjectArray::const_iterator itor =
+                            outVisibleObjects.begin();
+                        MovableObject::MovableObjectArray::const_iterator endt = outVisibleObjects.end();
 
-                        while( itRend != enRend )
+                        while( itor != endt )
                         {
-                            if( ( *itRend )->mRenderableVisible )
-                            {
-                                mRenderQueue->addRenderableV2( threadIdx, currRqId, casterPass, *itRend,
-                                                               *itor );
-                            }
-                            ++itRend;
-                        }
-                        ++itor;
-                    }
+                            RenderableArray::const_iterator itRend = ( *itor )->mRenderables.begin();
+                            RenderableArray::const_iterator enRend = ( *itor )->mRenderables.end();
 
-                    outVisibleObjects.clear();
+                            while( itRend != enRend )
+                            {
+                                if( ( *itRend )->mRenderableVisible )
+                                {
+                                    mRenderQueue->addRenderableV2( threadIdx, currRqId, casterPass,
+                                                                   *itRend, *itor );
+                                }
+                                ++itRend;
+                            }
+                            ++itor;
+                        }
+
+                        outVisibleObjects.clear();
+                    }
                 }
             }
 
