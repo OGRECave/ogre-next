@@ -49,7 +49,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const char *CompositorPassTypeEnumNames[PASS_CUSTOM + 1u] = {
+    const char *CompositorPassTypeEnumNames[] = {
         // clang-format off
         "INVALID",
         "SCENE",
@@ -63,6 +63,7 @@ namespace Ogre
         "IBL_SPECULAR",
         "SHADOWS",
         "TARGET_BARRIER",
+        "PASS_WARM_UP",
         "COMPUTE",
         "CUSTOM"
         // clang-format on
@@ -77,6 +78,10 @@ namespace Ogre
         mTargetLevelBarrier( 0 ),
         mParentNodeDef( parentNodeDef )
     {
+        static_assert(
+            sizeof( CompositorPassTypeEnumNames ) / sizeof( CompositorPassTypeEnumNames[0] ) ==
+                ( PASS_CUSTOM + 1 ),
+            "CompositorPassTypeEnumNames string was not updated to match all CompositorPassType" );
     }
     //-----------------------------------------------------------------------------------
     CompositorTargetDef::~CompositorTargetDef()

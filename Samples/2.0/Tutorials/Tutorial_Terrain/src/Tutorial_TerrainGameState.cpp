@@ -45,6 +45,7 @@ THE SOFTWARE.
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "Terra/Hlms/OgreHlmsTerra.h"
+#include "Terra/Hlms/OgreHlmsTerraDatablock.h"
 #include "Terra/Hlms/PbsListener/OgreHlmsPbsTerraShadows.h"
 #include "Terra/Terra.h"
 #include "Terra/TerraShadowMapper.h"
@@ -67,6 +68,7 @@ namespace Demo
     Tutorial_TerrainGameState::Tutorial_TerrainGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mLockCameraToGround( false ),
+        mTriplanarMappingEnabled( false ),
         mTimeOfDay( Ogre::Math::PI * /*0.25f*/ /*0.55f*/ 0.1f ),
         mAzimuth( 0 ),
         mTerra( 0 ),
@@ -247,6 +249,8 @@ namespace Demo
 
             outText += "\nF2 Lock Camera to Ground: [";
             outText += mLockCameraToGround ? "Yes]" : "No]";
+            outText += "\nT Enable triplanar mapping: [";
+            outText += mTriplanarMappingEnabled ? "Yes]" : "No]";
             outText += "\n+/- to change time of day. [";
             outText += StringConverter::toString( mTimeOfDay * 180.0f / Math::PI ) + "]";
             outText += "\n9/6 to change azimuth. [";
@@ -314,6 +318,44 @@ namespace Demo
         else
         {
             TutorialGameState::keyReleased( arg );
+        }
+
+        if( arg.keysym.scancode == SDL_SCANCODE_T )
+        {
+            mTriplanarMappingEnabled = !mTriplanarMappingEnabled;
+
+            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+            Ogre::HlmsTerraDatablock *datablock = static_cast<Ogre::HlmsTerraDatablock *>(
+                hlmsManager->getDatablock( "TerraExampleMaterial" ) );
+
+            datablock->setDetailTriplanarDiffuseEnabled( mTriplanarMappingEnabled );
+            datablock->setDetailTriplanarRoughnessEnabled( mTriplanarMappingEnabled );
+            datablock->setDetailTriplanarMetalnessEnabled( mTriplanarMappingEnabled );
+
+            Ogre::Vector2 terrainDimensions = mTerra->getXZDimensions();
+
+            Ogre::Vector4 detailMapOffsetScale[2];
+            detailMapOffsetScale[0] = datablock->getDetailMapOffsetScale( 0 );
+            detailMapOffsetScale[1] = datablock->getDetailMapOffsetScale( 1 );
+
+            // Switch between "common" UV mapping and world coordinates-based UV mapping (and vice versa)
+            if( mTriplanarMappingEnabled )
+            {
+                detailMapOffsetScale[0].z = 1.0f / ( terrainDimensions.x / detailMapOffsetScale[0].z );
+                detailMapOffsetScale[0].w = 1.0f / ( terrainDimensions.y / detailMapOffsetScale[0].w );
+                detailMapOffsetScale[1].z = 1.0f / ( terrainDimensions.x / detailMapOffsetScale[1].z );
+                detailMapOffsetScale[1].w = 1.0f / ( terrainDimensions.y / detailMapOffsetScale[1].w );
+            }
+            else
+            {
+                detailMapOffsetScale[0].z *= terrainDimensions.x;
+                detailMapOffsetScale[0].w *= terrainDimensions.y;
+                detailMapOffsetScale[1].z *= terrainDimensions.x;
+                detailMapOffsetScale[1].w *= terrainDimensions.y;
+            }
+
+            datablock->setDetailMapOffsetScale( 0, detailMapOffsetScale[0] );
+            datablock->setDetailMapOffsetScale( 1, detailMapOffsetScale[1] );
         }
     }
 }  // namespace Demo

@@ -114,6 +114,10 @@
 		  worldPos.yz = float2( -worldPos.z, worldPos.y );
 	@end
 
+	@property( detail_triplanar )
+		outVs.worldPos = worldPos.xyz;
+	@end
+
 	@insertpiece( VertexTerraTransform )
 
 	outVs.uv0.xy = float2( uVertexPos.xy ) * float2( cellData.pos.w, cellData.scale.w );

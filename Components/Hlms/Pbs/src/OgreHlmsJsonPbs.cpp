@@ -89,23 +89,23 @@ namespace Ogre
     PbsBrdf::PbsBrdf HlmsJsonPbs::parseBrdf( const char *value )
     {
         if( !strcmp( value, "default" ) )
-            return PbsBrdf::Default;
+            return PbsBrdf::DefaultHasDiffuseFresnel;
         if( !strcmp( value, "cook_torrance" ) )
-            return PbsBrdf::CookTorrance;
+            return PbsBrdf::CookTorranceHasDiffuseFresnel;
         if( !strcmp( value, "blinn_phong" ) )
-            return PbsBrdf::BlinnPhong;
+            return PbsBrdf::BlinnPhongHasDiffuseFresnel;
         if( !strcmp( value, "default_uncorrelated" ) )
             return PbsBrdf::DefaultUncorrelated;
-        if( !strcmp( value, "default_had_diffuse_fresnel" ) )
-            return PbsBrdf::DefaultHasDiffuseFresnel;
+        if( !strcmp( value, "default_no_diffuse_fresnel" ) )
+            return PbsBrdf::Default;
         if( !strcmp( value, "default_separate_diffuse_fresnel" ) )
             return PbsBrdf::DefaultSeparateDiffuseFresnel;
-        if( !strcmp( value, "cook_torrance_has_diffuse_fresnel" ) )
-            return PbsBrdf::CookTorranceHasDiffuseFresnel;
+        if( !strcmp( value, "cook_torrance_no_diffuse_fresnel" ) )
+            return PbsBrdf::CookTorrance;
         if( !strcmp( value, "cook_torrance_separate_diffuse_fresnel" ) )
             return PbsBrdf::CookTorranceSeparateDiffuseFresnel;
-        if( !strcmp( value, "blinn_phong_has_diffuse_fresnel" ) )
-            return PbsBrdf::BlinnPhongHasDiffuseFresnel;
+        if( !strcmp( value, "blinn_phong_no_diffuse_fresnel" ) )
+            return PbsBrdf::BlinnPhong;
         if( !strcmp( value, "blinn_phong_separate_diffuse_fresnel" ) )
             return PbsBrdf::BlinnPhongSeparateDiffuseFresnel;
         if( !strcmp( value, "blinn_phong_legacy_math" ) )
@@ -329,30 +329,7 @@ namespace Ogre
 
         itor = json.FindMember( "brdf" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
-        {
-            PbsBrdf::PbsBrdf brdf = parseBrdf( itor->value.GetString() );
-
-            if( static_cast<HlmsPbs *>( pbsDatablock->getCreator() )
-                    ->getDefaultBrdfWithDiffuseFresnel() )
-            {
-                switch( brdf )
-                {
-                case PbsBrdf::Default:
-                    brdf = PbsBrdf::DefaultHasDiffuseFresnel;
-                    break;
-                case PbsBrdf::CookTorrance:
-                    brdf = PbsBrdf::CookTorranceHasDiffuseFresnel;
-                    break;
-                case PbsBrdf::BlinnPhong:
-                    brdf = PbsBrdf::BlinnPhongHasDiffuseFresnel;
-                    break;
-                default:
-                    break;
-                }
-            }
-
-            pbsDatablock->setBrdf( brdf );
-        }
+            pbsDatablock->setBrdf( parseBrdf( itor->value.GetString() ) );
 
         itor = json.FindMember( "two_sided" );
         if( itor != json.MemberEnd() && itor->value.IsBool() )
@@ -613,31 +590,31 @@ namespace Ogre
         switch( value )
         {
         case PbsBrdf::Default:
-            outString += "default";
+            outString += "default_no_diffuse_fresnel";
             break;
         case PbsBrdf::CookTorrance:
-            outString += "cook_torrance";
+            outString += "cook_torrance_no_diffuse_fresnel";
             break;
         case PbsBrdf::BlinnPhong:
-            outString += "blinn_phong";
+            outString += "blinn_phong_no_diffuse_fresnel";
             break;
         case PbsBrdf::DefaultUncorrelated:
             outString += "default_uncorrelated";
             break;
         case PbsBrdf::DefaultHasDiffuseFresnel:
-            outString += "default_has_diffuse_fresnel";
+            outString += "default";
             break;
         case PbsBrdf::DefaultSeparateDiffuseFresnel:
             outString += "default_separate_diffuse_fresnel";
             break;
         case PbsBrdf::CookTorranceHasDiffuseFresnel:
-            outString += "cook_torrance_has_diffuse_fresnel";
+            outString += "cook_torrance";
             break;
         case PbsBrdf::CookTorranceSeparateDiffuseFresnel:
             outString += "cook_torrance_separate_diffuse_fresnel";
             break;
         case PbsBrdf::BlinnPhongHasDiffuseFresnel:
-            outString += "blinn_phong_has_diffuse_fresnel";
+            outString += "blinn_phong";
             break;
         case PbsBrdf::BlinnPhongSeparateDiffuseFresnel:
             outString += "blinn_phong_separate_diffuse_fresnel";
