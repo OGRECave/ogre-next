@@ -135,6 +135,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VkDescriptorSetLayout VulkanGpuProgramManager::getCachedSet( const VulkanSingleSetLayoutDesc &set )
     {
+        ScopedLock lock( mMutexRootLayouts );
         VkDescriptorSetLayout retVal = 0;
 
         DescriptorSetMap::const_iterator itor = mDescriptorSetMap.find( set );
@@ -161,6 +162,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanGpuProgramManager::getRootLayout( const RootLayout &rootLayout )
     {
+        ScopedLock lock( mMutexRootLayouts );
         VulkanRootLayout *retVal = 0;
 
         mTmpRootLayout->copyFrom( rootLayout );
@@ -185,6 +187,7 @@ namespace Ogre
                                                               const bool bCompute,
                                                               const String &filename )
     {
+        ScopedLock lock( mMutexRootLayouts );
         VulkanRootLayout *retVal = 0;
 
         mTmpRootLayout->parseRootLayout( rootLayout, bCompute, filename );

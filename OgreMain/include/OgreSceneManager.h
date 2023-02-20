@@ -813,6 +813,7 @@ namespace Ogre
             BUILD_LIGHT_LIST01,
             BUILD_LIGHT_LIST02,
             WARM_UP_SHADERS,
+            WARM_UP_SHADERS_COMPILE,
             USER_UNIFORM_SCALABLE_TASK,
             STOP_THREADS,
             NUM_REQUESTS
@@ -1908,6 +1909,8 @@ namespace Ogre
                          LightArray &outLights );
 
         void _warmUpShaders( Camera *camera, uint32_t visibilityMask, uint8 firstRq, uint8 lastRq );
+
+        void _fireWarmUpShadersCompile();
 
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
         void _frameEnded();

@@ -130,7 +130,7 @@ namespace Ogre
 
         void getLayoutForPso( const VertexElement2VecVec &vertexElements,
                               FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
-                              FastArray<VkVertexInputAttributeDescription> &outVertexInputs );
+                              FastArray<VkVertexInputAttributeDescription> &outVertexInputs ) const;
 
         uint32 getDrawIdLocation() const { return mDrawIdLocation; }
 

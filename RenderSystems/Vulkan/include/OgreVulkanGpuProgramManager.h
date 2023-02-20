@@ -63,12 +63,14 @@ namespace Ogre
         ProgramMap mProgramMap;
 
         typedef map<VulkanSingleSetLayoutDesc, VkDescriptorSetLayout>::type DescriptorSetMap;
-        DescriptorSetMap mDescriptorSetMap;
+        LightweightMutex mMutexDescriptorSet;
+        DescriptorSetMap mDescriptorSetMap;  // GUARDED_BY( mMutexDescriptorSet )
 
         typedef set<VulkanRootLayout *, SortByVulkanRootLayout>::type VulkanRootLayoutSet;
-        VulkanRootLayoutSet mRootLayouts;
+        LightweightMutex mMutexRootLayouts;
+        VulkanRootLayoutSet mRootLayouts;  // GUARDED_BY( mMutexRootLayouts )
 
-        VulkanRootLayout *mTmpRootLayout;
+        VulkanRootLayout *mTmpRootLayout;  // GUARDED_BY( mMutexRootLayouts )
 
         VulkanDevice *mDevice;
 

@@ -80,6 +80,7 @@ namespace Ogre
     const int RqBits::MeshShiftTransp       = ShaderShiftTransp - MeshBits;         //11
     const int RqBits::TextureShiftTransp    = MeshShiftTransp   - TextureBits;      //0
     // clang-format on
+
     //---------------------------------------------------------------------
     RenderQueue::RenderQueue( HlmsManager *hlmsManager, SceneManager *sceneManager,
                               VaoManager *vaoManager ) :
@@ -93,7 +94,8 @@ namespace Ogre
         mLastIndexData( 0 ),
         mLastTextureHash( 0 ),
         mCommandBuffer( 0 ),
-        mRenderingStarted( 0u )
+        mRenderingStarted( 0u ),
+        mCasterPass( false )
     {
         mCommandBuffer = new CommandBuffer();
 
@@ -522,6 +524,31 @@ namespace Ogre
             warmUpShaders( casterPass, mPassCache, mRenderQueues[i] );
         }
 
+        mCasterPass = casterPass;
+
+        const size_t numThreads = mSceneManager->getNumWorkerThreads();
+
+        for( size_t i = 0; i < HLMS_MAX; ++i )
+        {
+            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
+            if( hlms )
+                hlms->_setNumThreads( numThreads );
+        }
+
+        //mSceneManager->_fireWarmUpShadersCompile();
+
+        const HlmsCache *passCache = mPassCache;
+        for( const PsoCreateEntry &entry : mPsoPending )
+        {
+            const HlmsDatablock *datablock = entry.queuedRenderable.renderable->getDatablock();
+            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
+            hlms->compileShaderParallel02( passCache[datablock->mType], entry.queuedRenderable,
+                                           casterPass, 0u );
+        }
+        mPsoPending.clear();
+
+        OGRE_ASSERT_LOW( mPsoPending.empty() );
+
         --mRenderingStarted;
 
         OgreProfileEndGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
@@ -908,22 +935,10 @@ namespace Ogre
         mLastTextureHash = 0;
     }
     //-----------------------------------------------------------------------
-    struct ParallelEntry
-    {
-        uint32_t finalHash;
-        QueuedRenderable queuedRenderable;
-
-        bool operator<( const ParallelEntry &b ) const { return this->finalHash < b.finalHash; }
-        bool operator<( const uint32_t otherHash ) const { return this->finalHash < otherHash; }
-    };
-    typedef std::vector<ParallelEntry> ParallelEntryVec;
-
     void RenderQueue::warmUpShaders( const bool casterPass, HlmsCache passCache[],
                                      const RenderQueueGroup &renderQueueGroup )
     {
         uint32 lastHlmsCacheHash = 0;
-
-        ParallelEntryVec mParallelEntries;
 
         for( const QueuedRenderable &queuedRenderable : renderQueueGroup.mQueuedRenderables )
         {
@@ -937,20 +952,35 @@ namespace Ogre
                                            queuedRenderable, casterPass, bAlreadySeen );
             if( !bAlreadySeen )
             {
-                ParallelEntryVec::iterator itor = std::lower_bound(
-                    mParallelEntries.begin(), mParallelEntries.end(), lastHlmsCacheHash );
+                PsoCreateEntryVec::iterator itor =
+                    std::lower_bound( mPsoPending.begin(), mPsoPending.end(), lastHlmsCacheHash );
 
-                if( itor != mParallelEntries.end() && itor->finalHash != lastHlmsCacheHash )
-                    mParallelEntries.insert( itor, { lastHlmsCacheHash, queuedRenderable } );
+                if( itor == mPsoPending.end() || itor->finalHash != lastHlmsCacheHash )
+                    mPsoPending.insert( itor, { lastHlmsCacheHash, queuedRenderable } );
             }
         }
+    }
+    //-----------------------------------------------------------------------
+    void RenderQueue::_warmUpShadersThread( const size_t threadIdx )
+    {
+        const HlmsCache *passCache = mPassCache;
 
-        for( const ParallelEntry &entry : mParallelEntries )
+        while( true )
         {
+            mPsoMutex.lock();
+            if( mPsoPending.empty() )
+            {
+                mPsoMutex.unlock();
+                break;
+            }
+            PsoCreateEntry entry = std::move( mPsoPending.back() );
+            mPsoPending.pop_back();
+            mPsoMutex.unlock();
+
             const HlmsDatablock *datablock = entry.queuedRenderable.renderable->getDatablock();
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
             hlms->compileShaderParallel02( passCache[datablock->mType], entry.queuedRenderable,
-                                           casterPass, 0u );
+                                           mCasterPass, threadIdx );
         }
     }
     //-----------------------------------------------------------------------

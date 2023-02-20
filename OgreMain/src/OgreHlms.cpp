@@ -287,9 +287,7 @@ namespace Ogre
     {
         memset( mShaderTargets, 0, sizeof( mShaderTargets ) );
 
-        mT.resize( 1u );
-        for( ThreadData &threadData : mT )
-            threadData.shadersGenerated = 0u;
+        _setNumThreads( 1u );
 
         if( libraryFolders )
         {
@@ -1859,6 +1857,24 @@ namespace Ogre
         }
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::_setNumThreads( size_t numThreads )
+    {
+        // We can never shrink because we need to maintain the state of shadersGenerated
+        const size_t oldNumThreads = mT.size();
+        numThreads = std::max( numThreads, mT.size() );
+
+        mT.resize( numThreads );
+
+        ThreadDataVec::iterator itor = mT.begin() + ptrdiff_t( oldNumThreads );
+        ThreadDataVec::iterator endt = mT.end();
+
+        while( itor != endt )
+        {
+            itor->shadersGenerated = 0u;
+            ++itor;
+        }
     }
     //-----------------------------------------------------------------------------------
     HlmsDatablock *Hlms::createDatablock( IdString name, const String &refName,

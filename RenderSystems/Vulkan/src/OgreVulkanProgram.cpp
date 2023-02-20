@@ -1340,7 +1340,7 @@ namespace Ogre
     void VulkanProgram::getLayoutForPso(
         const VertexElement2VecVec &vertexElements,
         FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
-        FastArray<VkVertexInputAttributeDescription> &outVertexInputs )
+        FastArray<VkVertexInputAttributeDescription> &outVertexInputs ) const
     {
         OgreProfileExhaustive( "VulkanProgram::getLayoutForPso" );
 

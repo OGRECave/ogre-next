@@ -1606,6 +1606,19 @@ namespace Ogre
         mRenderQueue->warmUpShaders( realFirstRq, realLastRq, casterPass );
     }
     //-----------------------------------------------------------------------
+    void SceneManager::_fireWarmUpShadersCompile()
+    {
+        mRequestType = WARM_UP_SHADERS_COMPILE;
+
+        if( mForceMainThread )
+            updateWorkerThreadImpl( 0 );
+        else
+        {
+            mWorkerThreadsBarrier->sync();  // Fire threads
+            mWorkerThreadsBarrier->sync();  // Wait them to complete
+        }
+    }
+    //-----------------------------------------------------------------------
     void SceneManager::_frameEnded() { mRenderQueue->frameEnded(); }
     //-----------------------------------------------------------------------
     void SceneManager::_setDestinationRenderSystem( RenderSystem *sys )
@@ -4568,6 +4581,9 @@ namespace Ogre
             break;
         case WARM_UP_SHADERS:
             warmUpShaders( mCurrentCullFrustumRequest, threadIdx );
+            break;
+        case WARM_UP_SHADERS_COMPILE:
+            mRenderQueue->_warmUpShadersThread( threadIdx );
             break;
         case USER_UNIFORM_SCALABLE_TASK:
             mUserTask->execute( threadIdx, mNumWorkerThreads );

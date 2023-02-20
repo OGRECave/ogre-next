@@ -218,8 +218,8 @@ namespace Ogre
 
         PassCacheVec       mPassCache;
         RenderableCacheVec mRenderableCache;
-        ShaderCodeCacheVec mShaderCodeCache;
-        HlmsCacheVec       mShaderCache;
+        ShaderCodeCacheVec mShaderCodeCache;  // GUARDED_BY( mMutex )
+        HlmsCacheVec       mShaderCache;      // GUARDED_BY( mMutex )
 
         typedef std::vector<HlmsPropertyVec> HlmsPropertyVecVec;
         typedef std::vector<PiecesMap>       PiecesMapVec;
@@ -686,6 +686,8 @@ namespace Ogre
         Archive          *getDataFolder() { return mDataFolder; }
         const LibraryVec &getPiecesLibrary() const { return mLibrary; }
         ArchiveVec        getPiecesLibraryAsArchiveVec() const;
+
+        void _setNumThreads( size_t numThreads );
 
         /** Creates a unique datablock that can be shared by multiple renderables.
         @remarks

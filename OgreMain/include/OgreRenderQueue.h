@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreHlmsCommon.h"
 #include "OgreIteratorWrappers.h"
 #include "OgreSharedPtr.h"
+#include "Threading/OgreLightweightMutex.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -152,6 +153,16 @@ namespace Ogre
 
         typedef vector<IndirectBufferPacked *>::type IndirectBufferPackedVec;
 
+        struct PsoCreateEntry
+        {
+            uint32_t         finalHash;
+            QueuedRenderable queuedRenderable;
+
+            bool operator<( const PsoCreateEntry &b ) const { return this->finalHash < b.finalHash; }
+            bool operator<( const uint32_t otherHash ) const { return this->finalHash < otherHash; }
+        };
+        typedef std::vector<PsoCreateEntry> PsoCreateEntryVec;
+
         RenderQueueGroup mRenderQueues[256];
 
         HlmsManager  *mHlmsManager;
@@ -172,6 +183,10 @@ namespace Ogre
         HlmsCache mPassCache[HLMS_MAX];
 
         uint32 mRenderingStarted;
+
+        bool              mCasterPass;
+        PsoCreateEntryVec mPsoPending;  // GUARDED_BY(mPsoMutex)
+        LightweightMutex  mPsoMutex;
 
         /** Returns a new (or an existing) indirect buffer that can hold the requested number of draws.
         @param numDraws
@@ -277,6 +292,8 @@ namespace Ogre
         @param casterPass
         */
         void warmUpShaders( uint8 firstRq, uint8 lastRq, bool casterPass );
+
+        void _warmUpShadersThread( size_t threadIdx );
 
         /// Don't call this too often. Only renders v1 objects at the moment.
         void renderSingleObject( Renderable *pRend, const MovableObject *pMovableObject,
