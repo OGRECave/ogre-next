@@ -177,7 +177,7 @@ namespace Ogre
         bakedRanges[DescBindingTypes::Texture].end =
             (uint16)mTexUnitSlotStart + (uint16)getProperty( tid, UnlitProperty::NumTextures );
 
-        mListener->setupRootLayout( rootLayout, mSetProperties[tid], tid );
+        mListener->setupRootLayout( rootLayout, mT[tid].setProperties, tid );
     }
     //-----------------------------------------------------------------------------------
     const HlmsCache *HlmsUnlit::createShaderCacheEntry( uint32 renderableHash,
@@ -192,7 +192,7 @@ namespace Ogre
 
         if( mShaderProfile != "glsl" )
         {
-            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mSetProperties[tid],
+            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mT[tid].setProperties,
                                                 queuedRenderable, tid );
             return retVal;  // D3D embeds the texture slots in the shader.
         }
@@ -211,7 +211,7 @@ namespace Ogre
                 vsParams->setNamedConstant( "animationMatrixBuf", 1 );
         }
 
-        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mSetProperties[tid],
+        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mT[tid].setProperties,
                                             queuedRenderable, tid );
 
         mRenderSystem->_setPipelineStateObject( &retVal->pso );
@@ -514,8 +514,8 @@ namespace Ogre
 
         if( !hasAlphaTest )
         {
-            HlmsPropertyVec::iterator itor = mSetProperties[kNoTid].begin();
-            HlmsPropertyVec::iterator endt = mSetProperties[kNoTid].end();
+            HlmsPropertyVec::iterator itor = mT[kNoTid].setProperties.begin();
+            HlmsPropertyVec::iterator endt = mT[kNoTid].setProperties.end();
 
             while( itor != endt )
             {
@@ -528,8 +528,8 @@ namespace Ogre
                     itor->keyName != HlmsBaseProp::AlphaTest &&
                     itor->keyName != HlmsBaseProp::AlphaBlend )
                 {
-                    itor = mSetProperties[kNoTid].erase( itor );
-                    endt = mSetProperties[kNoTid].end();
+                    itor = mT[kNoTid].setProperties.erase( itor );
+                    endt = mT[kNoTid].setProperties.end();
                 }
                 else
                 {
@@ -581,7 +581,7 @@ namespace Ogre
     {
         OgreProfileExhaustive( "HlmsUnlit::preparePassHash" );
 
-        mSetProperties[kNoTid].clear();
+        mT[kNoTid].setProperties.clear();
 
         // Set the properties and create/retrieve the cache.
         if( casterPass )
@@ -638,7 +638,7 @@ namespace Ogre
 
         PassCache passCache;
         passCache.passPso = getPassPsoForScene( sceneManager );
-        passCache.properties = mSetProperties[kNoTid];
+        passCache.properties = mT[kNoTid].setProperties;
 
         assert( mPassCache.size() <= (size_t)HlmsBits::PassMask &&
                 "Too many passes combinations, we'll overflow the bits assigned in the hash!" );
@@ -653,7 +653,7 @@ namespace Ogre
 
         // Fill the buffers
         HlmsCache retVal( hash, mType, HlmsPso() );
-        retVal.setProperties = mSetProperties[kNoTid];
+        retVal.setProperties = mT[kNoTid].setProperties;
         retVal.pso.pass = passCache.passPso;
 
         mUsingInstancedStereo = isInstancedStereo;
@@ -714,7 +714,7 @@ namespace Ogre
         bool isShadowCastingPointLight =
             casterPass && getProperty( kNoTid, HlmsBaseProp::ShadowCasterPoint ) != 0;
 
-        mSetProperties[kNoTid].clear();
+        mT[kNoTid].setProperties.clear();
 
         // mat4 viewProj[2] + vec4 invWindowSize;
         size_t mapSize = ( 16 + 16 + 4 ) * 4;

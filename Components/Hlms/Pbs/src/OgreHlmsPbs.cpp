@@ -578,7 +578,7 @@ namespace Ogre
             }
         }
 
-        mListener->setupRootLayout( rootLayout, mSetProperties[tid], tid );
+        mListener->setupRootLayout( rootLayout, mT[tid].setProperties, tid );
     }
     //-----------------------------------------------------------------------------------
     const HlmsCache *HlmsPbs::createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
@@ -593,7 +593,7 @@ namespace Ogre
 
         if( mShaderProfile != "glsl" )
         {
-            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mSetProperties[tid],
+            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mT[tid].setProperties,
                                                 queuedRenderable, tid );
             return retVal;  // D3D embeds the texture slots in the shader.
         }
@@ -602,7 +602,7 @@ namespace Ogre
         if( mSetupWorldMatBuf && mVaoManager->readOnlyIsTexBuffer() )
             vsParams->setNamedConstant( "worldMatBuf", 0 );
 
-        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mSetProperties[tid],
+        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mT[tid].setProperties,
                                             queuedRenderable, tid );
 
         mRenderSystem->_setPipelineStateObject( &retVal->pso );
@@ -1047,8 +1047,8 @@ namespace Ogre
         HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock *>( renderable->getDatablock() );
         const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
 
-        HlmsPropertyVec::iterator itor = mSetProperties[kNoTid].begin();
-        HlmsPropertyVec::iterator endt = mSetProperties[kNoTid].end();
+        HlmsPropertyVec::iterator itor = mT[kNoTid].setProperties.begin();
+        HlmsPropertyVec::iterator endt = mT[kNoTid].setProperties.end();
 
         while( itor != endt )
         {
@@ -1069,8 +1069,8 @@ namespace Ogre
                      itor->keyName != HlmsBaseProp::AlphaBlend &&
                      ( !hasAlphaTest || !requiredPropertyByAlphaTest( itor->keyName ) ) )
             {
-                itor = mSetProperties[kNoTid].erase( itor );
-                endt = mSetProperties[kNoTid].end();
+                itor = mT[kNoTid].setProperties.erase( itor );
+                endt = mT[kNoTid].setProperties.end();
             }
             else
             {
@@ -1332,7 +1332,7 @@ namespace Ogre
             ++texUnit;
         }
 
-        texUnit += mListener->getNumExtraPassTextures( mSetProperties[tid], casterPass );
+        texUnit += mListener->getNumExtraPassTextures( mT[tid].setProperties, casterPass );
 
         setProperty( tid, PbsProperty::Set0TextureSlotEnd, texUnit );
 
@@ -1471,7 +1471,7 @@ namespace Ogre
     {
         OgreProfileExhaustive( "HlmsPbs::preparePassHash" );
 
-        mSetProperties[kNoTid].clear();
+        mT[kNoTid].setProperties.clear();
 
         if( shadowNode && mShadowFilter == ExponentialShadowMaps )
             setProperty( kNoTid, PbsProperty::ExponentialShadowMaps, mEsmK );
@@ -1735,7 +1735,7 @@ namespace Ogre
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         setProperty( kNoTid, PbsProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
         setProperty( kNoTid, PbsProperty::HwGammaWrite, 1 );
-        retVal.setProperties = mSetProperties[kNoTid];
+        retVal.setProperties = mT[kNoTid].setProperties;
 
         CamerasInProgress cameras = sceneManager->getCamerasInProgress();
         mConstantBiasScale = cameras.renderingCamera->_getConstantBiasScale();
@@ -2886,7 +2886,7 @@ namespace Ogre
         mTexBufUnitSlotEnd = mReservedTexBufferSlots;
         mTexUnitSlotStart =
             uint32( mPreparedPass.shadowMaps.size() + mReservedTexSlots + mReservedTexBufferSlots +
-                    mListener->getNumExtraPassTextures( mSetProperties[kNoTid], casterPass ) );
+                    mListener->getNumExtraPassTextures( mT[kNoTid].setProperties, casterPass ) );
 
         if( !casterPass )
         {

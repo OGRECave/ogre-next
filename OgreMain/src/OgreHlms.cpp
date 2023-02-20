@@ -287,8 +287,7 @@ namespace Ogre
     {
         memset( mShaderTargets, 0, sizeof( mShaderTargets ) );
 
-        mSetProperties.resize( 1u );
-        mPieces.resize( 1u );
+        mT.resize( 1u );
 
         if( libraryFolders )
         {
@@ -490,9 +489,9 @@ namespace Ogre
     {
         HlmsProperty p( key, value );
         HlmsPropertyVec::iterator it = std::lower_bound(
-            mSetProperties[tid].begin(), mSetProperties[tid].end(), p, OrderPropertyByIdString );
-        if( it == mSetProperties[tid].end() || it->keyName != p.keyName )
-            mSetProperties[tid].insert( it, p );
+            mT[tid].setProperties.begin(), mT[tid].setProperties.end(), p, OrderPropertyByIdString );
+        if( it == mT[tid].setProperties.end() || it->keyName != p.keyName )
+            mT[tid].setProperties.insert( it, p );
         else
             *it = p;
     }
@@ -501,8 +500,8 @@ namespace Ogre
     {
         HlmsProperty p( key, 0 );
         HlmsPropertyVec::const_iterator it = std::lower_bound(
-            mSetProperties[tid].begin(), mSetProperties[tid].end(), p, OrderPropertyByIdString );
-        if( it != mSetProperties[tid].end() && it->keyName == p.keyName )
+            mT[tid].setProperties.begin(), mT[tid].setProperties.end(), p, OrderPropertyByIdString );
+        if( it != mT[tid].setProperties.end() && it->keyName == p.keyName )
             defaultVal = it->value;
 
         return defaultVal;
@@ -512,9 +511,9 @@ namespace Ogre
     {
         HlmsProperty p( key, 0 );
         HlmsPropertyVec::iterator it = std::lower_bound(
-            mSetProperties[tid].begin(), mSetProperties[tid].end(), p, OrderPropertyByIdString );
-        if( it != mSetProperties[tid].end() && it->keyName == p.keyName )
-            mSetProperties[tid].erase( it );
+            mT[tid].setProperties.begin(), mT[tid].setProperties.end(), p, OrderPropertyByIdString );
+        if( it != mT[tid].setProperties.end() && it->keyName == p.keyName )
+            mT[tid].setProperties.erase( it );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::setProperty( HlmsPropertyVec &properties, IdString key, int32 value )
@@ -1370,9 +1369,9 @@ namespace Ogre
             if( !syntaxError )
             {
                 const IdString pieceName( argValues[0] );
-                PiecesMap::iterator it = mPieces[tid].find( pieceName );
-                if( it != mPieces[tid].end() )
-                    mPieces[tid].erase( it );
+                PiecesMap::iterator it = mT[tid].pieces.find( pieceName );
+                if( it != mT[tid].pieces.end() )
+                    mT[tid].pieces.erase( it );
             }
             else
             {
@@ -1412,8 +1411,8 @@ namespace Ogre
             if( !syntaxError )
             {
                 const IdString pieceName( argValues[0] );
-                PiecesMap::const_iterator it = mPieces[tid].find( pieceName );
-                if( it != mPieces[tid].end() )
+                PiecesMap::const_iterator it = mT[tid].pieces.find( pieceName );
+                if( it != mT[tid].pieces.end() )
                 {
                     syntaxError = true;
                     printf( "Error at line %lu: @piece '%s' already defined",
@@ -1426,7 +1425,7 @@ namespace Ogre
 
                     String tmpBuffer;
                     copy( tmpBuffer, blockSubString, blockSubString.getSize() );
-                    mPieces[tid][pieceName] = tmpBuffer;
+                    mT[tid].pieces[pieceName] = tmpBuffer;
 
                     subString.setStart( blockSubString.getEnd() + sizeof( "@end" ) );
                 }
@@ -1469,8 +1468,8 @@ namespace Ogre
             if( !syntaxError )
             {
                 const IdString pieceName( argValues[0] );
-                PiecesMap::const_iterator it = mPieces[tid].find( pieceName );
-                if( it != mPieces[tid].end() )
+                PiecesMap::const_iterator it = mT[tid].pieces.find( pieceName );
+                if( it != mT[tid].pieces.end() )
                     outBuffer += it->second;
             }
             else
@@ -1613,8 +1612,8 @@ namespace Ogre
     bool Hlms::parseOffline( const String &filename, String &inString, String &outString,
                              const size_t tid )
     {
-        mSetProperties[tid].clear();
-        mPieces[tid].clear();
+        mT[tid].setProperties.clear();
+        mT[tid].pieces.clear();
 
         if( mShaderProfile == "glsl" || mShaderProfile == "glslvk" )  // TODO: String comparision
         {
@@ -2081,8 +2080,8 @@ namespace Ogre
         LwString value( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
         {
-            HlmsPropertyVec::const_iterator itor = mSetProperties[tid].begin();
-            HlmsPropertyVec::const_iterator endt = mSetProperties[tid].end();
+            HlmsPropertyVec::const_iterator itor = mT[tid].setProperties.begin();
+            HlmsPropertyVec::const_iterator endt = mT[tid].setProperties.end();
 
             while( itor != endt )
             {
@@ -2102,8 +2101,8 @@ namespace Ogre
         outFile.write( "\n\tDONE DUMPING PROPERTIES", sizeof( "\n\tDONE DUMPING PROPERTIES" ) - 1u );
 
         {
-            PiecesMap::const_iterator itor = mPieces[tid].begin();
-            PiecesMap::const_iterator endt = mPieces[tid].end();
+            PiecesMap::const_iterator itor = mT[tid].pieces.begin();
+            PiecesMap::const_iterator endt = mT[tid].pieces.end();
 
             while( itor != endt )
             {
@@ -2218,7 +2217,7 @@ namespace Ogre
         ShaderCodeCache codeCache( mergedCache.pieces );
         codeCache.mergedCache.setProperties = mergedCache.setProperties;
 
-        codeCache.mergedCache.setProperties.swap( mSetProperties[tid] );
+        codeCache.mergedCache.setProperties.swap( mT[tid].setProperties );
 
         for( size_t i = 0; i < NumShaderTypes; ++i )
         {
@@ -2242,7 +2241,7 @@ namespace Ogre
             }
         }
 
-        codeCache.mergedCache.setProperties.swap( mSetProperties[tid] );
+        codeCache.mergedCache.setProperties.swap( mT[tid].setProperties );
 
         // Ensure code didn't accidentally modify mSetProperties
         OGRE_ASSERT_HIGH( codeCache.mergedCache.setProperties == mergedCache.setProperties );
@@ -2257,13 +2256,13 @@ namespace Ogre
         // Give the shaders friendly base-10 names
         const uint32 finalHash = mType * 100000000u + static_cast<uint32>( mShaderCodeCache.size() );
 
-        mSetProperties[tid] = codeCache.mergedCache.setProperties;
+        mT[tid].setProperties = codeCache.mergedCache.setProperties;
 
         // Generate the shaders
         for( size_t i = 0; i < NumShaderTypes; ++i )
         {
             // Collect pieces
-            mPieces[tid] = codeCache.mergedCache.pieces[i];
+            mT[tid].pieces = codeCache.mergedCache.pieces[i];
 
             const String filename = ShaderFiles[i] + mShaderFileExt;
             if( mDataFolder->exists( filename ) )
@@ -2406,15 +2405,15 @@ namespace Ogre
         OgreProfileExhaustive( "Hlms::createShaderCacheEntry" );
 
         // Set the properties by merging the cache from the pass, with the cache from renderable
-        mSetProperties[tid].clear();
+        mT[tid].setProperties.clear();
         // If retVal is null, we did something wrong earlier
         //(the cache should've been generated by now)
         const RenderableCache &renderableCache = getRenderableCache( renderableHash );
-        mSetProperties[tid].reserve( passCache.setProperties.size() +
-                                     renderableCache.setProperties.size() );
+        mT[tid].setProperties.reserve( passCache.setProperties.size() +
+                                       renderableCache.setProperties.size() );
         // Copy the properties from the renderable
-        mSetProperties[tid].insert( mSetProperties[tid].end(), renderableCache.setProperties.begin(),
-                                    renderableCache.setProperties.end() );
+        mT[tid].setProperties.insert( mT[tid].setProperties.end(), renderableCache.setProperties.begin(),
+                                      renderableCache.setProperties.end() );
         {
             // Now copy the properties from the pass (one by one, since be must maintain the order)
             HlmsPropertyVec::const_iterator itor = passCache.setProperties.begin();
@@ -2427,9 +2426,9 @@ namespace Ogre
             }
         }
 
-        mTextureNameStrings.clear();
+        mT[tid].textureNameStrings.clear();
         for( size_t i = 0; i < NumShaderTypes; ++i )
-            mTextureRegs[i].clear();
+            mT[tid].textureRegs[i].clear();
 
         {
             // Add RenderSystem-specific properties
@@ -2442,7 +2441,7 @@ namespace Ogre
 
         notifyPropertiesMergedPreGenerationStep( tid );
         mListener->propertiesMergedPreGenerationStep( this, passCache, renderableCache.setProperties,
-                                                      renderableCache.pieces, mSetProperties[tid],
+                                                      renderableCache.pieces, mT[tid].setProperties,
                                                       queuedRenderable, tid );
 
         // Retrieve the shader code from the code cache
@@ -2450,7 +2449,7 @@ namespace Ogre
         unsetProperty( tid, HlmsPsoProp::Macroblock );
         unsetProperty( tid, HlmsPsoProp::Blendblock );
         unsetProperty( tid, HlmsPsoProp::InputLayoutId );
-        codeCache.mergedCache.setProperties.swap( mSetProperties[tid] );
+        codeCache.mergedCache.setProperties.swap( mT[tid].setProperties );
         {
             ShaderCodeCacheVec::iterator itCodeCache =
                 std::find( mShaderCodeCache.begin(), mShaderCodeCache.end(), codeCache );
@@ -2460,7 +2459,7 @@ namespace Ogre
             {
                 for( size_t i = 0; i < NumShaderTypes; ++i )
                     codeCache.shaders[i] = itCodeCache->shaders[i];
-                codeCache.mergedCache.setProperties.swap( mSetProperties[tid] );
+                codeCache.mergedCache.setProperties.swap( mT[tid].setProperties );
             }
         }
 
@@ -2514,7 +2513,7 @@ namespace Ogre
 
         const HlmsCache *retVal = addShaderCache( finalHash, pso );
 
-        applyTextureRegisters( retVal );
+        applyTextureRegisters( retVal, tid );
 
         return retVal;
     }
@@ -2625,7 +2624,7 @@ namespace Ogre
     {
         OgreProfileExhaustive( "Hlms::calculateHashFor" );
 
-        mSetProperties[kNoTid].clear();
+        mT[kNoTid].setProperties.clear();
 
         setProperty( kNoTid, HlmsBaseProp::Skeleton, renderable->hasSkeletonAnimation() );
 
@@ -2672,7 +2671,7 @@ namespace Ogre
         }
         calculateHashForPreCreate( renderable, pieces );
 
-        const uint32 renderableHash = this->addRenderableCache( mSetProperties[kNoTid], pieces );
+        const uint32 renderableHash = this->addRenderableCache( mT[kNoTid].setProperties, pieces );
 
         // For shadow casters, turn normals off. UVs & diffuse also off unless there's alpha testing.
         setProperty( kNoTid, HlmsBaseProp::Normal, 0 );
@@ -2698,7 +2697,7 @@ namespace Ogre
                      renderable->getDatablock()->getMacroblock( true )->mLifetimeId );
         setProperty( kNoTid, HlmsPsoProp::Blendblock,
                      renderable->getDatablock()->getBlendblock( true )->mLifetimeId );
-        uint32 renderableCasterHash = this->addRenderableCache( mSetProperties[kNoTid], piecesCaster );
+        uint32 renderableCasterHash = this->addRenderableCache( mT[kNoTid].setProperties, piecesCaster );
 
         outHash = renderableHash;
         outCasterHash = renderableCasterHash;
@@ -2713,7 +2712,7 @@ namespace Ogre
     HlmsCache Hlms::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
                                      bool dualParaboloid, SceneManager *sceneManager )
     {
-        mSetProperties[kNoTid].clear();
+        mT[kNoTid].setProperties.clear();
         return preparePassHashBase( shadowNode, casterPass, dualParaboloid, sceneManager );
     }
     //-----------------------------------------------------------------------------------
@@ -3291,7 +3290,7 @@ namespace Ogre
 
         PassCache passCache;
         passCache.passPso = getPassPsoForScene( sceneManager );
-        passCache.properties = mSetProperties[kNoTid];
+        passCache.properties = mT[kNoTid].setProperties;
 
         assert( mPassCache.size() <= HlmsBits::PassMask &&
                 "Too many passes combinations, we'll overflow the bits assigned in the hash!" );
@@ -3305,7 +3304,7 @@ namespace Ogre
         const uint32 hash = static_cast<uint32>( it - mPassCache.begin() ) << HlmsBits::PassShift;
 
         HlmsCache retVal( hash, mType, HlmsPso() );
-        retVal.setProperties = mSetProperties[kNoTid];
+        retVal.setProperties = mT[kNoTid].setProperties;
         retVal.pso.pass = passCache.passPso;
 
         return retVal;
@@ -3375,17 +3374,17 @@ namespace Ogre
     {
         OGRE_ASSERT_MEDIUM( numTexUnits < 16 );
 
-        const uint32 startIdx = static_cast<uint32>( mTextureNameStrings.size() );
+        const uint32 startIdx = static_cast<uint32>( mT[tid].textureNameStrings.size() );
         char const *copyName = texName;
         while( *copyName != '\0' )
-            mTextureNameStrings.push_back( *copyName++ );
-        mTextureNameStrings.push_back( '\0' );
-        mTextureRegs[shaderType].push_back( TextureRegs( startIdx, texUnit, numTexUnits ) );
+            mT[tid].textureNameStrings.push_back( *copyName++ );
+        mT[tid].textureNameStrings.push_back( '\0' );
+        mT[tid].textureRegs[shaderType].push_back( TextureRegs( startIdx, texUnit, numTexUnits ) );
 
         setProperty( tid, texName, texUnit );
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::applyTextureRegisters( const HlmsCache *psoEntry )
+    void Hlms::applyTextureRegisters( const HlmsCache *psoEntry, const size_t tid )
     {
         if( mShaderProfile != "glsl" )
             return;  // D3D embeds the texture slots in the shader.
@@ -3406,12 +3405,12 @@ namespace Ogre
 
                 int texUnits[16];
 
-                TextureRegsVec::const_iterator itor = mTextureRegs[i].begin();
-                TextureRegsVec::const_iterator endt = mTextureRegs[i].end();
+                TextureRegsVec::const_iterator itor = mT[tid].textureRegs[i].begin();
+                TextureRegsVec::const_iterator endt = mT[tid].textureRegs[i].end();
 
                 while( itor != endt )
                 {
-                    const char *paramNameC = &mTextureNameStrings[itor->strNameIdxStart];
+                    const char *paramNameC = &mT[tid].textureNameStrings[itor->strNameIdxStart];
                     paramName = paramNameC;
 
                     const int texUnitStart = itor->texUnit;

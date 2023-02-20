@@ -137,7 +137,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsLowLevel::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
     {
-        mSetProperties[kNoTid].clear();
+        mT[kNoTid].setProperties.clear();
 
         const MaterialPtr &mat = renderable->getMaterial();
 
@@ -172,7 +172,7 @@ namespace Ogre
 
         setProperty( kNoTid, LowLevelProp::PassId, static_cast<Ogre::int32>( pass->getId() ) );
 
-        outHash = this->addRenderableCache( mSetProperties[kNoTid], (const PiecesMap *)0 );
+        outHash = this->addRenderableCache( mT[kNoTid].setProperties, (const PiecesMap *)0 );
 
         setProperty( kNoTid, HlmsBaseProp::ShadowCaster, true );
         setProperty( kNoTid, HlmsPsoProp::Macroblock,
@@ -180,7 +180,7 @@ namespace Ogre
         setProperty( kNoTid, HlmsPsoProp::Blendblock,
                      renderable->getDatablock()->getBlendblock( true )->mLifetimeId );
 
-        outCasterHash = this->addRenderableCache( mSetProperties[kNoTid], (const PiecesMap *)0 );
+        outCasterHash = this->addRenderableCache( mT[kNoTid].setProperties, (const PiecesMap *)0 );
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsLowLevel::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,

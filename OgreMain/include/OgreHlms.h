@@ -220,14 +220,24 @@ namespace Ogre
         ShaderCodeCacheVec mShaderCodeCache;
         HlmsCacheVec       mShaderCache;
 
-        TextureNameStrings mTextureNameStrings;
-        TextureRegsVec     mTextureRegs[NumShaderTypes];
-
         typedef std::vector<HlmsPropertyVec> HlmsPropertyVecVec;
         typedef std::vector<PiecesMap>       PiecesMapVec;
 
-        HlmsPropertyVecVec mSetProperties;
-        PiecesMapVec       mPieces;
+        struct ThreadData
+        {
+            TextureNameStrings textureNameStrings;
+            TextureRegsVec     textureRegs[NumShaderTypes];
+
+            HlmsPropertyVec setProperties;
+            PiecesMap       pieces;
+
+            // Prevent false cache sharing
+            uint8_t padding[64];
+        };
+
+        typedef std::vector<ThreadData> ThreadDataVec;
+
+        ThreadDataVec mT;
 
     public:
         struct Library
@@ -496,7 +506,7 @@ namespace Ogre
         ///
         /// This function does NOT call RenderSystem::bindGpuProgramParameters to
         /// make the changes effective.
-        void applyTextureRegisters( const HlmsCache *psoEntry );
+        void applyTextureRegisters( const HlmsCache *psoEntry, size_t tid );
 
         /// Returns the hash of the property Full32/Half16/Relaxed.
         /// See Hlms::getSupportedPrecisionMode

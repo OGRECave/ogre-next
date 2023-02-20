@@ -176,10 +176,10 @@ namespace Ogre
         // Generate the shader
 
         // Collect pieces
-        mPieces[kNoTid].clear();
+        mT[kNoTid].pieces.clear();
 
         // Start with the pieces sent by the user
-        mPieces[kNoTid] = job->mPieces;
+        mT[kNoTid].pieces = job->mPieces;
 
         const String sourceFilename = job->mSourceFilename + mShaderFileExt;
 
@@ -477,7 +477,7 @@ namespace Ogre
                 // Return back the borrowed properties and make
                 // a hard copy for starting the compilation.
                 psoCache.setProperties.swap( job->mSetProperties );
-                this->mSetProperties[kNoTid] = job->mSetProperties;
+                this->mT[kNoTid].setProperties = job->mSetProperties;
 
                 // Uset the HlmsComputePso, as the ptr may be cached by the
                 // RenderSystem and this could be invalidated
