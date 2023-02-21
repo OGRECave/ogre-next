@@ -970,6 +970,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void RenderQueue::_warmUpShadersThread( const size_t threadIdx )
     {
+        Hlms::msThreadId = static_cast<uint32>( threadIdx );
+
         const HlmsCache *passCache = mPassCache;
 
         while( true )

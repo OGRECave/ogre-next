@@ -176,6 +176,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsDiskCache::_compileShadersThread( CompilerJobParams &jobParams, const size_t threadIdx )
     {
+        Hlms::msThreadId = static_cast<uint32>( threadIdx );
+
         Hlms *hlms = jobParams.hlms;
         const uint32 numEntries = jobParams.numEntries;
         const bool templatesOutOfDate = jobParams.templatesOutOfDate;
