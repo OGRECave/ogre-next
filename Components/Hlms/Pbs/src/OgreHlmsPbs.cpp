@@ -1587,7 +1587,7 @@ namespace Ogre
         if( !casterPass )
         {
             if( mIndustryCompatible )
-                setProperty( PbsProperty::IndustryCompatible, 1 );
+                setProperty( kNoTid, PbsProperty::IndustryCompatible, 1 );
             if( mPerceptualRoughness )
                 setProperty( kNoTid, PbsProperty::PerceptualRoughness, 1 );
             if( mLightProfilesTexture )
