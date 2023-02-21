@@ -232,8 +232,6 @@ namespace Ogre
             HlmsPropertyVec setProperties;
             PiecesMap       pieces;
 
-            uint32_t shadersGenerated;
-
             // Prevent false cache sharing
             uint8_t padding[64];
         };
@@ -258,6 +256,7 @@ namespace Ogre
         StringVector mPieceFiles[NumShaderTypes];
         HlmsManager *mHlmsManager;
 
+        uint32_t           mShadersGenerated;  // GUARDED_BY( mMutex )
         LightGatheringMode mLightGatheringMode;
         bool               mStaticBranchingLights;
         uint16             mNumLightsLimit;
@@ -429,13 +428,14 @@ namespace Ogre
 
     public:
         void _compileShaderFromPreprocessedSource( const RenderableCache &mergedCache,
-                                                   const String source[NumShaderTypes], size_t tid );
+                                                   const String           source[NumShaderTypes],
+                                                   const uint32 shaderCounter, size_t tid );
 
         /** Compiles input properties and adds it to the shader code cache
         @param codeCache [in/out]
             All variables must be filled except for ShaderCodeCache::shaders which is the output
         */
-        void compileShaderCode( ShaderCodeCache &codeCache, size_t tid );
+        void compileShaderCode( ShaderCodeCache &codeCache, uint32 shaderCounter, size_t tid );
 
         const ShaderCodeCacheVec &getShaderCodeCache() const { return mShaderCodeCache; }
 
@@ -688,6 +688,7 @@ namespace Ogre
         ArchiveVec        getPiecesLibraryAsArchiveVec() const;
 
         void _setNumThreads( size_t numThreads );
+        void _setShadersGenerated( uint32 shadersGenerated );
 
         /** Creates a unique datablock that can be shared by multiple renderables.
         @remarks

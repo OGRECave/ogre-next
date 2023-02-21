@@ -2053,6 +2053,8 @@ namespace Ogre
                 ObjectData objData;
                 const size_t totalObjs = memoryManager->getFirstObjectData( objData, i );
 
+                // Skip if totalObjs == 0u. Profiling shows there is considerable gains.
+                // Too much (255 queues, most of them empty, multiples scene passes...)
                 if( totalObjs > 0u )
                 {
                     // Distribute the work evenly across all threads (not perfect), taking into

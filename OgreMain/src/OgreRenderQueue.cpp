@@ -535,17 +535,24 @@ namespace Ogre
                 hlms->_setNumThreads( numThreads );
         }
 
-        //mSceneManager->_fireWarmUpShadersCompile();
+        const bool bThreadingSupported = true;
 
-        const HlmsCache *passCache = mPassCache;
-        for( const PsoCreateEntry &entry : mPsoPending )
+        if( bThreadingSupported )
         {
-            const HlmsDatablock *datablock = entry.queuedRenderable.renderable->getDatablock();
-            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
-            hlms->compileShaderParallel02( passCache[datablock->mType], entry.queuedRenderable,
-                                           casterPass, 0u );
+            mSceneManager->_fireWarmUpShadersCompile();
         }
-        mPsoPending.clear();
+        else
+        {
+            const HlmsCache *passCache = mPassCache;
+            for( const PsoCreateEntry &entry : mPsoPending )
+            {
+                const HlmsDatablock *datablock = entry.queuedRenderable.renderable->getDatablock();
+                Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
+                hlms->compileShaderParallel02( passCache[datablock->mType], entry.queuedRenderable,
+                                               casterPass, 0u );
+            }
+            mPsoPending.clear();
+        }
 
         OGRE_ASSERT_LOW( mPsoPending.empty() );
 
