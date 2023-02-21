@@ -410,7 +410,7 @@ namespace Ogre
     void HlmsTerra::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
     {
         // Override, since shadow casting is very basic
-        mSetProperties[kNoTid].clear();
+        mT[kNoTid].setProperties.clear();
         setProperty( kNoTid, "hlms_no_shadowConstantBias_decl", 1 );
 
         TerrainCell *terrainCell = static_cast<TerrainCell *>( renderable );
