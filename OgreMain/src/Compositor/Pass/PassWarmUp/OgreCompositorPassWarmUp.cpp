@@ -244,7 +244,7 @@ namespace Ogre
         if( rtvEntry.textureName != rtvEntry.resolveTextureName &&
             rtvEntry.resolveTextureName != IdString() )
         {
-            createFromRtv( warmUpNodeDef, refNode, rtvEntry.textureName, seenTextures );
+            createFromRtv( warmUpNodeDef, refNode, rtvEntry.resolveTextureName, seenTextures );
         }
     }
     //-----------------------------------------------------------------------------------
