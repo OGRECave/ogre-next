@@ -970,8 +970,11 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void RenderQueue::_warmUpShadersThread( const size_t threadIdx )
     {
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
         Hlms::msThreadId = static_cast<uint32>( threadIdx );
-
+#    endif
+#endif
         const HlmsCache *passCache = mPassCache;
 
         while( true )

@@ -176,7 +176,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsDiskCache::_compileShadersThread( CompilerJobParams &jobParams, const size_t threadIdx )
     {
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
         Hlms::msThreadId = static_cast<uint32>( threadIdx );
+#    endif
+#endif
 
         Hlms *hlms = jobParams.hlms;
         const uint32 numEntries = jobParams.numEntries;

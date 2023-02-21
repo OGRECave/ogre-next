@@ -248,7 +248,11 @@ namespace Ogre
 
     static HlmsListener c_defaultListener;
 
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
     thread_local uint32 Hlms::msThreadId = 0u;
+#    endif
+#endif
 
     Hlms::Hlms( HlmsTypes type, const String &typeName, Archive *dataFolder,
                 ArchiveVec *libraryFolders ) :

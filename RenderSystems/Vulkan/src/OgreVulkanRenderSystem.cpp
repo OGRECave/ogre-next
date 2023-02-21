@@ -429,6 +429,19 @@ namespace Ogre
     //-------------------------------------------------------------------------
     size_t VulkanRenderSystem::getNumPriorityConfigOptions() const { return 1u; }
     //-------------------------------------------------------------------------
+    bool VulkanRenderSystem::supportsMultithreadedShaderCompliation() const
+    {
+#ifndef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+        return true;
+#else
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        return true;
+#    else
+        return false;
+#    endif
+#endif
+    }
+    //-------------------------------------------------------------------------
     String VulkanRenderSystem::validateConfigOptions()
     {
         return mVulkanSupport->validateConfigOptions();
@@ -1912,8 +1925,8 @@ namespace Ogre
         {
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
             VkSampler textureSampler = static_cast<VkSampler>( samplerblock->mRsData );
-#else // VK handles are always 64bit, even on 32bit systems
-            VkSampler textureSampler = *static_cast<VkSampler*>( samplerblock->mRsData );
+#else  // VK handles are always 64bit, even on 32bit systems
+            VkSampler textureSampler = *static_cast<VkSampler *>( samplerblock->mRsData );
 #endif
             if( mGlobalTable.samplers[texUnit].sampler != textureSampler )
             {
@@ -3396,8 +3409,8 @@ namespace Ogre
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         newBlock->mRsData = textureSampler;
-#else // VK handles are always 64bit, even on 32bit systems
-        newBlock->mRsData = new uint64(textureSampler);
+#else  // VK handles are always 64bit, even on 32bit systems
+        newBlock->mRsData = new uint64( textureSampler );
 #endif
     }
     //-------------------------------------------------------------------------
@@ -3406,9 +3419,9 @@ namespace Ogre
         assert( block->mRsData );
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         VkSampler textureSampler = static_cast<VkSampler>( block->mRsData );
-#else // VK handles are always 64bit, even on 32bit systems
-        VkSampler textureSampler = *static_cast<VkSampler*>( block->mRsData );
-        delete (uint64*)block->mRsData;
+#else  // VK handles are always 64bit, even on 32bit systems
+        VkSampler textureSampler = *static_cast<VkSampler *>( block->mRsData );
+        delete(uint64 *)block->mRsData;
 #endif
         delayed_vkDestroySampler( mVaoManager, mActiveDevice->mDevice, textureSampler, 0 );
     }

@@ -213,6 +213,11 @@ namespace Ogre
         */
         virtual size_t getNumPriorityConfigOptions() const;
 
+        /// Returns true if RenderSystem supports multithreaded shader and PSO compilation.
+        /// Support depends on the API, our implementation, and CMake setting
+        /// OGRE_SHADER_COMPILATION_THREADING_MODE with which OgreNext was built.
+        virtual bool supportsMultithreadedShaderCompliation() const;
+
         /** Create an object for performing hardware occlusion queries.
          */
         virtual HardwareOcclusionQuery *createHardwareOcclusionQuery() = 0;

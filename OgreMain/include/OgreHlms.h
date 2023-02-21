@@ -144,7 +144,13 @@ namespace Ogre
         /// For single-threaded operations
         static constexpr size_t kNoTid = 0u;
 
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
         static thread_local uint32 msThreadId;
+#    else
+        static constexpr uint32 msThreadId = 0u;
+#    endif
+#endif
 
     protected:
         struct RenderableCache
@@ -966,6 +972,7 @@ namespace Ogre
 
         RenderSystem *getRenderSystem() const { return mRenderSystem; }
 
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
     protected:
         /// Backwards-compatible versions of setProperty/getProperty/unsetProperty
         /// that don't ask for tid and rely instead on Thread Local Storage
@@ -991,6 +998,7 @@ namespace Ogre
         {
             setTextureReg( msThreadId, shaderType, texName, texUnit );
         }
+#endif
     };
 
     /// These are "default" or "Base" properties common to many implementations and thus defined here.
