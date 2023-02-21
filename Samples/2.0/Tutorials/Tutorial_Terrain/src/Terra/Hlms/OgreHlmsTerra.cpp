@@ -374,26 +374,26 @@ namespace Ogre
 
         if( datablock->getDetailTriplanarDiffuseEnabled() )
         {
-            setProperty( TerraProperty::DetailTriplanar, 1 );
-            setProperty( TerraProperty::DetailTriplanarDiffuse, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanar, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanarDiffuse, 1 );
         }
 
         if( datablock->getDetailTriplanarNormalEnabled() )
         {
-            setProperty( TerraProperty::DetailTriplanar, 1 );
-            setProperty( TerraProperty::DetailTriplanarNormal, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanar, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanarNormal, 1 );
         }
 
         if( datablock->getDetailTriplanarRoughnessEnabled() )
         {
-            setProperty( TerraProperty::DetailTriplanar, 1 );
-            setProperty( TerraProperty::DetailTriplanarRoughness, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanar, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanarRoughness, 1 );
         }
 
         if( datablock->getDetailTriplanarMetalnessEnabled() )
         {
-            setProperty( TerraProperty::DetailTriplanar, 1 );
-            setProperty( TerraProperty::DetailTriplanarMetalness, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanar, 1 );
+            setProperty( kNoTid, TerraProperty::DetailTriplanarMetalness, 1 );
         }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
