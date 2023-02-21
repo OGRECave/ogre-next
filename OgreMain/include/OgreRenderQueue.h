@@ -291,7 +291,7 @@ namespace Ogre
         @param lastRq
         @param casterPass
         */
-        void warmUpShaders( uint8 firstRq, uint8 lastRq, bool casterPass );
+        void warmUpShaders( RenderSystem *rs, uint8 firstRq, uint8 lastRq, bool casterPass );
 
         void _warmUpShadersThread( size_t threadIdx );
 

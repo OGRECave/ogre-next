@@ -284,7 +284,7 @@ namespace Ogre
             CompilerJobParams jobParams( hlms, mCache.sourceCode, mTemplatesOutOfDate );
 
             // Compile shaders
-            if( numThreads > 1u )
+            if( hlms->getRenderSystem()->supportsMultithreadedShaderCompliation() && numThreads > 1u )
             {
                 hlms->_setNumThreads( numThreads );
 

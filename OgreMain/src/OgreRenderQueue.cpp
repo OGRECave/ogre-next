@@ -484,7 +484,8 @@ namespace Ogre
         OgreProfileEndGroup( "Command Execution", OGREPROF_RENDERING );
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::warmUpShaders( const uint8 firstRq, const uint8 lastRq, const bool casterPass )
+    void RenderQueue::warmUpShaders( RenderSystem *rs, const uint8 firstRq, const uint8 lastRq,
+                                     const bool casterPass )
     {
         OgreProfileBeginGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
 
@@ -526,19 +527,17 @@ namespace Ogre
 
         mCasterPass = casterPass;
 
-        const size_t numThreads = mSceneManager->getNumWorkerThreads();
-
-        for( size_t i = 0; i < HLMS_MAX; ++i )
+        if( rs->supportsMultithreadedShaderCompliation() )
         {
-            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
-            if( hlms )
-                hlms->_setNumThreads( numThreads );
-        }
+            const size_t numThreads = mSceneManager->getNumWorkerThreads();
 
-        const bool bThreadingSupported = true;
+            for( size_t i = 0; i < HLMS_MAX; ++i )
+            {
+                Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
+                if( hlms )
+                    hlms->_setNumThreads( numThreads );
+            }
 
-        if( bThreadingSupported )
-        {
             mSceneManager->_fireWarmUpShadersCompile();
         }
         else

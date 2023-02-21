@@ -1603,7 +1603,7 @@ namespace Ogre
         }
 
         mVisibilityMask = oldVisibilityMask;
-        mRenderQueue->warmUpShaders( realFirstRq, realLastRq, casterPass );
+        mRenderQueue->warmUpShaders( mDestRenderSystem, realFirstRq, realLastRq, casterPass );
     }
     //-----------------------------------------------------------------------
     void SceneManager::_fireWarmUpShadersCompile()
