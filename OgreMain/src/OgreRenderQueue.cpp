@@ -94,8 +94,7 @@ namespace Ogre
         mLastIndexData( 0 ),
         mLastTextureHash( 0 ),
         mCommandBuffer( 0 ),
-        mRenderingStarted( 0u ),
-        mCasterPass( false )
+        mRenderingStarted( 0u )
     {
         mCommandBuffer = new CommandBuffer();
 
@@ -484,10 +483,10 @@ namespace Ogre
         OgreProfileEndGroup( "Command Execution", OGREPROF_RENDERING );
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::warmUpShaders( RenderSystem *rs, const uint8 firstRq, const uint8 lastRq,
-                                     const bool casterPass )
+    void RenderQueue::warmUpShadersCollect( const uint8 firstRq, const uint8 lastRq,
+                                            const bool casterPass )
     {
-        OgreProfileBeginGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
+        OgreProfileBeginGroup( "RenderQueue::warmUpShadersCollect", OGREPROF_RENDERING );
 
         for( size_t i = firstRq; i < lastRq; ++i )
         {
@@ -525,7 +524,16 @@ namespace Ogre
             warmUpShaders( casterPass, mPassCache, mRenderQueues[i] );
         }
 
-        mCasterPass = casterPass;
+        mPendingPassCaches.insert( mPendingPassCaches.end(), mPassCache, mPassCache + HLMS_MAX );
+
+        --mRenderingStarted;
+
+        OgreProfileEndGroup( "RenderQueue::warmUpShadersCollect", OGREPROF_RENDERING );
+    }
+    //-----------------------------------------------------------------------
+    void RenderQueue::warmUpShadersTrigger( RenderSystem *rs )
+    {
+        OgreProfileBeginGroup( "RenderQueue::warmUpShadersTrigger", OGREPROF_RENDERING );
 
         if( rs->supportsMultithreadedShaderCompliation() )
         {
@@ -542,22 +550,22 @@ namespace Ogre
         }
         else
         {
-            const HlmsCache *passCache = mPassCache;
+            const HlmsCache *passCache = mPendingPassCaches.data();
             for( const PsoCreateEntry &entry : mPsoPending )
             {
                 const HlmsDatablock *datablock = entry.queuedRenderable.renderable->getDatablock();
                 Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
                 hlms->compileShaderParallel02( passCache[datablock->mType], entry.queuedRenderable,
-                                               casterPass, 0u );
+                                               entry.casterPass, 0u );
             }
             mPsoPending.clear();
         }
 
+        mPendingPassCaches.clear();
+
         OGRE_ASSERT_LOW( mPsoPending.empty() );
 
-        --mRenderingStarted;
-
-        OgreProfileEndGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
+        OgreProfileEndGroup( "RenderQueue::warmUpShadersTrigger", OGREPROF_RENDERING );
     }
     //-----------------------------------------------------------------------
     void RenderQueue::renderES2( RenderSystem *rs, bool casterPass, bool dualParaboloid,
@@ -946,6 +954,8 @@ namespace Ogre
     {
         uint32 lastHlmsCacheHash = 0;
 
+        const uint16 cacheIdx = static_cast<uint16>( mPendingPassCaches.size() );
+
         for( const QueuedRenderable &queuedRenderable : renderQueueGroup.mQueuedRenderables )
         {
             const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
@@ -962,7 +972,11 @@ namespace Ogre
                     std::lower_bound( mPsoPending.begin(), mPsoPending.end(), lastHlmsCacheHash );
 
                 if( itor == mPsoPending.end() || itor->finalHash != lastHlmsCacheHash )
-                    mPsoPending.insert( itor, { lastHlmsCacheHash, queuedRenderable } );
+                {
+                    mPsoPending.insert(
+                        itor, { lastHlmsCacheHash, static_cast<uint16>( cacheIdx + datablock->mType ),
+                                casterPass, queuedRenderable } );
+                }
             }
         }
     }
@@ -974,7 +988,7 @@ namespace Ogre
         Hlms::msThreadId = static_cast<uint32>( threadIdx );
 #    endif
 #endif
-        const HlmsCache *passCache = mPassCache;
+        const HlmsCache *passCache = mPendingPassCaches.data();
 
         while( true )
         {
@@ -990,8 +1004,8 @@ namespace Ogre
 
             const HlmsDatablock *datablock = entry.queuedRenderable.renderable->getDatablock();
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
-            hlms->compileShaderParallel02( passCache[datablock->mType], entry.queuedRenderable,
-                                           mCasterPass, threadIdx );
+            hlms->compileShaderParallel02( passCache[entry.cacheIdx], entry.queuedRenderable,
+                                           entry.casterPass, threadIdx );
         }
     }
     //-----------------------------------------------------------------------

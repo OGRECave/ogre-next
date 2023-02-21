@@ -155,7 +155,9 @@ namespace Ogre
 
         struct PsoCreateEntry
         {
-            uint32_t         finalHash;
+            uint32           finalHash;
+            uint16           cacheIdx;
+            bool             casterPass;
             QueuedRenderable queuedRenderable;
 
             bool operator<( const PsoCreateEntry &b ) const { return this->finalHash < b.finalHash; }
@@ -184,9 +186,9 @@ namespace Ogre
 
         uint32 mRenderingStarted;
 
-        bool              mCasterPass;
-        PsoCreateEntryVec mPsoPending;  // GUARDED_BY(mPsoMutex)
-        LightweightMutex  mPsoMutex;
+        PsoCreateEntryVec      mPsoPending;  // GUARDED_BY(mPsoMutex)
+        LightweightMutex       mPsoMutex;
+        std::vector<HlmsCache> mPendingPassCaches;
 
         /** Returns a new (or an existing) indirect buffer that can hold the requested number of draws.
         @param numDraws
@@ -291,7 +293,8 @@ namespace Ogre
         @param lastRq
         @param casterPass
         */
-        void warmUpShaders( RenderSystem *rs, uint8 firstRq, uint8 lastRq, bool casterPass );
+        void warmUpShadersCollect( uint8 firstRq, uint8 lastRq, bool casterPass );
+        void warmUpShadersTrigger( RenderSystem *rs );
 
         void _warmUpShadersThread( size_t threadIdx );
 

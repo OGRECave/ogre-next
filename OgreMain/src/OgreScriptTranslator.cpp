@@ -11137,6 +11137,36 @@ namespace Ogre{
                     }
                     break;
                 }
+                case ID_MODE:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    String str;
+                    if( getString( *it0, &str ) )
+                    {
+                        if( str == "collect" )
+                            passWarmUp->mMode = CompositorPassWarmUpDef::Collect;
+                        else if( str == "trigger" )
+                            passWarmUp->mMode = CompositorPassWarmUpDef::Trigger;
+                        else if( str == "collect_and_trigger" )
+                            passWarmUp->mMode = CompositorPassWarmUpDef::CollectAndTrigger;
+                        else
+                        {
+                            compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file,
+                                                prop->line );
+                        }
+                    }
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                    }
+                    break;
+                }
                 // case ID_VIEWPORT:
                 case ID_IDENTIFIER:
                 case ID_NUM_INITIAL:

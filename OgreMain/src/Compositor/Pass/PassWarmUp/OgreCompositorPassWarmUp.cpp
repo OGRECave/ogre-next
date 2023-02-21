@@ -143,8 +143,13 @@ namespace Ogre
         RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
         renderSystem->executeRenderPassDescriptorDelayedActions();
 
-        sceneManager->_warmUpShaders( mCamera, mDefinition->mVisibilityMask, mDefinition->mFirstRQ,
-                                      mDefinition->mLastRQ );
+        if( mDefinition->mMode & CompositorPassWarmUpDef::Collect )
+        {
+            sceneManager->_warmUpShadersCollect( mCamera, mDefinition->mVisibilityMask,
+                                                 mDefinition->mFirstRQ, mDefinition->mLastRQ );
+        }
+        if( mDefinition->mMode & CompositorPassWarmUpDef::Trigger )
+            sceneManager->_warmUpShadersTrigger();
 
         sceneManager->_setCurrentCompositorPass( 0 );
 

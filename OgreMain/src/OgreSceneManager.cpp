@@ -1531,8 +1531,8 @@ namespace Ogre
         mVisibleObjects.swap( mTmpVisibleObjects );
     }
     //-----------------------------------------------------------------------
-    void SceneManager::_warmUpShaders( Camera *camera, uint32_t visibilityMask, const uint8 firstRq,
-                                       const uint8 lastRq )
+    void SceneManager::_warmUpShadersCollect( Camera *camera, uint32_t visibilityMask,
+                                              const uint8 firstRq, const uint8 lastRq )
     {
         const uint32_t oldVisibilityMask = mVisibilityMask;
 
@@ -1603,7 +1603,12 @@ namespace Ogre
         }
 
         mVisibilityMask = oldVisibilityMask;
-        mRenderQueue->warmUpShaders( mDestRenderSystem, realFirstRq, realLastRq, casterPass );
+        mRenderQueue->warmUpShadersCollect( realFirstRq, realLastRq, casterPass );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::_warmUpShadersTrigger()
+    {
+        mRenderQueue->warmUpShadersTrigger( mDestRenderSystem );
     }
     //-----------------------------------------------------------------------
     void SceneManager::_fireWarmUpShadersCompile()

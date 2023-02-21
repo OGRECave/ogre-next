@@ -53,6 +53,18 @@ namespace Ogre
         CompositorNodeDef *mParentNodeDef;
 
     public:
+        enum Mode : uint8
+        {
+            /// This pass will collect all shaders and compile them
+            CollectAndTrigger = 0x3,
+            /// This pass will collect all shaders.
+            /// Useful when multiple pass must accumulate many shaders.
+            /// Another pass will be the one to compile them.
+            Collect = 0x1,
+            /// Compile all shaders accumulated by previous passes set to 'Collect'
+            Trigger = 0x2,
+        };
+
         /// Viewport's visibility mask while pretending to render our pass
         /// Please don't write to this directly. Use setVisibilityMask()
         uint32 mVisibilityMask;
@@ -61,6 +73,9 @@ namespace Ogre
 
         /// When empty, uses the default camera.
         IdString mCameraName;
+
+        /// See CompositorPassWarmUpDef::Mode
+        Mode mMode;
 
         /// First Render Queue ID to render. Inclusive
         uint8 mFirstRQ;
@@ -76,6 +91,7 @@ namespace Ogre
             CompositorPassDef( PASS_WARM_UP, parentTargetDef ),
             mParentNodeDef( parentNodeDef ),
             mVisibilityMask( VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
+            mMode( CollectAndTrigger ),
             mFirstRQ( 0 ),
             mLastRQ( (uint8)-1 ),
             mEnableForwardPlus( true )
