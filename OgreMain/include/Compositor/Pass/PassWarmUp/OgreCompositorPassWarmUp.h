@@ -84,8 +84,35 @@ namespace Ogre
         Camera *getCamera() { return mCamera; }
     };
 
-    /** @} */
-    /** @} */
+    class _OgreExport WarmUpHelper
+    {
+        static size_t calculateNumTargetPasses( const CompositorNodeDef *refNode );
+
+        static size_t calculateNumScenePasses( const CompositorTargetDef *baseTargetDef );
+
+        static void createFromRtv( CompositorNodeDef *warmUpNodeDef, const CompositorNodeDef *refNode,
+                                   const IdString textureName, std::set<IdString> &seenTextures );
+
+        static void createFromRtv( CompositorNodeDef *warmUpNodeDef, const CompositorNodeDef *refNode,
+                                   const RenderTargetViewEntry &rtvEntry,
+                                   std::set<IdString>          &seenTextures );
+
+    public:
+        /** Utility to programmatically create a node that contains only warm_up passes
+            by basing them off the render_pass passes from a reference node.
+        @param compositorManager
+        @param nodeDefinitionName
+            Name to give to the node definition containing the warm ups.
+            Must be unique and not exist already.
+        @param refNodeDefinitionNamee
+            Name of the reference node definition to analyze.
+        */
+        static void createFrom( CompositorManager2 *compositorManager, const String &nodeDefinitionName,
+                                const IdString refNodeDefinitionName );
+
+        /** @} */
+        /** @} */
+    };
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"

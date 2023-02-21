@@ -30,10 +30,12 @@ THE SOFTWARE.
 
 #include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUp.h"
 
+#include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
+#include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "OgreCamera.h"
 #include "OgreSceneManager.h"
@@ -156,5 +158,188 @@ namespace Ogre
         notifyPassPosExecuteListeners();
 
         profilingEnd();
+    }
+
+    //-----------------------------------------------------------------------------------
+    size_t WarmUpHelper::calculateNumTargetPasses( const CompositorNodeDef *refNode )
+    {
+        size_t numTargetPassesNeeded = 0u;
+
+        const size_t numTargetPasses = refNode->getNumTargetPasses();
+        for( size_t i = 0u; i < numTargetPasses; ++i )
+        {
+            const CompositorTargetDef *baseTargetDef = refNode->getTargetPass( i );
+            const CompositorPassDefVec &basePassDefs = baseTargetDef->getCompositorPasses();
+
+            for( const CompositorPassDef *basePassDef : basePassDefs )
+            {
+                if( basePassDef->getType() == PASS_SCENE )
+                {
+                    ++numTargetPassesNeeded;
+                    break;
+                }
+            }
+        }
+
+        if( numTargetPassesNeeded == 0u )
+        {
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Reference Node: " + refNode->getNameStr() + " has no scene passes to base from.",
+                "WarmUpHelper::calculateNumTargetPasses" );
+        }
+
+        return numTargetPassesNeeded;
+    }
+    //-----------------------------------------------------------------------------------
+    size_t WarmUpHelper::calculateNumScenePasses( const CompositorTargetDef *baseTargetDef )
+    {
+        size_t numScenePasses = 0u;
+        const CompositorPassDefVec &basePassDefs = baseTargetDef->getCompositorPasses();
+
+        for( const CompositorPassDef *basePassDef : basePassDefs )
+        {
+            if( basePassDef->getType() == PASS_SCENE )
+                ++numScenePasses;
+        }
+        return numScenePasses;
+    }
+    //-----------------------------------------------------------------------------------
+    void WarmUpHelper::createFromRtv( CompositorNodeDef *warmUpNodeDef, const CompositorNodeDef *refNode,
+                                      const IdString textureName, std::set<IdString> &seenTextures )
+    {
+        if( seenTextures.find( textureName ) == seenTextures.end() )
+        {
+            size_t texIdx;
+            TextureDefinitionBase::TextureSource texSource;
+            refNode->getTextureSource( textureName, texIdx, texSource );
+
+            if( texSource == TextureDefinitionBase::TEXTURE_LOCAL )
+            {
+                // Don't waste huge amounts of VRAM
+                TextureDefinitionBase::TextureDefinition *texDef =
+                    warmUpNodeDef->_addTextureDefinition( textureName );
+                *texDef = refNode->getLocalTextureDefinitions()[texIdx];
+                texDef->width = 4u;
+                texDef->height = 4u;
+                texDef->widthFactor = 1.0f;
+                texDef->heightFactor = 1.0f;
+            }
+            else
+            {
+                warmUpNodeDef->_addTextureSourceName( textureName, texIdx, texSource );
+            }
+            seenTextures.insert( textureName );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void WarmUpHelper::createFromRtv( CompositorNodeDef *warmUpNodeDef, const CompositorNodeDef *refNode,
+                                      const RenderTargetViewEntry &rtvEntry,
+                                      std::set<IdString> &seenTextures )
+    {
+        if( rtvEntry.textureName != IdString() )
+        {
+            createFromRtv( warmUpNodeDef, refNode, rtvEntry.textureName, seenTextures );
+        }
+        if( rtvEntry.textureName != rtvEntry.resolveTextureName &&
+            rtvEntry.resolveTextureName != IdString() )
+        {
+            createFromRtv( warmUpNodeDef, refNode, rtvEntry.textureName, seenTextures );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void WarmUpHelper::createFrom( CompositorManager2 *compositorManager,
+                                   const String &nodeDefinitionName,
+                                   const IdString refNodeDefinitionName )
+    {
+        std::set<IdString> seenTextures;
+        std::set<IdString> seenRtv;
+
+        const CompositorNodeDef *refNode = compositorManager->getNodeDefinition( refNodeDefinitionName );
+        const size_t numTargetPassesNeeded = calculateNumTargetPasses( refNode );
+
+        // Create the node definition
+        CompositorNodeDef *warmUpNodeDef = compositorManager->addNodeDefinition( nodeDefinitionName );
+        warmUpNodeDef->setNumTargetPass( numTargetPassesNeeded );
+
+        const size_t numTargetPasses = refNode->getNumTargetPasses();
+        for( size_t i = 0u; i < numTargetPasses; ++i )
+        {
+            const CompositorTargetDef *refTargetDef = refNode->getTargetPass( i );
+
+            const size_t numScenePasses = calculateNumScenePasses( refTargetDef );
+
+            if( numScenePasses > 0u )
+            {
+                // Copy RTV and textures
+                if( seenRtv.find( refTargetDef->getRenderTargetName() ) == seenRtv.end() )
+                {
+                    const RenderTargetViewDef *refRtv =
+                        refNode->getRenderTargetViewDef( refTargetDef->getRenderTargetName() );
+
+                    RenderTargetViewDef *warmUpRtv =
+                        warmUpNodeDef->addRenderTextureView( refTargetDef->getRenderTargetName() );
+                    *warmUpRtv = *refRtv;
+
+                    for( const RenderTargetViewEntry &rtvEntry : refRtv->colourAttachments )
+                        createFromRtv( warmUpNodeDef, refNode, rtvEntry, seenTextures );
+                    createFromRtv( warmUpNodeDef, refNode, refRtv->depthAttachment, seenTextures );
+                    createFromRtv( warmUpNodeDef, refNode, refRtv->stencilAttachment, seenTextures );
+
+                    seenRtv.insert( refTargetDef->getRenderTargetName() );
+                }
+
+                CompositorTargetDef *targetDef = warmUpNodeDef->addTargetPass(
+                    refTargetDef->getRenderTargetNameStr(), refTargetDef->getRtIndex() );
+                targetDef->setNumPasses( numScenePasses );
+
+                targetDef->setTargetLevelBarrier( refTargetDef->getTargetLevelBarrier() );
+
+                size_t currPassNum = 0u;
+                const CompositorPassDefVec &refPassDefs = refTargetDef->getCompositorPasses();
+                for( const CompositorPassDef *refPassDef : refPassDefs )
+                {
+                    if( refPassDef->getType() == PASS_SCENE )
+                    {
+                        CompositorPassDef *pass = targetDef->addPass( PASS_WARM_UP );
+
+                        OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef *>( refPassDef ) );
+                        OGRE_ASSERT_HIGH( dynamic_cast<CompositorPassWarmUpDef *>( pass ) );
+
+                        const CompositorPassSceneDef *refPassScene =
+                            static_cast<const CompositorPassSceneDef *>( refPassDef );
+                        CompositorPassWarmUpDef *passWarmUp =
+                            static_cast<CompositorPassWarmUpDef *>( pass );
+
+                        passWarmUp->mIdentifier = refPassScene->mIdentifier;
+                        passWarmUp->mSkipLoadStoreSemantics = refPassScene->mSkipLoadStoreSemantics;
+                        passWarmUp->mColourWrite = refPassScene->mColourWrite;
+                        passWarmUp->mReadOnlyDepth = refPassScene->mReadOnlyDepth;
+                        passWarmUp->mReadOnlyStencil = refPassScene->mReadOnlyStencil;
+                        passWarmUp->mIncludeOverlays = refPassScene->mIncludeOverlays;
+                        passWarmUp->mExecutionMask = refPassScene->mExecutionMask;
+                        passWarmUp->mShadowMapFullViewport = refPassScene->mShadowMapFullViewport;
+                        passWarmUp->mExposedTextures = refPassScene->mExposedTextures;
+                        passWarmUp->mProfilingId = refPassScene->mProfilingId;
+
+                        passWarmUp->mVisibilityMask = refPassScene->mVisibilityMask;
+                        passWarmUp->mShadowNode = refPassScene->mShadowNode;
+                        passWarmUp->mFirstRQ = refPassScene->mFirstRQ;
+                        passWarmUp->mLastRQ = refPassScene->mLastRQ;
+                        passWarmUp->mEnableForwardPlus = refPassScene->mEnableForwardPlus;
+
+                        passWarmUp->mMode = CompositorPassWarmUpDef::Collect;
+
+                        ++currPassNum;
+
+                        if( i + 1u == numTargetPasses && currPassNum == numScenePasses )
+                        {
+                            // This is the last pass. Time to trigger everything we collected.
+                            passWarmUp->mMode = CompositorPassWarmUpDef::CollectAndTrigger;
+                        }
+                    }
+                }
+            }
+        }
     }
 }  // namespace Ogre

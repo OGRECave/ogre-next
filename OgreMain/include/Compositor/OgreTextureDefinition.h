@@ -266,6 +266,10 @@ namespace Ogre
         virtual IdString addTextureSourceName( const String &name, size_t index,
                                                TextureSource textureSource );
 
+        /// For internal use. Don't call this directly.
+        void _addTextureSourceName( const IdString hashedName, size_t index,
+                                    TextureSource textureSource );
+
         /** WARNING: Be very careful with this function.
             Removes a texture.
             + If the texture is from an input channel (TEXTURE_INPUT),
@@ -330,6 +334,9 @@ namespace Ogre
             is used correctly.
         */
         TextureDefinition *addTextureDefinition( const String &name );
+
+        /// For internal use. Don't call this directly.
+        TextureDefinition *_addTextureDefinition( const IdString hashedName );
 
         const TextureDefinitionVec &getLocalTextureDefinitions() const { return mLocalTextureDefs; }
 
