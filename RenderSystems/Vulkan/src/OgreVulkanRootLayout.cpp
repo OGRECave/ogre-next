@@ -231,8 +231,18 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VkPipelineLayout VulkanRootLayout::createVulkanHandles()
     {
+        {
+            // If mRootLayout is nullptr but being created in another thread, we will check again
+            // but with a proper lock. If it's not a nullptr, it means it's properly been created.
+            VkPipelineLayout retVal = mRootLayout.load( std::memory_order::memory_order_relaxed );
+            if( retVal )
+                return retVal;
+        }
+
+        ScopedLock lock( mProgramManager->getMutexRootLayoutHandles() );
+
         if( mRootLayout )
-            return mRootLayout;
+            return mRootLayout;  // Checking again as previous check was unsafe.
 
         FastArray<FastArray<VkDescriptorSetLayoutBinding> > rootLayoutDesc;
 
@@ -321,8 +331,12 @@ namespace Ogre
         pipelineLayoutCi.setLayoutCount = static_cast<uint32>( numSets );
         pipelineLayoutCi.pSetLayouts = mSets.begin();
 
-        VkResult result = vkCreatePipelineLayout( device->mDevice, &pipelineLayoutCi, 0, &mRootLayout );
+        VkPipelineLayout rootLayoutResult;
+        VkResult result =
+            vkCreatePipelineLayout( device->mDevice, &pipelineLayoutCi, 0, &rootLayoutResult );
         checkVkResult( result, "vkCreatePipelineLayout" );
+
+        mRootLayout.store( rootLayoutResult, std::memory_order::memory_order_relaxed );
 
         return mRootLayout;
     }

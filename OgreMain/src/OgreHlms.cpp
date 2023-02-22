@@ -254,6 +254,8 @@ namespace Ogre
 #    endif
 #endif
 
+    LightweightMutex Hlms::msGlobalMutex;
+
     Hlms::Hlms( HlmsTypes type, const String &typeName, Archive *dataFolder,
                 ArchiveVec *libraryFolders ) :
         mDataFolder( dataFolder ),
@@ -2176,7 +2178,8 @@ namespace Ogre
             if( pso.pass.strongMacroblockBits & HlmsPassPso::ForceDepthClamp )
                 prepassMacroblock.mDepthClamp = true;
 
-            ScopedLock lock( mMutex );
+            // mHlmsManager->getMacroblock may be called from different Hlms implementations
+            ScopedLock lock( msGlobalMutex );
             pso.macroblock = mHlmsManager->getMacroblock( prepassMacroblock );
         }
     }

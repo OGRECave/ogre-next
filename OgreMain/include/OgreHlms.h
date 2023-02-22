@@ -247,6 +247,8 @@ namespace Ogre
         ThreadDataVec    mT;
         LightweightMutex mMutex;
 
+        static LightweightMutex msGlobalMutex;
+
     public:
         struct Library
         {

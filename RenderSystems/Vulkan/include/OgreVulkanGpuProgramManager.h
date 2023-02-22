@@ -72,6 +72,9 @@ namespace Ogre
 
         VulkanRootLayout *mTmpRootLayout;  // GUARDED_BY( mMutexRootLayouts )
 
+        /// Guards VulkanRootLayout::createVulkanHandles
+        LightweightMutex mMutexRootLayoutHandles;
+
         VulkanDevice *mDevice;
 
     protected:
@@ -110,6 +113,8 @@ namespace Ogre
         /// @see    RootLayout::parseRootLayout
         VulkanRootLayout *getRootLayout( const char *rootLayout, const bool bCompute,
                                          const String &filename );
+
+        LightweightMutex &getMutexRootLayoutHandles() { return mMutexRootLayoutHandles; }
     };
 }  // namespace Ogre
 
