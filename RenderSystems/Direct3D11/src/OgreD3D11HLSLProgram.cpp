@@ -280,7 +280,7 @@ namespace Ogre
 #define READ_START( curlist, memberType ) \
     { \
         uint16 listSize = (uint16)curlist.size(); \
-        cacheMicrocode->read( &listSize, sizeof( uint16 ) ); \
+        cacheMicrocode.read( &listSize, sizeof( uint16 ) ); \
         if( listSize > 0 ) \
         { \
             curlist.resize( listSize ); \
@@ -296,46 +296,46 @@ namespace Ogre
 #define READ_UINT( member ) \
     { \
         uint32 tmpVal; \
-        cacheMicrocode->read( &tmpVal, sizeof( uint32 ) ); \
+        cacheMicrocode.read( &tmpVal, sizeof( uint32 ) ); \
         curItem.member = tmpVal; \
     }
 
 #define READ_ENUM( member, enumType ) \
     { \
         uint32 tmpVal; \
-        cacheMicrocode->read( &tmpVal, sizeof( uint32 ) ); \
+        cacheMicrocode.read( &tmpVal, sizeof( uint32 ) ); \
         curItem.member = (enumType)tmpVal; \
     }
 
 #define READ_BYTE( member ) \
     { \
-        cacheMicrocode->read( &curItem.member, sizeof( BYTE ) ); \
+        cacheMicrocode.read( &curItem.member, sizeof( BYTE ) ); \
     }
 
 #define READ_NAME( member ) \
     { \
         uint16 length = 0; \
-        cacheMicrocode->read( &length, sizeof( uint16 ) ); \
+        cacheMicrocode.read( &length, sizeof( uint16 ) ); \
         curItem.member = ""; \
         if( length > 0 ) \
         { \
             String *inString = new String(); \
             inString->resize( length ); \
-            cacheMicrocode->read( &( *inString )[0], length ); \
+            cacheMicrocode.read( &( *inString )[0], length ); \
             mSerStrings.push_back( inString ); \
             curItem.member = &( *inString )[0]; \
         } \
     }
 
         uint32 microCodeSize = 0;
-        cacheMicrocode->read( &microCodeSize, sizeof( uint32 ) );
+        cacheMicrocode.read( &microCodeSize, sizeof( uint32 ) );
         mMicroCode.resize( microCodeSize );
-        cacheMicrocode->read( &mMicroCode[0], microCodeSize );
+        cacheMicrocode.read( &mMicroCode[0], microCodeSize );
 
-        cacheMicrocode->read( &mConstantBufferSize, sizeof( uint32 ) );
-        cacheMicrocode->read( &mConstantBufferNr, sizeof( uint32 ) );
-        cacheMicrocode->read( &mNumSlots, sizeof( uint32 ) );
-        cacheMicrocode->read( &mDefaultBufferBindPoint, sizeof( uint32 ) );
+        cacheMicrocode.read( &mConstantBufferSize, sizeof( uint32 ) );
+        cacheMicrocode.read( &mConstantBufferNr, sizeof( uint32 ) );
+        cacheMicrocode.read( &mNumSlots, sizeof( uint32 ) );
+        cacheMicrocode.read( &mDefaultBufferBindPoint, sizeof( uint32 ) );
 
         READ_START( mD3d11ShaderInputParameters, D3D11_SIGNATURE_PARAMETER_DESC )
         READ_NAME( SemanticName )
@@ -440,11 +440,11 @@ namespace Ogre
         READ_END
 
         uint16 mInterfaceSlotsSize = 0;
-        cacheMicrocode->read( &mInterfaceSlotsSize, sizeof( uint16 ) );
+        cacheMicrocode.read( &mInterfaceSlotsSize, sizeof( uint16 ) );
         if( mInterfaceSlotsSize > 0 )
         {
             mInterfaceSlots.resize( mInterfaceSlotsSize );
-            cacheMicrocode->read( &mInterfaceSlots[0], mInterfaceSlotsSize * sizeof( UINT ) );
+            cacheMicrocode.read( &mInterfaceSlots[0], mInterfaceSlotsSize * sizeof( UINT ) );
         }
 
         analizeMicrocode();
