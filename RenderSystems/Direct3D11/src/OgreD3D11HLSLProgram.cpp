@@ -256,9 +256,11 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void D3D11HLSLProgram::loadFromSource()
     {
-        if( GpuProgramManager::getSingleton().isMicrocodeAvailableInCache( getNameForMicrocodeCache() ) )
+        GpuProgramManager::Microcode const *microcodePtr;
+        if( GpuProgramManager::getSingleton().getMicrocodeFromCache( getNameForMicrocodeCache(),
+                                                                     &microcodePtr ) )
         {
-            getMicrocodeFromCache();
+            getMicrocodeFromCache( reinterpret_cast<const void *>( microcodePtr ) );
         }
         else
         {
@@ -266,12 +268,14 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::getMicrocodeFromCache()
+    void D3D11HLSLProgram::getMicrocodeFromCache( const void *microcode )
     {
-        GpuProgramManager::Microcode cacheMicrocode =
-            GpuProgramManager::getSingleton().getMicrocodeFromCache( getNameForMicrocodeCache() );
+        const GpuProgramManager::Microcode &cacheMicrocodeRef =
+            *static_cast<const GpuProgramManager::Microcode *>( microcode );
 
-        cacheMicrocode->seek( 0 );
+        // Keep a local reference so that seeking is thread safe.
+        MemoryDataStream cacheMicrocode( cacheMicrocodeRef.getPtr(), cacheMicrocodeRef.size(), false,
+                                         true );
 
 #define READ_START( curlist, memberType ) \
     { \

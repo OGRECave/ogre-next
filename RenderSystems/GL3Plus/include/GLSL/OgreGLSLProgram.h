@@ -159,7 +159,7 @@ namespace Ogre
         Ogre::String getCombinedName();
         Ogre::String getCombinedSource() const;
         /// Get the the binary data of a program from the microcode cache
-        void getMicrocodeFromCache();
+        void getMicrocodeFromCache( const void *microcode );
         /// Compiles and links the vertex and fragment programs
         virtual void compileAndLink() = 0;
         // /// Put a program in use
