@@ -270,9 +270,11 @@ namespace Ogre
     bool GpuProgramManager::getMicrocodeFromCache( const String &source,
                                                    const Microcode **outMicrocode ) const
     {
+        const GpuProgramManager::Hash hashKey = computeHashWithRenderSystemName( source );
+
         ScopedLock lock( mMicrocodeCacheMutex );
-        MicrocodeMap ::const_iterator itor =
-            mMicrocodeCache.find( computeHashWithRenderSystemName( source ) );
+        MicrocodeMap ::const_iterator itor = mMicrocodeCache.find( hashKey );
+
         if( itor != mMicrocodeCache.end() )
         {
             *outMicrocode = &itor->second;
@@ -293,13 +295,14 @@ namespace Ogre
     void GpuProgramManager::addMicrocodeToCache( const String &source,
                                                  const GpuProgramManager::Microcode &microcode )
     {
-        ScopedLock lock( mMicrocodeCacheMutex );
-        Hash hash = computeHashWithRenderSystemName( source );
+        const Hash hashKey = computeHashWithRenderSystemName( source );
 
-        MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hash );
+        ScopedLock lock( mMicrocodeCacheMutex );
+        MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hashKey );
+
         if( foundIter == mMicrocodeCache.end() )
         {
-            mMicrocodeCache.emplace( hash, microcode );
+            mMicrocodeCache.emplace( hashKey, microcode );
         }
         else
         {
@@ -313,9 +316,10 @@ namespace Ogre
     //---------------------------------------------------------------------
     void GpuProgramManager::removeMicrocodeFromCache( const String &source )
     {
+        const Hash hashKey = computeHashWithRenderSystemName( source );
+
         ScopedLock lock( mMicrocodeCacheMutex );
-        Hash hash = computeHashWithRenderSystemName( source );
-        MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hash );
+        MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hashKey );
 
         if( foundIter != mMicrocodeCache.end() )
         {
