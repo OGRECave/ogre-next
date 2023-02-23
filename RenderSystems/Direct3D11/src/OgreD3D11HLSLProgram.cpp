@@ -274,7 +274,7 @@ namespace Ogre
             *static_cast<const GpuProgramManager::Microcode *>( microcode );
 
         // Keep a local reference so that seeking is thread safe.
-        MemoryDataStream cacheMicrocode( cacheMicrocodeRef.getPtr(), cacheMicrocodeRef.size(), false,
+        MemoryDataStream cacheMicrocode( cacheMicrocodeRef->getPtr(), cacheMicrocodeRef->size(), false,
                                          true );
 
 #define READ_START( curlist, memberType ) \
