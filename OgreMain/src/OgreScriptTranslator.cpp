@@ -11126,7 +11126,26 @@ namespace Ogre{
                         if( str == "off" )
                             passWarmUp->mShadowNode = IdString();
                         else
+                        {
                             passWarmUp->mShadowNode = IdString( str );
+                            passWarmUp->mShadowNodeRecalculation = SHADOW_NODE_FIRST_ONLY;
+
+                            if( prop->values.size() > 1 && getString( *it1, &str ) )
+                            {
+                                if( str == "reuse" )
+                                    passWarmUp->mShadowNodeRecalculation = SHADOW_NODE_REUSE;
+                                else if( str == "recalculate" )
+                                    passWarmUp->mShadowNodeRecalculation = SHADOW_NODE_RECALCULATE;
+                                else if( str == "first" )
+                                    passWarmUp->mShadowNodeRecalculation = SHADOW_NODE_FIRST_ONLY;
+                                else
+                                {
+                                    compiler->addError(
+                                        ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                        "Valid options are reuse, recalculate and first" );
+                                }
+                            }
+                        }
                     }
                     else
                     {

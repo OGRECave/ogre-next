@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "../OgreCompositorPassDef.h"
 
+#include "../PassScene/OgreCompositorPassSceneDef.h"
 #include "OgreCommon.h"
 #include "OgreVisibilityFlags.h"
 
@@ -69,7 +70,8 @@ namespace Ogre
         /// Please don't write to this directly. Use setVisibilityMask()
         uint32 mVisibilityMask;
 
-        IdString mShadowNode;
+        IdString                mShadowNode;
+        ShadowNodeRecalculation mShadowNodeRecalculation;  // Only valid if mShadowNode is not empty
 
         /// When empty, uses the default camera.
         IdString mCameraName;
@@ -91,6 +93,7 @@ namespace Ogre
             CompositorPassDef( PASS_WARM_UP, parentTargetDef ),
             mParentNodeDef( parentNodeDef ),
             mVisibilityMask( VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
+            mShadowNodeRecalculation( SHADOW_NODE_FIRST_ONLY ),
             mMode( CollectAndTrigger ),
             mFirstRQ( 0 ),
             mLastRQ( (uint8)-1 ),

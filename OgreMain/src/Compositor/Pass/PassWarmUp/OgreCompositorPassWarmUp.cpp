@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
+#include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 #include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "OgreCamera.h"
 #include "OgreSceneManager.h"
@@ -49,7 +50,8 @@ namespace Ogre
         CompositorPass( definition, parentNode ),
         mDefinition( definition ),
         mShadowNode( 0 ),
-        mCamera( 0 )
+        mCamera( 0 ),
+        mUpdateShadowNode( false )
     {
         initialize( rtv );
 
@@ -60,6 +62,10 @@ namespace Ogre
             bool shadowNodeCreated;
             mShadowNode =
                 workspace->findOrCreateShadowNode( mDefinition->mShadowNode, shadowNodeCreated );
+
+            // Passes with "first_only" option are set in CompositorWorkspace::setupPassesShadowNodes
+            if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_FIRST_ONLY )
+                mUpdateShadowNode = mDefinition->mShadowNodeRecalculation == SHADOW_NODE_RECALCULATE;
         }
 
         if( mDefinition->mCameraName != IdString() )
@@ -101,7 +107,7 @@ namespace Ogre
         // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
 
-        if( shadowNode )
+        if( mUpdateShadowNode && shadowNode )
         {
             // We need to prepare for rendering another RT (we broke the contiguous chain)
             if( mDefinition->mSkipLoadStoreSemantics )
@@ -173,7 +179,7 @@ namespace Ogre
 
             for( const CompositorPassDef *basePassDef : basePassDefs )
             {
-                if( basePassDef->getType() == PASS_SCENE )
+                if( basePassDef->getType() == PASS_SCENE || basePassDef->getType() == PASS_SHADOWS )
                 {
                     ++numTargetPassesNeeded;
                     break;
@@ -199,7 +205,7 @@ namespace Ogre
 
         for( const CompositorPassDef *basePassDef : basePassDefs )
         {
-            if( basePassDef->getType() == PASS_SCENE )
+            if( basePassDef->getType() == PASS_SCENE || basePassDef->getType() == PASS_SHADOWS )
                 ++numScenePasses;
         }
         return numScenePasses;
@@ -324,6 +330,7 @@ namespace Ogre
 
                         passWarmUp->mVisibilityMask = refPassScene->mVisibilityMask;
                         passWarmUp->mShadowNode = refPassScene->mShadowNode;
+                        passWarmUp->mShadowNodeRecalculation = refPassScene->mShadowNodeRecalculation;
                         passWarmUp->mFirstRQ = refPassScene->mFirstRQ;
                         passWarmUp->mLastRQ = refPassScene->mLastRQ;
                         passWarmUp->mEnableForwardPlus = refPassScene->mEnableForwardPlus;
@@ -337,6 +344,36 @@ namespace Ogre
                             // This is the last pass. Time to trigger everything we collected.
                             passWarmUp->mMode = CompositorPassWarmUpDef::CollectAndTrigger;
                         }
+                    }
+                    else if( refPassDef->getType() == PASS_SHADOWS )
+                    {
+                        CompositorPassDef *pass = targetDef->addPass( PASS_SHADOWS );
+
+                        OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassShadowsDef *>( refPassDef ) );
+                        OGRE_ASSERT_HIGH( dynamic_cast<CompositorPassShadowsDef *>( pass ) );
+
+                        const CompositorPassShadowsDef *refPassShadows =
+                            static_cast<const CompositorPassShadowsDef *>( refPassDef );
+                        CompositorPassShadowsDef *passShadows =
+                            static_cast<CompositorPassShadowsDef *>( pass );
+
+                        passShadows->mIdentifier = refPassShadows->mIdentifier;
+                        passShadows->mSkipLoadStoreSemantics = refPassShadows->mSkipLoadStoreSemantics;
+                        passShadows->mColourWrite = refPassShadows->mColourWrite;
+                        passShadows->mReadOnlyDepth = refPassShadows->mReadOnlyDepth;
+                        passShadows->mReadOnlyStencil = refPassShadows->mReadOnlyStencil;
+                        passShadows->mIncludeOverlays = refPassShadows->mIncludeOverlays;
+                        passShadows->mExecutionMask = refPassShadows->mExecutionMask;
+                        passShadows->mShadowMapFullViewport = refPassShadows->mShadowMapFullViewport;
+                        passShadows->mExposedTextures = refPassShadows->mExposedTextures;
+                        passShadows->mProfilingId = refPassShadows->mProfilingId;
+
+                        passShadows->mShadowNodes = refPassShadows->mShadowNodes;
+                        passShadows->mCameraName = refPassShadows->mCameraName;
+                        passShadows->mLodCameraName = refPassShadows->mLodCameraName;
+                        passShadows->mCullCameraName = refPassShadows->mCullCameraName;
+                        passShadows->mVisibilityMask = refPassShadows->mVisibilityMask;
+                        passShadows->mCameraCubemapReorient = refPassShadows->mCameraCubemapReorient;
                     }
                 }
             }

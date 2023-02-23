@@ -71,6 +71,7 @@ namespace Ogre
     protected:
         CompositorShadowNode *mShadowNode;
         Camera               *mCamera;
+        bool                  mUpdateShadowNode;
 
         void notifyPassSceneAfterShadowMapsListeners();
 
@@ -82,6 +83,12 @@ namespace Ogre
         void execute( const Camera *lodCamera ) override;
 
         Camera *getCamera() { return mCamera; }
+
+        CompositorShadowNode *getShadowNode() const { return mShadowNode; }
+
+        void _setUpdateShadowNode( bool update ) { mUpdateShadowNode = update; }
+
+        const CompositorPassWarmUpDef *getDefinition() const { return mDefinition; }
     };
 
     class _OgreExport WarmUpHelper
