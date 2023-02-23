@@ -113,9 +113,12 @@ namespace Ogre
             Must be unique and not exist already.
         @param refNodeDefinitionNamee
             Name of the reference node definition to analyze.
+        @param bCopyAllInputChannels
+            False to only generate input channels that are actually needed.
+            True to generate all input channels. This is useful if you must enforce certain order.
         */
         static void createFrom( CompositorManager2 *compositorManager, const String &nodeDefinitionName,
-                                const IdString refNodeDefinitionName );
+                                const IdString refNodeDefinitionName, const bool bCopyAllInputChannels );
 
         /** @} */
         /** @} */

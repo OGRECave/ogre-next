@@ -256,7 +256,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void WarmUpHelper::createFrom( CompositorManager2 *compositorManager,
                                    const String &nodeDefinitionName,
-                                   const IdString refNodeDefinitionName )
+                                   const IdString refNodeDefinitionName,
+                                   const bool bCopyAllInputChannels )
     {
         std::set<IdString> seenTextures;
         std::set<IdString> seenRtv;
@@ -301,6 +302,8 @@ namespace Ogre
 
                 targetDef->setTargetLevelBarrier( refTargetDef->getTargetLevelBarrier() );
 
+                bool bLoadStoreSemanticStarted = false;
+
                 size_t currPassNum = 0u;
                 const CompositorPassDefVec &refPassDefs = refTargetDef->getCompositorPasses();
                 for( const CompositorPassDef *refPassDef : refPassDefs )
@@ -344,6 +347,15 @@ namespace Ogre
                             // This is the last pass. Time to trigger everything we collected.
                             passWarmUp->mMode = CompositorPassWarmUpDef::CollectAndTrigger;
                         }
+
+                        if( bLoadStoreSemanticStarted )
+                        {
+                            // We are partially coping the definition.
+                            // If a previous pass that we didn't copy has LoadStore & we don't
+                            // then we can't have skip the LoadStore.
+                            passWarmUp->mSkipLoadStoreSemantics = false;
+                            bLoadStoreSemanticStarted = false;
+                        }
                     }
                     else if( refPassDef->getType() == PASS_SHADOWS )
                     {
@@ -374,7 +386,37 @@ namespace Ogre
                         passShadows->mCullCameraName = refPassShadows->mCullCameraName;
                         passShadows->mVisibilityMask = refPassShadows->mVisibilityMask;
                         passShadows->mCameraCubemapReorient = refPassShadows->mCameraCubemapReorient;
+
+                        if( bLoadStoreSemanticStarted )
+                        {
+                            passShadows->mSkipLoadStoreSemantics = false;
+                            bLoadStoreSemanticStarted = false;
+                        }
                     }
+                    else
+                    {
+                        if( !refPassDef->mSkipLoadStoreSemantics )
+                            bLoadStoreSemanticStarted = true;
+                        else
+                            bLoadStoreSemanticStarted = false;
+                    }
+                }
+            }
+        }
+
+        if( bCopyAllInputChannels )
+        {
+            const TextureDefinitionBase::NameToChannelMap &nameToChannel =
+                refNode->getNameToChannelMap();
+
+            for( const auto &entry : nameToChannel )
+            {
+                size_t index;
+                TextureDefinitionBase::TextureSource texSource;
+                TextureDefinitionBase::decodeTexSource( entry.second, index, texSource );
+                if( texSource == TextureDefinitionBase::TEXTURE_INPUT )
+                {
+                    warmUpNodeDef->_addTextureSourceName( entry.first, index, texSource );
                 }
             }
         }
