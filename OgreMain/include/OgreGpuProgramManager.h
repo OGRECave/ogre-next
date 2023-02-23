@@ -30,10 +30,12 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreResourceManager.h"
+
 // Precompiler options
 #include "OgreGpuProgram.h"
-#include "OgreResourceManager.h"
 #include "OgreSingleton.h"
+#include "Threading/OgreLightweightMutex.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -80,9 +82,10 @@ namespace Ogre
         typedef map<Hash, Microcode>::type MicrocodeMap;
 
     protected:
-        SharedParametersMap mSharedParametersMap;
-        MicrocodeMap        mMicrocodeCache;
-        bool                mSaveMicrocodesToCache;
+        SharedParametersMap      mSharedParametersMap;
+        MicrocodeMap             mMicrocodeCache;  // GUARDED_BY( mMicrocodeCacheMutex )
+        mutable LightweightMutex mMicrocodeCacheMutex;
+        bool                     mSaveMicrocodesToCache;
         bool mCacheDirty;  // When this is true the cache is 'dirty' and should be resaved to disk.
 
         static Hash computeHashWithRenderSystemName( const String &source );
@@ -248,11 +251,15 @@ namespace Ogre
         bool canGetCompiledShaderBuffer();
         /** Check if a microcode is available for a program in the microcode cache.
             Deprecated: Use getMicrocodeFromCache()
+
+            This version is subject to race conditions.
         @param name The name of the program.
         */
         OGRE_DEPRECATED_VER( 4 ) virtual bool isMicrocodeAvailableInCache( const String &source ) const;
         /** Returns a microcode for a program from the microcode cache.
             Deprecated: Use getMicrocodeFromCache()
+
+            This version is subject to race conditions.
         @param name The name of the program.
         */
         OGRE_DEPRECATED_VER( 4 )
