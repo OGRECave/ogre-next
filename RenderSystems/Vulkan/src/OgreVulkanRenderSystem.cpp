@@ -688,6 +688,8 @@ namespace Ogre
         rsc->setCapability( RSC_ALPHA_TO_COVERAGE );
         rsc->setCapability( RSC_HW_GAMMA );
         rsc->setCapability( RSC_VERTEX_BUFFER_INSTANCE_DATA );
+        // We don't support PSO nor VkShaderModule caches yet, but we do have SPIR-V caches.
+        rsc->setCapability( RSC_CAN_GET_COMPILED_SHADER_BUFFER );
         rsc->setCapability( RSC_EXPLICIT_API );
         rsc->setMaxPointSize( 256 );
 

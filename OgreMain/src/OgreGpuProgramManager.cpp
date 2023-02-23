@@ -267,6 +267,23 @@ namespace Ogre
         return mMicrocodeCache.find( computeHashWithRenderSystemName( source ) )->second;
     }
     //---------------------------------------------------------------------
+    bool GpuProgramManager::getMicrocodeFromCache( const String &source,
+                                                   const Microcode **outMicrocode ) const
+    {
+        MicrocodeMap ::const_iterator itor =
+            mMicrocodeCache.find( computeHashWithRenderSystemName( source ) );
+        if( itor != mMicrocodeCache.end() )
+        {
+            *outMicrocode = &itor->second;
+            return true;
+        }
+        else
+        {
+            *outMicrocode = nullptr;
+            return false;
+        }
+    }
+    //---------------------------------------------------------------------
     GpuProgramManager::Microcode GpuProgramManager::createMicrocode( const uint32 size ) const
     {
         return Microcode( OGRE_NEW MemoryDataStream( size ) );

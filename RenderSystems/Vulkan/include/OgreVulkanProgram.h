@@ -139,6 +139,8 @@ namespace Ogre
 
         uint32 getEshLanguage() const;
 
+        String getNameForMicrocodeCache( const String &preamble ) const;
+
         /// Returns true if successfully extracted Root Layout from source
         bool extractRootLayoutFromSource();
 

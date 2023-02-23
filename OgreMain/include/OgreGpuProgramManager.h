@@ -238,6 +238,16 @@ namespace Ogre
         */
         virtual const Microcode &getMicrocodeFromCache( const String &source ) const;
 
+        /** Retrieves a microcode for a program from the microcode cache.
+        @param source
+            The key of the shader to obtain
+        @param outMicrocode
+            The microcode being queried. Not nullptr if we return true, nullptr otherwise.
+        @return
+            Returns true if the microcode exists in cache. False otherwise
+        */
+        bool getMicrocodeFromCache( const String &source, const Microcode **outMicrocode ) const;
+
         /** Creates a microcode to be later added to the cache.
         @param size The size of the microcode in bytes
         */
