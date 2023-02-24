@@ -2208,7 +2208,8 @@ namespace Ogre
 
         HighLevelGpuProgramPtr gp;
         {
-            ScopedLock lock( mMutex );
+            // gpuProgramManager->createProgram may be called from different Hlms implementations
+            ScopedLock lock( msGlobalMutex );
             gp = gpuProgramManager->createProgram(
                 StringConverter::toString( finalHash ) + ShaderFiles[shaderType],
                 ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME, mShaderProfile,
