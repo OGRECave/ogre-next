@@ -114,7 +114,7 @@ namespace Ogre
             uint32      flags;
         };
 
-        static PixelFormatDesc msPixelFormatDesc[PFG_COUNT + 1u];
+        static const PixelFormatDesc msPixelFormatDesc[PFG_COUNT + 1u];
 
         static inline const PixelFormatDesc &getDescriptionFor( const PixelFormatGpu fmt );
 
