@@ -70,7 +70,7 @@ namespace Ogre
     class ParallelHlmsCompileQueue
     {
     public:
-        struct Requests
+        struct Request
         {
             HlmsCache const *passCache;  /// Must stay alive until worker thread is done with it
             HlmsCache       *reservedStubEntry;
@@ -80,25 +80,30 @@ namespace Ogre
         };
 
     protected:
-        std::vector<Requests> mRequests;  // GUARDED_BY( mutex )
-        LightweightMutex      mMutex;
-        Semaphore             mSemaphore;
-        bool                  mKeepCompiling;
+        std::vector<Request> mRequests;  // GUARDED_BY( mMutex )
+        LightweightMutex     mMutex;
+        Semaphore            mSemaphore;
+        bool                 mKeepCompiling;
 
     public:
         ParallelHlmsCompileQueue();
 
-        inline void pushRequest( const Requests &&request )
+        inline void pushRequest( const Request &&request )
         {
             ScopedLock lock( mMutex );
             mRequests.emplace_back( request );
             mSemaphore.increment();
         }
 
+        inline void pushWarmUpRequest( const Request &&request ) { mRequests.emplace_back( request ); }
+
         void start( SceneManager *sceneManager );
         void stopAndWait( SceneManager *sceneManager );
-
         void updateThread( size_t threadIdx, HlmsManager *hlmsManager );
+
+        void fireWarmUpParallel( SceneManager *sceneManager );
+        void updateWarmUpThread( size_t threadIdx, HlmsManager *hlmsManager );
+        void warmUpSerial( HlmsManager *hlmsManager );
     };
 
     /** Class to manage the scene object rendering queue.
@@ -221,8 +226,6 @@ namespace Ogre
 
         uint32 mRenderingStarted;
 
-        PsoCreateEntryVec      mPsoPending;  // GUARDED_BY(mPsoMutex)
-        LightweightMutex       mPsoMutex;
         std::vector<HlmsCache> mPendingPassCaches;
 
         ParallelHlmsCompileQueue mParallelHlmsCompileQueue;

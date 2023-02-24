@@ -477,7 +477,8 @@ namespace Ogre
         virtual const HlmsCache *createShaderCacheEntry( uint32           renderableHash,
                                                          const HlmsCache &passCache, uint32 finalHash,
                                                          const QueuedRenderable &queuedRenderable,
-                                                         HlmsCache *reservedStubEntry, size_t threadIdx );
+                                                         HlmsCache              *reservedStubEntry,
+                                                         size_t                  threadIdx );
 
         /// This function gets called right before starting parsing all templates, and after
         /// the renderable properties have been merged with the pass properties.
@@ -867,8 +868,15 @@ namespace Ogre
                                QueuedRenderable queuedRenderable, uint32 renderableHash,
                                uint32 finalHash, size_t tid );
 
-        /** Parallel Hlms generation consists in two stages:
-            This is the first stage, serial. See compileShaderParallel02() for 2nd stage.
+        /** This is extremely similar to getMaterial() except it's been designed to be always
+            in parallel and to be used by warm_up passes.
+
+            The main difference is that getMaterial() starts firing shaders for parallel compilation
+            as soon as they are seen, while this function accumulates as much as possible (even
+            crossing multiple warm_up passes if they are in Collect mode) and then fire everything
+            at once.
+
+            This can result in greater throughput.
         @param lastReturnedValue
             Hash of the last value we've returned.
         @param passCache
@@ -877,32 +885,15 @@ namespace Ogre
             See getMaterial()
         @param casterPass
             See getMaterial()
-        @param outAlreadySeen [out]
-            If true, the shader is already in our cache or has already been seen and must not be
-            compiled.
-            If false, the shader wasn't yet in our cache, but we may have returned this value in a
-            previous call (if that's the case, then it also must not be compiled twice).
+        @param parallelQueue [in/out]
+            Queue to push our work to
         @return
             The hash the shader will end up with.
             Caller must track whether we've already returned this value.
         */
         uint32 getMaterialSerial01( uint32 lastReturnedValue, const HlmsCache &passCache,
                                     const QueuedRenderable &queuedRenderable, bool casterPass,
-                                    bool &outAlreadySeen ) const;
-
-        /** Second Stage, parallel of shader compilation. See getMaterialSerial01() for 1st stage.
-        @param passCache
-            See getMaterial()
-        @param queuedRenderable
-            See getMaterial()
-        @param casterPass
-            See getMaterial()
-        @param tid
-            Thread idx of caller
-        */
-        void compileShaderParallel02( const HlmsCache        &passCache,
-                                      const QueuedRenderable &queuedRenderable, bool casterPass,
-                                      size_t tid );
+                                    ParallelHlmsCompileQueue &parallelQueue );
 
         /** Fills the constant buffers. Gets executed right before drawing the mesh.
         @param cache

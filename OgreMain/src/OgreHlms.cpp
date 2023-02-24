@@ -3548,7 +3548,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     uint32 Hlms::getMaterialSerial01( uint32 lastReturnedValue, const HlmsCache &passCache,
                                       const QueuedRenderable &queuedRenderable, bool casterPass,
-                                      bool &outAlreadySeen ) const
+                                      ParallelHlmsCompileQueue &parallelQueue )
     {
         uint32 finalHash;
         uint32 hash[2];
@@ -3564,34 +3564,26 @@ namespace Ogre
 
         finalHash = hash[0] | hash[1];
 
-        bool bAlreadySeen = true;
-
         if( lastReturnedValue != finalHash )
         {
             HlmsCache const *shaderCache = this->getShaderCache( finalHash );
+
             if( !shaderCache )
-                bAlreadySeen = false;
+            {
+                // Low level is a special case because it doesn't (yet?) support parallel compilation
+                if( mType != HLMS_LOW_LEVEL )
+                {
+                    // Create the entry now, but we'll fill it from a worker thread
+                    HlmsCache *stubEntry = addStubShaderCache( finalHash );
+                    parallelQueue.pushWarmUpRequest(
+                        { &passCache, stubEntry, queuedRenderable, hash[0], finalHash } );
+                }
+            }
         }
 
         lastReturnedValue = finalHash;
-        outAlreadySeen = bAlreadySeen;
 
         return lastReturnedValue;
-    }
-    //-----------------------------------------------------------------------------------
-    void Hlms::compileShaderParallel02( const HlmsCache &passCache,
-                                        const QueuedRenderable &queuedRenderable, bool casterPass,
-                                        size_t tid )
-    {
-        uint32 finalHash;
-        uint32 hash[2];
-        hash[0] = casterPass ? queuedRenderable.renderable->getHlmsCasterHash()
-                             : queuedRenderable.renderable->getHlmsHash();
-        hash[1] = passCache.hash;
-
-        finalHash = hash[0] | hash[1];
-
-        createShaderCacheEntry( hash[0], passCache, finalHash, queuedRenderable, nullptr, tid );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::setDebugOutputPath( bool enableDebugOutput, bool outputProperties, const String &path )
