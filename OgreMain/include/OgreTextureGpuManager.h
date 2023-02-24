@@ -528,7 +528,7 @@ namespace Ogre
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGen;
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGenCubemaps;
         bool                               mShuttingDown;
-        bool                               mUseMultiload;
+        std::atomic<bool>                  mUseMultiload;
         ThreadHandlePtr                    mWorkerThread;
         /// Main thread wakes, worker waits.
         WaitableEvent mWorkerWaitableEvent;
