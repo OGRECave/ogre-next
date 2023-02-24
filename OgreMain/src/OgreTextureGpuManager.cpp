@@ -2684,8 +2684,9 @@ namespace Ogre
     {
         LoadRequest loadRequest( "", 0, 0, 0, 0, 0, 0, false, false );
         bool bStillHasWork = false;
+        bool bUseMultiload = true;
 
-        while( mUseMultiload || bStillHasWork )
+        while( bUseMultiload || bStillHasWork )
         {
             mMultiLoadsSemaphore.decrementOrWait();
 
@@ -2699,6 +2700,8 @@ namespace Ogre
                 bWorkGrabbed = true;
             }
             bStillHasWork = !mMultiLoads.empty();
+            // We use memory_order_relaxed because the mutex already guarantees ordering.
+            bUseMultiload = mUseMultiload.load( std::memory_order::memory_order_relaxed );
             mMultiLoadsMutex.unlock();
 
             if( bWorkGrabbed )
