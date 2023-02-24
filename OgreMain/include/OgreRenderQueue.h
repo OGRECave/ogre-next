@@ -38,6 +38,8 @@ THE SOFTWARE.
 
 #include "OgreHeaderPrefix.h"
 
+#include <atomic>
+
 namespace Ogre
 {
     class Camera;
@@ -86,7 +88,7 @@ namespace Ogre
         std::vector<Request> mRequests;  // GUARDED_BY( mMutex )
         LightweightMutex     mMutex;
         Semaphore            mSemaphore;
-        bool                 mKeepCompiling;
+        std::atomic<bool>    mKeepCompiling;
 
     public:
         ParallelHlmsCompileQueue();

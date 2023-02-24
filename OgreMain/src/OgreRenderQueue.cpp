@@ -993,7 +993,10 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ParallelHlmsCompileQueue::stopAndWait( SceneManager *sceneManager )
     {
-        mKeepCompiling = false;
+        // There is no need to incur in the perf penalty of locking mMutex because we guarantee
+        // no more entries will be added to mRequests. (Unless I missed something?).
+        // The mMutex locks (and mSemaphore) already guarantee ordering.
+        mKeepCompiling.store( false, std::memory_order::memory_order_relaxed );
         mSemaphore.increment( static_cast<uint32_t>( sceneManager->getNumWorkerThreads() ) );
         sceneManager->waitForParallelHlmsCompile();
     }
@@ -1054,10 +1057,11 @@ namespace Ogre
 #    endif
 #endif
         bool bStillHasWork = false;
+        bool bKeepCompiling = true;
 
         ParallelHlmsCompileQueue::Request request;
 
-        while( mKeepCompiling || bStillHasWork )
+        while( bKeepCompiling || bStillHasWork )
         {
             mSemaphore.decrementOrWait();
 
@@ -1071,6 +1075,37 @@ namespace Ogre
                 bWorkGrabbed = true;
             }
             bStillHasWork = !mRequests.empty();
+            // mKeepCompiling MUST be read inside or before the mMutex, OTHERWISE if read afterwards:
+            //  1. We could see mRequests is empty, bStillHasWork = false
+            //  2. We leave mMutex
+            //  3. More work is added to mRequests
+            //  4. mKeepCompiling is set to false
+            //  5. We read mKeepCompiling == false, bStillHasWork == false. We finish
+            //  6. mRequests still has entries unprocessed
+            //
+            // By reading mKeepCompiling inside this lock, we guarantee that if bStillHasWork = false and
+            // mKeepCompiling = false, then no more entries will be added to mRequests.
+            //
+            // If bStillHasWork = false then after we leave:
+            //  1. If bKeepCompiling is true.
+            //      a. After abandoning mMutex main thread adds more work
+            //      b. Main thread sets mKeepCompiling to false
+            //      c. bKeepCompiling is still true, so we will iterate once more
+            //  2. If bKeepCompiling is true.
+            //      a. Main thread sets mKeepCompiling to false
+            //      b. bKeepCompiling is still true, so we will iterate once more
+            //      c. mSemaphore will not stall, and we will see bStillHasWork = false &
+            //          bKeepCompiling = false
+            //      d. We finish
+            //  3. If bKeepCompiling is false.
+            //      a. After abandoning mMutex, we are guaranteed no more work will be added
+            //
+            // There is no need for main thread to lock mMutex just to set mKeepCompiling = false.
+            // TSAN complains because it doesn't know we guarantee after main thread sets
+            // mKeepCompiling = true it won't add more work.
+            //
+            // We use memory_order_relaxed because the mutex already guarantees ordering.
+            bKeepCompiling = mKeepCompiling.load( std::memory_order::memory_order_relaxed );
             mMutex.unlock();
 
             if( bWorkGrabbed )
