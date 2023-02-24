@@ -46,6 +46,7 @@ if (APPLE AND NOT ANDROID)
   set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+  set(CMAKE_XCODE_ATTRIBUTE_USE_HEADERMAP NO)
 endif ()
 
 # This option needs to be set now
@@ -596,6 +597,8 @@ endif ()
 # to potentially speed up the compilation.
 option(OGRE_UNITY_BUILD "Enable unity build for Ogre." FALSE)
 set(OGRE_UNITY_FILES_PER_UNIT "50" CACHE STRING "Number of files per compilation unit in Unity build.")
+
+option(OGRE_PROFILING_TEXTURES "Enables profiling of texture loading. This is independent from OGRE_PROFILING_PROVIDER. Overhead is low so you may want to enable it without much worrying about performance." FALSE)
 
 set( OGRE_PROFILING_PROVIDER "none" CACHE STRING
 	"Enable profiling of Ogre for performance analysis. Profiling has a performance

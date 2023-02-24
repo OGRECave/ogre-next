@@ -466,7 +466,7 @@ namespace Ogre
 
         mActiveActors.clear();
 
-        mLastAspectRatio = camera->getAspectRatio();
+        mLastAspectRatio = aspectRatio;
         mLastCameraPos = camera->getDerivedPosition();
         mLastCameraRot = camera->getDerivedOrientation();
         mLastCamera = camera;

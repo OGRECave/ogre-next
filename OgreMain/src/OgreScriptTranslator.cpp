@@ -64,6 +64,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
+#include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "Compositor/Pass/OgreCompositorPassProvider.h"
 
 namespace Ogre{
@@ -10986,6 +10987,170 @@ namespace Ogre{
         }
     }
 
+    void CompositorPassTranslator::translateWarmUp( ScriptCompiler *compiler,
+                                                    const AbstractNodePtr &node,
+                                                    CompositorTargetDef *targetDef )
+    {
+        mPassDef = targetDef->addPass( PASS_WARM_UP );
+        CompositorPassWarmUpDef *passWarmUp = static_cast<CompositorPassWarmUpDef *>( mPassDef );
+
+        ObjectAbstractNode *obj = reinterpret_cast<ObjectAbstractNode *>( node.get() );
+        obj->context = Any( mPassDef );
+
+        for( const AbstractNodePtr &i : obj->children )
+        {
+            if( i->type == ANT_OBJECT )
+            {
+                processNode( compiler, i );
+            }
+            else if( i->type == ANT_PROPERTY )
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode *>( i.get() );
+                switch( prop->id )
+                {
+                case ID_VISIBILITY_MASK:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    uint32 var;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getHex( *it0, &var ) )
+                    {
+                        passWarmUp->setVisibilityMask( var );
+                    }
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                    }
+                    break;
+                }
+                case ID_CAMERA:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( !getIdString( *it0, &passWarmUp->mCameraName ) )
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                    break;
+                }
+                case ID_FIRST_RENDER_QUEUE:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    uint32 val;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getUInt( *it0, &val ) )
+                    {
+                        passWarmUp->mFirstRQ = (uint8)val;
+                    }
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                    }
+                    break;
+                }
+                case ID_LAST_RENDER_QUEUE:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    uint32 val;
+                    String str;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getUInt( *it0, &val ) )
+                    {
+                        passWarmUp->mLastRQ =
+                            (uint8)std::min<uint32>( val, std::numeric_limits<uint8>::max() );
+                    }
+                    else if( getString( *it0, &str ) && str == "max" )
+                    {
+                        passWarmUp->mLastRQ = std::numeric_limits<uint8>::max();
+                    }
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line,
+                                            "Expected a number between 0 & 255, or the word 'max'" );
+                    }
+                    break;
+                }
+                case ID_ENABLE_FORWARDPLUS:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( !getBoolean( *it0, &passWarmUp->mEnableForwardPlus ) )
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                    break;
+                }
+                case ID_SHADOWS_ENABLED:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else if( prop->values.size() > 2 )
+                    {
+                        compiler->addError( ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file,
+                                            prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    AbstractNodeList::const_iterator it1 = it0;
+                    if( prop->values.size() > 1 )
+                        ++it1;
+
+                    String str;
+                    if( getString( *it0, &str ) )
+                    {
+                        if( str == "off" )
+                            passWarmUp->mShadowNode = IdString();
+                        else
+                            passWarmUp->mShadowNode = IdString( str );
+                    }
+                    else
+                    {
+                        compiler->addError(
+                            ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                            "shadow property can be either 'shadow off' or 'shadow myNodeName "
+                            "[first|reuse|recalculate]'" );
+                    }
+                    break;
+                }
+                // case ID_VIEWPORT:
+                case ID_IDENTIFIER:
+                case ID_NUM_INITIAL:
+                case ID_EXECUTION_MASK:
+                case ID_PROFILING_ID:
+                    break;
+                default:
+                    compiler->addError( ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
+                                        "token \"" + prop->name + "\" is not recognized" );
+                }
+            }
+        }
+    }
+
     void CompositorPassTranslator::translateStencilFace( ScriptCompiler *compiler, const AbstractNodePtr &node,
                                                          StencilStateOp *stencilStateOp )
     {
@@ -11079,6 +11244,8 @@ namespace Ogre{
             translateMipmap( compiler, node, target );
         else if(obj->name == "ibl_specular")
             translateIblSpecular( compiler, node, target );
+        else if(obj->name == "warm_up")
+            translateWarmUp( compiler, node, target );
         else if(obj->name == "custom")
         {
             IdString customId;

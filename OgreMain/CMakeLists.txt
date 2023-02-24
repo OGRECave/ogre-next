@@ -62,6 +62,7 @@ add_filtered_std("Compositor/Pass/PassShadows")
 add_filtered_std("Compositor/Pass/PassStencil")
 add_filtered_std("Compositor/Pass/PassTargetBarrier")
 add_filtered_std("Compositor/Pass/PassUav")
+add_filtered_std("Compositor/Pass/PassWarmUp")
 add_filtered_std("Compute")
 add_filtered_std("debugbreak")
 add_filtered_std("Hash")
@@ -268,6 +269,7 @@ if (NOT WIN32)
 endif()
 
 list( APPEND THREAD_SOURCE_FILES
+	src/Threading/OgreSemaphore.cpp
 	src/Threading/OgreWaitableEvent.cpp
 )
 
@@ -276,6 +278,7 @@ list( APPEND THREAD_SOURCE_FILES
 set(THREAD_HEADER_FILES
 	include/Threading/OgreBarrier.h
 	include/Threading/OgreLightweightMutex.h
+	include/Threading/OgreSemaphore.h
 	include/Threading/OgreThreadDefines.h
 	include/Threading/OgreThreadHeaders.h
 	include/Threading/OgreThreads.h

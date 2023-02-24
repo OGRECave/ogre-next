@@ -416,11 +416,6 @@ namespace Ogre
 
                 *outCachedGrid = &( *itor );
 
-                // Not only this causes bugs see http://www.ogre3d.org/forums/viewtopic.php?f=25&t=88776
-                // as far as I can't tell this is not needed anymore.
-                // if( mSceneManager->isCurrentShadowNodeReused() )
-                //    upToDate = false; //We can't really be sure the cache is up to date
-
                 return upToDate;
             }
 

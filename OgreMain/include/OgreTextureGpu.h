@@ -389,15 +389,19 @@ namespace Ogre
             Whether we should call "delete image" once we're done using the image.
             Otherwise you must listen for TextureGpuListener::ReadyForRendering
             message to know when we're done using the image.
+        @param bSkipMultiload
+            Do not send this texture to be loaded by multiload (see TextureGpuManager::setMultiLoadPool)
+            Useful if the order in which textures are being created into a pool must be preserved
+            This value is implicitly true if image is not nullptr.
         */
         void unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image = 0,
-                                         bool autoDeleteImage = true );
+                                         bool autoDeleteImage = true, bool bSkipMultiload = false );
 
         /// Same as unsafeScheduleTransitionTo, but first checks if we're already
         /// in the residency state we want to go to, or if it has already
         /// been scheduled; thus it can be called multiple times
         void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image = 0,
-                                   bool autoDeleteImage = true );
+                                   bool autoDeleteImage = true, bool bSkipMultiload = false );
 
         /** There are times where you want to reload a texture again (e.g. file on
             disk changed, uploading a new Image2, etc) without visual disruption.
@@ -430,8 +434,11 @@ namespace Ogre
             See TextureGpu::unsafeScheduleTransitionTo
         @param autoDeleteImage
             Same TextureGpu::unsafeScheduleTransitionTo
+        @param bSkipMultiload
+            Same TextureGpu::unsafeScheduleTransitionTo
         */
-        void scheduleReupload( Image2 *image = 0, bool autoDeleteImage = true );
+        void scheduleReupload( Image2 *image = 0, bool autoDeleteImage = true,
+                               bool bSkipMultiload = false );
 
         // See isMetadataReady for threadsafety on these functions.
         void   setResolution( uint32 width, uint32 height, uint32 depthOrSlices = 1u );

@@ -216,6 +216,8 @@ namespace Ogre
 
         bool mUseLightBuffers;
 
+        bool mIndustryCompatible;
+
         bool mDefaultBrdfWithDiffuseFresnel;
 
         ShadowFilter     mShadowFilter;
@@ -477,6 +479,21 @@ namespace Ogre
         void setUseLightBuffers( bool b );
         bool getUseLightBuffers() { return mUseLightBuffers; }
 
+        /** There are slight variations between how PBR formulas are handled in OgreNext and other
+            game engines or DCC (Digital Content Creator) tools.
+
+            Enabling this setting forces OgreNext to mimic as close as possible what popular
+            DCC are doing.
+
+            Enable this option if the art director wants the model to look exactly (or as close as
+            possible) as it looks in Blender/Maya/Marmoset.
+        @param bIndustryCompatible
+            True to be as close as possible to other DCC.
+            Default is false.
+        */
+        void setIndustryCompatible( bool bIndustryCompatible );
+        bool getIndustryCompatible() const { return mIndustryCompatible; }
+
         /** OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match
             what most DCC tools (e.g. Marmoset) do.
 
@@ -519,6 +536,7 @@ namespace Ogre
         static const IdString MaterialsPerBuffer;
         static const IdString LowerGpuOverhead;
         static const IdString DebugPssmSplits;
+        static const IdString IndustryCompatible;
         static const IdString PerceptualRoughness;
         static const IdString HasPlanarReflections;
 

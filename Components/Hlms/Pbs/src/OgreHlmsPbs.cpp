@@ -87,6 +87,7 @@ namespace Ogre
     const IdString PbsProperty::MaterialsPerBuffer = IdString( "materials_per_buffer" );
     const IdString PbsProperty::LowerGpuOverhead = IdString( "lower_gpu_overhead" );
     const IdString PbsProperty::DebugPssmSplits = IdString( "debug_pssm_splits" );
+    const IdString PbsProperty::IndustryCompatible = IdString( "industry_compatible" );
     const IdString PbsProperty::PerceptualRoughness = IdString( "perceptual_roughness" );
     const IdString PbsProperty::HasPlanarReflections = IdString( "has_planar_reflections" );
 
@@ -324,6 +325,7 @@ namespace Ogre
         mUseObbRestraintAreaLtc( false ),
 #endif
         mUseLightBuffers( false ),
+        mIndustryCompatible( false ),
         mDefaultBrdfWithDiffuseFresnel( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
@@ -1568,6 +1570,8 @@ namespace Ogre
 
         if( !casterPass )
         {
+            if( mIndustryCompatible )
+                setProperty( PbsProperty::IndustryCompatible, 1 );
             if( mPerceptualRoughness )
                 setProperty( PbsProperty::PerceptualRoughness, 1 );
             if( mLightProfilesTexture )
@@ -3731,9 +3735,9 @@ namespace Ogre
             "brtfLutDfg.dds", GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
             TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, 0, poolId );
 
-        ltcMat0->scheduleTransitionTo( GpuResidency::Resident );
-        ltcMat1->scheduleTransitionTo( GpuResidency::Resident );
-        brtfLut2->scheduleTransitionTo( GpuResidency::Resident );
+        ltcMat0->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
+        ltcMat1->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
+        brtfLut2->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
 
         ltcMat0->waitForMetadata();
         ltcMat1->waitForMetadata();

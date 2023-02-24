@@ -52,6 +52,8 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassTargetBarrier/OgreCompositorPassTargetBarrier.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUav.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
+#include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUp.h"
+#include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "OgreLogManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreSceneManager.h"
@@ -757,6 +759,11 @@ namespace Ogre
                     newPass = OGRE_NEW CompositorPassCompute(
                         static_cast<CompositorPassComputeDef *>( *itPass ),
                         mWorkspace->getDefaultCamera(), this, rtvDef );
+                    break;
+                case PASS_WARM_UP:
+                    newPass =
+                        OGRE_NEW CompositorPassWarmUp( static_cast<CompositorPassWarmUpDef *>( *itPass ),
+                                                       mWorkspace->getDefaultCamera(), this, rtvDef );
                     break;
                 case PASS_CUSTOM:
                 {

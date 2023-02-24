@@ -4,7 +4,7 @@ This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2016 Torus Knot Software Ltd
+Copyright (c) 2000-2023 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,33 +26,47 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreMetalView_OSX_H_
-#define _OgreMetalView_OSX_H_
+#ifndef _OgreSemaphore_H_
+#define _OgreSemaphore_H_
 
-#import <AppKit/AppKit.h>
-#import <Metal/Metal.h>
-#import <QuartzCore/CAMetalLayer.h>
-#include "OgreMetalPrerequisites.h"
+#include "OgrePlatform.h"
 
-_OgreMetalExport @interface OgreMetalView : NSView
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+// No need to include the heavy windows.h header for something like this!
+typedef void *HANDLE;
+#else
+#    include <semaphore.h>
+#endif
 
-// view has a handle to the metal device when created
-@property( nonatomic, readonly ) id<MTLDevice> device;
+namespace Ogre
+{
+    /// Implements a semaphore
+    class _OgreExport Semaphore
+    {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+        HANDLE mSemaphore;
+#else
+        sem_t mSemaphore;
+#endif
 
-@property( nonatomic, readwrite ) BOOL layerSizeDidUpdate;
+    public:
+        Semaphore( uint32_t intialCount );
+        ~Semaphore();
 
-/// The value of presentationTime will be passed to
-/// MTLCommandBuffer::presentDrawable atTime:presentationTime
-/// When negative, it means to present immediately (Ogre will call presentDrawable overload)
-/// This value is very important if you want to render at e.g. 30 fps:
-/// Calling CADisplayLink.frameInterval = 2 is not enough; as the CPU timer will be fired
-/// once every two VSync intervals, but if the GPU completes its job too soon, it will
-/// present immediately (i.e. in the next 16ms instead of waiting 33ms).
-/// In that case you'll want to set presentationTime = displayLink.timestamp+(1.0/fps)
-/// See
-/// https://developer.apple.com/library/prerelease/content/documentation/3DDrawing/Conceptual/MTLBestPracticesGuide/FrameRate.html
-@property( nonatomic ) CFTimeInterval presentationTime;
+        /// Decrements the semaphore by 1.
+        /// If the value would reach -1, it blocks the thread and clamps it to 0
+        ///
+        /// On error returns false, true if everything's ok.
+        bool decrementOrWait();
 
-@end
+        /// Increments the semaphore by 1. May wake up a thread stalled on decrement()
+        ///
+        /// On error returns false, true if everything's ok.
+        bool increment();
+
+        /// Increments the semaphore by the given value.
+        bool increment( uint32_t value );
+    };
+}  // namespace Ogre
 
 #endif

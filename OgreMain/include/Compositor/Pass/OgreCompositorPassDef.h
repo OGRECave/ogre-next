@@ -64,6 +64,7 @@ namespace Ogre
         PASS_IBL_SPECULAR,
         PASS_SHADOWS,
         PASS_TARGET_BARRIER,
+        PASS_WARM_UP,
         PASS_COMPUTE,
         PASS_CUSTOM
     };

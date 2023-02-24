@@ -1065,18 +1065,5 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Camera::_setNeedsDepthClamp( bool bNeedsDepthClamp ) { mNeedsDepthClamp = bNeedsDepthClamp; }
     //-----------------------------------------------------------------------
-    void Camera::_resetRenderedRqs( size_t numRqs )
-    {
-        mRenderedRqs.clear();
-        mRenderedRqs.resize( numRqs, false );
-    }
-    //-----------------------------------------------------------------------
-    void Camera::_setRenderedRqs( size_t rqStart, size_t rqEnd )
-    {
-        assert( rqStart <= rqEnd );
-        for( size_t i = rqStart; i < rqEnd; ++i )
-            mRenderedRqs[i] = true;
-    }
-    //-----------------------------------------------------------------------
     Camera::Listener::~Listener() {}
 }  // namespace Ogre
