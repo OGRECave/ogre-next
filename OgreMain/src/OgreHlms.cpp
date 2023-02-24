@@ -3547,6 +3547,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     uint32 Hlms::getMaterialSerial01( uint32 lastReturnedValue, const HlmsCache &passCache,
+                                      const size_t passCacheIdx,
                                       const QueuedRenderable &queuedRenderable, bool casterPass,
                                       ParallelHlmsCompileQueue &parallelQueue )
     {
@@ -3576,7 +3577,8 @@ namespace Ogre
                     // Create the entry now, but we'll fill it from a worker thread
                     HlmsCache *stubEntry = addStubShaderCache( finalHash );
                     parallelQueue.pushWarmUpRequest(
-                        { &passCache, stubEntry, queuedRenderable, hash[0], finalHash } );
+                        { reinterpret_cast<const HlmsCache *>( passCacheIdx ), stubEntry,
+                          queuedRenderable, hash[0], finalHash } );
                 }
             }
         }

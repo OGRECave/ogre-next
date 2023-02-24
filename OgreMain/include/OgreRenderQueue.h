@@ -72,7 +72,10 @@ namespace Ogre
     public:
         struct Request
         {
-            HlmsCache const *passCache;  /// Must stay alive until worker thread is done with it
+            /// Must stay alive until worker thread is done with it. In the case of warmUpSerial &
+            /// updateWarmUpThread, we store instead an index to RenderQueue::mPendingPassCaches
+            /// because otherwise the iterators keep getting invalidated.
+            HlmsCache const *passCache;
             HlmsCache       *reservedStubEntry;
             QueuedRenderable queuedRenderable;
             uint32           renderableHash;
@@ -102,8 +105,9 @@ namespace Ogre
         void updateThread( size_t threadIdx, HlmsManager *hlmsManager );
 
         void fireWarmUpParallel( SceneManager *sceneManager );
-        void updateWarmUpThread( size_t threadIdx, HlmsManager *hlmsManager );
-        void warmUpSerial( HlmsManager *hlmsManager );
+        void updateWarmUpThread( size_t threadIdx, HlmsManager *hlmsManager,
+                                 const HlmsCache *passCaches );
+        void warmUpSerial( HlmsManager *hlmsManager, const HlmsCache *passCaches );
     };
 
     /** Class to manage the scene object rendering queue.
@@ -258,8 +262,7 @@ namespace Ogre
                           const RenderQueueGroup   &renderQueueGroup,
                           ParallelHlmsCompileQueue *parallelCompileQueue );
 
-        void warmUpShaders( bool casterPass, HlmsCache passCache[],
-                            const RenderQueueGroup &renderQueueGroup );
+        void warmUpShaders( bool casterPass, const RenderQueueGroup &renderQueueGroup );
 
     public:
         RenderQueue( HlmsManager *hlmsManager, SceneManager *sceneManager, VaoManager *vaoManager );

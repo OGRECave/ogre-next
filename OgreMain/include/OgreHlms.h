@@ -881,6 +881,11 @@ namespace Ogre
             Hash of the last value we've returned.
         @param passCache
             See getMaterial()
+        @param passCacheIdx
+            We can't send a permanent reference of passCache to parallelQueue,
+            because the passCache won't survive that long. So we send instead
+            and index that parallelQueue will later use to send the right pass cache
+            to compileStubEntry()
         @param queuedRenderable
             See getMaterial()
         @param casterPass
@@ -892,8 +897,8 @@ namespace Ogre
             Caller must track whether we've already returned this value.
         */
         uint32 getMaterialSerial01( uint32 lastReturnedValue, const HlmsCache &passCache,
-                                    const QueuedRenderable &queuedRenderable, bool casterPass,
-                                    ParallelHlmsCompileQueue &parallelQueue );
+                                    const size_t passCacheIdx, const QueuedRenderable &queuedRenderable,
+                                    bool casterPass, ParallelHlmsCompileQueue &parallelQueue );
 
         /** Fills the constant buffers. Gets executed right before drawing the mesh.
         @param cache
