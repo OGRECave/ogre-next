@@ -183,12 +183,12 @@ namespace Ogre
     const HlmsCache *HlmsUnlit::createShaderCacheEntry( uint32 renderableHash,
                                                         const HlmsCache &passCache, uint32 finalHash,
                                                         const QueuedRenderable &queuedRenderable,
-                                                        const size_t tid )
+                                                        HlmsCache *reservedStubEntry, const size_t tid )
     {
         OgreProfileExhaustive( "HlmsUnlit::createShaderCacheEntry" );
 
-        const HlmsCache *retVal =
-            Hlms::createShaderCacheEntry( renderableHash, passCache, finalHash, queuedRenderable, tid );
+        const HlmsCache *retVal = Hlms::createShaderCacheEntry(
+            renderableHash, passCache, finalHash, queuedRenderable, reservedStubEntry, tid );
 
         if( mShaderProfile != "glsl" )
         {

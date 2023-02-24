@@ -65,6 +65,7 @@ namespace Ogre
     const HlmsCache *HlmsLowLevel::createShaderCacheEntry( uint32 renderableHash,
                                                            const HlmsCache &passCache, uint32 finalHash,
                                                            const QueuedRenderable &queuedRenderable,
+                                                           HlmsCache *reservedStubEntry,
                                                            const size_t tid )
     {
         Renderable *renderable = queuedRenderable.renderable;
@@ -131,7 +132,19 @@ namespace Ogre
 
         mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );
 
-        const HlmsCache *retVal = addShaderCache( finalHash, pso );
+        if( reservedStubEntry )
+        {
+            OGRE_ASSERT_LOW( !reservedStubEntry->pso.vertexShader &&
+                             !reservedStubEntry->pso.geometryShader &&
+                             !reservedStubEntry->pso.tesselationHullShader &&
+                             !reservedStubEntry->pso.tesselationDomainShader &&
+                             !reservedStubEntry->pso.pixelShader && "Race condition?" );
+            reservedStubEntry->pso = pso;
+        }
+
+        const HlmsCache *retVal =
+            reservedStubEntry ? reservedStubEntry : addShaderCache( finalHash, pso );
+
         return retVal;
     }
     //-----------------------------------------------------------------------------------

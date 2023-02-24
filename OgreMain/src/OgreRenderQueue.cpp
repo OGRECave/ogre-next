@@ -308,11 +308,19 @@ namespace Ogre
         ++mRenderingStarted;
         mRoot->_notifyRenderingFrameStarted();
 
+        const size_t numWorkerThreads = mSceneManager->getNumWorkerThreads();
+        const bool bUseMultithreadedShaderCompliation =
+            mRoot->getRenderSystem()->supportsMultithreadedShaderCompliation() &&
+            mSceneManager->getNumWorkerThreads() > 1u;
+
         for( size_t i = 0; i < HLMS_MAX; ++i )
         {
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
             if( hlms )
             {
+                if( bUseMultithreadedShaderCompliation )
+                    hlms->_setNumThreads( numWorkerThreads );
+
                 mPassCache[i] = hlms->preparePassHash( mSceneManager->getCurrentShadowNode(), casterPass,
                                                        dualParaboloid, mSceneManager );
             }
@@ -351,6 +359,14 @@ namespace Ogre
         }
 
         mCommandBuffer->setCurrentRenderSystem( rs );
+
+        ParallelHlmsCompileQueue *parallelCompileQueue = 0;
+
+        if( rs->supportsMultithreadedShaderCompliation() && mSceneManager->getNumWorkerThreads() > 1u )
+        {
+            parallelCompileQueue = &mParallelHlmsCompileQueue;
+            mParallelHlmsCompileQueue.start( mSceneManager );
+        }
 
         bool supportsIndirectBuffers = mVaoManager->supportsIndirectBuffers();
 
@@ -444,17 +460,22 @@ namespace Ogre
                         v1::CbStartV1LegacyRendering();
                     mLastVaoName = 0;
                 }
-                renderGL3V1( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i] );
+                renderGL3V1( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
+                             parallelCompileQueue );
             }
             else if( numNeededDraws > 0 /*&& mRenderQueues[i].mMode == FAST*/ )
             {
-                indirectDraw = renderGL3( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
-                                          indirectBuffer, indirectDraw, startIndirectDraw );
+                indirectDraw =
+                    renderGL3( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
+                               parallelCompileQueue, indirectBuffer, indirectDraw, startIndirectDraw );
             }
         }
 
         if( supportsIndirectBuffers && indirectBuffer )
             indirectBuffer->unmap( UO_KEEP_PERSISTENT );
+
+        if( parallelCompileQueue )
+            mParallelHlmsCompileQueue.stopAndWait( mSceneManager );
 
         OgreProfileEndGroup( "Command Preparation", OGREPROF_RENDERING );
 
@@ -607,7 +628,7 @@ namespace Ogre
 
             lastHlmsCacheHash = lastHlmsCache->hash;
             const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache, passCache[datablock->mType],
-                                                            queuedRenderable, casterPass );
+                                                            queuedRenderable, casterPass, nullptr );
             if( lastHlmsCacheHash != hlmsCache->hash )
             {
                 rs->_setPipelineStateObject( &hlmsCache->pso );
@@ -633,6 +654,7 @@ namespace Ogre
     unsigned char *RenderQueue::renderGL3( RenderSystem *rs, bool casterPass, bool dualParaboloid,
                                            HlmsCache passCache[],
                                            const RenderQueueGroup &renderQueueGroup,
+                                           ParallelHlmsCompileQueue *parallelCompileQueue,
                                            IndirectBufferPacked *indirectBuffer,
                                            unsigned char *indirectDraw,
                                            unsigned char *startIndirectDraw )
@@ -676,8 +698,9 @@ namespace Ogre
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
 
             lastHlmsCacheHash = lastHlmsCache->hash;
-            const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache, passCache[datablock->mType],
-                                                            queuedRenderable, casterPass );
+            const HlmsCache *hlmsCache =
+                hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
+                                   casterPass, parallelCompileQueue );
             if( lastHlmsCacheHash != hlmsCache->hash )
             {
                 CbPipelineStateObject *psoCmd = mCommandBuffer->addCommand<CbPipelineStateObject>();
@@ -805,7 +828,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------
     void RenderQueue::renderGL3V1( RenderSystem *rs, bool casterPass, bool dualParaboloid,
-                                   HlmsCache passCache[], const RenderQueueGroup &renderQueueGroup )
+                                   HlmsCache passCache[], const RenderQueueGroup &renderQueueGroup,
+                                   ParallelHlmsCompileQueue *parallelCompileQueue )
     {
         v1::RenderOperation lastRenderOp;
         HlmsCache const *lastHlmsCache = &c_dummyCache;
@@ -841,8 +865,9 @@ namespace Ogre
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
 
             lastHlmsCacheHash = lastHlmsCache->hash;
-            const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache, passCache[datablock->mType],
-                                                            queuedRenderable, casterPass );
+            const HlmsCache *hlmsCache =
+                hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
+                                   casterPass, parallelCompileQueue );
             if( lastHlmsCache != hlmsCache )
             {
                 CbPipelineStateObject *psoCmd = mCommandBuffer->addCommand<CbPipelineStateObject>();
@@ -1009,6 +1034,62 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
+    void RenderQueue::_compileShadersThread( size_t threadIdx )
+    {
+        mParallelHlmsCompileQueue.updateThread( threadIdx, mHlmsManager );
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::start( SceneManager *sceneManager )
+    {
+        mKeepCompiling = true;
+        sceneManager->_fireParallelHlmsCompile();
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::stopAndWait( SceneManager *sceneManager )
+    {
+        mKeepCompiling = false;
+        mSemaphore.increment( static_cast<uint32_t>( sceneManager->getNumWorkerThreads() ) );
+        sceneManager->waitForParallelHlmsCompile();
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::updateThread( size_t threadIdx, HlmsManager *hlmsManager )
+    {
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        Hlms::msThreadId = static_cast<uint32>( threadIdx );
+#    endif
+#endif
+        bool bStillHasWork = false;
+
+        ParallelHlmsCompileQueue::Requests request;
+
+        while( mKeepCompiling || bStillHasWork )
+        {
+            mSemaphore.decrementOrWait();
+
+            bool bWorkGrabbed = false;
+
+            mMutex.lock();
+            if( !mRequests.empty() )
+            {
+                request = std::move( mRequests.back() );
+                mRequests.pop_back();
+                bWorkGrabbed = true;
+            }
+            bStillHasWork = !mRequests.empty();
+            mMutex.unlock();
+
+            if( bWorkGrabbed )
+            {
+                const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
+                Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
+                hlms->compileStubEntry( *request.passCache, request.reservedStubEntry,
+                                        request.queuedRenderable, request.renderableHash,
+                                        request.finalHash, threadIdx );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------
     void RenderQueue::renderSingleObject( Renderable *pRend, const MovableObject *pMovableObject,
                                           RenderSystem *rs, bool casterPass, bool dualParaboloid )
     {
@@ -1050,7 +1131,7 @@ namespace Ogre
         }
 
         const HlmsCache *hlmsCache =
-            hlms->getMaterial( &c_dummyCache, passCache, queuedRenderable, casterPass );
+            hlms->getMaterial( &c_dummyCache, passCache, queuedRenderable, casterPass, nullptr );
         rs->_setPipelineStateObject( &hlmsCache->pso );
 
         mLastTextureHash =
@@ -1100,4 +1181,8 @@ namespace Ogre
     {
         return mRenderQueues[rqId].mSortMode;
     }
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    ParallelHlmsCompileQueue::ParallelHlmsCompileQueue() : mSemaphore( 0u ), mKeepCompiling( false ) {}
 }  // namespace Ogre

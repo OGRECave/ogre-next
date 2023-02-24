@@ -814,6 +814,7 @@ namespace Ogre
             BUILD_LIGHT_LIST02,
             WARM_UP_SHADERS,
             WARM_UP_SHADERS_COMPILE,
+            PARALLEL_HLMS_COMPILE,
             USER_UNIFORM_SCALABLE_TASK,
             STOP_THREADS,
             NUM_REQUESTS
@@ -1913,6 +1914,9 @@ namespace Ogre
         void _warmUpShadersTrigger();
 
         void _fireWarmUpShadersCompile();
+
+        void _fireParallelHlmsCompile();
+        void waitForParallelHlmsCompile();
 
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
         void _frameEnded();

@@ -1993,6 +1993,22 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    HlmsCache *Hlms::addStubShaderCache( uint32 hash )
+    {
+        HlmsCache cache( hash, mType, HlmsPso() );
+        HlmsCacheVec::iterator it =
+            std::lower_bound( mShaderCache.begin(), mShaderCache.end(), &cache, OrderCacheByHash );
+
+        OGRE_ASSERT_LOW(
+            ( it == mShaderCache.end() || ( *it )->hash != hash ) &&
+            "Can't add the same shader to the cache twice! (or a hash collision happened)" );
+
+        HlmsCache *retVal = new HlmsCache( cache );
+        mShaderCache.insert( it, retVal );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     const HlmsCache *Hlms::addShaderCache( uint32 hash, const HlmsPso &pso )
     {
         ScopedLock lock( mMutex );
@@ -2423,7 +2439,7 @@ namespace Ogre
     const HlmsCache *Hlms::createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                    uint32 finalHash,
                                                    const QueuedRenderable &queuedRenderable,
-                                                   const size_t tid )
+                                                   HlmsCache *reservedStubEntry, const size_t tid )
     {
         OgreProfileExhaustive( "Hlms::createShaderCacheEntry" );
 
@@ -2550,7 +2566,18 @@ namespace Ogre
 
         mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );
 
-        const HlmsCache *retVal = addShaderCache( finalHash, pso );
+        if( reservedStubEntry )
+        {
+            OGRE_ASSERT_LOW( !reservedStubEntry->pso.vertexShader &&
+                             !reservedStubEntry->pso.geometryShader &&
+                             !reservedStubEntry->pso.tesselationHullShader &&
+                             !reservedStubEntry->pso.tesselationDomainShader &&
+                             !reservedStubEntry->pso.pixelShader && "Race condition?" );
+            reservedStubEntry->pso = pso;
+        }
+
+        const HlmsCache *retVal =
+            reservedStubEntry ? reservedStubEntry : addShaderCache( finalHash, pso );
 
         applyTextureRegisters( retVal, tid );
 
@@ -3467,7 +3494,8 @@ namespace Ogre
     const HlmsCache *Hlms::getMaterial( HlmsCache const *lastReturnedValue,        //
                                         const HlmsCache &passCache,                //
                                         const QueuedRenderable &queuedRenderable,  //
-                                        bool casterPass )
+                                        bool casterPass,                           //
+                                        ParallelHlmsCompileQueue *parallelQueue )
     {
         uint32 finalHash;
         uint32 hash[2];
@@ -3489,12 +3517,33 @@ namespace Ogre
 
             if( !lastReturnedValue )
             {
-                lastReturnedValue =
-                    createShaderCacheEntry( hash[0], passCache, finalHash, queuedRenderable, kNoTid );
+                // Low level is a special case because it doesn't (yet?) support parallel compilation
+                if( !parallelQueue || mType == HLMS_LOW_LEVEL )
+                {
+                    lastReturnedValue = createShaderCacheEntry( hash[0], passCache, finalHash,
+                                                                queuedRenderable, nullptr, kNoTid );
+                }
+                else
+                {
+                    // Create the entry now, but we'll fill it from a worker thread
+                    HlmsCache *stubEntry = addStubShaderCache( finalHash );
+                    lastReturnedValue = stubEntry;
+
+                    parallelQueue->pushRequest(
+                        { &passCache, stubEntry, queuedRenderable, hash[0], finalHash } );
+                }
             }
         }
 
         return lastReturnedValue;
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::compileStubEntry( const HlmsCache &passCache, HlmsCache *reservedStubEntry,
+                                 QueuedRenderable queuedRenderable, uint32 renderableHash,
+                                 uint32 finalHash, size_t tid )
+    {
+        createShaderCacheEntry( renderableHash, passCache, finalHash, queuedRenderable,
+                                reservedStubEntry, tid );
     }
     //-----------------------------------------------------------------------------------
     uint32 Hlms::getMaterialSerial01( uint32 lastReturnedValue, const HlmsCache &passCache,
@@ -3542,7 +3591,7 @@ namespace Ogre
 
         finalHash = hash[0] | hash[1];
 
-        createShaderCacheEntry( hash[0], passCache, finalHash, queuedRenderable, tid );
+        createShaderCacheEntry( hash[0], passCache, finalHash, queuedRenderable, nullptr, tid );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::setDebugOutputPath( bool enableDebugOutput, bool outputProperties, const String &path )

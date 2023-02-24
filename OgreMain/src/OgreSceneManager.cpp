@@ -1624,6 +1624,25 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
+    void SceneManager::_fireParallelHlmsCompile()
+    {
+        mRequestType = PARALLEL_HLMS_COMPILE;
+
+        if( mForceMainThread )
+            updateWorkerThreadImpl( 0 );
+        else
+            mWorkerThreadsBarrier->sync();  // Fire threads
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::waitForParallelHlmsCompile()
+    {
+        if( !mForceMainThread )
+        {
+            OGRE_ASSERT_LOW( mRequestType == PARALLEL_HLMS_COMPILE );
+            mWorkerThreadsBarrier->sync();  // Wait them to complete
+        }
+    }
+    //-----------------------------------------------------------------------
     void SceneManager::_frameEnded() { mRenderQueue->frameEnded(); }
     //-----------------------------------------------------------------------
     void SceneManager::_setDestinationRenderSystem( RenderSystem *sys )
@@ -4591,6 +4610,9 @@ namespace Ogre
             break;
         case WARM_UP_SHADERS_COMPILE:
             mRenderQueue->_warmUpShadersThread( threadIdx );
+            break;
+        case PARALLEL_HLMS_COMPILE:
+            mRenderQueue->_compileShadersThread( threadIdx );
             break;
         case USER_UNIFORM_SCALABLE_TASK:
             mUserTask->execute( threadIdx, mNumWorkerThreads );

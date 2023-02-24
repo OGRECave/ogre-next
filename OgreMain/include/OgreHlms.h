@@ -53,6 +53,8 @@ namespace Ogre
      *  @{
      */
 
+    class ParallelHlmsCompileQueue;
+
     /** HLMS stands for "High Level Material System".
 
         The Hlms has multiple caches:
@@ -411,6 +413,7 @@ namespace Ogre
         /// Retrieves a cache entry using the returned value from @addRenderableCache
         const RenderableCache &getRenderableCache( uint32 hash ) const;
 
+        HlmsCache       *addStubShaderCache( uint32 hash );
         const HlmsCache *addShaderCache( uint32 hash, const HlmsPso &pso );
         const HlmsCache *getShaderCache( uint32 hash ) const;
         virtual void     clearShaderCache();
@@ -462,15 +465,19 @@ namespace Ogre
             The renderable who owns the renderableHash. Not used by the base class, but
             derived implementations may overload this function and take advantage of
             some of the direct access it provides.
+        @param reservedStubEntry
+            If nullptr, then we create a new ptr in addShaderCache()
+            If non null, then reservedStubEntry IS the entry returned from a previously called
+            addShaderCache and we will fill its members.
         @param threadIdx
             Thread idx
         @return
-            The newly created shader.
+            The newly created shader (or reservedStubEntry, if non-null).
         */
         virtual const HlmsCache *createShaderCacheEntry( uint32           renderableHash,
                                                          const HlmsCache &passCache, uint32 finalHash,
                                                          const QueuedRenderable &queuedRenderable,
-                                                         size_t                  threadIdx );
+                                                         HlmsCache *reservedStubEntry, size_t threadIdx );
 
         /// This function gets called right before starting parsing all templates, and after
         /// the renderable properties have been merged with the pass properties.
@@ -834,11 +841,31 @@ namespace Ogre
             should cast shadows)
         @param casterPass
             True if this pass is the shadow mapping caster pass, false otherwise
+        @param parallelQueue
+            If non-null, the returned pointer will be a stub pointer; and
+            caller is expected to call compileStubEntry() from a worker thread.
         @return
             Structure containing all necessary shaders
         */
         const HlmsCache *getMaterial( HlmsCache const *lastReturnedValue, const HlmsCache &passCache,
-                                      const QueuedRenderable &queuedRenderable, bool casterPass );
+                                      const QueuedRenderable &queuedRenderable, bool casterPass,
+                                      ParallelHlmsCompileQueue *parallelQueue );
+
+        /** Called by ParallelHlmsCompileQueue to finish the job started in getMaterial()
+        @param passCache
+            See lastReturnedValue from getMaterial()
+        @param cacheEntry
+            The stub cache entry (return value of getMaterial()) to fill.
+        @param queuedRenderable
+            See getMaterial()
+        @param renderableHash
+        @param finalHash
+        @param tid
+            Thread idx of caller
+        */
+        void compileStubEntry( const HlmsCache &passCache, HlmsCache *reservedStubEntry,
+                               QueuedRenderable queuedRenderable, uint32 renderableHash,
+                               uint32 finalHash, size_t tid );
 
         /** Parallel Hlms generation consists in two stages:
             This is the first stage, serial. See compileShaderParallel02() for 2nd stage.

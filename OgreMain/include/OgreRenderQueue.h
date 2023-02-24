@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreIteratorWrappers.h"
 #include "OgreSharedPtr.h"
 #include "Threading/OgreLightweightMutex.h"
+#include "Threading/OgreSemaphore.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -64,6 +65,40 @@ namespace Ogre
         }
 
         bool operator<( const QueuedRenderable &_r ) const { return this->hash < _r.hash; }
+    };
+
+    class ParallelHlmsCompileQueue
+    {
+    public:
+        struct Requests
+        {
+            HlmsCache const *passCache;  /// Must stay alive until worker thread is done with it
+            HlmsCache       *reservedStubEntry;
+            QueuedRenderable queuedRenderable;
+            uint32           renderableHash;
+            uint32           finalHash;
+        };
+
+    protected:
+        std::vector<Requests> mRequests;  // GUARDED_BY( mutex )
+        LightweightMutex      mMutex;
+        Semaphore             mSemaphore;
+        bool                  mKeepCompiling;
+
+    public:
+        ParallelHlmsCompileQueue();
+
+        inline void pushRequest( const Requests &&request )
+        {
+            ScopedLock lock( mMutex );
+            mRequests.emplace_back( request );
+            mSemaphore.increment();
+        }
+
+        void start( SceneManager *sceneManager );
+        void stopAndWait( SceneManager *sceneManager );
+
+        void updateThread( size_t threadIdx, HlmsManager *hlmsManager );
     };
 
     /** Class to manage the scene object rendering queue.
@@ -190,7 +225,10 @@ namespace Ogre
         LightweightMutex       mPsoMutex;
         std::vector<HlmsCache> mPendingPassCaches;
 
-        /** Returns a new (or an existing) indirect buffer that can hold the requested number of draws.
+        ParallelHlmsCompileQueue mParallelHlmsCompileQueue;
+
+        /** Returns a new (or an existing) indirect buffer that can hold the requested number of
+        draws.
         @param numDraws
             Number of draws the indirect buffer is expected to hold. It must be an upper limit.
             The caller may end up using less draws if he desires.
@@ -210,10 +248,12 @@ namespace Ogre
         /// (i.e. Items, VertexArrayObject)
         unsigned char *renderGL3( RenderSystem *rs, bool casterPass, bool dualParaboloid,
                                   HlmsCache passCache[], const RenderQueueGroup &renderQueueGroup,
+                                  ParallelHlmsCompileQueue *parallelCompileQueue,
                                   IndirectBufferPacked *indirectBuffer, unsigned char *indirectDraw,
                                   unsigned char *startIndirectDraw );
         void renderGL3V1( RenderSystem *rs, bool casterPass, bool dualParaboloid, HlmsCache passCache[],
-                          const RenderQueueGroup &renderQueueGroup );
+                          const RenderQueueGroup   &renderQueueGroup,
+                          ParallelHlmsCompileQueue *parallelCompileQueue );
 
         void warmUpShaders( bool casterPass, HlmsCache passCache[],
                             const RenderQueueGroup &renderQueueGroup );
@@ -297,6 +337,8 @@ namespace Ogre
         void warmUpShadersTrigger( RenderSystem *rs );
 
         void _warmUpShadersThread( size_t threadIdx );
+
+        void _compileShadersThread( size_t threadIdx );
 
         /// Don't call this too often. Only renders v1 objects at the moment.
         void renderSingleObject( Renderable *pRend, const MovableObject *pMovableObject,
