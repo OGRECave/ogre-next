@@ -2659,7 +2659,8 @@ Public Attributes</h2></td></tr>
 <p >Testing shows on an AMD Ryzen 5900X (12C/24T) loading of many PNG &amp; JPG files of varying sizes (up to 2048x2048 RGBA8_UNORM) was cut from 1 second to 0.7 seconds in a Debug build.</p>
 <p >However a Lenovo TB-X6C6X (4C/4T) Android tablet, the same workload cut from 5 seconds to 1 second, in a Release build. </p><dl class="section remark"><dt>Remarks</dt><dd>Because of the multithreaded nature, enabling this feature means textures may be loaded out of order.</dd></dl>
 <p>Without this feature, normally textures would be loaded in order, unless there was an issue (e.g. file couldn't be found, raising an exception; the metadata cache was out of date, etc).</p>
-<p >This can have an impact if you rely on the order (e.g. if you are using <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a6e96132817c27bfae1c0374e98d20dfc" title="Reserves and preallocates a pool with the given parameters Returns the master texture that owns the p...">reservePoolId()</a>). If you need to preserve ordering, you can use TextureGpu::scheduleTransition and set bSkipMultiload = true. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >This can have an impact if you rely on the order (e.g. if you are using <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a6e96132817c27bfae1c0374e98d20dfc" title="Reserves and preallocates a pool with the given parameters Returns the master texture that owns the p...">reservePoolId()</a>). If you need to preserve ordering, you can use TextureGpu::scheduleTransition and set bSkipMultiload = true.</p>
+<p >Testing indicates the ideal value is somewhere between 4-8 threads. More threads and you get diminishing returns. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">numThreads</td><td>How many number of threads to use for loading multiple textures. 0 to disable this feature (Default). </td></tr>
   </table>
