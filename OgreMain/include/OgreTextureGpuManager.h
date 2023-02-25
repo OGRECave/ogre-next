@@ -1117,6 +1117,9 @@ namespace Ogre
             This can have an impact if you rely on the order (e.g. if you are using reservePoolId()).
             If you need to preserve ordering, you can use TextureGpu::scheduleTransition and
             set bSkipMultiload = true.
+
+            Testing indicates the ideal value is somewhere between 4-8 threads.
+            More threads and you get diminishing returns.
         @param numThreads
             How many number of threads to use for loading multiple textures.
             0 to disable this feature (Default).
