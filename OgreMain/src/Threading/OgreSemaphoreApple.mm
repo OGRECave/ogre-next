@@ -26,51 +26,31 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreSemaphore_H_
-#define _OgreSemaphore_H_
+#include "OgreStableHeaders.h"
 
-#include "OgrePlatform.h"
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-// No need to include the heavy windows.h header for something like this!
-typedef void *HANDLE;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-#    include <dispatch/dispatch.h>
-#else
-#    include <semaphore.h>
-#endif
+#include "Threading/OgreSemaphore.h"
 
 namespace Ogre
 {
-    /// Implements a semaphore
-    class _OgreExport Semaphore
+    Semaphore::Semaphore( uint32_t intialCount )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        HANDLE mSemaphore;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        dispatch_semaphore_t mSemaphore;
-#else
-        sem_t mSemaphore;
-#endif
-
-    public:
-        Semaphore( uint32_t intialCount );
-        ~Semaphore();
-
-        /// Decrements the semaphore by 1.
-        /// If the value would reach -1, it blocks the thread and clamps it to 0
-        ///
-        /// On error returns false, true if everything's ok.
-        bool decrementOrWait();
-
-        /// Increments the semaphore by 1. May wake up a thread stalled on decrement()
-        ///
-        /// On error returns false, true if everything's ok.
-        bool increment();
-
-        /// Increments the semaphore by the given value.
-        bool increment( uint32_t value );
-    };
+        mSemaphore = dispatch_semaphore_create( intialCount );
+    }
+    //-----------------------------------------------------------------------------------
+    Semaphore::~Semaphore() { mSemaphore = 0; }
+    //-----------------------------------------------------------------------------------
+    bool Semaphore::decrementOrWait()
+    {
+        return dispatch_semaphore_wait( mSemaphore, DISPATCH_TIME_FOREVER ) == 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Semaphore::increment() { return dispatch_semaphore_signal( mSemaphore ) == 0; }
+    //-----------------------------------------------------------------------------------
+    bool Semaphore::increment( uint32_t value )
+    {
+        bool anyErrors = false;
+        while( value-- )
+            anyErrors |= dispatch_semaphore_signal( mSemaphore ) != 0;
+        return !anyErrors;
+	}
 }  // namespace Ogre
-
-#endif
