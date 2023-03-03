@@ -50,6 +50,9 @@
 			@else
 				#define geomNormal normal
 			@end
+			@property( detail_triplanar )
+				midf3 worldSpaceNormal;
+			@end
 			midf4	diffuse;
 			midf3	specular;
 
@@ -262,7 +265,7 @@
 		@property( detail_map@n )
 			midf4 detailCol@n = SampleDetailCol@n@property( detail_triplanar_diffuse )Triplanar@end ( textureMaps@value(detail_map@n_idx),
 													samplerState@value(detail_map@n_sampler),
-                                                    UV_DETAIL@n( @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@else inPs.uv@value(uv_detail@n).xy@end @insertpiece( offsetDetail@n ) ),
+													UV_DETAIL@n( @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.worldSpaceNormal )@else inPs.uv@value(uv_detail@n).xy@end @insertpiece( offsetDetail@n ) ),
                                                     texIndex_detailMapIdx@n );
 			detailWeights.@insertpiece(detail_swizzle@n) *= detailCol@n.w;
 			detailCol@n.w = detailWeights.@insertpiece(detail_swizzle@n);
@@ -422,7 +425,7 @@
 	@foreach( detail_maps_normal, n )
 		@piece( SampleDetailMapNm@n )getTSNormal( textureMaps@value(detail_map_nm@n_idx),
 												  samplerState@value(detail_map_nm@n_sampler),
-												  UV_DETAIL_NM@n( @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@else inPs.uv@value(uv_detail_nm@n).xy@end @insertpiece( offsetDetail@n ) ),
+												  UV_DETAIL_NM@n( @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.worldSpaceNormal )@else inPs.uv@value(uv_detail_nm@n).xy@end @insertpiece( offsetDetail@n ) ),
 												  texIndex_detailNormMapIdx@n ) * detailWeights.@insertpiece(detail_swizzle@n) @insertpiece( detail@n_nm_weight_mul )@end
 	@end
 
