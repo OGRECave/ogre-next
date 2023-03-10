@@ -48,7 +48,8 @@ namespace Ogre
 
         if( numDevices == 0u )
         {
-            LogManager::getSingleton().logMessage( "[Vulkan] No Vulkan devices found." );
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
+                         "VulkanSupport::enumerateDevices" );
             return;
         }
 
