@@ -138,7 +138,7 @@
 		@property( metalness_map@n )
 			midf metalness@n = SampleMetalness@n@property( detail_triplanar_metalness )Triplanar@end ( textureMaps@value( metalness_map@n_idx ),
 												  samplerState@value(metalness_map@n_sampler),
-												  @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@else inPs.uv0.xy@end  * material.detailOffsetScale[@n].zw +
+												  @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.worldSpaceNormal )@else inPs.uv0.xy@end  * material.detailOffsetScale[@n].zw +
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailMetalnessIdx@n ).x;
 		@else
@@ -163,7 +163,7 @@
 		@property( roughness_map@n )
 			midf roughness@n = SampleRoughness@n@property( detail_triplanar_roughness )Triplanar@end ( textureMaps@value( roughness_map@n_idx ),
 												  samplerState@value(roughness_map@n_sampler),
-												  @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@else inPs.uv0.xy@end  * material.detailOffsetScale[@n].zw +
+												  @property( detail_triplanar )GetTriplanarUVTp( inPs.worldPos, pixelData.worldSpaceNormal )@else inPs.uv0.xy@end  * material.detailOffsetScale[@n].zw +
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailRoughnessIdx@n ).x;
 		@else
@@ -190,17 +190,16 @@
 		  pixelData.geomNormal.yz = midf2_c( -pixelData.geomNormal.z, pixelData.geomNormal.y );
 	@end
 
-	@property( normal_map && detail_triplanar_normal )
-		pixelData.normal = pixelData.geomNormal;
-	@end
-
 	@property( detail_triplanar )
+		pixelData.worldSpaceNormal = pixelData.geomNormal;
 		// https://bgolus.medium.com/normal-mapping-for-a-triplanar-shader-10bf39dca05a
-		midf3 triplanarBlend = pow3( pixelData.geomNormal, _h( 4.0 ) );
+		midf3 triplanarBlend = pow3( pixelData.worldSpaceNormal, _h( 4.0 ) );
 		triplanarBlend /= dot( triplanarBlend, midf3_c( 1.0, 1.0, 1.0 ) );
 	@end
 
-	@property( normal_map && !detail_triplanar_normal )
+	pixelData.geomNormal = mul( pixelData.geomNormal, toMidf3x3( passBuf.view ) );
+
+	@property( normal_map )
 		//Get the TBN matrix
 		midf3 viewSpaceUnitX	= mul( midf3_c( 1, 0, 0 ), toMidf3x3( passBuf.view ) );
 		midf3 vTangent			= normalize( cross( pixelData.geomNormal, viewSpaceUnitX ) );

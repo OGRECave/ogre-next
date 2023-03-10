@@ -37,19 +37,19 @@
 
 	@property( detail_triplanar_diffuse )
 		@foreach( detail_maps_diffuse, n )@property( detail_map@n )
-			#define SampleDetailCol@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleDetailCol@n( tex,																							  \
-																								sampler,																						  \
-																								UV_DETAIL@n( GetTriplanarUVSd( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ) ), \
-																								arrayIdx ) * triplanarBlend.x +																	  \
-																																																  \
-																			 SampleDetailCol@n( tex,																							  \
-																								sampler,																						  \
-																								UV_DETAIL@n( GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ) ), \
-																								arrayIdx ) * triplanarBlend.y +																	  \
-																																																  \
-																			 SampleDetailCol@n( tex,																							  \
-																								sampler,																						  \
-																								UV_DETAIL@n( GetTriplanarUVFr( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ) ), \
+			#define SampleDetailCol@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleDetailCol@n( tex,																							  			\
+																								sampler,																						  			\
+																								UV_DETAIL@n( GetTriplanarUVSd( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ) ), \
+																								arrayIdx ) * triplanarBlend.x +																	  			\
+																																																  			\
+																			 SampleDetailCol@n( tex,																							  			\
+																								sampler,																						  			\
+																								UV_DETAIL@n( GetTriplanarUVTp( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ) ), \
+																								arrayIdx ) * triplanarBlend.y +																	  			\
+																																																  			\
+																			 SampleDetailCol@n( tex,																							  			\
+																								sampler,																						  			\
+																								UV_DETAIL@n( GetTriplanarUVFr( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ) ), \
 																								arrayIdx ) * triplanarBlend.z)
 		@end @end
 	@end
@@ -65,9 +65,9 @@
 		}
 
 		@foreach( detail_maps_normal, n )@property( detail_map_nm@n )
-			#define SampleDetailMapNm@nSd( tex, sampler, uv, arrayIdx ) SampleDetailMapNm@nSdFn( tex, sampler, uv, arrayIdx, detailWeights, pixelData.normal )
-			#define SampleDetailMapNm@nTp( tex, sampler, uv, arrayIdx ) SampleDetailMapNm@nTpFn( tex, sampler, uv, arrayIdx, detailWeights, pixelData.normal )
-			#define SampleDetailMapNm@nFr( tex, sampler, uv, arrayIdx ) SampleDetailMapNm@nFrFn( tex, sampler, uv, arrayIdx, detailWeights, pixelData.normal )
+			#define SampleDetailMapNm@nSd( tex, sampler, uv, arrayIdx ) SampleDetailMapNm@nSdFn( tex, sampler, uv, arrayIdx, detailWeights, pixelData.worldSpaceNormal )
+			#define SampleDetailMapNm@nTp( tex, sampler, uv, arrayIdx ) SampleDetailMapNm@nTpFn( tex, sampler, uv, arrayIdx, detailWeights, pixelData.worldSpaceNormal )
+			#define SampleDetailMapNm@nFr( tex, sampler, uv, arrayIdx ) SampleDetailMapNm@nFrFn( tex, sampler, uv, arrayIdx, detailWeights, pixelData.worldSpaceNormal )
 
 			// Side view projection
 			midf3 SampleDetailMapNm@nSdFn( Texture2DArray tex, SamplerState smp, midf2 uv, uint arrayIdx, midf4 weights, midf3 normal )
@@ -117,38 +117,38 @@
 
 	@property( detail_triplanar_roughness )
 		@foreach( 4, n )@property( roughness_map@n )
-			#define SampleRoughness@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleRoughness@n( tex,																			   \
-																								sampler,																		   \
-																								GetTriplanarUVSd( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
-																								arrayIdx ) * triplanarBlend.x +													   \
-																																												   \
-																			 SampleRoughness@n( tex,																			   \
-																								sampler,																		   \
-																								GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
-																								arrayIdx ) * triplanarBlend.y +													   \
-																																												   \
-																			 SampleRoughness@n( tex,																			   \
-																								sampler,																		   \
-																								GetTriplanarUVFr( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
+			#define SampleRoughness@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleRoughness@n( tex,																			   			 \
+																								sampler,																		 		  	 \
+																								GetTriplanarUVSd( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ), \
+																								arrayIdx ) * triplanarBlend.x +													   			 \
+																																												   			 \
+																			 SampleRoughness@n( tex,																			   			 \
+																								sampler,																		   			 \
+																								GetTriplanarUVTp( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ), \
+																								arrayIdx ) * triplanarBlend.y +													   			 \
+																																												   			 \
+																			 SampleRoughness@n( tex,																			   			 \
+																								sampler,																		   			 \
+																								GetTriplanarUVFr( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ), \
 																								arrayIdx ) * triplanarBlend.z)
 		@end @end
 	@end
 
 	@property( detail_triplanar_metalness )
 		@foreach( 4, n )@property( metalness_map@n )
-			#define SampleMetalness@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleMetalness@n( tex,																			   \
-																								sampler,																		   \
-																								GetTriplanarUVSd( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
-																								arrayIdx ) * triplanarBlend.x +													   \
-																																												   \
-																			 SampleMetalness@n( tex,																			   \
-																								sampler,																		   \
-																								GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
-																								arrayIdx ) * triplanarBlend.y +													   \
-																																												   \
-																			 SampleMetalness@n( tex,																			   \
-																								sampler,																		   \
-																								GetTriplanarUVFr( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ), \
+			#define SampleMetalness@nTriplanar( tex, sampler, uv, arrayIdx ) (SampleMetalness@n( tex,																			   			 \
+																								sampler,																		   			 \
+																								GetTriplanarUVSd( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ), \
+																								arrayIdx ) * triplanarBlend.x +													   			 \
+																																												   			 \
+																			 SampleMetalness@n( tex,																			   			 \
+																								sampler,																		   			 \
+																								GetTriplanarUVTp( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ), \
+																								arrayIdx ) * triplanarBlend.y +													   			 \
+																																												   			 \
+																			 SampleMetalness@n( tex,																			   			 \
+																								sampler,																		   			 \
+																								GetTriplanarUVFr( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ), \
 																								arrayIdx ) * triplanarBlend.z)
 		@end @end
 	@end
@@ -159,17 +159,17 @@
 	@foreach( detail_maps_normal, n )@property( detail_map_nm@n )
 		pixelData.normal = SampleDetailMapNm@nSd( textureMaps@value( detail_map_nm@n_idx ),
 												  samplerState@value( detail_map_nm@n_sampler ),
-												  UV_DETAIL_NM@n( GetTriplanarUVSd( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ) ),
+												  UV_DETAIL_NM@n( GetTriplanarUVSd( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ) ),
 												  texIndex_detailNormMapIdx@n ) * triplanarBlend.x +
 
 						   SampleDetailMapNm@nTp( textureMaps@value( detail_map_nm@n_idx ),
 												  samplerState@value( detail_map_nm@n_sampler ),
-												  UV_DETAIL_NM@n( GetTriplanarUVTp( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ) ),
+												  UV_DETAIL_NM@n( GetTriplanarUVTp( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ) ),
 												  texIndex_detailNormMapIdx@n ) * triplanarBlend.y +
 
 						   SampleDetailMapNm@nFr( textureMaps@value( detail_map_nm@n_idx ),
 												  samplerState@value( detail_map_nm@n_sampler ),
-												  UV_DETAIL_NM@n( GetTriplanarUVFr( inPs.worldPos, pixelData.normal )@insertpiece( offsetDetail@n ) ),
+												  UV_DETAIL_NM@n( GetTriplanarUVFr( inPs.worldPos, pixelData.worldSpaceNormal )@insertpiece( offsetDetail@n ) ),
 												  texIndex_detailNormMapIdx@n ) * triplanarBlend.z;
 	@end @end
 @end
