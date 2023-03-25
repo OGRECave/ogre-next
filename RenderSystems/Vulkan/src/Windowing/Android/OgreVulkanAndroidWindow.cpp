@@ -299,8 +299,6 @@ namespace Ogre
             {
                 mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
             }
-
-            mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         }
 
         createSwapchain();
