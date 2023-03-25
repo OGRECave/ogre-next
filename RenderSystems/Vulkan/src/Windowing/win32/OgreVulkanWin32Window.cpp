@@ -571,8 +571,6 @@ namespace Ogre
 
         createSwapchain();
 
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-
         setHidden( mHidden );
     }
     //-------------------------------------------------------------------------
