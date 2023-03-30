@@ -3852,6 +3852,11 @@ namespace Ogre
     {
         mDefaultBrdfWithDiffuseFresnel = bDefaultToDiffuseFresnel;
     }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setIndustryCompatible( bool bIndustryCompatible )
+    {
+        mIndustryCompatible = bIndustryCompatible;
+    }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsPbs::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
