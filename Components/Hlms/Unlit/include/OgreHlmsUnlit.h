@@ -84,6 +84,8 @@ namespace Ogre
         float mConstantBiasScale;
         bool  mUsingInstancedStereo;
 
+        bool mDefaultGenerateMipmaps;
+
         bool   mUsingExponentialShadowMaps;
         uint16 mEsmK;  ///< K parameter for ESM.
         uint32 mTexUnitSlotStart;
@@ -151,6 +153,29 @@ namespace Ogre
         /// @copydoc HlmsPbs::setEsmK
         void   setEsmK( uint16 K );
         uint16 getEsmK() const { return mEsmK; }
+
+        /** By default Unlit does not automatically generate mipmaps for textures loaded (the texture
+            may already have mipmaps though).
+
+            This behavior is the opposite from HlmsPbs.
+
+            This is because often Unlit will be used for 2D stuff, which doesn't require mipmaps.
+            However for 3D stuff, mipmaps are highly useful.
+
+            JSON materials can override this behavior.
+        @param bDefaultGenerateMips
+            True to automatically generate mipmaps
+            False to not generate. If the texture was already loaded by HlmsPbs it may have mipmaps, or
+            if the texture on disk already has mipmaps (e.g. DDS) mipmaps will be loaded.
+
+            This setting only affects automatic generation when the texture does not have mipmaps and
+            is being loaded by Unlit.
+        */
+        void setDefaultGenerateMipmaps( bool bDefaultGenerateMips );
+
+        /// Returns true if automatic mipmap generation when loading textures is on.
+        /// See setDefaultGenerateMipmaps()
+        bool getDefaultGenerateMipmaps() const { return mDefaultGenerateMipmaps; }
 
         /// @copydoc HlmsPbs::getDefaultPaths
         static void getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths );

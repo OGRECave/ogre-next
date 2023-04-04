@@ -105,6 +105,12 @@ namespace Ogre
             // switchFullScreen( false );
             mRequestedFullscreenMode = false;
         }
+
+        if( mNativeWindow )
+        {
+            ANativeWindow_release( mNativeWindow );
+            mNativeWindow = nullptr;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::_initialize( TextureGpuManager *textureGpuManager,
@@ -237,7 +243,14 @@ namespace Ogre
             mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         }
 
-        mNativeWindow = nativeWindow;
+        if( mNativeWindow != nativeWindow )
+        {
+            if( mNativeWindow )
+                ANativeWindow_release( mNativeWindow );
+            mNativeWindow = nativeWindow;
+            if( mNativeWindow )
+                ANativeWindow_acquire( mNativeWindow );
+        }
 
         if( !mNativeWindow )
             return;
@@ -279,15 +292,13 @@ namespace Ogre
 
             if( mDepthBuffer )
             {
-                mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+                mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
                                                    mDepthBuffer->getPixelFormat() );
             }
             else
             {
                 mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
             }
-
-            mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         }
 
         createSwapchain();

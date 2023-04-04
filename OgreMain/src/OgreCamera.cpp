@@ -586,7 +586,7 @@ namespace Ogre
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         // We need to convert screen point to our oriented viewport (temp solution)
         Real tX = screenX;
-        Real a = getOrientationMode() * Math::HALF_PI;
+        Real a = getOrientationModeAngle().valueRadians();
         screenX = Math::Cos( a ) * ( tX - 0.5f ) + Math::Sin( a ) * ( screenY - 0.5f ) + 0.5f;
         screenY = Math::Sin( a ) * ( tX - 0.5f ) + Math::Cos( a ) * ( screenY - 0.5f ) + 0.5f;
         if( (int)getOrientationMode() & 1 )
@@ -1064,19 +1064,6 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------
     void Camera::_setNeedsDepthClamp( bool bNeedsDepthClamp ) { mNeedsDepthClamp = bNeedsDepthClamp; }
-    //-----------------------------------------------------------------------
-    void Camera::_resetRenderedRqs( size_t numRqs )
-    {
-        mRenderedRqs.clear();
-        mRenderedRqs.resize( numRqs, false );
-    }
-    //-----------------------------------------------------------------------
-    void Camera::_setRenderedRqs( size_t rqStart, size_t rqEnd )
-    {
-        assert( rqStart <= rqEnd );
-        for( size_t i = rqStart; i < rqEnd; ++i )
-            mRenderedRqs[i] = true;
-    }
     //-----------------------------------------------------------------------
     Camera::Listener::~Listener() {}
 }  // namespace Ogre

@@ -69,7 +69,7 @@ namespace Ogre
             mDefaultLog = newLog;
         }
 
-        mLogs.insert( LogList::value_type( name, newLog ) );
+        mLogs.emplace( name, newLog );
 
         return newLog;
     }

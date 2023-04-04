@@ -26,12 +26,30 @@ using namespace Demo;
 
 namespace Demo
 {
+    struct BrdfModes
+    {
+        Ogre::PbsBrdf::PbsBrdf brdf;
+        const char *name;
+    };
+
+    static const uint32_t kNumBrdfModes = 6u;
+    static const BrdfModes kBrdfModes[kNumBrdfModes]{
+        { Ogre::PbsBrdf::Default, "Default" },
+        { Ogre::PbsBrdf::CookTorrance, "CookTorrance" },
+        { Ogre::PbsBrdf::BlinnPhong, "BlinnPhong" },
+        { Ogre::PbsBrdf::BlinnPhongLegacyMath, "BlinnPhongLegacyMath" },
+        { Ogre::PbsBrdf::BlinnPhongFullLegacy, "BlinnPhongFullLegacy" },
+        { Ogre::PbsBrdf::DefaultUncorrelated, "DefaultUncorrelated" },
+    };
+
     PbsMaterialsGameState::PbsMaterialsGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mAnimateObjects( true ),
         mNumSpheres( 0 ),
+        mTransparencyValue( 1.0f ),
         mTransparencyMode( Ogre::HlmsPbsDatablock::None ),
-        mTransparencyValue( 1.0f )
+        mBrdfIdx( 0u ),
+        mBrdfDiffuseFresnelMode( NoDiffuseFresnel )
     {
         memset( mSceneNode, 0, sizeof( mSceneNode ) );
     }
@@ -215,6 +233,8 @@ namespace Demo
 
         mCameraController = new CameraController( mGraphicsSystem, false );
 
+        setBrdfToMaterials();
+
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
@@ -244,13 +264,38 @@ namespace Demo
         outText += mTransparencyMode == Ogre::HlmsPbsDatablock::Fade ? "[Fade]" : "[Transparent]";
         outText += "\n+/- to change transparency. [";
         outText += Ogre::StringConverter::toString( mTransparencyValue ) + "]";
+        outText += "\n[Shift+] F10 to toggle BRDFs. [" + Ogre::String( kBrdfModes[mBrdfIdx].name ) + "]";
+        outText += "\n[Shift+] F11 to toggle Diffuse Fresnel. [";
+        if( currentBrdfSupportsDiffuseFresnel() )
+        {
+            switch( mBrdfDiffuseFresnelMode )
+            {
+            case NoDiffuseFresnel:
+                outText += "Disabled";
+                break;
+            case WithDiffuseFresnel:
+                outText += "Enabled";
+                break;
+            case SeparateDiffuseFresnel:
+                outText += "Separate";
+                break;
+            case NumBrdfDiffuseFresnelModes:
+                outText += "ERROR";
+                break;
+            }
+        }
+        else
+        {
+            outText += "Unsupported";
+        }
+        outText += "]";
     }
     //-----------------------------------------------------------------------------------
     void PbsMaterialsGameState::setTransparencyToMaterials()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
-        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
 
         Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
@@ -273,9 +318,57 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
+    bool PbsMaterialsGameState::currentBrdfSupportsDiffuseFresnel() const
+    {
+        return kBrdfModes[mBrdfIdx].brdf == Ogre::PbsBrdf::Default ||
+               kBrdfModes[mBrdfIdx].brdf == Ogre::PbsBrdf::CookTorrance ||
+               kBrdfModes[mBrdfIdx].brdf == Ogre::PbsBrdf::BlinnPhong;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32_t PbsMaterialsGameState::getBrdf() const
+    {
+        uint32_t brdf = kBrdfModes[mBrdfIdx].brdf;
+        if( currentBrdfSupportsDiffuseFresnel() )
+        {
+            if( mBrdfDiffuseFresnelMode == WithDiffuseFresnel )
+            {
+                brdf |= Ogre::PbsBrdf::FLAG_HAS_DIFFUSE_FRESNEL;
+            }
+            else if( mBrdfDiffuseFresnelMode == SeparateDiffuseFresnel )
+            {
+                brdf |= Ogre::PbsBrdf::FLAG_HAS_DIFFUSE_FRESNEL |
+                        Ogre::PbsBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL;
+            }
+        }
+        return brdf;
+    }
+    //-----------------------------------------------------------------------------------
+    void PbsMaterialsGameState::setBrdfToMaterials()
+    {
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
+
+        const Ogre::PbsBrdf::PbsBrdf brdf = static_cast<Ogre::PbsBrdf::PbsBrdf>( getBrdf() );
+
+        for( size_t i = 0; i < mNumSpheres; ++i )
+        {
+            Ogre::String datablockName = "Test" + Ogre::StringConverter::toString( i );
+            Ogre::HlmsPbsDatablock *datablock =
+                static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( datablockName ) );
+            datablock->setBrdf( brdf );
+        }
+
+        Ogre::HlmsPbsDatablock *datablock = 0;
+        datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( "Marble" ) );
+        datablock->setBrdf( brdf );
+        datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( "Rocks" ) );
+        datablock->setBrdf( brdf );
+    }
+    //-----------------------------------------------------------------------------------
     void PbsMaterialsGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS | KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -328,6 +421,32 @@ namespace Demo
                 mTransparencyValue -= 0.1f;
                 mTransparencyValue = std::max( mTransparencyValue, 0.0f );
                 setTransparencyToMaterials();
+            }
+        }
+        else if( arg.keysym.sym == SDLK_F10 )
+        {
+            if( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) )
+                mBrdfIdx = ( mBrdfIdx + kNumBrdfModes - 1u ) % kNumBrdfModes;
+            else
+                mBrdfIdx = ( mBrdfIdx + 1u ) % kNumBrdfModes;
+            setBrdfToMaterials();
+        }
+        else if( arg.keysym.sym == SDLK_F11 )
+        {
+            if( currentBrdfSupportsDiffuseFresnel() )
+            {
+                if( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) )
+                {
+                    mBrdfDiffuseFresnelMode = static_cast<BrdfDiffuseFresnelMode>(
+                        ( mBrdfDiffuseFresnelMode + NumBrdfDiffuseFresnelModes - 1u ) %
+                        NumBrdfDiffuseFresnelModes );
+                }
+                else
+                {
+                    mBrdfDiffuseFresnelMode = static_cast<BrdfDiffuseFresnelMode>(
+                        ( mBrdfDiffuseFresnelMode + 1u ) % NumBrdfDiffuseFresnelModes );
+                }
+                setBrdfToMaterials();
             }
         }
         else

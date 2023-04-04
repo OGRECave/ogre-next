@@ -49,7 +49,7 @@ namespace Ogre
     bool GLSLShaderManager::registerShaderFactory( const String &syntaxCode,
                                                    CreateGpuProgramCallback createFn )
     {
-        return mShaderMap.insert( ShaderMap::value_type( syntaxCode, createFn ) ).second;
+        return mShaderMap.emplace( syntaxCode, createFn ).second;
     }
 
     bool GLSLShaderManager::unregisterShaderFactory( const String &syntaxCode )

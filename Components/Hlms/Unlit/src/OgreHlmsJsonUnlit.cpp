@@ -33,6 +33,7 @@ THE SOFTWARE.
 #    include "OgreHlmsManager.h"
 #    include "OgreLwString.h"
 #    include "OgreStringConverter.h"
+#    include "OgreTextureFilters.h"
 #    include "OgreTextureGpuManager.h"
 
 #    if defined( __GNUC__ ) && !defined( __clang__ )
@@ -100,11 +101,18 @@ namespace Ogre
 
         rapidjson::Value::ConstMemberIterator itor = json.FindMember( "texture" );
         if( itor != json.MemberEnd() &&
-            ( itor->value.IsString() || ( itor->value.IsArray() && itor->value.Size() == 2u &&
-                                          itor->value[0].IsString() && itor->value[1].IsString() ) ) )
+            ( itor->value.IsString() ||
+              ( itor->value.IsArray() && itor->value.Size() == 2u && itor->value[0].IsString() &&
+                ( itor->value[1].IsString() || itor->value[1].IsBool() ) ) ||
+              ( itor->value.IsArray() && itor->value.Size() == 3u && itor->value[0].IsString() &&
+                itor->value[1].IsString() && itor->value[2].IsBool() ) ) )
         {
             char const *textureName = 0;
             char const *aliasName = 0;
+
+            uint32 textureFilters =
+                datablock->getDefaultGenerateMipmaps() ? TextureFilter::TypeGenerateDefaultMipmaps : 0u;
+
             if( !itor->value.IsArray() )
             {
                 textureName = itor->value.GetString();
@@ -113,13 +121,32 @@ namespace Ogre
             else
             {
                 textureName = itor->value[0].GetString();
-                aliasName = itor->value[1].GetString();
+                if( itor->value[1].IsBool() )
+                {
+                    // Texture is specifically overriding mipmap behavior
+                    if( itor->value[1].GetBool() )
+                        textureFilters |= TextureFilter::TypeGenerateDefaultMipmaps;
+                    else
+                        textureFilters = 0u;
+                }
+                else
+                {
+                    aliasName = itor->value[1].GetString();
+                    if( itor->value.Size() == 3u )
+                    {
+                        // Texture is specifically overriding mipmap behavior
+                        if( itor->value[2].GetBool() )
+                            textureFilters |= TextureFilter::TypeGenerateDefaultMipmaps;
+                        else
+                            textureFilters = 0u;
+                    }
+                }
             }
             const uint32 textureFlags =
                 TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB;
             texture = mTextureManager->createOrRetrieveTexture(
                 textureName, aliasName, GpuPageOutStrategy::Discard, textureFlags, TextureTypes::Type2D,
-                resourceGroup );
+                resourceGroup, textureFilters );
         }
 
         itor = json.FindMember( "sampler" );
@@ -214,6 +241,9 @@ namespace Ogre
             TextureGpu *texture = datablock->getTexture( textureType );
             if( texture )
             {
+                const bool bDefaultGenerateMipmaps = datablock->getDefaultGenerateMipmaps();
+                const bool bHasMipmaps = texture->getNumMipmaps() > 1u;
+
                 const String *texName = mTextureManager->findResourceNameStr( texture->getName() );
                 const String *aliasName = mTextureManager->findAliasNameStr( texture->getName() );
                 if( texName && aliasName )
@@ -224,7 +254,21 @@ namespace Ogre
                         outString += *aliasName;
                         outString += "\", ";
                         outString += *texName;
-                        outString += "\"]";
+                        outString += "\"";
+                        if( bDefaultGenerateMipmaps != bHasMipmaps )
+                        {
+                            outString += "\", ";
+                            outString += bHasMipmaps ? "true" : "false";
+                        }
+                        outString += "]";
+                    }
+                    else if( bDefaultGenerateMipmaps != bHasMipmaps )
+                    {
+                        outString += ",\n\t\t\t\t\"texture\" : [\"";
+                        outString += *texName;
+                        outString += "\", ";
+                        outString += bHasMipmaps ? "true" : "false";
+                        outString += "]";
                     }
                     else
                     {

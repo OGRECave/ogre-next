@@ -112,7 +112,7 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Out of GPU memory or driver refused.",
                              "MetalTextureGpuManager::MetalTextureGpuManager" );
             }
-            mBlankTexture[i].label = [NSString stringWithUTF8String:dummyNames[i]];
+            mBlankTexture[i].label = @( dummyNames[i] );
 
             if( i == TextureTypes::TypeCube || i == TextureTypes::TypeCubeArray )
             {

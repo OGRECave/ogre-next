@@ -143,7 +143,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image,
-                                                 bool autoDeleteImage )
+                                                 bool autoDeleteImage, bool bSkipMultiload )
     {
         mNextResidencyStatus = nextResidency;
         ++mPendingResidencyChanges;
@@ -157,18 +157,19 @@ namespace Ogre
         else
         {
             // Schedule transition, we'll be loading from a worker thread.
-            mTextureManager->_scheduleTransitionTo( this, nextResidency, image, autoDeleteImage, false );
+            mTextureManager->_scheduleTransitionTo( this, nextResidency, image, autoDeleteImage, false,
+                                                    bSkipMultiload );
         }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image,
-                                           bool autoDeleteImage )
+                                           bool autoDeleteImage, bool bSkipMultiload )
     {
         if( mNextResidencyStatus != nextResidency )
-            unsafeScheduleTransitionTo( nextResidency, image, autoDeleteImage );
+            unsafeScheduleTransitionTo( nextResidency, image, autoDeleteImage, bSkipMultiload );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::scheduleReupload( Image2 *image, bool autoDeleteImage )
+    void TextureGpu::scheduleReupload( Image2 *image, bool autoDeleteImage, bool bSkipMultiload )
     {
         OGRE_ASSERT_LOW( mNextResidencyStatus != GpuResidency::OnStorage );
         OGRE_ASSERT_LOW( mDataPreparationsPending < std::numeric_limits<uint8>::max() &&
@@ -183,7 +184,7 @@ namespace Ogre
         {
             ++mDataPreparationsPending;
             mTextureManager->_scheduleTransitionTo( this, GpuResidency::Resident, image, autoDeleteImage,
-                                                    true );
+                                                    true, bSkipMultiload );
         }
     }
     //-----------------------------------------------------------------------------------

@@ -38,6 +38,6 @@ ogre_config_framework(OgreVolume)
 ogre_config_component(OgreVolume)
 
 install(FILES ${HEADER_FILES}
-  DESTINATION include/OGRE/Volume
+  DESTINATION include/${OGRE_NEXT_PREFIX}/Volume
 )
 

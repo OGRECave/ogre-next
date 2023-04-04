@@ -539,22 +539,21 @@ namespace Ogre {
         unsigned arm64SubtypesCount = sizeof(arm64Subtypes) / sizeof(arm64Subtypes[0]);
         unsigned arm64_32SubtypesCount = sizeof(arm64_32Subtypes) / sizeof(arm64_32Subtypes[0]);
 
-        struct Helper{
-            static const char* getName(const char** names, unsigned count, unsigned idx){
-                return idx < count && names[idx] ? names[idx] : names[0];
-            }
+        auto getCpuName = [](const char** names, unsigned count, cpu_subtype_t cpusubtype){
+            unsigned idx = (unsigned)cpusubtype & ~CPU_SUBTYPE_MASK;
+            return idx < count && names[idx] ? names[idx] : names[0];
         };
 
         switch(cputype)
         {
             case CPU_TYPE_ARM:
-                cpuID = Helper::getName(armSubtypes, armSubtypesCount, cpusubtype);
+                cpuID = getCpuName(armSubtypes, armSubtypesCount, cpusubtype);
                 break;
             case CPU_TYPE_ARM64:
-                cpuID = Helper::getName(arm64Subtypes, arm64SubtypesCount, cpusubtype & ~CPU_SUBTYPE_MASK);
+                cpuID = getCpuName(arm64Subtypes, arm64SubtypesCount, cpusubtype);
                 break;
             case CPU_TYPE_ARM64_32:
-                cpuID = Helper::getName(arm64_32Subtypes, arm64_32SubtypesCount, cpusubtype & ~CPU_SUBTYPE_MASK);
+                cpuID = getCpuName(arm64_32Subtypes, arm64_32SubtypesCount, cpusubtype);
                 break;
             default:
                 cpuID = "Unknown ARM";

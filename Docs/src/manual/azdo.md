@@ -65,32 +65,31 @@ into account[^13].
 Each RenderQueue ID can run in any of the following modes of operation:
 
 1.  `V1_LEGACY`: It runs as closely as possible as Ogre 1.x ran. Only low
-    level materials and mobile Hlms materials can work in this mode; and
-    only v1 objects can be stored in RenderQueue IDs operating in this
-    mode. This mode of operation is not recommended for a large number
-    of objects.
+    level materials can work in this mode; and only v1 objects can be
+    stored in RenderQueue IDs operating in this mode
+    This mode of operation is not recommended for a large number of objects.
 2.  `V1_FAST`: Certain obscures features from Ogre 1.x won't be available
     (i.e. the HW GlobalInstance buffer). The RenderQueue will first
     iterate through all objects, auto-instancing when possible; and
     updating the shader's constant and texture buffers; then using the
     Command Buffer all necessary state changes and draw calls. Only v1
     objects can live in these RenderQueue Ids. Originally they could
-    only use desktop Hlms materials, but recently support for Low Level
-    materials was added. Note that low level materials cannot be auto
+    only use Hlms materials, but support for Low Level materials
+    was later was added. Note that low level materials cannot be auto
     instanced.
 3.  `FAST`: The new system. It's similar to `V1_FAST`. However, only v2
-    objects can be used and they must be using dekstop Hlms materials.
+    objects can be used.
     The API overhead is extremely low; and is more multicore-friendly
     because `RenderQueue::addRenderable` is executed in parallel.
 
 You cannot mix v1 and v2 objects in the same RQ ID, however you can
 store them in different RQ IDs.
 
-RQ Mode    | Object type | Hlms materials (Desktop) | Hlms materials (Mobile) | Low Level materials
------------|-------------|--------------------------|-------------------------|--------------------
-V1\_LEGACY | v1          | NO                       | YES                     | YES
-V1\_FAST   | v1          | YES                      | NO                      | YES
-FAST       | v2          | YES                      | NO                      | NO
+RQ Mode    | Object type | Hlms materials | Low Level materials
+-----------|-------------|----------------|----------------------
+V1\_LEGACY | v1          | NO             | YES
+V1\_FAST   | v1          | YES            | YES
+FAST       | v2          | YES            | YES
 
 It is not automatic. Placing a v2 object in a v1 queue or viceversa may
 result in Ogre raising a helpful exception, or an unhelpful crash (it is
@@ -101,10 +100,9 @@ non empty (which indicates a v2 object), or the usage of
 `Renderable::getRenderOperation` and `v1::RenderOperation`, which
 indicates a v1 object.
 
-By default queue ID 0 is set to `FAST` (v2) while ID 1 is set to `V1_FAST`
-(v1); and v2 objects will try to default to ID 0 while v1 objects will
-try to default to ID 1. You can change the render queue modes with the
-following snippet:
+See Ogre::RenderQueue remarks for the default render queue IDs.
+
+You can change the render queue modes with the following snippet:
 
 ```cpp
 mSceneManager->getRenderQueue()->setRenderQueueMode(5,Ogre::RenderQueue::Modes::V1_FAST);

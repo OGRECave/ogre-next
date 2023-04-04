@@ -392,6 +392,7 @@ namespace Ogre
             mDepth.texture->getSampleDescription().getColourSamples() );
         attachment.loadOp = get( mDepth.loadAction );
         attachment.storeOp = get( mDepth.storeAction, false );
+
         if( mStencil.texture )
         {
             attachment.stencilLoadOp = get( mStencil.loadAction );
@@ -410,8 +411,11 @@ namespace Ogre
         }
         else
         {
-            if( attachment.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD )
+            if( attachment.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ||
+                attachment.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD )
+            {
                 attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            }
             else
                 attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;

@@ -87,9 +87,29 @@ namespace Ogre
         enum PoolId
         {
             POOL_NO_DEPTH = 0,
-            POOL_MANUAL_USAGE = 0,
+            POOL_MANUAL_USAGE OGRE_DEPRECATED_ENUM_VER( 3 ) = 0,
             POOL_DEFAULT = 1,
-            POOL_NON_SHAREABLE = 65534,
+            /// Deprecated.
+            ///
+            /// Do NOT use this flag directly. It made sense in Ogre 2.1
+            /// It no longer makes sense externally in Ogre 2.2
+            ///
+            /// Depth buffers are now created like regular TextureGpu and are
+            /// set directly to RTV (RenderTextureViews) aka RenderPassDescriptor
+            ///
+            /// See https://forums.ogre3d.org/viewtopic.php?p=548491#p548491
+            /// See samples that setup depth RTVs such as:
+            ///
+            /// Samples/Media/2.0/scripts/Compositors/IrradianceFieldRaster.compositor
+            /// Samples/Media/2.0/scripts/Compositors/StencilTest.compositor
+            /// Samples/Media/2.0/scripts/Compositors/Tutorial_ReconstructPosFromDepth.compositor
+            ///
+            /// See https://ogrecave.github.io/ogre-next/api/latest/_ogre22_changes.html
+            /// for documentation about RTVs.
+            POOL_NON_SHAREABLE OGRE_DEPRECATED_ENUM_VER( 3 ) = 65534,
+            /// The depth buffer doesn't come from a pool, either because the TextureGpu
+            /// is already a depth buffer, or it's explicitly set in an RTV
+            NO_POOL_EXPLICIT_RTV = 65534,
             POOL_INVALID = 65535
         };
 

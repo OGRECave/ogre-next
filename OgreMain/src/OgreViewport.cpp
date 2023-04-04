@@ -176,14 +176,17 @@ namespace Ogre
         _updateDimensions();
     }
     //---------------------------------------------------------------------
-    void Viewport::_updateCullPhase01( Camera *renderCamera, Camera *cullCamera, const Camera *lodCamera,
-                                       uint8 firstRq, uint8 lastRq, bool reuseCullData )
+    void Viewport::_setupAspectRatio( Camera *cullCamera )
     {
         // Automatic AR cameras are useful for cameras that draw into multiple viewports
         const Real aspectRatio = (Real)mActWidth / (Real)std::max( 1, mActHeight );
         if( cullCamera->getAutoAspectRatio() && cullCamera->getAspectRatio() != aspectRatio )
             cullCamera->setAspectRatio( aspectRatio );
-
+    }
+    //---------------------------------------------------------------------
+    void Viewport::_updateCullPhase01( Camera *renderCamera, Camera *cullCamera, const Camera *lodCamera,
+                                       uint8 firstRq, uint8 lastRq, bool reuseCullData )
+    {
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         {
             const OrientationMode orientationMode = mCurrentTarget->getOrientationMode();

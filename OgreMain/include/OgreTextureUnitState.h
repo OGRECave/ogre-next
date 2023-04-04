@@ -430,7 +430,7 @@ namespace Ogre
         {
             /// Normal texture identified by name
             CONTENT_NAMED = 0,
-            /// A shadow texture, automatically bound by engine
+            /// A shadow texture, automatically bound by engine (Deprecated)
             CONTENT_SHADOW = 1,
             /// A compositor texture, automatically linked to active viewport's chain
             CONTENT_COMPOSITOR = 2

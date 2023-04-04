@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "OgreAnimation.h"
 #include "OgreAnimationState.h"
 #include "OgreAnimationTrack.h"
-#include "OgreAny.h"
 #include "OgreArchive.h"
 #include "OgreArchiveManager.h"
 #include "OgreAxisAlignedBox.h"

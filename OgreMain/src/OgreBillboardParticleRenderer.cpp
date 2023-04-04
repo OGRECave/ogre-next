@@ -50,10 +50,14 @@ namespace Ogre
         BillboardParticleRenderer::CmdCommonUpVector BillboardParticleRenderer::msCommonUpVectorCmd;
         BillboardParticleRenderer::CmdPointRendering BillboardParticleRenderer::msPointRenderingCmd;
         BillboardParticleRenderer::CmdAccurateFacing BillboardParticleRenderer::msAccurateFacingCmd;
+        BillboardParticleRenderer::CmdTextureStacks BillboardParticleRenderer::msTextureStacksCmd;
+        BillboardParticleRenderer::CmdTextureSlices BillboardParticleRenderer::msTextureSlicesCmd;
         //-----------------------------------------------------------------------
         BillboardParticleRenderer::BillboardParticleRenderer( IdType id,
                                                               ObjectMemoryManager *objectMemoryManager,
-                                                              SceneManager *sceneManager )
+                                                              SceneManager *sceneManager ) :
+            mTextureStacks( 1 ),
+            mTextureSlices( 1 )
         {
             if( createParamDictionary( "BillboardParticleRenderer" ) )
             {
@@ -132,6 +136,13 @@ namespace Ogre
                                   "Cannot be combined with point rendering.",
                                   PT_BOOL ),
                     &msAccurateFacingCmd );
+
+                dict->addParameter(
+                    Ogre::ParameterDef( "stacks", "Texture stacks count for Animation", Ogre::PT_INT ),
+                    &msTextureStacksCmd );
+                dict->addParameter(
+                    Ogre::ParameterDef( "slices", "Texture slices count for Animation", Ogre::PT_INT ),
+                    &msTextureSlicesCmd );
             }
 
             // Create billboard set
@@ -184,6 +195,18 @@ namespace Ogre
                     bb.mWidth = p->mWidth;
                     bb.mHeight = p->mHeight;
                 }
+
+                if( mTextureStacks != 1u || mTextureSlices != 1u )
+                {
+                    // set animation frame
+                    uint32 spriteFrame = uint32( ( p->mTimeToLive / p->mTotalTimeToLive ) *
+                                                 Real( ( mTextureStacks * mTextureSlices ) - 1u ) );
+                    spriteFrame = std::min( spriteFrame, ( mTextureStacks * mTextureSlices ) - 1u );
+
+                    bb.mTexcoordIndex = static_cast<uint16>( spriteFrame );
+                    bb.mUseTexcoordRect = false;
+                }
+
                 mBillboardSet->injectBillboard( bb, camera );
             }
 
@@ -318,6 +341,22 @@ namespace Ogre
             return mBillboardSet->isPointRenderingEnabled();
         }
         //-----------------------------------------------------------------------
+        void BillboardParticleRenderer::setTextureStacks( uint32 value )
+        {
+            mTextureStacks = value;
+            mBillboardSet->setTextureStacksAndSlices( uchar( mTextureStacks ), uchar( mTextureSlices ) );
+        }
+        //-----------------------------------------------------------------------
+        uint32 BillboardParticleRenderer::getTextureStacks() const { return mTextureStacks; }
+        //-----------------------------------------------------------------------
+        void BillboardParticleRenderer::setTextureSlices( uint32 value )
+        {
+            mTextureSlices = value;
+            mBillboardSet->setTextureStacksAndSlices( uchar( mTextureStacks ), uchar( mTextureSlices ) );
+        }
+        //-----------------------------------------------------------------------
+        uint32 BillboardParticleRenderer::getTextureSlices() const { return mTextureSlices; }
+        //-----------------------------------------------------------------------
         //-----------------------------------------------------------------------
         //-----------------------------------------------------------------------
         BillboardParticleRendererFactory::BillboardParticleRendererFactory()
@@ -356,10 +395,8 @@ namespace Ogre
                 break;
             case BBT_ORIENTED_COMMON:
                 return "oriented_common";
-                break;
             case BBT_ORIENTED_SELF:
                 return "oriented_self";
-                break;
             case BBT_PERPENDICULAR_COMMON:
                 return "perpendicular_common";
             case BBT_PERPENDICULAR_SELF:
@@ -532,6 +569,28 @@ namespace Ogre
         {
             static_cast<BillboardParticleRenderer *>( target )->setUseAccurateFacing(
                 StringConverter::parseBool( val ) );
+        }
+        //-----------------------------------------------------------------------
+        String BillboardParticleRenderer::CmdTextureStacks::doGet( const void *target ) const
+        {
+            return Ogre::StringConverter::toString(
+                static_cast<const BillboardParticleRenderer *>( target )->getTextureStacks() );
+        }
+        void BillboardParticleRenderer::CmdTextureStacks::doSet( void *target, const Ogre::String &val )
+        {
+            static_cast<BillboardParticleRenderer *>( target )->setTextureStacks(
+                Ogre::StringConverter::parseUnsignedInt( val ) );
+        }
+        //-----------------------------------------------------------------------
+        String BillboardParticleRenderer::CmdTextureSlices::doGet( const void *target ) const
+        {
+            return Ogre::StringConverter::toString(
+                static_cast<const BillboardParticleRenderer *>( target )->getTextureSlices() );
+        }
+        void BillboardParticleRenderer::CmdTextureSlices::doSet( void *target, const Ogre::String &val )
+        {
+            static_cast<BillboardParticleRenderer *>( target )->setTextureSlices(
+                Ogre::StringConverter::parseUnsignedInt( val ) );
         }
     }  // namespace v1
 }  // namespace Ogre

@@ -276,7 +276,7 @@ namespace Ogre
                 }
             }
 
-            itor = mMeshes.insert( std::pair<IdString, VoxelizedMesh>( meshName, voxelizedMesh ) ).first;
+            itor = mMeshes.emplace( meshName, voxelizedMesh ).first;
 
             sceneManager->destroyItem( tmpItem );
         }

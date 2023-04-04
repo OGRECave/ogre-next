@@ -386,15 +386,15 @@ struct Material
 @pset( texcoord, 0 )
 
 @piece( VStoPS_block )
-	@property( syntax == metal )
+	@property( syntax == metal || lower_gpu_overhead )
 		@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
-			ushort materialId [[flat]];
+			FLAT_INTERPOLANT( ushort materialId, @counter(texcoord) );
 		@end
 		@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
-			uint objLightMask [[flat]];
+			FLAT_INTERPOLANT( uint objLightMask, @counter(texcoord) );
 		@end
 		@property( use_planar_reflections )
-			ushort planarReflectionIdx [[flat]];
+			FLAT_INTERPOLANT( ushort planarReflectionIdx, @counter(texcoord) );
 		@end
 	@else
 		@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )

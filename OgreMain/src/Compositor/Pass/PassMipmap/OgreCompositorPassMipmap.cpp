@@ -215,8 +215,6 @@ namespace Ogre
                     paramLodIdx.name = "srcLodIdx";
                     ShaderParams::Param paramOutputSize;
                     paramOutputSize.name = "g_f4OutputSize";
-                    ShaderParams::Param paramDstLodIdx;
-                    paramDstLodIdx.name = "dstLodIdx";
 
                     ShaderParams *shaderParams = 0;
 
@@ -224,14 +222,10 @@ namespace Ogre
                     paramOutputSize.setManualValue( Vector4( (float)currWidth, (float)currHeight,
                                                              1.0f / (float)currWidth,
                                                              1.0f / (float)currHeight ) );
-                    paramDstLodIdx.setManualValue( (uint32)mip );
 
                     shaderParams = &blurH2->getShaderParams( "default" );
                     shaderParams->mParams.push_back( paramLodIdx );
                     shaderParams->mParams.push_back( paramOutputSize );
-                    shaderParams->setDirty();
-                    shaderParams = &blurH2->getShaderParams( "metal" );
-                    shaderParams->mParams.push_back( paramDstLodIdx );
                     shaderParams->setDirty();
 
                     blurH2->setProperty( "width_with_lod", static_cast<int32>( currWidth ) );
@@ -241,14 +235,10 @@ namespace Ogre
                     paramOutputSize.setManualValue( Vector4( (float)currWidth, (float)currHeight,
                                                              1.0f / (float)currWidth,
                                                              1.0f / (float)currHeight ) );
-                    paramDstLodIdx.setManualValue( (uint32)( mip + 1u ) );
 
                     shaderParams = &blurV2->getShaderParams( "default" );
                     shaderParams->mParams.push_back( paramLodIdx );
                     shaderParams->mParams.push_back( paramOutputSize );
-                    shaderParams->setDirty();
-                    shaderParams = &blurV2->getShaderParams( "metal" );
-                    shaderParams->mParams.push_back( paramDstLodIdx );
                     shaderParams->setDirty();
 
                     DescriptorSetTexture2::TextureSlot texSlot(

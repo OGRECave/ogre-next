@@ -87,6 +87,7 @@ namespace Ogre
     const IdString PbsProperty::MaterialsPerBuffer = IdString( "materials_per_buffer" );
     const IdString PbsProperty::LowerGpuOverhead = IdString( "lower_gpu_overhead" );
     const IdString PbsProperty::DebugPssmSplits = IdString( "debug_pssm_splits" );
+    const IdString PbsProperty::IndustryCompatible = IdString( "industry_compatible" );
     const IdString PbsProperty::PerceptualRoughness = IdString( "perceptual_roughness" );
     const IdString PbsProperty::HasPlanarReflections = IdString( "has_planar_reflections" );
 
@@ -204,6 +205,7 @@ namespace Ogre
     const IdString PbsProperty::BrdfDefault = IdString( "BRDF_Default" );
     const IdString PbsProperty::BrdfCookTorrance = IdString( "BRDF_CookTorrance" );
     const IdString PbsProperty::BrdfBlinnPhong = IdString( "BRDF_BlinnPhong" );
+    const IdString PbsProperty::FresnelHasDiffuse = IdString( "fresnel_has_diffuse" );
     const IdString PbsProperty::FresnelSeparateDiffuse = IdString( "fresnel_separate_diffuse" );
     const IdString PbsProperty::GgxHeightCorrelated = IdString( "GGX_height_correlated" );
     const IdString PbsProperty::ClearCoat = IdString( "clear_coat" );
@@ -323,6 +325,8 @@ namespace Ogre
         mUseObbRestraintAreaLtc( false ),
 #endif
         mUseLightBuffers( false ),
+        mIndustryCompatible( false ),
+        mDefaultBrdfWithDiffuseFresnel( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
         mAmbientLightMode( AmbientAuto )
@@ -783,8 +787,12 @@ namespace Ogre
         else if( ( brdf & PbsBrdf::BRDF_MASK ) == PbsBrdf::BlinnPhong )
             setProperty( PbsProperty::BrdfBlinnPhong, 1 );
 
-        if( brdf & PbsBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
-            setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
+        if( brdf & PbsBrdf::FLAG_HAS_DIFFUSE_FRESNEL )
+        {
+            setProperty( PbsProperty::FresnelHasDiffuse, 1 );
+            if( brdf & PbsBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
+                setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
+        }
 
         if( brdf & PbsBrdf::FLAG_LEGACY_MATH )
             setProperty( PbsProperty::LegacyMathBrdf, 1 );
@@ -878,7 +886,7 @@ namespace Ogre
                 if( datablock->getCubemapProbe() )
                     setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
                 setProperty( PbsProperty::EnvProbeMap,
-                             static_cast<int32>( reflectionTexture->getName().mHash ) );
+                             static_cast<int32>( reflectionTexture->getName().getU32Value() ) );
             }
         }
 
@@ -947,25 +955,25 @@ namespace Ogre
             if( isSigned )
             {
                 setProperty( PbsProperty::NormalSamplingFormat,
-                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
                 setProperty( PbsProperty::NormalRgSnorm,
-                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
             }
             else
             {
                 if( nmPixelFormat != PFG_BC3_UNORM )
                 {
                     setProperty( PbsProperty::NormalSamplingFormat,
-                                 static_cast<int32>( PbsProperty::NormalRgUnorm.mHash ) );
+                                 static_cast<int32>( PbsProperty::NormalRgUnorm.getU32Value() ) );
                     setProperty( PbsProperty::NormalRgUnorm,
-                                 static_cast<int32>( PbsProperty::NormalRgUnorm.mHash ) );
+                                 static_cast<int32>( PbsProperty::NormalRgUnorm.getU32Value() ) );
                 }
                 else
                 {
                     setProperty( PbsProperty::NormalSamplingFormat,
-                                 static_cast<int32>( PbsProperty::NormalBc3Unorm.mHash ) );
+                                 static_cast<int32>( PbsProperty::NormalBc3Unorm.getU32Value() ) );
                     setProperty( PbsProperty::NormalBc3Unorm,
-                                 static_cast<int32>( PbsProperty::NormalBc3Unorm.mHash ) );
+                                 static_cast<int32>( PbsProperty::NormalBc3Unorm.getU32Value() ) );
                 }
             }
         }
@@ -1562,6 +1570,8 @@ namespace Ogre
 
         if( !casterPass )
         {
+            if( mIndustryCompatible )
+                setProperty( PbsProperty::IndustryCompatible, 1 );
             if( mPerceptualRoughness )
                 setProperty( PbsProperty::PerceptualRoughness, 1 );
             if( mLightProfilesTexture )
@@ -1611,7 +1621,7 @@ namespace Ogre
                 if( firstColourTarget->getTextureType() == TextureTypes::TypeCube )
                 {
                     setProperty( PbsProperty::TargetEnvprobeMap,
-                                 static_cast<int32>( firstColourTarget->getName().mHash ) );
+                                 static_cast<int32>( firstColourTarget->getName().getU32Value() ) );
                 }
             }
 
@@ -3725,9 +3735,9 @@ namespace Ogre
             "brtfLutDfg.dds", GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
             TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, 0, poolId );
 
-        ltcMat0->scheduleTransitionTo( GpuResidency::Resident );
-        ltcMat1->scheduleTransitionTo( GpuResidency::Resident );
-        brtfLut2->scheduleTransitionTo( GpuResidency::Resident );
+        ltcMat0->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
+        ltcMat1->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
+        brtfLut2->scheduleTransitionTo( GpuResidency::Resident, nullptr, false, true );
 
         ltcMat0->waitForMetadata();
         ltcMat1->waitForMetadata();
@@ -3835,7 +3845,18 @@ namespace Ogre
         mUseObbRestraintAreaLtc = areaLtc;
     }
 #endif
+    //-----------------------------------------------------------------------------------
     void HlmsPbs::setUseLightBuffers( bool b ) { mUseLightBuffers = b; }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setDefaultBrdfWithDiffuseFresnel( bool bDefaultToDiffuseFresnel )
+    {
+        mDefaultBrdfWithDiffuseFresnel = bDefaultToDiffuseFresnel;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setIndustryCompatible( bool bIndustryCompatible )
+    {
+        mIndustryCompatible = bIndustryCompatible;
+    }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsPbs::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,

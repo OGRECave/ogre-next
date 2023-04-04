@@ -69,12 +69,9 @@ namespace Ogre
         size_t memSize = 0;
 
         // Tally up passes
-        Passes::const_iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            memSize += ( *i )->calculateSize();
-        }
+        for( Pass *pass : mPasses )
+            memSize += pass->calculateSize();
+
         return memSize;
     }
     //-----------------------------------------------------------------------------
@@ -411,11 +408,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------
     void Technique::removeAllPasses()
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
+        for( Pass *pass : mPasses )
         {
-            OGRE_DELETE *i;
+            OGRE_DELETE pass;
         }
         mPasses.clear();
     }
@@ -482,11 +477,9 @@ namespace Ogre
 
         // copy passes
         removeAllPasses();
-        Passes::const_iterator i, iend;
-        iend = rhs.mPasses.end();
-        for( i = rhs.mPasses.begin(); i != iend; ++i )
+        for( Pass *rpass : rhs.mPasses )
         {
-            Pass *p = OGRE_NEW Pass( this, ( *i )->getIndex(), *( *i ) );
+            Pass *p = OGRE_NEW Pass( this, rpass->getIndex(), *rpass );
             mPasses.push_back( p );
         }
         return *this;
@@ -548,35 +541,23 @@ namespace Ogre
     {
         assert( mIsSupported && "This technique is not supported" );
         // Load each pass
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->_prepare();
-        }
+        for( Pass *pass : mPasses )
+            pass->_prepare();
     }
     //-----------------------------------------------------------------------------
     void Technique::_unprepare()
     {
         // Unload each pass
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->_unprepare();
-        }
+        for( Pass *pass : mPasses )
+            pass->_unprepare();
     }
     //-----------------------------------------------------------------------------
     void Technique::_load()
     {
         assert( mIsSupported && "This technique is not supported" );
         // Load each pass
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->_load();
-        }
+        for( Pass *pass : mPasses )
+            pass->_load();
 
         if( mShadowCasterMaterial )
         {
@@ -595,12 +576,8 @@ namespace Ogre
     void Technique::_unload()
     {
         // Unload each pass
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->_unload();
-        }
+        for( Pass *pass : mPasses )
+            pass->_unload();
     }
     //-----------------------------------------------------------------------------
     bool Technique::isLoaded() const
@@ -611,12 +588,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Technique::setPointSize( Real ps )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setPointSize( ps );
-        }
+        for( Pass *pass : mPasses )
+            pass->setPointSize( ps );
     }
     //-----------------------------------------------------------------------
     void Technique::setAmbient( Real red, Real green, Real blue )
@@ -626,22 +599,14 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Technique::setAmbient( const ColourValue &ambient )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setAmbient( ambient );
-        }
+        for( Pass *pass : mPasses )
+            pass->setAmbient( ambient );
     }
     //-----------------------------------------------------------------------
     void Technique::setDiffuse( Real red, Real green, Real blue, Real alpha )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setDiffuse( red, green, blue, alpha );
-        }
+        for( Pass *pass : mPasses )
+            pass->setDiffuse( red, green, blue, alpha );
     }
     //-----------------------------------------------------------------------
     void Technique::setDiffuse( const ColourValue &diffuse )
@@ -651,12 +616,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Technique::setSpecular( Real red, Real green, Real blue, Real alpha )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setSpecular( red, green, blue, alpha );
-        }
+        for( Pass *pass : mPasses )
+            pass->setSpecular( red, green, blue, alpha );
     }
     //-----------------------------------------------------------------------
     void Technique::setSpecular( const ColourValue &specular )
@@ -666,12 +627,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Technique::setShininess( Real val )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setShininess( val );
-        }
+        for( Pass *pass : mPasses )
+            pass->setShininess( val );
     }
     //-----------------------------------------------------------------------
     void Technique::setSelfIllumination( Real red, Real green, Real blue )
@@ -681,63 +638,39 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Technique::setSelfIllumination( const ColourValue &selfIllum )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setSelfIllumination( selfIllum );
-        }
+        for( Pass *pass : mPasses )
+            pass->setSelfIllumination( selfIllum );
     }
     //-----------------------------------------------------------------------
     void Technique::setShadingMode( ShadeOptions mode )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setShadingMode( mode );
-        }
+        for( Pass *pass : mPasses )
+            pass->setShadingMode( mode );
     }
     //-----------------------------------------------------------------------
     void Technique::setFog( bool overrideScene, FogMode mode, const ColourValue &colour, Real expDensity,
                             Real linearStart, Real linearEnd )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setFog( overrideScene, mode, colour, expDensity, linearStart, linearEnd );
-        }
+        for( Pass *pass : mPasses )
+            pass->setFog( overrideScene, mode, colour, expDensity, linearStart, linearEnd );
     }
     //-----------------------------------------------------------------------
     void Technique::setSamplerblock( const HlmsSamplerblock &samplerblock )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setSamplerblock( samplerblock );
-        }
+        for( Pass *pass : mPasses )
+            pass->setSamplerblock( samplerblock );
     }
     // --------------------------------------------------------------------
     void Technique::setMacroblock( const HlmsMacroblock &macroblock )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setMacroblock( macroblock );
-        }
+        for( Pass *pass : mPasses )
+            pass->setMacroblock( macroblock );
     }
     // --------------------------------------------------------------------
     void Technique::setBlendblock( const HlmsBlendblock &blendblock )
     {
-        Passes::iterator i, iend;
-        iend = mPasses.end();
-        for( i = mPasses.begin(); i != iend; ++i )
-        {
-            ( *i )->setBlendblock( blendblock );
-        }
+        for( Pass *pass : mPasses )
+            pass->setBlendblock( blendblock );
     }
     // --------------------------------------------------------------------
     void Technique::setName( const String &name ) { mName = name; }
@@ -765,13 +698,11 @@ namespace Ogre
                                          const bool apply ) const
     {
         // iterate through passes and apply texture alias
-        Passes::const_iterator i, iend;
-        iend = mPasses.end();
         bool testResult = false;
 
-        for( i = mPasses.begin(); i != iend; ++i )
+        for( Pass *pass : mPasses )
         {
-            if( ( *i )->applyTextureAliases( aliasList, apply ) )
+            if( pass->applyTextureAliases( aliasList, apply ) )
                 testResult = true;
         }
 

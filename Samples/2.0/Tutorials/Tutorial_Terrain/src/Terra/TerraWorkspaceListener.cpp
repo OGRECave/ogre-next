@@ -119,16 +119,19 @@ namespace Ogre
         if( !m_terraNeedsRestoring )
             return;  // Nothing to restore
 
-        const CompositorPassDef *definition = pass->getDefinition();
-        if( definition->getType() != PASS_SCENE )
-            return;  // We don't care
+        if( pass )  // Can be nullptr if caller is a PASS_WARM_UP
+        {
+            const CompositorPassDef *definition = pass->getDefinition();
+            if( definition->getType() != PASS_SCENE )
+                return;  // We don't care
 
-        OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef *>( definition ) );
-        const CompositorPassSceneDef *sceneDef =
-            static_cast<const CompositorPassSceneDef *>( definition );
+            OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef *>( definition ) );
+            const CompositorPassSceneDef *sceneDef =
+                static_cast<const CompositorPassSceneDef *>( definition );
 
-        if( sceneDef->mShadowNodeRecalculation == SHADOW_NODE_CASTER_PASS )
-            return;  // passEarlyPreExecute handled this
+            if( sceneDef->mShadowNodeRecalculation == SHADOW_NODE_CASTER_PASS )
+                return;  // passPreExecute handled this
+        }
 
         const FastArray<Terra *> &linkedTerras = m_hlmsTerra->getLinkedTerras();
 

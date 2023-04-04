@@ -273,6 +273,15 @@ namespace Ogre
         */
         void load( DataStreamPtr &stream, const String &type = BLANKSTRING );
 
+        /// Same as load() as but we will try to find the codec by both magic numbers and extension
+        /// The original load() only allows to either use magic number OR name extension
+        /// This version tries both.
+        void load2( DataStreamPtr &stream, const String &filename );
+
+    protected:
+        void load( DataStreamPtr &stream, Codec *pCodec );
+
+    public:
         /** Save the image as a file.
         @remarks
             Saving and loading are implemented by back end (sometimes third

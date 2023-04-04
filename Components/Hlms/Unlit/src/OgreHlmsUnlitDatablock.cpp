@@ -229,9 +229,9 @@ namespace Ogre
             }
         }
 
-        if( mTextureHash != hash.mHash )
+        if( mTextureHash != hash.getU32Value() )
         {
-            mTextureHash = hash.mHash;
+            mTextureHash = hash.getU32Value();
             // static_cast<HlmsUnlit*>(mCreator)->requestSlot( mTextureHash, this );
         }
     }
@@ -415,6 +415,12 @@ namespace Ogre
     bool HlmsUnlitDatablock::getEnablePlanarReflection( uint8 textureUnit ) const
     {
         return mEnablePlanarReflection[textureUnit];
+    }
+    //-----------------------------------------------------------------------------------
+    bool HlmsUnlitDatablock::getDefaultGenerateMipmaps() const
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<HlmsUnlit *>( mCreator ) );
+        return static_cast<HlmsUnlit *>( mCreator )->getDefaultGenerateMipmaps();
     }
     //-----------------------------------------------------------------------------------
     ColourValue HlmsUnlitDatablock::getDiffuseColour() const { return ColourValue( 0, 0, 0, 0 ); }

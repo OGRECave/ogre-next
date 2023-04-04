@@ -62,6 +62,9 @@ namespace Ogre
 
         deleteFences( mFences.begin(), mFences.end() );
 
+        // Staging Buffers are already delayed (see mZeroRefStagingBuffers) so they can
+        // be deallocated immediately.
+        // BT_DYNAMIC_DEFAULT already signals this information so no extra info is required.
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         vaoManager->deallocateVbo( mVboPoolIdx, mInternalBufferStart, getMaxSize(), BT_DYNAMIC_DEFAULT,
                                    !mUploadOnly, true );

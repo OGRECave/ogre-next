@@ -62,6 +62,7 @@ add_filtered_std("Compositor/Pass/PassShadows")
 add_filtered_std("Compositor/Pass/PassStencil")
 add_filtered_std("Compositor/Pass/PassTargetBarrier")
 add_filtered_std("Compositor/Pass/PassUav")
+add_filtered_std("Compositor/Pass/PassWarmUp")
 add_filtered_std("Compute")
 add_filtered_std("debugbreak")
 add_filtered_std("Hash")
@@ -268,6 +269,7 @@ if (NOT WIN32)
 endif()
 
 list( APPEND THREAD_SOURCE_FILES
+	src/Threading/OgreSemaphore.cpp
 	src/Threading/OgreWaitableEvent.cpp
 )
 
@@ -276,6 +278,7 @@ list( APPEND THREAD_SOURCE_FILES
 set(THREAD_HEADER_FILES
 	include/Threading/OgreBarrier.h
 	include/Threading/OgreLightweightMutex.h
+	include/Threading/OgreSemaphore.h
 	include/Threading/OgreThreadDefines.h
 	include/Threading/OgreThreadHeaders.h
 	include/Threading/OgreThreads.h
@@ -480,12 +483,12 @@ ogre_config_lib(${OGRE_NEXT}Main TRUE)
 foreach(HEADER_FILE ${HEADER_FILES})
 	string(REGEX REPLACE "((${CMAKE_CURRENT_SOURCE_DIR}|${OGRE_BINARY_DIR})/)?(include|src)/" "" RELATIVE_HEADER_FILE ${HEADER_FILE})
 	string(REGEX MATCH "((.*)/)+" HEADER_SUBDIRECTORY ${RELATIVE_HEADER_FILE})
-	install(FILES ${HEADER_FILE} DESTINATION include/OGRE/${HEADER_SUBDIRECTORY})
+	install(FILES ${HEADER_FILE} DESTINATION include/${OGRE_NEXT_PREFIX}/${HEADER_SUBDIRECTORY})
 endforeach()
 
 install(FILES ${PLATFORM_HEADERS}
-  DESTINATION include/OGRE/${PLATFORM_HEADER_INSTALL}
+  DESTINATION include/${OGRE_NEXT_PREFIX}/${PLATFORM_HEADER_INSTALL}
 )
 install(FILES ${THREAD_HEADER_FILES}
-	DESTINATION include/OGRE/Threading
+	DESTINATION include/${OGRE_NEXT_PREFIX}/Threading
 )

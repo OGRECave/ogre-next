@@ -1168,8 +1168,8 @@ namespace Ogre
                     // Only parse if is used
                     if( mVarDescPointer[pointerCount - 1].uFlags & D3D_SVF_USED )
                     {
-                        mSlotMap.insert( std::make_pair( mVarDescPointer[pointerCount - 1].Name,
-                                                         mInterfaceSlots[interCount - 1] ) );
+                        mSlotMap.emplace( mVarDescPointer[pointerCount - 1].Name,
+                                          mInterfaceSlots[interCount - 1] );
 
                         /*
                         D3D11_SHADER_TYPE_DESC typeDesc;

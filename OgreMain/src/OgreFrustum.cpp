@@ -113,7 +113,7 @@ namespace Ogre
         Vector2 retVal;
 
         const RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
-        if(getProjectionType() == PT_PERSPECTIVE)
+        if( getProjectionType() == PT_PERSPECTIVE )
         {
             if( !renderSystem->isReverseDepth() )
             {
@@ -130,13 +130,13 @@ namespace Ogre
         {
             if( !renderSystem->isReverseDepth() )
             {
-                retVal.x = -nearPlane / ( farPlane - nearPlane );                // projectionA
-                retVal.y = Real( -1.0 ) / ( farPlane - nearPlane );              // projectionB
+                retVal.x = -nearPlane / ( farPlane - nearPlane );    // projectionA
+                retVal.y = Real( -1.0 ) / ( farPlane - nearPlane );  // projectionB
             }
             else
             {
-                retVal.x = farPlane / ( farPlane - nearPlane );                   // projectionA
-                retVal.y = Real( -1.0 ) / ( farPlane - nearPlane );               // projectionB
+                retVal.x = farPlane / ( farPlane - nearPlane );      // projectionA
+                retVal.y = Real( -1.0 ) / ( farPlane - nearPlane );  // projectionB
             }
         }
 
@@ -557,12 +557,12 @@ namespace Ogre
 
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         // Deal with orientation mode
-        mProjMatrix = mProjMatrix * Quaternion( Degree( mOrientationMode * 90.f ), Vector3::UNIT_Z );
+        mProjMatrix = mProjMatrix * Quaternion( getOrientationModeAngle(), Vector3::UNIT_Z );
 #endif
 
         RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
         // API specific for Gpu Programs
-        if( !mObliqueDepthProjection )
+        if( !mObliqueDepthProjection && !mCustomProjMatrix )
         {
             renderSystem->_makeRsProjectionMatrix( mProjMatrix, mProjMatrixRSDepth, mNearDist, mFarDist,
                                                    mProjType );
@@ -1413,6 +1413,11 @@ namespace Ogre
                      "Getting Frustrum orientation mode is not supported", __FUNCTION__ );
 #endif
         return mOrientationMode;
+    }
+    //---------------------------------------------------------------------
+    Radian Frustum::getOrientationModeAngle() const
+    {
+        return Radian( Real( mOrientationMode ) * Math::HALF_PI );
     }
 
 }  // namespace Ogre

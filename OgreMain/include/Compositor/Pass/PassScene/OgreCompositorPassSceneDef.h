@@ -74,6 +74,7 @@ namespace Ogre
     {
     public:
         /// Viewport's visibility mask while rendering our pass
+        /// Please don't write to this directly. Use setVisibilityMask()
         uint32 mVisibilityMask;
         /// Used by Forward+ to determine which lights should be used (via Light::setVisibilityFlags)
         uint32                  mLightVisibilityMask;

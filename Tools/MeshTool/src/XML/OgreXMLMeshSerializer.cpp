@@ -734,13 +734,13 @@ namespace v1 {
             if (readFaces)
             {
                 TiXmlElement* faces = smElem->FirstChildElement("faces");
-                int actualCount = 0;
+                size_t actualCount = 0;
                 for (TiXmlElement *faceElem = faces->FirstChildElement(); faceElem != 0; faceElem = faceElem->NextSiblingElement())
                 {
                         actualCount++;
                 }
                 const char *claimedCount_ = faces->Attribute("count");
-                if (claimedCount_ && StringConverter::parseInt(claimedCount_)!=actualCount)
+                if (claimedCount_ && StringConverter::parseSizeT(claimedCount_)!=actualCount)
                 {
                     LogManager::getSingleton().stream()
                         << "WARNING: face count (" << actualCount << ") " <<
@@ -789,30 +789,30 @@ namespace v1 {
                     {
                         if (use32BitIndexes)
                         {
-                            *pInt++ = StringConverter::parseInt(faceElem->Attribute("v1"));
+                            *pInt++ = StringConverter::parseUnsignedInt(faceElem->Attribute("v1"));
                             if(sm->operationType == OT_LINE_LIST)
                             {
-                                *pInt++ = StringConverter::parseInt(faceElem->Attribute("v2"));
+                                *pInt++ = StringConverter::parseUnsignedInt(faceElem->Attribute("v2"));
                             }
                             // only need all 3 vertices if it's a trilist or first tri
                             else if (sm->operationType == OT_TRIANGLE_LIST || firstTri)
                             {
-                                *pInt++ = StringConverter::parseInt(faceElem->Attribute("v2"));
-                                *pInt++ = StringConverter::parseInt(faceElem->Attribute("v3"));
+                                *pInt++ = StringConverter::parseUnsignedInt(faceElem->Attribute("v2"));
+                                *pInt++ = StringConverter::parseUnsignedInt(faceElem->Attribute("v3"));
                             }
                         }
                         else
                         {
-                            *pShort++ = StringConverter::parseInt(faceElem->Attribute("v1"));
+                            *pShort++ = StringConverter::parseUnsignedShort(faceElem->Attribute("v1"));
                             if(sm->operationType == OT_LINE_LIST)
                             {
-                                *pShort++ = StringConverter::parseInt(faceElem->Attribute("v2"));
+                                *pShort++ = StringConverter::parseUnsignedShort(faceElem->Attribute("v2"));
                             }
                             // only need all 3 vertices if it's a trilist or first tri
                             else if (sm->operationType == OT_TRIANGLE_LIST || firstTri)
                             {
-                                *pShort++ = StringConverter::parseInt(faceElem->Attribute("v2"));
-                                *pShort++ = StringConverter::parseInt(faceElem->Attribute("v3"));
+                                *pShort++ = StringConverter::parseUnsignedShort(faceElem->Attribute("v2"));
+                                *pShort++ = StringConverter::parseUnsignedShort(faceElem->Attribute("v3"));
                             }
                         }
                         firstTri = false;
@@ -855,11 +855,11 @@ namespace v1 {
         ARGB *pCol;
 
         const char *claimedVertexCount_ = mGeometryNode->Attribute("vertexcount");
-        ptrdiff_t claimedVertexCount = 0;
+        size_t claimedVertexCount = 0;
         if (claimedVertexCount_)
         {
                 claimedVertexCount =
-                        StringConverter::parseInt(claimedVertexCount_);
+                        StringConverter::parseSizeT(claimedVertexCount_);
         }
         // Skip empty 
         if (claimedVertexCount_ && claimedVertexCount <= 0) return;
@@ -937,7 +937,7 @@ namespace v1 {
             attrib = vbElem->Attribute("texture_coords");
             if (attrib && StringConverter::parseInt(attrib))
             {
-                unsigned short numTexCoords = StringConverter::parseInt(vbElem->Attribute("texture_coords"));
+                unsigned short numTexCoords = StringConverter::parseUnsignedShort(vbElem->Attribute("texture_coords"));
                 for (unsigned short tx = 0; tx < numTexCoords; ++tx)
                 {
                     // NB set is local to this buffer, but will be translated into a 
@@ -990,7 +990,7 @@ namespace v1 {
             } 
 
             // calculate how many vertexes there actually are
-            int actualVertexCount = 0;
+            size_t actualVertexCount = 0;
             for (TiXmlElement * vertexElem = vbElem->FirstChildElement(); vertexElem != 0; vertexElem = vertexElem->NextSiblingElement())
             {
                     actualVertexCount++;
@@ -1312,9 +1312,9 @@ namespace v1 {
         elem != 0; elem = elem->NextSiblingElement())
         {
             VertexBoneAssignment vba;
-            vba.vertexIndex = StringConverter::parseInt(
+            vba.vertexIndex = StringConverter::parseUnsignedInt(
                 elem->Attribute("vertexindex"));
-            vba.boneIndex = StringConverter::parseInt(
+            vba.boneIndex = StringConverter::parseUnsignedShort(
                 elem->Attribute("boneindex"));
             vba.weight= StringConverter::parseReal(
                 elem->Attribute("weight"));
@@ -1354,7 +1354,7 @@ namespace v1 {
             elem != 0; elem = elem->NextSiblingElement())
         {
             String meshName = elem->Attribute("name");
-            int index = StringConverter::parseInt(elem->Attribute("index"));
+            unsigned index = StringConverter::parseUnsignedInt(elem->Attribute("index"));
 
             sm->nameSubMesh(meshName, index);
         }
@@ -1370,9 +1370,9 @@ namespace v1 {
         elem != 0; elem = elem->NextSiblingElement())
         {
             VertexBoneAssignment vba;
-            vba.vertexIndex = StringConverter::parseInt(
+            vba.vertexIndex = StringConverter::parseUnsignedInt(
                 elem->Attribute("vertexindex"));
-            vba.boneIndex = StringConverter::parseInt(
+            vba.boneIndex = StringConverter::parseUnsignedShort(
                 elem->Attribute("boneindex"));
             vba.weight= StringConverter::parseReal(
                 elem->Attribute("weight"));
@@ -1638,9 +1638,9 @@ namespace v1 {
         while (faceListElem)
         {
             val = faceListElem->Attribute("submeshindex");
-            unsigned short subidx = StringConverter::parseUnsignedInt(val);
+            unsigned subidx = StringConverter::parseUnsignedInt(val);
             val = faceListElem->Attribute("numfaces");
-            unsigned short numFaces = StringConverter::parseUnsignedInt(val);
+            unsigned numFaces = StringConverter::parseUnsignedInt(val);
             if (numFaces)
             {
                 // use of 32bit indexes depends on submesh
@@ -1671,11 +1671,11 @@ namespace v1 {
                     else
                     {
                         val = faceElem->Attribute("v1");
-                        *pShort++ = StringConverter::parseUnsignedInt(val);
+                        *pShort++ = StringConverter::parseUnsignedShort(val);
                         val = faceElem->Attribute("v2");
-                        *pShort++ = StringConverter::parseUnsignedInt(val);
+                        *pShort++ = StringConverter::parseUnsignedShort(val);
                         val = faceElem->Attribute("v3");
-                        *pShort++ = StringConverter::parseUnsignedInt(val);
+                        *pShort++ = StringConverter::parseUnsignedShort(val);
                     }
                 }
             }
@@ -1698,7 +1698,7 @@ namespace v1 {
         for (TiXmlElement* elem = extremesNode->FirstChildElement();
              elem != 0; elem = elem->NextSiblingElement())
         {
-            int index = StringConverter::parseInt(elem->Attribute("index"));
+            unsigned index = StringConverter::parseUnsignedInt(elem->Attribute("index"));
 
             SubMesh *sm = m->getSubMesh(index);
             sm->extremityPoints.clear ();
@@ -2010,7 +2010,7 @@ namespace v1 {
                         "Required attribute 'poseindex' missing on poseref", 
                         "XMLMeshSerializer::readPoseKeyFrames");
                 }
-                unsigned short poseIndex = StringConverter::parseUnsignedInt(attr);
+                unsigned short poseIndex = StringConverter::parseUnsignedShort(attr);
                 Real influence = 1.0f;
                 attr = poseRefNode->Attribute("influence");
                 if (attr)

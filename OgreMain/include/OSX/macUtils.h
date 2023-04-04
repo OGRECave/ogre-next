@@ -25,6 +25,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+
+#ifndef _OgreMacUtils_H_
+#define _OgreMacUtils_H_
+
 #include <CoreFoundation/CoreFoundation.h>
 #include "../OgrePrerequisites.h"
 
@@ -44,3 +48,5 @@ namespace Ogre
     _OgreExport String macLogPath();
     _OgreExport void   mac_dispatchOneEvent();
 }  // namespace Ogre
+
+#endif

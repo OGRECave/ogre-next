@@ -186,8 +186,6 @@ namespace Ogre
         void writeVertexProgramRef( const Pass *pPass );
         void writeTessellationHullProgramRef( const Pass *pPass );
         void writeTessellationDomainProgramRef( const Pass *pPass );
-        void writeShadowCasterVertexProgramRef( const Pass *pPass );
-        void writeShadowCasterFragmentProgramRef( const Pass *pPass );
         void writeGeometryProgramRef( const Pass *pPass );
         void writeFragmentProgramRef( const Pass *pPass );
         void writeGpuProgramRef( const String &attrib, const GpuProgramPtr &program,

@@ -222,7 +222,7 @@ namespace Ogre
         for( size_t i = 0; i < maxArrayIndex; i++ )
         {
             arrayName = paramName + "[" + StringConverter::toString( i ) + "]";
-            map.insert( GpuConstantDefinitionMap::value_type( arrayName, arrayDef ) );
+            map.emplace( arrayName, arrayDef );
             // increment location
             arrayDef.physicalIndex += arrayDef.elementSize;
         }
@@ -3314,7 +3314,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void GpuProgramParameters::setSubroutine( size_t index, const String &subroutine )
     {
-        mSubroutineMap.insert( std::make_pair( index, subroutine ) );
+        mSubroutineMap.emplace( index, subroutine );
     }
     //---------------------------------------------------------------------------
     void GpuProgramParameters::setNamedAutoConstant( const String &name, AutoConstantType acType,

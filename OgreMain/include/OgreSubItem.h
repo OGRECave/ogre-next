@@ -84,6 +84,8 @@ namespace Ogre
         SubMesh      *mSubMesh;
         unsigned char mMaterialLodIndex;
 
+        void setupSkeleton();
+
     public:
         /** Accessor method to read mesh data.
          */

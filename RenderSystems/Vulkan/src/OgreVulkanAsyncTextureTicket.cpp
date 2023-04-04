@@ -69,7 +69,7 @@ namespace Ogre
             unmap();
 
         if( mVboName.mVboName )
-            mVaoManager->deallocateRawBuffer( mVboName );
+            mVaoManager->deallocateRawBuffer( mVboName, mStatus != Downloading );
 
         if( mAccurateFence )
         {
@@ -155,7 +155,8 @@ namespace Ogre
         }
         region.bufferImageHeight = 0;
 
-        region.imageSubresource.aspectMask = VulkanMappings::getImageAspect( mPixelFormatFamily );
+        region.imageSubresource.aspectMask =
+            VulkanMappings::getImageAspect( textureSrc->getPixelFormat() );
         region.imageSubresource.mipLevel = mipLevel;
         region.imageSubresource.baseArrayLayer = srcTextureBox.sliceStart;
         region.imageSubresource.layerCount = srcTextureBox.numSlices;

@@ -571,8 +571,18 @@ namespace Ogre
             return ( !useTables ) ? std::tan( fValue ) : TanTable( fValue );
         }
 
-        static inline Real DegreesToRadians( Real degrees ) { return degrees * fDeg2Rad; }
-        static inline Real RadiansToDegrees( Real radians ) { return radians * fRad2Deg; }
+        static inline Real DegreesToRadians( Real degrees )
+        {
+            OGRE_ASSERT_HIGH( fDeg2Rad != 0.0f &&
+                              "Ogre library static variables are initialized out of order" );
+            return degrees * fDeg2Rad;
+        }
+        static inline Real RadiansToDegrees( Real radians )
+        {
+            OGRE_ASSERT_HIGH( fRad2Deg != 0.0f &&
+                              "Ogre library static variables are initialized out of order" );
+            return radians * fRad2Deg;
+        }
 
         /** These functions used to set the assumed angle units (radians or degrees)
              expected when using the Angle type.

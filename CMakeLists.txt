@@ -46,8 +46,22 @@ if (APPLE AND NOT ANDROID)
   set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+  set(CMAKE_XCODE_ATTRIBUTE_USE_HEADERMAP NO)
 endif ()
 
+# This option needs to be set now
+# OgreAddTargets and OgreConfigTargets make use of OGRE_NEXT and OGRE_NEXT_PREFIX
+option(OGRE_USE_NEW_PROJECT_NAME
+	"Libraries containing Ogre name will be called OgreNext, e.g. 'OgreNext.dll' instead of 'Ogre.dll'"
+	FALSE)
+
+if( OGRE_USE_NEW_PROJECT_NAME )
+	set( OGRE_NEXT "OgreNext" )
+	set( OGRE_NEXT_PREFIX "OGRE-Next")
+else()
+	set( OGRE_NEXT "Ogre" )
+	set( OGRE_NEXT_PREFIX "OGRE" )
+endif()
 
 project(OGRE-Next)
 # capture ogre location, and at the same time hide legacy cache variables
@@ -125,7 +139,13 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
     endif()
   endif()
   if (OGRE_GCC_HAS_SSE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2")
+    if(CMAKE_GENERATOR STREQUAL "Xcode")
+      # XCode builds universal binaries, and generates too much warnings when -msse and -msse2 are passed to arm compiler
+      set(CMAKE_XCODE_ATTRIBUTE_ARCH_CXXFLAGS[arch=i386] "-msse -msse2")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} $(ARCH_CXXFLAGS)")
+    else()
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2")
+    endif ()
   endif ()
   # This is a set of sensible warnings that provide meaningful output
   set(OGRE_WARNING_FLAGS
@@ -282,16 +302,6 @@ if (APPLE AND OGRE_BUILD_RENDERSYSTEM_METAL)
   endif ()
 endif (APPLE AND OGRE_BUILD_RENDERSYSTEM_METAL)
 
-# This option needs to be set now
-option(OGRE_USE_NEW_PROJECT_NAME
-	"Libraries containing Ogre name will be called OgreNext, e.g. 'OgreNext.dll' instead of 'Ogre.dll'"
-	FALSE)
-if( OGRE_USE_NEW_PROJECT_NAME )
-	set( OGRE_NEXT "OgreNext" )
-else()
-	set( OGRE_NEXT "Ogre" )
-endif()
-
 # Find dependencies
 include(Dependencies)
 # definitions for samples
@@ -443,7 +453,7 @@ cmake_dependent_option(OGRE_STATIC "Static build" FALSE "" TRUE)
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_D3D11 "Build Direct3D11 RenderSystem" TRUE "WIN32;DirectX11_FOUND OR WINDOWS_STORE OR WINDOWS_PHONE" FALSE)
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_GL3PLUS "Build OpenGL 3+ RenderSystem" TRUE "OPENGL_FOUND; NOT OGRE_BUILD_RENDERSYSTEM_GLES; NOT OGRE_BUILD_RENDERSYSTEM_GLES2;NOT WINDOWS_STORE;NOT WINDOWS_PHONE;NOT OGRE_BUILD_PLATFORM_APPLE_IOS" FALSE)
 cmake_dependent_option(OGRE_GLSUPPORT_USE_EGL_HEADLESS "Use EGL. Required if you want to use GL3+ headless support (e.g. rendering on the Cloud without X11). If more than one GLSUPPORT is enabled, interface can be selected at runtime" FALSE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;EGL_FOUND" FALSE)
-if( UNIX AND (NOT OGRE_BUILD_RENDERSYSTEM_GL3PLUS OR OGRE_GLSUPPORT_USE_EGL_HEADLESS) )
+if( UNIX AND NOT APPLE AND (NOT OGRE_BUILD_RENDERSYSTEM_GL3PLUS OR OGRE_GLSUPPORT_USE_EGL_HEADLESS) )
 	option(OGRE_CONFIG_UNIX_NO_X11 "Avoid X11 dependencies as much as possible. OGRE_GLSUPPORT_USE_GLX & OGRE_VULKAN_WINDOW_XCB won't be available" FALSE)
 endif()
 cmake_dependent_option(OGRE_GLSUPPORT_USE_GLX "Use GLX (Default / Native window). If more than one GLSUPPORT is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;UNIX;NOT APPLE;NOT OGRE_CONFIG_UNIX_NO_X11" FALSE)
@@ -470,6 +480,8 @@ if( APPLE )
     option(OGRE_BUILD_RENDERSYSTEM_METAL "Build Metal RenderSystem (Apple only)" TRUE)
 endif()
 option(OGRE_BUILD_PLUGIN_PFX "Build ParticleFX plugin" TRUE)
+
+option(OGRE_IDSTRING_USE_128 "Ogre will use 128 for IdString to reduce chances of collisions. Use this if you have approximately >= 10.000 meshes or materials" FALSE)
 
 option( OGRE_ADDRESS_SANITIZER_ASAN "Build with Asan (Address Sanitizer)" OFF )
 
@@ -585,6 +597,8 @@ endif ()
 # to potentially speed up the compilation.
 option(OGRE_UNITY_BUILD "Enable unity build for Ogre." FALSE)
 set(OGRE_UNITY_FILES_PER_UNIT "50" CACHE STRING "Number of files per compilation unit in Unity build.")
+
+option(OGRE_PROFILING_TEXTURES "Enables profiling of texture loading. This is independent from OGRE_PROFILING_PROVIDER. Overhead is low so you may want to enable it without much worrying about performance." FALSE)
 
 set( OGRE_PROFILING_PROVIDER "none" CACHE STRING
 	"Enable profiling of Ogre for performance analysis. Profiling has a performance

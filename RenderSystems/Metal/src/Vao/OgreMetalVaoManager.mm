@@ -138,19 +138,19 @@ namespace Ogre
         // On iOS alignment must match "the maximum accessed object" type. e.g.
         // if it's all float, then alignment = 4. if it's a float2, then alignment = 8.
         // The max. object is float4, so alignment = 16
-#if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0
         mConstBufferAlignment = 16;
         mTexBufferAlignment = 16;
-#else
+#    else
         mConstBufferAlignment = 256;
         mTexBufferAlignment = 256;
-#endif
+#    endif
 
         // Keep pools of 16MB for static buffers
         mDefaultPoolSize[CPU_INACCESSIBLE] = 16 * 1024 * 1024;
 
         mDefaultPoolSize[CPU_ACCESSIBLE_SHARED] = 16 * 1024 * 1024;
-        
+
         // Keep pools of 4MB each for dynamic buffers
         for( size_t i = CPU_ACCESSIBLE_DEFAULT; i <= CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 4 * 1024 * 1024;
@@ -166,7 +166,7 @@ namespace Ogre
         mDefaultPoolSize[CPU_INACCESSIBLE] = 32 * 1024 * 1024;
 
         mDefaultPoolSize[CPU_ACCESSIBLE_SHARED] = 32 * 1024 * 1024;
-        
+
         // Keep pools of 4MB each for dynamic buffers
         for( size_t i = CPU_ACCESSIBLE_DEFAULT; i <= CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 4 * 1024 * 1024;
@@ -210,8 +210,8 @@ namespace Ogre
         OGRE_FREE_SIMD( drawIdPtr, MEMCATEGORY_GEOMETRY );
         drawIdPtr = 0;
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS && TARGET_OS_SIMULATOR == 1
-        uint32 *drawIdPtr = static_cast<uint32 *>(
-            OGRE_MALLOC_SIMD( maxNumInstances * 256u, MEMCATEGORY_GEOMETRY ) );
+        uint32 *drawIdPtr =
+            static_cast<uint32 *>( OGRE_MALLOC_SIMD( maxNumInstances * 256u, MEMCATEGORY_GEOMETRY ) );
         for( uint32 i = 0; i < maxNumInstances; ++i )
         {
             drawIdPtr[64u * i] = i;
@@ -259,10 +259,9 @@ namespace Ogre
     void MetalVaoManager::createUnalignedCopyShader()
     {
         NSError *error;
-        id<MTLLibrary> library = [mDevice->mDevice
-            newLibraryWithSource:[NSString stringWithUTF8String:c_gpuMemcpyComputeShader]
-                         options:nil
-                           error:&error];
+        id<MTLLibrary> library = [mDevice->mDevice newLibraryWithSource:@( c_gpuMemcpyComputeShader )
+                                                                options:nil
+                                                                  error:&error];
 
         if( !library )
         {

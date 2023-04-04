@@ -143,7 +143,7 @@ int main( int argc, const char *argv[] )
     }
 
     const uint32_t width = faceImage.getWidth();
-    const uint32_t height = faceImage.getWidth();
+    const uint32_t height = faceImage.getHeight();
     const PixelFormatGpu pixelFormat = faceImage.getPixelFormat();
 
     uint8_t numMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( width, height );

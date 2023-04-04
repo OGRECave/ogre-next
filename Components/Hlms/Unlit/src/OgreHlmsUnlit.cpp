@@ -85,6 +85,7 @@ namespace Ogre
         mLastDescSampler( 0 ),
         mConstantBiasScale( 0.1f ),
         mUsingInstancedStereo( false ),
+        mDefaultGenerateMipmaps( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
         mTexUnitSlotStart( 2u ),
@@ -677,8 +678,8 @@ namespace Ogre
 
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         identityProjMat =
-            identityProjMat * Quaternion( Degree( cameras.renderingCamera->getOrientationMode() * 90.f ),
-                                          Vector3::UNIT_Z );
+            identityProjMat *
+            Quaternion( cameras.renderingCamera->getOrientationModeAngle(), Vector3::UNIT_Z );
 #endif
 
         if( !isInstancedStereo )
@@ -1094,6 +1095,11 @@ namespace Ogre
     {
         assert( K != 0 && "A value of K = 0 is invalid!" );
         mEsmK = K;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::setDefaultGenerateMipmaps( bool bDefaultGenerateMips )
+    {
+        mDefaultGenerateMipmaps = bDefaultGenerateMips;
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )

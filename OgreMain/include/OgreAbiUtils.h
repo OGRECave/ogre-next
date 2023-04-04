@@ -83,6 +83,7 @@ namespace Ogre
         data.push_back( OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR );
         data.push_back( OGRE_THREAD_SUPPORT );
         data.push_back( OGRE_THREAD_PROVIDER );
+        data.push_back( OGRE_HASH_BITS );
         data.push_back( OGRE_VERSION );
 
         OGRE_HASH128_FUNC( data.begin(), static_cast<int>( data.size() * sizeof( uint32 ) ),

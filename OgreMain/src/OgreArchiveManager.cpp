@@ -130,7 +130,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ArchiveManager::addArchiveFactory( ArchiveFactory *factory )
     {
-        mArchFactories.insert( ArchiveFactoryMap::value_type( factory->getType(), factory ) );
+        mArchFactories.emplace( factory->getType(), factory );
         LogManager::getSingleton().logMessage( "ArchiveFactory for archive type " + factory->getType() +
                                                " registered." );
     }

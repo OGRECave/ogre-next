@@ -150,7 +150,7 @@
 
 			//Point light
 			midf3 tmpColour =
-				BRDF( midf3_c( lightDir ), midf3_c( lightDiffuse.xyz ), lightSpecular, pixelData );
+				BRDF( midf3_c( lightDir ), midf3_c( lightDiffuse.xyz ), lightSpecular, pixelData PASSBUF_ARG );
 			finalColour += tmpColour * atten;
 		}
 	}
@@ -212,7 +212,7 @@
 			if( spotCosAngle >= spotParams.y )
 			{
 				midf3 tmpColour =
-					BRDF( midf3_c( lightDir ), midf3_c( lightDiffuse.xyz ), lightSpecular, pixelData );
+					BRDF( midf3_c( lightDir ), midf3_c( lightDiffuse.xyz ), lightSpecular, pixelData PASSBUF_ARG );
 				finalColour += tmpColour * atten;
 			}
 		}

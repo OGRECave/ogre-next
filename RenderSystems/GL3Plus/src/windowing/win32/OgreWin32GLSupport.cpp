@@ -114,7 +114,7 @@ namespace Ogre
             mDevModes.push_back( DevMode );
             StringStream str;
             str << DevMode.dmPelsWidth << " x " << DevMode.dmPelsHeight;
-            optVideoMode.possibleValues.push_back( str.str() );
+            optVideoMode.possibleValues.emplace_back( str.str() );
         }
         remove_duplicates( optVideoMode.possibleValues );
         optVideoMode.currentValue = optVideoMode.possibleValues.front();

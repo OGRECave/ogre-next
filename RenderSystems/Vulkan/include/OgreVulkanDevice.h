@@ -122,6 +122,8 @@ namespace Ogre
 
         bool mIsExternal;
 
+        void fillDeviceFeatures();
+
         static void destroyQueues( FastArray<VulkanQueue> &queueArray );
 
         void findGraphicsQueue( FastArray<uint32> &inOutUsedQueueCount );

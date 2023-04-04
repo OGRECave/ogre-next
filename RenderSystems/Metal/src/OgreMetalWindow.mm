@@ -499,7 +499,7 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+            mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
                                                mDepthBuffer->getPixelFormat() );
         }
         else
@@ -584,7 +584,7 @@ namespace Ogre
         }
         else if( name == "UIView" )
         {
-            *static_cast<void **>( pData ) = (void *)CFBridgingRetain( mMetalView );
+            *static_cast<const void **>( pData ) = (const void *)CFBridgingRetain( mMetalView );
         }
         else
         {

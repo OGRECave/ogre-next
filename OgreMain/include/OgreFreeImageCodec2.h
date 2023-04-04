@@ -76,6 +76,10 @@ namespace Ogre
         /// @copydoc Codec::magicNumberToFileExt
         String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const override;
 
+        /// @copydoc Codec::validateMagicNumber
+        ValidationStatus validateMagicNumber( const char *magicNumberPtr,
+                                              size_t      maxbytes ) const override;
+
         /// Static method to startup FreeImage and register the FreeImage codecs
         static void startup();
         /// Static method to shutdown FreeImage and unregister the FreeImage codecs

@@ -317,11 +317,11 @@ namespace Ogre
         // because those are not on the horizon.
         if( a <= b )
         {
-            edges.push_back( CHEdgeList::value_type( a, b ) );
+            edges.emplace_back( a, b );
         }
         else
         {
-            edges.push_back( CHEdgeList::value_type( b, a ) );
+            edges.emplace_back( b, a );
         }
     }
 

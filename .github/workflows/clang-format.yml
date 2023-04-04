@@ -1,0 +1,25 @@
+name: Clang-Format Check
+
+# Controls when the action will run.
+on:
+  push:
+    branches:  'master'
+
+  # Run for all pull requests
+  pull_request:
+    branches: 'master'
+    types: [opened, synchronize, reopened]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  ClangFormat:
+      runs-on: ubuntu-22.04
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Clang-Format Check
+          working-directory: ./.github/workflows/
+          run: python3 run_clang_format.py
+          #env:
+          #  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # run: ./run_clang_format.sh ${{ github.event_name }} ${{ github.event.pull_request.base.sha }}

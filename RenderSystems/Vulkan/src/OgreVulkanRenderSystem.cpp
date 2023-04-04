@@ -226,7 +226,7 @@ namespace Ogre
                 initializeExternalVkInstance( externalInstance );
 
 #ifndef OGRE_VULKAN_WINDOW_NULL
-                VulkanSupport *vulkanSupport = OGRE_NEW VulkanSupport();
+                VulkanSupport *vulkanSupport = new VulkanSupport();
                 vulkanSupport->setSupported();
                 mAvailableVulkanSupports[vulkanSupport->getInterfaceName()] = vulkanSupport;
                 mVulkanSupport = vulkanSupport;
@@ -263,7 +263,7 @@ namespace Ogre
 
         while( itor != endt )
         {
-            OGRE_DELETE itor->second;
+            delete itor->second;
             ++itor;
         }
 
@@ -1910,7 +1910,11 @@ namespace Ogre
         }
         else
         {
-            VkSampler textureSampler = reinterpret_cast<VkSampler>( samplerblock->mRsData );
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
+            VkSampler textureSampler = static_cast<VkSampler>( samplerblock->mRsData );
+#else // VK handles are always 64bit, even on 32bit systems
+            VkSampler textureSampler = *static_cast<VkSampler*>( samplerblock->mRsData );
+#endif
             if( mGlobalTable.samplers[texUnit].sampler != textureSampler )
             {
                 mGlobalTable.samplers[texUnit].sampler = textureSampler;
@@ -2365,7 +2369,10 @@ namespace Ogre
         return &mPixelFormatToShaderType;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushCommands() {}
+    void VulkanRenderSystem::flushCommands()
+    {
+        mActiveDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::beginProfileEvent( const String &eventName ) {}
     //-------------------------------------------------------------------------
@@ -2906,9 +2913,6 @@ namespace Ogre
                             c_srcValidAccessFlags;
                     }
 
-                    imageBarrier.dstAccessMask = VulkanMappings::getAccessFlags(
-                        itor->newLayout, itor->newAccess, texture, true );
-
                     if( itor->oldLayout != ResourceLayout::Texture &&
                         itor->oldLayout != ResourceLayout::Uav )
                     {
@@ -2918,6 +2922,9 @@ namespace Ogre
                     if( itor->oldStageMask != 0u )
                         srcStage |= ogreToVkStageFlags( itor->oldStageMask );
                 }
+
+                imageBarrier.dstAccessMask =
+                    VulkanMappings::getAccessFlags( itor->newLayout, itor->newAccess, texture, true );
 
                 if( itor->newLayout != ResourceLayout::Texture &&
                     itor->newLayout != ResourceLayout::Uav )
@@ -3387,13 +3394,22 @@ namespace Ogre
             vkCreateSampler( mActiveDevice->mDevice, &samplerDescriptor, 0, &textureSampler );
         checkVkResult( result, "vkCreateSampler" );
 
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         newBlock->mRsData = textureSampler;
+#else // VK handles are always 64bit, even on 32bit systems
+        newBlock->mRsData = new uint64(textureSampler);
+#endif
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsSamplerblockDestroyed( HlmsSamplerblock *block )
     {
         assert( block->mRsData );
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         VkSampler textureSampler = static_cast<VkSampler>( block->mRsData );
+#else // VK handles are always 64bit, even on 32bit systems
+        VkSampler textureSampler = *static_cast<VkSampler*>( block->mRsData );
+        delete (uint64*)block->mRsData;
+#endif
         delayed_vkDestroySampler( mVaoManager, mActiveDevice->mDevice, textureSampler, 0 );
     }
     //-------------------------------------------------------------------------

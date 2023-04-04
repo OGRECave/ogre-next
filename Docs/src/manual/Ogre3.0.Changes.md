@@ -41,3 +41,9 @@ but will be turned on by default in OgreNext 4.0**
 `EmptyProject`'s and Android's scripts have been updated to autodetect which name is being used and select between Ogre and OgreNext and CMake config time.
 
 Make sure to upgrade to latest CMake scripts if you're using them; to be ready for all changes.
+
+## PBS Changes in 3.0
+
+Default material BRDF settings have changed in 3.0; thus materials will look different.
+
+See [PBR / PBS Changes in 3.0](@ref PBSChangesIn30) to how make them look like they did in 2.4 and what these changes mean.

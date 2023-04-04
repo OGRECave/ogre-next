@@ -72,12 +72,9 @@ namespace Ogre
     ResourceGroupManager::~ResourceGroupManager()
     {
         // delete all resource groups
-        ResourceGroupMap::iterator i, iend;
-        iend = mResourceGroupMap.end();
-        for( i = mResourceGroupMap.begin(); i != iend; ++i )
-        {
-            deleteGroup( i->second );
-        }
+        for( ResourceGroupMap::value_type &rge : mResourceGroupMap )
+            deleteGroup( rge.second );
+
         mResourceGroupMap.clear();
     }
     //-----------------------------------------------------------------------
@@ -97,7 +94,7 @@ namespace Ogre
         grp->groupStatus = ResourceGroup::UNINITIALSED;
         grp->name = name;
         grp->inGlobalPool = inGlobalPool;
-        mResourceGroupMap.insert( ResourceGroupMap::value_type( name, grp ) );
+        mResourceGroupMap.emplace( name, grp );
     }
     //-----------------------------------------------------------------------
     class ScopedCLocale
@@ -109,6 +106,7 @@ namespace Ogre
         ScopedCLocale( bool changeLocaleTemporarily ) :
             mChangeLocaleTemporarily( changeLocaleTemporarily )
         {
+            memset( mSavedLocale, 0, sizeof( mSavedLocale ) );
             if( mChangeLocaleTemporarily )
             {
                 const char *currentLocale = setlocale( LC_NUMERIC, 0 );
@@ -166,11 +164,9 @@ namespace Ogre
         ScopedCLocale scopedCLocale( changeLocaleTemporarily );
 
         // Intialise all declared resource groups
-        ResourceGroupMap::iterator i, iend;
-        iend = mResourceGroupMap.end();
-        for( i = mResourceGroupMap.begin(); i != iend; ++i )
+        for( ResourceGroupMap::value_type &rge : mResourceGroupMap )
         {
-            ResourceGroup *grp = i->second;
+            ResourceGroup *grp = rge.second;
             OGRE_LOCK_MUTEX( grp->OGRE_AUTO_MUTEX_NAME );  // lock group mutex
             if( grp->groupStatus == ResourceGroup::UNINITIALSED )
             {
@@ -179,7 +175,7 @@ namespace Ogre
                 // Set current group
                 mCurrentGroup = grp;
                 parseResourceGroupScripts( grp );
-                LogManager::getSingleton().logMessage( "Creating resources for group " + i->first );
+                LogManager::getSingleton().logMessage( "Creating resources for group " + rge.first );
                 createDeclaredResources( grp );
                 grp->groupStatus = ResourceGroup::INITIALISED;
                 LogManager::getSingleton().logMessage( "All done" );
@@ -1022,7 +1018,7 @@ namespace Ogre
     {
         OGRE_LOCK_AUTO_MUTEX;
 
-        mScriptLoaderOrderMap.insert( ScriptLoaderOrderMap::value_type( su->getLoadingOrder(), su ) );
+        mScriptLoaderOrderMap.emplace( su->getLoadingOrder(), su );
     }
     //-----------------------------------------------------------------------
     void ResourceGroupManager::_unregisterScriptLoader( ScriptLoader *su )
@@ -1540,12 +1536,8 @@ namespace Ogre
     {
         OGRE_LOCK_AUTO_MUTEX;
 
-        ResourceManagerMap::iterator i, iend;
-        iend = mResourceManagerMap.end();
-        for( i = mResourceManagerMap.begin(); i != iend; ++i )
-        {
-            i->second->removeAll();
-        }
+        for( ResourceManagerMap::value_type &rme : mResourceManagerMap )
+            rme.second->removeAll();
     }
     //-----------------------------------------------------------------------
     StringVectorPtr ResourceGroupManager::listResourceNames( const String &groupName, bool dirs )
@@ -1566,11 +1558,9 @@ namespace Ogre
         OGRE_LOCK_MUTEX( grp->OGRE_AUTO_MUTEX_NAME );  // lock group mutex
 
         // Iterate over the archives
-        LocationList::iterator i, iend;
-        iend = grp->locationList.end();
-        for( i = grp->locationList.begin(); i != iend; ++i )
+        for( ResourceLocation *loc : grp->locationList )
         {
-            StringVectorPtr lst = ( *i )->archive->list( ( *i )->recursive, dirs );
+            StringVectorPtr lst = loc->archive->list( loc->recursive, dirs );
             vec->insert( vec->end(), lst->begin(), lst->end() );
         }
 
@@ -1595,11 +1585,9 @@ namespace Ogre
         OGRE_LOCK_MUTEX( grp->OGRE_AUTO_MUTEX_NAME );  // lock group mutex
 
         // Iterate over the archives
-        LocationList::iterator i, iend;
-        iend = grp->locationList.end();
-        for( i = grp->locationList.begin(); i != iend; ++i )
+        for( ResourceLocation *loc : grp->locationList )
         {
-            FileInfoListPtr lst = ( *i )->archive->listFileInfo( ( *i )->recursive, dirs );
+            FileInfoListPtr lst = loc->archive->listFileInfo( loc->recursive, dirs );
             vec->insert( vec->end(), lst->begin(), lst->end() );
         }
 
@@ -1625,11 +1613,9 @@ namespace Ogre
         OGRE_LOCK_MUTEX( grp->OGRE_AUTO_MUTEX_NAME );  // lock group mutex
 
         // Iterate over the archives
-        LocationList::iterator i, iend;
-        iend = grp->locationList.end();
-        for( i = grp->locationList.begin(); i != iend; ++i )
+        for( ResourceLocation *loc : grp->locationList )
         {
-            StringVectorPtr lst = ( *i )->archive->find( pattern, ( *i )->recursive, dirs );
+            StringVectorPtr lst = loc->archive->find( pattern, loc->recursive, dirs );
             vec->insert( vec->end(), lst->begin(), lst->end() );
         }
 
@@ -1655,11 +1641,9 @@ namespace Ogre
         OGRE_LOCK_MUTEX( grp->OGRE_AUTO_MUTEX_NAME );  // lock group mutex
 
         // Iterate over the archives
-        LocationList::iterator i, iend;
-        iend = grp->locationList.end();
-        for( i = grp->locationList.begin(); i != iend; ++i )
+        for( ResourceLocation *loc : grp->locationList )
         {
-            FileInfoListPtr lst = ( *i )->archive->findFileInfo( pattern, ( *i )->recursive, dirs );
+            FileInfoListPtr lst = loc->archive->findFileInfo( pattern, loc->recursive, dirs );
             vec->insert( vec->end(), lst->begin(), lst->end() );
         }
 
@@ -1840,12 +1824,8 @@ namespace Ogre
         OGRE_LOCK_MUTEX( grp->OGRE_AUTO_MUTEX_NAME );  // lock group mutex
 
         // Iterate over the archives
-        LocationList::iterator i, iend;
-        iend = grp->locationList.end();
-        for( i = grp->locationList.begin(); i != iend; ++i )
-        {
-            vec->push_back( ( *i )->archive->getName() );
-        }
+        for( ResourceLocation *loc : grp->locationList )
+            vec->push_back( loc->archive->getName() );
 
         return vec;
     }
@@ -1868,11 +1848,9 @@ namespace Ogre
         OGRE_LOCK_MUTEX( grp->OGRE_AUTO_MUTEX_NAME );  // lock group mutex
 
         // Iterate over the archives
-        LocationList::iterator i, iend;
-        iend = grp->locationList.end();
-        for( i = grp->locationList.begin(); i != iend; ++i )
+        for( ResourceLocation *loc : grp->locationList )
         {
-            String location = ( *i )->archive->getName();
+            String location = loc->archive->getName();
             // Search for the pattern
             if( StringUtil::match( location, pattern ) )
             {

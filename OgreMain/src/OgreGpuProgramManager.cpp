@@ -280,7 +280,7 @@ namespace Ogre
         MicrocodeMap::iterator foundIter = mMicrocodeCache.find( hash );
         if( foundIter == mMicrocodeCache.end() )
         {
-            mMicrocodeCache.insert( std::make_pair( hash, microcode ) );
+            mMicrocodeCache.emplace( hash, microcode );
             // if cache is modified, mark it as dirty.
             mCacheDirty = true;
         }
@@ -362,7 +362,7 @@ namespace Ogre
             microcodeOfShader->seek( 0 );
             stream->read( microcodeOfShader->getPtr(), microcodeLength );
 
-            mMicrocodeCache.insert( std::make_pair( shaderHash, microcodeOfShader ) );
+            mMicrocodeCache.emplace( shaderHash, microcodeOfShader );
         }
 
         // if cache is not modified, mark it as clean.

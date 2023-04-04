@@ -305,7 +305,7 @@ namespace Ogre
 
                     }
                     else
-                        capabilitiesLines.push_back(CapabilitiesLinesList::value_type(line, mCurrentLineNumber));
+                        capabilitiesLines.emplace_back( line, mCurrentLineNumber );
                 break;
 
             }

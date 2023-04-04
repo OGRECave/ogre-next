@@ -283,9 +283,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     MTLVertexFormat MetalMappings::dataTypeToVertexFormat( MTLDataType dataType )
     {
+        // clang-format off
         switch( dataType )
         {
-            // clang-format off
         case MTLDataTypeNone:           return MTLVertexFormatInvalid;
         case MTLDataTypeStruct:         return MTLVertexFormatInvalid;
         case MTLDataTypeArray:          return MTLVertexFormatInvalid;
@@ -358,10 +358,10 @@ namespace Ogre
         case MTLDataTypeBool2:          return MTLVertexFormatFloat2;
         case MTLDataTypeBool3:          return MTLVertexFormatFloat3;
         case MTLDataTypeBool4:          return MTLVertexFormatFloat4;
-            // clang-format on
-        }
 
-        return MTLVertexFormatInvalid;
+        default:                        return MTLVertexFormatInvalid;
+        }
+        // clang-format on
     }
     //-----------------------------------------------------------------------------------
     MTLPixelFormat MetalMappings::get( PixelFormatGpu pf, MetalDevice *device )
@@ -632,9 +632,9 @@ namespace Ogre
         case MTLDataTypeBool2:          return GCT_BOOL2;
         case MTLDataTypeBool3:          return GCT_BOOL3;
         case MTLDataTypeBool4:          return GCT_BOOL4;
+
+        default:                        return GCT_UNKNOWN;
         }
         // clang-format on
-
-        return GCT_UNKNOWN;
     }
 }

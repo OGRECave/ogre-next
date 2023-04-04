@@ -74,12 +74,8 @@ namespace Ogre
                 mCreator->notifyStaticDirty( this );
 
             // Now apply the same state to all our attachments.
-            ObjectVec::const_iterator itor = mAttachments.begin();
-            ObjectVec::const_iterator endt = mAttachments.end();
-
-            while( itor != endt )
+            for( MovableObject *obj : mAttachments )
             {
-                MovableObject *obj = *itor;
                 if( obj->isStatic() != ourCurrentStatus )
                 {
                     bool result = obj->setStatic( bStatic );
@@ -95,7 +91,6 @@ namespace Ogre
                             "SceneNode::setStatic" );
                     }
                 }
-                ++itor;
             }
         }
 
@@ -107,11 +102,8 @@ namespace Ogre
         if( mCreator )
         {
             // All our attachments are dirty now.
-            ObjectVec::const_iterator itor = mAttachments.begin();
-            ObjectVec::const_iterator endt = mAttachments.end();
-
-            while( itor != endt )
-                mCreator->notifyStaticAabbDirty( *itor++ );
+            for( MovableObject *obj : mAttachments )
+                mCreator->notifyStaticAabbDirty( obj );
         }
     }
     //-----------------------------------------------------------------------
@@ -215,9 +207,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void SceneNode::detachAllObjects()
     {
-        ObjectVec::iterator itr;
-        for( itr = mAttachments.begin(); itr != mAttachments.end(); ++itr )
-            ( *itr )->_notifyAttached( (SceneNode *)0 );
+        for( MovableObject *obj : mAttachments )
+            obj->_notifyAttached( (SceneNode *)0 );
         mAttachments.clear();
     }
     //-----------------------------------------------------------------------
@@ -245,53 +236,21 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void SceneNode::detachAllBones()
     {
-        BonesPerSkeletonInstance::const_iterator itSkeletons = mBoneChildren.begin();
-        BonesPerSkeletonInstance::const_iterator enSkeletons = mBoneChildren.end();
-
-        while( itSkeletons != enSkeletons )
-        {
-            BoneVec::const_iterator itBone = itSkeletons->second.begin();
-            BoneVec::const_iterator enBone = itSkeletons->second.end();
-
-            while( itBone != enBone )
-            {
-                itSkeletons->first->setSceneNodeAsParentOfBone( *itBone, 0 );
-                ++itBone;
-            }
-
-            ++itSkeletons;
-        }
+        for( BonesPerSkeletonInstance::value_type &skeletonBones : mBoneChildren )
+            for( Bone *bone : skeletonBones.second )
+                skeletonBones.first->setSceneNodeAsParentOfBone( bone, 0 );
 
         mBoneChildren.clear();
     }
     //-----------------------------------------------------------------------
     void SceneNode::_callMemoryChangeListeners()
     {
-        ObjectVec::iterator itor = mAttachments.begin();
-        ObjectVec::iterator endt = mAttachments.end();
+        for( MovableObject *obj : mAttachments )
+            obj->_notifyParentNodeMemoryChanged();
 
-        while( itor != endt )
-        {
-            ( *itor )->_notifyParentNodeMemoryChanged();
-            ++itor;
-        }
-
-        BonesPerSkeletonInstance::const_iterator itSkeletons = mBoneChildren.begin();
-        BonesPerSkeletonInstance::const_iterator enSkeletons = mBoneChildren.end();
-
-        while( itSkeletons != enSkeletons )
-        {
-            BoneVec::const_iterator itBone = itSkeletons->second.begin();
-            BoneVec::const_iterator enBone = itSkeletons->second.end();
-
-            while( itBone != enBone )
-            {
-                ( *itBone )->_setNodeParent( this );
-                ++itBone;
-            }
-
-            ++itSkeletons;
-        }
+        for( BonesPerSkeletonInstance::value_type &skeletonBones : mBoneChildren )
+            for( Bone *bone : skeletonBones.second )
+                bone->_setNodeParent( this );
     }
     /*TODO
     Node::DebugRenderable* SceneNode::getDebugRenderable()
@@ -334,15 +293,12 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void SceneNode::removeAndDestroyAllChildren()
     {
-        NodeVec::iterator itor = mChildren.begin();
-        NodeVec::iterator endt = mChildren.end();
-        while( itor != endt )
+        for( Node *node : mChildren )
         {
-            SceneNode *sceneNode = static_cast<SceneNode *>( *itor );
+            SceneNode *sceneNode = static_cast<SceneNode *>( node );
             sceneNode->removeAndDestroyAllChildren();
             sceneNode->unsetParent();
             mCreator->destroySceneNode( sceneNode );
-            ++itor;
         }
 
         mChildren.clear();
@@ -522,47 +478,25 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void SceneNode::setVisible( bool visible, bool cascade )
     {
-        ObjectVec::iterator itor = mAttachments.begin();
-        ObjectVec::iterator endt = mAttachments.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->setVisible( visible );
-            ++itor;
-        }
+        for( MovableObject *obj : mAttachments )
+            obj->setVisible( visible );
 
         if( cascade )
         {
-            NodeVec::iterator childItor = mChildren.begin();
-            NodeVec::iterator childItorEnd = mChildren.end();
-            while( childItor != childItorEnd )
-            {
-                static_cast<SceneNode *>( *childItor )->setVisible( visible, cascade );
-                ++childItor;
-            }
+            for( Node *child : mChildren )
+                static_cast<SceneNode *>( child )->setVisible( visible, cascade );
         }
     }
     //-----------------------------------------------------------------------
     void SceneNode::flipVisibility( bool cascade )
     {
-        ObjectVec::iterator itor = mAttachments.begin();
-        ObjectVec::iterator endt = mAttachments.end();
-
-        while( itor != endt )
-        {
-            ( *itor )->setVisible( !( *itor )->getVisible() );
-            ++itor;
-        }
+        for( MovableObject *obj : mAttachments )
+            obj->setVisible( !obj->getVisible() );
 
         if( cascade )
         {
-            NodeVec::iterator childItor = mChildren.begin();
-            NodeVec::iterator childItorEnd = mChildren.end();
-            while( childItor != childItorEnd )
-            {
-                static_cast<SceneNode *>( *childItor )->flipVisibility( cascade );
-                ++childItor;
-            }
+            for( Node *child : mChildren )
+                static_cast<SceneNode *>( child )->flipVisibility( cascade );
         }
     }
     //-----------------------------------------------------------------------
@@ -576,31 +510,12 @@ namespace Ogre
     {
         Node::_setCachedTransformOutOfDate();
 
-        ObjectVec::const_iterator itor = mAttachments.begin();
-        ObjectVec::const_iterator endt = mAttachments.end();
+        for( MovableObject *obj : mAttachments )
+            obj->_setCachedAabbOutOfDate();
 
-        while( itor != endt )
-        {
-            ( *itor )->_setCachedAabbOutOfDate();
-            ++itor;
-        }
-
-        BonesPerSkeletonInstance::const_iterator itSkeletons = mBoneChildren.begin();
-        BonesPerSkeletonInstance::const_iterator enSkeletons = mBoneChildren.end();
-
-        while( itSkeletons != enSkeletons )
-        {
-            BoneVec::const_iterator itBone = itSkeletons->second.begin();
-            BoneVec::const_iterator enBone = itSkeletons->second.end();
-
-            while( itBone != enBone )
-            {
-                ( *itBone )->_setCachedTransformOutOfDate();
-                ++itBone;
-            }
-
-            ++itSkeletons;
-        }
+        for( BonesPerSkeletonInstance::value_type &skeletonBones : mBoneChildren )
+            for( Bone *bone : skeletonBones.second )
+                bone->_setCachedTransformOutOfDate();
     }
 #endif
 }  // namespace Ogre

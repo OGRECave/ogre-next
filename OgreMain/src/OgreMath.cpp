@@ -50,7 +50,7 @@ namespace Ogre
 {
     const Real Math::POS_INFINITY = std::numeric_limits<Real>::infinity();
     const Real Math::NEG_INFINITY = -std::numeric_limits<Real>::infinity();
-    const Real Math::PI = Real( 4.0 * std::atan( 1.0 ) );
+    const Real Math::PI = Real( 3.14159265358979323846264338327950288 );  // enough even for float128
     const Real Math::TWO_PI = Real( 2.0 * PI );
     const Real Math::HALF_PI = Real( 0.5 * PI );
     const Real Math::fDeg2Rad = PI / Real( 180.0 );
@@ -138,12 +138,17 @@ namespace Ogre
         }
         else
         {
+            OGRE_ASSERT_HIGH( PI != 0.0f &&
+                              "Ogre library static variables are initialized out of order" );
             return Radian( PI );
         }
     }
     //-----------------------------------------------------------------------
     Radian Math::ASin( Real fValue )
     {
+        OGRE_ASSERT_HIGH( HALF_PI != 0.0f &&
+                          "Ogre library static variables are initialized out of order" );
+
         if( -1.0 < fValue )
         {
             if( fValue < 1.0 )
@@ -193,7 +198,11 @@ namespace Ogre
     Real Math::AngleUnitsToRadians( Real angleunits )
     {
         if( msAngleUnit == AU_DEGREE )
+        {
+            OGRE_ASSERT_HIGH( fDeg2Rad != 0.0f &&
+                              "Ogre library static variables are initialized out of order" );
             return angleunits * fDeg2Rad;
+        }
         else
             return angleunits;
     }
@@ -202,7 +211,11 @@ namespace Ogre
     Real Math::RadiansToAngleUnits( Real radians )
     {
         if( msAngleUnit == AU_DEGREE )
+        {
+            OGRE_ASSERT_HIGH( fRad2Deg != 0.0f &&
+                              "Ogre library static variables are initialized out of order" );
             return radians * fRad2Deg;
+        }
         else
             return radians;
     }
@@ -211,7 +224,11 @@ namespace Ogre
     Real Math::AngleUnitsToDegrees( Real angleunits )
     {
         if( msAngleUnit == AU_RADIAN )
+        {
+            OGRE_ASSERT_HIGH( fRad2Deg != 0.0f &&
+                              "Ogre library static variables are initialized out of order" );
             return angleunits * fRad2Deg;
+        }
         else
             return angleunits;
     }
@@ -220,7 +237,11 @@ namespace Ogre
     Real Math::DegreesToAngleUnits( Real degrees )
     {
         if( msAngleUnit == AU_RADIAN )
+        {
+            OGRE_ASSERT_HIGH( fDeg2Rad != 0.0f &&
+                              "Ogre library static variables are initialized out of order" );
             return degrees * fDeg2Rad;
+        }
         else
             return degrees;
     }
@@ -955,6 +976,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     Real Math::gaussianDistribution( Real x, Real offset, Real scale )
     {
+        OGRE_ASSERT_HIGH( PI != 0.0f && "Ogre library static variables are initialized out of order" );
+
         Real nom = Math::Exp( -Math::Sqr( x - offset ) / ( 2 * Math::Sqr( scale ) ) );
         Real denom = scale * Math::Sqrt( 2 * Math::PI );
 

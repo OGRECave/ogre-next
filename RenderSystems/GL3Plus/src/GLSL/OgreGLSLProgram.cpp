@@ -63,15 +63,15 @@ namespace Ogre
         }
 
         // Initialize the attribute to semantic map
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "vertex", VES_POSITION ) );
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "blendWeights", VES_BLEND_WEIGHTS ) );
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "normal", VES_NORMAL ) );
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "colour", VES_DIFFUSE ) );
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "secondary_colour", VES_SPECULAR ) );
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "blendIndices", VES_BLEND_INDICES ) );
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "tangent", VES_TANGENT ) );
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "binormal", VES_BINORMAL ) );
-        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "uv", VES_TEXTURE_COORDINATES ) );
+        mSemanticTypeMap.emplace( "vertex", VES_POSITION );
+        mSemanticTypeMap.emplace( "blendWeights", VES_BLEND_WEIGHTS );
+        mSemanticTypeMap.emplace( "normal", VES_NORMAL );
+        mSemanticTypeMap.emplace( "colour", VES_DIFFUSE );
+        mSemanticTypeMap.emplace( "secondary_colour", VES_SPECULAR );
+        mSemanticTypeMap.emplace( "blendIndices", VES_BLEND_INDICES );
+        mSemanticTypeMap.emplace( "tangent", VES_TANGENT );
+        mSemanticTypeMap.emplace( "binormal", VES_BINORMAL );
+        mSemanticTypeMap.emplace( "uv", VES_TEXTURE_COORDINATES );
     }
 
     GLSLProgram::~GLSLProgram()

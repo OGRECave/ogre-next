@@ -559,7 +559,7 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+            mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
                                                mDepthBuffer->getPixelFormat() );
         }
         else
@@ -570,8 +570,6 @@ namespace Ogre
         mSampleDescription = mRequestedSampleDescription;
 
         createSwapchain();
-
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         setHidden( mHidden );
     }

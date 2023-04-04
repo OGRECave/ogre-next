@@ -507,7 +507,6 @@ namespace Ogre
 
         CompositorPass       *mCurrentPass;
         CompositorShadowNode *mCurrentShadowNode;
-        bool                  mShadowNodeIsReused;
 
         /// Root scene node
         SceneNode *mSceneRoot[NUM_SCENE_MEMORY_MANAGER_TYPES];
@@ -615,16 +614,6 @@ namespace Ogre
 
         /// A pass designed to let us render shadow colour on white for texture shadows
         Pass *mShadowCasterPlainBlackPass;
-        /** Internal method for turning a regular pass into a shadow caster pass.
-        @remarks
-            This is only used for texture shadows, basically we're trying to
-            ensure that objects are rendered solid black.
-            This method will usually return the standard solid black pass for
-            all fixed function passes, but will merge in a vertex program
-            and fudge the AutoParamDataSource to set black lighting for
-            passes with vertex programs.
-        */
-        virtual_l2 const Pass *deriveShadowCasterPass( const Pass *pass );
 
         /** Internal method to validate whether a Pass should be allowed to render.
         @remarks
@@ -723,8 +712,6 @@ namespace Ogre
         /// Utility class for calculating automatic parameters for gpu programs
         AutoParamDataSource *mAutoParamDataSource;
 
-        bool mLateMaterialResolving;
-
         ColourValue             mShadowColour;
         Real                    mShadowDirLightExtrudeDist;
         IlluminationRenderStage mIlluminationStage;
@@ -801,16 +788,11 @@ namespace Ogre
         virtual void _resumeRendering( RenderContext *context );
 
     protected:
-        Real   mDefaultShadowFarDist;
-        Real   mDefaultShadowFarDistSquared;
-        Real   mShadowTextureOffset;     ///< Proportion of texture offset in view direction e.g. 0.4
-        Real   mShadowTextureFadeStart;  ///< As a proportion e.g. 0.6
-        Real   mShadowTextureFadeEnd;    ///< As a proportion e.g. 0.9
-        Pass  *mShadowTextureCustomCasterPass;
-        String mShadowTextureCustomCasterVertexProgram;
-        String mShadowTextureCustomCasterFragmentProgram;
-        GpuProgramParametersSharedPtr mShadowTextureCustomCasterVPParams;
-        GpuProgramParametersSharedPtr mShadowTextureCustomCasterFPParams;
+        Real mDefaultShadowFarDist;
+        Real mDefaultShadowFarDistSquared;
+        Real mShadowTextureOffset;     ///< Proportion of texture offset in view direction e.g. 0.4
+        Real mShadowTextureFadeStart;  ///< As a proportion e.g. 0.6
+        Real mShadowTextureFadeEnd;    ///< As a proportion e.g. 0.9
 
         CompositorTextureVec mCompositorTextures;
 
@@ -830,6 +812,7 @@ namespace Ogre
             UPDATE_ALL_LODS,
             BUILD_LIGHT_LIST01,
             BUILD_LIGHT_LIST02,
+            WARM_UP_SHADERS,
             USER_UNIFORM_SCALABLE_TASK,
             STOP_THREADS,
             NUM_REQUESTS
@@ -969,6 +952,15 @@ namespace Ogre
         void buildLightListThread01( const BuildLightListRequest &buildLightListRequest,
                                      size_t                       threadIdx );
         void buildLightListThread02( size_t threadIdx );
+
+        /** Gathers all objects that match the given scene visibility flags and render queue IDs.
+        @param request
+            Fully setup request. See CullFrustumRequest.
+        @param threadIdx
+            Index to mVisibleObjects so we know which array we should start at.
+            Must be unique for each worker thread
+        */
+        void warmUpShaders( const CullFrustumRequest &request, size_t threadIdx );
 
     public:
         /** Constructor.
@@ -1388,7 +1380,7 @@ namespace Ogre
         virtual Item *createItem(
             const String       &meshName,
             const String       &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-            SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC );
+            SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC, bool bUseMeshMat = true );
 
         /** Create an Item (instance of a discrete mesh).
             @param
@@ -1915,6 +1907,8 @@ namespace Ogre
         void cullLights( Camera *camera, Light::LightTypes startType, Light::LightTypes endType,
                          LightArray &outLights );
 
+        void _warmUpShaders( Camera *camera, uint32_t visibilityMask, uint8 firstRq, uint8 lastRq );
+
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
         void _frameEnded();
 
@@ -2343,48 +2337,14 @@ namespace Ogre
         */
         virtual void setShadowTextureFadeEnd( Real fadeEnd ) { mShadowTextureFadeEnd = fadeEnd; }
 
-        /** Sets the default material to use for rendering shadow casters.
-        @remarks
-            By default shadow casters are rendered into the shadow texture using
-            an automatically generated fixed-function pass. This allows basic
-            projective texture shadows, but it's possible to use more advanced
-            shadow techniques by overriding the caster materials, for
-            example providing vertex and fragment programs to implement shadow
-            maps.
-        @par
-            You can rely on the ambient light in the scene being set to the
-            requested texture shadow colour, if that's useful.
-        @note
-            Individual objects may also override the vertex program in
-            your default material if their materials include
-            shadow_caster_vertex_program_ref, shadow_caster_material entries,
-            so if you use both make sure they are compatible.
-        @note
-            Only a single pass is allowed in your material, although multiple
-            techniques may be used for hardware fallback.
-        */
-        virtual void setShadowTextureCasterMaterial( const String &name );
-
         void _setCurrentCompositorPass( CompositorPass *pass );
         /// Note: May be null.
         const CompositorPass *getCurrentCompositorPass() const { return mCurrentPass; }
 
-        void _setCurrentShadowNode( CompositorShadowNode *shadowNode, bool isReused );
+        void                        _setCurrentShadowNode( CompositorShadowNode *shadowNode );
         const CompositorShadowNode *getCurrentShadowNode() const { return mCurrentShadowNode; }
-        bool                        isCurrentShadowNodeReused() const { return mShadowNodeIsReused; }
 
         bool isUsingInstancedStereo() const;
-
-        /** Sets whether to use late material resolving or not. If set, materials will be resolved
-            from the materials at the pass-setting stage and not at the render queue building stage.
-            This is useful when the active material scheme during the render queue building stage
-            is different from the one during the rendering stage.
-        */
-        virtual void setLateMaterialResolving( bool isLate ) { mLateMaterialResolving = isLate; }
-
-        /** Gets whether using late material resolving or not.
-            @see setLateMaterialResolving */
-        virtual bool isLateMaterialResolving() const { return mLateMaterialResolving; }
 
         /** Add a listener which will get called back on scene manager events.
          */

@@ -31,5 +31,5 @@ ogre_config_framework(${OGRE_NEXT}Atmosphere)
 ogre_config_component(${OGRE_NEXT}Atmosphere)
 
 install(FILES ${HEADER_FILES}
-  DESTINATION include/OGRE/Atmosphere
+  DESTINATION include/${OGRE_NEXT_PREFIX}/Atmosphere
 )

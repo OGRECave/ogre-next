@@ -56,7 +56,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-	class Atmosphere;
+    class Atmosphere;
 }  // namespace Ogre
 
 #endif

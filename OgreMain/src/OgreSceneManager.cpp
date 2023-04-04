@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "Animation/OgreTagPoint.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
+#include "Math/Array/OgreBooleanMask.h"
 #include "OgreAnimation.h"
 #include "OgreAtmosphereComponent.h"
 #include "OgreBillboardChain.h"
@@ -134,7 +135,6 @@ namespace Ogre
         mCurrentViewport0( 0 ),
         mCurrentPass( 0 ),
         mCurrentShadowNode( 0 ),
-        mShadowNodeIsReused( false ),
         mSkyMethod( SkyCubemap ),
         mSky( 0 ),
         mRadialDensityMask( 0 ),
@@ -151,7 +151,6 @@ namespace Ogre
         mDisplayNodes( false ),
         mShowBoundingBoxes( false ),
         mAutoParamDataSource( 0 ),
-        mLateMaterialResolving( false ),
         mShadowColour( ColourValue( 0.25, 0.25, 0.25 ) ),
         mShadowDirLightExtrudeDist( 10000 ),
         mIlluminationStage( IRS_NONE ),
@@ -161,7 +160,6 @@ namespace Ogre
         mShadowTextureOffset( Real( 0.6 ) ),
         mShadowTextureFadeStart( Real( 0.7 ) ),
         mShadowTextureFadeEnd( Real( 0.9 ) ),
-        mShadowTextureCustomCasterPass( 0 ),
         mVisibilityMask( 0xFFFFFFFF & VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
         mLightMask( 0xFFFFFFFF ),
         mFindVisibleObjects( true ),
@@ -523,13 +521,15 @@ namespace Ogre
     //-----------------------------------------------------------------------
     Item *SceneManager::createItem(
         const String &meshName,
-        const String &groupName, /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */
-        SceneMemoryMgrTypes sceneType /*= SCENE_DYNAMIC */ )
+        const String &groupName,       /*= ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME*/
+        SceneMemoryMgrTypes sceneType, /*= SCENE_DYNAMIC*/
+        bool bUseMeshMat /*= true */ )
     {
         // delegate to factory implementation
         NameValuePairList params;
         params["mesh"] = meshName;
         params["resourceGroup"] = groupName;
+        params["useMeshMat"] = StringConverter::toString( bUseMeshMat );
         return static_cast<Item *>( createMovableObject( ItemFactory::FACTORY_TYPE_NAME,
                                                          &mEntityMemoryManager[sceneType], &params ) );
     }
@@ -538,6 +538,7 @@ namespace Ogre
     {
         return createItem( pMesh->getName(), pMesh->getGroup(), sceneType );
     }
+
     //-----------------------------------------------------------------------
     void SceneManager::destroyItem( Item *i ) { destroyMovableObject( i ); }
     //-----------------------------------------------------------------------
@@ -1331,8 +1332,6 @@ namespace Ogre
                     realLastRq = std::min( realLastRq, std::max( realFirstRq, lastRq ) );
                 }
 
-                cullCamera->_setRenderedRqs( realFirstRq, realLastRq );
-
                 CullFrustumRequest cullRequest(
                     realFirstRq, realLastRq, mIlluminationStage == IRS_RENDER_TO_TEXTURE, true, false,
                     &mEntitiesMemoryManagerCulledList, cullCamera, lodCamera );
@@ -1472,8 +1471,6 @@ namespace Ogre
             }
         }  // end lock on scene graph mutex
 
-        mDestRenderSystem->_resetMetrics();
-
         // Set initial camera state
         mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
 
@@ -1532,6 +1529,81 @@ namespace Ogre
         }
 
         mVisibleObjects.swap( mTmpVisibleObjects );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::_warmUpShaders( Camera *camera, uint32_t visibilityMask, const uint8 firstRq,
+                                       const uint8 lastRq )
+    {
+        const uint32_t oldVisibilityMask = mVisibilityMask;
+
+        mVisibilityMask =
+            ( mVisibilityMask | visibilityMask ) & VisibilityFlags::RESERVED_VISIBILITY_FLAGS;
+
+        const bool casterPass = mIlluminationStage == IRS_RENDER_TO_TEXTURE;
+
+        mRenderQueue->clear();
+        mRenderQueue->renderPassPrepare( casterPass, false );
+
+        // Quick way of reducing overhead/stress on  calculations (lastRq can be up to 255)
+        uint8 realFirstRq = firstRq;
+        uint8 realLastRq = 0;
+        for( const ObjectMemoryManager *objMemoryManager : mEntitiesMemoryManagerCulledList )
+        {
+            realFirstRq =
+                (uint8)std::min<size_t>( realFirstRq, objMemoryManager->_getTotalRenderQueues() );
+            realLastRq =
+                (uint8)std::max<size_t>( realLastRq, objMemoryManager->_getTotalRenderQueues() );
+        }
+
+        // clamp RQ values to the real RQ range
+        realFirstRq = Ogre::Math::Clamp( firstRq, realFirstRq, realLastRq );
+        realLastRq = Ogre::Math::Clamp( lastRq, realFirstRq, realLastRq );
+
+        {
+            mRequestType = WARM_UP_SHADERS;
+            mCurrentCullFrustumRequest =
+                CullFrustumRequest( realFirstRq, realLastRq, casterPass, true, false,
+                                    &mEntitiesMemoryManagerCulledList, nullptr, nullptr );
+            fireWorkerThreadsAndWait();
+        }
+
+        {
+            OgreProfileGroup( "V1 Renderable update", OGREPROF_RENDERING );
+
+            firePreFindVisibleObjects( mCurrentViewport0 );
+
+            // Some v1 Renderables may bind their own GL buffers during _updateRenderQueue,
+            // thus we need to be sure the correct VAO is bound.
+            mDestRenderSystem->_startLegacyV1Rendering();
+
+            // mVisibleObjects should be filled in phase 01
+            for( const VisibleObjectsPerRq &visibleObjectsPerRq : mVisibleObjects )
+            {
+                for( uint8 i = realFirstRq; i < realLastRq; ++i )
+                {
+                    for( MovableObject *movableObject : visibleObjectsPerRq[i] )
+                    {
+                        // Only v1 are added here. v2 objects have already
+                        // been added in parallel in phase 01.
+                        movableObject->_updateRenderQueue( mRenderQueue, camera, camera );
+
+                        for( Renderable *renderable : movableObject->mRenderables )
+                        {
+                            if( renderable->mRenderableVisible )
+                            {
+                                mRenderQueue->addRenderableV1( i, casterPass, renderable,
+                                                               movableObject );
+                            }
+                        }
+                    }
+                }
+            }
+
+            firePostFindVisibleObjects( mCurrentViewport0 );
+        }
+
+        mVisibilityMask = oldVisibilityMask;
+        mRenderQueue->warmUpShaders( realFirstRq, realLastRq, casterPass );
     }
     //-----------------------------------------------------------------------
     void SceneManager::_frameEnded() { mRenderQueue->frameEnded(); }
@@ -2330,6 +2402,115 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
+    void SceneManager::warmUpShaders( const CullFrustumRequest &request, size_t threadIdx )
+    {
+        VisibleObjectsPerRq &visibleObjectsPerRq = *( mVisibleObjects.begin() + threadIdx );
+        {
+            visibleObjectsPerRq.resize( 255 );
+            VisibleObjectsPerRq::iterator itor = visibleObjectsPerRq.begin();
+            VisibleObjectsPerRq::iterator endt = visibleObjectsPerRq.end();
+
+            while( itor != endt )
+            {
+                itor->clear();
+                ++itor;
+            }
+        }
+
+        const uint32 visibilityMask = this->getVisibilityMask();
+        const ArrayInt sceneFlags = Mathlib::SetAll( visibilityMask );
+
+        const uint32 includeNonCastersTest =
+            ( ( ( visibilityMask & VisibilityFlags::LAYER_SHADOW_CASTER ) ^
+                std::numeric_limits<uint32>::max() ) &
+              VisibilityFlags::LAYER_SHADOW_CASTER );
+
+        const ArrayInt includeNonCasters = Mathlib::SetAll( includeNonCastersTest );
+
+        ObjectMemoryManagerVec::const_iterator it = request.objectMemManager->begin();
+        ObjectMemoryManagerVec::const_iterator en = request.objectMemManager->end();
+
+        while( it != en )
+        {
+            ObjectMemoryManager *memoryManager = *it;
+            const size_t numRenderQueues = memoryManager->getNumRenderQueues();
+
+            const size_t firstRq = std::min<size_t>( request.firstRq, numRenderQueues );
+            const size_t lastRq = std::min<size_t>( request.lastRq, numRenderQueues );
+
+            for( size_t i = firstRq; i < lastRq; ++i )
+            {
+                MovableObject::MovableObjectArray &outVisibleObjects =
+                    *( visibleObjectsPerRq.begin() + i );
+
+                ObjectData objData;
+                const size_t totalObjs = memoryManager->getFirstObjectData( objData, i );
+
+                for( size_t j = 0u; j < totalObjs; j += ARRAY_PACKED_REALS )
+                {
+                    const ArrayInt *RESTRICT_ALIAS visibilityFlags =
+                        reinterpret_cast<ArrayInt * RESTRICT_ALIAS>( objData.mVisibilityFlags );
+
+                    // isVisible = isVisible() && (isCaster || includeNonCasters)
+                    const ArrayMaskI isVisible = Mathlib::And(
+                        Mathlib::TestFlags4( *visibilityFlags,
+                                             Mathlib::SetAll( VisibilityFlags::LAYER_VISIBILITY ) ),
+                        Mathlib::TestFlags4( Mathlib::Or( *visibilityFlags, includeNonCasters ),
+                                             Mathlib::SetAll( VisibilityFlags::LAYER_SHADOW_CASTER ) ) );
+
+                    // Fuse result with visibility flag
+                    // finalMask = (visible & sceneFlags & visibilityFlags) != 0 ? 0xffffffff : 0
+                    const ArrayMaskI finalMask =
+                        Mathlib::TestFlags4( isVisible, Mathlib::And( sceneFlags, *visibilityFlags ) );
+
+                    const uint32 scalarMask = BooleanMask4::getScalarMask( finalMask );
+
+                    for( size_t k = 0u; k < ARRAY_PACKED_REALS; ++k )
+                    {
+                        // Decompose the result for analyzing each MovableObject's
+                        // There's no need to check objData.mOwner[j] is null because
+                        // we set mVisibilityFlags to 0 on slot removals
+                        if( IS_BIT_SET( k, scalarMask ) )
+                            outVisibleObjects.push_back( objData.mOwner[k] );
+                    }
+
+                    objData.advanceFrustumPack();
+                }
+
+                const uint8 currRqId = static_cast<uint8>( i );
+
+                if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::FAST )
+                {
+                    // V2 meshes can be added to the render queue in parallel
+                    bool casterPass = request.casterPass;
+                    MovableObject::MovableObjectArray::const_iterator itor = outVisibleObjects.begin();
+                    MovableObject::MovableObjectArray::const_iterator endt = outVisibleObjects.end();
+
+                    while( itor != endt )
+                    {
+                        RenderableArray::const_iterator itRend = ( *itor )->mRenderables.begin();
+                        RenderableArray::const_iterator enRend = ( *itor )->mRenderables.end();
+
+                        while( itRend != enRend )
+                        {
+                            if( ( *itRend )->mRenderableVisible )
+                            {
+                                mRenderQueue->addRenderableV2( threadIdx, currRqId, casterPass, *itRend,
+                                                               *itor );
+                            }
+                            ++itRend;
+                        }
+                        ++itor;
+                    }
+
+                    outVisibleObjects.clear();
+                }
+            }
+
+            ++it;
+        }
+    }
+    //-----------------------------------------------------------------------
     void SceneManager::highLevelCull()
     {
         mNodeMemoryManagerUpdateList.clear();
@@ -2445,14 +2626,6 @@ namespace Ogre
                 numRqs = (uint8)std::max<size_t>( numRqs, ( *itor )->_getTotalRenderQueues() );
                 ++itor;
             }
-        }
-
-        CameraList::const_iterator itor = mCameras.begin();
-        CameraList::const_iterator endt = mCameras.end();
-        while( itor != endt )
-        {
-            ( *itor )->_resetRenderedRqs( numRqs );
-            ++itor;
         }
 
         // Reset these
@@ -2596,7 +2769,7 @@ namespace Ogre
                 const LightList *pLightListToUse;
                 // Start counting from the start light
                 size_t lightIndex = pass->getStartLight();
-                size_t depthInc = 0;
+                // size_t depthInc = 0;
 
                 while( lightsLeft > 0 )
                 {
@@ -2692,12 +2865,6 @@ namespace Ogre
                     // Do we need to update GPU program parameters?
                     if( pass->isProgrammable() )
                     {
-                        if( mCurrentShadowNode )
-                        {
-                            pLightListToUse = mCurrentShadowNode->setShadowMapsToPass(
-                                rend, pass, mAutoParamDataSource, pass->getStartLight() );
-                        }
-
                         useLightsGpuProgram( pass, pLightListToUse );
                     }
                     // Do we need to update light states?
@@ -2756,7 +2923,7 @@ namespace Ogre
                     {
                         mDestRenderSystem->setDeriveDepthBias(false);
                     }*/
-                    depthInc += pass->getPassIterationCount();
+                    // depthInc += pass->getPassIterationCount();
 
                     // Finalise GPU parameter bindings
                     updateGpuProgramParameters( pass );
@@ -2795,12 +2962,6 @@ namespace Ogre
                     // Do we need to update GPU program parameters?
                     if( pass->isProgrammable() )
                     {
-                        if( mCurrentShadowNode )
-                        {
-                            lightList = mCurrentShadowNode->setShadowMapsToPass(
-                                rend, pass, mAutoParamDataSource, pass->getStartLight() );
-                        }
-
                         useLightsGpuProgram( pass, lightList );
                     }
                     else if( passSurfaceAndLightParams )
@@ -3178,12 +3339,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     void SceneManager::_setCurrentCompositorPass( CompositorPass *pass ) { mCurrentPass = pass; }
     //---------------------------------------------------------------------
-    void SceneManager::_setCurrentShadowNode( CompositorShadowNode *shadowNode, bool isReused )
+    void SceneManager::_setCurrentShadowNode( CompositorShadowNode *shadowNode )
     {
         mCurrentShadowNode = shadowNode;
-        mShadowNodeIsReused = isReused;
-        if( !shadowNode )
-            mShadowNodeIsReused = false;
         mAutoParamDataSource->setCurrentShadowNode( shadowNode );
     }
     //---------------------------------------------------------------------
@@ -3212,29 +3370,23 @@ namespace Ogre
     //---------------------------------------------------------------------
     bool SceneManager::fireRenderQueueStarted( uint8 id, const String &invocation )
     {
-        RenderQueueListenerList::iterator i, iend;
         bool skip = false;
 
         RenderQueue *rq = mRenderQueue;
 
-        iend = mRenderQueueListeners.end();
-        for( i = mRenderQueueListeners.begin(); i != iend; ++i )
-        {
-            ( *i )->renderQueueStarted( rq, id, invocation, skip );
-        }
+        for( RenderQueueListener *li : mRenderQueueListeners )
+            li->renderQueueStarted( rq, id, invocation, skip );
+
         return skip;
     }
     //---------------------------------------------------------------------
     bool SceneManager::fireRenderQueueEnded( uint8 id, const String &invocation )
     {
-        RenderQueueListenerList::iterator i, iend;
         bool repeat = false;
 
-        iend = mRenderQueueListeners.end();
-        for( i = mRenderQueueListeners.begin(); i != iend; ++i )
-        {
-            ( *i )->renderQueueEnded( id, invocation, repeat );
-        }
+        for( RenderQueueListener *li : mRenderQueueListeners )
+            li->renderQueueEnded( id, invocation, repeat );
+
         return repeat;
     }
     //---------------------------------------------------------------------
@@ -3243,75 +3395,44 @@ namespace Ogre
                                                const LightList *pLightList,
                                                bool suppressRenderStateChanges )
     {
-        RenderObjectListenerList::iterator i, iend;
-
-        iend = mRenderObjectListeners.end();
-        for( i = mRenderObjectListeners.begin(); i != iend; ++i )
-        {
-            ( *i )->notifyRenderSingleObject( rend, pass, source, pLightList,
-                                              suppressRenderStateChanges );
-        }
+        for( RenderObjectListener *li : mRenderObjectListeners )
+            li->notifyRenderSingleObject( rend, pass, source, pLightList, suppressRenderStateChanges );
     }
     //---------------------------------------------------------------------
     void SceneManager::fireShadowTexturesUpdated( size_t numberOfShadowTextures )
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->shadowTexturesUpdated( numberOfShadowTextures );
-        }
+        for( Listener *li : listenersCopy )
+            li->shadowTexturesUpdated( numberOfShadowTextures );
     }
     //---------------------------------------------------------------------
     void SceneManager::fireShadowTexturesPreCaster( const Light *light, Camera *camera,
                                                     size_t iteration )
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->shadowTextureCasterPreViewProj( light, camera, iteration );
-        }
+        for( Listener *li : listenersCopy )
+            li->shadowTextureCasterPreViewProj( light, camera, iteration );
     }
     //---------------------------------------------------------------------
     void SceneManager::firePreFindVisibleObjects( Viewport *v )
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->preFindVisibleObjects( this, mIlluminationStage, v );
-        }
+        for( Listener *li : listenersCopy )
+            li->preFindVisibleObjects( this, mIlluminationStage, v );
     }
     //---------------------------------------------------------------------
     void SceneManager::firePostFindVisibleObjects( Viewport *v )
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->postFindVisibleObjects( this, mIlluminationStage, v );
-        }
+        for( Listener *li : listenersCopy )
+            li->postFindVisibleObjects( this, mIlluminationStage, v );
     }
     //---------------------------------------------------------------------
     void SceneManager::fireSceneManagerDestroyed()
     {
         ListenerList listenersCopy = mListeners;
-        ListenerList::iterator i, iend;
-
-        iend = listenersCopy.end();
-        for( i = listenersCopy.begin(); i != iend; ++i )
-        {
-            ( *i )->sceneManagerDestroyed( this );
-        }
+        for( Listener *li : listenersCopy )
+            li->sceneManagerDestroyed( this );
     }
     //---------------------------------------------------------------------
     void SceneManager::setViewports( Viewport **vp, size_t numViewports )
@@ -3360,152 +3481,6 @@ namespace Ogre
         mSuppressRenderStateChanges = suppress;
     }
     //---------------------------------------------------------------------
-    const Pass *SceneManager::deriveShadowCasterPass( const Pass *pass )
-    {
-        Pass *retPass;
-        if( pass->getParent()->getShadowCasterMaterial() )
-        {
-            return pass->getParent()->getShadowCasterMaterial()->getBestTechnique()->getPass( 0 );
-        }
-        else
-        {
-            retPass = mShadowTextureCustomCasterPass ? mShadowTextureCustomCasterPass
-                                                     : mShadowCasterPlainBlackPass;
-        }
-
-        // Special case alpha-blended passes
-        /*if ((pass->getSourceBlendFactor() == SBF_SOURCE_ALPHA &&
-            pass->getDestBlendFactor() == SBF_ONE_MINUS_SOURCE_ALPHA))
-            //|| pass->getAlphaRejectFunction() != CMPF_ALWAYS_PASS)
-        {
-            // Alpha blended passes must retain their transparency
-            retPass->setAlphaRejectSettings(pass->getAlphaRejectFunction(),
-                pass->getAlphaRejectValue());
-            retPass->setSceneBlending(pass->getSourceBlendFactor(), pass->getDestBlendFactor());
-            retPass->getParent()->getParent()->setTransparencyCastsShadows(true);
-
-            // So we allow the texture units, but override the colour functions
-            // Copy texture state, shift up one since 0 is shadow texture
-            unsigned short origPassTUCount = pass->getNumTextureUnitStates();
-            for (unsigned short t = 0; t < origPassTUCount; ++t)
-            {
-                TextureUnitState* tex;
-                if (retPass->getNumTextureUnitStates() <= t)
-                {
-                    tex = retPass->createTextureUnitState();
-                }
-                else
-                {
-                    tex = retPass->getTextureUnitState(t);
-                }
-                // copy base state
-                (*tex) = *(pass->getTextureUnitState(t));
-                // override colour function
-                tex->setColourOperationEx( LBX_SOURCE1, LBS_MANUAL, LBS_CURRENT, mShadowColour );
-
-            }
-            // Remove any extras
-            while (retPass->getNumTextureUnitStates() > origPassTUCount)
-            {
-                retPass->removeTextureUnitState(origPassTUCount);
-            }
-
-        }
-        else
-        {
-            // reset
-            retPass->setSceneBlending(SBT_REPLACE);
-            retPass->setAlphaRejectFunction(CMPF_ALWAYS_PASS);
-            while (retPass->getNumTextureUnitStates() > 0)
-            {
-                retPass->removeTextureUnitState(0);
-            }
-        }*/
-
-        // Does incoming pass have a custom shadow caster program?
-        if( !pass->getShadowCasterVertexProgramName().empty() )
-        {
-            // Have to merge the shadow caster vertex program in
-            retPass->setVertexProgram( pass->getShadowCasterVertexProgramName(), false );
-            const GpuProgramPtr &prg = retPass->getVertexProgram();
-            // Load this program if not done already
-            if( !prg->isLoaded() )
-                prg->load();
-            // Copy params
-            retPass->setVertexProgramParameters( pass->getShadowCasterVertexProgramParameters() );
-            // Also have to hack the light autoparams, that is done later
-        }
-        else
-        {
-            if( retPass == mShadowTextureCustomCasterPass )
-            {
-                // reset vp?
-                if( mShadowTextureCustomCasterPass->getVertexProgramName() !=
-                    mShadowTextureCustomCasterVertexProgram )
-                {
-                    mShadowTextureCustomCasterPass->setVertexProgram(
-                        mShadowTextureCustomCasterVertexProgram, false );
-                    if( mShadowTextureCustomCasterPass->hasVertexProgram() )
-                    {
-                        mShadowTextureCustomCasterPass->setVertexProgramParameters(
-                            mShadowTextureCustomCasterVPParams );
-                    }
-                }
-            }
-            else
-            {
-                // Standard shadow caster pass, reset to no vp
-                retPass->setVertexProgram( BLANKSTRING );
-            }
-        }
-
-        if( !pass->getShadowCasterFragmentProgramName().empty() )
-        {
-            // Have to merge the shadow caster fragment program in
-            retPass->setFragmentProgram( pass->getShadowCasterFragmentProgramName(), false );
-            const GpuProgramPtr &prg = retPass->getFragmentProgram();
-            // Load this program if not done already
-            if( !prg->isLoaded() )
-                prg->load();
-            // Copy params
-            retPass->setFragmentProgramParameters( pass->getShadowCasterFragmentProgramParameters() );
-            // Also have to hack the light autoparams, that is done later
-        }
-        else
-        {
-            if( retPass == mShadowTextureCustomCasterPass )
-            {
-                // reset fp?
-                if( mShadowTextureCustomCasterPass->getFragmentProgramName() !=
-                    mShadowTextureCustomCasterFragmentProgram )
-                {
-                    mShadowTextureCustomCasterPass->setFragmentProgram(
-                        mShadowTextureCustomCasterFragmentProgram, false );
-                    if( mShadowTextureCustomCasterPass->hasFragmentProgram() )
-                    {
-                        mShadowTextureCustomCasterPass->setFragmentProgramParameters(
-                            mShadowTextureCustomCasterFPParams );
-                    }
-                }
-            }
-            else
-            {
-                // Standard shadow caster pass, reset to no fp
-                retPass->setFragmentProgram( BLANKSTRING );
-            }
-        }
-
-        // handle the case where there is no fixed pipeline support
-        retPass->getParent()->getParent()->compile();
-        Technique *btech = retPass->getParent()->getParent()->getBestTechnique();
-        if( btech )
-        {
-            retPass = btech->getPass( 0 );
-        }
-
-        return retPass;
-    }
-    //---------------------------------------------------------------------
     const RealRect &SceneManager::getLightScissorRect( const Light *l, const Camera *cam )
     {
         checkCachedLightClippingInfo();
@@ -3515,9 +3490,7 @@ namespace Ogre
         if( ci == mLightClippingInfoMap.end() )
         {
             // create new entry
-            ci = mLightClippingInfoMap
-                     .insert( LightClippingInfoMap::value_type( l, LightClippingInfo() ) )
-                     .first;
+            ci = mLightClippingInfoMap.emplace( l, LightClippingInfo() ).first;
         }
         if( !ci->second.scissorValid )
         {
@@ -3741,9 +3714,7 @@ namespace Ogre
         if( ci == mLightClippingInfoMap.end() )
         {
             // create new entry
-            ci = mLightClippingInfoMap
-                     .insert( LightClippingInfoMap::value_type( l, LightClippingInfo() ) )
-                     .first;
+            ci = mLightClippingInfoMap.emplace( l, LightClippingInfo() ).first;
         }
         if( !ci->second.clipPlanesValid )
         {
@@ -3884,50 +3855,6 @@ namespace Ogre
     Real SceneManager::getShadowDirectionalLightExtrusionDistance() const
     {
         return mShadowDirLightExtrudeDist;
-    }
-    //---------------------------------------------------------------------
-    void SceneManager::setShadowTextureCasterMaterial( const String &name )
-    {
-        if( name.empty() )
-        {
-            mShadowTextureCustomCasterPass = 0;
-        }
-        else
-        {
-            MaterialPtr mat = MaterialManager::getSingleton().getByName( name );
-            if( !mat )
-            {
-                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                             "Cannot locate material called '" + name + "'",
-                             "SceneManager::setShadowTextureCasterMaterial" );
-            }
-            mat->load();
-            if( !mat->getBestTechnique() )
-            {
-                // unsupported
-                mShadowTextureCustomCasterPass = 0;
-            }
-            else
-            {
-                mShadowTextureCustomCasterPass = mat->getBestTechnique()->getPass( 0 );
-                if( mShadowTextureCustomCasterPass->hasVertexProgram() )
-                {
-                    // Save vertex program and params in case we have to swap them out
-                    mShadowTextureCustomCasterVertexProgram =
-                        mShadowTextureCustomCasterPass->getVertexProgramName();
-                    mShadowTextureCustomCasterVPParams =
-                        mShadowTextureCustomCasterPass->getVertexProgramParameters();
-                }
-                if( mShadowTextureCustomCasterPass->hasFragmentProgram() )
-                {
-                    // Save fragment program and params in case we have to swap them out
-                    mShadowTextureCustomCasterFragmentProgram =
-                        mShadowTextureCustomCasterPass->getFragmentProgramName();
-                    mShadowTextureCustomCasterFPParams =
-                        mShadowTextureCustomCasterPass->getFragmentProgramParameters();
-                }
-            }
-        }
     }
     //---------------------------------------------------------------------
     template <typename T>
@@ -4631,6 +4558,9 @@ namespace Ogre
             break;
         case BUILD_LIGHT_LIST02:
             buildLightListThread02( threadIdx );
+            break;
+        case WARM_UP_SHADERS:
+            warmUpShaders( mCurrentCullFrustumRequest, threadIdx );
             break;
         case USER_UNIFORM_SCALABLE_TASK:
             mUserTask->execute( threadIdx, mNumWorkerThreads );

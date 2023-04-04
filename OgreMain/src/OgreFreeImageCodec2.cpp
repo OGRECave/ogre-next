@@ -361,7 +361,9 @@ namespace Ogre
         // Check BPP
         uint32 bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) << 3u;
         if( bpp == 32 && imageType == FIT_BITMAP &&
-            !FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp ) &&
+            ( !FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp ) ||
+              mFreeImageType ==
+                  FIF_JPEG /* in FreeImage 3.18.0 it support 32bpp, but only for FIC_CMYK */ ) &&
             FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, 24 ) )
         {
             // drop to 24 bit (lose alpha)
@@ -605,7 +607,7 @@ namespace Ogre
         imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat );
         imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes(
             imgData->box.width, 1u, 1u, 1u, supportedFormat, rowAlignment );
-        imgData->box.bytesPerImage = imgData->box.bytesPerRow * imgData->box.height;
+        imgData->box.bytesPerImage = size_t( imgData->box.bytesPerRow ) * size_t( imgData->box.height );
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 
         // Convert data inverting scanlines
@@ -646,6 +648,47 @@ namespace Ogre
         else
         {
             return BLANKSTRING;
+        }
+    }
+    //---------------------------------------------------------------------
+    FreeImageCodec2::ValidationStatus FreeImageCodec2::validateMagicNumber( const char *magicNumberPtr,
+                                                                            size_t maxbytes ) const
+    {
+        FIMEMORY *fiMem = FreeImage_OpenMemory( (BYTE *)const_cast<char *>( magicNumberPtr ),
+                                                static_cast<DWORD>( maxbytes ) );
+
+        const BOOL bValid = FreeImage_ValidateFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
+        FreeImage_CloseMemory( fiMem );
+
+        if( bValid )
+        {
+            return CodecValid;
+        }
+        else
+        {
+            // Unfortunately FreeImage won't tell us when one of its plugin is incapable
+            // of determining validation. So we don't really know whether it's invalid or
+            // FreeImage is uncapable of validating this format.
+
+            // We took a look at FreeImage's source code and these formats have validation
+            // capability. These are popular formats so we return more accurate info
+            switch( mFreeImageType )
+            {
+            case FIF_BMP:
+            case FIF_JPEG:
+            case FIF_J2K:
+            case FIF_PNG:
+            case FIF_DDS:
+            case FIF_EXR:
+            case FIF_PSD:
+            case FIF_TARGA:
+            case FIF_TIFF:
+            case FIF_XPM:
+            case FIF_WEBP:
+                return CodecInvalid;
+            }
+
+            return CodecUnknown;
         }
     }
 }  // namespace Ogre

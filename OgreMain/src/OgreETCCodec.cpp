@@ -198,6 +198,25 @@ namespace Ogre
         return BLANKSTRING;
     }
     //---------------------------------------------------------------------
+    ETCCodec::ValidationStatus ETCCodec::validateMagicNumber( const char *magicNumberPtr,
+                                                              size_t maxbytes ) const
+    {
+        if( maxbytes >= sizeof( uint32 ) )
+        {
+            uint32 fileType;
+            memcpy( &fileType, magicNumberPtr, sizeof( uint32 ) );
+            flipEndian( &fileType, sizeof( uint32 ) );
+
+            if( PKM_MAGIC == fileType )
+                return CodecValid;
+
+            if( KTX_MAGIC == fileType )
+                return CodecValid;
+        }
+
+        return CodecInvalid;
+    }
+    //---------------------------------------------------------------------
     bool ETCCodec::decodePKM( DataStreamPtr &stream, DecodeResult &result ) const
     {
         PKMHeader header;

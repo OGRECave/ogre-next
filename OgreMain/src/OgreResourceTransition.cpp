@@ -156,7 +156,7 @@ namespace Ogre
             status.layout = newLayout;
             status.access = access;
             status.stageMask = stageMask;
-            mResourceStatus.insert( ResourceStatusMap::value_type( texture, status ) );
+            mResourceStatus.emplace( texture, status );
 
             ResourceTransition resTrans;
             resTrans.resource = texture;
@@ -234,7 +234,7 @@ namespace Ogre
             status.layout = ResourceLayout::Undefined;
             status.access = access;
             status.stageMask = stageMask;
-            mResourceStatus.insert( ResourceStatusMap::value_type( bufferRes, status ) );
+            mResourceStatus.emplace( bufferRes, status );
 
             // No transition. There's nothing to wait for and unlike textures,
             // buffers have no layout to transition to

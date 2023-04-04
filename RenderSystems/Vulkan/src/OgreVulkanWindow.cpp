@@ -160,7 +160,7 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+            mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
                                                mDepthBuffer->getPixelFormat() );
         }
         else
@@ -286,6 +286,15 @@ namespace Ogre
                                          surfaceCaps.maxImageExtent.width ),
                             Math::Clamp( getHeight(), surfaceCaps.minImageExtent.height,
                                          surfaceCaps.maxImageExtent.height ) );
+
+        // We need to retransition the main texture now to create MSAA surfaces (if any).
+        // We need to do it now, because doing it later will overwrite the VkImage handles with NULL.
+        //
+        // mTexture is supposed to always be at Resident once it transitions there,
+        // so maintain that guarantee.
+        if( mTexture->getResidencyStatus() != GpuResidency::OnStorage )
+            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         VkBool32 supported;
         result = vkGetPhysicalDeviceSurfaceSupportKHR(

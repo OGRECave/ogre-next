@@ -95,6 +95,8 @@ namespace Ogre
     VulkanVaoManager::VulkanVaoManager( VulkanDevice *device, VulkanRenderSystem *renderSystem,
                                         const NameValuePairList *params ) :
         VaoManager( params ),
+        mDelayedBlocksSize( 0u ),
+        mDelayedBlocksFlushThreshold( 512u * 1024u * 1024u ),
         mVaoNames( 1u ),
         mDrawId( 0 ),
         mDevice( device ),
@@ -174,6 +176,17 @@ namespace Ogre
         mDelayedFuncs.resize( mDynamicBufferMultiplier );
 
         determineBestMemoryTypes();
+
+        if( params )
+        {
+            NameValuePairList::const_iterator itor =
+                params->find( "VaoManager::mDelayedBlocksFlushThreshold" );
+            if( itor != params->end() )
+            {
+                mDelayedBlocksFlushThreshold = static_cast<size_t>(
+                    StringConverter::parseUnsignedLong( itor->second, mDelayedBlocksFlushThreshold ) );
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     VulkanVaoManager::~VulkanVaoManager()
@@ -221,6 +234,8 @@ namespace Ogre
                 ++itFrame;
             }
         }
+
+        flushAllGpuDelayedBlocks( false );
 
         {
             VulkanDescriptorPoolMap::const_iterator itor = mDescriptorPools.begin();
@@ -406,6 +421,8 @@ namespace Ogre
         if( !bDeviceStall )
             waitForTailFrameToFinish();
 
+        const VkMemoryType *memTypes = mDevice->mDeviceMemoryProperties.memoryTypes;
+
         set<VboIndex>::type::iterator itor = mEmptyVboPools.begin();
         set<VboIndex>::type::iterator endt = mEmptyVboPools.end();
 
@@ -417,6 +434,10 @@ namespace Ogre
 
             if( ( mFrameCount - vbo.emptyFrame ) >= mDynamicBufferMultiplier || bDeviceStall )
             {
+                OGRE_ASSERT_LOW( mUsedHeapMemory[memTypes[vbo.vkMemoryTypeIdx].heapIndex] >=
+                                 vbo.sizeBytes );
+                mUsedHeapMemory[memTypes[vbo.vkMemoryTypeIdx].heapIndex] -= vbo.sizeBytes;
+
                 vkDestroyBuffer( mDevice->mDevice, vbo.vkBuffer, 0 );
                 vkFreeMemory( mDevice->mDevice, vbo.vboName, 0 );
 
@@ -458,6 +479,92 @@ namespace Ogre
                     bufferInterface->_setVboPoolIndex( newPoolIdx );
             }
         }
+    }
+    //-----------------------------------------------------------------------------------
+    inline uint64 bytesToMegabytes( size_t sizeBytes ) { return uint64_t( sizeBytes >> 20u ); }
+    //-----------------------------------------------------------------------------------
+    bool VulkanVaoManager::flushAllGpuDelayedBlocks( const bool bIssueBarrier )
+    {
+        if( bIssueBarrier )
+        {
+            if( mDevice->mGraphicsQueue.getEncoderState() == VulkanQueue::EncoderGraphicsOpen )
+            {
+                // We can't flush right now
+                return false;
+            }
+
+            char tmpBuffer[256];
+            LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+            text.a( "[Vulkan] Flushing all mDelayedBlocks(", bytesToMegabytes( mDelayedBlocksSize ),
+                    " MB) because mDelayedBlocksFlushThreshold(",
+                    bytesToMegabytes( mDelayedBlocksFlushThreshold ),
+                    " MB) was exceeded. This prevents async operations (e.g. async compute)",
+                    LML_TRIVIAL );
+
+            LogManager::getSingleton().logMessage( text.c_str() );
+
+            VkMemoryBarrier memBarrier;
+            makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
+
+            memBarrier.srcAccessMask =
+                VK_ACCESS_INDIRECT_COMMAND_READ_BIT | VK_ACCESS_INDEX_READ_BIT |
+                VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT | VK_ACCESS_UNIFORM_READ_BIT |
+                VK_ACCESS_INPUT_ATTACHMENT_READ_BIT | VK_ACCESS_SHADER_READ_BIT |
+                VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT |
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_TRANSFER_READ_BIT |
+                VK_ACCESS_TRANSFER_WRITE_BIT /*| VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT*/;
+            memBarrier.dstAccessMask =
+                VK_ACCESS_INDIRECT_COMMAND_READ_BIT | VK_ACCESS_INDEX_READ_BIT |
+                VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT | VK_ACCESS_UNIFORM_READ_BIT |
+                VK_ACCESS_INPUT_ATTACHMENT_READ_BIT | VK_ACCESS_SHADER_READ_BIT |
+                VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT |
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_TRANSFER_READ_BIT |
+                VK_ACCESS_TRANSFER_WRITE_BIT /*| VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT*/;
+
+            vkCmdPipelineBarrier( mDevice->mGraphicsQueue.mCurrentCmdBuffer,
+                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                  0, 1u, &memBarrier, 0u, 0, 0u, 0 );
+        }
+
+        DirtyBlockArray::iterator itor = mDelayedBlocks.begin();
+        DirtyBlockArray::iterator endt = mDelayedBlocks.end();
+
+        while( itor != endt )
+        {
+            deallocateVbo( itor->vboIdx, itor->offset, itor->size, itor->vboFlag, true );
+            ++itor;
+        }
+
+        mDelayedBlocks.clear();
+        mDelayedBlocksSize = 0u;
+
+        return true;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::flushGpuDelayedBlocks()
+    {
+        const uint32 frameCount = mFrameCount;
+
+        size_t bytesFlushed = 0u;
+
+        // Unlike CPU -> GPU (or GPU -> CPU) resources, GPU -> GPU resources
+        // are safe to reuse after 1 frame of synchronization.
+        DirtyBlockArray::iterator itor = mDelayedBlocks.begin();
+        DirtyBlockArray::iterator endt = mDelayedBlocks.end();
+
+        while( itor != endt && ( frameCount - itor->frameIdx ) >= 1u )
+        {
+            bytesFlushed += itor->size;
+            deallocateVbo( itor->vboIdx, itor->offset, itor->size, itor->vboFlag, true );
+            ++itor;
+        }
+
+        OGRE_ASSERT_LOW( mDelayedBlocksSize >= bytesFlushed );
+
+        mDelayedBlocks.erasePOD( mDelayedBlocks.begin(), itor );
+        mDelayedBlocksSize -= bytesFlushed;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::cleanupEmptyPools()
@@ -799,6 +906,9 @@ namespace Ogre
                                         uint32 textureMemTypeBits, size_t &outVboIdx,
                                         size_t &outBufferOffset )
     {
+        if( mDelayedBlocksSize >= mDelayedBlocksFlushThreshold )
+            flushAllGpuDelayedBlocks( true );
+
         VboVec &vboVec = mVbos[vboFlag];
 
         VboVec::const_iterator itor = vboVec.begin();
@@ -889,7 +999,7 @@ namespace Ogre
                         {
                             // Found one!
                             size_t defaultPoolSize =
-                                std::min( mDefaultPoolSize[vboFlag],
+                                std::min( (VkDeviceSize)mDefaultPoolSize[vboFlag],
                                           memHeaps[memTypes[*itMemTypeIdx].heapIndex].size -
                                               mUsedHeapMemory[heapIdx] );
                             poolSize = std::max( defaultPoolSize, sizeBytes );
@@ -922,7 +1032,7 @@ namespace Ogre
                                 {
                                     // Found one!
                                     size_t defaultPoolSize =
-                                        std::min( mDefaultPoolSize[vboFlag],
+                                        std::min( (VkDeviceSize)mDefaultPoolSize[vboFlag],
                                                   memHeaps[memTypes[heapIdx].heapIndex].size -
                                                       mUsedHeapMemory[heapIdx] );
                                     chosenMemoryTypeIdx = static_cast<uint32>( i );
@@ -1067,15 +1177,35 @@ namespace Ogre
     {
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType, readCapable );
 
+        bool bImmediately = false;
         if( bufferType >= BT_DYNAMIC_DEFAULT && !readCapable && !skipDynBufferMultiplier )
+        {
             sizeBytes *= mDynamicBufferMultiplier;
+            bImmediately = true;  // Dynamic buffers are already delayed
+        }
 
-        deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboFlag );
+        deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboFlag, bImmediately );
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
-                                          const VboFlag vboFlag )
+                                          const VboFlag vboFlag, bool bImmediately )
     {
+        if( !bImmediately )
+        {
+            mDelayedBlocksSize += sizeBytes;
+
+            bool bBlocksFlushed = false;
+            if( mDelayedBlocksSize >= mDelayedBlocksFlushThreshold )
+                bBlocksFlushed = flushAllGpuDelayedBlocks( true );
+
+            if( !bBlocksFlushed )
+            {
+                mDelayedBlocks.push_back(
+                    DirtyBlock( mFrameCount, vboFlag, vboIdx, bufferOffset, sizeBytes ) );
+                return;
+            }
+        }
+
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         StrideChangerVec::iterator itStride =
             std::lower_bound( vbo.strideChangers.begin(), vbo.strideChangers.end(),  //
@@ -1125,7 +1255,7 @@ namespace Ogre
         const VboFlag vboFlag = mDevice->mDeviceProperties.limits.bufferImageGranularity == 1u
                                     ? CPU_INACCESSIBLE
                                     : TEXTURES_OPTIMAL;
-        deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboFlag );
+        deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboFlag, false );
     }
     //-----------------------------------------------------------------------------------
     VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes,
@@ -1149,12 +1279,12 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::deallocateRawBuffer( VulkanRawBuffer &rawBuffer )
+    void VulkanVaoManager::deallocateRawBuffer( VulkanRawBuffer &rawBuffer, bool bImmediately )
     {
         OGRE_ASSERT_LOW( rawBuffer.mUnmapTicket == std::numeric_limits<size_t>::max() &&
                          "VulkanRawBuffer not unmapped (or dangling)" );
         deallocateVbo( rawBuffer.mVboPoolIdx, rawBuffer.mInternalBufferStart, rawBuffer.mSize,
-                       static_cast<VboFlag>( rawBuffer.mVboFlag ) );
+                       static_cast<VboFlag>( rawBuffer.mVboFlag ), bImmediately );
         memset( &rawBuffer, 0, sizeof( rawBuffer ) );
     }
     //-----------------------------------------------------------------------------------
@@ -1757,6 +1887,8 @@ namespace Ogre
     void VulkanVaoManager::destroyStagingTexture( VulkanStagingTexture *stagingTexture )
     {
         stagingTexture->_unmapBuffer();
+        // Staging textures are already delayed so they can be deallocated immediately.
+        // BT_DYNAMIC_DEFAULT already signals this information so no extra info is required.
         deallocateVbo( stagingTexture->getVboPoolIndex(), stagingTexture->_getInternalBufferStart(),
                        stagingTexture->_getInternalTotalSizeBytes(), BT_DYNAMIC_DEFAULT, false, true );
     }
@@ -1907,6 +2039,12 @@ namespace Ogre
 
             mDelayedFuncs[mDynamicBufferCurrentFrame].erase(
                 mDelayedFuncs[mDynamicBufferCurrentFrame].begin(), itor );
+        }
+
+        if( !mDelayedBlocks.empty() && ( mFrameCount - mDelayedBlocks.front().frameIdx ) >= 1u )
+        {
+            waitForTailFrameToFinish();
+            flushGpuDelayedBlocks();
         }
 
         deallocateEmptyVbos( false );
@@ -2075,6 +2213,8 @@ namespace Ogre
     {
         mFenceFlushed = true;
 
+        flushAllGpuDelayedBlocks( false );
+
         for( size_t i = 0; i < 2u; ++i )
         {
             StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
@@ -2120,6 +2260,10 @@ namespace Ogre
         }
 
         deallocateEmptyVbos( true );
+
+        // If this isn't empty, then some deallocation got delayed after our flushAllGpuDelayedBlocks
+        // call even though it shouldn't!
+        OGRE_ASSERT_LOW( mDelayedBlocks.empty() );
 
         mFrameCount += mDynamicBufferMultiplier;
     }

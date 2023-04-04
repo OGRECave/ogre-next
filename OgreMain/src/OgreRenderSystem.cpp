@@ -708,7 +708,7 @@ namespace Ogre
             return window->getDepthBuffer();
         }
 
-        if( poolId == DepthBuffer::POOL_NON_SHAREABLE )
+        if( poolId == DepthBuffer::NO_POOL_EXPLICIT_RTV )
         {
             TextureGpu *retVal =
                 createDepthBufferFor( colourTexture, preferDepthTexture, depthBufferFormat, poolId );
@@ -797,7 +797,11 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_beginFrameOnce() { mVaoManager->_beginFrame(); }
+    void RenderSystem::_beginFrameOnce()
+    {
+        _resetMetrics();
+        mVaoManager->_beginFrame();
+    }
     //-----------------------------------------------------------------------
     void RenderSystem::_endFrameOnce() { queueBindUAVs( 0 ); }
     //-----------------------------------------------------------------------

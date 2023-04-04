@@ -44,11 +44,12 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassTargetBarrier/OgreCompositorPassTargetBarrierDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
+#include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "OgreLwString.h"
 
 namespace Ogre
 {
-    const char *CompositorPassTypeEnumNames[PASS_CUSTOM + 1u] = {
+    const char *CompositorPassTypeEnumNames[] = {
         // clang-format off
         "INVALID",
         "SCENE",
@@ -62,6 +63,7 @@ namespace Ogre
         "IBL_SPECULAR",
         "SHADOWS",
         "TARGET_BARRIER",
+        "PASS_WARM_UP",
         "COMPUTE",
         "CUSTOM"
         // clang-format on
@@ -76,6 +78,10 @@ namespace Ogre
         mTargetLevelBarrier( 0 ),
         mParentNodeDef( parentNodeDef )
     {
+        static_assert(
+            sizeof( CompositorPassTypeEnumNames ) / sizeof( CompositorPassTypeEnumNames[0] ) ==
+                ( PASS_CUSTOM + 1 ),
+            "CompositorPassTypeEnumNames string was not updated to match all CompositorPassType" );
     }
     //-----------------------------------------------------------------------------------
     CompositorTargetDef::~CompositorTargetDef()
@@ -144,6 +150,9 @@ namespace Ogre
         case PASS_IBL_SPECULAR:
             retVal = OGRE_NEW CompositorPassIblSpecularDef( mParentNodeDef, this );
             break;
+        case PASS_WARM_UP:
+            retVal = OGRE_NEW CompositorPassWarmUpDef( mParentNodeDef, this );
+            break;
         case PASS_CUSTOM:
         {
             CompositorPassProvider *passProvider =
@@ -205,4 +214,8 @@ namespace Ogre
     uint32 CompositorPassDef::getRtIndex() const { return mParentTargetDef->getRtIndex(); }
     //-----------------------------------------------------------------------------------
     const CompositorTargetDef *CompositorPassDef::getParentTargetDef() const { return mParentTargetDef; }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    CompositorPassProvider::~CompositorPassProvider() {}
 }  // namespace Ogre

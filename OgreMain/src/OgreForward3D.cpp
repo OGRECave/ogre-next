@@ -474,7 +474,7 @@ namespace Ogre
         ForwardPlusBase::setHlmsPassProperties( hlms );
 
         hlms->_setProperty( HlmsBaseProp::ForwardPlus,
-                            static_cast<int32>( HlmsBaseProp::Forward3D.mHash ) );
+                            static_cast<int32>( HlmsBaseProp::Forward3D.getU32Value() ) );
         hlms->_setProperty( HlmsBaseProp::Forward3DNumSlices, static_cast<int32>( mNumSlices ) );
     }
 }  // namespace Ogre

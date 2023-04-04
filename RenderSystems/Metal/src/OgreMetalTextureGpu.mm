@@ -108,7 +108,7 @@ namespace Ogre
                              StringConverter::toString( sizeBytes ) + " bytes.",
                          "MetalTextureGpu::createInternalResourcesImpl" );
         }
-        mFinalTextureName.label = [NSString stringWithUTF8String:textureName.c_str()];
+        mFinalTextureName.label = @( textureName.c_str() );
 
         if( isMultisample() && !hasMsaaExplicitResolves() )
         {
@@ -129,8 +129,7 @@ namespace Ogre
                                  StringConverter::toString( sizeBytes ) + " bytes.",
                              "MetalTextureGpu::createInternalResourcesImpl" );
             }
-            mMsaaFramebufferName.label =
-                [NSString stringWithUTF8String:( textureName + "_MSAA" ).c_str()];
+            mMsaaFramebufferName.label = @( ( textureName + "_MSAA" ).c_str() );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -409,11 +408,12 @@ namespace Ogre
     {
         if( name == msFinalTextureBuffer )
         {
-            *static_cast<void **>( pData ) = (void *)CFBridgingRetain( mFinalTextureName );
+            *static_cast<const void **>( pData ) = (const void *)CFBridgingRetain( mFinalTextureName );
         }
         else if( name == msMsaaTextureBuffer )
         {
-            *static_cast<void **>( pData ) = (void *)CFBridgingRetain( mMsaaFramebufferName );
+            *static_cast<const void **>( pData ) =
+                (const void *)CFBridgingRetain( mMsaaFramebufferName );
         }
     }
 

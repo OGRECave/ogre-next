@@ -26,6 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#ifndef _OgreMacUtils_H_
+#define _OgreMacUtils_H_
+
 #include <CoreFoundation/CoreFoundation.h>
 #include "OgrePrerequisites.h"
 
@@ -37,3 +40,5 @@ namespace Ogre
     _OgreExport String macTempFileName();
     _OgreExport String iOSDocumentsDirectory();
 }  // namespace Ogre
+
+#endif

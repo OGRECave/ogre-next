@@ -23,10 +23,10 @@
 @end
 
 @piece( DoPlanarReflectionsPS )
-	@property( syntax != metal )
-		uint planarReflectionIdx = worldMaterialIdx[inPs.drawId].w;
-	@else
+	@property( syntax == metal || lower_gpu_overhead )
 		ushort planarReflectionIdx = inPs.planarReflectionIdx;
+	@else
+		uint planarReflectionIdx = worldMaterialIdx[inPs.drawId].w;
 	@end
 
 	float4 planarReflection = passBuf.planarReflections[planarReflectionIdx];

@@ -94,13 +94,11 @@ namespace Ogre
 
         // Copy Techniques
         this->removeAllTechniques();
-        Techniques::const_iterator i, iend;
-        iend = rhs.mTechniques.end();
-        for( i = rhs.mTechniques.begin(); i != iend; ++i )
+        for( Technique *rtech : rhs.mTechniques )
         {
             Technique *t = this->createTechnique();
-            *t = *( *i );
-            if( ( *i )->isSupported() )
+            *t = *rtech;
+            if( rtech->isSupported() )
             {
                 insertSupportedTechnique( t );
             }
@@ -125,45 +123,29 @@ namespace Ogre
             compile();
 
         // Load all supported techniques
-        Techniques::iterator i, iend;
-        iend = mSupportedTechniques.end();
-        for( i = mSupportedTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->_prepare();
-        }
+        for( Technique *tech : mSupportedTechniques )
+            tech->_prepare();
     }
     //-----------------------------------------------------------------------
     void Material::unprepareImpl()
     {
         // Load all supported techniques
-        Techniques::iterator i, iend;
-        iend = mSupportedTechniques.end();
-        for( i = mSupportedTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->_unprepare();
-        }
+        for( Technique *tech : mSupportedTechniques )
+            tech->_unprepare();
     }
     //-----------------------------------------------------------------------
     void Material::loadImpl()
     {
         // Load all supported techniques
-        Techniques::iterator i, iend;
-        iend = mSupportedTechniques.end();
-        for( i = mSupportedTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->_load();
-        }
+        for( Technique *tech : mSupportedTechniques )
+            tech->_load();
     }
     //-----------------------------------------------------------------------
     void Material::unloadImpl()
     {
         // Unload all supported techniques
-        Techniques::iterator i, iend;
-        iend = mSupportedTechniques.end();
-        for( i = mSupportedTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->_unload();
-        }
+        for( Technique *tech : mSupportedTechniques )
+            tech->_unload();
     }
     //-----------------------------------------------------------------------
     size_t Material::calculateSize() const
@@ -171,12 +153,8 @@ namespace Ogre
         size_t memSize = 0;
 
         // Tally up techniques
-        Techniques::const_iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            memSize += ( *i )->calculateSize();
-        }
+        for( Technique *tech : mTechniques )
+            memSize += tech->calculateSize();
 
         memSize += sizeof( bool ) * 3;
         memSize += mUnsupportedReasons.size() * sizeof( char );
@@ -423,11 +401,9 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Material::removeAllTechniques()
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
+        for( Technique *tech : mTechniques )
         {
-            OGRE_DELETE( *i );
+            OGRE_DELETE( tech );
         }
         mTechniques.clear();
         mSupportedTechniques.clear();
@@ -448,11 +424,9 @@ namespace Ogre
     bool Material::isTransparent() const
     {
         // Check each technique
-        Techniques::const_iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
+        for( Technique *tech : mTechniques )
         {
-            if( ( *i )->isTransparent() )
+            if( tech->isTransparent() )
                 return true;
         }
         return false;
@@ -465,27 +439,26 @@ namespace Ogre
         clearBestTechniqueList();
         mUnsupportedReasons.clear();
 
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
         size_t techNo = 0;
-        for( i = mTechniques.begin(); i != iend; ++i, ++techNo )
+        for( Technique *tech : mTechniques )
         {
-            String compileMessages = ( *i )->_compile( autoManageTextureUnits );
-            if( ( *i )->isSupported() )
+            String compileMessages = tech->_compile( autoManageTextureUnits );
+            if( tech->isSupported() )
             {
-                insertSupportedTechnique( *i );
+                insertSupportedTechnique( tech );
             }
             else
             {
                 // Log informational
                 StringStream str;
                 str << "Material " << mName << " Technique " << techNo;
-                if( !( *i )->getName().empty() )
-                    str << "(" << ( *i )->getName() << ")";
+                if( !tech->getName().empty() )
+                    str << "(" << tech->getName() << ")";
                 str << " is not supported. " << compileMessages;
                 LogManager::getSingleton().logMessage( str.str(), LML_TRIVIAL );
                 mUnsupportedReasons += compileMessages;
             }
+            ++techNo;
         }
 
         mCompilationRequired = false;
@@ -513,12 +486,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Material::setPointSize( Real ps )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setPointSize( ps );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setPointSize( ps );
     }
     //-----------------------------------------------------------------------
     void Material::setAmbient( Real red, Real green, Real blue )
@@ -528,22 +497,14 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Material::setAmbient( const ColourValue &ambient )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setAmbient( ambient );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setAmbient( ambient );
     }
     //-----------------------------------------------------------------------
     void Material::setDiffuse( Real red, Real green, Real blue, Real alpha )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setDiffuse( red, green, blue, alpha );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setDiffuse( red, green, blue, alpha );
     }
     //-----------------------------------------------------------------------
     void Material::setDiffuse( const ColourValue &diffuse )
@@ -553,12 +514,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Material::setSpecular( Real red, Real green, Real blue, Real alpha )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setSpecular( red, green, blue, alpha );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setSpecular( red, green, blue, alpha );
     }
     //-----------------------------------------------------------------------
     void Material::setSpecular( const ColourValue &specular )
@@ -568,12 +525,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Material::setShininess( Real val )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setShininess( val );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setShininess( val );
     }
     //-----------------------------------------------------------------------
     void Material::setSelfIllumination( Real red, Real green, Real blue )
@@ -583,63 +536,39 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Material::setSelfIllumination( const ColourValue &selfIllum )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setSelfIllumination( selfIllum );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setSelfIllumination( selfIllum );
     }
     //-----------------------------------------------------------------------
     void Material::setMacroblock( const HlmsMacroblock &macroblock )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setMacroblock( macroblock );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setMacroblock( macroblock );
     }
     // --------------------------------------------------------------------
     void Material::setBlendblock( const HlmsBlendblock &blendblock )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setBlendblock( blendblock );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setBlendblock( blendblock );
     }
     //-----------------------------------------------------------------------
     void Material::setShadingMode( ShadeOptions mode )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setShadingMode( mode );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setShadingMode( mode );
     }
     //-----------------------------------------------------------------------
     void Material::setFog( bool overrideScene, FogMode mode, const ColourValue &colour, Real expDensity,
                            Real linearStart, Real linearEnd )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setFog( overrideScene, mode, colour, expDensity, linearStart, linearEnd );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setFog( overrideScene, mode, colour, expDensity, linearStart, linearEnd );
     }
     //-----------------------------------------------------------------------
     void Material::setSamplerblock( const HlmsSamplerblock &samplerblock )
     {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for( i = mTechniques.begin(); i != iend; ++i )
-        {
-            ( *i )->setSamplerblock( samplerblock );
-        }
+        for( Technique *tech : mTechniques )
+            tech->setSamplerblock( samplerblock );
     }
     // --------------------------------------------------------------------
     void Material::_notifyNeedsRecompile()
@@ -684,13 +613,11 @@ namespace Ogre
                                         const bool apply ) const
     {
         // iterate through all techniques and apply texture aliases
-        Techniques::const_iterator i, iend;
-        iend = mTechniques.end();
         bool testResult = false;
 
-        for( i = mTechniques.begin(); i != iend; ++i )
+        for( Technique *tech : mTechniques )
         {
-            if( ( *i )->applyTextureAliases( aliasList, apply ) )
+            if( tech->applyTextureAliases( aliasList, apply ) )
                 testResult = true;
         }
 

@@ -274,14 +274,6 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void TextureUnitState::setContentType( TextureUnitState::ContentType ct )
     {
-        if( mContentType != ct && mParent )
-        {
-            if( mContentType == CONTENT_SHADOW )
-                mParent->removeShadowContentTypeLookup( mParent->getTextureUnitStateIndex( this ) );
-            else if( ct == CONTENT_SHADOW )
-                mParent->insertShadowContentTypeLookup( mParent->getTextureUnitStateIndex( this ) );
-        }
-
         mContentType = ct;
         if( ct == CONTENT_SHADOW || ct == CONTENT_COMPOSITOR )
         {
@@ -641,7 +633,7 @@ namespace Ogre
         }
 
         // Record new effect
-        mEffects.insert( EffectMap::value_type( effect.type, effect ) );
+        mEffects.emplace( effect.type, effect );
     }
     //-----------------------------------------------------------------------
     void TextureUnitState::removeAllEffects()

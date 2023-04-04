@@ -668,7 +668,7 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+            mTexture->_setDepthBufferDefaults( DepthBuffer::NO_POOL_EXPLICIT_RTV, false,
                                                mDepthBuffer->getPixelFormat() );
         }
         else
@@ -732,6 +732,11 @@ namespace Ogre
         mClosed = true;
         mHDC = 0;  // no release thanks to CS_OWNDC wndclass style
         mHwnd = 0;
+
+        if( mClassRegistered )
+        {
+            UnregisterClassA( "OgreGLWindow", nullptr );
+        }
 
         if( mDeviceName != NULL )
         {
@@ -842,7 +847,7 @@ namespace Ogre
                 mTop = monitorInfo.rcMonitor.top;
                 mLeft = monitorInfo.rcMonitor.left;
 
-                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
+                SetWindowLongPtr( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
                 SetWindowPos( mHwnd, HWND_TOPMOST, mLeft, mTop, width, height, SWP_NOACTIVATE );
                 setFinalResolution( width, height );
             }
@@ -868,7 +873,7 @@ namespace Ogre
                 int left = ( screenw > (int)winWidth ) ? ( ( screenw - (int)winWidth ) / 2 ) : 0;
                 int top = ( screenh > (int)winHeight ) ? ( ( screenh - (int)winHeight ) / 2 ) : 0;
 
-                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
+                SetWindowLongPtr( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
                 SetWindowPos( mHwnd, HWND_NOTOPMOST, left, top, winWidth, winHeight,
                               SWP_DRAWFRAME | SWP_FRAMECHANGED | SWP_NOACTIVATE );
                 mLeft = left;
@@ -905,7 +910,7 @@ namespace Ogre
         {
             HWND currentWindowHandle = mHwnd;
             while( ( visible = ( IsIconic( currentWindowHandle ) == false ) ) &&
-                   ( GetWindowLong( currentWindowHandle, GWL_STYLE ) & WS_CHILD ) != 0 )
+                   ( GetWindowLongPtr( currentWindowHandle, GWL_STYLE ) & WS_CHILD ) != 0 )
             {
                 currentWindowHandle = GetParent( currentWindowHandle );
             }

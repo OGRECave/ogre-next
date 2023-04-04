@@ -198,6 +198,9 @@ namespace Ogre
         void renderGL3V1( RenderSystem *rs, bool casterPass, bool dualParaboloid, HlmsCache passCache[],
                           const RenderQueueGroup &renderQueueGroup );
 
+        void warmUpShaders( bool casterPass, HlmsCache passCache[],
+                            const RenderQueueGroup &renderQueueGroup );
+
     public:
         RenderQueue( HlmsManager *hlmsManager, SceneManager *sceneManager, VaoManager *vaoManager );
         ~RenderQueue();
@@ -266,6 +269,14 @@ namespace Ogre
 
         void render( RenderSystem *rs, uint8 firstRq, uint8 lastRq, bool casterPass,
                      bool dualParaboloid );
+
+        /** Simulates what render() would do. But doesn't actually render and skips as much as possible
+            We are only interested in generating the PSOs for compiling them early.
+        @param firstRq
+        @param lastRq
+        @param casterPass
+        */
+        void warmUpShaders( uint8 firstRq, uint8 lastRq, bool casterPass );
 
         /// Don't call this too often. Only renders v1 objects at the moment.
         void renderSingleObject( Renderable *pRend, const MovableObject *pMovableObject,

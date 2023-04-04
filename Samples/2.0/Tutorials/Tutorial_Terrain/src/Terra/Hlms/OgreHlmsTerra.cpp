@@ -73,6 +73,12 @@ namespace Ogre
     const char *TerraProperty::RoughnessMap = "roughness_map";
     const char *TerraProperty::MetalnessMap = "metalness_map";
 
+    const IdString TerraProperty::DetailTriplanar = IdString( "detail_triplanar" );
+    const IdString TerraProperty::DetailTriplanarDiffuse = IdString( "detail_triplanar_diffuse" );
+    const IdString TerraProperty::DetailTriplanarNormal = IdString( "detail_triplanar_normal" );
+    const IdString TerraProperty::DetailTriplanarRoughness = IdString( "detail_triplanar_roughness" );
+    const IdString TerraProperty::DetailTriplanarMetalness = IdString( "detail_triplanar_metalness" );
+
     HlmsTerra::HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders ) :
         HlmsPbs( dataFolder, libraryFolders ),
         mLastMovableObject( 0 )
@@ -300,8 +306,12 @@ namespace Ogre
         else if( ( brdf & TerraBrdf::BRDF_MASK ) == TerraBrdf::BlinnPhong )
             setProperty( PbsProperty::BrdfBlinnPhong, 1 );
 
-        if( brdf & TerraBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
-            setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
+        if( brdf & TerraBrdf::FLAG_HAS_DIFFUSE_FRESNEL )
+        {
+            setProperty( PbsProperty::FresnelHasDiffuse, 1 );
+            if( brdf & TerraBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
+                setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
+        }
 
         if( brdf & TerraBrdf::FLAG_LEGACY_MATH )
             setProperty( PbsProperty::LegacyMathBrdf, 1 );
@@ -341,7 +351,7 @@ namespace Ogre
                 //                if( datablock->getCubemapProbe() )
                 //                    setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
                 setProperty( PbsProperty::EnvProbeMap,
-                             static_cast<int32>( reflectionTexture->getName().mHash ) );
+                             static_cast<int32>( reflectionTexture->getName().getU32Value() ) );
             }
         }
 
@@ -354,10 +364,34 @@ namespace Ogre
         {
             {
                 setProperty( PbsProperty::NormalSamplingFormat,
-                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
                 setProperty( PbsProperty::NormalRgSnorm,
-                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.getU32Value() ) );
             }
+        }
+
+        if( datablock->getDetailTriplanarDiffuseEnabled() )
+        {
+            setProperty( TerraProperty::DetailTriplanar, 1 );
+            setProperty( TerraProperty::DetailTriplanarDiffuse, 1 );
+        }
+
+        if( datablock->getDetailTriplanarNormalEnabled() )
+        {
+            setProperty( TerraProperty::DetailTriplanar, 1 );
+            setProperty( TerraProperty::DetailTriplanarNormal, 1 );
+        }
+
+        if( datablock->getDetailTriplanarRoughnessEnabled() )
+        {
+            setProperty( TerraProperty::DetailTriplanar, 1 );
+            setProperty( TerraProperty::DetailTriplanarRoughness, 1 );
+        }
+
+        if( datablock->getDetailTriplanarMetalnessEnabled() )
+        {
+            setProperty( TerraProperty::DetailTriplanar, 1 );
+            setProperty( TerraProperty::DetailTriplanarMetalness, 1 );
         }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS

@@ -44,7 +44,7 @@ namespace Ogre
                                                               IndexType idxType, size_t numIndexes,
                                                               HardwareBuffer::Usage usage,
                                                               bool useShadowBuffer ) :
-            HardwareIndexBuffer( mgr, idxType, numIndexes, usage, false, false ),
+            HardwareIndexBuffer( mgr, idxType, numIndexes, usage, false, useShadowBuffer ),
             mVulkanHardwareBufferCommon( mSizeInBytes, usage, OGRE_VHIB_ALIGNMENT,
                                          mgr->_getDiscardBufferManager(),
                                          mgr->_getDiscardBufferManager()->getDevice() )

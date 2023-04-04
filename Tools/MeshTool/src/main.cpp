@@ -241,7 +241,7 @@ void parseOpts(UnaryOptionList& unOpts, BinaryOptionList& binOpts)
     BinaryOptionList::iterator bi = binOpts.find("-l");
     if (!bi->second.empty())
     {
-        opts.numLods = StringConverter::parseInt(bi->second);
+        opts.numLods = StringConverter::parseUnsignedShort(bi->second);
     }
 
     bi = binOpts.find("-d");
@@ -261,7 +261,7 @@ void parseOpts(UnaryOptionList& unOpts, BinaryOptionList& binOpts)
     bi = binOpts.find("-f");
     if (!bi->second.empty())
     {
-        opts.lodFixed = StringConverter::parseInt(bi->second);
+        opts.lodFixed = StringConverter::parseSizeT(bi->second);
         opts.usePercent = false;
     }
 
@@ -623,7 +623,7 @@ void buildLod(v1::MeshPtr& mesh)
                                 if (lodLevel.reductionValue > minReduction && lodLevel.reductionValue <= 100.0)
                                 {
                                     minReduction = lodLevel.reductionValue;
-                                    lodLevel.reductionValue *= 0.01;
+                                    lodLevel.reductionValue *= Real( 0.01 );
                                     if (minReduction == 100.0)
                                     {
                                         cout << "\nCan't insert more LOD levels!";
@@ -768,11 +768,13 @@ void checkColour(v1::VertexData* vdata, bool& hasColour, bool& hasAmbiguousColou
         {
         case VET_COLOUR:
             hasAmbiguousColour = true;
+            OGRE_FALLTHROUGH;
 
         case VET_COLOUR_ABGR:
         case VET_COLOUR_ARGB:
             hasColour = true;
             originalType = elem.getType();
+            break;
 
         default:
             // do nothing
@@ -904,9 +906,9 @@ DataStreamPtr openFile( String source )
                     "File " + source + " not found.", "OgreMeshTool");
     }
     stat( source.c_str(), &tagStat );
-    MemoryDataStream* memstream = new MemoryDataStream(source, tagStat.st_size, true);
-    size_t result = fread( (void*)memstream->getPtr(), 1, tagStat.st_size, pFile );
-    if (result != tagStat.st_size)
+    MemoryDataStream* memstream = new MemoryDataStream(source, (size_t)tagStat.st_size, true);
+    size_t result = fread( (void*)memstream->getPtr(), 1, (size_t)tagStat.st_size, pFile );
+    if (result != (size_t)tagStat.st_size)
     {
         OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR,
                     "Unexpected error while reading file " + source, "OgreMeshTool");

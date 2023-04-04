@@ -229,10 +229,7 @@ namespace Ogre
         CompositorShadowNode *shadowNode =
             ( mShadowNode && mShadowNode->getEnabled() ) ? mShadowNode : 0;
         if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_CASTER_PASS )
-        {
-            sceneManager->_setCurrentShadowNode(
-                shadowNode, mDefinition->mShadowNodeRecalculation == SHADOW_NODE_REUSE );
-        }
+            sceneManager->_setCurrentShadowNode( shadowNode );
 
         // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
@@ -259,8 +256,7 @@ namespace Ogre
             shadowNode->_update( mCullCamera, usedLodCamera, sceneManager );
 
             // ShadowNode passes may've overriden these settings.
-            sceneManager->_setCurrentShadowNode(
-                shadowNode, mDefinition->mShadowNodeRecalculation == SHADOW_NODE_REUSE );
+            sceneManager->_setCurrentShadowNode( shadowNode );
             viewport->_setVisibilityMask( oldVisibilityMask, oldLightVisibilityMask );
             mCullCamera->_notifyViewport( viewport );
 
@@ -274,8 +270,30 @@ namespace Ogre
 
         notifyPassSceneAfterShadowMapsListeners();
 
+        TextureGpu *oldTarget = viewport->getCurrentTarget();
+        const uint8 oldMip = viewport->getCurrentMip();
+        const Vector4 oldVpSize( viewport->getLeft(), viewport->getTop(), viewport->getWidth(),
+                                 viewport->getHeight() );
+        const Vector4 oldScissors( viewport->getScissorLeft(), viewport->getScissorTop(),
+                                   viewport->getScissorWidth(), viewport->getScissorHeight() );
+        {
+            // We must ensure Aspect Ratio is set BEFORE analyzeBarriers
+            // otherwise analyzeBarriers may make the wrong decisions
+            // (e.g. skipping barriers in planar reflections) because the AR
+            // may be used to determine whether a technique is used or not
+            setViewportSizeToViewport( 0u, viewport );
+            mCullCamera->_notifyViewport( viewport );
+            viewport->_setupAspectRatio( mCullCamera );
+        }
+
         analyzeBarriers();
         executeResourceTransitions();
+        {
+            // Restore the old viewport settings because we messed up with
+            // RenderSystem::mCurrentRenderViewport (where viewport points to) and some
+            // RenderSystems (D3D11) tracks these settings to see which ones are dirty.
+            viewport->setDimensions( oldTarget, oldVpSize, oldScissors, oldMip );
+        }
         setRenderPassDescToCurrent();
 
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );
@@ -311,7 +329,7 @@ namespace Ogre
 
         if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_CASTER_PASS )
         {
-            sceneManager->_setCurrentShadowNode( 0, false );
+            sceneManager->_setCurrentShadowNode( 0 );
             sceneManager->_setForwardPlusEnabledInPass( false );
         }
 

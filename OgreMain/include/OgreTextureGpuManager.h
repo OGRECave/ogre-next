@@ -36,12 +36,15 @@ THE SOFTWARE.
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuListener.h"
 #include "Threading/OgreLightweightMutex.h"
+#include "Threading/OgreSemaphore.h"
 #include "Threading/OgreThreads.h"
 #include "Threading/OgreWaitableEvent.h"
 
 #include "ogrestd/list.h"
 #include "ogrestd/map.h"
 #include "ogrestd/set.h"
+
+#include <atomic>
 
 #include "OgreHeaderPrefix.h"
 
@@ -402,9 +405,17 @@ namespace Ogre
             /// See LoadRequest::sliceOrDepth
             uint32          dstSliceOrDepth;
             FilterBaseArray filters;
+#ifdef OGRE_PROFILING_TEXTURES
+            uint64 microsecondsTaken;
+#endif
 
             QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
-                         FilterBaseArray &inOutFilters );
+                         FilterBaseArray &inOutFilters
+#ifdef OGRE_PROFILING_TEXTURES
+                         ,
+                         uint64 _microsecondsTaken
+#endif
+            );
             void  destroy();
             bool  empty() const;
             bool  isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;
@@ -487,14 +498,16 @@ namespace Ogre
             Image2                    *image;
             bool                       autoDeleteImage;
             bool                       reuploadOnly;
+            bool                       bSkipMultiload;
 
             void init( GpuResidency::GpuResidency _targetResidency, Image2 *_image,
-                       bool _autoDeleteImage, bool _reuploadOnly )
+                       bool _autoDeleteImage, bool _reuploadOnly, bool _bSkipMultiload )
             {
                 targetResidency = _targetResidency;
                 image = _image;
                 autoDeleteImage = _autoDeleteImage;
                 reuploadOnly = _reuploadOnly;
+                bSkipMultiload = _bSkipMultiload;
             }
         };
 
@@ -515,6 +528,7 @@ namespace Ogre
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGen;
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGenCubemaps;
         bool                               mShuttingDown;
+        std::atomic<bool>                  mUseMultiload;
         ThreadHandlePtr                    mWorkerThread;
         /// Main thread wakes, worker waits.
         WaitableEvent mWorkerWaitableEvent;
@@ -530,6 +544,13 @@ namespace Ogre
         bool          mAddedNewLoadRequests;
         ThreadData    mThreadData[2];
         StreamingData mStreamingData;
+
+        /// Threadpool for loading many textures in parallel. See setMultiLoadPool()
+        std::vector<ThreadHandlePtr> mMultiLoadWorkerThreads;
+        LoadRequestVec               mMultiLoads;
+        LightweightMutex             mMultiLoadsMutex;
+        Semaphore                    mMultiLoadsSemaphore;
+        std::atomic<uint32>          mPendingMultiLoads;
 
         TexturePoolList  mTexturePool;
         ResourceEntryMap mEntries;
@@ -583,6 +604,9 @@ namespace Ogre
         MissedListenerCallList mMissedListenerCallsTmp;
         bool                   mDelayListenerCalls;
         bool                   mIgnoreScheduledTasks;
+#ifdef OGRE_PROFILING_TEXTURES
+        bool mProfilingLoadingTime;
+#endif
 
     public:
         /** While true, calls to createTexture & createOrRetrieveTexture will ignore
@@ -618,6 +642,10 @@ namespace Ogre
     protected:
         VaoManager   *mVaoManager;
         RenderSystem *mRenderSystem;
+
+#ifdef OGRE_PROFILING_TEXTURES
+        std::map<IdString, Timer> mProfilingData;
+#endif
 
         // Be able to hold up to a 2x2 cubemap RGBA8 for when a
         // image raises an exception in the worker thread
@@ -732,6 +760,25 @@ namespace Ogre
         void _reserveSlotForTexture( TextureGpu *texture );
         /// Must be called from main thread.
         void _releaseSlotFromTexture( TextureGpu *texture );
+
+        /** Implements multiload. It is a simple job pool that picks the next request
+            and loads an Image2.
+
+            Then passes it to the worker thread as if the main thread had requested to
+            load a texture from an Image2 pointer, instead of loading it from file
+            or listener.
+
+            i.e. it pretends the user loaded:
+                tex->scheduleTransitionTo( GpuResidency::Resident, &image, autoDeleteImage = true );
+
+            If there are any errors we abort and pass the raw LoadRequest to the streaming
+            thread; and the streaming thread, trying to open this texture, should encounter
+            the same error again and handle it properly.
+        @param threadHandle
+        @return
+            Thread's return value.
+        */
+        unsigned long _updateTextureMultiLoadWorkerThread( ThreadHandle *threadHandle );
 
         unsigned long _updateStreamingWorkerThread( ThreadHandle *threadHandle );
 
@@ -1028,6 +1075,57 @@ namespace Ogre
         /// See TextureGpuManagerListener. Pointer cannot be null.
         void setTextureGpuManagerListener( TextureGpuManagerListener *listener );
 
+        /** OgreNext always performs background streaming to load textures in a worker thread.
+            However there is only ONE background thread performing all work serially while
+            the main thread can do other stuff (like rendering, even if textures aren't ready).
+
+            There are times where you need to load many textures at once and having
+            a threadpool of textures increases throughput.
+
+            The threadpool will load N textures at once into RAM, and then send them
+            to the background thread to upload them to the GPU.
+
+            Once the background thread is ready, the main thread is signalled about the situation.
+
+            Enabling the MultiLoad pool can give performance benefits in the following scenarios:
+
+              - You are IO limited: the threadpool gets stalled but in the meantime the
+                background thread still loads what's ready in System RAM into GPU RAM
+              - You are ALU/CPU limited: Loading PNG/JPG files needs decoding.
+                Loading multiple at once is better use of CPU resources.
+
+            Enabling Multiload pool may increase memory consumption because you may end
+            up with many images (more than numThreads) loaded in RAM.
+
+            You can change this value at any time, but it is an expensive call as we need
+            to synchronize with the threadpool and flush all work.
+
+            Testing shows on an AMD Ryzen 5900X (12C/24T) loading of many PNG & JPG files of
+            varying sizes (up to 2048x2048 RGBA8_UNORM) was cut from 1 second to 0.7 seconds
+            in a Debug build.
+
+            However a Lenovo TB-X6C6X (4C/4T) Android tablet, the same workload cut from
+            5 seconds to 1 second, in a Release build.
+        @remarks
+            Because of the multithreaded nature, enabling this feature means textures may be
+            loaded out of order.
+
+            Without this feature, normally textures would be loaded in order, unless there was
+            an issue (e.g. file couldn't be found, raising an exception; the metadata cache
+            was out of date, etc).
+
+            This can have an impact if you rely on the order (e.g. if you are using reservePoolId()).
+            If you need to preserve ordering, you can use TextureGpu::scheduleTransition and
+            set bSkipMultiload = true.
+
+            Testing indicates the ideal value is somewhere between 4-8 threads.
+            More threads and you get diminishing returns.
+        @param numThreads
+            How many number of threads to use for loading multiple textures.
+            0 to disable this feature (Default).
+        */
+        void setMultiLoadPool( uint32 numThreads );
+
         /** Background streaming works by having a bunch of preallocated StagingTextures so
             we're ready to start uploading as soon as we see a request to load a texture
             from file.
@@ -1185,6 +1283,20 @@ namespace Ogre
         */
         void setTrylockMutexFailureLimit( uint32 tryLockFailureLimit );
 
+        /** When enabled, we will profile the time it takes a texture
+            to go from Resident to Ready and Log it.
+        @param bProfile
+            True to enable. False to disable profiling.
+            Default value depends on Debug mode (default to true on Debug, false on Release)
+        */
+        void setProfileLoadingTime( bool bProfile );
+
+#ifdef OGRE_PROFILING_TEXTURES
+        bool getProfileLoadingTime() const { return mProfilingLoadingTime; }
+#else
+        bool getProfileLoadingTime() const { return false; }
+#endif
+
         /// This function CAN be called from any thread
         const String *findAliasNameStr( IdString idName ) const;
         /// This function CAN be called from any thread
@@ -1220,7 +1332,7 @@ namespace Ogre
 
     protected:
         void scheduleLoadRequest( TextureGpu *texture, Image2 *image, bool autoDeleteImage,
-                                  bool toSysRam, bool reuploadOnly );
+                                  bool toSysRam, bool reuploadOnly, bool bSkipMultiload );
 
         /// Transitions a texture from OnSystemRam to Resident; and asks the worker thread
         /// to transfer the data in the background.
@@ -1231,7 +1343,8 @@ namespace Ogre
 
         void scheduleLoadRequest( TextureGpu *texture, const String &name, const String &resourceGroup,
                                   uint32 filters, Image2 *image, bool autoDeleteImage, bool toSysRam,
-                                  bool reuploadOnly, bool skipMetadataCache = false,
+                                  bool reuploadOnly, bool bSkipMultiload = false,
+                                  bool   skipMetadataCache = false,
                                   uint32 sliceOrDepth = std::numeric_limits<uint32>::max() );
 
     public:
@@ -1240,7 +1353,8 @@ namespace Ogre
                               uint32 sliceOrDepth = std::numeric_limits<uint32>::max() );
 
         void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency targetResidency,
-                                    Image2 *image, bool autoDeleteImage, bool reuploadOnly );
+                                    Image2 *image, bool autoDeleteImage, bool reuploadOnly,
+                                    bool bSkipMultiload );
         void _queueDownloadToRam( TextureGpu *texture, bool resyncOnly );
         /// When true we will ignore all tasks in mScheduledTasks and execute transitions immediately
         /// Caller is responsible for ensuring this is safe to do.

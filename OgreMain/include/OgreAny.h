@@ -41,6 +41,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreLwString.h"
 
+#include <ostream>
 #include <typeinfo>
 
 #include "OgreHeaderPrefix.h"

@@ -50,11 +50,7 @@ namespace Ogre
         mVaoPerLod[VpNormal] = subMeshBasis->mVao[VpNormal];
         mVaoPerLod[VpShadow] = subMeshBasis->mVao[VpShadow];
 
-        if( !subMeshBasis->mBlendIndexToBoneIndexMap.empty() )
-        {
-            mHasSkeletonAnimation = true;
-            mBlendIndexToBoneIndexMap = &subMeshBasis->mBlendIndexToBoneIndexMap;
-        }
+        setupSkeleton();
 
         if( subMeshBasis->getNumPoses() > 0 )
         {
@@ -67,6 +63,15 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------
     SubItem::~SubItem() {}
+    //-----------------------------------------------------------------------
+    void SubItem::setupSkeleton()
+    {
+        if( !mSubMesh->mBlendIndexToBoneIndexMap.empty() )
+        {
+            mHasSkeletonAnimation = true;
+            mBlendIndexToBoneIndexMap = &mSubMesh->mBlendIndexToBoneIndexMap;
+        }
+    }
     //-----------------------------------------------------------------------
     SubMesh *SubItem::getSubMesh() const { return mSubMesh; }
     //-----------------------------------------------------------------------------

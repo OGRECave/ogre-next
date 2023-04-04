@@ -254,7 +254,9 @@ namespace Ogre
                 mDefinition->mNumInitialPasses != std::numeric_limits<uint32>::max()
                     ? ( mDefinition->mSamplesPerIteration * float( mDefinition->mNumInitialPasses ) )
                     : mDefinition->mSamplesPerIteration;
-            const float p_convolutionRoughness = mip / static_cast<float>( outNumMips - 1u );
+            const float lod = mip / static_cast<float>( outNumMips - 1u );
+            const float perceptualRoughness = lodToPerceptualRoughness( lod );
+            const float p_convolutionRoughness = perceptualRoughness * perceptualRoughness;
 
             if( !hasTypedUavLoads && p_convolutionSampleCount != p_convolutionMaxSamples )
             {
@@ -294,6 +296,20 @@ namespace Ogre
 
         if( !hasTypedUavLoads && mNumPassesLeft != std::numeric_limits<uint32>::max() )
             mNumPassesLeft = 1u;
+    }
+    //-----------------------------------------------------------------------------------
+    float CompositorPassIblSpecular::lodToPerceptualRoughness( float lod ) const
+    {
+        // Inverse perceptualRoughness-to-LOD mapping:
+        // The LOD-to-perceptualRoughness mapping is a quadratic fit for
+        // log2(perceptualRoughness)+iblMaxMipLevel when iblMaxMipLevel is 4.
+        // We found empirically that this mapping works very well for a 256 cubemap with 5 levels used,
+        // but also scales well for other iblMaxMipLevel values.
+        const float a = 2.0f;
+        const float b = -1.0f;
+        return ( lod != 0 ) ? Math::Clamp( ( std::sqrt( a * a + 4.0f * b * lod ) - a ) / ( 2.0f * b ),
+                                           0.0f, 1.0f )
+                            : 0.0f;
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassIblSpecular::execute( const Camera *lodCamera )

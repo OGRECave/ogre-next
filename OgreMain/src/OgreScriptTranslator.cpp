@@ -64,6 +64,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
+#include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "Compositor/Pass/OgreCompositorPassProvider.h"
 
 namespace Ogre{
@@ -1227,7 +1228,7 @@ namespace Ogre{
                             ++itor;
                         }
                     }
-                    paramVec.push_back( std::pair<IdString, String>( prop->name, value ) );
+                    paramVec.emplace_back( prop->name, value );
                     }
                 }
             }
@@ -1361,7 +1362,7 @@ namespace Ogre{
                         AbstractNodeList::const_iterator i0 = getNodeAt(prop->values, 0), i1 = getNodeAt(prop->values, 1);
                         String name, value;
                         if(getString(*i0, &name) && getString(*i1, &value))
-                            mTextureAliases.insert(std::make_pair(name, value));
+                            mTextureAliases.emplace( name, value );
                         else
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                                 "set_texture_alias must have 2 string argument");
@@ -3123,13 +3124,8 @@ namespace Ogre{
             return;
         }
 
-        Pass *pass = any_cast<Pass*>(node->parent->context);
-        pass->setShadowCasterVertexProgram(evt.mName);
-        if(pass->getShadowCasterVertexProgram()->isSupported())
-        {
-            GpuProgramParametersSharedPtr params = pass->getShadowCasterVertexProgramParameters();
-            GpuProgramTranslator::translateProgramParameters(compiler, params, node);
-        }
+        compiler->addError( ScriptCompiler::CE_UNEXPECTEDTOKEN, node->file, node->line,
+                            "shadow_caster_vertex_program_ref is deprecated and will be ignored" );
     }
     //-------------------------------------------------------------------------
     void PassTranslator::translateShadowCasterFragmentProgramRef(ScriptCompiler *compiler, ObjectAbstractNode *node)
@@ -3149,13 +3145,8 @@ namespace Ogre{
             return;
         }
 
-        Pass *pass = any_cast<Pass*>(node->parent->context);
-        pass->setShadowCasterFragmentProgram(evt.mName);
-        if(pass->getShadowCasterFragmentProgram()->isSupported())
-        {
-            GpuProgramParametersSharedPtr params = pass->getShadowCasterFragmentProgramParameters();
-            GpuProgramTranslator::translateProgramParameters(compiler, params, node);
-        }
+        compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, node->file, node->line,
+                            "shadow_caster_fragment_program_ref is deprecated and will be ignored" );
     }
 
     /**************************************************************************
@@ -4503,7 +4494,8 @@ namespace Ogre{
                                 mUnit->setContentType(TextureUnitState::CONTENT_NAMED);
                                 break;
                             case ID_SHADOW:
-                                mUnit->setContentType(TextureUnitState::CONTENT_SHADOW);
+                                compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                    prop->line, atom->value + " is deprecated" );
                                 break;
                             case ID_COMPOSITOR:
                                 mUnit->setContentType(TextureUnitState::CONTENT_COMPOSITOR);
@@ -4749,7 +4741,7 @@ namespace Ogre{
                             value += ((AtomAbstractNode*)(*it).get())->value;
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back( name, value );
                 }
             }
             else if((*i)->type == ANT_OBJECT)
@@ -4827,7 +4819,7 @@ namespace Ogre{
 
                     ProcessResourceNameScriptCompilerEvent evt(ProcessResourceNameScriptCompilerEvent::GPU_PROGRAM, value);
                     compiler->_fireEvent(&evt, 0);
-                    customParameters.push_back(std::make_pair("delegate", evt.mName));
+                    customParameters.emplace_back( "delegate", evt.mName );
                 }
                 else
                 {
@@ -4844,7 +4836,7 @@ namespace Ogre{
                             value += ((AtomAbstractNode*)(*it).get())->value;
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back( name, value );
                 }
             }
             else if((*i)->type == ANT_OBJECT)
@@ -4958,7 +4950,7 @@ namespace Ogre{
                             }
                         }
                     }
-                    customParameters.push_back(std::make_pair(name, value));
+                    customParameters.emplace_back( name, value );
                 }
             }
             else if((*i)->type == ANT_OBJECT)
@@ -6504,7 +6496,7 @@ namespace Ogre{
                     if( depthBufferId == DepthBuffer::POOL_INVALID )
                     {
                         if( PixelFormatGpuUtils::isDepth( format ) )
-                            depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                            depthBufferId = DepthBuffer::NO_POOL_EXPLICIT_RTV;
                         else if( format == PFG_NULL )
                             depthBufferId = DepthBuffer::POOL_NO_DEPTH;
                         else
@@ -7963,11 +7955,11 @@ namespace Ogre{
                     break;
                 case ID_DEPTH:
                     translateRenderTargetViewEntry( mRtv->depthAttachment, prop, compiler, false );
-                    mRtv->depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                    mRtv->depthBufferId = DepthBuffer::NO_POOL_EXPLICIT_RTV;
                     break;
                 case ID_STENCIL:
                     translateRenderTargetViewEntry( mRtv->stencilAttachment, prop, compiler, false );
-                    mRtv->depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                    mRtv->depthBufferId = DepthBuffer::NO_POOL_EXPLICIT_RTV;
                     break;
                 case ID_DEPTH_STENCIL:
                     translateRenderTargetViewEntry( mRtv->depthAttachment, prop, compiler, false );
@@ -8758,7 +8750,7 @@ namespace Ogre{
                         else
                         {
                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                               "Number expected, followed by dont_care|load|clear|clear_on_tilers");
+                                               "Number expected, followed by 4 floats");
                         }
                     }
                 }
@@ -8913,7 +8905,7 @@ namespace Ogre{
                         else
                         {
                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                               "Expected dont_care|store|clear|clear_on_tilers" );
+                                               "Expected dont_care|store|resolve|store_or_resolve|store_and_resolve" );
                         }
                     }
                     else
@@ -8936,7 +8928,7 @@ namespace Ogre{
                         else
                         {
                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                               "Number expected, followed by dont_care|store|clear|clear_on_tilers");
+                                               "Number expected, followed by dont_care|store|resolve|store_or_resolve|store_and_resolve");
                         }
                     }
                 }
@@ -8956,7 +8948,7 @@ namespace Ogre{
                     else
                     {
                         compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                           "Expected dont_care|store|clear|clear_on_tilers" );
+                                           "Expected dont_care|store|resolve|store_or_resolve|store_and_resolve" );
                     }
                 }
                     break;
@@ -8975,7 +8967,7 @@ namespace Ogre{
                     else
                     {
                         compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                           "Expected dont_care|store|clear|clear_on_tilers" );
+                                           "Expected dont_care|store|resolve|store_or_resolve|store_and_resolve" );
                     }
                 }
                     break;
@@ -10995,6 +10987,170 @@ namespace Ogre{
         }
     }
 
+    void CompositorPassTranslator::translateWarmUp( ScriptCompiler *compiler,
+                                                    const AbstractNodePtr &node,
+                                                    CompositorTargetDef *targetDef )
+    {
+        mPassDef = targetDef->addPass( PASS_WARM_UP );
+        CompositorPassWarmUpDef *passWarmUp = static_cast<CompositorPassWarmUpDef *>( mPassDef );
+
+        ObjectAbstractNode *obj = reinterpret_cast<ObjectAbstractNode *>( node.get() );
+        obj->context = Any( mPassDef );
+
+        for( const AbstractNodePtr &i : obj->children )
+        {
+            if( i->type == ANT_OBJECT )
+            {
+                processNode( compiler, i );
+            }
+            else if( i->type == ANT_PROPERTY )
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode *>( i.get() );
+                switch( prop->id )
+                {
+                case ID_VISIBILITY_MASK:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    uint32 var;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getHex( *it0, &var ) )
+                    {
+                        passWarmUp->setVisibilityMask( var );
+                    }
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                    }
+                    break;
+                }
+                case ID_CAMERA:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( !getIdString( *it0, &passWarmUp->mCameraName ) )
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                    break;
+                }
+                case ID_FIRST_RENDER_QUEUE:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    uint32 val;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getUInt( *it0, &val ) )
+                    {
+                        passWarmUp->mFirstRQ = (uint8)val;
+                    }
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                    }
+                    break;
+                }
+                case ID_LAST_RENDER_QUEUE:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    uint32 val;
+                    String str;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getUInt( *it0, &val ) )
+                    {
+                        passWarmUp->mLastRQ =
+                            (uint8)std::min<uint32>( val, std::numeric_limits<uint8>::max() );
+                    }
+                    else if( getString( *it0, &str ) && str == "max" )
+                    {
+                        passWarmUp->mLastRQ = std::numeric_limits<uint8>::max();
+                    }
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line,
+                                            "Expected a number between 0 & 255, or the word 'max'" );
+                    }
+                    break;
+                }
+                case ID_ENABLE_FORWARDPLUS:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( !getBoolean( *it0, &passWarmUp->mEnableForwardPlus ) )
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                    break;
+                }
+                case ID_SHADOWS_ENABLED:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else if( prop->values.size() > 2 )
+                    {
+                        compiler->addError( ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file,
+                                            prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    AbstractNodeList::const_iterator it1 = it0;
+                    if( prop->values.size() > 1 )
+                        ++it1;
+
+                    String str;
+                    if( getString( *it0, &str ) )
+                    {
+                        if( str == "off" )
+                            passWarmUp->mShadowNode = IdString();
+                        else
+                            passWarmUp->mShadowNode = IdString( str );
+                    }
+                    else
+                    {
+                        compiler->addError(
+                            ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                            "shadow property can be either 'shadow off' or 'shadow myNodeName "
+                            "[first|reuse|recalculate]'" );
+                    }
+                    break;
+                }
+                // case ID_VIEWPORT:
+                case ID_IDENTIFIER:
+                case ID_NUM_INITIAL:
+                case ID_EXECUTION_MASK:
+                case ID_PROFILING_ID:
+                    break;
+                default:
+                    compiler->addError( ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
+                                        "token \"" + prop->name + "\" is not recognized" );
+                }
+            }
+        }
+    }
+
     void CompositorPassTranslator::translateStencilFace( ScriptCompiler *compiler, const AbstractNodePtr &node,
                                                          StencilStateOp *stencilStateOp )
     {
@@ -11088,6 +11244,8 @@ namespace Ogre{
             translateMipmap( compiler, node, target );
         else if(obj->name == "ibl_specular")
             translateIblSpecular( compiler, node, target );
+        else if(obj->name == "warm_up")
+            translateWarmUp( compiler, node, target );
         else if(obj->name == "custom")
         {
             IdString customId;
@@ -11111,7 +11269,7 @@ namespace Ogre{
             CompositorPassProvider* passProv = compMgr->getCompositorPassProvider();
             if (passProv)
             {
-                passProv->translateCustomPass(node, mPassDef);
+                passProv->translateCustomPass( compiler, node, customId, mPassDef );
             }
         }
         else

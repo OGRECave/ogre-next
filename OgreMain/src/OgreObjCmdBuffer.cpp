@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreId.h"
 #include "OgreImage2.h"
+#include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreProfiler.h"
 #include "OgreResourceGroupManager.h"
@@ -205,4 +206,32 @@ namespace Ogre
 
         texture->notifyDataIsReady();
     }
+#ifdef OGRE_PROFILING_TEXTURES
+    //-----------------------------------------------------------------------------------
+    ObjCmdBuffer::LogProfilingData::LogProfilingData( TextureGpu *_textureGpu, uint32 _dstSliceOrDepth,
+                                                      uint64 microsecondsTaken ) :
+        texture( _textureGpu ),
+        dstSliceOrDepth( _dstSliceOrDepth ),
+        millisecondsTaken( static_cast<uint32>( microsecondsTaken / 10ul ) )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    void ObjCmdBuffer::LogProfilingData::execute()
+    {
+        OgreProfileExhaustive( "ObjCmdBuffer::LogProfilingData::execute" );
+
+        char tmpBuffer[256];
+        LwString logMsg( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+        logMsg.a( "[PROFILING] Time: ", millisecondsTaken / 100u, ".", millisecondsTaken % 100u,
+                  " ms slice: " );
+
+        if( dstSliceOrDepth == std::numeric_limits<uint32>::max() )
+            logMsg.a( "none ", texture->getNameStr().c_str() );
+        else
+            logMsg.a( dstSliceOrDepth, " ", texture->getNameStr().c_str() );
+
+        LogManager::getSingleton().logMessage( String( logMsg.c_str(), logMsg.size() ) );
+    }
+#endif
 }  // namespace Ogre

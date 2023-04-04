@@ -49,7 +49,7 @@ namespace Ogre
                                                                 size_t vertexSize, size_t numVertices,
                                                                 HardwareBuffer::Usage usage,
                                                                 bool useShadowBuffer ) :
-            HardwareVertexBuffer( mgr, vertexSize, numVertices, usage, false, false ),
+            HardwareVertexBuffer( mgr, vertexSize, numVertices, usage, false, useShadowBuffer ),
 
             mVulkanHardwareBufferCommon( mSizeInBytes, usage, OGRE_VHVB_ALIGNMENT,
                                          mgr->_getDiscardBufferManager(),

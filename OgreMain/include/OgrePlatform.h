@@ -65,7 +65,8 @@ THE SOFTWARE.
 #if defined( __i386__ ) || defined( __x86_64__ ) || defined( _M_IX86 ) || defined( _M_X64 ) || \
     defined( _M_AMD64 ) || defined( __e2k__ )
 #    define OGRE_CPU OGRE_CPU_X86
-#elif defined( __ppc__ ) || defined( __ppc64__ ) || defined( _M_PPC )
+#elif defined( __ppc__ ) || defined( __PPC__ ) || defined( __ppc64__ ) || defined( __PPC64__ ) || \
+      defined( _M_PPC )
 #    define OGRE_CPU OGRE_CPU_PPC
 #elif defined( __arm__ ) || defined( __arm64__ ) || defined( __aarch64__ ) || defined( _M_ARM ) || \
     defined( _M_ARM64 )
@@ -78,9 +79,9 @@ THE SOFTWARE.
 
 /* Find the arch type */
 #if defined( __x86_64__ ) || defined( _M_X64 ) || defined( _M_X64 ) || defined( _M_AMD64 ) || \
-    defined( __ppc64__ ) || defined( __arm64__ ) || defined( __aarch64__ ) || defined( _M_ARM64 ) || \
-    defined( __mips64 ) || defined( __mips64_ ) || defined( __alpha__ ) || defined( __ia64__ ) || \
-    defined( __e2k__ ) || defined( __s390__ ) || defined( __s390x__ )
+    defined( __ppc64__ ) || defined( __PPC64__ ) || defined( __arm64__ ) || defined( __aarch64__ ) || \
+    defined( _M_ARM64 ) || defined( __mips64 ) || defined( __mips64_ ) || defined( __alpha__ ) || \
+    defined( __ia64__ ) || defined( __e2k__ ) || defined( __s390__ ) || defined( __s390x__ )
 #    define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_64
 #else
 #    define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_32
@@ -217,16 +218,25 @@ THE SOFTWARE.
 #define OGRE_WARN( x ) message( __FILE__ "(" QUOTE( __LINE__ ) ") : " x "\n" )
 
 // For marking functions as deprecated
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#    define OGRE_DEPRECATED __declspec( deprecated )
-#    define OGRE_DEPRECATED_VER(x) __declspec( deprecated )
-#elif OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
-#    define OGRE_DEPRECATED __attribute__( ( deprecated ) )
-#    define OGRE_DEPRECATED_VER(x) __attribute__( ( deprecated ) )
+#if __cplusplus >= 201402L
+#    define OGRE_DEPRECATED [[deprecated]]
+#    define OGRE_DEPRECATED_VER( x ) [[deprecated]]
+#    define OGRE_DEPRECATED_ENUM_VER( x ) [[deprecated]]
 #else
-#    pragma message( "WARNING: You need to implement OGRE_DEPRECATED for this compiler" )
-#    define OGRE_DEPRECATED
-#    define OGRE_DEPRECATED_VER(x)
+#    if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#        define OGRE_DEPRECATED __declspec( deprecated )
+#        define OGRE_DEPRECATED_VER( x ) __declspec( deprecated )
+#        define OGRE_DEPRECATED_ENUM_VER( x )
+#    elif OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
+#        define OGRE_DEPRECATED __attribute__( ( deprecated ) )
+#        define OGRE_DEPRECATED_VER( x ) __attribute__( ( deprecated ) )
+#        define OGRE_DEPRECATED_ENUM_VER( x ) __attribute__( ( deprecated ) )
+#    else
+#        pragma message( "WARNING: You need to implement OGRE_DEPRECATED for this compiler" )
+#        define OGRE_DEPRECATED
+#        define OGRE_DEPRECATED_VER( x )
+#        define OGRE_DEPRECATED_ENUM_VER( x )
+#    endif
 #endif
 // Disable OGRE_WCHAR_T_STRINGS until we figure out what to do about it.
 #define OGRE_WCHAR_T_STRINGS 0
