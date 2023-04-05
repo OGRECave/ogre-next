@@ -45,7 +45,7 @@ namespace Ogre
             {
                 VaoManager *vaoManager = mBuffer->mVaoManager;
                 assert(vaoManager);
-                vaoManager->waitUntilCommitedCommandBufferCompleted();
+                vaoManager->_waitUntilCommitedCommandBufferCompleted();
             }
             assert( mBuffer->mMappingState == MS_UNMAPPED );
             void *dstData = this->map( elementStart, elementCount, mBuffer->mMappingState );

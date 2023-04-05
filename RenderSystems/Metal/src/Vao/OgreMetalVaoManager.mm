@@ -1469,10 +1469,10 @@ namespace Ogre
         return retVal;
     }
     
-    void MetalVaoManager::waitUntilCommitedCommandBufferCompleted()
+    void MetalVaoManager::_waitUntilCommitedCommandBufferCompleted()
     {
         if(mDevice)
-            mDevice->waitUntilCommitedCommandBufferCompleted();
+            mDevice->_waitUntilCommitedCommandBufferCompleted();
     }
 
     //-----------------------------------------------------------------------------------

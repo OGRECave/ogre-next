@@ -133,7 +133,7 @@ namespace Ogre
         mRenderSystem->_notifyNewCommandBuffer();
     }
     
-    void MetalDevice::waitUntilCommitedCommandBufferCompleted()
+    void MetalDevice::_waitUntilCommitedCommandBufferCompleted()
     {
         if(mCommitedCommandBuffer)
         {
