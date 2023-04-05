@@ -1,7 +1,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
-inline float max3( float x, float y, float z ) { return max(x, max(y, z)); }
+#define max3( a, b, c ) max( a, max( b, c ) )
 
 #if !MSAA_INITIALIZED
     #define MSAA_SUBSAMPLE_WEIGHT	0.25
