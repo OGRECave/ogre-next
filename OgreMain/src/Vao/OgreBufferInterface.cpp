@@ -35,9 +35,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    BufferInterface::BufferInterface() : mBuffer( 0 )
-    {
-    }
+    BufferInterface::BufferInterface() : mBuffer( 0 ) {}
     //-----------------------------------------------------------------------------------
     void BufferInterface::upload( const void *data, size_t elementStart, size_t elementCount )
     {
@@ -73,8 +71,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void BufferInterface::_ensureDelayedImmutableBuffersAreReady()
-    {
-    }
+    void BufferInterface::_ensureDelayedImmutableBuffersAreReady() {}
     //-----------------------------------------------------------------------------------
 }  // namespace Ogre
