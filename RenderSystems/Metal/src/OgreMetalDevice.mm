@@ -200,9 +200,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     // MARK: -
     //-------------------------------------------------------------------------
-    MetalDeviceItem::MetalDeviceItem() : mSameNameAdapterIndex( 0 )
-    {
-    }
+    MetalDeviceItem::MetalDeviceItem() : mSameNameAdapterIndex( 0 ) {}
     //-------------------------------------------------------------------------
     MetalDeviceItem::MetalDeviceItem( id<MTLDevice> device, unsigned sameNameIndex ) :
         mDevice( device ),
@@ -222,17 +220,11 @@ namespace Ogre
         return desc;
     }
     //-------------------------------------------------------------------------
-    id<MTLDevice> MetalDeviceItem::getMTLDevice() const
-    {
-        return mDevice;
-    }
+    id<MTLDevice> MetalDeviceItem::getMTLDevice() const { return mDevice; }
     //-------------------------------------------------------------------------
     // MARK: -
     //-------------------------------------------------------------------------
-    void MetalDeviceList::clear()
-    {
-        mItems.clear();
-    }
+    void MetalDeviceList::clear() { mItems.clear(); }
     //-------------------------------------------------------------------------
     void MetalDeviceList::refresh()
     {
@@ -258,15 +250,9 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
-    size_t MetalDeviceList::count() const
-    {
-        return mItems.size();
-    }
+    size_t MetalDeviceList::count() const { return mItems.size(); }
     //-------------------------------------------------------------------------
-    const MetalDeviceItem *MetalDeviceList::item( size_t index ) const
-    {
-        return &mItems.at( index );
-    }
+    const MetalDeviceItem *MetalDeviceList::item( size_t index ) const { return &mItems.at( index ); }
     //-------------------------------------------------------------------------
     const MetalDeviceItem *MetalDeviceList::item( const String &name ) const
     {
