@@ -35,16 +35,18 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    BufferInterface::BufferInterface() : mBuffer( 0 ) {}
+    BufferInterface::BufferInterface() : mBuffer( 0 )
+    {
+    }
     //-----------------------------------------------------------------------------------
     void BufferInterface::upload( const void *data, size_t elementStart, size_t elementCount )
     {
         if( mBuffer->mBufferType >= BT_DEFAULT_SHARED )
         {
-            if(mBuffer->mBufferType == BT_DEFAULT_SHARED)
+            if( mBuffer->mBufferType == BT_DEFAULT_SHARED )
             {
                 VaoManager *vaoManager = mBuffer->mVaoManager;
-                assert(vaoManager);
+                assert( vaoManager );
                 vaoManager->_waitUntilCommitedCommandBufferCompleted();
             }
             assert( mBuffer->mMappingState == MS_UNMAPPED );
@@ -71,6 +73,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void BufferInterface::_ensureDelayedImmutableBuffersAreReady() {}
+    void BufferInterface::_ensureDelayedImmutableBuffersAreReady()
+    {
+    }
     //-----------------------------------------------------------------------------------
 }  // namespace Ogre
