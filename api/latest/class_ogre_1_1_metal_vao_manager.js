@@ -14,6 +14,7 @@ var class_ogre_1_1_metal_vao_manager =
     [ "_notifyStagingBufferEnteredZeroRef", "class_ogre_1_1_metal_vao_manager.html#a374058250675bac30bfb5b03c26b5eb7", null ],
     [ "_notifyStagingBufferLeftZeroRef", "class_ogre_1_1_metal_vao_manager.html#ace2545e4ce03ff536e3d505e4669cc91", null ],
     [ "_update", "class_ogre_1_1_metal_vao_manager.html#aef197b0fbe37b6c3e04236da8d4949ce", null ],
+    [ "_waitUntilCommitedCommandBufferCompleted", "class_ogre_1_1_metal_vao_manager.html#ab598d3faae2953fab0440abbdcea51d1", null ],
     [ "bindDrawId", "class_ogre_1_1_metal_vao_manager.html#aaa852c541e3198817eed6e16a816771c", null ],
     [ "calculateVertexSize", "class_ogre_1_1_metal_vao_manager.html#a222d4e40df5eb53ab0b050e37aca7b89", null ],
     [ "cleanupEmptyPools", "class_ogre_1_1_metal_vao_manager.html#a8a3575e92200eac70e002a5d678e87a9", null ],

@@ -108,6 +108,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad8e3a62da0aa8f8ff31c516c95ffc94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7619e459ea80fcbfc3d9e3012981a028"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_metal_device.html#a7619e459ea80fcbfc3d9e3012981a028">~MetalDevice</a> ()</td></tr>
 <tr class="separator:a7619e459ea80fcbfc3d9e3012981a028"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28ffa138d4bf01e8c8b6eb808546526a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_metal_device.html#a28ffa138d4bf01e8c8b6eb808546526a">_waitUntilCommitedCommandBufferCompleted</a> ()</td></tr>
+<tr class="memdesc:a28ffa138d4bf01e8c8b6eb808546526a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waits for the last committed command buffer completion instead of the last frame completion with command buffer switching, so we can continue to work with current command buffer.  <a href="struct_ogre_1_1_metal_device.html#a28ffa138d4bf01e8c8b6eb808546526a">More...</a><br /></td></tr>
+<tr class="separator:a28ffa138d4bf01e8c8b6eb808546526a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57db350efd3f3b4ce38457d7b83bcb21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_metal_device.html#a57db350efd3f3b4ce38457d7b83bcb21">commitAndNextCommandBuffer</a> ()</td></tr>
 <tr class="separator:a57db350efd3f3b4ce38457d7b83bcb21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd648f16a343bfb621381a68fa9741e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_metal_device.html#abd648f16a343bfb621381a68fa9741e8">endAllEncoders</a> (bool endRenderPassDesc=true)</td></tr>
@@ -134,6 +137,8 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a954392d24903e403f582fdda1cde0e5b"><td class="memItemLeft" align="right" valign="top">id&lt; MTLBlitCommandEncoder &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_metal_device.html#a954392d24903e403f582fdda1cde0e5b">mBlitEncoder</a></td></tr>
 <tr class="separator:a954392d24903e403f582fdda1cde0e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50f9c00467fa7f7cd0367466dee54c4e"><td class="memItemLeft" align="right" valign="top">id&lt; MTLCommandBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_metal_device.html#a50f9c00467fa7f7cd0367466dee54c4e">mCommitedCommandBuffer</a></td></tr>
+<tr class="separator:a50f9c00467fa7f7cd0367466dee54c4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af65992cbbeb31fb99eaae7bc4276fab8"><td class="memItemLeft" align="right" valign="top">id&lt; MTLComputeCommandEncoder &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_metal_device.html#af65992cbbeb31fb99eaae7bc4276fab8">mComputeEncoder</a></td></tr>
 <tr class="separator:af65992cbbeb31fb99eaae7bc4276fab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab46b11729fd2db799921daac4c0a7ccc"><td class="memItemLeft" align="right" valign="top">id&lt; MTLCommandBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_metal_device.html#ab46b11729fd2db799921daac4c0a7ccc">mCurrentCommandBuffer</a></td></tr>
@@ -189,6 +194,26 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a28ffa138d4bf01e8c8b6eb808546526a" name="a28ffa138d4bf01e8c8b6eb808546526a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28ffa138d4bf01e8c8b6eb808546526a">&#9670;&#160;</a></span>_waitUntilCommitedCommandBufferCompleted()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::MetalDevice::_waitUntilCommitedCommandBufferCompleted </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Waits for the last committed command buffer completion instead of the last frame completion with command buffer switching, so we can continue to work with current command buffer. </p>
+<p >It's required for BT_DEFAULT_SHARED buffers upload </p>
+
+</div>
+</div>
 <a id="a57db350efd3f3b4ce38457d7b83bcb21" name="a57db350efd3f3b4ce38457d7b83bcb21"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a57db350efd3f3b4ce38457d7b83bcb21">&#9670;&#160;</a></span>commitAndNextCommandBuffer()</h2>
 
@@ -361,6 +386,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">id&lt;MTLBlitCommandEncoder&gt; Ogre::MetalDevice::mBlitEncoder</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a50f9c00467fa7f7cd0367466dee54c4e" name="a50f9c00467fa7f7cd0367466dee54c4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50f9c00467fa7f7cd0367466dee54c4e">&#9670;&#160;</a></span>mCommitedCommandBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">id&lt;MTLCommandBuffer&gt; Ogre::MetalDevice::mCommitedCommandBuffer</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -25,6 +25,7 @@ var class_ogre_1_1_vulkan_vao_manager =
     [ "_notifyStagingBufferLeftZeroRef", "class_ogre_1_1_vulkan_vao_manager.html#ace2545e4ce03ff536e3d505e4669cc91", null ],
     [ "_schedulePoolAdvanceFrame", "class_ogre_1_1_vulkan_vao_manager.html#a6c95b6cd736eb88e5dc4f4a0e9a52cae", null ],
     [ "_update", "class_ogre_1_1_vulkan_vao_manager.html#ac73735e43fe3530434e7f0762824a12f", null ],
+    [ "_waitUntilCommitedCommandBufferCompleted", "class_ogre_1_1_vulkan_vao_manager.html#ac4042640f22065fba7929049f3770008", null ],
     [ "addDelayedFunc", "class_ogre_1_1_vulkan_vao_manager.html#a9c1168472c2c1b564613933fb1c1b6b5", null ],
     [ "allocateRawBuffer", "class_ogre_1_1_vulkan_vao_manager.html#a2870e34d1f38436b26304d046d824aa9", null ],
     [ "allocateTexture", "class_ogre_1_1_vulkan_vao_manager.html#afbc41371222b8bad4d0df08b1edeba2a", null ],

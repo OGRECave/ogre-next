@@ -148,6 +148,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ace2545e4ce03ff536e3d505e4669cc91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef197b0fbe37b6c3e04236da8d4949ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_vao_manager.html#aef197b0fbe37b6c3e04236da8d4949ce">_update</a> () override</td></tr>
 <tr class="separator:aef197b0fbe37b6c3e04236da8d4949ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab598d3faae2953fab0440abbdcea51d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_vao_manager.html#ab598d3faae2953fab0440abbdcea51d1">_waitUntilCommitedCommandBufferCompleted</a> () override</td></tr>
+<tr class="memdesc:ab598d3faae2953fab0440abbdcea51d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waits for the last committed command buffer completion instead of the last frame completion with command buffer switching, so we can continue to work with current command buffer.  <a href="class_ogre_1_1_metal_vao_manager.html#ab598d3faae2953fab0440abbdcea51d1">More...</a><br /></td></tr>
+<tr class="separator:ab598d3faae2953fab0440abbdcea51d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa852c541e3198817eed6e16a816771c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_vao_manager.html#aaa852c541e3198817eed6e16a816771c">bindDrawId</a> ()</td></tr>
 <tr class="memdesc:aaa852c541e3198817eed6e16a816771c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds the Draw ID to the current RenderEncoder. (Assumed to be active!)  <a href="class_ogre_1_1_metal_vao_manager.html#aaa852c541e3198817eed6e16a816771c">More...</a><br /></td></tr>
 <tr class="separator:aaa852c541e3198817eed6e16a816771c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -547,6 +550,36 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_vao_manager.html#a6fa96e4f0157b0109ab892a52e57a9d8">Ogre::VaoManager</a>.</p>
+
+</div>
+</div>
+<a id="ab598d3faae2953fab0440abbdcea51d1" name="ab598d3faae2953fab0440abbdcea51d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab598d3faae2953fab0440abbdcea51d1">&#9670;&#160;</a></span>_waitUntilCommitedCommandBufferCompleted()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::MetalVaoManager::_waitUntilCommitedCommandBufferCompleted </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Waits for the last committed command buffer completion instead of the last frame completion with command buffer switching, so we can continue to work with current command buffer. </p>
+<p >It's required for BT_DEFAULT_SHARED buffers upload </p><dl class="section remark"><dt>Remarks</dt><dd>BT_DEFAULT_SHARED were designed for rare uploads. Nevertheless if we need to upload new data we have to be sure that last committed command buffer's completed to avoid artefacts due to data changing on the go. Indeed on some heavy scenes gpu may still execute last committed command buffer that uses BT_DEFAULT_SHARED vertex/index buffers when we come to upload some new data. Of cause we can wait for previous frame completion using <a class="el" href="class_ogre_1_1_metal_vao_manager.html#a0bfec349598fe9246f626f5ddaa7a228" title="See VaoManager::waitForSpecificFrameToFinish.">waitForSpecificFrameToFinish()</a>, but waitForSpecificFrameToFinish(vaoManager-&gt;<a class="el" href="class_ogre_1_1_vao_manager.html#af7480a3acdc16d5092f8108ddff49783">getFrameCount()</a>) leads to stall() call which is more slow: switches current command buffer and notify everyone with <a class="el" href="class_ogre_1_1_metal_vao_manager.html#ae6ec01b53c1fd062d562708ed1fa90d0">_notifyDeviceStalled()</a> call. So <a class="el" href="class_ogre_1_1_metal_vao_manager.html#ab598d3faae2953fab0440abbdcea51d1" title="Waits for the last committed command buffer completion instead of the last frame completion with comm...">_waitUntilCommitedCommandBufferCompleted()</a> is more lightweight aspecially for Metal render system </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_vao_manager.html#ac4042640f22065fba7929049f3770008">Ogre::VaoManager</a>.</p>
 
 </div>
 </div>

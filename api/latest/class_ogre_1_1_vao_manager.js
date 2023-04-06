@@ -9,6 +9,7 @@ var class_ogre_1_1_vao_manager =
     [ "_notifyStagingBufferEnteredZeroRef", "class_ogre_1_1_vao_manager.html#a374058250675bac30bfb5b03c26b5eb7", null ],
     [ "_notifyStagingBufferLeftZeroRef", "class_ogre_1_1_vao_manager.html#ace2545e4ce03ff536e3d505e4669cc91", null ],
     [ "_update", "class_ogre_1_1_vao_manager.html#a6fa96e4f0157b0109ab892a52e57a9d8", null ],
+    [ "_waitUntilCommitedCommandBufferCompleted", "class_ogre_1_1_vao_manager.html#ac4042640f22065fba7929049f3770008", null ],
     [ "calculateVertexSize", "class_ogre_1_1_vao_manager.html#a222d4e40df5eb53ab0b050e37aca7b89", null ],
     [ "cleanupEmptyPools", "class_ogre_1_1_vao_manager.html#a320cb3ed58ddfdc5870d097e90064f3f", null ],
     [ "createAsyncTicket", "class_ogre_1_1_vao_manager.html#a0b7cb641e18e9489cfa9bf868fd30985", null ],

@@ -12,6 +12,7 @@ var class_ogre_1_1_g_l3_plus_vao_manager =
     [ "_notifyStagingBufferEnteredZeroRef", "class_ogre_1_1_g_l3_plus_vao_manager.html#a374058250675bac30bfb5b03c26b5eb7", null ],
     [ "_notifyStagingBufferLeftZeroRef", "class_ogre_1_1_g_l3_plus_vao_manager.html#ace2545e4ce03ff536e3d505e4669cc91", null ],
     [ "_update", "class_ogre_1_1_g_l3_plus_vao_manager.html#a2298828954f04d6ac6dc29183c7ed733", null ],
+    [ "_waitUntilCommitedCommandBufferCompleted", "class_ogre_1_1_g_l3_plus_vao_manager.html#ac4042640f22065fba7929049f3770008", null ],
     [ "bindDrawId", "class_ogre_1_1_g_l3_plus_vao_manager.html#a8d481d82987d6530508110ed4c25ff38", null ],
     [ "calculateVertexSize", "class_ogre_1_1_g_l3_plus_vao_manager.html#a222d4e40df5eb53ab0b050e37aca7b89", null ],
     [ "cleanupEmptyPools", "class_ogre_1_1_g_l3_plus_vao_manager.html#a36b558b6c4cc150ce7d2a68ffca4a1f3", null ],
