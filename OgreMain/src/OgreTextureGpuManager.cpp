@@ -2711,21 +2711,23 @@ namespace Ogre
                 DataStreamPtr data;
                 if( !loadRequest.archive )
                     data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
-
-                try
+                else
                 {
-                    data = loadRequest.archive->open( loadRequest.name );
-                    if( loadRequest.loadingListener )
+                    try
                     {
-                        loadRequest.loadingListener->grouplessResourceOpened(
-                            loadRequest.name, loadRequest.archive, data );
+                        data = loadRequest.archive->open( loadRequest.name );
+                        if( loadRequest.loadingListener )
+                        {
+                            loadRequest.loadingListener->grouplessResourceOpened(
+                                loadRequest.name, loadRequest.archive, data );
+                        }
                     }
-                }
-                catch( Exception & )
-                {
-                    // We won't deal with it and just carry it on straight to the streaming thread
-                    // as if multiload was turned off. It will handle this error.
-                    data.reset();
+                    catch( Exception & )
+                    {
+                        // We won't deal with it and just carry it on straight to the streaming thread
+                        // as if multiload was turned off. It will handle this error.
+                        data.reset();
+                    }
                 }
 
                 Image2 *img = 0;
