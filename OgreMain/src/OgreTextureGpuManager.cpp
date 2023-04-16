@@ -2708,6 +2708,15 @@ namespace Ogre
             {
                 OGRE_ASSERT_LOW( !loadRequest.image );
 
+                if( ogre_unlikely( !loadRequest.archive && !loadRequest.loadingListener ) )
+                {
+                    LogManager::getSingleton().logMessage(
+                        "ERROR: Did you call createTexture with a valid resourceGroup? "
+                        "Texture: " +
+                            loadRequest.name,
+                        LML_CRITICAL );
+                }
+
                 DataStreamPtr data;
                 if( !loadRequest.archive )
                     data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
@@ -2816,7 +2825,7 @@ namespace Ogre
             }
         }
 
-        if( !loadRequest.archive && !loadRequest.loadingListener && !loadRequest.image )
+        if( ogre_unlikely( !loadRequest.archive && !loadRequest.loadingListener && !loadRequest.image ) )
         {
             LogManager::getSingleton().logMessage(
                 "ERROR: Did you call createTexture with a valid resourceGroup? "
