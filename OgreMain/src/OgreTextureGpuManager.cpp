@@ -2701,7 +2701,7 @@ namespace Ogre
             }
             bStillHasWork = !mMultiLoads.empty();
             // We use memory_order_relaxed because the mutex already guarantees ordering.
-            bUseMultiload = mUseMultiload.load( std::memory_order::memory_order_relaxed );
+            bUseMultiload = mUseMultiload.load( std::memory_order_relaxed );
             mMultiLoadsMutex.unlock();
 
             if( bWorkGrabbed )
