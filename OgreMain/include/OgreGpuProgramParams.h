@@ -2517,7 +2517,7 @@ namespace Ogre
         }
     };
 
-	inline size_t GpuProgramParameters::getAutoConstantCount() const { return mAutoConstants.size(); }
+    inline size_t GpuProgramParameters::getAutoConstantCount() const { return mAutoConstants.size(); }
 
     /** @} */
     /** @} */
