@@ -158,7 +158,7 @@ var class_ogre_1_1_gpu_program_parameters =
       [ "ET_REAL", "class_ogre_1_1_gpu_program_parameters.html#a39b96ad6d11ed0042375a0643c311046a0bf7f8842d69f38bc347021812495798", null ]
     ] ],
     [ "GpuProgramParameters", "class_ogre_1_1_gpu_program_parameters.html#adabe23325f34fdcaa061b6cdd814be95", null ],
-    [ "~GpuProgramParameters", "class_ogre_1_1_gpu_program_parameters.html#ad9b25f3529d5e9b4bca98749cf7ea671", null ],
+    [ "~GpuProgramParameters", "class_ogre_1_1_gpu_program_parameters.html#a7391827fb745e3d171dd02544680d467", null ],
     [ "GpuProgramParameters", "class_ogre_1_1_gpu_program_parameters.html#a464cf397d54d014a7cf3c2a90fbc605e", null ],
     [ "_copySharedParams", "class_ogre_1_1_gpu_program_parameters.html#a6afd7c931e057b5ebda85cf7d03d3942", null ],
     [ "_findNamedConstantDefinition", "class_ogre_1_1_gpu_program_parameters.html#a49d643e978a0f61786f8fc153dfe8699", null ],
@@ -206,7 +206,7 @@ var class_ogre_1_1_gpu_program_parameters =
     [ "findFloatAutoConstantEntry", "class_ogre_1_1_gpu_program_parameters.html#ae50c940238caf357e21f1613a81cc91a", null ],
     [ "findIntAutoConstantEntry", "class_ogre_1_1_gpu_program_parameters.html#a3dcf9267acf355c68003e3295d1eea88", null ],
     [ "findUnsignedIntAutoConstantEntry", "class_ogre_1_1_gpu_program_parameters.html#ae0002f9d76d3942dafa1d9684d80a2a3", null ],
-    [ "getAutoConstantCount", "class_ogre_1_1_gpu_program_parameters.html#a84525ef35d2eab5ed4d59178129f1ce0", null ],
+    [ "getAutoConstantCount", "group___materials.html#ga84525ef35d2eab5ed4d59178129f1ce0", null ],
     [ "getAutoConstantDefinition", "class_ogre_1_1_gpu_program_parameters.html#ab7cd9b7abf5c5f30a0ad8ab768d32c80", null ],
     [ "getAutoConstantDefinition", "class_ogre_1_1_gpu_program_parameters.html#ad12c429cdc53a0167a179d0c4d6e8526", null ],
     [ "getAutoConstantEntry", "class_ogre_1_1_gpu_program_parameters.html#ace3efa88b5bc1627ec270d6466f7b248", null ],

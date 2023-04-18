@@ -131,7 +131,7 @@ var searchData=
   ['getautoaspectratio_128',['getAutoAspectRatio',['../class_ogre_1_1_camera.html#a33778c441525bd2eb71bb9daa579be10',1,'Ogre::Camera']]],
   ['getautobuildedgelists_129',['getAutoBuildEdgeLists',['../class_ogre_1_1v1_1_1_mesh.html#a00f93195282755cd906d3ba9c86f803f',1,'Ogre::v1::Mesh']]],
   ['getautoconfig_130',['getAutoconfig',['../class_ogre_1_1_mesh_lod_generator.html#aa5d9afdd405700411396c605699f0f34',1,'Ogre::MeshLodGenerator']]],
-  ['getautoconstantcount_131',['getAutoConstantCount',['../class_ogre_1_1_gpu_program_parameters.html#a84525ef35d2eab5ed4d59178129f1ce0',1,'Ogre::GpuProgramParameters']]],
+  ['getautoconstantcount_131',['getAutoConstantCount',['../group___materials.html#ga84525ef35d2eab5ed4d59178129f1ce0',1,'Ogre::GpuProgramParameters']]],
   ['getautoconstantdefinition_132',['getAutoConstantDefinition',['../class_ogre_1_1_gpu_program_parameters.html#ab7cd9b7abf5c5f30a0ad8ab768d32c80',1,'Ogre::GpuProgramParameters::getAutoConstantDefinition(const size_t idx)'],['../class_ogre_1_1_gpu_program_parameters.html#ad12c429cdc53a0167a179d0c4d6e8526',1,'Ogre::GpuProgramParameters::getAutoConstantDefinition(const String &amp;name)']]],
   ['getautoconstantentry_133',['getAutoConstantEntry',['../class_ogre_1_1_gpu_program_parameters.html#ace3efa88b5bc1627ec270d6466f7b248',1,'Ogre::GpuProgramParameters']]],
   ['getautoconstantiterator_134',['getAutoConstantIterator',['../class_ogre_1_1_gpu_program_parameters.html#ab138905b4519e893540b7fd7358fc461',1,'Ogre::GpuProgramParameters']]],
