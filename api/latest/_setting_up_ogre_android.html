@@ -107,7 +107,7 @@ Requirements</h1>
 <ul>
 <li><a href="https://cmake.org/download/">CMake 3.x</a></li>
 <li>Git</li>
-<li>Android Studio 4.0</li>
+<li>Android Studio 4.0 or higher.</li>
 <li>Android SDK &amp; NDK</li>
 <li>Python 3.x (to build the samples)</li>
 <li>Vulkan-capable Android phone.</li>
@@ -120,7 +120,7 @@ Downloading and building Ogre</h1>
 <p >All that's needed is git, the ability to create folders, CMake, and Android SDK &amp; NDK.</p>
 <p >We're going to assume:</p><ul>
 <li>Android SDK is stored at /home/username/Android/Sdk/</li>
-<li>Android NDK is stored at /home/username/Android/Sdk/ndk/21.0.6113669</li>
+<li>Android NDK is stored at /home/username/Android/Sdk/ndk/24.X.XXXXXXX</li>
 <li>Your working dir is /home/username/workingdir</li>
 <li>Target ABI is arm64-v8a</li>
 </ul>
@@ -135,7 +135,7 @@ Downloading and building Ogre</h1>
 <div class="line">mkdir -p build/Android/Release</div>
 <div class="line">cd build/Android/Release</div>
 <div class="line">cmake \</div>
-<div class="line">    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake \</div>
+<div class="line">    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/24.X.XXXXXXX/build/cmake/android.toolchain.cmake \</div>
 <div class="line">    -DANDROID_ABI=arm64-v8a \</div>
 <div class="line">    -DANDROID_NATIVE_API_LEVEL=24 \</div>
 <div class="line">    -DCMAKE_BUILD_TYPE=Release \</div>
@@ -155,7 +155,7 @@ Downloading and building Ogre</h1>
 <div class="line">mkdir -p build/Android/Debug</div>
 <div class="line">cd build/Android/Debug</div>
 <div class="line">cmake \</div>
-<div class="line">    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake \</div>
+<div class="line">    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/24.X.XXXXXXX/build/cmake/android.toolchain.cmake \</div>
 <div class="line">    -DANDROID_ABI=arm64-v8a \</div>
 <div class="line">    -DANDROID_NATIVE_API_LEVEL=24 \</div>
 <div class="line">    -DOGRE_BUILD_PLATFORM_ANDROID=1 \</div>
@@ -173,7 +173,7 @@ Downloading and building Ogre</h1>
 <div class="line">mkdir -p build/Android/Release</div>
 <div class="line">cd build/Android/Release</div>
 <div class="line">cmake \</div>
-<div class="line">    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake \</div>
+<div class="line">    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/24.X.XXXXXXX/build/cmake/android.toolchain.cmake \</div>
 <div class="line">    -DANDROID_ABI=arm64-v8a \</div>
 <div class="line">    -DANDROID_NATIVE_API_LEVEL=24 \</div>
 <div class="line">    -DOGRE_BUILD_PLATFORM_ANDROID=1 \</div>
