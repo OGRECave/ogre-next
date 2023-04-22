@@ -6,8 +6,8 @@
  - [CMake 3.x](https://cmake.org/download/)
  - Git
  - Android Studio 4.0 or higher.
- - Android SDK 26 revision level 3 or higher
- - Android NDK 25 or higher
+ - Android 4.4 SDK (API level 19) or higher
+ - Android NDK 24 or higher
  - Python 3.x (to build the samples)
  - Vulkan-capable Android phone.
  - Android 19 or newer strongly recommended. 
@@ -22,7 +22,7 @@ All that's needed is git, the ability to create folders, CMake, and Android SDK 
 
 We're going to assume:
   - Android SDK is stored at /home/username/Android/Sdk/
-  - Android NDK is stored at /home/username/Android/Sdk/ndk/XX.X.XXXXXXX
+  - Android NDK is stored at /home/username/Android/Sdk/ndk/24.X.XXXXXXX
   - Your working dir is /home/username/workingdir
   - Target ABI is arm64-v8a
 
@@ -40,9 +40,9 @@ cd ogre-next-deps
 mkdir -p build/Android/Release
 cd build/Android/Release
 cmake \
-    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/XX.X.XXXXXXX/build/cmake/android.toolchain.cmake \
+    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/24.X.XXXXXXX/build/cmake/android.toolchain.cmake \
     -DANDROID_ABI=arm64-v8a \
-    -DANDROID_NATIVE_API_LEVEL=25 \
+    -DANDROID_NATIVE_API_LEVEL=24 \
     -DCMAKE_BUILD_TYPE=Release \
     ../../../
 make -j9
@@ -60,9 +60,9 @@ ln -s ../ogre-next-deps/build/Android/Release/ogredeps DependenciesAndroid
 mkdir -p build/Android/Debug
 cd build/Android/Debug
 cmake \
-    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/XX.X.XXXXXXX/build/cmake/android.toolchain.cmake \
+    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/24.X.XXXXXXX/build/cmake/android.toolchain.cmake \
     -DANDROID_ABI=arm64-v8a \
-    -DANDROID_NATIVE_API_LEVEL=25 \
+    -DANDROID_NATIVE_API_LEVEL=24 \
     -DOGRE_BUILD_PLATFORM_ANDROID=1 \
     -DOGRE_DEPENDENCIES_DIR=/home/username/workingdir/ogre-next/DependenciesAndroid \
     -DOGRE_SIMD_NEON=OFF \
@@ -78,9 +78,9 @@ cd ../../../
 mkdir -p build/Android/Release
 cd build/Android/Release
 cmake \
-    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/XX.X.XXXXXXX/build/cmake/android.toolchain.cmake \
+    -DCMAKE_TOOLCHAIN_FILE=/home/username/Android/Sdk/ndk/24.X.XXXXXXX/build/cmake/android.toolchain.cmake \
     -DANDROID_ABI=arm64-v8a \
-    -DANDROID_NATIVE_API_LEVEL=25 \
+    -DANDROID_NATIVE_API_LEVEL=24 \
     -DOGRE_BUILD_PLATFORM_ANDROID=1 \
     -DOGRE_DEPENDENCIES_DIR=/home/username/workingdir/ogre-next/DependenciesAndroid \
     -DOGRE_SIMD_NEON=OFF \
