@@ -6,11 +6,11 @@
  - [CMake 3.x](https://cmake.org/download/)
  - Git
  - Android Studio 4.0 or higher.
- - Android 4.4 SDK (API level 19) or higher
  - Android NDK 24 or higher
  - Python 3.x (to build the samples)
  - Vulkan-capable Android phone.
- - Android 19 or newer strongly recommended. 
+ - Android 8.0 or newer strongly recommended. Android 7.0 and 7.1 are supported,
+ but most phones are bundled with very old and buggy drivers. 
  - For HW & SW requirements, please visit http://www.ogre3d.org/developers/requirements
 
 # Downloading and building Ogre {#DownloadingOgreAndroid}
