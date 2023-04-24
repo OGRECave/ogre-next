@@ -345,6 +345,8 @@ namespace Ogre
                 ++itor;
             }
         }
+
+        hlms->_tagShaderCodeCacheUpToDate();
     }
     //-----------------------------------------------------------------------------------
     template <typename T>

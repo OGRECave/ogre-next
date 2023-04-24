@@ -269,6 +269,7 @@ namespace Ogre
         uint32_t           mShadersGenerated;  // GUARDED_BY( mMutex )
         LightGatheringMode mLightGatheringMode;
         bool               mStaticBranchingLights;
+        bool               mShaderCodeCacheDirty;
         uint16             mNumLightsLimit;
         uint16             mNumAreaApproxLightsLimit;
         uint16             mNumAreaLtcLightsLimit;
@@ -629,6 +630,12 @@ namespace Ogre
          */
         virtual void setStaticBranchingLights( bool staticBranchingLights );
         bool         getStaticBranchingLights() const { return mStaticBranchingLights; }
+
+        void _tagShaderCodeCacheUpToDate() { mShaderCodeCacheDirty = false; }
+
+        /// Users can check this function to tell if HlmsDiskCache needs saving.
+        /// If this value returns false, then HlmsDiskCache doesn't need saving.
+        bool isShaderCodeCacheDirty() const { return mShaderCodeCacheDirty; }
 
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit

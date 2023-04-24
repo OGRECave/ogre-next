@@ -666,7 +666,7 @@ namespace Demo
                 for( size_t i = Ogre::HLMS_LOW_LEVEL + 1u; i < Ogre::HLMS_MAX; ++i )
                 {
                     Ogre::Hlms *hlms = hlmsManager->getHlms( static_cast<Ogre::HlmsTypes>( i ) );
-                    if( hlms )
+                    if( hlms && hlms->isShaderCodeCacheDirty() )
                     {
                         diskCache.copyFrom( hlms );
 

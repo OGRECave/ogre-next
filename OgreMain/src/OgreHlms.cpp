@@ -263,6 +263,7 @@ namespace Ogre
         mShadersGenerated( 0u ),
         mLightGatheringMode( LightGatherForward ),
         mStaticBranchingLights( false ),
+        mShaderCodeCacheDirty( false ),
         mNumLightsLimit( 0u ),
         mNumAreaApproxLightsLimit( 1u ),
         mNumAreaLtcLightsLimit( 1u ),
@@ -2064,6 +2065,7 @@ namespace Ogre
 
         mShaderCodeCache.clear();
         mShadersGenerated = 0u;
+        mShaderCodeCacheDirty = true;
     }
     //-----------------------------------------------------------------------------------
     void Hlms::processPieces( Archive *archive, const StringVector &pieceFiles, const size_t tid )
@@ -2285,6 +2287,7 @@ namespace Ogre
 
         ScopedLock lock( mMutex );
         mShaderCodeCache.push_back( codeCache );
+        mShaderCodeCacheDirty = true;
     }
     //-----------------------------------------------------------------------------------
     void Hlms::compileShaderCode( ShaderCodeCache &codeCache, const uint32 shaderCounter,
@@ -2435,6 +2438,7 @@ namespace Ogre
 
         ScopedLock lock( mMutex );
         mShaderCodeCache.push_back( codeCache );
+        mShaderCodeCacheDirty = true;
     }
     //-----------------------------------------------------------------------------------
     const HlmsCache *Hlms::createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
