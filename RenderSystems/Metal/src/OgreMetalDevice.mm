@@ -42,6 +42,7 @@ namespace Ogre
         mDevice( 0 ),
         mMainCommandQueue( 0 ),
         mCurrentCommandBuffer( 0 ),
+        mCommitedCommandBuffer( 0 ),
         mBlitEncoder( 0 ),
         mComputeEncoder( 0 ),
         mRenderEncoder( 0 ),
@@ -56,6 +57,7 @@ namespace Ogre
         mDevice = 0;
         mMainCommandQueue = 0;
         mCurrentCommandBuffer = 0;
+        mCommitedCommandBuffer = 0;
         mBlitEncoder = 0;
         mComputeEncoder = 0;
         mRenderEncoder = 0;
@@ -121,6 +123,7 @@ namespace Ogre
         [mCurrentCommandBuffer commit];
         @autoreleasepool
         {
+            mCommitedCommandBuffer = mCurrentCommandBuffer;
             mCurrentCommandBuffer = [mMainCommandQueue commandBuffer];
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
             _rmt_BindMetal( mCurrentCommandBuffer );
@@ -129,6 +132,19 @@ namespace Ogre
 
         mRenderSystem->_notifyNewCommandBuffer();
     }
+
+    void MetalDevice::_waitUntilCommitedCommandBufferCompleted()
+    {
+        if( mCommitedCommandBuffer )
+        {
+            [mCommitedCommandBuffer waitUntilCompleted];
+            @autoreleasepool
+            {
+                mCommitedCommandBuffer = nil;
+            }
+        }
+    }
+
     //-------------------------------------------------------------------------
     id<MTLBlitCommandEncoder> MetalDevice::getBlitEncoder()
     {
@@ -247,4 +263,4 @@ namespace Ogre
 
         return NULL;
     }
-}
+}  // namespace Ogre

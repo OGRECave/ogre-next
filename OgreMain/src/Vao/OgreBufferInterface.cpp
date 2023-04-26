@@ -41,6 +41,12 @@ namespace Ogre
     {
         if( mBuffer->mBufferType >= BT_DEFAULT_SHARED )
         {
+            if( mBuffer->mBufferType == BT_DEFAULT_SHARED )
+            {
+                VaoManager *vaoManager = mBuffer->mVaoManager;
+                assert( vaoManager );
+                vaoManager->_waitUntilCommitedCommandBufferCompleted();
+            }
             assert( mBuffer->mMappingState == MS_UNMAPPED );
             void *dstData = this->map( elementStart, elementCount, mBuffer->mMappingState );
             memcpy( dstData, data, elementCount * mBuffer->mBytesPerElement );

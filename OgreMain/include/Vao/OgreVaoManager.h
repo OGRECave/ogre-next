@@ -596,6 +596,21 @@ namespace Ogre
 
         /// If this returns true, then waitForSpecificFrameToFinish is guaranteed to return immediately.
         virtual bool isFrameFinished( uint32 frameCount ) = 0;
+
+        /** Waits for the last committed command buffer completion instead of the last frame completion
+        with command buffer switching, so we can continue to work with current command buffer. It's
+        required for BT_DEFAULT_SHARED buffers upload
+        @remarks
+            BT_DEFAULT_SHARED were designed for rare uploads. Nevertheless if we need to upload new data
+        we have to be sure that last committed command buffer's completed to avoid artefacts due to data
+        changing on the go. Indeed on some heavy scenes gpu may still execute last committed command
+        buffer that uses BT_DEFAULT_SHARED vertex/index buffers when we come to upload some new data. Of
+        cause we can wait for previous frame completion using waitForSpecificFrameToFinish(), but
+        waitForSpecificFrameToFinish(vaoManager->getFrameCount()) leads to stall() call which is more
+        slow: switches current command buffer and notify everyone with _notifyDeviceStalled() call. So
+        _waitUntilCommitedCommandBufferCompleted() is more lightweight aspecially for Metal render system
+        */
+        virtual void _waitUntilCommitedCommandBufferCompleted(){};
     };
 }  // namespace Ogre
 

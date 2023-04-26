@@ -44,6 +44,7 @@ namespace Ogre
         id<MTLDevice>                mDevice;
         id<MTLCommandQueue>          mMainCommandQueue;
         id<MTLCommandBuffer>         mCurrentCommandBuffer;
+        id<MTLCommandBuffer>         mCommitedCommandBuffer;
         id<MTLBlitCommandEncoder>    mBlitEncoder;
         id<MTLComputeCommandEncoder> mComputeEncoder;
         id<MTLRenderCommandEncoder>  mRenderEncoder;
@@ -63,6 +64,11 @@ namespace Ogre
 
         // Ends all encoders, calls commit and grabs a new mMainCommandBuffer
         void commitAndNextCommandBuffer();
+
+        /// Waits for the last committed command buffer completion instead of the last frame completion
+        /// with command buffer switching, so we can continue to work with current command buffer. It's
+        /// required for BT_DEFAULT_SHARED buffers upload
+        void _waitUntilCommitedCommandBufferCompleted();
 
         /** Gets current blit encoder. If none is current, ends all other
             encoders and creates a new blit encoder.

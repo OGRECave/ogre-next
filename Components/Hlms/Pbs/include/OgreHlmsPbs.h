@@ -165,6 +165,7 @@ namespace Ogre
         /// use the reflections if they were built for a different camera angle)
         bool  mHasPlanarReflections;
         uint8 mLastBoundPlanarReflection;
+        uint8 mPlanarReflectionSlotIdx;
 #endif
         TextureGpu             *mAreaLightMasks;
         HlmsSamplerblock const *mAreaLightMasksSamplerblock;
