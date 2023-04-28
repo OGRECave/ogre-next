@@ -22,6 +22,8 @@ if(CMAKE_VS_PLATFORM_NAME STREQUAL "Tegra-Android")
 	set(CMAKE_LINK_LIBRARY_FLAG "")
 endif()
 
+#fix Policy CMP0072 is not set
+set(OpenGL_GL_PREFERENCE LEGACY)
 
 # Use relative paths
 # This is mostly to reduce path size for command-line limits on windows
