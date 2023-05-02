@@ -722,8 +722,10 @@ namespace Ogre
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
             if( SMT_FRAME_SEQUENTIAL == mStereoMode )
+            {
                 attribList.push_back( WGL_STEREO_ARB );
-            attribList.push_back( GL_TRUE );
+                attribList.push_back( GL_TRUE );
+            }
 #endif
 
             if( useHwGamma && mHasHardwareGamma )
