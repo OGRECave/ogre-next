@@ -2950,7 +2950,7 @@ namespace Ogre
 
                 mPlanarReflectionSlotIdx = static_cast<uint8>(
                     mTexUnitSlotStart - 1u -
-                    mListener->getNumExtraPassTextures( mSetProperties, casterPass ) );
+                    mListener->getNumExtraPassTextures( mT[kNoTid].setProperties, casterPass ) );
             }
 #endif
         }
