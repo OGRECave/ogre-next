@@ -208,7 +208,7 @@ namespace Ogre
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
         // Stereo driver must be freed after device is created
-        D3D11StereoDriverBridge* stereoBridge = D3D11StereoDriverBridge::getSingletonPtr();
+        D3D11StereoDriverBridge *stereoBridge = D3D11StereoDriverBridge::getSingletonPtr();
         OGRE_DELETE stereoBridge;
 #endif
 
