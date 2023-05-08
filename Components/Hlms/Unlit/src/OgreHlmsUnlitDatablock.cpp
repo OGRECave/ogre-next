@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreString.h"
+#include "OgreTextureFilters.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
 
@@ -275,10 +276,15 @@ namespace Ogre
         TextureGpu *texture = 0;
         if( !name.empty() )
         {
+            uint32 filters = 0u;
+
+            if( getDefaultGenerateMipmaps() )
+                filters |= TextureFilter::TypeGenerateDefaultMipmaps;
+
             texture = textureManager->createOrRetrieveTexture(
                 name, GpuPageOutStrategy::Discard,
                 TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB,
-                TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, filters );
         }
         setTexture( texUnit, texture, refParams );
     }

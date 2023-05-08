@@ -27,6 +27,23 @@
 
     @insertpiece( DeclShadowMapMacros )
 	@insertpiece( DeclAtmosphereNprSkyFuncs )
+	
+	@property( accurate_non_uniform_scaled_normals )
+		midf3x3 adjugate( midf3x3 m )
+		{
+			midf3x3 n;
+			n[0][0] = m[1][1] * m[2][2] - m[1][2] * m[2][1];
+			n[0][1] = m[0][2] * m[2][1] - m[0][1] * m[2][2];
+			n[0][2] = m[0][1] * m[1][2] - m[0][2] * m[1][1];
+			n[1][0] = m[1][2] * m[2][0] - m[1][0] * m[2][2];
+			n[1][1] = m[0][0] * m[2][2] - m[0][2] * m[2][0];
+			n[1][2] = m[0][2] * m[1][0] - m[0][0] * m[1][2];
+			n[2][0] = m[1][0] * m[2][1] - m[2][0] * m[1][1];
+			n[2][1] = m[0][1] * m[2][0] - m[0][0] * m[2][1];
+			n[2][2] = m[0][0] * m[1][1] - m[0][1] * m[1][0];
+			return n;
+		}
+	@end
 @end
 
 @property( !hlms_skeleton )
@@ -193,7 +210,15 @@
 	@insertpiece( custom_vs_preTransform )
 	//Lighting is in view space
 	@property( hlms_normal || hlms_qtangent )	outVs.pos		= @insertpiece( CalculatePsPos );@end
-	@property( hlms_normal || hlms_qtangent )	outVs.normal	= mul( @insertpiece(local_normal), toMidf3x3( worldViewMat ) );@end
+	@property( hlms_normal || hlms_qtangent )
+		midf3x3 worldMat3x3 = toMidf3x3( worldViewMat );
+		@property( accurate_non_uniform_scaled_normals )
+			midf3x3 normalMat = transpose( adjugate( worldMat3x3 ) );
+			outVs.normal = normalize( mul( @insertpiece(local_normal), normalMat ) );
+		@else
+			outVs.normal = mul( @insertpiece(local_normal), worldMat3x3 );
+		@end
+	@end
 	@property( normal_map )						outVs.tangent	= mul( @insertpiece(local_tangent), toMidf3x3( worldViewMat ) );@end
 	@property( !hlms_dual_paraboloid_mapping )
         @property( !hlms_use_uv_baking )
