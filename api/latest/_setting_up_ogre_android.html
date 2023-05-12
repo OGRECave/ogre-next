@@ -214,7 +214,7 @@ Building Samples</h1>
 <li>The same happens to gl_FragCoord</li>
 </ul>
 <p >This is aggravated by the fact that the bug may not manifest itself if the phone is in portrait mode (but ocassionally does manifest even in portrait).</p>
-<p >If you suspect this is the cause of your bugs, edit the CMakeLists.txt file so that OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE is no longer force-enabled.</p>
+<p >If you suspect this is the cause of your bugs, edit the CMakeLists.txt file so that OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE is no longer force-enabled, or pass miscParams["preTransform"] = "false" to the window.</p>
 <p >You can debug viewport orientation bugs on Desktop by enabling OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE in your Desktop build, and manually editing OgreVulkanWindow.cpp and set:</p>
 <p ><code>surfaceCaps.currentTransform = VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR;</code></p>
 <p >before <a class="el" href="namespace_ogre.html">Ogre</a> uses its value.</p>

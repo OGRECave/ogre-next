@@ -71,6 +71,7 @@ var class_ogre_1_1_vulkan_win32_window =
     [ "wantsToGoWindowed", "class_ogre_1_1_vulkan_win32_window.html#a3ac8b229b988e8f3e90df82499a2f3ec", null ],
     [ "windowMovedOrResized", "class_ogre_1_1_vulkan_win32_window.html#af0516e48a843818aa599dff73ed2d830", null ],
     [ "mClosed", "class_ogre_1_1_vulkan_win32_window.html#a09ff80100ca52995038ce8b404330c24", null ],
+    [ "mEnablePreTransform", "class_ogre_1_1_vulkan_win32_window.html#a747bcc89c2d87d95cd075609ff55d6a3", null ],
     [ "mLowestLatencyVSync", "class_ogre_1_1_vulkan_win32_window.html#aa562105b8ede44dd4bba7704ffcf763c", null ],
     [ "mRebuildingSwapchain", "class_ogre_1_1_vulkan_win32_window.html#a452c19b6161f1ae310dfd92b026f7ed9", null ],
     [ "mSuboptimal", "class_ogre_1_1_vulkan_win32_window.html#a26e48774201b2ea86d0928ffdda4f583", null ],
