@@ -180,6 +180,7 @@ namespace Ogre
                                                             uint32 height, bool fullscreenMode ) :
         VulkanWindow( title, width, height, fullscreenMode ),
         mLowestLatencyVSync( false ),
+        mEnablePreTransform( true ),
         mClosed( false ),
         mSurfaceKHR( 0 ),
         mSwapchain( 0 ),
@@ -216,6 +217,9 @@ namespace Ogre
         opt = miscParams->find( "vsync_method" );
         if( opt != end )
             mLowestLatencyVSync = opt->second == "Lowest Latency";
+        opt = miscParams->find( "preTransform" );
+        if( opt != end )
+            mEnablePreTransform = StringConverter::parseBool( opt->second );
     }
     //-------------------------------------------------------------------------
     PixelFormatGpu VulkanWindowSwapChainBased::chooseSurfaceFormat( bool hwGamma )
@@ -410,7 +414,7 @@ namespace Ogre
             }
         }
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        if( surfaceCaps.currentTransform <= VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR )
+        if( mEnablePreTransform && surfaceCaps.currentTransform <= VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR )
         {
             // We will manually rotate by adapting our projection matrices (fastest)
             // See https://arm-software.github.io/vulkan_best_practice_for_mobile_developers/samples/
