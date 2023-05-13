@@ -86,8 +86,10 @@ namespace Ogre
         if( hlms->_getProperty( tid, HlmsBaseProp::ShadowCaster ) == 0 &&
             hlms->_getProperty( tid, PbsTerraProperty::TerraEnabled ) != 0 )
         {
-            int32 texUnit = hlms->_getProperty( tid, PbsProperty::Set0TextureSlotEnd );
-            hlms->_setTextureReg( tid, VertexShader, "terrainShadows", texUnit - 1 );
+            int32 texUnit = hlms->_getProperty( tid, PbsProperty::Set0TextureSlotEnd ) - 1;
+            if( hlms->_getProperty( tid, PbsProperty::HasPlanarReflections ) )
+                --texUnit;
+            hlms->_setTextureReg( tid, VertexShader, "terrainShadows", texUnit );
         }
     }
     //-----------------------------------------------------------------------------------
