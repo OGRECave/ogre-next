@@ -329,6 +329,10 @@ namespace Ogre
 
         _destroySizeDependedD3DResources();
 
+        // Call flush to ensure destruction of resources.
+        // not doing so may result in 'Out of memory' exception.
+        mDevice.GetImmediateContext()->Flush();
+
         if( mUseFlipMode )
         {
             // swapchain is not multisampled in flip sequential mode, so we reuse it

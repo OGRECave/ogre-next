@@ -97,6 +97,7 @@ namespace Ogre
         };
 
         bool mLowestLatencyVSync;
+        bool mEnablePreTransform;
         bool mClosed;
 
         VkSurfaceKHR mSurfaceKHR;
