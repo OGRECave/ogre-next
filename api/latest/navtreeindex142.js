@@ -1,7 +1,5 @@
 var NAVTREEINDEX142 =
 {
-"class_ogre_1_1_shader_params.html#a5d576fae0ea406c50f071954fbd92e4b":[5,0,0,19,14],
-"class_ogre_1_1_shader_params.html#a7a33050426d883b45c184998e8f5a06e":[5,0,0,19,11],
 "class_ogre_1_1_shader_params.html#acfd948f8985348b278999a0fbe8cadda":[5,0,0,19,8],
 "class_ogre_1_1_shader_params.html#ad5c44d85355e1b2539a83141fef28e88":[5,0,0,19,10],
 "class_ogre_1_1_shadow_camera_setup.html":[5,2,11,54],
@@ -249,5 +247,7 @@ var NAVTREEINDEX142 =
 "class_ogre_1_1_skeleton_manager.html":[5,2,0,8],
 "class_ogre_1_1_skeleton_manager.html#a1826dced4beabf95300e22c34cf3bb51":[5,2,0,8,4],
 "class_ogre_1_1_skeleton_manager.html#a2f635f8a9879a29690654d810844ec8e":[5,2,0,8,0],
-"class_ogre_1_1_skeleton_manager.html#a6faf4acafe6dd33ab2fb89e869529ff3":[5,2,0,8,3]
+"class_ogre_1_1_skeleton_manager.html#a6faf4acafe6dd33ab2fb89e869529ff3":[5,2,0,8,3],
+"class_ogre_1_1_skeleton_manager.html#aa5de657acff092ae119cbc3715c1e4b8":[5,2,0,8,7],
+"class_ogre_1_1_skeleton_manager.html#ab77025797819af2c50c4a9cc955fa61b":[5,2,0,8,1]
 };

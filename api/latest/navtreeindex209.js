@@ -1,7 +1,5 @@
 var NAVTREEINDEX209 =
 {
-"class_radial_density_mask_vr_generator.html":[5,2,10,160],
-"class_rotation.html":[7,0,17],
 "class_visual.html":[7,0,19],
 "class_x_error_event.html":[7,0,22],
 "class_x_r_r_screen_configuration.html":[7,0,24],
@@ -249,5 +247,7 @@ var NAVTREEINDEX209 =
 "functions_func_e.html":[7,3,1,5],
 "functions_func_f.html":[7,3,1,6],
 "functions_func_g.html":[7,3,1,7],
-"functions_func_h.html":[7,3,1,8]
+"functions_func_h.html":[7,3,1,8],
+"functions_func_i.html":[7,3,1,9],
+"functions_func_k.html":[7,3,1,10]
 };

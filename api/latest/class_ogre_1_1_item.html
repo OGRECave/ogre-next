@@ -171,9 +171,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6b823b52684730302908ecfd1a8e6d54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a6b823b52684730302908ecfd1a8e6d54">addVisibilityFlags</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> flags)</td></tr>
 <tr class="memdesc:a6b823b52684730302908ecfd1a8e6d54"><td class="mdescLeft">&#160;</td><td class="mdescRight">As setVisibilityFlags, except the flags passed as parameters are appended to the existing flags on this object.  <a href="class_ogre_1_1_movable_object.html#a6b823b52684730302908ecfd1a8e6d54">More...</a><br /></td></tr>
 <tr class="separator:a6b823b52684730302908ecfd1a8e6d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae176f0c985cec02acfdac64b2f5399af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#ae176f0c985cec02acfdac64b2f5399af">clone</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;newName) const</td></tr>
-<tr class="memdesc:ae176f0c985cec02acfdac64b2f5399af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clones this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> and returns a pointer to the clone.  <a href="class_ogre_1_1_item.html#ae176f0c985cec02acfdac64b2f5399af">More...</a><br /></td></tr>
-<tr class="separator:ae176f0c985cec02acfdac64b2f5399af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2cfac9af1b0d71c780ec969166b3585"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#a5e0882c3b9f7ca32a795f98cf034e428">AnimableValuePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_animable_object.html#ab2cfac9af1b0d71c780ec969166b3585">createAnimableValue</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;valueName)</td></tr>
 <tr class="memdesc:ab2cfac9af1b0d71c780ec969166b3585"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a reference-counted AnimableValuePtr for the named value.  <a href="class_ogre_1_1_animable_object.html#ab2cfac9af1b0d71c780ec969166b3585">More...</a><br /></td></tr>
 <tr class="separator:ab2cfac9af1b0d71c780ec969166b3585"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1040,33 +1037,6 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae176f0c985cec02acfdac64b2f5399af" name="ae176f0c985cec02acfdac64b2f5399af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae176f0c985cec02acfdac64b2f5399af">&#9670;&#160;</a></span>clone()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_item.html">Item</a> * Ogre::Item::clone </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>newName</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Clones this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> and returns a pointer to the clone. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Useful method for duplicating an <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a>. The new <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> must be given a unique name, and is not attached to the scene in any way so must be attached to a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> to be visible (exactly as entities returned from <a class="el" href="class_ogre_1_1_scene_manager.html#aff2ceebf9755716d814d867e810e0269" title="Create an Item (instance of a discrete mesh).">SceneManager::createItem</a>). </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">newName</td><td>Name for the new <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a>. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

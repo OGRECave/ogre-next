@@ -1,7 +1,5 @@
 var NAVTREEINDEX126 =
 {
-"class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996a880b2fd053b02f0794d0741b66c7e397":[5,2,3,13,1,0],
-"class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996a90ae1f444ad0e2ae1897342ec2bd22ed":[5,2,3,13,1,13],
 "class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996a9e7450d70bad1347ffc9bd677fb0057e":[5,2,3,13,1,11],
 "class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996a9e80ebcd1741652a829a06823445c09a":[5,2,3,13,1,15],
 "class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996aac163af1a1070eb0495378216a075229":[5,2,3,13,1,9],
@@ -249,5 +247,7 @@ var NAVTREEINDEX126 =
 "class_ogre_1_1_point_emitter.html#a5dbfe2110608644da739b4b0c38e253b":[6,0,0,736,26],
 "class_ogre_1_1_point_emitter.html#a5dbfe2110608644da739b4b0c38e253b":[7,0,0,709,26],
 "class_ogre_1_1_point_emitter.html#a62b8c0ef6aa5cf9ed3114cf03e3a8f1a":[6,0,0,736,13],
-"class_ogre_1_1_point_emitter.html#a62b8c0ef6aa5cf9ed3114cf03e3a8f1a":[7,0,0,709,13]
+"class_ogre_1_1_point_emitter.html#a62b8c0ef6aa5cf9ed3114cf03e3a8f1a":[7,0,0,709,13],
+"class_ogre_1_1_point_emitter.html#a659edec094aae09a7f1325e7e8fbc29a":[7,0,0,709,72],
+"class_ogre_1_1_point_emitter.html#a659edec094aae09a7f1325e7e8fbc29a":[6,0,0,736,72]
 };

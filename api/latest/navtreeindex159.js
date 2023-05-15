@@ -1,7 +1,5 @@
 var NAVTREEINDEX159 =
 {
-"class_ogre_1_1_voxel_visualizer.html#a667b8876930b77c9d609b80ee5fb1515":[7,0,0,931,123],
-"class_ogre_1_1_voxel_visualizer.html#a667b8876930b77c9d609b80ee5fb1515":[6,0,0,958,123],
 "class_ogre_1_1_voxel_visualizer.html#a681ea443f1df78a6b33eaa6c391b60cb":[6,0,0,958,98],
 "class_ogre_1_1_voxel_visualizer.html#a681ea443f1df78a6b33eaa6c391b60cb":[7,0,0,931,98],
 "class_ogre_1_1_voxel_visualizer.html#a6b0b03c1209807a8ab34a27dcbe90bb5":[7,0,0,931,69],
@@ -249,5 +247,7 @@ var NAVTREEINDEX159 =
 "class_ogre_1_1_vulkan_android_window.html#a5a0a6a008d94955631351a2d49122da1":[7,0,0,934,41],
 "class_ogre_1_1_vulkan_android_window.html#a5a0a6a008d94955631351a2d49122da1":[6,0,0,961,41],
 "class_ogre_1_1_vulkan_android_window.html#a5d5fdfe9fed7934275a7016eaf3c4192":[7,0,0,934,17],
-"class_ogre_1_1_vulkan_android_window.html#a5d5fdfe9fed7934275a7016eaf3c4192":[6,0,0,961,17]
+"class_ogre_1_1_vulkan_android_window.html#a5d5fdfe9fed7934275a7016eaf3c4192":[6,0,0,961,17],
+"class_ogre_1_1_vulkan_android_window.html#a613826611a878a89cbc942d7dd403a2a":[7,0,0,934,43],
+"class_ogre_1_1_vulkan_android_window.html#a613826611a878a89cbc942d7dd403a2a":[6,0,0,961,43]
 };

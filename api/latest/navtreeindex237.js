@@ -1,7 +1,5 @@
 var NAVTREEINDEX237 =
 {
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#adcdaf180a49362ed22c542d5d7a3457e":[6,0,0,27,130,1],
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#adcdaf180a49362ed22c542d5d7a3457e":[7,0,0,2,130,1],
 "struct_ogre_1_1v1_1_1_vertex_data_1_1_hardware_animation_data.html":[5,2,9,31,0],
 "struct_ogre_1_1v1_1_1_vertex_data_1_1_hardware_animation_data.html#a6df454c6ed629dc29b9ee4f432ca374f":[5,2,9,31,0,1],
 "struct_ogre_1_1v1_1_1_vertex_data_1_1_hardware_animation_data.html#aba0d016df68e191b4a18a62e9505517d":[5,2,9,31,0,0],

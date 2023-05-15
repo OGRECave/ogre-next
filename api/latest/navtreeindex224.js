@@ -1,7 +1,5 @@
 var NAVTREEINDEX224 =
 {
-"struct_ogre_1_1_filter_kernel.html#ac077fb95195f8bb4514f9204ef614ff0":[5,2,3,3,2],
-"struct_ogre_1_1_filter_kernel.html#af93213e3a85be61c92a2887b8a454605":[5,2,3,3,1],
 "struct_ogre_1_1_filter_separable_kernel.html":[5,2,3,4],
 "struct_ogre_1_1_filter_separable_kernel.html#a3efa443520ae81bb086b7b08578dfb74":[5,2,3,4,1],
 "struct_ogre_1_1_filter_separable_kernel.html#a603f05fafdab69b79a159789c5859e88":[5,2,3,4,2],
@@ -249,5 +247,7 @@ var NAVTREEINDEX224 =
 "struct_ogre_1_1_gpu_constant_definition.html#a51ccda09a2daaef201e0bfe014dfef1b":[5,2,5,3,22],
 "struct_ogre_1_1_gpu_constant_definition.html#a59a70d25266c42c4d1c6cb3af15ff2cc":[5,2,5,3,12],
 "struct_ogre_1_1_gpu_constant_definition.html#a756b2a33dcacfd3cca90be358cae3168":[5,2,5,3,1],
-"struct_ogre_1_1_gpu_constant_definition.html#a7e8eb132b7b4e46045eb680f2734410a":[5,2,5,3,7]
+"struct_ogre_1_1_gpu_constant_definition.html#a7e8eb132b7b4e46045eb680f2734410a":[5,2,5,3,7],
+"struct_ogre_1_1_gpu_constant_definition.html#a8044bcb2a6b93ce1f36ae705d3dbcb29":[5,2,5,3,16],
+"struct_ogre_1_1_gpu_constant_definition.html#a8579926ecde16841abf0d872689b672c":[5,2,5,3,20]
 };

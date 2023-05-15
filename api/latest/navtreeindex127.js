@@ -1,7 +1,5 @@
 var NAVTREEINDEX127 =
 {
-"class_ogre_1_1_point_emitter.html#a659edec094aae09a7f1325e7e8fbc29a":[7,0,0,709,72],
-"class_ogre_1_1_point_emitter.html#a659edec094aae09a7f1325e7e8fbc29a":[6,0,0,736,72],
 "class_ogre_1_1_point_emitter.html#a674566db12d25f32513a382a4118b5da":[6,0,0,736,49],
 "class_ogre_1_1_point_emitter.html#a674566db12d25f32513a382a4118b5da":[7,0,0,709,49],
 "class_ogre_1_1_point_emitter.html#a6a2bc4941c3c346f6d9936e447dde3c9":[7,0,0,709,51],
@@ -249,5 +247,7 @@ var NAVTREEINDEX127 =
 "class_ogre_1_1_profiler.html#a72f5610e6fffc382e660c3a301d4a5d1":[5,2,2,89,31],
 "class_ogre_1_1_profiler.html#a78dcc907495fd0cb3d58520b1f2975d8":[5,2,2,89,21],
 "class_ogre_1_1_profiler.html#a7db9cda81673238148c907e25af96473":[5,2,2,89,18],
-"class_ogre_1_1_profiler.html#a8e0b586d75f5a8108178fcd75342aa7e":[5,2,2,89,13]
+"class_ogre_1_1_profiler.html#a8e0b586d75f5a8108178fcd75342aa7e":[5,2,2,89,13],
+"class_ogre_1_1_profiler.html#a91c40e21a3fc96003504ea21fec80d77":[5,2,2,89,23],
+"class_ogre_1_1_profiler.html#aa35c96681ded2faf493defa432ce6a04":[5,2,2,89,0]
 };

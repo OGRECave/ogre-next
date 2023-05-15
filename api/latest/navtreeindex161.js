@@ -1,7 +1,5 @@
 var NAVTREEINDEX161 =
 {
-"class_ogre_1_1_vulkan_const_buffer_packed.html#a24a2ccddbb2fc851304ae81eb78243ed":[6,0,0,967,29],
-"class_ogre_1_1_vulkan_const_buffer_packed.html#a24a2ccddbb2fc851304ae81eb78243ed":[7,0,0,940,29],
 "class_ogre_1_1_vulkan_const_buffer_packed.html#a302c5194b55cfff874298c54c76335af":[6,0,0,967,17],
 "class_ogre_1_1_vulkan_const_buffer_packed.html#a302c5194b55cfff874298c54c76335af":[7,0,0,940,17],
 "class_ogre_1_1_vulkan_const_buffer_packed.html#a5103334929d2d6f7b7f0d060755b6b93":[7,0,0,940,4],
@@ -249,5 +247,7 @@ var NAVTREEINDEX161 =
 "class_ogre_1_1_vulkan_gpu_program_manager.html#a117a3887bbf9e83e0585777beb0501dc":[7,0,0,965,7],
 "class_ogre_1_1_vulkan_gpu_program_manager.html#a117a3887bbf9e83e0585777beb0501dc":[6,0,0,992,7],
 "class_ogre_1_1_vulkan_gpu_program_manager.html#a1eadda53bbed16d5a3804cdba2ad687e":[6,0,0,992,23],
-"class_ogre_1_1_vulkan_gpu_program_manager.html#a1eadda53bbed16d5a3804cdba2ad687e":[7,0,0,965,23]
+"class_ogre_1_1_vulkan_gpu_program_manager.html#a1eadda53bbed16d5a3804cdba2ad687e":[7,0,0,965,23],
+"class_ogre_1_1_vulkan_gpu_program_manager.html#a1fe343406d15d5367cfc4f86ba589b55":[6,0,0,992,78],
+"class_ogre_1_1_vulkan_gpu_program_manager.html#a1fe343406d15d5367cfc4f86ba589b55":[7,0,0,965,78]
 };
