@@ -196,29 +196,6 @@ namespace Ogre
 
         setDatablock( datablock );
     }
-#if 0
-    //-----------------------------------------------------------------------
-    Item* Item::clone( const String& newName ) const
-    {
-        if (!mManager)
-        {
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                        "Cannot clone an Item that wasn't created through a "
-                        "SceneManager", "Item::clone");
-        }
-        Item* newEnt = mManager->createItem( newName, getMesh()->getName() );
-
-        if( mInitialised )
-        {
-            // Copy material settings
-            unsigned int n = 0;
-            for( SubItem &subitem : mSubItems )
-                newEnt->getSubItem(n++)->setDatablock( subitem.getDatablock() );
-        }
-
-        return newEnt;
-    }
-#endif
     //-----------------------------------------------------------------------
     void Item::setDatablockOrMaterialName(
         const String &name,
