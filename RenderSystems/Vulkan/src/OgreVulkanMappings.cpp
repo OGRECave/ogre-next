@@ -1033,7 +1033,7 @@ namespace Ogre
     {
         if( strcmp( sem, "input.blendIndices" ) == 0 )
             return VES_BLEND_INDICES;
-        if( strcmp( sem, "input.blendWeigth" ) == 0 )
+        if( strcmp( sem, "input.blendWeight" ) == 0 )
             return VES_BLEND_WEIGHTS;
         if( strcmp( sem, "input.colour" ) == 0 )
             return VES_DIFFUSE;
