@@ -6,6 +6,10 @@
 		#version 430 core
 	@else
 		#version 330 core
+
+		@property( !hlms_readonly_is_tex )
+			#extension GL_ARB_shader_storage_buffer_object: require
+		@end
 	@end
 @end
 
