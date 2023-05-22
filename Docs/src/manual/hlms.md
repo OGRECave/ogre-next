@@ -145,7 +145,7 @@ was cut as well. The HLMS default systems handle these.
     these files (or write some of their own) to fit their custom needs.
 3.  **C++ classes implementation.** The C++ takes care of picking the
     shader templates and manipulating them before compiling; and most
-    importantly it feeds the shaders with uniform/constans data and sets
+    importantly it feeds the shaders with uniform/constants data and sets
     the textures that are being in use. It is extremely flexible,
     powerful, efficient and scalable, but it's harder to use than good
     ol' Materials because those used to be data-driven: there are no
@@ -153,12 +153,11 @@ was cut as well. The HLMS default systems handle these.
     the camera when the scene pass is about to start, and then pass it
     yourself to the shader. This is very powerful, because in D3D11/GL3+
     you can just set the uniform buffer with the view matrix just once
-    for the entire frame, and thus have multiple uniforms buffers sorted
-    by update frequency. Very advanced user will be using messing with
-    this part.
+    for the entire frame, and thus have multiple uniform buffers sorted
+    by update frequency. Very advanced user will be using this part.
 
-Based on your skillset and needs, you can pick up to which parts you
-want to mess with. Most users will just use the scripts to define
+Based on your skillset and needs, you can pick which parts you
+want to tinker with. Most users will just use the scripts to define
 materials, advanced users will change the template, and very advanced
 users who need something entirely different will change all three.
 
@@ -167,7 +166,7 @@ implementation and its own set of shader templates. The Toon Shading has
 its own C++ implementation and set of shaders. There is also an "Unlit"
 implementation, specifically meant to deal with GUI and simple particle
 FXs (ignores normals & lighting, manages multiple UVs, can mix multiple
-texture with photoshop-like blend modes, can animate the UVs, etc)
+texture with photoshop-like blend modes, can animate the UVs, etc).
 
 It is theoretically possible to implement both Toon & PBS in the same
 C++ module, but that would be crazy, hard to maintain and not very
@@ -236,7 +235,7 @@ We also sort by blendblocks to reduce state changes.
 ## Samplerblocks {#HlmsBlocksSampleblocks}
 
 Samplerblocks hold information about texture units, like filtering
-options, addressing modes (wrap, clamp, etc), Lod bias, anisotropy,
+options, addressing modes (wrap, clamp, etc), LOD bias, anisotropy,
 border colour, etc. They're analogous to `D3D11_SAMPLER_DESC`.
 
 GL3+ and D3D11 both support samplerblocks natively[^12]. On GLES2, the
@@ -264,7 +263,7 @@ according to the following rules:
 1.  The files with the names "VertexShader\_vs", "PixelShader\_ps",
     "GeometryShader\_gs", "HullShader\_hs", "DomainShader\_ds" will be
     fully parsed and compiled into the shader. If an implementation only
-    provides "VertexShader\_vs.glsl", "PixelShader\_ps.glsl"; only the
+    provides "VertexShader\_vs.glsl", "PixelShader\_ps.glsl" only the
     vertex and pixel shaders for OpenGL will be created. There will be
     no geometry or tesellation shaders.
 2.  The files that contain the string "piece\_vs" in their filenames
@@ -277,7 +276,7 @@ according to the following rules:
     shortcut to collect from a piece file in all stages.
 
 The Hlms takes a template file (i.e. a file written in GLSL or HLSL) and
-spits out valid shader code. Templates can take advantage of the Hlms'
+produces valid shader code. Templates can take advantage of the Hlms'
 preprocessor, which is a simple yet powerful macro-like preprocessor
 that helps writing the required code.
 
