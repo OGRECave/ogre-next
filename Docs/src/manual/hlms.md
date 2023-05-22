@@ -519,7 +519,7 @@ Saves all the text inside the blocks and saves it as a named piece. If a
 piece with the given name already exists, a compiler error will be
 thrown. The text that was inside the block won't be printed. Useful when
 in combination with `@insertpiece`. Pieces can also be defined from C++ or
-[collected](#9.3.Hlms templates|outline) from piece template files.
+[collected](#HlmsTemplates) from piece template files.
 
 Trying to define a piece twice will result in error and may produce
 incorrect output.
@@ -629,7 +629,7 @@ output showed the overriden `Hello` version.
 ### @pset padd psub pmul pdiv pmod pmin pmax {#HlmsPreprocessorSyntaxPsetEtc}
 
 Analogous to [the family of math functions without the 'p'
-prefix](#9.4.1.5.\@set add sub mul div mod|outline). The difference is
+prefix](#HlmsPreprocessorSyntaxSetEtc). The difference is
 that the math is evaluated before anything else. There is no much use to
 these functions, probably except for quickly testing whether a given
 flag/variable is being properly set from C++ without having to
@@ -681,7 +681,7 @@ The following graph summarizes the process:
 
 Later on during rendering, at the start each render pass, a similar
 process is done, which ends up generating a [pass
-hash](#9.6.1.preparePassHash|outline) instead of a renderable hash.
+hash](#HlmsRuntimeRenderingPreparePassHash) instead of a renderable hash.
 Pass data stores settings like number of shadow casting lights, number
 of lights per type (directional, point, spot).
 
@@ -797,7 +797,7 @@ There are different levels in which an Hlms implementation can be
 customized:
 
 1.  Using a library, see [Hlms
-    Initialization](#8.8.1.Initialization|outline). pass a set of piece
+	Initialization](#UsingHlmsImplementationInitialization). pass a set of piece
     files in a folder by pushing the folder to `ArchiveVec`. The files in
     that folder will be parsed first, in order (`archiveVec[0]` then
     `archiveVec[1]`, ... `archiveVec[N-1]`); which will let you define
@@ -1074,7 +1074,7 @@ configurations, and only apply for textures being loaded for the first
 time. **The texture type is ignored when such texture has already been
 loaded, and beware that it may have been packed with different
 settings**. If you need to load it with different parameters, see
-[aliasing](#8.9.1.4.Loading a texture twice (i.e. with a different format) via aliasing|outline).
+[Loading a texture twice via aliasing](#HlmsTextureManagerAutomaticBatchingLoadingTwice).
 
 The following types are defined:
 
