@@ -331,6 +331,9 @@ case sensitive. The following keywords are recognized:
 -   \@insertpiece
 -   \@pset padd psub pmul pdiv pmod pmin pmax
 
+Note: @ takes precedence over comment //. If you comment out with //
+a line that has @, it will _not_ be commented out.
+
 ### \@property( expression ) {#HlmsPreprocessorSyntaxProperty}
 
 Checks whether the variables in the expression are true, if so, the text
