@@ -963,8 +963,8 @@ named "Green". However only one can be visible to the manager; let's
 assume that the PBS one was made visible.
 
 When you call `Renderable::setDatablock( "Green" )`, the HlmsManager will
-look the one that is visible to it. To assign the Unlit version of
-"Green" instead of the PBS one, you will have call the overload that
+look for the one that is visible to it. To assign the Unlit version of
+"Green" instead of the PBS one, you will have to call the overload that
 specifies the pointer, and grab the datablock from the implementation
 itself: `Renderable::setDatablock( hlmsUnlit->getDatablock( "Green" ) )`;
 
@@ -976,7 +976,7 @@ editors and other GUIs based on Ogre to display the material's name;
 since IdString destroys the original string in Release mode.
 
 HlmsParamVec is an array/vector of key-value string pairs to specify
-custom parameters on creation. Valid values depends on the
+custom parameters on creation. Valid values depend on the
 implementation. You should see the Constructor's documentation for more
 information on them.
 
@@ -1054,7 +1054,7 @@ the texture combinations that can be packed together.
 When the texture is being loaded for the first time, the manager will
 try to insert it into the first available array/atlas it sees, or else
 create a new one. Several parameters affect the creation of the texture
-array/atlas, which can be configured in
+array/atlas, which can be configured in:
 
 ```cpp
 DefaultTextureParameters mDefaultTextureParameters[NUM_TEXTURE_TYPES];
@@ -1095,7 +1095,7 @@ The reasons to have multiple profiles are simple:
     (i.e. `PF_L8`) even if the original is stored as a 32-bit RGBA PNG
     file. Furthermore, sRGB (gamma correction) is disabled for these
     textures.
-3.  Detail maps & its normal maps are usually meant to be tileable.
+3.  Detail maps and their normal maps are usually meant to be tileable.
     Therefore on mobile, UV atlas is disabled.
 
 Desktop-only Hlms implementations already skip the use of
@@ -1106,7 +1106,7 @@ since they're only useful in Mobile; and use `TEXTURE_TYPE_DIFFUSE` and
 ### Automatic parameters {#HlmsTextureManagerAutomaticBatchingAutoParams}
 
 The packing algorithm uses multiple criteria to determine whether it
-should pack or not a texture:
+should pack a texture or not:
 
 ```cpp
 /// Textures whose size are less or equal to minTextureSize
@@ -1216,7 +1216,7 @@ The reasons to use texture packs are varied:
 -   Improve loading time by baking as much information as possible
     offline.
 -   Certain formats can't be batched at runtime for UV atlas (i.e.
-    PVRTC2) and thus needs to done offline.
+    PVRTC2) and thus it needs to be done offline.
 
 TBD
 
@@ -1237,11 +1237,11 @@ To prevent this particular case, the `textureArraysTresholds` parameter
 will kick in; and will clamp `maxTexturesPerArray` to 1.
 
 Nonetheless, special attention needs to be taken to ensure maximum
-occupancy of the each array.
+occupancy of each array.
 
 The function `HlmsTextureManager::dumpMemoryUsage` is a powerful tool that
 will dump all loaded textures to the log in CSV format using '|' as
-separator for further analysis on MS Excel or OpenOffice Calc.
+separator for further analysis in MS Excel or OpenOffice Calc.
 
 The following is an example of the dump's output:
 
