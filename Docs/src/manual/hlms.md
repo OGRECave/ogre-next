@@ -401,13 +401,13 @@ Which will print:
 
 Loop that prints the text inside the block, The text is repeated `count - start` times. Must be finalized with `@end`.
 
--   count The number of times to repeat the loop (if start = 0). Count
+-   `count` The number of times to repeat the loop (if start = 0). Count
 	can read variables.
 -   `scopedVar` is a variable that can be used to print the
     current iteration of the loop while inside the block. i.e.
     `@scopedVar` will be converted into a number in the range \[start;
-    count)
--   start Optional. Allows to start from a value different than 0. Start
+    count).
+-   `start` Optional. Allows to start from a value different than 0. Start
     can read variables.
 
 Newlines are very important, as they will be printed with the loop.
@@ -450,7 +450,7 @@ Examples:
 >    @end
 >
 >    @end
->```
+> ```
 >
 >  Because psub will be evaluated before expanding the foreach.
 
@@ -514,7 +514,7 @@ Useful in combination with `@counter` and `@value`
 
 ### @piece( nameOfPiece ) {#HlmsPreprocessorSyntaxPiece}
 
-Saves all the text inside the blocks and saves it as a named piece. If a
+Saves all the text inside the blocks as a named piece. If a
 piece with the given name already exists, a compiler error will be
 thrown. The text that was inside the block won't be printed. Useful when
 in combination with `@insertpiece`. Pieces can also be defined from C++ or
@@ -658,7 +658,7 @@ shader itself and would need to be recompiled:
     multiplying it against the diffuse colour, etc.
 2.  The Mesh. Is it skeletally animated? Then include skeletal animation
     code. How many blend weights? Modify the skeletal animation code
-    appropiately. It doesn't have tangents? Then skip the normal map
+    appropriately. It doesn't have tangents? Then skip the normal map
     defined in the material. And so on.
 
 When calling `Renderable::setDatablock()`, what happens is that
@@ -678,7 +678,7 @@ The following graph summarizes the process:
 
 ![](hlms_hash.svg)
 
-Later on during rendering, at the start each render pass, a similar
+Later on during rendering, at the start of each render pass, a similar
 process is done, which ends up generating a [pass
 hash](#9.6.1.preparePassHash|outline) instead of a renderable hash.
 Pass data stores settings like number of shadow casting lights, number
@@ -698,8 +698,8 @@ illustrates the process:
 Note: This section is relevant to those seeking to write their own Hlms
 implementation.
 
-C++ can use `Hlms::setProperty( "key", value )` to set "key" to the given
-value. This value can be read by `\@property`, `@foreach`,
+C++ can use `Hlms::setProperty( "key", value )` to set value to the given
+"key". This value can be read by `\@property`, `@foreach`,
 `@add/sub/mul/div/mod`, `@counter`, `@value` and `@padd/psub/pmul/pdiv/pmod`
 
 To create pieces (or read them) you need to pass your custom
@@ -708,7 +708,7 @@ To create pieces (or read them) you need to pass your custom
 The recommended place to do this is in `Hlms::calculateHashForPreCreate`
 and `Hlms::calculateHashForPreCaster.` Both are virtual. The former gets
 called right before adding the set of properties, pieces and hash to the
-cache, while the latter happens right before adding the similar set for
+cache, while the latter happens right before adding a similar set for
 the shadow caster pass.
 
 In those two functions you get the chance to call setProperty to set
@@ -744,11 +744,11 @@ For mobile, avoid `mat4` and do the math yourself. As for 4x3 matrices
 (i.e. skinning), perform the math manually as many GLES2 drivers have
 issues compiling valid glsl code.
 
-Properties in `underscore_case` are set from C++; propierties in
+Properties in `underscore_case` are set from C++; properties in
 `camelCase` are set from the template.
 
-Propierties and pieces starting with `custom_` are for user
-customizations of the template
+Properties and pieces starting with `custom_` are for user
+customizations of the template.
 
 TBD
 
@@ -780,9 +780,9 @@ In many cases, users may want to slightly customize the shaders to
 achieve a particular look, implement a specific feature, or solve a
 unique problem; without having to rewrite the whole implementation.
 
-Maximum flexibility can be get by directly modifying the original source
+Maximum flexibility can be achieved by directly modifying the original source
 code. However this isn't modular, making it difficult to merge when the
-original source code has changed. Most of of the customizations don't
+original source code has changed. Most of the customizations don't
 require such intrusive approach.
 
 **Note:** For performance reasons, the listener interface does not allow
@@ -820,15 +820,15 @@ customized:
   @end
 ```
 
-1.  Via listener, through `HlmsListener`. This allows you to have access
+2.  Via listener, through `HlmsListener`. This allows you to have access
     to the buffer pass to fill extra information; or bind extra buffers
     to the shader.
-2.  Overload `HlmsPbs`. Useful for overriding only specific parts, or
+3.  Overload `HlmsPbs`. Useful for overriding only specific parts, or
     adding new functionality that requires storing extra information in
     a datablock (e.g. overload HlmsPbsDatablock to add more variables,
     and then overload `HlmsPbs::createDatablockImpl` to create these
-    custom datablocks)
-3.  Directly modify `HlmsPbs`, `HlmsPbsDatablock` and the template.
+    custom datablocks).
+4.  Directly modify `HlmsPbs`, `HlmsPbsDatablock` and the template.
 
 | Variable | Description |
 |----------|-------------|
