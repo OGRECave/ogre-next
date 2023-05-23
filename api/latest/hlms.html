@@ -449,7 +449,7 @@ Preprocessor syntax</h2>
 </table>
 <h3><a class="anchor" id="HlmsPreprocessorSyntaxPiece"></a>
 @piece( nameOfPiece )</h3>
-<p >Saves all the text inside the blocks and saves it as a named piece. If a piece with the given name already exists, a compiler error will be thrown. The text that was inside the block won't be printed. Useful when in combination with <code>@insertpiece</code>. Pieces can also be defined from C++ or 9.3.Hlms templates|outline "collected" from piece template files.</p>
+<p >Saves all the text inside the blocks and saves it as a named piece. If a piece with the given name already exists, a compiler error will be thrown. The text that was inside the block won't be printed. Useful when in combination with <code>@insertpiece</code>. Pieces can also be defined from C++ or <a class="el" href="hlms.html#HlmsTemplates">collected</a> from piece template files.</p>
 <p >Trying to define a piece twice will result in error and may produce incorrect output.</p>
 <p >Example:</p>
 <div class="fragment"><div class="line">Expression                        Output</div>
@@ -512,7 +512,7 @@ Preprocessor syntax</h2>
 <p >Note that despite we already had <code>Hello</code> inserted inside <code>VertexOut</code>; and that we only overrode <code>Hello</code> (not <code>VertexOut</code>) and yet the final output showed the overriden <code>Hello</code> version.</p>
 <h3><a class="anchor" id="HlmsPreprocessorSyntaxPsetEtc"></a>
 @pset padd psub pmul pdiv pmod pmin pmax</h3>
-<p >Analogous to 9.4.1.5.@set add sub mul div mod|outline "the family of math functions without the 'p' prefix". The difference is that the math is evaluated before anything else. There is no much use to these functions, probably except for quickly testing whether a given flag/variable is being properly set from C++ without having to recompile.</p>
+<p >Analogous to <a class="el" href="hlms.html#HlmsPreprocessorSyntaxSetEtc">the family of math functions without the 'p' prefix</a>. The difference is that the math is evaluated before anything else. There is no much use to these functions, probably except for quickly testing whether a given flag/variable is being properly set from C++ without having to recompile.</p>
 <p >i.e. If you suspect <code>hlms_normal</code> is never being set, try <code>@pset(
 hlms_normal, 1 )</code></p>
 <p >One important use worth mentioning, is that variables retain their values across shader stages. First the vertex shader template is parsed, then the pixel shader one. If 'myVal' is 0 and the vertex shader contains @counter( myVal ); when the pixel shader is parsed @value(
@@ -531,7 +531,7 @@ Creation of shaders</h1>
 <div class="image">
 <object type="image/svg+xml" data="hlms_hash.svg" style="pointer-events: none;"></object>
 </div>
-    <p >Later on during rendering, at the start each render pass, a similar process is done, which ends up generating a 9.6.1.preparePassHash|outline "pass hash" instead of a renderable hash. Pass data stores settings like number of shadow casting lights, number of lights per type (directional, point, spot).</p>
+    <p >Later on during rendering, at the start each render pass, a similar process is done, which ends up generating a <a class="el" href="hlms.html#HlmsRuntimeRenderingPreparePassHash">pass hash</a> instead of a renderable hash. Pass data stores settings like number of shadow casting lights, number of lights per type (directional, point, spot).</p>
 <p >While iterating each renderable for render, the hash key is read from the Renderable and merged with the pass' hash. With the merged hash, the shader is retrieved from a cache. If it's not in the cache, the shader will be generated and compiled by merging the cached data (pieces and variables) from the Renderable and the Pass. The following graph illustrates the process:</p>
 <div class="image">
 <object type="image/svg+xml" data="hlms_caching.svg" style="pointer-events: none;"></object>
@@ -568,7 +568,7 @@ Customizing an existing implementation</h2>
 <p ><b>Note:</b> For performance reasons, the listener interface does not allow you to add customizations that work per Renderable, as that loop is performance sensitive. The only listener callback that works inside <code>Hlms::fillBuffersFor</code> is hlmsTypeChanged which only gets evaluated when the previous Renderable used a different Hlms implementation; which is rare, and since we sort the RenderQueue, it often branch predicts well.</p>
 <p >There are different levels in which an Hlms implementation can be customized:</p>
 <ol type="1">
-<li>Using a library, see 8.8.1.Initialization|outline "Hlms Initialization". pass a set of piece files in a folder by pushing the folder to <code>ArchiveVec</code>. The files in that folder will be parsed first, in order (<code>archiveVec[0]</code> then <code>archiveVec[1]</code>, ... <code>archiveVec[N-1]</code>); which will let you define your own pieces to insert code into the default template (see the the table at the end). You can also do clever tricky things to avoid dealing with C++ code at all even if there are no <code>custom_</code> pieces for it. For example, you can write the following code to override the BRDF declarations and provide a custom BRDF:</li>
+<li>Using a library, see <a class="el" href="hlms.html#UsingHlmsImplementationInitialization">Hlms Initialization</a>. pass a set of piece files in a folder by pushing the folder to <code>ArchiveVec</code>. The files in that folder will be parsed first, in order (<code>archiveVec[0]</code> then <code>archiveVec[1]</code>, ... <code>archiveVec[N-1]</code>); which will let you define your own pieces to insert code into the default template (see the the table at the end). You can also do clever tricky things to avoid dealing with C++ code at all even if there are no <code>custom_</code> pieces for it. For example, you can write the following code to override the BRDF declarations and provide a custom BRDF:</li>
 </ol>
 <div class="fragment"><div class="line"><span class="comment">//Disable all known BRDFs that the implementation may enable</span></div>
 <div class="line"> </div>
@@ -720,7 +720,7 @@ Automatic batching</h2>
 </blockquote>
 <h3><a class="anchor" id="HlmsTextureManagerAutomaticBatchingTextureTypes"></a>
 Texture types</h3>
-<p >The texture types are like "profiles" of batching/packing configurations, and only apply for textures being loaded for the first time. <b>The texture type is ignored when such texture has already been loaded, and beware that it may have been packed with different settings</b>. If you need to load it with different parameters, see 8.9.1.4.Loading a texture twice (i.e. with a different format) via aliasing|outline "aliasing".</p>
+<p >The texture types are like "profiles" of batching/packing configurations, and only apply for textures being loaded for the first time. <b>The texture type is ignored when such texture has already been loaded, and beware that it may have been packed with different settings</b>. If you need to load it with different parameters, see <a class="el" href="hlms.html#HlmsTextureManagerAutomaticBatchingLoadingTwice">Loading a texture twice via aliasing</a>.</p>
 <p >The following types are defined:</p>
 <ul>
 <li>TEXTURE_TYPE_DIFFUSE</li>
