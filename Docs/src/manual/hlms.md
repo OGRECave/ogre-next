@@ -701,8 +701,8 @@ illustrates the process:
 Note: This section is relevant to those seeking to write their own Hlms
 implementation.
 
-C++ can use `Hlms::setProperty( "key", value )` to set value to the given
-"key". This value can be read by `\@property`, `@foreach`,
+C++ can use `Hlms::setProperty( "key", value )` to set "key" to the given
+value. This value can be read by `\@property`, `@foreach`,
 `@add/sub/mul/div/mod`, `@counter`, `@value` and `@padd/psub/pmul/pdiv/pmod`
 
 To create pieces (or read them) you need to pass your custom
