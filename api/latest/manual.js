@@ -264,10 +264,10 @@ var manual =
       [ "Hlms porting", "_ogre22_changes.html#autotoc_md46", null ],
       [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md47", null ]
     ] ],
-    [ "Behavor of StagingTexture in D3D11", "_behavor_staging_texture_d3_d11.html", [
-      [ "Attempting to be contiguous", "_behavor_staging_texture_d3_d11.html#autotoc_md4", null ],
-      [ "Slicing in 3", "_behavor_staging_texture_d3_d11.html#autotoc_md5", null ],
-      [ "Slicing in the middle", "_behavor_staging_texture_d3_d11.html#autotoc_md6", null ]
+    [ "Behavior of StagingTexture in D3D11", "_behavior_staging_texture_d3_d11.html", [
+      [ "Attempting to be contiguous", "_behavior_staging_texture_d3_d11.html#autotoc_md4", null ],
+      [ "Slicing in 3", "_behavior_staging_texture_d3_d11.html#autotoc_md5", null ],
+      [ "Slicing in the middle", "_behavior_staging_texture_d3_d11.html#autotoc_md6", null ]
     ] ],
     [ "What's new in Ogre 2.3", "_ogre23_changes.html", [
       [ "Switch importV1 to createByImportingV1", "_ogre23_changes.html#autotoc_md48", null ],
