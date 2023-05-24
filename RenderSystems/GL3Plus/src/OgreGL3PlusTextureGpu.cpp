@@ -666,21 +666,21 @@ namespace Ogre
                     static_cast<GLsizei>( srcBox.getDepthOrSlices() ) ) );
             }
             else if( support.checkExtension( "GL_NV_copy_image" ) )
-            {                
-                 // Initialize the pointer only the first time
+            {
+                // Initialize the pointer only the first time
                 PFNGLCOPYIMAGESUBDATANVPROC local_glCopyImageSubDataNV = nullptr;
-                if (!local_glCopyImageSubDataNV)
+                if( !local_glCopyImageSubDataNV )
                 {
-                    local_glCopyImageSubDataNV = (PFNGLCOPYIMAGESUBDATANVPROC)gl3wGetProcAddress("glCopyImageSubDataNV");
+                    local_glCopyImageSubDataNV =
+                        (PFNGLCOPYIMAGESUBDATANVPROC)gl3wGetProcAddress( "glCopyImageSubDataNV" );
                 }
 
-                OCGE( local_glCopyImageSubDataNV( this->mFinalTextureName, this->mGlTextureTarget,
-                                                  srcMipLevel, srcBox.x, srcBox.y,
-                                                  srcBox.getZOrSlice() + this->getInternalSliceStart(),
-                                                  dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
-                                                  dstMipLevel, dstBox.x, dstBox.y,
-                                                  dstBox.getZOrSlice() + dstGl->getInternalSliceStart(),
-                                                  srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+                OCGE( local_glCopyImageSubDataNV(
+                    this->mFinalTextureName, this->mGlTextureTarget, srcMipLevel, srcBox.x, srcBox.y,
+                    srcBox.getZOrSlice() + this->getInternalSliceStart(), dstGl->mFinalTextureName,
+                    dstGl->mGlTextureTarget, dstMipLevel, dstBox.x, dstBox.y,
+                    dstBox.getZOrSlice() + dstGl->getInternalSliceStart(), srcBox.width, srcBox.height,
+                    srcBox.getDepthOrSlices() ) );
             }
             /*TODO: These are for OpenGL ES 3.0+
             else if( support.checkExtension( "GL_OES_copy_image" ) )
