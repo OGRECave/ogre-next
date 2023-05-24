@@ -1,5 +1,10 @@
 @property( syntax != glslvk )
-	#version 430
+	@property( GL3+ >= 430 )
+		#version 430
+	@else
+		#version 420
+		#extension GL_ARB_compute_shader: enable
+	@end
 	#define ogre_B0 binding = 0
 	#define ogre_B1 binding = 1
 @else
