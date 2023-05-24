@@ -278,6 +278,8 @@ namespace Ogre
 
         uint8 getMaxNumMipmaps() const { return mMaxNumMipmaps; }
 
+        uint8 countActiveActors() const;
+
         enum CustomParameterBits
         {
             // clang-format off

@@ -928,4 +928,15 @@ namespace Ogre
     {
         return ( renderable->mCustomParameter & UseActiveActor ) != 0;
     }
+    //-----------------------------------------------------------------------------------
+    uint8 PlanarReflections::countActiveActors() const
+    {
+        uint8 numActors = 0u;
+        for( const PlanarReflectionActor *actor : mActiveActors )
+        {
+            if( actor != &mDummyActor )
+                ++numActors;
+        }
+        return numActors;
+    }
 }  // namespace Ogre
