@@ -521,29 +521,32 @@ namespace Ogre
                 ArrayMaskR vertexMask = ARRAY_MASK_ZERO;
                 ArrayReal dotResult;
 
-                ArrayVector3 tangentDir, vertexPoint;
+                ArrayVector3 tangentDir, vertexPoint, xMidpoint, yMidpoint;
 
-                tangentDir = actorsPlanes->planeNormals.yAxis() * actorsPlanes->xyHalfSize[1];
+                xMidpoint = actorsPlanes->planeNormals.xAxis() * actorsPlanes->xyHalfSize[0];
+                yMidpoint = actorsPlanes->planeNormals.yAxis() * actorsPlanes->xyHalfSize[1];
+
+                tangentDir = xMidpoint + yMidpoint;
                 vertexPoint = actorsPlanes->center + tangentDir;
-                dotResult = frustums[k].normal.dotProduct( vertexPoint ) - frustums[k].negD;
+                dotResult = frustums[k].normal.dotProduct( vertexPoint );
                 vertexMask =
-                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, frustums[k].negD ) );
 
                 vertexPoint = actorsPlanes->center - tangentDir;
-                dotResult = frustums[k].normal.dotProduct( vertexPoint ) - frustums[k].negD;
+                dotResult = frustums[k].normal.dotProduct( vertexPoint );
                 vertexMask =
-                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, frustums[k].negD ) );
 
-                tangentDir = actorsPlanes->planeNormals.xAxis() * actorsPlanes->xyHalfSize[0];
+                tangentDir = xMidpoint - yMidpoint;
                 vertexPoint = actorsPlanes->center + tangentDir;
-                dotResult = frustums[k].normal.dotProduct( vertexPoint ) - frustums[k].negD;
+                dotResult = frustums[k].normal.dotProduct( vertexPoint );
                 vertexMask =
-                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, frustums[k].negD ) );
 
                 vertexPoint = actorsPlanes->center - tangentDir;
-                dotResult = frustums[k].normal.dotProduct( vertexPoint ) - frustums[k].negD;
+                dotResult = frustums[k].normal.dotProduct( vertexPoint );
                 vertexMask =
-                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, frustums[k].negD ) );
 
                 mask = Mathlib::And( mask, vertexMask );
             }
@@ -566,9 +569,9 @@ namespace Ogre
                 // for( int l=0; l<8; ++l )
                 for( int l = 0; l < 4; ++l )
                 {
-                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
+                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] );
                     vertexMask =
-                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, actorPlaneNegD ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
@@ -578,21 +581,21 @@ namespace Ogre
                 vertexMask = ARRAY_MASK_ZERO;
                 for( int l = 0; l < 8; ++l )
                 {
-                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
+                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] );
                     vertexMask =
-                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, actorPlaneNegD ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
                 // North plane
-                actorPlaneNormal = actorsPlanes->planeNormals.yAxis();
+                actorPlaneNormal = -actorsPlanes->planeNormals.yAxis();
                 actorPlaneNegD = actorsPlanes->planeNegD[1];
                 vertexMask = ARRAY_MASK_ZERO;
                 for( int l = 0; l < 8; ++l )
                 {
-                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
+                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] );
                     vertexMask =
-                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, actorPlaneNegD ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
@@ -602,21 +605,21 @@ namespace Ogre
                 vertexMask = ARRAY_MASK_ZERO;
                 for( int l = 0; l < 8; ++l )
                 {
-                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
+                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] );
                     vertexMask =
-                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, actorPlaneNegD ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
                 // East plane
-                actorPlaneNormal = actorsPlanes->planeNormals.xAxis();
+                actorPlaneNormal = -actorsPlanes->planeNormals.xAxis();
                 actorPlaneNegD = actorsPlanes->planeNegD[3];
                 vertexMask = ARRAY_MASK_ZERO;
                 for( int l = 0; l < 8; ++l )
                 {
-                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
+                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] );
                     vertexMask =
-                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, actorPlaneNegD ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
@@ -626,9 +629,9 @@ namespace Ogre
                 vertexMask = ARRAY_MASK_ZERO;
                 for( int l = 0; l < 8; ++l )
                 {
-                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
+                    dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] );
                     vertexMask =
-                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, actorPlaneNegD ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
             }
