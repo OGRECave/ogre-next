@@ -1,5 +1,6 @@
 var NAVTREEINDEX226 =
 {
+"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#ac9163fe8946dea3c8f469ff12c1c8b46":[5,2,10,68,1,3],
 "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#afb97efbb9fcb672ca21456120e38912e":[5,2,10,68,1,0],
 "struct_ogre_1_1_hlms_disk_cache_1_1_source_code.html":[5,2,10,68,2],
 "struct_ogre_1_1_hlms_disk_cache_1_1_source_code.html#a31d614eae75d705a2e4c81b1dc9aa7fd":[5,2,10,68,2,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX226 =
 "struct_ogre_1_1_lod_config.html#a1344213f8ee863fab847136e13dc1195":[6,0,0,557,2],
 "struct_ogre_1_1_lod_config.html#a197e4bbdc17c5645e9775d0ea1863c4d":[7,0,0,530,4],
 "struct_ogre_1_1_lod_config.html#a197e4bbdc17c5645e9775d0ea1863c4d":[6,0,0,557,4],
-"struct_ogre_1_1_lod_config.html#a57f8dbcdf687850f01f904973cab37a9":[7,0,0,530,6],
-"struct_ogre_1_1_lod_config.html#a57f8dbcdf687850f01f904973cab37a9":[6,0,0,557,6]
+"struct_ogre_1_1_lod_config.html#a57f8dbcdf687850f01f904973cab37a9":[7,0,0,530,6]
 };

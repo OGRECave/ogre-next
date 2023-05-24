@@ -1,5 +1,6 @@
 var NAVTREEINDEX218 =
 {
+"manual.html":[1],
 "modules.html":[5],
 "namespace_ogre.html":[6,0,0],
 "namespace_ogre.html#a00d4a79ab9d0df3408d7a15be1e31d9a":[6,0,0,1154],
@@ -248,6 +249,5 @@ var NAVTREEINDEX218 =
 "namespace_ogre.html#abaf0024024f080806957a6d18c1665c3a5e6b3348e68c24b3063c940f582f7eea":[6,0,0,1299,0],
 "namespace_ogre.html#abc9243a9888899587fef58378f51320a":[6,0,0,1231],
 "namespace_ogre.html#abd073aedc62cca37390dfdd2afb53a70":[6,0,0,1236],
-"namespace_ogre.html#abd64b6e4eaf1f67aaf83a0d2d7f3bde0":[6,0,0,1210],
-"namespace_ogre.html#abdb3f1738cb3647211a3ce693d8fafdd":[6,0,0,1363]
+"namespace_ogre.html#abd64b6e4eaf1f67aaf83a0d2d7f3bde0":[6,0,0,1210]
 };

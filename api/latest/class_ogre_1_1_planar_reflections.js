@@ -14,6 +14,7 @@ var class_ogre_1_1_planar_reflections =
     [ "addRenderable", "class_ogre_1_1_planar_reflections.html#a50aeb6eec3120373b6d5316909128235", null ],
     [ "beginFrame", "class_ogre_1_1_planar_reflections.html#a3dd439594c476fb85b3a930a81b2864b", null ],
     [ "cameraMatches", "class_ogre_1_1_planar_reflections.html#a08baa1e192558155350dc4cae0779c39", null ],
+    [ "countActiveActors", "class_ogre_1_1_planar_reflections.html#a0765f86abacd811fdea0dc2941efb5cd", null ],
     [ "destroyActor", "class_ogre_1_1_planar_reflections.html#a44003f3183c9912fc8bd0dbe08130dc4", null ],
     [ "destroyAllActors", "class_ogre_1_1_planar_reflections.html#a026bf3208a69c61edf6ceb2c5a93dbc1", null ],
     [ "fillConstBufferData", "class_ogre_1_1_planar_reflections.html#ab6b4e4365e298e1964114c9f88affca4", null ],

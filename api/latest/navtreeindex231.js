@@ -1,5 +1,6 @@
 var NAVTREEINDEX231 =
 {
+"struct_ogre_1_1_staging_buffer_1_1_destination.html#af7b932de702d91cd632a52a6f9508681":[7,0,0,847,0,2],
 "struct_ogre_1_1_stencil_params.html":[5,2,2,114],
 "struct_ogre_1_1_stencil_params.html#a21b50e522ea54db40c35872a403c3897":[5,2,2,114,3],
 "struct_ogre_1_1_stencil_params.html#a2e887fc56a085cfe5ec7ce4ba649bda9":[5,2,2,114,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX231 =
 "struct_ogre_1_1_unlit_property.html#a1f18d1961ef991f16f725b90fd21da99":[7,0,0,900,48],
 "struct_ogre_1_1_unlit_property.html#a1f18d1961ef991f16f725b90fd21da99":[6,0,0,927,48],
 "struct_ogre_1_1_unlit_property.html#a2481eefb0b2610038376cb127da9d0dd":[7,0,0,900,11],
-"struct_ogre_1_1_unlit_property.html#a2481eefb0b2610038376cb127da9d0dd":[6,0,0,927,11],
-"struct_ogre_1_1_unlit_property.html#a2fd61aeb85206153008a9a1330055e65":[7,0,0,900,74]
+"struct_ogre_1_1_unlit_property.html#a2481eefb0b2610038376cb127da9d0dd":[6,0,0,927,11]
 };
