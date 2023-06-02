@@ -2400,10 +2400,11 @@ namespace Ogre{
                     }
                     else
                     {
-                        AbstractNodeList::const_iterator i1 = getNodeAt(prop->values, 1), i2 = getNodeAt(prop->values, 2);
+                        AbstractNodeList::const_iterator i1 = getNodeAt(prop->values, 1);
                         bool val = false;
                         if(getBoolean(prop->values.front(), &val))
                         {
+                            AbstractNodeList::const_iterator i2 = getNodeAt( prop->values, 2 );
                             FogMode mode = FOG_NONE;
                             ColourValue clr = ColourValue::White;
                             Real dens = Real( 0.001 ), start = 0.0f, end = 1.0f;
@@ -3352,7 +3353,7 @@ namespace Ogre{
                                         }
                                         else
                                         {
-                                            names[n++] = name;
+                                            names[n++] = std::move(name);
                                         }
                                     }
                                     else
@@ -4686,7 +4687,7 @@ namespace Ogre{
     //-------------------------------------------------------------------------
     void GpuProgramTranslator::translateGpuProgram(ScriptCompiler *compiler, ObjectAbstractNode *obj)
     {
-        list<std::pair<String,String> >::type customParameters;
+        vector<std::pair<String,String> >::type customParameters;
         String syntax, source;
         AbstractNodePtr params;
         for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
@@ -4791,7 +4792,7 @@ namespace Ogre{
         prog->_notifyOrigin(obj->file);
 
         // Set the custom parameters
-        for(list<std::pair<String,String> >::type::iterator i = customParameters.begin(); i != customParameters.end(); ++i)
+        for(vector<std::pair<String,String> >::type::iterator i = customParameters.begin(); i != customParameters.end(); ++i)
             prog->setParameter(i->first, i->second);
 
         // Set up default parameters
@@ -4804,7 +4805,7 @@ namespace Ogre{
     //-------------------------------------------------------------------------
     void GpuProgramTranslator::translateUnifiedGpuProgram(ScriptCompiler *compiler, ObjectAbstractNode *obj)
     {
-        list<std::pair<String,String> >::type customParameters;
+        vector<std::pair<String,String> >::type customParameters;
         AbstractNodePtr params;
         for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
         {
@@ -4875,7 +4876,7 @@ namespace Ogre{
         prog->_notifyOrigin(obj->file);
 
         // Set the custom parameters
-        for(list<std::pair<String,String> >::type::iterator i = customParameters.begin(); i != customParameters.end(); ++i)
+        for(vector<std::pair<String,String> >::type::iterator i = customParameters.begin(); i != customParameters.end(); ++i)
             prog->setParameter(i->first, i->second);
 
         // Set up default parameters
@@ -4901,7 +4902,7 @@ namespace Ogre{
             return;
         }
 
-        list<std::pair<String,String> >::type customParameters;
+        vector<std::pair<String,String> >::type customParameters;
         String source;
         AbstractNodePtr params;
         for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
@@ -4992,7 +4993,7 @@ namespace Ogre{
         prog->_notifyOrigin(obj->file);
 
         // Set the custom parameters
-        for(list<std::pair<String,String> >::type::iterator i = customParameters.begin(); i != customParameters.end(); ++i)
+        for(vector<std::pair<String,String> >::type::iterator i = customParameters.begin(); i != customParameters.end(); ++i)
             prog->setParameter(i->first, i->second);
 
         // Set up default parameters
@@ -5004,7 +5005,7 @@ namespace Ogre{
 
     }
     //-------------------------------------------------------------------------
-    uint32 parseProgramParameterDimensions(String& declarator, String type)
+    uint32 parseProgramParameterDimensions(const String& declarator, const String& type)
     {
         // Assume 1 unless otherwise specified
         uint32 dimensions = 1;
@@ -5013,7 +5014,7 @@ namespace Ogre{
 
         if (start != String::npos)
         {
-            size_t end = declarator.find_first_of("[", start);
+            size_t end = declarator.find_first_of('[', start);
 
             // int1, int2, etc.
             if (end != start)
@@ -5026,10 +5027,10 @@ namespace Ogre{
             // C-style array
             while (start != String::npos)
             {
-                end = declarator.find_first_of("]", start);
+                end = declarator.find_first_of(']', start);
                 dimensions *= StringConverter::parseUnsignedInt(
                     declarator.substr(start + 1, end - start - 1));
-                start = declarator.find_first_of("[", end);
+                start = declarator.find_first_of('[', end);
             }
         }
 
@@ -6531,7 +6532,7 @@ namespace Ogre{
         td->widthFactor     = widthFactor;
         td->heightFactor    = heightFactor;
         td->format          = format;
-        td->fsaa            = fsaa;
+        td->fsaa            = std::move(fsaa);
         td->textureFlags    = textureFlags;
         td->depthBufferId       = depthBufferId;
         td->preferDepthTexture  = preferDepthTexture;
@@ -7703,7 +7704,7 @@ namespace Ogre{
                     else
                     {
                         AbstractNodeList::const_iterator it1 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it1++;
+                        AbstractNodeList::const_iterator it0 = std::next( it1 );
 
                         uint32 outChannel;
                         IdString bufferName;
@@ -7937,7 +7938,7 @@ namespace Ogre{
                                 if( getIdString( *it, &texName ) )
                                 {
                                     if( colourIdx >= mRtv->colourAttachments.size() )
-                                        mRtv->colourAttachments.push_back( RenderTargetViewEntry() );
+                                        mRtv->colourAttachments.emplace_back();
                                     mRtv->colourAttachments.back().textureName = texName;
                                     ++colourIdx;
                                 }
@@ -8628,7 +8629,7 @@ namespace Ogre{
                         uint32 colourIdx;
                         LoadAction::LoadAction loadAction;
                         AbstractNodeList::const_iterator it1 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it1++;
+                        AbstractNodeList::const_iterator it0 = std::next( it1 );
                         if( getUInt( *it0, &colourIdx ) && getLoadAction( *it1, &loadAction ) )
                         {
                             if( colourIdx < OGRE_MAX_MULTIPLE_RENDER_TARGETS )
@@ -8913,7 +8914,7 @@ namespace Ogre{
                         uint32 colourIdx;
                         StoreAction::StoreAction storeAction;
                         AbstractNodeList::const_iterator it1 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it1++;
+                        AbstractNodeList::const_iterator it0 = std::next( it1 );
                         if( getUInt( *it0, &colourIdx ) && getStoreAction( *it1, &storeAction ) )
                         {
                             if( colourIdx < OGRE_MAX_MULTIPLE_RENDER_TARGETS )
@@ -9288,8 +9289,6 @@ namespace Ogre{
                     else
                     {
                         passQuad->mMaterialIsHlms = prop->id == ID_HLMS;
-
-                        String val;
                         if( !getString(prop->values.front(), &passQuad->mMaterialName) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
@@ -9310,8 +9309,8 @@ namespace Ogre{
                     else
                     {
                         AbstractNodeList::const_iterator it2 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it2++;
-                        AbstractNodeList::const_iterator it1 = it2++;
+                        AbstractNodeList::const_iterator it0 = std::next( it2 );
+                        AbstractNodeList::const_iterator it1 = std::next( it2, 2 );
 
                         uint32 id;
                         String name;
@@ -9720,9 +9719,9 @@ namespace Ogre{
                         gbuffer.resize( 2 );
 
                         AbstractNodeList::const_iterator it3 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it3++;
-                        AbstractNodeList::const_iterator it1 = it3++;
-                        AbstractNodeList::const_iterator it2 = it3++;
+                        AbstractNodeList::const_iterator it0 = std::next( it3 );
+                        AbstractNodeList::const_iterator it1 = std::next( it3, 2 );
+                        AbstractNodeList::const_iterator it2 = std::next( it3, 3 );
 
                         if( !getIdString( *it0, &gbuffer[0] ) ||
                             !getIdString( *it1, &gbuffer[1] ) ||
@@ -9769,7 +9768,7 @@ namespace Ogre{
                         IdString depthTexture, refractions;
 
                         AbstractNodeList::const_iterator it1 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it1++;
+                        AbstractNodeList::const_iterator it0 = std::next( it1 );
 
                         if( !getIdString( *it0, &depthTexture ) || !getIdString( *it1, &refractions ) )
                         {
@@ -9815,7 +9814,7 @@ namespace Ogre{
                     else
                     {
                         AbstractNodeList::const_iterator it1 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it1++;
+                        AbstractNodeList::const_iterator it0 = std::next( it1 );
 
                         if( !getReal( *it0, &passScene->mUvBakingOffset.x ) ||
                             !getReal( *it1, &passScene->mUvBakingOffset.y ) )
@@ -9946,10 +9945,6 @@ namespace Ogre{
                         }
 
                         AbstractNodeList::const_iterator it0 = prop->values.begin();
-                        AbstractNodeList::const_iterator it1 = it0;
-                        if( prop->values.size() > 1 )
-                            ++it1;
-
                         String str;
                         if( getString( *it0, &str ) )
                         {
@@ -10722,8 +10717,8 @@ namespace Ogre{
                     else
                     {
                         AbstractNodeList::const_iterator it2 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it2++;
-                        AbstractNodeList::const_iterator it1 = it2++;
+                        AbstractNodeList::const_iterator it0 = std::next( it2 );
+                        AbstractNodeList::const_iterator it1 = std::next( it2, 2 );
 
                         uint32 id;
                         String name;
@@ -10775,6 +10770,7 @@ namespace Ogre{
             else if((*i)->type == ANT_PROPERTY)
             {
                 PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
+                const AbstractNodePtr beginNode = prop->values.front();
                 switch(prop->id)
                 {
                 case ID_MIPMAP_METHOD:
@@ -10789,9 +10785,9 @@ namespace Ogre{
                     }
                     else
                     {
-                        if(prop->values.front()->type == ANT_ATOM)
+                        if( beginNode->type == ANT_ATOM )
                         {
-                            AtomAbstractNode *atom = (AtomAbstractNode*)prop->values.front().get();
+                            AtomAbstractNode *atom = (AtomAbstractNode *)beginNode.get();
                             switch(atom->id)
                             {
                             case ID_API_DEFAULT:
@@ -10805,14 +10801,14 @@ namespace Ogre{
                                 break;
                             default:
                                 compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                                   prop->values.front()->getValue() +
+                                                    beginNode->getValue() +
                                                    " is not a valid miprmap_method (api_default, compute, or compute_hq)");
                             }
                         }
                         else
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                               prop->values.front()->getValue() +
+                                                beginNode->getValue() +
                                                " is not a valid miprmap_method (api_default, compute, or compute_hq)");
                         }
                     }
@@ -10830,10 +10826,10 @@ namespace Ogre{
                     else
                     {
                         int value = 8;
-                        if( !getInt( prop->values.front(), &value ) )
+                        if( !getInt( beginNode, &value ) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                               prop->values.front()->getValue() + " is not a valid integer argument");
+                                beginNode->getValue() + " is not a valid integer argument" );
                         }
                         else
                         {
@@ -10853,10 +10849,10 @@ namespace Ogre{
                     }
                     else
                     {
-                        if( !getFloat( prop->values.front(), &passMipmap->mGaussianDeviationFactor ) )
+                        if( !getFloat( beginNode, &passMipmap->mGaussianDeviationFactor ) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                               prop->values.front()->getValue() + " is not a valid integer argument");
+                                beginNode->getValue() + " is not a valid integer argument" );
                         }
                     }
                 break;
@@ -11704,7 +11700,8 @@ namespace Ogre{
                     (parent->id == ID_COMPOSITOR_NODE || parent->id == ID_SHADOW_NODE ||
                      parent->id == ID_SHADOW_MAP_REPEAT))
                 translator = &mCompositorTargetTranslator;
-            else if( obj->id == ID_RTV && (parent->id == ID_COMPOSITOR_NODE ||
+            else if( obj->id == ID_RTV && parent &&
+                     ( parent->id == ID_COMPOSITOR_NODE ||
                                            parent->id == ID_SHADOW_NODE) )
                 translator = &mCompositorRenderTargetViewTranslator;
             else if(obj->id == ID_SHADOW_MAP_TARGET_TYPE && parent && parent->id == ID_SHADOW_NODE)
