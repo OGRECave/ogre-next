@@ -13,6 +13,7 @@
     * Windows 7 or higher is highly recommended. For Windows Vista & 7, you need to have the
       [KB2670838 update](https://support.microsoft.com/en-us/kb/2670838) installed.
       **YOUR END USERS NEED THIS UPDATE AS WELL**.
+    * Python 3.x is needed to build shaderc dependency for Vulkan.
     * For HW & SW requirements, please visit http://www.ogre3d.org/developers/requirements
 
 @copydoc DownloadingOgreScriptsCommon
