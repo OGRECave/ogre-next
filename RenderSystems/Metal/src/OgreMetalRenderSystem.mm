@@ -289,7 +289,7 @@ namespace Ogre
         bool supportsBCTextureCompression = true;
         if( @available( macOS 11, * ) )
         {
-            supportsBCTextureCompression = mActiveDevice->mDevice.supportsBCTextureCompression
+            supportsBCTextureCompression = mActiveDevice->mDevice.supportsBCTextureCompression;
         }
 
         if( supportsBCTextureCompression )
