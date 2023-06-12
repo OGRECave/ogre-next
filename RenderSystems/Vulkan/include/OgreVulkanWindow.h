@@ -99,6 +99,7 @@ namespace Ogre
         bool mLowestLatencyVSync;
         bool mEnablePreTransform;
         bool mClosed;
+        bool mCanDownloadData;
 
         VkSurfaceKHR mSurfaceKHR;
         VkSwapchainKHR mSwapchain;
@@ -121,7 +122,8 @@ namespace Ogre
         void acquireNextSwapchain();
 
     public:
-        VulkanWindowSwapChainBased( const String &title, uint32 width, uint32 height, bool fullscreenMode );
+        VulkanWindowSwapChainBased( const String &title, uint32 width, uint32 height,
+                                    bool fullscreenMode );
         ~VulkanWindowSwapChainBased() override;
 
         void destroy() override;
@@ -135,6 +137,10 @@ namespace Ogre
         bool isClosed() const override;
 
         void setVSync( bool vSync, uint32 vSyncInterval ) override;
+
+        void setWantsToDownload( bool bWantsToDownload ) override;
+
+        bool canDownloadData() const override;
 
         /// Tells our VulkanDevice that the next commitAndNextCommandBuffer call should present us
         /// Calling swapBuffers during the command buffer that is rendering to us is key for

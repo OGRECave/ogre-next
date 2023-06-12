@@ -182,6 +182,7 @@ namespace Ogre
         mLowestLatencyVSync( false ),
         mEnablePreTransform( true ),
         mClosed( false ),
+        mCanDownloadData( false ),
         mSurfaceKHR( 0 ),
         mSwapchain( 0 ),
         mSwapchainSemaphore( 0 ),
@@ -394,6 +395,8 @@ namespace Ogre
         swapchainCreateInfo.imageExtent.height = getHeight();
         swapchainCreateInfo.imageArrayLayers = 1u;
         swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        if( mCanDownloadData )
+            swapchainCreateInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
         swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         swapchainCreateInfo.queueFamilyIndexCount = 0u;
         swapchainCreateInfo.pQueueFamilyIndices = 0;
@@ -414,7 +417,8 @@ namespace Ogre
             }
         }
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        if( mEnablePreTransform && surfaceCaps.currentTransform <= VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR )
+        if( mEnablePreTransform &&
+            surfaceCaps.currentTransform <= VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR )
         {
             // We will manually rotate by adapting our projection matrices (fastest)
             // See https://arm-software.github.io/vulkan_best_practice_for_mobile_developers/samples/
@@ -613,6 +617,25 @@ namespace Ogre
 
         createSwapchain();
     }
+    //-------------------------------------------------------------------------
+    void VulkanWindowSwapChainBased::setWantsToDownload( bool bWantsToDownload )
+    {
+        if( mCanDownloadData == bWantsToDownload )
+            return;
+
+        mCanDownloadData = bWantsToDownload;
+
+        destroySwapchain();
+
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+
+        createSwapchain();
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanWindowSwapChainBased::canDownloadData() const { return mCanDownloadData; }
     //-------------------------------------------------------------------------
     void VulkanWindowSwapChainBased::swapBuffers()
     {

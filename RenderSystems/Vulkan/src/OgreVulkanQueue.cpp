@@ -457,6 +457,8 @@ namespace Ogre
 
             imageMemBarrier.oldLayout = newTransferLayout;
             imageMemBarrier.newLayout = vkTexture->mNextLayout;
+            OGRE_ASSERT_LOW( imageMemBarrier.newLayout != VK_IMAGE_LAYOUT_UNDEFINED &&
+                             imageMemBarrier.newLayout != VK_IMAGE_LAYOUT_PREINITIALIZED );
             mImageMemBarriers.push_back( imageMemBarrier );
             mImageMemBarrierPtrs.push_back( vkTexture );
         }

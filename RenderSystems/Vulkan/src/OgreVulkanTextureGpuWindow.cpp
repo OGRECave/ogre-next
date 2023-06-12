@@ -80,6 +80,10 @@ namespace Ogre
     {
         if( mSampleDescription.isMultisample() )
             createMsaaSurface();
+
+        OGRE_ASSERT_LOW( !PixelFormatGpuUtils::isDepth( mPixelFormat ) &&
+                         !PixelFormatGpuUtils::isStencil( mPixelFormat ) );
+        mNextLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::destroyInternalResourcesImpl()
