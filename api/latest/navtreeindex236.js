@@ -1,5 +1,13 @@
 var NAVTREEINDEX236 =
 {
+"struct_ogre_1_1float2.html#adc33b0e8a1fdd1551c0de5cd3f6576f4":[7,0,0,294,3],
+"struct_ogre_1_1float2.html#adc33b0e8a1fdd1551c0de5cd3f6576f4":[6,0,0,321,3],
+"struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[6,0,0,321,0],
+"struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[7,0,0,294,0],
+"struct_ogre_1_1float4.html":[6,0,0,322],
+"struct_ogre_1_1float4.html":[7,0,0,295],
+"struct_ogre_1_1float4.html#a342fc304f58a4a2b379c3a91dc0ae04d":[7,0,0,295,1],
+"struct_ogre_1_1float4.html#a342fc304f58a4a2b379c3a91dc0ae04d":[6,0,0,322,1],
 "struct_ogre_1_1float4.html#a455f96a54be42ed640cfbd6fe873f197":[7,0,0,295,4],
 "struct_ogre_1_1float4.html#a455f96a54be42ed640cfbd6fe873f197":[6,0,0,322,4],
 "struct_ogre_1_1float4.html#a4e18ae6fc1a9b1313e30b8946d92b2dd":[7,0,0,295,0],
@@ -241,13 +249,5 @@ var NAVTREEINDEX236 =
 "struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_index_remap.html#afe5d8266fd88a832bb8a40cef8408853":[5,2,6,32,0,3],
 "struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_index_remap.html#aff9848cc69e230f57300b34d1acd66da":[5,2,6,32,0,1],
 "struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html":[5,2,6,32,1],
-"struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html#a35bc995de2b199bd476b34a6be915a63":[5,2,6,32,1,1],
-"struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html#a692c1b17cbf67bff3a6d7e1d25c85caf":[5,2,6,32,1,0],
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html":[6,0,0,27,130],
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html":[7,0,0,2,130],
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#a0b75671027d6663490eb35375c3bab9c":[6,0,0,27,130,2],
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#a0b75671027d6663490eb35375c3bab9c":[7,0,0,2,130,2],
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#a734e6e3f60de59f1d571b6114151ac03":[6,0,0,27,130,0],
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#a734e6e3f60de59f1d571b6114151ac03":[7,0,0,2,130,0],
-"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#adcdaf180a49362ed22c542d5d7a3457e":[6,0,0,27,130,1]
+"struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html#a35bc995de2b199bd476b34a6be915a63":[5,2,6,32,1,1]
 };
