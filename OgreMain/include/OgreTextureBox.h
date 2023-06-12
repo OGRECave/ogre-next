@@ -233,7 +233,7 @@ namespace Ogre
                     // Copy row of blocks by row of blocks, compressed.
                     const PixelFormatGpu pixelFormat = getCompressedPixelFormat();
 
-                    const uint32 blockSize = PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat );
+                    const size_t blockSize = PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat );
                     const uint32 blockWidth =
                         PixelFormatGpuUtils::getCompressedBlockWidth( pixelFormat, false );
                     const uint32 blockHeight =

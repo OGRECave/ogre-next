@@ -676,11 +676,14 @@ namespace Ogre
                 }
 
                 OCGE( local_glCopyImageSubDataNV(
-                    this->mFinalTextureName, this->mGlTextureTarget, srcMipLevel, srcBox.x, srcBox.y,
-                    srcBox.getZOrSlice() + this->getInternalSliceStart(), dstGl->mFinalTextureName,
-                    dstGl->mGlTextureTarget, dstMipLevel, dstBox.x, dstBox.y,
-                    dstBox.getZOrSlice() + dstGl->getInternalSliceStart(), srcBox.width, srcBox.height,
-                    srcBox.getDepthOrSlices() ) );
+                    this->mFinalTextureName, this->mGlTextureTarget, srcMipLevel,
+                    static_cast<GLint>( srcBox.x ), static_cast<GLint>( srcBox.y ),
+                    static_cast<GLint>( srcBox.getZOrSlice() + this->getInternalSliceStart() ),
+                    dstGl->mFinalTextureName, dstGl->mGlTextureTarget, dstMipLevel,
+                    static_cast<GLint>( dstBox.x ), static_cast<GLint>( dstBox.y ),
+                    static_cast<GLint>( dstBox.getZOrSlice() + dstGl->getInternalSliceStart() ),
+                    static_cast<GLsizei>( srcBox.width ), static_cast<GLsizei>( srcBox.height ),
+                    static_cast<GLsizei>( srcBox.getDepthOrSlices() ) ) );
             }
             /*TODO: These are for OpenGL ES 3.0+
             else if( support.checkExtension( "GL_OES_copy_image" ) )
