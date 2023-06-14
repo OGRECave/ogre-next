@@ -366,12 +366,6 @@ namespace Ogre
         case PFG_BC7_UNORM:             return VK_FORMAT_BC7_UNORM_BLOCK;
         case PFG_BC7_UNORM_SRGB:        return VK_FORMAT_BC7_SRGB_BLOCK;
         case PFG_B4G4R4A4_UNORM:        return VK_FORMAT_B4G4R4A4_UNORM_PACK16;
-        case PFG_PVRTC_RGB2:            return VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG;
-        case PFG_PVRTC_RGBA2:           return VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG;
-        case PFG_PVRTC_RGB4:            return VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG;
-        case PFG_PVRTC_RGBA4:           return VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG;
-        case PFG_PVRTC2_2BPP:           return VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG;
-        case PFG_PVRTC2_4BPP:           return VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG;
         case PFG_ETC1_RGB8_UNORM:       return VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
         case PFG_ETC2_RGB8_UNORM:       return VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
         case PFG_ETC2_RGB8_UNORM_SRGB:  return VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK;
@@ -413,6 +407,23 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_10X10_sRGB:return VK_FORMAT_ASTC_10x10_SRGB_BLOCK;
         case PFG_ASTC_RGBA_UNORM_12X10_sRGB:return VK_FORMAT_ASTC_12x10_SRGB_BLOCK;
         case PFG_ASTC_RGBA_UNORM_12X12_sRGB:return VK_FORMAT_ASTC_12x12_SRGB_BLOCK;
+
+        // PVRTC requires asking for extension VK_IMG_format_pvrtc before using
+        // VK_FORMAT_PVRTC* family of enums.
+        //
+        // However:
+        //  1. This extension is deprecated.
+        //  2. We have no way of testing the extension/functionality works and won't crash if OgreNext
+        //     ever runs on PVRTC-enabled drivers. The oldest / most popular PVRTC GPU we can get is
+        //     the PowerVR GE8320 and it doesn't expose this extension.
+        //
+        // PVRTC on Vulkan is dead.
+        case PFG_PVRTC_RGB2:
+        case PFG_PVRTC_RGBA2:
+        case PFG_PVRTC_RGB4:
+        case PFG_PVRTC_RGBA4:
+        case PFG_PVRTC2_2BPP:
+        case PFG_PVRTC2_4BPP:
 
         case PFG_ATC_RGB:
         case PFG_ATC_RGBA_EXPLICIT_ALPHA:
