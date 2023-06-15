@@ -6955,13 +6955,16 @@ THE SOFTWARE.</h2>
 <p >No access for CPU at all. i.e. RenderTextures, vertex buffers that will be used for R2VB </p><dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="namespace_ogre.html">Ogre</a> will use staging buffers to upload and download contents, but don't do this frequently (except where needed, i.e. live video capture) </dd></dl>
 </td></tr>
 <tr><td class="fieldname"><a id="a579e6aa73b3f580b1227a5c80991dbc9ab90d85a967d1647087d9e525778e9bc1" name="a579e6aa73b3f580b1227a5c80991dbc9ab90d85a967d1647087d9e525778e9bc1"></a>BT_DEFAULT_SHARED&#160;</td><td class="fielddoc"><p >Read and write access from GPU/CPU. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This functionality was written for UMA (Unified Memory Architecture), like the iPhone and most Android phones; and a few desktop iGPUs.</dd></dl>
-<p>Its main implementation purpose is to be able to access vertex &amp; index buffers from meshes (which are either BT_IMMUTABLE or BT_DEFAULT and never modified again after the first upload).</p>
+<dl class="section remark"><dt>Remarks</dt><dd>!!! SERIOUSLY DO NOT USE THIS FLAG UNLESS YOU KNOW <em>EXACTLY</em> WHAT YOU ARE DOING IT HAS VERY SPECIFIC USES AND USING IT CARELESSLY CAN CAUSE GLITCHES OR CRASHES.</dd></dl>
+<p>THIS FLAG ASSUMSE YOU ARE FAMILIAR WITH HOW OGRE-NEXT WORKS INTERNALLY AND HOW GPUs AND APIs WORK.</p>
+<p >IF YOU DON'T KNOW WHAT THIS FLAG IS, USE BT_IMMUTABLE OR BT_DEFAULT. !!!</p>
+<p >This functionality was written for UMA (Unified Memory Architecture), like the iPhone and most Android phones; and a few desktop iGPUs.</p>
+<p >Its main implementation purpose is to be able to access vertex &amp; index buffers from meshes (which are either BT_IMMUTABLE or BT_DEFAULT and never modified again after the first upload).</p>
 <p >The main advantage of this buffer type is that apps can read the (vertex/index) data from CPU without neither waiting nor needing a shadow copy (which wastes precious RAM on mobile).</p>
 <p >There is no synchronization going on thus if you write to a BT_DEFAULT_SHARED buffer from GPU (e.g. <a class="el" href="class_ogre_1_1_buffer_packed.html#a162e23ff6f3cb7f90ed129d3906c14e4" title="Copies the contents of this buffer to another, using GPU -&gt; GPU transfers.">BufferPacked::copyTo</a>) you're going to have to manually wait for that transfer (using <a class="el" href="class_ogre_1_1_vao_manager.html#af029f21d9a83ae3024e36695a3f554f7" title="Waits for a specific frame to be ready.">VaoManager::waitForSpecificFrameToFinish</a>).</p>
 <p >And if you're reading from GPU from that buffer (e.g. rendering), you're also going to have to manually wait for those reads (using <a class="el" href="class_ogre_1_1_vao_manager.html#af029f21d9a83ae3024e36695a3f554f7" title="Waits for a specific frame to be ready.">VaoManager::waitForSpecificFrameToFinish</a>) before writing to this buffer.</p>
 <p ><a class="el" href="namespace_ogre.html">Ogre</a> won't use any staging buffers to upload and download contents. It's fast on UMA and slow on other archs.</p>
-<p >Theretically better synchronization could be implemented on top of this buffer type to be multi-purpose, but it would complicate things.</p>
+<p >Theoretically better synchronization could be implemented on top of this buffer type to be multi-purpose, but it would complicate things.</p>
 <p >Basically it's the perfect replacement for BT_IMMUTABLE if you want stall-free access to GPU data from within the CPU without consuming extra RAM.</p>
 <p >See <a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7aab001d90db104675638a8d3089160650">Capabilities::RSC_UMA</a> to check support. </p>
 </td></tr>
