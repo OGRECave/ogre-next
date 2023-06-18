@@ -98,9 +98,17 @@ namespace Ogre
         //-----------------------------------------------------------------------
         Mesh::~Mesh()
         {
-            // have to call this here rather than in Resource destructor
-            // since calling virtual methods in base destructors causes crash
-            unload();
+            if( !isLoaded() )
+            {
+                // Even while unloaded we still may have stuff to free
+                unloadImpl();
+            }
+            else
+            {
+                // have to call this here rather than in Resource destructor
+                // since calling virtual methods in base destructors causes crash
+                unload();
+            }
         }
         //-----------------------------------------------------------------------
         HardwareBufferManagerBase *Mesh::getHardwareBufferManager()
