@@ -28,6 +28,7 @@
 
 #include "OgreLodInputProviderMesh.h"
 
+#include "OgreBitwise.h"
 #include "OgreLodData.h"
 #include "OgreMesh.h"
 #include "OgreSubMesh.h"
@@ -116,11 +117,14 @@ namespace Ogre
             vertexData->vertexDeclaration->findElementBySemantic( VES_POSITION );
 
         // Only float supported.
-        OgreAssert( elemPos->getBaseType( elemPos->getType() ) == VET_FLOAT1 &&
-                        elemPos->getTypeCount( elemPos->getType() ) >= 3u,
-                    "Position must be VET_FLOAT3 or VET_FLOAT4" );
+        OgreAssert( ( elemPos->getBaseType( elemPos->getType() ) == VET_FLOAT1 &&
+                      elemPos->getTypeCount( elemPos->getType() ) >= 3u ) ||
+                        elemPos->getType() == VET_HALF4,
+                    "Position must be VET_FLOAT3, VET_FLOAT4 or VET_HALF4" );
 
-        if( elemPos->getTypeCount( elemPos->getType() ) == 4u )
+        const bool bPositionIsHalf = elemPos->getType() == VET_HALF4;
+
+        if( elemPos->getTypeCount( elemPos->getType() ) == 4u && !bPositionIsHalf )
         {
             LogManager::getSingleton().logMessage(
                 "LodInputProviderMesh::addVertexData: Position is VET_FLOAT4. "
@@ -148,6 +152,8 @@ namespace Ogre
         const v1::VertexElement *elemNormal =
             vertexData->vertexDeclaration->findElementBySemantic( VES_NORMAL );
 
+        const bool bNormalIsQTangent = elemNormal->getType() == VET_SHORT4_SNORM;
+
         data->mUseVertexNormals &= ( elemNormal != NULL );
         if( data->mUseVertexNormals )
         {
@@ -169,8 +175,6 @@ namespace Ogre
         // Loop through all vertices and insert them to the Unordered Map.
         for( ; vertex < vEnd; vertex += vSize )
         {
-            float *pFloat;
-            elemPos->baseVertexPointerToElement( vertex, &pFloat );
             LodData::VertexI vi = (LodData::VertexI)data->mVertexList.size();
             {
                 LodData::Vertex tmp;
@@ -180,9 +184,23 @@ namespace Ogre
                 data->mVertexList.push_back( tmp );
             }
             LodData::Vertex *v = &data->mVertexList.back();
-            v->position.x = pFloat[0];
-            v->position.y = pFloat[1];
-            v->position.z = pFloat[2];
+
+            if( bPositionIsHalf )
+            {
+                uint16 *pHalf;
+                elemPos->baseVertexPointerToElement( vertex, &pHalf );
+                v->position.x = Bitwise::halfToFloat( pHalf[0] );
+                v->position.y = Bitwise::halfToFloat( pHalf[1] );
+                v->position.z = Bitwise::halfToFloat( pHalf[2] );
+            }
+            else
+            {
+                float *pFloat;
+                elemPos->baseVertexPointerToElement( vertex, &pFloat );
+                v->position.x = pFloat[0];
+                v->position.y = pFloat[1];
+                v->position.z = pFloat[2];
+            }
             v->collapseToi = LodData::InvalidIndex;
             std::pair<LodData::UniqueVertexSet::iterator, bool> ret;
             ret = data->mUniqueVertexSet.insert( vi );
@@ -206,7 +224,35 @@ namespace Ogre
 
             if( data->mUseVertexNormals )
             {
-                elemNormal->baseVertexPointerToElement( vNormal, &pFloat );
+                float *pFloat;
+                float tmpFloat[3];
+                if( bNormalIsQTangent )
+                {
+                    int16 *srcData16;
+                    elemNormal->baseVertexPointerToElement( vNormal,
+                                                            reinterpret_cast<uint16 **>( &srcData16 ) );
+
+                    Quaternion qTangent;
+                    qTangent.x = Bitwise::snorm16ToFloat( srcData16[0] );
+                    qTangent.y = Bitwise::snorm16ToFloat( srcData16[1] );
+                    qTangent.z = Bitwise::snorm16ToFloat( srcData16[2] );
+                    qTangent.w = Bitwise::snorm16ToFloat( srcData16[3] );
+                    float reflection = 1.0f;
+                    if( qTangent.w < 0 )
+                        reflection = -1.0f;
+
+                    Vector3 decompressedNormal = qTangent.xAxis();
+
+                    pFloat = tmpFloat;
+                    tmpFloat[0] = decompressedNormal.x;
+                    tmpFloat[1] = decompressedNormal.y;
+                    tmpFloat[2] = decompressedNormal.z;
+                }
+                else
+                {
+                    elemNormal->baseVertexPointerToElement( vNormal, &pFloat );
+                }
+
                 if( !ret.second )
                 {
                     if( v->normal.x != pFloat[0] )
