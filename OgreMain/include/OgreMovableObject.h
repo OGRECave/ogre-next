@@ -236,6 +236,9 @@ namespace Ogre
         /// @see Node::_callMemoryChangeListeners
         virtual void _notifyParentNodeMemoryChanged() {}
 
+        /// Sets mCurrentMeshLod to 0.
+        void resetMeshLod();
+
         unsigned char getCurrentMeshLod() const { return mCurrentMeshLod; }
 
         /// Checks whether this MovableObject is static. @see setStatic

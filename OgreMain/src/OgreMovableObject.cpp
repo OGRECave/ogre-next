@@ -166,6 +166,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
+    void MovableObject::resetMeshLod() { mCurrentMeshLod = 0u; }
+    //-----------------------------------------------------------------------
     bool MovableObject::isStatic() const
     {
         return mObjectMemoryManager->getMemoryManagerType() == SCENE_STATIC;
