@@ -2617,7 +2617,7 @@ namespace Ogre
 
                 // vec4 areaApproxLights[numLights].tangent;
                 Quaternion qRot = light->getParentNode()->_getDerivedOrientation();
-                Vector3 xAxis = viewMatrix3 * qRot.xAxis();
+                Vector3 xAxis = viewMatrix3 * -qRot.xAxis();
                 *light1BufferPtr++ = xAxis.x;
                 *light1BufferPtr++ = xAxis.y;
                 *light1BufferPtr++ = xAxis.z;

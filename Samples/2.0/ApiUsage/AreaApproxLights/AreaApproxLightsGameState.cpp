@@ -147,7 +147,7 @@ namespace Demo
     {
         Ogre::v1::MeshPtr lightPlaneMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
             "LightPlane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-            Ogre::Plane( Ogre::Vector3::UNIT_Z, 0.0f ), 1.0f, 1.0f, 1, 1, true, 1, 1.0f, 1.0f,
+            Ogre::Plane( Ogre::Vector3::NEGATIVE_UNIT_Z, 0.0f ), 1.0f, 1.0f, 1, 1, true, 1, 1.0f, 1.0f,
             Ogre::Vector3::UNIT_Y, Ogre::v1::HardwareBuffer::HBU_STATIC,
             Ogre::v1::HardwareBuffer::HBU_STATIC );
         Ogre::MeshPtr lightPlaneMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
