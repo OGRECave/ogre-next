@@ -69,6 +69,7 @@ add_filtered_std("Hash")
 add_filtered_std("Math/Array")
 add_filtered_std("Math/Simple")
 add_filtered_std("Math/Simple/C")
+add_filtered_std("ParticleSystem")
 add_filtered_std("ogrestd")
 add_filtered_std("Vao")
 

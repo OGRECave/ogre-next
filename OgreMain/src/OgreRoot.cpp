@@ -83,6 +83,7 @@ THE SOFTWARE.
 #include "OgreWindow.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgreWireAabb.h"
+#include "ParticleSystem/OgreParticleSystem2.h"
 #include "Threading/OgreDefaultWorkQueue.h"
 
 #if OGRE_NO_FREEIMAGE == 0
@@ -296,6 +297,8 @@ namespace Ogre
         addMovableObjectFactory( mItemFactory );
         mLightFactory = OGRE_NEW LightFactory();
         addMovableObjectFactory( mLightFactory );
+        mParticleSystem2Factory = OGRE_NEW ParticleSystem2Factory();
+        addMovableObjectFactory( mParticleSystem2Factory );
         mRectangle2DFactory = OGRE_NEW Rectangle2DFactory();
         addMovableObjectFactory( mRectangle2DFactory );
         mBillboardSetFactory = OGRE_NEW v1::BillboardSetFactory();
@@ -403,6 +406,7 @@ namespace Ogre
         OGRE_DELETE mEntityFactory;
         OGRE_DELETE mItemFactory;
         OGRE_DELETE mLightFactory;
+        OGRE_DELETE mParticleSystem2Factory;
         OGRE_DELETE mRectangle2DFactory;
         OGRE_DELETE mBillboardSetFactory;
         OGRE_DELETE mManualObjectFactory;

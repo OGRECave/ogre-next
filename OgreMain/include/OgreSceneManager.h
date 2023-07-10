@@ -406,6 +406,7 @@ namespace Ogre
         ObjectMemoryManager mForwardPlusMemoryManager[NUM_SCENE_MEMORY_MANAGER_TYPES];
         SkeletonAnimManager mSkeletonAnimationManager;
         NodeMemoryManager   mTagPointNodeMemoryManager;
+        ObjectMemoryManager mParticleSysMemoryManager;
         /// Filled and cleared every frame in HighLevelCull()
         NodeMemoryManagerVec   mNodeMemoryManagerUpdateList;
         NodeMemoryManagerVec   mTagPointNodeMemoryManagerUpdateList;
@@ -486,6 +487,8 @@ namespace Ogre
         CameraMap  mCamerasByName;
         FrustumVec mVisibleCameras;
         FrustumVec mCubeMapCameras;
+
+        ParticleSystemManager2 *mParticleSystemManager2;
 
         typedef vector<WireAabb *>::type WireAabbVec;
 
@@ -1368,6 +1371,8 @@ namespace Ogre
         }
         ObjectMemoryManager &_getLightMemoryManager() { return mLightMemoryManager; }
 
+        ObjectMemoryManager &_getParticleSysMemoryManager() { return mParticleSysMemoryManager; }
+
         /// @copydoc ArrayMemoryManager::defragment
         void defragmentMemoryPools();
 
@@ -1618,6 +1623,43 @@ namespace Ogre
         /** Removes & destroys all ParticleSystems from the SceneManager.
          */
         virtual void destroyAllParticleSystems();
+
+        /** Creates the template / definition of the new generation of ParticleFXs.
+        @remarks
+            A ParticleSystemDef does not form part of the scene.
+
+            The reason it derives from MovableObject is to keep backwards compatibility with the
+            interface of the older ParticleFX plugin for much easier
+            migration/porting.
+
+            Do NOT attach it to a SceneNode.
+
+            See createParticleSystem2().
+        @param name
+            Name of the definition. Must be unique.
+        @return
+            ParticleSystem Definition to setup.
+        */
+        ParticleSystemDef *createParticleSystemDef( const String &name );
+
+        /** Creates an instance the next generation of ParticleFX.
+            This instanec must be based off a ParticleSystemDef already setup.
+
+            See createParticleSystemDef().
+        @param systemDef
+            The ParticleSystemDef.
+        @return
+            The ParticleSystem2
+        */
+        ParticleSystem2 *createParticleSystem2( ParticleSystemDef *systemDef );
+
+        /// See createParticleSystem2(). This supplies the name of the particle
+        /// system def instead of a pointer (slightly slower)
+        ParticleSystem2 *createParticleSystem2( const String &templateDefName );
+
+        void destroyParticleSystem2( ParticleSystem2 *obj );
+
+        void destroyAllParticleSystems2();
 
         /** Empties the entire scene, inluding all SceneNodes, Entities, Lights,
             BillboardSets etc. Cameras are not deleted at this stage since
