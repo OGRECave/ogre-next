@@ -76,6 +76,8 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreViewport.h"
 #include "OgreWireAabb.h"
+#include "ParticleSystem/OgreParticleSystem2.h"
+#include "ParticleSystem/OgreParticleSystemManager2.h"
 #include "Threading/OgreBarrier.h"
 #include "Threading/OgreUniformScalableTask.h"
 
@@ -131,6 +133,7 @@ namespace Ogre
         mDecalsNormalsTex( 0 ),
         mDecalsEmissiveTex( 0 ),
         mEnvFeatures( 0u ),
+        mParticleSystemManager2( new ParticleSystemManager2( this ) ),
         mCamerasInProgress( 0 ),
         mCurrentViewport0( 0 ),
         mCurrentPass( 0 ),
@@ -309,6 +312,8 @@ namespace Ogre
 
         mRenderQueue = 0;
         mAutoParamDataSource = 0;
+
+        delete mParticleSystemManager2;
 
         stopWorkerThreads();
     }
@@ -511,6 +516,7 @@ namespace Ogre
         }
 
         mLightMemoryManager.defragment();
+        mParticleSysMemoryManager.defragment();
         // Skeletons are more complex because the new slot count must be multiple bonesPerDepth
         // mSkeletonAnimationManager.defragment();
         mTagPointNodeMemoryManager.defragment();
@@ -526,6 +532,7 @@ namespace Ogre
         }
 
         mLightMemoryManager.shrinkToFit();
+        mParticleSysMemoryManager.shrinkToFit();
         // Skeletons are more complex because the new slot count must be multiple bonesPerDepth
         // mSkeletonAnimationManager.shrinkToFit();
         mTagPointNodeMemoryManager.shrinkToFit();
@@ -774,6 +781,41 @@ namespace Ogre
     void SceneManager::destroyAllParticleSystems()
     {
         destroyAllMovableObjectsByType( ParticleSystemFactory::FACTORY_TYPE_NAME );
+    }
+    //-----------------------------------------------------------------------
+    ParticleSystemDef *SceneManager::createParticleSystemDef( const String &name )
+    {
+        return mParticleSystemManager2->createParticleSystemDef( name );
+    }
+    //-----------------------------------------------------------------------
+    ParticleSystem2 *SceneManager::createParticleSystem2( ParticleSystemDef *systemDef )
+    {
+        NameValuePairList params;
+        params.insert( { "", Ogre::StringConverter::toString( (uintptr_t)systemDef ) } );
+        return static_cast<ParticleSystem2 *>( createMovableObject(
+            ParticleSystem2Factory::FACTORY_TYPE_NAME, &mParticleSysMemoryManager, &params ) );
+    }
+    //-----------------------------------------------------------------------
+    ParticleSystem2 *SceneManager::createParticleSystem2( const String &templateDefName )
+    {
+        return createParticleSystem2( mParticleSystemManager2->getParticleSystemDef( templateDefName ) );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::destroyParticleSystem2( ParticleSystem2 *obj )
+    {
+        return destroyMovableObject( obj );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::destroyAllParticleSystems2()
+    {
+        MovableObjectCollection *objectMap =
+            getMovableObjectCollection( ParticleSystem2Factory::FACTORY_TYPE_NAME );
+        {
+            OGRE_LOCK_MUTEX( objectMap->mutex );
+            objectMap->movableObjects.clear();
+        }
+
+        mParticleSystemManager2->destroyAllParticleSystems();
     }
     //-----------------------------------------------------------------------
     void SceneManager::clearScene( bool deleteIndestructibleToo, bool reattachCameras )
@@ -2624,7 +2666,8 @@ namespace Ogre
         OgreProfileGroup( "updateSceneGraph", OGREPROF_GENERAL );
 
         // Update controllers
-        ControllerManager::getSingleton().updateAllControllers();
+        ControllerManager &controllerManager = ControllerManager::getSingleton();
+        controllerManager.updateAllControllers();
 
         highLevelCull();
         _applySceneAnimations();
@@ -2684,6 +2727,11 @@ namespace Ogre
                 numRqs = (uint8)std::max<size_t>( numRqs, ( *itor )->_getTotalRenderQueues() );
                 ++itor;
             }
+        }
+
+        {
+            const Real timeSinceLast = controllerManager.getFrameTimeSource()->getValue();
+            mParticleSystemManager2->update( timeSinceLast );
         }
 
         // Reset these

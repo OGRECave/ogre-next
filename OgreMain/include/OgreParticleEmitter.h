@@ -170,19 +170,19 @@ namespace Ogre
         /** Internal utility method for generating particle exit direction
         @param destVector Reference to vector to complete with new direction (normalised)
         */
-        virtual void genEmissionDirection( const Vector3 &particlePos, Vector3 &destVector );
+        void genEmissionDirection( const Vector3 &particlePos, Vector3 &destVector ) const;
 
         /** Internal utility method to apply velocity to a particle direction.
         @param destVector The vector to scale by a randomly generated scale between min and max speed.
             Assumed normalised already, and likely already oriented in the right direction.
         */
-        virtual void genEmissionVelocity( Vector3 &destVector );
+        void genEmissionVelocity( Vector3 &destVector ) const;
 
         /** Internal utility method for generating a time-to-live for a particle. */
-        virtual Real genEmissionTTL();
+        Real genEmissionTTL() const;
 
         /** Internal utility method for generating a colour for a particle. */
-        virtual void genEmissionColour( ColourValue &destColour );
+        void genEmissionColour( ColourValue &destColour ) const;
 
         /** Internal utility method for generating an emission count based on a constant emission rate.
          */

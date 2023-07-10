@@ -10,5 +10,6 @@
 # Configure Plugins build
 
 if (OGRE_BUILD_PLUGIN_PFX)
-  add_subdirectory(ParticleFX)
+  #add_subdirectory(ParticleFX)
+  add_subdirectory(ParticleFX2)
 endif (OGRE_BUILD_PLUGIN_PFX)

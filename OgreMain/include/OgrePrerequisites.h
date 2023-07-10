@@ -250,7 +250,10 @@ namespace Ogre
     class ParticleEmitter;
     class ParticleEmitterFactory;
     class ParticleSystem;
+    class ParticleSystem2;
+    class ParticleSystemDef;
     class ParticleSystemManager;
+    class ParticleSystemManager2;
     class ParticleSystemRenderer;
     class ParticleSystemRendererFactory;
     class ParticleVisualData;
