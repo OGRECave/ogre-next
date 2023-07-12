@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "ParticleSystem/OgreParticle2.h"
 #include "ParticleSystem/OgreParticleAffector2.h"
 #include "ParticleSystem/OgreParticleSystem2.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 
 using namespace Ogre;
 
@@ -48,22 +49,25 @@ ParticleSystemManager2::ParticleSystemManager2( SceneManager *sceneManager ) :
 //-----------------------------------------------------------------------------
 ParticleSystemManager2::~ParticleSystemManager2()
 {
+    VaoManager *vaoManager = mSceneManager->getDestinationRenderSystem()->getVaoManager();
+
     for( std::pair<IdString, ParticleSystemDef *> itor : mParticleSystemDefMap )
+    {
+        itor.second->_destroy( vaoManager );
         delete itor.second;
+    }
 
     mActiveParticleSystemDefs.clear();
     mParticleSystemDefMap.clear();
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _timeSinceLast,
-                                            ParticleCpuData cpuData, const size_t numParticles,
-                                            ParticleSystemDef *systemDef )
+                                            ParticleCpuData cpuData, ParticleGpuData *gpuData,
+                                            const size_t numParticles, ParticleSystemDef *systemDef )
 {
     const ArrayReal timeSinceLast = Mathlib::SetAll( _timeSinceLast );
 
     const ArrayReal invPi = Mathlib::SetAll( 1.0f / Math::PI );
-
-    ParticleGpuData *gpuData = 0;
 
     for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
     {
@@ -78,7 +82,6 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
         const uint32 scalarMask = BooleanMask4::getScalarMask( Mathlib::And( wasAlive, isDead ) );
         const uint32 scalarIsDead = BooleanMask4::getScalarMask( isDead );
 
-        // ArrayReal normalizedRotation = Mathlib::Saturate(  );
         const ArrayVector3 normDir = cpuData.mDirection->normalisedCopy();
 
         int16 directions[3][ARRAY_PACKED_REALS];
@@ -164,6 +167,13 @@ void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
                     }
                 }
             }
+
+            const size_t numSimdActiveParticles = systemDef->getNumSimdActiveParticles();
+            if( numSimdActiveParticles > 0u )
+            {
+                systemDef->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
+                    systemDef->mGpuData->map( 0u, systemDef->getNumSimdActiveParticles() ) );
+            }
         }
     }
 }
@@ -177,6 +187,12 @@ void ParticleSystemManager2::updateSerialPos()
             for( const uint32 handle : threadParticlesToKill )
                 systemDef->deallocParticle( handle );
             threadParticlesToKill.clear();
+        }
+
+        if( systemDef->mParticleGpuData )
+        {
+            systemDef->mGpuData->unmap( UO_KEEP_PERSISTENT );
+            systemDef->mParticleGpuData = 0;
         }
     }
 }
@@ -223,7 +239,7 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
         }
 
         cpuData.advancePack( systemDef->getActiveParticlesPackOffset() );
-        const size_t numParticles = systemDef->getNumActiveParticles();
+        const size_t numParticles = systemDef->getNumSimdActiveParticles();
 
         // particlesPerThread must be multiple of ARRAY_PACKED_REALS
         size_t particlesPerThread = ( numParticles + numThreads - 1u ) / numThreads;
@@ -235,10 +251,12 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
 
         cpuData.advancePack( toAdvance );
 
+        ParticleGpuData *gpuData = systemDef->mParticleGpuData + toAdvance;
+
         for( const Affector *affector : systemDef->mAffectors )
             affector->run( cpuData, numParticlesToProcess );
 
-        tickParticles( threadIdx, timeSinceLast, cpuData, numParticles, systemDef );
+        tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numParticles, systemDef );
     }
 }
 //-----------------------------------------------------------------------------

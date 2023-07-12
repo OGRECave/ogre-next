@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "ParticleSystem/OgreEmitter2.h"
 #include "ParticleSystem/OgreParticleAffector2.h"
 #include "ParticleSystem/OgreParticleSystemManager2.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 
 using namespace Ogre;
 
@@ -43,6 +45,8 @@ ParticleSystemDef::ParticleSystemDef( SceneManager *manager,
     ParticleSystem( manager ),
     mName( name ),
     mParticleSystemManager( particleSystemManager ),
+    mGpuData( 0 ),
+    mParticleGpuData( 0 ),
     mFirstParticleIdx( 0u ),
     mLastParticleIdx( 0u ),
     mParticleQuotaFull( false )
@@ -53,28 +57,7 @@ ParticleSystemDef::ParticleSystemDef( SceneManager *manager,
 //-----------------------------------------------------------------------------
 ParticleSystemDef::~ParticleSystemDef()
 {
-    for( ParticleSystem2 *system : mParticleSystems )
-        delete system;
-    mActiveParticleSystems.clear();
-    mParticleSystems.clear();
-
-    if( mParticleCpuData.mPosition )
-    {
-        OGRE_FREE_SIMD( mParticleCpuData.mPosition, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mDirection, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mDimensions, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mRotation, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mRotationSpeed, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mTotalTimeToLive, MEMCATEGORY_GEOMETRY );
-    }
-
-    for( EmitterDefData *emitter : mEmitters )
-        delete emitter;
-    mEmitters.clear();
-    for( Affector *affector : mAffectors )
-        delete affector;
-    mAffectors.clear();
+    OGRE_ASSERT_LOW( !mParticleCpuData.mPosition && !mGpuData && "destroy() not called!" );
 }
 //-----------------------------------------------------------------------------
 uint32 ParticleSystemDef::getQuota() const
@@ -82,7 +65,7 @@ uint32 ParticleSystemDef::getQuota() const
     return static_cast<uint32>( mActiveParticles.capacity() );
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemDef::init()
+void ParticleSystemDef::init( VaoManager *vaoManager )
 {
     OGRE_ASSERT_LOW( mParticleCpuData.mPosition == nullptr );
     OGRE_ASSERT_MEDIUM( mActiveParticles.empty() );
@@ -114,6 +97,46 @@ void ParticleSystemDef::init()
     memset( mParticleCpuData.mRotationSpeed, 0, numParticles * sizeof( Radian ) );
     memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
     memset( mParticleCpuData.mTotalTimeToLive, 0, numParticles * sizeof( Real ) );
+
+    mGpuData = vaoManager->createReadOnlyBuffer(
+        PFG_RGBA8_UINT, sizeof( ParticleGpuData ) * numParticles, BT_DYNAMIC_PERSISTENT, 0, false );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::_destroy( VaoManager *vaoManager )
+{
+    for( ParticleSystem2 *system : mParticleSystems )
+        delete system;
+    mActiveParticleSystems.clear();
+    mParticleSystems.clear();
+
+    if( mParticleCpuData.mPosition )
+    {
+        OGRE_FREE_SIMD( mParticleCpuData.mPosition, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mDirection, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mDimensions, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mRotation, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mRotationSpeed, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mTotalTimeToLive, MEMCATEGORY_GEOMETRY );
+
+        mParticleCpuData.mPosition = 0;
+
+        if( mGpuData->getMappingState() != MS_UNMAPPED )
+        {
+            mGpuData->unmap( UO_UNMAP_ALL );
+            mParticleGpuData = 0;
+        }
+
+        vaoManager->destroyReadOnlyBuffer( mGpuData );
+        mGpuData = 0;
+    }
+
+    for( EmitterDefData *emitter : mEmitters )
+        delete emitter;
+    mEmitters.clear();
+    for( Affector *affector : mAffectors )
+        delete affector;
+    mAffectors.clear();
 }
 //-----------------------------------------------------------------------------
 bool ParticleSystemDef::isInitialized() const
@@ -193,7 +216,7 @@ void ParticleSystemDef::_destroyAllParticleSystems()
         delete system;
     mParticleSystems.clear();
 
-    const size_t numActiveParticles = getNumActiveParticles();
+    const size_t numActiveParticles = getNumSimdActiveParticles();
     ArrayReal *RESTRICT_ALIAS timeToLive =
         mParticleCpuData.mTimeToLive + this->getActiveParticlesPackOffset();
     for( size_t i = 0; i < numActiveParticles; i += ARRAY_PACKED_REALS )
