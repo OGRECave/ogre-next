@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "Math/Array/OgreArrayVector2.h"
 #include "Math/Array/OgreArrayVector3.h"
 
 #include "OgreHeaderPrefix.h"
@@ -50,7 +51,10 @@ namespace Ogre
         /// Direction (and speed)
         ArrayVector3 *RESTRICT_ALIAS mDirection;
 
-        /// Current rotation value
+        /// Width & Height
+        ArrayVector2 *RESTRICT_ALIAS mDimensions;
+
+        /// Current rotation value. MUST be kept in range [-PI; PI]
         ArrayRadian *RESTRICT_ALIAS mRotation;
 
         /// Speed of rotation in radians/sec
@@ -69,6 +73,7 @@ namespace Ogre
         {
             mPosition += numAdvance;
             mDirection += numAdvance;
+            mDimensions += numAdvance;
             mRotation += numAdvance;
             mRotationSpeed += numAdvance;
             mTimeToLive += numAdvance;
@@ -78,13 +83,13 @@ namespace Ogre
 
     struct _OgrePrivate ParticleGpuData
     {
-        float  mWidth;
-        float  mHeight;
-        float  mPos[3];
-        float  mColourScale;
-        int16  mDirection[3];
-        uint16 mRotation;
-        uint8  mColour[4];
+        float mWidth;
+        float mHeight;
+        float mPos[3];
+        float mColourScale;
+        int16 mDirection[3];
+        int16 mRotation;
+        uint8 mColour[4];
     };
 
     class _OgreExport Particle2

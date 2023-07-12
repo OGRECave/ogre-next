@@ -62,6 +62,7 @@ ParticleSystemDef::~ParticleSystemDef()
     {
         OGRE_FREE_SIMD( mParticleCpuData.mPosition, MEMCATEGORY_GEOMETRY );
         OGRE_FREE_SIMD( mParticleCpuData.mDirection, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mDimensions, MEMCATEGORY_GEOMETRY );
         OGRE_FREE_SIMD( mParticleCpuData.mRotation, MEMCATEGORY_GEOMETRY );
         OGRE_FREE_SIMD( mParticleCpuData.mRotationSpeed, MEMCATEGORY_GEOMETRY );
         OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
@@ -95,6 +96,8 @@ void ParticleSystemDef::init()
         OGRE_MALLOC_SIMD( numParticles * sizeof( Vector3 ), MEMCATEGORY_GEOMETRY ) );
     mParticleCpuData.mDirection = reinterpret_cast<ArrayVector3 *>(
         OGRE_MALLOC_SIMD( numParticles * sizeof( Vector3 ), MEMCATEGORY_GEOMETRY ) );
+    mParticleCpuData.mDimensions = reinterpret_cast<ArrayVector2 *>(
+        OGRE_MALLOC_SIMD( numParticles * sizeof( Vector2 ), MEMCATEGORY_GEOMETRY ) );
     mParticleCpuData.mRotation = reinterpret_cast<ArrayRadian *>(
         OGRE_MALLOC_SIMD( numParticles * sizeof( Radian ), MEMCATEGORY_GEOMETRY ) );
     mParticleCpuData.mRotationSpeed = reinterpret_cast<ArrayRadian *>(
@@ -106,6 +109,7 @@ void ParticleSystemDef::init()
 
     memset( mParticleCpuData.mPosition, 0, numParticles * sizeof( Vector3 ) );
     memset( mParticleCpuData.mDirection, 0, numParticles * sizeof( Vector3 ) );
+    memset( mParticleCpuData.mDimensions, 0, numParticles * sizeof( Vector2 ) );
     memset( mParticleCpuData.mRotation, 0, numParticles * sizeof( Radian ) );
     memset( mParticleCpuData.mRotationSpeed, 0, numParticles * sizeof( Radian ) );
     memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
