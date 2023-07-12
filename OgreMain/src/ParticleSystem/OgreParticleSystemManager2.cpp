@@ -61,6 +61,10 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
 {
     const ArrayReal timeSinceLast = Mathlib::SetAll( _timeSinceLast );
 
+    const ArrayReal invPi = Mathlib::SetAll( 1.0f / Math::PI );
+
+    ParticleGpuData *gpuData = 0;
+
     for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
     {
         *cpuData.mPosition += *cpuData.mDirection * timeSinceLast;
@@ -72,11 +76,56 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
 
         const ArrayMaskR isDead = Mathlib::CompareLessEqual( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
         const uint32 scalarMask = BooleanMask4::getScalarMask( Mathlib::And( wasAlive, isDead ) );
+        const uint32 scalarIsDead = BooleanMask4::getScalarMask( isDead );
+
+        // ArrayReal normalizedRotation = Mathlib::Saturate(  );
+        const ArrayVector3 normDir = cpuData.mDirection->normalisedCopy();
+
+        int16 directions[3][ARRAY_PACKED_REALS];
+        int16 rotations[ARRAY_PACKED_REALS];
+        Mathlib::extractS16( Mathlib::ToSnorm16( normDir.mChunkBase[0] ), directions[0] );
+        Mathlib::extractS16( Mathlib::ToSnorm16( normDir.mChunkBase[1] ), directions[1] );
+        Mathlib::extractS16( Mathlib::ToSnorm16( normDir.mChunkBase[2] ), directions[2] );
+        Mathlib::extractS16( Mathlib::ToSnorm16( cpuData.mRotation->valueRadians() * invPi ),
+                             rotations );
 
         for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
         {
             if( IS_BIT_SET( j, scalarMask ) )
+            {
                 systemDef->mParticlesToKill[threadIdx].push_back( systemDef->getHandle( cpuData, j ) );
+                // Should we use NaN? GPU is supposed to reject them faster.
+                gpuData->mWidth = 0.0f;
+                gpuData->mHeight = 0.0f;
+                gpuData->mPos[0] = gpuData->mPos[1] = gpuData->mPos[2] = 0.0f;
+                gpuData->mDirection[0] = gpuData->mDirection[1] = gpuData->mDirection[2] = 0.0f;
+                gpuData->mRotation = 0u;
+                gpuData->mColour[0] = gpuData->mColour[1] = gpuData->mColour[2] = gpuData->mColour[3] =
+                    0u;
+            }
+            else if( IS_BIT_SET( j, scalarIsDead ) )
+            {
+                Vector3 pos;
+                cpuData.mPosition->getAsVector3( pos, j );
+                Vector2 dim;
+                cpuData.mDimensions->getAsVector2( dim, j );
+                gpuData->mWidth = static_cast<float>( dim.x );
+                gpuData->mHeight = static_cast<float>( dim.y );
+                gpuData->mPos[0] = static_cast<float>( pos.x );
+                gpuData->mPos[1] = static_cast<float>( pos.y );
+                gpuData->mPos[2] = static_cast<float>( pos.z );
+                gpuData->mColourScale = 1.0f;
+                gpuData->mDirection[0] = directions[0][j];
+                gpuData->mDirection[1] = directions[1][j];
+                gpuData->mDirection[2] = directions[2][j];
+                gpuData->mRotation = rotations[j];
+                gpuData->mColour[0] = 255u;
+                gpuData->mColour[1] = 255u;
+                gpuData->mColour[2] = 255u;
+                gpuData->mColour[3] = 255u;
+            }
+
+            ++gpuData;
         }
 
         cpuData.advancePack();

@@ -284,6 +284,33 @@ namespace Ogre
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return _mm_min_ps( a, b ); }
 
+        /// Returns:
+        ///     (int16)( saturate( a ) * 32767.5f );
+        static inline ArrayInt ToSnorm16( ArrayReal a )
+        {
+            // _mm_packs_epi32 already performs saturation. No need for us to do it.
+            a = _mm_mul_ps( a, _mm_set_ps1( 32767.5f ) );
+            const __m128i asUint32 = _mm_cvtps_epi32( a );
+            return _mm_packs_epi32( asUint32, asUint32 );
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int16.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int16)a[0];
+            outValues[1] = (int16)a[1];
+            outValues[2] = (int16)a[2];
+            outValues[3] = (int16)a[3];
+        */
+        static inline void extractS16( ArrayInt a, int16 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = (int16)_mm_extract_epi16( a, 0 );
+            outValues[1] = (int16)_mm_extract_epi16( a, 1 );
+            outValues[2] = (int16)_mm_extract_epi16( a, 2 );
+            outValues[3] = (int16)_mm_extract_epi16( a, 3 );
+        }
+
         /** Returns the minimum value of all elements in a
         @return
             r[0] = min( a[0], a[1], a[2], a[3] )
