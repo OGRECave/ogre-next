@@ -54,7 +54,8 @@ namespace Ogre
         float mTimeSinceLast;  // For threaded update.
 
         void tickParticles( size_t threadIdx, Real timeSinceLast, ParticleCpuData cpuData,
-                            const size_t numParticles, ParticleSystemDef *systemDef );
+                            ParticleGpuData *gpuData, const size_t numParticles,
+                            ParticleSystemDef *systemDef );
 
         void updateSerialPre( Real timeSinceLast );
         void updateSerialPos();

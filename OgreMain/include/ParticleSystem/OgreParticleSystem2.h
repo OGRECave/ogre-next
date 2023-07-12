@@ -63,6 +63,8 @@ namespace Ogre
 
         ParticleSystemManager2 *mParticleSystemManager;
 
+        ReadOnlyBufferPacked *mGpuData;
+
         FastArray<EmitterDefData *> mEmitters;
         FastArray<Affector *>       mAffectors;
 
@@ -72,8 +74,9 @@ namespace Ogre
         /// are short lived and recreated in a circular buffer (i.e. particles are mostly FIFO).
         ///
         /// We also don't need to handle regrow: Once we reach the quota, no more particles are emitted.
-        bitset64        mActiveParticles;
-        ParticleCpuData mParticleCpuData;
+        bitset64         mActiveParticles;
+        ParticleCpuData  mParticleCpuData;
+        ParticleGpuData *mParticleGpuData;
         /// Tracks first bit set in mActiveParticles. Inclusive. Range is [0; getQuota()).
         uint32 mFirstParticleIdx;
         /// Tracks one bit after the last bit set in mActiveParticles. Exclusive.
@@ -121,7 +124,9 @@ namespace Ogre
 
         uint32 getQuota() const;
 
-        void init();
+        void init( VaoManager *vaoManager );
+
+        void _destroy( VaoManager *vaoManager );
 
         bool isInitialized() const;
 
@@ -154,7 +159,48 @@ namespace Ogre
 
         ParticleCpuData getParticleCpuData() const { return mParticleCpuData; }
 
-        size_t getNumActiveParticles() const { return mLastParticleIdx - mFirstParticleIdx; }
+        /// Returns the number of active particles rounded up to match up SIMD processing.
+        ///
+        /// e.g.
+        ///     - ARRAY_PACKED_REALS = 4
+        ///     - mFirstParticleIdx = 3
+        ///     - mLastParticleIdx = 6
+        ///     - Num Active Particles = mLastParticleIdx - mFirstParticleIdx = 3
+        ///     - Therefore getActiveParticlesPackOffset() = 0
+        ///
+        /// However we must process:
+        ///     0. inactive
+        ///     1. inactive
+        ///     2. inactive
+        ///     3. active
+        ///
+        ///     4. inactive
+        ///     5. active
+        ///     6. inactive
+        ///     7. inactive
+        ///
+        /// That means the following code:
+        ///
+        /// @code
+        ///     mParticleCpuData.advancePack( getActiveParticlesPackOffset() );
+        ///     for( i = 0; i < getNumSimdActiveParticles(); i += ARRAY_PACKED_REALS )
+        ///         mParticleCpuData.advancePack();
+        /// @endcode
+        ///
+        /// Must iterate 2 times. However if getNumSimdActiveParticles() returns 3, it will
+        /// only iterate once. Rounding 3 up to ARRAY_PACKED_REALS is also no good, because if it returns
+        /// 4, it still iterates once.
+        ///
+        /// It must return 8 (ARRAY_PACKED_REALS * 2).
+        ///
+        /// Note that there can be a lot of inactive particles between mFirstParticleIdx &
+        /// mLastParticleIdx. However this should be rare since particle FXs tend to follow FIFO.
+        size_t getNumSimdActiveParticles() const
+        {
+            return ( ( mLastParticleIdx + ARRAY_PACKED_REALS - 1u ) / ARRAY_PACKED_REALS -
+                     mFirstParticleIdx / ARRAY_PACKED_REALS ) *
+                   ARRAY_PACKED_REALS;
+        }
     };
 
     class _OgreExport ParticleSystem2 : public MovableObject
