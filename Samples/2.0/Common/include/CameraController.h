@@ -19,8 +19,6 @@ namespace Demo
 
     public:
         float mCameraBaseSpeed;
-
-    public:
         float mCameraSpeedBoost;
 
     private:
