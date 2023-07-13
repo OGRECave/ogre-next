@@ -947,6 +947,7 @@ namespace Ogre
         mUserValue[userValueIdx][1] = value.y;
         mUserValue[userValueIdx][2] = value.z;
         mUserValue[userValueIdx][3] = value.w;
+        scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
     Vector4 HlmsPbsDatablock::getUserValue( uint8 userValueIdx ) const

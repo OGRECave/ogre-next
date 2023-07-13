@@ -1,4 +1,4 @@
-# Behavor of StagingTexture in D3D11 {#BehavorStagingTextureD3D11}
+# Behavior of StagingTexture in D3D11 {#BehaviorStagingTextureD3D11}
 
 __Note:__ this article is intended for developers who want to understand or modify
 Ogre.
