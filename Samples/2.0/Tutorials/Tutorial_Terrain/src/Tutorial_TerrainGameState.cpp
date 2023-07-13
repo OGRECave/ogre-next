@@ -137,12 +137,14 @@ namespace Demo
         Ogre::AtmosphereNpr *atmosphere =
             static_cast<Ogre::AtmosphereNpr *>( sceneManager->getAtmosphere() );
         Ogre::AtmosphereNpr::Preset p = atmosphere->getPreset();
-        p.fogDensity = 0.0005f;
+        p.fogDensity = 0.00004f;
         p.fogBreakMinBrightness = 0.05f;
         atmosphere->setPreset( p );
 #endif
 
         mCameraController = new CameraController( mGraphicsSystem, false );
+        mCameraController->mCameraBaseSpeed = 200.f;
+        mCameraController->mCameraSpeedBoost = 3.0f;
         mGraphicsSystem->getCamera()->setFarClipDistance( 100000.0f );
         mGraphicsSystem->getCamera()->setPosition( -10.0f, 80.0f, 10.0f );
 
@@ -329,6 +331,7 @@ namespace Demo
                 hlmsManager->getDatablock( "TerraExampleMaterial" ) );
 
             datablock->setDetailTriplanarDiffuseEnabled( mTriplanarMappingEnabled );
+            datablock->setDetailTriplanarNormalEnabled( mTriplanarMappingEnabled );
             datablock->setDetailTriplanarRoughnessEnabled( mTriplanarMappingEnabled );
             datablock->setDetailTriplanarMetalnessEnabled( mTriplanarMappingEnabled );
 
