@@ -51,7 +51,7 @@ namespace Ogre
     /// migration/porting.
     ///
     /// Do NOT attach it to a SceneNode.
-    class _OgreExport ParticleSystemDef : public ParticleSystem
+    class _OgreExport ParticleSystemDef : public ParticleSystem, private Renderable
     {
     public:
         static constexpr uint32 InvalidHandle = 0xFFFFFFFF;
@@ -201,6 +201,19 @@ namespace Ogre
                      mFirstParticleIdx / ARRAY_PACKED_REALS ) *
                    ARRAY_PACKED_REALS;
         }
+
+        inline static const ParticleSystemDef *castToRenderable( const Renderable *a )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<const ParticleSystemDef *>( a ) );
+            return static_cast<const ParticleSystemDef *>( a );
+        }
+
+        ReadOnlyBufferPacked *_getGpuDataBuffer() const { return mGpuData; }
+
+        void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void getWorldTransforms( Matrix4 *xform ) const override;
+
+        const LightList &getLights() const override;
     };
 
     class _OgreExport ParticleSystem2 : public MovableObject
