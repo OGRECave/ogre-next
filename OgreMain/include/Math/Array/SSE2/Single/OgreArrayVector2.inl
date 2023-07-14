@@ -31,8 +31,8 @@ namespace Ogre
     /** HOW THIS WORKS:
 
         Instead of writing like 12 times the same code, we use macros:
-		DEFINE_OPERATION( ArrayVector2, ArrayVector2, +, _mm_add_ps );
-		Means: "define '+' operator that takes both arguments as ArrayVector2 and use
+        DEFINE_OPERATION( ArrayVector2, ArrayVector2, +, _mm_add_ps );
+        Means: "define '+' operator that takes both arguments as ArrayVector2 and use
         the _mm_add_ps intrinsic to do the job"
 
         Note that for scalars (i.e. floats) we use DEFINE_L_SCALAR_OPERATION/DEFINE_R_SCALAR_OPERATION
@@ -266,221 +266,221 @@ namespace Ogre
 	DEFINE_UPDATE_DIVISION(             ArrayVector2,       /=, _mm_div_ps );
     DEFINE_UPDATE_R_SCALAR_DIVISION(    Real,               /=, _mm_mul_ps );
     DEFINE_UPDATE_R_DIVISION(           ArrayReal,          /=, _mm_mul_ps );
-	// clang-format on
+    // clang-format on
 
-	// Functions
+    // Functions
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::length() const
+    inline ArrayReal ArrayVector2::length() const
     {
-		return _mm_sqrt_ps( _mm_add_ps(                      // sqrt(
-			_mm_mul_ps( mChunkBase[0], mChunkBase[0] ),      //(x * x +
-			_mm_mul_ps( mChunkBase[1], mChunkBase[1] ) ) );  // y * y)
+        return _mm_sqrt_ps( _mm_add_ps(                      // sqrt(
+            _mm_mul_ps( mChunkBase[0], mChunkBase[0] ),      //(x * x +
+            _mm_mul_ps( mChunkBase[1], mChunkBase[1] ) ) );  // y * y)
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::squaredLength() const
+    inline ArrayReal ArrayVector2::squaredLength() const
     {
-		return _mm_add_ps( _mm_mul_ps( mChunkBase[0], mChunkBase[0] ),    //(x * x +
-						   _mm_mul_ps( mChunkBase[1], mChunkBase[1] ) );  // y * y)
+        return _mm_add_ps( _mm_mul_ps( mChunkBase[0], mChunkBase[0] ),    //(x * x +
+                           _mm_mul_ps( mChunkBase[1], mChunkBase[1] ) );  // y * y)
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::distance( const ArrayVector2 &rhs ) const
+    inline ArrayReal ArrayVector2::distance( const ArrayVector2 &rhs ) const
     {
-		return ( *this - rhs ).length();
+        return ( *this - rhs ).length();
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::squaredDistance( const ArrayVector2 &rhs ) const
+    inline ArrayReal ArrayVector2::squaredDistance( const ArrayVector2 &rhs ) const
     {
-		return ( *this - rhs ).squaredLength();
+        return ( *this - rhs ).squaredLength();
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::dotProduct( const ArrayVector2 &vec ) const
+    inline ArrayReal ArrayVector2::dotProduct( const ArrayVector2 &vec ) const
     {
-		return _mm_add_ps( _mm_mul_ps( mChunkBase[0], vec.mChunkBase[0] ),    //( x * vec.x   +
-						   _mm_mul_ps( mChunkBase[1], vec.mChunkBase[1] ) );  //  y * vec.y )
+        return _mm_add_ps( _mm_mul_ps( mChunkBase[0], vec.mChunkBase[0] ),    //( x * vec.x   +
+                           _mm_mul_ps( mChunkBase[1], vec.mChunkBase[1] ) );  //  y * vec.y )
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::absDotProduct( const ArrayVector2 &vec ) const
+    inline ArrayReal ArrayVector2::absDotProduct( const ArrayVector2 &vec ) const
     {
-		return _mm_add_ps(
-			MathlibSSE2::Abs4( _mm_mul_ps( mChunkBase[0], vec.mChunkBase[0] ) ),  //( abs( x * vec.x ) +
-			MathlibSSE2::Abs4(
-				_mm_mul_ps( mChunkBase[1], vec.mChunkBase[1] ) ) );  //  abs( y * vec.y ) )
+        return _mm_add_ps(
+            MathlibSSE2::Abs4( _mm_mul_ps( mChunkBase[0], vec.mChunkBase[0] ) ),  //( abs( x * vec.x ) +
+            MathlibSSE2::Abs4(
+                _mm_mul_ps( mChunkBase[1], vec.mChunkBase[1] ) ) );  //  abs( y * vec.y ) )
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::normalise()
+    inline void ArrayVector2::normalise()
     {
-		ArrayReal sqLength = _mm_add_ps( _mm_mul_ps( mChunkBase[0], mChunkBase[0] ),    //(x * x +
-										 _mm_mul_ps( mChunkBase[1], mChunkBase[1] ) );  // y * y)
+        ArrayReal sqLength = _mm_add_ps( _mm_mul_ps( mChunkBase[0], mChunkBase[0] ),    //(x * x +
+                                         _mm_mul_ps( mChunkBase[1], mChunkBase[1] ) );  // y * y)
 
-		// Convert sqLength's 0s into 1, so that zero vectors remain as zero
-		// Denormals are treated as 0 during the check.
-		// Note: We could create a mask now and nuke nans after InvSqrt, however
-		// generating the nans could impact performance in some architectures
+        // Convert sqLength's 0s into 1, so that zero vectors remain as zero
+        // Denormals are treated as 0 during the check.
+        // Note: We could create a mask now and nuke nans after InvSqrt, however
+        // generating the nans could impact performance in some architectures
         sqLength = MathlibSSE2::Cmov4( sqLength, MathlibSSE2::ONE,
-									   _mm_cmpgt_ps( sqLength, MathlibSSE2::FLOAT_MIN ) );
+                                       _mm_cmpgt_ps( sqLength, MathlibSSE2::FLOAT_MIN ) );
         ArrayReal invLength = MathlibSSE2::InvSqrtNonZero4( sqLength );
-		mChunkBase[0] = _mm_mul_ps( mChunkBase[0], invLength );  // x * invLength
-		mChunkBase[1] = _mm_mul_ps( mChunkBase[1], invLength );  // y * invLength
+        mChunkBase[0] = _mm_mul_ps( mChunkBase[0], invLength );  // x * invLength
+        mChunkBase[1] = _mm_mul_ps( mChunkBase[1], invLength );  // y * invLength
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::crossProduct( const ArrayVector2 &rkVec ) const
+    inline ArrayReal ArrayVector2::crossProduct( const ArrayVector2 &rkVec ) const
     {
-		return _mm_sub_ps(
-			_mm_mul_ps( mChunkBase[0], rkVec.mChunkBase[1] ),
-			_mm_mul_ps( mChunkBase[1], rkVec.mChunkBase[0] ) );  // x * rkVec.y - y * rkVec.x
+        return _mm_sub_ps(
+            _mm_mul_ps( mChunkBase[0], rkVec.mChunkBase[1] ),
+            _mm_mul_ps( mChunkBase[1], rkVec.mChunkBase[0] ) );  // x * rkVec.y - y * rkVec.x
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayVector2 ArrayVector2::midPoint( const ArrayVector2 &rkVec ) const
+    inline ArrayVector2 ArrayVector2::midPoint( const ArrayVector2 &rkVec ) const
     {
-		return ArrayVector2(
+        return ArrayVector2(
             _mm_mul_ps( _mm_add_ps( mChunkBase[0], rkVec.mChunkBase[0] ), MathlibSSE2::HALF ),
-			_mm_mul_ps( _mm_add_ps( mChunkBase[1], rkVec.mChunkBase[1] ), MathlibSSE2::HALF ) );
+            _mm_mul_ps( _mm_add_ps( mChunkBase[1], rkVec.mChunkBase[1] ), MathlibSSE2::HALF ) );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::makeFloor( const ArrayVector2 &cmp )
+    inline void ArrayVector2::makeFloor( const ArrayVector2 &cmp )
     {
-		ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
-		const ArrayReal *RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
         aChunkBase[0] = _mm_min_ps( aChunkBase[0], bChunkBase[0] );
-		aChunkBase[1] = _mm_min_ps( aChunkBase[1], bChunkBase[1] );
+        aChunkBase[1] = _mm_min_ps( aChunkBase[1], bChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::makeCeil( const ArrayVector2 &cmp )
+    inline void ArrayVector2::makeCeil( const ArrayVector2 &cmp )
     {
-		ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
-		const ArrayReal *RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
         aChunkBase[0] = _mm_max_ps( aChunkBase[0], bChunkBase[0] );
-		aChunkBase[1] = _mm_max_ps( aChunkBase[1], bChunkBase[1] );
+        aChunkBase[1] = _mm_max_ps( aChunkBase[1], bChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::getMinComponent() const
+    inline ArrayReal ArrayVector2::getMinComponent() const
     {
-		return _mm_min_ps( mChunkBase[0], mChunkBase[1] );
+        return _mm_min_ps( mChunkBase[0], mChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::getMaxComponent() const
+    inline ArrayReal ArrayVector2::getMaxComponent() const
     {
-		return _mm_max_ps( mChunkBase[0], mChunkBase[1] );
+        return _mm_max_ps( mChunkBase[0], mChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::setToSign()
+    inline void ArrayVector2::setToSign()
     {
         // x = 1.0f | (x & 0x80000000)
         ArrayReal signMask = _mm_set1_ps( -0.0f );
         mChunkBase[0] = _mm_or_ps( MathlibSSE2::ONE, _mm_and_ps( signMask, mChunkBase[0] ) );
-		mChunkBase[1] = _mm_or_ps( MathlibSSE2::ONE, _mm_and_ps( signMask, mChunkBase[1] ) );
+        mChunkBase[1] = _mm_or_ps( MathlibSSE2::ONE, _mm_and_ps( signMask, mChunkBase[1] ) );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayVector2 ArrayVector2::perpendicular() const
+    inline ArrayVector2 ArrayVector2::perpendicular() const
     {
-		return ArrayVector2( _mm_xor_ps( mChunkBase[1], MathlibSSE2::SIGN_MASK ), mChunkBase[0] );
+        return ArrayVector2( _mm_xor_ps( mChunkBase[1], MathlibSSE2::SIGN_MASK ), mChunkBase[0] );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayVector2 ArrayVector2::normalisedCopy() const
+    inline ArrayVector2 ArrayVector2::normalisedCopy() const
     {
-		ArrayReal sqLength = _mm_add_ps( _mm_mul_ps( mChunkBase[0], mChunkBase[0] ),    //(x * x +
-										 _mm_mul_ps( mChunkBase[1], mChunkBase[1] ) );  // y * y)
+        ArrayReal sqLength = _mm_add_ps( _mm_mul_ps( mChunkBase[0], mChunkBase[0] ),    //(x * x +
+                                         _mm_mul_ps( mChunkBase[1], mChunkBase[1] ) );  // y * y)
 
-		// Convert sqLength's 0s into 1, so that zero vectors remain as zero
-		// Denormals are treated as 0 during the check.
-		// Note: We could create a mask now and nuke nans after InvSqrt, however
-		// generating the nans could impact performance in some architectures
+        // Convert sqLength's 0s into 1, so that zero vectors remain as zero
+        // Denormals are treated as 0 during the check.
+        // Note: We could create a mask now and nuke nans after InvSqrt, however
+        // generating the nans could impact performance in some architectures
         sqLength = MathlibSSE2::Cmov4( sqLength, MathlibSSE2::ONE,
-									   _mm_cmpgt_ps( sqLength, MathlibSSE2::FLOAT_MIN ) );
+                                       _mm_cmpgt_ps( sqLength, MathlibSSE2::FLOAT_MIN ) );
         ArrayReal invLength = MathlibSSE2::InvSqrtNonZero4( sqLength );
 
-		return ArrayVector2( _mm_mul_ps( mChunkBase[0], invLength ),    // x * invLength
-							 _mm_mul_ps( mChunkBase[1], invLength ) );  // y * invLength
+        return ArrayVector2( _mm_mul_ps( mChunkBase[0], invLength ),    // x * invLength
+                             _mm_mul_ps( mChunkBase[1], invLength ) );  // y * invLength
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayVector2 ArrayVector2::reflect( const ArrayVector2 &normal ) const
+    inline ArrayVector2 ArrayVector2::reflect( const ArrayVector2 &normal ) const
     {
         const ArrayReal twoPointZero = _mm_set_ps1( 2.0f );
         return ( *this - ( _mm_mul_ps( twoPointZero, this->dotProduct( normal ) ) * normal ) );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::inverseLeaveZeroes()
+    inline void ArrayVector2::inverseLeaveZeroes()
     {
-		// Use InvNonZero, we're gonna nuke the NaNs anyway.
-		mChunkBase[0] =
-			MathlibSSE2::CmovRobust( mChunkBase[0], MathlibSSE2::InvNonZero4( mChunkBase[0] ),
-									 _mm_cmpeq_ps( mChunkBase[0], _mm_setzero_ps() ) );
-		mChunkBase[1] =
-			MathlibSSE2::CmovRobust( mChunkBase[1], MathlibSSE2::InvNonZero4( mChunkBase[1] ),
-									 _mm_cmpeq_ps( mChunkBase[1], _mm_setzero_ps() ) );
+        // Use InvNonZero, we're gonna nuke the NaNs anyway.
+        mChunkBase[0] =
+            MathlibSSE2::CmovRobust( mChunkBase[0], MathlibSSE2::InvNonZero4( mChunkBase[0] ),
+                                     _mm_cmpeq_ps( mChunkBase[0], _mm_setzero_ps() ) );
+        mChunkBase[1] =
+            MathlibSSE2::CmovRobust( mChunkBase[1], MathlibSSE2::InvNonZero4( mChunkBase[1] ),
+                                     _mm_cmpeq_ps( mChunkBase[1], _mm_setzero_ps() ) );
     }
     //-----------------------------------------------------------------------------------
-	inline int ArrayVector2::isNaN() const
+    inline int ArrayVector2::isNaN() const
     {
-		ArrayReal mask = _mm_and_ps( _mm_cmpeq_ps( mChunkBase[0], mChunkBase[0] ),
-									 _mm_cmpeq_ps( mChunkBase[1], mChunkBase[1] ) );
+        ArrayReal mask = _mm_and_ps( _mm_cmpeq_ps( mChunkBase[0], mChunkBase[0] ),
+                                     _mm_cmpeq_ps( mChunkBase[1], mChunkBase[1] ) );
 
         return _mm_movemask_ps( mask ) ^ 0x0000000f;
-	}
-    //-----------------------------------------------------------------------------------
-	inline Vector2 ArrayVector2::collapseMin() const
-    {
-		// Transpose XXXX YYYY to XXYY XXYY
-		ArrayReal tmp0, tmp1;
-		tmp0 = _mm_shuffle_ps( mChunkBase[0], mChunkBase[1], 0x44 );
-		tmp1 = _mm_shuffle_ps( mChunkBase[0], mChunkBase[1], 0xEE );
-
-		// min( XXYY, XXYY )
-		tmp0 = _mm_min_ps( tmp0, tmp1 );
-		// Transpose X0 X1 Y0 Y1 to X1 X0 Y1 Y0
-		tmp1 = _mm_shuffle_ps( tmp0, tmp0, 0xB1 );
-		// min( XXYY, XXYY )
-		tmp0 = _mm_min_ps( tmp0, tmp1 );
-
-		// Transpose X0 X0 Y0 Y0 to Y0 nn nn nn (we don't care about nn)
-		tmp1 = _mm_shuffle_ps( tmp0, tmp0, 0x02 );
-
-		OGRE_ALIGNED_DECL( Real, vals[2], OGRE_SIMD_ALIGNMENT );
-		_mm_store_ss( &vals[0], tmp0 );
-		_mm_store_ss( &vals[1], tmp1 );
-
-		return Vector2( vals[0], vals[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline Vector2 ArrayVector2::collapseMax() const
+    inline Vector2 ArrayVector2::collapseMin() const
     {
-		// Transpose XXXX YYYY to XXYY XXYY
-		ArrayReal tmp0, tmp1;
-		tmp0 = _mm_shuffle_ps( mChunkBase[0], mChunkBase[1], 0x44 );
-		tmp1 = _mm_shuffle_ps( mChunkBase[0], mChunkBase[1], 0xEE );
+        // Transpose XXXX YYYY to XXYY XXYY
+        ArrayReal tmp0, tmp1;
+        tmp0 = _mm_shuffle_ps( mChunkBase[0], mChunkBase[1], 0x44 );
+        tmp1 = _mm_shuffle_ps( mChunkBase[0], mChunkBase[1], 0xEE );
 
-		// min( XXYY, XXYY )
-		tmp0 = _mm_max_ps( tmp0, tmp1 );
-		// Transpose X0 X1 Y0 Y1 to X1 X0 Y1 Y0
-		tmp1 = _mm_shuffle_ps( tmp0, tmp0, 0xB1 );
-		// min( XXYY, XXYY )
-		tmp0 = _mm_max_ps( tmp0, tmp1 );
+        // min( XXYY, XXYY )
+        tmp0 = _mm_min_ps( tmp0, tmp1 );
+        // Transpose X0 X1 Y0 Y1 to X1 X0 Y1 Y0
+        tmp1 = _mm_shuffle_ps( tmp0, tmp0, 0xB1 );
+        // min( XXYY, XXYY )
+        tmp0 = _mm_min_ps( tmp0, tmp1 );
 
-		// Transpose X0 X0 Y0 Y0 to Y0 nn nn nn (we don't care about nn)
-		tmp1 = _mm_shuffle_ps( tmp0, tmp0, 0x02 );
+        // Transpose X0 X0 Y0 Y0 to Y0 nn nn nn (we don't care about nn)
+        tmp1 = _mm_shuffle_ps( tmp0, tmp0, 0x02 );
 
-		OGRE_ALIGNED_DECL( Real, vals[2], OGRE_SIMD_ALIGNMENT );
-		_mm_store_ss( &vals[0], tmp0 );
-		_mm_store_ss( &vals[1], tmp1 );
+        OGRE_ALIGNED_DECL( Real, vals[2], OGRE_SIMD_ALIGNMENT );
+        _mm_store_ss( &vals[0], tmp0 );
+        _mm_store_ss( &vals[1], tmp1 );
 
-		return Vector2( vals[0], vals[1] );
+        return Vector2( vals[0], vals[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::Cmov4( ArrayReal mask, const ArrayVector2 &replacement )
+    inline Vector2 ArrayVector2::collapseMax() const
     {
-		ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
-		const ArrayReal *RESTRICT_ALIAS bChunkBase = replacement.mChunkBase;
+        // Transpose XXXX YYYY to XXYY XXYY
+        ArrayReal tmp0, tmp1;
+        tmp0 = _mm_shuffle_ps( mChunkBase[0], mChunkBase[1], 0x44 );
+        tmp1 = _mm_shuffle_ps( mChunkBase[0], mChunkBase[1], 0xEE );
+
+        // min( XXYY, XXYY )
+        tmp0 = _mm_max_ps( tmp0, tmp1 );
+        // Transpose X0 X1 Y0 Y1 to X1 X0 Y1 Y0
+        tmp1 = _mm_shuffle_ps( tmp0, tmp0, 0xB1 );
+        // min( XXYY, XXYY )
+        tmp0 = _mm_max_ps( tmp0, tmp1 );
+
+        // Transpose X0 X0 Y0 Y0 to Y0 nn nn nn (we don't care about nn)
+        tmp1 = _mm_shuffle_ps( tmp0, tmp0, 0x02 );
+
+        OGRE_ALIGNED_DECL( Real, vals[2], OGRE_SIMD_ALIGNMENT );
+        _mm_store_ss( &vals[0], tmp0 );
+        _mm_store_ss( &vals[1], tmp1 );
+
+        return Vector2( vals[0], vals[1] );
+    }
+    //-----------------------------------------------------------------------------------
+    inline void ArrayVector2::Cmov4( ArrayReal mask, const ArrayVector2 &replacement )
+    {
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = replacement.mChunkBase;
         aChunkBase[0] = MathlibSSE2::Cmov4( aChunkBase[0], bChunkBase[0], mask );
-		aChunkBase[1] = MathlibSSE2::Cmov4( aChunkBase[1], bChunkBase[1], mask );
+        aChunkBase[1] = MathlibSSE2::Cmov4( aChunkBase[1], bChunkBase[1], mask );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::CmovRobust( ArrayReal mask, const ArrayVector2 &replacement )
+    inline void ArrayVector2::CmovRobust( ArrayReal mask, const ArrayVector2 &replacement )
     {
-		ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
-		const ArrayReal *RESTRICT_ALIAS bChunkBase = replacement.mChunkBase;
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = replacement.mChunkBase;
         aChunkBase[0] = MathlibSSE2::CmovRobust( aChunkBase[0], bChunkBase[0], mask );
-		aChunkBase[1] = MathlibSSE2::CmovRobust( aChunkBase[1], bChunkBase[1], mask );
-	}
+        aChunkBase[1] = MathlibSSE2::CmovRobust( aChunkBase[1], bChunkBase[1], mask );
+    }
     //-----------------------------------------------------------------------------------
 
 #undef DEFINE_OPERATION
