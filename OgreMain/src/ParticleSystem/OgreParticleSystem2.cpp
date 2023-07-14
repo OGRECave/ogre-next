@@ -367,6 +367,33 @@ uint32 ParticleSystemDef::getHandle( const ParticleCpuData &cpuData, size_t idx 
     return uint32( cpuData.mPosition - mParticleCpuData.mPosition ) * ARRAY_PACKED_REALS + uint32( idx );
 }
 //-----------------------------------------------------------------------------
+void ParticleSystemDef::getRenderOperation( v1::RenderOperation &op, bool casterPass )
+{
+    OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                 "ParticleSystemDef does not implement this function."
+                 " ParticleSystemDef must be put in a RenderQueue ID operating in a special mode. See "
+                 "RenderQueue::Modes",
+                 "ParticleSystemDef::getRenderOperation" );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::getWorldTransforms( Matrix4 *xform ) const
+{
+    OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                 "ParticleSystemDef does not implement this function."
+                 " ParticleSystemDef must be put in a RenderQueue ID operating in a special mode. See "
+                 "RenderQueue::Modes",
+                 "ParticleSystemDef::getWorldTransforms" );
+}
+//-----------------------------------------------------------------------------
+const LightList &ParticleSystemDef::getLights() const
+{
+    OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                 "ParticleSystemDef does not implement this function."
+                 " ParticleSystemDef must be put in a RenderQueue ID operating in a special mode. See "
+                 "RenderQueue::Modes",
+                 "ParticleSystemDef::getLights" );
+}
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 ParticleSystem2::ParticleSystem2( IdType id, ObjectMemoryManager *objectMemoryManager,

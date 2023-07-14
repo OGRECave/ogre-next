@@ -42,6 +42,7 @@ namespace Ogre
 
     class _OgreExport ParticleRenderable : Renderable
     {
+        ReadOnlyBufferPacked *mGpuData;
     };
 
     struct ParticleRenderingBucket
