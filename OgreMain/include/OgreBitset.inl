@@ -160,6 +160,42 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     template <size_t _N>
+    size_t cbitset64<_N>::findFirstBitSet( const size_t startFrom ) const
+    {
+        OGRE_ASSERT_HIGH( startFrom < this->capacity() );
+
+        const size_t internalArraySize = this->getInternalArraySize();
+        const size_t internalArrayStart = startFrom >> 6u;
+
+        for( size_t i = internalArrayStart; i < internalArraySize; ++i )
+        {
+            if( this->mValues[i] != 0u )
+            {
+                if( i == internalArrayStart )
+                {
+                    const uint64 localIdx = ( startFrom & 0x3F );
+                    const uint64 mask = ~( ( uint64( 1ul ) << localIdx ) - 1ul );
+
+                    const uint64 value = this->mValues[i] & mask;
+
+                    if( value != 0u )
+                    {
+                        const size_t firstBitSet = Bitwise::ctz64( value );
+                        return firstBitSet + 64u * i;
+                    }
+                }
+                else
+                {
+                    const size_t firstBitSet = Bitwise::ctz64( this->mValues[i] );
+                    return firstBitSet + 64u * i;
+                }
+            }
+        }
+
+        return _N;
+    }
+    //-------------------------------------------------------------------------
+    template <size_t _N>
     size_t cbitset64<_N>::findLastBitSetPlusOne() const
     {
         const size_t internalArraySize = this->getInternalArraySize();

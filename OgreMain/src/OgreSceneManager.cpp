@@ -2131,6 +2131,8 @@ namespace Ogre
                 ObjectData objData;
                 const size_t totalObjs = memoryManager->getFirstObjectData( objData, i );
 
+                const uint8 currRqId = static_cast<uint8>( i );
+
                 // Skip if totalObjs == 0u. Profiling shows there is considerable gains.
                 // Too much (255 queues, most of them empty, multiples scene passes...)
                 if( totalObjs > 0u )
@@ -2150,8 +2152,6 @@ namespace Ogre
 
                     MovableObject::cullFrustum( numObjs, objData, camera, outVisibleObjects,
                                                 preparedData );
-
-                    const uint8 currRqId = static_cast<uint8>( i );
 
                     if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::FAST &&
                         request.addToRenderQueue )
@@ -2181,6 +2181,13 @@ namespace Ogre
 
                         outVisibleObjects.clear();
                     }
+                }
+
+                if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::PARTICLE_SYSTEM &&
+                    request.addToRenderQueue )
+                {
+                    mParticleSystemManager2->_addToRenderQueue( threadIdx, mNumWorkerThreads,
+                                                                mRenderQueue, currRqId, visibilityMask );
                 }
             }
 

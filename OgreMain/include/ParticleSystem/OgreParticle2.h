@@ -86,10 +86,13 @@ namespace Ogre
         float mWidth;
         float mHeight;
         float mPos[3];
-        float mColourScale;
-        int16 mDirection[3];
+        int8  mDirection[3];
+        // We use signed because SSE2 doesn't support unsigned.
+        // Also when unpacking in vertex shader, we can pack it with mDirection's unpacking.
+        // We lose one value of alpha though (because SNORM maps both -128 & -127 to -1)
+        int8  mColourAlpha;
         int16 mRotation;
-        uint8 mColour[4];
+        int16 mColourRgb[3];
     };
 
     class _OgreExport Particle2

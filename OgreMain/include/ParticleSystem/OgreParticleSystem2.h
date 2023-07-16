@@ -44,6 +44,8 @@ namespace Ogre
     struct EmitterInstanceData;
     class ParticleSystem2;
 
+    static constexpr uint8 kParticleSystemDefaultRenderQueueId = 15u;
+
     /// A ParticleSystemDef does not form part of the scene.
     ///
     /// The reason it derives from ParticleSystem (& hence MovableObject) is to keep backwards
@@ -51,6 +53,9 @@ namespace Ogre
     /// migration/porting.
     ///
     /// Do NOT attach it to a SceneNode.
+    ///
+    /// For performance reasons, all particle system instances share the same RenderQueue ID.
+    /// ParticleSystemDef must be cloned to use instances on another ID.
     class _OgreExport ParticleSystemDef : public ParticleSystem, private Renderable
     {
     public:
@@ -209,6 +214,10 @@ namespace Ogre
         }
 
         ReadOnlyBufferPacked *_getGpuDataBuffer() const { return mGpuData; }
+
+        bool getUseIdentityWorldMatrix() const override { return true; }
+
+        bool isParticleSystem() const override { return true; }
 
         void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
         void getWorldTransforms( Matrix4 *xform ) const override;

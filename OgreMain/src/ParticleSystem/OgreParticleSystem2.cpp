@@ -53,6 +53,8 @@ ParticleSystemDef::ParticleSystemDef( SceneManager *manager,
 {
     memset( &mParticleCpuData, 0, sizeof( mParticleCpuData ) );
     mParticlesToKill.resizePOD( manager->getNumWorkerThreads() );
+
+    mRenderQueueID = kParticleSystemDefaultRenderQueueId;
 }
 //-----------------------------------------------------------------------------
 ParticleSystemDef::~ParticleSystemDef()
@@ -100,6 +102,11 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
 
     mGpuData = vaoManager->createReadOnlyBuffer(
         PFG_RGBA8_UINT, sizeof( ParticleGpuData ) * numParticles, BT_DYNAMIC_PERSISTENT, 0, false );
+
+    mVaoPerLod[VpNormal].push_back( vaoManager->createVertexArrayObject(
+        {}, mParticleSystemManager->_getSharedIndexBuffer( numParticles, vaoManager ),
+        OT_TRIANGLE_LIST ) );
+    mVaoPerLod[VpShadow] = mVaoPerLod[VpNormal];
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::_destroy( VaoManager *vaoManager )

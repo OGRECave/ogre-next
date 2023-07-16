@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include "OgreIdString.h"
+#include "OgreRenderQueue.h"
 #include "ParticleSystem/OgreParticle2.h"
 
 #include <map>
@@ -51,7 +52,15 @@ namespace Ogre
 
         std::map<IdString, ParticleSystemDef *> mParticleSystemDefMap;
 
+        IndexBufferPacked *mSharedIndexBuffer16;
+        IndexBufferPacked *mSharedIndexBuffer32;
+        uint32             mHighestPossibleQuota16;
+        uint32             mHighestPossibleQuota32;
+
         float mTimeSinceLast;  // For threaded update.
+
+        void calculateHighestPossibleQuota( VaoManager *vaoManager );
+        void createSharedIndexBuffers( VaoManager *vaoManager );
 
         void tickParticles( size_t threadIdx, Real timeSinceLast, ParticleCpuData cpuData,
                             ParticleGpuData *gpuData, const size_t numParticles,
@@ -71,6 +80,34 @@ namespace Ogre
 
         static ParticleEmitterDefDataFactory *getFactory( IdString name );
 
+        /** ParticleSystemManager2 must know the highest possible quota any of its particle
+            systems may achieve.
+
+            After the index buffer has been initialized, this value cannot be changed.
+
+            After initialization you can create new ParticleSystemDef that set quotas
+            lower than the already highest possible one. However you cannot set a quota
+            larger than that.
+
+            Make sure to call this function with the highest values you anticipate your particle
+            systems will need.
+
+            Note this value directly correlates to VRAM used.
+            The amount of bytes consumed are : highestQuota32 * 6 * 4 bytes + highestQuota16 * 6 * 2
+        @param highestQuota16
+            The highest possible quota for ParticleSystemDefs that need less than 65536 particles.
+            If unsure, you can set it to 65536.
+
+            This value can be 0, however we may raise it if we find a ParticleSystemDef that needs it.
+        @param highestQuota32
+            The highest possible quota for ParticleSystemDefs that need more than 65535 particles.
+            This value can be 0, however we may raise it if we find a ParticleSystemDef that needs it.
+        */
+        void setHighestPossibleQuota( uint16 highestQuota16, uint32 highestQuota32 );
+
+        uint32 getHighestPossibleQuota16() const { return mHighestPossibleQuota16; }
+        uint32 getHighestPossibleQuota32() const { return mHighestPossibleQuota32; }
+
         ParticleSystemDef *createParticleSystemDef( const String &name );
 
         /** Retrieves an existing ParticleSystemDef with the given name
@@ -83,6 +120,19 @@ namespace Ogre
         ParticleSystemDef *getParticleSystemDef( const String &name );
 
         void destroyAllParticleSystems();
+
+        /** Instructs us to add all the ParticleSystemDef to the RenderQueue that match the given
+            renderQueueId and pass the visibilityMask.
+        @param threadIdx
+        @param numThreads
+        @param renderQueue
+        @param renderQueueId
+        @param visibilityMask
+        */
+        void _addToRenderQueue( size_t threadIdx, size_t numThreads, RenderQueue *renderQueue,
+                                uint8 renderQueueId, uint32 visibilityMask ) const;
+
+        IndexBufferPacked *_getSharedIndexBuffer( size_t maxQuota, VaoManager *vaoManager );
 
         void update( Real timeSinceLast );
 

@@ -176,6 +176,7 @@ namespace Ogre
     const IdString HlmsBaseProp::DecalsEmissive = IdString( "hlms_decals_emissive" );
     const IdString HlmsBaseProp::FwdPlusCubemapSlotOffset =
         IdString( "hlms_forwardplus_cubemap_slot_offset" );
+    const IdString HlmsBaseProp::ParticleSystem = IdString( "hlms_particle_system" );
     const IdString HlmsBaseProp::Forward3D = IdString( "forward3d" );
     const IdString HlmsBaseProp::ForwardClustered = IdString( "forward_clustered" );
     const IdString HlmsBaseProp::VPos = IdString( "hlms_vpos" );
@@ -2781,6 +2782,9 @@ namespace Ogre
 
         if( renderable->getUseIdentityWorldMatrix() )
             setProperty( kNoTid, HlmsBaseProp::IdentityWorld, 1 );
+
+        if( renderable->isParticleSystem() )
+            setProperty( kNoTid, HlmsBaseProp::ParticleSystem, 1 );
 
         if( renderable->getUseIdentityViewProjMatrixIsDynamic() )
             setProperty( kNoTid, HlmsBaseProp::IdentityViewProjDynamic, 1 );
