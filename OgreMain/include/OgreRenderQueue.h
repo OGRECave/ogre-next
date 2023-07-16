@@ -159,7 +159,8 @@ namespace Ogre
             Rectangle2D:        10 \n
             v1::Entity:         110 \n
             v1::Rectangle2D:    110 \n
-            ParticleSystem:     110 \n
+            ParticleSystem (v1):110 \n
+            ParticleSystem (v2):kParticleSystemDefaultRenderQueueId \n
             [.. more unlisted ..]
         @remarks
             By default, the render queues have the following mode set: \n

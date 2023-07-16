@@ -233,6 +233,9 @@ namespace Ogre
         */
         bool getUseIdentityView() const { return mUseIdentityView; }
 
+        /// Used by ParticleSystemDef to indicate Hlms they want specific shader code.
+        virtual bool isParticleSystem() const { return false; }
+
         /** Gets a list of lights, ordered relative to how close they are to this renderable.
         @remarks
             Directional lights, which have no position, will always be first on this list.

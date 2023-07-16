@@ -110,6 +110,8 @@ namespace Ogre
             setRenderQueueMode( static_cast<uint8>( i ), V1_FAST );
         for( size_t i = 225; i < 256u; ++i )
             setRenderQueueMode( static_cast<uint8>( i ), V1_FAST );
+
+        setRenderQueueMode( kParticleSystemDefaultRenderQueueId, PARTICLE_SYSTEM );
     }
     //---------------------------------------------------------------------
     RenderQueue::~RenderQueue()

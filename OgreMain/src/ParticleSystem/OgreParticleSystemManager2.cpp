@@ -30,12 +30,16 @@ THE SOFTWARE.
 
 #include "Math/Array/OgreArrayConfig.h"
 #include "Math/Array/OgreBooleanMask.h"
+#include "OgreRenderQueue.h"
 #include "OgreSceneManager.h"
 #include "ParticleSystem/OgreEmitter2.h"
 #include "ParticleSystem/OgreParticle2.h"
 #include "ParticleSystem/OgreParticleAffector2.h"
 #include "ParticleSystem/OgreParticleSystem2.h"
+#include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 using namespace Ogre;
 
@@ -43,6 +47,10 @@ static std::map<IdString, ParticleEmitterDefDataFactory *> sEmitterDefFactories;
 
 ParticleSystemManager2::ParticleSystemManager2( SceneManager *sceneManager ) :
     mSceneManager( sceneManager ),
+    mSharedIndexBuffer16( 0 ),
+    mSharedIndexBuffer32( 0 ),
+    mHighestPossibleQuota16( 0u ),
+    mHighestPossibleQuota32( 0u ),
     mTimeSinceLast( 0 )
 {
 }
@@ -84,11 +92,11 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
 
         const ArrayVector3 normDir = cpuData.mDirection->normalisedCopy();
 
-        int16 directions[3][ARRAY_PACKED_REALS];
+        int8 directions[3][ARRAY_PACKED_REALS];
         int16 rotations[ARRAY_PACKED_REALS];
-        Mathlib::extractS16( Mathlib::ToSnorm16( normDir.mChunkBase[0] ), directions[0] );
-        Mathlib::extractS16( Mathlib::ToSnorm16( normDir.mChunkBase[1] ), directions[1] );
-        Mathlib::extractS16( Mathlib::ToSnorm16( normDir.mChunkBase[2] ), directions[2] );
+        Mathlib::extractS8( Mathlib::ToSnorm8Unsafe( normDir.mChunkBase[0] ), directions[0] );
+        Mathlib::extractS8( Mathlib::ToSnorm8Unsafe( normDir.mChunkBase[1] ), directions[1] );
+        Mathlib::extractS8( Mathlib::ToSnorm8Unsafe( normDir.mChunkBase[2] ), directions[2] );
         Mathlib::extractS16( Mathlib::ToSnorm16( cpuData.mRotation->valueRadians() * invPi ),
                              rotations );
 
@@ -101,10 +109,10 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
                 gpuData->mWidth = 0.0f;
                 gpuData->mHeight = 0.0f;
                 gpuData->mPos[0] = gpuData->mPos[1] = gpuData->mPos[2] = 0.0f;
-                gpuData->mDirection[0] = gpuData->mDirection[1] = gpuData->mDirection[2] = 0.0f;
-                gpuData->mRotation = 0u;
-                gpuData->mColour[0] = gpuData->mColour[1] = gpuData->mColour[2] = gpuData->mColour[3] =
-                    0u;
+                gpuData->mDirection[0] = gpuData->mDirection[1] = gpuData->mDirection[2] = 0;
+                gpuData->mColourAlpha = 0;
+                gpuData->mRotation = 0;
+                gpuData->mColourRgb[0] = gpuData->mColourRgb[1] = gpuData->mColourRgb[2] = 0;
             }
             else if( IS_BIT_SET( j, scalarIsDead ) )
             {
@@ -117,15 +125,14 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
                 gpuData->mPos[0] = static_cast<float>( pos.x );
                 gpuData->mPos[1] = static_cast<float>( pos.y );
                 gpuData->mPos[2] = static_cast<float>( pos.z );
-                gpuData->mColourScale = 1.0f;
                 gpuData->mDirection[0] = directions[0][j];
                 gpuData->mDirection[1] = directions[1][j];
                 gpuData->mDirection[2] = directions[2][j];
+                gpuData->mColourAlpha = 127;
                 gpuData->mRotation = rotations[j];
-                gpuData->mColour[0] = 255u;
-                gpuData->mColour[1] = 255u;
-                gpuData->mColour[2] = 255u;
-                gpuData->mColour[3] = 255u;
+                gpuData->mColourRgb[0] = 255;
+                gpuData->mColourRgb[1] = 255;
+                gpuData->mColourRgb[2] = 255;
             }
 
             ++gpuData;
@@ -174,6 +181,9 @@ void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
                 systemDef->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
                     systemDef->mGpuData->map( 0u, systemDef->getNumSimdActiveParticles() ) );
             }
+
+            systemDef->mVaoPerLod[0].back()->setPrimitiveRange(
+                0u, static_cast<uint32>( numSimdActiveParticles * 4u ) );
         }
     }
 }
@@ -239,15 +249,16 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
         }
 
         cpuData.advancePack( systemDef->getActiveParticlesPackOffset() );
-        const size_t numParticles = systemDef->getNumSimdActiveParticles();
+        const size_t numSimdActiveParticles = systemDef->getNumSimdActiveParticles();
 
         // particlesPerThread must be multiple of ARRAY_PACKED_REALS
-        size_t particlesPerThread = ( numParticles + numThreads - 1u ) / numThreads;
+        size_t particlesPerThread = ( numSimdActiveParticles + numThreads - 1u ) / numThreads;
         particlesPerThread = ( ( particlesPerThread + ARRAY_PACKED_REALS - 1 ) / ARRAY_PACKED_REALS ) *
                              ARRAY_PACKED_REALS;
 
-        const size_t toAdvance = std::min( threadIdx * particlesPerThread, numParticles );
-        const size_t numParticlesToProcess = std::min( particlesPerThread, numParticles - toAdvance );
+        const size_t toAdvance = std::min( threadIdx * particlesPerThread, numSimdActiveParticles );
+        const size_t numParticlesToProcess =
+            std::min( particlesPerThread, numSimdActiveParticles - toAdvance );
 
         cpuData.advancePack( toAdvance );
 
@@ -256,7 +267,7 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
         for( const Affector *affector : systemDef->mAffectors )
             affector->run( cpuData, numParticlesToProcess );
 
-        tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numParticles, systemDef );
+        tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numSimdActiveParticles, systemDef );
     }
 }
 //-----------------------------------------------------------------------------
@@ -321,8 +332,141 @@ void ParticleSystemManager2::destroyAllParticleSystems()
     mActiveParticleSystemDefs.clear();
 }
 //-----------------------------------------------------------------------------
+void ParticleSystemManager2::_addToRenderQueue( size_t threadIdx, size_t numThreads,
+                                                RenderQueue *renderQueue, uint8 renderQueueId,
+                                                uint32 visibilityMask ) const
+{
+    const size_t numSystemDefs = mActiveParticleSystemDefs.size();
+    const size_t systemDefsPerThread = ( numSystemDefs + numThreads - 1u ) / numThreads;
+    const size_t toAdvance = std::min( threadIdx * systemDefsPerThread, numSystemDefs );
+    const size_t numParticlesToProcess = std::min( systemDefsPerThread, numSystemDefs - toAdvance );
+
+    FastArray<ParticleSystemDef *>::const_iterator itor = mActiveParticleSystemDefs.begin() + toAdvance;
+    FastArray<ParticleSystemDef *>::const_iterator endt =
+        mActiveParticleSystemDefs.begin() + toAdvance + numParticlesToProcess;
+
+    while( itor != endt )
+    {
+        ParticleSystemDef *systemDef = *itor;
+        if( systemDef->getNumSimdActiveParticles() > 0u &&  //
+            systemDef->mRenderQueueID == renderQueueId &&   //
+            systemDef->getVisibilityFlags() & visibilityMask )
+        {
+            renderQueue->addRenderableV2( threadIdx, systemDef->mRenderQueueID, false, systemDef,
+                                          systemDef );
+        }
+
+        ++itor;
+    }
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::calculateHighestPossibleQuota( VaoManager *vaoManager )
+{
+    uint32 highestQuota16 = 0u;
+    uint32 highestQuota32 = 0u;
+
+    for( const auto &pair : mParticleSystemDefMap )
+    {
+        ParticleSystemDef *systemDef = pair.second;
+        const uint32 quota = systemDef->getQuota();
+        if( quota <= std::numeric_limits<uint16>::max() )
+            highestQuota16 = std::max( quota, highestQuota16 );
+        else
+            highestQuota32 = std::max( quota, highestQuota32 );
+    }
+
+    if( ( mSharedIndexBuffer16 &&
+          mHighestPossibleQuota16 * 6u > mSharedIndexBuffer16->getNumElements() ) ||
+        ( mSharedIndexBuffer32 &&
+          mHighestPossibleQuota32 * 6u > mSharedIndexBuffer32->getNumElements() ) )
+    {
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                     "Raising highest possible quota after initialization is not yet implemented. "
+                     "Call  setHighestPossibleQuota() earlier with a bigger number.",
+                     "ParticleSystemManager2::calculateHighestPossibleQuota" );
+    }
+
+    createSharedIndexBuffers( vaoManager );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::createSharedIndexBuffers( VaoManager *vaoManager )
+{
+    // If these asserts trigger, then mHighestPossibleQuotaXX was
+    // increased without destroying the old mSharedIndexBufferXX
+    OGRE_ASSERT_LOW( !mSharedIndexBuffer16 ||
+                     mHighestPossibleQuota16 * 6u <= mSharedIndexBuffer16->getNumElements() );
+    OGRE_ASSERT_LOW( !mSharedIndexBuffer32 ||
+                     mHighestPossibleQuota32 * 6u <= mSharedIndexBuffer32->getNumElements() );
+
+    if( mHighestPossibleQuota16 > 0u && !mSharedIndexBuffer16 )
+    {
+        const size_t numIndices = mHighestPossibleQuota16 * 6u;
+
+        uint16_t *index16 = reinterpret_cast<uint16_t *>(
+            OGRE_MALLOC_SIMD( sizeof( uint16_t ) * numIndices, MEMCATEGORY_GEOMETRY ) );
+        FreeOnDestructor dataPtrContainer( index16 );
+
+        const size_t maxParticles = numIndices / 6u;
+        for( size_t k = 0; k < maxParticles; ++k )
+        {
+            index16[k * 6u + 0u] = static_cast<uint16>( k );
+            index16[k * 6u + 1u] = static_cast<uint16>( k );
+            index16[k * 6u + 2u] = static_cast<uint16>( k );
+
+            index16[k * 6u + 3u] = static_cast<uint16>( k );
+            index16[k * 6u + 4u] = static_cast<uint16>( k );
+            index16[k * 6u + 5u] = static_cast<uint16>( k );
+        }
+
+        mSharedIndexBuffer16 =
+            vaoManager->createIndexBuffer( IT_16BIT, numIndices, BT_IMMUTABLE, index16, false );
+    }
+
+    if( mHighestPossibleQuota32 > 0u )
+    {
+        const size_t numIndices = mHighestPossibleQuota32 * 6u;
+
+        uint32_t *index32 = reinterpret_cast<uint32_t *>(
+            OGRE_MALLOC_SIMD( sizeof( uint32_t ) * numIndices, MEMCATEGORY_GEOMETRY ) );
+        FreeOnDestructor dataPtrContainer( index32 );
+
+        const size_t maxParticles = numIndices / 6u;
+        for( size_t k = 0; k < maxParticles; ++k )
+        {
+            index32[k * 6u + 0u] = static_cast<uint32>( k );
+            index32[k * 6u + 1u] = static_cast<uint32>( k );
+            index32[k * 6u + 2u] = static_cast<uint32>( k );
+
+            index32[k * 6u + 3u] = static_cast<uint32>( k );
+            index32[k * 6u + 4u] = static_cast<uint32>( k );
+            index32[k * 6u + 5u] = static_cast<uint32>( k );
+        }
+
+        mSharedIndexBuffer32 =
+            vaoManager->createIndexBuffer( IT_32BIT, numIndices, BT_IMMUTABLE, index32, false );
+    }
+}
+//-----------------------------------------------------------------------------
+IndexBufferPacked *ParticleSystemManager2::_getSharedIndexBuffer( size_t maxQuota,
+                                                                  VaoManager *vaoManager )
+{
+    if( maxQuota <= std::numeric_limits<uint16>::max() )
+    {
+        if( !mSharedIndexBuffer16 )
+            calculateHighestPossibleQuota( vaoManager );
+        return mSharedIndexBuffer16;
+    }
+
+    if( !mSharedIndexBuffer32 )
+        calculateHighestPossibleQuota( vaoManager );
+    return mSharedIndexBuffer32;
+}
+//-----------------------------------------------------------------------------
 void ParticleSystemManager2::update( const Real timeSinceLast )
 {
+    if( mActiveParticleSystemDefs.empty() )
+        return;
+
     mTimeSinceLast = timeSinceLast;
 
     updateSerialPre( timeSinceLast );

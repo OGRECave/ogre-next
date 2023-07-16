@@ -37,6 +37,7 @@ vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 // START UNIFORM GL DECLARATION
 ReadOnlyBufferF( 0, float4, worldMatBuf );
 @property( texture_matrix )ReadOnlyBufferF( 1, float4, animationMatrixBuf );@end
+@insertpiece( ParticleSystemDeclVS )
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 // END UNIFORM GL DECLARATION
 

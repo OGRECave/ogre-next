@@ -294,6 +294,23 @@ namespace Ogre
             return _mm_packs_epi32( asUint32, asUint32 );
         }
 
+        /// Returns:
+        ///     (int16)( saturate( a ) * 127.5f );
+        ///
+        /// Input a MUST be in range (-256.996; 256.996) for saturation to properly work.
+        /// Otherwise result will be wrong.
+        static inline ArrayInt ToSnorm8Unsafe( ArrayReal a )
+        {
+            // _mm_packs_epi16 converts 16 bit to 8 bit using saturation. However
+            // the value is in 32-bit (there is no 32 -> 8 instruction).
+            // As long as `a * 127.5` results in a value that can be represented in signed 16-bit,
+            // _mm_packs_epi16's automatic saturation will do the job for us.
+            // We must mask
+            a = _mm_mul_ps( a, _mm_set_ps1( 127.5f ) );
+            const __m128i asUint32 = _mm_cvtps_epi32( a );
+            return _mm_packs_epi16( asUint32, asUint32 );
+        }
+
         /** Extracts ARRAY_PACKED_REALS int16.
         @param a
             a must contain integers. Not floats.
@@ -309,6 +326,23 @@ namespace Ogre
             outValues[1] = (int16)_mm_extract_epi16( a, 1 );
             outValues[2] = (int16)_mm_extract_epi16( a, 2 );
             outValues[3] = (int16)_mm_extract_epi16( a, 3 );
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int8.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int8)a[0];
+            outValues[1] = (int8)a[1];
+            outValues[2] = (int8)a[2];
+            outValues[3] = (int8)a[3];
+        */
+        static inline void extractS8( ArrayInt a, int8 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = (int8)_mm_extract_epi16( a, 0 );
+            outValues[1] = (int8)_mm_extract_epi16( a, 1 );
+            outValues[2] = (int8)_mm_extract_epi16( a, 2 );
+            outValues[3] = (int8)_mm_extract_epi16( a, 3 );
         }
 
         /** Returns the minimum value of all elements in a

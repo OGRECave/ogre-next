@@ -171,6 +171,24 @@ namespace Ogre
         */
         size_t findFirstBitSet() const;
 
+        /** Same as findFirstBitSet(); starting from startFrom (inclusive).
+        @param startFrom
+            In range [0; capacity)
+
+            e.g. if capacity == 5 and we've set 01001b (0 is the 4th bit, 1 is the 0th bit) then:
+
+                findFirstBitSet( 5 ) = INVALID
+                findFirstBitSet( 4 ) = 5u (capacity, not found)
+                findFirstBitSet( 3 ) = 3u
+                findFirstBitSet( 2 ) = 3u
+                findFirstBitSet( 1 ) = 3u
+                findFirstBitSet( 0 ) = 0u
+        @return
+            The index to the first unset bit
+            returns this->capacity() if all bits are unset (i.e. all 0s)
+        */
+        size_t findFirstBitSet( const size_t startFrom ) const;
+
         /** Finds the first bit unset after the last bit set.
         @return
             If all bits are unset (i.e. all 0s):
@@ -238,22 +256,7 @@ namespace Ogre
         /// @copydoc cbitset64::findFirstBitSet
         inline size_t findFirstBitSet() const;
 
-        /** Same as findFirstBitSet(); starting from startFrom (inclusive).
-        @param startFrom
-            In range [0; capacity)
-
-            e.g. if capacity == 5 and we've set 01001b (0 is the 4th bit, 1 is the 0th bit) then:
-
-                findFirstBitSet( 5 ) = INVALID
-                findFirstBitSet( 4 ) = 5u (capacity, not found)
-                findFirstBitSet( 3 ) = 3u
-                findFirstBitSet( 2 ) = 3u
-                findFirstBitSet( 1 ) = 3u
-                findFirstBitSet( 0 ) = 0u
-        @return
-            The index to the first unset bit
-            returns this->capacity() if all bits are unset (i.e. all 0s)
-        */
+        /// @copydoc cbitset64::findFirstBitSet
         inline size_t findFirstBitSet( size_t startFrom ) const;
 
         /// @copydoc cbitset64::findLastBitSetPlusOne
