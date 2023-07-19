@@ -26,6 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#ifndef OgreEmitter2_H
+#define OgreEmitter2_H
+
 #include "OgrePrerequisites.h"
 
 #include "OgreParticleEmitter.h"
@@ -122,3 +125,5 @@ namespace Ogre
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
+
+#endif
