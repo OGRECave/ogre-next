@@ -123,8 +123,8 @@ namespace Ogre
         size_t getActiveParticlesPackOffset() const { return mFirstParticleIdx / ARRAY_PACKED_REALS; }
 
     public:
-        ParticleSystemDef( SceneManager *manager, ParticleSystemManager2 *particleSystemManager,
-                           const String &name );
+        ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
+                           ParticleSystemManager2 *particleSystemManager, const String &name );
         ~ParticleSystemDef() override;
 
         uint32 getQuota() const;
@@ -209,7 +209,7 @@ namespace Ogre
 
         inline static const ParticleSystemDef *castToRenderable( const Renderable *a )
         {
-            OGRE_ASSERT_HIGH( dynamic_cast<const ParticleSystemDef *>( a ) );
+            // OGRE_ASSERT_HIGH( dynamic_cast<const ParticleSystemDef *>( a ) );
             return static_cast<const ParticleSystemDef *>( a );
         }
 
@@ -218,6 +218,8 @@ namespace Ogre
         bool getUseIdentityWorldMatrix() const override { return true; }
 
         bool isParticleSystem() const override { return true; }
+
+        void _notifyAttached( Node *parent ) override;
 
         void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
         void getWorldTransforms( Matrix4 *xform ) const override;

@@ -44,9 +44,11 @@ layout(location = FRAG_COLOR, index = 0) out midf outColour;
 	@end
 @end
 
+@pset( currSampler, samplerStateStart )
+
 @property( syntax == glslvk )
 	@foreach( num_samplers, n )
-		layout( ogre_s@counter(samplerStateStart) ) uniform sampler samplerState@n;@end
+		layout( ogre_s@counter(currSampler) ) uniform sampler samplerState@n;@end
 @end
 
 @insertpiece( DefaultHeaderPS )

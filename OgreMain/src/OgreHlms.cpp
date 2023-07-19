@@ -130,6 +130,7 @@ namespace Ogre
     const IdString HlmsBaseProp::EmulateClipDistances = IdString( "hlms_emulate_clip_distances" );
     const IdString HlmsBaseProp::DualParaboloidMapping = IdString( "hlms_dual_paraboloid_mapping" );
     const IdString HlmsBaseProp::InstancedStereo = IdString( "hlms_instanced_stereo" );
+    const IdString HlmsBaseProp::ViewMatrix = IdString( "hlms_view_matrix" );
     const IdString HlmsBaseProp::StaticBranchLights = IdString( "hlms_static_branch_lights" );
     const IdString HlmsBaseProp::StaticBranchShadowMapLights =
         IdString( "hlms_static_branch_shadow_map_lights" );
@@ -264,6 +265,7 @@ namespace Ogre
 #endif
 
     LightweightMutex Hlms::msGlobalMutex;
+    bool Hlms::msHasParticleFX2Plugin = true;
 
     Hlms::Hlms( HlmsTypes type, const String &typeName, Archive *dataFolder,
                 ArchiveVec *libraryFolders ) :

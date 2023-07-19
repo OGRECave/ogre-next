@@ -406,6 +406,7 @@ namespace Ogre
         ObjectMemoryManager mForwardPlusMemoryManager[NUM_SCENE_MEMORY_MANAGER_TYPES];
         SkeletonAnimManager mSkeletonAnimationManager;
         NodeMemoryManager   mTagPointNodeMemoryManager;
+        ObjectMemoryManager mParticleSysDefMemoryManager;
         ObjectMemoryManager mParticleSysMemoryManager;
         /// Filled and cleared every frame in HighLevelCull()
         NodeMemoryManagerVec   mNodeMemoryManagerUpdateList;
@@ -1371,6 +1372,7 @@ namespace Ogre
         }
         ObjectMemoryManager &_getLightMemoryManager() { return mLightMemoryManager; }
 
+        ObjectMemoryManager &_getParticleSysDefMemoryManager() { return mParticleSysDefMemoryManager; }
         ObjectMemoryManager &_getParticleSysMemoryManager() { return mParticleSysMemoryManager; }
 
         /// @copydoc ArrayMemoryManager::defragment

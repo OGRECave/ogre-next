@@ -4,7 +4,7 @@
 @property( hlms_particle_system )
 
 @piece( ParticleSystemDeclVS )
-ReadOnlyBufferU( @value(ParticleSystemSlot), uint4, particleSystemGpuData );
+ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 @end
 
 @piece( ParticleSystemStructDeclVS )
@@ -17,45 +17,45 @@ ReadOnlyBufferU( @value(ParticleSystemSlot), uint4, particleSystemGpuData );
 		float4 colour;
 	};
 
-    ParticleGpuData loadParticleGpuData()
-    {
-        ParticleGpuData retVal;
+	ParticleGpuData loadParticleGpuData()
+	{
+		ParticleGpuData retVal;
 
-        // const uint particleId = uint( inVs_vertexId ) / 6u;
-        const uint particleId = uint( inVs_vertexId ) / 4u;
-        uint4 tmp;
-        tmp = bufferFetch( particleSystemGpuData, particleId * 2u );
-        retVal.dim.xy = uintBitsToFloat( tmp.xy );
-        retVal.pos.xy = uintBitsToFloat( tmp.zw );
-        tmp = bufferFetch( particleSystemGpuData, particleId * 2u + 1u );
-        retVal.pos.z = uintBitsToFloat( tmp.x );
-        float4 tmp2 = unpackSnorm4x8( tmp.y );
-        retVal.dir.xyz = tmp2.xyz;
-        retVal.colour.w = tmp2.w * 0.5f + 0.5f;
-        tmp2.xy = unpackSnorm2x16( tmp.z );
-        retVal.rotation = tmp2.x;
-        retVal.colour.x = tmp2.y;
-        retVal.colour.yz = unpackSnorm2x16( tmp.w );
+		// const uint particleId = uint( inVs_vertexId ) / 6u;
+		const uint particleId = uint( inVs_vertexId ) / 4u;
+		uint4 tmp;
+		tmp = readOnlyFetch( particleSystemGpuData, particleId * 2u );
+		retVal.dim.xy = uintBitsToFloat( tmp.xy );
+		retVal.pos.xy = uintBitsToFloat( tmp.zw );
+		tmp = readOnlyFetch( particleSystemGpuData, particleId * 2u + 1u );
+		retVal.pos.z = uintBitsToFloat( tmp.x );
+		float4 tmp2 = unpackSnorm4x8( tmp.y );
+		retVal.dir.xyz = tmp2.xyz;
+		retVal.colour.w = tmp2.w * 0.5f + 0.5f;
+		tmp2.xy = unpackSnorm2x16( tmp.z );
+		retVal.rotation = tmp2.x;
+		retVal.colour.x = tmp2.y;
+		retVal.colour.yz = unpackSnorm2x16( tmp.w );
 
-        return retVal;
-    }
+		return retVal;
+	}
 @end
 
 @piece( DoParticleSystemVS )
-    const ParticleGpuData particleData = loadParticleGpuData();
+	const ParticleGpuData particleData = loadParticleGpuData();
 
-    const uint particleVertex = uint( inVs_vertexId ) & 0x03u;
-    const float3 viewSpaceRight = mul( float3( particleData.dim.x, 0, 0 ), passBuf.view );
-    const float3 viewSpaceUp = mul( float3( 0, particleData.dim.y, 0 ), passBuf.view );
-    #undef inVs_vertex
-    float3 inVs_vertex = particleData.pos;
+	const uint particleVertex = uint( inVs_vertexId ) & 0x03u;
+	const float3 viewSpaceRight = mul( float3( particleData.dim.x, 0, 0 ), toFloat3x3( passBuf.view ) );
+	const float3 viewSpaceUp = mul( float3( 0, particleData.dim.y, 0 ), toFloat3x3( passBuf.view ) );
+	#undef inVs_vertex
+	float4 inVs_vertex = float4( particleData.pos, 1.0f );
 
-    inVs_vertex += viewSpaceRight * ( particleVertex < 2u ?: -1.0f : 1.0f );
-    inVs_vertex += viewSpaceUp * ( ( particleVertex & 0x01u ) ? -1.0f : 1.0f );
+	inVs_vertex.xyz += viewSpaceRight * ( particleVertex < 2u ? -1.0f : 1.0f );
+	inVs_vertex.xyz += viewSpaceUp * ( ( particleVertex & 0x01u ) != 0u ? -1.0f : 1.0f );
 
-    #undef inVs_uv0
-    float2 inVs_uv0;
-    inVs_uv0.x = particleVertex < 2u ?: 0.0f : 1.0f;
-    inVs_uv0.y = ( ( particleVertex & 0x01u ) ? 0.0f : 1.0f );
+	#undef inVs_uv0
+	float2 inVs_uv0;
+	inVs_uv0.x = particleVertex < 2u ? 0.0f : 1.0f;
+	inVs_uv0.y = ( ( particleVertex & 0x01u ) != 0u ? 0.0f : 1.0f );
 @end
 @end

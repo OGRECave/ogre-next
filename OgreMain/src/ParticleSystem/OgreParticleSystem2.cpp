@@ -30,6 +30,9 @@ THE SOFTWARE.
 
 #include "OgreBitset.inl"
 #include "OgreException.h"
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgreRoot.h"
 #include "OgreSceneManager.h"
 #include "ParticleSystem/OgreEmitter2.h"
 #include "ParticleSystem/OgreParticleAffector2.h"
@@ -39,10 +42,11 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-ParticleSystemDef::ParticleSystemDef( SceneManager *manager,
+ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                      SceneManager *manager,
                                       ParticleSystemManager2 *particleSystemManager,
                                       const String &name ) :
-    ParticleSystem( manager ),
+    ParticleSystem( id, objectMemoryManager, manager, "", kParticleSystemDefaultRenderQueueId ),
     mName( name ),
     mParticleSystemManager( particleSystemManager ),
     mGpuData( 0 ),
@@ -107,6 +111,9 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
         {}, mParticleSystemManager->_getSharedIndexBuffer( numParticles, vaoManager ),
         OT_TRIANGLE_LIST ) );
     mVaoPerLod[VpShadow] = mVaoPerLod[VpNormal];
+
+    HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
+    this->setDatablock( hlmsManager->getHlms( HLMS_UNLIT )->getDefaultDatablock() );
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::_destroy( VaoManager *vaoManager )
@@ -374,7 +381,14 @@ uint32 ParticleSystemDef::getHandle( const ParticleCpuData &cpuData, size_t idx 
     return uint32( cpuData.mPosition - mParticleCpuData.mPosition ) * ARRAY_PACKED_REALS + uint32( idx );
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemDef::getRenderOperation( v1::RenderOperation &op, bool casterPass )
+void ParticleSystemDef::_notifyAttached( Node *parent )
+{
+    // We are a fake MovableObject, bypass ParticleSystem's functionality
+    // (which we only derive from to get backwards compatibility)
+    MovableObject::_notifyAttached( parent );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::getRenderOperation( v1::RenderOperation &, bool )
 {
     OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                  "ParticleSystemDef does not implement this function."
@@ -383,7 +397,7 @@ void ParticleSystemDef::getRenderOperation( v1::RenderOperation &op, bool caster
                  "ParticleSystemDef::getRenderOperation" );
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemDef::getWorldTransforms( Matrix4 *xform ) const
+void ParticleSystemDef::getWorldTransforms( Matrix4 * ) const
 {
     OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                  "ParticleSystemDef does not implement this function."

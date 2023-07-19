@@ -88,8 +88,11 @@ namespace Ogre
 
         bool   mUsingExponentialShadowMaps;
         uint16 mEsmK;  ///< K parameter for ESM.
+
+        uint8 mReservedTexBufferSlots;  // Includes ReadOnly
+        uint8 mReservedTexSlots;        // These get added to mReservedTexBufferSlots
+
         uint32 mTexUnitSlotStart;
-        uint32 mSamplerUnitSlotStart;
 
         void setupRootLayout( RootLayout &rootLayout, size_t tid ) override;
 

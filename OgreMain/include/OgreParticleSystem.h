@@ -143,9 +143,6 @@ namespace Ogre
             void   doSet( void *target, const String &val ) override;
         };
 
-    protected:
-        ParticleSystem( SceneManager *manager );
-
     public:
         /** Creates a particle system with no emitters or affectors.
         @remarks
@@ -153,7 +150,7 @@ namespace Ogre
             them directly.
         */
         ParticleSystem( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-                        const String &resourceGroupName );
+                        const String &resourceGroupName, uint8 renderQueueId = 110u );
 
         virtual ~ParticleSystem() override;
 

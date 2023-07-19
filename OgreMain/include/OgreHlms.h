@@ -251,6 +251,8 @@ namespace Ogre
 
         static LightweightMutex msGlobalMutex;
 
+        static bool msHasParticleFX2Plugin;
+
     public:
         struct Library
         {
@@ -1149,6 +1151,7 @@ namespace Ogre
         static const IdString EmulateClipDistances;
         static const IdString DualParaboloidMapping;
         static const IdString InstancedStereo;
+        static const IdString ViewMatrix;
         static const IdString StaticBranchLights;
         static const IdString StaticBranchShadowMapLights;
         static const IdString NumShadowMapLights;

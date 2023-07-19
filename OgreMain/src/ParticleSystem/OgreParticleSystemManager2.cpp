@@ -309,7 +309,10 @@ ParticleSystemDef *ParticleSystemManager2::createParticleSystemDef( const String
 
     std::map<IdString, ParticleSystemDef *>::iterator itor = insertResult.first;
 
-    itor->second = new ParticleSystemDef( mSceneManager, this, name );
+    itor->second = new ParticleSystemDef( Id::generateNewId<MovableObject>(),
+                                          &mSceneManager->_getParticleSysDefMemoryManager(),
+                                          mSceneManager, this, name );
+    mSceneManager->getRootSceneNode( SCENE_STATIC )->attachObject( itor->second );
     return itor->second;
 }
 //-----------------------------------------------------------------------------

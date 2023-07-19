@@ -11,6 +11,10 @@ out gl_PerVertex
 
 layout(std140) uniform;
 
+// START UNIFORM GL PRE DECLARATION
+@insertpiece( ParticleSystemDeclVS )
+// END UNIFORM GL PRE DECLARATION
+
 @insertpiece( DefaultHeaderVS )
 @insertpiece( custom_vs_uniformDeclaration )
 
@@ -36,8 +40,7 @@ vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 
 // START UNIFORM GL DECLARATION
 ReadOnlyBufferF( 0, float4, worldMatBuf );
-@property( texture_matrix )ReadOnlyBufferF( 1, float4, animationMatrixBuf );@end
-@insertpiece( ParticleSystemDeclVS )
+@property( texture_matrix )ReadOnlyBufferF( @value( texture_matrix ), float4, animationMatrixBuf );@end
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 // END UNIFORM GL DECLARATION
 

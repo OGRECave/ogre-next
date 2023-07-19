@@ -11,6 +11,9 @@
 		@else
 			float4x4 viewProj[4];
 		@end
+		@property( hlms_view_matrix )
+			float4x4 view;
+		@end
 		@property( hlms_global_clip_planes )
 			float4 clipPlane0;
 		@end

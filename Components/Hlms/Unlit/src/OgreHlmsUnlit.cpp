@@ -88,8 +88,10 @@ namespace Ogre
         mDefaultGenerateMipmaps( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
-        mTexUnitSlotStart( 2u ),
-        mSamplerUnitSlotStart( 2u )
+        mReservedTexBufferSlots(
+            msHasParticleFX2Plugin ? 3u : 2u ),  // Vertex shader consumes 2 slots with its tbuffers.
+        mReservedTexSlots( 0u ),
+        mTexUnitSlotStart( 2u )
     {
         // Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -99,6 +101,11 @@ namespace Ogre
 
         // Always an identity matrix
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
+
+        // It is always 1.
+        // (0 is world matrix, 1 is animation matrix when no PFX plugin is installed, 2 otherwise)
+        // This is done to maximize performance since animation matrix is rare.
+        mParticleSystemSlot = 1u;
     }
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, HlmsTypes type,
                           const String &typeName, uint32 constBufferSize ) :
@@ -112,8 +119,10 @@ namespace Ogre
         mUsingInstancedStereo( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
-        mTexUnitSlotStart( 2u ),
-        mSamplerUnitSlotStart( 2u )
+        mReservedTexBufferSlots(
+            msHasParticleFX2Plugin ? 3u : 2u ),  // Vertex shader consumes 2 slots with its tbuffers.
+        mReservedTexSlots( 0u ),
+        mTexUnitSlotStart( 2u )
     {
         // Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -123,6 +132,11 @@ namespace Ogre
 
         // Always an identity matrix
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
+
+        // It is always 1.
+        // (0 is world matrix, 1 is animation matrix when no PFX plugin is installed, 2 otherwise)
+        // This is done to maximize performance since animation matrix is rare.
+        mParticleSystemSlot = 1u;
     }
     //-----------------------------------------------------------------------------------
     HlmsUnlit::~HlmsUnlit() { destroyAllBuffers(); }
@@ -162,20 +176,24 @@ namespace Ogre
 
         descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
 
+        const uint16 extraPfxSlot = msHasParticleFX2Plugin ? 1u : 0u;
+
         if( getProperty( tid, UnlitProperty::TextureMatrix ) == 0 )
-            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u + extraPfxSlot;
         else
-            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u + extraPfxSlot;
 
         rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
-        bakedRanges[DescBindingTypes::Sampler].start = (uint16)mSamplerUnitSlotStart;
-        bakedRanges[DescBindingTypes::Sampler].end =
-            (uint16)mSamplerUnitSlotStart + (uint16)getProperty( tid, UnlitProperty::NumSamplers );
-
-        bakedRanges[DescBindingTypes::Texture].start = (uint16)mTexUnitSlotStart;
+        bakedRanges[DescBindingTypes::Texture].start = (uint16)getProperty( tid, "samplerStateStart" );
         bakedRanges[DescBindingTypes::Texture].end =
-            (uint16)mTexUnitSlotStart + (uint16)getProperty( tid, UnlitProperty::NumTextures );
+            bakedRanges[DescBindingTypes::Texture].start +
+            (uint16)getProperty( tid, UnlitProperty::NumTextures );
+
+        bakedRanges[DescBindingTypes::Sampler].start = bakedRanges[DescBindingTypes::Texture].start;
+        bakedRanges[DescBindingTypes::Sampler].end =
+            bakedRanges[DescBindingTypes::Sampler].start +
+            (uint16)getProperty( tid, UnlitProperty::NumSamplers );
 
         mListener->setupRootLayout( rootLayout, mT[tid].setProperties, tid );
     }
@@ -207,8 +225,10 @@ namespace Ogre
         if( mVaoManager->readOnlyIsTexBuffer() )
         {
             vsParams->setNamedConstant( "worldMatBuf", 0 );
-            if( getProperty( tid, UnlitProperty::TextureMatrix ) )
-                vsParams->setNamedConstant( "animationMatrixBuf", 1 );
+
+            const int32 texMatrixSlot = getProperty( tid, UnlitProperty::TextureMatrix );
+            if( texMatrixSlot )
+                vsParams->setNamedConstant( "animationMatrixBuf", texMatrixSlot );
         }
 
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mT[tid].setProperties,
@@ -466,7 +486,7 @@ namespace Ogre
             setProperty( kNoTid, UnlitProperty::DiffuseMap, maxUsedTexUnitPlusOne );
 
         if( hasAnimationMatrices )
-            setProperty( kNoTid, UnlitProperty::TextureMatrix, 1 );
+            setProperty( kNoTid, UnlitProperty::TextureMatrix, msHasParticleFX2Plugin ? 2 : 1 );
 
         if( hasPlanarReflection )
         {
@@ -580,6 +600,9 @@ namespace Ogre
                 setTextureReg( tid, PixelShader, texName.c_str(), texUnit++ );
             }
         }
+
+        if( getProperty( HlmsBaseProp::ParticleSystem ) )
+            setTextureReg( tid, VertexShader, "particleSystemSlot", mParticleSystemSlot );
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsUnlit::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
@@ -627,7 +650,15 @@ namespace Ogre
         setProperty( kNoTid, HlmsBaseProp::RenderDepthOnly,
                      ( renderPassDesc->getNumColourEntries() > 0 ) ? 0 : 1 );
 
-        setProperty( kNoTid, UnlitProperty::SamplerStateStart, (int32)mSamplerUnitSlotStart );
+        mTexUnitSlotStart =
+            uint32( mReservedTexSlots + mReservedTexBufferSlots +
+                    mListener->getNumExtraPassTextures( mT[kNoTid].setProperties, casterPass ) );
+
+        setProperty( kNoTid, UnlitProperty::SamplerStateStart, (int32)mTexUnitSlotStart );
+
+        const bool bNeedsViewMatrix = msHasParticleFX2Plugin;
+        if( bNeedsViewMatrix )
+            setProperty( kNoTid, HlmsBaseProp::ViewMatrix, 1 );
 
         if( mOptimizationStrategy == LowerGpuOverhead )
             setProperty( kNoTid, UnlitProperty::LowerGpuOverhead, 1 );
@@ -734,6 +765,12 @@ namespace Ogre
             mapSize += ( 16 + 16 ) * 4;
         }
 
+        if( bNeedsViewMatrix )
+        {
+            // float4x4 view
+            mapSize += 16u * 4u;
+        }
+
         const bool isCameraReflected = cameras.renderingCamera->isReflected();
         // mat4 invViewProj
         if( ( isCameraReflected ||
@@ -797,6 +834,12 @@ namespace Ogre
             // mat4 viewProj[1] (identityProj, right eye);
             for( size_t i = 0u; i < 16u; ++i )
                 *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[3][0][i];
+        }
+
+        if( bNeedsViewMatrix )
+        {
+            for( size_t i = 0u; i < 16u; ++i )
+                *passBufferPtr++ = (float)viewMatrix[0][i];
         }
 
         // vec4 clipPlane0
@@ -961,8 +1004,9 @@ namespace Ogre
             if( newPool->extraBuffer )
             {
                 TexBufferPacked *extraBuffer = static_cast<TexBufferPacked *>( newPool->extraBuffer );
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
-                    VertexShader, 1, extraBuffer, 0, (uint32)extraBuffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() =
+                    CbShaderBuffer( VertexShader, msHasParticleFX2Plugin ? 2u : 1u, extraBuffer, 0,
+                                    (uint32)extraBuffer->getTotalSizeBytes() );
             }
 
             mLastBoundPool = newPool;
@@ -1055,7 +1099,7 @@ namespace Ogre
                 if( datablock->mSamplersDescSet )
                 {
                     // Bind samplers
-                    size_t texUnit = mSamplerUnitSlotStart;
+                    size_t texUnit = mTexUnitSlotStart;
                     *commandBuffer->addCommand<CbSamplers>() =
                         CbSamplers( (uint16)texUnit, datablock->mSamplersDescSet );
                     mLastDescSampler = datablock->mSamplersDescSet;

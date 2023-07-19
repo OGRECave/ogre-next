@@ -351,15 +351,18 @@ namespace Ogre
         {
             if( mRenderQueues[i].mMode == FAST )
             {
-                QueuedRenderableArrayPerThread::const_iterator itor =
-                    mRenderQueues[i].mQueuedRenderablesPerThread.begin();
-                QueuedRenderableArrayPerThread::const_iterator endt =
-                    mRenderQueues[i].mQueuedRenderablesPerThread.end();
-
-                while( itor != endt )
+                for( const ThreadRenderQueue &threadRenderQueue :
+                     mRenderQueues[i].mQueuedRenderablesPerThread )
                 {
-                    numNeededV2Draws += itor->q.size();
-                    ++itor;
+                    numNeededV2Draws += threadRenderQueue.q.size();
+                }
+            }
+            else if( mRenderQueues[i].mMode == PARTICLE_SYSTEM )
+            {
+                for( const ThreadRenderQueue &threadRenderQueue :
+                     mRenderQueues[i].mQueuedRenderablesPerThread )
+                {
+                    numNeededParticleDraws += threadRenderQueue.q.size();
                 }
             }
         }
@@ -648,7 +651,6 @@ namespace Ogre
                                          IndirectBufferPacked *indirectBuffer, uint8 *indirectDraw,
                                          uint8 *startIndirectDraw )
     {
-        VertexArrayObject *lastVao = 0;
         uint32 lastVaoName = mLastVaoName;
         HlmsCache const *lastHlmsCache = &c_dummyCache;
         uint32 lastHlmsCacheHash = 0;
@@ -662,10 +664,8 @@ namespace Ogre
         const bool isUsingInstancedStereo = mSceneManager->isUsingInstancedStereo();
         const uint32 instancesPerDraw = isUsingInstancedStereo ? 2u : 1u;
         const uint32 baseInstanceShift = isUsingInstancedStereo ? 1u : 0u;
-        uint32 instanceCount = instancesPerDraw;
 
         CbDrawCall *drawCmd = 0;
-        CbSharedDraw *drawCountPtr = 0;
 
         RenderingMetrics stats;
 
@@ -753,7 +753,6 @@ namespace Ogre
                     drawCmd = drawCall;
                 }
 
-                lastVao = 0;
                 stats.mDrawCount += 1u;
             }
 
@@ -765,32 +764,25 @@ namespace Ogre
                 CbDrawIndexed *drawIndexedPtr = reinterpret_cast<CbDrawIndexed *>( indirectDraw );
                 indirectDraw += sizeof( CbDrawIndexed );
 
-                drawCountPtr = drawIndexedPtr;
                 drawIndexedPtr->primCount = vao->mPrimCount;
                 drawIndexedPtr->instanceCount = instancesPerDraw;
                 drawIndexedPtr->firstVertexIndex =
                     uint32( vao->mIndexBuffer->_getFinalBufferStart() + vao->mPrimStart );
                 drawIndexedPtr->baseVertex = uint32( vao->mBaseVertexBuffer->_getFinalBufferStart() );
                 drawIndexedPtr->baseInstance = baseInstance << baseInstanceShift;
-
-                instanceCount = instancesPerDraw;
             }
             else
             {
                 CbDrawStrip *drawStripPtr = reinterpret_cast<CbDrawStrip *>( indirectDraw );
                 indirectDraw += sizeof( CbDrawStrip );
 
-                drawCountPtr = drawStripPtr;
                 drawStripPtr->primCount = vao->mPrimCount;
                 drawStripPtr->instanceCount = instancesPerDraw;
                 drawStripPtr->firstVertexIndex =
                     uint32( vao->mBaseVertexBuffer->_getFinalBufferStart() + vao->mPrimStart );
                 drawStripPtr->baseInstance = baseInstance << baseInstanceShift;
-
-                instanceCount = instancesPerDraw;
             }
 
-            lastVao = vao;
             stats.mInstanceCount += instancesPerDraw;
 
             switch( vao->getOperationType() )
