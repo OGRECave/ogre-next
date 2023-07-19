@@ -378,7 +378,10 @@ void ParticleSystemDef::deallocParticle( uint32 handle )
 //-----------------------------------------------------------------------------
 uint32 ParticleSystemDef::getHandle( const ParticleCpuData &cpuData, size_t idx ) const
 {
-    return uint32( cpuData.mPosition - mParticleCpuData.mPosition ) * ARRAY_PACKED_REALS + uint32( idx );
+    const uint32 handle =
+        uint32( cpuData.mPosition - mParticleCpuData.mPosition ) * ARRAY_PACKED_REALS + uint32( idx );
+    OGRE_ASSERT_MEDIUM( handle < getQuota() && "Invalid handle!" );
+    return handle;
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::_notifyAttached( Node *parent )
