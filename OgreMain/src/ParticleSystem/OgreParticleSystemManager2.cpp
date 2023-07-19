@@ -80,14 +80,13 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
     for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
     {
         *cpuData.mPosition += *cpuData.mDirection * timeSinceLast;
+
+        const ArrayMaskR wasDead = Mathlib::CompareLessEqual( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
         *cpuData.mTimeToLive -= timeSinceLast;
-
-        const ArrayMaskR wasAlive = Mathlib::CompareGreater( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
-
         *cpuData.mTimeToLive = Mathlib::Max( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
-
         const ArrayMaskR isDead = Mathlib::CompareLessEqual( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
-        const uint32 scalarMask = BooleanMask4::getScalarMask( Mathlib::And( wasAlive, isDead ) );
+
+        const uint32 scalarWasDead = BooleanMask4::getScalarMask( wasDead );
         const uint32 scalarIsDead = BooleanMask4::getScalarMask( isDead );
 
         const ArrayVector3 normDir = cpuData.mDirection->normalisedCopy();
@@ -104,7 +103,7 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
         {
             if( IS_BIT_SET( j, scalarIsDead ) )
             {
-                if( IS_BIT_SET( j, scalarMask ) )
+                if( !IS_BIT_SET( j, scalarWasDead ) )
                 {
                     systemDef->mParticlesToKill[threadIdx].push_back(
                         systemDef->getHandle( cpuData, j ) );
