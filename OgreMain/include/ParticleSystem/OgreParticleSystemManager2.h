@@ -105,8 +105,8 @@ namespace Ogre
         */
         void setHighestPossibleQuota( uint16 highestQuota16, uint32 highestQuota32 );
 
-        uint32 getHighestPossibleQuota16() const { return mHighestPossibleQuota16; }
-        uint32 getHighestPossibleQuota32() const { return mHighestPossibleQuota32; }
+        uint32 getHighestPossibleQuota16() const { return mHighestPossibleQuota16 / 4u; }
+        uint32 getHighestPossibleQuota32() const { return mHighestPossibleQuota32 / 4u; }
 
         ParticleSystemDef *createParticleSystemDef( const String &name );
 

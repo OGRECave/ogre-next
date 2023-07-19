@@ -55,7 +55,10 @@ namespace Ogre
     /// EmitterDefData are per ParticleSystemDef
     class _OgreExport EmitterDefData : protected ParticleEmitter
     {
+    protected:
         friend struct EmitterInstanceData;
+
+        Vector2 mDimensions;
 
     public:
         EmitterDefData();

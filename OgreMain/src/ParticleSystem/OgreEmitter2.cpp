@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-EmitterDefData::EmitterDefData() : ParticleEmitter( nullptr )
+EmitterDefData::EmitterDefData() : ParticleEmitter( nullptr ), mDimensions( 1.0f )
 {
 }
 //-----------------------------------------------------------------------------
