@@ -13,6 +13,8 @@ struct PS_INPUT
 	@insertpiece( DeclShadowCasterMacros )
 @end
 
+@pset( currSampler, samplerStateStart )
+
 fragment @insertpiece( output_type ) main_metal
 (
 	PS_INPUT inPs [[stage_in]]
@@ -37,7 +39,7 @@ fragment @insertpiece( output_type ) main_metal
 		@end
 	@end
 	@foreach( num_samplers, n )
-		, sampler samplerState@n [[sampler(@counter(samplerStateStart))]]@end
+		, sampler samplerState@n [[sampler(@counter(currSampler))]]@end
 )
 {
 	PS_OUTPUT outPs;

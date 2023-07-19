@@ -111,47 +111,10 @@ namespace Ogre
         }
     };
     //-----------------------------------------------------------------------
-    ParticleSystem::ParticleSystem( SceneManager *manager ) :
-        MovableObject( nullptr ),
-        mBoundsAutoUpdate( true ),
-        mBoundsUpdateTime( 10.0f ),
-        mUpdateRemainTime( 0 ),
-        mResourceGroupName( "" ),
-        mIsRendererConfigured( false ),
-        mSpeedFactor( 1.0f ),
-        mIterationInterval( 0 ),
-        mIterationIntervalSet( false ),
-        mSorted( false ),
-        mLocalSpace( false ),
-        mNonvisibleTimeout( 0 ),
-        mNonvisibleTimeoutSet( false ),
-        mTimeSinceLastVisible( 0 ),
-        mLastVisibleFrame( Root::getSingleton().getNextFrameNumber() ),
-        mTimeController( 0 ),
-        mEmittedEmitterPoolInitialised( false ),
-        mIsEmitting( true ),
-        mParticleEmitterRootNode( 0 ),
-        mTranslateParticleDirectionIntoWorldSpace( true ),
-        mRenderer( 0 ),
-        mCullIndividual( false ),
-        mPoolSize( 0 ),
-        mEmittedEmitterPoolSize( 0 )
-    {
-        mManager = manager;
-        setDefaultDimensions( 100, 100 );
-        setMaterialName( "BaseWhite" );
-        // Default to 10 particles, expect app to specify (will only be increased, not decreased)
-        setParticleQuota( 10 );
-        setEmittedEmitterQuota( 3 );
-        initParameters();
-
-        // Default to billboard renderer
-        setRenderer( "billboard" );
-    }
-    //-----------------------------------------------------------------------
     ParticleSystem::ParticleSystem( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                    SceneManager *manager, const String &resourceGroup ) :
-        MovableObject( id, objectMemoryManager, manager, 110u ),
+                                    SceneManager *manager, const String &resourceGroup,
+                                    uint8 renderQueueId ) :
+        MovableObject( id, objectMemoryManager, manager, renderQueueId ),
         mBoundsAutoUpdate( true ),
         mBoundsUpdateTime( 10.0f ),
         mUpdateRemainTime( 0 ),

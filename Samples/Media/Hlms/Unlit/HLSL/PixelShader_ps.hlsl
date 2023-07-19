@@ -19,8 +19,10 @@ struct PS_INPUT
 	@end
 @end
 
+@pset( currSampler, samplerStateStart )
+
 @foreach( num_samplers, n )
-	SamplerState samplerState@n : register(s@counter(samplerStateStart));@end
+	SamplerState samplerState@n : register(s@counter(currSampler));@end
 
 @insertpiece( DeclOutputType )
 

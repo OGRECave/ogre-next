@@ -196,6 +196,7 @@ namespace Ogre
                                                           &mForwardPlusMemoryManager[SCENE_DYNAMIC] );
         mForwardPlusMemoryManager[SCENE_DYNAMIC]._setTwin( SCENE_DYNAMIC,
                                                            &mForwardPlusMemoryManager[SCENE_STATIC] );
+        mParticleSysDefMemoryManager._setTwin( SCENE_STATIC, 0 );
 
         Root *root = Root::getSingletonPtr();
         if( root )
@@ -516,6 +517,7 @@ namespace Ogre
         }
 
         mLightMemoryManager.defragment();
+        // Do not defragment mParticleSysDefMemoryManager
         mParticleSysMemoryManager.defragment();
         // Skeletons are more complex because the new slot count must be multiple bonesPerDepth
         // mSkeletonAnimationManager.defragment();
@@ -532,6 +534,7 @@ namespace Ogre
         }
 
         mLightMemoryManager.shrinkToFit();
+        // Do not defragment mParticleSysDefMemoryManager
         mParticleSysMemoryManager.shrinkToFit();
         // Skeletons are more complex because the new slot count must be multiple bonesPerDepth
         // mSkeletonAnimationManager.shrinkToFit();

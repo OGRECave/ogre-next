@@ -143,7 +143,7 @@ namespace Ogre
         ReadOnlyBufferPacked *mGlobalLightListBuffer;
 
         float  mMaxSpecIblMipmap;
-        uint16 mTexBufUnitSlotEnd;
+        uint16 mTexBufUnitSlotEnd;  /// Not used by Ogre but derived implementations may
         uint32 mTexUnitSlotStart;
 
         TextureGpuVec const *mPrePassTextures;
