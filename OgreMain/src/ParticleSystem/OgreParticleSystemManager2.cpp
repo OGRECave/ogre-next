@@ -102,9 +102,13 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
 
         for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
         {
-            if( IS_BIT_SET( j, scalarMask ) )
+            if( IS_BIT_SET( j, scalarIsDead ) )
             {
-                systemDef->mParticlesToKill[threadIdx].push_back( systemDef->getHandle( cpuData, j ) );
+                if( IS_BIT_SET( j, scalarMask ) )
+                {
+                    systemDef->mParticlesToKill[threadIdx].push_back(
+                        systemDef->getHandle( cpuData, j ) );
+                }
                 // Should we use NaN? GPU is supposed to reject them faster.
                 gpuData->mWidth = 0.0f;
                 gpuData->mHeight = 0.0f;
@@ -114,7 +118,7 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _
                 gpuData->mRotation = 0;
                 gpuData->mColourRgb[0] = gpuData->mColourRgb[1] = gpuData->mColourRgb[2] = 0;
             }
-            else if( IS_BIT_SET( j, scalarIsDead ) )
+            else
             {
                 Vector3 pos;
                 cpuData.mPosition->getAsVector3( pos, j );
