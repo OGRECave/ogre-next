@@ -26,6 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#ifndef OgreParticleAffector2_H
+#define OgreParticleAffector2_H
+
 #include "OgrePrerequisites.h"
 
 #include "ParticleSystem/OgreParticle2.h"
@@ -49,3 +52,5 @@ namespace Ogre
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
+
+#endif

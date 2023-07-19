@@ -251,7 +251,28 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
             }
         }
 
-        cpuData.advancePack( systemDef->getActiveParticlesPackOffset() );
+        // We have the following guarantees:
+        //      1. systemDef->mFirstParticleIdx is in range [0; quota)
+        //      2. systemDef->mLastParticleIdx is in range [0; quota * 2)
+        //      3. mLastParticleIdx - mFirstParticleIdx <= quota
+        //
+        // We need to handle the following:
+        //      1. Quota = 100, numThreads = 4, ARRAY_PACKED_REALS = 4
+        //      2. systemDef->getActiveParticlesPackOffset() = int(75 / 4) = 18 => 18 * 4 = 72
+        //      3. systemDef->getNumSimdActiveParticles() = 52
+        //
+        // This means we need to iterate the range [72; 100) and then the range [0; 24)
+        //  Threads should split the work and handle:
+        //      1. Thread A: [72; 88)
+        //      2. Thread B: [88; 100) and [0; 4)
+        //      3. Thread C: [4; 20)
+        //      4. Thread D: [20; 24)
+        //
+        // Same example but ARRAY_PACKED_REALS = 1
+        //      1. Thread A: [72; 85)
+        //      2. Thread B: [85; 98)
+        //      3. Thread C: [98; 100) [0; 11)
+        //      4. Thread D: [11; 24)
         const size_t numSimdActiveParticles = systemDef->getNumSimdActiveParticles();
 
         // particlesPerThread must be multiple of ARRAY_PACKED_REALS
@@ -259,18 +280,59 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
         particlesPerThread = ( ( particlesPerThread + ARRAY_PACKED_REALS - 1 ) / ARRAY_PACKED_REALS ) *
                              ARRAY_PACKED_REALS;
 
-        const size_t toAdvance = std::min( threadIdx * particlesPerThread, numSimdActiveParticles );
-        const size_t numParticlesToProcess =
-            std::min( particlesPerThread, numSimdActiveParticles - toAdvance );
+        const size_t quota = systemDef->getQuota();
+        size_t threadAdvance = std::min( threadIdx * particlesPerThread, numSimdActiveParticles );
+        size_t totalThreadNumParticlesToProcess =
+            std::min( particlesPerThread, numSimdActiveParticles - threadAdvance );
+        size_t gpuAdvance = threadAdvance;
 
-        cpuData.advancePack( toAdvance );
+        OGRE_ASSERT_MEDIUM( quota % ARRAY_PACKED_REALS == 0u );
+        OGRE_ASSERT_MEDIUM( threadAdvance % ARRAY_PACKED_REALS == 0u );
+        OGRE_ASSERT_MEDIUM( totalThreadNumParticlesToProcess % ARRAY_PACKED_REALS == 0u );
 
-        ParticleGpuData *gpuData = systemDef->mParticleGpuData + toAdvance;
+        // systemDef->getActiveParticlesPackOffset() * APR must be < quota
+        // threadAdvance (so far) & gpuAdvance must be < quota
+        OGRE_ASSERT_MEDIUM( threadAdvance <= quota );
+        // threadAdvance can now be >= quota
+        threadAdvance += systemDef->getActiveParticlesPackOffset() * ARRAY_PACKED_REALS;
 
-        for( const Affector *affector : systemDef->mAffectors )
-            affector->run( cpuData, numParticlesToProcess );
+        for( int i = 0; i < 2; ++i )
+        {
+            // maxParticle can be >= quota
+            const size_t maxParticle = totalThreadNumParticlesToProcess + threadAdvance;
+            // particleExcess is the amount of particles we can't
+            // process this iteration and will do on the next one.
+            const size_t particleExcess = maxParticle - std::min( maxParticle, quota );
 
-        tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numSimdActiveParticles, systemDef );
+            // If threadAdvance > quota, then particleExcess > totalThreadNumParticlesToProcess
+            OGRE_ASSERT_MEDIUM(
+                ( threadAdvance <= quota && totalThreadNumParticlesToProcess >= particleExcess ) ||
+                ( threadAdvance > quota && totalThreadNumParticlesToProcess <= particleExcess ) );
+
+            const size_t numParticlesToProcess =
+                std::max( totalThreadNumParticlesToProcess, particleExcess ) - particleExcess;
+
+            // This can advance out of bounds. But if so, then numParticlesToProcess == 0
+            OGRE_ASSERT_MEDIUM( threadAdvance <= quota || numParticlesToProcess == 0u );
+            cpuData.advancePack( threadAdvance / ARRAY_PACKED_REALS );
+
+            ParticleGpuData *gpuData = systemDef->mParticleGpuData + gpuAdvance;
+
+            for( const Affector *affector : systemDef->mAffectors )
+                affector->run( cpuData, numParticlesToProcess );
+
+            tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numParticlesToProcess,
+                           systemDef );
+
+            gpuAdvance += numParticlesToProcess;
+            totalThreadNumParticlesToProcess = particleExcess;
+            // If threadAdvance < quota, then we are crossing the boundary and
+            // must start processing from threadAdvance = 0
+            //
+            // If threadAdvance >= quota, then just do threadAdvance -= quota.
+            threadAdvance = threadAdvance - std::min( quota, threadAdvance );
+            cpuData = systemDef->getParticleCpuData();
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -444,14 +506,14 @@ void ParticleSystemManager2::createSharedIndexBuffers( VaoManager *vaoManager )
             //   |/ |
             //   B--D
             // Triangle 1 (ABC)
-            index16[k * 6u + 0u] = static_cast<uint16>( k * 6u + 0u );  // A
-            index16[k * 6u + 1u] = static_cast<uint16>( k * 6u + 1u );  // B
-            index16[k * 6u + 2u] = static_cast<uint16>( k * 6u + 2u );  // C
+            index16[k * 6u + 0u] = static_cast<uint16>( k * 4u + 0u );  // A
+            index16[k * 6u + 1u] = static_cast<uint16>( k * 4u + 1u );  // B
+            index16[k * 6u + 2u] = static_cast<uint16>( k * 4u + 2u );  // C
 
             // Triangle 2 (ACD)
-            index16[k * 6u + 3u] = static_cast<uint16>( k * 6u + 1u );  // B
-            index16[k * 6u + 4u] = static_cast<uint16>( k * 6u + 3u );  // D
-            index16[k * 6u + 5u] = static_cast<uint16>( k * 6u + 2u );  // C
+            index16[k * 6u + 3u] = static_cast<uint16>( k * 4u + 1u );  // B
+            index16[k * 6u + 4u] = static_cast<uint16>( k * 4u + 3u );  // D
+            index16[k * 6u + 5u] = static_cast<uint16>( k * 4u + 2u );  // C
         }
 
         mSharedIndexBuffer16 =

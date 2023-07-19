@@ -26,11 +26,15 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#ifndef OgreParticleSystem2_H
+#define OgreParticleSystem2_H
+
 #include "OgrePrerequisites.h"
 
 #include "OgreBitset.h"
 #include "OgreMovableObject.h"
 #include "OgreParticleSystem.h"
+#include "ParticleSystem/OgreEmitter2.h"
 #include "ParticleSystem/OgreParticle2.h"
 
 #include "OgreHeaderPrefix.h"
@@ -277,3 +281,5 @@ namespace Ogre
     OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 #include "OgreHeaderSuffix.h"
+
+#endif

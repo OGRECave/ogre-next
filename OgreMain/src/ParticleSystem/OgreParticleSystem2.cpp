@@ -79,7 +79,7 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     mFirstParticleIdx = 0u;
     mLastParticleIdx = 0u;
 
-    const uint32 numParticles = alignToNextMultiple<uint32>( getQuota(), ARRAY_PACKED_REALS );
+    const uint32 numParticles = getQuota();
 
     mParticleCpuData.mPosition = reinterpret_cast<ArrayVector3 *>(
         OGRE_MALLOC_SIMD( numParticles * sizeof( Vector3 ), MEMCATEGORY_GEOMETRY ) );
@@ -161,7 +161,7 @@ bool ParticleSystemDef::isInitialized() const
 void ParticleSystemDef::setParticleQuota( size_t quota )
 {
     OGRE_ASSERT_LOW( !isInitialized() );
-    mActiveParticles.reset( quota );
+    mActiveParticles.reset( alignToNextMultiple<size_t>( quota, ARRAY_PACKED_REALS ) );
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::reserveNumEmitters( size_t numEmitters )
