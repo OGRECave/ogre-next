@@ -44,18 +44,18 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 @piece( DoParticleSystemVS )
 	const ParticleGpuData particleData = loadParticleGpuData();
 
-	const uint particleVertex = uint( inVs_vertexId ) & 0x03u;
-	const float3 viewSpaceRight = mul( float3( particleData.dim.x, 0, 0 ), toFloat3x3( passBuf.view ) );
-	const float3 viewSpaceUp = mul( float3( 0, particleData.dim.y, 0 ), toFloat3x3( passBuf.view ) );
+	const uint vertexInQuad = uint( inVs_vertexId ) & 0x03u;
+	const float3 viewSpaceRight = mul( toFloat3x3( passBuf.view ), float3( particleData.dim.x, 0, 0 ) );
+	const float3 viewSpaceUp = mul( toFloat3x3( passBuf.view ), float3( 0, particleData.dim.y, 0 ) );
 	#undef inVs_vertex
 	float4 inVs_vertex = float4( particleData.pos, 1.0f );
 
-	inVs_vertex.xyz += viewSpaceRight * ( particleVertex < 2u ? -1.0f : 1.0f );
-	inVs_vertex.xyz += viewSpaceUp * ( ( particleVertex & 0x01u ) != 0u ? -1.0f : 1.0f );
+	inVs_vertex.xyz += viewSpaceRight * ( vertexInQuad < 2u ? -1.0f : 1.0f );
+	inVs_vertex.xyz += viewSpaceUp * ( ( vertexInQuad & 0x01u ) != 0u ? -1.0f : 1.0f );
 
 	#undef inVs_uv0
 	float2 inVs_uv0;
-	inVs_uv0.x = particleVertex < 2u ? 0.0f : 1.0f;
-	inVs_uv0.y = ( ( particleVertex & 0x01u ) != 0u ? 0.0f : 1.0f );
+	inVs_uv0.x = vertexInQuad < 2u ? 0.0f : 1.0f;
+	inVs_uv0.y = ( ( vertexInQuad & 0x01u ) != 0u ? 0.0f : 1.0f );
 @end
 @end

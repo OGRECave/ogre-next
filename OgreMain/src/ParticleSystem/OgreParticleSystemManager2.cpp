@@ -187,7 +187,7 @@ void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
             }
 
             systemDef->mVaoPerLod[0].back()->setPrimitiveRange(
-                0u, static_cast<uint32>( numSimdActiveParticles * 4u ) );
+                0u, static_cast<uint32>( numSimdActiveParticles * 6u ) );
         }
     }
 }
@@ -367,6 +367,26 @@ void ParticleSystemManager2::_addToRenderQueue( size_t threadIdx, size_t numThre
     }
 }
 //-----------------------------------------------------------------------------
+void ParticleSystemManager2::setHighestPossibleQuota( uint16 highestQuota16, uint32 highestQuota32 )
+{
+    if( mSharedIndexBuffer16 && mSharedIndexBuffer32 )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                     "It's too late. This function must be called earlier.",
+                     "ParticleSystemManager2::setHighestPossibleQuota" );
+    }
+
+    if( highestQuota16 * 4u > std::numeric_limits<uint16>::max() )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                     "highestQuota16 must be equal or lower than 65535 / 4",
+                     "ParticleSystemManager2::setHighestPossibleQuota" );
+    }
+
+    mHighestPossibleQuota16 = highestQuota16 * 4u;
+    mHighestPossibleQuota32 = highestQuota32 * 4u;
+}
+//-----------------------------------------------------------------------------
 void ParticleSystemManager2::calculateHighestPossibleQuota( VaoManager *vaoManager )
 {
     uint32 highestQuota16 = 0u;
@@ -375,12 +395,15 @@ void ParticleSystemManager2::calculateHighestPossibleQuota( VaoManager *vaoManag
     for( const auto &pair : mParticleSystemDefMap )
     {
         ParticleSystemDef *systemDef = pair.second;
-        const uint32 quota = systemDef->getQuota();
+        const uint32 quota = systemDef->getQuota() * 4u;
         if( quota <= std::numeric_limits<uint16>::max() )
             highestQuota16 = std::max( quota, highestQuota16 );
         else
             highestQuota32 = std::max( quota, highestQuota32 );
     }
+
+    mHighestPossibleQuota16 = std::max( mHighestPossibleQuota16, highestQuota16 );
+    mHighestPossibleQuota32 = std::max( mHighestPossibleQuota32, highestQuota32 );
 
     if( ( mSharedIndexBuffer16 &&
           mHighestPossibleQuota16 * 6u > mSharedIndexBuffer16->getNumElements() ) ||
@@ -389,7 +412,7 @@ void ParticleSystemManager2::calculateHighestPossibleQuota( VaoManager *vaoManag
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "Raising highest possible quota after initialization is not yet implemented. "
-                     "Call  setHighestPossibleQuota() earlier with a bigger number.",
+                     "Call setHighestPossibleQuota() earlier with a bigger number.",
                      "ParticleSystemManager2::calculateHighestPossibleQuota" );
     }
 
@@ -416,13 +439,20 @@ void ParticleSystemManager2::createSharedIndexBuffers( VaoManager *vaoManager )
         const size_t maxParticles = numIndices / 6u;
         for( size_t k = 0; k < maxParticles; ++k )
         {
-            index16[k * 6u + 0u] = static_cast<uint16>( k );
-            index16[k * 6u + 1u] = static_cast<uint16>( k );
-            index16[k * 6u + 2u] = static_cast<uint16>( k );
+            // Particle vertices:
+            //	 A--C
+            //   | /|
+            //   |/ |
+            //   B--D
+            // Triangle 1 (ABC)
+            index16[k * 6u + 0u] = static_cast<uint16>( k * 6u + 0u );  // A
+            index16[k * 6u + 1u] = static_cast<uint16>( k * 6u + 1u );  // B
+            index16[k * 6u + 2u] = static_cast<uint16>( k * 6u + 2u );  // C
 
-            index16[k * 6u + 3u] = static_cast<uint16>( k );
-            index16[k * 6u + 4u] = static_cast<uint16>( k );
-            index16[k * 6u + 5u] = static_cast<uint16>( k );
+            // Triangle 2 (ACD)
+            index16[k * 6u + 3u] = static_cast<uint16>( k * 6u + 1u );  // B
+            index16[k * 6u + 4u] = static_cast<uint16>( k * 6u + 3u );  // D
+            index16[k * 6u + 5u] = static_cast<uint16>( k * 6u + 2u );  // C
         }
 
         mSharedIndexBuffer16 =
@@ -440,13 +470,13 @@ void ParticleSystemManager2::createSharedIndexBuffers( VaoManager *vaoManager )
         const size_t maxParticles = numIndices / 6u;
         for( size_t k = 0; k < maxParticles; ++k )
         {
-            index32[k * 6u + 0u] = static_cast<uint32>( k );
-            index32[k * 6u + 1u] = static_cast<uint32>( k );
-            index32[k * 6u + 2u] = static_cast<uint32>( k );
+            index32[k * 6u + 0u] = static_cast<uint32>( k * 6u + 0u );  // A
+            index32[k * 6u + 1u] = static_cast<uint32>( k * 6u + 1u );  // B
+            index32[k * 6u + 2u] = static_cast<uint32>( k * 6u + 2u );  // C
 
-            index32[k * 6u + 3u] = static_cast<uint32>( k );
-            index32[k * 6u + 4u] = static_cast<uint32>( k );
-            index32[k * 6u + 5u] = static_cast<uint32>( k );
+            index32[k * 6u + 3u] = static_cast<uint32>( k * 6u + 0u );  // A
+            index32[k * 6u + 4u] = static_cast<uint32>( k * 6u + 2u );  // C
+            index32[k * 6u + 5u] = static_cast<uint32>( k * 6u + 3u );  // D
         }
 
         mSharedIndexBuffer32 =

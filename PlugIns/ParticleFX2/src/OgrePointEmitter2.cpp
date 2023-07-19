@@ -99,6 +99,8 @@ void PointEmitter::initEmittedParticles( ParticleCpuData cpuData, const uint32 *
         this->genEmissionVelocity( direction );
         cpuData.mDirection[j].setFromVector3( direction, idx );
 
+        cpuData.mDimensions[j].setFromVector2( mDimensions, idx );
+
         TODO_colour;
         Ogre::ColourValue colour;
         this->genEmissionColour( colour );
