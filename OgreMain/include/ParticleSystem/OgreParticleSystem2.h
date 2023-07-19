@@ -243,8 +243,6 @@ namespace Ogre
         /// mNewParticlesPerEmitter.size() == ParticleSystemDef::mEmitters.size()
         FastArray<size_t> mNewParticlesPerEmitter;
 
-        FastArray<uint32> mParticleHandles;
-
     public:
         /// See MovableObject::mGlobalIndex.
         /// This one tracks our place in ParticleSystemDef::mParticleSystems
@@ -256,8 +254,6 @@ namespace Ogre
         const String &getMovableType() const override;
 
         const ParticleSystemDef *getParticleSystemDef() const { return mCreator; }
-
-        const FastArray<uint32> &getParticleHandles() const { return mParticleHandles; }
     };
 
     /// Object for creating ParticleSystem2 instances

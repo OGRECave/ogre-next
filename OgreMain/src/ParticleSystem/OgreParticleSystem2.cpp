@@ -207,9 +207,6 @@ void ParticleSystemDef::_destroyParticleSystem( ParticleSystem2 *system )
                      "ParticleSystemDef::destroyParticleSystem" );
     }
 
-    for( const uint32 handle : system->getParticleHandles() )
-        deallocParticle( handle );
-
     FastArray<ParticleSystem2 *>::iterator itor =
         mParticleSystems.begin() + static_cast<ptrdiff_t>( system->mParentDefGlobalIdx );
     itor = efficientVectorRemove( mParticleSystems, itor );
