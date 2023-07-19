@@ -165,7 +165,6 @@ void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
                     const uint32 handle = systemDef->allocParticle();
                     if( handle != ParticleSystemDef::InvalidHandle )
                     {
-                        system->mParticleHandles.push_back( handle );
                         systemDef->mNewParticles.push_back( handle );
                     }
                     else
