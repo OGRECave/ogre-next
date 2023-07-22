@@ -158,15 +158,15 @@ $(document).ready(function(){initNavTree('hlms.html',''); initResizable(); });
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_hlms"></a></p>
-<p >The HLMS (often stylized Hlms) is the new material system used in <a class="el" href="namespace_ogre.html">Ogre</a> 2.0. It's more user friendly and performs faster.</p>
+<p >The HLMS (often stylized Hlms) is the new material system used in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0. It's more user friendly and performs faster.</p>
 <p >HLMS stands for "High Level Material System", because for the user, the HLMS means just define the material and start looking at it (no need for coding or shader knowledge!). But on retrospective, tweaking the shader code for an HLMS is much low level than the old Materials have ever been (and that makes them very powerful).</p>
 <h1><a class="anchor" id="HlmsChanges"></a>
 Fundamental changes</h1>
 <h2><a class="anchor" id="HlmsChangesViewports"></a>
 Viewports and Scissor tests</h2>
-<p >Viewports now contain information about the scissor rectangle. Back in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; Direct3D 9's support for scissor testing was optional, which caused lots of headaches. As a result, users could only use low-level function <code>RenderSystem::setScissorTest</code> for manually manipulating the scissor rect.</p>
+<p >Viewports now contain information about the scissor rectangle. Back in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x; Direct3D 9's support for scissor testing was optional, which caused lots of headaches. As a result, users could only use low-level function <code>RenderSystem::setScissorTest</code> for manually manipulating the scissor rect.</p>
 <p >In OpenGL, it was even messier because setting and enabling the scissor rect was needed to perform buffer clears on partial regions of the framebuffer; which could override user's manual input, potentially breaking applications that worked fine using Direct3D.</p>
-<p >Fortunately, all targetted APIs by <a class="el" href="namespace_ogre.html">Ogre</a> 2.0 support scissor tests, and thus it is now properly supported. As a result:</p>
+<p >Fortunately, all targetted APIs by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0 support scissor tests, and thus it is now properly supported. As a result:</p>
 <ul>
 <li>Viewports hold the information about the scissor rectangle (see <code>Viewport::setScissors</code>)</li>
 <li>Enabling and disabling scissor testing is controlled via Macroblocks.</li>
@@ -180,8 +180,8 @@ A lot of data is stored in "Blocks"</h2>
 <p >An OpenGL fan will tell you that grouping these together in single call like D3D11 did barely reduces API overhead in practice (as long as you keep sorting by state), and they're right about that.</p>
 <p >However, there are big advantages for using blocks:</p>
 <ol type="1">
-<li>Many materials in practice share the same Macro- &amp; Blendblock parameters. In an age where we want many 3D primitives with the same shader but slightly different parameters like texture, colour, or roughness (which equals, a different material) having these settings repeated per material wastes a lot of memory space… and a lot of bandwidth (and wastes cache space). <a class="el" href="namespace_ogre.html">Ogre</a> 2.0 is bandwidth bound, so having all materials share the same pointer to the same Macroblock can potentially save a lot of bandwidth, and be friendlier to the cache at the same time.This stays true whether we use D3D11, D3D12, OpenGL, GL ES 2, or Mantle.</li>
-<li>Sorting by Macroblock is a lot easier (and faster) than sorting by its individual parameters: when preparing the hash used for sorting, it's much easier to just do (every frame, per object) <code>hash |= (macroblock-&gt;getId() &lt;&lt; bits) &amp; mask</code> than to do: <code>hash =| m-&gt;depth_check | m-&gt;depthWrite &lt;&lt; 1 | m-&gt;depthBias &lt;&lt; 2 | m-&gt;depth_slope_bias &lt;&lt; 3 | m-&gt;cullMode &lt;&lt; 18 | ... ;</code> We also need a lot more bits we can't afford. <a class="el" href="namespace_ogre.html">Ogre</a> 2.0 imposes a limit on the amount of live Macroblocks you can have at the same time; as we run out of hashing space (by the way, D3D11 has its own limit). It operates around the idea that most setting combinations won't be used in practice.</li>
+<li>Many materials in practice share the same Macro- &amp; Blendblock parameters. In an age where we want many 3D primitives with the same shader but slightly different parameters like texture, colour, or roughness (which equals, a different material) having these settings repeated per material wastes a lot of memory space… and a lot of bandwidth (and wastes cache space). <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0 is bandwidth bound, so having all materials share the same pointer to the same Macroblock can potentially save a lot of bandwidth, and be friendlier to the cache at the same time.This stays true whether we use D3D11, D3D12, OpenGL, GL ES 2, or Mantle.</li>
+<li>Sorting by Macroblock is a lot easier (and faster) than sorting by its individual parameters: when preparing the hash used for sorting, it's much easier to just do (every frame, per object) <code>hash |= (macroblock-&gt;getId() &lt;&lt; bits) &amp; mask</code> than to do: <code>hash =| m-&gt;depth_check | m-&gt;depthWrite &lt;&lt; 1 | m-&gt;depthBias &lt;&lt; 2 | m-&gt;depth_slope_bias &lt;&lt; 3 | m-&gt;cullMode &lt;&lt; 18 | ... ;</code> We also need a lot more bits we can't afford. <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0 imposes a limit on the amount of live Macroblocks you can have at the same time; as we run out of hashing space (by the way, D3D11 has its own limit). It operates around the idea that most setting combinations won't be used in practice.</li>
 </ol>
 <p >Of course it's not perfect, it can't fit every use case. We inherit the same problems D3D11 has. If a particular rendering technique relies on regularly changing a property that lives in a Macroblock (i.e. like alternating depth comparison function between less &amp; greater with every draw call, or gradually incrementing the depth bias on each draw call); you'll end up redundantly changing a lot of other states (culling mode, polygon mode, depth check &amp; write flags, depth bias) alongside it. This is rare. We're aiming the general use case.</p>
 <p >These problems make me wonder if D3D11 made the right choice of using blocks from an API perspective, since I'm not used to driver development. However from an engine perspective, blocks make sense.</p>
@@ -193,7 +193,7 @@ Materials are still alive</h2>
 <li>Quick iteration. You need to write a shader, just define the material and start coding. Why would you deal with the template's syntax or a C++ module when you can just write a script and start coding? The HLMS though comes with a Command line tool to know how your template translates into a final shader (which is very handy for iteration, it's fast, and will check for syntax errors!), but it's most useful when you want to write your own C++ module or change the template, not when you want to just experiment. Besides, old timers are used to writing materials.</li>
 <li>Postprocessing effects. Materials are much better suited for this. Materials are data driven, easy to write. Postprocessing FXs don't need an awful lot of permutations (i.e. having to deal with shadow mapping, instancing, skeleton animation, facial animation). And they're at no performance disadvantage compared to HLMS: Each FX is a fullscreen pass that needs different shaders, different textures, its own uniforms. Basically, API overhead we can't optimize. But it doesn't matter much either, because it's not like there are 100 fullscreen passes. Usually there's less than 10.</li>
 </ul>
-<p >Under the hood there is an HLMS C++ implementation (<code>HLMS_LOW_LEVEL</code>) that acts just as a proxy to the material. The HLMS is an integral part of <a class="el" href="namespace_ogre.html">Ogre</a> 2.0, not just a fancy add-in.</p>
+<p >Under the hood there is an HLMS C++ implementation (<code>HLMS_LOW_LEVEL</code>) that acts just as a proxy to the material. The HLMS is an integral part of <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0, not just a fancy add-in.</p>
 <p >Materials have been refactored, and thus your old code may need a few changes. Most notably Macroblocks &amp; Blendblocks have been added to Materials, thus functions like <code>Pass::setDepthCheck</code> &amp; Co have been replaced by a two calls: <code>Pass::setMacroblock</code> &amp; <code>Pass::setBlendblock</code>.</p>
 <h2><a class="anchor" id="HlmsChangesFFP"></a>
 Fixed Function has been removed</h2>
@@ -543,7 +543,7 @@ C++ interaction with shader templates</h2>
 <p >In those two functions you get the chance to call setProperty to set your own variables and add your own pieces.</p>
 <p >Another option is to overload <code>Hlms::calculateHashFor</code> which gives you more control but you'll have to do some of the work the base class does.</p>
 <p >For some particularly complex features, the Hlms preprocessor may not be enough, too difficult, or just impossible to implement, and thus you can generate the string from C++ and send it as a piece. The template shader can insert it using @insertpiece.</p>
-<p >The function <code>Hlms::createShaderCacheEntry</code> is the main responsible for generating the shaders and parsing the template through the Hlms preprocessor. If you overload it, you can ignore pieces, properties; basically override the entire Hlms system and provide the source for the shaders yourself. See the HlmsLowLevel implementation which overrides the Hlms entirely and acts as a mere proxy to the old Material system from <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; the flexibility is really high.</p>
+<p >The function <code>Hlms::createShaderCacheEntry</code> is the main responsible for generating the shaders and parsing the template through the Hlms preprocessor. If you overload it, you can ignore pieces, properties; basically override the entire Hlms system and provide the source for the shaders yourself. See the HlmsLowLevel implementation which overrides the Hlms entirely and acts as a mere proxy to the old Material system from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x; the flexibility is really high.</p>
 <h2><a class="anchor" id="HlmsCreationOfShadersConventions"></a>
 Common conventions</h2>
 <p >Properties starting with <code>hlms_</code> prefix are common to all or most Hlms implementations. i.e. <code>hlms_skeleton</code> is set to 1 when a skeleton is present and hardware skinning should be performed.</p>
@@ -604,7 +604,7 @@ Customizing an existing implementation</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">custom_vs_preTransform   </td><td class="markdownTableBodyNone">TBD    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">custom_vs_preExecution   </td><td class="markdownTableBodyNone">Executed before <a class="el" href="namespace_ogre.html">Ogre</a>'s code from the Vertex Shader.    </td></tr>
+<td class="markdownTableBodyNone">custom_vs_preExecution   </td><td class="markdownTableBodyNone">Executed before <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s code from the Vertex Shader.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">custom_vs_posExecution   </td><td class="markdownTableBodyNone">Executed after all code from the Vertex Shader has been performed.    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -612,7 +612,7 @@ Customizing an existing implementation</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">custom_ps_uniformStructDeclaration   </td><td class="markdownTableBodyNone">TBD    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">custom_ps_preExecution   </td><td class="markdownTableBodyNone">Executed before <a class="el" href="namespace_ogre.html">Ogre</a>'s code from the Pixel Shader.    </td></tr>
+<td class="markdownTableBodyNone">custom_ps_preExecution   </td><td class="markdownTableBodyNone">Executed before <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s code from the Pixel Shader.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">custom_ps_posMaterialLoad   </td><td class="markdownTableBodyNone">Executed right after loading material data; and before anything else. May not get executed if there is no relevant material data (i.e. doesn't have normals or QTangents for lighting calculation)    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -643,7 +643,7 @@ Using the HLMS implementations</h1>
 <h2><a class="anchor" id="UsingHlmsImplementationInitialization"></a>
 Initialization</h2>
 <p >Before parsing the resources, i.e. before <code>ResourceGroupManager::initialiseAllResourceGroups</code> is called, you need to setup the proper Hlms.</p>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> is shipped with four implementations:</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> is shipped with four implementations:</p>
 <ul>
 <li>PBS: Stands for Physically Based Shading. The most common for most of your material needs.</li>
 <li>Unlit: Basic system with no lighting or skeleton skinning. Great for GUI, billboards, particle FXs. Supports multiple texture layering with photoshop-like blending modes.</li>
@@ -671,8 +671,8 @@ Initialization</h2>
 <h2><a class="anchor" id="UsingHlmsImplementationDeinitilization"></a>
 Deinitialization</h2>
 <p >The function registerHlms accepts a boolean parameter named <code>deleteOnExit</code> which is true by default.</p>
-<p >When true, <a class="el" href="namespace_ogre.html">Ogre</a> will automatically call <code>OGRE_DELETE hlmsPbs</code> on shutdown (when unregisterHlms gets called) and most of the time you don't need to worry.</p>
-<p >If you set this parameter to false, you will have to free the memory yourself after calling unregisterHlms. No renderable should be using any datablock created by that Hlms once it is destroyed; otherwise you will leave dangling pointers. On debug mode, <a class="el" href="namespace_ogre.html">Ogre</a> will assert if it detects a Renderable using a datablock that is being destroyed.</p>
+<p >When true, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will automatically call <code>OGRE_DELETE hlmsPbs</code> on shutdown (when unregisterHlms gets called) and most of the time you don't need to worry.</p>
+<p >If you set this parameter to false, you will have to free the memory yourself after calling unregisterHlms. No renderable should be using any datablock created by that Hlms once it is destroyed; otherwise you will leave dangling pointers. On debug mode, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will assert if it detects a Renderable using a datablock that is being destroyed.</p>
 <p >Reasons for setting the parameter to false could include: the Hlms implementation lives in a different DLL and cannot be freed from OgreMain.dll; the Hlms implementation was allocated with a different allocator; you want to keep the Hlms alive even after unregistering, you like to do stuff manually, etc.</p>
 <h2><a class="anchor" id="UsingHlmsImplementationCreatingDatablock"></a>
 Creating a datablock</h2>
@@ -685,7 +685,7 @@ Creating a datablock</h2>
 </div><!-- fragment --><p >The last parameter, <code>visibleToManager</code>, specifies whether the HlmsManager will see this Hlms when asking for its name.</p>
 <p >For example, both PBS and Unlit implementations may have a material named "Green". However only one can be visible to the manager; let's assume that the PBS one was made visible.</p>
 <p >When you call <code>Renderable::setDatablock( "Green" )</code>, the HlmsManager will look for the one that is visible to it. To assign the Unlit version of "Green" instead of the PBS one, you will have to call the overload that specifies the pointer, and grab the datablock from the implementation itself: <code>Renderable::setDatablock( hlmsUnlit-&gt;getDatablock( "Green" ) )</code>;</p>
-<p >The function createDatablock allows two names: the hashed string and the human readable one. Most of the time you want them to be the same, but this isn't enforced. Note that the human readable name doesn't affect the functionality in any way. Its only purpose is to allow material editors and other GUIs based on <a class="el" href="namespace_ogre.html">Ogre</a> to display the material's name; since IdString destroys the original string in Release mode.</p>
+<p >The function createDatablock allows two names: the hashed string and the human readable one. Most of the time you want them to be the same, but this isn't enforced. Note that the human readable name doesn't affect the functionality in any way. Its only purpose is to allow material editors and other GUIs based on <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to display the material's name; since IdString destroys the original string in Release mode.</p>
 <p >HlmsParamVec is an array/vector of key-value string pairs to specify custom parameters on creation. Valid values depend on the implementation. You should see the Constructor's documentation for more information on them.</p>
 <h1><a class="anchor" id="HlmsTextureManager"></a>
 The Hlms Texture Manager</h1>
@@ -803,7 +803,7 @@ Manual: Texture packs</h2>
 <h2><a class="anchor" id="HlmsTextureManagerWatchOutMemory"></a>
 Watching out for memory consumption</h2>
 <p >Incorrectly configuring the Hlms Texture Manager or having a messy Asset folder can easily cause weird crashes or cause GPU out of memory exceptions.</p>
-<p >For example one single 4096x4096 texture at 32 bpp requires 64MB. A <code>maxTexturesPerArray</code> of 8 means that <a class="el" href="namespace_ogre.html">Ogre</a> will attempt to request 512MB of consecutive GPU memory. This requires at least a 1GB GPU, and even then, it may not be possible due to fragmentation, staging resources, or even CPU-side virtual address exhaustion in 32-bit executables on 32-bit OSes.</p>
+<p >For example one single 4096x4096 texture at 32 bpp requires 64MB. A <code>maxTexturesPerArray</code> of 8 means that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will attempt to request 512MB of consecutive GPU memory. This requires at least a 1GB GPU, and even then, it may not be possible due to fragmentation, staging resources, or even CPU-side virtual address exhaustion in 32-bit executables on 32-bit OSes.</p>
 <p >To prevent this particular case, the <code>textureArraysTresholds</code> parameter will kick in; and will clamp <code>maxTexturesPerArray</code> to 1.</p>
 <p >Nonetheless, special attention needs to be taken to ensure maximum occupancy of each array.</p>
 <p >The function <code>HlmsTextureManager::dumpMemoryUsage</code> is a powerful tool that will dump all loaded textures to the log in CSV format using '|' as separator for further analysis in MS Excel or OpenOffice Calc.</p>
@@ -896,7 +896,7 @@ Additional memory considerations</h3>
 R_MASK, G_MASK )</code>.</p>
 <p >Additionally, texture arrays mean that either the whole array is GPU resident, or no texture from the array is. Traditionally D3D11 &amp; GL drivers keep track of which textures are needed for rendering. This made possible to load 1GB of texture data in a 256MB GPU without failing; because it isn't very common to use all 1GB at once in the same frame, thus the driver would page in and out what is necessary, leaving the rest in system RAM. This is known as <b>residency</b>.</p>
 <p >Texture arrays make residency control coarser. As a result, packing unrelated textures in the same array will force the driver to keep these unneeded textures resident (e.g. Level A &amp; Level X textures packed together), and this can result in more frequent out of GPU memory exceptions.</p>
-<p >In the future <a class="el" href="namespace_ogre.html">Ogre</a> should have its own residency control solution, particularly since it is needed by Vulkan &amp; D3D12; but at the time being <a class="el" href="namespace_ogre.html">Ogre</a> will naively try to load all textures. Suboptimal HlmsTextureManager settings can cause residency problems in OpenGL &amp; D3D11, in addition to the waste mentioned in the previous section.</p>
+<p >In the future <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> should have its own residency control solution, particularly since it is needed by Vulkan &amp; D3D12; but at the time being <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will naively try to load all textures. Suboptimal HlmsTextureManager settings can cause residency problems in OpenGL &amp; D3D11, in addition to the waste mentioned in the previous section.</p>
 <p >Although modern cards have &gt;= 1GB of available GPU memory, there still has to be room for geometry and RTTs (Render To Texture). Remember to keep an eye on your memory consumption at all times.</p>
 <h3><a class="anchor" id="setWorkerThreadMinimumBudget"></a>
 setWorkerThreadMinimumBudget warning</h3>
@@ -946,7 +946,7 @@ My shadows don't show up or are very glitchy</h2>
 <p >[^12]: GL3+ and GLES3: extension ARB_sampler_objects. D3D11: ID3D11SamplerState</p>
 <h1><a class="anchor" id="autotoc_md21"></a>
 Precision / Quality</h1>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> 2.4 added <code>Hlms::setPrecisionMode</code> with the following options:</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.4 added <code>Hlms::setPrecisionMode</code> with the following options:</p>
 <ul>
 <li><code>PrecisionFull32</code><ul>
 <li><code>midf</code> datatype maps to float (i.e. 32-bit)</li>

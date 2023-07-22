@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('_ogre30_changes.html',''); initResizab
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">What's new in <a class="el" href="namespace_ogre.html">Ogre</a> 3.0 </div></div>
+  <div class="headertitle"><div class="title">What's new in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 3.0 </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
@@ -105,10 +105,10 @@ $(document).ready(function(){initNavTree('_ogre30_changes.html',''); initResizab
 Ogre to OgreNext name migration</h1>
 <p >We're trying to make <a href="https://github.com/OGRECave/ogre-next/issues/232">OgreNext and Ogre able to be installed side-by-side</a>.</p>
 <p >This is particularly important in Linux systems which rely on shared, centralized packages managed by package managers.</p>
-<p >However this also benefits affect Windows apps that are able to select between <a class="el" href="namespace_ogre.html">Ogre</a> and OgreNext at runtime.</p>
-<p >One of the main issues is that DLLs are the same. i.e. <code>OgreMain.dll</code> or <code>libOgreMain.so</code> may refer to either <a class="el" href="namespace_ogre.html">Ogre</a> or OgreNext.</p>
+<p >However this also benefits affect Windows apps that are able to select between <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> and OgreNext at runtime.</p>
+<p >One of the main issues is that DLLs are the same. i.e. <code>OgreMain.dll</code> or <code>libOgreMain.so</code> may refer to either <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> or OgreNext.</p>
 <p >That's why <b>we added the CMake option <code>OGRE_USE_NEW_PROJECT_NAME</code></b></p>
-<p >When enabled, the project names will be <code>OgreNext</code> instead of <code><a class="el" href="namespace_ogre.html">Ogre</a></code>. e.g. the following projects are affected (enunciative):</p>
+<p >When enabled, the project names will be <code>OgreNext</code> instead of <code><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a></code>. e.g. the following projects are affected (enunciative):</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Old Name   </th><th class="markdownTableHeadNone">New Name    </th></tr>
@@ -140,7 +140,7 @@ Ogre to OgreNext name migration</h1>
 <p >We understand this change can wreak havoc on our users who have scripts expecting to find OgreMain instead of OgreNextMain.</p>
 <p ><b>Which is why this option will be off by default in OgreNext 3.0; but will be turned on by default in OgreNext 4.0</b></p>
 <p ><b>The CMake option is scheduled for removal in OgreNext 5.0</b></p>
-<p ><code>EmptyProject</code>'s and Android's scripts have been updated to autodetect which name is being used and select between <a class="el" href="namespace_ogre.html">Ogre</a> and OgreNext and CMake config time.</p>
+<p ><code>EmptyProject</code>'s and Android's scripts have been updated to autodetect which name is being used and select between <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> and OgreNext and CMake config time.</p>
 <p >Make sure to upgrade to latest CMake scripts if you're using them; to be ready for all changes.</p>
 <h1><a class="anchor" id="autotoc_md58"></a>
 PBS Changes in 3.0</h1>

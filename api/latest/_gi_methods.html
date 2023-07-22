@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('_gi_methods.html',''); initResizable()
 <li class="level1"><a href="#GiWhatTechniqueChoose">What technique should I choose?</a></li>
 </ul>
 </div>
-<div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_GiMethods"></a> <a class="el" href="namespace_ogre.html">Ogre</a> offers various GI techniques and it can be overwhelming which one to choose.</p>
+<div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_GiMethods"></a> <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> offers various GI techniques and it can be overwhelming which one to choose.</p>
 <h1><a class="anchor" id="GiAmbientLighting"></a>
 Ambient Lighting</h1>
 <p >The simplest and fastest solution there is.</p>
@@ -175,7 +175,7 @@ Parallax Corrected Cubemaps (PCC)</h1>
 <div class="line"> </div>
 <div class="line"># Step 2: Convert the filtered cubemaps to OITD (Ogre internal format):</div>
 <div class="line">OgreCmgenToCubemap d:\hdri\out\panorama_map png 8 panorama_map.oitd</div>
-</div><!-- fragment --><p >Then load the oitd in <a class="el" href="namespace_ogre.html">Ogre</a> at runtime (You need to explicitly use the prefer-loading-as-sRGB flag) and set it to PBSM_REFLECTION of the datablock. </p>
+</div><!-- fragment --><p >Then load the oitd in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> at runtime (You need to explicitly use the prefer-loading-as-sRGB flag) and set it to PBSM_REFLECTION of the datablock. </p>
 </blockquote>
 <h2><a class="anchor" id="GiPCCAuto"></a>
 Auto PCC</h2>
@@ -319,7 +319,7 @@ Cons</h3>
 </blockquote>
 <h2><a class="anchor" id="GiVCTPlusPPPCC"></a>
 VCT + Per Pixel PCC Hybrid</h2>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> supports combining Per-Pixel Parallax Corrected Cubemaps (PCC) with VCT when both techniques are enabled at the same time.</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> supports combining Per-Pixel Parallax Corrected Cubemaps (PCC) with VCT when both techniques are enabled at the same time.</p>
 <p >The idea is to use PCC to support much better low roughness (e.g. mirror-like) reflections and when PCC data is not available fallback to VCT.</p>
 <p >Details are in our <a href="https://www.ogre3d.org/2019/08/14/pcc-vct-hybrid-progress">News Announcement</a>.</p>
 <p >Parameters <code>pccVctMinDistance</code> and <code>pccVctMaxDistance</code> from <code>HlmsPbs::setParallaxCorrectedCubemap</code> control how PCC and VCT data is combined.</p>
@@ -328,7 +328,7 @@ VCT + Per Pixel PCC Hybrid</h2>
 </div>
     <h1><a class="anchor" id="GiIFD"></a>
 Irradiance Field with Depth (IFD)</h1>
-<p >This is a more generic term for what NVIDIA calls <a href="https://developer.nvidia.com/blog/an-engineers-guide-to-integrating-ddgi/">Dynamic Diffuse Global Illumination</a>, but instead of generating it out of Raytracing, we generated it from any source of data available (in <a class="el" href="namespace_ogre.html">Ogre</a>'s case, from VCT's Voxel data or via Rasterization).</p>
+<p >This is a more generic term for what NVIDIA calls <a href="https://developer.nvidia.com/blog/an-engineers-guide-to-integrating-ddgi/">Dynamic Diffuse Global Illumination</a>, but instead of generating it out of Raytracing, we generated it from any source of data available (in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s case, from VCT's Voxel data or via Rasterization).</p>
 <p >IFD only supports diffuse GI.</p>
 <p >As of 2021 this technique is also state of the art and can be very accurate.</p>
 <p >This technique is extremely similar to <code>Irradiance Volume</code> before (e.g. can be thought of a 3D grid of 1x1 cubemaps), but it is combined with depth information to fight leaking.</p>
@@ -398,9 +398,9 @@ Cascaded Image Voxel Cone Tracing (CIVCT)</h1>
 <li>Vulkan works great, but on low VRAM GPUs you may run out of VRAM and things will become super slow. Specially with e.g. 4 cascades</li>
 <li>OpenGL works, same issues as Vulkan. But needs a few workarounds and may run into issues due to the 32 texture unit limit. Also the way OGL calculates mipmaps makes the GI darker and that needs fixing.</li>
 <li>D3D11 works with low cascade count (e.g. 2), but breaks at 4 cascades. That's because D3D11 runs out of the 16 samplers because Hlms implementations are currently wasting a lot instead of reusing</li>
-<li>Metal does not work because it runs out of UAV texture units (this is an <a class="el" href="namespace_ogre.html">Ogre</a> limitation, not Metal)</li>
+<li>Metal does not work because it runs out of UAV texture units (this is an <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> limitation, not Metal)</li>
 </ul>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> 2.4 will fix most of these issues</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.4 will fix most of these issues</p>
 <blockquote class="doxtable">
 <p >&zwj;- See <code>Samples/2.0/ApiUsage/ImageVoxelizer</code> </p>
 </blockquote>
@@ -411,7 +411,7 @@ What technique should I choose?</h1>
 <p ><code>Irradiance Volume</code> is also even faster and for small indoor scenes it can get very reasonable results, specially if supporting old HW is needed.</p>
 <p >If you want something accurate, pretty and runs reasonably fast with reasonably memory consumption then go for <code>IFD</code>. This one has the best balance of quality, usability and performance.</p>
 <p >If you need the best possible quality or require to change lighting at runtime, then VCT (or IFD + VCT) is the best solution.</p>
-<p >Please note that many of these techniques can be combined together (e.g. PCC and per-pixel PCC usually can be paired with anything) but they won't necessarily end up in pleasant-looking results, and certain combinations may cause shaders to compile (it could be an <a class="el" href="namespace_ogre.html">Ogre</a> bug so if you find it please report it <a href="https://forums.ogre3d.org/viewforum.php?f=25">in the forums</a> or in <a href="https://github.com/OGRECave/ogre-next/issues">Github</a>) </p>
+<p >Please note that many of these techniques can be combined together (e.g. PCC and per-pixel PCC usually can be paired with anything) but they won't necessarily end up in pleasant-looking results, and certain combinations may cause shaders to compile (it could be an <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> bug so if you find it please report it <a href="https://forums.ogre3d.org/viewforum.php?f=25">in the forums</a> or in <a href="https://github.com/OGRECave/ogre-next/issues">Github</a>) </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

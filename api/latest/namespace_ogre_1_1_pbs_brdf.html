@@ -207,7 +207,7 @@ Enumerations</h2></td></tr>
 <li>Assumes your <a class="el" href="class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene.">Light</a> power is set to 1.0.</li>
 <li>Diffuse &amp; Specular is unmodified. There are two possible reasons to use this BRDF:</li>
 <li>Performance. This is the fastest BRDF.</li>
-<li>You're porting your app from <a class="el" href="namespace_ogre.html">Ogre</a> 1.x and want to maintain that Fixed-Function look for some odd reason, and your materials already dealt in shininess, and your lights are already calibrated.</li>
+<li>You're porting your app from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x and want to maintain that Fixed-Function look for some odd reason, and your materials already dealt in shininess, and your lights are already calibrated.</li>
 </ul>
 <p >Important: If switching from Default to BlinnPhongFullLegacy, you'll probably see that your scene is too bright. This is probably because Default divides diffuse by PI and you usually set your lights' power to a multiple of PI to compensate. If your scene is too bright, kist divide your lights by PI. BlinnPhongLegacyMath performs that conversion for you automatically at material level instead of doing it at light level. </p>
 </td></tr>

@@ -1012,7 +1012,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_buffer_packed.html#a24a2ccddbb2fc851304ae81eb78243ed" title="Maps the specified region to a pointer the CPU can access.">map</a>. Alternatively, you can flush a smaller region (i.e. you didn't know which regions you were to update when mapping, but now that you're done, you know). The region being flushed is [flushStart; flushStart + flushSize) </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">unmapOption</td><td>When using persistent mapping, UO_KEEP_PERSISTENT will keep the map alive; but you will have to call map again to use it. This requirement allows <a class="el" href="namespace_ogre.html">Ogre</a> to:<ol type="1">
+    <tr><td class="paramname">unmapOption</td><td>When using persistent mapping, UO_KEEP_PERSISTENT will keep the map alive; but you will have to call map again to use it. This requirement allows <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to:<ol type="1">
 <li>Synchronize if needed (avoid mapping a region that is still in use)</li>
 <li>Emulate persistent mapping on Hardware/Drivers that don't support it. </li>
 </ol>

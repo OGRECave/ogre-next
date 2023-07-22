@@ -157,7 +157,7 @@ Trivia</h2>
 <p >And now it looks very close to the reference VCT implementation!</p>
 <h1><a class="anchor" id="IVCT_Step2"></a>
 Step 2: Row Translation</h1>
-<p >We want to use cascades (a similar concept from shadow mapping, i.e. <a href="https://docs.microsoft.com/en-us/windows/win32/dxtecharts/cascaded-shadow-maps">Cascaded Shadow Maps</a>. In <a class="el" href="namespace_ogre.html">Ogre</a> we call it Parallel Split Shadow Maps but it's the same thing) concentric around the camera.</p>
+<p >We want to use cascades (a similar concept from shadow mapping, i.e. <a href="https://docs.microsoft.com/en-us/windows/win32/dxtecharts/cascaded-shadow-maps">Cascaded Shadow Maps</a>. In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> we call it Parallel Split Shadow Maps but it's the same thing) concentric around the camera.</p>
 <p >That means when the camera moves, once the camera has moved too much, we must move the cascades and re-voxelize.</p>
 <p >But we don't need to voxelize the entire thing from scratch. We can translate everything by 1 voxel, and then revoxelize the new row:</p>
 <div class="image">

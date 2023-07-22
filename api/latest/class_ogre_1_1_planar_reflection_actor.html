@@ -134,7 +134,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ae77682cf581dd2630cd2f75250473d2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_planar_reflection_actor.html#ae77682cf581dd2630cd2f75250473d2d">mActivationPriority</a></td></tr>
-<tr class="memdesc:ae77682cf581dd2630cd2f75250473d2d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespace_ogre.html">Ogre</a> tries to activate visible planar reflections, sorting those that are closest to the camera, as long as they have equal priority.  <a href="class_ogre_1_1_planar_reflection_actor.html#ae77682cf581dd2630cd2f75250473d2d">More...</a><br /></td></tr>
+<tr class="memdesc:ae77682cf581dd2630cd2f75250473d2d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> tries to activate visible planar reflections, sorting those that are closest to the camera, as long as they have equal priority.  <a href="class_ogre_1_1_planar_reflection_actor.html#ae77682cf581dd2630cd2f75250473d2d">More...</a><br /></td></tr>
 <tr class="separator:ae77682cf581dd2630cd2f75250473d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
@@ -432,7 +432,7 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="namespace_ogre.html">Ogre</a> tries to activate visible planar reflections, sorting those that are closest to the camera, as long as they have equal priority. </p>
+<p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> tries to activate visible planar reflections, sorting those that are closest to the camera, as long as they have equal priority. </p>
 <p >However distance to camera may not be convenient in all cases (such as when you have four small mirrors close and one huge mirror a bit further away). For such cases, you can use priority to allow a particular actor "to win" against others. It's also very possible you want to only set priority to 0 for actors that have reserved slots. </p><dl class="section user"><dt></dt><dd>There is no particular overhead/performance cost associated with this call. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>If the actor fails frustum culling, it won't be activated even if priority == 0. This shouldn't matter. </dd></dl>
 <dl class="section user"><dt></dt><dd>Value is in range [0; 255]. Default value is 127. A priority of 0 means always activate first. A priority of 255 means activate last. </dd></dl>

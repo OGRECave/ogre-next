@@ -580,7 +580,7 @@ Public Attributes</h2></td></tr>
 <li>Multiple calls to _setNodeParent with different arguments will silently override previous calls.</li>
 <li>By the time we update, we assume the <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> has already been updated. (even when calling _getDerivedPositionUpdated and Co)</li>
 <li>Null pointers will "detach", causing derived updates to be in local space</li>
-<li><a class="el" href="namespace_ogre.html">Ogre</a> must ensure that when a <a class="el" href="class_ogre_1_1_node_memory_manager.html" title="Wrap-around class that contains multiple ArrayMemoryManager, one per hierarchy depth.">NodeMemoryManager</a> performs a cleanup (or resizes), this function is called again (to update our pointers). </li>
+<li><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> must ensure that when a <a class="el" href="class_ogre_1_1_node_memory_manager.html" title="Wrap-around class that contains multiple ArrayMemoryManager, one per hierarchy depth.">NodeMemoryManager</a> performs a cleanup (or resizes), this function is called again (to update our pointers). </li>
 </ol>
 </dd></dl>
 

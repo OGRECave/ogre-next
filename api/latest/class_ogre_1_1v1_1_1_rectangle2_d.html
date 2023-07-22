@@ -520,7 +520,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangle has no depth and therefore is best used with 'depth_write off' materials. </p>
-<dl class="section user"><dt></dt><dd>Beginning <a class="el" href="namespace_ogre.html">Ogre</a> 2.0, it supports building a full screen triangle instead of rectangle. Position &amp; UVs are in the first source. Normals are in the second one </dd></dl>
+<dl class="section user"><dt></dt><dd>Beginning <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0, it supports building a full screen triangle instead of rectangle. Position &amp; UVs are in the first source. Normals are in the second one </dd></dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a117563eda1d3affcd4a64c6bf4f8663a" name="a117563eda1d3affcd4a64c6bf4f8663a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a117563eda1d3affcd4a64c6bf4f8663a">&#9670;&#160;</a></span>CustomParameterMap</h2>
@@ -3174,7 +3174,7 @@ Static Public Attributes</h2></td></tr>
 <p>Gets the world transform matrix / matrices for this renderable object. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>If the object has any derived transforms, these are expected to be up to date as long as all the <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> structures have been updated before this is called. </dd></dl>
 <dl class="section user"><dt></dt><dd>This method will populate transform with 1 matrix if it does not use vertex blending. If it does use vertex blending it will fill the passed in pointer with an array of matrices, the length being the value returned from getNumWorldTransforms. </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Internal <a class="el" href="namespace_ogre.html">Ogre</a> never supports non-affine matrix for world transform matrix/matrices, the behavior is undefined if returns non-affine matrix here. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Internal <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> never supports non-affine matrix for world transform matrix/matrices, the behavior is undefined if returns non-affine matrix here. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_matrix4.html#a6a8d44a7baeb3af2f47c97b62ea4f4fd" title="Check whether or not the matrix is affine matrix.">Matrix4::isAffine</a>. </dd></dl>
 
 <p>Implements <a class="el" href="class_ogre_1_1_renderable.html#a897d64f73a5e6ccc45d52a88e86392e1">Ogre::Renderable</a>.</p>

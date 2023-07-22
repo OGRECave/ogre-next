@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('_ogre22_changes.html',''); initResizab
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">What's new in <a class="el" href="namespace_ogre.html">Ogre</a> 2.2 </div></div>
+  <div class="headertitle"><div class="title">What's new in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
@@ -128,7 +128,7 @@ $(document).ready(function(){initNavTree('_ogre22_changes.html',''); initResizab
 <p >The main reason of 2.2 is a complete overhaul of the Texture system, with a focus on lowering GPU RAM consumption, background texture streaming, asynchronic GPU to CPU texture transfers, and reducing out of GPU memory scenarios (which are relatively easy to run into if your project is medium-to-large sized).</p>
 <h1><a class="anchor" id="autotoc_md27"></a>
 Load Store semantics</h1>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> 2.2 is much more mobile friendly. Metal introduced the concepts of “load” and “store” actions, and we follow that paradigm because it’s easy to implement and understand.</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 is much more mobile friendly. Metal introduced the concepts of “load” and “store” actions, and we follow that paradigm because it’s easy to implement and understand.</p>
 <p >First we need to explain how mobile TBDR GPUs work (**T**iled **B**ased **D**eferred **R**enderers). In a regular immediate GPU (any Desktop GPU), the GPU just processes and draws triangles to the screen in the order they’re submitted, writing results to RAM, and reading from RAM if need to. Run the vertex shader, then the pixel shader, go on to the next triangle. The process is slightly more complex because there’s a lot of parallelization going on (i.e. multiple triangles worked on a the same time), but the overall scheme of things is that desktop GPUs process things in order.</p>
 <p >TBDRs work differently: They process all the vertices first (i.e. run all of the vertex shaders), and then later it goes through each tile (usually of 8×8 pixels), finds which triangles touch that tile; sorts them front to back (unless alpha testing or alpha blending is used). and then runs the pixel shaders on all the triangles and pixels. Then proceeds to the next tile. This has the following advantages:</p>
 <ol type="1">
@@ -148,8 +148,8 @@ Now that we’ve explained how TBDRs work, we can explain load and store actions
 <li>Clear the cache instead, rather than loading it from RAM. (i.e. set the cache to a specific value each time the GPU begins a new tile)</li>
 <li>If you don’t need the results of a particular buffer once you’re done rendering, you can discard them instead of flushing it to RAM. This saves bandwidth and power. For example you may not need to save the depth buffer. Or you may only need the resolved result of MSAA render, and discard the contents of the MSAA surface.</li>
 </ol>
-<p >The Metal RenderSystem in <a class="el" href="namespace_ogre.html">Ogre</a> 2.1 tried to merge clears alongside draws as much as possible, but it didn’t always get it right; and it glitched when doing complex MSAA rendering.</p>
-<p >Now in <a class="el" href="namespace_ogre.html">Ogre</a> 2.2 you can explicitly specify what you want to do. For load actions you can do:</p>
+<p >The Metal RenderSystem in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 tried to merge clears alongside draws as much as possible, but it didn’t always get it right; and it glitched when doing complex MSAA rendering.</p>
+<p >Now in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 you can explicitly specify what you want to do. For load actions you can do:</p>
 <ol type="1">
 <li>DontCare: The cache is not initialized. This is the fastest option, and only works glitch-free if you can guarantee you will render to all the pixels in the screen with opaque geometry.</li>
 <li>Clear: The cache is cleared to a particular value. This is fast.</li>
@@ -166,12 +166,12 @@ Now that we’ve explained how TBDRs work, we can explain load and store actions
 <p >These semantics can also help on Desktop. Whenever we can, we emulate this behavior (to make porting to mobile easier), but we also tell the API about this information whenever the DX11 and GL APIs allow us. This can mostly help with SLI and Crossfire.</p>
 <h1><a class="anchor" id="autotoc_md29"></a>
 More control over MSAA</h1>
-<p >Explicit MSAA finally arrived in <a class="el" href="namespace_ogre.html">Ogre</a> 2.2; and thanks to load and store actions; you have a lot of control over what happens with MSAA and when; which can result in high quality rendering by making MSAA a first class citizen.</p>
-<p >There have been other numerous MSAA changes. In <a class="el" href="namespace_ogre.html">Ogre</a> 2.1 MRT + MSAA did not work correctly except for D3D11 (which makes SSR sample to only work with MSAA in D3D11). Now it works everywhere.</p>
-<p >Another change for example that in <a class="el" href="namespace_ogre.html">Ogre</a> 2.1 all render textures in the compositor default to using MSAA if the main target is using MSAA. In <a class="el" href="namespace_ogre.html">Ogre</a> 2.2; we default to not using MSAA unless told otherwise. We found out most textures do not need MSAA because they’re postprocessing FXs or similar; thus the MSAA is only a waste of memory and performance by doing useless resolves. Therefore only a few render textures actually need MSAA. This saves a lot of GPU RAM and some performance.</p>
+<p >Explicit MSAA finally arrived in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2; and thanks to load and store actions; you have a lot of control over what happens with MSAA and when; which can result in high quality rendering by making MSAA a first class citizen.</p>
+<p >There have been other numerous MSAA changes. In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 MRT + MSAA did not work correctly except for D3D11 (which makes SSR sample to only work with MSAA in D3D11). Now it works everywhere.</p>
+<p >Another change for example that in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 all render textures in the compositor default to using MSAA if the main target is using MSAA. In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2; we default to not using MSAA unless told otherwise. We found out most textures do not need MSAA because they’re postprocessing FXs or similar; thus the MSAA is only a waste of memory and performance by doing useless resolves. Therefore only a few render textures actually need MSAA. This saves a lot of GPU RAM and some performance.</p>
 <h1><a class="anchor" id="autotoc_md30"></a>
 Porting to Ogre 2.2 from 2.1</h1>
-<p >The impact from this change can vary a lot based on how you were using <a class="el" href="namespace_ogre.html">Ogre</a>:</p>
+<p >The impact from this change can vary a lot based on how you were using <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>:</p>
 <ul>
 <li>Users that mostly interacted with textures via material scripts will barely need porting efforts.</li>
 <li>Users that heavily manipulated textures from code (creation, upload, download, destroying, using render textures) will have more work to do.</li>
@@ -235,7 +235,7 @@ Porting to Ogre 2.2 from 2.1</h1>
 <li>DepthBuffer</li>
 </ol>
 <p >This was madness because these distinctions were applied inconsistently and often made no sense. e.g. a RenderTexture is often drawn to, and then used as a texture source. Or we want to render to several mips (which are represented as separate RenderTargets) This means we had to constantly walk upwards and downwards the hierarchy to get the information we needed.</p>
-<p >Now in <a class="el" href="namespace_ogre.html">Ogre</a> 2.2, all of that is condensed into one class:</p>
+<p >Now in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2, all of that is condensed into one class:</p>
 <ol type="1">
 <li>TextureGpu</li>
 </ol>
@@ -504,20 +504,20 @@ Downloading streaming</h3>
 <p >You should have two or three AsyncTextureTickets (double vs triple buffer) call download() at frame N, and call map() at frame N+3 and recycle them (rather than destroying them).</p>
 <p >Additionally, since you'll be mapping 3 frames afterwards, you should call download( texture, mip, accurateTracking=false );</p>
 <p >Using accurateTracking = false reduces tracking overhead, at the expense of more innacurate queryIsTransferDone calls (which are unnecessary if you are waiting for 3 frames to download).</p>
-<p ><em>Warning:</em> calling queryIsTransferDone too often when accurateTracking = false; will cause <a class="el" href="namespace_ogre.html">Ogre</a> to switch to accurateTracking, and cause unnecessary overhead and can hurt your performance a lot. This is because <a class="el" href="namespace_ogre.html">Ogre</a> will assume your code could be stuck in an infinite loop, e.g. </p><div class="fragment"><div class="line">while( !ticket-&gt;queryIsTransferDone() )</div>
+<p ><em>Warning:</em> calling queryIsTransferDone too often when accurateTracking = false; will cause <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to switch to accurateTracking, and cause unnecessary overhead and can hurt your performance a lot. This is because <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will assume your code could be stuck in an infinite loop, e.g. </p><div class="fragment"><div class="line">while( !ticket-&gt;queryIsTransferDone() )</div>
 <div class="line">    sleep( 1 );</div>
-</div><!-- fragment --><p> and this loop would never exit unless <a class="el" href="namespace_ogre.html">Ogre</a> switches that ticket to accurate tracking. An warning in the Ogre.log will be logged if this happens.</p>
+</div><!-- fragment --><p> and this loop would never exit unless <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> switches that ticket to accurate tracking. An warning in the Ogre.log will be logged if this happens.</p>
 <p >Accurate tracking isn't slow, but switching from innaccurate to accurate is potentially very slow, depending on many circumstances; as worst case scenario it can produce a full stall (CPU waits until GPU has fully finished doing all pending jobs).</p>
 <h1><a class="anchor" id="autotoc_md40"></a>
 Difference between depth, numSlices and depthOrSlices</h1>
-<p >You may find that throughout <a class="el" href="namespace_ogre.html">Ogre</a> we refer to <code>depth</code>, <code>numSlices</code>, and <code>depthOrSlices</code>. They're similar, but conceptually different.</p>
+<p >You may find that throughout <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> we refer to <code>depth</code>, <code>numSlices</code>, and <code>depthOrSlices</code>. They're similar, but conceptually different.</p>
 <p ><b>Depth</b> is associated with 3D volume textures. Depth is affected by mipmaps. Meaning that a 512x512x256 texture at mip 0 becomes 256x256x128 at mip 1. Current GPUs impose a maximum resolution of 2048x2048x2048 for 3D volume textures. Note however, depending on format, you may run out of GPU memory before reaching such high resolution.</p>
 <p ><b>NumSlices</b> is associated with everything else: 1D Array &amp; 2D Array textures, cubemap &amp; cubemap array textures. A cubemap has a hardcoded <code>numSlices</code> of 6. A cubemap array must be multiple of 6. Slices are not affected by mipmaps. Meaning that a 512x512x256 texture at mip 0 becomes 256x256x256 at mip 1.</p>
 <p ><b>depthOrSlices</b> means that we're storing both depth and numSlices in the same variable. When this happens, usually extra information is needed (in other words, is this a 3D texture or not?). For example TextureGpu declares <code>uint32 mDepthOrSlices</code> because it also declares &amp; knows the texture type <code>TextureTypes::TextureTypes mTextureType</code> If mipmapping isn't involved, then the texture type is not required, thus for the maths needed, depthOrSlices is the same as depth or numSlices.</p>
 <p >AMD GCN Note: At the time of writing (2018/02/01), all known GCN cards add padding to round texture resolutions to the next power of 2 if they have mipmaps. This means a cubemap of 1024x1024x6 actually takes as much as 1024x1024x8. This is very particularly important for 2D Array textures. Always try to use powers of 2 for your slices, otherwise you'll be wasting memory.</p>
 <h1><a class="anchor" id="autotoc_md41"></a>
 Memory layout of textures and images</h1>
-<p >All data manipulated by <a class="el" href="namespace_ogre.html">Ogre</a> (e.g. TextureBox, Image2, StagingTextures and AsyncTextureTickets) have the following memory layouts and rules:</p>
+<p >All data manipulated by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> (e.g. TextureBox, Image2, StagingTextures and AsyncTextureTickets) have the following memory layouts and rules:</p>
 <p >Internal layout of data in memory: </p><div class="fragment"><div class="line">Mip0 -&gt; Slice 0, Slice 1, ..., Slice N</div>
 <div class="line">Mip1 -&gt; Slice 0, Slice 1, ..., Slice N</div>
 <div class="line">...</div>
@@ -532,11 +532,11 @@ Memory layout of textures and images</h1>
 <div class="line">size_t bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md42"></a>
 Troubleshooting errors</h1>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> 2.2 code is new. While a lot of bugs have been ironed out already, the streaming code may still contain a few hidden bugs.</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 code is new. While a lot of bugs have been ironed out already, the streaming code may still contain a few hidden bugs.</p>
 <p >Particularly, most of these bugs only surface if textures are loaded in a particular order (because their resolution or pixel formats affect our algorithms in a way they misbehave).</p>
 <p >This is problematic with threading because results become non-deterministic: the first run texture A was uploaded then B was uploaded, but on the second run texture A and B were both uploaded as part of the same batch. Likewise, different computers take different time to upload (because their CPUs and drives are slower/faster) unearthing bugs that didn't reproduce in your machine.</p>
 <p >To troubleshoot these annoying bugs, you can go to OgreMain/src/OgreTextureGpuManager.cpp and uncomment the following macro: </p><div class="fragment"><div class="line">#define OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD 1</div>
-</div><!-- fragment --><p >This will force <a class="el" href="namespace_ogre.html">Ogre</a> to stream using the main thread, thus behaving deterministically in all machines.</p>
+</div><!-- fragment --><p >This will force <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to stream using the main thread, thus behaving deterministically in all machines.</p>
 <p >Uncommenting the following macro may help finding out what's going on: </p><div class="fragment"><div class="line">#define OGRE_DEBUG_MEMORY_CONSUMPTION 1</div>
 </div><!-- fragment --><p >If the problem does not reproduce at all when OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD is defined, then play with the following parameters until you nail the problem:</p>
 <ul>
@@ -600,7 +600,7 @@ RenderPassDescriptors</h1>
 <h1><a class="anchor" id="autotoc_md44"></a>
 DescriptorSetTexture &amp; co.</h1>
 <p ><em>Note: This section is only relevant to those writing their own Hlms implementations.</em></p>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> 2.2 uses a different binding model to make compatibility in the future with Vulkan and D3D12 easier.</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 uses a different binding model to make compatibility in the future with Vulkan and D3D12 easier.</p>
 <p >Rather than binding one texture at a time into a huge table, these APIs work with the concept of "descriptor sets". We could say in very layman's terms, that these are just an array of textures, and every frame we bind the list instead.</p>
 <p >Descriptor sets are managed in a similar way to how HlmsMacroblocks and HlmsBlendblocks are created and destroyed:</p>
 <div class="fragment"><div class="line">DescriptorSetTexture baseSet;</div>
@@ -623,12 +623,12 @@ DescriptorSetTexture &amp; co.</h1>
 <p >But if you take a look at <code>OGRE_HLMS_TEXTURE_BASE_CLASS::bakeTextures</code> in Components/Hlms/Common/include/OgreHlmsTextureBaseClass.inl you'll notice this routine that generates the descriptor texture &amp; sampler sets is overly complex. Why is that?</p>
 <p >The complexity of bakeTextures comes from two parts:</p>
 <p >First, we try to take advantage of D3D11 and Metal. In OpenGL, texture and samplers are tied together. This means that texture at slot 5 must use the sampler at slot 5. The main drawback from this approach is that OpenGL is often limited to 16 textures per shading stage (around 30 textures per shader stage for more modern cards and drivers). While D3D11 and Metal split these two, meaning that texture at slot 5 can use sampler at slot 1. This allows D3D11 and Metal to bind up to 128 textures and 16 samplers at the same time. That's a lot more than what OpenGL can do.</p>
-<p >Because supporting more than 16 textures has been a popular complaint about <a class="el" href="namespace_ogre.html">Ogre</a> 2.1, and dropping OpenGL is not an option, bakeTextures handles both paths. The code would be simplified if we just assumed one of these paths.</p>
+<p >Because supporting more than 16 textures has been a popular complaint about <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1, and dropping OpenGL is not an option, bakeTextures handles both paths. The code would be simplified if we just assumed one of these paths.</p>
 <p >The second reason is descriptor reuse: Material A may use Texture X, Y &amp; Z. While Material B may use Texture Z, Y &amp; X (same textures, different order). This different order would cause two sets to be generated. However we sort and ensure textures are deterministically ordered; therefore the texture sets can be shared between both materials as only one will be generated.</p>
 <p >Additionally, please note that descriptor sets need to be invalidated when a texture changes residency, which is why we listen for such changes via notifyTextureChanged.</p>
 <h1><a class="anchor" id="autotoc_md45"></a>
 Does 2.2 interoperate well with the HLMS texture arrays?</h1>
-<p >Yes. <a class="el" href="namespace_ogre.html">Ogre</a> 2.2 got rid of anything that used the "old" Textures. That includes the <code>HlmsTextureManager</code>.</p>
+<p >Yes. <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 got rid of anything that used the "old" Textures. That includes the <code>HlmsTextureManager</code>.</p>
 <p >The new <code>TextureGpuManager</code>, which replaces the old <code>TextureManager</code>, also replaces <code>HlmsTextureManager</code>.</p>
 <p >The functionality that was provided by <code>HlmsTextureManager</code> (pretend "a texture" was just one texture when behind the scenes it's actually a slice from a Texture2D Array) became first class citizen in 2.2:</p>
 <p >When <code>TextureFlags::AutomaticBatching</code> is present, the TextureGpu will assumes this is a <code>TextureTypes::Type2D</code> texture that behinds the scenes is actually a slices to shared <code>TextureTypes::Texture2DArray</code> texture.</p>
@@ -640,7 +640,7 @@ Does 2.2 interoperate well with the HLMS texture arrays?</h1>
 <div class="line">    const TexturePool* getTexturePool(void) const;</div>
 <div class="line">};</div>
 </div><!-- fragment --><p >Most functions completely hide the fact that you're dealing with an array for you.</p>
-<p >For example <code>getTextureType()</code> will return <code>Type2D</code> (which is actually a lie) and <code>TextureGpu::copyTo</code> will fail if dstBox parameter contains <code>z</code> or <code>sliceStart</code> &gt; 0, because <a class="el" href="namespace_ogre.html">Ogre</a> will internally add the internal slice start offset to whatever you ask.</p>
+<p >For example <code>getTextureType()</code> will return <code>Type2D</code> (which is actually a lie) and <code>TextureGpu::copyTo</code> will fail if dstBox parameter contains <code>z</code> or <code>sliceStart</code> &gt; 0, because <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will internally add the internal slice start offset to whatever you ask.</p>
 <p >Same will happen with StagingTextures and AsyncTextureTickets.</p>
 <p >If you want to get the <em>real</em> thing, you need to grab <code>TexturePool::masterTexture</code> (which is a <code>TextureGpu</code>) and <code>TextureGpu::getInternalSliceStart</code> to find the slice.</p>
 <p >A lot of functionality from <code>TextureGpuManager</code> will result familiar as they came from <code>HlmsTextureManager</code>. For example:</p>
@@ -715,7 +715,7 @@ Things to watch out when porting</h1>
 </div><!-- fragment --><p ><b>TexturePtr is default initialized to 0. TextureGpu is not</b>.</p>
 <p >This causes common problems with arrays of textures in C++ i.e.<code>TexturePtr myTextures[5];</code> If you do not initialize your TextureGpu variable(s), they will contain uninitialized values, whereas your old code would be initialized to 0.</p>
 <p ><b>Compositor textures are non-msaa by default</b>. Use <code>msaa &lt;number of samples&gt;</code> to explicitly set MSAA on a compositor texture or <code>msaa_auto</code> to use the same MSAA setting as the final output of the workspace. Previous behavior was as if <code>msaa_auto</code> was present in all textures unless it was explicitly turned off by you.</p>
-<p ><b>RTV (Render Target Views) in Compositors are required</b> They're not implicit. In <a class="el" href="namespace_ogre.html">Ogre</a> 2.1 this was enough to render to a texture when setting up the compositor from C++:</p>
+<p ><b>RTV (Render Target Views) in Compositors are required</b> They're not implicit. In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 this was enough to render to a texture when setting up the compositor from C++:</p>
 <div class="fragment"><div class="line">TextureDefinitionBase::TextureDefinition *texDef =</div>
 <div class="line">        shadowNodeDef-&gt;addTextureDefinition( &quot;tmpCubemap&quot; );</div>
 <div class="line"> </div>
@@ -749,7 +749,7 @@ Things to watch out when porting</h1>
 </div><!-- fragment --><p >Please note a few things things:</p>
 <ol type="1">
 <li>The RTV doesn't necessarily have to be named the same way as the texture. You could name it "MyRtv" and your node's passes will have to target "MyRtv" instead of "tmpCubemap". We use the same name to avoid user confusion.</li>
-<li>setForTextureDefinition did all the heavy lifting because it assumes the RTV will be used to render to just one texture (i.e. tmpCubemap). You can just look at what <a class="el" href="namespace_ogre.html">Ogre</a>'s code is doing. More advanced RTV setup (i.e. not using setForTextureDefinition) is for the cases where you need MRT (Multiple Render Target) or want a very specific MSAA resolve behavior.</li>
+<li>setForTextureDefinition did all the heavy lifting because it assumes the RTV will be used to render to just one texture (i.e. tmpCubemap). You can just look at what <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s code is doing. More advanced RTV setup (i.e. not using setForTextureDefinition) is for the cases where you need MRT (Multiple Render Target) or want a very specific MSAA resolve behavior.</li>
 <li><code>TextureDefinition</code> contains a few variables such as <code>depthBufferId</code>, <code>depthBufferFormat</code> and <code>preferDepthTexture</code> which are then repeated in <code>RenderTargetViewDef</code>. The settings that matters are the ones in <code>RenderTargetViewDef</code> and are often (but not necessarily) just a carbon copy. So why <code>TextureDefinition</code> has a duplicate? It's because when textures are used as output and input for inter-connecting nodes, the RTV settings are lost and the Compositor needs to evaluate at connection time what depth buffer settings the texture prefers. For more information see <code>CompositorPass::setupRenderPassDesc</code> snippet that starts with <code>if( rtv-&gt;isRuntimeAnalyzed() )</code> Also see <a class="el" href="struct_ogre_1_1_render_target_view_def.html#ac6ea3c7e635033ef74f8fe61d9640b6b" title="If the texture comes from an input channel, we don&#39;t have yet enough information, as we&#39;re missing:">Ogre::RenderTargetViewDef::setRuntimeAnalyzed</a> documentation.</li>
 </ol>
 <p ><b>D3D11's specific:</b></p>

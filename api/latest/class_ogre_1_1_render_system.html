@@ -253,7 +253,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af401f9ec22a0f9e21b6166fb263029f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlike _setPipelineStateObject, the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> will check if the PSO has changed to avoid redundant state changes (since it's hard to do it at <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> level)  <a href="class_ogre_1_1_render_system.html#af401f9ec22a0f9e21b6166fb263029f9">More...</a><br /></td></tr>
 <tr class="separator:af401f9ec22a0f9e21b6166fb263029f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5514030509c865cc21022534f3a416e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#af5514030509c865cc21022534f3a416e">_setCurrentDeviceFromTexture</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)=0</td></tr>
-<tr class="memdesc:af5514030509c865cc21022534f3a416e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Because <a class="el" href="namespace_ogre.html">Ogre</a> doesn't (yet) have the notion of a 'device' or 'GL context', this function lets <a class="el" href="namespace_ogre.html">Ogre</a> know which device should be used by providing a texture.  <a href="class_ogre_1_1_render_system.html#af5514030509c865cc21022534f3a416e">More...</a><br /></td></tr>
+<tr class="memdesc:af5514030509c865cc21022534f3a416e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Because <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> doesn't (yet) have the notion of a 'device' or 'GL context', this function lets <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> know which device should be used by providing a texture.  <a href="class_ogre_1_1_render_system.html#af5514030509c865cc21022534f3a416e">More...</a><br /></td></tr>
 <tr class="separator:af5514030509c865cc21022534f3a416e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59066ea64e39a91f9e190178400c090e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a59066ea64e39a91f9e190178400c090e">_setGeometryTexture</a> (size_t unit, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *tex)</td></tr>
 <tr class="separator:a59066ea64e39a91f9e190178400c090e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -650,7 +650,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Defines the functionality of a 3D API. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>The <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> class provides a base interface which abstracts the general functionality of the 3D API e.g. Direct3D or OpenGL. Whilst a few of the general methods have implementations, most of this class is abstract, requiring a subclass based on a specific API to be constructed to provide the full functionality. Note there are 2 levels to the interface - one which will be used often by the caller of the <a class="el" href="namespace_ogre.html">Ogre</a> library, and one which is at a lower level and will be used by the other classes provided by <a class="el" href="namespace_ogre.html">Ogre</a>. These lower level methods are prefixed with '_' to differentiate them. The advanced user of the library may use these lower level methods to access the 3D API at a more fundamental level (dealing direct with render states and rendering primitives), but still benefiting from <a class="el" href="namespace_ogre.html">Ogre</a>'s abstraction of exactly which 3D API is in use. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> class provides a base interface which abstracts the general functionality of the 3D API e.g. Direct3D or OpenGL. Whilst a few of the general methods have implementations, most of this class is abstract, requiring a subclass based on a specific API to be constructed to provide the full functionality. Note there are 2 levels to the interface - one which will be used often by the caller of the <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> library, and one which is at a lower level and will be used by the other classes provided by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>. These lower level methods are prefixed with '_' to differentiate them. The advanced user of the library may use these lower level methods to access the 3D API at a more fundamental level (dealing direct with render states and rendering primitives), but still benefiting from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s abstraction of exactly which 3D API is in use. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Steven Streeting </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -992,9 +992,9 @@ Static Public Member Functions</h2></td></tr>
 <tr>
 <td>externalWindowHandle </td><td>Win32: HWND as integer<br  />
  GLX: poslong:posint:poslong (display*:screen:windowHandle) or poslong:posint:poslong:poslong (display*:screen:windowHandle:XVisualInfo*)<br  />
- OS X Cocoa: OgreGLView address as an integer. You can pass NSView or NSWindow too, but should perform OgreGLView callbacks into the <a class="el" href="namespace_ogre.html">Ogre</a> manually. iOS: UIWindow address as an integer  </td><td>0 (none) </td><td>External window handle, for embedding the OGRE render in an existing window </td><td>&#160;  </td></tr>
+ OS X Cocoa: OgreGLView address as an integer. You can pass NSView or NSWindow too, but should perform OgreGLView callbacks into the <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> manually. iOS: UIWindow address as an integer  </td><td>0 (none) </td><td>External window handle, for embedding the OGRE render in an existing window </td><td>&#160;  </td></tr>
 <tr>
-<td>externalGLControl </td><td>true, false </td><td>false </td><td>Let the external window control OpenGL i.e. don't select a pixel format for the window, do not change v-sync and do not swap buffer. When set to true, the calling application is responsible of OpenGL initialization and buffer swapping. It should also create an OpenGL context for its own rendering, <a class="el" href="namespace_ogre.html">Ogre</a> will create one for its use. Then the calling application must also enable <a class="el" href="namespace_ogre.html">Ogre</a> OpenGL context before calling any <a class="el" href="namespace_ogre.html">Ogre</a> function and restore its OpenGL context after these calls. </td><td>OpenGL specific  </td></tr>
+<td>externalGLControl </td><td>true, false </td><td>false </td><td>Let the external window control OpenGL i.e. don't select a pixel format for the window, do not change v-sync and do not swap buffer. When set to true, the calling application is responsible of OpenGL initialization and buffer swapping. It should also create an OpenGL context for its own rendering, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will create one for its use. Then the calling application must also enable <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> OpenGL context before calling any <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> function and restore its OpenGL context after these calls. </td><td>OpenGL specific  </td></tr>
 <tr>
 <td>externalGLContext </td><td>Context as Unsigned Long </td><td>0 (create own context) </td><td>Use an externally created GL context </td><td>OpenGL Specific  </td></tr>
 <tr>
@@ -2377,7 +2377,7 @@ See _createRenderWindow for details about each member. </td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Because <a class="el" href="namespace_ogre.html">Ogre</a> doesn't (yet) have the notion of a 'device' or 'GL context', this function lets <a class="el" href="namespace_ogre.html">Ogre</a> know which device should be used by providing a texture. </p>
+<p>Because <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> doesn't (yet) have the notion of a 'device' or 'GL context', this function lets <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> know which device should be used by providing a texture. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">texture</td><td>Cannot be null. </td></tr>
@@ -3064,7 +3064,7 @@ that the shininess value is still taken from shininess)</a> and TVC_EMISSIVE. TV
 </div><div class="memdoc">
 
 <p>Sets a method for automatically calculating texture coordinates for a stage. </p>
-<p >Should not be used by apps - for use by <a class="el" href="namespace_ogre.html">Ogre</a> only. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >Should not be used by apps - for use by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> only. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">unit</td><td>Texture unit as above </td></tr>
     <tr><td class="paramname">m</td><td>Calculation method to use </td></tr>
@@ -4591,7 +4591,7 @@ that the shininess value is still taken from shininess)</a> and TVC_EMISSIVE. TV
 </div><div class="memdoc">
 
 <p>Required when caller will soon start analyzing barriers (e.g. </p>
-<p >use <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a>) <a class="el" href="namespace_ogre.html">Ogre</a> will flush any pending resource transitions.</p>
+<p >use <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a>) <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will flush any pending resource transitions.</p>
 <p >Otherwise <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> will see that a <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> is in a particular state or layout, then when calling executeResourceTransition, the pending resource layout will be flushed, and now the resource transition resolved by <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> will have the wrong 'old' layout </p>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a6f1197764e15a5ef8b6f0473cb7d0ac7">Ogre::VulkanRenderSystem</a>.</p>
@@ -6787,7 +6787,7 @@ Once this init sequence is completed the threads are independent but this startu
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">refValue</td><td>The reference value used in the comparison (dynamic) </td></tr>
-    <tr><td class="paramname">stencilParams</td><td>The static parameters that involve more expensive state changes. <a class="el" href="namespace_ogre.html">Ogre</a> dev implementors note: Should check if the stencilParams are different from before </td></tr>
+    <tr><td class="paramname">stencilParams</td><td>The static parameters that involve more expensive state changes. <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> dev implementors note: Should check if the stencilParams are different from before </td></tr>
   </table>
   </dd>
 </dl>
@@ -6813,7 +6813,7 @@ Once this init sequence is completed the threads are independent but this startu
 </div><div class="memdoc">
 
 <p>In Direct3D11, UAV &amp; RenderTargets share the same slots. </p>
-<p >Because of this, we enforce the same behavior on all RenderSystems. An unfortunate consequence is that if you attach an MRT consisting of 3 RTs; the UAV needs to set at slot 3; not slot 0. This setting lets you tell <a class="el" href="namespace_ogre.html">Ogre</a> the starting slot; so queueBindUAVs( descSet ) goes from slot 3 onwards if you call setUavStartingSlot( 3 ) </p><dl class="section user"><dt></dt><dd><a class="el" href="namespace_ogre.html">Ogre</a> will raise an exception in D3D11 if the starting slot is lower than the number of attached RTs, but will let it pass if you're using GL3+ [TODO: Make this behavior consistent?] </dd></dl>
+<p >Because of this, we enforce the same behavior on all RenderSystems. An unfortunate consequence is that if you attach an MRT consisting of 3 RTs; the UAV needs to set at slot 3; not slot 0. This setting lets you tell <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> the starting slot; so queueBindUAVs( descSet ) goes from slot 3 onwards if you call setUavStartingSlot( 3 ) </p><dl class="section user"><dt></dt><dd><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will raise an exception in D3D11 if the starting slot is lower than the number of attached RTs, but will let it pass if you're using GL3+ [TODO: Make this behavior consistent?] </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>Will not take effect until the next call to flushUAVs or setting a new RTT. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

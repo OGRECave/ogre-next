@@ -3332,7 +3332,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">enableDebugOutput</td><td>Whether to enable or disable dumping the shaders into a folder </td></tr>
-    <tr><td class="paramname">outputProperties</td><td>Whether to dump properties and pieces at the beginning of the shader file. This is very useful for determining what caused <a class="el" href="namespace_ogre.html">Ogre</a> to compile a new variation. Note that this setting may not always produce valid shader code in the dumped files (but it we'll still produce valid shader code while at runtime) If you want to compile the dumped file and it is invalid, just strip this info. </td></tr>
+    <tr><td class="paramname">outputProperties</td><td>Whether to dump properties and pieces at the beginning of the shader file. This is very useful for determining what caused <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to compile a new variation. Note that this setting may not always produce valid shader code in the dumped files (but it we'll still produce valid shader code while at runtime) If you want to compile the dumped file and it is invalid, just strip this info. </td></tr>
     <tr><td class="paramname">path</td><td>Path location on where to dump it. Should end with slash for proper concatenation (i.e. C:/path/ instead of C:/path; or /home/user/ instead of /home/user) </td></tr>
   </table>
   </dd>
@@ -3457,7 +3457,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Non-caster directional lights are hardcoded into shaders. </p>
 <p >This means that if you have 6 directional lights and then you add a 7th one, a whole new set of shaders will be created.</p>
-<p >This setting allows you to tremendously reduce the amount of shader permutations by forcing <a class="el" href="namespace_ogre.html">Ogre</a> to switching to static branching with an upper limit to the max number of non-shadow-casting directional lights.</p>
+<p >This setting allows you to tremendously reduce the amount of shader permutations by forcing <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to switching to static branching with an upper limit to the max number of non-shadow-casting directional lights.</p>
 <p >There is no such switch for shadow-casting directional/point/spot lights because of technical limitations at the GPU level (cannot index shadow map textures in DX11, nor samplers in any known GPU).</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms.html#aebca7da0789967e8fde70d95fa74ac0c" title="Area lights use regular Forward.">setAreaLightForwardSettings</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -3619,7 +3619,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>By default shadow-caster spot and point lights are hardcoded into shaders. </p>
 <p >This means that if you have 8 spot/point lights and then you add a 9th one, a whole new set of shaders will be created. Even more if you have a combination of 3 spot and 5 point lights and the combination has changed to 4 spot and 4 point lights then you'll get the next set of shaders</p>
-<p >This setting allows you to tremendously reduce the amount of shader permutations by forcing <a class="el" href="namespace_ogre.html">Ogre</a> to switching to static branching with an upper limit to the max number of shadow-casting spot or point lights.</p>
+<p >This setting allows you to tremendously reduce the amount of shader permutations by forcing <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to switching to static branching with an upper limit to the max number of shadow-casting spot or point lights.</p>
 <p >See <a class="el" href="class_ogre_1_1_hlms.html#aebca7da0789967e8fde70d95fa74ac0c" title="Area lights use regular Forward.">Hlms::setAreaLightForwardSettings</a> </p><dl class="section remark"><dt>Remarks</dt><dd>All point and spot lights must share the same hlms_shadowmap atlas</dd></dl>
 <p>This is mostly an D3D11 / HLSL SM 5.0 restriction (<a href="https://github.com/OGRECave/ogre-next/pull/255">https://github.com/OGRECave/ogre-next/pull/255</a>) but it may also help with performance in other APIs.</p>
 <p >If multiple atlas support is needed, using Texture2DArrays may be a good solution, although it is currently untested and may need additional fixes to get it working</p>

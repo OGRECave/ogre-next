@@ -5185,7 +5185,7 @@ InstanceBatch::instanceBatchCullFrustumThreaded </dd></dl>
 
 <p>Sets the aspect ratio for the frustum viewport. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>The ratio between the x and y dimensions of the rectangular area visible through the frustum is known as aspect ratio: aspect = width / height . </dd></dl>
-<dl class="section user"><dt></dt><dd>The default for most fullscreen windows is 1.3333 - this is also assumed by <a class="el" href="namespace_ogre.html">Ogre</a> unless you use this method to state otherwise. </dd></dl>
+<dl class="section user"><dt></dt><dd>The default for most fullscreen windows is 1.3333 - this is also assumed by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> unless you use this method to state otherwise. </dd></dl>
 
 </div>
 </div>
@@ -5312,7 +5312,7 @@ InstanceBatch::instanceBatchCullFrustumThreaded </dd></dl>
   <table class="params">
     <tr><td class="paramname">enable</td><td>If <code>true</code>, the custom projection matrix passed as the second parameter will be used in preference to an auto calculated one. If <code>false</code>, the frustum will revert to auto calculating the projection matrix. </td></tr>
     <tr><td class="paramname">projectionMatrix</td><td>The custom view matrix to use. </td></tr>
-    <tr><td class="paramname">alternateDepthRange</td><td>Set this to true if the input projectionMatrix has the depth in range [0; 1] instead of the range [-1; 1] that <a class="el" href="namespace_ogre.html">Ogre</a> expects.</td></tr>
+    <tr><td class="paramname">alternateDepthRange</td><td>Set this to true if the input projectionMatrix has the depth in range [0; 1] instead of the range [-1; 1] that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> expects.</td></tr>
   </table>
   </dd>
 </dl>
@@ -5734,11 +5734,11 @@ InstanceBatch::instanceBatchCullFrustumThreaded </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">left,right,top,bottom</td><td>The position where the side clip planes intersect the near clip plane, in eye space OR the tangent of the half angles from the eye to the edges of the near clip plane </td></tr>
-    <tr><td class="paramname">frustrumExtentsType</td><td>Specifies how the extents are represented. Be default they are the positions on near clip plane. However if this is a scene camera it is recommended that you actually use the tangent of the half angles. ie Half the FoV angles. This is because <a class="el" href="namespace_ogre.html">Ogre</a> uses this camera setup to calculate custom clipping planes for PSSM algorithms, and Forward+ algorithms, but alter the near and far clip distances. </td></tr>
+    <tr><td class="paramname">frustrumExtentsType</td><td>Specifies how the extents are represented. Be default they are the positions on near clip plane. However if this is a scene camera it is recommended that you actually use the tangent of the half angles. ie Half the FoV angles. This is because <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> uses this camera setup to calculate custom clipping planes for PSSM algorithms, and Forward+ algorithms, but alter the near and far clip distances. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section user"><dt></dt><dd>If you supply extents as positions on the projection plane the near clip distance has already been calculated as part of the supplied extents, however if they are tangent of the half angles <a class="el" href="namespace_ogre.html">Ogre</a> can apply different near clip distances dynamically. </dd></dl>
+<dl class="section user"><dt></dt><dd>If you supply extents as positions on the projection plane the near clip distance has already been calculated as part of the supplied extents, however if they are tangent of the half angles <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> can apply different near clip distances dynamically. </dd></dl>
 
 </div>
 </div>

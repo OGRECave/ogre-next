@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('commandbuffer.html',''); initResizable
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_commandbuffer"></a></p>
-<p >The Command Buffer was the response to a very practical problem: <a class="el" href="namespace_ogre.html">Ogre</a> couldn't assume persistent mapping is supported as this would break compatibility with DX10-level hardware and DX11 API.</p>
+<p >The Command Buffer was the response to a very practical problem: <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> couldn't assume persistent mapping is supported as this would break compatibility with DX10-level hardware and DX11 API.</p>
 <p >This means that we need to map a buffer to update its contents. But we can't issue a draw call while a buffer is mapped. Unmapping and mapping before and after each draw call would be extremely costly; and therefore a command buffer was needed that would record all the API calls that have to be made; in order for buffers (i.e. constant and texture buffers to send data to the shaders) to be mapped only once.</p>
 <p >Once we're done updating all buffers, the command buffer is executed, playing back all the API calls in the right order.</p>
 <p >Note that the command buffer is written for high performance, low footprint; thus its inner workings and interface are very C-like.</p>
@@ -183,7 +183,7 @@ Execution table</h1>
 <h2><a class="anchor" id="CommandBufferExecutionTableHacks"></a>
 Hacks and Tricks</h2>
 <p >Maintaining a manual vtable may seem like a lot of trouble, but the amount of commands is manageable (don't feel tempted to add one command for every little thing!) and it has very powerful benefits: You can manipulate the command type with simple integer arithmetic, thus saving expensive branch evaluations per object.</p>
-<p >For example, <a class="el" href="namespace_ogre.html">Ogre</a> supports indirect buffers when available. But when indirect buffers aren't supported, not only we have to store the draw command data in CPU memory rather than GPU memory, but we also have to use very different draw calls. This is shown in <code>RenderSystem::_render</code> vs <code>RenderSystem::_renderEmulated</code>.</p>
+<p >For example, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> supports indirect buffers when available. But when indirect buffers aren't supported, not only we have to store the draw command data in CPU memory rather than GPU memory, but we also have to use very different draw calls. This is shown in <code>RenderSystem::_render</code> vs <code>RenderSystem::_renderEmulated</code>.</p>
 <p >The former uses indirect buffer draw calls, the latter doesn't. Both do the exact same thing.</p>
 <p >Usually, during command generation, the RenderQueue could look like this:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">for</span>(size_ti=0;i&lt;numRenderables;++i)</div>
@@ -209,10 +209,10 @@ Hacks and Tricks</h2>
 </div><!-- fragment --><p >It's not just cleaner, it's also more efficient. A cmp, a jmp and a mov instruction (plus a potential miss-prediction) was just transformed into a single add.</p>
 <h1><a class="anchor" id="CommandBufferPostProcessing"></a>
 Post-processing the command buffer</h1>
-<p >Another advantage of a command buffer, is that you may have more information about the rendering sequence only after you have processed all objects. You could also try to detect redundant state changes (<a class="el" href="namespace_ogre.html">Ogre</a> doesn't do this though).</p>
+<p >Another advantage of a command buffer, is that you may have more information about the rendering sequence only after you have processed all objects. You could also try to detect redundant state changes (<a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> doesn't do this though).</p>
 <p >For example, both texture buffers require binding them to a shader by specifying an offset and a size.</p>
 <p >The offset is known at the time the texture buffer is needed, but the size is not. The same texture buffer may be used to store data of many subsequent Renderables, and thus required size may not be known until we're done processing all of them.</p>
-<p >For example, the Hlms implementations shipped with <a class="el" href="namespace_ogre.html">Ogre</a> populate this size at the end. For that, it saves the command location with <code>CommandBuffer::getCommandOffset</code> called after adding the command:</p>
+<p >For example, the Hlms implementations shipped with <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> populate this size at the end. For that, it saves the command location with <code>CommandBuffer::getCommandOffset</code> called after adding the command:</p>
 <div class="fragment"><div class="line">CbShaderBuffer*shaderBufferCmd=commandBuffer-&gt;addCommand&lt;CbShaderBuffer&gt;();</div>
 <div class="line">*shaderBufferCmd=CbShaderBuffer(shaderResourceSlot,</div>
 <div class="line">                                   texBuffer,offsetStart,0);</div>

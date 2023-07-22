@@ -1080,7 +1080,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the full transformation matrix for this node. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This method returns the full transformation matrix for this node, including the effect of any parent node transformations, provided they have been updated using the Node::_update method. This should only be called by a <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> which knows the derived transforms have been updated before calling this method. Applications using <a class="el" href="namespace_ogre.html">Ogre</a> should just use the relative transforms. Assumes the caches are already updated </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This method returns the full transformation matrix for this node, including the effect of any parent node transformations, provided they have been updated using the Node::_update method. This should only be called by a <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> which knows the derived transforms have been updated before calling this method. Applications using <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> should just use the relative transforms. Assumes the caches are already updated </dd></dl>
 
 <p class="reference">References <a class="el" href="struct_ogre_1_1_transform.html#ab130604cfbbebb88805dd147aa7a3e11">Ogre::Transform::mDerivedTransform</a>, and <a class="el" href="struct_ogre_1_1_transform.html#a14e0f44727da02c219d40449c6e95ded">Ogre::Transform::mIndex</a>.</p>
 
@@ -1344,7 +1344,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Helper method to update the <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> and all children. </p>
-<dl class="section note"><dt>Note</dt><dd>Updates this node and all children to incorporate transforms etc. <a class="el" href="namespace_ogre.html">Ogre</a> never call it, preferring full update of all transforms, but there could be situations when scene modifications are known and so small that full update is inefficient. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Updates this node and all children to incorporate transforms etc. <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> never call it, preferring full update of all transforms, but there could be situations when scene modifications are known and so small that full update is inefficient. </dd></dl>
 
 </div>
 </div>

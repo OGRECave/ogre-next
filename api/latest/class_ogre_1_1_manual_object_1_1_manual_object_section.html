@@ -1378,7 +1378,7 @@ Friends</h2></td></tr>
 <p>Gets the world transform matrix / matrices for this renderable object.  </p>
 <dl class="section remark"><dt>Remarks</dt><dd>If the object has any derived transforms, these are expected to be up to date as long as all the <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> structures have been updated before this is called. </dd></dl>
 <dl class="section user"><dt></dt><dd>This method will populate transform with 1 matrix if it does not use vertex blending. If it does use vertex blending it will fill the passed in pointer with an array of matrices, the length being the value returned from getNumWorldTransforms. </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Internal <a class="el" href="namespace_ogre.html">Ogre</a> never supports non-affine matrix for world transform matrix/matrices, the behavior is undefined if returns non-affine matrix here. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Internal <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> never supports non-affine matrix for world transform matrix/matrices, the behavior is undefined if returns non-affine matrix here. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_matrix4.html#a6a8d44a7baeb3af2f47c97b62ea4f4fd" title="Check whether or not the matrix is affine matrix.">Matrix4::isAffine</a>.  </dd></dl>
 
 <p>Implements <a class="el" href="class_ogre_1_1_renderable.html#a897d64f73a5e6ccc45d52a88e86392e1">Ogre::Renderable</a>.</p>

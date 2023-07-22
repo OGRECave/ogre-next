@@ -134,10 +134,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abeedbfecbb98d295978226f18f1ba5bd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#abeedbfecbb98d295978226f18f1ba5bd">~RenderQueue</a> ()</td></tr>
 <tr class="separator:abeedbfecbb98d295978226f18f1ba5bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a504e8bf8d6496ea3b88ead7e6cef8aa0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#a504e8bf8d6496ea3b88ead7e6cef8aa0">addRenderableV1</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> renderQueueId, bool casterPass, <a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *pRend, const <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> *pMovableObject)</td></tr>
-<tr class="memdesc:a504e8bf8d6496ea3b88ead7e6cef8aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a renderable (<a class="el" href="namespace_ogre.html">Ogre</a> v1.x) object to the queue.  <a href="class_ogre_1_1_render_queue.html#a504e8bf8d6496ea3b88ead7e6cef8aa0">More...</a><br /></td></tr>
+<tr class="memdesc:a504e8bf8d6496ea3b88ead7e6cef8aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a renderable (<a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> v1.x) object to the queue.  <a href="class_ogre_1_1_render_queue.html#a504e8bf8d6496ea3b88ead7e6cef8aa0">More...</a><br /></td></tr>
 <tr class="separator:a504e8bf8d6496ea3b88ead7e6cef8aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf6d23ea6dfa5a14cbb3052d30a7332f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#abf6d23ea6dfa5a14cbb3052d30a7332f">addRenderableV2</a> (size_t threadIdx, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> renderQueueId, bool casterPass, <a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *pRend, const <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> *pMovableObject)</td></tr>
-<tr class="memdesc:abf6d23ea6dfa5a14cbb3052d30a7332f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a renderable (<a class="el" href="namespace_ogre.html">Ogre</a> v2.0, i.e.  <a href="class_ogre_1_1_render_queue.html#abf6d23ea6dfa5a14cbb3052d30a7332f">More...</a><br /></td></tr>
+<tr class="memdesc:abf6d23ea6dfa5a14cbb3052d30a7332f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a renderable (<a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> v2.0, i.e.  <a href="class_ogre_1_1_render_queue.html#abf6d23ea6dfa5a14cbb3052d30a7332f">More...</a><br /></td></tr>
 <tr class="separator:abf6d23ea6dfa5a14cbb3052d30a7332f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82cdde6cd9331f28acff91089e95ba68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#a82cdde6cd9331f28acff91089e95ba68">clear</a> ()</td></tr>
 <tr class="memdesc:a82cdde6cd9331f28acff91089e95ba68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty the queue - should only be called by SceneManagers.  <a href="class_ogre_1_1_render_queue.html#a82cdde6cd9331f28acff91089e95ba68">More...</a><br /></td></tr>
@@ -203,9 +203,9 @@ By default, the render queues have the following mode set: <br  />
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad2b57c9b40e33d4b64f613a5a6147367ac84764f8648d1701fd809afba1358b32" name="ad2b57c9b40e33d4b64f613a5a6147367ac84764f8648d1701fd809afba1358b32"></a>V1_LEGACY&#160;</td><td class="fielddoc"><p >This is the slowest mode. </p>
-<p >Renders the same or similar way to how <a class="el" href="namespace_ogre.html">Ogre</a> 1.x rendered meshes. Only <a class="el" href="namespace_ogre_1_1v1.html">v1</a> entities can be put in this type of queue. Ideal for low level materials, InstancedEntity via InstanceManager, and any other weird custom object. </p>
+<p >Renders the same or similar way to how <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x rendered meshes. Only <a class="el" href="namespace_ogre_1_1v1.html">v1</a> entities can be put in this type of queue. Ideal for low level materials, InstancedEntity via InstanceManager, and any other weird custom object. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ad2b57c9b40e33d4b64f613a5a6147367aae5865e2c1ce44806f2538863c9dda44" name="ad2b57c9b40e33d4b64f613a5a6147367aae5865e2c1ce44806f2538863c9dda44"></a>V1_FAST&#160;</td><td class="fielddoc"><p >Renders <a class="el" href="namespace_ogre_1_1v1.html">v1</a> entities using HLMS materials with some of the new benefits, but some deprecated features from <a class="el" href="namespace_ogre.html">Ogre</a> 1.x might not be available or work properly (like global instancing buffer). </p>
+<tr><td class="fieldname"><a id="ad2b57c9b40e33d4b64f613a5a6147367aae5865e2c1ce44806f2538863c9dda44" name="ad2b57c9b40e33d4b64f613a5a6147367aae5865e2c1ce44806f2538863c9dda44"></a>V1_FAST&#160;</td><td class="fielddoc"><p >Renders <a class="el" href="namespace_ogre_1_1v1.html">v1</a> entities using HLMS materials with some of the new benefits, but some deprecated features from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x might not be available or work properly (like global instancing buffer). </p>
 <p >Ideal for most <a class="el" href="namespace_ogre_1_1v1.html">v1</a> entities, particle effects and billboards using HLMS materials. Cannot be used by RenderSystems that don't support constant buffers (i.e. OpenGL ES 2) </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ad2b57c9b40e33d4b64f613a5a6147367afaf209c76453b55e28708a165b37386e" name="ad2b57c9b40e33d4b64f613a5a6147367afaf209c76453b55e28708a165b37386e"></a>FAST&#160;</td><td class="fielddoc"><p >Renders v2 items using HLMS materials with minimum driver overhead Recommended method for rendering extremely large amounts of objects of homogeneous and heterogenous meshes, with many different kinds of materials and textures. </p>
@@ -325,7 +325,7 @@ By default, the render queues have the following mode set: <br  />
       </table>
 </div><div class="memdoc">
 
-<p>Add a renderable (<a class="el" href="namespace_ogre.html">Ogre</a> v1.x) object to the queue. </p>
+<p>Add a renderable (<a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> v1.x) object to the queue. </p>
 <dl class="section see"><dt>See also</dt><dd>addRenderable </dd></dl>
 
 </div>
@@ -374,7 +374,7 @@ By default, the render queues have the following mode set: <br  />
       </table>
 </div><div class="memdoc">
 
-<p>Add a renderable (<a class="el" href="namespace_ogre.html">Ogre</a> v2.0, i.e. </p>
+<p>Add a renderable (<a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> v2.0, i.e. </p>
 <p >Items; they use VAOs) object to the queue. </p><dl class="section remark"><dt>Remarks</dt><dd>If sorting mode is set to DisableSort (<a class="el" href="class_ogre_1_1_render_queue.html#aeb41ed3f50a9e7e270d81d045e8a23e6" title="Sets whether we should sort the render queue ID every frame.">RenderQueue::setSortRenderQueue</a>) for the given renderQueueId, then the order in which renderables are added via <a class="el" href="class_ogre_1_1_render_queue.html#abf6d23ea6dfa5a14cbb3052d30a7332f" title="Add a renderable (Ogre v2.0, i.e.">RenderQueue::addRenderableV2</a> (and V1) determines the render order (the first added get rendered first) within that renderQueueId. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

@@ -121,8 +121,8 @@ Automatic download &amp; build scripts</h1>
 <p ><a href="https://www.ogre3d.org/download/sdk/sdk-ogre-next">https://www.ogre3d.org/download/sdk/sdk-ogre-next</a> </p>
 <h1><a class="anchor" id="DownloadingOgreWindows"></a>
 Downloading Ogre</h1>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> Next source is located at <a href="https://github.com/OGRECave/ogre-next">Github/OGRECave/ogre-next</a></p>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> Next dependencies are located at <a href="https://github.com/OGRECave/ogre-next-deps">Github/OGRECave/ogre-next-deps</a></p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> Next source is located at <a href="https://github.com/OGRECave/ogre-next">Github/OGRECave/ogre-next</a></p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> Next dependencies are located at <a href="https://github.com/OGRECave/ogre-next-deps">Github/OGRECave/ogre-next-deps</a></p>
 <p >Download the source code or you can fork it to your own repository and clone it locally with <a href="https://desktop.github.com/">Github Desktop</a> or the command line.</p>
 <p ><b>IMPORTANT:</b> Do NOT use the the "Download" feature from Github. It will not follow subrepositories.</p>
 <p ><b>Command line</b>: </p><div class="fragment"><div class="line">git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps</div>
@@ -140,7 +140,7 @@ Building Dependencies</h1>
 <li>Now click 'Generate'.</li>
 <li>Open C:\OgreDepsRepo\build\OGREDEPS.sln under <a class="el" href="class_visual.html">Visual</a> Studio. If you have multiple versions of VS, make sure you open it with the one you targeted for in CMake.</li>
 <li>Build the whole solution; which should build FreeImage, freetype, OIS, zlib and zziplib. Make sure to build both Debug and Release</li>
-<li>Once it's finished, right click on INSTALL project, and click build. THIS IS VERY IMPORTANT. It will create the folder structure that <a class="el" href="namespace_ogre.html">Ogre</a> needs. You need to do this both for Debug and Release. <img src="BuildWindowsDependencies.png" alt="" class="inline"/>    </li>
+<li>Once it's finished, right click on INSTALL project, and click build. THIS IS VERY IMPORTANT. It will create the folder structure that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> needs. You need to do this both for Debug and Release. <img src="BuildWindowsDependencies.png" alt="" class="inline"/>    </li>
 </ol>
 <ol type="1">
 <li>This should've created an SDK folder structure under C:\OgreDepsRepo\build\ogredeps</li>
@@ -157,7 +157,7 @@ Building Ogre</h1>
 <li><em>Pro tip:</em> If you move the generated folder C:\OgreDepsRepo\build\ogredeps to C:\OgreSDK\Dependencies you won't need the previous step.</li>
 <li>Click Generate. If you want to build the samples, now tick OGRE_BUILD_SAMPLES2 and click Generate again.</li>
 <li>Open the solution C:\OgreSDK\build\OGRE.sln and compile.</li>
-<li>You're done. You can also right click on INSTALL project if you wish to generate the SDK structure we provide in our official releases (we are planning on modifying this on the future for <a class="el" href="namespace_ogre.html">Ogre</a> 2.1 though).</li>
+<li>You're done. You can also right click on INSTALL project if you wish to generate the SDK structure we provide in our official releases (we are planning on modifying this on the future for <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 though).</li>
 <li>If you are like me (I don't like using INSTALL feature for my own projects), you can add C:\OgreSDK\build\include to your project's include location and C:\OgreSDK\build\lib\Debug (and Release) to your additional library paths. The DLLs will be located in bin\debug (or release)</li>
 </ol>
 <p >You can watch the <a href="https://www.youtube.com/watch?v=-3XwyYQ9OLg">YouTube video</a> if you prefer video tutorials.</p>

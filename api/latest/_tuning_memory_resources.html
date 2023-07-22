@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('_tuning_memory_resources.html',''); in
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_MemoryResources"></a></p>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> has the following samples to show how to cleanup memory:</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> has the following samples to show how to cleanup memory:</p>
 <ol type="1">
 <li>Samples/2.0/Tutorials/Tutorial_Memory</li>
 <li>Samples/2.0/Tests/MemoryCleanup</li>
@@ -133,7 +133,7 @@ Grouping textures by type</h1>
 <h1><a class="anchor" id="DynamicVsDefaultBuffers"></a>
 Dynamic vs Default buffers</h1>
 <p ><code>BT_DEFAULT_DYNAMIC</code> is optimized for <b>data that is modified every frame from scratch.</b> It's rare to have to have a lot of this type of data except for particle FXs.</p>
-<p >By default we triple the buffer size because <a class="el" href="namespace_ogre.html">Ogre</a> manually synchronizes data to prevent arbitrary stalls. <a class="el" href="namespace_ogre.html">Ogre</a> 1.x let the driver handle synchronization.</p>
+<p >By default we triple the buffer size because <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> manually synchronizes data to prevent arbitrary stalls. <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x let the driver handle synchronization.</p>
 <p >If your code was structured to map the buffer, even though you should be using <code>BT_DEFAULT</code> then we recommend you simply use a malloc'ed memory ptr:</p>
 <div class="fragment"><div class="line"><span class="comment">// Old code</span></div>
 <div class="line"><span class="keywordtype">void</span> *data = buffer-&gt;map( ... );</div>
@@ -149,7 +149,7 @@ Dynamic vs Default buffers</h1>
 <div class="ttc" id="a_ogre_memory_allocator_config_8h_html_afd7ddaef10ac9ea1ffbd18902167b9a2"><div class="ttname"><a href="_ogre_memory_allocator_config_8h.html#afd7ddaef10ac9ea1ffbd18902167b9a2">OGRE_MALLOC_SIMD</a></div><div class="ttdeci">#define OGRE_MALLOC_SIMD(bytes, category)</div><div class="ttdoc">Allocate a block of raw memory aligned to SIMD boundaries, and indicate the category of usage.</div><div class="ttdef"><b>Definition:</b> OgreMemoryAllocatorConfig.h:374</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="TweakingVaoManager"></a>
 Tweaking default memory consumption by VaoManager</h1>
-<p >When initializing <a class="el" href="namespace_ogre.html">Ogre</a> through the first <code>Root::createRenderWindow</code>, you can provide settings via <code>NameValuePairList params</code>.</p>
+<p >When initializing <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> through the first <code>Root::createRenderWindow</code>, you can provide settings via <code>NameValuePairList params</code>.</p>
 <p >It accepts the following</p>
 <div class="fragment"><div class="line"><span class="comment">// Use double buffer instead of triple buffer to decrease latency,</span></div>
 <div class="line"><span class="comment">// lowers BT_DEFAULT_DYNAMIC consumption</span></div>

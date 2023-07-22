@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_material_manager.html',
 </div><!--header-->
 <div class="contents">
 
-<p>Class for managing <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> settings for <a class="el" href="namespace_ogre.html">Ogre</a>.  
+<p>Class for managing <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> settings for <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>.  
  <a href="class_ogre_1_1_material_manager.html#details">More...</a></p>
 
 <p><code>#include &lt;OgreMaterialManager.h&gt;</code></p>
@@ -321,7 +321,7 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a290b828b5d44637ee4d247a09ea81bd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Class for managing <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> settings for <a class="el" href="namespace_ogre.html">Ogre</a>. </p>
+<div class="textblock"><p >Class for managing <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> settings for <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Materials control the eventual surface rendering properties of geometry. This class manages the library of materials, dealing with programmatic registrations and lookups, as well as loading predefined <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> settings from scripts. </dd></dl>
 <dl class="section user"><dt></dt><dd>When loaded from a script, a <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> is in an 'unloaded' state and only stores the settings required. It does not at that stage load any textures. This is because the material settings may be loaded 'en masse' from bulk material script files, but only a subset will actually be required. </dd></dl>
 <dl class="section user"><dt></dt><dd>Because this is a subclass of <a class="el" href="class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler.">ResourceManager</a>, any files loaded will be searched for in any path or archive added to the resource paths/archives. See <a class="el" href="class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler.">ResourceManager</a> for details. </dd></dl>
@@ -1166,7 +1166,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns a pointer to the default <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> settings. </p>
-<dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="namespace_ogre.html">Ogre</a> comes configured with a set of defaults for newly created materials. If you wish to have a different set of defaults, simply call this method and change the returned <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a>'s settings. All materials created from then on will be configured with the new defaults you have specified. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> comes configured with a set of defaults for newly created materials. If you wish to have a different set of defaults, simply call this method and change the returned <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a>'s settings. All materials created from then on will be configured with the new defaults you have specified. </dd></dl>
 <dl class="section user"><dt></dt><dd>The default settings begin as a single <a class="el" href="class_ogre_1_1_technique.html" title="Class representing an approach to rendering this particular Material.">Technique</a> with a single, non-programmable <a class="el" href="class_ogre_1_1_pass.html" title="Class defining a single pass of a Technique (of a Material), i.e.">Pass</a>: <ul>
 <li>
 ambient = <a class="el" href="class_ogre_1_1_colour_value.html#a8eba66b2908f44f00f8d9c9ec25877de">ColourValue::White</a> </li>

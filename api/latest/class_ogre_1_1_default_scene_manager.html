@@ -2272,7 +2272,7 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </div><div class="memdoc">
 
 <p>Prompts the class to send its contents to the renderer. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This method prompts the scene manager to send the contents of the scene it manages to the rendering pipeline. You must have called _cullPhase01 before calling this function. Note that this method is not normally called directly by the user application; it is called automatically by the <a class="el" href="namespace_ogre.html">Ogre</a> rendering loop. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This method prompts the scene manager to send the contents of the scene it manages to the rendering pipeline. You must have called _cullPhase01 before calling this function. Note that this method is not normally called directly by the user application; it is called automatically by the <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> rendering loop. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">camera</td><td>Pointer to a camera from whose viewpoint the scene is to be rendered. </td></tr>
@@ -3017,10 +3017,10 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </div><div class="memdoc">
 
 <p>Empties the entire scene, inluding all SceneNodes, Entities, Lights, BillboardSets etc. </p>
-<p >Cameras are not deleted at this stage since they are still referenced by viewports, which are not destroyed during this process. </p><dl class="section remark"><dt>Remarks</dt><dd>When an indestructible <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> has a destructible parent, the parent will be destroyed and thus the former <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> will be parent-less, i.e. be at the same level as root. Note that parent-less SceneNodes can still render to the scene (this behavior is different from <a class="el" href="namespace_ogre.html">Ogre</a> 1.x) </dd></dl>
+<p >Cameras are not deleted at this stage since they are still referenced by viewports, which are not destroyed during this process. </p><dl class="section remark"><dt>Remarks</dt><dd>When an indestructible <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> has a destructible parent, the parent will be destroyed and thus the former <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> will be parent-less, i.e. be at the same level as root. Note that parent-less SceneNodes can still render to the scene (this behavior is different from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x) </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">deleteIndestructibleToo</td><td>If a node is marked as indestructible, it won't be deleted unless deleteIndestructibleToo is marked as true. Note that some <a class="el" href="namespace_ogre.html">Ogre</a> compoenents mark some of their objects as internal to prevent them from becoming dangling pointers.</td></tr>
+    <tr><td class="paramname">deleteIndestructibleToo</td><td>If a node is marked as indestructible, it won't be deleted unless deleteIndestructibleToo is marked as true. Note that some <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> compoenents mark some of their objects as internal to prevent them from becoming dangling pointers.</td></tr>
   </table>
   </dd>
 </dl>
@@ -6985,7 +6985,7 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </div><div class="memdoc">
 
 <p>Gets the <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> at the root of the scene hierarchy. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>The entire scene is held as a hierarchy of nodes, which allows things like relative transforms, general changes in rendering state etc (See the <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> class for more info). In this basic <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> class, the application using <a class="el" href="namespace_ogre.html">Ogre</a> is free to structure this hierarchy however it likes, since it has no real significance apart from making transforms relative to each node (more specialised subclasses will provide utility methods for building specific node structures e.g. loading a BSP tree). </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The entire scene is held as a hierarchy of nodes, which allows things like relative transforms, general changes in rendering state etc (See the <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> class for more info). In this basic <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> class, the application using <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> is free to structure this hierarchy however it likes, since it has no real significance apart from making transforms relative to each node (more specialised subclasses will provide utility methods for building specific node structures e.g. loading a BSP tree). </dd></dl>
 <dl class="section user"><dt></dt><dd>However, in all cases there is only ever one root node of the hierarchy, and this method returns a pointer to it. There is actually an extra <a class="el" href="class_ogre_1_1_root.html" title="The root class of the Ogre system.">Root</a> <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> so that static objects can be attached to it. Note however, static nodes can be children of a dynamic root node. </dd></dl>
 
 </div>
@@ -9019,7 +9019,7 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
 <p>Set whether to use relative offset co-ordinates when rendering, ie offset to subtract to the camera, lights &amp; objects. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>This is a technique to alleviate some of the precision issues associated with rendering far from the origin, where single-precision floats as used in most GPUs begin to lose their precision. The origin "translates" to this new relativeOffset. <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> previous non-permanent origin is overriden </dd></dl>
 <dl class="section user"><dt></dt><dd>All that this function performs is just offseting the root scene node, and as such, will force to update the static nodes as well. Call this at a low frequency (i.e. when camera has gone too far from origin) </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>If you need this option, you will probably also need to enable double-precision mode in <a class="el" href="namespace_ogre.html">Ogre</a> (OGRE_DOUBLE_PRECISION), since even though this will alleviate the rendering precision, the source camera and object positions will still suffer from precision issues leading to jerky movement. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>If you need this option, you will probably also need to enable double-precision mode in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> (OGRE_DOUBLE_PRECISION), since even though this will alleviate the rendering precision, the source camera and object positions will still suffer from precision issues leading to jerky movement. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bPermanent</td><td>When false, it only affects the root nodes (static &amp; dynamic) so that everything is shifted by the relative origin, causing world &amp; view matrices to contain smaller values. This improves the quality of skeletal animations and "Z fighting"-like artifacts because vertices don't snap to the right place. However, it won't fix the jittering of objects observed while translating them by small increments, including camera movement.</td></tr>
@@ -9173,7 +9173,7 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
 </div><div class="memdoc">
 
 <p>Sets the proportional distance at which texture shadows finish to fading out. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>To hide the edges where texture shadows end (in directional lights) <a class="el" href="namespace_ogre.html">Ogre</a> will fade out the shadow in the distance. This value is a proportional distance of the entire shadow visibility distance at which the shadow is completely invisible. The default is 0.9. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>To hide the edges where texture shadows end (in directional lights) <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will fade out the shadow in the distance. This value is a proportional distance of the entire shadow visibility distance at which the shadow is completely invisible. The default is 0.9. </dd></dl>
 
 </div>
 </div>
@@ -9202,7 +9202,7 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
 </div><div class="memdoc">
 
 <p>Sets the proportional distance at which texture shadows begin to fade out. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>To hide the edges where texture shadows end (in directional lights) <a class="el" href="namespace_ogre.html">Ogre</a> will fade out the shadow in the distance. This value is a proportional distance of the entire shadow visibility distance at which the shadow begins to fade out. The default is 0.7 </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>To hide the edges where texture shadows end (in directional lights) <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will fade out the shadow in the distance. This value is a proportional distance of the entire shadow visibility distance at which the shadow begins to fade out. The default is 0.7 </dd></dl>
 
 </div>
 </div>
@@ -9509,7 +9509,7 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
 <p>Updates the world aabbs from all entities in the scene. </p>
 <p >Ought to be called right after updateAllTransforms. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_scene_manager.html#a1f59ebdfaadbe33f713d754737041654" title="Updates the derived transforms of all nodes in the scene.">updateAllTransforms</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd></dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#add737d6564593333aeac457a1a2c0269">MovableObject::updateAllBounds</a> Don't call this function from another thread other than <a class="el" href="namespace_ogre.html">Ogre</a>'s main one (we use worker threads that may be in use for something else, and touching the sync barrier could deadlock in the best of cases). </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#add737d6564593333aeac457a1a2c0269">MovableObject::updateAllBounds</a> Don't call this function from another thread other than <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s main one (we use worker threads that may be in use for something else, and touching the sync barrier could deadlock in the best of cases). </dd></dl>
 
 </div>
 </div>
@@ -9616,7 +9616,7 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
 </div><div class="memdoc">
 
 <p>Updates the derived transforms of all nodes in the scene. </p>
-<p >This is typically called once per frame during render, but the user may want to manually call this function. </p><dl class="section remark"><dt>Remarks</dt><dd>mEntitiesMemoryManagerUpdateList must be set. It contains multiple memory manager containing all objects to be updated (i.e. Entities &amp; Lights are both MovableObjects but are kept separate) Don't call this function from another thread other than <a class="el" href="namespace_ogre.html">Ogre</a>'s main one (we use worker threads that may be in use for something else, and touching the sync barrier could deadlock in the best of cases). </dd></dl>
+<p >This is typically called once per frame during render, but the user may want to manually call this function. </p><dl class="section remark"><dt>Remarks</dt><dd>mEntitiesMemoryManagerUpdateList must be set. It contains multiple memory manager containing all objects to be updated (i.e. Entities &amp; Lights are both MovableObjects but are kept separate) Don't call this function from another thread other than <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s main one (we use worker threads that may be in use for something else, and touching the sync barrier could deadlock in the best of cases). </dd></dl>
 
 </div>
 </div>

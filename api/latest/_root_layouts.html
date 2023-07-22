@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('_root_layouts.html',''); initResizable
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_RootLayouts"></a></p>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> 2.3 introduced the concept of root layouts, and they need to be setup for Vulkan.</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.3 introduced the concept of root layouts, and they need to be setup for Vulkan.</p>
 <p >If you're familiar with D3D12, you may have noted we borrowed this concept.</p>
 <h1><a class="anchor" id="RootLayoutsOldAPIs"></a>
 Old APIs (i.e. D3D11 and GL)</h1>
@@ -142,7 +142,7 @@ Old APIs (i.e. D3D11 and GL)</h1>
 <div class="line">    int      arrayIndex;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p >This table model is simple to understand, although not all APIs agree on what goes together, e.g. in Metal regular textures and UAV textures share the same table. In D3D11 they have separate tables, thus regularTexture can be bound to slot <code>t1</code> and uavTexture to slot <code>u1</code>; while on Metal only one of them can be bound to slot <code>[[ texture( 1 ) ]]</code></p>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> tries to abstract these differences.</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> tries to abstract these differences.</p>
 <h1><a class="anchor" id="RootLayoutsNewAPIs"></a>
 New APIs and Root Layouts</h1>
 <p >In newer APIs, these tables don't exist. Developers can layout resources in arbitrary ways and then describe the API what is in each offset. A binding can contain ANYTHING: sampler, const buffer, textures, etc</p>
@@ -167,14 +167,14 @@ New APIs and Root Layouts</h1>
 <p >The fact that resource declaration can be so arbitrary gives a lot of power and flexibility but it can be difficult to setup, easy to mess up; and how to approach the problem can be overwhelming.</p>
 <p >There are three ways to approach it:</p>
 <ol type="1">
-<li>The shader is first compiled, the layout is manually and carefully maintained. The C++ and shader code assume the layout is preserved as is. <a class="el" href="namespace_ogre.html">Ogre</a> cannot do this as we have to preserve compatibility with other APIs and we cannot enforce a layout to nor from our user either. This is too low level.</li>
-<li>The shader is first compiled, reflected, their slots extracted, a Root Layout is created out of it, the Root Layout is modified to work with how <a class="el" href="namespace_ogre.html">Ogre</a> expects to bind data, and then the shader is recompiled again with patched binding slots.</li>
+<li>The shader is first compiled, the layout is manually and carefully maintained. The C++ and shader code assume the layout is preserved as is. <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> cannot do this as we have to preserve compatibility with other APIs and we cannot enforce a layout to nor from our user either. This is too low level.</li>
+<li>The shader is first compiled, reflected, their slots extracted, a Root Layout is created out of it, the Root Layout is modified to work with how <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> expects to bind data, and then the shader is recompiled again with patched binding slots.</li>
 <li>The root layout is first specified, then the shader is built with patched binding slots</li>
 </ol>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> follows the 3rd approach (except when arrays of textures are used, which use the 2nd approach).</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> follows the 3rd approach (except when arrays of textures are used, which use the 2nd approach).</p>
 <p >Root Layouts can have up to 4 sets (which is the minimum guaranteed by Vulkan).</p>
-<p >It is common practice in <a class="el" href="namespace_ogre.html">Ogre</a> to leave set 0 for resources bound in the traditional way (i.e. like a table model in D3D11 / OpenGL) while set 1 is set to 'baked' where DescriptorSetTexture/Sampler/Texture2/Uav are bound to it.</p>
-<p ><b>Another way to look at <a class="el" href="namespace_ogre.html">Ogre</a>'s RootLayout is that it basically tells <a class="el" href="namespace_ogre.html">Ogre</a> what resources will the shader use so that we can properly emulate tables and compile the shader using slot locations calculated by us while the shader author can use binding slot index that have the same number as the shader code for other APIs (i.e. D3D11, GL)</b></p>
+<p >It is common practice in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to leave set 0 for resources bound in the traditional way (i.e. like a table model in D3D11 / OpenGL) while set 1 is set to 'baked' where DescriptorSetTexture/Sampler/Texture2/Uav are bound to it.</p>
+<p ><b>Another way to look at <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s RootLayout is that it basically tells <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> what resources will the shader use so that we can properly emulate tables and compile the shader using slot locations calculated by us while the shader author can use binding slot index that have the same number as the shader code for other APIs (i.e. D3D11, GL)</b></p>
 <h1><a class="anchor" id="RootLayoutsSettingUp"></a>
 Setting up root layouts</h1>
 <p >An HLSL shader that ONLY declares and uses the following resources:</p>
@@ -356,7 +356,7 @@ Inline shader declaration</h2>
 </div><!-- fragment --><h2><a class="anchor" id="RootLayoutsAoTAuto"></a>
 Automatic</h2>
 <p >In automatic, arrays are not declared. But the shader will be compiled, reflected, <b>and then compiled again</b> with a patched Root Layout (unless there were no arrays).</p>
-<p >On Debug builds, <a class="el" href="namespace_ogre.html">Ogre</a> will always reflect shaders to check the declared arrays in root layouts match the arrays used by the shader.</p>
+<p >On Debug builds, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will always reflect shaders to check the declared arrays in root layouts match the arrays used by the shader.</p>
 <p >Automatic is the default behavior for low level materials. For Hlms shaders it's turned off</p>
 <p >Automatic can be turned on or off via <code>GpuProgram::setAutoReflectArrayBindingsInRootLayout</code> or its script counterpart <code>uses_array_bindings</code></p>
 <p >Compute Shaders can turn on automatic mode by setting the <code>uses_array_bindings</code> property via Hlms, e.g.</p>

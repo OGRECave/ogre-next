@@ -186,8 +186,8 @@ Downloading and building Ogre</h1>
 <div class="line">make install</div>
 </div><!-- fragment --><h1><a class="anchor" id="BuildingSamplesAndroid"></a>
 Building Samples</h1>
-<p >The samples are built alongside <a class="el" href="namespace_ogre.html">Ogre</a> (unless OGRE_BUILD_SAMPLES2 is not set) in the previous sectio in the form of C++ static libraries.</p>
-<p >However Android Studio is needed for the final step to compile a bit of C++, link all libraries (i.e. libOgreSamplesCommon.a, libSampleName.a and all <a class="el" href="namespace_ogre.html">Ogre</a> libraries) and generate the APK file.</p>
+<p >The samples are built alongside <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> (unless OGRE_BUILD_SAMPLES2 is not set) in the previous sectio in the form of C++ static libraries.</p>
+<p >However Android Studio is needed for the final step to compile a bit of C++, link all libraries (i.e. libOgreSamplesCommon.a, libSampleName.a and all <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> libraries) and generate the APK file.</p>
 <p >The Android Studio projects for each sample are generated from a single template located at /home/username/workingdir/ogre-next/Samples/2.0/AndroidAppTemplate</p>
 <p >The script GenTemplate.py will duplicate and customize the template for all samples. i.e. simply run:</p>
 <div class="fragment"><div class="line">cd /home/username/workingdir/ogre-next/Samples/2.0/AndroidAppTemplate</div>
@@ -208,7 +208,7 @@ Building Samples</h1>
 <p >&zwj;⚠️ Note:</p>
 <p >Building for Android force-enables OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE</p>
 <p >This setting <a href="https://community.arm.com/developer/tools-software/graphics/b/blog/posts/appropriate-use-of-surface-rotation">improves performance and/or lowers battery consumption</a> on phones <a href="https://arm-software.github.io/vulkan_best_practice_for_mobile_developers/samples/performance/surface_rotation/surface_rotation_tutorial.html">without HW-accelerated preTransform rotation</a>.</p>
-<p >However OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE can introduce bugs either in <a class="el" href="namespace_ogre.html">Ogre</a> or your application e.g. see Tutorial_SSAOGameState::update which must call <code>camera-&gt;setOrientationMode( Ogre::OR_DEGREE_0 )</code> to properly apply SSAO.</p>
+<p >However OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE can introduce bugs either in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> or your application e.g. see Tutorial_SSAOGameState::update which must call <code>camera-&gt;setOrientationMode( Ogre::OR_DEGREE_0 )</code> to properly apply SSAO.</p>
 <p >For example:</p><ul>
 <li>{ dFdx, dFdx } <a href="https://android-developers.googleblog.com/2020/02/handling-device-orientation-efficiently.html">needs to be mapped</a> to {dFdy, -dFdx}, {-dFdy, dFdx}, {-dFdx, -dFdy}, for 90°, 270° and 180° respectively</li>
 <li>The same happens to gl_FragCoord</li>
@@ -217,7 +217,7 @@ Building Samples</h1>
 <p >If you suspect this is the cause of your bugs, edit the CMakeLists.txt file so that OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE is no longer force-enabled, or pass miscParams["preTransform"] = "false" to the window.</p>
 <p >You can debug viewport orientation bugs on Desktop by enabling OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE in your Desktop build, and manually editing OgreVulkanWindow.cpp and set:</p>
 <p ><code>surfaceCaps.currentTransform = VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR;</code></p>
-<p >before <a class="el" href="namespace_ogre.html">Ogre</a> uses its value.</p>
+<p >before <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> uses its value.</p>
 <p >The window will be 90° rotated, but you will be able to reproduce the bug on a desktop, where it is much easier to solve than on a phone. </p>
 </blockquote>
 </div></div><!-- contents -->

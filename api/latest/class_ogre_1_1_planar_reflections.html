@@ -186,7 +186,7 @@ Public Member Functions</h2></td></tr>
 <p >An unlit datablock is tied to a particular Actor (reflection plane). PBS on the other hand, can dynamically assign Renderables to the closest actor that aligns with the <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a>'s (predominant) normal, regardless of the pbs datablock it uses. If the actor is close enough but not an exact match, PBS will attempt to project the reflection in an attempt to correct this, however it's an approximation.</p>
 <p >If you want perfect reflections, the reflection plane of the actor must match and align exactly the surface being drawn; or rely on a fallback (Local Cubemaps, SSR, etc).</p>
 <p >Furthermore, PBS will automatically disable reflections while rendering reflections (but Unlit won't do this, so it's your job to leave it out of rendering i.e. via visibility masks).</p>
-<p >Actors are culled against the camera, thus if they're no longer visible <a class="el" href="namespace_ogre.html">Ogre</a> will stop updating those actors, improving performance. </p>
+<p >Actors are culled against the camera, thus if they're no longer visible <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will stop updating those actors, improving performance. </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="aef23063b9860dc2511f94643d68a5144" name="aef23063b9860dc2511f94643d68a5144"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aef23063b9860dc2511f94643d68a5144">&#9670;&#160;</a></span>CustomParameterBits</h2>

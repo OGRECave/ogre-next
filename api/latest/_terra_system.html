@@ -196,7 +196,7 @@ Outer layers</h2>
 <p >As you may have noticed, after merging, a **<code>TerrainCell</code> may no longer be squared!**</p>
 <p >After we've covered the whole terrain, for all surviving <code>TerrainCell</code> <code>TerrainCell::uploadToGpu</code> is called and added to Terra's MovableObject::mRenderables.</p>
 <p >This uploaded data is what the Vertex Shader reads in <code>CellData cellData = cellDataArray[inVs_drawId];</code>.</p>
-<p >After that, <code>Terra::update</code> will return and <a class="el" href="namespace_ogre.html">Ogre</a> will pick up the mRenderables from the Terra object for rendering.</p>
+<p >After that, <code>Terra::update</code> will return and <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will pick up the mRenderables from the Terra object for rendering.</p>
 <blockquote class="doxtable">
 <p >&zwj;<b>Note:</b> Hardcoding <code>lodLevel</code> to be always 0 forces Terra to render without any sort of LOD, which is useful when maximum quality is needed. </p>
 </blockquote>
@@ -233,7 +233,7 @@ Shadows</h1>
 <p >Point &amp; spot lights use traditional shadow maps. They often have much higher quality and limited range, thus vertex count is also not an issue.</p>
 <h1><a class="anchor" id="autotoc_md83"></a>
 Shading</h1>
-<p >Starting <a class="el" href="namespace_ogre.html">Ogre</a> 2.2, HlmsTerra derives from HlmsPbs therefore all or most features available to PBS are also available to Terra. That includes multiple light sources, multiple BRDFs, Forward+, PCC, etc.</p>
+<p >Starting <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2, HlmsTerra derives from HlmsPbs therefore all or most features available to PBS are also available to Terra. That includes multiple light sources, multiple BRDFs, Forward+, PCC, etc.</p>
 <p >Terra shader <a href="https://github.com/OGRECave/ogre-next/blob/e8486341da0e0f9780e943a001adda33df00a268/Samples/Media/Hlms/Terra/Any/800.PixelShader_piece_ps.any#L125">overrides texturing code</a> via <code>@undefpiece</code> to perform blending between detail maps in a manner that is most common to terrain tools.</p>
 <p >However every project has its own idea of how detail maps should be blended together in a terrain; and we encourage to override them to suit your needs.</p>
 <p >For example the <a href="https://github.com/ignitionrobotics/ign-rendering/blob/056023a9f8f139925035b0e62db3837ad9a3f8e3/ogre2/src/media/Hlms/Terra/Any/800.PixelShader_piece_ps.any#L133">Ignition project customized blending</a> to more closely match that of their Terrain Component from Ogre1.</p>

@@ -195,7 +195,7 @@ Parameter: brdf</h2>
 <ul>
 <li>Defines the brdf mode</li>
 <li>Valid values:<ul>
-<li><code>default</code>: Most physically accurate BRDF <a class="el" href="namespace_ogre.html">Ogre</a> has.<ul>
+<li><code>default</code>: Most physically accurate BRDF <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> has.<ul>
 <li>Uses: Good for representing the majority of materials.</li>
 </ul>
 </li>
@@ -233,7 +233,7 @@ Parameter: brdf</h2>
 <li>Assumes your Light power is set to 1.0.</li>
 <li>Diffuse &amp; Specular is unmodified</li>
 <li>The fastest BRDF implementations</li>
-<li>Use this implementation for ease of porting from <a class="el" href="namespace_ogre.html">Ogre</a> 1.X and to maintain the fixed-function look.</li>
+<li>Use this implementation for ease of porting from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.X and to maintain the fixed-function look.</li>
 <li>If switching from the 'default' BRDF implementation, the scene will be too bright. If so, divide light power by PI.</li>
 </ul>
 </li>
@@ -499,7 +499,7 @@ Parameter: workflow</h2>
 <ul>
 <li>Defines the workflow of the material</li>
 <li>Valid values:<ul>
-<li><code>specular_ogre</code>: <a class="el" href="namespace_ogre.html">Ogre</a> implementation of specular workflow. Specular texture is used as a specular texture, and is expected to be either coloured or monochrome. setMetalness should not be called in this mode.</li>
+<li><code>specular_ogre</code>: <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> implementation of specular workflow. Specular texture is used as a specular texture, and is expected to be either coloured or monochrome. setMetalness should not be called in this mode.</li>
 <li><code>specular_fresnel</code>: Equivalent to what other implementations often refer to as "specular workflow". Specular texture is used as a specular texture, and is expected to be either coloured or monochrome. setMetalness should not be called in this mode.</li>
 <li><code>metallic</code>: Metallic workflow. The texture is used as a metallic texture and expected to be monochrome. Fresnel setting should not be used.</li>
 </ul>

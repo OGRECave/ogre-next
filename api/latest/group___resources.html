@@ -484,7 +484,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a part of a complete mesh.  <a href="class_ogre_1_1v1_1_1_sub_mesh.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vertex_buffer_download_helper.html">Ogre::VertexBufferDownloadHelper</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespace_ogre.html">Ogre</a> currently does not support deinterleaved vertex buffers.  <a href="class_ogre_1_1_vertex_buffer_download_helper.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> currently does not support deinterleaved vertex buffers.  <a href="class_ogre_1_1_vertex_buffer_download_helper.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_flush_only_desc_value.html">Ogre::VulkanFlushOnlyDescValue</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1857,12 +1857,12 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section remark"><dt>Remarks</dt><dd>It's possible to set both saveOitd &amp; saveOriginal to true, but will likely double storage requirements (2x as many textures). Setting both to true is useful for troubleshooting obscure <a class="el" href="namespace_ogre.html">Ogre</a> bugs. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>It's possible to set both saveOitd &amp; saveOriginal to true, but will likely double storage requirements (2x as many textures). Setting both to true is useful for troubleshooting obscure <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> bugs. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">folderPath</td><td>Folder where to dump the textures. </td></tr>
     <tr><td class="paramname">savedTextures</td><td>[in/out] Set of texture names. Textures whose name is already in the set won't be saved again. Textures that were saved will be inserted into the set. </td></tr>
-    <tr><td class="paramname">saveOitd</td><td>When true, we will download the texture from GPU and save it in OITD format. OITD is faster to load as it's stored in <a class="el" href="namespace_ogre.html">Ogre</a>'s native format it understands, but it cannot be opened by traditional image editors; also OITD is not backwards compatible with older versions of <a class="el" href="namespace_ogre.html">Ogre</a>. </td></tr>
+    <tr><td class="paramname">saveOitd</td><td>When true, we will download the texture from GPU and save it in OITD format. OITD is faster to load as it's stored in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s native format it understands, but it cannot be opened by traditional image editors; also OITD is not backwards compatible with older versions of <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>. </td></tr>
     <tr><td class="paramname">saveOriginal</td><td>When true, we will attempt to read the raw filestream of the original texture and save it (i.e. copy the original png/dds/etc file). </td></tr>
   </table>
   </dd>

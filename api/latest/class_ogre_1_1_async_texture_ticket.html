@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_async_texture_ticket.ht
 </div><!--header-->
 <div class="contents">
 
-<p>In <a class="el" href="namespace_ogre.html">Ogre</a> 2.2 reading data from GPU back to CPU is asynchronous.  
+<p>In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 reading data from GPU back to CPU is asynchronous.  
  <a href="class_ogre_1_1_async_texture_ticket.html#details">More...</a></p>
 
 <p><code>#include &lt;OgreAsyncTextureTicket.h&gt;</code></p>
@@ -191,7 +191,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0aff529519349fc7255f74d995f3953f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >In <a class="el" href="namespace_ogre.html">Ogre</a> 2.2 reading data from GPU back to CPU is asynchronous. </p>
+<div class="textblock"><p >In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 reading data from GPU back to CPU is asynchronous. </p>
 <p >See <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a71e7ae62f823f48c7c4844a2d34589de" title="Creates an AsyncTextureTicket that can be used to download data GPU -&gt; CPU from a TextureGpu.">TextureGpuManager::createAsyncTextureTicket</a> to generate a ticket. While the async transfer is being performed, you should be doing something else. </p><dl class="section remark"><dt>Remarks</dt><dd>If you call <a class="el" href="class_ogre_1_1_async_texture_ticket.html#a6c76b44f26be0d76c764fe2d5597a26f" title="Maps the buffer for CPU access.">map()</a> before the transfer is done, it will produce a stall as the CPU must wait for the GPU to finish all its pending operations. </dd></dl>
 <dl class="section user"><dt></dt><dd>Use queryIsTransferDone to query if the transfer has finished. Beware not all APIs support querying async transfer status. In those cases there is no reliable way to determine when the transfer is done. An almost safe bet is to wait two frames before mapping. </dd></dl>
 <dl class="section user"><dt></dt><dd>Call <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#af906e6a5e055170b281a1986374b4754">TextureGpuManager::destroyAsyncTextureTicket</a> when you're done with this ticket. </dd></dl>
@@ -244,7 +244,7 @@ Public Member Functions</h2></td></tr>
 <p >Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257" name="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p >This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#a73d480691663c93439835ff7d11f7739" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
-<p >This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
+<p >This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e" name="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
 </table>

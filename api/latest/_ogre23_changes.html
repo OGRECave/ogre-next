@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('_ogre23_changes.html',''); initResizab
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">What's new in <a class="el" href="namespace_ogre.html">Ogre</a> 2.3 </div></div>
+  <div class="headertitle"><div class="title">What's new in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.3 </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('_ogre23_changes.html',''); initResizab
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_Ogre2_3_Changes"></a></p>
-<p >Since <a class="el" href="namespace_ogre.html">Ogre</a> 2.2 there are multiple changes that warrant bumping the minor version to 2.3:</p>
+<p >Since <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 there are multiple changes that warrant bumping the minor version to 2.3:</p>
 <ul>
 <li>Mesh::importV1 deprecated over createByImportingV1</li>
 <li>Unlit shaders unification can cause a few minor headaches if the old</li>
@@ -140,8 +140,8 @@ Unlit vertex and pixel shaders unified</h1>
 <h1><a class="anchor" id="autotoc_md51"></a>
 Added HlmsMacroblock::mDepthClamp</h1>
 <p >It is now possible to toggle Depth Clamp on/off. Check if it's supported via RSC_DEPTH_CLAMP. All desktop GPU should support it unless you're using extremely old OpenGL drivers. iOS supports it since A11 chip (iPhone 8 or newer)</p>
-<p >Users upgrading from older <a class="el" href="namespace_ogre.html">Ogre</a> versions should be careful their libraries and headers don't get out of sync. <b>A full rebuild is recommended</b>.</p>
-<p >The reason being is that HlmsMacroblock (which is used almost anywhere in <a class="el" href="namespace_ogre.html">Ogre</a>) added a new member variable. And if a DLL or header gets out of sync, it likely won't crash but the artifacts will be very funny (most likely depth buffer will be disabled).</p>
+<p >Users upgrading from older <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> versions should be careful their libraries and headers don't get out of sync. <b>A full rebuild is recommended</b>.</p>
+<p >The reason being is that HlmsMacroblock (which is used almost anywhere in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>) added a new member variable. And if a DLL or header gets out of sync, it likely won't crash but the artifacts will be very funny (most likely depth buffer will be disabled).</p>
 <h1><a class="anchor" id="autotoc_md52"></a>
 Added shadow pancaking</h1>
 <p >With the addition of depth clamp, we are now able to push the near plane of directional shadow maps in PSSM (non-stable variant). This greatly enhances depth buffer precision and reduces self-occlusion and acne bugs.</p>
@@ -149,11 +149,11 @@ Added shadow pancaking</h1>
 <p >Shadow pancaking is automatically disabled when depth clamp is not supported.</p>
 <h1><a class="anchor" id="autotoc_md53"></a>
 PluginOptional</h1>
-<p >Old timers may remember that <a class="el" href="namespace_ogre.html">Ogre</a> could crash if the latest DirectX runtimes were not installed, despite having an OpenGL backend as a fallback.</p>
+<p >Old timers may remember that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> could crash if the latest DirectX runtimes were not installed, despite having an OpenGL backend as a fallback.</p>
 <p >This was specially true during the Win 9x and Win XP eras which may not have DirectX 9.0c support. And stopped being an issue in the last decade since... well everyone has it now.</p>
 <p >This problem came back with the Vulkan plugin, as laptops having very old drivers (e.g. from 2014) with GPUs that were perfectly capable of running Vulkan would crash due to missing system DLLs.</p>
-<p >Furthermore, if the GPU cannot do Vulkan, <a class="el" href="namespace_ogre.html">Ogre</a> would also crash.</p>
-<p >We added the keyword <code>PluginOptional</code> to the Plugins.cfg file. With this, <a class="el" href="namespace_ogre.html">Ogre</a> will try to load OpenGL, D3D11, Metal and/or Vulkan; and if these plugins fail to load, they will be ignored.</p>
+<p >Furthermore, if the GPU cannot do Vulkan, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> would also crash.</p>
+<p >We added the keyword <code>PluginOptional</code> to the Plugins.cfg file. With this, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will try to load OpenGL, D3D11, Metal and/or Vulkan; and if these plugins fail to load, they will be ignored.</p>
 <p >Make sure to update your Plugins.cfg to use this feature to provide a good experience to all of your users, even if they've got old HW or SW.</p>
 <h1><a class="anchor" id="autotoc_md54"></a>
 Other relevant information when porting</h1>
@@ -175,7 +175,7 @@ Other relevant information when porting</h1>
 <p >This is normal for textures whose contents are meant to be carried over from the previous frame.</p>
 <h2><a class="anchor" id="autotoc_md55"></a>
 Do not call notifyDataIsReady more than needed</h2>
-<p >In <a class="el" href="namespace_ogre.html">Ogre</a> 2.2 you could call notifyDataIsReady as many times as you want. In fact we gave the following example which is now possibly wrong:</p>
+<p >In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 you could call notifyDataIsReady as many times as you want. In fact we gave the following example which is now possibly wrong:</p>
 <div class="fragment"><div class="line">stagingTexture-&gt;startMapRegion();</div>
 <div class="line">TextureBox box0 = stagingTexture-&gt;mapRegion( width, height, depth, slices, pixelFormat );</div>
 <div class="line">... write to box0.data ...</div>
@@ -187,13 +187,13 @@ Do not call notifyDataIsReady more than needed</h2>
 <div class="line">textureManager.removeStagingTexture( stagingTexture );</div>
 <div class="line">texture0-&gt;notifyDataIsReady();</div>
 <div class="line">texture1-&gt;notifyDataIsReady();</div>
-</div><!-- fragment --><p >However in <a class="el" href="namespace_ogre.html">Ogre</a> 2.3 every <code>notifyDataIsReady</code> must previously have had a call to <code>scheduleTransitionTo</code> (Resident) or <code>scheduleReupload</code>, assuming you didn't cancel the load e.g. assuming you didn't do this:</p>
+</div><!-- fragment --><p >However in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.3 every <code>notifyDataIsReady</code> must previously have had a call to <code>scheduleTransitionTo</code> (Resident) or <code>scheduleReupload</code>, assuming you didn't cancel the load e.g. assuming you didn't do this:</p>
 <div class="fragment"><div class="line">tex-&gt;scheduleTransitionTo( GpuResidency::Resident );</div>
 <div class="line">tex-&gt;scheduleTransitionTo( GpuResidency::OnStorage );</div>
 <div class="line"><span class="comment">// Must NOT call tex-&gt;notifyDataIsReady();</span></div>
-</div><!-- fragment --><p >Additionally for <code>ManualTexture</code> textures, <a class="el" href="namespace_ogre.html">Ogre</a> automatically calls <code>notifyDataIsReady</code> as soon as the texture becomes resident. Thus <code>notifyDataIsReady</code> shouldn <em>not</em> be called by the user if <code>TextureFlags::ManualTexture</code> flag is set.</p>
+</div><!-- fragment --><p >Additionally for <code>ManualTexture</code> textures, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> automatically calls <code>notifyDataIsReady</code> as soon as the texture becomes resident. Thus <code>notifyDataIsReady</code> shouldn <em>not</em> be called by the user if <code>TextureFlags::ManualTexture</code> flag is set.</p>
 <p >The solution is simple: Remove the call to <code>notifyDataIsReady</code>, since it wasn't previous needed, and now it must not be there.</p>
-<p >If the assert is triggering inside <a class="el" href="namespace_ogre.html">Ogre</a>, then it means you previously called <code>notifyDataIsReady</code> on that texture and now <a class="el" href="namespace_ogre.html">Ogre</a> is doing it again. Find where you're calling <code>notifyDataIsReady</code> and remove that line.</p>
+<p >If the assert is triggering inside <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>, then it means you previously called <code>notifyDataIsReady</code> on that texture and now <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> is doing it again. Find where you're calling <code>notifyDataIsReady</code> and remove that line.</p>
 <p ><a href="https://github.com/OGRECave/ogre-next/commit/829d228857d05923ca420486ba7a1d875972f7ea#diff-95607f7ef0960e151e7726bd1b5a1fc3ead98b4e1c36887bbd1ae6c1da6741c6L136">Terra</a>, SSAO, Postprocessing samples and <a href="https://github.com/OGRECave/ogre-next/commit/829d228857d05923ca420486ba7a1d875972f7ea#diff-dcb86bb90358b03d4647a3d7f5d56811c187d76ddb292abc9c17b0e7b954c1ecL501">v1 Overlays</a> were updated to reflect this change.</p>
 <h2><a class="anchor" id="autotoc_md56"></a>
 Global changes for Vulkan compatibility:</h2>

@@ -164,7 +164,7 @@ $(document).ready(function(){initNavTree('compositor.html',''); initResizable();
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_compositor"></a></p>
-<p >The Compositor is a Core and key component in <a class="el" href="namespace_ogre.html">Ogre</a> 2.0. In 1.x, it was just used for fancy post-processing effects. In 2.0, it's the way to tell <a class="el" href="namespace_ogre.html">Ogre</a> how you want to render the scene. Without setting it up, <a class="el" href="namespace_ogre.html">Ogre</a> won't render to screen.</p>
+<p >The Compositor is a Core and key component in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0. In 1.x, it was just used for fancy post-processing effects. In 2.0, it's the way to tell <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> how you want to render the scene. Without setting it up, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> won't render to screen.</p>
 <p >With the Compositor, the user stops having to deal with setting Viewports, RenderTargets, updating these RenderTargets every frame, etc.</p>
 <p >Instead the user has now to setup Nodes and a Workspace. The workspace is the top level system where the user indicates which Nodes he wants to use, how they will be connected, which global render textures will be declared (which can be seen by all nodes from the same workspace), where to render the final output (i.e. RenderWindow, an offscreen RenderTexture) and which SceneManager to use. The user can have multiple workspaces active at the same time.</p>
 <p >The new Compositor system was heavily inspired by Blender's Compositor system. Picture from Blender:</p>
@@ -229,11 +229,11 @@ Locally declared textures</h3>
 <div class="line"> </div>
 <div class="line">    out 0 rt0</div>
 <div class="line">}</div>
-</div><!-- fragment --><p >You may have noticed the syntax for declaring the RTT is <b>almost exactly the same</b> as it was in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x</p>
-<p >Refer to <a class="el" href="namespace_ogre.html">Ogre</a>'s 1.9 documentation for more information about it.</p>
+</div><!-- fragment --><p >You may have noticed the syntax for declaring the RTT is <b>almost exactly the same</b> as it was in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x</p>
+<p >Refer to <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s 1.9 documentation for more information about it.</p>
 <p >There are a couple of small changes:</p>
 <ul>
-<li><b>New parameter</b> <code>no_gamma</code>: In 1.x HW gamma would be on by default if the global gamma settings were on; with no way to turn it off. But it could be forced always on using the keyword <code>gamma</code>. In <a class="el" href="namespace_ogre.html">Ogre</a> 2.x, leaving the option blank uses the system's settings, writing the keyword <code>gamma</code> forces it on, and using the keyword <code>no_gamma</code> turns it off.</li>
+<li><b>New parameter</b> <code>no_gamma</code>: In 1.x HW gamma would be on by default if the global gamma settings were on; with no way to turn it off. But it could be forced always on using the keyword <code>gamma</code>. In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.x, leaving the option blank uses the system's settings, writing the keyword <code>gamma</code> forces it on, and using the keyword <code>no_gamma</code> turns it off.</li>
 <li>The parameter "scope" is no longer available.</li>
 <li>The parameter "pooled" is no longer available.</li>
 </ul>
@@ -261,7 +261,7 @@ It comes from an input channel</h3>
 </div>
     <h3><a class="anchor" id="CompositorNodesChannelsAndRTTsGlobal"></a>
 It is a global texture</h3>
-<p >Global textures are declared at workspace scope and have the same syntax as local textures (which is the same <a class="el" href="namespace_ogre.html">Ogre</a> 1.x's syntax). There are a few restrictions:</p>
+<p >Global textures are declared at workspace scope and have the same syntax as local textures (which is the same <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x's syntax). There are a few restrictions:</p>
 <ol type="1">
 <li>Global texture names must contain the <em><b>global_</b></em> prefix. Inversely, any local texture or input channel trying to use a name that starts with <code>global_</code> is illegal.</li>
 <li>They can't be used in input or output channels.</li>
@@ -311,8 +311,8 @@ Target</h2>
 </ul>
 <p >Default value is no.</p>
 <p >When yes, this setting is meant to be used with <code>skip_load_store_semantics</code> for optimization on mobile/TBDR targets, but should be used with care.</p>
-<p ><code>skip_load_store_semantics</code> allows <a class="el" href="namespace_ogre.html">Ogre</a> to execute multiple consecutive passes as if they were only one.</p>
-<p >An obstacle for this is that barriers from all theses passes mut be issued <em>before</em> the first pass executes; otherwise the passes need to be internally broken up and <a class="el" href="namespace_ogre.html">Ogre</a> will complain if <code>skip_load_store_semantics on</code> but we can't merge the passes.</p>
+<p ><code>skip_load_store_semantics</code> allows <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to execute multiple consecutive passes as if they were only one.</p>
+<p >An obstacle for this is that barriers from all theses passes mut be issued <em>before</em> the first pass executes; otherwise the passes need to be internally broken up and <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will complain if <code>skip_load_store_semantics on</code> but we can't merge the passes.</p>
 <p ><code>target_level_barrier yes</code> means that an extra hidden pass will be inserted at the beginning of the target and issue all necessary barriers from subsequent passes:</p>
 <div class="fragment"><div class="line">target rt_renderwindow</div>
 <div class="line">{</div>
@@ -386,7 +386,7 @@ Target</h2>
 <div class="line">}</div>
 </div><!-- fragment --><h2><a class="anchor" id="CompositorNodesPasses"></a>
 Passes</h2>
-<p >Passes are the same as they were in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x. At the time of writing there are 10 types of passes:</p>
+<p >Passes are the same as they were in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x. At the time of writing there are 10 types of passes:</p>
 <ul>
 <li>clear (PASS_CLEAR)</li>
 <li>generate_mipmaps (PASS_MIPMAP)</li>
@@ -403,7 +403,7 @@ Passes</h2>
 <p >Planned passes are:</p>
 <ul>
 <li>Paraboloid mapping passes (useful for efficient env. mapping and point light shadow maps)</li>
-<li>N pass (optimizes <a class="el" href="namespace_ogre.html">Ogre</a> data for two or more passes i.e. a Z pre-pass with minimum overhead in the engine since the cull data is the same)</li>
+<li>N pass (optimizes <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> data for two or more passes i.e. a Z pre-pass with minimum overhead in the engine since the cull data is the same)</li>
 </ul>
 <p >All passes support the following script parameters:</p>
 <ul>
@@ -415,7 +415,7 @@ Passes</h2>
 <li>num_initial &lt;number&gt;;</li>
 </ul>
 <p >Number of times this will be executed. Default is -1, which means always execute. When the execution count hits that value, it won't executed again until a d3d device reset, resize or workspace recreation (the execution count is reset and executed N times again)</p>
-<p >This parameter replaces the <code>only_initial</code> parameter in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x.</p>
+<p >This parameter replaces the <code>only_initial</code> parameter in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x.</p>
 <ul>
 <li>flush_command_buffers &lt;off|on&gt;;</li>
 </ul>
@@ -469,7 +469,7 @@ generate_mipmaps</h3>
 <p >generate_mipmaps works at texture level. If you pass a Cubemap, it will generate mipmaps for all the faces. If you pass a 3D or a 2D array texture, it will generate mipmaps for all slices.</p>
 <p >A RenderWindow does not have a texture, thus attempting to generate mipmaps on it will raise an exception.</p>
 <p >Attention #2!</p>
-<p >In order for compute-based mipmap generation to work, <a class="el" href="namespace_ogre.html">Ogre</a> must be compiled with JSON support, and the user must include the resources included in <a class="el" href="namespace_ogre.html">Ogre</a>'s repository at Samples/Media/2.0/scripts/materials/Common </p>
+<p >In order for compute-based mipmap generation to work, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> must be compiled with JSON support, and the user must include the resources included in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s repository at Samples/Media/2.0/scripts/materials/Common </p>
 </blockquote>
 <h3><a class="anchor" id="CompositorNodesPassesQuad"></a>
 quad</h3>
@@ -488,12 +488,12 @@ quad</h3>
 <ul>
 <li>expose &lt;textureName&gt;;</li>
 </ul>
-<p >Low level materials can access local and global textures via the old 'content_type compositor' setting, and Hlms materials can access them by calling <code>SceneManager::getCompositorTextures</code>. But before you can do that, you need to expose them to the pass. This is necessary so <a class="el" href="namespace_ogre.html">Ogre</a> can know which textures may or will be used during the pass so resource transitions and barriers can be issued in explicit APIs like DX12 and Vulkan.</p>
+<p >Low level materials can access local and global textures via the old 'content_type compositor' setting, and Hlms materials can access them by calling <code>SceneManager::getCompositorTextures</code>. But before you can do that, you need to expose them to the pass. This is necessary so <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> can know which textures may or will be used during the pass so resource transitions and barriers can be issued in explicit APIs like DX12 and Vulkan.</p>
 <ul>
 <li>skip_load_store_semantics [yes|no];</li>
 </ul>
 <p >When yes, the load and store semantics will be ignored. Use with care as improper usage may lead to rendering bugs or crashes.</p>
-<p >Normally <a class="el" href="namespace_ogre.html">Ogre</a> tries to merge passes when possible but certain advanced uses are impossible or difficult to get automatically merged, thus this flag indicates we want e.g.</p>
+<p >Normally <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> tries to merge passes when possible but certain advanced uses are impossible or difficult to get automatically merged, thus this flag indicates we want e.g.</p>
 <div class="fragment"><div class="line">compositor_node MyNode</div>
 <div class="line">{</div>
 <div class="line">    in 0 rtt</div>
@@ -544,22 +544,22 @@ quad</h3>
 <div class="line">    pass render_quad { skip_load_store_semantics <span class="keyword">true</span> }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p >This script will <em>not</em> behave as expected because <b>both render_quad passes will draw to TargetA!</b></p>
-<p >This is because with <code>skip_load_store_semantics</code> you're telling <a class="el" href="namespace_ogre.html">Ogre</a> not to set <code>UnrelatedTargetB</code> as the current target <em>because <a class="el" href="namespace_ogre.html">Ogre</a> should assume it already is</em> the current target.</p>
+<p >This is because with <code>skip_load_store_semantics</code> you're telling <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> not to set <code>UnrelatedTargetB</code> as the current target <em>because <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> should assume it already is</em> the current target.</p>
 <p >Likewise there should be no barriers to execute because barriers force the pass to 'close' which means store semantics must be executed; and to open another pass we must execute load semantics again (see <code>target_level_barrier</code> to solve this problem).</p>
 <p >We try to perform validation checks in Debug mode to avoid these type of errors, but we can't cover them all.</p>
 <p >This setting is an optimization specifically aimed at mobile and you should pay attention to errors, the Ogre.log, Vulkan Validation Layers, and tools like RenderDoc to be sure rendering is happening as intended.</p>
-<p >The following setting was available in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; but was not documented:</p>
+<p >The following setting was available in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x; but was not documented:</p>
 <ul>
 <li>quad_normals [camera_far_corners_view_space|camera_far_corners_view_space_normalized|camera_far_corners_view_space_normalized_lh|camera_far_corners_world_space|camera_far_corners_world_space_centered|camera_direction]</li>
 </ul>
 <p >Sends through the <code>NORMALS</code> semantic the camera's frustum corners in either world space or view space. This is particularly useful for efficiently reconstructing position using only the depth and the corners. The <code>camera_direction</code> option sends the direction across the frustum and is the same as <code>camera_far_corners_world_space_centered</code> but normalized (values are in range [0;1]) which is useful for sky rendering &amp; atmospheric scattering. See <code>TutorialSky_Postprocess</code> sample.</p>
 <p >Interesting read: Reconstructing Position From Depth <a href="http://mynameismjp.wordpress.com/2009/03/10/reconstructing-position-from-depth/">Part I</a>, <a href="http://mynameismjp.wordpress.com/2009/05/05/reconstructing-position-from-depth-continued/">Part II</a>, <a href="http://mynameismjp.wordpress.com/2010/09/05/position-from-depth-3/">Part III</a></p>
 <p ><code>camera_far_corners_view_space_normalized</code> is like <code>camera_far_corners_view_space</code> but divides the whole vector by the far plane; causing dir.z to be always -1 (but the vector itself isn't unit-length). The one with <code>_lh</code> suffix is the left-handed variant (i.e. dir.z = 1 instead of -1)</p>
-<p >Starting <a class="el" href="namespace_ogre.html">Ogre</a> 2.0, UV coordinates are always sent to the vertex shader in pass quads.</p>
+<p >Starting <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0, UV coordinates are always sent to the vertex shader in pass quads.</p>
 <blockquote class="doxtable">
 <p >&zwj; Attention!</p>
-<p >In <a class="el" href="namespace_ogre.html">Ogre</a> 2.x; you need to apply the <b>world-view-proj matrix</b> so that the the pass being drawn compensates for texel-to-pixel aligning reads in Direct3D9. Failing to do so will not only cause the aforementioned alignment issue, but also will cause glitches when the viewport is not 0 0 1 1</p>
-<p >In <a class="el" href="namespace_ogre.html">Ogre</a> 1.x, only the proj matrix was necessary to fix texture flipping issues when rendering to FBOs in OpenGL. </p>
+<p >In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.x; you need to apply the <b>world-view-proj matrix</b> so that the the pass being drawn compensates for texel-to-pixel aligning reads in Direct3D9. Failing to do so will not only cause the aforementioned alignment issue, but also will cause glitches when the viewport is not 0 0 1 1</p>
+<p >In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x, only the proj matrix was necessary to fix texture flipping issues when rendering to FBOs in OpenGL. </p>
 </blockquote>
 <h3><a class="anchor" id="CompositorNodesPassesResolve"></a>
 resolve</h3>
@@ -594,7 +594,7 @@ render_scene</h3>
 <ul>
 <li>visibility_mask &lt;number&gt;;</li>
 </ul>
-<p >Visibility mask to be used by the pass' viewport. Those entities that fail the test '<em>entityMask &amp; visibility_mask</em>' will not be rendered. There are no significant changes to <a class="el" href="namespace_ogre.html">Ogre</a> 1.x, except that the script compiler now accepts hexadecimal values with the 0x prefix; not just decimal values.</p>
+<p >Visibility mask to be used by the pass' viewport. Those entities that fail the test '<em>entityMask &amp; visibility_mask</em>' will not be rendered. There are no significant changes to <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x, except that the script compiler now accepts hexadecimal values with the 0x prefix; not just decimal values.</p>
 <ul>
 <li>light_visibility_mask &lt;number&gt;;</li>
 </ul>
@@ -619,7 +619,7 @@ render_scene</h3>
 <ul>
 <li>lod_camera &lt;camera_name&gt;;</li>
 </ul>
-<p >The camera point of view from which the LOD calculations will be based from (i.e. useful for shadow mapping, which needs the LOD to match that of the user camera). When an empty string is provided, <a class="el" href="namespace_ogre.html">Ogre</a> will assume the lod camera is the same as the current camera, except for shadow nodes in which it will assume it's the lod_camera from the normal pass the shadow node is attached to. Default: Empty string.</p>
+<p >The camera point of view from which the LOD calculations will be based from (i.e. useful for shadow mapping, which needs the LOD to match that of the user camera). When an empty string is provided, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will assume the lod camera is the same as the current camera, except for shadow nodes in which it will assume it's the lod_camera from the normal pass the shadow node is attached to. Default: Empty string.</p>
 <ul>
 <li>lod_update_list [yes|no]</li>
 </ul>
@@ -632,7 +632,7 @@ render_scene</h3>
 <li>camera_cubemap_reorient [yes|no]</li>
 </ul>
 <p >When Yes, the camera will be reoriented for rendering cubemaps, depending on which slice of the render target we're rendering to (3D, Cubemaps and 2D-array textures only). Its original orientation is restored after the pass finishes. The rotations are relative to its original orientation, which can produce counter-intuitive results if the Camera wasn't set to identity (unless that's the desired effect). See 4.1.2.Passes|outline "Passes" section on how to indicate which slice should we render to. Default: No.</p>
-<p ><b>Note:</b> if the target is not a cubemap, <a class="el" href="namespace_ogre.html">Ogre</a> will still try to rotate the camera, often to unintended angles.</p>
+<p ><b>Note:</b> if the target is not a cubemap, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will still try to rotate the camera, often to unintended angles.</p>
 <ul>
 <li>enable_plus [yes|no]</li>
 </ul>
@@ -645,7 +645,7 @@ render_scene</h3>
 <ul>
 <li>expose &lt;textureName&gt;;</li>
 </ul>
-<p >Low level materials can access local and global textures via the old 'content_type compositor' setting, and Hlms materials can access them by calling SceneManager::getCompositorTextures. But before you can do that, you need to expose them to the pass. This is necessary so <a class="el" href="namespace_ogre.html">Ogre</a> can know which textures may or will be used during the pass so resource transitions and barriers can be issued in explicit APIs like DX12 and Vulkan.</p>
+<p >Low level materials can access local and global textures via the old 'content_type compositor' setting, and Hlms materials can access them by calling SceneManager::getCompositorTextures. But before you can do that, you need to expose them to the pass. This is necessary so <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> can know which textures may or will be used during the pass so resource transitions and barriers can be issued in explicit APIs like DX12 and Vulkan.</p>
 <ul>
 <li>is_prepass [yes|no];</li>
 </ul>
@@ -693,7 +693,7 @@ shadows</h3>
 <div class="line">}</div>
 </div><!-- fragment --><h3><a class="anchor" id="CompositorNodesPassesStencil"></a>
 stencil</h3>
-<p >Stencil passes are little more flexible than in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; always remember to restore the stencil passes before leaving the node otherwise next nodes that will be executed may use unexpected stencil settings.</p>
+<p >Stencil passes are little more flexible than in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x; always remember to restore the stencil passes before leaving the node otherwise next nodes that will be executed may use unexpected stencil settings.</p>
 <p >Most relevant changes are that two sided stencil can now be definted with more flexibility (it's not a boolean anymore), and that syntax has slightly changed to accomodate for this change:</p>
 <div class="fragment"><div class="line">pass stencil</div>
 <div class="line">{</div>
@@ -712,7 +712,7 @@ stencil</h3>
 <p >Valid values are 'both' 'front' and 'back'. 'both' is just a shortcut for defining front and back at the same time with less typing.</p>
 <h3><a class="anchor" id="CompositorNodesPassesUavQueue"></a>
 uav_queue</h3>
-<p >This is a new feature introduced in <a class="el" href="namespace_ogre.html">Ogre</a> 2.1. s stands for <b>U</b>nordered <b>A</b>ccess <b>V</b>iews, in D3D's jargon. OpenGL users know UAVs as the feature combination of <em>image</em> textures (imageLoad, imageStore) and SSBOs (Shader Storage Buffer Object). UAVs are powerful beasts because they allow random read and write access from a shader, and even support atomic operations. Proper use of them can achieve incredible results that couldn't be done without UAVs, but improper use can severely hurt performance.</p>
+<p >This is a new feature introduced in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1. s stands for <b>U</b>nordered <b>A</b>ccess <b>V</b>iews, in D3D's jargon. OpenGL users know UAVs as the feature combination of <em>image</em> textures (imageLoad, imageStore) and SSBOs (Shader Storage Buffer Object). UAVs are powerful beasts because they allow random read and write access from a shader, and even support atomic operations. Proper use of them can achieve incredible results that couldn't be done without UAVs, but improper use can severely hurt performance.</p>
 <p >There's quite a discrepancy between D3D11 &amp; OpenGL in how they treat UAVs from API interface perspective. D3D11 equals UAVs to RenderTargets; while OpenGL equals them more like textures.</p>
 <p >In fact, the D3D11 API call to bind UAVs must set RenderTargets at the same time. There is no API call to only set UAVs. To make things harder, D3D11 forces UAVs to share slots with RenderTargets; and there are up to 8 slots in total (64 when using D3D11.1 on Windows 8.1). Which means if you're using an MRT with 3 targets, you only have 5 slots left for UAVs.</p>
 <p >We can guess for performance improvements: this way D3D11 can check for hazards when setting RTs and UAVs (i.e. make sure you don't bind the same resource as both RT and UAV) while they still use the same hazard checking they do for textures to check that you're not binding a texture at the same time it is bound as an RT/UAV.</p>
@@ -722,7 +722,7 @@ uav_queue</h3>
 <li>starting_slot &lt;number&gt;;</li>
 </ul>
 <p >Offset for all UAV slots. For example if you bind an uav to slot 3 and the starting slot is 2; the uav will actually be bound to uav slot 5. When set to 255, the slot offset is ignore and leaves the last setting made.</p>
-<p >Default: 255 (by default <a class="el" href="namespace_ogre.html">Ogre</a> sets it to 1).</p>
+<p >Default: 255 (by default <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> sets it to 1).</p>
 <ul>
 <li>uav &lt;slot&gt;; &lt;texture_name&gt;; [mrt #] &lt;read&gt;; &lt;write&gt;; [pixel_format] [&lt;mipmap&gt;; #]</li>
 </ul>
@@ -860,7 +860,7 @@ Textures</h2>
 <ul>
 <li>no_gamma</li>
 </ul>
-<p >By default <a class="el" href="namespace_ogre.html">Ogre</a> will perform automatic HW gamma conversion for you (when supported by the hardware) based on system settings. But when this is present, you can override that behavior.</p>
+<p >By default <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will perform automatic HW gamma conversion for you (when supported by the hardware) based on system settings. But when this is present, you can override that behavior.</p>
 <ul>
 <li>depth_pool</li>
 </ul>
@@ -888,7 +888,7 @@ Textures</h2>
 <ul>
 <li>explicit_resolve</li>
 </ul>
-<p >When present, <a class="el" href="namespace_ogre.html">Ogre</a> shall not resolve the MSAA contents every time you want to access it as a texture; but rather when you do that explicitly, thus until it's not manually resolved; you can access the internal MSAA contents.</p>
+<p >When present, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> shall not resolve the MSAA contents every time you want to access it as a texture; but rather when you do that explicitly, thus until it's not manually resolved; you can access the internal MSAA contents.</p>
 <h3><a class="anchor" id="CompositorNodesTexturesMsaa"></a>
 MSAA: Explicit vs Implicit resolves</h3>
 <p >Not long ago, MSAA support was automatic, and worked flawlessly with forward renderers and no postprocessing. Direct3D 9 and OpenGL were not able to access the individual MSAA subsamples from shaders at all.</p>
@@ -898,19 +898,19 @@ MSAA: Explicit vs Implicit resolves</h3>
 <p >To cleanly deal with this new feature without breaking compatibility with D3D9 &amp; older GL render systems while at the same time being able to effortlessly switch MSAA on and off; the notion of "Explicit" and "Implicit" resolves were added.</p>
 <h4><a class="anchor" id="CompositorNodesTexturesMsaaImplicit"></a>
 Implicit resolves</h4>
-<p >By default all RTTs are implicitly resolved. The behavior of implicitly resolved textures mimics <a class="el" href="namespace_ogre.html">Ogre</a> 1.x (except for implementation and design issues in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x that could cause an RTT to resolve multiple times per frame unnecessarily)</p>
+<p >By default all RTTs are implicitly resolved. The behavior of implicitly resolved textures mimics <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x (except for implementation and design issues in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.x that could cause an RTT to resolve multiple times per frame unnecessarily)</p>
 <p >The RTT has an internal flag for being "dirty". The texture gets dirty when rendering to it; and it stops being dirty when it is resolved.</p>
-<p >When you attempt to bind a dirty RTTs as a texture, you're forcing <a class="el" href="namespace_ogre.html">Ogre</a> to resolve it. This means that you should try to delay using the RTT as a texture as much as possible until you've done with rendering to it.</p>
+<p >When you attempt to bind a dirty RTTs as a texture, you're forcing <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to resolve it. This means that you should try to delay using the RTT as a texture as much as possible until you've done with rendering to it.</p>
 <p >Otherwise the RTT may resolve more than once if you render to it: render (gets dirty), use it as a texture, render to it again (gets dirty again), and use again as a texture (all in the same frame). In some cases this is unavoidable, but often it isn't.</p>
 <h4><a class="anchor" id="CompositorNodesTexturesMsaaExplicit"></a>
 Explicit resolves</h4>
 <p >Explicit resolves are used when you want to either implement a custom resolve other than the API's default; or you want access to the MSAA subsamples directly through shaders.</p>
 <p >Like implicit resolves, RTTs have a dirty flag. However:</p>
 <ol type="1">
-<li>Attempting to bind a dirty RTT as a texture will cause <a class="el" href="namespace_ogre.html">Ogre</a> to send the MSAA buffer; granting the shader the ability to access subsamples.</li>
-<li>Attempting to bind a non-dirty dirty RTT as a texture will cause <a class="el" href="namespace_ogre.html">Ogre</a> to send the resolved buffer. The shader won't be able to access subsamples.</li>
+<li>Attempting to bind a dirty RTT as a texture will cause <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to send the MSAA buffer; granting the shader the ability to access subsamples.</li>
+<li>Attempting to bind a non-dirty dirty RTT as a texture will cause <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to send the resolved buffer. The shader won't be able to access subsamples.</li>
 </ol>
-<p >In summary, shaders can access subsamples while a texture is dirty. To clean the dirty flag and perform a resolve on the RTT, use the 3.1.2.3.resolve|outline "PASS\_RESOLVE pass". This is why they're called "explicit" resolves; because you have to *explicitly *tell <a class="el" href="namespace_ogre.html">Ogre</a> to resolve an msaa target and unset the dirty flag[^6].</p>
+<p >In summary, shaders can access subsamples while a texture is dirty. To clean the dirty flag and perform a resolve on the RTT, use the 3.1.2.3.resolve|outline "PASS\_RESOLVE pass". This is why they're called "explicit" resolves; because you have to *explicitly *tell <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to resolve an msaa target and unset the dirty flag[^6].</p>
 <p >On RenderSystems where explicit resolving is not supported, all textures will be treated as implicitly resolved and PASS_RESOLVE passes will be ignored; which should work straightforward and without issues except for a few corner cases.</p>
 <p >Use the RSC_EXPLICIT_FSAA_RESOLVE Render system capability flag to check if the API supports explicit resolves.</p>
 <h4><a class="anchor" id="CompositorNodesTexturesMsaaResources"></a>
@@ -921,7 +921,7 @@ Resources</h4>
 </ul>
 <h3><a class="anchor" id="CompositorNodesTexturesDepth"></a>
 Depth Textures</h3>
-<p >Since <a class="el" href="namespace_ogre.html">Ogre</a> 2.1; depth textures are supported. It has been a feature missing from <a class="el" href="namespace_ogre.html">Ogre</a> since a long time by now.</p>
+<p >Since <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1; depth textures are supported. It has been a feature missing from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> since a long time by now.</p>
 <p >Depth textures are a bit particular because they may not "own" the depth buffer. They're just a null render target with a "view" on an already existing depth buffer. But... what does this mean?</p>
 <p >Depth Buffers can be tricky. Suppose the following example:</p>
 <div class="fragment"><div class="line">compositor_node Example</div>
@@ -1028,8 +1028,8 @@ coloured RTT called 'finalSSAO' ".</p>
 </blockquote>
 <h1><a class="anchor" id="CompositorShadowNodes"></a>
 Shadow Nodes</h1>
-<p >The only way to have shadows in <a class="el" href="namespace_ogre.html">Ogre</a> is through shadow nodes.</p>
-<p >Stencil shadows and "textured shadows" have been removed from <a class="el" href="namespace_ogre.html">Ogre</a> 2.0; only depth shadow maps are supported.</p>
+<p >The only way to have shadows in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> is through shadow nodes.</p>
+<p >Stencil shadows and "textured shadows" have been removed from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0; only depth shadow maps are supported.</p>
 <p >A shadow node is a special type of Node (in fact, the class inherits from CompositorNode) that is executed inside a regular node (normally, a render_scene pass) instead of being connected to other nodes.</p>
 <p >It is possible however, to connect the output from a Shadow Node to a regular Node for further postprocessing (i.e. reflective shadow maps for real time Global Illumination), but Shadow Nodes cannot have input. <em>This particular feature (output to regular nodes) is still a work in progress at the time of writing since ensuring the regular node is executed after the shadow node has been executed can be a bit tricky</em>.</p>
 <h2><a class="anchor" id="CompositorShadowNodesSetup"></a>
@@ -1063,7 +1063,7 @@ Setting up shadow nodes</h2>
 </ul>
 <p >Constant bias is per material (tweak HlmsDatablock::mShadowConstantBias). This value lets you multiply it 'mShadowConstantBias * constantBiasScale' per cascade / shadow map</p>
 <p >Large values can cause peter-panning.</p>
-<p >Default is 0.1 for backwards compatibility with older materials created by <a class="el" href="namespace_ogre.html">Ogre</a> 2.2.2 and earlier</p>
+<p >Default is 0.1 for backwards compatibility with older materials created by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2.2 and earlier</p>
 <ul>
 <li>pssm_lambda &lt;lambda&gt;</li>
 </ul>
@@ -1096,7 +1096,7 @@ Setting up shadow nodes</h2>
 </ul>
 <p >Default: 0; only necessary when using PSSM techniques. Indicates which split this shadow map refers to.</p>
 <div class="fragment"><div class="line">shadow_map &lt;shadowMapName0&gt; &lt;shadowMapName1&gt; {}</div>
-</div><!-- fragment --><p >Declaring a shadow map is not enough. You need to tell <a class="el" href="namespace_ogre.html">Ogre</a> what do you want to render to it. And for that you need render_scene passes.</p>
+</div><!-- fragment --><p >Declaring a shadow map is not enough. You need to tell <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> what do you want to render to it. And for that you need render_scene passes.</p>
 <p >Shadow nodes can be written with the regular <code>target { pass render_scene {} }</code> syntax. However when you have 6 shadow maps with the same exact pass settings, it's cumbersome to write the pass six times. Instead the <code>shadow_map</code> keyword repeats the passes for you.</p>
 <h2><a class="anchor" id="CompositorShadowNodesExample"></a>
 Example</h2>
@@ -1236,8 +1236,8 @@ Shadow map atlas &amp; Point Lights</h2>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><p >Point light shadow mapping has to exploit the powerful compositor scripting capabilities: <a class="el" href="namespace_ogre.html">Ogre</a> uses DPSM (Dual Paraboloid Shadow Maps). Please note we will be rendering to cubemaps, then converting to DPSM.</p>
-<p >We won't be rendering directly to DPSM as testing shows it deforms too much when tessellation is low. We could support it, but it's not a priority. So <a class="el" href="namespace_ogre.html">Ogre</a> first needs to render to a cubemap, which can be shared by all shadow maps, and then a converter transforms it to DPSM.</p>
+</div><!-- fragment --><p >Point light shadow mapping has to exploit the powerful compositor scripting capabilities: <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> uses DPSM (Dual Paraboloid Shadow Maps). Please note we will be rendering to cubemaps, then converting to DPSM.</p>
+<p >We won't be rendering directly to DPSM as testing shows it deforms too much when tessellation is low. We could support it, but it's not a priority. So <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> first needs to render to a cubemap, which can be shared by all shadow maps, and then a converter transforms it to DPSM.</p>
 <p >The reason to use scene -&gt; Cubemap -&gt; DPSM is so that we keep a reasonable memory footprint and be atlas friendly. If we use cubemaps directly and want to support 8 point lights at 1024x1024, then we would have to do 1024x1024x6x8 = 192MB. However with DPSM it would be 8 DPSM and 1 cubemap: 1024x1024x4x8 + 1024x1024x4x6 = 56MB.</p>
 <p >So, to setup a point light with a temporary cubemap, it goes as follows:</p>
 <div class="fragment"><div class="line">abstract target cubemap_target_shadow</div>
@@ -1287,7 +1287,7 @@ Shadow map atlas &amp; Point Lights</h2>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-<div class="ttc" id="anamespace_ogre_html"><div class="ttname"><a href="namespace_ogre.html">Ogre</a></div><div class="ttdef"><b>Definition:</b> OgreAtmosphereNpr.h:43</div></div>
+<div class="ttc" id="anamespace_ogre_html"><div class="ttname"><a href="namespace_ogre.html">Ogre</a></div><div class="ttdoc">bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;</div><div class="ttdef"><b>Definition:</b> OgreAtmosphereNpr.h:43</div></div>
 </div><!-- fragment --><p >See Samples/Media/2.0/scripts/Compositors/ShadowMapDebugging.compositor for an example of a full script that can support directional, spot &amp; point lights all in one, in a single atlas.</p>
 <h2><a class="anchor" id="CompositorShadowNodesReuseEtc"></a>
 Reuse, recalculate and first</h2>
@@ -1297,14 +1297,14 @@ Reuse, recalculate and first</h2>
 <li><code>SHADOW_NODE_RECALCULATE</code></li>
 <li><code>SHADOW_NODE_FIRST_ONLY</code></li>
 </ol>
-<p >This affect when shadow nodes are executed and how they cache their results. The default value is <code>SHADOW_NODE_FIRST_ONLY</code>; in which means <a class="el" href="namespace_ogre.html">Ogre</a> should manage this automatically; however there are times when <code>SHADOW_NODE_REUSE</code> could be useful.</p>
+<p >This affect when shadow nodes are executed and how they cache their results. The default value is <code>SHADOW_NODE_FIRST_ONLY</code>; in which means <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> should manage this automatically; however there are times when <code>SHADOW_NODE_REUSE</code> could be useful.</p>
 <p >It's easier to explain what they do with examples.</p>
 <p >Suppose the user has two <code>render_scene</code> passes, both have the same shadow node associated:</p>
 <ol type="1">
 <li>One for opaque geometry.</li>
 <li>Another for transparent geometry,</li>
 </ol>
-<p >If using <code>SHADOW_NODE_FIRST_ONLY</code>, when the first pass is executed (opaque geometry), <a class="el" href="namespace_ogre.html">Ogre</a> will first execute the shadow nodes, updating the shadow maps; then render the opaque geometry.</p>
+<p >If using <code>SHADOW_NODE_FIRST_ONLY</code>, when the first pass is executed (opaque geometry), <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will first execute the shadow nodes, updating the shadow maps; then render the opaque geometry.</p>
 <p >When the second pass is executed (transparent geometry), the shadow node won't be executed as the shadow maps are supposed to be up to date; hence the transparent geometry will reuse the results.</p>
 <p >Another example: Suppose the user has three passes:</p>
 <ol type="1">
@@ -1313,25 +1313,25 @@ Reuse, recalculate and first</h2>
 <li>The last pass for transparent geometry, rendered using the same camera as opaque geometry.</li>
 </ol>
 <p >If using <code>SHADOW_NODE_FIRST_ONLY</code>; the shadow node will be executed before the opaque geometry pass.</p>
-<p >Then the reflections' pass comes. It uses a different camera, which means there could be a different set of lights that will be used for shadow casting (since some techniques set shadow cameras relative to the rendering camera for optimum quality, pssm splits become obsolete, some lights are closer to this camera than they were to the player's camera, etc). <em><b><a class="el" href="namespace_ogre.html">Ogre</a> has no choice but to recalculate and execute the shadow node again, updating the shadow maps</b></em>.</p>
+<p >Then the reflections' pass comes. It uses a different camera, which means there could be a different set of lights that will be used for shadow casting (since some techniques set shadow cameras relative to the rendering camera for optimum quality, pssm splits become obsolete, some lights are closer to this camera than they were to the player's camera, etc). <em><b><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> has no choice but to recalculate and execute the shadow node again, updating the shadow maps</b></em>.</p>
 <p >When the third pass kicks in, the camera has changed again; thus we need to execute the shadow node... again!</p>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> will log a warning when it detects a suboptimal compositor setup such as this one. To be more specific, <a class="el" href="namespace_ogre.html">Ogre</a> detects that the 3rd pass uses the same results as the 1st pass, but the shadow node is being forced to recalculate in the third one, instead of reusing.</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will log a warning when it detects a suboptimal compositor setup such as this one. To be more specific, <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> detects that the 3rd pass uses the same results as the 1st pass, but the shadow node is being forced to recalculate in the third one, instead of reusing.</p>
 <p >There are several ways to solve this problem:</p>
 <ol type="1">
 <li>Render reflections first: This is perhaps the most obvious one. If there are no data dependencies; first perform the reflection pass, and then the opaque &amp; transparent passes; so the shadow node is executed twice instead of three times.</li>
 <li>Use two shadow nodes: When the first option isn't viable (i.e. there's a data dependency) using two shadow nodes will guarantee the results don't get overwritten. This option needs more VRAM though.</li>
-<li><b>Use SHADOW_NODE_REUSE in the reflection render_scene pass:</b> This will force <a class="el" href="namespace_ogre.html">Ogre</a> not to execute the shadow node. This assumes you know what you're doing or else you may experience glitches (i.e. pssm splits aren't fully usable from a camera with a different position). This is useful though, if you wish to maintain consistency in the light list being used (since recalculation may cause a different set of lights to be used for shadow maps, since it depends on proximity to the active camera). Another reason to force reusage could be performance: The shadow node is only being executed once.</li>
+<li><b>Use SHADOW_NODE_REUSE in the reflection render_scene pass:</b> This will force <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> not to execute the shadow node. This assumes you know what you're doing or else you may experience glitches (i.e. pssm splits aren't fully usable from a camera with a different position). This is useful though, if you wish to maintain consistency in the light list being used (since recalculation may cause a different set of lights to be used for shadow maps, since it depends on proximity to the active camera). Another reason to force reusage could be performance: The shadow node is only being executed once.</li>
 </ol>
-<p >The setting <code>SHADOW_NODE_RECALCULATE</code> forces <a class="el" href="namespace_ogre.html">Ogre</a> to always recalculate. <a class="el" href="namespace_ogre.html">Ogre</a> will not issue a warning if it detects your node setup is suboptimal because of passes using <code>SHADOW_NODE_RECALCULATE</code>.</p>
-<p >Forcing recalculation only makes sense when the application makes relevant changes to the camera between passes that <a class="el" href="namespace_ogre.html">Ogre</a> cannot detect (i.e. change the position or the orientation through listeners)</p>
+<p >The setting <code>SHADOW_NODE_RECALCULATE</code> forces <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> to always recalculate. <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will not issue a warning if it detects your node setup is suboptimal because of passes using <code>SHADOW_NODE_RECALCULATE</code>.</p>
+<p >Forcing recalculation only makes sense when the application makes relevant changes to the camera between passes that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> cannot detect (i.e. change the position or the orientation through listeners)</p>
 <h2><a class="anchor" id="CompositorShadowNodesTypes"></a>
 Shadow mapping setup types</h2>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> supports 5 depth shadow mapping techniques. Although they're as old as <a class="el" href="namespace_ogre.html">Ogre</a> 1.4 or older, they've never been mentioned in the manual, and the doxygen documentation is quite cryptic, assuming the reader is quite familiar with the original papers. Here each is technique explained.</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> supports 5 depth shadow mapping techniques. Although they're as old as <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 1.4 or older, they've never been mentioned in the manual, and the doxygen documentation is quite cryptic, assuming the reader is quite familiar with the original papers. Here each is technique explained.</p>
 <h3><a class="anchor" id="CompositorShadowNodesTypesUniform"></a>
 Uniform shadow mapping</h3>
 <p >The oldest form of shadow mapping, and the most simple one. It's very basic and thus probably glitch-free. However it's quality is very bad, even on high resolutions.</p>
-<p >The user needs to call <code>SceneManager::setShadowDirectionalLightExtrusionDistance</code> &amp; <code>SceneManager::getShadowFarDistance</code> let <a class="el" href="namespace_ogre.html">Ogre</a> know how far directional lights should be from camera (since theoretically they're infinitely distant). If the value is too low, some casters won't be included and thus won't cast a shadow. Too high and the quality will quickly degrade.</p>
-<p >Most likely only useful for testing that shaders are working correctly, and shadows not showing up correctly is not an <a class="el" href="namespace_ogre.html">Ogre</a> bug or the scene (i.e. casters with infinite aabbs can cause trouble for Focused techniques).</p>
+<p >The user needs to call <code>SceneManager::setShadowDirectionalLightExtrusionDistance</code> &amp; <code>SceneManager::getShadowFarDistance</code> let <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> know how far directional lights should be from camera (since theoretically they're infinitely distant). If the value is too low, some casters won't be included and thus won't cast a shadow. Too high and the quality will quickly degrade.</p>
+<p >Most likely only useful for testing that shaders are working correctly, and shadows not showing up correctly is not an <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> bug or the scene (i.e. casters with infinite aabbs can cause trouble for Focused techniques).</p>
 <h3><a class="anchor" id="CompositorShadowNodesTypesFocused"></a>
 Focused</h3>
 <p >An improved form over uniform shadow mapping. The technique uses the AABB enclosing all casters, an AABB enclosing all receivers visible by the current camera and the camera's frustum to build a hull (which is the intersection of all three, also known as the "intersection body B"). With this hull's information, Focused shadow mapping is able to deduce the optimal extrusion distance (no need to set it like in uniform shadow mapping), and create a much tighter near and far plane, resulting in much superior quality.</p>
@@ -1354,7 +1354,7 @@ Plane Optimal</h3>
 <p >TBD</p>
 <h2><a class="anchor" id="CompositorShadowNodesShaders"></a>
 Writing shaders</h2>
-<p >Writing the necessary shaders to get depth shadow mapping work can be difficult due to the amount of factors that weight in and the flexibility that <a class="el" href="namespace_ogre.html">Ogre</a> offers.</p>
+<p >Writing the necessary shaders to get depth shadow mapping work can be difficult due to the amount of factors that weight in and the flexibility that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> offers.</p>
 <p >It is often better to use a shader generator or a material system that is less flexible but allows easier setting up of shadow maps, like <a href="http://www.ogre3d.org/tikiwiki/tiki-index.php?page=RT+Shader+System">RTSS</a> or <a href="https://github.com/scrawl/shiny">Shiny</a></p>
 <p >That being said, in order to make a shadow mapping shader work, the following checklist will come in handy:</p>
 <ul>
@@ -1541,7 +1541,7 @@ Workspaces</h1>
 </div><!-- fragment --><h2><a class="anchor" id="CompositorWorkspacesDataDependencies"></a>
 Data dependencies between nodes and circular dependencies</h2>
 <p >The Compostor will solve data dependencies and reorder node execution as necessary. It will also detect some circular dependencies (i.e. node A connecting to A; A connecting to B and B connecting to A) report the error and refuse to initialize the workspace, but it may not detect more complex cases (i.e. node A connecting to B, B to C, C to D, D to B) and attempting execution could result in crashes or graphical glitches.</p>
-<p >If you happen to encounter a circular dependency that is not reported by <a class="el" href="namespace_ogre.html">Ogre</a>, we would be intereste in knowing more about it. You can <a href="https://ogre3d.atlassian.net/browse/OGRE">submit your bug report to JIRA</a></p>
+<p >If you happen to encounter a circular dependency that is not reported by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>, we would be intereste in knowing more about it. You can <a href="https://ogre3d.atlassian.net/browse/OGRE">submit your bug report to JIRA</a></p>
 <h1><a class="anchor" id="CompositorSetupCode"></a>
 Setting up code</h1>
 <h2><a class="anchor" id="CompositorWorkspacesSetupInitialize"></a>
@@ -1641,7 +1641,7 @@ Advanced MSAA</h1>
 What is MSAA?</h2>
 <p >MSAA (Multisample Antialiasing) is a very common antialiasing technique.</p>
 <p >It is quite common to treat MSAA like black magic: it works automatically and makes those staircase effect aka jagged edges aka aliasing disappear.</p>
-<p >However there are times where we need to understand how it works, what's going on and how to control it explicitly via <a class="el" href="namespace_ogre.html">Ogre</a>.</p>
+<p >However there are times where we need to understand how it works, what's going on and how to control it explicitly via <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>.</p>
 <h3><a class="anchor" id="autotoc_md9"></a>
 Supersampling Antialiasing (SSAA) vs MSAA</h3>
 <p >It is best to explain what MSAA is by first explaining its most basic form: SSAA aka Supersampling Antialiasing.</p>
@@ -1669,7 +1669,7 @@ MSAA approach to the problem</h3>
 </ol>
 <h2><a class="anchor" id="autotoc_md11"></a>
 Ogre + MSAA with Implicit Resolves</h2>
-<p ><a class="el" href="namespace_ogre.html">Ogre</a> by default uses implicit resolves. When you call:</p>
+<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> by default uses implicit resolves. When you call:</p>
 <div class="fragment"><div class="line">texture = textureGpuManager-&gt;createTexture(</div>
 <div class="line">                   <span class="stringliteral">&quot;MyRtt&quot;</span>,</div>
 <div class="line">                   GpuPageOutStrategy::Discard,</div>
@@ -1680,17 +1680,17 @@ Ogre + MSAA with Implicit Resolves</h2>
 <div class="line">texture-&gt;setNumMipmaps( 1u );</div>
 <div class="line">texture-&gt;setSampleDescription( SampleDescription( 4u ) ); <span class="comment">// 4x MSAA</span></div>
 <div class="line">texture-&gt;scheduleTransitionTo( GpuResidency::Resident );</div>
-</div><!-- fragment --><p ><a class="el" href="namespace_ogre.html">Ogre</a> creates two textures:</p><ol type="1">
+</div><!-- fragment --><p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> creates two textures:</p><ol type="1">
 <li>The MSAA surface. Generally you don't have direct access to it. This one occupies 1920x1080x4x4 = 31.64MB</li>
 <li>The implicitly resolved texture which can be used for sampling. This one occupies 1920x1080x4 = 7.91MB</li>
 </ol>
 <p >StoreActions control when the texture is resolved:</p><ul>
 <li>Store: Do not resolve. Useful if you have to interrupt rendering to a RenderTarget, switch to another RenderTarget, and come back to continue rendering; asuming you didn't need to sample from this texture (to fetch what has been rendered so far)</li>
 <li>MultisampleResolve: Always resolve the texture once we're done rendering, and we do not care about the contents of the MSAA surface. This flag won't work on non-MSAA textures and will raise an exception. You should not continue rendering to this texture after this, unless you clear it.</li>
-<li>StoreAndMultisampleResolve: Always resolve the texture once we're done rendering, and we do care about the contents of the MSAA surface. It is valid to use this flag without an MSAA texture. This flag is mostly meant for explicit-resolve textures as <a class="el" href="namespace_ogre.html">Ogre</a> users have no way of accessing MSAA contents. However it may be useful if you need to interrupt rendering to a RenderTarget, switch to another RenderTarget while also sampling what has been rendered so far, and then come back to continue rendering to MSAA.</li>
+<li>StoreAndMultisampleResolve: Always resolve the texture once we're done rendering, and we do care about the contents of the MSAA surface. It is valid to use this flag without an MSAA texture. This flag is mostly meant for explicit-resolve textures as <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> users have no way of accessing MSAA contents. However it may be useful if you need to interrupt rendering to a RenderTarget, switch to another RenderTarget while also sampling what has been rendered so far, and then come back to continue rendering to MSAA.</li>
 <li>StoreOrResolve: This is the compositor's default. It behaves like 'Store' if the texture is not MSAA. It behaves like 'MultisampleResolve' if the texture is MSAA.</li>
 </ul>
-<p >Implicitly resolved textures is how <a class="el" href="namespace_ogre.html">Ogre</a> traditionally worked before <a class="el" href="namespace_ogre.html">Ogre</a> 2.2 <a class="el" href="namespace_ogre.html">Ogre</a> 2.1 tried to implement this but it was very basic and often broken.</p>
+<p >Implicitly resolved textures is how <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> traditionally worked before <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 tried to implement this but it was very basic and often broken.</p>
 <h2><a class="anchor" id="autotoc_md12"></a>
 Ogre + MSAA with Explicit Resolves</h2>
 <p >You need to explicitly ask for explicit resolves. When you call:</p>
@@ -1704,7 +1704,7 @@ Ogre + MSAA with Explicit Resolves</h2>
 <div class="line">texture-&gt;setNumMipmaps( 1u );</div>
 <div class="line">texture-&gt;setSampleDescription( SampleDescription( 4u ) ); <span class="comment">// 4x MSAA</span></div>
 <div class="line">texture-&gt;scheduleTransitionTo( GpuResidency::Resident );</div>
-</div><!-- fragment --><p ><a class="el" href="namespace_ogre.html">Ogre</a> creates only one texture:</p><ol type="1">
+</div><!-- fragment --><p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> creates only one texture:</p><ol type="1">
 <li>The MSAA surface. This one occupies 1920x1080x4x4 = 31.64MB</li>
 </ol>
 <p >Therefore:</p>

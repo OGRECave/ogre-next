@@ -339,7 +339,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class representing an approach to rendering this particular <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a>. </p>
-<dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="namespace_ogre.html">Ogre</a> will attempt to use the best technique supported by the active hardware, unless you specifically request a lower detail technique (say for distant rendering). </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will attempt to use the best technique supported by the active hardware, unless you specifically request a lower detail technique (say for distant rendering). </dd></dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a63da4eb10f7272486a9806374b09bab6" name="a63da4eb10f7272486a9806374b09bab6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a63da4eb10f7272486a9806374b09bab6">&#9670;&#160;</a></span>GPUDeviceNameRuleIterator</h2>
@@ -1676,7 +1676,7 @@ Public Member Functions</h2></td></tr>
 <p>Assigns a level-of-detail (LOD) index to this <a class="el" href="class_ogre_1_1_technique.html" title="Class representing an approach to rendering this particular Material.">Technique</a>. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>As noted previously, as well as providing fallback support for various graphics cards, multiple <a class="el" href="class_ogre_1_1_technique.html" title="Class representing an approach to rendering this particular Material.">Technique</a> objects can also be used to implement material LOD, where the detail of the material diminishes with distance to save rendering power. </dd></dl>
 <dl class="section user"><dt></dt><dd>By default, all Techniques have a LOD index of 0, which means they are the highest level of detail. Increasing LOD indexes are lower levels of detail. You can assign more than one <a class="el" href="class_ogre_1_1_technique.html" title="Class representing an approach to rendering this particular Material.">Technique</a> to the same LOD index, meaning that the best <a class="el" href="class_ogre_1_1_technique.html" title="Class representing an approach to rendering this particular Material.">Technique</a> that is supported at that LOD index is used. </dd></dl>
-<dl class="section user"><dt></dt><dd>You should not leave gaps in the LOD sequence; <a class="el" href="namespace_ogre.html">Ogre</a> will allow you to do this and will continue to function as if the LODs were sequential, but it will confuse matters. </dd></dl>
+<dl class="section user"><dt></dt><dd>You should not leave gaps in the LOD sequence; <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> will allow you to do this and will continue to function as if the LODs were sequential, but it will confuse matters. </dd></dl>
 
 </div>
 </div>
