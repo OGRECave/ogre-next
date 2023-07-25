@@ -53,7 +53,8 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
     mParticleGpuData( 0 ),
     mFirstParticleIdx( 0u ),
     mLastParticleIdx( 0u ),
-    mParticleQuotaFull( false )
+    mParticleQuotaFull( false ),
+    mParticleType( ParticleType::Point )
 {
     memset( &mParticleCpuData, 0, sizeof( mParticleCpuData ) );
     mParticlesToKill.resizePOD( manager->getNumWorkerThreads() );
@@ -379,6 +380,11 @@ uint32 ParticleSystemDef::getHandle( const ParticleCpuData &cpuData, size_t idx 
         uint32( cpuData.mPosition - mParticleCpuData.mPosition ) * ARRAY_PACKED_REALS + uint32( idx );
     OGRE_ASSERT_MEDIUM( handle < getQuota() && "Invalid handle!" );
     return handle;
+}
+//-----------------------------------------------------------------------------
+ParticleType::ParticleType ParticleSystemDef::getParticleType() const
+{
+    return mParticleType;
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::_notifyAttached( Node *parent )

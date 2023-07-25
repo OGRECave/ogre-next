@@ -45,8 +45,26 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 	const ParticleGpuData particleData = loadParticleGpuData();
 
 	const uint vertexInQuad = uint( inVs_vertexId ) & 0x03u;
-	const float3 viewSpaceRight = mul( toFloat3x3( passBuf.view ), float3( particleData.dim.x, 0, 0 ) );
-	const float3 viewSpaceUp = mul( toFloat3x3( passBuf.view ), float3( 0, particleData.dim.y, 0 ) );
+
+	@property( particle_type == particle_type_point )
+		const float3 viewSpaceRight = mul( toFloat3x3( passBuf.view ), float3( particleData.dim.x, 0, 0 ) );
+		const float3 viewSpaceUp = mul( toFloat3x3( passBuf.view ), float3( 0, particleData.dim.y, 0 ) );
+	@end
+	@property( particle_type == particle_type_oriented_common )
+		TODO; // We need to send common_dir
+	@end
+	@property( particle_type == particle_type_oriented_self )
+		const float particleCamDir = mul( toFloat3x3( passBuf.view ),
+										  float3( 0, 0, -particleData.dim.x ) );
+		const float3 viewSpaceRight = particleCamDir.cross( particleData.dir );
+		const float3 viewSpaceUp = particleData.dir * particleData.dim.y;
+	@end
+	@property( particle_type == particle_type_perpendicular_common )
+		TODO; // We need to send common_up common_dir
+	@end
+	@property( particle_type == particle_type_perpendicular_self )
+		TODO; // We need to send common_dir
+	@end
 	#undef inVs_vertex
 	float4 inVs_vertex = float4( particleData.pos, 1.0f );
 
