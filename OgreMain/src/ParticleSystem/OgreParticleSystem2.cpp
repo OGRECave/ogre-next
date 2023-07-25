@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "ParticleSystem/OgreEmitter2.h"
 #include "ParticleSystem/OgreParticleAffector2.h"
 #include "ParticleSystem/OgreParticleSystemManager2.h"
+#include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
@@ -193,6 +194,51 @@ void ParticleSystemDef::setParticleQuota( size_t quota )
 {
     OGRE_ASSERT_LOW( !isInitialized() );
     mActiveParticles.reset( alignToNextMultiple<size_t>( quota, ARRAY_PACKED_REALS ) );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::setParticleType( ParticleType::ParticleType particleType )
+{
+    if( particleType == ParticleType::NotParticle )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid value: ParticleType::NotParticle",
+                     "ParticleSystemDef::setParticleType" );
+    }
+    mParticleType = particleType;
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::setCommonVectors( const Vector3 &commonDir, const Vector3 &commonUp )
+{
+    mCommonDirection = commonDir;
+    mCommonUpVector = commonUp;
+
+    if( mGpuCommonData )
+    {
+        GpuParticleCommon particleCommon( mCommonDirection,
+                                          mParticleType != ParticleType::PerpendicularCommon
+                                              ? mCommonUpVector
+                                              : mCommonUpVector.crossProduct( mCommonDirection ) );
+        mGpuCommonData->upload( &particleCommon, 0u, mGpuCommonData->getTotalSizeBytes() );
+    }
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::setCommonDirection( const Vector3 &vec )
+{
+    setCommonVectors( vec, mCommonUpVector );
+}
+//-----------------------------------------------------------------------------
+const Vector3 &ParticleSystemDef::getCommonDirection() const
+{
+    return mCommonDirection;
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::setCommonUpVector( const Vector3 &vec )
+{
+    setCommonVectors( mCommonDirection, vec );
+}
+//-----------------------------------------------------------------------------
+const Vector3 &ParticleSystemDef::getCommonUpVector() const
+{
+    return mCommonUpVector;
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::reserveNumEmitters( size_t numEmitters )

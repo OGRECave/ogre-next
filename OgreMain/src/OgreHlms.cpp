@@ -179,7 +179,7 @@ namespace Ogre
         IdString( "hlms_forwardplus_cubemap_slot_offset" );
     const IdString HlmsBaseProp::ParticleSystem = IdString( "hlms_particle_system" );
     const IdString HlmsBaseProp::ParticleType = IdString( "hlms_particle_type" );
-    const IdString HlmsBaseProp::ParticleTypePoint = IdString( "hlms_particle_type_point" );
+    const IdString HlmsBaseProp::ParticleTypePoint = IdString( "particle_type_point" );
     const IdString HlmsBaseProp::ParticleTypeOrientedCommon =
         IdString( "particle_type_oriented_common" );
     const IdString HlmsBaseProp::ParticleTypeOrientedSelf = IdString( "particle_type_oriented_self" );
