@@ -42,6 +42,22 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
+struct GpuParticleCommon
+{
+    float commonDir[3];
+    float padding0;
+    float commonUp[3];
+    float padding1;
+
+    GpuParticleCommon( const Vector3 &commonDirection, const Vector3 &commonUpVector ) :
+        commonDir{ (float)commonDirection.x, (float)commonDirection.y, (float)commonDirection.z },
+        padding0( 0 ),
+        commonUp{ (float)commonUpVector.x, (float)commonUpVector.y, (float)commonUpVector.z },
+        padding1( 0 )
+    {
+    }
+};
+
 ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager,
                                       SceneManager *manager,
                                       ParticleSystemManager2 *particleSystemManager,
@@ -49,7 +65,10 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
     ParticleSystem( id, objectMemoryManager, manager, "", kParticleSystemDefaultRenderQueueId ),
     mName( name ),
     mParticleSystemManager( particleSystemManager ),
+    mGpuCommonData( 0 ),
     mGpuData( 0 ),
+    mCommonDirection( Ogre::Vector3::UNIT_Z ),
+    mCommonUpVector( Vector3::UNIT_Y ),
     mParticleGpuData( 0 ),
     mFirstParticleIdx( 0u ),
     mLastParticleIdx( 0u ),
@@ -64,7 +83,8 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
 //-----------------------------------------------------------------------------
 ParticleSystemDef::~ParticleSystemDef()
 {
-    OGRE_ASSERT_LOW( !mParticleCpuData.mPosition && !mGpuData && "destroy() not called!" );
+    OGRE_ASSERT_LOW( !mParticleCpuData.mPosition && !mGpuData && !mGpuCommonData &&
+                     "destroy() not called!" );
 }
 //-----------------------------------------------------------------------------
 uint32 ParticleSystemDef::getQuota() const
@@ -105,6 +125,13 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
     memset( mParticleCpuData.mTotalTimeToLive, 0, numParticles * sizeof( Real ) );
 
+    GpuParticleCommon particleCommon( mCommonDirection,
+                                      mParticleType != ParticleType::PerpendicularCommon
+                                          ? mCommonUpVector
+                                          : mCommonUpVector.crossProduct( mCommonDirection ) );
+    mGpuCommonData =
+        vaoManager->createConstBuffer( sizeof( GpuParticleCommon ), BT_DEFAULT, &particleCommon, false );
+
     mGpuData = vaoManager->createReadOnlyBuffer(
         PFG_RGBA8_UINT, sizeof( ParticleGpuData ) * numParticles, BT_DYNAMIC_PERSISTENT, 0, false );
 
@@ -144,6 +171,9 @@ void ParticleSystemDef::_destroy( VaoManager *vaoManager )
 
         vaoManager->destroyReadOnlyBuffer( mGpuData );
         mGpuData = 0;
+
+        vaoManager->destroyConstBuffer( mGpuCommonData );
+        mGpuCommonData = 0;
     }
 
     for( EmitterDefData *emitter : mEmitters )
