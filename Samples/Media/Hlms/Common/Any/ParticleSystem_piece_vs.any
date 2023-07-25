@@ -53,34 +53,35 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 
 	const uint vertexInQuad = uint( inVs_vertexId ) & 0x03u;
 
-	@property( hlms_particle_type == hlms_particle_type_point )
+	@property( hlms_particle_type == particle_type_point )
 		// In point type, these are in view space
 		const float3 particleRightVec =
 			mul( toFloat3x3( passBuf.view ), float3( particleData.dim.x, 0, 0 ) );
 		const float3 particleUpVec =
 			mul( toFloat3x3( passBuf.view ), float3( 0, particleData.dim.y, 0 ) );
 	@end
-	@property( hlms_particle_type == hlms_particle_type_oriented_common )
+	@property( hlms_particle_type == particle_type_oriented_common )
 		const float3 particleCamDir =
 			mul( toFloat3x3( passBuf.view ), float3( 0, 0, -particleData.dim.x ) );
-		const float3 particleRightVec = particleCamDir.cross( particleCommon.dir.xyz );
+		const float3 particleRightVec = cross( particleCamDir, particleCommon.dir.xyz );
 		const float3 particleUpVec = particleCommon.dir.xyz * particleData.dim.y;
 	@end
-	@property( hlms_particle_type == hlms_particle_type_oriented_self )
+	@property( hlms_particle_type == particle_type_oriented_self )
 		const float3 particleCamDir =
 			mul( toFloat3x3( passBuf.view ), float3( 0, 0, -particleData.dim.x ) );
-		const float3 particleRightVec = particleCamDir.cross( particleData.dir );
+		const float3 particleRightVec = cross( particleCamDir, particleData.dir );
 		const float3 particleUpVec = particleData.dir * particleData.dim.y;
 	@end
-	@property( hlms_particle_type == hlms_particle_type_perpendicular_common )
+	@property( hlms_particle_type == particle_type_perpendicular_common )
 		// In this mode, particleCommon.up.xyz actually contains
-		// particleCommon.up.xyz.cross( particleCommon.dir.xyz )
+		// cross( particleCommon.up.xyz, particleCommon.dir.xyz )
 		const float3 particleUpVec = particleCommon.up.xyz * particleData.dim.y;
 		const float3 particleRightVec = particleCommon.dir.xyz * particleData.dim.x;
 	@end
-	@property( hlms_particle_type == hlms_particle_type_perpendicular_self )
-		const float3 particleRightVecNorm = particleCommon.up.xyz.cross( particleData.dir );
-		const float3 particleUpVec = particleData.dir.cross( particleRightVecNorm ) * particleData.dim.y;
+	@property( hlms_particle_type == particle_type_perpendicular_self )
+		const float3 particleRightVecNorm = cross( particleCommon.up.xyz, particleData.dir );
+		const float3 particleUpVec =
+			cross( particleData.dir, particleRightVecNorm ) * particleData.dim.y;
 		const float3 particleRightVec = particleRightVecNorm * particleData.dim.x;
 	@end
 	#undef inVs_vertex

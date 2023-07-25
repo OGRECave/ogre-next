@@ -151,6 +151,48 @@ namespace Ogre
 
         void setParticleQuota( size_t quota ) override;
 
+        void setParticleType( ParticleType::ParticleType particleType );
+
+        /// See setCommonDirection() and setCommonUpVector().
+        /// Use this version if you have to often change both of these at the same time.
+        void setCommonVectors( const Vector3 &commonDir, const Vector3 &commonUp );
+
+        /** Use this to specify the common direction given to particles when type is
+            ParticleType::OrientedCommon and ParticleType::PerpendicularCommon.
+        @remarks
+            Use ParticleType::OrientedCommon when you want oriented particles but you know they are
+            always going to be oriented the same way (e.g. rain in calm weather). It is faster for the
+            system to calculate the billboard vertices if they have a common direction.
+
+            If you need to call both setCommonDirection() and setCommonUpVector() often,
+            prefer using setCommonVectors().
+        @param vec
+            The direction for all particles.
+        */
+        void setCommonDirection( const Vector3 &vec );
+
+        /// Returns the common direction for all particles. See setCommonDirection().
+        const Vector3 &getCommonDirection() const;
+
+        /** Use this to specify the common up-vector given to billboards of type
+            ParticleType::PerpendicularCommon and ParticleType::PerpendicularSelf.
+        @remarks
+            Use ParticleType::PerpendicularSelf when you want oriented particles perpendicular to their
+            own direction vector and don't face to camera. In this case, we need an additional vector
+            to determine the billboard X, Y axis. The generated X axis perpendicular to both the own
+            direction and up-vector, the Y axis will coplanar with both own direction and up-vector,
+            and perpendicular to own direction.
+
+            If you need to call both setCommonDirection() and setCommonUpVector() often,
+            prefer using setCommonVectors().
+        @param vec
+            The up-vector for all particles.
+        */
+        void setCommonUpVector( const Vector3 &vec );
+
+        /// Gets the common up-vector for all particles. See setCommonUpVector().
+        const Vector3 &getCommonUpVector() const;
+
         /** If you know in advance how many times you will call addEmitter() call this
             function to achieve optimum memory use. This is the same as std::vector::reserve.
             Optional.
