@@ -1194,6 +1194,12 @@ namespace Ogre
         static const IdString DecalsEmissive;
         static const IdString FwdPlusCubemapSlotOffset;
         static const IdString ParticleSystem;
+        static const IdString ParticleType;
+        static const IdString ParticleTypePoint;
+        static const IdString ParticleTypeOrientedCommon;
+        static const IdString ParticleTypeOrientedSelf;
+        static const IdString ParticleTypePerpendicularCommon;
+        static const IdString ParticleTypePerpendicularSelf;
 
         static const IdString Forward3D;
         static const IdString ForwardClustered;

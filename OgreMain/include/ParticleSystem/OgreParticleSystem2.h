@@ -106,6 +106,8 @@ namespace Ogre
         /// One per thread.
         FastArray<FastArray<uint32>> mParticlesToKill;
 
+        ParticleType::ParticleType mParticleType;
+
         uint32 allocParticle();
 
         void deallocParticle( uint32 handle );
@@ -221,7 +223,7 @@ namespace Ogre
 
         bool getUseIdentityWorldMatrix() const override { return true; }
 
-        bool isParticleSystem() const override { return true; }
+        ParticleType::ParticleType getParticleType() const override;
 
         void _notifyAttached( Node *parent ) override;
 

@@ -178,6 +178,15 @@ namespace Ogre
     const IdString HlmsBaseProp::FwdPlusCubemapSlotOffset =
         IdString( "hlms_forwardplus_cubemap_slot_offset" );
     const IdString HlmsBaseProp::ParticleSystem = IdString( "hlms_particle_system" );
+    const IdString HlmsBaseProp::ParticleType = IdString( "hlms_particle_type" );
+    const IdString HlmsBaseProp::ParticleTypePoint = IdString( "hlms_particle_type_point" );
+    const IdString HlmsBaseProp::ParticleTypeOrientedCommon =
+        IdString( "particle_type_oriented_common" );
+    const IdString HlmsBaseProp::ParticleTypeOrientedSelf = IdString( "particle_type_oriented_self" );
+    const IdString HlmsBaseProp::ParticleTypePerpendicularCommon =
+        IdString( "particle_type_perpendicular_common" );
+    const IdString HlmsBaseProp::ParticleTypePerpendicularSelf =
+        IdString( "particle_type_perpendicular_self" );
     const IdString HlmsBaseProp::Forward3D = IdString( "forward3d" );
     const IdString HlmsBaseProp::ForwardClustered = IdString( "forward_clustered" );
     const IdString HlmsBaseProp::VPos = IdString( "hlms_vpos" );
@@ -294,7 +303,7 @@ namespace Ogre
         mDebugOutput( false ),
 #endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-        mDebugOutputProperties( true ),
+        mDebugOutputProperties( false ),
 #else
         mDebugOutputProperties( false ),
 #endif
@@ -2785,8 +2794,36 @@ namespace Ogre
         if( renderable->getUseIdentityWorldMatrix() )
             setProperty( kNoTid, HlmsBaseProp::IdentityWorld, 1 );
 
-        if( renderable->isParticleSystem() )
+        if( renderable->getParticleType() != ParticleType::NotParticle )
+        {
             setProperty( kNoTid, HlmsBaseProp::ParticleSystem, 1 );
+
+            IdString particleTypeName;
+            switch( renderable->getParticleType() )
+            {
+            case ParticleType::NotParticle:
+            case ParticleType::Point:
+                particleTypeName = HlmsBaseProp::ParticleTypePoint;
+                break;
+            case ParticleType::OrientedCommon:
+                particleTypeName = HlmsBaseProp::ParticleTypeOrientedCommon;
+                break;
+            case ParticleType::OrientedSelf:
+                particleTypeName = HlmsBaseProp::ParticleTypeOrientedSelf;
+                break;
+            case ParticleType::PerpendicularCommon:
+                particleTypeName = HlmsBaseProp::ParticleTypePerpendicularCommon;
+                break;
+            case ParticleType::PerpendicularSelf:
+                particleTypeName = HlmsBaseProp::ParticleTypePerpendicularSelf;
+                break;
+            }
+
+            setProperty( kNoTid, HlmsBaseProp::ParticleType,
+                         static_cast<int32>( particleTypeName.getU32Value() ) );
+            setProperty( kNoTid, particleTypeName,
+                         static_cast<int32>( particleTypeName.getU32Value() ) );
+        }
 
         if( renderable->getUseIdentityViewProjMatrixIsDynamic() )
             setProperty( kNoTid, HlmsBaseProp::IdentityViewProjDynamic, 1 );
