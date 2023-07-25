@@ -47,6 +47,7 @@ THE SOFTWARE.
 #include "OgreSceneManagerEnumerator.h"
 #include "OgreTechnique.h"
 #include "ParticleSystem/OgreParticleSystem2.h"
+#include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
@@ -669,14 +670,20 @@ namespace Ogre
 
         RenderingMetrics stats;
 
-        uint8 particleSystemSlot[HLMS_MAX];
+        uint8 particleSystemSlot[HLMS_MAX][2];
         for( size_t i = 0u; i < HLMS_MAX; ++i )
         {
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
             if( hlms )
-                particleSystemSlot[i] = hlms->getParticleSystemSlot();
+            {
+                particleSystemSlot[i][0] = hlms->getParticleSystemConstSlot();
+                particleSystemSlot[i][1] = hlms->getParticleSystemSlot();
+            }
             else
-                particleSystemSlot[i] = 0u;
+            {
+                particleSystemSlot[i][0] = 0u;
+                particleSystemSlot[i][1] = 0u;
+            }
         }
 
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
@@ -712,9 +719,13 @@ namespace Ogre
             const ParticleSystemDef *systemDef =
                 ParticleSystemDef::castToRenderable( queuedRenderable.renderable );
 
+            ConstBufferPacked *particleCommonBuffer = systemDef->_getGpuCommonBuffer();
+            *mCommandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( VertexShader, particleSystemSlot[hlmsType][0], particleCommonBuffer, 0,
+                                (uint32)particleCommonBuffer->getTotalSizeBytes() );
             ReadOnlyBufferPacked *particleDataBuffer = systemDef->_getGpuDataBuffer();
             *mCommandBuffer->addCommand<CbShaderBuffer>() =
-                CbShaderBuffer( VertexShader, particleSystemSlot[hlmsType], particleDataBuffer, 0,
+                CbShaderBuffer( VertexShader, particleSystemSlot[hlmsType][1], particleDataBuffer, 0,
                                 (uint32)particleDataBuffer->getTotalSizeBytes() );
 
             const uint32 baseInstance = hlms->fillBuffersForV2( hlmsCache, queuedRenderable, casterPass,

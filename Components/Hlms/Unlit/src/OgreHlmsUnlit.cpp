@@ -102,6 +102,7 @@ namespace Ogre
         // Always an identity matrix
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
 
+        mParticleSystemConstSlot = 3u;  // It is always 3.
         // It is always 1.
         // (0 is world matrix, 1 is animation matrix when no PFX plugin is installed, 2 otherwise)
         // This is done to maximize performance since animation matrix is rare.
@@ -174,7 +175,7 @@ namespace Ogre
     {
         DescBindingRange *descBindingRanges = rootLayout.mDescBindingRanges[0];
 
-        descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
+        descBindingRanges[DescBindingTypes::ConstBuffer].end = msHasParticleFX2Plugin ? 4u : 3u;
 
         const uint16 extraPfxSlot = msHasParticleFX2Plugin ? 1u : 0u;
 
@@ -602,7 +603,10 @@ namespace Ogre
         }
 
         if( getProperty( HlmsBaseProp::ParticleSystem ) )
+        {
+            setTextureReg( tid, VertexShader, "particleSystemConstSlot", mParticleSystemConstSlot );
             setTextureReg( tid, VertexShader, "particleSystemSlot", mParticleSystemSlot );
+        }
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsUnlit::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,

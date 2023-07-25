@@ -272,6 +272,7 @@ namespace Ogre
         LightGatheringMode mLightGatheringMode;
         bool               mStaticBranchingLights;
         bool               mShaderCodeCacheDirty;
+        uint8              mParticleSystemConstSlot;
         uint8              mParticleSystemSlot;
         uint16             mNumLightsLimit;
         uint16             mNumAreaApproxLightsLimit;
@@ -594,6 +595,7 @@ namespace Ogre
         /// Returns true if shaders are being compiled with Fast Shader Build Hack (D3D11 only)
         bool getFastShaderBuildHack() const;
 
+        uint8 getParticleSystemConstSlot() const { return mParticleSystemConstSlot; }
         uint8 getParticleSystemSlot() const { return mParticleSystemSlot; }
 
         /** Non-caster directional lights are hardcoded into shaders. This means that if you

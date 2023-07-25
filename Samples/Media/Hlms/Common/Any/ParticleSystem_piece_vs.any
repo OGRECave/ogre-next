@@ -4,6 +4,13 @@
 @property( hlms_particle_system )
 
 @piece( ParticleSystemDeclVS )
+CONST_BUFFER_STRUCT_BEGIN( GpuParticleCommon, @value(particleSystemConstSlot) )
+{
+	float4 dir;
+	float4 up;
+}
+CONST_BUFFER_STRUCT_END( particleCommon );
+
 ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 @end
 
@@ -46,30 +53,41 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 
 	const uint vertexInQuad = uint( inVs_vertexId ) & 0x03u;
 
-	@property( particle_type == particle_type_point )
-		const float3 viewSpaceRight = mul( toFloat3x3( passBuf.view ), float3( particleData.dim.x, 0, 0 ) );
-		const float3 viewSpaceUp = mul( toFloat3x3( passBuf.view ), float3( 0, particleData.dim.y, 0 ) );
+	@property( hlms_particle_type == hlms_particle_type_point )
+		// In point type, these are in view space
+		const float3 particleRightVec =
+			mul( toFloat3x3( passBuf.view ), float3( particleData.dim.x, 0, 0 ) );
+		const float3 particleUpVec =
+			mul( toFloat3x3( passBuf.view ), float3( 0, particleData.dim.y, 0 ) );
 	@end
-	@property( particle_type == particle_type_oriented_common )
-		TODO; // We need to send common_dir
+	@property( hlms_particle_type == hlms_particle_type_oriented_common )
+		const float3 particleCamDir =
+			mul( toFloat3x3( passBuf.view ), float3( 0, 0, -particleData.dim.x ) );
+		const float3 particleRightVec = particleCamDir.cross( particleCommon.dir.xyz );
+		const float3 particleUpVec = particleCommon.dir.xyz * particleData.dim.y;
 	@end
-	@property( particle_type == particle_type_oriented_self )
-		const float particleCamDir = mul( toFloat3x3( passBuf.view ),
-										  float3( 0, 0, -particleData.dim.x ) );
-		const float3 viewSpaceRight = particleCamDir.cross( particleData.dir );
-		const float3 viewSpaceUp = particleData.dir * particleData.dim.y;
+	@property( hlms_particle_type == hlms_particle_type_oriented_self )
+		const float3 particleCamDir =
+			mul( toFloat3x3( passBuf.view ), float3( 0, 0, -particleData.dim.x ) );
+		const float3 particleRightVec = particleCamDir.cross( particleData.dir );
+		const float3 particleUpVec = particleData.dir * particleData.dim.y;
 	@end
-	@property( particle_type == particle_type_perpendicular_common )
-		TODO; // We need to send common_up common_dir
+	@property( hlms_particle_type == hlms_particle_type_perpendicular_common )
+		// In this mode, particleCommon.up.xyz actually contains
+		// particleCommon.up.xyz.cross( particleCommon.dir.xyz )
+		const float3 particleUpVec = particleCommon.up.xyz * particleData.dim.y;
+		const float3 particleRightVec = particleCommon.dir.xyz * particleData.dim.x;
 	@end
-	@property( particle_type == particle_type_perpendicular_self )
-		TODO; // We need to send common_dir
+	@property( hlms_particle_type == hlms_particle_type_perpendicular_self )
+		const float3 particleRightVecNorm = particleCommon.up.xyz.cross( particleData.dir );
+		const float3 particleUpVec = particleData.dir.cross( particleRightVecNorm ) * particleData.dim.y;
+		const float3 particleRightVec = particleRightVecNorm * particleData.dim.x;
 	@end
 	#undef inVs_vertex
 	float4 inVs_vertex = float4( particleData.pos, 1.0f );
 
-	inVs_vertex.xyz += viewSpaceRight * ( vertexInQuad < 2u ? -1.0f : 1.0f );
-	inVs_vertex.xyz += viewSpaceUp * ( ( vertexInQuad & 0x01u ) != 0u ? -1.0f : 1.0f );
+	inVs_vertex.xyz += particleRightVec * ( vertexInQuad < 2u ? -1.0f : 1.0f );
+	inVs_vertex.xyz += particleUpVec * ( ( vertexInQuad & 0x01u ) != 0u ? -1.0f : 1.0f );
 
 	#undef inVs_uv0
 	float2 inVs_uv0;

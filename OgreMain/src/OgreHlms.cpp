@@ -284,6 +284,7 @@ namespace Ogre
         mLightGatheringMode( LightGatherForward ),
         mStaticBranchingLights( false ),
         mShaderCodeCacheDirty( false ),
+        mParticleSystemConstSlot( 0u ),
         mParticleSystemSlot( 0u ),
         mNumLightsLimit( 0u ),
         mNumAreaApproxLightsLimit( 1u ),

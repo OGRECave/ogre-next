@@ -72,7 +72,13 @@ namespace Ogre
 
         ParticleSystemManager2 *mParticleSystemManager;
 
+        /// Data common to all particles
+        ConstBufferPacked *mGpuCommonData;
+        /// Data for each individual particle set in an array
         ReadOnlyBufferPacked *mGpuData;
+
+        Vector3 mCommonDirection;
+        Vector3 mCommonUpVector;
 
         FastArray<EmitterDefData *> mEmitters;
         FastArray<Affector *>       mAffectors;
@@ -219,6 +225,7 @@ namespace Ogre
             return static_cast<const ParticleSystemDef *>( a );
         }
 
+        ConstBufferPacked    *_getGpuCommonBuffer() const { return mGpuCommonData; }
         ReadOnlyBufferPacked *_getGpuDataBuffer() const { return mGpuData; }
 
         bool getUseIdentityWorldMatrix() const override { return true; }
