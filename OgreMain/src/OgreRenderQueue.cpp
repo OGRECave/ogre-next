@@ -717,7 +717,7 @@ namespace Ogre
             }
 
             const ParticleSystemDef *systemDef =
-                ParticleSystemDef::castToRenderable( queuedRenderable.renderable );
+                ParticleSystemDef::castFromRenderable( queuedRenderable.renderable );
 
             ConstBufferPacked *particleCommonBuffer = systemDef->_getGpuCommonBuffer();
             *mCommandBuffer->addCommand<CbShaderBuffer>() =
