@@ -45,6 +45,7 @@ namespace Ogre
 
     class ParticleSystemDef;
 
+    class ParticleAffectorFactory2;
     class ParticleEmitterDefDataFactory;
 
     class _OgreExport ParticleSystemManager2
@@ -65,7 +66,7 @@ namespace Ogre
         void calculateHighestPossibleQuota( VaoManager *vaoManager );
         void createSharedIndexBuffers( VaoManager *vaoManager );
 
-        void tickParticles( size_t threadIdx, Real timeSinceLast, ParticleCpuData cpuData,
+        void tickParticles( size_t threadIdx, ArrayReal timeSinceLast, ParticleCpuData cpuData,
                             ParticleGpuData *gpuData, const size_t numParticles,
                             ParticleSystemDef *systemDef );
 
@@ -82,6 +83,11 @@ namespace Ogre
         static void removeEmitterFactory( ParticleEmitterDefDataFactory *factory );
 
         static ParticleEmitterDefDataFactory *getFactory( IdString name );
+
+        static void addAffectorFactory( ParticleAffectorFactory2 *factory );
+        static void removeAffectorFactory( ParticleAffectorFactory2 *factory );
+
+        static ParticleAffectorFactory2 *getAffectorFactory( IdString name );
 
         /** ParticleSystemManager2 must know the highest possible quota any of its particle
             systems may achieve.

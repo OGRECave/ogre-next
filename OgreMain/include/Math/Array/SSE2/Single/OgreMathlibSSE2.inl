@@ -117,6 +117,11 @@ namespace Ogre
         return *this;
     }*/
     //-----------------------------------------------------------------------------------
+    inline ArrayRadian ArrayRadian::operator * ( ArrayReal r ) const
+    {
+        return ArrayRadian( _mm_mul_ps( mRad, r ) );
+    }
+    //-----------------------------------------------------------------------------------
     inline ArrayRadian ArrayRadian::operator * ( const ArrayRadian& r ) const
     {
         return ArrayRadian( _mm_mul_ps( mRad, r.mRad ) );

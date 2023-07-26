@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreAbiUtils.h"
 #include "OgrePointEmitter2.h"
 #include "OgreRoot.h"
+#include "OgreRotationAffector2.h"
 #include "ParticleSystem/OgreParticleSystemManager2.h"
 
 using namespace Ogre;
@@ -39,41 +40,53 @@ static const String sPluginName = "ParticleFX2";
 //---------------------------------------------------------------------
 const String &ParticleFX2Plugin::getName() const
 {
-	return sPluginName;
+    return sPluginName;
 }
 //---------------------------------------------------------------------
 void ParticleFX2Plugin::install( const NameValuePairList * )
 {
-	// -- Create all new particle emitter factories --
-	ParticleEmitterDefDataFactory *pEmitFact;
+    // -- Create all new particle emitter factories --
+    ParticleEmitterDefDataFactory *pEmitFact;
 
-	// PointEmitter
-	pEmitFact = new PointEmitterFactory();
-	ParticleSystemManager2::addEmitterFactory( pEmitFact );
-	mEmitterFactories.push_back( pEmitFact );
+    // PointEmitter
+    pEmitFact = new PointEmitterFactory();
+    ParticleSystemManager2::addEmitterFactory( pEmitFact );
+    mEmitterFactories.push_back( pEmitFact );
+
+    ParticleAffectorFactory2 *pAffectorFact;
+
+    pAffectorFact = new RotationAffectorFactory2();
+    ParticleSystemManager2::addAffectorFactory( pAffectorFact );
+    mAffectorFactories.push_back( pAffectorFact );
 }
 //---------------------------------------------------------------------
 void ParticleFX2Plugin::initialise()
 {
-	// nothing to do
+    // nothing to do
 }
 //---------------------------------------------------------------------
 void ParticleFX2Plugin::shutdown()
 {
-	// nothing to do
+    // nothing to do
 }
 //---------------------------------------------------------------------
 void ParticleFX2Plugin::uninstall()
 {
-	// destroy
-	for( ParticleEmitterDefDataFactory *emitterFactory : mEmitterFactories )
-	{
-		ParticleSystemManager2::removeEmitterFactory( emitterFactory );
-		delete emitterFactory;
-	}
+    // destroy
+    for( ParticleAffectorFactory2 *affectorFactory : mAffectorFactories )
+    {
+        ParticleSystemManager2::removeAffectorFactory( affectorFactory );
+        delete affectorFactory;
+    }
+
+    for( ParticleEmitterDefDataFactory *emitterFactory : mEmitterFactories )
+    {
+        ParticleSystemManager2::removeEmitterFactory( emitterFactory );
+        delete emitterFactory;
+    }
 }
 //---------------------------------------------------------------------
 void ParticleFX2Plugin::getAbiCookie( AbiCookie &outAbiCookie )
 {
-	outAbiCookie = generateAbiCookie();
+    outAbiCookie = generateAbiCookie();
 }

@@ -43,7 +43,7 @@ namespace Ogre
 {
     OGRE_ASSUME_NONNULL_BEGIN
 
-    class Affector;
+    class ParticleAffector2;
     class EmitterDefData;
     struct EmitterInstanceData;
     class ParticleSystem2;
@@ -80,8 +80,9 @@ namespace Ogre
         Vector3 mCommonDirection;
         Vector3 mCommonUpVector;
 
-        FastArray<EmitterDefData *> mEmitters;
-        FastArray<Affector *>       mAffectors;
+        FastArray<EmitterDefData *>    mEmitters;
+        FastArray<ParticleAffector2 *> mAffectors;
+        FastArray<ParticleAffector2 *> mInitializableAffectors;
 
         /// Particles are distributed across all instances.
         ///
@@ -206,6 +207,20 @@ namespace Ogre
         const FastArray<EmitterDefData *> &getEmitters() const { return mEmitters; }
 
         size_t getNumEmitters() const;
+
+        /** If you know in advance how many times you will call addAffector() call this
+            function to achieve optimum memory use. This is the same as std::vector::reserve.
+            Optional.
+        @param numAffectors
+            Number of times you intend to call addAffector().
+        */
+        void reserveNumAffectors( size_t numAffectors );
+
+        ParticleAffector2 *addAffector( IdString name );
+
+        const FastArray<ParticleAffector2 *> &getAffectors() const { return mAffectors; }
+
+        size_t getNumAffectors() const;
 
         /// For internal use. Don't call this directly. See SceneManager::createParticleSystem2
         ParticleSystem2 *_createParticleSystem( ObjectMemoryManager *objectMemoryManager );

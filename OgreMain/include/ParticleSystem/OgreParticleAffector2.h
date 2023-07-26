@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreStringInterface.h"
 #include "ParticleSystem/OgreParticle2.h"
 
 #include "OgreHeaderPrefix.h"
@@ -40,12 +41,60 @@ namespace Ogre
     OGRE_ASSUME_NONNULL_BEGIN
 
     /// Affectors are per ParticleSystemDef
-    class _OgreExport Affector
+    class _OgreExport ParticleAffector2 : public StringInterface
     {
     public:
-        virtual ~Affector() = default;
+        virtual ~ParticleAffector2() = default;
 
-        virtual void run( ParticleCpuData cpuData, const size_t numParticles ) const = 0;
+        /// Returns true if initEmittedParticles() must be called on a particle that has been emitted.
+        virtual bool needsInitialization() const { return false; }
+
+        /** Initializes particles
+            Can be called by multiple threads.
+
+            @see EmitterDefData::initEmittedParticles
+        @remarks
+            If this is overloaded, then needsInitialization() must return true.
+        */
+        virtual void initEmittedParticles( ParticleCpuData /*cpuData*/, const uint32 * /*newHandles*/,
+                                           size_t /*numParticles*/ ) const
+        {
+        }
+
+        virtual void run( ParticleCpuData cpuData, size_t numParticles,
+                          ArrayReal timeSinceLast ) const = 0;
+
+        /** Returns the name of the type of affector.
+        @remarks
+            This property is useful for determining the type of affector procedurally so another
+            can be created.
+        */
+        virtual String getType() const = 0;
+    };
+
+    /** Abstract class defining the interface to be implemented by creators of ParticleAffector2
+        subclasses.
+    @remarks
+        Plugins or 3rd party applications can add new types of particle affectors to Ogre by creating
+        subclasses of the ParticleAffector2 class. Because multiple instances of these affectors may be
+        required, a factory class to manage the instances is also required.
+    @par
+        ParticleAffector2Factory subclasses must allow the creation and destruction of ParticleAffector2
+        subclasses. They must also be registered with the ParticleSystemManager. All factories have
+        a name which identifies them, examples might be 'force_vector', 'attractor', or 'fader', and
+        these can be also be used from particle system scripts.
+    */
+    class _OgreExport ParticleAffectorFactory2
+    {
+    public:
+        virtual ~ParticleAffectorFactory2() = default;
+
+        /// Returns the name of the factory, the name which identifies
+        /// the particle affector type this factory creates.
+        virtual String getName() const = 0;
+
+        /// Creates a new affector instance.
+        virtual ParticleAffector2 *createAffector() = 0;
     };
 
     OGRE_ASSUME_NONNULL_END
