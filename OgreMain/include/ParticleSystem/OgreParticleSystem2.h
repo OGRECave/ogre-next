@@ -261,11 +261,13 @@ namespace Ogre
                    ARRAY_PACKED_REALS;
         }
 
-        inline static const ParticleSystemDef *castToRenderable( const Renderable *a )
+        inline static const ParticleSystemDef *castFromRenderable( const Renderable *a )
         {
             // OGRE_ASSERT_HIGH( dynamic_cast<const ParticleSystemDef *>( a ) );
             return static_cast<const ParticleSystemDef *>( a );
         }
+
+        inline static Renderable *castToRenderable( ParticleSystemDef *a ) { return a; }
 
         ConstBufferPacked    *_getGpuCommonBuffer() const { return mGpuCommonData; }
         ReadOnlyBufferPacked *_getGpuDataBuffer() const { return mGpuData; }
