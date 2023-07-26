@@ -101,6 +101,7 @@ void RotationAffector2::run( ParticleCpuData cpuData, const size_t numParticles,
     for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
     {
         *cpuData.mRotation = *cpuData.mRotation + *cpuData.mRotationSpeed * timeSinceLast;
+        cpuData.mRotation->wrapToRangeNPI_PI();
         cpuData.advancePack();
     }
 }

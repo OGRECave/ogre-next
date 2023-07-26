@@ -74,6 +74,7 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
     mFirstParticleIdx( 0u ),
     mLastParticleIdx( 0u ),
     mParticleQuotaFull( false ),
+    mRotationType( ParticleRotationType::None ),
     mParticleType( ParticleType::Point )
 {
     memset( &mParticleCpuData, 0, sizeof( mParticleCpuData ) );
@@ -204,6 +205,16 @@ void ParticleSystemDef::setParticleType( ParticleType::ParticleType particleType
                      "ParticleSystemDef::setParticleType" );
     }
     mParticleType = particleType;
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::setRotationType( ParticleRotationType::ParticleRotationType rotationType )
+{
+    mRotationType = rotationType;
+}
+//-----------------------------------------------------------------------------
+ParticleRotationType::ParticleRotationType ParticleSystemDef::getRotationType() const
+{
+    return mRotationType;
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::setCommonVectors( const Vector3 &commonDir, const Vector3 &commonUp )

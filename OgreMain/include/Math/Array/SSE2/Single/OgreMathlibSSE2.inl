@@ -146,10 +146,31 @@ namespace Ogre
     inline ArrayReal ArrayRadian::operator >  ( const ArrayRadian& r ) const { return _mm_cmpgt_ps( mRad, r.mRad ); }
 
     //-----------------------------------------------------------------------------------
+    inline void ArrayRadian::wrapToRangeNPI_PI()
+    {
+        const ArrayReal signedPi = MathlibSSE2::CopySign4( MathlibSSE2::PI, mRad );
+        const ArrayReal x = _mm_add_ps( mRad, signedPi );                         // x = mRad + signedPi
+        const ArrayReal quotient = _mm_mul_ps( mRad, MathlibSSE2::ONE_DIV_2PI );  // x / ( 2 * PI )
+        const ArrayReal integerQuot =
+            _mm_cvtepi32_ps( _mm_cvttps_epi32( quotient ) );                 // trunc( x / 2PI )
+        const ArrayReal s = _mm_mul_ps( integerQuot, MathlibSSE2::TWO_PI );  // trunc( x / 2PI ) * 2PI
+
+        const ArrayReal wrappedValue = _mm_sub_ps( x, s );  // x - trunc( x / 2PI ) * 2PI
+
+        mRad = _mm_sub_ps( wrappedValue, signedPi );  // mRad = wrappedValue - signedPi
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibSSE2::Modf4( ArrayReal x, ArrayReal &outIntegral )
     {
         outIntegral = _mm_cvtepi32_ps( _mm_cvttps_epi32( x ) ); // truncate towards zero, overflows for large input
         return _mm_sub_ps( x, outIntegral );
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayReal MathlibSSE2::CopySign4( ArrayReal mag, ArrayReal sig )
+    {
+        return _mm_xor_ps( mag, _mm_and_ps( sig, MathlibSSE2::SIGN_MASK ) );
     }
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibSSE2::ACos4( ArrayReal x)
