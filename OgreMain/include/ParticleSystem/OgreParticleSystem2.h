@@ -50,6 +50,19 @@ namespace Ogre
 
     static constexpr uint8 kParticleSystemDefaultRenderQueueId = 15u;
 
+    namespace ParticleRotationType
+    {
+        enum ParticleRotationType
+        {
+            /// No rotation
+            None,
+            /// Rotate the particle's vertices around their facing direction
+            Vertex,
+            /// Rotate the particle's texture coordinates
+            Texcoord
+        };
+    }
+
     /// A ParticleSystemDef does not form part of the scene.
     ///
     /// The reason it derives from ParticleSystem (& hence MovableObject) is to keep backwards
@@ -102,6 +115,8 @@ namespace Ogre
         uint32 mLastParticleIdx;
         bool   mParticleQuotaFull;
 
+        ParticleRotationType::ParticleRotationType mRotationType;
+
         FastArray<ParticleSystem2 *> mParticleSystems;
         /// Contains ACTIVE particle systems to be processed this frame. Sorted by relevance/priority.
         FastArray<ParticleSystem2 *> mActiveParticleSystems;
@@ -153,6 +168,10 @@ namespace Ogre
         void setParticleQuota( size_t quota ) override;
 
         void setParticleType( ParticleType::ParticleType particleType );
+
+        void setRotationType( ParticleRotationType::ParticleRotationType rotationType );
+
+        ParticleRotationType::ParticleRotationType getRotationType() const;
 
         /// See setCommonDirection() and setCommonUpVector().
         /// Use this version if you have to often change both of these at the same time.

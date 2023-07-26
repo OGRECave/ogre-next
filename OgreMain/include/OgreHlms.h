@@ -1202,6 +1202,7 @@ namespace Ogre
         static const IdString ParticleTypeOrientedSelf;
         static const IdString ParticleTypePerpendicularCommon;
         static const IdString ParticleTypePerpendicularSelf;
+        static const IdString ParticleRotation;
 
         static const IdString Forward3D;
         static const IdString ForwardClustered;

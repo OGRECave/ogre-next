@@ -58,7 +58,7 @@ namespace Ogre
     const float32x4_ct MathlibNEON::MAX_POS = init_list_4( std::numeric_limits<Real>::max() );
     const float32x4_ct MathlibNEON::LAST_AFFINE_COLUMN = { 0, 0, 0, 1 };
 
-    static const Real _PI = Real( 4.0 * std::atan( 1.0 ) );
+    static const Real _PI = Real( 3.14159265358979323846264338327950288 );
     // We can't use Math::fDeg2Rad & Math::fRad2Deg directly because
     // it's not guaranteed to have been initialized first
     const float32x4_ct MathlibNEON::PI = init_list_4( _PI );

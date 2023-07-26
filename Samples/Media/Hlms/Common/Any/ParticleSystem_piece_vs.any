@@ -40,7 +40,7 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 		retVal.dir.xyz = tmp2.xyz;
 		retVal.colour.w = tmp2.w * 0.5f + 0.5f;
 		tmp2.xy = unpackSnorm2x16( tmp.z );
-		retVal.rotation = tmp2.x;
+		retVal.rotation = tmp2.x * 3.14159265359f;
 		retVal.colour.x = tmp2.y;
 		retVal.colour.yz = unpackSnorm2x16( tmp.w );
 
@@ -96,5 +96,14 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 	float2 inVs_uv0;
 	inVs_uv0.x = vertexInQuad < 2u ? 0.0f : 1.0f;
 	inVs_uv0.y = ( ( vertexInQuad & 0x01u ) != 0u ? 0.0f : 1.0f );
+
+	@property( hlms_particle_rotation == 2 )
+		// 2x2 matrix rotation
+		float4 particleRotMatrix;
+		particleRotMatrix.xz = float2( cos( particleData.rotation ), sin( particleData.rotation ) );
+		particleRotMatrix.yw = float2( -particleRotMatrix.z, particleRotMatrix.x );
+		inVs_uv0.x = dot( inVs_uv0.xy - 0.5f, particleRotMatrix.xy ) + 0.5f;
+		inVs_uv0.y = dot( inVs_uv0.xy - 0.5f, particleRotMatrix.zw ) + 0.5f;
+	@end
 @end
 @end

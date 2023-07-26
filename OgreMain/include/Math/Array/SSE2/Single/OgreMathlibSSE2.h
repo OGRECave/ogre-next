@@ -56,6 +56,15 @@ namespace Ogre
         // ArrayReal valueDegrees() const; // see bottom of this file
         ArrayReal valueRadians() const { return mRad; }
 
+        /** Wraps the given value to the range [-pi; pi]
+            The algorithm is:
+                const float signedPi = std::copysign( _PI, mRad );
+                const float x = mRad + signedPi;
+                const float wrappedValue = fmod( mRad + signedPi, TWO_PI );
+                mRad = wrappedValue - signedPi;
+        */
+        inline void wrapToRangeNPI_PI();
+
         inline const ArrayRadian &operator+() const;
         inline ArrayRadian        operator+( const ArrayRadian &r ) const;
         // inline ArrayRadian operator + ( const ArrayDegree& d ) const;
@@ -506,6 +515,16 @@ namespace Ogre
                 The fractional part of x. i.e. 0.57
         */
         static inline ArrayReal Modf4( ArrayReal x, ArrayReal &outIntegral );
+
+        /** Like std::copysign, composes a value of magnitude mag and sign sig
+        @param mag
+            Magnitude of the returned value.
+        @param sig
+            Sign of the returned value.
+        @return
+            A value of magnitude mag and sign sig
+        */
+        static inline ArrayReal CopySign4( ArrayReal mag, ArrayReal sig );
 
         /** Returns the arccos of x
             @param x
