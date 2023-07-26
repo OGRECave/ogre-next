@@ -43,6 +43,7 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
+static std::map<IdString, ParticleAffectorFactory2 *> sAffectorFactories;
 static std::map<IdString, ParticleEmitterDefDataFactory *> sEmitterDefFactories;
 
 ParticleSystemManager2::ParticleSystemManager2( SceneManager *sceneManager ) :
@@ -69,12 +70,10 @@ ParticleSystemManager2::~ParticleSystemManager2()
     mParticleSystemDefMap.clear();
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemManager2::tickParticles( const size_t threadIdx, const Real _timeSinceLast,
+void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayReal timeSinceLast,
                                             ParticleCpuData cpuData, ParticleGpuData *gpuData,
                                             const size_t numParticles, ParticleSystemDef *systemDef )
 {
-    const ArrayReal timeSinceLast = Mathlib::SetAll( _timeSinceLast );
-
     const ArrayReal invPi = Mathlib::SetAll( 1.0f / Math::PI );
 
     for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
@@ -211,7 +210,7 @@ void ParticleSystemManager2::updateSerialPos()
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_t numThreads )
 {
-    const Real timeSinceLast = mTimeSinceLast;
+    const ArrayReal timeSinceLast = Mathlib::SetAll( mTimeSinceLast );
 
     for( ParticleSystemDef *systemDef : mActiveParticleSystemDefs )
     {
@@ -239,6 +238,13 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
                 systemDef->mEmitters[i]->initEmittedParticles(
                     cpuData, systemDef->mNewParticles.begin() + currOffset + toAdvance,
                     numParticlesToProcess );
+
+                for( const ParticleAffector2 *affector : systemDef->mInitializableAffectors )
+                {
+                    affector->initEmittedParticles(
+                        cpuData, systemDef->mNewParticles.begin() + currOffset + toAdvance,
+                        numParticlesToProcess );
+                }
 
                 // We've processed numParticlesToProcess but we need to skip newParticlesPerEmitter
                 // because the gap "newParticlesPerEmitter - numParticlesToProcess" is being
@@ -317,8 +323,8 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
 
             ParticleGpuData *gpuData = systemDef->mParticleGpuData + gpuAdvance;
 
-            for( const Affector *affector : systemDef->mAffectors )
-                affector->run( cpuData, numParticlesToProcess );
+            for( const ParticleAffector2 *affector : systemDef->mAffectors )
+                affector->run( cpuData, numParticlesToProcess, timeSinceLast );
 
             tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numParticlesToProcess,
                            systemDef );
@@ -355,6 +361,30 @@ ParticleEmitterDefDataFactory *ParticleSystemManager2::getFactory( IdString name
             Exception::ERR_ITEM_NOT_FOUND,
             "No emitter with name '" + name.getFriendlyText() + "' found. Is the plugin installed?",
             "ParticleSystemManager2::getFactory" );
+    }
+    return itor->second;
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::addAffectorFactory( ParticleAffectorFactory2 *factory )
+{
+    sAffectorFactories[factory->getName()] = factory;
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::removeAffectorFactory( ParticleAffectorFactory2 *factory )
+{
+    sAffectorFactories.erase( factory->getName() );
+}
+//-----------------------------------------------------------------------------
+ParticleAffectorFactory2 *ParticleSystemManager2::getAffectorFactory( IdString name )
+{
+    std::map<IdString, ParticleAffectorFactory2 *>::const_iterator itor =
+        sAffectorFactories.find( name );
+    if( itor == sAffectorFactories.end() )
+    {
+        OGRE_EXCEPT(
+            Exception::ERR_ITEM_NOT_FOUND,
+            "No Affector with name '" + name.getFriendlyText() + "' found. Is the plugin installed?",
+            "ParticleSystemManager2::getAffectorFactory" );
     }
     return itor->second;
 }

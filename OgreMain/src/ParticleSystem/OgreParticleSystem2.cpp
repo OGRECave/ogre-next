@@ -180,7 +180,7 @@ void ParticleSystemDef::_destroy( VaoManager *vaoManager )
     for( EmitterDefData *emitter : mEmitters )
         delete emitter;
     mEmitters.clear();
-    for( Affector *affector : mAffectors )
+    for( ParticleAffector2 *affector : mAffectors )
         delete affector;
     mAffectors.clear();
 }
@@ -255,6 +255,26 @@ EmitterDefData *ParticleSystemDef::addEmitter( IdString name )
 size_t ParticleSystemDef::getNumEmitters() const
 {
     return mEmitters.size();
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::reserveNumAffectors( size_t numAffectors )
+{
+    mAffectors.reserve( numAffectors );
+}
+//-----------------------------------------------------------------------------
+ParticleAffector2 *ParticleSystemDef::addAffector( IdString name )
+{
+    ParticleAffector2 *newAffector =
+        ParticleSystemManager2::getAffectorFactory( name )->createAffector();
+    mAffectors.push_back( newAffector );
+    if( newAffector->needsInitialization() )
+        mInitializableAffectors.push_back( newAffector );
+    return newAffector;
+}
+//-----------------------------------------------------------------------------
+size_t ParticleSystemDef::getNumAffectors() const
+{
+    return mAffectors.size();
 }
 //-----------------------------------------------------------------------------
 ParticleSystem2 *ParticleSystemDef::_createParticleSystem( ObjectMemoryManager *objectMemoryManager )

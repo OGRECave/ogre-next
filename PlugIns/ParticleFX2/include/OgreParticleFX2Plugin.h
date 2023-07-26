@@ -32,15 +32,17 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-	class ParticleEmitterDefDataFactory;
+    class ParticleAffectorFactory2;
+    class ParticleEmitterDefDataFactory;
 
     /** Plugin instance for ParticleFX2 Manager */
     class ParticleFX2Plugin final : public Plugin
     {
-	protected:
-		FastArray<ParticleEmitterDefDataFactory *> mEmitterFactories;
+    protected:
+        FastArray<ParticleAffectorFactory2 *>      mAffectorFactories;
+        FastArray<ParticleEmitterDefDataFactory *> mEmitterFactories;
 
-	public:
+    public:
         /// @copydoc Plugin::getName
         const String &getName() const override;
 
