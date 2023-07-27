@@ -33,6 +33,7 @@ THE SOFTWARE.
 
 #include "Math/Array/OgreArrayVector2.h"
 #include "Math/Array/OgreArrayVector3.h"
+#include "Math/Array/OgreArrayVector4.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -67,7 +68,7 @@ namespace Ogre
         ArrayReal *RESTRICT_ALIAS mTotalTimeToLive;
 
         /// Current colour
-        // ArrayVector4 *RESTRICT_ALIAS mColour;
+        ArrayVector4 *RESTRICT_ALIAS mColour;
 
         void advancePack( size_t numAdvance = 1u )
         {
@@ -78,6 +79,7 @@ namespace Ogre
             mRotationSpeed += numAdvance;
             mTimeToLive += numAdvance;
             mTotalTimeToLive += numAdvance;
+            mColour += numAdvance;
         }
     };
 

@@ -76,6 +76,24 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
 {
     const ArrayReal invPi = Mathlib::SetAll( 1.0f / Math::PI );
 
+    // To support HDR, particles are encoded as SNORM16.
+    // Although rare, it is possible some particles may have negative colour to subtract instead of add.
+    // To support the most common cases, we support sending the range [-4; 120] while still
+    // having full 8-bit precision in the range [0; 1].
+    //
+    // We chose 124 because 32767 is a multiple of it, which causes the value 0 to map exactly to 0.
+    // However the value 1.0 maps to sint16 1321, which after decoding maps to 0.999053926206244
+    // This should be good enough for SDR (since 254/255 = 0.996078431)
+    //
+    // If you need a larger range, use material diffuse multipliers.
+    const Real kColourRange = 124.0f;
+    const Real kMinColourValue = -4.0f;
+
+    const ArrayReal colourRange = Mathlib::SetAll( 1.0f / kColourRange );
+    const ArrayReal minColorValue = Mathlib::SetAll( kMinColourValue / kColourRange );
+    const ArrayReal alphaScale = Mathlib::SetAll( 2.0f );
+    const ArrayReal alphaOffset = Mathlib::SetAll( -1.0f );
+
     for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
     {
         *cpuData.mPosition += *cpuData.mDirection * timeSinceLast;
@@ -90,13 +108,22 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
 
         const ArrayVector3 normDir = cpuData.mDirection->normalisedCopy();
 
+        ArrayVector4 vColour = *cpuData.mColour;
+        vColour.fma3x1( colourRange, minColorValue, alphaScale, alphaOffset );
+
         int8 directions[3][ARRAY_PACKED_REALS];
         int16 rotations[ARRAY_PACKED_REALS];
+        int16 colour[3][ARRAY_PACKED_REALS];
+        int8 alpha[ARRAY_PACKED_REALS];
         Mathlib::extractS8( Mathlib::ToSnorm8Unsafe( normDir.mChunkBase[0] ), directions[0] );
         Mathlib::extractS8( Mathlib::ToSnorm8Unsafe( normDir.mChunkBase[1] ), directions[1] );
         Mathlib::extractS8( Mathlib::ToSnorm8Unsafe( normDir.mChunkBase[2] ), directions[2] );
         Mathlib::extractS16( Mathlib::ToSnorm16( cpuData.mRotation->valueRadians() * invPi ),
                              rotations );
+        Mathlib::extractS16( Mathlib::ToSnorm16( vColour.mChunkBase[0] ), colour[0] );
+        Mathlib::extractS16( Mathlib::ToSnorm16( vColour.mChunkBase[1] ), colour[1] );
+        Mathlib::extractS16( Mathlib::ToSnorm16( vColour.mChunkBase[2] ), colour[2] );
+        Mathlib::extractS8( Mathlib::ToSnorm8Unsafe( vColour.mChunkBase[3] ), alpha );
 
         for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
         {
@@ -130,11 +157,11 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
                 gpuData->mDirection[0] = directions[0][j];
                 gpuData->mDirection[1] = directions[1][j];
                 gpuData->mDirection[2] = directions[2][j];
-                gpuData->mColourAlpha = 127;
+                gpuData->mColourAlpha = alpha[j];
                 gpuData->mRotation = rotations[j];
-                gpuData->mColourRgb[0] = 255;
-                gpuData->mColourRgb[1] = 255;
-                gpuData->mColourRgb[2] = 255;
+                gpuData->mColourRgb[0] = colour[0][j];
+                gpuData->mColourRgb[1] = colour[1][j];
+                gpuData->mColourRgb[2] = colour[2][j];
             }
 
             ++gpuData;
