@@ -49,6 +49,8 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 @end
 
 @piece( DoParticleSystemVS )
+	// We try that most variables start with particle prefix to avoid our
+	// variable names from clashing with other Hlms custom blocks.
 	const ParticleGpuData particleData = loadParticleGpuData();
 
 	const uint vertexInQuad = uint( inVs_vertexId ) & 0x03u;
@@ -89,8 +91,16 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 	#undef inVs_vertex
 	float4 inVs_vertex = float4( particleData.pos, 1.0f );
 
-	inVs_vertex.xyz += particleRightVec * ( vertexInQuad < 2u ? -1.0f : 1.0f );
-	inVs_vertex.xyz += particleUpVec * ( ( vertexInQuad & 0x01u ) != 0u ? -1.0f : 1.0f );
+	float3 toParticleEdge = particleRightVec * ( vertexInQuad < 2u ? -1.0f : 1.0f ) +
+							particleUpVec * ( ( vertexInQuad & 0x01u ) != 0u ? -1.0f : 1.0f );
+
+	@property( hlms_particle_rotation == 1 )
+		const float4 particleRotQuat = BuildQuaternionFromAngleAxis(
+			normalize( cross( particleRightVec, particleUpVec ) ), particleData.rotation );
+		toParticleEdge = qmul( particleRotQuat, toParticleEdge );
+	@end
+
+	inVs_vertex.xyz += toParticleEdge;
 
 	#undef inVs_uv0
 	float2 inVs_uv0;
