@@ -8,7 +8,7 @@
 struct VS_INPUT
 {
 	float4 position [[attribute(VES_POSITION)]];
-@property( hlms_colour )	float4 colour [[attribute(VES_DIFFUSE)]];@end
+@property( hlms_colour && !hlms_particle_system )	float4 colour [[attribute(VES_DIFFUSE)]];@end
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n [[attribute(VES_TEXTURE_COORDINATES@n)]];@end
 @property( !iOS )

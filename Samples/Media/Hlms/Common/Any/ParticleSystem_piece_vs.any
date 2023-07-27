@@ -41,8 +41,8 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 		retVal.colour.w = tmp2.w * 0.5f + 0.5f;
 		tmp2.xy = unpackSnorm2x16( tmp.z );
 		retVal.rotation = tmp2.x * 3.14159265359f;
-		retVal.colour.x = tmp2.y;
-		retVal.colour.yz = unpackSnorm2x16( tmp.w );
+		retVal.colour.x = tmp2.y * 124.0f - 4.0f;
+		retVal.colour.yz = unpackSnorm2x16( tmp.w ) * 124.0f - 4.0f;
 
 		return retVal;
 	}
@@ -101,6 +101,9 @@ ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
 	@end
 
 	inVs_vertex.xyz += toParticleEdge;
+
+	#undef inVs_colour
+	#define inVs_colour particleData.colour
 
 	#undef inVs_uv0
 	float2 inVs_uv0;

@@ -19,7 +19,7 @@ layout(std140) uniform;
 @insertpiece( custom_vs_uniformDeclaration )
 
 vulkan_layout( OGRE_POSITION ) in vec4 vertex;
-@property( hlms_colour )vulkan_layout( OGRE_DIFFUSE ) in vec4 colour;@end
+@property( hlms_colour && !hlms_particle_system )vulkan_layout( OGRE_DIFFUSE ) in vec4 colour;@end
 
 @foreach( hlms_uv_count, n )
 	vulkan_layout( OGRE_TEXCOORD@n ) in vec@value( hlms_uv_count@n ) uv@n;

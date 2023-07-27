@@ -32,8 +32,6 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-#define TODO_colour
-
 uint32 PointEmitter::genEmissionCount( const Real timeSinceLast,
                                        EmitterInstanceData &instanceData ) const
 {
@@ -101,10 +99,9 @@ void PointEmitter::initEmittedParticles( ParticleCpuData cpuData, const uint32 *
 
         cpuData.mDimensions[j].setFromVector2( mDimensions, idx );
 
-        TODO_colour;
         Ogre::ColourValue colour;
         this->genEmissionColour( colour );
-        // cpuData.mColour[j].setFromVector4( colour, idx );
+        cpuData.mColour[j].setFromVector4( Vector4( colour.ptr() ), idx );
 
         reinterpret_cast<Real * RESTRICT_ALIAS>( cpuData.mTimeToLive )[h] =
             reinterpret_cast<Real * RESTRICT_ALIAS>( cpuData.mTotalTimeToLive )[h] =
@@ -117,10 +114,10 @@ void PointEmitter::initEmittedParticles( ParticleCpuData cpuData, const uint32 *
 static const String kPointEmitterFactoryName = "point";
 const String &PointEmitterFactory::getName() const
 {
-	return kPointEmitterFactoryName;
+    return kPointEmitterFactoryName;
 }
 //-----------------------------------------------------------------------------
 EmitterDefData *PointEmitterFactory::createEmitter()
 {
-	return new PointEmitter();
+    return new PointEmitter();
 }

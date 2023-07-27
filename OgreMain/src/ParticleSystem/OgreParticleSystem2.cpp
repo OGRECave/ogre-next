@@ -118,6 +118,8 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
         OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
     mParticleCpuData.mTotalTimeToLive = reinterpret_cast<ArrayReal *>(
         OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
+    mParticleCpuData.mColour = reinterpret_cast<ArrayVector4 *>(
+        OGRE_MALLOC_SIMD( numParticles * sizeof( Vector4 ), MEMCATEGORY_GEOMETRY ) );
 
     memset( mParticleCpuData.mPosition, 0, numParticles * sizeof( Vector3 ) );
     memset( mParticleCpuData.mDirection, 0, numParticles * sizeof( Vector3 ) );
@@ -126,6 +128,7 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     memset( mParticleCpuData.mRotationSpeed, 0, numParticles * sizeof( Radian ) );
     memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
     memset( mParticleCpuData.mTotalTimeToLive, 0, numParticles * sizeof( Real ) );
+    memset( mParticleCpuData.mColour, 0, numParticles * sizeof( Vector4 ) );
 
     GpuParticleCommon particleCommon( mCommonDirection,
                                       mParticleType != ParticleType::PerpendicularCommon
@@ -155,13 +158,14 @@ void ParticleSystemDef::_destroy( VaoManager *vaoManager )
 
     if( mParticleCpuData.mPosition )
     {
-        OGRE_FREE_SIMD( mParticleCpuData.mPosition, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mDirection, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mDimensions, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mRotation, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mRotationSpeed, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mColour, MEMCATEGORY_GEOMETRY );
         OGRE_FREE_SIMD( mParticleCpuData.mTotalTimeToLive, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mRotationSpeed, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mRotation, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mDimensions, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mDirection, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mPosition, MEMCATEGORY_GEOMETRY );
 
         mParticleCpuData.mPosition = 0;
 
