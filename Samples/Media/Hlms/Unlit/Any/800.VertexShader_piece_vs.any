@@ -3,6 +3,9 @@
 
 @piece( DefaultHeaderVS )
 	@insertpiece( Common_Matrix_DeclUnpackMatrix4x4 )
+	@property( hlms_particle_system )
+		@insertpiece( DeclQuaternion )
+	@end
 
 	// START UNIFORM DECLARATION
 	@insertpiece( PassStructDecl )
