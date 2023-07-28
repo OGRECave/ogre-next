@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 #include "OgreParticleFX2Prerequisites.h"
 
-#include "OgreStringInterface.h"
 #include "ParticleSystem/OgreParticleAffector2.h"
 
 namespace Ogre
@@ -42,40 +41,39 @@ namespace Ogre
     */
     class _OgreParticleFX2Export RotationAffector2 : public ParticleAffector2
     {
-    public:
-        /// Command object for particle emitter  - see ParamCommand
-        class CmdRotationSpeedRangeStart final : public ParamCommand
-        {
-        public:
-            String doGet( const void *target ) const override;
-            void   doSet( void *target, const String &val ) override;
-        };
-
-        /// Command object for particle emitter  - see ParamCommand
-        class CmdRotationSpeedRangeEnd final : public ParamCommand
-        {
-        public:
-            String doGet( const void *target ) const override;
-            void   doSet( void *target, const String &val ) override;
-        };
-
-        /// Command object for particle emitter  - see ParamCommand
-        class CmdRotationRangeStart final : public ParamCommand
-        {
-        public:
-            String doGet( const void *target ) const override;
-            void   doSet( void *target, const String &val ) override;
-        };
-
-        /// Command object for particle emitter  - see ParamCommand
-        class CmdRotationRangeEnd final : public ParamCommand
-        {
-        public:
-            String doGet( const void *target ) const override;
-            void   doSet( void *target, const String &val ) override;
-        };
-
     private:
+        /// Command object for particle emitter  - see ParamCommand
+        class _OgrePrivate CmdRotationSpeedRangeStart final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+
+        /// Command object for particle emitter  - see ParamCommand
+        class _OgrePrivate CmdRotationSpeedRangeEnd final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+
+        /// Command object for particle emitter  - see ParamCommand
+        class _OgrePrivate CmdRotationRangeStart final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+
+        /// Command object for particle emitter  - see ParamCommand
+        class _OgrePrivate CmdRotationRangeEnd final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+
         static CmdRotationSpeedRangeStart msRotationSpeedRangeStartCmd;
         static CmdRotationSpeedRangeEnd   msRotationSpeedRangeEndCmd;
         static CmdRotationRangeStart      msRotationRangeStartCmd;
@@ -122,7 +120,7 @@ namespace Ogre
         String getType() const override;
     };
 
-    class _OgreParticleFX2Export RotationAffectorFactory2 final : public ParticleAffectorFactory2
+    class _OgrePrivate RotationAffectorFactory2 final : public ParticleAffectorFactory2
     {
         String getName() const override { return "Rotator"; }
 

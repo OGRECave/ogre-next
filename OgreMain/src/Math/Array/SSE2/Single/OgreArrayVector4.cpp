@@ -34,6 +34,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const ArrayVector4 ArrayVector4::ZERO( _mm_setzero_ps(), _mm_setzero_ps(), _mm_setzero_ps() );
+    const ArrayVector4 ArrayVector4::ZERO( _mm_setzero_ps(), _mm_setzero_ps(), _mm_setzero_ps(),
+                                           _mm_setzero_ps() );
 }  // namespace Ogre
 #endif
