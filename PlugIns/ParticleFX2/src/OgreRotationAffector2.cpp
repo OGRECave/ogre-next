@@ -27,8 +27,6 @@ THE SOFTWARE.
 */
 #include "OgreRotationAffector2.h"
 
-#include "OgreParticle.h"
-#include "OgreParticleSystem.h"
 #include "OgreStringConverter.h"
 
 using namespace Ogre;

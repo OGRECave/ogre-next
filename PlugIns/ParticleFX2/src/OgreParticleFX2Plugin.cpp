@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "OgreParticleFX2Plugin.h"
 
 #include "OgreAbiUtils.h"
+#include "OgreColourFaderAffector2FX2.h"
+#include "OgreColourFaderAffectorFX2.h"
 #include "OgrePointEmitter2.h"
 #include "OgreRoot.h"
 #include "OgreRotationAffector2.h"
@@ -55,6 +57,12 @@ void ParticleFX2Plugin::install( const NameValuePairList * )
 
     ParticleAffectorFactory2 *pAffectorFact;
 
+    pAffectorFact = new ColourFaderAffectorFX2Factory();
+    ParticleSystemManager2::addAffectorFactory( pAffectorFact );
+    mAffectorFactories.push_back( pAffectorFact );
+    pAffectorFact = new ColourFaderAffector2FX2Factory();
+    ParticleSystemManager2::addAffectorFactory( pAffectorFact );
+    mAffectorFactories.push_back( pAffectorFact );
     pAffectorFact = new RotationAffectorFactory2();
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
