@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE-Next
-(Object-oriented Graphics Rendering Engine)
+    (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2023 Torus Knot Software Ltd
@@ -25,13 +25,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-
-#ifndef OgrePointEmitter_H
-#define OgrePointEmitter_H
+#ifndef OgreBoxEmitter_H
+#define OgreBoxEmitter_H
 
 #include "OgreParticleFX2Prerequisites.h"
 
-#include "ParticleSystem/OgreEmitter2.h"
+#include "OgreAreaEmitter2.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -39,14 +38,24 @@ namespace Ogre
 {
     OGRE_ASSUME_NONNULL_BEGIN
 
-    class _OgreParticleFX2Export PointEmitter2 : public EmitterDefData
+    /** Particle emitter which emits particles randomly from points inside a box.
+    @remarks
+        This basic particle emitter emits particles from a box area. The
+        initial direction of these particles can either be a single direction (i.e. a line),
+        a random scattering inside a cone, or a random scattering in all directions,
+        depending the 'angle' parameter, which is the angle across which to scatter the
+        particles either side of the base direction of the emitter.
+    */
+    class _OgreParticleFX2Export BoxEmitter2 : public AreaEmitter2
     {
     public:
+        BoxEmitter2();
+
         void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
                                    size_t numParticles ) override;
     };
 
-    class _OgrePrivate PointEmitterFactory2 final : public ParticleEmitterDefDataFactory
+    class _OgrePrivate BoxEmitterFactory2 final : public ParticleEmitterDefDataFactory
     {
     public:
         const String &getName() const override;

@@ -29,8 +29,10 @@ THE SOFTWARE.
 #include "OgreParticleFX2Plugin.h"
 
 #include "OgreAbiUtils.h"
+#include "OgreBoxEmitter2.h"
 #include "OgreColourFaderAffector2FX2.h"
 #include "OgreColourFaderAffectorFX2.h"
+#include "OgreColourInterpolatorAffector2.h"
 #include "OgrePointEmitter2.h"
 #include "OgreRoot.h"
 #include "OgreRotationAffector2.h"
@@ -50,17 +52,24 @@ void ParticleFX2Plugin::install( const NameValuePairList * )
     // -- Create all new particle emitter factories --
     ParticleEmitterDefDataFactory *pEmitFact;
 
-    // PointEmitter
-    pEmitFact = new PointEmitterFactory();
+    // Emitters
+    pEmitFact = new PointEmitterFactory2();
+    ParticleSystemManager2::addEmitterFactory( pEmitFact );
+    mEmitterFactories.push_back( pEmitFact );
+    pEmitFact = new BoxEmitterFactory2();
     ParticleSystemManager2::addEmitterFactory( pEmitFact );
     mEmitterFactories.push_back( pEmitFact );
 
     ParticleAffectorFactory2 *pAffectorFact;
 
+    // Affectors
     pAffectorFact = new ColourFaderAffectorFX2Factory();
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
     pAffectorFact = new ColourFaderAffector2FX2Factory();
+    ParticleSystemManager2::addAffectorFactory( pAffectorFact );
+    mAffectorFactories.push_back( pAffectorFact );
+    pAffectorFact = new ColourInterpolatorAffectorFactory2();
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
     pAffectorFact = new RotationAffectorFactory2();

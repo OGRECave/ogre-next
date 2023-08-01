@@ -75,8 +75,7 @@ namespace Ogre
         @return
             Total number of particles to emit.
         */
-        virtual uint32 genEmissionCount( Real                 timeSinceLast,
-                                         EmitterInstanceData &instanceData ) const = 0;
+        uint32 genEmissionCount( Real timeSinceLast, EmitterInstanceData &instanceData ) const;
 
         /** Initializes particles
             Can be called by multiple threads.
