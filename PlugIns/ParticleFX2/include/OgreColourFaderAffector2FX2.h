@@ -34,6 +34,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    OGRE_ASSUME_NONNULL_BEGIN
+
     /** This plugin subclass of ParticleAffector allows you to alter the colour of particles.
     @remarks
         This class supplies the ParticleAffector implementation required to modify the colour of
@@ -242,6 +244,8 @@ namespace Ogre
             return p;
         }
     };
+
+    OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 
 #endif

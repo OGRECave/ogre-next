@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef OgreDeflectorPlaneAffector_H
-#define OgreDeflectorPlaneAffector_H
+#ifndef OgreDirectionRandomiserAffector2_H
+#define OgreDirectionRandomiserAffector2_H
 
 #include "OgreParticleFX2Prerequisites.h"
 
@@ -36,35 +36,36 @@ namespace Ogre
 {
     OGRE_ASSUME_NONNULL_BEGIN
 
-    /** This class defines a ParticleAffector which deflects particles.
+    /** This class defines a ParticleAffector which applies randomness to the movement of the particles.
     @remarks
-        This affector (see ParticleAffector) offers a simple (and inaccurate) physical deflection.
-        All particles which hit the plane are reflected.
+        This affector (see ParticleAffector) applies randomness to the movement of the particles by
+        changing the direction vectors.
     @par
-        The plane is defined by a point (plane_point) and the normal (plane_normal).
-        In addition it is possible to change the strength of the recoil by using the bounce parameter.
+        The most important parameter to control the effect is randomness. It controls the range in which
+    changes are applied to each axis of the direction vector. The parameter scope can be used to limit
+    the effect to a certain percentage of the particles.
     */
-    class _OgreParticleFX2Export DeflectorPlaneAffector2 : public ParticleAffector2
+    class _OgreParticleFX2Export DirectionRandomiserAffector2 : public ParticleAffector2
     {
     private:
-        /** Command object for plane point (see ParamCommand).*/
-        class _OgrePrivate CmdPlanePoint final : public ParamCommand
+        /** Command object for randomness (see ParamCommand).*/
+        class _OgrePrivate CmdRandomness final : public ParamCommand
         {
         public:
             String doGet( const void *target ) const override;
             void   doSet( void *target, const String &val ) override;
         };
 
-        /** Command object for plane normal (see ParamCommand).*/
-        class _OgrePrivate CmdPlaneNormal final : public ParamCommand
+        /** Command object for scope (see ParamCommand).*/
+        class _OgrePrivate CmdScope final : public ParamCommand
         {
         public:
             String doGet( const void *target ) const override;
             void   doSet( void *target, const String &val ) override;
         };
 
-        /** Command object for bounce (see ParamCommand).*/
-        class _OgrePrivate CmdBounce final : public ParamCommand
+        /** Command object for keep_velocity (see ParamCommand).*/
+        class _OgrePrivate CmdKeepVelocity final : public ParamCommand
         {
         public:
             String doGet( const void *target ) const override;
@@ -72,52 +73,44 @@ namespace Ogre
         };
 
         /// Command objects
-        static CmdPlanePoint  msPlanePointCmd;
-        static CmdPlaneNormal msPlaneNormalCmd;
-        static CmdBounce      msBounceCmd;
+        static CmdRandomness   msRandomnessCmd;
+        static CmdScope        msScopeCmd;
+        static CmdKeepVelocity msKeepVelocityCmd;
 
     protected:
-        /// deflector plane point
-        Vector3 mPlanePoint;
-        /// deflector plane normal vector
-        Vector3 mPlaneNormal;
-
-        /// bounce factor (0.5 means 50 percent)
-        Real mBounce;
+        Real mRandomness;
+        Real mScope;
+        bool mKeepVelocity;
 
     public:
-        DeflectorPlaneAffector2();
+        DirectionRandomiserAffector2();
 
         void run( ParticleCpuData cpuData, size_t numParticles, ArrayReal timeSinceLast ) const override;
 
-        /// Sets the plane point of the deflector plane.
-        void setPlanePoint( const Vector3 &pos );
+        /// Sets the randomness to apply to the particles in a system.
+        void setRandomness( Real force );
+        /// Sets the scope (percentage of particles which are randomised).
+        void setScope( Real force );
+        /// Set flag which detemines whether particle speed is changed.
+        void setKeepVelocity( bool keepVelocity );
 
-        /// Gets the plane point of the deflector plane.
-        Vector3 getPlanePoint() const;
-
-        /// Sets the plane normal of the deflector plane.
-        void setPlaneNormal( const Vector3 &normal );
-
-        /// Gets the plane normal of the deflector plane.
-        Vector3 getPlaneNormal() const;
-
-        /// Sets the bounce value of the deflection.
-        void setBounce( Real bounce );
-
-        /// Gets the bounce value of the deflection.
-        Real getBounce() const;
+        /// Gets the randomness to apply to the particles in a system.
+        Real getRandomness() const;
+        /// Gets the scope (percentage of particles which are randomised).
+        Real getScope() const;
+        /// Gets flag which detemines whether particle speed is changed.
+        bool getKeepVelocity() const;
 
         String getType() const override;
     };
 
-    class _OgrePrivate DeflectorPlaneAffectorFactory2 final : public ParticleAffectorFactory2
+    class _OgrePrivate DirectionRandomiserAffectorFactory2 final : public ParticleAffectorFactory2
     {
-        String getName() const override { return "DeflectorPlane"; }
+        String getName() const override { return "DirectionRandomiser"; }
 
         ParticleAffector2 *createAffector() override
         {
-            ParticleAffector2 *p = new DeflectorPlaneAffector2();
+            ParticleAffector2 *p = new DirectionRandomiserAffector2();
             return p;
         }
     };
