@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE-Next
-    (Object-oriented Graphics Rendering Engine)
+(Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2023 Torus Knot Software Ltd
@@ -25,21 +25,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+// Original author: Tels <http://bloodgate.com>, released as public domain
+#include "OgreCylinderEmitter2.h"
 
-#include "OgreBoxEmitter2.h"
-
-#include "ParticleSystem/OgreParticle2.h"
+// Implements an Emitter whose emitting points all lie inside a cylinder.
 
 using namespace Ogre;
 
-//-----------------------------------------------------------------------------
-BoxEmitter2::BoxEmitter2()
+//-----------------------------------------------------------------------
+CylinderEmitter2::CylinderEmitter2() : AreaEmitter2()
 {
-    initDefaults( "Box" );
+    initDefaults( "Cylinder" );
 }
-//-----------------------------------------------------------------------------
-void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
-                                        const size_t numParticles )
+//-----------------------------------------------------------------------
+void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+                                             const size_t numParticles )
 {
     const Vector3 position = mPosition;
     const Vector2 dimensions = mDimensions;
@@ -53,13 +53,36 @@ void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *n
         const size_t j = h / ARRAY_PACKED_REALS;
         const size_t idx = h % ARRAY_PACKED_REALS;
 
-        Vector3 xOff, yOff, zOff;
+        Real x, y, z;
 
-        xOff = Math::SymmetricRandom() * xRange;
-        yOff = Math::SymmetricRandom() * yRange;
-        zOff = Math::SymmetricRandom() * zRange;
+        // First we create a random point inside a bounding cylinder with a
+        // radius and height of 1 (this is easy to do). The distance of the
+        // point from 0,0,0 must be <= 1 (== 1 means on the surface and we
+        // count this as inside, too).
 
-        cpuData.mPosition[j].setFromVector3( position + xOff + yOff + zOff, idx );
+        while( true )
+        {
+            /* ClearSpace not yet implemeted
+
+            */
+            // three random values for one random point in 3D space
+            x = Math::SymmetricRandom();
+            y = Math::SymmetricRandom();
+            z = Math::SymmetricRandom();
+
+            // the distance of x,y from 0,0 is sqrt(x*x+y*y), but
+            // as usual we can omit the sqrt(), since sqrt(1) == 1 and we
+            // use the 1 as boundary. z is not taken into account, since
+            // all values in the z-direction are inside the cylinder:
+            if( x * x + y * y <= 1 )
+            {
+                break;  // found one valid point inside
+            }
+        }
+
+        // scale the found point to the cylinder's size and move it
+        // relatively to the center of the emitter point
+        cpuData.mPosition[j].setFromVector3( position + x * xRange + y * yRange + z * zRange, idx );
         reinterpret_cast<Real * RESTRICT_ALIAS>( cpuData.mRotation )[h] = 0.0f;
 
         Vector3 direction;
@@ -81,13 +104,13 @@ void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *n
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
-static const String kBoxEmitterFactoryName = "box";
-const String &BoxEmitterFactory2::getName() const
+static const String kCylinderEmitterFactoryName = "cylinder";
+const String &CylinderEmitterFactory2::getName() const
 {
-    return kBoxEmitterFactoryName;
+    return kCylinderEmitterFactoryName;
 }
 //-----------------------------------------------------------------------------------
-EmitterDefData *BoxEmitterFactory2::createEmitter()
+EmitterDefData *CylinderEmitterFactory2::createEmitter()
 {
-    return new BoxEmitter2();
+    return new CylinderEmitter2();
 }

@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreColourFaderAffector2FX2.h"
 #include "OgreColourFaderAffectorFX2.h"
 #include "OgreColourInterpolatorAffector2.h"
+#include "OgreCylinderEmitter2.h"
 #include "OgrePointEmitter2.h"
 #include "OgreRoot.h"
 #include "OgreRotationAffector2.h"
@@ -53,10 +54,13 @@ void ParticleFX2Plugin::install( const NameValuePairList * )
     ParticleEmitterDefDataFactory *pEmitFact;
 
     // Emitters
-    pEmitFact = new PointEmitterFactory2();
+    pEmitFact = new BoxEmitterFactory2();
     ParticleSystemManager2::addEmitterFactory( pEmitFact );
     mEmitterFactories.push_back( pEmitFact );
-    pEmitFact = new BoxEmitterFactory2();
+    pEmitFact = new CylinderEmitterFactory2();
+    ParticleSystemManager2::addEmitterFactory( pEmitFact );
+    mEmitterFactories.push_back( pEmitFact );
+    pEmitFact = new PointEmitterFactory2();
     ParticleSystemManager2::addEmitterFactory( pEmitFact );
     mEmitterFactories.push_back( pEmitFact );
 
