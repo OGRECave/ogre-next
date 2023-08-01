@@ -40,6 +40,7 @@ g_folders = [
     'RenderSystems/Metal',
     'RenderSystems/NULL',
     'PlugIns/ParticleFX',
+    'PlugIns/ParticleFX2',
     'Samples/2.0',
 ]
 
@@ -85,7 +86,6 @@ g_thresholds = {
     '../../OgreMain/include/Math/Array/NEON/Single/OgreArrayMatrixAf4x3.inl': 1791,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreArrayVector3.inl': 1239,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreArraySphere.inl': 30,
-    '../../OgreMain/include/Math/Array/SSE2/Single/OgreMathlibSSE2.inl': 393,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreArrayMatrix4.inl': 1530,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreArrayAabb.inl': 219,
     '../../OgreMain/include/Math/Array/SSE2/Single/OgreBooleanMask.inl': 126,

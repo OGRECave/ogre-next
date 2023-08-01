@@ -184,19 +184,19 @@ namespace Ogre
         inline void operator/=( const Real fScalar );
         inline void operator/=( const ArrayReal fScalar );
 
-		/** Performs the following operation:
-				this->xyz = (this->xyz + a) * m
-				this->w = (this->w + a2) * m2
-		@param m
-			Scalar to multiply to the xyz components.
-		@param a
-			Scalar to add to the xyz components.
-		@param m2
-			Scalar to multiply to the w component.
-		@param a2
-			Scalar to add to the w component.
-		*/
-		inline void fma3x1( ArrayReal m, ArrayReal a, ArrayReal m2, ArrayReal a2 );
+        /** Performs the following operation:
+                this->xyz = (this->xyz + a) * m
+                this->w = (this->w + a2) * m2
+        @param m
+            Scalar to multiply to the xyz components.
+        @param a
+            Scalar to add to the xyz components.
+        @param m2
+            Scalar to multiply to the w component.
+        @param a2
+            Scalar to add to the w component.
+        */
+        inline void fma3x1( ArrayReal m, ArrayReal a, ArrayReal m2, ArrayReal a2 );
 
         /// @copydoc Vector4::makeFloor()
         inline void makeFloor( const ArrayVector4 &cmp );
