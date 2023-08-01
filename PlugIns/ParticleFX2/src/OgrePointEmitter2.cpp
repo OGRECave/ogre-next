@@ -34,23 +34,26 @@ using namespace Ogre;
 
 //-----------------------------------------------------------------------------
 void PointEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
-                                          size_t numParticles )
+                                          const size_t numParticles )
 {
+    const Vector3 position = mPosition;
+    const Vector2 dimensions = mDimensions;
+
     for( size_t i = 0u; i < numParticles; ++i )
     {
         const size_t h = newHandles[i];
         const size_t j = h / ARRAY_PACKED_REALS;
         const size_t idx = h % ARRAY_PACKED_REALS;
 
-        cpuData.mPosition[j].setFromVector3( mPosition, idx );
+        cpuData.mPosition[j].setFromVector3( position, idx );
         reinterpret_cast<Real * RESTRICT_ALIAS>( cpuData.mRotation )[h] = 0.0f;
 
         Vector3 direction;
-        this->genEmissionDirection( mPosition, direction );
+        this->genEmissionDirection( position, direction );
         this->genEmissionVelocity( direction );
         cpuData.mDirection[j].setFromVector3( direction, idx );
 
-        cpuData.mDimensions[j].setFromVector2( mDimensions, idx );
+        cpuData.mDimensions[j].setFromVector2( dimensions, idx );
 
         Ogre::ColourValue colour;
         this->genEmissionColour( colour );

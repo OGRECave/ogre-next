@@ -36,6 +36,8 @@ ColourFaderAffectorFX2::CmdRedAdjust ColourFaderAffectorFX2::msRedCmd;
 ColourFaderAffectorFX2::CmdGreenAdjust ColourFaderAffectorFX2::msGreenCmd;
 ColourFaderAffectorFX2::CmdBlueAdjust ColourFaderAffectorFX2::msBlueCmd;
 ColourFaderAffectorFX2::CmdAlphaAdjust ColourFaderAffectorFX2::msAlphaCmd;
+ColourFaderAffectorFX2::CmdMinColour ColourFaderAffectorFX2::msMinColourCmd;
+ColourFaderAffectorFX2::CmdMaxColour ColourFaderAffectorFX2::msMaxColourCmd;
 //-----------------------------------------------------------------------------
 ColourFaderAffectorFX2::ColourFaderAffectorFX2() :
     mColourAdj( Vector4::ZERO ),

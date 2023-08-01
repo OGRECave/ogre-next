@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE-Next
-    (Object-oriented Graphics Rendering Engine)
+(Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2023 Torus Knot Software Ltd
@@ -25,8 +25,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef OgreBoxEmitter_H
-#define OgreBoxEmitter_H
+// Original author: Tels <http://bloodgate.com>, released as public domain
+
+#ifndef OgreCylinderEmitter2_H
+#define OgreCylinderEmitter2_H
 
 #include "OgreParticleFX2Prerequisites.h"
 
@@ -34,34 +36,35 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    OGRE_ASSUME_NONNULL_BEGIN
+	OGRE_ASSUME_NONNULL_BEGIN
 
-    /** Particle emitter which emits particles randomly from points inside a box.
+    /** Particle emitter which emits particles randomly from points inside a cylinder.
     @remarks
-        This basic particle emitter emits particles from a box area. The
-        initial direction of these particles can either be a single direction (i.e. a line),
-        a random scattering inside a cone, or a random scattering in all directions,
-        depending the 'angle' parameter, which is the angle across which to scatter the
-        particles either side of the base direction of the emitter.
+        This basic particle emitter emits particles from a cylinder area. The
+        initial direction of these particles can either be a single direction
+        (i.e. a line), a random scattering inside a cone, or a random
+        scattering in all directions, depending the 'angle' parameter, which
+        is the angle across which to scatter the particles either side of the
+        base direction of the emitter.
     */
-    class _OgreParticleFX2Export BoxEmitter2 : public AreaEmitter2
+	class _OgreParticleFX2Export CylinderEmitter2 : public AreaEmitter2
     {
-    public:
-        BoxEmitter2();
+	public:
+		CylinderEmitter2();
 
-        void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
-                                   size_t numParticles ) override;
+		void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+								   size_t numParticles ) override;
     };
 
-    class _OgrePrivate BoxEmitterFactory2 final : public ParticleEmitterDefDataFactory
-    {
-    public:
-        const String &getName() const override;
+	class _OgrePrivate CylinderEmitterFactory2 final : public ParticleEmitterDefDataFactory
+	{
+	public:
+		const String &getName() const override;
 
-        EmitterDefData *createEmitter() override;
-    };
+		EmitterDefData *createEmitter() override;
+	};
 
-    OGRE_ASSUME_NONNULL_END
+	OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 
 #endif

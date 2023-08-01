@@ -46,6 +46,9 @@ ColourFaderAffector2FX2::CmdAlphaAdjust2 ColourFaderAffector2FX2::msAlphaCmd2;
 
 ColourFaderAffector2FX2::CmdStateChange ColourFaderAffector2FX2::msStateCmd;
 
+ColourFaderAffector2FX2::CmdMinColour ColourFaderAffector2FX2::msMinColourCmd;
+ColourFaderAffector2FX2::CmdMaxColour ColourFaderAffector2FX2::msMaxColourCmd;
+
 //-----------------------------------------------------------------------------
 ColourFaderAffector2FX2::ColourFaderAffector2FX2() :
     mColourAdj1( Vector4::ZERO ),
