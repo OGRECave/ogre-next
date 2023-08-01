@@ -303,16 +303,16 @@ namespace Ogre
     // clang-format on
 
     // Functions
-	//-------------------------------------------------------------------------
-	inline void ArrayVector4::fma3x1( const ArrayReal m, const ArrayReal a,  //
-									  const ArrayReal m2, const ArrayReal a2 )
-	{
-		mChunkBase[0] = _mm_madd_ps( mChunkBase[0], m, a );
-		mChunkBase[1] = _mm_madd_ps( mChunkBase[1], m, a );
-		mChunkBase[2] = _mm_madd_ps( mChunkBase[2], m, a );
+    //-------------------------------------------------------------------------
+    inline void ArrayVector4::fma3x1( const ArrayReal m, const ArrayReal a,  //
+                                      const ArrayReal m2, const ArrayReal a2 )
+    {
+        mChunkBase[0] = _mm_madd_ps( mChunkBase[0], m, a );
+        mChunkBase[1] = _mm_madd_ps( mChunkBase[1], m, a );
+        mChunkBase[2] = _mm_madd_ps( mChunkBase[2], m, a );
 
-		mChunkBase[3] = _mm_madd_ps( mChunkBase[3], m2, a2 );
-	}
+        mChunkBase[3] = _mm_madd_ps( mChunkBase[3], m2, a2 );
+    }
     //-------------------------------------------------------------------------
     inline void ArrayVector4::makeFloor( const ArrayVector4 &cmp )
     {
