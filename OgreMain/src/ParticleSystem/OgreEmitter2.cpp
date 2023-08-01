@@ -36,6 +36,53 @@ EmitterDefData::EmitterDefData() : ParticleEmitter( nullptr ), mDimensions( 1.0f
 {
 }
 //-----------------------------------------------------------------------------
+uint32 EmitterDefData::genEmissionCount( Real timeSinceLast, EmitterInstanceData &instanceData ) const
+{
+    if( instanceData.mEnabled )
+    {
+        // Keep fractions, otherwise a high frame rate will result in zero emissions!
+        instanceData.mRemainder += mEmissionRate * timeSinceLast;
+        const uint32 intRequest = (uint32)instanceData.mRemainder;
+        instanceData.mRemainder -= (Real)intRequest;
+
+        // Check duration
+        if( mDurationMax != 0.0 )
+        {
+            instanceData.mDurationRemain -= timeSinceLast;
+            if( mDurationRemain <= 0 )
+            {
+                // Disable, duration is out (takes effect next time)
+                instanceData.setEnabled( false, *this );
+            }
+        }
+        return intRequest;
+    }
+    else
+    {
+        // Check repeat
+        if( mRepeatDelayMax != 0.0 )
+        {
+            instanceData.mRepeatDelayRemain -= timeSinceLast;
+            if( instanceData.mRepeatDelayRemain <= 0 )
+            {
+                // Enable, repeat delay is out (takes effect next time)
+                instanceData.setEnabled( true, *this );
+            }
+        }
+        if( instanceData.mStartTime != 0.0 )
+        {
+            instanceData.mStartTime -= timeSinceLast;
+            if( instanceData.mStartTime <= 0 )
+            {
+                instanceData.setEnabled( true, *this );
+                instanceData.mStartTime = 0;
+            }
+        }
+
+        return 0u;
+    }
+}
+//-----------------------------------------------------------------------------
 void EmitterInstanceData::setEnabled( bool bEnabled, const EmitterDefData &emitter )
 {
     mEnabled = bEnabled;

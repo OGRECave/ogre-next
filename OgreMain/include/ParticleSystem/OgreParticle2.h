@@ -61,7 +61,7 @@ namespace Ogre
         /// Speed of rotation in radians/sec
         ArrayRadian *RESTRICT_ALIAS mRotationSpeed;
 
-        /// Time left to live, number of seconds left of particles natural life
+        /// Time left to live, number of seconds left of particles natural life. It does when it's 0.
         ArrayReal *RESTRICT_ALIAS mTimeToLive;
 
         /// Time to live, number of seconds left of particles natural life

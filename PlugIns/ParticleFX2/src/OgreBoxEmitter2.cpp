@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE-Next
-(Object-oriented Graphics Rendering Engine)
+    (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2023 Torus Knot Software Ltd
@@ -26,15 +26,20 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgrePointEmitter2.h"
+#include "OgreBoxEmitter2.h"
 
 #include "ParticleSystem/OgreParticle2.h"
 
 using namespace Ogre;
 
 //-----------------------------------------------------------------------------
-void PointEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
-                                          size_t numParticles )
+BoxEmitter2::BoxEmitter2()
+{
+    initDefaults( "Box" );
+}
+//-----------------------------------------------------------------------------
+void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+                                        size_t numParticles )
 {
     for( size_t i = 0u; i < numParticles; ++i )
     {
@@ -42,7 +47,13 @@ void PointEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 
         const size_t j = h / ARRAY_PACKED_REALS;
         const size_t idx = h % ARRAY_PACKED_REALS;
 
-        cpuData.mPosition[j].setFromVector3( mPosition, idx );
+        Vector3 xOff, yOff, zOff;
+
+        xOff = Math::SymmetricRandom() * mXRange;
+        yOff = Math::SymmetricRandom() * mYRange;
+        zOff = Math::SymmetricRandom() * mZRange;
+
+        cpuData.mPosition[j].setFromVector3( mPosition + xOff + yOff + zOff, idx );
         reinterpret_cast<Real * RESTRICT_ALIAS>( cpuData.mRotation )[h] = 0.0f;
 
         Vector3 direction;
@@ -61,16 +72,16 @@ void PointEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 
                 this->genEmissionTTL();
     }
 }
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-static const String kPointEmitter2FactoryName = "point";
-const String &PointEmitterFactory2::getName() const
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+static const String kBoxEmitterFactoryName = "box";
+const String &BoxEmitterFactory2::getName() const
 {
-    return kPointEmitter2FactoryName;
+    return kBoxEmitterFactoryName;
 }
-//-----------------------------------------------------------------------------
-EmitterDefData *PointEmitterFactory2::createEmitter()
+//-----------------------------------------------------------------------------------
+EmitterDefData *BoxEmitterFactory2::createEmitter()
 {
-    return new PointEmitter2();
+    return new BoxEmitter2();
 }

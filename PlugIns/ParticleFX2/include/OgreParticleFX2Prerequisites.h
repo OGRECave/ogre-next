@@ -57,8 +57,8 @@ THE SOFTWARE.
 namespace Ogre
 {
     // Predeclare classes
-    class PointEmitter;
-    class PointEmitterFactory;
+    class PointEmitter2;
+    class PointEmitterFactory2;
     class LinearForceAffector;
     class LinearForceAffectorFactory;
     class DirectionRandomiserAffectorFactory;
