@@ -42,6 +42,8 @@ THE SOFTWARE.
 #include "OgreRingEmitter2.h"
 #include "OgreRoot.h"
 #include "OgreRotationAffector2.h"
+#include "OgreScaleAffector2.h"
+#include "OgreScaleInterpolatorAffector2.h"
 #include "ParticleSystem/OgreParticleSystemManager2.h"
 
 using namespace Ogre;
@@ -97,6 +99,12 @@ void ParticleFX2Plugin::install( const NameValuePairList * )
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
     pAffectorFact = new RotationAffectorFactory2();
+    ParticleSystemManager2::addAffectorFactory( pAffectorFact );
+    mAffectorFactories.push_back( pAffectorFact );
+    pAffectorFact = new ScaleAffectorFactory2();
+    ParticleSystemManager2::addAffectorFactory( pAffectorFact );
+    mAffectorFactories.push_back( pAffectorFact );
+    pAffectorFact = new ScaleInterpolatorAffectorFactory2();
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
 }
