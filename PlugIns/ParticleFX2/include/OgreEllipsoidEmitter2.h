@@ -25,28 +25,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-
-#ifndef OgrePointEmitter2_H
-#define OgrePointEmitter2_H
+// Original author: Tels <http://bloodgate.com>, released as public domain
+#ifndef OgreEllipsoidEmitter2_H
+#define OgreEllipsoidEmitter2_H
 
 #include "OgreParticleFX2Prerequisites.h"
 
-#include "ParticleSystem/OgreEmitter2.h"
-
-#include "OgreHeaderPrefix.h"
+#include "OgreAreaEmitter2.h"
 
 namespace Ogre
 {
     OGRE_ASSUME_NONNULL_BEGIN
 
-    class _OgreParticleFX2Export PointEmitter2 : public EmitterDefData
+    /** Particle emitter which emits particles randomly from points inside an ellipsoid.
+    @remarks
+        This basic particle emitter emits particles from a ellipsoid area.
+        The initial direction of these particles can either be a single
+        direction (i.e. a line), a random scattering inside a cone, or a random
+        scattering in all directions, depending the 'angle' parameter, which
+        is the angle across which to scatter the particles either side of the
+        base direction of the emitter.
+    */
+    class _OgreParticleFX2Export EllipsoidEmitter2 : public AreaEmitter2
     {
     public:
+        EllipsoidEmitter2();
+
         void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
                                    size_t numParticles ) override;
     };
 
-    class _OgrePrivate PointEmitterFactory2 final : public ParticleEmitterDefDataFactory
+    class _OgrePrivate EllipsoidEmitterFactory2 final : public ParticleEmitterDefDataFactory
     {
     public:
         const String &getName() const override;
@@ -56,7 +65,5 @@ namespace Ogre
 
     OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
-
-#include "OgreHeaderSuffix.h"
 
 #endif

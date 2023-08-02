@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef OgreBoxEmitter_H
-#define OgreBoxEmitter_H
+#ifndef OgreBoxEmitter2_H
+#define OgreBoxEmitter2_H
 
 #include "OgreParticleFX2Prerequisites.h"
 
