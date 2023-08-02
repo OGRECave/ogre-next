@@ -81,7 +81,7 @@ void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *n
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
-static const String kBoxEmitterFactoryName = "box";
+static const String kBoxEmitterFactoryName = "Box";
 const String &BoxEmitterFactory2::getName() const
 {
     return kBoxEmitterFactoryName;

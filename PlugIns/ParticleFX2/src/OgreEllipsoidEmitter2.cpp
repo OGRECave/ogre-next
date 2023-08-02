@@ -108,7 +108,7 @@ void EllipsoidEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uin
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
-static const String kEllipsoidEmitterFactoryName = "ellipsoid";
+static const String kEllipsoidEmitterFactoryName = "Ellipsoid";
 const String &EllipsoidEmitterFactory2::getName() const
 {
     return kEllipsoidEmitterFactoryName;

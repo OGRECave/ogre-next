@@ -104,7 +104,7 @@ void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
-static const String kCylinderEmitterFactoryName = "cylinder";
+static const String kCylinderEmitterFactoryName = "Cylinder";
 const String &CylinderEmitterFactory2::getName() const
 {
     return kCylinderEmitterFactoryName;
