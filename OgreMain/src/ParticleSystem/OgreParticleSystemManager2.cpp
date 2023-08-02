@@ -370,7 +370,13 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::addEmitterFactory( ParticleEmitterDefDataFactory *factory )
 {
-    sEmitterDefFactories[factory->getName()] = factory;
+    const auto insertionResult = sEmitterDefFactories.insert( { factory->getName(), factory } );
+    if( !insertionResult.second )
+    {
+        OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                     "Emitter Factory with name '" + factory->getName() + "' already exists.",
+                     "ParticleSystemManager2::addEmitterFactory" );
+    }
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::removeEmitterFactory( ParticleEmitterDefDataFactory *factory )
@@ -394,7 +400,13 @@ ParticleEmitterDefDataFactory *ParticleSystemManager2::getFactory( IdString name
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::addAffectorFactory( ParticleAffectorFactory2 *factory )
 {
-    sAffectorFactories[factory->getName()] = factory;
+    const auto insertionResult = sAffectorFactories.insert( { factory->getName(), factory } );
+    if( !insertionResult.second )
+    {
+        OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                     "Affector Factory with name '" + factory->getName() + "' already exists.",
+                     "ParticleSystemManager2::addAffectorFactory" );
+    }
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::removeAffectorFactory( ParticleAffectorFactory2 *factory )

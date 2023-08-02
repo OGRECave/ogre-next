@@ -35,6 +35,9 @@ THE SOFTWARE.
 #include "OgreColourInterpolatorAffector2.h"
 #include "OgreCylinderEmitter2.h"
 #include "OgreDirectionRandomiserAffector2.h"
+#include "OgreEllipsoidEmitter2.h"
+#include "OgreHollowEllipsoidEmitter2.h"
+#include "OgreLinearForceAffector2.h"
 #include "OgrePointEmitter2.h"
 #include "OgreRoot.h"
 #include "OgreRotationAffector2.h"
@@ -43,12 +46,12 @@ THE SOFTWARE.
 using namespace Ogre;
 
 static const String sPluginName = "ParticleFX2";
-//---------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 const String &ParticleFX2Plugin::getName() const
 {
     return sPluginName;
 }
-//---------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void ParticleFX2Plugin::install( const NameValuePairList * )
 {
     // -- Create all new particle emitter factories --
@@ -59,6 +62,12 @@ void ParticleFX2Plugin::install( const NameValuePairList * )
     ParticleSystemManager2::addEmitterFactory( pEmitFact );
     mEmitterFactories.push_back( pEmitFact );
     pEmitFact = new CylinderEmitterFactory2();
+    ParticleSystemManager2::addEmitterFactory( pEmitFact );
+    mEmitterFactories.push_back( pEmitFact );
+    pEmitFact = new EllipsoidEmitterFactory2();
+    ParticleSystemManager2::addEmitterFactory( pEmitFact );
+    mEmitterFactories.push_back( pEmitFact );
+    pEmitFact = new HollowEllipsoidEmitterFactory2();
     ParticleSystemManager2::addEmitterFactory( pEmitFact );
     mEmitterFactories.push_back( pEmitFact );
     pEmitFact = new PointEmitterFactory2();
@@ -80,21 +89,24 @@ void ParticleFX2Plugin::install( const NameValuePairList * )
     pAffectorFact = new DirectionRandomiserAffectorFactory2();
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
+    pAffectorFact = new LinearForceAffectorFactory2();
+    ParticleSystemManager2::addAffectorFactory( pAffectorFact );
+    mAffectorFactories.push_back( pAffectorFact );
     pAffectorFact = new RotationAffectorFactory2();
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
 }
-//---------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void ParticleFX2Plugin::initialise()
 {
     // nothing to do
 }
-//---------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void ParticleFX2Plugin::shutdown()
 {
     // nothing to do
 }
-//---------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void ParticleFX2Plugin::uninstall()
 {
     // destroy
@@ -110,7 +122,7 @@ void ParticleFX2Plugin::uninstall()
         delete emitterFactory;
     }
 }
-//---------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void ParticleFX2Plugin::getAbiCookie( AbiCookie &outAbiCookie )
 {
     outAbiCookie = generateAbiCookie();
