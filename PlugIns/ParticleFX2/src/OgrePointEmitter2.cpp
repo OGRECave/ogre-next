@@ -67,7 +67,7 @@ void PointEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-static const String kPointEmitter2FactoryName = "point";
+static const String kPointEmitter2FactoryName = "Point";
 const String &PointEmitterFactory2::getName() const
 {
     return kPointEmitter2FactoryName;

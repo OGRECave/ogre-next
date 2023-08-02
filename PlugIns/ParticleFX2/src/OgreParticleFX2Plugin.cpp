@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "OgreHollowEllipsoidEmitter2.h"
 #include "OgreLinearForceAffector2.h"
 #include "OgrePointEmitter2.h"
+#include "OgreRingEmitter2.h"
 #include "OgreRoot.h"
 #include "OgreRotationAffector2.h"
 #include "ParticleSystem/OgreParticleSystemManager2.h"
@@ -71,6 +72,9 @@ void ParticleFX2Plugin::install( const NameValuePairList * )
     ParticleSystemManager2::addEmitterFactory( pEmitFact );
     mEmitterFactories.push_back( pEmitFact );
     pEmitFact = new PointEmitterFactory2();
+    ParticleSystemManager2::addEmitterFactory( pEmitFact );
+    mEmitterFactories.push_back( pEmitFact );
+    pEmitFact = new RingEmitterFactory2();
     ParticleSystemManager2::addEmitterFactory( pEmitFact );
     mEmitterFactories.push_back( pEmitFact );
 
