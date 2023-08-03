@@ -237,6 +237,12 @@ namespace Ogre
 
         static inline void Set( ArrayReal &dst, Real val, size_t index ) { dst = val; }
 
+        /** Returns the first entry in src
+        @return
+            src[0]
+        */
+        static inline Real Get0( ArrayReal src ) { return src; }
+
         /** Returns the result of "a == std::numeric_limits<float>::infinity()"
         @return
             r[i] = a[i] == Inf ? 0xffffffff : 0;
@@ -251,6 +257,58 @@ namespace Ogre
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return std::min( a, b ); }
+
+        /// Returns:
+        ///     (int16)( saturate( a ) * 32767.5f );
+        static inline ArrayInt ToSnorm16( ArrayReal a )
+        {
+            a = std::max( std::min( a, 1.0f ), -1.0f );
+            a = a * 32767.5f;
+            const ArrayInt asUint32 = static_cast<ArrayInt>( static_cast<int32>( a ) );
+            return asUint32;
+        }
+
+        /// Returns:
+        ///     (int16)( saturate( a ) * 127.5f );
+        ///
+        /// Input a MUST be in range (-256.996; 256.996) for saturation to properly work
+        /// (in other implementations, C version doesn't have this flaw).
+        /// Otherwise result will be wrong.
+        static inline ArrayInt ToSnorm8Unsafe( ArrayReal a )
+        {
+            a = std::max( std::min( a, 1.0f ), -1.0f );
+            a = a * 127.5f;
+            const ArrayInt asUint32 = static_cast<ArrayInt>( static_cast<int32>( a ) );
+            return asUint32;
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int16.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int16)a[0];
+            outValues[1] = (int16)a[1];
+            outValues[2] = (int16)a[2];
+            outValues[3] = (int16)a[3];
+        */
+        static inline void extractS16( ArrayInt a, int16 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = (int16)a;
+        }
+
+        /** Extracts ARRAY_PACKED_REALS int8.
+        @param a
+            a must contain integers. Not floats.
+        @param outValues [out]
+            outValues[0] = (int8)a[0];
+            outValues[1] = (int8)a[1];
+            outValues[2] = (int8)a[2];
+            outValues[3] = (int8)a[3];
+        */
+        static inline void extractS8( ArrayInt a, int8 outValues[ARRAY_PACKED_REALS] )
+        {
+            outValues[0] = (int8)a;
+        }
 
         /** Returns the minimum value of all elements in a
         @return

@@ -59,7 +59,6 @@ namespace Ogre
         /** Wraps the given value to the range [-pi; pi]
             The algorithm is:
                 const float signedPi = std::copysign( _PI, mRad );
-                const float x = mRad + signedPi;
                 const float wrappedValue = fmod( mRad + signedPi, TWO_PI );
                 mRad = wrappedValue - signedPi;
         */
@@ -325,7 +324,6 @@ namespace Ogre
             // the value is in 32-bit (there is no 32 -> 8 instruction).
             // As long as `a * 127.5` results in a value that can be represented in signed 16-bit,
             // _mm_packs_epi16's automatic saturation will do the job for us.
-            // We must mask
             a = _mm_mul_ps( a, _mm_set_ps1( 127.5f ) );
             const __m128i asUint32 = _mm_cvtps_epi32( a );
             return _mm_packs_epi16( asUint32, asUint32 );
