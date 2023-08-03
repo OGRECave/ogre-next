@@ -115,7 +115,7 @@ void ColourInterpolatorAffector2::setTimeAdjust( size_t index, Real time )
 //-----------------------------------------------------------------------
 Real ColourInterpolatorAffector2::getTimeAdjust( size_t index ) const
 {
-    return *reinterpret_cast<const Real *>( &mTimeAdj[index] );
+    return Mathlib::Get0( mTimeAdj[index] );
 }
 //-----------------------------------------------------------------------------------
 String ColourInterpolatorAffector2::getType() const

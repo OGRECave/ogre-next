@@ -52,10 +52,19 @@ namespace Ogre
             void   doSet( void *target, const String &val ) override;
         };
 
-        static CmdScaleAdjust msScaleCmd;
+        class _OgrePrivate CmdMultiplyMode final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+
+        static CmdScaleAdjust  msScaleCmd;
+        static CmdMultiplyMode msMultiplyModeCmd;
 
     protected:
         Real mScaleAdj;
+        bool mMultiplyMode;
 
     public:
         ScaleAffector2();
@@ -72,6 +81,19 @@ namespace Ogre
 
         /// Gets the scale adjustment to be made per second to particles.
         Real getAdjust() const;
+
+        /** Sets the multiply mode.
+        @param bMultiplyMode
+            When false (default), we do `scale += factor * time`.
+            When true, we do `scale *= pow( factor, time )`.
+
+            False it "slows" down as the particle gets bigger. Shrinking particles is also problematic.
+            True provides a consistent growth over time. Shrinking particles is easy.
+        */
+        void setMultiplyMode( bool bMultiplyMode );
+
+        /// Gets the multiply mode.
+        bool getMultiplyMode() const;
 
         String getType() const override;
     };
