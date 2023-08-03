@@ -278,6 +278,17 @@ namespace Ogre
             dst[index] = val;
         }
 
+        /** Returns the first entry in src
+        @return
+            src[0]
+        */
+        static inline Real Get0( ArrayReal src )
+        {
+            float dst;
+            _mm_store_ss( &dst, src );
+            return dst;
+        }
+
         /** Returns the result of "a == std::numeric_limits<float>::infinity()"
         @return
             r[i] = a[i] == Inf ? 0xffffffff : 0;

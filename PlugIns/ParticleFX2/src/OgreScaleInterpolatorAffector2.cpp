@@ -102,7 +102,7 @@ void ScaleInterpolatorAffector2::setScaleAdjust( size_t index, Real scale )
 //-----------------------------------------------------------------------------
 Real ScaleInterpolatorAffector2::getScaleAdjust( size_t index ) const
 {
-    return *reinterpret_cast<const Real *>( &mScaleAdj[index] );
+    return Mathlib::Get0( mScaleAdj[index] );
 }
 //-----------------------------------------------------------------------------
 void ScaleInterpolatorAffector2::setTimeAdjust( size_t index, Real time )
@@ -112,7 +112,7 @@ void ScaleInterpolatorAffector2::setTimeAdjust( size_t index, Real time )
 //-----------------------------------------------------------------------------
 Real ScaleInterpolatorAffector2::getTimeAdjust( size_t index ) const
 {
-    return *reinterpret_cast<const Real *>( &mTimeAdj[index] );
+    return Mathlib::Get0( mTimeAdj[index] );
 }
 //-----------------------------------------------------------------------------------
 String ScaleInterpolatorAffector2::getType() const
