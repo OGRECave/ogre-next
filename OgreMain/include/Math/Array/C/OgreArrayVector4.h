@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 This source file is part of OGRE-Next
     (Object-oriented Graphics Rendering Engine)
-For the latest info, see http://www.ogre4d.org/
+For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2023 Torus Knot Software Ltd
 
@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef Ogre_SSE2_ArrayVector4_H
-#define Ogre_SSE2_ArrayVector4_H
+#ifndef Ogre_C_ArrayVector4_H
+#define Ogre_C_ArrayVector4_H
 
 #ifndef OgreArrayVector4_H
 #    error "Don't include this file directly. include Math/Array/OgreArrayVector4.h"
@@ -38,6 +38,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    class ArrayInterQuaternion;
+
     /** \addtogroup Core
      *  @{
      */
@@ -55,7 +57,7 @@ namespace Ogre
             XXXX YYYY ZZZZ WWWW      XXXX YYYY ZZZZ WWWW
             Extracting one vector (XYZW) needs 64 bytes, which is within
             the 64 byte size of common cache lines.
-            Architectures where the cache line == 64 bytes may want to
+            Architectures where the cache line == 32 bytes may want to
             set ARRAY_PACKED_REALS = 2 depending on their needs
     */
 
@@ -107,23 +109,18 @@ namespace Ogre
         /// Sets all packed vectors to the same value as the scalar input vector
         void setAll( const Vector4 &v )
         {
-            mChunkBase[0] = _mm_set_ps1( v.x );
-            mChunkBase[1] = _mm_set_ps1( v.y );
-            mChunkBase[2] = _mm_set_ps1( v.z );
-            mChunkBase[3] = _mm_set_ps1( v.w );
+            mChunkBase[0] = v.x;
+            mChunkBase[1] = v.y;
+            mChunkBase[2] = v.z;
+            mChunkBase[3] = v.w;
         }
 
         inline ArrayVector4 &operator=( const Real fScalar )
         {
-            // set1_ps is a composite instrinsic using shuffling instructions.
-            // Store the actual result in a tmp variable and copy. We don't
-            // do mChunkBase[1] = mChunkBase[0]; because of a potential LHS
-            // depending on how smart the compiler was
-            ArrayReal tmp = _mm_set1_ps( fScalar );
-            mChunkBase[0] = tmp;
-            mChunkBase[1] = tmp;
-            mChunkBase[2] = tmp;
-            mChunkBase[3] = tmp;
+            mChunkBase[0] = fScalar;
+            mChunkBase[1] = fScalar;
+            mChunkBase[2] = fScalar;
+            mChunkBase[3] = fScalar;
 
             return *this;
         }
@@ -161,19 +158,15 @@ namespace Ogre
         inline friend ArrayVector4 operator/( const ArrayVector4 &lhs, ArrayReal fScalar );
 
         inline void operator+=( const ArrayVector4 &a );
-        inline void operator+=( const Real fScalar );
         inline void operator+=( const ArrayReal fScalar );
 
         inline void operator-=( const ArrayVector4 &a );
-        inline void operator-=( const Real fScalar );
         inline void operator-=( const ArrayReal fScalar );
 
         inline void operator*=( const ArrayVector4 &a );
-        inline void operator*=( const Real fScalar );
         inline void operator*=( const ArrayReal fScalar );
 
         inline void operator/=( const ArrayVector4 &a );
-        inline void operator/=( const Real fScalar );
         inline void operator/=( const ArrayReal fScalar );
 
         /** Performs the following operation:
@@ -200,9 +193,9 @@ namespace Ogre
             But if original is zero, the zero is left (0 / 0 = 0).
             Example:
             Bfore inverseLeaveZero:
-                x = 0; y = 2; z = 4;
+                x = 0; y = 2; z = 3;
             After inverseLeaveZero
-                x = 0; y = 0.5; z = 0.4444;
+                x = 0; y = 0.5; z = 0.3333;
         */
         inline void inverseLeaveZeroes();
 
@@ -218,7 +211,7 @@ namespace Ogre
             the replacement provided:
 
             this[i] = mask[i] != 0 ? this[i] : replacement[i]
-            @see MathlibSSE2::Cmov4
+            @see MathlibC::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -241,7 +234,7 @@ namespace Ogre
             the replacement provided:
 
             this[i] = mask[i] != 0 ? this[i] : replacement[i]
-            @see MathlibSSE2::CmovRobust
+            @see MathlibC::CmovRobust
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -263,7 +256,7 @@ namespace Ogre
             Selects between arg1 & arg2 according to mask:
 
             this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
-            @see MathlibSSE2::Cmov4
+            @see MathlibC::Cmov4
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
@@ -282,7 +275,6 @@ namespace Ogre
 
         static const ArrayVector4 ZERO;
     };
-
     /** @} */
     /** @} */
 

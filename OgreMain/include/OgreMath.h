@@ -104,6 +104,19 @@ namespace Ogre
         bool operator>=( const Radian &r ) const { return mRad >= r.mRad; }
         bool operator>( const Radian &r ) const { return mRad > r.mRad; }
 
+        /** Wraps the given value to the range [-pi; pi]
+            The algorithm is:
+                const float signedPi = std::copysign( _PI, mRad );
+                const float wrappedValue = fmod( mRad + signedPi, TWO_PI );
+                mRad = wrappedValue - signedPi;
+        */
+        void wrapToRangeNPI_PI()
+        {
+            const float signedPi = std::copysign( (Real)M_PI, mRad );
+            const float wrappedValue = std::fmod( mRad + signedPi, (Real)M_PI * Real( 2.0f ) );
+            mRad = wrappedValue - signedPi;
+        }
+
         _OgreExport friend std::ostream &operator<<( std::ostream &o, const Radian &v );
     };
 
