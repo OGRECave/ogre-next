@@ -99,8 +99,7 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
         *cpuData.mPosition += *cpuData.mDirection * timeSinceLast;
 
         const ArrayMaskR wasDead = Mathlib::CompareLessEqual( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
-        *cpuData.mTimeToLive -= timeSinceLast;
-        *cpuData.mTimeToLive = Mathlib::Max( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
+        *cpuData.mTimeToLive = Mathlib::Max( *cpuData.mTimeToLive - timeSinceLast, ARRAY_REAL_ZERO );
         const ArrayMaskR isDead = Mathlib::CompareLessEqual( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
 
         const uint32 scalarWasDead = BooleanMask4::getScalarMask( wasDead );

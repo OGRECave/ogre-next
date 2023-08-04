@@ -110,12 +110,7 @@ namespace Ogre
                 const float wrappedValue = fmod( mRad + signedPi, TWO_PI );
                 mRad = wrappedValue - signedPi;
         */
-        void wrapToRangeNPI_PI()
-        {
-            const float signedPi = std::copysign( (Real)M_PI, mRad );
-            const float wrappedValue = std::fmod( mRad + signedPi, (Real)M_PI * Real( 2.0f ) );
-            mRad = wrappedValue - signedPi;
-        }
+        inline void wrapToRangeNPI_PI();
 
         _OgreExport friend std::ostream &operator<<( std::ostream &o, const Radian &v );
     };
@@ -896,6 +891,13 @@ namespace Ogre
     inline Degree operator*( Real a, const Degree &b ) { return Degree( a * b.valueDegrees() ); }
 
     inline Degree operator/( Real a, const Degree &b ) { return Degree( a / b.valueDegrees() ); }
+
+    inline void Radian::wrapToRangeNPI_PI()
+    {
+        const float signedPi = std::copysign( Math::PI, mRad );
+        const float wrappedValue = std::fmod( mRad + signedPi, Math::PI * Real( 2.0f ) );
+        mRad = wrappedValue - signedPi;
+    }
     /** @} */
     /** @} */
 }  // namespace Ogre
