@@ -90,7 +90,7 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
     const Real kMinColourValue = -4.0f;
 
     const ArrayReal colourRange = Mathlib::SetAll( 1.0f / kColourRange );
-    const ArrayReal minColorValue = Mathlib::SetAll( kMinColourValue / kColourRange );
+    const ArrayReal minColorValue = Mathlib::SetAll( -kMinColourValue / kColourRange );
     const ArrayReal alphaScale = Mathlib::SetAll( 2.0f );
     const ArrayReal alphaOffset = Mathlib::SetAll( -1.0f );
 
@@ -206,8 +206,9 @@ void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
             const size_t numSimdActiveParticles = systemDef->getNumSimdActiveParticles();
             if( numSimdActiveParticles > 0u )
             {
-                systemDef->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
-                    systemDef->mGpuData->map( 0u, systemDef->getNumSimdActiveParticles() ) );
+                systemDef->mParticleGpuData =
+                    reinterpret_cast<ParticleGpuData *>( systemDef->mGpuData->map(
+                        0u, sizeof( ParticleGpuData ) * systemDef->getNumSimdActiveParticles() ) );
             }
 
             systemDef->mVaoPerLod[0].back()->setPrimitiveRange(
