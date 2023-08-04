@@ -13,7 +13,9 @@ ReadOnlyBuffer( 0, float4, worldMatBuf );
 
 struct VS_INPUT
 {
+@property( !hlms_particle_system )
 	float4 vertex : POSITION;
+@end
 @property( hlms_colour && !hlms_particle_system )	float4 colour : COLOR0;@end
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n : TEXCOORD@n;@end
