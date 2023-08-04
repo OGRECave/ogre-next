@@ -141,6 +141,19 @@ namespace Ogre
     inline ArrayMaskR ArrayRadian::operator >  ( const ArrayRadian& r ) const { return vcgtq_f32( mRad, r.mRad ); }
 
     //-----------------------------------------------------------------------------------
+    inline void ArrayRadian::wrapToRangeNPI_PI()
+    {
+        const ArrayReal signedPi = MathlibNEON::CopySign4( MathlibNEON::PI, mRad );
+        const ArrayReal x = vaddq_f32( mRad, signedPi );                      // x = mRad + signedPi
+        const ArrayReal quotient = vmulq_f32( x, MathlibNEON::ONE_DIV_2PI );  // x / ( 2 * PI )
+        const ArrayReal integerQuot = vcvtq_f32_s32( vcvtnq_s32_f32( quotient ) );  // trunc( x / 2PI )
+        const ArrayReal s = vmulq_f32( integerQuot, MathlibNEON::TWO_PI );  // trunc( x / 2PI ) * 2PI
+
+        const ArrayReal wrappedValue = vsubq_f32( x, s );  // x - trunc( x / 2PI ) * 2PI
+
+        mRad = vsubq_f32( wrappedValue, signedPi );  // mRad = wrappedValue - signedPi
+    }
+    //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibNEON::Modf4( ArrayReal x, ArrayReal &outIntegral )
     {
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
@@ -149,6 +162,11 @@ namespace Ogre
         outIntegral = vcvtq_f32_s32( vcvtq_s32_f32( x ) ); // truncate towards zero, overflows for large input
 #endif
         return vsubq_f32( x, outIntegral );
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayReal MathlibNEON::CopySign4( ArrayReal mag, ArrayReal sig )
+    {
+        return veorq_f32( mag, vandq_f32( sig, MathlibNEON::SIGN_MASK ) );
     }
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibNEON::ACos4( ArrayReal x)

@@ -188,6 +188,11 @@ namespace Ogre
 {
     typedef int32x4_t  ArrayInt;
     typedef uint32x4_t ArrayMaskI;
+
+    /// To store the result of ToSnorm8, can be consumed by extractS8
+    typedef int8x8_t ArrayToS8;
+    /// To store the result of ToSnorm16, can be consumed by extractS16
+    typedef int16x4_t ArrayToS16;
 }  // namespace Ogre
 
 /// r = (a * b) + c
