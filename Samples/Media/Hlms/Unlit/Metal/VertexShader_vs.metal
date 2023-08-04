@@ -20,7 +20,9 @@ struct VS_INPUT
 struct PS_INPUT
 {
 @insertpiece( VStoPS_block )
+@property( !hlms_particle_system )
 	float4 gl_Position [[position]];
+@end
 
 	@property( hlms_pso_clip_distances )
 		float gl_ClipDistance [[clip_distance]] [@value( hlms_pso_clip_distances )];
