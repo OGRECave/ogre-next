@@ -357,7 +357,6 @@ elseif (ANDROID)
    set(OGRE_BUILD_COMPONENT_PAGING FALSE CACHE BOOL "Disable paging component on Android ES1" FORCE)
   endif()
 
-  set(OGRE_BUILD_TESTS FALSE CACHE BOOL "Disable tests on Android" FORCE)
   set(OGRE_BUILD_TOOLS FALSE CACHE BOOL "Disable tools on Android" FORCE)
   set(OGRE_STATIC TRUE CACHE BOOL "Forcing static build for Android" FORCE)
   set(OGRE_SIMD FALSE CACHE BOOL "Disable SIMD on Android" FORCE)
