@@ -577,4 +577,11 @@ namespace Ogre
         aChunkBase[2] = MathlibNEON::Cmov4( aChunkBase[2], bChunkBase[2], mask );
         aChunkBase[3] = MathlibNEON::Cmov4( aChunkBase[3], bChunkBase[3], mask );
     }
+
+#undef DEFINE_OPERATION
+#undef DEFINE_L_OPERATION
+#undef DEFINE_R_OPERATION
+
+#undef DEFINE_UPDATE_OPERATION
+#undef DEFINE_UPDATE_R_OPERATION
 }
