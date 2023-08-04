@@ -44,6 +44,9 @@ THE SOFTWARE.
 #    ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
 #        include "OgreVulkanPlugin.h"
 #    endif
+#    ifdef OGRE_BUILD_PLUGIN_PFX
+#        include "OgreParticleFX2Plugin.h"
+#    endif
 #endif
 #include "OgreRoot.h"
 
@@ -73,6 +76,10 @@ namespace Demo
         ,
         mVulkanPlugin( 0 )
 #    endif
+#    ifdef OGRE_BUILD_PLUGIN_PFX
+        ,
+        mPFX2Plugin( 0 )
+#    endif
 #endif
     {
 #if defined( OGRE_STATIC_LIB )
@@ -83,6 +90,10 @@ namespace Demo
     StaticPluginLoader::~StaticPluginLoader()
     {
 #ifdef OGRE_STATIC_LIB
+#    ifdef OGRE_BUILD_PLUGIN_PFX
+        OGRE_DELETE mPFX2Plugin;
+        mPFX2Plugin = 0;
+#    endif
 #    ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
         OGRE_DELETE mGL3PlusPlugin;
         mGL3PlusPlugin = 0;
@@ -133,6 +144,11 @@ namespace Demo
         if( !mVulkanPlugin )
             mVulkanPlugin = OGRE_NEW Ogre::VulkanPlugin();
         root->installPlugin( mVulkanPlugin, nullptr );
+#    endif
+#    ifdef OGRE_BUILD_PLUGIN_PFX
+        if( !mPFX2Plugin )
+            mPFX2Plugin = OGRE_NEW Ogre::ParticleFX2Plugin();
+        root->installPlugin( mPFX2Plugin, nullptr );
 #    endif
 #endif
     }

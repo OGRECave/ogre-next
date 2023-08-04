@@ -49,6 +49,9 @@ namespace Ogre
 #    ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
     class VulkanPlugin;
 #    endif
+#    ifdef OGRE_BUILD_PLUGIN_PFX
+    class ParticleFX2Plugin;
+#    endif
 #endif
     class Root;
 }  // namespace Ogre
@@ -74,6 +77,9 @@ namespace Demo
 #    endif
 #    ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
         Ogre::VulkanPlugin *mVulkanPlugin;
+#    endif
+#    ifdef OGRE_BUILD_PLUGIN_PFX
+        Ogre::ParticleFX2Plugin *mPFX2Plugin;
 #    endif
 #endif
     public:
