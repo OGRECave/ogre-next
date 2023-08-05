@@ -81,6 +81,11 @@ namespace Ogre
 {
     typedef __m128i ArrayInt;
     typedef __m128i ArrayMaskI;
+
+    /// To store the result of ToSnorm8, can be consumed by extractS8
+    typedef __m128i ArrayToS8;
+    /// To store the result of ToSnorm16, can be consumed by extractS16
+    typedef __m128i ArrayToS16;
 }  // namespace Ogre
 
 /// r = (a * b) + c
@@ -224,6 +229,11 @@ namespace Ogre
     typedef uint32 ArrayInt;
     typedef bool   ArrayMaskR;
     typedef bool   ArrayMaskI;
+
+    /// To store the result of ToSnorm8, can be consumed by extractS8
+    typedef uint32 ArrayToS8;
+    /// To store the result of ToSnorm16, can be consumed by extractS16
+    typedef uint32 ArrayToS16;
 
 // Do NOT I REPEAT DO NOT change these to static_cast<Ogre::Real>(x) and static_cast<int>(x)
 // These are not conversions. They're reinterpretations!
