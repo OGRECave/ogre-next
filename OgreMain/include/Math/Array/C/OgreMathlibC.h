@@ -260,7 +260,7 @@ namespace Ogre
 
         /// Returns:
         ///     (int16)( saturate( a ) * 32767.5f );
-        static inline ArrayInt ToSnorm16( ArrayReal a )
+        static inline ArrayToS16 ToSnorm16( ArrayReal a )
         {
             a = std::max( std::min( a, 1.0f ), -1.0f );
             a = a * 32767.5f;
@@ -274,7 +274,7 @@ namespace Ogre
         /// Input a MUST be in range (-256.996; 256.996) for saturation to properly work
         /// (in other implementations, C version doesn't have this flaw).
         /// Otherwise result will be wrong.
-        static inline ArrayInt ToSnorm8Unsafe( ArrayReal a )
+        static inline ArrayToS8 ToSnorm8Unsafe( ArrayReal a )
         {
             a = std::max( std::min( a, 1.0f ), -1.0f );
             a = a * 127.5f;
@@ -291,7 +291,7 @@ namespace Ogre
             outValues[2] = (int16)a[2];
             outValues[3] = (int16)a[3];
         */
-        static inline void extractS16( ArrayInt a, int16 outValues[ARRAY_PACKED_REALS] )
+        static inline void extractS16( ArrayToS16 a, int16 outValues[ARRAY_PACKED_REALS] )
         {
             outValues[0] = (int16)a;
         }
@@ -305,7 +305,7 @@ namespace Ogre
             outValues[2] = (int8)a[2];
             outValues[3] = (int8)a[3];
         */
-        static inline void extractS8( ArrayInt a, int8 outValues[ARRAY_PACKED_REALS] )
+        static inline void extractS8( ArrayToS8 a, int8 outValues[ARRAY_PACKED_REALS] )
         {
             outValues[0] = (int8)a;
         }

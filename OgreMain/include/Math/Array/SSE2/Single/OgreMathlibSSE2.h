@@ -305,7 +305,7 @@ namespace Ogre
 
         /// Returns:
         ///     (int16)( saturate( a ) * 32767.5f );
-        static inline ArrayInt ToSnorm16( ArrayReal a )
+        static inline ArrayToS16 ToSnorm16( ArrayReal a )
         {
             // _mm_packs_epi32 already performs saturation. No need for us to do it.
             a = _mm_mul_ps( a, _mm_set_ps1( 32767.5f ) );
@@ -318,7 +318,7 @@ namespace Ogre
         ///
         /// Input a MUST be in range (-256.996; 256.996) for saturation to properly work.
         /// Otherwise result will be wrong.
-        static inline ArrayInt ToSnorm8Unsafe( ArrayReal a )
+        static inline ArrayToS8 ToSnorm8Unsafe( ArrayReal a )
         {
             // _mm_packs_epi16 converts 16 bit to 8 bit using saturation. However
             // the value is in 32-bit (there is no 32 -> 8 instruction).
@@ -338,7 +338,7 @@ namespace Ogre
             outValues[2] = (int16)a[2];
             outValues[3] = (int16)a[3];
         */
-        static inline void extractS16( ArrayInt a, int16 outValues[ARRAY_PACKED_REALS] )
+        static inline void extractS16( ArrayToS16 a, int16 outValues[ARRAY_PACKED_REALS] )
         {
             outValues[0] = (int16)_mm_extract_epi16( a, 0 );
             outValues[1] = (int16)_mm_extract_epi16( a, 1 );
@@ -355,7 +355,7 @@ namespace Ogre
             outValues[2] = (int8)a[2];
             outValues[3] = (int8)a[3];
         */
-        static inline void extractS8( ArrayInt a, int8 outValues[ARRAY_PACKED_REALS] )
+        static inline void extractS8( ArrayToS8 a, int8 outValues[ARRAY_PACKED_REALS] )
         {
             outValues[0] = (int8)_mm_extract_epi16( a, 0 );
             outValues[1] = (int8)_mm_extract_epi16( a, 1 );
