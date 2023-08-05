@@ -10,8 +10,6 @@ namespace Demo
 {
     class InternalCoreGameState : public TutorialGameState
     {
-        Ogre::SceneNode *mSceneNode;
-
     public:
         InternalCoreGameState( const Ogre::String &helpDescription );
 
