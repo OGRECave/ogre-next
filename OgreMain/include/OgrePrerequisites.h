@@ -172,6 +172,7 @@ namespace Ogre
     struct DescriptorSetUav;
     class DynLib;
     class DynLibManager;
+    class EmitterDefData;
     class ErrorDialog;
     class ExternalTextureSourceManager;
     class Factory;
@@ -246,6 +247,7 @@ namespace Ogre
     class ObjectMemoryManager;
     class Particle;
     class ParticleAffector;
+    class ParticleAffector2;
     class ParticleAffectorFactory;
     class ParticleEmitter;
     class ParticleEmitterFactory;

@@ -1707,6 +1707,7 @@ namespace Ogre
         mScriptPatterns.push_back( "*.program" );
         mScriptPatterns.push_back( "*.material" );
         mScriptPatterns.push_back( "*.particle" );
+        mScriptPatterns.push_back( "*.particle2" );
         mScriptPatterns.push_back( "*.compositor" );
         mScriptPatterns.push_back( "*.os" );
         ResourceGroupManager::getSingleton()._registerScriptLoader( this );

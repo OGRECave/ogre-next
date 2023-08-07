@@ -276,6 +276,37 @@ namespace Ogre
         void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
     };
 
+    class _OgrePrivate ParticleSystemTranslator2 final : public ScriptTranslator
+    {
+    protected:
+        ParticleSystemDef *mSystem;
+        bool               mIsParsing;
+
+    public:
+        ParticleSystemTranslator2();
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
+
+        bool isParsing() const { return mIsParsing; }
+    };
+    class _OgrePrivate ParticleEmitterTranslator2 final : public ScriptTranslator
+    {
+    protected:
+        EmitterDefData *mEmitter;
+
+    public:
+        ParticleEmitterTranslator2();
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
+    };
+    class _OgrePrivate ParticleAffectorTranslator2 final : public ScriptTranslator
+    {
+    protected:
+        ParticleAffector2 *mAffector;
+
+    public:
+        ParticleAffectorTranslator2();
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node ) override;
+    };
+
     /**************************************************************************
      * Compositor section
      *************************************************************************/
@@ -435,6 +466,9 @@ namespace Ogre
         ParticleSystemTranslator                mParticleSystemTranslator;
         ParticleEmitterTranslator               mParticleEmitterTranslator;
         ParticleAffectorTranslator              mParticleAffectorTranslator;
+        ParticleSystemTranslator2               mParticleSystemTranslator2;
+        ParticleEmitterTranslator2              mParticleEmitterTranslator2;
+        ParticleAffectorTranslator2             mParticleAffectorTranslator2;
         CompositorWorkspaceTranslator           mCompositorWorkspaceTranslator;
         CompositorNodeTranslator                mCompositorNodeTranslator;
         CompositorShadowNodeTranslator          mCompositorShadowNodeTranslator;
