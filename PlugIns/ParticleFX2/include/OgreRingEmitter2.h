@@ -102,6 +102,8 @@ namespace Ogre
         Real getInnerSizeX() const;
         /// Gets the y component of the area inside the ellipsoid which doesn't emit particles.
         Real getInnerSizeY() const;
+
+        void _cloneFrom( const EmitterDefData *original ) override;
     };
 
     class _OgrePrivate RingEmitterFactory2 final : public ParticleEmitterDefDataFactory

@@ -493,6 +493,21 @@ uint32 ParticleSystemDef::getHandle( const ParticleCpuData &cpuData, size_t idx 
     return handle;
 }
 //-----------------------------------------------------------------------------
+void ParticleSystemDef::cloneImpl( ParticleSystemDef *toClone )
+{
+    toClone->mCommonDirection = this->mCommonDirection;
+    toClone->mCommonUpVector = this->mCommonUpVector;
+    toClone->mRotationType = this->mRotationType;
+    toClone->mParticleType = this->mParticleType;
+
+    toClone->mEmitters.reserve( this->mEmitters.size() );
+    for( const EmitterDefData *emitter : mEmitters )
+    {
+        EmitterDefData *newEmitter = toClone->addEmitter( emitter->asParticleEmitter()->getType() );
+        newEmitter->_cloneFrom( emitter );
+    }
+}
+//-----------------------------------------------------------------------------
 ParticleType::ParticleType ParticleSystemDef::getParticleType() const
 {
     return mParticleType;

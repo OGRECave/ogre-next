@@ -32,3 +32,20 @@ call( ["python2", \
         "-I", "../../build/Debug/include", \
         "-I", "../../build/Release/include", \
         ] )
+
+call(["python3",
+      "clone_particle_systems.py",
+      "../../OgreMain/include/ParticleSystem/OgreEmitter2.h",
+      "../../PlugIns/ParticleFX2/include/OgreAreaEmitter2.h",
+      "../../PlugIns/ParticleFX2/include/OgreBoxEmitter2.h",
+      "../../PlugIns/ParticleFX2/include/OgreCylinderEmitter2.h",
+      "../../PlugIns/ParticleFX2/include/OgreEllipsoidEmitter2.h",
+      "../../PlugIns/ParticleFX2/include/OgreHollowEllipsoidEmitter2.h",
+      "../../PlugIns/ParticleFX2/include/OgrePointEmitter2.h",
+      "../../PlugIns/ParticleFX2/include/OgreRingEmitter2.h",
+      "-I", "../../OgreMain/include/",
+      "-I", "../../PlugIns/ParticleFX2/include/",
+      "-I", "../../build/include",
+      "-I", "../../build/Debug/include",
+      "-I", "../../build/Release/include"
+      ])

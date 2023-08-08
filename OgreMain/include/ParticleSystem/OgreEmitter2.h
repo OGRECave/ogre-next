@@ -87,12 +87,16 @@ namespace Ogre
         virtual void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
                                            size_t numParticles ) = 0;
 
+        virtual void _cloneFrom( const EmitterDefData *original );
+
         /// ParticleEmitter is a protected base class of EmitterDefData.
         ///
         /// This is because the new system was designed to be backwards compatible
         /// as much as possible with old the system, however it may not map 1:1.
         /// Thus in order to access the old interface, one must cast explicitly.
         ParticleEmitter *asParticleEmitter() { return this; }
+
+        const ParticleEmitter *asParticleEmitter() const { return this; }
     };
 
     /** Abstract class defining the interface to be implemented by creators of EmitterDefData
