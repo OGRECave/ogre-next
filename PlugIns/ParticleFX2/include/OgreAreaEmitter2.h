@@ -93,6 +93,7 @@ namespace Ogre
         */
         bool initDefaults( const String &mType );
 
+    public:
         /** Overloaded to update the trans. matrix */
         void setDirection( const Vector3 &direction ) override;
 
@@ -126,6 +127,8 @@ namespace Ogre
         void setDepth( Real Depth );
         /** Gets the depth (local y size) of the emitter. */
         Real getDepth() const;
+
+        void _cloneFrom( const EmitterDefData *original ) override;
     };
 
     OGRE_ASSUME_NONNULL_END

@@ -116,3 +116,5 @@ unsigned short EmitterDefData::_getEmissionCount( Real )
     OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
     return 0u;
 }
+
+#include "OgreEmitter2Clone.autogen.h"
