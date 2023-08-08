@@ -117,6 +117,8 @@ namespace Ogre
         Real getInnerSizeY() const;
         /// Gets the z component of the area inside the ellipsoid which doesn't emit particles.
         Real getInnerSizeZ() const;
+
+        void _cloneFrom( const EmitterDefData *original ) override;
     };
 
     class _OgrePrivate HollowEllipsoidEmitterFactory2 final : public ParticleEmitterDefDataFactory

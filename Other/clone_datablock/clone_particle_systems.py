@@ -4,9 +4,10 @@
 import argparse
 import clang.cindex
 import io
-import os
 import sys
-#import hashlib
+from functools import partial
+from multiprocessing.pool import ThreadPool
+
 
 if not sys.platform.startswith("win32"):
     from ctypes.util import find_library
@@ -187,6 +188,31 @@ def writeFileIfChanged(newFile, fullPath):
     return
 
 
+def parseClass(className, clangArgs):
+    clangIndex = clang.cindex.Index.create()
+    headerFile = "../../PlugIns/ParticleFX2/include/Ogre{className}.h".format(
+        className=className)
+    print("Parsing " + headerFile)
+    translationunit = clangIndex.parse(headerFile, clangArgs)
+    for diag in translationunit.diagnostics:
+        print(diag)
+
+    classMembers = []
+    baseClassNames = []
+    parse_any(translationunit.cursor, className,
+              classMembers, baseClassNames)
+
+    # Sort classMembers for prettyprint source code
+    classMembers.sort(key=lambda x: x[1][0])
+
+    if len(classMembers) > 0:
+        cppStr = writeCppSrcCloneBody(className, classMembers, baseClassNames)
+    else:
+        cppStr = ''
+
+    return cppStr
+
+
 # The class EmitterDefData is a special case for 2 reasons:
 #   1. EmitterDefData definition goes into OgreMain (the rest go into ParticleFX2 plugin)
 #   2. ParticleEmitter must be cloned but we don't want to expose _cloneFrom() in that
@@ -236,11 +262,11 @@ def main():
     cppStr = io.StringIO(newline="\n")
     cppStr.write(FileHeader)
 
-    for header in args.HEADER:
-        translationunit = index.parse(header, indexargs)
+    # The base class is two classes parsed into one, in OgreMain core. It's a special case.
+    parseBaseClass(index.parse(
+        '../../OgreMain/include/ParticleSystem/OgreEmitter2.h', indexargs).cursor)
 
-    parseBaseClass(translationunit.cursor)
-
+    # Now do all emitters in multiple threads then join
     # Add all includes first.
     for className in classesToParse:
         cppStr.write("#include \"Ogre{className}.h\"\n".format(
@@ -248,18 +274,12 @@ def main():
 
     cppStr.write("using namespace Ogre;")
 
-    for className in classesToParse:
-        classMembers = []
-        baseClassNames = []
-        parse_any(translationunit.cursor, className,
-                  classMembers, baseClassNames)
-
-        # Sort classMembers for prettyprint source code
-        classMembers.sort(key=lambda x: x[1][0])
-
-        if len(classMembers) > 0:
-            cppStr.write(writeCppSrcCloneBody(className,
-                                              classMembers, baseClassNames))
+    # Run in threads
+    pool = ThreadPool()
+    result = pool.map(
+        partial(parseClass, clangArgs=indexargs),  classesToParse)
+    for r in result:
+        cppStr.write(r)
 
     writeFileIfChanged(
         cppStr, "../../PlugIns/ParticleFX2/src/OgreAllEmittersClone.autogen.cpp")
