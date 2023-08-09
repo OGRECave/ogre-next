@@ -54,11 +54,16 @@ ParticleSystemManager2::ParticleSystemManager2( SceneManager *sceneManager ) :
     mHighestPossibleQuota32( 0u ),
     mTimeSinceLast( 0 )
 {
+    if( sceneManager )
+        mMemoryManager = &sceneManager->_getParticleSysDefMemoryManager();
+    else
+        mMemoryManager = new ObjectMemoryManager();
 }
 //-----------------------------------------------------------------------------
 ParticleSystemManager2::~ParticleSystemManager2()
 {
-    VaoManager *vaoManager = mSceneManager->getDestinationRenderSystem()->getVaoManager();
+    VaoManager *vaoManager =
+        mSceneManager ? mSceneManager->getDestinationRenderSystem()->getVaoManager() : 0;
 
     for( std::pair<IdString, ParticleSystemDef *> itor : mParticleSystemDefMap )
     {
@@ -68,6 +73,10 @@ ParticleSystemManager2::~ParticleSystemManager2()
 
     mActiveParticleSystemDefs.clear();
     mParticleSystemDefMap.clear();
+
+    if( !mSceneManager )
+        delete mMemoryManager;
+    mMemoryManager = 0;
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayReal timeSinceLast,
@@ -442,10 +451,10 @@ ParticleSystemDef *ParticleSystemManager2::createParticleSystemDef( const String
 
     std::map<IdString, ParticleSystemDef *>::iterator itor = insertResult.first;
 
-    itor->second = new ParticleSystemDef( Id::generateNewId<MovableObject>(),
-                                          &mSceneManager->_getParticleSysDefMemoryManager(),
+    itor->second = new ParticleSystemDef( Id::generateNewId<MovableObject>(), mMemoryManager,
                                           mSceneManager, this, name );
-    mSceneManager->getRootSceneNode( SCENE_STATIC )->attachObject( itor->second );
+    if( mSceneManager )
+        mSceneManager->getRootSceneNode( SCENE_STATIC )->attachObject( itor->second );
     return itor->second;
 }
 //-----------------------------------------------------------------------------

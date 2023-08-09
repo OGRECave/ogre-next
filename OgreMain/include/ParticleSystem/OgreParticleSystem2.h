@@ -153,7 +153,8 @@ namespace Ogre
         void cloneImpl( ParticleSystemDef *toClone );
 
     public:
-        ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
+        ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager,
+                           SceneManager *ogre_nullable manager,
                            ParticleSystemManager2 *particleSystemManager, const String &name );
         ~ParticleSystemDef() override;
 
@@ -179,7 +180,7 @@ namespace Ogre
 
         void init( VaoManager *vaoManager );
 
-        void _destroy( VaoManager *vaoManager );
+        void _destroy( VaoManager *ogre_nullable vaoManager );
 
         bool isInitialized() const;
 
