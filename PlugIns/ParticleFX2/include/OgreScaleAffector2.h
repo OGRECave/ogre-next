@@ -95,6 +95,8 @@ namespace Ogre
         /// Gets the multiply mode.
         bool getMultiplyMode() const;
 
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
         String getType() const override;
     };
 

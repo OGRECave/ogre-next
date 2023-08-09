@@ -117,6 +117,8 @@ namespace Ogre
         /// Gets the maximum rotation of particles to be emitted.
         const Radian &getRotationRangeEnd() const;
 
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
         String getType() const override;
     };
 

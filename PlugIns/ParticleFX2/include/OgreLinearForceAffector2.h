@@ -112,6 +112,8 @@ namespace Ogre
         */
         ForceApplication getForceApplication() const;
 
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
 		String getType() const override;
     };
 

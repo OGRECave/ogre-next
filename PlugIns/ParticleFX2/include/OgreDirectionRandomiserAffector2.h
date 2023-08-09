@@ -101,6 +101,8 @@ namespace Ogre
         /// Gets flag which detemines whether particle speed is changed.
         bool getKeepVelocity() const;
 
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
         String getType() const override;
     };
 

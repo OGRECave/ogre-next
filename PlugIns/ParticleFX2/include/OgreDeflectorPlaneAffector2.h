@@ -108,6 +108,8 @@ namespace Ogre
         /// Gets the bounce value of the deflection.
         Real getBounce() const;
 
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
         String getType() const override;
     };
 

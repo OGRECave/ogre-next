@@ -8,7 +8,6 @@ import sys
 from functools import partial
 from multiprocessing.pool import ThreadPool
 
-
 if not sys.platform.startswith("win32"):
     from ctypes.util import find_library
 
@@ -104,33 +103,24 @@ void {className}::_cloneFrom( const {mostBaseClass} *_original )
 }}
 """
 
-CloneCodeTemplateVariable = u"""    this->{varName} = original->{varName};
+CloneCodeTemplateArray = u"""    for( size_t i = 0u; i<{arrayCount}u; ++i )
+        this->{varName}[i] = original->{varName}[i];
 """
 
-
-def writeEmitterDefDataBody(className, classMembers, baseClassMembers):
-    # Copy every variable member
-    membersCopyCode = ''
-    for member in classMembers:
-        membersCopyCode += CloneCodeTemplateVariable.format(varName=member[0])
-    for member in baseClassMembers:
-        membersCopyCode += CloneCodeTemplateVariable.format(varName=member[0])
-
-    # Remove last newline
-    membersCopyCode = membersCopyCode[:-1]
-
-    cppStr = CloneCodeTemplateBody.format(
-        className=className, baseClass=className, mostBaseClass=className,
-        baseFunctionCopy='', membersCopyCode=membersCopyCode)
-
-    return cppStr
+CloneCodeTemplateVariable = u"""    this->{varName} = original->{varName};
+"""
 
 
 def writeCppSrcCloneBody(className, classMembers, baseClassNames, mostBaseClass):
     # Copy every variable member
     membersCopyCode = ''
     for member in classMembers:
-        membersCopyCode += CloneCodeTemplateVariable.format(varName=member[0])
+        if member[1][0] > 1:
+            membersCopyCode += CloneCodeTemplateArray.format(
+                varName=member[0], arrayCount=member[1][0])
+        else:
+            membersCopyCode += CloneCodeTemplateVariable.format(
+                varName=member[0])
 
     # Remove last newline
     membersCopyCode = membersCopyCode[:-1]
@@ -151,8 +141,10 @@ def writeCppSrcCloneBody(className, classMembers, baseClassNames, mostBaseClass)
     return cppStr
 
 
-classesToParse = ['AreaEmitter2', 'BoxEmitter2', 'CylinderEmitter2',
-                  'EllipsoidEmitter2', 'HollowEllipsoidEmitter2', 'PointEmitter2', 'RingEmitter2']
+classesToParse = ['ColourFaderAffector2FX2', 'ColourFaderAffectorFX2',
+                  'DeflectorPlaneAffector2', 'ColourInterpolatorAffector2',
+                  'DirectionRandomiserAffector2', 'LinearForceAffector2',
+                  'RotationAffector2', 'ScaleAffector2', 'ScaleInterpolatorAffector2']
 
 
 def writeFileIfChanged(newFile, fullPath):
@@ -199,35 +191,11 @@ def parseClass(className, clangArgs):
 
     if len(classMembers) > 0:
         cppStr = writeCppSrcCloneBody(
-            className, classMembers, baseClassNames, 'EmitterDefData')
+            className, classMembers, baseClassNames, 'ParticleAffector2')
     else:
         cppStr = ''
 
     return cppStr
-
-
-# The class EmitterDefData is a special case for 2 reasons:
-#   1. EmitterDefData definition goes into OgreMain (the rest go into ParticleFX2 plugin)
-#   2. ParticleEmitter must be cloned but we don't want to expose _cloneFrom() in that
-#      class since it's a legacy class, hence the copy must be done by EmitterDefData
-def parseBaseClass(cursor):
-    emitterDefDataClass = []
-    particleEmitterClass = []
-    baseClassNames = []
-    parse_any(cursor, 'EmitterDefData', emitterDefDataClass, baseClassNames)
-    parse_any(cursor, 'ParticleEmitter', particleEmitterClass, baseClassNames)
-
-    # Sort classMembers for prettyprint source code
-    emitterDefDataClass.sort(key=lambda x: x[1][0])
-    particleEmitterClass.sort(key=lambda x: x[1][0])
-
-    # Open a file in memory
-    newFile = io.StringIO(newline="\n")
-    # Write the full body
-    newFile.write(writeEmitterDefDataBody('EmitterDefData',
-                                          emitterDefDataClass, particleEmitterClass))
-    writeFileIfChanged(
-        newFile, "../../OgreMain/src/ParticleSystem/OgreEmitter2Clone.autogen.h")
 
 
 def main():
@@ -242,7 +210,6 @@ def main():
 
     setup_clang(args.library)
 
-    index = clang.cindex.Index.create()
     indexargs = ["-x", "c++"]
 
     if args.include_directory:
@@ -253,11 +220,7 @@ def main():
     cppStr = io.StringIO(newline="\n")
     cppStr.write(FileHeader)
 
-    # The base class is two classes parsed into one, in OgreMain core. It's a special case.
-    parseBaseClass(index.parse(
-        '../../OgreMain/include/ParticleSystem/OgreEmitter2.h', indexargs).cursor)
-
-    # Now do all emitters in multiple threads then join
+    # Now do all affectors in multiple threads then join
     # Add all includes first.
     for className in classesToParse:
         cppStr.write("#include \"Ogre{className}.h\"\n".format(
@@ -273,7 +236,7 @@ def main():
         cppStr.write(r)
 
     writeFileIfChanged(
-        cppStr, "../../PlugIns/ParticleFX2/src/OgreAllEmittersClone.autogen.cpp")
+        cppStr, "../../PlugIns/ParticleFX2/src/OgreAllAffectorsClone.autogen.cpp")
     # print(cppStr.read())
 
 

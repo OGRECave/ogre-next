@@ -174,6 +174,8 @@ namespace Ogre
         /// Gets the alpha adjustment to be made per second to particles.
         float getAlphaAdjust() const;
 
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
         String getType() const override;
     };
 

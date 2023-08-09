@@ -23,10 +23,10 @@ void AreaEmitter2::_cloneFrom( const EmitterDefData *_original )
 }
 
 //-----------------------------------------------------------------------------
-void HollowEllipsoidEmitter2::_cloneFrom( const HollowEllipsoidEmitter2 *_original )
+void HollowEllipsoidEmitter2::_cloneFrom( const EmitterDefData *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const HollowEllipsoidEmitter2 *>( _original ) );
-
+    EllipsoidEmitter2::_cloneFrom( _original );
     const HollowEllipsoidEmitter2 *original = static_cast<const HollowEllipsoidEmitter2 *>( _original );
     this->mInnerSize = original->mInnerSize;
 }
