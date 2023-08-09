@@ -94,6 +94,16 @@ uint32 ParticleSystemDef::getQuota() const
     return static_cast<uint32>( mActiveParticles.capacity() );
 }
 //-----------------------------------------------------------------------------
+ParticleSystemDef *ParticleSystemDef::clone( const String &newName, ParticleSystemManager2 *dstManager )
+{
+    if( !dstManager )
+        dstManager = mParticleSystemManager;
+
+    ParticleSystemDef *newClone = dstManager->createParticleSystemDef( newName );
+    this->cloneImpl( newClone );
+    return newClone;
+}
+//-----------------------------------------------------------------------------
 void ParticleSystemDef::init( VaoManager *vaoManager )
 {
     OGRE_ASSERT_LOW( mParticleCpuData.mPosition == nullptr );
@@ -505,6 +515,14 @@ void ParticleSystemDef::cloneImpl( ParticleSystemDef *toClone )
     {
         EmitterDefData *newEmitter = toClone->addEmitter( emitter->asParticleEmitter()->getType() );
         newEmitter->_cloneFrom( emitter );
+    }
+
+    toClone->mAffectors.reserve( this->mAffectors.size() );
+    toClone->mInitializableAffectors.reserve( this->mInitializableAffectors.size() );
+    for( const ParticleAffector2 *affector : mAffectors )
+    {
+        ParticleAffector2 *newAffector = toClone->addAffector( affector->getType() );
+        newAffector->_cloneFrom( affector );
     }
 }
 //-----------------------------------------------------------------------------
