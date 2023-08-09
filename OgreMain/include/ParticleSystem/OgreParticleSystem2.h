@@ -150,12 +150,32 @@ namespace Ogre
         /// Note that mFirstParticleIdx may not be multiple of ARRAY_PACKED_REALS.
         size_t getActiveParticlesPackOffset() const { return mFirstParticleIdx / ARRAY_PACKED_REALS; }
 
+        void cloneImpl( ParticleSystemDef *toClone );
+
     public:
         ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                            ParticleSystemManager2 *particleSystemManager, const String &name );
         ~ParticleSystemDef() override;
 
         uint32 getQuota() const;
+
+        /** Clones this ParticleSystemDef with a new name into a new ParticleSystemManager2.
+            Spawned particle instances are not cloned.
+
+            This is useful if you need a different material or need to alter a few settings.
+        @remarks
+            This function can throw.
+
+        @param newName
+            New name. Must be unique in dstManager
+        @param dstManager
+            The ParticleSystemManager2 where it will be cloned into.
+            If nullptr, it's the same ParticleSystemManager2 as the manager this definition belongs to.
+        @return
+            The cloned particle system definition.
+        */
+        ParticleSystemDef *clone( const String                         &newName,
+                                  ParticleSystemManager2 *ogre_nullable dstManager = 0 );
 
         void init( VaoManager *vaoManager );
 
