@@ -62,6 +62,8 @@ namespace Ogre
         virtual void run( ParticleCpuData cpuData, size_t numParticles,
                           ArrayReal timeSinceLast ) const = 0;
 
+        virtual void _cloneFrom( const ParticleAffector2 *original ) = 0;
+
         /** Returns the name of the type of affector.
         @remarks
             This property is useful for determining the type of affector procedurally so another

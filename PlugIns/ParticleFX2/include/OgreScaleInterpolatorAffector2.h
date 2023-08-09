@@ -88,6 +88,8 @@ namespace Ogre
         void setTimeAdjust( size_t index, Real time );
         Real getTimeAdjust( size_t index ) const;
 
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
         String getType() const override;
     };
 

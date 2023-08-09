@@ -59,10 +59,6 @@ namespace Ogre
     // Predeclare classes
     class PointEmitter2;
     class PointEmitterFactory2;
-    class LinearForceAffector;
-    class LinearForceAffectorFactory;
-    class DirectionRandomiserAffectorFactory;
-    class DeflectorPlaneAffectorFactory;
 
     struct ParticleCpuData;
 }  // namespace Ogre

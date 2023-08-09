@@ -231,6 +231,8 @@ namespace Ogre
         void setStateChange( Real NewValue );
         Real getStateChange() const;
 
+        void _cloneFrom( const ParticleAffector2 *original ) override;
+
         String getType() const override;
     };
 
