@@ -78,7 +78,8 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
     mParticleType( ParticleType::Point )
 {
     memset( &mParticleCpuData, 0, sizeof( mParticleCpuData ) );
-    mParticlesToKill.resizePOD( manager->getNumWorkerThreads() );
+    if( manager )
+        mParticlesToKill.resizePOD( manager->getNumWorkerThreads() );
 
     mRenderQueueID = kParticleSystemDefaultRenderQueueId;
 }
@@ -185,11 +186,17 @@ void ParticleSystemDef::_destroy( VaoManager *vaoManager )
             mParticleGpuData = 0;
         }
 
-        vaoManager->destroyReadOnlyBuffer( mGpuData );
-        mGpuData = 0;
+        if( !vaoManager )
+        {
+            vaoManager->destroyReadOnlyBuffer( mGpuData );
+            mGpuData = 0;
 
-        vaoManager->destroyConstBuffer( mGpuCommonData );
-        mGpuCommonData = 0;
+            vaoManager->destroyConstBuffer( mGpuCommonData );
+            mGpuCommonData = 0;
+        }
+
+        OGRE_ASSERT_LOW( !mGpuData && !mGpuCommonData &&
+                         "ParticleSystemDef owned by root should've never called init()!" );
     }
 
     for( EmitterDefData *emitter : mEmitters )

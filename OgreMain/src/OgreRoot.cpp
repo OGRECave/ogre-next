@@ -84,6 +84,7 @@ THE SOFTWARE.
 #include "OgreWindowEventUtilities.h"
 #include "OgreWireAabb.h"
 #include "ParticleSystem/OgreParticleSystem2.h"
+#include "ParticleSystem/OgreParticleSystemManager2.h"
 #include "Threading/OgreDefaultWorkQueue.h"
 
 #if OGRE_NO_FREEIMAGE == 0
@@ -234,6 +235,8 @@ namespace Ogre
         // LOD strategy manager
         mLodStrategyManager = OGRE_NEW LodStrategyManager();
 
+        mParticleSystemManager = new ParticleSystemManager2( nullptr );
+
 #if OGRE_PROFILING
         // Profiler
         mProfiler = OGRE_NEW Profiler();
@@ -367,6 +370,8 @@ namespace Ogre
 #if OGRE_NO_ASTC_CODEC == 0
         ASTCCodec::shutdown();
 #endif
+
+        delete mParticleSystemManager;
 
         OGRE_DELETE mLodStrategyManager;
 
