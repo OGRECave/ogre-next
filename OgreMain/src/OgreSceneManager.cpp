@@ -133,7 +133,8 @@ namespace Ogre
         mDecalsNormalsTex( 0 ),
         mDecalsEmissiveTex( 0 ),
         mEnvFeatures( 0u ),
-        mParticleSystemManager2( new ParticleSystemManager2( this ) ),
+        mParticleSystemManager2(
+            new ParticleSystemManager2( this, Root::getSingleton().getParticleSystemManager2() ) ),
         mCamerasInProgress( 0 ),
         mCurrentViewport0( 0 ),
         mCurrentPass( 0 ),

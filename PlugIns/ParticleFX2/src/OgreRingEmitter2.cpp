@@ -40,7 +40,7 @@ RingEmitter2::CmdInnerY RingEmitter2::msCmdInnerY;
 //-----------------------------------------------------------------------------
 RingEmitter2::RingEmitter2()
 {
-    if( initDefaults( "Ring" ) )
+    if( initDefaults() )
     {
         // Add custom parameters
         ParamDictionary *pDict = getParamDictionary();
@@ -146,6 +146,12 @@ Real RingEmitter2::getInnerSizeY() const
     return mInnerSizey;
 }
 //-----------------------------------------------------------------------------
+static const String kRingEmitterFactoryName = "Ring";
+const String &RingEmitter2::getType() const
+{
+    return kRingEmitterFactoryName;
+}
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // Command objects
@@ -171,7 +177,6 @@ void RingEmitter2::CmdInnerY::doSet( void *target, const String &val )
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
-static const String kRingEmitterFactoryName = "Ring";
 const String &RingEmitterFactory2::getName() const
 {
     return kRingEmitterFactoryName;

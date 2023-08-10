@@ -37,7 +37,7 @@ AreaEmitter2::CmdWidth AreaEmitter2::msWidthCmd;
 AreaEmitter2::CmdHeight AreaEmitter2::msHeightCmd;
 AreaEmitter2::CmdDepth AreaEmitter2::msDepthCmd;
 //-----------------------------------------------------------------------------
-bool AreaEmitter2::initDefaults( const String &t )
+bool AreaEmitter2::initDefaults()
 {
     // called by the constructor as initDefaults("Type")
 
@@ -45,10 +45,9 @@ bool AreaEmitter2::initDefaults( const String &t )
     mDirection = Vector3::UNIT_Z;
     mUp = Vector3::UNIT_Y;
     setSize( 100, 100, 100 );
-    mType = t;
 
     // Set up parameters
-    if( createParamDictionary( mType + "Emitter" ) )
+    if( createParamDictionary( getType() + "Emitter" ) )
     {
         addBaseParameters();
         ParamDictionary *dict = getParamDictionary();

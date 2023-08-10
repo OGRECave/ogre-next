@@ -16,7 +16,7 @@ using namespace Ogre;
 void ColourFaderAffector2FX2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const ColourFaderAffector2FX2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const ColourFaderAffector2FX2 *original = static_cast<const ColourFaderAffector2FX2 *>( _original );
     this->mStateChangeVal = original->mStateChangeVal;
     this->mColourAdj1 = original->mColourAdj1;
@@ -29,7 +29,7 @@ void ColourFaderAffector2FX2::_cloneFrom( const ParticleAffector2 *_original )
 void ColourFaderAffectorFX2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const ColourFaderAffectorFX2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const ColourFaderAffectorFX2 *original = static_cast<const ColourFaderAffectorFX2 *>( _original );
     this->mColourAdj = original->mColourAdj;
     this->mMinColour = original->mMinColour;
@@ -40,7 +40,7 @@ void ColourFaderAffectorFX2::_cloneFrom( const ParticleAffector2 *_original )
 void DeflectorPlaneAffector2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const DeflectorPlaneAffector2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const DeflectorPlaneAffector2 *original = static_cast<const DeflectorPlaneAffector2 *>( _original );
     this->mBounce = original->mBounce;
     this->mPlanePoint = original->mPlanePoint;
@@ -51,7 +51,7 @@ void DeflectorPlaneAffector2::_cloneFrom( const ParticleAffector2 *_original )
 void ColourInterpolatorAffector2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const ColourInterpolatorAffector2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const ColourInterpolatorAffector2 *original = static_cast<const ColourInterpolatorAffector2 *>( _original );
     for( size_t i = 0u; i<6u; ++i )
         this->mColourAdj[i] = original->mColourAdj[i];
@@ -63,7 +63,7 @@ void ColourInterpolatorAffector2::_cloneFrom( const ParticleAffector2 *_original
 void DirectionRandomiserAffector2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const DirectionRandomiserAffector2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const DirectionRandomiserAffector2 *original = static_cast<const DirectionRandomiserAffector2 *>( _original );
     this->mRandomness = original->mRandomness;
     this->mScope = original->mScope;
@@ -74,7 +74,7 @@ void DirectionRandomiserAffector2::_cloneFrom( const ParticleAffector2 *_origina
 void LinearForceAffector2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const LinearForceAffector2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const LinearForceAffector2 *original = static_cast<const LinearForceAffector2 *>( _original );
     this->mForceApplication = original->mForceApplication;
     this->mForceVector = original->mForceVector;
@@ -84,7 +84,7 @@ void LinearForceAffector2::_cloneFrom( const ParticleAffector2 *_original )
 void RotationAffector2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const RotationAffector2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const RotationAffector2 *original = static_cast<const RotationAffector2 *>( _original );
     this->mRotationSpeedRangeStart = original->mRotationSpeedRangeStart;
     this->mRotationSpeedRangeEnd = original->mRotationSpeedRangeEnd;
@@ -96,7 +96,7 @@ void RotationAffector2::_cloneFrom( const ParticleAffector2 *_original )
 void ScaleAffector2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const ScaleAffector2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const ScaleAffector2 *original = static_cast<const ScaleAffector2 *>( _original );
     this->mScaleAdj = original->mScaleAdj;
     this->mMultiplyMode = original->mMultiplyMode;
@@ -106,7 +106,7 @@ void ScaleAffector2::_cloneFrom( const ParticleAffector2 *_original )
 void ScaleInterpolatorAffector2::_cloneFrom( const ParticleAffector2 *_original )
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const ScaleInterpolatorAffector2 *>( _original ) );
-    ParticleAffector2::_cloneFrom( _original );
+
     const ScaleInterpolatorAffector2 *original = static_cast<const ScaleInterpolatorAffector2 *>( _original );
     for( size_t i = 0u; i<6u; ++i )
         this->mScaleAdj[i] = original->mScaleAdj[i];

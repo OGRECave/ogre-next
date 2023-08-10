@@ -120,7 +120,7 @@ def writeEmitterDefDataBody(className, classMembers, baseClassMembers):
     membersCopyCode = membersCopyCode[:-1]
 
     cppStr = CloneCodeTemplateBody.format(
-        className=className, baseClass=className, mostBaseClass=className,
+        className=className, mostBaseClass=className,
         baseFunctionCopy='', membersCopyCode=membersCopyCode)
 
     return cppStr
@@ -137,15 +137,13 @@ def writeCppSrcCloneBody(className, classMembers, baseClassNames, mostBaseClass)
 
     # Call base function (if any)
     baseFunctionCopy = ''
-    if (len(baseClassNames) == 0):
-        baseClassNames = [className]
-    else:
+    if (len(baseClassNames) != 0):
         baseFunctionCopy = CallBaseFunctionCopy.format(
             baseClass=baseClassNames[0])
 
     # Semi-final output
     cppStr = CloneCodeTemplateBody.format(
-        className=className, baseClass=baseClassNames[0], mostBaseClass=mostBaseClass,
+        className=className, mostBaseClass=mostBaseClass,
         baseFunctionCopy=baseFunctionCopy, membersCopyCode=membersCopyCode)
 
     return cppStr
@@ -163,8 +161,11 @@ def writeFileIfChanged(newFile, fullPath):
 
     newFile.seek(0, io.SEEK_SET)
 
+    oldData = oldFile.read() if oldFile else ''
+    newData = newFile.read()
+
     # Raw compare.
-    if not oldFile or oldFile.read() != newFile.read():
+    if oldData != newData:
         if oldFile:
             oldFile.seek(0, io.SEEK_SET)
         newFile.seek(0, io.SEEK_SET)

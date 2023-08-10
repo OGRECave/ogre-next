@@ -48,7 +48,7 @@ HollowEllipsoidEmitter2::CmdInnerZ HollowEllipsoidEmitter2::msCmdInnerZ;
 //-----------------------------------------------------------------------------
 HollowEllipsoidEmitter2::HollowEllipsoidEmitter2()
 {
-    if( initDefaults( "HollowEllipsoid" ) )
+    if( initDefaults() )
     {
         // Add custom parameters
         ParamDictionary *pDict = getParamDictionary();
@@ -177,6 +177,12 @@ Real HollowEllipsoidEmitter2::getInnerSizeZ() const
 {
     return mInnerSize.z;
 }
+//-----------------------------------------------------------------------------------
+static const String kHollowEllipsoidEmitterFactoryName = "HollowEllipsoid";
+const String &HollowEllipsoidEmitter2::getType() const
+{
+    return kHollowEllipsoidEmitterFactoryName;
+}
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -215,7 +221,6 @@ void HollowEllipsoidEmitter2::CmdInnerZ::doSet( void *target, const String &val 
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
-static const String kHollowEllipsoidEmitterFactoryName = "HollowEllipsoid";
 const String &HollowEllipsoidEmitterFactory2::getName() const
 {
     return kHollowEllipsoidEmitterFactoryName;

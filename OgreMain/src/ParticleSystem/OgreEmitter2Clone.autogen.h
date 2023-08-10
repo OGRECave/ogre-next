@@ -24,7 +24,6 @@ void EmitterDefData::_cloneFrom( const EmitterDefData *_original )
     this->mRemainder = original->mRemainder;
     this->mEmitted = original->mEmitted;
     this->mPosition = original->mPosition;
-    this->mType = original->mType;
     this->mDirection = original->mDirection;
     this->mUp = original->mUp;
     this->mDirPositionRef = original->mDirPositionRef;

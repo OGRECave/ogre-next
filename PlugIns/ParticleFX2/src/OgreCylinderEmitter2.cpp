@@ -35,7 +35,7 @@ using namespace Ogre;
 //-----------------------------------------------------------------------
 CylinderEmitter2::CylinderEmitter2() : AreaEmitter2()
 {
-    initDefaults( "Cylinder" );
+    initDefaults();
 }
 //-----------------------------------------------------------------------
 void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
@@ -102,9 +102,14 @@ void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint
     }
 }
 //-----------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------
 static const String kCylinderEmitterFactoryName = "Cylinder";
+const String &CylinderEmitter2::getType() const
+{
+    return kCylinderEmitterFactoryName;
+}
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
 const String &CylinderEmitterFactory2::getName() const
 {
     return kCylinderEmitterFactoryName;

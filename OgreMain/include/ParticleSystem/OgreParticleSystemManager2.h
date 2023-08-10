@@ -63,7 +63,8 @@ namespace Ogre
 
         float mTimeSinceLast;  // For threaded update.
 
-        ObjectMemoryManager *mMemoryManager;
+        ParticleSystemManager2 *ogre_nullable mMaster;
+        ObjectMemoryManager                  *mMemoryManager;
 
         void calculateHighestPossibleQuota( VaoManager *vaoManager );
         void createSharedIndexBuffers( VaoManager *vaoManager );
@@ -78,7 +79,8 @@ namespace Ogre
         void updateParallel( size_t threadIdx, size_t numThreads );
 
     public:
-        ParticleSystemManager2( SceneManager *ogre_nullable sceneManager );
+        ParticleSystemManager2( SceneManager *ogre_nullable           sceneManager,
+                                ParticleSystemManager2 *ogre_nullable master );
         ~ParticleSystemManager2();
 
         static void addEmitterFactory( ParticleEmitterDefDataFactory *factory );

@@ -235,7 +235,7 @@ namespace Ogre
         // LOD strategy manager
         mLodStrategyManager = OGRE_NEW LodStrategyManager();
 
-        mParticleSystemManager = new ParticleSystemManager2( nullptr );
+        mParticleSystemManager = new ParticleSystemManager2( nullptr, nullptr );
 
 #if OGRE_PROFILING
         // Profiler

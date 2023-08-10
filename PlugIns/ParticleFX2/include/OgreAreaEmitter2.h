@@ -91,7 +91,7 @@ namespace Ogre
         /** Internal for initializing some defaults and parameters
         @return True if custom parameters need initialising
         */
-        bool initDefaults( const String &mType );
+        bool initDefaults();
 
     public:
         /** Overloaded to update the trans. matrix */
