@@ -42,7 +42,7 @@ using namespace Ogre;
 //-----------------------------------------------------------------------------
 EllipsoidEmitter2::EllipsoidEmitter2()
 {
-    initDefaults( "Ellipsoid" );
+    initDefaults();
 }
 //-----------------------------------------------------------------------------
 void EllipsoidEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
@@ -105,10 +105,15 @@ void EllipsoidEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uin
                 this->genEmissionTTL();
     }
 }
-//-----------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
 static const String kEllipsoidEmitterFactoryName = "Ellipsoid";
+const String &EllipsoidEmitter2::getType() const
+{
+    return kEllipsoidEmitterFactoryName;
+}
+//-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 const String &EllipsoidEmitterFactory2::getName() const
 {
     return kEllipsoidEmitterFactoryName;

@@ -118,6 +118,8 @@ namespace Ogre
         /// Gets the z component of the area inside the ellipsoid which doesn't emit particles.
         Real getInnerSizeZ() const;
 
+        const String &getType() const override;
+
         void _cloneFrom( const EmitterDefData *original ) override;
     };
 

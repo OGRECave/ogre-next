@@ -127,15 +127,13 @@ def writeCppSrcCloneBody(className, classMembers, baseClassNames, mostBaseClass)
 
     # Call base function (if any)
     baseFunctionCopy = ''
-    if (len(baseClassNames) == 0):
-        baseClassNames = [className]
-    else:
+    if (len(baseClassNames) != 0):
         baseFunctionCopy = CallBaseFunctionCopy.format(
             baseClass=baseClassNames[0])
 
     # Semi-final output
     cppStr = CloneCodeTemplateBody.format(
-        className=className, baseClass=baseClassNames[0], mostBaseClass=mostBaseClass,
+        className=className, mostBaseClass=mostBaseClass,
         baseFunctionCopy=baseFunctionCopy, membersCopyCode=membersCopyCode)
 
     return cppStr
@@ -155,8 +153,11 @@ def writeFileIfChanged(newFile, fullPath):
 
     newFile.seek(0, io.SEEK_SET)
 
+    oldData = oldFile.read() if oldFile else ''
+    newData = newFile.read()
+
     # Raw compare.
-    if not oldFile or oldFile.read() != newFile.read():
+    if oldData != newData:
         if oldFile:
             oldFile.seek(0, io.SEEK_SET)
         newFile.seek(0, io.SEEK_SET)
@@ -189,6 +190,7 @@ def parseClass(className, clangArgs):
     # Sort classMembers for prettyprint source code
     classMembers.sort(key=lambda x: x[1][0])
 
+    baseClassNames = []  # ParticleAffector2 is a virtual function
     if len(classMembers) > 0:
         cppStr = writeCppSrcCloneBody(
             className, classMembers, baseClassNames, 'ParticleAffector2')
@@ -229,7 +231,7 @@ def main():
     cppStr.write("using namespace Ogre;")
 
     # Run in threads
-    pool = ThreadPool()
+    pool = ThreadPool(processes=1)
     result = pool.map(
         partial(parseClass, clangArgs=indexargs),  classesToParse)
     for r in result:

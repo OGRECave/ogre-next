@@ -46,13 +46,15 @@ using namespace Ogre;
 static std::map<IdString, ParticleAffectorFactory2 *> sAffectorFactories;
 static std::map<IdString, ParticleEmitterDefDataFactory *> sEmitterDefFactories;
 
-ParticleSystemManager2::ParticleSystemManager2( SceneManager *sceneManager ) :
+ParticleSystemManager2::ParticleSystemManager2( SceneManager *sceneManager,
+                                                ParticleSystemManager2 *master ) :
     mSceneManager( sceneManager ),
     mSharedIndexBuffer16( 0 ),
     mSharedIndexBuffer32( 0 ),
     mHighestPossibleQuota16( 0u ),
     mHighestPossibleQuota32( 0u ),
-    mTimeSinceLast( 0 )
+    mTimeSinceLast( 0 ),
+    mMaster( master )
 {
     if( sceneManager )
         mMemoryManager = &sceneManager->_getParticleSysDefMemoryManager();
@@ -380,7 +382,7 @@ void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_
 void ParticleSystemManager2::addEmitterFactory( ParticleEmitterDefDataFactory *factory )
 {
     const auto insertionResult = sEmitterDefFactories.insert( { factory->getName(), factory } );
-    if( !insertionResult.second )
+    if( ogre_unlikely( !insertionResult.second ) )
     {
         OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
                      "Emitter Factory with name '" + factory->getName() + "' already exists.",
@@ -397,7 +399,7 @@ ParticleEmitterDefDataFactory *ParticleSystemManager2::getFactory( IdString name
 {
     std::map<IdString, ParticleEmitterDefDataFactory *>::const_iterator itor =
         sEmitterDefFactories.find( name );
-    if( itor == sEmitterDefFactories.end() )
+    if( ogre_unlikely( itor == sEmitterDefFactories.end() ) )
     {
         OGRE_EXCEPT(
             Exception::ERR_ITEM_NOT_FOUND,
@@ -410,7 +412,7 @@ ParticleEmitterDefDataFactory *ParticleSystemManager2::getFactory( IdString name
 void ParticleSystemManager2::addAffectorFactory( ParticleAffectorFactory2 *factory )
 {
     const auto insertionResult = sAffectorFactories.insert( { factory->getName(), factory } );
-    if( !insertionResult.second )
+    if( ogre_unlikely( !insertionResult.second ) )
     {
         OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
                      "Affector Factory with name '" + factory->getName() + "' already exists.",
@@ -427,7 +429,7 @@ ParticleAffectorFactory2 *ParticleSystemManager2::getAffectorFactory( IdString n
 {
     std::map<IdString, ParticleAffectorFactory2 *>::const_iterator itor =
         sAffectorFactories.find( name );
-    if( itor == sAffectorFactories.end() )
+    if( ogre_unlikely( itor == sAffectorFactories.end() ) )
     {
         OGRE_EXCEPT(
             Exception::ERR_ITEM_NOT_FOUND,
@@ -442,7 +444,7 @@ ParticleSystemDef *ParticleSystemManager2::createParticleSystemDef( const String
     const IdString nameHash = name;
 
     auto insertResult = mParticleSystemDefMap.insert( { nameHash, nullptr } );
-    if( !insertResult.second )
+    if( ogre_unlikely( !insertResult.second ) )
     {
         OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
                      "Particle System Definition '" + name + "' already exists.",
@@ -460,14 +462,28 @@ ParticleSystemDef *ParticleSystemManager2::createParticleSystemDef( const String
 //-----------------------------------------------------------------------------
 ParticleSystemDef *ParticleSystemManager2::getParticleSystemDef( const String &name )
 {
+    ParticleSystemDef *retVal = 0;
+
     std::map<IdString, ParticleSystemDef *>::const_iterator itor = mParticleSystemDefMap.find( name );
     if( itor == mParticleSystemDefMap.end() )
     {
-        OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                     "Particle System Definition '" + name + "' not found.",
-                     "ParticleSystemManager2::getParticleSystemDef" );
+        if( mMaster )
+        {
+            ParticleSystemDef *templateParticle = mMaster->getParticleSystemDef( name );
+            retVal = templateParticle->clone( name, this );
+        }
+
+        if( ogre_unlikely( !retVal ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Particle System Definition '" + name + "' not found.",
+                         "ParticleSystemManager2::getParticleSystemDef" );
+        }
     }
-    return itor->second;
+    else
+        retVal = itor->second;
+
+    return retVal;
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::destroyAllParticleSystems()

@@ -44,6 +44,8 @@ namespace Ogre
     public:
         void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
                                    size_t numParticles ) override;
+
+        const String &getType() const override;
     };
 
     class _OgrePrivate PointEmitterFactory2 final : public ParticleEmitterDefDataFactory

@@ -102,8 +102,6 @@ namespace Ogre
         Vector3 mPosition;
         /// Rate in particles per second at which this emitter wishes to emit particles
         Real mEmissionRate;
-        /// Name of the type of emitter, MUST be initialised by subclasses
-        String mType;
         /// Base direction of the emitter, may not be used by some emitters
         Vector3 mDirection;
         /// Notional up vector, used to speed up generation of variant directions, and also to orient
@@ -432,7 +430,7 @@ namespace Ogre
             This property is useful for determining the type of emitter procedurally so another
             can be created.
         */
-        const String &getType() const { return mType; }
+        virtual const String &getType() const = 0;
 
         /** Sets whether or not the emitter is enabled.
         @remarks
