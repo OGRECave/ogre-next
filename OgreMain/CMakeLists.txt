@@ -398,14 +398,21 @@ endif ()
 
 set (TARGET_LINK_FLAGS "")
 
+set( BROKEN_FILES_IN_UNITY_BUILD "src/OgreFreeImageCodec2.cpp" )
+
 # setup OgreMain target
 if (WINDOWS_STORE OR WINDOWS_PHONE)
 	# exclude OgreTimer.cpp from unity builds; causes problem
-	ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/WIN32/OgreTimer.cpp")
+	list( APPEND BROKEN_FILES_IN_UNITY_BUILD
+			"src/WIN32/OgreTimer.cpp" )
 else ()
-	# exclude OgreAlignedAllocator.cpp from unity builds; causes problems on Linux
-	ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/OgreAlignedAllocator.cpp")
+	# exclude these from unity builds; cause problems on Linux
+	list( APPEND BROKEN_FILES_IN_UNITY_BUILD
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreAlignedAllocator.cpp"
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/OgreConfigDialog.cpp"
+	)
 endif ()
+ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE ${BROKEN_FILES_IN_UNITY_BUILD})
 # In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
 if(WIN32 AND MSVC10 AND CMAKE_CL_64)
   set_target_properties(${OGRE_NEXT}Main PROPERTIES
