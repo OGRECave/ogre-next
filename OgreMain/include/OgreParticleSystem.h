@@ -150,7 +150,8 @@ namespace Ogre
             them directly.
         */
         ParticleSystem( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-                        const String &resourceGroupName, uint8 renderQueueId = 110u );
+                        const String &resourceGroupName, uint8 renderQueueId = 110u,
+                        bool bCreateRenderer = true );
 
         virtual ~ParticleSystem() override;
 
