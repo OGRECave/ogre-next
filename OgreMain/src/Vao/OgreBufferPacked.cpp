@@ -171,6 +171,9 @@ namespace Ogre
                          "BufferPacked::map" );
         }
 
+        OGRE_ASSERT_LOW( elementStart <= getNumElements() && "Mapping outside range" );
+        OGRE_ASSERT_LOW( elementStart + elementCount <= getNumElements() && "Mapping outside range" );
+
 #if OGRE_DEBUG_MODE
         if( mBufferType != BT_DEFAULT_SHARED )
         {
