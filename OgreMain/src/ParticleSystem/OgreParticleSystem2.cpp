@@ -149,7 +149,7 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
         vaoManager->createConstBuffer( sizeof( GpuParticleCommon ), BT_DEFAULT, &particleCommon, false );
 
     mGpuData = vaoManager->createReadOnlyBuffer(
-        PFG_RGBA8_UINT, sizeof( ParticleGpuData ) * numParticles, BT_DYNAMIC_PERSISTENT, 0, false );
+        PFG_RGBA32_UINT, sizeof( ParticleGpuData ) * numParticles, BT_DYNAMIC_PERSISTENT, 0, false );
 
     mVaoPerLod[VpNormal].push_back( vaoManager->createVertexArrayObject(
         {}, mParticleSystemManager->_getSharedIndexBuffer( numParticles, vaoManager ),

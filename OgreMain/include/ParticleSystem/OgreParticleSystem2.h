@@ -301,9 +301,9 @@ namespace Ogre
         ///         mParticleCpuData.advancePack();
         /// @endcode
         ///
-        /// Must iterate 2 times. However if getNumSimdActiveParticles() returns 3, it will
-        /// only iterate once. Rounding 3 up to ARRAY_PACKED_REALS is also no good, because if it returns
-        /// 4, it still iterates once.
+        /// Must iterate 2 times. However if getNumSimdActiveParticles() returns 3 (3 = 5 - 3 + 1),
+        /// it will only iterate once. Rounding 3 up to ARRAY_PACKED_REALS is also no good, because if it
+        /// returns 4, it still iterates once.
         ///
         /// It must return 8 (ARRAY_PACKED_REALS * 2).
         ///
@@ -311,9 +311,20 @@ namespace Ogre
         /// mLastParticleIdx. However this should be rare since particle FXs tend to follow FIFO.
         size_t getNumSimdActiveParticles() const
         {
-            return ( ( mLastParticleIdx + ARRAY_PACKED_REALS - 1u ) / ARRAY_PACKED_REALS -
-                     mFirstParticleIdx / ARRAY_PACKED_REALS ) *
-                   ARRAY_PACKED_REALS;
+            size_t numSimdActiveParticles =
+                ( ( mLastParticleIdx + ARRAY_PACKED_REALS - 1u ) / ARRAY_PACKED_REALS -
+                  mFirstParticleIdx / ARRAY_PACKED_REALS ) *
+                ARRAY_PACKED_REALS;
+
+            // The previous formula can be off by one in some cases, e.g.
+            //  getQuota = 12
+            //  ARRAY_PACKED_REALS = 4
+            //  mLastParticleIdx = 1 -> rounds down to 0
+            //  mLastParticleIdx = 13 -> rounds up to 16
+            //  16 > 12
+            // Thus we must ensure we never exceed the quota.
+            numSimdActiveParticles = std::min<size_t>( numSimdActiveParticles, getQuota() );
+            return numSimdActiveParticles;
         }
 
         inline static const ParticleSystemDef *castFromRenderable( const Renderable *a )
