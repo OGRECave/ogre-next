@@ -63,7 +63,7 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
                                       SceneManager *manager,
                                       ParticleSystemManager2 *particleSystemManager,
                                       const String &name ) :
-    ParticleSystem( id, objectMemoryManager, manager, "", kParticleSystemDefaultRenderQueueId ),
+    ParticleSystem( id, objectMemoryManager, manager, "", kParticleSystemDefaultRenderQueueId, false ),
     mName( name ),
     mParticleSystemManager( particleSystemManager ),
     mGpuCommonData( 0 ),

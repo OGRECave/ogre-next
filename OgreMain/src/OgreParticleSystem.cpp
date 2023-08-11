@@ -113,7 +113,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     ParticleSystem::ParticleSystem( IdType id, ObjectMemoryManager *objectMemoryManager,
                                     SceneManager *manager, const String &resourceGroup,
-                                    uint8 renderQueueId ) :
+                                    uint8 renderQueueId, const bool bCreateRenderer ) :
         MovableObject( id, objectMemoryManager, manager, renderQueueId ),
         mBoundsAutoUpdate( true ),
         mBoundsUpdateTime( 10.0f ),
@@ -146,8 +146,11 @@ namespace Ogre
         setEmittedEmitterQuota( 3 );
         initParameters();
 
-        // Default to billboard renderer
-        setRenderer( "billboard" );
+        if( bCreateRenderer )
+        {
+            // Default to billboard renderer
+            setRenderer( "billboard" );
+        }
 
         // By default most particles don't cast shadows.
         setCastShadows( false );
