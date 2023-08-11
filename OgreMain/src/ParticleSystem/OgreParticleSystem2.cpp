@@ -186,7 +186,7 @@ void ParticleSystemDef::_destroy( VaoManager *vaoManager )
             mParticleGpuData = 0;
         }
 
-        if( !vaoManager )
+        if( vaoManager )
         {
             vaoManager->destroyReadOnlyBuffer( mGpuData );
             mGpuData = 0;
