@@ -1630,5 +1630,6 @@ namespace Ogre
             }
         }
     }
-
 }  // namespace Ogre
+
+#include "OgreParticleSystem.autogen.h"

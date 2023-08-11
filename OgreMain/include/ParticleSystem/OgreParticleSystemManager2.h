@@ -125,12 +125,33 @@ namespace Ogre
 
         /** Retrieves an existing ParticleSystemDef with the given name
             Throws if not found.
+        @remarks
+            If we 'this' belongs to a SceneManager and a ParticleSystemDef hasn't been
+            cloned yet, we will look into Root's ParticleSystemManager2 to see if they
+            have a master definition.
+
+            We only throw if Root's version doesn't have a definition by that name either.
         @param name
             Name of the ParticleSystemDef.
+        @param bAutoInit
+            When true, we always call ParticleSystemDef::init after cloning.
+            When false, we don't (useful if you want to customize).
         @return
             The ParticleSystemDef.
         */
-        ParticleSystemDef *getParticleSystemDef( const String &name );
+        ParticleSystemDef *getParticleSystemDef( const String &name, bool bAutoInit = true );
+
+        /** Returns true if this ParticleSystemManager2 has a ParticleSystemDef by that name.
+        @param name
+            Name of the ParticleSystemDef.
+        @param bSearchInRoot
+            When true, we also search in Root's ParticleSystemManager2 to see if they
+            have a master definition.
+        @return
+            True if found.
+            False if not found.
+        */
+        bool hasParticleSystemDef( const String &name, bool bSearchInRoot = true ) const;
 
         void destroyAllParticleSystems();
 

@@ -139,10 +139,7 @@ def writeCppSrcCloneBody(className, classMembers, baseClassNames, mostBaseClass)
     return cppStr
 
 
-classesToParse = ['ColourFaderAffector2FX2', 'ColourFaderAffectorFX2',
-                  'DeflectorPlaneAffector2', 'ColourInterpolatorAffector2',
-                  'DirectionRandomiserAffector2', 'LinearForceAffector2',
-                  'RotationAffector2', 'ScaleAffector2', 'ScaleInterpolatorAffector2']
+classesToParse = ['ParticleSystem']
 
 
 def writeFileIfChanged(newFile, fullPath):
@@ -175,7 +172,7 @@ def writeFileIfChanged(newFile, fullPath):
 
 def parseClass(className, clangArgs):
     clangIndex = clang.cindex.Index.create()
-    headerFile = "../../PlugIns/ParticleFX2/include/Ogre{className}.h".format(
+    headerFile = "../../OgreMain/include/Ogre{className}.h".format(
         className=className)
     print("Parsing " + headerFile)
     translationunit = clangIndex.parse(headerFile, clangArgs)
@@ -190,10 +187,10 @@ def parseClass(className, clangArgs):
     # Sort classMembers for prettyprint source code
     classMembers.sort(key=lambda x: x[1][0])
 
-    baseClassNames = []  # ParticleAffector2 is a virtual function
+    baseClassNames = []  # ParticleSystem is a virtual function
     if len(classMembers) > 0:
         cppStr = writeCppSrcCloneBody(
-            className, classMembers, baseClassNames, 'ParticleAffector2')
+            className, classMembers, baseClassNames, 'ParticleSystem')
     else:
         cppStr = ''
 
@@ -238,7 +235,7 @@ def main():
         cppStr.write(r)
 
     writeFileIfChanged(
-        cppStr, "../../PlugIns/ParticleFX2/src/OgreAllAffectorsClone.autogen.cpp")
+        cppStr, "../../OgreMain/src/OgreParticleSystem.autogen.h")
     # print(cppStr.read())
 
 

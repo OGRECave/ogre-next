@@ -460,7 +460,8 @@ ParticleSystemDef *ParticleSystemManager2::createParticleSystemDef( const String
     return itor->second;
 }
 //-----------------------------------------------------------------------------
-ParticleSystemDef *ParticleSystemManager2::getParticleSystemDef( const String &name )
+ParticleSystemDef *ParticleSystemManager2::getParticleSystemDef( const String &name,
+                                                                 const bool bAutoInit )
 {
     ParticleSystemDef *retVal = 0;
 
@@ -471,6 +472,8 @@ ParticleSystemDef *ParticleSystemManager2::getParticleSystemDef( const String &n
         {
             ParticleSystemDef *templateParticle = mMaster->getParticleSystemDef( name );
             retVal = templateParticle->clone( name, this );
+            if( bAutoInit )
+                retVal->init( mSceneManager->getDestinationRenderSystem()->getVaoManager() );
         }
 
         if( ogre_unlikely( !retVal ) )
@@ -484,6 +487,14 @@ ParticleSystemDef *ParticleSystemManager2::getParticleSystemDef( const String &n
         retVal = itor->second;
 
     return retVal;
+}
+//-----------------------------------------------------------------------------
+bool ParticleSystemManager2::hasParticleSystemDef( const String &name, const bool bSearchInRoot ) const
+{
+    bool bHasDef = mParticleSystemDefMap.find( name ) != mParticleSystemDefMap.end();
+    if( !bHasDef && bSearchInRoot && mMaster )
+        bHasDef = mMaster->hasParticleSystemDef( name, false );
+    return bHasDef;
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::destroyAllParticleSystems()
