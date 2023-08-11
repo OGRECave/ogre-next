@@ -917,6 +917,8 @@ namespace Ogre
            flag, they are rebuild in the regular process flow.
         */
         void _notifyReorganiseEmittedEmitterData();
+
+        void _cloneFrom( const ParticleSystem *_original );
     };
     /** @} */
     /** @} */

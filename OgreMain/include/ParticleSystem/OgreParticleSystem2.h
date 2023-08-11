@@ -150,7 +150,7 @@ namespace Ogre
         /// Note that mFirstParticleIdx may not be multiple of ARRAY_PACKED_REALS.
         size_t getActiveParticlesPackOffset() const { return mFirstParticleIdx / ARRAY_PACKED_REALS; }
 
-        void cloneImpl( ParticleSystemDef *toClone );
+        void cloneTo( ParticleSystemDef *toClone );
 
     public:
         ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager,

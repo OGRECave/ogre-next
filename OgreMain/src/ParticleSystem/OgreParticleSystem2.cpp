@@ -101,7 +101,7 @@ ParticleSystemDef *ParticleSystemDef::clone( const String &newName, ParticleSyst
         dstManager = mParticleSystemManager;
 
     ParticleSystemDef *newClone = dstManager->createParticleSystemDef( newName );
-    this->cloneImpl( newClone );
+    this->cloneTo( newClone );
     return newClone;
 }
 //-----------------------------------------------------------------------------
@@ -510,12 +510,15 @@ uint32 ParticleSystemDef::getHandle( const ParticleCpuData &cpuData, size_t idx 
     return handle;
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemDef::cloneImpl( ParticleSystemDef *toClone )
+void ParticleSystemDef::cloneTo( ParticleSystemDef *toClone )
 {
+    ParticleSystem::_cloneFrom( toClone );
+
     toClone->mCommonDirection = this->mCommonDirection;
     toClone->mCommonUpVector = this->mCommonUpVector;
     toClone->mRotationType = this->mRotationType;
     toClone->mParticleType = this->mParticleType;
+    toClone->setParticleQuota( this->getParticleQuota() );
 
     toClone->mEmitters.reserve( this->mEmitters.size() );
     for( const EmitterDefData *emitter : mEmitters )
