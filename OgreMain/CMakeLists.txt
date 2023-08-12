@@ -410,7 +410,7 @@ else ()
 	list( APPEND BROKEN_FILES_IN_UNITY_BUILD
 			"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreAlignedAllocator.cpp"
 	)
-	if( UNIX AND NOT OGRE_CONFIG_UNIX_NO_X11 )
+	if( UNIX AND NOT OGRE_CONFIG_UNIX_NO_X11 AND NOT ANDROID AND NOT APPLE )
 		# These files cause problems on Linux
 		list( APPEND BROKEN_FILES_IN_UNITY_BUILD
 				"${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/OgreConfigDialog.cpp"
