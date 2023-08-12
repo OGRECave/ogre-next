@@ -39,7 +39,7 @@ namespace Ogre
 {
     namespace v1
     {
-        String rendererTypeName = "billboard";
+        static const String rendererTypeName = "billboard";
 
         //-----------------------------------------------------------------------
         BillboardParticleRenderer::CmdBillboardType BillboardParticleRenderer::msBillboardTypeCmd;

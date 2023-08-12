@@ -59,6 +59,10 @@ struct GpuParticleCommon
     }
 };
 
+ParticleSystemDef::CmdBillboardType ParticleSystemDef::msBillboardTypeCmd;
+ParticleSystemDef::CmdCommonDirection ParticleSystemDef::msCommonDirectionCmd;
+ParticleSystemDef::CmdCommonUpVector ParticleSystemDef::msCommonUpVectorCmd;
+
 ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager,
                                       SceneManager *manager,
                                       ParticleSystemManager2 *particleSystemManager,
@@ -82,6 +86,45 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
         mParticlesToKill.resizePOD( manager->getNumWorkerThreads() );
 
     mRenderQueueID = kParticleSystemDefaultRenderQueueId;
+
+    if( createParamDictionary( "ParticleSystemDef" ) )
+    {
+        ParamDictionary *dict = getParamDictionary();
+        dict->addParameter(
+            ParameterDef( "billboard_type",
+                          "The type of billboard to use. 'point' means a simulated spherical particle, "
+                          "'oriented_common' means all particles in the set are oriented around "
+                          "common_direction, "
+                          "'oriented_self' means particles are oriented around their own direction, "
+                          "'perpendicular_common' means all particles are perpendicular to "
+                          "common_direction, "
+                          "and 'perpendicular_self' means particles are perpendicular to their own "
+                          "direction.",
+                          PT_STRING ),
+            &msBillboardTypeCmd );
+
+        dict->addParameter(
+            ParameterDef( "common_direction",
+                          "Only useful when billboard_type is oriented_common or perpendicular_common. "
+                          "When billboard_type is oriented_common, this parameter sets the common "
+                          "orientation for "
+                          "all particles in the set (e.g. raindrops may all be oriented downwards). "
+                          "When billboard_type is perpendicular_common, this parameter sets the "
+                          "perpendicular vector for "
+                          "all particles in the set (e.g. an aureola around the player and parallel to "
+                          "the ground).",
+                          PT_VECTOR3 ),
+            &msCommonDirectionCmd );
+
+        dict->addParameter( ParameterDef( "common_up_vector",
+                                          "Only useful when billboard_type is "
+                                          "perpendicular_self or perpendicular_common. This "
+                                          "parameter sets the common up-vector for all "
+                                          "particles in the set (e.g. an aureola around "
+                                          "the player and parallel to the ground).",
+                                          PT_VECTOR3 ),
+                            &msCommonUpVectorCmd );
+    }
 }
 //-----------------------------------------------------------------------------
 ParticleSystemDef::~ParticleSystemDef()
@@ -623,4 +666,84 @@ void ParticleSystem2Factory::destroyInstance( MovableObject *obj )
     ParticleSystem2 *system = static_cast<ParticleSystem2 *>( obj );
     ParticleSystemDef *systemDef = const_cast<ParticleSystemDef *>( system->getParticleSystemDef() );
     systemDef->_destroyParticleSystem( system );
+}
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+String ParticleSystemDef::CmdBillboardType::doGet( const void *target ) const
+{
+    ParticleType::ParticleType t = static_cast<const ParticleSystemDef *>( target )->getParticleType();
+    switch( t )
+    {
+    case ParticleType::NotParticle:
+        return "";
+    case ParticleType::Point:
+        return "point";
+    case ParticleType::OrientedCommon:
+        return "oriented_common";
+    case ParticleType::OrientedSelf:
+        return "oriented_self";
+    case ParticleType::PerpendicularCommon:
+        return "perpendicular_common";
+    case ParticleType::PerpendicularSelf:
+        return "perpendicular_self";
+    }
+    // Compiler nicety
+    return "";
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::CmdBillboardType::doSet( void *target, const String &val )
+{
+    ParticleType::ParticleType t;
+    if( val == "point" )
+    {
+        t = ParticleType::Point;
+    }
+    else if( val == "oriented_common" )
+    {
+        t = ParticleType::OrientedCommon;
+    }
+    else if( val == "oriented_self" )
+    {
+        t = ParticleType::OrientedSelf;
+    }
+    else if( val == "perpendicular_common" )
+    {
+        t = ParticleType::PerpendicularCommon;
+    }
+    else if( val == "perpendicular_self" )
+    {
+        t = ParticleType::PerpendicularSelf;
+    }
+    else
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid billboard_type '" + val + "'",
+                     "ParticleSystemDef::CmdBillboardType::doSet" );
+    }
+
+    static_cast<ParticleSystemDef *>( target )->setParticleType( t );
+}
+//-----------------------------------------------------------------------------
+String ParticleSystemDef::CmdCommonDirection::doGet( const void *target ) const
+{
+    return StringConverter::toString(
+        static_cast<const ParticleSystemDef *>( target )->getCommonDirection() );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::CmdCommonDirection::doSet( void *target, const String &val )
+{
+    static_cast<ParticleSystemDef *>( target )->setCommonDirection(
+        StringConverter::parseVector3( val ) );
+}
+//-----------------------------------------------------------------------------
+String ParticleSystemDef::CmdCommonUpVector::doGet( const void *target ) const
+{
+    return StringConverter::toString(
+        static_cast<const ParticleSystemDef *>( target )->getCommonUpVector() );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::CmdCommonUpVector::doSet( void *target, const String &val )
+{
+    static_cast<ParticleSystemDef *>( target )->setCommonUpVector(
+        StringConverter::parseVector3( val ) );
 }
