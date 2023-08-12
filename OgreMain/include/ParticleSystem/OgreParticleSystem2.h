@@ -75,6 +75,30 @@ namespace Ogre
     /// ParticleSystemDef must be cloned to use instances on another ID.
     class _OgreExport ParticleSystemDef : public ParticleSystem, private Renderable
     {
+    private:
+        class _OgrePrivate CmdBillboardType final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+        class _OgrePrivate CmdCommonDirection final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+        class _OgrePrivate CmdCommonUpVector final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+
+        static CmdBillboardType   msBillboardTypeCmd;
+        static CmdCommonDirection msCommonDirectionCmd;
+        static CmdCommonUpVector  msCommonUpVectorCmd;
+
     public:
         static constexpr uint32 InvalidHandle = 0xFFFFFFFF;
 
