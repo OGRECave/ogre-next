@@ -719,6 +719,9 @@ namespace Ogre
             const ParticleSystemDef *systemDef =
                 ParticleSystemDef::castFromRenderable( queuedRenderable.renderable );
 
+            const uint32 baseInstance = hlms->fillBuffersForV2( hlmsCache, queuedRenderable, casterPass,
+                                                                lastHlmsCacheHash, mCommandBuffer );
+
             ConstBufferPacked *particleCommonBuffer = systemDef->_getGpuCommonBuffer();
             *mCommandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( VertexShader, particleSystemSlot[hlmsType][0], particleCommonBuffer, 0,
@@ -727,9 +730,6 @@ namespace Ogre
             *mCommandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( VertexShader, particleSystemSlot[hlmsType][1], particleDataBuffer, 0,
                                 (uint32)particleDataBuffer->getTotalSizeBytes() );
-
-            const uint32 baseInstance = hlms->fillBuffersForV2( hlmsCache, queuedRenderable, casterPass,
-                                                                lastHlmsCacheHash, mCommandBuffer );
 
             // We always break the commands (because we re-bind particleDataBuffer for every draw)
             {

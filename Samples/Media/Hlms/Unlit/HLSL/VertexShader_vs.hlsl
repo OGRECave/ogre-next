@@ -7,7 +7,9 @@
 @insertpiece( custom_vs_uniformDeclaration )
 
 // START UNIFORM D3D DECLARATION
-ReadOnlyBuffer( 0, float4, worldMatBuf );
+@property( !hlms_particle_system )
+	ReadOnlyBuffer( 0, float4, worldMatBuf );
+@end
 @property( texture_matrix )ReadOnlyBuffer( 1, float4, animationMatrixBuf );@end
 // END UNIFORM D3D DECLARATION
 
