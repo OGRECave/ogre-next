@@ -406,11 +406,16 @@ if (WINDOWS_STORE OR WINDOWS_PHONE)
 	list( APPEND BROKEN_FILES_IN_UNITY_BUILD
 			"src/WIN32/OgreTimer.cpp" )
 else ()
-	# exclude these from unity builds; cause problems on Linux
+	# exclude these from unity builds; cause problems
 	list( APPEND BROKEN_FILES_IN_UNITY_BUILD
 			"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreAlignedAllocator.cpp"
-			"${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/OgreConfigDialog.cpp"
 	)
+	if( UNIX AND NOT OGRE_CONFIG_UNIX_NO_X11 )
+		# These files cause problems on Linux
+		list( APPEND BROKEN_FILES_IN_UNITY_BUILD
+				"${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/OgreConfigDialog.cpp"
+		)
+	endif()
 endif ()
 ogre_add_library(${OGRE_NEXT}Main ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE ${BROKEN_FILES_IN_UNITY_BUILD})
 # In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
