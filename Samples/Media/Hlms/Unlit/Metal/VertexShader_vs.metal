@@ -42,7 +42,9 @@ vertex PS_INPUT main_metal
 		@insertpiece( MaterialDecl )
 	@end
 	@insertpiece( InstanceDecl )
-	, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
+	@property( !hlms_particle_system )
+		, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
+	@end
 	@property( texture_matrix ), device const float4 *animationMatrixBuf [[buffer(TEX_SLOT_START+1)]]@end
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION

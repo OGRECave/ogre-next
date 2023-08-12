@@ -88,8 +88,7 @@ namespace Ogre
         mDefaultGenerateMipmaps( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
-        mReservedTexBufferSlots(
-            msHasParticleFX2Plugin ? 3u : 2u ),  // Vertex shader consumes 2 slots with its tbuffers.
+        mReservedTexBufferSlots( 2u ),  // Vertex shader consumes 2 slots with its tbuffers.
         mReservedTexSlots( 0u ),
         mTexUnitSlotStart( 2u )
     {
@@ -103,10 +102,9 @@ namespace Ogre
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
 
         mParticleSystemConstSlot = 3u;  // It is always 3.
-        // It is always 1.
-        // (0 is world matrix, 1 is animation matrix when no PFX plugin is installed, 2 otherwise)
-        // This is done to maximize performance since animation matrix is rare.
-        mParticleSystemSlot = 1u;
+        // It is always 0.
+        // (0 is world matrix, we don't need it for particles. 1 is animation matrix)
+        mParticleSystemSlot = 0u;
     }
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, HlmsTypes type,
                           const String &typeName, uint32 constBufferSize ) :
@@ -120,8 +118,7 @@ namespace Ogre
         mUsingInstancedStereo( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
-        mReservedTexBufferSlots(
-            msHasParticleFX2Plugin ? 3u : 2u ),  // Vertex shader consumes 2 slots with its tbuffers.
+        mReservedTexBufferSlots( 2u ),  // Vertex shader consumes 2 slots with its tbuffers.
         mReservedTexSlots( 0u ),
         mTexUnitSlotStart( 2u )
     {
@@ -134,10 +131,10 @@ namespace Ogre
         // Always an identity matrix
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
 
-        // It is always 1.
-        // (0 is world matrix, 1 is animation matrix when no PFX plugin is installed, 2 otherwise)
-        // This is done to maximize performance since animation matrix is rare.
-        mParticleSystemSlot = 1u;
+        mParticleSystemConstSlot = 3u;  // It is always 3.
+        // It is always 0.
+        // (0 is world matrix, we don't need it for particles. 1 is animation matrix)
+        mParticleSystemSlot = 0u;
     }
     //-----------------------------------------------------------------------------------
     HlmsUnlit::~HlmsUnlit() { destroyAllBuffers(); }
@@ -177,12 +174,10 @@ namespace Ogre
 
         descBindingRanges[DescBindingTypes::ConstBuffer].end = msHasParticleFX2Plugin ? 4u : 3u;
 
-        const uint16 extraPfxSlot = msHasParticleFX2Plugin ? 1u : 0u;
-
         if( getProperty( tid, UnlitProperty::TextureMatrix ) == 0 )
-            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u + extraPfxSlot;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
         else
-            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u + extraPfxSlot;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u;
 
         rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
@@ -487,7 +482,7 @@ namespace Ogre
             setProperty( kNoTid, UnlitProperty::DiffuseMap, maxUsedTexUnitPlusOne );
 
         if( hasAnimationMatrices )
-            setProperty( kNoTid, UnlitProperty::TextureMatrix, msHasParticleFX2Plugin ? 2 : 1 );
+            setProperty( kNoTid, UnlitProperty::TextureMatrix, 1 );
 
         if( hasPlanarReflection )
         {
@@ -1008,9 +1003,8 @@ namespace Ogre
             if( newPool->extraBuffer )
             {
                 TexBufferPacked *extraBuffer = static_cast<TexBufferPacked *>( newPool->extraBuffer );
-                *commandBuffer->addCommand<CbShaderBuffer>() =
-                    CbShaderBuffer( VertexShader, msHasParticleFX2Plugin ? 2u : 1u, extraBuffer, 0,
-                                    (uint32)extraBuffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    VertexShader, 1u, extraBuffer, 0, (uint32)extraBuffer->getTotalSizeBytes() );
             }
 
             mLastBoundPool = newPool;

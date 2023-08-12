@@ -41,7 +41,9 @@ layout(std140) uniform;
 @end
 
 // START UNIFORM GL DECLARATION
-ReadOnlyBufferF( 0, float4, worldMatBuf );
+@property( !hlms_particle_system )
+	ReadOnlyBufferF( 0, float4, worldMatBuf );
+@end
 @property( texture_matrix )ReadOnlyBufferF( @value( texture_matrix ), float4, animationMatrixBuf );@end
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 // END UNIFORM GL DECLARATION
