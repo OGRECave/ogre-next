@@ -53,8 +53,8 @@ uint64 Timer::getMilliseconds()
 {
     struct timeval now;
     gettimeofday( &now, NULL );
-    return static_cast<uint64>( now.tv_sec - start.tv_sec ) * 1000 +
-           static_cast<uint64>( ( now.tv_usec - start.tv_usec ) / 1000 );
+    return static_cast<uint64>( now.tv_sec - start.tv_sec ) * 1000ul +
+           static_cast<uint64>( ( now.tv_usec - start.tv_usec ) / 1000l );
 }
 
 //--------------------------------------------------------------------------------//
@@ -62,7 +62,7 @@ uint64 Timer::getMicroseconds()
 {
     struct timeval now;
     gettimeofday( &now, NULL );
-    return static_cast<uint64>( now.tv_sec - start.tv_sec ) * 1000000 +
+    return static_cast<uint64>( now.tv_sec - start.tv_sec ) * 1000000ul +
            static_cast<uint64>( now.tv_usec - start.tv_usec );
 }
 
