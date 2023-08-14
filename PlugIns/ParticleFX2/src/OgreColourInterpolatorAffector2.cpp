@@ -51,7 +51,7 @@ ColourInterpolatorAffector2::ColourInterpolatorAffector2()
     }
 
     // Init parameters
-    if( createParamDictionary( "ColourInterpolatorAffector" ) )
+    if( createParamDictionary( "ColourInterpolatorAffector2" ) )
     {
         ParamDictionary *dict = getParamDictionary();
 

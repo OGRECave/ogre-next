@@ -33,6 +33,14 @@ THE SOFTWARE.
 using namespace Ogre;
 
 //-----------------------------------------------------------------------------
+PointEmitter2::PointEmitter2()
+{
+    if( createParamDictionary( "PointEmitter2" ) )
+    {
+        addBaseParameters();
+    }
+}
+//-----------------------------------------------------------------------------
 void PointEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
                                           const size_t numParticles )
 {
