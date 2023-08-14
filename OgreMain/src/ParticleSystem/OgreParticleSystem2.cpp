@@ -289,6 +289,7 @@ void ParticleSystemDef::setParticleQuota( size_t quota )
 {
     OGRE_ASSERT_LOW( !isInitialized() );
     mActiveParticles.reset( alignToNextMultiple<size_t>( quota, ARRAY_PACKED_REALS ) );
+    mPoolSize = quota; // In case ParticleSystem::getParticleQuota gets called.
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::setParticleType( ParticleType::ParticleType particleType )
@@ -527,8 +528,8 @@ void ParticleSystemDef::deallocParticle( uint32 handle )
     OGRE_ASSERT_MEDIUM( handle < quota && "Invalid handle!" );
     OGRE_ASSERT_MEDIUM( mActiveParticles.test( handle ) && "Particle double freed!" );
     OGRE_ASSERT_MEDIUM(
-        ( mFirstParticleIdx >= handle && handle < mLastParticleIdx && mLastParticleIdx <= quota ) ||
-        ( ( mFirstParticleIdx >= handle || handle < lastParticleIdxWrapped ) &&
+        ( handle >= mFirstParticleIdx && handle < mLastParticleIdx && mLastParticleIdx <= quota ) ||
+        ( ( handle >= mFirstParticleIdx || handle < lastParticleIdxWrapped ) &&
           mLastParticleIdx > quota ) &&
             "Invalid state detected. The handle is outside the tracking zone." );
 
@@ -591,7 +592,7 @@ void ParticleSystemDef::cloneTo( ParticleSystemDef *toClone )
     toClone->mCommonUpVector = this->mCommonUpVector;
     toClone->mRotationType = this->mRotationType;
     toClone->mParticleType = this->mParticleType;
-    toClone->setParticleQuota( this->getParticleQuota() );
+    toClone->setParticleQuota( this->getQuota() );
 
     toClone->mEmitters.reserve( this->mEmitters.size() );
     for( const EmitterDefData *emitter : mEmitters )
