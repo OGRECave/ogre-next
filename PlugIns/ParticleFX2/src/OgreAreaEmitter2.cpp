@@ -47,7 +47,7 @@ bool AreaEmitter2::initDefaults()
     setSize( 100, 100, 100 );
 
     // Set up parameters
-    if( createParamDictionary( getType() + "Emitter" ) )
+    if( createParamDictionary( getType() + "Emitter2" ) )
     {
         addBaseParameters();
         ParamDictionary *dict = getParamDictionary();

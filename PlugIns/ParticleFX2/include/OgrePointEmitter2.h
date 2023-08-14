@@ -42,6 +42,8 @@ namespace Ogre
     class _OgreParticleFX2Export PointEmitter2 : public EmitterDefData
     {
     public:
+        PointEmitter2();
+
         void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
                                    size_t numParticles ) override;
 
