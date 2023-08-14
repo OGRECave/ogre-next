@@ -60,6 +60,10 @@ struct GpuParticleCommon
 };
 
 ParticleSystemDef::CmdBillboardType ParticleSystemDef::msBillboardTypeCmd;
+#if 0
+ParticleSystemDef::CmdBillboardOrigin ParticleSystemDef::msBillboardOriginCmd;
+#endif
+ParticleSystemDef::CmdBillboardRotationType ParticleSystemDef::msBillboardRotationTypeCmd;
 ParticleSystemDef::CmdCommonDirection ParticleSystemDef::msCommonDirectionCmd;
 ParticleSystemDef::CmdCommonUpVector ParticleSystemDef::msCommonUpVectorCmd;
 
@@ -87,7 +91,7 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
 
     mRenderQueueID = kParticleSystemDefaultRenderQueueId;
 
-    if( createParamDictionary( "ParticleSystemDef" ) )
+    if( getParamDictionary() )
     {
         ParamDictionary *dict = getParamDictionary();
         dict->addParameter(
@@ -102,6 +106,28 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
                           "direction.",
                           PT_STRING ),
             &msBillboardTypeCmd );
+
+#if 0
+        dict->addParameter(
+            ParameterDef(
+                "billboard_origin",
+                "This setting controls the fine tuning of where a billboard appears in relation "
+                "to it's position. "
+                "Possible value are: 'top_left', 'top_center', 'top_right', 'center_left', "
+                "'center', 'center_right', "
+                "'bottom_left', 'bottom_center' and 'bottom_right'. Default value is 'center'.",
+                PT_STRING ),
+            &msBillboardOriginCmd );
+#endif
+
+        dict->addParameter(
+            ParameterDef( "billboard_rotation_type",
+                          "This setting controls the billboard rotation type. "
+                          "'vertex' means rotate the billboard's vertices around their facing direction."
+                          "'texcoord' means rotate the billboard's texture coordinates."
+                          "'none' means rotation is ignored. Default value is 'none'.",
+                          PT_STRING ),
+            &msBillboardRotationTypeCmd );
 
         dict->addParameter(
             ParameterDef( "common_direction",
@@ -200,7 +226,11 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     mVaoPerLod[VpShadow] = mVaoPerLod[VpNormal];
 
     HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
-    this->setDatablock( hlmsManager->getHlms( HLMS_UNLIT )->getDefaultDatablock() );
+    HlmsDatablock *datablock = hlmsManager->getDatablockNoDefault( mMaterialName );
+    if( datablock )
+        this->setDatablock( datablock );
+    else
+        this->setDatablock( hlmsManager->getHlms( HLMS_UNLIT )->getDefaultDatablock() );
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::_destroy( VaoManager *vaoManager )
@@ -555,7 +585,7 @@ uint32 ParticleSystemDef::getHandle( const ParticleCpuData &cpuData, size_t idx 
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::cloneTo( ParticleSystemDef *toClone )
 {
-    ParticleSystem::_cloneFrom( toClone );
+    toClone->ParticleSystem::_cloneFrom( this );
 
     toClone->mCommonDirection = this->mCommonDirection;
     toClone->mCommonUpVector = this->mCommonUpVector;
@@ -722,6 +752,101 @@ void ParticleSystemDef::CmdBillboardType::doSet( void *target, const String &val
     }
 
     static_cast<ParticleSystemDef *>( target )->setParticleType( t );
+}
+//-----------------------------------------------------------------------------
+#if 0
+String ParticleSystemDef::CmdBillboardOrigin::doGet( const void *target ) const
+{
+    BillboardOrigin o = static_cast<const ParticleSystemDef *>( target )->getBillboardOrigin();
+    switch( o )
+    {
+    case BBO_TOP_LEFT:
+        return "top_left";
+    case BBO_TOP_CENTER:
+        return "top_center";
+    case BBO_TOP_RIGHT:
+        return "top_right";
+    case BBO_CENTER_LEFT:
+        return "center_left";
+    case BBO_CENTER:
+        return "center";
+    case BBO_CENTER_RIGHT:
+        return "center_right";
+    case BBO_BOTTOM_LEFT:
+        return "bottom_left";
+    case BBO_BOTTOM_CENTER:
+        return "bottom_center";
+    case BBO_BOTTOM_RIGHT:
+        return "bottom_right";
+    }
+    // Compiler nicety
+    return BLANKSTRING;
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::CmdBillboardOrigin::doSet( void *target, const String &val )
+{
+    BillboardOrigin o;
+    if( val == "top_left" )
+        o = BBO_TOP_LEFT;
+    else if( val == "top_center" )
+        o = BBO_TOP_CENTER;
+    else if( val == "top_right" )
+        o = BBO_TOP_RIGHT;
+    else if( val == "center_left" )
+        o = BBO_CENTER_LEFT;
+    else if( val == "center" )
+        o = BBO_CENTER;
+    else if( val == "center_right" )
+        o = BBO_CENTER_RIGHT;
+    else if( val == "bottom_left" )
+        o = BBO_BOTTOM_LEFT;
+    else if( val == "bottom_center" )
+        o = BBO_BOTTOM_CENTER;
+    else if( val == "bottom_right" )
+        o = BBO_BOTTOM_RIGHT;
+    else
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid billboard_origin '" + val + "'",
+                     "ParticleSystem::CmdBillboardOrigin::doSet" );
+    }
+
+    static_cast<ParticleSystemDef *>( target )->setBillboardOrigin( o );
+}
+#endif
+//-----------------------------------------------------------------------------
+String ParticleSystemDef::CmdBillboardRotationType::doGet( const void *target ) const
+{
+    ParticleRotationType::ParticleRotationType r =
+        static_cast<const ParticleSystemDef *>( target )->getRotationType();
+    switch( r )
+    {
+    case ParticleRotationType::Vertex:
+        return "vertex";
+    case ParticleRotationType::Texcoord:
+        return "texcoord";
+    case ParticleRotationType::None:
+        return "none";
+    }
+    // Compiler nicety
+    return BLANKSTRING;
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemDef::CmdBillboardRotationType::doSet( void *target, const String &val )
+{
+    ParticleRotationType::ParticleRotationType r;
+    if( val == "vertex" )
+        r = ParticleRotationType::Vertex;
+    else if( val == "texcoord" )
+        r = ParticleRotationType::Texcoord;
+    else if( val == "none" )
+        r = ParticleRotationType::None;
+    else
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid billboard_rotation_type '" + val + "'",
+                     "ParticleSystemDef::CmdBillboardRotationType::doSet" );
+    }
+
+    static_cast<ParticleSystemDef *>( target )->setRotationType( r );
 }
 //-----------------------------------------------------------------------------
 String ParticleSystemDef::CmdCommonDirection::doGet( const void *target ) const

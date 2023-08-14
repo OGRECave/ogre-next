@@ -82,6 +82,20 @@ namespace Ogre
             String doGet( const void *target ) const override;
             void   doSet( void *target, const String &val ) override;
         };
+#if 0
+        class _OgrePrivate CmdBillboardOrigin final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
+#endif
+        class _OgrePrivate CmdBillboardRotationType final : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
+        };
         class _OgrePrivate CmdCommonDirection final : public ParamCommand
         {
         public:
@@ -96,6 +110,10 @@ namespace Ogre
         };
 
         static CmdBillboardType   msBillboardTypeCmd;
+#if 0
+        static CmdBillboardOrigin msBillboardOriginCmd;
+#endif
+        static CmdBillboardRotationType msBillboardRotationTypeCmd;
         static CmdCommonDirection msCommonDirectionCmd;
         static CmdCommonUpVector  msCommonUpVectorCmd;
 
