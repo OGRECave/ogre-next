@@ -7,8 +7,12 @@
 
 struct VS_INPUT
 {
+@property( !hlms_particle_system )
 	float4 position [[attribute(VES_POSITION)]];
-@property( hlms_colour && !hlms_particle_system )	float4 colour [[attribute(VES_DIFFUSE)]];@end
+@end
+@property( hlms_colour && !hlms_particle_system )
+	float4 colour [[attribute(VES_DIFFUSE)]];
+@end
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n [[attribute(VES_TEXTURE_COORDINATES@n)]];@end
 @property( !iOS )
@@ -20,9 +24,7 @@ struct VS_INPUT
 struct PS_INPUT
 {
 @insertpiece( VStoPS_block )
-@property( !hlms_particle_system )
 	float4 gl_Position [[position]];
-@end
 
 	@property( hlms_pso_clip_distances )
 		float gl_ClipDistance [[clip_distance]] [@value( hlms_pso_clip_distances )];
@@ -45,7 +47,10 @@ vertex PS_INPUT main_metal
 	@property( !hlms_particle_system )
 		, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
 	@end
-	@property( texture_matrix ), device const float4 *animationMatrixBuf [[buffer(TEX_SLOT_START+1)]]@end
+	@property( texture_matrix )
+		, device const float4 *animationMatrixBuf [[buffer(TEX_SLOT_START+@value( texture_matrix ))]]
+	@end
+	@insertpiece( ParticleSystemDeclVS )
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
 )
