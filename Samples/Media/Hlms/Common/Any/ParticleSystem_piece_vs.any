@@ -20,7 +20,15 @@
 		float4 colour;
 	};
 
-	ParticleGpuData loadParticleGpuData( uint vertexId )
+	@property( syntax == metal )
+		#define PARTICLEGPU_ARG_DECL , device const uint4 *particleSystemGpuData
+		#define PARTICLEGPU_ARG , particleSystemGpuData
+	@else
+		#define PARTICLEGPU_ARG_DECL
+		#define PARTICLEGPU_ARG
+	@end
+
+	ParticleGpuData loadParticleGpuData( uint vertexId PARTICLEGPU_ARG_DECL )
 	{
 		ParticleGpuData retVal;
 
@@ -47,7 +55,7 @@
 @piece( DoParticleSystemVS )
 	// We try that most variables start with particle prefix to avoid our
 	// variable names from clashing with other Hlms custom blocks.
-	const ParticleGpuData particleData = loadParticleGpuData( uint( inVs_vertexId ) );
+	const ParticleGpuData particleData = loadParticleGpuData( uint( inVs_vertexId ) PARTICLEGPU_ARG );
 
 	const uint vertexInQuad = uint( inVs_vertexId ) & 0x03u;
 
