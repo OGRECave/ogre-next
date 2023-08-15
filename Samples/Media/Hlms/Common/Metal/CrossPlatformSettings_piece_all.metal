@@ -114,7 +114,14 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 #define NO_INTERPOLATION_SUFFIX [[flat]]
 
 #define floatBitsToUint(x) as_type<uint>(x)
-#define uintBitsToFloat(x) as_type<float>(x)
+inline float uintBitsToFloat( uint x )
+{
+	return as_type<float>( x );
+}
+inline float2 uintBitsToFloat( uint2 x )
+{
+	return as_type<float2>( x );
+}
 #define floatBitsToInt(x) as_type<int>(x)
 #define lessThan( a, b ) (a < b)
 #define discard discard_fragment()
@@ -209,4 +216,8 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 
 #define OGRE_ARRAY_START( type ) {
 #define OGRE_ARRAY_END }
+
+#define unpackSnorm4x8 unpack_snorm4x8_to_float
+#define unpackSnorm2x16 unpack_snorm2x16_to_float
+
 @end
