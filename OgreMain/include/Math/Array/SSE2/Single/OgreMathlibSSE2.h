@@ -586,16 +586,16 @@ namespace Ogre
 #    if OGRE_COMPILER != OGRE_COMPILER_CLANG && OGRE_COMPILER != OGRE_COMPILER_GNUC
     // clang-format off
     inline ArrayReal operator - ( ArrayReal l )                 { return _mm_xor_ps( l, MathlibSSE2::SIGN_MASK ); }
-//  inline ArrayReal operator + ( ArrayReal l, Real r )         { return _mm_add_ps( l, _mm_set1_ps( r ) ); }
+    inline ArrayReal operator + ( ArrayReal l, Real r )         { return _mm_add_ps( l, _mm_set1_ps( r ) ); }
 //  inline ArrayReal operator + ( Real l, ArrayReal r )         { return _mm_add_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator + ( ArrayReal l, ArrayReal r )    { return _mm_add_ps( l, r ); }
 //  inline ArrayReal operator - ( ArrayReal l, Real r )         { return _mm_sub_ps( l, _mm_set1_ps( r ) ); }
 //  inline ArrayReal operator - ( Real l, ArrayReal r )         { return _mm_sub_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator - ( ArrayReal l, ArrayReal r )    { return _mm_sub_ps( l, r ); }
 //  inline ArrayReal operator * ( ArrayReal l, Real r )         { return _mm_mul_ps( l, _mm_set1_ps( r ) ); }
-//  inline ArrayReal operator * ( Real l, ArrayReal r )         { return _mm_mul_ps( _mm_set1_ps( l ), r ); }
+    inline ArrayReal operator * ( Real l, ArrayReal r )         { return _mm_mul_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator * ( ArrayReal l, ArrayReal r )    { return _mm_mul_ps( l, r ); }
-//  inline ArrayReal operator / ( ArrayReal l, Real r )         { return _mm_div_ps( l, _mm_set1_ps( r ) ); }
+    inline ArrayReal operator / ( ArrayReal l, Real r )         { return _mm_div_ps( l, _mm_set1_ps( r ) ); }
 //  inline ArrayReal operator / ( Real l, ArrayReal r )         { return _mm_div_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return _mm_div_ps( l, r ); }
 // clang-format on
