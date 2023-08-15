@@ -151,7 +151,7 @@ namespace Ogre
         const ArrayReal signedPi = MathlibNEON::CopySign4( MathlibNEON::PI, mRad );
         const ArrayReal x = vaddq_f32( mRad, signedPi );                      // x = mRad + signedPi
         const ArrayReal quotient = vmulq_f32( x, MathlibNEON::ONE_DIV_2PI );  // x / ( 2 * PI )
-        const ArrayReal integerQuot = vcvtq_f32_s32( vcvtnq_s32_f32( quotient ) );  // trunc( x / 2PI )
+        const ArrayReal integerQuot = vcvtq_f32_s32( vcvtq_s32_f32( quotient ) );  // trunc( x / 2PI )
         const ArrayReal s = vmulq_f32( integerQuot, MathlibNEON::TWO_PI );  // trunc( x / 2PI ) * 2PI
 
         const ArrayReal wrappedValue = vsubq_f32( x, s );  // x - trunc( x / 2PI ) * 2PI

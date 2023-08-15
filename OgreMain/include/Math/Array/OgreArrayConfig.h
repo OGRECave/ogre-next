@@ -98,6 +98,8 @@ namespace Ogre
 #        define CastIntToReal( x ) _mm_castsi128_ps( x )
 /// Input must be 16-byte aligned
 #        define CastArrayToReal( outFloatPtr, arraySimd ) _mm_store_ps( outFloatPtr, arraySimd )
+#        define CastArrayToInt32( outInt32Ptr, arraySimd ) \
+            _mm_store_si128( reinterpret_cast<__m128i *>( outInt32Ptr ), arraySimd )
 
 #    elif OGRE_CPU == OGRE_CPU_ARM
 // ARM - NEON
@@ -212,6 +214,8 @@ namespace Ogre
 #        define CastIntToReal( x ) ( x )
 /// Input must be 16-byte aligned
 #        define CastArrayToReal( outFloatPtr, arraySimd ) vst1q_f32( outFloatPtr, arraySimd )
+#        define CastArrayToInt32( outInt32Ptr, arraySimd ) \
+            vst1q_s32( reinterpret_cast<int32_t *>( outInt32Ptr ), arraySimd )
 
 #    else
 // Unsupported architecture, tell user to reconfigure. We could silently fallback to C,
@@ -253,6 +257,8 @@ namespace Ogre
 
 /// Input must be 16-byte aligned
 #    define CastArrayToReal( outFloatPtr, arraySimd ) ( *( outFloatPtr ) = arraySimd )
+#    define CastArrayToInt32( outInt32Ptr, arraySimd ) \
+        ( *( outInt32Ptr ) = static_cast<int32>( arraySimd ) )
 
 // Distance (in ArrayMemoryManager's slots) used to keep fetching data. This also
 // means the memory manager needs to allocate extra memory for them.

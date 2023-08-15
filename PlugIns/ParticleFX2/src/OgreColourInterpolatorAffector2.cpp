@@ -93,6 +93,8 @@ void ColourInterpolatorAffector2::run( ParticleCpuData cpuData, const size_t num
             const ArrayVector4 colour = Math::lerp( mColourAdj[j], mColourAdj[j + 1], fW );
             cpuData.mColour->Cmov4( isAffected, colour );
         }
+
+        cpuData.advancePack();
     }
 }
 //-----------------------------------------------------------------------

@@ -231,6 +231,9 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
         this->setDatablock( datablock );
     else
         this->setDatablock( hlmsManager->getHlms( HLMS_UNLIT )->getDefaultDatablock() );
+
+    for( ParticleAffector2 *affector : mAffectors )
+        affector->oneTimeInit();
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::_destroy( VaoManager *vaoManager )
