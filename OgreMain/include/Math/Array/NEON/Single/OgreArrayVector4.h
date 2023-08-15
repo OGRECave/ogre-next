@@ -70,7 +70,7 @@ namespace Ogre
             mChunkBase[0] = chunkX;
             mChunkBase[1] = chunkY;
             mChunkBase[2] = chunkZ;
-            mChunkBase[3] = chunkZ;
+            mChunkBase[3] = chunkW;
         }
 
         void getAsVector4( Vector4 &out, size_t index ) const
