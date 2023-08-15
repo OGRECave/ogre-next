@@ -50,7 +50,13 @@ vertex PS_INPUT main_metal
 	@property( texture_matrix )
 		, device const float4 *animationMatrixBuf [[buffer(TEX_SLOT_START+@value( texture_matrix ))]]
 	@end
+
 	@insertpiece( ParticleSystemDeclVS )
+
+	@property( hlms_vertex_id )
+		, uint inVs_vertexId [[vertex_id]]
+		, uint baseVertexID [[base_vertex]]
+	@end
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
 )
