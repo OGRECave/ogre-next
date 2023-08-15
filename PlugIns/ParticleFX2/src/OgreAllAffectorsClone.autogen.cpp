@@ -4,8 +4,9 @@
 // clone_particle_systems.py will overwrite your modifications.
 #include "OgreColourFaderAffector2FX2.h"
 #include "OgreColourFaderAffectorFX2.h"
-#include "OgreDeflectorPlaneAffector2.h"
+#include "OgreColourImageAffector2.h"
 #include "OgreColourInterpolatorAffector2.h"
+#include "OgreDeflectorPlaneAffector2.h"
 #include "OgreDirectionRandomiserAffector2.h"
 #include "OgreLinearForceAffector2.h"
 #include "OgreRotationAffector2.h"
@@ -37,14 +38,14 @@ void ColourFaderAffectorFX2::_cloneFrom( const ParticleAffector2 *_original )
 }
 
 //-----------------------------------------------------------------------------
-void DeflectorPlaneAffector2::_cloneFrom( const ParticleAffector2 *_original )
+void ColourImageAffector2::_cloneFrom( const ParticleAffector2 *_original )
 {
-    OGRE_ASSERT_HIGH( dynamic_cast<const DeflectorPlaneAffector2 *>( _original ) );
+    OGRE_ASSERT_HIGH( dynamic_cast<const ColourImageAffector2 *>( _original ) );
 
-    const DeflectorPlaneAffector2 *original = static_cast<const DeflectorPlaneAffector2 *>( _original );
-    this->mBounce = original->mBounce;
-    this->mPlanePoint = original->mPlanePoint;
-    this->mPlaneNormal = original->mPlaneNormal;
+    const ColourImageAffector2 *original = static_cast<const ColourImageAffector2 *>( _original );
+    this->mColourData = original->mColourData;
+    this->mInitialized = original->mInitialized;
+    this->mColourImageName = original->mColourImageName;
 }
 
 //-----------------------------------------------------------------------------
@@ -57,6 +58,17 @@ void ColourInterpolatorAffector2::_cloneFrom( const ParticleAffector2 *_original
         this->mColourAdj[i] = original->mColourAdj[i];
     for( size_t i = 0u; i<6u; ++i )
         this->mTimeAdj[i] = original->mTimeAdj[i];
+}
+
+//-----------------------------------------------------------------------------
+void DeflectorPlaneAffector2::_cloneFrom( const ParticleAffector2 *_original )
+{
+    OGRE_ASSERT_HIGH( dynamic_cast<const DeflectorPlaneAffector2 *>( _original ) );
+
+    const DeflectorPlaneAffector2 *original = static_cast<const DeflectorPlaneAffector2 *>( _original );
+    this->mBounce = original->mBounce;
+    this->mPlanePoint = original->mPlanePoint;
+    this->mPlaneNormal = original->mPlaneNormal;
 }
 
 //-----------------------------------------------------------------------------

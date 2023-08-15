@@ -410,11 +410,23 @@ namespace Ogre
             return vceqq_f32( a, MathlibNEON::INFINITEA );
         }
 
+        /// Truncates float to 32-bit integer
+        static inline ArrayInt Truncate( ArrayReal a ) { return vcvtq_s32_f32( a ); }
+
+        /// Converts 32-bit integer to float
+        static inline ArrayReal ConvertToF32( ArrayInt a ) { return vcvtq_f32_s32( a ); }
+
         /// Returns the maximum value between a and b
         static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return vmaxq_f32( a, b ); }
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return vminq_f32( a, b ); }
+
+        /// Clamps the value to the range [0; 1]
+        static inline ArrayReal Saturate( ArrayReal a )
+        {
+            return vmaxq_f32( vminq_f32( a, ONE ), vdupq_n_f32( 0.0f ) );
+        }
 
         /** Returns the minimum value of all elements in a
         @return

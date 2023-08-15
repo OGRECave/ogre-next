@@ -297,11 +297,23 @@ namespace Ogre
             return _mm_cmpeq_ps( a, MathlibSSE2::INFINITEA );
         }
 
+        /// Truncates float to 32-bit integer
+        static inline ArrayInt Truncate( ArrayReal a ) { return _mm_cvttps_epi32( a ); }
+
+        /// Converts 32-bit integer to float
+        static inline ArrayReal ConvertToF32( ArrayInt a ) { return _mm_cvtepi32_ps( a ); }
+
         /// Returns the maximum value between a and b
         static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return _mm_max_ps( a, b ); }
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return _mm_min_ps( a, b ); }
+
+        /// Clamps the value to the range [0; 1]
+        static inline ArrayReal Saturate( ArrayReal a )
+        {
+            return _mm_max_ps( _mm_min_ps( a, ONE ), _mm_setzero_ps() );
+        }
 
         /// Returns:
         ///     (int16)( saturate( a ) * 32767.5f );

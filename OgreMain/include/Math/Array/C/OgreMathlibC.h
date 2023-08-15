@@ -252,11 +252,23 @@ namespace Ogre
             return a == std::numeric_limits<float>::infinity();
         }
 
+        /// Truncates float to 32-bit integer
+        static inline ArrayInt Truncate( ArrayReal a ) { return static_cast<ArrayInt>( a ); }
+
+        /// Converts 32-bit integer to float
+        static inline ArrayReal ConvertToF32( ArrayInt a ) { return static_cast<ArrayReal>( a ); }
+
         /// Returns the maximum value between a and b
         static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return std::max( a, b ); }
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return std::min( a, b ); }
+
+        /// Clamps the value to the range [0; 1]
+        static inline ArrayReal Saturate( ArrayReal a )
+        {
+            return std::max( std::min( a, ArrayReal( 1.0f ) ), ArrayReal( 0.0f ) );
+        }
 
         /// Returns:
         ///     (int16)( saturate( a ) * 32767.5f );

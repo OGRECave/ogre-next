@@ -139,8 +139,8 @@ def writeCppSrcCloneBody(className, classMembers, baseClassNames, mostBaseClass)
     return cppStr
 
 
-classesToParse = ['ColourFaderAffector2FX2', 'ColourFaderAffectorFX2',
-                  'DeflectorPlaneAffector2', 'ColourInterpolatorAffector2',
+classesToParse = ['ColourFaderAffector2FX2', 'ColourFaderAffectorFX2', 'ColourImageAffector2',
+                  'ColourInterpolatorAffector2', 'DeflectorPlaneAffector2',
                   'DirectionRandomiserAffector2', 'LinearForceAffector2',
                   'RotationAffector2', 'ScaleAffector2', 'ScaleInterpolatorAffector2']
 

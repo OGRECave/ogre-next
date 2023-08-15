@@ -44,6 +44,8 @@ namespace Ogre
     class _OgreExport ParticleAffector2 : public StringInterface
     {
     public:
+        virtual void oneTimeInit() {}
+
         /// Returns true if initEmittedParticles() must be called on a particle that has been emitted.
         virtual bool needsInitialization() const { return false; }
 
