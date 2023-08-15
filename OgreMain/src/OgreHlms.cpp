@@ -2800,6 +2800,7 @@ namespace Ogre
         if( renderable->getParticleType() != ParticleType::NotParticle )
         {
             setProperty( kNoTid, HlmsBaseProp::ParticleSystem, 1 );
+            setProperty( kNoTid, HlmsBaseProp::VertexId, 1 );
 
             IdString particleTypeName;
             switch( renderable->getParticleType() )

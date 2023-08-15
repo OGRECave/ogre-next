@@ -3,10 +3,6 @@
 
 @property( hlms_particle_system )
 
-@piece( ParticleSystemDeclVS )
-	ReadOnlyBufferU( @value(particleSystemGpuData), uint4, particleSystemGpuData );
-@end
-
 @piece( ParticleSystemStructDeclVS )
 	CONST_BUFFER_STRUCT_BEGIN( GpuParticleCommon, @value(particleSystemConstSlot) )
 	{
@@ -24,12 +20,12 @@
 		float4 colour;
 	};
 
-	ParticleGpuData loadParticleGpuData()
+	ParticleGpuData loadParticleGpuData( uint vertexId )
 	{
 		ParticleGpuData retVal;
 
-		// const uint particleId = uint( inVs_vertexId ) / 6u;
-		const uint particleId = uint( inVs_vertexId ) / 4u;
+		// const uint particleId = vertexId / 6u;
+		const uint particleId = vertexId / 4u;
 		uint4 tmp;
 		tmp = readOnlyFetch( particleSystemGpuData, particleId * 2u );
 		retVal.dim.xy = uintBitsToFloat( tmp.xy );
@@ -51,7 +47,7 @@
 @piece( DoParticleSystemVS )
 	// We try that most variables start with particle prefix to avoid our
 	// variable names from clashing with other Hlms custom blocks.
-	const ParticleGpuData particleData = loadParticleGpuData();
+	const ParticleGpuData particleData = loadParticleGpuData( uint( inVs_vertexId ) );
 
 	const uint vertexInQuad = uint( inVs_vertexId ) & 0x03u;
 

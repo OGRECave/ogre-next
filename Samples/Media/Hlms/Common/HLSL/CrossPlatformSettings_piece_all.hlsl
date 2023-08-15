@@ -175,4 +175,19 @@
 
 #define OGRE_ARRAY_START( type ) {
 #define OGRE_ARRAY_END }
+
+float4 unpackSnorm4x8( uint value )
+{
+	int signedValue = int( value );
+	int4 packed = int4( signedValue << 24, signedValue << 16, signedValue << 8, signedValue ) >> 24;
+	return clamp( float4( packed ) / 127.0, -1.0, 1.0 );
+}
+
+float2 unpackSnorm2x16( uint value )
+{
+	int signedValue = int( value );
+	int2 packed = int2( signedValue << 16, signedValue ) >> 16;
+	return clamp( float2( packed ) / 32767.0, -1.0, 1.0 );
+}
+
 @end

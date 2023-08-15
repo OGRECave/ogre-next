@@ -29,6 +29,9 @@ struct VS_INPUT
 @end
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n : TEXCOORD@n;@end
+@property( hlms_vertex_id )
+	uint vertexId : SV_VertexID;
+@end
 	uint drawId : DRAWID;
 	@insertpiece( custom_vs_attributes )
 };
