@@ -3,6 +3,10 @@
 
 @insertpiece( SetCrossPlatformSettings )
 
+// START UNIFORM D3D PRE DECLARATION
+@insertpiece( ParticleSystemDeclVS )
+// END UNIFORM D3D PRE DECLARATION
+
 @insertpiece( DefaultHeaderVS )
 @insertpiece( custom_vs_uniformDeclaration )
 
@@ -10,7 +14,9 @@
 @property( !hlms_particle_system )
 	ReadOnlyBuffer( 0, float4, worldMatBuf );
 @end
-@property( texture_matrix )ReadOnlyBuffer( 1, float4, animationMatrixBuf );@end
+@property( texture_matrix )
+	ReadOnlyBuffer( @value( texture_matrix ), float4, animationMatrixBuf );
+@end
 // END UNIFORM D3D DECLARATION
 
 struct VS_INPUT
@@ -18,7 +24,9 @@ struct VS_INPUT
 @property( !hlms_particle_system )
 	float4 vertex : POSITION;
 @end
-@property( hlms_colour && !hlms_particle_system )	float4 colour : COLOR0;@end
+@property( hlms_colour && !hlms_particle_system )
+	float4 colour : COLOR0;
+@end
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n : TEXCOORD@n;@end
 	uint drawId : DRAWID;
