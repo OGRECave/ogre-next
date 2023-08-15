@@ -4,17 +4,17 @@
 @property( hlms_particle_system )
 
 @piece( ParticleSystemDeclVS )
-CONST_BUFFER_STRUCT_BEGIN( GpuParticleCommon, @value(particleSystemConstSlot) )
-{
-	float4 dir;
-	float4 up;
-}
-CONST_BUFFER_STRUCT_END( particleCommon );
-
-ReadOnlyBufferU( @value(particleSystemSlot), uint4, particleSystemGpuData );
+	ReadOnlyBufferU( @value(particleSystemGpuData), uint4, particleSystemGpuData );
 @end
 
 @piece( ParticleSystemStructDeclVS )
+	CONST_BUFFER_STRUCT_BEGIN( GpuParticleCommon, @value(particleSystemConstSlot) )
+	{
+		float4 dir;
+		float4 up;
+	}
+	CONST_BUFFER_STRUCT_END( particleCommon );
+
 	struct ParticleGpuData
 	{
 		float2 dim;

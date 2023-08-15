@@ -593,8 +593,11 @@ namespace Ogre
 
         if( getProperty( HlmsBaseProp::ParticleSystem ) )
         {
-            setTextureReg( tid, VertexShader, "particleSystemConstSlot", mParticleSystemConstSlot );
-            setTextureReg( tid, VertexShader, "particleSystemSlot", mParticleSystemSlot );
+            setProperty( tid, "particleSystemConstSlot", mParticleSystemConstSlot );
+            if( mVaoManager->readOnlyIsTexBuffer() )
+                setTextureReg( tid, VertexShader, "particleSystemGpuData", mParticleSystemSlot );
+            else
+                setProperty( tid, "particleSystemGpuData", mParticleSystemSlot );
         }
     }
     //-----------------------------------------------------------------------------------
