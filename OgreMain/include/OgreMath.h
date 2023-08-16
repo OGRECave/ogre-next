@@ -265,7 +265,9 @@ namespace Ogre
         {
         public:
             virtual ~RandomValueProvider();
-            /** When called should return a random values in the range of [0,1] */
+
+            /// When called should return a random values in the range of [0,1]
+            /// It it is strongly advised this function to be thread safe.
             virtual Real getRandomUnit() = 0;
         };
 
