@@ -245,7 +245,7 @@ void ParticleSystemManager2::updateSerialPos()
     }
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemManager2::updateParallel( const size_t threadIdx, const size_t numThreads )
+void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size_t numThreads )
 {
     const ArrayReal timeSinceLast = Mathlib::SetAll( mTimeSinceLast );
 
@@ -671,7 +671,7 @@ void ParticleSystemManager2::update( const Real timeSinceLast )
     mTimeSinceLast = timeSinceLast;
 
     updateSerialPre( timeSinceLast );
-    updateParallel( 0u, 1u );
+    mSceneManager->_fireParticleSystemManager2Update();
     updateSerialPos();
 }
 //-----------------------------------------------------------------------------

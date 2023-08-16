@@ -76,8 +76,6 @@ namespace Ogre
         void updateSerialPre( Real timeSinceLast );
         void updateSerialPos();
 
-        void updateParallel( size_t threadIdx, size_t numThreads );
-
     public:
         ParticleSystemManager2( SceneManager *ogre_nullable           sceneManager,
                                 ParticleSystemManager2 *ogre_nullable master );
@@ -169,6 +167,8 @@ namespace Ogre
         IndexBufferPacked *_getSharedIndexBuffer( size_t maxQuota, VaoManager *vaoManager );
 
         void update( Real timeSinceLast );
+
+        void _updateParallel( size_t threadIdx, size_t numThreads );
 
         void _addParticleSystemDefAsActive( ParticleSystemDef *def );
         void _removeParticleSystemDefFromActive( ParticleSystemDef *def );
