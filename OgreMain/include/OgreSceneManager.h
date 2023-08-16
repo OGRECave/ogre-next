@@ -819,6 +819,7 @@ namespace Ogre
             WARM_UP_SHADERS,
             WARM_UP_SHADERS_COMPILE,
             PARALLEL_HLMS_COMPILE,
+            PARTICLE_SYSTEM_MANAGER2,
             USER_UNIFORM_SCALABLE_TASK,
             STOP_THREADS,
             NUM_REQUESTS
@@ -1961,6 +1962,8 @@ namespace Ogre
 
         void _fireParallelHlmsCompile();
         void waitForParallelHlmsCompile();
+
+        void _fireParticleSystemManager2Update();
 
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
         void _frameEnded();
