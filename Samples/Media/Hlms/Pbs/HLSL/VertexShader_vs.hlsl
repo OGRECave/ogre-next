@@ -3,20 +3,29 @@
 
 @insertpiece( SetCrossPlatformSettings )
 
+// START UNIFORM D3D PRE DECLARATION
+@insertpiece( ParticleSystemDeclVS )
+// END UNIFORM D3D PRE DECLARATION
+
 @insertpiece( DefaultHeaderVS )
 @insertpiece( custom_vs_uniformDeclaration )
 
 struct VS_INPUT
 {
+@property( !hlms_particle_system )
 	float4 vertex : POSITION;
-@property( hlms_normal )	float3 normal : NORMAL;@end
-@property( hlms_qtangent )	float4 qtangent : NORMAL;@end
+	@property( hlms_normal )	float3 normal : NORMAL;@end
+	@property( hlms_qtangent )	float4 qtangent : NORMAL;@end
 
-@property( normal_map && !hlms_qtangent )
-	@property( hlms_tangent4 )float4 tangent	: TANGENT;@end
-	@property( !hlms_tangent4 )float3 tangent	: TANGENT;@end
-	@property( hlms_binormal )float3 binormal	: BINORMAL;@end
-@end
+	@property( normal_map && !hlms_qtangent )
+		@property( hlms_tangent4 )float4 tangent	: TANGENT;@end
+		@property( !hlms_tangent4 )float3 tangent	: TANGENT;@end
+		@property( hlms_binormal )float3 binormal	: BINORMAL;@end
+	@end
+
+	@foreach( hlms_uv_count, n )
+		float@value( hlms_uv_count@n ) uv@n : TEXCOORD@n;@end
+@end /// hlms_particle_system
 
 @property( hlms_skeleton )
 	uint4 blendIndices	: BLENDINDICES;
@@ -27,8 +36,6 @@ struct VS_INPUT
 	uint vertexId: SV_VertexID;
 @end
 
-@foreach( hlms_uv_count, n )
-	float@value( hlms_uv_count@n ) uv@n : TEXCOORD@n;@end
 	uint drawId : DRAWID;
 	@insertpiece( custom_vs_attributes )
 };
@@ -53,7 +60,9 @@ struct PS_INPUT
 };
 
 // START UNIFORM D3D DECLARATION
-ReadOnlyBuffer( 0, float4, worldMatBuf );
+@property( !hlms_particle_system )
+	ReadOnlyBuffer( 0, float4, worldMatBuf );
+@end
 @property( hlms_pose )
 	Buffer<float4> poseBuf : register(t@value(poseBuf));
 @end
