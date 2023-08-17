@@ -122,5 +122,22 @@
 		inVs_uv0.x = dot( inVs_uv0.xy - 0.5f, particleRotMatrix.xy ) + 0.5f;
 		inVs_uv0.y = dot( inVs_uv0.xy - 0.5f, particleRotMatrix.zw ) + 0.5f;
 	@end
+
+	@property( hlms_normal )
+		float4 worldPos = inVs_vertex;
+
+		#undef worldViewMat
+		#define worldViewMat passBuf.view
+		#undef inVs_normal
+		float3 inVs_normal = normalize( cross( particleRightVec, particleUpVec ) );
+		@property( normal_map )
+			#undef inVs_tangent
+			float4 inVs_tangent = float4( normalize( particleRightVec ), -1.0f );
+		@end
+		@property( hlms_num_shadow_map_lights )
+			// We need worldNorm for normal offset bias
+			midf3 worldNorm = midf3_c( inVs_normal );
+		@end
+	@end
 @end
 @end
