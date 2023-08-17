@@ -172,7 +172,10 @@ namespace Ogre
     {
         DescBindingRange *descBindingRanges = rootLayout.mDescBindingRanges[0];
 
-        descBindingRanges[DescBindingTypes::ConstBuffer].end = msHasParticleFX2Plugin ? 4u : 3u;
+        if( getProperty( tid, HlmsBaseProp::ParticleSystem ) == 0 )
+            descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
+        else
+            descBindingRanges[DescBindingTypes::ConstBuffer].end = 4u;
 
         if( getProperty( tid, UnlitProperty::TextureMatrix ) == 0 )
             descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;

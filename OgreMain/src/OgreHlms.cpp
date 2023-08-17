@@ -276,7 +276,7 @@ namespace Ogre
 #endif
 
     LightweightMutex Hlms::msGlobalMutex;
-    bool Hlms::msHasParticleFX2Plugin = true;
+    bool Hlms::msHasParticleFX2Plugin = false;
 
     Hlms::Hlms( HlmsTypes type, const String &typeName, Archive *dataFolder,
                 ArchiveVec *libraryFolders ) :

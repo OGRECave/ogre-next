@@ -665,6 +665,13 @@ namespace Ogre
         /// If this value returns false, then HlmsDiskCache doesn't need saving.
         bool isShaderCodeCacheDirty() const { return mShaderCodeCacheDirty; }
 
+        static void _setHasParticleFX2Plugin( bool bHasPfx2Plugin )
+        {
+            msHasParticleFX2Plugin = bHasPfx2Plugin;
+        }
+
+        static bool hasParticleFX2Plugin() { return msHasParticleFX2Plugin; }
+
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit
             Maximum number of area approx lights that will be considered by the shader.

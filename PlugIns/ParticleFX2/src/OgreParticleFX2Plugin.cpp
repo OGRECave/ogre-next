@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreCylinderEmitter2.h"
 #include "OgreDirectionRandomiserAffector2.h"
 #include "OgreEllipsoidEmitter2.h"
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
 #include "OgreHollowEllipsoidEmitter2.h"
 #include "OgreLinearForceAffector2.h"
 #include "OgrePointEmitter2.h"
@@ -58,6 +60,34 @@ const String &ParticleFX2Plugin::getName() const
 //-----------------------------------------------------------------------------
 void ParticleFX2Plugin::install( const NameValuePairList * )
 {
+    if( !Hlms::hasParticleFX2Plugin() )
+    {
+        HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
+
+        bool bCanInstallPlugin = true;
+
+        if( hlmsManager )
+        {
+            if( hlmsManager->getHlms( HLMS_PBS ) ||   //
+                hlmsManager->getHlms( HLMS_TOON ) ||  //
+                hlmsManager->getHlms( HLMS_UNLIT ) )
+            {
+                bCanInstallPlugin = false;
+            }
+        }
+
+        if( bCanInstallPlugin )
+        {
+            Hlms::_setHasParticleFX2Plugin( true );
+        }
+        else
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "ParticleFX2 must be installed BEFORE creating Pbs & Unlit Hlms.",
+                         "ParticleFX2Plugin::install" );
+        }
+    }
+
     // -- Create all new particle emitter factories --
     ParticleEmitterDefDataFactory *pEmitFact;
 
@@ -136,6 +166,28 @@ void ParticleFX2Plugin::uninstall()
     {
         ParticleSystemManager2::removeEmitterFactory( emitterFactory );
         delete emitterFactory;
+    }
+
+    // We can only unset Hlms::msHasParticleFX2Plugin if there are no active Hlms.
+    // Otherwise we just have to leave it on.
+    if( Hlms::hasParticleFX2Plugin() )
+    {
+        HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
+
+        bool bCanUninstallPlugin = true;
+
+        if( hlmsManager )
+        {
+            if( hlmsManager->getHlms( HLMS_PBS ) ||   //
+                hlmsManager->getHlms( HLMS_TOON ) ||  //
+                hlmsManager->getHlms( HLMS_UNLIT ) )
+            {
+                bCanUninstallPlugin = false;
+            }
+        }
+
+        if( bCanUninstallPlugin )
+            Hlms::_setHasParticleFX2Plugin( false );
     }
 }
 //-----------------------------------------------------------------------------
