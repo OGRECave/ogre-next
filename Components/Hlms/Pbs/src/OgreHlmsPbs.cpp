@@ -336,6 +336,10 @@ namespace Ogre
 
         // Override defaults
         mLightGatheringMode = LightGatherForwardPlus;
+
+        // It is always 0.
+        // (0 is world matrix, we don't need it for particles. 1 is animation matrix)
+        mParticleSystemSlot = 0u;
     }
     //-----------------------------------------------------------------------------------
     HlmsPbs::~HlmsPbs() { destroyAllBuffers(); }
@@ -945,7 +949,8 @@ namespace Ogre
         setProperty(  kNoTid,HlmsBaseProp::DiffuseMap, (bool)datablock->getTexture( PBSM_DETAIL1 ) );*/
         bool normalMapCanBeSupported = ( getProperty( kNoTid, HlmsBaseProp::Normal ) &&
                                          getProperty( kNoTid, HlmsBaseProp::Tangent ) ) ||
-                                       getProperty( kNoTid, HlmsBaseProp::QTangent );
+                                       getProperty( kNoTid, HlmsBaseProp::QTangent ) ||
+                                       getProperty( kNoTid, HlmsBaseProp::ParticleSystem );
 
         if( !normalMapCanBeSupported && !datablockNormalMaps.empty() )
         {
@@ -1372,6 +1377,19 @@ namespace Ogre
 
         // This is a regular property!
         setProperty( tid, "samplerStateStart", samplerStateStart );
+
+        if( getProperty( HlmsBaseProp::ParticleSystem ) )
+        {
+            setProperty( tid, "particleSystemConstSlot", mParticleSystemConstSlot );
+            if( mVaoManager->readOnlyIsTexBuffer() )
+                setTextureReg( tid, VertexShader, "particleSystemGpuData", mParticleSystemSlot );
+            else
+                setProperty( tid, "particleSystemGpuData", mParticleSystemSlot );
+
+            setProperty( kNoTid, HlmsBaseProp::Normal, 1 );
+            setProperty( kNoTid, HlmsBaseProp::Tangent4, 1 );
+            setProperty( kNoTid, HlmsBaseProp::UvCount, 1 );
+        }
     }
     //-----------------------------------------------------------------------------------
     bool HlmsPbs::requiredPropertyByAlphaTest( IdString keyName )
@@ -1718,6 +1736,12 @@ namespace Ogre
                 if( mUseLightBuffers )
                     numPassConstBuffers += 3u;
                 numPassConstBuffers += mAtmosphere->preparePassHash( this, numPassConstBuffers );
+            }
+
+            if( msHasParticleFX2Plugin )
+            {
+                mParticleSystemConstSlot = static_cast<uint8>( numPassConstBuffers );
+                ++numPassConstBuffers;
             }
 
             mNumPassConstBuffers = numPassConstBuffers;
