@@ -66,6 +66,10 @@ namespace Ogre
     public:
         EmitterDefData();
 
+        void setInitialDimensions( const Vector2 &dim );
+
+        const Vector2 &getInitialDimensions() const { return mDimensions; }
+
         /// Override so we don't use it accidentally (we use genEmissionCount() instead).
         unsigned short _getEmissionCount( Real timeElapsed ) final;
 

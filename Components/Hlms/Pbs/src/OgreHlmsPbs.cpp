@@ -1387,7 +1387,7 @@ namespace Ogre
                 setProperty( tid, "particleSystemGpuData", mParticleSystemSlot );
 
             setProperty( kNoTid, HlmsBaseProp::Normal, 1 );
-            setProperty( kNoTid, HlmsBaseProp::Tangent4, 1 );
+            setProperty( kNoTid, HlmsBaseProp::Tangent, 1 );
             setProperty( kNoTid, HlmsBaseProp::UvCount, 1 );
         }
     }
