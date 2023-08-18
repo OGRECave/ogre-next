@@ -121,7 +121,7 @@ namespace Ogre
         /** Internal for initializing some defaults and parameters
         @return True if custom parameters need initialising
         */
-        bool initDefaults( const String &mType );
+        bool initDefaults();
 
         /// Command objects
         static CmdWidth  msWidthCmd;

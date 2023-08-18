@@ -109,13 +109,13 @@ namespace Ogre
             void   doSet( void *target, const String &val ) override;
         };
 
-        static CmdBillboardType   msBillboardTypeCmd;
+        static CmdBillboardType msBillboardTypeCmd;
 #if 0
         static CmdBillboardOrigin msBillboardOriginCmd;
 #endif
         static CmdBillboardRotationType msBillboardRotationTypeCmd;
-        static CmdCommonDirection msCommonDirectionCmd;
-        static CmdCommonUpVector  msCommonUpVectorCmd;
+        static CmdCommonDirection       msCommonDirectionCmd;
+        static CmdCommonUpVector        msCommonUpVectorCmd;
 
     public:
         static constexpr uint32 InvalidHandle = 0xFFFFFFFF;

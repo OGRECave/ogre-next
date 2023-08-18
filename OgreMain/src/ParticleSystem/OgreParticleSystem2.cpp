@@ -292,7 +292,7 @@ void ParticleSystemDef::setParticleQuota( size_t quota )
 {
     OGRE_ASSERT_LOW( !isInitialized() );
     mActiveParticles.reset( alignToNextMultiple<size_t>( quota, ARRAY_PACKED_REALS ) );
-    mPoolSize = quota; // In case ParticleSystem::getParticleQuota gets called.
+    mPoolSize = quota;  // In case ParticleSystem::getParticleQuota gets called.
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemDef::setParticleType( ParticleType::ParticleType particleType )

@@ -301,7 +301,7 @@ namespace Ogre
     DEFINE_UPDATE_R_DIVISION(           ArrayReal,          /=, vmulq_f32 );
     // clang-format on
 
-    //Functions
+    // Functions
     //-----------------------------------------------------------------------------------
     inline void ArrayVector4::fma3x1( const ArrayReal m, const ArrayReal a,  //
                                       const ArrayReal m2, const ArrayReal a2 )
@@ -313,20 +313,20 @@ namespace Ogre
         mChunkBase[3] = _mm_madd_ps( mChunkBase[3], m2, a2 );
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector4::makeFloor( const ArrayVector4& cmp )
+    inline void ArrayVector4::makeFloor( const ArrayVector4 &cmp )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = mChunkBase;
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
         aChunkBase[0] = vminq_f32( aChunkBase[0], bChunkBase[0] );
         aChunkBase[1] = vminq_f32( aChunkBase[1], bChunkBase[1] );
         aChunkBase[2] = vminq_f32( aChunkBase[2], bChunkBase[2] );
         aChunkBase[3] = vminq_f32( aChunkBase[3], bChunkBase[3] );
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector4::makeCeil( const ArrayVector4& cmp )
+    inline void ArrayVector4::makeCeil( const ArrayVector4 &cmp )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = mChunkBase;
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
         aChunkBase[0] = vmaxq_f32( aChunkBase[0], bChunkBase[0] );
         aChunkBase[1] = vmaxq_f32( aChunkBase[1], bChunkBase[1] );
         aChunkBase[2] = vmaxq_f32( aChunkBase[2], bChunkBase[2] );
@@ -398,4 +398,4 @@ namespace Ogre
 #undef DEFINE_UPDATE_DIVISION
 #undef DEFINE_UPDATE_R_SCALAR_DIVISION
 #undef DEFINE_UPDATE_R_DIVISION
-}
+}  // namespace Ogre

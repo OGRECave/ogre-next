@@ -273,8 +273,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline void ArrayVector4::Cmov4( ArrayMaskR mask, const ArrayVector4 &replacement )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = &mChunkBase[0];
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = &replacement.mChunkBase[0];
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = &mChunkBase[0];
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = &replacement.mChunkBase[0];
         aChunkBase[0] = MathlibC::Cmov4( aChunkBase[0], bChunkBase[0], mask );
         aChunkBase[1] = MathlibC::Cmov4( aChunkBase[1], bChunkBase[1], mask );
         aChunkBase[2] = MathlibC::Cmov4( aChunkBase[2], bChunkBase[2], mask );
@@ -283,15 +283,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline void ArrayVector4::CmovRobust( ArrayMaskR mask, const ArrayVector4 &replacement )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = &mChunkBase[0];
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = &replacement.mChunkBase[0];
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = &mChunkBase[0];
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = &replacement.mChunkBase[0];
         aChunkBase[0] = MathlibC::CmovRobust( aChunkBase[0], bChunkBase[0], mask );
         aChunkBase[1] = MathlibC::CmovRobust( aChunkBase[1], bChunkBase[1], mask );
         aChunkBase[2] = MathlibC::CmovRobust( aChunkBase[2], bChunkBase[2], mask );
         aChunkBase[3] = MathlibC::CmovRobust( aChunkBase[3], bChunkBase[3], mask );
     }
     //-----------------------------------------------------------------------------------
-    
+
 #undef DEFINE_OPERATION
 #undef DEFINE_L_OPERATION
 #undef DEFINE_R_OPERATION
@@ -306,4 +306,4 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     // END CODE TO BE COPIED TO OgreArrayVector4.inl
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

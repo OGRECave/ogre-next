@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-	OGRE_ASSUME_NONNULL_BEGIN
+    OGRE_ASSUME_NONNULL_BEGIN
 
     /** This class defines a ParticleAffector which applies a linear force to particles in a system.
     @remarks
@@ -49,11 +49,11 @@ namespace Ogre
         it is not self-stabilising and can lead to perpetually increasing particle velocities.
         You choose the approach by calling the setForceApplication method.
     */
-	class _OgreParticleFX2Export LinearForceAffector2 : public ParticleAffector2
-	{
-	private:
+    class _OgreParticleFX2Export LinearForceAffector2 : public ParticleAffector2
+    {
+    private:
         /** Command object for force vector (see ParamCommand).*/
-		class _OgrePrivate CmdForceVector final : public ParamCommand
+        class _OgrePrivate CmdForceVector final : public ParamCommand
         {
         public:
             String doGet( const void *target ) const override;
@@ -61,18 +61,18 @@ namespace Ogre
         };
 
         /** Command object for force application (see ParamCommand).*/
-		class _OgrePrivate CmdForceApp final : public ParamCommand
+        class _OgrePrivate CmdForceApp final : public ParamCommand
         {
         public:
             String doGet( const void *target ) const override;
             void   doSet( void *target, const String &val ) override;
         };
 
-		/// Command objects
-		static CmdForceVector msForceVectorCmd;
-		static CmdForceApp    msForceAppCmd;
+        /// Command objects
+        static CmdForceVector msForceVectorCmd;
+        static CmdForceApp    msForceAppCmd;
 
-	public:
+    public:
         /// Choice of how to apply the force vector to particles
         enum ForceApplication
         {
@@ -82,22 +82,22 @@ namespace Ogre
             FA_ADD
         };
 
-	protected:
-		/// Force vector
-		Vector3 mForceVector;
+    protected:
+        /// Force vector
+        Vector3 mForceVector;
 
-		/// How to apply force
-		ForceApplication mForceApplication;
+        /// How to apply force
+        ForceApplication mForceApplication;
 
-	public:
-		LinearForceAffector2();
+    public:
+        LinearForceAffector2();
 
-		void run( ParticleCpuData cpuData, size_t numParticles, ArrayReal timeSinceLast ) const override;
+        void run( ParticleCpuData cpuData, size_t numParticles, ArrayReal timeSinceLast ) const override;
 
-		/// Sets the force vector to apply to the particles in a system.
+        /// Sets the force vector to apply to the particles in a system.
         void setForceVector( const Vector3 &force );
 
-		/// Gets the force vector to apply to the particles in a system.
+        /// Gets the force vector to apply to the particles in a system.
         Vector3 getForceVector() const;
 
         /** Sets how the force vector is applied to a particle.
@@ -114,21 +114,21 @@ namespace Ogre
 
         void _cloneFrom( const ParticleAffector2 *original ) override;
 
-		String getType() const override;
+        String getType() const override;
     };
 
-	class _OgrePrivate LinearForceAffectorFactory2 final : public ParticleAffectorFactory2
-	{
-		String getName() const override { return "LinearForce"; }
+    class _OgrePrivate LinearForceAffectorFactory2 final : public ParticleAffectorFactory2
+    {
+        String getName() const override { return "LinearForce"; }
 
-		ParticleAffector2 *createAffector() override
-		{
-			ParticleAffector2 *p = new LinearForceAffector2();
-			return p;
-		}
-	};
+        ParticleAffector2 *createAffector() override
+        {
+            ParticleAffector2 *p = new LinearForceAffector2();
+            return p;
+        }
+    };
 
-	OGRE_ASSUME_NONNULL_END
+    OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 
 #endif

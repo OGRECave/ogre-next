@@ -11,4 +11,5 @@ PluginFolder=@OGRE_PLUGIN_DIR_REL@
 @OGRE_COMMENT_RENDERSYSTEM_GLES2@ PluginOptional=RenderSystem_GLES2
 # If you add another RenderSystem make sure Vulkan is the last one or you might encounter issues on nVidia cards.
 @OGRE_COMMENT_RENDERSYSTEM_VULKAN@ PluginOptional=RenderSystem_Vulkan
-@OGRE_COMMENT_PLUGIN_PARTICLEFX@ Plugin=Plugin_ParticleFX2
+@OGRE_COMMENT_PLUGIN_PARTICLEFX@ Plugin=Plugin_ParticleFX
+@OGRE_COMMENT_PLUGIN_PARTICLEFX2@ Plugin=Plugin_ParticleFX2

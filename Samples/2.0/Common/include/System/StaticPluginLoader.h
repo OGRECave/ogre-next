@@ -50,6 +50,9 @@ namespace Ogre
     class VulkanPlugin;
 #    endif
 #    ifdef OGRE_BUILD_PLUGIN_PFX
+    class ParticleFXPlugin;
+#    endif
+#    ifdef OGRE_BUILD_PLUGIN_PFX2
     class ParticleFX2Plugin;
 #    endif
 #endif
@@ -79,6 +82,9 @@ namespace Demo
         Ogre::VulkanPlugin *mVulkanPlugin;
 #    endif
 #    ifdef OGRE_BUILD_PLUGIN_PFX
+        Ogre::ParticleFXPlugin *mPFXPlugin;
+#    endif
+#    ifdef OGRE_BUILD_PLUGIN_PFX2
         Ogre::ParticleFX2Plugin *mPFX2Plugin;
 #    endif
 #endif

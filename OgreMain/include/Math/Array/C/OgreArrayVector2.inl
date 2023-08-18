@@ -31,8 +31,8 @@ namespace Ogre
     /** HOW THIS WORKS:
 
         Instead of writing like 12 times the same code, we use macros:
-		DEFINE_OPERATION( ArrayVector2, ArrayVector2, +, _mm_add_ps );
-		Means: "define '+' operator that takes both arguments as ArrayVector2 and use
+        DEFINE_OPERATION( ArrayVector2, ArrayVector2, +, _mm_add_ps );
+        Means: "define '+' operator that takes both arguments as ArrayVector2 and use
         the _mm_add_ps intrinsic to do the job"
 
         Note that for scalars (i.e. floats) we use DEFINE_L_SCALAR_OPERATION/DEFINE_R_SCALAR_OPERATION
@@ -199,168 +199,162 @@ namespace Ogre
     // /=
 	DEFINE_UPDATE_DIVISION(             ArrayVector2,       /=, / );
     DEFINE_UPDATE_R_SCALAR_DIVISION(    Real,               /=, * );
-	// clang-format on
+    // clang-format on
 
-	// Functions
+    // Functions
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::length() const
+    inline ArrayReal ArrayVector2::length() const
     {
-		return std::sqrt( ( mChunkBase[0] * mChunkBase[0] ) +  //
-						  ( mChunkBase[1] * mChunkBase[1] ) );
+        return std::sqrt( ( mChunkBase[0] * mChunkBase[0] ) +  //
+                          ( mChunkBase[1] * mChunkBase[1] ) );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::squaredLength() const
+    inline ArrayReal ArrayVector2::squaredLength() const
     {
-		return ( mChunkBase[0] * mChunkBase[0] ) +  //
-			   ( mChunkBase[1] * mChunkBase[1] );
+        return ( mChunkBase[0] * mChunkBase[0] ) +  //
+               ( mChunkBase[1] * mChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::distance( const ArrayVector2& rhs ) const
+    inline ArrayReal ArrayVector2::distance( const ArrayVector2 &rhs ) const
     {
-        return (*this - rhs).length();
+        return ( *this - rhs ).length();
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::squaredDistance( const ArrayVector2& rhs ) const
+    inline ArrayReal ArrayVector2::squaredDistance( const ArrayVector2 &rhs ) const
     {
-        return (*this - rhs).squaredLength();
+        return ( *this - rhs ).squaredLength();
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::dotProduct( const ArrayVector2& vec ) const
+    inline ArrayReal ArrayVector2::dotProduct( const ArrayVector2 &vec ) const
     {
-		return ( mChunkBase[0] * vec.mChunkBase[0] ) + ( mChunkBase[1] * vec.mChunkBase[1] );
+        return ( mChunkBase[0] * vec.mChunkBase[0] ) + ( mChunkBase[1] * vec.mChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::absDotProduct( const ArrayVector2& vec ) const
+    inline ArrayReal ArrayVector2::absDotProduct( const ArrayVector2 &vec ) const
     {
-		return Math::Abs( ( mChunkBase[0] * vec.mChunkBase[0] ) ) +
-			   Math::Abs( ( mChunkBase[1] * vec.mChunkBase[1] ) );
+        return Math::Abs( ( mChunkBase[0] * vec.mChunkBase[0] ) ) +
+               Math::Abs( ( mChunkBase[1] * vec.mChunkBase[1] ) );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::normalise()
+    inline void ArrayVector2::normalise()
     {
-		ArrayReal sqLength = ( mChunkBase[0] * mChunkBase[0] ) +  //
-							 ( mChunkBase[1] * mChunkBase[1] );
+        ArrayReal sqLength = ( mChunkBase[0] * mChunkBase[0] ) +  //
+                             ( mChunkBase[1] * mChunkBase[1] );
 
-		// Convert sqLength's 0s into 1, so that zero vectors remain as zero
-		// Denormals are treated as 0 during the check.
-		// Note: We could create a mask now and nuke nans after InvSqrt, however
-		// generating the nans could impact performance in some architectures
+        // Convert sqLength's 0s into 1, so that zero vectors remain as zero
+        // Denormals are treated as 0 during the check.
+        // Note: We could create a mask now and nuke nans after InvSqrt, however
+        // generating the nans could impact performance in some architectures
         sqLength = MathlibC::Cmov4( sqLength, 1.0f, sqLength > MathlibC::FLOAT_MIN );
         ArrayReal invLength = MathlibC::InvSqrtNonZero4( sqLength );
-		mChunkBase[0] = mChunkBase[0] * invLength;  // x * invLength
-		mChunkBase[1] = mChunkBase[1] * invLength;  // y * invLength
+        mChunkBase[0] = mChunkBase[0] * invLength;  // x * invLength
+        mChunkBase[1] = mChunkBase[1] * invLength;  // y * invLength
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::crossProduct( const ArrayVector2& rkVec ) const
+    inline ArrayReal ArrayVector2::crossProduct( const ArrayVector2 &rkVec ) const
     {
-		return ( mChunkBase[0] * rkVec.mChunkBase[1] ) -  //
-			   ( mChunkBase[1] * rkVec.mChunkBase[0] );   // x * rkVec.y - y * rkVec.x
+        return ( mChunkBase[0] * rkVec.mChunkBase[1] ) -  //
+               ( mChunkBase[1] * rkVec.mChunkBase[0] );   // x * rkVec.y - y * rkVec.x
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayVector2 ArrayVector2::midPoint( const ArrayVector2& rkVec ) const
+    inline ArrayVector2 ArrayVector2::midPoint( const ArrayVector2 &rkVec ) const
     {
-		return ArrayVector2( ( mChunkBase[0] + rkVec.mChunkBase[0] ) * 0.5f,
-							 ( mChunkBase[1] + rkVec.mChunkBase[1] ) * 0.5f );
+        return ArrayVector2( ( mChunkBase[0] + rkVec.mChunkBase[0] ) * 0.5f,
+                             ( mChunkBase[1] + rkVec.mChunkBase[1] ) * 0.5f );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::makeFloor( const ArrayVector2& cmp )
+    inline void ArrayVector2::makeFloor( const ArrayVector2 &cmp )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = &mChunkBase[0];
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = &cmp.mChunkBase[0];
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = &mChunkBase[0];
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = &cmp.mChunkBase[0];
         aChunkBase[0] = std::min( aChunkBase[0], bChunkBase[0] );
-		aChunkBase[1] = std::min( aChunkBase[1], bChunkBase[1] );
+        aChunkBase[1] = std::min( aChunkBase[1], bChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::makeCeil( const ArrayVector2& cmp )
+    inline void ArrayVector2::makeCeil( const ArrayVector2 &cmp )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = &mChunkBase[0];
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = &cmp.mChunkBase[0];
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = &mChunkBase[0];
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = &cmp.mChunkBase[0];
         aChunkBase[0] = std::max( aChunkBase[0], bChunkBase[0] );
-		aChunkBase[1] = std::max( aChunkBase[1], bChunkBase[1] );
+        aChunkBase[1] = std::max( aChunkBase[1], bChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::getMinComponent() const
+    inline ArrayReal ArrayVector2::getMinComponent() const
     {
-		return std::min( mChunkBase[0], mChunkBase[1] );
+        return std::min( mChunkBase[0], mChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayReal ArrayVector2::getMaxComponent() const
+    inline ArrayReal ArrayVector2::getMaxComponent() const
     {
-		return std::max( mChunkBase[0], mChunkBase[1] );
+        return std::max( mChunkBase[0], mChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::setToSign()
+    inline void ArrayVector2::setToSign()
     {
         mChunkBase[0] = mChunkBase[0] >= 0 ? 1.0f : -1.0f;
-		mChunkBase[1] = mChunkBase[1] >= 0 ? 1.0f : -1.0f;
+        mChunkBase[1] = mChunkBase[1] >= 0 ? 1.0f : -1.0f;
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayVector2 ArrayVector2::perpendicular() const
-	{
-		return ArrayVector2( -mChunkBase[1], mChunkBase[0] );
-    }
-    //-----------------------------------------------------------------------------------
-	inline ArrayVector2 ArrayVector2::normalisedCopy() const
+    inline ArrayVector2 ArrayVector2::perpendicular() const
     {
-		ArrayReal sqLength = ( mChunkBase[0] * mChunkBase[0] ) +  //
-							 ( mChunkBase[1] * mChunkBase[1] );
+        return ArrayVector2( -mChunkBase[1], mChunkBase[0] );
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayVector2 ArrayVector2::normalisedCopy() const
+    {
+        ArrayReal sqLength = ( mChunkBase[0] * mChunkBase[0] ) +  //
+                             ( mChunkBase[1] * mChunkBase[1] );
 
-		// Convert sqLength's 0s into 1, so that zero vectors remain as zero
-		// Denormals are treated as 0 during the check.
-		// Note: We could create a mask now and nuke nans after InvSqrt, however
-		// generating the nans could impact performance in some architectures
+        // Convert sqLength's 0s into 1, so that zero vectors remain as zero
+        // Denormals are treated as 0 during the check.
+        // Note: We could create a mask now and nuke nans after InvSqrt, however
+        // generating the nans could impact performance in some architectures
         sqLength = MathlibC::Cmov4( sqLength, MathlibC::ONE, sqLength > MathlibC::FLOAT_MIN );
         ArrayReal invLength = MathlibC::InvSqrtNonZero4( sqLength );
 
-		return ArrayVector2( mChunkBase[0] * invLength,    // x * invLength
-							 mChunkBase[1] * invLength );  // y * invLength
+        return ArrayVector2( mChunkBase[0] * invLength,    // x * invLength
+                             mChunkBase[1] * invLength );  // y * invLength
     }
     //-----------------------------------------------------------------------------------
-	inline ArrayVector2 ArrayVector2::reflect( const ArrayVector2& normal ) const
+    inline ArrayVector2 ArrayVector2::reflect( const ArrayVector2 &normal ) const
     {
         return ( *this - ( 2.0f * this->dotProduct( normal ) ) * normal );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::inverseLeaveZeroes()
+    inline void ArrayVector2::inverseLeaveZeroes()
     {
-		mChunkBase[0] = MathlibC::CmovRobust( mChunkBase[0], MathlibC::InvNonZero4( mChunkBase[0] ),
-											  mChunkBase[0] == 0.0f );
-		mChunkBase[1] = MathlibC::CmovRobust( mChunkBase[1], MathlibC::InvNonZero4( mChunkBase[1] ),
-											  mChunkBase[1] == 0.0f );
+        mChunkBase[0] = MathlibC::CmovRobust( mChunkBase[0], MathlibC::InvNonZero4( mChunkBase[0] ),
+                                              mChunkBase[0] == 0.0f );
+        mChunkBase[1] = MathlibC::CmovRobust( mChunkBase[1], MathlibC::InvNonZero4( mChunkBase[1] ),
+                                              mChunkBase[1] == 0.0f );
     }
     //-----------------------------------------------------------------------------------
-	inline int ArrayVector2::isNaN() const
+    inline int ArrayVector2::isNaN() const
     {
-		return Math::isNaN( mChunkBase[0] ) | Math::isNaN( mChunkBase[1] );
-	}
-    //-----------------------------------------------------------------------------------
-	inline Vector2 ArrayVector2::collapseMin() const
-    {
-		return Vector2( mChunkBase[0], mChunkBase[1] );
+        return Math::isNaN( mChunkBase[0] ) | Math::isNaN( mChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-	inline Vector2 ArrayVector2::collapseMax() const
-    {
-		return Vector2( mChunkBase[0], mChunkBase[1] );
-    }
+    inline Vector2 ArrayVector2::collapseMin() const { return Vector2( mChunkBase[0], mChunkBase[1] ); }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::Cmov4( ArrayMaskR mask, const ArrayVector2 &replacement )
+    inline Vector2 ArrayVector2::collapseMax() const { return Vector2( mChunkBase[0], mChunkBase[1] ); }
+    //-----------------------------------------------------------------------------------
+    inline void ArrayVector2::Cmov4( ArrayMaskR mask, const ArrayVector2 &replacement )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = &mChunkBase[0];
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = &replacement.mChunkBase[0];
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = &mChunkBase[0];
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = &replacement.mChunkBase[0];
         aChunkBase[0] = MathlibC::Cmov4( aChunkBase[0], bChunkBase[0], mask );
-		aChunkBase[1] = MathlibC::Cmov4( aChunkBase[1], bChunkBase[1], mask );
+        aChunkBase[1] = MathlibC::Cmov4( aChunkBase[1], bChunkBase[1], mask );
     }
     //-----------------------------------------------------------------------------------
-	inline void ArrayVector2::CmovRobust( ArrayMaskR mask, const ArrayVector2 &replacement )
+    inline void ArrayVector2::CmovRobust( ArrayMaskR mask, const ArrayVector2 &replacement )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = &mChunkBase[0];
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = &replacement.mChunkBase[0];
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = &mChunkBase[0];
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = &replacement.mChunkBase[0];
         aChunkBase[0] = MathlibC::CmovRobust( aChunkBase[0], bChunkBase[0], mask );
-		aChunkBase[1] = MathlibC::CmovRobust( aChunkBase[1], bChunkBase[1], mask );
-	}
+        aChunkBase[1] = MathlibC::CmovRobust( aChunkBase[1], bChunkBase[1], mask );
+    }
     //-----------------------------------------------------------------------------------
-    
+
 #undef DEFINE_OPERATION
 #undef DEFINE_L_OPERATION
 #undef DEFINE_R_OPERATION
@@ -373,6 +367,6 @@ namespace Ogre
 #undef DEFINE_UPDATE_R_SCALAR_DIVISION
 
     //-----------------------------------------------------------------------------------
-	// END CODE TO BE COPIED TO OgreArrayVector2.inl
+    // END CODE TO BE COPIED TO OgreArrayVector2.inl
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

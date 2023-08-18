@@ -44,10 +44,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    EllipsoidEmitter::EllipsoidEmitter( ParticleSystem *psys ) : AreaEmitter( psys )
-    {
-        initDefaults( "Ellipsoid" );
-    }
+    EllipsoidEmitter::EllipsoidEmitter( ParticleSystem *psys ) : AreaEmitter( psys ) { initDefaults(); }
     //-----------------------------------------------------------------------
     void EllipsoidEmitter::_initParticle( Particle *pParticle )
     {
@@ -90,5 +87,7 @@ namespace Ogre
         // Generate simpler data
         pParticle->mTimeToLive = pParticle->mTotalTimeToLive = genEmissionTTL();
     }
-
+    //-----------------------------------------------------------------------------------
+    static const String kEllipsoidEmitterFactoryName = "Ellipsoid";
+    const String &EllipsoidEmitter::getType() const { return kEllipsoidEmitterFactoryName; }
 }  // namespace Ogre

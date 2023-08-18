@@ -293,13 +293,13 @@ namespace Ogre
         return ( *this - rhs ).squaredLength();
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayVector2::dotProduct( const ArrayVector2& vec ) const
+    inline ArrayReal ArrayVector2::dotProduct( const ArrayVector2 &vec ) const
     {
         return vaddq_f32( vmulq_f32( mChunkBase[0], vec.mChunkBase[0] ),    //( x * vec.x   +
                           vmulq_f32( mChunkBase[1], vec.mChunkBase[1] ) );  //  y * vec.y )
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayVector2::absDotProduct( const ArrayVector2& vec ) const
+    inline ArrayReal ArrayVector2::absDotProduct( const ArrayVector2 &vec ) const
     {
         return vaddq_f32(
             MathlibNEON::Abs4( vmulq_f32( mChunkBase[0], vec.mChunkBase[0] ) ),  //( abs( x * vec.x )   +
@@ -322,32 +322,32 @@ namespace Ogre
         mChunkBase[1] = vmulq_f32( mChunkBase[1], invLength );  // y * invLength
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayVector2::crossProduct( const ArrayVector2& rkVec ) const
+    inline ArrayReal ArrayVector2::crossProduct( const ArrayVector2 &rkVec ) const
     {
         return vsubq_f32(
             vmulq_f32( mChunkBase[0], rkVec.mChunkBase[1] ),
             vmulq_f32( mChunkBase[1], rkVec.mChunkBase[0] ) );  // x * rkVec.y - y * rkVec.x
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector2 ArrayVector2::midPoint( const ArrayVector2& rkVec ) const
+    inline ArrayVector2 ArrayVector2::midPoint( const ArrayVector2 &rkVec ) const
     {
         return ArrayVector2(
             vmulq_f32( vaddq_f32( mChunkBase[0], rkVec.mChunkBase[0] ), MathlibNEON::HALF ),
             vmulq_f32( vaddq_f32( mChunkBase[1], rkVec.mChunkBase[1] ), MathlibNEON::HALF ) );
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector2::makeFloor( const ArrayVector2& cmp )
+    inline void ArrayVector2::makeFloor( const ArrayVector2 &cmp )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = mChunkBase;
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
         aChunkBase[0] = vminq_f32( aChunkBase[0], bChunkBase[0] );
         aChunkBase[1] = vminq_f32( aChunkBase[1], bChunkBase[1] );
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector2::makeCeil( const ArrayVector2& cmp )
+    inline void ArrayVector2::makeCeil( const ArrayVector2 &cmp )
     {
-        ArrayReal * RESTRICT_ALIAS aChunkBase = mChunkBase;
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
+        ArrayReal *RESTRICT_ALIAS       aChunkBase = mChunkBase;
+        const ArrayReal *RESTRICT_ALIAS bChunkBase = cmp.mChunkBase;
         aChunkBase[0] = vmaxq_f32( aChunkBase[0], bChunkBase[0] );
         aChunkBase[1] = vmaxq_f32( aChunkBase[1], bChunkBase[1] );
     }
@@ -392,7 +392,7 @@ namespace Ogre
                              vmulq_f32( mChunkBase[1], invLength ) );  // y * invLength
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector2 ArrayVector2::reflect( const ArrayVector2& normal ) const
+    inline ArrayVector2 ArrayVector2::reflect( const ArrayVector2 &normal ) const
     {
         const ArrayReal twoPointZero = vdupq_n_f32( 2.0f );
         return ( *this - ( vmulq_f32( twoPointZero, this->dotProduct( normal ) ) * normal ) );
@@ -465,4 +465,4 @@ namespace Ogre
 #undef DEFINE_UPDATE_DIVISION
 #undef DEFINE_UPDATE_R_SCALAR_DIVISION
 #undef DEFINE_UPDATE_R_DIVISION
-}
+}  // namespace Ogre

@@ -29,7 +29,8 @@ void ParticleSystem::_cloneFrom( const ParticleSystem *_original )
     this->mEmittedEmitterPoolInitialised = original->mEmittedEmitterPoolInitialised;
     this->mIsEmitting = original->mIsEmitting;
     this->mParticleEmitterRootNode = original->mParticleEmitterRootNode;
-    this->mTranslateParticleDirectionIntoWorldSpace = original->mTranslateParticleDirectionIntoWorldSpace;
+    this->mTranslateParticleDirectionIntoWorldSpace =
+        original->mTranslateParticleDirectionIntoWorldSpace;
     this->mRenderer = original->mRenderer;
     this->mCullIndividual = original->mCullIndividual;
     this->mPoolSize = original->mPoolSize;

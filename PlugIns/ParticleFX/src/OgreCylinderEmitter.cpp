@@ -39,10 +39,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    CylinderEmitter::CylinderEmitter( ParticleSystem *psys ) : AreaEmitter( psys )
-    {
-        initDefaults( "Cylinder" );
-    }
+    CylinderEmitter::CylinderEmitter( ParticleSystem *psys ) : AreaEmitter( psys ) { initDefaults(); }
     //-----------------------------------------------------------------------
     void CylinderEmitter::_initParticle( Particle *pParticle )
     {
@@ -89,5 +86,7 @@ namespace Ogre
         // Generate simpler data
         pParticle->mTimeToLive = pParticle->mTotalTimeToLive = genEmissionTTL();
     }
-
+    //-----------------------------------------------------------------------------------
+    static const String kCylinderEmitterFactoryName = "Cylinder";
+    const String &CylinderEmitter::getType() const { return kCylinderEmitterFactoryName; }
 }  // namespace Ogre
