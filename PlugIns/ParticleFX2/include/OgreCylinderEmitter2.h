@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-	OGRE_ASSUME_NONNULL_BEGIN
+    OGRE_ASSUME_NONNULL_BEGIN
 
     /** Particle emitter which emits particles randomly from points inside a cylinder.
     @remarks
@@ -47,26 +47,26 @@ namespace Ogre
         is the angle across which to scatter the particles either side of the
         base direction of the emitter.
     */
-	class _OgreParticleFX2Export CylinderEmitter2 : public AreaEmitter2
+    class _OgreParticleFX2Export CylinderEmitter2 : public AreaEmitter2
     {
-	public:
-		CylinderEmitter2();
+    public:
+        CylinderEmitter2();
 
-		void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
-								   size_t numParticles ) override;
+        void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+                                   size_t numParticles ) override;
 
         const String &getType() const override;
     };
 
-	class _OgrePrivate CylinderEmitterFactory2 final : public ParticleEmitterDefDataFactory
-	{
-	public:
-		const String &getName() const override;
+    class _OgrePrivate CylinderEmitterFactory2 final : public ParticleEmitterDefDataFactory
+    {
+    public:
+        const String &getName() const override;
 
-		EmitterDefData *createEmitter() override;
-	};
+        EmitterDefData *createEmitter() override;
+    };
 
-	OGRE_ASSUME_NONNULL_END
+    OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 
 #endif

@@ -43,7 +43,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     RingEmitter::RingEmitter( ParticleSystem *psys ) : AreaEmitter( psys )
     {
-        if( initDefaults( "Ring" ) )
+        if( initDefaults() )
         {
             // Add custom parameters
             ParamDictionary *pDict = getParamDictionary();
@@ -126,6 +126,9 @@ namespace Ogre
     Real RingEmitter::getInnerSizeX() const { return mInnerSizex; }
     //-----------------------------------------------------------------------
     Real RingEmitter::getInnerSizeY() const { return mInnerSizey; }
+    //-----------------------------------------------------------------------
+    static const String kRingEmitterFactoryName = "Ring";
+    const String &RingEmitter::getType() const { return kRingEmitterFactoryName; }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     // Command objects

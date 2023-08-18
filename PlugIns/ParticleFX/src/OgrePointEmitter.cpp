@@ -34,7 +34,6 @@ namespace Ogre
     //-----------------------------------------------------------------------
     PointEmitter::PointEmitter( ParticleSystem *psys ) : ParticleEmitter( psys )
     {
-        mType = "Point";
         // Set up parameters
         if( createParamDictionary( "PointEmitter" ) )
         {
@@ -67,4 +66,7 @@ namespace Ogre
         // Use basic constant emission
         return genConstantEmissionCount( timeElapsed );
     }
+    //-----------------------------------------------------------------------------
+    static const String kPointEmitterFactoryName = "Point";
+    const String &PointEmitter::getType() const { return kPointEmitterFactoryName; }
 }  // namespace Ogre

@@ -53,10 +53,11 @@ void ColourInterpolatorAffector2::_cloneFrom( const ParticleAffector2 *_original
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const ColourInterpolatorAffector2 *>( _original ) );
 
-    const ColourInterpolatorAffector2 *original = static_cast<const ColourInterpolatorAffector2 *>( _original );
-    for( size_t i = 0u; i<6u; ++i )
+    const ColourInterpolatorAffector2 *original =
+        static_cast<const ColourInterpolatorAffector2 *>( _original );
+    for( size_t i = 0u; i < 6u; ++i )
         this->mColourAdj[i] = original->mColourAdj[i];
-    for( size_t i = 0u; i<6u; ++i )
+    for( size_t i = 0u; i < 6u; ++i )
         this->mTimeAdj[i] = original->mTimeAdj[i];
 }
 
@@ -76,7 +77,8 @@ void DirectionRandomiserAffector2::_cloneFrom( const ParticleAffector2 *_origina
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const DirectionRandomiserAffector2 *>( _original ) );
 
-    const DirectionRandomiserAffector2 *original = static_cast<const DirectionRandomiserAffector2 *>( _original );
+    const DirectionRandomiserAffector2 *original =
+        static_cast<const DirectionRandomiserAffector2 *>( _original );
     this->mRandomness = original->mRandomness;
     this->mScope = original->mScope;
     this->mKeepVelocity = original->mKeepVelocity;
@@ -119,9 +121,10 @@ void ScaleInterpolatorAffector2::_cloneFrom( const ParticleAffector2 *_original 
 {
     OGRE_ASSERT_HIGH( dynamic_cast<const ScaleInterpolatorAffector2 *>( _original ) );
 
-    const ScaleInterpolatorAffector2 *original = static_cast<const ScaleInterpolatorAffector2 *>( _original );
-    for( size_t i = 0u; i<6u; ++i )
+    const ScaleInterpolatorAffector2 *original =
+        static_cast<const ScaleInterpolatorAffector2 *>( _original );
+    for( size_t i = 0u; i < 6u; ++i )
         this->mScaleAdj[i] = original->mScaleAdj[i];
-    for( size_t i = 0u; i<6u; ++i )
+    for( size_t i = 0u; i < 6u; ++i )
         this->mTimeAdj[i] = original->mTimeAdj[i];
 }

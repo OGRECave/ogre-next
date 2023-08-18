@@ -46,8 +46,8 @@ namespace Ogre
      */
     /** Cache-friendly array of 2-dimensional represented as a SoA array.
         @remarks
-			ArrayVector2 is a SIMD & cache-friendly version of Vector2.
-			An operation on an ArrayVector2 is done on 4 vectors at a
+            ArrayVector2 is a SIMD & cache-friendly version of Vector2.
+            An operation on an ArrayVector2 is done on 4 vectors at a
             time (the actual amount is defined by ARRAY_PACKED_REALS)
             Assuming ARRAY_PACKED_REALS == 4, the memory layout will
             be as following:
@@ -59,140 +59,140 @@ namespace Ogre
             set ARRAY_PACKED_REALS = 2 depending on their needs
     */
 
-	class _OgreExport ArrayVector2
+    class _OgreExport ArrayVector2
     {
     public:
-		ArrayReal mChunkBase[2];
+        ArrayReal mChunkBase[2];
 
-		ArrayVector2() {}
-		ArrayVector2( ArrayReal chunkX, ArrayReal chunkY )
+        ArrayVector2() {}
+        ArrayVector2( ArrayReal chunkX, ArrayReal chunkY )
         {
             mChunkBase[0] = chunkX;
-			mChunkBase[1] = chunkY;
+            mChunkBase[1] = chunkY;
         }
 
-		void getAsVector2( Vector2 &out, size_t index ) const
+        void getAsVector2( Vector2 &out, size_t index ) const
         {
             // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
             const Real *aliasedReal = reinterpret_cast<const Real *>( mChunkBase );
             out.x = aliasedReal[ARRAY_PACKED_REALS * 0 + index];  // X
-			out.y = aliasedReal[ARRAY_PACKED_REALS * 1 + index];  // Y
+            out.y = aliasedReal[ARRAY_PACKED_REALS * 1 + index];  // Y
         }
 
-		/// Prefer using @see getAsVector2() because this function may have more
+        /// Prefer using @see getAsVector2() because this function may have more
         /// overhead (the other one is faster)
-		Vector2 getAsVector2( size_t index ) const
+        Vector2 getAsVector2( size_t index ) const
         {
             // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
             const Real *aliasedReal = reinterpret_cast<const Real *>( mChunkBase );
-			return Vector2( aliasedReal[ARRAY_PACKED_REALS * 0 + index],    // X
-							aliasedReal[ARRAY_PACKED_REALS * 1 + index] );  // Y
+            return Vector2( aliasedReal[ARRAY_PACKED_REALS * 0 + index],    // X
+                            aliasedReal[ARRAY_PACKED_REALS * 1 + index] );  // Y
         }
 
-		void setFromVector2( const Vector2 &v, size_t index )
+        void setFromVector2( const Vector2 &v, size_t index )
         {
             Real *aliasedReal = reinterpret_cast<Real *>( mChunkBase );
             aliasedReal[ARRAY_PACKED_REALS * 0 + index] = v.x;
-			aliasedReal[ARRAY_PACKED_REALS * 1 + index] = v.y;
+            aliasedReal[ARRAY_PACKED_REALS * 1 + index] = v.y;
         }
 
         /// Sets all packed vectors to the same value as the scalar input vector
-		void setAll( const Vector2 &v )
+        void setAll( const Vector2 &v )
         {
             mChunkBase[0] = v.x;
-			mChunkBase[1] = v.y;
+            mChunkBase[1] = v.y;
         }
 
-		inline ArrayVector2 &operator=( const Real fScalar )
+        inline ArrayVector2 &operator=( const Real fScalar )
         {
             mChunkBase[0] = fScalar;
-			mChunkBase[1] = fScalar;
+            mChunkBase[1] = fScalar;
 
             return *this;
         }
 
         // Arithmetic operations
-		inline const ArrayVector2 &operator+() const;
-		inline ArrayVector2        operator-() const;
+        inline const ArrayVector2 &operator+() const;
+        inline ArrayVector2        operator-() const;
 
-		inline friend ArrayVector2 operator+( const ArrayVector2 &lhs, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator+( Real fScalar, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator+( const ArrayVector2 &lhs, Real fScalar );
+        inline friend ArrayVector2 operator+( const ArrayVector2 &lhs, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator+( Real fScalar, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator+( const ArrayVector2 &lhs, Real fScalar );
 
-		inline friend ArrayVector2 operator+( ArrayReal fScalar, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator+( const ArrayVector2 &lhs, ArrayReal fScalar );
+        inline friend ArrayVector2 operator+( ArrayReal fScalar, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator+( const ArrayVector2 &lhs, ArrayReal fScalar );
 
-		inline friend ArrayVector2 operator-( const ArrayVector2 &lhs, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator-( Real fScalar, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator-( const ArrayVector2 &lhs, Real fScalar );
+        inline friend ArrayVector2 operator-( const ArrayVector2 &lhs, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator-( Real fScalar, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator-( const ArrayVector2 &lhs, Real fScalar );
 
-		inline friend ArrayVector2 operator-( ArrayReal fScalar, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator-( const ArrayVector2 &lhs, ArrayReal fScalar );
+        inline friend ArrayVector2 operator-( ArrayReal fScalar, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator-( const ArrayVector2 &lhs, ArrayReal fScalar );
 
-		inline friend ArrayVector2 operator*( const ArrayVector2 &lhs, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator*( Real fScalar, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator*( const ArrayVector2 &lhs, Real fScalar );
+        inline friend ArrayVector2 operator*( const ArrayVector2 &lhs, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator*( Real fScalar, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator*( const ArrayVector2 &lhs, Real fScalar );
 
-		inline friend ArrayVector2 operator*( ArrayReal fScalar, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator*( const ArrayVector2 &lhs, ArrayReal fScalar );
+        inline friend ArrayVector2 operator*( ArrayReal fScalar, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator*( const ArrayVector2 &lhs, ArrayReal fScalar );
 
-		inline friend ArrayVector2 operator/( const ArrayVector2 &lhs, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator/( Real fScalar, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator/( const ArrayVector2 &lhs, Real fScalar );
+        inline friend ArrayVector2 operator/( const ArrayVector2 &lhs, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator/( Real fScalar, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator/( const ArrayVector2 &lhs, Real fScalar );
 
-		inline friend ArrayVector2 operator/( ArrayReal fScalar, const ArrayVector2 &rhs );
-		inline friend ArrayVector2 operator/( const ArrayVector2 &lhs, ArrayReal fScalar );
+        inline friend ArrayVector2 operator/( ArrayReal fScalar, const ArrayVector2 &rhs );
+        inline friend ArrayVector2 operator/( const ArrayVector2 &lhs, ArrayReal fScalar );
 
-		inline void operator+=( const ArrayVector2 &a );
+        inline void operator+=( const ArrayVector2 &a );
         inline void operator+=( const ArrayReal fScalar );
 
-		inline void operator-=( const ArrayVector2 &a );
+        inline void operator-=( const ArrayVector2 &a );
         inline void operator-=( const ArrayReal fScalar );
 
-		inline void operator*=( const ArrayVector2 &a );
+        inline void operator*=( const ArrayVector2 &a );
         inline void operator*=( const ArrayReal fScalar );
 
-		inline void operator/=( const ArrayVector2 &a );
+        inline void operator/=( const ArrayVector2 &a );
         inline void operator/=( const ArrayReal fScalar );
 
-		/// @copydoc Vector2::length()
+        /// @copydoc Vector2::length()
         inline ArrayReal length() const;
 
-		/// @copydoc Vector2::squaredLength()
+        /// @copydoc Vector2::squaredLength()
         inline ArrayReal squaredLength() const;
 
-		/// @copydoc Vector2::distance()
-		inline ArrayReal distance( const ArrayVector2 &rhs ) const;
+        /// @copydoc Vector2::distance()
+        inline ArrayReal distance( const ArrayVector2 &rhs ) const;
 
-		/// @copydoc Vector2::squaredDistance()
-		inline ArrayReal squaredDistance( const ArrayVector2 &rhs ) const;
+        /// @copydoc Vector2::squaredDistance()
+        inline ArrayReal squaredDistance( const ArrayVector2 &rhs ) const;
 
-		/// @copydoc Vector2::dotProduct()
-		inline ArrayReal dotProduct( const ArrayVector2 &vec ) const;
+        /// @copydoc Vector2::dotProduct()
+        inline ArrayReal dotProduct( const ArrayVector2 &vec ) const;
 
-		/// @copydoc Vector2::absDotProduct()
-		inline ArrayReal absDotProduct( const ArrayVector2 &vec ) const;
+        /// @copydoc Vector2::absDotProduct()
+        inline ArrayReal absDotProduct( const ArrayVector2 &vec ) const;
 
-		/// Unlike Vector2::normalise(), this function does not return the length of the vector
-		/// because such value was not cached and was never available @see Vector2::normalise()
+        /// Unlike Vector2::normalise(), this function does not return the length of the vector
+        /// because such value was not cached and was never available @see Vector2::normalise()
         inline void normalise();
 
-		/// @copydoc Vector2::crossProduct()
+        /// @copydoc Vector2::crossProduct()
         inline ArrayReal crossProduct( const ArrayVector2 &rkVector ) const;
 
-		/// @copydoc Vector2::midPoint()
-		inline ArrayVector2 midPoint( const ArrayVector2 &vec ) const;
+        /// @copydoc Vector2::midPoint()
+        inline ArrayVector2 midPoint( const ArrayVector2 &vec ) const;
 
-		/// @copydoc Vector2::makeFloor()
-		inline void makeFloor( const ArrayVector2 &cmp );
+        /// @copydoc Vector2::makeFloor()
+        inline void makeFloor( const ArrayVector2 &cmp );
 
-		/// @copydoc Vector2::makeCeil()
-		inline void makeCeil( const ArrayVector2 &cmp );
+        /// @copydoc Vector2::makeCeil()
+        inline void makeCeil( const ArrayVector2 &cmp );
 
-		/// Returns the smallest value between x, y; min( x, y )
+        /// Returns the smallest value between x, y; min( x, y )
         inline ArrayReal getMinComponent() const;
 
-		/// Returns the biggest value between x, y; max( x, y )
+        /// Returns the biggest value between x, y; max( x, y )
         inline ArrayReal getMaxComponent() const;
 
         /** Converts the vector to (sign(x), sign(y), sign(z))
@@ -205,14 +205,14 @@ namespace Ogre
         */
         inline void setToSign();
 
-		/// @copydoc Vector2::perpendicular()
-		inline ArrayVector2 perpendicular() const;
+        /// @copydoc Vector2::perpendicular()
+        inline ArrayVector2 perpendicular() const;
 
-		/// @copydoc Vector2::normalisedCopy()
-		inline ArrayVector2 normalisedCopy() const;
+        /// @copydoc Vector2::normalisedCopy()
+        inline ArrayVector2 normalisedCopy() const;
 
-		/// @copydoc Vector2::reflect()
-		inline ArrayVector2 reflect( const ArrayVector2 &normal ) const;
+        /// @copydoc Vector2::reflect()
+        inline ArrayVector2 reflect( const ArrayVector2 &normal ) const;
 
         /** Calculates the inverse of the vectors: 1.0f / v;
             But if original is zero, the zero is left (0 / 0 = 0).
@@ -224,9 +224,9 @@ namespace Ogre
         */
         inline void inverseLeaveZeroes();
 
-		/// @see Vector2::isNaN()
+        /// @see Vector2::isNaN()
         /// @return
-		///     Return value differs from Vector2's counterpart. We return an int
+        ///     Return value differs from Vector2's counterpart. We return an int
         ///     bits 0-4 are set for each NaN of each vector inside.
         ///     if the int is non-zero, there is a NaN.
         inline int isNaN() const;
@@ -237,9 +237,9 @@ namespace Ogre
             in SIMD form, and once it is done, merge the results from the simd vectors into one
         @return
             Vector.x = min( vector[0].x, vector[1].x, vector[2].x, vector[3].x )
-			Vector.y = min( vector[0].y, vector[1].y, vector[2].y, vector[3].y )
+            Vector.y = min( vector[0].y, vector[1].y, vector[2].y, vector[3].y )
         */
-		inline Vector2 collapseMin() const;
+        inline Vector2 collapseMin() const;
 
         /** Takes each Vector and returns one returns a single vector
         @remarks
@@ -247,9 +247,9 @@ namespace Ogre
             in SIMD form, and once it is done, merge the results from the simd vectors into one
         @return
             Vector.x = max( vector[0].x, vector[1].x, vector[2].x, vector[3].x )
-			Vector.y = max( vector[0].y, vector[1].y, vector[2].y, vector[3].y )
+            Vector.y = max( vector[0].y, vector[1].y, vector[2].y, vector[3].y )
         */
-		inline Vector2 collapseMax() const;
+        inline Vector2 collapseMax() const;
 
         /** Conditional move update.
             Changes each of the four vectors contained in 'this' with
@@ -264,15 +264,15 @@ namespace Ogre
                 result or overwrite with a replacement (performance optimization).
                 i.e. a = Cmov4( a, b )
                 If this vector hasn't been assigned yet any value and want to
-				decide between two ArrayVector2s, i.e. a = Cmov4( b, c ) then
-				see Cmov4( const ArrayVector2 &arg1, const ArrayVector2 &arg2, ArrayMaskR mask );
+                decide between two ArrayVector2s, i.e. a = Cmov4( b, c ) then
+                see Cmov4( const ArrayVector2 &arg1, const ArrayVector2 &arg2, ArrayMaskR mask );
                 instead.
             @param replacement
                 Vectors to be used as replacement if the mask is zero.
             @param mask
                 mask filled with either 0's or 0xFFFFFFFF
         */
-		inline void Cmov4( ArrayMaskR mask, const ArrayVector2 &replacement );
+        inline void Cmov4( ArrayMaskR mask, const ArrayVector2 &replacement );
 
         /** Conditional move update.
             Changes each of the four vectors contained in 'this' with
@@ -287,15 +287,15 @@ namespace Ogre
                 result or overwrite with a replacement (performance optimization).
                 i.e. a = CmovRobust( a, b )
                 If this vector hasn't been assigned yet any value and want to
-				decide between two ArrayVector2s, i.e. a = Cmov4( b, c ) then
-				see Cmov4( const ArrayVector2 &arg1, const ArrayVector2 &arg2, ArrayMaskR mask );
+                decide between two ArrayVector2s, i.e. a = Cmov4( b, c ) then
+                see Cmov4( const ArrayVector2 &arg1, const ArrayVector2 &arg2, ArrayMaskR mask );
                 instead.
             @param replacement
                 Vectors to be used as replacement if the mask is zero.
             @param mask
                 mask filled with either 0's or 0xFFFFFFFF
         */
-		inline void CmovRobust( ArrayMaskR mask, const ArrayVector2 &replacement );
+        inline void CmovRobust( ArrayMaskR mask, const ArrayVector2 &replacement );
 
         /** Conditional move.
             Selects between arg1 & arg2 according to mask:
@@ -306,7 +306,7 @@ namespace Ogre
                 If mask param contains anything other than 0's or 0xffffffff's
                 the result is undefined.
                 If you wanted to do a = cmov4( a, b ), then consider using the update version
-				see Cmov4( ArrayMaskR mask, const ArrayVector2 &replacement );
+                see Cmov4( ArrayMaskR mask, const ArrayVector2 &replacement );
                 instead.
             @param arg1
                 First array of Vectors
@@ -315,22 +315,22 @@ namespace Ogre
             @param mask
                 mask filled with either 0's or 0xFFFFFFFF
         */
-		inline static ArrayVector2 Cmov4( const ArrayVector2 &arg1, const ArrayVector2 &arg2,
+        inline static ArrayVector2 Cmov4( const ArrayVector2 &arg1, const ArrayVector2 &arg2,
                                           ArrayMaskR mask );
 
-		/** Converts 4 ARRAY_PACKED_REALS reals into this ArrayVector2
+        /** Converts 4 ARRAY_PACKED_REALS reals into this ArrayVector2
          @remarks
-		 'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS Vector2
+         'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS Vector2
          See Frustum::getCustomWorldSpaceCorners implementation for an actual, advanced use case.
          */
         inline void loadFromAoS( const Real *RESTRICT_ALIAS src );
 
-		static const ArrayVector2 ZERO;
-		static const ArrayVector2 UNIT_X;
-		static const ArrayVector2 UNIT_Y;
-		static const ArrayVector2 NEGATIVE_UNIT_X;
-		static const ArrayVector2 NEGATIVE_UNIT_Y;
-		static const ArrayVector2 UNIT_SCALE;
+        static const ArrayVector2 ZERO;
+        static const ArrayVector2 UNIT_X;
+        static const ArrayVector2 UNIT_Y;
+        static const ArrayVector2 NEGATIVE_UNIT_X;
+        static const ArrayVector2 NEGATIVE_UNIT_Y;
+        static const ArrayVector2 UNIT_SCALE;
     };
     /** @} */
     /** @} */
