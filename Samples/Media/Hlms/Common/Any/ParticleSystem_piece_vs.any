@@ -112,7 +112,7 @@
 	#undef inVs_uv0
 	float2 inVs_uv0;
 	inVs_uv0.x = vertexInQuad < 2u ? 0.0f : 1.0f;
-	inVs_uv0.y = ( ( vertexInQuad & 0x01u ) != 0u ? 0.0f : 1.0f );
+	inVs_uv0.y = ( ( vertexInQuad & 0x01u ) != 0u ? 1.0f : 0.0f );
 
 	@property( hlms_particle_rotation == 2 )
 		// 2x2 matrix rotation
@@ -132,7 +132,7 @@
 		float3 inVs_normal = normalize( cross( particleRightVec, particleUpVec ) );
 		@property( normal_map )
 			#undef inVs_tangent
-			float4 inVs_tangent = float4( normalize( particleRightVec ), -1.0f );
+			float3 inVs_tangent = normalize( particleRightVec );
 		@end
 		@property( hlms_num_shadow_map_lights )
 			// We need worldNorm for normal offset bias

@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreColourImageAffector2.h"
 #include "OgreColourInterpolatorAffector2.h"
 #include "OgreCylinderEmitter2.h"
+#include "OgreDeflectorPlaneAffector2.h"
 #include "OgreDirectionRandomiserAffector2.h"
 #include "OgreEllipsoidEmitter2.h"
 #include "OgreHlms.h"
@@ -96,6 +97,9 @@ void ParticleFX2Plugin::install( const NameValuePairList * )
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
     pAffectorFact = new ColourInterpolatorAffectorFactory2();
+    ParticleSystemManager2::addAffectorFactory( pAffectorFact );
+    mAffectorFactories.push_back( pAffectorFact );
+    pAffectorFact = new DeflectorPlaneAffectorFactory2();
     ParticleSystemManager2::addAffectorFactory( pAffectorFact );
     mAffectorFactories.push_back( pAffectorFact );
     pAffectorFact = new DirectionRandomiserAffectorFactory2();

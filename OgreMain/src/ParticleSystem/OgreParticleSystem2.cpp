@@ -358,6 +358,7 @@ void ParticleSystemDef::reserveNumEmitters( size_t numEmitters )
 EmitterDefData *ParticleSystemDef::addEmitter( IdString name )
 {
     mEmitters.push_back( ParticleSystemManager2::getFactory( name )->createEmitter() );
+    mEmitters.back()->setInitialDimensions( Vector2( mDefaultWidth, mDefaultHeight ) );
     return mEmitters.back();
 }
 //-----------------------------------------------------------------------------

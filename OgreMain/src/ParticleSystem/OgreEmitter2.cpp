@@ -111,6 +111,11 @@ void EmitterInstanceData::setEnabled( bool bEnabled, const EmitterDefData &emitt
     }
 }
 //-----------------------------------------------------------------------------
+void EmitterDefData::setInitialDimensions( const Vector2 &dim )
+{
+    mDimensions = dim;
+}
+//-----------------------------------------------------------------------------
 unsigned short EmitterDefData::_getEmissionCount( Real )
 {
     OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
