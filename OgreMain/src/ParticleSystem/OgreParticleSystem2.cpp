@@ -210,10 +210,13 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     memset( mParticleCpuData.mTotalTimeToLive, 0, numParticles * sizeof( Real ) );
     memset( mParticleCpuData.mColour, 0, numParticles * sizeof( Vector4 ) );
 
-    GpuParticleCommon particleCommon( mCommonDirection,
+    GpuParticleCommon particleCommon( mParticleType != ParticleType::PerpendicularCommon
+                                          ? mCommonDirection
+                                          : mCommonUpVector.crossProduct( mCommonDirection ),
                                       mParticleType != ParticleType::PerpendicularCommon
-                                          ? mCommonUpVector
-                                          : mCommonUpVector.crossProduct( mCommonDirection ) );
+                                          ? mCommonUpVector  //
+                                          : -mCommonUpVector );
+
     mGpuCommonData =
         vaoManager->createConstBuffer( sizeof( GpuParticleCommon ), BT_DEFAULT, &particleCommon, false );
 
