@@ -116,8 +116,8 @@ void DeflectorPlaneAffector2::run( ParticleCpuData cpuData, const size_t numPart
                     cpuData.mDirection = newDir;
                 }
             */
-            cpuData.mPosition->Cmov4( mustUpdate, newPos );
-            cpuData.mDirection->Cmov4( mustUpdate, newDir );
+            *cpuData.mPosition = ArrayVector3::Cmov4( newPos, *cpuData.mPosition, mustUpdate );
+            *cpuData.mDirection = ArrayVector3::Cmov4( newDir, *cpuData.mDirection, mustUpdate );
         }
 
         cpuData.advancePack();

@@ -85,13 +85,13 @@ void ColourInterpolatorAffector2::run( ParticleCpuData cpuData, const size_t num
         for( int j = 0; j < MAX_STAGES - 1; j++ )
         {
             /*
-            if( isAffected )
+            if( !skipStage )
                 cpuData.mColour = lerp( mColourAdj[j], mColourAdj[j + 1], fW ) );
             */
-            const ArrayMaskR isAffected = Mathlib::CompareGreaterEqual( particleTime, mTimeAdj[j] );
+            const ArrayMaskR skipStage = Mathlib::CompareLess( particleTime, mTimeAdj[j] );
             const ArrayReal fW = ( particleTime - mTimeAdj[j] ) / ( mTimeAdj[j + 1] - mTimeAdj[j] );
             const ArrayVector4 colour = Math::lerp( mColourAdj[j], mColourAdj[j + 1], fW );
-            cpuData.mColour->Cmov4( isAffected, colour );
+            cpuData.mColour->Cmov4( skipStage, colour );
         }
 
         cpuData.advancePack();
