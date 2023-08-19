@@ -80,15 +80,15 @@ void ScaleInterpolatorAffector2::run( ParticleCpuData cpuData, const size_t numP
         for( int j = 0; j < MAX_STAGES - 1; j++ )
         {
             /*
-            if( isAffected )
+            if( !skipStage )
                 cpuData.mDimensions = defaultDimensions * lerp( mScaleAdj[j], mScaleAdj[j + 1], fW ) );
             */
-            const ArrayMaskR isAffected = Mathlib::CompareGreaterEqual( particleTime, mTimeAdj[j] );
+            const ArrayMaskR skipStage = Mathlib::CompareLess( particleTime, mTimeAdj[j] );
             const ArrayReal fW = ( particleTime - mTimeAdj[j] ) / ( mTimeAdj[j + 1] - mTimeAdj[j] );
             const ArrayReal scale = Math::lerp( mScaleAdj[j], mScaleAdj[j + 1], fW );
 
             const ArrayVector2 newDimensions = defaultDimensions * scale;
-            cpuData.mDimensions->Cmov4( isAffected, newDimensions );
+            cpuData.mDimensions->Cmov4( skipStage, newDimensions );
         }
 
         cpuData.advancePack();

@@ -140,14 +140,12 @@ void ColourFaderAffector2FX2::run( ParticleCpuData cpuData, const size_t numPart
 
     for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
     {
-        ArrayVector4 colourAdj;
-        colourAdj = colourAdj2;
-
         // if( cpuData.mTimeToLive > stateChangeVal )
         //  colourAdj = colourAdj1;
         // else
         //  colourAdj = colourAdj2;
-        colourAdj.Cmov4( Mathlib::CompareGreater( *cpuData.mTimeToLive, stateChangeVal ), colourAdj1 );
+        const ArrayVector4 colourAdj = ArrayVector4::Cmov4(
+            colourAdj1, colourAdj2, Mathlib::CompareGreater( *cpuData.mTimeToLive, stateChangeVal ) );
 
         *cpuData.mColour += colourAdj;
         cpuData.mColour->makeCeil( minColour );
