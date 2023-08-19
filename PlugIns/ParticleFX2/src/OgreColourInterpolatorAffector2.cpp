@@ -47,7 +47,9 @@ ColourInterpolatorAffector2::ColourInterpolatorAffector2()
         // particle here grey because when a colour component is 0.5f the maximum difference to
         // another colour component is 0.5f
         mColourAdj[i].setAll( Vector4( 0.5f, 0.5f, 0.5f, 0.0f ) );
-        mTimeAdj[i] = Mathlib::ONE;
+        // Avoid mTimeAdj[i+1] - mTimeAdj[i] == 0; which causes divisions by 0.
+        // And they should all be above 1.0f when unused.
+        mTimeAdj[i] = Mathlib::SetAll( 1.0f + static_cast<Real>( i ) );
     }
 
     // Init parameters

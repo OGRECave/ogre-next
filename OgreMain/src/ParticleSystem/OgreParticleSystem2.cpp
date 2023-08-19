@@ -207,7 +207,8 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     memset( mParticleCpuData.mRotation, 0, numParticles * sizeof( Radian ) );
     memset( mParticleCpuData.mRotationSpeed, 0, numParticles * sizeof( Radian ) );
     memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
-    memset( mParticleCpuData.mTotalTimeToLive, 0, numParticles * sizeof( Real ) );
+    for( size_t i = 0u; i < numParticles / ARRAY_PACKED_REALS; ++i )
+        mParticleCpuData.mTotalTimeToLive[i] = Mathlib::ONE;  // Avoid divisions by 0.
     memset( mParticleCpuData.mColour, 0, numParticles * sizeof( Vector4 ) );
 
     GpuParticleCommon particleCommon( mParticleType != ParticleType::PerpendicularCommon
