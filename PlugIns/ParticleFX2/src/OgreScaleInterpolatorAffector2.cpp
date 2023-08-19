@@ -42,7 +42,9 @@ ScaleInterpolatorAffector2::ScaleInterpolatorAffector2()
     for( int i = 0; i < MAX_STAGES; i++ )
     {
         mScaleAdj[i] = Mathlib::ONE;
-        mTimeAdj[i] = Mathlib::ONE;
+        // Avoid mTimeAdj[i+1] - mTimeAdj[i] == 0; which causes divisions by 0.
+        // And they should all be above 1.0f when unused.
+        mTimeAdj[i] = Mathlib::SetAll( 1.0f + static_cast<Real>( i ) );
     }
 
     // Init parameters
