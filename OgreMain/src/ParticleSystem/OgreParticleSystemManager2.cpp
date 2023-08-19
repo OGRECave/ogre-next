@@ -212,17 +212,17 @@ void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
                     }
                 }
             }
-
-            const size_t numSimdActiveParticles = systemDef->getNumSimdActiveParticles();
-            if( numSimdActiveParticles > 0u )
-            {
-                systemDef->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
-                    systemDef->mGpuData->map( 0u, sizeof( ParticleGpuData ) * numSimdActiveParticles ) );
-            }
-
-            systemDef->mVaoPerLod[0].back()->setPrimitiveRange(
-                0u, static_cast<uint32>( numSimdActiveParticles * 6u ) );
         }
+
+        const size_t numSimdActiveParticles = systemDef->getNumSimdActiveParticles();
+        if( numSimdActiveParticles > 0u )
+        {
+            systemDef->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
+                systemDef->mGpuData->map( 0u, sizeof( ParticleGpuData ) * numSimdActiveParticles ) );
+        }
+
+        systemDef->mVaoPerLod[0].back()->setPrimitiveRange(
+            0u, static_cast<uint32>( numSimdActiveParticles * 6u ) );
     }
 }
 //-----------------------------------------------------------------------------
