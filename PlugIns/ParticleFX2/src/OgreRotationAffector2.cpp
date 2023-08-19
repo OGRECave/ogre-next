@@ -79,6 +79,11 @@ bool RotationAffector2::needsInitialization() const
     return true;
 }
 //-----------------------------------------------------------------------------
+bool RotationAffector2::wantsRotation() const
+{
+    return true;
+}
+//-----------------------------------------------------------------------------
 void RotationAffector2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
                                               size_t numParticles ) const
 {

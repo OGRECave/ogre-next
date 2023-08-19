@@ -49,6 +49,10 @@ namespace Ogre
         /// Returns true if initEmittedParticles() must be called on a particle that has been emitted.
         virtual bool needsInitialization() const { return false; }
 
+        /// Returns true if ParticleSystemDef should default to something else
+        /// other than ParticleRotationType::None.
+        virtual bool wantsRotation() const { return false; }
+
         /** Initializes particles
             Can be called by multiple threads.
 

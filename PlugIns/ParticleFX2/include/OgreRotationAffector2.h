@@ -94,6 +94,8 @@ namespace Ogre
 
         bool needsInitialization() const override;
 
+        bool wantsRotation() const override;
+
         void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
                                    size_t numParticles ) const override;
 

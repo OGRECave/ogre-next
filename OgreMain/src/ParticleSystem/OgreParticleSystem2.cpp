@@ -213,9 +213,7 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     GpuParticleCommon particleCommon( mParticleType != ParticleType::PerpendicularCommon
                                           ? mCommonDirection
                                           : mCommonUpVector.crossProduct( mCommonDirection ),
-                                      mParticleType != ParticleType::PerpendicularCommon
-                                          ? mCommonUpVector  //
-                                          : -mCommonUpVector );
+                                      mCommonUpVector );
 
     mGpuCommonData =
         vaoManager->createConstBuffer( sizeof( GpuParticleCommon ), BT_DEFAULT, &particleCommon, false );
@@ -382,6 +380,8 @@ ParticleAffector2 *ParticleSystemDef::addAffector( IdString name )
     mAffectors.push_back( newAffector );
     if( newAffector->needsInitialization() )
         mInitializableAffectors.push_back( newAffector );
+    if( newAffector->wantsRotation() && mRotationType == ParticleRotationType::None )
+        mRotationType = ParticleRotationType::Texcoord;
     return newAffector;
 }
 //-----------------------------------------------------------------------------
