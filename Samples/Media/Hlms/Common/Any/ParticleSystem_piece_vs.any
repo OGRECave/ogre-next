@@ -119,8 +119,9 @@
 		float4 particleRotMatrix;
 		particleRotMatrix.xz = float2( cos( particleData.rotation ), sin( particleData.rotation ) );
 		particleRotMatrix.yw = float2( -particleRotMatrix.z, particleRotMatrix.x );
-		inVs_uv0.x = dot( inVs_uv0.xy - 0.5f, particleRotMatrix.xy ) + 0.5f;
-		inVs_uv0.y = dot( inVs_uv0.xy - 0.5f, particleRotMatrix.zw ) + 0.5f;
+		const float2 oldUv = inVs_uv0;
+		inVs_uv0.x = dot( oldUv.xy - 0.5f, particleRotMatrix.xy ) + 0.5f;
+		inVs_uv0.y = dot( oldUv.xy - 0.5f, particleRotMatrix.zw ) + 0.5f;
 	@end
 
 	@property( hlms_normal )
