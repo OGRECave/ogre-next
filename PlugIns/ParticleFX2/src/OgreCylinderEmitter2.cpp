@@ -38,7 +38,7 @@ CylinderEmitter2::CylinderEmitter2() : AreaEmitter2()
     initDefaults();
 }
 //-----------------------------------------------------------------------
-void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                              const size_t numParticles )
 {
     const Vector3 position = mPosition;
@@ -49,7 +49,7 @@ void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint
 
     for( size_t i = 0u; i < numParticles; ++i )
     {
-        const size_t h = newHandles[i];
+        const size_t h = newHandles[i].handle;
         const size_t j = h / ARRAY_PACKED_REALS;
         const size_t idx = h % ARRAY_PACKED_REALS;
 
@@ -82,12 +82,14 @@ void CylinderEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint
 
         // scale the found point to the cylinder's size and move it
         // relatively to the center of the emitter point
-        cpuData.mPosition[j].setFromVector3( position + x * xRange + y * yRange + z * zRange, idx );
+        const Vector3 localPos = position + x * xRange + y * yRange + z * zRange;
+        cpuData.mPosition[j].setFromVector3( newHandles[i].pos + newHandles[i].rot * localPos, idx );
         reinterpret_cast<Real * RESTRICT_ALIAS>( cpuData.mRotation )[h] = 0.0f;
 
         Vector3 direction;
-        this->genEmissionDirection( position, direction );
+        this->genEmissionDirection( localPos, direction );
         this->genEmissionVelocity( direction );
+        direction = newHandles[i].rot * direction;
         cpuData.mDirection[j].setFromVector3( direction, idx );
 
         cpuData.mDimensions[j].setFromVector2( dimensions, idx );

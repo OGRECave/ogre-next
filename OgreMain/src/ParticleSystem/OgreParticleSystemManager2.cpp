@@ -196,12 +196,16 @@ void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
                     timeSinceLast, system->mEmitterInstanceData[i] );
                 system->mNewParticlesPerEmitter[i] = numRequestedParticles;
 
+                const Node *instanceNode = system->getParentNode();
+                const Vector3 instancePos = instanceNode->_getDerivedPosition();
+                const Quaternion instanceRot = instanceNode->_getDerivedOrientation();
+
                 for( uint32 j = 0u; j < numRequestedParticles; ++j )
                 {
                     const uint32 handle = systemDef->allocParticle();
                     if( handle != ParticleSystemDef::InvalidHandle )
                     {
-                        systemDef->mNewParticles.push_back( handle );
+                        systemDef->mNewParticles.push_back( { handle, instancePos, instanceRot } );
                     }
                     else
                     {

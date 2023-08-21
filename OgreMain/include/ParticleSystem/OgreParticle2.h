@@ -97,8 +97,11 @@ namespace Ogre
         int16 mColourRgb[3];
     };
 
-    class _OgreExport Particle2
+    struct _OgrePrivate EmittedParticle
     {
+        uint32     handle;
+        Vector3    pos;
+        Quaternion rot;
     };
 
     OGRE_ASSUME_NONNULL_END

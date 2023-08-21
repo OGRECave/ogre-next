@@ -38,7 +38,7 @@ BoxEmitter2::BoxEmitter2()
     initDefaults();
 }
 //-----------------------------------------------------------------------------
-void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                         const size_t numParticles )
 {
     const Vector3 position = mPosition;
@@ -49,7 +49,7 @@ void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *n
 
     for( size_t i = 0u; i < numParticles; ++i )
     {
-        const size_t h = newHandles[i];
+        const size_t h = newHandles[i].handle;
         const size_t j = h / ARRAY_PACKED_REALS;
         const size_t idx = h % ARRAY_PACKED_REALS;
 
@@ -59,12 +59,14 @@ void BoxEmitter2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *n
         yOff = Math::SymmetricRandom() * yRange;
         zOff = Math::SymmetricRandom() * zRange;
 
-        cpuData.mPosition[j].setFromVector3( position + xOff + yOff + zOff, idx );
+        const Vector3 localPos = position + xOff + yOff + zOff;
+        cpuData.mPosition[j].setFromVector3( newHandles[i].pos + newHandles[i].rot * localPos, idx );
         reinterpret_cast<Real * RESTRICT_ALIAS>( cpuData.mRotation )[h] = 0.0f;
 
         Vector3 direction;
-        this->genEmissionDirection( position, direction );
+        this->genEmissionDirection( localPos, direction );
         this->genEmissionVelocity( direction );
+        direction = newHandles[i].rot * direction;
         cpuData.mDirection[j].setFromVector3( direction, idx );
 
         cpuData.mDimensions[j].setFromVector2( dimensions, idx );
