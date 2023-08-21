@@ -83,7 +83,7 @@ namespace Ogre
     public:
         HollowEllipsoidEmitter2();
 
-        void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+        void initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                    size_t numParticles ) override;
 
         /** Sets the size of the clear space inside the area from where NO particles are emitted.

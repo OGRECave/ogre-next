@@ -52,7 +52,7 @@ namespace Ogre
     public:
         CylinderEmitter2();
 
-        void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+        void initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                    size_t numParticles ) override;
 
         const String &getType() const override;

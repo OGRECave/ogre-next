@@ -84,12 +84,12 @@ bool RotationAffector2::wantsRotation() const
     return true;
 }
 //-----------------------------------------------------------------------------
-void RotationAffector2::initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+void RotationAffector2::initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                               size_t numParticles ) const
 {
     for( size_t i = 0u; i < numParticles; ++i )
     {
-        const size_t h = newHandles[i];
+        const size_t h = newHandles[i].handle;
         reinterpret_cast<Radian * RESTRICT_ALIAS>( cpuData.mRotation )[h] =
             mRotationRangeStart + Math::UnitRandom() * ( mRotationRangeEnd - mRotationRangeStart );
         reinterpret_cast<Radian * RESTRICT_ALIAS>( cpuData.mRotationSpeed )[h] =

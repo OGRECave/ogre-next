@@ -165,7 +165,7 @@ namespace Ogre
 
         /// This is a "temporary" array used by ParticleSystemManager::updateSerial to store
         /// the newly created particles for ParticleSystemManager::update to process.
-        FastArray<uint32> mNewParticles;
+        FastArray<EmittedParticle> mNewParticles;
 
         /// One per thread.
         FastArray<FastArray<uint32>> mParticlesToKill;

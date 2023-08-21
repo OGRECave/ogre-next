@@ -60,7 +60,8 @@ namespace Ogre
         @remarks
             If this is overloaded, then needsInitialization() must return true.
         */
-        virtual void initEmittedParticles( ParticleCpuData /*cpuData*/, const uint32 * /*newHandles*/,
+        virtual void initEmittedParticles( ParticleCpuData /*cpuData*/,
+                                           const EmittedParticle * /*newHandles*/,
                                            size_t /*numParticles*/ ) const
         {
         }

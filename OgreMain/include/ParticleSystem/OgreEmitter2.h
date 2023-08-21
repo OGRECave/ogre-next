@@ -88,7 +88,7 @@ namespace Ogre
         @param numParticles
             Number of particles to initialize.
         */
-        virtual void initEmittedParticles( ParticleCpuData cpuData, const uint32 *newHandles,
+        virtual void initEmittedParticles( ParticleCpuData cpuData, const EmittedParticle *newHandles,
                                            size_t numParticles ) = 0;
 
         virtual void _cloneFrom( const EmitterDefData *original );
