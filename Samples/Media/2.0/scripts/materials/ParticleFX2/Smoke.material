@@ -1,0 +1,36 @@
+hlms Particle/SmokeUnlit unlit
+{
+	depth_write	off
+	cull_mode	none
+	scene_blend alpha_blend
+	diffuse_map smoke.png
+}
+
+hlms Particle/SmokePBS pbs
+{
+	depth_write	off
+	cull_mode	none
+
+	roughness 1.00
+	fresnel 1
+
+	scene_blend alpha_blend
+
+	//diffuse_map Sphere_diffuse.png
+	diffuse_map smoke.png
+	normal_map Sphere_nm.png
+}
+
+hlms Particle/SpherePBS pbs
+{
+	depth_write	off
+	cull_mode	none
+
+	roughness 0.2
+	fresnel 0.5
+
+	scene_blend alpha_blend
+
+	diffuse_map Sphere_diffuse.png
+	normal_map Sphere_nm.png
+}
