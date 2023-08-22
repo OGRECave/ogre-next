@@ -24,6 +24,8 @@
 		@end
 	@end
 
+	@insertpiece( DeclAlphaHashFuncs )
+
 	// START UNIFORM DECLARATION
 	@property( has_planar_reflections || hlms_shadowcaster_point )
 		@insertpiece( PassStructDecl )
@@ -110,6 +112,11 @@
 
 	@insertpiece( custom_ps_preLights )
 
+	@property( hlms_alpha_hash )
+		//if( AlphaHashReject( diffuseCol.w, inPs.uv0.xy ) )
+		//	discard;
+	@end
+
 	@property( alpha_test && (!alpha_test_shadow_caster_only || hlms_shadowcaster) )
 		if( material.alpha_test_threshold.x @insertpiece( alpha_test_cmp_func ) diffuseCol.w )
 			discard;
@@ -117,5 +124,9 @@
 
 	@property( !hlms_shadowcaster )
 		outPs_colour0 = diffuseCol;
+
+		@property( hlms_alpha_hash )
+			outPs_colour0.w = AlphaHashReject( diffuseCol.w, inPs.uv0.xy );
+		@end
 	@end
 @end
