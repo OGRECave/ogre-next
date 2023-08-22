@@ -201,6 +201,7 @@ namespace Ogre
     const IdString HlmsBaseProp::AlphaTestShadowCasterOnly = IdString( "alpha_test_shadow_caster_only" );
     const IdString HlmsBaseProp::AlphaBlend = IdString( "hlms_alphablend" );
     const IdString HlmsBaseProp::AlphaToCoverage = IdString( "hlms_alpha_to_coverage" );
+    const IdString HlmsBaseProp::AlphaHash = IdString( "hlms_alpha_hash" );
     const IdString HlmsBaseProp::ScreenSpaceRefractions = IdString( "hlms_screen_space_refractions" );
     // We use a different convention because it's a really private property that ideally
     // shouldn't be exposed to users.
@@ -2793,6 +2794,8 @@ namespace Ogre
                      datablock->getBlendblock( false )->isAutoTransparent() );
         setProperty( kNoTid, HlmsBaseProp::AlphaToCoverage,
                      datablock->getBlendblock( false )->mAlphaToCoverageEnabled );
+        if( datablock->getAlphaHashing() )
+            setProperty( kNoTid, HlmsBaseProp::AlphaHash, 1 );
 
         if( renderable->getUseIdentityWorldMatrix() )
             setProperty( kNoTid, HlmsBaseProp::IdentityWorld, 1 );

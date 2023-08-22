@@ -1,0 +1,85 @@
+
+// #include "SyntaxHighlightingMisc.h"
+
+@property( hlms_alpha_hash )
+
+@piece( DeclAlphaHashFuncs )
+
+INLINE uint AlphaHashWang( uint seed )
+{
+	seed = ( seed ^ 61u ) ^ ( seed >> 16u );
+	seed *= 9u;
+	seed = seed ^ ( seed >> 4u );
+	seed *= 0x27d4eb2du;
+	seed = seed ^ ( seed >> 15u );
+	return seed;
+}
+
+INLINE float AlphaHashWangFP2D( float2 p )
+{
+	uint seed = floatBitsToUint( p.x ) ^ floatBitsToUint( p.y * 59.0 + 11.0 );
+	seed = AlphaHashWang( seed );
+	return ( float( seed ) ) * ( 1.0 / 4294967296.0 );
+}
+
+INLINE float AlphaHashWangNoise2( float2 x )
+{
+	float2 p = floor( x );
+	float2 w = fract( x );
+
+	float2 u = w * w * w * ( w * ( w * 6.0 - 15.0 ) + 10.0 );
+	float2 du = 30.0 * w * w * ( w * ( w - 2.0 ) + 1.0 );
+
+	float a = AlphaHashWangFP2D( p + float2( 0, 0 ) );
+	float b = AlphaHashWangFP2D( p + float2( 1, 0 ) );
+	float c = AlphaHashWangFP2D( p + float2( 0, 1 ) );
+	float d = AlphaHashWangFP2D( p + float2( 1, 1 ) );
+
+	float k0 = a;
+	float k1 = b - a;
+	float k2 = c - a;
+	float k4 = a - b - c + d;
+
+	return k0 + k1 * u.x + k2 * u.y + k4 * u.x * u.y;
+}
+
+@property( hlms_alpha_to_coverage )
+	INLINE float AlphaHashReject( float _alpha, float2 vPos )
+@else
+	INLINE bool AlphaHashReject( float _alpha, float2 vPos )
+@end
+{
+	const float g_HashScale = 1.0f;
+
+	//Formulate taken
+	// Find the discretized derivatives of our coordinates
+	const float maxDeriv = max( length( OGRE_ddx( vPos.xy ) ), length( OGRE_ddx( vPos.xy ) ) );
+	const float pixScale = 1.0f / ( g_HashScale * maxDeriv );
+	// Find two nearest log-discretized noise scales
+	const float2 pixScales = float2( exp2( floor( log2( pixScale ) ) ), exp2( ceil( log2( pixScale ) ) ) );
+	// Compute alpha thresholds at our two noise scales
+	const float2 alpha = float2( AlphaHashWangFP2D( floor( pixScales.x * vPos.xy ) ),
+								 AlphaHashWangFP2D( floor( pixScales.y * vPos.xy ) ) );
+	// Factor to interpolate lerp with
+	const float lerpFactor = fract( log2( pixScale ) );
+	// Interpolate alpha threshold from noise at two scales
+	const float x = ( 1 - lerpFactor ) * alpha.x + lerpFactor * alpha.y;
+	// Pass into CDF to compute uniformly distrib threshold
+	float a = min( lerpFactor, 1 - lerpFactor );
+	const float3 cases = float3( x * x / ( 2 * a * ( 1 - a ) ), ( x - 0.5 * a ) / ( 1 - a ),
+								 1.0f - ( ( 1 - x ) * ( 1 - x ) / ( 2 * a * ( 1 - a ) ) ) );
+	// Find our final, uniformly distributed alpha threshold
+	float alphaThreshold = ( x < ( 1 - a ) ) ? ( ( x < a ) ? cases.x : cases.y ) : cases.z;
+	// Avoids alphaThreshold == 0.
+	alphaThreshold = clamp( alphaThreshold, 1.0e-6f, 1.0 );
+
+	@property( hlms_alpha_to_coverage )
+		return lerp( max( _alpha - alphaThreshold, 0.0f ), 1.0f, _alpha * _alpha * _alpha );
+	@else
+		return _alpha < alphaThreshold;
+	@end
+}
+
+@end
+
+@end

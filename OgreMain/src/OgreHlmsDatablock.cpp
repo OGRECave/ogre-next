@@ -121,6 +121,7 @@ namespace Ogre
         mType( creator->getType() ),
         mAllowTextureResidencyChange( true ),
         mIgnoreFlushRenderables( false ),
+        mAlphaHashing( false ),
         mAlphaTestCmp( CMPF_ALWAYS_PASS ),
         mAlphaTestShadowCasterOnly( false ),
         mAlphaTestThreshold( 0.5f ),
@@ -138,6 +139,10 @@ namespace Ogre
         hlmsManager->destroyBlendblock( blendblock );
 
         String paramVal;
+
+        if( Hlms::findParamInVec( params, "alpha_hash", paramVal ) && !paramVal.empty() )
+            mAlphaHashing = StringConverter::parseBool( paramVal, false );
+
         if( Hlms::findParamInVec( params, HlmsBaseProp::AlphaTest, paramVal ) )
         {
             mAlphaTestCmp = CMPF_LESS;
@@ -226,6 +231,7 @@ namespace Ogre
         datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[0] ), false );
         datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[1] ), true );
 
+        datablock->mAlphaHashing = mAlphaHashing;
         datablock->mAlphaTestCmp = mAlphaTestCmp;
         datablock->mAlphaTestShadowCasterOnly = mAlphaTestShadowCasterOnly;
         datablock->mAlphaTestThreshold = mAlphaTestThreshold;
@@ -426,6 +432,15 @@ namespace Ogre
             // be different but be assigned a different ID (old one's API construct was already
             // destroyed) or be equal but have a different ID. It's not random or chaotic and
             // there are guarantees, but it's tricky to get it right and not worth it.
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setAlphaHashing( bool bAlphaHashing )
+    {
+        if( mAlphaHashing != bAlphaHashing )
+        {
+            mAlphaHashing = bAlphaHashing;
             flushRenderables();
         }
     }

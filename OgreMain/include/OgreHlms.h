@@ -1203,6 +1203,7 @@ namespace Ogre
         static const IdString DecalsEmissive;
         static const IdString FwdPlusCubemapSlotOffset;
         static const IdString ParticleSystem;
+        // Change per Object (specific to Particles)
         static const IdString ParticleType;
         static const IdString ParticleTypePoint;
         static const IdString ParticleTypeOrientedCommon;
@@ -1223,6 +1224,7 @@ namespace Ogre
         static const IdString AlphaTestShadowCasterOnly;
         static const IdString AlphaBlend;
         static const IdString AlphaToCoverage;
+        static const IdString AlphaHash;
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
         static const IdString

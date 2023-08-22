@@ -329,6 +329,7 @@ namespace Ogre
 
     protected:
         bool  mIgnoreFlushRenderables;
+        bool  mAlphaHashing;
         uint8 mAlphaTestCmp;  ///< @see CompareFunction
         bool  mAlphaTestShadowCasterOnly;
         float mAlphaTestThreshold;
@@ -451,6 +452,29 @@ namespace Ogre
         {
             return mBlendblock[casterBlock];
         }
+
+        /** Uses a trick to *mimic* true Order Independent Transparency alpha blending.
+            The advantage of this method is that it is compatible with depth buffer writes
+            and is order independent.
+
+            Calling this function triggers a HlmsDatablock::flushRenderables
+        @remarks
+            For best results:
+
+                // Disable alpha test (default)
+                datablock->setAlphaTest( CMPF_ALWAYS_PASS );
+                // Do NOT enable alpha blending in the HlmsBlendblock (default)
+                HlmsBlendblock blendblock;
+                blendblock.setBlendType( SBT_REPLACE );
+                datablock->setBlendblock( &blendblock );
+
+                datablock->setAlphaHashing( true );
+        @param bAlphaHashing
+            True to enable alpha hashing.
+        */
+        void setAlphaHashing( bool bAlphaHashing );
+
+        bool getAlphaHashing() const { return mAlphaHashing; }
 
         /** Sets the alpha test to the given compare function. CMPF_ALWAYS_PASS means disabled.
             @see mAlphaTestThreshold.

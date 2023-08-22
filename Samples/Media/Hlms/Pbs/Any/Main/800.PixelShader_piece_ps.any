@@ -179,6 +179,7 @@
 	@insertpiece( DeclRefractionsFuncs )
 	@insertpiece( DeclIrradianceSH )
 	@insertpiece( DeclLightProfilesTextureFuncs )
+	@insertpiece( DeclAlphaHashFuncs )
 @end
 
 
@@ -947,11 +948,20 @@
 					outPs_colour0.xyz	= finalColour;
 				@end
 
-				@property( hlms_alphablend || hlms_alpha_to_coverage )
+				@property( hlms_alphablend || hlms_alpha_to_coverage || hlms_alpha_hash )
 					@property( use_texture_alpha )
 						outPs_colour0.w	= midf_c( material.F0.w ) * pixelData.diffuse.w;
 					@else
 						outPs_colour0.w	= midf_c( material.F0.w );
+					@end
+
+					@property( hlms_alpha_hash )
+						@property( hlms_alpha_to_coverage )
+							outPs_colour0.w = AlphaHashReject( outPs_colour0.w, inPs.uv0.xy );
+						@else
+							if( AlphaHashReject( outPs_colour0.w, inPs.uv0.xy ) )
+								discard;
+						@end
 					@end
 				@else
 					outPs_colour0.w		= _h( 1.0 );
