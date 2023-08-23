@@ -51,7 +51,7 @@ INLINE float AlphaHashWangNoise2( float2 x )
 {
 	const float g_HashScale = 1.0f;
 
-	//Formulate taken
+	// Formula taken from Hashed Alpha Testing, Chris Wyman & Morgan McGuire
 	// Find the discretized derivatives of our coordinates
 	const float maxDeriv = max( length( OGRE_ddx( vPos.xy ) ), length( OGRE_ddx( vPos.xy ) ) );
 	const float pixScale = 1.0f / ( g_HashScale * maxDeriv );
