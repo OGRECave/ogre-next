@@ -847,7 +847,7 @@ Default: alpha_rejection always_pass@*@*
 
 Sets whether this pass will use 'alpha to coverage', a way to multisample alpha texture edges so they blend more seamlessly with the background. This facility is typically only available on cards from around 2006 onwards, but it is safe to enable it anyway - Ogre will just ignore it if the hardware does not support it. The common use for alpha to coverage is foliage rendering and chain-link fence style textures. @*@*
 
-Format: alpha_to_coverage <on|off>@*@*
+Format: alpha_to_coverage <on|off|\"msaa_only\">@*@*
 
 Default: alpha_to_coverage off@*@*
 @anchor{light_scissor}

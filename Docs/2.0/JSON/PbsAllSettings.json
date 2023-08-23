@@ -41,7 +41,7 @@ including invalid combinations (i.e. having a Metallic texture and a Specular te
     {
         "unique_name" :
         {
-            "alpha_to_coverage" : false,
+            "alpha_to_coverage" : false true "msaa_only",
             "blendmask" : "rgba",
             "separate_blend" : true,
             "src_blend_factor" : "one" "zero" "dst_colour" "src_colour" "one_minus_dst_colour" "one_minus_src_colour" "dst_alpha" "src_alpha" "one_minus_dst_alpha" "one_minus_src_alpha",
