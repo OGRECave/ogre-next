@@ -15,7 +15,7 @@ Reference Guide: HLMS Blendblock {#hlmsblendblockref}
 
 ## Parameter: alpha_to_coverage {#bbParamAlphaToCoverage}
 - Alpha to coverage performs multisampling on the edges of alpha-rejected textures to produce a smoother result. It is only supported when multisampling is already enabled on the render target, and when the hardware supports alpha to coverage. The common use for alpha to coverage is foliage rendering and chain-link fence style textures.
-- Value is true or false
+- Value is true, false or "msaa_only". The latter means it is only enabled if the render target is MSAA 2x or higher.
 - **DEFAULT=false**
 
 ## Parameter: blendmask {#bbParamBlendmask}
