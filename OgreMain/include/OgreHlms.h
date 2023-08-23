@@ -1177,6 +1177,7 @@ namespace Ogre
         static const IdString UseUvBaking;
         static const IdString UvBaking;
         static const IdString BakeLightingOnly;
+        static const IdString MsaaSamples;
         static const IdString GenNormalsGBuf;
         static const IdString PrePass;
         static const IdString UsePrePass;

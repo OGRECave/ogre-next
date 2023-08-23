@@ -1649,7 +1649,10 @@ namespace Ogre
             psd.vertexDescriptor = vertexDescriptor;
         }
 
-        psd.alphaToCoverageEnabled = newPso->blendblock->mAlphaToCoverageEnabled;
+        psd.alphaToCoverageEnabled =
+            newPso->blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabled ||
+            ( newPso->blendblock->mAlphaToCoverage == HlmsBlendblock::A2cEnabledMsaaOnly &&
+              newPso->pass.sampleDescription.isMultisample() );
 
         uint8 mrtCount = 0;
         for( size_t i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )

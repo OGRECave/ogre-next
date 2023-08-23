@@ -50,6 +50,8 @@ namespace Ogre
         ComPtr<ID3D11InputLayout>       inputLayout;
         ComPtr<ID3D11DepthStencilState> depthStencilState;
 
+        ComPtr<ID3D11BlendState> blendState;
+
         // Shader
         D3D11HLSLProgram *vertexShader;
         D3D11HLSLProgram *geometryShader;

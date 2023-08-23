@@ -372,8 +372,18 @@ namespace Ogre
     void HlmsJson::loadBlendblock( const rapidjson::Value &blendblocksJson, HlmsBlendblock &blendblock )
     {
         rapidjson::Value::ConstMemberIterator itor = blendblocksJson.FindMember( "alpha_to_coverage" );
-        if( itor != blendblocksJson.MemberEnd() && itor->value.IsBool() )
-            blendblock.mAlphaToCoverageEnabled = itor->value.GetBool();
+        if( itor != blendblocksJson.MemberEnd() )
+        {
+            if( itor->value.IsBool() )
+            {
+                blendblock.mAlphaToCoverage =
+                    itor->value.GetBool() ? HlmsBlendblock::A2cEnabled : HlmsBlendblock::A2cDisabled;
+            }
+            else if( itor->value.IsString() && !strcmp( itor->value.GetString(), "msaa_only" ) )
+            {
+                blendblock.mAlphaToCoverage = HlmsBlendblock::A2cEnabledMsaaOnly;
+            }
+        }
 
         itor = blendblocksJson.FindMember( "blendmask" );
         if( itor != blendblocksJson.MemberEnd() && itor->value.IsString() )
@@ -924,7 +934,19 @@ namespace Ogre
         outString += " :\n\t\t{\n";
 
         outString += "\t\t\t\"alpha_to_coverage\" : ";
-        outString += blendblock->mAlphaToCoverageEnabled ? "true" : "false";
+        switch( blendblock->mAlphaToCoverage )
+        {
+        default:
+        case HlmsBlendblock::A2cDisabled:
+            outString += "false";
+            break;
+        case HlmsBlendblock::A2cEnabled:
+            outString += "true";
+            break;
+        case HlmsBlendblock::A2cEnabledMsaaOnly:
+            outString += "\"msaa_only\"";
+            break;
+        }
 
         outString += ",\n\t\t\t\"blendmask\" : \"";
         if( blendblock->mBlendChannelMask == HlmsBlendblock::BlendChannelForceDisabled )

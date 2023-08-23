@@ -1018,7 +1018,7 @@ namespace Ogre
         if( datablock->mUseAlphaFromTextures &&
             ( datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
               datablock->mBlendblock[0]->isAutoTransparent() ||
-              datablock->mBlendblock[0]->mAlphaToCoverageEnabled ||  //
+              datablock->mBlendblock[0]->mAlphaToCoverage != HlmsBlendblock::A2cDisabled ||  //
               datablock->mAlphaHashing ||
               datablock->mTransparencyMode == HlmsPbsDatablock::Refractive ) &&
             ( getProperty( kNoTid, PbsProperty::DiffuseMap ) ||  //
@@ -1123,6 +1123,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbs::notifyPropertiesMergedPreGenerationStep( const size_t tid )
     {
+        Hlms::notifyPropertiesMergedPreGenerationStep( tid );
+
         const int32 numVctProbes = getProperty( tid, PbsProperty::VctNumProbes );
         const bool hasVct = numVctProbes > 0;
         if( getProperty( tid, HlmsBaseProp::DecalsNormals ) || hasVct )

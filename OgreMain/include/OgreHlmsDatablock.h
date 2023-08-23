@@ -169,7 +169,17 @@ namespace Ogre
             BlendChannelForceDisabled = 0x10
         };
 
-        bool mAlphaToCoverageEnabled;
+        enum A2CSetting
+        {
+            /// Alpha to Coverage is always disabled.
+            A2cDisabled,
+            /// Alpha to Coverage is always enabled.
+            A2cEnabled,
+            /// Alpha to Coverage is enabled only if RenderTarget uses MSAA.
+            A2cEnabledMsaaOnly
+        };
+
+        uint8 mAlphaToCoverage;  /// See A2CSetting
 
         /// Masks which colour channels will be writing to. Default: BlendChannelAll
         /// For some advanced effects, you may wish to turn off the writing of certain colour
@@ -222,6 +232,19 @@ namespace Ogre
         bool isAutoTransparent() const { return ( mIsTransparent & 0x01u ) != 0u; }
         bool isForcedTransparent() const { return ( mIsTransparent & 0x02u ) != 0u; }
 
+        bool isAlphaToCoverage( const SampleDescription &sd ) const
+        {
+            switch( static_cast<HlmsBlendblock::A2CSetting>( mAlphaToCoverage ) )
+            {
+            case HlmsBlendblock::A2cDisabled:
+                return false;
+            case HlmsBlendblock::A2cEnabled:
+                return true;
+            case HlmsBlendblock::A2cEnabledMsaaOnly:
+                return sd.isMultisample();
+            }
+        }
+
         bool operator==( const HlmsBlendblock &_r ) const { return !( *this != _r ); }
 
         bool operator!=( const HlmsBlendblock &_r ) const
@@ -239,7 +262,7 @@ namespace Ogre
                        mDestBlendFactorAlpha != _r.mDestBlendFactorAlpha ) ) ||  //
                    mBlendOperation != _r.mBlendOperation ||                      //
                    mBlendOperationAlpha != _r.mBlendOperationAlpha ||            //
-                   mAlphaToCoverageEnabled != _r.mAlphaToCoverageEnabled ||      //
+                   mAlphaToCoverage != _r.mAlphaToCoverage ||                    //
                    mBlendChannelMask != _r.mBlendChannelMask ||                  //
                    ( mIsTransparent & 0x02u ) != ( _r.mIsTransparent & 0x02u );
         }

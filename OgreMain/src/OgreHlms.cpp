@@ -149,6 +149,7 @@ namespace Ogre
     const IdString HlmsBaseProp::UseUvBaking = IdString( "hlms_use_uv_baking" );
     const IdString HlmsBaseProp::UvBaking = IdString( "hlms_uv_baking" );
     const IdString HlmsBaseProp::BakeLightingOnly = IdString( "hlms_bake_lighting_only" );
+    const IdString HlmsBaseProp::MsaaSamples = IdString( "hlms_msaa_samples" );
     const IdString HlmsBaseProp::GenNormalsGBuf = IdString( "hlms_gen_normals_gbuffer" );
     const IdString HlmsBaseProp::PrePass = IdString( "hlms_prepass" );
     const IdString HlmsBaseProp::UsePrePass = IdString( "hlms_use_prepass" );
@@ -2655,7 +2656,14 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::notifyPropertiesMergedPreGenerationStep( const size_t tid ) {}
+    void Hlms::notifyPropertiesMergedPreGenerationStep( const size_t tid )
+    {
+        if( getProperty( tid, HlmsBaseProp::AlphaToCoverage ) == HlmsBlendblock::A2cEnabledMsaaOnly )
+        {
+            if( getProperty( tid, HlmsBaseProp::MsaaSamples ) <= 1 )
+                setProperty( tid, HlmsBaseProp::AlphaToCoverage, 0 );
+        }
+    }
     //-----------------------------------------------------------------------------------
     uint16 Hlms::calculateHashForV1( Renderable *renderable )
     {
@@ -2793,7 +2801,7 @@ namespace Ogre
         setProperty( kNoTid, HlmsBaseProp::AlphaBlend,
                      datablock->getBlendblock( false )->isAutoTransparent() );
         setProperty( kNoTid, HlmsBaseProp::AlphaToCoverage,
-                     datablock->getBlendblock( false )->mAlphaToCoverageEnabled );
+                     datablock->getBlendblock( false )->mAlphaToCoverage );
         if( datablock->getAlphaHashing() )
             setProperty( kNoTid, HlmsBaseProp::AlphaHash, 1 );
 
@@ -2869,7 +2877,7 @@ namespace Ogre
         setProperty( kNoTid, HlmsBaseProp::AlphaBlend,
                      datablock->getBlendblock( true )->isAutoTransparent() );
         setProperty( kNoTid, HlmsBaseProp::AlphaToCoverage,
-                     datablock->getBlendblock( true )->mAlphaToCoverageEnabled );
+                     datablock->getBlendblock( true )->mAlphaToCoverage );
         PiecesMap piecesCaster[NumShaderTypes];
         if( datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
         {
@@ -2911,6 +2919,8 @@ namespace Ogre
     {
         if( !mRenderSystem->isReverseDepth() )
             setProperty( kNoTid, HlmsBaseProp::NoReverseDepth, 1 );
+
+        const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
 
         if( !casterPass )
         {
@@ -3145,8 +3155,6 @@ namespace Ogre
 
                 setProperty( kNoTid, HlmsBaseProp::ShadowUsesDepthTexture, usesDepthTextures );
             }
-
-            const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
 
             if( pass && pass->getType() == PASS_SCENE )
             {
@@ -3402,8 +3410,6 @@ namespace Ogre
         {
             setProperty( kNoTid, HlmsBaseProp::ShadowCaster, 1 );
 
-            const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
-
             if( pass )
             {
                 const uint32 shadowMapIdx = pass->getDefinition()->mShadowMapIdx;
@@ -3470,6 +3476,12 @@ namespace Ogre
 
             if( sceneManager->getCurrentSsrTexture() != 0 )
                 setProperty( kNoTid, HlmsBaseProp::UseSsr, 1 );
+        }
+
+        if( pass && pass->getAnyTargetTexture() )
+        {
+            setProperty( kNoTid, HlmsBaseProp::MsaaSamples,
+                         pass->getAnyTargetTexture()->getSampleDescription().getColourSamples() );
         }
 
         if( sceneManager->getCurrentRefractionsTexture() != 0 )

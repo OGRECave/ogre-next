@@ -594,7 +594,7 @@ namespace Ogre
                 write( dataStream, itor->macroblock.mCullMode );
                 write( dataStream, itor->macroblock.mPolygonMode );
 
-                write( dataStream, itor->blendblock.mAlphaToCoverageEnabled );
+                write( dataStream, itor->blendblock.mAlphaToCoverage );
                 write( dataStream, itor->blendblock.mBlendChannelMask );
                 write<uint8>( dataStream, itor->blendblock.mIsTransparent & 0x02u );
                 write( dataStream, itor->blendblock.mSeparateBlend );
@@ -825,7 +825,7 @@ namespace Ogre
                 read( dataStream, pso.macroblock.mCullMode );
                 read( dataStream, pso.macroblock.mPolygonMode );
 
-                read( dataStream, pso.blendblock.mAlphaToCoverageEnabled );
+                read( dataStream, pso.blendblock.mAlphaToCoverage );
                 read( dataStream, pso.blendblock.mBlendChannelMask );
                 read( dataStream, pso.blendblock.mIsTransparent );
                 read( dataStream, pso.blendblock.mSeparateBlend );
