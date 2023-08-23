@@ -1056,6 +1056,7 @@ namespace Ogre
 
         void setMsaa( uint8 msaa, MsaaPatterns::MsaaPatterns pattern = MsaaPatterns::Undefined );
 
+        /// Use isMultisample() instead. This only returns if it's not CSAA/EQAA/etc.
         bool isMsaa() const;
 
         /** Set CSAA by NVIDIA's marketing names e.g.

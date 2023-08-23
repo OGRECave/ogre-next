@@ -565,6 +565,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( const size_t tid )
     {
+        Hlms::notifyPropertiesMergedPreGenerationStep( tid );
+
         const int32 samplerStateStart = getProperty( tid, UnlitProperty::SamplerStateStart );
         int32 texUnit = samplerStateStart;
         {
@@ -671,6 +673,12 @@ namespace Ogre
             // some Android devices(e.g. Mali-G77, Google Pixel 7 Pro) do not support user clip planes
             if( !mRenderSystem->getCapabilities()->hasCapability( RSC_USER_CLIP_PLANES ) )
                 setProperty( kNoTid, HlmsBaseProp::EmulateClipDistances, 1 );
+        }
+
+        if( pass && pass->getAnyTargetTexture() )
+        {
+            setProperty( kNoTid, HlmsBaseProp::MsaaSamples,
+                         pass->getAnyTargetTexture()->getSampleDescription().getColourSamples() );
         }
 
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );

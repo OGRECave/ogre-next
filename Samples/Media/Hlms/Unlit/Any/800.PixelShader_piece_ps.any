@@ -112,9 +112,9 @@
 
 	@insertpiece( custom_ps_preLights )
 
-	@property( hlms_alpha_hash )
-		//if( AlphaHashReject( diffuseCol.w, inPs.uv0.xy ) )
-		//	discard;
+	@property( hlms_alpha_hash && !hlms_alpha_to_coverage )
+		if( AlphaHashReject( diffuseCol.w, inPs.uv0.xy ) )
+			discard;
 	@end
 
 	@property( alpha_test && (!alpha_test_shadow_caster_only || hlms_shadowcaster) )
@@ -125,7 +125,7 @@
 	@property( !hlms_shadowcaster )
 		outPs_colour0 = diffuseCol;
 
-		@property( hlms_alpha_hash )
+		@property( hlms_alpha_hash && hlms_alpha_to_coverage )
 			outPs_colour0.w = AlphaHashReject( diffuseCol.w, inPs.uv0.xy );
 		@end
 	@end

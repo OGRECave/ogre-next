@@ -507,10 +507,22 @@ namespace Ogre
             }
 
             // alpha_to_coverage
-            if( mDefaults || blendblock->mAlphaToCoverageEnabled )
+            if( mDefaults || blendblock->mAlphaToCoverage != HlmsBlendblock::A2cDisabled )
             {
                 writeAttribute( 3, "alpha_to_coverage" );
-                writeValue( blendblock->mAlphaToCoverageEnabled ? "on" : "off" );
+                switch( blendblock->mAlphaToCoverage )
+                {
+                default:
+                case HlmsBlendblock::A2cDisabled:
+                    writeValue( "off" );
+                    break;
+                case HlmsBlendblock::A2cEnabled:
+                    writeValue( "on" );
+                    break;
+                case HlmsBlendblock::A2cEnabledMsaaOnly:
+                    writeValue( "msaa_only" );
+                    break;
+                }
             }
 
             const HlmsMacroblock *macroblock = pPass->getMacroblock();

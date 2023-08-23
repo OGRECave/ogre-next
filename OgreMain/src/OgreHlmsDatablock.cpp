@@ -67,7 +67,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsBlendblock::HlmsBlendblock() :
         BasicBlock( BLOCK_BLEND ),
-        mAlphaToCoverageEnabled( false ),
+        mAlphaToCoverage( A2cDisabled ),
         mBlendChannelMask( BlendChannelAll ),
         mIsTransparent( 0u ),
         mSeparateBlend( false ),
@@ -320,12 +320,12 @@ namespace Ogre
         if( !casterBlock )
         {
             mIgnoreFlushRenderables = true;
-            if( !mBlendblock[0]->mAlphaToCoverageEnabled )
+            if( mBlendblock[0]->mAlphaToCoverage == HlmsBlendblock::A2cDisabled )
                 setBlendblock( mBlendblock[0], true );
             else
             {
                 HlmsBlendblock blendblockNoAC = *mBlendblock[0];
-                blendblockNoAC.mAlphaToCoverageEnabled = false;
+                blendblockNoAC.mAlphaToCoverage = HlmsBlendblock::A2cDisabled;
                 setBlendblock( blendblockNoAC, true );
             }
             mIgnoreFlushRenderables = false;
@@ -356,12 +356,12 @@ namespace Ogre
         if( !casterBlock )
         {
             mIgnoreFlushRenderables = true;
-            if( !mBlendblock[0]->mAlphaToCoverageEnabled )
+            if( mBlendblock[0]->mAlphaToCoverage == HlmsBlendblock::A2cDisabled )
                 setBlendblock( mBlendblock[0], true );
             else
             {
                 HlmsBlendblock blendblockNoAC = *mBlendblock[0];
-                blendblockNoAC.mAlphaToCoverageEnabled = false;
+                blendblockNoAC.mAlphaToCoverage = HlmsBlendblock::A2cDisabled;
                 setBlendblock( blendblockNoAC, true );
             }
             mIgnoreFlushRenderables = false;

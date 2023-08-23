@@ -830,10 +830,28 @@ namespace Ogre{
                     }
                     else
                     {
-                        if(!getBoolean(prop->values.front(), &blendblock.mAlphaToCoverageEnabled))
+                        bool a2cEnabled;
+                        if( getBoolean( prop->values.front(), &a2cEnabled ) )
                         {
-                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                               "alpha_to_coverage argument must be \"true\", \"false\", \"yes\", \"no\", \"on\", or \"off\"");
+                            blendblock.mAlphaToCoverage =
+                                a2cEnabled ? HlmsBlendblock::A2cEnabled : HlmsBlendblock::A2cDisabled;
+                        }
+                        else
+                        {
+                            String val;
+                            if( getString( prop->values.front(), &val ) )
+                            {
+                                if( val == "msaa_only" )
+                                    blendblock.mAlphaToCoverage = HlmsBlendblock::A2cEnabledMsaaOnly;
+                            }
+
+                            if( blendblock.mAlphaToCoverage != HlmsBlendblock::A2cEnabledMsaaOnly )
+                            {
+                                compiler->addError(
+                                    ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                    "alpha_to_coverage argument must be \"msaa_only\", \"true\", "
+                                    "\"false\", \"yes\", \"no\", \"on\", or \"off\"" );
+                            }
                         }
                     }
                     break;
@@ -2176,10 +2194,28 @@ namespace Ogre{
                     }
                     else
                     {
-                        if(!getBoolean(prop->values.front(), &blendblock.mAlphaToCoverageEnabled))
+                        bool a2cEnabled;
+                        if( getBoolean( prop->values.front(), &a2cEnabled ) )
                         {
-                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                               "alpha_to_coverage argument must be \"true\", \"false\", \"yes\", \"no\", \"on\", or \"off\"");
+                            blendblock.mAlphaToCoverage =
+                                a2cEnabled ? HlmsBlendblock::A2cEnabled : HlmsBlendblock::A2cDisabled;
+                        }
+                        else
+                        {
+                            String val;
+                            if( getString( prop->values.front(), &val ) )
+                            {
+                                if( val == "msaa_only" )
+                                    blendblock.mAlphaToCoverage = HlmsBlendblock::A2cEnabledMsaaOnly;
+                            }
+
+                            if( blendblock.mAlphaToCoverage != HlmsBlendblock::A2cEnabledMsaaOnly )
+                            {
+                                compiler->addError(
+                                    ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                    "alpha_to_coverage argument must be \"msaa_only\", \"true\", "
+                                    "\"false\", \"yes\", \"no\", \"on\", or \"off\"" );
+                            }
                         }
                     }
                     break;

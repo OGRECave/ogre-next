@@ -187,6 +187,9 @@ namespace Ogre
 
         const CompositorNode *getParentNode() const { return mParentNode; }
 
+        /// @copydoc CompositorPass::mAnyTargetTexture
+        const TextureGpu *getAnyTargetTexture() const { return mAnyTargetTexture; }
+
         const ResourceTransitionArray &getResourceTransitions() const { return mResourceTransitions; }
         ResourceTransitionArray       &_getResourceTransitionsNonConst() { return mResourceTransitions; }
 
