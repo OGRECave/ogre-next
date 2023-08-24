@@ -509,7 +509,7 @@ void ParticleSystemManager2::destroyAllParticleSystems()
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::_addToRenderQueue( size_t threadIdx, size_t numThreads,
                                                 RenderQueue *renderQueue, uint8 renderQueueId,
-                                                uint32 visibilityMask ) const
+                                                uint32 visibilityMask, bool includeNonCasters ) const
 {
     const size_t numSystemDefs = mActiveParticleSystemDefs.size();
     const size_t systemDefsPerThread = ( numSystemDefs + numThreads - 1u ) / numThreads;
@@ -525,7 +525,8 @@ void ParticleSystemManager2::_addToRenderQueue( size_t threadIdx, size_t numThre
         ParticleSystemDef *systemDef = *itor;
         if( systemDef->getNumSimdActiveParticles() > 0u &&  //
             systemDef->mRenderQueueID == renderQueueId &&   //
-            systemDef->getVisibilityFlags() & visibilityMask )
+            systemDef->getVisibilityFlags() & visibilityMask &&
+            ( systemDef->getCastShadows() || includeNonCasters ) )
         {
             renderQueue->addRenderableV2( threadIdx, systemDef->mRenderQueueID, false, systemDef,
                                           systemDef );

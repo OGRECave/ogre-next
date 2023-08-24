@@ -160,9 +160,11 @@ namespace Ogre
         @param renderQueue
         @param renderQueueId
         @param visibilityMask
+        @param includeNonCasters
         */
         void _addToRenderQueue( size_t threadIdx, size_t numThreads, RenderQueue *renderQueue,
-                                uint8 renderQueueId, uint32 visibilityMask ) const;
+                                uint8 renderQueueId, uint32 visibilityMask,
+                                bool includeNonCasters ) const;
 
         IndexBufferPacked *_getSharedIndexBuffer( size_t maxQuota, VaoManager *vaoManager );
 
