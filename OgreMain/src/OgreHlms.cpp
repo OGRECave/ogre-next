@@ -179,6 +179,7 @@ namespace Ogre
     const IdString HlmsBaseProp::DecalsEmissive = IdString( "hlms_decals_emissive" );
     const IdString HlmsBaseProp::FwdPlusCubemapSlotOffset =
         IdString( "hlms_forwardplus_cubemap_slot_offset" );
+    const IdString HlmsBaseProp::BlueNoise = IdString( "hlms_blue_noise" );
     const IdString HlmsBaseProp::ParticleSystem = IdString( "hlms_particle_system" );
     const IdString HlmsBaseProp::ParticleType = IdString( "hlms_particle_type" );
     const IdString HlmsBaseProp::ParticleTypePoint = IdString( "particle_type_point" );

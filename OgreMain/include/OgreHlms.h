@@ -1139,6 +1139,7 @@ namespace Ogre
         static const IdString DecalsNormals;
         static const IdString DecalsEmissive;
         static const IdString FwdPlusCubemapSlotOffset;
+        static const IdString BlueNoise;
         static const IdString ParticleSystem;
         // Change per Object (specific to Particles)
         static const IdString ParticleType;
