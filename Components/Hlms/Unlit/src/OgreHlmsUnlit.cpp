@@ -182,6 +182,14 @@ namespace Ogre
         else
             descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u;
 
+        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
+        {
+            descBindingRanges[DescBindingTypes::Texture].end =
+                (uint16)getProperty( tid, "samplerStateStart" );
+            descBindingRanges[DescBindingTypes::Texture].start =
+                descBindingRanges[DescBindingTypes::Texture].end - 1u;
+        }
+
         rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
         bakedRanges[DescBindingTypes::Texture].start = (uint16)getProperty( tid, "samplerStateStart" );
@@ -575,6 +583,10 @@ namespace Ogre
 
         const int32 samplerStateStart = getProperty( tid, UnlitProperty::SamplerStateStart );
         int32 texUnit = samplerStateStart;
+
+        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
+            setTextureReg( tid, PixelShader, "blueNoise", texUnit - 1 );
+
         {
             char tmpData[32];
             LwString texName = LwString::FromEmptyPointer( tmpData, sizeof( tmpData ) );
@@ -660,6 +672,12 @@ namespace Ogre
         mTexUnitSlotStart =
             uint32( mReservedTexSlots + mReservedTexBufferSlots +
                     mListener->getNumExtraPassTextures( mT[kNoTid].setProperties, casterPass ) );
+
+        if( mHlmsManager->getBlueNoiseTexture() )
+        {
+            setProperty( kNoTid, HlmsBaseProp::BlueNoise, 1 );
+            ++mTexUnitSlotStart;
+        }
 
         setProperty( kNoTid, UnlitProperty::SamplerStateStart, (int32)mTexUnitSlotStart );
 
@@ -995,6 +1013,14 @@ namespace Ogre
                     CbShaderBuffer( VertexShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
                 *commandBuffer->addCommand<CbShaderBuffer>() =
                     CbShaderBuffer( PixelShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
+            }
+
+            size_t texUnit = mReservedTexBufferSlots;
+            if( mHlmsManager->getBlueNoiseTexture() )
+            {
+                *commandBuffer->addCommand<CbTexture>() =
+                    CbTexture( (uint16)texUnit, mHlmsManager->getBlueNoiseTexture(), 0 );
+                ++texUnit;
             }
 
             rebindTexBuffer( commandBuffer );

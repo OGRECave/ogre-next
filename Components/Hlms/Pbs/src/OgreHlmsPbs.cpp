@@ -1288,6 +1288,9 @@ namespace Ogre
             }
         }
 
+        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
+            setTextureReg( tid, PixelShader, "blueNoise", texUnit++ );
+
         if( getProperty( tid, HlmsBaseProp::EnableDecals ) )
         {
             const int32 decalsDiffuseProp = getProperty( tid, HlmsBaseProp::DecalsDiffuse );
@@ -1606,6 +1609,9 @@ namespace Ogre
             setProperty( kNoTid, HlmsBaseProp::VPos, 1 );
 
         mAtmosphere = sceneManager->getAtmosphere();
+
+        if( mHlmsManager->getBlueNoiseTexture() )
+            setProperty( kNoTid, HlmsBaseProp::BlueNoise, 1 );
 
         if( !casterPass )
         {
@@ -2963,6 +2969,9 @@ namespace Ogre
             if( mLtcMatrixTexture )
                 ++mTexUnitSlotStart;
 
+            if( mHlmsManager->getBlueNoiseTexture() )
+                ++mTexUnitSlotStart;
+
             for( size_t i = 0u; i < 3u; ++i )
             {
                 if( mDecalsTextures[i] && ( i != 2u || !mDecalsDiffuseMergedEmissive ) )
@@ -3167,6 +3176,13 @@ namespace Ogre
                 {
                     *commandBuffer->addCommand<CbTexture>() =
                         CbTexture( (uint16)texUnit, mLtcMatrixTexture, mAreaLightMasksSamplerblock );
+                    ++texUnit;
+                }
+
+                if( mHlmsManager->getBlueNoiseTexture() )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( (uint16)texUnit, mHlmsManager->getBlueNoiseTexture(), 0 );
                     ++texUnit;
                 }
 
@@ -3769,7 +3785,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbs::loadLtcMatrix()
     {
-        const uint32 poolId = 992044u;
+        const uint32 poolId = 992044u;  // Same as BlueNoise (BlueNoise has different pixel format)
 
         TextureGpuManager *textureGpuManager = mRenderSystem->getTextureGpuManager();
         if( !textureGpuManager->hasPoolId( poolId, 64u, 64u, 1u, PFG_RGBA16_FLOAT ) )

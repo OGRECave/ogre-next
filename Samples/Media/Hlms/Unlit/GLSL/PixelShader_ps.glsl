@@ -51,6 +51,8 @@ layout(location = FRAG_COLOR, index = 0) out midf outColour;
 		layout( ogre_s@counter(currSampler) ) uniform sampler samplerState@n;@end
 @end
 
+@insertpiece( DeclBlueNoiseTexture )
+
 @insertpiece( DefaultHeaderPS )
 
 @property( hlms_shadowcaster )
