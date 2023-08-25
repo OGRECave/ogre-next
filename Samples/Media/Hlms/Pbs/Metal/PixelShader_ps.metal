@@ -61,7 +61,7 @@ fragment @insertpiece( output_type ) main_metal
 		, uint gl_SampleMask [[sample_mask]]
 	@end
 	// START UNIFORM DECLARATION
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@property( !hlms_shadowcaster )
 			@insertpiece( PassDecl )
 		@end
@@ -163,7 +163,7 @@ fragment @insertpiece( output_type ) main_metal
 	PS_INPUT inPs [[stage_in]]
 
 	// START UNIFORM DECLARATION
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( MaterialDecl )
 	@end
 	@property( hlms_shadowcaster_point )

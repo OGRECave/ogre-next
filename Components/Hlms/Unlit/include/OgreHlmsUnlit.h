@@ -110,7 +110,8 @@ namespace Ogre
 
         void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash ) override;
         void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override;
-        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) override;
+        void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                        const PiecesMap *nonCasterPieces ) override;
 
         void notifyPropertiesMergedPreGenerationStep( size_t tid ) override;
 

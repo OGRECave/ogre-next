@@ -87,7 +87,10 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
 {
     memset( &mParticleCpuData, 0, sizeof( mParticleCpuData ) );
     if( manager )
+    {
         mParticlesToKill.resizePOD( manager->getNumWorkerThreads() );
+        mAabb.resizePOD( manager->getNumWorkerThreads() );
+    }
 
     mRenderQueueID = kParticleSystemDefaultRenderQueueId;
 

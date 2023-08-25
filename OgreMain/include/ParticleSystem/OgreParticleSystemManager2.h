@@ -48,6 +48,8 @@ namespace Ogre
     class ParticleAffectorFactory2;
     class ParticleEmitterDefDataFactory;
 
+    class ArrayAabb;
+
     class _OgreExport ParticleSystemManager2
     {
         SceneManager *ogre_nullable mSceneManager;
@@ -71,7 +73,7 @@ namespace Ogre
 
         void tickParticles( size_t threadIdx, ArrayReal timeSinceLast, ParticleCpuData cpuData,
                             ParticleGpuData *gpuData, const size_t numParticles,
-                            ParticleSystemDef *systemDef );
+                            ParticleSystemDef *systemDef, ArrayAabb &inOutAabb );
 
         void updateSerialPre( Real timeSinceLast );
         void updateSerialPos();

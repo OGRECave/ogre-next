@@ -83,7 +83,8 @@ ParticleSystemManager2::~ParticleSystemManager2()
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayReal timeSinceLast,
                                             ParticleCpuData cpuData, ParticleGpuData *gpuData,
-                                            const size_t numParticles, ParticleSystemDef *systemDef )
+                                            const size_t numParticles, ParticleSystemDef *systemDef,
+                                            ArrayAabb &inOutAabb )
 {
     const ArrayReal invPi = Mathlib::SetAll( 1.0f / Math::PI );
 
@@ -105,6 +106,8 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
     const ArrayReal alphaScale = Mathlib::SetAll( 2.0f );
     const ArrayReal alphaOffset = Mathlib::SetAll( -1.0f );
 
+    ArrayAabb aabb = inOutAabb;
+
     for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
     {
         *cpuData.mPosition += *cpuData.mDirection * timeSinceLast;
@@ -112,6 +115,17 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
         const ArrayMaskR wasDead = Mathlib::CompareLessEqual( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
         *cpuData.mTimeToLive = Mathlib::Max( *cpuData.mTimeToLive - timeSinceLast, ARRAY_REAL_ZERO );
         const ArrayMaskR isDead = Mathlib::CompareLessEqual( *cpuData.mTimeToLive, ARRAY_REAL_ZERO );
+
+        {
+            // Calculate / Grow the AABB. Ignore dead particles.
+            ArrayVector3 position = aabb.mCenter;
+            position.CmovRobust( isDead, *cpuData.mPosition );
+            const ArrayReal maxDimension = Mathlib::CmovRobust(
+                ARRAY_REAL_ZERO, cpuData.mDimensions->getMaxComponent() * 0.5f, isDead );
+
+            aabb.merge(
+                ArrayAabb( position, ArrayVector3( maxDimension, maxDimension, maxDimension ) ) );
+        }
 
         const uint32 scalarWasDead = BooleanMask4::getScalarMask( wasDead );
         const uint32 scalarIsDead = BooleanMask4::getScalarMask( isDead );
@@ -179,6 +193,8 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
 
         cpuData.advancePack();
     }
+
+    inOutAabb = aabb;
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
@@ -240,6 +256,20 @@ void ParticleSystemManager2::updateSerialPos()
                 systemDef->deallocParticle( handle );
             threadParticlesToKill.clear();
         }
+
+        Aabb aabb = Aabb::BOX_NULL;
+        for( const Aabb &threadAabb : systemDef->mAabb )
+            aabb.merge( threadAabb );
+
+        // A null box can happen if there are not live particles.
+        // We only care of the AABB for shadow casting (if there are PFXs casting shadows).
+        // MovableObject::calculateCastersBox has problem with null boxes, but will ignore
+        // infinite ones; so set it to that.
+        if( aabb == Aabb::BOX_NULL )
+            aabb = Aabb::BOX_INFINITE;
+
+        systemDef->setLocalAabb( aabb );
+        *systemDef->_getObjectData().mWorldAabb = *systemDef->_getObjectData().mLocalAabb;
 
         if( systemDef->mParticleGpuData )
         {
@@ -342,6 +372,8 @@ void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size
         // threadAdvance can now be >= quota
         threadAdvance += systemDef->getActiveParticlesPackOffset() * ARRAY_PACKED_REALS;
 
+        ArrayAabb aabb = ArrayAabb::BOX_NULL;
+
         for( int i = 0; i < 2; ++i )
         {
             // maxParticle can be >= quota
@@ -367,8 +399,8 @@ void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size
             for( const ParticleAffector2 *affector : systemDef->mAffectors )
                 affector->run( cpuData, numParticlesToProcess, timeSinceLast );
 
-            tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numParticlesToProcess,
-                           systemDef );
+            tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numParticlesToProcess, systemDef,
+                           aabb );
 
             gpuAdvance += numParticlesToProcess;
             totalThreadNumParticlesToProcess = particleExcess;
@@ -379,6 +411,16 @@ void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size
             threadAdvance = threadAdvance - std::min( quota, threadAdvance );
             cpuData = systemDef->getParticleCpuData();
         }
+
+        Aabb finalAabb;
+        aabb.getAsAabb( finalAabb, 0u );
+        for( size_t j = 1u; j < ARRAY_PACKED_REALS; ++j )
+        {
+            Aabb scalarAabb;
+            aabb.getAsAabb( scalarAabb, j );
+            finalAabb.merge( scalarAabb );
+        }
+        systemDef->mAabb[threadIdx] = finalAabb;
     }
 }
 //-----------------------------------------------------------------------------

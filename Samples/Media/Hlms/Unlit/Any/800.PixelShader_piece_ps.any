@@ -30,7 +30,7 @@
 	@property( has_planar_reflections || hlms_shadowcaster_point )
 		@insertpiece( PassStructDecl )
 	@end
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( MaterialStructDecl )
 		@insertpiece( InstanceStructDecl )
 	@end
@@ -65,7 +65,7 @@
 
 	midf4 diffuseCol = midf4_c( 1.0f, 1.0f, 1.0f, 1.0f );
 
-	@property( diffuse_map || alpha_test || diffuse )
+	@property( diffuse_map || alpha_test || hlms_alpha_hash || diffuse )
 		@insertpiece( LoadMaterial )
 	@end
 

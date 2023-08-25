@@ -67,7 +67,7 @@ fragment @insertpiece( output_type ) main_metal
 		, uint gl_SampleMask [[sample_mask]]
 	@end
 	// START UNIFORM DECLARATION
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( PassDecl )
 		@insertpiece( TerraMaterialDecl )
 		@insertpiece( PccManualProbeDecl )

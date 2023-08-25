@@ -877,8 +877,6 @@ namespace Ogre
             ArrayInt *RESTRICT_ALIAS visibilityFlags =
                 reinterpret_cast<ArrayInt * RESTRICT_ALIAS>( objData.mVisibilityFlags );
 
-            objData.mWorldAabb->mCenter + objData.mWorldAabb->mHalfSize;
-
             // Ignore casters with infinite boxes
             ArrayMaskR infMask = Mathlib::Or(
                 Mathlib::Or( Mathlib::isInfinity( objData.mWorldAabb->mHalfSize.mChunkBase[0] ),

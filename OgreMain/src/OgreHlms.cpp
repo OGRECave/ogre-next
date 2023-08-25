@@ -2722,26 +2722,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
+    void Hlms::setupSharedBasicProperties( Renderable *renderable )
     {
-        OgreProfileExhaustive( "Hlms::calculateHashFor" );
-
-        mT[kNoTid].setProperties.clear();
-
-        setProperty( kNoTid, HlmsBaseProp::Skeleton, renderable->hasSkeletonAnimation() );
-
-        setProperty( kNoTid, HlmsBaseProp::Pose, renderable->getNumPoses() );
-        setProperty( kNoTid, HlmsBaseProp::PoseHalfPrecision, renderable->getPoseHalfPrecision() );
-        setProperty( kNoTid, HlmsBaseProp::PoseNormals, renderable->getPoseNormals() );
-
-        uint16 numTexCoords = 0;
-        if( renderable->getVaos( VpNormal ).empty() )
-            numTexCoords = calculateHashForV1( renderable );
-        else
-            numTexCoords = calculateHashForV2( renderable );
-
-        setProperty( kNoTid, HlmsBaseProp::UvCount, numTexCoords );
-
         HlmsDatablock *datablock = renderable->getDatablock();
 
         setProperty( kNoTid, HlmsBaseProp::AlphaTest, datablock->getAlphaTest() != CMPF_ALWAYS_PASS );
@@ -2804,11 +2786,34 @@ namespace Ogre
             setProperty( kNoTid, HlmsBaseProp::IdentityViewProjDynamic, 1 );
         else if( renderable->getUseIdentityProjection() )
             setProperty( kNoTid, HlmsBaseProp::IdentityViewProj, 1 );
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
+    {
+        OgreProfileExhaustive( "Hlms::calculateHashFor" );
 
-        setProperty( kNoTid, HlmsPsoProp::Macroblock,
-                     renderable->getDatablock()->getMacroblock( false )->mLifetimeId );
-        setProperty( kNoTid, HlmsPsoProp::Blendblock,
-                     renderable->getDatablock()->getBlendblock( false )->mLifetimeId );
+        mT[kNoTid].setProperties.clear();
+
+        setProperty( kNoTid, HlmsBaseProp::Skeleton, renderable->hasSkeletonAnimation() );
+
+        setProperty( kNoTid, HlmsBaseProp::Pose, renderable->getNumPoses() );
+        setProperty( kNoTid, HlmsBaseProp::PoseHalfPrecision, renderable->getPoseHalfPrecision() );
+        setProperty( kNoTid, HlmsBaseProp::PoseNormals, renderable->getPoseNormals() );
+
+        uint16 numTexCoords = 0;
+        if( renderable->getVaos( VpNormal ).empty() )
+            numTexCoords = calculateHashForV1( renderable );
+        else
+            numTexCoords = calculateHashForV2( renderable );
+
+        setProperty( kNoTid, HlmsBaseProp::UvCount, numTexCoords );
+
+        setupSharedBasicProperties( renderable );
+
+        HlmsDatablock *datablock = renderable->getDatablock();
+
+        setProperty( kNoTid, HlmsPsoProp::Macroblock, datablock->getMacroblock( false )->mLifetimeId );
+        setProperty( kNoTid, HlmsPsoProp::Blendblock, datablock->getBlendblock( false )->mLifetimeId );
 
         PiecesMap pieces[NumShaderTypes];
         if( datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
@@ -2839,11 +2844,9 @@ namespace Ogre
             VertexArrayObject *vao = renderable->getVaos( VpShadow )[0];
             setProperty( kNoTid, HlmsPsoProp::InputLayoutId, vao->getInputLayoutId() );
         }
-        calculateHashForPreCaster( renderable, piecesCaster );
-        setProperty( kNoTid, HlmsPsoProp::Macroblock,
-                     renderable->getDatablock()->getMacroblock( true )->mLifetimeId );
-        setProperty( kNoTid, HlmsPsoProp::Blendblock,
-                     renderable->getDatablock()->getBlendblock( true )->mLifetimeId );
+        calculateHashForPreCaster( renderable, piecesCaster, pieces );
+        setProperty( kNoTid, HlmsPsoProp::Macroblock, datablock->getMacroblock( true )->mLifetimeId );
+        setProperty( kNoTid, HlmsPsoProp::Blendblock, datablock->getBlendblock( true )->mLifetimeId );
         uint32 renderableCasterHash = this->addRenderableCache( mT[kNoTid].setProperties, piecesCaster );
 
         outHash = renderableHash;

@@ -5,7 +5,7 @@
 	@piece( output_type )void@end
 @end
 
-@property( hlms_render_depth_only && !alpha_test && !hlms_shadows_esm )
+@property( hlms_render_depth_only && !alpha_test && !hlms_alpha_hash && !hlms_shadows_esm )
 	@set( hlms_disable_stage, 1 )
 @end
 

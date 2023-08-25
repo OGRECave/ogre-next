@@ -40,7 +40,7 @@ vertex PS_INPUT main_metal
 	@end
 	// START UNIFORM DECLARATION
 	@insertpiece( PassDecl )
-	@property( ( !hlms_shadowcaster || alpha_test ) && hlms_colour && diffuse )
+	@property( ( !hlms_shadowcaster || alpha_test || hlms_alpha_hash ) && hlms_colour && diffuse )
 		@insertpiece( MaterialDecl )
 	@end
 	@insertpiece( InstanceDecl )

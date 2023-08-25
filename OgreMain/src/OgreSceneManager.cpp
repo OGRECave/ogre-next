@@ -3751,6 +3751,34 @@ namespace Ogre
             ++it;
         }
 
+        {
+            // Calculate the particles
+            // Everything will be treated as const (we have no ConstObjectData structure).
+            ObjectMemoryManager *objMemoryManager =
+                const_cast<ObjectMemoryManager *>( &mParticleSysDefMemoryManager );
+            const size_t numRenderQueues = objMemoryManager->getNumRenderQueues();
+
+            // TODO: Send this to worker threads (dark_sylinc)
+
+            size_t firstRq = std::min<size_t>( _firstRq, numRenderQueues );
+            size_t lastRq = std::min<size_t>( _lastRq, numRenderQueues );
+
+            for( size_t i = firstRq; i < lastRq; ++i )
+            {
+                AxisAlignedBox tmpBox;
+
+                ObjectData objData;
+                const size_t numObjs = objMemoryManager->getFirstObjectData( objData, i );
+
+                MovableObject::calculateCastersBox(
+                    numObjs, objData,
+                    ( viewportVisibilityMask & getVisibilityMask() ) |
+                        ( viewportVisibilityMask & ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
+                    &tmpBox );
+                retVal.merge( tmpBox );
+            }
+        }
+
         return retVal;
     }
     //---------------------------------------------------------------------
