@@ -17,14 +17,14 @@ layout(location = FRAG_COLOR, index = 0) out midf outColour;
 // START UNIFORM DECLARATION
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
+@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || hlms_alpha_hash || exponential_shadow_maps )
 	vulkan_layout( location = 0 ) in block
 	{
 		@insertpiece( VStoPS_block )
 	} inPs;
 @end
 
-@property( !hlms_shadowcaster || alpha_test )
+@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 	@property( syntax != glslvk )
 		@foreach( num_textures, n )
 			@property( is_texture@n_array )
@@ -62,7 +62,7 @@ layout(location = FRAG_COLOR, index = 0) out midf outColour;
 void main()
 {
 	@insertpiece( custom_ps_preExecution )
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( DefaultBodyPS )
 	@end
 	@property( hlms_shadowcaster )

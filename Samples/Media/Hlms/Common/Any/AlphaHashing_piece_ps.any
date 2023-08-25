@@ -6,23 +6,23 @@
 @piece( DeclAlphaHashFuncs )
 
 @property( !hlms_blue_noise )
-    // Use ALU-based white noise if the blue noise texture is not available.
-    INLINE uint AlphaHashWang( uint seed )
-    {
-        seed = ( seed ^ 61u ) ^ ( seed >> 16u );
-        seed *= 9u;
-        seed = seed ^ ( seed >> 4u );
-        seed *= 0x27d4eb2du;
-        seed = seed ^ ( seed >> 15u );
-        return seed;
-    }
+	// Use ALU-based white noise if the blue noise texture is not available.
+	INLINE uint AlphaHashWang( uint seed )
+	{
+		seed = ( seed ^ 61u ) ^ ( seed >> 16u );
+		seed *= 9u;
+		seed = seed ^ ( seed >> 4u );
+		seed *= 0x27d4eb2du;
+		seed = seed ^ ( seed >> 15u );
+		return seed;
+	}
 
-    INLINE float AlphaHashWangFP2D( float2 p )
-    {
-        uint seed = floatBitsToUint( p.x ) ^ floatBitsToUint( p.y * 59.0 + 11.0 );
-        seed = AlphaHashWang( seed );
-        return ( float( seed ) ) * ( 1.0 / 4294967296.0 );
-    }
+	INLINE float AlphaHashWangFP2D( float2 p )
+	{
+		uint seed = floatBitsToUint( p.x ) ^ floatBitsToUint( p.y * 59.0 + 11.0 );
+		seed = AlphaHashWang( seed );
+		return ( float( seed ) ) * ( 1.0 / 4294967296.0 );
+	}
 @end
 
 @property( hlms_alpha_to_coverage )
@@ -31,11 +31,11 @@
 	INLINE bool AlphaHashReject( float _alpha, float2 vPos )
 @end
 {
-    @property( hlms_blue_noise )
-        const float g_HashScale = 1.5f;
-    @else
-        const float g_HashScale = 1.0f;
-    @end
+	@property( hlms_blue_noise )
+		const float g_HashScale = 1.5f;
+	@else
+		const float g_HashScale = 1.0f;
+	@end
 
 	// Formula taken from Hashed Alpha Testing, Chris Wyman & Morgan McGuire
 	// Find the discretized derivatives of our coordinates
@@ -44,14 +44,14 @@
 	// Find two nearest log-discretized noise scales
 	const float2 pixScales = float2( exp2( floor( log2( pixScale ) ) ), exp2( ceil( log2( pixScale ) ) ) );
 	// Compute alpha thresholds at our two noise scales
-    @property( hlms_blue_noise )
-        const float2 alpha = float2(
-            OGRE_LoadArray2D( blueNoiseTex, mod( floor( pixScales.x * vPos.xy ), 64.0f ), 0, 0 ).x,
-            OGRE_LoadArray2D( blueNoiseTex, mod( floor( pixScales.y * vPos.xy ) + 1, 64.0f ), 0, 0 ).x );
-    @else
-        const float2 alpha = float2( AlphaHashWangFP2D( floor( pixScales.x * vPos.xy ) ),
-                                     AlphaHashWangFP2D( floor( pixScales.y * vPos.xy ) ) );
-    @end
+	@property( hlms_blue_noise )
+		const float2 alpha = float2(
+			OGRE_LoadArray2D( blueNoiseTex, mod( floor( pixScales.x * vPos.xy ), 64.0f ), 0, 0 ).x,
+			OGRE_LoadArray2D( blueNoiseTex, mod( floor( pixScales.y * vPos.xy ) + 1, 64.0f ), 0, 0 ).x );
+	@else
+		const float2 alpha = float2( AlphaHashWangFP2D( floor( pixScales.x * vPos.xy ) ),
+									 AlphaHashWangFP2D( floor( pixScales.y * vPos.xy ) ) );
+	@end
 
 	// Factor to interpolate lerp with
 	const float lerpFactor = fract( log2( pixScale ) );
@@ -67,8 +67,8 @@
 	alphaThreshold = clamp( alphaThreshold, 1.0e-6f, 1.0 );
 
 	@property( hlms_alpha_to_coverage )
-        return lerp( max( ( _alpha - alphaThreshold ) * 2.0f, 0.0f ), 1.0f,
-                     _alpha * _alpha * _alpha * _alpha );
+		return lerp( max( ( _alpha - alphaThreshold ) * 2.0f, 0.0f ), 1.0f,
+					 _alpha * _alpha * _alpha * _alpha );
 	@else
 		return _alpha < alphaThreshold;
 	@end

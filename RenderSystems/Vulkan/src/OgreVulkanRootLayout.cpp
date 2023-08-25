@@ -580,8 +580,11 @@ namespace Ogre
                         descBindingRanges[j + DescBindingTypes::ReadOnlyBuffer];
                     if( bindRanges.isInUse() )
                     {
-                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[j] &&
-                                            "No DescriptorSetTexture/Sampler/Uav bound when expected!" );
+                        OGRE_ASSERT_MEDIUM(
+                            table.bakedDescriptorSets[j] &&
+                            "No DescriptorSetTexture/Sampler/Uav bound when expected!\n"
+                            "Forgot a call to "
+                            "RenderSystem::_setTextures/_setTextures2/_setSamplers/etc?" );
                         OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[j]->descriptorCount ==
                                                 bindRanges.getNumUsedSlots() &&
                                             "DescriptorSetTexture/Sampler/Uav provided is incompatible "

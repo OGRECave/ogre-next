@@ -1053,7 +1053,8 @@ namespace Ogre
                                              const PiecesMap * )
     {
         HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock *>( renderable->getDatablock() );
-        const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
+        const bool hasAlphaTestOrHash =
+            datablock->getAlphaTest() != CMPF_ALWAYS_PASS || datablock->getAlphaHashing();
 
         HlmsPropertyVec::iterator itor = mT[kNoTid].setProperties.begin();
         HlmsPropertyVec::iterator endt = mT[kNoTid].setProperties.end();
@@ -1073,9 +1074,7 @@ namespace Ogre
                      itor->keyName != HlmsBaseProp::PoseNormals &&
                      itor->keyName != HlmsBaseProp::BonesPerVertex &&
                      itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
-                     itor->keyName != HlmsBaseProp::AlphaTest &&
-                     itor->keyName != HlmsBaseProp::AlphaBlend &&
-                     ( !hasAlphaTest || !requiredPropertyByAlphaTest( itor->keyName ) ) )
+                     ( !hasAlphaTestOrHash || !requiredPropertyByAlphaTest( itor->keyName ) ) )
             {
                 itor = mT[kNoTid].setProperties.erase( itor );
                 endt = mT[kNoTid].setProperties.end();
@@ -1086,7 +1085,9 @@ namespace Ogre
             }
         }
 
-        if( hasAlphaTest && getProperty( kNoTid, PbsProperty::UseTextureAlpha ) )
+        setupSharedBasicProperties( renderable );
+
+        if( hasAlphaTestOrHash && getProperty( kNoTid, PbsProperty::UseTextureAlpha ) )
         {
             if( datablock->mTexturesDescSet )
                 setDetailMapProperties( kNoTid, datablock, inOutPieces, true );
@@ -1288,9 +1289,6 @@ namespace Ogre
             }
         }
 
-        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
-            setTextureReg( tid, PixelShader, "blueNoise", texUnit++ );
-
         if( getProperty( tid, HlmsBaseProp::EnableDecals ) )
         {
             const int32 decalsDiffuseProp = getProperty( tid, HlmsBaseProp::DecalsDiffuse );
@@ -1345,6 +1343,9 @@ namespace Ogre
             ++texUnit;
         }
 
+        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
+            setTextureReg( tid, PixelShader, "blueNoise", texUnit++ );
+
         texUnit += mListener->getNumExtraPassTextures( mT[tid].setProperties, casterPass );
 
         setProperty( tid, PbsProperty::Set0TextureSlotEnd, texUnit );
@@ -1392,8 +1393,11 @@ namespace Ogre
             else
                 setProperty( tid, "particleSystemGpuData", mParticleSystemSlot );
 
-            setProperty( kNoTid, HlmsBaseProp::Normal, 1 );
-            setProperty( kNoTid, HlmsBaseProp::Tangent, 1 );
+            if( !casterPass )
+            {
+                setProperty( kNoTid, HlmsBaseProp::Normal, 1 );
+                setProperty( kNoTid, HlmsBaseProp::Tangent, 1 );
+            }
             setProperty( kNoTid, HlmsBaseProp::UvCount, 1 );
         }
     }
@@ -1738,6 +1742,8 @@ namespace Ogre
 #endif
         }
 
+        const bool bNeedsViewMatrix = msHasParticleFX2Plugin;
+
         {
             uint32 numPassConstBuffers = 3u;
             if( !casterPass )
@@ -1749,6 +1755,7 @@ namespace Ogre
 
             if( msHasParticleFX2Plugin )
             {
+                setProperty( kNoTid, HlmsBaseProp::ViewMatrix, 1 );
                 mParticleSystemConstSlot = static_cast<uint8>( numPassConstBuffers );
                 ++numPassConstBuffers;
             }
@@ -1959,6 +1966,9 @@ namespace Ogre
         }
         else
         {
+            // float4x4 view
+            if( bNeedsViewMatrix )
+                mapSize += 16u * 4u;
             isShadowCastingPointLight = getProperty( kNoTid, HlmsBaseProp::ShadowCasterPoint ) != 0;
             // vec4 cameraPosWS
             if( isShadowCastingPointLight )
@@ -2859,6 +2869,12 @@ namespace Ogre
         }
         else
         {
+            if( bNeedsViewMatrix )
+            {
+                for( size_t i = 0u; i < 16u; ++i )
+                    *passBufferPtr++ = (float)viewMatrix[0][i];
+            }
+
             // vec4 viewZRow
             if( mShadowFilter == ExponentialShadowMaps )
             {
@@ -2969,9 +2985,6 @@ namespace Ogre
             if( mLtcMatrixTexture )
                 ++mTexUnitSlotStart;
 
-            if( mHlmsManager->getBlueNoiseTexture() )
-                ++mTexUnitSlotStart;
-
             for( size_t i = 0u; i < 3u; ++i )
             {
                 if( mDecalsTextures[i] && ( i != 2u || !mDecalsDiffuseMergedEmissive ) )
@@ -2989,6 +3002,16 @@ namespace Ogre
                     mTexUnitSlotStart - 1u -
                     mListener->getNumExtraPassTextures( mT[kNoTid].setProperties, casterPass ) );
             }
+#endif
+        }
+
+        if( mHlmsManager->getBlueNoiseTexture() )
+        {
+            // Blue Noise is bound with shadow casters too
+            ++mTexUnitSlotStart;
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
+            // Planar reflections did not account for our slot which comes after it. Correct it.
+            --mPlanarReflectionSlotIdx;
 #endif
         }
 
@@ -3179,13 +3202,6 @@ namespace Ogre
                     ++texUnit;
                 }
 
-                if( mHlmsManager->getBlueNoiseTexture() )
-                {
-                    *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( (uint16)texUnit, mHlmsManager->getBlueNoiseTexture(), 0 );
-                    ++texUnit;
-                }
-
                 for( size_t i = 0u; i < 3u; ++i )
                 {
                     if( mDecalsTextures[i] && ( i != 2u || !mDecalsDiffuseMergedEmissive ) )
@@ -3218,6 +3234,13 @@ namespace Ogre
                 }
             }
 
+            if( mHlmsManager->getBlueNoiseTexture() )
+            {
+                *commandBuffer->addCommand<CbTexture>() =
+                    CbTexture( (uint16)texUnit, mHlmsManager->getBlueNoiseTexture(), 0 );
+                ++texUnit;
+            }
+
             mLastDescTexture = 0;
             mLastDescSampler = 0;
             mLastBoundPool = 0;
@@ -3246,7 +3269,8 @@ namespace Ogre
         // Don't bind the material buffer on caster passes (important to keep
         // MDI & auto-instancing running on shadow map passes)
         if( mLastBoundPool != datablock->getAssignedPool() &&
-            ( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ) )
+            ( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+              datablock->getAlphaHashing() ) )
         {
             // layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
@@ -3585,7 +3609,8 @@ namespace Ogre
         //                          ---- PIXEL SHADER ----
         //---------------------------------------------------------------------------
 
-        if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
+        if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+            datablock->getAlphaHashing() )
         {
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             if( !casterPass && mHasPlanarReflections &&

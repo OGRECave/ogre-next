@@ -169,6 +169,8 @@ namespace Ogre
 
         /// One per thread.
         FastArray<FastArray<uint32>> mParticlesToKill;
+        /// One per thread.
+        FastArray<Aabb> mAabb;
 
         ParticleType::ParticleType mParticleType;
 

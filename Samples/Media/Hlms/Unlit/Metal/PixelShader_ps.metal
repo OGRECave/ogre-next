@@ -22,14 +22,14 @@ fragment @insertpiece( output_type ) main_metal
 	@property( has_planar_reflections || hlms_shadowcaster_point )
 		@insertpiece( PassDecl )
 	@end
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( MaterialDecl )
 	@end
 	@insertpiece( custom_ps_uniformDeclaration )
 	// END UNIFORM DECLARATION
 	@property( hlms_vpos ), float4 gl_FragCoord [[position]]@end
 
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@foreach( num_textures, n )
 			@property( is_texture@n_array )
 				, texture2d_array<midf> textureMapsArray@n [[texture(@value(textureMapsArray@n))]]
@@ -45,7 +45,7 @@ fragment @insertpiece( output_type ) main_metal
 	PS_OUTPUT outPs;
 
 	@insertpiece( custom_ps_preExecution )
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@insertpiece( DefaultBodyPS )
 	@end
 	@property( hlms_shadowcaster )

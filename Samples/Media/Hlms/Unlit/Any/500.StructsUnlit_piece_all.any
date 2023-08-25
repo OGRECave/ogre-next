@@ -93,7 +93,7 @@
 @pset( texcoord, 0 )
 
 @piece( VStoPS_block )
-	@property( !hlms_shadowcaster || alpha_test )
+    @property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@property( syntax != metal )
 			FLAT_INTERPOLANT( uint drawId, @counter(texcoord) );
 		@else

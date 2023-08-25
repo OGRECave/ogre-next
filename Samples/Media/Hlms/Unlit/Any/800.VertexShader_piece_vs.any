@@ -9,7 +9,7 @@
 
 	// START UNIFORM DECLARATION
 	@insertpiece( PassStructDecl )
-	@property( ( !hlms_shadowcaster || alpha_test ) && hlms_colour && diffuse )
+	@property( ( !hlms_shadowcaster || alpha_test || hlms_alpha_hash ) && hlms_colour && diffuse )
 		@insertpiece( MaterialStructDecl )
 	@end
 	@insertpiece( InstanceStructDecl )
@@ -84,7 +84,7 @@
 		outVs_Position = mul( worldPos, passBuf.viewProj[vpmatIdx] );
 	@end
 
-	@property( !hlms_shadowcaster || alpha_test )
+	@property( !hlms_shadowcaster || alpha_test || hlms_alpha_hash )
 		@property( hlms_colour )
 			outVs.colour = midf4_c( inVs_colour );
 			@property( diffuse )

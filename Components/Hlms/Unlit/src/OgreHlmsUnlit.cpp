@@ -538,9 +538,10 @@ namespace Ogre
         //                                              renderable->getDatablock() );
 
         HlmsDatablock *datablock = renderable->getDatablock();
-        const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
+        const bool hasAlphaTestOrHash =
+            datablock->getAlphaTest() != CMPF_ALWAYS_PASS || datablock->getAlphaHashing();
 
-        if( !hasAlphaTest )
+        if( !hasAlphaTestOrHash )
         {
             HlmsPropertyVec::iterator itor = mT[kNoTid].setProperties.begin();
             HlmsPropertyVec::iterator endt = mT[kNoTid].setProperties.end();
@@ -552,9 +553,7 @@ namespace Ogre
                     itor->keyName != HlmsPsoProp::InputLayoutId &&
                     itor->keyName != HlmsBaseProp::Skeleton &&
                     itor->keyName != HlmsBaseProp::BonesPerVertex &&
-                    itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
-                    itor->keyName != HlmsBaseProp::AlphaTest &&
-                    itor->keyName != HlmsBaseProp::AlphaBlend )
+                    itor->keyName != HlmsBaseProp::DualParaboloidMapping )
                 {
                     itor = mT[kNoTid].setProperties.erase( itor );
                     endt = mT[kNoTid].setProperties.end();
@@ -570,6 +569,8 @@ namespace Ogre
             inOutPieces[VertexShader] = normalPassPieces[VertexShader];
             inOutPieces[PixelShader] = normalPassPieces[PixelShader];
         }
+
+        setupSharedBasicProperties( renderable );
 
         if( mFastShaderBuildHack )
             setProperty( kNoTid, UnlitProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
@@ -1030,7 +1031,9 @@ namespace Ogre
 
         // Don't bind the material buffer on caster passes (important to keep
         // MDI & auto-instancing running on shadow map passes)
-        if( mLastBoundPool != datablock->getAssignedPool() && !casterPass )
+        if( mLastBoundPool != datablock->getAssignedPool() &&
+            ( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+              datablock->getAlphaHashing() ) )
         {
             // layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
@@ -1107,7 +1110,8 @@ namespace Ogre
         //                          ---- PIXEL SHADER ----
         //---------------------------------------------------------------------------
 
-        if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
+        if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+            datablock->getAlphaHashing() )
         {
             if( datablock->mTexturesDescSet != mLastDescTexture )
             {

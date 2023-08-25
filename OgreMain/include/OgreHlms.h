@@ -841,6 +841,10 @@ namespace Ogre
         */
         static bool findParamInVec( const HlmsParamVec &paramVec, IdString key, String &inOut );
 
+    protected:
+        void setupSharedBasicProperties( Renderable *renderable );
+
+    public:
         /** Called by the renderable when either it changes the material,
             or its properties change (e.g. the mesh' uvs are stripped)
         @param renderable

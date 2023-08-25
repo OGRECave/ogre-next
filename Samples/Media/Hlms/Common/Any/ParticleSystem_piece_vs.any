@@ -124,6 +124,10 @@
 		inVs_uv0.y = dot( oldUv.xy - 0.5f, particleRotMatrix.zw ) + 0.5f;
 	@end
 
+	@property( hlms_shadowcaster )
+		float4 worldPos = inVs_vertex;
+	@end
+
 	@property( hlms_normal )
 		float4 worldPos = inVs_vertex;
 

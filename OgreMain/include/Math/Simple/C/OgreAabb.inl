@@ -69,9 +69,9 @@ namespace Ogre
         Vector3 min( mCenter - mHalfSize );
         min.makeFloor( rhs.mCenter - rhs.mHalfSize );
 
-        if( max.x != std::numeric_limits<float>::infinity() &&
-            max.y != std::numeric_limits<float>::infinity() &&
-            max.z != std::numeric_limits<float>::infinity() )
+        if( std::abs( max.x ) != std::numeric_limits<float>::infinity() &&
+            std::abs( max.y ) != std::numeric_limits<float>::infinity() &&
+            std::abs( max.z ) != std::numeric_limits<float>::infinity() )
         {
             mCenter = ( max + min ) * 0.5f;
         }

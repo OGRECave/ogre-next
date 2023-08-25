@@ -33,7 +33,7 @@ layout(std140) uniform;
 
 @insertpiece( custom_vs_attributes )
 
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
+@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || hlms_alpha_hash || exponential_shadow_maps )
 	vulkan_layout( location = 0 ) out block
 	{
 		@insertpiece( VStoPS_block )

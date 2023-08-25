@@ -18,7 +18,7 @@ layout(location = FRAG_COLOR) out float outColour;
 @property( has_planar_reflections )
 	@insertpiece( PassDecl )
 @end
-@property( !hlms_shadowcaster && (diffuse_map || alpha_test || diffuse) )
+@property( !hlms_shadowcaster && (diffuse_map || alpha_test || hlms_alpha_hash || diffuse) )
 @insertpiece( MaterialDecl )
 @insertpiece( InstanceDecl )
 @end
@@ -37,12 +37,12 @@ in block
 
 @property( diffuse )@piece( MultiplyDiffuseConst )* material.diffuse@end @end
 
-@property( diffuse_map || alpha_test || diffuse )Material material;@end
+@property( diffuse_map || alpha_test || hlms_alpha_hash || diffuse )Material material;@end
 
 void main()
 {
 	@insertpiece( custom_ps_preExecution )
-@property( diffuse_map || alpha_test || diffuse )
+@property( diffuse_map || alpha_test || hlms_alpha_hash || diffuse )
 	uint materialId	= instance.worldMaterialIdx[inPs.drawId].x;
 	material = materialArray.m[materialId];
 @end
