@@ -121,7 +121,7 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
             ArrayVector3 position = aabb.mCenter;
             position.CmovRobust( isDead, *cpuData.mPosition );
             const ArrayReal maxDimension = Mathlib::CmovRobust(
-                ARRAY_REAL_ZERO, cpuData.mDimensions->getMaxComponent() * 0.5f, isDead );
+                ARRAY_REAL_ZERO, 0.5f * cpuData.mDimensions->getMaxComponent(), isDead );
 
             aabb.merge(
                 ArrayAabb( position, ArrayVector3( maxDimension, maxDimension, maxDimension ) ) );
