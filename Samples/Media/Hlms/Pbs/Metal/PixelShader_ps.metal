@@ -106,6 +106,7 @@ fragment @insertpiece( output_type ) main_metal
 	@insertpiece( DeclPlanarReflTextures )
 	@insertpiece( DeclAreaApproxTextures )
 	@insertpiece( DeclLightProfilesTexture )
+	@insertpiece( DeclBlueNoiseTexture )
 
 	@property( irradiance_volumes )
 		, texture3d<midf>	irradianceVolume		[[texture(@value(irradianceVolume))]]
@@ -176,6 +177,8 @@ fragment @insertpiece( output_type ) main_metal
 		, texture2d_array<midf> textureMaps@n [[texture(@value(textureMaps@n))]]@end
 	@foreach( num_samplers, n )
 		, sampler samplerState@value(samplerStateStart) [[sampler(@counter(samplerStateStart))]]@end
+
+	@insertpiece( DeclBlueNoiseTexture )
 )
 {
 @property( !hlms_render_depth_only || exponential_shadow_maps || hlms_shadowcaster_point )

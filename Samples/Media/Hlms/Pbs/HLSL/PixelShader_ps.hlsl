@@ -5,6 +5,7 @@
 @insertpiece( DeclareUvModifierMacros )
 
 @insertpiece( DeclLightProfilesTexture )
+@insertpiece( DeclBlueNoiseTexture )
 
 @insertpiece( DefaultHeaderPS )
 @insertpiece( custom_ps_uniformDeclaration )

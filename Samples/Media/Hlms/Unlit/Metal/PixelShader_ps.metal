@@ -9,6 +9,8 @@ struct PS_INPUT
 
 @insertpiece( DefaultHeaderPS )
 
+@insertpiece( DeclBlueNoiseTexture )
+
 @property( hlms_shadowcaster )
 	@insertpiece( DeclShadowCasterMacros )
 @end
