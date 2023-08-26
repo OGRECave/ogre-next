@@ -26,6 +26,8 @@ struct PS_INPUT
 
 @insertpiece( DeclOutputType )
 
+@insertpiece( DeclBlueNoiseTexture )
+
 @insertpiece( DefaultHeaderPS )
 
 @property( hlms_shadowcaster )
