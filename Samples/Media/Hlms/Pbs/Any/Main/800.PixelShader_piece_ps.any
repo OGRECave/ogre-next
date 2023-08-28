@@ -758,9 +758,9 @@
 
 		@property( hlms_alpha_hash )
 			@property( hlms_alpha_to_coverage )
-				finalAlpha = AlphaHashReject( finalAlpha, inPs.uv0.xy );
+				finalAlpha = AlphaHashReject( finalAlpha, inPs.uv0.xy ALPHA_HASHING_ARG );
 			@else
-				if( AlphaHashReject( finalAlpha, inPs.uv0.xy ) )
+				if( AlphaHashReject( finalAlpha, inPs.uv0.xy ALPHA_HASHING_ARG ) )
 					discard;
 			@end
 		@end

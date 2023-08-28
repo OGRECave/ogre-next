@@ -9,8 +9,6 @@ struct PS_INPUT
 
 @insertpiece( DefaultHeaderPS )
 
-@insertpiece( DeclBlueNoiseTexture )
-
 @property( hlms_shadowcaster )
 	@insertpiece( DeclShadowCasterMacros )
 @end
@@ -42,6 +40,8 @@ fragment @insertpiece( output_type ) main_metal
 	@end
 	@foreach( num_samplers, n )
 		, sampler samplerState@n [[sampler(@counter(currSampler))]]@end
+
+	@insertpiece( DeclBlueNoiseTexture )
 )
 {
 	PS_OUTPUT outPs;

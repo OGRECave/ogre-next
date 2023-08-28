@@ -25,10 +25,18 @@
 	}
 @end
 
+	@property( syntax == metal )
+		#define ALPHA_HASHING_ARG_DECL , texture2d_array<float> blueNoiseTex
+		#define ALPHA_HASHING_ARG , blueNoiseTex
+	@else
+		#define ALPHA_HASHING_ARG_DECL
+		#define ALPHA_HASHING_ARG
+	@end
+
 @property( hlms_alpha_to_coverage )
-	INLINE float AlphaHashReject( float _alpha, float2 vPos )
+	INLINE float AlphaHashReject( float _alpha, float2 vPos ALPHA_HASHING_ARG_DECL )
 @else
-	INLINE bool AlphaHashReject( float _alpha, float2 vPos )
+	INLINE bool AlphaHashReject( float _alpha, float2 vPos ALPHA_HASHING_ARG_DECL )
 @end
 {
 	@property( hlms_blue_noise )
