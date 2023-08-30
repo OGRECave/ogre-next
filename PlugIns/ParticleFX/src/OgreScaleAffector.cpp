@@ -35,9 +35,11 @@ namespace Ogre
 {
     // init statics
     ScaleAffector::CmdScaleAdjust ScaleAffector::msScaleCmd;
-
+    ScaleAffector::CmdMultiplyMode ScaleAffector::msMultiplyModeCmd;
     //-----------------------------------------------------------------------
-    ScaleAffector::ScaleAffector( ParticleSystem *psys ) : ParticleAffector( psys )
+    ScaleAffector::ScaleAffector( ParticleSystem *psys ) :
+        ParticleAffector( psys ),
+        mMultiplyMode( false )
     {
         mScaleAdj = 0;
         mType = "Scaler";
@@ -62,31 +64,61 @@ namespace Ogre
         Real ds;
 
         // Scale adjustments by time
-        ds = mScaleAdj * timeElapsed;
-
-        Real NewWide, NewHigh;
-
-        while( !pi.end() )
+        if( mMultiplyMode )
         {
-            p = pi.getNext();
+            ds = std::pow( mScaleAdj, timeElapsed );
 
-            if( p->hasOwnDimensions() == false )
+            while( !pi.end() )
             {
-                NewWide = pSystem->getDefaultWidth() + ds;
-                NewHigh = pSystem->getDefaultHeight() + ds;
+                p = pi.getNext();
+
+                Real NewWide, NewHigh;
+
+                if( p->hasOwnDimensions() == false )
+                {
+                    NewWide = pSystem->getDefaultWidth() * ds;
+                    NewHigh = pSystem->getDefaultHeight() * ds;
+                }
+                else
+                {
+                    NewWide = p->getOwnWidth() * ds;
+                    NewHigh = p->getOwnHeight() * ds;
+                }
+                p->setDimensions( NewWide, NewHigh );
             }
-            else
+        }
+        else
+        {
+            ds = mScaleAdj * timeElapsed;
+
+            while( !pi.end() )
             {
-                NewWide = p->getOwnWidth() + ds;
-                NewHigh = p->getOwnHeight() + ds;
+                p = pi.getNext();
+
+                Real NewWide, NewHigh;
+
+                if( p->hasOwnDimensions() == false )
+                {
+                    NewWide = pSystem->getDefaultWidth() + ds;
+                    NewHigh = pSystem->getDefaultHeight() + ds;
+                }
+                else
+                {
+                    NewWide = p->getOwnWidth() + ds;
+                    NewHigh = p->getOwnHeight() + ds;
+                }
+                p->setDimensions( NewWide, NewHigh );
             }
-            p->setDimensions( NewWide, NewHigh );
         }
     }
     //-----------------------------------------------------------------------
     void ScaleAffector::setAdjust( Real rate ) { mScaleAdj = rate; }
     //-----------------------------------------------------------------------
     Real ScaleAffector::getAdjust() const { return mScaleAdj; }
+    //-----------------------------------------------------------------------------
+    void ScaleAffector::setMultiplyMode( bool bMultiplyMode ) { mMultiplyMode = bMultiplyMode; }
+    //-----------------------------------------------------------------------------
+    bool ScaleAffector::getMultiplyMode() const { return mMultiplyMode; }
     //-----------------------------------------------------------------------
 
     //-----------------------------------------------------------------------
@@ -101,6 +133,16 @@ namespace Ogre
     void ScaleAffector::CmdScaleAdjust::doSet( void *target, const String &val )
     {
         static_cast<ScaleAffector *>( target )->setAdjust( StringConverter::parseReal( val ) );
+    }
+    //-----------------------------------------------------------------------------
+    String ScaleAffector::CmdMultiplyMode::doGet( const void *target ) const
+    {
+        return StringConverter::toString(
+            static_cast<const ScaleAffector *>( target )->getMultiplyMode() );
+    }
+    void ScaleAffector::CmdMultiplyMode::doSet( void *target, const String &val )
+    {
+        static_cast<ScaleAffector *>( target )->setMultiplyMode( StringConverter::parseBool( val ) );
     }
 
 }  // namespace Ogre
