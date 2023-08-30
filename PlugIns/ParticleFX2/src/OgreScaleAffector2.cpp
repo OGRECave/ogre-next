@@ -65,15 +65,22 @@ void ScaleAffector2::run( ParticleCpuData cpuData, const size_t numParticles,
     {
         Real scalarDeltaScale = std::pow( mScaleAdj, Mathlib::Get0( timeSinceLast ) );
         ds = Mathlib::SetAll( scalarDeltaScale );
+
+        for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
+        {
+            *cpuData.mDimensions *= ds;
+            cpuData.advancePack();
+        }
     }
     else
     {
         ds = Mathlib::SetAll( mScaleAdj ) * timeSinceLast;
-    }
-    for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
-    {
-        *cpuData.mDimensions += ds;
-        cpuData.advancePack();
+
+        for( size_t i = 0u; i < numParticles; i += ARRAY_PACKED_REALS )
+        {
+            *cpuData.mDimensions += ds;
+            cpuData.advancePack();
+        }
     }
 }
 //-----------------------------------------------------------------------------
