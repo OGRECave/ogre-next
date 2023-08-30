@@ -51,7 +51,6 @@ namespace Ogre
         ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
             ParticleEmitter *emit = OGRE_NEW EllipsoidEmitter( psys );
-            mEmitters.push_back( emit );
             return emit;
         }
     };

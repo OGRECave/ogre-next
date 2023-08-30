@@ -1608,31 +1608,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     ParticleAffector::~ParticleAffector() {}
     //-----------------------------------------------------------------------
-    ParticleAffectorFactory::~ParticleAffectorFactory()
-    {
-        // Destroy all affectors
-        vector<ParticleAffector *>::type::iterator i;
-        for( i = mAffectors.begin(); i != mAffectors.end(); ++i )
-        {
-            OGRE_DELETE( *i );
-        }
-
-        mAffectors.clear();
-    }
-    //-----------------------------------------------------------------------
-    void ParticleAffectorFactory::destroyAffector( ParticleAffector *e )
-    {
-        vector<ParticleAffector *>::type::iterator i;
-        for( i = mAffectors.begin(); i != mAffectors.end(); ++i )
-        {
-            if( ( *i ) == e )
-            {
-                mAffectors.erase( i );
-                OGRE_DELETE e;
-                break;
-            }
-        }
-    }
+    void ParticleAffectorFactory::destroyAffector( ParticleAffector *e ) { OGRE_DELETE e; }
 }  // namespace Ogre
 
 #include "OgreParticleSystem.autogen.h"
