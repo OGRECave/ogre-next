@@ -363,9 +363,34 @@ namespace Ogre
             // The previous formula can be off by one in some cases, e.g.
             //  getQuota = 12
             //  ARRAY_PACKED_REALS = 4
-            //  mLastParticleIdx = 1 -> rounds down to 0
+            //  mFirstParticleIdx = 1 -> rounds down to 0
             //  mLastParticleIdx = 13 -> rounds up to 16
-            //  16 > 12
+            //  16 - 0 => 16 > 12
+            // Thus we must ensure we never exceed the quota.
+            numSimdActiveParticles = std::min<size_t>( numSimdActiveParticles, getQuota() );
+            return numSimdActiveParticles;
+        }
+
+        /// Like getNumSimdActiveParticles(), we have to consider SIMD.
+        ///
+        /// However given the same example we only need to return 6, not 8.
+        ///
+        /// There's not much we can do about the waste at the beginning (in a API-compatible way),
+        /// but we can do something about the last 2 vertices that are waste.
+        ///
+        /// This function is called "tighter" because it returns 6 instead of 8, but it is not fully
+        /// "tight" because if that were the case, we'd return 3.
+        size_t getParticlesToRenderTighter() const
+        {
+            size_t numSimdActiveParticles =
+                mLastParticleIdx - ( ( mFirstParticleIdx / ARRAY_PACKED_REALS ) * ARRAY_PACKED_REALS );
+
+            // The previous formula can be off by one in some cases, e.g.
+            //  getQuota = 12
+            //  ARRAY_PACKED_REALS = 4
+            //  mFirstParticleIdx = 1 -> rounds down to 0
+            //  mLastParticleIdx = 13 -> No rounding
+            //  13 - 0 => 13 > 12
             // Thus we must ensure we never exceed the quota.
             numSimdActiveParticles = std::min<size_t>( numSimdActiveParticles, getQuota() );
             return numSimdActiveParticles;

@@ -242,7 +242,7 @@ void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
         }
 
         systemDef->mVaoPerLod[0].back()->setPrimitiveRange(
-            0u, static_cast<uint32>( numSimdActiveParticles * 6u ) );
+            0u, static_cast<uint32>( systemDef->getParticlesToRenderTighter() * 6u ) );
     }
 }
 //-----------------------------------------------------------------------------
