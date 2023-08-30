@@ -50,7 +50,6 @@ namespace Ogre
         ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
             ParticleEmitter *emit = OGRE_NEW PointEmitter( psys );
-            mEmitters.push_back( emit );
             return emit;
         }
     };

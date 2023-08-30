@@ -575,31 +575,7 @@ namespace Ogre
     Real ParticleEmitter::getMaxRepeatDelay() const { return mRepeatDelayMax; }
 
     //-----------------------------------------------------------------------
-    ParticleEmitterFactory::~ParticleEmitterFactory()
-    {
-        // Destroy all emitters
-        vector<ParticleEmitter *>::type::iterator i;
-        for( i = mEmitters.begin(); i != mEmitters.end(); ++i )
-        {
-            OGRE_DELETE( *i );
-        }
-
-        mEmitters.clear();
-    }
-    //-----------------------------------------------------------------------
-    void ParticleEmitterFactory::destroyEmitter( ParticleEmitter *e )
-    {
-        vector<ParticleEmitter *>::type::iterator i;
-        for( i = mEmitters.begin(); i != mEmitters.end(); ++i )
-        {
-            if( ( *i ) == e )
-            {
-                mEmitters.erase( i );
-                OGRE_DELETE e;
-                break;
-            }
-        }
-    }
+    void ParticleEmitterFactory::destroyEmitter( ParticleEmitter *e ) { OGRE_DELETE e; }
 
     //-----------------------------------------------------------------------
 
