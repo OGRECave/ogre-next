@@ -142,7 +142,7 @@
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailMetalnessIdx@n ).x;
 		@else
-			midf metalness@n = _h( 0 );
+			midf metalness@n = _h( 1.0 );
 		@end
 	@end
 
@@ -167,7 +167,7 @@
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailRoughnessIdx@n ).x;
 		@else
-			midf roughness@n = _h( 0 );
+			midf roughness@n = _h( 1.0 );
 		@end
 	@end
 
