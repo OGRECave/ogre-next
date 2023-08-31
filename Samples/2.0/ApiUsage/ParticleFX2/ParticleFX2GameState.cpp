@@ -17,6 +17,7 @@
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
+#include "ParticleSystem/OgreParticleSystemManager2.h"
 
 #include "OgreParticleSystem.h"
 
