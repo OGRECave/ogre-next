@@ -170,7 +170,8 @@ namespace Ogre
             Leave it blank if you don't know what to put
         */
         void saveMaterials( const Hlms *hlms, String &outString,
-                            const String &additionalTextureExtension );
+                            const String &additionalTextureExtension,
+                            bool sortByName = false);
 
         /** Saves a single datablock to a string
         @param datablock
