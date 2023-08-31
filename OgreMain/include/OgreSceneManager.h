@@ -827,6 +827,9 @@ namespace Ogre
 
         size_t mNumWorkerThreads;
         bool   mForceMainThread;
+        /// Performance optimization. When true, ParticleSystemManager2::_prepareParallel()
+        /// will be called in an unrelated call so we don't have to sync more than needed.
+        bool mPrepareParticleFx;
 
         CullFrustumRequest            mCurrentCullFrustumRequest;
         UpdateLodRequest              mUpdateLodRequest;

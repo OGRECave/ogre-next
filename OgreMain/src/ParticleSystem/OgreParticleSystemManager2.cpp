@@ -54,7 +54,8 @@ ParticleSystemManager2::ParticleSystemManager2( SceneManager *sceneManager,
     mHighestPossibleQuota16( 0u ),
     mHighestPossibleQuota32( 0u ),
     mTimeSinceLast( 0 ),
-    mMaster( master )
+    mMaster( master ),
+    mCameraPos( Vector3::ZERO )
 {
     if( sceneManager )
         mMemoryManager = &sceneManager->_getParticleSysDefMemoryManager();
@@ -197,48 +198,42 @@ void ParticleSystemManager2::tickParticles( const size_t threadIdx, const ArrayR
     inOutAabb = aabb;
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemManager2::updateSerialPre( const Real timeSinceLast )
+void ParticleSystemManager2::sortAndPrepare( ParticleSystemDef *systemDef, const Vector3 &camPos,
+                                             const float timeSinceLast )
 {
-    for( ParticleSystemDef *systemDef : mActiveParticleSystemDefs )
+    systemDef->sortByDistanceTo( camPos );
+
+    // Emit new particles
+    const size_t numEmitters = systemDef->mEmitters.size();
+    systemDef->mNewParticles.clear();
+
+    for( ParticleSystem2 *system : systemDef->mActiveParticleSystems )
     {
-        const size_t numEmitters = systemDef->mEmitters.size();
-        systemDef->mNewParticles.clear();
-
-        for( ParticleSystem2 *system : systemDef->mActiveParticleSystems )
+        for( size_t i = 0u; i < numEmitters; ++i )
         {
-            for( size_t i = 0u; i < numEmitters; ++i )
+            const uint32 numRequestedParticles = systemDef->mEmitters[i]->genEmissionCount(
+                timeSinceLast, system->mEmitterInstanceData[i] );
+            system->mNewParticlesPerEmitter[i] = numRequestedParticles;
+
+            const Node *instanceNode = system->getParentNode();
+            const Vector3 instancePos = instanceNode->_getDerivedPosition();
+            const Quaternion instanceRot = instanceNode->_getDerivedOrientation();
+
+            for( uint32 j = 0u; j < numRequestedParticles; ++j )
             {
-                const uint32 numRequestedParticles = systemDef->mEmitters[i]->genEmissionCount(
-                    timeSinceLast, system->mEmitterInstanceData[i] );
-                system->mNewParticlesPerEmitter[i] = numRequestedParticles;
-
-                const Node *instanceNode = system->getParentNode();
-                const Vector3 instancePos = instanceNode->_getDerivedPosition();
-                const Quaternion instanceRot = instanceNode->_getDerivedOrientation();
-
-                for( uint32 j = 0u; j < numRequestedParticles; ++j )
+                const uint32 handle = systemDef->allocParticle();
+                if( handle != ParticleSystemDef::InvalidHandle )
                 {
-                    const uint32 handle = systemDef->allocParticle();
-                    if( handle != ParticleSystemDef::InvalidHandle )
-                    {
-                        systemDef->mNewParticles.push_back( { handle, instancePos, instanceRot } );
-                    }
-                    else
-                    {
-                        // The pool run out of particles.
-                        // It won't be handling more while in updateSerial()
-                        system->mNewParticlesPerEmitter[i] = j;
-                        break;
-                    }
+                    systemDef->mNewParticles.push_back( { handle, instancePos, instanceRot } );
+                }
+                else
+                {
+                    // The pool run out of particles.
+                    // It won't be handling more while in updateSerial()
+                    system->mNewParticlesPerEmitter[i] = j;
+                    break;
                 }
             }
-        }
-
-        const size_t numSimdActiveParticles = systemDef->getNumSimdActiveParticles();
-        if( numSimdActiveParticles > 0u )
-        {
-            systemDef->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
-                systemDef->mGpuData->map( 0u, sizeof( ParticleGpuData ) * numSimdActiveParticles ) );
         }
 
         systemDef->mVaoPerLod[0].back()->setPrimitiveRange(
@@ -250,6 +245,15 @@ void ParticleSystemManager2::updateSerialPos()
 {
     for( ParticleSystemDef *systemDef : mActiveParticleSystemDefs )
     {
+        // Do this now, because getNumSimdActiveParticles() is about to change.
+        if( systemDef->mParticleGpuData )
+        {
+            const size_t numParticlesToFlush = systemDef->getNumSimdActiveParticles();
+            systemDef->mGpuData->unmap( UO_KEEP_PERSISTENT, 0u,
+                                        sizeof( ParticleGpuData ) * numParticlesToFlush );
+            systemDef->mParticleGpuData = 0;
+        }
+
         for( FastArray<uint32> &threadParticlesToKill : systemDef->mParticlesToKill )
         {
             for( const uint32 handle : threadParticlesToKill )
@@ -270,12 +274,35 @@ void ParticleSystemManager2::updateSerialPos()
 
         systemDef->setLocalAabb( aabb );
         *systemDef->_getObjectData().mWorldAabb = *systemDef->_getObjectData().mLocalAabb;
+    }
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::_prepareParallel()
+{
+    if( mActiveParticleSystemDefs.empty() )
+        return;
 
-        if( systemDef->mParticleGpuData )
+    ParticleSystemDef *systemDef = 0;
+
+    const Vector3 camPos = mCameraPos;
+    const float timeSinceLast = mTimeSinceLast;
+
+    bool bStillHasWork = true;
+    while( bStillHasWork )
+    {
+        mSortMutex.lock();
+        if( !mActiveParticlesLeftToSort.empty() )
         {
-            systemDef->mGpuData->unmap( UO_KEEP_PERSISTENT );
-            systemDef->mParticleGpuData = 0;
+            systemDef = std::move( mActiveParticlesLeftToSort.back() );
+            mActiveParticlesLeftToSort.pop_back();
+            bStillHasWork = true;
         }
+        else
+            bStillHasWork = false;
+        mSortMutex.unlock();
+
+        if( bStillHasWork )
+            sortAndPrepare( systemDef, camPos, timeSinceLast );
     }
 }
 //-----------------------------------------------------------------------------
@@ -710,14 +737,28 @@ IndexBufferPacked *ParticleSystemManager2::_getSharedIndexBuffer( size_t maxQuot
     return mSharedIndexBuffer32;
 }
 //-----------------------------------------------------------------------------
-void ParticleSystemManager2::update( const Real timeSinceLast )
+void ParticleSystemManager2::prepareForUpdate( const Real timeSinceLast )
 {
+    mActiveParticlesLeftToSort.clear();
     if( mActiveParticleSystemDefs.empty() )
         return;
 
     mTimeSinceLast = timeSinceLast;
+    mActiveParticlesLeftToSort.appendPOD( mActiveParticleSystemDefs.begin(),
+                                          mActiveParticleSystemDefs.end() );
 
-    updateSerialPre( timeSinceLast );
+    for( ParticleSystemDef *systemDef : mActiveParticleSystemDefs )
+    {
+        systemDef->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
+            systemDef->mGpuData->map( 0u, systemDef->mGpuData->getNumElements() ) );
+    }
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::update()
+{
+    if( mActiveParticleSystemDefs.empty() )
+        return;
+
     mSceneManager->_fireParticleSystemManager2Update();
     updateSerialPos();
 }

@@ -194,6 +194,11 @@ namespace Ogre
         /// Note that mFirstParticleIdx may not be multiple of ARRAY_PACKED_REALS.
         size_t getActiveParticlesPackOffset() const { return mFirstParticleIdx / ARRAY_PACKED_REALS; }
 
+        /// Sorts all active particles in mParticleSystems by distance to camPos into
+        /// mActiveParticleSystems so that closer to it have higher priority when requesting particles
+        /// in a limited quota pool.
+        void sortByDistanceTo( Vector3 camPos );
+
         void cloneTo( ParticleSystemDef *toClone );
 
     public:
