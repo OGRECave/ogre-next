@@ -1667,6 +1667,8 @@ namespace Ogre
 
         void destroyAllParticleSystems2();
 
+        ParticleSystemManager2 *getParticleSystemManager2() { return mParticleSystemManager2; }
+
         /** Empties the entire scene, inluding all SceneNodes, Entities, Lights,
             BillboardSets etc. Cameras are not deleted at this stage since
             they are still referenced by viewports, which are not destroyed during
