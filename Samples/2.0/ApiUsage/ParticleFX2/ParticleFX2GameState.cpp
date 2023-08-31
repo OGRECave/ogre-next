@@ -138,6 +138,11 @@ namespace Demo
         mParticleSystem3_EmmitterSceneNode->setPosition(
             Ogre::Vector3( 20.0f * mTime / 10.0f - 10.f, 0.5, 20.0f * mTime / 10.0f - 10 ) );
 
+        // Tell the ParticleSystem where the camera is.
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+        sceneManager->getParticleSystemManager2()->setCameraPosition(
+            mGraphicsSystem->getCamera()->getDerivedPosition() );
+
         TutorialGameState::update( timeSinceLast );
     }
 }  // namespace Demo

@@ -177,6 +177,24 @@ namespace Ogre
 
         IndexBufferPacked *_getSharedIndexBuffer( size_t maxQuota, VaoManager *vaoManager );
 
+        /** All instances are sorted every frame to their distance to camera.
+
+            Closer instances are given higher priority to emit. If instances reach the shared Quota
+            (see ParticleSystemDef::setParticleQuota) then eventually over time far instances will run
+            out of particles as they can no longer emit more, while close instances will still
+            be emitting as much as possible.
+
+        @remarks
+            Only one camera position per SceneManager is supported.
+            If rendering from multiple camera positions, consider using the most relevant position
+            for the simulation.
+
+            This value does not control rendering. It's not instantaneous. It merely tells the
+            simulation which systems should be prioritized for emission for this frame.
+
+        @param camPos
+            Camera position
+        */
         void setCameraPosition( const Vector3 &camPos ) { mCameraPos = camPos; }
 
         const Vector3 &getCameraPosition() const { return mCameraPos; }
