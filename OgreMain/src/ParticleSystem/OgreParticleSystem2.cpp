@@ -595,6 +595,31 @@ uint32 ParticleSystemDef::getHandle( const ParticleCpuData &cpuData, size_t idx 
     return handle;
 }
 //-----------------------------------------------------------------------------
+struct SortParticlesByDistanceToCamera
+{
+    const Vector3 camPos;
+
+public:
+    SortParticlesByDistanceToCamera( const Vector3 &_camPos ) : camPos( _camPos ) {}
+
+    bool operator()( const ParticleSystem2 *ogre_nonnull a, const ParticleSystem2 *ogre_nonnull b ) const
+    {
+        const Real distA = a->getParentNode()->_getDerivedPosition().squaredDistance( camPos );
+        const Real distB = b->getParentNode()->_getDerivedPosition().squaredDistance( camPos );
+        return distA < distB;
+    }
+};
+
+void ParticleSystemDef::sortByDistanceTo( const Vector3 camPos )
+{
+    mActiveParticleSystems.clear();
+    mActiveParticleSystems.resizePOD( mParticleSystems.size() );
+
+    std::partial_sort_copy( mParticleSystems.begin(), mParticleSystems.end(),
+                            mActiveParticleSystems.begin(), mActiveParticleSystems.end(),
+                            SortParticlesByDistanceToCamera( camPos ) );
+}
+//-----------------------------------------------------------------------------
 void ParticleSystemDef::cloneTo( ParticleSystemDef *toClone )
 {
     toClone->ParticleSystem::_cloneFrom( this );

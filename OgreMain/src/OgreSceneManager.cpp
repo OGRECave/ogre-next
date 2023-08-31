@@ -169,6 +169,7 @@ namespace Ogre
         mFindVisibleObjects( true ),
         mNumWorkerThreads( std::max<size_t>( numWorkerThreads, 1u ) ),
         mForceMainThread( numWorkerThreads == 0u ? true : false ),
+        mPrepareParticleFx( false ),
         mUpdateBoundsRequest( 0 ),
         mUserTask( 0 ),
         mRequestType( NUM_REQUESTS ),
@@ -2694,6 +2695,12 @@ namespace Ogre
         ControllerManager &controllerManager = ControllerManager::getSingleton();
         controllerManager.updateAllControllers();
 
+        {
+            const Real timeSinceLast = controllerManager.getFrameTimeSource()->getValue();
+            mParticleSystemManager2->prepareForUpdate( timeSinceLast );
+            mPrepareParticleFx = true;
+        }
+
         highLevelCull();
         _applySceneAnimations();
         updateAllTransforms();
@@ -2701,6 +2708,8 @@ namespace Ogre
         updateAllTagPoints();
         updateAllBounds( mEntitiesMemoryManagerUpdateList );
         updateAllBounds( mLightsMemoryManagerCulledList );
+
+        mPrepareParticleFx = false;
 
         {
             // Auto-track nodes
@@ -2742,22 +2751,7 @@ namespace Ogre
 
         buildLightList();
 
-        // Reset the list of render RQs for all cameras that are in a PASS_SCENE (except shadow passes)
-        uint8 numRqs = 0;
-        {
-            ObjectMemoryManagerVec::const_iterator itor = mEntitiesMemoryManagerCulledList.begin();
-            ObjectMemoryManagerVec::const_iterator endt = mEntitiesMemoryManagerCulledList.end();
-            while( itor != endt )
-            {
-                numRqs = (uint8)std::max<size_t>( numRqs, ( *itor )->_getTotalRenderQueues() );
-                ++itor;
-            }
-        }
-
-        {
-            const Real timeSinceLast = controllerManager.getFrameTimeSource()->getValue();
-            mParticleSystemManager2->update( timeSinceLast );
-        }
+        mParticleSystemManager2->update();
 
         // Reset these
         mStaticMinDepthLevelDirty = std::numeric_limits<uint16>::max();
@@ -4699,6 +4693,8 @@ namespace Ogre
             break;
         case UPDATE_ALL_ANIMATIONS:
             updateAllAnimationsThread( threadIdx );
+            if( mPrepareParticleFx )
+                mParticleSystemManager2->_prepareParallel();
             break;
         case UPDATE_ALL_TRANSFORMS:
             updateAllTransformsThread( mUpdateTransformRequest, threadIdx );

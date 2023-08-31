@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreRenderQueue.h"
 #include "ParticleSystem/OgreParticle2.h"
+#include "Threading/OgreSemaphore.h"
 
 #include <map>
 
@@ -68,6 +69,10 @@ namespace Ogre
         ParticleSystemManager2 *ogre_nullable mMaster;
         ObjectMemoryManager                  *mMemoryManager;
 
+        Vector3                        mCameraPos;
+        FastArray<ParticleSystemDef *> mActiveParticlesLeftToSort;  // GUARDED_BY( mSortMutex )
+        LightweightMutex               mSortMutex;
+
         void calculateHighestPossibleQuota( VaoManager *vaoManager );
         void createSharedIndexBuffers( VaoManager *vaoManager );
 
@@ -75,7 +80,9 @@ namespace Ogre
                             ParticleGpuData *gpuData, const size_t numParticles,
                             ParticleSystemDef *systemDef, ArrayAabb &inOutAabb );
 
-        void updateSerialPre( Real timeSinceLast );
+        inline void sortAndPrepare( ParticleSystemDef *systemDef, const Vector3 &camPos,
+                                    float timeSinceLast );
+
         void updateSerialPos();
 
     public:
@@ -170,9 +177,49 @@ namespace Ogre
 
         IndexBufferPacked *_getSharedIndexBuffer( size_t maxQuota, VaoManager *vaoManager );
 
-        void update( Real timeSinceLast );
+        void setCameraPosition( const Vector3 &camPos ) { mCameraPos = camPos; }
 
+        const Vector3 &getCameraPosition() const { return mCameraPos; }
+
+        /** The order of function calls is:
+                1. manager->prepareForUpdate( timeSinceLast ) (main thread)
+                2. manager->_prepareParallel() (from many threads)
+                3. manager->update() (main thread)
+                    - This function will call _updateParallel from all threads.
+
+            Prepares everything for caller to later call _prepareParallel() from all threads.
+            This function must be called from main thread.
+        @param timeSinceLast
+            Time in seconds since last frame (to advance the particle simulation).
+        */
+        void prepareForUpdate( Real timeSinceLast );
+
+        /** See prepareForUpdate()
+            This function is called from multiple threads.
+
+            Each thread handles a whole ParticleSystemDef. (i.e. 2 threads won't concurrently
+            access the same ParticleSystemDef).
+
+            It handles sorting them by distance to camera; and emits
+            new particles that instances require.
+        */
+        void _prepareParallel();
+
+        /** See prepareForUpdate()
+            This function is called from multiple threads.
+        @remarks
+            Unlike _prepareParallel(), each thread concurrently access the same ParticleSystemDef.
+            This function is in charge of advancing the simulation of each particle forward.
+            Each thread handles one particle (i.e. 2 threads won't concurrently access the same
+            ParticleCpuData).
+        */
         void _updateParallel( size_t threadIdx, size_t numThreads );
+
+        /// See prepareForUpdate()
+        ///
+        /// Must be called after prepareForUpdate() & _prepareParallel().
+        /// This function must be called from main thread.
+        void update();
 
         void _addParticleSystemDefAsActive( ParticleSystemDef *def );
         void _removeParticleSystemDefFromActive( ParticleSystemDef *def );
