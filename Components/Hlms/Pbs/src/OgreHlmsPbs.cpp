@@ -1333,6 +1333,9 @@ namespace Ogre
         if( parallaxCorrectCubemaps )
             cubemapTexUnit = texUnit++;
 
+        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
+            setTextureReg( tid, PixelShader, "blueNoise", texUnit++ );
+
         const int32 hasPlanarReflections = getProperty( tid, PbsProperty::HasPlanarReflections );
         if( hasPlanarReflections )
         {
@@ -1342,9 +1345,6 @@ namespace Ogre
                 setTextureReg( tid, PixelShader, "planarReflectionTex", texUnit );
             ++texUnit;
         }
-
-        if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
-            setTextureReg( tid, PixelShader, "blueNoise", texUnit++ );
 
         texUnit += mListener->getNumExtraPassTextures( mT[tid].setProperties, casterPass );
 
@@ -3010,8 +3010,8 @@ namespace Ogre
             // Blue Noise is bound with shadow casters too
             ++mTexUnitSlotStart;
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
-            // Planar reflections did not account for our slot which comes after it. Correct it.
-            --mPlanarReflectionSlotIdx;
+            // Planar reflections did not account for our slot. Correct it.
+            ++mPlanarReflectionSlotIdx;
 #endif
         }
 
