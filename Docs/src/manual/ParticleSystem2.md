@@ -118,6 +118,12 @@ The key settings are:
 
 Note that the noise may look terrible but it quite different in motion. See `Samples/2.0/ApiUsage/ParticleFX2` sample.
 
+## Thread Safe RandomValueProvider
+
+PFX2 relies on `Math::UnitRandom` being thread safe.
+
+If you've registered a custom random provider via `Math::SetRandomValueProvider`, then make sure `RandomValueProvider::getRandomUnit` is thread safe (e.g. use TLS).
+
 ## New settings
 
 scaler TBD
