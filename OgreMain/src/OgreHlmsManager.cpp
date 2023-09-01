@@ -48,6 +48,7 @@ namespace Ogre
     HlmsManager::HlmsManager() :
         mComputeHlms( 0 ),
         mRenderSystem( 0 ),
+        mBlueNoise( 0 ),
         mDefaultHlmsType( HLMS_PBS )
 #if !OGRE_NO_JSON
         ,
