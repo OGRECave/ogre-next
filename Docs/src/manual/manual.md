@@ -24,3 +24,4 @@ painful and traumatic as possible.
 - @subpage ResolvingMergeConflicts30
 - @subpage Ogre30Changes
 - @subpage PBSChangesIn30
+- @subpage ParticleSystem2
