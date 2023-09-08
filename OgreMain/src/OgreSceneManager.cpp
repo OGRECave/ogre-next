@@ -4525,6 +4525,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     unsigned long updateWorkerThread( ThreadHandle *threadHandle )
     {
+        Threads::SetThreadName(
+            threadHandle, "SceneMgr#" + StringConverter::toString( threadHandle->getThreadIdx() ) );
+
         SceneManager *sceneManager = reinterpret_cast<SceneManager *>( threadHandle->getUserParam() );
         return sceneManager->_updateWorkerThread( threadHandle );
     }

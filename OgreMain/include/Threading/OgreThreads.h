@@ -50,6 +50,7 @@ THE SOFTWARE.
             Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle *>( argName ) ); \
             try \
             { \
+                threadHandle->_setOsHandleToSelf(); \
                 retVal = threadFunction( threadHandle ); \
             } \
             catch( ... ) \
@@ -67,6 +68,7 @@ THE SOFTWARE.
             Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle *>( argName ) ); \
             try \
             { \
+                threadHandle->_setOsHandleToSelf(); \
                 retVal = threadFunction( threadHandle ); \
             } \
             catch( ... ) \
@@ -115,6 +117,8 @@ namespace Ogre
         /// Internal use
         pthread_t _getOsHandle() const { return mThread; }
 #endif
+        /// Internal use
+        void _setOsHandleToSelf();
     };
 
     typedef SharedPtr<ThreadHandle>    ThreadHandlePtr;
@@ -189,6 +193,20 @@ namespace Ogre
         /// Sleeps for a **minimum** of the specified time of milliseconds. Actual time spent
         /// sleeping may vary widely depending on OS and other variables. Do not feed 0.
         static void Sleep( uint32 milliseconds );
+
+        /** Sets the name to the given thread.
+        @remarks
+            For best performance, call this function from the same thread setting the current name.
+        @param thread
+            The thread to set the name.
+            If nullptr, we will attempt to set the name to the calling thread.
+        @param name
+            Name for the given thread.
+            The name may be truncated on some platforms if it's too large.
+        @return
+            True on success.
+        */
+        static bool SetThreadName( ThreadHandle *thread, const String &name );
 
         /** Allocates a Thread Local Storage handle to use
         @param outTls [out]

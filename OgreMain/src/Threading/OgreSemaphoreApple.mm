@@ -52,5 +52,5 @@ namespace Ogre
         while( value-- )
             anyErrors |= dispatch_semaphore_signal( mSemaphore ) != 0;
         return !anyErrors;
-	}
+    }
 }  // namespace Ogre
