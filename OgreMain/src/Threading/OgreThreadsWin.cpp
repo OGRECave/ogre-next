@@ -107,6 +107,7 @@ namespace Ogre
             reinterpret_cast<SetThreadDescriptionFuncDecl>(
                 ::GetProcAddress( ::GetModuleHandleW( L"Kernel32.dll" ), "SetThreadDescription" ) );
 
+        bool bSuccess = false;
         if( SetThreadDescriptionFunc )
         {
             HANDLE threadHandle;
@@ -115,8 +116,10 @@ namespace Ogre
             else
                 threadHandle = ::GetCurrentThread();
 
-            SetThreadDescriptionFunc( threadHandle, to_wpath( name ).c_str() );
+            bSuccess = SUCCEEDED( SetThreadDescriptionFunc( threadHandle, to_wpath( name ).c_str() ) );
         }
+
+        return bSuccess;
     }
     //-----------------------------------------------------------------------------------
     bool Threads::CreateTls( TlsHandle *outTls )
