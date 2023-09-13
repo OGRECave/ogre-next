@@ -100,6 +100,7 @@ namespace Ogre
         memcpy( threadName, name.c_str(), maxLength );
         threadName[maxLength] = '\0';
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         pthread_t threadHandle;
         if( thread )
             threadHandle = thread->_getOsHandle();
@@ -109,6 +110,22 @@ namespace Ogre
         const int result = pthread_setname_np( threadHandle, threadName );
 
         return result == 0u;
+#else
+        bool bCanNameThread = false;
+
+        if( thread )
+            bCanNameThread = thread->_getOsHandle() == pthread_self();
+        else
+            bCanNameThread = true;
+
+        if( bCanNameThread )
+        {
+            const int result = pthread_setname_np( threadName );
+            bCanNameThread = result == 0u;
+        }
+
+        return bCanNameThread;
+#endif
     }
     //-----------------------------------------------------------------------------------
     bool Threads::CreateTls( TlsHandle *outTls )
