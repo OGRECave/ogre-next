@@ -315,18 +315,18 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_d3_d11_vao_manager_1_1_stride_changer.html#aa2ab357cb1e3c32732a9feb82cebb812",
 "struct_ogre_1_1_file_info.html#ac48eca5413e87a3efd1f3355b994f5fd",
 "struct_ogre_1_1_gpu_constant_definition.html#a3fd6712d35b95b3c8e6f07263a3aa492",
-"struct_ogre_1_1_hlms_disk_cache_1_1_cache.html#a935b276d0c98143261fa2627676a6648",
-"struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97",
+"struct_ogre_1_1_hlms_disk_cache_1_1_cache.html#a7e78623bd0a3cf950c534aae99fac7d4",
+"struct_ogre_1_1_linear_resampler___float32.html",
 "struct_ogre_1_1_lod_vertex_buffer.html#a2ece4a3fd9118aa7e15124f3e1203643",
-"struct_ogre_1_1_object_data.html#a54aba887e19ad0a9a7191423b9469ba2",
-"struct_ogre_1_1_render_pass_target_base.html",
+"struct_ogre_1_1_object_data.html#a52689b2fd81da10a3abaa24e856f6332",
+"struct_ogre_1_1_render_pass_stencil_target.html#af25253ac5a6aefe92b365c2468c58898",
 "struct_ogre_1_1_staging_buffer_1_1_destination.html#a070ad6f0ea4a9d15d07ca77de015e4b3",
-"struct_ogre_1_1_unlit_property.html#a1e0f0f3f938c65052f9a23a4c9571d80",
-"struct_ogre_1_1_vector_set.html#a1bc36fd4f486783f4a5255e911c4178c",
-"struct_ogre_1_1_vertices_remap_info.html#a98e2f0ffd318cd552513256068f9fd91",
-"struct_ogre_1_1_vulkan_device.html#a85acdf7f991b9f09a6cbde24bb4beb0c",
-"struct_ogre_1_1float2.html#adc33b0e8a1fdd1551c0de5cd3f6576f4",
-"struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html#a692c1b17cbf67bff3a6d7e1d25c85caf"
+"struct_ogre_1_1_unlit_property.html#a1df7899d2b25f5f0a6d59346e62c36a5",
+"struct_ogre_1_1_vector_set.html#a0c2eb072dfec3dd4b21519915f6eea62",
+"struct_ogre_1_1_vertices_remap_info.html#a80871ca8a57f58fd72172f0173a0a332",
+"struct_ogre_1_1_vulkan_device.html#a857f4d05cc191573c3a56adf69581c07",
+"struct_ogre_1_1float2.html#acc1f836dc566a17404141826fa187759",
+"struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html#a35bc995de2b199bd476b34a6be915a63"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

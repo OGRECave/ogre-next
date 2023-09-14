@@ -1540,6 +1540,7 @@ var group___resources =
       [ "DecalsNormals", "struct_ogre_1_1_hlms_base_prop.html#aa441a74c2ece4c5a0ef5add55037d83b", null ],
       [ "DisableStage", "struct_ogre_1_1_hlms_base_prop.html#a7fe31bb54a8f8ee45a7627dc7bc5e658", null ],
       [ "DualParaboloidMapping", "struct_ogre_1_1_hlms_base_prop.html#ab6bd2019896555394d8cab0b1aefafa5", null ],
+      [ "EmulateClipDistances", "struct_ogre_1_1_hlms_base_prop.html#a5996d1079ce601bd86121079f882df25", null ],
       [ "EnableDecals", "struct_ogre_1_1_hlms_base_prop.html#a44c68b1348efc7a02e5d4c4678e85dcb", null ],
       [ "EnableVpls", "struct_ogre_1_1_hlms_base_prop.html#aec485191b959843f9bda48c39808f7d8", null ],
       [ "FastShaderBuildHack", "struct_ogre_1_1_hlms_base_prop.html#a90f5a82a25543ff50bbb459172ece38b", null ],
