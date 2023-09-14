@@ -2277,7 +2277,7 @@ namespace Ogre
             }
 
             // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 4u atIndex:15];
 #    else
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 256u atIndex:15];
@@ -2324,7 +2324,7 @@ namespace Ogre
         {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 4u atIndex:15];
 #    else
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 256u atIndex:15];
@@ -2407,7 +2407,7 @@ namespace Ogre
 #    endif
 
         // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 4u atIndex:15];
 #    else
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 256u atIndex:15];
@@ -2437,7 +2437,7 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 4u atIndex:15];
 #    else
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 256u atIndex:15];
