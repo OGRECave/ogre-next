@@ -615,8 +615,9 @@ namespace Ogre
         }
 
         const VkPhysicalDeviceLimits &deviceLimits = mDevice->mDeviceProperties.limits;
-        rsc->setMaximumResolutions( deviceLimits.maxImageDimension2D, deviceLimits.maxImageDimension3D,
-                                    deviceLimits.maxImageDimensionCube );
+        rsc->setMaximumResolutions( std::min( deviceLimits.maxImageDimension2D, 16384u ),
+                                    std::min( deviceLimits.maxImageDimension3D, 4096u ),
+                                    std::min( deviceLimits.maxImageDimensionCube, 16384u ) );
         rsc->setMaxThreadsPerThreadgroupAxis( deviceLimits.maxComputeWorkGroupSize );
         rsc->setMaxThreadsPerThreadgroup( deviceLimits.maxComputeWorkGroupInvocations );
 
@@ -673,7 +674,6 @@ namespace Ogre
         rsc->setCapability( RSC_EXPLICIT_API );
         rsc->setMaxPointSize( 256 );
 
-        rsc->setMaximumResolutions( 16384, 4096, 16384 );
 
         rsc->setVertexProgramConstantFloatCount( 256u );
         rsc->setVertexProgramConstantIntCount( 256u );
