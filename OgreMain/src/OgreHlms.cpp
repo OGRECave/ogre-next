@@ -3253,9 +3253,9 @@ namespace Ogre
         {
             setProperty( HlmsBaseProp::PsoClipDistances, 1 );
             setProperty( HlmsBaseProp::GlobalClipPlanes, 1 );
-            // some Android devices(e.g. Mali-G77, Google Pixel 7 Pro) do not support Vulkan shaderClipDistance feature
-            if(!mRenderSystem->getCapabilities()->hasCapability(RSC_USER_CLIP_PLANES))
-                setProperty(HlmsBaseProp::EmulateClipDistances, 1); //turn on emulation of clipDistances
+            // some Android devices(e.g. Mali-G77, Google Pixel 7 Pro) do not support user clip planes
+            if( !mRenderSystem->getCapabilities()->hasCapability( RSC_USER_CLIP_PLANES ) )
+                setProperty( HlmsBaseProp::EmulateClipDistances, 1 );
         }
 
         const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
