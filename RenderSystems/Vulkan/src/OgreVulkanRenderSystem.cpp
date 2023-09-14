@@ -674,6 +674,17 @@ namespace Ogre
         rsc->setCapability( RSC_EXPLICIT_API );
         rsc->setMaxPointSize( 256 );
 
+        const VkPhysicalDeviceMemoryProperties &memoryProperties = mDevice->mDeviceMemoryProperties;
+        for( uint32_t typeIndex = 0; typeIndex < memoryProperties.memoryTypeCount; ++typeIndex )
+        {
+            const VkMemoryType &memoryType = memoryProperties.memoryTypes[typeIndex];
+            if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) != 0 &&
+                ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) != 0 &&
+                ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0 )
+            {
+                rsc->setCapability( RSC_UMA );
+            }
+        }
 
         rsc->setVertexProgramConstantFloatCount( 256u );
         rsc->setVertexProgramConstantIntCount( 256u );

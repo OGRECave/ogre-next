@@ -142,6 +142,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t VulkanBufferInterface::advanceFrame( bool bAdvanceFrame )
     {
+        if( mBuffer->mBufferType == BT_DEFAULT_SHARED )
+        {
+            if( bAdvanceFrame )
+            {
+                mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart;
+            }
+            return 0;
+        }
+
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
         dynamicCurrentFrame /= mBuffer->_getInternalNumElements();
@@ -159,6 +168,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanBufferInterface::regressFrame()
     {
+        if( mBuffer->mBufferType == BT_DEFAULT_SHARED )
+        {
+            mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart;
+            return;
+        }
+
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
         dynamicCurrentFrame /= mBuffer->_getInternalNumElements();
