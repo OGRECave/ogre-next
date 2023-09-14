@@ -674,6 +674,7 @@ namespace Ogre
         rsc->setCapability( RSC_EXPLICIT_API );
         rsc->setMaxPointSize( 256 );
 
+        // check memory properties to determine, if we can use UMA and/or TBDR optimizations
         const VkPhysicalDeviceMemoryProperties &memoryProperties = mDevice->mDeviceMemoryProperties;
         for( uint32_t typeIndex = 0; typeIndex < memoryProperties.memoryTypeCount; ++typeIndex )
         {
@@ -683,6 +684,13 @@ namespace Ogre
                 ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0 )
             {
                 rsc->setCapability( RSC_UMA );
+            }
+            // VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT is a prerequisite for TBDR, and is probably a good
+            // heuristic that TBDR mode of buffers clearing is supported efficiently, i.e. RSC_IS_TILER.
+            if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT ) != 0 )
+            {
+                rsc->setCapability( RSC_IS_TILER );
+                rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
             }
         }
 
