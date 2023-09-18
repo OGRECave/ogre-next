@@ -676,21 +676,27 @@ namespace Ogre
 
         // check memory properties to determine, if we can use UMA and/or TBDR optimizations
         const VkPhysicalDeviceMemoryProperties &memoryProperties = mDevice->mDeviceMemoryProperties;
-        for( uint32_t typeIndex = 0; typeIndex < memoryProperties.memoryTypeCount; ++typeIndex )
+        if( mDevice->mDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU ||
+            mDevice->mDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU )
         {
-            const VkMemoryType &memoryType = memoryProperties.memoryTypes[typeIndex];
-            if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) != 0 &&
-                ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) != 0 &&
-                ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0 )
+            for( uint32_t typeIndex = 0; typeIndex < memoryProperties.memoryTypeCount; ++typeIndex )
             {
-                rsc->setCapability( RSC_UMA );
-            }
-            // VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT is a prerequisite for TBDR, and is probably a good
-            // heuristic that TBDR mode of buffers clearing is supported efficiently, i.e. RSC_IS_TILER.
-            if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT ) != 0 )
-            {
-                rsc->setCapability( RSC_IS_TILER );
-                rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
+                const VkMemoryType &memoryType = memoryProperties.memoryTypes[typeIndex];
+                if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) != 0 &&
+                    ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) != 0 &&
+                    ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0 )
+                {
+                    rsc->setCapability( RSC_UMA );
+                }
+
+                // VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT is a prerequisite for TBDR, and is probably
+                // a good heuristic that TBDR mode of buffers clearing is supported efficiently,
+                // i.e. RSC_IS_TILER.
+                if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT ) != 0 )
+                {
+                    rsc->setCapability( RSC_IS_TILER );
+                    rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
+                }
             }
         }
 
@@ -1926,8 +1932,8 @@ namespace Ogre
         {
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
             VkSampler textureSampler = static_cast<VkSampler>( samplerblock->mRsData );
-#else // VK handles are always 64bit, even on 32bit systems
-            VkSampler textureSampler = *static_cast<VkSampler*>( samplerblock->mRsData );
+#else  // VK handles are always 64bit, even on 32bit systems
+            VkSampler textureSampler = *static_cast<VkSampler *>( samplerblock->mRsData );
 #endif
             if( mGlobalTable.samplers[texUnit].sampler != textureSampler )
             {
@@ -3410,8 +3416,8 @@ namespace Ogre
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         newBlock->mRsData = textureSampler;
-#else // VK handles are always 64bit, even on 32bit systems
-        newBlock->mRsData = new uint64(textureSampler);
+#else  // VK handles are always 64bit, even on 32bit systems
+        newBlock->mRsData = new uint64( textureSampler );
 #endif
     }
     //-------------------------------------------------------------------------
@@ -3420,9 +3426,9 @@ namespace Ogre
         assert( block->mRsData );
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         VkSampler textureSampler = static_cast<VkSampler>( block->mRsData );
-#else // VK handles are always 64bit, even on 32bit systems
-        VkSampler textureSampler = *static_cast<VkSampler*>( block->mRsData );
-        delete (uint64*)block->mRsData;
+#else  // VK handles are always 64bit, even on 32bit systems
+        VkSampler textureSampler = *static_cast<VkSampler *>( block->mRsData );
+        delete(uint64 *)block->mRsData;
 #endif
         delayed_vkDestroySampler( mVaoManager, mActiveDevice->mDevice, textureSampler, 0 );
     }
