@@ -860,7 +860,7 @@ namespace Ogre
     void GL3PlusTextureGpuRenderTarget::setOrientationMode( OrientationMode orientationMode )
     {
         OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::OnStorage || isRenderWindowSpecific() ||
-                         isRenderToTexture() && mWidth == mHeight );
+                         ( isRenderToTexture() && mWidth == mHeight ) );
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         mOrientationMode = orientationMode;
 #endif
