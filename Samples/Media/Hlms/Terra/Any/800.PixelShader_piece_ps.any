@@ -214,8 +214,8 @@
 	@property( hlms_emulate_clip_distances && hlms_global_clip_planes && hlms_pso_clip_distances && syntax == glslvk)
 		@foreach( hlms_pso_clip_distances, n )
 			if( inPs.clipDistance@n < 0.0 )
-                discard;
-        @end
+				discard;
+		@end
 	@end
 
 	@insertpiece( LoadMaterial )
