@@ -289,7 +289,7 @@ the preprocessor may feel counter-intuitive or frustrating.
 
 For example
 ```cpp
-  \@property( IncludeLighting )
+  @property( IncludeLighting )
 
   /* code here */
 
@@ -346,41 +346,39 @@ The logical operands `&& || !` are valid.
 Examples:
 
 ```cpp
-  \@property( hlms_skeleton )
+  @property( hlms_skeleton )
 
   //Skeleton animation code here
 
   @end
 
-  \@property( hlms_skeleton && !hlms_normal )
+  @property( hlms_skeleton && !hlms_normal )
 
   //Print this code if it has skeleton animation but no normals
 
   @end
 
-  \@property( hlms_normal || hlms_tangent )
+  @property( hlms_normal || hlms_tangent )
 
   //Print this code if it has normals or tangents
 
   @end
 
-  \@property( hlms_normal && (!hlms_skeleton || hlms_tangent) )
+  @property( hlms_normal && (!hlms_skeleton || hlms_tangent) )
 
   //Print this code if it has normals and either no skeleton or tangents
 
   @end
 ```
 
-It is very similar to \#if hlms\_skeleton != 0 \#endif; however there is
-no equivalent \#else or \#elif syntax. As a simple workaround you can
-do:
+Hlms supports `@else` code:
 
 ```cpp
-  \@property( hlms_skeleton )
+  @property( hlms_skeleton )
 
   //Skeleton animation code here
 
-  @end \@property( !hlms_skeleton )
+  @else
 
   //Non-Skeleton code here
 
@@ -389,8 +387,8 @@ do:
 
 Newlines are not necessary. The following is perfectly valid:
 
-```
-  diffuse = surfaceDiffuse \@property( hasLights )* lightDiffuse@end ;
+```cpp
+  diffuse = surfaceDiffuse @property( hasLights )* lightDiffuse@end ;
 ```
 
 Which will print:
@@ -446,7 +444,7 @@ Examples:
 >
 >    @psub( myVar, 1 ) //Decrement myVar on each loop
 >
->    \@property( myVar )
+>    @property( myVar )
 >
 >    //Code that shouldn't be printed in the last iteration
 >
@@ -702,7 +700,7 @@ Note: This section is relevant to those seeking to write their own Hlms
 implementation.
 
 C++ can use `Hlms::setProperty( "key", value )` to set "key" to the given
-value. This value can be read by `\@property`, `@foreach`,
+value. This value can be read by `@property`, `@foreach`,
 `@add/sub/mul/div/mod`, `@counter`, `@value` and `@padd/psub/pmul/pdiv/pmod`
 
 To create pieces (or read them) you need to pass your custom
