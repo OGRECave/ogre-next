@@ -260,19 +260,19 @@ material.
 The Hlms will parse the template files from the template folder
 according to the following rules:
 
-1.  The files with the names "VertexShader\_vs", "PixelShader\_ps",
-    "GeometryShader\_gs", "HullShader\_hs", "DomainShader\_ds" will be
+1.  The files with the names `VertexShader_vs`, `PixelShader_ps`,
+    `GeometryShader_gs`, `HullShader_hs`, `DomainShader_ds` will be
     fully parsed and compiled into the shader. If an implementation only
-    provides "VertexShader\_vs.glsl", "PixelShader\_ps.glsl" only the
+    provides `VertexShader_vs.glsl`, `PixelShader_ps.glsl` only the
     vertex and pixel shaders for OpenGL will be created. There will be
     no geometry or tesellation shaders.
-2.  The files that contain the string "piece\_vs" in their filenames
+2.  The files that contain the string `piece_vs` in their filenames
     will be parsed only for collecting pieces (more on *pieces* later).
-    Likewise the words "piece\_ps", "piece\_gs", "piece\_hs",
-    "piece\_ds" correspond to the pieces for their respective shader
+    Likewise the words `piece_ps`, `piece_gs`, `piece_hs`,
+    `piece_ds` correspond to the pieces for their respective shader
     stages. Note that you can concatenate, thus
-    "MyUtilities\_piece\_vs\_piece\_ps.glsl" will be collected both in
-    the vertex and pixel shader stages. You can use "piece\_all" as a
+    `MyUtilities_piece_vs_piece_ps.glsl` will be collected both in
+    the vertex and pixel shader stages. You can use `piece_all` as a
     shortcut to collect from a piece file in all stages.
 
 The Hlms takes a template file (i.e. a file written in GLSL or HLSL) and
@@ -305,16 +305,30 @@ is analogous to
   #endif
 ```
 
-However you can't evaluate `IncludeLighting` to anything other than zero
-and non-zero, i.e. you can't check whether `IncludeLighting == 2` with the
-Hlms preprocessor. A simple workaround is to define, from C++, the
-variable "IncludeLightingEquals2" and check whether it's non-zero.
-Another solution is to use the GLSL/HLSL preprocessor itself instead of
-Hlms'. However the advantage of Hlms is that you can see its generated
-output in a file for inspection, whereas you can't see the GLSL/HLSL
-after the macro preprocessor without vendor-specific tools. Plus, in the
-case of GLSL, you'll depend on the driver implementation having a good
-macro preprocessor.
+You can also evaluate `IncludeLighting` to anything other than zero
+and non-zero, i.e.
+
+```cpp
+  @property( IncludeLighting == 2 )
+
+  /* code here */
+
+  @end
+
+  @property( IncludeLighting == AnotherVariable )
+
+  /* code here 2 */
+
+  @end
+```
+
+This first snippet will be included if IncludeLighting == 2.
+And the secon snippet will be included if IncludeLighting == AnotherVariable.
+
+Note that if both IncludeLighting and AnotherVariable are not defined,
+it will evaluate to `0 == 0` and thus be included.
+
+All comparison operations: `== != < <= >= >` are supported.
 
 ## Preprocessor syntax {#HlmsPreprocessorSyntax}
 
