@@ -97,7 +97,6 @@ $(document).ready(function(){initNavTree('threading.html',''); initResizable(); 
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#ThreadingInitializing">Initializing</a><ul><li class="level2"><a href="#ThreadingInitializingNumberOfThreads">Ideal number of threads</a></li>
-<li class="level2"><a href="#ThreadingInitializingCullingMethod">More info about InstancingThreadedCullingMethod</a></li>
 </ul>
 </li>
 <li class="level1"><a href="#ThreadingInOgre">What tasks are threaded in Ogre</a></li>
@@ -106,7 +105,7 @@ $(document).ready(function(){initNavTree('threading.html',''); initResizable(); 
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_Docs_src_manual_threading"></a></p>
-<p ><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0 uses synchronous threading for some of its operations. This means the main thread wakes up the worker threads, and waits for all worker threads to finish. It also means users don't have to be worried that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> is using CPU cores while the application is outside a <code>renderOneFrame</code> call.</p>
+<p >OgreNext uses synchronous threading for some of its operations. This means the main thread wakes up the worker threads, and waits for all worker threads to finish. It also means users don't have to be worried that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> is using CPU cores while the application is outside a <code>renderOneFrame</code> call.</p>
 <h1><a class="anchor" id="ThreadingInitializing"></a>
 Initializing</h1>
 <p >The number of worker threads must be provided by the user when creating the SceneManager:</p>
@@ -124,29 +123,6 @@ Ideal number of threads</h2>
 <p >Spawning more threads than cores will oversubscribe the system and won't run faster. In fact it should only slow it down.</p>
 <p >If you plan to use a whole core for your own computations that will run in parallel while renderOneFrame is working (i.e. one thread for physics) and take a significant cpu time from that core; then in this case the ideal number of threads becomes number_of_logical_cores – 1</p>
 <p >Whether increasing the number of threads to include hyperthreading cores improves performance or not remains to be tested.</p>
-<h2><a class="anchor" id="ThreadingInitializingCullingMethod"></a>
-More info about InstancingThreadedCullingMethod</h2>
-<p >There are two Instancing techniques that perform culling of their own:</p>
-<ul>
-<li>HW Basic</li>
-<li>HW VTF</li>
-</ul>
-<p >Frustum culling is highly parallelizable &amp; scalable. However, we first cull InstanceBatches &amp; regular entities, then ask the culled InstanceBatches to perform their culling to the InstancedEntities they own.</p>
-<p >This results performance boost for skipping large amounts of instanced entities when the whole batch isn't visible. However, this also means threading frustum culling of instanced entities got harder.</p>
-<p >There were four possible approaches:</p>
-<ul>
-<li>Ask all existing batches to frustum cull. Then use only the ones we want. Sheer brute force. Scales very well with cores, but sacrifices performance unnecessary when only a few batches are visible. This approach is not taken by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>.</li>
-<li>Sync every time an InstanceBatchHW or InstanceBatchHW_VTF tries to frustum cull to delegate the job on worker threads. Considering there could be hundreds of InstanceBatches, this would cause a huge amount of thread synchronization overhead &amp; context switches. This approach is not taken by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>.</li>
-<li>Each thread after having culled all InstancedBatches &amp; Entities, will parse the culled list to ask all MovableObjects to perform culling of their own. Entities will ignore this call (however they add to a small overhead for traversing them and calling a virtual function) while InstanceBatchHW &amp; InstanceBatchHW_VTF will perform their own culling from within the multiple threads. This approach scales well with cores and only visible batches. However load balancing may be an issue for certain scenes: eg. an InstanceBatch with 5000 InstancedEntities in one thread, while the other three threads get one InstanceBatch each with 50 InstancedEntities. The first thread will have considerably more work to do than the other three. This approach is a good balance when compared to the first two. <b>This is the approach taken by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> when INSTANCING_CULLING_THREADED is on</b></li>
-<li>Don't multithread instanced entitites' frustum culling. Only the InstanceBatch &amp; Entity's frustum culling will be threaded. <b>This is what happens when INSTANCING_CULLING_SINGLE is on</b>.</li>
-</ul>
-<p >Whether INSTANCING_CULLING_THREADED improves or degrades performance depends highly on your scene.</p>
-<p >When to use INSTANCING_CULLING_SINGLETHREAD?</p>
-<p >If your scene doesn't use HW Basic or HW VTF instancing techniques, or you have very few Instanced entities compared to the amount of regular Entities.</p>
-<p >Turning threading on, you'll be wasting your time traversing the list from multiple threads in search of InstanceBatchHW &amp; InstanceBatchHW_VTF</p>
-<p >When to use INSTANCING_CULLING_THREADED?</p>
-<p >If your scene makes intensive use of HW Basic and/or HW VTF instancing techniques. Note that threaded culling is performed in SCENE_STATIC instances too. The most advantage is seen when the instances per batch is very high and when doing many PASS_SCENE, which require frustum culling multiple times per frame (eg. pssm shadows, multiple light sources with shadows, very advanced compositing, etc)</p>
-<p >Note that unlike the number of threads, you can switch between methods at any time at runtime.</p>
 <h1><a class="anchor" id="ThreadingInOgre"></a>
 What tasks are threaded in Ogre</h1>
 <p >The following tasks are partitioned into multiple threads:</p>

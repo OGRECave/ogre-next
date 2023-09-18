@@ -194,8 +194,7 @@ var manual =
     ] ],
     [ "Threading", "threading.html", [
       [ "Initializing", "threading.html#ThreadingInitializing", [
-        [ "Ideal number of threads", "threading.html#ThreadingInitializingNumberOfThreads", null ],
-        [ "More info about InstancingThreadedCullingMethod", "threading.html#ThreadingInitializingCullingMethod", null ]
+        [ "Ideal number of threads", "threading.html#ThreadingInitializingNumberOfThreads", null ]
       ] ],
       [ "What tasks are threaded in Ogre", "threading.html#ThreadingInOgre", null ],
       [ "Using Ogre's threading system for custom tasks", "threading.html#ThreadingCustomTasks", null ],
