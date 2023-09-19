@@ -30,7 +30,13 @@ if(DOXYGEN_FOUND)
     endif ()
     
 	file(GLOB MANUAL
-			${OGRE_SOURCE_DIR}/Docs/src/manual/*.md
+		${OGRE_SOURCE_DIR}/Docs/src/manual/*.md
+			${OGRE_SOURCE_DIR}/Docs/src/manual/Introduction/*.md
+			${OGRE_SOURCE_DIR}/Docs/src/manual/Migrating/*.md
+			${OGRE_SOURCE_DIR}/Docs/src/manual/Performance/*.md
+			${OGRE_SOURCE_DIR}/Docs/src/manual/Plugins/*.md
+			${OGRE_SOURCE_DIR}/Docs/src/manual/Rendering/*.md
+			${OGRE_SOURCE_DIR}/Docs/src/manual/Scripts/*.md
 			${OGRE_SOURCE_DIR}/Docs/src/SettingUpOgre/*.md
 			${OGRE_SOURCE_DIR}/Docs/src/UsingOgre/*.md
 		)
