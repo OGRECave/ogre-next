@@ -188,13 +188,7 @@ shared by other datablocks, so you will be changing them as well as side
 effect) and it would probably work. But it will definitely fail on D3D11
 render system.  
 
-Refer to the following pages for parameter references:
-- @subpage hlmsblendblockref
-- @subpage hlmspbsdatablockref
-- @subpage hlmsunlitdatablockref
-- @subpage hlmsterradatablockref
-- @subpage hlmsmacroblockref
-- @subpage hlmssamplerref
+For more information refer to the [JSON Materials](@ref JSON-Materials) page.
 
 ## Datablocks {#HlmsBlocksDatablocks}
 
