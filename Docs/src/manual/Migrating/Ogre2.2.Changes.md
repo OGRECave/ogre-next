@@ -9,7 +9,7 @@ lowering GPU RAM consumption, background texture streaming, asynchronic GPU to C
 transfers, and reducing out of GPU memory scenarios (which are relatively easy to run into
 if your project is medium-to-large sized).
 
-## Load Store semantics
+## Load Store semantics {#Ogre22LoadStoreSemantics}
 
 Ogre 2.2 is much more mobile friendly. Metal introduced the concepts of “load” and “store”
 actions, and we follow that paradigm because it’s easy to implement and understand.

@@ -926,8 +926,6 @@ namespace Ogre
                 ID_TARGET_ORIENTATION_MODE,
                 ID_TARGET_FORMAT,
             //  ID_GAMMA,
-                ID_NO_GAMMA,
-                ID_NO_FSAA,
                 ID_MSAA,
                 ID_MSAA_AUTO,
                 ID_EXPLICIT_RESOLVE,

@@ -1235,8 +1235,6 @@ namespace Ogre
         mIds["target_height_scaled"] = ID_TARGET_HEIGHT_SCALED;
         mIds["target_orientation_mode"] = ID_TARGET_ORIENTATION_MODE;
         mIds["target_format"] = ID_TARGET_FORMAT;
-        mIds["no_gamma"] = ID_NO_GAMMA;
-        mIds["no_fsaa"] = ID_NO_FSAA;
         mIds["msaa"] = ID_MSAA;
         mIds["msaa_auto"] = ID_MSAA_AUTO;
         mIds["explicit_resolve"] = ID_EXPLICIT_RESOLVE;
