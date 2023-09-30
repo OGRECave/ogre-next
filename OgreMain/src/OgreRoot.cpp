@@ -1066,6 +1066,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     bool Root::endRenderingQueued() { return mQueuedEnd; }
     //-----------------------------------------------------------------------
+    void Root::resetFrameStats() { mFrameStats->reset( mTimer->getMicroseconds() ); }
+    //-----------------------------------------------------------------------
     void Root::startRendering()
     {
         assert( mActiveRenderer != 0 );
