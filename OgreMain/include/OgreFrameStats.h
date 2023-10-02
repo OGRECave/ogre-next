@@ -234,9 +234,13 @@ namespace Ogre
             mLastTimeAbsoluteUS = timeUs;
 
             mNumSamples = 0.0;
-            mLatestTimeSinceLast = 0.0;
-            mRollingAvg = 0.0;
-            mAllTimeAvg = 0.0;
+            // Prevent division by zero using a sensible default.
+            // Because mNumSamples = 0, mAllTimeAvg is not actually affected by this trick.
+            // mLatestTimeSinceLast will be overwritten on next sample.
+            // And mRollingAvg should converge quickly over time to its real value.
+            mLatestTimeSinceLast = 1.0 / 60.0;
+            mRollingAvg = 1.0 / 60.0;
+            mAllTimeAvg = 1.0 / 60.0;
 
             mBestFrameTime = std::numeric_limits<double>::max();
             mWorstFrameTime = 0;
