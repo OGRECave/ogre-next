@@ -127,6 +127,7 @@ namespace Ogre
     // Change per scene pass
     const IdString HlmsBaseProp::PsoClipDistances = IdString( "hlms_pso_clip_distances" );
     const IdString HlmsBaseProp::GlobalClipPlanes = IdString( "hlms_global_clip_planes" );
+    const IdString HlmsBaseProp::EmulateClipDistances = IdString( "hlms_emulate_clip_distances" );
     const IdString HlmsBaseProp::DualParaboloidMapping = IdString( "hlms_dual_paraboloid_mapping" );
     const IdString HlmsBaseProp::InstancedStereo = IdString( "hlms_instanced_stereo" );
     const IdString HlmsBaseProp::StaticBranchLights = IdString( "hlms_static_branch_lights" );
@@ -3252,6 +3253,9 @@ namespace Ogre
         {
             setProperty( HlmsBaseProp::PsoClipDistances, 1 );
             setProperty( HlmsBaseProp::GlobalClipPlanes, 1 );
+            // some Android devices(e.g. Mali-G77, Google Pixel 7 Pro) do not support user clip planes
+            if( !mRenderSystem->getCapabilities()->hasCapability( RSC_USER_CLIP_PLANES ) )
+                setProperty( HlmsBaseProp::EmulateClipDistances, 1 );
         }
 
         const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();

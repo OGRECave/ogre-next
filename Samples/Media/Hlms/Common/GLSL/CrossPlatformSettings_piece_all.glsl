@@ -6,6 +6,10 @@
 		#version 430 core
 	@else
 		#version 330 core
+
+		@property( !hlms_readonly_is_tex )
+			#extension GL_ARB_shader_storage_buffer_object: require
+		@end
 	@end
 @end
 
@@ -233,7 +237,11 @@
 
 #define outVs_Position gl_Position
 #define outVs_viewportIndex gl_ViewportIndex
+@property( hlms_emulate_clip_distances )
+#define outVs_clipDistance0 outVs.clipDistance0
+@else
 #define outVs_clipDistance0 gl_ClipDistance[0]
+@end
 
 #define gl_SampleMaskIn0 gl_SampleMaskIn[0]
 #define reversebits bitfieldReverse

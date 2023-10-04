@@ -680,9 +680,9 @@ namespace Ogre{
 
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
         Hlms *hlms = 0;
-        HlmsParamVec paramVec;
-
-        paramVec.reserve( obj->children.size() );
+        // We need a map to deal with materials that define the same setting multiple times.
+        // The last defined version must win.
+        map<IdString, String>::type paramMap;
 
         const IdString idType( type );
         for( size_t i=0; i<HLMS_MAX && !hlms; ++i )
@@ -1228,7 +1228,7 @@ namespace Ogre{
                             ++itor;
                         }
                     }
-                    paramVec.emplace_back( prop->name, value );
+                    paramMap[prop->name] = value;
                     }
                 }
             }
@@ -1239,7 +1239,10 @@ namespace Ogre{
             }
         }
 
-        std::sort( paramVec.begin(), paramVec.end(), OrderParamVecByKey );
+        HlmsParamVec paramVec;
+        paramVec.reserve( paramMap.size() );
+        paramVec.insert( paramVec.begin(), paramMap.begin(), paramMap.end() );
+
         blendblock.calculateSeparateBlendMode();
         hlms->createDatablock( obj->name, obj->name, macroblock, blendblock, paramVec, true,
                                obj->file, compiler->getResourceGroup() );

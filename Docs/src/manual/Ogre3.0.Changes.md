@@ -46,4 +46,4 @@ Make sure to upgrade to latest CMake scripts if you're using them; to be ready f
 
 Default material BRDF settings have changed in 3.0; thus materials will look different.
 
-See [PBR / PBS Changes in 3.0](@ref PBSChangesIn30) to how make them look like they did in 2.4 and what these changes mean.
+See [PBR / PBS Changes in 3.0](@ref PBSChangesIn30) to how make them look like they did in 2.3 and what these changes mean.

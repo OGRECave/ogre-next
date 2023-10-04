@@ -524,77 +524,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline Vector3 ArrayVector3::collapseMin() const
     {
-        OGRE_ALIGNED_DECL( Real, vals[4], OGRE_SIMD_ALIGNMENT );
-//      ArrayReal aosVec0, aosVec1, aosVec2, aosVec3;
-        Real min0 = MathlibNEON::CollapseMin(mChunkBase[0]);
-        Real min1 = MathlibNEON::CollapseMin(mChunkBase[1]);
-        Real min2 = MathlibNEON::CollapseMin(mChunkBase[2]);
-
-        float32x4_ct minArray = { min0, min1, min2, std::numeric_limits<Real>::infinity() };
-        Real min = MathlibNEON::CollapseMin(minArray);
-//        min = vminq_f32(mChunkBase[0], mChunkBase[1]);
-//        min = vminq_f32(min, mChunkBase[2]);
-
-//        ArrayReal a_lo, a_hi, min;
-//        a_lo = vget_low_f32(a);
-//        a_hi = vget_high_f32(a);
-//        min = vpmin_f32(a_lo, a_hi);
-//        min = vpmin_f32(min, min);
-//
-//        return vget_lane_f32(min, 0);
-
-        //Transpose XXXX YYYY ZZZZ to XYZZ XYZZ XYZZ XYZZ
-//      ArrayReal tmp2, tmp0;
-//      tmp0   = vshuf_f32( mChunkBase[0], mChunkBase[1], 0x44 );
-//        tmp2   = vshuf_f32( mChunkBase[0], mChunkBase[1], 0xEE );
-//
-//        aosVec0 = vshuf_f32( tmp0, mChunkBase[2], 0x08 );
-//      aosVec1 = vshuf_f32( tmp0, mChunkBase[2], 0x5D );
-//      aosVec2 = vshuf_f32( tmp2, mChunkBase[2], 0xA8 );
-//      aosVec3 = vshuf_f32( tmp2, mChunkBase[2], 0xFD );
-//
-//      //Do the actual operation
-//      aosVec0 = vminq_f32( aosVec0, aosVec1 );
-//      aosVec2 = vminq_f32( aosVec2, aosVec3 );
-//      aosVec0 = vminq_f32( aosVec0, aosVec2 );
-
-        vst1q_f32( vals, vdupq_n_f32(min) );
-
-        return Vector3( vals[0], vals[1], vals[2] );
+        Real min0 = MathlibNEON::CollapseMin( mChunkBase[0] );
+        Real min1 = MathlibNEON::CollapseMin( mChunkBase[1] );
+        Real min2 = MathlibNEON::CollapseMin( mChunkBase[2] );
+        return Vector3( min0, min1, min2 );
     }
     //-----------------------------------------------------------------------------------
     inline Vector3 ArrayVector3::collapseMax() const
     {
-        OGRE_ALIGNED_DECL( Real, vals[4], OGRE_SIMD_ALIGNMENT );
-//      ArrayReal aosVec0, aosVec1, aosVec2, aosVec3;
-        Real max0 = MathlibNEON::CollapseMax(mChunkBase[0]);
-        Real max1 = MathlibNEON::CollapseMax(mChunkBase[1]);
-        Real max2 = MathlibNEON::CollapseMax(mChunkBase[2]);
-
-        float32x4_ct maxArray = { max0, max1, max2, -std::numeric_limits<Real>::infinity() };
-        Real max = MathlibNEON::CollapseMax(maxArray);
-//        ArrayReal max;
-//        max = vmaxq_f32(mChunkBase[0], mChunkBase[1]);
-//        max = vmaxq_f32(max, mChunkBase[2]);
-
-        //Transpose XXXX YYYY ZZZZ to XYZZ XYZZ XYZZ XYZZ
-//      ArrayReal tmp2, tmp0;
-//      tmp0   = vshuf_f32( mChunkBase[0], mChunkBase[1], 0x44 );
-//        tmp2   = vshuf_f32( mChunkBase[0], mChunkBase[1], 0xEE );
-//
-//        aosVec0 = vshuf_f32( tmp0, mChunkBase[2], 0x08 );
-//      aosVec1 = vshuf_f32( tmp0, mChunkBase[2], 0x5D );
-//      aosVec2 = vshuf_f32( tmp2, mChunkBase[2], 0xA8 );
-//      aosVec3 = vshuf_f32( tmp2, mChunkBase[2], 0xFD );
-//
-//      //Do the actual operation
-//      aosVec0 = vmaxq_f32( aosVec0, aosVec1 );
-//      aosVec2 = vmaxq_f32( aosVec2, aosVec3 );
-//      aosVec0 = vmaxq_f32( aosVec0, aosVec2 );
-
-        vst1q_f32( vals, vdupq_n_f32(max) );
-
-        return Vector3( vals[0], vals[1], vals[2] );
+        Real max0 = MathlibNEON::CollapseMax( mChunkBase[0] );
+        Real max1 = MathlibNEON::CollapseMax( mChunkBase[1] );
+        Real max2 = MathlibNEON::CollapseMax( mChunkBase[2] );
+        return Vector3( max0, max1, max2 );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayVector3::Cmov4( ArrayMaskR mask, const ArrayVector3 &replacement )

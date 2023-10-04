@@ -18,7 +18,7 @@ painful and traumatic as possible.
 - @subpage TerraSystem
 - @subpage TuningMemoryResources
 - @subpage Ogre22Changes
-- @subpage BehavorStagingTextureD3D11
+- @subpage BehaviorStagingTextureD3D11
 - @subpage Ogre23Changes
 - @subpage RootLayouts
 - @subpage ResolvingMergeConflicts30

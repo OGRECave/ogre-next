@@ -978,6 +978,31 @@ namespace Ogre
             return;
         }
 
+        if( mReadyWindowForPresent )
+        {
+            const size_t numColourEntries = mNumColourEntries;
+            for( size_t i = 0u; i < numColourEntries; ++i )
+            {
+                VulkanTextureGpu *texture;
+
+                if( mColour[i].resolveTexture && mColour[i].resolveTexture->isRenderWindowSpecific() )
+                {
+                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( mColour[i].resolveTexture ) );
+                    texture = static_cast<VulkanTextureGpu *>( mColour[i].resolveTexture );
+                    texture->mCurrLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                    texture->mNextLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                }
+
+                if( mColour[i].texture && mColour[i].texture->isRenderWindowSpecific() )
+                {
+                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( mColour[i].texture ) );
+                    texture = static_cast<VulkanTextureGpu *>( mColour[i].texture );
+                    texture->mCurrLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                    texture->mNextLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                }
+            }
+        }
+
         // End (if exists) the render command encoder tied to this RenderPassDesc.
         // Another encoder will have to be created, and don't let ours linger
         // since mCurrentRenderPassDescriptor probably doesn't even point to 'this'

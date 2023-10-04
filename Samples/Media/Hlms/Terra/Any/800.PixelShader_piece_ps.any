@@ -142,7 +142,7 @@
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailMetalnessIdx@n ).x;
 		@else
-			midf metalness@n = _h( 0 );
+			midf metalness@n = _h( 1.0 );
 		@end
 	@end
 
@@ -167,7 +167,7 @@
 												  material.detailOffsetScale[@n].xy,
 												  texIndex_detailRoughnessIdx@n ).x;
 		@else
-			midf roughness@n = _h( 0 );
+			midf roughness@n = _h( 1.0 );
 		@end
 	@end
 
@@ -210,6 +210,13 @@
 
 @piece( DefaultTerraBodyPS )
 	PixelData pixelData;
+
+	@property( hlms_emulate_clip_distances && hlms_global_clip_planes && hlms_pso_clip_distances && syntax == glslvk)
+		@foreach( hlms_pso_clip_distances, n )
+			if( inPs.clipDistance@n < 0.0 )
+				discard;
+		@end
+	@end
 
 	@insertpiece( LoadMaterial )
 	@insertpiece( UnpackTextureIndices0 )

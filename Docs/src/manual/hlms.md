@@ -145,7 +145,7 @@ was cut as well. The HLMS default systems handle these.
     these files (or write some of their own) to fit their custom needs.
 3.  **C++ classes implementation.** The C++ takes care of picking the
     shader templates and manipulating them before compiling; and most
-    importantly it feeds the shaders with uniform/constans data and sets
+    importantly it feeds the shaders with uniform/constants data and sets
     the textures that are being in use. It is extremely flexible,
     powerful, efficient and scalable, but it's harder to use than good
     ol' Materials because those used to be data-driven: there are no
@@ -153,12 +153,11 @@ was cut as well. The HLMS default systems handle these.
     the camera when the scene pass is about to start, and then pass it
     yourself to the shader. This is very powerful, because in D3D11/GL3+
     you can just set the uniform buffer with the view matrix just once
-    for the entire frame, and thus have multiple uniforms buffers sorted
-    by update frequency. Very advanced user will be using messing with
-    this part.
+    for the entire frame, and thus have multiple uniform buffers sorted
+    by update frequency. Very advanced user will be using this part.
 
-Based on your skillset and needs, you can pick up to which parts you
-want to mess with. Most users will just use the scripts to define
+Based on your skillset and needs, you can pick which parts you
+want to tinker with. Most users will just use the scripts to define
 materials, advanced users will change the template, and very advanced
 users who need something entirely different will change all three.
 
@@ -167,7 +166,7 @@ implementation and its own set of shader templates. The Toon Shading has
 its own C++ implementation and set of shaders. There is also an "Unlit"
 implementation, specifically meant to deal with GUI and simple particle
 FXs (ignores normals & lighting, manages multiple UVs, can mix multiple
-texture with photoshop-like blend modes, can animate the UVs, etc)
+texture with photoshop-like blend modes, can animate the UVs, etc).
 
 It is theoretically possible to implement both Toon & PBS in the same
 C++ module, but that would be crazy, hard to maintain and not very
@@ -236,7 +235,7 @@ We also sort by blendblocks to reduce state changes.
 ## Samplerblocks {#HlmsBlocksSampleblocks}
 
 Samplerblocks hold information about texture units, like filtering
-options, addressing modes (wrap, clamp, etc), Lod bias, anisotropy,
+options, addressing modes (wrap, clamp, etc), LOD bias, anisotropy,
 border colour, etc. They're analogous to `D3D11_SAMPLER_DESC`.
 
 GL3+ and D3D11 both support samplerblocks natively[^12]. On GLES2, the
@@ -264,7 +263,7 @@ according to the following rules:
 1.  The files with the names "VertexShader\_vs", "PixelShader\_ps",
     "GeometryShader\_gs", "HullShader\_hs", "DomainShader\_ds" will be
     fully parsed and compiled into the shader. If an implementation only
-    provides "VertexShader\_vs.glsl", "PixelShader\_ps.glsl"; only the
+    provides "VertexShader\_vs.glsl", "PixelShader\_ps.glsl" only the
     vertex and pixel shaders for OpenGL will be created. There will be
     no geometry or tesellation shaders.
 2.  The files that contain the string "piece\_vs" in their filenames
@@ -277,7 +276,7 @@ according to the following rules:
     shortcut to collect from a piece file in all stages.
 
 The Hlms takes a template file (i.e. a file written in GLSL or HLSL) and
-spits out valid shader code. Templates can take advantage of the Hlms'
+produces valid shader code. Templates can take advantage of the Hlms'
 preprocessor, which is a simple yet powerful macro-like preprocessor
 that helps writing the required code.
 
@@ -331,6 +330,9 @@ case sensitive. The following keywords are recognized:
 -   \@piece
 -   \@insertpiece
 -   \@pset padd psub pmul pdiv pmod pmin pmax
+
+Note: @ takes precedence over comment //. If you comment out with //
+a line that has @, it will _not_ be commented out.
 
 ### \@property( expression ) {#HlmsPreprocessorSyntaxProperty}
 
@@ -402,13 +404,13 @@ Which will print:
 
 Loop that prints the text inside the block, The text is repeated `count - start` times. Must be finalized with `@end`.
 
--   count The number of times to repeat the loop (if start = 0). Count
+-   `count` The number of times to repeat the loop (if start = 0). Count
 	can read variables.
 -   `scopedVar` is a variable that can be used to print the
     current iteration of the loop while inside the block. i.e.
     `@scopedVar` will be converted into a number in the range \[start;
-    count)
--   start Optional. Allows to start from a value different than 0. Start
+    count).
+-   `start` Optional. Allows to start from a value different than 0. Start
     can read variables.
 
 Newlines are very important, as they will be printed with the loop.
@@ -451,7 +453,7 @@ Examples:
 >    @end
 >
 >    @end
->```
+> ```
 >
 >  Because psub will be evaluated before expanding the foreach.
 
@@ -515,11 +517,11 @@ Useful in combination with `@counter` and `@value`
 
 ### @piece( nameOfPiece ) {#HlmsPreprocessorSyntaxPiece}
 
-Saves all the text inside the blocks and saves it as a named piece. If a
+Saves all the text inside the blocks as a named piece. If a
 piece with the given name already exists, a compiler error will be
 thrown. The text that was inside the block won't be printed. Useful when
 in combination with `@insertpiece`. Pieces can also be defined from C++ or
-[collected](#9.3.Hlms templates|outline) from piece template files.
+[collected](#HlmsTemplates) from piece template files.
 
 Trying to define a piece twice will result in error and may produce
 incorrect output.
@@ -629,7 +631,7 @@ output showed the overriden `Hello` version.
 ### @pset padd psub pmul pdiv pmod pmin pmax {#HlmsPreprocessorSyntaxPsetEtc}
 
 Analogous to [the family of math functions without the 'p'
-prefix](#9.4.1.5.\@set add sub mul div mod|outline). The difference is
+prefix](#HlmsPreprocessorSyntaxSetEtc). The difference is
 that the math is evaluated before anything else. There is no much use to
 these functions, probably except for quickly testing whether a given
 flag/variable is being properly set from C++ without having to
@@ -659,7 +661,7 @@ shader itself and would need to be recompiled:
     multiplying it against the diffuse colour, etc.
 2.  The Mesh. Is it skeletally animated? Then include skeletal animation
     code. How many blend weights? Modify the skeletal animation code
-    appropiately. It doesn't have tangents? Then skip the normal map
+    appropriately. It doesn't have tangents? Then skip the normal map
     defined in the material. And so on.
 
 When calling `Renderable::setDatablock()`, what happens is that
@@ -679,9 +681,9 @@ The following graph summarizes the process:
 
 ![](hlms_hash.svg)
 
-Later on during rendering, at the start each render pass, a similar
+Later on during rendering, at the start of each render pass, a similar
 process is done, which ends up generating a [pass
-hash](#9.6.1.preparePassHash|outline) instead of a renderable hash.
+hash](#HlmsRuntimeRenderingPreparePassHash) instead of a renderable hash.
 Pass data stores settings like number of shadow casting lights, number
 of lights per type (directional, point, spot).
 
@@ -709,7 +711,7 @@ To create pieces (or read them) you need to pass your custom
 The recommended place to do this is in `Hlms::calculateHashForPreCreate`
 and `Hlms::calculateHashForPreCaster.` Both are virtual. The former gets
 called right before adding the set of properties, pieces and hash to the
-cache, while the latter happens right before adding the similar set for
+cache, while the latter happens right before adding a similar set for
 the shadow caster pass.
 
 In those two functions you get the chance to call setProperty to set
@@ -745,11 +747,11 @@ For mobile, avoid `mat4` and do the math yourself. As for 4x3 matrices
 (i.e. skinning), perform the math manually as many GLES2 drivers have
 issues compiling valid glsl code.
 
-Properties in `underscore_case` are set from C++; propierties in
+Properties in `underscore_case` are set from C++; properties in
 `camelCase` are set from the template.
 
-Propierties and pieces starting with `custom_` are for user
-customizations of the template
+Properties and pieces starting with `custom_` are for user
+customizations of the template.
 
 TBD
 
@@ -781,9 +783,9 @@ In many cases, users may want to slightly customize the shaders to
 achieve a particular look, implement a specific feature, or solve a
 unique problem; without having to rewrite the whole implementation.
 
-Maximum flexibility can be get by directly modifying the original source
+Maximum flexibility can be achieved by directly modifying the original source
 code. However this isn't modular, making it difficult to merge when the
-original source code has changed. Most of of the customizations don't
+original source code has changed. Most of the customizations don't
 require such intrusive approach.
 
 **Note:** For performance reasons, the listener interface does not allow
@@ -797,7 +799,7 @@ There are different levels in which an Hlms implementation can be
 customized:
 
 1.  Using a library, see [Hlms
-    Initialization](#8.8.1.Initialization|outline). pass a set of piece
+	Initialization](#UsingHlmsImplementationInitialization). pass a set of piece
     files in a folder by pushing the folder to `ArchiveVec`. The files in
     that folder will be parsed first, in order (`archiveVec[0]` then
     `archiveVec[1]`, ... `archiveVec[N-1]`); which will let you define
@@ -821,32 +823,38 @@ customized:
   @end
 ```
 
-1.  Via listener, through `HlmsListener`. This allows you to have access
+2.  Via listener, through `HlmsListener`. This allows you to have access
     to the buffer pass to fill extra information; or bind extra buffers
     to the shader.
-2.  Overload `HlmsPbs`. Useful for overriding only specific parts, or
+3.  Overload `HlmsPbs`. Useful for overriding only specific parts, or
     adding new functionality that requires storing extra information in
     a datablock (e.g. overload HlmsPbsDatablock to add more variables,
     and then overload `HlmsPbs::createDatablockImpl` to create these
-    custom datablocks)
-3.  Directly modify `HlmsPbs`, `HlmsPbsDatablock` and the template.
+    custom datablocks).
+4.  Directly modify `HlmsPbs`, `HlmsPbsDatablock` and the template.
 
 | Variable | Description |
 |----------|-------------|
-| custom_passBuffer            |   Piece where users can add extra information for the pass buffer (only useful if the user is using HlmsListener or overloaded HlmsPbs. |
-| custom_VStoPS                |   Piece where users can add more interpolants for passing data from the vertex to the pixel shader.|
+| custom_passBuffer            |  Piece where users can add extra information for the pass buffer (only useful if the user is using HlmsListener or overloaded HlmsPbs. |
+| custom_materialBuffer        |  TBD |
+| custom_VStoPS                |  Piece where users can add more interpolants for passing data from the vertex to the pixel shader.|
 | custom_vs_attributes         |  Custom vertex shader attributes in the Vertex Shader (i.e. a special texcoord, etc).|
 | custom_vs_uniformDeclaration |  Data declaration (textures, texture buffers, uniform buffers) in the Vertex Shader.|
+| custom_vs_uniformStructDeclaration |  TBD |
+| custom_vs_posMaterialLoad    |  TBD |
+| custom_vs_preTransform       |  TBD |
 | custom_vs_preExecution       |  Executed before Ogre's code from the Vertex Shader.|
 | custom_vs_posExecution       |  Executed after all code from the Vertex Shader has been performed.                     |
 | custom_ps_uniformDeclaration |  Same as custom_vs_uniformDeclaration, but for the Pixel Shader|
+| custom_ps_uniformStructDeclaration  |  TBD |
 | custom_ps_preExecution       |  Executed before Ogre's code from the Pixel Shader.|
 | custom_ps_posMaterialLoad    |  Executed right after loading material data; and before anything else. May not get executed if there is no relevant material data (i.e. doesn't have normals or QTangents for lighting calculation)|
+| custom_ps_posSampleNormal    |  TBD |
 | custom_ps_preLights          |  Executed right before any light (i.e. to perform your own ambient / global illumination pass). All relevant texture data should be loaded by now.|
 | custom_ps_posExecution       |  Executed after all code from the Pixel Shader has been performed.|
 | custom_ps_uv_modifier_macros |  PBS specific. Allows you to override the macros defined in Samples/Media/Hlms/Pbs/Any/UvModifierMacros_piece_ps.any so you can apply custom transformations to each UV. e.g. `#undef UV_DIFFUSE #define UV_DIFFUSE( x ) ((x) * 2.0)` |
-| custom_ps_functions          | Used to declare functions outside the main body of the shader |
-| custom_ps_pixelData          | Declare additional data in `struct PixelData` from Pixel Shader |
+| custom_ps_functions          |  Used to declare functions outside the main body of the shader |
+| custom_ps_pixelData          |  Declare additional data in `struct PixelData` from Pixel Shader |
 
 # Run-time rendering {#HlmsRuntimeRendering}
 
@@ -964,8 +972,8 @@ named "Green". However only one can be visible to the manager; let's
 assume that the PBS one was made visible.
 
 When you call `Renderable::setDatablock( "Green" )`, the HlmsManager will
-look the one that is visible to it. To assign the Unlit version of
-"Green" instead of the PBS one, you will have call the overload that
+look for the one that is visible to it. To assign the Unlit version of
+"Green" instead of the PBS one, you will have to call the overload that
 specifies the pointer, and grab the datablock from the implementation
 itself: `Renderable::setDatablock( hlmsUnlit->getDatablock( "Green" ) )`;
 
@@ -977,7 +985,7 @@ editors and other GUIs based on Ogre to display the material's name;
 since IdString destroys the original string in Release mode.
 
 HlmsParamVec is an array/vector of key-value string pairs to specify
-custom parameters on creation. Valid values depends on the
+custom parameters on creation. Valid values depend on the
 implementation. You should see the Constructor's documentation for more
 information on them.
 
@@ -1055,7 +1063,7 @@ the texture combinations that can be packed together.
 When the texture is being loaded for the first time, the manager will
 try to insert it into the first available array/atlas it sees, or else
 create a new one. Several parameters affect the creation of the texture
-array/atlas, which can be configured in
+array/atlas, which can be configured in:
 
 ```cpp
 DefaultTextureParameters mDefaultTextureParameters[NUM_TEXTURE_TYPES];
@@ -1074,7 +1082,7 @@ configurations, and only apply for textures being loaded for the first
 time. **The texture type is ignored when such texture has already been
 loaded, and beware that it may have been packed with different
 settings**. If you need to load it with different parameters, see
-[aliasing](#8.9.1.4.Loading a texture twice (i.e. with a different format) via aliasing|outline).
+[Loading a texture twice via aliasing](#HlmsTextureManagerAutomaticBatchingLoadingTwice).
 
 The following types are defined:
 
@@ -1096,7 +1104,7 @@ The reasons to have multiple profiles are simple:
     (i.e. `PF_L8`) even if the original is stored as a 32-bit RGBA PNG
     file. Furthermore, sRGB (gamma correction) is disabled for these
     textures.
-3.  Detail maps & its normal maps are usually meant to be tileable.
+3.  Detail maps and their normal maps are usually meant to be tileable.
     Therefore on mobile, UV atlas is disabled.
 
 Desktop-only Hlms implementations already skip the use of
@@ -1107,7 +1115,7 @@ since they're only useful in Mobile; and use `TEXTURE_TYPE_DIFFUSE` and
 ### Automatic parameters {#HlmsTextureManagerAutomaticBatchingAutoParams}
 
 The packing algorithm uses multiple criteria to determine whether it
-should pack or not a texture:
+should pack a texture or not:
 
 ```cpp
 /// Textures whose size are less or equal to minTextureSize
@@ -1217,7 +1225,7 @@ The reasons to use texture packs are varied:
 -   Improve loading time by baking as much information as possible
     offline.
 -   Certain formats can't be batched at runtime for UV atlas (i.e.
-    PVRTC2) and thus needs to done offline.
+    PVRTC2) and thus it needs to be done offline.
 
 TBD
 
@@ -1238,11 +1246,11 @@ To prevent this particular case, the `textureArraysTresholds` parameter
 will kick in; and will clamp `maxTexturesPerArray` to 1.
 
 Nonetheless, special attention needs to be taken to ensure maximum
-occupancy of the each array.
+occupancy of each array.
 
 The function `HlmsTextureManager::dumpMemoryUsage` is a powerful tool that
 will dump all loaded textures to the log in CSV format using '|' as
-separator for further analysis on MS Excel or OpenOffice Calc.
+separator for further analysis in MS Excel or OpenOffice Calc.
 
 The following is an example of the dump's output:
 

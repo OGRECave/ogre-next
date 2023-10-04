@@ -114,6 +114,11 @@
 			@end
 		@end
 	@end
+	@property( hlms_emulate_clip_distances && hlms_pso_clip_distances )
+		@foreach( hlms_pso_clip_distances, n )
+			INTERPOLANT( float clipDistance@n, @counter(texcoord) );
+		@end
+	@end
 	@insertpiece( custom_VStoPS )
 @end
 

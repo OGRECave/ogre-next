@@ -7,7 +7,7 @@
  - Git
  - Android Studio 4.0 or higher.
  - Android SDK & NDK
- - Python 3.x (to build the samples)
+ - Python 3.x is needed to build shaderc dependency for Vulkan.
  - Vulkan-capable Android phone.
  - Android 8.0 or newer strongly recommended. Android 7.0 and 7.1 are supported,
  but most phones are bundled with very old and buggy drivers.

@@ -2,7 +2,7 @@
 Threading {#threading}
 =========
 
-Ogre 2.0 uses synchronous threading for some of its operations. This
+OgreNext uses synchronous threading for some of its operations. This
 means the main thread wakes up the worker threads, and waits for all
 worker threads to finish. It also means users don't have to be worried
 that Ogre is using CPU cores while the application is outside a
@@ -47,75 +47,6 @@ case the ideal number of threads becomes number\_of\_logical\_cores – 1
 Whether increasing the number of threads to include hyperthreading cores
 improves performance or not remains to be tested.
 
-## More info about InstancingThreadedCullingMethod {#ThreadingInitializingCullingMethod}
-
-There are two Instancing techniques that perform culling of their own:
-
--   HW Basic
--   HW VTF
-
-Frustum culling is highly parallelizable & scalable. However, we first
-cull InstanceBatches & regular entities, then ask the culled
-InstanceBatches to perform their culling to the InstancedEntities they
-own.
-
-This results performance boost for skipping large amounts of instanced
-entities when the whole batch isn't visible. However, this also means
-threading frustum culling of instanced entities got harder.
-
-There were four possible approaches:
-
--   Ask all existing batches to frustum cull. Then use only the ones we
-    want. Sheer brute force. Scales very well with cores, but sacrifices
-    performance unnecessary when only a few batches are visible. This
-    approach is not taken by Ogre.
--   Sync every time an InstanceBatchHW or InstanceBatchHW\_VTF tries to
-    frustum cull to delegate the job on worker threads. Considering
-    there could be hundreds of InstanceBatches, this would cause a huge
-    amount of thread synchronization overhead & context switches. This
-    approach is not taken by Ogre.
--   Each thread after having culled all InstancedBatches & Entities,
-    will parse the culled list to ask all MovableObjects to perform
-    culling of their own. Entities will ignore this call (however they
-    add to a small overhead for traversing them and calling a virtual
-    function) while InstanceBatchHW & InstanceBatchHW\_VTF will perform
-    their own culling from within the multiple threads. This approach
-    scales well with cores and only visible batches. However load
-    balancing may be an issue for certain scenes: eg. an InstanceBatch
-    with 5000 InstancedEntities in one thread, while the other three
-    threads get one InstanceBatch each with 50 InstancedEntities. The
-    first thread will have considerably more work to do than the other
-    three. This approach is a good balance when compared to the first
-    two. **This is the approach taken by Ogre when
-    INSTANCING\_CULLING\_THREADED is on**
--   Don't multithread instanced entitites' frustum culling. Only the
-    InstanceBatch & Entity's frustum culling will be threaded. **This is
-    what happens when INSTANCING\_CULLING\_SINGLE is on**.
-
-Whether INSTANCING\_CULLING\_THREADED improves or degrades performance
-depends highly on your scene.
-
-When to use INSTANCING\_CULLING\_SINGLETHREAD?
-
-If your scene doesn't use HW Basic or HW VTF instancing techniques, or
-you have very few Instanced entities compared to the amount of regular
-Entities.
-
-Turning threading on, you'll be wasting your time traversing the list
-from multiple threads in search of InstanceBatchHW &
-InstanceBatchHW\_VTF
-
-When to use INSTANCING\_CULLING\_THREADED?
-
-If your scene makes intensive use of HW Basic and/or HW VTF instancing
-techniques. Note that threaded culling is performed in SCENE\_STATIC
-instances too. The most advantage is seen when the instances per batch
-is very high and when doing many PASS\_SCENE, which require frustum
-culling multiple times per frame (eg. pssm shadows, multiple light
-sources with shadows, very advanced compositing, etc)
-
-Note that unlike the number of threads, you can switch between methods
-at any time at runtime.
 
 # What tasks are threaded in Ogre {#ThreadingInOgre}
 

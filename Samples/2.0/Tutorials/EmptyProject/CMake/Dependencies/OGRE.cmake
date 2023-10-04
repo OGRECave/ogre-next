@@ -135,6 +135,10 @@ macro( setupPluginFileFromTemplate BUILD_TYPE OGRE_USE_SCENE_FORMAT OGRE_USE_PLA
 			set( OGRE_DLLS ${OGRE_DLLS} ${OGRE_NEXT}SceneFormat )
 		endif()
 
+		if( NOT OGRE_BUILD_COMPONENT_ATMOSPHERE EQUAL -1 )
+			set( OGRE_DLLS ${OGRE_DLLS} ${OGRE_NEXT}Atmosphere )
+		endif()
+
 		# Deal with OS and Ogre naming shenanigans:
 		#	* OgreMain.dll vs libOgreMain.so
 		#	* OgreMain_d.dll vs libOgreMain_d.so in Debug mode.
@@ -231,12 +235,12 @@ else()
 endif()
 
 isOgreNext( OGRE_USE_NEW_NAME )
-message( STATUS ${OGRE_USE_NEW_NAME} )
 if( ${OGRE_USE_NEW_NAME} )
 	set( OGRE_NEXT "OgreNext" )
 else()
 	set( OGRE_NEXT "Ogre" )
 endif()
+message( STATUS "OgreNext lib name prefix is ${OGRE_NEXT}" )
 
 # Ogre config
 include_directories( "${OGRE_SOURCE}/OgreMain/include" )
@@ -260,13 +264,13 @@ file( READ "${OGRE_BINARIES}/include/OgreBuildSettings.h" OGRE_BUILD_SETTINGS_ST
 string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_BUILD_COMPONENT_ATMOSPHERE" OGRE_BUILD_COMPONENT_ATMOSPHERE )
 string( FIND "${OGRE_BUILD_SETTINGS_STR}" "#define OGRE_STATIC_LIB" OGRE_STATIC )
 if( NOT OGRE_STATIC EQUAL -1 )
-	message( STATUS "Detected static build of Ogre" )
+	message( STATUS "Detected static build of OgreNext" )
 	set( OGRE_STATIC "Static" )
 
 	# Static builds must link against its dependencies
 	addStaticDependencies( OGRE_SOURCE, OGRE_BINARIES, OGRE_BUILD_SETTINGS_STR, OGRE_DEPENDENCY_LIBS )
 else()
-	message( STATUS "Detected DLL build of Ogre" )
+	message( STATUS "Detected DLL build of OgreNext" )
 	unset( OGRE_STATIC )
 endif()
 findOgreBuildSetting( ${OGRE_BUILD_SETTINGS_STR} OGRE_BUILD_RENDERSYSTEM_GL3PLUS )
