@@ -443,8 +443,8 @@ Types of passes:
 - [render_scene](@ref CompositorNodesPassesRenderScene) (PASS\_SCENE)
 - shadows (PASS\_SHADOWS)
 - stencil (PASS\_STENCIL)
-- uav\_queue (PASS\_UAV)
-- compute (PASS\_COMPUTE)
+- [uav_queue](@ref CompositorNodesPassesUavQueue) (PASS\_UAV)
+- [compute](@ref CompositorNodesPassesCompute) (PASS\_COMPUTE)
 - custom (PASS\_CUSTOM)
 
 
@@ -1769,7 +1769,13 @@ you abide to certain rules).
 Because D3D11 is more restrictive than OpenGL, our interface resemble's
 D3D11.
 
--   starting\_slot \<number\>;
+- [starting_slot](@ref CompositorNodesPassesUavQueue_starting_slot)
+- [uav](@ref CompositorNodesPassesUavQueue_uav)
+- [uav_external](@ref CompositorNodesPassesUavQueue_uav_external)
+- [uav_buffer](@ref CompositorNodesPassesUavQueue_uav_buffer)
+- [keep_previous_uavs](@ref CompositorNodesPassesUavQueue_keep_previous_uavs)
+
+#### starting\_slot {#CompositorNodesPassesUavQueue_starting_slot}
 
 Offset for all UAV slots. For example if you bind an uav to slot 3 and
 the starting slot is 2; the uav will actually be bound to uav slot 5.
@@ -1778,49 +1784,78 @@ made.
 
 Default: 255 (by default Ogre sets it to 1).
 
--   uav \<slot\>; \<texture\_name\>; \[mrt \#\] \<read\>;
-    \<write\>; \[pixel\_format\] \[\<mipmap\>; \#\]
-
-Sets a texture visible in the current compositor scope (i.e. global
-textures, input textures, local textures). Slot, name and at least read
-or write flags must be present. The others are optional and default to 0
-(mrt & mipmap) and `PF_UNKNOWN` (format, `PF_UNKNOWN` means the UAV will
-use the original texture's pixel format instead of trying to reinterpret
-the data).
-
-The keyword mipmap must be present if specifying the mipmap level.
-
-Example, assuming `starting_slot` is 1:
-
+@par
+Format:
 ```cpp
-uav 0 global_myTexture 2 read write mipmap 5
+starting_slot <number>
 ```
 
-Will bind the mrt slice \#2 of the global texture 'global\_myTexture' to
-slot 1[^5], will have both read & write access, and use mipmap level 5.
+#### uav {#CompositorNodesPassesUavQueue_uav}
 
-If only the slot is specified, any UAV at the given slot will be
-cleared.
+Sets a texture visible in the current compositor scope (i.e. global
+textures, input textures, local textures).
 
--   uav\_external
+@par
+Format:
+```cpp
+uav <slot> <texture_name> <read> <write> [pixel_format] [mipmap #]
+```
 
-Exactly the same as uav. But instead of sourcing the texture by name
-from the Compositor scope, the name is referencing a texture that can be
-accessed via `TextureManager::getByName`.
+@param slot 0-based index to bind to.
+@param texture_name Name of the texture. Must be global, input or local texture.
+@param read If present, it states you want to read from this UAV in the next vertex/pixel shaders. If absent, you don't intend to read.
+@param write If present, it states you want to write into this UAV in the next vertex/pixel shaders. If absent, you don't intend to write.
+@param pixel_format Optional. The pixel format to bind as. If absent, it uses the original pixel format. Note: the texture must have been declared with `reinterpretable` if reinterpreting as a different pixel format.
+@param mipmap The mipmap value must be following by a number (0-based). If not present, default value is 0.
 
--   uav\_buffer \<slot\>; \<bufferName\>; \<read\>;
-    \<write\>; \[offsetBytes\] \[sizeBytes\]
+| Flag Combination | Status  |
+|------------------|---------|
+| read             | valid   |
+| Read + write     | valid   |
+| write            | valid   |
+| <nothing>        | invalid |
 
-Sets an UAV buffer visible in the current compositor scope (i.e. global
-buffers, input buffers, local buffers). Slot, name and at least read or
-write flags must be present. The others are optional and default to 0.
-When sizeBytes = 0; we assume you want to bind from the offset until the
-end of the buffer.
 
-Example, assuming starting\_slot is 1:
+Example:
 
 ```cpp
-uav_buffer 0 myUavBuffer read write 256 512
+starting_slot 1
+uav 2 global_myTexture read write mipmap 5
+```
+
+Will bind the global texture 'global\_myTexture' to
+slot 3, will have both read & write access, and use mipmap level 5.
+
+@note starting\_slot + slot = 1 + 2 = 3
+
+If only the slot is specified, the slot will be cleared.
+
+#### uav\_external {#CompositorNodesPassesUavQueue_uav_external}
+
+Exactly the same as [uav](@ref CompositorNodesPassesUavQueue_uav). But instead of sourcing the texture by name
+from the Compositor scope, the name is referencing a texture that can be
+accessed via `TextureGpuManager::findTextureNoThrow`.
+
+#### uav\_buffer {#CompositorNodesPassesUavQueue_uav_buffer}
+
+Sets an UAV buffer visible in the current compositor scope (i.e. global
+buffers, input buffers, local buffers).
+
+@par
+Format:
+```cpp
+uav__buffer <slot> <buffer_name> <read> <write> [offset_bytes] [size_bytes]
+```
+
+@param slot Same as [uav](@ref CompositorNodesPassesUavQueue_uav)
+@param read Same as [uav](@ref CompositorNodesPassesUavQueue_uav)
+@param write Same as [uav](@ref CompositorNodesPassesUavQueue_uav)
+@param offset_bytes Default: 0. Optional. Offset in bytes to bind.
+@param size_bytes Default: 0. Optional. Size in bytes to bind. When size_bytes = 0, we assume you want to bind from the offset until the end of the buffer.
+
+```cpp
+starting_slot 1
+uav_buffer 3 myUavBuffer read write 256 512
 ```
 
 Note there may be HW alignment restriction on which offset you specify.
@@ -1829,38 +1864,19 @@ Multiples of 256 bytes are a safe bet.
 Note that uav\_buffer slots are shared with uav texture's. Binding both
 to the same slot index will only result in one of them being available.
 
-If only the slot is specified, any UAV at the given slot will be
-cleared.
+If only the slot is specified, the slot will be cleared.
 
--   keep\_previous\_uavs \[true|false\]
+#### keep\_previous\_uavs {#CompositorNodesPassesUavQueue_keep_previous_uavs}
 
 When false, all previous UAVs in all slot will be cleared. When true,
 only the UAV slots modified by this pass will be affected. Default:
 true.
 
-#### Synchronization {#CompositorNodesPassesUavQueueSync}
-
-UAVs make little guarantees about the order of read and writes. Often
-memory barriers need to be placed to result in correct rendering.
-
-OpenGL uses a coarse barrier (affects all resources that will be used as
-a specific type); while D3D12 uses a fine barrier (per resource).
-Therefore we need to take D3D12's approach.
-
-The Compositor can detect when an UAV will be used in a `PASS_QUAD` pass
-as a texture, and thus it will automatically insert memory barriers.
-However it cannot detect if the pass will use an UAV that was just been
-used for writing as an UAV for reading, and hence the user must insert a
-barrier manually. (TODO: No interface to do this yet!)
-
-The compositor textures that are explicitly made visible to passes to be
-used as textures (i.e. in a `CompositorPassScene`) can also be detected
-and a memory barrier will automatically be placed.
-
-TODO: !!!Interface WIP. Code may not work as described in this
-section!!!
-
->  **Note:** at the time of writing, memory barriers are a Work In Progress. Documentation may change!
+@par
+Format:
+```cpp
+keep_previous_uavs [true|false]
+```
 
 ### compute {#CompositorNodesPassesCompute}
 
@@ -1925,7 +1941,7 @@ You may do so within a valid render target:
 compositor_node MyNode
 {
 	in 0 rt_renderwindow
-	texture myUavTexture target_width target_height PF_R8G8B8A8 depth_pool 0 no_gamma uav
+	texture myUavTexture target_width target_height PFG_RGBA8_UNORM depth_pool 0 uav
 	buffer myUavBuffer 1024 4
 	
 	target rt_renderwindow
@@ -1954,8 +1970,8 @@ Or to a null dummy render target, which occupies almost no memory:
 ```cpp
 compositor_node MyNode
 {
-	texture nullDummy target_width target_height PF_NULL
-	texture myUavTexture target_width target_height PF_R8G8B8A8 depth_pool 0 no_gamma uav
+	texture nullDummy target_width target_height PFG_NULL
+	texture myUavTexture target_width target_height PFG_RGBA8_UNORM depth_pool 0 uav
 	buffer myUavBuffer 1024 4
 	
 	target  nullDummy
@@ -1974,21 +1990,17 @@ compositor_node MyNode
 }
 ```
 
->  Attention \#1!
->  
->  Do NOT set UAV buffers to the compute job directly (the class HlmsComputeJob). The Compositor needs to evaluate memory barriers and resource transitions. Leaving inconsistent memory barriers can result in hazards/race conditions in some APIs. If in doubt, change the CompositorPassComputeDef instead.
->  
->  Also setting Textures that are RenderTargets is dangerous. For RenderTargets, change the CompositorPassComputeDef instead.
->  
->  Attention \#2!
->  
->  Don't interleave compute and graphics passes. For optimum performance, try to batch everything together.
+@note Do NOT set UAV buffers to the compute job directly via C++ (the class [HlmsComputeJob](@ref Ogre::HlmsComputeJob)) bypassing the Compositor. The Compositor needs to evaluate memory barriers and resource transitions. Leaving inconsistent memory barriers can result in hazards/race conditions in some APIs. If in doubt, change the [CompositorPassComputeDef](@ref Ogre::CompositorPassComputeDef) instead.
+<br/>
+Also setting Textures that are RenderTargets is dangerous. For RenderTargets, change the [CompositorPassComputeDef](@ref Ogre::CompositorPassComputeDef) instead.
+@par
+@note Don't interleave compute and graphics passes. For optimum performance, try to batch everything of the same type together.
 
 ## texture {#CompositorNodesTextures}
 
 ```cpp
 texture <name> <width> <height> [depth] <pixel_format> [msaa <N>] [msaa_auto]
-[depth_texture] [depth_pool <poolId>] [uav] [2d_array|3d|cubemap] [mipmaps <numMips>] [no_automipmaps]
+[depth_texture] [depth_pool <poolId>] [uav] [2d_array|3d|cubemap] [mipmaps <numMips>] [no_automipmaps] [reinterpretable]
 [explicit_resolve]
 ```
 
@@ -2066,6 +2078,14 @@ fill all mipmaps until 1x1
 When absent (default) and mipmaps are != 1, OgreNext will assume you may eventually use [generate_mipmaps](#CompositorNodesPassesGenerateMipmaps) (not the Compute version) on this texture or call Ogre::TextureGpu::_autogenerateMipmaps from C++.<br/>
 When present, it is not valid to use generate\_mipmaps on this texture (except for the Compute version).
 
+@param reinterpretable
+
+When present, it indicates the texture may be reinterpreted to a different pixel format.
+e.g. PFG\_RGBA8\_UNORM as PFG\_RGBA8\_UNORM\_SRGB, PFG\_RGBA8\_UNORM as PFG\_R32\_UINT, etc.
+
+Not all formats can be reinterpreted into any format. The bpp must be the same. Compressed blocks (e.g. BCn) [have specific rules](https://learn.microsoft.com/en-us/windows/win32/direct3d10/d3d10-graphics-programming-guide-resources-block-compression#format-conversion-using-direct3d-101).
+The reinterpretation must be supported by the GPU and API.
+
 @param explicit\_resolve
 
 When absent (default), MSAA textures will have an extra non-MSAA copy where the contents are always resolved (unless store actions are not set to resolve).<br/>
@@ -2128,7 +2148,11 @@ In summary, shaders can access subsamples while a texture is dirty. To
 clean the dirty flag and perform a resolve on the RTT, use the
 [PASS\_RESOLVE pass](#3.1.2.3.resolve|outline). This is why they're
 called "explicit" resolves; because you have to *explicitly *tell Ogre
-to resolve an msaa target and unset the dirty flag[^6].
+to resolve an msaa target and unset the dirty fla.
+
+@note You're allowed to keep an explicitly resolved textured dirty
+forever (i.e. never resolve, in case your main purpose is to always
+access fsaa subsamples)
 
 On RenderSystems where explicit resolving is not supported, all textures
 will be treated as implicitly resolved and PASS\_RESOLVE passes will be
@@ -2302,62 +2326,108 @@ Shadow nodes work very similar to regular nodes. Perhaps their most
 noticeable difference is how are RTTs defined. The following keywords
 are supposed at shadow node scope:
 
--   technique \<uniform|planeoptimal|focused|pssm\>;
+- [technique](@ref CompositorShadowNodesSetup_technique)
+- [num_splits](@ref CompositorShadowNodesSetup_num_splits)
+- [num_stable_splits](@ref CompositorShadowNodesSetup_num_stable_splits)
+- [normal_offset_bias](@ref CompositorShadowNodesSetup_normal_offset_bias)
+- [constant_bias_scale](@ref CompositorShadowNodesSetup_constant_bias_scale)
+- [pssm_lambda](@ref CompositorShadowNodesSetup_pssm_lambda)
+- [pssm_split_blend](@ref CompositorShadowNodesSetup_pssm_split_blend)
+- [pssm_split_fade](@ref CompositorShadowNodesSetup_pssm_split_fade)
+- [shadow_map](@ref CompositorShadowNodesSetup_shadow_map)
+
+#### technique {#CompositorShadowNodesSetup_technique}
 
 Specifies which shadow technique to use for the subsequent shadow map
 declarations. The default is uniform.
 
->  **Note:** planeoptimal has also not been implemented yet.
+@note planeoptimal has also not been implemented yet.
 
--   num\_splits \<num\_splits\>
+@par
+Format:
+```cpp
+technique <uniform|planeoptimal|focused|pssm>
+```
+
+#### num_splits {#CompositorShadowNodesSetup_num_splits}
 
 Only used by PSSM techniques. Specifies the number of splits per light.
 Can vary per shadow map. The number of splits must be greater than 2.
 Default is 3.
 
--   num\_stable\_splits \<num\_stable\_splits\>
+@par
+Format:
+```cpp
+num_splits <num_splits>
+```
 
-PSSM tends to be very unstable to camera rotation changes. Rotate the camera around
-and the shadow mapping artifacts keep changing.
+#### num\_stable\_splits {#CompositorShadowNodesSetup_num_stable_splits}
 
-setNumStableSplits allows you to fix that problem; by switching to ConcentricShadowCamera
-for the first N splits you specify; while the rest of the splits will use
-FocusedShadowCameraSetup.
+PSSM tends to be very unstable to camera rotation changes. Just rotate the camera around
+without changing its position and the shadow mapping artifacts keep flickering.
 
-We achieve rotation stability by sacrificing overall quality. Using ConcentricShadowCamera
-on higher splits means sacrificing exponentially a lot more quality (and even performance);
-thus the recommended values are num\_stable\_splits = 1 or num\_stable\_splits = 2
+Ogre::PSSMShadowCameraSetup::setNumStableSplits allows you to fix that problem
+by switching to [ConcentricShadowCamera](@ref Ogre::ConcentricShadowCamera) for the first N splits you specify while the remaining splits will use FocusedShadowCameraSetup.
 
-The default is num\_stable\_splits = 0 which disables the feature
+**We achieve rotation stability by sacrificing overall quality.** Using ConcentricShadowCamera
+on higher splits means exponentially sacrificing a lot more quality (and even performance);
+thus the recommended values are num\_stable\_splits = 1 or num\_stable\_splits = 2.
 
--	normal\_offset\_bias <value>
+The default is num\_stable\_splits = 0 which disables the feature.
 
-Normal-offset bias is per cascade / shadow map to fight shadow acne and self shadowing artifacts
-Very large values can cause misalignments between the objects and their shadows (if they're touching)
+@par
+Format:
+```cpp
+num_stable_splits <num_stable_splits>
+```
 
-Default is 0.00004
+#### normal\_offset\_bias {#CompositorShadowNodesSetup_normal_offset_bias}
 
--	constant\_bias\_scale <value>
+Normal-offset bias is per cascade / shadow map to fight shadow acne and self shadowing artifacts.
+Very large values can cause misalignments between the objects and their shadows (if they're touching).
 
-Constant bias is per material (tweak HlmsDatablock::mShadowConstantBias).
+Default is 168.0.
+
+@par
+Format:
+```cpp
+normal_offset_bias <value>
+```
+
+#### constant\_bias\_scale {#CompositorShadowNodesSetup_constant_bias_scale}
+
+Constant bias is normally per material (tweak [HlmsDatablock::mShadowConstantBias](@ref Ogre::HlmsDatablock::mShadowConstantBias)).
 This value lets you multiply it 'mShadowConstantBias * constantBiasScale' per cascade / shadow map
 
-Large values can cause peter-panning.
+Large values cause peter-panning.
 
-Default is 0.1 for backwards compatibility with older materials created by Ogre 2.2.2 and earlier
+Default is 1.0.
 
--   pssm\_lambda \<lambda\>
+```cpp
+constant_bias_scale <value>
+```
 
-Only used by PSSM techniques. Value usually between 0 & 1. The default
+#### pssm\_lambda {#CompositorShadowNodesSetup_pssm_lambda}
+
+Used only by PSSM techniques. Value should be in range \[0; 1\]. The default
 is 0.95. PSSM's lambda is a weight value for a linear interpolation
 between exponential and linear separation between each split. A higher
 lambda will use exponential distribution, thus closer shadows will
 improve quality. A lower lambda will use a linear distribution, pushing
 the splits further, improving the quality of shadows in the distance.
 
--   pssm\_split\_blend \<blend\>
+```cpp
+pssm_lambda <value>
+```
 
-Only used by PSSM techniques. Value between 0 & 1. The default
+| Lambda | Close Shadows | Far Shadows  |
+|--------|---------------|--------------|
+| 0.0    | Low Quality   | High Quality |
+| 1.0    | High Quality  | Low Quality  |
+
+#### pssm\_split\_blend {#CompositorShadowNodesSetup_pssm_split_blend}
+
+Used only by PSSM techniques. Value in range \[0; 1\]. The default
 is 0.125; use 0 to disable it. PSSM's blend defines, in the closest N-1
 splits, the blend band size. E.g., a value of 0.1 means that the
 farthest 10% of the first split is blended with the second split (and
@@ -2367,61 +2437,68 @@ between splits at a cost of a slightly less defined shadow. See
 (https://msdn.microsoft.com/en-us/library/windows/desktop/ee416307(v=vs.85).aspx)
 for additional info.
 
+```cpp
+pssm_split_blend <value>
+```
+
+#### pssm\_split\_fade {#CompositorShadowNodesSetup_pssm_split_fade} 
 -   pssm\_split\_fade \<fade\>
 
-Only used by PSSM techniques. Value between 0 & 1. The default
+Used only by PSSM techniques. Value in range \[0; 1\]. The default
 is 0.313; use 0 to disable it. PSSM's fade defines how much of the last
 split will fade out. E.g., a value of 0.1 means that the farthest 10% of
 the last split will fade out. A higher fade makes the transition from
 shadowed to non shadowed areas (and viceversa) smoother at a cost of a
 less visible distant shadow.
 
-
 ```cpp
-shadow_map <number> <texture_name> light <lightIndex> [split <index>]
-shadow_map <number> [atlas <texture_name> <left> <top> <width> <height>] light <lightIndex> [split <index>]
+pssm_split_fade <value>
 ```
 
-Shadow maps declaration order is important. The first shadow map
-declared becomes shadow map \#0; the second shadow map declared becomes
-\#1; and so on. Most of the settings are the same as for regular
-textures. So only the new settings or the ones that behave differently
-will be described:
+#### shadow_map {#CompositorShadowNodesSetup_shadow_map}
 
--   texture_name
+```cpp
+shadow_map <number> <texture_name> [uv <left> <top> <width> <height>] light <light_index> [split <index>]
+```
 
-What texture to use that has already been declared,
-where the shadow map contents will be stored.
+@param number
+The number of the shadow map being defined.
 
--   atlas \<texture_name\> \<left\> \<top\> \<width\> \<height\>
+@param texture_name
+What texture to use which must have already been declared, where the shadow map contents will be stored.
 
-Instead of using the whole atlas content, you can use a region of it.
-The values are in range \[0;1\]
+@param uv
+Optional. After this keyword, 4 more numbers must follow (left, top, width, height).
+<br/>
+An atlas allows you to use a region of a texture. Instead of using the whole atlas content, you can use a region of it. This allows you to have multiple shadow maps in the same texture.
 
--   light \<index\>;
+@param left
+@param top
+Specifies the left & top origin of the shadow map inside the atlas. In UV space. in range \[0; 1\].
 
+@param width
+@param height
+Specifies the width & height of the shadow map inside the atlas. In UV space. in range \[0; 1\].
+
+@param light
+After `light` must follow the number for the light.
 Indicates which light index will be associated with this shadow map.
-i.e. the Shadow map \#0 may contain the Nth closest shadow mapping light
-to the entity, not necessarily the first one.
+This is useful for PSSM because multiple shadow maps may refer to the same light.
 
--   split \<split index\>;
+@param split
+Optional. After `split` must follow the split index.
+Used by PSSM, indicates which split does this shadow map handle.
 
-Default: 0; only necessary when using PSSM techniques. Indicates which
-split this shadow map refers to.
 
-```cpp
-shadow_map <shadowMapName0> <shadowMapName1> {}
-```
+## Example {#CompositorShadowNodesExample}
 
-Declaring a shadow map is not enough. You need to tell Ogre what do you
-want to render to it. And for that you need render\_scene passes.
+Declaring a shadow map is not enough. You need to tell OgreNext what do you
+want to render to it and how. And for that you need [render\_scene](@ref CompositorNodesPassesRenderScene) passes.
 
 Shadow nodes can be written with the regular `target { pass
 render_scene {} }` syntax. However when you have 6 shadow maps with the
 same exact pass settings, it's cumbersome to write the pass six times.
 Instead the `shadow_map` keyword repeats the passes for you.
-
-## Example {#CompositorShadowNodesExample}
 
 The following is a basic script that will set a single shadow map with a
 focused setup:
@@ -2430,16 +2507,19 @@ focused setup:
 compositor_node_shadow myShadowNode
 {
 	technique focused
-    texture focusedTex 2048 2048 PF_D32_FLOAT no_fsaa
+    texture focusedTex 2048 2048 PFG_D32_FLOAT
     shadow_map 0 focusedTex light 0
-	//Render shadow map "0"
+	// Render shadow map "0"
     shadow_map_target_type directional spot
     {
         shadow_map 0
         {
-            pass clear { colour_value 1 1 1 1 }
             pass render_scene
             {
+                load
+                {
+                    all	clear
+                }
                 rq_first 0
                 rq_last max
             }
@@ -2448,82 +2528,67 @@ compositor_node_shadow myShadowNode
 }
 ```
 
-The typical setup is to have one directional light for the sun, and then
-multiple point or spot lights. This means directional light should use a
-PSSM setting for best quality, while point & spot lights shadow maps
-could use focused or uniform.
+The typical setup is to have one directional light for the sun. And then
+multiple point or spot lights.
+
+This means directional light should use a PSSM setting for best quality
+while point & spot lights shadow maps could use focused or uniform.
 
 The following script creates 3 shadow maps for 3 PSSM splits, and 3
-additional ones for the remaining lights:
+additional ones for the remaining lights (which can be either directional or spot):
 
 ```cpp
 compositor_node_shadow myShadowNode
 {
-	//Change to focused from now on
-	technique focused
-	shadow_map 3 1024 1024 PF_FLOAT16_R light 1
-	shadow_map 4 1024 1024 PF_FLOAT16_R light 2
-	shadow_map 5 512 512 PF_FLOAT16_R light 3
-
-	//Render shadow maps "myStringName", "1", "2", "3", "4" and "5"
-	shadow_map myStringName 1 2 3 4 5
-	{
-		pass clear { colour_value 1 1 1 1 }
-		pass render_scene
-		{
-			rq_first 0
-			rq_last max
-		}
-	}
     technique pssm
 
-    texture pssm0 2048 2048 PF_D32_FLOAT
-    texture pssm1 1024 1024 PF_D32_FLOAT
-    texture pssm2 1024 1024 PF_D32_FLOAT
+    texture tex_for_pssm0 2048 2048 PFG_D32_FLOAT
+    texture tex_for_pssm1 1024 1024 PFG_D32_FLOAT
+    texture tex_for_pssm2 1024 1024 PFG_D32_FLOAT
 
-    texture spot0 2048 2048 PF_D32_FLOAT
-    texture spot1 2048 2048 PF_D32_FLOAT
+    texture tex_for_spot0 2048 2048 PFG_D32_FLOAT
+    texture tex_for_spot1 2048 2048 PFG_D32_FLOAT
 
     num_splits		3
     pssm_lambda		0.95
-    //Render 1st closest light, splits 0 1 & 2
-    shadow_map 0 pssm0 light 0 split 0
-    shadow_map 1 pssm1 light 0 split 1
-    shadow_map 2 pssm2 light 0 split 2
+    // Store 1st closest light, splits 0 1 & 2
+    shadow_map 0 tex_for_pssm0 light 0 split 0
+    shadow_map 1 tex_for_pssm1 light 0 split 1
+    shadow_map 2 tex_for_pssm2 light 0 split 2
 
-    //Change to focused from now on
+    // Change to focused from now on
     technique focused
-    shadow_map 3 spot0 light 1
-    shadow_map 4 spot1 light 2
+    shadow_map 3 tex_for_spot0 light 1
+    shadow_map 4 tex_for_spot1 light 2
 
     shadow_map_target_type directional
     {
-        //Render shadow maps 0, 1 and 2.
-        //Can only be used by directional lights.
+        // Render shadow maps 0, 1 and 2.
+        // Can only be used by directional lights.
         shadow_map 0 1 2
         {
-            pass clear
-            {
-                colour_value 1 1 1 1
-            }
             pass render_scene
             {
+                load
+                {
+                    all	clear
+                }
             }
         }
     }
 
     shadow_map_target_type directional spot
     {
-        //Render shadow maps 3 and 4
-        //Can only be used by either directional lights or spot lights.
+        // Render shadow maps 3 and 4
+        // Can only be used by either directional lights or spot lights.
         shadow_map 3 4
         {
-            pass clear
-            {
-                colour_value 1 1 1 1
-            }
             pass render_scene
             {
+                load
+                {
+                    all	clear
+                }
             }
         }
     }
@@ -2539,7 +2604,7 @@ compositor_node_shadow PssmWithAtlas
 {
     technique pssm
 
-    texture atlas 3072 2048 PF_D32_FLOAT no_fsaa
+    texture atlas 3072 2048 PFG_D32_FLOAT
 
     //The splits are distributed in the atlas like this:
     //  -------------
@@ -2553,8 +2618,8 @@ compositor_node_shadow PssmWithAtlas
     shadow_map 1 atlas uv 0.666666666666667 0.0 0.333333333333333 0.5 light 0 split 1
     shadow_map 2 atlas uv 0.666666666666667 0.5 0.333333333333333 0.5 light 0 split 2
 
-    //Before doing anything, clear the whole atlas in one go. This is not
-    //recommended on iOS & Android though; but recommended on Desktop.
+    // Before doing anything, clear the whole atlas in one go. This is not
+    // ideal on iOS & Android though; but recommended on Desktop.
     target atlas
     {
         pass clear
@@ -2569,46 +2634,59 @@ compositor_node_shadow PssmWithAtlas
         {
             pass render_scene
             {
-                //The viewport settings will be automatically
-                //adjusted to constrain to the atlas regions.
+                // The viewport settings will be automatically
+                // adjusted to constrain to the atlas regions.
             }
         }
     }
 }
 ```
 
-Point light shadow mapping has to exploit the powerful compositor scripting
-capabilities: Ogre uses DPSM (Dual Paraboloid Shadow Maps).
+Point light shadow mapping must exploit the powerful compositor scripting
+capabilities: OgreNext uses DPSM (Dual Paraboloid Shadow Maps).
+
 Please note we will be rendering to cubemaps, then converting to DPSM.
 
-We won't be rendering directly to DPSM as testing shows it deforms too much when
+We won't be rendering directly as DPSM because testing shows it deforms too much when
 tessellation is low. We could support it, but it's not a priority.
-So Ogre first needs to render to a cubemap, which can be shared by all shadow maps,
+Thus OgreNext first needs to render to a cubemap, which can be shared by all shadow maps,
 and then a converter transforms it to DPSM.
 
 The reason to use scene -> Cubemap -> DPSM is so that we keep a reasonable memory
-footprint and be atlas friendly. If we use cubemaps directly and want to support
-8 point lights at 1024x1024, then we would have to do 1024x1024x6x8 = 192MB.
+footprint and be atlas-friendly. If we use cubemaps directly and want to support
+8 point lights at 1024x1024, then we would need 1024x1024x6x8 = 192MB.
+
 However with DPSM it would be 8 DPSM and 1 cubemap: 1024x1024x4x8 + 1024x1024x4x6 = 56MB.
 
-So, to setup a point light with a temporary cubemap, it goes as follows:
+The following example setups a script to support two point lights (and **only** two point lights):
 
 ```cpp
 abstract target cubemap_target_shadow
 {
-    pass clear { colour_value 1 1 1 1 }
     pass render_scene
     {
+        load
+        {
+            all									clear
+            clear_colour_reverse_depth_aware	1 1 1 1
+        }
+        store
+        {
+            //We only care about the contents of the colour target with point shadows
+            depth			dont_care
+            stencil			dont_care
+        }
         camera_cubemap_reorient true
     }
 }
+
 compositor_node_shadow PointLight
 {
     technique pssm
 
-    texture pointLightTex0 2048 2048 PF_D32_FLOAT no_fsaa
-    texture pointLightTex1 2048 2048 PF_D32_FLOAT no_fsaa
-    texture tmpCubemap 1024 1024 PF_FLOAT32_R cubemap no_fsaa
+    texture pointLightTex0 2048 2048 PFG_D32_FLOAT
+    texture pointLightTex1 2048 2048 PFG_D32_FLOAT
+    texture tmpCubemap 1024 1024 PFG_R32_FLOAT cubemap depth_format PFG_D32_FLOAT
 
     technique focused
     shadow_map 0 pointLightTex0 light 0
@@ -2619,8 +2697,8 @@ compositor_node_shadow PointLight
         //shadow_map_repeat tells to repeat what's inside its body for shadow map 0 & 1
         shadow_map_repeat 0 1
         {
-            //Render to the cubemap with the camera settings of
-            //the currently iterated point light shadow map
+            // Render to the cubemap with the camera settings of
+            // the currently iterated point light shadow map
             target tmpCubemap +X : cubemap_target_shadow {}
             target tmpCubemap -X : cubemap_target_shadow {}
             target tmpCubemap +Y : cubemap_target_shadow {}
@@ -2628,12 +2706,12 @@ compositor_node_shadow PointLight
             target tmpCubemap +Z : cubemap_target_shadow {}
             target tmpCubemap -Z : cubemap_target_shadow {}
 
-            //Render to the current shadow map being iterated.
+            // Render to the current shadow map being iterated.
             shadow_map
             {
                 pass render_quad
                 {
-                    //This material can be found in Samples/Media/2.0/materials/Common
+                    // This material can be found in Samples/Media/2.0/materials/Common
                     material Ogre/DPSM/CubeToDpsm
                     input 0 tmpCubemap
                 }
@@ -3337,12 +3415,6 @@ for( int i=0; i<4; ++i )
                                         (1 << i), (1 << i) );
 }
 ```
-
-[^5]: starting\_slot + slot = 1 + 0 = 1
-
-[^6]: Note: You're allowed to keep an explicitly resolved textured dirty
-    forever (i.e. never resolve, in case your main purpose is to always
-    access fsaa subsamples)
 
 # Advanced MSAA
 
