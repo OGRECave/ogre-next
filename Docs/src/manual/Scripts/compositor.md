@@ -2292,15 +2292,16 @@ compositor_node Example2_fixed
 }
 ```
 
->  Attention \#1!
->  
->  On a lot of Hardware, depth buffers are compressed (see [Depth In Depth](http://amd-dev.wpengine.netdna-cdn.com/wordpress/media/2012/10/Depth_in-depth.pdf) and [ATI Radeon HD 2000 Programming Guide](http://amd-dev.wpengine.netdna-cdn.com/wordpress/media/2012/10/ATI_Radeon_HD_2000_programming_guide.pdf)). Before AMD's GCN Taihiti hardware (AMD Radeon R9 280), **depth buffers need to be decompressed when bound for sampling as a depth texture.** Trying to use the depth texture as a depth buffer again without clearing it will degrade due to the lack of compression.
->  
->  It is suggested to copy the depth texture to another depth texture if you desire to use one for sampling and another to keep rendering, in order to maximize performance.
->  
->  The specifics of depth (de)compression for NVIDIA and Intel aren't known but it's probable they're bound to similar issues.
->  
->  TODO: Compositor interface to copy depth texture to another depth texture automatically.
+@note On a lot of Hardware, depth buffers are compressed (see [Depth In Depth](https://archive.org/details/depth-in-depth) and [ATI Radeon HD 2000 Programming Guide](https://archive.org/details/ati-radeon-hd-2000-programming-guide)). Before AMD's GCN Taihiti hardware (AMD Radeon R9 280), **depth buffers need to be decompressed when bound for sampling as a depth texture.** Trying to use the depth texture as a depth buffer again without clearing it will degrade due to the lack of compression.
+<br/>
+<br/>
+It is suggested to copy the depth texture to another depth texture if you desire to use one for sampling and another to keep rendering, in order to maximize performance.
+<br/>
+<br/>
+The specifics of depth (de)compression for NVIDIA and Intel aren't known but it's probable they're bound to similar issues.
+<br/>
+<br/>
+TODO: Compositor interface to copy depth texture to another depth texture automatically.
 
 # Shadow Nodes {#CompositorShadowNodes}
 
@@ -2881,27 +2882,6 @@ Xu & Lee Kit Lun
 
 TBD
 
-## Writing shaders {#CompositorShadowNodesShaders}
-
-Writing the necessary shaders to get depth shadow mapping work can be
-difficult due to the amount of factors that weight in and the
-flexibility that Ogre offers.
-
-It is often better to use a shader generator or a material system that
-is less flexible but allows easier setting up of shadow maps, like
-[RTSS](http://www.ogre3d.org/tikiwiki/tiki-index.php?page=RT+Shader+System)
-or [Shiny](https://github.com/scrawl/shiny)
-
-That being said, in order to make a shadow mapping shader work, the
-following checklist will come in handy:
-
--  Written receiver's Vertex & Pixel shader to use depth shadow mapping                             
--  Material uses right pair of receiver vertex shader & caster vertex shader                        
--  Caster's vertex shader's math matches the receiver vertex shader's (i.e. skinning, instancing)   
--  VTF Instancing: The texture\_unit is set to use a VTF texture for the caster.                    
-
-TBD
-
 # Workspaces {#CompositorWorkspaces}
 
 Nodes are useless without setting up a workspace.
@@ -2912,34 +2892,37 @@ going to be connected. They also need to declare global textures.
 
 Nodes are automatically in use when their connection is specified.
 
+- [connect](@ref CompositorWorkspaces_connect)
+- [connect_external](@ref CompositorWorkspaces_connect_external)
+- [alias](@ref CompositorWorkspaces_alias)
+- [buffer](@ref CompositorWorkspaces_buffer)
+- [connect_buffer](@ref CompositorWorkspaces_connect_buffer)
+- [connect_buffer_external](@ref CompositorWorkspaces_connect_buffer_external)
+
+#### connect {#CompositorWorkspaces_connect}
+
 ```cpp
-connect <Node Name 1> [<output ch #>] [<output ch #>]  <Node Name 2> [<input ch #>] [<input ch #>]
+connect <node_name_1> [<output_ch #>] [<output_ch #>]  <node_name_2> [<input_ch #>] [<input_ch #>]
 ```
 
-Connects the Node "Node Name 1" output channels to "Node Name 2" input
-channels. This implicitly means "Node Name 1" & "Node Name 2" will be
+Connects the Node "node_name_1" output channels to "node_name_2" input
+channels. This implicitly means "node_name_1" & "node_name_2" will be
 used and executed by the workspace (even if they're isolated and never
 reach the screen)
 
--   \<Node Name 1\>;
+@param node_name_1 
+The name of the Node that will be executed before "node_name_2"
 
-The name of the Node that will be executed before "Node Name 2"
+@param output_ch
+Channel numbers from node_name_1's output channels that will be
+connected to node_name_2.
 
--   \[\<output ch \#\>;\] \[\<output ch \#\>;\] … \[\<output ch
-    \#\>;\]
+@param node_name_2
+The name of the Node that will be executed after "node_name_1"
 
-Channel numbers from "Node Name 1"'s output channels that will be
-connected to "Node Name 2".
-
--   \<Node Name 2\>;
-
-The name of the Node that will be executed after "Node Name 1"
-
--   \[\<input ch \#\>;\] \[\<input ch \#\>;\] … \[\<input ch
-    \#\>;\]
-
-Channel numbers from "Node Name 2"'s inputs channels that will be
-connected from "Node Name 1" bindings.
+@param input_ch
+Channel numbers from node_name_2's inputs channels that will be
+connected from node_name_2 bindings.
 
 Examples:
 
@@ -2961,20 +2944,16 @@ connect nodeC 3 nodeB 1
 ```
 
 Not all output channels must be used. Take in mind that if an output is
-not used at all, it will still take CPU & GPU processing time. MRT
-(Multiple Render Target) textures are designed to travel through a
-single channel.
+not used at all, it will still take CPU & GPU processing time.
 
->  Attention \#1!
->
->  All nodes must have their input channels connected. If a node has a disconnected input channel, the workspace will fail to initialize and throw a warning.
-> 
->  Attention \#2!
->
->  Nodes that have no input channels will be the first to be executed, regardless of declaration order (but nodes without input channels declared first should run before nodes declared later with no input channels). Take this in mind if you plan to use global textures as a means of passing information (usually a very bad idea).
+@note All nodes must have their input channels connected. If a node has a disconnected input channel, the workspace will fail to initialize and throw a warning.
+@par
+@note Nodes that have no input channels will be the first to be executed, regardless of declaration order (but nodes without input channels declared first should run before nodes declared later with no input channels). Take this in mind if you plan to use global textures as a means of passing information (usually a very bad idea).
+
+#### connect_external {#CompositorWorkspaces_connect_external}
 
 ```cpp
-connect_external <external channel #> <Node Name> <input channel #>
+connect_external <external_channel #> <node_name> <input_channel #>
 ```
 
 Connects the final render target (i.e. the RenderWindow) to the
@@ -2988,17 +2967,14 @@ are passed in C++ code when initializing the Workspace.
 It is possible for a Workspace to not use this variable (though rather
 pointless)
 
--   \<external channel \#\>;
+@param external_channel
+The index to the external texture or UAV buffer passed to addWorkspace.
 
-    The index to the external UAV buffer passed to addWorkspace.
+@param node_name
+The name of the Node that will receive the external texture.
 
--   \<Node Name 1\>;
-
-The name of the Node that will receive the final RTT
-
--   \<input channel \#\>;
-
-The number of the input channel from "Node Name 1".
+@param input_channel
+The number of the input channel from node_name.
 
 Example:
 
@@ -3012,17 +2988,19 @@ connect_external 1 nodeB 1
 ```
 
 ```cpp
-connect_output <Node Name> <input channel #>
+connect_output <node_name> <input_channel #>
 ```
 
-It's the same as `connect_external 0 <Node Name> <input channel>`.
+It's the same as `connect_external 0 <node_name> <input_channel>`.
 
 Provided for compatibility reasons and convenience. Originally only one
-connect\_output was allowed, but now you can use it as often as you
-want.
+connect\_output was allowed, but now you can use it as many as you
+need.
+
+#### alias {#CompositorWorkspaces_alias}
 
 ```cpp
-alias <Node Name> <Aliased Name>
+alias <node_name> <aliased_name>
 ```
 
 Normally, a Node is always reused. So, if node A connects to B and
@@ -3036,12 +3014,9 @@ and hence that's what node aliasing does. Once an alias is declared, the
 node will be instantiated with a different name (its aliased name), and
 will be possible to make connections with it.
 
--   \<Node Name\>;
-
+@param node_name
 The name of the original instance
-
--   \<Aliased Name\>;
-
+@param aliased_name
 The alias name to give to this separate instance. The alias must be
 unique across the workspace, and must also be unique across the names of
 original node definitions.
@@ -3059,32 +3034,31 @@ workspace MyWorkspace
 }
 ```
 
+#### buffer {#CompositorWorkspaces_buffer}
+
 ```cpp
 buffer <buffer_name> <num_elements> <bytes_per_element> [target_width] [target_width_scaled] [target_height] [target_height_scaled]
 ```
 
 Creates an UAV buffer.
 
--   \<buffer\_name\>;
-
+@param buffer_name
 The name of the buffer. Unlike textures, there are no naming
 restrictions (i.e. no `global_` prefix). If a buffer local to the node
 and a global buffer have the same name, the local one takes precedence
 and a warning is logged.
 
--   \<num\_elements\>;
-
+@param num_elements
 The number of elements in the UAV. Must be a number higher than 0.
 
--   \<bytes\_per\_element\>;
-
+@param bytes_per_element
 Bytes per element. Must be a number higher than 0.
 
--   \[target\_width\] \[target\_height\] \[target\_width\_scaled\]
-    \[target\_height\_scaled\]
-
-They work like their texture counterparts, and when present, will be
-multiplied against the number of elements.
+@param target_width
+@param target_height
+@param target_width_scaled
+@param target_height_scaled
+See [texture](@ref CompositorNodesTextures) they work like their texture counterparts, and when present, will be multiplied against the number of elements.
 
 The size of the UAV buffer is calculated as follows:
 
@@ -3100,7 +3074,7 @@ For example if you want to do 512 x height; just set numElements to 512
 and target\_height or target\_height\_scaled 1.
 
 Since there are no pixel formats, the bytesPerElement controls such such
-thing (eg. 4 bytes for RGBA8888).
+thing (eg. 4 bytes for RGBA8_UNORM).
 
 UAV Buffers are not just for storing contiguous texture data. For
 example if you run a compute shader that gathers all lights, you would
@@ -3144,8 +3118,10 @@ This is not a rule of thumb. You'll need to experiment with both UAV
 textures and UAV buffers in your compute shaders to see what gives you
 the best performance.
 
+#### connect_buffer {#CompositorWorkspaces_connect_buffer}
+
 ```cpp
-connect_buffer <Node Name 1> [<output ch #>] [<output ch #>]  <Node Name 2> [<input ch #>] [<input ch #>]
+connect_buffer <node_name_1> [<output_ch #>] [<output_ch #>]  <node_name_2> [<input_ch #>] [<input_ch #>]
 ```
 
 Exactly the same as connect, but it connects UAV buffers instead of
@@ -3170,8 +3146,10 @@ connect_buffer nodeA 0 2 nodeB  0 1
 connect_buffer nodeC 3 nodeB 1
 ```
 
+#### connect_buffer_external {#CompositorWorkspaces_connect_buffer_external}
+
 ```cpp
-connect_buffer_external <external channel #> <Node Name> <input channel #>
+connect_buffer_external <external_channel #> <node_name> <input_channel #>
 ```
 
 Connects multiple external UAV buffer. External UAV buffers are provided
@@ -3180,17 +3158,12 @@ when instantiating the Workspace via addWorkspace in C++.
 It is possible for a Workspace to not use this variable (though rather
 pointless)
 
--   \<external channel \#\>;
-
+@param external_channel
 The index to the external UAV buffer passed to addWorkspace.
-
--   \<Node Name\>;
-
+@param node_name
 The name of the Node that will receive the external UAV
-
--   \<input channel \#\>;
-
-The number of the input channel from "Node Name".
+@param input_channel
+The number of the input channel from node_name.
 
 Example:
 
