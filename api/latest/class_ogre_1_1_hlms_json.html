@@ -135,9 +135,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abcdd0f78e0261aa00e410f7187582bd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_json.html#abcdd0f78e0261aa00e410f7187582bd6">saveMaterial</a> (const <a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *datablock, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outString, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;additionalTextureExtension)</td></tr>
 <tr class="memdesc:abcdd0f78e0261aa00e410f7187582bd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves a single datablock to a string.  <a href="class_ogre_1_1_hlms_json.html#abcdd0f78e0261aa00e410f7187582bd6">More...</a><br /></td></tr>
 <tr class="separator:abcdd0f78e0261aa00e410f7187582bd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcfda14186fb3683f989d4c615d95745"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_json.html#adcfda14186fb3683f989d4c615d95745">saveMaterials</a> (const <a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outString, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;additionalTextureExtension)</td></tr>
-<tr class="memdesc:adcfda14186fb3683f989d4c615d95745"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves all the Datablocks defined in the given <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> into a JSON formatted string.  <a href="class_ogre_1_1_hlms_json.html#adcfda14186fb3683f989d4c615d95745">More...</a><br /></td></tr>
-<tr class="separator:adcfda14186fb3683f989d4c615d95745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af88672b0aae288a6beeed006950fd661"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_json.html#af88672b0aae288a6beeed006950fd661">saveMaterials</a> (const <a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outString, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;additionalTextureExtension, bool sortByName=false)</td></tr>
+<tr class="memdesc:af88672b0aae288a6beeed006950fd661"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves all the Datablocks defined in the given <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> into a JSON formatted string.  <a href="class_ogre_1_1_hlms_json.html#af88672b0aae288a6beeed006950fd661">More...</a><br /></td></tr>
+<tr class="separator:af88672b0aae288a6beeed006950fd661"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -569,8 +569,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adcfda14186fb3683f989d4c615d95745" name="adcfda14186fb3683f989d4c615d95745"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcfda14186fb3683f989d4c615d95745">&#9670;&#160;</a></span>saveMaterials()</h2>
+<a id="af88672b0aae288a6beeed006950fd661" name="af88672b0aae288a6beeed006950fd661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af88672b0aae288a6beeed006950fd661">&#9670;&#160;</a></span>saveMaterials()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -591,7 +591,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>additionalTextureExtension</em>&#160;</td>
+          <td class="paramname"><em>additionalTextureExtension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>sortByName</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

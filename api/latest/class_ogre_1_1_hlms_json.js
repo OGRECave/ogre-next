@@ -15,7 +15,7 @@ var class_ogre_1_1_hlms_json =
     [ "parsePolygonMode", "class_ogre_1_1_hlms_json.html#a7f724a976fe35046202631033f26823f", null ],
     [ "parseTextureAddressingMode", "class_ogre_1_1_hlms_json.html#a9ac5f586215fbcdc729803db41f5d61d", null ],
     [ "saveMaterial", "class_ogre_1_1_hlms_json.html#abcdd0f78e0261aa00e410f7187582bd6", null ],
-    [ "saveMaterials", "class_ogre_1_1_hlms_json.html#adcfda14186fb3683f989d4c615d95745", null ],
+    [ "saveMaterials", "class_ogre_1_1_hlms_json.html#af88672b0aae288a6beeed006950fd661", null ],
     [ "toQuotedStr", "class_ogre_1_1_hlms_json.html#a1a650ea92d9ffd3318ff3317f5463c5e", null ],
     [ "toQuotedStr", "class_ogre_1_1_hlms_json.html#a72536f3b839f6b4102e07ab366226e3b", null ],
     [ "toQuotedStr", "class_ogre_1_1_hlms_json.html#aff3a44c56e927127f0354aab42026356", null ],
