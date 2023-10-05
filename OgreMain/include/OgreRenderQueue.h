@@ -186,8 +186,8 @@ namespace Ogre
                                         Renderable *pRend, const MovableObject *pMovableObject,
                                         bool isV1 );
 
-        void renderES2( RenderSystem *rs, bool casterPass, bool dualParaboloid, HlmsCache passCache[],
-                        const RenderQueueGroup &renderQueueGroup );
+        void renderES2( RenderSystem *rs, bool casterPass, bool dualParaboloid,
+                        HlmsCache passCache[HLMS_MAX], const RenderQueueGroup &renderQueueGroup );
 
         /// Renders in a compatible way with GL 3.3 and D3D11. Can only render V2 objects
         /// (i.e. Items, VertexArrayObject)
