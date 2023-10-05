@@ -760,7 +760,7 @@ load
  - [warn_if_rtv_was_flushed](@ref CompositorPass_load_warn_if_rtv_was_flushed)
 
 
-#### all {#CompositorPass_load_all}
+#### all (load) {#CompositorPass_load_all}
 
 Sets all RTV parameters (all colour targets in MRT + depth + stencil) to the same load action.
 
@@ -783,7 +783,7 @@ See [LoadAction::ClearOnTilers](@ref Ogre::LoadAction::LoadAction).
 @param load
 Load the contents that were stored in the texture. See [LoadAction::Load](@ref Ogre::LoadAction::LoadAction).
 
-#### colour {#CompositorPass_load_colour}
+#### colour (load) {#CompositorPass_load_colour}
 
 Sets the load action for each and/or all the colour textures. Does nothing if there are no colour textures.
 
@@ -803,7 +803,7 @@ Value in range [0; num_mrt) to reference the colour target in an MRT. For non-MR
 @param dont_care|clear|clear_on_tilers|load
 See Load Actions in [all](@ref CompositorPass_load_all).
 
-#### depth {#CompositorPass_load_depth}
+#### depth (load) {#CompositorPass_load_depth}
 
 Sets the load action for the Depth Buffer. Does nothing if there is no depth buffer.
 
@@ -821,7 +821,7 @@ See Load Actions in [all](@ref CompositorPass_load_all).
 
 @note For performance reasons, the load action of the depth buffer should be the same as the stencil one.
 
-#### stencil {#CompositorPass_load_stencil}
+#### stencil (load) {#CompositorPass_load_stencil}
 
 Sets the load action for the Stencil Buffer. Does nothing if there is no stencil buffer.
 
@@ -839,7 +839,7 @@ See Load Actions in [all](@ref CompositorPass_load_all).
 
 @note For performance reasons, the load action of the depth buffer should be the same as the stencil one.
 
-#### clear\_colour / colour\_value {#CompositorPass_load_clear_colour}
+#### clear\_colour / colour\_value (load) {#CompositorPass_load_clear_colour}
 
 Sets the colour to set the texture to. The kayword colour\_value is the same, and retained due to old naming conventions.
 
@@ -860,7 +860,7 @@ Value in range [0; num_mrt) to reference the colour target in an MRT. When absen
 @param rgba
 Four float values to set the colour target to. e.g. `clear_colour 0.2 0.4 0.5 1.0`.
 
-#### clear\_colour\_reverse\_depth\_aware {#CompositorPass_load_clear_colour_reverse_depth_aware}
+#### clear\_colour\_reverse\_depth\_aware (load) {#CompositorPass_load_clear_colour_reverse_depth_aware}
 
 Sets the colour texture to either the `clear_colour` or `White - clear_colour` depending on whether OgreNext is configured to use reverse depth. See Ogre::RenderSystem::isReverseDepth.
 
@@ -883,7 +883,7 @@ Value in range [0; num_mrt) to reference the colour target in an MRT. When absen
 @param rgba
 Four float values to set the colour target to. e.g. `0.2 0.4 0.5 1.0`. When using reverse Z, the final colour value will be `0.8 0.6 0.5 0.0`.
 
-#### clear\_depth {#CompositorPass_load_clear_depth}
+#### clear\_depth (load) {#CompositorPass_load_clear_depth}
 
 Sets the value to set the depth buffer to.
 
@@ -902,7 +902,7 @@ load
 Floating point value to set the depth to. Usually in range [0; 1], but not necessarily (depends on API support).
 @note If OgreNext is using reverse depth, the depth value will be set to 1.0 - value.
 
-#### clear\_stencil {#CompositorPass_load_clear_stencil}
+#### clear\_stencil (load) {#CompositorPass_load_clear_stencil}
 
 Sets the value to set the stencil buffer to.
 
@@ -920,7 +920,7 @@ load
 @param value
 Integer value to set the depth to. Usually in range [0; 255] since to date all known stencil formats are 8-bit.
 
-#### warn\_if\_rtv\_was\_flushed {#CompositorPass_load_warn_if_rtv_was_flushed}
+#### warn\_if\_rtv\_was\_flushed (load) {#CompositorPass_load_warn_if_rtv_was_flushed}
 
 See Ogre::CompositorPassDef::mWarnIfRtvWasFlushed
 
@@ -958,7 +958,7 @@ store
  - [depth](@ref CompositorPass_store_depth)
  - [stencil](@ref CompositorPass_store_stencil)
 
-#### all {#CompositorPass_store_all}
+#### all (store) {#CompositorPass_store_all}
 
 Sets all RTV parameters (all colour targets in MRT + depth + stencil) to the same store action.
 
@@ -993,7 +993,7 @@ This is the compositor's default. It behaves like 'Store' if the texture is not 
 <br/>
 See [StoreAction::StoreOrResolve](@ref Ogre::StoreAction::StoreOrResolve). This is the default value.
 
-#### colour {#CompositorPass_store_colour}
+#### colour (store) {#CompositorPass_store_colour}
 
 @par
 Format:
@@ -1011,7 +1011,7 @@ Value in range [0; num_mrt) to reference the colour target in an MRT. For non-MR
 @param dont_care|etc
 See Store Actions in [all](@ref CompositorPass_store_all).
 
-#### depth {#CompositorPass_store_depth}
+#### depth (store) {#CompositorPass_store_depth}
 
 Sets the store action for the Depth Buffer.
 
@@ -1027,7 +1027,7 @@ store
 @param dont_care|etc
 See Store Actions in [all](@ref CompositorPass_store_all).
 
-#### stencil {#CompositorPass_store_stencil}
+#### stencil (store) {#CompositorPass_store_stencil}
 
 Sets the store action for the Stencil Buffer.
 
