@@ -611,7 +611,7 @@ we just set the size here.
 When the optional 'idx' parameter is supplied at the beginning there will be
 either 5 or 9 parameters instead of 4 or 8 respectively.
 
-This index allows you to set multiple viewports for e.g. [instanced_stereo](CompositorNodesPassesRenderScene_instanced_stereo) or
+This index allows you to set multiple viewports for e.g. [instanced_stereo](@ref CompositorNodesPassesRenderScene_instanced_stereo) or
 for shaders that make use of gl\_ViewportIndex/SV\_ViewportArrayIndex.
 When not provided, this value defaults to 0. The value is in range \[0; 16\)
 
@@ -972,14 +972,25 @@ store
 ```
 
 @param dont_care
+Discard, leaving the texture contents in an undefined state. You should not attempt to read from it after this.
 See [StoreAction::DontCare](@ref Ogre::StoreAction::StoreAction).
 @param store
+Do not resolve. Useful if you have to interrupt rendering to a RenderTarget, switch to another RenderTarget, and come back to continue rendering; asuming you didn't need to sample from this texture (to fetch what has been rendered so far).
+<br/>
 See [StoreAction::Store](@ref Ogre::StoreAction::StoreAction).
 @param resolve
+Always resolve the texture once we're done rendering, and we do not care about the contents of the MSAA surface. This flag won't work on non-MSAA textures and will raise an exception. You should not continue rendering to this texture after this, unless you clear it.
+<br/>
 See [StoreAction::MultisampleResolve](@ref Ogre::StoreAction::MultisampleResolve).
 @param store_and_resolve
+Always resolve the texture once we're done rendering, and we do care about the contents of the MSAA surface.
+It is valid to use this flag without an MSAA texture.
+This flag is mostly meant for explicit-resolve textures as Ogre users have no way of accessing MSAA contents. However it may be useful if you need to interrupt rendering to a RenderTarget, switch to another RenderTarget while also sampling what has been rendered so far, and then come back to continue rendering to MSAA.
+<br/>
 See [StoreAction::StoreAndMultisampleResolve](@ref Ogre::StoreAction::StoreAndMultisampleResolve).
 @param store_or_resolve
+This is the compositor's default. It behaves like 'Store' if the texture is not MSAA. It behaves like 'MultisampleResolve' if the texture is MSAA.
+<br/>
 See [StoreAction::StoreOrResolve](@ref Ogre::StoreAction::StoreOrResolve). This is the default value.
 
 #### colour {#CompositorPass_store_colour}
@@ -1544,7 +1555,7 @@ enable_forwardplus [yes|no]
 
 #### flush\_command\_buffers\_after\_shadow\_node {#CompositorNodesPassesRenderScene_flush_command_buffers_after_shadow_node}
 
-Very similar to [flush_command_buffers](CompositorPass_flush_command_buffers). Does not do anything if 'shadows' is set to 'reuse' (or was set to 'first' and this node is not the first).
+Very similar to [flush_command_buffers](@ref CompositorPass_flush_command_buffers). Does not do anything if 'shadows' is set to 'reuse' (or was set to 'first' and this node is not the first).
 
 See Ogre::CompositorPassSceneDef::mFlushCommandBuffersAfterShadowNode.
 
@@ -2131,43 +2142,7 @@ resolve to the internal texture.
 
 #### Explicit resolves {#CompositorNodesTexturesMsaaExplicit}
 
-Explicit resolves are used when you want to either implement a custom
-resolve other than the API's default; or you want access to the MSAA
-subsamples directly through shaders.
-
-Like implicit resolves, RTTs have a dirty flag. However:
-
-1.  Attempting to bind a dirty RTT as a texture will cause Ogre to send
-    the MSAA buffer; granting the shader the ability to access
-    subsamples.
-2.  Attempting to bind a non-dirty dirty RTT as a texture will cause
-    Ogre to send the resolved buffer. The shader won't be able to access
-    subsamples.
-
-In summary, shaders can access subsamples while a texture is dirty. To
-clean the dirty flag and perform a resolve on the RTT, use the
-[PASS\_RESOLVE pass](#3.1.2.3.resolve|outline). This is why they're
-called "explicit" resolves; because you have to *explicitly *tell Ogre
-to resolve an msaa target and unset the dirty fla.
-
-@note You're allowed to keep an explicitly resolved textured dirty
-forever (i.e. never resolve, in case your main purpose is to always
-access fsaa subsamples)
-
-On RenderSystems where explicit resolving is not supported, all textures
-will be treated as implicitly resolved and PASS\_RESOLVE passes will be
-ignored; which should work straightforward and without issues except for
-a few corner cases.
-
-Use the RSC\_EXPLICIT\_FSAA\_RESOLVE Render system capability flag to
-check if the API supports explicit resolves.
-
-#### Resources {#CompositorNodesTexturesMsaaResources}
-
--   [A Quick Overview of
-    MSAA](http://mynameismjp.wordpress.com/2012/10/24/msaa-overview/)
--   [Experimenting with Reconstruction Filters for MSAA
-    Resolve](http://mynameismjp.wordpress.com/2012/10/28/msaa-resolve-filters/)
+To perform explicit resolves you need to setup an RTV, see [Advanced MSAA](@ref AdvancedMSAA)
 
 ### Depth Textures {#CompositorNodesTexturesDepth}
 
@@ -3389,7 +3364,7 @@ for( int i=0; i<4; ++i )
 }
 ```
 
-# Advanced MSAA
+# Advanced MSAA {#AdvancedMSAA}
 
 ## What is MSAA?
 
@@ -3403,18 +3378,17 @@ and how to control it explicitly via Ogre.
 
 ### Supersampling Antialiasing (SSAA) vs MSAA
 
-It is best to explain what MSAA is by first explaining its most basic form: SSAA aka Supersampling Antialiasing.
+It is best to explain what MSAA is by first explaining Supersampling Antialiasing (SSAA).
 
-SSAA is simply rasterizing at higher resolution and then using a downscale filter.
-Huh? What's next you ask? That's it!
+If we have to render 1920x1080 4xSSAA, then we would just render at 3840x2160 and downscale back to 1920x1080 (either with a basic bilinear filter or something more advanced e.g. bicubic, gaussian, etc).
 
-If the original render target is 1920x1080, then SSAA 4x needs to render at 3840x2160 (1920x2 = 3840 and 1080x2 = 2160, twice the width and twice the height is 4x the area!) and then downscale back to 1920x1080
-either using a simple bilinear filter or something slightly more fancy (e.g. bicubic, gaussian, etc)
+Huh? What's next, you ask? That's it!
 
-Thus we just established that SSAA is not a complex algorithm: it's just rendering at higher
-resolution and then scaling down to blur each of the 4 pixels into 1, producing soft edges.
+@note 1920x2 = 3840 and 1080x2 = 2160, twice the width and twice the height is 4x the area. Hence 4xSSAA.
 
-This operation of scaling down is known as **'Resolve'**
+Thus SSAA is not a complex algorithm: it's just rendering at higher resolution and then scaling down to blur each of the 4 pixels into 1, producing soft edges.
+
+**This operation of scaling down is known as _Resolve_**
 
 The problem with SSAA: it consumes a lot of bandwidth and processing power.
 4x of everything to be exact (for 4xSSAA).
@@ -3423,30 +3397,34 @@ The problem with SSAA: it consumes a lot of bandwidth and processing power.
 
 ### MSAA approach to the problem
 
-What's different is that MSAA assumes only triangle edges are different and need special treatment.
-Thus for all pixels except the ones at the border of a triangle, the GPU will only run the
+MSAA exploits a simple fact: only the triangle borders need antialiasing.
+
+Thus for all pixels except the ones touching the border of a triangle, the GPU will only run the
 pixel shader *once* and broadcast the colour to all 4 pixels *just as if it were rendering at 1920x1080*.
 This saves 4x of colour bandwidth and 4x processing power, making it very efficient.
 
+@note Internally the GPU may have a hidden 2-bit mask. Thus if a triangle covers all 4 subpixels, it runs the pixel shader once and and sets the mask to 0x3 to indicate all 4 subpixels share the same value.
+<br/>
+The specifics of how these hidden bit masks work depend on vendor and GPU model and are implementation details.
+
 The depth however is still populated at 3840x2160.
 
-Ideally only at the polygon edges the pixel shader may run *up to* 4 times.
+Ideally it is only at the polygon edges that the pixel shader may run *up to* 4 times.
 
 The major drawbacks from MSAA are two:
 
  * Performance is highly dependent on the geometry involved. A scene with lots of sharp & spiky
  triangles will force the GPU to run the pixel shader up to 4 times very often
- (grass blades often trigger this worst case scenario). While a scene with smoothly-connected
- triangles (i.e. barely any edges) will run very fast.
+ (grass blades often trigger this worst case scenario). Thus MSAA effectively becomes SSAA. While a scene with smoothly-connected triangles (i.e. barely any edges) will run very fast.
  * Only geometric aliasing (e.g. polygon edges) is fixed. There are other sources of aliasing
  (texture, shading) which are not considered. Texture aliasing is often fixed with mipmapping though.
  While fixing shading aliasing is still a hot topic.
 
- The specific of how the GPU keeps the MSAA contents in memory are very vendor and device-specific.
+ The specific of how the GPU keeps the MSAA contents in memory are vendor and device-specific.
  However they're often not sampling-friendly (poor cache behavior, no bilinear filtering available)
- therefore we often resolve the contents and work on the resolved data.
+ therefore we often resolve the contents before working on its data.
 
- But there are exceptions:
+ But there are exceptions where we need access to the MSAA subsamples before resolve:
 
  1. HDR tonemapping [should happen before resolving](https://mynameismjp.wordpress.com/2012/10/24/msaa-overview/), otherwise aliasing effects won't go away.
  That means an HDR tonemap needs direct access to the MSAA contents.
@@ -3458,6 +3436,13 @@ The major drawbacks from MSAA are two:
  did not happen and just take of the values, or the minimum or maximum of each. There is no
  right answer and it is a very similar problem
  [mixed resolution particle rendering has](https://developer.nvidia.com/gpugems/gpugems3/part-iv-image-effects/chapter-23-high-speed-screen-particles).
+
+#### Resources {#CompositorNodesTexturesMsaaResources}
+
+-   [A Quick Overview of
+    MSAA](http://mynameismjp.wordpress.com/2012/10/24/msaa-overview/)
+-   [Experimenting with Reconstruction Filters for MSAA
+    Resolve](http://mynameismjp.wordpress.com/2012/10/28/msaa-resolve-filters/)
 
  ## Ogre + MSAA with Implicit Resolves
 
@@ -3477,23 +3462,13 @@ texture->scheduleTransitionTo( GpuResidency::Resident );
 ```
 
 Ogre creates two textures:
-  1. The MSAA surface. Generally you don't have direct access to it.
-  This one occupies 1920x1080x4x4 = 31.64MB
-  2. The implicitly resolved texture which can be used for sampling.
-  This one occupies 1920x1080x4 = 7.91MB
+  1. The MSAA surface. Generally you don't have direct access to it. This one occupies 1920x1080x4x4 = 31.64MB
+  2. The implicitly resolved texture which can be used for sampling. This one occupies 1920x1080x4 = 7.91MB
 
-StoreActions control when the texture is resolved:
- * Store: Do not resolve. Useful if you have to interrupt rendering to a RenderTarget, switch to another RenderTarget, and come back to continue rendering; asuming you didn't need to sample from this texture (to fetch what has been rendered so far)
- * MultisampleResolve: Always resolve the texture once we're done rendering,
- and we do not care about the contents of the MSAA surface. This flag won't work on non-MSAA textures and will raise an exception. You should not continue rendering to this texture after this, unless you clear it.
- * StoreAndMultisampleResolve: Always resolve the texture once we're done rendering,
- and we do care about the contents of the MSAA surface.
- It is valid to use this flag without an MSAA texture.
- This flag is mostly meant for explicit-resolve textures as Ogre users have no way of accessing MSAA contents. However it may be useful if you need to interrupt rendering to a RenderTarget, switch to another RenderTarget while also sampling what has been rendered so far, and then come back to continue rendering to MSAA.
- * StoreOrResolve: This is the compositor's default. It behaves like 'Store' if the texture is not MSAA. It behaves like 'MultisampleResolve' if the texture is MSAA.
+[StoreActions](@ref CompositorPass_store_all) control when the texture is resolved.
 
- Implicitly resolved textures is how Ogre traditionally worked before Ogre 2.2
- Ogre 2.1 tried to implement this but it was very basic and often broken.
+Implicitly resolved textures is how Ogre traditionally worked before Ogre 2.2
+Ogre 2.1 tried to implement this but it was very basic and often broken.
 
 ## Ogre + MSAA with Explicit Resolves {#MSAAExplicitResolves}
 
@@ -3512,13 +3487,13 @@ texture->setSampleDescription( SampleDescription( 4u ) ); // 4x MSAA
 texture->scheduleTransitionTo( GpuResidency::Resident );
 ```
 
-Ogre creates only one texture:
+OgreNext creates only one texture:
   1. The MSAA surface. This one occupies 1920x1080x4x4 = 31.64MB
 
 Therefore:
 
- 1. Binding this texture to a shader means the shader must access it via Texture2DMS (HLSL), sampler2DMS (GLSL), and texture2d_ms (Metal)
- 1. Resolving must be done manually (assuming you want to resolve at all). This means setting up the RTV on the compositor manually
+ 1. Binding this texture to a shader means the shader must access it via Texture2DMS (HLSL), sampler2DMS (GLSL), and texture2d_ms (Metal).
+ 2. Resolving must be done manually (assuming you want to resolve at all). This means setting up the RTV on the compositor manually.
 
 In compositor scripts one would have to set the rtv like this:
 
@@ -3550,3 +3525,191 @@ Now you just rendered to myMsaaTex, resolved into myResolvedResult and can have 
 access to MSAA samples (by binding myMsaaTex to a material).
 
 See Samples/Media/2.0/scripts/Compositors/ScreenSpaceReflections.compositor for a specific example
+
+# RTV (RenderTargetView) {#CompositorRTV}
+
+So far all examples tried to ignore RTVs.
+
+The Compositor creates an rtv automatically with the same name for locally created textures and input textures.
+
+However there are cases when you need to know them.
+
+## What is an RTV {#CompositorWhatisAnRtv}
+
+When you render to a Texture, the GPU actually needs to setup a lot of things:
+
+ - If it has multiple mipmaps, which mipmap.
+ - If it is a Cubemap, a 3D or a 2D Array texture, which slice.
+ - If it's MSAA, where to resolve the MSAA contents into (unless we don't want to resolve).
+     - What MSAA mipmap to resolve into.
+     - What MSAA slice to resolve into.
+ - What depth buffer to use.
+ - What stencil buffer to use.
+ - If using MRT (Multiple Render Targets), you want to setup more than one colour texture at the same time.
+
+An RTV contains the definition of all that.
+
+## RTV settings {#CompositorRtvSettings}
+
+- [colour](@ref CompositorRtv_colour)
+- [depth](@ref CompositorRtv_depth)
+- [stencil](@ref CompositorRtv_stencil)
+- [depth_stencil](@ref CompositorRtv_depth_stencil)
+- [depth_texture](@ref CompositorRtv_depth_texture)
+- [depth_pool](@ref CompositorRtv_depth_pool)
+- [depth_format](@ref CompositorRtv_depth_format)
+- [depth_read_only](@ref CompositorRtv_depth_read_only)
+- [stencil_read_only](@ref CompositorRtv_stencil_read_only)
+
+#### colour {#CompositorRtv_colour}
+
+@par
+Format:
+```cpp
+colour <texture_name>
+colour <mrt_idx> <texture_name> [resolve <resolve_dst_texture_name>] [mip <#>] [resolve_mip <#>] [slice <#>] [resolve_slice <#>] [all_layers [true|false]]
+```
+
+@param mrt_index
+0-based slot of the MRT (Multiple Render Target). Must be in range \[0; Ogre::RenderSystemCapabilities::getNumMultiRenderTargets\).
+@param texture_name
+Name of the colour texture to bind at this slot.
+@param mip
+@param resolve_mip
+Optional. Mip level to render or resolve to. This keyword must be followed by a number.
+@param slice
+@param resolve_slice
+Optional. Slice index to render or resolve to. This keyword must be followed by a number.
+@param all_layers
+Optional. This keyword must be followed by a boolean.
+When true `slice` will be ignored and all slices will be attached instead. The shaders are expected to use gl_ViewportIndex or equivalent to dispatch geometry to the right slice.
+<br/>
+See Ogre::RenderPassColourTarget::allLayers.
+
+As a shortcut, if the user only types:
+
+```cpp
+colour texture_name
+```
+
+it is the same as:
+
+```cpp
+colour 0 texture_name resolve texture_name mip 0 resolve_mip 0 slice 0 resolve_slice 0 all_layers false
+```
+
+@note texture_name MUST have a pixel format that is colour.
+
+#### depth {#CompositorRtv_depth}
+
+Explicitly assigns a depth buffer to this RTV.
+
+@par
+Format:
+```cpp
+depth <texture_name> [mip <#>] [slice <#>]
+```
+
+@param texture_name
+Name of the depth texture to bind at this slot.
+@param mip
+Optional. Mip level to render to. This keyword must be followed by a number.
+@param slice
+Optional. Slice index to render to. This keyword must be followed by a number.
+
+@note Most APIs do not allow to create a 2D Array depth buffer, thus the slice parameter is always 0.
+@par
+@note texture_name MUST have a pixel format that is depth.
+
+#### stencil {#CompositorRtv_stencil}
+
+Explicitly assigns a stencil buffer to this RTV.
+
+@par
+Format:
+```cpp
+stencil <texture_name> [mip <#>] [slice <#>]
+```
+
+@param texture_name
+Name of the stencil texture to bind at this slot.
+@param mip
+Optional. Mip level to render to. This keyword must be followed by a number.
+@param slice
+Optional. Slice index to render to. This keyword must be followed by a number.
+
+@note Most APIs do not allow to create a 2D Array stencil buffer, thus the slice parameter is always 0.
+@par
+@note texture_name MUST have a pixel format that is stencil or depth_stencil.
+@par
+@note Only iOS supports setting a stencil texture different from a depth texture. For maximum compatibility always use depth and depth_stencil.
+
+#### depth_stencil {#CompositorRtv_depth_stencil}
+
+This is the same as calling [depth](@ref CompositorRtv_depth) & [stencil](@ref CompositorRtv_stencil) with the same parameters. e.g.
+
+```cpp
+depth myDepthStencilTexture
+stencil myDepthStencilTexture
+
+// is equivalent to:
+depth_stencil myDepthStencilTexture
+```
+
+#### depth_pool {#CompositorRtv_depth_pool}
+
+If [depth](@ref CompositorRtv_depth) & [stencil](@ref CompositorRtv_stencil) are left blank, this setting uses pool ID so that a generic depth buffer from the same pool ID that matches the colour resolution is generated or reused instead.
+
+Set to 0 to disable.
+
+@par
+Format:
+```cpp
+depth_pool <pool_id>
+```
+
+#### depth_texture {#CompositorRtv_depth_texture}
+
+If [depth](@ref CompositorRtv_depth) & [stencil](@ref CompositorRtv_stencil) are left blank and [depth_pool](@ref CompositorRtv_depth_pool) isn't 0, this setting uses indicates the texture from the pool must allow sampling.
+
+This setting is discouraged and deprecated.
+
+@par
+Format:
+```cpp
+depth_pool <true|false>
+```
+
+#### depth_format {#CompositorRtv_depth_format}
+
+If [depth](@ref CompositorRtv_depth) & [stencil](@ref CompositorRtv_stencil) are left blank and [depth_pool](@ref CompositorRtv_depth_pool) isn't 0, this setting uses indicates the pixel format to prefer.
+
+@par
+Format:
+```cpp
+depth_format <pixel_format>
+```
+
+#### depth_read_only {#CompositorRtv_depth_read_only}
+
+It is invalid to bind a depth buffer as RTV and sample from it at the same time. Doing so is called _Framebuffer Feeback_ and results in Undefined Behavior.
+
+However there are exceptions. If the depth buffer is bound as read_only (which means depth writes are ignored even if Ogre::HlmsMacroblock::mDepthWrite is true) it is possible to use it for both rendering and sampling at the same time.
+
+This can be useful for certain effects such as refractions.
+
+@par
+Format:
+```cpp
+depth_read_only <true|false>
+```
+
+#### stencil_read_only {#CompositorRtv_stencil_read_only}
+
+See [depth_read_only](@ref CompositorRtv_depth_read_only).
+
+@par
+Format:
+```cpp
+stencil_read_only <true|false>
+```
