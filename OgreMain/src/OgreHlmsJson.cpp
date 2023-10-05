@@ -27,7 +27,6 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
-#include "OgreIdString.h"
 
 #if !OGRE_NO_JSON
 
@@ -36,6 +35,7 @@ THE SOFTWARE.
 #    include "OgreHlms.h"
 #    include "OgreHlmsJsonCompute.h"
 #    include "OgreHlmsManager.h"
+#    include "OgreIdString.h"
 #    include "OgreLogManager.h"
 #    include "OgreLwString.h"
 #    include "OgreRenderSystem.h"
@@ -1013,8 +1013,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::saveMaterials( const Hlms *hlms, String &outString,
-                                  const String &additionalTextureExtension,
-                                  bool sortByName )
+                                  const String &additionalTextureExtension, bool sortByName )
     {
         outString += "{";
 
@@ -1115,8 +1114,8 @@ namespace Ogre
 
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
             Hlms::HlmsDatablockMap::const_iterator endt = datablockMap.end();
-        
-            if (sortByName)
+
+            if( sortByName )
             {
                 std::map<std::string, IdString> sortedMap;
                 while( itor != endt )
@@ -1130,13 +1129,14 @@ namespace Ogre
 
                 while( itor2 != endt2 )
                 {
-                    Hlms::HlmsDatablockMap::const_iterator itorFind = datablockMap.find(itor2->second);
-                    if (itorFind != endt)
+                    Hlms::HlmsDatablockMap::const_iterator itorFind = datablockMap.find( itor2->second );
+                    if( itorFind != endt )
                     {
                         const HlmsDatablock *datablock = itorFind->second.datablock;
 
                         if( datablock != defaultDatablock )
-                            saveDatablock( itorFind->second.name, datablock, outString, additionalTextureExtension );
+                            saveDatablock( itorFind->second.name, datablock, outString,
+                                           additionalTextureExtension );
                     }
                     ++itor2;
                 }
@@ -1148,7 +1148,8 @@ namespace Ogre
                     const HlmsDatablock *datablock = itor->second.datablock;
 
                     if( datablock != defaultDatablock )
-                        saveDatablock( itor->second.name, datablock, outString, additionalTextureExtension );
+                        saveDatablock( itor->second.name, datablock, outString,
+                                       additionalTextureExtension );
                     ++itor;
                 }
             }
