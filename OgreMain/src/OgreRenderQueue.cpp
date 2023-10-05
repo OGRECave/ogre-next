@@ -912,7 +912,6 @@ namespace Ogre
                                      const RenderQueueGroup &renderQueueGroup )
     {
         HlmsCache const *lastHlmsCache = &c_dummyCache;
-        uint32 lastHlmsCacheHash = 0;
 
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
 
@@ -927,7 +926,6 @@ namespace Ogre
 
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
 
-            lastHlmsCacheHash = lastHlmsCache->hash;
             hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
                                casterPass );
             ++itor;
