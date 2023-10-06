@@ -43,6 +43,7 @@ if(DOXYGEN_FOUND)
 
 	file(GLOB COMPONENTS ${OGRE_SOURCE_DIR}/Components/*/include)
 	file(GLOB PLUGINS ${OGRE_SOURCE_DIR}/PlugIns/*/include)
+	file(GLOB SAMPLES ${OGRE_SOURCE_DIR}/Samples/Media/particle/*.particle)
 
     set(CMAKE_DOXYGEN_INPUT_LIST 
         \"${OGRE_SOURCE_DIR}/OgreMain/include
