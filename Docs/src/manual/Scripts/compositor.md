@@ -1324,7 +1324,7 @@ Format:
 rq_first <id>
 ```
 
-#### rq\_last CompositorNodesPassesRenderScene_rq_last
+#### rq\_last {#CompositorNodesPassesRenderScene_rq_last}
 
 The default is `max` which is a special parameter that implies the last active render queue ID.
 If numeric, value must be between 0 and 255.
@@ -1448,7 +1448,7 @@ Optional. Reuses existing rendered shadow map data, regardless of whether it's v
 @param recalculate
 Optional. Forces to redraw the shadow map, even if OgreNext believes it should not. This is useful if you've modified the scene via listeners or rendering in a complex way that OgreNext has no way to know the shadow node should be redrawn. Mutually exclusive with first & reuse.
 
-#### overlays \<off|on\>;
+#### overlays {#CompositorNodesPassesRenderScene_overlays}
 
 Whether to render Overlays from the OverlaySystem component. On by default for
 regular nodes, Off by default on shadow nodes. The goal is that
@@ -1462,9 +1462,9 @@ Format:
 overlays <off|on>
 ```
 
-See [Overlays](@ref Overlay-Scripts) for more info.
+See [Overlays](@ref v1_Overlays) for more info.
 
-#### camera (@ref CompositorNodesPassesRenderScene_camera)
+#### camera {#CompositorNodesPassesRenderScene_camera}
 
 When not specified, the default camera is used for rendering the pass
 (this default camera is specified when instantiating the workspace from
@@ -1824,7 +1824,7 @@ uav <slot> <texture_name> <read> <write> [pixel_format] [mipmap #]
 | read             | valid   |
 | Read + write     | valid   |
 | write            | valid   |
-| <nothing>        | invalid |
+| \<nothing\>      | invalid |
 
 
 Example:
@@ -2471,7 +2471,7 @@ Used by PSSM, indicates which split does this shadow map handle.
 ## Example {#CompositorShadowNodesExample}
 
 Declaring a shadow map is not enough. You need to tell OgreNext what do you
-want to render to it and how. And for that you need [render\_scene](@ref CompositorNodesPassesRenderScene) passes.
+want to render to it and how. And for that you need [render_scene](@ref CompositorNodesPassesRenderScene) passes.
 
 Shadow nodes can be written with the regular `target { pass
 render_scene {} }` syntax. However when you have 6 shadow maps with the

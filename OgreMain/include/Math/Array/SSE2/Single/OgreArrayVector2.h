@@ -179,7 +179,7 @@ namespace Ogre
         /// @copydoc Vector2::dotProduct()
         inline ArrayReal dotProduct( const ArrayVector2 &vec ) const;
 
-        /// @copydoc Vector2::absDotProduct()
+        /// Returns the absolute of the dotProduct().
         inline ArrayReal absDotProduct( const ArrayVector2 &vec ) const;
 
         /// Unlike Vector2::normalise(), this function does not return the length of the vector

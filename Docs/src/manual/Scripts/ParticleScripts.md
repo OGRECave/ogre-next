@@ -215,7 +215,7 @@ default: center
 
 ### billboard\_rotation\_type {#BillboardRendererAttributes_billboard_rotation_type}
 
-@copydetails Ogre::BillboardRotationType
+@copydetails Ogre::v1::BillboardRotationType
 
 ```cpp
 format:  billboard_rotation_type <vertex|texcoord|none>

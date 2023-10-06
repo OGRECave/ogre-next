@@ -283,6 +283,8 @@ namespace Ogre
                 See VertexArrayObject::readRequests
             @param requests [in/out]
                 Array filled with the semantic.
+            @param lockOptions
+                See HardwareBuffer::LockOptions
             */
             void lockMultipleElements( ReadRequestsArray          &requests,
                                        HardwareBuffer::LockOptions lockOptions );

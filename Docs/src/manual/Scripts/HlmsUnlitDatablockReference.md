@@ -12,7 +12,7 @@ Reference Guide: HLMS Unlit Datablock {#hlmsunlitdatablockref}
 
 # Common Datablock Parameters: {#dbulCommonParameters}
 
-## Parameter: alpha_test {#dbParamAlphaTest}
+## Parameter: alpha_test {#dbulParamAlphaTest}
 - Sets the alpha test to the given compare function
 - Alpha_test value is type array:
     - First value is a string and sets the compare function.
@@ -21,11 +21,11 @@ Reference Guide: HLMS Unlit Datablock {#hlmsunlitdatablockref}
     - Optional third is a bool that sets weather to alpha test shadow caster only
 - **DEFAULT=["disabled",0.5,false]** 
 
-## Parameter: blendblock {#dbParamBlendBlock}
+## Parameter: blendblock {#dbulParamBlendBlock}
 - Sets the blendblock definition
 - Value is type string, the name of a blendblock definition. Example: `"blendblock" : "blendblock_name"`
 
-## Parameter: macroblock {#dbParamMacroBlock}
+## Parameter: macroblock {#dbulParamMacroBlock}
 - Sets the macroblock definition
 - Value is type string, the name of a macroblock definition. Example: `"macroblock" : "macroblock_name"`
 
@@ -68,7 +68,8 @@ Reference Guide: HLMS Unlit Datablock {#hlmsunlitdatablockref}
     - `uv`: Type integer. Sets which UV set to use for the given texture. Value must be between in range [0, 8). **DEFAULT=0**
 
 # Example Unlit Datablock Definition: {#dbulExample}
-```
+
+```json
 { 
     "unlit" : 
     {
@@ -94,7 +95,7 @@ Reference Guide: HLMS Unlit Datablock {#hlmsunlitdatablockref}
 }
 ```
 
-### Links {#dbulLinks}
+## Links {#dbulLinks}
 - [Ogre 2.3 HLMS Manual](https://ogrecave.github.io/ogre-next/api/2.3/hlms.html)
 - [Ogre 13.1 Material Script Manual](https://ogrecave.github.io/ogre/api/latest/_material-_scripts.html#SEC23)
 

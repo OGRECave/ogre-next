@@ -290,7 +290,7 @@ namespace Ogre
         size_t currentVertexCount();
 
         // MovableObject overrides
-        /** @copydoc MovableObject::getMovableType. */
+        /** @copydoc MovableObject::getMovableType */
         const String &getMovableType() const override;
 
         /// Built, renderable section of geometry
@@ -317,13 +317,13 @@ namespace Ogre
             ~ManualObjectSection() override;
 
             // Renderable overrides
-            /** @copydoc Renderable::getRenderOperation. */
+            /** @copydoc Renderable::getRenderOperation */
             void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
-            /** @copydoc Renderable::getWorldTransforms. */
+            /** @copydoc Renderable::getWorldTransforms */
             void getWorldTransforms( Matrix4 *xform ) const override;
-            /** @copydoc Renderable::getLights. */
+            /** @copydoc Renderable::getLights */
             const LightList &getLights() const override;
-            /** @copydoc Renderable::getCastsShadows. */
+            /** @copydoc Renderable::getCastsShadows */
             bool getCastsShadows() const override;
 
             /** Sets an user defined name that can serve to identify this section.

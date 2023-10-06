@@ -257,7 +257,8 @@ Reference Guide: HLMS PBS Datablock {#hlmspbsdatablockref}
 - **DEFAULT="specular_ogre"**
 
 # Example PBS Datablock Definition: {#dbExample}
-```
+
+```json
 { 
     "pbs" : 
     {
@@ -383,7 +384,7 @@ Reference Guide: HLMS PBS Datablock {#hlmspbsdatablockref}
 }
 ```
 
-### Links {#dbLinks}
+## Links {#dbLinks}
 - [Ogre 2.3 HLMS Manual](https://ogrecave.github.io/ogre-next/api/2.3/hlms.html)
 - [Ogre 13.1 Material Script Manual](https://ogrecave.github.io/ogre/api/latest/_material-_scripts.html#SEC23)
 
