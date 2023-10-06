@@ -81,8 +81,7 @@ namespace Ogre
         static const Quaternion CubemapRotations[6];
 
         RenderPassDescriptor *mRenderPassDesc;
-        /// Contains the first valid texture in mRenderPassDesc, to be used for reference
-        /// (e.g. width, height, etc). Could be colour, depth, stencil, or nullptr.
+        /// See getAnyTargetTexture().
         TextureGpu *mAnyTargetTexture;
         uint8       mAnyMipLevel;
 
@@ -187,7 +186,8 @@ namespace Ogre
 
         const CompositorNode *getParentNode() const { return mParentNode; }
 
-        /// @copydoc CompositorPass::mAnyTargetTexture
+        /// Contains the first valid texture in mRenderPassDesc, to be used for reference
+        /// (e.g. width, height, etc). Could be colour, depth, stencil, or nullptr.
         const TextureGpu *getAnyTargetTexture() const { return mAnyTargetTexture; }
 
         const ResourceTransitionArray &getResourceTransitions() const { return mResourceTransitions; }

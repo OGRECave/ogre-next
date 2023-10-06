@@ -183,9 +183,10 @@ namespace Ogre
                                 uint8 stageMask );
 
         /** Tell the solver the texture has been transitioned to a different layout, externally
-        @param newLayout
-        @param access
-        @param stageMask
+        @param texture      See resolveTransition().
+        @param newLayout    See resolveTransition().
+        @param access       See resolveTransition().
+        @param stageMask    See resolveTransition().
         */
         void assumeTransition( TextureGpu *texture, ResourceLayout::Layout newLayout,
                                ResourceAccess::ResourceAccess access, uint8 stageMask );

@@ -138,12 +138,10 @@ namespace Ogre
                 If the buffers can't be optimized (i.e. it is invalid because an LOD level doesn't
                 contain the VES_POSITION semantic), useSameVaos is used; which does not
                 clone the Vaos.
-            @param vaoManager
-                VaoManager. Required for buffer management.
-            @param inVao
-                Input Vao to clone and optimize.
-            @param outVao
-                Output vao to store the cloned, optimized version.
+            @param inGeom
+                Input geometry data to clone and optimize.
+            @param outGeom
+                Output geometry data to store the cloned, optimized version.
             */
             static void optimizeForShadowMapping( const VertexShadowMapHelper::GeometryVec &inGeom,
                                                   VertexShadowMapHelper::GeometryVec       &outGeom );

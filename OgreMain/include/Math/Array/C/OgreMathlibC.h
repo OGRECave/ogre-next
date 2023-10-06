@@ -370,11 +370,11 @@ namespace Ogre
         static inline ArrayReal InvSqrtNonZero4( ArrayReal f ) { return 1.0f / std::sqrt( f ); }
 
         /** Break x into fractional and integral parts
-            @param
-                4 floating point values. i.e. "2.57" (x4)
             @param x
+                4 floating point values. i.e. "2.57" (x4)
+            @param outIntegral
                 The integral part of x. i.e. 2
-            @return outIntegral
+            @return
                 The fractional part of x. i.e. 0.57
         */
         static inline ArrayReal Modf4( ArrayReal x, ArrayReal &outIntegral );

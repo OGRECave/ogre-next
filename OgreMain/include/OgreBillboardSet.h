@@ -848,7 +848,7 @@ namespace Ogre
             */
             void notifyBillboardDataChanged() { mBillboardDataChanged = true; }
 
-            /** @copydoc MovableObject::_releaseManualHardwareResources. */
+            /** @copydoc MovableObject::_releaseManualHardwareResources */
             void _releaseManualHardwareResources() override { _destroyBuffers(); }
 
             void setMaterial( const MaterialPtr &material ) override;

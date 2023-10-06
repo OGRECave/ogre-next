@@ -67,7 +67,8 @@ Reference Guide: HLMS Terra Datablock {#hlmsterradatablockref}
     - `texture`: Type string. The name of a texture. Example: `"texture" : "texture.tga"` **OPTIONAL parameter** 
 
 # Example Terra Datablock Definition: {#dbtExample}
-```
+
+```json
 { 
     "Terra" : 
     {
@@ -107,7 +108,7 @@ Reference Guide: HLMS Terra Datablock {#hlmsterradatablockref}
 }
 ```
 
-### Links {#dbtLinks}
+## Links {#dbtLinks}
 - [Ogre 2.3 HLMS Manual](https://ogrecave.github.io/ogre-next/api/2.3/hlms.html)
 - [Ogre 13.1 Material Script Manual](https://ogrecave.github.io/ogre/api/latest/_material-_scripts.html#SEC23)
 

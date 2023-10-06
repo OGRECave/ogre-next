@@ -111,7 +111,7 @@ namespace Ogre
         @param nodeDefinitionName
             Name to give to the node definition containing the warm ups.
             Must be unique and not exist already.
-        @param refNodeDefinitionNamee
+        @param refNodeDefinitionName
             Name of the reference node definition to analyze.
         @param bCopyAllInputChannels
             False to only generate input channels that are actually needed.

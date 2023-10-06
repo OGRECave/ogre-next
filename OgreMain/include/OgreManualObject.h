@@ -127,7 +127,7 @@ namespace Ogre
             ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
             ~ManualObject() override;
 
-            /** @copydoc MovableObject::_releaseManualHardwareResources. */
+            /** @copydoc MovableObject::_releaseManualHardwareResources */
             void _releaseManualHardwareResources() override { clear(); }
 
             // pre-declare ManualObjectSection

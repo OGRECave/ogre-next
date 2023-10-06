@@ -649,12 +649,9 @@ namespace Ogre
             If multiple atlas support is needed, using Texture2DArrays may be a good solution,
             although it is currently untested and may need additional fixes to get it working
 
-        @param maxShadowMapLights
-            Maximum number of shadow-caster spot and point lights.
-            0 to allow unlimited number of lights, at the cost of shader recompilations
-            when spot or point  lights are added or removed or their combination are changed.
-
-            Default value is 0.
+        @param staticBranchingLights
+            True to evalute number of lights in the shader using static branching (less shader variants).
+            False to recompile the shader more often (more variants, but better optimized shaders).
          */
         virtual void setStaticBranchingLights( bool staticBranchingLights );
         bool         getStaticBranchingLights() const { return mStaticBranchingLights; }
@@ -901,7 +898,7 @@ namespace Ogre
         /** Called by ParallelHlmsCompileQueue to finish the job started in getMaterial()
         @param passCache
             See lastReturnedValue from getMaterial()
-        @param cacheEntry
+        @param reservedStubEntry
             The stub cache entry (return value of getMaterial()) to fill.
         @param queuedRenderable
             See getMaterial()

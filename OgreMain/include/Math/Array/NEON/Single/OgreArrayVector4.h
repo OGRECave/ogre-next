@@ -190,10 +190,10 @@ namespace Ogre
         */
         inline void fma3x1( ArrayReal m, ArrayReal a, ArrayReal m2, ArrayReal a2 );
 
-        /// @copydoc Vector4::makeFloor()
+        /// Does the same as Vector3::makeFloor (including the .w component).
         inline void makeFloor( const ArrayVector4 &cmp );
 
-        /// @copydoc Vector4::makeCeil()
+        /// Does the same as Vector3::makeCeil (including the .w component).
         inline void makeCeil( const ArrayVector4 &cmp );
 
         /** Calculates the inverse of the vectors: 1.0f / v;
