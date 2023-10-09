@@ -168,6 +168,9 @@ namespace Ogre
             if texture name is "mytex.png" and additionalTextureExtension = ".dds"
             then the actual texture saved will be "mytex.png.dds"
             Leave it blank if you don't know what to put
+        @param sortByName
+            Use true if output JSON should have materials sorted alphabetically
+            by name (case sensitive).
         */
         void saveMaterials( const Hlms *hlms, String &outString,
                             const String &additionalTextureExtension, bool sortByName = false );
