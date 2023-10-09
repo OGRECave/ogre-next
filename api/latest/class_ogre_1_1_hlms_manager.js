@@ -45,7 +45,7 @@ var class_ogre_1_1_hlms_manager =
     [ "registerComputeHlms", "class_ogre_1_1_hlms_manager.html#afe7d07397770e0f532794a07fec132f7", null ],
     [ "registerHlms", "class_ogre_1_1_hlms_manager.html#ae9c73aa588cd3aa3264d5432d3c5394f", null ],
     [ "saveMaterial", "class_ogre_1_1_hlms_manager.html#a885e5bb4bf16c313adec6d194aa37fd9", null ],
-    [ "saveMaterials", "class_ogre_1_1_hlms_manager.html#a419930c70ddbd1ff15019f33264c4c2d", null ],
+    [ "saveMaterials", "class_ogre_1_1_hlms_manager.html#a04e8b1dfc1e01fafe97b2eb599aa3d0c", null ],
     [ "unregisterComputeHlms", "class_ogre_1_1_hlms_manager.html#a9a7d73cf6cb7bb16674eba093bbdffae", null ],
     [ "unregisterHlms", "class_ogre_1_1_hlms_manager.html#a9c853f68fcf70a4d0af1d99c6cdba744", null ],
     [ "useDefaultDatablockFrom", "class_ogre_1_1_hlms_manager.html#a8db5df7807fd1f755fbc4e350daca9e7", null ],
