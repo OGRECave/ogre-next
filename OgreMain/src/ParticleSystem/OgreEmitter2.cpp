@@ -26,6 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreStableHeaders.h"
+
 #include "ParticleSystem/OgreEmitter2.h"
 
 #include "OgreException.h"
