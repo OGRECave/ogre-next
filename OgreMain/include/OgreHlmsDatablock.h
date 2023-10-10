@@ -243,6 +243,8 @@ namespace Ogre
             case HlmsBlendblock::A2cEnabledMsaaOnly:
                 return sd.isMultisample();
             }
+
+            return false;
         }
 
         bool operator==( const HlmsBlendblock &_r ) const { return !( *this != _r ); }
