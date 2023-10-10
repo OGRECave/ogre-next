@@ -26,6 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreStableHeaders.h"
+
 #include "ParticleSystem/OgreParticleSystem2.h"
 
 #include "OgreBitset.inl"
