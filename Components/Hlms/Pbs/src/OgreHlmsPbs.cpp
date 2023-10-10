@@ -1334,7 +1334,7 @@ namespace Ogre
             cubemapTexUnit = texUnit++;
 
         if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
-            setTextureReg( tid, PixelShader, "blueNoise", texUnit++ );
+            setTextureReg( tid, PixelShader, "blueNoiseTex", texUnit++ );
 
         const int32 hasPlanarReflections = getProperty( tid, PbsProperty::HasPlanarReflections );
         if( hasPlanarReflections )

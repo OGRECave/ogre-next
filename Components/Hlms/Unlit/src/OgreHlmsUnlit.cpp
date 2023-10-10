@@ -586,7 +586,7 @@ namespace Ogre
         int32 texUnit = samplerStateStart;
 
         if( getProperty( tid, HlmsBaseProp::BlueNoise ) )
-            setTextureReg( tid, PixelShader, "blueNoise", texUnit - 1 );
+            setTextureReg( tid, PixelShader, "blueNoiseTex", texUnit - 1 );
 
         {
             char tmpData[32];
