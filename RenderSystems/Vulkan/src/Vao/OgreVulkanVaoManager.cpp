@@ -1000,8 +1000,7 @@ namespace Ogre
                             // Found one!
                             size_t defaultPoolSize =
                                 std::min( (VkDeviceSize)mDefaultPoolSize[vboFlag],
-                                          memHeaps[memTypes[*itMemTypeIdx].heapIndex].size -
-                                              mUsedHeapMemory[heapIdx] );
+                                          memHeaps[heapIdx].size - mUsedHeapMemory[heapIdx] );
                             poolSize = std::max( defaultPoolSize, sizeBytes );
                             break;
                         }
@@ -1027,14 +1026,13 @@ namespace Ogre
                             {
                                 // We didn't try this memory type. Let's check if we can use it
                                 // TODO: See comment above about memHeaps[heapIdx].size
-                                const size_t heapIdx = memTypes[memTypes[i].heapIndex].heapIndex;
+                                const size_t heapIdx = memTypes[i].heapIndex;
                                 if( mUsedHeapMemory[heapIdx] + poolSize < memHeaps[heapIdx].size )
                                 {
                                     // Found one!
                                     size_t defaultPoolSize =
                                         std::min( (VkDeviceSize)mDefaultPoolSize[vboFlag],
-                                                  memHeaps[memTypes[heapIdx].heapIndex].size -
-                                                      mUsedHeapMemory[heapIdx] );
+                                                  memHeaps[heapIdx].size - mUsedHeapMemory[heapIdx] );
                                     chosenMemoryTypeIdx = static_cast<uint32>( i );
                                     poolSize = std::max( defaultPoolSize, sizeBytes );
                                     break;
