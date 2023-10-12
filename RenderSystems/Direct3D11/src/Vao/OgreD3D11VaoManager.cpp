@@ -81,6 +81,7 @@ namespace Ogre
                                       const NameValuePairList *params ) :
         VaoManager( params ),
         mVaoNames( 1 ),
+        mMapNoOverwriteOnDynamicBufferSRV( false ),
         mDevice( device ),
         mDrawId( 0 ),
         mD3D11RenderSystem( renderSystem )
@@ -132,11 +133,22 @@ namespace Ogre
         mTexBufferMaxSize = 128 * 1024 * 1024;
         mUavBufferMaxSize = mTexBufferMaxSize;
 
-        mReadOnlyIsTexBuffer = mD3D11RenderSystem->_getFeatureLevel() < D3D_FEATURE_LEVEL_11_0;
+        const D3D_FEATURE_LEVEL featureLevel = mD3D11RenderSystem->_getFeatureLevel();
+
+        mReadOnlyIsTexBuffer = featureLevel < D3D_FEATURE_LEVEL_11_0;
         mReadOnlyBufferMaxSize = mReadOnlyIsTexBuffer ? mTexBufferMaxSize : mUavBufferMaxSize;
 
         mSupportsPersistentMapping = false;
         mSupportsIndirectBuffers = _supportsIndirectBuffers;
+
+        if( featureLevel >= D3D_FEATURE_LEVEL_11_1 )
+        {
+            D3D11_FEATURE_DATA_D3D11_OPTIONS opts = {};
+            HRESULT hr =
+                mDevice->CheckFeatureSupport( D3D11_FEATURE_D3D11_OPTIONS, &opts, sizeof( opts ) );
+            if( SUCCEEDED( hr ) )
+                mMapNoOverwriteOnDynamicBufferSRV = opts.MapNoOverwriteOnDynamicBufferSRV;
+        }
 
         _createD3DResources();
     }
@@ -369,7 +381,7 @@ namespace Ogre
     {
         const BufferPackedTypes bufferPackedType = buffer->getBufferPackedType();
         if( ( mSupportsIndirectBuffers || bufferPackedType != BP_TYPE_INDIRECT ) &&
-            ( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 ||
+            ( mMapNoOverwriteOnDynamicBufferSRV ||
               ( bufferPackedType != BP_TYPE_TEX && bufferPackedType != BP_TYPE_READONLY ) ) &&
             bufferPackedType != BP_TYPE_CONST && bufferPackedType != BP_TYPE_UAV )
         {
@@ -1188,7 +1200,7 @@ namespace Ogre
             sizeBytes = alignToNextMultiple( sizeBytes, Math::lcm( alignment, bytesPerElement ) );
         }
 
-        if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
+        if( mMapNoOverwriteOnDynamicBufferSRV )
         {
             // D3D11.1 supports NO_OVERWRITE on shader buffers, use the common pool
             size_t vboIdx = 0;
@@ -1224,7 +1236,7 @@ namespace Ogre
             uint32( ( sizeBytes - requestedSize ) / bytesPerElement ), bufferType, initialData,
             keepAsShadow, this, bufferInterface, pixelFormat, false, mDevice );
 
-        if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
+        if( mMapNoOverwriteOnDynamicBufferSRV )
         {
             if( initialData )
                 static_cast<D3D11BufferInterface *>( bufferInterface )->_firstUpload( initialData );
@@ -1238,7 +1250,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::destroyTexBufferImpl( TexBufferPacked *texBuffer )
     {
-        if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
+        if( mMapNoOverwriteOnDynamicBufferSRV )
         {
             D3D11BufferInterface *bufferInterface =
                 static_cast<D3D11BufferInterface *>( texBuffer->getBufferInterface() );
@@ -1346,7 +1358,7 @@ namespace Ogre
                              "D3D11VaoManager::createShaderBufferInterface" );
             }
 
-            if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
+            if( mMapNoOverwriteOnDynamicBufferSRV )
             {
                 D3D11DynamicBuffer *dynamicBuffer = 0;
                 if( bufferType >= BT_DYNAMIC_DEFAULT )
@@ -1377,7 +1389,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer )
     {
-        if( !mReadOnlyIsTexBuffer && mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
+        if( !mReadOnlyIsTexBuffer && mMapNoOverwriteOnDynamicBufferSRV )
         {
             OGRE_ASSERT_HIGH(
                 dynamic_cast<D3D11BufferInterface *>( readOnlyBuffer->getBufferInterface() ) );
