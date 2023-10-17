@@ -166,6 +166,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     static unsigned long compileShadersThread( ThreadHandle *threadHandle )
     {
+        Threads::SetThreadName( threadHandle,
+                                "ShCmplr#" + StringConverter::toString( threadHandle->getThreadIdx() ) );
+
         CompilerJobParams &jobParams =
             *reinterpret_cast<CompilerJobParams *>( threadHandle->getUserParam() );
 
