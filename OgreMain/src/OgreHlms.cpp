@@ -2569,6 +2569,10 @@ namespace Ogre
             pso.enablePrimitiveRestart = false;
         }
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        LogManager::getSingleton().logMessage(
+            "Compiling new PSO for datablock: " + datablock->getName().getFriendlyText(), LML_TRIVIAL );
+#endif
         mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );
 
         if( reservedStubEntry )

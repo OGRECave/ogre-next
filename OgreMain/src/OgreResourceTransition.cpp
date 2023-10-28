@@ -146,8 +146,6 @@ namespace Ogre
                 access == ResourceAccess::Read ) ) &&
             "Invalid Layout-access pair" );
 
-        OGRE_ASSERT_MEDIUM( access != ResourceAccess::Undefined );
-
         ResourceStatusMap::iterator itor = mResourceStatus.find( texture );
 
         if( itor == mResourceStatus.end() )
