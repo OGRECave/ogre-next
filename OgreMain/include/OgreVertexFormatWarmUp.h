@@ -109,11 +109,20 @@ namespace Ogre
                 }
             };
 
-            VFPair            vertexFormats;
-            FastArray<String> materials;
-            // We don't keep seenHlmsShadowHashes because Hlms implementations guarantee
+            struct MaterialRqId
+            {
+                uint8  renderQueueId;
+                String name;
+            };
+
+            VFPair                    vertexFormats;
+            std::vector<MaterialRqId> materials;
+            // We don't keep 'seenHlmsShadowHashes' because Hlms implementations guarantee
             // That the shadow Hlms hashes will be the same if the base one are the same.
-            std::set<uint32> seenHlmsHashes;
+            // The hash is actually 48 bits:
+            //  32 bits for the hlms hash
+            //   8 bits for the render queue ID.
+            std::set<uint64> seenHlmsHashes;
 
             std::vector<WarmUpRenderable *> renderables;
 
@@ -134,7 +143,7 @@ namespace Ogre
         void createSkeleton( SceneManager *sceneManager );
         void destroySkeleton( SceneManager *sceneManager );
 
-        void analyze( const Renderable *renderable );
+        void analyze( uint8 renderQueueId, const Renderable *renderable );
 
         void save( DataStreamPtr &dataStream, const VertexElement2VecVec &vertexElements );
         void load( DataStreamPtr &dataStream, VertexElement2VecVec &outVertexElements );
@@ -148,7 +157,7 @@ namespace Ogre
         void saveTo( DataStreamPtr &dataStream );
         void loadFrom( DataStreamPtr &dataStream );
 
-        void createWarmUp( SceneManager *sceneManager, uint8 renderQueueIdForV2 = 10u );
+        void createWarmUp( SceneManager *sceneManager );
         void destroyWarmUp();
     };
 

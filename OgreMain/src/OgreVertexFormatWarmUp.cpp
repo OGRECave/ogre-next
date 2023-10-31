@@ -114,7 +114,7 @@ void VertexFormatWarmUpStorage::destroySkeleton( SceneManager *sceneManager )
     SkeletonManager::getSingleton().remove( "VertexFormatWarmUpStorage Skel" );
 }
 //-----------------------------------------------------------------------------
-void VertexFormatWarmUpStorage::analyze( const Renderable *renderable )
+void VertexFormatWarmUpStorage::analyze( const uint8 renderQueueId, const Renderable *renderable )
 {
     const VertexArrayObjectArray &vaos = renderable->getVaos( VpNormal );
     if( vaos.empty() )
@@ -136,22 +136,24 @@ void VertexFormatWarmUpStorage::analyze( const Renderable *renderable )
 
     mNeedsSkeleton |= pair.hasSkeleton;
 
+    const uint64 hash = ( uint64( renderQueueId ) << 32u ) | renderable->getHlmsHash();
+
     VertexFormatEntryVec::iterator itor = std::lower_bound( mEntries.begin(), mEntries.end(), pair );
     if( itor == mEntries.end() || itor->vertexFormats != pair )
     {
         // New entry
         VertexFormatEntry entry;
         entry.vertexFormats = pair;
-        entry.seenHlmsHashes.insert( renderable->getHlmsHash() );
-        entry.materials.push_back( renderable->getDatablockOrMaterialName() );
+        entry.seenHlmsHashes.insert( hash );
+        entry.materials.push_back( { renderQueueId, renderable->getDatablockOrMaterialName() } );
         mEntries.insert( itor, entry );
     }
     else
     {
         // Old entry. Check if we've seen this Hlms hash combination.
-        const auto insertionResult = itor->seenHlmsHashes.insert( renderable->getHlmsHash() );
+        const auto insertionResult = itor->seenHlmsHashes.insert( hash );
         if( insertionResult.second )
-            itor->materials.push_back( renderable->getDatablockOrMaterialName() );
+            itor->materials.push_back( { renderQueueId, renderable->getDatablockOrMaterialName() } );
     }
 }
 //-----------------------------------------------------------------------------
@@ -178,13 +180,13 @@ void VertexFormatWarmUpStorage::analyze( Ogre::SceneManager *sceneManager )
                     {
                         const size_t numSubItems = item->getNumSubItems();
                         for( size_t l = 0u; l < numSubItems; ++l )
-                            analyze( item->getSubItem( l ) );
+                            analyze( item->getRenderQueueGroup(), item->getSubItem( l ) );
                     }
                     else
                     {
                         // Generic fallback.
                         for( const Renderable *renderable : objData.mOwner[k]->mRenderables )
-                            analyze( renderable );
+                            analyze( objData.mOwner[k]->getRenderQueueGroup(), renderable );
                     }
                 }
                 objData.advancePack();
@@ -251,13 +253,14 @@ void VertexFormatWarmUpStorage::saveTo( DataStreamPtr &dataStream )
 
         const uint32 numMaterials = static_cast<uint32>( entry.materials.size() );
         write<uint32>( dataStream, numMaterials );
-        for( const String &material : entry.materials )
-            writeString16( dataStream, material );
+        for( const VertexFormatEntry::MaterialRqId &material : entry.materials )
+        {
+            write<uint8>( dataStream, material.renderQueueId );
+            writeString16( dataStream, material.name );
+        }
 
-        const uint32 numHlmsHashes = static_cast<uint32>( entry.seenHlmsHashes.size() );
-        write<uint32>( dataStream, numHlmsHashes );
-        for( const uint32 hlmsHash : entry.seenHlmsHashes )
-            write<uint32>( dataStream, hlmsHash );
+        // entry.seenHlmsHashes are not saved because they're not deterministic
+        // (they can be deterministic, but a lot of care must be taken).
     }
 }
 //-----------------------------------------------------------------------------
@@ -358,18 +361,16 @@ void VertexFormatWarmUpStorage::loadFrom( DataStreamPtr &dataStream )
         entry.materials.clear();
         entry.materials.reserve( numMaterials );
         for( size_t j = 0u; j < numMaterials; ++j )
-            entry.materials.push_back( readString16( dataStream ) );
-
-        const uint32 numHlmsHashes = read<uint32>( dataStream );
-        entry.seenHlmsHashes.clear();
-        for( size_t j = 0u; j < numHlmsHashes; ++j )
-            entry.seenHlmsHashes.insert( read<uint32>( dataStream ) );
+        {
+            const uint8 renderQueueId = read<uint8>( dataStream );
+            entry.materials.push_back( { renderQueueId, readString16( dataStream ) } );
+        }
 
         mEntries.push_back( entry );
     }
 }
 //-----------------------------------------------------------------------------
-void VertexFormatWarmUpStorage::createWarmUp( SceneManager *sceneManager, uint8 renderQueueIdForV2 )
+void VertexFormatWarmUpStorage::createWarmUp( SceneManager *sceneManager )
 {
     destroyWarmUp();
 
@@ -425,16 +426,16 @@ void VertexFormatWarmUpStorage::createWarmUp( SceneManager *sceneManager, uint8 
         const bool bHasSkeleton = entry.vertexFormats.hasSkeleton;
 
         // Start spawning
-        for( const String &materialName : entry.materials )
+        for( const VertexFormatEntry::MaterialRqId &material : entry.materials )
         {
             WarmUpRenderable *renderable =
                 new WarmUpRenderable( Ogre::Id::generateNewId<Ogre::MovableObject>(),
                                       &sceneManager->_getEntityMemoryManager( Ogre::SCENE_STATIC ),
-                                      sceneManager, renderQueueIdForV2, vao, shadowVao );
+                                      sceneManager, material.renderQueueId, vao, shadowVao );
             if( bHasSkeleton )
                 renderable->setupSkeleton( mSkeleton, &mBlendIndexToBoneIndexMap );
             entry.renderables.push_back( renderable );
-            renderable->setDatablock( materialName );
+            renderable->setDatablock( material.name );
             rootNode->attachObject( renderable );
         }
     }
