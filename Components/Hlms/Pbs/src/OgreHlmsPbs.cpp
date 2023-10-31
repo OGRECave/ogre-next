@@ -3364,9 +3364,8 @@ namespace Ogre
                 {
                     SkeletonInstance *skeleton = queuedRenderable.movableObject->getSkeletonInstance();
 
-#if OGRE_DEBUG_MODE
-                    assert( dynamic_cast<const RenderableAnimated *>( queuedRenderable.renderable ) );
-#endif
+                    OGRE_ASSERT_HIGH(
+                        dynamic_cast<const RenderableAnimated *>( queuedRenderable.renderable ) );
 
                     const RenderableAnimated *renderableAnimated =
                         static_cast<const RenderableAnimated *>( queuedRenderable.renderable );

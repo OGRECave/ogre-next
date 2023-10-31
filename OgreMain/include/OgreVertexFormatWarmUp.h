@@ -43,6 +43,38 @@ namespace Ogre
 
     /** The purpose of this class is to trigger shader compilations on demand (e.g. at startup
         or at loading time) without having to load meshes and skeletons.
+
+        Normally to warm up all shader caches, you'd have to create an Item of each Mesh + Material
+        combo that is needed.
+
+        This is tedious to keep by hand and can increase loading time and RAM consumption because a
+        significant time is spent on loading meshes and skeletons.
+
+        This class simplifies that task by splitting up it up in parts:
+
+        ## Part 1:
+            1. Create a scene with all objects you plan on ever using (or at least as much as possible).
+            2. Run VertexFormatWarmUpStorage::analyze.
+            3. Save the results to file via VertexFormatWarmUpStorage::saveTo.
+
+        ## Part 2:
+            1. Load the saved file via VertexFormatWarmUpStorage::loadFrom.
+            2. Call VertexFormatWarmUpStorage::createWarmUp.
+            3. Render one frame (or multiple ones). Either directly to the screen or with the help of
+               warm_up compositor passeses (see CompositorPassWarmUpDef and see WarmUpHelper).
+            4. Destroy the VertexFormatWarmUpStorage.
+
+        What VertexFormatWarmUpStorage in Part I simply does is to collect all useful combos of
+        Vertex_Format + Material settings and saves them to file.
+
+        @note Many Materials when applied to the same Vertex_Format may result in the exact same shader.
+        In that case, the VertexFormatWarmUpStorage will only save one material (the first one it sees
+        with for that combo). It doesn't waste time saving all materials.
+
+        In Part II, VertexFormatWarmUpStorage will create a very small vertex buffer with the same
+        vertex format and apply the material to it. This way attempting to render will result in nothing
+        on screen (because it's all 0s and degenerate triangles), the shader gets parsed and the hit
+        to VRAM and disk loading times are minimum.
     */
     class _OgreExport VertexFormatWarmUpStorage
     {
@@ -50,6 +82,7 @@ namespace Ogre
         {
             struct VFPair
             {
+                bool                 hasSkeleton;
                 OperationType        opType;
                 OperationType        opTypeShadow;
                 VertexElement2VecVec normal;
@@ -57,12 +90,15 @@ namespace Ogre
 
                 bool operator!=( const VFPair &other ) const
                 {
-                    return this->opType != other.opType || this->opTypeShadow != other.opTypeShadow ||
-                           this->normal != other.normal || this->shadow != other.shadow;
+                    return this->hasSkeleton != other.hasSkeleton || this->opType != other.opType ||
+                           this->opTypeShadow != other.opTypeShadow || this->normal != other.normal ||
+                           this->shadow != other.shadow;
                 }
 
                 bool operator<( const VFPair &other ) const
                 {
+                    if( this->hasSkeleton < other.hasSkeleton )
+                        return true;
                     if( this->opType < other.opType )
                         return true;
                     if( this->opTypeShadow < other.opTypeShadow )
@@ -88,12 +124,23 @@ namespace Ogre
 
         VertexFormatEntryVec mEntries;
 
+        typedef FastArray<unsigned short> IndexMap;
+
+        bool mNeedsSkeleton;
+        /// Dummy used by all entries that need a skeleton.
+        SkeletonInstance *mSkeleton;
+        IndexMap          mBlendIndexToBoneIndexMap;
+
+        void createSkeleton( SceneManager *sceneManager );
+        void destroySkeleton( SceneManager *sceneManager );
+
         void analyze( const Renderable *renderable );
 
         void save( DataStreamPtr &dataStream, const VertexElement2VecVec &vertexElements );
         void load( DataStreamPtr &dataStream, VertexElement2VecVec &outVertexElements );
 
     public:
+        VertexFormatWarmUpStorage();
         ~VertexFormatWarmUpStorage();
 
         void analyze( SceneManager *sceneManager );

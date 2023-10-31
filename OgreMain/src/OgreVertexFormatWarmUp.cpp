@@ -30,9 +30,11 @@ THE SOFTWARE.
 
 #include "OgreVertexFormatWarmUp.h"
 
+#include "Animation/OgreSkeletonManager.h"
 #include "OgreItem.h"
 #include "OgreLogManager.h"
 #include "OgreSceneManager.h"
+#include "OgreSkeleton.h"
 #include "OgreSubItem.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
@@ -49,6 +51,9 @@ namespace Ogre
         WarmUpRenderable( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                           uint8 renderQueueId, VertexArrayObject *vao, VertexArrayObject *shadowVao );
 
+        void setupSkeleton( SkeletonInstance *instance,
+                            FastArray<unsigned short> *blendIndexToBoneIndexMap );
+
         // Overrides from MovableObject
         const String &getMovableType() const override;
 
@@ -62,9 +67,49 @@ namespace Ogre
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
+VertexFormatWarmUpStorage::VertexFormatWarmUpStorage() : mNeedsSkeleton( false ), mSkeleton( 0 )
+{
+}
+//-----------------------------------------------------------------------------
 VertexFormatWarmUpStorage::~VertexFormatWarmUpStorage()
 {
     destroyWarmUp();
+}
+//-----------------------------------------------------------------------------
+void VertexFormatWarmUpStorage::createSkeleton( SceneManager *sceneManager )
+{
+    destroySkeleton( sceneManager );
+    if( mNeedsSkeleton )
+        return;
+
+    v1::Skeleton *skeleton =
+        OGRE_NEW Ogre::v1::Skeleton( nullptr, "VertexFormatWarmUpStorage Skel", 0,
+                                     ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, true, nullptr );
+    skeleton->setToLoaded();
+    skeleton->createBone();  // We just need a root bone. We don't care about setting it up.
+    // Because the vertex buffer has all 0s, even vertex formats with multiple bones per vertex
+    // will all reference bone 0. Thus we just set [0] = 0.
+    mBlendIndexToBoneIndexMap[0] = 0;
+    // We don't care about animations either. Just create the v2 skeleton now.
+    SkeletonDefPtr skeletonDef = SkeletonManager::getSingleton().getSkeletonDef( skeleton );
+    OGRE_DELETE skeleton;  // We don't need the v1 skeleton anymore.
+    skeleton = 0;
+
+    mSkeleton = sceneManager->createSkeletonInstance( skeletonDef.get() );
+}
+//-----------------------------------------------------------------------------
+void VertexFormatWarmUpStorage::destroySkeleton( SceneManager *sceneManager )
+{
+    if( !mSkeleton )
+        return;
+
+    sceneManager->destroySkeletonInstance( mSkeleton );
+    mSkeleton = 0;
+    SkeletonDefPtr skeletonDef =
+        SkeletonManager::getSingleton().getSkeletonDef( "VertexFormatWarmUpStorage Skel" );
+    sceneManager->_removeSkeletonDef( skeletonDef.get() );
+    skeletonDef.reset();
+    SkeletonManager::getSingleton().remove( "VertexFormatWarmUpStorage Skel" );
 }
 //-----------------------------------------------------------------------------
 void VertexFormatWarmUpStorage::analyze( const Renderable *renderable )
@@ -76,12 +121,18 @@ void VertexFormatWarmUpStorage::analyze( const Renderable *renderable )
     if( !renderable->getCustomParameters().empty() )
         return;  // Ignore objects with potential indications for custom Hlms for now.
 
+    if( renderable->getNumPoses() > 0u )
+        return;  // Poses not supported yet.
+
     const VertexArrayObjectArray &shadowVaos = renderable->getVaos( VpShadow );
 
-    const VertexFormatEntry::VFPair pair = { vaos.front()->getOperationType(),
+    const VertexFormatEntry::VFPair pair = { renderable->hasSkeletonAnimation(),
+                                             vaos.front()->getOperationType(),
                                              shadowVaos.front()->getOperationType(),
                                              vaos.front()->getVertexDeclaration(),
                                              shadowVaos.front()->getVertexDeclaration() };
+
+    mNeedsSkeleton |= pair.hasSkeleton;
 
     VertexFormatEntryVec::iterator itor = std::lower_bound( mEntries.begin(), mEntries.end(), pair );
     if( itor == mEntries.end() || itor->vertexFormats != pair )
@@ -190,6 +241,7 @@ void VertexFormatWarmUpStorage::saveTo( DataStreamPtr &dataStream )
 
     for( const VertexFormatEntry &entry : mEntries )
     {
+        write<uint8>( dataStream, entry.vertexFormats.hasSkeleton );
         write<uint8>( dataStream, entry.vertexFormats.opType );
         write<uint8>( dataStream, entry.vertexFormats.opTypeShadow );
         save( dataStream, entry.vertexFormats.normal );
@@ -275,6 +327,7 @@ void VertexFormatWarmUpStorage::loadFrom( DataStreamPtr &dataStream )
     LogManager::getSingleton().logMessage( "Loading VertexFormatWarmUpStorage from " +
                                            dataStream->getName() );
 
+    mNeedsSkeleton = false;
     mEntries.clear();
 
     const uint16 version = read<uint16>( dataStream );
@@ -292,6 +345,8 @@ void VertexFormatWarmUpStorage::loadFrom( DataStreamPtr &dataStream )
     VertexFormatEntry entry;
     for( size_t i = 0u; i < numEntries; ++i )
     {
+        entry.vertexFormats.hasSkeleton = read<bool>( dataStream );
+        mNeedsSkeleton |= entry.vertexFormats.hasSkeleton;
         entry.vertexFormats.opType = static_cast<OperationType>( read<uint8>( dataStream ) );
         entry.vertexFormats.opTypeShadow = static_cast<OperationType>( read<uint8>( dataStream ) );
         load( dataStream, entry.vertexFormats.normal );
@@ -315,6 +370,9 @@ void VertexFormatWarmUpStorage::loadFrom( DataStreamPtr &dataStream )
 void VertexFormatWarmUpStorage::createWarmUp( SceneManager *sceneManager, uint8 renderQueueIdForV2 )
 {
     destroyWarmUp();
+
+    if( mNeedsSkeleton && !mSkeleton )
+        createSkeleton( sceneManager );
 
     VaoManager *vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -362,6 +420,8 @@ void VertexFormatWarmUpStorage::createWarmUp( SceneManager *sceneManager, uint8 
         // Vao and vertex buffer handles.
         OGRE_ASSERT_LOW( !entry.materials.empty() );
 
+        const bool bHasSkeleton = entry.vertexFormats.hasSkeleton;
+
         // Start spawning
         for( const String &materialName : entry.materials )
         {
@@ -369,6 +429,8 @@ void VertexFormatWarmUpStorage::createWarmUp( SceneManager *sceneManager, uint8 
                 new WarmUpRenderable( Ogre::Id::generateNewId<Ogre::MovableObject>(),
                                       &sceneManager->_getEntityMemoryManager( Ogre::SCENE_STATIC ),
                                       sceneManager, renderQueueIdForV2, vao, shadowVao );
+            if( bHasSkeleton )
+                renderable->setupSkeleton( mSkeleton, &mBlendIndexToBoneIndexMap );
             entry.renderables.push_back( renderable );
             renderable->setDatablock( materialName );
             rootNode->attachObject( renderable );
@@ -440,6 +502,15 @@ WarmUpRenderable::WarmUpRenderable( IdType id, ObjectMemoryManager *objectMemory
     mVaoPerLod[VpShadow].push_back( shadowVao );
 
     mRenderables.push_back( this );
+}
+//-----------------------------------------------------------------------------------
+void WarmUpRenderable::setupSkeleton( SkeletonInstance *instance,
+                                      FastArray<unsigned short> *blendIndexToBoneIndexMap )
+{
+    OGRE_ASSERT_MEDIUM( instance );
+    mHasSkeletonAnimation = true;
+    mSkeletonInstance = instance;
+    mBlendIndexToBoneIndexMap = blendIndexToBoneIndexMap;
 }
 //-----------------------------------------------------------------------------------
 const String &WarmUpRenderable::getMovableType() const
