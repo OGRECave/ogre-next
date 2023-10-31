@@ -50,6 +50,7 @@ namespace Ogre
     public:
         WarmUpRenderable( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                           uint8 renderQueueId, VertexArrayObject *vao, VertexArrayObject *shadowVao );
+        ~WarmUpRenderable() override;
 
         void setupSkeleton( SkeletonInstance *instance,
                             FastArray<unsigned short> *blendIndexToBoneIndexMap );
@@ -79,7 +80,7 @@ VertexFormatWarmUpStorage::~VertexFormatWarmUpStorage()
 void VertexFormatWarmUpStorage::createSkeleton( SceneManager *sceneManager )
 {
     destroySkeleton( sceneManager );
-    if( mNeedsSkeleton )
+    if( !mNeedsSkeleton )
         return;
 
     v1::Skeleton *skeleton =
@@ -89,6 +90,7 @@ void VertexFormatWarmUpStorage::createSkeleton( SceneManager *sceneManager )
     skeleton->createBone();  // We just need a root bone. We don't care about setting it up.
     // Because the vertex buffer has all 0s, even vertex formats with multiple bones per vertex
     // will all reference bone 0. Thus we just set [0] = 0.
+    mBlendIndexToBoneIndexMap.resizePOD( 1u );
     mBlendIndexToBoneIndexMap[0] = 0;
     // We don't care about animations either. Just create the v2 skeleton now.
     SkeletonDefPtr skeletonDef = SkeletonManager::getSingleton().getSkeletonDef( skeleton );
@@ -502,6 +504,12 @@ WarmUpRenderable::WarmUpRenderable( IdType id, ObjectMemoryManager *objectMemory
     mVaoPerLod[VpShadow].push_back( shadowVao );
 
     mRenderables.push_back( this );
+}
+//-----------------------------------------------------------------------------------
+WarmUpRenderable::~WarmUpRenderable()
+{
+    // We don't own this ptr, our creator will free it. Set this to nullptr to prevent an assert.
+    mSkeletonInstance = 0;
 }
 //-----------------------------------------------------------------------------------
 void WarmUpRenderable::setupSkeleton( SkeletonInstance *instance,
