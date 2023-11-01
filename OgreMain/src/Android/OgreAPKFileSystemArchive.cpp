@@ -34,11 +34,11 @@ namespace Ogre
         Archive( name, archType ),
         mAssetMgr( assetMgr )
     {
-        if( mName.size() > 0 && mName[0] == '/' )
+        if( !mName.empty() && mName[0] == '/' )
             mName.erase( mName.begin() );
 
         mPathPreFix = mName;
-        if( mPathPreFix.size() > 0 )
+        if( !mPathPreFix.empty() && mPathPreFix.back() != '/' )
             mPathPreFix += "/";
 
         if( !IsFolderParsed( mName ) )
