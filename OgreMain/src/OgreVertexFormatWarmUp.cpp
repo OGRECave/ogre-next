@@ -116,6 +116,9 @@ void VertexFormatWarmUpStorage::destroySkeleton( SceneManager *sceneManager )
 //-----------------------------------------------------------------------------
 void VertexFormatWarmUpStorage::analyze( const uint8 renderQueueId, const Renderable *renderable )
 {
+    if( !renderable->mRenderableVisible )
+        return;
+
     const VertexArrayObjectArray &vaos = renderable->getVaos( VpNormal );
     if( vaos.empty() )
         return;  // Must be V1 object or malformed.
