@@ -447,14 +447,12 @@ void VertexFormatWarmUpStorage::createWarmUp( SceneManager *sceneManager )
 void VertexFormatWarmUpStorage::destroyWarmUp()
 {
     VaoManager *vaoManager = 0;
+    SceneManager *sceneManager = 0;
 
     if( !mEntries.empty() && !mEntries.back().renderables.empty() )
     {
-        vaoManager = mEntries.back()
-                         .renderables.back()
-                         ->_getManager()
-                         ->getDestinationRenderSystem()
-                         ->getVaoManager();
+        sceneManager = mEntries.back().renderables.back()->_getManager();
+        vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
     }
 
     for( VertexFormatEntry &entry : mEntries )
@@ -488,6 +486,8 @@ void VertexFormatWarmUpStorage::destroyWarmUp()
             }
         }
     }
+
+    destroySkeleton( sceneManager );
 }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
