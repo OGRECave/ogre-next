@@ -733,5 +733,5 @@ include(Packaging)
 
 
 # Show feature summary
-include(FeatureSummary)
+include(OgreFeatureSummary)
 
