@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -94,9 +93,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_hlms_low_level_databloc
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_hlms_low_level_datablock-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::HlmsLowLevelDatablock Class Reference<div class="ingroups"><a class="el" href="group___component.html">Component</a> &raquo; <a class="el" href="group___material.html">Material</a></div></div></div>
 </div><!--header-->
@@ -121,99 +118,101 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5681e965c22dd19bc29b06c03ea852bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace7820498216f36d691ad242e67f95d9"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_low_level_datablock.html#ace7820498216f36d691ad242e67f95d9">~HlmsLowLevelDatablock</a> ()</td></tr>
 <tr class="separator:ace7820498216f36d691ad242e67f95d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8f09ce4391c44bdde8bc4c26acc19af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae8f09ce4391c44bdde8bc4c26acc19af">_linkRenderable</a> (<a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *renderable)</td></tr>
-<tr class="separator:ae8f09ce4391c44bdde8bc4c26acc19af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7de763729aa608f77b7bee59e1172bd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a7de763729aa608f77b7bee59e1172bd3">_unlinkRenderable</a> (<a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *renderable)</td></tr>
-<tr class="separator:a7de763729aa608f77b7bee59e1172bd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa55bf43e01f95d05f3e28da6d4c49464"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aa55bf43e01f95d05f3e28da6d4c49464">calculateHash</a> ()</td></tr>
-<tr class="memdesc:aa55bf43e01f95d05f3e28da6d4c49464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the hashes needed for sorting by the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> (i.e. mTextureHash)  <a href="class_ogre_1_1_hlms_datablock.html#aa55bf43e01f95d05f3e28da6d4c49464">More...</a><br /></td></tr>
-<tr class="separator:aa55bf43e01f95d05f3e28da6d4c49464"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15d3af39577e58586fb577c1cbbcb91a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a15d3af39577e58586fb577c1cbbcb91a">clone</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> name) const</td></tr>
-<tr class="memdesc:a15d3af39577e58586fb577c1cbbcb91a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of this datablock with the same settings, but a different name.  <a href="class_ogre_1_1_hlms_datablock.html#a15d3af39577e58586fb577c1cbbcb91a">More...</a><br /></td></tr>
-<tr class="separator:a15d3af39577e58586fb577c1cbbcb91a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7567020e1e5f76035ef68d0724059046"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a7567020e1e5f76035ef68d0724059046">getAlphaTest</a> () const</td></tr>
-<tr class="separator:a7567020e1e5f76035ef68d0724059046"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53f23bd5d085a6a04d31e036765f9c2b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a53f23bd5d085a6a04d31e036765f9c2b">getAlphaTestShadowCasterOnly</a> () const</td></tr>
-<tr class="separator:a53f23bd5d085a6a04d31e036765f9c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d0fb2b2a98729f531286386d23e7556"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a6d0fb2b2a98729f531286386d23e7556">getAlphaTestThreshold</a> () const</td></tr>
-<tr class="separator:a6d0fb2b2a98729f531286386d23e7556"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9ee38f3c54e42d40f7bad067cf1542c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aa9ee38f3c54e42d40f7bad067cf1542c">getBlendblock</a> (bool casterBlock=false) const</td></tr>
-<tr class="separator:aa9ee38f3c54e42d40f7bad067cf1542c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefd220e3e669819154ce530ce8073a49"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aefd220e3e669819154ce530ce8073a49">getCreator</a> () const</td></tr>
-<tr class="separator:aefd220e3e669819154ce530ce8073a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0a175ab0ffb2f3c552592f5b39df102"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102">getDiffuseColour</a> () const</td></tr>
-<tr class="memdesc:ab0a175ab0ffb2f3c552592f5b39df102"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest match for a diffuse colour, if applicable by the actual implementation.  <a href="class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102">More...</a><br /></td></tr>
-<tr class="separator:ab0a175ab0ffb2f3c552592f5b39df102"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a78dee492f17cfbf4014c1b9688ba7f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a8a78dee492f17cfbf4014c1b9688ba7f">getDiffuseTexture</a> () const</td></tr>
-<tr class="memdesc:a8a78dee492f17cfbf4014c1b9688ba7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest match for a diffuse texture, if applicable by the actual implementation.  <a href="class_ogre_1_1_hlms_datablock.html#a8a78dee492f17cfbf4014c1b9688ba7f">More...</a><br /></td></tr>
-<tr class="separator:a8a78dee492f17cfbf4014c1b9688ba7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03046c121275f5aca15725cdef10ae3e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a03046c121275f5aca15725cdef10ae3e">getEmissiveColour</a> () const</td></tr>
-<tr class="memdesc:a03046c121275f5aca15725cdef10ae3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest match for a emissive colour, if applicable by the actual implementation.  <a href="class_ogre_1_1_hlms_datablock.html#a03046c121275f5aca15725cdef10ae3e">More...</a><br /></td></tr>
-<tr class="separator:a03046c121275f5aca15725cdef10ae3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ac3b3f3a7d05c7c6d150e25dc64fc37"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a5ac3b3f3a7d05c7c6d150e25dc64fc37">getEmissiveTexture</a> () const</td></tr>
-<tr class="memdesc:a5ac3b3f3a7d05c7c6d150e25dc64fc37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest match for a emissive texture, if applicable by the actual implementation.  <a href="class_ogre_1_1_hlms_datablock.html#a5ac3b3f3a7d05c7c6d150e25dc64fc37">More...</a><br /></td></tr>
-<tr class="separator:a5ac3b3f3a7d05c7c6d150e25dc64fc37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d32cd53c5534994ef78c312da60f0d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a9d32cd53c5534994ef78c312da60f0d0">getFilenameAndResourceGroup</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const **outFilename, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const **outResourceGroup) const</td></tr>
-<tr class="separator:a9d32cd53c5534994ef78c312da60f0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3031ab73d16eddfaca9ea7a6d6257b0"><td class="memItemLeft" align="right" valign="top">const vector&lt; <a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> * &gt;::type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ab3031ab73d16eddfaca9ea7a6d6257b0">getLinkedRenderables</a> () const</td></tr>
-<tr class="separator:ab3031ab73d16eddfaca9ea7a6d6257b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed6e51cb5a915a02143b46b1712a0d60"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aed6e51cb5a915a02143b46b1712a0d60">getMacroblock</a> (bool casterBlock=false) const</td></tr>
-<tr class="separator:aed6e51cb5a915a02143b46b1712a0d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85d50b40ec915267602dce330755148f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a85d50b40ec915267602dce330755148f">getName</a> () const</td></tr>
-<tr class="separator:a85d50b40ec915267602dce330755148f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7d51c2c4c49b8f9f64f9d5e179071fe"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aa7d51c2c4c49b8f9f64f9d5e179071fe">getNameStr</a> () const</td></tr>
-<tr class="separator:aa7d51c2c4c49b8f9f64f9d5e179071fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a080f4a428d886dbe9fab72e88e9ba7e2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a080f4a428d886dbe9fab72e88e9ba7e2">hasCustomShadowMacroblock</a> () const</td></tr>
-<tr class="separator:a080f4a428d886dbe9fab72e88e9ba7e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bdfaaee402c04a5db850af5382af2c3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a2bdfaaee402c04a5db850af5382af2c3">preload</a> ()</td></tr>
-<tr class="memdesc:a2bdfaaee402c04a5db850af5382af2c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells datablock to start loading all of its textures (if not loaded already) and any other resource it may need.  <a href="class_ogre_1_1_hlms_datablock.html#a2bdfaaee402c04a5db850af5382af2c3">More...</a><br /></td></tr>
-<tr class="separator:a2bdfaaee402c04a5db850af5382af2c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f0826a189eec659051ce6513eafaa57"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a3f0826a189eec659051ce6513eafaa57">saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
-<tr class="separator:a3f0826a189eec659051ce6513eafaa57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c5bc6488a0f67fa0838f41352172b4d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction, bool shadowCasterOnly=false, bool useAlphaFromTextures=true)</td></tr>
-<tr class="memdesc:a4c5bc6488a0f67fa0838f41352172b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha test to the given compare function.  <a href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">More...</a><br /></td></tr>
-<tr class="separator:a4c5bc6488a0f67fa0838f41352172b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a2d38b259d670575af205798067c612"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a1a2d38b259d670575af205798067c612">setAlphaTestThreshold</a> (float threshold)</td></tr>
-<tr class="memdesc:a1a2d38b259d670575af205798067c612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alpha test's threshold.  <a href="class_ogre_1_1_hlms_datablock.html#a1a2d38b259d670575af205798067c612">More...</a><br /></td></tr>
-<tr class="separator:a1a2d38b259d670575af205798067c612"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae98b240d749de133737090afd9912df8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae98b240d749de133737090afd9912df8">setBlendblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> &amp;blendblock, bool casterBlock=false)</td></tr>
-<tr class="memdesc:ae98b240d749de133737090afd9912df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new blendblock that matches the same parameter as the input.  <a href="class_ogre_1_1_hlms_datablock.html#ae98b240d749de133737090afd9912df8">More...</a><br /></td></tr>
-<tr class="separator:ae98b240d749de133737090afd9912df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1eceea7ae2d0610b0b2f8a0ec025015"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#af1eceea7ae2d0610b0b2f8a0ec025015">setBlendblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *blendblock, bool casterBlock=false)</td></tr>
-<tr class="memdesc:af1eceea7ae2d0610b0b2f8a0ec025015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the blendblock from the given pointer that was already retrieved from the <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>.  <a href="class_ogre_1_1_hlms_datablock.html#af1eceea7ae2d0610b0b2f8a0ec025015">More...</a><br /></td></tr>
-<tr class="separator:af1eceea7ae2d0610b0b2f8a0ec025015"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab115f92198bc417baf0dc592c4e0a71f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ab115f92198bc417baf0dc592c4e0a71f">setMacroblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> &amp;macroblock, bool casterBlock=false)</td></tr>
-<tr class="memdesc:ab115f92198bc417baf0dc592c4e0a71f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new macroblock that matches the same parameter as the input.  <a href="class_ogre_1_1_hlms_datablock.html#ab115f92198bc417baf0dc592c4e0a71f">More...</a><br /></td></tr>
-<tr class="separator:ab115f92198bc417baf0dc592c4e0a71f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b31cdd58f656a73fa73c4a724e55237"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a9b31cdd58f656a73fa73c4a724e55237">setMacroblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *macroblock, bool casterBlock=false)</td></tr>
-<tr class="memdesc:a9b31cdd58f656a73fa73c4a724e55237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the macroblock from the given pointer that was already retrieved from the <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>.  <a href="class_ogre_1_1_hlms_datablock.html#a9b31cdd58f656a73fa73c4a724e55237">More...</a><br /></td></tr>
-<tr class="separator:a9b31cdd58f656a73fa73c4a724e55237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a4dda39a6280c558df45f1155abd8e664"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4dda39a6280c558df45f1155abd8e664">getCmpString</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction)</td></tr>
-<tr class="separator:a4dda39a6280c558df45f1155abd8e664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_hlms_datablock"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_hlms_datablock')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_hlms_datablock.html">Ogre::HlmsDatablock</a></td></tr>
+<tr class="memitem:a2e445901fc23c28ce598be2fb57e16ab inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a2e445901fc23c28ce598be2fb57e16ab">HlmsDatablock</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, <a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *creator, const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *macroblock, const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *blendblock, const <a class="el" href="group___resources.html#ga26539e1c24ff9cadeb6f54139ad7dc54">HlmsParamVec</a> &amp;params)</td></tr>
+<tr class="separator:a2e445901fc23c28ce598be2fb57e16ab inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0504bd5084c504735f10879fd3f26b96 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a0504bd5084c504735f10879fd3f26b96">~HlmsDatablock</a> ()</td></tr>
+<tr class="separator:a0504bd5084c504735f10879fd3f26b96 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8f09ce4391c44bdde8bc4c26acc19af inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae8f09ce4391c44bdde8bc4c26acc19af">_linkRenderable</a> (<a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *renderable)</td></tr>
+<tr class="separator:ae8f09ce4391c44bdde8bc4c26acc19af inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7de763729aa608f77b7bee59e1172bd3 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a7de763729aa608f77b7bee59e1172bd3">_unlinkRenderable</a> (<a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *renderable)</td></tr>
+<tr class="separator:a7de763729aa608f77b7bee59e1172bd3 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa55bf43e01f95d05f3e28da6d4c49464 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aa55bf43e01f95d05f3e28da6d4c49464">calculateHash</a> ()</td></tr>
+<tr class="memdesc:aa55bf43e01f95d05f3e28da6d4c49464 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the hashes needed for sorting by the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> (i.e. mTextureHash)  <a href="class_ogre_1_1_hlms_datablock.html#aa55bf43e01f95d05f3e28da6d4c49464">More...</a><br /></td></tr>
+<tr class="separator:aa55bf43e01f95d05f3e28da6d4c49464 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15d3af39577e58586fb577c1cbbcb91a inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a15d3af39577e58586fb577c1cbbcb91a">clone</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> name) const</td></tr>
+<tr class="memdesc:a15d3af39577e58586fb577c1cbbcb91a inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of this datablock with the same settings, but a different name.  <a href="class_ogre_1_1_hlms_datablock.html#a15d3af39577e58586fb577c1cbbcb91a">More...</a><br /></td></tr>
+<tr class="separator:a15d3af39577e58586fb577c1cbbcb91a inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7567020e1e5f76035ef68d0724059046 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a7567020e1e5f76035ef68d0724059046">getAlphaTest</a> () const</td></tr>
+<tr class="separator:a7567020e1e5f76035ef68d0724059046 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53f23bd5d085a6a04d31e036765f9c2b inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a53f23bd5d085a6a04d31e036765f9c2b">getAlphaTestShadowCasterOnly</a> () const</td></tr>
+<tr class="separator:a53f23bd5d085a6a04d31e036765f9c2b inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d0fb2b2a98729f531286386d23e7556 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a6d0fb2b2a98729f531286386d23e7556">getAlphaTestThreshold</a> () const</td></tr>
+<tr class="separator:a6d0fb2b2a98729f531286386d23e7556 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9ee38f3c54e42d40f7bad067cf1542c inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aa9ee38f3c54e42d40f7bad067cf1542c">getBlendblock</a> (bool casterBlock=false) const</td></tr>
+<tr class="separator:aa9ee38f3c54e42d40f7bad067cf1542c inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefd220e3e669819154ce530ce8073a49 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aefd220e3e669819154ce530ce8073a49">getCreator</a> () const</td></tr>
+<tr class="separator:aefd220e3e669819154ce530ce8073a49 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0a175ab0ffb2f3c552592f5b39df102 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102">getDiffuseColour</a> () const</td></tr>
+<tr class="memdesc:ab0a175ab0ffb2f3c552592f5b39df102 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest match for a diffuse colour, if applicable by the actual implementation.  <a href="class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102">More...</a><br /></td></tr>
+<tr class="separator:ab0a175ab0ffb2f3c552592f5b39df102 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a78dee492f17cfbf4014c1b9688ba7f inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a8a78dee492f17cfbf4014c1b9688ba7f">getDiffuseTexture</a> () const</td></tr>
+<tr class="memdesc:a8a78dee492f17cfbf4014c1b9688ba7f inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest match for a diffuse texture, if applicable by the actual implementation.  <a href="class_ogre_1_1_hlms_datablock.html#a8a78dee492f17cfbf4014c1b9688ba7f">More...</a><br /></td></tr>
+<tr class="separator:a8a78dee492f17cfbf4014c1b9688ba7f inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03046c121275f5aca15725cdef10ae3e inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a03046c121275f5aca15725cdef10ae3e">getEmissiveColour</a> () const</td></tr>
+<tr class="memdesc:a03046c121275f5aca15725cdef10ae3e inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest match for a emissive colour, if applicable by the actual implementation.  <a href="class_ogre_1_1_hlms_datablock.html#a03046c121275f5aca15725cdef10ae3e">More...</a><br /></td></tr>
+<tr class="separator:a03046c121275f5aca15725cdef10ae3e inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ac3b3f3a7d05c7c6d150e25dc64fc37 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a5ac3b3f3a7d05c7c6d150e25dc64fc37">getEmissiveTexture</a> () const</td></tr>
+<tr class="memdesc:a5ac3b3f3a7d05c7c6d150e25dc64fc37 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest match for a emissive texture, if applicable by the actual implementation.  <a href="class_ogre_1_1_hlms_datablock.html#a5ac3b3f3a7d05c7c6d150e25dc64fc37">More...</a><br /></td></tr>
+<tr class="separator:a5ac3b3f3a7d05c7c6d150e25dc64fc37 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d32cd53c5534994ef78c312da60f0d0 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a9d32cd53c5534994ef78c312da60f0d0">getFilenameAndResourceGroup</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const **outFilename, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const **outResourceGroup) const</td></tr>
+<tr class="separator:a9d32cd53c5534994ef78c312da60f0d0 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3031ab73d16eddfaca9ea7a6d6257b0 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">const vector&lt; <a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> * &gt;::type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ab3031ab73d16eddfaca9ea7a6d6257b0">getLinkedRenderables</a> () const</td></tr>
+<tr class="separator:ab3031ab73d16eddfaca9ea7a6d6257b0 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed6e51cb5a915a02143b46b1712a0d60 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aed6e51cb5a915a02143b46b1712a0d60">getMacroblock</a> (bool casterBlock=false) const</td></tr>
+<tr class="separator:aed6e51cb5a915a02143b46b1712a0d60 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85d50b40ec915267602dce330755148f inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a85d50b40ec915267602dce330755148f">getName</a> () const</td></tr>
+<tr class="separator:a85d50b40ec915267602dce330755148f inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7d51c2c4c49b8f9f64f9d5e179071fe inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aa7d51c2c4c49b8f9f64f9d5e179071fe">getNameStr</a> () const</td></tr>
+<tr class="separator:aa7d51c2c4c49b8f9f64f9d5e179071fe inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a080f4a428d886dbe9fab72e88e9ba7e2 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a080f4a428d886dbe9fab72e88e9ba7e2">hasCustomShadowMacroblock</a> () const</td></tr>
+<tr class="separator:a080f4a428d886dbe9fab72e88e9ba7e2 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bdfaaee402c04a5db850af5382af2c3 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a2bdfaaee402c04a5db850af5382af2c3">preload</a> ()</td></tr>
+<tr class="memdesc:a2bdfaaee402c04a5db850af5382af2c3 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells datablock to start loading all of its textures (if not loaded already) and any other resource it may need.  <a href="class_ogre_1_1_hlms_datablock.html#a2bdfaaee402c04a5db850af5382af2c3">More...</a><br /></td></tr>
+<tr class="separator:a2bdfaaee402c04a5db850af5382af2c3 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f0826a189eec659051ce6513eafaa57 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a3f0826a189eec659051ce6513eafaa57">saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
+<tr class="separator:a3f0826a189eec659051ce6513eafaa57 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c5bc6488a0f67fa0838f41352172b4d inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction, bool shadowCasterOnly=false, bool useAlphaFromTextures=true)</td></tr>
+<tr class="memdesc:a4c5bc6488a0f67fa0838f41352172b4d inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha test to the given compare function.  <a href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">More...</a><br /></td></tr>
+<tr class="separator:a4c5bc6488a0f67fa0838f41352172b4d inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a2d38b259d670575af205798067c612 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a1a2d38b259d670575af205798067c612">setAlphaTestThreshold</a> (float threshold)</td></tr>
+<tr class="memdesc:a1a2d38b259d670575af205798067c612 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alpha test's threshold.  <a href="class_ogre_1_1_hlms_datablock.html#a1a2d38b259d670575af205798067c612">More...</a><br /></td></tr>
+<tr class="separator:a1a2d38b259d670575af205798067c612 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae98b240d749de133737090afd9912df8 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae98b240d749de133737090afd9912df8">setBlendblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> &amp;blendblock, bool casterBlock=false)</td></tr>
+<tr class="memdesc:ae98b240d749de133737090afd9912df8 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new blendblock that matches the same parameter as the input.  <a href="class_ogre_1_1_hlms_datablock.html#ae98b240d749de133737090afd9912df8">More...</a><br /></td></tr>
+<tr class="separator:ae98b240d749de133737090afd9912df8 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1eceea7ae2d0610b0b2f8a0ec025015 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#af1eceea7ae2d0610b0b2f8a0ec025015">setBlendblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *blendblock, bool casterBlock=false)</td></tr>
+<tr class="memdesc:af1eceea7ae2d0610b0b2f8a0ec025015 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the blendblock from the given pointer that was already retrieved from the <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>.  <a href="class_ogre_1_1_hlms_datablock.html#af1eceea7ae2d0610b0b2f8a0ec025015">More...</a><br /></td></tr>
+<tr class="separator:af1eceea7ae2d0610b0b2f8a0ec025015 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab115f92198bc417baf0dc592c4e0a71f inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ab115f92198bc417baf0dc592c4e0a71f">setMacroblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> &amp;macroblock, bool casterBlock=false)</td></tr>
+<tr class="memdesc:ab115f92198bc417baf0dc592c4e0a71f inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new macroblock that matches the same parameter as the input.  <a href="class_ogre_1_1_hlms_datablock.html#ab115f92198bc417baf0dc592c4e0a71f">More...</a><br /></td></tr>
+<tr class="separator:ab115f92198bc417baf0dc592c4e0a71f inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b31cdd58f656a73fa73c4a724e55237 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a9b31cdd58f656a73fa73c4a724e55237">setMacroblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *macroblock, bool casterBlock=false)</td></tr>
+<tr class="memdesc:a9b31cdd58f656a73fa73c4a724e55237 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the macroblock from the given pointer that was already retrieved from the <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>.  <a href="class_ogre_1_1_hlms_datablock.html#a9b31cdd58f656a73fa73c4a724e55237">More...</a><br /></td></tr>
+<tr class="separator:a9b31cdd58f656a73fa73c4a724e55237 inherit pub_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:af1ac88fb51276fb7145e0b9d7ce77acd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#af1ac88fb51276fb7145e0b9d7ce77acd">mAllowTextureResidencyChange</a></td></tr>
-<tr class="memdesc:af1ac88fb51276fb7145e0b9d7ce77acd"><td class="mdescLeft">&#160;</td><td class="mdescRight">When false, we won't try to have Textures become resident.  <a href="class_ogre_1_1_hlms_datablock.html#af1ac88fb51276fb7145e0b9d7ce77acd">More...</a><br /></td></tr>
-<tr class="separator:af1ac88fb51276fb7145e0b9d7ce77acd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfdafe7756d34fd2e4992caba072b248"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#abfdafe7756d34fd2e4992caba072b248">mMacroblockHash</a> [2]</td></tr>
-<tr class="separator:abfdafe7756d34fd2e4992caba072b248"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a010cb65f8fe6cd255283851cfbdacdbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_low_level_datablock.html#a010cb65f8fe6cd255283851cfbdacdbf">mProxyMaterial</a></td></tr>
 <tr class="separator:a010cb65f8fe6cd255283851cfbdacdbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0ab6a48ea79da805bc7ba0e4908190c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae0ab6a48ea79da805bc7ba0e4908190c">mShadowConstantBias</a></td></tr>
-<tr class="separator:ae0ab6a48ea79da805bc7ba0e4908190c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3b54a6d547a9478cde09086bab07542"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae3b54a6d547a9478cde09086bab07542">mTextureHash</a></td></tr>
-<tr class="separator:ae3b54a6d547a9478cde09086bab07542"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeabeb1aca625e7c98b5ad36217dc2ad4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aeabeb1aca625e7c98b5ad36217dc2ad4">mType</a></td></tr>
-<tr class="separator:aeabeb1aca625e7c98b5ad36217dc2ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_class_ogre_1_1_hlms_datablock"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_ogre_1_1_hlms_datablock')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_ogre_1_1_hlms_datablock.html">Ogre::HlmsDatablock</a></td></tr>
+<tr class="memitem:af1ac88fb51276fb7145e0b9d7ce77acd inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#af1ac88fb51276fb7145e0b9d7ce77acd">mAllowTextureResidencyChange</a></td></tr>
+<tr class="memdesc:af1ac88fb51276fb7145e0b9d7ce77acd inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="mdescLeft">&#160;</td><td class="mdescRight">When false, we won't try to have Textures become resident.  <a href="class_ogre_1_1_hlms_datablock.html#af1ac88fb51276fb7145e0b9d7ce77acd">More...</a><br /></td></tr>
+<tr class="separator:af1ac88fb51276fb7145e0b9d7ce77acd inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfdafe7756d34fd2e4992caba072b248 inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#abfdafe7756d34fd2e4992caba072b248">mMacroblockHash</a> [2]</td></tr>
+<tr class="separator:abfdafe7756d34fd2e4992caba072b248 inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0ab6a48ea79da805bc7ba0e4908190c inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae0ab6a48ea79da805bc7ba0e4908190c">mShadowConstantBias</a></td></tr>
+<tr class="separator:ae0ab6a48ea79da805bc7ba0e4908190c inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3b54a6d547a9478cde09086bab07542 inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae3b54a6d547a9478cde09086bab07542">mTextureHash</a></td></tr>
+<tr class="separator:ae3b54a6d547a9478cde09086bab07542 inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeabeb1aca625e7c98b5ad36217dc2ad4 inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aeabeb1aca625e7c98b5ad36217dc2ad4">mType</a></td></tr>
+<tr class="separator:aeabeb1aca625e7c98b5ad36217dc2ad4 inherit pub_attribs_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:acec53ee0d1339b751b6be24b065d3d98"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_low_level_datablock.html#acec53ee0d1339b751b6be24b065d3d98">HlmsLowLevel</a></td></tr>
-<tr class="separator:acec53ee0d1339b751b6be24b065d3d98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_static_methods_class_ogre_1_1_hlms_datablock"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_class_ogre_1_1_hlms_datablock')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="class_ogre_1_1_hlms_datablock.html">Ogre::HlmsDatablock</a></td></tr>
+<tr class="memitem:a4dda39a6280c558df45f1155abd8e664 inherit pub_static_methods_class_ogre_1_1_hlms_datablock"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4dda39a6280c558df45f1155abd8e664">getCmpString</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction)</td></tr>
+<tr class="separator:a4dda39a6280c558df45f1155abd8e664 inherit pub_static_methods_class_ogre_1_1_hlms_datablock"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Contains information needed by the UI (2D) for OpenGL ES 2.0. </p>
@@ -289,996 +288,7 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae8f09ce4391c44bdde8bc4c26acc19af" name="ae8f09ce4391c44bdde8bc4c26acc19af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8f09ce4391c44bdde8bc4c26acc19af">&#9670;&#160;</a></span>_linkRenderable()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::HlmsDatablock::_linkRenderable </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *&#160;</td>
-          <td class="paramname"><em>renderable</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7de763729aa608f77b7bee59e1172bd3" name="a7de763729aa608f77b7bee59e1172bd3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7de763729aa608f77b7bee59e1172bd3">&#9670;&#160;</a></span>_unlinkRenderable()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::HlmsDatablock::_unlinkRenderable </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *&#160;</td>
-          <td class="paramname"><em>renderable</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa55bf43e01f95d05f3e28da6d4c49464" name="aa55bf43e01f95d05f3e28da6d4c49464"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa55bf43e01f95d05f3e28da6d4c49464">&#9670;&#160;</a></span>calculateHash()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::HlmsDatablock::calculateHash </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Calculates the hashes needed for sorting by the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> (i.e. mTextureHash) </p>
-
-</div>
-</div>
-<a id="a15d3af39577e58586fb577c1cbbcb91a" name="a15d3af39577e58586fb577c1cbbcb91a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15d3af39577e58586fb577c1cbbcb91a">&#9670;&#160;</a></span>clone()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> * Ogre::HlmsDatablock::clone </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Creates a copy of this datablock with the same settings, but a different name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>Name of the cloned datablock. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a7567020e1e5f76035ef68d0724059046" name="a7567020e1e5f76035ef68d0724059046"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7567020e1e5f76035ef68d0724059046">&#9670;&#160;</a></span>getAlphaTest()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> Ogre::HlmsDatablock::getAlphaTest </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a53f23bd5d085a6a04d31e036765f9c2b" name="a53f23bd5d085a6a04d31e036765f9c2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53f23bd5d085a6a04d31e036765f9c2b">&#9670;&#160;</a></span>getAlphaTestShadowCasterOnly()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::HlmsDatablock::getAlphaTestShadowCasterOnly </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6d0fb2b2a98729f531286386d23e7556" name="a6d0fb2b2a98729f531286386d23e7556"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d0fb2b2a98729f531286386d23e7556">&#9670;&#160;</a></span>getAlphaTestThreshold()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Ogre::HlmsDatablock::getAlphaTestThreshold </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa9ee38f3c54e42d40f7bad067cf1542c" name="aa9ee38f3c54e42d40f7bad067cf1542c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9ee38f3c54e42d40f7bad067cf1542c">&#9670;&#160;</a></span>getBlendblock()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> * Ogre::HlmsDatablock::getBlendblock </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>casterBlock</em> = <code>false</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4dda39a6280c558df45f1155abd8e664" name="a4dda39a6280c558df45f1155abd8e664"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4dda39a6280c558df45f1155abd8e664">&#9670;&#160;</a></span>getCmpString()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static const char * Ogre::HlmsDatablock::getCmpString </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a>&#160;</td>
-          <td class="paramname"><em>compareFunction</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aefd220e3e669819154ce530ce8073a49" name="aefd220e3e669819154ce530ce8073a49"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aefd220e3e669819154ce530ce8073a49">&#9670;&#160;</a></span>getCreator()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> * Ogre::HlmsDatablock::getCreator </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab0a175ab0ffb2f3c552592f5b39df102" name="ab0a175ab0ffb2f3c552592f5b39df102"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0a175ab0ffb2f3c552592f5b39df102">&#9670;&#160;</a></span>getDiffuseColour()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> Ogre::HlmsDatablock::getDiffuseColour </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the closest match for a diffuse colour, if applicable by the actual implementation. </p>
-<p >Note that Unlit implementation returns 0 as diffuse, since it's considered emissive instead due to being bright even in the absence lights. </p>
-
-</div>
-</div>
-<a id="a8a78dee492f17cfbf4014c1b9688ba7f" name="a8a78dee492f17cfbf4014c1b9688ba7f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a78dee492f17cfbf4014c1b9688ba7f">&#9670;&#160;</a></span>getDiffuseTexture()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> * Ogre::HlmsDatablock::getDiffuseTexture </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the closest match for a diffuse texture, if applicable by the actual implementation. </p>
-<p >See <a class="el" href="class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102" title="Returns the closest match for a diffuse colour, if applicable by the actual implementation.">HlmsDatablock::getDiffuseColour</a> </p>
-
-</div>
-</div>
-<a id="a03046c121275f5aca15725cdef10ae3e" name="a03046c121275f5aca15725cdef10ae3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03046c121275f5aca15725cdef10ae3e">&#9670;&#160;</a></span>getEmissiveColour()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> Ogre::HlmsDatablock::getEmissiveColour </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the closest match for a emissive colour, if applicable by the actual implementation. </p>
-<p >See <a class="el" href="class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102" title="Returns the closest match for a diffuse colour, if applicable by the actual implementation.">HlmsDatablock::getDiffuseColour</a> </p>
-
-</div>
-</div>
-<a id="a5ac3b3f3a7d05c7c6d150e25dc64fc37" name="a5ac3b3f3a7d05c7c6d150e25dc64fc37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ac3b3f3a7d05c7c6d150e25dc64fc37">&#9670;&#160;</a></span>getEmissiveTexture()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> * Ogre::HlmsDatablock::getEmissiveTexture </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the closest match for a emissive texture, if applicable by the actual implementation. </p>
-<p >See <a class="el" href="class_ogre_1_1_hlms_datablock.html#ab0a175ab0ffb2f3c552592f5b39df102" title="Returns the closest match for a diffuse colour, if applicable by the actual implementation.">HlmsDatablock::getDiffuseColour</a> </p>
-
-</div>
-</div>
-<a id="a9d32cd53c5534994ef78c312da60f0d0" name="a9d32cd53c5534994ef78c312da60f0d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d32cd53c5534994ef78c312da60f0d0">&#9670;&#160;</a></span>getFilenameAndResourceGroup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::HlmsDatablock::getFilenameAndResourceGroup </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const **&#160;</td>
-          <td class="paramname"><em>outFilename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const **&#160;</td>
-          <td class="paramname"><em>outResourceGroup</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms.html#ad004bde573064ae48aba462dfcaa536e" title="Returns the filaname &amp; resource group a datablock was created from, and is associated with its hashed...">Hlms::getFilenameAndResourceGroup</a>. This operations is NOT fast. Might return null (if the datablock was removed from the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> but somehow is still alive) Usage: <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const *filename; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const *resourceGroup; datablock-&gt;getFilenameAndResourceGroup( &amp;filename, &amp;resourceGroup ); if( filename &amp;&amp; resourceGroup &amp;&amp; !filename-&gt;empty() &amp;&amp; !resourceGroup-&gt;empty() ) { //Valid filename &amp; resource group. } </dd></dl>
-
-</div>
-</div>
-<a id="ab3031ab73d16eddfaca9ea7a6d6257b0" name="ab3031ab73d16eddfaca9ea7a6d6257b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3031ab73d16eddfaca9ea7a6d6257b0">&#9670;&#160;</a></span>getLinkedRenderables()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const vector&lt; <a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> * &gt;::type &amp; Ogre::HlmsDatablock::getLinkedRenderables </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aed6e51cb5a915a02143b46b1712a0d60" name="aed6e51cb5a915a02143b46b1712a0d60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed6e51cb5a915a02143b46b1712a0d60">&#9670;&#160;</a></span>getMacroblock()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> * Ogre::HlmsDatablock::getMacroblock </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>casterBlock</em> = <code>false</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a85d50b40ec915267602dce330755148f" name="a85d50b40ec915267602dce330755148f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85d50b40ec915267602dce330755148f">&#9670;&#160;</a></span>getName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> Ogre::HlmsDatablock::getName </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa7d51c2c4c49b8f9f64f9d5e179071fe" name="aa7d51c2c4c49b8f9f64f9d5e179071fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7d51c2c4c49b8f9f64f9d5e179071fe">&#9670;&#160;</a></span>getNameStr()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> * Ogre::HlmsDatablock::getNameStr </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms.html#a6a39abc97918a7952311bd944e6e1e7f" title="Returns the string name associated with its hashed name (this was passed as refName in createDatabloc...">Hlms::getNameStr</a>. This operations is NOT fast. Might return null (if the datablock was removed from the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> but somehow is still alive) </dd></dl>
-
-</div>
-</div>
-<a id="a080f4a428d886dbe9fab72e88e9ba7e2" name="a080f4a428d886dbe9fab72e88e9ba7e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a080f4a428d886dbe9fab72e88e9ba7e2">&#9670;&#160;</a></span>hasCustomShadowMacroblock()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Ogre::HlmsDatablock::hasCustomShadowMacroblock </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2bdfaaee402c04a5db850af5382af2c3" name="a2bdfaaee402c04a5db850af5382af2c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2bdfaaee402c04a5db850af5382af2c3">&#9670;&#160;</a></span>preload()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::HlmsDatablock::preload </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Tells datablock to start loading all of its textures (if not loaded already) and any other resource it may need. </p>
-<p >Useful to cut loading times by anticipating what the user will do.</p>
-<p >Do not call this function aggressively (e.g. for lots of material every frame) </p>
-
-<p>Reimplemented in <a class="el" href="group___resources.html#ga33c79f56b0993d1921c87c18040211da">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>.</p>
-
-</div>
-</div>
-<a id="a3f0826a189eec659051ce6513eafaa57" name="a3f0826a189eec659051ce6513eafaa57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f0826a189eec659051ce6513eafaa57">&#9670;&#160;</a></span>saveTextures()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::HlmsDatablock::saveTextures </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>folderPath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;&#160;</td>
-          <td class="paramname"><em>savedTextures</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>saveOitd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>saveOriginal</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *&#160;</td>
-          <td class="paramname"><em>listener</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section remark"><dt>Remarks</dt><dd>It's possible to set both saveOitd &amp; saveOriginal to true, but will likely double storage requirements (2x as many textures). Setting both to true is useful for troubleshooting obscure <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> bugs. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">folderPath</td><td>Folder where to dump the textures. </td></tr>
-    <tr><td class="paramname">savedTextures</td><td>[in/out] Set of texture names. Textures whose name is already in the set won't be saved again. Textures that were saved will be inserted into the set. </td></tr>
-    <tr><td class="paramname">saveOitd</td><td>When true, we will download the texture from GPU and save it in OITD format. OITD is faster to load as it's stored in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s native format it understands, but it cannot be opened by traditional image editors; also OITD is not backwards compatible with older versions of <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>. </td></tr>
-    <tr><td class="paramname">saveOriginal</td><td>When true, we will attempt to read the raw filestream of the original texture and save it (i.e. copy the original png/dds/etc file). </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Reimplemented in <a class="el" href="group___resources.html#gaa174345a2019a718cfcd2aa274abe595">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>.</p>
-
-</div>
-</div>
-<a id="a4c5bc6488a0f67fa0838f41352172b4d" name="a4c5bc6488a0f67fa0838f41352172b4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4c5bc6488a0f67fa0838f41352172b4d">&#9670;&#160;</a></span>setAlphaTest()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::HlmsDatablock::setAlphaTest </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a>&#160;</td>
-          <td class="paramname"><em>compareFunction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>shadowCasterOnly</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>useAlphaFromTextures</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the alpha test to the given compare function. </p>
-<p >CMPF_ALWAYS_PASS means disabled. </p><dl class="section see"><dt>See also</dt><dd>mAlphaTestThreshold. Calling this function triggers a HlmsDatablock::flushRenderables </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>It is to the derived implementation to actually implement the alpha test. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">compareFunction</td><td>Compare function to use. Default is CMPF_ALWAYS_PASS, which means disabled. Note: CMPF_ALWAYS_FAIL is not supported. Set a negative threshold to workaround this issue. </td></tr>
-    <tr><td class="paramname">shadowCasterOnly</td><td>When true, only the caster should use alpha testing. Useful if you want alpha blending (i.e. transparency) while rendering normally, but want semi-transparent shadows. </td></tr>
-    <tr><td class="paramname">useAlphaFromTextures</td><td>Whether you want the diffuse texture's alpha to influence the alpha test Most likely you want this to be true, unless you're customizing the shader and have special use for alpha testing </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1a2d38b259d670575af205798067c612" name="a1a2d38b259d670575af205798067c612"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a2d38b259d670575af205798067c612">&#9670;&#160;</a></span>setAlphaTestThreshold()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::HlmsDatablock::setAlphaTestThreshold </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>threshold</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Alpha test's threshold. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d" title="Sets the alpha test to the given compare function.">setAlphaTest</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">threshold</td><td>Value typically in the range [0; 1) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ae98b240d749de133737090afd9912df8" name="ae98b240d749de133737090afd9912df8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae98b240d749de133737090afd9912df8">&#9670;&#160;</a></span>setBlendblock() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::HlmsDatablock::setBlendblock </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> &amp;&#160;</td>
-          <td class="paramname"><em>blendblock</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>casterBlock</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets a new blendblock that matches the same parameter as the input. </p>
-<p >Decreases the reference count of the previous mBlendblock. Runs an O(N) search to get the right block. Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">blendblock</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_manager.html#a38fca7caf3b7ab2ce0365a1392f98af5" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">casterBlock</td><td>True to directly set the blendblock to be used during the shadow mapping's caster pass. Note that when false, it will reset the caster block to the same as the regular one. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="af1eceea7ae2d0610b0b2f8a0ec025015" name="af1eceea7ae2d0610b0b2f8a0ec025015"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1eceea7ae2d0610b0b2f8a0ec025015">&#9670;&#160;</a></span>setBlendblock() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::HlmsDatablock::setBlendblock </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *&#160;</td>
-          <td class="paramname"><em>blendblock</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>casterBlock</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the blendblock from the given pointer that was already retrieved from the <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>. </p>
-<p >Unlike the other overload, this operation is O(1). Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">blendblock</td><td>A valid block. The reference count is increased inside this function. </td></tr>
-    <tr><td class="paramname">casterBlock</td><td>True to directly set the blendblock to be used during the shadow mapping's caster pass. Note that when false, it will reset the caster block to the same as the regular one. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ab115f92198bc417baf0dc592c4e0a71f" name="ab115f92198bc417baf0dc592c4e0a71f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab115f92198bc417baf0dc592c4e0a71f">&#9670;&#160;</a></span>setMacroblock() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::HlmsDatablock::setMacroblock </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> &amp;&#160;</td>
-          <td class="paramname"><em>macroblock</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>casterBlock</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets a new macroblock that matches the same parameter as the input. </p>
-<p >Decreases the reference count of the previously set one. Runs an O(N) search to get the right block. Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">macroblock</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_manager.html#a064c7cfc9fb3ac1e9690f6c39a5d1449" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">casterBlock</td><td>True to directly set the macroblock to be used during the shadow mapping's caster pass. Note that when false, it will automatically reset the caster's block according to HlmsManager::setShadowMappingUseBackFaces setting. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a9b31cdd58f656a73fa73c4a724e55237" name="a9b31cdd58f656a73fa73c4a724e55237"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b31cdd58f656a73fa73c4a724e55237">&#9670;&#160;</a></span>setMacroblock() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::HlmsDatablock::setMacroblock </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *&#160;</td>
-          <td class="paramname"><em>macroblock</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>casterBlock</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the macroblock from the given pointer that was already retrieved from the <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>. </p>
-<p >Unlike the other overload, this operation is O(1). Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">macroblock</td><td>A valid block. The reference count is increased inside this function. </td></tr>
-    <tr><td class="paramname">casterBlock</td><td>True to directly set the macroblock to be used during the shadow mapping's caster pass. Note that when false, it will automatically reset the caster's block according to HlmsManager::setShadowMappingUseBackFaces setting. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="acec53ee0d1339b751b6be24b065d3d98" name="acec53ee0d1339b751b6be24b065d3d98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acec53ee0d1339b751b6be24b065d3d98">&#9670;&#160;</a></span>HlmsLowLevel</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_hlms_low_level.html">HlmsLowLevel</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="af1ac88fb51276fb7145e0b9d7ce77acd" name="af1ac88fb51276fb7145e0b9d7ce77acd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1ac88fb51276fb7145e0b9d7ce77acd">&#9670;&#160;</a></span>mAllowTextureResidencyChange</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::HlmsDatablock::mAllowTextureResidencyChange</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>When false, we won't try to have Textures become resident. </p>
-
-</div>
-</div>
-<a id="abfdafe7756d34fd2e4992caba072b248" name="abfdafe7756d34fd2e4992caba072b248"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfdafe7756d34fd2e4992caba072b248">&#9670;&#160;</a></span>mMacroblockHash</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> Ogre::HlmsDatablock::mMacroblockHash[2]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a010cb65f8fe6cd255283851cfbdacdbf" name="a010cb65f8fe6cd255283851cfbdacdbf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a010cb65f8fe6cd255283851cfbdacdbf">&#9670;&#160;</a></span>mProxyMaterial</h2>
 
@@ -1290,73 +300,6 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae0ab6a48ea79da805bc7ba0e4908190c" name="ae0ab6a48ea79da805bc7ba0e4908190c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0ab6a48ea79da805bc7ba0e4908190c">&#9670;&#160;</a></span>mShadowConstantBias</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Ogre::HlmsDatablock::mShadowConstantBias</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae3b54a6d547a9478cde09086bab07542" name="ae3b54a6d547a9478cde09086bab07542"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3b54a6d547a9478cde09086bab07542">&#9670;&#160;</a></span>mTextureHash</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> Ogre::HlmsDatablock::mTextureHash</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aeabeb1aca625e7c98b5ad36217dc2ad4" name="aeabeb1aca625e7c98b5ad36217dc2ad4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeabeb1aca625e7c98b5ad36217dc2ad4">&#9670;&#160;</a></span>mType</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::HlmsDatablock::mType</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group___resources.html#gacbb211b021bd3350291861d7232dd02d" title="Up to 8 different HLMS generator types are allowed.">HlmsTypes</a> </dd></dl>
 
 </div>
 </div>

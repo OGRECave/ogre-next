@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -152,12 +151,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad34f6d46eece2606c09a6eea73de4591"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ad34f6d46eece2606c09a6eea73de4591">setForceTransparentRenderOrder</a> (bool bForceTransparent)</td></tr>
 <tr class="memdesc:ad34f6d46eece2606c09a6eea73de4591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sometimes you want to force the <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> to render back to front even if the object isn't alpha blended (e.g.  <a href="struct_ogre_1_1_hlms_blendblock.html#ad34f6d46eece2606c09a6eea73de4591">More...</a><br /></td></tr>
 <tr class="separator:ad34f6d46eece2606c09a6eea73de4591"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_struct_ogre_1_1_basic_block"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_ogre_1_1_basic_block')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_ogre_1_1_basic_block.html">Ogre::BasicBlock</a></td></tr>
+<tr class="memitem:a8aefdd97cf9d334c75a8ca33664a34de inherit pub_methods_struct_ogre_1_1_basic_block"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a8aefdd97cf9d334c75a8ca33664a34de">BasicBlock</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> blockType)</td></tr>
+<tr class="separator:a8aefdd97cf9d334c75a8ca33664a34de inherit pub_methods_struct_ogre_1_1_basic_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a8202a5d073a92de41e05e2b6fe50ff26"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a8202a5d073a92de41e05e2b6fe50ff26">mAllowGlobalDefaults</a></td></tr>
-<tr class="memdesc:a8202a5d073a92de41e05e2b6fe50ff26"><td class="mdescLeft">&#160;</td><td class="mdescRight">When zero, <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a> cannot override the block's values with enforced global settings.  <a href="struct_ogre_1_1_basic_block.html#a8202a5d073a92de41e05e2b6fe50ff26">More...</a><br /></td></tr>
-<tr class="separator:a8202a5d073a92de41e05e2b6fe50ff26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84604e9d467e80aa7de99146b89e03a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a84604e9d467e80aa7de99146b89e03a9">mAlphaToCoverageEnabled</a></td></tr>
 <tr class="separator:a84604e9d467e80aa7de99146b89e03a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab274bfed0268538fe6ede5fce32e3e64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ab274bfed0268538fe6ede5fce32e3e64">mBlendChannelMask</a></td></tr>
@@ -167,26 +166,13 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a81bbefc83b818e89da47b4cba0bea28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf7321e2dde4b0e645bac4aa47873741"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___materials.html#gaa7a12a72231aedf6e33d58aafc11214a">SceneBlendOperation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#acf7321e2dde4b0e645bac4aa47873741">mBlendOperationAlpha</a></td></tr>
 <tr class="separator:acf7321e2dde4b0e645bac4aa47873741"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0a844b4cc3a0bba5e822b66b553bcbe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#ae0a844b4cc3a0bba5e822b66b553bcbe">mBlockType</a></td></tr>
-<tr class="separator:ae0a844b4cc3a0bba5e822b66b553bcbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4c14e110695f0bed5cf54ef6383c23d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___materials.html#ga41c76d419d6c9c205a6c1d3b42872213">SceneBlendFactor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ad4c14e110695f0bed5cf54ef6383c23d">mDestBlendFactor</a></td></tr>
 <tr class="separator:ad4c14e110695f0bed5cf54ef6383c23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63d4a51e01cbbe17e7d69e190b07c6ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___materials.html#ga41c76d419d6c9c205a6c1d3b42872213">SceneBlendFactor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a63d4a51e01cbbe17e7d69e190b07c6ee">mDestBlendFactorAlpha</a></td></tr>
 <tr class="separator:a63d4a51e01cbbe17e7d69e190b07c6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46bd9a389676bce8a4c7f1ac1dc294bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a46bd9a389676bce8a4c7f1ac1dc294bd">mId</a></td></tr>
-<tr class="memdesc:a46bd9a389676bce8a4c7f1ac1dc294bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mId is only valid while mRefCount &gt; 0; which means mRsData may contain valid data, else it's null.  <a href="struct_ogre_1_1_basic_block.html#a46bd9a389676bce8a4c7f1ac1dc294bd">More...</a><br /></td></tr>
-<tr class="separator:a46bd9a389676bce8a4c7f1ac1dc294bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3df17a567525e19195f4d4daf1d11690"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a3df17a567525e19195f4d4daf1d11690">mIsTransparent</a></td></tr>
 <tr class="memdesc:a3df17a567525e19195f4d4daf1d11690"><td class="mdescLeft">&#160;</td><td class="mdescRight">This value calculated by <a class="el" href="class_ogre_1_1_hlms_manager.html#a38fca7caf3b7ab2ce0365a1392f98af5" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> mIsTransparent = 0 -&gt; Not transparent mIsTransparent |= 1 -&gt; Automatically determined as transparent mIsTransparent |= 2 -&gt; Forced to be considered as transparent by <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> for render order mIsTransparent = 3 -&gt; Forced &amp; also automatically determined as transparent.  <a href="struct_ogre_1_1_hlms_blendblock.html#a3df17a567525e19195f4d4daf1d11690">More...</a><br /></td></tr>
 <tr class="separator:a3df17a567525e19195f4d4daf1d11690"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8dbf13c2d554ba4945031e0f309e82a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a8dbf13c2d554ba4945031e0f309e82a4">mLifetimeId</a></td></tr>
-<tr class="memdesc:a8dbf13c2d554ba4945031e0f309e82a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Except for HlmsSamplerblocks, mLifetimeId is valid throghout the entire life of <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>.  <a href="struct_ogre_1_1_basic_block.html#a8dbf13c2d554ba4945031e0f309e82a4">More...</a><br /></td></tr>
-<tr class="separator:a8dbf13c2d554ba4945031e0f309e82a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afea9606f074d5d04aba4be6b04b2a90f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#afea9606f074d5d04aba4be6b04b2a90f">mRefCount</a></td></tr>
-<tr class="separator:afea9606f074d5d04aba4be6b04b2a90f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21bbcc9c98f74ec12230597d9a3e7e6d"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a21bbcc9c98f74ec12230597d9a3e7e6d">mRsData</a></td></tr>
-<tr class="memdesc:a21bbcc9c98f74ec12230597d9a3e7e6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render-System specific data.  <a href="struct_ogre_1_1_basic_block.html#a21bbcc9c98f74ec12230597d9a3e7e6d">More...</a><br /></td></tr>
-<tr class="separator:a21bbcc9c98f74ec12230597d9a3e7e6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36bb99bc16fd86300b1152414d10ebb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a36bb99bc16fd86300b1152414d10ebb8">mSeparateBlend</a></td></tr>
 <tr class="memdesc:a36bb99bc16fd86300b1152414d10ebb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to determine if separate alpha blending should be used for color and alpha channels.  <a href="struct_ogre_1_1_hlms_blendblock.html#a36bb99bc16fd86300b1152414d10ebb8">More...</a><br /></td></tr>
 <tr class="separator:a36bb99bc16fd86300b1152414d10ebb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,6 +180,23 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a275c638971e8578cfe0d4a1f1b891ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e6d3852cbde641d61b64808b71bf419"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___materials.html#ga41c76d419d6c9c205a6c1d3b42872213">SceneBlendFactor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a6e6d3852cbde641d61b64808b71bf419">mSourceBlendFactorAlpha</a></td></tr>
 <tr class="separator:a6e6d3852cbde641d61b64808b71bf419"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_struct_ogre_1_1_basic_block"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_struct_ogre_1_1_basic_block')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="struct_ogre_1_1_basic_block.html">Ogre::BasicBlock</a></td></tr>
+<tr class="memitem:a8202a5d073a92de41e05e2b6fe50ff26 inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a8202a5d073a92de41e05e2b6fe50ff26">mAllowGlobalDefaults</a></td></tr>
+<tr class="memdesc:a8202a5d073a92de41e05e2b6fe50ff26 inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">When zero, <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a> cannot override the block's values with enforced global settings.  <a href="struct_ogre_1_1_basic_block.html#a8202a5d073a92de41e05e2b6fe50ff26">More...</a><br /></td></tr>
+<tr class="separator:a8202a5d073a92de41e05e2b6fe50ff26 inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0a844b4cc3a0bba5e822b66b553bcbe inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#ae0a844b4cc3a0bba5e822b66b553bcbe">mBlockType</a></td></tr>
+<tr class="separator:ae0a844b4cc3a0bba5e822b66b553bcbe inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46bd9a389676bce8a4c7f1ac1dc294bd inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a46bd9a389676bce8a4c7f1ac1dc294bd">mId</a></td></tr>
+<tr class="memdesc:a46bd9a389676bce8a4c7f1ac1dc294bd inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mId is only valid while mRefCount &gt; 0; which means mRsData may contain valid data, else it's null.  <a href="struct_ogre_1_1_basic_block.html#a46bd9a389676bce8a4c7f1ac1dc294bd">More...</a><br /></td></tr>
+<tr class="separator:a46bd9a389676bce8a4c7f1ac1dc294bd inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dbf13c2d554ba4945031e0f309e82a4 inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a8dbf13c2d554ba4945031e0f309e82a4">mLifetimeId</a></td></tr>
+<tr class="memdesc:a8dbf13c2d554ba4945031e0f309e82a4 inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Except for HlmsSamplerblocks, mLifetimeId is valid throghout the entire life of <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>.  <a href="struct_ogre_1_1_basic_block.html#a8dbf13c2d554ba4945031e0f309e82a4">More...</a><br /></td></tr>
+<tr class="separator:a8dbf13c2d554ba4945031e0f309e82a4 inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afea9606f074d5d04aba4be6b04b2a90f inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#afea9606f074d5d04aba4be6b04b2a90f">mRefCount</a></td></tr>
+<tr class="separator:afea9606f074d5d04aba4be6b04b2a90f inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21bbcc9c98f74ec12230597d9a3e7e6d inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_basic_block.html#a21bbcc9c98f74ec12230597d9a3e7e6d">mRsData</a></td></tr>
+<tr class="memdesc:a21bbcc9c98f74ec12230597d9a3e7e6d inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render-System specific data.  <a href="struct_ogre_1_1_basic_block.html#a21bbcc9c98f74ec12230597d9a3e7e6d">More...</a><br /></td></tr>
+<tr class="separator:a21bbcc9c98f74ec12230597d9a3e7e6d inherit pub_attribs_struct_ogre_1_1_basic_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >A blend block contains settings that rarely change, and thus are common to many materials. </p>
@@ -449,33 +452,6 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a8202a5d073a92de41e05e2b6fe50ff26" name="a8202a5d073a92de41e05e2b6fe50ff26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8202a5d073a92de41e05e2b6fe50ff26">&#9670;&#160;</a></span>mAllowGlobalDefaults</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::BasicBlock::mAllowGlobalDefaults</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>When zero, <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a> cannot override the block's values with enforced global settings. </p>
-<p >(such as lower quality texture filtering or turning off depth checks for debugging) </p>
-
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#afa02cd5c594a782367716cd76413c723">operator!=()</a>, <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#a40a3623c935d1a2e43f9676392fbeaff">Ogre::HlmsMacroblock::operator!=()</a>, and <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html#ac869fdf6195034b570a466462746ef73">Ogre::HlmsSamplerblock::operator!=()</a>.</p>
-
-</div>
-</div>
 <a id="a84604e9d467e80aa7de99146b89e03a9" name="a84604e9d467e80aa7de99146b89e03a9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a84604e9d467e80aa7de99146b89e03a9">&#9670;&#160;</a></span>mAlphaToCoverageEnabled</h2>
 
@@ -543,29 +519,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae0a844b4cc3a0bba5e822b66b553bcbe" name="ae0a844b4cc3a0bba5e822b66b553bcbe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0a844b4cc3a0bba5e822b66b553bcbe">&#9670;&#160;</a></span>mBlockType</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::BasicBlock::mBlockType</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group___resources.html#gaf7c7c73e6a7e3dfb3e74484e3a971346">HlmsBasicBlock</a> </dd></dl>
-
-</div>
-</div>
 <a id="ad4c14e110695f0bed5cf54ef6383c23d" name="ad4c14e110695f0bed5cf54ef6383c23d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad4c14e110695f0bed5cf54ef6383c23d">&#9670;&#160;</a></span>mDestBlendFactor</h2>
 
@@ -598,30 +551,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a46bd9a389676bce8a4c7f1ac1dc294bd" name="a46bd9a389676bce8a4c7f1ac1dc294bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46bd9a389676bce8a4c7f1ac1dc294bd">&#9670;&#160;</a></span>mId</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> Ogre::BasicBlock::mId</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The mId is only valid while mRefCount &gt; 0; which means mRsData may contain valid data, else it's null. </p>
-
-</div>
-</div>
 <a id="a3df17a567525e19195f4d4daf1d11690" name="a3df17a567525e19195f4d4daf1d11690"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3df17a567525e19195f4d4daf1d11690">&#9670;&#160;</a></span>mIsTransparent</h2>
 
@@ -637,77 +566,6 @@ Public Attributes</h2></td></tr>
 <p>This value calculated by <a class="el" href="class_ogre_1_1_hlms_manager.html#a38fca7caf3b7ab2ce0365a1392f98af5" title="See HlmsManager::getMacroblock.">HlmsManager::getBlendblock</a> mIsTransparent = 0 -&gt; Not transparent mIsTransparent |= 1 -&gt; Automatically determined as transparent mIsTransparent |= 2 -&gt; Forced to be considered as transparent by <a class="el" href="class_ogre_1_1_render_queue.html" title="Class to manage the scene object rendering queue.">RenderQueue</a> for render order mIsTransparent = 3 -&gt; Forced &amp; also automatically determined as transparent. </p>
 
 <p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#afa02cd5c594a782367716cd76413c723">operator!=()</a>.</p>
-
-</div>
-</div>
-<a id="a8dbf13c2d554ba4945031e0f309e82a4" name="a8dbf13c2d554ba4945031e0f309e82a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8dbf13c2d554ba4945031e0f309e82a4">&#9670;&#160;</a></span>mLifetimeId</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> Ogre::BasicBlock::mLifetimeId</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Except for HlmsSamplerblocks, mLifetimeId is valid throghout the entire life of <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>. </p>
-<p >This guarantees <a class="el" href="struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials.">HlmsMacroblock</a> &amp; <a class="el" href="struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials.">HlmsBlendblock</a> pointers are always valid, although they may be inactive (i.e. mId invalid, mRefCount = 0 and mRsData = 0) </p>
-
-</div>
-</div>
-<a id="afea9606f074d5d04aba4be6b04b2a90f" name="afea9606f074d5d04aba4be6b04b2a90f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afea9606f074d5d04aba4be6b04b2a90f">&#9670;&#160;</a></span>mRefCount</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> Ogre::BasicBlock::mRefCount</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a21bbcc9c98f74ec12230597d9a3e7e6d" name="a21bbcc9c98f74ec12230597d9a3e7e6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21bbcc9c98f74ec12230597d9a3e7e6d">&#9670;&#160;</a></span>mRsData</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* Ogre::BasicBlock::mRsData</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Render-System specific data. </p>
 
 </div>
 </div>

@@ -19,7 +19,6 @@ var class_ogre_1_1_small_vector_template_common =
     [ "capacity", "class_ogre_1_1_small_vector_template_common.html#a922c12bc5de4cf0fee5c101919fecc94", null ],
     [ "data", "class_ogre_1_1_small_vector_template_common.html#a29f4c0677b9a04a1f137adc07be5be3a", null ],
     [ "data", "class_ogre_1_1_small_vector_template_common.html#a031182e52c76c98b41e3e6e7bc084a7e", null ],
-    [ "empty", "class_ogre_1_1_small_vector_template_common.html#ad476fe9d6fa0faecffb16338b6a972e5", null ],
     [ "end", "class_ogre_1_1_small_vector_template_common.html#add1c1041f5e7ca89feccdf57e746558b", null ],
     [ "end", "class_ogre_1_1_small_vector_template_common.html#a87ee5ad0c88dbd163e58835d7990ef32", null ],
     [ "front", "class_ogre_1_1_small_vector_template_common.html#aabbc326f17698c1b404fcfed47099f19", null ],

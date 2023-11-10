@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -254,6 +253,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeaa1410333b7bcea14b00c360112a528"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_manager.html#aeaa1410333b7bcea14b00c360112a528">unloadUnreferencedResources</a> (bool reloadableOnly=true)</td></tr>
 <tr class="memdesc:aeaa1410333b7bcea14b00c360112a528"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unload all resources which are not referenced by any other object.  <a href="class_ogre_1_1_resource_manager.html#aeaa1410333b7bcea14b00c360112a528">More...</a><br /></td></tr>
 <tr class="separator:aeaa1410333b7bcea14b00c360112a528"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_script_loader"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_script_loader')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_script_loader.html">Ogre::ScriptLoader</a></td></tr>
+<tr class="memitem:ad7758f66fa9246639426f3044478f709 inherit pub_methods_class_ogre_1_1_script_loader"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_loader.html#ad7758f66fa9246639426f3044478f709">~ScriptLoader</a> ()</td></tr>
+<tr class="separator:ad7758f66fa9246639426f3044478f709 inherit pub_methods_class_ogre_1_1_script_loader"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bf72f1e75715528379a532c48000e89 inherit pub_methods_class_ogre_1_1_script_loader"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_loader.html#a7bf72f1e75715528379a532c48000e89">getLoadingOrder</a> () const =0</td></tr>
+<tr class="memdesc:a7bf72f1e75715528379a532c48000e89 inherit pub_methods_class_ogre_1_1_script_loader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the relative loading order of scripts of this type.  <a href="class_ogre_1_1_script_loader.html#a7bf72f1e75715528379a532c48000e89">More...</a><br /></td></tr>
+<tr class="separator:a7bf72f1e75715528379a532c48000e89 inherit pub_methods_class_ogre_1_1_script_loader"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7da204901e2024a5aed1d064890e8964 inherit pub_methods_class_ogre_1_1_script_loader"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_loader.html#a7da204901e2024a5aed1d064890e8964">getScriptPatterns</a> () const =0</td></tr>
+<tr class="memdesc:a7da204901e2024a5aed1d064890e8964 inherit pub_methods_class_ogre_1_1_script_loader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the file patterns which should be used to find scripts for this class.  <a href="class_ogre_1_1_script_loader.html#a7da204901e2024a5aed1d064890e8964">More...</a><br /></td></tr>
+<tr class="separator:a7da204901e2024a5aed1d064890e8964 inherit pub_methods_class_ogre_1_1_script_loader"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bd73a15503c5cb29ed8b7e264e12293 inherit pub_methods_class_ogre_1_1_script_loader"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_loader.html#a6bd73a15503c5cb29ed8b7e264e12293">parseScript</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;stream, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName)=0</td></tr>
+<tr class="memdesc:a6bd73a15503c5cb29ed8b7e264e12293 inherit pub_methods_class_ogre_1_1_script_loader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a script file.  <a href="class_ogre_1_1_script_loader.html#a6bd73a15503c5cb29ed8b7e264e12293">More...</a><br /></td></tr>
+<tr class="separator:a6bd73a15503c5cb29ed8b7e264e12293 inherit pub_methods_class_ogre_1_1_script_loader"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>

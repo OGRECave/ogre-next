@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -98,7 +97,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_node.html',''); initRes
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_node-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::Node Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group___component.html">Component</a> &#124; <a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___scene.html">Scene</a></div></div></div>
 </div><!--header-->
@@ -247,9 +245,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a478f180848cc1f39caa8f17f86e8a5dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#a478f180848cc1f39caa8f17f86e8a5dd">getDepthLevel</a> () const</td></tr>
 <tr class="memdesc:a478f180848cc1f39caa8f17f86e8a5dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns how deep in the hierarchy we are (eg. 0 -&gt; root node, 1 -&gt; child of root)  <a href="class_ogre_1_1_node.html#a478f180848cc1f39caa8f17f86e8a5dd">More...</a><br /></td></tr>
 <tr class="separator:a478f180848cc1f39caa8f17f86e8a5dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab152c8f646a835c2f88585ad4fe0413a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">getId</a> () const</td></tr>
-<tr class="memdesc:ab152c8f646a835c2f88585ad4fe0413a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the unique id of this object.  <a href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">More...</a><br /></td></tr>
-<tr class="separator:ab152c8f646a835c2f88585ad4fe0413a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67eeca6c33a61c00b3fb2abd2c1289ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#a67eeca6c33a61c00b3fb2abd2c1289ba">getIndestructibleByClearScene</a> () const</td></tr>
 <tr class="separator:a67eeca6c33a61c00b3fb2abd2c1289ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae98ec089fda531aa72b7200d4bc98f03"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8">virtual_l2</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#ae98ec089fda531aa72b7200d4bc98f03">getInheritOrientation</a> () const</td></tr>
@@ -301,10 +296,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a789e0dfefecefbd30b449fc47a4372de"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#a789e0dfefecefbd30b449fc47a4372de">numChildren</a> () const</td></tr>
 <tr class="memdesc:a789e0dfefecefbd30b449fc47a4372de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the number of child nodes under this one.  <a href="class_ogre_1_1_node.html#a789e0dfefecefbd30b449fc47a4372de">More...</a><br /></td></tr>
 <tr class="separator:a789e0dfefecefbd30b449fc47a4372de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57e0523432c6e5133ff4fc251111a60e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a57e0523432c6e5133ff4fc251111a60e">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;right)</td></tr>
-<tr class="separator:a57e0523432c6e5133ff4fc251111a60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ae22596b5bd2a3faf2958ab3d109d1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a0ae22596b5bd2a3faf2958ab3d109d1f">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *right)</td></tr>
-<tr class="separator:a0ae22596b5bd2a3faf2958ab3d109d1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade4a8283f41882f4b6c70acbe9f27c61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8">virtual_l2</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#ade4a8283f41882f4b6c70acbe9f27c61">pitch</a> (const <a class="el" href="class_ogre_1_1_radian.html">Radian</a> &amp;angle, <a class="el" href="class_ogre_1_1_node.html#ac42e2063379286eb673eaffff6ca5e99">TransformSpace</a> relativeTo=<a class="el" href="class_ogre_1_1_node.html#ac42e2063379286eb673eaffff6ca5e99afcc5f69a4f8962eec29c8b57c1a675a2">TS_LOCAL</a>)</td></tr>
 <tr class="memdesc:ade4a8283f41882f4b6c70acbe9f27c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotate the node around the X-axis.  <a href="class_ogre_1_1_node.html#ade4a8283f41882f4b6c70acbe9f27c61">More...</a><br /></td></tr>
 <tr class="separator:ade4a8283f41882f4b6c70acbe9f27c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -385,6 +376,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab4cb21c7d7270547ae33b5eab8c8b02d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8">virtual_l2</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#ab4cb21c7d7270547ae33b5eab8c8b02d">yaw</a> (const <a class="el" href="class_ogre_1_1_radian.html">Radian</a> &amp;angle, <a class="el" href="class_ogre_1_1_node.html#ac42e2063379286eb673eaffff6ca5e99">TransformSpace</a> relativeTo=<a class="el" href="class_ogre_1_1_node.html#ac42e2063379286eb673eaffff6ca5e99afcc5f69a4f8962eec29c8b57c1a675a2">TS_LOCAL</a>)</td></tr>
 <tr class="memdesc:ab4cb21c7d7270547ae33b5eab8c8b02d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotate the node around the Y-axis.  <a href="class_ogre_1_1_node.html#ab4cb21c7d7270547ae33b5eab8c8b02d">More...</a><br /></td></tr>
 <tr class="separator:ab4cb21c7d7270547ae33b5eab8c8b02d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_id_object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_id_object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_id_object.html">Ogre::IdObject</a></td></tr>
+<tr class="memitem:a7884ec3abf1ed8c1b1514d3bda918370 inherit pub_methods_class_ogre_1_1_id_object"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a7884ec3abf1ed8c1b1514d3bda918370">IdObject</a> (<a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a> id)</td></tr>
+<tr class="memdesc:a7884ec3abf1ed8c1b1514d3bda918370 inherit pub_methods_class_ogre_1_1_id_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">We don't call generateNewId() here, to prevent objects in the stack (i.e.  <a href="class_ogre_1_1_id_object.html#a7884ec3abf1ed8c1b1514d3bda918370">More...</a><br /></td></tr>
+<tr class="separator:a7884ec3abf1ed8c1b1514d3bda918370 inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab152c8f646a835c2f88585ad4fe0413a inherit pub_methods_class_ogre_1_1_id_object"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">getId</a> () const</td></tr>
+<tr class="memdesc:ab152c8f646a835c2f88585ad4fe0413a inherit pub_methods_class_ogre_1_1_id_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the unique id of this object.  <a href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">More...</a><br /></td></tr>
+<tr class="separator:ab152c8f646a835c2f88585ad4fe0413a inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57e0523432c6e5133ff4fc251111a60e inherit pub_methods_class_ogre_1_1_id_object"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a57e0523432c6e5133ff4fc251111a60e">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;right)</td></tr>
+<tr class="separator:a57e0523432c6e5133ff4fc251111a60e inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ae22596b5bd2a3faf2958ab3d109d1f inherit pub_methods_class_ogre_1_1_id_object"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a0ae22596b5bd2a3faf2958ab3d109d1f">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *right)</td></tr>
+<tr class="separator:a0ae22596b5bd2a3faf2958ab3d109d1f inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -399,11 +401,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:af133224a62eb73055298c3e2a889f6f5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#af133224a62eb73055298c3e2a889f6f5">mParentIndex</a></td></tr>
 <tr class="memdesc:af133224a62eb73055298c3e2a889f6f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index in the vector holding this node reference (could be our parent node, or a global array tracking all created nodes to avoid memory leaks).   <a href="class_ogre_1_1_node.html#af133224a62eb73055298c3e2a889f6f5">More...</a><br /></td></tr>
 <tr class="separator:af133224a62eb73055298c3e2a889f6f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a535b0fc0b58adbe616826a046ed531a9"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#a535b0fc0b58adbe616826a046ed531a9">TagPoint</a></td></tr>
-<tr class="separator:a535b0fc0b58adbe616826a046ed531a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class representing a general-purpose node an articulated scene graph. </p>
@@ -1476,33 +1473,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ab152c8f646a835c2f88585ad4fe0413a" name="ab152c8f646a835c2f88585ad4fe0413a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab152c8f646a835c2f88585ad4fe0413a">&#9670;&#160;</a></span>getId()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a> Ogre::IdObject::getId </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the unique id of this object. </p>
-
-</div>
-</div>
 <a id="a67eeca6c33a61c00b3fb2abd2c1289ba" name="a67eeca6c33a61c00b3fb2abd2c1289ba"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67eeca6c33a61c00b3fb2abd2c1289ba">&#9670;&#160;</a></span>getIndestructibleByClearScene()</h2>
 
@@ -1923,78 +1893,6 @@ See setInheritOrientation for more info. </dd></dl>
 </div><div class="memdoc">
 
 <p>Reports the number of child nodes under this one. </p>
-
-</div>
-</div>
-<a id="a57e0523432c6e5133ff4fc251111a60e" name="a57e0523432c6e5133ff4fc251111a60e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57e0523432c6e5133ff4fc251111a60e">&#9670;&#160;</a></span>operator()() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::IdObject::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;&#160;</td>
-          <td class="paramname"><em>left</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;&#160;</td>
-          <td class="paramname"><em>right</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0ae22596b5bd2a3faf2958ab3d109d1f" name="a0ae22596b5bd2a3faf2958ab3d109d1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ae22596b5bd2a3faf2958ab3d109d1f">&#9670;&#160;</a></span>operator()() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::IdObject::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *&#160;</td>
-          <td class="paramname"><em>left</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *&#160;</td>
-          <td class="paramname"><em>right</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -2914,29 +2812,6 @@ See setInheritOrientation for more info. </dd></dl>
 </div><div class="memdoc">
 
 <p>Rotate the node around the Y-axis. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="a535b0fc0b58adbe616826a046ed531a9" name="a535b0fc0b58adbe616826a046ed531a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a535b0fc0b58adbe616826a046ed531a9">&#9670;&#160;</a></span>TagPoint</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_tag_point.html">TagPoint</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

@@ -5,7 +5,6 @@ var class_ogre_1_1_d3_d11_hardware_occlusion_query =
     [ "beginOcclusionQuery", "class_ogre_1_1_d3_d11_hardware_occlusion_query.html#aa3c111dae5d73c6732db8aaa8c626f8a", null ],
     [ "endOcclusionQuery", "class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a28807e76d3a658b19f1728aac5b97bdd", null ],
     [ "getLastQuerysPixelcount", "class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a95818811808f3175c390e6986e1f4f05", null ],
-    [ "getLastQuerysPixelcount", "class_ogre_1_1_d3_d11_hardware_occlusion_query.html#ad1c71c786e262908a3aa805287b815e3", null ],
     [ "isStillOutstanding", "class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a6c8b1de9c318c1d95d58a87b43feb14e", null ],
     [ "pullOcclusionQuery", "class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a917636a56d29fef2b89b912d2115177a", null ]
 ];

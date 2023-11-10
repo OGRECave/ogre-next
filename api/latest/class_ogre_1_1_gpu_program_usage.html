@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -145,9 +144,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a81ccd8b8364a2650c0754a498152c69f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_usage.html#a81ccd8b8364a2650c0754a498152c69f">loadingComplete</a> (<a class="el" href="class_ogre_1_1_resource.html">Resource</a> *prog) override</td></tr>
 <tr class="memdesc:a81ccd8b8364a2650c0754a498152c69f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called whenever the resource finishes loading.  <a href="class_ogre_1_1_gpu_program_usage.html#a81ccd8b8364a2650c0754a498152c69f">More...</a><br /></td></tr>
 <tr class="separator:a81ccd8b8364a2650c0754a498152c69f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7951abdcff85efd6cf58a49d94442f67"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_1_1_listener.html#a7951abdcff85efd6cf58a49d94442f67">preparingComplete</a> (<a class="el" href="class_ogre_1_1_resource.html">Resource</a> *)</td></tr>
-<tr class="memdesc:a7951abdcff85efd6cf58a49d94442f67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called whenever the resource finishes preparing (paging into memory).  <a href="class_ogre_1_1_resource_1_1_listener.html#a7951abdcff85efd6cf58a49d94442f67">More...</a><br /></td></tr>
-<tr class="separator:a7951abdcff85efd6cf58a49d94442f67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91c1c956ce21910fb19b533d00761d41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_usage.html#a91c1c956ce21910fb19b533d00761d41">setParameters</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params)</td></tr>
 <tr class="memdesc:a91c1c956ce21910fb19b533d00761d41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the program parameters that should be used; because parameters can be shared between multiple usages for efficiency, this method is here for you to register externally created parameter objects.  <a href="class_ogre_1_1_gpu_program_usage.html#a91c1c956ce21910fb19b533d00761d41">More...</a><br /></td></tr>
 <tr class="separator:a91c1c956ce21910fb19b533d00761d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,6 +156,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afb0dde967665c333ee4882bb8e7fc4ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_usage.html#afb0dde967665c333ee4882bb8e7fc4ba">unloadingComplete</a> (<a class="el" href="class_ogre_1_1_resource.html">Resource</a> *prog) override</td></tr>
 <tr class="memdesc:afb0dde967665c333ee4882bb8e7fc4ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called whenever the resource has been unloaded.  <a href="class_ogre_1_1_gpu_program_usage.html#afb0dde967665c333ee4882bb8e7fc4ba">More...</a><br /></td></tr>
 <tr class="separator:afb0dde967665c333ee4882bb8e7fc4ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_resource_1_1_listener"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_resource_1_1_listener')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_resource_1_1_listener.html">Ogre::Resource::Listener</a></td></tr>
+<tr class="memitem:a082340c9150be4d1b0509fd235e26ddc inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_1_1_listener.html#a082340c9150be4d1b0509fd235e26ddc">Listener</a> ()</td></tr>
+<tr class="separator:a082340c9150be4d1b0509fd235e26ddc inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a087cbfc9a4ad6490b09884d482932945 inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_1_1_listener.html#a087cbfc9a4ad6490b09884d482932945">~Listener</a> ()</td></tr>
+<tr class="separator:a087cbfc9a4ad6490b09884d482932945 inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8d962ac52ef53a2ad6ddbdc5b6c9655 inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_1_1_listener.html#ac8d962ac52ef53a2ad6ddbdc5b6c9655">loadingComplete</a> (<a class="el" href="class_ogre_1_1_resource.html">Resource</a> *)</td></tr>
+<tr class="memdesc:ac8d962ac52ef53a2ad6ddbdc5b6c9655 inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called whenever the resource finishes loading.  <a href="class_ogre_1_1_resource_1_1_listener.html#ac8d962ac52ef53a2ad6ddbdc5b6c9655">More...</a><br /></td></tr>
+<tr class="separator:ac8d962ac52ef53a2ad6ddbdc5b6c9655 inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7951abdcff85efd6cf58a49d94442f67 inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_1_1_listener.html#a7951abdcff85efd6cf58a49d94442f67">preparingComplete</a> (<a class="el" href="class_ogre_1_1_resource.html">Resource</a> *)</td></tr>
+<tr class="memdesc:a7951abdcff85efd6cf58a49d94442f67 inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called whenever the resource finishes preparing (paging into memory).  <a href="class_ogre_1_1_resource_1_1_listener.html#a7951abdcff85efd6cf58a49d94442f67">More...</a><br /></td></tr>
+<tr class="separator:a7951abdcff85efd6cf58a49d94442f67 inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f8cdeb73a65a6a1c018e5ac783dfafe inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_1_1_listener.html#a9f8cdeb73a65a6a1c018e5ac783dfafe">unloadingComplete</a> (<a class="el" href="class_ogre_1_1_resource.html">Resource</a> *)</td></tr>
+<tr class="memdesc:a9f8cdeb73a65a6a1c018e5ac783dfafe inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called whenever the resource has been unloaded.  <a href="class_ogre_1_1_resource_1_1_listener.html#a9f8cdeb73a65a6a1c018e5ac783dfafe">More...</a><br /></td></tr>
+<tr class="separator:a9f8cdeb73a65a6a1c018e5ac783dfafe inherit pub_methods_class_ogre_1_1_resource_1_1_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This class makes the usage of a vertex and fragment programs (low-level or high-level), with a given set of parameters, explicit. </p>
@@ -452,36 +462,6 @@ This class packages up those details so you don't have to worry about them. For 
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#ae0a0007de944eb3c2f933a372a752b35" title="Tells the resource whether it is background loaded or not.">Resource::setBackgroundLoaded</a>), the call does not itself occur in the thread which is doing the loading; when loading is complete a response indicator is placed with the <a class="el" href="class_ogre_1_1_resource_group_manager.html" title="This singleton class manages the list of resource groups, and notifying the various resource managers...">ResourceGroupManager</a>, which will then be sent back to the listener as part of the application's primary frame loop thread. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_resource_1_1_listener.html#ac8d962ac52ef53a2ad6ddbdc5b6c9655">Ogre::Resource::Listener</a>.</p>
-
-</div>
-</div>
-<a id="a7951abdcff85efd6cf58a49d94442f67" name="a7951abdcff85efd6cf58a49d94442f67"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7951abdcff85efd6cf58a49d94442f67">&#9670;&#160;</a></span>preparingComplete()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::Resource::Listener::preparingComplete </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_resource.html">Resource</a> *&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Called whenever the resource finishes preparing (paging into memory). </p>
-<dl class="section remark"><dt>Remarks</dt><dd>If a <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> has been marked as background loaded (</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#ae0a0007de944eb3c2f933a372a752b35" title="Tells the resource whether it is background loaded or not.">Resource::setBackgroundLoaded</a>) the call does not itself occur in the thread which is doing the preparing; when preparing is complete a response indicator is placed with the <a class="el" href="class_ogre_1_1_resource_group_manager.html" title="This singleton class manages the list of resource groups, and notifying the various resource managers...">ResourceGroupManager</a>, which will then be sent back to the listener as part of the application's primary frame loop thread. </dd></dl>
 
 </div>
 </div>

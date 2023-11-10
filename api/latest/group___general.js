@@ -48,12 +48,6 @@ var group___general =
       [ "AnyNumeric", "class_ogre_1_1_any_numeric.html#a56d143332e5388489b3a3c3a11c45e30", null ],
       [ "AnyNumeric", "class_ogre_1_1_any_numeric.html#a9ae2045cc85e7a8e134d54e0babc2a3f", null ],
       [ "~AnyNumeric", "class_ogre_1_1_any_numeric.html#adc22f71f7106988f2d8090bf823185f8", null ],
-      [ "destroy", "class_ogre_1_1_any_numeric.html#a3c414d8a6803eb4b319d39c2628b435b", null ],
-      [ "get", "class_ogre_1_1_any_numeric.html#a0a8600f6711855846591011a22ff4528", null ],
-      [ "getType", "class_ogre_1_1_any_numeric.html#aa5822a6a9445ae66bb6b2d5f11a01293", null ],
-      [ "has_value", "class_ogre_1_1_any_numeric.html#a8de17caf0ea6729e6904b6552162cf77", null ],
-      [ "isEmpty", "class_ogre_1_1_any_numeric.html#a9408e147480f134e1ba1817b4b1bc50f", null ],
-      [ "operator()", "class_ogre_1_1_any_numeric.html#ac1df40ae0c766635b60427035ce2a76d", null ],
       [ "operator*", "class_ogre_1_1_any_numeric.html#a70e54709e177f5dbbeab34999e416e1c", null ],
       [ "operator*", "class_ogre_1_1_any_numeric.html#ad4b1c2bf0151e7ec59a67f47b749c123", null ],
       [ "operator*=", "class_ogre_1_1_any_numeric.html#ac3b74981a5214fd6b7983f7983bc4065", null ],
@@ -63,21 +57,13 @@ var group___general =
       [ "operator-=", "class_ogre_1_1_any_numeric.html#a4876b20914b902652dbe369730adce14", null ],
       [ "operator/", "class_ogre_1_1_any_numeric.html#aa45d67ae6ca4fca3214d1fba1630e6e5", null ],
       [ "operator/=", "class_ogre_1_1_any_numeric.html#af32699bb01aeef60f6f3e8b92a62baf0", null ],
-      [ "operator=", "class_ogre_1_1_any_numeric.html#afb607a830f1b756959d794e05c4a6e56", null ],
-      [ "reset", "class_ogre_1_1_any_numeric.html#a222ee6835ca577d5984049d0b1176505", null ],
-      [ "swap", "class_ogre_1_1_any_numeric.html#a6966abacf1848ea305390cfcfaeb5586", null ],
-      [ "type", "class_ogre_1_1_any_numeric.html#ab0c58b9a5837415a9a463406fd87364f", null ]
+      [ "operator=", "class_ogre_1_1_any_numeric.html#afb607a830f1b756959d794e05c4a6e56", null ]
     ] ],
     [ "Ogre::AtomAbstractNode", "class_ogre_1_1_atom_abstract_node.html", [
       [ "AtomAbstractNode", "class_ogre_1_1_atom_abstract_node.html#a360729aa927fc675fc7acd4b61747632", null ],
       [ "clone", "class_ogre_1_1_atom_abstract_node.html#aaca3c584472e28b7ffe4b98b37ee2992", null ],
       [ "getValue", "class_ogre_1_1_atom_abstract_node.html#a2ad835ae2a299e04ca1314c6b974947a", null ],
-      [ "context", "class_ogre_1_1_atom_abstract_node.html#acf394c05aecb3cb258a28c19e1969ff2", null ],
-      [ "file", "class_ogre_1_1_atom_abstract_node.html#ad12982998ed96d3b0b99a1b74ae1360b", null ],
       [ "id", "class_ogre_1_1_atom_abstract_node.html#aa1a4a963e398a506e20cf600862f5c17", null ],
-      [ "line", "class_ogre_1_1_atom_abstract_node.html#ad2e2e1cc95ee64cd9632cc63e4ca3234", null ],
-      [ "parent", "class_ogre_1_1_atom_abstract_node.html#a25d905239cc4b086edcfe91bc51f7bfb", null ],
-      [ "type", "class_ogre_1_1_atom_abstract_node.html#af05272e6472ec8283d7bdf304cd9ef14", null ],
       [ "value", "class_ogre_1_1_atom_abstract_node.html#abe45c919b151fc9e91220522c7776602", null ]
     ] ],
     [ "Ogre::AtomicObject< T >", "class_ogre_1_1_atomic_object.html", [
@@ -250,9 +236,7 @@ var group___general =
       [ "CompositorTargetTranslator", "class_ogre_1_1_compositor_target_translator.html#ade3d3201ea1dd723c47c5dc6c262a274", null ],
       [ "translate", "class_ogre_1_1_compositor_target_translator.html#a4422ad1d5e8623617979dcf25dc40bf8", null ]
     ] ],
-    [ "Ogre::CompositorTextureBaseTranslator", "class_ogre_1_1_compositor_texture_base_translator.html", [
-      [ "translate", "class_ogre_1_1_compositor_texture_base_translator.html#a6f0fa5113e8c5fecf2da9afe6f624262", null ]
-    ] ],
+    [ "Ogre::CompositorTextureBaseTranslator", "class_ogre_1_1_compositor_texture_base_translator.html", null ],
     [ "Ogre::CompositorWorkspaceTranslator", "class_ogre_1_1_compositor_workspace_translator.html", [
       [ "CompositorWorkspaceTranslator", "class_ogre_1_1_compositor_workspace_translator.html#a2c1cd98d1ae16bfbac6d8dfd0684e463", null ],
       [ "translate", "class_ogre_1_1_compositor_workspace_translator.html#aea5e7e808a0500f084d539dc3af0036b", null ]
@@ -396,8 +380,7 @@ var group___general =
       [ "eventType", "class_ogre_1_1_create_compositor_script_compiler_event.html#aef2a0596e638e688e695dafc3d5d1521", null ],
       [ "mFile", "class_ogre_1_1_create_compositor_script_compiler_event.html#a1b8f501137d19fd80f68007ff788fce8", null ],
       [ "mName", "class_ogre_1_1_create_compositor_script_compiler_event.html#a9f07c294aeb33e46ef06d758add7d584", null ],
-      [ "mResourceGroup", "class_ogre_1_1_create_compositor_script_compiler_event.html#ab81debbe356569675c115026c16642eb", null ],
-      [ "mType", "class_ogre_1_1_create_compositor_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mResourceGroup", "class_ogre_1_1_create_compositor_script_compiler_event.html#ab81debbe356569675c115026c16642eb", null ]
     ] ],
     [ "Ogre::CreateGpuProgramScriptCompilerEvent", "class_ogre_1_1_create_gpu_program_script_compiler_event.html", [
       [ "CreateGpuProgramScriptCompilerEvent", "class_ogre_1_1_create_gpu_program_script_compiler_event.html#a53c8dd264143054dbf29a79107dedca1", null ],
@@ -407,16 +390,14 @@ var group___general =
       [ "mProgramType", "class_ogre_1_1_create_gpu_program_script_compiler_event.html#a7b906375e72b00b76b9ac211716ec9ec", null ],
       [ "mResourceGroup", "class_ogre_1_1_create_gpu_program_script_compiler_event.html#a2bfe09f8c1632afaf9894bd2331c5db7", null ],
       [ "mSource", "class_ogre_1_1_create_gpu_program_script_compiler_event.html#a8afd68b508b35b52c60c256e846b24ff", null ],
-      [ "mSyntax", "class_ogre_1_1_create_gpu_program_script_compiler_event.html#aa10432fb214d5d1304b8c12bbfcdbc53", null ],
-      [ "mType", "class_ogre_1_1_create_gpu_program_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mSyntax", "class_ogre_1_1_create_gpu_program_script_compiler_event.html#aa10432fb214d5d1304b8c12bbfcdbc53", null ]
     ] ],
     [ "Ogre::CreateGpuSharedParametersScriptCompilerEvent", "class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html", [
       [ "CreateGpuSharedParametersScriptCompilerEvent", "class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html#a498eb4924486fccbd9c2e83cdc205b51", null ],
       [ "eventType", "class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html#a896fe40542b24eeb5814bc371c5f2cb0", null ],
       [ "mFile", "class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html#ac68ed9e815579490856c2e722e60f630", null ],
       [ "mName", "class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html#a1b7cbae6225a03537eb8d86019019e68", null ],
-      [ "mResourceGroup", "class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html#a983cf04921ea813dccff75ccaf5f7005", null ],
-      [ "mType", "class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mResourceGroup", "class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html#a983cf04921ea813dccff75ccaf5f7005", null ]
     ] ],
     [ "Ogre::CreateHighLevelGpuProgramScriptCompilerEvent", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html", [
       [ "CreateHighLevelGpuProgramScriptCompilerEvent", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a7c525a5b56ad39bd0fbb64486e153b7b", null ],
@@ -426,27 +407,23 @@ var group___general =
       [ "mName", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a19f3cdde73274ca712b7920dce8e43a5", null ],
       [ "mProgramType", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#aa4df239d1e53bba3c96b0aed2de4a7ba", null ],
       [ "mResourceGroup", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a34dd09b89f48c5049996ad1bbb658871", null ],
-      [ "mSource", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a581f63322ca90c89720be8fe682e0346", null ],
-      [ "mType", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mSource", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a581f63322ca90c89720be8fe682e0346", null ]
     ] ],
     [ "Ogre::CreateMaterialScriptCompilerEvent", "class_ogre_1_1_create_material_script_compiler_event.html", [
       [ "CreateMaterialScriptCompilerEvent", "class_ogre_1_1_create_material_script_compiler_event.html#a10dbdf2ae2dac913c552c799e8878064", null ],
       [ "eventType", "class_ogre_1_1_create_material_script_compiler_event.html#a99ee0b5555a50c2786826902f73d7173", null ],
       [ "mFile", "class_ogre_1_1_create_material_script_compiler_event.html#a45a175db818b216a1c2bcec9394557c9", null ],
       [ "mName", "class_ogre_1_1_create_material_script_compiler_event.html#a1d11e1b36c4e3020a17579c2a7dd9cce", null ],
-      [ "mResourceGroup", "class_ogre_1_1_create_material_script_compiler_event.html#af9f939d7217bf645405e2106df7a6612", null ],
-      [ "mType", "class_ogre_1_1_create_material_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mResourceGroup", "class_ogre_1_1_create_material_script_compiler_event.html#af9f939d7217bf645405e2106df7a6612", null ]
     ] ],
     [ "Ogre::CreateParticleSystemScriptCompilerEvent", "class_ogre_1_1_create_particle_system_script_compiler_event.html", [
       [ "CreateParticleSystemScriptCompilerEvent", "class_ogre_1_1_create_particle_system_script_compiler_event.html#ae5d353f53c585c185969c67c01b80890", null ],
       [ "eventType", "class_ogre_1_1_create_particle_system_script_compiler_event.html#a35db50fc079ef40ae98a0789afdfca5e", null ],
       [ "mFile", "class_ogre_1_1_create_particle_system_script_compiler_event.html#a7a252f8660b61c20d31773bbfc1d8412", null ],
       [ "mName", "class_ogre_1_1_create_particle_system_script_compiler_event.html#a828774193e4f2704a068fd0582becfae", null ],
-      [ "mResourceGroup", "class_ogre_1_1_create_particle_system_script_compiler_event.html#ac25d4cbd99b13a92efa1ec773b4aead8", null ],
-      [ "mType", "class_ogre_1_1_create_particle_system_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mResourceGroup", "class_ogre_1_1_create_particle_system_script_compiler_event.html#ac25d4cbd99b13a92efa1ec773b4aead8", null ]
     ] ],
     [ "Ogre::DefaultWorkQueueBase", "class_ogre_1_1_default_work_queue_base.html", [
-      [ "RequestID", "class_ogre_1_1_default_work_queue_base.html#a1908257e726af6caa80f1a6cd5682d76", null ],
       [ "DefaultWorkQueueBase", "class_ogre_1_1_default_work_queue_base.html#ad8c782f13059f74607be6c01df9d10be", null ],
       [ "~DefaultWorkQueueBase", "class_ogre_1_1_default_work_queue_base.html#a1d588e0f77255963f984735313ec9e7a", null ],
       [ "_processNextRequest", "class_ogre_1_1_default_work_queue_base.html#af981193d550a56ea146f7b3f544f1013", null ],
@@ -458,7 +435,6 @@ var group___general =
       [ "addRequest", "class_ogre_1_1_default_work_queue_base.html#a15f5effebeec30f3d30926a66ca9871a", null ],
       [ "addRequestHandler", "class_ogre_1_1_default_work_queue_base.html#a3b0a7e54f7982743a60c06f56f86aa63", null ],
       [ "addResponseHandler", "class_ogre_1_1_default_work_queue_base.html#a67763faa933aff479056a72814e148d8", null ],
-      [ "getChannel", "class_ogre_1_1_default_work_queue_base.html#a9a550b2e870c3cf2fb7dc6732ceed3e5", null ],
       [ "getName", "class_ogre_1_1_default_work_queue_base.html#a3b38abc5e3d472c3282b0f1a3b6b8809", null ],
       [ "getRequestsAccepted", "class_ogre_1_1_default_work_queue_base.html#a89d7c1d6659662f3d6317a2234e3cf1a", null ],
       [ "getResponseProcessingTimeLimit", "class_ogre_1_1_default_work_queue_base.html#a4e37fee918294527bdc90819a371d625", null ],
@@ -473,9 +449,7 @@ var group___general =
       [ "setRequestsAccepted", "class_ogre_1_1_default_work_queue_base.html#adbbd75670752ea4740fc72a5894480d1", null ],
       [ "setResponseProcessingTimeLimit", "class_ogre_1_1_default_work_queue_base.html#a77b6c97d0c34e3ffbd2dd47e2ee0cdd4", null ],
       [ "setWorkersCanAccessRenderSystem", "class_ogre_1_1_default_work_queue_base.html#a59458ab8807c99c478fe0a62c750c31d", null ],
-      [ "setWorkerThreadCount", "class_ogre_1_1_default_work_queue_base.html#a7edecae3229cfb6616774688070eeffa", null ],
-      [ "shutdown", "class_ogre_1_1_default_work_queue_base.html#a42d64d8891849878e3d1afb66fa0ce19", null ],
-      [ "startup", "class_ogre_1_1_default_work_queue_base.html#ad6d7aeeb4b1e4e8eed931cb17d63add3", null ]
+      [ "setWorkerThreadCount", "class_ogre_1_1_default_work_queue_base.html#a7edecae3229cfb6616774688070eeffa", null ]
     ] ],
     [ "Ogre::DynLib", "class_ogre_1_1_dyn_lib.html", [
       [ "DynLib", "class_ogre_1_1_dyn_lib.html#a88102713b4c98c0de690d13dadb465dc", null ],
@@ -551,28 +525,8 @@ var group___general =
       [ "getType", "class_ogre_1_1_factory_obj.html#ae46bdfaa9ea186c7545c533572b62f8f", null ]
     ] ],
     [ "Ogre::FileNotFoundException", "class_ogre_1_1_file_not_found_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_file_not_found_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "FileNotFoundException", "class_ogre_1_1_file_not_found_exception.html#ac5774daad7866a3b538731c16ba08faf", null ],
-      [ "~FileNotFoundException", "class_ogre_1_1_file_not_found_exception.html#ae624757b2995c8eeee04319da2b9d557", null ],
-      [ "getDescription", "class_ogre_1_1_file_not_found_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_file_not_found_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_file_not_found_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_file_not_found_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_file_not_found_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_file_not_found_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_file_not_found_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~FileNotFoundException", "class_ogre_1_1_file_not_found_exception.html#ae624757b2995c8eeee04319da2b9d557", null ]
     ] ],
     [ "Ogre::FloatGpuParameterControllerValue", "class_ogre_1_1_float_gpu_parameter_controller_value.html", [
       [ "FloatGpuParameterControllerValue", "class_ogre_1_1_float_gpu_parameter_controller_value.html#aa15f3e1a7e929f71dbc2c6d47199175f", null ],
@@ -605,7 +559,6 @@ var group___general =
     [ "Ogre::FrameTimeControllerValue", "class_ogre_1_1_frame_time_controller_value.html", [
       [ "FrameTimeControllerValue", "class_ogre_1_1_frame_time_controller_value.html#aed8ee1d63bf0c06fba9ec32bcf36d8c5", null ],
       [ "frameEnded", "class_ogre_1_1_frame_time_controller_value.html#a7cf58ff02b01a353e19f9d8fb5d89991", null ],
-      [ "frameRenderingQueued", "class_ogre_1_1_frame_time_controller_value.html#a2785cb38589ab9df123fa401cbda31c3", null ],
       [ "frameStarted", "class_ogre_1_1_frame_time_controller_value.html#a64e8f92ea01f9d509290edc2f9415c03", null ],
       [ "getElapsedTime", "class_ogre_1_1_frame_time_controller_value.html#affaa394bb3463a7749da311472bc974b", null ],
       [ "getFrameDelay", "class_ogre_1_1_frame_time_controller_value.html#ab7ad021e14db00d482da0781fe6cb1ab", null ],
@@ -684,157 +637,32 @@ var group___general =
       [ "ImportAbstractNode", "class_ogre_1_1_import_abstract_node.html#a44e8ff802eb8c81bfbd9e8805781e4e2", null ],
       [ "clone", "class_ogre_1_1_import_abstract_node.html#a9aaac988ee27c8af36de204eaa0f8f99", null ],
       [ "getValue", "class_ogre_1_1_import_abstract_node.html#a8ae1f4223f040636de4e66b1a33af6fa", null ],
-      [ "context", "class_ogre_1_1_import_abstract_node.html#acf394c05aecb3cb258a28c19e1969ff2", null ],
-      [ "file", "class_ogre_1_1_import_abstract_node.html#ad12982998ed96d3b0b99a1b74ae1360b", null ],
-      [ "line", "class_ogre_1_1_import_abstract_node.html#ad2e2e1cc95ee64cd9632cc63e4ca3234", null ],
-      [ "parent", "class_ogre_1_1_import_abstract_node.html#a25d905239cc4b086edcfe91bc51f7bfb", null ],
       [ "source", "class_ogre_1_1_import_abstract_node.html#abf7e3cadcd65283bae356cc5dde84826", null ],
-      [ "target", "class_ogre_1_1_import_abstract_node.html#a2979096d9e6ff882bce5a9e6bbecbd18", null ],
-      [ "type", "class_ogre_1_1_import_abstract_node.html#af05272e6472ec8283d7bdf304cd9ef14", null ]
+      [ "target", "class_ogre_1_1_import_abstract_node.html#a2979096d9e6ff882bce5a9e6bbecbd18", null ]
     ] ],
     [ "Ogre::InternalErrorException", "class_ogre_1_1_internal_error_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_internal_error_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "InternalErrorException", "class_ogre_1_1_internal_error_exception.html#a5bc4d45afee8370b1688b13dd6099cb2", null ],
-      [ "~InternalErrorException", "class_ogre_1_1_internal_error_exception.html#aa9e9e10fb850c0951736b073d4b26697", null ],
-      [ "getDescription", "class_ogre_1_1_internal_error_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_internal_error_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_internal_error_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_internal_error_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_internal_error_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_internal_error_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_internal_error_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~InternalErrorException", "class_ogre_1_1_internal_error_exception.html#aa9e9e10fb850c0951736b073d4b26697", null ]
     ] ],
     [ "Ogre::InvalidCallException", "class_ogre_1_1_invalid_call_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_invalid_call_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "InvalidCallException", "class_ogre_1_1_invalid_call_exception.html#a49d7f567dc5242ac1cdcc057e6273ad0", null ],
-      [ "~InvalidCallException", "class_ogre_1_1_invalid_call_exception.html#adb561b7e7affcd004b2374764c5c3d4c", null ],
-      [ "getDescription", "class_ogre_1_1_invalid_call_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_invalid_call_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_invalid_call_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_invalid_call_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_invalid_call_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_invalid_call_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_invalid_call_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~InvalidCallException", "class_ogre_1_1_invalid_call_exception.html#adb561b7e7affcd004b2374764c5c3d4c", null ]
     ] ],
     [ "Ogre::InvalidParametersException", "class_ogre_1_1_invalid_parameters_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_invalid_parameters_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "InvalidParametersException", "class_ogre_1_1_invalid_parameters_exception.html#ac6276640f16c331e952b71f3a174bd8f", null ],
-      [ "~InvalidParametersException", "class_ogre_1_1_invalid_parameters_exception.html#a2852f62bf0c4431b700230e24d392ce8", null ],
-      [ "getDescription", "class_ogre_1_1_invalid_parameters_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_invalid_parameters_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_invalid_parameters_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_invalid_parameters_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_invalid_parameters_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_invalid_parameters_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_invalid_parameters_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~InvalidParametersException", "class_ogre_1_1_invalid_parameters_exception.html#a2852f62bf0c4431b700230e24d392ce8", null ]
     ] ],
     [ "Ogre::InvalidStateException", "class_ogre_1_1_invalid_state_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_invalid_state_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "InvalidStateException", "class_ogre_1_1_invalid_state_exception.html#ab0379b445379968669795492ba1ef567", null ],
-      [ "~InvalidStateException", "class_ogre_1_1_invalid_state_exception.html#a56504a4b563af10623934164a719be5c", null ],
-      [ "getDescription", "class_ogre_1_1_invalid_state_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_invalid_state_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_invalid_state_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_invalid_state_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_invalid_state_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_invalid_state_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_invalid_state_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~InvalidStateException", "class_ogre_1_1_invalid_state_exception.html#a56504a4b563af10623934164a719be5c", null ]
     ] ],
     [ "Ogre::IOException", "class_ogre_1_1_i_o_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_i_o_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "IOException", "class_ogre_1_1_i_o_exception.html#a9cb13ae6d95e203689c43dfe194cf0c7", null ],
-      [ "~IOException", "class_ogre_1_1_i_o_exception.html#afc1228e859e0cde334b43c7a0e8b025d", null ],
-      [ "getDescription", "class_ogre_1_1_i_o_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_i_o_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_i_o_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_i_o_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_i_o_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_i_o_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_i_o_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~IOException", "class_ogre_1_1_i_o_exception.html#afc1228e859e0cde334b43c7a0e8b025d", null ]
     ] ],
     [ "Ogre::ItemIdentityException", "class_ogre_1_1_item_identity_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_item_identity_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "ItemIdentityException", "class_ogre_1_1_item_identity_exception.html#ae98c4a38b709e81ef21722be30db5060", null ],
-      [ "~ItemIdentityException", "class_ogre_1_1_item_identity_exception.html#a3dd5835ee39e5dd7c85c516cea8e5747", null ],
-      [ "getDescription", "class_ogre_1_1_item_identity_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_item_identity_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_item_identity_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_item_identity_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_item_identity_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_item_identity_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_item_identity_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~ItemIdentityException", "class_ogre_1_1_item_identity_exception.html#a3dd5835ee39e5dd7c85c516cea8e5747", null ]
     ] ],
     [ "Ogre::LightClosest", "struct_ogre_1_1_light_closest.html", [
       [ "LightClosest", "struct_ogre_1_1_light_closest.html#aab0691f8197b06e2c28bc74dbf9b6522", null ],
@@ -926,20 +754,10 @@ var group___general =
       [ "bases", "class_ogre_1_1_object_abstract_node.html#ad2930e484d7e428e0ee2b0ecb312904c", null ],
       [ "children", "class_ogre_1_1_object_abstract_node.html#ab4c1c1fa960979a2ad990dc851bff016", null ],
       [ "cls", "class_ogre_1_1_object_abstract_node.html#a17e65f29d850e30778464b77d6a7407a", null ],
-      [ "context", "class_ogre_1_1_object_abstract_node.html#acf394c05aecb3cb258a28c19e1969ff2", null ],
-      [ "file", "class_ogre_1_1_object_abstract_node.html#ad12982998ed96d3b0b99a1b74ae1360b", null ],
       [ "id", "class_ogre_1_1_object_abstract_node.html#aca6f43f74819d6a47eb7acc0d84e177d", null ],
-      [ "line", "class_ogre_1_1_object_abstract_node.html#ad2e2e1cc95ee64cd9632cc63e4ca3234", null ],
       [ "name", "class_ogre_1_1_object_abstract_node.html#afd1ca416adcf3f7d3da2a93f790be3e0", null ],
       [ "overrides", "class_ogre_1_1_object_abstract_node.html#a7c0f89fd757f3a0c9877d01008ecf20d", null ],
-      [ "parent", "class_ogre_1_1_object_abstract_node.html#a25d905239cc4b086edcfe91bc51f7bfb", null ],
-      [ "type", "class_ogre_1_1_object_abstract_node.html#af05272e6472ec8283d7bdf304cd9ef14", null ],
       [ "values", "class_ogre_1_1_object_abstract_node.html#a4a43cc387b3154ce2e41487d72ae742f", null ]
-    ] ],
-    [ "Ogre::ParamCommand", "class_ogre_1_1_param_command.html", [
-      [ "~ParamCommand", "class_ogre_1_1_param_command.html#a44288c733303c12a4cb30f483ee006ee", null ],
-      [ "doGet", "class_ogre_1_1_param_command.html#ae47ea550693403baebbcde11c59e074f", null ],
-      [ "doSet", "class_ogre_1_1_param_command.html#ad69d7e3ca3959f0ab2e84137f621ca6a", null ]
     ] ],
     [ "Ogre::ParamDictionary", "class_ogre_1_1_param_dictionary.html", [
       [ "ParamDictionary", "class_ogre_1_1_param_dictionary.html#af3f46fdeacdb40c4dc234cd3540cd701", null ],
@@ -1009,15 +827,13 @@ var group___general =
       [ "PreApplyTextureAliasesScriptCompilerEvent", "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html#af8a79ba69d0bd18034a45efd19e6a43f", null ],
       [ "eventType", "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html#a403617d0cc5f8e8bffccca4012dd6fb1", null ],
       [ "mAliases", "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html#a298f1b128634bef5d5964726097278e8", null ],
-      [ "mMaterial", "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html#a7fe96a9aaef9359e8077bdb0c234db2f", null ],
-      [ "mType", "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mMaterial", "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html#a7fe96a9aaef9359e8077bdb0c234db2f", null ]
     ] ],
     [ "Ogre::ProcessNameExclusionScriptCompilerEvent", "class_ogre_1_1_process_name_exclusion_script_compiler_event.html", [
       [ "ProcessNameExclusionScriptCompilerEvent", "class_ogre_1_1_process_name_exclusion_script_compiler_event.html#a4e7e3b1f5f8a2d9005f243729cd5367b", null ],
       [ "eventType", "class_ogre_1_1_process_name_exclusion_script_compiler_event.html#a6743ef063ddf25f8ccaa1fc95465e0c6", null ],
       [ "mClass", "class_ogre_1_1_process_name_exclusion_script_compiler_event.html#a51a223dead21c6a2ddfa66f75d508553", null ],
-      [ "mParent", "class_ogre_1_1_process_name_exclusion_script_compiler_event.html#ab4e31bae208b7526e183369be3acb410", null ],
-      [ "mType", "class_ogre_1_1_process_name_exclusion_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mParent", "class_ogre_1_1_process_name_exclusion_script_compiler_event.html#ab4e31bae208b7526e183369be3acb410", null ]
     ] ],
     [ "Ogre::ProcessResourceNameScriptCompilerEvent", "class_ogre_1_1_process_resource_name_script_compiler_event.html", [
       [ "ResourceType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#afd04c7f48ef0823ba70812b83fde1acc", [
@@ -1031,8 +847,7 @@ var group___general =
       [ "ProcessResourceNameScriptCompilerEvent", "class_ogre_1_1_process_resource_name_script_compiler_event.html#a93b2fb455dd0deec91a7f16a3a91c55e", null ],
       [ "eventType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#a3c4bdfcd9e3758d5281dfe0ed7d8e5fc", null ],
       [ "mName", "class_ogre_1_1_process_resource_name_script_compiler_event.html#a9df601b04eff55b09762484c8eac6082", null ],
-      [ "mResourceType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#ad65384a6b5c01e1ce69a4d452d45745f", null ],
-      [ "mType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+      [ "mResourceType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#ad65384a6b5c01e1ce69a4d452d45745f", null ]
     ] ],
     [ "Ogre::Profile", "class_ogre_1_1_profile.html", [
       [ "Profile", "class_ogre_1_1_profile.html#a7a94c7b3e9f8cbdd8f266c91dab8c4be", null ],
@@ -1134,13 +949,8 @@ var group___general =
       [ "PropertyAbstractNode", "class_ogre_1_1_property_abstract_node.html#ade9b1e1c8820af5188cc59ab9ee1096b", null ],
       [ "clone", "class_ogre_1_1_property_abstract_node.html#a15354ff6ee601c4584b8e490d5f79447", null ],
       [ "getValue", "class_ogre_1_1_property_abstract_node.html#a994678037fc45ff5ffac5dc50a76f837", null ],
-      [ "context", "class_ogre_1_1_property_abstract_node.html#acf394c05aecb3cb258a28c19e1969ff2", null ],
-      [ "file", "class_ogre_1_1_property_abstract_node.html#ad12982998ed96d3b0b99a1b74ae1360b", null ],
       [ "id", "class_ogre_1_1_property_abstract_node.html#a6f9f35b1b4762dbba25c48f2fbf852d1", null ],
-      [ "line", "class_ogre_1_1_property_abstract_node.html#ad2e2e1cc95ee64cd9632cc63e4ca3234", null ],
       [ "name", "class_ogre_1_1_property_abstract_node.html#af3c62474bc3a0a363d559eb1894e7d30", null ],
-      [ "parent", "class_ogre_1_1_property_abstract_node.html#a25d905239cc4b086edcfe91bc51f7bfb", null ],
-      [ "type", "class_ogre_1_1_property_abstract_node.html#af05272e6472ec8283d7bdf304cd9ef14", null ],
       [ "values", "class_ogre_1_1_property_abstract_node.html#aaedb640096a77b579a255b4dfc1c0dab", null ]
     ] ],
     [ "Ogre::RadixSort< TContainer, TContainerValueType, TCompValueType >", "class_ogre_1_1_radix_sort.html", [
@@ -1150,28 +960,8 @@ var group___general =
       [ "sort", "class_ogre_1_1_radix_sort.html#a4fc283b678dfda772eb6600436d97579", null ]
     ] ],
     [ "Ogre::RenderingAPIException", "class_ogre_1_1_rendering_a_p_i_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_rendering_a_p_i_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "RenderingAPIException", "class_ogre_1_1_rendering_a_p_i_exception.html#aa3f950b457a33a114a74f9b8993a885d", null ],
-      [ "~RenderingAPIException", "class_ogre_1_1_rendering_a_p_i_exception.html#a75a5b0fe6f36d85671e0a4ed83225592", null ],
-      [ "getDescription", "class_ogre_1_1_rendering_a_p_i_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_rendering_a_p_i_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_rendering_a_p_i_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_rendering_a_p_i_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_rendering_a_p_i_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_rendering_a_p_i_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_rendering_a_p_i_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~RenderingAPIException", "class_ogre_1_1_rendering_a_p_i_exception.html#a75a5b0fe6f36d85671e0a4ed83225592", null ]
     ] ],
     [ "Ogre::RenderingMetrics", "struct_ogre_1_1_rendering_metrics.html", [
       [ "RenderingMetrics", "struct_ogre_1_1_rendering_metrics.html#a8e6d2e09bd08cfaed88d20ae40a236fa", null ],
@@ -1277,28 +1067,8 @@ var group___general =
       [ "RenderSystem", "class_ogre_1_1_root.html#a06b786d8e0847dfe9cc15e1dea308fcd", null ]
     ] ],
     [ "Ogre::RuntimeAssertionException", "class_ogre_1_1_runtime_assertion_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "RuntimeAssertionException", "class_ogre_1_1_runtime_assertion_exception.html#a871fffb1a89b647d78c7581e539363e5", null ],
-      [ "~RuntimeAssertionException", "class_ogre_1_1_runtime_assertion_exception.html#af02547df72846be9b4be847e632268a4", null ],
-      [ "getDescription", "class_ogre_1_1_runtime_assertion_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_runtime_assertion_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_runtime_assertion_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_runtime_assertion_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_runtime_assertion_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_runtime_assertion_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_runtime_assertion_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~RuntimeAssertionException", "class_ogre_1_1_runtime_assertion_exception.html#af02547df72846be9b4be847e632268a4", null ]
     ] ],
     [ "Ogre::SampleDescription", "struct_ogre_1_1_sample_description.html", [
       [ "SampleDescription", "struct_ogre_1_1_sample_description.html#a128ab28c554a1a984808c83514b81cf8", null ],
@@ -1645,39 +1415,14 @@ var group___general =
       [ "top", "struct_ogre_1_1_t_rect.html#a54b9de090a6cc533511d51d2bb9b0b82", null ]
     ] ],
     [ "Ogre::UnimplementedException", "class_ogre_1_1_unimplemented_exception.html", [
-      [ "ExceptionCodes", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29b", [
-        [ "ERR_CANNOT_WRITE_TO_FILE", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71", null ],
-        [ "ERR_INVALID_STATE", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957", null ],
-        [ "ERR_INVALIDPARAMS", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba359c10b8abe9abf39f84550a903e4698", null ],
-        [ "ERR_RENDERINGAPI_ERROR", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703", null ],
-        [ "ERR_DUPLICATE_ITEM", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a", null ],
-        [ "ERR_ITEM_NOT_FOUND", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003", null ],
-        [ "ERR_FILE_NOT_FOUND", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152", null ],
-        [ "ERR_INTERNAL_ERROR", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99", null ],
-        [ "ERR_RT_ASSERTION_FAILED", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d", null ],
-        [ "ERR_NOT_IMPLEMENTED", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090", null ],
-        [ "ERR_INVALID_CALL", "class_ogre_1_1_unimplemented_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705", null ]
-      ] ],
       [ "UnimplementedException", "class_ogre_1_1_unimplemented_exception.html#a454b97468f2b1f1d935442971bf082ec", null ],
-      [ "~UnimplementedException", "class_ogre_1_1_unimplemented_exception.html#a950768cae7176bb76b17e2d3ebbfde21", null ],
-      [ "getDescription", "class_ogre_1_1_unimplemented_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
-      [ "getFile", "class_ogre_1_1_unimplemented_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
-      [ "getFullDescription", "class_ogre_1_1_unimplemented_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
-      [ "getLine", "class_ogre_1_1_unimplemented_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
-      [ "getNumber", "class_ogre_1_1_unimplemented_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-      [ "getSource", "class_ogre_1_1_unimplemented_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
-      [ "what", "class_ogre_1_1_unimplemented_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
+      [ "~UnimplementedException", "class_ogre_1_1_unimplemented_exception.html#a950768cae7176bb76b17e2d3ebbfde21", null ]
     ] ],
     [ "Ogre::VariableAccessAbstractNode", "class_ogre_1_1_variable_access_abstract_node.html", [
       [ "VariableAccessAbstractNode", "class_ogre_1_1_variable_access_abstract_node.html#a24354dd9607adb0795d178377495957d", null ],
       [ "clone", "class_ogre_1_1_variable_access_abstract_node.html#a0306ec7d8fd4cedd4076adebc4ff7f95", null ],
       [ "getValue", "class_ogre_1_1_variable_access_abstract_node.html#ad5f3c353b422b4cf1b30d6195933b0f4", null ],
-      [ "context", "class_ogre_1_1_variable_access_abstract_node.html#acf394c05aecb3cb258a28c19e1969ff2", null ],
-      [ "file", "class_ogre_1_1_variable_access_abstract_node.html#ad12982998ed96d3b0b99a1b74ae1360b", null ],
-      [ "line", "class_ogre_1_1_variable_access_abstract_node.html#ad2e2e1cc95ee64cd9632cc63e4ca3234", null ],
-      [ "name", "class_ogre_1_1_variable_access_abstract_node.html#a85f2a1e1cfcf01102fb6c80c470d7783", null ],
-      [ "parent", "class_ogre_1_1_variable_access_abstract_node.html#a25d905239cc4b086edcfe91bc51f7bfb", null ],
-      [ "type", "class_ogre_1_1_variable_access_abstract_node.html#af05272e6472ec8283d7bdf304cd9ef14", null ]
+      [ "name", "class_ogre_1_1_variable_access_abstract_node.html#a85f2a1e1cfcf01102fb6c80c470d7783", null ]
     ] ],
     [ "Ogre::WaveformControllerFunction", "class_ogre_1_1_waveform_controller_function.html", [
       [ "WaveformControllerFunction", "class_ogre_1_1_waveform_controller_function.html#a1b83f439aae8d785f1db065ac7e59139", null ],

@@ -11,7 +11,6 @@ var class_ogre_1_1_gpu_program_usage =
     [ "getProgramName", "class_ogre_1_1_gpu_program_usage.html#ad02e3ffe067deb8e2b7569321d95fff9", null ],
     [ "getType", "class_ogre_1_1_gpu_program_usage.html#ad8b71cebdb78ac8d86effa88ef9412a6", null ],
     [ "loadingComplete", "class_ogre_1_1_gpu_program_usage.html#a81ccd8b8364a2650c0754a498152c69f", null ],
-    [ "preparingComplete", "class_ogre_1_1_gpu_program_usage.html#a7951abdcff85efd6cf58a49d94442f67", null ],
     [ "setParameters", "class_ogre_1_1_gpu_program_usage.html#a91c1c956ce21910fb19b533d00761d41", null ],
     [ "setProgram", "class_ogre_1_1_gpu_program_usage.html#a6d21e305d7dd1524e859b1c916cc9780", null ],
     [ "setProgramName", "class_ogre_1_1_gpu_program_usage.html#a512e5a33561e116ad63042ec383bc911", null ],

@@ -2,7 +2,7 @@ var hierarchy =
 [
     [ "_D3DCOLORVALUE", "struct___d3_d_c_o_l_o_r_v_a_l_u_e.html", null ],
     [ "_finddata_t", "struct__finddata__t.html", null ],
-    [ "Ogre::AllocatedObject< AlignAllocPolicy<> >", "class_ogre_1_1_allocated_object.html", [
+    [ "Ogre::AllocatedObject< AlignAllocPolicy<> >", null, [
       [ "Ogre::AutoParamDataSource", "class_ogre_1_1_auto_param_data_source.html", null ],
       [ "Ogre::Hlms", "class_ogre_1_1_hlms.html", [
         [ "Ogre::HlmsBufferManager", "class_ogre_1_1_hlms_buffer_manager.html", [
@@ -234,7 +234,6 @@ var hierarchy =
     [ "Ogre::AbiCookie", "struct_ogre_1_1_abi_cookie.html", null ],
     [ "Ogre::ActiveActorData", "struct_ogre_1_1_active_actor_data.html", null ],
     [ "Ogre::AlignedMemory", "class_ogre_1_1_aligned_memory.html", null ],
-    [ "Ogre::AllocatedObject< Alloc >", "class_ogre_1_1_allocated_object.html", null ],
     [ "Ogre::Angle", "class_ogre_1_1_angle.html", null ],
     [ "Ogre::AnimableObject", "class_ogre_1_1_animable_object.html", [
       [ "Ogre::MovableObject", "class_ogre_1_1_movable_object.html", [
@@ -1415,7 +1414,7 @@ var hierarchy =
     [ "Ogre::ParallaxCorrectedCubemapAutoListener", "class_ogre_1_1_parallax_corrected_cubemap_auto_listener.html", [
       [ "Ogre::PccPerPixelGridPlacement", "class_ogre_1_1_pcc_per_pixel_grid_placement.html", null ]
     ] ],
-    [ "Ogre::ParamCommand", "class_ogre_1_1_param_command.html", [
+    [ "Ogre::ParamCommand", null, [
       [ "Ogre::AreaEmitter::CmdDepth", "class_ogre_1_1_area_emitter_1_1_cmd_depth.html", null ],
       [ "Ogre::AreaEmitter::CmdHeight", "class_ogre_1_1_area_emitter_1_1_cmd_height.html", null ],
       [ "Ogre::AreaEmitter::CmdWidth", "class_ogre_1_1_area_emitter_1_1_cmd_width.html", null ],

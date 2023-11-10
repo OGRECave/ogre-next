@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -133,8 +132,9 @@ Public Types</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:aa20b2f1745d99d3534242c64c19e5c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac88868dab1629f0becfe78f25f27426"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; ptrdiff_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426">PtrdiffVec</a></td></tr>
-<tr class="separator:aac88868dab1629f0becfe78f25f27426"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_class_ogre_1_1_array_memory_manager"><td colspan="2" onclick="javascript:toggleInherit('pub_types_class_ogre_1_1_array_memory_manager')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_ogre_1_1_array_memory_manager.html">Ogre::ArrayMemoryManager</a></td></tr>
+<tr class="memitem:aac88868dab1629f0becfe78f25f27426 inherit pub_types_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; ptrdiff_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426">PtrdiffVec</a></td></tr>
+<tr class="separator:aac88868dab1629f0becfe78f25f27426 inherit pub_types_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -144,42 +144,48 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad03ffb749fb44282e687fd5cd982a6b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone_array_memory_manager.html#ad03ffb749fb44282e687fd5cd982a6b7">createNewNode</a> (<a class="el" href="struct_ogre_1_1_bone_transform.html">BoneTransform</a> &amp;outTransform)</td></tr>
 <tr class="memdesc:ad03ffb749fb44282e687fd5cd982a6b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests memory for a new <a class="el" href="class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton.">Bone</a> (for the Array vectors &amp; matrices) May be also be used for a new Entity, etc.  <a href="class_ogre_1_1_bone_array_memory_manager.html#ad03ffb749fb44282e687fd5cd982a6b7">More...</a><br /></td></tr>
 <tr class="separator:ad03ffb749fb44282e687fd5cd982a6b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ff6ca754a46c4d2fe35ec737681bc26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a1ff6ca754a46c4d2fe35ec737681bc26">defragment</a> ()</td></tr>
-<tr class="memdesc:a1ff6ca754a46c4d2fe35ec737681bc26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triggers on demand a defragmentation of the pools, so that all slots become contiguous in memory.  <a href="class_ogre_1_1_array_memory_manager.html#a1ff6ca754a46c4d2fe35ec737681bc26">More...</a><br /></td></tr>
-<tr class="separator:a1ff6ca754a46c4d2fe35ec737681bc26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa59979265f37644b7b411c1c186412a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0">destroy</a> ()</td></tr>
-<tr class="memdesc:aa59979265f37644b7b411c1c186412a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the memory ptrs.  <a href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0">More...</a><br /></td></tr>
-<tr class="separator:aa59979265f37644b7b411c1c186412a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad576942696d777aeb0589dda9c481044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone_array_memory_manager.html#ad576942696d777aeb0589dda9c481044">destroyNode</a> (<a class="el" href="struct_ogre_1_1_bone_transform.html">BoneTransform</a> &amp;inOutTransform)</td></tr>
 <tr class="memdesc:ad576942696d777aeb0589dda9c481044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases memory acquired through.  <a href="class_ogre_1_1_bone_array_memory_manager.html#ad576942696d777aeb0589dda9c481044">More...</a><br /></td></tr>
 <tr class="separator:ad576942696d777aeb0589dda9c481044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c128b8ba585ecb04205e81d2aa2c341"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a8c128b8ba585ecb04205e81d2aa2c341">getAllMemory</a> () const</td></tr>
-<tr class="memdesc:a8c128b8ba585ecb04205e81d2aa2c341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all memory reserved for this manager.  <a href="class_ogre_1_1_array_memory_manager.html#a8c128b8ba585ecb04205e81d2aa2c341">More...</a><br /></td></tr>
-<tr class="separator:a8c128b8ba585ecb04205e81d2aa2c341"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9190868192f4cd6b544832e168410768"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone_array_memory_manager.html#a9190868192f4cd6b544832e168410768">getFirstNode</a> (<a class="el" href="struct_ogre_1_1_bone_transform.html">BoneTransform</a> &amp;outTransform)</td></tr>
 <tr class="memdesc:a9190868192f4cd6b544832e168410768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a <a class="el" href="struct_ogre_1_1_bone_transform.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">BoneTransform</a> pointing to the first <a class="el" href="class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton.">Bone</a>.  <a href="class_ogre_1_1_bone_array_memory_manager.html#a9190868192f4cd6b544832e168410768">More...</a><br /></td></tr>
 <tr class="separator:a9190868192f4cd6b544832e168410768"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac639db8f3c078fa02ceb2691d4b86065"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#ac639db8f3c078fa02ceb2691d4b86065">getFreeMemory</a> () const</td></tr>
-<tr class="memdesc:ac639db8f3c078fa02ceb2691d4b86065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets available memory in bytes.  <a href="class_ogre_1_1_array_memory_manager.html#ac639db8f3c078fa02ceb2691d4b86065">More...</a><br /></td></tr>
-<tr class="separator:ac639db8f3c078fa02ceb2691d4b86065"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd91cd460057cd3a143e84c887655c26"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#afd91cd460057cd3a143e84c887655c26">getNumUsedSlotsIncludingFragmented</a> () const</td></tr>
-<tr class="memdesc:afd91cd460057cd3a143e84c887655c26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns mUsedMemory.  <a href="class_ogre_1_1_array_memory_manager.html#afd91cd460057cd3a143e84c887655c26">More...</a><br /></td></tr>
-<tr class="separator:afd91cd460057cd3a143e84c887655c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1483bb4f495abd37502c209eecc08881"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881">getUsedMemory</a> () const</td></tr>
-<tr class="memdesc:a1483bb4f495abd37502c209eecc08881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets used memory in bytes (not including waste)  <a href="class_ogre_1_1_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881">More...</a><br /></td></tr>
-<tr class="separator:a1483bb4f495abd37502c209eecc08881"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42fe5a861ebd6b4610189ce2be86b032"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032">getWastedMemory</a> () const</td></tr>
-<tr class="memdesc:a42fe5a861ebd6b4610189ce2be86b032"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets wasted memory (perform a cleanup to fix)  <a href="class_ogre_1_1_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032">More...</a><br /></td></tr>
-<tr class="separator:a42fe5a861ebd6b4610189ce2be86b032"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad680fce37ec7058f94a5a69be2e2f4c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5">initialize</a> ()</td></tr>
-<tr class="memdesc:ad680fce37ec7058f94a5a69be2e2f4c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes mMemoryPools.  <a href="class_ogre_1_1_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5">More...</a><br /></td></tr>
-<tr class="separator:ad680fce37ec7058f94a5a69be2e2f4c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a443f00a249cbbc4b6edf56632c5e2756"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756">neverDefragment</a> ()</td></tr>
-<tr class="memdesc:a443f00a249cbbc4b6edf56632c5e2756"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prevent defragmentation from ever happening.  <a href="class_ogre_1_1_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756">More...</a><br /></td></tr>
-<tr class="separator:a443f00a249cbbc4b6edf56632c5e2756"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1885069fab42349469ea51ea34590bad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a1885069fab42349469ea51ea34590bad">shrinkToFit</a> ()</td></tr>
-<tr class="memdesc:a1885069fab42349469ea51ea34590bad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defragments memory, then reallocates a smaller pool that tightly fits the current number of objects.  <a href="class_ogre_1_1_array_memory_manager.html#a1885069fab42349469ea51ea34590bad">More...</a><br /></td></tr>
-<tr class="separator:a1885069fab42349469ea51ea34590bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_array_memory_manager"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_array_memory_manager')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_array_memory_manager.html">Ogre::ArrayMemoryManager</a></td></tr>
+<tr class="memitem:a9d4cefc1bbe7c9016496e60f7ceb6bcd inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a9d4cefc1bbe7c9016496e60f7ceb6bcd">ArrayMemoryManager</a> (size_t const *elementsMemSize, <a class="el" href="group___memory.html#ga4670b4da69fc17f183690626fd3bf47f">CleanupRoutines</a> const *initRoutines, <a class="el" href="group___memory.html#ga4670b4da69fc17f183690626fd3bf47f">CleanupRoutines</a> const *cleanupRoutines, size_t numElementsSize, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> depthLevel, size_t hintMaxNodes, size_t cleanupThreshold=100, size_t maxHardLimit=<a class="el" href="class_ogre_1_1_array_memory_manager.html#a738870646404c47464027863b9dea16c">MAX_MEMORY_SLOTS</a>, <a class="el" href="class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html">RebaseListener</a> *rebaseListener=0)</td></tr>
+<tr class="memdesc:a9d4cefc1bbe7c9016496e60f7ceb6bcd inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_ogre_1_1_array_memory_manager.html#a9d4cefc1bbe7c9016496e60f7ceb6bcd">More...</a><br /></td></tr>
+<tr class="separator:a9d4cefc1bbe7c9016496e60f7ceb6bcd inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac39c1d7b610c181e4c9b5baeef0097cc inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#ac39c1d7b610c181e4c9b5baeef0097cc">~ArrayMemoryManager</a> ()</td></tr>
+<tr class="separator:ac39c1d7b610c181e4c9b5baeef0097cc inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ff6ca754a46c4d2fe35ec737681bc26 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a1ff6ca754a46c4d2fe35ec737681bc26">defragment</a> ()</td></tr>
+<tr class="memdesc:a1ff6ca754a46c4d2fe35ec737681bc26 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triggers on demand a defragmentation of the pools, so that all slots become contiguous in memory.  <a href="class_ogre_1_1_array_memory_manager.html#a1ff6ca754a46c4d2fe35ec737681bc26">More...</a><br /></td></tr>
+<tr class="separator:a1ff6ca754a46c4d2fe35ec737681bc26 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa59979265f37644b7b411c1c186412a0 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0">destroy</a> ()</td></tr>
+<tr class="memdesc:aa59979265f37644b7b411c1c186412a0 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the memory ptrs.  <a href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0">More...</a><br /></td></tr>
+<tr class="separator:aa59979265f37644b7b411c1c186412a0 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c128b8ba585ecb04205e81d2aa2c341 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a8c128b8ba585ecb04205e81d2aa2c341">getAllMemory</a> () const</td></tr>
+<tr class="memdesc:a8c128b8ba585ecb04205e81d2aa2c341 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all memory reserved for this manager.  <a href="class_ogre_1_1_array_memory_manager.html#a8c128b8ba585ecb04205e81d2aa2c341">More...</a><br /></td></tr>
+<tr class="separator:a8c128b8ba585ecb04205e81d2aa2c341 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac639db8f3c078fa02ceb2691d4b86065 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#ac639db8f3c078fa02ceb2691d4b86065">getFreeMemory</a> () const</td></tr>
+<tr class="memdesc:ac639db8f3c078fa02ceb2691d4b86065 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets available memory in bytes.  <a href="class_ogre_1_1_array_memory_manager.html#ac639db8f3c078fa02ceb2691d4b86065">More...</a><br /></td></tr>
+<tr class="separator:ac639db8f3c078fa02ceb2691d4b86065 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd91cd460057cd3a143e84c887655c26 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#afd91cd460057cd3a143e84c887655c26">getNumUsedSlotsIncludingFragmented</a> () const</td></tr>
+<tr class="memdesc:afd91cd460057cd3a143e84c887655c26 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns mUsedMemory.  <a href="class_ogre_1_1_array_memory_manager.html#afd91cd460057cd3a143e84c887655c26">More...</a><br /></td></tr>
+<tr class="separator:afd91cd460057cd3a143e84c887655c26 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1483bb4f495abd37502c209eecc08881 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881">getUsedMemory</a> () const</td></tr>
+<tr class="memdesc:a1483bb4f495abd37502c209eecc08881 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets used memory in bytes (not including waste)  <a href="class_ogre_1_1_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881">More...</a><br /></td></tr>
+<tr class="separator:a1483bb4f495abd37502c209eecc08881 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42fe5a861ebd6b4610189ce2be86b032 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032">getWastedMemory</a> () const</td></tr>
+<tr class="memdesc:a42fe5a861ebd6b4610189ce2be86b032 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets wasted memory (perform a cleanup to fix)  <a href="class_ogre_1_1_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032">More...</a><br /></td></tr>
+<tr class="separator:a42fe5a861ebd6b4610189ce2be86b032 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad680fce37ec7058f94a5a69be2e2f4c5 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5">initialize</a> ()</td></tr>
+<tr class="memdesc:ad680fce37ec7058f94a5a69be2e2f4c5 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes mMemoryPools.  <a href="class_ogre_1_1_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5">More...</a><br /></td></tr>
+<tr class="separator:ad680fce37ec7058f94a5a69be2e2f4c5 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a443f00a249cbbc4b6edf56632c5e2756 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756">neverDefragment</a> ()</td></tr>
+<tr class="memdesc:a443f00a249cbbc4b6edf56632c5e2756 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prevent defragmentation from ever happening.  <a href="class_ogre_1_1_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756">More...</a><br /></td></tr>
+<tr class="separator:a443f00a249cbbc4b6edf56632c5e2756 inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1885069fab42349469ea51ea34590bad inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a1885069fab42349469ea51ea34590bad">shrinkToFit</a> ()</td></tr>
+<tr class="memdesc:a1885069fab42349469ea51ea34590bad inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defragments memory, then reallocates a smaller pool that tightly fits the current number of objects.  <a href="class_ogre_1_1_array_memory_manager.html#a1885069fab42349469ea51ea34590bad">More...</a><br /></td></tr>
+<tr class="separator:a1885069fab42349469ea51ea34590bad inherit pub_methods_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -189,37 +195,15 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a54f67f154e7bc21144c1962b83063fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f9c3b7d2dee1d619161717d8ed0cd80"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone_array_memory_manager.html#a1f9c3b7d2dee1d619161717d8ed0cd80">ElementsMemSize</a> [<a class="el" href="class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7ea071e67bb3f346281a5dbbdb6b4abfa00">NumMemoryTypes</a>]</td></tr>
 <tr class="separator:a1f9c3b7d2dee1d619161717d8ed0cd80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a738870646404c47464027863b9dea16c"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a738870646404c47464027863b9dea16c">MAX_MEMORY_SLOTS</a></td></tr>
-<tr class="separator:a738870646404c47464027863b9dea16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_class_ogre_1_1_array_memory_manager"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_class_ogre_1_1_array_memory_manager')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="class_ogre_1_1_array_memory_manager.html">Ogre::ArrayMemoryManager</a></td></tr>
+<tr class="memitem:a738870646404c47464027863b9dea16c inherit pub_static_attribs_class_ogre_1_1_array_memory_manager"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_memory_manager.html#a738870646404c47464027863b9dea16c">MAX_MEMORY_SLOTS</a></td></tr>
+<tr class="separator:a738870646404c47464027863b9dea16c inherit pub_static_attribs_class_ogre_1_1_array_memory_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Implementation to create the <a class="el" href="struct_ogre_1_1_transform.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)">Transform</a> variables needed by Bones. </p>
 <dl class="section author"><dt>Author</dt><dd>Matias N. Goldberg </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="aac88868dab1629f0becfe78f25f27426" name="aac88868dab1629f0becfe78f25f27426"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac88868dab1629f0becfe78f25f27426">&#9670;&#160;</a></span>PtrdiffVec</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef std::vector&lt;ptrdiff_t&gt; <a class="el" href="class_ogre_1_1_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426">Ogre::ArrayMemoryManager::PtrdiffVec</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="aa20b2f1745d99d3534242c64c19e5c7e" name="aa20b2f1745d99d3534242c64c19e5c7e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa20b2f1745d99d3534242c64c19e5c7e">&#9670;&#160;</a></span>MemoryTypes</h2>
 
@@ -343,63 +327,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1ff6ca754a46c4d2fe35ec737681bc26" name="a1ff6ca754a46c4d2fe35ec737681bc26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ff6ca754a46c4d2fe35ec737681bc26">&#9670;&#160;</a></span>defragment()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ArrayMemoryManager::defragment </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Triggers on demand a defragmentation of the pools, so that all slots become contiguous in memory. </p>
-<p >ArrayMemoryManager::destroySlot already does this when the number of fragmented slots reaches mCleanupThreshold </p>
-
-</div>
-</div>
-<a id="aa59979265f37644b7b411c1c186412a0" name="aa59979265f37644b7b411c1c186412a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa59979265f37644b7b411c1c186412a0">&#9670;&#160;</a></span>destroy()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ArrayMemoryManager::destroy </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Destroys the memory ptrs. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5" title="Initializes mMemoryPools.">initialize</a> </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>If there were slots in use, make sure they're no longer used, as their ptrs will become dangling ptrs. We don't assert because this may be valid behavior (i.e. on shutdown) </dd></dl>
-
-</div>
-</div>
 <a id="ad576942696d777aeb0589dda9c481044" name="ad576942696d777aeb0589dda9c481044"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad576942696d777aeb0589dda9c481044">&#9670;&#160;</a></span>destroyNode()</h2>
 
@@ -425,33 +352,6 @@ Static Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a8c128b8ba585ecb04205e81d2aa2c341" name="a8c128b8ba585ecb04205e81d2aa2c341"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c128b8ba585ecb04205e81d2aa2c341">&#9670;&#160;</a></span>getAllMemory()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t Ogre::ArrayMemoryManager::getAllMemory </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets all memory reserved for this manager. </p>
 
 </div>
 </div>
@@ -481,199 +381,6 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of Nodes in this depth level </dd></dl>
-
-</div>
-</div>
-<a id="ac639db8f3c078fa02ceb2691d4b86065" name="ac639db8f3c078fa02ceb2691d4b86065"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac639db8f3c078fa02ceb2691d4b86065">&#9670;&#160;</a></span>getFreeMemory()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t Ogre::ArrayMemoryManager::getFreeMemory </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets available memory in bytes. </p>
-
-</div>
-</div>
-<a id="afd91cd460057cd3a143e84c887655c26" name="afd91cd460057cd3a143e84c887655c26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd91cd460057cd3a143e84c887655c26">&#9670;&#160;</a></span>getNumUsedSlotsIncludingFragmented()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t Ogre::ArrayMemoryManager::getNumUsedSlotsIncludingFragmented </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns mUsedMemory. </p>
-<p >When ARRAY_PACKED_REALS = 4, and 4 objects have been created but the 2nd one has been deleted, getNumUsedSlotsIncludingFragmented will still return 4 until the 4th object is removed or a cleanup is performed </p>
-
-</div>
-</div>
-<a id="a1483bb4f495abd37502c209eecc08881" name="a1483bb4f495abd37502c209eecc08881"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1483bb4f495abd37502c209eecc08881">&#9670;&#160;</a></span>getUsedMemory()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t Ogre::ArrayMemoryManager::getUsedMemory </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets used memory in bytes (not including waste) </p>
-
-</div>
-</div>
-<a id="a42fe5a861ebd6b4610189ce2be86b032" name="a42fe5a861ebd6b4610189ce2be86b032"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42fe5a861ebd6b4610189ce2be86b032">&#9670;&#160;</a></span>getWastedMemory()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t Ogre::ArrayMemoryManager::getWastedMemory </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets wasted memory (perform a cleanup to fix) </p>
-
-</div>
-</div>
-<a id="ad680fce37ec7058f94a5a69be2e2f4c5" name="ad680fce37ec7058f94a5a69be2e2f4c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad680fce37ec7058f94a5a69be2e2f4c5">&#9670;&#160;</a></span>initialize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ArrayMemoryManager::initialize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initializes mMemoryPools. </p>
-<p >Once it has been called, <a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0" title="Destroys the memory ptrs.">destroy()</a> <b>must</b> be called. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0" title="Destroys the memory ptrs.">destroy</a> </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>The destructor won't free the data, if you don't call destroy, memory will leak. Calling initialize twice is possible and won't leak, but will free the previous memory ptrs without calling the registered RebaseListener. So if there were slots in use, their pointers will become dangling. An assert will trigger if this happens. </dd></dl>
-
-</div>
-</div>
-<a id="a443f00a249cbbc4b6edf56632c5e2756" name="a443f00a249cbbc4b6edf56632c5e2756"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a443f00a249cbbc4b6edf56632c5e2756">&#9670;&#160;</a></span>neverDefragment()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ArrayMemoryManager::neverDefragment </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Prevent defragmentation from ever happening. </p>
-
-</div>
-</div>
-<a id="a1885069fab42349469ea51ea34590bad" name="a1885069fab42349469ea51ea34590bad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1885069fab42349469ea51ea34590bad">&#9670;&#160;</a></span>shrinkToFit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ArrayMemoryManager::shrinkToFit </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Defragments memory, then reallocates a smaller pool that tightly fits the current number of objects. </p>
-<p >Useful when you know you won't be creating more slots and you need to reclaim memory. </p>
 
 </div>
 </div>
@@ -738,28 +445,6 @@ Static Public Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a738870646404c47464027863b9dea16c" name="a738870646404c47464027863b9dea16c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a738870646404c47464027863b9dea16c">&#9670;&#160;</a></span>MAX_MEMORY_SLOTS</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const size_t Ogre::ArrayMemoryManager::MAX_MEMORY_SLOTS</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

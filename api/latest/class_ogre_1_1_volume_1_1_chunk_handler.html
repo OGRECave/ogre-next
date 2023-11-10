@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -123,12 +122,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a45aca5ac0738bf63b7539627a9d0d978"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_chunk_handler.html#a45aca5ac0738bf63b7539627a9d0d978">addRequest</a> (const <a class="el" href="struct_ogre_1_1_volume_1_1_chunk_request.html">ChunkRequest</a> &amp;req)</td></tr>
 <tr class="memdesc:a45aca5ac0738bf63b7539627a9d0d978"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new <a class="el" href="struct_ogre_1_1_volume_1_1_chunk_request.html" title="Data being passed around while loading.">ChunkRequest</a> to be loaded to the <a class="el" href="class_ogre_1_1_work_queue.html" title="Interface to a general purpose request / response style background work queue.">WorkQueue</a>.  <a href="class_ogre_1_1_volume_1_1_chunk_handler.html#a45aca5ac0738bf63b7539627a9d0d978">More...</a><br /></td></tr>
 <tr class="separator:a45aca5ac0738bf63b7539627a9d0d978"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf4a5093c7b789352a0a44629490bc87"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html#adf4a5093c7b789352a0a44629490bc87">canHandleRequest</a> (const Request *req, const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *srcQ)</td></tr>
-<tr class="memdesc:adf4a5093c7b789352a0a44629490bc87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether this handler can process a given request.  <a href="class_ogre_1_1_work_queue_1_1_request_handler.html#adf4a5093c7b789352a0a44629490bc87">More...</a><br /></td></tr>
-<tr class="separator:adf4a5093c7b789352a0a44629490bc87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a2fabae7f92bed384f100526055a899"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html#a7a2fabae7f92bed384f100526055a899">canHandleResponse</a> (const Response *res, const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *srcQ)</td></tr>
-<tr class="memdesc:a7a2fabae7f92bed384f100526055a899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether this handler can process a given response.  <a href="class_ogre_1_1_work_queue_1_1_response_handler.html#a7a2fabae7f92bed384f100526055a899">More...</a><br /></td></tr>
-<tr class="separator:a7a2fabae7f92bed384f100526055a899"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bb58c8f5cd6e9a59e743c3f1c5eeaeb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_work_queue_1_1_response.html">WorkQueue::Response</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_chunk_handler.html#a2bb58c8f5cd6e9a59e743c3f1c5eeaeb">handleRequest</a> (const <a class="el" href="class_ogre_1_1_work_queue_1_1_request.html">WorkQueue::Request</a> *req, const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *srcQ)</td></tr>
 <tr class="memdesc:a2bb58c8f5cd6e9a59e743c3f1c5eeaeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation for <a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests.">WorkQueue::RequestHandler</a>.  <a href="class_ogre_1_1_volume_1_1_chunk_handler.html#a2bb58c8f5cd6e9a59e743c3f1c5eeaeb">More...</a><br /></td></tr>
 <tr class="separator:a2bb58c8f5cd6e9a59e743c3f1c5eeaeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,6 +131,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a70535b273b9b1a91b0d6824973bda14f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_chunk_handler.html#a70535b273b9b1a91b0d6824973bda14f">processWorkQueue</a> ()</td></tr>
 <tr class="memdesc:a70535b273b9b1a91b0d6824973bda14f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the process-update of the <a class="el" href="class_ogre_1_1_work_queue.html" title="Interface to a general purpose request / response style background work queue.">WorkQueue</a> so it doesn't block.  <a href="class_ogre_1_1_volume_1_1_chunk_handler.html#a70535b273b9b1a91b0d6824973bda14f">More...</a><br /></td></tr>
 <tr class="separator:a70535b273b9b1a91b0d6824973bda14f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_work_queue_1_1_request_handler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html">Ogre::WorkQueue::RequestHandler</a></td></tr>
+<tr class="memitem:a37f35aaa5935b91a180d92e5243fccb7 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html#a37f35aaa5935b91a180d92e5243fccb7">RequestHandler</a> ()</td></tr>
+<tr class="separator:a37f35aaa5935b91a180d92e5243fccb7 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d7c8fced3825d323b12b5dbd167bf83 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html#a0d7c8fced3825d323b12b5dbd167bf83">~RequestHandler</a> ()</td></tr>
+<tr class="separator:a0d7c8fced3825d323b12b5dbd167bf83 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf4a5093c7b789352a0a44629490bc87 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html#adf4a5093c7b789352a0a44629490bc87">canHandleRequest</a> (const <a class="el" href="class_ogre_1_1_work_queue_1_1_request.html">Request</a> *req, const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *srcQ)</td></tr>
+<tr class="memdesc:adf4a5093c7b789352a0a44629490bc87 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether this handler can process a given request.  <a href="class_ogre_1_1_work_queue_1_1_request_handler.html#adf4a5093c7b789352a0a44629490bc87">More...</a><br /></td></tr>
+<tr class="separator:adf4a5093c7b789352a0a44629490bc87 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e0e8cf40a6e47136aac754e15f08974 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_ogre_1_1_work_queue_1_1_response.html">Response</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html#a8e0e8cf40a6e47136aac754e15f08974">handleRequest</a> (const <a class="el" href="class_ogre_1_1_work_queue_1_1_request.html">Request</a> *req, const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *srcQ)=0</td></tr>
+<tr class="memdesc:a8e0e8cf40a6e47136aac754e15f08974 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="mdescLeft">&#160;</td><td class="mdescRight">The handler method every subclass must implement.  <a href="class_ogre_1_1_work_queue_1_1_request_handler.html#a8e0e8cf40a6e47136aac754e15f08974">More...</a><br /></td></tr>
+<tr class="separator:a8e0e8cf40a6e47136aac754e15f08974 inherit pub_methods_class_ogre_1_1_work_queue_1_1_request_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_work_queue_1_1_response_handler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html">Ogre::WorkQueue::ResponseHandler</a></td></tr>
+<tr class="memitem:a0e4215e93030a19595bc2d2e30f0a938 inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html#a0e4215e93030a19595bc2d2e30f0a938">ResponseHandler</a> ()</td></tr>
+<tr class="separator:a0e4215e93030a19595bc2d2e30f0a938 inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fb201476bd4bf5a14425c4598753aab inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html#a5fb201476bd4bf5a14425c4598753aab">~ResponseHandler</a> ()</td></tr>
+<tr class="separator:a5fb201476bd4bf5a14425c4598753aab inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a2fabae7f92bed384f100526055a899 inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html#a7a2fabae7f92bed384f100526055a899">canHandleResponse</a> (const <a class="el" href="struct_ogre_1_1_work_queue_1_1_response.html">Response</a> *res, const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *srcQ)</td></tr>
+<tr class="memdesc:a7a2fabae7f92bed384f100526055a899 inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether this handler can process a given response.  <a href="class_ogre_1_1_work_queue_1_1_response_handler.html#a7a2fabae7f92bed384f100526055a899">More...</a><br /></td></tr>
+<tr class="separator:a7a2fabae7f92bed384f100526055a899 inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fab0334551e482042df078a5945f5de inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html#a8fab0334551e482042df078a5945f5de">handleResponse</a> (const <a class="el" href="struct_ogre_1_1_work_queue_1_1_response.html">Response</a> *res, const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *srcQ)=0</td></tr>
+<tr class="memdesc:a8fab0334551e482042df078a5945f5de inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="mdescLeft">&#160;</td><td class="mdescRight">The handler method every subclass must implement.  <a href="class_ogre_1_1_work_queue_1_1_response_handler.html#a8fab0334551e482042df078a5945f5de">More...</a><br /></td></tr>
+<tr class="separator:a8fab0334551e482042df078a5945f5de inherit pub_methods_class_ogre_1_1_work_queue_1_1_response_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Handles the <a class="el" href="class_ogre_1_1_work_queue.html" title="Interface to a general purpose request / response style background work queue.">WorkQueue</a> management of the chunks. </p>
@@ -212,92 +227,6 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="adf4a5093c7b789352a0a44629490bc87" name="adf4a5093c7b789352a0a44629490bc87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf4a5093c7b789352a0a44629490bc87">&#9670;&#160;</a></span>canHandleRequest()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Ogre::WorkQueue::RequestHandler::canHandleRequest </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_work_queue_1_1_request.html">Request</a> *&#160;</td>
-          <td class="paramname"><em>req</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *&#160;</td>
-          <td class="paramname"><em>srcQ</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return whether this handler can process a given request. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Defaults to true, but if you wish to add several handlers each of which deal with different types of request, you can override this method. </dd></dl>
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_page.html#a858b194d988c22e52516f03fd50d0062">Ogre::Page</a>, and <a class="el" href="class_ogre_1_1_resource_background_queue.html#ad9a9f0ca7d0fd287954cfeefcecd1f37">Ogre::ResourceBackgroundQueue</a>.</p>
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_work_queue_1_1_request.html#a787e9f136393d10910474fbb433bf05a">Ogre::WorkQueue::Request::getAborted()</a>.</p>
-
-</div>
-</div>
-<a id="a7a2fabae7f92bed384f100526055a899" name="a7a2fabae7f92bed384f100526055a899"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a2fabae7f92bed384f100526055a899">&#9670;&#160;</a></span>canHandleResponse()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Ogre::WorkQueue::ResponseHandler::canHandleResponse </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_work_queue_1_1_response.html">Response</a> *&#160;</td>
-          <td class="paramname"><em>res</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_work_queue.html">WorkQueue</a> *&#160;</td>
-          <td class="paramname"><em>srcQ</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return whether this handler can process a given response. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Defaults to true, but if you wish to add several handlers each of which deal with different types of response, you can override this method. </dd></dl>
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_page.html#a3e963a28826407a7cb45f6c8fdaab4ce">Ogre::Page</a>, and <a class="el" href="class_ogre_1_1_resource_background_queue.html#ac55be78a397f2e6ec2b8421871096389">Ogre::ResourceBackgroundQueue</a>.</p>
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_work_queue_1_1_request.html#a787e9f136393d10910474fbb433bf05a">Ogre::WorkQueue::Request::getAborted()</a>, and <a class="el" href="struct_ogre_1_1_work_queue_1_1_response.html#a069919ee58c46826f4d0dc11ad802d16">Ogre::WorkQueue::Response::getRequest()</a>.</p>
 
 </div>
 </div>

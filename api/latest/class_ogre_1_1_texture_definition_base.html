@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -97,7 +96,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_texture_definition_base
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_texture_definition_base-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::TextureDefinitionBase Class Reference<div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___effects.html">Effects</a></div></div></div>
 </div><!--header-->
@@ -231,13 +229,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a144e886afb8ef106b348e308f7c12a87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a348ce672cc5c66882639051002325f91"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a348ce672cc5c66882639051002325f91">setupTexture</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *tex, const <a class="el" href="class_ogre_1_1_texture_definition_base_1_1_texture_definition.html">TextureDefinition</a> &amp;textureDef, const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *finalTarget)</td></tr>
 <tr class="separator:a348ce672cc5c66882639051002325f91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:aa9dbbda8ea72eba1cf3c77f13e23fcdf"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#aa9dbbda8ea72eba1cf3c77f13e23fcdf">CompositorNode</a></td></tr>
-<tr class="separator:aa9dbbda8ea72eba1cf3c77f13e23fcdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87d95f1066f10ce9e0fd54d6ec545633"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a87d95f1066f10ce9e0fd54d6ec545633">CompositorWorkspace</a></td></tr>
-<tr class="separator:a87d95f1066f10ce9e0fd54d6ec545633"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Centralized class for dealing with declarations of textures in <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> &amp; Workspace definitions. </p>
@@ -1561,51 +1552,6 @@ Friends</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="aa9dbbda8ea72eba1cf3c77f13e23fcdf" name="aa9dbbda8ea72eba1cf3c77f13e23fcdf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9dbbda8ea72eba1cf3c77f13e23fcdf">&#9670;&#160;</a></span>CompositorNode</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_compositor_node.html">CompositorNode</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a87d95f1066f10ce9e0fd54d6ec545633" name="a87d95f1066f10ce9e0fd54d6ec545633"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87d95f1066f10ce9e0fd54d6ec545633">&#9670;&#160;</a></span>CompositorWorkspace</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -2,7 +2,6 @@ var class_ogre_1_1_wire_aabb_factory =
 [
     [ "WireAabbFactory", "class_ogre_1_1_wire_aabb_factory.html#a8db72b4819c9b95adc156a51ce8840e5", null ],
     [ "~WireAabbFactory", "class_ogre_1_1_wire_aabb_factory.html#aeca7d6e9453134a82e4457ceafc78ffc", null ],
-    [ "createInstance", "class_ogre_1_1_wire_aabb_factory.html#abd16dae5dd18b58f57d2e0d8bdbb26e0", null ],
     [ "destroyInstance", "class_ogre_1_1_wire_aabb_factory.html#a9b0c1cf9711935949fb4090d18b2c1c4", null ],
     [ "getType", "class_ogre_1_1_wire_aabb_factory.html#a23d551a9c9ddfaaf5f4e41d906ea8412", null ],
     [ "FACTORY_TYPE_NAME", "class_ogre_1_1_wire_aabb_factory.html#a08eafba0b076630a8e7e60b5f46f097a", null ]

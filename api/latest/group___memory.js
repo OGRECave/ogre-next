@@ -6,20 +6,6 @@ var group___memory =
       [ "allocate", "class_ogre_1_1_aligned_memory.html#aa7da5d5b67d88adec855c35ff1c3b8c2", null ],
       [ "deallocate", "class_ogre_1_1_aligned_memory.html#aec9665c128b282869284a6025520adee", null ]
     ] ],
-    [ "Ogre::AllocatedObject< Alloc >", "class_ogre_1_1_allocated_object.html", [
-      [ "AllocatedObject", "class_ogre_1_1_allocated_object.html#a366445eb206e55a2199267b8b9089ebb", null ],
-      [ "~AllocatedObject", "class_ogre_1_1_allocated_object.html#a499773d35ca98b2df7c2699fc8c1bea2", null ],
-      [ "operator delete", "class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
-      [ "operator delete", "class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792", null ],
-      [ "operator delete", "class_ogre_1_1_allocated_object.html#a1c727e879a260c37b00ce5505fe8e144", null ],
-      [ "operator delete[]", "class_ogre_1_1_allocated_object.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
-      [ "operator delete[]", "class_ogre_1_1_allocated_object.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-      [ "operator new", "class_ogre_1_1_allocated_object.html#ad1f1a983f9e2dfddee802c47bb0b1ca9", null ],
-      [ "operator new", "class_ogre_1_1_allocated_object.html#ab422c67a2c8844f410fe822a357cba3b", null ],
-      [ "operator new", "class_ogre_1_1_allocated_object.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
-      [ "operator new[]", "class_ogre_1_1_allocated_object.html#adce32528577d71b228692df906ecd17c", null ],
-      [ "operator new[]", "class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ]
-    ] ],
     [ "Ogre::ArrayMemoryManager", "class_ogre_1_1_array_memory_manager.html", [
       [ "RebaseListener", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html", [
         [ "applyRebase", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html#aefcfd7751701e774e0ba3ba51935438d", null ],
@@ -42,7 +28,6 @@ var group___memory =
       [ "MAX_MEMORY_SLOTS", "class_ogre_1_1_array_memory_manager.html#a738870646404c47464027863b9dea16c", null ]
     ] ],
     [ "Ogre::BoneArrayMemoryManager", "class_ogre_1_1_bone_array_memory_manager.html", [
-      [ "PtrdiffVec", "class_ogre_1_1_bone_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426", null ],
       [ "MemoryTypes", "class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7e", [
         [ "Owner", "class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7ea6b77403ae3588cc6d8f67271366327d5", null ],
         [ "Position", "class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7ead79d876167733f51086b408040fdc79f", null ],
@@ -58,22 +43,11 @@ var group___memory =
       ] ],
       [ "BoneArrayMemoryManager", "class_ogre_1_1_bone_array_memory_manager.html#a780996517465b98494b5671576da0bef", null ],
       [ "createNewNode", "class_ogre_1_1_bone_array_memory_manager.html#ad03ffb749fb44282e687fd5cd982a6b7", null ],
-      [ "defragment", "class_ogre_1_1_bone_array_memory_manager.html#a1ff6ca754a46c4d2fe35ec737681bc26", null ],
-      [ "destroy", "class_ogre_1_1_bone_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0", null ],
       [ "destroyNode", "class_ogre_1_1_bone_array_memory_manager.html#ad576942696d777aeb0589dda9c481044", null ],
-      [ "getAllMemory", "class_ogre_1_1_bone_array_memory_manager.html#a8c128b8ba585ecb04205e81d2aa2c341", null ],
       [ "getFirstNode", "class_ogre_1_1_bone_array_memory_manager.html#a9190868192f4cd6b544832e168410768", null ],
-      [ "getFreeMemory", "class_ogre_1_1_bone_array_memory_manager.html#ac639db8f3c078fa02ceb2691d4b86065", null ],
-      [ "getNumUsedSlotsIncludingFragmented", "class_ogre_1_1_bone_array_memory_manager.html#afd91cd460057cd3a143e84c887655c26", null ],
-      [ "getUsedMemory", "class_ogre_1_1_bone_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881", null ],
-      [ "getWastedMemory", "class_ogre_1_1_bone_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032", null ],
-      [ "initialize", "class_ogre_1_1_bone_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5", null ],
-      [ "neverDefragment", "class_ogre_1_1_bone_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756", null ],
-      [ "shrinkToFit", "class_ogre_1_1_bone_array_memory_manager.html#a1885069fab42349469ea51ea34590bad", null ],
       [ "BoneCleanupRoutines", "class_ogre_1_1_bone_array_memory_manager.html#a0ae824691bda826505d578c8e710e696", null ],
       [ "BoneInitRoutines", "class_ogre_1_1_bone_array_memory_manager.html#a54f67f154e7bc21144c1962b83063fad", null ],
-      [ "ElementsMemSize", "class_ogre_1_1_bone_array_memory_manager.html#a1f9c3b7d2dee1d619161717d8ed0cd80", null ],
-      [ "MAX_MEMORY_SLOTS", "class_ogre_1_1_bone_array_memory_manager.html#a738870646404c47464027863b9dea16c", null ]
+      [ "ElementsMemSize", "class_ogre_1_1_bone_array_memory_manager.html#a1f9c3b7d2dee1d619161717d8ed0cd80", null ]
     ] ],
     [ "Ogre::BoneMemoryManager", "class_ogre_1_1_bone_memory_manager.html", [
       [ "BoneMemoryManager", "class_ogre_1_1_bone_memory_manager.html#a4c64e11634352f03b8f6ef06c94ff800", null ],
@@ -93,7 +67,6 @@ var group___memory =
       [ "setBoneRebaseListener", "class_ogre_1_1_bone_memory_manager.html#a530c24952c58a0547716da1a6b75d78b", null ]
     ] ],
     [ "Ogre::NodeArrayMemoryManager", "class_ogre_1_1_node_array_memory_manager.html", [
-      [ "PtrdiffVec", "class_ogre_1_1_node_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426", null ],
       [ "MemoryTypes", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5f", [
         [ "Parent", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5fa8c8ec6390a866bd1f9a26254c3e389f3", null ],
         [ "Owner", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5faf719d71db838dd7d4d921ee72c3f3ac0", null ],
@@ -110,20 +83,9 @@ var group___memory =
       ] ],
       [ "NodeArrayMemoryManager", "class_ogre_1_1_node_array_memory_manager.html#aa151e8893d1202165995ba9446ac1813", null ],
       [ "createNewNode", "class_ogre_1_1_node_array_memory_manager.html#ac6fb4f1d86cd6a094d2705d59560840d", null ],
-      [ "defragment", "class_ogre_1_1_node_array_memory_manager.html#a1ff6ca754a46c4d2fe35ec737681bc26", null ],
-      [ "destroy", "class_ogre_1_1_node_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0", null ],
       [ "destroyNode", "class_ogre_1_1_node_array_memory_manager.html#ad6a69c60fa0af29d3f36469bc68a3518", null ],
-      [ "getAllMemory", "class_ogre_1_1_node_array_memory_manager.html#a8c128b8ba585ecb04205e81d2aa2c341", null ],
       [ "getFirstNode", "class_ogre_1_1_node_array_memory_manager.html#a7f8202c2ad3fd5e39ff357a1e4d4d013", null ],
-      [ "getFreeMemory", "class_ogre_1_1_node_array_memory_manager.html#ac639db8f3c078fa02ceb2691d4b86065", null ],
-      [ "getNumUsedSlotsIncludingFragmented", "class_ogre_1_1_node_array_memory_manager.html#afd91cd460057cd3a143e84c887655c26", null ],
-      [ "getUsedMemory", "class_ogre_1_1_node_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881", null ],
-      [ "getWastedMemory", "class_ogre_1_1_node_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032", null ],
-      [ "initialize", "class_ogre_1_1_node_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5", null ],
-      [ "neverDefragment", "class_ogre_1_1_node_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756", null ],
-      [ "shrinkToFit", "class_ogre_1_1_node_array_memory_manager.html#a1885069fab42349469ea51ea34590bad", null ],
       [ "ElementsMemSize", "class_ogre_1_1_node_array_memory_manager.html#a17a9a4ed2086a696252860e4dd1363a7", null ],
-      [ "MAX_MEMORY_SLOTS", "class_ogre_1_1_node_array_memory_manager.html#a738870646404c47464027863b9dea16c", null ],
       [ "NodeCleanupRoutines", "class_ogre_1_1_node_array_memory_manager.html#ae4768b67e11274e71bd9e63d967b9f6e", null ],
       [ "NodeInitRoutines", "class_ogre_1_1_node_array_memory_manager.html#a6c467643bfc4d843669d49d9a0a3fd8b", null ]
     ] ],
@@ -153,7 +115,6 @@ var group___memory =
       [ "shrinkToFit", "class_ogre_1_1_node_memory_manager.html#adb199d18bd2c249d44fc89c2dbfdedaf", null ]
     ] ],
     [ "Ogre::ObjectDataArrayMemoryManager", "class_ogre_1_1_object_data_array_memory_manager.html", [
-      [ "PtrdiffVec", "class_ogre_1_1_object_data_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426", null ],
       [ "MemoryTypes", "class_ogre_1_1_object_data_array_memory_manager.html#a01818bd20c4b78825933f9b4e5c83735", [
         [ "Parent", "class_ogre_1_1_object_data_array_memory_manager.html#a01818bd20c4b78825933f9b4e5c83735ac64922a0801701b751899aff96fa1072", null ],
         [ "Owner", "class_ogre_1_1_object_data_array_memory_manager.html#a01818bd20c4b78825933f9b4e5c83735a32327967a22f45457ddf494bb4fe88e9", null ],
@@ -171,20 +132,9 @@ var group___memory =
       ] ],
       [ "ObjectDataArrayMemoryManager", "class_ogre_1_1_object_data_array_memory_manager.html#ad2af8c192791b036134a6bf332972ce8", null ],
       [ "createNewNode", "class_ogre_1_1_object_data_array_memory_manager.html#aefcf632ca4631c7dcff0adf2d0e3328f", null ],
-      [ "defragment", "class_ogre_1_1_object_data_array_memory_manager.html#a1ff6ca754a46c4d2fe35ec737681bc26", null ],
-      [ "destroy", "class_ogre_1_1_object_data_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0", null ],
       [ "destroyNode", "class_ogre_1_1_object_data_array_memory_manager.html#abfa9d99a622bd7428e2458c554bb2808", null ],
-      [ "getAllMemory", "class_ogre_1_1_object_data_array_memory_manager.html#a8c128b8ba585ecb04205e81d2aa2c341", null ],
       [ "getFirstNode", "class_ogre_1_1_object_data_array_memory_manager.html#af6ef4eb0a0cba2e9fb5cdc8a61d30fa3", null ],
-      [ "getFreeMemory", "class_ogre_1_1_object_data_array_memory_manager.html#ac639db8f3c078fa02ceb2691d4b86065", null ],
-      [ "getNumUsedSlotsIncludingFragmented", "class_ogre_1_1_object_data_array_memory_manager.html#afd91cd460057cd3a143e84c887655c26", null ],
-      [ "getUsedMemory", "class_ogre_1_1_object_data_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881", null ],
-      [ "getWastedMemory", "class_ogre_1_1_object_data_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032", null ],
-      [ "initialize", "class_ogre_1_1_object_data_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5", null ],
-      [ "neverDefragment", "class_ogre_1_1_object_data_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756", null ],
-      [ "shrinkToFit", "class_ogre_1_1_object_data_array_memory_manager.html#a1885069fab42349469ea51ea34590bad", null ],
       [ "ElementsMemSize", "class_ogre_1_1_object_data_array_memory_manager.html#a0a0ae39e5ad5949c8ceb27f82db9a76a", null ],
-      [ "MAX_MEMORY_SLOTS", "class_ogre_1_1_object_data_array_memory_manager.html#a738870646404c47464027863b9dea16c", null ],
       [ "ObjCleanupRoutines", "class_ogre_1_1_object_data_array_memory_manager.html#a3669ef2901676e46a8d2961761e8660c", null ]
     ] ],
     [ "Ogre::ObjectMemoryManager", "class_ogre_1_1_object_memory_manager.html", [

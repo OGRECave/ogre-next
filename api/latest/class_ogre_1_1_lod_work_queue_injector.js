@@ -2,7 +2,6 @@ var class_ogre_1_1_lod_work_queue_injector =
 [
     [ "LodWorkQueueInjector", "class_ogre_1_1_lod_work_queue_injector.html#a6049861b8c6bf30b8d3b1f14bcfe3881", null ],
     [ "~LodWorkQueueInjector", "class_ogre_1_1_lod_work_queue_injector.html#abc0e9d3ee05babc648ccd5aa8a91e1dd", null ],
-    [ "canHandleResponse", "class_ogre_1_1_lod_work_queue_injector.html#a7a2fabae7f92bed384f100526055a899", null ],
     [ "getInjectorListener", "class_ogre_1_1_lod_work_queue_injector.html#a4e8c0b7fa14e8da3ee75a6685e1ffe5b", null ],
     [ "getSingleton", "class_ogre_1_1_lod_work_queue_injector.html#a3be16725394fe7ec20e620707b8a2c82", null ],
     [ "getSingletonPtr", "class_ogre_1_1_lod_work_queue_injector.html#a711e6e0fe990504aae71ff3165c567d1", null ],

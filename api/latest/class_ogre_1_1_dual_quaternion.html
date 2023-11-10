@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -95,7 +94,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_dual_quaternion.html','
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_dual_quaternion-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::DualQuaternion Class Reference<div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___math.html">Math</a></div></div></div>
 </div><!--header-->
@@ -178,12 +176,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a43375b322ae7a0b7f5d03318bfa33f17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca62cb2fb2eeab0637b35bc920a7cae4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dual_quaternion.html#aca62cb2fb2eeab0637b35bc920a7cae4">z</a></td></tr>
 <tr class="separator:aca62cb2fb2eeab0637b35bc920a7cae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:aa1b8bcff8bd24a240e237d2adf9f4da5"><td class="memItemLeft" align="right" valign="top">_OgreExport friend std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dual_quaternion.html#aa1b8bcff8bd24a240e237d2adf9f4da5">operator&lt;&lt;</a> (std::ostream &amp;o, const <a class="el" href="class_ogre_1_1_dual_quaternion.html">DualQuaternion</a> &amp;q)</td></tr>
-<tr class="memdesc:aa1b8bcff8bd24a240e237d2adf9f4da5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for writing to a stream.  <a href="class_ogre_1_1_dual_quaternion.html#aa1b8bcff8bd24a240e237d2adf9f4da5">More...</a><br /></td></tr>
-<tr class="separator:aa1b8bcff8bd24a240e237d2adf9f4da5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Implementation of a dual quaternion, i.e. </p>
@@ -731,46 +723,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Convert a dual quaternion to a 4x4 transformation matrix. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="aa1b8bcff8bd24a240e237d2adf9f4da5" name="aa1b8bcff8bd24a240e237d2adf9f4da5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1b8bcff8bd24a240e237d2adf9f4da5">&#9670;&#160;</a></span>operator&lt;&lt;</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">_OgreExport friend std::ostream &amp; operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>o</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_dual_quaternion.html">DualQuaternion</a> &amp;&#160;</td>
-          <td class="paramname"><em>q</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Function for writing to a stream. </p>
-<p >Outputs "DualQuaternion(w, x, y, z, dw, dx, dy, dz)" with w, x, y, z, dw, dx, dy, dz being the member values of the dual quaternion. </p>
 
 </div>
 </div>

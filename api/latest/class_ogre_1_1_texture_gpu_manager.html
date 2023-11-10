@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -131,7 +130,10 @@ Public Types</h2></td></tr>
 <tr class="separator:a243112239378b673ba9f1df5e7abdbf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75e42d75a1eae1a28e52e4613832edb3"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>, <a class="el" href="struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html">MetadataCacheEntry</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a75e42d75a1eae1a28e52e4613832edb3">MetadataCacheMap</a></td></tr>
 <tr class="separator:a75e42d75a1eae1a28e52e4613832edb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe11bd546cf7315f4526488e7078cc7d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">Reason</a> { <br />
+<tr class="memitem:ad657330e7020f561860d24366460271c"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>, <a class="el" href="struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html">ResourceEntry</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ad657330e7020f561860d24366460271c">ResourceEntryMap</a></td></tr>
+<tr class="separator:ad657330e7020f561860d24366460271c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_class_ogre_1_1_texture_gpu_listener"><td colspan="2" onclick="javascript:toggleInherit('pub_types_class_ogre_1_1_texture_gpu_listener')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_ogre_1_1_texture_gpu_listener.html">Ogre::TextureGpuListener</a></td></tr>
+<tr class="memitem:afe11bd546cf7315f4526488e7078cc7d inherit pub_types_class_ogre_1_1_texture_gpu_listener"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">Reason</a> { <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82">Unknown</a>
 , <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27">FromStorageToSysRam</a>
 , <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da058c0eecb9f3f188fccc4d0018bf337b">FromSysRamToStorage</a>
@@ -148,9 +150,7 @@ Public Types</h2></td></tr>
 , <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e">Deleted</a>
 <br />
  }</td></tr>
-<tr class="separator:afe11bd546cf7315f4526488e7078cc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad657330e7020f561860d24366460271c"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>, <a class="el" href="struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html">ResourceEntry</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ad657330e7020f561860d24366460271c">ResourceEntryMap</a></td></tr>
-<tr class="separator:ad657330e7020f561860d24366460271c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:afe11bd546cf7315f4526488e7078cc7d inherit pub_types_class_ogre_1_1_texture_gpu_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -304,14 +304,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a40cd14ba1ba374c0bf5d0774a79b1290"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a40cd14ba1ba374c0bf5d0774a79b1290">setWorkerThreadMinimumBudget</a> (const <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a243112239378b673ba9f1df5e7abdbf3">BudgetEntryVec</a> &amp;budget, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> maxSplitResolution=0)</td></tr>
 <tr class="memdesc:a40cd14ba1ba374c0bf5d0774a79b1290"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background streaming works by having a bunch of preallocated StagingTextures so we're ready to start uploading as soon as we see a request to load a texture from file.  <a href="class_ogre_1_1_texture_gpu_manager.html#a40cd14ba1ba374c0bf5d0774a79b1290">More...</a><br /></td></tr>
 <tr class="separator:a40cd14ba1ba374c0bf5d0774a79b1290"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1427f0b635a4186cd6083a9bab879fa2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#a1427f0b635a4186cd6083a9bab879fa2">shouldStayLoaded</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
-<tr class="memdesc:a1427f0b635a4186cd6083a9bab879fa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> should likely stay loaded or else graphical changes could occur.  <a href="class_ogre_1_1_texture_gpu_listener.html#a1427f0b635a4186cd6083a9bab879fa2">More...</a><br /></td></tr>
-<tr class="separator:a1427f0b635a4186cd6083a9bab879fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1188e251546ab3391ef646d60f2317d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8">shutdown</a> ()</td></tr>
 <tr class="separator:a1188e251546ab3391ef646d60f2317d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34ac834c93bbe00900232169bd8b3b53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a34ac834c93bbe00900232169bd8b3b53">waitForStreamingCompletion</a> ()</td></tr>
 <tr class="memdesc:a34ac834c93bbe00900232169bd8b3b53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocks main thread until all pending textures are fully loaded.  <a href="class_ogre_1_1_texture_gpu_manager.html#a34ac834c93bbe00900232169bd8b3b53">More...</a><br /></td></tr>
 <tr class="separator:a34ac834c93bbe00900232169bd8b3b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_texture_gpu_listener"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_texture_gpu_listener')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_texture_gpu_listener.html">Ogre::TextureGpuListener</a></td></tr>
+<tr class="memitem:a315edc6e949e74ca2565d004269a2ad7 inherit pub_methods_class_ogre_1_1_texture_gpu_listener"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#a315edc6e949e74ca2565d004269a2ad7">~TextureGpuListener</a> ()</td></tr>
+<tr class="separator:a315edc6e949e74ca2565d004269a2ad7 inherit pub_methods_class_ogre_1_1_texture_gpu_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad4e9062c9a92d1e2cc57d4bbe50eb95 inherit pub_methods_class_ogre_1_1_texture_gpu_listener"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#aad4e9062c9a92d1e2cc57d4bbe50eb95">notifyTextureChanged</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a> reason, void *extraData)=0</td></tr>
+<tr class="memdesc:aad4e9062c9a92d1e2cc57d4bbe50eb95 inherit pub_methods_class_ogre_1_1_texture_gpu_listener"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> changed in a way that affects how it is displayed:  <a href="class_ogre_1_1_texture_gpu_listener.html#aad4e9062c9a92d1e2cc57d4bbe50eb95">More...</a><br /></td></tr>
+<tr class="separator:aad4e9062c9a92d1e2cc57d4bbe50eb95 inherit pub_methods_class_ogre_1_1_texture_gpu_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1427f0b635a4186cd6083a9bab879fa2 inherit pub_methods_class_ogre_1_1_texture_gpu_listener"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#a1427f0b635a4186cd6083a9bab879fa2">shouldStayLoaded</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
+<tr class="memdesc:a1427f0b635a4186cd6083a9bab879fa2 inherit pub_methods_class_ogre_1_1_texture_gpu_listener"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> should likely stay loaded or else graphical changes could occur.  <a href="class_ogre_1_1_texture_gpu_listener.html#a1427f0b635a4186cd6083a9bab879fa2">More...</a><br /></td></tr>
+<tr class="separator:a1427f0b635a4186cd6083a9bab879fa2 inherit pub_methods_class_ogre_1_1_texture_gpu_listener"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -392,62 +398,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="afe11bd546cf7315f4526488e7078cc7d" name="afe11bd546cf7315f4526488e7078cc7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe11bd546cf7315f4526488e7078cc7d">&#9670;&#160;</a></span>Reason</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">Ogre::TextureGpuListener::Reason</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82" name="afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82"></a>Unknown&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27" name="afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27"></a>FromStorageToSysRam&#160;</td><td class="fielddoc"><p >OnStorage -&gt; OnSystemRam. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7da058c0eecb9f3f188fccc4d0018bf337b" name="afe11bd546cf7315f4526488e7078cc7da058c0eecb9f3f188fccc4d0018bf337b"></a>FromSysRamToStorage&#160;</td><td class="fielddoc"><p >OnSystemRam -&gt; OnStorage. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7da55066351a26967068b944c2170e51af1" name="afe11bd546cf7315f4526488e7078cc7da55066351a26967068b944c2170e51af1"></a>GainedResidency&#160;</td><td class="fielddoc"><p >OnStorage -&gt; Resident OnSystemRam -&gt; Resident See ReadyForRendering. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7da61729c4ae25807d6132d5bc46580ff3d" name="afe11bd546cf7315f4526488e7078cc7da61729c4ae25807d6132d5bc46580ff3d"></a>LostResidency&#160;</td><td class="fielddoc"><p >Resident -&gt; OnStorage Resident -&gt; OnSystemRam. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dafbdd85981846de4423d48d1a0ff665e0" name="afe11bd546cf7315f4526488e7078cc7dafbdd85981846de4423d48d1a0ff665e0"></a>PoolTextureSlotChanged&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47" name="afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47"></a>ResidentToSysRamSync&#160;</td><td class="fielddoc"><p >Only called while <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> is still Resident, and strategy is AlwaysKeepSystemRamCopy. </p>
-<p >This listener happens when something was done to the <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> that modifies its contents in the GPU, and were thus forced to sync those values back to SystemRam. This listener calls tells that sync is over. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604" name="afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604"></a>MetadataCacheOutOfDate&#160;</td><td class="fielddoc"><p >The Metadata cache was out of date and we had to do a ping-pong. </p>
-<p >Expect this to be followed by at least LostResidency and GainedResidency calls</p>
-<p >This is very important, because if you were expecting certain sequence of calls (e.g. you were expecting a LostResidency soon to arrive), expect that to be changed.</p>
-<p >See <a class="el" href="class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e.">TextureGpuManager</a> for details about the metadata cache. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26" name="afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26"></a>ExceptionThrown&#160;</td><td class="fielddoc"><p >Called when the worker thread caught an exception. </p>
-<p >This exception has already been logged, and the texture resumed loading normally with a white 2x2 RGBA8 fallback.</p>
-<p >This listener will get called from the main thread.</p>
-<p >The texture may still have pending residency transitions (e.g. it may still be loading the 2x2 fallback)</p>
-<p >Cast <a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine.">Exception</a> <em>e = reinterpret_cast&lt;<a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine.">Exception</a></em>&gt;( extraData ); to know more info </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7" name="afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7"></a>FsaaSettingAlteredByApi&#160;</td><td class="fielddoc"><p >Requested FSAA (MSAA / CSAA / EQAA / etc) is not supported by the API, and thus the setting had to be downgraded. </p>
-<p >Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257" name="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p >This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#a73d480691663c93439835ff7d11f7739" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
-<p >This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e" name="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
-</table>
 
 </div>
 </div>
@@ -2435,39 +2385,6 @@ Public Attributes</h2></td></tr>
 <p >If an entry in the budget contains minNumSlices &gt; 1 and minResolution &gt;= maxSplitResolution then a lot of memory waste could end up being caused; thus we will warn to the Ogre.log if you set such setting.</p>
 <p >The default value in 32-bit systems and mobile is 2048 The default value in 64-bit Desktop systems is 4096</p>
 <p >This setting is closely related to setWorkerThreadMaxPerStagingTextureRequestBytes, because a texture whose resolution is &gt;= maxSplitResolution will force us to use multiple StagingTextures, thus relieving the pressure on memory and memory fragmentation. </p>
-
-</div>
-</div>
-<a id="a1427f0b635a4186cd6083a9bab879fa2" name="a1427f0b635a4186cd6083a9bab879fa2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1427f0b635a4186cd6083a9bab879fa2">&#9670;&#160;</a></span>shouldStayLoaded()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Ogre::TextureGpuListener::shouldStayLoaded </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
-          <td class="paramname"><em>texture</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return true if this <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> should likely stay loaded or else graphical changes could occur. </p>
-<p >Return false if it is certainly safe to unload. </p>
-
-<p>Reimplemented in <a class="el" href="group___resources.html#ga912c2e67f80ed4e5f40e9143ab3855ab">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>, and <a class="el" href="class_ogre_1_1_vct_lighting.html#a4bc28bea3aa8434c792ba2fd4c138949">Ogre::VctLighting</a>.</p>
-
-<p class="reference">References <a class="el" href="_ogre_prerequisites_8h.html#a0a4a25196c102869505a54bc533455c6">OGRE_UNUSED_VAR</a>.</p>
 
 </div>
 </div>

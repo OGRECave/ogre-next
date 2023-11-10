@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -95,7 +94,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_lw_const_string.html','
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_lw_const_string-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::LwConstString Class Reference</div></div>
 </div><!--header-->
@@ -160,11 +158,6 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ab0e63733d66e7cdb9867b12f70f5e5b8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#ab0e63733d66e7cdb9867b12f70f5e5b8">FromUnsafeCStr</a> (const char *cStr)</td></tr>
 <tr class="separator:ab0e63733d66e7cdb9867b12f70f5e5b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ac94384c5c8f6128be4fbfb6d97257851"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lw_const_string.html#ac94384c5c8f6128be4fbfb6d97257851">LwString</a></td></tr>
-<tr class="separator:ac94384c5c8f6128be4fbfb6d97257851"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_lw_string.html" title="This is a Light-weight string wrapper around the C string interface.">LwString</a>. This base class exists so that you can wrap around useful functionality around const char pointers, for example: const char myText = "Hello World!"; <a class="el" href="class_ogre_1_1_lw_const_string.html">LwConstString</a> myString( myText, 13 ); such as comparison, finding, etc. The internal pointer is const_cast'ed because derived class <a class="el" href="class_ogre_1_1_lw_string.html" title="This is a Light-weight string wrapper around the C string interface.">LwString</a> needs it so, however this base class <em>never</em> writes to this pointer or returns a non-const pointer. </dd></dl>
@@ -800,31 +793,6 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="ac94384c5c8f6128be4fbfb6d97257851" name="ac94384c5c8f6128be4fbfb6d97257851"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac94384c5c8f6128be4fbfb6d97257851">&#9670;&#160;</a></span>LwString</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_lw_string.html">LwString</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_lw_string.html#a692a2e039781d164c63776fd04b6ebc4">Ogre::LwString::FromEmptyPointer()</a>.</p>
 
 </div>
 </div>

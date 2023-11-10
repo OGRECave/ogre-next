@@ -11,13 +11,8 @@ var class_ogre_1_1_object_abstract_node =
     [ "bases", "class_ogre_1_1_object_abstract_node.html#ad2930e484d7e428e0ee2b0ecb312904c", null ],
     [ "children", "class_ogre_1_1_object_abstract_node.html#ab4c1c1fa960979a2ad990dc851bff016", null ],
     [ "cls", "class_ogre_1_1_object_abstract_node.html#a17e65f29d850e30778464b77d6a7407a", null ],
-    [ "context", "class_ogre_1_1_object_abstract_node.html#acf394c05aecb3cb258a28c19e1969ff2", null ],
-    [ "file", "class_ogre_1_1_object_abstract_node.html#ad12982998ed96d3b0b99a1b74ae1360b", null ],
     [ "id", "class_ogre_1_1_object_abstract_node.html#aca6f43f74819d6a47eb7acc0d84e177d", null ],
-    [ "line", "class_ogre_1_1_object_abstract_node.html#ad2e2e1cc95ee64cd9632cc63e4ca3234", null ],
     [ "name", "class_ogre_1_1_object_abstract_node.html#afd1ca416adcf3f7d3da2a93f790be3e0", null ],
     [ "overrides", "class_ogre_1_1_object_abstract_node.html#a7c0f89fd757f3a0c9877d01008ecf20d", null ],
-    [ "parent", "class_ogre_1_1_object_abstract_node.html#a25d905239cc4b086edcfe91bc51f7bfb", null ],
-    [ "type", "class_ogre_1_1_object_abstract_node.html#af05272e6472ec8283d7bdf304cd9ef14", null ],
     [ "values", "class_ogre_1_1_object_abstract_node.html#a4a43cc387b3154ce2e41487d72ae742f", null ]
 ];

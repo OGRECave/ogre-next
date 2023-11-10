@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -94,7 +93,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_g_l_s_l_monolithic_prog
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_ogre_1_1_g_l_s_l_monolithic_program-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::GLSLMonolithicProgram Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div></div>
 </div><!--header-->
@@ -123,49 +121,65 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a64b30fb05b06f897496ee7f873df2769"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_monolithic_program.html#a64b30fb05b06f897496ee7f873df2769">activate</a> () override</td></tr>
 <tr class="memdesc:a64b30fb05b06f897496ee7f873df2769"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a program object active by making sure it is linked and then putting it in use.  <a href="class_ogre_1_1_g_l_s_l_monolithic_program.html#a64b30fb05b06f897496ee7f873df2769">More...</a><br /></td></tr>
 <tr class="separator:a64b30fb05b06f897496ee7f873df2769"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada67890568a79bc676df4e45c04c36ab"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ada67890568a79bc676df4e45c04c36ab">extractLayoutQualifiers</a> ()</td></tr>
-<tr class="memdesc:ada67890568a79bc676df4e45c04c36ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds layout qualifiers in the shader source and sets attribute indices appropriately.  <a href="class_ogre_1_1_g_l_s_l_program.html#ada67890568a79bc676df4e45c04c36ab">More...</a><br /></td></tr>
-<tr class="separator:ada67890568a79bc676df4e45c04c36ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70655786bb6ed49fac5502f8a3affc57"><td class="memItemLeft" align="right" valign="top">virtual GLint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a70655786bb6ed49fac5502f8a3affc57">getAttributeIndex</a> (<a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a> semantic, <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> index)</td></tr>
-<tr class="memdesc:a70655786bb6ed49fac5502f8a3affc57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the index of a non-standard attribute bound in the linked code.  <a href="class_ogre_1_1_g_l_s_l_program.html#a70655786bb6ed49fac5502f8a3affc57">More...</a><br /></td></tr>
-<tr class="separator:a70655786bb6ed49fac5502f8a3affc57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5648366457c035e298fa254e423fc684"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a5648366457c035e298fa254e423fc684">getComputeShader</a> () const</td></tr>
-<tr class="separator:a5648366457c035e298fa254e423fc684"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a0fc5acd82fdb82ddfa6c046dad1473"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a1a0fc5acd82fdb82ddfa6c046dad1473">getDomainShader</a> () const</td></tr>
-<tr class="separator:a1a0fc5acd82fdb82ddfa6c046dad1473"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7033f73d15946c90a612690beb5c8a2f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a7033f73d15946c90a612690beb5c8a2f">getFragmentShader</a> () const</td></tr>
-<tr class="separator:a7033f73d15946c90a612690beb5c8a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3f0b3f79c54e2a4ce1521a1150100c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ae3f0b3f79c54e2a4ce1521a1150100c1">getGeometryShader</a> () const</td></tr>
-<tr class="separator:ae3f0b3f79c54e2a4ce1521a1150100c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f69f159864ed8ea018012aa0033bb71"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a4f69f159864ed8ea018012aa0033bb71">getGLProgramHandle</a> () const</td></tr>
-<tr class="memdesc:a4f69f159864ed8ea018012aa0033bb71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the GL Handle for the program object.  <a href="class_ogre_1_1_g_l_s_l_program.html#a4f69f159864ed8ea018012aa0033bb71">More...</a><br /></td></tr>
-<tr class="separator:a4f69f159864ed8ea018012aa0033bb71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2e3337f23cef39f05f57c364683e4b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#af2e3337f23cef39f05f57c364683e4b5">getHullShader</a> () const</td></tr>
-<tr class="separator:af2e3337f23cef39f05f57c364683e4b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2ca34e150d18ffa4e6696c47abca0f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l3_plus_old_vertex_array_object.html">GL3PlusOldVertexArrayObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ad2ca34e150d18ffa4e6696c47abca0f5">getVertexArrayObject</a> ()</td></tr>
-<tr class="separator:ad2ca34e150d18ffa4e6696c47abca0f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc203076edbe6bf41d42373461e12d05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#afc203076edbe6bf41d42373461e12d05">getVertexShader</a> () const</td></tr>
-<tr class="separator:afc203076edbe6bf41d42373461e12d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a423121edb58ff00020455bb1a0073560"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a423121edb58ff00020455bb1a0073560">isAttributeValid</a> (<a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a> semantic, <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> index)</td></tr>
-<tr class="memdesc:a423121edb58ff00020455bb1a0073560"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is a non-standard attribute bound in the linked code?  <a href="class_ogre_1_1_g_l_s_l_program.html#a423121edb58ff00020455bb1a0073560">More...</a><br /></td></tr>
-<tr class="separator:a423121edb58ff00020455bb1a0073560"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fcbb89304919d5679343c2fb7237e57"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a4fcbb89304919d5679343c2fb7237e57">isSkeletalAnimationIncluded</a> () const</td></tr>
-<tr class="memdesc:a4fcbb89304919d5679343c2fb7237e57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the linked program includes the required instructions to perform skeletal animation.  <a href="class_ogre_1_1_g_l_s_l_program.html#a4fcbb89304919d5679343c2fb7237e57">More...</a><br /></td></tr>
-<tr class="separator:a4fcbb89304919d5679343c2fb7237e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f39aaa31fe8a633519eec5973fd5286"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a9f39aaa31fe8a633519eec5973fd5286">setSkeletalAnimationIncluded</a> (bool included)</td></tr>
-<tr class="memdesc:a9f39aaa31fe8a633519eec5973fd5286"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the linked program includes the required instructions to perform skeletal animation.  <a href="class_ogre_1_1_g_l_s_l_program.html#a9f39aaa31fe8a633519eec5973fd5286">More...</a><br /></td></tr>
-<tr class="separator:a9f39aaa31fe8a633519eec5973fd5286"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad83a10764defebb54bd85abcca9f8fc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_monolithic_program.html#ad83a10764defebb54bd85abcca9f8fc4">updatePassIterationUniforms</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params) override</td></tr>
 <tr class="memdesc:ad83a10764defebb54bd85abcca9f8fc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program object uniforms using data from pass iteration <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram.">GpuProgramParameters</a>.  <a href="class_ogre_1_1_g_l_s_l_monolithic_program.html#ad83a10764defebb54bd85abcca9f8fc4">More...</a><br /></td></tr>
 <tr class="separator:ad83a10764defebb54bd85abcca9f8fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9a8e333316af4028ec41154337e28c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_monolithic_program.html#aa9a8e333316af4028ec41154337e28c1">updateUniforms</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> mask, <a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a> fromProgType) override</td></tr>
 <tr class="memdesc:aa9a8e333316af4028ec41154337e28c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program object uniforms using data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram.">GpuProgramParameters</a>.  <a href="class_ogre_1_1_g_l_s_l_monolithic_program.html#aa9a8e333316af4028ec41154337e28c1">More...</a><br /></td></tr>
 <tr class="separator:aa9a8e333316af4028ec41154337e28c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_g_l_s_l_program"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_g_l_s_l_program')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_g_l_s_l_program.html">Ogre::GLSLProgram</a></td></tr>
+<tr class="memitem:afcf0444b479c82eba4f73d47bbda9fc3 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#afcf0444b479c82eba4f73d47bbda9fc3">GLSLProgram</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *vertexProgram, <a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *hullProgram, <a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *domainProgram, <a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *geometryProgram, <a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *fragmentProgram, <a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *computeProgram)</td></tr>
+<tr class="memdesc:afcf0444b479c82eba4f73d47bbda9fc3 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor should only be used by <a class="el" href="class_ogre_1_1_g_l_s_l_monolithic_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL has one progr...">GLSLMonolithicProgramManager</a> and GLSLSeparableProgramManager.  <a href="class_ogre_1_1_g_l_s_l_program.html#afcf0444b479c82eba4f73d47bbda9fc3">More...</a><br /></td></tr>
+<tr class="separator:afcf0444b479c82eba4f73d47bbda9fc3 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a990f9f05bab0fe5d75c137e16aa59faf inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a990f9f05bab0fe5d75c137e16aa59faf">~GLSLProgram</a> ()</td></tr>
+<tr class="separator:a990f9f05bab0fe5d75c137e16aa59faf inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac226bd79e02f1056d48591f78f483902 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ac226bd79e02f1056d48591f78f483902">activate</a> ()=0</td></tr>
+<tr class="memdesc:ac226bd79e02f1056d48591f78f483902 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a program object active by making sure it is linked and then putting it in use.  <a href="class_ogre_1_1_g_l_s_l_program.html#ac226bd79e02f1056d48591f78f483902">More...</a><br /></td></tr>
+<tr class="separator:ac226bd79e02f1056d48591f78f483902 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada67890568a79bc676df4e45c04c36ab inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ada67890568a79bc676df4e45c04c36ab">extractLayoutQualifiers</a> ()</td></tr>
+<tr class="memdesc:ada67890568a79bc676df4e45c04c36ab inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds layout qualifiers in the shader source and sets attribute indices appropriately.  <a href="class_ogre_1_1_g_l_s_l_program.html#ada67890568a79bc676df4e45c04c36ab">More...</a><br /></td></tr>
+<tr class="separator:ada67890568a79bc676df4e45c04c36ab inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70655786bb6ed49fac5502f8a3affc57 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">virtual GLint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a70655786bb6ed49fac5502f8a3affc57">getAttributeIndex</a> (<a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a> semantic, <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> index)</td></tr>
+<tr class="memdesc:a70655786bb6ed49fac5502f8a3affc57 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the index of a non-standard attribute bound in the linked code.  <a href="class_ogre_1_1_g_l_s_l_program.html#a70655786bb6ed49fac5502f8a3affc57">More...</a><br /></td></tr>
+<tr class="separator:a70655786bb6ed49fac5502f8a3affc57 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5648366457c035e298fa254e423fc684 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a5648366457c035e298fa254e423fc684">getComputeShader</a> () const</td></tr>
+<tr class="separator:a5648366457c035e298fa254e423fc684 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a0fc5acd82fdb82ddfa6c046dad1473 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a1a0fc5acd82fdb82ddfa6c046dad1473">getDomainShader</a> () const</td></tr>
+<tr class="separator:a1a0fc5acd82fdb82ddfa6c046dad1473 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7033f73d15946c90a612690beb5c8a2f inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a7033f73d15946c90a612690beb5c8a2f">getFragmentShader</a> () const</td></tr>
+<tr class="separator:a7033f73d15946c90a612690beb5c8a2f inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3f0b3f79c54e2a4ce1521a1150100c1 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ae3f0b3f79c54e2a4ce1521a1150100c1">getGeometryShader</a> () const</td></tr>
+<tr class="separator:ae3f0b3f79c54e2a4ce1521a1150100c1 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f69f159864ed8ea018012aa0033bb71 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a4f69f159864ed8ea018012aa0033bb71">getGLProgramHandle</a> () const</td></tr>
+<tr class="memdesc:a4f69f159864ed8ea018012aa0033bb71 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the GL Handle for the program object.  <a href="class_ogre_1_1_g_l_s_l_program.html#a4f69f159864ed8ea018012aa0033bb71">More...</a><br /></td></tr>
+<tr class="separator:a4f69f159864ed8ea018012aa0033bb71 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2e3337f23cef39f05f57c364683e4b5 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#af2e3337f23cef39f05f57c364683e4b5">getHullShader</a> () const</td></tr>
+<tr class="separator:af2e3337f23cef39f05f57c364683e4b5 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2ca34e150d18ffa4e6696c47abca0f5 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l3_plus_old_vertex_array_object.html">GL3PlusOldVertexArrayObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ad2ca34e150d18ffa4e6696c47abca0f5">getVertexArrayObject</a> ()</td></tr>
+<tr class="separator:ad2ca34e150d18ffa4e6696c47abca0f5 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc203076edbe6bf41d42373461e12d05 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#afc203076edbe6bf41d42373461e12d05">getVertexShader</a> () const</td></tr>
+<tr class="separator:afc203076edbe6bf41d42373461e12d05 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a423121edb58ff00020455bb1a0073560 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a423121edb58ff00020455bb1a0073560">isAttributeValid</a> (<a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a> semantic, <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> index)</td></tr>
+<tr class="memdesc:a423121edb58ff00020455bb1a0073560 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is a non-standard attribute bound in the linked code?  <a href="class_ogre_1_1_g_l_s_l_program.html#a423121edb58ff00020455bb1a0073560">More...</a><br /></td></tr>
+<tr class="separator:a423121edb58ff00020455bb1a0073560 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fcbb89304919d5679343c2fb7237e57 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a4fcbb89304919d5679343c2fb7237e57">isSkeletalAnimationIncluded</a> () const</td></tr>
+<tr class="memdesc:a4fcbb89304919d5679343c2fb7237e57 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the linked program includes the required instructions to perform skeletal animation.  <a href="class_ogre_1_1_g_l_s_l_program.html#a4fcbb89304919d5679343c2fb7237e57">More...</a><br /></td></tr>
+<tr class="separator:a4fcbb89304919d5679343c2fb7237e57 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f39aaa31fe8a633519eec5973fd5286 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a9f39aaa31fe8a633519eec5973fd5286">setSkeletalAnimationIncluded</a> (bool included)</td></tr>
+<tr class="memdesc:a9f39aaa31fe8a633519eec5973fd5286 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the linked program includes the required instructions to perform skeletal animation.  <a href="class_ogre_1_1_g_l_s_l_program.html#a9f39aaa31fe8a633519eec5973fd5286">More...</a><br /></td></tr>
+<tr class="separator:a9f39aaa31fe8a633519eec5973fd5286 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9e119d25b6c3b8c9d6ff07df71c9967 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ac9e119d25b6c3b8c9d6ff07df71c9967">updatePassIterationUniforms</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params)=0</td></tr>
+<tr class="memdesc:ac9e119d25b6c3b8c9d6ff07df71c9967 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program object uniforms using data from pass iteration <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram.">GpuProgramParameters</a>.  <a href="class_ogre_1_1_g_l_s_l_program.html#ac9e119d25b6c3b8c9d6ff07df71c9967">More...</a><br /></td></tr>
+<tr class="separator:ac9e119d25b6c3b8c9d6ff07df71c9967 inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad263f5b3f1d2b5d1e2080e5d18a860af inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ad263f5b3f1d2b5d1e2080e5d18a860af">updateUniforms</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> mask, <a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a> fromProgType)=0</td></tr>
+<tr class="memdesc:ad263f5b3f1d2b5d1e2080e5d18a860af inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program object uniforms using data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram.">GpuProgramParameters</a>.  <a href="class_ogre_1_1_g_l_s_l_program.html#ad263f5b3f1d2b5d1e2080e5d18a860af">More...</a><br /></td></tr>
+<tr class="separator:ad263f5b3f1d2b5d1e2080e5d18a860af inherit pub_methods_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a4f37b2394d3d9b4e785991e70f1bf340"><td class="memItemLeft" align="right" valign="top">GLint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a4f37b2394d3d9b4e785991e70f1bf340">mBaseInstanceLocation</a></td></tr>
-<tr class="separator:a4f37b2394d3d9b4e785991e70f1bf340"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_attribs_class_ogre_1_1_g_l_s_l_program"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_ogre_1_1_g_l_s_l_program')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_ogre_1_1_g_l_s_l_program.html">Ogre::GLSLProgram</a></td></tr>
+<tr class="memitem:a4f37b2394d3d9b4e785991e70f1bf340 inherit pub_attribs_class_ogre_1_1_g_l_s_l_program"><td class="memItemLeft" align="right" valign="top">GLint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_program.html#a4f37b2394d3d9b4e785991e70f1bf340">mBaseInstanceLocation</a></td></tr>
+<tr class="separator:a4f37b2394d3d9b4e785991e70f1bf340 inherit pub_attribs_class_ogre_1_1_g_l_s_l_program"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Model of OpenGL program object created using the glLinkProgram method of linking. </p>
@@ -280,368 +294,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ada67890568a79bc676df4e45c04c36ab" name="ada67890568a79bc676df4e45c04c36ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada67890568a79bc676df4e45c04c36ab">&#9670;&#160;</a></span>extractLayoutQualifiers()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::GLSLProgram::extractLayoutQualifiers </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Finds layout qualifiers in the shader source and sets attribute indices appropriately. </p>
-
-</div>
-</div>
-<a id="a70655786bb6ed49fac5502f8a3affc57" name="a70655786bb6ed49fac5502f8a3affc57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70655786bb6ed49fac5502f8a3affc57">&#9670;&#160;</a></span>getAttributeIndex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual GLint Ogre::GLSLProgram::getAttributeIndex </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a>&#160;</td>
-          <td class="paramname"><em>semantic</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a>&#160;</td>
-          <td class="paramname"><em>index</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the index of a non-standard attribute bound in the linked code. </p>
-
-</div>
-</div>
-<a id="a5648366457c035e298fa254e423fc684" name="a5648366457c035e298fa254e423fc684"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5648366457c035e298fa254e423fc684">&#9670;&#160;</a></span>getComputeShader()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> * Ogre::GLSLProgram::getComputeShader </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1a0fc5acd82fdb82ddfa6c046dad1473" name="a1a0fc5acd82fdb82ddfa6c046dad1473"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a0fc5acd82fdb82ddfa6c046dad1473">&#9670;&#160;</a></span>getDomainShader()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> * Ogre::GLSLProgram::getDomainShader </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7033f73d15946c90a612690beb5c8a2f" name="a7033f73d15946c90a612690beb5c8a2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7033f73d15946c90a612690beb5c8a2f">&#9670;&#160;</a></span>getFragmentShader()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> * Ogre::GLSLProgram::getFragmentShader </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae3f0b3f79c54e2a4ce1521a1150100c1" name="ae3f0b3f79c54e2a4ce1521a1150100c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3f0b3f79c54e2a4ce1521a1150100c1">&#9670;&#160;</a></span>getGeometryShader()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> * Ogre::GLSLProgram::getGeometryShader </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4f69f159864ed8ea018012aa0033bb71" name="a4f69f159864ed8ea018012aa0033bb71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f69f159864ed8ea018012aa0033bb71">&#9670;&#160;</a></span>getGLProgramHandle()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">GLuint Ogre::GLSLProgram::getGLProgramHandle </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the GL Handle for the program object. </p>
-
-</div>
-</div>
-<a id="af2e3337f23cef39f05f57c364683e4b5" name="af2e3337f23cef39f05f57c364683e4b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2e3337f23cef39f05f57c364683e4b5">&#9670;&#160;</a></span>getHullShader()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> * Ogre::GLSLProgram::getHullShader </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad2ca34e150d18ffa4e6696c47abca0f5" name="ad2ca34e150d18ffa4e6696c47abca0f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2ca34e150d18ffa4e6696c47abca0f5">&#9670;&#160;</a></span>getVertexArrayObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l3_plus_old_vertex_array_object.html">GL3PlusOldVertexArrayObject</a> * Ogre::GLSLProgram::getVertexArrayObject </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afc203076edbe6bf41d42373461e12d05" name="afc203076edbe6bf41d42373461e12d05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc203076edbe6bf41d42373461e12d05">&#9670;&#160;</a></span>getVertexShader()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_shader.html">GLSLShader</a> * Ogre::GLSLProgram::getVertexShader </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a423121edb58ff00020455bb1a0073560" name="a423121edb58ff00020455bb1a0073560"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a423121edb58ff00020455bb1a0073560">&#9670;&#160;</a></span>isAttributeValid()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::GLSLProgram::isAttributeValid </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a>&#160;</td>
-          <td class="paramname"><em>semantic</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a>&#160;</td>
-          <td class="paramname"><em>index</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Is a non-standard attribute bound in the linked code? </p>
-
-</div>
-</div>
-<a id="a4fcbb89304919d5679343c2fb7237e57" name="a4fcbb89304919d5679343c2fb7237e57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4fcbb89304919d5679343c2fb7237e57">&#9670;&#160;</a></span>isSkeletalAnimationIncluded()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::GLSLProgram::isSkeletalAnimationIncluded </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns whether the linked program includes the required instructions to perform skeletal animation. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>If this returns true, OGRE will not blend the geometry according to skeletal animation, it will expect the vertex program to do it. </dd></dl>
-
-</div>
-</div>
-<a id="a9f39aaa31fe8a633519eec5973fd5286" name="a9f39aaa31fe8a633519eec5973fd5286"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f39aaa31fe8a633519eec5973fd5286">&#9670;&#160;</a></span>setSkeletalAnimationIncluded()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::GLSLProgram::setSkeletalAnimationIncluded </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>included</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets whether the linked program includes the required instructions to perform skeletal animation. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>If this is set to true, OGRE will not blend the geometry according to skeletal animation, it will expect the vertex program to do it. </dd></dl>
-
-</div>
-</div>
 <a id="ad83a10764defebb54bd85abcca9f8fc4" name="ad83a10764defebb54bd85abcca9f8fc4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad83a10764defebb54bd85abcca9f8fc4">&#9670;&#160;</a></span>updatePassIterationUniforms()</h2>
 
@@ -717,29 +369,6 @@ Public Attributes</h2></td></tr>
 <p >normally called by <a class="el" href="class_ogre_1_1_g_l_s_l_shader.html#a98c3899b9c510ce5ec479155c35a0647" title="Execute the param binding functions for this shader.">GLSLShader::bindParameters()</a> just before rendering occurs. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1_g_l_s_l_program.html#ad263f5b3f1d2b5d1e2080e5d18a860af">Ogre::GLSLProgram</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a4f37b2394d3d9b4e785991e70f1bf340" name="a4f37b2394d3d9b4e785991e70f1bf340"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f37b2394d3d9b4e785991e70f1bf340">&#9670;&#160;</a></span>mBaseInstanceLocation</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">GLint Ogre::GLSLProgram::mBaseInstanceLocation</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

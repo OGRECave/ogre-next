@@ -5,10 +5,7 @@ var class_ogre_1_1_g_l_x_context =
     [ "_getFbConfig", "class_ogre_1_1_g_l_x_context.html#ae5ff7edd4a97746fae46cc70d435c70c", null ],
     [ "clone", "class_ogre_1_1_g_l_x_context.html#a86356f1ed27dc6e7a083b5d093e8d055", null ],
     [ "endCurrent", "class_ogre_1_1_g_l_x_context.html#ad9cca0c015ec3bd29e9a855d022bf885", null ],
-    [ "getInitialized", "class_ogre_1_1_g_l_x_context.html#acc5f8635eda869d7848234b6c35659ca", null ],
-    [ "releaseContext", "class_ogre_1_1_g_l_x_context.html#a1adbc39dc51e3c5dd91795544c2fa352", null ],
     [ "setCurrent", "class_ogre_1_1_g_l_x_context.html#a267afa8ebb84b56f4743222e6fac6a3a", null ],
-    [ "setInitialized", "class_ogre_1_1_g_l_x_context.html#a291525177116254970385db2fab2536d", null ],
     [ "mContext", "class_ogre_1_1_g_l_x_context.html#ac7df59faff766dce165a312ee4a7fca8", null ],
     [ "mDrawable", "class_ogre_1_1_g_l_x_context.html#ae0ea65602fcbf7008e8be6d204110eac", null ]
 ];

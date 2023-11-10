@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -93,7 +92,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_lod_config_serializer.h
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_ogre_1_1_lod_config_serializer-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::LodConfigSerializer Class Reference</div></div>
@@ -110,15 +108,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_lod_config_serializer.h
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a5122d5a3161fb5fd819d9a0521fe9d39"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">Endian</a> { <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef">ENDIAN_NATIVE</a>
-, <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240">ENDIAN_BIG</a>
-, <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3">ENDIAN_LITTLE</a>
- }</td></tr>
-<tr class="memdesc:a5122d5a3161fb5fd819d9a0521fe9d39"><td class="mdescLeft">&#160;</td><td class="mdescRight">The endianness of written files.  <a href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">More...</a><br /></td></tr>
-<tr class="separator:a5122d5a3161fb5fd819d9a0521fe9d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a90888570c5ea11c98e7ea8cfdab52fae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_config_serializer.html#a90888570c5ea11c98e7ea8cfdab52fae">LodConfigSerializer</a> ()</td></tr>
@@ -131,40 +120,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af4e0f6e5ceae25f6fdb735cec0b51069"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72f631aab3f43aa1ccb441cbbd8cd63c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_config_serializer.html#a72f631aab3f43aa1ccb441cbbd8cd63c">importLodConfig</a> (<a class="el" href="struct_ogre_1_1_lod_config.html">Ogre::LodConfig</a> *config, <a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;stream)</td></tr>
 <tr class="separator:a72f631aab3f43aa1ccb441cbbd8cd63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_serializer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_serializer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_serializer.html">Ogre::Serializer</a></td></tr>
+<tr class="memitem:a3268ab522d56e98d88b604255b0f43d4 inherit pub_methods_class_ogre_1_1_serializer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_serializer.html#a3268ab522d56e98d88b604255b0f43d4">Serializer</a> ()</td></tr>
+<tr class="separator:a3268ab522d56e98d88b604255b0f43d4 inherit pub_methods_class_ogre_1_1_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a593233ff92623bc48b15e00cf90cc inherit pub_methods_class_ogre_1_1_serializer"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_serializer.html#a78a593233ff92623bc48b15e00cf90cc">~Serializer</a> ()</td></tr>
+<tr class="separator:a78a593233ff92623bc48b15e00cf90cc inherit pub_methods_class_ogre_1_1_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_class_ogre_1_1_serializer"><td colspan="2" onclick="javascript:toggleInherit('pub_types_class_ogre_1_1_serializer')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_ogre_1_1_serializer.html">Ogre::Serializer</a></td></tr>
+<tr class="memitem:a5122d5a3161fb5fd819d9a0521fe9d39 inherit pub_types_class_ogre_1_1_serializer"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">Endian</a> { <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef">ENDIAN_NATIVE</a>
+, <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240">ENDIAN_BIG</a>
+, <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3">ENDIAN_LITTLE</a>
+ }</td></tr>
+<tr class="memdesc:a5122d5a3161fb5fd819d9a0521fe9d39"><td class="mdescLeft">&#160;</td><td class="mdescRight">The endianness of written files.  <a href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">More...</a><br /></td></tr>
+<tr class="separator:a5122d5a3161fb5fd819d9a0521fe9d39 inherit pub_types_class_ogre_1_1_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a5122d5a3161fb5fd819d9a0521fe9d39" name="a5122d5a3161fb5fd819d9a0521fe9d39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5122d5a3161fb5fd819d9a0521fe9d39">&#9670;&#160;</a></span>Endian</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">Ogre::Serializer::Endian</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The endianness of written files. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef" name="a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef"></a>ENDIAN_NATIVE&#160;</td><td class="fielddoc"><p >Use the platform native endian. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240" name="a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240"></a>ENDIAN_BIG&#160;</td><td class="fielddoc"><p >Use big endian (0x1000 is serialised as 0x10 0x00) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3" name="a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3"></a>ENDIAN_LITTLE&#160;</td><td class="fielddoc"><p >Use little endian (0x1000 is serialised as 0x00 0x10) </p>
-</td></tr>
-</table>
-
-</div>
-</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a90888570c5ea11c98e7ea8cfdab52fae" name="a90888570c5ea11c98e7ea8cfdab52fae"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a90888570c5ea11c98e7ea8cfdab52fae">&#9670;&#160;</a></span>LodConfigSerializer()</h2>

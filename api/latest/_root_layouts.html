@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -223,7 +222,7 @@ Setting up root layouts</h1>
 </div><!-- fragment --><p >Thus a GLSL shader can use it like this:</p>
 <div class="fragment"><div class="line">layout( ogre_B4 ) uniform bufferName</div>
 <div class="line">{</div>
-<div class="line">    uniform float myParam;</div>
+<div class="line">    uniform <span class="keywordtype">float</span> myParam;</div>
 <div class="line">    uniform float2 myParam2;</div>
 <div class="line">};</div>
 <div class="line"> </div>
@@ -243,34 +242,34 @@ Could you have used e.g. "const_buffers" : [0,7] instead of [4,7]?</h2>
 <h1><a class="anchor" id="RootLayoutsDeclaringInShaders"></a>
 Declaring Root Layouts in shaders</h1>
 <p >Shaders can declare their Root Layouts in JSON in comments as long as it starts with <code>## ROOT LAYOUT BEGIN</code> and end with <code>## ROOT LAYOUT END</code>:</p>
-<div class="fragment"><div class="line">/*</div>
-<div class="line">## ROOT LAYOUT BEGIN</div>
-<div class="line">{</div>
-<div class="line">    &quot;0&quot; :</div>
-<div class="line">    {</div>
-<div class="line">        &quot;has_params&quot; : true</div>
-<div class="line">        &quot;const_buffers&quot; : [2, 4]</div>
-<div class="line">        &quot;tex_buffers&quot; : [0, 1]</div>
-<div class="line">        &quot;samplers&quot; : [1, 2],</div>
-<div class="line">        &quot;textures&quot; : [1, 2]</div>
-<div class="line">    }</div>
-<div class="line">}</div>
-<div class="line">## ROOT LAYOUT END</div>
-<div class="line">*/</div>
+<div class="fragment"><div class="line"><span class="comment">/*</span></div>
+<div class="line"><span class="comment">## ROOT LAYOUT BEGIN</span></div>
+<div class="line"><span class="comment">{</span></div>
+<div class="line"><span class="comment">    &quot;0&quot; :</span></div>
+<div class="line"><span class="comment">    {</span></div>
+<div class="line"><span class="comment">        &quot;has_params&quot; : true</span></div>
+<div class="line"><span class="comment">        &quot;const_buffers&quot; : [2, 4]</span></div>
+<div class="line"><span class="comment">        &quot;tex_buffers&quot; : [0, 1]</span></div>
+<div class="line"><span class="comment">        &quot;samplers&quot; : [1, 2],</span></div>
+<div class="line"><span class="comment">        &quot;textures&quot; : [1, 2]</span></div>
+<div class="line"><span class="comment">    }</span></div>
+<div class="line"><span class="comment">}</span></div>
+<div class="line"><span class="comment">## ROOT LAYOUT END</span></div>
+<div class="line"><span class="comment">*/</span></div>
 <div class="line"> </div>
-<div class="line">#version 450</div>
+<div class="line"><span class="preprocessor">#version 450</span></div>
 <div class="line"> </div>
 <div class="line">layout( ogre_P0 ) uniform Params {</div>
-<div class="line">    uniform float myParams;</div>
+<div class="line">    uniform <span class="keywordtype">float</span> myParams;</div>
 <div class="line">};</div>
 <div class="line">layout( ogre_B2 ) uniform MyUBO {</div>
-<div class="line">    uniform float anotherParam;</div>
+<div class="line">    uniform <span class="keywordtype">float</span> anotherParam;</div>
 <div class="line">};</div>
 <div class="line">layout( ogre_t1 ) texture2d myTexA;</div>
 <div class="line"> </div>
-<div class="line">void main()</div>
+<div class="line"><span class="keywordtype">void</span> main()</div>
 <div class="line">{</div>
-<div class="line">    // glsl code...</div>
+<div class="line">    <span class="comment">// glsl code...</span></div>
 <div class="line">}</div>
 </div><!-- fragment --><p >Or it can be declared in C++. This is the preferred method for Hlms shader code to maximize performance.</p>
 <p ><code>HlmsUnlit::setupRootLayout</code> has a simple example:</p>
@@ -377,7 +376,7 @@ Making GLSL shaders compatible with both Vulkan and OpenGL</h2>
 </table>
 <h3><a class="anchor" id="RootLayoutsGLSLForGLandVKExample"></a>
 Example:</h3>
-<div class="fragment"><div class="line">#version ogre_glsl_ver_330</div>
+<div class="fragment"><div class="line"><span class="preprocessor">#version ogre_glsl_ver_330</span></div>
 <div class="line"> </div>
 <div class="line">vulkan_layout( ogre_t0 ) uniform texture2D tex;</div>
 <div class="line">vulkan( layout( ogre_s0 ) uniform sampler texSampler );</div>
@@ -399,7 +398,7 @@ Example:</h3>
 <div class="line">vulkan( }; )</div>
 </div><!-- fragment --><h4><a class="anchor" id="autotoc_md74"></a>
 OpenGL</h4>
-<div class="fragment"><div class="line">#version 330</div>
+<div class="fragment"><div class="line"><span class="preprocessor">#version 330</span></div>
 <div class="line"> </div>
 <div class="line">uniform texture2D tex;</div>
 <div class="line"> </div>
@@ -417,7 +416,7 @@ OpenGL</h4>
 <div class="line">    uniform float3 aspectRatioFixer;</div>
 </div><!-- fragment --><h4><a class="anchor" id="autotoc_md75"></a>
 Vulkan</h4>
-<div class="fragment"><div class="line">#version 450</div>
+<div class="fragment"><div class="line"><span class="preprocessor">#version 450</span></div>
 <div class="line"> </div>
 <div class="line">layout( ogre_t0 ) uniform texture2D tex;</div>
 <div class="line">layout( ogre_s0 ) uniform sampler texSampler;</div>

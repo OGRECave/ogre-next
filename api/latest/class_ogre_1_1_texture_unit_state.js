@@ -20,20 +20,6 @@ var class_ogre_1_1_texture_unit_state =
       [ "ENV_REFLECTION", "class_ogre_1_1_texture_unit_state.html#a72a88b1cf11053da98fa25f98689931ea3983cce37fbce61c118d202278166be9", null ],
       [ "ENV_NORMAL", "class_ogre_1_1_texture_unit_state.html#a72a88b1cf11053da98fa25f98689931eae1644f418a586fea471d808485a7a036", null ]
     ] ],
-    [ "Reason", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7d", [
-      [ "Unknown", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82", null ],
-      [ "FromStorageToSysRam", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27", null ],
-      [ "FromSysRamToStorage", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da058c0eecb9f3f188fccc4d0018bf337b", null ],
-      [ "GainedResidency", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da55066351a26967068b944c2170e51af1", null ],
-      [ "LostResidency", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da61729c4ae25807d6132d5bc46580ff3d", null ],
-      [ "PoolTextureSlotChanged", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dafbdd85981846de4423d48d1a0ff665e0", null ],
-      [ "ResidentToSysRamSync", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47", null ],
-      [ "MetadataCacheOutOfDate", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604", null ],
-      [ "ExceptionThrown", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26", null ],
-      [ "FsaaSettingAlteredByApi", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7", null ],
-      [ "ReadyForRendering", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257", null ],
-      [ "Deleted", "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e", null ]
-    ] ],
     [ "TextureCubeFace", "class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3", [
       [ "CUBE_FRONT", "class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3aa9d74ce7d0576d0dda5b5046a6434529", null ],
       [ "CUBE_BACK", "class_ogre_1_1_texture_unit_state.html#a2584766311cf6d0eaada7be28c287cc3a4459a171ecd0fe942dc5b5f8e517ecb2", null ],
@@ -156,6 +142,5 @@ var class_ogre_1_1_texture_unit_state =
     [ "setTextureVScale", "class_ogre_1_1_texture_unit_state.html#af73cbd6d4bc2dbf21596da3a8d0dc4fd", null ],
     [ "setTextureVScroll", "class_ogre_1_1_texture_unit_state.html#a83752e3f64f9a345abbfd143f213f586", null ],
     [ "setTransformAnimation", "class_ogre_1_1_texture_unit_state.html#af56112cb1e6d144b8fd63b280d8ae350", null ],
-    [ "shouldStayLoaded", "class_ogre_1_1_texture_unit_state.html#a1427f0b635a4186cd6083a9bab879fa2", null ],
     [ "RenderSystem", "class_ogre_1_1_texture_unit_state.html#a06b786d8e0847dfe9cc15e1dea308fcd", null ]
 ];

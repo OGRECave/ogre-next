@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -118,8 +117,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac75d3cdb462fdc3e8edfa558c764cb43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a358fd487b253f9f6d425e425e87e697d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_buffer_interface.html#a358fd487b253f9f6d425e425e87e697d">~NULLBufferInterface</a> () override</td></tr>
 <tr class="separator:a358fd487b253f9f6d425e425e87e697d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a793cc8c376e7fe3a6d6585ff4d8d324a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a793cc8c376e7fe3a6d6585ff4d8d324a">_ensureDelayedImmutableBuffersAreReady</a> ()</td></tr>
-<tr class="separator:a793cc8c376e7fe3a6d6585ff4d8d324a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88a7c733caa521d8abd64c8045ec2e00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_buffer_interface.html#a88a7c733caa521d8abd64c8045ec2e00">_firstUpload</a> (const void *data, size_t elementStart, size_t elementCount)</td></tr>
 <tr class="memdesc:a88a7c733caa521d8abd64c8045ec2e00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only use this function for the first upload.  <a href="class_ogre_1_1_n_u_l_l_buffer_interface.html#a88a7c733caa521d8abd64c8045ec2e00">More...</a><br /></td></tr>
 <tr class="separator:a88a7c733caa521d8abd64c8045ec2e00"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,8 +126,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afc4eaf1a073588cbbaa51f7e8ff85712"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affd2022aa1b37fd38259f01a6c5d52e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_buffer_interface.html#affd2022aa1b37fd38259f01a6c5d52e4">copyTo</a> (<a class="el" href="class_ogre_1_1_buffer_interface.html">BufferInterface</a> *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes, size_t sizeBytes) override</td></tr>
 <tr class="separator:affd2022aa1b37fd38259f01a6c5d52e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89ecb91790988ec68198960782a7e79e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a89ecb91790988ec68198960782a7e79e">getBufferPacked</a> ()</td></tr>
-<tr class="separator:a89ecb91790988ec68198960782a7e79e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4d4930530ed9fc8d051c9e835878b8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_buffer_interface.html#ab4d4930530ed9fc8d051c9e835878b8a">getNullDataPtr</a> ()</td></tr>
 <tr class="separator:ab4d4930530ed9fc8d051c9e835878b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af345a164d21f221e8370bf047a639a06"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_buffer_interface.html#af345a164d21f221e8370bf047a639a06">getVboPoolIndex</a> ()</td></tr>
@@ -144,8 +139,29 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a460831a86ecf652c36b548d74cd424f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9bd6afea200869f335ca75339875129"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_n_u_l_l_buffer_interface.html#aa9bd6afea200869f335ca75339875129">unmap</a> (<a class="el" href="namespace_ogre.html#a118de288d2577e6d95183777f40e57c7">UnmapOptions</a> unmapOption, size_t flushStartElem=0, size_t flushSizeElem=0) override</td></tr>
 <tr class="separator:aa9bd6afea200869f335ca75339875129"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc183c59ca908d4dc53149add87a0237"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#abc183c59ca908d4dc53149add87a0237">upload</a> (const void *data, size_t elementStart, size_t elementCount)</td></tr>
-<tr class="separator:abc183c59ca908d4dc53149add87a0237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_buffer_interface"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_buffer_interface')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_buffer_interface.html">Ogre::BufferInterface</a></td></tr>
+<tr class="memitem:a37dff12ef223921c7bb242e7f3672814 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a37dff12ef223921c7bb242e7f3672814">BufferInterface</a> ()</td></tr>
+<tr class="separator:a37dff12ef223921c7bb242e7f3672814 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a88ceed58a01ed49bd103a90a411ba7 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a3a88ceed58a01ed49bd103a90a411ba7">~BufferInterface</a> ()</td></tr>
+<tr class="separator:a3a88ceed58a01ed49bd103a90a411ba7 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a793cc8c376e7fe3a6d6585ff4d8d324a inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a793cc8c376e7fe3a6d6585ff4d8d324a">_ensureDelayedImmutableBuffersAreReady</a> ()</td></tr>
+<tr class="separator:a793cc8c376e7fe3a6d6585ff4d8d324a inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b7b1f47a858a1b14ac3c7b0e8bb9007 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a1b7b1f47a858a1b14ac3c7b0e8bb9007">_notifyBuffer</a> (<a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> *buffer)</td></tr>
+<tr class="separator:a1b7b1f47a858a1b14ac3c7b0e8bb9007 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acee1bdb89ed8511b0bcccf43e946f97b inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#acee1bdb89ed8511b0bcccf43e946f97b">advanceFrame</a> ()=0</td></tr>
+<tr class="separator:acee1bdb89ed8511b0bcccf43e946f97b inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af98efee10be4efe65661d8e59a5b6245 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#af98efee10be4efe65661d8e59a5b6245">copyTo</a> (<a class="el" href="class_ogre_1_1_buffer_interface.html">BufferInterface</a> *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes, size_t sizeBytes)=0</td></tr>
+<tr class="separator:af98efee10be4efe65661d8e59a5b6245 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89ecb91790988ec68198960782a7e79e inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a89ecb91790988ec68198960782a7e79e">getBufferPacked</a> ()</td></tr>
+<tr class="separator:a89ecb91790988ec68198960782a7e79e inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f8b83fd3ebe39ef941faf27ac7cf69e inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">virtual void *<a class="el" href="_ogre_platform_8h.html#a59a62dcc672b5775f3bd2a8d08bb60a4">RESTRICT_ALIAS_RETURN</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a3f8b83fd3ebe39ef941faf27ac7cf69e">map</a> (size_t elementStart, size_t elementCount, <a class="el" href="namespace_ogre.html#a447e51d7625af79716667cebcfa6da57">MappingState</a> prevMappingState, bool <a class="el" href="class_ogre_1_1_buffer_interface.html#acee1bdb89ed8511b0bcccf43e946f97b">advanceFrame</a>=true)=0</td></tr>
+<tr class="separator:a3f8b83fd3ebe39ef941faf27ac7cf69e inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c3d2ba8b7d627830d17451ae9ed2cff inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a6c3d2ba8b7d627830d17451ae9ed2cff">regressFrame</a> ()=0</td></tr>
+<tr class="separator:a6c3d2ba8b7d627830d17451ae9ed2cff inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a524e5ebca877a232bb8f7c83d871460d inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#a524e5ebca877a232bb8f7c83d871460d">unmap</a> (<a class="el" href="namespace_ogre.html#a118de288d2577e6d95183777f40e57c7">UnmapOptions</a> unmapOption, size_t flushStartElem=0, size_t flushSizeElem=0)=0</td></tr>
+<tr class="separator:a524e5ebca877a232bb8f7c83d871460d inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc183c59ca908d4dc53149add87a0237 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_interface.html#abc183c59ca908d4dc53149add87a0237">upload</a> (const void *data, size_t elementStart, size_t elementCount)</td></tr>
+<tr class="separator:abc183c59ca908d4dc53149add87a0237 inherit pub_methods_class_ogre_1_1_buffer_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >For GL3+, most (if not all) buffers, can be treated with the same code. </p>
@@ -195,33 +211,6 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a793cc8c376e7fe3a6d6585ff4d8d324a" name="a793cc8c376e7fe3a6d6585ff4d8d324a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a793cc8c376e7fe3a6d6585ff4d8d324a">&#9670;&#160;</a></span>_ensureDelayedImmutableBuffersAreReady()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::BufferInterface::_ensureDelayedImmutableBuffersAreReady </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_d3_d11_buffer_interface_base.html#abcb3af6d2fdcbd5f83b5bfe703480caf">Ogre::D3D11BufferInterfaceBase</a>.</p>
-
-</div>
-</div>
 <a id="a88a7c733caa521d8abd64c8045ec2e00" name="a88a7c733caa521d8abd64c8045ec2e00"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a88a7c733caa521d8abd64c8045ec2e00">&#9670;&#160;</a></span>_firstUpload()</h2>
 
@@ -360,31 +349,6 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="class_ogre_1_1_buffer_interface.html#af98efee10be4efe65661d8e59a5b6245">Ogre::BufferInterface</a>.</p>
-
-</div>
-</div>
-<a id="a89ecb91790988ec68198960782a7e79e" name="a89ecb91790988ec68198960782a7e79e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89ecb91790988ec68198960782a7e79e">&#9670;&#160;</a></span>getBufferPacked()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> * Ogre::BufferInterface::getBufferPacked </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -583,48 +547,6 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="class_ogre_1_1_buffer_interface.html#a524e5ebca877a232bb8f7c83d871460d">Ogre::BufferInterface</a>.</p>
-
-</div>
-</div>
-<a id="abc183c59ca908d4dc53149add87a0237" name="abc183c59ca908d4dc53149add87a0237"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc183c59ca908d4dc53149add87a0237">&#9670;&#160;</a></span>upload()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::BufferInterface::upload </td>
-          <td>(</td>
-          <td class="paramtype">const void *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>elementStart</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>elementCount</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

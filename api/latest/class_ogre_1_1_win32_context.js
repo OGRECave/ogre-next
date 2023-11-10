@@ -5,8 +5,6 @@ var class_ogre_1_1_win32_context =
     [ "clone", "class_ogre_1_1_win32_context.html#ad637775955c14f8e59296683f2694b6f", null ],
     [ "endCurrent", "class_ogre_1_1_win32_context.html#a02724e124a37133de86907ad3c4a65e9", null ],
     [ "getHGLRC", "class_ogre_1_1_win32_context.html#a5c58d3129786f5a8d5cb95a56c3492b4", null ],
-    [ "getInitialized", "class_ogre_1_1_win32_context.html#acc5f8635eda869d7848234b6c35659ca", null ],
     [ "releaseContext", "class_ogre_1_1_win32_context.html#aa5a289fe65c137eaf0ba5760fa88c5a1", null ],
-    [ "setCurrent", "class_ogre_1_1_win32_context.html#a5f1d94dbef0a4021eb4d93eefb59e7c5", null ],
-    [ "setInitialized", "class_ogre_1_1_win32_context.html#a291525177116254970385db2fab2536d", null ]
+    [ "setCurrent", "class_ogre_1_1_win32_context.html#a5f1d94dbef0a4021eb4d93eefb59e7c5", null ]
 ];

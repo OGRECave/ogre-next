@@ -5,7 +5,6 @@ var class_ogre_1_1v1_1_1_transform_key_frame =
     [ "_clone", "class_ogre_1_1v1_1_1_transform_key_frame.html#aa6688da2a9d4b0d0e9b5be60c3bf6ab0", null ],
     [ "getRotation", "class_ogre_1_1v1_1_1_transform_key_frame.html#aa7d7833525e76f0b77d51495e7b7670f", null ],
     [ "getScale", "class_ogre_1_1v1_1_1_transform_key_frame.html#ac1db0910505f1591b7bff74ed61b6cf7", null ],
-    [ "getTime", "class_ogre_1_1v1_1_1_transform_key_frame.html#aa510d71b4d0925e3fd2583d65fb92abd", null ],
     [ "getTranslate", "class_ogre_1_1v1_1_1_transform_key_frame.html#a4448c3122c4ff321b49bba65e5085b9a", null ],
     [ "setRotation", "class_ogre_1_1v1_1_1_transform_key_frame.html#a244dc276f5112ac2bea7312272b519d7", null ],
     [ "setScale", "class_ogre_1_1v1_1_1_transform_key_frame.html#ace87c1b3dc6e1718bbd89c2da1e341f1", null ],

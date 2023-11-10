@@ -1,10 +1,5 @@
 var class_ogre_1_1_mesh_serializer =
 [
-    [ "Endian", "class_ogre_1_1_mesh_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39", [
-      [ "ENDIAN_NATIVE", "class_ogre_1_1_mesh_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef", null ],
-      [ "ENDIAN_BIG", "class_ogre_1_1_mesh_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240", null ],
-      [ "ENDIAN_LITTLE", "class_ogre_1_1_mesh_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3", null ]
-    ] ],
     [ "MeshSerializer", "class_ogre_1_1_mesh_serializer.html#a03602487a54f8e4037df407c881d32e6", null ],
     [ "~MeshSerializer", "class_ogre_1_1_mesh_serializer.html#a2e5c4987d4a0fa64430cb612e12c2e8c", null ],
     [ "exportMesh", "class_ogre_1_1_mesh_serializer.html#a4de99d7b747bb944b269df88c2b169db", null ],

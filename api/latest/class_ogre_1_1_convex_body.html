@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -96,7 +95,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_convex_body.html',''); 
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_convex_body-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::ConvexBody Class Reference<div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___math.html">Math</a></div></div></div>
 </div><!--header-->
@@ -189,12 +187,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a59fb24ee9a509ade6490ad1d9aac16d7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_convex_body.html#a59fb24ee9a509ade6490ad1d9aac16d7">_initialisePool</a> ()</td></tr>
 <tr class="memdesc:a59fb24ee9a509ade6490ad1d9aac16d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialise the internal polygon pool used to minimise allocations.  <a href="class_ogre_1_1_convex_body.html#a59fb24ee9a509ade6490ad1d9aac16d7">More...</a><br /></td></tr>
 <tr class="separator:a59fb24ee9a509ade6490ad1d9aac16d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a721a3cee58ba77cfed605fb589360e31"><td class="memItemLeft" align="right" valign="top">_OgreExport friend std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_convex_body.html#a721a3cee58ba77cfed605fb589360e31">operator&lt;&lt;</a> (std::ostream &amp;strm, const <a class="el" href="class_ogre_1_1_convex_body.html">ConvexBody</a> &amp;body)</td></tr>
-<tr class="memdesc:a721a3cee58ba77cfed605fb589360e31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints out the body with all its polygons.  <a href="class_ogre_1_1_convex_body.html#a721a3cee58ba77cfed605fb589360e31">More...</a><br /></td></tr>
-<tr class="separator:a721a3cee58ba77cfed605fb589360e31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Holds a solid representation of a convex body. </p>
@@ -744,45 +736,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Resets the object. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="a721a3cee58ba77cfed605fb589360e31" name="a721a3cee58ba77cfed605fb589360e31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a721a3cee58ba77cfed605fb589360e31">&#9670;&#160;</a></span>operator&lt;&lt;</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">_OgreExport friend std::ostream &amp; operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>strm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_convex_body.html">ConvexBody</a> &amp;&#160;</td>
-          <td class="paramname"><em>body</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Prints out the body with all its polygons. </p>
 
 </div>
 </div>

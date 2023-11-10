@@ -4,8 +4,6 @@ var class_ogre_1_1_volume_1_1_chunk =
     [ "Chunk", "class_ogre_1_1_volume_1_1_chunk.html#ab9923db79cd098ab391a19e19e4f8063", null ],
     [ "~Chunk", "class_ogre_1_1_volume_1_1_chunk.html#a70a646f8829148ae55a31d24d5d57d8b", null ],
     [ "createInstance", "class_ogre_1_1_volume_1_1_chunk.html#abe71d5c3d9a2681986ede6702fff1121", null ],
-    [ "frameEnded", "class_ogre_1_1_volume_1_1_chunk.html#af1d0140678c18a013ac45aa544c00bfd", null ],
-    [ "frameRenderingQueued", "class_ogre_1_1_volume_1_1_chunk.html#a2785cb38589ab9df123fa401cbda31c3", null ],
     [ "frameStarted", "class_ogre_1_1_volume_1_1_chunk.html#acae8c3c6bac0462d6659dec3c7e5e364", null ],
     [ "getBoundingRadius", "class_ogre_1_1_volume_1_1_chunk.html#a79af172be0758f888ce9e86eccdcd5dd", null ],
     [ "getChunkParameters", "class_ogre_1_1_volume_1_1_chunk.html#aa761d0df7e99f7c7beae9760b13500c2", null ],

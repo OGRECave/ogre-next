@@ -4,12 +4,6 @@ var class_ogre_1_1_any_numeric =
     [ "AnyNumeric", "class_ogre_1_1_any_numeric.html#a56d143332e5388489b3a3c3a11c45e30", null ],
     [ "AnyNumeric", "class_ogre_1_1_any_numeric.html#a9ae2045cc85e7a8e134d54e0babc2a3f", null ],
     [ "~AnyNumeric", "class_ogre_1_1_any_numeric.html#adc22f71f7106988f2d8090bf823185f8", null ],
-    [ "destroy", "class_ogre_1_1_any_numeric.html#a3c414d8a6803eb4b319d39c2628b435b", null ],
-    [ "get", "class_ogre_1_1_any_numeric.html#a0a8600f6711855846591011a22ff4528", null ],
-    [ "getType", "class_ogre_1_1_any_numeric.html#aa5822a6a9445ae66bb6b2d5f11a01293", null ],
-    [ "has_value", "class_ogre_1_1_any_numeric.html#a8de17caf0ea6729e6904b6552162cf77", null ],
-    [ "isEmpty", "class_ogre_1_1_any_numeric.html#a9408e147480f134e1ba1817b4b1bc50f", null ],
-    [ "operator()", "class_ogre_1_1_any_numeric.html#ac1df40ae0c766635b60427035ce2a76d", null ],
     [ "operator*", "class_ogre_1_1_any_numeric.html#a70e54709e177f5dbbeab34999e416e1c", null ],
     [ "operator*", "class_ogre_1_1_any_numeric.html#ad4b1c2bf0151e7ec59a67f47b749c123", null ],
     [ "operator*=", "class_ogre_1_1_any_numeric.html#ac3b74981a5214fd6b7983f7983bc4065", null ],
@@ -19,8 +13,5 @@ var class_ogre_1_1_any_numeric =
     [ "operator-=", "class_ogre_1_1_any_numeric.html#a4876b20914b902652dbe369730adce14", null ],
     [ "operator/", "class_ogre_1_1_any_numeric.html#aa45d67ae6ca4fca3214d1fba1630e6e5", null ],
     [ "operator/=", "class_ogre_1_1_any_numeric.html#af32699bb01aeef60f6f3e8b92a62baf0", null ],
-    [ "operator=", "class_ogre_1_1_any_numeric.html#afb607a830f1b756959d794e05c4a6e56", null ],
-    [ "reset", "class_ogre_1_1_any_numeric.html#a222ee6835ca577d5984049d0b1176505", null ],
-    [ "swap", "class_ogre_1_1_any_numeric.html#a6966abacf1848ea305390cfcfaeb5586", null ],
-    [ "type", "class_ogre_1_1_any_numeric.html#ab0c58b9a5837415a9a463406fd87364f", null ]
+    [ "operator=", "class_ogre_1_1_any_numeric.html#afb607a830f1b756959d794e05c4a6e56", null ]
 ];

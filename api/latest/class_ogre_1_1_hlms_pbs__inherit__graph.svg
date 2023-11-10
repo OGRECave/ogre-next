@@ -50,7 +50,7 @@
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="class_ogre_1_1_allocated_object.html" target="_top" xlink:title=" ">
+<g id="a_node4"><a xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="121.5,-195 6.5,-195 6.5,-165 121.5,-165 121.5,-195"/>
 <text text-anchor="start" x="14.5" y="-183" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::AllocatedObject</text>
 <text text-anchor="middle" x="64" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; AlignAllocPolicy&lt;&gt; &gt;</text>

@@ -2,8 +2,6 @@ var class_ogre_1_1_g_l_s_l_monolithic_program_manager =
 [
     [ "GLSLMonolithicProgramManager", "class_ogre_1_1_g_l_s_l_monolithic_program_manager.html#a4689096c887cb4160f41d0be748fa602", null ],
     [ "~GLSLMonolithicProgramManager", "class_ogre_1_1_g_l_s_l_monolithic_program_manager.html#a3be644728d41155d1f03cc9a5a485270", null ],
-    [ "extractUniformsFromGLSL", "class_ogre_1_1_g_l_s_l_monolithic_program_manager.html#a63938323d0abadeecd75beb6ea86b054", null ],
-    [ "extractUniformsFromProgram", "class_ogre_1_1_g_l_s_l_monolithic_program_manager.html#a20b09000a902722c31628bb7beba6cc0", null ],
     [ "getActiveMonolithicProgram", "class_ogre_1_1_g_l_s_l_monolithic_program_manager.html#a0ca5940f2b177adda71d7aad213bbb69", null ],
     [ "getSingleton", "class_ogre_1_1_g_l_s_l_monolithic_program_manager.html#a20d332cf054ab8deb82e19f6b02861ec", null ],
     [ "getSingletonPtr", "class_ogre_1_1_g_l_s_l_monolithic_program_manager.html#a0b1b458bb8be3d6d5c03f8f0819370cb", null ],

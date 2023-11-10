@@ -19,7 +19,6 @@ var class_ogre_1_1_compositor_node =
     [ "getDefinedTexture", "class_ogre_1_1_compositor_node.html#af990864da9638f9a535514ef9eaa631a", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_node.html#a860defea61122d7d8d4dc278c1a876c8", null ],
     [ "getEnabled", "class_ogre_1_1_compositor_node.html#a7282de98f052c046880aefb7a838e760", null ],
-    [ "getId", "class_ogre_1_1_compositor_node.html#ab152c8f646a835c2f88585ad4fe0413a", null ],
     [ "getInputChannel", "class_ogre_1_1_compositor_node.html#ab77dd0b2b1cd5e8f3951a111596dbf14", null ],
     [ "getLocalTextures", "class_ogre_1_1_compositor_node.html#aeff30ffaedc5a0fb7beabf21641a5109", null ],
     [ "getName", "class_ogre_1_1_compositor_node.html#a98c98f58d980e3c3c628fd13de14e580", null ],
@@ -31,8 +30,6 @@ var class_ogre_1_1_compositor_node =
     [ "notifyDestroyed", "class_ogre_1_1_compositor_node.html#ae72f2d56524f23dc474d2634b06aeeeb", null ],
     [ "notifyRecreated", "class_ogre_1_1_compositor_node.html#a01e7c49813462a88761ff73f514d7ce8", null ],
     [ "notifyRecreated", "class_ogre_1_1_compositor_node.html#a17e701215d769e1890329c6e3e4a4ac9", null ],
-    [ "operator()", "class_ogre_1_1_compositor_node.html#a57e0523432c6e5133ff4fc251111a60e", null ],
-    [ "operator()", "class_ogre_1_1_compositor_node.html#a0ae22596b5bd2a3faf2958ab3d109d1f", null ],
     [ "resetAllNumPassesLeft", "class_ogre_1_1_compositor_node.html#a07b216e017d9aa22718a5419a1e98a2a", null ],
     [ "setEnabled", "class_ogre_1_1_compositor_node.html#a817bc10dbf5427a77912ab3bcd391f69", null ]
 ];

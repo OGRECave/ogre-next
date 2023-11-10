@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -99,7 +98,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_movable_object.html',''
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_movable_object-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::MovableObject Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group___component.html">Component</a> &#124; <a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___scene.html">Scene</a></div></div></div>
 </div><!--header-->
@@ -178,15 +176,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6b823b52684730302908ecfd1a8e6d54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a6b823b52684730302908ecfd1a8e6d54">addVisibilityFlags</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> flags)</td></tr>
 <tr class="memdesc:a6b823b52684730302908ecfd1a8e6d54"><td class="mdescLeft">&#160;</td><td class="mdescRight">As setVisibilityFlags, except the flags passed as parameters are appended to the existing flags on this object.  <a href="class_ogre_1_1_movable_object.html#a6b823b52684730302908ecfd1a8e6d54">More...</a><br /></td></tr>
 <tr class="separator:a6b823b52684730302908ecfd1a8e6d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2cfac9af1b0d71c780ec969166b3585"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#a5e0882c3b9f7ca32a795f98cf034e428">AnimableValuePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_animable_object.html#ab2cfac9af1b0d71c780ec969166b3585">createAnimableValue</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;valueName)</td></tr>
-<tr class="memdesc:ab2cfac9af1b0d71c780ec969166b3585"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a reference-counted AnimableValuePtr for the named value.  <a href="class_ogre_1_1_animable_object.html#ab2cfac9af1b0d71c780ec969166b3585">More...</a><br /></td></tr>
-<tr class="separator:ab2cfac9af1b0d71c780ec969166b3585"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2bf67d4ae27cdbe44ab73d09c4797b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#aa2bf67d4ae27cdbe44ab73d09c4797b2">detachFromParent</a> ()</td></tr>
 <tr class="memdesc:aa2bf67d4ae27cdbe44ab73d09c4797b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detaches an object from a parent <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> if attached.  <a href="class_ogre_1_1_movable_object.html#aa2bf67d4ae27cdbe44ab73d09c4797b2">More...</a><br /></td></tr>
 <tr class="separator:aa2bf67d4ae27cdbe44ab73d09c4797b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa510ee849ab25fbf5787539d256666b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_animable_object.html#afa510ee849ab25fbf5787539d256666b">getAnimableValueNames</a> () const</td></tr>
-<tr class="memdesc:afa510ee849ab25fbf5787539d256666b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of animable value names for this object.  <a href="class_ogre_1_1_animable_object.html#afa510ee849ab25fbf5787539d256666b">More...</a><br /></td></tr>
-<tr class="separator:afa510ee849ab25fbf5787539d256666b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a428496efccef33325db9e2acf9a55c2a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#afb4ca6e169ec9a9e45f2b3bb3625d1e1">RealAsUint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a428496efccef33325db9e2acf9a55c2a">getCachedDistanceToCamera</a> () const</td></tr>
 <tr class="memdesc:a428496efccef33325db9e2acf9a55c2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance to camera as calculated in <a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">cullFrustum()</a>  <a href="class_ogre_1_1_movable_object.html#a428496efccef33325db9e2acf9a55c2a">More...</a><br /></td></tr>
 <tr class="separator:a428496efccef33325db9e2acf9a55c2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,9 +190,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a37db6f9cfc9d58883adb75995d8b5c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4703f13fadcd89b1dd5b32f66151f9d2"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a4703f13fadcd89b1dd5b32f66151f9d2">getCurrentMeshLod</a> () const</td></tr>
 <tr class="separator:a4703f13fadcd89b1dd5b32f66151f9d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab152c8f646a835c2f88585ad4fe0413a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">getId</a> () const</td></tr>
-<tr class="memdesc:ab152c8f646a835c2f88585ad4fe0413a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the unique id of this object.  <a href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">More...</a><br /></td></tr>
-<tr class="separator:ab152c8f646a835c2f88585ad4fe0413a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54fc365f16014359d23cecf859da5510"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a54fc365f16014359d23cecf859da5510">getLightMask</a> () const</td></tr>
 <tr class="memdesc:a54fc365f16014359d23cecf859da5510"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a bitwise mask which will filter the lights affecting this object.  <a href="class_ogre_1_1_movable_object.html#a54fc365f16014359d23cecf859da5510">More...</a><br /></td></tr>
 <tr class="separator:a54fc365f16014359d23cecf859da5510"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -276,10 +265,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1e10940fd789fbf392c640a3c242e315"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a1e10940fd789fbf392c640a3c242e315">isVisible</a> () const</td></tr>
 <tr class="memdesc:a1e10940fd789fbf392c640a3c242e315"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether or not this object is supposed to be visible or not.  <a href="class_ogre_1_1_movable_object.html#a1e10940fd789fbf392c640a3c242e315">More...</a><br /></td></tr>
 <tr class="separator:a1e10940fd789fbf392c640a3c242e315"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57e0523432c6e5133ff4fc251111a60e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a57e0523432c6e5133ff4fc251111a60e">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;right)</td></tr>
-<tr class="separator:a57e0523432c6e5133ff4fc251111a60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ae22596b5bd2a3faf2958ab3d109d1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a0ae22596b5bd2a3faf2958ab3d109d1f">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *right)</td></tr>
-<tr class="separator:a0ae22596b5bd2a3faf2958ab3d109d1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a681ea443f1df78a6b33eaa6c391b60cb"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___general.html#ga9870d1f08a71391b8716b43bb2064b2d">LightList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a681ea443f1df78a6b33eaa6c391b60cb">queryLights</a> () const</td></tr>
 <tr class="memdesc:a681ea443f1df78a6b33eaa6c391b60cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of lights, ordered relative to how close they are to this movable object.  <a href="class_ogre_1_1_movable_object.html#a681ea443f1df78a6b33eaa6c391b60cb">More...</a><br /></td></tr>
 <tr class="separator:a681ea443f1df78a6b33eaa6c391b60cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -328,6 +313,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad563191e86e4d119c62ea9acfc2a90d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ad563191e86e4d119c62ea9acfc2a90d5">setVisible</a> (bool visible)</td></tr>
 <tr class="memdesc:ad563191e86e4d119c62ea9acfc2a90d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells this object whether to be visible or not, if it has a renderable component.  <a href="class_ogre_1_1_movable_object.html#ad563191e86e4d119c62ea9acfc2a90d5">More...</a><br /></td></tr>
 <tr class="separator:ad563191e86e4d119c62ea9acfc2a90d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_animable_object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_animable_object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_animable_object.html">Ogre::AnimableObject</a></td></tr>
+<tr class="memitem:acc4f830de60e226fbed772610eea93a4 inherit pub_methods_class_ogre_1_1_animable_object"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_animable_object.html#acc4f830de60e226fbed772610eea93a4">AnimableObject</a> ()</td></tr>
+<tr class="separator:acc4f830de60e226fbed772610eea93a4 inherit pub_methods_class_ogre_1_1_animable_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac61ca9c912e6b00bbe4fdd9ee0e56079 inherit pub_methods_class_ogre_1_1_animable_object"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_animable_object.html#ac61ca9c912e6b00bbe4fdd9ee0e56079">~AnimableObject</a> ()</td></tr>
+<tr class="separator:ac61ca9c912e6b00bbe4fdd9ee0e56079 inherit pub_methods_class_ogre_1_1_animable_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2cfac9af1b0d71c780ec969166b3585 inherit pub_methods_class_ogre_1_1_animable_object"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#a5e0882c3b9f7ca32a795f98cf034e428">AnimableValuePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_animable_object.html#ab2cfac9af1b0d71c780ec969166b3585">createAnimableValue</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;valueName)</td></tr>
+<tr class="memdesc:ab2cfac9af1b0d71c780ec969166b3585 inherit pub_methods_class_ogre_1_1_animable_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a reference-counted AnimableValuePtr for the named value.  <a href="class_ogre_1_1_animable_object.html#ab2cfac9af1b0d71c780ec969166b3585">More...</a><br /></td></tr>
+<tr class="separator:ab2cfac9af1b0d71c780ec969166b3585 inherit pub_methods_class_ogre_1_1_animable_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa510ee849ab25fbf5787539d256666b inherit pub_methods_class_ogre_1_1_animable_object"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_animable_object.html#afa510ee849ab25fbf5787539d256666b">getAnimableValueNames</a> () const</td></tr>
+<tr class="memdesc:afa510ee849ab25fbf5787539d256666b inherit pub_methods_class_ogre_1_1_animable_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of animable value names for this object.  <a href="class_ogre_1_1_animable_object.html#afa510ee849ab25fbf5787539d256666b">More...</a><br /></td></tr>
+<tr class="separator:afa510ee849ab25fbf5787539d256666b inherit pub_methods_class_ogre_1_1_animable_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_id_object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_id_object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_id_object.html">Ogre::IdObject</a></td></tr>
+<tr class="memitem:a7884ec3abf1ed8c1b1514d3bda918370 inherit pub_methods_class_ogre_1_1_id_object"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a7884ec3abf1ed8c1b1514d3bda918370">IdObject</a> (<a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a> id)</td></tr>
+<tr class="memdesc:a7884ec3abf1ed8c1b1514d3bda918370 inherit pub_methods_class_ogre_1_1_id_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">We don't call generateNewId() here, to prevent objects in the stack (i.e.  <a href="class_ogre_1_1_id_object.html#a7884ec3abf1ed8c1b1514d3bda918370">More...</a><br /></td></tr>
+<tr class="separator:a7884ec3abf1ed8c1b1514d3bda918370 inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab152c8f646a835c2f88585ad4fe0413a inherit pub_methods_class_ogre_1_1_id_object"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">getId</a> () const</td></tr>
+<tr class="memdesc:ab152c8f646a835c2f88585ad4fe0413a inherit pub_methods_class_ogre_1_1_id_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the unique id of this object.  <a href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">More...</a><br /></td></tr>
+<tr class="separator:ab152c8f646a835c2f88585ad4fe0413a inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57e0523432c6e5133ff4fc251111a60e inherit pub_methods_class_ogre_1_1_id_object"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a57e0523432c6e5133ff4fc251111a60e">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;right)</td></tr>
+<tr class="separator:a57e0523432c6e5133ff4fc251111a60e inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ae22596b5bd2a3faf2958ab3d109d1f inherit pub_methods_class_ogre_1_1_id_object"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#a0ae22596b5bd2a3faf2958ab3d109d1f">operator()</a> (const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *left, const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *right)</td></tr>
+<tr class="separator:a0ae22596b5bd2a3faf2958ab3d109d1f inherit pub_methods_class_ogre_1_1_id_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -376,13 +383,6 @@ Public Attributes</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a7c3bff2a6922bbc098c789e9386140e3"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a7c3bff2a6922bbc098c789e9386140e3">c_DefaultLodMesh</a></td></tr>
 <tr class="separator:a7c3bff2a6922bbc098c789e9386140e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a7ae9e10420b4c462fd91b7e5c54f0483"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a7ae9e10420b4c462fd91b7e5c54f0483">LodStrategy::lodSet</a> (<a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> &amp;t, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> lodValues[<a class="el" href="_ogre_array_config_8h.html#aae6e6e54870826a15444682ed7bae799">ARRAY_PACKED_REALS</a>])</td></tr>
-<tr class="separator:a7ae9e10420b4c462fd91b7e5c54f0483"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a158e972be87282325850f001cee635a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a158e972be87282325850f001cee635a8">LodStrategy::lodUpdateImpl</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> bias) const</td></tr>
-<tr class="separator:a158e972be87282325850f001cee635a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Abstract class defining a movable object in a scene. </p>
@@ -982,39 +982,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ab2cfac9af1b0d71c780ec969166b3585" name="ab2cfac9af1b0d71c780ec969166b3585"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2cfac9af1b0d71c780ec969166b3585">&#9670;&#160;</a></span>createAnimableValue()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="namespace_ogre.html#a5e0882c3b9f7ca32a795f98cf034e428">AnimableValuePtr</a> Ogre::AnimableObject::createAnimableValue </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>valueName</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Create a reference-counted AnimableValuePtr for the named value. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>You can use the returned object to animate a value on this object, using AnimationTrack. Subclasses must override this if they wish to support animation of their values. </dd></dl>
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_light.html#a1a0671d05e0dcde78bb636e84bb13274">Ogre::Light</a>.</p>
-
-<p class="reference">References <a class="el" href="group___general.html#gaf27f0d64dfeb225d37a513c253eaa1a0">OGRE_EXCEPT</a>.</p>
-
-</div>
-</div>
 <a id="a7d491859c987cf03cd2b62121e9bfea0" name="a7d491859c987cf03cd2b62121e9bfea0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d491859c987cf03cd2b62121e9bfea0">&#9670;&#160;</a></span>cullFrustum()</h2>
 
@@ -1163,35 +1130,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Detaches an object from a parent <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> if attached. </p>
-
-</div>
-</div>
-<a id="afa510ee849ab25fbf5787539d256666b" name="afa510ee849ab25fbf5787539d256666b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa510ee849ab25fbf5787539d256666b">&#9670;&#160;</a></span>getAnimableValueNames()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> &amp; Ogre::AnimableObject::getAnimableValueNames </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets a list of animable value names for this object. </p>
-
-<p class="reference">References <a class="el" href="group___general.html#gaf27f0d64dfeb225d37a513c253eaa1a0">OGRE_EXCEPT</a>.</p>
 
 </div>
 </div>
@@ -1379,33 +1317,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the default visibility flags for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> instances. </p>
-
-</div>
-</div>
-<a id="ab152c8f646a835c2f88585ad4fe0413a" name="ab152c8f646a835c2f88585ad4fe0413a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab152c8f646a835c2f88585ad4fe0413a">&#9670;&#160;</a></span>getId()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a> Ogre::IdObject::getId </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the unique id of this object. </p>
 
 </div>
 </div>
@@ -2075,78 +1986,6 @@ InstanceBatch::instanceBatchCullFrustumThreaded </dd></dl>
 
 </div>
 </div>
-<a id="a57e0523432c6e5133ff4fc251111a60e" name="a57e0523432c6e5133ff4fc251111a60e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57e0523432c6e5133ff4fc251111a60e">&#9670;&#160;</a></span>operator()() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::IdObject::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;&#160;</td>
-          <td class="paramname"><em>left</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> &amp;&#160;</td>
-          <td class="paramname"><em>right</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0ae22596b5bd2a3faf2958ab3d109d1f" name="a0ae22596b5bd2a3faf2958ab3d109d1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ae22596b5bd2a3faf2958ab3d109d1f">&#9670;&#160;</a></span>operator()() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::IdObject::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *&#160;</td>
-          <td class="paramname"><em>left</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_id_object.html">IdObject</a> *&#160;</td>
-          <td class="paramname"><em>right</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a681ea443f1df78a6b33eaa6c391b60cb" name="a681ea443f1df78a6b33eaa6c391b60cb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a681ea443f1df78a6b33eaa6c391b60cb">&#9670;&#160;</a></span>queryLights()</h2>
 
@@ -2746,91 +2585,6 @@ InstanceBatch::instanceBatchCullFrustumThreaded </dd></dl>
 </div><div class="memdoc">
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_scene_manager.html#a5de4ecb4955dcf164cfeb69c457716ee" title="Updates the world aabbs from all entities in the scene.">SceneManager::updateAllBounds</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>We don't pass by reference on purpose (avoid implicit aliasing) </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="a7ae9e10420b4c462fd91b7e5c54f0483" name="a7ae9e10420b4c462fd91b7e5c54f0483"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ae9e10420b4c462fd91b7e5c54f0483">&#9670;&#160;</a></span>LodStrategy::lodSet</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_ogre_1_1_lod_strategy.html#a2400dc929b5f7727f0d69336b3b1e05d">LodStrategy::lodSet</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> &amp;&#160;</td>
-          <td class="paramname"><em>t</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td>
-          <td class="paramname"><em>lodValues</em>[ARRAY_PACKED_REALS]&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a158e972be87282325850f001cee635a8" name="a158e972be87282325850f001cee635a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a158e972be87282325850f001cee635a8">&#9670;&#160;</a></span>LodStrategy::lodUpdateImpl</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_ogre_1_1_lod_strategy.html#a44ca92b0906532d0f7f99984bca6c193">LodStrategy::lodUpdateImpl</a> </td>
-          <td>(</td>
-          <td class="paramtype">const size_t&#160;</td>
-          <td class="paramname"><em>numNodes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a>&#160;</td>
-          <td class="paramname"><em>t</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
-          <td class="paramname"><em>camera</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td>
-          <td class="paramname"><em>bias</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

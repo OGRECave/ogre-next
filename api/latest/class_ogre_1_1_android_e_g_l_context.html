@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -94,7 +93,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_android_e_g_l_context.h
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_ogre_1_1_android_e_g_l_context-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::AndroidEGLContext Class Reference</div></div>
 </div><!--header-->
@@ -116,46 +114,90 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4617a92f1b93caadfe83219e859367e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72100630f6f905882efe0c172b7617dc"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_android_e_g_l_context.html#a72100630f6f905882efe0c172b7617dc">~AndroidEGLContext</a> ()</td></tr>
 <tr class="separator:a72100630f6f905882efe0c172b7617dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7b87d8031a667931b402d8f96346da8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#aa7b87d8031a667931b402d8f96346da8">_createInternalResources</a> (EGLDisplay eglDisplay, ::EGLConfig glconfig, ::EGLSurface drawable, <a class="el" href="class_ogre_1_1_e_g_l_context.html#af5ddf92270c9f4c936da9ef908442748">::EGLContext</a> shareContext)</td></tr>
-<tr class="separator:aa7b87d8031a667931b402d8f96346da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f2b47f53f419897c04ccf676ace35e5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a0f2b47f53f419897c04ccf676ace35e5">_destroyInternalResources</a> ()</td></tr>
-<tr class="separator:a0f2b47f53f419897c04ccf676ace35e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50dbaace067890a718d0b2f272a7036a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html">GLES2Context</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_android_e_g_l_context.html#a50dbaace067890a718d0b2f272a7036a">clone</a> () const</td></tr>
 <tr class="memdesc:a50dbaace067890a718d0b2f272a7036a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new context based on the same window/pbuffer as this context - mostly useful for additional threads.   <a href="class_ogre_1_1_android_e_g_l_context.html#a50dbaace067890a718d0b2f272a7036a">More...</a><br /></td></tr>
 <tr class="separator:a50dbaace067890a718d0b2f272a7036a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08612fd3eea707121938bb0197e454c6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6">endCurrent</a> ()</td></tr>
-<tr class="memdesc:a08612fd3eea707121938bb0197e454c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called before another context is made current.   <a href="class_ogre_1_1_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6">More...</a><br /></td></tr>
-<tr class="separator:a08612fd3eea707121938bb0197e454c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08612fd3eea707121938bb0197e454c6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6">endCurrent</a> ()</td></tr>
-<tr class="memdesc:a08612fd3eea707121938bb0197e454c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called before another context is made current.  <a href="class_ogre_1_1_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6">More...</a><br /></td></tr>
-<tr class="separator:a08612fd3eea707121938bb0197e454c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1773206dd73cb2d134a18f0c90db2335"><td class="memItemLeft" align="right" valign="top">EGLSurface&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a1773206dd73cb2d134a18f0c90db2335">getDrawable</a> () const</td></tr>
-<tr class="separator:a1773206dd73cb2d134a18f0c90db2335"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc5f8635eda869d7848234b6c35659ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#acc5f8635eda869d7848234b6c35659ca">getInitialized</a> ()</td></tr>
-<tr class="separator:acc5f8635eda869d7848234b6c35659ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd71a4bfddbdf111e429e9ff825af985"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#abd71a4bfddbdf111e429e9ff825af985">getInitialized</a> ()</td></tr>
-<tr class="separator:abd71a4bfddbdf111e429e9ff825af985"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1adbc39dc51e3c5dd91795544c2fa352"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a1adbc39dc51e3c5dd91795544c2fa352">releaseContext</a> ()</td></tr>
-<tr class="memdesc:a1adbc39dc51e3c5dd91795544c2fa352"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release the render context.  <a href="class_ogre_1_1_g_l3_plus_context.html#a1adbc39dc51e3c5dd91795544c2fa352">More...</a><br /></td></tr>
-<tr class="separator:a1adbc39dc51e3c5dd91795544c2fa352"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15cc115c6f857dad066218f1225c4283"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#a15cc115c6f857dad066218f1225c4283">releaseContext</a> ()</td></tr>
-<tr class="memdesc:a15cc115c6f857dad066218f1225c4283"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release the render context.  <a href="class_ogre_1_1_g_l_e_s2_context.html#a15cc115c6f857dad066218f1225c4283">More...</a><br /></td></tr>
-<tr class="separator:a15cc115c6f857dad066218f1225c4283"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa817ff5a5ae3fbb16d8ad182016b212d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#aa817ff5a5ae3fbb16d8ad182016b212d">setCurrent</a> ()</td></tr>
-<tr class="memdesc:aa817ff5a5ae3fbb16d8ad182016b212d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the context.   <a href="class_ogre_1_1_e_g_l_context.html#aa817ff5a5ae3fbb16d8ad182016b212d">More...</a><br /></td></tr>
-<tr class="separator:aa817ff5a5ae3fbb16d8ad182016b212d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa817ff5a5ae3fbb16d8ad182016b212d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#aa817ff5a5ae3fbb16d8ad182016b212d">setCurrent</a> ()</td></tr>
-<tr class="memdesc:aa817ff5a5ae3fbb16d8ad182016b212d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the context.  <a href="class_ogre_1_1_e_g_l_context.html#aa817ff5a5ae3fbb16d8ad182016b212d">More...</a><br /></td></tr>
-<tr class="separator:aa817ff5a5ae3fbb16d8ad182016b212d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a291525177116254970385db2fab2536d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a291525177116254970385db2fab2536d">setInitialized</a> ()</td></tr>
-<tr class="separator:a291525177116254970385db2fab2536d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae3d4471c090572da0ced04cde4b87bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#aae3d4471c090572da0ced04cde4b87bf">setInitialized</a> ()</td></tr>
-<tr class="separator:aae3d4471c090572da0ced04cde4b87bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_e_g_l_context"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_e_g_l_context')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_e_g_l_context.html">Ogre::EGLContext</a></td></tr>
+<tr class="memitem:a135b4e8c80c71bb6202aa2b11f6f9ac4 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a135b4e8c80c71bb6202aa2b11f6f9ac4">EGLContext</a> (EGLDisplay eglDisplay, const <a class="el" href="class_ogre_1_1_e_g_l_support.html">EGLSupport</a> *glsupport, ::EGLConfig fbconfig, ::EGLSurface drawable)</td></tr>
+<tr class="separator:a135b4e8c80c71bb6202aa2b11f6f9ac4 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5ddf92270c9f4c936da9ef908442748 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#af5ddf92270c9f4c936da9ef908442748">EGLContext</a> (EGLDisplay eglDisplay, <a class="el" href="class_ogre_1_1_e_g_l_g_l_support.html">EGLGLSupport</a> *glsupport, ::EGLConfig fbconfig, ::EGLSurface drawable, ::EGLContext context=0)</td></tr>
+<tr class="separator:af5ddf92270c9f4c936da9ef908442748 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c38b081c4a1198402559e4ba12a5e77 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a7c38b081c4a1198402559e4ba12a5e77">~EGLContext</a> ()</td></tr>
+<tr class="separator:a7c38b081c4a1198402559e4ba12a5e77 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c38b081c4a1198402559e4ba12a5e77 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a7c38b081c4a1198402559e4ba12a5e77">~EGLContext</a> ()</td></tr>
+<tr class="separator:a7c38b081c4a1198402559e4ba12a5e77 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7b87d8031a667931b402d8f96346da8 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#aa7b87d8031a667931b402d8f96346da8">_createInternalResources</a> (EGLDisplay eglDisplay, ::EGLConfig glconfig, ::EGLSurface drawable, <a class="el" href="class_ogre_1_1_e_g_l_context.html#af5ddf92270c9f4c936da9ef908442748">::EGLContext</a> shareContext)</td></tr>
+<tr class="separator:aa7b87d8031a667931b402d8f96346da8 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f2b47f53f419897c04ccf676ace35e5 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a0f2b47f53f419897c04ccf676ace35e5">_destroyInternalResources</a> ()</td></tr>
+<tr class="separator:a0f2b47f53f419897c04ccf676ace35e5 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4691c64ae5335353874d5394f03c8e8 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html">GL3PlusContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#ac4691c64ae5335353874d5394f03c8e8">clone</a> () const</td></tr>
+<tr class="memdesc:ac4691c64ae5335353874d5394f03c8e8 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new context based on the same window/pbuffer as this context - mostly useful for additional threads.   <a href="class_ogre_1_1_e_g_l_context.html#ac4691c64ae5335353874d5394f03c8e8">More...</a><br /></td></tr>
+<tr class="separator:ac4691c64ae5335353874d5394f03c8e8 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa402a695ea93e4973feba3279df734f0 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_g_l_e_s2_context.html">GLES2Context</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#aa402a695ea93e4973feba3279df734f0">clone</a> () const =0</td></tr>
+<tr class="memdesc:aa402a695ea93e4973feba3279df734f0 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new context based on the same window/pbuffer as this context - mostly useful for additional threads.  <a href="class_ogre_1_1_e_g_l_context.html#aa402a695ea93e4973feba3279df734f0">More...</a><br /></td></tr>
+<tr class="separator:aa402a695ea93e4973feba3279df734f0 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08612fd3eea707121938bb0197e454c6 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6">endCurrent</a> ()</td></tr>
+<tr class="memdesc:a08612fd3eea707121938bb0197e454c6 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called before another context is made current.   <a href="class_ogre_1_1_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6">More...</a><br /></td></tr>
+<tr class="separator:a08612fd3eea707121938bb0197e454c6 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08612fd3eea707121938bb0197e454c6 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6">endCurrent</a> ()</td></tr>
+<tr class="memdesc:a08612fd3eea707121938bb0197e454c6 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called before another context is made current.  <a href="class_ogre_1_1_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6">More...</a><br /></td></tr>
+<tr class="separator:a08612fd3eea707121938bb0197e454c6 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1773206dd73cb2d134a18f0c90db2335 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">EGLSurface&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#a1773206dd73cb2d134a18f0c90db2335">getDrawable</a> () const</td></tr>
+<tr class="separator:a1773206dd73cb2d134a18f0c90db2335 inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa817ff5a5ae3fbb16d8ad182016b212d inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#aa817ff5a5ae3fbb16d8ad182016b212d">setCurrent</a> ()</td></tr>
+<tr class="memdesc:aa817ff5a5ae3fbb16d8ad182016b212d inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the context.   <a href="class_ogre_1_1_e_g_l_context.html#aa817ff5a5ae3fbb16d8ad182016b212d">More...</a><br /></td></tr>
+<tr class="separator:aa817ff5a5ae3fbb16d8ad182016b212d inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa817ff5a5ae3fbb16d8ad182016b212d inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#aa817ff5a5ae3fbb16d8ad182016b212d">setCurrent</a> ()</td></tr>
+<tr class="memdesc:aa817ff5a5ae3fbb16d8ad182016b212d inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the context.  <a href="class_ogre_1_1_e_g_l_context.html#aa817ff5a5ae3fbb16d8ad182016b212d">More...</a><br /></td></tr>
+<tr class="separator:aa817ff5a5ae3fbb16d8ad182016b212d inherit pub_methods_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_g_l3_plus_context"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_g_l3_plus_context')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_g_l3_plus_context.html">Ogre::GL3PlusContext</a></td></tr>
+<tr class="memitem:a7711adffc778f66d4923c3107902748f inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a7711adffc778f66d4923c3107902748f">GL3PlusContext</a> ()</td></tr>
+<tr class="separator:a7711adffc778f66d4923c3107902748f inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a018b88b66c35e10f0c43e8788e22bb67 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a018b88b66c35e10f0c43e8788e22bb67">~GL3PlusContext</a> ()</td></tr>
+<tr class="separator:a018b88b66c35e10f0c43e8788e22bb67 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74affe2f98dc033a57511a2e83d3379a inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_g_l3_plus_context.html">GL3PlusContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a74affe2f98dc033a57511a2e83d3379a">clone</a> () const =0</td></tr>
+<tr class="memdesc:a74affe2f98dc033a57511a2e83d3379a inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new context based on the same window/pbuffer as this context - mostly useful for additional threads.  <a href="class_ogre_1_1_g_l3_plus_context.html#a74affe2f98dc033a57511a2e83d3379a">More...</a><br /></td></tr>
+<tr class="separator:a74affe2f98dc033a57511a2e83d3379a inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e330ff0fc363ba544feb34240af0cc3 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a2e330ff0fc363ba544feb34240af0cc3">endCurrent</a> ()=0</td></tr>
+<tr class="memdesc:a2e330ff0fc363ba544feb34240af0cc3 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called before another context is made current.  <a href="class_ogre_1_1_g_l3_plus_context.html#a2e330ff0fc363ba544feb34240af0cc3">More...</a><br /></td></tr>
+<tr class="separator:a2e330ff0fc363ba544feb34240af0cc3 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc5f8635eda869d7848234b6c35659ca inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#acc5f8635eda869d7848234b6c35659ca">getInitialized</a> ()</td></tr>
+<tr class="separator:acc5f8635eda869d7848234b6c35659ca inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1adbc39dc51e3c5dd91795544c2fa352 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a1adbc39dc51e3c5dd91795544c2fa352">releaseContext</a> ()</td></tr>
+<tr class="memdesc:a1adbc39dc51e3c5dd91795544c2fa352 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release the render context.  <a href="class_ogre_1_1_g_l3_plus_context.html#a1adbc39dc51e3c5dd91795544c2fa352">More...</a><br /></td></tr>
+<tr class="separator:a1adbc39dc51e3c5dd91795544c2fa352 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81bc43e2597648c770ab31fe0a5293c7 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a81bc43e2597648c770ab31fe0a5293c7">setCurrent</a> ()=0</td></tr>
+<tr class="memdesc:a81bc43e2597648c770ab31fe0a5293c7 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the context.  <a href="class_ogre_1_1_g_l3_plus_context.html#a81bc43e2597648c770ab31fe0a5293c7">More...</a><br /></td></tr>
+<tr class="separator:a81bc43e2597648c770ab31fe0a5293c7 inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a291525177116254970385db2fab2536d inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a291525177116254970385db2fab2536d">setInitialized</a> ()</td></tr>
+<tr class="separator:a291525177116254970385db2fab2536d inherit pub_methods_class_ogre_1_1_g_l3_plus_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_g_l_e_s2_context"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_g_l_e_s2_context')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_g_l_e_s2_context.html">Ogre::GLES2Context</a></td></tr>
+<tr class="memitem:a295a18126fd987222e787f35e17938e1 inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#a295a18126fd987222e787f35e17938e1">GLES2Context</a> ()</td></tr>
+<tr class="separator:a295a18126fd987222e787f35e17938e1 inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a863d851be5b196821063b7abb148631c inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#a863d851be5b196821063b7abb148631c">~GLES2Context</a> ()</td></tr>
+<tr class="separator:a863d851be5b196821063b7abb148631c inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec7616a47982f5072087740cee403ddc inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_g_l_e_s2_context.html">GLES2Context</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#aec7616a47982f5072087740cee403ddc">clone</a> () const =0</td></tr>
+<tr class="memdesc:aec7616a47982f5072087740cee403ddc inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new context based on the same window/pbuffer as this context - mostly useful for additional threads.  <a href="class_ogre_1_1_g_l_e_s2_context.html#aec7616a47982f5072087740cee403ddc">More...</a><br /></td></tr>
+<tr class="separator:aec7616a47982f5072087740cee403ddc inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa17e4083d95a9ddaa4a57d3796266ddb inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#aa17e4083d95a9ddaa4a57d3796266ddb">endCurrent</a> ()=0</td></tr>
+<tr class="memdesc:aa17e4083d95a9ddaa4a57d3796266ddb inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called before another context is made current.  <a href="class_ogre_1_1_g_l_e_s2_context.html#aa17e4083d95a9ddaa4a57d3796266ddb">More...</a><br /></td></tr>
+<tr class="separator:aa17e4083d95a9ddaa4a57d3796266ddb inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd71a4bfddbdf111e429e9ff825af985 inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#abd71a4bfddbdf111e429e9ff825af985">getInitialized</a> ()</td></tr>
+<tr class="separator:abd71a4bfddbdf111e429e9ff825af985 inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15cc115c6f857dad066218f1225c4283 inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#a15cc115c6f857dad066218f1225c4283">releaseContext</a> ()</td></tr>
+<tr class="memdesc:a15cc115c6f857dad066218f1225c4283 inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release the render context.  <a href="class_ogre_1_1_g_l_e_s2_context.html#a15cc115c6f857dad066218f1225c4283">More...</a><br /></td></tr>
+<tr class="separator:a15cc115c6f857dad066218f1225c4283 inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a934c8c93b407843c7bd6f1112730ac5f inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#a934c8c93b407843c7bd6f1112730ac5f">setCurrent</a> ()=0</td></tr>
+<tr class="memdesc:a934c8c93b407843c7bd6f1112730ac5f inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the context.  <a href="class_ogre_1_1_g_l_e_s2_context.html#a934c8c93b407843c7bd6f1112730ac5f">More...</a><br /></td></tr>
+<tr class="separator:a934c8c93b407843c7bd6f1112730ac5f inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae3d4471c090572da0ced04cde4b87bf inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#aae3d4471c090572da0ced04cde4b87bf">setInitialized</a> ()</td></tr>
+<tr class="separator:aae3d4471c090572da0ced04cde4b87bf inherit pub_methods_class_ogre_1_1_g_l_e_s2_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ae0deff82440f162380917cbc211ad800"><td class="memItemLeft" align="right" valign="top">EGLSurface&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#ae0deff82440f162380917cbc211ad800">mDrawable</a></td></tr>
-<tr class="separator:ae0deff82440f162380917cbc211ad800"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_attribs_class_ogre_1_1_e_g_l_context"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_ogre_1_1_e_g_l_context')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_ogre_1_1_e_g_l_context.html">Ogre::EGLContext</a></td></tr>
+<tr class="memitem:ae0deff82440f162380917cbc211ad800 inherit pub_attribs_class_ogre_1_1_e_g_l_context"><td class="memItemLeft" align="right" valign="top">EGLSurface&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_e_g_l_context.html#ae0deff82440f162380917cbc211ad800">mDrawable</a></td></tr>
+<tr class="separator:ae0deff82440f162380917cbc211ad800 inherit pub_attribs_class_ogre_1_1_e_g_l_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4617a92f1b93caadfe83219e859367e0" name="a4617a92f1b93caadfe83219e859367e0"></a>
@@ -224,79 +266,6 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa7b87d8031a667931b402d8f96346da8" name="aa7b87d8031a667931b402d8f96346da8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7b87d8031a667931b402d8f96346da8">&#9670;&#160;</a></span>_createInternalResources()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::EGLContext::_createInternalResources </td>
-          <td>(</td>
-          <td class="paramtype">EGLDisplay&#160;</td>
-          <td class="paramname"><em>eglDisplay</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">::EGLConfig&#160;</td>
-          <td class="paramname"><em>glconfig</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">::EGLSurface&#160;</td>
-          <td class="paramname"><em>drawable</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_e_g_l_context.html#af5ddf92270c9f4c936da9ef908442748">::EGLContext</a>&#160;</td>
-          <td class="paramname"><em>shareContext</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0f2b47f53f419897c04ccf676ace35e5" name="a0f2b47f53f419897c04ccf676ace35e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f2b47f53f419897c04ccf676ace35e5">&#9670;&#160;</a></span>_destroyInternalResources()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::EGLContext::_destroyInternalResources </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a50dbaace067890a718d0b2f272a7036a" name="a50dbaace067890a718d0b2f272a7036a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a50dbaace067890a718d0b2f272a7036a">&#9670;&#160;</a></span>clone()</h2>
 
@@ -324,330 +293,6 @@ Public Attributes</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>The caller is responsible for deleting the returned context.  </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_e_g_l_context.html#ac4691c64ae5335353874d5394f03c8e8">Ogre::EGLContext</a>.</p>
-
-</div>
-</div>
-<a id="a08612fd3eea707121938bb0197e454c6" name="a08612fd3eea707121938bb0197e454c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08612fd3eea707121938bb0197e454c6">&#9670;&#160;</a></span>endCurrent() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::EGLContext::endCurrent </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>This is called before another context is made current.  </p>
-<p >By default, nothing is done here.  </p>
-
-<p>Implements <a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a2e330ff0fc363ba544feb34240af0cc3">Ogre::GL3PlusContext</a>.</p>
-
-</div>
-</div>
-<a id="a08612fd3eea707121938bb0197e454c6" name="a08612fd3eea707121938bb0197e454c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08612fd3eea707121938bb0197e454c6">&#9670;&#160;</a></span>endCurrent() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::EGLContext::endCurrent </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>This is called before another context is made current. </p>
-<p >By default, nothing is done here. </p>
-
-<p>Implements <a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a2e330ff0fc363ba544feb34240af0cc3">Ogre::GL3PlusContext</a>.</p>
-
-</div>
-</div>
-<a id="a1773206dd73cb2d134a18f0c90db2335" name="a1773206dd73cb2d134a18f0c90db2335"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1773206dd73cb2d134a18f0c90db2335">&#9670;&#160;</a></span>getDrawable()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">EGLSurface Ogre::EGLContext::getDrawable </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="acc5f8635eda869d7848234b6c35659ca" name="acc5f8635eda869d7848234b6c35659ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc5f8635eda869d7848234b6c35659ca">&#9670;&#160;</a></span>getInitialized() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::GL3PlusContext::getInitialized </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abd71a4bfddbdf111e429e9ff825af985" name="abd71a4bfddbdf111e429e9ff825af985"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd71a4bfddbdf111e429e9ff825af985">&#9670;&#160;</a></span>getInitialized() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::GLES2Context::getInitialized </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1adbc39dc51e3c5dd91795544c2fa352" name="a1adbc39dc51e3c5dd91795544c2fa352"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1adbc39dc51e3c5dd91795544c2fa352">&#9670;&#160;</a></span>releaseContext() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::GL3PlusContext::releaseContext </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Release the render context. </p>
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_win32_context.html#aa5a289fe65c137eaf0ba5760fa88c5a1">Ogre::Win32Context</a>.</p>
-
-</div>
-</div>
-<a id="a15cc115c6f857dad066218f1225c4283" name="a15cc115c6f857dad066218f1225c4283"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15cc115c6f857dad066218f1225c4283">&#9670;&#160;</a></span>releaseContext() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::GLES2Context::releaseContext </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Release the render context. </p>
-
-</div>
-</div>
-<a id="aa817ff5a5ae3fbb16d8ad182016b212d" name="aa817ff5a5ae3fbb16d8ad182016b212d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa817ff5a5ae3fbb16d8ad182016b212d">&#9670;&#160;</a></span>setCurrent() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::EGLContext::setCurrent </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Enable the context.  </p>
-<p >All subsequent rendering commands will go here.  </p>
-
-<p>Implements <a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a81bc43e2597648c770ab31fe0a5293c7">Ogre::GL3PlusContext</a>.</p>
-
-</div>
-</div>
-<a id="aa817ff5a5ae3fbb16d8ad182016b212d" name="aa817ff5a5ae3fbb16d8ad182016b212d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa817ff5a5ae3fbb16d8ad182016b212d">&#9670;&#160;</a></span>setCurrent() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::EGLContext::setCurrent </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Enable the context. </p>
-<p >All subsequent rendering commands will go here. </p>
-
-<p>Implements <a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a81bc43e2597648c770ab31fe0a5293c7">Ogre::GL3PlusContext</a>.</p>
-
-</div>
-</div>
-<a id="a291525177116254970385db2fab2536d" name="a291525177116254970385db2fab2536d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a291525177116254970385db2fab2536d">&#9670;&#160;</a></span>setInitialized() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::GL3PlusContext::setInitialized </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aae3d4471c090572da0ced04cde4b87bf" name="aae3d4471c090572da0ced04cde4b87bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae3d4471c090572da0ced04cde4b87bf">&#9670;&#160;</a></span>setInitialized() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::GLES2Context::setInitialized </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ae0deff82440f162380917cbc211ad800" name="ae0deff82440f162380917cbc211ad800"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0deff82440f162380917cbc211ad800">&#9670;&#160;</a></span>mDrawable</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">EGLSurface Ogre::EGLContext::mDrawable</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

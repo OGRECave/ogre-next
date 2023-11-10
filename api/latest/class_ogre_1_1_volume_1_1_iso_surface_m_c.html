@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -94,7 +93,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_volume_1_1_iso_surface_
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="class_ogre_1_1_volume_1_1_iso_surface_m_c-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::Volume::IsoSurfaceMC Class Reference</div></div>
 </div><!--header-->
@@ -124,27 +122,37 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae28ca071c68a271362ec9dc103f0a72c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface_m_c.html#ae28ca071c68a271362ec9dc103f0a72c">addMarchingSquaresTriangles</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> *corners, const <a class="el" href="class_ogre_1_1_vector4.html">Vector4</a> *volumeValues, const size_t *indices, const <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> maxDistance, <a class="el" href="class_ogre_1_1_volume_1_1_mesh_builder.html">MeshBuilder</a> *mb) const</td></tr>
 <tr class="memdesc:ae28ca071c68a271362ec9dc103f0a72c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overridden from <a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html" title="Abstract IsoSurface.">IsoSurface</a>.  <a href="class_ogre_1_1_volume_1_1_iso_surface_m_c.html#ae28ca071c68a271362ec9dc103f0a72c">More...</a><br /></td></tr>
 <tr class="separator:ae28ca071c68a271362ec9dc103f0a72c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_volume_1_1_iso_surface')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html">Ogre::Volume::IsoSurface</a></td></tr>
+<tr class="memitem:a0efce5be039359db22f285857c93a787 inherit pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a0efce5be039359db22f285857c93a787">~IsoSurface</a> ()</td></tr>
+<tr class="separator:a0efce5be039359db22f285857c93a787 inherit pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a054d881e05f6a90c94693b07322c2344 inherit pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a054d881e05f6a90c94693b07322c2344">addMarchingCubesTriangles</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> *corners, const <a class="el" href="class_ogre_1_1_vector4.html">Vector4</a> *volumeValues, <a class="el" href="class_ogre_1_1_volume_1_1_mesh_builder.html">MeshBuilder</a> *mb) const =0</td></tr>
+<tr class="memdesc:a054d881e05f6a90c94693b07322c2344 inherit pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds triangles to a <a class="el" href="class_ogre_1_1_volume_1_1_mesh_builder.html" title="Class to build up a mesh with vertices and indices.">MeshBuilder</a> via Marching Cubes.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#a054d881e05f6a90c94693b07322c2344">More...</a><br /></td></tr>
+<tr class="separator:a054d881e05f6a90c94693b07322c2344 inherit pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dfadeaa4614513de2ca22db41fb0fcd inherit pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a7dfadeaa4614513de2ca22db41fb0fcd">addMarchingSquaresTriangles</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> *corners, const <a class="el" href="class_ogre_1_1_vector4.html">Vector4</a> *volumeValues, const size_t *indices, const <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> maxDistance, <a class="el" href="class_ogre_1_1_volume_1_1_mesh_builder.html">MeshBuilder</a> *mb) const =0</td></tr>
+<tr class="memdesc:a7dfadeaa4614513de2ca22db41fb0fcd inherit pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds triangles to a <a class="el" href="class_ogre_1_1_volume_1_1_mesh_builder.html" title="Class to build up a mesh with vertices and indices.">MeshBuilder</a> via Marching Squares.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#a7dfadeaa4614513de2ca22db41fb0fcd">More...</a><br /></td></tr>
+<tr class="separator:a7dfadeaa4614513de2ca22db41fb0fcd inherit pub_methods_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a69ee963db33cd0af9e84d423ba17124c"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a69ee963db33cd0af9e84d423ba17124c">MS_CORNERS_BACK</a> [4]</td></tr>
-<tr class="memdesc:a69ee963db33cd0af9e84d423ba17124c"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its back.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#a69ee963db33cd0af9e84d423ba17124c">More...</a><br /></td></tr>
-<tr class="separator:a69ee963db33cd0af9e84d423ba17124c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accd9544ecdf6776fcc50da2982c14f33"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#accd9544ecdf6776fcc50da2982c14f33">MS_CORNERS_BOTTOM</a> [4]</td></tr>
-<tr class="memdesc:accd9544ecdf6776fcc50da2982c14f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its bottom.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#accd9544ecdf6776fcc50da2982c14f33">More...</a><br /></td></tr>
-<tr class="separator:accd9544ecdf6776fcc50da2982c14f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41268c3902b9c8ea62df4621d6677883"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a41268c3902b9c8ea62df4621d6677883">MS_CORNERS_FRONT</a> [4]</td></tr>
-<tr class="memdesc:a41268c3902b9c8ea62df4621d6677883"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its front.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#a41268c3902b9c8ea62df4621d6677883">More...</a><br /></td></tr>
-<tr class="separator:a41268c3902b9c8ea62df4621d6677883"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba8d1d8804e40fe7053876e71c36e722"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#aba8d1d8804e40fe7053876e71c36e722">MS_CORNERS_LEFT</a> [4]</td></tr>
-<tr class="memdesc:aba8d1d8804e40fe7053876e71c36e722"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its left.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#aba8d1d8804e40fe7053876e71c36e722">More...</a><br /></td></tr>
-<tr class="separator:aba8d1d8804e40fe7053876e71c36e722"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae347b5e55f1518aaec82913056e84593"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#ae347b5e55f1518aaec82913056e84593">MS_CORNERS_RIGHT</a> [4]</td></tr>
-<tr class="memdesc:ae347b5e55f1518aaec82913056e84593"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its right.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#ae347b5e55f1518aaec82913056e84593">More...</a><br /></td></tr>
-<tr class="separator:ae347b5e55f1518aaec82913056e84593"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a347c64743265efefd007bed0b42febdc"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a347c64743265efefd007bed0b42febdc">MS_CORNERS_TOP</a> [4]</td></tr>
-<tr class="memdesc:a347c64743265efefd007bed0b42febdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its top.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#a347c64743265efefd007bed0b42febdc">More...</a><br /></td></tr>
-<tr class="separator:a347c64743265efefd007bed0b42febdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html">Ogre::Volume::IsoSurface</a></td></tr>
+<tr class="memitem:a69ee963db33cd0af9e84d423ba17124c inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a69ee963db33cd0af9e84d423ba17124c">MS_CORNERS_BACK</a> [4]</td></tr>
+<tr class="memdesc:a69ee963db33cd0af9e84d423ba17124c inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its back.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#a69ee963db33cd0af9e84d423ba17124c">More...</a><br /></td></tr>
+<tr class="separator:a69ee963db33cd0af9e84d423ba17124c inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accd9544ecdf6776fcc50da2982c14f33 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#accd9544ecdf6776fcc50da2982c14f33">MS_CORNERS_BOTTOM</a> [4]</td></tr>
+<tr class="memdesc:accd9544ecdf6776fcc50da2982c14f33 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its bottom.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#accd9544ecdf6776fcc50da2982c14f33">More...</a><br /></td></tr>
+<tr class="separator:accd9544ecdf6776fcc50da2982c14f33 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41268c3902b9c8ea62df4621d6677883 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a41268c3902b9c8ea62df4621d6677883">MS_CORNERS_FRONT</a> [4]</td></tr>
+<tr class="memdesc:a41268c3902b9c8ea62df4621d6677883 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its front.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#a41268c3902b9c8ea62df4621d6677883">More...</a><br /></td></tr>
+<tr class="separator:a41268c3902b9c8ea62df4621d6677883 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba8d1d8804e40fe7053876e71c36e722 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#aba8d1d8804e40fe7053876e71c36e722">MS_CORNERS_LEFT</a> [4]</td></tr>
+<tr class="memdesc:aba8d1d8804e40fe7053876e71c36e722 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its left.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#aba8d1d8804e40fe7053876e71c36e722">More...</a><br /></td></tr>
+<tr class="separator:aba8d1d8804e40fe7053876e71c36e722 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae347b5e55f1518aaec82913056e84593 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#ae347b5e55f1518aaec82913056e84593">MS_CORNERS_RIGHT</a> [4]</td></tr>
+<tr class="memdesc:ae347b5e55f1518aaec82913056e84593 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its right.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#ae347b5e55f1518aaec82913056e84593">More...</a><br /></td></tr>
+<tr class="separator:ae347b5e55f1518aaec82913056e84593 inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a347c64743265efefd007bed0b42febdc inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a347c64743265efefd007bed0b42febdc">MS_CORNERS_TOP</a> [4]</td></tr>
+<tr class="memdesc:a347c64743265efefd007bed0b42febdc inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="mdescLeft">&#160;</td><td class="mdescRight">To call Marching Squares with a cube on its top.  <a href="class_ogre_1_1_volume_1_1_iso_surface.html#a347c64743265efefd007bed0b42febdc">More...</a><br /></td></tr>
+<tr class="separator:a347c64743265efefd007bed0b42febdc inherit pub_static_attribs_class_ogre_1_1_volume_1_1_iso_surface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Marching Cubes implementation like at <a href="http://local.wasp.uwa.edu.au/~pbourke/geometry/polygonise/">http://local.wasp.uwa.edu.au/~pbourke/geometry/polygonise/</a>. </p>
@@ -285,151 +293,6 @@ Static Public Attributes</h2></td></tr>
 <p>Overridden from <a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html" title="Abstract IsoSurface.">IsoSurface</a>. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a7dfadeaa4614513de2ca22db41fb0fcd">Ogre::Volume::IsoSurface</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a69ee963db33cd0af9e84d423ba17124c" name="a69ee963db33cd0af9e84d423ba17124c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69ee963db33cd0af9e84d423ba17124c">&#9670;&#160;</a></span>MS_CORNERS_BACK</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const size_t Ogre::Volume::IsoSurface::MS_CORNERS_BACK[4]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>To call Marching Squares with a cube on its back. </p>
-
-</div>
-</div>
-<a id="accd9544ecdf6776fcc50da2982c14f33" name="accd9544ecdf6776fcc50da2982c14f33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accd9544ecdf6776fcc50da2982c14f33">&#9670;&#160;</a></span>MS_CORNERS_BOTTOM</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const size_t Ogre::Volume::IsoSurface::MS_CORNERS_BOTTOM[4]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>To call Marching Squares with a cube on its bottom. </p>
-
-</div>
-</div>
-<a id="a41268c3902b9c8ea62df4621d6677883" name="a41268c3902b9c8ea62df4621d6677883"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41268c3902b9c8ea62df4621d6677883">&#9670;&#160;</a></span>MS_CORNERS_FRONT</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const size_t Ogre::Volume::IsoSurface::MS_CORNERS_FRONT[4]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>To call Marching Squares with a cube on its front. </p>
-
-</div>
-</div>
-<a id="aba8d1d8804e40fe7053876e71c36e722" name="aba8d1d8804e40fe7053876e71c36e722"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba8d1d8804e40fe7053876e71c36e722">&#9670;&#160;</a></span>MS_CORNERS_LEFT</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const size_t Ogre::Volume::IsoSurface::MS_CORNERS_LEFT[4]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>To call Marching Squares with a cube on its left. </p>
-
-</div>
-</div>
-<a id="ae347b5e55f1518aaec82913056e84593" name="ae347b5e55f1518aaec82913056e84593"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae347b5e55f1518aaec82913056e84593">&#9670;&#160;</a></span>MS_CORNERS_RIGHT</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const size_t Ogre::Volume::IsoSurface::MS_CORNERS_RIGHT[4]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>To call Marching Squares with a cube on its right. </p>
-
-</div>
-</div>
-<a id="a347c64743265efefd007bed0b42febdc" name="a347c64743265efefd007bed0b42febdc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a347c64743265efefd007bed0b42febdc">&#9670;&#160;</a></span>MS_CORNERS_TOP</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const size_t Ogre::Volume::IsoSurface::MS_CORNERS_TOP[4]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>To call Marching Squares with a cube on its top. </p>
 
 </div>
 </div>

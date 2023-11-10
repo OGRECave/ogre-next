@@ -7,10 +7,8 @@ var class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer =
     [ "blit", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#a501366a61c497632b399e825780b152f", null ],
     [ "blitFromMemory", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#a21f5e72308af0182294be5a23b5d4ca2", null ],
     [ "blitFromTexture", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#a0293d5fc2b7de382d59c8aeb74e27962", null ],
-    [ "blitToMemory", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#a428ea67e828f2d2015eaf5d643eb2884", null ],
     [ "copyFromFramebuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#ab0da329ab045e01a43563e561294e6c4", null ],
     [ "download", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#ae7a9245fba8062c2b72ec7073f830ceb", null ],
-    [ "getGLFormat", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#ade7ce2b063b72c585fd74ba2d10e5525", null ],
     [ "getRenderTarget", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#a323855aaf3d52854f62be824646d5934", null ],
     [ "upload", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html#a3ff4ee2ad5e06a5893dd9442d665b9bc", null ]
 ];

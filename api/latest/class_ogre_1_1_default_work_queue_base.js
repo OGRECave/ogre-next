@@ -1,6 +1,5 @@
 var class_ogre_1_1_default_work_queue_base =
 [
-    [ "RequestID", "class_ogre_1_1_default_work_queue_base.html#a1908257e726af6caa80f1a6cd5682d76", null ],
     [ "DefaultWorkQueueBase", "class_ogre_1_1_default_work_queue_base.html#ad8c782f13059f74607be6c01df9d10be", null ],
     [ "~DefaultWorkQueueBase", "class_ogre_1_1_default_work_queue_base.html#a1d588e0f77255963f984735313ec9e7a", null ],
     [ "_processNextRequest", "class_ogre_1_1_default_work_queue_base.html#af981193d550a56ea146f7b3f544f1013", null ],
@@ -12,7 +11,6 @@ var class_ogre_1_1_default_work_queue_base =
     [ "addRequest", "class_ogre_1_1_default_work_queue_base.html#a15f5effebeec30f3d30926a66ca9871a", null ],
     [ "addRequestHandler", "class_ogre_1_1_default_work_queue_base.html#a3b0a7e54f7982743a60c06f56f86aa63", null ],
     [ "addResponseHandler", "class_ogre_1_1_default_work_queue_base.html#a67763faa933aff479056a72814e148d8", null ],
-    [ "getChannel", "class_ogre_1_1_default_work_queue_base.html#a9a550b2e870c3cf2fb7dc6732ceed3e5", null ],
     [ "getName", "class_ogre_1_1_default_work_queue_base.html#a3b38abc5e3d472c3282b0f1a3b6b8809", null ],
     [ "getRequestsAccepted", "class_ogre_1_1_default_work_queue_base.html#a89d7c1d6659662f3d6317a2234e3cf1a", null ],
     [ "getResponseProcessingTimeLimit", "class_ogre_1_1_default_work_queue_base.html#a4e37fee918294527bdc90819a371d625", null ],
@@ -27,7 +25,5 @@ var class_ogre_1_1_default_work_queue_base =
     [ "setRequestsAccepted", "class_ogre_1_1_default_work_queue_base.html#adbbd75670752ea4740fc72a5894480d1", null ],
     [ "setResponseProcessingTimeLimit", "class_ogre_1_1_default_work_queue_base.html#a77b6c97d0c34e3ffbd2dd47e2ee0cdd4", null ],
     [ "setWorkersCanAccessRenderSystem", "class_ogre_1_1_default_work_queue_base.html#a59458ab8807c99c478fe0a62c750c31d", null ],
-    [ "setWorkerThreadCount", "class_ogre_1_1_default_work_queue_base.html#a7edecae3229cfb6616774688070eeffa", null ],
-    [ "shutdown", "class_ogre_1_1_default_work_queue_base.html#a42d64d8891849878e3d1afb66fa0ce19", null ],
-    [ "startup", "class_ogre_1_1_default_work_queue_base.html#ad6d7aeeb4b1e4e8eed931cb17d63add3", null ]
+    [ "setWorkerThreadCount", "class_ogre_1_1_default_work_queue_base.html#a7edecae3229cfb6616774688070eeffa", null ]
 ];

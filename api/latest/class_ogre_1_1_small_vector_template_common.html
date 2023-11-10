@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -156,8 +155,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a031182e52c76c98b41e3e6e7bc084a7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_small_vector_template_common.html#ab4fb906b0b1c29080f7e14222a7a2677">const_pointer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_small_vector_template_common.html#a031182e52c76c98b41e3e6e7bc084a7e">data</a> () const</td></tr>
 <tr class="memdesc:a031182e52c76c98b41e3e6e7bc084a7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">data - Return a pointer to the vector's buffer, even if <a class="el" href="class_ogre_1_1_small_vector_base.html#ad476fe9d6fa0faecffb16338b6a972e5">empty()</a>.  <a href="class_ogre_1_1_small_vector_template_common.html#a031182e52c76c98b41e3e6e7bc084a7e">More...</a><br /></td></tr>
 <tr class="separator:a031182e52c76c98b41e3e6e7bc084a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad476fe9d6fa0faecffb16338b6a972e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_small_vector_base.html#ad476fe9d6fa0faecffb16338b6a972e5">empty</a> () const</td></tr>
-<tr class="separator:ad476fe9d6fa0faecffb16338b6a972e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add1c1041f5e7ca89feccdf57e746558b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_small_vector_template_common.html#ad3aa63daaa8c3754f1e8be544cb617ae">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_small_vector_template_common.html#add1c1041f5e7ca89feccdf57e746558b">end</a> ()</td></tr>
 <tr class="separator:add1c1041f5e7ca89feccdf57e746558b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87ee5ad0c88dbd163e58835d7990ef32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_small_vector_template_common.html#ad1c6b259854f9fa396fa1eee2e10b2b6">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_small_vector_template_common.html#a87ee5ad0c88dbd163e58835d7990ef32">end</a> () const</td></tr>
@@ -182,6 +179,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a726e02e5ed3fb393ddab4970b92e3906"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae40a8630bf739e9fadd1162ea95bb412"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_small_vector_template_common.html#a8985bda74ea85da34c90a7356586e0c4">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_small_vector_template_common.html#ae40a8630bf739e9fadd1162ea95bb412">size</a> () const</td></tr>
 <tr class="separator:ae40a8630bf739e9fadd1162ea95bb412"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_small_vector_base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_small_vector_base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_small_vector_base.html">Ogre::SmallVectorBase</a></td></tr>
+<tr class="memitem:ad476fe9d6fa0faecffb16338b6a972e5 inherit pub_methods_class_ogre_1_1_small_vector_base"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_small_vector_base.html#ad476fe9d6fa0faecffb16338b6a972e5">empty</a> () const</td></tr>
+<tr class="separator:ad476fe9d6fa0faecffb16338b6a972e5 inherit pub_methods_class_ogre_1_1_small_vector_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ad1c6b259854f9fa396fa1eee2e10b2b6" name="ad1c6b259854f9fa396fa1eee2e10b2b6"></a>
@@ -598,33 +598,6 @@ template&lt;typename T &gt; </div>
 <p>data - Return a pointer to the vector's buffer, even if <a class="el" href="class_ogre_1_1_small_vector_base.html#ad476fe9d6fa0faecffb16338b6a972e5">empty()</a>. </p>
 
 <p class="reference">References <a class="el" href="class_ogre_1_1_small_vector_template_common.html#a6f3019eb35333a8ca4e10f14923298d4">Ogre::SmallVectorTemplateCommon&lt; T &gt;::begin()</a>.</p>
-
-</div>
-</div>
-<a id="ad476fe9d6fa0faecffb16338b6a972e5" name="ad476fe9d6fa0faecffb16338b6a972e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad476fe9d6fa0faecffb16338b6a972e5">&#9670;&#160;</a></span>empty()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::SmallVectorBase::empty </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_small_vector.html#ac8f9366b3504393d595e2e1e1c4c6c5b">Ogre::SmallVector&lt; T, N &gt;::SmallVector()</a>.</p>
 
 </div>
 </div>

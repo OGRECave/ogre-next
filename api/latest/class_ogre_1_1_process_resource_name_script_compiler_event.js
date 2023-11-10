@@ -11,6 +11,5 @@ var class_ogre_1_1_process_resource_name_script_compiler_event =
     [ "ProcessResourceNameScriptCompilerEvent", "class_ogre_1_1_process_resource_name_script_compiler_event.html#a93b2fb455dd0deec91a7f16a3a91c55e", null ],
     [ "eventType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#a3c4bdfcd9e3758d5281dfe0ed7d8e5fc", null ],
     [ "mName", "class_ogre_1_1_process_resource_name_script_compiler_event.html#a9df601b04eff55b09762484c8eac6082", null ],
-    [ "mResourceType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#ad65384a6b5c01e1ce69a4d452d45745f", null ],
-    [ "mType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+    [ "mResourceType", "class_ogre_1_1_process_resource_name_script_compiler_event.html#ad65384a6b5c01e1ce69a4d452d45745f", null ]
 ];

@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -98,7 +97,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_renderable.html',''); i
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_renderable-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::Renderable Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group___component.html">Component</a> &#124; <a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___scene.html">Scene</a></div></div></div>
 </div><!--header-->
@@ -279,11 +277,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842">mRenderableVisible</a></td></tr>
 <tr class="memdesc:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control visibility at <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> (e.g.  <a href="class_ogre_1_1_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842">More...</a><br /></td></tr>
 <tr class="separator:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a7ae9e10420b4c462fd91b7e5c54f0483"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a7ae9e10420b4c462fd91b7e5c54f0483">LodStrategy::lodSet</a> (<a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> &amp;t, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> lodValues[<a class="el" href="_ogre_array_config_8h.html#aae6e6e54870826a15444682ed7bae799">ARRAY_PACKED_REALS</a>])</td></tr>
-<tr class="separator:a7ae9e10420b4c462fd91b7e5c54f0483"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Abstract class defining the interface all renderable objects must implement. </p>
@@ -1844,43 +1837,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1_renderable.html#a13f1bbc23e57df9084bed76acb3b5500" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. Sets any kind of user value on this object. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This method allows you to associate any user value you like with this <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a>. This can be a pointer back to one of your own classes for instance. </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="a7ae9e10420b4c462fd91b7e5c54f0483" name="a7ae9e10420b4c462fd91b7e5c54f0483"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ae9e10420b4c462fd91b7e5c54f0483">&#9670;&#160;</a></span>LodStrategy::lodSet</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_ogre_1_1_lod_strategy.html#a2400dc929b5f7727f0d69336b3b1e05d">LodStrategy::lodSet</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> &amp;&#160;</td>
-          <td class="paramname"><em>t</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td>
-          <td class="paramname"><em>lodValues</em>[ARRAY_PACKED_REALS]&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

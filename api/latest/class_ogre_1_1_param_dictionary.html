@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -94,7 +93,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_param_dictionary.html',
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_param_dictionary-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::ParamDictionary Class Reference<div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___general.html">General</a></div></div></div>
 </div><!--header-->
@@ -109,17 +107,12 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_param_dictionary.html',
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af3f46fdeacdb40c4dc234cd3540cd701"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_param_dictionary.html#af3f46fdeacdb40c4dc234cd3540cd701">ParamDictionary</a> ()</td></tr>
 <tr class="separator:af3f46fdeacdb40c4dc234cd3540cd701"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a411fa9cc6ca47ea388307fdd7841f547"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_param_dictionary.html#a411fa9cc6ca47ea388307fdd7841f547">addParameter</a> (const <a class="el" href="class_ogre_1_1_parameter_def.html">ParameterDef</a> &amp;paramDef, <a class="el" href="class_ogre_1_1_param_command.html">ParamCommand</a> *paramCmd)</td></tr>
+<tr class="memitem:a411fa9cc6ca47ea388307fdd7841f547"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_param_dictionary.html#a411fa9cc6ca47ea388307fdd7841f547">addParameter</a> (const <a class="el" href="class_ogre_1_1_parameter_def.html">ParameterDef</a> &amp;paramDef, ParamCommand *paramCmd)</td></tr>
 <tr class="memdesc:a411fa9cc6ca47ea388307fdd7841f547"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for adding a parameter definition for this class.  <a href="class_ogre_1_1_param_dictionary.html#a411fa9cc6ca47ea388307fdd7841f547">More...</a><br /></td></tr>
 <tr class="separator:a411fa9cc6ca47ea388307fdd7841f547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e3313a93aa3527bc95e3c66320c3089"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___general.html#gac3c212f18e4a3e6aba496571cfbe5400">ParameterList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_param_dictionary.html#a5e3313a93aa3527bc95e3c66320c3089">getParameters</a> () const</td></tr>
 <tr class="memdesc:a5e3313a93aa3527bc95e3c66320c3089"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a list of parameters valid for this object.  <a href="class_ogre_1_1_param_dictionary.html#a5e3313a93aa3527bc95e3c66320c3089">More...</a><br /></td></tr>
 <tr class="separator:a5e3313a93aa3527bc95e3c66320c3089"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:af1037345f6c7a90f967a44cb1eb6dadc"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_param_dictionary.html#af1037345f6c7a90f967a44cb1eb6dadc">StringInterface</a></td></tr>
-<tr class="separator:af1037345f6c7a90f967a44cb1eb6dadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class to hold a dictionary of parameters for a single class. </p>
@@ -168,7 +161,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_param_command.html">ParamCommand</a> *&#160;</td>
+          <td class="paramtype">ParamCommand *&#160;</td>
           <td class="paramname"><em>paramCmd</em>&#160;</td>
         </tr>
         <tr>
@@ -188,7 +181,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">paramDef</td><td>A <a class="el" href="class_ogre_1_1_parameter_def.html" title="Definition of a parameter supported by a StringInterface class, for introspection.">ParameterDef</a> object defining the parameter </td></tr>
-    <tr><td class="paramname">paramCmd</td><td>Pointer to a <a class="el" href="class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters.">ParamCommand</a> subclass to handle the getting / setting of this parameter. NB this class will not destroy this on shutdown, please ensure you do </td></tr>
+    <tr><td class="paramname">paramCmd</td><td>Pointer to a ParamCommand subclass to handle the getting / setting of this parameter. NB this class will not destroy this on shutdown, please ensure you do </td></tr>
   </table>
   </dd>
 </dl>
@@ -222,29 +215,6 @@ Friends</h2></td></tr>
 
 <p>Retrieves a list of parameters valid for this object. </p>
 <dl class="section return"><dt>Returns</dt><dd>A reference to a static list of <a class="el" href="class_ogre_1_1_parameter_def.html" title="Definition of a parameter supported by a StringInterface class, for introspection.">ParameterDef</a> objects. </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="af1037345f6c7a90f967a44cb1eb6dadc" name="af1037345f6c7a90f967a44cb1eb6dadc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1037345f6c7a90f967a44cb1eb6dadc">&#9670;&#160;</a></span>StringInterface</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_string_interface.html">StringInterface</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

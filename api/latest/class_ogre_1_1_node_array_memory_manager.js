@@ -1,6 +1,5 @@
 var class_ogre_1_1_node_array_memory_manager =
 [
-    [ "PtrdiffVec", "class_ogre_1_1_node_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426", null ],
     [ "MemoryTypes", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5f", [
       [ "Parent", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5fa8c8ec6390a866bd1f9a26254c3e389f3", null ],
       [ "Owner", "class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5faf719d71db838dd7d4d921ee72c3f3ac0", null ],
@@ -17,20 +16,9 @@ var class_ogre_1_1_node_array_memory_manager =
     ] ],
     [ "NodeArrayMemoryManager", "class_ogre_1_1_node_array_memory_manager.html#aa151e8893d1202165995ba9446ac1813", null ],
     [ "createNewNode", "class_ogre_1_1_node_array_memory_manager.html#ac6fb4f1d86cd6a094d2705d59560840d", null ],
-    [ "defragment", "class_ogre_1_1_node_array_memory_manager.html#a1ff6ca754a46c4d2fe35ec737681bc26", null ],
-    [ "destroy", "class_ogre_1_1_node_array_memory_manager.html#aa59979265f37644b7b411c1c186412a0", null ],
     [ "destroyNode", "class_ogre_1_1_node_array_memory_manager.html#ad6a69c60fa0af29d3f36469bc68a3518", null ],
-    [ "getAllMemory", "class_ogre_1_1_node_array_memory_manager.html#a8c128b8ba585ecb04205e81d2aa2c341", null ],
     [ "getFirstNode", "class_ogre_1_1_node_array_memory_manager.html#a7f8202c2ad3fd5e39ff357a1e4d4d013", null ],
-    [ "getFreeMemory", "class_ogre_1_1_node_array_memory_manager.html#ac639db8f3c078fa02ceb2691d4b86065", null ],
-    [ "getNumUsedSlotsIncludingFragmented", "class_ogre_1_1_node_array_memory_manager.html#afd91cd460057cd3a143e84c887655c26", null ],
-    [ "getUsedMemory", "class_ogre_1_1_node_array_memory_manager.html#a1483bb4f495abd37502c209eecc08881", null ],
-    [ "getWastedMemory", "class_ogre_1_1_node_array_memory_manager.html#a42fe5a861ebd6b4610189ce2be86b032", null ],
-    [ "initialize", "class_ogre_1_1_node_array_memory_manager.html#ad680fce37ec7058f94a5a69be2e2f4c5", null ],
-    [ "neverDefragment", "class_ogre_1_1_node_array_memory_manager.html#a443f00a249cbbc4b6edf56632c5e2756", null ],
-    [ "shrinkToFit", "class_ogre_1_1_node_array_memory_manager.html#a1885069fab42349469ea51ea34590bad", null ],
     [ "ElementsMemSize", "class_ogre_1_1_node_array_memory_manager.html#a17a9a4ed2086a696252860e4dd1363a7", null ],
-    [ "MAX_MEMORY_SLOTS", "class_ogre_1_1_node_array_memory_manager.html#a738870646404c47464027863b9dea16c", null ],
     [ "NodeCleanupRoutines", "class_ogre_1_1_node_array_memory_manager.html#ae4768b67e11274e71bd9e63d967b9f6e", null ],
     [ "NodeInitRoutines", "class_ogre_1_1_node_array_memory_manager.html#a6c467643bfc4d843669d49d9a0a3fd8b", null ]
 ];

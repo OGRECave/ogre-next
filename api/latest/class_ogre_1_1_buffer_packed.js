@@ -20,7 +20,6 @@ var class_ogre_1_1_buffer_packed =
     [ "getShadowCopy", "class_ogre_1_1_buffer_packed.html#a1b7bf642c5f9e50f76b64f0f02766bb8", null ],
     [ "getTotalSizeBytes", "class_ogre_1_1_buffer_packed.html#ab9ce07a6d2e0d181085bcdb7c2b49051", null ],
     [ "isCurrentlyMapped", "class_ogre_1_1_buffer_packed.html#a63c781040cdfc2c1d3ac9fc3a7cd9097", null ],
-    [ "isTextureGpu", "class_ogre_1_1_buffer_packed.html#ab24625894d83ec3f90972a350f27e60a", null ],
     [ "map", "class_ogre_1_1_buffer_packed.html#a24a2ccddbb2fc851304ae81eb78243ed", null ],
     [ "readRequest", "class_ogre_1_1_buffer_packed.html#a80c6682bd4adc315782091679d230cee", null ],
     [ "regressFrame", "class_ogre_1_1_buffer_packed.html#a8a1e2da7aed186b9fd6c4f88a4f9734b", null ],

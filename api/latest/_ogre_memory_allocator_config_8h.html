@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -194,7 +193,7 @@ Functions</h2></td></tr>
 </div><!-- fragment --><p >Policies are then used as implementations for the wrapper classes and macros which call them. AllocatedObject for example provides the hooks to override the new and delete operators for a class and redirect the functionality to the policy. STLAllocator is a class which is provided to STL containers in order to hook up allocation of the containers members to the allocation policy. </p><dl class="section user"><dt></dt><dd>In addition to linking allocations to policies, this class also defines a number of macros to allow debugging information to be passed along with allocations, such as the file and line number they originate from. It's important to realise that we do not redefine the 'new' and 'delete' symbols with macros, because that's very difficult to consistently do when other libraries are also trying to do the same thing; instead we use dedicated 'OGRE_' prefixed macros. See OGRE_NEW and related items. </dd></dl>
 <dl class="section user"><dt></dt><dd>The base macros you can use are listed below, in order of preference and with their conditions stated: <ul>
 <li>
-OGRE_NEW - use to allocate an object which have custom new/delete operators to handle custom allocations, usually this means it's derived from <a class="el" href="class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator...">Ogre::AllocatedObject</a>. Free the memory using OGRE_DELETE. You can in fact use the regular new/delete for these classes but you won't get any line number debugging if you do. The memory category is automatically derived for these classes; for all other allocations you have to specify it.  </li>
+OGRE_NEW - use to allocate an object which have custom new/delete operators to handle custom allocations, usually this means it's derived from Ogre::AllocatedObject. Free the memory using OGRE_DELETE. You can in fact use the regular new/delete for these classes but you won't get any line number debugging if you do. The memory category is automatically derived for these classes; for all other allocations you have to specify it.  </li>
 <li>
 OGRE_NEW_T - use to allocate a single class / struct that does not have custom new/delete operators, either because it is non-virtual (Vector3, Quaternion), or because it is from an external library (e.g. STL). You must deallocate with OGRE_DELETE_T if you expect the destructor to be called. You may free the memory using OGRE_FREE if you are absolutely sure there is no destructor to be called. These macros ensure that constructors and destructors are called correctly even though the memory originates externally (via placement new). Also note that you have to specify the type and memory category so that the correct allocator can be derived, when both allocating and freeing.  </li>
 <li>

@@ -7,6 +7,5 @@ var class_ogre_1_1_create_high_level_gpu_program_script_compiler_event =
     [ "mName", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a19f3cdde73274ca712b7920dce8e43a5", null ],
     [ "mProgramType", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#aa4df239d1e53bba3c96b0aed2de4a7ba", null ],
     [ "mResourceGroup", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a34dd09b89f48c5049996ad1bbb658871", null ],
-    [ "mSource", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a581f63322ca90c89720be8fe682e0346", null ],
-    [ "mType", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6", null ]
+    [ "mSource", "class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html#a581f63322ca90c89720be8fe682e0346", null ]
 ];

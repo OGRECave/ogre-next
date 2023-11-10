@@ -12,7 +12,6 @@ var class_ogre_1_1v1_1_1_vertex_pose_key_frame =
     [ "getPoseReferenceIterator", "class_ogre_1_1v1_1_1_vertex_pose_key_frame.html#ad71ab508dfc34cb3d59bdf3da47cfdef", null ],
     [ "getPoseReferenceIterator", "class_ogre_1_1v1_1_1_vertex_pose_key_frame.html#ac364515514632d9b78ab796fcb0e4f87", null ],
     [ "getPoseReferences", "class_ogre_1_1v1_1_1_vertex_pose_key_frame.html#a0b2880b4d6b6869bef32eaf224ab5c76", null ],
-    [ "getTime", "class_ogre_1_1v1_1_1_vertex_pose_key_frame.html#aa510d71b4d0925e3fd2583d65fb92abd", null ],
     [ "removeAllPoseReferences", "class_ogre_1_1v1_1_1_vertex_pose_key_frame.html#a88d31d6bb2bd3d08cd4d6b7c8f91fda4", null ],
     [ "removePoseReference", "class_ogre_1_1v1_1_1_vertex_pose_key_frame.html#aef72ae8f154b0e7e94f38f7f32a1ed4c", null ],
     [ "updatePoseReference", "class_ogre_1_1v1_1_1_vertex_pose_key_frame.html#a5511635f4af1e4ee17ce580ebd14f42d", null ]

@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -94,7 +93,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_mesh_serializer_impl.ht
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_ogre_1_1_mesh_serializer_impl-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::MeshSerializerImpl Class Reference<div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___resources.html">Resources</a></div></div></div>
@@ -114,15 +112,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_mesh_serializer_impl.ht
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a5122d5a3161fb5fd819d9a0521fe9d39"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">Endian</a> { <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef">ENDIAN_NATIVE</a>
-, <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240">ENDIAN_BIG</a>
-, <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3">ENDIAN_LITTLE</a>
- }</td></tr>
-<tr class="memdesc:a5122d5a3161fb5fd819d9a0521fe9d39"><td class="mdescLeft">&#160;</td><td class="mdescRight">The endianness of written files.  <a href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">More...</a><br /></td></tr>
-<tr class="separator:a5122d5a3161fb5fd819d9a0521fe9d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0a5a3365f3e276d4158b1aac030ba5ce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh_serializer_impl.html#a0a5a3365f3e276d4158b1aac030ba5ce">MeshSerializerImpl</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoManager)</td></tr>
@@ -135,45 +124,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e4affe098778b6834aad962d1360deb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh_serializer_impl.html#a3e4affe098778b6834aad962d1360deb">importMesh</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;stream, <a class="el" href="class_ogre_1_1_mesh.html">Mesh</a> *pDest, <a class="el" href="class_ogre_1_1_mesh_serializer_listener.html">MeshSerializerListener</a> *listener)</td></tr>
 <tr class="memdesc:a3e4affe098778b6834aad962d1360deb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imports <a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a> and (optionally) <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> data from a .mesh file <a class="el" href="class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data.">DataStream</a>.  <a href="class_ogre_1_1_mesh_serializer_impl.html#a3e4affe098778b6834aad962d1360deb">More...</a><br /></td></tr>
 <tr class="separator:a3e4affe098778b6834aad962d1360deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_ogre_1_1_serializer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_ogre_1_1_serializer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_ogre_1_1_serializer.html">Ogre::Serializer</a></td></tr>
+<tr class="memitem:a3268ab522d56e98d88b604255b0f43d4 inherit pub_methods_class_ogre_1_1_serializer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_serializer.html#a3268ab522d56e98d88b604255b0f43d4">Serializer</a> ()</td></tr>
+<tr class="separator:a3268ab522d56e98d88b604255b0f43d4 inherit pub_methods_class_ogre_1_1_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a593233ff92623bc48b15e00cf90cc inherit pub_methods_class_ogre_1_1_serializer"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_serializer.html#a78a593233ff92623bc48b15e00cf90cc">~Serializer</a> ()</td></tr>
+<tr class="separator:a78a593233ff92623bc48b15e00cf90cc inherit pub_methods_class_ogre_1_1_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_class_ogre_1_1_serializer"><td colspan="2" onclick="javascript:toggleInherit('pub_types_class_ogre_1_1_serializer')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_ogre_1_1_serializer.html">Ogre::Serializer</a></td></tr>
+<tr class="memitem:a5122d5a3161fb5fd819d9a0521fe9d39 inherit pub_types_class_ogre_1_1_serializer"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">Endian</a> { <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef">ENDIAN_NATIVE</a>
+, <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240">ENDIAN_BIG</a>
+, <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3">ENDIAN_LITTLE</a>
+ }</td></tr>
+<tr class="memdesc:a5122d5a3161fb5fd819d9a0521fe9d39"><td class="mdescLeft">&#160;</td><td class="mdescRight">The endianness of written files.  <a href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">More...</a><br /></td></tr>
+<tr class="separator:a5122d5a3161fb5fd819d9a0521fe9d39 inherit pub_types_class_ogre_1_1_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Internal implementation of <a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a> reading / writing for the latest version of the .mesh format. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>In order to maintain compatibility with older versions of the .mesh format, there will be alternative subclasses of this class to load older versions, whilst this class will remain to load the latest version.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>This mesh format was used from <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> v1.10. </dd></dl>
-</div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a5122d5a3161fb5fd819d9a0521fe9d39" name="a5122d5a3161fb5fd819d9a0521fe9d39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5122d5a3161fb5fd819d9a0521fe9d39">&#9670;&#160;</a></span>Endian</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="class_ogre_1_1_serializer.html#a5122d5a3161fb5fd819d9a0521fe9d39">Ogre::Serializer::Endian</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The endianness of written files. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef" name="a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef"></a>ENDIAN_NATIVE&#160;</td><td class="fielddoc"><p >Use the platform native endian. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240" name="a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240"></a>ENDIAN_BIG&#160;</td><td class="fielddoc"><p >Use big endian (0x1000 is serialised as 0x10 0x00) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3" name="a5122d5a3161fb5fd819d9a0521fe9d39a10ce3b8f55cba526f6bc8237d8b25cc3"></a>ENDIAN_LITTLE&#160;</td><td class="fielddoc"><p >Use little endian (0x1000 is serialised as 0x00 0x10) </p>
-</td></tr>
-</table>
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0a5a3365f3e276d4158b1aac030ba5ce" name="a0a5a3365f3e276d4158b1aac030ba5ce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0a5a3365f3e276d4158b1aac030ba5ce">&#9670;&#160;</a></span>MeshSerializerImpl()</h2>
 

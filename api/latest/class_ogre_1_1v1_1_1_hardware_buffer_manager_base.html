@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -96,7 +95,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1v1_1_1_hardware_buffer_m
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::v1::HardwareBufferManagerBase Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___render_system.html">RenderSystem</a></div></div></div>
 </div><!--header-->
@@ -176,13 +174,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a28b1ee3a62509c78ab8c6c7a13ad8059"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a28b1ee3a62509c78ab8c6c7a13ad8059">touchVertexBufferCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;bufferCopy)</td></tr>
 <tr class="memdesc:a28b1ee3a62509c78ab8c6c7a13ad8059"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell engine that the vertex buffer copy intent to reuse.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a28b1ee3a62509c78ab8c6c7a13ad8059">More...</a><br /></td></tr>
 <tr class="separator:a28b1ee3a62509c78ab8c6c7a13ad8059"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ac301d86fde854d92c82283660c10ca58"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#ac301d86fde854d92c82283660c10ca58">HardwareIndexBufferSharedPtr</a></td></tr>
-<tr class="separator:ac301d86fde854d92c82283660c10ca58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdb4b01e9cf06263b1bae7fbb0bb2e9e"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#abdb4b01e9cf06263b1bae7fbb0bb2e9e">HardwareVertexBufferSharedPtr</a></td></tr>
-<tr class="separator:abdb4b01e9cf06263b1bae7fbb0bb2e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Base definition of a hardware buffer manager. </p>
@@ -880,51 +871,6 @@ Note that because vertex buffers can be shared, they are reference counted so yo
 <p>Reimplemented in <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a587815d85f94e9a7bc50e1c0834a7f10">Ogre::v1::HardwareBufferManager</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a587815d85f94e9a7bc50e1c0834a7f10">Ogre::v1::HardwareBufferManager::touchVertexBufferCopy()</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="ac301d86fde854d92c82283660c10ca58" name="ac301d86fde854d92c82283660c10ca58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac301d86fde854d92c82283660c10ca58">&#9670;&#160;</a></span>HardwareIndexBufferSharedPtr</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer_shared_ptr.html">HardwareIndexBufferSharedPtr</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abdb4b01e9cf06263b1bae7fbb0bb2e9e" name="abdb4b01e9cf06263b1bae7fbb0bb2e9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdb4b01e9cf06263b1bae7fbb0bb2e9e">&#9670;&#160;</a></span>HardwareVertexBufferSharedPtr</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

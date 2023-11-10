@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -96,7 +95,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_paged_world.html',''); 
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_paged_world-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::PagedWorld Class Reference<div class="ingroups"><a class="el" href="group___optional.html">Components</a> &raquo; <a class="el" href="group___paging.html">Paging</a></div></div></div>
 </div><!--header-->
@@ -219,12 +217,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a22c0313ee4f22c41c592aec526aedce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5aed8fa0270feca86392300faff64764"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_paged_world.html#a5aed8fa0270feca86392300faff64764">CHUNK_VERSION</a></td></tr>
 <tr class="separator:a5aed8fa0270feca86392300faff64764"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:acb8ecc03b04c2b56fa15cd3d6d9a8fcf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_paging_prerequisites_8h.html#a12507ffbcb05d7b7af41403ff7db8a5c">_OgrePagingExport</a> friend std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_paged_world.html#acb8ecc03b04c2b56fa15cd3d6d9a8fcf">operator&lt;&lt;</a> (std::ostream &amp;o, const <a class="el" href="class_ogre_1_1_paged_world.html">PagedWorld</a> &amp;p)</td></tr>
-<tr class="memdesc:acb8ecc03b04c2b56fa15cd3d6d9a8fcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for writing to a stream.  <a href="class_ogre_1_1_paged_world.html#acb8ecc03b04c2b56fa15cd3d6d9a8fcf">More...</a><br /></td></tr>
-<tr class="separator:acb8ecc03b04c2b56fa15cd3d6d9a8fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This class represents a collection of pages which make up a world. </p>
@@ -1129,45 +1121,6 @@ Friends</h2></td></tr>
 <p>Set the <a class="el" href="class_ogre_1_1_page_provider.html" title="Abstract class that can be implemented by the user application to provide a way to retrieve or genera...">PageProvider</a> which can provide streams for Pages in this world. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>This is the top-level way that you can direct how <a class="el" href="class_ogre_1_1_page.html" title="Page class.">Page</a> data is loaded. When data for a <a class="el" href="class_ogre_1_1_page.html" title="Page class.">Page</a> is requested for a <a class="el" href="class_ogre_1_1_paged_world_section.html" title="Represents a section of the PagedWorld which uses a given PageStrategy, and which is made up of a gen...">PagedWorldSection</a>, the following sequence of classes will be checked to see if they have a provider willing to supply the stream: <a class="el" href="class_ogre_1_1_paged_world_section.html" title="Represents a section of the PagedWorld which uses a given PageStrategy, and which is made up of a gen...">PagedWorldSection</a>, <a class="el" href="class_ogre_1_1_paged_world.html" title="This class represents a collection of pages which make up a world.">PagedWorld</a>, <a class="el" href="class_ogre_1_1_page_manager.html" title="The PageManager is the entry point through which you load all PagedWorld instances,...">PageManager</a>. If none of these do, then the default behaviour is to look for a file called worldname_sectionname_pageID.page. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>The caller remains responsible for the destruction of the provider. </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="acb8ecc03b04c2b56fa15cd3d6d9a8fcf" name="acb8ecc03b04c2b56fa15cd3d6d9a8fcf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb8ecc03b04c2b56fa15cd3d6d9a8fcf">&#9670;&#160;</a></span>operator&lt;&lt;</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="_ogre_paging_prerequisites_8h.html#a12507ffbcb05d7b7af41403ff7db8a5c">_OgrePagingExport</a> friend std::ostream &amp; operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>o</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_paged_world.html">PagedWorld</a> &amp;&#160;</td>
-          <td class="paramname"><em>p</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Function for writing to a stream. </p>
 
 </div>
 </div>

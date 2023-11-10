@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -97,7 +96,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_quaternion.html',''); i
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_quaternion-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::Quaternion Class Reference<div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___math.html">Math</a></div></div></div>
 </div><!--header-->
@@ -267,14 +265,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a6b53296360cc166c62533cff8f1edcc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44f3c000c8f1ea2759c2e724e04bf86b"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#a44f3c000c8f1ea2759c2e724e04bf86b">ZERO</a></td></tr>
 <tr class="separator:a44f3c000c8f1ea2759c2e724e04bf86b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ab929010aac9fae8a14008a7213d9d419"><td class="memItemLeft" align="right" valign="top">_OgreExport friend <a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#ab929010aac9fae8a14008a7213d9d419">operator*</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> fScalar, const <a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a> &amp;rkQ)</td></tr>
-<tr class="separator:ab929010aac9fae8a14008a7213d9d419"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2fb3f8af50db0acd46f33d4c88518f2"><td class="memItemLeft" align="right" valign="top">_OgreExport friend std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_quaternion.html#aa2fb3f8af50db0acd46f33d4c88518f2">operator&lt;&lt;</a> (std::ostream &amp;o, const <a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a> &amp;q)</td></tr>
-<tr class="memdesc:aa2fb3f8af50db0acd46f33d4c88518f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for writing to a stream.  <a href="class_ogre_1_1_quaternion.html#aa2fb3f8af50db0acd46f33d4c88518f2">More...</a><br /></td></tr>
-<tr class="separator:aa2fb3f8af50db0acd46f33d4c88518f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Implementation of a <a class="el" href="class_ogre_1_1_quaternion.html" title="Implementation of a Quaternion, i.e.">Quaternion</a>, i.e. </p>
@@ -1707,82 +1697,6 @@ Friends</h2></td></tr>
 
 <p>Returns the Z orthonormal axis defining the quaternion. </p>
 <p >Same as doing zAxis = <a class="el" href="class_ogre_1_1_vector3.html#ad25aed2e9367cfa879d3e3c231c5a136">Vector3::UNIT_Z</a> * this. Also called the local Z-axis </p>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="ab929010aac9fae8a14008a7213d9d419" name="ab929010aac9fae8a14008a7213d9d419"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab929010aac9fae8a14008a7213d9d419">&#9670;&#160;</a></span>operator*</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">_OgreExport friend <a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a> operator* </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td>
-          <td class="paramname"><em>fScalar</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td>
-          <td class="paramname"><em>rkQ</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa2fb3f8af50db0acd46f33d4c88518f2" name="aa2fb3f8af50db0acd46f33d4c88518f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2fb3f8af50db0acd46f33d4c88518f2">&#9670;&#160;</a></span>operator&lt;&lt;</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">_OgreExport friend std::ostream &amp; operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>o</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td>
-          <td class="paramname"><em>q</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Function for writing to a stream. </p>
-<p >Outputs "Quaternion(w, x, y, z)" with w,x,y,z being the member values of the quaternion. </p>
 
 </div>
 </div>

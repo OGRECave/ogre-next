@@ -1,9 +1,5 @@
 var class_ogre_1_1v1_1_1_hardware_buffer_manager =
 [
-    [ "BufferLicenseType", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eb", [
-      [ "BLT_MANUAL_RELEASE", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31ebaefbef8f3135135145a860b8647faba4c", null ],
-      [ "BLT_AUTOMATIC_RELEASE", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eba2b12eec76abb4c56344b6c6ff1cdb65f", null ]
-    ] ],
     [ "HardwareBufferManager", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a3d052ba43c323137194e3df2144e6d9a", null ],
     [ "~HardwareBufferManager", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a5ae639e9725379af8eb4fe8bce5cffd0", null ],
     [ "_forceReleaseBufferCopies", "class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a704f13dfbb251f877235107f05bd7658", null ],

@@ -35,7 +35,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="class_ogre_1_1_allocated_object.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="115,-140 0,-140 0,-110 115,-110 115,-140"/>
 <text text-anchor="start" x="8" y="-128" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::AllocatedObject</text>
 <text text-anchor="middle" x="57.5" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; AlignAllocPolicy&lt;&gt; &gt;</text>

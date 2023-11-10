@@ -21,7 +21,6 @@ var class_ogre_1_1_atmosphere_npr =
     [ "getPreset", "class_ogre_1_1_atmosphere_npr.html#abf03449a1774b3d083d80e1d8289f5ad", null ],
     [ "getPresets", "class_ogre_1_1_atmosphere_npr.html#a269ac2a19b91a3b5bf5122cfddc8b184", null ],
     [ "preparePassHash", "class_ogre_1_1_atmosphere_npr.html#a5bdb945240a474514a7a345f13c56c76", null ],
-    [ "providesHlmsCode", "class_ogre_1_1_atmosphere_npr.html#ae84ab1df8e6f66b7ba60f752c85d2ac3", null ],
     [ "setLight", "class_ogre_1_1_atmosphere_npr.html#a1026e13f69c34baed70ab7454d7fd8d2", null ],
     [ "setPreset", "class_ogre_1_1_atmosphere_npr.html#ae7b3bc2959177dd1b83ddccb99845714", null ],
     [ "setPresets", "class_ogre_1_1_atmosphere_npr.html#aca45e8c563e5b78273e35cb5fedd0824", null ],

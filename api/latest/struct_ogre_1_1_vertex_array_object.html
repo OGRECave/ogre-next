@@ -17,7 +17,6 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="ogre_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -25,7 +24,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
+  <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">OGRE-Next<span id="projectnumber">&#160;latest</span>
    </div>
@@ -98,7 +97,6 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_vertex_array_object.ht
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="struct_ogre_1_1_vertex_array_object-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Ogre::VertexArrayObject Struct Reference</div></div>
 </div><!--header-->
@@ -181,21 +179,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:ae4fd3c12158239adb3bc2aaa42205805"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_vertex_buffer_packed.html">VertexBufferPacked</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vertex_array_object.html#ae4fd3c12158239adb3bc2aaa42205805">msDummyVertexBuffer</a></td></tr>
 <tr class="memdesc:ae4fd3c12158239adb3bc2aaa42205805"><td class="mdescLeft">&#160;</td><td class="mdescRight">When a Vao doesn't have a vertex buffer, a dummy one is assigned for performance reasons (avoid checking if pointer is null, avoid crashing inside <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>)  <a href="struct_ogre_1_1_vertex_array_object.html#ae4fd3c12158239adb3bc2aaa42205805">More...</a><br /></td></tr>
 <tr class="separator:ae4fd3c12158239adb3bc2aaa42205805"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ae66ded42f6ea32924a49976b7643b89b"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vertex_array_object.html#ae66ded42f6ea32924a49976b7643b89b">D3D11RenderSystem</a></td></tr>
-<tr class="separator:ae66ded42f6ea32924a49976b7643b89b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f2b08c320cc81c424247936d34d11b6"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vertex_array_object.html#a4f2b08c320cc81c424247936d34d11b6">GL3PlusRenderSystem</a></td></tr>
-<tr class="separator:a4f2b08c320cc81c424247936d34d11b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0aaa30a5a63b3ba9e2b3cd0797fdf60"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vertex_array_object.html#ae0aaa30a5a63b3ba9e2b3cd0797fdf60">GLES2RenderSystem</a></td></tr>
-<tr class="separator:ae0aaa30a5a63b3ba9e2b3cd0797fdf60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e2b56e3fc67296e2d2ab35eb630ecce"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vertex_array_object.html#a3e2b56e3fc67296e2d2ab35eb630ecce">MetalRenderSystem</a></td></tr>
-<tr class="separator:a3e2b56e3fc67296e2d2ab35eb630ecce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68e318c4a7793b7195ffd7ba8b6afba9"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vertex_array_object.html#a68e318c4a7793b7195ffd7ba8b6afba9">RenderQueue</a></td></tr>
-<tr class="separator:a68e318c4a7793b7195ffd7ba8b6afba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06b786d8e0847dfe9cc15e1dea308fcd"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vertex_array_object.html#a06b786d8e0847dfe9cc15e1dea308fcd">RenderSystem</a></td></tr>
-<tr class="separator:a06b786d8e0847dfe9cc15e1dea308fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and index buffer with a given operation type. </p>
@@ -786,139 +769,6 @@ Friends</h2></td></tr>
 
 <p>Unmaps the buffers mapped via. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="struct_ogre_1_1_vertex_array_object.html#a8a3a9dbd49ddd81cbbb58352d6d622ea" title="Maps the buffers requested via.">mapAsyncTickets</a> </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="ae66ded42f6ea32924a49976b7643b89b" name="ae66ded42f6ea32924a49976b7643b89b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae66ded42f6ea32924a49976b7643b89b">&#9670;&#160;</a></span>D3D11RenderSystem</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_d3_d11_render_system.html">D3D11RenderSystem</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4f2b08c320cc81c424247936d34d11b6" name="a4f2b08c320cc81c424247936d34d11b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f2b08c320cc81c424247936d34d11b6">&#9670;&#160;</a></span>GL3PlusRenderSystem</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html">GL3PlusRenderSystem</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae0aaa30a5a63b3ba9e2b3cd0797fdf60" name="ae0aaa30a5a63b3ba9e2b3cd0797fdf60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0aaa30a5a63b3ba9e2b3cd0797fdf60">&#9670;&#160;</a></span>GLES2RenderSystem</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html">GLES2RenderSystem</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3e2b56e3fc67296e2d2ab35eb630ecce" name="a3e2b56e3fc67296e2d2ab35eb630ecce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e2b56e3fc67296e2d2ab35eb630ecce">&#9670;&#160;</a></span>MetalRenderSystem</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_metal_render_system.html">MetalRenderSystem</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a68e318c4a7793b7195ffd7ba8b6afba9" name="a68e318c4a7793b7195ffd7ba8b6afba9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68e318c4a7793b7195ffd7ba8b6afba9">&#9670;&#160;</a></span>RenderQueue</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_render_queue.html">RenderQueue</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a06b786d8e0847dfe9cc15e1dea308fcd" name="a06b786d8e0847dfe9cc15e1dea308fcd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06b786d8e0847dfe9cc15e1dea308fcd">&#9670;&#160;</a></span>RenderSystem</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

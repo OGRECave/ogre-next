@@ -6,7 +6,6 @@ var class_ogre_1_1_vct_cascaded_voxelizer =
     [ "addCascade", "class_ogre_1_1_vct_cascaded_voxelizer.html#a3e07c899db89d6b9de7e2b902359444d", null ],
     [ "addItem", "class_ogre_1_1_vct_cascaded_voxelizer.html#a6b8d462f8ae1d8378b883868926ac76a", null ],
     [ "allWorkspacesBeforeBeginUpdate", "class_ogre_1_1_vct_cascaded_voxelizer.html#abc877f9e18f76267764c13b513766cb8", null ],
-    [ "allWorkspacesBeginUpdate", "class_ogre_1_1_vct_cascaded_voxelizer.html#a47d89a97c8d3e1726c9a8ca2f334c23c", null ],
     [ "autoCalculateStepSizes", "class_ogre_1_1_vct_cascaded_voxelizer.html#a2352a81b6d10db715def555673530d63", null ],
     [ "getCameraPosition", "class_ogre_1_1_vct_cascaded_voxelizer.html#a0a17a5d33b3f5819e8bb3036a005a9f0", null ],
     [ "getCascade", "class_ogre_1_1_vct_cascaded_voxelizer.html#a5b218c8db5715301448ed26d1db3de97", null ],
@@ -17,11 +16,6 @@ var class_ogre_1_1_vct_cascaded_voxelizer =
     [ "getVctLighting", "class_ogre_1_1_vct_cascaded_voxelizer.html#aa61e7e677eb1948aa588ebbbcb2ea0ab", null ],
     [ "init", "class_ogre_1_1_vct_cascaded_voxelizer.html#a40c3e972dee1bcd3fb3b3fd50b007bdf", null ],
     [ "isAnisotropic", "class_ogre_1_1_vct_cascaded_voxelizer.html#a581908a1f3caf8e607e42362245668d6", null ],
-    [ "passEarlyPreExecute", "class_ogre_1_1_vct_cascaded_voxelizer.html#a9eba922fa823c5142a3078de97cf4cc0", null ],
-    [ "passPosExecute", "class_ogre_1_1_vct_cascaded_voxelizer.html#aafb1faa16a3a3f920edf5d356160ed3e", null ],
-    [ "passPreExecute", "class_ogre_1_1_vct_cascaded_voxelizer.html#a30e82f9915494734c77e2be6386045bd", null ],
-    [ "passSceneAfterFrustumCulling", "class_ogre_1_1_vct_cascaded_voxelizer.html#aa48c3669cc7eea1407af04641a48b955", null ],
-    [ "passSceneAfterShadowMaps", "class_ogre_1_1_vct_cascaded_voxelizer.html#a75c7e6c919c3bf55475a0a04160189fc", null ],
     [ "popCascade", "class_ogre_1_1_vct_cascaded_voxelizer.html#ae64b36d8bd5de87643f36fa43ccde64e", null ],
     [ "removeAllItems", "class_ogre_1_1_vct_cascaded_voxelizer.html#a6ce9e39741870d035877eee531f46efd", null ],
     [ "removeItem", "class_ogre_1_1_vct_cascaded_voxelizer.html#a5226e4319de1b9d8b5b3697224e77c9a", null ],
@@ -30,7 +24,5 @@ var class_ogre_1_1_vct_cascaded_voxelizer =
     [ "setCameraPosition", "class_ogre_1_1_vct_cascaded_voxelizer.html#a4fd028a077a340e10cfe6746a18cd380", null ],
     [ "setConsistentCascadeSteps", "class_ogre_1_1_vct_cascaded_voxelizer.html#a59b14aa1217ae1991b14906b8642247e", null ],
     [ "setNewSettings", "class_ogre_1_1_vct_cascaded_voxelizer.html#ad2e61f6284d065f11c78063a9a0c4d46", null ],
-    [ "update", "class_ogre_1_1_vct_cascaded_voxelizer.html#a22fbeb5509dd74de23eeab4cf8255c78", null ],
-    [ "workspacePosUpdate", "class_ogre_1_1_vct_cascaded_voxelizer.html#a71ee72b0064a1c20c05b37995e5e139e", null ],
-    [ "workspacePreUpdate", "class_ogre_1_1_vct_cascaded_voxelizer.html#aad6aea0f666028295c3efa9dc41eaceb", null ]
+    [ "update", "class_ogre_1_1_vct_cascaded_voxelizer.html#a22fbeb5509dd74de23eeab4cf8255c78", null ]
 ];
