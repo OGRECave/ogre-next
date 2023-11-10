@@ -44,9 +44,13 @@ git config user.name "darksylinc@users.noreply.github.com"
 
 echo "--- Adding to ${OGRE_VERSION} to git ---"
 git add ${OGRE_VERSION} || exit $?
-echo "--- Committing ---"
-git commit -m "Deploy GH" || exit $?
-echo "--- Pushing repo... ---"
-git push || exit $?
+if [ $(git status --porcelain | wc -l) -eq "0" ]; then
+	echo "--- Nothing has changed. Nothing to commit or push. ---"
+else
+	echo "--- Committing ---"
+	git commit -m "Deploy GH" || exit $?
+	echo "--- Pushing repo... ---"
+	git push || exit $?
+fi
 
 echo "Done!"
