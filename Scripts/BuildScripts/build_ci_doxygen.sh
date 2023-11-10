@@ -29,8 +29,13 @@ cmake \
 -DCMAKE_CXX_STANDARD=11 \
 -G Ninja ../.. || exit $?
 ninja OgreDoc || exit $?
-cd ../.. || exit $?
-# echo "--- Checking out gh-pages branch ---"
-# git checkout gh-pages || exit $?
 
-echo "Done Step 0!"
+echo "--- Going to gh-pages repo ---"
+cd ../../gh-pages || exit $?
+cd api || exit $?
+echo "--- Removing old ${OGRE_VERSION} ---"
+rm -rf ${OGRE_VERSION} || exit $?
+echo "--- Copying new ${OGRE_VERSION} ---"
+mv ../../build/Doxygen/api/html ${OGRE_VERSION} || exit $?
+
+echo "Done!"

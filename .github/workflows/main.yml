@@ -17,13 +17,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Build Doxygen
-        working-directory: ./
-        run: ./Scripts/BuildScripts/build_ci_doxygen_step0.sh
       - uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages
-      - name: Publish Doxygen
+
+      - name: Build Doxygen
         working-directory: ./
-        run: ./Scripts/BuildScripts/build_ci_doxygen_step1.sh
+        run: ./Scripts/BuildScripts/build_ci_doxygen.sh
+
+      - name: Publish # Only on master branch
+        if: github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./gh-pages
