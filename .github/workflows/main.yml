@@ -25,10 +25,3 @@ jobs:
       - name: Build Doxygen
         working-directory: ./
         run: ./Scripts/BuildScripts/build_ci_doxygen.sh
-
-      - name: Publish # Only on master branch
-        if: github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./gh-pages
