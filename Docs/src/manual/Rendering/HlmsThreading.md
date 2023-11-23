@@ -17,11 +17,11 @@ The CMake option `OGRE_SHADER_COMPILATION_THREADING_MODE` was added. This option
 | 1      | Use compatible API.<br/>Enable only if supported by compiler and OS.<br/>Default setting. | The macro OGRE\_SHADER\_THREADING\_BACKWARDS\_COMPATIBLE\_API will be defined thus the class Hlms will provide setProperty, getProperty, unsetProperty and co. API calls that do not ask for a tid argument.<br/><br/>OgreNext will use compiler-assisted TLS (Thread Local Storage) to automatically determine the tid (thread ID) value. In practice OgreNext will **only** use TLS (and hence enabling multithreading) in fully static builds (i.e. CMake option `OGRE_STATIC = TRUE`), and disable it in dynamic library builds.<br/><br/> If `OGRE_STATIC = TRUE` then:<br/>  - If the user calls the functions that ask for a tid argument, the tid value will be used.<br/>  - If the user calls the functions that don't ask for a tid argument, OgreNext will use TLS to determine the correct tid value.<br/><br/>If `OGRE_STATIC = FALSE` the behavior is the same as Disabled. |
 | 2      | Force-enable.                                                                     | The macro OGRE\_SHADER\_THREADING\_BACKWARDS\_COMPATIBLE\_API will **not** be defined.<br/> The user must always call setProperty, getProperty and co. that ask for a tid argument.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
-The default option is 1 because it allows to provide Multithreaded support when possible, while providing backwards-compatible API functions that make porting from OgreNext 3.0 easier.
+The default option is 1 because it allows to provide Multithreaded support when possible, while providing backwards-compatible API functions that make porting from OgreNext 3.0 easier. Make sure to read [Porting tips (from <= 3.0)](@ref Ogre40Changes_PortingTips) section.
 
-New users are encouraged to use option 2 instead to make sure they can maximize performance and avoid confusion over which setProperty, getProperty \& co. functions they should use.
+**New users are encouraged to use option 2 instead** to make sure they can maximize performance and avoid confusion over which setProperty, getProperty \& co. functions they should use.
 
-Note that this option will not exist forever. See [Deprecation Plan](@ref DeprecationPlan).
+@note This option will not exist forever. See [Deprecation Plan](@ref DeprecationPlan).
 
 # The tid (Thread ID) argument {#HlmsThreading_tidArgument}
 
@@ -44,7 +44,7 @@ namespace Ogre
 }
 ```
 
-@note Whenever a function provides a tid you must assume it is being executed in a worker thread and thus take all the necessary precautions if your code accesses a shared resource.
+@note Whenever a function provides a tid you must assume it is being executed in a worker thread and thus take all the necessary precautions if your code accesses a shared resource (such as using a mutex, or using the tid parameter to index per-thread storage).
 
 Other functions such as Ogre::HlmsListener::preparePassHash don't ask for a tid. This always means the function is being called from the main rendering thread unless stated otherwise by the documentation. When calling setProperty/getProperty \& co. you must use `Ogre::Hlms::kNoTid`. e.g.:
 
@@ -140,3 +140,7 @@ That's why we must call `waitForHlmsJobs()` before calling `executeAllCommands()
 Therefore OgreNext will process and iterate through many Items while worker threads compile shaders that were seen for the first time.
 
 With a bit of luck, if the worker threads finish compiling before we reach `waitForHlmsJobs()` then there will be no stalls at all. If not, then the wait has likely reduced by a little. Furthermore, if multiple new PSOs are encountered, they will be delivered to different worker threads thus compiling in parallel.
+
+## What is the range of tid argument?
+
+The range is `[0; num_threads)`.
