@@ -1,5 +1,6 @@
 var NAVTREEINDEX40 =
 {
+"class_ogre_1_1_lod_collapse_cost_curvature.html#a84d9d9de99c6dcc372ff990d16b9cbd9":[7,0,0,506,0],
 "class_ogre_1_1_lod_collapse_cost_outside.html":[7,0,0,507],
 "class_ogre_1_1_lod_collapse_cost_outside.html#a3dc6ad7aa6b2fb5f7d4b54ac3d65f4b2":[7,0,0,507,2],
 "class_ogre_1_1_lod_collapse_cost_outside.html#a9c6d276cf377eafd29bf21c1efb5bed7":[7,0,0,507,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX40 =
 "class_ogre_1_1_manual_object.html#a78a66d2e1a0cd897fdee7b31084dd551":[7,0,0,541,28],
 "class_ogre_1_1_manual_object.html#a7986da1d8235600a980e6ccc6d946790":[7,0,0,541,36],
 "class_ogre_1_1_manual_object.html#a89c82f945f9718f0aa9eab381c7b1347":[7,0,0,541,17],
-"class_ogre_1_1_manual_object.html#a8b4d68a9227896fdf1ab39568ae57f89":[7,0,0,541,26],
-"class_ogre_1_1_manual_object.html#a8ef25fd0635f78e444fa345a09e6b0f0":[7,0,0,541,12]
+"class_ogre_1_1_manual_object.html#a8b4d68a9227896fdf1ab39568ae57f89":[7,0,0,541,26]
 };

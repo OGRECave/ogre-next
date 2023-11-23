@@ -1,5 +1,6 @@
 var NAVTREEINDEX102 =
 {
+"struct_ogre_1_1_hlms_base_prop.html#ab1cbc516e3c5f4077f346e595f4e2327":[5,2,10,47,78],
 "struct_ogre_1_1_hlms_base_prop.html#ab1f0b2627b4b6c98986c9d187e245335":[5,2,10,47,67],
 "struct_ogre_1_1_hlms_base_prop.html#ab338aaa04dc8d24f62a698bdcbaff7b5":[5,2,10,47,44],
 "struct_ogre_1_1_hlms_base_prop.html#ab6bd2019896555394d8cab0b1aefafa5":[5,2,10,47,12],
@@ -227,8 +228,8 @@ var NAVTREEINDEX102 =
 "struct_ogre_1_1_id_string.html#afbe35aa8a428bd10ca8588921891860f":[7,0,0,457,10],
 "struct_ogre_1_1_intersection_scene_query_result.html":[5,0,1,20],
 "struct_ogre_1_1_intersection_scene_query_result.html":[5,2,11,20],
-"struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[5,2,11,20,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[5,0,1,20,1],
+"struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[5,2,11,20,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[5,0,1,20,0],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[5,2,11,20,0],
 "struct_ogre_1_1_key_frame_rig.html":[7,0,0,492],
@@ -248,6 +249,5 @@ var NAVTREEINDEX102 =
 "struct_ogre_1_1_light_closest.html#aac9b931e3ccda0855b8b424732d57d5e":[5,2,2,61,1],
 "struct_ogre_1_1_light_closest.html#aed0c94b9023439bf8fb67600270e9908":[5,2,2,61,4],
 "struct_ogre_1_1_light_closest.html#af692c6045bf99f42a763b4de27cece53":[5,2,2,61,2],
-"struct_ogre_1_1_light_list_info.html":[5,2,2,62],
-"struct_ogre_1_1_light_list_info.html#a29f8b2d7075f792fe24454a5a37b09d0":[5,2,2,62,3]
+"struct_ogre_1_1_light_list_info.html":[5,2,2,62]
 };

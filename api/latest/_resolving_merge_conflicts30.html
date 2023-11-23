@@ -97,8 +97,8 @@ $(document).ready(function(){initNavTree('_resolving_merge_conflicts30.html','')
 <li>Lots of warnings were fixed</li>
 <li>Clang format 13 was applied to the entire codebase</li>
 </ul>
-<p>Users who run a customized version of Ogre-Next may found rebasing to the latest version a near impossible job due to the sheer amount of minor merge conflicts.</p>
-<p>To perform this task with more easily, we recommend the following:</p>
+<p>Users who run a forked/customized version of Ogre-Next may found rebasing to the latest version a near impossible job due to the sheer amount of <em>minor</em> merge conflicts.</p>
+<p>To perform this task more easily, we recommend the following:</p>
 <ol type="1">
 <li>Merge your changes with <code>master</code> branch (or 3.0 when it appears)</li>
 <li>Resolve all conflicts with <code>your code</code></li>
@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('_resolving_merge_conflicts30.html','')
 <li>Commit</li>
 </ol>
 <p>Now you have your changes applied on top of Ogre-Next 3.0!</p>
-<h1><a class="anchor" id="autotoc_md76"></a>
+<h1><a class="anchor" id="autotoc_md77"></a>
 Notes:</h1>
 <p>We're using clang-format-13</p>
 <p>A common issue is that auto-merging will skip either an opening or closing brace (i.e. missing <code>{</code> or <code>}</code>)</p>
@@ -147,7 +147,7 @@ Notes:</h1>
 <div class="line">{</div>
 <div class="line">    <span class="keywordtype">int</span> abc = 0;</div>
 <div class="line">}</div>
-</div><!-- fragment --><p>After applying Clang format, everything that follows will indent (and likely the code will not compile):</p>
+</div><!-- fragment --><p>After applying Clang format, everything that follows will indent (and likely the code will not compile) which make much easier to spot where the problem went wrong:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> myFuntion( <span class="keywordtype">int</span> a )</div>
 <div class="line">{</div>
 <div class="line">    <span class="keywordflow">for</span>( <span class="keywordtype">int</span> i = 0; i &lt; count; ++i )</div>
@@ -164,10 +164,10 @@ Notes:</h1>
 <div class="line">    {</div>
 <div class="line">        <span class="keywordtype">int</span> abc = 0;</div>
 <div class="line">    }</div>
-</div><!-- fragment --><p>If you find after merging and applying clang format that there is massive added or removed indentation; start from the top and find the first occurrence of this change and start looking for the missing brace.</p>
-<h1><a class="anchor" id="autotoc_md77"></a>
+</div><!-- fragment --><p>If you find after merging and applying clang format that there is massive indentation being added (or removed); start from the top and find the first occurrence of this change and start looking for the missing brace.</p>
+<h1><a class="anchor" id="autotoc_md78"></a>
 Batch Script</h1>
-<p>The following bash script will run clang-format on all files with the right extensions in the current folder and recursively in its subdirectories</p>
+<p>The following bash script will run clang-format on all files with the right extensions in the current folder and recursively in its sub-directories.</p>
 <div class="fragment"><div class="line">FILES=$(find . -name &quot;*.mm&quot; -o -name &quot;*.h&quot; -o -name &quot;*.cpp&quot;)</div>
 <div class="line"> </div>
 <div class="line">for file in $FILES</div>
@@ -175,7 +175,8 @@ Batch Script</h1>
 <div class="line">  echo &quot;Formatting \&quot;$file\&quot;&quot;</div>
 <div class="line">  clang-format-13 -i &quot;$file&quot;</div>
 <div class="line">done</div>
-</div><!-- fragment --> </div></div><!-- contents -->
+</div><!-- fragment --><p>You can also look at our python script in <a href="https://github.com/OGRECave/ogre-next/blob/879a86fd4d1e7274af67b37628f29d6ad06a7d79/.github/workflows/run_clang_format.py">.github/workflows/run_clang_format.py</a> if you prefer Python instead. </p>
+</div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
 <!-- start footer part -->

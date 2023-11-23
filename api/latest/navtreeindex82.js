@@ -1,5 +1,6 @@
 var NAVTREEINDEX82 =
 {
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a6ba9f85e912a9a3450ead8f7c46ea73e":[5,2,0,29,16],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a75701140f94de20e469a79387d106928":[5,2,0,29,5],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a782049252c74a247c2187917ac0baa4e":[5,2,0,29,2],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a7d287563be14c2e96c6800f0a82afb42":[5,2,0,29,19],
@@ -191,10 +192,10 @@ var NAVTREEINDEX82 =
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#ad6a38006935f381aa67522e2b08606d6":[7,0,0,2,143,1],
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#adb4a0338b24be02f2d416b7015aff554":[7,0,0,2,143,3],
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#af19e8c7951716353066e6ac355b08e88":[7,0,0,2,143,8],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,0,1,67],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,2,11,67],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a2189c0ee19612a7ae7382fda94aeec5f":[5,2,11,67,1],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,0,1,67],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a2189c0ee19612a7ae7382fda94aeec5f":[5,0,1,67,1],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a2189c0ee19612a7ae7382fda94aeec5f":[5,2,11,67,1],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,0,1,67,3],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,2,11,67,3],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,0,1,67,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX82 =
 "compositor.html#CompositorShadowNodesReuseEtc":[3,3,1,3],
 "compositor.html#CompositorShadowNodesSetup":[3,3,1,0],
 "compositor.html#CompositorShadowNodesShaders":[3,3,1,5],
-"compositor.html#CompositorShadowNodesTypes":[3,3,1,4],
-"compositor.html#CompositorShadowNodesTypesFocused":[3,3,1,4,1]
+"compositor.html#CompositorShadowNodesTypes":[3,3,1,4]
 };

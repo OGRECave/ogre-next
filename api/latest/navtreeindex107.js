@@ -1,5 +1,6 @@
 var NAVTREEINDEX107 =
 {
+"struct_ogre_1_1_vulkan_frame_buffer_desc_value.html#a549f7ef0fda0519767049b2c9e2f0b42":[5,2,10,132,5],
 "struct_ogre_1_1_vulkan_frame_buffer_desc_value.html#ab24c20831131bf8a42404b8e3c6360b9":[5,2,10,132,2],
 "struct_ogre_1_1_vulkan_frame_buffer_desc_value.html#ac1d08432feb8d01de7fe6a3569745867":[5,2,10,132,1],
 "struct_ogre_1_1_vulkan_frame_buffer_desc_value.html#add9fca7ac278e992092f9a51b309abd4":[5,2,10,132,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX107 =
 "struct_x_client_message_event_data.html":[7,0,21],
 "struct_x_client_message_event_data.html#af9ab2e94eb01f68d26563596eb428490":[7,0,21,0],
 "struct_x_event.html":[7,0,23],
-"struct_x_r_r_screen_size.html":[7,0,25],
-"struct_x_r_r_screen_size.html#a02a27d346b7436632a7e2a7cb2939b5d":[7,0,25,1]
+"struct_x_r_r_screen_size.html":[7,0,25]
 };
