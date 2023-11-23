@@ -459,6 +459,7 @@ namespace Ogre
             property there.
         @see Pass::setFog
         */
+        OGRE_DEPRECATED_VER( 3 )
         void setFog( bool overrideScene, FogMode mode = FOG_NONE,
                      const ColourValue &colour = ColourValue::White, Real expDensity = Real( 0.001 ),
                      Real linearStart = 0.0, Real linearEnd = 1.0 );

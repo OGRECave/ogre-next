@@ -627,6 +627,12 @@ namespace Ogre
                 writeValue( pPass->getPolygonModeOverrideable() ? "on" : "off" );
             }
 
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( push, 0 )
+#else
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
             // fog override
             if( mDefaults || pPass->getFogOverride() != false )
             {
@@ -659,6 +665,11 @@ namespace Ogre
                     }
                 }
             }
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#else
+#    pragma GCC diagnostic pop
+#endif
 
             //  GPU Vertex and Fragment program references and parameters
             if( pPass->hasVertexProgram() )

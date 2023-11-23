@@ -229,8 +229,20 @@ namespace Ogre
                 mShadowCasterPlainBlackPass->setDiffuse( ColourValue::Black );
                 mShadowCasterPlainBlackPass->setSelfIllumination( ColourValue::Black );
                 mShadowCasterPlainBlackPass->setSpecular( ColourValue::Black );
+
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( push, 0 )
+#else
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
                 // Override fog
                 mShadowCasterPlainBlackPass->setFog( true, FOG_NONE );
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#else
+#    pragma GCC diagnostic pop
+#endif
                 // no textures or anything else, we will bind vertex programs
                 // every so often though
             }

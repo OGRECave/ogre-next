@@ -1943,6 +1943,8 @@ namespace Ogre
         virtual void _restoreManualHardwareResources();
 
         /** Sets the fogging mode applied to the scene.
+            Deprecated in favour of Atmosphere component. See AtmosphereNpr::setSky.
+
             @remarks
                 This method sets up the scene-wide fogging effect. These settings
                 apply to all geometry rendered, UNLESS the material with which it
@@ -1966,29 +1968,30 @@ namespace Ogre
                 opaque. Only applicable if mode is
                 FOG_LINEAR.
         */
+        OGRE_DEPRECATED_VER( 3 )
         void setFog( FogMode mode = FOG_NONE, const ColourValue &colour = ColourValue::White,
                      Real expDensity = Real( 0.001 ), Real linearStart = Real( 0.0 ),
                      Real linearEnd = Real( 1.0 ) );
 
         /** Returns the fog mode for the scene.
          */
-        virtual FogMode getFogMode() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual FogMode getFogMode() const;
 
         /** Returns the fog colour for the scene.
          */
-        virtual const ColourValue &getFogColour() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual const ColourValue &getFogColour() const;
 
         /** Returns the fog start distance for the scene.
          */
-        virtual Real getFogStart() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual Real getFogStart() const;
 
         /** Returns the fog end distance for the scene.
          */
-        virtual Real getFogEnd() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual Real getFogEnd() const;
 
         /** Returns the fog density for the scene.
          */
-        virtual Real getFogDensity() const;
+        OGRE_DEPRECATED_VER( 3 ) virtual Real getFogDensity() const;
 
         /** Creates a new BillboardSet for use with this scene manager.
             @remarks

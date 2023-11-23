@@ -283,6 +283,12 @@ namespace Ogre
         mAutoParamDataSource->setCurrentPass( pass );
         mAutoParamDataSource->setCurrentLightList( &renderable->getLights() );
 
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( push, 0 )
+#else
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
         if( pass->getFogOverride() )
         {
             mAutoParamDataSource->setFog( pass->getFogMode(), pass->getFogColour(),
@@ -296,6 +302,11 @@ namespace Ogre
                 mCurrentSceneManager->getFogDensity(), mCurrentSceneManager->getFogStart(),
                 mCurrentSceneManager->getFogEnd() );
         }
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#else
+#    pragma GCC diagnostic pop
+#endif
 
         Pass::ConstTextureUnitStateIterator texIter = pass->getTextureUnitStateIterator();
         size_t unit = 0;
