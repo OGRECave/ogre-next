@@ -1,4 +1,4 @@
-# What's new in Ogre 3.0 {#Ogre30Changes}
+# What's new in Ogre-Next 3.0 {#Ogre30Changes}
 
 @tableofcontents
 
