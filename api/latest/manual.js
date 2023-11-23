@@ -308,7 +308,7 @@ var manual =
       [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md77", null ],
       [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md78", null ]
     ] ],
-    [ "What's new in Ogre 3.0", "_ogre30_changes.html", [
+    [ "What's new in Ogre-Next 3.0", "_ogre30_changes.html", [
       [ "Ogre to OgreNext name migration", "_ogre30_changes.html#autotoc_md62", null ],
       [ "PBS Changes in 3.0", "_ogre30_changes.html#autotoc_md63", null ],
       [ "Move to C++11 and general cleanup", "_ogre30_changes.html#autotoc_md64", null ]
