@@ -9,3 +9,4 @@ Most notably 2.2 introduced Load & Store actions and RenderPassDescriptors which
 - @subpage Migrating_21_to_22
 - @subpage Migrating_22_to_23
 - @subpage Migrating_23_to_30
+- @subpage Migrating_30_to_40
