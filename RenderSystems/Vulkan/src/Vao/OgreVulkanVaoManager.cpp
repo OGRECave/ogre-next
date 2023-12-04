@@ -781,7 +781,7 @@ namespace Ogre
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT )
             {
-                // addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
+                addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
             }
 
             // Find coherent memory (many desktop GPUs don't provide this)
