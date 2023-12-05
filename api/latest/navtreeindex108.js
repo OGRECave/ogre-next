@@ -1,5 +1,8 @@
 var NAVTREEINDEX108 =
 {
+"struct_x_client_message_event_data.html#af9ab2e94eb01f68d26563596eb428490":[7,0,21,0],
+"struct_x_event.html":[7,0,23],
+"struct_x_r_r_screen_size.html":[7,0,25],
 "struct_x_r_r_screen_size.html#a02a27d346b7436632a7e2a7cb2939b5d":[7,0,25,1],
 "struct_x_r_r_screen_size.html#adaacadb01cf3ef92d5ca532283a9e8d3":[7,0,25,0],
 "struct_x_set_window_attributes.html":[7,0,26],

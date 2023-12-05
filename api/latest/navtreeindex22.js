@@ -1,5 +1,6 @@
 var NAVTREEINDEX22 =
 {
+"class_ogre_1_1_compositor_pass_shadows_def.html":[5,2,1,20],
 "class_ogre_1_1_compositor_pass_shadows_def.html#a2c5cf20f44ad3b353a804835884d16cd":[5,2,1,20,1],
 "class_ogre_1_1_compositor_pass_shadows_def.html#a3aab982ecdae947e85c6c5ae48da2fef":[5,2,1,20,0],
 "class_ogre_1_1_compositor_pass_shadows_def.html#a41144aff43b51b640c97701716bf1a9f":[5,2,1,20,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX22 =
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,21],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,25],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,1],
-"class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,3],
-"class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,5]
+"class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,3]
 };

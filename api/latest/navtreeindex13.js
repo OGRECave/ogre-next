@@ -1,5 +1,6 @@
 var NAVTREEINDEX13 =
 {
+"_samples.html#updatedecal":[3,0,28],
 "_samples.html#v1interface":[3,0,29],
 "_samples.html#v2Mesh":[3,0,31],
 "_setting_up_ogre.html":[1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX13 =
 "class_ogre_1_1_archive.html#a331471a22b46882d08cd1db7bfc28611":[5,2,10,0,9],
 "class_ogre_1_1_archive.html#a370fba29d752fa317e992aec6625d5ed":[5,2,10,0,1],
 "class_ogre_1_1_archive.html#a4dfb3997d1a088f414d2146218c56d74":[5,2,10,0,6],
-"class_ogre_1_1_archive.html#a5c1747f4ab92962a5528a263c714dc31":[5,2,10,0,12],
-"class_ogre_1_1_archive.html#a5c2927f6a35441ea77262f95e4b0a6a0":[5,2,10,0,16]
+"class_ogre_1_1_archive.html#a5c1747f4ab92962a5528a263c714dc31":[5,2,10,0,12]
 };

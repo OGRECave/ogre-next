@@ -334,6 +334,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adeeab393ced10ecde6fd91b6f0e58f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab98067e9e31da8681c6f14f6502e0f8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#ab98067e9e31da8681c6f14f6502e0f8f">flushDescriptorState</a> (VkPipelineBindPoint pipeline_bind_point, const <a class="el" href="class_ogre_1_1_vulkan_const_buffer_packed.html">VulkanConstBufferPacked</a> &amp;constBuffer, const size_t bindOffset, const size_t bytesToWrite, const unordered_map&lt; unsigned, <a class="el" href="struct_ogre_1_1_vulkan_constant_definition_binding_param.html">VulkanConstantDefinitionBindingParam</a> &gt;::type &amp;shaderBindings)</td></tr>
 <tr class="separator:ab98067e9e31da8681c6f14f6502e0f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe27debb608870cf8f00efed74254beb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#abe27debb608870cf8f00efed74254beb">flushPendingNonCoherentFlushes</a> (const <a class="el" href="namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e">SubmissionType::SubmissionType</a> submissionType)</td></tr>
+<tr class="memdesc:abe27debb608870cf8f00efed74254beb"><td class="mdescLeft">&#160;</td><td class="mdescRight">All pending or queued buffer flushes (i.e.  <a href="class_ogre_1_1_vulkan_render_system.html#abe27debb608870cf8f00efed74254beb">More...</a><br /></td></tr>
+<tr class="separator:abe27debb608870cf8f00efed74254beb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c6ffaba5cdab8d05338061fa8026988"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a4c6ffaba5cdab8d05338061fa8026988">flushUAVs</a> ()</td></tr>
 <tr class="separator:a4c6ffaba5cdab8d05338061fa8026988"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8acd37d1a08c29816e03702001169ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a027109503a988ba85f4c63b55082907f">VertexElementType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#af8acd37d1a08c29816e03702001169ea">getColourVertexElementType</a> () const override</td></tr>
@@ -3946,6 +3949,32 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe27debb608870cf8f00efed74254beb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe27debb608870cf8f00efed74254beb">&#9670;&nbsp;</a></span>flushPendingNonCoherentFlushes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanRenderSystem::flushPendingNonCoherentFlushes </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e">SubmissionType::SubmissionType</a>&#160;</td>
+          <td class="paramname"><em>submissionType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>All pending or queued buffer flushes (i.e. </p>
+<p>calls to vkFlushMappedMemoryRanges) must be done now because we're about to submit commands for execution; and they need to see those regions flushed. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">submissionType</td><td>See <a class="el" href="namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e">SubmissionType::SubmissionType</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

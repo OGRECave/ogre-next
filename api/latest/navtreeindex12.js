@@ -46,15 +46,16 @@ var NAVTREEINDEX12 =
 "_ogre_vulkan_texture_gpu_window_8h.html":[8,0,839],
 "_ogre_vulkan_uav_buffer_packed_8h.html":[8,0,840],
 "_ogre_vulkan_utils_8h.html":[8,0,841],
+"_ogre_vulkan_utils_8h.html#a24084171ec692b4831ae31dace5b6f78":[8,0,841,0],
 "_ogre_vulkan_utils_8h.html#a26bb73ddc770257c1d41fd99f82bdf75":[8,0,841,2],
 "_ogre_vulkan_utils_8h.html#a2b493a2b2990de17799a5b5d9f1fab4c":[8,0,841,3],
-"_ogre_vulkan_utils_8h.html#a32e622e97e3c73068c785dda09562751":[8,0,841,0],
 "_ogre_vulkan_utils_8h.html#a35281bec85547bd26f9ef56c75171459":[8,0,841,5],
 "_ogre_vulkan_utils_8h.html#a439278da9ec600ca236ce06ce5007657":[8,0,841,1],
-"_ogre_vulkan_utils_8h.html#a9b895fae7e7ce5a60cbfe4bdfbe9e634":[8,0,841,7],
+"_ogre_vulkan_utils_8h.html#a9b895fae7e7ce5a60cbfe4bdfbe9e634":[8,0,841,8],
+"_ogre_vulkan_utils_8h.html#ab72f85dc35c9af68fd5e394570c58e87":[8,0,841,7],
 "_ogre_vulkan_utils_8h.html#abdb3f1738cb3647211a3ce693d8fafdd":[8,0,841,6],
 "_ogre_vulkan_utils_8h.html#ad9d115b4c2f15cfd117e06a64beaf55d":[8,0,841,4],
-"_ogre_vulkan_utils_8h.html#ae1ce15cb4176db694f6c257c9d9e4dcd":[8,0,841,8],
+"_ogre_vulkan_utils_8h.html#ae1ce15cb4176db694f6c257c9d9e4dcd":[8,0,841,9],
 "_ogre_vulkan_vao_manager_8h.html":[8,0,842],
 "_ogre_vulkan_win32_support_8h.html":[8,0,843],
 "_ogre_vulkan_win32_support_8h.html#a0172fbace36625330d5f0f163a1ddc1a":[8,0,843,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "_samples.html#tutorial05":[3,0,37],
 "_samples.html#tutorial06":[3,0,38],
 "_samples.html#uav1":[3,0,51],
-"_samples.html#uav2":[3,0,52],
-"_samples.html#updatedecal":[3,0,28]
+"_samples.html#uav2":[3,0,52]
 };

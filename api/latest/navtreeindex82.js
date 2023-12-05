@@ -1,5 +1,7 @@
 var NAVTREEINDEX82 =
 {
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a60bb9397c249cfc6edfc199f6b4e511e":[5,2,0,29,14],
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a62e4978caff779232cdd0c6d46fcb8e2":[5,2,0,29,7],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a6ba9f85e912a9a3450ead8f7c46ea73e":[5,2,0,29,16],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a75701140f94de20e469a79387d106928":[5,2,0,29,5],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a782049252c74a247c2187917ac0baa4e":[5,2,0,29,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX82 =
 "compositor.html#CompositorShadowNodesAtlasAndPointLights":[3,3,1,2],
 "compositor.html#CompositorShadowNodesExample":[3,3,1,1],
 "compositor.html#CompositorShadowNodesReuseEtc":[3,3,1,3],
-"compositor.html#CompositorShadowNodesSetup":[3,3,1,0],
-"compositor.html#CompositorShadowNodesShaders":[3,3,1,5],
-"compositor.html#CompositorShadowNodesTypes":[3,3,1,4]
+"compositor.html#CompositorShadowNodesSetup":[3,3,1,0]
 };

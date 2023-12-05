@@ -1,5 +1,6 @@
 var NAVTREEINDEX63 =
 {
+"class_ogre_1_1_stream_serialiser.html#a5f557c549a65a20e76e605f9bf9fe4c9":[5,2,10,104,28],
 "class_ogre_1_1_stream_serialiser.html#a60ac46edf43d39927816e34b1a0d983c":[5,2,10,104,50],
 "class_ogre_1_1_stream_serialiser.html#a6430b8559a0b559d3eefaebef786759e":[5,2,10,104,39],
 "class_ogre_1_1_stream_serialiser.html#a6469d16380285e935ad31ab9c1807f43":[5,2,10,104,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX63 =
 "class_ogre_1_1_technique.html#a8beaa9080bde2987b00c2d2d440a0ad3":[5,2,5,19,26],
 "class_ogre_1_1_technique.html#a9268992ba6f7d7d71ca290a8d5b44426":[5,2,5,19,16],
 "class_ogre_1_1_technique.html#a96db53bdf6b3f097fcb9a038df84abe9":[5,2,5,19,39],
-"class_ogre_1_1_technique.html#a98091dbc9cb06b40138458537c36e3ed":[5,2,5,19,3],
-"class_ogre_1_1_technique.html#a9e5d7120bf501c5796bb461ec16ca22d":[5,2,5,19,65]
+"class_ogre_1_1_technique.html#a98091dbc9cb06b40138458537c36e3ed":[5,2,5,19,3]
 };

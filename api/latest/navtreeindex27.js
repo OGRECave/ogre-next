@@ -1,5 +1,6 @@
 var NAVTREEINDEX27 =
 {
+"class_ogre_1_1_degree.html#a3948efcffa54a0ebd12753acd96c1594":[5,2,6,11,11],
 "class_ogre_1_1_degree.html#a3985fcbd2b8eb22a9d369a6b6ebe5763":[5,2,6,11,2],
 "class_ogre_1_1_degree.html#a501f79ce69c3a73d5c07c945c3251097":[5,2,6,11,23],
 "class_ogre_1_1_degree.html#a502f121976cd95de2817ddb9b9ac1730":[5,2,6,11,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX27 =
 "class_ogre_1_1_ellipsoid_emitter.html#acf92ea5d6c849eafdebeb499b32b3a16":[7,0,0,267,0],
 "class_ogre_1_1_ellipsoid_emitter_factory.html":[7,0,0,268],
 "class_ogre_1_1_ellipsoid_emitter_factory.html#a1bc8c503b4dbbf75b5095af26660ffc4":[7,0,0,268,1],
-"class_ogre_1_1_ellipsoid_emitter_factory.html#a5ca4c6179a2a8eecd140072d6f1657d0":[7,0,0,268,0],
-"class_ogre_1_1_embedded_zip_archive_factory.html":[5,2,10,18]
+"class_ogre_1_1_ellipsoid_emitter_factory.html#a5ca4c6179a2a8eecd140072d6f1657d0":[7,0,0,268,0]
 };

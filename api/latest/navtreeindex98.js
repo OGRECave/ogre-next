@@ -1,5 +1,8 @@
 var NAVTREEINDEX98 =
 {
+"namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a2f298fbaec7db976ba6616430b1f52a3":[6,0,0,21,0,11],
+"namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a3ff7a5394c299b94950eb7cff468ad1b":[6,0,0,21,0,1],
+"namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a6bb3b181923f370b8618a63e6d40390e":[6,0,0,21,0,4],
 "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a9cd187875caaa6134bc9d31b34b14c06":[6,0,0,21,0,3],
 "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434aac3ff5c1bb3a3ef222a7eef0d83836ba":[6,0,0,21,0,7],
 "namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434aad9174004d6621896215779a0abb14e7":[6,0,0,21,0,6],
@@ -71,8 +74,8 @@ var NAVTREEINDEX98 =
 "namespace_profile_sample_flags.html#ad121424c1c2bcb7cada9bcbc441e2a19":[6,0,1,0],
 "namespace_profile_sample_flags.html#ad121424c1c2bcb7cada9bcbc441e2a19a09075c04acb5688f6983051c600284c2":[6,0,1,0,1],
 "namespace_profile_sample_flags.html#ad121424c1c2bcb7cada9bcbc441e2a19a471fbc12d944ab2ea72eca5da69c30dc":[6,0,1,0,0],
-"namespacemembers.html":[6,1,0,0],
 "namespacemembers.html":[6,1,0],
+"namespacemembers.html":[6,1,0,0],
 "namespacemembers_a.html":[6,1,0,1],
 "namespacemembers_b.html":[6,1,0,2],
 "namespacemembers_c.html":[6,1,0,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX98 =
 "struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a91a882aabf4531a69c8f03ca7802eeac":[5,0,0,2,0,5],
 "struct_ogre_1_1_atmosphere_npr_1_1_preset.html#a91d610a8bd76cd9d0392c18e96967209":[5,0,0,2,0,15],
 "struct_ogre_1_1_atmosphere_npr_1_1_preset.html#acaf6afb1834eba7628795a4ab74bdb5a":[5,0,0,2,0,2],
-"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#acb80054521ca142121c426248197ff0b":[5,0,0,2,0,10],
-"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#ad011d747bd87d3626d73429ce632a290":[5,0,0,2,0,17],
-"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#ad5af092adf3ddd68512457308a0d871a":[5,0,0,2,0,16],
-"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#adcf454ea61f148eacbac0011a07e9d2c":[5,0,0,2,0,1]
+"struct_ogre_1_1_atmosphere_npr_1_1_preset.html#acb80054521ca142121c426248197ff0b":[5,0,0,2,0,10]
 };
