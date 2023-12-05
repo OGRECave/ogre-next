@@ -850,6 +850,8 @@ namespace Ogre
             // - Whether 2 is faster than 3 or viceversa may be HW specific. For example Intel only
             //   exposes Cached + Coherent and nothing else. It seems they have no performance problems
             //   at all.
+            //
+            // This assumes CPU write-combining is fast. If it's not, then this is wrong.
             const uint32 idx = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].back();
             // Prefer coherent memory if it's uncached, or if we have no choice.
             if( !mSupportsNonCoherentMemory ||
