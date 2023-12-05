@@ -267,9 +267,10 @@ namespace Ogre
         FastArray<VulkanDelayedFuncBaseArray> mDelayedFuncs;
 
         bool mFenceFlushed;
-        bool mSupportsCoherentMemory;
-        bool mSupportsNonCoherentMemory;
-        bool mReadMemoryIsCoherent;
+        bool mSupportsCoherentMemory : 1;
+        bool mSupportsNonCoherentMemory : 1;
+        bool mPreferCoherentMemory : 1;
+        bool mReadMemoryIsCoherent : 1;
 
         static const uint32 VERTEX_ATTRIBUTE_INDEX[VES_COUNT];
 

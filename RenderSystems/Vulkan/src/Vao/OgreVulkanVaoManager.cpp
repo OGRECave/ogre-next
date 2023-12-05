@@ -824,10 +824,47 @@ namespace Ogre
         mSupportsNonCoherentMemory = !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT].empty();
         mSupportsCoherentMemory = !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].empty();
 
+        mPreferCoherentMemory = false;
+        if( !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].empty() )
+        {
+            // When it comes to writing (and at least in theory), the following order should be
+            // preferred:
+            //
+            // 1 Uncached, coherent
+            // 2 Cached, non-coherent
+            // 3 Cached, coherent
+            // 4 Anything else (uncached, non-coherent? that doesn't make sense)
+            //
+            // "Uncached, coherent" means CPU caches are bypassed. Hence GPU doesn't have to worry about
+            // them and can automatically synchronize its internal caches (since there's nothing to
+            // synchronize).
+            //
+            // "Cached" means CPU caches are important. If it's coherent, HW (likely) needs to do heavy
+            // work to keep both CPU & GPU caches in sync. Hence non-coherent makes sense to be superior
+            // here since we just invalidate the GPU caches by hand.
+            //
+            // Now there are a few gotchas:
+            //
+            // - Whether 1 is faster than 2 mostly depends on whether the code makes correct use of
+            //   write-combining (or else perf goes down fast).
+            // - Whether 2 is faster than 3 or viceversa may be HW specific. For example Intel only
+            //   exposes Cached + Coherent and nothing else. It seems they have no performance problems
+            //   at all.
+            const uint32 idx = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].back();
+            // Prefer coherent memory if it's uncached, or if we have no choice.
+            if( !mSupportsNonCoherentMemory ||
+                memProperties.memoryTypes[idx].propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT )
+            {
+                mPreferCoherentMemory = true;
+            }
+        }
+
         logManager.logMessage( "VkDevice will use coherent memory buffers: " +
                                StringConverter::toString( mSupportsCoherentMemory ) );
         logManager.logMessage( "VkDevice will use non-coherent memory buffers: " +
                                StringConverter::toString( mSupportsNonCoherentMemory ) );
+        logManager.logMessage( "VkDevice will prefer coherent memory buffers: " +
+                               StringConverter::toString( mPreferCoherentMemory ) );
 
         if( mBestVkMemoryTypeIndex[CPU_READ_WRITE].empty() )
         {
@@ -1259,8 +1296,8 @@ namespace Ogre
     VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes,
                                                          size_t alignment )
     {
-        // Change flag if unavailable
-        if( vboFlag == CPU_WRITE_PERSISTENT && !mSupportsNonCoherentMemory )
+        // Override what user prefers (or change if unavailable).
+        if( vboFlag == CPU_WRITE_PERSISTENT && mPreferCoherentMemory )
             vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
         else if( vboFlag == CPU_WRITE_PERSISTENT_COHERENT && !mSupportsCoherentMemory )
             vboFlag = CPU_WRITE_PERSISTENT;
@@ -2057,10 +2094,7 @@ namespace Ogre
         mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::_notifyNewCommandBuffer()
-    {
-        mFenceFlushed = true;
-    }
+    void VulkanVaoManager::_notifyNewCommandBuffer() { mFenceFlushed = true; }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::getAvailableSempaphores( VkSemaphoreArray &semaphoreArray,
                                                     size_t numSemaphores )
@@ -2297,8 +2331,8 @@ namespace Ogre
             break;
         }
 
-        // Change flag if unavailable
-        if( vboFlag == CPU_WRITE_PERSISTENT && !mSupportsNonCoherentMemory )
+        // Override what user prefers (or change if unavailable).
+        if( vboFlag == CPU_WRITE_PERSISTENT && mPreferCoherentMemory )
             vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
         else if( vboFlag == CPU_WRITE_PERSISTENT_COHERENT && !mSupportsCoherentMemory )
             vboFlag = CPU_WRITE_PERSISTENT;
