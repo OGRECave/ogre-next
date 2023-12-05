@@ -855,7 +855,7 @@ namespace Ogre
             const uint32 idx = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].back();
             // Prefer coherent memory if it's uncached, or if we have no choice.
             if( !mSupportsNonCoherentMemory ||
-                memProperties.memoryTypes[idx].propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT )
+                !( memProperties.memoryTypes[idx].propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) )
             {
                 mPreferCoherentMemory = true;
             }
