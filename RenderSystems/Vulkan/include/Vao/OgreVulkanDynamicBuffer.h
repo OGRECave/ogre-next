@@ -75,7 +75,7 @@ namespace Ogre
         size_t addMappedRange( size_t start, size_t count );
 
     public:
-        VulkanDynamicBuffer( VkDeviceMemory deviceMemory, size_t vboSize, const bool isNonCoherent,
+        VulkanDynamicBuffer( VkDeviceMemory deviceMemory, size_t vboSize, const bool isCoherent,
                              const bool hasReadAccess, VulkanDevice *device );
         ~VulkanDynamicBuffer();
 
