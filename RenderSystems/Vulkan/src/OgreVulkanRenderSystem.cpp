@@ -161,6 +161,7 @@ namespace Ogre
         mVulkanProgramFactory2( 0 ),
         mVulkanProgramFactory3( 0 ),
         mVkInstance( 0 ),
+        mFirstUnflushedAutoParamsBuffer( 0 ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
         mCurrentAutoParamsBufferSpaceLeft( 0 ),
@@ -287,6 +288,18 @@ namespace Ogre
     {
         if( !mDevice )
             return;
+
+        for( ConstBufferPacked *constBuffer : mAutoParamsBuffer )
+        {
+            if( constBuffer->getMappingState() != MS_UNMAPPED )
+                constBuffer->unmap( UO_UNMAP_ALL );
+            mVaoManager->destroyConstBuffer( constBuffer );
+        }
+        mAutoParamsBuffer.clear();
+        mFirstUnflushedAutoParamsBuffer = 0u;
+        mAutoParamsBufferIdx = 0u;
+        mCurrentAutoParamsBufferPtr = 0;
+        mCurrentAutoParamsBufferSpaceLeft = 0;
 
         mDevice->stall();
 
@@ -2316,13 +2329,21 @@ namespace Ogre
             {
                 if( mAutoParamsBufferIdx >= mAutoParamsBuffer.size() )
                 {
+                    // Ask for a coherent buffer to avoid excessive flushing. Note: VaoManager may ignore
+                    // this request if the GPU can't provide coherent memory and we must flush anyway.
                     ConstBufferPacked *constBuffer =
                         mVaoManager->createConstBuffer( std::max<size_t>( 512u * 1024u, bytesToWrite ),
-                                                        BT_DYNAMIC_PERSISTENT, 0, false );
+                                                        BT_DYNAMIC_PERSISTENT_COHERENT, 0, false );
                     mAutoParamsBuffer.push_back( constBuffer );
                 }
 
                 ConstBufferPacked *constBuffer = mAutoParamsBuffer[mAutoParamsBufferIdx];
+
+                // This should be near-impossible to trigger because most Const Buffers are <= 64kb
+                // and we reserver 512kb per const buffer. A Low Level Material using a Params buffer
+                // with > 64kb is an edge case we don't care handling.
+                OGRE_ASSERT_LOW( bytesToWrite <= constBuffer->getTotalSizeBytes() );
+
                 mCurrentAutoParamsBufferPtr =
                     reinterpret_cast<uint8 *>( constBuffer->map( 0, constBuffer->getNumElements() ) );
                 mCurrentAutoParamsBufferSpaceLeft = constBuffer->getTotalSizeBytes();
@@ -2332,7 +2353,7 @@ namespace Ogre
 
             shader->updateBuffers( params, mCurrentAutoParamsBufferPtr );
 
-            assert( dynamic_cast<VulkanConstBufferPacked *>(
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanConstBufferPacked *>(
                 mAutoParamsBuffer[mAutoParamsBufferIdx - 1u] ) );
 
             VulkanConstBufferPacked *constBuffer =
@@ -2355,6 +2376,70 @@ namespace Ogre
             mCurrentAutoParamsBufferSpaceLeft -=
                 std::min( mCurrentAutoParamsBufferSpaceLeft, bytesToWrite );
         }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::flushBoundGpuProgramParameters(
+        const SubmissionType::SubmissionType submissionType )
+    {
+        bool bWillReuseLastBuffer = false;
+
+        const size_t maxBufferToFlush = mAutoParamsBufferIdx;
+        for( size_t i = mFirstUnflushedAutoParamsBuffer; i < maxBufferToFlush; ++i )
+        {
+            ConstBufferPacked *constBuffer = mAutoParamsBuffer[i];
+            if( i + 1u != maxBufferToFlush )
+            {
+                // Flush whole buffer.
+                constBuffer->unmap( UO_KEEP_PERSISTENT );
+            }
+            else
+            {
+                // Last buffer. Partial flush.
+                const size_t bytesToFlush =
+                    constBuffer->getTotalSizeBytes() - mCurrentAutoParamsBufferSpaceLeft;
+
+                constBuffer->unmap( UO_KEEP_PERSISTENT, 0u, bytesToFlush );
+                if( submissionType <= SubmissionType::FlushOnly &&
+                    mCurrentAutoParamsBufferSpaceLeft >= 4u )
+                {
+                    // Map again so we can continue from where we left off.
+
+                    // If the assert triggers then getNumElements is not in bytes and our math is wrong.
+                    OGRE_ASSERT_LOW( constBuffer->getBytesPerElement() == 1u );
+                    constBuffer->regressFrame();
+                    mCurrentAutoParamsBufferPtr = reinterpret_cast<uint8 *>(
+                        constBuffer->map( bytesToFlush, constBuffer->getNumElements() - bytesToFlush ) );
+                    mCurrentAutoParamsBufferSpaceLeft = constBuffer->getNumElements() - bytesToFlush;
+                    bWillReuseLastBuffer = true;
+                }
+                else
+                {
+                    mCurrentAutoParamsBufferSpaceLeft = 0u;
+                    mCurrentAutoParamsBufferPtr = 0;
+                }
+            }
+        }
+
+        if( submissionType >= SubmissionType::NewFrameIdx )
+        {
+            mAutoParamsBufferIdx = 0u;
+            mFirstUnflushedAutoParamsBuffer = 0u;
+        }
+        else
+        {
+            // If maxBufferToFlush == 0 then bindGpuProgramParameters() was never called this round
+            // and bWillReuseLastBuffer can't be true.
+            if( bWillReuseLastBuffer )
+                mFirstUnflushedAutoParamsBuffer = maxBufferToFlush - 1u;
+            else
+                mFirstUnflushedAutoParamsBuffer = maxBufferToFlush;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::flushPendingNonCoherentFlushes(
+        const SubmissionType::SubmissionType submissionType )
+    {
+        flushBoundGpuProgramParameters( submissionType );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::bindGpuProgramPassIterationParameters( GpuProgramType gptype ) {}
