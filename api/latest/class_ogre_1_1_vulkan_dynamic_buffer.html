@@ -102,8 +102,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_vulkan_dynamic_buffer.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a345e4583a228d36d78bb7ddc9ae55f1d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_dynamic_buffer.html#a345e4583a228d36d78bb7ddc9ae55f1d">VulkanDynamicBuffer</a> (VkDeviceMemory deviceMemory, size_t vboSize, const bool isNonCoherent, const bool hasReadAccess, <a class="el" href="struct_ogre_1_1_vulkan_device.html">VulkanDevice</a> *device)</td></tr>
-<tr class="separator:a345e4583a228d36d78bb7ddc9ae55f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa1cf22c25d0f0a2163c27b7e79819fa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_dynamic_buffer.html#aaa1cf22c25d0f0a2163c27b7e79819fa">VulkanDynamicBuffer</a> (VkDeviceMemory deviceMemory, size_t vboSize, const bool isCoherent, const bool hasReadAccess, <a class="el" href="struct_ogre_1_1_vulkan_device.html">VulkanDevice</a> *device)</td></tr>
+<tr class="separator:aaa1cf22c25d0f0a2163c27b7e79819fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34d2249c90567be33f6acf91c1395b01"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_dynamic_buffer.html#a34d2249c90567be33f6acf91c1395b01">~VulkanDynamicBuffer</a> ()</td></tr>
 <tr class="separator:a34d2249c90567be33f6acf91c1395b01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa24bed0666c1554569243ba3748f52c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_dynamic_buffer.html#aa24bed0666c1554569243ba3748f52c9">flush</a> (size_t ticket, size_t start, size_t count)</td></tr>
@@ -125,8 +125,8 @@ Public Member Functions</h2></td></tr>
 <dl class="section user"><dt></dt><dd>This class takes care of mapping pools just once while allowing <a class="el" href="class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code.">BufferInterface</a> to map subregions of it as if they were separate buffers. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>Caller is responsible for flushing regions before unmapping. Caller is responsible for proper synchronization. No check is performed to see if two map calls overlap. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a345e4583a228d36d78bb7ddc9ae55f1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a345e4583a228d36d78bb7ddc9ae55f1d">&#9670;&nbsp;</a></span>VulkanDynamicBuffer()</h2>
+<a id="aaa1cf22c25d0f0a2163c27b7e79819fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa1cf22c25d0f0a2163c27b7e79819fa">&#9670;&nbsp;</a></span>VulkanDynamicBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,7 +147,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const bool&#160;</td>
-          <td class="paramname"><em>isNonCoherent</em>, </td>
+          <td class="paramname"><em>isCoherent</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

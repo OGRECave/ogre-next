@@ -1,6 +1,6 @@
 var class_ogre_1_1_vulkan_dynamic_buffer =
 [
-    [ "VulkanDynamicBuffer", "class_ogre_1_1_vulkan_dynamic_buffer.html#a345e4583a228d36d78bb7ddc9ae55f1d", null ],
+    [ "VulkanDynamicBuffer", "class_ogre_1_1_vulkan_dynamic_buffer.html#aaa1cf22c25d0f0a2163c27b7e79819fa", null ],
     [ "~VulkanDynamicBuffer", "class_ogre_1_1_vulkan_dynamic_buffer.html#a34d2249c90567be33f6acf91c1395b01", null ],
     [ "flush", "class_ogre_1_1_vulkan_dynamic_buffer.html#aa24bed0666c1554569243ba3748f52c9", null ],
     [ "getDeviceMemory", "class_ogre_1_1_vulkan_dynamic_buffer.html#a9edab8693b5ce89ac3db9a2f97acf709", null ],
