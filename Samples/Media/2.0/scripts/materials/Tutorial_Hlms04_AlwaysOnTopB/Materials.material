@@ -1,0 +1,7 @@
+hlms ClearDepth pbs
+{
+	// We want to override depth on the pixels we touch.
+	depth_func always_pass
+	// We don't want to render colour, just depth.
+	channel_mask 0
+}

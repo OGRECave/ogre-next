@@ -1,8 +1,8 @@
 
-#include "Tutorial_Hlms03_AlwaysOnTopAGameState.h"
+#include "Tutorial_Hlms04_AlwaysOnTopBGameState.h"
 
-#include "Tutorial_Hlms03_AlwaysOnTopA.h"
-#include "Tutorial_Hlms03_MyHlmsPbs.h"
+#include "Tutorial_Hlms04_AlwaysOnTopB.h"
+#include "Tutorial_Hlms04_MyHlmsPbs.h"
 
 #include "CameraController.h"
 #include "GraphicsSystem.h"
@@ -19,22 +19,32 @@
 
 using namespace Demo;
 
-Hlms03AlwaysOnTopAGameState::Hlms03AlwaysOnTopAGameState( const Ogre::String &helpDescription ) :
+Hlms04AlwaysOnTopBGameState::Hlms04AlwaysOnTopBGameState( const Ogre::String &helpDescription ) :
     TutorialGameState( helpDescription )
 {
 }
 //-----------------------------------------------------------------------------
-void Hlms03AlwaysOnTopAGameState::createBar( const bool bAlwaysOnTop )
+void Hlms04AlwaysOnTopBGameState::createBar( const bool bAlwaysOnTop )
 {
     Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
     Ogre::Item *item = sceneManager->createItem(
         "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+    Ogre::Item *clearClone = 0;
+
     Ogre::SceneNode *cameraNode = mGraphicsSystem->getCamera()->getParentSceneNode();
     Ogre::SceneNode *sceneNode = cameraNode->createChildSceneNode();
     sceneNode->setScale( 0.1f, 0.5f, 0.1f );
     sceneNode->setPosition( bAlwaysOnTop ? 0.4f : -0.4f, 0, -1.0f );
     sceneNode->pitch( Ogre::Degree( -30.0f ) );
+
+    if( bAlwaysOnTop )
+    {
+        clearClone = sceneManager->createItem(
+            "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+        clearClone->setCastShadows( false );
+        sceneNode->attachObject( clearClone );
+    }
     sceneNode->attachObject( item );
 
     if( bAlwaysOnTop )
@@ -42,19 +52,24 @@ void Hlms03AlwaysOnTopAGameState::createBar( const bool bAlwaysOnTop )
         const size_t numSubItems = item->getNumSubItems();
         for( size_t i = 0u; i < numSubItems; ++i )
         {
-            Ogre::SubItem *subItem = item->getSubItem( i );
-            subItem->setCustomParameter( Ogre::MyHlmsPbs::kAlwaysOnTopId, Ogre::Vector4::ZERO );
+            Ogre::SubItem *subItemClone = clearClone->getSubItem( i );
+            subItemClone->setCustomParameter( Ogre::MyHlmsPbs::kClearDepthId, Ogre::Vector4::ZERO );
 
-            // If we want to keep the current material, we must force Hlms to flush this object so it
-            // can reevaluate it and generate the shaders with the new code we just enabled.
-            Ogre::HlmsDatablock *datablock = subItem->getDatablock();
-            subItem->_setNullDatablock();
-            subItem->setDatablock( datablock );
+            subItemClone->setDatablock( "ClearDepth" );
+
+            // Make sure the clone gets rendered before the item; so the depth is cleared first.
+            Ogre::SubItem *subItem = item->getSubItem( i );
+            subItemClone->setRenderQueueSubGroup( 0u );
+            subItem->setRenderQueueSubGroup( 1u );
         }
     }
+
+    item->setRenderQueueGroup( 99u );
+    if( clearClone )
+        clearClone->setRenderQueueGroup( 99u );
 }
 //-----------------------------------------------------------------------------
-void Hlms03AlwaysOnTopAGameState::createScene01()
+void Hlms04AlwaysOnTopBGameState::createScene01()
 {
     Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -180,12 +195,12 @@ void Hlms03AlwaysOnTopAGameState::createScene01()
     TutorialGameState::createScene01();
 }
 //-----------------------------------------------------------------------------
-void Hlms03AlwaysOnTopAGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
+void Hlms04AlwaysOnTopBGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
 {
     TutorialGameState::generateDebugText( timeSinceLast, outText );
 
     outText +=
         "\n\nThe left bar clips through objects."
-        "\nThe right bar is (almost) always on top."
+        "\nThe right bar is always on top."
         "\n\nPress F1 for more info on the technique.";
 }
