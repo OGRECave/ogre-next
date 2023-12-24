@@ -11,8 +11,6 @@ namespace Demo
     {
         void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
-        void setTransparencyToMaterials();
-
     public:
         Hlms01CustomizationGameState( const Ogre::String &helpDescription );
 

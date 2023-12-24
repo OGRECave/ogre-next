@@ -1,0 +1,22 @@
+// This file gets parsed by the vertex shader stage (because it ends in piece_vs.any)
+
+@property( always_on_top )
+	@piece( AlwaysOnTop )
+		// The space between [near_plane; near_plane * 2.0f] maps to either [0; 0.5] or [1.0; 0.5]
+		// We put the object there to make it (almost) always render on top while getting
+		// correct depth evaluation against itself.
+		@property( hlms_no_reverse_depth )
+			outVs_Position.z = outVs_Position.z * 0.5f;
+		@else
+			outVs_Position.z = outVs_Position.z * 0.5f + 0.5f * outVs_Position.w;
+		@end
+	@end
+@end
+
+@end
+
+@piece( custom_vs_posExecution )
+	// We use this strategy in case you want to chain multiple customizations together.
+	// Put those here.
+	@insertpiece( AlwaysOnTop )
+@end
