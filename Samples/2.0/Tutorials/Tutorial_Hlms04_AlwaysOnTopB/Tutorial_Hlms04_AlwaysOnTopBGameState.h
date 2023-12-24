@@ -9,6 +9,8 @@ namespace Demo
 {
     class Hlms04AlwaysOnTopBGameState : public TutorialGameState
     {
+        std::vector<Ogre::Item*> mClones;
+
         void createBar( const bool bAlwaysOnTop );
 
         void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
@@ -17,6 +19,7 @@ namespace Demo
         Hlms04AlwaysOnTopBGameState( const Ogre::String &helpDescription );
 
         void createScene01() override;
+        void destroyScene() override;
     };
 }  // namespace Demo
 
