@@ -44,6 +44,14 @@ void Hlms04AlwaysOnTopBGameState::createBar( const bool bAlwaysOnTop )
             "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
         clearClone->setCastShadows( false );
         sceneNode->attachObject( clearClone );
+
+        if( item->getSkeletonInstance() )
+        {
+            // If the Item has skeleton animations, make sure they share the same skeleton
+            // so they are in the exact same state (and also saves RAM & CPU).
+            clearClone->useSkeletonInstanceFrom( item );
+            mClones.push_back( clearClone );
+        }
     }
     sceneNode->attachObject( item );
 
@@ -193,6 +201,16 @@ void Hlms04AlwaysOnTopBGameState::createScene01()
     mCameraController = new CameraController( mGraphicsSystem, true );
 
     TutorialGameState::createScene01();
+}
+//-----------------------------------------------------------------------------
+void Hlms04AlwaysOnTopBGameState::destroyScene()
+{
+    for( Ogre::Item *item : mClones )
+    {
+        if( item->sharesSkeletonInstance() )
+            item->stopUsingSkeletonInstanceFromMaster();
+    }
+    mClones.clear();
 }
 //-----------------------------------------------------------------------------
 void Hlms04AlwaysOnTopBGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
