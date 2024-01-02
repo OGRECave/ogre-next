@@ -185,6 +185,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8efeb0b89e1b40e1ce3760a949107afd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_scene_node.html#abb509726b3e96301eb5fcb3b5977a236">ConstObjectIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_node.html#a8efeb0b89e1b40e1ce3760a949107afd">getAttachedObjectIterator</a> () const</td></tr>
 <tr class="memdesc:a8efeb0b89e1b40e1ce3760a949107afd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator which can be used to efficiently step through the objects attached to this node.  <a href="class_ogre_1_1_scene_node.html#a8efeb0b89e1b40e1ce3760a949107afd">More...</a><br /></td></tr>
 <tr class="separator:a8efeb0b89e1b40e1ce3760a949107afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a887a6c4db326dda5134780228d2fba59"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_scene_node.html#a9191f708826e449a2c22210567949c33">ObjectVec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_node.html#a887a6c4db326dda5134780228d2fba59">getAttachments</a> ()</td></tr>
+<tr class="separator:a887a6c4db326dda5134780228d2fba59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab28f1910847fe893345db1a947adecd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_node.html#ab28f1910847fe893345db1a947adecd9">getCreator</a> () const</td></tr>
 <tr class="memdesc:ab28f1910847fe893345db1a947adecd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the creator of this scene node.  <a href="class_ogre_1_1_scene_node.html#ab28f1910847fe893345db1a947adecd9">More...</a><br /></td></tr>
 <tr class="separator:ab28f1910847fe893345db1a947adecd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1042,6 +1044,31 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Retrieves an iterator which can be used to efficiently step through the objects attached to this node. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>This is a much faster way to go through <b>all</b> the objects attached to the node than using getAttachedObject. But the iterator returned is only valid until a change is made to the collection (ie an addition or removal) so treat the returned iterator as transient, and don't add / remove items as you go through the iterator, save changes until the end, or retrieve a new iterator after making the change. Making changes to the object returned through the iterator is OK though. </dd></dl>
+
+</div>
+</div>
+<a id="a887a6c4db326dda5134780228d2fba59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a887a6c4db326dda5134780228d2fba59">&#9670;&nbsp;</a></span>getAttachments()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_ogre_1_1_scene_node.html#a9191f708826e449a2c22210567949c33">ObjectVec</a>&amp; Ogre::SceneNode::getAttachments </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

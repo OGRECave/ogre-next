@@ -21,6 +21,7 @@ var class_ogre_1_1_scene_node =
     [ "getAttachedObject", "class_ogre_1_1_scene_node.html#aa797529c6a9ee1cf01e3ce47f35be269", null ],
     [ "getAttachedObjectIterator", "class_ogre_1_1_scene_node.html#aaaf9c0199970b4e9713dd5d6855cc726", null ],
     [ "getAttachedObjectIterator", "class_ogre_1_1_scene_node.html#a8efeb0b89e1b40e1ce3760a949107afd", null ],
+    [ "getAttachments", "class_ogre_1_1_scene_node.html#a887a6c4db326dda5134780228d2fba59", null ],
     [ "getCreator", "class_ogre_1_1_scene_node.html#ab28f1910847fe893345db1a947adecd9", null ],
     [ "getDefaultNodeMemoryManager", "class_ogre_1_1_scene_node.html#ab8be5bd671d9eff3fc87ff38f568850e", null ],
     [ "getParentSceneNode", "class_ogre_1_1_scene_node.html#a6f6192cf2b05ec5cbb84f58af1e753ed", null ],

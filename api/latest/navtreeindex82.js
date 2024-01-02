@@ -1,5 +1,7 @@
 var NAVTREEINDEX82 =
 {
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a17f83278691bea5e763b860b57b6303f":[5,2,0,29,4],
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a2b1fba2af6572d6be2dd1c4134a926b6":[5,2,0,29,17],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a60bb9397c249cfc6edfc199f6b4e511e":[5,2,0,29,14],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a62e4978caff779232cdd0c6d46fcb8e2":[5,2,0,29,7],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a6ba9f85e912a9a3450ead8f7c46ea73e":[5,2,0,29,16],
@@ -194,16 +196,16 @@ var NAVTREEINDEX82 =
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#ad6a38006935f381aa67522e2b08606d6":[7,0,0,2,143,1],
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#adb4a0338b24be02f2d416b7015aff554":[7,0,0,2,143,3],
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#af19e8c7951716353066e6ac355b08e88":[7,0,0,2,143,8],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,2,11,67],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,0,1,67],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,2,11,67],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a2189c0ee19612a7ae7382fda94aeec5f":[5,0,1,67,1],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a2189c0ee19612a7ae7382fda94aeec5f":[5,2,11,67,1],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,0,1,67,3],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,2,11,67,3],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,0,1,67,0],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,0,1,67,3],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,2,11,67,0],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[5,0,1,67,2],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,0,1,67,0],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[5,2,11,67,2],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[5,0,1,67,2],
 "class_radial_density_mask_vr_generator.html":[5,2,10,142],
 "class_rotation.html":[7,0,17],
 "class_visual.html":[7,0,19],
@@ -247,7 +249,5 @@ var NAVTREEINDEX82 =
 "compositor.html#CompositorSetupCode":[3,3,3],
 "compositor.html#CompositorShadowNodes":[3,3,1],
 "compositor.html#CompositorShadowNodesAtlasAndPointLights":[3,3,1,2],
-"compositor.html#CompositorShadowNodesExample":[3,3,1,1],
-"compositor.html#CompositorShadowNodesReuseEtc":[3,3,1,3],
-"compositor.html#CompositorShadowNodesSetup":[3,3,1,0]
+"compositor.html#CompositorShadowNodesExample":[3,3,1,1]
 };

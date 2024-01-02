@@ -1,5 +1,7 @@
 var NAVTREEINDEX108 =
 {
+"struct_x_client_message_event.html#aebcdb6d799b39a40027af5d24cbb4273":[7,0,20,3],
+"struct_x_client_message_event_data.html":[7,0,21],
 "struct_x_client_message_event_data.html#af9ab2e94eb01f68d26563596eb428490":[7,0,21,0],
 "struct_x_event.html":[7,0,23],
 "struct_x_r_r_screen_size.html":[7,0,25],
