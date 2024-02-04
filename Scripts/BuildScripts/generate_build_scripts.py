@@ -20,6 +20,7 @@ def getMercurialBranchName():
 	exitCode = process.wait()
 
 	if exitCode == 0:
+		output = output.decode()
 		branchName = output.replace( '\n', '' )
 		return branchName
 	else:
@@ -32,6 +33,7 @@ def getGitBranchName():
 	exitCode = process.wait()
 
 	if exitCode == 0:
+		output = output.decode()
 		branchName = output.replace( '\n', '' )
 		return branchName
 	else:
