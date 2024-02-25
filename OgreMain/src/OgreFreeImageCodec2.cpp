@@ -433,15 +433,15 @@ namespace Ogre {
         // write data into memory
         FreeImage_SaveToMemory((FREE_IMAGE_FORMAT)mFreeImageType, fiBitmap, mem);
         // Grab data information
-        BYTE* data;
-        DWORD size;
-        FreeImage_AcquireMemory(mem, &data, &size);
+        uint8_t *data;
+        uint32_t size;
+        FreeImage_AcquireMemory( mem, &data, &size );
         // Copy data into our own buffer
         // Because we're asking MemoryDataStream to free this, must create in a compatible way
-        BYTE* ourData = OGRE_ALLOC_T(BYTE, size, MEMCATEGORY_GENERAL);
-        memcpy(ourData, data, size);
-        // Wrap data in stream, tell it to free on close 
-        DataStreamPtr outstream(OGRE_NEW MemoryDataStream(ourData, size, true));
+        uint8_t *ourData = OGRE_ALLOC_T( uint8_t, size, MEMCATEGORY_GENERAL );
+        memcpy( ourData, data, size );
+        // Wrap data in stream, tell it to free on close
+        DataStreamPtr outstream( OGRE_NEW MemoryDataStream( ourData, size, true ) );
         // Now free FreeImage memory buffers
         FreeImage_CloseMemory(mem);
         // Unload bitmap
@@ -464,9 +464,9 @@ namespace Ogre {
         // Buffer stream into memory (TODO: override IO functions instead?)
         MemoryDataStream memStream(input, true);
 
-        FIMEMORY* fiMem = FreeImage_OpenMemory( memStream.getPtr(),
-                                                static_cast<DWORD>( memStream.size() ) );
-        FIBITMAP* fiBitmap = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
+        FIMEMORY *fiMem =
+            FreeImage_OpenMemory( memStream.getPtr(), static_cast<uint32_t>( memStream.size() ) );
+        FIBITMAP *fiBitmap = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
         if( !fiBitmap )
         {
             FreeImage_CloseMemory( fiMem );
@@ -647,9 +647,8 @@ namespace Ogre {
     //---------------------------------------------------------------------
     String FreeImageCodec2::magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const
     {
-        FIMEMORY* fiMem = 
-                    FreeImage_OpenMemory( (BYTE*)const_cast<char*>(magicNumberPtr),
-                                          static_cast<DWORD>(maxbytes) );
+        FIMEMORY *fiMem = FreeImage_OpenMemory( (uint8_t *)const_cast<char *>( magicNumberPtr ),
+                                                static_cast<uint32_t>( maxbytes ) );
 
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory( fiMem, (int)maxbytes );
         FreeImage_CloseMemory(fiMem);
