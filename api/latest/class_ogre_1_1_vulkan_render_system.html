@@ -330,6 +330,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae99410504b2df17b864d00e6a60a0bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a3f93b5d52d42509d57f6809d0f7966"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a9a3f93b5d52d42509d57f6809d0f7966">executeResourceTransition</a> (const <a class="el" href="group___resources.html#gab881163687bedff909edce16d11d9127">ResourceTransitionArray</a> &amp;rstCollection) override</td></tr>
 <tr class="separator:a9a3f93b5d52d42509d57f6809d0f7966"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46d0dbe8bb52718c3093f7e71c3f1ec2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#a46d0dbe8bb52718c3093f7e71c3f1ec2">flushBoundGpuProgramParameters</a> (const <a class="el" href="namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e">SubmissionType::SubmissionType</a> submissionType)</td></tr>
+<tr class="memdesc:a46d0dbe8bb52718c3093f7e71c3f1ec2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low Level Materials use a params buffer to pass all uniforms.  <a href="class_ogre_1_1_vulkan_render_system.html#a46d0dbe8bb52718c3093f7e71c3f1ec2">More...</a><br /></td></tr>
+<tr class="separator:a46d0dbe8bb52718c3093f7e71c3f1ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adeeab393ced10ecde6fd91b6f0e58f76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#adeeab393ced10ecde6fd91b6f0e58f76">flushCommands</a> () override</td></tr>
 <tr class="separator:adeeab393ced10ecde6fd91b6f0e58f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab98067e9e31da8681c6f14f6502e0f8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_render_system.html#ab98067e9e31da8681c6f14f6502e0f8f">flushDescriptorState</a> (VkPipelineBindPoint pipeline_bind_point, const <a class="el" href="class_ogre_1_1_vulkan_const_buffer_packed.html">VulkanConstBufferPacked</a> &amp;constBuffer, const size_t bindOffset, const size_t bytesToWrite, const unordered_map&lt; unsigned, <a class="el" href="struct_ogre_1_1_vulkan_constant_definition_binding_param.html">VulkanConstantDefinitionBindingParam</a> &gt;::type &amp;shaderBindings)</td></tr>
@@ -3876,6 +3879,39 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#ad6efb4ed490715cf068fca69b689403d">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a46d0dbe8bb52718c3093f7e71c3f1ec2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46d0dbe8bb52718c3093f7e71c3f1ec2">&#9670;&nbsp;</a></span>flushBoundGpuProgramParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::VulkanRenderSystem::flushBoundGpuProgramParameters </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e">SubmissionType::SubmissionType</a>&#160;</td>
+          <td class="paramname"><em>submissionType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Low Level Materials use a params buffer to pass all uniforms. </p>
+<p>We emulate this using a large const buffer to which we write to and bind the regions we need. This is done in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#adbe2abdee42d588e25345a420b76e35b" title="Bind Gpu program parameters.">bindGpuProgramParameters()</a>.</p>
+<p>When it runs out of space, we create another one (see mAutoParamsBuffer).</p>
+<p>However:</p><ul>
+<li>In all cases we must flush buffers before command submission or else the cmds we're about to execute may not see the const buffer data up to date. We don't flush in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#adbe2abdee42d588e25345a420b76e35b" title="Bind Gpu program parameters.">bindGpuProgramParameters()</a> because we could end up with lots of 4-byte flushes which is seriously inefficient. Flushing the whole thing once at the end is better.</li>
+<li>We musn't grow indefinitely. On submissionType &gt;= NewFrameIdx, we are certain we can set mAutoParamsBufferIdx = 0 and start over. <dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="class_ogre_1_1_vulkan_render_system.html#adbe2abdee42d588e25345a420b76e35b" title="Bind Gpu program parameters.">bindGpuProgramParameters()</a> tries to use BT_DYNAMIC_PERSISTENT_COHERENT which doesn't need flushing (thus we'd only care about submissionType &gt;= NewFrameIdx to reuse memory).</dd></dl>
+However <a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> cannot guarantee BT_DYNAMIC_PERSISTENT_COHERENT will actually be coherent thus we must call unmap( UO_KEEP_PERSISTENT ) anyway. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">submissionType</td><td>See <a class="el" href="namespace_ogre_1_1_submission_type.html#a119342ed453a2c317a310c790104831e">SubmissionType::SubmissionType</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ul>
 
 </div>
 </div>
