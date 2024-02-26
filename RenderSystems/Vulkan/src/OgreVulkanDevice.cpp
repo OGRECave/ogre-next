@@ -678,6 +678,20 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanDevice::stall()
     {
+        // We must call flushBoundGpuProgramParameters() now because commitAndNextCommandBuffer() will
+        // call flushBoundGpuProgramParameters( SubmissionType::FlushOnly ).
+        //
+        // Unfortunately that's not enough because that assumes VaoManager::mFrameCount
+        // won't change (which normally wouldn't w/ FlushOnly). However our caller is
+        // about to do mFrameCount += mDynamicBufferMultiplier.
+        //
+        // The solution is to tell flushBoundGpuProgramParameters() we're changing frame idx.
+        // Calling it again becomes a no-op since mFirstUnflushedAutoParamsBuffer becomes 0.
+        //
+        // We also *want* mCurrentAutoParamsBufferPtr to become nullptr since it can be reused from
+        // scratch. Because we're stalling, it is safe to do so.
+        mRenderSystem->flushBoundGpuProgramParameters( SubmissionType::NewFrameIdx );
+
         // We must flush the cmd buffer and our bindings because we take the
         // moment to delete all delayed buffers and API handles after a stall.
         //

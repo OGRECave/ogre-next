@@ -273,7 +273,6 @@ namespace Ogre
                                        uint16 variabilityMask ) override;
         void bindGpuProgramPassIterationParameters( GpuProgramType gptype ) override;
 
-    protected:
         /** Low Level Materials use a params buffer to pass all uniforms. We emulate this using a large
             const buffer to which we write to and bind the regions we need.
             This is done in bindGpuProgramParameters().
