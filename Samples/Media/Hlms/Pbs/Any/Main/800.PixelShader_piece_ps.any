@@ -371,11 +371,12 @@
 		@piece( two_sided_flip_normal )* (gl_FrontFacing ? 1.0 : -1.0)@end
 	@end
 @end
+@piece( LoadGeomNormalData )
+	// Geometric normal
+	pixelData.geomNormal = normalize( inPs.normal ) @insertpiece( two_sided_flip_normal );
+@end
 @piece( LoadNormalData )
-	@property( !normal_map )
-		// Geometric normal
-		pixelData.normal = normalize( inPs.normal ) @insertpiece( two_sided_flip_normal );
-	@else
+	@property( normal_map )
 		//Normal mapping.
 		pixelData.geomNormal = normalize( inPs.normal ) @insertpiece( two_sided_flip_normal );
 		midf3 vTangent		= normalize( inPs.tangent );
@@ -790,6 +791,10 @@
 		pixelData.diffuse.xyz	= float3( 1.0f, 1.0f, 1.0f );
 		pixelData.specular.xyz	= float3( 0.0f, 0.0f, 0.0f );
 @end
+
+		@property( !hlms_use_prepass )
+			@insertpiece( LoadGeomNormalData )
+		@end
 
 		@insertpiece( forwardPlusDoDecals )
 

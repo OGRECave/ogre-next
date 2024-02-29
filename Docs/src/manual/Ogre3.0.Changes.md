@@ -48,6 +48,12 @@ Default material BRDF settings have changed in 3.0; thus materials will look dif
 
 See [PBR / PBS Changes in 3.0](@ref PBSChangesIn30) to how make them look like they did in 2.3 and what these changes mean.
 
+## Hlms Shader piece changes
+
+The piece block `LoadNormalData` got split into `LoadGeomNormalData` & `LoadNormalData` in order to support Decals in Terra.
+
+If you were overriding `LoadNormalData` in a custom piece, make sure to account for the new `LoadGeomNormalData`.
+
 ## Move to C++11 and general cleanup
 
 Lots of dead \& long-deprecated code was removed.
