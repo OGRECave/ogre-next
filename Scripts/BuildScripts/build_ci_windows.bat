@@ -34,15 +34,17 @@ IF NOT EXIST %BUILD_FOLDER%\..\ogre-next-deps (
 	mkdir %BUILD_FOLDER%\..\ogre-next-deps
 	echo --- Cloning ogre-next-deps ---
 	git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps %BUILD_FOLDER%\..\ogre-next-deps
+
+	mkdir %BUILD_FOLDER%\..\ogre-next-deps\build
+	cd %BUILD_FOLDER%\..\ogre-next-deps\build
+	echo --- Building ogre-next-deps ---
+	%CMAKE_BIN% -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%\..\ogre-next-deps
+	%CMAKE_BIN% --build . --config %CONFIGURATION%
+	%CMAKE_BIN% --build . --target install --config %CONFIGURATION%
 ) ELSE (
 	echo --- ogre-next-deps repo detected. Cloning skipped ---
+	echo --- ogre-next-deps repo detected. Building skipped ---
 )
-mkdir %BUILD_FOLDER%\..\ogre-next-deps\build
-cd %BUILD_FOLDER%\..\ogre-next-deps\build
-echo --- Building ogre-next-deps ---
-%CMAKE_BIN% -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%\..\ogre-next-deps
-%CMAKE_BIN% --build . --config %CONFIGURATION%
-%CMAKE_BIN% --build . --target install --config %CONFIGURATION%
 
 cd %BUILD_FOLDER%
 mkdir %BUILD_FOLDER%\build
