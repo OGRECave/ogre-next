@@ -1,5 +1,6 @@
 var NAVTREEINDEX103 =
 {
+"struct_ogre_1_1_light_closest.html#aa41b81d253b1af2e9951905238e0a7dc":[5,2,2,61,7],
 "struct_ogre_1_1_light_closest.html#aab0691f8197b06e2c28bc74dbf9b6522":[5,2,2,61,0],
 "struct_ogre_1_1_light_closest.html#aabcad38af292fdfc1e2179c1a9be4ac3":[5,2,2,61,6],
 "struct_ogre_1_1_light_closest.html#aac9b931e3ccda0855b8b424732d57d5e":[5,2,2,61,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX103 =
 "struct_ogre_1_1_n_u_l_l_vertex_array_object.html#a9aacca9290ed7f2970fe2345106aa9fd":[7,0,0,624,0],
 "struct_ogre_1_1_object_data.html":[7,0,0,629],
 "struct_ogre_1_1_object_data.html#a0a22f7505805d72aecc7b76286e01aad":[7,0,0,629,20],
-"struct_ogre_1_1_object_data.html#a0e48666eb375723ba307a25510911656":[7,0,0,629,7],
-"struct_ogre_1_1_object_data.html#a1df46e1dbbe97f928f5b223dbf968c51":[7,0,0,629,6]
+"struct_ogre_1_1_object_data.html#a0e48666eb375723ba307a25510911656":[7,0,0,629,7]
 };

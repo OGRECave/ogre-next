@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"_ogre_numerics_8h.html#ga006856a8eae8ec29bf45365bbd67ea46":[8,0,555,0],
 "_ogre_o_i_t_d_codec_8h.html":[8,0,560],
 "_ogre_o_s_version_helpers_8h.html":[8,0,566],
 "_ogre_o_s_version_helpers_8h.html#a89b31b859227cdb5cc6321eca16d4a2b":[8,0,566,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18afb50cec76a881367b145f8dcc8eb7608":[8,0,612,0,56],
 "_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18afde33c427368230bf0529ad2477e7e78":[8,0,612,0,95],
 "_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18aff9da06535c10e1a589aef74e56fc1da":[8,0,612,0,61],
-"_ogre_pixel_format_gpu_utils_8h.html":[8,0,613],
-"_ogre_planar_reflection_actor_8h.html":[8,0,614]
+"_ogre_pixel_format_gpu_utils_8h.html":[8,0,613]
 };

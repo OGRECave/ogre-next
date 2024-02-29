@@ -1,5 +1,6 @@
 var NAVTREEINDEX56 =
 {
+"class_ogre_1_1_resource_group_manager.html#a634c03b30b1008b00f0db3f435449932":[5,2,10,97,55],
 "class_ogre_1_1_resource_group_manager.html#a6ff0efec5d27cedb448cfba8b2b78c8d":[5,2,10,97,20],
 "class_ogre_1_1_resource_group_manager.html#a7046808e2a8caf92e19907e5d9c310fd":[5,2,10,97,21],
 "class_ogre_1_1_resource_group_manager.html#a70da3137e703c147b98fbfbbebfbf023":[5,2,10,97,64],
@@ -248,6 +249,5 @@ var NAVTREEINDEX56 =
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_end.html#a9d8298233c13f3fb172751634817fc73":[7,0,0,749,0,1],
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_start.html":[7,0,0,749,1],
 "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_start.html#a275d0421330b4449f8da8e0fc4474d3e":[7,0,0,749,1,0],
-"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_start.html#adcef5ee1679a009e7d645e3e1377657a":[7,0,0,749,1,1],
-"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html":[7,0,0,749,2]
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_start.html#adcef5ee1679a009e7d645e3e1377657a":[7,0,0,749,1,1]
 };

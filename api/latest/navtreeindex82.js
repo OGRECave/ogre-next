@@ -1,5 +1,6 @@
 var NAVTREEINDEX82 =
 {
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a13c5c793d317d46adfbe7712d7eeb323":[5,2,0,29,9],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a166de6dc122d862999ad0757d4a22196":[5,2,0,29,18],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a17f83278691bea5e763b860b57b6303f":[5,2,0,29,4],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a2b1fba2af6572d6be2dd1c4134a926b6":[5,2,0,29,17],
@@ -201,8 +202,8 @@ var NAVTREEINDEX82 =
 "class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,0,1,67],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a2189c0ee19612a7ae7382fda94aeec5f":[5,0,1,67,1],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a2189c0ee19612a7ae7382fda94aeec5f":[5,2,11,67,1],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,2,11,67,3],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,0,1,67,3],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,2,11,67,3],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,2,11,67,0],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,0,1,67,0],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[5,0,1,67,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX82 =
 "compositor.html#CompositorNodesTexturesMsaaImplicit":[3,3,0,3,0,0],
 "compositor.html#CompositorNodesTexturesMsaaResources":[3,3,0,3,0,2],
 "compositor.html#CompositorSetupCode":[3,3,3],
-"compositor.html#CompositorShadowNodes":[3,3,1],
-"compositor.html#CompositorShadowNodesAtlasAndPointLights":[3,3,1,2]
+"compositor.html#CompositorShadowNodes":[3,3,1]
 };

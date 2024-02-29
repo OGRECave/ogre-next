@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"_ogre_const_buffer_pool_8h.html#ga3ab5784a70c3aaa077b9e93e68260723":[8,0,152,2],
 "_ogre_controller_8h.html":[8,0,153],
 "_ogre_controller_manager_8h.html":[8,0,154],
 "_ogre_controller_manager_8h.html#ga09a0dddd1979ea33b569b8e84c33fdfa":[8,0,154,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "_ogre_g_l3_plus_tex_buffer_emulated_packed_8h.html":[8,0,295],
 "_ogre_g_l3_plus_tex_buffer_packed_8h.html":[8,0,296],
 "_ogre_g_l3_plus_texture_gpu_8h.html":[8,0,297],
-"_ogre_g_l3_plus_texture_gpu_manager_8h.html":[8,0,298],
-"_ogre_g_l3_plus_texture_gpu_window_8h.html":[8,0,299]
+"_ogre_g_l3_plus_texture_gpu_manager_8h.html":[8,0,298]
 };

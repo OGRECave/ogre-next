@@ -145,6 +145,7 @@ var NAVTREEINDEX0 =
 "_ogre30_changes.html#autotoc_md62":[3,19,0],
 "_ogre30_changes.html#autotoc_md63":[3,19,1],
 "_ogre30_changes.html#autotoc_md64":[3,19,2],
+"_ogre30_changes.html#autotoc_md65":[3,19,3],
 "_ogre_8h.html":[8,0,0],
 "_ogre_a_p_k_file_system_archive_8h.html":[8,0,14],
 "_ogre_a_p_k_zip_archive_8h.html":[8,0,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "_ogre_barrier_8h.html":[8,0,58],
 "_ogre_billboard_8h.html":[8,0,59],
 "_ogre_billboard_chain_8h.html":[8,0,60],
-"_ogre_billboard_particle_renderer_8h.html":[8,0,61],
-"_ogre_billboard_set_8h.html":[8,0,62]
+"_ogre_billboard_particle_renderer_8h.html":[8,0,61]
 };

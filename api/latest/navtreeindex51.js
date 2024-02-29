@@ -1,5 +1,6 @@
 var NAVTREEINDEX51 =
 {
+"class_ogre_1_1_pass.html#afc41cb1fe9251448002a2405405b8bd9":[5,2,5,18,153],
 "class_ogre_1_1_pass.html#afd45b897ebc29d3ee40a2ee307682f35":[5,2,5,18,123],
 "class_ogre_1_1_pass_translator.html":[5,2,2,77],
 "class_ogre_1_1_pass_translator.html#a0359452063bcbdc46c2b5fd5002f257a":[5,2,2,77,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX51 =
 "class_ogre_1_1_process_resource_name_script_compiler_event.html":[5,2,2,82],
 "class_ogre_1_1_process_resource_name_script_compiler_event.html#a3c4bdfcd9e3758d5281dfe0ed7d8e5fc":[5,2,2,82,2],
 "class_ogre_1_1_process_resource_name_script_compiler_event.html#a93b2fb455dd0deec91a7f16a3a91c55e":[5,2,2,82,1],
-"class_ogre_1_1_process_resource_name_script_compiler_event.html#a9df601b04eff55b09762484c8eac6082":[5,2,2,82,3],
-"class_ogre_1_1_process_resource_name_script_compiler_event.html#ad65384a6b5c01e1ce69a4d452d45745f":[5,2,2,82,4]
+"class_ogre_1_1_process_resource_name_script_compiler_event.html#a9df601b04eff55b09762484c8eac6082":[5,2,2,82,3]
 };

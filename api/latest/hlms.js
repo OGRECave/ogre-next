@@ -58,7 +58,7 @@ var hlms =
     [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
       [ "My shadows don't show up or are very glitchy", "hlms.html#HlmsTroubleshootingShadow", null ]
     ] ],
-    [ "Precision / Quality", "hlms.html#autotoc_md97", null ],
+    [ "Precision / Quality", "hlms.html#autotoc_md98", null ],
     [ "Reference Guide: HLMS Blendblock", "hlmsblendblockref.html", [
       [ "Parameters:", "hlmsblendblockref.html#bbParameters", [
         [ "Parameter: alpha_to_coverage", "hlmsblendblockref.html#bbParamAlphaToCoverage", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"_ogre_shadow_camera_setup_focused_8h.html":[8,0,693],
 "_ogre_shadow_camera_setup_p_s_s_m_8h.html":[8,0,695],
 "_ogre_shadow_camera_setup_plane_optimal_8h.html":[8,0,694],
 "_ogre_shared_ptr_8h.html":[8,0,696],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "_ogre_thread_defines_s_t_d_8h.html":[8,0,748],
 "_ogre_thread_defines_s_t_d_8h.html#a042f108091bba675307acb915a71bfa9":[8,0,748,17],
 "_ogre_thread_defines_s_t_d_8h.html#a053475f75a35e320fa019cf083ba8918":[8,0,748,15],
-"_ogre_thread_defines_s_t_d_8h.html#a062b6df8793a5440c06a9056ff1c8fe9":[8,0,748,6],
-"_ogre_thread_defines_s_t_d_8h.html#a0a38f532fc987f34e7ffa1d18b770fc9":[8,0,748,10]
+"_ogre_thread_defines_s_t_d_8h.html#a062b6df8793a5440c06a9056ff1c8fe9":[8,0,748,6]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"_ogre_planar_reflection_actor_8h.html":[8,0,614],
 "_ogre_planar_reflections_8h.html":[8,0,615],
 "_ogre_planar_reflections_prerequisites_8h.html":[8,0,616],
 "_ogre_planar_reflections_prerequisites_8h.html#a0041ba8498c00b0e84c8def6d2a1722b":[8,0,616,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a180803c56feb172439f17c52ac5ad939":[8,0,650,4,55],
 "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a19761248dd0758d71a6ac77637b39e25":[8,0,650,4,33],
 "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a198f4339a0d8f1cf056770a577c56f84":[8,0,650,4,32],
-"_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a1a32a54a3b00630209a22204bbf8e38a":[8,0,650,4,84],
-"_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a204835847a1b5fb0337102ac8b67e7fb":[8,0,650,4,69]
+"_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a1a32a54a3b00630209a22204bbf8e38a":[8,0,650,4,84]
 };

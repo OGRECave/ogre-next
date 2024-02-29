@@ -148,13 +148,13 @@ var manual =
         [ "Execution mask", "compositor.html#CompositorWorkspacesStereoExecutionMask", null ],
         [ "Default values", "compositor.html#CompositorWorkspacesStereoDefaultValues", null ]
       ] ],
-      [ "Advanced MSAA", "compositor.html#autotoc_md91", [
-        [ "What is MSAA?", "compositor.html#autotoc_md92", [
-          [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md93", null ],
-          [ "MSAA approach to the problem", "compositor.html#autotoc_md94", null ]
+      [ "Advanced MSAA", "compositor.html#autotoc_md92", [
+        [ "What is MSAA?", "compositor.html#autotoc_md93", [
+          [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md94", null ],
+          [ "MSAA approach to the problem", "compositor.html#autotoc_md95", null ]
         ] ],
-        [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md95", null ],
-        [ "Ogre + MSAA with Explicit Resolves", "compositor.html#autotoc_md96", null ]
+        [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md96", null ],
+        [ "Ogre + MSAA with Explicit Resolves", "compositor.html#autotoc_md97", null ]
       ] ]
     ] ],
     [ "Global Illumination Methods", "_gi_methods.html", "_gi_methods" ],
@@ -218,16 +218,16 @@ var manual =
       [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
     ] ],
     [ "Terra System", "_terra_system.html", [
-      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md82", null ],
-      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md83", null ],
-      [ "Terra cells", "_terra_system.html#autotoc_md84", [
-        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md85", null ],
-        [ "Outer layers", "_terra_system.html#autotoc_md86", null ]
+      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md83", null ],
+      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md84", null ],
+      [ "Terra cells", "_terra_system.html#autotoc_md85", [
+        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md86", null ],
+        [ "Outer layers", "_terra_system.html#autotoc_md87", null ]
       ] ],
-      [ "Skirts", "_terra_system.html#autotoc_md87", null ],
-      [ "Shadows", "_terra_system.html#autotoc_md88", null ],
-      [ "Shading", "_terra_system.html#autotoc_md89", null ],
-      [ "Why is it not a component?", "_terra_system.html#autotoc_md90", null ]
+      [ "Skirts", "_terra_system.html#autotoc_md88", null ],
+      [ "Shadows", "_terra_system.html#autotoc_md89", null ],
+      [ "Shading", "_terra_system.html#autotoc_md90", null ],
+      [ "Why is it not a component?", "_terra_system.html#autotoc_md91", null ]
     ] ],
     [ "Tunning memory consumption and resources", "_tuning_memory_resources.html", [
       [ "Grouping textures by type", "_tuning_memory_resources.html#GroupingTexturesByType", null ],
@@ -284,7 +284,7 @@ var manual =
       [ "Old APIs (i.e. D3D11 and GL)", "_root_layouts.html#RootLayoutsOldAPIs", null ],
       [ "New APIs and Root Layouts", "_root_layouts.html#RootLayoutsNewAPIs", null ],
       [ "Setting up root layouts", "_root_layouts.html#RootLayoutsSettingUp", [
-        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md79", null ]
+        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md80", null ]
       ] ],
       [ "Declaring Root Layouts in shaders", "_root_layouts.html#RootLayoutsDeclaringInShaders", null ],
       [ "Baked sets", "_root_layouts.html#RootLayoutsBakedSets", null ],
@@ -298,37 +298,38 @@ var manual =
             [ "Links", "hlmspbsdatablockref.html#dbLinks", null ],
             [ "Links", "hlmsunlitdatablockref.html#dbulLinks", null ],
             [ "Links", "hlmsterradatablockref.html#dbtLinks", null ],
-            [ "OpenGL", "_root_layouts.html#autotoc_md80", null ],
-            [ "Vulkan", "_root_layouts.html#autotoc_md81", null ]
+            [ "OpenGL", "_root_layouts.html#autotoc_md81", null ],
+            [ "Vulkan", "_root_layouts.html#autotoc_md82", null ]
           ] ]
         ] ]
       ] ]
     ] ],
     [ "Resolving Merge Conflicts in Ogre-Next 3.0", "_resolving_merge_conflicts30.html", [
-      [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md77", null ],
-      [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md78", null ]
+      [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md78", null ],
+      [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md79", null ]
     ] ],
     [ "What's new in Ogre-Next 3.0", "_ogre30_changes.html", [
       [ "Ogre to OgreNext name migration", "_ogre30_changes.html#autotoc_md62", null ],
       [ "PBS Changes in 3.0", "_ogre30_changes.html#autotoc_md63", null ],
-      [ "Move to C++11 and general cleanup", "_ogre30_changes.html#autotoc_md64", null ]
+      [ "Hlms Shader piece changes", "_ogre30_changes.html#autotoc_md64", null ],
+      [ "Move to C++11 and general cleanup", "_ogre30_changes.html#autotoc_md65", null ]
     ] ],
     [ "PBR / PBS Changes in 3.0", "_p_b_s_changes_in30.html", [
-      [ "Short version", "_p_b_s_changes_in30.html#autotoc_md65", null ],
-      [ "Long version", "_p_b_s_changes_in30.html#autotoc_md66", [
-        [ "Direct Lighting", "_p_b_s_changes_in30.html#autotoc_md67", [
-          [ "Fresnel Diffuse is no longer considered", "_p_b_s_changes_in30.html#autotoc_md68", [
-            [ "Raffaele's comments:", "_p_b_s_changes_in30.html#autotoc_md69", null ],
-            [ "Default-enable to diffuse fresnel", "_p_b_s_changes_in30.html#autotoc_md70", null ]
+      [ "Short version", "_p_b_s_changes_in30.html#autotoc_md66", null ],
+      [ "Long version", "_p_b_s_changes_in30.html#autotoc_md67", [
+        [ "Direct Lighting", "_p_b_s_changes_in30.html#autotoc_md68", [
+          [ "Fresnel Diffuse is no longer considered", "_p_b_s_changes_in30.html#autotoc_md69", [
+            [ "Raffaele's comments:", "_p_b_s_changes_in30.html#autotoc_md70", null ],
+            [ "Default-enable to diffuse fresnel", "_p_b_s_changes_in30.html#autotoc_md71", null ]
           ] ],
-          [ "Geometric Term change", "_p_b_s_changes_in30.html#autotoc_md71", null ],
-          [ "Metalness change", "_p_b_s_changes_in30.html#autotoc_md72", null ]
+          [ "Geometric Term change", "_p_b_s_changes_in30.html#autotoc_md72", null ],
+          [ "Metalness change", "_p_b_s_changes_in30.html#autotoc_md73", null ]
         ] ],
-        [ "IBL", "_p_b_s_changes_in30.html#autotoc_md73", [
-          [ "IBL Diffuse", "_p_b_s_changes_in30.html#autotoc_md74", [
-            [ "Multiplication by PI", "_p_b_s_changes_in30.html#autotoc_md75", null ]
+        [ "IBL", "_p_b_s_changes_in30.html#autotoc_md74", [
+          [ "IBL Diffuse", "_p_b_s_changes_in30.html#autotoc_md75", [
+            [ "Multiplication by PI", "_p_b_s_changes_in30.html#autotoc_md76", null ]
           ] ],
-          [ "IBL Specular", "_p_b_s_changes_in30.html#autotoc_md76", null ]
+          [ "IBL Specular", "_p_b_s_changes_in30.html#autotoc_md77", null ]
         ] ]
       ] ]
     ] ]

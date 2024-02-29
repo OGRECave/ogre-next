@@ -1,5 +1,6 @@
 var NAVTREEINDEX52 =
 {
+"class_ogre_1_1_process_resource_name_script_compiler_event.html#ad65384a6b5c01e1ce69a4d452d45745f":[5,2,2,82,4],
 "class_ogre_1_1_process_resource_name_script_compiler_event.html#afd04c7f48ef0823ba70812b83fde1acc":[5,2,2,82,0],
 "class_ogre_1_1_process_resource_name_script_compiler_event.html#afd04c7f48ef0823ba70812b83fde1acca79d98608fb92fdd1ff492f56d86b2ba1":[5,2,2,82,0,5],
 "class_ogre_1_1_process_resource_name_script_compiler_event.html#afd04c7f48ef0823ba70812b83fde1acca89eafbeaac332dd99da1acf69bcd5e28":[5,2,2,82,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX52 =
 "class_ogre_1_1_radian.html#abe1d20fdd7fca95f126200a17379ce53":[5,2,6,23,6],
 "class_ogre_1_1_radian.html#abf3d4527839810f9d2212037660ea9f6":[5,2,6,23,10],
 "class_ogre_1_1_radix_sort.html":[5,2,2,90],
-"class_ogre_1_1_radix_sort.html#a2c982200600a22b21906e3f43a0a962d":[5,2,2,90,1],
-"class_ogre_1_1_radix_sort.html#a4fc283b678dfda772eb6600436d97579":[5,2,2,90,3]
+"class_ogre_1_1_radix_sort.html#a2c982200600a22b21906e3f43a0a962d":[5,2,2,90,1]
 };

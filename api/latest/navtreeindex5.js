@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"_ogre_gpu_program_params_8h.html#gga9c5b2950be06ff56a6ee0bace240d447ad023a5c54e29999cee04d54971cc5691":[8,0,382,9,21],
 "_ogre_gpu_program_params_8h.html#gga9c5b2950be06ff56a6ee0bace240d447ad6544d6a653aceace5f368085563fd44":[8,0,382,9,40],
 "_ogre_gpu_program_params_8h.html#gga9c5b2950be06ff56a6ee0bace240d447ad9fae90ecc4c94651144f418f02a7238":[8,0,382,9,36],
 "_ogre_gpu_program_params_8h.html#gga9c5b2950be06ff56a6ee0bace240d447adb4f16d2650d3ca25ba5c9aba48634b6":[8,0,382,9,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "_ogre_lod_prerequisites_8h.html#a85a340f35bf274668aa757bed23b5ff1":[8,0,455,3],
 "_ogre_lod_prerequisites_8h.html#aab2b912370b681335fc1d156739c94fe":[8,0,455,2],
 "_ogre_lod_prerequisites_8h.html#ae57d12f3dc7924e86a2aee7c779d8726":[8,0,455,5],
-"_ogre_lod_strategy_8h.html":[8,0,456],
-"_ogre_lod_strategy_manager_8h.html":[8,0,457]
+"_ogre_lod_strategy_8h.html":[8,0,456]
 };

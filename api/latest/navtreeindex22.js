@@ -1,5 +1,6 @@
 var NAVTREEINDEX22 =
 {
+"class_ogre_1_1_compositor_pass_shadows.html#a6c251a893c15c6aa5958fbb31b23a1d0":[5,2,1,19,2],
 "class_ogre_1_1_compositor_pass_shadows_def.html":[5,2,1,20],
 "class_ogre_1_1_compositor_pass_shadows_def.html#a2c5cf20f44ad3b353a804835884d16cd":[5,2,1,20,1],
 "class_ogre_1_1_compositor_pass_shadows_def.html#a3aab982ecdae947e85c6c5ae48da2fef":[5,2,1,20,0],
@@ -237,17 +238,16 @@ var NAVTREEINDEX22 =
 "class_ogre_1_1_config_dialog.html#a13256672f2bebba9e0b0d7921c006e19":[5,2,2,26,28],
 "class_ogre_1_1_config_dialog.html#a13256672f2bebba9e0b0d7921c006e19":[5,2,2,26,29],
 "class_ogre_1_1_config_dialog.html#a13256672f2bebba9e0b0d7921c006e19":[5,2,2,26,30],
+"class_ogre_1_1_config_dialog.html#a145ff70301c38309e3a441a9d97cc50f":[5,2,2,26,16],
 "class_ogre_1_1_config_dialog.html#a145ff70301c38309e3a441a9d97cc50f":[5,2,2,26,17],
 "class_ogre_1_1_config_dialog.html#a145ff70301c38309e3a441a9d97cc50f":[5,2,2,26,18],
-"class_ogre_1_1_config_dialog.html#a145ff70301c38309e3a441a9d97cc50f":[5,2,2,26,16],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,19],
+"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,20],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,21],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,22],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,23],
-"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,20],
-"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,25],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,24],
+"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,25],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,26],
-"class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,1],
-"class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,3]
+"class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,1]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX13 =
 {
+"_samples.html#uav2":[3,0,52],
 "_samples.html#updatedecal":[3,0,28],
 "_samples.html#v1interface":[3,0,29],
 "_samples.html#v2Mesh":[3,0,31],
@@ -40,15 +41,15 @@ var NAVTREEINDEX13 =
 "_technical_overview.html#SIMDCoherence":[3,2,0,0],
 "_technical_overview.html#TechnicalOverviewOverview":[3,2,0],
 "_terra_system.html":[3,12],
-"_terra_system.html#autotoc_md82":[3,12,0],
-"_terra_system.html#autotoc_md83":[3,12,1],
-"_terra_system.html#autotoc_md84":[3,12,2],
-"_terra_system.html#autotoc_md85":[3,12,2,0],
-"_terra_system.html#autotoc_md86":[3,12,2,1],
-"_terra_system.html#autotoc_md87":[3,12,3],
-"_terra_system.html#autotoc_md88":[3,12,4],
-"_terra_system.html#autotoc_md89":[3,12,5],
-"_terra_system.html#autotoc_md90":[3,12,6],
+"_terra_system.html#autotoc_md83":[3,12,0],
+"_terra_system.html#autotoc_md84":[3,12,1],
+"_terra_system.html#autotoc_md85":[3,12,2],
+"_terra_system.html#autotoc_md86":[3,12,2,0],
+"_terra_system.html#autotoc_md87":[3,12,2,1],
+"_terra_system.html#autotoc_md88":[3,12,3],
+"_terra_system.html#autotoc_md89":[3,12,4],
+"_terra_system.html#autotoc_md90":[3,12,5],
+"_terra_system.html#autotoc_md91":[3,12,6],
 "_tuning_memory_resources.html":[3,13],
 "_tuning_memory_resources.html#DynamicVsDefaultBuffers":[3,13,1],
 "_tuning_memory_resources.html#GroupingTexturesByType":[3,13,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX13 =
 "class_ogre_1_1_archive.html#a3229d2fd6c8d3236f68f7a3f1baedeec":[5,2,10,0,10],
 "class_ogre_1_1_archive.html#a331471a22b46882d08cd1db7bfc28611":[5,2,10,0,9],
 "class_ogre_1_1_archive.html#a370fba29d752fa317e992aec6625d5ed":[5,2,10,0,1],
-"class_ogre_1_1_archive.html#a4dfb3997d1a088f414d2146218c56d74":[5,2,10,0,6],
-"class_ogre_1_1_archive.html#a5c1747f4ab92962a5528a263c714dc31":[5,2,10,0,12]
+"class_ogre_1_1_archive.html#a4dfb3997d1a088f414d2146218c56d74":[5,2,10,0,6]
 };
