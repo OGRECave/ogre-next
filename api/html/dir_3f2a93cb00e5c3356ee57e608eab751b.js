@@ -26,7 +26,7 @@ var dir_3f2a93cb00e5c3356ee57e608eab751b =
     [ "OgreLodWorkQueueRequest.h", "_ogre_lod_work_queue_request_8h.html", "_ogre_lod_work_queue_request_8h" ],
     [ "OgreLodWorkQueueWorker.h", "_ogre_lod_work_queue_worker_8h.html", "_ogre_lod_work_queue_worker_8h" ],
     [ "OgreMeshLodGenerator.h", "_ogre_mesh_lod_generator_8h.html", "_ogre_mesh_lod_generator_8h" ],
-    [ "Components/MeshLodGenerator/include/OgreSmallVector.h", "_components_2_mesh_lod_generator_2include_2_ogre_small_vector_8h.html", "_components_2_mesh_lod_generator_2include_2_ogre_small_vector_8h" ],
+    [ "OgreSmallVector.h", "_components_2_mesh_lod_generator_2include_2_ogre_small_vector_8h.html", "_components_2_mesh_lod_generator_2include_2_ogre_small_vector_8h" ],
     [ "OgreVectorSet.h", "_ogre_vector_set_8h.html", "_ogre_vector_set_8h" ],
     [ "OgreVectorSetImpl.h", "_ogre_vector_set_impl_8h.html", null ]
 ];

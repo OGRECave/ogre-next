@@ -1,6 +1,9 @@
 <map id="Ogre::NULLAsyncTextureTicket" name="Ogre::NULLAsyncTextureTicket">
-<area shape="rect" id="node1" title="See AsyncTextureTicket." alt="" coords="17,152,224,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="35,79,206,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,87,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="111,5,282,31"/>
+<area shape="rect" id="Node000001" title="See AsyncTextureTicket." alt="" coords="17,153,223,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous." alt="" coords="35,79,205,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,120,123,152,118,152,118,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,86,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="71,40,110,77,106,81,67,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="110,5,280,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="173,44,134,81,131,77,169,40"/>
 </map>

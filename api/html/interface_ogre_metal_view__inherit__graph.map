@@ -1,5 +1,7 @@
 <map id="OgreMetalView" name="OgreMetalView">
-<area shape="rect" id="node1" title=" " alt="" coords="28,79,139,104"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,71,31"/>
-<area shape="rect" id="node3" title=" " alt="" coords="95,5,165,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="28,79,138,105"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,70,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="55,42,77,77,73,80,51,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="94,5,163,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="115,45,93,80,88,77,110,42"/>
 </map>

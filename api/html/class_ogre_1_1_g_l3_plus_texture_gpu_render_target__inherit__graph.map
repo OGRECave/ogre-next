@@ -1,10 +1,17 @@
 <map id="Ogre::GL3PlusTextureGpuRenderTarget" name="Ogre::GL3PlusTextureGpuRenderTarget">
-<area shape="rect" id="node1" title=" " alt="" coords="137,299,351,339"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html" title=" " alt="" coords="5,387,235,427"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_g_l3_plus_texture_gpu_window.html" title=" " alt="" coords="259,394,479,419"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l3_plus_texture_gpu.html" title=" " alt="" coords="157,225,331,251"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="183,152,305,177"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="62,79,245,104"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="269,79,403,104"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="283,5,389,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="136,300,351,341"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html" title=" " alt="" coords="5,389,234,429"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="204,352,149,390,146,386,201,348"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_g_l3_plus_texture_gpu_window.html" title=" " alt="" coords="258,396,477,422"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="286,348,352,393,349,398,283,352"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_texture_gpu.html" title=" " alt="" coords="157,226,330,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,267,246,300,241,300,241,267"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="182,153,305,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="246,194,246,226,241,226,241,194"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="62,79,244,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="182,112,230,150,227,154,178,117"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="267,79,401,105"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="309,117,260,154,257,150,305,112"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="282,5,387,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="337,46,337,79,332,79,332,46"/>
 </map>

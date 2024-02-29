@@ -1,5 +1,7 @@
 <map id="Ogre::Grid3DPageStrategy" name="Ogre::Grid3DPageStrategy">
-<area shape="rect" id="node1" title="Page strategy which loads new pages based on a regular 3D grid." alt="" coords="5,152,180,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_page_strategy.html" title="Defines the interface to a strategy class which is responsible for deciding when Page instances are r..." alt="" coords="25,79,160,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,133,31"/>
+<area shape="rect" id="Node000001" title="Page strategy which loads new pages based on a regular 3D grid." alt="" coords="5,153,179,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_page_strategy.html" title="Defines the interface to a strategy class which is responsible for deciding when Page instances are r..." alt="" coords="25,79,159,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,120,95,152,89,152,89,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,132,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,46,95,79,89,79,89,46"/>
 </map>

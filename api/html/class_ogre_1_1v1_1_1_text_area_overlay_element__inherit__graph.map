@@ -1,7 +1,11 @@
 <map id="Ogre::v1::TextAreaOverlayElement" name="Ogre::v1::TextAreaOverlayElement">
-<area shape="rect" id="node1" title="This class implements an overlay element which contains simple unformatted text." alt="" coords="146,152,318,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_overlay_element.html" title="Abstract definition of a 2D element to be displayed in an Overlay." alt="" coords="149,79,315,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,147,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="171,5,293,31"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="317,5,411,31"/>
+<area shape="rect" id="Node000001" title="This class implements an overlay element which contains simple unformatted text." alt="" coords="145,153,316,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_overlay_element.html" title="Abstract definition of a 2D element to be displayed in an Overlay." alt="" coords="147,79,313,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,120,233,152,228,152,228,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,146,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,35,205,76,203,81,114,40"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="170,5,290,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="233,46,233,79,228,79,228,46"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="315,5,409,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="328,41,254,81,251,76,326,36"/>
 </map>

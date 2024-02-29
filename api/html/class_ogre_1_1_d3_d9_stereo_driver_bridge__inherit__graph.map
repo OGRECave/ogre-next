@@ -1,5 +1,7 @@
 <map id="Ogre::D3D9StereoDriverBridge" name="Ogre::D3D9StereoDriverBridge">
-<area shape="rect" id="node1" title="Bridge interface from the render system to the stereo driver." alt="" coords="93,93,290,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,196,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="221,13,343,38"/>
+<area shape="rect" id="Node000001" title="Bridge interface from the render system to the stereo driver." alt="" coords="92,94,288,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,196,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,54,178,91,174,95,132,58"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="219,13,342,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,51,205,95,202,91,254,47"/>
 </map>

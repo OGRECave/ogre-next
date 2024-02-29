@@ -1,7 +1,15 @@
 <map id="Ogre::SmallVector&lt; T, 0 &gt;" name="Ogre::SmallVector&lt; T, 0 &gt;">
-<area shape="rect" id="node1" title="Specialize SmallVector at N=0." alt="" coords="29,343,164,383"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="5,269,188,295"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="6,167,187,221"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="6,79,187,119"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="18,5,175,31"/>
+<area shape="rect" id="Node000001" title="Specialize SmallVector at N=0." alt="" coords="29,345,163,386"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="5,271,187,297"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,312,91,345,85,345,85,313"/>
+<area shape="poly" id="edge8_Node000001_Node000002" title=" " alt="" coords="107,313,107,345,101,345,102,312"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="6,168,186,223"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,238,92,271,87,271,84,239"/>
+<area shape="poly" id="edge7_Node000002_Node000003" title=" " alt="" coords="108,239,105,271,100,271,102,238"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="6,79,186,120"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="90,135,90,167,85,167,85,135"/>
+<area shape="poly" id="edge6_Node000003_Node000004" title=" " alt="" coords="107,135,107,167,102,167,102,135"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_small_vector_base.html" title="SmallVectorBase &#45; This is all the non&#45;templated stuff common to all SmallVectors." alt="" coords="18,5,174,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="90,46,91,79,85,79,85,47"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="107,47,107,79,101,79,102,46"/>
 </map>

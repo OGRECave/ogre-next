@@ -1,5 +1,7 @@
 <map id="Ogre::ResourceGroupManager" name="Ogre::ResourceGroupManager">
-<area shape="rect" id="node1" title="This singleton class manages the list of resource groups, and notifying the various resource managers..." alt="" coords="78,93,274,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,181,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="205,13,312,38"/>
+<area shape="rect" id="Node000001" title="This singleton class manages the list of resource groups, and notifying the various resource managers..." alt="" coords="77,94,272,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,181,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,55,164,91,160,95,122,59"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="204,13,310,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,51,189,95,185,92,232,47"/>
 </map>

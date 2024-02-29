@@ -1,5 +1,7 @@
 <map id="Ogre::FloatGpuParameterControllerValue" name="Ogre::FloatGpuParameterControllerValue">
-<area shape="rect" id="node1" title="Predefined controller value for setting a single floating&#45; point value in a constant parameter of a v..." alt="" coords="5,167,229,207"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="45,79,189,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="64,5,171,31"/>
+<area shape="rect" id="Node000001" title="Predefined controller value for setting a single floating&#45; point value in a constant parameter of a v..." alt="" coords="5,168,229,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_value.html" title=" " alt="" coords="45,79,189,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,135,120,167,114,167,114,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="64,5,170,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,46,120,79,114,79,114,46"/>
 </map>

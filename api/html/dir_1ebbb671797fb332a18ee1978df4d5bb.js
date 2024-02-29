@@ -10,5 +10,5 @@ var dir_1ebbb671797fb332a18ee1978df4d5bb =
     [ "OgreGL3PlusTexBufferPacked.h", "_ogre_g_l3_plus_tex_buffer_packed_8h.html", "_ogre_g_l3_plus_tex_buffer_packed_8h" ],
     [ "OgreGL3PlusUavBufferPacked.h", "_ogre_g_l3_plus_uav_buffer_packed_8h.html", "_ogre_g_l3_plus_uav_buffer_packed_8h" ],
     [ "OgreGL3PlusVaoManager.h", "_ogre_g_l3_plus_vao_manager_8h.html", "_ogre_g_l3_plus_vao_manager_8h" ],
-    [ "Vao/OgreGL3PlusVertexArrayObject.h", "_vao_2_ogre_g_l3_plus_vertex_array_object_8h.html", "_vao_2_ogre_g_l3_plus_vertex_array_object_8h" ]
+    [ "OgreGL3PlusVertexArrayObject.h", "_vao_2_ogre_g_l3_plus_vertex_array_object_8h.html", "_vao_2_ogre_g_l3_plus_vertex_array_object_8h" ]
 ];

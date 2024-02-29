@@ -1,5 +1,7 @@
 <map id="Ogre::HlmsLowLevel" name="Ogre::HlmsLowLevel">
-<area shape="rect" id="node1" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="5,152,149,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="34,79,121,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="36,5,119,31"/>
+<area shape="rect" id="Node000001" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="5,153,149,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="34,79,120,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,120,80,152,74,152,74,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="36,5,118,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="80,46,80,79,74,79,74,46"/>
 </map>

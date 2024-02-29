@@ -1,10 +1,17 @@
 <map id="Ogre::LodStrategy" name="Ogre::LodStrategy">
-<area shape="rect" id="node1" title="Strategy for determining level of detail." alt="" coords="127,84,253,109"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_distance_lod_strategy_base.html" title="Level of detail strategy based on distance from camera." alt="" coords="307,55,514,80"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="301,112,520,137"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,84,79,109"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_distance_lod_box_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding box." alt="" coords="578,5,777,31"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_distance_lod_sphere_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="568,55,787,80"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_absolute_pixel_count_lod_strategy.html" title="The AbsolutePixelCountLodStrategy class LOD strategy that works like ScreenRatioPixelCountLodStrategy..." alt="" coords="593,105,762,145"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_screen_ratio_pixel_count_lod_strategy.html" title="The ScreenRatioPixelCountLodStrategy class Implement a strategy which calculates LOD ratios based on ..." alt="" coords="583,169,772,209"/>
+<area shape="rect" id="Node000001" title="Strategy for determining level of detail." alt="" coords="126,84,251,110"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_distance_lod_strategy_base.html" title="Level of detail strategy based on distance from camera." alt="" coords="305,55,511,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="266,84,307,78,307,84,267,89"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="299,112,516,138"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="266,104,302,109,302,114,266,109"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,84,78,110"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,94,125,94,125,100,93,100"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_distance_lod_box_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding box." alt="" coords="574,5,772,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="495,49,599,29,600,34,496,54"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_distance_lod_sphere_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="564,55,782,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="526,65,564,65,564,70,526,70"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_absolute_pixel_count_lod_strategy.html" title="The AbsolutePixelCountLodStrategy class LOD strategy that works like ScreenRatioPixelCountLodStrategy..." alt="" coords="589,105,757,145"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="532,122,588,122,588,128,532,128"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_screen_ratio_pixel_count_lod_strategy.html" title="The ScreenRatioPixelCountLodStrategy class Implement a strategy which calculates LOD ratios based on ..." alt="" coords="579,170,767,211"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="478,139,588,167,587,172,477,145"/>
 </map>

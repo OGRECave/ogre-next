@@ -1,7 +1,11 @@
 <map id="Ogre::SharedPtrInfo" name="Ogre::SharedPtrInfo">
-<area shape="rect" id="node1" title=" " alt="" coords="5,92,141,117"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_shared_ptr_info_delete.html" title=" " alt="" coords="189,5,392,31"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_shared_ptr_info_delete_t.html" title=" " alt="" coords="204,55,377,95"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_shared_ptr_info_free.html" title=" " alt="" coords="195,120,387,145"/>
-<area shape="rect" id="node5" href="$struct_ogre_1_1_shared_ptr_info_none.html" title=" " alt="" coords="207,169,374,195"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,92,141,118"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_shared_ptr_info_delete.html" title=" " alt="" coords="189,5,391,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,81,145,60,188,41,225,29,227,34,190,46,147,65,110,86"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_shared_ptr_info_delete_t.html" title=" " alt="" coords="204,55,376,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="156,91,203,85,203,90,156,96"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_shared_ptr_info_free.html" title=" " alt="" coords="194,120,386,146"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="156,113,194,118,193,123,155,118"/>
+<area shape="rect" id="Node000005" href="$struct_ogre_1_1_shared_ptr_info_none.html" title=" " alt="" coords="207,169,373,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="114,123,190,156,225,166,223,171,188,161,111,127"/>
 </map>

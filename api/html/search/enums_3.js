@@ -1,7 +1,7 @@
 var searchData=
 [
   ['d3d9resourcecreationpolicy_0',['D3D9ResourceCreationPolicy',['../namespace_ogre.html#ae1989b3ea4f950a490576b517adfa511',1,'Ogre']]],
-  ['debugvisualizationmode_1',['DebugVisualizationMode',['../class_ogre_1_1_irradiance_field.html#a41156332f76f4565fea6bdf70b204a0e',1,'Ogre::IrradianceField::DebugVisualizationMode()'],['../class_ogre_1_1_vct_voxelizer.html#a6f53ab149daf60f02bdc7541c12f51dc',1,'Ogre::VctVoxelizer::DebugVisualizationMode()']]],
+  ['debugvisualizationmode_1',['debugvisualizationmode',['../class_ogre_1_1_irradiance_field.html#a41156332f76f4565fea6bdf70b204a0e',1,'Ogre::IrradianceField::DebugVisualizationMode'],['../class_ogre_1_1_vct_voxelizer.html#a6f53ab149daf60f02bdc7541c12f51dc',1,'Ogre::VctVoxelizer::DebugVisualizationMode']]],
   ['defaultmipmapgen_2',['DefaultMipmapGen',['../namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb',1,'Ogre::DefaultMipmapGen']]],
   ['deformfunc_3',['DeformFunc',['../_ogre_quake3_types_8h.html#a48a11311dd79091d26fbf9aa6ae7efde',1,'OgreQuake3Types.h']]],
   ['dirtyflags_4',['DirtyFlags',['../class_ogre_1_1_const_buffer_pool.html#a4dc8f3f46667d44648238e9c396fd9a7',1,'Ogre::ConstBufferPool']]],

@@ -1,5 +1,7 @@
 <map id="Ogre::GL3PlusVertexArrayObject" name="Ogre::GL3PlusVertexArrayObject">
-<area shape="rect" id="node1" title=" " alt="" coords="5,152,180,192"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="12,79,173,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="15,5,171,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,179,193"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i..." alt="" coords="12,79,172,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,120,95,152,89,152,89,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="14,5,170,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,46,95,79,89,79,89,46"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Ogre::CompositorShadowNodeDef" name="Ogre::CompositorShadowNodeDef">
-<area shape="rect" id="node1" title="Shadow Nodes are special nodes (not to be confused with." alt="" coords="5,225,225,251"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_node_def.html" title="Compositor nodes are the core subject of compositing." alt="" coords="29,152,202,177"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_texture_definition_base.html" title="Centralized class for dealing with declarations of textures in Node &amp; Workspace definitions." alt="" coords="24,79,207,104"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="46,5,185,31"/>
+<area shape="rect" id="Node000001" title="Shadow Nodes are special nodes (not to be confused with." alt="" coords="5,226,225,252"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_compositor_node_def.html" title="Compositor nodes are the core subject of compositing." alt="" coords="29,153,201,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,194,118,226,112,226,112,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_definition_base.html" title="Centralized class for dealing with declarations of textures in Node &amp; Workspace definitions." alt="" coords="24,79,206,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,120,118,152,112,152,112,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="46,5,184,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="118,46,118,79,112,79,112,46"/>
 </map>

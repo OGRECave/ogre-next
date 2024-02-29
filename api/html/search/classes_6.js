@@ -93,7 +93,7 @@ var searchData=
   ['framebufferdesckey_90',['FrameBufferDescKey',['../struct_ogre_1_1_frame_buffer_desc_key.html',1,'Ogre']]],
   ['frameevent_91',['FrameEvent',['../struct_ogre_1_1_frame_event.html',1,'Ogre']]],
   ['framelistener_92',['FrameListener',['../class_ogre_1_1_frame_listener.html',1,'Ogre']]],
-  ['framestats_93',['FrameStats',['../class_ogre_1_1_frame_stats.html',1,'Ogre::FrameStats'],['../struct_ogre_1_1_render_target_1_1_frame_stats.html',1,'Ogre::RenderTarget::FrameStats']]],
+  ['framestats_93',['framestats',['../class_ogre_1_1_frame_stats.html',1,'Ogre::FrameStats'],['../struct_ogre_1_1_render_target_1_1_frame_stats.html',1,'Ogre::RenderTarget::FrameStats']]],
   ['frametimecontrollervalue_94',['FrameTimeControllerValue',['../class_ogre_1_1_frame_time_controller_value.html',1,'Ogre']]],
   ['freeimagecodec_95',['FreeImageCodec',['../class_ogre_1_1_free_image_codec.html',1,'Ogre']]],
   ['freeimagecodec2_96',['FreeImageCodec2',['../class_ogre_1_1_free_image_codec2.html',1,'Ogre']]],

@@ -1,5 +1,7 @@
 <map id="Ogre::VctLighting" name="Ogre::VctLighting">
-<area shape="rect" id="node1" title=" " alt="" coords="78,79,201,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="5,5,111,31"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="135,5,306,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="77,79,198,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="5,5,110,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,39,126,77,122,81,81,43"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="134,5,304,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,43,153,81,149,77,192,39"/>
 </map>

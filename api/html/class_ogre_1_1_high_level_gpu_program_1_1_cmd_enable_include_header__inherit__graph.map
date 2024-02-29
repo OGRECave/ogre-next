@@ -1,4 +1,5 @@
 <map id="Ogre::HighLevelGpuProgram::CmdEnableIncludeHeader" name="Ogre::HighLevelGpuProgram::CmdEnableIncludeHeader">
-<area shape="rect" id="node1" title="Command object for enabling include in shaders." alt="" coords="5,79,193,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="23,5,176,31"/>
+<area shape="rect" id="Node000001" title="Command object for enabling include in shaders." alt="" coords="5,79,193,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="23,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,46,102,79,96,79,96,46"/>
 </map>

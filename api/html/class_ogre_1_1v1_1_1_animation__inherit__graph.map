@@ -1,4 +1,5 @@
 <map id="Ogre::v1::Animation" name="Ogre::v1::Animation">
-<area shape="rect" id="node1" title="An animation sequence." alt="" coords="5,79,140,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="18,5,127,31"/>
+<area shape="rect" id="Node000001" title="An animation sequence." alt="" coords="5,79,139,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="18,5,126,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,46,75,79,69,79,69,46"/>
 </map>

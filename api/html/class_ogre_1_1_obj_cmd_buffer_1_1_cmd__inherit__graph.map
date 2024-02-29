@@ -1,8 +1,13 @@
 <map id="Ogre::ObjCmdBuffer::Cmd" name="Ogre::ObjCmdBuffer::Cmd">
-<area shape="rect" id="node1" title=" " alt="" coords="5,141,176,166"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_obj_cmd_buffer_1_1_exception_thrown.html" title=" " alt="" coords="237,5,375,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_obj_cmd_buffer_1_1_notify_data_is_ready.html" title=" " alt="" coords="237,69,375,109"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_obj_cmd_buffer_1_1_out_of_date_cache.html" title=" " alt="" coords="237,133,375,173"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_obj_cmd_buffer_1_1_transition_to_loaded.html" title=" " alt="" coords="235,197,377,237"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_obj_cmd_buffer_1_1_upload_from_staging_tex.html" title=" " alt="" coords="224,261,388,301"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,144,175,169"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_obj_cmd_buffer_1_1_exception_thrown.html" title=" " alt="" coords="236,5,373,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,131,164,94,221,57,247,44,249,49,224,61,167,99,120,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_obj_cmd_buffer_1_1_notify_data_is_ready.html" title=" " alt="" coords="236,71,373,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,136,235,109,236,114,150,141"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_obj_cmd_buffer_1_1_out_of_date_cache.html" title=" " alt="" coords="236,136,373,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="190,154,236,154,236,159,190,159"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_obj_cmd_buffer_1_1_transition_to_loaded.html" title=" " alt="" coords="233,201,376,242"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="150,172,236,198,234,203,148,177"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_obj_cmd_buffer_1_1_upload_from_staging_tex.html" title=" " alt="" coords="223,267,386,307"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="120,177,167,214,224,251,249,264,247,269,221,256,164,218,117,182"/>
 </map>

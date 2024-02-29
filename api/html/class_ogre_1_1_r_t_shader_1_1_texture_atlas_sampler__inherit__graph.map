@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::TextureAtlasSampler" name="Ogre::RTShader::TextureAtlasSampler">
-<area shape="rect" id="node1" title="Implements texture atlas sampling." alt="" coords="5,167,199,207"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state.html" title="This class is the base interface of sub part from a shader based rendering pipeline." alt="" coords="10,79,194,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="25,5,179,31"/>
+<area shape="rect" id="Node000001" title="Implements texture atlas sampling." alt="" coords="5,168,198,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state.html" title="This class is the base interface of sub part from a shader based rendering pipeline." alt="" coords="10,79,193,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,135,104,167,99,167,99,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="25,5,178,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,46,104,79,99,79,99,46"/>
 </map>

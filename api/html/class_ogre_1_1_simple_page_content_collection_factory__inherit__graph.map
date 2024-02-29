@@ -1,5 +1,7 @@
 <map id="Ogre::SimplePageContentCollectionFactory" name="Ogre::SimplePageContentCollectionFactory">
-<area shape="rect" id="node1" title="Factory class for SimplePageContentCollection." alt="" coords="5,167,233,207"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_page_content_collection_factory.html" title="Define the interface to a factory class that will create subclasses of PageContentCollection." alt="" coords="25,79,213,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="79,5,160,31"/>
+<area shape="rect" id="Node000001" title="Factory class for SimplePageContentCollection." alt="" coords="5,168,233,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_page_content_collection_factory.html" title="Define the interface to a factory class that will create subclasses of PageContentCollection." alt="" coords="25,79,213,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,135,122,167,116,167,116,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="79,5,159,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,46,122,79,116,79,116,46"/>
 </map>

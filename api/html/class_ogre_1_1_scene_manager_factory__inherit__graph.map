@@ -1,8 +1,13 @@
 <map id="Ogre::SceneManagerFactory" name="Ogre::SceneManagerFactory">
-<area shape="rect" id="node1" title="Class which will create instances of a given SceneManager." alt="" coords="164,95,351,120"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_bsp_scene_manager_factory.html" title="Factory for BspSceneManager." alt="" coords="400,5,609,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_default_scene_manager_factory.html" title="Factory for default scene manager." alt="" coords="413,55,597,95"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_octree_scene_manager_factory.html" title="Factory for OctreeSceneManager." alt="" coords="413,119,596,159"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_p_c_z_scene_manager_factory.html" title="Factory for PCZSceneManager." alt="" coords="399,184,611,209"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,95,116,120"/>
+<area shape="rect" id="Node000001" title="Class which will create instances of a given SceneManager." alt="" coords="163,96,348,122"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_bsp_scene_manager_factory.html" title="Factory for BspSceneManager." alt="" coords="398,5,606,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="293,86,341,63,395,41,436,29,437,34,397,46,343,68,296,91"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_default_scene_manager_factory.html" title="Factory for default scene manager." alt="" coords="410,55,593,96"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="363,92,409,85,410,91,364,97"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_octree_scene_manager_factory.html" title="Factory for OctreeSceneManager." alt="" coords="411,121,592,161"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="364,120,411,126,410,132,363,125"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_p_c_z_scene_manager_factory.html" title="Factory for PCZSceneManager." alt="" coords="396,185,607,211"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="296,127,344,149,397,170,437,182,436,187,395,175,342,154,294,131"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,96,115,122"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,106,162,106,162,112,130,112"/>
 </map>

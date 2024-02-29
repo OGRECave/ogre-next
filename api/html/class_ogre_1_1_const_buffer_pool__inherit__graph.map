@@ -1,5 +1,7 @@
 <map id="Ogre::ConstBufferPool" name="Ogre::ConstBufferPool">
-<area shape="rect" id="node1" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="53,5,204,31"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="5,79,116,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="141,79,255,104"/>
+<area shape="rect" id="Node000001" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="53,5,203,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="5,79,115,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,44,73,80,70,77,104,40"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="139,79,253,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,40,186,77,183,80,148,44"/>
 </map>

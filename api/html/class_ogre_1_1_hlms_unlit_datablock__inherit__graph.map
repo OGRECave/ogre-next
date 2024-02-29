@@ -1,4 +1,5 @@
 <map id="Ogre::HlmsUnlitDatablock" name="Ogre::HlmsUnlitDatablock">
-<area shape="rect" id="node1" title="Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ &amp; D3D11+." alt="" coords="25,79,197,104"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,216,31"/>
+<area shape="rect" id="Node000001" title="Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ &amp; D3D11+." alt="" coords="25,79,196,105"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,216,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,46,113,79,108,79,108,46"/>
 </map>

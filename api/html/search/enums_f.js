@@ -20,7 +20,7 @@ var searchData=
   ['skeletonversion_17',['SkeletonVersion',['../namespace_ogre_1_1v1.html#a64f38234a267554c4c68b1c0206782f4',1,'Ogre::v1']]],
   ['skinningtype_18',['SkinningType',['../namespace_ogre_1_1_r_t_shader.html#a8c100ce939d23573f062f3ad579998a1',1,'Ogre::RTShader']]],
   ['skymethod_19',['SkyMethod',['../class_ogre_1_1_scene_manager.html#a6a925e073eee8e57dafc08083bc10238',1,'Ogre::SceneManager']]],
-  ['slottype_20',['SlotType',['../struct_ogre_1_1_descriptor_set_texture2.html#a4d69463988b7b5b64414c43a3aead6a4',1,'Ogre::DescriptorSetTexture2::SlotType()'],['../struct_ogre_1_1_descriptor_set_uav.html#adbb8074b5116277a91930840b9fa653a',1,'Ogre::DescriptorSetUav::SlotType()']]],
+  ['slottype_20',['slottype',['../struct_ogre_1_1_descriptor_set_texture2.html#a4d69463988b7b5b64414c43a3aead6a4',1,'Ogre::DescriptorSetTexture2::SlotType'],['../struct_ogre_1_1_descriptor_set_uav.html#adbb8074b5116277a91930840b9fa653a',1,'Ogre::DescriptorSetUav::SlotType']]],
   ['sortmode_21',['SortMode',['../group___general.html#ga73dc0089e326fa37f93a30bf67ba7e3a',1,'Ogre']]],
   ['sourcemodifier_22',['SourceModifier',['../class_ogre_1_1_r_t_shader_1_1_layered_blending.html#a29ca2d389adaaf32edffe5f83701fb50',1,'Ogre::RTShader::LayeredBlending']]],
   ['space_23',['Space',['../class_ogre_1_1_terrain.html#aebf8a7aadb5de3a0669d41acfd58d781',1,'Ogre::Terrain']]],

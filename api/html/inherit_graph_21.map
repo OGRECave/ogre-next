@@ -1,4 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,13,168,38"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d9_hardware_buffer_manager.html" title="D3D9HardwareBufferManagerBase as a Singleton." alt="" coords="216,5,395,45"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,13,167,39"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_d3_d9_hardware_buffer_manager.html" title="D3D9HardwareBufferManagerBase as a Singleton." alt="" coords="215,5,392,46"/>
+<area shape="poly" id="edge4_Node000000_Node000001" title=" " alt="" coords="182,23,214,23,214,28,182,28"/>
 </map>

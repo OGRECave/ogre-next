@@ -8,5 +8,5 @@ var dir_d57448fb955b539397a0a1e04ed52bdf =
     [ "OgreSkeletonInstance.h", "_ogre_skeleton_instance_8h.html", "_ogre_skeleton_instance_8h" ],
     [ "OgreSkeletonManager.h", "_ogre_skeleton_manager_8h.html", null ],
     [ "OgreSkeletonTrack.h", "_ogre_skeleton_track_8h.html", "_ogre_skeleton_track_8h" ],
-    [ "Animation/OgreTagPoint.h", "_animation_2_ogre_tag_point_8h.html", null ]
+    [ "OgreTagPoint.h", "_animation_2_ogre_tag_point_8h.html", null ]
 ];

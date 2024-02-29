@@ -1,5 +1,7 @@
 <map id="Ogre::Root" name="Ogre::Root">
-<area shape="rect" id="node1" title="The root class of the Ogre system." alt="" coords="114,79,197,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,164,31"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="188,5,267,31"/>
+<area shape="rect" id="Node000001" title="The root class of the Ogre system." alt="" coords="114,79,196,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,164,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,40,145,77,141,80,105,44"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="187,5,265,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,44,169,80,165,77,202,40"/>
 </map>

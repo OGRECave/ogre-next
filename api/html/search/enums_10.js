@@ -21,6 +21,6 @@ var searchData=
   ['textureusage_18',['TextureUsage',['../group___resources.html#gaf140ec886884a864abc74a7556f8bf67',1,'Ogre']]],
   ['threadgroupsbasedon_19',['ThreadGroupsBasedOn',['../class_ogre_1_1_hlms_compute_job.html#a297b925576b81843bd963d67ec561fbd',1,'Ogre::HlmsComputeJob']]],
   ['trackvertexcolourenum_20',['TrackVertexColourEnum',['../group___general.html#ga5d04131dcb51ec3cf219465196b6de85',1,'Ogre']]],
-  ['transformspace_21',['TransformSpace',['../class_ogre_1_1v1_1_1_old_node.html#a0244945288b15d4b8fa79cedf162c84c',1,'Ogre::v1::OldNode::TransformSpace()'],['../class_ogre_1_1_node.html#ac42e2063379286eb673eaffff6ca5e99',1,'Ogre::Node::TransformSpace()']]],
+  ['transformspace_21',['transformspace',['../class_ogre_1_1v1_1_1_old_node.html#a0244945288b15d4b8fa79cedf162c84c',1,'Ogre::v1::OldNode::TransformSpace'],['../class_ogre_1_1_node.html#ac42e2063379286eb673eaffff6ca5e99',1,'Ogre::Node::TransformSpace']]],
   ['transparencymodes_22',['TransparencyModes',['../class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382ceb',1,'Ogre::HlmsPbsDatablock']]]
 ];

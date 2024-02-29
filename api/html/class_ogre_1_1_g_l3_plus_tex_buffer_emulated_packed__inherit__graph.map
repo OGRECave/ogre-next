@@ -1,7 +1,11 @@
 <map id="Ogre::GL3PlusTexBufferEmulatedPacked" name="Ogre::GL3PlusTexBufferEmulatedPacked">
-<area shape="rect" id="node1" title=" " alt="" coords="78,225,294,265"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_tex_buffer_packed.html" title="Represents Texture buffers (also known as tbuffers in D3D11)" alt="" coords="109,152,263,177"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="119,79,253,104"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,188,31"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="212,5,341,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="78,226,293,267"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_tex_buffer_packed.html" title="Represents Texture buffers (also known as tbuffers in D3D11)" alt="" coords="108,153,263,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,194,188,226,183,226,183,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="119,79,252,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="188,120,188,152,183,152,183,120"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,187,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="124,39,172,77,169,81,121,43"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="211,5,339,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="250,43,202,81,199,77,246,39"/>
 </map>

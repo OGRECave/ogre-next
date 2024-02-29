@@ -1,4 +1,5 @@
 <map id="Ogre::Profile" name="Ogre::Profile">
-<area shape="rect" id="node1" title="An individual profile that will be processed by the Profiler." alt="" coords="5,79,97,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="6,5,97,31"/>
+<area shape="rect" id="Node000001" title="An individual profile that will be processed by the Profiler." alt="" coords="5,79,97,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="6,5,96,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,46,54,79,48,79,48,46"/>
 </map>

@@ -1,10 +1,17 @@
 <map id="Ogre::DefaultIntersectionSceneQuery" name="Ogre::DefaultIntersectionSceneQuery">
-<area shape="rect" id="node1" title="Default implementation of IntersectionSceneQuery." alt="" coords="649,69,815,109"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_bsp_intersection_scene_query.html" title="BSP specialisation of IntersectionSceneQuery." alt="" coords="864,5,1048,45"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_octree_intersection_scene_query.html" title="Octree implementation of IntersectionSceneQuery." alt="" coords="875,69,1037,109"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_p_c_z_intersection_scene_query.html" title="PCZ implementation of IntersectionSceneQuery." alt="" coords="863,133,1049,173"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_intersection_scene_query.html" title="Separate SceneQuery class to query for pairs of objects which are possibly intersecting one another." alt="" coords="407,77,601,102"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="198,47,325,73"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,47,116,73"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_intersection_scene_query_listener.html" title="Alternative listener class for dealing with IntersectionSceneQuery." alt="" coords="164,97,359,137"/>
+<area shape="rect" id="Node000001" title="Default implementation of IntersectionSceneQuery." alt="" coords="647,71,812,111"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_bsp_intersection_scene_query.html" title="BSP specialisation of IntersectionSceneQuery." alt="" coords="861,5,1045,46"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="815,63,880,44,881,49,817,68"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_octree_intersection_scene_query.html" title="Octree implementation of IntersectionSceneQuery." alt="" coords="872,71,1034,111"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="827,88,871,88,871,94,827,94"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_p_c_z_intersection_scene_query.html" title="PCZ implementation of IntersectionSceneQuery." alt="" coords="860,136,1046,177"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="817,114,881,133,880,138,815,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_intersection_scene_query.html" title="Separate SceneQuery class to query for pairs of objects which are possibly intersecting one another." alt="" coords="405,78,599,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="615,88,647,88,647,94,615,94"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="197,49,323,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,68,405,77,404,82,338,74"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,49,115,75"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="130,59,196,59,196,64,130,64"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_intersection_scene_query_listener.html" title="Alternative listener class for dealing with IntersectionSceneQuery." alt="" coords="163,99,357,139"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="372,103,404,100,405,105,373,109"/>
 </map>

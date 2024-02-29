@@ -1,5 +1,7 @@
 <map id="Ogre::CompositorPassTranslator" name="Ogre::CompositorPassTranslator">
-<area shape="rect" id="node1" title=" " alt="" coords="5,152,216,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="37,79,185,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,5,182,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,215,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="36,79,184,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,120,113,152,107,152,107,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,5,181,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,46,113,79,107,79,107,46"/>
 </map>

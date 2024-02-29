@@ -1,5 +1,7 @@
 <map id="Ogre::CompositorShadowMapTargetTranslator" name="Ogre::CompositorShadowMapTargetTranslator">
-<area shape="rect" id="node1" title=" " alt="" coords="5,152,200,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="29,79,177,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="31,5,174,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,199,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="28,79,176,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,120,105,152,99,152,99,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="31,5,173,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,46,105,79,99,79,99,46"/>
 </map>

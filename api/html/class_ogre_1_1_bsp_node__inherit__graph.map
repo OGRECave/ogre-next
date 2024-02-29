@@ -1,4 +1,5 @@
 <map id="Ogre::BspNode" name="Ogre::BspNode">
-<area shape="rect" id="node1" title="Encapsulates a node in a BSP tree." alt="" coords="5,79,116,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="19,5,102,31"/>
+<area shape="rect" id="Node000001" title="Encapsulates a node in a BSP tree." alt="" coords="5,79,115,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="19,5,101,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,46,63,79,57,79,57,46"/>
 </map>

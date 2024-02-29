@@ -1,12 +1,22 @@
 <map id="Ogre::EGLWindow" name="Ogre::EGLWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="609,80,737,105"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="796,5,968,31"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="785,55,979,80"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="800,104,964,129"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="807,153,957,179"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_window.html" title=" " alt="" coords="439,55,541,80"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,55,154,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="236,104,371,129"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="419,104,561,129"/>
-<area shape="rect" id="node6" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,104,188,129"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="606,80,734,106"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="792,5,964,31"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="709,70,781,40,816,29,817,34,783,45,712,75"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="782,55,974,80"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="749,81,781,77,782,82,749,86"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="796,104,960,130"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="749,99,796,105,795,110,749,105"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="803,153,953,179"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="712,110,783,140,818,150,816,155,781,145,710,115"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_window.html" title=" " alt="" coords="437,55,538,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="553,74,607,81,606,87,553,79"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,55,153,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="168,65,436,65,436,70,168,70"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="235,104,368,130"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="168,82,245,101,244,106,167,87"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="416,104,558,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="574,103,606,99,606,104,574,108"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="383,114,416,114,416,120,383,120"/>
+<area shape="rect" id="Node000006" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,104,187,130"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="202,114,234,114,234,120,202,120"/>
 </map>

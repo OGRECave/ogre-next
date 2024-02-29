@@ -1,5 +1,7 @@
 <map id="Ogre::LogManager" name="Ogre::LogManager">
-<area shape="rect" id="node1" title="The log manager handles the creation and retrieval of logs for the application." alt="" coords="125,79,253,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,209,31"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="233,5,307,31"/>
+<area shape="rect" id="Node000001" title="The log manager handles the creation and retrieval of logs for the application." alt="" coords="123,79,251,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,209,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,39,175,77,172,81,130,43"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="232,5,305,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,43,202,81,199,77,241,39"/>
 </map>

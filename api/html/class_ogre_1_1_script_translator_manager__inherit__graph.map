@@ -1,5 +1,7 @@
 <map id="Ogre::ScriptTranslatorManager" name="Ogre::ScriptTranslatorManager">
-<area shape="rect" id="node1" title="The ScriptTranslatorManager manages the lifetime and access to script translators." alt="" coords="5,79,204,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_builtin_script_translator_manager.html" title="This class manages the builtin translators." alt="" coords="13,152,197,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="33,5,176,31"/>
+<area shape="rect" id="Node000001" title="The ScriptTranslatorManager manages the lifetime and access to script translators." alt="" coords="5,79,203,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_builtin_script_translator_manager.html" title="This class manages the builtin translators." alt="" coords="12,153,196,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="107,120,107,152,101,152,101,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="33,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,46,107,79,101,79,101,46"/>
 </map>

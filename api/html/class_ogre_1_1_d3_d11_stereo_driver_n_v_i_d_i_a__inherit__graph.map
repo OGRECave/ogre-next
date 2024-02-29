@@ -1,5 +1,7 @@
 <map id="Ogre::D3D11StereoDriverNVIDIA" name="Ogre::D3D11StereoDriverNVIDIA">
-<area shape="rect" id="node1" title="Interface of the NVIDIA stereo driver." alt="" coords="5,152,217,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_stereo_driver_impl.html" title="Virtual interface of the stereo driver." alt="" coords="15,79,207,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="58,5,165,31"/>
+<area shape="rect" id="Node000001" title="Interface of the NVIDIA stereo driver." alt="" coords="5,153,217,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d11_stereo_driver_impl.html" title="Virtual interface of the stereo driver." alt="" coords="15,79,207,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,120,114,152,108,152,108,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="58,5,164,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,46,114,79,108,79,108,46"/>
 </map>

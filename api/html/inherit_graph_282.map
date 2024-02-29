@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_hlms_json_1_1_named_blocks.html" title=" " alt="" coords="5,5,208,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_hlms_json_listener.html" title=" " alt="" coords="31,5,192,31"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_scene_format_listener.html" title="Override this listener if you want to filter which objects get exported." alt="" coords="266,31,446,56"/>
+<area shape="poly" id="edge1110_Node000000_Node000001" title=" " alt="" coords="208,25,265,31,265,37,207,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_default_scene_format_listener.html" title="Default implementation that prevents a SceneNode from being exported if the only attached objects." alt="" coords="494,23,668,64"/>
+<area shape="poly" id="edge1111_Node000001_Node000002" title=" " alt="" coords="461,41,493,41,493,46,461,46"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_texture_export_listener.html" title=" " alt="" coords="5,55,218,80"/>
+<area shape="poly" id="edge1112_Node000003_Node000001" title=" " alt="" coords="233,53,265,50,265,55,233,58"/>
 </map>

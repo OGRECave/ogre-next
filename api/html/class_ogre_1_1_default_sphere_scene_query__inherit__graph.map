@@ -1,10 +1,17 @@
 <map id="Ogre::DefaultSphereSceneQuery" name="Ogre::DefaultSphereSceneQuery">
-<area shape="rect" id="node1" title="Default implementation of SphereSceneQuery." alt="" coords="133,299,308,339"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_octree_sphere_scene_query.html" title="Octree implementation of SphereSceneQuery." alt="" coords="5,387,212,412"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_p_c_z_sphere_scene_query.html" title="PCZ implementation of SphereSceneQuery." alt="" coords="237,387,431,412"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_sphere_scene_query.html" title="Specialises the SceneQuery class for querying within a sphere." alt="" coords="137,225,305,251"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_region_scene_query.html" title="Abstract class defining a query which returns single results from a region." alt="" coords="137,152,304,177"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="71,79,197,104"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="79,5,189,31"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_scene_query_listener.html" title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ..." alt="" coords="221,79,396,104"/>
+<area shape="rect" id="Node000001" title="Default implementation of SphereSceneQuery." alt="" coords="133,300,308,341"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_octree_sphere_scene_query.html" title="Octree implementation of SphereSceneQuery." alt="" coords="5,389,212,414"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="182,352,127,390,124,386,179,348"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_p_c_z_sphere_scene_query.html" title="PCZ implementation of SphereSceneQuery." alt="" coords="236,389,429,414"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="262,348,317,386,314,390,259,352"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_sphere_scene_query.html" title="Specialises the SceneQuery class for querying within a sphere." alt="" coords="137,226,304,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,267,223,300,218,300,218,267"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_region_scene_query.html" title="Abstract class defining a query which returns single results from a region." alt="" coords="137,153,304,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="223,194,223,226,218,226,218,194"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="71,79,197,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="162,113,208,150,204,154,159,117"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="79,5,189,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="137,46,137,79,131,79,131,46"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_scene_query_listener.html" title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ..." alt="" coords="221,79,394,105"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="282,117,237,154,233,150,279,113"/>
 </map>

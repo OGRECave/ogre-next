@@ -1,5 +1,7 @@
 <map id="Ogre::ZipDataStream" name="Ogre::ZipDataStream">
-<area shape="rect" id="node1" title="Specialisation of DataStream to handle streaming data from zip archives." alt="" coords="5,152,148,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="14,79,139,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="30,5,123,31"/>
+<area shape="rect" id="Node000001" title="Specialisation of DataStream to handle streaming data from zip archives." alt="" coords="5,153,148,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="14,79,139,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,120,79,152,74,152,74,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="30,5,123,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="79,46,79,79,74,79,74,46"/>
 </map>

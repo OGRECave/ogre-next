@@ -1,3 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_g_l_e_s2_pixel_util.html" title="Class to do pixel format mapping between GL and OGRE." alt="" coords="5,5,152,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l_e_s2_support.html" title=" " alt="" coords="5,105,148,131"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_e_g_l_support.html" title=" " alt="" coords="206,80,333,106"/>
+<area shape="poly" id="edge1093_Node000000_Node000001" title=" " alt="" coords="163,104,205,99,206,104,163,109"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_na_cl_g_l_support.html" title=" " alt="" coords="196,129,343,155"/>
+<area shape="poly" id="edge1098_Node000000_Node000006" title=" " alt="" coords="164,126,196,130,195,136,163,132"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_android_e_g_l_support.html" title=" " alt="" coords="402,5,572,31"/>
+<area shape="poly" id="edge1094_Node000001_Node000002" title=" " alt="" coords="311,71,390,40,426,29,428,34,392,45,313,76"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_emscripten_e_g_l_support.html" title=" " alt="" coords="391,55,582,80"/>
+<area shape="poly" id="edge1095_Node000001_Node000003" title=" " alt="" coords="347,81,390,76,391,81,348,86"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_win32_e_g_l_support.html" title=" " alt="" coords="406,104,568,130"/>
+<area shape="poly" id="edge1096_Node000001_Node000004" title=" " alt="" coords="348,99,405,105,405,110,348,104"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_x11_e_g_l_support.html" title=" " alt="" coords="412,153,561,179"/>
+<area shape="poly" id="edge1097_Node000001_Node000005" title=" " alt="" coords="330,109,344,114,368,127,392,140,425,150,423,155,390,145,366,132,342,119,328,114"/>
 </map>

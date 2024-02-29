@@ -1,7 +1,11 @@
 <map id="Ogre::ResourceBackgroundQueue" name="Ogre::ResourceBackgroundQueue">
-<area shape="rect" id="node1" title="This class is used to perform Resource operations in a background thread." alt="" coords="241,92,421,132"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="11,5,187,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="46,70,153,95"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="10,120,189,160"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="5,184,193,224"/>
+<area shape="rect" id="Node000001" title="This class is used to perform Resource operations in a background thread." alt="" coords="241,92,420,133"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="11,5,187,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,49,194,55,280,89,278,94,192,60,175,54"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="46,70,152,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,89,240,98,240,104,167,94"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="10,120,188,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="203,125,240,121,241,126,203,130"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="5,185,193,226"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="174,177,192,170,283,131,285,136,194,175,175,182"/>
 </map>

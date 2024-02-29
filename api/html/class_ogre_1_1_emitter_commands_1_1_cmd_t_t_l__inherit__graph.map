@@ -1,4 +1,5 @@
 <map id="Ogre::EmitterCommands::CmdTTL" name="Ogre::EmitterCommands::CmdTTL">
-<area shape="rect" id="node1" title="Command object for particle emitter &#45; see ParamCommand." alt="" coords="5,79,168,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="10,5,163,31"/>
+<area shape="rect" id="Node000001" title="Command object for particle emitter &#45; see ParamCommand." alt="" coords="5,79,168,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="10,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,46,89,79,84,79,84,46"/>
 </map>

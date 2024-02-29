@@ -1,6 +1,9 @@
 <map id="Ogre::D3D11Window" name="Ogre::D3D11Window">
-<area shape="rect" id="node1" title=" " alt="" coords="38,152,179,177"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_window_swap_chain_based.html" title=" " alt="" coords="5,225,212,265"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_window.html" title=" " alt="" coords="57,79,160,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="51,5,166,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="38,153,179,178"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_window_swap_chain_based.html" title=" " alt="" coords="5,226,212,267"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="111,194,111,226,106,226,106,194"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_window.html" title=" " alt="" coords="58,79,159,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,120,111,152,106,152,106,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,165,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,46,111,79,106,79,106,46"/>
 </map>

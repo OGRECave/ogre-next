@@ -1,8 +1,13 @@
 <map id="Ogre::RaySceneQueryListener" name="Ogre::RaySceneQueryListener">
-<area shape="rect" id="node1" title="Alternative listener class for dealing with RaySceneQuery." alt="" coords="197,5,393,31"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_ray_scene_query.html" title="Specialises the SceneQuery class for querying along a ray." alt="" coords="221,79,370,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_default_ray_scene_query.html" title="Default implementation of RaySceneQuery." alt="" coords="200,152,391,177"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_bsp_ray_scene_query.html" title="BSP specialisation of RaySceneQuery." alt="" coords="5,225,177,251"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_octree_ray_scene_query.html" title="Octree implementation of RaySceneQuery." alt="" coords="201,225,389,251"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_p_c_z_ray_scene_query.html" title="PCZ implementation of RaySceneQuery." alt="" coords="413,225,588,251"/>
+<area shape="rect" id="Node000001" title="Alternative listener class for dealing with RaySceneQuery." alt="" coords="197,5,393,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_ray_scene_query.html" title="Specialises the SceneQuery class for querying along a ray." alt="" coords="221,79,369,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="298,46,298,79,292,79,292,46"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_default_ray_scene_query.html" title="Default implementation of RaySceneQuery." alt="" coords="200,153,390,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="298,120,298,152,292,152,292,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_bsp_ray_scene_query.html" title="BSP specialisation of RaySceneQuery." alt="" coords="5,226,177,252"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="247,186,127,228,125,223,245,181"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_octree_ray_scene_query.html" title="Octree implementation of RaySceneQuery." alt="" coords="201,226,389,252"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="298,194,298,226,292,226,292,194"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_p_c_z_ray_scene_query.html" title="PCZ implementation of RaySceneQuery." alt="" coords="413,226,588,252"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="345,181,466,223,464,228,343,186"/>
 </map>

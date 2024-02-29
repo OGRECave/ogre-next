@@ -1,5 +1,7 @@
 <map id="Ogre::GL3PlusRTTManager" name="Ogre::GL3PlusRTTManager">
-<area shape="rect" id="node1" title="Manager/factory for RenderTextures." alt="" coords="6,93,189,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_g_l3_plus_f_b_o_manager.html" title="Factory for GL Frame Buffer Objects, and related things." alt="" coords="5,167,189,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="11,5,183,45"/>
+<area shape="rect" id="Node000001" title="Manager/factory for RenderTextures." alt="" coords="6,94,188,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l3_plus_f_b_o_manager.html" title="Factory for GL Frame Buffer Objects, and related things." alt="" coords="5,168,189,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="100,135,100,167,94,167,94,135"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="11,5,183,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,62,100,93,94,93,94,62"/>
 </map>

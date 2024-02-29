@@ -1,7 +1,7 @@
 var dir_882e490fc42778f674a21d3536bf54f0 =
 [
     [ "OgreDDSCodec.h", "_ogre_d_d_s_codec_8h.html", null ],
-    [ "Deprecated/OgreDepthBuffer.h", "_deprecated_2_ogre_depth_buffer_8h.html", null ],
+    [ "OgreDepthBuffer.h", "_deprecated_2_ogre_depth_buffer_8h.html", null ],
     [ "OgreFreeImageCodec.h", "_ogre_free_image_codec_8h.html", null ],
     [ "OgreHardwarePixelBuffer.h", "_ogre_hardware_pixel_buffer_8h.html", null ],
     [ "OgreImage.h", "_ogre_image_8h.html", "_ogre_image_8h" ],

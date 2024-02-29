@@ -1,8 +1,13 @@
 <map id="Ogre::IfdProbeVisualizer" name="Ogre::IfdProbeVisualizer">
-<area shape="rect" id="node1" title=" " alt="" coords="224,152,385,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="156,79,299,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,277,31"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="301,5,407,31"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="323,79,444,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="224,153,385,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="156,79,298,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="253,114,293,150,290,154,250,117"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,36,203,76,201,81,117,41"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,277,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="230,46,230,79,224,79,224,46"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="300,5,405,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="319,41,250,81,247,76,317,37"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="323,79,443,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="360,117,319,154,316,150,357,113"/>
 </map>

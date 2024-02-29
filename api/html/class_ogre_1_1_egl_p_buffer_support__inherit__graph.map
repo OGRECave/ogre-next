@@ -1,4 +1,5 @@
 <map id="Ogre::EglPBufferSupport" name="Ogre::EglPBufferSupport">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,168,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="11,5,163,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,167,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="10,5,162,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,46,89,79,83,79,83,46"/>
 </map>

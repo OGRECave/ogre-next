@@ -1,5 +1,7 @@
 <map id="Ogre::DynLibManager" name="Ogre::DynLibManager">
-<area shape="rect" id="node1" title="Manager for Dynamic&#45;loading Libraries." alt="" coords="134,79,281,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,228,31"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="253,5,343,31"/>
+<area shape="rect" id="Node000001" title="Manager for Dynamic&#45;loading Libraries." alt="" coords="133,79,278,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,227,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,39,192,77,189,81,141,43"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="251,5,341,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="271,43,222,81,219,77,267,39"/>
 </map>

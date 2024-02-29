@@ -1,6 +1,9 @@
 <map id="Ogre::RTShader::HardwareSkinningTechnique" name="Ogre::RTShader::HardwareSkinningTechnique">
-<area shape="rect" id="node1" title="Implement a sub render state which performs hardware skinning." alt="" coords="138,79,314,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_r_t_shader_1_1_dual_quaternion_skinning.html" title="Implement a sub render state which performs dual quaternion hardware skinning." alt="" coords="5,167,215,207"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_r_t_shader_1_1_linear_skinning.html" title="Implement a sub render state which performs hardware skinning." alt="" coords="239,174,445,199"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="149,5,303,31"/>
+<area shape="rect" id="Node000001" title="Implement a sub render state which performs hardware skinning." alt="" coords="137,79,312,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_r_t_shader_1_1_dual_quaternion_skinning.html" title="Implement a sub render state which performs dual quaternion hardware skinning." alt="" coords="5,168,214,208"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,131,137,169,134,165,184,127"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_r_t_shader_1_1_linear_skinning.html" title="Implement a sub render state which performs hardware skinning." alt="" coords="238,175,443,201"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="264,127,326,173,323,177,261,131"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="148,5,300,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,46,227,79,222,79,222,46"/>
 </map>

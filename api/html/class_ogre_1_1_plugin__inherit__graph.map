@@ -1,15 +1,27 @@
 <map id="Ogre::Plugin" name="Ogre::Plugin">
-<area shape="rect" id="node1" title="Class defining a generic OGRE plugin." alt="" coords="140,252,232,277"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_bsp_scene_manager_plugin.html" title="Plugin instance for BSPSceneManager." alt="" coords="280,5,483,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_plugin.html" title="Plugin instance for D3D11 Manager." alt="" coords="316,55,447,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d9_plugin.html" title="Plugin instance for D3D9 Manager." alt="" coords="319,104,443,129"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l3_plus_plugin.html" title="Plugin instance for GL3Plus Manager." alt="" coords="310,153,453,179"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_g_l_e_s2_plugin.html" title="Plugin instance for GL ES 2 Manager." alt="" coords="314,203,449,228"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_metal_plugin.html" title="Plugin instance for Metal Manager." alt="" coords="319,252,443,277"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_n_u_l_l_plugin.html" title="Plugin instance for NULL Manager." alt="" coords="317,301,445,327"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_octree_plugin.html" title="Plugin instance for Octree Manager." alt="" coords="316,351,447,376"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_octree_zone_plugin.html" title="Plugin instance for OctreeZone." alt="" coords="301,400,461,425"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_p_c_z_plugin.html" title="Plugin instance for PCZ Manager." alt="" coords="322,449,441,475"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_particle_f_x_plugin.html" title="Plugin instance for ParticleFX Manager." alt="" coords="305,499,458,524"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,252,92,277"/>
+<area shape="rect" id="Node000001" title="Class defining a generic OGRE plugin." alt="" coords="140,252,231,278"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_bsp_scene_manager_plugin.html" title="Plugin instance for BSPSceneManager." alt="" coords="279,5,480,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,236,196,193,212,140,239,86,256,62,277,40,294,29,297,34,281,44,260,65,243,89,217,142,201,194,193,237"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_plugin.html" title="Plugin instance for D3D11 Manager." alt="" coords="315,55,445,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="191,236,203,202,220,162,245,123,277,89,295,79,313,72,315,77,297,84,281,94,249,126,225,165,208,204,196,238"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_d3_d9_plugin.html" title="Plugin instance for D3D9 Manager." alt="" coords="318,104,441,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="197,237,229,186,251,160,278,139,317,122,319,127,280,143,255,164,233,189,202,239"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_g_l3_plus_plugin.html" title="Plugin instance for GL3Plus Manager." alt="" coords="309,153,451,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="208,239,240,212,278,188,307,177,309,182,280,193,243,216,212,243"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_g_l_e_s2_plugin.html" title="Plugin instance for GL ES 2 Manager." alt="" coords="313,203,446,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="245,246,278,237,321,226,322,231,280,242,247,251"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_metal_plugin.html" title="Plugin instance for Metal Manager." alt="" coords="318,252,441,278"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="247,262,317,262,317,268,247,268"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_n_u_l_l_plugin.html" title="Plugin instance for NULL Manager." alt="" coords="316,301,443,327"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="247,279,280,288,322,298,321,303,278,293,245,284"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_octree_plugin.html" title="Plugin instance for Octree Manager." alt="" coords="315,351,445,376"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="212,287,243,313,280,337,315,350,313,355,278,342,240,318,208,291"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_octree_zone_plugin.html" title="Plugin instance for OctreeZone." alt="" coords="300,400,459,426"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="202,290,233,340,255,366,280,387,301,397,298,402,278,391,251,369,229,343,197,293"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_p_c_z_plugin.html" title="Plugin instance for PCZ Manager." alt="" coords="321,449,438,475"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="196,292,208,325,225,365,249,403,281,436,300,447,321,454,320,459,298,452,277,440,245,407,220,367,203,327,191,293"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_particle_f_x_plugin.html" title="Plugin instance for ParticleFX Manager." alt="" coords="304,499,456,524"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="193,292,201,336,217,388,243,441,260,465,281,485,304,499,302,504,277,490,256,468,239,444,212,390,196,337,187,293"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,252,92,278"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,262,139,262,139,268,107,268"/>
 </map>

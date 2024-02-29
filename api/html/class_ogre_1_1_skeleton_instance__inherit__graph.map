@@ -1,4 +1,5 @@
 <map id="Ogre::SkeletonInstance" name="Ogre::SkeletonInstance">
-<area shape="rect" id="node1" title="Instance of a Skeleton, main external interface for retrieving bone positions and applying animations..." alt="" coords="5,79,163,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,134,31"/>
+<area shape="rect" id="Node000001" title="Instance of a Skeleton, main external interface for retrieving bone positions and applying animations..." alt="" coords="5,79,162,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,133,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,46,86,79,81,79,81,46"/>
 </map>

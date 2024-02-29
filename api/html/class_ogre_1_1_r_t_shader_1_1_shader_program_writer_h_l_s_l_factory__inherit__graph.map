@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::ShaderProgramWriterHLSLFactory" name="Ogre::RTShader::ShaderProgramWriterHLSLFactory">
-<area shape="rect" id="node1" title="HLSL program writer factory implementation." alt="" coords="5,167,216,207"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_r_t_shader_1_1_program_writer_factory.html" title="Interface definition for factories of ShaderProgramWriter." alt="" coords="9,79,212,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,187,31"/>
+<area shape="rect" id="Node000001" title="HLSL program writer factory implementation." alt="" coords="5,168,215,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_r_t_shader_1_1_program_writer_factory.html" title="Interface definition for factories of ShaderProgramWriter." alt="" coords="9,79,211,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,135,113,167,107,167,107,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,186,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,46,113,79,107,79,107,46"/>
 </map>

@@ -162,7 +162,6 @@ var annotated_dup =
         [ "GL3PlusDefaultHardwareIndexBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer" ],
         [ "GL3PlusDefaultHardwareUniformBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_uniform_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_uniform_buffer" ],
         [ "GL3PlusDefaultHardwareVertexBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_vertex_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_vertex_buffer" ],
-        [ "GL3PlusDepthPixelBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_depth_pixel_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_depth_pixel_buffer" ],
         [ "GL3PlusHardwareBufferManager", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager.html", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager" ],
         [ "GL3PlusHardwareBufferManagerBase", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base.html", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager_base" ],
         [ "GL3PlusHardwareCounterBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_counter_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_counter_buffer" ],
@@ -171,7 +170,6 @@ var annotated_dup =
         [ "GL3PlusHardwareShaderStorageBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_shader_storage_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_shader_storage_buffer" ],
         [ "GL3PlusHardwareUniformBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_uniform_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_uniform_buffer" ],
         [ "GL3PlusHardwareVertexBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_vertex_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_vertex_buffer" ],
-        [ "GL3PlusNullPixelBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_null_pixel_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_null_pixel_buffer" ],
         [ "GL3PlusRenderBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_render_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_render_buffer" ],
         [ "GL3PlusRenderToVertexBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_render_to_vertex_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_render_to_vertex_buffer" ],
         [ "GL3PlusTextureBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_texture_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_texture_buffer" ],
@@ -180,14 +178,12 @@ var annotated_dup =
         [ "GLES2DefaultHardwareIndexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_index_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_index_buffer" ],
         [ "GLES2DefaultHardwareUniformBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_uniform_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_uniform_buffer" ],
         [ "GLES2DefaultHardwareVertexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_vertex_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_vertex_buffer" ],
-        [ "GLES2DepthPixelBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_depth_pixel_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_depth_pixel_buffer" ],
         [ "GLES2HardwareBufferManager", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager.html", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager" ],
         [ "GLES2HardwareBufferManagerBase", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base" ],
         [ "GLES2HardwareIndexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_index_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_index_buffer" ],
         [ "GLES2HardwarePixelBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer" ],
         [ "GLES2HardwareUniformBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_uniform_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_uniform_buffer" ],
         [ "GLES2HardwareVertexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_vertex_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_vertex_buffer" ],
-        [ "GLES2NullPixelBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_null_pixel_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_null_pixel_buffer" ],
         [ "GLES2RenderBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer" ],
         [ "GLES2RenderToVertexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_render_to_vertex_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_render_to_vertex_buffer" ],
         [ "GLES2TextureBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer" ],
@@ -224,7 +220,6 @@ var annotated_dup =
         [ "MeshSerializerImpl_v1_41", "class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__41.html", "class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__41" ],
         [ "MeshSerializerImpl_v1_8", "class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__8.html", "class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__8" ],
         [ "MeshSerializerListener", "class_ogre_1_1v1_1_1_mesh_serializer_listener.html", "class_ogre_1_1v1_1_1_mesh_serializer_listener" ],
-        [ "MetalDepthPixelBuffer", "class_ogre_1_1v1_1_1_metal_depth_pixel_buffer.html", "class_ogre_1_1v1_1_1_metal_depth_pixel_buffer" ],
         [ "MetalHardwareBufferCommon", "class_ogre_1_1v1_1_1_metal_hardware_buffer_common.html", "class_ogre_1_1v1_1_1_metal_hardware_buffer_common" ],
         [ "MetalHardwareBufferManager", "class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html", "class_ogre_1_1v1_1_1_metal_hardware_buffer_manager" ],
         [ "MetalHardwareBufferManagerBase", "class_ogre_1_1v1_1_1_metal_hardware_buffer_manager_base.html", "class_ogre_1_1v1_1_1_metal_hardware_buffer_manager_base" ],
@@ -1434,11 +1429,6 @@ var annotated_dup =
       [ "GenericValue", "classrapidjson_1_1_generic_value.html", null ],
       [ "MemoryPoolAllocator", "classrapidjson_1_1_memory_pool_allocator.html", null ],
       [ "UTF8", "structrapidjson_1_1_u_t_f8.html", null ]
-    ] ],
-    [ "std", "namespacestd.html", [
-      [ "tr1", "namespacestd_1_1tr1.html", [
-        [ "hash< Ogre::SharedPtr< T > >", "structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html", "structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4" ]
-      ] ]
     ] ],
     [ "_D3DCOLORVALUE", "struct___d3_d_c_o_l_o_r_v_a_l_u_e.html", "struct___d3_d_c_o_l_o_r_v_a_l_u_e" ],
     [ "_finddata_t", "struct__finddata__t.html", "struct__finddata__t" ],

@@ -1,5 +1,7 @@
 <map id="Ogre::Volume::CSGUnionSource" name="Ogre::Volume::CSGUnionSource">
-<area shape="rect" id="node1" title="Builds the union between two sources." alt="" coords="5,167,215,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_volume_1_1_c_s_g_operation_source.html" title="Abstract operation volume source holding two sources as operants." alt="" coords="15,79,205,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="37,5,183,31"/>
+<area shape="rect" id="Node000001" title="Builds the union between two sources." alt="" coords="5,168,214,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_c_s_g_operation_source.html" title="Abstract operation volume source holding two sources as operants." alt="" coords="15,79,204,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,135,112,167,107,167,107,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="36,5,183,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,46,112,79,107,79,107,46"/>
 </map>

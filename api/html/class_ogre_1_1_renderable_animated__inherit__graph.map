@@ -1,5 +1,7 @@
 <map id="Ogre::RenderableAnimated" name="Ogre::RenderableAnimated">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,181,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_sub_item.html" title="Utility class which defines the sub&#45;parts of an Item." alt="" coords="41,152,146,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="33,5,154,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,181,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_sub_item.html" title="Utility class which defines the sub&#45;parts of an Item." alt="" coords="41,153,145,178"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="96,120,96,152,90,152,90,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="33,5,153,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,46,96,79,90,79,90,46"/>
 </map>

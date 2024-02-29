@@ -1,6 +1,9 @@
 <map id="Ogre::AndroidEGLContext" name="Ogre::AndroidEGLContext">
-<area shape="rect" id="node1" title=" " alt="" coords="81,152,251,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_context.html" title=" " alt="" coords="103,79,229,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="5,5,156,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="180,5,323,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="80,153,249,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_e_g_l_context.html" title=" " alt="" coords="102,79,227,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,120,167,152,162,152,162,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="5,5,156,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,39,152,77,149,81,104,43"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="179,5,321,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="226,43,180,81,177,77,222,39"/>
 </map>

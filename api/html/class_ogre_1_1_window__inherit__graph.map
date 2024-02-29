@@ -1,17 +1,31 @@
 <map id="Ogre::Window" name="Ogre::Window">
-<area shape="rect" id="node1" title=" " alt="" coords="168,194,271,219"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_cocoa_window.html" title=" " alt="" coords="331,21,469,46"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_window.html" title=" " alt="" coords="329,70,471,95"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="336,119,464,145"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_egl_p_buffer_window.html" title="PBuffer implementation of EGL When supported, PBuffer is a surface&#45;less implementation of OpenGL." alt="" coords="319,169,481,194"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_g_l_x_window.html" title=" " alt="" coords="335,218,465,243"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_metal_window.html" title=" " alt="" coords="333,267,467,293"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_n_u_l_l_window.html" title=" " alt="" coords="331,317,469,342"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_win32_window.html" title=" " alt="" coords="331,366,469,391"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,194,120,219"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_window_swap_chain_based.html" title=" " alt="" coords="529,5,736,45"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="547,70,719,95"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="536,119,729,145"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="551,169,715,194"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="557,218,708,243"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="167,194,268,220"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_cocoa_window.html" title=" " alt="" coords="328,21,466,47"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,178,260,116,285,84,314,56,333,45,336,49,318,60,289,87,265,119,232,181"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_window.html" title=" " alt="" coords="327,70,467,96"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="235,180,269,141,315,105,337,94,340,99,317,109,273,145,239,183"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="334,120,461,145"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="253,184,315,154,345,143,347,148,317,159,255,189"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_egl_p_buffer_window.html" title="PBuffer implementation of EGL When supported, PBuffer is a surface&#45;less implementation of OpenGL." alt="" coords="316,169,478,195"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="283,195,315,191,316,196,284,200"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_g_l_x_window.html" title=" " alt="" coords="333,218,461,244"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="284,213,333,220,332,225,283,218"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_metal_window.html" title=" " alt="" coords="331,268,464,293"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="257,225,317,254,347,264,346,269,315,259,254,230"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_n_u_l_l_window.html" title=" " alt="" coords="329,317,466,343"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="239,230,273,268,317,303,340,314,337,319,315,308,270,272,235,234"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_win32_window.html" title=" " alt="" coords="329,366,466,392"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="232,233,265,294,289,326,318,353,336,363,333,368,314,357,285,329,260,297,227,236"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,194,119,220"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,204,166,204,166,210,134,210"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_d3_d11_window_swap_chain_based.html" title=" " alt="" coords="526,5,733,46"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="466,63,543,44,545,49,468,68"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="544,70,715,96"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="476,113,565,94,566,99,477,118"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="533,120,726,145"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="476,130,533,130,533,135,476,135"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="548,169,711,195"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="477,146,566,166,565,171,476,152"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="554,218,705,244"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="471,149,480,154,495,167,504,180,513,193,528,205,555,216,553,221,525,209,509,197,500,183,491,171,477,159,469,154"/>
 </map>

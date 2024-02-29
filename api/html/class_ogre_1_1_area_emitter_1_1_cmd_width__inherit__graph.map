@@ -1,4 +1,5 @@
 <map id="Ogre::AreaEmitter::CmdWidth" name="Ogre::AreaEmitter::CmdWidth">
-<area shape="rect" id="node1" title="Command object for area emitter size (see ParamCommand)." alt="" coords="17,79,147,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="5,5,159,31"/>
+<area shape="rect" id="Node000001" title="Command object for area emitter size (see ParamCommand)." alt="" coords="17,79,146,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="5,5,158,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,46,84,79,79,79,79,46"/>
 </map>

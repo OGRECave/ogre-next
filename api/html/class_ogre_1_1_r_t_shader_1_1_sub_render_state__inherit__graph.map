@@ -1,17 +1,31 @@
 <map id="Ogre::RTShader::SubRenderState" name="Ogre::RTShader::SubRenderState">
-<area shape="rect" id="node1" title="This class is the base interface of sub part from a shader based rendering pipeline." alt="" coords="207,274,391,314"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_alpha_test.html" title="A factory that enables creation of LayeredBlending instances." alt="" coords="439,5,643,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_colour.html" title="Colour sub render state implementation of the Fixed Function Pipeline." alt="" coords="449,55,632,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_fog.html" title="Fog sub render state implementation of the Fixed Function Pipeline." alt="" coords="457,104,624,129"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_lighting.html" title="Lighting sub render state implementation of the Fixed Function Pipeline." alt="" coords="445,153,636,179"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_texturing.html" title="Texturing sub render state implementation of the Fixed Function Pipeline." alt="" coords="441,203,640,228"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_transform.html" title="Transform sub render state implementation of the Fixed Function Pipeline." alt="" coords="439,252,643,277"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_r_t_shader_1_1_hardware_skinning.html" title="Implement a sub render state which performs hardware skinning." alt="" coords="453,302,629,342"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_r_t_shader_1_1_integrated_p_s_s_m3.html" title="Integrated PSSM shadow receiver with 3 splits sub render state implementation." alt="" coords="451,366,630,406"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_r_t_shader_1_1_normal_map_lighting.html" title="Normal Map Lighting extension sub render state implementation." alt="" coords="447,430,634,470"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_r_t_shader_1_1_per_pixel_lighting.html" title="Per pixel Lighting extension sub render state implementation." alt="" coords="457,494,625,534"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler.html" title="Implements texture atlas sampling." alt="" coords="444,558,637,598"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html" title="Triplanar Texturing." alt="" coords="455,622,626,662"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,281,159,307"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_r_t_shader_1_1_layered_blending.html" title="Texturing sub render state implementation of layered blending." alt="" coords="691,203,907,228"/>
+<area shape="rect" id="Node000001" title="This class is the base interface of sub part from a shader based rendering pipeline." alt="" coords="206,274,389,315"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_alpha_test.html" title="A factory that enables creation of LayeredBlending instances." alt="" coords="437,5,640,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="306,258,322,208,349,149,386,90,409,63,435,40,454,29,457,34,439,44,413,67,391,93,354,152,327,210,311,260"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_colour.html" title="Colour sub render state implementation of the Fixed Function Pipeline." alt="" coords="448,55,629,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="310,259,330,219,357,173,392,127,435,89,456,78,458,83,439,94,396,131,361,176,334,221,315,261"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_fog.html" title="Fog sub render state implementation of the Fixed Function Pipeline." alt="" coords="456,104,622,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="317,260,366,197,399,165,436,139,459,128,461,133,438,143,402,169,370,201,322,263"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_lighting.html" title="Lighting sub render state implementation of the Fixed Function Pipeline." alt="" coords="444,153,634,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="330,261,378,223,436,188,464,177,466,182,438,193,381,227,333,265"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_texturing.html" title="Texturing sub render state implementation of the Fixed Function Pipeline." alt="" coords="440,203,637,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="360,265,436,237,474,226,476,232,438,242,362,270"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_r_t_shader_1_1_f_f_p_transform.html" title="Transform sub render state implementation of the Fixed Function Pipeline." alt="" coords="437,252,640,278"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="404,279,436,275,437,280,405,284"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_r_t_shader_1_1_hardware_skinning.html" title="Implement a sub render state which performs hardware skinning." alt="" coords="451,302,626,343"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="405,304,451,309,450,315,404,309"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_r_t_shader_1_1_integrated_p_s_s_m3.html" title="Integrated PSSM shadow receiver with 3 splits sub render state implementation." alt="" coords="450,367,627,408"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="359,319,438,352,473,364,471,369,436,357,357,324"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_r_t_shader_1_1_normal_map_lighting.html" title="Normal Map Lighting extension sub render state implementation." alt="" coords="446,433,632,473"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="328,324,377,372,407,396,438,417,464,430,462,434,436,422,404,400,374,376,325,328"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_r_t_shader_1_1_per_pixel_lighting.html" title="Per pixel Lighting extension sub render state implementation." alt="" coords="455,498,622,539"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="317,327,337,363,365,405,399,447,439,483,460,495,457,500,435,487,395,450,360,408,333,366,312,329"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler.html" title="Implements texture atlas sampling." alt="" coords="443,563,635,604"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="311,329,328,378,355,437,391,497,414,524,439,548,458,560,455,565,435,552,410,528,387,500,350,439,323,380,306,330"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html" title="Triplanar Texturing." alt="" coords="454,629,623,669"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="307,329,321,390,345,467,363,507,384,546,409,582,439,613,456,626,453,630,435,618,405,585,379,548,358,509,340,469,315,392,302,330"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,281,158,307"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,292,205,292,205,297,173,297"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_r_t_shader_1_1_layered_blending.html" title="Texturing sub render state implementation of layered blending." alt="" coords="688,203,904,228"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="653,213,688,213,688,218,653,218"/>
 </map>

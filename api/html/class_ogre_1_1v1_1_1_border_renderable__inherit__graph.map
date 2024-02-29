@@ -1,5 +1,7 @@
 <map id="Ogre::v1::BorderRenderable" name="Ogre::v1::BorderRenderable">
-<area shape="rect" id="node1" title="Class for rendering the border of a BorderPanelOverlayElement." alt="" coords="42,79,221,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="5,5,127,31"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="151,5,245,31"/>
+<area shape="rect" id="Node000001" title="Class for rendering the border of a BorderPanelOverlayElement." alt="" coords="42,79,220,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="5,5,126,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,40,122,77,118,80,84,44"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="150,5,245,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,44,144,80,140,77,174,40"/>
 </map>

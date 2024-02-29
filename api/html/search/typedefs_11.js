@@ -1,13 +1,13 @@
 var searchData=
 [
   ['rayscenequeryresult_0',['RaySceneQueryResult',['../group___scene.html#ga1d0db569747448aeff27f36ecd717686',1,'Ogre']]],
-  ['readrequestsarray_1',['ReadRequestsArray',['../struct_ogre_1_1_vertex_array_object.html#a3475853f055b59cf9e231a4ee26e95c1',1,'Ogre::VertexArrayObject::ReadRequestsArray()'],['../class_ogre_1_1v1_1_1_vertex_data.html#a6b6fc02592866abcc89cf0d82fb26188',1,'Ogre::v1::VertexData::ReadRequestsArray()']]],
+  ['readrequestsarray_1',['readrequestsarray',['../struct_ogre_1_1_vertex_array_object.html#a3475853f055b59cf9e231a4ee26e95c1',1,'Ogre::VertexArrayObject::ReadRequestsArray'],['../class_ogre_1_1v1_1_1_vertex_data.html#a6b6fc02592866abcc89cf0d82fb26188',1,'Ogre::v1::VertexData::ReadRequestsArray']]],
   ['real_2',['Real',['../namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d',1,'Ogre']]],
   ['realasuint_3',['RealAsUint',['../namespace_ogre.html#afb4ca6e169ec9a9e45f2b3bb3625d1e1',1,'Ogre']]],
   ['realrect_4',['RealRect',['../group___general.html#ga3e1c672c1d342ffb4f122f44e342bc90',1,'Ogre']]],
   ['realvector_5',['RealVector',['../class_ogre_1_1_terrain.html#aa2b09fef0fe773201df2e55cc995d312',1,'Ogre::Terrain']]],
-  ['rect_6',['Rect',['../group___general.html#gae714035a753a8f484650598dc4143db8',1,'Ogre::Rect()'],['../class_ogre_1_1_image.html#aacf1f2552048b7c6d5e94d6746d9186b',1,'Ogre::Image::Rect()']]],
-  ['reference_7',['reference',['../class_ogre_1_1_hashed_vector.html#a3ad011d104e03019a4e9b9840439ef17',1,'Ogre::HashedVector::reference()'],['../class_ogre_1_1_small_vector_template_common.html#acd7dfa3b3e065207cd1d9923c0d81745',1,'Ogre::SmallVectorTemplateCommon::reference()'],['../class_ogre_1_1_s_t_l_allocator.html#a5d26e2252c837f0620a51c075aeb6d56',1,'Ogre::STLAllocator::reference()'],['../class_ogre_1_1_small_vector_template_common.html#acd7dfa3b3e065207cd1d9923c0d81745',1,'Ogre::SmallVectorTemplateCommon::reference()']]],
+  ['rect_6',['rect',['../group___general.html#gae714035a753a8f484650598dc4143db8',1,'Ogre::Rect'],['../class_ogre_1_1_image.html#aacf1f2552048b7c6d5e94d6746d9186b',1,'Ogre::Image::Rect']]],
+  ['reference_7',['reference',['../class_ogre_1_1_hashed_vector.html#a3ad011d104e03019a4e9b9840439ef17',1,'Ogre::HashedVector::reference'],['../class_ogre_1_1_small_vector_template_common.html#acd7dfa3b3e065207cd1d9923c0d81745',1,'Ogre::SmallVectorTemplateCommon::reference'],['../class_ogre_1_1_s_t_l_allocator.html#a5d26e2252c837f0620a51c075aeb6d56',1,'Ogre::STLAllocator::reference'],['../class_ogre_1_1_small_vector_template_common.html#acd7dfa3b3e065207cd1d9923c0d81745',1,'Ogre::SmallVectorTemplateCommon::reference']]],
   ['regioniterator_8',['RegionIterator',['../class_ogre_1_1v1_1_1_static_geometry.html#a150067d7674a4d4f37bc2df8e9048847',1,'Ogre::v1::StaticGeometry']]],
   ['regionmap_9',['RegionMap',['../class_ogre_1_1v1_1_1_static_geometry.html#ad3a97be855e9973f75a3a0ae22af56fc',1,'Ogre::v1::StaticGeometry']]],
   ['renderablearray_10',['RenderableArray',['../group___material.html#gac2456530a54d76fba2d659954fc243c9',1,'Ogre']]],
@@ -42,9 +42,8 @@ var searchData=
   ['resourcesimdallocpolicy_39',['ResourceSimdAllocPolicy',['../namespace_ogre.html#a21882659ab6ddd5e11551446039e028b',1,'Ogre']]],
   ['resourcetotexextensionmap_40',['ResourceToTexExtensionMap',['../class_ogre_1_1_hlms_manager.html#aaf389a4d1d62b5493ed9b544486a9544',1,'Ogre::HlmsManager']]],
   ['resourcewithgroupmap_41',['ResourceWithGroupMap',['../class_ogre_1_1_resource_manager.html#a117a3887bbf9e83e0585777beb0501dc',1,'Ogre::ResourceManager']]],
-  ['result_5ftype_42',['result_type',['../structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html#a92fe2717408e51be270266c05d4f2847',1,'std::tr1::hash&lt; Ogre::SharedPtr&lt; T &gt; &gt;']]],
-  ['reverse_5fiterator_43',['reverse_iterator',['../class_ogre_1_1_hashed_vector.html#a96a361e91069936d53fb954b07acf424',1,'Ogre::HashedVector::reverse_iterator()'],['../class_ogre_1_1_small_vector_template_common.html#af5c75e8908b1e44ae53d8c12d784ed96',1,'Ogre::SmallVectorTemplateCommon::reverse_iterator()'],['../class_ogre_1_1_small_vector_template_common.html#af5c75e8908b1e44ae53d8c12d784ed96',1,'Ogre::SmallVectorTemplateCommon::reverse_iterator()']]],
-  ['rgba_44',['RGBA',['../group___general.html#ga8c0fefd117985c6df93c4714f370bcd6',1,'Ogre']]],
-  ['rootalloc_45',['RootAlloc',['../namespace_ogre.html#aaa653fbb322c81fdf7c29d8a621c0bfb',1,'Ogre']]],
-  ['rtshadersystemalloc_46',['RTShaderSystemAlloc',['../namespace_ogre.html#a3f7035c5ce4caa67a610946c00e442d0',1,'Ogre']]]
+  ['reverse_5fiterator_42',['reverse_iterator',['../class_ogre_1_1_hashed_vector.html#a96a361e91069936d53fb954b07acf424',1,'Ogre::HashedVector::reverse_iterator'],['../class_ogre_1_1_small_vector_template_common.html#af5c75e8908b1e44ae53d8c12d784ed96',1,'Ogre::SmallVectorTemplateCommon::reverse_iterator'],['../class_ogre_1_1_small_vector_template_common.html#af5c75e8908b1e44ae53d8c12d784ed96',1,'Ogre::SmallVectorTemplateCommon::reverse_iterator']]],
+  ['rgba_43',['RGBA',['../group___general.html#ga8c0fefd117985c6df93c4714f370bcd6',1,'Ogre']]],
+  ['rootalloc_44',['RootAlloc',['../namespace_ogre.html#aaa653fbb322c81fdf7c29d8a621c0bfb',1,'Ogre']]],
+  ['rtshadersystemalloc_45',['RTShaderSystemAlloc',['../namespace_ogre.html#a3f7035c5ce4caa67a610946c00e442d0',1,'Ogre']]]
 ];

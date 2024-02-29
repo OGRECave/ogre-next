@@ -1,13 +1,23 @@
 <map id="Ogre::TextureManager" name="Ogre::TextureManager">
-<area shape="rect" id="node1" title="Class for loading &amp; managing textures." alt="" coords="396,129,545,155"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_texture_manager.html" title=" " alt="" coords="599,5,787,31"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d9_texture_manager.html" title=" " alt="" coords="603,55,784,80"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_g_l3_plus_texture_manager.html" title="GL3Plus&#45;specific implementation of a TextureManager." alt="" coords="593,104,793,129"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_g_l_e_s2_texture_manager.html" title="GL ES&#45;specific implementation of a TextureManager." alt="" coords="598,153,789,179"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_metal_texture_manager.html" title=" " alt="" coords="603,203,784,228"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_n_u_l_l_texture_manager.html" title=" " alt="" coords="601,252,786,277"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="185,100,347,125"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,76,136,101"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="17,125,124,151"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="184,150,348,190"/>
+<area shape="rect" id="Node000001" title="Class for loading &amp; managing textures." alt="" coords="394,129,542,155"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_d3_d11_texture_manager.html" title=" " alt="" coords="596,5,784,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="490,116,534,77,589,40,616,29,618,34,592,45,537,81,494,120"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_d3_d9_texture_manager.html" title=" " alt="" coords="600,55,780,80"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="510,120,589,89,627,78,628,83,591,94,512,125"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_g_l3_plus_texture_manager.html" title="GL3Plus&#45;specific implementation of a TextureManager." alt="" coords="590,104,790,130"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="557,129,590,126,590,131,558,135"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_g_l_e_s2_texture_manager.html" title="GL ES&#45;specific implementation of a TextureManager." alt="" coords="595,153,785,179"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="558,149,594,153,594,158,557,154"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_metal_texture_manager.html" title=" " alt="" coords="600,203,780,228"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="514,159,591,189,628,199,627,205,589,194,512,164"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_n_u_l_l_texture_manager.html" title=" " alt="" coords="598,252,782,278"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="494,164,537,203,592,238,618,249,617,254,589,243,534,207,491,168"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="184,100,345,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="360,124,394,129,393,134,359,129"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,76,135,102"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="150,96,184,100,183,106,150,101"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="17,125,123,151"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="138,127,183,121,184,126,138,132"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="183,150,346,191"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="361,154,394,150,394,155,362,160"/>
 </map>

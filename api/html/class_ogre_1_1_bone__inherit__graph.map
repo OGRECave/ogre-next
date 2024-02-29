@@ -1,5 +1,7 @@
 <map id="Ogre::Bone" name="Ogre::Bone">
-<area shape="rect" id="node1" title="Class representing a Bone in the join hierarchy of a skeleton." alt="" coords="62,79,149,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,88,31"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="113,5,218,31"/>
+<area shape="rect" id="Node000001" title="Class representing a Bone in the join hierarchy of a skeleton." alt="" coords="62,79,147,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,87,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,41,97,77,93,80,63,45"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="111,5,216,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,45,117,80,113,77,142,41"/>
 </map>

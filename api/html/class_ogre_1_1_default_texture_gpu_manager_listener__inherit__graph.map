@@ -1,5 +1,7 @@
 <map id="Ogre::DefaultTextureGpuManagerListener" name="Ogre::DefaultTextureGpuManagerListener">
-<area shape="rect" id="node1" title="This is a Default implementation of TextureGpuManagerListener based on heuristics." alt="" coords="8,152,223,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_texture_gpu_manager_listener.html" title=" " alt="" coords="5,79,225,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="30,5,201,31"/>
+<area shape="rect" id="Node000001" title="This is a Default implementation of TextureGpuManagerListener based on heuristics." alt="" coords="8,153,222,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_texture_gpu_manager_listener.html" title=" " alt="" coords="5,79,225,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,120,118,152,112,152,112,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="30,5,200,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,46,118,79,112,79,112,46"/>
 </map>

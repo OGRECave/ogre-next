@@ -1,9 +1,15 @@
 <map id="Ogre::DataStream" name="Ogre::DataStream">
-<area shape="rect" id="node1" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="147,104,272,129"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_deflate_stream.html" title="Stream which compresses / uncompresses data using the &#39;deflate&#39; compression algorithm." alt="" coords="345,5,483,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_file_handle_data_stream.html" title="Common subclass of DataStream for handling data from C&#45;style file handles." alt="" coords="321,55,507,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_file_stream_data_stream.html" title="Common subclass of DataStream for handling data from std::basic_istream." alt="" coords="320,104,508,129"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_memory_data_stream.html" title="Common subclass of DataStream for handling data from chunks of memory." alt="" coords="329,153,499,179"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_zip_data_stream.html" title="Specialisation of DataStream to handle streaming data from zip archives." alt="" coords="343,203,485,228"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,104,99,129"/>
+<area shape="rect" id="Node000001" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="146,104,270,130"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_deflate_stream.html" title="Stream which compresses / uncompresses data using the &#39;deflate&#39; compression algorithm." alt="" coords="343,5,480,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,92,273,65,317,40,346,29,348,34,319,45,275,69,238,96"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_file_handle_data_stream.html" title="Common subclass of DataStream for handling data from C&#45;style file handles." alt="" coords="319,55,505,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="278,97,355,78,356,84,280,102"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_file_stream_data_stream.html" title="Common subclass of DataStream for handling data from std::basic_istream." alt="" coords="318,104,505,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="286,114,317,114,317,120,286,120"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_memory_data_stream.html" title="Common subclass of DataStream for handling data from chunks of memory." alt="" coords="327,153,497,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="280,131,356,150,355,155,278,137"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_zip_data_stream.html" title="Specialisation of DataStream to handle streaming data from zip archives." alt="" coords="341,203,483,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="238,137,275,164,319,189,348,200,346,205,317,194,273,169,235,142"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,104,98,130"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,114,145,114,145,120,113,120"/>
 </map>

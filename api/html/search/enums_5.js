@@ -5,7 +5,7 @@ var searchData=
   ['ffpfragmentshaderstage_2',['FFPFragmentShaderStage',['../group___r_t_shader.html#ga06b7172046e21956b5eb485dbd7fc29a',1,'Ogre::RTShader']]],
   ['ffpshaderstage_3',['FFPShaderStage',['../group___r_t_shader.html#ga4c92eba13eb8038d35530610c58ceff4',1,'Ogre::RTShader']]],
   ['ffpvertexshaderstage_4',['FFPVertexShaderStage',['../group___r_t_shader.html#ga7d20b2397c3eab2b52ec405863c6f274',1,'Ogre::RTShader']]],
-  ['filter_5',['Filter',['../class_ogre_1_1_image2.html#a3c76426b32883e39309d5bb9e62f966a',1,'Ogre::Image2::Filter()'],['../class_ogre_1_1_image.html#aa1d0fe80507583b39161736e4be198d5',1,'Ogre::Image::Filter()']]],
+  ['filter_5',['filter',['../class_ogre_1_1_image2.html#a3c76426b32883e39309d5bb9e62f966a',1,'Ogre::Image2::Filter'],['../class_ogre_1_1_image.html#aa1d0fe80507583b39161736e4be198d5',1,'Ogre::Image::Filter']]],
   ['filteroptions_6',['FilterOptions',['../group___general.html#ga02306c6246268d35f45ad22278bd5d3d',1,'Ogre']]],
   ['filtertype_7',['FilterType',['../group___general.html#gac1fc36ec2f4df4b2afa9fa39f9c66c06',1,'Ogre']]],
   ['filtertypes_8',['FilterTypes',['../namespace_ogre_1_1_texture_filter.html#ad1f488159fb867da13bf2ae96f04b054',1,'Ogre::TextureFilter']]],

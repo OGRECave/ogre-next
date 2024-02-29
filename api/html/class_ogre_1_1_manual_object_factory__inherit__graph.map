@@ -1,5 +1,7 @@
 <map id="Ogre::ManualObjectFactory" name="Ogre::ManualObjectFactory">
-<area shape="rect" id="node1" title="Factory object for creating ManualObject instances." alt="" coords="9,152,188,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="5,79,192,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="49,5,149,31"/>
+<area shape="rect" id="Node000001" title="Factory object for creating ManualObject instances." alt="" coords="9,153,187,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="5,79,191,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,120,101,152,95,152,95,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="48,5,148,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,46,101,79,95,79,95,46"/>
 </map>

@@ -156,9 +156,6 @@ var hierarchy =
     [ "HardwareVertexBuffer MANAGED_RESOURCE", null, [
       [ "Ogre::v1::GLES2HardwareVertexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_vertex_buffer.html", null ]
     ] ],
-    [ "hash", null, [
-      [ "std::tr1::hash< Ogre::SharedPtr< T > >", "structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html", null ]
-    ] ],
     [ "Ogre::HashedVector< LightClosest >", "class_ogre_1_1_hashed_vector.html", null ],
     [ "HighLevelGpuProgram MANAGED_RESOURCE", null, [
       [ "Ogre::GLSLESShader", "class_ogre_1_1_g_l_s_l_e_s_shader.html", null ]
@@ -1126,19 +1123,14 @@ var hierarchy =
           [ "Ogre::v1::D3D11DepthPixelBuffer", "class_ogre_1_1v1_1_1_d3_d11_depth_pixel_buffer.html", null ],
           [ "Ogre::v1::D3D11HardwarePixelBuffer", "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html", null ],
           [ "Ogre::v1::D3D11NullPixelBuffer", "class_ogre_1_1v1_1_1_d3_d11_null_pixel_buffer.html", null ],
-          [ "Ogre::v1::GL3PlusDepthPixelBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_depth_pixel_buffer.html", null ],
           [ "Ogre::v1::GL3PlusHardwarePixelBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_pixel_buffer.html", [
             [ "Ogre::v1::GL3PlusRenderBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_render_buffer.html", null ],
             [ "Ogre::v1::GL3PlusTextureBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_texture_buffer.html", null ]
           ] ],
-          [ "Ogre::v1::GL3PlusNullPixelBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_null_pixel_buffer.html", null ],
-          [ "Ogre::v1::GLES2DepthPixelBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_depth_pixel_buffer.html", null ],
           [ "Ogre::v1::GLES2HardwarePixelBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer.html", [
             [ "Ogre::v1::GLES2RenderBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer.html", null ],
             [ "Ogre::v1::GLES2TextureBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_texture_buffer.html", null ]
           ] ],
-          [ "Ogre::v1::GLES2NullPixelBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_null_pixel_buffer.html", null ],
-          [ "Ogre::v1::MetalDepthPixelBuffer", "class_ogre_1_1v1_1_1_metal_depth_pixel_buffer.html", null ],
           [ "Ogre::v1::MetalHardwarePixelBuffer", "class_ogre_1_1v1_1_1_metal_hardware_pixel_buffer.html", [
             [ "Ogre::v1::MetalTextureBuffer", "class_ogre_1_1v1_1_1_metal_texture_buffer.html", null ]
           ] ],

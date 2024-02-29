@@ -1,4 +1,5 @@
 <map id="Ogre::v1::StaticGeometry::LODBucket" name="Ogre::v1::StaticGeometry::LODBucket">
-<area shape="rect" id="node1" title="A LODBucket is a collection of smaller buckets with the same LOD." alt="" coords="5,79,172,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="11,5,166,31"/>
+<area shape="rect" id="Node000001" title="A LODBucket is a collection of smaller buckets with the same LOD." alt="" coords="5,79,171,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="11,5,165,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,46,91,79,85,79,85,46"/>
 </map>

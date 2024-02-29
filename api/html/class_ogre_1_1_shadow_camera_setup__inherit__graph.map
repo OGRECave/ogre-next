@@ -1,9 +1,15 @@
 <map id="Ogre::ShadowCameraSetup" name="Ogre::ShadowCameraSetup">
-<area shape="rect" id="node1" title="This class allows you to plug in new ways to define the camera setup when rendering and projecting sh..." alt="" coords="238,79,421,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_default_shadow_camera_setup.html" title="Implements default shadow camera setup." alt="" coords="131,152,320,192"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_plane_optimal_shadow_camera_setup.html" title="Implements the plane optimal shadow camera algorithm." alt="" coords="344,152,525,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="267,5,392,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_concentric_shadow_camera.html" title="Implements the concentric shadow mapping algorithm." alt="" coords="5,247,216,273"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_focused_shadow_camera_setup.html" title="Implements the uniform shadow mapping algorithm in focused mode." alt="" coords="241,240,439,280"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_p_s_s_m_shadow_camera_setup.html" title="Parallel Split Shadow Map (PSSM) shadow camera setup." alt="" coords="230,328,450,353"/>
+<area shape="rect" id="Node000001" title="This class allows you to plug in new ways to define the camera setup when rendering and projecting sh..." alt="" coords="237,79,418,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_default_shadow_camera_setup.html" title="Implements default shadow camera setup." alt="" coords="129,153,318,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="301,116,251,154,247,150,298,112"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_plane_optimal_shadow_camera_setup.html" title="Implements the plane optimal shadow camera algorithm." alt="" coords="341,153,522,193"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="357,112,407,150,404,154,354,116"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="265,5,390,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="330,46,330,79,325,79,325,46"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_concentric_shadow_camera.html" title="Implements the concentric shadow mapping algorithm." alt="" coords="5,249,215,275"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="187,205,127,251,124,246,184,201"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_focused_shadow_camera_setup.html" title="Implements the uniform shadow mapping algorithm in focused mode." alt="" coords="239,241,437,282"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="263,201,314,239,310,243,260,205"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_p_s_s_m_shadow_camera_setup.html" title="Parallel Split Shadow Map (PSSM) shadow camera setup." alt="" coords="228,330,448,356"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="341,298,341,329,335,329,335,298"/>
 </map>

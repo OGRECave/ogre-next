@@ -1,3 +1,21 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_g_l3_plus_pixel_util.html" title="Class to do pixel format mapping between GL and OGRE." alt="" coords="5,5,160,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="40,179,192,204"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_e_g_l_g_l_support.html" title=" " alt="" coords="292,55,437,80"/>
+<area shape="poly" id="edge1084_Node000000_Node000001" title=" " alt="" coords="145,167,203,128,274,89,303,78,305,83,276,94,206,132,148,171"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_egl_p_buffer_support.html" title=" " alt="" coords="284,104,445,130"/>
+<area shape="poly" id="edge1085_Node000000_Node000002" title=" " alt="" coords="171,171,274,138,311,128,313,133,275,143,173,176"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_x_g_l_support.html" title=" " alt="" coords="292,153,437,179"/>
+<area shape="poly" id="edge1086_Node000000_Node000003" title=" " alt="" coords="207,180,291,171,291,176,207,185"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_t_k_g_l_support.html" title="GL support in a GTK window." alt="" coords="292,5,437,31"/>
+<area shape="poly" id="edge1087_Node000000_Node000004" title=" " alt="" coords="135,164,193,102,231,68,273,40,298,29,300,34,276,45,234,73,196,106,139,168"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_gl_switchable_support.html" title=" " alt="" coords="276,203,453,228"/>
+<area shape="poly" id="edge1088_Node000000_Node000006" title=" " alt="" coords="207,198,276,204,275,210,207,203"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_o_s_x_g_l3_plus_support.html" title=" " alt="" coords="275,252,454,278"/>
+<area shape="poly" id="edge1089_Node000000_Node000007" title=" " alt="" coords="174,207,275,238,313,249,311,254,274,243,172,212"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_s_d_l_g_l_support.html" title=" " alt="" coords="292,301,437,327"/>
+<area shape="poly" id="edge1090_Node000000_Node000008" title=" " alt="" coords="149,212,206,250,276,288,305,298,303,303,274,293,203,255,146,216"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_win32_g_l_support.html" title=" " alt="" coords="287,351,442,376"/>
+<area shape="poly" id="edge1091_Node000000_Node000009" title=" " alt="" coords="139,215,196,276,234,309,276,337,300,348,298,353,273,342,231,313,193,280,135,218"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,227,31"/>
+<area shape="poly" id="edge1092_Node000005_Node000004" title=" " alt="" coords="243,16,291,16,291,21,243,21"/>
 </map>

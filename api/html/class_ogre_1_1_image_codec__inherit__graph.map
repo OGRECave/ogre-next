@@ -1,8 +1,13 @@
 <map id="Ogre::ImageCodec" name="Ogre::ImageCodec">
-<area shape="rect" id="node1" title="Codec specialized in images." alt="" coords="145,152,274,177"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d_d_s_codec.html" title="Codec specialized in loading DDS (Direct Draw Surface) images." alt="" coords="5,225,125,251"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_e_x_r_codec.html" title="Codec specialized in loading OpenEXR high dynamic range images." alt="" coords="150,225,269,251"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_free_image_codec.html" title="Codec specialized in images loaded using FreeImage." alt="" coords="293,225,448,251"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_codec.html" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="163,79,256,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="165,5,253,31"/>
+<area shape="rect" id="Node000001" title="Codec specialized in images." alt="" coords="144,153,272,178"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d_d_s_codec.html" title="Codec specialized in loading DDS (Direct Draw Surface) images." alt="" coords="5,226,125,252"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="171,188,91,228,88,223,169,183"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_e_x_r_codec.html" title="Codec specialized in loading OpenEXR high dynamic range images." alt="" coords="149,226,267,252"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="210,194,210,226,205,226,205,194"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_free_image_codec.html" title="Codec specialized in images loaded using FreeImage." alt="" coords="291,226,445,252"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="250,183,341,223,339,228,247,187"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_codec.html" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="162,79,254,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,120,210,152,205,152,205,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="164,5,251,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="210,46,210,79,205,79,205,46"/>
 </map>

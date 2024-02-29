@@ -1,7 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1iterator__range.html" title="Base for an iterator_range." alt="" coords="5,80,171,105"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_const_map_range.html" title="Predefined type." alt="" coords="225,5,407,31"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_const_vector_range.html" title="Predefined type." alt="" coords="219,55,413,80"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_map_range.html" title="Predefined type." alt="" coords="242,104,390,129"/>
-<area shape="rect" id="node5" href="$struct_ogre_1_1_vector_range.html" title="Predefined type." alt="" coords="235,153,397,179"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_iterator_wrapper.html" title=" " alt="" coords="5,5,150,61"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_map_iterator_wrapper.html" title="Prepared IteratorWrapper for key&#45;value container." alt="" coords="198,13,367,54"/>
+<area shape="poly" id="edge1117_Node000000_Node000001" title=" " alt="" coords="165,31,197,31,197,36,165,36"/>
 </map>

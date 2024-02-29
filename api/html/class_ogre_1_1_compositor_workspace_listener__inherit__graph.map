@@ -1,6 +1,9 @@
 <map id="Ogre::CompositorWorkspaceListener" name="Ogre::CompositorWorkspaceListener">
-<area shape="rect" id="node1" title=" " alt="" coords="144,5,331,45"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="116,93,359,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="5,167,219,192"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="243,167,483,192"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="142,5,329,46"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="114,94,357,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,62,238,93,233,93,233,62"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="5,168,218,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="203,130,134,169,131,165,200,125"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="241,168,481,193"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="271,125,341,165,338,169,268,130"/>
 </map>

@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1is_pod_like_3_01unsigned_01short_01_4.html" title=" " alt="" coords="5,5,183,45"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1iterator__range.html" title="Base for an iterator_range." alt="" coords="5,80,170,106"/>
+<area shape="rect" id="Node000001" href="$struct_ogre_1_1_const_map_range.html" title="Predefined type." alt="" coords="224,5,406,31"/>
+<area shape="poly" id="edge1113_Node000000_Node000001" title=" " alt="" coords="133,71,217,40,254,29,256,34,218,45,135,76"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_const_vector_range.html" title="Predefined type." alt="" coords="218,55,412,80"/>
+<area shape="poly" id="edge1114_Node000000_Node000002" title=" " alt="" coords="185,79,217,76,218,81,185,85"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_map_range.html" title="Predefined type." alt="" coords="241,104,389,130"/>
+<area shape="poly" id="edge1115_Node000000_Node000003" title=" " alt="" coords="185,100,241,106,240,112,185,106"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_vector_range.html" title="Predefined type." alt="" coords="235,153,395,179"/>
+<area shape="poly" id="edge1116_Node000000_Node000004" title=" " alt="" coords="136,109,218,140,256,150,254,155,217,145,134,114"/>
 </map>

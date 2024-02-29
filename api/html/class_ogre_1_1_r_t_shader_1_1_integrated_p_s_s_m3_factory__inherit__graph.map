@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::IntegratedPSSM3Factory" name="Ogre::RTShader::IntegratedPSSM3Factory">
-<area shape="rect" id="node1" title="A factory that enables creation of IntegratedPSSM3 instances." alt="" coords="8,167,187,207"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state_factory.html" title="Abstract factory interface for creating SubRenderState implementation instances." alt="" coords="5,79,189,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="21,5,174,31"/>
+<area shape="rect" id="Node000001" title="A factory that enables creation of IntegratedPSSM3 instances." alt="" coords="8,168,186,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state_factory.html" title="Abstract factory interface for creating SubRenderState implementation instances." alt="" coords="5,79,189,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,135,100,167,94,167,94,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="21,5,173,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,46,100,79,94,79,94,46"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::Volume::ChunkHandler" name="Ogre::Volume::ChunkHandler">
-<area shape="rect" id="node1" title="Handles the WorkQueue management of the chunks." alt="" coords="105,93,293,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,184,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="209,5,397,45"/>
+<area shape="rect" id="Node000001" title="Handles the WorkQueue management of the chunks." alt="" coords="103,94,290,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,183,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,53,182,91,179,96,130,58"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="207,5,394,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="265,58,214,96,211,91,261,53"/>
 </map>

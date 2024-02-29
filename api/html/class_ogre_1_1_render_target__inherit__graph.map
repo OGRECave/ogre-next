@@ -1,40 +1,77 @@
 <map id="Ogre::RenderTarget" name="Ogre::RenderTarget">
-<area shape="rect" id="node1" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="236,635,371,660"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_multi_render_target.html" title="This class represents a render target that renders to multiple RenderTextures at once." alt="" coords="419,144,581,169"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture." alt="" coords="430,635,570,660"/>
-<area shape="rect" id="node26" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="429,1127,571,1152"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,609,188,635"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,659,154,684"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_multi_render_target.html" title=" " alt="" coords="635,5,836,31"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d9_multi_render_target.html" title=" " alt="" coords="638,55,833,80"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_g_l3_plus_f_b_o_multi_render_target.html" title="MultiRenderTarget for OpenGL." alt="" coords="634,105,837,145"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_g_l_e_s2_f_b_o_multi_render_target.html" title="MultiRenderTarget for GL ES 2.x." alt="" coords="638,169,833,209"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_metal_multi_render_target.html" title=" " alt="" coords="638,233,833,259"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_d3_d11_depth_texture_target.html" title=" " alt="" coords="631,283,840,308"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_d3_d11_null_texture_target.html" title=" " alt="" coords="636,332,835,357"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_d3_d11_render_texture.html" title="RenderTexture implementation for D3D11." alt="" coords="646,381,825,407"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_d3_d9_render_texture.html" title="RenderTexture implementation for D3D9." alt="" coords="649,431,821,456"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_g_l3_plus_depth_texture_target.html" title=" " alt="" coords="643,481,827,521"/>
-<area shape="rect" id="node16" href="$class_ogre_1_1_g_l3_plus_null_texture_target.html" title=" " alt="" coords="649,545,822,585"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_g_l3_plus_render_texture.html" title="Base class for GL Render Textures." alt="" coords="640,609,831,635"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1_g_l_e_s2_depth_texture_target.html" title=" " alt="" coords="629,659,841,684"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1_g_l_e_s2_null_texture_target.html" title=" " alt="" coords="635,708,836,733"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1_g_l_e_s2_render_texture.html" title="Base class for GL Render Textures." alt="" coords="644,757,827,783"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1_metal_depth_texture_target.html" title=" " alt="" coords="634,807,837,832"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1_metal_null_texture_target.html" title=" " alt="" coords="640,856,831,881"/>
-<area shape="rect" id="node24" href="$class_ogre_1_1_metal_render_texture.html" title=" " alt="" coords="649,905,821,931"/>
-<area shape="rect" id="node25" href="$class_ogre_1_1_n_u_l_l_render_texture.html" title=" " alt="" coords="647,955,823,980"/>
-<area shape="rect" id="node18" href="$class_ogre_1_1_g_l3_plus_f_b_o_render_texture.html" title="RenderTexture for GL FBO." alt="" coords="889,609,1108,635"/>
-<area shape="rect" id="node27" href="$class_ogre_1_1_d3_d11_render_window_base.html" title=" " alt="" coords="629,1004,841,1029"/>
-<area shape="rect" id="node29" href="$class_ogre_1_1_d3_d9_render_window.html" title=" " alt="" coords="648,1053,823,1079"/>
-<area shape="rect" id="node30" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="671,1103,799,1128"/>
-<area shape="rect" id="node35" href="$class_ogre_1_1_g_t_k_window.html" title=" " alt="" coords="671,1152,800,1177"/>
-<area shape="rect" id="node36" href="$class_ogre_1_1_n_u_l_l_render_window.html" title=" " alt="" coords="646,1201,825,1227"/>
-<area shape="rect" id="node37" href="$class_ogre_1_1_na_cl_window.html" title=" " alt="" coords="670,1251,801,1276"/>
-<area shape="rect" id="node38" href="$class_ogre_1_1_s_d_l_window.html" title=" " alt="" coords="671,1300,799,1325"/>
-<area shape="rect" id="node28" href="$class_ogre_1_1_d3_d11_render_window_swap_chain_based.html" title=" " alt="" coords="891,989,1106,1029"/>
-<area shape="rect" id="node31" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="913,1053,1085,1079"/>
-<area shape="rect" id="node32" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="902,1103,1095,1128"/>
-<area shape="rect" id="node33" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="917,1152,1081,1177"/>
-<area shape="rect" id="node34" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="923,1201,1074,1227"/>
+<area shape="rect" id="Node000001" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="235,637,368,663"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_multi_render_target.html" title="This class represents a render target that renders to multiple RenderTextures at once." alt="" coords="416,145,577,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="311,622,488,171,493,173,316,624"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture." alt="" coords="427,637,566,663"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="384,648,427,648,427,653,384,653"/>
+<area shape="rect" id="Node000026" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="426,1129,568,1155"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="316,677,493,1128,488,1130,311,679"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,612,187,638"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,635,234,639,234,645,201,641"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,661,153,687"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,663,234,655,235,661,169,668"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_d3_d11_multi_render_target.html" title=" " alt="" coords="631,5,831,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="516,132,562,85,592,60,624,40,650,29,652,34,627,45,595,65,566,89,520,136"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_d3_d9_multi_render_target.html" title=" " alt="" coords="634,55,828,80"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="532,135,575,112,624,90,663,78,665,84,626,95,578,117,535,139"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_g_l3_plus_f_b_o_multi_render_target.html" title="MultiRenderTarget for OpenGL." alt="" coords="630,105,832,145"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="592,142,629,137,630,142,593,147"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_g_l_e_s2_f_b_o_multi_render_target.html" title="MultiRenderTarget for GL ES 2.x." alt="" coords="634,170,828,211"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="593,169,634,174,633,180,592,174"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_metal_multi_render_target.html" title=" " alt="" coords="634,235,828,260"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="535,177,578,199,626,220,665,232,664,237,624,225,576,204,533,181"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_d3_d11_depth_texture_target.html" title=" " alt="" coords="627,284,835,310"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="498,621,507,558,528,476,544,433,565,391,592,353,624,319,640,308,643,312,627,323,596,356,570,394,549,435,533,478,512,559,503,622"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_d3_d11_null_texture_target.html" title=" " alt="" coords="632,333,830,359"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="500,622,512,568,535,499,551,463,571,428,595,396,624,368,641,357,644,362,627,372,599,399,576,431,556,465,540,501,517,569,505,623"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_d3_d11_render_texture.html" title="RenderTexture implementation for D3D11." alt="" coords="642,383,820,408"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="503,621,518,576,542,521,577,465,599,439,624,417,642,407,645,411,627,422,603,443,582,468,547,523,523,578,508,623"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_d3_d9_render_texture.html" title="RenderTexture implementation for D3D9." alt="" coords="645,432,817,458"/>
+<area shape="poly" id="edge13_Node000010_Node000014" title=" " alt="" coords="507,622,525,586,551,545,584,503,624,468,647,456,650,461,627,472,588,507,555,548,530,589,512,624"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_g_l3_plus_depth_texture_target.html" title=" " alt="" coords="639,482,823,523"/>
+<area shape="poly" id="edge14_Node000010_Node000015" title=" " alt="" coords="518,624,564,578,593,554,624,533,651,521,653,525,627,538,596,558,567,582,521,627"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_g_l3_plus_null_texture_target.html" title=" " alt="" coords="645,547,817,588"/>
+<area shape="poly" id="edge15_Node000010_Node000016" title=" " alt="" coords="543,628,624,597,658,586,660,591,626,602,545,633"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_g_l3_plus_render_texture.html" title="Base class for GL Render Textures." alt="" coords="636,612,826,638"/>
+<area shape="poly" id="edge16_Node000010_Node000017" title=" " alt="" coords="582,638,635,632,636,638,582,644"/>
+<area shape="rect" id="Node000019" href="$class_ogre_1_1_g_l_e_s2_depth_texture_target.html" title=" " alt="" coords="625,661,837,687"/>
+<area shape="poly" id="edge18_Node000010_Node000019" title=" " alt="" coords="582,656,625,661,625,666,582,662"/>
+<area shape="rect" id="Node000020" href="$class_ogre_1_1_g_l_e_s2_null_texture_target.html" title=" " alt="" coords="631,711,831,736"/>
+<area shape="poly" id="edge19_Node000010_Node000020" title=" " alt="" coords="544,667,626,697,665,708,664,713,625,702,542,672"/>
+<area shape="rect" id="Node000021" href="$class_ogre_1_1_g_l_e_s2_render_texture.html" title="Base class for GL Render Textures." alt="" coords="640,760,822,786"/>
+<area shape="poly" id="edge20_Node000010_Node000021" title=" " alt="" coords="523,672,569,710,627,746,655,757,653,762,624,751,566,715,520,676"/>
+<area shape="rect" id="Node000022" href="$class_ogre_1_1_metal_depth_texture_target.html" title=" " alt="" coords="630,809,832,835"/>
+<area shape="poly" id="edge21_Node000010_Node000022" title=" " alt="" coords="515,674,560,736,591,769,627,796,649,806,647,811,624,800,587,773,556,740,511,678"/>
+<area shape="rect" id="Node000023" href="$class_ogre_1_1_metal_null_texture_target.html" title=" " alt="" coords="636,859,826,884"/>
+<area shape="poly" id="edge22_Node000010_Node000023" title=" " alt="" coords="510,676,527,715,552,761,585,807,627,845,646,856,644,861,624,850,581,810,547,764,522,717,505,678"/>
+<area shape="rect" id="Node000024" href="$class_ogre_1_1_metal_render_texture.html" title=" " alt="" coords="645,908,817,934"/>
+<area shape="poly" id="edge23_Node000010_Node000024" title=" " alt="" coords="507,677,521,725,545,785,580,845,602,871,627,895,646,906,643,910,624,899,598,875,575,848,540,787,516,727,502,679"/>
+<area shape="rect" id="Node000025" href="$class_ogre_1_1_n_u_l_l_render_texture.html" title=" " alt="" coords="643,957,819,983"/>
+<area shape="poly" id="edge24_Node000010_Node000025" title=" " alt="" coords="504,678,515,735,538,807,554,845,574,881,598,915,627,944,644,955,641,959,624,948,594,918,569,884,549,847,533,809,510,736,499,679"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1_g_l3_plus_f_b_o_render_texture.html" title="RenderTexture for GL FBO." alt="" coords="885,612,1102,638"/>
+<area shape="poly" id="edge17_Node000017_Node000018" title=" " alt="" coords="842,622,884,622,884,628,842,628"/>
+<area shape="rect" id="Node000027" href="$class_ogre_1_1_d3_d11_render_window_base.html" title=" " alt="" coords="625,1007,837,1032"/>
+<area shape="poly" id="edge26_Node000026_Node000027" title=" " alt="" coords="520,1117,566,1078,624,1041,653,1030,655,1035,627,1046,569,1082,523,1121"/>
+<area shape="rect" id="Node000029" href="$class_ogre_1_1_d3_d9_render_window.html" title=" " alt="" coords="644,1056,818,1082"/>
+<area shape="poly" id="edge28_Node000026_Node000029" title=" " alt="" coords="542,1120,625,1090,664,1080,665,1085,626,1095,544,1125"/>
+<area shape="rect" id="Node000030" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="667,1105,795,1131"/>
+<area shape="poly" id="edge29_Node000026_Node000030" title=" " alt="" coords="583,1131,667,1122,667,1127,583,1136"/>
+<area shape="rect" id="Node000035" href="$class_ogre_1_1_g_t_k_window.html" title=" " alt="" coords="667,1155,795,1180"/>
+<area shape="poly" id="edge34_Node000026_Node000035" title=" " alt="" coords="583,1149,667,1158,666,1163,583,1154"/>
+<area shape="rect" id="Node000036" href="$class_ogre_1_1_n_u_l_l_render_window.html" title=" " alt="" coords="642,1204,820,1230"/>
+<area shape="poly" id="edge35_Node000026_Node000036" title=" " alt="" coords="543,1159,626,1190,665,1201,663,1206,625,1195,541,1164"/>
+<area shape="rect" id="Node000037" href="$class_ogre_1_1_na_cl_window.html" title=" " alt="" coords="666,1253,796,1279"/>
+<area shape="poly" id="edge36_Node000026_Node000037" title=" " alt="" coords="523,1164,569,1203,626,1240,666,1253,664,1259,624,1245,565,1207,519,1168"/>
+<area shape="rect" id="Node000038" href="$class_ogre_1_1_s_d_l_window.html" title=" " alt="" coords="667,1303,795,1328"/>
+<area shape="poly" id="edge37_Node000026_Node000038" title=" " alt="" coords="515,1167,560,1229,591,1262,627,1289,668,1305,666,1310,624,1294,587,1266,556,1233,511,1170"/>
+<area shape="rect" id="Node000028" href="$class_ogre_1_1_d3_d11_render_window_swap_chain_based.html" title=" " alt="" coords="886,991,1101,1032"/>
+<area shape="poly" id="edge27_Node000027_Node000028" title=" " alt="" coords="852,1013,886,1012,886,1017,852,1018"/>
+<area shape="rect" id="Node000031" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="908,1056,1079,1082"/>
+<area shape="poly" id="edge30_Node000030_Node000031" title=" " alt="" coords="809,1101,921,1080,922,1085,810,1106"/>
+<area shape="rect" id="Node000032" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="897,1105,1090,1131"/>
+<area shape="poly" id="edge31_Node000030_Node000032" title=" " alt="" coords="810,1116,897,1116,897,1121,810,1121"/>
+<area shape="rect" id="Node000033" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="912,1155,1075,1180"/>
+<area shape="poly" id="edge32_Node000030_Node000033" title=" " alt="" coords="810,1130,922,1151,921,1157,809,1136"/>
+<area shape="rect" id="Node000034" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="918,1204,1069,1230"/>
+<area shape="poly" id="edge33_Node000030_Node000034" title=" " alt="" coords="811,1128,838,1140,854,1153,863,1166,872,1179,886,1191,919,1204,917,1209,883,1195,868,1182,858,1169,850,1156,835,1144,809,1133"/>
 </map>

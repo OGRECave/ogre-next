@@ -1,9 +1,15 @@
 <map id="Ogre::GLES2Support" name="Ogre::GLES2Support">
-<area shape="rect" id="node1" title=" " alt="" coords="5,105,148,131"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_support.html" title=" " alt="" coords="207,80,333,105"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_na_cl_g_l_support.html" title=" " alt="" coords="196,129,344,155"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_android_e_g_l_support.html" title=" " alt="" coords="403,5,573,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_emscripten_e_g_l_support.html" title=" " alt="" coords="392,55,584,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_win32_e_g_l_support.html" title=" " alt="" coords="407,104,569,129"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_x11_e_g_l_support.html" title=" " alt="" coords="413,153,563,179"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,105,148,131"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_e_g_l_support.html" title=" " alt="" coords="206,80,333,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,104,205,99,206,104,163,109"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_na_cl_g_l_support.html" title=" " alt="" coords="196,129,343,155"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="164,126,196,130,195,136,163,132"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_android_e_g_l_support.html" title=" " alt="" coords="402,5,572,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="311,71,390,40,426,29,428,34,392,45,313,76"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_emscripten_e_g_l_support.html" title=" " alt="" coords="391,55,582,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="347,81,390,76,391,81,348,86"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_win32_e_g_l_support.html" title=" " alt="" coords="406,104,568,130"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="348,99,405,105,405,110,348,104"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_x11_e_g_l_support.html" title=" " alt="" coords="412,153,561,179"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="330,109,344,114,368,127,392,140,425,150,423,155,390,145,366,132,342,119,328,114"/>
 </map>

@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_shared_ptr.html" title=" " alt="" coords="5,5,171,60"/>
+<area shape="rect" id="Node000000" href="$struct_ogre_1_1_shared_ptr_info.html" title=" " alt="" coords="5,92,141,118"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_shared_ptr_info_delete.html" title=" " alt="" coords="189,5,391,31"/>
+<area shape="poly" id="edge1311_Node000000_Node000001" title=" " alt="" coords="107,81,145,60,188,41,225,29,227,34,190,46,147,65,110,86"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_shared_ptr_info_delete_t.html" title=" " alt="" coords="204,55,376,96"/>
+<area shape="poly" id="edge1312_Node000000_Node000002" title=" " alt="" coords="156,91,203,85,203,90,156,96"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_shared_ptr_info_free.html" title=" " alt="" coords="194,120,386,146"/>
+<area shape="poly" id="edge1313_Node000000_Node000003" title=" " alt="" coords="156,113,194,118,193,123,155,118"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_shared_ptr_info_none.html" title=" " alt="" coords="207,169,373,195"/>
+<area shape="poly" id="edge1314_Node000000_Node000004" title=" " alt="" coords="114,123,190,156,225,166,223,171,188,161,111,127"/>
 </map>

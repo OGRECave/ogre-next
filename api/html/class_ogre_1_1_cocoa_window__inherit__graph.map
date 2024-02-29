@@ -1,5 +1,7 @@
 <map id="Ogre::CocoaWindow" name="Ogre::CocoaWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="5,152,144,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_window.html" title=" " alt="" coords="23,79,126,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="17,5,132,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,144,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_window.html" title=" " alt="" coords="24,79,125,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,120,77,152,72,152,72,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="18,5,131,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="77,46,77,79,72,79,72,46"/>
 </map>

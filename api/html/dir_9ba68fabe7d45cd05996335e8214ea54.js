@@ -254,7 +254,7 @@ var dir_9ba68fabe7d45cd05996335e8214ea54 =
     [ "OgreSkeleton.h", "_ogre_skeleton_8h.html", "_ogre_skeleton_8h" ],
     [ "OgreSkeletonFileFormat.h", "_ogre_skeleton_file_format_8h.html", "_ogre_skeleton_file_format_8h" ],
     [ "OgreSkeletonSerializer.h", "_ogre_skeleton_serializer_8h.html", "_ogre_skeleton_serializer_8h" ],
-    [ "OgreMain/include/OgreSmallVector.h", "_ogre_main_2include_2_ogre_small_vector_8h.html", "_ogre_main_2include_2_ogre_small_vector_8h" ],
+    [ "OgreSmallVector.h", "_ogre_main_2include_2_ogre_small_vector_8h.html", "_ogre_main_2include_2_ogre_small_vector_8h" ],
     [ "OgreSphere.h", "_ogre_sphere_8h.html", null ],
     [ "OgreStableHeaders.h", "_ogre_stable_headers_8h.html", null ],
     [ "OgreStackVector.h", "_ogre_stack_vector_8h.html", "_ogre_stack_vector_8h" ],

@@ -1,5 +1,7 @@
 <map id="Ogre::LodStrategyManager" name="Ogre::LodStrategyManager">
-<area shape="rect" id="node1" title="Manager for LOD strategies." alt="" coords="90,93,266,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,196,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="220,13,293,38"/>
+<area shape="rect" id="Node000001" title="Manager for LOD strategies." alt="" coords="90,94,266,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,196,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,55,168,92,164,95,128,59"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="220,13,293,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,51,192,95,188,92,232,48"/>
 </map>

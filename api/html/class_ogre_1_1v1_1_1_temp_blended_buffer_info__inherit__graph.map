@@ -1,5 +1,7 @@
 <map id="Ogre::v1::TempBlendedBufferInfo" name="Ogre::v1::TempBlendedBufferInfo">
-<area shape="rect" id="node1" title="Structure for recording the use of temporary blend buffers." alt="" coords="57,93,269,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer_licensee.html" title="Abstract interface representing a &#39;licensee&#39; of a hardware buffer copy." alt="" coords="5,5,172,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="197,13,282,38"/>
+<area shape="rect" id="Node000001" title="Structure for recording the use of temporary blend buffers." alt="" coords="57,94,268,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer_licensee.html" title="Abstract interface representing a &#39;licensee&#39; of a hardware buffer copy." alt="" coords="5,5,171,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,56,153,92,149,95,115,59"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="195,13,280,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,52,176,95,172,92,214,48"/>
 </map>

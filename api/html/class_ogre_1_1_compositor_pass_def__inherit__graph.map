@@ -1,13 +1,23 @@
 <map id="Ogre::CompositorPassDef" name="Ogre::CompositorPassDef">
-<area shape="rect" id="node1" title="Interface to abstract all types of pass definitions (." alt="" coords="192,219,364,244"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_pass_clear_def.html" title=" " alt="" coords="429,5,632,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_pass_compute_def.html" title=" " alt="" coords="419,55,643,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_pass_depth_copy_def.html" title=" " alt="" coords="437,105,624,145"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_compositor_pass_ibl_specular_def.html" title=" " alt="" coords="412,169,649,195"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_compositor_pass_mipmap_def.html" title=" " alt="" coords="421,219,640,244"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_compositor_pass_quad_def.html" title=" " alt="" coords="429,268,632,293"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_compositor_pass_scene_def.html" title=" " alt="" coords="426,317,635,343"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_compositor_pass_stencil_def.html" title=" " alt="" coords="425,367,637,392"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_compositor_pass_uav_def.html" title=" " alt="" coords="433,416,629,441"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,219,144,244"/>
+<area shape="rect" id="Node000001" title="Interface to abstract all types of pass definitions (." alt="" coords="192,219,363,244"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_pass_clear_def.html" title=" " alt="" coords="429,5,630,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="287,203,305,166,332,121,367,77,410,40,430,29,433,34,412,44,371,81,336,124,310,168,292,205"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_pass_compute_def.html" title=" " alt="" coords="418,55,641,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="294,204,341,146,373,116,410,91,438,78,440,83,412,95,377,120,345,150,298,208"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_pass_depth_copy_def.html" title=" " alt="" coords="437,105,622,145"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="310,208,356,180,410,154,441,143,443,148,412,159,359,185,313,212"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_compositor_pass_ibl_specular_def.html" title=" " alt="" coords="411,169,647,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="361,212,459,193,460,198,362,218"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_compositor_pass_mipmap_def.html" title=" " alt="" coords="421,219,638,244"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="379,229,420,229,420,234,379,234"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_quad_def.html" title=" " alt="" coords="428,268,630,294"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="362,245,460,265,459,270,361,251"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_compositor_pass_scene_def.html" title=" " alt="" coords="425,317,633,343"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="312,251,358,279,412,304,447,314,445,319,410,309,356,283,309,256"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_compositor_pass_stencil_def.html" title=" " alt="" coords="424,367,635,392"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="300,255,348,306,378,332,412,353,438,364,436,368,410,358,375,336,344,310,296,258"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_compositor_pass_uav_def.html" title=" " alt="" coords="432,416,627,442"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="294,257,313,291,339,331,373,370,412,403,434,413,431,418,410,407,369,374,335,334,308,294,289,260"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,219,144,244"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,229,191,229,191,234,159,234"/>
 </map>

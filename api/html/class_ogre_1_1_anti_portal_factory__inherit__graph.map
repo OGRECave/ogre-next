@@ -1,6 +1,9 @@
 <map id="Ogre::AntiPortalFactory" name="Ogre::AntiPortalFactory">
-<area shape="rect" id="node1" title="Factory object for creating AntiPortal instances." alt="" coords="21,225,177,251"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_portal_base_factory.html" title="Factory object for creating Portal instances." alt="" coords="17,152,180,177"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="5,79,192,104"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="49,5,149,31"/>
+<area shape="rect" id="Node000001" title="Factory object for creating AntiPortal instances." alt="" coords="20,226,176,252"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_portal_base_factory.html" title="Factory object for creating Portal instances." alt="" coords="17,153,179,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,194,101,226,95,226,95,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="5,79,191,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,120,101,152,95,152,95,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="48,5,148,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="101,46,101,79,95,79,95,46"/>
 </map>

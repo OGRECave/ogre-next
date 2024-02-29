@@ -1,6 +1,9 @@
 <map id="Ogre::RenderSystem::Listener" name="Ogre::RenderSystem::Listener">
-<area shape="rect" id="node1" title="Defines a listener on the custom events that this render system can raise." alt="" coords="279,5,421,45"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="5,93,231,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d9_stereo_driver_a_m_d.html" title="Virtual interface of the stereo driver." alt="" coords="255,93,445,119"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_overlay_system.html" title="This class simplify initialization / finalization of the overlay system." alt="" coords="469,93,633,119"/>
+<area shape="rect" id="Node000001" title="Defines a listener on the custom events that this render system can raise." alt="" coords="278,5,418,46"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d11_render_pass_descriptor.html" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="5,94,230,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="277,54,154,96,152,91,276,49"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d9_stereo_driver_a_m_d.html" title="Virtual interface of the stereo driver." alt="" coords="254,94,442,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="351,62,351,93,346,93,346,62"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_overlay_system.html" title="This class simplify initialization / finalization of the overlay system." alt="" coords="467,94,630,120"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="413,50,518,91,517,96,411,55"/>
 </map>

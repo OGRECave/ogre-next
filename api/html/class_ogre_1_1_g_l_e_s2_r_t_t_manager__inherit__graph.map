@@ -1,5 +1,7 @@
 <map id="Ogre::GLES2RTTManager" name="Ogre::GLES2RTTManager">
-<area shape="rect" id="node1" title="Manager/factory for RenderTextures." alt="" coords="43,79,217,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_g_l_e_s2_f_b_o_manager.html" title="Factory for GL ES 2 Frame Buffer Objects, and related things." alt="" coords="43,152,217,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,255,31"/>
+<area shape="rect" id="Node000001" title="Manager/factory for RenderTextures." alt="" coords="43,79,216,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_e_s2_f_b_o_manager.html" title="Factory for GL ES 2 Frame Buffer Objects, and related things." alt="" coords="42,153,217,178"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,120,132,152,127,152,127,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,254,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,46,132,79,127,79,127,46"/>
 </map>

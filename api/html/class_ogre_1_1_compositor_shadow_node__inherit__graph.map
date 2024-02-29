@@ -1,6 +1,9 @@
 <map id="Ogre::CompositorShadowNode" name="Ogre::CompositorShadowNode">
-<area shape="rect" id="node1" title="Shadow Nodes are special nodes (not to be confused with." alt="" coords="48,152,248,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing." alt="" coords="71,79,225,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,144,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="169,5,274,31"/>
+<area shape="rect" id="Node000001" title="Shadow Nodes are special nodes (not to be confused with." alt="" coords="47,153,246,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing." alt="" coords="70,79,223,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,120,149,152,144,152,144,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,144,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,40,136,77,132,80,95,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="168,5,272,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="199,44,161,80,157,77,195,40"/>
 </map>

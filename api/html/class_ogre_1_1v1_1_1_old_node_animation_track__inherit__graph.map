@@ -1,5 +1,7 @@
 <map id="Ogre::v1::OldNodeAnimationTrack" name="Ogre::v1::OldNodeAnimationTrack">
-<area shape="rect" id="node1" title="Specialised AnimationTrack for dealing with node transforms." alt="" coords="5,152,191,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_animation_track.html" title="A &#39;track&#39; in an animation sequence, i.e." alt="" coords="15,79,181,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="43,5,153,31"/>
+<area shape="rect" id="Node000001" title="Specialised AnimationTrack for dealing with node transforms." alt="" coords="5,153,190,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_animation_track.html" title="A &#39;track&#39; in an animation sequence, i.e." alt="" coords="14,79,181,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,120,100,152,95,152,95,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="43,5,152,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,46,100,79,95,79,95,46"/>
 </map>

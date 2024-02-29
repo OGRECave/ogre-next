@@ -1,7 +1,11 @@
 <map id="Ogre::v1::OverlayElementFactory" name="Ogre::v1::OverlayElementFactory">
-<area shape="rect" id="node1" title="Defines the interface which all components wishing to supply OverlayElement subclasses must implement..." alt="" coords="148,69,315,109"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html" title="Factory for creating BorderPanelOverlayElement instances." alt="" coords="367,5,558,45"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_panel_overlay_element_factory.html" title="Factory for creating PanelOverlayElement instances." alt="" coords="363,69,563,109"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html" title="Factory for creating TextAreaOverlayElement instances." alt="" coords="377,133,549,173"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,77,100,102"/>
+<area shape="rect" id="Node000001" title="Defines the interface which all components wishing to supply OverlayElement subclasses must implement..." alt="" coords="148,71,314,111"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html" title="Factory for creating BorderPanelOverlayElement instances." alt="" coords="367,5,557,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="319,63,386,44,388,49,320,69"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_panel_overlay_element_factory.html" title="Factory for creating PanelOverlayElement instances." alt="" coords="362,71,561,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="330,88,361,88,361,94,330,94"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html" title="Factory for creating TextAreaOverlayElement instances." alt="" coords="376,136,547,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="320,113,388,133,386,138,319,119"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,78,100,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,88,147,88,147,94,115,94"/>
 </map>

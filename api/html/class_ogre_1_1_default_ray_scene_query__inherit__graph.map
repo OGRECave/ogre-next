@@ -1,10 +1,17 @@
 <map id="Ogre::DefaultRaySceneQuery" name="Ogre::DefaultRaySceneQuery">
-<area shape="rect" id="node1" title="Default implementation of RaySceneQuery." alt="" coords="200,225,391,251"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_bsp_ray_scene_query.html" title="BSP specialisation of RaySceneQuery." alt="" coords="5,299,177,324"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_octree_ray_scene_query.html" title="Octree implementation of RaySceneQuery." alt="" coords="201,299,389,324"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_p_c_z_ray_scene_query.html" title="PCZ implementation of RaySceneQuery." alt="" coords="413,299,588,324"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_ray_scene_query.html" title="Specialises the SceneQuery class for querying along a ray." alt="" coords="221,152,370,177"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="140,79,267,104"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="148,5,259,31"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_ray_scene_query_listener.html" title="Alternative listener class for dealing with RaySceneQuery." alt="" coords="291,79,487,104"/>
+<area shape="rect" id="Node000001" title="Default implementation of RaySceneQuery." alt="" coords="200,226,390,252"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_bsp_ray_scene_query.html" title="BSP specialisation of RaySceneQuery." alt="" coords="5,300,177,326"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="247,260,127,302,125,297,245,255"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_octree_ray_scene_query.html" title="Octree implementation of RaySceneQuery." alt="" coords="201,300,389,326"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="298,267,298,300,292,300,292,267"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_p_c_z_ray_scene_query.html" title="PCZ implementation of RaySceneQuery." alt="" coords="413,300,588,326"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="345,255,466,297,464,302,343,260"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_ray_scene_query.html" title="Specialises the SceneQuery class for querying along a ray." alt="" coords="221,153,369,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="298,194,298,226,292,226,292,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="140,79,266,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="232,112,281,150,278,154,229,117"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="148,5,258,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="206,46,206,79,200,79,200,46"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_ray_scene_query_listener.html" title="Alternative listener class for dealing with RaySceneQuery." alt="" coords="291,79,486,105"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="362,117,312,154,309,150,359,112"/>
 </map>

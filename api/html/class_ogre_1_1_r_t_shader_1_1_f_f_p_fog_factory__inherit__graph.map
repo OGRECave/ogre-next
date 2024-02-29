@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::FFPFogFactory" name="Ogre::RTShader::FFPFogFactory">
-<area shape="rect" id="node1" title="A factory that enables creation of FFPFog instances." alt="" coords="5,167,216,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state_factory.html" title="Abstract factory interface for creating SubRenderState implementation instances." alt="" coords="19,79,203,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,187,31"/>
+<area shape="rect" id="Node000001" title="A factory that enables creation of FFPFog instances." alt="" coords="5,168,215,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state_factory.html" title="Abstract factory interface for creating SubRenderState implementation instances." alt="" coords="18,79,202,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,135,113,167,107,167,107,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,186,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,46,113,79,107,79,107,46"/>
 </map>

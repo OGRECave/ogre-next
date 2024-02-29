@@ -25,15 +25,288 @@
 var NAVTREE =
 [
   [ "OGRE", "index.html", [
-    [ "API Reference Start Page", "index.html", [
-      [ "Introduction", "index.html#autotoc_md2", [
-        [ "What is this?", "index.html#autotoc_md3", null ],
-        [ "It's so BIG!", "index.html#autotoc_md4", null ],
-        [ "License", "index.html#autotoc_md5", null ]
+    [ "API Reference Start Page", "index.html", "index" ],
+    [ "Manual", "manual.html", [
+      [ "Changes: Objects, Scene & Nodes", "_ogre20_changes.html", [
+        [ "Names are now optional", "_ogre20_changes.html#NamesAreNowOptional", null ],
+        [ "How to debug MovableObjects' (and Nodes) data", "_ogre20_changes.html#HowToDebugMovableObjectsData", [
+          [ "Interpreting ArrayVector3", "_ogre20_changes.html#InterpretingArrayVector3", null ],
+          [ "Dummy pointers instead of NULL", "_ogre20_changes.html#DummyPointers", null ]
+        ] ],
+        [ "Attachment and Visibility", "_ogre20_changes.html#AttachmentAndVisibility", null ],
+        [ "Attaching/Detaching is more expensive than hiding", "_ogre20_changes.html#AttachingDetachingIsMoreExpensive", null ],
+        [ "All MovableObjects require a SceneNode (Lights & Cameras)", "_ogre20_changes.html#AllMovableObjectsRequireSceneNode", null ],
+        [ "Obtaining derived transforms", "_ogre20_changes.html#DerivedTransforms", null ],
+        [ "SCENE_STATIC and SCENE_DYNAMIC", "_ogre20_changes.html#SceneStaticSceneDynamic", [
+          [ "What means a Node to be SCENE_STATIC", "_ogre20_changes.html#SceneStaticNode", null ],
+          [ "What means a Entities (and InstancedEntities) to be SCENE_STATIC", "_ogre20_changes.html#SceneStaticEntities", null ],
+          [ "General", "_ogre20_changes.html#SceneStaticGeneral", null ]
+        ] ],
+        [ "Ogre asserts mCachedAabbOutOfDate or mCachedTransformOutOfDate while in debug mode", "_ogre20_changes.html#AssersionCachedOutOfDate", null ],
+        [ "Custom classes derived from Renderable or MovableObject", "_ogre20_changes.html#DerivingRenderable", null ],
+        [ "How do I get the vertex information from the new v2 Mesh classes?", "_ogre20_changes.html#V2MeshInformation", null ],
+        [ "How do I set the element offsets, vertex buffer's source and index?", "_ogre20_changes.html#V2MeshElementOffset", null ],
+        [ "My scene looks too dark or dull!", "_ogre20_changes.html#SceneLooksDarkDull", null ],
+        [ "I activated gamma correction, but now my GUI textures look washed out!", "_ogre20_changes.html#GUIWashedOut", null ]
+      ] ],
+      [ "Technical Overview", "_technical_overview.html", [
+        [ "Overview", "_technical_overview.html#TechnicalOverviewOverview", [
+          [ "SIMD Coherence", "_technical_overview.html#SIMDCoherence", null ]
+        ] ],
+        [ "Memory Managers usage patterns", "_technical_overview.html#MemoryManagerUsagePatterns", [
+          [ "Cleanups", "_technical_overview.html#MemoryManagerCleanups", null ]
+        ] ],
+        [ "Memory preallocation", "_technical_overview.html#MemoryPreallocation", null ],
+        [ "Configuring memory managers", "_technical_overview.html#ConfiguringMemoryManagers", null ],
+        [ "Where is RenderTarget::update? Why do I get errors in Viewport?", "_technical_overview.html#RenderTargetUpdate", null ],
+        [ "Porting from 1.x to 2.0", "_technical_overview.html#PortingV1ToV2", null ],
+        [ "Porting from 2.0 to 2.1", "_technical_overview.html#PortingV20ToV21", null ]
+      ] ],
+      [ "Compositor", "compositor.html", [
+        [ "Nodes", "compositor.html#CompositorNodes", [
+          [ "Input & output channels and RTTs", "compositor.html#CompositorNodesChannelsAndRTTs", [
+            [ "Locally declared textures", "compositor.html#CompositorNodesChannelsAndRTTsLocalTextures", null ],
+            [ "It comes from an input channel", "compositor.html#CompositorNodesChannelsAndRTTsFromInputChannel", null ],
+            [ "It is a global texture", "compositor.html#CompositorNodesChannelsAndRTTsGlobal", null ],
+            [ "Main RenderTarget", "compositor.html#CompositorNodesChannelsAndRTTsMainRenderTarget", null ]
+          ] ],
+          [ "Target", "compositor.html#CompositorNodesTarget", null ],
+          [ "Passes", "compositor.html#CompositorNodesPasses", [
+            [ "clear", "compositor.html#CompositorNodesPassesClear", null ],
+            [ "generate_mipmaps", "compositor.html#CompositorNodesPassesGenerateMipmaps", null ],
+            [ "quad", "compositor.html#CompositorNodesPassesQuad", null ],
+            [ "resolve", "compositor.html#CompositorNodesPassesResolve", null ],
+            [ "render_scene", "compositor.html#CompositorNodesPassesRenderScene", null ],
+            [ "stencil", "compositor.html#CompositorNodesPassesStencil", null ],
+            [ "uav_queue", "compositor.html#CompositorNodesPassesUavQueue", [
+              [ "Synchronization", "compositor.html#CompositorNodesPassesUavQueueSync", null ]
+            ] ],
+            [ "compute", "compositor.html#CompositorNodesPassesCompute", null ]
+          ] ],
+          [ "Textures", "compositor.html#CompositorNodesTextures", [
+            [ "MSAA: Explicit vs Implicit resolves", "compositor.html#CompositorNodesTexturesMsaa", [
+              [ "Implicit resolves", "compositor.html#CompositorNodesTexturesMsaaImplicit", null ],
+              [ "Explicit resolves", "compositor.html#CompositorNodesTexturesMsaaExplicit", null ],
+              [ "Resources", "compositor.html#CompositorNodesTexturesMsaaResources", null ]
+            ] ],
+            [ "Depth Textures", "compositor.html#CompositorNodesTexturesDepth", null ]
+          ] ]
+        ] ],
+        [ "Shadow Nodes", "compositor.html#CompositorShadowNodes", [
+          [ "Setting up shadow nodes", "compositor.html#CompositorShadowNodesSetup", null ],
+          [ "Example", "compositor.html#CompositorShadowNodesExample", null ],
+          [ "Shadow map atlas & Point Lights", "compositor.html#CompositorShadowNodesAtlasAndPointLights", null ],
+          [ "Reuse, recalculate and first", "compositor.html#CompositorShadowNodesReuseEtc", null ],
+          [ "Shadow mapping setup types", "compositor.html#CompositorShadowNodesTypes", [
+            [ "Uniform shadow mapping", "compositor.html#CompositorShadowNodesTypesUniform", null ],
+            [ "Focused", "compositor.html#CompositorShadowNodesTypesFocused", null ],
+            [ "PSSM / CSM", "compositor.html#CompositorShadowNodesTypesPssm", null ],
+            [ "Plane Optimal", "compositor.html#CompositorShadowNodesTypesPlaneOptimal", null ]
+          ] ],
+          [ "Writing shaders", "compositor.html#CompositorShadowNodesShaders", null ]
+        ] ],
+        [ "Workspaces", "compositor.html#CompositorWorkspaces", [
+          [ "Data dependencies between nodes and circular dependencies", "compositor.html#CompositorWorkspacesDataDependencies", null ]
+        ] ],
+        [ "Setting up code", "compositor.html#CompositorSetupCode", [
+          [ "Initializing the workspace", "compositor.html#CompositorWorkspacesSetupInitialize", null ],
+          [ "Simple bootstrap for beginners", "compositor.html#CompositorWorkspacesSetupSimple", null ],
+          [ "Advanced C++ users", "compositor.html#CompositorWorkspacesSetupAdvanced", null ]
+        ] ],
+        [ "Stereo and Split-Screen Rendering", "compositor.html#StereoAndSplitScreenRendering", [
+          [ "Per-Workspace offset and scale", "compositor.html#CompositorWorkspacesStereoPerWorkspace", null ],
+          [ "Viewport modifier mask", "compositor.html#CompositorWorkspacesStereoViewportMask", null ],
+          [ "Execution mask", "compositor.html#CompositorWorkspacesStereoExecutionMask", null ],
+          [ "Default values", "compositor.html#CompositorWorkspacesStereoDefaultValues", null ]
+        ] ]
+      ] ],
+      [ "Global Illumination Methods", "_gi_methods.html", [
+        [ "Ambient Lighting", "_gi_methods.html#GiAmbientLighting", [
+          [ "Flat", "_gi_methods.html#GiAmbientLightingFlat", null ],
+          [ "Hemisphere", "_gi_methods.html#GiAmbientLightingHemisphere", null ],
+          [ "Spherical Harmonics", "_gi_methods.html#GiAmbientLightingSH", null ]
+        ] ],
+        [ "Parallax Corrected Cubemaps (PCC)", "_gi_methods.html#GiPCC", [
+          [ "Auto PCC", "_gi_methods.html#GiPCCAuto", null ],
+          [ "Manual PCC", "_gi_methods.html#GiPCCManual", null ]
+        ] ],
+        [ "Per Pixel PCC", "_gi_methods.html#GiPPPCC", [
+          [ "PCC Per Pixel Grid Placement", "_gi_methods.html#GiPPGridPlacement", null ]
+        ] ],
+        [ "Instant Radiosity", "_gi_methods.html#GiInstantRadiosity", null ],
+        [ "Irradiance Volume", "_gi_methods.html#GiIrradianceVolume", null ],
+        [ "Voxel Cone Tracing (aka VCT)", "_gi_methods.html#GiVCT", [
+          [ "VCT + Per Pixel PCC Hybrid", "_gi_methods.html#GiVCTPlusPPPCC", null ]
+        ] ],
+        [ "Irradiance Field with Depth (IFD)", "_gi_methods.html#GiIFD", null ],
+        [ "What technique should I choose?", "_gi_methods.html#GiWhatTechniqueChoose", null ]
+      ] ],
+      [ "Instancing", "instancing.html", [
+        [ "What is instancing?", "instancing.html#WhatIsInstancing", null ],
+        [ "Instancing 101", "instancing.html#Instancing101", [
+          [ "Instances per batch", "instancing.html#InstancesPerBatch", null ]
+        ] ],
+        [ "Techniques", "instancing.html#InstancingTechniques", [
+          [ "ShaderBased", "instancing.html#InstancingTechniquesShaderBased", null ],
+          [ "VTF (Software)", "instancing.html#InstancingTechniquesVTFSoftware", null ],
+          [ "HW VTF", "instancing.html#InstancingTechniquesHWVTF", [
+            [ "HW VTF LUT", "instancing.html#InstancingTechniquesHW", null ]
+          ] ],
+          [ "HW Basic", "instancing.html#InstancingTechniquesHWBasic", null ]
+        ] ],
+        [ "Custom parameters", "instancing.html#InstancingCustomParameters", null ],
+        [ "Supporting multiple submeshes", "instancing.html#InstancingMultipleSubmeshes", null ],
+        [ "Defragmenting batches", "instancing.html#InstancingDefragmentingBatches", [
+          [ "What is batch fragmentation?", "instancing.html#InstancingDefragmentingBatchesIntro", null ],
+          [ "Prevention: Avoiding fragmentation", "instancing.html#InstancingDefragmentingBatchesPrevention", null ],
+          [ "Cure: Defragmenting on the fly", "instancing.html#InstancingDefragmentingBatchesOnTheFly", null ]
+        ] ],
+        [ "Troubleshooting", "instancing.html#InstancingTroubleshooting", null ]
+      ] ],
+      [ "Threading", "threading.html", [
+        [ "Initializing", "threading.html#ThreadingInitializing", [
+          [ "Ideal number of threads", "threading.html#ThreadingInitializingNumberOfThreads", null ],
+          [ "More info about InstancingThreadedCullingMethod", "threading.html#ThreadingInitializingCullingMethod", null ]
+        ] ],
+        [ "What tasks are threaded in Ogre", "threading.html#ThreadingInOgre", null ],
+        [ "Using Ogre's threading system for custom tasks", "threading.html#ThreadingCustomTasks", null ],
+        [ "Thread safety of SceneNodes", "threading.html#ThreadSafetySceneNodes", null ]
+      ] ],
+      [ "Performance Hints", "performance.html", null ],
+      [ "HLMS: High Level Material System", "hlms.html", [
+        [ "Fundamental changes", "hlms.html#HlmsChanges", [
+          [ "Viewports and Scissor tests", "hlms.html#HlmsChangesViewports", null ],
+          [ "A lot of data is stored in \"Blocks\"", "hlms.html#HlmsChangesBlocks", null ],
+          [ "Materials are still alive", "hlms.html#HlmsChangesMaterialsAlive", null ],
+          [ "Fixed Function has been removed", "hlms.html#HlmsChangesFFP", null ]
+        ] ],
+        [ "The three components", "hlms.html#HlmsComponents", null ],
+        [ "Blocks", "hlms.html#HlmsBlocks", [
+          [ "Datablocks", "hlms.html#HlmsBlocksDatablocks", null ],
+          [ "Macroblocks", "hlms.html#HlmsBlocksMacroblocks", null ],
+          [ "Blendblocks", "hlms.html#HlmsBlocksBlendblocks", null ],
+          [ "Samplerblocks", "hlms.html#HlmsBlocksSampleblocks", null ]
+        ] ],
+        [ "Hlms templates", "hlms.html#HlmsTemplates", null ],
+        [ "The Hlms preprocessor", "hlms.html#HlmsPreprocessor", [
+          [ "Preprocessor syntax", "hlms.html#HlmsPreprocessorSyntax", [
+            [ "@property( expression )", "hlms.html#HlmsPreprocessorSyntaxProperty", null ],
+            [ "@foreach( count, scopedVar, [start] )", "hlms.html#HlmsPreprocessorSyntaxForeach", null ],
+            [ "@counter( variable )", "hlms.html#HlmsPreprocessorSyntaxCounter", null ],
+            [ "@value( variable )", "hlms.html#HlmsPreprocessorSyntaxValue", null ],
+            [ "@set add sub mul div mod min max", "hlms.html#HlmsPreprocessorSyntaxSetEtc", null ],
+            [ "@piece( nameOfPiece )", "hlms.html#HlmsPreprocessorSyntaxPiece", null ],
+            [ "@insertpiece( nameOfPiece )", "hlms.html#HlmsPreprocessorSyntaxInsertpiece", null ],
+            [ "@undefpiece( nameOfPiece )", "hlms.html#HlmsPreprocessorSyntaxUndefpiece", null ],
+            [ "@pset padd psub pmul pdiv pmod pmin pmax", "hlms.html#HlmsPreprocessorSyntaxPsetEtc", null ]
+          ] ]
+        ] ],
+        [ "Creation of shaders", "hlms.html#HlmsCreationOfShaders", [
+          [ "C++ interaction with shader templates", "hlms.html#HlmsCreationOfShadersCpp", null ],
+          [ "Common conventions", "hlms.html#HlmsCreationOfShadersConventions", null ],
+          [ "Hot reloading", "hlms.html#HlmsCreationOfShadersHotReloading", null ],
+          [ "Disabling a stage", "hlms.html#HlmsCreationOfShadersDisablingStage", null ],
+          [ "Customizing an existing implementation", "hlms.html#HlmsCreationOfShadersCustomizing", null ]
+        ] ],
+        [ "Run-time rendering", "hlms.html#HlmsRuntimeRendering", [
+          [ "preparePassHash", "hlms.html#HlmsRuntimeRenderingPreparePassHash", null ],
+          [ "fillBuffersFor", "hlms.html#HlmsRuntimeRenderingFillBuffersFor", null ]
+        ] ],
+        [ "Using the HLMS implementations", "hlms.html#UsingHlmsImplementation", [
+          [ "Initialization", "hlms.html#UsingHlmsImplementationInitialization", null ],
+          [ "Deinitialization", "hlms.html#UsingHlmsImplementationDeinitilization", null ],
+          [ "Creating a datablock", "hlms.html#UsingHlmsImplementationCreatingDatablock", null ]
+        ] ],
+        [ "The Hlms Texture Manager", "hlms.html#HlmsTextureManager", [
+          [ "Automatic batching", "hlms.html#HlmsTextureManagerAutomaticBatching", [
+            [ "Texture types", "hlms.html#HlmsTextureManagerAutomaticBatchingTextureTypes", null ],
+            [ "Automatic parameters", "hlms.html#HlmsTextureManagerAutomaticBatchingAutoParams", null ],
+            [ "Loading a texture twice (i.e. with a different format) via aliasing", "hlms.html#HlmsTextureManagerAutomaticBatchingLoadingTwice", null ]
+          ] ],
+          [ "Manual: Texture packs", "hlms.html#HlmsTextureManagerTexturePacks", null ],
+          [ "Watching out for memory consumption", "hlms.html#HlmsTextureManagerWatchOutMemory", [
+            [ "Additional memory considerations", "hlms.html#HlmsTextureManagerWatchOutMemoryConsiderations", null ],
+            [ "setWorkerThreadMinimumBudget warning", "hlms.html#setWorkerThreadMinimumBudget", null ]
+          ] ]
+        ] ],
+        [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
+          [ "My shadows don't show up or are very glitchy", "hlms.html#HlmsTroubleshootingShadow", null ]
+        ] ]
+      ] ],
+      [ "AZDO changes (Aproaching Zero Driver Overhead)", "azdo.html", [
+        [ "V2 and v1 objects", "azdo.html#V2AndV1Objects", [
+          [ "Longevity of the v1 objects and deprecation", "azdo.html#V2AndV1ObjectsV1Longevity", null ]
+        ] ],
+        [ "Render Queue", "azdo.html#RenderQueue", null ],
+        [ "The VaoManager", "azdo.html#VaoMaanger", null ]
+      ] ],
+      [ "The Command Buffer", "commandbuffer.html", [
+        [ "Adding a command", "commandbuffer.html#CommandBufferAddCommand", null ],
+        [ "Structure of a command", "commandbuffer.html#CommandBufferCommandStructure", null ],
+        [ "Execution table", "commandbuffer.html#CommandBufferExecutionTable", [
+          [ "Hacks and Tricks", "commandbuffer.html#CommandBufferExecutionTableHacks", null ]
+        ] ],
+        [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
+      ] ],
+      [ "What's new in Ogre 2.2", "_ogre22_changes.html", [
+        [ "Load Store semantics", "_ogre22_changes.html#autotoc_md17", [
+          [ "Now that we’ve explained how TBDRs work, we can explain load and store actions", "_ogre22_changes.html#autotoc_md18", null ]
+        ] ],
+        [ "More control over MSAA", "_ogre22_changes.html#autotoc_md19", null ],
+        [ "Porting to Ogre 2.2 from 2.1", "_ogre22_changes.html#autotoc_md20", [
+          [ "PixelFormats", "_ogre22_changes.html#autotoc_md21", [
+            [ "Common pixel format equivalencies", "_ogre22_changes.html#autotoc_md22", null ]
+          ] ],
+          [ "Useful code snippets", "_ogre22_changes.html#autotoc_md23", [
+            [ "Create a TextureGpu based on a file", "_ogre22_changes.html#autotoc_md24", null ],
+            [ "Create a TextureGpu based that you manually fill", "_ogre22_changes.html#autotoc_md25", null ],
+            [ "Uploading data to a TextureGpu", "_ogre22_changes.html#autotoc_md26", null ],
+            [ "Upload streaming", "_ogre22_changes.html#autotoc_md27", null ],
+            [ "Downloading data from TextureGpu into CPU", "_ogre22_changes.html#autotoc_md28", null ],
+            [ "Downloading streaming", "_ogre22_changes.html#autotoc_md29", null ]
+          ] ]
+        ] ],
+        [ "Difference between depth, numSlices and depthOrSlices", "_ogre22_changes.html#autotoc_md30", null ],
+        [ "Memory layout of textures and images", "_ogre22_changes.html#autotoc_md31", null ],
+        [ "Troubleshooting errors", "_ogre22_changes.html#autotoc_md32", null ],
+        [ "RenderPassDescriptors", "_ogre22_changes.html#autotoc_md33", null ],
+        [ "DescriptorSetTexture & co.", "_ogre22_changes.html#autotoc_md34", null ],
+        [ "Does 2.2 interoperate well with the HLMS texture arrays?", "_ogre22_changes.html#autotoc_md35", null ],
+        [ "Hlms porting", "_ogre22_changes.html#autotoc_md36", null ],
+        [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md37", null ]
+      ] ],
+      [ "Behavor of StagingTexture in D3D11", "_behavor_staging_texture_d3_d11.html", [
+        [ "Attempting to be contiguous", "_behavor_staging_texture_d3_d11.html#autotoc_md6", null ],
+        [ "Slicing in 3", "_behavor_staging_texture_d3_d11.html#autotoc_md7", null ],
+        [ "Slicing in the middle", "_behavor_staging_texture_d3_d11.html#autotoc_md8", null ]
       ] ]
     ] ],
-    [ "Manual", "manual.html", "manual" ],
-    [ "Setting Up Ogre", "_setting_up_ogre.html", "_setting_up_ogre" ],
+    [ "Setting Up Ogre", "_setting_up_ogre.html", [
+      [ "Windows", "_setting_up_ogre_windows.html", [
+        [ "Requirements", "_setting_up_ogre_windows.html#RequirementsWindows", null ],
+        [ "Downloading Ogre", "_setting_up_ogre_windows.html#DownloadingOgreWindows", null ],
+        [ "Building Dependencies", "_setting_up_ogre_windows.html#BuildingDependenciesWindows", null ],
+        [ "Building Ogre", "_setting_up_ogre_windows.html#BuildingOgreWindows", null ]
+      ] ],
+      [ "Linux", "_setting_up_ogre_linux.html", [
+        [ "Requirements", "_setting_up_ogre_linux.html#RequirementsLinux", null ],
+        [ "Downloading Ogre", "_setting_up_ogre_linux.html#DownloadingOgreLinux", null ],
+        [ "Building Dependencies", "_setting_up_ogre_linux.html#BuildingDependenciesLinux", null ],
+        [ "Building Ogre", "_setting_up_ogre_linux.html#BuildingOgreLinux", null ],
+        [ "Setting Up Ogre with QtCreator", "_setting_up_ogre_linux.html#SettingUpOgreWithQtCreatorLinux", null ]
+      ] ],
+      [ "iOS", "_setting_up_ogre_i_o_s.html", [
+        [ "Requirements", "_setting_up_ogre_i_o_s.html#Requirements_iOS", null ],
+        [ "Downloading Ogre", "_setting_up_ogre_i_o_s.html#DownloadingOgre_iOS", null ],
+        [ "Building Ogre", "_setting_up_ogre_i_o_s.html#BuildingOgre_iOS", null ]
+      ] ],
+      [ "macOS", "_setting_up_ogre_mac_o_s.html", [
+        [ "Install cmake", "_setting_up_ogre_mac_o_s.html#autotoc_md38", null ],
+        [ "Install dependencies", "_setting_up_ogre_mac_o_s.html#autotoc_md39", null ],
+        [ "Build Ogre", "_setting_up_ogre_mac_o_s.html#autotoc_md40", null ],
+        [ "Build offline version of the docs", "_setting_up_ogre_mac_o_s.html#autotoc_md41", null ]
+      ] ]
+    ] ],
     [ "Using Ogre in your App", "_using_ogre_in_your_app.html", [
       [ "Overview", "_using_ogre_in_your_app.html#UsingOgreInYourAppOverview", null ],
       [ "Speeding things up", "_using_ogre_in_your_app.html#SpeedingThingsUp", [
@@ -45,7 +318,7 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Deprecated List", "deprecated.html", null ],
-    [ "Modules", "modules.html", "modules" ],
+    [ "Topics", "topics.html", "topics" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -69,7 +342,7 @@ var NAVTREE =
         [ "Enumerations", "functions_enum.html", null ],
         [ "Enumerator", "functions_eval.html", "functions_eval" ],
         [ "Properties", "functions_prop.html", null ],
-        [ "Related Functions", "functions_rela.html", "functions_rela" ]
+        [ "Related Symbols", "functions_rela.html", "functions_rela" ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -386,75 +659,73 @@ var NAVTREEINDEX =
 "class_ogre_1_1v1_1_1_entity.html#af19ca18abcd6ca7bceb2f55a814e1c1b",
 "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_counter_buffer.html#a9f7b1a5624f5a89781b0870f919152e4",
 "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_vertex_buffer.html#a5caebd4b5db7696029eb412351d7767f",
-"class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager.html#ad31a801ac5e410a06a20706f437cdebd",
-"class_ogre_1_1v1_1_1_g_l3_plus_hardware_index_buffer.html#a87632db14ce9c10e113f1966c6a97c6da3756a6536dc4f8a6c3434b704537c0eb",
-"class_ogre_1_1v1_1_1_g_l3_plus_hardware_shader_storage_buffer.html#adce32528577d71b228692df906ecd17c",
-"class_ogre_1_1v1_1_1_g_l3_plus_null_pixel_buffer.html#a93e6a86dde5483c053ca0f2a85bbfd6c",
-"class_ogre_1_1v1_1_1_g_l3_plus_texture_buffer.html#a787c4f5ca31d533e63f089f6d35a5e8e",
-"class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6fa5619d24e60002f0ca94398226dcdb4e8",
-"class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_vertex_buffer.html#ae863b62f0f60184f5ed9411fa0dedb78",
-"class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#aab50efb6a3069f7be0429857166e0b07",
-"class_ogre_1_1v1_1_1_g_l_e_s2_hardware_uniform_buffer.html#aed1464ac3de21ff20db8f9f1f8608dc7",
-"class_ogre_1_1v1_1_1_g_l_e_s2_render_to_vertex_buffer.html#a339e988aca24cd6f0ef0cdadb2328d00",
-"class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a4b495397711f2183c49b4900bb425e78",
-"class_ogre_1_1v1_1_1_hardware_uniform_buffer.html#a87632db14ce9c10e113f1966c6a97c6d",
-"class_ogre_1_1v1_1_1_manual_object.html#a6c4003f6b67540727844dc33c20714f7",
-"class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a8357fe4fb4849772b94baa4bf47c7ded",
-"class_ogre_1_1v1_1_1_mesh.html#ad2a2e90e38d42ca830768c464eec4e77",
-"class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__41.html#a03e0d9d1ac6df9a1c20e314fcd484d79",
-"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#aefebeab1dc9817a749f72d6c6a66c07f",
-"class_ogre_1_1v1_1_1_metal_hardware_pixel_buffer.html#a93e6a86dde5483c053ca0f2a85bbfd6c",
-"class_ogre_1_1v1_1_1_metal_null_pixel_buffer.html#af9e3a9dbf6ee8c01bf6313ca37542816",
-"class_ogre_1_1v1_1_1_node_animation_track.html#a4c7d222329573c8bf90cf7b1b8b3954c",
-"class_ogre_1_1v1_1_1_old_node.html#a6aeafd2da26f1851a1300067e2aa8c85",
-"class_ogre_1_1v1_1_1_old_skeleton_instance.html#a42b5906fa37d09408439624dc8e43e57",
-"class_ogre_1_1v1_1_1_overlay.html#a69450a6153358915f7625cecc0649cf1",
-"class_ogre_1_1v1_1_1_overlay_element.html#a173800458c92ecefcff9d037be54afea",
-"class_ogre_1_1v1_1_1_overlay_system.html#a338dd1abf82317692ce7504978c01a5c",
-"class_ogre_1_1v1_1_1_patch_mesh.html#a37ed66c22ecc9cc13116b2018406f827",
-"class_ogre_1_1v1_1_1_rectangle2_d.html#a30acf249cd312d9eed03a0f3ad618067",
-"class_ogre_1_1v1_1_1_rectangle2_d_factory.html#a595ea4c05da8aa987d3800e65d23355d",
-"class_ogre_1_1v1_1_1_ribbon_trail.html#afd6c95fe6033be484e6cb501f2ca1c27",
-"class_ogre_1_1v1_1_1_simple_renderable.html#ac4305df204604a027ca27ef77efff295",
-"class_ogre_1_1v1_1_1_static_geometry.html#aac0ecb9e456d3d972e8024beaaf41515",
-"class_ogre_1_1v1_1_1_static_geometry_1_1_material_bucket.html#a22d4b1a164220f5ee06d13e4acd8bb5d",
-"class_ogre_1_1v1_1_1_static_geometry_1_1_region.html#ad66149b7a6f5ba1cd5c58fbd69f0446a",
-"class_ogre_1_1v1_1_1_sub_mesh.html#ad1f1a983f9e2dfddee802c47bb0b1ca9",
-"class_ogre_1_1v1_1_1_text_area_overlay_element.html#aa18b1553de5547c24b1f8cdd6265f8ca",
-"class_ogre_1_1v1_1_1_vertex_declaration.html",
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a667b8876930b77c9d609b80ee5fb1515",
-"dir_08f45fe6822aeb4ce2bc268e3b1361be.html",
-"functions_type_m.html",
-"group___general.html#gac173244ed7d950d0acd726e4f323ecdb",
-"group___general.html#gga828fd7e6454d2a188dc27c3df3627244a56c52dc100ecef30b91fbace8cf86c51",
-"group___general.html#gga828fd7e6454d2a188dc27c3df3627244afe70fb02909d6aac2802cf9950075d39",
-"group___image.html#gga71f09fe41a1db41186262f1aa5814a18abda15d4c54986b4c2f31b8313207f095",
-"group___materials.html#gga41c76d419d6c9c205a6c1d3b42872213a09184af2d875978d03c6edd00d4d52f9",
-"group___optional.html#gaec607907c425472cc2edaab54c7a0d90",
-"group___render_system.html#gac4c251bcc05376f701348bfe0f4a53b4",
-"group___resources.html#gga7b904fc5463a8ef1e61f6de39b603fc4adb5976001d45fa25b6f5bf094ee26cb9",
-"namespace_ogre.html#a027109503a988ba85f4c63b55082907fac6a0941060af4229841f897c79af7ea4",
-"namespace_ogre.html#a8a7a044fdaeb5519dcfa2224541f46fc",
-"namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540ac3a7d5a193ef3c437fcbdc8c61cc34a2",
-"namespacestd.html",
-"struct_ogre_1_1_cb_draw_strip.html",
-"struct_ogre_1_1_const_map_range.html#ade652ae33eb3952d98d75bfc15ea7be4",
-"struct_ogre_1_1_descriptor_set_uav_1_1_buffer_slot.html",
-"struct_ogre_1_1_g_l_atomic_counter_reference.html#aed4e289a240d18f013e2d9678069e84d",
-"struct_ogre_1_1_hlms_base_prop.html#a30a8aaf4edf7c988a87ebc7d620f1288",
-"struct_ogre_1_1_hlms_texture_manager_1_1_default_texture_parameters.html",
-"struct_ogre_1_1_lod_data.html#a8e9cd1fac7686aa15718a1b4895dd3ba",
-"struct_ogre_1_1_metal_descriptor_set_texture.html#a725859d9ad8a3e196063c8f4c80d1838",
-"struct_ogre_1_1_pbs_mobile_property.html#a4cb9e1bce065858841ab3c688872695c",
-"struct_ogre_1_1_quake3_shader_1_1_pass.html",
-"struct_ogre_1_1_sample_description.html#a933c0f4deb1ecd4a58349e0404e9972e",
-"struct_ogre_1_1_t_rect.html#a4b857f788936dbeeb63ac64fc5e9fb99",
-"struct_ogre_1_1_texture_unit_state_1_1_texture_effect.html",
-"struct_ogre_1_1_unlit_property.html#aea53c060be96b05b5b4cdf5f2063780a",
-"struct_ogre_1_1_vector_set.html#a93908576e26866c616eea337800ceb9d",
-"struct_ogre_1_1_volume_1_1_chunk_parameters.html#a68abf70466535d03dcbe3ac79db16ba6",
-"struct_ogre_1_1type4.html#a455f96a54be42ed640cfbd6fe873f197",
-"struct_x_client_message_event.html"
+"class_ogre_1_1v1_1_1_g_l3_plus_hardware_counter_buffer.html",
+"class_ogre_1_1v1_1_1_g_l3_plus_hardware_pixel_buffer.html#a87632db14ce9c10e113f1966c6a97c6dab5fe6ef729ea615265721a10ff7d9e57",
+"class_ogre_1_1v1_1_1_g_l3_plus_hardware_vertex_buffer.html#a4674ce75bfc84fa7e6ac03a059f0dbb5",
+"class_ogre_1_1v1_1_1_g_l3_plus_texture_buffer.html#a4c89e8f3e555b5baf18bcae16d5fb8dd",
+"class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_buffer_manager_base.html#adce32528577d71b228692df906ecd17c",
+"class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_vertex_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa364f94b757045261468e68fe09c36cca",
+"class_ogre_1_1v1_1_1_g_l_e_s2_hardware_pixel_buffer.html#a787c4f5ca31d533e63f089f6d35a5e8e",
+"class_ogre_1_1v1_1_1_g_l_e_s2_render_buffer.html#ab60da8e622506487a7d44200a1c704b6",
+"class_ogre_1_1v1_1_1_hardware_buffer_licensee.html#a79993f3120fffb36d8c97cafc84ea938",
+"class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfae160717b1f864d2d91aa2ba24ac38771",
+"class_ogre_1_1v1_1_1_manual_object.html#a3a0931d4fb9b2dfb348257b40d15110e",
+"class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a3bee104c7359ba6c41d65d88cfc3d418",
+"class_ogre_1_1v1_1_1_mesh.html#a7fc68fb27ecf6df13e48f55dc2bf63c6",
+"class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__2.html#a595ea4c05da8aa987d3800e65d23355d",
+"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager_base.html#aaec7f834aff615ec9efd3169658950b0",
+"class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a314bdb43214d6d0ec151d9eb628fe6c3",
+"class_ogre_1_1v1_1_1_metal_texture_buffer.html#a87632db14ce9c10e113f1966c6a97c6da1de64eadc98dfb60e9dcdf7fe6287c09",
+"class_ogre_1_1v1_1_1_numeric_animation_track.html#ad1f1a983f9e2dfddee802c47bb0b1ca9",
+"class_ogre_1_1v1_1_1_old_node.html#acb46d4b0a597156d9ba5abc39d127792",
+"class_ogre_1_1v1_1_1_old_skeleton_instance.html#a9dffcf1a2d754e63e98770e5cf2cd9ee",
+"class_ogre_1_1v1_1_1_overlay.html#aed1464ac3de21ff20db8f9f1f8608dc7",
+"class_ogre_1_1v1_1_1_overlay_element.html#a82ffa73dd4cd2aaaff532429e5e26e14",
+"class_ogre_1_1v1_1_1_panel_overlay_element.html#a40f54cb11284c8e13a04511539a2f3ea",
+"class_ogre_1_1v1_1_1_patch_mesh.html#a8e9e4d491069483506d008369076aef1",
+"class_ogre_1_1v1_1_1_rectangle2_d.html#a65246f7bdb08b9b4fb169ff5d0235eaa",
+"class_ogre_1_1v1_1_1_ribbon_trail.html#a01f48775e48b672d7796311f3ffe2930",
+"class_ogre_1_1v1_1_1_simple_renderable.html#a27e11639e69472211e847cbe59389c02",
+"class_ogre_1_1v1_1_1_simple_renderable.html#af85238872bb197dea36acf21a578ecec",
+"class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html#a0f81bbb1fd282d641035a19a9432175f",
+"class_ogre_1_1v1_1_1_static_geometry_1_1_optimised_sub_mesh_geometry.html#ab7d95354f1f6655034211af3984878b6",
+"class_ogre_1_1v1_1_1_sub_entity.html#a1cc35cf8e670d08912fc52fb51330759",
+"class_ogre_1_1v1_1_1_tag_point.html#a7b932b5d1e72cc70eda5309e0a93fe27",
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html#a90af55100e3482cbb2271eb78037db61",
+"class_ogre_1_1v1_1_1_vertex_element.html#a988815e754f24add2e6529c744e5f4fb",
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a9a72ade896561e23c32cf8659f1640e4",
+"dir_83c3d6697dd0c53f763f0f7468a75e59.html",
+"globals_defs_f.html",
+"group___general.html#gga3970484e048d1352a7e59b61186b5f2aadae32e4e84712917731325c903fa14dd",
+"group___general.html#gga828fd7e6454d2a188dc27c3df3627244a824a2c2d59619c736a3db29ed92d51a9",
+"group___image.html#ga4239da7c9c8c6d4ce977663844dfcae1",
+"group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca2542d39f6712cb6f69907330a31a9342",
+"group___materials.html#gga9c5b2950be06ff56a6ee0bace240d447ae5d0f0b506f6443725dfa2ee729d2b8b",
+"group___property.html#gga0883a5af9197151407965df0bacc4f3aaa5b410ea31e3954eeba233240dfb67ec",
+"group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7ab4f91cac8782a94b7628efde67bb3a89",
+"group___scene.html#ga1d0db569747448aeff27f36ecd717686",
+"namespace_ogre.html#a11c9152a33c78bdc13a9cfdc41833d35",
+"namespace_ogre.html#aba516afc0c3b91e55136e823cb02fed0",
+"namespace_ogre_1_1_scene_flags.html#af3190017d83d94455e645c506aa1681b",
+"struct_ogre_1_1_aabb.html#ac6f3f88357056e62dbd427a9c486c76c",
+"struct_ogre_1_1_cb_shader_buffer.html#af17e61e5739bfe1d4e35520a870f1003",
+"struct_ogre_1_1_d3_d11_frame_buffer_desc_value.html#a92045338d83c538dcafda06bcf72240e",
+"struct_ogre_1_1_entity_material_lod_changed_event.html",
+"struct_ogre_1_1_g_l_e_s2_vertex_array_object.html#a18c774a4e47939b8d4ce980af254c40d",
+"struct_ogre_1_1_hlms_base_prop.html#ad20efb9f96fcd8abff55af3369051f0d",
+"struct_ogre_1_1_id_string.html#aa879e3cd371deb2979f1f5d4b8977d44",
+"struct_ogre_1_1_lod_data_1_1_triangle.html#ab43218cda5bc70a6c6e5f084a1a5ec7b",
+"struct_ogre_1_1_metal_hlms_pso.html#a0649b518d6c05f67c1732d3397d0118d",
+"struct_ogre_1_1_pbs_property.html#a04fcad673e38920530d9300fe0b748f7",
+"struct_ogre_1_1_r_t_shader_1_1_function_invocation_1_1_function_invocation_compare.html",
+"struct_ogre_1_1_scene_query_result.html#acb46d4b0a597156d9ba5abc39d127792",
+"struct_ogre_1_1_terrain_group_1_1_terrain_slot.html#aa0cb112bc24303af1881f7849b7c0585",
+"struct_ogre_1_1_unlit_mobile_prop.html#a57de8ec760b9fa28206c2e9a1544b402",
+"struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a5e9e1ef044989c8fc9fc88bd4cfbc303",
+"struct_ogre_1_1_vector_set.html#adf2eb6c75c5a21936b9d658de1a3e132",
+"struct_ogre_1_1_volume_1_1_dual_cell.html#a3da89c366371d8f8f24c95307a897caf",
+"struct_ogre_1_1v1_1_1_cb_draw_call_strip.html",
+"structbsp__face__t.html#ae18796a76c1cc01a88908a91ffbb18b1"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

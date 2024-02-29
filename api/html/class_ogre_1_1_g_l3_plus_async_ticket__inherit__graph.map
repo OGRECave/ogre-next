@@ -1,5 +1,7 @@
 <map id="Ogre::GL3PlusAsyncTicket" name="Ogre::GL3PlusAsyncTicket">
-<area shape="rect" id="node1" title=" " alt="" coords="5,152,184,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_async_ticket.html" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous." alt="" coords="31,79,159,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="37,5,152,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,184,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_async_ticket.html" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous." alt="" coords="31,79,158,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,120,97,152,92,152,92,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="38,5,151,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,46,97,79,92,79,92,46"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::GpuNamedConstantsSerializer" name="Ogre::GpuNamedConstantsSerializer">
-<area shape="rect" id="node1" title="Simple class for loading / saving GpuNamedConstants." alt="" coords="5,152,240,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="68,79,177,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="71,5,175,31"/>
+<area shape="rect" id="Node000001" title="Simple class for loading / saving GpuNamedConstants." alt="" coords="5,153,239,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="68,79,176,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,120,125,152,119,152,119,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="70,5,174,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="125,46,125,79,119,79,119,46"/>
 </map>

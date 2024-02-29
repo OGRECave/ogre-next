@@ -1,6 +1,9 @@
 <map id="Ogre::v1::RenderToVertexBuffer" name="Ogre::v1::RenderToVertexBuffer">
-<area shape="rect" id="node1" title=" " alt="" coords="5,69,175,109"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_d3_d11_render_to_vertex_buffer.html" title="An object which renders geometry to a vertex." alt="" coords="224,5,432,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_g_l3_plus_render_to_vertex_buffer.html" title="An object which renders geometry to a vertex." alt="" coords="237,69,419,109"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_g_l_e_s2_render_to_vertex_buffer.html" title=" " alt="" coords="223,133,433,173"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,71,174,111"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_d3_d11_render_to_vertex_buffer.html" title="An object which renders geometry to a vertex." alt="" coords="223,5,431,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,64,249,44,251,49,181,69"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_g_l3_plus_render_to_vertex_buffer.html" title="An object which renders geometry to a vertex." alt="" coords="236,71,418,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,88,235,88,235,94,189,94"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_g_l_e_s2_render_to_vertex_buffer.html" title=" " alt="" coords="222,136,432,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="181,113,251,133,249,138,179,118"/>
 </map>

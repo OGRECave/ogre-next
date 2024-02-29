@@ -1,6 +1,9 @@
 <map id="Ogre::RenderPassTargetBase" name="Ogre::RenderPassTargetBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,55,200,80"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_render_pass_colour_target.html" title=" " alt="" coords="249,5,451,31"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_render_pass_depth_target.html" title=" " alt="" coords="251,55,449,80"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_render_pass_stencil_target.html" title=" " alt="" coords="248,104,452,129"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,199,80"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_render_pass_colour_target.html" title=" " alt="" coords="248,5,449,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,48,280,29,281,34,185,54"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_render_pass_depth_target.html" title=" " alt="" coords="250,55,447,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,65,249,65,249,70,214,70"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_render_pass_stencil_target.html" title=" " alt="" coords="247,104,450,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="185,81,281,101,280,106,184,87"/>
 </map>

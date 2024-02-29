@@ -1,4 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_g_l_s_l_e_s_program_common.html" title="C++ encapsulation of GLSL ES Program Object." alt="" coords="5,5,215,31"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html" title="Specialisation of GLSLESProgramCommon to provide support for separable programs via the Open GL progr..." alt="" coords="263,5,465,31"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html" title="Ogre assumes that there are separate programs to deal with but GLSL ES has one program object that re..." alt="" coords="13,71,219,111"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_s_l_e_s_link_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr..." alt="" coords="275,48,506,73"/>
+<area shape="poly" id="edge1100_Node000000_Node000001" title=" " alt="" coords="234,75,274,71,274,76,235,80"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr..." alt="" coords="289,101,492,142"/>
+<area shape="poly" id="edge1101_Node000000_Node000003" title=" " alt="" coords="235,102,289,108,288,113,234,107"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="17,5,215,46"/>
+<area shape="poly" id="edge1102_Node000002_Node000001" title=" " alt="" coords="230,37,284,44,283,50,229,43"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,136,227,177"/>
+<area shape="poly" id="edge1103_Node000004_Node000003" title=" " alt="" coords="242,138,288,132,289,137,242,143"/>
 </map>

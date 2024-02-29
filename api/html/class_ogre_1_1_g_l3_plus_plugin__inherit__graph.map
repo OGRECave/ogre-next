@@ -1,5 +1,7 @@
 <map id="Ogre::GL3PlusPlugin" name="Ogre::GL3PlusPlugin">
-<area shape="rect" id="node1" title="Plugin instance for GL3Plus Manager." alt="" coords="5,152,148,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_plugin.html" title="Class defining a generic OGRE plugin." alt="" coords="31,79,123,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="33,5,120,31"/>
+<area shape="rect" id="Node000001" title="Plugin instance for GL3Plus Manager." alt="" coords="5,153,148,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_plugin.html" title="Class defining a generic OGRE plugin." alt="" coords="31,79,122,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,120,79,152,74,152,74,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="33,5,120,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="79,46,79,79,74,79,74,46"/>
 </map>

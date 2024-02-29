@@ -1,5 +1,7 @@
 <map id="Ogre::v1::GL3PlusDefaultHardwareBufferManagerBase" name="Ogre::v1::GL3PlusDefaultHardwareBufferManagerBase">
-<area shape="rect" id="node1" title="Specialisation of HardwareBufferManager to emulate hardware buffers." alt="" coords="5,167,197,207"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="18,79,185,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="59,5,144,31"/>
+<area shape="rect" id="Node000001" title="Specialisation of HardwareBufferManager to emulate hardware buffers." alt="" coords="5,168,197,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="18,79,184,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,135,104,167,98,167,98,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="59,5,143,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,46,104,79,98,79,98,46"/>
 </map>

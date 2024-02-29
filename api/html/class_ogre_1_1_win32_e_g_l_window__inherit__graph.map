@@ -1,9 +1,16 @@
 <map id="Ogre::Win32EGLWindow" name="Ogre::Win32EGLWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="54,299,218,324"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="72,225,200,251"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_window.html" title=" " alt="" coords="11,152,114,177"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,120,31"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="142,79,277,104"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="138,152,281,177"/>
-<area shape="rect" id="node7" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="145,5,327,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="52,300,216,326"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="70,226,198,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,267,137,300,131,300,131,267"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_window.html" title=" " alt="" coords="11,153,113,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="87,187,124,224,120,228,83,191"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,119,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="65,47,65,152,59,152,59,47"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="141,79,274,105"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="101,36,184,76,181,81,99,41"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="136,153,279,178"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="186,191,148,228,145,224,182,187"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="210,120,210,152,205,152,205,120"/>
+<area shape="rect" id="Node000007" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="143,5,325,31"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="227,46,214,79,209,78,222,44"/>
 </map>

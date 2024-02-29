@@ -1,5 +1,7 @@
 <map id="Ogre::GL3PlusHardwareOcclusionQuery" name="Ogre::GL3PlusHardwareOcclusionQuery">
-<area shape="rect" id="node1" title="This is a class that is the base class of the query class for hardware occlusion." alt="" coords="5,152,227,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_hardware_occlusion_query.html" title="This is a abstract class that that provides the interface for the query class for hardware occlusion." alt="" coords="14,79,218,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="59,5,173,31"/>
+<area shape="rect" id="Node000001" title="This is a class that is the base class of the query class for hardware occlusion." alt="" coords="5,153,226,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_hardware_occlusion_query.html" title="This is a abstract class that that provides the interface for the query class for hardware occlusion." alt="" coords="14,79,217,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,120,118,152,113,152,113,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="59,5,172,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,46,118,79,113,79,113,46"/>
 </map>

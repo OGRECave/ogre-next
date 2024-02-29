@@ -1,5 +1,7 @@
 <map id="Ogre::SceneFormatBase" name="Ogre::SceneFormatBase">
-<area shape="rect" id="node1" title=" " alt="" coords="117,5,281,31"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_scene_format_exporter.html" title=" " alt="" coords="5,79,187,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_scene_format_importer.html" title=" " alt="" coords="211,79,394,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="117,5,280,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_scene_format_exporter.html" title=" " alt="" coords="5,79,186,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,42,115,81,111,76,167,38"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_scene_format_importer.html" title=" " alt="" coords="210,79,392,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,38,285,76,282,81,226,42"/>
 </map>

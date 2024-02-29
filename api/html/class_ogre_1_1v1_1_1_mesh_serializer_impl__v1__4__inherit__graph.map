@@ -1,10 +1,17 @@
 <map id="Ogre::v1::MeshSerializerImpl_v1_4" name="Ogre::v1::MeshSerializerImpl_v1_4">
-<area shape="rect" id="node1" title="Class for providing backwards&#45;compatibility for loading version 1.4 of the .mesh format." alt="" coords="18,343,179,383"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__3.html" title="Class for providing backwards&#45;compatibility for loading version 1.3 of the .mesh format." alt="" coords="18,431,179,471"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__41.html" title="Class for providing backwards&#45;compatibility for loading version 1.41 of the .mesh format." alt="" coords="18,255,179,295"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__8.html" title="Class for providing backwards&#45;compatibility for loading version 1.8 of the .mesh format." alt="" coords="18,167,179,207"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__10.html" title="Class for providing backwards&#45;compatibility for loading version 1.10 of the .mesh format." alt="" coords="18,79,179,119"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl.html" title="Internal implementation of Mesh reading / writing for the latest version of the .mesh format." alt="" coords="5,5,192,31"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__2.html" title="Class for providing backwards&#45;compatibility for loading version 1.2 of the .mesh format." alt="" coords="18,519,179,559"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__1.html" title="Class for providing backwards&#45;compatibility for loading version 1.1 of the .mesh format." alt="" coords="18,607,179,647"/>
+<area shape="rect" id="Node000001" title="Class for providing backwards&#45;compatibility for loading version 1.4 of the .mesh format." alt="" coords="18,345,178,386"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__3.html" title="Class for providing backwards&#45;compatibility for loading version 1.3 of the .mesh format." alt="" coords="18,434,178,474"/>
+<area shape="poly" id="edge5_Node000001_Node000008" title=" " alt="" coords="101,401,101,433,95,433,95,401"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__41.html" title="Class for providing backwards&#45;compatibility for loading version 1.41 of the .mesh format." alt="" coords="18,256,178,297"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,313,101,345,95,345,95,313"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__8.html" title="Class for providing backwards&#45;compatibility for loading version 1.8 of the .mesh format." alt="" coords="18,168,178,208"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,224,101,256,95,256,95,224"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__10.html" title="Class for providing backwards&#45;compatibility for loading version 1.10 of the .mesh format." alt="" coords="18,79,178,120"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="101,135,101,167,95,167,95,135"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl.html" title="Internal implementation of Mesh reading / writing for the latest version of the .mesh format." alt="" coords="5,5,191,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="101,46,101,79,95,79,95,46"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__2.html" title="Class for providing backwards&#45;compatibility for loading version 1.2 of the .mesh format." alt="" coords="18,522,178,563"/>
+<area shape="poly" id="edge6_Node000008_Node000009" title=" " alt="" coords="101,490,101,522,95,522,95,490"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1v1_1_1_mesh_serializer_impl__v1__1.html" title="Class for providing backwards&#45;compatibility for loading version 1.1 of the .mesh format." alt="" coords="18,611,178,652"/>
+<area shape="poly" id="edge7_Node000009_Node000010" title=" " alt="" coords="101,579,101,611,95,611,95,579"/>
 </map>

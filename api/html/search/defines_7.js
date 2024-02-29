@@ -73,5 +73,5 @@ var searchData=
   ['glrenderbufferstoragemultisampleapple_70',['glRenderbufferStorageMultisampleAPPLE',['../_ogre_g_l_e_s2_prerequisites_8h.html#a1369f71375b25f02c323fb881f5f0ad7',1,'OgreGLES2Prerequisites.h']]],
   ['glunmapbufferoes_71',['glUnmapBufferOES',['../_ogre_g_l_e_s2_prerequisites_8h.html#af6cd029feb29f408216596e4072a3c30',1,'OgreGLES2Prerequisites.h']]],
   ['glvertexattribdivisorext_72',['glVertexAttribDivisorEXT',['../_ogre_g_l_e_s2_prerequisites_8h.html#adc8ae5a57ff196403a5e0d1ec32538e5',1,'OgreGLES2Prerequisites.h']]],
-  ['glx_5fglxext_5fprototypes_73',['GLX_GLXEXT_PROTOTYPES',['../_ogre_g_l_x_g_l_support_8h.html#a296d18d62b3eeb690c34d396359abe90',1,'GLX_GLXEXT_PROTOTYPES():&#160;OgreGLXGLSupport.h'],['../_ogre_g_l_x_utils_8h.html#a296d18d62b3eeb690c34d396359abe90',1,'GLX_GLXEXT_PROTOTYPES():&#160;OgreGLXUtils.h']]]
+  ['glx_5fglxext_5fprototypes_73',['glx_glxext_prototypes',['../_ogre_g_l_x_g_l_support_8h.html#a296d18d62b3eeb690c34d396359abe90',1,'GLX_GLXEXT_PROTOTYPES:&#160;OgreGLXGLSupport.h'],['../_ogre_g_l_x_utils_8h.html#a296d18d62b3eeb690c34d396359abe90',1,'GLX_GLXEXT_PROTOTYPES:&#160;OgreGLXUtils.h']]]
 ];

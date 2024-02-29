@@ -1,5 +1,7 @@
 <map id="Ogre::GLSLESProgramManagerCommon" name="Ogre::GLSLESProgramManagerCommon">
-<area shape="rect" id="node1" title="Ogre assumes that there are separate programs to deal with but GLSL ES has one program object that re..." alt="" coords="138,5,345,45"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_s_l_e_s_link_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr..." alt="" coords="5,101,237,126"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr..." alt="" coords="261,93,464,133"/>
+<area shape="rect" id="Node000001" title="Ogre assumes that there are separate programs to deal with but GLSL ES has one program object that re..." alt="" coords="138,5,344,46"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l_s_l_e_s_link_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr..." alt="" coords="5,102,237,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,57,139,103,136,99,200,53"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr..." alt="" coords="261,94,464,135"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="282,53,336,91,333,96,279,57"/>
 </map>

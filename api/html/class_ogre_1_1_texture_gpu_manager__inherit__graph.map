@@ -1,9 +1,15 @@
 <map id="Ogre::TextureGpuManager" name="Ogre::TextureGpuManager">
-<area shape="rect" id="node1" title="This class manages all textures (i.e." alt="" coords="224,80,397,105"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="451,5,663,31"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="445,55,669,80"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="455,104,660,129"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="453,153,662,179"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="37,55,144,80"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="5,104,176,129"/>
+<area shape="rect" id="Node000001" title="This class manages all textures (i.e." alt="" coords="223,80,395,106"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title=" " alt="" coords="449,5,660,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="355,71,442,40,483,29,485,34,444,45,356,76"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title=" " alt="" coords="443,55,666,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="410,80,442,76,443,82,411,85"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title=" " alt="" coords="453,104,657,130"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="411,100,452,104,452,109,410,105"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title=" " alt="" coords="451,153,659,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="357,109,444,140,485,150,483,155,442,145,356,114"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="37,55,143,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,73,223,80,222,86,158,78"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="5,104,175,130"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,103,222,100,222,105,190,109"/>
 </map>

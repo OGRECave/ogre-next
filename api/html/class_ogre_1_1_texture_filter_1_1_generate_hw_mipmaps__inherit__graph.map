@@ -1,5 +1,7 @@
 <map id="Ogre::TextureFilter::GenerateHwMipmaps" name="Ogre::TextureFilter::GenerateHwMipmaps">
-<area shape="rect" id="node1" title=" " alt="" coords="5,167,160,207"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_texture_filter_1_1_filter_base.html" title=" " alt="" coords="19,79,147,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="29,5,136,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,168,159,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_texture_filter_1_1_filter_base.html" title=" " alt="" coords="18,79,146,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,135,85,167,79,167,79,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="29,5,135,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="85,46,85,79,79,79,79,46"/>
 </map>

@@ -1,9 +1,15 @@
 <map id="Ogre::DepthBuffer" name="Ogre::DepthBuffer">
-<area shape="rect" id="node1" title="An abstract class that contains a depth/stencil buffer." alt="" coords="168,104,292,129"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_depth_buffer.html" title=" " alt="" coords="346,5,509,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d9_depth_buffer.html" title=" " alt="" coords="349,55,505,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_depth_buffer.html" title=" " alt="" coords="340,104,515,129"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l_e_s2_depth_buffer.html" title=" " alt="" coords="344,153,511,179"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_metal_depth_buffer.html" title=" " alt="" coords="349,203,505,228"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,104,120,129"/>
+<area shape="rect" id="Node000001" title="An abstract class that contains a depth/stencil buffer." alt="" coords="167,104,290,130"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_depth_buffer.html" title=" " alt="" coords="344,5,506,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="256,92,293,65,337,40,365,29,367,34,339,45,296,69,259,96"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d9_depth_buffer.html" title=" " alt="" coords="348,55,503,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="297,97,370,78,371,84,298,102"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l3_plus_depth_buffer.html" title=" " alt="" coords="338,104,512,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="306,114,338,114,338,120,306,120"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_g_l_e_s2_depth_buffer.html" title=" " alt="" coords="343,153,508,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="298,131,371,150,370,155,297,137"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_metal_depth_buffer.html" title=" " alt="" coords="348,203,503,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="259,138,296,164,339,189,367,200,365,205,337,194,293,169,256,142"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,104,119,130"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,114,166,114,166,120,134,120"/>
 </map>

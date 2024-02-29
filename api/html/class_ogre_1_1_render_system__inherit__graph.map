@@ -1,10 +1,17 @@
 <map id="Ogre::RenderSystem" name="Ogre::RenderSystem">
-<area shape="rect" id="node1" title="Defines the functionality of a 3D API." alt="" coords="168,129,309,155"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_system.html" title="Implementation of DirectX11 as a rendering system." alt="" coords="363,5,543,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d9_render_system.html" title="Implementation of DirectX9 as a rendering system." alt="" coords="367,55,540,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_render_system.html" title="Implementation of GL 3 as a rendering system." alt="" coords="357,104,549,129"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l_e_s2_render_system.html" title="Implementation of GL ES 2.x as a rendering system." alt="" coords="362,153,545,179"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_metal_render_system.html" title="Implementation of Metal as a rendering system." alt="" coords="367,203,540,228"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_n_u_l_l_render_system.html" title="Implementation of NULL as a rendering system." alt="" coords="365,252,542,277"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,129,120,155"/>
+<area shape="rect" id="Node000001" title="Defines the functionality of a 3D API." alt="" coords="167,129,307,155"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_render_system.html" title="Implementation of DirectX11 as a rendering system." alt="" coords="361,5,540,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="258,116,300,77,354,40,380,29,382,34,356,45,303,81,262,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d9_render_system.html" title="Implementation of DirectX9 as a rendering system." alt="" coords="365,55,537,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="278,120,354,89,390,78,391,83,356,94,280,125"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l3_plus_render_system.html" title="Implementation of GL 3 as a rendering system." alt="" coords="355,104,546,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="322,129,354,126,355,131,323,135"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_g_l_e_s2_render_system.html" title="Implementation of GL ES 2.x as a rendering system." alt="" coords="360,153,542,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="323,149,359,153,359,159,322,154"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_metal_render_system.html" title="Implementation of Metal as a rendering system." alt="" coords="365,203,537,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="281,159,356,189,391,199,390,205,354,194,279,164"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_n_u_l_l_render_system.html" title="Implementation of NULL as a rendering system." alt="" coords="363,252,539,278"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="262,164,304,203,356,238,382,249,380,254,354,243,300,207,258,168"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,129,119,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,140,166,140,166,145,134,145"/>
 </map>

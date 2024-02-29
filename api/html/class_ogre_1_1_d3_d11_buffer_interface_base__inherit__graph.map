@@ -1,6 +1,9 @@
 <map id="Ogre::D3D11BufferInterfaceBase" name="Ogre::D3D11BufferInterfaceBase">
-<area shape="rect" id="node1" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="103,79,314,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_buffer_interface.html" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="5,152,185,177"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_compat_buffer_interface.html" title="In D3D11, const buffers can&#39;t be bound by offset." alt="" coords="209,152,435,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="138,5,279,31"/>
+<area shape="rect" id="Node000001" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="102,79,312,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_buffer_interface.html" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="5,153,185,178"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="177,116,116,154,113,150,174,111"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_compat_buffer_interface.html" title="In D3D11, const buffers can&#39;t be bound by offset." alt="" coords="208,153,433,178"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="240,111,302,150,300,154,238,116"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="137,5,277,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,46,210,79,204,79,204,46"/>
 </map>

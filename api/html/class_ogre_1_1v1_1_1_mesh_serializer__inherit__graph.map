@@ -1,5 +1,7 @@
 <map id="Ogre::v1::MeshSerializer" name="Ogre::v1::MeshSerializer">
-<area shape="rect" id="node1" title="Class for serialising mesh data to/from an OGRE .mesh file." alt="" coords="5,152,167,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="31,79,141,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,138,31"/>
+<area shape="rect" id="Node000001" title="Class for serialising mesh data to/from an OGRE .mesh file." alt="" coords="5,153,166,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="31,79,140,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,120,88,152,83,152,83,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,137,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,46,88,79,83,79,83,46"/>
 </map>

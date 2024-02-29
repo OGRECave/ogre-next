@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::FFPLighting" name="Ogre::RTShader::FFPLighting">
-<area shape="rect" id="node1" title="Lighting sub render state implementation of the Fixed Function Pipeline." alt="" coords="5,167,196,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state.html" title="This class is the base interface of sub part from a shader based rendering pipeline." alt="" coords="9,79,193,119"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="24,5,177,31"/>
+<area shape="rect" id="Node000001" title="Lighting sub render state implementation of the Fixed Function Pipeline." alt="" coords="5,168,196,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state.html" title="This class is the base interface of sub part from a shader based rendering pipeline." alt="" coords="9,79,192,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,135,103,167,98,167,98,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="24,5,177,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,46,103,79,98,79,98,46"/>
 </map>

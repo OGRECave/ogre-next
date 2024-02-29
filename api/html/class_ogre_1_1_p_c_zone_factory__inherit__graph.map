@@ -1,6 +1,9 @@
 <map id="Ogre::PCZoneFactory" name="Ogre::PCZoneFactory">
-<area shape="rect" id="node1" title="Factory for PCZones." alt="" coords="113,79,259,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_default_zone_factory.html" title=" " alt="" coords="5,152,175,177"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_octree_zone_factory.html" title="Factory for OctreeZone." alt="" coords="199,152,365,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="103,5,269,31"/>
+<area shape="rect" id="Node000001" title="Factory for PCZones." alt="" coords="113,79,258,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_default_zone_factory.html" title=" " alt="" coords="5,153,174,178"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,116,107,154,104,150,156,112"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_octree_zone_factory.html" title="Factory for OctreeZone." alt="" coords="198,153,365,178"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="215,112,267,150,264,154,212,116"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="102,5,269,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,46,188,79,183,79,183,46"/>
 </map>

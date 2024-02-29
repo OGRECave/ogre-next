@@ -1,4 +1,5 @@
 <map id="Ogre::v1::GL3PlusRenderToVertexBuffer" name="Ogre::v1::GL3PlusRenderToVertexBuffer">
-<area shape="rect" id="node1" title="An object which renders geometry to a vertex." alt="" coords="5,93,188,133"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_render_to_vertex_buffer.html" title=" " alt="" coords="12,5,181,45"/>
+<area shape="rect" id="Node000001" title="An object which renders geometry to a vertex." alt="" coords="5,94,188,135"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_render_to_vertex_buffer.html" title=" " alt="" coords="12,5,181,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,62,99,94,94,94,94,62"/>
 </map>

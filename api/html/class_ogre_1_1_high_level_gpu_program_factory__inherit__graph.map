@@ -1,10 +1,17 @@
 <map id="Ogre::HighLevelGpuProgramFactory" name="Ogre::HighLevelGpuProgramFactory">
-<area shape="rect" id="node1" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="148,122,336,162"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_h_l_s_l_program_factory.html" title="Factory class for D3D11 HLSL programs." alt="" coords="384,5,607,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d9_h_l_s_l_program_factory.html" title="Factory class for D3D9 HLSL programs." alt="" coords="388,55,603,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_s_l_e_s_shader_factory.html" title="Factory class for GLSL ES programs." alt="" coords="399,104,591,129"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l_s_l_shader_factory.html" title="Factory class for GLSL shaders." alt="" coords="408,153,583,179"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_metal_program_factory.html" title="Factory class for Metal programs." alt="" coords="405,203,585,228"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_unified_high_level_gpu_program_factory.html" title="Factory class for Unified programs." alt="" coords="406,253,585,293"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,129,100,155"/>
+<area shape="rect" id="Node000001" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="147,122,334,163"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_h_l_s_l_program_factory.html" title="Factory class for D3D11 HLSL programs." alt="" coords="382,5,603,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="275,109,323,73,381,40,411,29,413,34,383,45,326,77,278,114"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d9_h_l_s_l_program_factory.html" title="Factory class for D3D9 HLSL programs." alt="" coords="386,55,600,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="308,114,381,89,423,78,424,84,383,94,309,119"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l_s_l_e_s_shader_factory.html" title="Factory class for GLSL ES programs." alt="" coords="397,104,588,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="349,129,396,124,397,129,350,134"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_g_l_s_l_shader_factory.html" title="Factory class for GLSL shaders." alt="" coords="406,153,580,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="350,150,405,155,405,161,349,155"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_metal_program_factory.html" title="Factory class for Metal programs." alt="" coords="403,203,582,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="311,166,383,189,425,199,423,205,381,194,310,171"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_unified_high_level_gpu_program_factory.html" title="Factory class for Unified programs." alt="" coords="404,253,582,293"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="279,170,327,206,383,238,410,249,408,254,381,243,324,210,276,175"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,129,99,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,140,146,140,146,145,114,145"/>
 </map>

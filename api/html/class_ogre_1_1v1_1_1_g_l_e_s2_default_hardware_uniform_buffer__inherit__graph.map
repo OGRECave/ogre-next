@@ -1,6 +1,9 @@
 <map id="Ogre::v1::GLES2DefaultHardwareUniformBuffer" name="Ogre::v1::GLES2DefaultHardwareUniformBuffer">
-<area shape="rect" id="node1" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="5,240,220,280"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_uniform_buffer.html" title="Specialisation of HardwareBuffer for a uniform buffer." alt="" coords="23,152,202,192"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="29,79,196,104"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="70,5,155,31"/>
+<area shape="rect" id="Node000001" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="5,241,220,282"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_uniform_buffer.html" title="Specialisation of HardwareBuffer for a uniform buffer." alt="" coords="24,153,201,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,209,115,241,110,241,110,209"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="30,79,195,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,120,115,152,110,152,110,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="70,5,155,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="115,46,115,79,110,79,110,46"/>
 </map>

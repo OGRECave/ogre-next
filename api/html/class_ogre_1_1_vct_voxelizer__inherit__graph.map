@@ -1,4 +1,5 @@
 <map id="Ogre::VctVoxelizer" name="Ogre::VctVoxelizer">
-<area shape="rect" id="node1" title="The voxelizer consists in several stages." alt="" coords="5,79,133,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="17,5,122,31"/>
+<area shape="rect" id="Node000001" title="The voxelizer consists in several stages." alt="" coords="5,79,133,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="17,5,121,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,46,72,79,66,79,66,46"/>
 </map>

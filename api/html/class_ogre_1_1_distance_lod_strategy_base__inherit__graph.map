@@ -1,7 +1,11 @@
 <map id="Ogre::DistanceLodStrategyBase" name="Ogre::DistanceLodStrategyBase">
-<area shape="rect" id="node1" title="Level of detail strategy based on distance from camera." alt="" coords="117,152,324,177"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_distance_lod_box_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding box." alt="" coords="5,225,204,251"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_distance_lod_sphere_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="229,225,447,251"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="157,79,284,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="184,5,257,31"/>
+<area shape="rect" id="Node000001" title="Level of detail strategy based on distance from camera." alt="" coords="117,153,324,178"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_distance_lod_box_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding box." alt="" coords="5,226,204,252"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="190,189,126,228,123,223,187,184"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_distance_lod_sphere_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="228,226,445,252"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="254,184,318,223,315,228,251,189"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="158,79,283,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,120,223,152,218,152,218,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="184,5,257,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="223,46,223,79,218,79,218,46"/>
 </map>

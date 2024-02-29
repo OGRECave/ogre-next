@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::FFPRenderStateBuilder" name="Ogre::RTShader::FFPRenderStateBuilder">
-<area shape="rect" id="node1" title="Fixed Function Pipeline render state builder." alt="" coords="103,93,289,133"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,192,45"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="217,13,370,38"/>
+<area shape="rect" id="Node000001" title="Fixed Function Pipeline render state builder." alt="" coords="102,94,287,135"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,192,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,55,175,92,171,96,130,59"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="216,13,368,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="269,51,218,96,215,92,265,47"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::FunctionAtom" name="Ogre::RTShader::FunctionAtom">
-<area shape="rect" id="node1" title="A class that represents an atomic code section of shader based program function." alt="" coords="5,79,207,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_r_t_shader_1_1_function_invocation.html" title="A class that represents function invocation code from shader based program function." alt="" coords="21,152,191,192"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="29,5,183,31"/>
+<area shape="rect" id="Node000001" title="A class that represents an atomic code section of shader based program function." alt="" coords="5,79,206,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_r_t_shader_1_1_function_invocation.html" title="A class that represents function invocation code from shader based program function." alt="" coords="21,153,190,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="108,120,108,152,103,152,103,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="29,5,182,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,46,108,79,103,79,103,46"/>
 </map>

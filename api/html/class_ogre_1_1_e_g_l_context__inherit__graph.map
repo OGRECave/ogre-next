@@ -1,9 +1,15 @@
 <map id="Ogre::EGLContext" name="Ogre::EGLContext">
-<area shape="rect" id="node1" title=" " alt="" coords="204,80,331,105"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="389,5,559,31"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="379,55,569,80"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="393,104,555,129"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="399,153,549,179"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="5,55,156,80"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="9,104,152,129"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="204,80,329,106"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="388,5,557,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="305,70,376,40,410,29,412,34,378,45,308,75"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="377,55,567,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="344,81,376,77,377,82,345,86"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="392,104,553,130"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="344,99,391,105,391,110,344,105"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="398,153,546,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="308,110,378,140,413,150,411,155,376,145,306,115"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_context.html" title="Class that encapsulates an GL context." alt="" coords="5,55,156,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,77,203,82,203,87,170,82"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="10,104,151,130"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,103,203,98,204,104,167,108"/>
 </map>

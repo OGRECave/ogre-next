@@ -1,6 +1,9 @@
 <map id="Ogre::Resource::Listener" name="Ogre::Resource::Listener">
-<area shape="rect" id="node1" title=" " alt="" coords="156,5,320,31"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_gpu_program_usage.html" title="This class makes the usage of a vertex and fragment programs (low&#45;level or high&#45;level),..." alt="" coords="5,79,172,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="197,79,279,104"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="304,79,412,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="155,5,318,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_gpu_program_usage.html" title="This class makes the usage of a vertex and fragment programs (low&#45;level or high&#45;level),..." alt="" coords="5,79,172,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,41,115,81,113,76,196,36"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="196,79,277,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,46,239,79,234,79,234,46"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="302,79,409,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="271,37,336,76,334,81,268,42"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Ogre::FreeImageCodec" name="Ogre::FreeImageCodec">
-<area shape="rect" id="node1" title="Codec specialized in images loaded using FreeImage." alt="" coords="5,225,160,251"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_image_codec.html" title="Codec specialized in images." alt="" coords="18,152,147,177"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_codec.html" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="36,79,129,104"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,5,127,31"/>
+<area shape="rect" id="Node000001" title="Codec specialized in images loaded using FreeImage." alt="" coords="5,226,160,252"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_image_codec.html" title="Codec specialized in images." alt="" coords="18,153,147,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,194,85,226,80,226,80,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_codec.html" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="36,79,129,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="85,120,85,152,80,152,80,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,5,126,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="85,46,85,79,80,79,80,46"/>
 </map>

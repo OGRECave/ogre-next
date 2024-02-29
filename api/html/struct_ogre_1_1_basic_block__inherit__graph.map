@@ -1,6 +1,9 @@
 <map id="Ogre::BasicBlock" name="Ogre::BasicBlock">
-<area shape="rect" id="node1" title=" " alt="" coords="197,5,319,31"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials." alt="" coords="5,79,156,104"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials." alt="" coords="181,79,335,104"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_hlms_samplerblock.html" title="A sampler block contains settings that go hand in hand with a texture, and thus are common to many te..." alt="" coords="360,79,527,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="196,5,317,31"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials." alt="" coords="5,79,156,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,40,112,81,110,76,212,35"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials." alt="" coords="180,79,333,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,46,259,79,254,79,254,46"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_hlms_samplerblock.html" title="A sampler block contains settings that go hand in hand with a texture, and thus are common to many te..." alt="" coords="358,79,523,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="303,34,410,76,408,81,301,39"/>
 </map>

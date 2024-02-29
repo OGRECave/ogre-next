@@ -1,8 +1,13 @@
 <map id="Ogre::HlmsDatablock" name="Ogre::HlmsDatablock">
-<area shape="rect" id="node1" title="An hlms datablock contains individual information about a specific material." alt="" coords="135,80,280,105"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="332,5,535,31"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_hlms_pbs_mobile_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL ES 2.0." alt="" coords="330,55,537,80"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_hlms_unlit_mobile_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="328,104,539,129"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="331,154,536,194"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,80,87,105"/>
+<area shape="rect" id="Node000001" title="An hlms datablock contains individual information about a specific material." alt="" coords="134,80,278,106"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="330,5,531,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,70,325,40,363,29,365,34,327,45,250,75"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_hlms_pbs_mobile_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL ES 2.0." alt="" coords="328,55,533,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="293,80,327,76,328,82,293,86"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_hlms_unlit_mobile_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="326,104,535,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="294,99,326,103,325,108,293,105"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="329,154,533,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="252,110,327,140,359,151,358,156,325,145,250,115"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,80,86,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,90,133,90,133,96,101,96"/>
 </map>

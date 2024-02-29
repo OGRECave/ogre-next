@@ -1,5 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_g_l_s_l_program.html" title="C++ encapsulation of GLSL program object." alt="" coords="5,31,145,56"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_s_l_monolithic_program.html" title="Model of OpenGL program object created using the glLinkProgram method of linking." alt="" coords="193,5,392,31"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_g_l_s_l_separable_program.html" title="Specialisation of GLSLProgram to provide support for separable programs via the OpenGL program pipeli..." alt="" coords="193,55,392,80"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l_s_l_program_manager.html" title="Ogre assumes that there are separate programs to deal with but GLSL has one program object that repre..." alt="" coords="18,70,207,96"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_s_l_monolithic_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL has one progr..." alt="" coords="268,19,466,59"/>
+<area shape="poly" id="edge1106_Node000000_Node000001" title=" " alt="" coords="205,64,267,54,268,59,206,70"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l_s_l_separable_program_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL has one progr..." alt="" coords="268,96,466,137"/>
+<area shape="poly" id="edge1107_Node000000_Node000003" title=" " alt="" coords="223,95,268,101,267,106,222,100"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,220,46"/>
+<area shape="poly" id="edge1108_Node000002_Node000001" title=" " alt="" coords="235,29,267,31,267,36,235,35"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="6,120,219,161"/>
+<area shape="poly" id="edge1109_Node000004_Node000003" title=" " alt="" coords="235,126,267,123,268,128,235,131"/>
 </map>

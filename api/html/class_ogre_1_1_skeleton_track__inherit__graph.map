@@ -1,4 +1,5 @@
 <map id="Ogre::SkeletonTrack" name="Ogre::SkeletonTrack">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,145,104"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="21,5,130,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,145,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="21,5,129,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,46,78,79,72,79,72,46"/>
 </map>

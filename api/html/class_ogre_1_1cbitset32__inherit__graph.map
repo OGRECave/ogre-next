@@ -1,4 +1,5 @@
 <map id="Ogre::cbitset32&lt; _N &gt;" name="Ogre::cbitset32&lt; _N &gt;">
-<area shape="rect" id="node1" title="This is similar to std::bitset, except waaay less bloat." alt="" coords="5,93,153,119"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1cbitset_n.html" title=" " alt="" coords="11,5,148,45"/>
+<area shape="rect" id="Node000001" title="This is similar to std::bitset, except waaay less bloat." alt="" coords="5,94,153,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1cbitset_n.html" title=" " alt="" coords="11,5,147,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,62,82,93,76,93,76,62"/>
 </map>
