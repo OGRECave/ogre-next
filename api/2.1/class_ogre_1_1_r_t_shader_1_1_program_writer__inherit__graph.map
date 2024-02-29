@@ -1,8 +1,13 @@
 <map id="Ogre::RTShader::ProgramWriter" name="Ogre::RTShader::ProgramWriter">
-<area shape="rect" id="node1" title="Base class interface for shader program writers." alt="" coords="207,111,409,138"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_r_t_shader_1_1_c_g_program_writer.html" title="CG target language writer implementation." alt="" coords="474,5,662,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_r_t_shader_1_1_g_l_s_l_e_s_program_writer.html" title="GLSL ES target language writer implementation." alt="" coords="457,71,679,112"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_r_t_shader_1_1_g_l_s_l_program_writer.html" title="GLSL target language writer implementation." alt="" coords="466,136,670,177"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_r_t_shader_1_1_h_l_s_l_program_writer.html" title="HLSL target language writer implementation." alt="" coords="466,201,670,243"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,111,159,138"/>
+<area shape="rect" id="Node000001" title="Base class interface for shader program writers." alt="" coords="206,112,408,137"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_r_t_shader_1_1_c_g_program_writer.html" title="CG target language writer implementation." alt="" coords="473,5,660,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="348,102,455,57,492,44,493,49,457,61,350,107"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_r_t_shader_1_1_g_l_s_l_e_s_program_writer.html" title="GLSL ES target language writer implementation." alt="" coords="456,71,676,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="423,107,455,103,456,108,424,112"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_r_t_shader_1_1_g_l_s_l_program_writer.html" title="GLSL target language writer implementation." alt="" coords="465,136,668,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="424,136,464,141,464,146,423,141"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_r_t_shader_1_1_h_l_s_l_program_writer.html" title="HLSL target language writer implementation." alt="" coords="465,201,668,242"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="352,142,457,186,493,198,492,203,455,191,349,147"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,112,158,137"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,122,205,122,205,127,173,127"/>
 </map>

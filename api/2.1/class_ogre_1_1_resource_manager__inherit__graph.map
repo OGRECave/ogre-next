@@ -1,25 +1,47 @@
 <map id="Ogre::ResourceManager" name="Ogre::ResourceManager">
-<area shape="rect" id="node1" title="Defines a generic resource handler." alt="" coords="184,259,345,285"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_bsp_resource_manager.html" title="Manages the locating and loading of BSP&#45;based indoor levels." alt="" coords="400,40,584,67"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_font_manager.html" title="Manages Font resources, parsing .fontdef files and generally organising them." alt="" coords="426,91,558,117"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_gpu_program_manager.html" title=" " alt="" coords="403,141,581,168"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_high_level_gpu_program_manager.html" title="This ResourceManager manages high&#45;level vertex and fragment programs." alt="" coords="398,193,586,234"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_material_manager.html" title="Class for managing Material settings for Ogre." alt="" coords="416,259,568,285"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="423,309,561,336"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_texture_manager.html" title="Class for loading &amp; managing textures." alt="" coords="417,360,567,387"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1v1_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="413,411,571,437"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1v1_1_1_old_skeleton_manager.html" title="Handles the management of skeleton resources." alt="" coords="393,461,591,488"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,233,136,260"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="17,284,124,311"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="640,5,859,32"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_d3_d9_gpu_program_manager.html" title=" " alt="" coords="644,56,855,83"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="639,107,860,133"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="658,157,841,184"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="644,208,855,235"/>
-<area shape="rect" id="node16" href="$class_ogre_1_1_d3_d11_texture_manager.html" title=" " alt="" coords="655,259,843,285"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_d3_d9_texture_manager.html" title=" " alt="" coords="659,309,840,336"/>
-<area shape="rect" id="node18" href="$class_ogre_1_1_g_l3_plus_texture_manager.html" title="GL3Plus&#45;specific implementation of a TextureManager." alt="" coords="649,360,849,387"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1_g_l_e_s2_texture_manager.html" title="GL ES&#45;specific implementation of a TextureManager." alt="" coords="654,411,845,437"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1_metal_texture_manager.html" title=" " alt="" coords="659,461,840,488"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1_n_u_l_l_texture_manager.html" title=" " alt="" coords="657,512,842,539"/>
+<area shape="rect" id="Node000001" title="Defines a generic resource handler." alt="" coords="183,252,343,278"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_bsp_resource_manager.html" title="Manages the locating and loading of BSP&#45;based indoor levels." alt="" coords="398,39,581,64"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="272,236,290,199,315,155,348,111,389,73,410,62,412,67,393,78,352,114,320,158,295,202,277,238"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_font_manager.html" title="Manages Font resources, parsing .fontdef files and generally organising them." alt="" coords="424,88,555,114"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="278,237,323,179,355,148,390,123,422,109,424,114,392,127,358,152,327,183,282,241"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_gpu_program_manager.html" title=" " alt="" coords="400,137,578,163"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="289,240,334,206,390,173,422,161,424,166,392,178,337,210,292,244"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_high_level_gpu_program_manager.html" title="This ResourceManager manages high&#45;level vertex and fragment programs." alt="" coords="396,187,583,228"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="331,245,405,226,407,231,332,250"/>
+<area shape="rect" id="Node000013" href="$class_ogre_1_1_material_manager.html" title="Class for managing Material settings for Ogre." alt="" coords="414,252,565,278"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="359,262,413,262,413,268,359,268"/>
+<area shape="rect" id="Node000014" href="$class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="421,301,558,327"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="341,279,427,298,426,303,340,284"/>
+<area shape="rect" id="Node000015" href="$class_ogre_1_1_texture_manager.html" title="Class for loading &amp; managing textures." alt="" coords="415,351,563,376"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="297,285,341,312,392,337,423,348,422,353,390,342,338,316,294,289"/>
+<area shape="rect" id="Node000022" href="$class_ogre_1_1v1_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="411,400,568,426"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="285,288,330,339,360,365,392,386,416,397,414,402,390,391,357,369,327,343,281,292"/>
+<area shape="rect" id="Node000023" href="$class_ogre_1_1v1_1_1_old_skeleton_manager.html" title="Handles the management of skeleton resources." alt="" coords="391,449,587,475"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="279,290,297,324,322,364,354,403,392,436,413,446,410,451,390,440,350,407,318,367,292,327,274,293"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,227,135,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,247,183,252,182,257,150,253"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="17,276,123,302"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="138,278,182,272,182,277,139,283"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="637,5,854,31"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="580,128,586,124,602,104,609,83,616,61,634,40,653,29,655,34,637,44,620,64,614,85,607,107,589,128,583,132"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_d3_d9_gpu_program_manager.html" title=" " alt="" coords="640,55,851,80"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="572,129,586,124,610,107,634,89,664,78,666,83,637,94,613,111,589,128,574,134"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="635,104,856,130"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="593,134,641,128,642,133,594,139"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="655,153,836,179"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="594,154,655,158,654,163,594,159"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="640,203,851,228"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="560,165,588,173,636,189,678,199,677,205,635,194,587,178,558,170"/>
+<area shape="rect" id="Node000016" href="$class_ogre_1_1_d3_d11_texture_manager.html" title=" " alt="" coords="652,252,839,278"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="576,342,586,337,600,325,609,313,618,299,634,287,658,276,660,281,637,291,622,303,613,316,604,329,589,342,579,347"/>
+<area shape="rect" id="Node000017" href="$class_ogre_1_1_d3_d9_texture_manager.html" title=" " alt="" coords="655,301,836,327"/>
+<area shape="poly" id="edge16_Node000015_Node000017" title=" " alt="" coords="574,345,674,325,675,330,575,350"/>
+<area shape="rect" id="Node000018" href="$class_ogre_1_1_g_l3_plus_texture_manager.html" title="GL3Plus&#45;specific implementation of a TextureManager." alt="" coords="646,351,845,376"/>
+<area shape="poly" id="edge17_Node000015_Node000018" title=" " alt="" coords="579,361,645,361,645,366,579,366"/>
+<area shape="rect" id="Node000019" href="$class_ogre_1_1_g_l_e_s2_texture_manager.html" title="GL ES&#45;specific implementation of a TextureManager." alt="" coords="650,400,841,426"/>
+<area shape="poly" id="edge18_Node000015_Node000019" title=" " alt="" coords="575,377,675,397,674,402,574,382"/>
+<area shape="rect" id="Node000020" href="$class_ogre_1_1_metal_texture_manager.html" title=" " alt="" coords="655,449,836,475"/>
+<area shape="poly" id="edge19_Node000015_Node000020" title=" " alt="" coords="579,380,589,385,604,398,613,411,622,424,637,436,660,446,658,451,634,440,618,428,609,414,600,402,586,390,576,385"/>
+<area shape="rect" id="Node000021" href="$class_ogre_1_1_n_u_l_l_texture_manager.html" title=" " alt="" coords="653,499,838,524"/>
+<area shape="poly" id="edge20_Node000015_Node000021" title=" " alt="" coords="579,378,589,385,601,398,608,411,614,437,619,462,626,474,637,485,654,496,651,500,634,490,622,477,614,464,609,438,603,413,597,401,586,390,576,383"/>
 </map>

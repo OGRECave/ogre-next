@@ -1,6 +1,9 @@
 <map id="Ogre::Volume::GridSource" name="Ogre::Volume::GridSource">
-<area shape="rect" id="node1" title="A volume source from a discrete 3d grid." alt="" coords="117,80,287,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_half_float_grid_source.html" title="A volume source from a 16 Bit float 3D grid capable of loading volume serializations." alt="" coords="5,155,188,196"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_volume_1_1_texture_source.html" title="A volume source from a 3D texture." alt="" coords="212,162,403,189"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="129,5,275,32"/>
+<area shape="rect" id="Node000001" title="A volume source from a discrete 3d grid." alt="" coords="115,79,286,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_half_float_grid_source.html" title="A volume source from a 16 Bit float 3D grid capable of loading volume serializations." alt="" coords="5,153,188,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,116,124,154,121,150,171,112"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_texture_source.html" title="A volume source from a 3D texture." alt="" coords="211,160,401,186"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="230,112,291,157,288,162,227,116"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="127,5,274,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,46,203,79,198,79,198,46"/>
 </map>

@@ -1,9 +1,15 @@
 <map id="Ogre::AbstractNode" name="Ogre::AbstractNode">
-<area shape="rect" id="node1" title=" " alt="" coords="184,107,320,133"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_atom_abstract_node.html" title="This is an abstract node which cannot be broken down further." alt="" coords="398,5,565,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_import_abstract_node.html" title="This abstract node represents an import statement." alt="" coords="395,56,568,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_object_abstract_node.html" title="This specific abstract node represents a script object." alt="" coords="394,107,569,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_property_abstract_node.html" title="This abstract node represents a script property." alt="" coords="389,157,573,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_variable_access_abstract_node.html" title="This abstract node represents a variable assignment." alt="" coords="368,208,595,235"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,107,136,133"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="184,104,319,130"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_atom_abstract_node.html" title="This is an abstract node which cannot be broken down further." alt="" coords="397,5,563,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="279,92,319,65,366,40,398,29,400,34,368,45,322,69,282,96"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_import_abstract_node.html" title="This abstract node represents an import statement." alt="" coords="394,55,566,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,97,366,89,416,78,417,83,368,94,329,103"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_object_abstract_node.html" title="This specific abstract node represents a script object." alt="" coords="394,104,567,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="334,114,393,114,393,120,334,120"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_property_abstract_node.html" title="This abstract node represents a script property." alt="" coords="389,153,572,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="329,131,368,140,417,150,416,155,366,145,328,136"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_variable_access_abstract_node.html" title="This abstract node represents a variable assignment." alt="" coords="367,203,593,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="282,137,322,165,368,189,400,200,398,205,366,194,319,169,279,142"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,104,136,130"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,114,183,114,183,120,151,120"/>
 </map>

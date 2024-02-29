@@ -1,8 +1,13 @@
 <map id="Ogre::CompositorTextureBaseTranslator" name="Ogre::CompositorTextureBaseTranslator">
-<area shape="rect" id="node1" title=" " alt="" coords="392,57,587,98"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_node_translator.html" title=" " alt="" coords="635,5,845,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_shadow_node_translator.html" title=" " alt="" coords="640,57,840,98"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_compositor_workspace_translator.html" title=" " alt="" coords="647,122,833,163"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="196,64,344,91"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,64,148,91"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="391,55,585,96"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_node_translator.html" title=" " alt="" coords="633,5,844,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="594,49,678,29,680,34,595,54"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_shadow_node_translator.html" title=" " alt="" coords="639,55,838,96"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="601,73,639,73,639,78,601,78"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_compositor_workspace_translator.html" title=" " alt="" coords="645,121,832,161"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="584,98,658,117,657,122,583,103"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_script_translator.html" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="196,63,343,88"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,73,391,73,391,78,359,78"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,63,148,88"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="163,73,195,73,195,78,163,78"/>
 </map>

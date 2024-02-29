@@ -1,3 +1,33 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_capsule.html" title=" " alt="" coords="5,5,108,32"/>
+<area shape="rect" id="Node000000" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="5,276,107,302"/>
+<area shape="rect" id="Node000001" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="187,29,310,55"/>
+<area shape="poly" id="edge36_Node000000_Node000001" title=" " alt="" coords="59,260,69,217,86,164,114,110,132,86,153,64,185,47,187,52,156,68,136,89,118,113,91,166,74,218,64,261"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_cb_indirect_buffer.html" title=" " alt="" coords="174,79,323,104"/>
+<area shape="poly" id="edge39_Node000000_Node000004" title=" " alt="" coords="63,260,75,226,94,187,120,147,153,113,172,102,175,107,156,118,124,150,99,189,80,228,68,262"/>
+<area shape="rect" id="Node000005" href="$struct_ogre_1_1_cb_low_level_material.html" title=" " alt="" coords="161,128,336,154"/>
+<area shape="poly" id="edge40_Node000000_Node000005" title=" " alt="" coords="69,261,103,211,126,185,153,163,175,152,177,157,156,167,130,188,107,214,73,264"/>
+<area shape="rect" id="Node000006" href="$struct_ogre_1_1_cb_pipeline_state_object.html" title=" " alt="" coords="155,177,342,203"/>
+<area shape="poly" id="edge41_Node000000_Node000006" title=" " alt="" coords="80,264,113,237,153,212,181,201,183,206,156,217,116,241,83,268"/>
+<area shape="rect" id="Node000007" href="$struct_ogre_1_1_cb_shader_buffer.html" title=" " alt="" coords="175,227,322,252"/>
+<area shape="poly" id="edge42_Node000000_Node000007" title=" " alt="" coords="121,270,154,261,195,250,196,256,155,266,122,275"/>
+<area shape="rect" id="Node000008" href="$struct_ogre_1_1_cb_texture.html" title=" " alt="" coords="191,276,306,302"/>
+<area shape="poly" id="edge43_Node000000_Node000008" title=" " alt="" coords="122,286,191,286,191,292,122,292"/>
+<area shape="rect" id="Node000009" href="$struct_ogre_1_1_cb_texture_disable_from.html" title=" " alt="" coords="155,325,342,351"/>
+<area shape="poly" id="edge44_Node000000_Node000009" title=" " alt="" coords="122,303,155,312,196,322,195,327,154,317,121,308"/>
+<area shape="rect" id="Node000010" href="$struct_ogre_1_1_cb_vao.html" title=" " alt="" coords="201,375,296,400"/>
+<area shape="poly" id="edge45_Node000000_Node000010" title=" " alt="" coords="83,310,116,337,156,361,201,377,200,382,154,366,113,341,80,314"/>
+<area shape="rect" id="Node000011" href="$struct_ogre_1_1v1_1_1_cb_draw_call.html" title=" " alt="" coords="177,424,320,450"/>
+<area shape="poly" id="edge46_Node000000_Node000011" title=" " alt="" coords="73,314,107,364,130,389,156,411,178,421,175,426,153,415,126,393,103,367,69,317"/>
+<area shape="rect" id="Node000014" href="$struct_ogre_1_1v1_1_1_cb_render_op.html" title=" " alt="" coords="174,473,323,499"/>
+<area shape="poly" id="edge49_Node000000_Node000014" title=" " alt="" coords="68,316,80,349,99,388,124,427,156,460,175,471,172,475,153,464,120,431,94,391,75,351,63,317"/>
+<area shape="rect" id="Node000015" href="$struct_ogre_1_1v1_1_1_cb_start_v1_legacy_rendering.html" title=" " alt="" coords="160,523,337,564"/>
+<area shape="poly" id="edge50_Node000000_Node000015" title=" " alt="" coords="65,316,75,359,93,411,119,464,137,488,156,510,172,521,168,525,153,513,132,491,115,466,88,413,70,360,60,318"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="400,5,568,31"/>
+<area shape="poly" id="edge37_Node000001_Node000002" title=" " alt="" coords="325,32,399,24,400,29,326,37"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_cb_draw_call_strip.html" title=" " alt="" coords="409,55,559,80"/>
+<area shape="poly" id="edge38_Node000001_Node000003" title=" " alt="" coords="326,48,409,57,408,62,325,53"/>
+<area shape="rect" id="Node000012" href="$struct_ogre_1_1v1_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="390,400,578,426"/>
+<area shape="poly" id="edge47_Node000011_Node000012" title=" " alt="" coords="335,425,389,420,390,425,336,431"/>
+<area shape="rect" id="Node000013" href="$struct_ogre_1_1v1_1_1_cb_draw_call_strip.html" title=" " alt="" coords="399,449,569,475"/>
+<area shape="poly" id="edge48_Node000011_Node000013" title=" " alt="" coords="335,443,399,450,398,456,335,449"/>
 </map>

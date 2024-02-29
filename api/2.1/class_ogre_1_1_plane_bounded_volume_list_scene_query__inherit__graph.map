@@ -1,10 +1,17 @@
 <map id="Ogre::PlaneBoundedVolumeListSceneQuery" name="Ogre::PlaneBoundedVolumeListSceneQuery">
-<area shape="rect" id="node1" title="Specialises the SceneQuery class for querying within a plane&#45;bounded volume." alt="" coords="601,39,785,80"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html" title="Default implementation of PlaneBoundedVolumeListSceneQuery." alt="" coords="833,39,1015,80"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_region_scene_query.html" title="Abstract class defining a query which returns single results from a region." alt="" coords="387,46,553,73"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="188,21,315,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,21,116,47"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_scene_query_listener.html" title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ..." alt="" coords="164,71,339,98"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_octree_plane_bounded_volume_list_scene_query.html" title="Octree implementation of PlaneBoundedVolumeListSceneQuery." alt="" coords="1079,5,1257,47"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_p_c_z_plane_bounded_volume_list_scene_query.html" title="PCZ implementation of PlaneBoundedVolumeListSceneQuery." alt="" coords="1063,71,1273,112"/>
+<area shape="rect" id="Node000001" title="Specialises the SceneQuery class for querying within a plane&#45;bounded volume." alt="" coords="598,39,782,79"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html" title="Default implementation of PlaneBoundedVolumeListSceneQuery." alt="" coords="830,39,1010,79"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="797,56,829,56,829,62,797,62"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_region_scene_query.html" title="Abstract class defining a query which returns single results from a region." alt="" coords="384,46,550,72"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="565,56,598,56,598,62,565,62"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="186,21,313,47"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="328,40,384,47,383,52,327,45"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,21,115,47"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="130,31,186,31,186,36,130,36"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_scene_query_listener.html" title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ..." alt="" coords="163,70,336,96"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="351,69,383,66,384,71,352,74"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_octree_plane_bounded_volume_list_scene_query.html" title="Octree implementation of PlaneBoundedVolumeListSceneQuery." alt="" coords="1074,5,1252,46"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1025,42,1073,35,1073,41,1026,47"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_p_c_z_plane_bounded_volume_list_scene_query.html" title="PCZ implementation of PlaneBoundedVolumeListSceneQuery." alt="" coords="1058,71,1267,111"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="1026,70,1058,75,1057,80,1025,76"/>
 </map>

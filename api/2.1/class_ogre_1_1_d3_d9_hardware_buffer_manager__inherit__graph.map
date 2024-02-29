@@ -1,4 +1,5 @@
 <map id="Ogre::D3D9HardwareBufferManager" name="Ogre::D3D9HardwareBufferManager">
-<area shape="rect" id="node1" title="D3D9HardwareBufferManagerBase as a Singleton." alt="" coords="5,80,184,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="13,5,176,32"/>
+<area shape="rect" id="Node000001" title="D3D9HardwareBufferManagerBase as a Singleton." alt="" coords="5,79,183,120"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="13,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,46,97,79,91,79,91,46"/>
 </map>

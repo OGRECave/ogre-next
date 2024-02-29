@@ -1,5 +1,7 @@
 <map id="Ogre::v1::NumericAnimationTrack" name="Ogre::v1::NumericAnimationTrack">
-<area shape="rect" id="node1" title="Specialised AnimationTrack for dealing with generic animable values." alt="" coords="5,155,188,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_animation_track.html" title="A &#39;track&#39; in an animation sequence, i.e." alt="" coords="13,80,180,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="42,5,151,32"/>
+<area shape="rect" id="Node000001" title="Specialised AnimationTrack for dealing with generic animable values." alt="" coords="5,153,188,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_animation_track.html" title="A &#39;track&#39; in an animation sequence, i.e." alt="" coords="13,79,180,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,120,99,152,94,152,94,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="42,5,151,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,46,99,79,94,79,94,46"/>
 </map>

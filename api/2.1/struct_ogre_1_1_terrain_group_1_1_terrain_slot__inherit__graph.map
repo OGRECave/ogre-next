@@ -1,4 +1,5 @@
 <map id="Ogre::TerrainGroup::TerrainSlot" name="Ogre::TerrainGroup::TerrainSlot">
-<area shape="rect" id="node1" title="Slot for a terrain instance, together with its definition." alt="" coords="5,80,136,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="25,5,116,32"/>
+<area shape="rect" id="Node000001" title="Slot for a terrain instance, together with its definition." alt="" coords="5,79,136,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="25,5,116,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,46,73,79,68,79,68,46"/>
 </map>

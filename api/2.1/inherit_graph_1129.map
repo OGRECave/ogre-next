@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_strange_data.html" title=" " alt="" coords="5,5,100,32"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,87,31"/>
+<area shape="rect" id="Node000001" href="$interface_ogre_window.html" title=" " alt="" coords="135,5,230,31"/>
+<area shape="poly" id="edge1291_Node000000_Node000001" title=" " alt="" coords="102,16,134,16,134,21,102,21"/>
 </map>

@@ -1,3 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_g_l3_plus_pixel_util.html" title="Class to do pixel format mapping between GL and OGRE." alt="" coords="5,5,160,32"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="40,104,192,130"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_g_l_x_g_l_support.html" title=" " alt="" coords="292,55,437,80"/>
+<area shape="poly" id="edge1001_Node000000_Node000001" title=" " alt="" coords="199,98,295,78,296,84,200,103"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_t_k_g_l_support.html" title="GL support in a GTK window." alt="" coords="292,5,437,31"/>
+<area shape="poly" id="edge1002_Node000000_Node000002" title=" " alt="" coords="154,94,210,67,274,40,307,29,308,34,276,45,212,72,156,99"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_o_s_x_g_l3_plus_support.html" title=" " alt="" coords="275,104,454,130"/>
+<area shape="poly" id="edge1003_Node000000_Node000004" title=" " alt="" coords="207,114,274,114,274,120,207,120"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_s_d_l_g_l_support.html" title=" " alt="" coords="292,153,437,179"/>
+<area shape="poly" id="edge1004_Node000000_Node000005" title=" " alt="" coords="200,131,296,150,295,155,199,136"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_win32_g_l_support.html" title=" " alt="" coords="287,203,442,228"/>
+<area shape="poly" id="edge1005_Node000000_Node000006" title=" " alt="" coords="156,135,212,162,276,189,308,199,307,205,274,194,210,167,154,139"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,227,31"/>
+<area shape="poly" id="edge1006_Node000003_Node000002" title=" " alt="" coords="243,16,291,16,291,21,243,21"/>
 </map>

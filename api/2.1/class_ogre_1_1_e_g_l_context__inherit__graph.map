@@ -1,8 +1,13 @@
 <map id="Ogre::EGLContext" name="Ogre::EGLContext">
-<area shape="rect" id="node1" title=" " alt="" coords="196,81,323,108"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="381,5,551,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="371,56,561,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="385,107,547,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="391,157,541,184"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="5,81,148,108"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="195,80,320,106"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="379,5,548,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="296,70,367,40,401,29,403,34,369,45,299,75"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="368,55,558,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="335,81,367,77,368,82,336,86"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="383,104,544,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="335,99,382,105,382,110,335,105"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="389,153,537,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="299,110,369,140,404,150,402,155,367,145,297,115"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="5,80,147,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,90,194,90,194,96,162,96"/>
 </map>

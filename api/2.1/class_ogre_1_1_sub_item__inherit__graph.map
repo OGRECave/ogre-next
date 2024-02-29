@@ -1,6 +1,9 @@
 <map id="Ogre::SubItem" name="Ogre::SubItem">
-<area shape="rect" id="node1" title="Utility class which defines the sub&#45;parts of an Item." alt="" coords="123,155,229,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_renderable_animated.html" title=" " alt="" coords="5,80,181,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="33,5,154,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="205,80,312,107"/>
+<area shape="rect" id="Node000001" title="Utility class which defines the sub&#45;parts of an Item." alt="" coords="122,153,227,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_renderable_animated.html" title=" " alt="" coords="5,79,181,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,113,162,150,159,154,116,117"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="33,5,153,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,46,96,79,90,79,90,46"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="204,79,310,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="233,117,190,154,186,150,230,113"/>
 </map>

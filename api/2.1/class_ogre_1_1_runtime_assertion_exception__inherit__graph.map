@@ -1,5 +1,7 @@
 <map id="Ogre::RuntimeAssertionException" name="Ogre::RuntimeAssertionException">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,220,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine." alt="" coords="57,80,169,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="62,5,163,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,220,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine." alt="" coords="57,79,168,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,120,115,152,110,152,110,120"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="62,5,163,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,46,115,79,110,79,110,46"/>
 </map>

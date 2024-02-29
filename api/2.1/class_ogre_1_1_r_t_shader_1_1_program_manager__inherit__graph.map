@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::ProgramManager" name="Ogre::RTShader::ProgramManager">
-<area shape="rect" id="node1" title="A singleton manager class that manages shader based programs." alt="" coords="75,95,293,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,176,47"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="201,13,354,39"/>
+<area shape="rect" id="Node000001" title="A singleton manager class that manages shader based programs." alt="" coords="73,94,291,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,175,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,54,170,91,166,95,123,58"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="199,13,352,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="251,51,198,96,195,91,248,47"/>
 </map>

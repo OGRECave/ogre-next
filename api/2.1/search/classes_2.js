@@ -12,7 +12,7 @@ var searchData=
   ['billboardset_9',['BillboardSet',['../class_ogre_1_1v1_1_1_billboard_set.html',1,'Ogre::v1']]],
   ['billboardsetfactory_10',['BillboardSetFactory',['../class_ogre_1_1v1_1_1_billboard_set_factory.html',1,'Ogre::v1']]],
   ['bitwise_11',['Bitwise',['../class_ogre_1_1_bitwise.html',1,'Ogre']]],
-  ['block_12',['Block',['../struct_ogre_1_1_d3_d11_vao_manager_1_1_block.html',1,'Ogre::D3D11VaoManager::Block'],['../struct_ogre_1_1_g_l3_plus_vao_manager_1_1_block.html',1,'Ogre::GL3PlusVaoManager::Block'],['../struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_block.html',1,'Ogre::GLES2VaoManager::Block'],['../struct_ogre_1_1_metal_vao_manager_1_1_block.html',1,'Ogre::MetalVaoManager::Block'],['../struct_ogre_1_1_n_u_l_l_vao_manager_1_1_block.html',1,'Ogre::NULLVaoManager::Block']]],
+  ['block_12',['block',['../struct_ogre_1_1_metal_vao_manager_1_1_block.html',1,'Ogre::MetalVaoManager::Block'],['../struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_block.html',1,'Ogre::GLES2VaoManager::Block'],['../struct_ogre_1_1_g_l3_plus_vao_manager_1_1_block.html',1,'Ogre::GL3PlusVaoManager::Block'],['../struct_ogre_1_1_n_u_l_l_vao_manager_1_1_block.html',1,'Ogre::NULLVaoManager::Block'],['../struct_ogre_1_1_d3_d11_vao_manager_1_1_block.html',1,'Ogre::D3D11VaoManager::Block']]],
   ['bone_13',['Bone',['../class_ogre_1_1_bone.html',1,'Ogre']]],
   ['bonearraymemorymanager_14',['BoneArrayMemoryManager',['../class_ogre_1_1_bone_array_memory_manager.html',1,'Ogre']]],
   ['bonedata_15',['BoneData',['../struct_ogre_1_1_skeleton_def_1_1_bone_data.html',1,'Ogre::SkeletonDef']]],
@@ -52,7 +52,7 @@ var searchData=
   ['bufferinterface_49',['BufferInterface',['../class_ogre_1_1_buffer_interface.html',1,'Ogre']]],
   ['bufferpacked_50',['BufferPacked',['../class_ogre_1_1_buffer_packed.html',1,'Ogre']]],
   ['bufferpool_51',['BufferPool',['../struct_ogre_1_1_const_buffer_pool_1_1_buffer_pool.html',1,'Ogre::ConstBufferPool']]],
-  ['buffersource_52',['BufferSource',['../struct_ogre_1_1_compositor_pass_compute_def_1_1_buffer_source.html',1,'Ogre::CompositorPassComputeDef::BufferSource'],['../struct_ogre_1_1_compositor_pass_uav_def_1_1_buffer_source.html',1,'Ogre::CompositorPassUavDef::BufferSource']]],
+  ['buffersource_52',['buffersource',['../struct_ogre_1_1_compositor_pass_uav_def_1_1_buffer_source.html',1,'Ogre::CompositorPassUavDef::BufferSource'],['../struct_ogre_1_1_compositor_pass_compute_def_1_1_buffer_source.html',1,'Ogre::CompositorPassComputeDef::BufferSource']]],
   ['buildlightlistrequest_53',['BuildLightListRequest',['../struct_ogre_1_1_build_light_list_request.html',1,'Ogre']]],
   ['builtinscripttranslatormanager_54',['BuiltinScriptTranslatorManager',['../class_ogre_1_1_builtin_script_translator_manager.html',1,'Ogre']]],
   ['byskeletondef_55',['BySkeletonDef',['../struct_ogre_1_1_by_skeleton_def.html',1,'Ogre']]]

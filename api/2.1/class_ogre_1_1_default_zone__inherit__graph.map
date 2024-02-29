@@ -1,5 +1,7 @@
 <map id="Ogre::DefaultZone" name="Ogre::DefaultZone">
-<area shape="rect" id="node1" title=" " alt="" coords="25,155,152,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_p_c_zone.html" title="Portal&#45;Connected Zone datastructure for managing scene nodes." alt="" coords="37,80,140,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,172,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="26,153,151,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_p_c_zone.html" title="Portal&#45;Connected Zone datastructure for managing scene nodes." alt="" coords="37,79,140,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,120,91,152,86,152,86,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,172,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,46,91,79,86,79,86,46"/>
 </map>

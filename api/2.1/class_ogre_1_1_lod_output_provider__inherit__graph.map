@@ -1,7 +1,11 @@
 <map id="Ogre::LodOutputProvider" name="Ogre::LodOutputProvider">
-<area shape="rect" id="node1" title=" " alt="" coords="5,56,171,83"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_lod_output_provider_buffer.html" title=" " alt="" coords="255,5,453,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_lod_output_provider_compressed_mesh.html" title=" " alt="" coords="219,56,489,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_lod_output_provider_mesh.html" title=" " alt="" coords="255,107,453,133"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_lod_output_provider_compressed_buffer.html" title=" " alt="" coords="537,49,776,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,170,80"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_output_provider_buffer.html" title=" " alt="" coords="253,5,452,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,49,217,40,274,29,275,34,218,45,171,54"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_output_provider_compressed_mesh.html" title=" " alt="" coords="218,55,487,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="185,65,217,65,217,70,185,70"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_lod_output_provider_mesh.html" title=" " alt="" coords="254,104,451,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="171,81,218,90,275,101,274,106,217,95,170,86"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_lod_output_provider_compressed_buffer.html" title=" " alt="" coords="535,47,772,88"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="502,65,534,65,534,70,502,70"/>
 </map>

@@ -149,10 +149,10 @@ var _ogre_common_8h =
     [ "FastHash", "_ogre_common_8h.html#ga2be47c9c5b63cc7860edcec9b22e6f10", null ],
     [ "findCommandLineOpts", "_ogre_common_8h.html#gad78e25bde5597796c07e75d4f857a3cd", null ],
     [ "HashCombine", "_ogre_common_8h.html#gae1e937aed630bd25446cbef3bdd2cc7c", null ],
-    [ "max", "_ogre_common_8h.html#a03153e60cbb84dce0a825327578251da", null ],
-    [ "max", "_ogre_common_8h.html#ad41bf73e4e94602c821fcf213720b44a", null ],
-    [ "min", "_ogre_common_8h.html#a3793ebbb62f3a6cb47eb9f6911fd650b", null ],
-    [ "min", "_ogre_common_8h.html#a05e19fb494a484c9a64baa7d7433c12a", null ],
+    [ "max", "_ogre_common_8h.html#a1998c541902808cbfa6e7d1f315059ea", null ],
+    [ "max", "_ogre_common_8h.html#a75b1a085c56d11a912ec59c991fe6d54", null ],
+    [ "min", "_ogre_common_8h.html#aa6c918e6859c39bf5a89f79b3920c9ff", null ],
+    [ "min", "_ogre_common_8h.html#ac4dceab5a440e757b874b81f7337f270", null ],
     [ "operator<<", "_ogre_common_8h.html#ga7d3995197b7140ce4dd7f6675fc03628", null ],
     [ "BLANKSTRING", "_ogre_common_8h.html#gad842a4b416bd2f3245d2b44826a0aedc", null ]
 ];

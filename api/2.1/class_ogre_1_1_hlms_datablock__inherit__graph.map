@@ -1,9 +1,15 @@
 <map id="Ogre::HlmsDatablock" name="Ogre::HlmsDatablock">
-<area shape="rect" id="node1" title="An hlms datablock contains individual information about a specific material." alt="" coords="135,107,280,133"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="332,5,535,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_hlms_pbs_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ &amp; D3D11+." alt="" coords="349,56,517,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_hlms_pbs_mobile_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL ES 2.0." alt="" coords="330,107,537,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_hlms_unlit_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ &amp; D3D11+." alt="" coords="347,157,519,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_hlms_unlit_mobile_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="328,208,539,235"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,107,87,133"/>
+<area shape="rect" id="Node000001" title="An hlms datablock contains individual information about a specific material." alt="" coords="134,104,278,130"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="330,5,531,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,92,276,65,325,40,356,29,358,34,327,45,279,69,238,97"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_hlms_pbs_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ &amp; D3D11+." alt="" coords="347,55,514,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="282,97,368,78,369,84,283,103"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_hlms_pbs_mobile_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL ES 2.0." alt="" coords="328,104,533,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="293,114,328,114,328,120,293,120"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_hlms_unlit_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ &amp; D3D11+." alt="" coords="345,153,516,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="283,131,369,150,368,155,282,136"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_hlms_unlit_mobile_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="326,203,535,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="238,137,279,164,327,189,358,199,356,205,325,194,276,169,235,141"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,104,86,130"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,114,133,114,133,120,101,120"/>
 </map>

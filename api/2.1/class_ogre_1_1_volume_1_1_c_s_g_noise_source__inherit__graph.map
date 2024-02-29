@@ -1,5 +1,7 @@
 <map id="Ogre::Volume::CSGNoiseSource" name="Ogre::Volume::CSGNoiseSource">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,215,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_volume_1_1_c_s_g_unary_source.html" title="Source which does a unary operation to another one." alt="" coords="5,80,215,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="37,5,183,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,214,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_c_s_g_unary_source.html" title="Source which does a unary operation to another one." alt="" coords="5,79,214,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,120,112,152,107,152,107,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="36,5,183,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,46,112,79,107,79,107,46"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::MetalRenderTargetCommon" name="Ogre::MetalRenderTargetCommon">
-<area shape="rect" id="node1" title=" " alt="" coords="81,5,299,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_metal_render_texture.html" title=" " alt="" coords="5,80,177,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_metal_render_window.html" title=" " alt="" coords="201,80,376,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="81,5,298,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_metal_render_texture.html" title=" " alt="" coords="5,79,177,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,43,109,81,106,76,159,38"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_metal_render_window.html" title=" " alt="" coords="201,79,376,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="220,38,273,76,270,81,217,43"/>
 </map>

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['edge_0',['Edge',['../struct_ogre_1_1_lod_data_1_1_edge.html',1,'Ogre::LodData::Edge'],['../struct_ogre_1_1v1_1_1_edge_data_1_1_edge.html',1,'Ogre::v1::EdgeData::Edge']]],
+  ['edge_0',['edge',['../struct_ogre_1_1_lod_data_1_1_edge.html',1,'Ogre::LodData::Edge'],['../struct_ogre_1_1v1_1_1_edge_data_1_1_edge.html',1,'Ogre::v1::EdgeData::Edge']]],
   ['edgedata_1',['EdgeData',['../class_ogre_1_1v1_1_1_edge_data.html',1,'Ogre::v1']]],
   ['edgegroup_2',['EdgeGroup',['../struct_ogre_1_1v1_1_1_edge_data_1_1_edge_group.html',1,'Ogre::v1::EdgeData']]],
   ['edgelistbuilder_3',['EdgeListBuilder',['../class_ogre_1_1v1_1_1_edge_list_builder.html',1,'Ogre::v1']]],

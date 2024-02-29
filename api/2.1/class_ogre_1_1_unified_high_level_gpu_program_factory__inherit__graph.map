@@ -1,5 +1,7 @@
 <map id="Ogre::UnifiedHighLevelGpuProgramFactory" name="Ogre::UnifiedHighLevelGpuProgramFactory">
-<area shape="rect" id="node1" title="Factory class for Unified programs." alt="" coords="10,169,189,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_high_level_gpu_program_factory.html" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="5,80,193,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,147,32"/>
+<area shape="rect" id="Node000001" title="Factory class for Unified programs." alt="" coords="10,168,188,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_high_level_gpu_program_factory.html" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="5,79,193,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,135,102,167,96,167,96,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,146,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,46,102,79,96,79,96,46"/>
 </map>

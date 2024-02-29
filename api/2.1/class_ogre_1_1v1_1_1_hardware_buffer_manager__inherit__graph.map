@@ -1,13 +1,23 @@
 <map id="Ogre::v1::HardwareBufferManager" name="Ogre::v1::HardwareBufferManager">
-<area shape="rect" id="node1" title="Singleton wrapper for hardware buffer manager." alt="" coords="364,201,531,243"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html" title="D3D11HardwareBufferManagerBase as a Singleton." alt="" coords="583,5,789,47"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_default_hardware_buffer_manager.html" title="DefaultHardwareBufferManager as a Singleton." alt="" coords="599,71,773,112"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_buffer_manager.html" title="GL3PlusDefaultHardwareBufferManagerBase as a Singleton." alt="" coords="602,136,770,177"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager.html" title="GL3PlusHardwareBufferManagerBase as a Singleton." alt="" coords="595,201,777,243"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_buffer_manager.html" title="GLES2DefaultHardwareBufferManagerBase as a Singleton." alt="" coords="579,267,793,308"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager.html" title="GLES2HardwareBufferManagerBase as a Singleton." alt="" coords="582,332,790,373"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html" title="MetalHardwareBufferManagerBase as a Singleton." alt="" coords="587,397,785,439"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="144,168,311,209"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,175,91,202"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="139,233,316,275"/>
+<area shape="rect" id="Node000001" title="Singleton wrapper for hardware buffer manager." alt="" coords="362,201,527,242"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html" title="D3D11HardwareBufferManagerBase as a Singleton." alt="" coords="580,5,785,46"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="462,186,508,121,538,86,574,57,597,44,599,49,577,61,542,90,512,124,467,189"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1v1_1_1_default_hardware_buffer_manager.html" title="DefaultHardwareBufferManager as a Singleton." alt="" coords="596,71,769,111"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="478,189,522,154,574,122,603,109,605,114,577,127,525,159,482,193"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_buffer_manager.html" title="GL3PlusDefaultHardwareBufferManagerBase as a Singleton." alt="" coords="599,136,766,177"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="535,194,605,175,606,180,536,199"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1v1_1_1_g_l3_plus_hardware_buffer_manager.html" title="GL3PlusHardwareBufferManagerBase as a Singleton." alt="" coords="591,201,774,242"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="543,219,591,219,591,224,543,224"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_buffer_manager.html" title="GLES2DefaultHardwareBufferManagerBase as a Singleton." alt="" coords="575,267,790,307"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="536,244,606,263,605,269,535,249"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager.html" title="GLES2HardwareBufferManagerBase as a Singleton." alt="" coords="579,332,786,373"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="482,250,525,285,577,317,605,329,603,334,574,321,522,289,478,254"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html" title="MetalHardwareBufferManagerBase as a Singleton." alt="" coords="584,397,781,438"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="467,254,512,319,542,353,577,382,599,394,597,399,574,387,538,357,508,323,462,257"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html" title="Base definition of a hardware buffer manager." alt="" coords="143,168,309,209"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="324,201,362,206,361,212,324,206"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,176,90,201"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,186,143,186,143,191,105,191"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="138,233,314,274"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="329,236,361,231,362,236,330,241"/>
 </map>

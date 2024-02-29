@@ -20,7 +20,7 @@ var searchData=
   ['sbt_5freplace_17',['SBT_REPLACE',['../group___materials.html#ggac46c60cf6e5c199220e3b8f26570cb9aab6672abe57fa6051e9ab57d51975d244',1,'Ogre']]],
   ['sbt_5ftransparent_5falpha_18',['SBT_TRANSPARENT_ALPHA',['../group___materials.html#ggac46c60cf6e5c199220e3b8f26570cb9aa8df6dd8b7710971196000da11b5ab114',1,'Ogre']]],
   ['sbt_5ftransparent_5fcolour_19',['SBT_TRANSPARENT_COLOUR',['../group___materials.html#ggac46c60cf6e5c199220e3b8f26570cb9aab57b2cf11c74056c5109fce1efa37a05',1,'Ogre']]],
-  ['scale_20',['Scale',['../class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5fa48a2b92d1e9cab467df37b65e098fa50',1,'Ogre::NodeArrayMemoryManager::Scale()'],['../class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7eae961025b88faa8af3664322796691ffc',1,'Ogre::BoneArrayMemoryManager::Scale()']]],
+  ['scale_20',['scale',['../class_ogre_1_1_node_array_memory_manager.html#af49bbc12dc3106a2fc7b8f1761ac9f5fa48a2b92d1e9cab467df37b65e098fa50',1,'Ogre::NodeArrayMemoryManager::Scale'],['../class_ogre_1_1_bone_array_memory_manager.html#aa20b2f1745d99d3534242c64c19e5c7eae961025b88faa8af3664322796691ffc',1,'Ogre::BoneArrayMemoryManager::Scale']]],
   ['scene_5fdynamic_21',['SCENE_DYNAMIC',['../group___general.html#gga635aa2486e7e05c17c1fdec1913094a6a1ea35787f06b0a63e0dd130cce754204',1,'Ogre']]],
   ['scene_5fstatic_22',['SCENE_STATIC',['../group___general.html#gga635aa2486e7e05c17c1fdec1913094a6a284ea1c4b2ae53f2aefbaeabd6a27da8',1,'Ogre']]],
   ['scenenodes_23',['SceneNodes',['../namespace_ogre_1_1_scene_flags.html#af3190017d83d94455e645c506aa1681ba3958187af9e739e607108fa5a85aaf29',1,'Ogre::SceneFlags']]],

@@ -1,7 +1,11 @@
 <map id="Ogre::PixelCountLodStrategyBase" name="Ogre::PixelCountLodStrategyBase">
-<area shape="rect" id="node1" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="82,155,301,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_absolute_pixel_count_lod_strategy.html" title=" " alt="" coords="5,229,175,271"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_screen_ratio_pixel_count_lod_strategy.html" title=" " alt="" coords="199,229,389,271"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="128,80,255,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="155,5,228,32"/>
+<area shape="rect" id="Node000001" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="82,153,300,178"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_absolute_pixel_count_lod_strategy.html" title=" " alt="" coords="5,226,174,267"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="165,190,116,228,113,224,162,186"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_screen_ratio_pixel_count_lod_strategy.html" title=" " alt="" coords="198,226,386,267"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="220,186,269,224,266,228,216,190"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="128,79,254,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,120,194,152,188,152,188,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="155,5,227,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="194,46,194,79,188,79,188,46"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::RTShader::SGMaterialSerializerListener" name="Ogre::RTShader::SGMaterialSerializerListener">
-<area shape="rect" id="node1" title="This class responsible for translating core features of the RT Shader System for Ogre material script..." alt="" coords="79,95,265,136"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_material_serializer_1_1_listener.html" title="Class that allows listening in on the various stages of material serialization process." alt="" coords="5,5,160,47"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="185,13,338,39"/>
+<area shape="rect" id="Node000001" title="This class responsible for translating core features of the RT Shader System for Ogre material script..." alt="" coords="78,94,263,135"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_material_serializer_1_1_listener.html" title="Class that allows listening in on the various stages of material serialization process." alt="" coords="5,5,160,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,55,152,92,149,95,111,59"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="184,13,336,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,51,193,95,189,92,235,48"/>
 </map>

@@ -1,13 +1,23 @@
 <map id="Ogre::v1::InstanceBatch" name="Ogre::v1::InstanceBatch">
-<area shape="rect" id="node1" title="InstanceBatch forms part of the new Instancing system This is an abstract class that must be derived ..." alt="" coords="392,81,552,108"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_base_instance_batch_v_t_f.html" title="Instancing implementation using vertex texture through Vertex Texture Fetch (VTF) This implementation..." alt="" coords="600,31,815,57"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1v1_1_1_instance_batch_h_w.html" title="This is technique requires true instancing hardware support." alt="" coords="616,81,799,108"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1v1_1_1_instance_batch_shader.html" title="This is the same technique the old &quot;InstancedGeometry&quot; implementation used (with improvements)." alt="" coords="607,132,808,159"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="212,56,333,83"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="201,107,344,133"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,56,153,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="29,107,129,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="27,157,132,184"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1v1_1_1_instance_batch_h_w___v_t_f.html" title="Instancing implementation using vertex texture through Vertex Texture Fetch (VTF) and hardware instan..." alt="" coords="863,5,1077,32"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1v1_1_1_instance_batch_v_t_f.html" title=" " alt="" coords="877,56,1063,83"/>
+<area shape="rect" id="Node000001" title="InstanceBatch forms part of the new Instancing system This is an abstract class that must be derived ..." alt="" coords="391,79,550,104"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1v1_1_1_base_instance_batch_v_t_f.html" title="Instancing implementation using vertex texture through Vertex Texture Fetch (VTF) This implementation..." alt="" coords="598,29,813,55"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="550,72,640,53,641,58,551,77"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1v1_1_1_instance_batch_h_w.html" title="This is technique requires true instancing hardware support." alt="" coords="615,79,796,104"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="566,89,614,89,614,94,566,94"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1v1_1_1_instance_batch_shader.html" title="This is the same technique the old &quot;InstancedGeometry&quot; implementation used (with improvements)." alt="" coords="605,128,806,154"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="551,106,641,125,640,130,550,111"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="212,53,332,79"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="348,73,391,79,390,84,347,78"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="201,103,343,128"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="358,102,390,98,391,104,359,108"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,53,153,79"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="148,81,219,99,218,105,146,86"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="29,103,129,128"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="145,113,200,113,200,118,145,118"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="27,152,131,178"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="146,145,218,126,220,131,147,150"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1v1_1_1_instance_batch_h_w___v_t_f.html" title="Instancing implementation using vertex texture through Vertex Texture Fetch (VTF) and hardware instan..." alt="" coords="861,5,1074,31"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="828,28,860,25,860,31,828,34"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1v1_1_1_instance_batch_v_t_f.html" title=" " alt="" coords="875,55,1060,80"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="828,51,875,56,874,61,828,57"/>
 </map>

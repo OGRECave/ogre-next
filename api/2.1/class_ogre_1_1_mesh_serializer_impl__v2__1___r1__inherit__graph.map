@@ -1,7 +1,11 @@
 <map id="Ogre::MeshSerializerImpl_v2_1_R1" name="Ogre::MeshSerializerImpl_v2_1_R1">
-<area shape="rect" id="node1" title=" " alt="" coords="5,229,172,271"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_mesh_serializer_impl__v2__1___r0.html" title=" " alt="" coords="5,319,172,360"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_mesh_serializer_impl.html" title="Internal implementation of Mesh reading / writing for the latest version of the .mesh format." alt="" coords="5,155,172,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="34,80,143,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="37,5,141,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,226,171,267"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_mesh_serializer_impl__v2__1___r0.html" title=" " alt="" coords="5,315,171,356"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="91,283,91,315,85,315,85,283"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_mesh_serializer_impl.html" title="Internal implementation of Mesh reading / writing for the latest version of the .mesh format." alt="" coords="5,153,171,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,194,91,226,85,226,85,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_serializer.html" title="Generic class for serialising data to / from binary stream&#45;based files." alt="" coords="34,79,142,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,120,91,152,85,152,85,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="36,5,140,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="91,46,91,79,85,79,85,46"/>
 </map>

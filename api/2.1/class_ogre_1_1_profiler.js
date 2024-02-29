@@ -12,6 +12,7 @@ var class_ogre_1_1_profiler =
     [ "endGPUSample", "class_ogre_1_1_profiler.html#abefd86977f9c58ef76e8c92eb17ec9c8", null ],
     [ "endProfile", "class_ogre_1_1_profiler.html#abe681ebc8892d4475940301a0319fe83", null ],
     [ "getEnabled", "class_ogre_1_1_profiler.html#a43b5da14797ed9b7e48da4638207ca84", null ],
+    [ "getOfflineProfiler", "class_ogre_1_1_profiler.html#ae6b99366788276bb361fb6b621d2cca5", null ],
     [ "getProfileGroupMask", "class_ogre_1_1_profiler.html#a8e0b586d75f5a8108178fcd75342aa7e", null ],
     [ "getSingleton", "class_ogre_1_1_profiler.html#a8147f54c4af90377e9cde1a0d9608a58", null ],
     [ "getSingletonPtr", "class_ogre_1_1_profiler.html#a1539975bc729be95d410cda274e1dd4e", null ],

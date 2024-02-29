@@ -1,6 +1,5 @@
 var _ogre_shared_ptr_8h =
 [
-    [ "std::tr1::hash< Ogre::SharedPtr< T > >", "structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html", "structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4" ],
     [ "SharedPtrFreeMethod", "_ogre_shared_ptr_8h.html#ga3970484e048d1352a7e59b61186b5f2a", [
       [ "SPFM_DELETE", "_ogre_shared_ptr_8h.html#gga3970484e048d1352a7e59b61186b5f2aadae32e4e84712917731325c903fa14dd", null ],
       [ "SPFM_DELETE_T", "_ogre_shared_ptr_8h.html#gga3970484e048d1352a7e59b61186b5f2aab7cd87e656cd7fd3b9cd1345d03822d7", null ],

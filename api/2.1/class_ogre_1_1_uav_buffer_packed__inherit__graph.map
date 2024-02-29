@@ -1,10 +1,17 @@
 <map id="Ogre::UavBufferPacked" name="Ogre::UavBufferPacked">
-<area shape="rect" id="node1" title="Represents UAV buffers (also known as SSBOs in OpenGL) Uav buffers are supported in DX10/DX10...." alt="" coords="371,81,529,108"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_uav_buffer_packed.html" title=" " alt="" coords="583,5,781,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l3_plus_uav_buffer_packed.html" title=" " alt="" coords="577,56,787,83"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_metal_uav_buffer_packed.html" title=" " alt="" coords="587,107,777,133"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_n_u_l_l_uav_buffer_packed.html" title=" " alt="" coords="585,157,779,184"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="188,81,323,108"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_gpu_resource.html" title=" " alt="" coords="5,56,140,83"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="8,107,137,133"/>
+<area shape="rect" id="Node000001" title="Represents UAV buffers (also known as SSBOs in OpenGL) Uav buffers are supported in DX10/DX10...." alt="" coords="369,80,526,106"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_d3_d11_uav_buffer_packed.html" title=" " alt="" coords="580,5,777,31"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="491,71,574,40,612,29,613,34,575,45,493,76"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_g_l3_plus_uav_buffer_packed.html" title=" " alt="" coords="574,55,783,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="542,80,574,76,574,82,542,85"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_metal_uav_buffer_packed.html" title=" " alt="" coords="584,104,773,130"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="542,100,584,104,583,110,542,105"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_n_u_l_l_uav_buffer_packed.html" title=" " alt="" coords="582,153,775,179"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="494,110,575,140,614,150,612,155,574,145,492,115"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="188,80,321,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,90,369,90,369,96,336,96"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_gpu_resource.html" title=" " alt="" coords="5,55,140,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="155,76,187,81,187,86,155,82"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="8,104,137,130"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="152,104,187,99,188,104,153,109"/>
 </map>

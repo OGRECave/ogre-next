@@ -1,5 +1,7 @@
 <map id="Ogre::ParticleSystemFactory" name="Ogre::ParticleSystemFactory">
-<area shape="rect" id="node1" title="Factory object for creating ParticleSystem instances." alt="" coords="5,155,192,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="5,80,192,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="49,5,149,32"/>
+<area shape="rect" id="Node000001" title="Factory object for creating ParticleSystem instances." alt="" coords="5,153,192,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="6,79,191,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,120,101,152,96,152,96,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="49,5,148,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,46,101,79,96,79,96,46"/>
 </map>

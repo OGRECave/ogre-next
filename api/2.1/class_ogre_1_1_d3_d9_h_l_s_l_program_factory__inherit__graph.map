@@ -1,5 +1,7 @@
 <map id="Ogre::D3D9HLSLProgramFactory" name="Ogre::D3D9HLSLProgramFactory">
-<area shape="rect" id="node1" title="Factory class for D3D9 HLSL programs." alt="" coords="5,169,220,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_high_level_gpu_program_factory.html" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="19,80,207,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="65,5,160,32"/>
+<area shape="rect" id="Node000001" title="Factory class for D3D9 HLSL programs." alt="" coords="5,168,220,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_high_level_gpu_program_factory.html" title="Interface definition for factories of HighLevelGpuProgram." alt="" coords="19,79,206,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,135,115,167,110,167,110,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="66,5,159,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,46,115,79,110,79,110,46"/>
 </map>

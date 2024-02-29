@@ -1,10 +1,17 @@
 <map id="Ogre::D3D11DeviceResource" name="Ogre::D3D11DeviceResource">
-<area shape="rect" id="node1" title="Represents a Direct3D rendering resource." alt="" coords="5,81,196,108"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_h_l_s_l_program.html" title="Specialization of HighLevelGpuProgram to provide support for D3D11 High&#45;Level Shader Language (HLSL)." alt="" coords="261,5,439,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_texture.html" title="RenderTexture implementation for D3D11." alt="" coords="261,56,439,83"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_render_window_base.html" title=" " alt="" coords="244,107,456,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_texture.html" title=" " alt="" coords="281,161,419,188"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_render_window_swap_chain_based.html" title=" " alt="" coords="504,95,719,137"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_depth_texture.html" title=" " alt="" coords="525,161,697,188"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_d3_d11_null_texture.html" title=" " alt="" coords="531,212,692,239"/>
+<area shape="rect" id="Node000001" title="Represents a Direct3D rendering resource." alt="" coords="5,80,195,106"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d11_h_l_s_l_program.html" title="Specialization of HighLevelGpuProgram to provide support for D3D11 High&#45;Level Shader Language (HLSL)." alt="" coords="259,5,438,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,71,242,40,283,29,284,34,243,45,150,77"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_render_texture.html" title="RenderTexture implementation for D3D11." alt="" coords="259,55,438,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,79,259,74,259,79,210,84"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d11_render_window_base.html" title=" " alt="" coords="243,104,454,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="211,101,242,104,242,109,210,106"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_d3_d11_texture.html" title=" " alt="" coords="280,157,417,183"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="152,109,243,140,294,154,293,159,242,145,150,114"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_d3_d11_render_window_swap_chain_based.html" title=" " alt="" coords="502,93,716,133"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="469,112,501,112,501,117,469,118"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_d3_d11_depth_texture.html" title=" " alt="" coords="524,157,695,183"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="433,168,523,168,523,173,433,173"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_d3_d11_null_texture.html" title=" " alt="" coords="529,207,689,232"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="433,183,538,203,537,209,432,189"/>
 </map>

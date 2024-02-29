@@ -1,8 +1,13 @@
 <map id="Ogre::PCZSphereSceneQuery" name="Ogre::PCZSphereSceneQuery">
-<area shape="rect" id="node1" title="PCZ implementation of SphereSceneQuery." alt="" coords="58,319,253,345"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_default_sphere_scene_query.html" title="Default implementation of SphereSceneQuery." alt="" coords="68,229,243,271"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_sphere_scene_query.html" title="Specialises the SceneQuery class for querying within a sphere." alt="" coords="71,155,239,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_region_scene_query.html" title="Abstract class defining a query which returns single results from a region." alt="" coords="72,80,239,107"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="5,5,132,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_scene_query_listener.html" title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ..." alt="" coords="156,5,331,32"/>
+<area shape="rect" id="Node000001" title="PCZ implementation of SphereSceneQuery." alt="" coords="59,315,252,341"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_default_sphere_scene_query.html" title="Default implementation of SphereSceneQuery." alt="" coords="68,226,242,267"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,283,158,314,153,314,153,283"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_sphere_scene_query.html" title="Specialises the SceneQuery class for querying within a sphere." alt="" coords="72,153,239,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,194,158,226,153,226,153,194"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_region_scene_query.html" title="Abstract class defining a query which returns single results from a region." alt="" coords="72,79,238,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,120,158,152,153,152,153,120"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_scene_query.html" title="A class for performing queries on a scene." alt="" coords="5,5,132,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="97,39,142,77,139,81,93,43"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_scene_query_listener.html" title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ..." alt="" coords="155,5,329,31"/>
+<area shape="poly" id="edge5_Node000004_Node000007" title=" " alt="" coords="217,43,171,81,168,77,214,39"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Ogre::LinearForceAffector" name="Ogre::LinearForceAffector">
-<area shape="rect" id="node1" title="This class defines a ParticleAffector which applies a linear force to particles in a system." alt="" coords="55,155,225,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_affector.html" title="Abstract class defining the interface to be implemented by particle affectors." alt="" coords="67,80,213,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,147,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="170,5,238,32"/>
+<area shape="rect" id="Node000001" title="This class defines a ParticleAffector which applies a linear force to particles in a system." alt="" coords="55,153,224,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_affector.html" title="Abstract class defining the interface to be implemented by particle affectors." alt="" coords="67,79,212,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,120,142,152,137,152,137,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,146,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,40,131,77,127,80,94,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="170,5,237,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="185,44,152,80,148,77,181,40"/>
 </map>

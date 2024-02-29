@@ -1,5 +1,7 @@
 <map id="Ogre::TerrainGlobalOptions" name="Ogre::TerrainGlobalOptions">
-<area shape="rect" id="node1" title="Options class which just stores default options for the terrain." alt="" coords="36,95,215,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,13,96,39"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="121,5,282,47"/>
+<area shape="rect" id="Node000001" title="Options class which just stores default options for the terrain." alt="" coords="37,94,214,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,13,96,39"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,48,116,92,112,95,70,52"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="120,5,280,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,59,139,95,135,92,169,56"/>
 </map>

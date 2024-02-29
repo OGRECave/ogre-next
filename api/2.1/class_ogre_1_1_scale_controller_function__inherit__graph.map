@@ -1,5 +1,7 @@
 <map id="Ogre::ScaleControllerFunction" name="Ogre::ScaleControllerFunction">
-<area shape="rect" id="node1" title="Predefined controller function which simply scales an input to an output value." alt="" coords="5,169,200,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_controller_function.html" title=" " alt="" coords="22,80,183,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="49,5,156,32"/>
+<area shape="rect" id="Node000001" title="Predefined controller function which simply scales an input to an output value." alt="" coords="5,168,199,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_controller_function.html" title=" " alt="" coords="22,79,182,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,135,105,167,99,167,99,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="49,5,155,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,46,105,79,99,79,99,46"/>
 </map>

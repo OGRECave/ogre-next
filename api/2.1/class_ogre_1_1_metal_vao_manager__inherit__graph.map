@@ -1,5 +1,7 @@
 <map id="Ogre::MetalVaoManager" name="Ogre::MetalVaoManager">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,167,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vao_manager.html" title=" " alt="" coords="21,80,151,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="29,5,143,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,166,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_vao_manager.html" title=" " alt="" coords="21,79,150,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,120,88,152,83,152,83,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="29,5,142,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,46,88,79,83,79,83,46"/>
 </map>

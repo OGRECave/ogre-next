@@ -1,5 +1,7 @@
 <map id="Ogre::Volume::CSGDifferenceSource" name="Ogre::Volume::CSGDifferenceSource">
-<area shape="rect" id="node1" title="Builds the difference between two sources." alt="" coords="5,169,197,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_volume_1_1_c_s_g_operation_source.html" title="Abstract operation volume source holding two sources as operants." alt="" coords="6,80,197,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="28,5,175,32"/>
+<area shape="rect" id="Node000001" title="Builds the difference between two sources." alt="" coords="5,168,197,208"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_c_s_g_operation_source.html" title="Abstract operation volume source holding two sources as operants." alt="" coords="6,79,196,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,135,104,167,98,167,98,135"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="28,5,174,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,46,104,79,98,79,98,46"/>
 </map>

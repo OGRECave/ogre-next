@@ -1,5 +1,7 @@
 <map id="Ogre::GTKGLSupport" name="Ogre::GTKGLSupport">
-<area shape="rect" id="node1" title="GL support in a GTK window." alt="" coords="113,80,260,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="5,5,157,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="182,5,405,32"/>
+<area shape="rect" id="Node000001" title="GL support in a GTK window." alt="" coords="114,79,259,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="5,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,38,170,76,167,81,110,42"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="181,5,402,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,42,206,81,203,76,260,38"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::D3D11Plugin" name="Ogre::D3D11Plugin">
-<area shape="rect" id="node1" title="Plugin instance for D3D11 Manager." alt="" coords="5,155,136,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_plugin.html" title="Class defining a generic OGRE plugin." alt="" coords="25,80,117,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="27,5,114,32"/>
+<area shape="rect" id="Node000001" title="Plugin instance for D3D11 Manager." alt="" coords="5,153,136,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_plugin.html" title="Class defining a generic OGRE plugin." alt="" coords="25,79,116,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,120,73,152,68,152,68,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="27,5,114,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="73,46,73,79,68,79,68,46"/>
 </map>

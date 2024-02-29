@@ -1,6 +1,9 @@
 <map id="Ogre::ParallaxCorrectedCubemap" name="Ogre::ParallaxCorrectedCubemap">
-<area shape="rect" id="node1" title=" " alt="" coords="122,95,335,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="5,13,111,39"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_workspace_listener.html" title=" " alt="" coords="135,5,322,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="347,13,487,39"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="121,94,333,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="5,13,110,39"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,43,202,91,200,96,96,48"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_workspace_listener.html" title=" " alt="" coords="134,5,320,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,62,230,93,224,93,224,62"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="344,13,483,39"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="372,47,256,96,254,91,370,42"/>
 </map>

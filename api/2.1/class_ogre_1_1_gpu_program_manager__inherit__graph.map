@@ -1,12 +1,21 @@
 <map id="Ogre::GpuProgramManager" name="Ogre::GpuProgramManager">
-<area shape="rect" id="node1" title=" " alt="" coords="427,107,605,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="655,5,873,32"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d9_gpu_program_manager.html" title=" " alt="" coords="659,56,869,83"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="653,107,875,133"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="673,157,855,184"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="659,208,869,235"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="201,77,362,104"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,52,136,79"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="17,103,124,129"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="184,129,379,170"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="424,104,602,130"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="652,5,869,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="546,93,594,65,649,40,684,29,685,34,651,45,596,70,548,98"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_d3_d9_gpu_program_manager.html" title=" " alt="" coords="655,55,866,80"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="596,98,692,78,693,84,597,103"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="650,104,871,130"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="618,114,650,114,650,120,618,120"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="670,153,851,179"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="597,131,693,150,692,155,596,136"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="655,203,866,228"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="548,136,596,164,651,189,685,199,684,205,649,194,594,168,546,141"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="199,75,360,100"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="375,97,424,103,423,108,374,102"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,51,135,76"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="150,70,199,76,199,81,150,75"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="17,100,123,126"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="138,102,198,95,199,100,138,107"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="183,125,376,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="391,129,423,125,424,130,392,134"/>
 </map>

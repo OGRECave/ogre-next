@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['safe_5fdelete_0',['SAFE_DELETE',['../_ogre_d3_d9_prerequisites_8h.html#a9bbcd82e77c41df827c09759def05c9a',1,'SAFE_DELETE():&#160;OgreD3D9Prerequisites.h'],['../_ogre_d3_d11_prerequisites_8h.html#a9bbcd82e77c41df827c09759def05c9a',1,'SAFE_DELETE():&#160;OgreD3D11Prerequisites.h']]],
-  ['safe_5fdelete_5farray_1',['SAFE_DELETE_ARRAY',['../_ogre_d3_d11_prerequisites_8h.html#a506b3685b3eb05aac751f9e14cbed93b',1,'SAFE_DELETE_ARRAY():&#160;OgreD3D11Prerequisites.h'],['../_ogre_d3_d9_prerequisites_8h.html#a506b3685b3eb05aac751f9e14cbed93b',1,'SAFE_DELETE_ARRAY():&#160;OgreD3D9Prerequisites.h']]],
-  ['safe_5frelease_2',['SAFE_RELEASE',['../_ogre_d3_d11_prerequisites_8h.html#a6038f7bdb274c2e159988a57dedbf93d',1,'SAFE_RELEASE():&#160;OgreD3D11Prerequisites.h'],['../_ogre_d3_d9_prerequisites_8h.html#a6038f7bdb274c2e159988a57dedbf93d',1,'SAFE_RELEASE():&#160;OgreD3D9Prerequisites.h']]],
+  ['safe_5fdelete_0',['safe_delete',['../_ogre_d3_d9_prerequisites_8h.html#a9bbcd82e77c41df827c09759def05c9a',1,'SAFE_DELETE:&#160;OgreD3D9Prerequisites.h'],['../_ogre_d3_d11_prerequisites_8h.html#a9bbcd82e77c41df827c09759def05c9a',1,'SAFE_DELETE:&#160;OgreD3D11Prerequisites.h']]],
+  ['safe_5fdelete_5farray_1',['safe_delete_array',['../_ogre_d3_d11_prerequisites_8h.html#a506b3685b3eb05aac751f9e14cbed93b',1,'SAFE_DELETE_ARRAY:&#160;OgreD3D11Prerequisites.h'],['../_ogre_d3_d9_prerequisites_8h.html#a506b3685b3eb05aac751f9e14cbed93b',1,'SAFE_DELETE_ARRAY:&#160;OgreD3D9Prerequisites.h']]],
+  ['safe_5frelease_2',['safe_release',['../_ogre_d3_d11_prerequisites_8h.html#a6038f7bdb274c2e159988a57dedbf93d',1,'SAFE_RELEASE:&#160;OgreD3D11Prerequisites.h'],['../_ogre_d3_d9_prerequisites_8h.html#a6038f7bdb274c2e159988a57dedbf93d',1,'SAFE_RELEASE:&#160;OgreD3D9Prerequisites.h']]],
   ['sgx_5ffunc_5ftriplanar_5ftexturing_3',['SGX_FUNC_TRIPLANAR_TEXTURING',['../_ogre_shader_ex_triplanar_texturing_8h.html#a8c0174a846f733e9f37729ca734beeac',1,'OgreShaderExTriplanarTexturing.h']]],
   ['sgx_5flib_5flayeredblending_4',['SGX_LIB_LAYEREDBLENDING',['../_ogre_shader_ex_layered_blending_8h.html#ae55bc079a817e57149a0008c6e85ec2a',1,'OgreShaderExLayeredBlending.h']]],
   ['sst_5ffirst_5',['SST_FIRST',['../_ogre_cg_fx_script_loader_8h.html#aa9121de665062e87dd35a6462b347ad0',1,'OgreCgFxScriptLoader.h']]],

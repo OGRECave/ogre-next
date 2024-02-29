@@ -1,18 +1,33 @@
 <map id="Ogre::CbBase" name="Ogre::CbBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,284,108,311"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="188,31,312,57"/>
-<area shape="rect" id="node5" href="$struct_ogre_1_1_cb_indirect_buffer.html" title=" " alt="" coords="175,81,325,108"/>
-<area shape="rect" id="node6" href="$struct_ogre_1_1_cb_low_level_material.html" title=" " alt="" coords="163,132,337,159"/>
-<area shape="rect" id="node7" href="$struct_ogre_1_1_cb_pipeline_state_object.html" title=" " alt="" coords="157,183,343,209"/>
-<area shape="rect" id="node8" href="$struct_ogre_1_1_cb_shader_buffer.html" title=" " alt="" coords="177,233,323,260"/>
-<area shape="rect" id="node9" href="$struct_ogre_1_1_cb_texture.html" title=" " alt="" coords="193,284,307,311"/>
-<area shape="rect" id="node10" href="$struct_ogre_1_1_cb_texture_disable_from.html" title=" " alt="" coords="156,335,344,361"/>
-<area shape="rect" id="node11" href="$struct_ogre_1_1_cb_vao.html" title=" " alt="" coords="203,385,297,412"/>
-<area shape="rect" id="node12" href="$struct_ogre_1_1v1_1_1_cb_draw_call.html" title=" " alt="" coords="178,436,322,463"/>
-<area shape="rect" id="node15" href="$struct_ogre_1_1v1_1_1_cb_render_op.html" title=" " alt="" coords="175,487,325,513"/>
-<area shape="rect" id="node16" href="$struct_ogre_1_1v1_1_1_cb_start_v1_legacy_rendering.html" title=" " alt="" coords="161,538,339,579"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="402,5,571,32"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_cb_draw_call_strip.html" title=" " alt="" coords="411,56,562,83"/>
-<area shape="rect" id="node13" href="$struct_ogre_1_1v1_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="392,411,581,437"/>
-<area shape="rect" id="node14" href="$struct_ogre_1_1v1_1_1_cb_draw_call_strip.html" title=" " alt="" coords="401,461,572,488"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,276,107,302"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="187,29,310,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="59,260,69,217,86,164,114,110,132,86,153,64,185,47,187,52,156,68,136,89,118,113,91,166,74,218,64,261"/>
+<area shape="rect" id="Node000005" href="$struct_ogre_1_1_cb_indirect_buffer.html" title=" " alt="" coords="174,79,323,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="63,260,75,226,94,187,120,147,153,113,172,102,175,107,156,118,124,150,99,189,80,228,68,262"/>
+<area shape="rect" id="Node000006" href="$struct_ogre_1_1_cb_low_level_material.html" title=" " alt="" coords="161,128,336,154"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="69,261,103,211,126,185,153,163,175,152,177,157,156,167,130,188,107,214,73,264"/>
+<area shape="rect" id="Node000007" href="$struct_ogre_1_1_cb_pipeline_state_object.html" title=" " alt="" coords="155,177,342,203"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="80,264,113,237,153,212,181,201,183,206,156,217,116,241,83,268"/>
+<area shape="rect" id="Node000008" href="$struct_ogre_1_1_cb_shader_buffer.html" title=" " alt="" coords="175,227,322,252"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="121,270,154,261,195,250,196,256,155,266,122,275"/>
+<area shape="rect" id="Node000009" href="$struct_ogre_1_1_cb_texture.html" title=" " alt="" coords="191,276,306,302"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="122,286,191,286,191,292,122,292"/>
+<area shape="rect" id="Node000010" href="$struct_ogre_1_1_cb_texture_disable_from.html" title=" " alt="" coords="155,325,342,351"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="122,303,155,312,196,322,195,327,154,317,121,308"/>
+<area shape="rect" id="Node000011" href="$struct_ogre_1_1_cb_vao.html" title=" " alt="" coords="201,375,296,400"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="83,310,116,337,156,361,201,377,200,382,154,366,113,341,80,314"/>
+<area shape="rect" id="Node000012" href="$struct_ogre_1_1v1_1_1_cb_draw_call.html" title=" " alt="" coords="177,424,320,450"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="73,314,107,364,130,389,156,411,178,421,175,426,153,415,126,393,103,367,69,317"/>
+<area shape="rect" id="Node000015" href="$struct_ogre_1_1v1_1_1_cb_render_op.html" title=" " alt="" coords="174,473,323,499"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="68,316,80,349,99,388,124,427,156,460,175,471,172,475,153,464,120,431,94,391,75,351,63,317"/>
+<area shape="rect" id="Node000016" href="$struct_ogre_1_1v1_1_1_cb_start_v1_legacy_rendering.html" title=" " alt="" coords="160,523,337,564"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="65,316,75,359,93,411,119,464,137,488,156,510,172,521,168,525,153,513,132,491,115,466,88,413,70,360,60,318"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="400,5,568,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,32,399,24,400,29,326,37"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_cb_draw_call_strip.html" title=" " alt="" coords="409,55,559,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="326,48,409,57,408,62,325,53"/>
+<area shape="rect" id="Node000013" href="$struct_ogre_1_1v1_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="390,400,578,426"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="335,425,389,420,390,425,336,431"/>
+<area shape="rect" id="Node000014" href="$struct_ogre_1_1v1_1_1_cb_draw_call_strip.html" title=" " alt="" coords="399,449,569,475"/>
+<area shape="poly" id="edge13_Node000012_Node000014" title=" " alt="" coords="335,443,399,450,398,456,335,449"/>
 </map>

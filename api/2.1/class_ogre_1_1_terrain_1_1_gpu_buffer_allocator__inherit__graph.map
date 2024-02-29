@@ -1,5 +1,7 @@
 <map id="Ogre::Terrain::GpuBufferAllocator" name="Ogre::Terrain::GpuBufferAllocator">
-<area shape="rect" id="node1" title="Interface used to by the Terrain instance to allocate GPU buffers." alt="" coords="9,80,169,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_terrain_1_1_default_gpu_buffer_allocator.html" title="Standard implementation of a buffer allocator which re&#45;uses buffers." alt="" coords="5,169,172,211"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="43,5,134,32"/>
+<area shape="rect" id="Node000001" title="Interface used to by the Terrain instance to allocate GPU buffers." alt="" coords="9,79,168,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_terrain_1_1_default_gpu_buffer_allocator.html" title="Standard implementation of a buffer allocator which re&#45;uses buffers." alt="" coords="5,168,172,208"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="91,135,91,167,86,167,86,135"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="43,5,134,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,46,91,79,86,79,86,46"/>
 </map>

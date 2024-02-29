@@ -1,7 +1,11 @@
 <map id="Ogre::Volume::CSGOperationSource" name="Ogre::Volume::CSGOperationSource">
-<area shape="rect" id="node1" title="Abstract operation volume source holding two sources as operants." alt="" coords="200,71,391,112"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_volume_1_1_c_s_g_difference_source.html" title="Builds the difference between two sources." alt="" coords="447,5,639,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_volume_1_1_c_s_g_intersection_source.html" title="Builds the intersection between two sources." alt="" coords="442,71,645,112"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_volume_1_1_c_s_g_union_source.html" title="Builds the union between two sources." alt="" coords="439,137,648,163"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,78,152,105"/>
+<area shape="rect" id="Node000001" title="Abstract operation volume source holding two sources as operants." alt="" coords="200,71,389,111"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_volume_1_1_c_s_g_difference_source.html" title="Builds the difference between two sources." alt="" coords="446,5,637,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="388,64,461,44,462,49,389,69"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_volume_1_1_c_s_g_intersection_source.html" title="Builds the intersection between two sources." alt="" coords="441,71,642,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="405,88,440,88,440,94,405,94"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_volume_1_1_c_s_g_union_source.html" title="Builds the union between two sources." alt="" coords="437,136,645,161"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="400,113,483,132,482,137,399,118"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_volume_1_1_source.html" title="Abstract class defining the density function." alt="" coords="5,78,152,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,88,199,88,199,94,167,94"/>
 </map>

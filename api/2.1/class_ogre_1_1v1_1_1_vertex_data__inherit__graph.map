@@ -1,4 +1,5 @@
 <map id="Ogre::v1::VertexData" name="Ogre::v1::VertexData">
-<area shape="rect" id="node1" title="Summary class collecting together vertex source information." alt="" coords="5,80,145,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="18,5,133,32"/>
+<area shape="rect" id="Node000001" title="Summary class collecting together vertex source information." alt="" coords="5,79,145,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="18,5,132,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,46,78,79,72,79,72,46"/>
 </map>

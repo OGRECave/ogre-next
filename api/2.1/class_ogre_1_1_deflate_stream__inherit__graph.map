@@ -1,5 +1,7 @@
 <map id="Ogre::DeflateStream" name="Ogre::DeflateStream">
-<area shape="rect" id="node1" title="Stream which compresses / uncompresses data using the &#39;deflate&#39; compression algorithm." alt="" coords="5,155,144,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="12,80,137,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="28,5,121,32"/>
+<area shape="rect" id="Node000001" title="Stream which compresses / uncompresses data using the &#39;deflate&#39; compression algorithm." alt="" coords="5,153,143,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data." alt="" coords="12,79,136,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,120,77,152,71,152,71,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="28,5,120,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="77,46,77,79,71,79,71,46"/>
 </map>

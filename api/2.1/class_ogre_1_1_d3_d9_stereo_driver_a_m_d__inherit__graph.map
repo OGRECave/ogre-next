@@ -1,7 +1,11 @@
 <map id="Ogre::D3D9StereoDriverAMD" name="Ogre::D3D9StereoDriverAMD">
-<area shape="rect" id="node1" title="Virtual interface of the stereo driver." alt="" coords="191,169,381,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d9_stereo_driver_impl.html" title="Virtual interface of the stereo driver." alt="" coords="5,87,191,114"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="45,5,151,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="215,80,357,121"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_render_target_listener.html" title="A interface class defining a listener which can be used to receive notifications of RenderTarget even..." alt="" coords="381,87,562,114"/>
+<area shape="rect" id="Node000001" title="Virtual interface of the stereo driver." alt="" coords="190,168,378,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d9_stereo_driver_impl.html" title="Virtual interface of the stereo driver." alt="" coords="5,87,190,112"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,116,257,165,255,170,139,121"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="45,5,150,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,47,100,86,95,86,95,47"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="214,79,354,120"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="287,135,287,167,282,167,282,135"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_render_target_listener.html" title="A interface class defining a listener which can be used to receive notifications of RenderTarget even..." alt="" coords="378,87,558,112"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="427,121,313,170,311,165,425,116"/>
 </map>

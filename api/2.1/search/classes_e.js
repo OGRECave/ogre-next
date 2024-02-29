@@ -8,7 +8,7 @@ var searchData=
   ['octreeaxisalignedboxscenequery_5',['OctreeAxisAlignedBoxSceneQuery',['../class_ogre_1_1_octree_axis_aligned_box_scene_query.html',1,'Ogre']]],
   ['octreecamera_6',['OctreeCamera',['../class_ogre_1_1_octree_camera.html',1,'Ogre']]],
   ['octreeintersectionscenequery_7',['OctreeIntersectionSceneQuery',['../class_ogre_1_1_octree_intersection_scene_query.html',1,'Ogre']]],
-  ['octreenode_8',['OctreeNode',['../class_ogre_1_1_octree_node.html',1,'Ogre::OctreeNode'],['../class_ogre_1_1_volume_1_1_octree_node.html',1,'Ogre::Volume::OctreeNode']]],
+  ['octreenode_8',['octreenode',['../class_ogre_1_1_volume_1_1_octree_node.html',1,'Ogre::Volume::OctreeNode'],['../class_ogre_1_1_octree_node.html',1,'Ogre::OctreeNode']]],
   ['octreenodesplitpolicy_9',['OctreeNodeSplitPolicy',['../class_ogre_1_1_volume_1_1_octree_node_split_policy.html',1,'Ogre::Volume']]],
   ['octreeplaneboundedvolumelistscenequery_10',['OctreePlaneBoundedVolumeListSceneQuery',['../class_ogre_1_1_octree_plane_bounded_volume_list_scene_query.html',1,'Ogre']]],
   ['octreeplugin_11',['OctreePlugin',['../class_ogre_1_1_octree_plugin.html',1,'Ogre']]],

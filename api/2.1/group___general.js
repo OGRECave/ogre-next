@@ -1361,6 +1361,18 @@ var group___general =
     ] ],
     [ "Ogre::PlatformInformation", "class_ogre_1_1_platform_information.html", [
       [ "CpuFeatures", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807", [
+        [ "CPU_FEATURE_SSE", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807a1ae4263f68c419342c129ca694878307", null ],
+        [ "CPU_FEATURE_SSE2", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807a8b9a9e995ae9886ef33500254536cc6e", null ],
+        [ "CPU_FEATURE_SSE3", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807aa607177ead91f654dbc5c2444c5999b9", null ],
+        [ "CPU_FEATURE_MMX", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807af1d5c5e48b069e9cdfb96167836f5f8f", null ],
+        [ "CPU_FEATURE_MMXEXT", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807a15cd1f4c0b74a9fa9f9e5b9a74ab1616", null ],
+        [ "CPU_FEATURE_3DNOW", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807ab02aebd522397209dc00ab5e580e1cd6", null ],
+        [ "CPU_FEATURE_3DNOWEXT", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807a171794d6739d25f3bcf5f5f1ddffdfb1", null ],
+        [ "CPU_FEATURE_CMOV", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807ac13691e4b73cb7643a41163944a9a5a5", null ],
+        [ "CPU_FEATURE_TSC", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807ab8dc79e9c3f35aa7befa143234048020", null ],
+        [ "CPU_FEATURE_FPU", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807a5fc4873770d764423e744f0c38205f9a", null ],
+        [ "CPU_FEATURE_PRO", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807adb21fcf38fa8c6da129b284fe6098138", null ],
+        [ "CPU_FEATURE_HTT", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807a926da4b4266e9394a740a5b5d737abf2", null ],
         [ "CPU_FEATURE_NONE", "class_ogre_1_1_platform_information.html#af7f9306631264031789d89af0642a807a1bea16c1677fe68834a2d76b968562d7", null ]
       ] ],
       [ "getCpuFeatures", "class_ogre_1_1_platform_information.html#aae9beb453c6df1f32ad9949536a3f40f", null ],
@@ -1498,6 +1510,7 @@ var group___general =
       [ "endGPUSample", "class_ogre_1_1_profiler.html#abefd86977f9c58ef76e8c92eb17ec9c8", null ],
       [ "endProfile", "class_ogre_1_1_profiler.html#abe681ebc8892d4475940301a0319fe83", null ],
       [ "getEnabled", "class_ogre_1_1_profiler.html#a43b5da14797ed9b7e48da4638207ca84", null ],
+      [ "getOfflineProfiler", "class_ogre_1_1_profiler.html#ae6b99366788276bb361fb6b621d2cca5", null ],
       [ "getProfileGroupMask", "class_ogre_1_1_profiler.html#a8e0b586d75f5a8108178fcd75342aa7e", null ],
       [ "getSingleton", "class_ogre_1_1_profiler.html#a8147f54c4af90377e9cde1a0d9608a58", null ],
       [ "getSingletonPtr", "class_ogre_1_1_profiler.html#a1539975bc729be95d410cda274e1dd4e", null ],
@@ -2056,6 +2069,7 @@ var group___general =
       [ "toString", "class_ogre_1_1_string_converter.html#aa331e97f9c49e38ac4951c6643f02fbf", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#a16f86bf7f546c9a6c0d3477e84f12024", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#a184e73275f33b8191a756dad27e391b2", null ],
+      [ "toString", "class_ogre_1_1_string_converter.html#a1fcc92ec31fa27f8712b28f01743705c", null ],
       [ "toString", "class_ogre_1_1_string_converter.html#aa1378ae68227b869fc21b4bb9110d2db", null ]
     ] ],
     [ "Ogre::StringInterface", "class_ogre_1_1_string_interface.html", [
@@ -2396,7 +2410,7 @@ var group___general =
     [ "OGRE_EXCEPT_EX", "group___general.html#ga158d9c8ba6320aa37b7c9c05a2f2fd8f", null ],
     [ "OGRE_FRAME_STATS_SAMPLES", "group___general.html#ga923615d571c08a38711b4df9fd11d541", null ],
     [ "OGRE_LOG_THRESHOLD", "group___general.html#gaafd348d0e141380ecf8d7b57a65652d7", null ],
-    [ "Ogre::_StringHash", "group___general.html#ga4adaf30a5217767650a9e0b0b4de540c", null ],
+    [ "Ogre::_StringHash", "group___general.html#ga036f87474178a0b4e37966d9452ecf2e", null ],
     [ "Ogre::ABGR", "group___general.html#gac65e9a4f14f6cd3f76a1a9875fbd8dd8", null ],
     [ "Ogre::AbstractNodeList", "group___general.html#gae6612ea0b05ddf514b5478a6c0c0cb09", null ],
     [ "Ogre::AbstractNodeListPtr", "group___general.html#gad207f4cd0b8599200e52d366fe61f069", null ],

@@ -1,8 +1,13 @@
 <map id="Ogre::PCZLight" name="Ogre::PCZLight">
-<area shape="rect" id="node1" title="Specialized version of Ogre::Light which caches which zones the light affects." alt="" coords="172,229,283,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="185,155,270,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="156,80,299,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,277,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="301,5,407,32"/>
+<area shape="rect" id="Node000001" title="Specialized version of Ogre::Light which caches which zones the light affects." alt="" coords="172,226,282,252"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene." alt="" coords="185,153,269,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,194,230,226,224,226,224,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="156,79,298,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="230,120,230,152,224,152,224,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="119,36,203,76,201,81,117,41"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,277,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="230,46,230,79,224,79,224,46"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="300,5,405,31"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="319,41,250,81,247,76,317,37"/>
 </map>

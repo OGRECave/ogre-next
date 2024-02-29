@@ -1,12 +1,21 @@
 <map id="Ogre::v1::HardwareUniformBuffer" name="Ogre::v1::HardwareUniformBuffer">
-<area shape="rect" id="node1" title="Specialisation of HardwareBuffer for a uniform buffer." alt="" coords="353,201,532,243"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_d3_d11_hardware_uniform_buffer.html" title="Specialisation of HardwareBuffer for D3D11." alt="" coords="581,5,799,47"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_default_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="603,71,777,112"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="606,136,774,177"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1v1_1_1_g_l3_plus_hardware_shader_storage_buffer.html" title="Specialisation of HardwareUniformBuffer for the OpenGL Shader Storage Buffer." alt="" coords="599,201,781,243"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1v1_1_1_g_l3_plus_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for OpenGL." alt="" coords="599,267,781,308"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="583,332,797,373"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for OpenGL." alt="" coords="580,397,800,439"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="139,209,305,235"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,209,91,235"/>
+<area shape="rect" id="Node000001" title="Specialisation of HardwareBuffer for a uniform buffer." alt="" coords="351,201,528,242"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1v1_1_1_d3_d11_hardware_uniform_buffer.html" title="Specialisation of HardwareBuffer for D3D11." alt="" coords="578,5,794,46"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="459,186,506,121,538,86,575,57,598,44,601,49,578,61,542,90,510,124,463,189"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1v1_1_1_default_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="600,71,772,111"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="475,189,521,154,575,122,605,109,607,114,578,127,524,159,478,193"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="602,136,770,177"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="533,194,606,175,607,180,534,199"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1v1_1_1_g_l3_plus_hardware_shader_storage_buffer.html" title="Specialisation of HardwareUniformBuffer for the OpenGL Shader Storage Buffer." alt="" coords="595,201,777,242"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="544,219,594,219,594,224,544,224"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1v1_1_1_g_l3_plus_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for OpenGL." alt="" coords="595,267,777,307"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="534,244,607,263,606,269,533,249"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for emulation." alt="" coords="579,332,793,373"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="478,250,524,284,578,317,607,329,605,334,575,321,521,289,475,254"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1v1_1_1_g_l_e_s2_hardware_uniform_buffer.html" title="Specialisation of HardwareUniformBuffer for OpenGL." alt="" coords="576,397,796,438"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="463,254,510,319,542,353,578,382,601,394,598,399,575,387,538,357,506,323,459,257"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers." alt="" coords="138,209,303,235"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="319,219,351,219,351,224,319,224"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,209,90,235"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,219,137,219,137,224,105,224"/>
 </map>

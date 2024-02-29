@@ -1,5 +1,7 @@
 <map id="Ogre::ImageCodec::ImageData" name="Ogre::ImageCodec::ImageData">
-<area shape="rect" id="node1" title="Codec return class for images." alt="" coords="5,155,204,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_codec_1_1_codec_data.html" title=" " alt="" coords="23,80,186,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="61,5,149,32"/>
+<area shape="rect" id="Node000001" title="Codec return class for images." alt="" coords="5,153,203,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_codec_1_1_codec_data.html" title=" " alt="" coords="23,79,185,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,120,107,152,101,152,101,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="60,5,148,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,46,107,79,101,79,101,46"/>
 </map>

@@ -1,7 +1,11 @@
 <map id="Ogre::HardwareOcclusionQuery" name="Ogre::HardwareOcclusionQuery">
-<area shape="rect" id="node1" title="This is a abstract class that that provides the interface for the query class for hardware occlusion." alt="" coords="168,78,372,105"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_hardware_occlusion_query.html" title="This is a class that is the DirectX9 implementation of hardware occlusion testing." alt="" coords="426,5,635,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d9_hardware_occlusion_query.html" title="This is a class that is the DirectX9 implementation of hardware occlusion testing." alt="" coords="429,71,632,112"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html" title="This is a class that is the base class of the query class for hardware occlusion." alt="" coords="420,136,641,177"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,78,120,105"/>
+<area shape="rect" id="Node000001" title="This is a abstract class that that provides the interface for the query class for hardware occlusion." alt="" coords="167,78,370,104"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d11_hardware_occlusion_query.html" title="This is a class that is the DirectX9 implementation of hardware occlusion testing." alt="" coords="424,5,632,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="336,71,444,44,445,49,338,77"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d9_hardware_occlusion_query.html" title="This is a class that is the DirectX9 implementation of hardware occlusion testing." alt="" coords="428,71,629,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="386,88,427,88,427,94,386,94"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html" title="This is a class that is the base class of the query class for hardware occlusion." alt="" coords="418,136,638,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="338,105,445,133,444,138,336,111"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,78,119,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,88,166,88,166,94,134,94"/>
 </map>

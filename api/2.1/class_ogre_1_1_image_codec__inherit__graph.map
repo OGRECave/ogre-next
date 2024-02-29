@@ -1,13 +1,23 @@
 <map id="Ogre::ImageCodec" name="Ogre::ImageCodec">
-<area shape="rect" id="node1" title="Codec specialized in images." alt="" coords="283,183,412,209"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_a_s_t_c_codec.html" title="Codec specialized in loading ASTC (ARM Adaptive Scalable Texture Compression) images." alt="" coords="475,5,603,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d_d_s_codec.html" title="Codec specialized in loading DDS (Direct Draw Surface) images." alt="" coords="479,56,599,83"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_e_t_c_codec.html" title="Codec specialized in loading ETC (Ericsson Texture Compression) images." alt="" coords="480,107,599,133"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_e_x_r_codec.html" title="Codec specialized in loading OpenEXR high dynamic range images." alt="" coords="480,157,599,184"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_free_image_codec.html" title="Codec specialized in images loaded using FreeImage." alt="" coords="462,208,617,235"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_o_i_t_d_codec.html" title="Codec specialized in loading OITD (Ogre Internal Texture Dump) format." alt="" coords="477,259,601,285"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_p_v_r_t_c_codec.html" title="Codec specialized in loading PVRTC (PowerVR) images." alt="" coords="471,309,608,336"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_s_t_b_i_image_codec.html" title="Codec specialized in images loaded using stbi (https://github.com/nothings/stb)." alt="" coords="460,360,619,387"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_codec.html" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="141,183,235,209"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,183,93,209"/>
+<area shape="rect" id="Node000001" title="Codec specialized in images." alt="" coords="281,179,409,204"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_a_s_t_c_codec.html" title="Codec specialized in loading ASTC (ARM Adaptive Scalable Texture Compression) images." alt="" coords="473,5,600,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,163,396,101,423,68,456,40,476,29,478,34,459,44,427,72,400,104,362,166"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_d_d_s_codec.html" title="Codec specialized in loading DDS (Direct Draw Surface) images." alt="" coords="477,55,596,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="366,165,405,126,456,89,480,79,482,83,459,94,409,130,370,169"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_e_t_c_codec.html" title="Codec specialized in loading ETC (Ericsson Texture Compression) images." alt="" coords="478,104,595,130"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="386,169,456,138,487,128,489,133,458,143,388,174"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_e_x_r_codec.html" title="Codec specialized in loading OpenEXR high dynamic range images." alt="" coords="477,153,596,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="425,178,476,171,477,177,425,184"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_free_image_codec.html" title="Codec specialized in images loaded using FreeImage." alt="" coords="459,203,614,228"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="425,199,460,203,459,208,425,204"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_o_i_t_d_codec.html" title="Codec specialized in loading OITD (Ogre Internal Texture Dump) format." alt="" coords="475,252,598,278"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="388,209,458,238,489,249,487,254,456,243,386,214"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_p_v_r_t_c_codec.html" title="Codec specialized in loading PVRTC (PowerVR) images." alt="" coords="468,301,605,327"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="370,214,409,252,459,288,482,298,480,303,456,292,406,256,366,218"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_s_t_b_i_image_codec.html" title="Codec specialized in images loaded using stbi (https://github.com/nothings/stb)." alt="" coords="457,351,616,376"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="362,217,400,278,427,310,459,337,478,348,476,352,456,342,424,314,396,281,357,220"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_codec.html" title="Abstract class that defines a &#39;codec&#39;." alt="" coords="141,179,233,204"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,189,281,189,281,194,249,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,179,93,204"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,189,140,189,140,194,108,194"/>
 </map>

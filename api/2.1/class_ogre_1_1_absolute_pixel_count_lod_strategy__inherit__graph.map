@@ -1,7 +1,11 @@
 <map id="Ogre::AbsolutePixelCountLodStrategy" name="Ogre::AbsolutePixelCountLodStrategy">
-<area shape="rect" id="node1" title=" " alt="" coords="139,244,309,285"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="5,162,224,189"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="51,80,178,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="78,5,151,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="249,155,421,196"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="139,241,308,282"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="5,160,223,186"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,193,200,239,197,243,139,198"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="51,79,177,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,120,117,160,111,160,111,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="78,5,150,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="117,46,117,79,111,79,111,46"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="247,153,418,193"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="297,205,250,243,246,239,294,201"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Ogre::Page" name="Ogre::Page">
-<area shape="rect" id="node1" title="Page class." alt="" coords="259,95,346,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,184,47"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="209,5,397,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="421,13,502,39"/>
+<area shape="rect" id="Node000001" title="Page class." alt="" coords="258,94,343,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="5,5,183,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,49,270,91,268,96,159,54"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="207,5,394,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="303,62,303,93,298,93,298,62"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="418,13,498,39"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="421,48,326,96,323,91,419,43"/>
 </map>

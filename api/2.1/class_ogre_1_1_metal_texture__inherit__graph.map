@@ -1,9 +1,15 @@
 <map id="Ogre::MetalTexture" name="Ogre::MetalTexture">
-<area shape="rect" id="node1" title=" " alt="" coords="115,229,245,256"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_metal_depth_texture.html" title=" " alt="" coords="5,304,171,331"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_metal_null_texture.html" title=" " alt="" coords="195,304,349,331"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource." alt="" coords="131,155,229,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="125,80,235,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="36,5,177,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="201,5,308,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="113,226,243,252"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_metal_depth_texture.html" title=" " alt="" coords="5,300,170,326"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="153,264,104,302,101,298,149,260"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_metal_null_texture.html" title=" " alt="" coords="194,300,347,326"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="207,260,256,298,253,302,204,264"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource." alt="" coords="129,153,227,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,194,181,226,176,226,176,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="123,79,233,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,120,181,152,176,152,176,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="35,5,175,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="130,40,168,77,164,80,126,44"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="199,5,304,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="230,44,192,80,189,77,227,40"/>
 </map>

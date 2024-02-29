@@ -1,7 +1,11 @@
 <map id="Ogre::D3D9RenderWindow" name="Ogre::D3D9RenderWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="60,229,235,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="76,155,219,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="80,80,215,107"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_resource.html" title=" " alt="" coords="5,5,140,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="165,5,279,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="59,226,233,252"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="75,153,217,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,194,149,226,143,226,143,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="79,79,213,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="149,120,149,152,143,152,143,120"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_gpu_resource.html" title=" " alt="" coords="5,5,140,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="97,40,135,77,132,80,94,44"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="164,5,277,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="199,44,160,81,156,77,195,40"/>
 </map>

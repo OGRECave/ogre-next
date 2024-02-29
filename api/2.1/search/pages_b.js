@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['windows_0',['Windows',['../_setting_up_ogre_windows.html',1,'SettingUpOgre']]]
+  ['reference_20start_20page_0',['API Reference Start Page',['../index.html',1,'']]]
 ];

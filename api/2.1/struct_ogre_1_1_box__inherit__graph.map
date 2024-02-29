@@ -1,4 +1,5 @@
 <map id="Ogre::Box" name="Ogre::Box">
-<area shape="rect" id="node1" title="Structure used to define a box in a 3&#45;D integer space." alt="" coords="19,5,98,32"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_pixel_box.html" title=" " alt="" coords="5,80,112,107"/>
+<area shape="rect" id="Node000001" title="Structure used to define a box in a 3&#45;D integer space." alt="" coords="19,5,97,31"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_pixel_box.html" title=" " alt="" coords="5,79,111,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,46,61,79,55,79,55,46"/>
 </map>

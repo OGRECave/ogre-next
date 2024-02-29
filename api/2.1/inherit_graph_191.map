@@ -1,3 +1,17 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_g_l_atomic_counter_reference.html" title="Structure used to keep track of named atomic counter uniforms in the linked program object." alt="" coords="5,5,224,32"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="6,80,147,106"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_e_g_l_context.html" title=" " alt="" coords="206,80,332,106"/>
+<area shape="poly" id="edge1007_Node000000_Node000001" title=" " alt="" coords="163,90,206,90,206,96,163,96"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_na_cl_g_l_context.html" title=" " alt="" coords="196,129,342,155"/>
+<area shape="poly" id="edge1012_Node000000_Node000006" title=" " alt="" coords="145,107,216,126,215,131,143,113"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_android_e_g_l_context.html" title=" " alt="" coords="401,5,570,31"/>
+<area shape="poly" id="edge1008_Node000001_Node000002" title=" " alt="" coords="311,71,389,40,425,29,427,34,391,45,313,76"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_emscripten_e_g_l_context.html" title=" " alt="" coords="390,55,580,80"/>
+<area shape="poly" id="edge1009_Node000001_Node000003" title=" " alt="" coords="347,81,389,76,390,81,347,86"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_win32_e_g_l_context.html" title=" " alt="" coords="405,104,566,130"/>
+<area shape="poly" id="edge1010_Node000001_Node000004" title=" " alt="" coords="347,99,404,105,404,110,347,104"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_x11_e_g_l_context.html" title=" " alt="" coords="411,153,559,179"/>
+<area shape="poly" id="edge1011_Node000001_Node000005" title=" " alt="" coords="329,109,343,114,367,127,391,140,423,150,422,155,389,145,365,132,341,119,327,114"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,129,148,155"/>
+<area shape="poly" id="edge1013_Node000007_Node000006" title=" " alt="" coords="163,140,195,140,195,145,163,145"/>
 </map>

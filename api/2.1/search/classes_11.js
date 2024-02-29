@@ -17,7 +17,7 @@ var searchData=
   ['rayscenequery_14',['RaySceneQuery',['../class_ogre_1_1_ray_scene_query.html',1,'Ogre']]],
   ['rayscenequerylistener_15',['RaySceneQueryListener',['../class_ogre_1_1_ray_scene_query_listener.html',1,'Ogre']]],
   ['rayscenequeryresultentry_16',['RaySceneQueryResultEntry',['../struct_ogre_1_1_ray_scene_query_result_entry.html',1,'Ogre']]],
-  ['readrequests_17',['ReadRequests',['../struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html',1,'Ogre::v1::VertexData::ReadRequests'],['../struct_ogre_1_1_vertex_array_object_1_1_read_requests.html',1,'Ogre::VertexArrayObject::ReadRequests']]],
+  ['readrequests_17',['readrequests',['../struct_ogre_1_1_vertex_array_object_1_1_read_requests.html',1,'Ogre::VertexArrayObject::ReadRequests'],['../struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html',1,'Ogre::v1::VertexData::ReadRequests']]],
   ['rebaselistener_18',['RebaseListener',['../class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html',1,'Ogre::ArrayMemoryManager']]],
   ['rebind_19',['rebind',['../struct_ogre_1_1_s_t_l_allocator_1_1rebind.html',1,'Ogre::STLAllocator']]],
   ['rectangle2d_20',['Rectangle2D',['../class_ogre_1_1v1_1_1_rectangle2_d.html',1,'Ogre::v1']]],

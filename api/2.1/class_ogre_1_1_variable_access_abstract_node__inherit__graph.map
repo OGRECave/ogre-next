@@ -1,5 +1,7 @@
 <map id="Ogre::VariableAccessAbstractNode" name="Ogre::VariableAccessAbstractNode">
-<area shape="rect" id="node1" title="This abstract node represents a variable assignment." alt="" coords="5,155,232,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_abstract_node.html" title=" " alt="" coords="51,80,187,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="53,5,184,32"/>
+<area shape="rect" id="Node000001" title="This abstract node represents a variable assignment." alt="" coords="5,153,232,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_abstract_node.html" title=" " alt="" coords="51,79,186,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,120,121,152,116,152,116,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="53,5,184,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,46,121,79,116,79,116,46"/>
 </map>

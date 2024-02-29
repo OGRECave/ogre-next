@@ -1,5 +1,7 @@
 <map id="Ogre::ArchiveManager" name="Ogre::ArchiveManager">
-<area shape="rect" id="node1" title="This class manages the available ArchiveFactory plugins." alt="" coords="90,95,241,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,171,47"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="195,13,290,39"/>
+<area shape="rect" id="Node000001" title="This class manages the available ArchiveFactory plugins." alt="" coords="89,94,238,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,170,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,56,154,92,150,95,115,59"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="194,13,288,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,51,177,95,173,92,217,48"/>
 </map>

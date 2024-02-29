@@ -1,8 +1,13 @@
 <map id="Ogre::EmbeddedZipArchiveFactory" name="Ogre::EmbeddedZipArchiveFactory">
-<area shape="rect" id="node1" title="Specialisation of ZipArchiveFactory for embedded Zip files." alt="" coords="90,229,269,271"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_a_p_k_zip_archive_factory.html" title=" " alt="" coords="85,319,273,345"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_zip_archive_factory.html" title="Specialisation of ArchiveFactory for Zip files." alt="" coords="99,155,260,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_archive_factory.html" title="Abstract factory class, archive codec plugins can register concrete subclasses of this." alt="" coords="108,80,251,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,191,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="215,5,309,32"/>
+<area shape="rect" id="Node000001" title="Specialisation of ZipArchiveFactory for embedded Zip files." alt="" coords="90,226,268,267"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_a_p_k_zip_archive_factory.html" title=" " alt="" coords="85,315,273,341"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="182,283,182,314,176,314,176,283"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_zip_archive_factory.html" title="Specialisation of ArchiveFactory for Zip files." alt="" coords="99,153,259,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,194,182,226,176,226,176,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_archive_factory.html" title="Abstract factory class, archive codec plugins can register concrete subclasses of this." alt="" coords="108,79,250,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="182,120,182,152,176,152,176,120"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,190,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="124,39,167,77,163,81,121,43"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="214,5,309,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="238,44,194,81,191,77,234,39"/>
 </map>

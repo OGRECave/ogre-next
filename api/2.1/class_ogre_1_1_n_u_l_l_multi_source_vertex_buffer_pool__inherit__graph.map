@@ -1,5 +1,7 @@
 <map id="Ogre::NULLMultiSourceVertexBufferPool" name="Ogre::NULLMultiSourceVertexBufferPool">
-<area shape="rect" id="node1" title=" " alt="" coords="17,155,216,196"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_multi_source_vertex_buffer_pool.html" title="Vertex Array Objects do not need to change when: The same (internal) vertex buffer is still bound." alt="" coords="5,80,228,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,181,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,153,215,193"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_multi_source_vertex_buffer_pool.html" title="Vertex Array Objects do not need to change when: The same (internal) vertex buffer is still bound." alt="" coords="5,79,227,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,120,119,152,113,152,113,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,180,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,46,119,79,113,79,113,46"/>
 </map>

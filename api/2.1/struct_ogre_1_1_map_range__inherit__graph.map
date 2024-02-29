@@ -1,4 +1,5 @@
 <map id="Ogre::MapRange&lt; T &gt;" name="Ogre::MapRange&lt; T &gt;">
-<area shape="rect" id="node1" title="Predefined type." alt="" coords="5,95,153,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1iterator__range.html" title="Base for an iterator_range." alt="" coords="16,5,143,47"/>
+<area shape="rect" id="Node000001" title="Predefined type." alt="" coords="5,94,153,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1iterator__range.html" title="Base for an iterator_range." alt="" coords="16,5,142,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,62,82,93,76,93,76,62"/>
 </map>

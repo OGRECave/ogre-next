@@ -1,12 +1,21 @@
 <map id="Ogre::CompositorPass" name="Ogre::CompositorPass">
-<area shape="rect" id="node1" title="Abstract class for compositor passes." alt="" coords="192,183,344,209"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_pass_clear.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="408,5,591,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_pass_compute.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="397,56,601,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_pass_depth_copy.html" title="Implementation of CompositorPass This implementation will copy one DepthBuffer to another DepthBuffer..." alt="" coords="392,107,607,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_compositor_pass_mipmap.html" title="Implementation of CompositorPass This implementation will Mipmap the texture used by this RenderTarge..." alt="" coords="400,157,599,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_compositor_pass_quad.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="408,208,591,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_compositor_pass_scene.html" title="Implementation of CompositorPass This implementation will perform main rendering, selecting several p..." alt="" coords="405,259,594,285"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_compositor_pass_stencil.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="403,309,595,336"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="411,360,587,387"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,183,144,209"/>
+<area shape="rect" id="Node000001" title="Abstract class for compositor passes." alt="" coords="192,179,343,204"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_pass_clear.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="408,5,589,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="281,163,324,101,354,68,390,40,412,29,414,34,392,44,358,71,328,104,285,166"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_pass_compute.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="397,55,600,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="290,165,334,126,361,106,390,89,418,78,419,83,392,94,364,110,337,130,293,169"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_pass_depth_copy.html" title="Implementation of CompositorPass This implementation will copy one DepthBuffer to another DepthBuffer..." alt="" coords="391,104,605,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="310,169,390,138,429,128,430,133,392,143,312,174"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_compositor_pass_mipmap.html" title="Implementation of CompositorPass This implementation will Mipmap the texture used by this RenderTarge..." alt="" coords="400,153,597,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="358,179,399,174,399,180,359,184"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_compositor_pass_quad.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="407,203,589,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="359,198,407,203,406,209,358,204"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_scene.html" title="Implementation of CompositorPass This implementation will perform main rendering, selecting several p..." alt="" coords="404,252,592,278"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="312,208,392,238,430,249,429,254,390,243,310,213"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_compositor_pass_stencil.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="403,301,594,327"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="294,214,337,252,392,288,420,298,418,303,390,293,334,257,290,218"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="411,351,586,376"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="285,216,328,278,358,310,392,337,414,348,412,353,390,342,354,314,324,282,281,219"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,179,144,204"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,189,191,189,191,194,159,194"/>
 </map>

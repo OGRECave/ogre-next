@@ -1,14 +1,25 @@
 <map id="Ogre::ParticleAffector" name="Ogre::ParticleAffector">
-<area shape="rect" id="node1" title="Abstract class defining the interface to be implemented by particle affectors." alt="" coords="195,224,340,251"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_colour_fader_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the colour of particles." alt="" coords="395,5,566,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_colour_fader_affector2.html" title="This plugin subclass of ParticleAffector allows you to alter the colour of particles." alt="" coords="391,56,570,83"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_colour_image_affector.html" title=" " alt="" coords="393,107,568,133"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_colour_interpolator_affector.html" title=" " alt="" coords="401,158,560,199"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_deflector_plane_affector.html" title="This class defines a ParticleAffector which deflects particles." alt="" coords="388,224,573,251"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_direction_randomiser_affector.html" title="This class defines a ParticleAffector which applies randomness to the movement of the particles." alt="" coords="393,275,569,317"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_linear_force_affector.html" title="This class defines a ParticleAffector which applies a linear force to particles in a system." alt="" coords="395,341,566,368"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_rotation_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the rotation of particles." alt="" coords="406,392,555,419"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_scale_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the scale of particles." alt="" coords="413,443,548,469"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,199,147,225"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="42,249,110,276"/>
+<area shape="rect" id="Node000001" title="Abstract class defining the interface to be implemented by particle affectors." alt="" coords="194,219,338,244"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_colour_fader_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the colour of particles." alt="" coords="393,5,563,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,203,290,166,314,122,345,78,384,40,404,29,406,34,388,44,349,81,318,125,295,168,279,205"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_colour_fader_affector2.html" title="This plugin subclass of ParticleAffector allows you to alter the colour of particles." alt="" coords="390,55,567,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="280,204,322,146,351,115,385,89,407,78,409,83,387,94,355,119,326,149,284,207"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_colour_image_affector.html" title=" " alt="" coords="392,104,565,130"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="291,206,333,172,385,140,416,128,418,133,387,145,336,176,294,210"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_colour_interpolator_affector.html" title=" " alt="" coords="400,154,557,195"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="330,211,399,193,401,198,332,217"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_deflector_plane_affector.html" title="This class defines a ParticleAffector which deflects particles." alt="" coords="386,219,570,244"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="353,229,385,229,385,234,353,234"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_direction_randomiser_affector.html" title="This class defines a ParticleAffector which applies randomness to the movement of the particles." alt="" coords="391,269,566,309"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="332,246,401,265,399,270,330,252"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_linear_force_affector.html" title="This class defines a ParticleAffector which applies a linear force to particles in a system." alt="" coords="394,333,563,359"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="294,253,336,287,387,318,418,330,416,335,385,323,333,291,291,257"/>
+<area shape="rect" id="Node000011" href="$class_ogre_1_1_rotation_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the rotation of particles." alt="" coords="404,383,552,408"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="284,256,326,314,355,344,387,369,409,380,407,385,385,374,351,348,322,317,280,259"/>
+<area shape="rect" id="Node000012" href="$class_ogre_1_1_scale_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the scale of particles." alt="" coords="412,432,545,458"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="279,258,295,295,318,338,349,382,388,419,412,431,410,436,384,423,345,385,314,341,290,297,274,260"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,193,146,219"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,215,194,219,193,225,161,220"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="42,243,109,268"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,247,193,238,194,243,125,252"/>
 </map>

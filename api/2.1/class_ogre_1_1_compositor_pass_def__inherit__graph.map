@@ -1,12 +1,21 @@
 <map id="Ogre::CompositorPassDef" name="Ogre::CompositorPassDef">
-<area shape="rect" id="node1" title="Interface to abstract all types of pass definitions (." alt="" coords="192,199,364,225"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_pass_clear_def.html" title=" " alt="" coords="423,5,625,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_compositor_pass_compute_def.html" title=" " alt="" coords="412,56,636,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_pass_depth_copy_def.html" title=" " alt="" coords="431,107,617,149"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_compositor_pass_mipmap_def.html" title=" " alt="" coords="415,173,633,200"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_compositor_pass_quad_def.html" title=" " alt="" coords="423,224,625,251"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_compositor_pass_scene_def.html" title=" " alt="" coords="419,275,629,301"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_compositor_pass_stencil_def.html" title=" " alt="" coords="418,325,630,352"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_compositor_pass_uav_def.html" title=" " alt="" coords="426,376,622,403"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,199,144,225"/>
+<area shape="rect" id="Node000001" title="Interface to abstract all types of pass definitions (." alt="" coords="192,195,363,220"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_compositor_pass_clear_def.html" title=" " alt="" coords="422,5,623,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,180,309,147,336,109,370,71,410,40,432,29,434,34,412,44,374,75,340,112,314,150,294,183"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_compositor_pass_compute_def.html" title=" " alt="" coords="411,55,634,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="298,181,346,134,377,111,410,90,440,78,442,83,412,95,380,115,350,139,302,185"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_compositor_pass_depth_copy_def.html" title=" " alt="" coords="430,105,615,145"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="325,186,410,154,445,143,447,148,412,159,326,191"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_compositor_pass_mipmap_def.html" title=" " alt="" coords="414,169,631,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="378,194,413,191,414,196,379,200"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_compositor_pass_quad_def.html" title=" " alt="" coords="422,219,624,244"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="379,215,421,219,421,224,378,220"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_compositor_pass_scene_def.html" title=" " alt="" coords="419,268,627,294"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="326,224,412,254,453,265,451,270,410,259,324,229"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_compositor_pass_stencil_def.html" title=" " alt="" coords="417,317,628,343"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="305,229,353,268,412,304,441,314,440,319,410,309,350,272,302,233"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_compositor_pass_uav_def.html" title=" " alt="" coords="425,367,620,392"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="297,232,343,294,376,326,412,353,436,364,433,369,410,358,372,330,339,297,292,235"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,195,144,220"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,205,191,205,191,210,159,210"/>
 </map>

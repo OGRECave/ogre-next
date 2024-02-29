@@ -1,7 +1,11 @@
 <map id="Ogre::iterator_range&lt; T &gt;" name="Ogre::iterator_range&lt; T &gt;">
-<area shape="rect" id="node1" title="Base for an iterator_range." alt="" coords="5,81,171,108"/>
-<area shape="rect" id="node2" href="$struct_ogre_1_1_const_map_range.html" title="Predefined type." alt="" coords="225,5,407,32"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_const_vector_range.html" title="Predefined type." alt="" coords="219,56,413,83"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_map_range.html" title="Predefined type." alt="" coords="242,107,390,133"/>
-<area shape="rect" id="node5" href="$struct_ogre_1_1_vector_range.html" title="Predefined type." alt="" coords="235,157,397,184"/>
+<area shape="rect" id="Node000001" title="Base for an iterator_range." alt="" coords="5,80,170,106"/>
+<area shape="rect" id="Node000002" href="$struct_ogre_1_1_const_map_range.html" title="Predefined type." alt="" coords="224,5,406,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,71,217,40,254,29,256,34,218,45,135,76"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_const_vector_range.html" title="Predefined type." alt="" coords="218,55,412,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="185,79,217,76,218,81,185,85"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_map_range.html" title="Predefined type." alt="" coords="241,104,389,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="185,100,241,106,240,112,185,106"/>
+<area shape="rect" id="Node000005" href="$struct_ogre_1_1_vector_range.html" title="Predefined type." alt="" coords="235,153,395,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="136,109,218,140,256,150,254,155,217,145,134,114"/>
 </map>

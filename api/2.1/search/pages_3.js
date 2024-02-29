@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['hlms_3a_20high_20level_20material_20system_0',['HLMS: High Level Material System',['../hlms.html',1,'manual']]]
+  ['deprecated_20list_0',['Deprecated List',['../deprecated.html',1,'']]],
+  ['driver_20overhead_1',['AZDO changes (Aproaching Zero Driver Overhead)',['../azdo.html',1,'manual']]]
 ];

@@ -1,4 +1,19 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_iterator_wrapper.html" title=" " alt="" coords="5,5,151,61"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_vector_iterator_wrapper.html" title="Prepared IteratorWrapper for container like std::vector." alt="" coords="199,13,381,54"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1_iterator_wrapper.html" title="Basefunctionality for IteratorWrappers." alt="" coords="5,104,187,145"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1_map_iterator_wrapper.html" title=" " alt="" coords="241,5,411,46"/>
+<area shape="poly" id="edge1040_Node000000_Node000001" title=" " alt="" coords="151,94,234,57,265,44,267,49,236,61,154,99"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_map_iterator_wrapper.html" title=" " alt="" coords="241,71,411,111"/>
+<area shape="poly" id="edge1042_Node000000_Node000003" title=" " alt="" coords="202,106,240,101,241,106,203,112"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_vector_iterator_wrapper.html" title=" " alt="" coords="235,136,417,177"/>
+<area shape="poly" id="edge1044_Node000000_Node000005" title=" " alt="" coords="203,136,235,141,234,146,202,142"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_vector_iterator_wrapper.html" title=" " alt="" coords="235,201,417,242"/>
+<area shape="poly" id="edge1046_Node000000_Node000007" title=" " alt="" coords="154,149,236,186,267,198,265,203,234,191,152,154"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_const_map_iterator.html" title="Concrete IteratorWrapper for const access to the underlying key&#45;value container." alt="" coords="472,13,657,39"/>
+<area shape="poly" id="edge1041_Node000001_Node000002" title=" " alt="" coords="426,23,471,23,471,28,426,28"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_map_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying key&#45;value container." alt="" coords="489,78,640,104"/>
+<area shape="poly" id="edge1043_Node000003_Node000004" title=" " alt="" coords="426,88,488,88,488,94,426,94"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_const_vector_iterator.html" title="Concrete IteratorWrapper for const access to the underlying container." alt="" coords="465,144,663,169"/>
+<area shape="poly" id="edge1045_Node000005_Node000006" title=" " alt="" coords="433,154,464,154,464,159,433,159"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_vector_iterator.html" title="Concrete IteratorWrapper for nonconst access to the underlying container." alt="" coords="482,209,646,235"/>
+<area shape="poly" id="edge1047_Node000007_Node000008" title=" " alt="" coords="433,219,482,219,482,224,433,224"/>
 </map>

@@ -1,11 +1,19 @@
 <map id="Ogre::EGLWindow" name="Ogre::EGLWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="561,81,689,108"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="748,5,920,32"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="737,56,931,83"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="752,107,916,133"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="759,157,909,184"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="371,81,513,108"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="188,81,323,108"/>
-<area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_resource.html" title=" " alt="" coords="5,56,140,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="15,107,130,133"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="559,80,687,106"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="745,5,917,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="662,70,734,40,769,29,770,34,736,45,665,75"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="735,55,927,80"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="702,81,734,77,735,82,702,86"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="749,104,913,130"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="702,99,749,105,748,110,702,105"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="756,153,906,179"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="665,110,736,140,771,150,769,155,734,145,663,115"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="369,80,511,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="527,90,559,90,559,96,527,96"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="188,80,321,106"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="336,90,369,90,369,96,336,96"/>
+<area shape="rect" id="Node000004" href="$struct_ogre_1_1_gpu_resource.html" title=" " alt="" coords="5,55,140,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="155,76,187,81,187,86,155,82"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="16,104,129,130"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="144,105,187,99,188,104,145,110"/>
 </map>

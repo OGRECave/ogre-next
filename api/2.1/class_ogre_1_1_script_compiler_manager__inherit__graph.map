@@ -1,6 +1,9 @@
 <map id="Ogre::ScriptCompilerManager" name="Ogre::ScriptCompilerManager">
-<area shape="rect" id="node1" title="Manages threaded compilation of scripts." alt="" coords="207,95,397,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,212,47"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="237,13,367,39"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="391,13,527,39"/>
+<area shape="rect" id="Node000001" title="Manages threaded compilation of scripts." alt="" coords="205,94,395,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,211,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,50,272,91,270,96,169,55"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="235,13,365,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="303,54,303,93,297,93,297,54"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="388,13,524,39"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="420,48,325,96,323,91,417,43"/>
 </map>

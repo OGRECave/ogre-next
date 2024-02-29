@@ -1,8 +1,13 @@
 <map id="Ogre::v1::OldSkeletonInstance" name="Ogre::v1::OldSkeletonInstance">
-<area shape="rect" id="node1" title="A OldSkeletonInstance is a single instance of a Skeleton used by a world object." alt="" coords="137,229,335,256"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_skeleton.html" title="A collection of OldBone objects used to animate a skinned mesh." alt="" coords="173,155,299,181"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="94,80,205,107"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,147,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="171,5,277,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1v1_1_1_animation_container.html" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="229,80,419,107"/>
+<area shape="rect" id="Node000001" title="A OldSkeletonInstance is a single instance of a Skeleton used by a world object." alt="" coords="137,226,334,252"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_skeleton.html" title="A collection of OldBone objects used to animate a skinned mesh." alt="" coords="172,153,299,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,194,238,226,233,226,233,194"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="94,79,204,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="177,113,223,150,219,154,174,117"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,146,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="100,40,138,77,135,80,97,44"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="170,5,275,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="201,44,163,80,159,77,197,40"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1v1_1_1_animation_container.html" title="An animation container interface, which allows generic access to sibling animations." alt="" coords="228,79,416,105"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="297,117,252,154,248,150,294,113"/>
 </map>

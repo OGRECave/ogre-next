@@ -1,8 +1,13 @@
 <map id="Ogre::EGLSupport" name="Ogre::EGLSupport">
-<area shape="rect" id="node1" title=" " alt="" coords="196,81,323,108"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_android_e_g_l_support.html" title=" " alt="" coords="381,5,552,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_emscripten_e_g_l_support.html" title=" " alt="" coords="371,56,563,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_win32_e_g_l_support.html" title=" " alt="" coords="385,107,548,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_x11_e_g_l_support.html" title=" " alt="" coords="391,157,542,184"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_e_s2_support.html" title=" " alt="" coords="5,81,148,108"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="196,80,322,106"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_android_e_g_l_support.html" title=" " alt="" coords="381,5,551,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="298,70,369,40,404,29,405,34,371,45,300,75"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_emscripten_e_g_l_support.html" title=" " alt="" coords="370,55,561,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="337,81,369,77,370,82,338,86"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_win32_e_g_l_support.html" title=" " alt="" coords="385,104,547,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="338,99,384,105,384,110,337,105"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_x11_e_g_l_support.html" title=" " alt="" coords="391,153,540,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="301,110,371,140,406,150,404,155,369,145,299,115"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l_e_s2_support.html" title=" " alt="" coords="5,80,148,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,90,195,90,195,96,163,96"/>
 </map>

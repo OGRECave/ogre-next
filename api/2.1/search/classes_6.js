@@ -64,7 +64,7 @@ var searchData=
   ['forwardplusbase_61',['ForwardPlusBase',['../class_ogre_1_1_forward_plus_base.html',1,'Ogre']]],
   ['frameevent_62',['FrameEvent',['../struct_ogre_1_1_frame_event.html',1,'Ogre']]],
   ['framelistener_63',['FrameListener',['../class_ogre_1_1_frame_listener.html',1,'Ogre']]],
-  ['framestats_64',['FrameStats',['../class_ogre_1_1_frame_stats.html',1,'Ogre::FrameStats'],['../struct_ogre_1_1_render_target_1_1_frame_stats.html',1,'Ogre::RenderTarget::FrameStats']]],
+  ['framestats_64',['framestats',['../class_ogre_1_1_frame_stats.html',1,'Ogre::FrameStats'],['../struct_ogre_1_1_render_target_1_1_frame_stats.html',1,'Ogre::RenderTarget::FrameStats']]],
   ['frametimecontrollervalue_65',['FrameTimeControllerValue',['../class_ogre_1_1_frame_time_controller_value.html',1,'Ogre']]],
   ['freeimagecodec_66',['FreeImageCodec',['../class_ogre_1_1_free_image_codec.html',1,'Ogre']]],
   ['freeondestructor_67',['FreeOnDestructor',['../struct_ogre_1_1_free_on_destructor.html',1,'Ogre']]],

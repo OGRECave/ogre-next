@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['using_20ogre_20in_20your_20app_0',['Using Ogre in your App',['../_using_ogre_in_your_app.html',1,'']]]
+  ['page_0',['API Reference Start Page',['../index.html',1,'']]],
+  ['performance_20hints_1',['Performance Hints',['../performance.html',1,'manual']]]
 ];

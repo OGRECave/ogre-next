@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1v1_1_1_render_operation.html" title="&#39;New&#39; rendering operation using vertex buffers." alt="" coords="5,5,179,32"/>
+<area shape="rect" id="Node000000" href="$class_ogre_1_1v1_1_1_render_to_vertex_buffer.html" title=" " alt="" coords="5,71,174,111"/>
+<area shape="rect" id="Node000001" href="$class_ogre_1_1v1_1_1_d3_d11_render_to_vertex_buffer.html" title="An object which renders geometry to a vertex." alt="" coords="223,5,431,46"/>
+<area shape="poly" id="edge1257_Node000000_Node000001" title=" " alt="" coords="179,64,249,44,251,49,181,69"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1v1_1_1_g_l3_plus_render_to_vertex_buffer.html" title="An object which renders geometry to a vertex." alt="" coords="236,71,418,111"/>
+<area shape="poly" id="edge1258_Node000000_Node000002" title=" " alt="" coords="189,88,235,88,235,94,189,94"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1v1_1_1_g_l_e_s2_render_to_vertex_buffer.html" title=" " alt="" coords="222,136,432,177"/>
+<area shape="poly" id="edge1259_Node000000_Node000003" title=" " alt="" coords="181,113,251,133,249,138,179,118"/>
 </map>

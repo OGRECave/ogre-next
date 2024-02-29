@@ -1,8 +1,13 @@
 <map id="Ogre::MultiSourceVertexBufferPool" name="Ogre::MultiSourceVertexBufferPool">
-<area shape="rect" id="node1" title="Vertex Array Objects do not need to change when: The same (internal) vertex buffer is still bound." alt="" coords="183,111,405,138"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html" title=" " alt="" coords="467,5,643,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_g_l_e_s2_multi_source_vertex_buffer_pool.html" title=" " alt="" coords="453,71,657,112"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_metal_multi_source_vertex_buffer_pool.html" title=" " alt="" coords="458,136,653,177"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_n_u_l_l_multi_source_vertex_buffer_pool.html" title=" " alt="" coords="456,201,655,243"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,111,135,138"/>
+<area shape="rect" id="Node000001" title="Vertex Array Objects do not need to change when: The same (internal) vertex buffer is still bound." alt="" coords="182,112,403,137"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html" title=" " alt="" coords="465,5,640,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="337,102,450,57,485,44,487,49,452,61,339,107"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_g_l_e_s2_multi_source_vertex_buffer_pool.html" title=" " alt="" coords="451,71,654,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="412,106,450,101,451,107,413,112"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_metal_multi_source_vertex_buffer_pool.html" title=" " alt="" coords="456,136,649,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="418,137,456,142,455,147,417,142"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_n_u_l_l_multi_source_vertex_buffer_pool.html" title=" " alt="" coords="454,201,651,242"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="340,141,452,186,487,198,485,203,450,191,338,146"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,112,134,137"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,122,181,122,181,127,149,127"/>
 </map>

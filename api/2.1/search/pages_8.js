@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['setting_20up_20ogre_0',['Setting Up Ogre',['../_setting_up_ogre.html',1,'']]]
+  ['nodes_0',['Changes: Objects, Scene &amp; Nodes',['../_ogre20_changes.html',1,'manual']]]
 ];

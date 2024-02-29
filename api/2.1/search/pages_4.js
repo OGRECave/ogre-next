@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['instancing_0',['Instancing',['../instancing.html',1,'manual']]],
-  ['ios_1',['iOS',['../_setting_up_ogre_i_o_s.html',1,'SettingUpOgre']]]
+  ['high_20level_20material_20system_0',['HLMS: High Level Material System',['../hlms.html',1,'manual']]],
+  ['hints_1',['Performance Hints',['../performance.html',1,'manual']]],
+  ['hlms_3a_20high_20level_20material_20system_2',['HLMS: High Level Material System',['../hlms.html',1,'manual']]]
 ];

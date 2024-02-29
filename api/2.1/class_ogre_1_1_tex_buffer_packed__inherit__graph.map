@@ -1,12 +1,21 @@
 <map id="Ogre::TexBufferPacked" name="Ogre::TexBufferPacked">
-<area shape="rect" id="node1" title="Represents Texture buffers (also known as tbuffers in D3D11)" alt="" coords="371,152,525,179"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_tex_buffer_packed.html" title=" " alt="" coords="584,5,779,32"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l3_plus_tex_buffer_emulated_packed.html" title=" " alt="" coords="573,57,789,98"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_g_l3_plus_tex_buffer_packed.html" title=" " alt="" coords="578,123,785,149"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_g_l_e_s2_tex_buffer_emulated_packed.html" title=" " alt="" coords="578,174,785,215"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_metal_tex_buffer_packed.html" title=" " alt="" coords="588,240,775,267"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_n_u_l_l_tex_buffer_packed.html" title=" " alt="" coords="586,291,777,317"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="188,152,323,179"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_gpu_resource.html" title=" " alt="" coords="5,127,140,153"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="8,177,137,204"/>
+<area shape="rect" id="Node000001" title="Represents Texture buffers (also known as tbuffers in D3D11)" alt="" coords="369,149,523,175"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_d3_d11_tex_buffer_packed.html" title=" " alt="" coords="582,5,776,31"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="465,135,509,87,538,62,570,41,599,29,601,34,573,46,542,66,513,91,469,139"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_g_l3_plus_tex_buffer_emulated_packed.html" title=" " alt="" coords="571,55,787,96"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="488,140,570,105,603,94,605,99,572,110,490,145"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_g_l3_plus_tex_buffer_packed.html" title=" " alt="" coords="576,120,782,146"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="538,148,576,143,576,148,539,153"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_g_l_e_s2_tex_buffer_emulated_packed.html" title=" " alt="" coords="576,170,782,211"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="539,171,576,175,575,180,538,176"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_metal_tex_buffer_packed.html" title=" " alt="" coords="586,235,772,260"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="486,180,527,201,572,220,612,231,610,237,570,225,525,206,483,185"/>
+<area shape="rect" id="Node000010" href="$class_ogre_1_1_n_u_l_l_tex_buffer_packed.html" title=" " alt="" coords="584,284,774,310"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="470,185,514,229,542,252,573,270,599,281,597,286,570,275,539,256,511,233,466,189"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="188,149,321,175"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,160,369,160,369,165,336,165"/>
+<area shape="rect" id="Node000003" href="$struct_ogre_1_1_gpu_resource.html" title=" " alt="" coords="5,124,140,150"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="155,146,187,150,187,155,155,151"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="8,173,137,199"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="152,173,187,168,188,174,153,178"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Ogre::v1::BillboardParticleRendererFactory" name="Ogre::v1::BillboardParticleRendererFactory">
-<area shape="rect" id="node1" title="Factory class for BillboardParticleRenderer." alt="" coords="79,184,250,225"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_particle_system_renderer_factory.html" title="Abstract class definition of a factory object for ParticleSystemRenderer." alt="" coords="67,95,263,136"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,180,47"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="204,13,272,39"/>
+<area shape="rect" id="Node000001" title="Factory class for BillboardParticleRenderer." alt="" coords="79,183,249,223"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_particle_system_renderer_factory.html" title="Abstract class definition of a factory object for ParticleSystemRenderer." alt="" coords="66,94,262,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,150,167,182,161,182,161,150"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,179,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,56,150,92,146,95,116,60"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="202,13,270,39"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="219,52,182,96,178,92,214,49"/>
 </map>

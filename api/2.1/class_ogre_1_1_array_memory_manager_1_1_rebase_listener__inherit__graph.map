@@ -1,6 +1,9 @@
 <map id="Ogre::ArrayMemoryManager::RebaseListener" name="Ogre::ArrayMemoryManager::RebaseListener">
-<area shape="rect" id="node1" title="When mUsedMemory &gt;= mMaxMemory (that is, we&#39;ve exhausted all our preallocated memory) ArrayMemoryMana..." alt="" coords="212,5,395,47"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_bone_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="5,95,188,121"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_node_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="212,95,395,121"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_object_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per render queue." alt="" coords="419,95,609,121"/>
+<area shape="rect" id="Node000001" title="When mUsedMemory &gt;= mMaxMemory (that is, we&#39;ve exhausted all our preallocated memory) ArrayMemoryMana..." alt="" coords="211,5,392,46"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_bone_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="5,94,187,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="237,54,128,96,127,91,235,49"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_node_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per hierarchy depth." alt="" coords="210,94,393,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="304,62,304,93,299,93,299,62"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_object_memory_manager.html" title="Wrap&#45;around class that contains multiple ArrayMemoryManager, one per render queue." alt="" coords="416,94,605,120"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="369,49,479,91,478,96,367,54"/>
 </map>

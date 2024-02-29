@@ -1,6 +1,9 @@
 <map id="Ogre::D3D9StereoDriverImpl" name="Ogre::D3D9StereoDriverImpl">
-<area shape="rect" id="node1" title="Virtual interface of the stereo driver." alt="" coords="118,80,303,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d9_stereo_driver_a_m_d.html" title="Virtual interface of the stereo driver." alt="" coords="5,155,195,181"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d9_stereo_driver_n_v_i_d_i_a.html" title="Interface of the NVIDIA stereo driver." alt="" coords="219,155,424,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="157,5,264,32"/>
+<area shape="rect" id="Node000001" title="Virtual interface of the stereo driver." alt="" coords="117,79,301,105"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_d3_d9_stereo_driver_a_m_d.html" title="Virtual interface of the stereo driver." alt="" coords="5,153,194,178"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,115,120,154,117,150,176,111"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_d3_d9_stereo_driver_n_v_i_d_i_a.html" title="Interface of the NVIDIA stereo driver." alt="" coords="217,153,422,178"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="242,111,302,150,299,154,239,116"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="156,5,262,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,46,212,79,206,79,206,46"/>
 </map>

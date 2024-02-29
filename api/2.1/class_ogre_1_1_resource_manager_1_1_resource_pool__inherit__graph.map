@@ -1,5 +1,7 @@
 <map id="Ogre::ResourceManager::ResourcePool" name="Ogre::ResourceManager::ResourcePool">
-<area shape="rect" id="node1" title="Definition of a pool of resources, which users can use to reuse similar resources many times without ..." alt="" coords="95,80,257,121"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_pool.html" title=" " alt="" coords="5,5,181,32"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="205,5,312,32"/>
+<area shape="rect" id="Node000001" title="Definition of a pool of resources, which users can use to reuse similar resources many times without ..." alt="" coords="94,79,255,120"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_pool.html" title=" " alt="" coords="5,5,181,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,40,156,77,152,81,114,44"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="204,5,310,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,44,197,81,193,77,232,40"/>
 </map>

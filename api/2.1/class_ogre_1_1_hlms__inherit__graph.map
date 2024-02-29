@@ -1,11 +1,19 @@
 <map id="Ogre::Hlms" name="Ogre::Hlms">
-<area shape="rect" id="node1" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="136,132,223,159"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="271,31,441,57"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_hlms_compute.html" title="HLMS implementation that handles compute shaders." alt="" coords="287,81,425,108"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_hlms_low_level.html" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="284,132,428,159"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_hlms_pbs_mobile.html" title="Physically based shading implementation specfically designed for OpenGL ES 2.0 and other RenderSystem..." alt="" coords="282,183,430,209"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_hlms_unlit_mobile.html" title="User Interface (2D) implementation specfically designed for OpenGL ES 2.0 and other RenderSystems whi..." alt="" coords="280,233,432,260"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,132,88,159"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="491,5,602,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="489,56,604,83"/>
+<area shape="rect" id="Node000001" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="135,128,221,154"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="269,29,439,55"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,115,231,89,268,64,293,53,295,58,270,69,234,93,204,119"/>
+<area shape="rect" id="Node000006" href="$class_ogre_1_1_hlms_compute.html" title="HLMS implementation that handles compute shaders." alt="" coords="285,79,423,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="235,122,305,102,307,107,237,127"/>
+<area shape="rect" id="Node000007" href="$class_ogre_1_1_hlms_low_level.html" title="This is an HLMS implementation that acts as proxy to use the Material system from Ogre 1...." alt="" coords="283,128,426,154"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="237,138,282,138,282,144,237,144"/>
+<area shape="rect" id="Node000008" href="$class_ogre_1_1_hlms_pbs_mobile.html" title="Physically based shading implementation specfically designed for OpenGL ES 2.0 and other RenderSystem..." alt="" coords="281,177,428,203"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="237,154,307,174,305,179,235,160"/>
+<area shape="rect" id="Node000009" href="$class_ogre_1_1_hlms_unlit_mobile.html" title="User Interface (2D) implementation specfically designed for OpenGL ES 2.0 and other RenderSystems whi..." alt="" coords="279,227,430,252"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="204,162,234,189,270,213,295,224,293,229,268,218,231,193,200,166"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,128,87,154"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,138,134,138,134,144,102,144"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="489,5,599,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="454,27,489,22,489,28,455,32"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="487,55,601,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="455,53,487,57,486,63,454,58"/>
 </map>

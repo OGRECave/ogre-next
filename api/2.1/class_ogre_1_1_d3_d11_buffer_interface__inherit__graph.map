@@ -1,5 +1,7 @@
 <map id="Ogre::D3D11BufferInterface" name="Ogre::D3D11BufferInterface">
-<area shape="rect" id="node1" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="21,155,201,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_buffer_interface_base.html" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="5,80,216,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="40,5,181,32"/>
+<area shape="rect" id="Node000001" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="20,153,200,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_d3_d11_buffer_interface_base.html" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="5,79,215,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,120,113,152,107,152,107,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="40,5,180,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,46,113,79,107,79,107,46"/>
 </map>

@@ -1,7 +1,11 @@
 <map id="Ogre::MeshManager" name="Ogre::MeshManager">
-<area shape="rect" id="node1" title="Handles the management of mesh resources." alt="" coords="177,155,316,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="61,80,222,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,5,136,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="160,5,267,32"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="246,80,461,107"/>
+<area shape="rect" id="Node000001" title="Handles the management of mesh resources." alt="" coords="177,153,315,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="61,79,221,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,111,230,150,227,154,170,116"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,5,135,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,40,131,77,127,80,90,44"/>
+<area shape="rect" id="Node000004" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="159,5,264,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="191,44,154,80,151,77,187,40"/>
+<area shape="rect" id="Node000005" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="245,79,458,105"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="322,116,265,154,262,150,319,111"/>
 </map>

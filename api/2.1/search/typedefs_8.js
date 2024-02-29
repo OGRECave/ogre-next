@@ -7,7 +7,7 @@ var searchData=
   ['highlevelgpuprogramptr_4',['HighLevelGpuProgramPtr',['../namespace_ogre.html#aa0dbc2fa75a10658398c55e1450309e6',1,'Ogre']]],
   ['hlmsalloc_5',['HlmsAlloc',['../namespace_ogre.html#a42386c4e35b6e81acdef4ec599a8a376',1,'Ogre']]],
   ['hlmscachevec_6',['HlmsCacheVec',['../group___resources.html#ga5c8436916a9551e984a980637867d2aa',1,'Ogre']]],
-  ['hlmsdatablockmap_7',['HlmsDatablockMap',['../class_ogre_1_1_hlms.html#ab38ae89227591ab06dac2f033300e7c0',1,'Ogre::Hlms::HlmsDatablockMap()'],['../class_ogre_1_1_hlms_manager.html#afc2984534f1d52fe054541ee798c80c2',1,'Ogre::HlmsManager::HlmsDatablockMap()']]],
+  ['hlmsdatablockmap_7',['hlmsdatablockmap',['../class_ogre_1_1_hlms.html#ab38ae89227591ab06dac2f033300e7c0',1,'Ogre::Hlms::HlmsDatablockMap'],['../class_ogre_1_1_hlms_manager.html#afc2984534f1d52fe054541ee798c80c2',1,'Ogre::HlmsManager::HlmsDatablockMap']]],
   ['hlmsparamvec_8',['HlmsParamVec',['../group___resources.html#ga26539e1c24ff9cadeb6f54139ad7dc54',1,'Ogre']]],
   ['hlmspropertyvec_9',['HlmsPropertyVec',['../group___resources.html#ga1d333e3b1280899cce855c563f200938',1,'Ogre']]]
 ];

@@ -1,5 +1,7 @@
 <map id="Ogre::CompositorPassScene" name="Ogre::CompositorPassScene">
-<area shape="rect" id="node1" title="Implementation of CompositorPass This implementation will perform main rendering, selecting several p..." alt="" coords="5,155,195,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="24,80,176,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="31,5,169,32"/>
+<area shape="rect" id="Node000001" title="Implementation of CompositorPass This implementation will perform main rendering, selecting several p..." alt="" coords="5,153,194,178"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="24,79,175,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,120,102,152,97,152,97,120"/>
+<area shape="rect" id="Node000003" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="30,5,169,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,46,102,79,97,79,97,46"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Ogre::NaClGLContext" name="Ogre::NaClGLContext">
-<area shape="rect" id="node1" title=" " alt="" coords="86,80,233,107"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="5,5,148,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="172,5,315,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="86,79,232,105"/>
+<area shape="rect" id="Node000002" href="$class_ogre_1_1_g_l_e_s2_context.html" title="Class that encapsulates an GL context." alt="" coords="5,5,147,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,39,147,77,143,81,100,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="170,5,313,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,44,174,81,171,77,214,39"/>
 </map>
