@@ -38,6 +38,8 @@ IF NOT EXIST %BUILD_FOLDER%\..\ogredeps (
 	echo --- Ogredeps repo detected. Cloning skipped ---
 )
 mkdir %BUILD_FOLDER%\..\ogredeps\build
+cd %BUILD_FOLDER%\..\ogredeps
+git checkout d06afab81ddecd6efa11f723069f5eaefe519501
 cd %BUILD_FOLDER%\..\ogredeps\build
 echo --- Building Ogredeps ---
 %CMAKE_BIN% -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%\..\ogredeps

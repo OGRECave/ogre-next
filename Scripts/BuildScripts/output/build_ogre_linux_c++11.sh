@@ -12,6 +12,7 @@ else
 	echo "--- ogre-next-deps repo detected. Cloning skipped ---"
 fi
 cd ogre-next-deps
+git checkout d06afab81ddecd6efa11f723069f5eaefe519501
 mkdir build
 cd build
 echo "--- Building ogre-next-deps ---"
