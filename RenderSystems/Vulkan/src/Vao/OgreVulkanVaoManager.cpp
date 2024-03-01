@@ -101,7 +101,8 @@ namespace Ogre
         mDrawId( 0 ),
         mDevice( device ),
         mVkRenderSystem( renderSystem ),
-        mFenceFlushed( true ),
+        mFenceFlushedWarningCount( 0u ),
+        mFenceFlushed( FenceUnflushed ),
         mSupportsCoherentMemory( false ),
         mSupportsNonCoherentMemory( false ),
         mReadMemoryIsCoherent( false )
@@ -2086,20 +2087,34 @@ namespace Ogre
 
         deallocateEmptyVbos( false );
 
-        if( !mFenceFlushed )
+        if( mFenceFlushed == FenceUnflushed )
         {
             // We could only reach here if _update() was called
             // twice in a row without completing a full frame.
-            // Without this, waitForTailFrameToFinish becomes unsafe.
+            // Without this, mFrameCount won't actually advance, and if we increment
+            // mFrameCount ourselves, waitForTailFrameToFinish would become unsafe.
             mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
         }
 
-        mFenceFlushed = false;
+        mFenceFlushed = FenceUnflushed;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyNewCommandBuffer()
     {
-        mFenceFlushed = true;
+        if( mFenceFlushed == FenceFlushed )
+        {
+            if( mFenceFlushedWarningCount < 5u )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Calling RenderSystem::_endFrameOnce() twice in a row without calling "
+                    "RenderSystem::_update. This can lead to strange results.",
+                    LML_CRITICAL );
+                ++mFenceFlushedWarningCount;
+            }
+
+            _update();
+        }
+        mFenceFlushed = FenceFlushed;
         mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
         ++mFrameCount;
     }
@@ -2248,7 +2263,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyDeviceStalled()
     {
-        mFenceFlushed = true;
+        mFenceFlushed = GpuStalled;
 
         flushAllGpuDelayedBlocks( false );
 
