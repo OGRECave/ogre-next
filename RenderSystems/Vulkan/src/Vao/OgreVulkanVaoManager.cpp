@@ -1988,6 +1988,10 @@ namespace Ogre
             }
         }
 
+        VaoManager::_update();
+        // Undo the increment from VaoManager::_update. This is done by _notifyNewCommandBuffer
+        --mFrameCount;
+
         mUsedDescriptorPools.clear();
 
         uint64 currentTimeMs = mTimer->getMilliseconds();
@@ -2030,14 +2034,6 @@ namespace Ogre
                     }
                 }
             }
-        }
-
-        if( !mFenceFlushed )
-        {
-            // We could only reach here if _update() was called
-            // twice in a row without completing a full frame.
-            // Without this, waitForTailFrameToFinish becomes unsafe.
-            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
         }
 
         if( !mUsedSemaphores.empty() )
@@ -2090,13 +2086,23 @@ namespace Ogre
 
         deallocateEmptyVbos( false );
 
-        VaoManager::_update();
+        if( !mFenceFlushed )
+        {
+            // We could only reach here if _update() was called
+            // twice in a row without completing a full frame.
+            // Without this, waitForTailFrameToFinish becomes unsafe.
+            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
+        }
 
         mFenceFlushed = false;
-        mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::_notifyNewCommandBuffer() { mFenceFlushed = true; }
+    void VulkanVaoManager::_notifyNewCommandBuffer()
+    {
+        mFenceFlushed = true;
+        mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
+        ++mFrameCount;
+    }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::getAvailableSempaphores( VkSemaphoreArray &semaphoreArray,
                                                     size_t numSemaphores )
