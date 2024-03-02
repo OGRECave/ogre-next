@@ -35,7 +35,8 @@ namespace Demo
         mUnlitDatablock( 0 ),
         mRgbaReference( 0 ),
         mTextureBox( 0 ),
-        mRaceConditionDetected( false )
+        mRaceConditionDetected( false ),
+        mCurrFrame( 0u )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -130,11 +131,9 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void EndFrameOnceFailureGameState::update( float timeSinceLast )
+    void EndFrameOnceFailureGameState::simulateSpuriousBufferDisposal()
     {
         Ogre::RenderSystem *renderSystem = mGraphicsSystem->getRoot()->getRenderSystem();
-        Ogre::TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
-
         Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
 
         Ogre::IndexBufferPacked *dummyBuffer = vaoManager->createIndexBuffer(
@@ -142,6 +141,15 @@ namespace Demo
         dummyBuffer->map( 0, dummyBuffer->getNumElements() );
         dummyBuffer->unmap( Ogre::UO_UNMAP_ALL );
         vaoManager->destroyIndexBuffer( dummyBuffer );
+    }
+    //-----------------------------------------------------------------------------------
+    void EndFrameOnceFailureGameState::update( float timeSinceLast )
+    {
+        Ogre::RenderSystem *renderSystem = mGraphicsSystem->getRoot()->getRenderSystem();
+        Ogre::TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
+        Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
+
+        simulateSpuriousBufferDisposal();
 
         Ogre::TextureGpu *readbackTex = textureManager->createTexture(
             "EndFrameOnceFailure Tex", Ogre::GpuPageOutStrategy::Discard,
@@ -164,65 +172,73 @@ namespace Demo
         const size_t iterations = size_t( std::ceil( Ogre::Math::RangeRandom( 1.0f, 50.0f ) ) );
         for( size_t i = 0u; i < iterations; ++i )
         {
-            Ogre::IndexBufferPacked *dummyBuffer = vaoManager->createIndexBuffer(
-                Ogre::IT_16BIT, 16000, Ogre::BT_DYNAMIC_PERSISTENT, 0, false );
-            dummyBuffer->map( 0, dummyBuffer->getNumElements() );
-            dummyBuffer->unmap( Ogre::UO_UNMAP_ALL );
-            vaoManager->destroyIndexBuffer( dummyBuffer );
-
-            // Choose random colour
-            Ogre::ColourValue randColour(
-                Ogre::Math::RangeRandom( 0.0f, 1.0f ), Ogre::Math::RangeRandom( 0.0f, 1.0f ),
-                Ogre::Math::RangeRandom( 0.0f, 1.0f ), Ogre::Math::RangeRandom( 0.0f, 1.0f ) );
-
-            // Quantize
-            const Ogre::RGBA asRgba = randColour.getAsRGBA();
-            randColour.setAsRGBA( asRgba );
-            mRgbaReference = asRgba;
-
-            mUnlitDatablock->setColour( randColour );
-
-            uint32_t rgba = randColour.getAsABGR();
-            const uint8_t *rgba8 = reinterpret_cast<const uint8_t *>( &rgba );
-
-            Ogre::LogManager::getSingleton().logMessage(
-                "Testing colour: " + std::to_string( rgba8[0] ) + " " + std::to_string( rgba8[1] ) +
-                    " " + std::to_string( rgba8[2] ) + " " + std::to_string( rgba8[3] ),
-                Ogre::LML_CRITICAL );
-
-            workspace->_validateFinalTarget();
-            workspace->_beginUpdate( false );
-            workspace->_update();
-            workspace->_endUpdate( false );
-
-            Ogre::Image2 image;
-            image.convertFromTexture( readbackTex, 0u, 0u );
-
-            renderSystem->_endFrameOnce();
-
-            if( ( i & 0x1u ) == 0u )
+            if( mCurrFrame % 64u < 32u )
             {
-                Ogre::TextureBox box = image.getData( 0u );
-                mTextureBox = &box;
+                // Check that multiple VaoManager::_update in a row don't break.
+                for( size_t i = 0u; i < iterations; ++i )
+                    simulateSpuriousBufferDisposal();
+                vaoManager->_update();
+            }
+            else
+            {
+                // Check that unexpected calls to _endFrameOnce don't break.
+                simulateSpuriousBufferDisposal();
 
-                mGraphicsSystem->getSceneManager()->executeUserScalableTask( this, true );
-                // execute(0u,1u);
+                // Choose random colour
+                Ogre::ColourValue randColour(
+                    Ogre::Math::RangeRandom( 0.0f, 1.0f ), Ogre::Math::RangeRandom( 0.0f, 1.0f ),
+                    Ogre::Math::RangeRandom( 0.0f, 1.0f ), Ogre::Math::RangeRandom( 0.0f, 1.0f ) );
 
-                if( mRaceConditionDetected )
+                // Quantize
+                const Ogre::RGBA asRgba = randColour.getAsRGBA();
+                randColour.setAsRGBA( asRgba );
+                mRgbaReference = asRgba;
+
+                mUnlitDatablock->setColour( randColour );
+
+                uint32_t rgba = randColour.getAsABGR();
+                const uint8_t *rgba8 = reinterpret_cast<const uint8_t *>( &rgba );
+
+                Ogre::LogManager::getSingleton().logMessage(
+                    "Testing colour: " + std::to_string( rgba8[0] ) + " " + std::to_string( rgba8[1] ) +
+                        " " + std::to_string( rgba8[2] ) + " " + std::to_string( rgba8[3] ),
+                    Ogre::LML_CRITICAL );
+
+                workspace->_validateFinalTarget();
+                workspace->_beginUpdate( false );
+                workspace->_update();
+                workspace->_endUpdate( false );
+
+                Ogre::Image2 image;
+                image.convertFromTexture( readbackTex, 0u, 0u );
+
+                renderSystem->_endFrameOnce();
+
+                if( ( i & 0x1u ) == 0u )
                 {
-                    Ogre::LogManager::getSingleton().logMessage(
-                        "Race condition detected!. Expected value: " + std::to_string( rgba8[0] ) + " " +
-                            std::to_string( rgba8[1] ) + " " + std::to_string( rgba8[2] ) + " " +
-                            std::to_string( rgba8[3] ) +
-                            " Got instead: " + std::to_string( mRgbaResult[0] ) + " " +
-                            std::to_string( mRgbaResult[1] ) + " " + std::to_string( mRgbaResult[2] ) +
-                            " " + std::to_string( mRgbaResult[3] ),
-                        Ogre::LML_CRITICAL );
+                    Ogre::TextureBox box = image.getData( 0u );
+                    mTextureBox = &box;
 
-                    mRaceConditionDetected = false;
+                    mGraphicsSystem->getSceneManager()->executeUserScalableTask( this, true );
+                    // execute(0u,1u);
 
-                    OGRE_EXCEPT( Ogre::Exception::ERR_RT_ASSERTION_FAILED, "Race condition detected!",
-                                 "Test failed!" );
+                    if( mRaceConditionDetected )
+                    {
+                        Ogre::LogManager::getSingleton().logMessage(
+                            "Race condition detected!. Expected value: " + std::to_string( rgba8[0] ) +
+                                " " + std::to_string( rgba8[1] ) + " " + std::to_string( rgba8[2] ) +
+                                " " + std::to_string( rgba8[3] ) +
+                                " Got instead: " + std::to_string( mRgbaResult[0] ) + " " +
+                                std::to_string( mRgbaResult[1] ) + " " +
+                                std::to_string( mRgbaResult[2] ) + " " +
+                                std::to_string( mRgbaResult[3] ),
+                            Ogre::LML_CRITICAL );
+
+                        mRaceConditionDetected = false;
+
+                        OGRE_EXCEPT( Ogre::Exception::ERR_RT_ASSERTION_FAILED,
+                                     "Race condition detected!", "Test failed!" );
+                    }
                 }
             }
         }
@@ -234,6 +250,8 @@ namespace Demo
         mUnlitDatablock->setColour( Ogre::ColourValue::Black );
 
         TutorialGameState::update( timeSinceLast );
+
+        ++mCurrFrame;
     }
     //-----------------------------------------------------------------------------------
     void EndFrameOnceFailureGameState::execute( size_t threadId, size_t numThreads )

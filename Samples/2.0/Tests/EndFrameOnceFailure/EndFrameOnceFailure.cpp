@@ -1,6 +1,6 @@
 
-#include "GraphicsSystem.h"
 #include "EndFrameOnceFailureGameState.h"
+#include "GraphicsSystem.h"
 
 // Declares WinMain / main
 #include "MainEntryPointHelper.h"
@@ -24,8 +24,8 @@ namespace Demo
                                          GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
         EndFrameOnceFailureGameState *gfxGameState = new EndFrameOnceFailureGameState(
-            "Checks the value read matches what is drawn\n"
-            "It tries to check there are no race conditions when drawing and reading back\n"
+            "Checks two edge cases that should happen rarely don't break\n"
+            "See https://github.com/OGRECave/ogre-next/issues/433\n"
             "This is very important for Vulkan." );
 
         GraphicsSystem *graphicsSystem = new GraphicsSystem( gfxGameState );
@@ -43,5 +43,8 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char *MainEntryPoints::getWindowTitle( void ) { return "Test near and far plane"; }
+    const char *MainEntryPoints::getWindowTitle( void )
+    {
+        return "Test VaoManager mFrameCount advancement";
+    }
 }  // namespace Demo

@@ -23,6 +23,10 @@ namespace Demo
         Ogre::TextureBox const *mTextureBox;
         bool mRaceConditionDetected;
 
+        Ogre::uint32 mCurrFrame;
+
+        void simulateSpuriousBufferDisposal();
+
         void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
