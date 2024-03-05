@@ -101,7 +101,8 @@ namespace Ogre
         mDrawId( 0 ),
         mDevice( device ),
         mVkRenderSystem( renderSystem ),
-        mFenceFlushed( true ),
+        mFenceFlushedWarningCount( 0u ),
+        mFenceFlushed( FenceUnflushed ),
         mSupportsCoherentMemory( false ),
         mSupportsNonCoherentMemory( false ),
         mReadMemoryIsCoherent( false )
@@ -1977,6 +1978,37 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_update()
     {
+        if( mFenceFlushed == FenceUnflushed )
+        {
+            // We could only reach here if _update() was called
+            // twice in a row without completing a full frame.
+            //
+            // Without this, mFrameCount won't actually advance, and if we increment
+            // mFrameCount ourselves, waitForTailFrameToFinish would become unsafe.
+            //
+            // This must be done at the beginning, because normally the following sequence would happen:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2. _notifyNewCommandBuffer   - mFrameCount = 1
+            //  3. VulkanVaoManager::_update - mFrameCount = 1
+            //  4. _notifyNewCommandBuffer   - mFrameCount = 2
+            //  5. And so on...
+            //
+            // However we reached here because we performed the following:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2. VulkanVaoManager::_update - mFrameCount = ???
+            //
+            // Thus we MUST insert a _notifyNewCommandBuffer in-between the first two:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2a._notifyNewCommandBuffer   - mFrameCount = 1
+            //  2b.VulkanVaoManager::_update - mFrameCount = 1
+            //
+            // Previously this block of code was at the end of VulkanVaoManager::_update
+            // and this was causing troubles. See https://github.com/OGRECave/ogre-next/issues/433
+            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
+        }
+
+        mFenceFlushed = FenceUnflushed;
+
         {
             FastArray<VulkanDescriptorPool *>::const_iterator itor = mUsedDescriptorPools.begin();
             FastArray<VulkanDescriptorPool *>::const_iterator endt = mUsedDescriptorPools.end();
@@ -1987,6 +2019,10 @@ namespace Ogre
                 ++itor;
             }
         }
+
+        VaoManager::_update();
+        // Undo the increment from VaoManager::_update. This is done by _notifyNewCommandBuffer
+        --mFrameCount;
 
         mUsedDescriptorPools.clear();
 
@@ -2030,14 +2066,6 @@ namespace Ogre
                     }
                 }
             }
-        }
-
-        if( !mFenceFlushed )
-        {
-            // We could only reach here if _update() was called
-            // twice in a row without completing a full frame.
-            // Without this, waitForTailFrameToFinish becomes unsafe.
-            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
         }
 
         if( !mUsedSemaphores.empty() )
@@ -2089,14 +2117,27 @@ namespace Ogre
         }
 
         deallocateEmptyVbos( false );
-
-        VaoManager::_update();
-
-        mFenceFlushed = false;
-        mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::_notifyNewCommandBuffer() { mFenceFlushed = true; }
+    void VulkanVaoManager::_notifyNewCommandBuffer()
+    {
+        if( mFenceFlushed == FenceFlushed )
+        {
+            if( mFenceFlushedWarningCount < 5u )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Calling RenderSystem::_endFrameOnce() twice in a row without calling "
+                    "RenderSystem::_update. This can lead to strange results.",
+                    LML_CRITICAL );
+                ++mFenceFlushedWarningCount;
+            }
+
+            _update();
+        }
+        mFenceFlushed = FenceFlushed;
+        mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
+        ++mFrameCount;
+    }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::getAvailableSempaphores( VkSemaphoreArray &semaphoreArray,
                                                     size_t numSemaphores )
@@ -2242,7 +2283,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyDeviceStalled()
     {
-        mFenceFlushed = true;
+        mFenceFlushed = GpuStalled;
 
         flushAllGpuDelayedBlocks( false );
 
