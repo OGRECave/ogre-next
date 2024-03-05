@@ -73,7 +73,7 @@ namespace Ogre
 #define OGRE_VERSION_MAJOR 3
 #define OGRE_VERSION_MINOR 0
 #define OGRE_VERSION_PATCH 0
-#define OGRE_VERSION_SUFFIX "unstable"
+#define OGRE_VERSION_SUFFIX ""
 #define OGRE_VERSION_NAME "Eris"
 
 #define OGRE_MAKE_VERSION( maj, min, patch ) ( ( maj << 16 ) | ( min << 8 ) | patch )
