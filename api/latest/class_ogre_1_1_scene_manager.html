@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -190,6 +190,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5f939d39028792c0b38811d734758baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cca7941525cf1c3aa08a6e3dfa5357a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a1cca7941525cf1c3aa08a6e3dfa5357a">_destroyCubemapProbe</a> (<a class="el" href="class_ogre_1_1_internal_cubemap_probe.html">InternalCubemapProbe</a> *probe)</td></tr>
 <tr class="separator:a1cca7941525cf1c3aa08a6e3dfa5357a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafe9e8281f38f5e41457d7fdc578dd7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aafe9e8281f38f5e41457d7fdc578dd7f">_fireParallelHlmsCompile</a> ()</td></tr>
+<tr class="separator:aafe9e8281f38f5e41457d7fdc578dd7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eb12e77377019771c3b8faa001c2062"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a7eb12e77377019771c3b8faa001c2062">_fireWarmUpShadersCompile</a> ()</td></tr>
+<tr class="separator:a7eb12e77377019771c3b8faa001c2062"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88574ace95c8fcc5ede8c5e81a7ae83b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a88574ace95c8fcc5ede8c5e81a7ae83b">_frameEnded</a> ()</td></tr>
 <tr class="memdesc:a88574ace95c8fcc5ede8c5e81a7ae83b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the frame has fully ended (ALL passes have been executed to all RTTs)  <a href="class_ogre_1_1_scene_manager.html#a88574ace95c8fcc5ede8c5e81a7ae83b">More...</a><br /></td></tr>
 <tr class="separator:a88574ace95c8fcc5ede8c5e81a7ae83b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -286,8 +290,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9959c0abe638bebd7ad2a30abc23ca2e"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a9959c0abe638bebd7ad2a30abc23ca2e">_updateWorkerThread</a> (<a class="el" href="class_ogre_1_1_thread_handle.html">ThreadHandle</a> *threadHandle)</td></tr>
 <tr class="memdesc:a9959c0abe638bebd7ad2a30abc23ca2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from the worker thread, polls to process frustum culling requests when a sync is performed.  <a href="class_ogre_1_1_scene_manager.html#a9959c0abe638bebd7ad2a30abc23ca2e">More...</a><br /></td></tr>
 <tr class="separator:a9959c0abe638bebd7ad2a30abc23ca2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a452210f8cda18ae14867bb1d637e1ff6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a452210f8cda18ae14867bb1d637e1ff6">_warmUpShaders</a> (<a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, uint32_t visibilityMask, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> firstRq, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> lastRq)</td></tr>
-<tr class="separator:a452210f8cda18ae14867bb1d637e1ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0a1c8d37797160bd73901046b721536"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ae0a1c8d37797160bd73901046b721536">_warmUpShadersCollect</a> (<a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, uint32_t visibilityMask, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> firstRq, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> lastRq)</td></tr>
+<tr class="separator:ae0a1c8d37797160bd73901046b721536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a991c83721994fc07c9e2493e91e539f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a991c83721994fc07c9e2493e91e539f8">_warmUpShadersTrigger</a> ()</td></tr>
+<tr class="separator:a991c83721994fc07c9e2493e91e539f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b54e34b6a8e72d4c1456bda016731ad"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a6b54e34b6a8e72d4c1456bda016731ad">addListener</a> (<a class="el" href="class_ogre_1_1_scene_manager_1_1_listener.html">Listener</a> *s)</td></tr>
 <tr class="memdesc:a6b54e34b6a8e72d4c1456bda016731ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a listener which will get called back on scene manager events.  <a href="class_ogre_1_1_scene_manager.html#a6b54e34b6a8e72d4c1456bda016731ad">More...</a><br /></td></tr>
 <tr class="separator:a6b54e34b6a8e72d4c1456bda016731ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -846,6 +852,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3cbd2750082529aed2375531a4d5d9cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a3cbd2750082529aed2375531a4d5d9cd">updateSceneGraph</a> ()</td></tr>
 <tr class="memdesc:a3cbd2750082529aed2375531a4d5d9cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the scene: Perform high level culling, <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> transforms and entity animations.  <a href="class_ogre_1_1_scene_manager.html#a3cbd2750082529aed2375531a4d5d9cd">More...</a><br /></td></tr>
 <tr class="separator:a3cbd2750082529aed2375531a4d5d9cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd3c8f29334c2e269225bdf2b172265d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#afd3c8f29334c2e269225bdf2b172265d">waitForParallelHlmsCompile</a> ()</td></tr>
+<tr class="separator:afd3c8f29334c2e269225bdf2b172265d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11c832526246a71e73cd517bff928a64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a11c832526246a71e73cd517bff928a64">waitForPendingUserScalableTask</a> ()</td></tr>
 <tr class="memdesc:a11c832526246a71e73cd517bff928a64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocks until the the task from processUserScalableTask finishes.  <a href="class_ogre_1_1_scene_manager.html#a11c832526246a71e73cd517bff928a64">More...</a><br /></td></tr>
 <tr class="separator:a11c832526246a71e73cd517bff928a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1536,6 +1544,40 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 <span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aafe9e8281f38f5e41457d7fdc578dd7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafe9e8281f38f5e41457d7fdc578dd7f">&#9670;&nbsp;</a></span>_fireParallelHlmsCompile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::_fireParallelHlmsCompile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7eb12e77377019771c3b8faa001c2062"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eb12e77377019771c3b8faa001c2062">&#9670;&nbsp;</a></span>_fireWarmUpShadersCompile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::_fireWarmUpShadersCompile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -2549,14 +2591,14 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 
 </div>
 </div>
-<a id="a452210f8cda18ae14867bb1d637e1ff6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a452210f8cda18ae14867bb1d637e1ff6">&#9670;&nbsp;</a></span>_warmUpShaders()</h2>
+<a id="ae0a1c8d37797160bd73901046b721536"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0a1c8d37797160bd73901046b721536">&#9670;&nbsp;</a></span>_warmUpShadersCollect()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::SceneManager::_warmUpShaders </td>
+          <td class="memname">void Ogre::SceneManager::_warmUpShadersCollect </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
           <td class="paramname"><em>camera</em>, </td>
@@ -2583,6 +2625,23 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a991c83721994fc07c9e2493e91e539f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a991c83721994fc07c9e2493e91e539f8">&#9670;&nbsp;</a></span>_warmUpShadersTrigger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::_warmUpShadersTrigger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -8543,6 +8602,23 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
 </div><div class="memdoc">
 
 <p>Updates the scene: Perform high level culling, <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> transforms and entity animations. </p>
+
+</div>
+</div>
+<a id="afd3c8f29334c2e269225bdf2b172265d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd3c8f29334c2e269225bdf2b172265d">&#9670;&nbsp;</a></span>waitForParallelHlmsCompile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::waitForParallelHlmsCompile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

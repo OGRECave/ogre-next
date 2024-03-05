@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -149,6 +149,9 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 <li>IFloor()
 : <a class="el" href="class_ogre_1_1_math.html#aece40785651ff1ffa963627fb6da64a6">Ogre::Math</a>
 </li>
+<li>ignoreRenderingDistance
+: <a class="el" href="struct_ogre_1_1_cull_frustum_prepared_data.html#a146efe01c1f986cb096085d698b13157">Ogre::CullFrustumPreparedData</a>
+</li>
 <li>IlluminationRenderStage
 : <a class="el" href="class_ogre_1_1_scene_manager.html#a51db39cc4fa15b28086a1793d42fc827">Ogre::SceneManager</a>
 </li>
@@ -223,6 +226,9 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 </li>
 <li>INCLUDE
 : <a class="el" href="class_ogre_1_1_technique.html#a1ade219e17b5e8d73d079d11f64a2a2dabd4cc2de655eff5194cda7ea50d00ee3">Ogre::Technique</a>
+</li>
+<li>includeNonCasters
+: <a class="el" href="struct_ogre_1_1_cull_frustum_prepared_data.html#acaefcbd3d74bce47ed828d330802416b">Ogre::CullFrustumPreparedData</a>
 </li>
 <li>includeOrExclude
 : <a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_device_name_rule.html#afa5cd604584285e1d9dfe42734461673">Ogre::Technique::GPUDeviceNameRule</a>
@@ -503,7 +509,7 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 <li>insert()
 : <a class="el" href="class_ogre_1_1_fast_array.html#a86977feca5ecd8a72f8e621362616722">Ogre::FastArray&lt; T &gt;</a>
 , <a class="el" href="class_ogre_1_1_hashed_vector.html#a48e330da70c4af1d72e23070dea24a2e">Ogre::HashedVector&lt; T &gt;</a>
-, <a class="el" href="class_ogre_1_1_small_vector_impl.html#aea596193580db53967668c72412d57e4">Ogre::SmallVectorImpl&lt; T &gt;</a>
+, <a class="el" href="class_ogre_1_1_small_vector_impl.html#a53872aabbaa3c28ff90c0fdd4458f101">Ogre::SmallVectorImpl&lt; T &gt;</a>
 , <a class="el" href="class_ogre_1_1_stack_vector.html#a3a6329677cbb3667facff230d787df7c">Ogre::StackVector&lt; T, Capacity &gt;</a>
 </li>
 <li>insertElement()
@@ -1006,7 +1012,7 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 , <a class="el" href="class_ogre_1_1v1_1_1_overlay.html#a4733c32d26d75cf0d06fd85c42dcd30f">Ogre::v1::Overlay</a>
 </li>
 <li>isInLightRange()
-: <a class="el" href="class_ogre_1_1_light.html#a690b8626f9bc29d87dce0ac536276bb1">Ogre::Light</a>
+: <a class="el" href="class_ogre_1_1_light.html#a555aaeda1762a4820baf9648a2189b85">Ogre::Light</a>
 </li>
 <li>isInt()
 : <a class="el" href="struct_ogre_1_1_gpu_constant_definition.html#a134c40a7f7baddf559a6a771c0cd9149">Ogre::GpuConstantDefinition</a>
@@ -1071,9 +1077,6 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 </li>
 <li>isMetadataReady()
 : <a class="el" href="class_ogre_1_1_texture_gpu.html#a9212250fb5225d8f37b6554e11a7ed39">Ogre::TextureGpu</a>
-</li>
-<li>isMicrocodeAvailableInCache()
-: <a class="el" href="class_ogre_1_1_gpu_program_manager.html#ac7311b1e2dea2bdbf6d1f497edc2c4a0">Ogre::GpuProgramManager</a>
 </li>
 <li>isModified()
 : <a class="el" href="class_ogre_1_1_page.html#ac78d80a073213ee780c8929e2b52b149">Ogre::Page</a>
@@ -1222,6 +1225,9 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 <li>isSampler()
 : <a class="el" href="struct_ogre_1_1_gpu_constant_definition.html#a280838a1b7aa40b1e0dc5036b9a33b97">Ogre::GpuConstantDefinition</a>
 </li>
+<li>isShaderCodeCacheDirty()
+: <a class="el" href="class_ogre_1_1_hlms.html#a87e7dcce06295d710b64917bb19e1f52">Ogre::Hlms</a>
+</li>
 <li>isShaderProfileSupported()
 : <a class="el" href="class_ogre_1_1_render_system_capabilities.html#a210c5e1f5feed4782887932fabb8d72d">Ogre::RenderSystemCapabilities</a>
 </li>
@@ -1230,6 +1236,9 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 </li>
 <li>isShadowMapIdxInValidRange()
 : <a class="el" href="class_ogre_1_1_compositor_shadow_node.html#aa0104d92ad5a14a2e36a92f46e9bfe88">Ogre::CompositorShadowNode</a>
+</li>
+<li>isShadowMappingCasterPass
+: <a class="el" href="struct_ogre_1_1_cull_frustum_prepared_data.html#ac0d2bedcabd3a8951d709dfd8e1ec835">Ogre::CullFrustumPreparedData</a>
 </li>
 <li>isShuttingDown()
 : <a class="el" href="class_ogre_1_1_default_work_queue_base.html#a1654469715e0e622018a07bb7d82e998">Ogre::DefaultWorkQueueBase</a>
@@ -1287,7 +1296,7 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 : <a class="el" href="class_ogre_1_1_volume_1_1_octree_node.html#a3d50a6e194954fa679fc6dbdf7264eec">Ogre::Volume::OctreeNode</a>
 </li>
 <li>isSubroutine()
-: <a class="el" href="struct_ogre_1_1_gpu_constant_definition.html#ae697e9c02150de15437ba260b8cf339b">Ogre::GpuConstantDefinition</a>
+: <a class="el" href="struct_ogre_1_1_gpu_constant_definition.html#a3fd6712d35b95b3c8e6f07263a3aa492">Ogre::GpuConstantDefinition</a>
 </li>
 <li>isSubtextureRegion()
 : <a class="el" href="struct_ogre_1_1_texture_box.html#a83fd2ad9f9bf8a26234cdc0b55664564">Ogre::TextureBox</a>

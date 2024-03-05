@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -93,6 +93,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_render_queue.html','');
 
 <p>This is the complete list of members for <a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a>, including all inherited members.</p>
 <table class="directory">
+  <tr class="even"><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#ad6e291d9363608ae01f1aba7d90c8ee7">_compileShadersThread</a>(size_t threadIdx)</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#a3a989e7043b62af6ac712bfbf9968813">_warmUpShadersThread</a>(size_t threadIdx)</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#a504e8bf8d6496ea3b88ead7e6cef8aa0">addRenderableV1</a>(uint8 renderQueueId, bool casterPass, Renderable *pRend, const MovableObject *pMovableObject)</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#abf6d23ea6dfa5a14cbb3052d30a7332f">addRenderableV2</a>(size_t threadIdx, uint8 renderQueueId, bool casterPass, Renderable *pRend, const MovableObject *pMovableObject)</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#a82cdde6cd9331f28acff91089e95ba68">clear</a>()</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
@@ -114,8 +116,9 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_render_queue.html','');
   <tr class="even"><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#acbc6e62a79b77d38cf3881c796e0078ba99c6ffffec769f9ecd91d930c8ab63d6">StableSort</a> enum value</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367aae5865e2c1ce44806f2538863c9dda44">V1_FAST</a> enum value</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367ac84764f8648d1701fd809afba1358b32">V1_LEGACY</a> enum value</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#acfbbd9218d9c134357c12e12c32733f6">warmUpShaders</a>(uint8 firstRq, uint8 lastRq, bool casterPass)</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#abeedbfecbb98d295978226f18f1ba5bd">~RenderQueue</a>()</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#af8a1ce899163064e71e176bb7be8b87c">warmUpShadersCollect</a>(uint8 firstRq, uint8 lastRq, bool casterPass)</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#ae2a7ef1b3b7b9f936ed6e97be9bab31a">warmUpShadersTrigger</a>(RenderSystem *rs)</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html#abeedbfecbb98d295978226f18f1ba5bd">~RenderQueue</a>()</td><td class="entry"><a class="el" href="class_ogre_1_1_render_queue.html">Ogre::RenderQueue</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

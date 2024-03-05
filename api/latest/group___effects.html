@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -90,6 +90,7 @@ $(document).ready(function(){initNavTree('group___effects.html',''); initResizab
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">Effects<div class="ingroups"><a class="el" href="group___core.html">Core</a></div></div>  </div>
@@ -266,6 +267,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_ribbon_trail_factory.html">Ogre::v1::RibbonTrailFactory</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory object for creating <a class="el" href="class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances.">RibbonTrail</a> instances.  <a href="class_ogre_1_1v1_1_1_ribbon_trail_factory.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_warm_up_helper.html">Ogre::WarmUpHelper</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -361,6 +364,26 @@ Enumerations</h2></td></tr>
 , <a class="el" href="group___effects.html#gga11f3abbd0f35645ab06412852cc3ab92a05f415db9bb05cfdb02ca1f454437e80">Ogre::SHADOW_NODE_CASTER_PASS</a>
  }</td></tr>
 <tr class="separator:ga11f3abbd0f35645ab06412852cc3ab92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gac9e9d7e8691265820c9a0d6d51a4c6ff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gac9e9d7e8691265820c9a0d6d51a4c6ff">Ogre::CompositorPassWarmUp::CompositorPassWarmUp</a> (const <a class="el" href="class_ogre_1_1_compositor_pass_warm_up_def.html">CompositorPassWarmUpDef</a> *definition, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *defaultCamera, <a class="el" href="class_ogre_1_1_compositor_node.html">CompositorNode</a> *parentNode, const <a class="el" href="struct_ogre_1_1_render_target_view_def.html">RenderTargetViewDef</a> *rtv)</td></tr>
+<tr class="separator:gac9e9d7e8691265820c9a0d6d51a4c6ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga45407af4811ad0b454d21390a6367a59"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga45407af4811ad0b454d21390a6367a59">Ogre::CompositorPassWarmUp::~CompositorPassWarmUp</a> () override=default</td></tr>
+<tr class="separator:ga45407af4811ad0b454d21390a6367a59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga797f7d45872cff80b5169fa54a51e089"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga797f7d45872cff80b5169fa54a51e089">Ogre::CompositorPassWarmUp::_setUpdateShadowNode</a> (bool update)</td></tr>
+<tr class="separator:ga797f7d45872cff80b5169fa54a51e089"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga58ef88b78a3f0af026fb54e93c9ac75e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga58ef88b78a3f0af026fb54e93c9ac75e">Ogre::WarmUpHelper::createFrom</a> (<a class="el" href="class_ogre_1_1_compositor_manager2.html">CompositorManager2</a> *compositorManager, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;nodeDefinitionName, const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> refNodeDefinitionName, const bool bCopyAllInputChannels)</td></tr>
+<tr class="memdesc:ga58ef88b78a3f0af026fb54e93c9ac75e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility to programmatically create a node that contains only warm_up passes by basing them off the render_pass passes from a reference node.  <a href="group___effects.html#ga58ef88b78a3f0af026fb54e93c9ac75e">More...</a><br /></td></tr>
+<tr class="separator:ga58ef88b78a3f0af026fb54e93c9ac75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab7961e4d92c46e58a11fe21daa8b344e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gab7961e4d92c46e58a11fe21daa8b344e">Ogre::CompositorPassWarmUp::execute</a> (const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera) override</td></tr>
+<tr class="separator:gab7961e4d92c46e58a11fe21daa8b344e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga40ccc92bdb6b7c9fe88e84d3d4d8d580"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga40ccc92bdb6b7c9fe88e84d3d4d8d580">Ogre::CompositorPassWarmUp::getCamera</a> ()</td></tr>
+<tr class="separator:ga40ccc92bdb6b7c9fe88e84d3d4d8d580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaff0b1d0da355a6d8ff8d6c09a5fe15f8"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_compositor_pass_warm_up_def.html">CompositorPassWarmUpDef</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gaff0b1d0da355a6d8ff8d6c09a5fe15f8">Ogre::CompositorPassWarmUp::getDefinition</a> () const</td></tr>
+<tr class="separator:gaff0b1d0da355a6d8ff8d6c09a5fe15f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae197091fd2032ad5e8339d828c5bd1de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gae197091fd2032ad5e8339d828c5bd1de">Ogre::CompositorPassWarmUp::getShadowNode</a> () const</td></tr>
+<tr class="separator:gae197091fd2032ad5e8339d828c5bd1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -679,6 +702,260 @@ Variables</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="gga11f3abbd0f35645ab06412852cc3ab92a05f415db9bb05cfdb02ca1f454437e80"></a>SHADOW_NODE_CASTER_PASS&#160;</td><td class="fielddoc"></td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="gac9e9d7e8691265820c9a0d6d51a4c6ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac9e9d7e8691265820c9a0d6d51a4c6ff">&#9670;&nbsp;</a></span>CompositorPassWarmUp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::CompositorPassWarmUp::CompositorPassWarmUp </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_compositor_pass_warm_up_def.html">CompositorPassWarmUpDef</a> *&#160;</td>
+          <td class="paramname"><em>definition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>defaultCamera</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_node.html">CompositorNode</a> *&#160;</td>
+          <td class="paramname"><em>parentNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_render_target_view_def.html">RenderTargetViewDef</a> *&#160;</td>
+          <td class="paramname"><em>rtv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga45407af4811ad0b454d21390a6367a59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga45407af4811ad0b454d21390a6367a59">&#9670;&nbsp;</a></span>~CompositorPassWarmUp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::CompositorPassWarmUp::~CompositorPassWarmUp </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga797f7d45872cff80b5169fa54a51e089"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga797f7d45872cff80b5169fa54a51e089">&#9670;&nbsp;</a></span>_setUpdateShadowNode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::CompositorPassWarmUp::_setUpdateShadowNode </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>update</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga58ef88b78a3f0af026fb54e93c9ac75e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga58ef88b78a3f0af026fb54e93c9ac75e">&#9670;&nbsp;</a></span>createFrom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Ogre::WarmUpHelper::createFrom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_manager2.html">CompositorManager2</a> *&#160;</td>
+          <td class="paramname"><em>compositorManager</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>nodeDefinitionName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
+          <td class="paramname"><em>refNodeDefinitionName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bCopyAllInputChannels</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Utility to programmatically create a node that contains only warm_up passes by basing them off the render_pass passes from a reference node. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">compositorManager</td><td></td></tr>
+    <tr><td class="paramname">nodeDefinitionName</td><td>Name to give to the node definition containing the warm ups. Must be unique and not exist already. </td></tr>
+    <tr><td class="paramname">refNodeDefinitionNamee</td><td>Name of the reference node definition to analyze. </td></tr>
+    <tr><td class="paramname">bCopyAllInputChannels</td><td>False to only generate input channels that are actually needed. True to generate all input channels. This is useful if you must enforce certain order. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gab7961e4d92c46e58a11fe21daa8b344e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab7961e4d92c46e58a11fe21daa8b344e">&#9670;&nbsp;</a></span>execute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::CompositorPassWarmUp::execute </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>lodCamera</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_ogre_1_1_compositor_pass.html#a2cc832fbb80b9685b4fedf874b46075c">Ogre::CompositorPass</a>.</p>
+
+</div>
+</div>
+<a id="ga40ccc92bdb6b7c9fe88e84d3d4d8d580"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga40ccc92bdb6b7c9fe88e84d3d4d8d580">&#9670;&nbsp;</a></span>getCamera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_camera.html">Camera</a>* Ogre::CompositorPassWarmUp::getCamera </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gaff0b1d0da355a6d8ff8d6c09a5fe15f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaff0b1d0da355a6d8ff8d6c09a5fe15f8">&#9670;&nbsp;</a></span>getDefinition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_ogre_1_1_compositor_pass_warm_up_def.html">CompositorPassWarmUpDef</a>* Ogre::CompositorPassWarmUp::getDefinition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gae197091fd2032ad5e8339d828c5bd1de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae197091fd2032ad5e8339d828c5bd1de">&#9670;&nbsp;</a></span>getShadowNode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a>* Ogre::CompositorPassWarmUp::getShadowNode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

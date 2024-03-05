@@ -426,7 +426,7 @@ var group___resources =
       [ "getMinDistance", "class_ogre_1_1_forward3_d.html#a3a77ff463a6977350684af7451155b16", null ],
       [ "getNumSlices", "class_ogre_1_1_forward3_d.html#a952aa30e607f4550c3e49485b0fd8da5", null ],
       [ "getWidth", "class_ogre_1_1_forward3_d.html#ad49f0da403d2fc00a8922ab71af27632", null ],
-      [ "setHlmsPassProperties", "class_ogre_1_1_forward3_d.html#af9e833e6a2c8fbf7c6d2878c2aa9490d", null ]
+      [ "setHlmsPassProperties", "class_ogre_1_1_forward3_d.html#af16da0e7b95e6ee01d313abbf6bc7cfd", null ]
     ] ],
     [ "ForwardClustered", "class_ogre_1_1_forward_clustered.html", [
       [ "ForwardClustered", "class_ogre_1_1_forward_clustered.html#a2b6bbc95c2d377533b8209fd54cfeb3c", null ],
@@ -447,7 +447,7 @@ var group___resources =
       [ "getWidth", "class_ogre_1_1_forward_clustered.html#a267ec35f6c9aa4a8c91433a7ec29c170", null ],
       [ "setDebugFrustum", "class_ogre_1_1_forward_clustered.html#ab610004fd23fec62e35f11e0cbb0a9a4", null ],
       [ "setFreezeDebugFrustum", "class_ogre_1_1_forward_clustered.html#a9e327e8b2c00343fc28aca6877e16a9d", null ],
-      [ "setHlmsPassProperties", "class_ogre_1_1_forward_clustered.html#aff2b15179aa5fe3db11d4a88f69cebce", null ]
+      [ "setHlmsPassProperties", "class_ogre_1_1_forward_clustered.html#a9afbf4966d03ac85de2436ba5eee92fa", null ]
     ] ],
     [ "ForwardPlusBase", "class_ogre_1_1_forward_plus_base.html", [
       [ "CachedGridBuffer", "struct_ogre_1_1_forward_plus_base_1_1_cached_grid_buffer.html", [
@@ -481,7 +481,7 @@ var group___resources =
       [ "setEnableVpls", "class_ogre_1_1_forward_plus_base.html#ace096afb5e2f082995fecfa56b87bda0", null ],
       [ "setFadeAttenuationRange", "class_ogre_1_1_forward_plus_base.html#a5afca86cefefcd3a5d5da282fd734325", null ],
       [ "setFineLightMaskGranularity", "class_ogre_1_1_forward_plus_base.html#aab10c992600476f4227e8205bb383293", null ],
-      [ "setHlmsPassProperties", "class_ogre_1_1_forward_plus_base.html#a1d1c6892baf024c1ebb422d7be18654f", null ],
+      [ "setHlmsPassProperties", "class_ogre_1_1_forward_plus_base.html#adfa3b7c8903715931f772a593177d608", null ],
       [ "MaxCubemapProbeRq", "class_ogre_1_1_forward_plus_base.html#aadd8ac3d6f3c664ea8a76b414811fb91", null ],
       [ "MaxDecalRq", "class_ogre_1_1_forward_plus_base.html#a19bef9e6d7419339fe2de693289168d2", null ],
       [ "MinCubemapProbeRq", "class_ogre_1_1_forward_plus_base.html#a13455303a0a8ac6516f60672a237cd30", null ],
@@ -646,6 +646,7 @@ var group___resources =
       [ "getAvailableSharedParameters", "class_ogre_1_1_gpu_program_manager.html#a499cfbb66f95aeefa240f4f0963cfa40", null ],
       [ "getByName", "class_ogre_1_1_gpu_program_manager.html#af6b1156d96165528bd587e92267cc741", null ],
       [ "getMicrocodeFromCache", "class_ogre_1_1_gpu_program_manager.html#a2fe8ec41a010059eb1c34b1ca4866696", null ],
+      [ "getMicrocodeFromCache", "class_ogre_1_1_gpu_program_manager.html#a8f066576e48d2eb157c5ab56014ba7bc", null ],
       [ "getResourceByName", "class_ogre_1_1_gpu_program_manager.html#a95ad629bcb4005c9427dbea8e24699d4", null ],
       [ "getSaveMicrocodesToCache", "class_ogre_1_1_gpu_program_manager.html#a5feb934731d48691738aa13c63c4518b", null ],
       [ "getSharedParameters", "class_ogre_1_1_gpu_program_manager.html#a2aebd515c488f378e859db9bded95412", null ],
@@ -653,11 +654,11 @@ var group___resources =
       [ "getSingletonPtr", "class_ogre_1_1_gpu_program_manager.html#a18b7d139396f8fa391ef3335e541d88d", null ],
       [ "getSupportedSyntax", "class_ogre_1_1_gpu_program_manager.html#a42bae3f849626d7fa11bf548edbf2340", null ],
       [ "isCacheDirty", "class_ogre_1_1_gpu_program_manager.html#ae2fd9c4dda44c05c9ee3676e2bf1ff6f", null ],
-      [ "isMicrocodeAvailableInCache", "class_ogre_1_1_gpu_program_manager.html#ac7311b1e2dea2bdbf6d1f497edc2c4a0", null ],
       [ "isSyntaxSupported", "class_ogre_1_1_gpu_program_manager.html#a58e89a2444fd9134b9a87ec6d8f18544", null ],
       [ "load", "class_ogre_1_1_gpu_program_manager.html#acf1a17422bc3cd1b7af27269bf4182cf", null ],
       [ "loadFromString", "class_ogre_1_1_gpu_program_manager.html#aa97ecb7825ee46c6be15313b6592ee16", null ],
       [ "loadMicrocodeCache", "class_ogre_1_1_gpu_program_manager.html#af591ed6c8f4a2a930c10156deb1883de", null ],
+      [ "OGRE_DEPRECATED_VER", "class_ogre_1_1_gpu_program_manager.html#a7a7b65b3ac7d413999b1baf25de97938", null ],
       [ "removeMicrocodeFromCache", "class_ogre_1_1_gpu_program_manager.html#a0b3d897dacdf542d029ea2d2a5a988c7", null ],
       [ "saveMicrocodeCache", "class_ogre_1_1_gpu_program_manager.html#a9ba5ed16850087dad793713281264527", null ],
       [ "setSaveMicrocodesToCache", "class_ogre_1_1_gpu_program_manager.html#aa21d703ad5720d87243b2cbb8b7dc02a", null ]
@@ -754,16 +755,20 @@ var group___resources =
       [ "_changeRenderSystem", "class_ogre_1_1_hlms.html#ab8744fe92c019a0f47330772904f4c58", null ],
       [ "_clearShaderCache", "class_ogre_1_1_hlms.html#aa833178056ec974abfed8302f82e9e7a", null ],
       [ "_collectSamplerblocks", "class_ogre_1_1_hlms.html#ab373a8f13dd34e0c8e9cf534254c90be", null ],
-      [ "_compileShaderFromPreprocessedSource", "class_ogre_1_1_hlms.html#a208e79527ebc2ae3be944b9b3472155f", null ],
-      [ "_getProperty", "class_ogre_1_1_hlms.html#adc75baa384c1804e1eb921e8e1cedfb2", null ],
+      [ "_compileShaderFromPreprocessedSource", "class_ogre_1_1_hlms.html#aae9789ec1cdc22bd63d2469c3b9a0664", null ],
+      [ "_getProperty", "class_ogre_1_1_hlms.html#ae21a6701b5269533881eadfde2ce94f1", null ],
       [ "_loadJson", "class_ogre_1_1_hlms.html#a2db23de0342377671bb1a83915a2d1f2", null ],
       [ "_notifyManager", "class_ogre_1_1_hlms.html#a5d0353d49f366e8b0e5f928e55b86e55", null ],
       [ "_saveJson", "class_ogre_1_1_hlms.html#a3ee5970f2c0c19635182ba56c516fd70", null ],
-      [ "_setProperty", "class_ogre_1_1_hlms.html#a687aefae7d02308facf08680c08ddbea", null ],
-      [ "_setTextureReg", "class_ogre_1_1_hlms.html#af4ccf5764c93956803fdc7063290e037", null ],
+      [ "_setNumThreads", "class_ogre_1_1_hlms.html#a282fe10007225bb20cf3cd416af538cf", null ],
+      [ "_setProperty", "class_ogre_1_1_hlms.html#aba1ac2143a8c3669741e1c18702c8d03", null ],
+      [ "_setShadersGenerated", "class_ogre_1_1_hlms.html#a1a7312a5ead5f0dce741cbc7ec9872e3", null ],
+      [ "_setTextureReg", "class_ogre_1_1_hlms.html#aab44bf49e523f61ade8520785740585e", null ],
+      [ "_tagShaderCodeCacheUpToDate", "class_ogre_1_1_hlms.html#a440ded6d3f0269ad77e8c9670f95131a", null ],
       [ "analyzeBarriers", "class_ogre_1_1_hlms.html#ad2b1ed80ecf35fa559da066bbdef5d20", null ],
       [ "calculateHashFor", "class_ogre_1_1_hlms.html#a5b71158453ed0a2411a92ecf767af130", null ],
-      [ "compileShaderCode", "class_ogre_1_1_hlms.html#a9a1b12239e46b90448d960ed784148d8", null ],
+      [ "compileShaderCode", "class_ogre_1_1_hlms.html#a0ef77fcae4df5d51475d7e5ff3baafd8", null ],
+      [ "compileStubEntry", "class_ogre_1_1_hlms.html#a0bfc990f4f1edf446ca68b6f2f971c32", null ],
       [ "createDatablock", "class_ogre_1_1_hlms.html#a335481b26695a97d83885780235ee0e5", null ],
       [ "destroyAllDatablocks", "class_ogre_1_1_hlms.html#a60ed9de97ae0b9d5b5c12648e17df989", null ],
       [ "destroyDatablock", "class_ogre_1_1_hlms.html#a42e458f42a60363648a6b1ce368feb4b", null ],
@@ -782,7 +787,8 @@ var group___resources =
       [ "getFilenameAndResourceGroup", "class_ogre_1_1_hlms.html#ad004bde573064ae48aba462dfcaa536e", null ],
       [ "getHlmsManager", "class_ogre_1_1_hlms.html#aa46aee70eef1c4f54899d0684cb1bb0d", null ],
       [ "getListener", "class_ogre_1_1_hlms.html#ae9a2d1a97fa99771f11ccd42a50dea91", null ],
-      [ "getMaterial", "class_ogre_1_1_hlms.html#a18c6bad1d5c7c5112fae2c6a33b8b2e1", null ],
+      [ "getMaterial", "class_ogre_1_1_hlms.html#aee64b3dbfabb7704aaeb029dcf1b1744", null ],
+      [ "getMaterialSerial01", "class_ogre_1_1_hlms.html#aa6543944cdb6e2eddc17075e31db2db5", null ],
       [ "getMaxNonCasterDirectionalLights", "class_ogre_1_1_hlms.html#a9d0d8509660561e244edcd5ac2b4364f", null ],
       [ "getNameStr", "class_ogre_1_1_hlms.html#a25eba7ceb9fbc7603a20984d36ee74c7", null ],
       [ "getPiecesLibrary", "class_ogre_1_1_hlms.html#ac608d7209cceef560c7b1b7e21cfefa9", null ],
@@ -799,7 +805,8 @@ var group___resources =
       [ "getType", "class_ogre_1_1_hlms.html#a508e017c803859196fc55860b7ddfc0f", null ],
       [ "getTypeName", "class_ogre_1_1_hlms.html#a10f828092b41b6224285937a71c69350", null ],
       [ "getTypeNameStr", "class_ogre_1_1_hlms.html#adfb0ef70d22041d5950adc3c89ce8dae", null ],
-      [ "parseOffline", "class_ogre_1_1_hlms.html#a3be3cc55b1f3d431a23633cd07770cdf", null ],
+      [ "isShaderCodeCacheDirty", "class_ogre_1_1_hlms.html#a87e7dcce06295d710b64917bb19e1f52", null ],
+      [ "parseOffline", "class_ogre_1_1_hlms.html#ae4dbc640402f792b8d2da9889a4a9e19", null ],
       [ "postCommandBufferExecution", "class_ogre_1_1_hlms.html#a666c0da0880cf52f84e31f03e4736cac", null ],
       [ "preCommandBufferExecution", "class_ogre_1_1_hlms.html#a365579c231d6fd0d32a567a3a1b6582a", null ],
       [ "preparePassHash", "class_ogre_1_1_hlms.html#ad3e82fb2e682366cc721e521ee41d64d", null ],
@@ -812,7 +819,8 @@ var group___resources =
       [ "setPrecisionMode", "class_ogre_1_1_hlms.html#afd7b3dc16d494d83e9608cdb68f4512d", null ],
       [ "setProperty", "class_ogre_1_1_hlms.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
       [ "setStaticBranchingLights", "class_ogre_1_1_hlms.html#a46fdb3fe8b4889d911d41468dabf4400", null ],
-      [ "HlmsDiskCache", "class_ogre_1_1_hlms.html#ac9b8cbd74b47ab37c399d390954fb92c", null ]
+      [ "HlmsDiskCache", "class_ogre_1_1_hlms.html#ac9b8cbd74b47ab37c399d390954fb92c", null ],
+      [ "kNoTid", "class_ogre_1_1_hlms.html#a3b41b85c9b51fe6794d25e95bd5ea31f", null ]
     ] ],
     [ "HlmsBasePieces", "struct_ogre_1_1_hlms_base_pieces.html", [
       [ "AlphaTestCmpFunc", "struct_ogre_1_1_hlms_base_pieces.html#a818124924b91cc5cb1f5510fd76a43ce", null ]
@@ -1052,7 +1060,8 @@ var group___resources =
       [ "SourceCodeVec", "class_ogre_1_1_hlms_disk_cache.html#afba4875fb3b00ceffe4781474f8a87b0", null ],
       [ "HlmsDiskCache", "class_ogre_1_1_hlms_disk_cache.html#a50047d59e56d978a4374faf8c01cadc8", null ],
       [ "~HlmsDiskCache", "class_ogre_1_1_hlms_disk_cache.html#aff7bf04d41d41e9b1a96b3236da1fcbc", null ],
-      [ "applyTo", "class_ogre_1_1_hlms_disk_cache.html#a730367b3c5eae7a21ae42a632d79932f", null ],
+      [ "_compileShadersThread", "class_ogre_1_1_hlms_disk_cache.html#a8dade80181a0e5a800aed19d52e4531c", null ],
+      [ "applyTo", "class_ogre_1_1_hlms_disk_cache.html#a8d635f3fac7d4242c1bc90f715b77f88", null ],
       [ "clearCache", "class_ogre_1_1_hlms_disk_cache.html#a0fad253e5fab5577a12ee44a825a4e9e", null ],
       [ "copyFrom", "class_ogre_1_1_hlms_disk_cache.html#abfa0c18337b3b7e59a9e28ae7375bf4a", null ],
       [ "load", "class_ogre_1_1_hlms_disk_cache.html#a213cec23c928050df22266c795a1fd37", null ],
@@ -1122,9 +1131,9 @@ var group___resources =
       [ "hlmsTypeChanged", "class_ogre_1_1_hlms_listener.html#a10609ad741f2c3de7ce3715738cd0bea", null ],
       [ "preparePassBuffer", "class_ogre_1_1_hlms_listener.html#a29e1a2fb6c578ba54b8cbce7a4418800", null ],
       [ "preparePassHash", "class_ogre_1_1_hlms_listener.html#ab0cc9cdfb4cc2eca0e06ba13a467c7e5", null ],
-      [ "propertiesMergedPreGenerationStep", "class_ogre_1_1_hlms_listener.html#aa7af65b7900952b3e201c065b0617060", null ],
-      [ "setupRootLayout", "class_ogre_1_1_hlms_listener.html#a96f4ab8489ca98dcf76020e3d169607f", null ],
-      [ "shaderCacheEntryCreated", "class_ogre_1_1_hlms_listener.html#a669b0c1ba569472a0c5c3d2777d77dc5", null ]
+      [ "propertiesMergedPreGenerationStep", "class_ogre_1_1_hlms_listener.html#a1b8ae5bc5f0c78db2e98b111bcdbed0d", null ],
+      [ "setupRootLayout", "class_ogre_1_1_hlms_listener.html#aa82f8eabfd65173e02a8e6901047eb62", null ],
+      [ "shaderCacheEntryCreated", "class_ogre_1_1_hlms_listener.html#aaf83dfe4a43ac3c7c444c90d759a7744", null ]
     ] ],
     [ "HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html", [
       [ "HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html#a59013785563e6a19b27a03943b85acdd", null ],

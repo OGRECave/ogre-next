@@ -12,5 +12,5 @@ var class_ogre_1_1_forward3_d =
     [ "getMinDistance", "class_ogre_1_1_forward3_d.html#a3a77ff463a6977350684af7451155b16", null ],
     [ "getNumSlices", "class_ogre_1_1_forward3_d.html#a952aa30e607f4550c3e49485b0fd8da5", null ],
     [ "getWidth", "class_ogre_1_1_forward3_d.html#ad49f0da403d2fc00a8922ab71af27632", null ],
-    [ "setHlmsPassProperties", "class_ogre_1_1_forward3_d.html#af9e833e6a2c8fbf7c6d2878c2aa9490d", null ]
+    [ "setHlmsPassProperties", "class_ogre_1_1_forward3_d.html#af16da0e7b95e6ee01d313abbf6bc7cfd", null ]
 ];

@@ -564,7 +564,7 @@ var files_dup =
     [ "OgreForwardClustered.h", "_ogre_forward_clustered_8h.html", null ],
     [ "OgreForwardPlusBase.h", "_ogre_forward_plus_base_8h.html", "_ogre_forward_plus_base_8h" ],
     [ "OgreFrameListener.h", "_ogre_frame_listener_8h.html", null ],
-    [ "OgreFrameStats.h", "_ogre_frame_stats_8h.html", "_ogre_frame_stats_8h" ],
+    [ "OgreFrameStats.h", "_ogre_frame_stats_8h.html", null ],
     [ "OgreFreeImageCodec2.h", "_ogre_free_image_codec2_8h.html", null ],
     [ "OgreFrustum.h", "_ogre_frustum_8h.html", "_ogre_frustum_8h" ],
     [ "OgreGL3PlusAsyncTextureTicket.h", "_ogre_g_l3_plus_async_texture_ticket_8h.html", [
@@ -1664,6 +1664,11 @@ var files_dup =
     [ "OgreVertexBufferDownloadHelper.h", "_ogre_vertex_buffer_download_helper_8h.html", "_ogre_vertex_buffer_download_helper_8h" ],
     [ "OgreVertexBufferPacked.h", "_ogre_vertex_buffer_packed_8h.html", "_ogre_vertex_buffer_packed_8h" ],
     [ "OgreVertexElements.h", "_ogre_vertex_elements_8h.html", "_ogre_vertex_elements_8h" ],
+    [ "OgreVertexFormatWarmUp.h", "_ogre_vertex_format_warm_up_8h.html", [
+      [ "VertexFormatWarmUpStorage", "class_ogre_1_1_vertex_format_warm_up_storage.html", "class_ogre_1_1_vertex_format_warm_up_storage" ],
+      [ "MaterialRqId", "struct_ogre_1_1_vertex_format_warm_up_storage_1_1_vertex_format_entry_1_1_material_rq_id.html", "struct_ogre_1_1_vertex_format_warm_up_storage_1_1_vertex_format_entry_1_1_material_rq_id" ],
+      [ "VFPair", "struct_ogre_1_1_vertex_format_warm_up_storage_1_1_vertex_format_entry_1_1_v_f_pair.html", "struct_ogre_1_1_vertex_format_warm_up_storage_1_1_vertex_format_entry_1_1_v_f_pair" ]
+    ] ],
     [ "OgreVertexIndexData.h", "_ogre_vertex_index_data_8h.html", "_ogre_vertex_index_data_8h" ],
     [ "OgreVertexRemapping.h", "_ogre_vertex_remapping_8h.html", [
       [ "VerticesRemapInfo", "struct_ogre_1_1_vertices_remap_info.html", "struct_ogre_1_1_vertices_remap_info" ]

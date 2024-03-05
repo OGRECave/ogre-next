@@ -27,7 +27,7 @@ var class_ogre_1_1_forward_plus_base =
     [ "setEnableVpls", "class_ogre_1_1_forward_plus_base.html#ace096afb5e2f082995fecfa56b87bda0", null ],
     [ "setFadeAttenuationRange", "class_ogre_1_1_forward_plus_base.html#a5afca86cefefcd3a5d5da282fd734325", null ],
     [ "setFineLightMaskGranularity", "class_ogre_1_1_forward_plus_base.html#aab10c992600476f4227e8205bb383293", null ],
-    [ "setHlmsPassProperties", "class_ogre_1_1_forward_plus_base.html#a1d1c6892baf024c1ebb422d7be18654f", null ],
+    [ "setHlmsPassProperties", "class_ogre_1_1_forward_plus_base.html#adfa3b7c8903715931f772a593177d608", null ],
     [ "MaxCubemapProbeRq", "class_ogre_1_1_forward_plus_base.html#aadd8ac3d6f3c664ea8a76b414811fb91", null ],
     [ "MaxDecalRq", "class_ogre_1_1_forward_plus_base.html#a19bef9e6d7419339fe2de693289168d2", null ],
     [ "MinCubemapProbeRq", "class_ogre_1_1_forward_plus_base.html#a13455303a0a8ac6516f60672a237cd30", null ],

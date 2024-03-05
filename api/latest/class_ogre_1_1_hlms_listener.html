@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -116,15 +116,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab0cc9cdfb4cc2eca0e06ba13a467c7e5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#ab0cc9cdfb4cc2eca0e06ba13a467c7e5">preparePassHash</a> (const <a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *shadowNode, bool casterPass, bool dualParaboloid, <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager, <a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms)</td></tr>
 <tr class="memdesc:ab0cc9cdfb4cc2eca0e06ba13a467c7e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called right before creating the pass cache, to allow the listener to add/remove properties.  <a href="class_ogre_1_1_hlms_listener.html#ab0cc9cdfb4cc2eca0e06ba13a467c7e5">More...</a><br /></td></tr>
 <tr class="separator:ab0cc9cdfb4cc2eca0e06ba13a467c7e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7af65b7900952b3e201c065b0617060"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#aa7af65b7900952b3e201c065b0617060">propertiesMergedPreGenerationStep</a> (<a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms, const <a class="el" href="struct_ogre_1_1_hlms_cache.html">HlmsCache</a> &amp;passCache, const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;renderableCacheProperties, const <a class="el" href="group___resources.html#ga7308171d42bf5b86adda94adc5d30f03">PiecesMap</a> renderableCachePieces[<a class="el" href="group___general.html#gga7049ce296bb4883feab25251d3865035a0bf893209b217d59e15abaf48092d132">NumShaderTypes</a>], const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties, const <a class="el" href="struct_ogre_1_1_queued_renderable.html">QueuedRenderable</a> &amp;queuedRenderable)</td></tr>
-<tr class="memdesc:aa7af65b7900952b3e201c065b0617060"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to <a class="el" href="class_ogre_1_1_hlms_listener.html#a669b0c1ba569472a0c5c3d2777d77dc5" title="Called after the shader was created/compiled, and right before bindGpuProgramParameters (relevant inf...">HlmsListener::shaderCacheEntryCreated</a>, but it gets called before creating any shader.  <a href="class_ogre_1_1_hlms_listener.html#aa7af65b7900952b3e201c065b0617060">More...</a><br /></td></tr>
-<tr class="separator:aa7af65b7900952b3e201c065b0617060"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96f4ab8489ca98dcf76020e3d169607f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#a96f4ab8489ca98dcf76020e3d169607f">setupRootLayout</a> (<a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;rootLayout, const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties) const</td></tr>
-<tr class="memdesc:a96f4ab8489ca98dcf76020e3d169607f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called right before compiling.  <a href="class_ogre_1_1_hlms_listener.html#a96f4ab8489ca98dcf76020e3d169607f">More...</a><br /></td></tr>
-<tr class="separator:a96f4ab8489ca98dcf76020e3d169607f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a669b0c1ba569472a0c5c3d2777d77dc5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#a669b0c1ba569472a0c5c3d2777d77dc5">shaderCacheEntryCreated</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;shaderProfile, const <a class="el" href="struct_ogre_1_1_hlms_cache.html">HlmsCache</a> *hlmsCacheEntry, const <a class="el" href="struct_ogre_1_1_hlms_cache.html">HlmsCache</a> &amp;passCache, const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties, const <a class="el" href="struct_ogre_1_1_queued_renderable.html">QueuedRenderable</a> &amp;queuedRenderable)</td></tr>
-<tr class="memdesc:a669b0c1ba569472a0c5c3d2777d77dc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the shader was created/compiled, and right before bindGpuProgramParameters (relevant information for OpenGL programs).  <a href="class_ogre_1_1_hlms_listener.html#a669b0c1ba569472a0c5c3d2777d77dc5">More...</a><br /></td></tr>
-<tr class="separator:a669b0c1ba569472a0c5c3d2777d77dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b8ae5bc5f0c78db2e98b111bcdbed0d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#a1b8ae5bc5f0c78db2e98b111bcdbed0d">propertiesMergedPreGenerationStep</a> (<a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms, const <a class="el" href="struct_ogre_1_1_hlms_cache.html">HlmsCache</a> &amp;passCache, const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;renderableCacheProperties, const <a class="el" href="group___resources.html#ga7308171d42bf5b86adda94adc5d30f03">PiecesMap</a> renderableCachePieces[<a class="el" href="group___general.html#gga7049ce296bb4883feab25251d3865035a0bf893209b217d59e15abaf48092d132">NumShaderTypes</a>], const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties, const <a class="el" href="struct_ogre_1_1_queued_renderable.html">QueuedRenderable</a> &amp;queuedRenderable, size_t tid)</td></tr>
+<tr class="memdesc:a1b8ae5bc5f0c78db2e98b111bcdbed0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to <a class="el" href="class_ogre_1_1_hlms_listener.html#aaf83dfe4a43ac3c7c444c90d759a7744" title="Called after the shader was created/compiled, and right before bindGpuProgramParameters (relevant inf...">HlmsListener::shaderCacheEntryCreated</a>, but it gets called before creating any shader.  <a href="class_ogre_1_1_hlms_listener.html#a1b8ae5bc5f0c78db2e98b111bcdbed0d">More...</a><br /></td></tr>
+<tr class="separator:a1b8ae5bc5f0c78db2e98b111bcdbed0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa82f8eabfd65173e02a8e6901047eb62"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#aa82f8eabfd65173e02a8e6901047eb62">setupRootLayout</a> (<a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;rootLayout, const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties, size_t tid) const</td></tr>
+<tr class="memdesc:aa82f8eabfd65173e02a8e6901047eb62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called right before compiling.  <a href="class_ogre_1_1_hlms_listener.html#aa82f8eabfd65173e02a8e6901047eb62">More...</a><br /></td></tr>
+<tr class="separator:aa82f8eabfd65173e02a8e6901047eb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf83dfe4a43ac3c7c444c90d759a7744"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_listener.html#aaf83dfe4a43ac3c7c444c90d759a7744">shaderCacheEntryCreated</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;shaderProfile, const <a class="el" href="struct_ogre_1_1_hlms_cache.html">HlmsCache</a> *hlmsCacheEntry, const <a class="el" href="struct_ogre_1_1_hlms_cache.html">HlmsCache</a> &amp;passCache, const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;properties, const <a class="el" href="struct_ogre_1_1_queued_renderable.html">QueuedRenderable</a> &amp;queuedRenderable, size_t tid)</td></tr>
+<tr class="memdesc:aaf83dfe4a43ac3c7c444c90d759a7744"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after the shader was created/compiled, and right before bindGpuProgramParameters (relevant information for OpenGL programs).  <a href="class_ogre_1_1_hlms_listener.html#aaf83dfe4a43ac3c7c444c90d759a7744">More...</a><br /></td></tr>
+<tr class="separator:aaf83dfe4a43ac3c7c444c90d759a7744"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Listener that can be hooked to an <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> implementation for extending it with custom code. </p>
@@ -165,7 +165,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>If hlmsTypeChanged is going to be binding extra textures, override this function to tell us how many textures you will use, so that we don't use those slots. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Given the same set of properties, the function must always return the same value. Otherwise caching (i.e. <a class="el" href="class_ogre_1_1_hlms_disk_cache.html" title="This class allows saving the current state of an Hlms to disk: both its compiled shaders with source ...">HlmsDiskCache</a>) won't work correctly </dd></dl>
+<p>May be called from any thread. </p><dl class="section remark"><dt>Remarks</dt><dd>Given the same set of properties, the function must always return the same value. Otherwise caching (i.e. <a class="el" href="class_ogre_1_1_hlms_disk_cache.html" title="This class allows saving the current state of an Hlms to disk: both its compiled shaders with source ...">HlmsDiskCache</a>) won't work correctly </dd></dl>
 
 </div>
 </div>
@@ -216,7 +216,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Listeners should return the number of extra bytes they wish to allocate for storing additional data in the pass buffer. </p>
-<p>The actual data will be provided by a <a class="el" href="class_ogre_1_1_hlms_listener.html#a29e1a2fb6c578ba54b8cbce7a4418800" title="Write additional data in the pass buffer.">preparePassBuffer()</a> override. </p><dl class="section return"><dt>Returns</dt><dd>Number of bytes of additional pass buffer data to allocate. Must be a multiple of 16. </dd></dl>
+<p>The actual data will be provided by a <a class="el" href="class_ogre_1_1_hlms_listener.html#a29e1a2fb6c578ba54b8cbce7a4418800" title="Write additional data in the pass buffer.">preparePassBuffer()</a> override.</p>
+<p>The Thread Idx is always <a class="el" href="class_ogre_1_1_hlms.html#a3b41b85c9b51fe6794d25e95bd5ea31f" title="For single-threaded operations.">Hlms::kNoTid</a> </p><dl class="section return"><dt>Returns</dt><dd>Number of bytes of additional pass buffer data to allocate. Must be a multiple of 16. </dd></dl>
 
 </div>
 </div>
@@ -267,7 +268,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Called when the last <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> processed was of a different <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> type, thus we need to rebind certain buffers (like the pass buffer). </p>
-<p>You can use this moment to bind your own buffers. </p>
+<p>You can use this moment to bind your own buffers.</p>
+<p>The Thread Idx is always <a class="el" href="class_ogre_1_1_hlms.html#a3b41b85c9b51fe6794d25e95bd5ea31f" title="For single-threaded operations.">Hlms::kNoTid</a> </p>
 
 </div>
 </div>
@@ -324,7 +326,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Write additional data in the pass buffer. </p>
-<p>Users can write to passBufferPtr. Implementations must ensure they make the buffer big enough via <a class="el" href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9" title="Listeners should return the number of extra bytes they wish to allocate for storing additional data i...">getPassBufferSize()</a>. The passBufferPtr is already aligned to 16 bytes. </p><dl class="section return"><dt>Returns</dt><dd>Pointer past the end of added data, aligned to 16 bytes. The difference between the result pointer and the input passBufferPtr must equal the value that you returned from <a class="el" href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9" title="Listeners should return the number of extra bytes they wish to allocate for storing additional data i...">getPassBufferSize()</a>. </dd></dl>
+<p>Users can write to passBufferPtr. Implementations must ensure they make the buffer big enough via <a class="el" href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9" title="Listeners should return the number of extra bytes they wish to allocate for storing additional data i...">getPassBufferSize()</a>. The passBufferPtr is already aligned to 16 bytes.</p>
+<p>The Thread Idx is always <a class="el" href="class_ogre_1_1_hlms.html#a3b41b85c9b51fe6794d25e95bd5ea31f" title="For single-threaded operations.">Hlms::kNoTid</a> </p><dl class="section return"><dt>Returns</dt><dd>Pointer past the end of added data, aligned to 16 bytes. The difference between the result pointer and the input passBufferPtr must equal the value that you returned from <a class="el" href="class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9" title="Listeners should return the number of extra bytes they wish to allocate for storing additional data i...">getPassBufferSize()</a>. </dd></dl>
 
 </div>
 </div>
@@ -382,8 +385,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Called right before creating the pass cache, to allow the listener to add/remove properties. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>For the rest of the parameters, </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms.html#ad3e82fb2e682366cc721e521ee41d64d" title="Called every frame by the Render Queue to cache the properties needed by this pass.">Hlms::preparePassHash</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms.html#ad3e82fb2e682366cc721e521ee41d64d" title="Called every frame by the Render Queue to cache the properties needed by this pass.">Hlms::preparePassHash</a></dd></dl>
+<p>The Thread Idx is always <a class="el" href="class_ogre_1_1_hlms.html#a3b41b85c9b51fe6794d25e95bd5ea31f" title="For single-threaded operations.">Hlms::kNoTid</a> </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">hlms</td><td>Caller <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a>; from which you can alter the properties using Hlms::setProperty </td></tr>
   </table>
@@ -392,8 +395,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa7af65b7900952b3e201c065b0617060"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7af65b7900952b3e201c065b0617060">&#9670;&nbsp;</a></span>propertiesMergedPreGenerationStep()</h2>
+<a id="a1b8ae5bc5f0c78db2e98b111bcdbed0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b8ae5bc5f0c78db2e98b111bcdbed0d">&#9670;&nbsp;</a></span>propertiesMergedPreGenerationStep()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -435,7 +438,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="struct_ogre_1_1_queued_renderable.html">QueuedRenderable</a> &amp;&#160;</td>
-          <td class="paramname"><em>queuedRenderable</em>&#160;</td>
+          <td class="paramname"><em>queuedRenderable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>tid</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -450,7 +459,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Similar to <a class="el" href="class_ogre_1_1_hlms_listener.html#a669b0c1ba569472a0c5c3d2777d77dc5" title="Called after the shader was created/compiled, and right before bindGpuProgramParameters (relevant inf...">HlmsListener::shaderCacheEntryCreated</a>, but it gets called before creating any shader. </p>
+<p>Similar to <a class="el" href="class_ogre_1_1_hlms_listener.html#aaf83dfe4a43ac3c7c444c90d759a7744" title="Called after the shader was created/compiled, and right before bindGpuProgramParameters (relevant inf...">HlmsListener::shaderCacheEntryCreated</a>, but it gets called before creating any shader. </p>
 <p>The main difference is that there is no hlmsCacheEntry (because it hasn't been generated yet) and the properties are before they are transformed by the templates</p>
 <p>propertiesMergedPreGenerationStep </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -465,14 +474,15 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">renderableCachePieces</td><td>Pieces that can be inserted, belonging to the renderable. The PiecesMap pointer cannot be null </td></tr>
     <tr><td class="paramname">properties</td><td>Combined properties of both renderableCacheProperties &amp; passCache.setProperties </td></tr>
     <tr><td class="paramname">queuedRenderable</td><td></td></tr>
+    <tr><td class="paramname">tid</td><td>Thread Idx </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a96f4ab8489ca98dcf76020e3d169607f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96f4ab8489ca98dcf76020e3d169607f">&#9670;&nbsp;</a></span>setupRootLayout()</h2>
+<a id="aa82f8eabfd65173e02a8e6901047eb62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa82f8eabfd65173e02a8e6901047eb62">&#9670;&nbsp;</a></span>setupRootLayout()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -490,7 +500,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="group___resources.html#ga1d333e3b1280899cce855c563f200938">HlmsPropertyVec</a> &amp;&#160;</td>
-          <td class="paramname"><em>properties</em>&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>tid</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -512,14 +528,15 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">rootLayout</td><td>An already-filled rootLayout derived classes can modify </td></tr>
     <tr><td class="paramname">properties</td><td>The current contents of Hlms::mSetProperties </td></tr>
+    <tr><td class="paramname">tid</td><td>Thread Idx </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a669b0c1ba569472a0c5c3d2777d77dc5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a669b0c1ba569472a0c5c3d2777d77dc5">&#9670;&nbsp;</a></span>shaderCacheEntryCreated()</h2>
+<a id="aaf83dfe4a43ac3c7c444c90d759a7744"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf83dfe4a43ac3c7c444c90d759a7744">&#9670;&nbsp;</a></span>shaderCacheEntryCreated()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -555,7 +572,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="struct_ogre_1_1_queued_renderable.html">QueuedRenderable</a> &amp;&#160;</td>
-          <td class="paramname"><em>queuedRenderable</em>&#160;</td>
+          <td class="paramname"><em>queuedRenderable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>tid</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -573,27 +596,15 @@ Public Member Functions</h2></td></tr>
 <p>Called after the shader was created/compiled, and right before bindGpuProgramParameters (relevant information for OpenGL programs). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">shaderProfile</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd>Hlms::mShaderProfile </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+    <tr><td class="paramname">shaderProfile</td><td>See Hlms::mShaderProfile </td></tr>
     <tr><td class="paramname">hlmsCacheEntry</td><td>The created shader. </td></tr>
-    <tr><td class="paramname">passCache</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd>Hlms::createShaderCacheEntry </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+    <tr><td class="paramname">passCache</td><td>See Hlms::createShaderCacheEntry </td></tr>
     <tr><td class="paramname">properties</td><td>The current contents of Hlms::mSetProperties </td></tr>
-    <tr><td class="paramname">queuedRenderable</td><td></td></tr>
+    <tr><td class="paramname">queuedRenderable</td><td>See Hlms::createShaderCacheEntry </td></tr>
+    <tr><td class="paramname">tid</td><td>Thread Idx </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd>Hlms::createShaderCacheEntry </dd></dl>
 
 </div>
 </div>

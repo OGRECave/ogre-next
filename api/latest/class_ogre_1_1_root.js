@@ -76,6 +76,7 @@ var class_ogre_1_1_root =
     [ "removeSceneManagerFactory", "class_ogre_1_1_root.html#afdf0d57e4f6e80bb519336c56ec23a88", null ],
     [ "renderOneFrame", "class_ogre_1_1_root.html#ae3836b7e78a71d20713e07f748c4d760", null ],
     [ "renderOneFrame", "class_ogre_1_1_root.html#a7820badfeef2fb9994ea9de17facb218", null ],
+    [ "resetFrameStats", "class_ogre_1_1_root.html#af9e152c747d0b9fcb044f9c066e23ffd", null ],
     [ "restoreConfig", "class_ogre_1_1_root.html#a2e470031129bddb7cf7e101648a3524f", null ],
     [ "saveConfig", "class_ogre_1_1_root.html#a78f315db1fc74a429fb35321791cd8aa", null ],
     [ "setBlendIndicesGpuRedundant", "class_ogre_1_1_root.html#a9c610fa759978755ffd9da222fe68b3e", null ],

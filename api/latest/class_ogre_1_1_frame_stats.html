@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_frame_stats.html',''); 
 </div><!--header-->
 <div class="contents">
 
-<p>All return values are either in milliseconds or frames per second; but they're internally stored in microseconds.  
+<p>All returned values are either in seconds or frames per second.  
  <a href="class_ogre_1_1_frame_stats.html#details">More...</a></p>
 
 <p><code>#include &lt;OgreFrameStats.h&gt;</code></p>
@@ -111,29 +111,140 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_frame_stats.html',''); 
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ga26025ae896d7a8ce9421d05303ab18c3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga26025ae896d7a8ce9421d05303ab18c3">FrameStats</a> ()</td></tr>
 <tr class="separator:ga26025ae896d7a8ce9421d05303ab18c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa6a88b9aef803fda1435c756cbf976a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaa6a88b9aef803fda1435c756cbf976a8">addSample</a> (<a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> timeMs)</td></tr>
-<tr class="memdesc:gaa6a88b9aef803fda1435c756cbf976a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new measured time, in <em>microseconds</em>  <a href="group___general.html#gaa6a88b9aef803fda1435c756cbf976a8">More...</a><br /></td></tr>
-<tr class="separator:gaa6a88b9aef803fda1435c756cbf976a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae435d81f32ecb89467f544ca5b2fe3fd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gae435d81f32ecb89467f544ca5b2fe3fd">getAvgFps</a> () const</td></tr>
-<tr class="separator:gae435d81f32ecb89467f544ca5b2fe3fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga731877e8519f22776e533d00512ba9a6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga731877e8519f22776e533d00512ba9a6">getAvgTime</a> () const</td></tr>
-<tr class="separator:ga731877e8519f22776e533d00512ba9a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga94dec1675b3606403d560c41d5095f4e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga94dec1675b3606403d560c41d5095f4e">getBestTime</a> () const</td></tr>
-<tr class="separator:ga94dec1675b3606403d560c41d5095f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaff08d73def9cb61dd86673225fb33afb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaff08d73def9cb61dd86673225fb33afb">getFps</a> () const</td></tr>
-<tr class="separator:gaff08d73def9cb61dd86673225fb33afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga072e1371c14de52412109234ab271348"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga072e1371c14de52412109234ab271348">getLastTime</a> () const</td></tr>
-<tr class="separator:ga072e1371c14de52412109234ab271348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac300f4f8b5673144ca9014ce92c96151"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gac300f4f8b5673144ca9014ce92c96151">addSample</a> (const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> timeUs)</td></tr>
+<tr class="memdesc:gac300f4f8b5673144ca9014ce92c96151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new measured time, in <em>microseconds</em>  <a href="group___general.html#gac300f4f8b5673144ca9014ce92c96151">More...</a><br /></td></tr>
+<tr class="separator:gac300f4f8b5673144ca9014ce92c96151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadeb89d0a5dcf935dedcebfa14185311d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gadeb89d0a5dcf935dedcebfa14185311d">getAllTimeAverage</a> () const</td></tr>
+<tr class="memdesc:gadeb89d0a5dcf935dedcebfa14185311d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the average since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>.  <a href="group___general.html#gadeb89d0a5dcf935dedcebfa14185311d">More...</a><br /></td></tr>
+<tr class="separator:gadeb89d0a5dcf935dedcebfa14185311d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacd07884bec7a51a44c0f6c6d6a528899"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gacd07884bec7a51a44c0f6c6d6a528899">getAllTimeAverageFps</a> () const</td></tr>
+<tr class="memdesc:gacd07884bec7a51a44c0f6c6d6a528899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="group___general.html#gadeb89d0a5dcf935dedcebfa14185311d" title="Returns the average since the last reset().">getAllTimeAverage()</a>, but expressed as frames per second instead of seconds.  <a href="group___general.html#gacd07884bec7a51a44c0f6c6d6a528899">More...</a><br /></td></tr>
+<tr class="separator:gacd07884bec7a51a44c0f6c6d6a528899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5d2df9183b307bc645ebc2db0ce59598"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga5d2df9183b307bc645ebc2db0ce59598">getBestTime</a> () const</td></tr>
+<tr class="memdesc:ga5d2df9183b307bc645ebc2db0ce59598"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the best frame time in seconds since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>.  <a href="group___general.html#ga5d2df9183b307bc645ebc2db0ce59598">More...</a><br /></td></tr>
+<tr class="separator:ga5d2df9183b307bc645ebc2db0ce59598"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaab8c28c36e4fe3fb9970a9f249d363c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaab8c28c36e4fe3fb9970a9f249d363c2">getLastTimeRawMicroseconds</a> () const</td></tr>
 <tr class="separator:gaab8c28c36e4fe3fb9970a9f249d363c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga66b2067eb7f1ba53650c55f00b34de49"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga66b2067eb7f1ba53650c55f00b34de49">getWorstTime</a> () const</td></tr>
-<tr class="separator:ga66b2067eb7f1ba53650c55f00b34de49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga91166fe4ac997f5e98d7118cac7cddb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga91166fe4ac997f5e98d7118cac7cddb9">reset</a> (<a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> timeMs)</td></tr>
-<tr class="separator:ga91166fe4ac997f5e98d7118cac7cddb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga14e40178fd544453953760214076797a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga14e40178fd544453953760214076797a">getLatestTimeSinceLast</a> () const</td></tr>
+<tr class="memdesc:ga14e40178fd544453953760214076797a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns latest record of the time since last measurement.  <a href="group___general.html#ga14e40178fd544453953760214076797a">More...</a><br /></td></tr>
+<tr class="separator:ga14e40178fd544453953760214076797a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad2729fa307157abd391cb96c01e8fd1f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gad2729fa307157abd391cb96c01e8fd1f">getLatestTimeSinceLastFps</a> () const</td></tr>
+<tr class="memdesc:gad2729fa307157abd391cb96c01e8fd1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="group___general.html#ga14e40178fd544453953760214076797a" title="Returns latest record of the time since last measurement.">getLatestTimeSinceLast()</a> but expressed as frames per second instead of seconds.  <a href="group___general.html#gad2729fa307157abd391cb96c01e8fd1f">More...</a><br /></td></tr>
+<tr class="separator:gad2729fa307157abd391cb96c01e8fd1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4688ea4b999f56611db32593344b0982"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982">getPercentile95th</a> (bool bUseTime) const</td></tr>
+<tr class="memdesc:ga4688ea4b999f56611db32593344b0982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the 95th percentile, since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>.  <a href="group___general.html#ga4688ea4b999f56611db32593344b0982">More...</a><br /></td></tr>
+<tr class="separator:ga4688ea4b999f56611db32593344b0982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga96f3dab9aa34386786e4431198b45e18"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga96f3dab9aa34386786e4431198b45e18">getPercentile99th</a> (bool bUseTime) const</td></tr>
+<tr class="memdesc:ga96f3dab9aa34386786e4431198b45e18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the 99th percentile, since the last reset. See <a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982" title="Gets the 95th percentile, since the last reset().">getPercentile95th()</a>.  <a href="group___general.html#ga96f3dab9aa34386786e4431198b45e18">More...</a><br /></td></tr>
+<tr class="separator:ga96f3dab9aa34386786e4431198b45e18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada72de2008f14816751e753b66056bd2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gada72de2008f14816751e753b66056bd2">getPercentileNth</a> (double percentile, bool bUseTime) const</td></tr>
+<tr class="memdesc:gada72de2008f14816751e753b66056bd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the desired percentile, since the last reset.  <a href="group___general.html#gada72de2008f14816751e753b66056bd2">More...</a><br /></td></tr>
+<tr class="separator:gada72de2008f14816751e753b66056bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa4b83bbc9a492610ac3181fad6a497ed"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed">getRollingAverage</a> () const</td></tr>
+<tr class="memdesc:gaa4b83bbc9a492610ac3181fad6a497ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the rolling average.  <a href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed">More...</a><br /></td></tr>
+<tr class="separator:gaa4b83bbc9a492610ac3181fad6a497ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae0953c1dce53fbb73ce891ff786c6cff"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gae0953c1dce53fbb73ce891ff786c6cff">getRollingAverageFps</a> () const</td></tr>
+<tr class="memdesc:gae0953c1dce53fbb73ce891ff786c6cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed" title="Returns the rolling average.">getRollingAverage()</a>, but expressed as frames per second instead of seconds.  <a href="group___general.html#gae0953c1dce53fbb73ce891ff786c6cff">More...</a><br /></td></tr>
+<tr class="separator:gae0953c1dce53fbb73ce891ff786c6cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeaf54b8bb864b59557c2392ae0a80209"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaeaf54b8bb864b59557c2392ae0a80209">getWorstTime</a> () const</td></tr>
+<tr class="memdesc:gaeaf54b8bb864b59557c2392ae0a80209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the worst frame time in seconds since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>.  <a href="group___general.html#gaeaf54b8bb864b59557c2392ae0a80209">More...</a><br /></td></tr>
+<tr class="separator:gaeaf54b8bb864b59557c2392ae0a80209"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_frame_stats.html#ga15789cbc6a90856b2a477c3a2081df3c">OGRE_DEPRECATED_VER</a> (4) double getLastTime() const</td></tr>
+<tr class="separator:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_frame_stats.html#ga15789cbc6a90856b2a477c3a2081df3c">OGRE_DEPRECATED_VER</a> (4) float getAvgFps() const</td></tr>
+<tr class="separator:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_frame_stats.html#ga15789cbc6a90856b2a477c3a2081df3c">OGRE_DEPRECATED_VER</a> (4) float getAvgTime() const</td></tr>
+<tr class="separator:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga15789cbc6a90856b2a477c3a2081df3c">OGRE_DEPRECATED_VER</a> (4) float getFps() const</td></tr>
+<tr class="separator:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga926833cfab123279e27b940b6d5e7cf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset</a> (<a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> timeUs)</td></tr>
+<tr class="separator:ga926833cfab123279e27b940b6d5e7cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>All return values are either in milliseconds or frames per second; but they're internally stored in microseconds. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<div class="textblock"><p>All returned values are either in seconds or frames per second. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ga15789cbc6a90856b2a477c3a2081df3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga15789cbc6a90856b2a477c3a2081df3c">&#9670;&nbsp;</a></span>OGRE_DEPRECATED_VER() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::FrameStats::OGRE_DEPRECATED_VER </td>
+          <td>(</td>
+          <td class="paramtype">4&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated:</a></b></dt><dd>since 4.0 in favour of <a class="el" href="group___general.html#ga14e40178fd544453953760214076797a" title="Returns latest record of the time since last measurement.">getLatestTimeSinceLast()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="ga15789cbc6a90856b2a477c3a2081df3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga15789cbc6a90856b2a477c3a2081df3c">&#9670;&nbsp;</a></span>OGRE_DEPRECATED_VER() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::FrameStats::OGRE_DEPRECATED_VER </td>
+          <td>(</td>
+          <td class="paramtype">4&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated:</a></b></dt><dd>since 4.0 in favour of <a class="el" href="group___general.html#gae0953c1dce53fbb73ce891ff786c6cff" title="Same as getRollingAverage(), but expressed as frames per second instead of seconds.">getRollingAverageFps()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="ga15789cbc6a90856b2a477c3a2081df3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga15789cbc6a90856b2a477c3a2081df3c">&#9670;&nbsp;</a></span>OGRE_DEPRECATED_VER() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::FrameStats::OGRE_DEPRECATED_VER </td>
+          <td>(</td>
+          <td class="paramtype">4&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated:</a></b></dt><dd>since 4.0 in favour of <a class="el" href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed" title="Returns the rolling average.">getRollingAverage()</a>. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="_ogre_frame_stats_8h.html">OgreFrameStats.h</a></li>
 </ul>
 </div><!-- contents -->

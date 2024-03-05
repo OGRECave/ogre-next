@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -122,6 +122,8 @@ Classes</h2></td></tr>
 Public Types</h2></td></tr>
 <tr class="memitem:a7c2e6e1337065e18f6bc0abe8cd6428a"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html">BufferDefinition</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a7c2e6e1337065e18f6bc0abe8cd6428a">BufferDefinitionVec</a></td></tr>
 <tr class="separator:a7c2e6e1337065e18f6bc0abe8cd6428a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfede534f6fd89bc49484338576ed45c"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#abfede534f6fd89bc49484338576ed45c">NameToChannelMap</a></td></tr>
+<tr class="separator:abfede534f6fd89bc49484338576ed45c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3960c5889208ca2c38c96796d403a52"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#ae3960c5889208ca2c38c96796d403a52">PixelFormatGpuVec</a></td></tr>
 <tr class="separator:ae3960c5889208ca2c38c96796d403a52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef33c6f04104697fc6ffc789c1f0f2f5"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_texture_definition_base_1_1_texture_definition.html">TextureDefinition</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#aef33c6f04104697fc6ffc789c1f0f2f5">TextureDefinitionVec</a></td></tr>
@@ -137,6 +139,12 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a62849c288ce310d458a72621f58dd739"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a62849c288ce310d458a72621f58dd739">TextureDefinitionBase</a> (<a class="el" href="class_ogre_1_1_texture_definition_base.html#ae70fe8c6c0e24395c1f94647c04fb079">TextureSource</a> defaultSource)</td></tr>
 <tr class="separator:a62849c288ce310d458a72621f58dd739"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abca1966c2378e0b15cc2f8fdd92650e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_definition_base_1_1_texture_definition.html">TextureDefinition</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#abca1966c2378e0b15cc2f8fdd92650e0">_addTextureDefinition</a> (const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> hashedName)</td></tr>
+<tr class="memdesc:abca1966c2378e0b15cc2f8fdd92650e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">For internal use. Don't call this directly.  <a href="class_ogre_1_1_texture_definition_base.html#abca1966c2378e0b15cc2f8fdd92650e0">More...</a><br /></td></tr>
+<tr class="separator:abca1966c2378e0b15cc2f8fdd92650e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11a7653b792a2911f384a6747073f96e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a11a7653b792a2911f384a6747073f96e">_addTextureSourceName</a> (const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> hashedName, size_t index, <a class="el" href="class_ogre_1_1_texture_definition_base.html#ae70fe8c6c0e24395c1f94647c04fb079">TextureSource</a> textureSource)</td></tr>
+<tr class="memdesc:a11a7653b792a2911f384a6747073f96e"><td class="mdescLeft">&#160;</td><td class="mdescRight">For internal use. Don't call this directly.  <a href="class_ogre_1_1_texture_definition_base.html#a11a7653b792a2911f384a6747073f96e">More...</a><br /></td></tr>
+<tr class="separator:a11a7653b792a2911f384a6747073f96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ea411a6f2944383e0c023ce79847dc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a0ea411a6f2944383e0c023ce79847dc3">addBufferDefinition</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, size_t numElements, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> bytesPerElement, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> bindFlags, float widthFactor, float heightFactor)</td></tr>
 <tr class="memdesc:a0ea411a6f2944383e0c023ce79847dc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an UAV buffer.  <a href="class_ogre_1_1_texture_definition_base.html#a0ea411a6f2944383e0c023ce79847dc3">More...</a><br /></td></tr>
 <tr class="separator:a0ea411a6f2944383e0c023ce79847dc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,7 +169,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1fe320d0670dc4dc862f105fcaaab23e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_definition_base.html#aef33c6f04104697fc6ffc789c1f0f2f5">TextureDefinitionVec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a1fe320d0670dc4dc862f105fcaaab23e">getLocalTextureDefinitionsNonConst</a> ()</td></tr>
 <tr class="memdesc:a1fe320d0670dc4dc862f105fcaaab23e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the local texture definitions.  <a href="class_ogre_1_1_texture_definition_base.html#a1fe320d0670dc4dc862f105fcaaab23e">More...</a><br /></td></tr>
 <tr class="separator:a1fe320d0670dc4dc862f105fcaaab23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9c8e924f57ca85b16f96c2c354e3fdc"><td class="memItemLeft" align="right" valign="top">const NameToChannelMap &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#ab9c8e924f57ca85b16f96c2c354e3fdc">getNameToChannelMap</a> () const</td></tr>
+<tr class="memitem:ab9c8e924f57ca85b16f96c2c354e3fdc"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_texture_definition_base.html#abfede534f6fd89bc49484338576ed45c">NameToChannelMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#ab9c8e924f57ca85b16f96c2c354e3fdc">getNameToChannelMap</a> () const</td></tr>
 <tr class="separator:ab9c8e924f57ca85b16f96c2c354e3fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3918e583d1b4d94dec156f3fce5e4870"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a3918e583d1b4d94dec156f3fce5e4870">getNumInputBufferChannels</a> () const</td></tr>
 <tr class="separator:a3918e583d1b4d94dec156f3fce5e4870"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -210,6 +218,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3dd5a18207b6fca4f39c679c1c82ff77"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a3dd5a18207b6fca4f39c679c1c82ff77">createTextures</a> (const <a class="el" href="class_ogre_1_1_texture_definition_base.html#aef33c6f04104697fc6ffc789c1f0f2f5">TextureDefinitionVec</a> &amp;textureDefs, <a class="el" href="group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3">CompositorChannelVec</a> &amp;inOutTexContainer, <a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a> id, const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *finalTarget, <a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *renderSys)</td></tr>
 <tr class="memdesc:a3dd5a18207b6fca4f39c679c1c82ff77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function to create the textures based on a given set of texture definitions and put them in a container.  <a href="class_ogre_1_1_texture_definition_base.html#a3dd5a18207b6fca4f39c679c1c82ff77">More...</a><br /></td></tr>
 <tr class="separator:a3dd5a18207b6fca4f39c679c1c82ff77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a97c936e9d7566dd2ba9499f8c012fe"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a7a97c936e9d7566dd2ba9499f8c012fe">decodeTexSource</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> encodedVal, size_t &amp;outIdx, <a class="el" href="class_ogre_1_1_texture_definition_base.html#ae70fe8c6c0e24395c1f94647c04fb079">TextureSource</a> &amp;outTexSource)</td></tr>
+<tr class="separator:a7a97c936e9d7566dd2ba9499f8c012fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a491f3ccf401762343436ee19f13632a3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#a491f3ccf401762343436ee19f13632a3">destroyBuffers</a> (const <a class="el" href="class_ogre_1_1_texture_definition_base.html#a7c2e6e1337065e18f6bc0abe8cd6428a">BufferDefinitionVec</a> &amp;bufferDefs, <a class="el" href="group___effects.html#gabe54b22d0cf0eb77a49fed877816fe2d">CompositorNamedBufferVec</a> &amp;inOutBufContainer, <a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *renderSys)</td></tr>
 <tr class="separator:a491f3ccf401762343436ee19f13632a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1d4d17aeeacb92b400d2ff31c6cdea0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_definition_base.html#ac1d4d17aeeacb92b400d2ff31c6cdea0">destroyTextures</a> (<a class="el" href="group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3">CompositorChannelVec</a> &amp;inOutTexContainer, <a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *renderSys)</td></tr>
@@ -239,6 +249,20 @@ Static Public Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html">BufferDefinition</a>&gt;::type <a class="el" href="class_ogre_1_1_texture_definition_base.html#a7c2e6e1337065e18f6bc0abe8cd6428a">Ogre::TextureDefinitionBase::BufferDefinitionVec</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abfede534f6fd89bc49484338576ed45c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfede534f6fd89bc49484338576ed45c">&#9670;&nbsp;</a></span>NameToChannelMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef map&lt;<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&gt;::type <a class="el" href="class_ogre_1_1_texture_definition_base.html#abfede534f6fd89bc49484338576ed45c">Ogre::TextureDefinitionBase::NameToChannelMap</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -317,6 +341,62 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="abca1966c2378e0b15cc2f8fdd92650e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abca1966c2378e0b15cc2f8fdd92650e0">&#9670;&nbsp;</a></span>_addTextureDefinition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_texture_definition_base_1_1_texture_definition.html">TextureDefinition</a>* Ogre::TextureDefinitionBase::_addTextureDefinition </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
+          <td class="paramname"><em>hashedName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>For internal use. Don't call this directly. </p>
+
+</div>
+</div>
+<a id="a11a7653b792a2911f384a6747073f96e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11a7653b792a2911f384a6747073f96e">&#9670;&nbsp;</a></span>_addTextureSourceName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::TextureDefinitionBase::_addTextureSourceName </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
+          <td class="paramname"><em>hashedName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_definition_base.html#ae70fe8c6c0e24395c1f94647c04fb079">TextureSource</a>&#160;</td>
+          <td class="paramname"><em>textureSource</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>For internal use. Don't call this directly. </p>
+
+</div>
+</div>
 <a id="a0ea411a6f2944383e0c023ce79847dc3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ea411a6f2944383e0c023ce79847dc3">&#9670;&nbsp;</a></span>addBufferDefinition()</h2>
 
@@ -755,6 +835,48 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a7a97c936e9d7566dd2ba9499f8c012fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a97c936e9d7566dd2ba9499f8c012fe">&#9670;&nbsp;</a></span>decodeTexSource()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Ogre::TextureDefinitionBase::decodeTexSource </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td>
+          <td class="paramname"><em>encodedVal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t &amp;&#160;</td>
+          <td class="paramname"><em>outIdx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_definition_base.html#ae70fe8c6c0e24395c1f94647c04fb079">TextureSource</a> &amp;&#160;</td>
+          <td class="paramname"><em>outTexSource</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a491f3ccf401762343436ee19f13632a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a491f3ccf401762343436ee19f13632a3">&#9670;&nbsp;</a></span>destroyBuffers()</h2>
 
@@ -961,7 +1083,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const NameToChannelMap&amp; Ogre::TextureDefinitionBase::getNameToChannelMap </td>
+          <td class="memname">const <a class="el" href="class_ogre_1_1_texture_definition_base.html#abfede534f6fd89bc49484338576ed45c">NameToChannelMap</a>&amp; Ogre::TextureDefinitionBase::getNameToChannelMap </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>

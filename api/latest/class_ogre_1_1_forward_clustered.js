@@ -18,5 +18,5 @@ var class_ogre_1_1_forward_clustered =
     [ "getWidth", "class_ogre_1_1_forward_clustered.html#a267ec35f6c9aa4a8c91433a7ec29c170", null ],
     [ "setDebugFrustum", "class_ogre_1_1_forward_clustered.html#ab610004fd23fec62e35f11e0cbb0a9a4", null ],
     [ "setFreezeDebugFrustum", "class_ogre_1_1_forward_clustered.html#a9e327e8b2c00343fc28aca6877e16a9d", null ],
-    [ "setHlmsPassProperties", "class_ogre_1_1_forward_clustered.html#aff2b15179aa5fe3db11d4a88f69cebce", null ]
+    [ "setHlmsPassProperties", "class_ogre_1_1_forward_clustered.html#a9afbf4966d03ac85de2436ba5eee92fa", null ]
 ];

@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -224,7 +224,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A interface class defining a listener which can be used to receive notifications of frame events.  <a href="class_ogre_1_1_frame_listener.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_frame_stats.html">Ogre::FrameStats</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">All return values are either in milliseconds or frames per second; but they're internally stored in microseconds.  <a href="class_ogre_1_1_frame_stats.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">All returned values are either in seconds or frames per second.  <a href="class_ogre_1_1_frame_stats.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_frame_time_controller_value.html">Ogre::FrameTimeControllerValue</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Predefined controller value for getting the latest frame time.  <a href="class_ogre_1_1_frame_time_controller_value.html#details">More...</a><br /></td></tr>
@@ -434,8 +434,6 @@ Macros</h2></td></tr>
 <tr class="separator:gaf27f0d64dfeb225d37a513c253eaa1a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga158d9c8ba6320aa37b7c9c05a2f2fd8f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga158d9c8ba6320aa37b7c9c05a2f2fd8f">OGRE_EXCEPT_EX</a>(code,  num,  desc,  src)&#160;&#160;&#160;        <a class="el" href="class_ogre_1_1_exception_factory.html#ac40de834689ce18de40e0128c8c2ad93">Ogre::ExceptionFactory::throwException</a>( code, num, desc, src, __FILE__, __LINE__ )</td></tr>
 <tr class="separator:ga158d9c8ba6320aa37b7c9c05a2f2fd8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga923615d571c08a38711b4df9fd11d541"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga923615d571c08a38711b4df9fd11d541">OGRE_FRAME_STATS_SAMPLES</a>&#160;&#160;&#160;60</td></tr>
-<tr class="separator:ga923615d571c08a38711b4df9fd11d541"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaafd348d0e141380ecf8d7b57a65652d7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaafd348d0e141380ecf8d7b57a65652d7">OGRE_LOG_THRESHOLD</a>&#160;&#160;&#160;4</td></tr>
 <tr class="separator:gaafd348d0e141380ecf8d7b57a65652d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -956,42 +954,43 @@ Enumerations</h2></td></tr>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caa8c82eab51d1ea6632f2406bbedd3c88">Ogre::ID_SAMPLES_SINGLE_ITERATION_FALLBACK</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca34ceaa287216aa89af50af30a3118781">Ogre::ID_FORCE_MIPMAP_FALLBACK</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca7cd861a63432b75d04469766dc7fed1b">Ogre::ID_READ_BACK_AS_TEXTURE</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca6364b183ab4866caf745f4aab260510d">Ogre::ID_MODE</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca7cd861a63432b75d04469766dc7fed1b">Ogre::ID_READ_BACK_AS_TEXTURE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca52b8050298e35924a2f7482eeb370068">Ogre::ID_SHADOW_NODE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca1526ee526526c370eaa8609edcd211c6">Ogre::ID_NUM_SPLITS</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cac049e1221eecfc65a41bcdc6dcc04fde">Ogre::ID_NUM_STABLE_SPLITS</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca01cab4ae171255fea3acb69f6af303ab">Ogre::ID_NORMAL_OFFSET_BIAS</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cac049e1221eecfc65a41bcdc6dcc04fde">Ogre::ID_NUM_STABLE_SPLITS</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca01cab4ae171255fea3acb69f6af303ab">Ogre::ID_NORMAL_OFFSET_BIAS</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4b5406872612558ed6538c4525ed4a37">Ogre::ID_CONSTANT_BIAS_SCALE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cab2248cdf337cd0f38241de0ec80e6a49">Ogre::ID_PSSM_SPLIT_PADDING</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cafa13ce4bb1eac5cad2e91d0ecd2ef64a">Ogre::ID_PSSM_SPLIT_BLEND</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3ee7785eedf41eb57c76ff8f77db6d6d">Ogre::ID_PSSM_SPLIT_FADE</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cafa13ce4bb1eac5cad2e91d0ecd2ef64a">Ogre::ID_PSSM_SPLIT_BLEND</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3ee7785eedf41eb57c76ff8f77db6d6d">Ogre::ID_PSSM_SPLIT_FADE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca8dd1a0e09c79afa1818de42aa26e7624">Ogre::ID_PSSM_LAMBDA</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca47d48e51e74026d78ad19d31f83dc415">Ogre::ID_SHADOW_MAP_TARGET_TYPE</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caad47abc04c9d9c97cce20fa145b11901">Ogre::ID_SHADOW_MAP_REPEAT</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca152907bc201f5e3e1c40245117c0bedc">Ogre::ID_SHADOW_MAP</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caad47abc04c9d9c97cce20fa145b11901">Ogre::ID_SHADOW_MAP_REPEAT</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca152907bc201f5e3e1c40245117c0bedc">Ogre::ID_SHADOW_MAP</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca78e88cb1ff5664c7f71b83cd0193e200">Ogre::ID_UV</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3c3213a4174892559198604bc0e15f99">Ogre::ID_ARRAY_INDEX</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4d2780ec80e9c4cba88724d6fae8a210">Ogre::ID_FSAA</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3fe9608609faf64f4832aec057798fc4">Ogre::ID_LIGHT</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4d2780ec80e9c4cba88724d6fae8a210">Ogre::ID_FSAA</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca3fe9608609faf64f4832aec057798fc4">Ogre::ID_LIGHT</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cad1cd27fad6157664510498a3871dd93f">Ogre::ID_SPLIT</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caf7fb8a4831adf494ba7e07d1533de5ce">Ogre::ID_HLMS</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cab792b34394a82267b90bfb95e58e7c2a">Ogre::ID_TESSELLATION_HULL_PROGRAM</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca5edb94857707b8497ea03a302fb54d77">Ogre::ID_TESSELLATION_DOMAIN_PROGRAM</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cab792b34394a82267b90bfb95e58e7c2a">Ogre::ID_TESSELLATION_HULL_PROGRAM</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca5edb94857707b8497ea03a302fb54d77">Ogre::ID_TESSELLATION_DOMAIN_PROGRAM</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca0636a88417a574ecb76a76afd1400bdd">Ogre::ID_COMPUTE_PROGRAM</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca08c86b2cb636adea0f2d2aab02d05c9d">Ogre::ID_TESSELLATION_HULL_PROGRAM_REF</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadd7a14a59d6d2a7f5b12bbe25c921a2c">Ogre::ID_TESSELLATION_DOMAIN_PROGRAM_REF</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca6d18dc722a1fb444e68fae16db582676">Ogre::ID_COMPUTE_PROGRAM_REF</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadd7a14a59d6d2a7f5b12bbe25c921a2c">Ogre::ID_TESSELLATION_DOMAIN_PROGRAM_REF</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca6d18dc722a1fb444e68fae16db582676">Ogre::ID_COMPUTE_PROGRAM_REF</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca6e961b61c5a6975da7aa4586b9bed93d">Ogre::ID_GEOMETRY</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca4a1a42db5112a846698a55f320c037f0">Ogre::ID_TESSELLATION_HULL</a>
-, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadb52b83cde1fdaad88ace2fed1e1729b">Ogre::ID_TESSELLATION_DOMAIN</a>
 , <br />
-&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca37361d582dd6509e66a17001acf654c2">Ogre::ID_COMPUTE</a>
+&#160;&#160;<a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadb52b83cde1fdaad88ace2fed1e1729b">Ogre::ID_TESSELLATION_DOMAIN</a>
+, <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181ca37361d582dd6509e66a17001acf654c2">Ogre::ID_COMPUTE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181caf2ce862d2188961440cdb462c5978967">Ogre::ID_SUBROUTINE</a>
 , <a class="el" href="group___general.html#gga30d5439896c2a2362024ec689b1e181cadf89bd427d0fe983ab7007919f4615a0">Ogre::ID_END_BUILTIN_IDS</a>
 <br />
@@ -1323,9 +1322,9 @@ Enumerations</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:ga26025ae896d7a8ce9421d05303ab18c3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga26025ae896d7a8ce9421d05303ab18c3">Ogre::FrameStats::FrameStats</a> ()</td></tr>
 <tr class="separator:ga26025ae896d7a8ce9421d05303ab18c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa6a88b9aef803fda1435c756cbf976a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaa6a88b9aef803fda1435c756cbf976a8">Ogre::FrameStats::addSample</a> (<a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> timeMs)</td></tr>
-<tr class="memdesc:gaa6a88b9aef803fda1435c756cbf976a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new measured time, in <em>microseconds</em>  <a href="group___general.html#gaa6a88b9aef803fda1435c756cbf976a8">More...</a><br /></td></tr>
-<tr class="separator:gaa6a88b9aef803fda1435c756cbf976a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac300f4f8b5673144ca9014ce92c96151"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gac300f4f8b5673144ca9014ce92c96151">Ogre::FrameStats::addSample</a> (const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> timeUs)</td></tr>
+<tr class="memdesc:gac300f4f8b5673144ca9014ce92c96151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new measured time, in <em>microseconds</em>  <a href="group___general.html#gac300f4f8b5673144ca9014ce92c96151">More...</a><br /></td></tr>
+<tr class="separator:gac300f4f8b5673144ca9014ce92c96151"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5a44ad7023ea3086c39d923cd37bddf7"><td class="memTemplParams" colspan="2">template&lt;typename ValueType &gt; </td></tr>
 <tr class="memitem:ga5a44ad7023ea3086c39d923cd37bddf7"><td class="memTemplItemLeft" align="right" valign="top">ValueType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#ga5a44ad7023ea3086c39d923cd37bddf7">Ogre::any_cast</a> (<a class="el" href="class_ogre_1_1_any.html">Any</a> *operand)</td></tr>
 <tr class="separator:ga5a44ad7023ea3086c39d923cd37bddf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1341,24 +1340,47 @@ Functions</h2></td></tr>
 <tr class="memitem:gad78e25bde5597796c07e75d4f857a3cd"><td class="memItemLeft" align="right" valign="top">int _OgreExport&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gad78e25bde5597796c07e75d4f857a3cd">Ogre::findCommandLineOpts</a> (int numargs, char **argv, <a class="el" href="group___general.html#ga1fdbb1354b0aef3b66cfb0f34b8d5fde">UnaryOptionList</a> &amp;unaryOptList, <a class="el" href="group___general.html#ga1349994da6582545bdc210cb63d00e36">BinaryOptionList</a> &amp;binOptList)</td></tr>
 <tr class="memdesc:gad78e25bde5597796c07e75d4f857a3cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locate command-line options of the unary form '-blah' and of the binary form '-blah foo', passing back the index of the next non-option.  <a href="group___general.html#gad78e25bde5597796c07e75d4f857a3cd">More...</a><br /></td></tr>
 <tr class="separator:gad78e25bde5597796c07e75d4f857a3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae435d81f32ecb89467f544ca5b2fe3fd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gae435d81f32ecb89467f544ca5b2fe3fd">Ogre::FrameStats::getAvgFps</a> () const</td></tr>
-<tr class="separator:gae435d81f32ecb89467f544ca5b2fe3fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga731877e8519f22776e533d00512ba9a6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga731877e8519f22776e533d00512ba9a6">Ogre::FrameStats::getAvgTime</a> () const</td></tr>
-<tr class="separator:ga731877e8519f22776e533d00512ba9a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga94dec1675b3606403d560c41d5095f4e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga94dec1675b3606403d560c41d5095f4e">Ogre::FrameStats::getBestTime</a> () const</td></tr>
-<tr class="separator:ga94dec1675b3606403d560c41d5095f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaff08d73def9cb61dd86673225fb33afb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaff08d73def9cb61dd86673225fb33afb">Ogre::FrameStats::getFps</a> () const</td></tr>
-<tr class="separator:gaff08d73def9cb61dd86673225fb33afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga072e1371c14de52412109234ab271348"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga072e1371c14de52412109234ab271348">Ogre::FrameStats::getLastTime</a> () const</td></tr>
-<tr class="separator:ga072e1371c14de52412109234ab271348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadeb89d0a5dcf935dedcebfa14185311d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gadeb89d0a5dcf935dedcebfa14185311d">Ogre::FrameStats::getAllTimeAverage</a> () const</td></tr>
+<tr class="memdesc:gadeb89d0a5dcf935dedcebfa14185311d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the average since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>.  <a href="group___general.html#gadeb89d0a5dcf935dedcebfa14185311d">More...</a><br /></td></tr>
+<tr class="separator:gadeb89d0a5dcf935dedcebfa14185311d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacd07884bec7a51a44c0f6c6d6a528899"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gacd07884bec7a51a44c0f6c6d6a528899">Ogre::FrameStats::getAllTimeAverageFps</a> () const</td></tr>
+<tr class="memdesc:gacd07884bec7a51a44c0f6c6d6a528899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="group___general.html#gadeb89d0a5dcf935dedcebfa14185311d" title="Returns the average since the last reset().">getAllTimeAverage()</a>, but expressed as frames per second instead of seconds.  <a href="group___general.html#gacd07884bec7a51a44c0f6c6d6a528899">More...</a><br /></td></tr>
+<tr class="separator:gacd07884bec7a51a44c0f6c6d6a528899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5d2df9183b307bc645ebc2db0ce59598"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga5d2df9183b307bc645ebc2db0ce59598">Ogre::FrameStats::getBestTime</a> () const</td></tr>
+<tr class="memdesc:ga5d2df9183b307bc645ebc2db0ce59598"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the best frame time in seconds since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>.  <a href="group___general.html#ga5d2df9183b307bc645ebc2db0ce59598">More...</a><br /></td></tr>
+<tr class="separator:ga5d2df9183b307bc645ebc2db0ce59598"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaab8c28c36e4fe3fb9970a9f249d363c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaab8c28c36e4fe3fb9970a9f249d363c2">Ogre::FrameStats::getLastTimeRawMicroseconds</a> () const</td></tr>
 <tr class="separator:gaab8c28c36e4fe3fb9970a9f249d363c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga66b2067eb7f1ba53650c55f00b34de49"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga66b2067eb7f1ba53650c55f00b34de49">Ogre::FrameStats::getWorstTime</a> () const</td></tr>
-<tr class="separator:ga66b2067eb7f1ba53650c55f00b34de49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga14e40178fd544453953760214076797a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga14e40178fd544453953760214076797a">Ogre::FrameStats::getLatestTimeSinceLast</a> () const</td></tr>
+<tr class="memdesc:ga14e40178fd544453953760214076797a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns latest record of the time since last measurement.  <a href="group___general.html#ga14e40178fd544453953760214076797a">More...</a><br /></td></tr>
+<tr class="separator:ga14e40178fd544453953760214076797a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad2729fa307157abd391cb96c01e8fd1f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gad2729fa307157abd391cb96c01e8fd1f">Ogre::FrameStats::getLatestTimeSinceLastFps</a> () const</td></tr>
+<tr class="memdesc:gad2729fa307157abd391cb96c01e8fd1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="group___general.html#ga14e40178fd544453953760214076797a" title="Returns latest record of the time since last measurement.">getLatestTimeSinceLast()</a> but expressed as frames per second instead of seconds.  <a href="group___general.html#gad2729fa307157abd391cb96c01e8fd1f">More...</a><br /></td></tr>
+<tr class="separator:gad2729fa307157abd391cb96c01e8fd1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4688ea4b999f56611db32593344b0982"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982">Ogre::FrameStats::getPercentile95th</a> (bool bUseTime) const</td></tr>
+<tr class="memdesc:ga4688ea4b999f56611db32593344b0982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the 95th percentile, since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>.  <a href="group___general.html#ga4688ea4b999f56611db32593344b0982">More...</a><br /></td></tr>
+<tr class="separator:ga4688ea4b999f56611db32593344b0982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga96f3dab9aa34386786e4431198b45e18"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga96f3dab9aa34386786e4431198b45e18">Ogre::FrameStats::getPercentile99th</a> (bool bUseTime) const</td></tr>
+<tr class="memdesc:ga96f3dab9aa34386786e4431198b45e18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the 99th percentile, since the last reset. See <a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982" title="Gets the 95th percentile, since the last reset().">getPercentile95th()</a>.  <a href="group___general.html#ga96f3dab9aa34386786e4431198b45e18">More...</a><br /></td></tr>
+<tr class="separator:ga96f3dab9aa34386786e4431198b45e18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada72de2008f14816751e753b66056bd2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gada72de2008f14816751e753b66056bd2">Ogre::FrameStats::getPercentileNth</a> (double percentile, bool bUseTime) const</td></tr>
+<tr class="memdesc:gada72de2008f14816751e753b66056bd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the desired percentile, since the last reset.  <a href="group___general.html#gada72de2008f14816751e753b66056bd2">More...</a><br /></td></tr>
+<tr class="separator:gada72de2008f14816751e753b66056bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa4b83bbc9a492610ac3181fad6a497ed"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed">Ogre::FrameStats::getRollingAverage</a> () const</td></tr>
+<tr class="memdesc:gaa4b83bbc9a492610ac3181fad6a497ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the rolling average.  <a href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed">More...</a><br /></td></tr>
+<tr class="separator:gaa4b83bbc9a492610ac3181fad6a497ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae0953c1dce53fbb73ce891ff786c6cff"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gae0953c1dce53fbb73ce891ff786c6cff">Ogre::FrameStats::getRollingAverageFps</a> () const</td></tr>
+<tr class="memdesc:gae0953c1dce53fbb73ce891ff786c6cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed" title="Returns the rolling average.">getRollingAverage()</a>, but expressed as frames per second instead of seconds.  <a href="group___general.html#gae0953c1dce53fbb73ce891ff786c6cff">More...</a><br /></td></tr>
+<tr class="separator:gae0953c1dce53fbb73ce891ff786c6cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeaf54b8bb864b59557c2392ae0a80209"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaeaf54b8bb864b59557c2392ae0a80209">Ogre::FrameStats::getWorstTime</a> () const</td></tr>
+<tr class="memdesc:gaeaf54b8bb864b59557c2392ae0a80209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the worst frame time in seconds since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>.  <a href="group___general.html#gaeaf54b8bb864b59557c2392ae0a80209">More...</a><br /></td></tr>
+<tr class="separator:gaeaf54b8bb864b59557c2392ae0a80209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae1e937aed630bd25446cbef3bdd2cc7c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:gae1e937aed630bd25446cbef3bdd2cc7c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#gae1e937aed630bd25446cbef3bdd2cc7c">Ogre::HashCombine</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> hashSoFar, const T &amp;data)</td></tr>
 <tr class="memdesc:gae1e937aed630bd25446cbef3bdd2cc7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combine hashes with same style as boost::hash_combine.  <a href="group___general.html#gae1e937aed630bd25446cbef3bdd2cc7c">More...</a><br /></td></tr>
 <tr class="separator:gae1e937aed630bd25446cbef3bdd2cc7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga15789cbc6a90856b2a477c3a2081df3c">Ogre::FrameStats::OGRE_DEPRECATED_VER</a> (4) float getFps() const</td></tr>
+<tr class="separator:ga15789cbc6a90856b2a477c3a2081df3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga80a53685c54f25a002db54a9368e02c6"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:ga80a53685c54f25a002db54a9368e02c6"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#ga80a53685c54f25a002db54a9368e02c6">Ogre::operator!=</a> (const <a class="el" href="class_ogre_1_1_com_ptr.html">ComPtr</a>&lt; T &gt; &amp;a, const <a class="el" href="class_ogre_1_1_com_ptr.html">ComPtr</a>&lt; T &gt; &amp;b) <a class="el" href="_ogre_com_ptr_8h.html#aab7a3e30a0294c44ce9f1ab0701b37ee">ASSUME_NOEXCEPT</a></td></tr>
 <tr class="separator:ga80a53685c54f25a002db54a9368e02c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1377,8 +1399,8 @@ Functions</h2></td></tr>
 <tr class="memitem:ga3b1a2ed80c33ac23b8894c35d8029160"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:ga3b1a2ed80c33ac23b8894c35d8029160"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#ga3b1a2ed80c33ac23b8894c35d8029160">Ogre::operator&gt;=</a> (const <a class="el" href="class_ogre_1_1_com_ptr.html">ComPtr</a>&lt; T &gt; &amp;a, const <a class="el" href="class_ogre_1_1_com_ptr.html">ComPtr</a>&lt; T &gt; &amp;b) <a class="el" href="_ogre_com_ptr_8h.html#aab7a3e30a0294c44ce9f1ab0701b37ee">ASSUME_NOEXCEPT</a></td></tr>
 <tr class="separator:ga3b1a2ed80c33ac23b8894c35d8029160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga91166fe4ac997f5e98d7118cac7cddb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga91166fe4ac997f5e98d7118cac7cddb9">Ogre::FrameStats::reset</a> (<a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> timeMs)</td></tr>
-<tr class="separator:ga91166fe4ac997f5e98d7118cac7cddb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga926833cfab123279e27b940b6d5e7cf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">Ogre::FrameStats::reset</a> (<a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> timeUs)</td></tr>
+<tr class="separator:ga926833cfab123279e27b940b6d5e7cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8f81fcfbc204edbd0f2f52519068fe96"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:ga8f81fcfbc204edbd0f2f52519068fe96"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#ga8f81fcfbc204edbd0f2f52519068fe96">Ogre::swap</a> (<a class="el" href="class_ogre_1_1_com_ptr.html">ComPtr</a>&lt; T &gt; &amp;a, <a class="el" href="class_ogre_1_1_com_ptr.html">ComPtr</a>&lt; T &gt; &amp;b)</td></tr>
 <tr class="separator:ga8f81fcfbc204edbd0f2f52519068fe96"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1465,20 +1487,6 @@ Variables</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td>&#160;&#160;&#160;        <a class="el" href="class_ogre_1_1_exception_factory.html#ac40de834689ce18de40e0128c8c2ad93">Ogre::ExceptionFactory::throwException</a>( code, num, desc, src, __FILE__, __LINE__ )</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ga923615d571c08a38711b4df9fd11d541"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga923615d571c08a38711b4df9fd11d541">&#9670;&nbsp;</a></span>OGRE_FRAME_STATS_SAMPLES</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define OGRE_FRAME_STATS_SAMPLES&#160;&#160;&#160;60</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2356,6 +2364,7 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="gga30d5439896c2a2362024ec689b1e181ca4d85f85ee5e384690e1f1324e91e6b1e"></a>ID_SAMPLES_PER_ITERATION&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga30d5439896c2a2362024ec689b1e181caa8c82eab51d1ea6632f2406bbedd3c88"></a>ID_SAMPLES_SINGLE_ITERATION_FALLBACK&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga30d5439896c2a2362024ec689b1e181ca34ceaa287216aa89af50af30a3118781"></a>ID_FORCE_MIPMAP_FALLBACK&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga30d5439896c2a2362024ec689b1e181ca6364b183ab4866caf745f4aab260510d"></a>ID_MODE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga30d5439896c2a2362024ec689b1e181ca7cd861a63432b75d04469766dc7fed1b"></a>ID_READ_BACK_AS_TEXTURE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga30d5439896c2a2362024ec689b1e181ca52b8050298e35924a2f7482eeb370068"></a>ID_SHADOW_NODE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga30d5439896c2a2362024ec689b1e181ca1526ee526526c370eaa8609edcd211c6"></a>ID_NUM_SPLITS&#160;</td><td class="fielddoc"></td></tr>
@@ -3226,8 +3235,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="gaa6a88b9aef803fda1435c756cbf976a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaa6a88b9aef803fda1435c756cbf976a8">&#9670;&nbsp;</a></span>addSample()</h2>
+<a id="gac300f4f8b5673144ca9014ce92c96151"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac300f4f8b5673144ca9014ce92c96151">&#9670;&nbsp;</a></span>addSample()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3238,8 +3247,8 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::FrameStats::addSample </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td>
-          <td class="paramname"><em>timeMs</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td>
+          <td class="paramname"><em>timeUs</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -3251,8 +3260,6 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Adds a new measured time, in <em>microseconds</em> </p>
-
-<p class="reference">References <a class="el" href="group___general.html#ga923615d571c08a38711b4df9fd11d541">OGRE_FRAME_STATS_SAMPLES</a>.</p>
 
 </div>
 </div>
@@ -3414,8 +3421,8 @@ template&lt;typename ValueType &gt; </div>
 
 </div>
 </div>
-<a id="gae435d81f32ecb89467f544ca5b2fe3fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae435d81f32ecb89467f544ca5b2fe3fd">&#9670;&nbsp;</a></span>getAvgFps()</h2>
+<a id="gadeb89d0a5dcf935dedcebfa14185311d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadeb89d0a5dcf935dedcebfa14185311d">&#9670;&nbsp;</a></span>getAllTimeAverage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3424,7 +3431,7 @@ template&lt;typename ValueType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float Ogre::FrameStats::getAvgFps </td>
+          <td class="memname">double Ogre::FrameStats::getAllTimeAverage </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -3437,10 +3444,14 @@ template&lt;typename ValueType &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Returns the average since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>. </p>
+<p>This is what you want if you're benchmarking an entire session, and want to know the average of all samples. </p><dl class="section remark"><dt>Remarks</dt><dd>Multiply by 1000.0 to get the time in milliseconds per frame. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Average time since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>, in seconds. </dd></dl>
+
 </div>
 </div>
-<a id="ga731877e8519f22776e533d00512ba9a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga731877e8519f22776e533d00512ba9a6">&#9670;&nbsp;</a></span>getAvgTime()</h2>
+<a id="gacd07884bec7a51a44c0f6c6d6a528899"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacd07884bec7a51a44c0f6c6d6a528899">&#9670;&nbsp;</a></span>getAllTimeAverageFps()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3449,7 +3460,7 @@ template&lt;typename ValueType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float Ogre::FrameStats::getAvgTime </td>
+          <td class="memname">double Ogre::FrameStats::getAllTimeAverageFps </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -3462,10 +3473,13 @@ template&lt;typename ValueType &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Same as <a class="el" href="group___general.html#gadeb89d0a5dcf935dedcebfa14185311d" title="Returns the average since the last reset().">getAllTimeAverage()</a>, but expressed as frames per second instead of seconds. </p>
+<dl class="section return"><dt>Returns</dt><dd>Average time in FPS. </dd></dl>
+
 </div>
 </div>
-<a id="ga94dec1675b3606403d560c41d5095f4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga94dec1675b3606403d560c41d5095f4e">&#9670;&nbsp;</a></span>getBestTime()</h2>
+<a id="ga5d2df9183b307bc645ebc2db0ce59598"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5d2df9183b307bc645ebc2db0ce59598">&#9670;&nbsp;</a></span>getBestTime()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3474,7 +3488,7 @@ template&lt;typename ValueType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float Ogre::FrameStats::getBestTime </td>
+          <td class="memname">double Ogre::FrameStats::getBestTime </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -3487,57 +3501,9 @@ template&lt;typename ValueType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="gaff08d73def9cb61dd86673225fb33afb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaff08d73def9cb61dd86673225fb33afb">&#9670;&nbsp;</a></span>getFps()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Ogre::FrameStats::getFps </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ga072e1371c14de52412109234ab271348"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga072e1371c14de52412109234ab271348">&#9670;&nbsp;</a></span>getLastTime()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Ogre::FrameStats::getLastTime </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="group___general.html#ga923615d571c08a38711b4df9fd11d541">OGRE_FRAME_STATS_SAMPLES</a>.</p>
+<p>Returns the best frame time in seconds since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Multiply by 1000.0 to get the time in milliseconds per frame. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Best frame time in seconds. </dd></dl>
 
 </div>
 </div>
@@ -3566,8 +3532,8 @@ template&lt;typename ValueType &gt; </div>
 
 </div>
 </div>
-<a id="ga66b2067eb7f1ba53650c55f00b34de49"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga66b2067eb7f1ba53650c55f00b34de49">&#9670;&nbsp;</a></span>getWorstTime()</h2>
+<a id="ga14e40178fd544453953760214076797a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga14e40178fd544453953760214076797a">&#9670;&nbsp;</a></span>getLatestTimeSinceLast()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3576,7 +3542,7 @@ template&lt;typename ValueType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float Ogre::FrameStats::getWorstTime </td>
+          <td class="memname">double Ogre::FrameStats::getLatestTimeSinceLast </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -3588,6 +3554,242 @@ template&lt;typename ValueType &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Returns latest record of the time since last measurement. </p>
+<p>i.e. the time spent between the last two <a class="el" href="group___general.html#gac300f4f8b5673144ca9014ce92c96151" title="Adds a new measured time, in microseconds">addSample()</a> calls.</p>
+<p>This is the same as <a class="el" href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed" title="Returns the rolling average.">getRollingAverage()</a> except this value is too noisy. </p><dl class="section remark"><dt>Remarks</dt><dd>Multiply by 1000.0 to get the time in milliseconds per frame. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Time in seconds spent between the last two <a class="el" href="group___general.html#gac300f4f8b5673144ca9014ce92c96151" title="Adds a new measured time, in microseconds">addSample()</a> calls. </dd></dl>
+
+</div>
+</div>
+<a id="gad2729fa307157abd391cb96c01e8fd1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad2729fa307157abd391cb96c01e8fd1f">&#9670;&nbsp;</a></span>getLatestTimeSinceLastFps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Ogre::FrameStats::getLatestTimeSinceLastFps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Same as <a class="el" href="group___general.html#ga14e40178fd544453953760214076797a" title="Returns latest record of the time since last measurement.">getLatestTimeSinceLast()</a> but expressed as frames per second instead of seconds. </p>
+
+</div>
+</div>
+<a id="ga4688ea4b999f56611db32593344b0982"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4688ea4b999f56611db32593344b0982">&#9670;&nbsp;</a></span>getPercentile95th()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Ogre::FrameStats::getPercentile95th </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bUseTime</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the 95th percentile, since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>For memory constraint reasons, we track framerates in 0.4 steps. Which means we will report percentiles of 0.4fps, 0.8fps, 1.2fps, ... 60.0, 60.4 and so on. <br  />
+ If the framerate often stays above 409.6 fps, we may not be able to accurately calculate the percentiles. </dd>
+<dd>
+Multiply by 1000.0 to get the time in milliseconds per frame. Perform 1.0 / <a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982" title="Gets the 95th percentile, since the last reset().">getPercentile95th()</a> to get the value in frames per second. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bUseTime</td><td><p class="starttd">When true, we divide the total rendering time in percentiles.</p>
+<p class="intertd">The advantage is that it is more homogeneous and biases towards slow frames. The disadvantage is that slow loading times can skew the results too much.</p>
+<p class="intertd">When false, we divide the total number of samples in percentiles.</p>
+<p class="intertd">The disadvantage is that a slow frame (i.e. spikes) matter less when running at 144hz than when running at 60hz.</p>
+<p class="endtd">See <a href="https://www.yosoygames.com.ar/wp/2023/09/youre-calculating-framerate-percentiles-wrong/">https://www.yosoygames.com.ar/wp/2023/09/youre-calculating-framerate-percentiles-wrong/</a> </p>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The frametime in seconds at the requested percentile. </dd></dl>
+
+</div>
+</div>
+<a id="ga96f3dab9aa34386786e4431198b45e18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga96f3dab9aa34386786e4431198b45e18">&#9670;&nbsp;</a></span>getPercentile99th()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Ogre::FrameStats::getPercentile99th </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bUseTime</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the 99th percentile, since the last reset. See <a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982" title="Gets the 95th percentile, since the last reset().">getPercentile95th()</a>. </p>
+
+</div>
+</div>
+<a id="gada72de2008f14816751e753b66056bd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gada72de2008f14816751e753b66056bd2">&#9670;&nbsp;</a></span>getPercentileNth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Ogre::FrameStats::getPercentileNth </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>percentile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bUseTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the desired percentile, since the last reset. </p>
+<p>See <a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982" title="Gets the 95th percentile, since the last reset().">getPercentile95th()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">percentile</td><td>Value in range (0; 1) </td></tr>
+    <tr><td class="paramname">bUseTime</td><td>See <a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982" title="Gets the 95th percentile, since the last reset().">getPercentile95th()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>See <a class="el" href="group___general.html#ga4688ea4b999f56611db32593344b0982" title="Gets the 95th percentile, since the last reset().">getPercentile95th()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="gaa4b83bbc9a492610ac3181fad6a497ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa4b83bbc9a492610ac3181fad6a497ed">&#9670;&nbsp;</a></span>getRollingAverage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Ogre::FrameStats::getRollingAverage </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the rolling average. </p>
+<p>This is what you want to display for an FPS counter; Since the framerate during the last few seconds are what matter the most. </p><dl class="section remark"><dt>Remarks</dt><dd>Multiply by 1000.0 to get the time in milliseconds per frame. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Average time in seconds. </dd></dl>
+
+</div>
+</div>
+<a id="gae0953c1dce53fbb73ce891ff786c6cff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae0953c1dce53fbb73ce891ff786c6cff">&#9670;&nbsp;</a></span>getRollingAverageFps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Ogre::FrameStats::getRollingAverageFps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Same as <a class="el" href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed" title="Returns the rolling average.">getRollingAverage()</a>, but expressed as frames per second instead of seconds. </p>
+<dl class="section return"><dt>Returns</dt><dd>Average time in FPS. </dd></dl>
+
+</div>
+</div>
+<a id="gaeaf54b8bb864b59557c2392ae0a80209"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaeaf54b8bb864b59557c2392ae0a80209">&#9670;&nbsp;</a></span>getWorstTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Ogre::FrameStats::getWorstTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the worst frame time in seconds since the last <a class="el" href="group___general.html#ga926833cfab123279e27b940b6d5e7cf5">reset()</a>. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Multiply by 1000.0 to get the time in milliseconds per frame. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Worst frame time in seconds. </dd></dl>
 
 </div>
 </div>
@@ -3622,6 +3824,33 @@ template&lt;typename T &gt; </div>
 <p>Combine hashes with same style as boost::hash_combine. </p>
 
 <p class="reference">References <a class="el" href="group___general.html#ga2be47c9c5b63cc7860edcec9b22e6f10">Ogre::FastHash()</a>.</p>
+
+</div>
+</div>
+<a id="ga15789cbc6a90856b2a477c3a2081df3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga15789cbc6a90856b2a477c3a2081df3c">&#9670;&nbsp;</a></span>OGRE_DEPRECATED_VER()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::FrameStats::OGRE_DEPRECATED_VER </td>
+          <td>(</td>
+          <td class="paramtype">4&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated:</a></b></dt><dd>since 4.0 in favour of <a class="el" href="group___general.html#gad2729fa307157abd391cb96c01e8fd1f" title="Same as getLatestTimeSinceLast() but expressed as frames per second instead of seconds.">getLatestTimeSinceLastFps()</a>. </dd></dl>
 
 </div>
 </div>
@@ -3805,8 +4034,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="ga91166fe4ac997f5e98d7118cac7cddb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga91166fe4ac997f5e98d7118cac7cddb9">&#9670;&nbsp;</a></span>reset()</h2>
+<a id="ga926833cfab123279e27b940b6d5e7cf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga926833cfab123279e27b940b6d5e7cf5">&#9670;&nbsp;</a></span>reset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3818,7 +4047,7 @@ template&lt;class T &gt; </div>
           <td class="memname">void Ogre::FrameStats::reset </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td>
-          <td class="paramname"><em>timeMs</em></td><td>)</td>
+          <td class="paramname"><em>timeUs</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -3828,8 +4057,6 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="group___general.html#ga923615d571c08a38711b4df9fd11d541">OGRE_FRAME_STATS_SAMPLES</a>.</p>
 
 </div>
 </div>

@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -141,6 +141,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abbef1ac33825efebf54416bc1c79c081"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad372f734fb208f2951c3b3d9ab5af53b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_vulkan_device.html">VulkanDevice</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_gpu_program_manager.html#ad372f734fb208f2951c3b3d9ab5af53b">getDevice</a> () const</td></tr>
 <tr class="separator:ad372f734fb208f2951c3b3d9ab5af53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b306ea95fcb2b93cfa092ebd574c65f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_lightweight_mutex.html">LightweightMutex</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_gpu_program_manager.html#a6b306ea95fcb2b93cfa092ebd574c65f">getMutexRootLayoutHandles</a> ()</td></tr>
+<tr class="separator:a6b306ea95fcb2b93cfa092ebd574c65f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2b51c6fb363603a6cb4e44eb31ac920"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html">VulkanRootLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_gpu_program_manager.html#aa2b51c6fb363603a6cb4e44eb31ac920">getRootLayout</a> (const char *rootLayout, const bool bCompute, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename)</td></tr>
 <tr class="memdesc:aa2b51c6fb363603a6cb4e44eb31ac920"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a cached root layout from the given JSON data, creates a new one if not found.  <a href="class_ogre_1_1_vulkan_gpu_program_manager.html#aa2b51c6fb363603a6cb4e44eb31ac920">More...</a><br /></td></tr>
 <tr class="separator:aa2b51c6fb363603a6cb4e44eb31ac920"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,6 +193,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2fe8ec41a010059eb1c34b1ca4866696 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="class_ogre_1_1_gpu_program_manager.html#aef34af73ab87b0b09d2707ebeb43508d">Microcode</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a2fe8ec41a010059eb1c34b1ca4866696">getMicrocodeFromCache</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source) const</td></tr>
 <tr class="memdesc:a2fe8ec41a010059eb1c34b1ca4866696 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a microcode for a program from the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#a2fe8ec41a010059eb1c34b1ca4866696">More...</a><br /></td></tr>
 <tr class="separator:a2fe8ec41a010059eb1c34b1ca4866696 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f066576e48d2eb157c5ab56014ba7bc inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a8f066576e48d2eb157c5ab56014ba7bc">getMicrocodeFromCache</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source, const <a class="el" href="class_ogre_1_1_gpu_program_manager.html#aef34af73ab87b0b09d2707ebeb43508d">Microcode</a> **outMicrocode) const</td></tr>
+<tr class="memdesc:a8f066576e48d2eb157c5ab56014ba7bc inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a microcode for a program from the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#a8f066576e48d2eb157c5ab56014ba7bc">More...</a><br /></td></tr>
+<tr class="separator:a8f066576e48d2eb157c5ab56014ba7bc inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95ad629bcb4005c9427dbea8e24699d4 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a4697cc0c72aef3b488c7e058adf734ed">ResourcePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a95ad629bcb4005c9427dbea8e24699d4">getResourceByName</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool preferHighLevelPrograms=true)</td></tr>
 <tr class="memdesc:a95ad629bcb4005c9427dbea8e24699d4 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the standard <a class="el" href="class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler.">ResourceManager</a> getResourceByName method.  <a href="class_ogre_1_1_gpu_program_manager.html#a95ad629bcb4005c9427dbea8e24699d4">More...</a><br /></td></tr>
 <tr class="separator:a95ad629bcb4005c9427dbea8e24699d4 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,9 +211,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2fd9c4dda44c05c9ee3676e2bf1ff6f inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#ae2fd9c4dda44c05c9ee3676e2bf1ff6f">isCacheDirty</a> () const</td></tr>
 <tr class="memdesc:ae2fd9c4dda44c05c9ee3676e2bf1ff6f inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the microcodecache changed during the run.  <a href="class_ogre_1_1_gpu_program_manager.html#ae2fd9c4dda44c05c9ee3676e2bf1ff6f">More...</a><br /></td></tr>
 <tr class="separator:ae2fd9c4dda44c05c9ee3676e2bf1ff6f inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7311b1e2dea2bdbf6d1f497edc2c4a0 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#ac7311b1e2dea2bdbf6d1f497edc2c4a0">isMicrocodeAvailableInCache</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source) const</td></tr>
-<tr class="memdesc:ac7311b1e2dea2bdbf6d1f497edc2c4a0 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a microcode is available for a program in the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#ac7311b1e2dea2bdbf6d1f497edc2c4a0">More...</a><br /></td></tr>
-<tr class="separator:ac7311b1e2dea2bdbf6d1f497edc2c4a0 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58e89a2444fd9134b9a87ec6d8f18544 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a58e89a2444fd9134b9a87ec6d8f18544">isSyntaxSupported</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;syntaxCode) const</td></tr>
 <tr class="memdesc:a58e89a2444fd9134b9a87ec6d8f18544 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a given syntax code (e.g.  <a href="class_ogre_1_1_gpu_program_manager.html#a58e89a2444fd9134b9a87ec6d8f18544">More...</a><br /></td></tr>
 <tr class="separator:a58e89a2444fd9134b9a87ec6d8f18544 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,6 +223,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af591ed6c8f4a2a930c10156deb1883de inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#af591ed6c8f4a2a930c10156deb1883de">loadMicrocodeCache</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> stream)</td></tr>
 <tr class="memdesc:af591ed6c8f4a2a930c10156deb1883de inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the microcode cache from disk.  <a href="class_ogre_1_1_gpu_program_manager.html#af591ed6c8f4a2a930c10156deb1883de">More...</a><br /></td></tr>
 <tr class="separator:af591ed6c8f4a2a930c10156deb1883de inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a7b65b3ac7d413999b1baf25de97938 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a7a7b65b3ac7d413999b1baf25de97938">OGRE_DEPRECATED_VER</a> (4) virtual bool isMicrocodeAvailableInCache(const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source) const</td></tr>
+<tr class="memdesc:a7a7b65b3ac7d413999b1baf25de97938 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a microcode is available for a program in the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#a7a7b65b3ac7d413999b1baf25de97938">More...</a><br /></td></tr>
+<tr class="separator:a7a7b65b3ac7d413999b1baf25de97938 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b3d897dacdf542d029ea2d2a5a988c7 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a0b3d897dacdf542d029ea2d2a5a988c7">removeMicrocodeFromCache</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source)</td></tr>
 <tr class="memdesc:a0b3d897dacdf542d029ea2d2a5a988c7 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a microcode for a program from the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#a0b3d897dacdf542d029ea2d2a5a988c7">More...</a><br /></td></tr>
 <tr class="separator:a0b3d897dacdf542d029ea2d2a5a988c7 inherit pub_methods_class_ogre_1_1_gpu_program_manager"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -468,6 +473,31 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b306ea95fcb2b93cfa092ebd574c65f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b306ea95fcb2b93cfa092ebd574c65f">&#9670;&nbsp;</a></span>getMutexRootLayoutHandles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_lightweight_mutex.html">LightweightMutex</a>&amp; Ogre::VulkanGpuProgramManager::getMutexRootLayoutHandles </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>

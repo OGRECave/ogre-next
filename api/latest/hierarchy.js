@@ -952,6 +952,7 @@ var hierarchy =
       [ "Ogre::NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html", null ],
       [ "Ogre::ObjectMemoryManager", "class_ogre_1_1_object_memory_manager.html", null ]
     ] ],
+    [ "Ogre::ArrayPlane", "struct_ogre_1_1_array_plane.html", null ],
     [ "Ogre::ArrayQuaternion", "class_ogre_1_1_array_quaternion.html", null ],
     [ "Ogre::ArrayRay", "class_ogre_1_1_array_ray.html", null ],
     [ "Ogre::ArraySphere", "class_ogre_1_1_array_sphere.html", null ],
@@ -1037,6 +1038,7 @@ var hierarchy =
     [ "Ogre::ConstBufferPoolUser", "class_ogre_1_1_const_buffer_pool_user.html", null ],
     [ "Ogre::ConvexBody", "class_ogre_1_1_convex_body.html", null ],
     [ "Ogre::CPreprocessor", "class_ogre_1_1_c_preprocessor.html", null ],
+    [ "Ogre::CullFrustumPreparedData", "struct_ogre_1_1_cull_frustum_prepared_data.html", null ],
     [ "Ogre::CullFrustumRequest", "struct_ogre_1_1_cull_frustum_request.html", [
       [ "Ogre::UpdateLodRequest", "struct_ogre_1_1_update_lod_request.html", null ]
     ] ],
@@ -1366,6 +1368,8 @@ var hierarchy =
     [ "Ogre::OfflineProfiler", "class_ogre_1_1_offline_profiler.html", null ],
     [ "Ogre::OptimisedUtil", "class_ogre_1_1_optimised_util.html", null ],
     [ "Ogre::PageProvider", "class_ogre_1_1_page_provider.html", null ],
+    [ "Ogre::ParallelHlmsCompileQueue", "class_ogre_1_1_parallel_hlms_compile_queue.html", null ],
+    [ "Ogre::ParallelHlmsCompileQueue::Request", "struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html", null ],
     [ "Ogre::ParamCommand", null, [
       [ "Ogre::AreaEmitter::CmdDepth", "class_ogre_1_1_area_emitter_1_1_cmd_depth.html", null ],
       [ "Ogre::AreaEmitter::CmdHeight", "class_ogre_1_1_area_emitter_1_1_cmd_height.html", null ],
@@ -1767,6 +1771,9 @@ var hierarchy =
     [ "Ogre::VertexBufferDownloadHelper::DownloadData", "struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html", null ],
     [ "Ogre::VertexElement2", "struct_ogre_1_1_vertex_element2.html", null ],
     [ "Ogre::VertexElementSemanticFull", "struct_ogre_1_1_vertex_element_semantic_full.html", null ],
+    [ "Ogre::VertexFormatWarmUpStorage", "class_ogre_1_1_vertex_format_warm_up_storage.html", null ],
+    [ "Ogre::VertexFormatWarmUpStorage::VertexFormatEntry::MaterialRqId", "struct_ogre_1_1_vertex_format_warm_up_storage_1_1_vertex_format_entry_1_1_material_rq_id.html", null ],
+    [ "Ogre::VertexFormatWarmUpStorage::VertexFormatEntry::VFPair", "struct_ogre_1_1_vertex_format_warm_up_storage_1_1_vertex_format_entry_1_1_v_f_pair.html", null ],
     [ "Ogre::VertexShadowMapHelper", "class_ogre_1_1_vertex_shadow_map_helper.html", null ],
     [ "Ogre::VerticesRemapInfo", "struct_ogre_1_1_vertices_remap_info.html", null ],
     [ "Ogre::ViewPoint", "struct_ogre_1_1_view_point.html", null ],
@@ -1841,6 +1848,7 @@ var hierarchy =
     [ "Ogre::VulkanVaoManager::StrideChanger", "struct_ogre_1_1_vulkan_vao_manager_1_1_stride_changer.html", null ],
     [ "Ogre::VulkanVaoManager::Vao::VertexBinding", "struct_ogre_1_1_vulkan_vao_manager_1_1_vao_1_1_vertex_binding.html", null ],
     [ "Ogre::WaitableEvent", "class_ogre_1_1_waitable_event.html", null ],
+    [ "Ogre::WarmUpHelper", "class_ogre_1_1_warm_up_helper.html", null ],
     [ "Ogre::WindowEventListener", "class_ogre_1_1_window_event_listener.html", null ],
     [ "Ogre::WindowEventUtilities", "class_ogre_1_1_window_event_utilities.html", null ],
     [ "Ogre::Workarounds", "struct_ogre_1_1_workarounds.html", null ],

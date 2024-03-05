@@ -42,6 +42,7 @@ var class_ogre_1_1_renderable =
     [ "postRender", "class_ogre_1_1_renderable.html#a77230eea8136b7c296cc0a5db1dba9ee", null ],
     [ "preRender", "class_ogre_1_1_renderable.html#afcbf4cb36d5911a9d40a40c57e94f23b", null ],
     [ "removeCustomParameter", "class_ogre_1_1_renderable.html#a0c726a0326e8a7d9e80d030541b6bddf", null ],
+    [ "resetMaterialLod", "class_ogre_1_1_renderable.html#a857513ea28263faf0695009ded6c53fc", null ],
     [ "setCustomParameter", "class_ogre_1_1_renderable.html#a572c0331ef2ec650d56063fdc17435f5", null ],
     [ "setDatablock", "class_ogre_1_1_renderable.html#a21d95904b985b26f99f88696958891c3", null ],
     [ "setDatablock", "class_ogre_1_1_renderable.html#a8096988a16728c8b7e32495146111c62", null ],

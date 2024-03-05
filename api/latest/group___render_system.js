@@ -42,6 +42,24 @@ var group___render_system =
       [ "isStillOutstanding", "class_ogre_1_1_hardware_occlusion_query.html#a8709ecea26514056be6d7ad0444bc4ed", null ],
       [ "pullOcclusionQuery", "class_ogre_1_1_hardware_occlusion_query.html#ae30ceda53d771c5db266fdcfd14e6c9c", null ]
     ] ],
+    [ "ParallelHlmsCompileQueue", "class_ogre_1_1_parallel_hlms_compile_queue.html", [
+      [ "Request", "struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html", [
+        [ "finalHash", "struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html#a9e94d94effb2702f255d8395b1120950", null ],
+        [ "passCache", "struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html#aed4a6128776400f9f6fc385b22826e40", null ],
+        [ "queuedRenderable", "struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html#a68594295b1af77d5638c5eada57528c5", null ],
+        [ "renderableHash", "struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html#a8c95446916a3b4a33401d4a590a6e359", null ],
+        [ "reservedStubEntry", "struct_ogre_1_1_parallel_hlms_compile_queue_1_1_request.html#af0c1f1afd367cca41f1875a760aa4b78", null ]
+      ] ],
+      [ "ParallelHlmsCompileQueue", "class_ogre_1_1_parallel_hlms_compile_queue.html#ae38048ebb76edabb33f61e0745d796d0", null ],
+      [ "fireWarmUpParallel", "class_ogre_1_1_parallel_hlms_compile_queue.html#a392eb4d02e34df8841097ac7be82b852", null ],
+      [ "pushRequest", "class_ogre_1_1_parallel_hlms_compile_queue.html#aaf595df16ab16cb9459154049bdd86d1", null ],
+      [ "pushWarmUpRequest", "class_ogre_1_1_parallel_hlms_compile_queue.html#aac24523f28c40d659b84f80d2a43fd95", null ],
+      [ "start", "class_ogre_1_1_parallel_hlms_compile_queue.html#a6e2a94362f7bae8919e3074587b252b9", null ],
+      [ "stopAndWait", "class_ogre_1_1_parallel_hlms_compile_queue.html#ab6f85d23748cecb3d025f464a928bf2a", null ],
+      [ "updateThread", "class_ogre_1_1_parallel_hlms_compile_queue.html#a7a6de65b48a5b5fd42858fd2459b2680", null ],
+      [ "updateWarmUpThread", "class_ogre_1_1_parallel_hlms_compile_queue.html#a03a265cea3e505ec77e302b9fbae9bdb", null ],
+      [ "warmUpSerial", "class_ogre_1_1_parallel_hlms_compile_queue.html#ad304fe38d2b602e9840ab2d33dacc788", null ]
+    ] ],
     [ "QueuedRenderable", "struct_ogre_1_1_queued_renderable.html", [
       [ "QueuedRenderable", "struct_ogre_1_1_queued_renderable.html#a824405b401150a9fe60811fc7c9fe8c7", null ],
       [ "QueuedRenderable", "struct_ogre_1_1_queued_renderable.html#a1cfc9e5b48ec4ef2891e7e92237dac26", null ],
@@ -63,6 +81,8 @@ var group___render_system =
       ] ],
       [ "RenderQueue", "class_ogre_1_1_render_queue.html#abb653f126d0d03d73e28468a89c3c24d", null ],
       [ "~RenderQueue", "class_ogre_1_1_render_queue.html#abeedbfecbb98d295978226f18f1ba5bd", null ],
+      [ "_compileShadersThread", "class_ogre_1_1_render_queue.html#ad6e291d9363608ae01f1aba7d90c8ee7", null ],
+      [ "_warmUpShadersThread", "class_ogre_1_1_render_queue.html#a3a989e7043b62af6ac712bfbf9968813", null ],
       [ "addRenderableV1", "class_ogre_1_1_render_queue.html#a504e8bf8d6496ea3b88ead7e6cef8aa0", null ],
       [ "addRenderableV2", "class_ogre_1_1_render_queue.html#abf6d23ea6dfa5a14cbb3052d30a7332f", null ],
       [ "clear", "class_ogre_1_1_render_queue.html#a82cdde6cd9331f28acff91089e95ba68", null ],
@@ -75,7 +95,8 @@ var group___render_system =
       [ "renderSingleObject", "class_ogre_1_1_render_queue.html#a7cdd43e3bd6ce4350d4a4b66b58a934b", null ],
       [ "setRenderQueueMode", "class_ogre_1_1_render_queue.html#a70f6d85d6cde43a1b4badf25ed09fca5", null ],
       [ "setSortRenderQueue", "class_ogre_1_1_render_queue.html#aeb41ed3f50a9e7e270d81d045e8a23e6", null ],
-      [ "warmUpShaders", "class_ogre_1_1_render_queue.html#acfbbd9218d9c134357c12e12c32733f6", null ]
+      [ "warmUpShadersCollect", "class_ogre_1_1_render_queue.html#af8a1ce899163064e71e176bb7be8b87c", null ],
+      [ "warmUpShadersTrigger", "class_ogre_1_1_render_queue.html#ae2a7ef1b3b7b9f936ed6e97be9bab31a", null ]
     ] ],
     [ "RenderQueueListener", "class_ogre_1_1_render_queue_listener.html", [
       [ "~RenderQueueListener", "class_ogre_1_1_render_queue_listener.html#aca4ab8444c09caeeff186213a98beb89", null ],
@@ -280,6 +301,7 @@ var group___render_system =
       [ "setWBufferEnabled", "class_ogre_1_1_render_system.html#a01c339f6e89d82b526fb7725424a4263", null ],
       [ "shutdown", "class_ogre_1_1_render_system.html#a46a77118396fb950d34f0124b4e6e4a2", null ],
       [ "startGpuDebuggerFrameCapture", "class_ogre_1_1_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e", null ],
+      [ "supportsMultithreadedShaderCompliation", "class_ogre_1_1_render_system.html#a5e64cf633bd9dfcea3bff39e447bac20", null ],
       [ "unregisterThread", "class_ogre_1_1_render_system.html#a64138779fab3c6b157f2de40c3831e10", null ],
       [ "updateCompositorManager", "class_ogre_1_1_render_system.html#a41328026d8be0e7143402a914f707cf9", null ],
       [ "useCustomRenderSystemCapabilities", "class_ogre_1_1_render_system.html#a6219a2d1f92be5548983a03de9522365", null ],

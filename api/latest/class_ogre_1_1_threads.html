@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -109,6 +109,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ad16e7506cedef68e690d752294608c1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf52b79a8c1ff03e2ae1ec068c7ca1d9"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_threads.html#acf52b79a8c1ff03e2ae1ec068c7ca1d9">GetTls</a> (<a class="el" href="namespace_ogre.html#ad7ea3be12f3852965f47072336fa7e97">TlsHandle</a> tlsHandle)</td></tr>
 <tr class="separator:acf52b79a8c1ff03e2ae1ec068c7ca1d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d5fa8c811454d4a53507fca141521c7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_threads.html#a5d5fa8c811454d4a53507fca141521c7">SetThreadName</a> (<a class="el" href="class_ogre_1_1_thread_handle.html">ThreadHandle</a> *thread, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name)</td></tr>
+<tr class="memdesc:a5d5fa8c811454d4a53507fca141521c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the name to the given thread.  <a href="class_ogre_1_1_threads.html#a5d5fa8c811454d4a53507fca141521c7">More...</a><br /></td></tr>
+<tr class="separator:a5d5fa8c811454d4a53507fca141521c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a516061569e86ae056c680017cf52fc6d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_threads.html#a516061569e86ae056c680017cf52fc6d">SetTls</a> (<a class="el" href="namespace_ogre.html#ad7ea3be12f3852965f47072336fa7e97">TlsHandle</a> tlsHandle, void *value)</td></tr>
 <tr class="separator:a516061569e86ae056c680017cf52fc6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80458b75def930997652129abcf9c24e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_threads.html#a80458b75def930997652129abcf9c24e">Sleep</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> milliseconds)</td></tr>
@@ -269,6 +272,53 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d5fa8c811454d4a53507fca141521c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d5fa8c811454d4a53507fca141521c7">&#9670;&nbsp;</a></span>SetThreadName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool Ogre::Threads::SetThreadName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_thread_handle.html">ThreadHandle</a> *&#160;</td>
+          <td class="paramname"><em>thread</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the name to the given thread. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>For best performance, call this function from the same thread setting the current name. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">thread</td><td>The thread to set the name. If nullptr, we will attempt to set the name to the calling thread. </td></tr>
+    <tr><td class="paramname">name</td><td>Name for the given thread. The name may be truncated on some platforms if it's too large. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
 </div>
 </div>

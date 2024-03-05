@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -90,6 +90,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_hlms_disk_cache.html','
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_ogre_1_1_hlms_disk_cache-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -132,8 +133,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a50047d59e56d978a4374faf8c01cadc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff7bf04d41d41e9b1a96b3236da1fcbc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_disk_cache.html#aff7bf04d41d41e9b1a96b3236da1fcbc">~HlmsDiskCache</a> ()</td></tr>
 <tr class="separator:aff7bf04d41d41e9b1a96b3236da1fcbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a730367b3c5eae7a21ae42a632d79932f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_disk_cache.html#a730367b3c5eae7a21ae42a632d79932f">applyTo</a> (<a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms)</td></tr>
-<tr class="separator:a730367b3c5eae7a21ae42a632d79932f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d635f3fac7d4242c1bc90f715b77f88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_disk_cache.html#a8d635f3fac7d4242c1bc90f715b77f88">applyTo</a> (<a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms, size_t numThreads)</td></tr>
+<tr class="separator:a8d635f3fac7d4242c1bc90f715b77f88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fad253e5fab5577a12ee44a825a4e9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_disk_cache.html#a0fad253e5fab5577a12ee44a825a4e9e">clearCache</a> ()</td></tr>
 <tr class="separator:a0fad253e5fab5577a12ee44a825a4e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfa0c18337b3b7e59a9e28ae7375bf4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_disk_cache.html#abfa0c18337b3b7e59a9e28ae7375bf4a">copyFrom</a> (<a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *hlms)</td></tr>
@@ -158,6 +159,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a31d8d520055ba11c04c601851f1b20ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1d44465001a7a0b3be0f54876102f3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_disk_cache.html#af1d44465001a7a0b3be0f54876102f3a">saveTo</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;dataStream)</td></tr>
 <tr class="separator:af1d44465001a7a0b3be0f54876102f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a8dade80181a0e5a800aed19d52e4531c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_disk_cache.html#a8dade80181a0e5a800aed19d52e4531c">_compileShadersThread</a> (CompilerJobParams &amp;threadHandle, size_t threadIdx)</td></tr>
+<tr class="separator:a8dade80181a0e5a800aed19d52e4531c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -243,7 +249,7 @@ Public Attributes</h2></td></tr>
 <div class="line">                            some stalls at runtime, due to the driver translating the Microcode</div>
 <div class="line">                            to the <span class="keyword">internal</span> ISA.</div>
 <div class="ttc" id="aclass_ogre_1_1_hlms_disk_cache_html_a50047d59e56d978a4374faf8c01cadc8"><div class="ttname"><a href="class_ogre_1_1_hlms_disk_cache.html#a50047d59e56d978a4374faf8c01cadc8">Ogre::HlmsDiskCache::HlmsDiskCache</a></div><div class="ttdeci">HlmsDiskCache(HlmsManager *hlmsManager)</div></div>
-<div class="ttc" id="astruct_ogre_1_1_hlms_disk_cache_1_1_cache_html_a935b276d0c98143261fa2627676a6648"><div class="ttname"><a href="struct_ogre_1_1_hlms_disk_cache_1_1_cache.html#a935b276d0c98143261fa2627676a6648">Ogre::HlmsDiskCache::Cache::pso</a></div><div class="ttdeci">PsoVec pso</div><div class="ttdef"><b>Definition:</b> OgreHlmsDiskCache.h:166</div></div>
+<div class="ttc" id="astruct_ogre_1_1_hlms_disk_cache_1_1_cache_html_a935b276d0c98143261fa2627676a6648"><div class="ttname"><a href="struct_ogre_1_1_hlms_disk_cache_1_1_cache.html#a935b276d0c98143261fa2627676a6648">Ogre::HlmsDiskCache::Cache::pso</a></div><div class="ttdeci">PsoVec pso</div><div class="ttdef"><b>Definition:</b> OgreHlmsDiskCache.h:168</div></div>
 </div><!-- fragment --> </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="af8fa1f4d66f6a50812c86914679178dc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af8fa1f4d66f6a50812c86914679178dc">&#9670;&nbsp;</a></span>PsoVec</h2>
@@ -310,8 +316,44 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a730367b3c5eae7a21ae42a632d79932f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a730367b3c5eae7a21ae42a632d79932f">&#9670;&nbsp;</a></span>applyTo()</h2>
+<a id="a8dade80181a0e5a800aed19d52e4531c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8dade80181a0e5a800aed19d52e4531c">&#9670;&nbsp;</a></span>_compileShadersThread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Ogre::HlmsDiskCache::_compileShadersThread </td>
+          <td>(</td>
+          <td class="paramtype">CompilerJobParams &amp;&#160;</td>
+          <td class="paramname"><em>threadHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>threadIdx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8d635f3fac7d4242c1bc90f715b77f88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d635f3fac7d4242c1bc90f715b77f88">&#9670;&nbsp;</a></span>applyTo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -320,8 +362,18 @@ Public Attributes</h2></td></tr>
           <td class="memname">void Ogre::HlmsDiskCache::applyTo </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_hlms.html">Hlms</a> *&#160;</td>
-          <td class="paramname"><em>hlms</em></td><td>)</td>
+          <td class="paramname"><em>hlms</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>numThreads</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

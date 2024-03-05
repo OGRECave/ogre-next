@@ -135,6 +135,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "setStencilBufferParams", "class_ogre_1_1_vulkan_render_system.html#a09ef8ec23ef96f72756915dbbf79e381", null ],
     [ "sharedVkInitialization", "class_ogre_1_1_vulkan_render_system.html#acf4ba4fa8ff3b5387cd18f617538516f", null ],
     [ "shutdown", "class_ogre_1_1_vulkan_render_system.html#a2c7caf82ac2d6d9ddb335f0ee0effb10", null ],
+    [ "supportsMultithreadedShaderCompliation", "class_ogre_1_1_vulkan_render_system.html#a926fe6f398b994c0cf1468bf8625b8a2", null ],
     [ "unregisterThread", "class_ogre_1_1_vulkan_render_system.html#a6cd050d0488813ce414f5a2bb3e99f38", null ],
     [ "validateConfigOptions", "class_ogre_1_1_vulkan_render_system.html#a20202748993a987073131d6b8ea43c6a", null ],
     [ "validateSampleDescription", "class_ogre_1_1_vulkan_render_system.html#a781d712f91d633b7f0827ec78d5ffb7d", null ]

@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -175,6 +175,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2fe8ec41a010059eb1c34b1ca4866696"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="class_ogre_1_1_gpu_program_manager.html#aef34af73ab87b0b09d2707ebeb43508d">Microcode</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a2fe8ec41a010059eb1c34b1ca4866696">getMicrocodeFromCache</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source) const</td></tr>
 <tr class="memdesc:a2fe8ec41a010059eb1c34b1ca4866696"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a microcode for a program from the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#a2fe8ec41a010059eb1c34b1ca4866696">More...</a><br /></td></tr>
 <tr class="separator:a2fe8ec41a010059eb1c34b1ca4866696"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f066576e48d2eb157c5ab56014ba7bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a8f066576e48d2eb157c5ab56014ba7bc">getMicrocodeFromCache</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source, const <a class="el" href="class_ogre_1_1_gpu_program_manager.html#aef34af73ab87b0b09d2707ebeb43508d">Microcode</a> **outMicrocode) const</td></tr>
+<tr class="memdesc:a8f066576e48d2eb157c5ab56014ba7bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a microcode for a program from the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#a8f066576e48d2eb157c5ab56014ba7bc">More...</a><br /></td></tr>
+<tr class="separator:a8f066576e48d2eb157c5ab56014ba7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95ad629bcb4005c9427dbea8e24699d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a4697cc0c72aef3b488c7e058adf734ed">ResourcePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a95ad629bcb4005c9427dbea8e24699d4">getResourceByName</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool preferHighLevelPrograms=true)</td></tr>
 <tr class="memdesc:a95ad629bcb4005c9427dbea8e24699d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the standard <a class="el" href="class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler.">ResourceManager</a> getResourceByName method.  <a href="class_ogre_1_1_gpu_program_manager.html#a95ad629bcb4005c9427dbea8e24699d4">More...</a><br /></td></tr>
 <tr class="separator:a95ad629bcb4005c9427dbea8e24699d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,9 +193,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2fd9c4dda44c05c9ee3676e2bf1ff6f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#ae2fd9c4dda44c05c9ee3676e2bf1ff6f">isCacheDirty</a> () const</td></tr>
 <tr class="memdesc:ae2fd9c4dda44c05c9ee3676e2bf1ff6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the microcodecache changed during the run.  <a href="class_ogre_1_1_gpu_program_manager.html#ae2fd9c4dda44c05c9ee3676e2bf1ff6f">More...</a><br /></td></tr>
 <tr class="separator:ae2fd9c4dda44c05c9ee3676e2bf1ff6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7311b1e2dea2bdbf6d1f497edc2c4a0"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#ac7311b1e2dea2bdbf6d1f497edc2c4a0">isMicrocodeAvailableInCache</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source) const</td></tr>
-<tr class="memdesc:ac7311b1e2dea2bdbf6d1f497edc2c4a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a microcode is available for a program in the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#ac7311b1e2dea2bdbf6d1f497edc2c4a0">More...</a><br /></td></tr>
-<tr class="separator:ac7311b1e2dea2bdbf6d1f497edc2c4a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58e89a2444fd9134b9a87ec6d8f18544"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a58e89a2444fd9134b9a87ec6d8f18544">isSyntaxSupported</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;syntaxCode) const</td></tr>
 <tr class="memdesc:a58e89a2444fd9134b9a87ec6d8f18544"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a given syntax code (e.g.  <a href="class_ogre_1_1_gpu_program_manager.html#a58e89a2444fd9134b9a87ec6d8f18544">More...</a><br /></td></tr>
 <tr class="separator:a58e89a2444fd9134b9a87ec6d8f18544"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -205,6 +205,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af591ed6c8f4a2a930c10156deb1883de"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#af591ed6c8f4a2a930c10156deb1883de">loadMicrocodeCache</a> (<a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> stream)</td></tr>
 <tr class="memdesc:af591ed6c8f4a2a930c10156deb1883de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the microcode cache from disk.  <a href="class_ogre_1_1_gpu_program_manager.html#af591ed6c8f4a2a930c10156deb1883de">More...</a><br /></td></tr>
 <tr class="separator:af591ed6c8f4a2a930c10156deb1883de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a7b65b3ac7d413999b1baf25de97938"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a7a7b65b3ac7d413999b1baf25de97938">OGRE_DEPRECATED_VER</a> (4) virtual bool isMicrocodeAvailableInCache(const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source) const</td></tr>
+<tr class="memdesc:a7a7b65b3ac7d413999b1baf25de97938"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a microcode is available for a program in the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#a7a7b65b3ac7d413999b1baf25de97938">More...</a><br /></td></tr>
+<tr class="separator:a7a7b65b3ac7d413999b1baf25de97938"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b3d897dacdf542d029ea2d2a5a988c7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program_manager.html#a0b3d897dacdf542d029ea2d2a5a988c7">removeMicrocodeFromCache</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source)</td></tr>
 <tr class="memdesc:a0b3d897dacdf542d029ea2d2a5a988c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a microcode for a program from the microcode cache.  <a href="class_ogre_1_1_gpu_program_manager.html#a0b3d897dacdf542d029ea2d2a5a988c7">More...</a><br /></td></tr>
 <tr class="separator:a0b3d897dacdf542d029ea2d2a5a988c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -904,7 +907,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <a id="a2fe8ec41a010059eb1c34b1ca4866696"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2fe8ec41a010059eb1c34b1ca4866696">&#9670;&nbsp;</a></span>getMicrocodeFromCache()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fe8ec41a010059eb1c34b1ca4866696">&#9670;&nbsp;</a></span>getMicrocodeFromCache() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -928,12 +931,51 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns a microcode for a program from the microcode cache. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Deprecated: Use <a class="el" href="class_ogre_1_1_gpu_program_manager.html#a2fe8ec41a010059eb1c34b1ca4866696" title="Returns a microcode for a program from the microcode cache.">getMicrocodeFromCache()</a></p>
+<p>This version is subject to race conditions. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the program. </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a8f066576e48d2eb157c5ab56014ba7bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f066576e48d2eb157c5ab56014ba7bc">&#9670;&nbsp;</a></span>getMicrocodeFromCache() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::GpuProgramManager::getMicrocodeFromCache </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_gpu_program_manager.html#aef34af73ab87b0b09d2707ebeb43508d">Microcode</a> **&#160;</td>
+          <td class="paramname"><em>outMicrocode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves a microcode for a program from the microcode cache. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">source</td><td>The key of the shader to obtain </td></tr>
+    <tr><td class="paramname">outMicrocode</td><td>The microcode being queried. Not nullptr if we return true, nullptr otherwise. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if the microcode exists in cache. False otherwise </dd></dl>
 
 </div>
 </div>
@@ -1122,40 +1164,6 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if the microcodecache changed during the run. </p>
-
-</div>
-</div>
-<a id="ac7311b1e2dea2bdbf6d1f497edc2c4a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7311b1e2dea2bdbf6d1f497edc2c4a0">&#9670;&nbsp;</a></span>isMicrocodeAvailableInCache()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Ogre::GpuProgramManager::isMicrocodeAvailableInCache </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>source</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Check if a microcode is available for a program in the microcode cache. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The name of the program. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -1356,6 +1364,33 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a7a7b65b3ac7d413999b1baf25de97938"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a7b65b3ac7d413999b1baf25de97938">&#9670;&nbsp;</a></span>OGRE_DEPRECATED_VER()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::GpuProgramManager::OGRE_DEPRECATED_VER </td>
+          <td>(</td>
+          <td class="paramtype">4&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const &amp;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if a microcode is available for a program in the microcode cache. </p>
+<p>Deprecated: Use <a class="el" href="class_ogre_1_1_gpu_program_manager.html#a2fe8ec41a010059eb1c34b1ca4866696" title="Returns a microcode for a program from the microcode cache.">getMicrocodeFromCache()</a></p>
+<p>This version is subject to race conditions. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the program. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a0b3d897dacdf542d029ea2d2a5a988c7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b3d897dacdf542d029ea2d2a5a988c7">&#9670;&nbsp;</a></span>removeMicrocodeFromCache()</h2>
 
@@ -1441,6 +1476,15 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Set if the microcode of a shader should be saved to a cache. </p>
+<p>Q: Can I bundle the microcode cache created in one system, into another system?</p><ul>
+<li>Direct3D11: Yes.</li>
+<li>OpenGL: No. It must be generated on target machine.</li>
+<li>Metal: N/A (microcode cache unsupported).</li>
+<li>Vulkan: Yes (even created on PC and bundled into Android).</li>
+</ul>
+<p>Beware in all cases, a microcode cache created by a Release build may not be the same as one created by a Debug build.</p>
+<p>In the cases where it can be bundled to different HW, beware if there are HW feature differences that cause different shaders to be generated (or, where applicable, different <a class="el" href="class_ogre_1_1_root.html" title="The root class of the Ogre system.">Root</a> Layouts) then the bundled microcode cache may become fully or partially useless as more misses will be generated.</p>
+<p>In those cases it's possible to merge those caches (if you have access to both systems) and bundle the larger cache to everyone. </p>
 
 </div>
 </div>

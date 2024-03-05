@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -137,6 +137,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8633b1cdc6a1e9a0d3bd31e083ac20c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_target_def.html#a8633b1cdc6a1e9a0d3bd31e083ac20c5">setShadowMapSupportedLightTypes</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> types)</td></tr>
 <tr class="separator:a8633b1cdc6a1e9a0d3bd31e083ac20c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe6a03c3d3be1fd9ec2fb778f18b104f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_target_def.html#abe6a03c3d3be1fd9ec2fb778f18b104f">setTargetLevelBarrier</a> (bool bBarrier)</td></tr>
+<tr class="memdesc:abe6a03c3d3be1fd9ec2fb778f18b104f"><td class="mdescLeft">&#160;</td><td class="mdescRight">When enabled, we will gather all passes contained in this target def and issue one barrier for all of them; instead of having (potentially, worst case) one barrier for every pass.  <a href="class_ogre_1_1_compositor_target_def.html#abe6a03c3d3be1fd9ec2fb778f18b104f">More...</a><br /></td></tr>
 <tr class="separator:abe6a03c3d3be1fd9ec2fb778f18b104f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -524,6 +525,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>When enabled, we will gather all passes contained in this target def and issue one barrier for all of them; instead of having (potentially, worst case) one barrier for every pass. </p>
+<p>This is much more efficient, but it can't always be done because we assume subsequent passes will only change the same resource once (or multiple times to the same destination layout).</p>
+<p>This setting is of particular importance on mobile. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bBarrier</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

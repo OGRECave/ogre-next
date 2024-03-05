@@ -3,6 +3,7 @@ var class_ogre_1_1_texture_definition_base =
     [ "BufferDefinition", "struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html", "struct_ogre_1_1_texture_definition_base_1_1_buffer_definition" ],
     [ "TextureDefinition", "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html", "class_ogre_1_1_texture_definition_base_1_1_texture_definition" ],
     [ "BufferDefinitionVec", "class_ogre_1_1_texture_definition_base.html#a7c2e6e1337065e18f6bc0abe8cd6428a", null ],
+    [ "NameToChannelMap", "class_ogre_1_1_texture_definition_base.html#abfede534f6fd89bc49484338576ed45c", null ],
     [ "PixelFormatGpuVec", "class_ogre_1_1_texture_definition_base.html#ae3960c5889208ca2c38c96796d403a52", null ],
     [ "TextureDefinitionVec", "class_ogre_1_1_texture_definition_base.html#aef33c6f04104697fc6ffc789c1f0f2f5", null ],
     [ "TextureSource", "class_ogre_1_1_texture_definition_base.html#ae70fe8c6c0e24395c1f94647c04fb079", [
@@ -12,6 +13,8 @@ var class_ogre_1_1_texture_definition_base =
       [ "NUM_TEXTURES_SOURCES", "class_ogre_1_1_texture_definition_base.html#ae70fe8c6c0e24395c1f94647c04fb079a294f4db86ffc1938eb1fd64b4c90a15a", null ]
     ] ],
     [ "TextureDefinitionBase", "class_ogre_1_1_texture_definition_base.html#a62849c288ce310d458a72621f58dd739", null ],
+    [ "_addTextureDefinition", "class_ogre_1_1_texture_definition_base.html#abca1966c2378e0b15cc2f8fdd92650e0", null ],
+    [ "_addTextureSourceName", "class_ogre_1_1_texture_definition_base.html#a11a7653b792a2911f384a6747073f96e", null ],
     [ "addBufferDefinition", "class_ogre_1_1_texture_definition_base.html#a0ea411a6f2944383e0c023ce79847dc3", null ],
     [ "addBufferInput", "class_ogre_1_1_texture_definition_base.html#ac5068bdfeb8b358179d1039692b4bc80", null ],
     [ "addRenderTextureView", "class_ogre_1_1_texture_definition_base.html#a2f407df3a3024b3d37ca902f8b9c3eb6", null ],
@@ -21,6 +24,7 @@ var class_ogre_1_1_texture_definition_base =
     [ "createBuffers", "class_ogre_1_1_texture_definition_base.html#ac9ed18fbde6ac2dbf557bc38afd2fff3", null ],
     [ "createTexture", "class_ogre_1_1_texture_definition_base.html#aaf3902b6622e554b6f618cf26b57e3b0", null ],
     [ "createTextures", "class_ogre_1_1_texture_definition_base.html#a3dd5a18207b6fca4f39c679c1c82ff77", null ],
+    [ "decodeTexSource", "class_ogre_1_1_texture_definition_base.html#a7a97c936e9d7566dd2ba9499f8c012fe", null ],
     [ "destroyBuffers", "class_ogre_1_1_texture_definition_base.html#a491f3ccf401762343436ee19f13632a3", null ],
     [ "destroyTextures", "class_ogre_1_1_texture_definition_base.html#ac1d4d17aeeacb92b400d2ff31c6cdea0", null ],
     [ "getLocalBufferDefinitions", "class_ogre_1_1_texture_definition_base.html#aff0d00ae27c2b95faf9248a3c5558d18", null ],

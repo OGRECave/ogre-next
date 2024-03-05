@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -111,34 +111,42 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <dd><a class="anchor" id="_deprecated000002"></a>use <a class="el" href="class_ogre_1_1_compositor_workspace.html#a292165f698ef7585024be087f526e621">getListeners()</a> instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_compositor_workspace.html#aa4cbcc3ff70190a4a26dc6ae55cd8ebb">Ogre::CompositorWorkspace::setListener</a>  (<a class="el" href="class_ogre_1_1_compositor_workspace_listener.html">CompositorWorkspaceListener</a> *listener)</dt>
 <dd><a class="anchor" id="_deprecated000001"></a>use <a class="el" href="class_ogre_1_1_compositor_workspace.html#a8ea8f3823022091ed1ae79137ff8e38e">addListener()</a> and <a class="el" href="class_ogre_1_1_compositor_workspace.html#a69dfe3698baa1238a7e09ba6832fb237">removeListener()</a> instead  </dd>
+<dt>Member <a class="el" href="group___general.html#ga15789cbc6a90856b2a477c3a2081df3c">Ogre::FrameStats::OGRE_DEPRECATED_VER</a>  (4) float getFps() const</dt>
+<dd><a class="anchor" id="_deprecated000011"></a>since 4.0 in favour of <a class="el" href="group___general.html#gad2729fa307157abd391cb96c01e8fd1f" title="Same as getLatestTimeSinceLast() but expressed as frames per second instead of seconds.">getLatestTimeSinceLastFps()</a>.  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_frame_stats.html#ga15789cbc6a90856b2a477c3a2081df3c">Ogre::FrameStats::OGRE_DEPRECATED_VER</a>  (4) float getAvgFps() const</dt>
+<dd><a class="anchor" id="_deprecated000012"></a>since 4.0 in favour of <a class="el" href="group___general.html#gae0953c1dce53fbb73ce891ff786c6cff" title="Same as getRollingAverage(), but expressed as frames per second instead of seconds.">getRollingAverageFps()</a>.  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_frame_stats.html#ga15789cbc6a90856b2a477c3a2081df3c">Ogre::FrameStats::OGRE_DEPRECATED_VER</a>  (4) double getLastTime() const</dt>
+<dd><a class="anchor" id="_deprecated000013"></a>since 4.0 in favour of <a class="el" href="group___general.html#ga14e40178fd544453953760214076797a" title="Returns latest record of the time since last measurement.">getLatestTimeSinceLast()</a>.  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_frame_stats.html#ga15789cbc6a90856b2a477c3a2081df3c">Ogre::FrameStats::OGRE_DEPRECATED_VER</a>  (4) float getAvgTime() const</dt>
+<dd><a class="anchor" id="_deprecated000014"></a>since 4.0 in favour of <a class="el" href="group___general.html#gaa4b83bbc9a492610ac3181fad6a497ed" title="Returns the rolling average.">getRollingAverage()</a>.  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_node.html#ab52d2653967a5cc778ea5ceae0537043">Ogre::Node::getUserAny</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000012"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#adec1cf29d6134cbb881fc7c79b900bcf" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1_node.html#af3fcf16e43b07e046816125cbb8dc8f3" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
+<dd><a class="anchor" id="_deprecated000016"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#adec1cf29d6134cbb881fc7c79b900bcf" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1_node.html#af3fcf16e43b07e046816125cbb8dc8f3" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_node.html#a2f495289a449621359d2b23eaa31786c">Ogre::Node::setUserAny</a>  (const <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> &amp;anything)</dt>
-<dd><a class="anchor" id="_deprecated000011"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1_node.html#af3fcf16e43b07e046816125cbb8dc8f3" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
+<dd><a class="anchor" id="_deprecated000015"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1_node.html#af3fcf16e43b07e046816125cbb8dc8f3" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_renderable.html#a6bd93d515e31fbc852696d337a8d2a30">Ogre::Renderable::getUserAny</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000016"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#adec1cf29d6134cbb881fc7c79b900bcf" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1_renderable.html#a2ed9a2f3c1decac6286f8af974ce2ffc" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
+<dd><a class="anchor" id="_deprecated000020"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#adec1cf29d6134cbb881fc7c79b900bcf" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1_renderable.html#a2ed9a2f3c1decac6286f8af974ce2ffc" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_renderable.html#a8f18715b01c0851631eb9cccd1a05552">Ogre::Renderable::setUserAny</a>  (const <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> &amp;anything)</dt>
-<dd><a class="anchor" id="_deprecated000015"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1_renderable.html#a2ed9a2f3c1decac6286f8af974ce2ffc" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
+<dd><a class="anchor" id="_deprecated000019"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1_renderable.html#a2ed9a2f3c1decac6286f8af974ce2ffc" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
 <dt>Class <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr&lt; T &gt;</a>  </dt>
-<dd><a class="anchor" id="_deprecated000017"></a>for backwards compatibility only, rather use std::shared_ptr directly  </dd>
+<dd><a class="anchor" id="_deprecated000021"></a>for backwards compatibility only, rather use std::shared_ptr directly  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#ada1634204594ebb5a8c5906547797fad">Ogre::SharedPtr&lt; T &gt;::bind</a>  (T *rep)</dt>
-<dd><a class="anchor" id="_deprecated000020"></a>this api will be dropped. use reset(T*) instead  </dd>
+<dd><a class="anchor" id="_deprecated000024"></a>this api will be dropped. use reset(T*) instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#ac87b08300b2fb097661a03d781c46442">Ogre::SharedPtr&lt; T &gt;::dynamicCast</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000019"></a>use Ogre::dynamic_pointer_cast instead  </dd>
+<dd><a class="anchor" id="_deprecated000023"></a>use Ogre::dynamic_pointer_cast instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a4154c0f302c57df22fa6b16f149c6486">Ogre::SharedPtr&lt; T &gt;::getPointer</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000022"></a>use get() instead  </dd>
+<dd><a class="anchor" id="_deprecated000026"></a>use get() instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a1a5c885a46aba1ae159096d5db2318a2">Ogre::SharedPtr&lt; T &gt;::isNull</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000023"></a>use SharedPtr::operator bool instead  </dd>
+<dd><a class="anchor" id="_deprecated000027"></a>use SharedPtr::operator bool instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#aff5fd534b22373382cc02823ed99f5b1">Ogre::SharedPtr&lt; T &gt;::setNull</a>  ()</dt>
-<dd><a class="anchor" id="_deprecated000024"></a>use reset() instead  </dd>
+<dd><a class="anchor" id="_deprecated000028"></a>use reset() instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a209f931f633ee93c524bb19d57d5607f">Ogre::SharedPtr&lt; T &gt;::staticCast</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000018"></a>use Ogre::static_pointer_cast instead  </dd>
+<dd><a class="anchor" id="_deprecated000022"></a>use Ogre::static_pointer_cast instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a400c7fcd1943c439d90f4a6ed45b56ca">Ogre::SharedPtr&lt; T &gt;::useCount</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000021"></a>use use_count() instead  </dd>
+<dd><a class="anchor" id="_deprecated000025"></a>use use_count() instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a8f6a56d8e8c2c30bd92572d75f0ca560">Ogre::v1::OldNode::getUserAny</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000014"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#adec1cf29d6134cbb881fc7c79b900bcf" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a9540436cb4632a1e8ec9dbca8d63bf2c" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
+<dd><a class="anchor" id="_deprecated000018"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#adec1cf29d6134cbb881fc7c79b900bcf" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a9540436cb4632a1e8ec9dbca8d63bf2c" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
 <dt>Member <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#ab5a70671b6342033c8a3c4a642b42bea">Ogre::v1::OldNode::setUserAny</a>  (const <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> &amp;anything)</dt>
-<dd><a class="anchor" id="_deprecated000013"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a9540436cb4632a1e8ec9dbca8d63bf2c" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead.</dd>
+<dd><a class="anchor" id="_deprecated000017"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a9540436cb4632a1e8ec9dbca8d63bf2c" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead.</dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

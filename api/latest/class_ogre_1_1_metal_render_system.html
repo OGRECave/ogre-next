@@ -29,7 +29,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE-Next
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">4.0.0unstable</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -377,6 +377,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aafe67099839ff9f49fc3c9e8ad8b8540"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#aafe67099839ff9f49fc3c9e8ad8b8540">shutdown</a> () override</td></tr>
 <tr class="memdesc:aafe67099839ff9f49fc3c9e8ad8b8540"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shutdown the renderer and cleanup resources.  <a href="class_ogre_1_1_metal_render_system.html#aafe67099839ff9f49fc3c9e8ad8b8540">More...</a><br /></td></tr>
 <tr class="separator:aafe67099839ff9f49fc3c9e8ad8b8540"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ec95423103993563c8fa2933466d02e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#a3ec95423103993563c8fa2933466d02e">supportsMultithreadedShaderCompliation</a> () const override</td></tr>
+<tr class="memdesc:a3ec95423103993563c8fa2933466d02e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> supports multithreaded shader and PSO compilation.  <a href="class_ogre_1_1_metal_render_system.html#a3ec95423103993563c8fa2933466d02e">More...</a><br /></td></tr>
+<tr class="separator:a3ec95423103993563c8fa2933466d02e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f4ba98e059508597e1eaf840f0f9cbe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#a9f4ba98e059508597e1eaf840f0f9cbe">unregisterThread</a> () override</td></tr>
 <tr class="memdesc:a9f4ba98e059508597e1eaf840f0f9cbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister an additional thread which may make calls to rendersystem-related objects.  <a href="class_ogre_1_1_metal_render_system.html#a9f4ba98e059508597e1eaf840f0f9cbe">More...</a><br /></td></tr>
 <tr class="separator:a9f4ba98e059508597e1eaf840f0f9cbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -4227,6 +4230,36 @@ Once this init sequence is completed the threads are independent but this startu
 <p>Shutdown the renderer and cleanup resources. </p>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a46a77118396fb950d34f0124b4e6e4a2">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a3ec95423103993563c8fa2933466d02e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ec95423103993563c8fa2933466d02e">&#9670;&nbsp;</a></span>supportsMultithreadedShaderCompliation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::MetalRenderSystem::supportsMultithreadedShaderCompliation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> supports multithreaded shader and PSO compilation. </p>
+<p>Support depends on the API, our implementation, and CMake setting OGRE_SHADER_COMPILATION_THREADING_MODE with which OgreNext was built. </p>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a5e64cf633bd9dfcea3bff39e447bac20">Ogre::RenderSystem</a>.</p>
 
 </div>
 </div>
