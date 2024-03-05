@@ -266,7 +266,16 @@ namespace Ogre
         typedef FastArray<VulkanDelayedFuncBase *> VulkanDelayedFuncBaseArray;
         FastArray<VulkanDelayedFuncBaseArray> mDelayedFuncs;
 
-        bool mFenceFlushed;
+        uint8 mFenceFlushedWarningCount;
+
+        enum FenceFlushState : uint8
+        {
+            FenceUnflushed,
+            FenceFlushed,
+            GpuStalled,
+        };
+
+        FenceFlushState mFenceFlushed;
         bool mSupportsCoherentMemory : 1;
         bool mSupportsNonCoherentMemory : 1;
         bool mPreferCoherentMemory : 1;

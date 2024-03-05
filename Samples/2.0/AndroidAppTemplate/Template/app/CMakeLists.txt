@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.5.1)
 
 # build native_app_glue as a static lib
 set( APP_GLUE_DIR ${ANDROID_NDK}/sources/android/native_app_glue )

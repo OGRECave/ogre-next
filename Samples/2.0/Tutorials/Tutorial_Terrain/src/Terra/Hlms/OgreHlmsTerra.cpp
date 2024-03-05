@@ -785,6 +785,7 @@ namespace Ogre
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Atmosphere" );
 #endif
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Main" );
+        outLibraryFoldersPaths.push_back( "Hlms/Pbs/" + shaderSyntax );
         outLibraryFoldersPaths.push_back( "Hlms/Terra/Any" );
 
         // Fill the data folder path

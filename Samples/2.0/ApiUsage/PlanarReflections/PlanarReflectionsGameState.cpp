@@ -313,6 +313,7 @@ namespace Demo
         TutorialGameState::generateDebugText( timeSinceLast, outText );
         outText += "\nPress F2 to toggle animation. ";
         outText += mAnimateObjects ? "[On]" : "[Off]";
+        outText += "\nNum actors active: " + std::to_string( mPlanarReflections->countActiveActors() );
     }
     //-----------------------------------------------------------------------------------
     void PlanarReflectionsGameState::keyReleased( const SDL_KeyboardEvent &arg )

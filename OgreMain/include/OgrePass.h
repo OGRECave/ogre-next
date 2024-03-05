@@ -608,41 +608,42 @@ namespace Ogre
             linearEnd Distance in world units at which linear fog becomes completely opaque.
             Only applicable if mode is FOG_LINEAR.
         */
+        OGRE_DEPRECATED_VER( 3 )
         void setFog( bool overrideScene, FogMode mode = FOG_NONE,
                      const ColourValue &colour = ColourValue::White, Real expDensity = Real( 0.001 ),
                      Real linearStart = 0.0, Real linearEnd = 1.0 );
 
         /** Returns true if this pass is to override the scene fog settings.
          */
-        bool getFogOverride() const;
+        OGRE_DEPRECATED_VER( 3 ) bool getFogOverride() const;
 
         /** Returns the fog mode for this pass.
             @note
             Only valid if getFogOverride is true.
         */
-        FogMode getFogMode() const;
+        OGRE_DEPRECATED_VER( 3 ) FogMode getFogMode() const;
 
         /** Returns the fog colour for the scene.
          */
-        const ColourValue &getFogColour() const;
+        OGRE_DEPRECATED_VER( 3 ) const ColourValue &getFogColour() const;
 
         /** Returns the fog start distance for this pass.
             @note
             Only valid if getFogOverride is true.
         */
-        Real getFogStart() const;
+        OGRE_DEPRECATED_VER( 3 ) Real getFogStart() const;
 
         /** Returns the fog end distance for this pass.
             @note
             Only valid if getFogOverride is true.
         */
-        Real getFogEnd() const;
+        OGRE_DEPRECATED_VER( 3 ) Real getFogEnd() const;
 
         /** Returns the fog density for this pass.
             @note
             Only valid if getFogOverride is true.
         */
-        Real getFogDensity() const;
+        OGRE_DEPRECATED_VER( 3 ) Real getFogDensity() const;
 
         /// Gets the internal datablock that acts as proxy for us
         HlmsDatablock *_getDatablock() const;

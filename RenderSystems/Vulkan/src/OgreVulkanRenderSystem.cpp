@@ -634,11 +634,6 @@ namespace Ogre
                 rsc->setCapability( RSC_TEXTURE_COMPRESSION_ETC2 );
             }
 
-            vkGetPhysicalDeviceFormatProperties( mDevice->mPhysicalDevice,
-                                                 VulkanMappings::get( PFG_PVRTC_RGB2 ), &props );
-            if( props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
-                rsc->setCapability( RSC_TEXTURE_COMPRESSION_PVRTC );
-
             vkGetPhysicalDeviceFormatProperties(
                 mDevice->mPhysicalDevice, VulkanMappings::get( PFG_ASTC_RGBA_UNORM_4X4_LDR ), &props );
             if( props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
@@ -646,8 +641,9 @@ namespace Ogre
         }
 
         const VkPhysicalDeviceLimits &deviceLimits = mDevice->mDeviceProperties.limits;
-        rsc->setMaximumResolutions( deviceLimits.maxImageDimension2D, deviceLimits.maxImageDimension3D,
-                                    deviceLimits.maxImageDimensionCube );
+        rsc->setMaximumResolutions( std::min( deviceLimits.maxImageDimension2D, 16384u ),
+                                    std::min( deviceLimits.maxImageDimension3D, 4096u ),
+                                    std::min( deviceLimits.maxImageDimensionCube, 16384u ) );
         rsc->setMaxThreadsPerThreadgroupAxis( deviceLimits.maxComputeWorkGroupSize );
         rsc->setMaxThreadsPerThreadgroup( deviceLimits.maxComputeWorkGroupInvocations );
 
@@ -706,7 +702,31 @@ namespace Ogre
         rsc->setCapability( RSC_EXPLICIT_API );
         rsc->setMaxPointSize( 256 );
 
-        rsc->setMaximumResolutions( 16384, 4096, 16384 );
+        // check memory properties to determine, if we can use UMA and/or TBDR optimizations
+        const VkPhysicalDeviceMemoryProperties &memoryProperties = mDevice->mDeviceMemoryProperties;
+        if( mDevice->mDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU ||
+            mDevice->mDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU )
+        {
+            for( uint32_t typeIndex = 0; typeIndex < memoryProperties.memoryTypeCount; ++typeIndex )
+            {
+                const VkMemoryType &memoryType = memoryProperties.memoryTypes[typeIndex];
+                if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) != 0 &&
+                    ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) != 0 &&
+                    ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0 )
+                {
+                    rsc->setCapability( RSC_UMA );
+                }
+
+                // VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT is a prerequisite for TBDR, and is probably
+                // a good heuristic that TBDR mode of buffers clearing is supported efficiently,
+                // i.e. RSC_IS_TILER.
+                if( ( memoryType.propertyFlags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT ) != 0 )
+                {
+                    rsc->setCapability( RSC_IS_TILER );
+                    rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
+                }
+            }
+        }
 
         rsc->setVertexProgramConstantFloatCount( 256u );
         rsc->setVertexProgramConstantIntCount( 256u );

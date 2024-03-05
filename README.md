@@ -69,6 +69,10 @@ For a list of samples and their demonstrated features, refer to the [samples sec
 
 ![](./Docs/frontpage/SunsetRangers.jpg)
 
+## [Stunt Rally 3](https://stuntrally.tuxfamily.org/)
+
+![](./Docs/frontpage/StuntRally3.jpg)
+
 
 # Features
 
@@ -106,6 +110,7 @@ For a list of samples and their demonstrated features, refer to the [samples sec
 * Git
 * For HW & SW requirements, please visit http://www.ogre3d.org/developers/requirements
 * Our source dependencies are grouped in [ogre-next-deps](https://github.com/OGRECave/ogre-next-deps) repo
+* Python 3.x is needed to build shaderc dependency for Vulkan.
 
 # Dependencies (Windows)
 

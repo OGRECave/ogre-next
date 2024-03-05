@@ -101,7 +101,8 @@ namespace Ogre
         mDrawId( 0 ),
         mDevice( device ),
         mVkRenderSystem( renderSystem ),
-        mFenceFlushed( true ),
+        mFenceFlushedWarningCount( 0u ),
+        mFenceFlushed( FenceUnflushed ),
         mSupportsCoherentMemory( false ),
         mSupportsNonCoherentMemory( false ),
         mReadMemoryIsCoherent( false )
@@ -798,7 +799,7 @@ namespace Ogre
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT )
             {
-                // addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
+                addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
             }
 
             // Find coherent memory (many desktop GPUs don't provide this)
@@ -1977,6 +1978,37 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_update()
     {
+        if( mFenceFlushed == FenceUnflushed )
+        {
+            // We could only reach here if _update() was called
+            // twice in a row without completing a full frame.
+            //
+            // Without this, mFrameCount won't actually advance, and if we increment
+            // mFrameCount ourselves, waitForTailFrameToFinish would become unsafe.
+            //
+            // This must be done at the beginning, because normally the following sequence would happen:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2. _notifyNewCommandBuffer   - mFrameCount = 1
+            //  3. VulkanVaoManager::_update - mFrameCount = 1
+            //  4. _notifyNewCommandBuffer   - mFrameCount = 2
+            //  5. And so on...
+            //
+            // However we reached here because we performed the following:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2. VulkanVaoManager::_update - mFrameCount = ???
+            //
+            // Thus we MUST insert a _notifyNewCommandBuffer in-between the first two:
+            //  1. VulkanVaoManager::_update - mFrameCount = 0
+            //  2a._notifyNewCommandBuffer   - mFrameCount = 1
+            //  2b.VulkanVaoManager::_update - mFrameCount = 1
+            //
+            // Previously this block of code was at the end of VulkanVaoManager::_update
+            // and this was causing troubles. See https://github.com/OGRECave/ogre-next/issues/433
+            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
+        }
+
+        mFenceFlushed = FenceUnflushed;
+
         {
             FastArray<VulkanDescriptorPool *>::const_iterator itor = mUsedDescriptorPools.begin();
             FastArray<VulkanDescriptorPool *>::const_iterator endt = mUsedDescriptorPools.end();
@@ -2085,21 +2117,24 @@ namespace Ogre
         }
 
         deallocateEmptyVbos( false );
-
-        if( !mFenceFlushed )
-        {
-            // We could only reach here if _update() was called
-            // twice in a row without completing a full frame.
-            // Without this, waitForTailFrameToFinish becomes unsafe.
-            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
-        }
-
-        mFenceFlushed = false;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyNewCommandBuffer()
     {
-        mFenceFlushed = true;
+        if( mFenceFlushed == FenceFlushed )
+        {
+            if( mFenceFlushedWarningCount < 5u )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Calling RenderSystem::_endFrameOnce() twice in a row without calling "
+                    "RenderSystem::_update. This can lead to strange results.",
+                    LML_CRITICAL );
+                ++mFenceFlushedWarningCount;
+            }
+
+            _update();
+        }
+        mFenceFlushed = FenceFlushed;
         mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
         ++mFrameCount;
     }
@@ -2248,7 +2283,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyDeviceStalled()
     {
-        mFenceFlushed = true;
+        mFenceFlushed = GpuStalled;
 
         flushAllGpuDelayedBlocks( false );
 

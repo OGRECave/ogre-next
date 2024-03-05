@@ -632,6 +632,9 @@ namespace Ogre
             int32 numClipDist = std::max( getProperty( kNoTid, HlmsBaseProp::PsoClipDistances ), 1 );
             setProperty( kNoTid, HlmsBaseProp::PsoClipDistances, numClipDist );
             setProperty( kNoTid, HlmsBaseProp::GlobalClipPlanes, 1 );
+            // some Android devices(e.g. Mali-G77, Google Pixel 7 Pro) do not support user clip planes
+            if( !mRenderSystem->getCapabilities()->hasCapability( RSC_USER_CLIP_PLANES ) )
+                setProperty( kNoTid, HlmsBaseProp::EmulateClipDistances, 1 );
         }
 
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );

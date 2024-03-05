@@ -680,9 +680,9 @@ namespace Ogre{
 
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
         Hlms *hlms = 0;
-        HlmsParamVec paramVec;
-
-        paramVec.reserve( obj->children.size() );
+        // We need a map to deal with materials that define the same setting multiple times.
+        // The last defined version must win.
+        map<IdString, String>::type paramMap;
 
         const IdString idType( type );
         for( size_t i=0; i<HLMS_MAX && !hlms; ++i )
@@ -1228,7 +1228,7 @@ namespace Ogre{
                             ++itor;
                         }
                     }
-                    paramVec.emplace_back( prop->name, value );
+                    paramMap[prop->name] = value;
                     }
                 }
             }
@@ -1239,7 +1239,10 @@ namespace Ogre{
             }
         }
 
-        std::sort( paramVec.begin(), paramVec.end(), OrderParamVecByKey );
+        HlmsParamVec paramVec;
+        paramVec.reserve( paramMap.size() );
+        paramVec.insert( paramVec.begin(), paramMap.begin(), paramMap.end() );
+
         blendblock.calculateSeparateBlendMode();
         hlms->createDatablock( obj->name, obj->name, macroblock, blendblock, paramVec, true,
                                obj->file, compiler->getResourceGroup() );
@@ -2486,7 +2489,18 @@ namespace Ogre{
                                 ++i2;
                             }
 
-                            mPass->setFog(val, mode, clr, dens, start, end);
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( push, 0 )
+#else
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+                            mPass->setFog( val, mode, clr, dens, start, end );
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#else
+#    pragma GCC diagnostic pop
+#endif
                         }
                         else
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,

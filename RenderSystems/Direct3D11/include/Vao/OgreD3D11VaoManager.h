@@ -140,6 +140,8 @@ namespace Ogre
         VaoVec mVaos;
         uint32 mVaoNames;
 
+        bool mMapNoOverwriteOnDynamicBufferSRV;
+
         D3D11Device &mDevice;
 
         D3D11SyncVec mFrameSyncVec;

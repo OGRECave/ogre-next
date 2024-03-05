@@ -143,17 +143,6 @@ namespace Ogre
         /// Sets the given HLMS datablock to all SubEntities
         void setDatablock( IdString datablockName );
 
-        /** Clones this Item and returns a pointer to the clone.
-        @remarks
-            Useful method for duplicating an Item. The new Item must be
-            given a unique name, and is not attached to the scene in any way
-            so must be attached to a SceneNode to be visible (exactly as
-            entities returned from SceneManager::createItem).
-        @param newName
-            Name for the new Item.
-        */
-        Item *clone( const String &newName ) const;
-
         /** Sets the material to use for the whole of this Item.
         @remarks
             This is a shortcut method to set all the materials for all

@@ -50,6 +50,16 @@ namespace Ogre
 
         /** Read and write access from GPU/CPU.
         @remarks
+            !!!
+            SERIOUSLY DO NOT USE THIS FLAG UNLESS YOU KNOW *EXACTLY* WHAT YOU ARE DOING
+            IT HAS VERY SPECIFIC USES AND USING IT CARELESSLY CAN CAUSE GLITCHES OR CRASHES.
+
+            THIS FLAG ASSUMSE YOU ARE FAMILIAR WITH HOW OGRE-NEXT WORKS INTERNALLY
+            AND HOW GPUs AND APIs WORK.
+
+            IF YOU DON'T KNOW WHAT THIS FLAG IS, USE BT_IMMUTABLE OR BT_DEFAULT.
+            !!!
+
             This functionality was written for UMA (Unified Memory Architecture),
             like the iPhone and most Android phones; and a few desktop iGPUs.
 
@@ -73,7 +83,7 @@ namespace Ogre
             Ogre won't use any staging buffers to upload and download contents.
             It's fast on UMA and slow on other archs.
 
-            Theretically better synchronization could be implemented on top of this
+            Theoretically better synchronization could be implemented on top of this
             buffer type to be multi-purpose, but it would complicate things.
 
             Basically it's the perfect replacement for BT_IMMUTABLE if you want

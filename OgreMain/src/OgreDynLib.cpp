@@ -42,7 +42,7 @@ THE SOFTWARE.
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-#    include "OgreUTFString.h"
+#    include "OgreFileSystem.h"
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS

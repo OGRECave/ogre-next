@@ -7,7 +7,7 @@
  - Git
  - Android Studio 4.0 or higher.
  - Android SDK & NDK
- - Python 3.x (to build the samples)
+ - Python 3.x is needed to build shaderc dependency for Vulkan.
  - Vulkan-capable Android phone.
  - Android 8.0 or newer strongly recommended. Android 7.0 and 7.1 are supported,
  but most phones are bundled with very old and buggy drivers.
@@ -142,7 +142,7 @@ Open these projects in Android Studio and deploy the APK.
 > (but ocassionally does manifest even in portrait).
 >
 > If you suspect this is the cause of your bugs, edit the CMakeLists.txt file so that
-> OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE is no longer force-enabled.
+> OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE is no longer force-enabled, or pass miscParams["preTransform"] = "false" to the window.
 >
 > You can debug viewport orientation bugs on Desktop by enabling OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE
 > in your Desktop build, and manually editing OgreVulkanWindow.cpp and set:

@@ -1079,6 +1079,7 @@ namespace Ogre
         // Change per scene pass
         static const IdString PsoClipDistances;
         static const IdString GlobalClipPlanes;
+        static const IdString EmulateClipDistances;
         static const IdString DualParaboloidMapping;
         static const IdString InstancedStereo;
         static const IdString StaticBranchLights;
