@@ -216,7 +216,7 @@ namespace Ogre
         InterfaceSlots  mInterfaceSlots;
 
         void analizeMicrocode();
-        void getMicrocodeFromCache();
+        void getMicrocodeFromCache( const void *microcode );
         void compileMicrocode();
 
     public:

@@ -354,9 +354,12 @@ namespace Ogre
             Hlms type. The type must be registered, otherwise it may crash.
         @param filename
             Valid file path.
+        @param sortByName
+            Use true if output JSON should have materials sorted alphabetically
+            by name (case sensitive).
         */
         void saveMaterials( HlmsTypes hlmsType, const String &filename, HlmsJsonListener *listener,
-                            const String &additionalTextureExtension );
+                            const String &additionalTextureExtension, bool sortByName = false );
 
         /** Saves a specific Hlms material at the given file location.
         @param datablock

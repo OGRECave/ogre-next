@@ -69,17 +69,15 @@
 		float3 absLocalPos = abs( localPos.xyz );
 		bool isOutsideDecal = absLocalPos.x > 0.5f || absLocalPos.y > 0.5f || absLocalPos.z > 0.5f;
 
-		//Mask away objects looking away from the decal. Please note that inPs.normal is not unit-length
-		//and is before any TBN for normal mapping. In other words it's the geometric normal
-		//geomNormal is not available because it gets decalred after decals run
+		//Mask away objects looking away from the decal.
 		//We assume invWorldView is orthogonal, thus the transpose = inverse, hance invWorldView1.xyz
 		//works as the decal's direction
 		//
 		//Use a smooth fade to avoid flickering due to floating point precision when the normal
 		//and the decal are perpendicular to each other. (tolerance set to 0.0002)
 		midf3 decalDir = normalize( midf3_c( invWorldView1.xyz ) );
-		//isOutsideDecal = dot( decalDir.xyz, inPs.normal.xyz ) <= 0.0 ? true : isOutsideDecal;
-		midf normalAway = saturate( (dot( decalDir.xyz, inPs.normal.xyz ) + _h( 0.0002 ) ) / _h( 0.0002 ) );
+		//isOutsideDecal = dot( decalDir.xyz, pixelData.geomNormal.xyz ) <= 0.0 ? true : isOutsideDecal;
+		midf normalAway = saturate( (dot( decalDir.xyz, pixelData.geomNormal.xyz ) + _h( 0.0002 ) ) / _h( 0.0002 ) );
 		normalAway = isOutsideDecal ? _h( 0.0f ) : normalAway;
 
 		midf decalMask = normalAway;

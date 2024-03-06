@@ -182,6 +182,7 @@
 	@end
 @end
 
+@undefpiece( LoadGeomNormalData )
 @undefpiece( LoadNormalData )
 @piece( LoadNormalData )
 	// Geometric normal
@@ -227,6 +228,7 @@
 	@insertpiece( LoadDetailWeights )
 
 	@property( !hlms_use_prepass )
+		@insertpiece( LoadGeomNormalData )
 		@insertpiece( LoadNormalData )
 		@insertpiece( SampleAndApplyDetailNormalMaps@property( detail_triplanar_normal )Triplanar@end )
 	@end

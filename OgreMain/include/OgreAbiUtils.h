@@ -71,6 +71,14 @@ namespace Ogre
         data.push_back( setting );
 #endif
         ++setting;
+#ifdef OGRE_SHADER_THREADING_USE_TLS
+        data.push_back( setting );
+#endif
+        ++setting;
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+        data.push_back( setting );
+#endif
+        ++setting;
         data.push_back( sizeof( IdString ) );
         data.push_back( OGRE_FLEXIBILITY_LEVEL );
         data.push_back( OGRE_SIMD_ALIGNMENT );

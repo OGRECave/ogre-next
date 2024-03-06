@@ -125,6 +125,8 @@
 	#define midf3x3_c mat3
 	#define midf4x4_c mat4
 
+	#define midf_tex
+
 	#define toMidf3x3( x ) mat3( x )
 	#define buildMidf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
@@ -151,6 +153,8 @@
 	#define midf2x2_c f16mat2x2
 	#define midf3x3_c f16mat3x3
 	#define midf4x4_c f16mat4x4
+
+	#define midf_tex mediump
 
 	#define toMidf3x3( x ) f16mat3x3( x )
 	#define buildMidf3x3( row0, row1, row2 ) f16mat3x3( row0, row1, row2 )
@@ -189,6 +193,8 @@
 	#define midf2x2_c mat2
 	#define midf3x3_c mat3
 	#define midf4x4_c mat4
+
+	#define midf_tex mediump
 
 	#define toMidf3x3( x ) mat3( x )
 	#define buildMidf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )

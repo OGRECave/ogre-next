@@ -527,6 +527,8 @@ namespace Ogre
         */
         bool endRenderingQueued();
 
+        void resetFrameStats();
+
         const FrameStats *getFrameStats() const { return mFrameStats; }
 
         /** Starts / restarts the automatic rendering cycle.

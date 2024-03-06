@@ -34,11 +34,15 @@ if(DOXYGEN_FOUND)
 			${OGRE_SOURCE_DIR}/Docs/src/SettingUpOgre/*.md
 			${OGRE_SOURCE_DIR}/Docs/src/UsingOgre/*.md
 		)
-    
+
+	file(GLOB COMPONENTS ${OGRE_SOURCE_DIR}/Components/*/include)
+	file(GLOB PLUGINS ${OGRE_SOURCE_DIR}/PlugIns/*/include)
+
     set(CMAKE_DOXYGEN_INPUT_LIST 
-        \"${OGRE_SOURCE_DIR}/OgreMain
-        ${OGRE_SOURCE_DIR}/Components
-        ${OGRE_SOURCE_DIR}/Plugins
+        \"${OGRE_SOURCE_DIR}/OgreMain/include
+        ${COMPONENTS}
+        ${PLUGINS}
+        ${OGRE_SOURCE_DIR}/PlugIns
         ${OGRE_SOURCE_DIR}/RenderSystems
         ${OGRE_SOURCE_DIR}/Docs/src/apimainpage.md
         ${MANUAL}\")

@@ -163,7 +163,10 @@ void handle_cmd( android_app *app, int32_t cmd )
     case APP_CMD_CONTENT_RECT_CHANGED:
     case APP_CMD_WINDOW_RESIZED:
         __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "windowMovedOrResized: %d", cmd );
-        g_appController.mGraphicsSystem->getRenderWindow()->windowMovedOrResized();
+        // We got crash reports from getting _RESIZED events w/ mGraphicsSystem being a nullptr.
+        // That's Android for you.
+        if( g_appController.mGraphicsSystem && g_appController.mGraphicsSystem->getRenderWindow() )
+            g_appController.mGraphicsSystem->getRenderWindow()->windowMovedOrResized();
         break;
     default:
         __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "event not handled: %d", cmd );

@@ -1075,6 +1075,9 @@ namespace Ogre
                     ID_SAMPLES_SINGLE_ITERATION_FALLBACK,
                     ID_FORCE_MIPMAP_FALLBACK,
 
+                    //Used by WARM_UP
+                    ID_MODE,
+
             ID_READ_BACK_AS_TEXTURE,
 
         ID_SHADOW_NODE,

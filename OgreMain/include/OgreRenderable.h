@@ -416,6 +416,9 @@ namespace Ogre
         /// Manually sets the hlms hashes. Don't call this directly
         virtual void _setHlmsHashes( uint32 hash, uint32 casterHash );
 
+        /// Sets mCurrentMaterialLod to 0.
+        void resetMaterialLod();
+
         uint8 getCurrentMaterialLod() const { return mCurrentMaterialLod; }
 
         friend void LodStrategy::lodSet( ObjectData &t, Real lodValues[ARRAY_PACKED_REALS] );

@@ -1246,6 +1246,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     size_t RenderSystem::getNumPriorityConfigOptions() const { return 0u; }
     //-----------------------------------------------------------------------
+    bool RenderSystem::supportsMultithreadedShaderCompliation() const { return false; }
+    //-----------------------------------------------------------------------
     void RenderSystem::destroyHardwareOcclusionQuery( HardwareOcclusionQuery *hq )
     {
         HardwareOcclusionQueryList::iterator i =

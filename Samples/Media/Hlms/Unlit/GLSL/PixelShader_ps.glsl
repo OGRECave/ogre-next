@@ -28,17 +28,17 @@ layout(location = FRAG_COLOR, index = 0) out midf outColour;
 	@property( syntax != glslvk )
 		@foreach( num_textures, n )
 			@property( is_texture@n_array )
-				uniform sampler2DArray textureMapsArray@n;
+				midf_tex uniform sampler2DArray textureMapsArray@n;
 			@else
-				uniform sampler2D textureMaps@n;
+				midf_tex uniform sampler2D textureMaps@n;
 			@end
 		@end
 	@else
 		@foreach( num_textures, n )
 			@property( is_texture@n_array )
-				layout( ogre_t@value(textureMapsArray@n) ) uniform texture2DArray textureMapsArray@n;
+				layout( ogre_t@value(textureMapsArray@n) ) midf_tex uniform texture2DArray textureMapsArray@n;
 			@else
-				layout( ogre_t@value(textureMaps@n) ) uniform texture2D textureMaps@n;
+				layout( ogre_t@value(textureMaps@n) ) midf_tex uniform texture2D textureMaps@n;
 			@end
 		@end
 	@end

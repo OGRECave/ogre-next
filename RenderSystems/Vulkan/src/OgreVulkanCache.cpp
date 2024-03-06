@@ -245,6 +245,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VkRenderPass VulkanCache::getRenderPass( const VkRenderPassCreateInfo &renderPassCi )
     {
+        ScopedLock lock( mMutex );
+
         VkRenderPass retVal = 0;
         VkRenderPassMap::const_iterator itor = mRenderPassCache.find( renderPassCi );
         if( itor == mRenderPassCache.end() )

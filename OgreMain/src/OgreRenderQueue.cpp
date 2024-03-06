@@ -80,6 +80,7 @@ namespace Ogre
     const int RqBits::MeshShiftTransp       = ShaderShiftTransp - MeshBits;         //11
     const int RqBits::TextureShiftTransp    = MeshShiftTransp   - TextureBits;      //0
     // clang-format on
+
     //---------------------------------------------------------------------
     RenderQueue::RenderQueue( HlmsManager *hlmsManager, SceneManager *sceneManager,
                               VaoManager *vaoManager ) :
@@ -307,11 +308,19 @@ namespace Ogre
         ++mRenderingStarted;
         mRoot->_notifyRenderingFrameStarted();
 
+        const size_t numWorkerThreads = mSceneManager->getNumWorkerThreads();
+        const bool bUseMultithreadedShaderCompliation =
+            mRoot->getRenderSystem()->supportsMultithreadedShaderCompliation() &&
+            mSceneManager->getNumWorkerThreads() > 1u;
+
         for( size_t i = 0; i < HLMS_MAX; ++i )
         {
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
             if( hlms )
             {
+                if( bUseMultithreadedShaderCompliation )
+                    hlms->_setNumThreads( numWorkerThreads );
+
                 mPassCache[i] = hlms->preparePassHash( mSceneManager->getCurrentShadowNode(), casterPass,
                                                        dualParaboloid, mSceneManager );
             }
@@ -350,6 +359,14 @@ namespace Ogre
         }
 
         mCommandBuffer->setCurrentRenderSystem( rs );
+
+        ParallelHlmsCompileQueue *parallelCompileQueue = 0;
+
+        if( rs->supportsMultithreadedShaderCompliation() && mSceneManager->getNumWorkerThreads() > 1u )
+        {
+            parallelCompileQueue = &mParallelHlmsCompileQueue;
+            mParallelHlmsCompileQueue.start( mSceneManager );
+        }
 
         bool supportsIndirectBuffers = mVaoManager->supportsIndirectBuffers();
 
@@ -443,17 +460,22 @@ namespace Ogre
                         v1::CbStartV1LegacyRendering();
                     mLastVaoName = 0;
                 }
-                renderGL3V1( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i] );
+                renderGL3V1( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
+                             parallelCompileQueue );
             }
             else if( numNeededDraws > 0 /*&& mRenderQueues[i].mMode == FAST*/ )
             {
-                indirectDraw = renderGL3( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
-                                          indirectBuffer, indirectDraw, startIndirectDraw );
+                indirectDraw =
+                    renderGL3( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
+                               parallelCompileQueue, indirectBuffer, indirectDraw, startIndirectDraw );
             }
         }
 
         if( supportsIndirectBuffers && indirectBuffer )
             indirectBuffer->unmap( UO_KEEP_PERSISTENT );
+
+        if( parallelCompileQueue )
+            mParallelHlmsCompileQueue.stopAndWait( mSceneManager );
 
         OgreProfileEndGroup( "Command Preparation", OGREPROF_RENDERING );
 
@@ -482,9 +504,10 @@ namespace Ogre
         OgreProfileEndGroup( "Command Execution", OGREPROF_RENDERING );
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::warmUpShaders( const uint8 firstRq, const uint8 lastRq, const bool casterPass )
+    void RenderQueue::warmUpShadersCollect( const uint8 firstRq, const uint8 lastRq,
+                                            const bool casterPass )
     {
-        OgreProfileBeginGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
+        OgreProfileBeginGroup( "RenderQueue::warmUpShadersCollect", OGREPROF_RENDERING );
 
         for( size_t i = firstRq; i < lastRq; ++i )
         {
@@ -519,12 +542,28 @@ namespace Ogre
             }
 
             // All render queue modes share the same path
-            warmUpShaders( casterPass, mPassCache, mRenderQueues[i] );
+            warmUpShaders( casterPass, mRenderQueues[i] );
         }
+
+        mPendingPassCaches.insert( mPendingPassCaches.end(), mPassCache, mPassCache + HLMS_MAX );
 
         --mRenderingStarted;
 
-        OgreProfileEndGroup( "RenderQueue::warmUpShaders", OGREPROF_RENDERING );
+        OgreProfileEndGroup( "RenderQueue::warmUpShadersCollect", OGREPROF_RENDERING );
+    }
+    //-----------------------------------------------------------------------
+    void RenderQueue::warmUpShadersTrigger( RenderSystem *rs )
+    {
+        OgreProfileBeginGroup( "RenderQueue::warmUpShadersTrigger", OGREPROF_RENDERING );
+
+        if( rs->supportsMultithreadedShaderCompliation() && mSceneManager->getNumWorkerThreads() > 1u )
+            mParallelHlmsCompileQueue.fireWarmUpParallel( mSceneManager );
+        else
+            mParallelHlmsCompileQueue.warmUpSerial( mHlmsManager, mPendingPassCaches.data() );
+
+        mPendingPassCaches.clear();
+
+        OgreProfileEndGroup( "RenderQueue::warmUpShadersTrigger", OGREPROF_RENDERING );
     }
     //-----------------------------------------------------------------------
     void RenderQueue::renderES2( RenderSystem *rs, bool casterPass, bool dualParaboloid,
@@ -566,7 +605,7 @@ namespace Ogre
 
             lastHlmsCacheHash = lastHlmsCache->hash;
             const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache, passCache[datablock->mType],
-                                                            queuedRenderable, casterPass );
+                                                            queuedRenderable, casterPass, nullptr );
             if( lastHlmsCacheHash != hlmsCache->hash )
             {
                 rs->_setPipelineStateObject( &hlmsCache->pso );
@@ -592,6 +631,7 @@ namespace Ogre
     unsigned char *RenderQueue::renderGL3( RenderSystem *rs, bool casterPass, bool dualParaboloid,
                                            HlmsCache passCache[],
                                            const RenderQueueGroup &renderQueueGroup,
+                                           ParallelHlmsCompileQueue *parallelCompileQueue,
                                            IndirectBufferPacked *indirectBuffer,
                                            unsigned char *indirectDraw,
                                            unsigned char *startIndirectDraw )
@@ -635,8 +675,9 @@ namespace Ogre
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
 
             lastHlmsCacheHash = lastHlmsCache->hash;
-            const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache, passCache[datablock->mType],
-                                                            queuedRenderable, casterPass );
+            const HlmsCache *hlmsCache =
+                hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
+                                   casterPass, parallelCompileQueue );
             if( lastHlmsCacheHash != hlmsCache->hash )
             {
                 CbPipelineStateObject *psoCmd = mCommandBuffer->addCommand<CbPipelineStateObject>();
@@ -764,7 +805,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------
     void RenderQueue::renderGL3V1( RenderSystem *rs, bool casterPass, bool dualParaboloid,
-                                   HlmsCache passCache[], const RenderQueueGroup &renderQueueGroup )
+                                   HlmsCache passCache[], const RenderQueueGroup &renderQueueGroup,
+                                   ParallelHlmsCompileQueue *parallelCompileQueue )
     {
         v1::RenderOperation lastRenderOp;
         HlmsCache const *lastHlmsCache = &c_dummyCache;
@@ -800,8 +842,9 @@ namespace Ogre
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
 
             lastHlmsCacheHash = lastHlmsCache->hash;
-            const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache, passCache[datablock->mType],
-                                                            queuedRenderable, casterPass );
+            const HlmsCache *hlmsCache =
+                hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
+                                   casterPass, parallelCompileQueue );
             if( lastHlmsCache != hlmsCache )
             {
                 CbPipelineStateObject *psoCmd = mCommandBuffer->addCommand<CbPipelineStateObject>();
@@ -908,29 +951,171 @@ namespace Ogre
         mLastTextureHash = 0;
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::warmUpShaders( const bool casterPass, HlmsCache passCache[],
-                                     const RenderQueueGroup &renderQueueGroup )
+    void RenderQueue::warmUpShaders( const bool casterPass, const RenderQueueGroup &renderQueueGroup )
     {
-        HlmsCache const *lastHlmsCache = &c_dummyCache;
         uint32 lastHlmsCacheHash = 0;
 
-        const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
+        const size_t passCacheBaseIdx = mPendingPassCaches.size();
 
-        QueuedRenderableArray::const_iterator itor = queuedRenderables.begin();
-        QueuedRenderableArray::const_iterator endt = queuedRenderables.end();
-
-        while( itor != endt )
+        for( const QueuedRenderable &queuedRenderable : renderQueueGroup.mQueuedRenderables )
         {
-            const QueuedRenderable &queuedRenderable = *itor;
-
             const HlmsDatablock *datablock = queuedRenderable.renderable->getDatablock();
 
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
 
-            lastHlmsCacheHash = lastHlmsCache->hash;
-            hlms->getMaterial( lastHlmsCache, passCache[datablock->mType], queuedRenderable,
-                               casterPass );
-            ++itor;
+            lastHlmsCacheHash = hlms->getMaterialSerial01(
+                lastHlmsCacheHash, mPassCache[datablock->mType], datablock->mType + passCacheBaseIdx,
+                queuedRenderable, casterPass, mParallelHlmsCompileQueue );
+        }
+    }
+    //-----------------------------------------------------------------------
+    void RenderQueue::_warmUpShadersThread( const size_t threadIdx )
+    {
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        Hlms::msThreadId = static_cast<uint32>( threadIdx );
+#    endif
+#endif
+        mParallelHlmsCompileQueue.updateWarmUpThread( threadIdx, mHlmsManager,
+                                                      mPendingPassCaches.data() );
+    }
+    //-----------------------------------------------------------------------
+    void RenderQueue::_compileShadersThread( size_t threadIdx )
+    {
+        mParallelHlmsCompileQueue.updateThread( threadIdx, mHlmsManager );
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::start( SceneManager *sceneManager )
+    {
+        mKeepCompiling = true;
+        sceneManager->_fireParallelHlmsCompile();
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::stopAndWait( SceneManager *sceneManager )
+    {
+        // There is no need to incur in the perf penalty of locking mMutex because we guarantee
+        // no more entries will be added to mRequests. (Unless I missed something?).
+        // The mMutex locks (and mSemaphore) already guarantee ordering.
+        mKeepCompiling.store( false, std::memory_order::memory_order_relaxed );
+        mSemaphore.increment( static_cast<uint32_t>( sceneManager->getNumWorkerThreads() ) );
+        sceneManager->waitForParallelHlmsCompile();
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::fireWarmUpParallel( SceneManager *sceneManager )
+    {
+        sceneManager->_fireWarmUpShadersCompile();
+        OGRE_ASSERT_LOW( mRequests.empty() );
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::updateWarmUpThread( size_t threadIdx, HlmsManager *hlmsManager,
+                                                       const HlmsCache *passCaches )
+    {
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        Hlms::msThreadId = static_cast<uint32>( threadIdx );
+#    endif
+#endif
+        while( true )
+        {
+            mMutex.lock();
+            if( mRequests.empty() )
+            {
+                mMutex.unlock();
+                break;
+            }
+            Request request = std::move( mRequests.back() );
+            mRequests.pop_back();
+            mMutex.unlock();
+
+            const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
+            Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
+            hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
+                                    request.reservedStubEntry, request.queuedRenderable,
+                                    request.renderableHash, request.finalHash, threadIdx );
+        }
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::warmUpSerial( HlmsManager *hlmsManager, const HlmsCache *passCaches )
+    {
+        for( const Request &request : mRequests )
+        {
+            const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
+            Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
+            hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
+                                    request.reservedStubEntry, request.queuedRenderable,
+                                    request.renderableHash, request.finalHash, 0u );
+        }
+
+        mRequests.clear();
+    }
+    //-----------------------------------------------------------------------
+    void ParallelHlmsCompileQueue::updateThread( size_t threadIdx, HlmsManager *hlmsManager )
+    {
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        Hlms::msThreadId = static_cast<uint32>( threadIdx );
+#    endif
+#endif
+        bool bStillHasWork = false;
+        bool bKeepCompiling = true;
+
+        ParallelHlmsCompileQueue::Request request;
+
+        while( bKeepCompiling || bStillHasWork )
+        {
+            mSemaphore.decrementOrWait();
+
+            bool bWorkGrabbed = false;
+
+            mMutex.lock();
+            if( !mRequests.empty() )
+            {
+                request = std::move( mRequests.back() );
+                mRequests.pop_back();
+                bWorkGrabbed = true;
+            }
+            bStillHasWork = !mRequests.empty();
+            // mKeepCompiling MUST be read inside or before the mMutex, OTHERWISE if read afterwards:
+            //  1. We could see mRequests is empty, bStillHasWork = false
+            //  2. We leave mMutex
+            //  3. More work is added to mRequests
+            //  4. mKeepCompiling is set to false
+            //  5. We read mKeepCompiling == false, bStillHasWork == false. We finish
+            //  6. mRequests still has entries unprocessed
+            //
+            // By reading mKeepCompiling inside this lock, we guarantee that if bStillHasWork = false and
+            // mKeepCompiling = false, then no more entries will be added to mRequests.
+            //
+            // If bStillHasWork = false then after we leave:
+            //  1. If bKeepCompiling is true.
+            //      a. After abandoning mMutex main thread adds more work
+            //      b. Main thread sets mKeepCompiling to false
+            //      c. bKeepCompiling is still true, so we will iterate once more
+            //  2. If bKeepCompiling is true.
+            //      a. Main thread sets mKeepCompiling to false
+            //      b. bKeepCompiling is still true, so we will iterate once more
+            //      c. mSemaphore will not stall, and we will see bStillHasWork = false &
+            //          bKeepCompiling = false
+            //      d. We finish
+            //  3. If bKeepCompiling is false.
+            //      a. After abandoning mMutex, we are guaranteed no more work will be added
+            //
+            // There is no need for main thread to lock mMutex just to set mKeepCompiling = false.
+            // TSAN complains because it doesn't know we guarantee after main thread sets
+            // mKeepCompiling = true it won't add more work.
+            //
+            // We use memory_order_relaxed because the mutex already guarantees ordering.
+            bKeepCompiling = mKeepCompiling.load( std::memory_order::memory_order_relaxed );
+            mMutex.unlock();
+
+            if( bWorkGrabbed )
+            {
+                const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
+                Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
+                hlms->compileStubEntry( *request.passCache, request.reservedStubEntry,
+                                        request.queuedRenderable, request.renderableHash,
+                                        request.finalHash, threadIdx );
+            }
         }
     }
     //-----------------------------------------------------------------------
@@ -975,7 +1160,7 @@ namespace Ogre
         }
 
         const HlmsCache *hlmsCache =
-            hlms->getMaterial( &c_dummyCache, passCache, queuedRenderable, casterPass );
+            hlms->getMaterial( &c_dummyCache, passCache, queuedRenderable, casterPass, nullptr );
         rs->_setPipelineStateObject( &hlmsCache->pso );
 
         mLastTextureHash =
@@ -1025,4 +1210,8 @@ namespace Ogre
     {
         return mRenderQueues[rqId].mSortMode;
     }
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    ParallelHlmsCompileQueue::ParallelHlmsCompileQueue() : mSemaphore( 0u ), mKeepCompiling( false ) {}
 }  // namespace Ogre

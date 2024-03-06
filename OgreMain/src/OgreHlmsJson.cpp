@@ -35,6 +35,7 @@ THE SOFTWARE.
 #    include "OgreHlms.h"
 #    include "OgreHlmsJsonCompute.h"
 #    include "OgreHlmsManager.h"
+#    include "OgreIdString.h"
 #    include "OgreLogManager.h"
 #    include "OgreLwString.h"
 #    include "OgreRenderSystem.h"
@@ -1012,7 +1013,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::saveMaterials( const Hlms *hlms, String &outString,
-                                  const String &additionalTextureExtension )
+                                  const String &additionalTextureExtension, bool sortByName )
     {
         outString += "{";
 
@@ -1114,13 +1115,43 @@ namespace Ogre
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
             Hlms::HlmsDatablockMap::const_iterator endt = datablockMap.end();
 
-            while( itor != endt )
+            if( sortByName )
             {
-                const HlmsDatablock *datablock = itor->second.datablock;
+                std::map<std::string, IdString> sortedMap;
+                while( itor != endt )
+                {
+                    sortedMap[itor->second.name] = itor->first;
+                    ++itor;
+                }
 
-                if( datablock != defaultDatablock )
-                    saveDatablock( itor->second.name, datablock, outString, additionalTextureExtension );
-                ++itor;
+                std::map<std::string, IdString>::const_iterator itor2 = sortedMap.begin();
+                std::map<std::string, IdString>::const_iterator endt2 = sortedMap.end();
+
+                while( itor2 != endt2 )
+                {
+                    Hlms::HlmsDatablockMap::const_iterator itorFind = datablockMap.find( itor2->second );
+                    if( itorFind != endt )
+                    {
+                        const HlmsDatablock *datablock = itorFind->second.datablock;
+
+                        if( datablock != defaultDatablock )
+                            saveDatablock( itorFind->second.name, datablock, outString,
+                                           additionalTextureExtension );
+                    }
+                    ++itor2;
+                }
+            }
+            else
+            {
+                while( itor != endt )
+                {
+                    const HlmsDatablock *datablock = itor->second.datablock;
+
+                    if( datablock != defaultDatablock )
+                        saveDatablock( itor->second.name, datablock, outString,
+                                       additionalTextureExtension );
+                    ++itor;
+                }
             }
 
             if( numDatablocks > 1u )

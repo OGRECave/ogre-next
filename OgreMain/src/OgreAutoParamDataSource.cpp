@@ -1048,7 +1048,10 @@ namespace Ogre
         return ControllerManager::getSingleton().getFrameTimeSource()->getValue();
     }
     //-----------------------------------------------------------------------------
-    Real AutoParamDataSource::getFPS() const { return Root::getSingleton().getFrameStats()->getFps(); }
+    Real AutoParamDataSource::getFPS() const
+    {
+        return static_cast<Real>( Root::getSingleton().getFrameStats()->getLatestTimeSinceLastFps() );
+    }
     //-----------------------------------------------------------------------------
     Real AutoParamDataSource::getViewportWidth() const
     {

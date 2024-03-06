@@ -109,10 +109,12 @@ namespace Ogre
         {
             OGRE_CHECK_GL_ERROR( mGLProgramHandle = glCreateProgram() );
 
+            GpuProgramManager::Microcode const *microcodePtr;
             if( GpuProgramManager::getSingleton().canGetCompiledShaderBuffer() &&
-                GpuProgramManager::getSingleton().isMicrocodeAvailableInCache( getCombinedSource() ) )
+                GpuProgramManager::getSingleton().getMicrocodeFromCache( getCombinedSource(),
+                                                                         &microcodePtr ) )
             {
-                getMicrocodeFromCache();
+                getMicrocodeFromCache( reinterpret_cast<const void *>( microcodePtr ) );
             }
             else
             {

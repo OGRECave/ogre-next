@@ -39,7 +39,7 @@ namespace Ogre
     class HlmsPbsTerraShadows : public HlmsListener
     {
     protected:
-        Terra *                 mTerra;
+        Terra                  *mTerra;
         HlmsSamplerblock const *mTerraSamplerblock;
 #if OGRE_DEBUG_MODE
         SceneManager *mSceneManager;
@@ -57,8 +57,9 @@ namespace Ogre
         void propertiesMergedPreGenerationStep( Hlms *hlms, const HlmsCache &passCache,
                                                 const HlmsPropertyVec &renderableCacheProperties,
                                                 const PiecesMap renderableCachePieces[NumShaderTypes],
-                                                const HlmsPropertyVec & properties,
-                                                const QueuedRenderable &queuedRenderable ) override;
+                                                const HlmsPropertyVec  &properties,
+                                                const QueuedRenderable &queuedRenderable,
+                                                size_t                  tid ) override;
 
         void preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
                               bool dualParaboloid, SceneManager *sceneManager, Hlms *hlms ) override;

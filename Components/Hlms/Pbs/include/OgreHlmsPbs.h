@@ -225,28 +225,29 @@ namespace Ogre
         uint16           mEsmK;  ///< K parameter for ESM.
         AmbientLightMode mAmbientLightMode;
 
-        void setupRootLayout( RootLayout &rootLayout ) override;
+        void setupRootLayout( RootLayout &rootLayout, size_t tid ) override;
 
         const HlmsCache *createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                  uint32                  finalHash,
-                                                 const QueuedRenderable &queuedRenderable ) override;
+                                                 const QueuedRenderable &queuedRenderable,
+                                                 HlmsCache *reservedStubEntry, size_t tid ) override;
 
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
                                             const HlmsParamVec   &paramVec ) override;
 
-        void setDetailMapProperties( HlmsPbsDatablock *datablock, PiecesMap *inOutPieces,
+        void setDetailMapProperties( size_t tid, HlmsPbsDatablock *datablock, PiecesMap *inOutPieces,
                                      const bool bCasterPass );
-        void setTextureProperty( const char *propertyName, HlmsPbsDatablock *datablock,
+        void setTextureProperty( size_t tid, const char *propertyName, HlmsPbsDatablock *datablock,
                                  PbsTextureTypes texType );
-        void setDetailTextureProperty( const char *propertyName, HlmsPbsDatablock *datablock,
+        void setDetailTextureProperty( size_t tid, const char *propertyName, HlmsPbsDatablock *datablock,
                                        PbsTextureTypes baseTexType, uint8 detailIdx );
 
         void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash ) override;
         void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override;
         void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) override;
 
-        void notifyPropertiesMergedPreGenerationStep() override;
+        void notifyPropertiesMergedPreGenerationStep( size_t tid ) override;
 
         static bool requiredPropertyByAlphaTest( IdString propertyName );
 

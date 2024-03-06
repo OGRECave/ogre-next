@@ -253,6 +253,11 @@ namespace Ogre
         return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
+    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const
+    {
+        return true;
+    }
+    //-------------------------------------------------------------------------
     HardwareOcclusionQuery *MetalRenderSystem::createHardwareOcclusionQuery()
     {
         return 0;  // TODO
@@ -1470,6 +1475,8 @@ namespace Ogre
 
         depthState.stencilParams = pso->pass.stencilParams;
 
+        ScopedLock lock( mMutexDepthStencilStates );
+
         CachedDepthStencilStateVec::iterator itor =
             std::lower_bound( mDepthStencilStates.begin(), mDepthStencilStates.end(), depthState );
 
@@ -1547,6 +1554,7 @@ namespace Ogre
 
         depthState.stencilParams = pso->pass.stencilParams;
 
+        ScopedLock lock( mMutexDepthStencilStates );
         CachedDepthStencilStateVec::iterator itor =
             std::lower_bound( mDepthStencilStates.begin(), mDepthStencilStates.end(), depthState );
 

@@ -1937,7 +1937,7 @@ namespace Ogre
                                                 PixelFormatGpuUtils::PFF_NORMALIZED;
 
     // clang-format off
-    PixelFormatGpuUtils::PixelFormatDesc PixelFormatGpuUtils::msPixelFormatDesc[PFG_COUNT + 1u] =
+    const PixelFormatGpuUtils::PixelFormatDesc PixelFormatGpuUtils::msPixelFormatDesc[PFG_COUNT + 1u] =
     {
         {"PFG_UNKNOWN", 1u, 0, 0, 0 },
         {"PFG_NULL", 1u, 0, 0, 0 },

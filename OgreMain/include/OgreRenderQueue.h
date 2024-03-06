@@ -33,8 +33,12 @@ THE SOFTWARE.
 #include "OgreHlmsCommon.h"
 #include "OgreIteratorWrappers.h"
 #include "OgreSharedPtr.h"
+#include "Threading/OgreLightweightMutex.h"
+#include "Threading/OgreSemaphore.h"
 
 #include "OgreHeaderPrefix.h"
+
+#include <atomic>
 
 namespace Ogre
 {
@@ -63,6 +67,49 @@ namespace Ogre
         }
 
         bool operator<( const QueuedRenderable &_r ) const { return this->hash < _r.hash; }
+    };
+
+    class ParallelHlmsCompileQueue
+    {
+    public:
+        struct Request
+        {
+            /// Must stay alive until worker thread is done with it. In the case of warmUpSerial &
+            /// updateWarmUpThread, we store instead an index to RenderQueue::mPendingPassCaches
+            /// because otherwise the iterators keep getting invalidated.
+            HlmsCache const *passCache;
+            HlmsCache       *reservedStubEntry;
+            QueuedRenderable queuedRenderable;
+            uint32           renderableHash;
+            uint32           finalHash;
+        };
+
+    protected:
+        std::vector<Request> mRequests;  // GUARDED_BY( mMutex )
+        LightweightMutex     mMutex;
+        Semaphore            mSemaphore;
+        std::atomic<bool>    mKeepCompiling;
+
+    public:
+        ParallelHlmsCompileQueue();
+
+        inline void pushRequest( const Request &&request )
+        {
+            ScopedLock lock( mMutex );
+            mRequests.emplace_back( request );
+            mSemaphore.increment();
+        }
+
+        inline void pushWarmUpRequest( const Request &&request ) { mRequests.emplace_back( request ); }
+
+        void start( SceneManager *sceneManager );
+        void stopAndWait( SceneManager *sceneManager );
+        void updateThread( size_t threadIdx, HlmsManager *hlmsManager );
+
+        void fireWarmUpParallel( SceneManager *sceneManager );
+        void updateWarmUpThread( size_t threadIdx, HlmsManager *hlmsManager,
+                                 const HlmsCache *passCaches );
+        void warmUpSerial( HlmsManager *hlmsManager, const HlmsCache *passCaches );
     };
 
     /** Class to manage the scene object rendering queue.
@@ -152,6 +199,18 @@ namespace Ogre
 
         typedef vector<IndirectBufferPacked *>::type IndirectBufferPackedVec;
 
+        struct PsoCreateEntry
+        {
+            uint32           finalHash;
+            uint16           cacheIdx;
+            bool             casterPass;
+            QueuedRenderable queuedRenderable;
+
+            bool operator<( const PsoCreateEntry &b ) const { return this->finalHash < b.finalHash; }
+            bool operator<( const uint32_t otherHash ) const { return this->finalHash < otherHash; }
+        };
+        typedef std::vector<PsoCreateEntry> PsoCreateEntryVec;
+
         RenderQueueGroup mRenderQueues[256];
 
         HlmsManager  *mHlmsManager;
@@ -173,7 +232,12 @@ namespace Ogre
 
         uint32 mRenderingStarted;
 
-        /** Returns a new (or an existing) indirect buffer that can hold the requested number of draws.
+        std::vector<HlmsCache> mPendingPassCaches;
+
+        ParallelHlmsCompileQueue mParallelHlmsCompileQueue;
+
+        /** Returns a new (or an existing) indirect buffer that can hold the requested number of
+        draws.
         @param numDraws
             Number of draws the indirect buffer is expected to hold. It must be an upper limit.
             The caller may end up using less draws if he desires.
@@ -186,20 +250,21 @@ namespace Ogre
                                         Renderable *pRend, const MovableObject *pMovableObject,
                                         bool isV1 );
 
-        void renderES2( RenderSystem *rs, bool casterPass, bool dualParaboloid, HlmsCache passCache[],
-                        const RenderQueueGroup &renderQueueGroup );
+        void renderES2( RenderSystem *rs, bool casterPass, bool dualParaboloid,
+                        HlmsCache passCache[HLMS_MAX], const RenderQueueGroup &renderQueueGroup );
 
         /// Renders in a compatible way with GL 3.3 and D3D11. Can only render V2 objects
         /// (i.e. Items, VertexArrayObject)
         unsigned char *renderGL3( RenderSystem *rs, bool casterPass, bool dualParaboloid,
                                   HlmsCache passCache[], const RenderQueueGroup &renderQueueGroup,
+                                  ParallelHlmsCompileQueue *parallelCompileQueue,
                                   IndirectBufferPacked *indirectBuffer, unsigned char *indirectDraw,
                                   unsigned char *startIndirectDraw );
         void renderGL3V1( RenderSystem *rs, bool casterPass, bool dualParaboloid, HlmsCache passCache[],
-                          const RenderQueueGroup &renderQueueGroup );
+                          const RenderQueueGroup   &renderQueueGroup,
+                          ParallelHlmsCompileQueue *parallelCompileQueue );
 
-        void warmUpShaders( bool casterPass, HlmsCache passCache[],
-                            const RenderQueueGroup &renderQueueGroup );
+        void warmUpShaders( bool casterPass, const RenderQueueGroup &renderQueueGroup );
 
     public:
         RenderQueue( HlmsManager *hlmsManager, SceneManager *sceneManager, VaoManager *vaoManager );
@@ -276,7 +341,12 @@ namespace Ogre
         @param lastRq
         @param casterPass
         */
-        void warmUpShaders( uint8 firstRq, uint8 lastRq, bool casterPass );
+        void warmUpShadersCollect( uint8 firstRq, uint8 lastRq, bool casterPass );
+        void warmUpShadersTrigger( RenderSystem *rs );
+
+        void _warmUpShadersThread( size_t threadIdx );
+
+        void _compileShadersThread( size_t threadIdx );
 
         /// Don't call this too often. Only renders v1 objects at the moment.
         void renderSingleObject( Renderable *pRend, const MovableObject *pMovableObject,

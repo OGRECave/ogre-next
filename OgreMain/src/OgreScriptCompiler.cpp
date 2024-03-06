@@ -1369,6 +1369,8 @@ namespace Ogre
         mIds["samples_single_iteration_fallback"] = ID_SAMPLES_SINGLE_ITERATION_FALLBACK;
         mIds["force_mipmap_fallback"] = ID_FORCE_MIPMAP_FALLBACK;
 
+        mIds["mode"] = ID_MODE;
+
         mIds["compositor_node_shadow"] = ID_SHADOW_NODE;
         mIds["num_splits"] = ID_NUM_SPLITS;
         mIds["num_stable_splits"] = ID_NUM_STABLE_SPLITS;
