@@ -657,7 +657,7 @@ namespace Ogre
         FIMEMORY *fiMem = FreeImage_OpenMemory( (uint8_t *)const_cast<char *>( magicNumberPtr ),
                                                 static_cast<uint32_t>( maxbytes ) );
 
-        const FIBOOL bValid = FreeImage_ValidateFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
+        const auto bValid = FreeImage_ValidateFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
         FreeImage_CloseMemory( fiMem );
 
         if( bValid )
