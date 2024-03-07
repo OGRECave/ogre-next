@@ -62,10 +62,11 @@ THE SOFTWARE.
 
 #include <sstream>
 
-// We want to be compatible with both FreeImage and FreeImageRe, but first specifies sizes as DWORD and second as uint32_t
-// On Windows both DWORD (unsigned long) and uint32_t are separate 32bit types, so pointers to them can not be mixed
+// We want to be compatible with both FreeImage and FreeImageRe, but first specifies sizes as DWORD and
+// second as uint32_t. On Windows both DWORD (unsigned long) and uint32_t are separate 32bit types, so
+// pointers to them can not be mixed
 #ifndef FISIZE
-#define FISIZE decltype( FIICCPROFILE::size ) // DWORD for FreeImage, uint32_t for FreeImageRe
+#    define FISIZE decltype( FIICCPROFILE::size )  // DWORD for FreeImage, uint32_t for FreeImageRe
 #endif
 
 namespace Ogre
