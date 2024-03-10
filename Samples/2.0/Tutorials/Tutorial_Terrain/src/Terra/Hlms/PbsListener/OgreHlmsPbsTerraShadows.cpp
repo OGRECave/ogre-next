@@ -87,8 +87,6 @@ namespace Ogre
             hlms->_getProperty( PbsTerraProperty::TerraEnabled ) != 0 )
         {
             int32 texUnit = hlms->_getProperty( PbsProperty::Set0TextureSlotEnd ) - 1;
-            if( hlms->_getProperty( PbsProperty::HasPlanarReflections ) )
-                --texUnit;
             hlms->_setTextureReg( VertexShader, "terrainShadows", texUnit );
         }
     }
