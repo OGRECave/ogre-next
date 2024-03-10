@@ -2801,7 +2801,7 @@ namespace Ogre
             if( mHasPlanarReflections )
             {
                 mPlanarReflections->fillConstBufferData( renderTarget, cameras.renderingCamera,
-                                                         projectionMatrix, passBufferPtr );
+                                                         passBufferPtr );
                 passBufferPtr += mPlanarReflections->getConstBufferSize() >> 2u;
             }
 #endif
