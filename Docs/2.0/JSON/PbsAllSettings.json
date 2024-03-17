@@ -63,6 +63,7 @@ including invalid combinations (i.e. having a Metallic texture and a Specular te
             "shadow_const_bias" : 0.01,
             "two_sided"  :  false,
             "receive_shadows"	:	true,
+            "refraction_strength" : 0.2,
 
             "workflow" : "specular_ogre" "specular_fresnel" "metallic",
 
