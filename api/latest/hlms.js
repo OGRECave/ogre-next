@@ -58,7 +58,7 @@ var hlms =
     [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
       [ "My shadows don't show up or are very glitchy", "hlms.html#HlmsTroubleshootingShadow", null ]
     ] ],
-    [ "Precision / Quality", "hlms.html#autotoc_md100", null ],
+    [ "Precision / Quality", "hlms.html#autotoc_md101", null ],
     [ "Reference Guide: HLMS Blendblock", "hlmsblendblockref.html", [
       [ "Parameters:", "hlmsblendblockref.html#bbParameters", [
         [ "Parameter: alpha_to_coverage", "hlmsblendblockref.html#bbParamAlphaToCoverage", null ],
@@ -90,6 +90,7 @@ var hlms =
       ] ],
       [ "PBS Datablock Parameters", "hlmspbsdatablockref.html#dbPBSParameters", [
         [ "Parameter: brdf", "hlmspbsdatablockref.html#dbParamBRDF", null ],
+        [ "Parameter: refraction_strength", "hlmspbsdatablockref.html#autotoc_md29", null ],
         [ "Parameter: detail_diffuse[X]", "hlmspbsdatablockref.html#dbParamDetailDiffuse", null ],
         [ "Parameter: detail_normal[X]", "hlmspbsdatablockref.html#dbParamDetailNormal", null ],
         [ "Parameter: detail_weight", "hlmspbsdatablockref.html#dbParamDetailWeight", null ],

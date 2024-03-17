@@ -1,5 +1,6 @@
 var NAVTREEINDEX102 =
 {
+"struct_ogre_1_1_gpu_logical_index_use.html#a91d1c0191ce855328ae7f22488c1d5a0":[5,2,5,5,0],
 "struct_ogre_1_1_gpu_logical_index_use.html#a9f135f5ed4d3c13a5e9df38abf4aec3d":[5,2,5,5,1],
 "struct_ogre_1_1_gpu_logical_index_use.html#aaf903f4b7f9d1b7e5c72f768388b408e":[5,2,5,5,4],
 "struct_ogre_1_1_gpu_logical_index_use.html#af0fbf51e578ed82d008b1f4346bae20b":[5,2,5,5,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX102 =
 "struct_ogre_1_1_hlms_macroblock.html#a6992c372553d3cf1045f403bdd1a488c":[5,2,10,58,11],
 "struct_ogre_1_1_hlms_macroblock.html#a84c2808fce656f84311edfba9c5192ae":[5,2,10,58,4],
 "struct_ogre_1_1_hlms_macroblock.html#abe268acf5606ed35b7af995a2b031843":[5,2,10,58,8],
-"struct_ogre_1_1_hlms_macroblock.html#ac8868b95f6dc87b0d9e75449414dbacb":[5,2,10,58,7],
-"struct_ogre_1_1_hlms_macroblock.html#accab50d79b1fb2cbe0d02d0cd57160cf":[5,2,10,58,2]
+"struct_ogre_1_1_hlms_macroblock.html#ac8868b95f6dc87b0d9e75449414dbacb":[5,2,10,58,7]
 };

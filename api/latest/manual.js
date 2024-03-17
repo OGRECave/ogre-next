@@ -148,27 +148,27 @@ var manual =
         [ "Execution mask", "compositor.html#CompositorWorkspacesStereoExecutionMask", null ],
         [ "Default values", "compositor.html#CompositorWorkspacesStereoDefaultValues", null ]
       ] ],
-      [ "Advanced MSAA", "compositor.html#autotoc_md94", [
-        [ "What is MSAA?", "compositor.html#autotoc_md95", [
-          [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md96", null ],
-          [ "MSAA approach to the problem", "compositor.html#autotoc_md97", null ]
+      [ "Advanced MSAA", "compositor.html#autotoc_md95", [
+        [ "What is MSAA?", "compositor.html#autotoc_md96", [
+          [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md97", null ],
+          [ "MSAA approach to the problem", "compositor.html#autotoc_md98", null ]
         ] ],
-        [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md98", null ],
-        [ "Ogre + MSAA with Explicit Resolves", "compositor.html#autotoc_md99", null ]
+        [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md99", null ],
+        [ "Ogre + MSAA with Explicit Resolves", "compositor.html#autotoc_md100", null ]
       ] ]
     ] ],
     [ "Global Illumination Methods", "_gi_methods.html", "_gi_methods" ],
     [ "Image Voxel Cone Tracing", "_image_voxel_cone_tracing.html", [
       [ "Step 1: Image Voxelizer", "_image_voxel_cone_tracing.html#IVCT_Step1", [
         [ "Downside", "_image_voxel_cone_tracing.html#IVCT_Step1_Downside", [
-          [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md29", null ]
+          [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md30", null ]
         ] ],
-        [ "Trivia", "_image_voxel_cone_tracing.html#autotoc_md30", null ]
+        [ "Trivia", "_image_voxel_cone_tracing.html#autotoc_md31", null ]
       ] ],
       [ "Step 2: Row Translation", "_image_voxel_cone_tracing.html#IVCT_Step2", null ],
       [ "Step 3: Cascades", "_image_voxel_cone_tracing.html#IVCT_Step3", null ],
-      [ "Wait isn't this what UE5's Lumen does?", "_image_voxel_cone_tracing.html#autotoc_md31", null ],
-      [ "Wait isn't this what Godot does?", "_image_voxel_cone_tracing.html#autotoc_md32", null ]
+      [ "Wait isn't this what UE5's Lumen does?", "_image_voxel_cone_tracing.html#autotoc_md32", null ],
+      [ "Wait isn't this what Godot does?", "_image_voxel_cone_tracing.html#autotoc_md33", null ]
     ] ],
     [ "Instancing", "instancing.html", [
       [ "What is instancing?", "instancing.html#WhatIsInstancing", null ],
@@ -218,50 +218,50 @@ var manual =
       [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
     ] ],
     [ "Terra System", "_terra_system.html", [
-      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md85", null ],
-      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md86", null ],
-      [ "Terra cells", "_terra_system.html#autotoc_md87", [
-        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md88", null ],
-        [ "Outer layers", "_terra_system.html#autotoc_md89", null ]
+      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md86", null ],
+      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md87", null ],
+      [ "Terra cells", "_terra_system.html#autotoc_md88", [
+        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md89", null ],
+        [ "Outer layers", "_terra_system.html#autotoc_md90", null ]
       ] ],
-      [ "Skirts", "_terra_system.html#autotoc_md90", null ],
-      [ "Shadows", "_terra_system.html#autotoc_md91", null ],
-      [ "Shading", "_terra_system.html#autotoc_md92", null ],
-      [ "Why is it not a component?", "_terra_system.html#autotoc_md93", null ]
+      [ "Skirts", "_terra_system.html#autotoc_md91", null ],
+      [ "Shadows", "_terra_system.html#autotoc_md92", null ],
+      [ "Shading", "_terra_system.html#autotoc_md93", null ],
+      [ "Why is it not a component?", "_terra_system.html#autotoc_md94", null ]
     ] ],
     [ "Tunning memory consumption and resources", "_tuning_memory_resources.html", [
       [ "Grouping textures by type", "_tuning_memory_resources.html#GroupingTexturesByType", null ],
       [ "Dynamic vs Default buffers", "_tuning_memory_resources.html#DynamicVsDefaultBuffers", null ],
       [ "Tweaking default memory consumption by VaoManager", "_tuning_memory_resources.html#TweakingVaoManager", [
-        [ "Vulkan and <tt>TEXTURES_OPTIMAL</tt>", "_tuning_memory_resources.html#autotoc_md33", null ]
+        [ "Vulkan and <tt>TEXTURES_OPTIMAL</tt>", "_tuning_memory_resources.html#autotoc_md34", null ]
       ] ]
     ] ],
     [ "What's new in Ogre 2.2", "_ogre22_changes.html", [
-      [ "Load Store semantics", "_ogre22_changes.html#autotoc_md34", [
-        [ "Now that we’ve explained how TBDRs work, we can explain load and store actions", "_ogre22_changes.html#autotoc_md35", null ]
+      [ "Load Store semantics", "_ogre22_changes.html#autotoc_md35", [
+        [ "Now that we’ve explained how TBDRs work, we can explain load and store actions", "_ogre22_changes.html#autotoc_md36", null ]
       ] ],
-      [ "More control over MSAA", "_ogre22_changes.html#autotoc_md36", null ],
-      [ "Porting to Ogre 2.2 from 2.1", "_ogre22_changes.html#autotoc_md37", [
-        [ "PixelFormats", "_ogre22_changes.html#autotoc_md38", [
-          [ "Common pixel format equivalencies", "_ogre22_changes.html#autotoc_md39", null ]
+      [ "More control over MSAA", "_ogre22_changes.html#autotoc_md37", null ],
+      [ "Porting to Ogre 2.2 from 2.1", "_ogre22_changes.html#autotoc_md38", [
+        [ "PixelFormats", "_ogre22_changes.html#autotoc_md39", [
+          [ "Common pixel format equivalencies", "_ogre22_changes.html#autotoc_md40", null ]
         ] ],
-        [ "Useful code snippets", "_ogre22_changes.html#autotoc_md40", [
-          [ "Create a TextureGpu based on a file", "_ogre22_changes.html#autotoc_md41", null ],
-          [ "Create a TextureGpu based that you manually fill", "_ogre22_changes.html#autotoc_md42", null ],
-          [ "Uploading data to a TextureGpu", "_ogre22_changes.html#autotoc_md43", null ],
-          [ "Upload streaming", "_ogre22_changes.html#autotoc_md44", null ],
-          [ "Downloading data from TextureGpu into CPU", "_ogre22_changes.html#autotoc_md45", null ],
-          [ "Downloading streaming", "_ogre22_changes.html#autotoc_md46", null ]
+        [ "Useful code snippets", "_ogre22_changes.html#autotoc_md41", [
+          [ "Create a TextureGpu based on a file", "_ogre22_changes.html#autotoc_md42", null ],
+          [ "Create a TextureGpu based that you manually fill", "_ogre22_changes.html#autotoc_md43", null ],
+          [ "Uploading data to a TextureGpu", "_ogre22_changes.html#autotoc_md44", null ],
+          [ "Upload streaming", "_ogre22_changes.html#autotoc_md45", null ],
+          [ "Downloading data from TextureGpu into CPU", "_ogre22_changes.html#autotoc_md46", null ],
+          [ "Downloading streaming", "_ogre22_changes.html#autotoc_md47", null ]
         ] ]
       ] ],
-      [ "Difference between depth, numSlices and depthOrSlices", "_ogre22_changes.html#autotoc_md47", null ],
-      [ "Memory layout of textures and images", "_ogre22_changes.html#autotoc_md48", null ],
-      [ "Troubleshooting errors", "_ogre22_changes.html#autotoc_md49", null ],
-      [ "RenderPassDescriptors", "_ogre22_changes.html#autotoc_md50", null ],
-      [ "DescriptorSetTexture & co.", "_ogre22_changes.html#autotoc_md51", null ],
-      [ "Does 2.2 interoperate well with the HLMS texture arrays?", "_ogre22_changes.html#autotoc_md52", null ],
-      [ "Hlms porting", "_ogre22_changes.html#autotoc_md53", null ],
-      [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md54", null ]
+      [ "Difference between depth, numSlices and depthOrSlices", "_ogre22_changes.html#autotoc_md48", null ],
+      [ "Memory layout of textures and images", "_ogre22_changes.html#autotoc_md49", null ],
+      [ "Troubleshooting errors", "_ogre22_changes.html#autotoc_md50", null ],
+      [ "RenderPassDescriptors", "_ogre22_changes.html#autotoc_md51", null ],
+      [ "DescriptorSetTexture & co.", "_ogre22_changes.html#autotoc_md52", null ],
+      [ "Does 2.2 interoperate well with the HLMS texture arrays?", "_ogre22_changes.html#autotoc_md53", null ],
+      [ "Hlms porting", "_ogre22_changes.html#autotoc_md54", null ],
+      [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md55", null ]
     ] ],
     [ "Behavior of StagingTexture in D3D11", "_behavior_staging_texture_d3_d11.html", [
       [ "Attempting to be contiguous", "_behavior_staging_texture_d3_d11.html#autotoc_md18", null ],
@@ -269,22 +269,22 @@ var manual =
       [ "Slicing in the middle", "_behavior_staging_texture_d3_d11.html#autotoc_md20", null ]
     ] ],
     [ "What's new in Ogre 2.3", "_ogre23_changes.html", [
-      [ "Switch importV1 to createByImportingV1", "_ogre23_changes.html#autotoc_md55", null ],
-      [ "Shadow's Normal Offset Bias", "_ogre23_changes.html#autotoc_md56", null ],
-      [ "Unlit vertex and pixel shaders unified", "_ogre23_changes.html#autotoc_md57", null ],
-      [ "Added HlmsMacroblock::mDepthClamp", "_ogre23_changes.html#autotoc_md58", null ],
-      [ "Added shadow pancaking", "_ogre23_changes.html#autotoc_md59", null ],
-      [ "PluginOptional", "_ogre23_changes.html#autotoc_md60", null ],
-      [ "Other relevant information when porting", "_ogre23_changes.html#autotoc_md61", [
-        [ "Do not call notifyDataIsReady more than needed", "_ogre23_changes.html#autotoc_md62", null ],
-        [ "Global changes for Vulkan compatibility:", "_ogre23_changes.html#autotoc_md63", null ]
+      [ "Switch importV1 to createByImportingV1", "_ogre23_changes.html#autotoc_md56", null ],
+      [ "Shadow's Normal Offset Bias", "_ogre23_changes.html#autotoc_md57", null ],
+      [ "Unlit vertex and pixel shaders unified", "_ogre23_changes.html#autotoc_md58", null ],
+      [ "Added HlmsMacroblock::mDepthClamp", "_ogre23_changes.html#autotoc_md59", null ],
+      [ "Added shadow pancaking", "_ogre23_changes.html#autotoc_md60", null ],
+      [ "PluginOptional", "_ogre23_changes.html#autotoc_md61", null ],
+      [ "Other relevant information when porting", "_ogre23_changes.html#autotoc_md62", [
+        [ "Do not call notifyDataIsReady more than needed", "_ogre23_changes.html#autotoc_md63", null ],
+        [ "Global changes for Vulkan compatibility:", "_ogre23_changes.html#autotoc_md64", null ]
       ] ]
     ] ],
     [ "Root Layouts", "_root_layouts.html", [
       [ "Old APIs (i.e. D3D11 and GL)", "_root_layouts.html#RootLayoutsOldAPIs", null ],
       [ "New APIs and Root Layouts", "_root_layouts.html#RootLayoutsNewAPIs", null ],
       [ "Setting up root layouts", "_root_layouts.html#RootLayoutsSettingUp", [
-        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md82", null ]
+        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md83", null ]
       ] ],
       [ "Declaring Root Layouts in shaders", "_root_layouts.html#RootLayoutsDeclaringInShaders", null ],
       [ "Baked sets", "_root_layouts.html#RootLayoutsBakedSets", null ],
@@ -298,38 +298,38 @@ var manual =
             [ "Links", "hlmspbsdatablockref.html#dbLinks", null ],
             [ "Links", "hlmsunlitdatablockref.html#dbulLinks", null ],
             [ "Links", "hlmsterradatablockref.html#dbtLinks", null ],
-            [ "OpenGL", "_root_layouts.html#autotoc_md83", null ],
-            [ "Vulkan", "_root_layouts.html#autotoc_md84", null ]
+            [ "OpenGL", "_root_layouts.html#autotoc_md84", null ],
+            [ "Vulkan", "_root_layouts.html#autotoc_md85", null ]
           ] ]
         ] ]
       ] ]
     ] ],
     [ "Resolving Merge Conflicts in Ogre-Next 3.0", "_resolving_merge_conflicts30.html", [
-      [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md80", null ],
-      [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md81", null ]
+      [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md81", null ],
+      [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md82", null ]
     ] ],
     [ "What's new in Ogre-Next 3.0", "_ogre30_changes.html", [
-      [ "Ogre to OgreNext name migration", "_ogre30_changes.html#autotoc_md64", null ],
-      [ "PBS Changes in 3.0", "_ogre30_changes.html#autotoc_md65", null ],
-      [ "Hlms Shader piece changes", "_ogre30_changes.html#autotoc_md66", null ],
-      [ "Move to C++11 and general cleanup", "_ogre30_changes.html#autotoc_md67", null ]
+      [ "Ogre to OgreNext name migration", "_ogre30_changes.html#autotoc_md65", null ],
+      [ "PBS Changes in 3.0", "_ogre30_changes.html#autotoc_md66", null ],
+      [ "Hlms Shader piece changes", "_ogre30_changes.html#autotoc_md67", null ],
+      [ "Move to C++11 and general cleanup", "_ogre30_changes.html#autotoc_md68", null ]
     ] ],
     [ "PBR / PBS Changes in 3.0", "_p_b_s_changes_in30.html", [
-      [ "Short version", "_p_b_s_changes_in30.html#autotoc_md68", null ],
-      [ "Long version", "_p_b_s_changes_in30.html#autotoc_md69", [
-        [ "Direct Lighting", "_p_b_s_changes_in30.html#autotoc_md70", [
-          [ "Fresnel Diffuse is no longer considered", "_p_b_s_changes_in30.html#autotoc_md71", [
-            [ "Raffaele's comments:", "_p_b_s_changes_in30.html#autotoc_md72", null ],
-            [ "Default-enable to diffuse fresnel", "_p_b_s_changes_in30.html#autotoc_md73", null ]
+      [ "Short version", "_p_b_s_changes_in30.html#autotoc_md69", null ],
+      [ "Long version", "_p_b_s_changes_in30.html#autotoc_md70", [
+        [ "Direct Lighting", "_p_b_s_changes_in30.html#autotoc_md71", [
+          [ "Fresnel Diffuse is no longer considered", "_p_b_s_changes_in30.html#autotoc_md72", [
+            [ "Raffaele's comments:", "_p_b_s_changes_in30.html#autotoc_md73", null ],
+            [ "Default-enable to diffuse fresnel", "_p_b_s_changes_in30.html#autotoc_md74", null ]
           ] ],
-          [ "Geometric Term change", "_p_b_s_changes_in30.html#autotoc_md74", null ],
-          [ "Metalness change", "_p_b_s_changes_in30.html#autotoc_md75", null ]
+          [ "Geometric Term change", "_p_b_s_changes_in30.html#autotoc_md75", null ],
+          [ "Metalness change", "_p_b_s_changes_in30.html#autotoc_md76", null ]
         ] ],
-        [ "IBL", "_p_b_s_changes_in30.html#autotoc_md76", [
-          [ "IBL Diffuse", "_p_b_s_changes_in30.html#autotoc_md77", [
-            [ "Multiplication by PI", "_p_b_s_changes_in30.html#autotoc_md78", null ]
+        [ "IBL", "_p_b_s_changes_in30.html#autotoc_md77", [
+          [ "IBL Diffuse", "_p_b_s_changes_in30.html#autotoc_md78", [
+            [ "Multiplication by PI", "_p_b_s_changes_in30.html#autotoc_md79", null ]
           ] ],
-          [ "IBL Specular", "_p_b_s_changes_in30.html#autotoc_md79", null ]
+          [ "IBL Specular", "_p_b_s_changes_in30.html#autotoc_md80", null ]
         ] ]
       ] ]
     ] ]

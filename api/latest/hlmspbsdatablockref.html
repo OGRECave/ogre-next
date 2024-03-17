@@ -98,6 +98,7 @@ $(document).ready(function(){initNavTree('hlmspbsdatablockref.html',''); initRes
 </ul>
 </li>
 <li class="level1"><a href="#dbPBSParameters">PBS Datablock Parameters</a><ul><li class="level2"><a href="#dbParamBRDF">Parameter: brdf</a></li>
+<li class="level2"><a href="#autotoc_md29">Parameter: refraction_strength</a></li>
 <li class="level2"><a href="#dbParamDetailDiffuse">Parameter: detail_diffuse[X]</a></li>
 <li class="level2"><a href="#dbParamDetailNormal">Parameter: detail_normal[X]</a></li>
 <li class="level2"><a href="#dbParamDetailWeight">Parameter: detail_weight</a></li>
@@ -237,6 +238,13 @@ Parameter: brdf</h2>
 </ul>
 </li>
 <li><b>DEFAULT="default"</b></li>
+</ul>
+<h2><a class="anchor" id="autotoc_md29"></a>
+Parameter: refraction_strength</h2>
+<ul>
+<li>Value of type float</li>
+<li>See Ogre::HlmsPbsDatablock::setRefractionStrength</li>
+<li><b>DEFAULT=0.075</b></li>
 </ul>
 <h2><a class="anchor" id="dbParamDetailDiffuse"></a>
 Parameter: detail_diffuse[X]</h2>
@@ -514,6 +522,8 @@ Example PBS Datablock Definition:</h1>
 <div class="line">            &quot;macroblock&quot; : &quot;macroblock_name&quot;,</div>
 <div class="line">            &quot;macroblock&quot; : [&quot;macroblock_name&quot;, &quot;macroblock_name_for_shadows&quot;],</div>
 <div class="line">            &quot;shadow_const_bias&quot; : 0.01,</div>
+<div class="line">            </div>
+<div class="line">            &quot;refraction_strength&quot; : 0.2,</div>
 <div class="line">      </div>
 <div class="line">            &quot;brdf&quot; : &quot;default&quot;,</div>
 <div class="line">            &quot;detail_diffuse0&quot; :</div>

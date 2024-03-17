@@ -148,12 +148,12 @@ $(document).ready(function(){initNavTree('compositor.html',''); initResizable();
 <li class="level2"><a href="#CompositorWorkspacesStereoDefaultValues">Default values</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md94">Advanced MSAA</a><ul><li class="level2"><a href="#autotoc_md95">What is MSAA?</a><ul><li class="level3"><a href="#autotoc_md96">Supersampling Antialiasing (SSAA) vs MSAA</a></li>
-<li class="level3"><a href="#autotoc_md97">MSAA approach to the problem</a></li>
+<li class="level1"><a href="#autotoc_md95">Advanced MSAA</a><ul><li class="level2"><a href="#autotoc_md96">What is MSAA?</a><ul><li class="level3"><a href="#autotoc_md97">Supersampling Antialiasing (SSAA) vs MSAA</a></li>
+<li class="level3"><a href="#autotoc_md98">MSAA approach to the problem</a></li>
 </ul>
 </li>
-<li class="level2"><a href="#autotoc_md98">Ogre + MSAA with Implicit Resolves</a></li>
-<li class="level2"><a href="#autotoc_md99">Ogre + MSAA with Explicit Resolves</a></li>
+<li class="level2"><a href="#autotoc_md99">Ogre + MSAA with Implicit Resolves</a></li>
+<li class="level2"><a href="#autotoc_md100">Ogre + MSAA with Explicit Resolves</a></li>
 </ul>
 </li>
 </ul>
@@ -1622,14 +1622,14 @@ Default values</h2>
 <div class="line">}</div>
 </div><!-- fragment --><p>[^5]: starting_slot + slot = 1 + 0 = 1</p>
 <p>[^6]: Note: You're allowed to keep an explicitly resolved textured dirty forever (i.e. never resolve, in case your main purpose is to always access fsaa subsamples)</p>
-<h1><a class="anchor" id="autotoc_md94"></a>
+<h1><a class="anchor" id="autotoc_md95"></a>
 Advanced MSAA</h1>
-<h2><a class="anchor" id="autotoc_md95"></a>
+<h2><a class="anchor" id="autotoc_md96"></a>
 What is MSAA?</h2>
 <p>MSAA (Multisample Antialiasing) is a very common antialiasing technique.</p>
 <p>It is quite common to treat MSAA like black magic: it works automatically and makes those staircase effect aka jagged edges aka aliasing disappear.</p>
 <p>However there are times where we need to understand how it works, what's going on and how to control it explicitly via <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>.</p>
-<h3><a class="anchor" id="autotoc_md96"></a>
+<h3><a class="anchor" id="autotoc_md97"></a>
 Supersampling Antialiasing (SSAA) vs MSAA</h3>
 <p>It is best to explain what MSAA is by first explaining its most basic form: SSAA aka Supersampling Antialiasing.</p>
 <p>SSAA is simply rasterizing at higher resolution and then using a downscale filter. Huh? What's next you ask? That's it!</p>
@@ -1638,7 +1638,7 @@ Supersampling Antialiasing (SSAA) vs MSAA</h3>
 <p>This operation of scaling down is known as **'Resolve'**</p>
 <p>The problem with SSAA: it consumes a lot of bandwidth and processing power. 4x of everything to be exact (for 4xSSAA).</p>
 <p><b>That's where MSAA comes in.</b> MSAA in is basic form looks like SSAA: the GPU needs to allocate a 3840x2160 colour target and a 3840x2160 depth buffer. Thus it stll consumes 4x more memory.</p>
-<h3><a class="anchor" id="autotoc_md97"></a>
+<h3><a class="anchor" id="autotoc_md98"></a>
 MSAA approach to the problem</h3>
 <p>What's different is that MSAA assumes only triangle edges are different and need special treatment. Thus for all pixels except the ones at the border of a triangle, the GPU will only run the pixel shader <em>once</em> and broadcast the colour to all 4 pixels <em>just as if it were rendering at 1920x1080</em>. This saves 4x of colour bandwidth and 4x processing power, making it very efficient.</p>
 <p>The depth however is still populated at 3840x2160.</p>
@@ -1654,7 +1654,7 @@ MSAA approach to the problem</h3>
 <li>HDR tonemapping <a href="https://mynameismjp.wordpress.com/2012/10/24/msaa-overview/">should happen before resolving</a>, otherwise aliasing effects won't go away. That means an HDR tonemap needs direct access to the MSAA contents. See our HDR sample which deals with this issue.</li>
 <li>Resolving a depth buffer makes no sense. Averaging depth is meaningless. Depth is often required by postprocessing effects such as Screen Space Reflections, Depth of Field, SSAO. In order to do this, either the 1920x1080 4xMSAA depth buffer gets copied to a regular 3840x2160 texture (to make it cache- and sampling-friendly) or we pretend MSAA did not happen and just take of the values, or the minimum or maximum of each. There is no right answer and it is a very similar problem <a href="https://developer.nvidia.com/gpugems/gpugems3/part-iv-image-effects/chapter-23-high-speed-screen-particles">mixed resolution particle rendering has</a>.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md98"></a>
+<h2><a class="anchor" id="autotoc_md99"></a>
 Ogre + MSAA with Implicit Resolves</h2>
 <p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> by default uses implicit resolves. When you call:</p>
 <div class="fragment"><div class="line">texture = textureGpuManager-&gt;createTexture(</div>
@@ -1683,7 +1683,7 @@ Ogre + MSAA with Implicit Resolves</h2>
 <li>StoreOrResolve: This is the compositor's default. It behaves like 'Store' if the texture is not MSAA. It behaves like 'MultisampleResolve' if the texture is MSAA.</li>
 </ul>
 <p>Implicitly resolved textures is how <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> traditionally worked before <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 tried to implement this but it was very basic and often broken.</p>
-<h2><a class="anchor" id="autotoc_md99"></a>
+<h2><a class="anchor" id="autotoc_md100"></a>
 Ogre + MSAA with Explicit Resolves</h2>
 <p>You need to explicitly ask for explicit resolves. When you call:</p>
 <div class="fragment"><div class="line">texture = textureGpuManager-&gt;createTexture(</div>

@@ -2,7 +2,7 @@ var NAVTREEINDEX23 =
 {
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,25],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,26],
-"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,23],
+"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,22],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,1],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,3],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,5],
