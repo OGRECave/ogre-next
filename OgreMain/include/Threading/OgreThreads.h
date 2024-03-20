@@ -41,6 +41,21 @@ THE SOFTWARE.
 #    define OGRE_THREAD_CALL_CONVENTION
 #endif
 
+namespace Ogre
+{
+    template <typename T>
+    struct DeleteOnDestructor
+    {
+        T *ptr;
+        DeleteOnDestructor( T *_ptr ) : ptr( _ptr ) {}
+        ~DeleteOnDestructor() { delete ptr; }
+
+        // Prevent being able to copy this object
+        DeleteOnDestructor( const DeleteOnDestructor & ) = delete;
+        DeleteOnDestructor &operator=( const DeleteOnDestructor & ) = delete;
+    };
+}  // namespace Ogre
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 /// See Threads::CreateThread for an example on how to use
 #    define THREAD_DECLARE( threadFunction ) \
@@ -48,15 +63,9 @@ THE SOFTWARE.
         { \
             unsigned long       retVal = 0; \
             Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle *>( argName ) ); \
-            try \
-            { \
-                threadHandle->_setOsHandleToSelf(); \
-                retVal = threadFunction( threadHandle ); \
-            } \
-            catch( ... ) \
-            { \
-            } \
-            delete threadHandle; \
+            Ogre::DeleteOnDestructor<Ogre::ThreadHandle> container( threadHandle ); \
+            threadHandle->_setOsHandleToSelf(); \
+            retVal = threadFunction( threadHandle ); \
             return retVal; \
         }
 #else
@@ -66,16 +75,9 @@ THE SOFTWARE.
         { \
             unsigned long       retVal = 0; \
             Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle *>( argName ) ); \
-            try \
-            { \
-                threadHandle->_setOsHandleToSelf(); \
-                retVal = threadFunction( threadHandle ); \
-            } \
-            catch( ... ) \
-            { \
-            } \
-            delete threadHandle; \
-\
+            Ogre::DeleteOnDestructor<Ogre::ThreadHandle> container( threadHandle ); \
+            threadHandle->_setOsHandleToSelf(); \
+            retVal = threadFunction( threadHandle ); \
             return (void *)retVal; \
         }
 #endif
