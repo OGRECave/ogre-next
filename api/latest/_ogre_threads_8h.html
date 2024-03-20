@@ -100,6 +100,8 @@ $(document).ready(function(){initNavTree('_ogre_threads_8h.html',''); initResiza
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_delete_on_destructor.html">Ogre::DeleteOnDestructor&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_thread_handle.html">Ogre::ThreadHandle</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_threads.html">Ogre::Threads</a></td></tr>
@@ -182,20 +184,13 @@ Typedefs</h2></td></tr>
 <div class="line">        { \</div>
 <div class="line">            unsigned <span class="keywordtype">long</span>       retVal = 0; \</div>
 <div class="line">            Ogre::ThreadHandle *threadHandle( <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="class_ogre_1_1_thread_handle.html">Ogre::ThreadHandle</a> *<span class="keyword">&gt;</span>( argName ) ); \</div>
-<div class="line">            try \</div>
-<div class="line">            { \</div>
-<div class="line">                threadHandle-&gt;_setOsHandleToSelf(); \</div>
-<div class="line">                retVal = threadFunction( threadHandle ); \</div>
-<div class="line">            } \</div>
-<div class="line">            catch( ... ) \</div>
-<div class="line">            { \</div>
-<div class="line">            } \</div>
-<div class="line">            delete threadHandle; \</div>
-<div class="line">\</div>
+<div class="line">            Ogre::DeleteOnDestructor&lt;Ogre::ThreadHandle&gt; container( threadHandle ); \</div>
+<div class="line">            threadHandle-&gt;_setOsHandleToSelf(); \</div>
+<div class="line">            retVal = threadFunction( threadHandle ); \</div>
 <div class="line">            return (<span class="keywordtype">void</span> *)retVal; \</div>
 <div class="line">        }</div>
 <div class="ttc" id="a_ogre_threads_8h_html_a185766e353b49ca5f5c5073a1f069b6f"><div class="ttname"><a href="_ogre_threads_8h.html#a185766e353b49ca5f5c5073a1f069b6f">OGRE_THREAD_CALL_CONVENTION</a></div><div class="ttdeci">#define OGRE_THREAD_CALL_CONVENTION</div><div class="ttdef"><b>Definition:</b> OgreThreads.h:41</div></div>
-<div class="ttc" id="aclass_ogre_1_1_thread_handle_html"><div class="ttname"><a href="class_ogre_1_1_thread_handle.html">Ogre::ThreadHandle</a></div><div class="ttdef"><b>Definition:</b> OgreThreads.h:93</div></div>
+<div class="ttc" id="aclass_ogre_1_1_thread_handle_html"><div class="ttname"><a href="class_ogre_1_1_thread_handle.html">Ogre::ThreadHandle</a></div><div class="ttdef"><b>Definition:</b> OgreThreads.h:95</div></div>
 </div><!-- fragment -->
 <p>See Threads::CreateThread for an example on how to use. </p>
 

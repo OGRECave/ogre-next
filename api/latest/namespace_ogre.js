@@ -535,6 +535,7 @@ var namespace_ogre =
     [ "DeflectorPlaneAffector", "class_ogre_1_1_deflector_plane_affector.html", "class_ogre_1_1_deflector_plane_affector" ],
     [ "DeflectorPlaneAffectorFactory", "class_ogre_1_1_deflector_plane_affector_factory.html", null ],
     [ "Degree", "class_ogre_1_1_degree.html", "class_ogre_1_1_degree" ],
+    [ "DeleteOnDestructor", "struct_ogre_1_1_delete_on_destructor.html", "struct_ogre_1_1_delete_on_destructor" ],
     [ "DepthBuffer", "struct_ogre_1_1_depth_buffer.html", "struct_ogre_1_1_depth_buffer" ],
     [ "DescBindingRange", "struct_ogre_1_1_desc_binding_range.html", "struct_ogre_1_1_desc_binding_range" ],
     [ "DescriptorSetSampler", "struct_ogre_1_1_descriptor_set_sampler.html", "struct_ogre_1_1_descriptor_set_sampler" ],

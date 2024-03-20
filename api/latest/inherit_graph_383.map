@@ -1,3 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_object_data.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays)" alt="" coords="5,5,140,32"/>
+<area shape="rect" id="node1" href="$class_ogre_1_1_obj_cmd_buffer_1_1_cmd.html" title=" " alt="" coords="5,143,196,170"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_obj_cmd_buffer_1_1_exception_thrown.html" title=" " alt="" coords="258,5,410,47"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_obj_cmd_buffer_1_1_notify_data_is_ready.html" title=" " alt="" coords="258,71,410,112"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_obj_cmd_buffer_1_1_out_of_date_cache.html" title=" " alt="" coords="258,136,410,177"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_obj_cmd_buffer_1_1_transition_to_loaded.html" title=" " alt="" coords="257,201,411,243"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_obj_cmd_buffer_1_1_upload_from_staging_tex.html" title=" " alt="" coords="244,267,424,308"/>
 </map>

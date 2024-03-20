@@ -190,14 +190,14 @@ var NAVTREEINDEX =
 "namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540acd7ddc0ba749aedac2cc5094d3fdd798",
 "struct___d3_d_c_o_l_o_r_v_a_l_u_e.html#a75fb19f8ec022e84b099bdc5752487bb",
 "struct_ogre_1_1_compositor_named_buffer.html#a50deda7881a2bcfd14e34cc15bead786",
-"struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#af2fec86c1eb6096e650385ef2e703d4c",
-"struct_ogre_1_1_gpu_logical_index_use.html#a91d1c0191ce855328ae7f22488c1d5a0",
-"struct_ogre_1_1_hlms_macroblock.html#accab50d79b1fb2cbe0d02d0cd57160cf",
-"struct_ogre_1_1_lod_vertex_buffer.html",
-"struct_ogre_1_1_rendering_metrics.html#af3f28bc50e4dc72e47ff1099fbbb47a2",
-"struct_ogre_1_1_texture_box.html#a5935c959161bf4c97af599ee22b86fc0",
-"struct_ogre_1_1_volume_1_1_chunk_request.html#ae5e6c6ee00b6c824bcc782266a440c42",
-"struct_ogre_1_1is_pod_like_3_01std_1_1pair_3_01_t_00_01_u_01_4_01_4.html"
+"struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#aae7055a7d4be5d244b9fc3f8d1762c9d",
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a2cdd35182b10421abcbf8fefa4b7be47",
+"struct_ogre_1_1_hlms_macroblock.html#a59013785563e6a19b27a03943b85acdd",
+"struct_ogre_1_1_lod_level.html#a7bafbed24b52459d611c54799aabf754",
+"struct_ogre_1_1_rendering_metrics.html#a226ff71a38bdee6b6795aa6e7ac22e3f",
+"struct_ogre_1_1_texture_box.html#a1106f8a2d7f5d442d14408d84c1ff05f",
+"struct_ogre_1_1_volume_1_1_chunk_request.html#a194b6f47569db10150aa2726d1ef0dd3",
+"struct_ogre_1_1is_pod_like_3_01long_01_4.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

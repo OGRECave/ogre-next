@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1v1_1_1_edge_data_1_1_triangle.html" target="_top" xlink:title="Basic triangle structure.">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1v1_1_1_edge_data_1_1_edge_group.html" target="_top" xlink:title="A group of edges sharing the same vertex data.">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 111,-30.5 111,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::EdgeData</text>
-<text text-anchor="middle" x="55.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::Triangle</text>
+<text text-anchor="middle" x="55.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::EdgeGroup</text>
 </a>
 </g>
 </g>

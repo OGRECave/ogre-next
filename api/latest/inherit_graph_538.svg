@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html" target="_top" xlink:title="The result of having built a tangent space basis.">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_index_remap.html" target="_top" xlink:title="Information about a remapped index.">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 152,-30.5 152,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TangentSpaceCalc</text>
-<text text-anchor="middle" x="76" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::Result</text>
+<text text-anchor="middle" x="76" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::IndexRemap</text>
 </a>
 </g>
 </g>
