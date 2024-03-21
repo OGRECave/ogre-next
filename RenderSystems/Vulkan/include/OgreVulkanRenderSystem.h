@@ -340,6 +340,8 @@ namespace Ogre
 
         bool hasAnisotropicMipMapFilter() const override { return true; }
 
+        void getCustomAttribute( const String &name, void *pData ) override;
+
         void setClipPlanesImpl( const PlaneList &clipPlanes ) override;
         void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
                                                      Window *primary ) override;

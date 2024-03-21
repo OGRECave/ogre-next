@@ -2538,6 +2538,43 @@ namespace Ogre
         RenderSystem::endGpuDebuggerFrameCapture( window, bDiscard );
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::getCustomAttribute( const String &name, void *pData )
+    {
+        if( name == "VkInstance" )
+        {
+            *(VkInstance *)pData = mDevice->mInstance;
+            return;
+        }
+        else if( name == "VkPhysicalDevice" )
+        {
+            *(VkPhysicalDevice *)pData = mDevice->mPhysicalDevice;
+            return;
+        }
+        else if( name == "VulkanDevice" )
+        {
+            *(VulkanDevice **)pData = mDevice;
+            return;
+        }
+        else if( name == "VkDevice" )
+        {
+            *(VkDevice *)pData = mDevice->mDevice;
+            return;
+        }
+        else if( name == "mPresentQueue" )
+        {
+            *(VkQueue *)pData = mDevice->mPresentQueue;
+            return;
+        }
+        else if( name == "VulkanQueue" )
+        {
+            *(VulkanQueue **)pData = &mDevice->mGraphicsQueue;
+            return;
+        }
+
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Attribute not found: " + name,
+                     "VulkanRenderSystem::getCustomAttribute" );
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::setClipPlanesImpl( const PlaneList &clipPlanes ) {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
