@@ -1599,7 +1599,7 @@ namespace Ogre
                                                             unsigned short lodNum, MeshLodUsage &usage,
                                                             uint8 casterPass )
         {
-            usage.manualName = "";
+            usage.manualName.clear();
 
             // Get one set of detail per SubMesh
             unsigned numSubs, i;
@@ -3243,7 +3243,7 @@ namespace Ogre
                                                                  unsigned short lodNum,
                                                                  MeshLodUsage &usage, uint8 casterPass )
         {
-            usage.manualName = "";
+            usage.manualName.clear();
             usage.manualMesh.reset();
             pushInnerChunk( stream );
             {
@@ -3431,7 +3431,7 @@ namespace Ogre
                 readFloats( stream, &( usage.userValue ), 1 );
 
                 // Set default values
-                usage.manualName = "";
+                usage.manualName.clear();
                 usage.manualMesh.reset();
                 usage.edgeData = NULL;
 
@@ -3835,7 +3835,7 @@ namespace Ogre
                 usage.userValue = Math::Sqrt( usage.value );
 
                 // Set default values
-                usage.manualName = "";
+                usage.manualName.clear();
                 usage.manualMesh.reset();
                 usage.edgeData = NULL;
 
