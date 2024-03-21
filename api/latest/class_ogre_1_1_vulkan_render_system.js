@@ -100,6 +100,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "flushUAVs", "class_ogre_1_1_vulkan_render_system.html#a4c6ffaba5cdab8d05338061fa8026988", null ],
     [ "getColourVertexElementType", "class_ogre_1_1_vulkan_render_system.html#af8acd37d1a08c29816e03702001169ea", null ],
     [ "getConfigOptions", "class_ogre_1_1_vulkan_render_system.html#a21a0eed7c43225ea5f3a09df2507beca", null ],
+    [ "getCustomAttribute", "class_ogre_1_1_vulkan_render_system.html#a8ca7d23ba458937f74ea5f20b758217a", null ],
     [ "getDisplayMonitorCount", "class_ogre_1_1_vulkan_render_system.html#a8b589095fc9dc86cccf5495b55d2d231", null ],
     [ "getErrorDescription", "class_ogre_1_1_vulkan_render_system.html#aed95c87112738c43ac939a17c7fd302d", null ],
     [ "getFriendlyName", "class_ogre_1_1_vulkan_render_system.html#afd7791671c174fb80da8e48295f710c4", null ],
