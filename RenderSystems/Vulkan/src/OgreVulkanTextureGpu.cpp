@@ -86,6 +86,12 @@ namespace Ogre
 
         const PixelFormatGpu finalPixelFormat = getWorkaroundedPixelFormat( mPixelFormat );
 
+        // Unfortunately this is necessary, which means the abstraction may leak to the user.
+        // The pixel format is used in PSO generation, which creates a lot of issues I'm not willing
+        // to fix just because one old driver is broken. Setting mPixelFormat here fixes all issues so
+        // far encountered with old Adreno drivers.
+        mPixelFormat = finalPixelFormat;
+
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
         imageInfo.imageType = getVulkanTextureType();

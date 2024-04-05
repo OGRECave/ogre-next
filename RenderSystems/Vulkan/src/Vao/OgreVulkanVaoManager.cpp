@@ -122,7 +122,8 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
         Workarounds::mAdrenoUbo64kLimitTriggered = false;
         Workarounds::mAdrenoUbo64kLimit = 0u;
-        if( renderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM )
+        if( renderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM &&
+            renderSystem->getCapabilities()->getDeviceName().find( "Turnip" ) == String::npos )
         {
             mConstBufferMaxSize =
                 std::min<size_t>( mConstBufferMaxSize, 64u * 1024u - mConstBufferAlignment );

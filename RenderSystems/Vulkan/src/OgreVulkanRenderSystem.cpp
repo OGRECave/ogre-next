@@ -737,7 +737,9 @@ namespace Ogre
         rsc->addShaderProfile( "glslvk" );
         rsc->addShaderProfile( "glsl" );
 
-        if( rsc->getVendor() == GPU_QUALCOMM )
+        // Turnip is the Mesa driver.
+        // These workarounds are for the proprietary driver.
+        if( rsc->getVendor() == GPU_QUALCOMM && rsc->getDeviceName().find( "Turnip" ) == String::npos )
         {
 #ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
             Workarounds::mBad3DBlit = true;
