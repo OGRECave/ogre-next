@@ -157,6 +157,8 @@ namespace Ogre
         uint32 mLastParticleIdx;
         bool   mParticleQuotaFull;
 
+        bool mIsBillboardSet;
+
         ParticleRotationType::ParticleRotationType mRotationType;
 
         FastArray<ParticleSystem2 *> mParticleSystems;
@@ -204,7 +206,8 @@ namespace Ogre
     public:
         ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager,
                            SceneManager *ogre_nullable manager,
-                           ParticleSystemManager2 *particleSystemManager, const String &name );
+                           ParticleSystemManager2 *particleSystemManager, const String &name,
+                           const bool bIsBillboardSet );
         ~ParticleSystemDef() override;
 
         uint32 getQuota() const;

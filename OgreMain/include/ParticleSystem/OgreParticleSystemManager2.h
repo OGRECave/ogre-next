@@ -59,6 +59,8 @@ namespace Ogre
 
         std::map<IdString, ParticleSystemDef *> mParticleSystemDefMap;
 
+        FastArray<BillboardSet *> mBillboardSets;
+
         IndexBufferPacked *mSharedIndexBuffer16;
         IndexBufferPacked *mSharedIndexBuffer32;
         uint32             mHighestPossibleQuota16;
@@ -66,6 +68,8 @@ namespace Ogre
 
         float mTimeSinceLast;  // For threaded update.
 
+        // There's one ParticleSystemManager2 owned by Root (the 'master') which holds all templates.
+        // And one ParticleSystemManager2 per SceneManager that reference Root's.
         ParticleSystemManager2 *ogre_nullable mMaster;
         ObjectMemoryManager                  *mMemoryManager;
 
@@ -161,6 +165,22 @@ namespace Ogre
         bool hasParticleSystemDef( const String &name, bool bSearchInRoot = true ) const;
 
         void destroyAllParticleSystems();
+
+        /** Creates a BillboardSet.
+        @return
+            Pointer to newly created BillboardSet.
+        */
+        BillboardSet *createBillboardSet();
+
+        /** Destroys a BillboardSet created with createBillboardSet().
+        @param billboardSet
+            Set to destroy.
+        */
+        void destroyBillboardSet( BillboardSet *billboardSet );
+
+        /// Destroys all BillboardSet created with createBillboardSet().
+        /// Do not hold any more references to those pointers as they will become dangling!
+        void destroyAllBillboardSets();
 
         /** Instructs us to add all the ParticleSystemDef to the RenderQueue that match the given
             renderQueueId and pass the visibilityMask.
