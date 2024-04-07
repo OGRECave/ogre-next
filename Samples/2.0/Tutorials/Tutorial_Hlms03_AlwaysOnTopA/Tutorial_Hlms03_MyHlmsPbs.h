@@ -6,21 +6,21 @@
 
 namespace Ogre
 {
-	class MyHlmsPbs final : public HlmsPbs
+    class MyHlmsPbs final : public HlmsPbs
     {
-	public:
-		/// This value is completely arbitrary. It just doesn't have to clash with anything else.
+    public:
+        /// This value is completely arbitrary. It just doesn't have to clash with anything else.
         /// We use it to tag which SubItems/SubEntities should have be always on top.
         static constexpr uint32 kAlwaysOnTopId = 6841455u;
 
-		MyHlmsPbs( Archive *dataFolder, ArchiveVec *libraryFolders ) :
-			HlmsPbs( dataFolder, libraryFolders )
+        MyHlmsPbs( Archive *dataFolder, ArchiveVec *libraryFolders ) :
+            HlmsPbs( dataFolder, libraryFolders )
         {
         }
 
-		void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override
-		{
-			HlmsPbs::calculateHashForPreCreate( renderable, inOutPieces );
+        void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) override
+        {
+            HlmsPbs::calculateHashForPreCreate( renderable, inOutPieces );
 
             // Check if the object has been tagged to be always on top. If it does, then set
             // the respective property so the shader gets generated with extra code.
@@ -28,7 +28,7 @@ namespace Ogre
             // calculateHashForPreCaster().
             if( renderable->hasCustomParameter( kAlwaysOnTopId ) )
                 setProperty( kNoTid, "always_on_top", 1 );
-		}
+        }
     };
 }  // namespace Ogre
 

@@ -44,10 +44,8 @@ namespace Demo
             else if( *( originalDataFolder.end() - 1 ) != '/' )
                 originalDataFolder += "/";
 
-            const char *c_locations[2] = {
-                "2.0/scripts/materials/PbsMaterials",
-                "2.0/scripts/materials/ParticleFX2"
-            };
+            const char *c_locations[2] = { "2.0/scripts/materials/PbsMaterials",
+                                           "2.0/scripts/materials/ParticleFX2" };
 
             for( size_t i = 0; i < sizeof( c_locations ) / sizeof( c_locations[0] ); ++i )
             {

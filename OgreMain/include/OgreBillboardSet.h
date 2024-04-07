@@ -56,9 +56,9 @@ namespace Ogre
             top-left etc).
 
             This setting controls the fine tuning of where a billboard appears in relation to it's
-            position. It could be that a billboard's position represents it's center (e.g. for fireballs),
-            it could mean the center of the bottom edge (e.g. a tree which is positioned on the ground),
-            the top-left corner (e.g. a cursor).
+            position. It could be that a billboard's position represents it's center (e.g. for
+            fireballs), it could mean the center of the bottom edge (e.g. a tree which is positioned on
+            the ground), the top-left corner (e.g. a cursor).
 
             @see BillboardSet::setBillboardOrigin
         */

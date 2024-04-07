@@ -9,7 +9,7 @@ namespace Demo
 {
     class Hlms04AlwaysOnTopBGameState : public TutorialGameState
     {
-        std::vector<Ogre::Item*> mClones;
+        std::vector<Ogre::Item *> mClones;
 
         void createBar( const bool bAlwaysOnTop );
 
