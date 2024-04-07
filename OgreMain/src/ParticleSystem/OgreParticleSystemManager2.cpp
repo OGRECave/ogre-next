@@ -68,6 +68,8 @@ ParticleSystemManager2::ParticleSystemManager2( SceneManager *sceneManager,
 //-----------------------------------------------------------------------------
 ParticleSystemManager2::~ParticleSystemManager2()
 {
+    destroyAllBillboardSets();
+
     VaoManager *vaoManager =
         mSceneManager ? mSceneManager->getDestinationRenderSystem()->getVaoManager() : 0;
 
@@ -246,6 +248,31 @@ void ParticleSystemManager2::sortAndPrepare( ParticleSystemDef *systemDef, const
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::updateSerialPos()
 {
+    for( BillboardSet *billboardSet : mBillboardSets )
+    {
+        if( billboardSet->mParticleGpuData )
+        {
+            const size_t numParticlesToFlush = billboardSet->getNumSimdActiveParticles();
+            billboardSet->mGpuData->unmap( UO_KEEP_PERSISTENT, 0u,
+                                           sizeof( ParticleGpuData ) * numParticlesToFlush );
+            billboardSet->mParticleGpuData = 0;
+        }
+
+        Aabb aabb = Aabb::BOX_NULL;
+        for( const Aabb &threadAabb : billboardSet->mAabb )
+            aabb.merge( threadAabb );
+
+        // A null box can happen if there are not live billboards.
+        // We only care of the AABB for shadow casting (if there are billboards casting shadows).
+        // MovableObject::calculateCastersBox has problem with null boxes, but will ignore
+        // infinite ones; so set it to that.
+        if( aabb == Aabb::BOX_NULL )
+            aabb = Aabb::BOX_INFINITE;
+
+        billboardSet->setLocalAabb( aabb );
+        *billboardSet->_getObjectData().mWorldAabb = *billboardSet->_getObjectData().mLocalAabb;
+    }
+
     for( ParticleSystemDef *systemDef : mActiveParticleSystemDefs )
     {
         // Do this now, because getNumSimdActiveParticles() is about to change.
@@ -504,7 +531,7 @@ void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size
             cpuData.advancePack( threadAdvance / ARRAY_PACKED_REALS );
 
             ParticleGpuData *gpuData = billboardSet->mParticleGpuData + gpuAdvance;
-            tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numParticlesToProcess,
+            tickParticles( threadIdx, ARRAY_REAL_ZERO, cpuData, gpuData, numParticlesToProcess,
                            billboardSet, aabb );
 
             gpuAdvance += numParticlesToProcess;
@@ -873,6 +900,12 @@ void ParticleSystemManager2::prepareForUpdate( const Real timeSinceLast )
     {
         systemDef->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
             systemDef->mGpuData->map( 0u, systemDef->mGpuData->getNumElements() ) );
+    }
+
+    for( BillboardSet *billboardSet : mBillboardSets )
+    {
+        billboardSet->mParticleGpuData = reinterpret_cast<ParticleGpuData *>(
+            billboardSet->mGpuData->map( 0u, billboardSet->mGpuData->getNumElements() ) );
     }
 }
 //-----------------------------------------------------------------------------

@@ -202,17 +202,16 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     {
         mParticleCpuData.mRotationSpeed = reinterpret_cast<ArrayRadian *>(
             OGRE_MALLOC_SIMD( numParticles * sizeof( Radian ), MEMCATEGORY_GEOMETRY ) );
-        mParticleCpuData.mTimeToLive = reinterpret_cast<ArrayReal *>(
-            OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
         mParticleCpuData.mTotalTimeToLive = reinterpret_cast<ArrayReal *>(
             OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
     }
     else
     {
         mParticleCpuData.mRotationSpeed = 0;
-        mParticleCpuData.mTimeToLive = 0;
         mParticleCpuData.mTotalTimeToLive = 0;
     }
+    mParticleCpuData.mTimeToLive = reinterpret_cast<ArrayReal *>(
+        OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
     mParticleCpuData.mColour = reinterpret_cast<ArrayVector4 *>(
         OGRE_MALLOC_SIMD( numParticles * sizeof( Vector4 ), MEMCATEGORY_GEOMETRY ) );
 
@@ -223,10 +222,10 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     if( !mIsBillboardSet )
     {
         memset( mParticleCpuData.mRotationSpeed, 0, numParticles * sizeof( Radian ) );
-        memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
         for( size_t i = 0u; i < numParticles / ARRAY_PACKED_REALS; ++i )
             mParticleCpuData.mTotalTimeToLive[i] = Mathlib::ONE;  // Avoid divisions by 0.
     }
+    memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
     memset( mParticleCpuData.mColour, 0, numParticles * sizeof( Vector4 ) );
 
     GpuParticleCommon particleCommon( mParticleType != ParticleType::PerpendicularCommon
@@ -266,10 +265,10 @@ void ParticleSystemDef::_destroy( VaoManager *vaoManager )
     if( mParticleCpuData.mPosition )
     {
         OGRE_FREE_SIMD( mParticleCpuData.mColour, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
         if( !mIsBillboardSet )
         {
             OGRE_FREE_SIMD( mParticleCpuData.mTotalTimeToLive, MEMCATEGORY_GEOMETRY );
-            OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
             OGRE_FREE_SIMD( mParticleCpuData.mRotationSpeed, MEMCATEGORY_GEOMETRY );
         }
         OGRE_FREE_SIMD( mParticleCpuData.mRotation, MEMCATEGORY_GEOMETRY );

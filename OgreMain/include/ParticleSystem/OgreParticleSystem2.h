@@ -73,7 +73,7 @@ namespace Ogre
     ///
     /// For performance reasons, all particle system instances share the same RenderQueue ID.
     /// ParticleSystemDef must be cloned to use instances on another ID.
-    class _OgreExport ParticleSystemDef : public ParticleSystem, private Renderable
+    class _OgreExport ParticleSystemDef : public ParticleSystem, protected Renderable
     {
     private:
         class _OgrePrivate CmdBillboardType final : public ParamCommand

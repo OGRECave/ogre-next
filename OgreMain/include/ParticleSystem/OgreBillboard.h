@@ -54,6 +54,7 @@ namespace Ogre
 
         static Vector3 getDirection( const Quaternion &qRot ) { return -qRot.zAxis(); }
 
+        void setVisible( const bool bVisible );
         void setPosition( const Vector3 &pos );
         void setOrientation( const Quaternion &qRot ) { setDirection( getDirection( qRot ) ); }
         void setDirection( const Vector3 &vDir );

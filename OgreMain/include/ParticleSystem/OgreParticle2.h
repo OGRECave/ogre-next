@@ -61,13 +61,14 @@ namespace Ogre
         /// Speed of rotation in radians/sec. It is nullptr for BillboardSet2.
         ArrayRadian *RESTRICT_ALIAS ogre_nullable mRotationSpeed;
 
-        /// Time left to live, number of seconds left of particles natural life. It does when it's 0.
-        /// It is nullptr for BillboardSet2.
-        ArrayReal *RESTRICT_ALIAS ogre_nullable mTimeToLive;
-
         /// Time to live, number of seconds left of particles natural life
         /// It is nullptr for BillboardSet2.
         ArrayReal *RESTRICT_ALIAS ogre_nullable mTotalTimeToLive;
+
+        /// Time left to live, number of seconds left of particles natural life. It does when it's 0.
+        /// It's a valid ptr even for BillboardSet2 because that's how we can tell apart unallocated
+        /// particles.
+        ArrayReal *RESTRICT_ALIAS mTimeToLive;
 
         /// Current colour
         ArrayVector4 *RESTRICT_ALIAS mColour;
@@ -79,8 +80,8 @@ namespace Ogre
             mDimensions += numAdvance;
             mRotation += numAdvance;
             mRotationSpeed += numAdvance;
-            mTimeToLive += numAdvance;
             mTotalTimeToLive += numAdvance;
+            mTimeToLive += numAdvance;
             mColour += numAdvance;
         }
     };
