@@ -452,6 +452,81 @@ void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size
         }
         systemDef->mAabb[threadIdx] = finalAabb;
     }
+
+    // Now do the billboards, which are very similar.
+    for( BillboardSet *billboardSet : mBillboardSets )
+    {
+        const size_t numSimdActiveParticles = billboardSet->getNumSimdActiveParticles();
+
+        // particlesPerThread must be multiple of ARRAY_PACKED_REALS
+        size_t particlesPerThread = ( numSimdActiveParticles + numThreads - 1u ) / numThreads;
+        particlesPerThread = ( ( particlesPerThread + ARRAY_PACKED_REALS - 1 ) / ARRAY_PACKED_REALS ) *
+                             ARRAY_PACKED_REALS;
+
+        const size_t quota = billboardSet->getQuota();
+        size_t threadAdvance = std::min( threadIdx * particlesPerThread, numSimdActiveParticles );
+        size_t totalThreadNumParticlesToProcess =
+            std::min( particlesPerThread, numSimdActiveParticles - threadAdvance );
+        size_t gpuAdvance = threadAdvance;
+
+        OGRE_ASSERT_MEDIUM( quota % ARRAY_PACKED_REALS == 0u );
+        OGRE_ASSERT_MEDIUM( threadAdvance % ARRAY_PACKED_REALS == 0u );
+        OGRE_ASSERT_MEDIUM( totalThreadNumParticlesToProcess % ARRAY_PACKED_REALS == 0u );
+
+        // billboardSet->getActiveParticlesPackOffset() * APR must be < quota
+        // threadAdvance (so far) & gpuAdvance must be < quota
+        OGRE_ASSERT_MEDIUM( threadAdvance <= quota );
+        // threadAdvance can now be >= quota
+        threadAdvance += billboardSet->getActiveParticlesPackOffset() * ARRAY_PACKED_REALS;
+
+        ArrayAabb aabb = ArrayAabb::BOX_NULL;
+
+        ParticleCpuData cpuData = billboardSet->getParticleCpuData();
+
+        for( int i = 0; i < 2; ++i )
+        {
+            // maxParticle can be >= quota
+            const size_t maxParticle = totalThreadNumParticlesToProcess + threadAdvance;
+            // particleExcess is the amount of particles we can't
+            // process this iteration and will do on the next one.
+            const size_t particleExcess = maxParticle - std::min( maxParticle, quota );
+
+            // If threadAdvance > quota, then particleExcess > totalThreadNumParticlesToProcess
+            OGRE_ASSERT_MEDIUM(
+                ( threadAdvance <= quota && totalThreadNumParticlesToProcess >= particleExcess ) ||
+                ( threadAdvance > quota && totalThreadNumParticlesToProcess <= particleExcess ) );
+
+            const size_t numParticlesToProcess =
+                std::max( totalThreadNumParticlesToProcess, particleExcess ) - particleExcess;
+
+            // This can advance out of bounds. But if so, then numParticlesToProcess == 0
+            OGRE_ASSERT_MEDIUM( threadAdvance <= quota || numParticlesToProcess == 0u );
+            cpuData.advancePack( threadAdvance / ARRAY_PACKED_REALS );
+
+            ParticleGpuData *gpuData = billboardSet->mParticleGpuData + gpuAdvance;
+            tickParticles( threadIdx, timeSinceLast, cpuData, gpuData, numParticlesToProcess,
+                           billboardSet, aabb );
+
+            gpuAdvance += numParticlesToProcess;
+            totalThreadNumParticlesToProcess = particleExcess;
+            // If threadAdvance < quota, then we are crossing the boundary and
+            // must start processing from threadAdvance = 0
+            //
+            // If threadAdvance >= quota, then just do threadAdvance -= quota.
+            threadAdvance = threadAdvance - std::min( quota, threadAdvance );
+            cpuData = billboardSet->getParticleCpuData();
+        }
+
+        Aabb finalAabb;
+        aabb.getAsAabb( finalAabb, 0u );
+        for( size_t j = 1u; j < ARRAY_PACKED_REALS; ++j )
+        {
+            Aabb scalarAabb;
+            aabb.getAsAabb( scalarAabb, j );
+            finalAabb.merge( scalarAabb );
+        }
+        billboardSet->mAabb[threadIdx] = finalAabb;
+    }
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::addEmitterFactory( ParticleEmitterDefDataFactory *factory )
