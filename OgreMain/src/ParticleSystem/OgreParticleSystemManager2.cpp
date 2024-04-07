@@ -231,7 +231,7 @@ void ParticleSystemManager2::sortAndPrepare( ParticleSystemDef *systemDef, const
                 else
                 {
                     // The pool run out of particles.
-                    // It won't be handling more while in updateSerial()
+                    // It won't be handling more while in _prepareParallel()
                     system->mNewParticlesPerEmitter[i] = j;
                     break;
                 }
@@ -351,7 +351,7 @@ void ParticleSystemManager2::_updateParallel( const size_t threadIdx, const size
                 // processed by other threads.
                 //
                 // We need to move on to the next set of particles requested by the next
-                // emitter during updateSerial().
+                // emitter during _prepareParallel().
                 currOffset += newParticlesPerEmitter;
             }
         }
