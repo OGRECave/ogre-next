@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "Math/Array/OgreBooleanMask.h"
 #include "OgreRenderQueue.h"
 #include "OgreSceneManager.h"
+#include "ParticleSystem/OgreBillboardSet2.h"
 #include "ParticleSystem/OgreEmitter2.h"
 #include "ParticleSystem/OgreParticle2.h"
 #include "ParticleSystem/OgreParticleAffector2.h"
@@ -528,7 +529,7 @@ ParticleSystemDef *ParticleSystemManager2::createParticleSystemDef( const String
     std::map<IdString, ParticleSystemDef *>::iterator itor = insertResult.first;
 
     itor->second = new ParticleSystemDef( Id::generateNewId<MovableObject>(), mMemoryManager,
-                                          mSceneManager, this, name );
+                                          mSceneManager, this, name, false );
     if( mSceneManager )
         mSceneManager->getRootSceneNode( SCENE_STATIC )->attachObject( itor->second );
     return itor->second;
@@ -576,6 +577,50 @@ void ParticleSystemManager2::destroyAllParticleSystems()
     for( std::pair<IdString, ParticleSystemDef *> itor : mParticleSystemDefMap )
         itor.second->_destroyAllParticleSystems();
     mActiveParticleSystemDefs.clear();
+}
+//-----------------------------------------------------------------------------
+BillboardSet *ParticleSystemManager2::createBillboardSet()
+{
+    OGRE_ASSERT_LOW( mSceneManager );
+    BillboardSet *retVal =
+        new BillboardSet( Id::generateNewId<MovableObject>(), mMemoryManager, mSceneManager, this );
+    retVal->mGlobalIndex = mBillboardSets.size();
+    mBillboardSets.push_back( retVal );
+    mSceneManager->getRootSceneNode( SCENE_STATIC )->attachObject( retVal );
+    return retVal;
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::destroyBillboardSet( BillboardSet *billboardSet )
+{
+    OGRE_ASSERT_LOW( billboardSet->mGlobalIndex < mBillboardSets.size() &&
+                     billboardSet ==
+                         *( mBillboardSets.begin() + ptrdiff_t( billboardSet->mGlobalIndex ) ) &&
+                     "Double free detected, memory corruption or this BillboardSet does not belong to "
+                     "this ParticleSystemManager2." );
+
+    FastArray<BillboardSet *>::iterator itor =
+        mBillboardSets.begin() + ptrdiff_t( billboardSet->mGlobalIndex );
+    itor = efficientVectorRemove( mBillboardSets, itor );
+
+    VaoManager *vaoManager = mSceneManager->getDestinationRenderSystem()->getVaoManager();
+    billboardSet->detachFromParent();
+    billboardSet->_destroy( vaoManager );
+    delete billboardSet;
+
+    // The set that was at the end got swapped and has now a different index.
+    if( itor != mBillboardSets.end() )
+        ( *itor )->mGlobalIndex = static_cast<size_t>( itor - mBillboardSets.begin() );
+}
+//-----------------------------------------------------------------------------
+void ParticleSystemManager2::destroyAllBillboardSets()
+{
+    VaoManager *vaoManager = mSceneManager->getDestinationRenderSystem()->getVaoManager();
+    for( ParticleSystemDef *billboardSet : mBillboardSets )
+    {
+        billboardSet->_destroy( vaoManager );
+        delete billboardSet;
+    }
+    mBillboardSets.clear();
 }
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::_addToRenderQueue( size_t threadIdx, size_t numThreads,

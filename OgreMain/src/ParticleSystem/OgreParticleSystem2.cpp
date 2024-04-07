@@ -71,8 +71,8 @@ ParticleSystemDef::CmdCommonUpVector ParticleSystemDef::msCommonUpVectorCmd;
 
 ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemoryManager,
                                       SceneManager *manager,
-                                      ParticleSystemManager2 *particleSystemManager,
-                                      const String &name ) :
+                                      ParticleSystemManager2 *particleSystemManager, const String &name,
+                                      const bool bIsBillboardSet ) :
     ParticleSystem( id, objectMemoryManager, manager, "", kParticleSystemDefaultRenderQueueId, false ),
     mName( name ),
     mParticleSystemManager( particleSystemManager ),
@@ -84,6 +84,7 @@ ParticleSystemDef::ParticleSystemDef( IdType id, ObjectMemoryManager *objectMemo
     mFirstParticleIdx( 0u ),
     mLastParticleIdx( 0u ),
     mParticleQuotaFull( false ),
+    mIsBillboardSet( bIsBillboardSet ),
     mRotationType( ParticleRotationType::None ),
     mParticleType( ParticleType::Point )
 {
@@ -197,12 +198,21 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
         OGRE_MALLOC_SIMD( numParticles * sizeof( Vector2 ), MEMCATEGORY_GEOMETRY ) );
     mParticleCpuData.mRotation = reinterpret_cast<ArrayRadian *>(
         OGRE_MALLOC_SIMD( numParticles * sizeof( Radian ), MEMCATEGORY_GEOMETRY ) );
-    mParticleCpuData.mRotationSpeed = reinterpret_cast<ArrayRadian *>(
-        OGRE_MALLOC_SIMD( numParticles * sizeof( Radian ), MEMCATEGORY_GEOMETRY ) );
-    mParticleCpuData.mTimeToLive = reinterpret_cast<ArrayReal *>(
-        OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
-    mParticleCpuData.mTotalTimeToLive = reinterpret_cast<ArrayReal *>(
-        OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
+    if( !mIsBillboardSet )
+    {
+        mParticleCpuData.mRotationSpeed = reinterpret_cast<ArrayRadian *>(
+            OGRE_MALLOC_SIMD( numParticles * sizeof( Radian ), MEMCATEGORY_GEOMETRY ) );
+        mParticleCpuData.mTimeToLive = reinterpret_cast<ArrayReal *>(
+            OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
+        mParticleCpuData.mTotalTimeToLive = reinterpret_cast<ArrayReal *>(
+            OGRE_MALLOC_SIMD( numParticles * sizeof( Real ), MEMCATEGORY_GEOMETRY ) );
+    }
+    else
+    {
+        mParticleCpuData.mRotationSpeed = 0;
+        mParticleCpuData.mTimeToLive = 0;
+        mParticleCpuData.mTotalTimeToLive = 0;
+    }
     mParticleCpuData.mColour = reinterpret_cast<ArrayVector4 *>(
         OGRE_MALLOC_SIMD( numParticles * sizeof( Vector4 ), MEMCATEGORY_GEOMETRY ) );
 
@@ -210,10 +220,13 @@ void ParticleSystemDef::init( VaoManager *vaoManager )
     memset( mParticleCpuData.mDirection, 0, numParticles * sizeof( Vector3 ) );
     memset( mParticleCpuData.mDimensions, 0, numParticles * sizeof( Vector2 ) );
     memset( mParticleCpuData.mRotation, 0, numParticles * sizeof( Radian ) );
-    memset( mParticleCpuData.mRotationSpeed, 0, numParticles * sizeof( Radian ) );
-    memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
-    for( size_t i = 0u; i < numParticles / ARRAY_PACKED_REALS; ++i )
-        mParticleCpuData.mTotalTimeToLive[i] = Mathlib::ONE;  // Avoid divisions by 0.
+    if( !mIsBillboardSet )
+    {
+        memset( mParticleCpuData.mRotationSpeed, 0, numParticles * sizeof( Radian ) );
+        memset( mParticleCpuData.mTimeToLive, 0, numParticles * sizeof( Real ) );
+        for( size_t i = 0u; i < numParticles / ARRAY_PACKED_REALS; ++i )
+            mParticleCpuData.mTotalTimeToLive[i] = Mathlib::ONE;  // Avoid divisions by 0.
+    }
     memset( mParticleCpuData.mColour, 0, numParticles * sizeof( Vector4 ) );
 
     GpuParticleCommon particleCommon( mParticleType != ParticleType::PerpendicularCommon
@@ -253,9 +266,12 @@ void ParticleSystemDef::_destroy( VaoManager *vaoManager )
     if( mParticleCpuData.mPosition )
     {
         OGRE_FREE_SIMD( mParticleCpuData.mColour, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mTotalTimeToLive, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
-        OGRE_FREE_SIMD( mParticleCpuData.mRotationSpeed, MEMCATEGORY_GEOMETRY );
+        if( !mIsBillboardSet )
+        {
+            OGRE_FREE_SIMD( mParticleCpuData.mTotalTimeToLive, MEMCATEGORY_GEOMETRY );
+            OGRE_FREE_SIMD( mParticleCpuData.mTimeToLive, MEMCATEGORY_GEOMETRY );
+            OGRE_FREE_SIMD( mParticleCpuData.mRotationSpeed, MEMCATEGORY_GEOMETRY );
+        }
         OGRE_FREE_SIMD( mParticleCpuData.mRotation, MEMCATEGORY_GEOMETRY );
         OGRE_FREE_SIMD( mParticleCpuData.mDimensions, MEMCATEGORY_GEOMETRY );
         OGRE_FREE_SIMD( mParticleCpuData.mDirection, MEMCATEGORY_GEOMETRY );

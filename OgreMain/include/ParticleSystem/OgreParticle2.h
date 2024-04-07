@@ -43,29 +43,31 @@ namespace Ogre
 
     struct _OgreExport ParticleCpuData
     {
-        /// Which of the packed values is ours. Value in range [0; 4) for SSE2
+        /// Which of the packed values is ours. Value in range [0; 4) for SSE2.
         uint8 mIndex;
 
-        /// World position
+        /// World position.
         ArrayVector3 *RESTRICT_ALIAS mPosition;
 
-        /// Direction (and speed)
+        /// Direction (and speed).
         ArrayVector3 *RESTRICT_ALIAS mDirection;
 
-        /// Width & Height
+        /// Width & Height.
         ArrayVector2 *RESTRICT_ALIAS mDimensions;
 
-        /// Current rotation value. MUST be kept in range [-PI; PI]
+        /// Current rotation value. MUST be kept in range [-PI; PI].
         ArrayRadian *RESTRICT_ALIAS mRotation;
 
-        /// Speed of rotation in radians/sec
-        ArrayRadian *RESTRICT_ALIAS mRotationSpeed;
+        /// Speed of rotation in radians/sec. It is nullptr for BillboardSet2.
+        ArrayRadian *RESTRICT_ALIAS ogre_nullable mRotationSpeed;
 
         /// Time left to live, number of seconds left of particles natural life. It does when it's 0.
-        ArrayReal *RESTRICT_ALIAS mTimeToLive;
+        /// It is nullptr for BillboardSet2.
+        ArrayReal *RESTRICT_ALIAS ogre_nullable mTimeToLive;
 
         /// Time to live, number of seconds left of particles natural life
-        ArrayReal *RESTRICT_ALIAS mTotalTimeToLive;
+        /// It is nullptr for BillboardSet2.
+        ArrayReal *RESTRICT_ALIAS ogre_nullable mTotalTimeToLive;
 
         /// Current colour
         ArrayVector4 *RESTRICT_ALIAS mColour;
@@ -91,7 +93,7 @@ namespace Ogre
         int8  mDirection[3];
         // We use signed because SSE2 doesn't support unsigned.
         // Also when unpacking in vertex shader, we can pack it with mDirection's unpacking.
-        // We lose one value of alpha though (because SNORM maps both -128 & -127 to -1)
+        // We lose one value of alpha though (because SNORM maps both -128 & -127 to -1).
         int8  mColourAlpha;
         int16 mRotation;
         int16 mColourRgb[3];

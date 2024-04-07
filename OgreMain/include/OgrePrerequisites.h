@@ -139,6 +139,7 @@ namespace Ogre
     class AxisAlignedBox;
     class AxisAlignedBoxSceneQuery;
     class Barrier;
+    class BillboardSet;
     class Bone;
     class BoneMemoryManager;
     struct BoneTransform;
