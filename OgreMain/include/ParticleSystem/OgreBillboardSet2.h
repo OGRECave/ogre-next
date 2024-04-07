@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "ParticleSystem/OgreBillboard.h"
+#include "ParticleSystem/OgreBillboard2.h"
 #include "ParticleSystem/OgreParticleSystem2.h"
 
 #include "OgreHeaderPrefix.h"

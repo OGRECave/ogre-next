@@ -26,8 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef OgreBillboard_H
-#define OgreBillboard_H
+#ifndef OgreBillboard2_H
+#define OgreBillboard2_H
 
 #include "OgrePrerequisites.h"
 
