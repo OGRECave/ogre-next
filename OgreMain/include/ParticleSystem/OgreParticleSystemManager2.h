@@ -80,9 +80,9 @@ namespace Ogre
         void calculateHighestPossibleQuota( VaoManager *vaoManager );
         void createSharedIndexBuffers( VaoManager *vaoManager );
 
-        void tickParticles( size_t threadIdx, ArrayReal timeSinceLast, ParticleCpuData cpuData,
-                            ParticleGpuData *gpuData, const size_t numParticles,
-                            ParticleSystemDef *systemDef, ArrayAabb &inOutAabb );
+        inline void tickParticles( size_t threadIdx, ArrayReal timeSinceLast, ParticleCpuData cpuData,
+                                   ParticleGpuData *gpuData, const size_t numParticles,
+                                   ParticleSystemDef *systemDef, ArrayAabb &inOutAabb );
 
         inline void sortAndPrepare( ParticleSystemDef *systemDef, const Vector3 &camPos,
                                     float timeSinceLast );

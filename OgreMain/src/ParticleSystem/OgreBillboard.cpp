@@ -34,6 +34,12 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
+void Billboard::setVisible( const bool bVisible )
+{
+    ParticleCpuData cpuData = mBillboardSet->getParticleCpuData();
+    reinterpret_cast<Real * RESTRICT_ALIAS>( cpuData.mTimeToLive )[mHandle] = bVisible ? 1.0f : 0.0f;
+}
+//-----------------------------------------------------------------------------
 void Billboard::setPosition( const Vector3 &pos )
 {
     ParticleCpuData cpuData = mBillboardSet->getParticleCpuData();

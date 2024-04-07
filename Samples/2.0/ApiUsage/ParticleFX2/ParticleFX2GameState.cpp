@@ -17,6 +17,7 @@
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
+#include "ParticleSystem/OgreBillboardSet2.h"
 #include "ParticleSystem/OgreParticleSystemManager2.h"
 
 #include "OgreParticleSystem.h"
@@ -94,6 +95,15 @@ void ParticleFX2GameState::createScene01()
     Ogre::ParticleSystem2 *pSystem0 = sceneManager->createParticleSystem2( "Examples/PurpleFountain" );
     Ogre::ParticleSystem2 *pSystem1 = sceneManager->createParticleSystem2( "Examples/Aureola" );
     Ogre::ParticleSystem2 *pSystem2 = sceneManager->createParticleSystem2( "Particle/SmokePBS" );
+
+    Ogre::BillboardSet *billboardSet = sceneManager->getParticleSystemManager2()->createBillboardSet();
+    billboardSet->setParticleQuota( 10u );
+    billboardSet->setMaterialName( "Marble",
+                                   Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+    billboardSet->init( sceneManager->getDestinationRenderSystem()->getVaoManager() );
+    Ogre::Billboard billboard = billboardSet->allocBillboard();
+    billboard.set( Ogre::Vector3::ZERO, Ogre::Vector3::NEGATIVE_UNIT_Z, Ogre::Vector2( 15.0f, 9.0f ),
+                   Ogre::ColourValue::White );
 
     Ogre::SceneNode *sceneNode = rootNode->createChildSceneNode();
     sceneNode->attachObject( pSystem0 );

@@ -40,42 +40,55 @@ namespace Ogre
 {
     OGRE_ASSUME_NONNULL_BEGIN
 
-	/// A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,
-	///	affectors and time to live.
-	///
-	/// Why isn't it the reverse? (i.e. a ParticleSystemDef should derive from BillboardSet2,
-	/// making it a more specialized version with extra features).
-	///
-	/// Well 2 simple reasons:
-	///
-	///	  1. The code started out as a ParticleSystemDef first.
-	///	  2. ParticleSystemDef are tied to shader generation (i.e. Hlms & RenderQueues) because
-	///		 geometry generation happens in shaders (instead of the CPU).
-	///		 This means it's easier for Hlms to downcast to ParticleSystemDef (which offers full
-	///      functionality) and generate the shader based on available features, rather than first
-	///		 downcast to a BillboardSet2 and then to ParticleSystemDef.
-	class _OgreExport BillboardSet : public ParticleSystemDef
+    /// A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,
+    ///	affectors and time to live.
+    ///
+    /// Why isn't it the reverse? (i.e. a ParticleSystemDef should derive from BillboardSet2,
+    /// making it a more specialized version with extra features).
+    ///
+    /// Well 2 simple reasons:
+    ///
+    ///	  1. The code started out as a ParticleSystemDef first.
+    ///	  2. ParticleSystemDef are tied to shader generation (i.e. Hlms & RenderQueues) because
+    ///		 geometry generation happens in shaders (instead of the CPU).
+    ///		 This means it's easier for Hlms to downcast to ParticleSystemDef (which offers full
+    ///      functionality) and generate the shader based on available features, rather than first
+    ///		 downcast to a BillboardSet2 and then to ParticleSystemDef.
+    ///
+    /// Use setParticleQuota() to define how many billboards this set can contain.
+    class _OgreExport BillboardSet : public ParticleSystemDef
     {
-	public:
-		Billboard allocBillboard()
-		{
-			const uint32 handle = allocParticle();
-			return Billboard( handle, this );
-		}
+    public:
+        using ParticleSystem::setMaterialName;
 
-		void dellocBillboard( uint32 handle ) { deallocParticle( handle ); }
-		void dellocBillboard( Billboard billboard ) { deallocParticle( billboard.mHandle ); }
+        Renderable *getAsRenderable() { return this; }
 
-		BillboardSet( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
-					  ParticleSystemManager2 *particleSystemManager ) :
-			ParticleSystemDef( id, objectMemoryManager, manager, particleSystemManager, "", true )
-		{
-		}
+        Billboard allocBillboard()
+        {
+            const uint32 handle = allocParticle();
 
-	protected:
-		// Hide these functions.
-		uint32 allocParticle() { return ParticleSystemDef::allocParticle(); }
-		void   deallocParticle( uint32 handle ) { ParticleSystemDef::deallocParticle( handle ); }
+            Billboard retVal( handle, this );
+            retVal.setVisible( true );
+            return Billboard( handle, this );
+        }
+
+        void deallocBillboard( Billboard billboard )
+        {
+            billboard.setVisible( false );
+            deallocParticle( billboard.mHandle );
+        }
+        void deallocBillboard( uint32 handle ) { deallocBillboard( Billboard( handle, this ) ); }
+
+        BillboardSet( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
+                      ParticleSystemManager2 *particleSystemManager ) :
+            ParticleSystemDef( id, objectMemoryManager, manager, particleSystemManager, "", true )
+        {
+        }
+
+    protected:
+        // Hide these functions.
+        uint32 allocParticle() { return ParticleSystemDef::allocParticle(); }
+        void   deallocParticle( uint32 handle ) { ParticleSystemDef::deallocParticle( handle ); }
     };
 
     OGRE_ASSUME_NONNULL_END
