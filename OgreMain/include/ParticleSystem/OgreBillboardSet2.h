@@ -63,20 +63,9 @@ namespace Ogre
 
         Renderable *getAsRenderable() { return this; }
 
-        Billboard allocBillboard()
-        {
-            const uint32 handle = allocParticle();
+        Billboard allocBillboard();
 
-            Billboard retVal( handle, this );
-            retVal.setVisible( true );
-            return Billboard( handle, this );
-        }
-
-        void deallocBillboard( Billboard billboard )
-        {
-            billboard.setVisible( false );
-            deallocParticle( billboard.mHandle );
-        }
+        void deallocBillboard( Billboard billboard );
         void deallocBillboard( uint32 handle ) { deallocBillboard( Billboard( handle, this ) ); }
 
         BillboardSet( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
