@@ -96,8 +96,9 @@ void ParticleFX2GameState::createScene01()
     Ogre::ParticleSystem2 *pSystem1 = sceneManager->createParticleSystem2( "Examples/Aureola" );
     Ogre::ParticleSystem2 *pSystem2 = sceneManager->createParticleSystem2( "Particle/SmokePBS" );
 
-    Ogre::BillboardSet *billboardSet = sceneManager->getParticleSystemManager2()->createBillboardSet();
-    billboardSet->setParticleQuota( 10u );
+    Ogre::BillboardSet *billboardSet = sceneManager->createBillboardSet2();
+    // Try to be as tight as possible. In this sample we only need 1.
+    billboardSet->setParticleQuota( 1u );
     billboardSet->setMaterialName( "Marble",
                                    Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
     billboardSet->init( sceneManager->getDestinationRenderSystem()->getVaoManager() );
