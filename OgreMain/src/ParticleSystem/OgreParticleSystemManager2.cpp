@@ -716,6 +716,13 @@ void ParticleSystemManager2::destroyBillboardSet( BillboardSet *billboardSet )
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::destroyAllBillboardSets()
 {
+    if( !mMaster )
+    {
+        OGRE_ASSERT_LOW( mBillboardSets.empty() &&
+                         "ParticleSystemManager2 owned by Root can't create BillboardSets!" );
+        return;
+    }
+
     VaoManager *vaoManager = mSceneManager->getDestinationRenderSystem()->getVaoManager();
     for( ParticleSystemDef *billboardSet : mBillboardSets )
     {
@@ -729,28 +736,58 @@ void ParticleSystemManager2::_addToRenderQueue( size_t threadIdx, size_t numThre
                                                 RenderQueue *renderQueue, uint8 renderQueueId,
                                                 uint32 visibilityMask, bool includeNonCasters ) const
 {
-    const size_t numSystemDefs = mActiveParticleSystemDefs.size();
-    const size_t systemDefsPerThread = ( numSystemDefs + numThreads - 1u ) / numThreads;
-    const size_t toAdvance = std::min( threadIdx * systemDefsPerThread, numSystemDefs );
-    const size_t numParticlesToProcess = std::min( systemDefsPerThread, numSystemDefs - toAdvance );
-
-    FastArray<ParticleSystemDef *>::const_iterator itor = mActiveParticleSystemDefs.begin() + toAdvance;
-    FastArray<ParticleSystemDef *>::const_iterator endt =
-        mActiveParticleSystemDefs.begin() + toAdvance + numParticlesToProcess;
-
-    while( itor != endt )
     {
-        ParticleSystemDef *systemDef = *itor;
-        if( systemDef->getNumSimdActiveParticles() > 0u &&  //
-            systemDef->mRenderQueueID == renderQueueId &&   //
-            systemDef->getVisibilityFlags() & visibilityMask &&
-            ( systemDef->getCastShadows() || includeNonCasters ) )
-        {
-            renderQueue->addRenderableV2( threadIdx, systemDef->mRenderQueueID, false, systemDef,
-                                          systemDef );
-        }
+        const size_t numSystemDefs = mActiveParticleSystemDefs.size();
+        const size_t systemDefsPerThread = ( numSystemDefs + numThreads - 1u ) / numThreads;
+        const size_t toAdvance = std::min( threadIdx * systemDefsPerThread, numSystemDefs );
+        const size_t numParticlesToProcess = std::min( systemDefsPerThread, numSystemDefs - toAdvance );
 
-        ++itor;
+        FastArray<ParticleSystemDef *>::const_iterator itor =
+            mActiveParticleSystemDefs.begin() + toAdvance;
+        FastArray<ParticleSystemDef *>::const_iterator endt =
+            mActiveParticleSystemDefs.begin() + toAdvance + numParticlesToProcess;
+
+        while( itor != endt )
+        {
+            ParticleSystemDef *systemDef = *itor;
+            if( systemDef->getNumSimdActiveParticles() > 0u &&  //
+                systemDef->mRenderQueueID == renderQueueId &&   //
+                systemDef->getVisibilityFlags() & visibilityMask &&
+                ( systemDef->getCastShadows() || includeNonCasters ) )
+            {
+                renderQueue->addRenderableV2( threadIdx, systemDef->mRenderQueueID, false, systemDef,
+                                              systemDef );
+            }
+
+            ++itor;
+        }
+    }
+
+    {
+        const size_t numBillboardSets = mBillboardSets.size();
+        const size_t billboardSetsPerThread = ( numBillboardSets + numThreads - 1u ) / numThreads;
+        const size_t toAdvance = std::min( threadIdx * billboardSetsPerThread, numBillboardSets );
+        const size_t numBillboardSetsToProcess =
+            std::min( billboardSetsPerThread, numBillboardSets - toAdvance );
+
+        FastArray<BillboardSet *>::const_iterator itor = mBillboardSets.begin() + toAdvance;
+        FastArray<BillboardSet *>::const_iterator endt =
+            mBillboardSets.begin() + toAdvance + numBillboardSetsToProcess;
+
+        while( itor != endt )
+        {
+            BillboardSet *billboardSet = *itor;
+            if( billboardSet->getNumSimdActiveParticles() > 0u &&  //
+                billboardSet->mRenderQueueID == renderQueueId &&   //
+                billboardSet->getVisibilityFlags() & visibilityMask &&
+                ( billboardSet->getCastShadows() || includeNonCasters ) )
+            {
+                renderQueue->addRenderableV2( threadIdx, billboardSet->mRenderQueueID, false,
+                                              billboardSet, billboardSet );
+            }
+
+            ++itor;
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -783,6 +820,15 @@ void ParticleSystemManager2::calculateHighestPossibleQuota( VaoManager *vaoManag
     {
         ParticleSystemDef *systemDef = pair.second;
         const uint32 quota = systemDef->getQuota() * 4u;
+        if( quota <= std::numeric_limits<uint16>::max() )
+            highestQuota16 = std::max( quota, highestQuota16 );
+        else
+            highestQuota32 = std::max( quota, highestQuota32 );
+    }
+
+    for( const BillboardSet *billboardSet : mBillboardSets )
+    {
+        const uint32 quota = billboardSet->getQuota() * 4u;
         if( quota <= std::numeric_limits<uint16>::max() )
             highestQuota16 = std::max( quota, highestQuota16 );
         else
@@ -889,7 +935,7 @@ IndexBufferPacked *ParticleSystemManager2::_getSharedIndexBuffer( size_t maxQuot
 void ParticleSystemManager2::prepareForUpdate( const Real timeSinceLast )
 {
     mActiveParticlesLeftToSort.clear();
-    if( mActiveParticleSystemDefs.empty() )
+    if( mActiveParticleSystemDefs.empty() && mBillboardSets.empty() )
         return;
 
     mTimeSinceLast = timeSinceLast;
@@ -911,7 +957,7 @@ void ParticleSystemManager2::prepareForUpdate( const Real timeSinceLast )
 //-----------------------------------------------------------------------------
 void ParticleSystemManager2::update()
 {
-    if( mActiveParticleSystemDefs.empty() )
+    if( mActiveParticleSystemDefs.empty() && mBillboardSets.empty() )
         return;
 
     mSceneManager->_fireParticleSystemManager2Update();
