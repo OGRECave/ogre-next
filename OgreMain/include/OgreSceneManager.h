@@ -1649,7 +1649,7 @@ namespace Ogre
         ParticleSystemDef *createParticleSystemDef( const String &name );
 
         /** Creates an instance the next generation of ParticleFX.
-            This instanec must be based off a ParticleSystemDef already setup.
+            This instance must be based off a ParticleSystemDef already setup.
 
             See createParticleSystemDef().
         @param systemDef
@@ -1665,7 +1665,36 @@ namespace Ogre
 
         void destroyParticleSystem2( ParticleSystem2 *obj );
 
+        /// Destroys all particle systems created with createParticleSystem2.
+        /// Do not hold any more references to those pointers as they will become dangling!
         void destroyAllParticleSystems2();
+
+        /** Creates an instance of the new generation of billboards.
+            See ParticleSystemManager2::createBillboardSet.
+        @remark
+            This is the same as doing:
+                sceneMgr->getParticleSystemManager2()->createBillboardSet();
+        */
+        BillboardSet *createBillboardSet2();
+
+        /** Destroys a BillboardSet created with createBillboardSet2().
+            See ParticleSystemManager2::destroyBillboardSet.
+        @remark
+            This is the same as doing:
+                sceneMgr->getParticleSystemManager2()->destroyBillboardSet( s );
+        @param billboardSet
+            Set to destroy.
+        */
+        void destroyBillboardSet2( BillboardSet *billboardSet );
+
+        /**  Destroys all BillboardSet created with createBillboardSet2().
+             Do not hold any more references to those pointers as they will become dangling!
+             See ParticleSystemManager2::destroyAllBillboardSets.
+        @remark
+            This is the same as doing:
+                sceneMgr->getParticleSystemManager2()->destroyAllBillboardSets();
+        */
+        void destroyAllBillboardSets2();
 
         ParticleSystemManager2 *getParticleSystemManager2() { return mParticleSystemManager2; }
 

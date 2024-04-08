@@ -823,6 +823,21 @@ namespace Ogre
         mParticleSystemManager2->destroyAllParticleSystems();
     }
     //-----------------------------------------------------------------------
+    BillboardSet *SceneManager::createBillboardSet2()
+    {
+        return mParticleSystemManager2->createBillboardSet();
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::destroyBillboardSet2( BillboardSet *billboardSet )
+    {
+        return mParticleSystemManager2->destroyBillboardSet( billboardSet );
+    }
+    //-----------------------------------------------------------------------
+    void SceneManager::destroyAllBillboardSets2()
+    {
+        return mParticleSystemManager2->destroyAllBillboardSets();
+    }
+    //-----------------------------------------------------------------------
     void SceneManager::clearScene( bool deleteIndestructibleToo, bool reattachCameras )
     {
         destroyAllMovableObjects();
