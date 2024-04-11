@@ -63,6 +63,7 @@ namespace Ogre
         ANativeWindow *mNativeWindow;
 #ifdef OGRE_USE_VK_SWAPPY
         AndroidJniProvider *mJniProvider;
+        uint64 mRefreshDuration;
 #endif
 
         bool mVisible;
@@ -78,6 +79,8 @@ namespace Ogre
 
         static const char *getRequiredExtensionName();
 
+        void setVSync( bool vSync, uint32 vSyncInterval ) override;
+
         void destroy() override;
         void _initialize( TextureGpuManager *textureGpuManager,
                           const NameValuePairList *miscParams ) override;
@@ -90,6 +93,51 @@ namespace Ogre
         bool isVisible() const override;
         void setHidden( bool hidden ) override;
         bool isHidden() const override;
+
+        enum FramePacingSwappyModes
+        {
+            /// Try to honour the vSyncInterval set via Window::setVSync.
+            /// Pipelining is always on. This is the same behavior as Desktop APIs
+            /// (e.g. D3D11, Vulkan & GL on Windows and Linux).
+            PipelineForcedOn,
+
+            /// Autocalculate vSyncInterval (see Window::setVSync).
+            /// The autocalculated vSyncInterval should be in the range [vSyncInterval; inf) where
+            /// vSyncInterval is the value passed to Window::setVSync.
+            ///
+            /// While this sounds convenient, beware that Swappy will often downgrade vSyncInterval
+            /// until it finds something that can be met & sustained.
+            /// That means if your game runs between 40fps and 60fps on a 60hz screen, after some time
+            /// swappy will downgrade vSyncInterval to 2 so that the game render at perfect 30fps.
+            ///
+            /// This may result in a better experience considering framerates jump a lot due to
+            /// thermal throttling on phones. But it may also cause undesired or unexplainable
+            /// "locked to 30fps for no aparent reason for a considerable time".
+            ///
+            /// Pipelining is always on.
+            AutoVSyncInterval_PipelineForcedOn,
+
+            /// Autocalculate vSyncInterval (see Window::setVSync).
+            /// See AutoSwapInterval_PipelineForcedOn documentation.
+            ///
+            /// Use this mode when you know you have extremely fast render times (e.g. CPU + GPU time is
+            /// below half the monitor's refresh time, e.g. it takes <= 8ms to render in a 60hz screen)
+            /// which means Swappy will eventually disable pipelining.
+            ///
+            /// A disabled pipeline minimizes latency because the whole thing presented is ASAP by the
+            /// time the next VBLANK interval arrives.
+            AutoVSyncInterval_AutoPipeline,
+        };
+
+        /** Sets Swappy auto swap interval and auto pipeline modes.
+            See https://developer.android.com/games/sdk/frame-pacing
+        @remarks
+            This function is static, because it affects all Windows.
+        @param bAutoSwapInterval
+            Set to let Swappy autocalculate the vSyncInterval. i.e. See Window::setVSync.
+            False to always try to honour the vSyncInterval set in Window::setVSync.
+        */
+        static void setFramePacingSwappyAutoMode( FramePacingSwappyModes mode );
 
         /// If the ANativeWindow changes, allows to set a new one.
         void setNativeWindow( ANativeWindow *nativeWindow );

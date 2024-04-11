@@ -56,7 +56,10 @@ namespace Ogre
                                               bool fullscreenMode ) :
         VulkanWindowSwapChainBased( title, width, height, fullscreenMode ),
         mNativeWindow( 0 ),
+#ifdef OGRE_USE_VK_SWAPPY
         mJniProvider( 0 ),
+        mRefreshDuration( 0 ),
+#endif
         mVisible( true ),
         mHidden( false ),
         mIsExternal( false )
@@ -142,12 +145,14 @@ namespace Ogre
                     StringConverter::parseUnsignedLong( opt->second ) );
             }
 
+#ifdef OGRE_USE_VK_SWAPPY
             opt = miscParams->find( "AndroidJniProvider" );
             if( opt != end )
             {
                 mJniProvider = reinterpret_cast<AndroidJniProvider *>(
                     StringConverter::parseUnsignedLong( opt->second ) );
             }
+#endif
         }
 
         if( !nativeWindow )
@@ -239,6 +244,31 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     bool VulkanAndroidWindow::isHidden() const { return false; }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::setFramePacingSwappyAutoMode( FramePacingSwappyModes mode )
+    {
+#ifdef OGRE_USE_VK_SWAPPY
+        switch( mode )
+        {
+        case AutoVSyncInterval_AutoPipeline:
+            SwappyVk_setAutoSwapInterval( true );
+            SwappyVk_setAutoPipelineMode( true );
+            break;
+        case AutoVSyncInterval_PipelineForcedOn:
+            SwappyVk_setAutoSwapInterval( true );
+            SwappyVk_setAutoPipelineMode( false );
+            break;
+        case PipelineForcedOn:
+            SwappyVk_setAutoSwapInterval( false );
+            SwappyVk_setAutoPipelineMode( false );
+            break;
+            // Note:
+            //  SwappyVk_setAutoSwapInterval( false );
+            //  SwappyVk_setAutoPipelineMode( true );
+            // Is ignored by Swappy as it makes no sense.
+        }
+#endif
+    }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
@@ -337,6 +367,22 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::setVSync( bool vSync, uint32 vSyncInterval )
+    {
+#ifdef OGRE_USE_VK_SWAPPY
+        const bool bSwapchainWillbeRecreated = mVSync != vSync;
+#endif
+        VulkanWindowSwapChainBased::setVSync( vSync, vSyncInterval );
+
+#ifdef OGRE_USE_VK_SWAPPY
+        if( !bSwapchainWillbeRecreated && mSwapchain )
+        {
+            SwappyVk_setSwapIntervalNS( mDevice->mDevice, mSwapchain,
+                                        mRefreshDuration * mVSyncInterval );
+        }
+#endif
+    }
+    //-------------------------------------------------------------------------
     void VulkanAndroidWindow::createSwapchain()
     {
         VulkanWindowSwapChainBased::createSwapchain();
@@ -352,9 +398,8 @@ namespace Ogre
         JNIEnv *jni = 0;
         jobject nativeActivityClass = 0;
         mJniProvider->get( &jni, &nativeActivityClass );
-        uint64_t refreshDuration = 0u;
         SwappyVk_initAndGetRefreshCycleDuration( jni, nativeActivityClass, mDevice->mPhysicalDevice,
-                                                 mDevice->mDevice, mSwapchain, &refreshDuration );
+                                                 mDevice->mDevice, mSwapchain, &mRefreshDuration );
 
         // Swappy wants to know the mNativeWindow every time the Swapchain changes.
         // If we try to set mNativeWindow without a valid mSwapchain yet, it won't work correctly.
@@ -362,6 +407,19 @@ namespace Ogre
         // (Swappy inverts the relationship: It works as if mNativeWindow depended on Swapchains).
         OGRE_ASSERT_LOW( mSwapchain );  // should've thrown by now if mSwapchain creation failed.
         SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
+
+        if( mRefreshDuration <= std::numeric_limits<uint32>::max() )
+        {
+            mFrequencyDenominator = static_cast<uint32>( mRefreshDuration );
+            mFrequencyNumerator = 1000000000u;
+        }
+        else
+        {
+            mFrequencyNumerator = 0u;
+            mFrequencyDenominator = 0u;
+        }
+        SwappyVk_setAutoSwapInterval( false );
+        SwappyVk_setSwapIntervalNS( mDevice->mDevice, mSwapchain, mRefreshDuration * mVSyncInterval );
 #endif
     }
     //-------------------------------------------------------------------------
