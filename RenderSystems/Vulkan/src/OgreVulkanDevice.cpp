@@ -39,6 +39,10 @@ THE SOFTWARE.
 
 #include <vulkan/vulkan.h>
 
+#ifdef OGRE_USE_VK_SWAPPY
+#    include "swappy/swappyVk.h"
+#endif
+
 #define TODO_findRealPresentQueue
 
 namespace Ogre
@@ -647,6 +651,9 @@ namespace Ogre
             mGraphicsQueue.init( mDevice, mGraphicsQueue.mQueue, mRenderSystem );
         }
 
+#ifdef OGRE_USE_VK_SWAPPY
+        SwappyVk_setQueueFamilyIndex( mDevice, mGraphicsQueue.mQueue, mGraphicsQueue.mFamilyIdx );
+#endif
         VkQueue queue = 0;
 
         FastArray<VulkanQueue>::iterator itor = mComputeQueues.begin();

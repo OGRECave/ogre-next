@@ -81,6 +81,10 @@ THE SOFTWARE.
 
 #include "OgrePixelFormatGpuUtils.h"
 
+#ifdef OGRE_USE_VK_SWAPPY
+#    include "swappy/swappyVk.h"
+#endif
+
 #define TODO_addVpCount_to_passpso
 
 namespace Ogre
@@ -382,6 +386,11 @@ namespace Ogre
         VkDevice vkDevice = mDevice->mDevice;
         delete mDevice;
         mDevice = 0;
+
+#ifdef OGRE_USE_VK_SWAPPY
+        SwappyVk_destroyDevice( vkDevice );
+#endif
+
         if( !bIsExternal )
             vkDestroyDevice( vkDevice, 0 );
     }
@@ -1266,6 +1275,15 @@ namespace Ogre
 
             bool bCanRestrictImageViewUsage = false;
 
+#ifdef OGRE_USE_VK_SWAPPY
+            // Declared at this scope because the pointer must live long enough
+            // for the reference in deviceExtensions[i] to remain valid.
+            struct ExtName
+            {
+                char name[VK_MAX_EXTENSION_NAME_SIZE];
+            };
+            FastArray<ExtName> swappyRequiredExtensionNames;
+#endif
             FastArray<const char *> deviceExtensions;
             if( !externalDevice )
             {
@@ -1300,6 +1318,39 @@ namespace Ogre
                     else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
                 }
+#ifdef OGRE_USE_VK_SWAPPY
+                // Add any extensions that SwappyVk requires:
+                uint32_t numSwappyRequiredExtensions = 0u;
+                SwappyVk_determineDeviceExtensions( mDevice->mPhysicalDevice, numExtensions,
+                                                    availableExtensions.begin(),
+                                                    &numSwappyRequiredExtensions, 0 );
+                FastArray<char *> swappyRequiredExtensionNamesTmp;
+                swappyRequiredExtensionNames.resize( numSwappyRequiredExtensions );
+                swappyRequiredExtensionNamesTmp.reserve( numSwappyRequiredExtensions );
+
+                for( ExtName &extName : swappyRequiredExtensionNames )
+                    swappyRequiredExtensionNamesTmp.push_back( extName.name );
+
+                SwappyVk_determineDeviceExtensions(
+                    mDevice->mPhysicalDevice, numExtensions, availableExtensions.begin(),
+                    &numSwappyRequiredExtensions, swappyRequiredExtensionNamesTmp.begin() );
+
+                for( const char *swappyReqExtension : swappyRequiredExtensionNamesTmp )
+                {
+                    bool bAlreadyAdded = false;
+                    for( const char *alreadyAdded : deviceExtensions )
+                    {
+                        if( strncmp( alreadyAdded, swappyReqExtension, VK_MAX_EXTENSION_NAME_SIZE ) ==
+                            0 )
+                        {
+                            bAlreadyAdded = true;
+                            break;
+                        }
+                    }
+                    if( !bAlreadyAdded )
+                        deviceExtensions.push_back( swappyReqExtension );
+                }
+#endif
             }
             else
             {

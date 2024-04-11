@@ -28,6 +28,8 @@ THE SOFTWARE.
 #ifndef _OgreVulkanPrerequisites_H_
 #define _OgreVulkanPrerequisites_H_
 
+#define OGRE_USE_VK_SWAPPY
+
 #include "OgrePrerequisites.h"
 
 #include "OgreVulkanBuildSettings.h"

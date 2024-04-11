@@ -46,12 +46,17 @@ THE SOFTWARE.
 
 #include <android/native_window.h>
 
+#ifdef OGRE_USE_VK_SWAPPY
+#    include "swappy/swappyVk.h"
+#endif
+
 namespace Ogre
 {
     VulkanAndroidWindow::VulkanAndroidWindow( const String &title, uint32 width, uint32 height,
                                               bool fullscreenMode ) :
         VulkanWindowSwapChainBased( title, width, height, fullscreenMode ),
         mNativeWindow( 0 ),
+        mJniProvider( 0 ),
         mVisible( true ),
         mHidden( false ),
         mIsExternal( false )
@@ -136,6 +141,13 @@ namespace Ogre
                 nativeWindow = reinterpret_cast<ANativeWindow *>(
                     StringConverter::parseUnsignedLong( opt->second ) );
             }
+
+            opt = miscParams->find( "AndroidJniProvider" );
+            if( opt != end )
+            {
+                mJniProvider = reinterpret_cast<AndroidJniProvider *>(
+                    StringConverter::parseUnsignedLong( opt->second ) );
+            }
         }
 
         if( !nativeWindow )
@@ -143,6 +155,15 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "App must provide ANativeWindow via Misc Params!",
                          "VulkanAndroidWindow::_initialize" );
         }
+
+#ifdef OGRE_USE_VK_SWAPPY
+        if( !mJniProvider )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "App must provide AndroidJniProvider via Misc Params!",
+                         "VulkanAndroidWindow::_initialize" );
+        }
+#endif
 
         setHidden( false );
 
@@ -232,6 +253,11 @@ namespace Ogre
             mDevice->stall();
         }
 
+#ifdef OGRE_USE_VK_SWAPPY
+        if( mSwapchain )
+            SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
+#endif
+
         destroy();
 
         // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
@@ -302,6 +328,49 @@ namespace Ogre
         }
 
         createSwapchain();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::setJniProvider( AndroidJniProvider *provider )
+    {
+#ifdef OGRE_USE_VK_SWAPPY
+        mJniProvider = provider;
+#endif
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::createSwapchain()
+    {
+        VulkanWindowSwapChainBased::createSwapchain();
+#ifdef OGRE_USE_VK_SWAPPY
+        if( !mJniProvider )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "VulkanAndroidWindow::setJniProvider not called or called with nullptr. This "
+                         "function is mandatory to set if built with Swappy support for Android.",
+                         "VulkanAndroidWindow::createSwapchain" );
+        }
+
+        JNIEnv *jni = 0;
+        jobject nativeActivityClass = 0;
+        mJniProvider->get( &jni, &nativeActivityClass );
+        uint64_t refreshDuration = 0u;
+        SwappyVk_initAndGetRefreshCycleDuration( jni, nativeActivityClass, mDevice->mPhysicalDevice,
+                                                 mDevice->mDevice, mSwapchain, &refreshDuration );
+
+        // Swappy wants to know the mNativeWindow every time the Swapchain changes.
+        // If we try to set mNativeWindow without a valid mSwapchain yet, it won't work correctly.
+        // So we must do this here, every time the Swapchain gets recreated
+        // (Swappy inverts the relationship: It works as if mNativeWindow depended on Swapchains).
+        OGRE_ASSERT_LOW( mSwapchain );  // should've thrown by now if mSwapchain creation failed.
+        SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
+#endif
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::destroySwapchain()
+    {
+#ifdef OGRE_USE_VK_SWAPPY
+        SwappyVk_destroySwapchain( mDevice->mDevice, mSwapchain );
+#endif
+        VulkanWindowSwapChainBased::destroySwapchain();
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::getCustomAttribute( IdString name, void *pData )

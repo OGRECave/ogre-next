@@ -39,15 +39,38 @@ THE SOFTWARE.
 
 struct ANativeWindow;
 
+struct _JNIEnv;
+class _jobject;
+typedef _JNIEnv JNIEnv;
+typedef _jobject *jobject;
+
 namespace Ogre
 {
+    class _OgreVulkanExport AndroidJniProvider
+    {
+    public:
+        /** User must override this function.
+        @param env [out]
+            The JNI class that is assumed to be from AttachCurrentThread.
+        @param activity [out]
+            NativeActivity object handle, used for JNI.
+        */
+        virtual void get( JNIEnv **env, jobject *activity ) = 0;
+    };
+
     class _OgreVulkanExport VulkanAndroidWindow final : public VulkanWindowSwapChainBased
     {
         ANativeWindow *mNativeWindow;
+#ifdef OGRE_USE_VK_SWAPPY
+        AndroidJniProvider *mJniProvider;
+#endif
 
         bool mVisible;
         bool mHidden;
         bool mIsExternal;
+
+        void createSwapchain() override;
+        void destroySwapchain() override;
 
     public:
         VulkanAndroidWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
@@ -70,6 +93,14 @@ namespace Ogre
 
         /// If the ANativeWindow changes, allows to set a new one.
         void setNativeWindow( ANativeWindow *nativeWindow );
+
+        /// User must call this function before initializing if built with OGRE_USE_VK_SWAPPY.
+        ///
+        /// We don't ask for the JNIEnv directly (but rather through the provider) because the dev user
+        /// may chose to call DetachCurrentThread often instead of keeping the JNIEnv around.
+        ///
+        /// We only need to call AndroidJniProvider::get when recreating the swapchain.
+        void setJniProvider( AndroidJniProvider *provider );
 
         void getCustomAttribute( IdString name, void *pData ) override;
     };
