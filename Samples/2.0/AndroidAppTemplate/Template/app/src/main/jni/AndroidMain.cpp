@@ -141,9 +141,26 @@ namespace Demo
             mAccumulator += timeSinceLast;
         }
     };
+
+    class DemoJniProvider final : public Ogre::AndroidJniProvider
+    {
+        void acquire( JNIEnv **env, jobject *activity ) override
+        {
+            android_app *app = AndroidSystems::getAndroidApp();
+            app->activity->vm->AttachCurrentThread( env, nullptr );
+            *activity = app->activity->clazz;
+        }
+
+        void release( JNIEnv * ) override
+        {
+            android_app *app = AndroidSystems::getAndroidApp();
+            app->activity->vm->DetachCurrentThread();
+        }
+    };
 }  // namespace Demo
 
 static Demo::AndroidAppController g_appController;
+static Demo::DemoJniProvider g_demoJniProvider;
 
 // Process the next main command.
 void handle_cmd( android_app *app, int32_t cmd )
@@ -179,6 +196,7 @@ void android_main( struct android_app *app )
     app->onAppCmd = handle_cmd;
 
     Demo::AndroidSystems::setAndroidApp( app );
+    Demo::AndroidSystems::setJniProvider( &g_demoJniProvider );
 
     // Used to poll the events in the main loop
     int events;

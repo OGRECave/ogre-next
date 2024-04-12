@@ -44,12 +44,14 @@ namespace Demo
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-    AndroidSystems::AndroidSystems() : mAndroidApp( 0 ), mNativeWindow( 0 ) {}
+    AndroidSystems::AndroidSystems() : mAndroidApp( 0 ), mNativeWindow( 0 ), mJniProvider( 0 ) {}
     //-------------------------------------------------------------------------
     void AndroidSystems::setAndroidApp( android_app *androidApp )
     {
         g_andrSystem.mAndroidApp = androidApp;
     }
+    //-------------------------------------------------------------------------
+    android_app *AndroidSystems::getAndroidApp() { return g_andrSystem.mAndroidApp; }
     //-------------------------------------------------------------------------
     void AndroidSystems::setNativeWindow( ANativeWindow *nativeWindow )
     {
@@ -57,6 +59,13 @@ namespace Demo
     }
     //-------------------------------------------------------------------------
     ANativeWindow *AndroidSystems::getNativeWindow() { return g_andrSystem.mNativeWindow; }
+    //-------------------------------------------------------------------------
+    void AndroidSystems::setJniProvider( Ogre::AndroidJniProvider *provider )
+    {
+        g_andrSystem.mJniProvider = provider;
+    }
+    //-------------------------------------------------------------------------
+    Ogre::AndroidJniProvider *AndroidSystems::getJniProvider() { return g_andrSystem.mJniProvider; }
     //-------------------------------------------------------------------------
     void AndroidSystems::registerArchiveFactories()
     {
@@ -105,8 +114,11 @@ namespace Demo
     //-------------------------------------------------------------------------
     AndroidSystems::AndroidSystems() {}
     void AndroidSystems::setAndroidApp( android_app * ) {}
+    android_app *AndroidSystems::getAndroidApp() { return 0; }
     void AndroidSystems::setNativeWindow( ANativeWindow * ) {}
     ANativeWindow *AndroidSystems::getNativeWindow() { return 0; }
+    void AndroidSystems::setJniProvider( Ogre::AndroidJniProvider *provider ) {}
+    Ogre::AndroidJniProvider *AndroidSystems::getJniProvider() { return 0; }
     std::string AndroidSystems::getFilesDir( const bool /*bInternal*/ ) { return ""; }
     bool AndroidSystems::isAndroid() { return false; }
     void AndroidSystems::registerArchiveFactories() {}
