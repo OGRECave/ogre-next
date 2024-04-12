@@ -40,7 +40,7 @@ use_pkgconfig(AndroidSwappy_PKGC AndroidSwappy)
 
 findpkg_framework(AndroidSwappy)
 
-find_path(AndroidSwappy_INCLUDE_DIR NAMES swappyVk.h HINTS ${AndroidSwappy_FRAMEWORK_INCLUDES} ${AndroidSwappy_INC_SEARCH_PATH} ${AndroidSwappy_PKGC_INCLUDE_DIRS} PATH_SUFFIXES "swappy")
+find_path(AndroidSwappy_INCLUDE_DIR NAMES swappyVk.h HINTS ${AndroidSwappy_FRAMEWORK_INCLUDES} ${AndroidSwappy_INC_SEARCH_PATH} ${AndroidSwappy_PKGC_INCLUDE_DIRS} PATH_SUFFIXES "swappy" "swappy/swappy")
 find_library(AndroidSwappy_LIBRARY NAMES swappy_static HINTS ${AndroidSwappy_LIB_SEARCH_PATH} ${AndroidSwappy_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" release relwithdebinfo minsizerel debug)
 
 findpkg_finish(AndroidSwappy)

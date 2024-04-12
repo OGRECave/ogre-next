@@ -198,6 +198,20 @@ void android_main( struct android_app *app )
     Demo::AndroidSystems::setAndroidApp( app );
     Demo::AndroidSystems::setJniProvider( &g_demoJniProvider );
 
+	// !!! IMPORTANT !!!
+	//
+	// Swappy defaults to AutoVSyncInterval_AutoPipeline.
+	// But we change it to PipelineForcedOn because it's the behavior most users coming from PC
+	// expect (AutoVSyncInterval_AutoPipeline can be counter-intuitive because it can lock the
+	// pacing to lower framerates)
+	//
+	// What actual setting you wish to use (or expose to user) depends on how much love,
+	// testing & optimization you put into your Android app.
+	//
+	// !!! IMPORTANT !!!
+	Ogre::VulkanAndroidWindow::setFramePacingSwappyAutoMode(
+		Ogre::VulkanAndroidWindow::PipelineForcedOn );
+
     // Used to poll the events in the main loop
     int events;
     android_poll_source *source;
