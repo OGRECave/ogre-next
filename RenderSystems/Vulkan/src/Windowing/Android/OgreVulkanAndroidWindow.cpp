@@ -46,7 +46,7 @@ THE SOFTWARE.
 
 #include <android/native_window.h>
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
 #    include "swappy/swappyVk.h"
 #endif
 
@@ -56,7 +56,7 @@ namespace Ogre
                                               bool fullscreenMode ) :
         VulkanWindowSwapChainBased( title, width, height, fullscreenMode ),
         mNativeWindow( 0 ),
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         mJniProvider( 0 ),
         mRefreshDuration( 0 ),
 #endif
@@ -145,7 +145,7 @@ namespace Ogre
                     StringConverter::parseUnsignedLong( opt->second ) );
             }
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
             opt = miscParams->find( "AndroidJniProvider" );
             if( opt != end )
             {
@@ -161,7 +161,7 @@ namespace Ogre
                          "VulkanAndroidWindow::_initialize" );
         }
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         if( !mJniProvider )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -247,7 +247,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setFramePacingSwappyAutoMode( FramePacingSwappyModes mode )
     {
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         switch( mode )
         {
         case AutoVSyncInterval_AutoPipeline:
@@ -283,7 +283,7 @@ namespace Ogre
             mDevice->stall();
         }
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         if( mSwapchain )
             SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
 #endif
@@ -362,19 +362,19 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setJniProvider( AndroidJniProvider *provider )
     {
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         mJniProvider = provider;
 #endif
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setVSync( bool vSync, uint32 vSyncInterval )
     {
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         const bool bSwapchainWillbeRecreated = mVSync != vSync;
 #endif
         VulkanWindowSwapChainBased::setVSync( vSync, vSyncInterval );
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         if( !bSwapchainWillbeRecreated && mSwapchain )
         {
             SwappyVk_setSwapIntervalNS( mDevice->mDevice, mSwapchain,
@@ -386,7 +386,7 @@ namespace Ogre
     void VulkanAndroidWindow::createSwapchain()
     {
         VulkanWindowSwapChainBased::createSwapchain();
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         if( !mJniProvider )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
@@ -425,7 +425,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::destroySwapchain()
     {
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         SwappyVk_destroySwapchain( mDevice->mDevice, mSwapchain );
 #endif
         VulkanWindowSwapChainBased::destroySwapchain();

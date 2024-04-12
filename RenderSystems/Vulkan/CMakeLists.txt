@@ -33,12 +33,19 @@ include_directories(
 )
 
 include_directories( ${Vulkan_INCLUDE_DIRS} )
+if( OGRE_VULKAN_USE_SWAPPY )
+	include_directories( ${AndroidSwappy_INCLUDE_DIRS} )
+endif()
 
 ogre_add_library(RenderSystem_Vulkan ${OGRE_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(RenderSystem_Vulkan ${OGRE_NEXT}Main ${Vulkan_LIBRARIES})
 
 if( OGRE_VULKAN_WINDOW_XCB )
 	target_link_libraries(RenderSystem_Vulkan xcb-randr X11-xcb)
+endif()
+
+if( OGRE_VULKAN_USE_SWAPPY )
+	target_link_libraries(RenderSystem_Vulkan ${AndroidSwappy_LIBRARY})
 endif()
 
 if (OGRE_CONFIG_THREADS)

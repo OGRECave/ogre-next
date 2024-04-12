@@ -42,7 +42,7 @@ THE SOFTWARE.
 
 #include "vulkan/vulkan_core.h"
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
 #    include "swappy/swappyVk.h"
 #endif
 
@@ -699,7 +699,7 @@ namespace Ogre
             present.pWaitSemaphores = &queueFinishSemaphore;
         }
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         VkResult result = SwappyVk_queuePresent( mDevice->mPresentQueue, &present );
 #else
         VkResult result = vkQueuePresentKHR( mDevice->mPresentQueue, &present );

@@ -61,7 +61,7 @@ namespace Ogre
     class _OgreVulkanExport VulkanAndroidWindow final : public VulkanWindowSwapChainBased
     {
         ANativeWindow *mNativeWindow;
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         AndroidJniProvider *mJniProvider;
         uint64 mRefreshDuration;
 #endif
@@ -142,7 +142,7 @@ namespace Ogre
         /// If the ANativeWindow changes, allows to set a new one.
         void setNativeWindow( ANativeWindow *nativeWindow );
 
-        /// User must call this function before initializing if built with OGRE_USE_VK_SWAPPY.
+        /// User must call this function before initializing if built with OGRE_VULKAN_USE_SWAPPY.
         ///
         /// We don't ask for the JNIEnv directly (but rather through the provider) because the dev user
         /// may chose to call DetachCurrentThread often instead of keeping the JNIEnv around.

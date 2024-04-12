@@ -39,7 +39,7 @@ THE SOFTWARE.
 
 #include <vulkan/vulkan.h>
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
 #    include "swappy/swappyVk.h"
 #endif
 
@@ -651,7 +651,7 @@ namespace Ogre
             mGraphicsQueue.init( mDevice, mGraphicsQueue.mQueue, mRenderSystem );
         }
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         SwappyVk_setQueueFamilyIndex( mDevice, mGraphicsQueue.mQueue, mGraphicsQueue.mFamilyIdx );
 #endif
         VkQueue queue = 0;

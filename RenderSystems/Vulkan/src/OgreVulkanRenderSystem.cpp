@@ -81,7 +81,7 @@ THE SOFTWARE.
 
 #include "OgrePixelFormatGpuUtils.h"
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
 #    include "swappy/swappyVk.h"
 #endif
 
@@ -387,7 +387,7 @@ namespace Ogre
         delete mDevice;
         mDevice = 0;
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
         SwappyVk_destroyDevice( vkDevice );
 #endif
 
@@ -1275,7 +1275,7 @@ namespace Ogre
 
             bool bCanRestrictImageViewUsage = false;
 
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
             // Declared at this scope because the pointer must live long enough
             // for the reference in deviceExtensions[i] to remain valid.
             struct ExtName
@@ -1318,7 +1318,7 @@ namespace Ogre
                     else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
                 }
-#ifdef OGRE_USE_VK_SWAPPY
+#ifdef OGRE_VULKAN_USE_SWAPPY
                 // Add any extensions that SwappyVk requires:
                 uint32_t numSwappyRequiredExtensions = 0u;
                 SwappyVk_determineDeviceExtensions( mDevice->mPhysicalDevice, numExtensions,
