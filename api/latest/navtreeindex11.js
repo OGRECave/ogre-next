@@ -202,6 +202,8 @@ var NAVTREEINDEX11 =
 "_ogre_vulkan_android_support_8h.html":[8,0,801],
 "_ogre_vulkan_android_support_8h.html#a687c4460355e5b2230b2ac9715ede6a0":[8,0,801,1],
 "_ogre_vulkan_android_window_8h.html":[8,0,802],
+"_ogre_vulkan_android_window_8h.html#a27ece82c688e24084c36da05df46d21b":[8,0,802,3],
+"_ogre_vulkan_android_window_8h.html#a5e00c24a0dc9623ad0f968347487d093":[8,0,802,2],
 "_ogre_vulkan_async_texture_ticket_8h.html":[8,0,803],
 "_ogre_vulkan_async_ticket_8h.html":[8,0,804],
 "_ogre_vulkan_buffer_interface_8h.html":[8,0,805],
@@ -247,7 +249,5 @@ var NAVTREEINDEX11 =
 "_ogre_vulkan_hlms_pso_8h.html":[8,0,820],
 "_ogre_vulkan_mappings_8h.html":[8,0,821],
 "_ogre_vulkan_multi_source_vertex_buffer_pool_8h.html":[8,0,822],
-"_ogre_vulkan_pixel_format_to_shader_type_8h.html":[8,0,823],
-"_ogre_vulkan_plugin_8h.html":[8,0,824],
-"_ogre_vulkan_prerequisites_8h.html":[8,0,825]
+"_ogre_vulkan_pixel_format_to_shader_type_8h.html":[8,0,823]
 };

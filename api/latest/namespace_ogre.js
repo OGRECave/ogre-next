@@ -303,6 +303,7 @@ var namespace_ogre =
     [ "AndroidEGLContext", "class_ogre_1_1_android_e_g_l_context.html", "class_ogre_1_1_android_e_g_l_context" ],
     [ "AndroidEGLSupport", "class_ogre_1_1_android_e_g_l_support.html", "class_ogre_1_1_android_e_g_l_support" ],
     [ "AndroidEGLWindow", "class_ogre_1_1_android_e_g_l_window.html", "class_ogre_1_1_android_e_g_l_window" ],
+    [ "AndroidJniProvider", "class_ogre_1_1_android_jni_provider.html", "class_ogre_1_1_android_jni_provider" ],
     [ "AndroidLogListener", "class_ogre_1_1_android_log_listener.html", "class_ogre_1_1_android_log_listener" ],
     [ "Angle", "class_ogre_1_1_angle.html", "class_ogre_1_1_angle" ],
     [ "AnimableObject", "class_ogre_1_1_animable_object.html", "class_ogre_1_1_animable_object" ],

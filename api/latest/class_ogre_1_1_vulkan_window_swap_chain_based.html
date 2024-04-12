@@ -134,12 +134,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad337e8d5f7a28e608259a18269694bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d6f1accac3551566dc3de3a44cfc9ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#a8d6f1accac3551566dc3de3a44cfc9ac">chooseSurfaceFormat</a> (bool hwGamma)</td></tr>
 <tr class="separator:a8d6f1accac3551566dc3de3a44cfc9ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a881dd6b5984a497d0b554b0eb14793e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#a881dd6b5984a497d0b554b0eb14793e4">createSwapchain</a> ()</td></tr>
-<tr class="separator:a881dd6b5984a497d0b554b0eb14793e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53450084ff3d2a80c7edcc4687835844"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#a53450084ff3d2a80c7edcc4687835844">createSwapchain</a> ()</td></tr>
+<tr class="separator:a53450084ff3d2a80c7edcc4687835844"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d713cd086e916722a1dd2227b2a8071"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#a7d713cd086e916722a1dd2227b2a8071">destroy</a> () override</td></tr>
 <tr class="separator:a7d713cd086e916722a1dd2227b2a8071"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52c3e9ef70853f880c393c81e7394b5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#a52c3e9ef70853f880c393c81e7394b5c">destroySwapchain</a> ()</td></tr>
-<tr class="separator:a52c3e9ef70853f880c393c81e7394b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af92fab418bed453eb671d9a759ee8f0a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#af92fab418bed453eb671d9a759ee8f0a">destroySwapchain</a> ()</td></tr>
+<tr class="separator:af92fab418bed453eb671d9a759ee8f0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a92d312fe89d7ca06565d0fb7554b30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#a5a92d312fe89d7ca06565d0fb7554b30">getCustomAttribute</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, void *pData) override</td></tr>
 <tr class="separator:a5a92d312fe89d7ca06565d0fb7554b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62633b1e5220c2884e44b30a78d1183e"><td class="memItemLeft" align="right" valign="top">VkSemaphore&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#a62633b1e5220c2884e44b30a78d1183e">getImageAcquiredSemaphore</a> ()</td></tr>
@@ -504,19 +504,27 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a881dd6b5984a497d0b554b0eb14793e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a881dd6b5984a497d0b554b0eb14793e4">&#9670;&nbsp;</a></span>createSwapchain()</h2>
+<a id="a53450084ff3d2a80c7edcc4687835844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53450084ff3d2a80c7edcc4687835844">&#9670;&nbsp;</a></span>createSwapchain()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::VulkanWindowSwapChainBased::createSwapchain </td>
+          <td class="memname">virtual void Ogre::VulkanWindowSwapChainBased::createSwapchain </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -550,19 +558,27 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a52c3e9ef70853f880c393c81e7394b5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a52c3e9ef70853f880c393c81e7394b5c">&#9670;&nbsp;</a></span>destroySwapchain()</h2>
+<a id="af92fab418bed453eb671d9a759ee8f0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af92fab418bed453eb671d9a759ee8f0a">&#9670;&nbsp;</a></span>destroySwapchain()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::VulkanWindowSwapChainBased::destroySwapchain </td>
+          <td class="memname">virtual void Ogre::VulkanWindowSwapChainBased::destroySwapchain </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -773,6 +789,8 @@ Public Attributes</h2></td></tr>
 <p>If the 31st bit is set, i.e. 0x80000000, then lowest latency mode, aka mailbox, will be used (which doesn't limit the framerate) </p>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_window.html#a76b56f475ba7474c83760b557c34c6a5">Ogre::Window</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_android_window.html#a2934178a8d6147ece82e78128c7b0b18">Ogre::VulkanAndroidWindow</a>.</p>
 
 </div>
 </div>

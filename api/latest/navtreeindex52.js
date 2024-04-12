@@ -1,5 +1,10 @@
 var NAVTREEINDEX52 =
 {
+"class_ogre_1_1_polygon.html#a2e9e0c2abd6c18c910b7b75ab01f1513":[5,2,6,21,1],
+"class_ogre_1_1_polygon.html#a2f6f8ca3ff5356ed6ddebb55f9c158bd":[5,2,6,21,7],
+"class_ogre_1_1_polygon.html#a4ecd1e0336a4e27b0c09ae3f75a1da72":[5,2,6,21,19],
+"class_ogre_1_1_polygon.html#a55b73fdabd35c480dd873009c546c20f":[5,2,6,21,2],
+"class_ogre_1_1_polygon.html#a5fd6676a7f72ed2cb4b96262e7e0b448":[5,2,6,21,12],
 "class_ogre_1_1_polygon.html#a6c6bde3911911e1bdf7ff2ed93209eda":[5,2,6,21,18],
 "class_ogre_1_1_polygon.html#a7ce008c85c18f7c28776a7e6b5fb60f3":[5,2,6,21,4],
 "class_ogre_1_1_polygon.html#a820a2030d0864cace5d649e1dc607838":[5,2,6,21,16],
@@ -11,12 +16,12 @@ var NAVTREEINDEX52 =
 "class_ogre_1_1_polygon.html#abc7c0f8e319e3a5a14c3a875eb5ab56c":[5,2,6,21,15],
 "class_ogre_1_1_polygon.html#ac32b2d0a6e7c0cee21471fdaf6da13c4":[5,2,6,21,10],
 "class_ogre_1_1_polygon.html#ae88f6dcead5afbf639ab42959662dac3":[5,2,6,21,8],
-"class_ogre_1_1_pool.html":[7,0,0,688],
-"class_ogre_1_1_pool.html#a3151e6614c063eeae4bf7d95a9fbbbcb":[7,0,0,688,4],
-"class_ogre_1_1_pool.html#a4fb09f4b25feb32de79b6f578359aab1":[7,0,0,688,1],
-"class_ogre_1_1_pool.html#a7bd667e735a8fdaf2e7017d436ba75a6":[7,0,0,688,0],
-"class_ogre_1_1_pool.html#abafd7c72963d86ef829c0373fe50aa7f":[7,0,0,688,2],
-"class_ogre_1_1_pool.html#af399adb462aa706c25e1e961cdfb5a1e":[7,0,0,688,3],
+"class_ogre_1_1_pool.html":[7,0,0,689],
+"class_ogre_1_1_pool.html#a3151e6614c063eeae4bf7d95a9fbbbcb":[7,0,0,689,4],
+"class_ogre_1_1_pool.html#a4fb09f4b25feb32de79b6f578359aab1":[7,0,0,689,1],
+"class_ogre_1_1_pool.html#a7bd667e735a8fdaf2e7017d436ba75a6":[7,0,0,689,0],
+"class_ogre_1_1_pool.html#abafd7c72963d86ef829c0373fe50aa7f":[7,0,0,689,2],
+"class_ogre_1_1_pool.html#af399adb462aa706c25e1e961cdfb5a1e":[7,0,0,689,3],
 "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html":[5,2,2,80],
 "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html#a298f1b128634bef5d5964726097278e8":[5,2,2,80,2],
 "class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html#a403617d0cc5f8e8bffccca4012dd6fb1":[5,2,2,80,1],
@@ -244,10 +249,5 @@ var NAVTREEINDEX52 =
 "class_ogre_1_1_quaternion.html#af05da43b746cf5b9bc2dcaf3aa4db2b9":[5,2,6,22,25],
 "class_ogre_1_1_quaternion.html#af292a9ed18e3da0bda0fbe114f60cdec":[5,2,6,22,31],
 "class_ogre_1_1_quaternion.html#af3424f1e07092c0ffe293d18b277a04f":[5,2,6,22,54],
-"class_ogre_1_1_radial_density_mask.html":[5,2,10,88],
-"class_ogre_1_1_radial_density_mask.html#a2fb81e428dc82c0ec6f989aa3987d008":[5,2,10,88,0],
-"class_ogre_1_1_radial_density_mask.html#a2fb81e428dc82c0ec6f989aa3987d008a06f91d83ae58863c75fe329ed494a60c":[5,2,10,88,0,1],
-"class_ogre_1_1_radial_density_mask.html#a2fb81e428dc82c0ec6f989aa3987d008a76e83a37eed491f98709308902a42f63":[5,2,10,88,0,0],
-"class_ogre_1_1_radial_density_mask.html#a2fb81e428dc82c0ec6f989aa3987d008aa48ecd698c3b41bb26542690b3e33359":[5,2,10,88,0,2],
-"class_ogre_1_1_radial_density_mask.html#a30bc78c3281679b74e35d1fb984badc6":[5,2,10,88,8]
+"class_ogre_1_1_radial_density_mask.html":[5,2,10,88]
 };

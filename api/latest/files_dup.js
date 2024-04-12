@@ -1728,9 +1728,7 @@ var files_dup =
       [ "TextureSource", "class_ogre_1_1_volume_1_1_texture_source.html", "class_ogre_1_1_volume_1_1_texture_source" ]
     ] ],
     [ "OgreVulkanAndroidSupport.h", "_ogre_vulkan_android_support_8h.html", "_ogre_vulkan_android_support_8h" ],
-    [ "OgreVulkanAndroidWindow.h", "_ogre_vulkan_android_window_8h.html", [
-      [ "VulkanAndroidWindow", "class_ogre_1_1_vulkan_android_window.html", "class_ogre_1_1_vulkan_android_window" ]
-    ] ],
+    [ "OgreVulkanAndroidWindow.h", "_ogre_vulkan_android_window_8h.html", "_ogre_vulkan_android_window_8h" ],
     [ "OgreVulkanAsyncTextureTicket.h", "_ogre_vulkan_async_texture_ticket_8h.html", [
       [ "VulkanAsyncTextureTicket", "class_ogre_1_1_vulkan_async_texture_ticket.html", "class_ogre_1_1_vulkan_async_texture_ticket" ]
     ] ],
