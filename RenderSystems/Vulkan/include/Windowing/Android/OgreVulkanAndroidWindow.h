@@ -51,11 +51,18 @@ namespace Ogre
     public:
         /** User must override this function.
         @param env [out]
-            The JNI class that is assumed to be from AttachCurrentThread.
+            The JNI class that is assumed to be from AttachCurrentThread().
         @param activity [out]
             NativeActivity object handle, used for JNI.
         */
-        virtual void get( JNIEnv **env, jobject *activity ) = 0;
+        virtual void acquire( JNIEnv **env, jobject *activity ) = 0;
+
+        /** Notifies the implementation that we're done using the env object.
+            In case the implementation wants to call DetachCurrentThread().
+        @param env
+            The JNI class that was retrieved via acquire().
+        */
+        virtual void release( JNIEnv *env ) = 0;
     };
 
     class _OgreVulkanExport VulkanAndroidWindow final : public VulkanWindowSwapChainBased

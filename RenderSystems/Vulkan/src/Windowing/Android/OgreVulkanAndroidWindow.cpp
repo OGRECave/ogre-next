@@ -395,11 +395,14 @@ namespace Ogre
                          "VulkanAndroidWindow::createSwapchain" );
         }
 
-        JNIEnv *jni = 0;
-        jobject nativeActivityClass = 0;
-        mJniProvider->get( &jni, &nativeActivityClass );
-        SwappyVk_initAndGetRefreshCycleDuration( jni, nativeActivityClass, mDevice->mPhysicalDevice,
-                                                 mDevice->mDevice, mSwapchain, &mRefreshDuration );
+        {
+            JNIEnv *jni = 0;
+            jobject nativeActivityClass = 0;
+            mJniProvider->acquire( &jni, &nativeActivityClass );
+            SwappyVk_initAndGetRefreshCycleDuration( jni, nativeActivityClass, mDevice->mPhysicalDevice,
+                                                     mDevice->mDevice, mSwapchain, &mRefreshDuration );
+            mJniProvider->release( jni );
+        }
 
         // Swappy wants to know the mNativeWindow every time the Swapchain changes.
         // If we try to set mNativeWindow without a valid mSwapchain yet, it won't work correctly.
