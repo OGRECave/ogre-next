@@ -157,6 +157,9 @@ namespace Ogre
     VulkanRenderSystem::VulkanRenderSystem( const NameValuePairList *options ) :
         RenderSystem(),
         mInitialized( false ),
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        mSwappyFramePacing( true ),
+#endif
         mHardwareBufferManager( 0 ),
         mIndirectBuffer( 0 ),
         mShaderManager( 0 ),
@@ -817,6 +820,35 @@ namespace Ogre
         }
 
         return rsc;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::setSwappyFramePacing( bool bEnable, Window *callingWindow )
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        const bool bChanged = mSwappyFramePacing != bEnable;
+        mSwappyFramePacing = bEnable;
+
+        if( bChanged )
+        {
+            for( Window *window : mWindows )
+            {
+                if( window != callingWindow )
+                {
+                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanAndroidWindow *>( window ) );
+                    static_cast<VulkanAndroidWindow *>( window )->_notifySwappyToggled();
+                }
+            }
+        }
+#endif
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanRenderSystem::getSwappyFramePacing() const
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        return mSwappyFramePacing;
+#else
+        return false;
+#endif
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::resetAllBindings()

@@ -700,7 +700,11 @@ namespace Ogre
         }
 
 #ifdef OGRE_VULKAN_USE_SWAPPY
-        VkResult result = SwappyVk_queuePresent( mDevice->mPresentQueue, &present );
+        VkResult result;
+        if( mDevice->mRenderSystem->getSwappyFramePacing() )
+            result = SwappyVk_queuePresent( mDevice->mPresentQueue, &present );
+        else
+            result = vkQueuePresentKHR( mDevice->mPresentQueue, &present );
 #else
         VkResult result = vkQueuePresentKHR( mDevice->mPresentQueue, &present );
 #endif

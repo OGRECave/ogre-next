@@ -71,11 +71,31 @@ namespace Ogre
 #ifdef OGRE_VULKAN_USE_SWAPPY
         AndroidJniProvider *mJniProvider;
         uint64 mRefreshDuration;
+
+        // At least on one device (Redmi 4X, custom ROM), Swappy got into a resize loop:
+        //
+        // 1. Swappy is initialized
+        // 2. I get a resize event
+        // 3. Recreate the swapchain
+        // 4. Swappy is reinitialized
+        // 5. Go to step 2
+        //
+        // This causes framerate to drop catastrophically (~7 fps)
+        // because every frame recreates the swapchain.
+        //
+        // Thus if we've recreated the swapchain N times in a second, we
+        // consider Swappy busted on this device and disable it.
+        int64 mFirstRecreateTimestamp;  // In milliseconds.
+        uint8 mRecreateCount;
 #endif
 
         bool mVisible;
         bool mHidden;
         bool mIsExternal;
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        void initSwappy();
+#endif
 
         void createSwapchain() override;
         void destroySwapchain() override;
@@ -145,6 +165,10 @@ namespace Ogre
             False to always try to honour the vSyncInterval set in Window::setVSync.
         */
         static void setFramePacingSwappyAutoMode( FramePacingSwappyModes mode );
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        void _notifySwappyToggled();
+#endif
 
         /// If the ANativeWindow changes, allows to set a new one.
         void setNativeWindow( ANativeWindow *nativeWindow );

@@ -59,6 +59,8 @@ namespace Ogre
 #ifdef OGRE_VULKAN_USE_SWAPPY
         mJniProvider( 0 ),
         mRefreshDuration( 0 ),
+        mFirstRecreateTimestamp( 0u ),
+        mRecreateCount( 255u ),
 #endif
         mVisible( true ),
         mHidden( false ),
@@ -203,12 +205,52 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    static int64_t timeInMilliseconds()
+    {
+        timespec clockTime;
+        clock_gettime( CLOCK_MONOTONIC, &clockTime );
+        return clockTime.tv_sec * 1000 + clockTime.tv_nsec / 1000000;
+    }
+#endif
+
     void VulkanAndroidWindow::windowMovedOrResized()
     {
         if( mClosed || !mNativeWindow )
             return;
 
         mDevice->stall();
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        // Code to detect buggy devices (if it's buggy, we disable Swappy).
+        if( mRecreateCount == 255u )
+        {
+            mRecreateCount = 0u;
+            mFirstRecreateTimestamp = timeInMilliseconds();
+        }
+        else
+        {
+            int64 currTimestamp = timeInMilliseconds();
+            if( currTimestamp - mFirstRecreateTimestamp <= 1000 )
+            {
+                ++mRecreateCount;
+                if( mRecreateCount < 5u )
+                {
+                    // We're disabling Swappy. It's likely buggy.
+                    LogManager::getSingleton().logMessage(
+                        "Swapchain recreated too many times within one second. "
+                        "Disabling Swappy Frame Pacing.",
+                        LML_CRITICAL );
+
+                    mDevice->mRenderSystem->setSwappyFramePacing( false, this );
+                }
+            }
+            else
+            {
+                mRecreateCount = 255u;
+            }
+        }
+#endif
 
         destroySwapchain();
 
@@ -270,6 +312,27 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    void VulkanAndroidWindow::_notifySwappyToggled()
+    {
+        if( !mDevice->mRenderSystem->getSwappyFramePacing() )
+        {
+            // Disabling
+            if( mSwapchain )
+            {
+                SwappyVk_setWindow( mDevice->mDevice, mSwapchain, nullptr );
+                SwappyVk_destroySwapchain( mDevice->mDevice, mSwapchain );
+            }
+        }
+        else
+        {
+            // Enabling
+            if( mSwapchain )
+                initSwappy();
+        }
+    }
+#endif
+    //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
         if( mNativeWindow && !nativeWindow )
@@ -284,7 +347,7 @@ namespace Ogre
         }
 
 #ifdef OGRE_VULKAN_USE_SWAPPY
-        if( mSwapchain )
+        if( mSwapchain && mDevice->mRenderSystem->getSwappyFramePacing() )
             SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
 #endif
 
@@ -375,18 +438,20 @@ namespace Ogre
         VulkanWindowSwapChainBased::setVSync( vSync, vSyncInterval );
 
 #ifdef OGRE_VULKAN_USE_SWAPPY
-        if( !bSwapchainWillbeRecreated && mSwapchain )
+        if( !bSwapchainWillbeRecreated && mSwapchain && mDevice->mRenderSystem->getSwappyFramePacing() )
         {
             SwappyVk_setSwapIntervalNS( mDevice->mDevice, mSwapchain,
                                         mRefreshDuration * mVSyncInterval );
         }
 #endif
     }
-    //-------------------------------------------------------------------------
-    void VulkanAndroidWindow::createSwapchain()
-    {
-        VulkanWindowSwapChainBased::createSwapchain();
+//-------------------------------------------------------------------------
 #ifdef OGRE_VULKAN_USE_SWAPPY
+    void VulkanAndroidWindow::initSwappy()
+    {
+        if( !mDevice->mRenderSystem->getSwappyFramePacing() )
+            return;
+
         if( !mJniProvider )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
@@ -421,14 +486,25 @@ namespace Ogre
             mFrequencyNumerator = 0u;
             mFrequencyDenominator = 0u;
         }
-        SwappyVk_setAutoSwapInterval( false );
         SwappyVk_setSwapIntervalNS( mDevice->mDevice, mSwapchain, mRefreshDuration * mVSyncInterval );
+    }
+#endif
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::createSwapchain()
+    {
+        VulkanWindowSwapChainBased::createSwapchain();
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        initSwappy();
 #endif
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::destroySwapchain()
     {
 #ifdef OGRE_VULKAN_USE_SWAPPY
+        // Swappy has a bug where calling SwappyVk_destroySwapchain will leak the mNativeWindow.
+        // So we must call SwappyVk_setWindow() ourselves.
+        if( mNativeWindow )
+            SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
         SwappyVk_destroySwapchain( mDevice->mDevice, mSwapchain );
 #endif
         VulkanWindowSwapChainBased::destroySwapchain();
