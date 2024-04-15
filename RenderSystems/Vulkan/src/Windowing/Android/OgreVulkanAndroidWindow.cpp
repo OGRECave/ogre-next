@@ -231,10 +231,10 @@ namespace Ogre
         else
         {
             int64 currTimestamp = timeInMilliseconds();
-            if( currTimestamp - mFirstRecreateTimestamp <= 1000 )
+            if( currTimestamp - mFirstRecreateTimestamp <= 1500 )
             {
                 ++mRecreateCount;
-                if( mRecreateCount < 5u )
+                if( mRecreateCount >= 5u )
                 {
                     // We're disabling Swappy. It's likely buggy.
                     LogManager::getSingleton().logMessage(
