@@ -338,7 +338,9 @@ namespace Ogre
         createInfo.enabledExtensionCount = static_cast<uint32>( extensions.size() );
         createInfo.ppEnabledExtensionNames = extensions.begin();
 
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH && !defined OGRE_VULKAN_WINDOW_ANDROID
+        // Workaround: skip following code on Android as it causes crash in vkCreateInstance() on Android
+        // Emulator 35.1.4, macOS 14.4.1, M1 Pro, despite declared support for rev.10 VK_EXT_debug_report
         VkDebugReportCallbackCreateInfoEXT debugCb = addDebugCallback( debugCallback, renderSystem );
         createInfo.pNext = &debugCb;
 #endif
