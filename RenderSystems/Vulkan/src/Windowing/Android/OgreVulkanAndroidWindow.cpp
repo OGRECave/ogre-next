@@ -450,7 +450,11 @@ namespace Ogre
     void VulkanAndroidWindow::initSwappy()
     {
         if( !mDevice->mRenderSystem->getSwappyFramePacing() )
+        {
+            mFrequencyNumerator = 0u;
+            mFrequencyDenominator = 0u;
             return;
+        }
 
         if( !mJniProvider )
         {
