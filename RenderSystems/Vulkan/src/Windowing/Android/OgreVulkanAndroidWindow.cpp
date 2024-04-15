@@ -52,6 +52,12 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    // Same default as Swappy.
+    VulkanAndroidWindow::FramePacingSwappyModes VulkanAndroidWindow::msFramePacingSwappyMode =
+        VulkanAndroidWindow::AutoVSyncInterval_AutoPipeline;
+#endif
+
     VulkanAndroidWindow::VulkanAndroidWindow( const String &title, uint32 width, uint32 height,
                                               bool fullscreenMode ) :
         VulkanWindowSwapChainBased( title, width, height, fullscreenMode ),
@@ -290,7 +296,15 @@ namespace Ogre
     void VulkanAndroidWindow::setFramePacingSwappyAutoMode( FramePacingSwappyModes mode )
     {
 #ifdef OGRE_VULKAN_USE_SWAPPY
-        switch( mode )
+        msFramePacingSwappyMode = mode;
+        setFramePacingSwappyAutoMode();
+#endif
+    }
+    //-------------------------------------------------------------------------
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    void VulkanAndroidWindow::setFramePacingSwappyAutoMode()
+    {
+        switch( msFramePacingSwappyMode )
         {
         case AutoVSyncInterval_AutoPipeline:
             SwappyVk_setAutoSwapInterval( true );
@@ -309,8 +323,8 @@ namespace Ogre
             //  SwappyVk_setAutoPipelineMode( true );
             // Is ignored by Swappy as it makes no sense.
         }
-#endif
     }
+#endif
     //-------------------------------------------------------------------------
 #ifdef OGRE_VULKAN_USE_SWAPPY
     void VulkanAndroidWindow::_notifySwappyToggled()
@@ -491,6 +505,8 @@ namespace Ogre
             mFrequencyDenominator = 0u;
         }
         SwappyVk_setSwapIntervalNS( mDevice->mDevice, mSwapchain, mRefreshDuration * mVSyncInterval );
+
+        setFramePacingSwappyAutoMode();
     }
 #endif
     //-------------------------------------------------------------------------

@@ -67,60 +67,7 @@ namespace Ogre
 
     class _OgreVulkanExport VulkanAndroidWindow final : public VulkanWindowSwapChainBased
     {
-        ANativeWindow *mNativeWindow;
-#ifdef OGRE_VULKAN_USE_SWAPPY
-        AndroidJniProvider *mJniProvider;
-        uint64 mRefreshDuration;
-
-        // At least on one device (Redmi 4X, custom ROM), Swappy got into a resize loop:
-        //
-        // 1. Swappy is initialized
-        // 2. I get a resize event
-        // 3. Recreate the swapchain
-        // 4. Swappy is reinitialized
-        // 5. Go to step 2
-        //
-        // This causes framerate to drop catastrophically (~7 fps)
-        // because every frame recreates the swapchain.
-        //
-        // Thus if we've recreated the swapchain N times in a second, we
-        // consider Swappy busted on this device and disable it.
-        int64 mFirstRecreateTimestamp;  // In milliseconds.
-        uint8 mRecreateCount;
-#endif
-
-        bool mVisible;
-        bool mHidden;
-        bool mIsExternal;
-
-#ifdef OGRE_VULKAN_USE_SWAPPY
-        void initSwappy();
-#endif
-
-        void createSwapchain() override;
-        void destroySwapchain() override;
-
     public:
-        VulkanAndroidWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        ~VulkanAndroidWindow() override;
-
-        static const char *getRequiredExtensionName();
-
-        void setVSync( bool vSync, uint32 vSyncInterval ) override;
-
-        void destroy() override;
-        void _initialize( TextureGpuManager *textureGpuManager,
-                          const NameValuePairList *miscParams ) override;
-
-        void reposition( int32 left, int32 top ) override;
-        void requestResolution( uint32 width, uint32 height ) override;
-        void windowMovedOrResized() override;
-
-        void _setVisible( bool visible ) override;
-        bool isVisible() const override;
-        void setHidden( bool hidden ) override;
-        bool isHidden() const override;
-
         enum FramePacingSwappyModes
         {
             /// Try to honour the vSyncInterval set via Window::setVSync.
@@ -155,6 +102,65 @@ namespace Ogre
             /// time the next VBLANK interval arrives.
             AutoVSyncInterval_AutoPipeline,
         };
+
+    private:
+        ANativeWindow *mNativeWindow;
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        AndroidJniProvider *mJniProvider;
+        uint64 mRefreshDuration;
+
+        // At least on one device (Redmi 4X, custom ROM), Swappy got into a resize loop:
+        //
+        // 1. Swappy is initialized
+        // 2. I get a resize event
+        // 3. Recreate the swapchain
+        // 4. Swappy is reinitialized
+        // 5. Go to step 2
+        //
+        // This causes framerate to drop catastrophically (~7 fps)
+        // because every frame recreates the swapchain.
+        //
+        // Thus if we've recreated the swapchain N times in a second, we
+        // consider Swappy busted on this device and disable it.
+        int64 mFirstRecreateTimestamp;  // In milliseconds.
+        uint8 mRecreateCount;
+
+        static FramePacingSwappyModes msFramePacingSwappyMode;
+#endif
+
+        bool mVisible;
+        bool mHidden;
+        bool mIsExternal;
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        void initSwappy();
+
+        static void setFramePacingSwappyAutoMode();
+#endif
+
+        void createSwapchain() override;
+        void destroySwapchain() override;
+
+    public:
+        VulkanAndroidWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
+        ~VulkanAndroidWindow() override;
+
+        static const char *getRequiredExtensionName();
+
+        void setVSync( bool vSync, uint32 vSyncInterval ) override;
+
+        void destroy() override;
+        void _initialize( TextureGpuManager *textureGpuManager,
+                          const NameValuePairList *miscParams ) override;
+
+        void reposition( int32 left, int32 top ) override;
+        void requestResolution( uint32 width, uint32 height ) override;
+        void windowMovedOrResized() override;
+
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
 
         /** Sets Swappy auto swap interval and auto pipeline modes.
             See https://developer.android.com/games/sdk/frame-pacing
