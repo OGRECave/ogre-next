@@ -2012,7 +2012,7 @@ Also setting Textures that are RenderTargets is dangerous. For RenderTargets, ch
 ```cpp
 texture <name> <width> <height> [depth] <pixel_format> [msaa <N>] [msaa_auto]
 [depth_texture] [depth_pool <poolId>] [uav] [2d_array|3d|cubemap] [mipmaps <numMips>] [no_automipmaps] [reinterpretable]
-[explicit_resolve]
+[explicit_resolve] [not_texture]
 ```
 
 @param name
@@ -2100,7 +2100,12 @@ The reinterpretation must be supported by the GPU and API.
 @param explicit\_resolve
 
 When absent (default), MSAA textures will have an extra non-MSAA copy where the contents are always resolved (unless store actions are not set to resolve).<br/>
-When present, there is no extra copy; and you must setup the RTV manually with a different non-MSAA texture where to resolve to. See [MSAA with Explicit Resolves](@ref MSAAExplicitResolves)
+When present, there is no extra copy; and you must setup the RTV manually with a different non-MSAA texture where to resolve to. See [MSAA with Explicit Resolves](@ref MSAAExplicitResolves).
+
+@param not\_texture
+
+When absent (default), the texture can be bound as a regular texture for sampling (e.g. with point/bilinear filtering).
+When present, you can't sample from this texture. This flag is useful if you intend to use it together with uav or explicit\_resolve.
 
 ### MSAA: Explicit vs Implicit resolves {#CompositorNodesTexturesMsaa}
 

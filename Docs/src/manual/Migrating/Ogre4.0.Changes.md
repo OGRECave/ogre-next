@@ -38,3 +38,30 @@ Once that's done, most Hlms-related compiler errors (if setting [`OGRE_SHADER_CO
 You should Find & Replace in that order. If you first find all `setProperty( ` and replace them with `setProperty( kNoTid, `; you will end up with code that compiles but introduces race conditions and no way to identify them.
 
 However if you first find all `setProperty( ` and replace them with `setProperty( tid, `, you will end up with code that does not compile wherever `kNoTid` should be used (still exercise care when replacing `tid` with `kNoTid`, make sure to be conscious of it. See [The tid (Thread ID) argument](@ref HlmsThreading_tidArgument) for details).
+
+## Compositor Script changes
+
+Added the `not_texture` keyword. This can improve performance in scenarios where you don't intend to sample from this texture i.e. usually in conjuntion with either the `uav` or `explicit_resolve` keywords:
+
+```
+compositor_node RenderingNodeMsaa
+{
+	in 0 rt_renderwindow
+
+	texture msaaSurface target_width target_height target_format target_orientation_mode msaa 4 not_texture explicit_resolve
+
+	rtv mainRtv
+	{
+		colour 0 msaaSurface resolve rt_renderwindow
+	}
+
+	target mainRtv
+	{
+		pass render_scene
+		{
+		}
+	}
+
+	out 0 rt_renderwindow
+}
+```
