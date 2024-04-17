@@ -3745,6 +3745,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    inline bool isPowerOf2( uint32 x ) { return ( x & ( x - 1u ) ) == 0u; }
     SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
                                                                      PixelFormatGpu format,
                                                                      uint32 textureFlags,
@@ -3856,11 +3857,12 @@ namespace Ogre
             }
 
             uint8 samples = sampleDesc.getColourSamples();
+            OGRE_ASSERT_LOW( isPowerOf2( samples ) );
             while( samples > 0u )
             {
-                if( supportedSampleCounts & ( 1u << ( samples - 1u ) ) )
+                if( supportedSampleCounts & samples )
                     return SampleDescription( samples, sampleDesc.getMsaaPattern() );
-                --samples;
+                samples = samples >> 1u;
             }
 
             // Ouch. The format is not supported. Return "something".
