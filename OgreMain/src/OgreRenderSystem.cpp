@@ -810,7 +810,9 @@ namespace Ogre
     void RenderSystem::setWBufferEnabled( bool enabled ) { mWBuffer = enabled; }
     //-----------------------------------------------------------------------
     SampleDescription RenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-                                                               PixelFormatGpu format )
+                                                               PixelFormatGpu format,
+                                                               uint32 textureFlags,
+                                                               uint32 depthTextureFlags )
     {
         SampleDescription retVal( sampleDesc.getMaxSamples(), sampleDesc.getMsaaPattern() );
         return retVal;

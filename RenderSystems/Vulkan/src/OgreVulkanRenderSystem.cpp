@@ -3746,12 +3746,126 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-                                                                     PixelFormatGpu format )
+                                                                     PixelFormatGpu format,
+                                                                     uint32 textureFlags,
+                                                                     uint32 depthTextureFlags )
     {
-        uint8 samples = sampleDesc.getMaxSamples();
-        if( mDevice )
-            samples = (uint8)getMaxUsableSampleCount( mDevice->mDeviceProperties, samples );
-        return SampleDescription( samples, sampleDesc.getMsaaPattern() );
+        if( !mDevice )
+        {
+            // TODO
+            return sampleDesc;
+        }
+
+        // TODO: Spec says framebufferColorSampleCounts & co. contains the base minimum for all formats
+        // and we can use vkGetPhysicalDeviceImageFormatProperties to check for MSAA settings that may go
+        // BEYOND that mask for a specific format (honestly I don't trust Android drivers to implement
+        // vkGetPhysicalDeviceImageFormatProperties properly).
+        const VkPhysicalDeviceLimits &deviceLimits = mDevice->mDeviceProperties.limits;
+
+        if( sampleDesc.getCoverageSamples() != 0u )
+        {
+            // EQAA / CSAA.
+            // TODO: Support VK_AMD_mixed_attachment_samples & VK_NV_framebuffer_mixed_samples.
+            return validateSampleDescription(
+                SampleDescription( sampleDesc.getMaxSamples(), sampleDesc.getMsaaPattern() ), format,
+                textureFlags, depthTextureFlags );
+        }
+        else
+        {
+            // MSAA.
+            VkSampleCountFlags supportedSampleCounts = 0u;
+
+            if( PixelFormatGpuUtils::isDepth( format ) )
+            {
+                // Not an if-else typo: storageImageSampleCounts is AND'ed against *DepthSampleCounts.
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+
+                if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferDepthSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageDepthSampleCounts;
+
+                if( PixelFormatGpuUtils::isStencil( format ) )
+                {
+                    // Not a typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                    if( textureFlags & TextureFlags::Uav )
+                        supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                    if( textureFlags & TextureFlags::NotTexture )
+                        supportedSampleCounts &= deviceLimits.framebufferStencilSampleCounts;
+                    else
+                        supportedSampleCounts &= deviceLimits.sampledImageStencilSampleCounts;
+                }
+            }
+            else if( PixelFormatGpuUtils::isStencil( format ) )
+            {
+                // Not an if-else typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+
+                if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferStencilSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageStencilSampleCounts;
+            }
+            else if( format == PFG_NULL )
+            {
+                // PFG_NULL is always NotTexture and can't be Uav,
+                // let's just return to the user what they intended to ask.
+                supportedSampleCounts = deviceLimits.framebufferNoAttachmentsSampleCounts;
+            }
+            else if( PixelFormatGpuUtils::isInteger( format ) )
+            {
+                // TODO: Query Vulkan 1.2 / extensions to get framebufferIntegerColorSampleCounts.
+                // supportedSampleCounts = deviceLimits.framebufferIntegerColorSampleCounts;
+                supportedSampleCounts = VK_SAMPLE_COUNT_1_BIT;
+            }
+            else
+            {
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+                else if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferColorSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageColorSampleCounts;
+
+                if( PixelFormatGpuUtils::isDepth( format ) )
+                {
+                    // Not an if-else typo: storageImage... is AND'ed against *DepthSampleCounts.
+                    if( depthTextureFlags & TextureFlags::Uav )
+                        supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                    if( depthTextureFlags & TextureFlags::NotTexture )
+                        supportedSampleCounts &= deviceLimits.framebufferDepthSampleCounts;
+                    else
+                        supportedSampleCounts &= deviceLimits.sampledImageDepthSampleCounts;
+
+                    if( PixelFormatGpuUtils::isStencil( format ) )
+                    {
+                        // Not a typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                        if( depthTextureFlags & TextureFlags::Uav )
+                            supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                        if( depthTextureFlags & TextureFlags::NotTexture )
+                            supportedSampleCounts &= deviceLimits.framebufferStencilSampleCounts;
+                        else
+                            supportedSampleCounts &= deviceLimits.sampledImageStencilSampleCounts;
+                    }
+                }
+            }
+
+            uint8 samples = sampleDesc.getColourSamples();
+            while( samples > 0u )
+            {
+                if( supportedSampleCounts & ( 1u << ( samples - 1u ) ) )
+                    return SampleDescription( samples, sampleDesc.getMsaaPattern() );
+                --samples;
+            }
+
+            // Ouch. The format is not supported. Return "something".
+            return SampleDescription( 0u, sampleDesc.getMsaaPattern() );
+        }
     }
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,

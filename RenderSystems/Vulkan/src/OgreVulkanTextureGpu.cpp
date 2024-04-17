@@ -114,8 +114,18 @@ namespace Ogre
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         if( hasMsaaExplicitResolves() )
         {
-            imageInfo.samples =
-                static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+            if( mSampleDescription.getCoverageSamples() != 0u &&
+                ( PixelFormatGpuUtils::isDepth( finalPixelFormat ) ||
+                  PixelFormatGpuUtils::isStencil( finalPixelFormat ) ) )
+            {
+                imageInfo.samples =
+                    static_cast<VkSampleCountFlagBits>( mSampleDescription.getCoverageSamples() );
+            }
+            else
+            {
+                imageInfo.samples =
+                    static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+            }
         }
         else
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -952,7 +962,18 @@ namespace Ogre
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        imageInfo.samples = static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getCoverageSamples() != 0u &&
+            ( PixelFormatGpuUtils::isDepth( finalPixelFormat ) ||
+              PixelFormatGpuUtils::isStencil( finalPixelFormat ) ) )
+        {
+            imageInfo.samples =
+                static_cast<VkSampleCountFlagBits>( mSampleDescription.getCoverageSamples() );
+        }
+        else
+        {
+            imageInfo.samples =
+                static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+        }
         imageInfo.flags = 0;
         imageInfo.usage |= PixelFormatGpuUtils::isDepth( finalPixelFormat )
                                ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT

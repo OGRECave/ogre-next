@@ -239,7 +239,9 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     SampleDescription MetalRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-                                                                    PixelFormatGpu format )
+                                                                    PixelFormatGpu format,
+                                                                    uint32 textureFlags,
+                                                                    uint32 depthTextureFlags )
     {
         uint8 samples = sampleDesc.getMaxSamples();
         if( @available( iOS 9.0, * ) )
@@ -253,10 +255,7 @@ namespace Ogre
         return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
-    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const
-    {
-        return true;
-    }
+    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const { return true; }
     //-------------------------------------------------------------------------
     HardwareOcclusionQuery *MetalRenderSystem::createHardwareOcclusionQuery()
     {

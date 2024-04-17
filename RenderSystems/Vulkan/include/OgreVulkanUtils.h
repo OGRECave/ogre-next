@@ -75,9 +75,6 @@ namespace Ogre
     }
 
     String getSpirvReflectError( SpvReflectResult spirvReflectResult );
-
-    VkSampleCountFlagBits getMaxUsableSampleCount( VkPhysicalDeviceProperties &physicalDeviceProperties,
-                                                   uint32 requestedSampleCount );
 }  // namespace Ogre
 
 #endif  //#ifndef _OgreVulkanPrerequisites_H_
