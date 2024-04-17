@@ -1,6 +1,5 @@
 var NAVTREEINDEX64 =
 {
-"class_ogre_1_1_tag_point.html":[5,2,0,8],
 "class_ogre_1_1_tag_point.html#a0e31e052ed4eded936856eea23be9ed7":[5,2,0,8,3],
 "class_ogre_1_1_tag_point.html#a302a3ded9b21d79cc797a9d902bc2875":[5,2,0,8,8],
 "class_ogre_1_1_tag_point.html#a3db4e7e4a02e55d8e03ccb86931272fb":[5,2,0,8,7],
@@ -249,5 +248,6 @@ var NAVTREEINDEX64 =
 "class_ogre_1_1_texture_gpu.html#a7345e4a1d69f94657945067273376684":[5,2,10,107,14],
 "class_ogre_1_1_texture_gpu.html#a73d480691663c93439835ff7d11f7739":[5,2,10,107,77],
 "class_ogre_1_1_texture_gpu.html#a78bd23c2116dc08afcaa8dc1b8d2384e":[5,2,10,107,88],
-"class_ogre_1_1_texture_gpu.html#a85f9670da9031ec138caf8b3e910b37e":[5,2,10,107,19]
+"class_ogre_1_1_texture_gpu.html#a85f9670da9031ec138caf8b3e910b37e":[5,2,10,107,19],
+"class_ogre_1_1_texture_gpu.html#a88776112af1b31c69566c2d1b6217d64":[5,2,10,107,45]
 };

@@ -1,6 +1,5 @@
 var NAVTREEINDEX83 =
 {
-"class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager_base.html#adcc6d94fe1578ebddb6f9670f9bcccd2":[7,0,0,2,141,5],
 "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager_base.html#ae323c21b261ea97bafaede8eadbfb597":[7,0,0,2,141,4],
 "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager_base.html#aef37e9cc2f7b5b54ef29e0a37f08ee06":[7,0,0,2,141,3],
 "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager_base.html#aff1c6e5ddc82493933afb514832d9379":[7,0,0,2,141,1],
@@ -32,8 +31,8 @@ var NAVTREEINDEX83 =
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a2189c0ee19612a7ae7382fda94aeec5f":[5,2,11,69,1],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,0,1,69,3],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a4a1bfe23cadfd5eee017f5f76390641b":[5,2,11,69,3],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,0,1,69,0],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,2,11,69,0],
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a74293d38760984a8545eb3d8e5fc5f9b":[5,0,1,69,0],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[5,2,11,69,2],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a7cd34069ef7153f171bb63b9ff7594cf":[5,0,1,69,2],
 "class_radial_density_mask_vr_generator.html":[5,2,10,142],
@@ -106,8 +105,8 @@ var NAVTREEINDEX83 =
 "compositor.html#autotoc_md99":[3,3,5,1],
 "deprecated.html":[4],
 "files.html":[8,0],
-"functions.html":[7,3,0],
 "functions.html":[7,3,0,0],
+"functions.html":[7,3,0],
 "functions_a.html":[7,3,0,1],
 "functions_b.html":[7,3,0,2],
 "functions_c.html":[7,3,0,3],
@@ -245,9 +244,10 @@ var NAVTREEINDEX83 =
 "globals_a.html":[8,1,0,1],
 "globals_c.html":[8,1,0,2],
 "globals_d.html":[8,1,0,3],
-"globals_defs.html":[8,1,5],
 "globals_defs.html":[8,1,5,0],
+"globals_defs.html":[8,1,5],
 "globals_defs_a.html":[8,1,5,1],
 "globals_defs_c.html":[8,1,5,2],
-"globals_defs_d.html":[8,1,5,3]
+"globals_defs_d.html":[8,1,5,3],
+"globals_defs_e.html":[8,1,5,4]
 };

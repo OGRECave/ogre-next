@@ -125,5 +125,5 @@ var class_ogre_1_1_d3_d11_render_system =
     [ "unregisterThread", "class_ogre_1_1_d3_d11_render_system.html#ad200bf1fb2a807c66b8531d85a70b368", null ],
     [ "validateConfigOptions", "class_ogre_1_1_d3_d11_render_system.html#a3d7e0738522b0144613a690f5ff118f8", null ],
     [ "validateDevice", "class_ogre_1_1_d3_d11_render_system.html#aef0108b035ba4efa9a5ba004966c4a91", null ],
-    [ "validateSampleDescription", "class_ogre_1_1_d3_d11_render_system.html#ac3a3b7bc23a569d870e3332e3be2b26b", null ]
+    [ "validateSampleDescription", "class_ogre_1_1_d3_d11_render_system.html#a246bf3d6c9610a8db3cd6645806ba34f", null ]
 ];

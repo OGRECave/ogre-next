@@ -1754,6 +1754,7 @@ var group___general =
       [ "ID_MSAA", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca9fd2048862404d5d14d3a4bf027eb540", null ],
       [ "ID_MSAA_AUTO", "group___general.html#gga30d5439896c2a2362024ec689b1e181cad6c66cd5caffc68d90a9cf1adadd7266", null ],
       [ "ID_EXPLICIT_RESOLVE", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca513a675c5cc7e40dae07c905ea94b952", null ],
+      [ "ID_NOT_TEXTURE", "group___general.html#gga30d5439896c2a2362024ec689b1e181caebaa2424526d01ac2bb5769b3b634bea", null ],
       [ "ID_REINTERPRETABLE", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca70c462fa7aca81126132bc6c34094c95", null ],
       [ "ID_KEEP_CONTENT", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca00823301fdaeac7f248cec06e1688684", null ],
       [ "ID_DEPTH_POOL", "group___general.html#gga30d5439896c2a2362024ec689b1e181cae092acc2d893628fba9256f9a69b758e", null ],

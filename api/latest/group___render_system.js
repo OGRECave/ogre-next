@@ -307,7 +307,7 @@ var group___render_system =
       [ "useCustomRenderSystemCapabilities", "class_ogre_1_1_render_system.html#a6219a2d1f92be5548983a03de9522365", null ],
       [ "validateConfigOptions", "class_ogre_1_1_render_system.html#a90ca5c0fdbb3b6c21f334a6e8cdb1373", null ],
       [ "validateDevice", "class_ogre_1_1_render_system.html#a913bd8f0e2e19cf356ccaa3bed31543e", null ],
-      [ "validateSampleDescription", "class_ogre_1_1_render_system.html#a1681d824b46321ab26f5566371c9fcb8", null ]
+      [ "validateSampleDescription", "class_ogre_1_1_render_system.html#aaaf78da347235d1fb0893b5aad4fc51f", null ]
     ] ],
     [ "RenderSystemCapabilities", "class_ogre_1_1_render_system_capabilities.html", [
       [ "ShaderProfiles", "class_ogre_1_1_render_system_capabilities.html#a811e06a15b0ada4ab8926eebbd1dd63d", null ],

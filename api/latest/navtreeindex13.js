@@ -1,6 +1,5 @@
 var NAVTREEINDEX13 =
 {
-"_samples.html#tutorial05":[3,0,37],
 "_samples.html#tutorial06":[3,0,38],
 "_samples.html#uav1":[3,0,51],
 "_samples.html#uav2":[3,0,52],
@@ -249,5 +248,6 @@ var NAVTREEINDEX13 =
 "class_ogre_1_1_any_numeric.html#ad4b1c2bf0151e7ec59a67f47b749c123":[5,2,2,4,5],
 "class_ogre_1_1_any_numeric.html#adc22f71f7106988f2d8090bf823185f8":[5,2,2,4,3],
 "class_ogre_1_1_any_numeric.html#ae46b3b0ebe2e956031cfa3f771087708":[5,2,2,4,0],
-"class_ogre_1_1_any_numeric.html#ae50aea5f19e2fd3957eebbd688c0a533":[5,2,2,4,13]
+"class_ogre_1_1_any_numeric.html#ae50aea5f19e2fd3957eebbd688c0a533":[5,2,2,4,13],
+"class_ogre_1_1_archive.html":[5,2,10,0]
 };

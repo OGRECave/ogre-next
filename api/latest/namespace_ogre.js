@@ -2483,7 +2483,6 @@ var namespace_ogre =
     [ "findSupportedFormat", "namespace_ogre.html#a26bb73ddc770257c1d41fd99f82bdf75", null ],
     [ "generateAbiCookie", "namespace_ogre.html#ad22a4c18d678c98c1d5abc2bbe324148", null ],
     [ "getGLSupport", "namespace_ogre.html#a7331dc70fef58e0eaac23e887e63ec61", null ],
-    [ "getMaxUsableSampleCount", "namespace_ogre.html#a2b493a2b2990de17799a5b5d9f1fab4c", null ],
     [ "getNumVulkanSupports", "namespace_ogre.html#a72e29d6e624b3a5f073f0da92db461ac", null ],
     [ "getSpirvReflectError", "namespace_ogre.html#ad9d115b4c2f15cfd117e06a64beaf55d", null ],
     [ "getVulkanSupport", "namespace_ogre.html#a4a6dc02bee563849f4da4c0101a2340a", null ],
