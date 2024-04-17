@@ -9,3 +9,4 @@ To see the expanded version see [Related Pages](pages.html)
 - @subpage Samples
 - @subpage Plugins
 - @subpage MigratingSeries
+- @subpage DeprecationPlan
