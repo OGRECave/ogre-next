@@ -888,6 +888,10 @@ skeletally animated), set the textures. They can rely on parameters like
 previously rendered object and avoid setting again many shared
 paremeters.
 
+## Multithreaded Shader Compilation
+
+For details see the dedicated section @subpage HlmsThreading.
+
 # Using the HLMS implementations {#UsingHlmsImplementation}
 
 ## Initialization {#UsingHlmsImplementationInitialization}

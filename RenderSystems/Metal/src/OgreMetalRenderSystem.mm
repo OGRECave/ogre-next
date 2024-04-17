@@ -255,7 +255,18 @@ namespace Ogre
         return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
-    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const { return true; }
+    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const
+    {
+#ifndef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+        return true;
+#else
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        return true;
+#    else
+        return false;
+#    endif
+#endif
+    }
     //-------------------------------------------------------------------------
     HardwareOcclusionQuery *MetalRenderSystem::createHardwareOcclusionQuery()
     {
