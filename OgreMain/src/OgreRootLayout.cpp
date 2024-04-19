@@ -34,24 +34,27 @@ THE SOFTWARE.
 #include "OgreGpuProgram.h"
 #include "OgreLogManager.h"
 #include "OgreLwString.h"
-#include "OgreStringConverter.h"
 
-#if defined( __GNUC__ ) && !defined( __clang__ )
-#    pragma GCC diagnostic push
-#    pragma GCC diagnostic ignored "-Wclass-memaccess"
-#endif
-#if defined( __clang__ )
-#    pragma clang diagnostic push
-#    pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
-#    pragma clang diagnostic ignored "-Wdeprecated-copy"
-#endif
-#include "rapidjson/document.h"
-#include "rapidjson/error/en.h"
-#if defined( __clang__ )
-#    pragma clang diagnostic pop
-#endif
-#if defined( __GNUC__ ) && !defined( __clang__ )
-#    pragma GCC diagnostic pop
+#if !OGRE_NO_JSON
+#    include "OgreStringConverter.h"
+#
+#    if defined( __GNUC__ ) && !defined( __clang__ )
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wclass-memaccess"
+#    endif
+#    if defined( __clang__ )
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#        pragma clang diagnostic ignored "-Wdeprecated-copy"
+#    endif
+#    include "rapidjson/document.h"
+#    include "rapidjson/error/en.h"
+#    if defined( __clang__ )
+#        pragma clang diagnostic pop
+#    endif
+#    if defined( __GNUC__ ) && !defined( __clang__ )
+#        pragma GCC diagnostic pop
+#    endif
 #endif
 
 #define TODO_limit_NUM_BIND_TEXTURES  // and co.
@@ -358,6 +361,7 @@ namespace Ogre
     void RootLayout::parseSet( const rapidjson::Value &jsonValue, const size_t setIdx,
                                const String &filename )
     {
+#if !OGRE_NO_JSON
         rapidjson::Value::ConstMemberIterator itor;
 
         itor = jsonValue.FindMember( "baked" );
@@ -450,6 +454,11 @@ namespace Ogre
                 }
             }
         }
+#else
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
+                     "Ogre must be built with JSON support to call this function!",
+                     "RootLayout::parseSet" );
+#endif
     }
     //-------------------------------------------------------------------------
     void RootLayout::addArrayBinding( DescBindingTypes::DescBindingTypes bindingType,
@@ -543,6 +552,7 @@ namespace Ogre
     void RootLayout::parseRootLayout( const char *rootLayout, const bool bCompute,
                                       const String &filename )
     {
+#if !OGRE_NO_JSON
         mCompute = bCompute;
         mParamsBuffStages = 0u;
 
@@ -623,6 +633,11 @@ namespace Ogre
             LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
             throw;
         }
+#else
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
+                     "Ogre must be built with JSON support to call this function!",
+                     "RootLayout::parseRootLayout" );
+#endif
     }
     //-----------------------------------------------------------------------------------
     inline void RootLayout::flushLwString( LwString &jsonStr, String &outJson )
