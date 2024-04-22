@@ -36,6 +36,8 @@ precision highp sampler2DArray;
 #define toFloat3x3( x ) mat3( x )
 #define buildFloat3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
+#define buildFloat4x4( row0, row1, row2, row3 ) mat4( row0, row1, row2, row3 )
+
 #define mul( x, y ) ((x) * (y))
 #define saturate(x) clamp( (x), 0.0, 1.0 )
 #define lerp mix
