@@ -75,6 +75,8 @@
 #define toFloat3x3( x ) mat3( x )
 #define buildFloat3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
+#define buildFloat4x4( row0, row1, row2, row3 ) mat4( row0, row1, row2, row3 )
+
 // Let's explain this madness:
 //
 // We use the keyword "midf" because "half" is already taken on Metal.
