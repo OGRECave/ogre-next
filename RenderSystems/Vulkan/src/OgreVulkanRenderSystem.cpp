@@ -81,6 +81,10 @@ THE SOFTWARE.
 
 #include "OgrePixelFormatGpuUtils.h"
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+#    include "swappy/swappyVk.h"
+#endif
+
 #define TODO_addVpCount_to_passpso
 
 namespace Ogre
@@ -153,6 +157,9 @@ namespace Ogre
     VulkanRenderSystem::VulkanRenderSystem( const NameValuePairList *options ) :
         RenderSystem(),
         mInitialized( false ),
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        mSwappyFramePacing( true ),
+#endif
         mHardwareBufferManager( 0 ),
         mIndirectBuffer( 0 ),
         mShaderManager( 0 ),
@@ -382,6 +389,11 @@ namespace Ogre
         VkDevice vkDevice = mDevice->mDevice;
         delete mDevice;
         mDevice = 0;
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        SwappyVk_destroyDevice( vkDevice );
+#endif
+
         if( !bIsExternal )
             vkDestroyDevice( vkDevice, 0 );
     }
@@ -752,7 +764,9 @@ namespace Ogre
         rsc->addShaderProfile( "glslvk" );
         rsc->addShaderProfile( "glsl" );
 
-        if( rsc->getVendor() == GPU_QUALCOMM )
+        // Turnip is the Mesa driver.
+        // These workarounds are for the proprietary driver.
+        if( rsc->getVendor() == GPU_QUALCOMM && rsc->getDeviceName().find( "Turnip" ) == String::npos )
         {
 #ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
             Workarounds::mBad3DBlit = true;
@@ -806,6 +820,35 @@ namespace Ogre
         }
 
         return rsc;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::setSwappyFramePacing( bool bEnable, Window *callingWindow )
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        const bool bChanged = mSwappyFramePacing != bEnable;
+        mSwappyFramePacing = bEnable;
+
+        if( bChanged )
+        {
+            for( Window *window : mWindows )
+            {
+                if( window != callingWindow )
+                {
+                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanAndroidWindow *>( window ) );
+                    static_cast<VulkanAndroidWindow *>( window )->_notifySwappyToggled();
+                }
+            }
+        }
+#endif
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanRenderSystem::getSwappyFramePacing() const
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        return mSwappyFramePacing;
+#else
+        return false;
+#endif
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::resetAllBindings()
@@ -1264,6 +1307,15 @@ namespace Ogre
 
             bool bCanRestrictImageViewUsage = false;
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+            // Declared at this scope because the pointer must live long enough
+            // for the reference in deviceExtensions[i] to remain valid.
+            struct ExtName
+            {
+                char name[VK_MAX_EXTENSION_NAME_SIZE];
+            };
+            FastArray<ExtName> swappyRequiredExtensionNames;
+#endif
             FastArray<const char *> deviceExtensions;
             if( !externalDevice )
             {
@@ -1298,6 +1350,39 @@ namespace Ogre
                     else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
                 }
+#ifdef OGRE_VULKAN_USE_SWAPPY
+                // Add any extensions that SwappyVk requires:
+                uint32_t numSwappyRequiredExtensions = 0u;
+                SwappyVk_determineDeviceExtensions( mDevice->mPhysicalDevice, numExtensions,
+                                                    availableExtensions.begin(),
+                                                    &numSwappyRequiredExtensions, 0 );
+                FastArray<char *> swappyRequiredExtensionNamesTmp;
+                swappyRequiredExtensionNames.resize( numSwappyRequiredExtensions );
+                swappyRequiredExtensionNamesTmp.reserve( numSwappyRequiredExtensions );
+
+                for( ExtName &extName : swappyRequiredExtensionNames )
+                    swappyRequiredExtensionNamesTmp.push_back( extName.name );
+
+                SwappyVk_determineDeviceExtensions(
+                    mDevice->mPhysicalDevice, numExtensions, availableExtensions.begin(),
+                    &numSwappyRequiredExtensions, swappyRequiredExtensionNamesTmp.begin() );
+
+                for( const char *swappyReqExtension : swappyRequiredExtensionNamesTmp )
+                {
+                    bool bAlreadyAdded = false;
+                    for( const char *alreadyAdded : deviceExtensions )
+                    {
+                        if( strncmp( alreadyAdded, swappyReqExtension, VK_MAX_EXTENSION_NAME_SIZE ) ==
+                            0 )
+                        {
+                            bAlreadyAdded = true;
+                            break;
+                        }
+                    }
+                    if( !bAlreadyAdded )
+                        deviceExtensions.push_back( swappyReqExtension );
+                }
+#endif
             }
             else
             {
@@ -2538,6 +2623,43 @@ namespace Ogre
         RenderSystem::endGpuDebuggerFrameCapture( window, bDiscard );
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::getCustomAttribute( const String &name, void *pData )
+    {
+        if( name == "VkInstance" )
+        {
+            *(VkInstance *)pData = mDevice->mInstance;
+            return;
+        }
+        else if( name == "VkPhysicalDevice" )
+        {
+            *(VkPhysicalDevice *)pData = mDevice->mPhysicalDevice;
+            return;
+        }
+        else if( name == "VulkanDevice" )
+        {
+            *(VulkanDevice **)pData = mDevice;
+            return;
+        }
+        else if( name == "VkDevice" )
+        {
+            *(VkDevice *)pData = mDevice->mDevice;
+            return;
+        }
+        else if( name == "mPresentQueue" )
+        {
+            *(VkQueue *)pData = mDevice->mPresentQueue;
+            return;
+        }
+        else if( name == "VulkanQueue" )
+        {
+            *(VulkanQueue **)pData = &mDevice->mGraphicsQueue;
+            return;
+        }
+
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Attribute not found: " + name,
+                     "VulkanRenderSystem::getCustomAttribute" );
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::setClipPlanesImpl( const PlaneList &clipPlanes ) {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
@@ -3623,13 +3745,129 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    inline bool isPowerOf2( uint32 x ) { return ( x & ( x - 1u ) ) == 0u; }
     SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-                                                                     PixelFormatGpu format )
+                                                                     PixelFormatGpu format,
+                                                                     uint32 textureFlags,
+                                                                     uint32 depthTextureFlags )
     {
-        uint8 samples = sampleDesc.getMaxSamples();
-        if( mDevice )
-            samples = (uint8)getMaxUsableSampleCount( mDevice->mDeviceProperties, samples );
-        return SampleDescription( samples, sampleDesc.getMsaaPattern() );
+        if( !mDevice )
+        {
+            // TODO
+            return sampleDesc;
+        }
+
+        // TODO: Spec says framebufferColorSampleCounts & co. contains the base minimum for all formats
+        // and we can use vkGetPhysicalDeviceImageFormatProperties to check for MSAA settings that may go
+        // BEYOND that mask for a specific format (honestly I don't trust Android drivers to implement
+        // vkGetPhysicalDeviceImageFormatProperties properly).
+        const VkPhysicalDeviceLimits &deviceLimits = mDevice->mDeviceProperties.limits;
+
+        if( sampleDesc.getCoverageSamples() != 0u )
+        {
+            // EQAA / CSAA.
+            // TODO: Support VK_AMD_mixed_attachment_samples & VK_NV_framebuffer_mixed_samples.
+            return validateSampleDescription(
+                SampleDescription( sampleDesc.getMaxSamples(), sampleDesc.getMsaaPattern() ), format,
+                textureFlags, depthTextureFlags );
+        }
+        else
+        {
+            // MSAA.
+            VkSampleCountFlags supportedSampleCounts = 0u;
+
+            if( PixelFormatGpuUtils::isDepth( format ) )
+            {
+                // Not an if-else typo: storageImageSampleCounts is AND'ed against *DepthSampleCounts.
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+
+                if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferDepthSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageDepthSampleCounts;
+
+                if( PixelFormatGpuUtils::isStencil( format ) )
+                {
+                    // Not a typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                    if( textureFlags & TextureFlags::Uav )
+                        supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                    if( textureFlags & TextureFlags::NotTexture )
+                        supportedSampleCounts &= deviceLimits.framebufferStencilSampleCounts;
+                    else
+                        supportedSampleCounts &= deviceLimits.sampledImageStencilSampleCounts;
+                }
+            }
+            else if( PixelFormatGpuUtils::isStencil( format ) )
+            {
+                // Not an if-else typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+
+                if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferStencilSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageStencilSampleCounts;
+            }
+            else if( format == PFG_NULL )
+            {
+                // PFG_NULL is always NotTexture and can't be Uav,
+                // let's just return to the user what they intended to ask.
+                supportedSampleCounts = deviceLimits.framebufferNoAttachmentsSampleCounts;
+            }
+            else if( PixelFormatGpuUtils::isInteger( format ) )
+            {
+                // TODO: Query Vulkan 1.2 / extensions to get framebufferIntegerColorSampleCounts.
+                // supportedSampleCounts = deviceLimits.framebufferIntegerColorSampleCounts;
+                supportedSampleCounts = VK_SAMPLE_COUNT_1_BIT;
+            }
+            else
+            {
+                if( textureFlags & TextureFlags::Uav )
+                    supportedSampleCounts = deviceLimits.storageImageSampleCounts;
+                else if( textureFlags & TextureFlags::NotTexture )
+                    supportedSampleCounts = deviceLimits.framebufferColorSampleCounts;
+                else
+                    supportedSampleCounts = deviceLimits.sampledImageColorSampleCounts;
+
+                if( PixelFormatGpuUtils::isDepth( format ) )
+                {
+                    // Not an if-else typo: storageImage... is AND'ed against *DepthSampleCounts.
+                    if( depthTextureFlags & TextureFlags::Uav )
+                        supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                    if( depthTextureFlags & TextureFlags::NotTexture )
+                        supportedSampleCounts &= deviceLimits.framebufferDepthSampleCounts;
+                    else
+                        supportedSampleCounts &= deviceLimits.sampledImageDepthSampleCounts;
+
+                    if( PixelFormatGpuUtils::isStencil( format ) )
+                    {
+                        // Not a typo: storageImageSampleCounts is AND'ed against *StencilSampleCounts.
+                        if( depthTextureFlags & TextureFlags::Uav )
+                            supportedSampleCounts &= deviceLimits.storageImageSampleCounts;
+
+                        if( depthTextureFlags & TextureFlags::NotTexture )
+                            supportedSampleCounts &= deviceLimits.framebufferStencilSampleCounts;
+                        else
+                            supportedSampleCounts &= deviceLimits.sampledImageStencilSampleCounts;
+                    }
+                }
+            }
+
+            uint8 samples = sampleDesc.getColourSamples();
+            OGRE_ASSERT_LOW( isPowerOf2( samples ) );
+            while( samples > 0u )
+            {
+                if( supportedSampleCounts & samples )
+                    return SampleDescription( samples, sampleDesc.getMsaaPattern() );
+                samples = samples >> 1u;
+            }
+
+            // Ouch. The format is not supported. Return "something".
+            return SampleDescription( 0u, sampleDesc.getMsaaPattern() );
+        }
     }
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,

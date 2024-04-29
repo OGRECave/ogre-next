@@ -90,6 +90,9 @@ namespace Ogre
         Semaphore            mSemaphore;
         std::atomic<bool>    mKeepCompiling;
 
+        bool               mExceptionFound;     // GUARDED_BY( mMutex )
+        std::exception_ptr mThreadedException;  // GUARDED_BY( mMutex )
+
     public:
         ParallelHlmsCompileQueue();
 
@@ -102,13 +105,39 @@ namespace Ogre
 
         inline void pushWarmUpRequest( const Request &&request ) { mRequests.emplace_back( request ); }
 
+        /** Starts worker threads (job queue) so they start accepting work every time pushRequest()
+            gets called and will keep compiling those shaders until stopAndWait() is called.
+
+            The work is done in updateThread() and is in charge of compiling shaders AND generating PSOs.
+        @remarks
+            This function must not be called if RenderSystem::supportsMultithreadedShaderCompliation
+            is false.
+        @param sceneManager
+        */
         void start( SceneManager *sceneManager );
+        /** Signals worker threads we won't be submitting more work, so they should stop once they're
+            done compiling all pending shaders / PSOs.
+
+            Will wait until all shaders are done.
+        @param sceneManager
+        */
         void stopAndWait( SceneManager *sceneManager );
+        /// The actual work done by the job queues.
         void updateThread( size_t threadIdx, HlmsManager *hlmsManager );
 
+        /// Similar to start() and stopAndWait() at the same time: It assumes all work has already been
+        /// gathered in mRequests via pushWarmUpRequest() (instead of gather it as we go)
+        /// and fires all threads to compile the shaders and PSOs in parallel.
+        ///
+        /// It will wait until all threads are done.
         void fireWarmUpParallel( SceneManager *sceneManager );
+
+        /// The actual work done by fireWarmUpParallel().
         void updateWarmUpThread( size_t threadIdx, HlmsManager *hlmsManager,
                                  const HlmsCache *passCaches );
+
+        /// Serial alternative of fireWarmUpParallel() + updateWarmUpThread() for when
+        /// RenderSystem::supportsMultithreadedShaderCompliation is false.
         void warmUpSerial( HlmsManager *hlmsManager, const HlmsCache *passCaches );
     };
 

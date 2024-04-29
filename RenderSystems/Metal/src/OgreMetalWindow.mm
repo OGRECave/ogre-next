@@ -507,8 +507,11 @@ namespace Ogre
             mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
         }
 
+        // We create our MSAA buffer and it is not accessible, thus NotTexture.
+        // Same for our depth buffer.
         mSampleDescription = textureManager->getRenderSystem()->validateSampleDescription(
-            mRequestedSampleDescription, mTexture->getPixelFormat() );
+            mRequestedSampleDescription, mTexture->getPixelFormat(), TextureFlags::NotTexture,
+            TextureFlags::NotTexture );
         mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
         if( mDepthBuffer )
             mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );

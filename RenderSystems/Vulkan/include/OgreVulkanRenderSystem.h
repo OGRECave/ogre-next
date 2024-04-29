@@ -57,6 +57,9 @@ namespace Ogre
     class _OgreVulkanExport VulkanRenderSystem final : public RenderSystem
     {
         bool mInitialized;
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        bool mSwappyFramePacing;
+#endif
         v1::HardwareBufferManager *mHardwareBufferManager;
 
         VulkanPixelFormatToShaderType mPixelFormatToShaderType;
@@ -171,6 +174,23 @@ namespace Ogre
         String validateConfigOptions() override;
 
         RenderSystemCapabilities *createRenderSystemCapabilities() const override;
+
+        /** ANDROID ONLY: Whether to enable/disable Swappy frame pacing.
+            It may be disabled by OgreNext if Swappy is causing bugs on the current device.
+
+            Users can cache the value of getSwappyFramePacing() on shutdown to force-disable
+            on the next run.
+
+            This call is ignored in other platforms.
+        @param bEnable
+            Whether to enable or disable.
+        @param callingWindow
+            For internal use. Leave this set as nullptr.
+        */
+        void setSwappyFramePacing( bool bEnable, Window *callingWindow = 0 );
+
+        /// ANDROID ONLY: Whether Swappy is enabled. See setSwappyFramePacing().
+        bool getSwappyFramePacing() const;
 
         void resetAllBindings();
 
@@ -340,6 +360,8 @@ namespace Ogre
 
         bool hasAnisotropicMipMapFilter() const override { return true; }
 
+        void getCustomAttribute( const String &name, void *pData ) override;
+
         void setClipPlanesImpl( const PlaneList &clipPlanes ) override;
         void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
                                                      Window *primary ) override;
@@ -382,7 +404,8 @@ namespace Ogre
         void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu format ) override;
+                                                     PixelFormatGpu format, uint32 textureFlags,
+                                                     uint32 depthTextureFlags ) override;
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
 

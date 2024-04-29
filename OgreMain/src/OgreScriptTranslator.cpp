@@ -6394,6 +6394,9 @@ namespace Ogre{
             case ID_EXPLICIT_RESOLVE:
                 textureFlags |= TextureFlags::MsaaExplicitResolve;
                 break;
+            case ID_NOT_TEXTURE:
+                textureFlags |= TextureFlags::NotTexture;
+                break;
             case ID_REINTERPRETABLE:
                 textureFlags |= TextureFlags::Reinterpretable;
                 break;

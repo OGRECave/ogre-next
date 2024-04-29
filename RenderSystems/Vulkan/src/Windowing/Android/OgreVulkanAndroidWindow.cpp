@@ -46,12 +46,28 @@ THE SOFTWARE.
 
 #include <android/native_window.h>
 
+#ifdef OGRE_VULKAN_USE_SWAPPY
+#    include "swappy/swappyVk.h"
+#endif
+
 namespace Ogre
 {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    // Same default as Swappy.
+    VulkanAndroidWindow::FramePacingSwappyModes VulkanAndroidWindow::msFramePacingSwappyMode =
+        VulkanAndroidWindow::AutoVSyncInterval_AutoPipeline;
+#endif
+
     VulkanAndroidWindow::VulkanAndroidWindow( const String &title, uint32 width, uint32 height,
                                               bool fullscreenMode ) :
         VulkanWindowSwapChainBased( title, width, height, fullscreenMode ),
         mNativeWindow( 0 ),
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        mJniProvider( 0 ),
+        mRefreshDuration( 0 ),
+        mFirstRecreateTimestamp( 0u ),
+        mRecreateCount( 255u ),
+#endif
         mVisible( true ),
         mHidden( false ),
         mIsExternal( false )
@@ -136,6 +152,15 @@ namespace Ogre
                 nativeWindow = reinterpret_cast<ANativeWindow *>(
                     StringConverter::parseUnsignedLong( opt->second ) );
             }
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+            opt = miscParams->find( "AndroidJniProvider" );
+            if( opt != end )
+            {
+                mJniProvider = reinterpret_cast<AndroidJniProvider *>(
+                    StringConverter::parseUnsignedLong( opt->second ) );
+            }
+#endif
         }
 
         if( !nativeWindow )
@@ -143,6 +168,15 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "App must provide ANativeWindow via Misc Params!",
                          "VulkanAndroidWindow::_initialize" );
         }
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        if( !mJniProvider )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "App must provide AndroidJniProvider via Misc Params!",
+                         "VulkanAndroidWindow::_initialize" );
+        }
+#endif
 
         setHidden( false );
 
@@ -177,12 +211,52 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    static int64_t timeInMilliseconds()
+    {
+        timespec clockTime;
+        clock_gettime( CLOCK_MONOTONIC, &clockTime );
+        return clockTime.tv_sec * 1000 + clockTime.tv_nsec / 1000000;
+    }
+#endif
+
     void VulkanAndroidWindow::windowMovedOrResized()
     {
         if( mClosed || !mNativeWindow )
             return;
 
         mDevice->stall();
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        // Code to detect buggy devices (if it's buggy, we disable Swappy).
+        if( mRecreateCount == 255u )
+        {
+            mRecreateCount = 0u;
+            mFirstRecreateTimestamp = timeInMilliseconds();
+        }
+        else
+        {
+            int64 currTimestamp = timeInMilliseconds();
+            if( currTimestamp - mFirstRecreateTimestamp <= 1500 )
+            {
+                ++mRecreateCount;
+                if( mRecreateCount >= 5u )
+                {
+                    // We're disabling Swappy. It's likely buggy.
+                    LogManager::getSingleton().logMessage(
+                        "Swapchain recreated too many times within one second. "
+                        "Disabling Swappy Frame Pacing.",
+                        LML_CRITICAL );
+
+                    mDevice->mRenderSystem->setSwappyFramePacing( false, this );
+                }
+            }
+            else
+            {
+                mRecreateCount = 255u;
+            }
+        }
+#endif
 
         destroySwapchain();
 
@@ -219,6 +293,60 @@ namespace Ogre
     //-------------------------------------------------------------------------
     bool VulkanAndroidWindow::isHidden() const { return false; }
     //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::setFramePacingSwappyAutoMode( FramePacingSwappyModes mode )
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        msFramePacingSwappyMode = mode;
+        setFramePacingSwappyAutoMode();
+#endif
+    }
+    //-------------------------------------------------------------------------
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    void VulkanAndroidWindow::setFramePacingSwappyAutoMode()
+    {
+        switch( msFramePacingSwappyMode )
+        {
+        case AutoVSyncInterval_AutoPipeline:
+            SwappyVk_setAutoSwapInterval( true );
+            SwappyVk_setAutoPipelineMode( true );
+            break;
+        case AutoVSyncInterval_PipelineForcedOn:
+            SwappyVk_setAutoSwapInterval( true );
+            SwappyVk_setAutoPipelineMode( false );
+            break;
+        case PipelineForcedOn:
+            SwappyVk_setAutoSwapInterval( false );
+            SwappyVk_setAutoPipelineMode( false );
+            break;
+            // Note:
+            //  SwappyVk_setAutoSwapInterval( false );
+            //  SwappyVk_setAutoPipelineMode( true );
+            // Is ignored by Swappy as it makes no sense.
+        }
+    }
+#endif
+    //-------------------------------------------------------------------------
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    void VulkanAndroidWindow::_notifySwappyToggled()
+    {
+        if( !mDevice->mRenderSystem->getSwappyFramePacing() )
+        {
+            // Disabling
+            if( mSwapchain )
+            {
+                SwappyVk_setWindow( mDevice->mDevice, mSwapchain, nullptr );
+                SwappyVk_destroySwapchain( mDevice->mDevice, mSwapchain );
+            }
+        }
+        else
+        {
+            // Enabling
+            if( mSwapchain )
+                initSwappy();
+        }
+    }
+#endif
+    //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {
         if( mNativeWindow && !nativeWindow )
@@ -231,6 +359,11 @@ namespace Ogre
             // will return DEVICE_LOST
             mDevice->stall();
         }
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        if( mSwapchain && mDevice->mRenderSystem->getSwappyFramePacing() )
+            SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
+#endif
 
         destroy();
 
@@ -302,6 +435,99 @@ namespace Ogre
         }
 
         createSwapchain();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::setJniProvider( AndroidJniProvider *provider )
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        mJniProvider = provider;
+#endif
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::setVSync( bool vSync, uint32 vSyncInterval )
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        const bool bSwapchainWillbeRecreated = mVSync != vSync;
+#endif
+        VulkanWindowSwapChainBased::setVSync( vSync, vSyncInterval );
+
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        if( !bSwapchainWillbeRecreated && mSwapchain && mDevice->mRenderSystem->getSwappyFramePacing() )
+        {
+            SwappyVk_setSwapIntervalNS( mDevice->mDevice, mSwapchain,
+                                        mRefreshDuration * mVSyncInterval );
+        }
+#endif
+    }
+//-------------------------------------------------------------------------
+#ifdef OGRE_VULKAN_USE_SWAPPY
+    void VulkanAndroidWindow::initSwappy()
+    {
+        if( !mDevice->mRenderSystem->getSwappyFramePacing() )
+        {
+            mFrequencyNumerator = 0u;
+            mFrequencyDenominator = 0u;
+            return;
+        }
+
+        if( !mJniProvider )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "VulkanAndroidWindow::setJniProvider not called or called with nullptr. This "
+                         "function is mandatory to set if built with Swappy support for Android.",
+                         "VulkanAndroidWindow::createSwapchain" );
+        }
+
+        {
+            JNIEnv *jni = 0;
+            jobject nativeActivityClass = 0;
+            mJniProvider->acquire( &jni, &nativeActivityClass );
+            SwappyVk_initAndGetRefreshCycleDuration( jni, nativeActivityClass, mDevice->mPhysicalDevice,
+                                                     mDevice->mDevice, mSwapchain, &mRefreshDuration );
+            mJniProvider->release( jni );
+        }
+
+        // Swappy wants to know the mNativeWindow every time the Swapchain changes.
+        // If we try to set mNativeWindow without a valid mSwapchain yet, it won't work correctly.
+        // So we must do this here, every time the Swapchain gets recreated
+        // (Swappy inverts the relationship: It works as if mNativeWindow depended on Swapchains).
+        OGRE_ASSERT_LOW( mSwapchain );  // should've thrown by now if mSwapchain creation failed.
+        SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
+
+        if( mRefreshDuration <= std::numeric_limits<uint32>::max() )
+        {
+            mFrequencyDenominator = static_cast<uint32>( mRefreshDuration );
+            mFrequencyNumerator = 1000000000u;
+        }
+        else
+        {
+            mFrequencyNumerator = 0u;
+            mFrequencyDenominator = 0u;
+        }
+        SwappyVk_setSwapIntervalNS( mDevice->mDevice, mSwapchain, mRefreshDuration * mVSyncInterval );
+
+        setFramePacingSwappyAutoMode();
+    }
+#endif
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::createSwapchain()
+    {
+        VulkanWindowSwapChainBased::createSwapchain();
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        initSwappy();
+#endif
+    }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::destroySwapchain()
+    {
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        // Swappy has a bug where calling SwappyVk_destroySwapchain will leak the mNativeWindow.
+        // So we must call SwappyVk_setWindow() ourselves.
+        if( mNativeWindow )
+            SwappyVk_setWindow( mDevice->mDevice, mSwapchain, mNativeWindow );
+        SwappyVk_destroySwapchain( mDevice->mDevice, mSwapchain );
+#endif
+        VulkanWindowSwapChainBased::destroySwapchain();
     }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::getCustomAttribute( IdString name, void *pData )

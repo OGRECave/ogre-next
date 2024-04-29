@@ -311,6 +311,9 @@ namespace Demo
         params.insert( std::make_pair(
             "ANativeWindow",
             Ogre::StringConverter::toString( (uintptr_t)AndroidSystems::getNativeWindow() ) ) );
+        params.insert( std::make_pair(
+            "AndroidJniProvider",
+            Ogre::StringConverter::toString( (uintptr_t)AndroidSystems::getJniProvider() ) ) );
 #endif
 
         params.insert( std::make_pair( "title", windowTitle ) );

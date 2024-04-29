@@ -931,6 +931,7 @@ namespace Ogre
                 ID_MSAA,
                 ID_MSAA_AUTO,
                 ID_EXPLICIT_RESOLVE,
+                ID_NOT_TEXTURE,
                 ID_REINTERPRETABLE,
                 ID_KEEP_CONTENT,
                 ID_DEPTH_POOL,

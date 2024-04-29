@@ -999,12 +999,35 @@ namespace Ogre
         mKeepCompiling.store( false, std::memory_order::memory_order_relaxed );
         mSemaphore.increment( static_cast<uint32_t>( sceneManager->getNumWorkerThreads() ) );
         sceneManager->waitForParallelHlmsCompile();
+
+        // No need to use mMutex because we guarantee no write access from other threads
+        // after this point.
+        //
+        // IMPORTANT: After this exception is caught, the Hlms will likely be left in an inconsistent
+        // state. We pretty much can't do anything more unless some heavy reinitialization is done.
+        if( mExceptionFound )
+        {
+            std::exception_ptr threadedException = mThreadedException;
+            mRequests.clear();  // We terminated threads early. (Does it matter?)
+            mThreadedException = nullptr;
+            mExceptionFound = false;
+            std::rethrow_exception( threadedException );
+        }
     }
     //-----------------------------------------------------------------------
     void ParallelHlmsCompileQueue::fireWarmUpParallel( SceneManager *sceneManager )
     {
         sceneManager->_fireWarmUpShadersCompile();
-        OGRE_ASSERT_LOW( mRequests.empty() );
+        OGRE_ASSERT_LOW( mRequests.empty() );  // Should be empty, whether we found an exception or not.
+        // See comments in ParallelHlmsCompileQueue::stopAndWait implementation.
+        // The only difference is that mRequests should be empty by now.
+        if( mExceptionFound )
+        {
+            std::exception_ptr threadedException = mThreadedException;
+            mThreadedException = nullptr;
+            mExceptionFound = false;
+            std::rethrow_exception( threadedException );
+        }
     }
     //-----------------------------------------------------------------------
     void ParallelHlmsCompileQueue::updateWarmUpThread( size_t threadIdx, HlmsManager *hlmsManager,
@@ -1029,9 +1052,23 @@ namespace Ogre
 
             const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
             Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
-            hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
-                                    request.reservedStubEntry, request.queuedRenderable,
-                                    request.renderableHash, request.finalHash, threadIdx );
+            try
+            {
+                hlms->compileStubEntry( passCaches[reinterpret_cast<size_t>( request.passCache )],
+                                        request.reservedStubEntry, request.queuedRenderable,
+                                        request.renderableHash, request.finalHash, threadIdx );
+            }
+            catch( Exception & )
+            {
+                ScopedLock lock( mMutex );
+                // We can only report one exception.
+                if( !mExceptionFound )
+                {
+                    mRequests.clear();  // Only way to signal other threads to stop early.
+                    mExceptionFound = true;
+                    mThreadedException = std::current_exception();
+                }
+            }
         }
     }
     //-----------------------------------------------------------------------
@@ -1112,9 +1149,23 @@ namespace Ogre
             {
                 const HlmsDatablock *datablock = request.queuedRenderable.renderable->getDatablock();
                 Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( datablock->mType ) );
-                hlms->compileStubEntry( *request.passCache, request.reservedStubEntry,
-                                        request.queuedRenderable, request.renderableHash,
-                                        request.finalHash, threadIdx );
+                try
+                {
+                    hlms->compileStubEntry( *request.passCache, request.reservedStubEntry,
+                                            request.queuedRenderable, request.renderableHash,
+                                            request.finalHash, threadIdx );
+                }
+                catch( Exception & )
+                {
+                    ScopedLock lock( mMutex );
+                    // We can only report one exception.
+                    if( !mExceptionFound )
+                    {
+                        mKeepCompiling.store( false, std::memory_order::memory_order_relaxed );
+                        mExceptionFound = true;
+                        mThreadedException = std::current_exception();
+                    }
+                }
             }
         }
     }
@@ -1213,5 +1264,10 @@ namespace Ogre
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    ParallelHlmsCompileQueue::ParallelHlmsCompileQueue() : mSemaphore( 0u ), mKeepCompiling( false ) {}
+    ParallelHlmsCompileQueue::ParallelHlmsCompileQueue() :
+        mSemaphore( 0u ),
+        mKeepCompiling( false ),
+        mExceptionFound( false )
+    {
+    }
 }  // namespace Ogre

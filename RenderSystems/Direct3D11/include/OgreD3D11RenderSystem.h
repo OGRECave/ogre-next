@@ -330,7 +330,8 @@ namespace Ogre
         void postExtraThreadsStarted() override;
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu           format ) override;
+                                                     PixelFormatGpu format, uint32 textureFlags,
+                                                     uint32 depthTextureFlags ) override;
 
         /// @copydoc RenderSystem::getDisplayMonitorCount
         unsigned int getDisplayMonitorCount() const override;

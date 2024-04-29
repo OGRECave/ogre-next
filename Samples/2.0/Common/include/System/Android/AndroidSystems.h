@@ -34,23 +34,34 @@ THE SOFTWARE.
 struct android_app;
 struct ANativeWindow;
 
+namespace Ogre
+{
+    class AndroidJniProvider;
+}
+
 namespace Demo
 {
     /// Utility class to load plugins statically
     class AndroidSystems
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        android_app *  mAndroidApp;
+        android_app   *mAndroidApp;
         ANativeWindow *mNativeWindow;
+
+        Ogre::AndroidJniProvider *mJniProvider;
 #endif
 
     public:
         AndroidSystems();
 
-        static void setAndroidApp( android_app *androidApp );
+        static void         setAndroidApp( android_app *androidApp );
+        static android_app *getAndroidApp();
 
         static void           setNativeWindow( ANativeWindow *nativeWindow );
         static ANativeWindow *getNativeWindow();
+
+        static void                      setJniProvider( Ogre::AndroidJniProvider *provider );
+        static Ogre::AndroidJniProvider *getJniProvider();
 
         /**
         On Android platforms:
