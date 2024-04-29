@@ -239,7 +239,9 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     SampleDescription MetalRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-                                                                    PixelFormatGpu format )
+                                                                    PixelFormatGpu format,
+                                                                    uint32 textureFlags,
+                                                                    uint32 depthTextureFlags )
     {
         uint8 samples = sampleDesc.getMaxSamples();
         if( @available( iOS 9.0, * ) )
@@ -252,6 +254,8 @@ namespace Ogre
         }
         return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
+    //-------------------------------------------------------------------------
+    bool MetalRenderSystem::supportsMultithreadedShaderCompliation() const { return true; }
     //-------------------------------------------------------------------------
     HardwareOcclusionQuery *MetalRenderSystem::createHardwareOcclusionQuery()
     {
@@ -1470,6 +1474,8 @@ namespace Ogre
 
         depthState.stencilParams = pso->pass.stencilParams;
 
+        ScopedLock lock( mMutexDepthStencilStates );
+
         CachedDepthStencilStateVec::iterator itor =
             std::lower_bound( mDepthStencilStates.begin(), mDepthStencilStates.end(), depthState );
 
@@ -1547,6 +1553,7 @@ namespace Ogre
 
         depthState.stencilParams = pso->pass.stencilParams;
 
+        ScopedLock lock( mMutexDepthStencilStates );
         CachedDepthStencilStateVec::iterator itor =
             std::lower_bound( mDepthStencilStates.begin(), mDepthStencilStates.end(), depthState );
 
@@ -2277,7 +2284,7 @@ namespace Ogre
             }
 
             // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 4u atIndex:15];
 #    else
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 256u atIndex:15];
@@ -2324,7 +2331,7 @@ namespace Ogre
         {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 4u atIndex:15];
 #    else
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * 256u atIndex:15];
@@ -2407,7 +2414,7 @@ namespace Ogre
 #    endif
 
         // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 4u atIndex:15];
 #    else
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 256u atIndex:15];
@@ -2437,7 +2444,7 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         // Setup baseInstance.
-#    if TARGET_OS_SIMULATOR == 0
+#    if TARGET_OS_SIMULATOR == 0 || OGRE_CPU == OGRE_CPU_ARM
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 4u atIndex:15];
 #    else
         [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * 256u atIndex:15];

@@ -42,6 +42,8 @@ namespace Ogre
      *  @{
      */
 
+    struct CompilerJobParams;
+
     /** @class HlmsDiskCache
 
         This class allows saving the current state of an Hlms to disk: both its compiled shaders
@@ -192,10 +194,12 @@ namespace Ogre
         void clearCache();
 
         void copyFrom( Hlms *hlms );
-        void applyTo( Hlms *hlms );
+        void applyTo( Hlms *hlms, size_t numThreads );
 
         void saveTo( DataStreamPtr &dataStream );
         void loadFrom( DataStreamPtr &dataStream );
+
+        static void _compileShadersThread( CompilerJobParams &threadHandle, size_t threadIdx );
     };
 
     /** @} */

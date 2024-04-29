@@ -34,6 +34,8 @@ THE SOFTWARE.
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 // No need to include the heavy windows.h header for something like this!
 typedef void *HANDLE;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#    include <dispatch/dispatch.h>
 #else
 #    include <semaphore.h>
 #endif
@@ -45,6 +47,8 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
         HANDLE mSemaphore;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        dispatch_semaphore_t mSemaphore;
 #else
         sem_t mSemaphore;
 #endif

@@ -97,7 +97,8 @@ namespace Ogre
 
         __unsafe_unretained id<MTLBuffer> mIndirectBuffer;
         unsigned char                    *mSwIndirectBufferPtr;
-        CachedDepthStencilStateVec        mDepthStencilStates;
+        CachedDepthStencilStateVec        mDepthStencilStates;  // GUARDED_BY( mMutexDepthStencilStates )
+        LightweightMutex                  mMutexDepthStencilStates;
         MetalHlmsPso const               *mPso;
         HlmsComputePso const             *mComputePso;
 
@@ -155,6 +156,8 @@ namespace Ogre
         void             initConfigOptions();
         ConfigOptionMap &getConfigOptions() override { return mOptions; }
         void             setConfigOption( const String &name, const String &value ) override;
+
+        bool supportsMultithreadedShaderCompliation() const override;
 
         HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
 
@@ -294,7 +297,8 @@ namespace Ogre
         unsigned int getDisplayMonitorCount() const override { return 1; }
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu           format ) override;
+                                                     PixelFormatGpu format, uint32 textureFlags,
+                                                     uint32 depthTextureFlags ) override;
 
         const PixelFormatToShaderType *getPixelFormatToShaderType() const override;
 

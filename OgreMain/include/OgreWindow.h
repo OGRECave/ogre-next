@@ -43,14 +43,15 @@ namespace Ogre
     /** \addtogroup Resources
      *  @{
      */
+    OGRE_ASSUME_NONNULL_BEGIN
 
     class _OgreExport Window : public OgreAllocatedObj
     {
     protected:
-        String      mTitle;
-        TextureGpu *mTexture;
-        TextureGpu *mDepthBuffer;
-        TextureGpu *mStencilBuffer;
+        String                    mTitle;
+        TextureGpu *ogre_nullable mTexture;
+        TextureGpu *ogre_nullable mDepthBuffer;
+        TextureGpu *ogre_nullable mStencilBuffer;
 
         /** 0/0 is legal and will be interpreted as 0/1.
             0/anything is interpreted as zero.
@@ -295,15 +296,16 @@ namespace Ogre
 
         /// WARNING: Attempting to change the TextureGpu (e.g. setResolution, setPixelFormat)
         /// is undefined behavior
-        TextureGpu *getTexture() const;
-        TextureGpu *getDepthBuffer() const;
-        TextureGpu *getStencilBuffer() const;
+        TextureGpu *ogre_nullable getTexture() const;
+        TextureGpu *ogre_nullable getDepthBuffer() const;
+        TextureGpu *ogre_nullable getStencilBuffer() const;
 
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 
         virtual void swapBuffers() = 0;
     };
 
+    OGRE_ASSUME_NONNULL_END
     /** @} */
     /** @} */
 }  // namespace Ogre

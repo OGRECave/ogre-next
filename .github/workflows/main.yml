@@ -1,21 +1,12 @@
-name: CI
+name: Doxygen
 
 # Controls when the action will run.
 on:
   push:
     branches:  'master'
 
-  # Run for all pull requests
-  pull_request:
-    branches: '*'
-    types: [opened]
-
 env:
-  CMAKE_DOXYGEN_INPUT_LIST: "Components Docs/src OgreMain PlugIns RenderSystems"
-  OGRE_SOURCE_DIR: "./"
-  OGRE_BINARY_DIR: "./"
   OGRE_VERSION: "latest"
-  DOXYGEN_HTML_OUTPUT_DIR: "./latest"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -24,27 +15,13 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Generate Doxyfile
-        # Replace CMake's ${ENV_VAR} to Doxygen's $(ENV_VAR) syntax
-        run: cat CMake/Templates/html.cfg.in | sed 's/\${\(.*\)}/$(\1)/' > Doxyfile
-
-      - name: Generate docs with doxygen
-        uses: mattnotmitt/doxygen-action@v1
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          doxyfile-path: './Doxyfile'
+          ref: gh-pages
+          path: gh-pages
 
-      - name: Remove files
-        working-directory: .github/workflows/
-        run: python3 doxygen_remove_files.py
-
-      - name: Publish # Only on master branch
-        if: github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          keep_files: true
+      - name: Build Doxygen
+        working-directory: ./
+        run: ./Scripts/BuildScripts/build_ci_doxygen.sh

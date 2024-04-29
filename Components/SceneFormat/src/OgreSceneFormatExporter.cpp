@@ -50,21 +50,9 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreTextureGpuManager.h"
 
-#include "math.h"
-
+#include <cmath>
 #include <fstream>
 #include <queue>
-
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
-inline float isfinite( float x )
-{
-    return _finite( x ) == 0;
-}
-inline float isinf( float x )
-{
-    return x == std::numeric_limits<float>::infinity() || x == -std::numeric_limits<float>::infinity();
-}
-#endif
 
 #define SceneFormatExporterNumFloatBins \
     ( sizeof( mFloatBinTmpString ) / sizeof( mFloatBinTmpString[0] ) )
@@ -144,11 +132,11 @@ namespace Ogre
             strValue.a( encodeFloatBin( value ) );
         else
         {
-            if( isfinite( value ) )
+            if( std::isfinite( value ) )
                 strValue.a( LwString::Float( value, 9 ) );
             else
             {
-                if( isinf( value ) )
+                if( std::isinf( value ) )
                     strValue.a( value > 0 ? "\"inf\"" : "\"-inf\"" );
                 else
                     strValue.a( "\"nan\"" );
@@ -168,11 +156,11 @@ namespace Ogre
             strValue.a( encodeDoubleBin( value ) );
         else
         {
-            if( isfinite( value ) )
+            if( std::isfinite( value ) )
                 strValue.a( LwString::Float( (float)value, 18 ) );
             else
             {
-                if( isinf( value ) )
+                if( std::isinf( value ) )
                     strValue.a( value > 0 ? "\"inf\"" : "\"-inf\"" );
                 else
                     strValue.a( "\"nan\"" );

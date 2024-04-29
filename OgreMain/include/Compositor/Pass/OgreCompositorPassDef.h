@@ -315,6 +315,17 @@ namespace Ogre
         void  setShadowMapSupportedLightTypes( uint8 types ) { mShadowMapSupportedLightTypes = types; }
         uint8 getShadowMapSupportedLightTypes() const { return mShadowMapSupportedLightTypes; }
 
+        /** When enabled, we will gather all passes contained in this target def
+            and issue one barrier for all of them; instead of having (potentially,
+            worst case) one barrier for every pass.
+
+            This is much more efficient, but it can't always be done because
+            we assume subsequent passes will only change the same resource once
+            (or multiple times to the same destination layout).
+
+            This setting is of particular importance on mobile.
+        @param bBarrier
+        */
         void setTargetLevelBarrier( bool bBarrier );
         bool getTargetLevelBarrier() const { return mTargetLevelBarrier != 0; }
 

@@ -269,9 +269,18 @@ if (NOT WIN32)
 endif()
 
 list( APPEND THREAD_SOURCE_FILES
-	src/Threading/OgreSemaphore.cpp
 	src/Threading/OgreWaitableEvent.cpp
 )
+
+if( APPLE )
+	list( APPEND THREAD_SOURCE_FILES
+		src/Threading/OgreSemaphoreApple.mm
+	)
+else()
+	list( APPEND THREAD_SOURCE_FILES
+		src/Threading/OgreSemaphore.cpp
+	)
+endif()
 
 
 # Configure threading files

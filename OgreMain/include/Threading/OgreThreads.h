@@ -41,6 +41,21 @@ THE SOFTWARE.
 #    define OGRE_THREAD_CALL_CONVENTION
 #endif
 
+namespace Ogre
+{
+    template <typename T>
+    struct DeleteOnDestructor
+    {
+        T *ptr;
+        DeleteOnDestructor( T *_ptr ) : ptr( _ptr ) {}
+        ~DeleteOnDestructor() { delete ptr; }
+
+        // Prevent being able to copy this object
+        DeleteOnDestructor( const DeleteOnDestructor & ) = delete;
+        DeleteOnDestructor &operator=( const DeleteOnDestructor & ) = delete;
+    };
+}  // namespace Ogre
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 /// See Threads::CreateThread for an example on how to use
 #    define THREAD_DECLARE( threadFunction ) \
@@ -48,14 +63,9 @@ THE SOFTWARE.
         { \
             unsigned long       retVal = 0; \
             Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle *>( argName ) ); \
-            try \
-            { \
-                retVal = threadFunction( threadHandle ); \
-            } \
-            catch( ... ) \
-            { \
-            } \
-            delete threadHandle; \
+            Ogre::DeleteOnDestructor<Ogre::ThreadHandle> container( threadHandle ); \
+            threadHandle->_setOsHandleToSelf(); \
+            retVal = threadFunction( threadHandle ); \
             return retVal; \
         }
 #else
@@ -65,15 +75,9 @@ THE SOFTWARE.
         { \
             unsigned long       retVal = 0; \
             Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle *>( argName ) ); \
-            try \
-            { \
-                retVal = threadFunction( threadHandle ); \
-            } \
-            catch( ... ) \
-            { \
-            } \
-            delete threadHandle; \
-\
+            Ogre::DeleteOnDestructor<Ogre::ThreadHandle> container( threadHandle ); \
+            threadHandle->_setOsHandleToSelf(); \
+            retVal = threadFunction( threadHandle ); \
             return (void *)retVal; \
         }
 #endif
@@ -115,6 +119,8 @@ namespace Ogre
         /// Internal use
         pthread_t _getOsHandle() const { return mThread; }
 #endif
+        /// Internal use
+        void _setOsHandleToSelf();
     };
 
     typedef SharedPtr<ThreadHandle>    ThreadHandlePtr;
@@ -189,6 +195,20 @@ namespace Ogre
         /// Sleeps for a **minimum** of the specified time of milliseconds. Actual time spent
         /// sleeping may vary widely depending on OS and other variables. Do not feed 0.
         static void Sleep( uint32 milliseconds );
+
+        /** Sets the name to the given thread.
+        @remarks
+            For best performance, call this function from the same thread setting the current name.
+        @param thread
+            The thread to set the name.
+            If nullptr, we will attempt to set the name to the calling thread.
+        @param name
+            Name for the given thread.
+            The name may be truncated on some platforms if it's too large.
+        @return
+            True on success.
+        */
+        static bool SetThreadName( ThreadHandle *thread, const String &name );
 
         /** Allocates a Thread Local Storage handle to use
         @param outTls [out]

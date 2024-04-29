@@ -48,6 +48,8 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 #define toFloat3x3( x ) toMat3x3( x )
 #define buildFloat3x3( row0, row1, row2 ) float3x3( float3( row0 ), float3( row1 ), float3( row2 ) )
 
+#define buildFloat4x4( row0, row1, row2, row3 ) float4x4( float4( row0 ), float4( row1 ), float4( row2 ), float4( row3 ) )
+
 // See CrossPlatformSettings_piece_all.glsl for an explanation
 @property( precision_mode == full32 )
 	// In Metal 'half' is an actual datatype. It should be OK to override it

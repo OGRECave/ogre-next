@@ -2489,7 +2489,18 @@ namespace Ogre{
                                 ++i2;
                             }
 
-                            mPass->setFog(val, mode, clr, dens, start, end);
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( push, 0 )
+#else
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+                            mPass->setFog( val, mode, clr, dens, start, end );
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#else
+#    pragma GCC diagnostic pop
+#endif
                         }
                         else
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
@@ -6382,6 +6393,9 @@ namespace Ogre{
                 break;
             case ID_EXPLICIT_RESOLVE:
                 textureFlags |= TextureFlags::MsaaExplicitResolve;
+                break;
+            case ID_NOT_TEXTURE:
+                textureFlags |= TextureFlags::NotTexture;
                 break;
             case ID_REINTERPRETABLE:
                 textureFlags |= TextureFlags::Reinterpretable;
@@ -11129,7 +11143,26 @@ namespace Ogre{
                         if( str == "off" )
                             passWarmUp->mShadowNode = IdString();
                         else
+                        {
                             passWarmUp->mShadowNode = IdString( str );
+                            passWarmUp->mShadowNodeRecalculation = SHADOW_NODE_FIRST_ONLY;
+
+                            if( prop->values.size() > 1 && getString( *it1, &str ) )
+                            {
+                                if( str == "reuse" )
+                                    passWarmUp->mShadowNodeRecalculation = SHADOW_NODE_REUSE;
+                                else if( str == "recalculate" )
+                                    passWarmUp->mShadowNodeRecalculation = SHADOW_NODE_RECALCULATE;
+                                else if( str == "first" )
+                                    passWarmUp->mShadowNodeRecalculation = SHADOW_NODE_FIRST_ONLY;
+                                else
+                                {
+                                    compiler->addError(
+                                        ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                        "Valid options are reuse, recalculate and first" );
+                                }
+                            }
+                        }
                     }
                     else
                     {
@@ -11137,6 +11170,36 @@ namespace Ogre{
                             ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                             "shadow property can be either 'shadow off' or 'shadow myNodeName "
                             "[first|reuse|recalculate]'" );
+                    }
+                    break;
+                }
+                case ID_MODE:
+                {
+                    if( prop->values.empty() )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    String str;
+                    if( getString( *it0, &str ) )
+                    {
+                        if( str == "collect" )
+                            passWarmUp->mMode = CompositorPassWarmUpDef::Collect;
+                        else if( str == "trigger" )
+                            passWarmUp->mMode = CompositorPassWarmUpDef::Trigger;
+                        else if( str == "collect_and_trigger" )
+                            passWarmUp->mMode = CompositorPassWarmUpDef::CollectAndTrigger;
+                        else
+                        {
+                            compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file,
+                                                prop->line );
+                        }
+                    }
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
                     }
                     break;
                 }

@@ -203,10 +203,11 @@ namespace Ogre
         };
         typedef vector<BufferDefinition>::type BufferDefinitionVec;
 
+        typedef map<IdString, uint32>::type NameToChannelMap;
+
     protected:
         friend class CompositorNode;
         friend class CompositorWorkspace;
-        typedef map<IdString, uint32>::type              NameToChannelMap;
         typedef map<IdString, RenderTargetViewDef>::type RenderTargetViewDefMap;
 
         /** TextureSource to use by addLocalTextureDefinition. Could be either
@@ -229,10 +230,10 @@ namespace Ogre
             return ( index & 0x3FFFFFFF ) | ( static_cast<uint32>( textureSource ) << 30u );
         }
 
-        static void decodeTexSource( uint32 encodedVal, size_t &outIdx, TextureSource &outTexSource );
-
     public:
         TextureDefinitionBase( TextureSource defaultSource );
+
+        static void decodeTexSource( uint32 encodedVal, size_t &outIdx, TextureSource &outTexSource );
 
         /// This has O(N) complexity! (not cached, we look in mNameToChannelMap)
         size_t getNumInputChannels() const;
@@ -265,6 +266,10 @@ namespace Ogre
         */
         virtual IdString addTextureSourceName( const String &name, size_t index,
                                                TextureSource textureSource );
+
+        /// For internal use. Don't call this directly.
+        void _addTextureSourceName( const IdString hashedName, size_t index,
+                                    TextureSource textureSource );
 
         /** WARNING: Be very careful with this function.
             Removes a texture.
@@ -330,6 +335,9 @@ namespace Ogre
             is used correctly.
         */
         TextureDefinition *addTextureDefinition( const String &name );
+
+        /// For internal use. Don't call this directly.
+        TextureDefinition *_addTextureDefinition( const IdString hashedName );
 
         const TextureDefinitionVec &getLocalTextureDefinitions() const { return mLocalTextureDefs; }
 

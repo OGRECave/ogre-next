@@ -62,6 +62,13 @@ THE SOFTWARE.
 
 #include <sstream>
 
+// We want to be compatible with both FreeImage and FreeImageRe, but first specifies sizes as DWORD and
+// second as uint32_t. On Windows both DWORD (unsigned long) and uint32_t are separate 32bit types, so
+// pointers to them can not be mixed
+#ifndef FISIZE
+#    define FISIZE decltype( FIICCPROFILE::size )  // DWORD for FreeImage, uint32_t for FreeImageRe
+#endif
+
 namespace Ogre
 {
     FreeImageCodec2::RegisteredCodecList FreeImageCodec2::msCodecList;
@@ -424,12 +431,12 @@ namespace Ogre
         // write data into memory
         FreeImage_SaveToMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiBitmap, mem );
         // Grab data information
-        BYTE *data;
-        DWORD size;
+        uint8_t *data;
+        FISIZE size;
         FreeImage_AcquireMemory( mem, &data, &size );
         // Copy data into our own buffer
         // Because we're asking MemoryDataStream to free this, must create in a compatible way
-        BYTE *ourData = OGRE_ALLOC_T( BYTE, size, MEMCATEGORY_GENERAL );
+        uint8_t *ourData = OGRE_ALLOC_T( uint8_t, size, MEMCATEGORY_GENERAL );
         memcpy( ourData, data, size );
         // Wrap data in stream, tell it to free on close
         DataStreamPtr outstream( OGRE_NEW MemoryDataStream( ourData, size, true ) );
@@ -456,7 +463,7 @@ namespace Ogre
         MemoryDataStream memStream( input, true );
 
         FIMEMORY *fiMem =
-            FreeImage_OpenMemory( memStream.getPtr(), static_cast<DWORD>( memStream.size() ) );
+            FreeImage_OpenMemory( memStream.getPtr(), static_cast<uint32_t>( memStream.size() ) );
         FIBITMAP *fiBitmap = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
         if( !fiBitmap )
         {
@@ -633,8 +640,8 @@ namespace Ogre
     //---------------------------------------------------------------------
     String FreeImageCodec2::magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const
     {
-        FIMEMORY *fiMem = FreeImage_OpenMemory( (BYTE *)const_cast<char *>( magicNumberPtr ),
-                                                static_cast<DWORD>( maxbytes ) );
+        FIMEMORY *fiMem = FreeImage_OpenMemory( (uint8_t *)const_cast<char *>( magicNumberPtr ),
+                                                static_cast<uint32_t>( maxbytes ) );
 
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory( fiMem, (int)maxbytes );
         FreeImage_CloseMemory( fiMem );
@@ -654,10 +661,10 @@ namespace Ogre
     FreeImageCodec2::ValidationStatus FreeImageCodec2::validateMagicNumber( const char *magicNumberPtr,
                                                                             size_t maxbytes ) const
     {
-        FIMEMORY *fiMem = FreeImage_OpenMemory( (BYTE *)const_cast<char *>( magicNumberPtr ),
-                                                static_cast<DWORD>( maxbytes ) );
+        FIMEMORY *fiMem = FreeImage_OpenMemory( (uint8_t *)const_cast<char *>( magicNumberPtr ),
+                                                static_cast<uint32_t>( maxbytes ) );
 
-        const BOOL bValid = FreeImage_ValidateFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
+        const auto bValid = FreeImage_ValidateFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
         FreeImage_CloseMemory( fiMem );
 
         if( bValid )
@@ -685,6 +692,7 @@ namespace Ogre
             case FIF_TIFF:
             case FIF_XPM:
             case FIF_WEBP:
+            case FIF_JXR:
                 return CodecInvalid;
             }
 

@@ -111,7 +111,9 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    std::wstring to_wpath( const String &text, unsigned codepage = CP_UTF8 )
+    extern std::wstring to_wpath( const String &text, unsigned codepage = CP_UTF8 );
+
+    std::wstring to_wpath( const String &text, unsigned codepage )
     {
         const int utf16Length =
             ::MultiByteToWideChar( codepage, 0, text.c_str(), (int)text.size(), NULL, 0 );

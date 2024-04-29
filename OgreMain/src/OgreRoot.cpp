@@ -327,8 +327,8 @@ namespace Ogre
     Root::~Root()
     {
         LogManager::getSingleton().stream( LML_TRIVIAL )
-            << "Average FPS: " << mFrameStats->getAvgFps() << "\n"
-            << "Average time: \t" << mFrameStats->getAvgTime() << " ms\n"
+            << "Average FPS: " << mFrameStats->getRollingAverageFps() << "\n"
+            << "Average time: \t" << ( mFrameStats->getRollingAverage() * 1000.0 ) << " ms\n"
             << "Best time: \t" << mFrameStats->getBestTime() << " ms\n"
             << "Worst time: \t" << mFrameStats->getWorstTime() << " ms";
 
@@ -1065,6 +1065,8 @@ namespace Ogre
     void Root::queueEndRendering( bool state /* = true */ ) { mQueuedEnd = state; }
     //-----------------------------------------------------------------------
     bool Root::endRenderingQueued() { return mQueuedEnd; }
+    //-----------------------------------------------------------------------
+    void Root::resetFrameStats() { mFrameStats->reset( mTimer->getMicroseconds() ); }
     //-----------------------------------------------------------------------
     void Root::startRendering()
     {

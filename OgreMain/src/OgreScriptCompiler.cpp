@@ -1240,6 +1240,7 @@ namespace Ogre
         mIds["msaa"] = ID_MSAA;
         mIds["msaa_auto"] = ID_MSAA_AUTO;
         mIds["explicit_resolve"] = ID_EXPLICIT_RESOLVE;
+        mIds["not_texture"] = ID_NOT_TEXTURE;
         mIds["reinterpretable"] = ID_REINTERPRETABLE;
         mIds["keep_content"] = ID_KEEP_CONTENT;
         mIds["depth_pool"] = ID_DEPTH_POOL;
@@ -1368,6 +1369,8 @@ namespace Ogre
         mIds["samples_per_iteration"] = ID_SAMPLES_PER_ITERATION;
         mIds["samples_single_iteration_fallback"] = ID_SAMPLES_SINGLE_ITERATION_FALLBACK;
         mIds["force_mipmap_fallback"] = ID_FORCE_MIPMAP_FALLBACK;
+
+        mIds["mode"] = ID_MODE;
 
         mIds["compositor_node_shadow"] = ID_SHADOW_NODE;
         mIds["num_splits"] = ID_NUM_SPLITS;

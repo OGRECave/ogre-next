@@ -86,6 +86,12 @@ namespace Ogre
 
         const PixelFormatGpu finalPixelFormat = getWorkaroundedPixelFormat( mPixelFormat );
 
+        // Unfortunately this is necessary, which means the abstraction may leak to the user.
+        // The pixel format is used in PSO generation, which creates a lot of issues I'm not willing
+        // to fix just because one old driver is broken. Setting mPixelFormat here fixes all issues so
+        // far encountered with old Adreno drivers.
+        mPixelFormat = finalPixelFormat;
+
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
         imageInfo.imageType = getVulkanTextureType();
@@ -108,8 +114,18 @@ namespace Ogre
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         if( hasMsaaExplicitResolves() )
         {
-            imageInfo.samples =
-                static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+            if( mSampleDescription.getCoverageSamples() != 0u &&
+                ( PixelFormatGpuUtils::isDepth( finalPixelFormat ) ||
+                  PixelFormatGpuUtils::isStencil( finalPixelFormat ) ) )
+            {
+                imageInfo.samples =
+                    static_cast<VkSampleCountFlagBits>( mSampleDescription.getCoverageSamples() );
+            }
+            else
+            {
+                imageInfo.samples =
+                    static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+            }
         }
         else
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -946,7 +962,18 @@ namespace Ogre
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        imageInfo.samples = static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getCoverageSamples() != 0u &&
+            ( PixelFormatGpuUtils::isDepth( finalPixelFormat ) ||
+              PixelFormatGpuUtils::isStencil( finalPixelFormat ) ) )
+        {
+            imageInfo.samples =
+                static_cast<VkSampleCountFlagBits>( mSampleDescription.getCoverageSamples() );
+        }
+        else
+        {
+            imageInfo.samples =
+                static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+        }
         imageInfo.flags = 0;
         imageInfo.usage |= PixelFormatGpuUtils::isDepth( finalPixelFormat )
                                ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
@@ -1014,7 +1041,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuRenderTarget::setOrientationMode( OrientationMode orientationMode )
     {
-        OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::OnStorage || isRenderWindowSpecific() );
+        OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::OnStorage || isRenderWindowSpecific() ||
+                         ( isRenderToTexture() && mWidth == mHeight ) );
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         mOrientationMode = orientationMode;
 #endif

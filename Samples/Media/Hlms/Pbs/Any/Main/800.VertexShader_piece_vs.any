@@ -195,10 +195,7 @@
 			@foreach( 4, n )
 				float4 row@n = readOnlyFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 4u + @nu ) );
 			@end
-			float4x4 worldView = float4x4( row0, row1, row2, row3 );
-			@property( syntax == hlsl )
-				worldView = transpose( worldView );
-			@end
+			float4x4 worldView = buildFloat4x4( row0, row1, row2, row3 );
 		@end
 	@end
 @end // PoseTransform

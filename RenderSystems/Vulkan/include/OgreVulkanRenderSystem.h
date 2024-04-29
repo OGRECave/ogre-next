@@ -57,6 +57,9 @@ namespace Ogre
     class _OgreVulkanExport VulkanRenderSystem final : public RenderSystem
     {
         bool mInitialized;
+#ifdef OGRE_VULKAN_USE_SWAPPY
+        bool mSwappyFramePacing;
+#endif
         v1::HardwareBufferManager *mHardwareBufferManager;
 
         VulkanPixelFormatToShaderType mPixelFormatToShaderType;
@@ -78,10 +81,10 @@ namespace Ogre
         // TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
         typedef vector<ConstBufferPacked *>::type ConstBufferPackedVec;
         ConstBufferPackedVec mAutoParamsBuffer;
+        size_t mFirstUnflushedAutoParamsBuffer;
         size_t mAutoParamsBufferIdx;
         uint8 *mCurrentAutoParamsBufferPtr;
         size_t mCurrentAutoParamsBufferSpaceLeft;
-        size_t mHistoricalAutoParamsSize[60];
 
         // For v1 rendering.
         v1::IndexData *mCurrentIndexBuffer;
@@ -164,12 +167,30 @@ namespace Ogre
         void setConfigOption( const String &name, const String &value ) override;
         const char *getPriorityConfigOption( size_t idx ) const override;
         size_t getNumPriorityConfigOptions() const override;
+        bool supportsMultithreadedShaderCompliation() const override;
 
         HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
 
         String validateConfigOptions() override;
 
         RenderSystemCapabilities *createRenderSystemCapabilities() const override;
+
+        /** ANDROID ONLY: Whether to enable/disable Swappy frame pacing.
+            It may be disabled by OgreNext if Swappy is causing bugs on the current device.
+
+            Users can cache the value of getSwappyFramePacing() on shutdown to force-disable
+            on the next run.
+
+            This call is ignored in other platforms.
+        @param bEnable
+            Whether to enable or disable.
+        @param callingWindow
+            For internal use. Leave this set as nullptr.
+        */
+        void setSwappyFramePacing( bool bEnable, Window *callingWindow = 0 );
+
+        /// ANDROID ONLY: Whether Swappy is enabled. See setSwappyFramePacing().
+        bool getSwappyFramePacing() const;
 
         void resetAllBindings();
 
@@ -272,6 +293,39 @@ namespace Ogre
                                        uint16 variabilityMask ) override;
         void bindGpuProgramPassIterationParameters( GpuProgramType gptype ) override;
 
+        /** Low Level Materials use a params buffer to pass all uniforms. We emulate this using a large
+            const buffer to which we write to and bind the regions we need.
+            This is done in bindGpuProgramParameters().
+
+            When it runs out of space, we create another one (see mAutoParamsBuffer).
+
+            However:
+                - In all cases we must flush buffers before command submission or else the cmds we're
+                  about to execute may not see the const buffer data up to date. We don't flush in
+                  bindGpuProgramParameters() because we could end up with lots of 4-byte flushes
+                  which is seriously inefficient. Flushing the whole thing once at the end is better.
+                - We musn't grow indefinitely. On submissionType >= NewFrameIdx, we
+                  are certain we can set mAutoParamsBufferIdx = 0 and start over.
+        @remarks
+            bindGpuProgramParameters() tries to use BT_DYNAMIC_PERSISTENT_COHERENT which doesn't need
+            flushing (thus we'd only care about submissionType >= NewFrameIdx to reuse memory).
+
+            However VaoManager cannot guarantee BT_DYNAMIC_PERSISTENT_COHERENT will actually be
+            coherent thus we must call unmap( UO_KEEP_PERSISTENT ) anyway.
+        @param submissionType
+            See SubmissionType::SubmissionType.
+        */
+        void flushBoundGpuProgramParameters( const SubmissionType::SubmissionType submissionType );
+
+    public:
+        /** All pending or queued buffer flushes (i.e. calls to vkFlushMappedMemoryRanges) must be done
+            now because we're about to submit commands for execution; and they need to see those
+            regions flushed.
+        @param submissionType
+            See SubmissionType::SubmissionType.
+        */
+        void flushPendingNonCoherentFlushes( const SubmissionType::SubmissionType submissionType );
+
         void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
                                uint8 mipLevel ) override;
 
@@ -305,6 +359,8 @@ namespace Ogre
         void endGpuDebuggerFrameCapture( Window *window, const bool bDiscard = false ) override;
 
         bool hasAnisotropicMipMapFilter() const override { return true; }
+
+        void getCustomAttribute( const String &name, void *pData ) override;
 
         void setClipPlanesImpl( const PlaneList &clipPlanes ) override;
         void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
@@ -348,7 +404,8 @@ namespace Ogre
         void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu format ) override;
+                                                     PixelFormatGpu format, uint32 textureFlags,
+                                                     uint32 depthTextureFlags ) override;
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
 

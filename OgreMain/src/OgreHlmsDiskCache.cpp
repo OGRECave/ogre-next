@@ -35,10 +35,13 @@ THE SOFTWARE.
 #include "OgreProfiler.h"
 #include "OgreRenderSystem.h"
 #include "OgreStringConverter.h"
+#include "Threading/OgreThreads.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
 #    include "iOS/macUtils.h"
 #endif
+
+#include <atomic>
 
 namespace Ogre
 {
@@ -142,7 +145,76 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDiskCache::applyTo( Hlms *hlms )
+    struct CompilerJobParams
+    {
+        Hlms *hlms;
+        std::atomic<uint32> currentEntry;
+        uint32 numEntries;
+        const HlmsDiskCache::SourceCode *sourceCode;
+        bool templatesOutOfDate;
+
+        CompilerJobParams( Hlms *_hlms, const HlmsDiskCache::SourceCodeVec &_sourceCode,
+                           bool _templatesOutOfDate ) :
+            hlms( _hlms ),
+            currentEntry( 0u ),
+            numEntries( static_cast<uint32>( _sourceCode.size() ) ),
+            sourceCode( _sourceCode.data() ),
+            templatesOutOfDate( _templatesOutOfDate )
+        {
+        }
+    };
+    //-----------------------------------------------------------------------------------
+    static unsigned long compileShadersThread( ThreadHandle *threadHandle )
+    {
+        Threads::SetThreadName( threadHandle,
+                                "ShCmplr#" + StringConverter::toString( threadHandle->getThreadIdx() ) );
+
+        CompilerJobParams &jobParams =
+            *reinterpret_cast<CompilerJobParams *>( threadHandle->getUserParam() );
+
+        HlmsDiskCache::_compileShadersThread( jobParams, threadHandle->getThreadIdx() );
+        return 0u;
+    }
+    THREAD_DECLARE( compileShadersThread );
+    //-----------------------------------------------------------------------------------
+    void HlmsDiskCache::_compileShadersThread( CompilerJobParams &jobParams, const size_t threadIdx )
+    {
+#ifdef OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API
+#    ifdef OGRE_SHADER_THREADING_USE_TLS
+        Hlms::msThreadId = static_cast<uint32>( threadIdx );
+#    endif
+#endif
+
+        Hlms *hlms = jobParams.hlms;
+        const uint32 numEntries = jobParams.numEntries;
+        const bool templatesOutOfDate = jobParams.templatesOutOfDate;
+        const HlmsDiskCache::SourceCode *sourceCode = jobParams.sourceCode;
+
+        while( true )
+        {
+            const uint32 idx = jobParams.currentEntry++;
+            if( idx >= numEntries )
+                break;
+
+            // Compile shaders
+            if( !templatesOutOfDate )
+            {
+                // Templates haven't changed, send the Hlms-processed shader code for compilation
+                hlms->_compileShaderFromPreprocessedSource( sourceCode[idx].mergedCache,
+                                                            sourceCode[idx].sourceFile, idx, threadIdx );
+            }
+            else
+            {
+                // Templates have changed, they need to be run through the Hlms
+                // preprocessor again before they can be compiled again
+                Hlms::ShaderCodeCache shaderCodeCache( sourceCode[idx].mergedCache.pieces );
+                shaderCodeCache.mergedCache.setProperties = sourceCode[idx].mergedCache.setProperties;
+                hlms->compileShaderCode( shaderCodeCache, idx, threadIdx );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDiskCache::applyTo( Hlms *hlms, const size_t numThreads )
     {
         LogManager::getSingleton().logMessage( "Applying HlmsDiskCache " +
                                                StringConverter::toString( hlms->getType() ) );
@@ -212,27 +284,30 @@ namespace Ogre
         hlms->clearShaderCache();
 
         {
-            // Compile shaders
-            SourceCodeVec::const_iterator itor = mCache.sourceCode.begin();
-            SourceCodeVec::const_iterator endt = mCache.sourceCode.end();
+            CompilerJobParams jobParams( hlms, mCache.sourceCode, mTemplatesOutOfDate );
 
-            while( itor != endt )
+            // Compile shaders
+            if( hlms->getRenderSystem()->supportsMultithreadedShaderCompliation() && numThreads > 1u )
             {
-                if( !mTemplatesOutOfDate )
+                hlms->_setNumThreads( numThreads );
+
+                std::vector<ThreadHandlePtr> multiLoadWorkerThreads;
+                multiLoadWorkerThreads.resize( numThreads );
+                for( size_t i = 0u; i < numThreads; ++i )
                 {
-                    // Templates haven't changed, send the Hlms-processed shader code for compilation
-                    hlms->_compileShaderFromPreprocessedSource( itor->mergedCache, itor->sourceFile );
+                    multiLoadWorkerThreads[i] =
+                        Threads::CreateThread( THREAD_GET( compileShadersThread ), i, &jobParams );
                 }
-                else
-                {
-                    // Templates have changed, they need to be run through the Hlms
-                    // preprocessor again before they can be compiled again
-                    Hlms::ShaderCodeCache shaderCodeCache( itor->mergedCache.pieces );
-                    shaderCodeCache.mergedCache.setProperties = itor->mergedCache.setProperties;
-                    hlms->compileShaderCode( shaderCodeCache );
-                }
-                ++itor;
+
+                Threads::WaitForThreads( multiLoadWorkerThreads.size(), multiLoadWorkerThreads.data() );
+                multiLoadWorkerThreads.clear();
             }
+            else
+            {
+                _compileShadersThread( jobParams, Hlms::kNoTid );
+            }
+
+            hlms->_setShadersGenerated( jobParams.numEntries );
         }
 
         {
@@ -273,6 +348,8 @@ namespace Ogre
                 ++itor;
             }
         }
+
+        hlms->_tagShaderCodeCacheUpToDate();
     }
     //-----------------------------------------------------------------------------------
     template <typename T>

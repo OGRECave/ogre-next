@@ -32,8 +32,15 @@ THE SOFTWARE.
 
 #include "OgreArchive.h"
 #include "OgreArchiveFactory.h"
+
+#if !defined( OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API ) || \
+    defined( OGRE_SHADER_THREADING_USE_TLS )
+#    include "Threading/OgreLightweightMutex.h"
+#else
+#    include "Threading/OgreThreadHeaders.h"
+#endif
+
 #include "OgreHeaderPrefix.h"
-#include "Threading/OgreThreadHeaders.h"
 
 // Forward declaration for zziplib to avoid header file dependency.
 typedef struct zzip_dir       ZZIP_DIR;
@@ -66,7 +73,15 @@ namespace Ogre
         /// A pointer to file io alternative implementation
         zzip_plugin_io_handlers *mPluginIo;
 
+#if !defined( OGRE_SHADER_THREADING_BACKWARDS_COMPATIBLE_API ) || \
+    defined( OGRE_SHADER_THREADING_USE_TLS )
+        LightweightMutex mMutex;
+#else
         OGRE_AUTO_MUTEX;
+#endif
+
+        FileInfoListPtr findFileInfo( const String &pattern, bool recursive, bool dirs,
+                                      bool bAlreadyLocked );
 
     public:
         ZipArchive( const String &name, const String &archType,

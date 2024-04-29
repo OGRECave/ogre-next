@@ -34,6 +34,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    OGRE_ASSUME_NONNULL_BEGIN
+
     class VulkanWindow : public Window
     {
     protected:
@@ -47,7 +49,7 @@ namespace Ogre
         void _setDevice( VulkanDevice *device );
         void _initialize( TextureGpuManager *textureGpuManager ) override;
         virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *miscParams ) = 0;
+                                  const NameValuePairList *ogre_nullable miscParams ) = 0;
     };
 
     class VulkanWindowNull : public VulkanWindow
@@ -64,7 +66,7 @@ namespace Ogre
         void setHidden( bool hidden ) override;
         bool isHidden() const override;
         void _initialize( TextureGpuManager *textureGpuManager,
-                          const NameValuePairList *miscParams ) override;
+                          const NameValuePairList *ogre_nullable miscParams ) override;
         void swapBuffers() override;
     };
 
@@ -115,8 +117,8 @@ namespace Ogre
         void parseSharedParams( const NameValuePairList *miscParams );
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
-        void createSwapchain();
-        void destroySwapchain();
+        virtual void createSwapchain();
+        virtual void destroySwapchain();
 
     public:
         void acquireNextSwapchain();
@@ -156,6 +158,8 @@ namespace Ogre
 
         void getCustomAttribute( IdString name, void *pData ) override;
     };
+
+    OGRE_ASSUME_NONNULL_END
 }  // namespace Ogre
 
 #endif

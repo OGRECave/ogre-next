@@ -30,10 +30,14 @@ THE SOFTWARE.
 
 #include "Threading/OgreThreads.h"
 
+#include "Threading/OgreLightweightMutex.h"
+
 #include "ogrestd/vector.h"
 
 namespace Ogre
 {
+    static LightweightMutex mOsHandleMutex;
+
     ThreadHandle::ThreadHandle( size_t threadIdx, void *userParam ) :
         mThreadIdx( threadIdx ),
         mUserParam( userParam )
@@ -41,6 +45,14 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     ThreadHandle::~ThreadHandle() {}
+    //-----------------------------------------------------------------------------------
+    void ThreadHandle::_setOsHandleToSelf()
+    {
+        ScopedLock lock( mOsHandleMutex );
+        pthread_t handle = pthread_self();
+        _setOsHandle( handle );
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
 
@@ -50,7 +62,10 @@ namespace Ogre
         ThreadHandlePtr retVal( new ThreadHandle( threadIdx, param ) );
         pthread_t threadId;
         pthread_create( &threadId, NULL, entryPoint, threadArg );
-        retVal->_setOsHandle( threadId );
+        {
+            ScopedLock lock( mOsHandleMutex );
+            retVal->_setOsHandle( threadId );
+        }
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -74,6 +89,43 @@ namespace Ogre
         timeToSleep.tv_nsec = ( milliseconds % 1000 ) * 1000000;
         timeToSleep.tv_sec = milliseconds / 1000;
         nanosleep( &timeToSleep, 0 );
+    }
+    //-----------------------------------------------------------------------------------
+    bool Threads::SetThreadName( ThreadHandle *thread, const String &name )
+    {
+        constexpr size_t kMaxChars = 15u;
+        char threadName[kMaxChars + 1u];
+
+        const size_t maxLength = std::min( kMaxChars, name.size() );
+        memcpy( threadName, name.c_str(), maxLength );
+        threadName[maxLength] = '\0';
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        pthread_t threadHandle;
+        if( thread )
+            threadHandle = thread->_getOsHandle();
+        else
+            threadHandle = pthread_self();
+
+        const int result = pthread_setname_np( threadHandle, threadName );
+
+        return result == 0u;
+#else
+        bool bCanNameThread = false;
+
+        if( thread )
+            bCanNameThread = thread->_getOsHandle() == pthread_self();
+        else
+            bCanNameThread = true;
+
+        if( bCanNameThread )
+        {
+            const int result = pthread_setname_np( threadName );
+            bCanNameThread = result == 0u;
+        }
+
+        return bCanNameThread;
+#endif
     }
     //-----------------------------------------------------------------------------------
     bool Threads::CreateTls( TlsHandle *outTls )

@@ -874,14 +874,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsManager::saveMaterials( HlmsTypes hlmsType, const String &filename,
                                      HlmsJsonListener *listener,
-                                     const String &additionalTextureExtension )
+                                     const String &additionalTextureExtension, bool sortByName )
     {
         assert( hlmsType != HLMS_MAX );
         assert( hlmsType != HLMS_LOW_LEVEL );
 
         String jsonString;
         HlmsJson hlmsJson( this, listener );
-        hlmsJson.saveMaterials( mRegisteredHlms[hlmsType], jsonString, additionalTextureExtension );
+        hlmsJson.saveMaterials( mRegisteredHlms[hlmsType], jsonString, additionalTextureExtension,
+                                sortByName );
 
         std::ofstream file( filename.c_str(), std::ios::binary | std::ios::out );
         if( file.is_open() )

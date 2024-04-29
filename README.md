@@ -69,6 +69,10 @@ For a list of samples and their demonstrated features, refer to the [samples sec
 
 ![](./Docs/frontpage/SunsetRangers.jpg)
 
+## [Stunt Rally 3](https://stuntrally.tuxfamily.org/)
+
+![](./Docs/frontpage/StuntRally3.jpg)
+
 
 # Features
 

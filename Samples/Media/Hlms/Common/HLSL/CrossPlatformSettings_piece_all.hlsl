@@ -15,6 +15,8 @@
 #define toFloat3x3( x ) ((float3x3)(x))
 #define buildFloat3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
 
+#define buildFloat4x4( row0, row1, row2, row3 ) transpose( float4x4( row0, row1, row2, row3 ) )
+
 // See CrossPlatformSettings_piece_all.glsl for an explanation
 @property( precision_mode == full32 )
 	#define _h(x) (x)
@@ -98,7 +100,7 @@
 	#define inVs_stereoDrawId input.drawId
 @end
 
-#define finalDrawId input.drawId
+#define finalDrawId inVs_drawId
 
 @foreach( hlms_uv_count, n )
 	#define inVs_uv@n input.uv@n@end

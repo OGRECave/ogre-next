@@ -46,6 +46,36 @@ THE SOFTWARE.
 #include "OgreVulkanPlugin.h"
 #include "Windowing/Android/OgreVulkanAndroidWindow.h"
 
+#include <fstream>
+
+//-----------------------------------------------------------------------------
+std::string Android_getCacheFolder()
+{
+    android_app *app = Demo::AndroidSystems::getAndroidApp();
+
+    JNIEnv *jni = 0;
+    app->activity->vm->AttachCurrentThread( &jni, nullptr );
+
+    ANativeActivity *nativeActivity = app->activity;
+    jclass classDef = jni->GetObjectClass( nativeActivity->clazz );
+    jmethodID getCacheFolder = jni->GetMethodID( classDef, "getCacheFolder", "()Ljava/lang/String;" );
+    jstring cacheDir = (jstring)jni->CallObjectMethod( nativeActivity->clazz, getCacheFolder );
+
+    const char *cacheDirCStr = jni->GetStringUTFChars( cacheDir, nullptr );
+    std::string retVal( cacheDirCStr );
+    jni->ReleaseStringUTFChars( cacheDir, cacheDirCStr );
+
+    jni->DeleteLocalRef( cacheDir );
+    jni->DeleteLocalRef( classDef );
+
+    if( !retVal.empty() && retVal.back() != '/' )
+        retVal += "/";
+
+    app->activity->vm->DetachCurrentThread();
+
+    return retVal;
+}
+
 namespace Demo
 {
     struct AndroidAppController
@@ -59,25 +89,83 @@ namespace Demo
         Ogre::uint64 mStartTime;
         double mAccumulator;
 
+        bool mCriticalFailure;
+
         AndroidAppController() :
             mGraphicsGameState( 0 ),
             mGraphicsSystem( 0 ),
             mLogicGameState( 0 ),
             mLogicSystem( 0 ),
             mStartTime( 0 ),
-            mAccumulator( 0 )
+            mAccumulator( 0 ),
+            mCriticalFailure( false )
         {
         }
 
         void init()
         {
+            if( mCriticalFailure )
+                return;
+
             if( !mGraphicsSystem )
             {
                 MainEntryPoints::createSystems( &mGraphicsGameState, &mGraphicsSystem, &mLogicGameState,
                                                 &mLogicSystem );
-                mGraphicsSystem->initialize( MainEntryPoints::getWindowTitle() );
+                try
+                {
+                    mGraphicsSystem->initialize( MainEntryPoints::getWindowTitle() );
+                }
+                catch( Ogre::RenderingAPIException &e )
+                {
+                    ANativeActivity *nativeActivity = Demo::AndroidSystems::getAndroidApp()->activity;
+
+                    JNIEnv *jni = 0;
+                    nativeActivity->vm->AttachCurrentThread( &jni, nullptr );
+
+                    jclass classDef = jni->GetObjectClass( nativeActivity->clazz );
+                    jstring errorMsgJStr = jni->NewStringUTF( e.getDescription().c_str() );
+                    jstring detailedErrorMsgJStr = jni->NewStringUTF( e.getFullDescription().c_str() );
+                    jmethodID showNoVulkanAlertMethod = jni->GetMethodID(
+                        classDef, "showNoVulkanAlert", "(Ljava/lang/String;Ljava/lang/String;)V" );
+                    jni->CallVoidMethod( nativeActivity->clazz, showNoVulkanAlertMethod, errorMsgJStr,
+                                         detailedErrorMsgJStr );
+                    jni->DeleteLocalRef( errorMsgJStr );
+                    jni->DeleteLocalRef( detailedErrorMsgJStr );
+                    jni->DeleteLocalRef( classDef );
+
+                    // Let them leak. We can't do a clean shutdown. If we're here then there's
+                    // nothing we can do. Let's just avoid crashing.
+                    mLogicSystem = 0;
+                    mGraphicsSystem = 0;
+
+                    mCriticalFailure = true;
+
+                    Demo::AndroidSystems::setNativeWindow( 0 );
+                    nativeActivity->vm->DetachCurrentThread();
+                    return;
+                }
+
                 if( mLogicSystem )
                     mLogicSystem->initialize();
+
+                {
+                    // Disable Swappy if a previous run determined it was buggy.
+                    struct stat buffer;
+                    if( stat( ( Android_getCacheFolder() + "SwappyDisabled" ).c_str(), &buffer ) == 0 )
+                    {
+                        Ogre::LogManager::getSingleton().logMessage(
+                            "Disabling Swappy Frame Pacing because previous runs determined it's buggy "
+                            "on this "
+                            "device.",
+                            Ogre::LML_CRITICAL );
+
+                        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::VulkanRenderSystem *>(
+                            mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() ) );
+                        Ogre::VulkanRenderSystem *renderSystem = static_cast<Ogre::VulkanRenderSystem *>(
+                            mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() );
+                        renderSystem->setSwappyFramePacing( false );
+                    }
+                }
 
                 mGraphicsSystem->createScene01();
                 if( mLogicSystem )
@@ -110,6 +198,17 @@ namespace Demo
                 Ogre::VulkanAndroidWindow *window =
                     static_cast<Ogre::VulkanAndroidWindow *>( windowBase );
                 window->setNativeWindow( 0 );
+
+                // Cache the fact that Swappy is buggy on this device, using an empty file.
+                OGRE_ASSERT_HIGH( dynamic_cast<Ogre::VulkanRenderSystem *>(
+                    mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() ) );
+                Ogre::VulkanRenderSystem *renderSystem = static_cast<Ogre::VulkanRenderSystem *>(
+                    mGraphicsSystem->getSceneManager()->getDestinationRenderSystem() );
+                if( !renderSystem->getSwappyFramePacing() )
+                {
+                    std::ofstream outFile( Android_getCacheFolder() + "SwappyDisabled",
+                                           std::ios::out | std::ios::binary );
+                }
             }
         }
 
@@ -141,9 +240,26 @@ namespace Demo
             mAccumulator += timeSinceLast;
         }
     };
+
+    class DemoJniProvider final : public Ogre::AndroidJniProvider
+    {
+        void acquire( JNIEnv **env, jobject *activity ) override
+        {
+            android_app *app = AndroidSystems::getAndroidApp();
+            app->activity->vm->AttachCurrentThread( env, nullptr );
+            *activity = app->activity->clazz;
+        }
+
+        void release( JNIEnv * ) override
+        {
+            android_app *app = AndroidSystems::getAndroidApp();
+            app->activity->vm->DetachCurrentThread();
+        }
+    };
 }  // namespace Demo
 
 static Demo::AndroidAppController g_appController;
+static Demo::DemoJniProvider g_demoJniProvider;
 
 // Process the next main command.
 void handle_cmd( android_app *app, int32_t cmd )
@@ -163,7 +279,10 @@ void handle_cmd( android_app *app, int32_t cmd )
     case APP_CMD_CONTENT_RECT_CHANGED:
     case APP_CMD_WINDOW_RESIZED:
         __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "windowMovedOrResized: %d", cmd );
-        g_appController.mGraphicsSystem->getRenderWindow()->windowMovedOrResized();
+        // We got crash reports from getting _RESIZED events w/ mGraphicsSystem being a nullptr.
+        // That's Android for you.
+        if( g_appController.mGraphicsSystem && g_appController.mGraphicsSystem->getRenderWindow() )
+            g_appController.mGraphicsSystem->getRenderWindow()->windowMovedOrResized();
         break;
     default:
         __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "event not handled: %d", cmd );
@@ -176,6 +295,21 @@ void android_main( struct android_app *app )
     app->onAppCmd = handle_cmd;
 
     Demo::AndroidSystems::setAndroidApp( app );
+    Demo::AndroidSystems::setJniProvider( &g_demoJniProvider );
+
+    // !!! IMPORTANT !!!
+    //
+    // Swappy defaults to AutoVSyncInterval_AutoPipeline.
+    // But we change it to PipelineForcedOn because it's the behavior most users coming from PC
+    // expect (AutoVSyncInterval_AutoPipeline can be counter-intuitive because it can lock the
+    // pacing to lower framerates)
+    //
+    // What actual setting you wish to use (or expose to user) depends on how much love,
+    // testing & optimization you put into your Android app.
+    //
+    // !!! IMPORTANT !!!
+    Ogre::VulkanAndroidWindow::setFramePacingSwappyAutoMode(
+        Ogre::VulkanAndroidWindow::PipelineForcedOn );
 
     // Used to poll the events in the main loop
     int events;

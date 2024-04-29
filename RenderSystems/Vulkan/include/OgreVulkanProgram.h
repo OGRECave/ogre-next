@@ -130,7 +130,7 @@ namespace Ogre
 
         void getLayoutForPso( const VertexElement2VecVec &vertexElements,
                               FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
-                              FastArray<VkVertexInputAttributeDescription> &outVertexInputs );
+                              FastArray<VkVertexInputAttributeDescription> &outVertexInputs ) const;
 
         uint32 getDrawIdLocation() const { return mDrawIdLocation; }
 
@@ -138,6 +138,8 @@ namespace Ogre
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
 
         uint32 getEshLanguage() const;
+
+        String getNameForMicrocodeCache( const String &preamble ) const;
 
         /// Returns true if successfully extracted Root Layout from source
         bool extractRootLayoutFromSource();

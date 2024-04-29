@@ -79,6 +79,12 @@ Reference Guide: HLMS PBS Datablock {#hlmspbsdatablockref}
             - If switching from the 'default' BRDF implementation, the scene will be too bright. If so, divide light power by PI.
 - **DEFAULT="default"**
 
+## Parameter: refraction_strength
+
+- Value of type float
+- See Ogre::HlmsPbsDatablock::setRefractionStrength
+- **DEFAULT=0.075**
+
 ## Parameter: detail_diffuse[X] {#dbParamDetailDiffuse}
 - Name of the detail map to be used on top of the diffuse colour
 - Can contain up to 4 detail_diffuse blocks (`detail_diffuse0` to `detail_diffuse3`)
@@ -263,6 +269,8 @@ Reference Guide: HLMS PBS Datablock {#hlmspbsdatablockref}
             "macroblock" : "macroblock_name",
             "macroblock" : ["macroblock_name", "macroblock_name_for_shadows"],
             "shadow_const_bias" : 0.01,
+            
+            "refraction_strength" : 0.2,
       
             "brdf" : "default",
             "detail_diffuse0" :

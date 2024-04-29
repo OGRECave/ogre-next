@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadows.h"
+#include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUp.h"
+#include "Compositor/Pass/PassWarmUp/OgreCompositorPassWarmUpDef.h"
 #include "OgreCamera.h"
 #include "OgreLogManager.h"
 #include "OgreProfiler.h"
@@ -459,6 +461,65 @@ namespace Ogre
                                     // We need to recalculate
                                     pass->_setUpdateShadowNode( true );
                                     lastCamera = pass->getCullCamera();
+
+                                    // Performance warning check. Only on non-release builds.
+                                    // We don't raise the log on SHADOW_NODE_RECALCULATE because
+                                    // that's explicit. We assume the user knows what he's doing.
+                                    //(may be he changed the objects without us knowing
+                                    // through a listener)
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+                                    if( usedCameras.find( lastCamera ) != usedCameras.end() )
+                                    {
+                                        // clang-format off
+                                        LogManager::getSingleton().logMessage(
+                "\tPerformance Warning: Shadow Node '" + (*itor)->getName().getFriendlyText() +
+                "' is forced to recalculate twice (or more) its contents for the same camera.\n"
+                "\tThis happens when assigning a shadow node to a pass using a different camera "
+                "and then using it back again in another pass with the older camera.\n"
+                "\tYou can fix this by cloning the shadow node and using the clone for the pass with "
+                "a different camera. But beware you'll be trading performance for more VRAM usage.\n"
+                "\tOr you can ignore this warning." );
+                                        // clang-format on
+                                    }
+                                    else
+                                    {
+                                        usedCameras.insert( lastCamera );
+                                    }
+#endif
+                                }
+                                else
+                                {
+                                    pass->_setUpdateShadowNode( false );
+                                }
+                            }
+                        }
+                    }
+                    else if( ( *itPasses )->getType() == PASS_WARM_UP )
+                    {
+                        assert( dynamic_cast<CompositorPassWarmUp *>( *itPasses ) );
+                        CompositorPassWarmUp *pass = static_cast<CompositorPassWarmUp *>( *itPasses );
+
+                        if( shadowNode == pass->getShadowNode() )
+                        {
+                            ShadowNodeRecalculation recalc =
+                                pass->getDefinition()->mShadowNodeRecalculation;
+
+                            if( recalc == SHADOW_NODE_RECALCULATE )
+                            {
+                                // We're forced to recalculate anyway, save the new camera
+                                lastCamera = pass->getCamera();
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+                                usedCameras.insert( lastCamera );
+#endif
+                            }
+                            else if( recalc == SHADOW_NODE_FIRST_ONLY )
+                            {
+                                if( lastCamera != pass->getCamera() )
+                                {
+                                    // Either this is the first one, or camera changed.
+                                    // We need to recalculate
+                                    pass->_setUpdateShadowNode( true );
+                                    lastCamera = pass->getCamera();
 
                                     // Performance warning check. Only on non-release builds.
                                     // We don't raise the log on SHADOW_NODE_RECALCULATE because

@@ -96,16 +96,24 @@ namespace Ogre
             {
                 // The layout the texture is currently in does not match our records.
                 // This can mean either of two things:
-                //  1. Texture was transitioned outside BarrierSolver's knowledge
+                //  1. Texture was transitioned outside BarrierSolver's knowledge.
+                //     This is wrong and bConsistentOldRecord = false.
                 //
                 //  2. User called resolveTransition() twice on this texture
                 //     without executing the transition yet. Thus 'lastKnownLayout'
                 //     contains the layout we will transition to. So we need
                 //     to check the current layout matches the *old* record,
                 //     not the future one.
-                //     That's what we're checking here.
+                //     This is allowed and that's what we're checking here.
+                //     bConsistentOldRecord = true in this case.
                 bConsistentOldRecord = renderSystem->isSameLayout(
                     itor->oldLayout, texture->getCurrentLayout(), texture, true );
+
+                // Discardable textures will return whatever in texture->getCurrentLayout(), but
+                // itor->oldLayout will be ResourceLayout::Undefined if last time resolveTransition()
+                // was called was in a new frame. We need to allow this.
+                if( texture->isDiscardableContent() && itor->oldLayout == ResourceLayout::Undefined )
+                    bConsistentOldRecord = true;
             }
         }
 
@@ -145,8 +153,6 @@ namespace Ogre
               ( newLayout == ResourceLayout::RenderTargetReadOnly &&
                 access == ResourceAccess::Read ) ) &&
             "Invalid Layout-access pair" );
-
-        OGRE_ASSERT_MEDIUM( access != ResourceAccess::Undefined );
 
         ResourceStatusMap::iterator itor = mResourceStatus.find( texture );
 
