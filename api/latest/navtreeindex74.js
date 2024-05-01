@@ -1,5 +1,6 @@
 var NAVTREEINDEX74 =
 {
+"class_ogre_1_1v1_1_1_billboard_particle_renderer.html#ae401df1cd58636b9aff7be65673ffdce":[5,2,1,57,28],
 "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#af1bcb159cb49363ef5a16154fd76c599":[5,2,1,57,11],
 "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#afa922653dd726d4c609649b8ad3fa42a":[5,2,1,57,31],
 "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#affcba53c253aa08cef145139fb3b8225":[5,2,1,57,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX74 =
 "class_ogre_1_1v1_1_1_default_hardware_vertex_buffer.html#a90a6a4b62f81d65b9d7515753c2cc609":[5,2,9,17,6],
 "class_ogre_1_1v1_1_1_default_hardware_vertex_buffer.html#a93b775bf9ea8213d95377f864728f9f9":[5,2,9,17,3],
 "class_ogre_1_1v1_1_1_default_hardware_vertex_buffer.html#aaed1f7e658979bafd5cc15b8eb58ea3a":[5,2,9,17,5],
-"class_ogre_1_1v1_1_1_default_hardware_vertex_buffer.html#abaf945e50c9fdd24c9390a1a49762b2c":[5,2,9,17,4],
-"class_ogre_1_1v1_1_1_edge_data.html":[5,2,6,30]
+"class_ogre_1_1v1_1_1_default_hardware_vertex_buffer.html#abaf945e50c9fdd24c9390a1a49762b2c":[5,2,9,17,4]
 };

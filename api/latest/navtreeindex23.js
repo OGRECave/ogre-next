@@ -1,5 +1,6 @@
 var NAVTREEINDEX23 =
 {
+"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,19],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,20],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,21],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX23 =
 "class_ogre_1_1_d3_d11_compat_buffer_interface.html#aa55c406c1b7cb34814d1fbf30474ecfd":[7,0,0,188,1],
 "class_ogre_1_1_d3_d11_compat_buffer_interface.html#af117e49155b386bcab0c93dbb6e843c0":[7,0,0,188,3],
 "class_ogre_1_1_d3_d11_const_buffer_packed.html":[7,0,0,189],
-"class_ogre_1_1_d3_d11_const_buffer_packed.html#a17aa47dfe24882d2a888a914f35c0055":[7,0,0,189,1],
-"class_ogre_1_1_d3_d11_const_buffer_packed.html#a182c622002342d4caea90d32aa68e620":[7,0,0,189,0]
+"class_ogre_1_1_d3_d11_const_buffer_packed.html#a17aa47dfe24882d2a888a914f35c0055":[7,0,0,189,1]
 };

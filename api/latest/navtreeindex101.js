@@ -1,5 +1,6 @@
 var NAVTREEINDEX101 =
 {
+"struct_ogre_1_1_descriptor_set_texture2.html#ad1cb7d878f4703a993f1fe474952fde3":[5,2,10,16,4],
 "struct_ogre_1_1_descriptor_set_texture2.html#ae78cc1a959e88da8a3abda873d04010a":[5,2,10,16,9],
 "struct_ogre_1_1_descriptor_set_texture2_1_1_buffer_slot.html":[5,2,10,16,0],
 "struct_ogre_1_1_descriptor_set_texture2_1_1_buffer_slot.html#a15c17f54a11090925144345709bade79":[5,2,10,16,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX101 =
 "struct_ogre_1_1_gpu_constant_definition.html#a2d71f0cd6e1f4fab8806905dd131abe6":[5,2,5,3,19],
 "struct_ogre_1_1_gpu_constant_definition.html#a3561315f96c261bf026da6b06955518f":[5,2,5,3,10],
 "struct_ogre_1_1_gpu_constant_definition.html#a3fd6712d35b95b3c8e6f07263a3aa492":[5,2,5,3,14],
-"struct_ogre_1_1_gpu_constant_definition.html#a46ccefd7dc110783ff07328cf105b19f":[5,2,5,3,21],
-"struct_ogre_1_1_gpu_constant_definition.html#a4c59abf98a3fd610274815428eda0caa":[5,2,5,3,15]
+"struct_ogre_1_1_gpu_constant_definition.html#a46ccefd7dc110783ff07328cf105b19f":[5,2,5,3,21]
 };

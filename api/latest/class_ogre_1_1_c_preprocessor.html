@@ -144,6 +144,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac9c8ca6c8013a5217275e35e9727052d"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_c_preprocessor.html#ac9c8ca6c8013a5217275e35e9727052d">Parse</a> (const char *iSource, size_t iLength, size_t &amp;oLength)</td></tr>
 <tr class="memdesc:ac9c8ca6c8013a5217275e35e9727052d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the input string and return a newly-allocated output string.  <a href="class_ogre_1_1_c_preprocessor.html#ac9c8ca6c8013a5217275e35e9727052d">More...</a><br /></td></tr>
 <tr class="separator:ac9c8ca6c8013a5217275e35e9727052d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8323e7c4a93051c5356925a4222d1b1c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_c_preprocessor.html#a8323e7c4a93051c5356925a4222d1b1c">ParsePreamble</a> (const char *iSource, size_t iLength)</td></tr>
+<tr class="memdesc:a8323e7c4a93051c5356925a4222d1b1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the input string as a preamble (i.e.  <a href="class_ogre_1_1_c_preprocessor.html#a8323e7c4a93051c5356925a4222d1b1c">More...</a><br /></td></tr>
+<tr class="separator:a8323e7c4a93051c5356925a4222d1b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3849848c4223928aea432f66184d541e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_c_preprocessor.html#a3849848c4223928aea432f66184d541e">Undef</a> (const char *iMacroName, size_t iMacroNameLen)</td></tr>
 <tr class="memdesc:a3849848c4223928aea432f66184d541e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undefine a macro.  <a href="class_ogre_1_1_c_preprocessor.html#a3849848c4223928aea432f66184d541e">More...</a><br /></td></tr>
 <tr class="separator:a3849848c4223928aea432f66184d541e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -611,6 +614,44 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The output from preprocessor, allocated with malloc(). The parser can actually allocate more than needed for performance reasons, but this should not be a problem unless you will want to store the returned pointer for long time in which case you might want to realloc() it. If an error has been encountered, the function returns NULL. In some cases the function may return an unallocated address that's <em>inside</em> the source buffer. You must free() the result string only if the returned address is not inside the source text. </dd></dl>
+
+</div>
+</div>
+<a id="a8323e7c4a93051c5356925a4222d1b1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8323e7c4a93051c5356925a4222d1b1c">&#9670;&nbsp;</a></span>ParsePreamble()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::CPreprocessor::ParsePreamble </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>iSource</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>iLength</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parse the input string as a preamble (i.e. </p>
+<p>to define a lot of enums). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iSource</td><td>The source text containing preamble macros. </td></tr>
+    <tr><td class="paramname">iLength</td><td>The length of iSource text in characters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>False on errors. True on success. </dd></dl>
 
 </div>
 </div>

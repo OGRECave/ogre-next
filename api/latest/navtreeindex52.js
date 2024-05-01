@@ -1,5 +1,6 @@
 var NAVTREEINDEX52 =
 {
+"class_ogre_1_1_polygon.html#a2e9e0c2abd6c18c910b7b75ab01f1513":[5,2,6,21,1],
 "class_ogre_1_1_polygon.html#a2f6f8ca3ff5356ed6ddebb55f9c158bd":[5,2,6,21,7],
 "class_ogre_1_1_polygon.html#a4ecd1e0336a4e27b0c09ae3f75a1da72":[5,2,6,21,19],
 "class_ogre_1_1_polygon.html#a55b73fdabd35c480dd873009c546c20f":[5,2,6,21,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX52 =
 "class_ogre_1_1_quaternion.html#af05da43b746cf5b9bc2dcaf3aa4db2b9":[5,2,6,22,25],
 "class_ogre_1_1_quaternion.html#af292a9ed18e3da0bda0fbe114f60cdec":[5,2,6,22,31],
 "class_ogre_1_1_quaternion.html#af3424f1e07092c0ffe293d18b277a04f":[5,2,6,22,54],
-"class_ogre_1_1_radial_density_mask.html":[5,2,10,88],
-"class_ogre_1_1_radial_density_mask.html#a2fb81e428dc82c0ec6f989aa3987d008":[5,2,10,88,0]
+"class_ogre_1_1_radial_density_mask.html":[5,2,10,88]
 };

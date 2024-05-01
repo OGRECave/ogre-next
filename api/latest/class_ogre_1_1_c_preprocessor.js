@@ -12,6 +12,7 @@ var class_ogre_1_1_c_preprocessor =
     [ "Define", "class_ogre_1_1_c_preprocessor.html#a70c0a271d5ea9dcf93d13f9c08318458", null ],
     [ "Parse", "class_ogre_1_1_c_preprocessor.html#ac9c8ca6c8013a5217275e35e9727052d", null ],
     [ "Parse", "class_ogre_1_1_c_preprocessor.html#ac9c8ca6c8013a5217275e35e9727052d", null ],
+    [ "ParsePreamble", "class_ogre_1_1_c_preprocessor.html#a8323e7c4a93051c5356925a4222d1b1c", null ],
     [ "Undef", "class_ogre_1_1_c_preprocessor.html#a3849848c4223928aea432f66184d541e", null ],
     [ "Undef", "class_ogre_1_1_c_preprocessor.html#a3849848c4223928aea432f66184d541e", null ],
     [ "CPreprocessor::Macro", "class_ogre_1_1_c_preprocessor.html#add20dea21f6ffd096bfb856da834c578", null ],

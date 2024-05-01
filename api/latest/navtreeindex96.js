@@ -1,5 +1,6 @@
 var NAVTREEINDEX96 =
 {
+"hlmsmacroblockref.html#mbParamDepthBiasSlopeScale":[3,9,15,0,5],
 "hlmsmacroblockref.html#mbParamDepthCheck":[3,9,15,0,1],
 "hlmsmacroblockref.html#mbParamDepthFunction":[3,9,15,0,3],
 "hlmsmacroblockref.html#mbParamDepthWrite":[3,9,15,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX96 =
 "namespace_ogre.html#a751d388a0b231360abe5cb03585f762e":[6,0,0,1197],
 "namespace_ogre.html#a762e575b2bd9afcd0820448daa431afb":[6,0,0,1190],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573":[6,0,0,1211],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a020e54ace2ab2b1659ceff9bf72b2f02":[6,0,0,1211,12],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a058e30c87f886feb8d223b9160095aab":[6,0,0,1211,35]
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a020e54ace2ab2b1659ceff9bf72b2f02":[6,0,0,1211,12]
 };
