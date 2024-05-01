@@ -521,6 +521,16 @@ namespace Ogre
          */
         char *Parse( const char *iSource, size_t iLength, size_t &oLength );
 
+        /** Parse the input string as a preamble (i.e. to define a lot of enums).
+        @param iSource
+            The source text containing preamble macros.
+        @param iLength
+            The length of iSource text in characters.
+        @return
+            False on errors. True on success.
+        */
+        bool ParsePreamble( const char *iSource, size_t iLength );
+
         /**
          * An error handler function type.
          * The default implementation just drops a note to stderr and
