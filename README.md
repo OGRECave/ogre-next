@@ -142,7 +142,8 @@ pacman -S freeimage freetype2 libxaw libxrandr mesa zziplib cmake gcc
 
 We provide quick download-build scripts under the [Scripts/BuildScripts/output](Scripts/BuildScripts/output) folder.
 
-You can download all of these scripts [as a compressed 7zip file](https://bintray.com/darksylinc/ogre-next/download_file?file_path=build_ogre_scripts-master.7z)
+You can download all of these scripts [as a compressed 7zip file](https://github.com/OGRECave/ogre-next/releases/download/bin-releases/build_ogre_scripts-master.7z).
+We also have an archive if you're looking for [scripts to build older versions](https://github.com/OGRECave/ogre-next/releases/bin-releases/).
 
 If you're on Linux, make sure to first install the dependencies (i.e. run the sudo apt-get above)
 
