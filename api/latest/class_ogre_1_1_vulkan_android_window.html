@@ -341,7 +341,7 @@ Additional Inherited Members</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a43a4724bc63eea00a6bdc6fe72052d18a0a8ad5c98f2fb8097daf051afd47752e"></a>AutoVSyncInterval_PipelineForcedOn&#160;</td><td class="fielddoc"><p>Autocalculate vSyncInterval (see <a class="el" href="class_ogre_1_1_window.html#a76b56f475ba7474c83760b557c34c6a5" title="Turns VSync on/off.">Window::setVSync</a>). </p>
 <p>The autocalculated vSyncInterval should be in the range [vSyncInterval; inf) where vSyncInterval is the value passed to <a class="el" href="class_ogre_1_1_window.html#a76b56f475ba7474c83760b557c34c6a5" title="Turns VSync on/off.">Window::setVSync</a>.</p>
-<p>While this sounds convenient, beware that Swappy will often downgrade vSyncInterval until it finds something that can be met &amp; sustained. That means if your game runs between 40fps and 60fps on a 60hz screen, after some time swappy will downgrade vSyncInterval to 2 so that the game render at perfect 30fps.</p>
+<p>While this sounds convenient, beware that Swappy will often downgrade vSyncInterval until it finds something that can be met &amp; sustained. That means if your game runs between 40fps and 60fps on a 60hz screen, after some time Swappy will downgrade vSyncInterval to 2 so that the game renders at perfect 30fps.</p>
 <p>This may result in a better experience considering framerates jump a lot due to thermal throttling on phones. But it may also cause undesired or unexplainable "locked to 30fps for no aparent reason for a considerable time".</p>
 <p>Pipelining is always on. </p>
 </td></tr>
