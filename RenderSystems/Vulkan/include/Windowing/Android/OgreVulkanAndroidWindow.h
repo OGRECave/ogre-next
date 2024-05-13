@@ -82,7 +82,7 @@ namespace Ogre
             /// While this sounds convenient, beware that Swappy will often downgrade vSyncInterval
             /// until it finds something that can be met & sustained.
             /// That means if your game runs between 40fps and 60fps on a 60hz screen, after some time
-            /// swappy will downgrade vSyncInterval to 2 so that the game render at perfect 30fps.
+            /// Swappy will downgrade vSyncInterval to 2 so that the game renders at perfect 30fps.
             ///
             /// This may result in a better experience considering framerates jump a lot due to
             /// thermal throttling on phones. But it may also cause undesired or unexplainable
