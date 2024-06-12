@@ -18,13 +18,13 @@ When enabled, the project names will be `OgreNext` instead of `Ogre`. e.g. the f
 
 | Old Name                   | New Name                       |
 |----------------------------|--------------------------------|
-| OgreMain.dll               | OgreMain.dll                   |
+| OgreMain.dll               | OgreNextMain.dll               |
 | OgreHlmsPbs.dll            | OgreNextHlmsPbs.dll            |
 | OgreHlmsUnlit.dll          | OgreNextHlmsUnlit.dll          |
 | OgreMeshLodGenerator.dll   | OgreNextMeshLodGenerator.dll   |
 | OgreOverlay.dll            | OgreNextOverlay.dll            |
 | OgreSceneFormat.dll        | OgreNextSceneFormat.dll        |
-| libOgreMain.so             | libOgreMain.so                 |
+| libOgreMain.so             | libOgreNextMain.so             |
 | libOgreHlmsPbs.so          | libOgreNextHlmsPbs.so          |
 | libOgreHlmsUnlit.so        | libOgreNextHlmsUnlit.so        |
 | libOgreMeshLodGenerator.so | libOgreNextMeshLodGenerator.so |
