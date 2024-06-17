@@ -502,7 +502,8 @@ namespace Ogre
             setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlit::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
+    void HlmsUnlit::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                               const PiecesMap *normalPassPieces )
     {
         // HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>(
         //                                              renderable->getDatablock() );
@@ -534,6 +535,11 @@ namespace Ogre
                     ++itor;
                 }
             }
+        }
+        else
+        {
+            inOutPieces[VertexShader] = normalPassPieces[VertexShader];
+            inOutPieces[PixelShader] = normalPassPieces[PixelShader];
         }
 
         if( mFastShaderBuildHack )
@@ -1017,7 +1023,7 @@ namespace Ogre
         //                          ---- PIXEL SHADER ----
         //---------------------------------------------------------------------------
 
-        if( !casterPass )
+        if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
         {
             if( datablock->mTexturesDescSet != mLastDescTexture )
             {

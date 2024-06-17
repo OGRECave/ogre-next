@@ -17,7 +17,7 @@ layout(location = FRAG_COLOR, index = 0) out midf outColour;
 // START UNIFORM DECLARATION
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || exponential_shadow_maps )
+@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
 	vulkan_layout( location = 0 ) in block
 	{
 		@insertpiece( VStoPS_block )

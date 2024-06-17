@@ -2710,7 +2710,7 @@ namespace Ogre
             VertexArrayObject *vao = renderable->getVaos( VpShadow )[0];
             setProperty( HlmsPsoProp::InputLayoutId, vao->getInputLayoutId() );
         }
-        calculateHashForPreCaster( renderable, piecesCaster );
+        calculateHashForPreCaster( renderable, piecesCaster, pieces );
         setProperty( HlmsPsoProp::Macroblock,
                      renderable->getDatablock()->getMacroblock( true )->mLifetimeId );
         setProperty( HlmsPsoProp::Blendblock,

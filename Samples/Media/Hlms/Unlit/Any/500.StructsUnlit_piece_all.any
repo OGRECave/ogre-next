@@ -90,7 +90,7 @@
 @pset( texcoord, 0 )
 
 @piece( VStoPS_block )
-	@property( !hlms_shadowcaster )
+	@property( !hlms_shadowcaster || alpha_test )
 		@property( syntax != metal )
 			FLAT_INTERPOLANT( uint drawId, @counter(texcoord) );
 		@else
@@ -103,7 +103,9 @@
 		@end
 		@foreach( out_uv_half_count, n )
 			INTERPOLANT( float@value( out_uv_half_count@n ) uv@n, @counter(texcoord) );@end
-	@else
+	@end
+
+	@property( hlms_shadowcaster )
 		@property( (!hlms_shadow_uses_depth_texture || exponential_shadow_maps) && !hlms_shadowcaster_point )
 			INTERPOLANT( float depth, @counter(texcoord) );
 		@end
