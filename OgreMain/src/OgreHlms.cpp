@@ -2278,6 +2278,12 @@ namespace Ogre
 
                 codeCache.shaders[i] =
                     compileShaderCode( source[i], "", uniqueName, static_cast<ShaderType>( i ), tid );
+
+                if( mDebugOutput )
+                {
+                    debugDumpFile.write( source[i].c_str(),
+                                         static_cast<std::streamsize>( source[i].size() ) );
+                }
             }
         }
 

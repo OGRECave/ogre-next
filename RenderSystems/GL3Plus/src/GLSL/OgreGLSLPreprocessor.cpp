@@ -1437,4 +1437,10 @@ namespace Ogre
         return retval.Buffer;
     }
 
+    bool CPreprocessor::ParsePreamble( const char *iSource, size_t iLength )
+    {
+        Token retval = Parse( Token( Token::TK_TEXT, iSource, iLength ) );
+        return retval.Type != Token::TK_ERROR;
+    }
+
 }  // namespace Ogre
