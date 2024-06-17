@@ -96,6 +96,7 @@ struct CellData
 
 @undefpiece( DeclareObjLightMask )
 @property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
+	// Currently unimplemented (also makes little sense since there's nothing fine granularity to do).
 	@property( syntax == metal )
 		@piece( DeclareObjLightMask )uint objLightMask = 0xFFFFFFFFu;@end
 	@else
