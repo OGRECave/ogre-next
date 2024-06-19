@@ -78,9 +78,9 @@
 			{
 		@end
 				pixelData.envColourS += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-											  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWD );
-				pixelData.envColourD += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
 											  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWS );
+				pixelData.envColourD += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
+											  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWD );
 		@property( vct_num_probes )
 			}
 		@end
