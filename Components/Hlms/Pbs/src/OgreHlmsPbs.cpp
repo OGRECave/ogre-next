@@ -1043,7 +1043,8 @@ namespace Ogre
             setProperty( kNoTid, PbsProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
+    void HlmsPbs::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                             const PiecesMap * )
     {
         HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock *>( renderable->getDatablock() );
         const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;

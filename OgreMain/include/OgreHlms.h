@@ -504,7 +504,10 @@ namespace Ogre
         uint16 calculateHashForV2( Renderable *renderable );
 
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) {}
-        virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) {}
+        virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces,
+                                                const PiecesMap *normalPassPieces )
+        {
+        }
 
         HlmsCache preparePassHashBase( const Ogre::CompositorShadowNode *shadowNode, bool casterPass,
                                        bool dualParaboloid, SceneManager *sceneManager );
