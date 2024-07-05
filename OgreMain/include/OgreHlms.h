@@ -299,6 +299,24 @@ namespace Ogre
         uint8         mPrecisionMode;  ///< See PrecisionMode
         bool          mFastShaderBuildHack;
 
+    public:
+        struct DatablockCustomPieceFile
+        {
+            String filename;
+            String resourceGroup;
+            String sourceCode;
+
+            void getCodeChecksum( uint64 outHash[2] ) const;
+
+            bool isCacheable() const { return !resourceGroup.empty(); }
+        };
+
+        typedef std::map<int32, DatablockCustomPieceFile> DatablockCustomPieceFileMap;
+
+    protected:
+        /// See HlmsDatablock::setCustomPieceFile.
+        DatablockCustomPieceFileMap mDatablockCustomPieceFiles;
+
         /// The default datablock occupies the name IdString(); which is not the same as IdString("")
         HlmsDatablock *mDefaultDatablock;
 
@@ -1003,6 +1021,49 @@ namespace Ogre
 
         void _clearShaderCache();
 
+        /** See HlmsDatablock::setCustomPieceCodeFromMemory & HlmsDatablock::setCustomPieceFile.
+        @param filename
+            Name of the file.
+        @param shaderCode
+            The contents of the file.
+        */
+        void _addDatablockCustomPieceFile( const String &filename, const String &resourceGroup );
+
+        enum CachedCustomPieceFileStatus
+        {
+            /// Everything ok.
+            CCPFS_Success,
+            /// Recompile the cache from the templates.
+            CCPFS_OutOfDate,
+            /// The cache contains unrecoverable errors. Do not use the cache.
+            CCPFS_CriticalError,
+        };
+
+        /**
+        @param filename
+            See _addDatablockCustomPieceFile() overload.
+            Unlike the other overload, file not found errors are ignored.
+        @param resourceGroup
+            See _addDatablockCustomPieceFile() overload.
+        @param templateHash
+            The expected hash of the file. File won't be added if the hash does not match.
+        @return
+            See CachedCustomPieceFileStatus.
+        */
+        CachedCustomPieceFileStatus _addDatablockCustomPieceFile( const String &filename,
+                                                                  const String &resourceGroup,
+                                                                  const uint64  sourceCodeHash[2] );
+
+        void _addDatablockCustomPieceFileFromMemory( const String &filename, const String &sourceCode );
+
+        bool isDatablockCustomPieceFileCacheable( int32 filenameHashId ) const;
+
+        const String &getDatablockCustomPieceFileNameStr( int32 filenameHashId ) const;
+
+        /// Returns all the data we know about filenameHashId. Can be nullptr if not found.
+        const DatablockCustomPieceFile * /*ogre_nullable*/
+        getDatablockCustomPieceData( int32 filenameHashId ) const;
+
         virtual void _changeRenderSystem( RenderSystem *newRs );
 
         RenderSystem *getRenderSystem() const { return mRenderSystem; }
@@ -1141,6 +1202,7 @@ namespace Ogre
         static const IdString AlphaToCoverage;
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
+        static const IdString _DatablockCustomPieceShaderName;  // Do not set/get directly.
 
         // Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;

@@ -132,6 +132,15 @@ namespace Ogre
         "min",
         "max"
     };
+
+    static const char *c_customPieceKeyword[NumShaderTypes] =
+    {
+        "custom_piece_file_vs",
+        "custom_piece_file_ps",
+        "custom_piece_file_gs",
+        "custom_piece_file_hs",
+        "custom_piece_file_ds",
+    };
     // clang-format on
 
     HlmsJson::HlmsJson( HlmsManager *hlmsManager, HlmsJsonListener *listener ) :
@@ -481,6 +490,17 @@ namespace Ogre
                             datablock->setBlendblock( it->second, i != 0 );
                     }
                 }
+            }
+        }
+
+        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        {
+            itor = json.FindMember( c_customPieceKeyword[i] );
+            if( itor != json.MemberEnd() && itor->value.IsArray() && itor->value.Size() == 2u &&
+                itor->value[0].IsString() && itor->value[1].IsString() )
+            {
+                datablock->setCustomPieceFile( itor->value[0].GetString(), itor->value[1].GetString(),
+                                               static_cast<ShaderType>( i ) );
             }
         }
 
@@ -989,6 +1009,27 @@ namespace Ogre
         else
         {
             outString += getName( datablock->getBlendblock() );
+        }
+
+        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        {
+            const int32 hashId = datablock->getCustomPieceFileIdHash( static_cast<ShaderType>( i ) );
+            if( hashId )
+            {
+                const Hlms *hlms = datablock->getCreator();
+                const Hlms::DatablockCustomPieceFile *data = hlms->getDatablockCustomPieceData( hashId );
+                OGRE_ASSERT_LOW( data );
+                if( data->isCacheable() )
+                {
+                    outString += ",\n\t\t\t\"";
+                    outString += c_customPieceKeyword[i];
+                    outString += "\" : [";
+                    outString += data->filename;
+                    outString += ", ";
+                    outString += data->resourceGroup;
+                    outString += "];";
+                }
+            }
         }
 
         if( datablock->getAlphaTest() != CMPF_ALWAYS_PASS )

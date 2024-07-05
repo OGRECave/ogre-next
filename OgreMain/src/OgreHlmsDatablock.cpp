@@ -114,6 +114,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsDatablock::HlmsDatablock( IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
                                   const HlmsBlendblock *blendblock, const HlmsParamVec &params ) :
+        mCustomPieceFileIdHash{},
         mCreator( creator ),
         mName( name ),
         mTextureHash( 0 ),
@@ -236,6 +237,64 @@ namespace Ogre
         datablock->calculateHash();
 
         return datablock;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setCustomPieceCodeFromMemory( const String &filename, const String &shaderCode,
+                                                      ShaderType shaderType )
+    {
+        if( filename.empty() )
+        {
+            OGRE_ASSERT_LOW( shaderCode.empty() && "Providing shader code but the filename is empty!" );
+            if( mCustomPieceFileIdHash[shaderType] )
+            {
+                mCustomPieceFileIdHash[shaderType] = 0;
+                flushRenderables();
+            }
+        }
+        else
+        {
+            mCreator->_addDatablockCustomPieceFileFromMemory( filename, shaderCode );
+            const int32 hashNameId = static_cast<int32>( IdString( filename ).getU32Value() );
+            mCustomPieceFileIdHash[shaderType] = hashNameId;
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::setCustomPieceFile( const String &filename, const String &resourceGroup,
+                                            ShaderType shaderType )
+    {
+        if( filename.empty() )
+        {
+            if( mCustomPieceFileIdHash[shaderType] )
+            {
+                mCustomPieceFileIdHash[shaderType] = 0;
+                flushRenderables();
+            }
+        }
+        else
+        {
+            const int32 hashNameId = static_cast<int32>( IdString( filename ).getU32Value() );
+            if( mCustomPieceFileIdHash[shaderType] != hashNameId )
+            {
+                mCreator->_addDatablockCustomPieceFile( filename, resourceGroup );
+                mCustomPieceFileIdHash[shaderType] = hashNameId;
+                flushRenderables();
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    int32 HlmsDatablock::getCustomPieceFileIdHash( ShaderType shaderType ) const
+    {
+        OGRE_ASSERT_LOW( shaderType < NumShaderTypes );
+        return mCustomPieceFileIdHash[shaderType];
+    }
+    //-----------------------------------------------------------------------------------
+    const String &HlmsDatablock::getCustomPieceFileStr( ShaderType shaderType ) const
+    {
+        OGRE_ASSERT_LOW( shaderType < NumShaderTypes );
+        if( !mCustomPieceFileIdHash[shaderType] )
+            return BLANKSTRING;
+        return mCreator->getDatablockCustomPieceFileNameStr( mCustomPieceFileIdHash[shaderType] );
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, bool casterBlock )
