@@ -3707,6 +3707,8 @@ namespace Ogre
 
         try
         {
+            Hlms::CachedCustomPieceFileStatus retVal = CCPFS_Success;
+
             const DataStreamPtr stream =
                 ResourceGroupManager::getSingleton().openResource( filename, resourceGroup );
 
@@ -3717,7 +3719,7 @@ namespace Ogre
             uint64 currentChecksum[2];
             entry.getCodeChecksum( currentChecksum );
             if( currentChecksum[0] != sourceCodeHash[0] && currentChecksum[1] != sourceCodeHash[1] )
-                return CCPFS_OutOfDate;
+                retVal = CCPFS_OutOfDate;
 
             if( itor == mDatablockCustomPieceFiles.end() )
             {
@@ -3735,7 +3737,7 @@ namespace Ogre
                              "Hlms::_addDatablockCustomPieceFile" );
             }
 
-            return CCPFS_Success;
+            return retVal;
         }
         catch( FileNotFoundException &e )
         {
