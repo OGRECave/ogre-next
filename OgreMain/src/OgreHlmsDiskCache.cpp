@@ -502,8 +502,8 @@ namespace Ogre
         for( const DatablockCustomPiecesCache &datablockPiece : mCache.datablockCustomPieceFiles )
         {
             write( dataStream, datablockPiece.sourceCodeHash );
-            write( dataStream, datablockPiece.filename );
-            write( dataStream, datablockPiece.resourceGroup );
+            save( dataStream, datablockPiece.filename );
+            save( dataStream, datablockPiece.resourceGroup );
         }
 
         {
