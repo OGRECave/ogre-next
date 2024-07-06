@@ -1202,7 +1202,8 @@ namespace Ogre
         static const IdString AlphaToCoverage;
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
-        static const IdString _DatablockCustomPieceShaderName;  // Do not set/get directly.
+        static const IdString
+            _DatablockCustomPieceShaderName[NumShaderTypes];  // Do not set/get directly.
 
         // Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;

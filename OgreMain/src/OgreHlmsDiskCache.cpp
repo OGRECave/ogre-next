@@ -135,9 +135,21 @@ namespace Ogre
 
             while( itor != endt )
             {
-                const int32 customPieceName = hlms->getProperty(
-                    itor->mergedCache.setProperties, HlmsBaseProp::_DatablockCustomPieceShaderName );
-                if( !customPieceName || hlms->isDatablockCustomPieceFileCacheable( customPieceName ) )
+                bool bCacheable = true;
+
+                for( size_t i = 0u; i < NumShaderTypes; ++i )
+                {
+                    const int32 customPieceName =
+                        hlms->getProperty( itor->mergedCache.setProperties,
+                                           HlmsBaseProp::_DatablockCustomPieceShaderName[i] );
+                    if( customPieceName &&
+                        !hlms->isDatablockCustomPieceFileCacheable( customPieceName ) )
+                    {
+                        bCacheable = false;
+                    }
+                }
+
+                if( bCacheable )
                 {
                     SourceCode sourceCode( *itor );
                     mCache.sourceCode.push_back( sourceCode );
@@ -163,10 +175,21 @@ namespace Ogre
                 // const uint32 inputLayout    = (finalHash >> HlmsBits::InputLayoutShift) & //
                 //                              (uint32)HlmsBits::InputLayoutMask;
 
-                const int32 customPieceName =
-                    hlms->getProperty( hlms->mRenderableCache[renderableIdx].setProperties,
-                                       HlmsBaseProp::_DatablockCustomPieceShaderName );
-                if( !customPieceName || hlms->isDatablockCustomPieceFileCacheable( customPieceName ) )
+                bool bCacheable = true;
+
+                for( size_t i = 0u; i < NumShaderTypes; ++i )
+                {
+                    const int32 customPieceName =
+                        hlms->getProperty( hlms->mRenderableCache[renderableIdx].setProperties,
+                                           HlmsBaseProp::_DatablockCustomPieceShaderName[i] );
+                    if( customPieceName &&
+                        !hlms->isDatablockCustomPieceFileCacheable( customPieceName ) )
+                    {
+                        bCacheable = false;
+                    }
+                }
+
+                if( bCacheable )
                 {
                     Pso pso( hlms->mRenderableCache[renderableIdx], hlms->mPassCache[passIdx], *itor );
                     mCache.pso.push_back( pso );

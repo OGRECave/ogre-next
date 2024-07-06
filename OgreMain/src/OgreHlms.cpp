@@ -191,8 +191,11 @@ namespace Ogre
     const IdString HlmsBaseProp::ScreenSpaceRefractions = IdString( "hlms_screen_space_refractions" );
     // We use a different convention because it's a really private property that ideally
     // shouldn't be exposed to users.
-    const IdString HlmsBaseProp::_DatablockCustomPieceShaderName =
-        IdString( "_DatablockCustomPieceShaderName" );
+    const IdString HlmsBaseProp::_DatablockCustomPieceShaderName[NumShaderTypes] = {
+        IdString( "_DatablockCustomPieceShaderNameVS" ), IdString( "_DatablockCustomPieceShaderNamePS" ),
+        IdString( "_DatablockCustomPieceShaderNameGS" ), IdString( "_DatablockCustomPieceShaderNameHS" ),
+        IdString( "_DatablockCustomPieceShaderNameDS" )
+    };
 
     const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
     const IdString HlmsBaseProp::ReadOnlyIsTex = IdString( "hlms_readonly_is_tex" );
@@ -2386,21 +2389,8 @@ namespace Ogre
                         dumpProperties( debugDumpFile, tid );
                 }
 
-                // Library piece files first
-                LibraryVec::const_iterator itor = mLibrary.begin();
-                LibraryVec::const_iterator endt = mLibrary.end();
-
-                while( itor != endt )
-                {
-                    processPieces( itor->dataFolder, itor->pieceFiles[i], tid );
-                    ++itor;
-                }
-
-                // Main piece files
-                processPieces( mDataFolder, mPieceFiles[i], tid );
-
                 const int32 customPieceName =
-                    getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName );
+                    getProperty( tid, HlmsBaseProp::_DatablockCustomPieceShaderName[i] );
                 if( customPieceName )
                 {
                     // Parse custom arbitrary shader piece specified by the datablock.
@@ -2422,6 +2412,19 @@ namespace Ogre
                     this->collectPieces( outString, inString, tid );
                     this->parseCounter( inString, outString, tid );
                 }
+
+                // Library piece files first
+                LibraryVec::const_iterator itor = mLibrary.begin();
+                LibraryVec::const_iterator endt = mLibrary.end();
+
+                while( itor != endt )
+                {
+                    processPieces( itor->dataFolder, itor->pieceFiles[i], tid );
+                    ++itor;
+                }
+
+                // Main piece files
+                processPieces( mDataFolder, mPieceFiles[i], tid );
 
                 // Generate the shader file.
                 DataStreamPtr inFile = mDataFolder->open( filename );
@@ -2764,7 +2767,7 @@ namespace Ogre
             const int32 filenameHashId =
                 datablock->getCustomPieceFileIdHash( static_cast<ShaderType>( i ) );
             if( filenameHashId )
-                setProperty( kNoTid, HlmsBaseProp::_DatablockCustomPieceShaderName, filenameHashId );
+                setProperty( kNoTid, HlmsBaseProp::_DatablockCustomPieceShaderName[i], filenameHashId );
         }
 
         setProperty( kNoTid, HlmsBaseProp::AlphaTest, datablock->getAlphaTest() != CMPF_ALWAYS_PASS );

@@ -370,9 +370,7 @@ namespace Ogre
         void setCustomPieceCodeFromMemory( const String &filename, const String &shaderCode,
                                            ShaderType shaderType );
 
-        /** Sets the filename of a piece file to be parsed from disk by Hlms after all other piece files
-            have been parsed but right before the last one (i.e. VertexShader_vs.glsl,
-            PixelShader_ps.hlsl, etc).
+        /** Sets the filename of a piece file to be parsed from disk. First, before all other files.
 
             Calling this function triggers HlmsDatablock::flushRenderables.
         @remarks
