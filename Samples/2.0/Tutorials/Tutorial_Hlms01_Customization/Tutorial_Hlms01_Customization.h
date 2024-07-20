@@ -1,4 +1,7 @@
 
+#ifndef Demo_Tutorial_Hlms01_Customization_H
+#define Demo_Tutorial_Hlms01_Customization_H
+
 #include "GraphicsSystem.h"
 
 #include "System/Android/AndroidSystems.h"
@@ -162,3 +165,5 @@ namespace Demo
         Ogre::MyHlmsListener *getMyHlmsListener() { return mMyHlmsListener; }
     };
 }  // namespace Demo
+
+#endif

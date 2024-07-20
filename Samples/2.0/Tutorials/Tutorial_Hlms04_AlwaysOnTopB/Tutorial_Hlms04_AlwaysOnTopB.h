@@ -1,4 +1,7 @@
 
+#ifndef Demo_Tutorial_Hlms04_AlwaysOnTopB_H
+#define Demo_Tutorial_Hlms04_AlwaysOnTopB_H
+
 #include "GraphicsSystem.h"
 
 #include "System/Android/AndroidSystems.h"
@@ -144,3 +147,5 @@ namespace Demo
         Hlms04AlwaysOnTopBGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}
     };
 }  // namespace Demo
+
+#endif
