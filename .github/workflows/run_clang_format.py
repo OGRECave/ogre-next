@@ -45,6 +45,7 @@ g_folders = [
 ]
 
 g_exceptions = {'stb_image_write.h', 'stb_image.h',
+                'wgl.h', 'khrplatform.h',
                 'MurmurHash3.cpp', 'GLX_backdrop.h',
                 'glcorearb.h', 'glext.h', 'wglext.h',
                 'gl3w.h', 'glxtokens-backup.h', 'glxext.h',
@@ -164,8 +165,8 @@ def collectCppFilesForFormatting():
             for fileName in filenames:
                 fullpath = os.path.join(root, fileName)
                 ext = os.path.splitext(fileName)[-1].lower()
-                if(ext == '.cpp' or ext == '.h' or ext == '.inl' or ext == '.mm'):
-                    if(fileName not in g_exceptions):
+                if (ext == '.cpp' or ext == '.h' or ext == '.inl' or ext == '.mm'):
+                    if (fileName not in g_exceptions):
                         pathsToParse.append(fullpath)
     return pathsToParse
 
