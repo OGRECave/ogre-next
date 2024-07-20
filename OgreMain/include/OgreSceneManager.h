@@ -615,14 +615,6 @@ namespace Ogre
         /// A pass designed to let us render shadow colour on white for texture shadows
         Pass *mShadowCasterPlainBlackPass;
 
-        /** Internal method to validate whether a Pass should be allowed to render.
-        @remarks
-            Called just before a pass is about to be used for rendering a group to
-            allow the SceneManager to omit it if required. A return value of false
-            skips this pass.
-        */
-        virtual_l2 bool validatePassForRendering( const Pass *pass );
-
         enum BoxPlane
         {
             BP_FRONT = 0,
