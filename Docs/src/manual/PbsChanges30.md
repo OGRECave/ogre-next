@@ -166,3 +166,48 @@ The [second change](https://github.com/OGRECave/ogre-next/commit/4859a0a6cc622a1
 
 **With Schlick Fresnel using F0:**
 ![](PbsChanges30/OgreIblSpecularFresnelF0.png)
+
+
+# Hemisphere Ambient Lighting changes
+
+If you were using one of the following settings:
+
+ - Ogre::SceneManager::setAmbientLight() (mandatory)
+ - Ogre::HlmsPbs::setAmbientLightMode( Ogre::HlmsPbs::AmbientAuto ) (the default setting)
+ - Ogre::HlmsPbs::setAmbientLightMode( Ogre::HlmsPbs::AmbientHemisphere )
+ 
+Then you are affected.
+
+[Hemisphere Ambient Lighting](Ogre::HlmsPbs::AmbientLightMode::AmbientHemisphereNormal) is a cheap trick.
+
+Therefore there is no true "right way" of doing it.
+
+Nonetheless user Th3V1kt0r [spotted we had swapped diffuse & specular calculations](https://github.com/OGRECave/ogre-next/pull/444).
+
+In some cases the difference may be negligible, but depending on how strong your ambient lighting is (controlled via Ogre::SceneManager::setAmbientLight), this can result in visible changes:
+
+![](PbsChanges30/AmbientHemisphereLighting.png)
+
+Due to how considerable the differences are, and how visually pleasant the old method was; **we are keeping both models but default to the new one**.
+
+| Old Value (<= 2.3)| New Value (>= 3.0)        | Description                                                                                                     |
+|-------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------|
+| #N / A            | AmbientAutoNormal         | Did not exist. Default                                                                                          |
+| AmbientAuto       | AmbientAutoInverted       | Inverts diffuse & specular calculations. This was the default value in OgreNext 2.3                             |
+| #N / A            | AmbientHemisphereNormal   | Did not exist.                                                                                                  |
+| AmbientHemisphere | AmbientHemisphereInverted | Inverts diffuse & specular calculations. This is how hemisphere ambient lighting was calculated in OgreNext 2.3 |
+
+Thus if you wish ambient lighting to look how it was before, simply call:
+
+```cpp
+hlmsPbs->setAmbientLightMode( Ogre::HlmsPbs::AmbientAutoInverted );
+```
+
+The most simple explanation of why the old method may be more pleasant is that ambient hemisphere lighting
+is a very cheap trick to simulate Global Illumination.
+
+Given how simple it was (it's just the blending of two colours across two hemispheres), this mistake made
+lighting look more rich and dynamic, even if wrong.
+
+Thus the correct calculations look more dull unless the data is sourced from something more accurate like
+a cubemap, spherical harmonics, or true path/raytracing.
