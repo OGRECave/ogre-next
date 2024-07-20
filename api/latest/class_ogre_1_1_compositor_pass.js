@@ -6,6 +6,7 @@ var class_ogre_1_1_compositor_pass =
     [ "analyzeBarriers", "class_ogre_1_1_compositor_pass.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
     [ "execute", "class_ogre_1_1_compositor_pass.html#a2cc832fbb80b9685b4fedf874b46075c", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass.html#ae40f4defcc8f4847f8b80c70992efc09", null ],
+    [ "getAnyTargetTexture", "class_ogre_1_1_compositor_pass.html#a8775025bcac9b4db48c7aec8ca0defed", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass.html#a123ad972ffeab36c66f31c26a2b639e4", null ],
     [ "getParentNode", "class_ogre_1_1_compositor_pass.html#a1fcf0351919f3f8fa422dae558bbf64b", null ],
     [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass.html#a792590a3c8a0fefc9c22fab8ec5bd66a", null ],

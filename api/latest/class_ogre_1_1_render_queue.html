@@ -114,6 +114,7 @@ Public Types</h2></td></tr>
 <tr class="memitem:ad2b57c9b40e33d4b64f613a5a6147367"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367">Modes</a> { <a class="el" href="class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367ac84764f8648d1701fd809afba1358b32">V1_LEGACY</a>
 , <a class="el" href="class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367aae5865e2c1ce44806f2538863c9dda44">V1_FAST</a>
 , <a class="el" href="class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367afaf209c76453b55e28708a165b37386e">FAST</a>
+, <a class="el" href="class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367aaba007477484af6f9eeb1e2a1bb76754">PARTICLE_SYSTEM</a>
  }</td></tr>
 <tr class="separator:ad2b57c9b40e33d4b64f613a5a6147367"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbc6e62a79b77d38cf3881c796e0078b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_queue.html#acbc6e62a79b77d38cf3881c796e0078b">RqSortMode</a> { <a class="el" href="class_ogre_1_1_render_queue.html#acbc6e62a79b77d38cf3881c796e0078ba00d99f921af963915cd1e94fa6f769b8">DisableSort</a>
@@ -182,7 +183,8 @@ Public Member Functions</h2></td></tr>
  <a class="el" href="class_ogre_1_1_rectangle2_d.html">Rectangle2D</a>: 10 <br  />
  <a class="el" href="class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh.">v1::Entity</a>: 110 <br  />
  <a class="el" href="class_ogre_1_1v1_1_1_rectangle2_d.html" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl...">v1::Rectangle2D</a>: 110 <br  />
- <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a>: 110 <br  />
+ <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> (<a class="el" href="namespace_ogre_1_1v1.html">v1</a>):110 <br  />
+ <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> (v2):kParticleSystemDefaultRenderQueueId <br  />
  [.. more unlisted ..] </dd>
 <dd>
 By default, the render queues have the following mode set: <br  />
@@ -211,6 +213,9 @@ By default, the render queues have the following mode set: <br  />
 </td></tr>
 <tr><td class="fieldname"><a id="ad2b57c9b40e33d4b64f613a5a6147367afaf209c76453b55e28708a165b37386e"></a>FAST&#160;</td><td class="fielddoc"><p>Renders v2 items using HLMS materials with minimum driver overhead Recommended method for rendering extremely large amounts of objects of homogeneous and heterogenous meshes, with many different kinds of materials and textures. </p>
 <p>Only v2 Items can be put in this queue. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad2b57c9b40e33d4b64f613a5a6147367aaba007477484af6f9eeb1e2a1bb76754"></a>PARTICLE_SYSTEM&#160;</td><td class="fielddoc"><p>Renders <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a> (i.e. </p>
+<p>ParticleFX2 plugin). Don't put <a class="el" href="namespace_ogre_1_1v1.html">v1</a> <a class="el" href="class_ogre_1_1_particle.html" title="Class representing a single particle instance.">Particle</a> Systems here. </p>
 </td></tr>
 </table>
 

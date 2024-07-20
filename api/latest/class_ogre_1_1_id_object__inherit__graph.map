@@ -1,11 +1,11 @@
 <map id="Ogre::IdObject" name="Ogre::IdObject">
-<area shape="rect" id="node1" title=" " alt="" coords="5,487,120,513"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton." alt="" coords="224,360,319,387"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing." alt="" coords="186,411,357,437"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="168,461,375,488"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="192,512,351,539"/>
-<area shape="rect" id="node28" href="$class_ogre_1_1_node.html" title="Class representing a general&#45;purpose node an articulated scene graph." alt="" coords="224,765,319,792"/>
-<area shape="rect" id="node31" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="193,917,350,944"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,512,120,539"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton." alt="" coords="224,385,319,412"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_compositor_node.html" title="Compositor nodes are the core subject of compositing." alt="" coords="186,436,357,463"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re..." alt="" coords="168,487,375,513"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="192,537,351,564"/>
+<area shape="rect" id="node31" href="$class_ogre_1_1_node.html" title="Class representing a general&#45;purpose node an articulated scene graph." alt="" coords="224,791,319,817"/>
+<area shape="rect" id="node34" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="193,943,350,969"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_compositor_shadow_node.html" title="Shadow Nodes are special nodes (not to be confused with CompositorNode) that are only used for render..." alt="" coords="423,5,644,32"/>
 <area shape="rect" id="node7" href="$class_ogre_1_1_decal.html" title="Decals can have diffuse, normal map, and emissive on top of regular objects." alt="" coords="484,56,583,83"/>
 <area shape="rect" id="node8" href="$class_ogre_1_1_frustum.html" title="A frustum represents a pyramid, capped at the near and far end which is used to represent either a vi..." alt="" coords="476,107,591,133"/>
@@ -16,19 +16,22 @@
 <area shape="rect" id="node14" href="$class_ogre_1_1_movable_plane.html" title="Definition of a Plane that may be attached to a node, and the derived details of it retrieved simply." alt="" coords="457,360,610,387"/>
 <area shape="rect" id="node15" href="$class_ogre_1_1_null_entity.html" title=" " alt="" coords="471,411,596,437"/>
 <area shape="rect" id="node16" href="$class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects." alt="" coords="454,461,613,488"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_rectangle2_d.html" title=" " alt="" coords="461,512,605,539"/>
-<area shape="rect" id="node18" href="$class_ogre_1_1_wire_aabb.html" title="Helper class to display the Aabb of a MovableObject as lines." alt="" coords="471,563,595,589"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1v1_1_1_billboard_chain.html" title="Allows the rendering of a chain of connected billboards." alt="" coords="443,613,623,640"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1v1_1_1_billboard_set.html" title="A collection of billboards (faces which are always facing the given direction) with the same (default..." alt="" coords="451,664,615,691"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="472,715,595,741"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1v1_1_1_manual_object.html" title="Class providing a much simplified interface to generating manual objects with custom geometry." alt="" coords="446,765,621,792"/>
-<area shape="rect" id="node24" href="$class_ogre_1_1v1_1_1_overlay.html" title="Represents a layer which is rendered on top of the &#39;normal&#39; scene contents." alt="" coords="465,816,601,843"/>
-<area shape="rect" id="node25" href="$class_ogre_1_1v1_1_1_rectangle2_d.html" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="449,867,617,893"/>
-<area shape="rect" id="node26" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="431,917,635,944"/>
+<area shape="rect" id="node19" href="$class_ogre_1_1_particle_system2.html" title=" " alt="" coords="450,512,617,539"/>
+<area shape="rect" id="node20" href="$class_ogre_1_1_rectangle2_d.html" title=" " alt="" coords="461,563,605,589"/>
+<area shape="rect" id="node21" href="$class_ogre_1_1_wire_aabb.html" title="Helper class to display the Aabb of a MovableObject as lines." alt="" coords="471,613,595,640"/>
+<area shape="rect" id="node22" href="$class_ogre_1_1v1_1_1_billboard_chain.html" title="Allows the rendering of a chain of connected billboards." alt="" coords="443,664,623,691"/>
+<area shape="rect" id="node24" href="$class_ogre_1_1v1_1_1_billboard_set.html" title="A collection of billboards (faces which are always facing the given direction) with the same (default..." alt="" coords="451,715,615,741"/>
+<area shape="rect" id="node25" href="$class_ogre_1_1v1_1_1_entity.html" title="Defines an instance of a discrete, movable object based on a Mesh." alt="" coords="472,765,595,792"/>
+<area shape="rect" id="node26" href="$class_ogre_1_1v1_1_1_manual_object.html" title="Class providing a much simplified interface to generating manual objects with custom geometry." alt="" coords="446,816,621,843"/>
+<area shape="rect" id="node27" href="$class_ogre_1_1v1_1_1_overlay.html" title="Represents a layer which is rendered on top of the &#39;normal&#39; scene contents." alt="" coords="465,867,601,893"/>
+<area shape="rect" id="node28" href="$class_ogre_1_1v1_1_1_rectangle2_d.html" title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl..." alt="" coords="449,917,617,944"/>
+<area shape="rect" id="node29" href="$class_ogre_1_1v1_1_1_simple_renderable.html" title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects." alt="" coords="431,968,635,995"/>
 <area shape="rect" id="node9" href="$class_ogre_1_1_camera.html" title="A viewpoint from which the scene will be rendered." alt="" coords="737,107,849,133"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="714,613,871,640"/>
-<area shape="rect" id="node27" href="$class_ogre_1_1v1_1_1_wire_bounding_box.html" title="Allows the rendering of a wireframe bounding box." alt="" coords="692,917,893,944"/>
-<area shape="rect" id="node29" href="$class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph." alt="" coords="466,968,601,995"/>
-<area shape="rect" id="node30" href="$class_ogre_1_1_tag_point.html" title="TagPoints are like SceneNodes, that can be children of a Bone." alt="" coords="735,968,851,995"/>
-<area shape="rect" id="node32" href="$class_ogre_1_1_default_scene_manager.html" title="Default scene manager." alt="" coords="431,1019,636,1045"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene." alt="" coords="702,461,883,488"/>
+<area shape="rect" id="node18" href="$class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,..." alt="" coords="941,461,1081,488"/>
+<area shape="rect" id="node23" href="$class_ogre_1_1v1_1_1_ribbon_trail.html" title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances." alt="" coords="714,664,871,691"/>
+<area shape="rect" id="node30" href="$class_ogre_1_1v1_1_1_wire_bounding_box.html" title="Allows the rendering of a wireframe bounding box." alt="" coords="692,968,893,995"/>
+<area shape="rect" id="node32" href="$class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph." alt="" coords="466,1019,601,1045"/>
+<area shape="rect" id="node33" href="$class_ogre_1_1_tag_point.html" title="TagPoints are like SceneNodes, that can be children of a Bone." alt="" coords="735,1019,851,1045"/>
+<area shape="rect" id="node35" href="$class_ogre_1_1_default_scene_manager.html" title="Default scene manager." alt="" coords="431,1069,636,1096"/>
 </map>

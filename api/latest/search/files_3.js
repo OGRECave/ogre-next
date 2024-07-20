@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['ogreconfigdialogimp_2eh_15335',['OgreConfigDialogImp.h',['../_emscripten_2_ogre_config_dialog_imp_8h.html',1,'']]],
-  ['ogreerrordialogimp_2eh_15336',['OgreErrorDialogImp.h',['../_emscripten_2_ogre_error_dialog_imp_8h.html',1,'']]],
-  ['ogregl3plusutil_2eh_15337',['OgreGL3PlusUtil.h',['../_e_g_l_2_ogre_g_l3_plus_util_8h.html',1,'']]],
-  ['ogregles2util_2eh_15338',['OgreGLES2Util.h',['../_emscripten_2_ogre_g_l_e_s2_util_8h.html',1,'']]],
-  ['ogretimerimp_2eh_15339',['OgreTimerImp.h',['../_emscripten_2_ogre_timer_imp_8h.html',1,'']]]
+  ['deprecationplan_2emd_15675',['DeprecationPlan.md',['../_deprecation_plan_8md.html',1,'']]]
 ];

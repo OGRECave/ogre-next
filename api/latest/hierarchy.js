@@ -22,6 +22,7 @@ var hierarchy =
     [ "Ogre::cbitsetN< _N, uint64, 6u, 0x3Fu >", "class_ogre_1_1cbitset_n.html", [
       [ "Ogre::cbitset64< _N >", "class_ogre_1_1cbitset64.html", null ]
     ] ],
+    [ "Ogre::ComPtr< ID3D11BlendState >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< ID3D11Buffer >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< ID3D11ClassLinkage >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< ID3D11ComputeShader >", "class_ogre_1_1_com_ptr.html", null ],
@@ -86,20 +87,32 @@ var hierarchy =
     [ "Ogre::FastArray< LightArray >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< LightClosest >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< LightCount >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::Aabb >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::BillboardSet * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::CompositorPass * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::CompositorShadowNode * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::DescriptorSetTexture2::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::DescriptorSetUav::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::EglPBufferSupport::DeviceData >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::EmittedParticle >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::EmitterDefData * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::EmitterInstanceData >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::FastArray >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::FastArray< uint32 > >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::HlmsComputeJob * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::IdString >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::MetalBufferRegion >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::MetalTexRegion >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::ObjCmdBuffer::Cmd * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::ParticleAffector2 * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::ParticleAffectorFactory2 * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::ParticleEmitterDefDataFactory * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::ParticleSystem2 * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::ParticleSystemDef * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::SampleDescription >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::SkeletonInstance * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::TextureGpu * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::Vector4 >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::VulkanDescriptorPool * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::VulkanQueue >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::VulkanQueue::PerFrameData >", "class_ogre_1_1_fast_array.html", null ],
@@ -465,7 +478,12 @@ var hierarchy =
         [ "Ogre::ManualObject", "class_ogre_1_1_manual_object.html", null ],
         [ "Ogre::MovablePlane", "class_ogre_1_1_movable_plane.html", null ],
         [ "Ogre::NullEntity", "class_ogre_1_1_null_entity.html", null ],
-        [ "Ogre::ParticleSystem", "class_ogre_1_1_particle_system.html", null ],
+        [ "Ogre::ParticleSystem", "class_ogre_1_1_particle_system.html", [
+          [ "Ogre::ParticleSystemDef", "class_ogre_1_1_particle_system_def.html", [
+            [ "Ogre::BillboardSet", "class_ogre_1_1_billboard_set.html", null ]
+          ] ]
+        ] ],
+        [ "Ogre::ParticleSystem2", "class_ogre_1_1_particle_system2.html", null ],
         [ "Ogre::Rectangle2D", "class_ogre_1_1_rectangle2_d.html", null ],
         [ "Ogre::WireAabb", "class_ogre_1_1_wire_aabb.html", null ],
         [ "Ogre::v1::BillboardChain", "class_ogre_1_1v1_1_1_billboard_chain.html", [
@@ -486,6 +504,7 @@ var hierarchy =
         [ "Ogre::ItemFactory", "class_ogre_1_1_item_factory.html", null ],
         [ "Ogre::LightFactory", "class_ogre_1_1_light_factory.html", null ],
         [ "Ogre::ManualObjectFactory", "class_ogre_1_1_manual_object_factory.html", null ],
+        [ "Ogre::ParticleSystem2Factory", "class_ogre_1_1_particle_system2_factory.html", null ],
         [ "Ogre::ParticleSystemFactory", "class_ogre_1_1_particle_system_factory.html", null ],
         [ "Ogre::Rectangle2DFactory", "class_ogre_1_1_rectangle2_d_factory.html", null ],
         [ "Ogre::WireAabbFactory", "class_ogre_1_1_wire_aabb_factory.html", null ],
@@ -511,6 +530,17 @@ var hierarchy =
               [ "Ogre::HollowEllipsoidEmitter", "class_ogre_1_1_hollow_ellipsoid_emitter.html", null ]
             ] ],
             [ "Ogre::RingEmitter", "class_ogre_1_1_ring_emitter.html", null ]
+          ] ],
+          [ "Ogre::EmitterDefData", "class_ogre_1_1_emitter_def_data.html", [
+            [ "Ogre::AreaEmitter2", "class_ogre_1_1_area_emitter2.html", [
+              [ "Ogre::BoxEmitter2", "class_ogre_1_1_box_emitter2.html", null ],
+              [ "Ogre::CylinderEmitter2", "class_ogre_1_1_cylinder_emitter2.html", null ],
+              [ "Ogre::EllipsoidEmitter2", "class_ogre_1_1_ellipsoid_emitter2.html", [
+                [ "Ogre::HollowEllipsoidEmitter2", "class_ogre_1_1_hollow_ellipsoid_emitter2.html", null ]
+              ] ],
+              [ "Ogre::RingEmitter2", "class_ogre_1_1_ring_emitter2.html", null ]
+            ] ],
+            [ "Ogre::PointEmitter2", "class_ogre_1_1_point_emitter2.html", null ]
           ] ],
           [ "Ogre::PointEmitter", "class_ogre_1_1_point_emitter.html", null ]
         ] ]
@@ -560,6 +590,7 @@ var hierarchy =
         [ "Ogre::GLES2Plugin", "class_ogre_1_1_g_l_e_s2_plugin.html", null ],
         [ "Ogre::MetalPlugin", "class_ogre_1_1_metal_plugin.html", null ],
         [ "Ogre::NULLPlugin", "class_ogre_1_1_n_u_l_l_plugin.html", null ],
+        [ "Ogre::ParticleFX2Plugin", "class_ogre_1_1_particle_f_x2_plugin.html", null ],
         [ "Ogre::ParticleFXPlugin", "class_ogre_1_1_particle_f_x_plugin.html", null ],
         [ "Ogre::VulkanPlugin", "class_ogre_1_1_vulkan_plugin.html", null ]
       ] ],
@@ -672,8 +703,11 @@ var hierarchy =
         [ "Ogre::HlmsTranslator", "class_ogre_1_1_hlms_translator.html", null ],
         [ "Ogre::MaterialTranslator", "class_ogre_1_1_material_translator.html", null ],
         [ "Ogre::ParticleAffectorTranslator", "class_ogre_1_1_particle_affector_translator.html", null ],
+        [ "Ogre::ParticleAffectorTranslator2", "class_ogre_1_1_particle_affector_translator2.html", null ],
         [ "Ogre::ParticleEmitterTranslator", "class_ogre_1_1_particle_emitter_translator.html", null ],
+        [ "Ogre::ParticleEmitterTranslator2", "class_ogre_1_1_particle_emitter_translator2.html", null ],
         [ "Ogre::ParticleSystemTranslator", "class_ogre_1_1_particle_system_translator.html", null ],
+        [ "Ogre::ParticleSystemTranslator2", "class_ogre_1_1_particle_system_translator2.html", null ],
         [ "Ogre::PassTranslator", "class_ogre_1_1_pass_translator.html", null ],
         [ "Ogre::SharedParamsTranslator", "class_ogre_1_1_shared_params_translator.html", null ],
         [ "Ogre::TechniqueTranslator", "class_ogre_1_1_technique_translator.html", null ],
@@ -957,7 +991,9 @@ var hierarchy =
     [ "Ogre::ArrayQuaternion", "class_ogre_1_1_array_quaternion.html", null ],
     [ "Ogre::ArrayRay", "class_ogre_1_1_array_ray.html", null ],
     [ "Ogre::ArraySphere", "class_ogre_1_1_array_sphere.html", null ],
+    [ "Ogre::ArrayVector2", "class_ogre_1_1_array_vector2.html", null ],
     [ "Ogre::ArrayVector3", "class_ogre_1_1_array_vector3.html", null ],
+    [ "Ogre::ArrayVector4", "class_ogre_1_1_array_vector4.html", null ],
     [ "Ogre::AsyncTextureTicket::DelayedDownload", "struct_ogre_1_1_async_texture_ticket_1_1_delayed_download.html", null ],
     [ "Ogre::AtmosphereNpr::Preset", "struct_ogre_1_1_atmosphere_npr_1_1_preset.html", null ],
     [ "Ogre::AtomicObject< T >", "class_ogre_1_1_atomic_object.html", null ],
@@ -971,6 +1007,7 @@ var hierarchy =
       [ "Ogre::HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html", null ],
       [ "Ogre::HlmsSamplerblock", "struct_ogre_1_1_hlms_samplerblock.html", null ]
     ] ],
+    [ "Ogre::Billboard", "struct_ogre_1_1_billboard.html", null ],
     [ "Ogre::bitset64", "class_ogre_1_1bitset64.html", null ],
     [ "Ogre::Bitwise", "class_ogre_1_1_bitwise.html", null ],
     [ "Ogre::BoneTransform", "struct_ogre_1_1_bone_transform.html", null ],
@@ -1094,6 +1131,8 @@ var hierarchy =
     [ "Ogre::DriverVersion", "struct_ogre_1_1_driver_version.html", null ],
     [ "Ogre::DualQuaternion", "class_ogre_1_1_dual_quaternion.html", null ],
     [ "Ogre::EglPBufferSupport::DeviceData", "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html", null ],
+    [ "Ogre::EmittedParticle", "struct_ogre_1_1_emitted_particle.html", null ],
+    [ "Ogre::EmitterInstanceData", "struct_ogre_1_1_emitter_instance_data.html", null ],
     [ "Ogre::EntityMaterialLodChangedEvent", "struct_ogre_1_1_entity_material_lod_changed_event.html", null ],
     [ "Ogre::EntityMeshLodChangedEvent", "struct_ogre_1_1_entity_mesh_lod_changed_event.html", null ],
     [ "Ogre::ErrorDialog", "class_ogre_1_1_error_dialog.html", null ],
@@ -1467,6 +1506,7 @@ var hierarchy =
       [ "Ogre::RotationAffector::CmdRotationRangeStart", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_range_start.html", null ],
       [ "Ogre::RotationAffector::CmdRotationSpeedRangeEnd", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html", null ],
       [ "Ogre::RotationAffector::CmdRotationSpeedRangeStart", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html", null ],
+      [ "Ogre::ScaleAffector::CmdMultiplyMode", "class_ogre_1_1_scale_affector_1_1_cmd_multiply_mode.html", null ],
       [ "Ogre::ScaleAffector::CmdScaleAdjust", "class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust.html", null ],
       [ "Ogre::ScaleInterpolatorAffector::CmdScaleAdjust", "class_ogre_1_1_scale_interpolator_affector_1_1_cmd_scale_adjust.html", null ],
       [ "Ogre::ScaleInterpolatorAffector::CmdTimeAdjust", "class_ogre_1_1_scale_interpolator_affector_1_1_cmd_time_adjust.html", null ],
@@ -1515,7 +1555,30 @@ var hierarchy =
     ] ],
     [ "Ogre::ParamDictionary", "class_ogre_1_1_param_dictionary.html", null ],
     [ "Ogre::ParameterDef", "class_ogre_1_1_parameter_def.html", null ],
+    [ "Ogre::ParticleAffectorFactory2", "class_ogre_1_1_particle_affector_factory2.html", [
+      [ "Ogre::ColourFaderAffector2FX2Factory", "class_ogre_1_1_colour_fader_affector2_f_x2_factory.html", null ],
+      [ "Ogre::ColourFaderAffectorFX2Factory", "class_ogre_1_1_colour_fader_affector_f_x2_factory.html", null ],
+      [ "Ogre::ColourImageAffectorFactory2", "class_ogre_1_1_colour_image_affector_factory2.html", null ],
+      [ "Ogre::ColourInterpolatorAffectorFactory2", "class_ogre_1_1_colour_interpolator_affector_factory2.html", null ],
+      [ "Ogre::DeflectorPlaneAffectorFactory2", "class_ogre_1_1_deflector_plane_affector_factory2.html", null ],
+      [ "Ogre::DirectionRandomiserAffectorFactory2", "class_ogre_1_1_direction_randomiser_affector_factory2.html", null ],
+      [ "Ogre::LinearForceAffectorFactory2", "class_ogre_1_1_linear_force_affector_factory2.html", null ],
+      [ "Ogre::RotationAffectorFactory2", "class_ogre_1_1_rotation_affector_factory2.html", null ],
+      [ "Ogre::ScaleAffectorFactory2", "class_ogre_1_1_scale_affector_factory2.html", null ],
+      [ "Ogre::ScaleInterpolatorAffectorFactory2", "class_ogre_1_1_scale_interpolator_affector_factory2.html", null ]
+    ] ],
+    [ "Ogre::ParticleCpuData", "struct_ogre_1_1_particle_cpu_data.html", null ],
+    [ "Ogre::ParticleEmitterDefDataFactory", "class_ogre_1_1_particle_emitter_def_data_factory.html", [
+      [ "Ogre::BoxEmitterFactory2", "class_ogre_1_1_box_emitter_factory2.html", null ],
+      [ "Ogre::CylinderEmitterFactory2", "class_ogre_1_1_cylinder_emitter_factory2.html", null ],
+      [ "Ogre::EllipsoidEmitterFactory2", "class_ogre_1_1_ellipsoid_emitter_factory2.html", null ],
+      [ "Ogre::HollowEllipsoidEmitterFactory2", "class_ogre_1_1_hollow_ellipsoid_emitter_factory2.html", null ],
+      [ "Ogre::PointEmitterFactory2", "class_ogre_1_1_point_emitter_factory2.html", null ],
+      [ "Ogre::RingEmitterFactory2", "class_ogre_1_1_ring_emitter_factory2.html", null ]
+    ] ],
+    [ "Ogre::ParticleGpuData", "struct_ogre_1_1_particle_gpu_data.html", null ],
     [ "Ogre::ParticleIterator", "class_ogre_1_1_particle_iterator.html", null ],
+    [ "Ogre::ParticleSystemManager2", "class_ogre_1_1_particle_system_manager2.html", null ],
     [ "Ogre::PixelFormatGpuUtils", "class_ogre_1_1_pixel_format_gpu_utils.html", null ],
     [ "Ogre::PixelFormatToShaderType", "class_ogre_1_1_pixel_format_to_shader_type.html", [
       [ "Ogre::D3D11PixelFormatToShaderType", "class_ogre_1_1_d3_d11_pixel_format_to_shader_type.html", null ],
@@ -1555,6 +1618,7 @@ var hierarchy =
     [ "Ogre::Renderable", "class_ogre_1_1_renderable.html", [
       [ "Ogre::Frustum", "class_ogre_1_1_frustum.html", null ],
       [ "Ogre::ManualObject::ManualObjectSection", "class_ogre_1_1_manual_object_1_1_manual_object_section.html", null ],
+      [ "Ogre::ParticleSystemDef", "class_ogre_1_1_particle_system_def.html", null ],
       [ "Ogre::Rectangle2D", "class_ogre_1_1_rectangle2_d.html", null ],
       [ "Ogre::RenderableAnimated", "class_ogre_1_1_renderable_animated.html", [
         [ "Ogre::SubItem", "class_ogre_1_1_sub_item.html", null ]
@@ -1693,6 +1757,18 @@ var hierarchy =
     [ "Ogre::StringInterface", "class_ogre_1_1_string_interface.html", [
       [ "Ogre::ExternalTextureSource", "class_ogre_1_1_external_texture_source.html", null ],
       [ "Ogre::ParticleAffector", "class_ogre_1_1_particle_affector.html", null ],
+      [ "Ogre::ParticleAffector2", "class_ogre_1_1_particle_affector2.html", [
+        [ "Ogre::ColourFaderAffector2FX2", "class_ogre_1_1_colour_fader_affector2_f_x2.html", null ],
+        [ "Ogre::ColourFaderAffectorFX2", "class_ogre_1_1_colour_fader_affector_f_x2.html", null ],
+        [ "Ogre::ColourImageAffector2", "class_ogre_1_1_colour_image_affector2.html", null ],
+        [ "Ogre::ColourInterpolatorAffector2", "class_ogre_1_1_colour_interpolator_affector2.html", null ],
+        [ "Ogre::DeflectorPlaneAffector2", "class_ogre_1_1_deflector_plane_affector2.html", null ],
+        [ "Ogre::DirectionRandomiserAffector2", "class_ogre_1_1_direction_randomiser_affector2.html", null ],
+        [ "Ogre::LinearForceAffector2", "class_ogre_1_1_linear_force_affector2.html", null ],
+        [ "Ogre::RotationAffector2", "class_ogre_1_1_rotation_affector2.html", null ],
+        [ "Ogre::ScaleAffector2", "class_ogre_1_1_scale_affector2.html", null ],
+        [ "Ogre::ScaleInterpolatorAffector2", "class_ogre_1_1_scale_interpolator_affector2.html", null ]
+      ] ],
       [ "Ogre::ParticleEmitter", "class_ogre_1_1_particle_emitter.html", null ],
       [ "Ogre::ParticleSystem", "class_ogre_1_1_particle_system.html", null ],
       [ "Ogre::ParticleSystemRenderer", "class_ogre_1_1_particle_system_renderer.html", null ],

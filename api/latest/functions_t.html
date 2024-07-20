@@ -475,16 +475,22 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 <li>toRotationTranslation()
 : <a class="el" href="class_ogre_1_1_dual_quaternion.html#ab208a261f08d2fc8e95025f294a305c1">Ogre::DualQuaternion</a>
 </li>
+<li>ToSnorm16()
+: <a class="el" href="class_ogre_1_1_mathlib_c.html#a4138830d91582362115ea56227e5d4cf">Ogre::MathlibC</a>
+</li>
+<li>ToSnorm8Unsafe()
+: <a class="el" href="class_ogre_1_1_mathlib_c.html#a49a9d59c77c224e0957e86552b549ff8">Ogre::MathlibC</a>
+</li>
 <li>toSRGB()
 : <a class="el" href="class_ogre_1_1_pixel_format_gpu_utils.html#a29255ccf10ce3f825a9f9ad1c31c5835">Ogre::PixelFormatGpuUtils</a>
 </li>
 <li>toStr()
-: <a class="el" href="class_ogre_1_1_hlms_json.html#a499b05d8b63715f1f1e1b19a27b0626e">Ogre::HlmsJson</a>
+: <a class="el" href="class_ogre_1_1_hlms_json.html#a685b67e3d0216a54d0528b11c4d1fb96">Ogre::HlmsJson</a>
 </li>
 <li>toString()
 : <a class="el" href="struct_ogre_1_1_driver_version.html#ae3501d20cef0a84769ceacfbf3bae077">Ogre::DriverVersion</a>
 , <a class="el" href="class_ogre_1_1_pixel_format_gpu_utils.html#a256a65b56f10850b502ae681de8a3fb8">Ogre::PixelFormatGpuUtils</a>
-, <a class="el" href="class_ogre_1_1_string_converter.html#aa671980d27b86d09a0f568b451ba677d">Ogre::StringConverter</a>
+, <a class="el" href="class_ogre_1_1_string_converter.html#a184e73275f33b8191a756dad27e391b2">Ogre::StringConverter</a>
 </li>
 <li>totalCalls
 : <a class="el" href="struct_ogre_1_1_profile_history.html#a996ed640b5da7fadaa9f829ea99c6526">Ogre::ProfileHistory</a>
@@ -595,8 +601,11 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 , <a class="el" href="class_ogre_1_1_hlms_translator.html#a90ebc4e74e833458b73200b8a397c26c">Ogre::HlmsTranslator</a>
 , <a class="el" href="class_ogre_1_1_material_translator.html#ad6779ffc94cd87ad2a2e407e33001d3e">Ogre::MaterialTranslator</a>
 , <a class="el" href="class_ogre_1_1_node.html#ac97975ed6d907bc0674dc9f26b154a8f">Ogre::Node</a>
+, <a class="el" href="class_ogre_1_1_particle_affector_translator2.html#a22e18cf3bd41b4c850f6fc17dd6fd2d8">Ogre::ParticleAffectorTranslator2</a>
 , <a class="el" href="class_ogre_1_1_particle_affector_translator.html#ac6f68579d2d63ee6a126bfd24bc4f81f">Ogre::ParticleAffectorTranslator</a>
+, <a class="el" href="class_ogre_1_1_particle_emitter_translator2.html#a3428262a89fa4cdb6f770c9960b6373a">Ogre::ParticleEmitterTranslator2</a>
 , <a class="el" href="class_ogre_1_1_particle_emitter_translator.html#a11b620fd8f8c4288551d3fd65205473a">Ogre::ParticleEmitterTranslator</a>
+, <a class="el" href="class_ogre_1_1_particle_system_translator2.html#a411d03537797374fc911d9c7637b7b13">Ogre::ParticleSystemTranslator2</a>
 , <a class="el" href="class_ogre_1_1_particle_system_translator.html#a2c7474ff556061ae772eb4a9ef7bf685">Ogre::ParticleSystemTranslator</a>
 , <a class="el" href="class_ogre_1_1_pass_translator.html#aa4bfd4f73b1caba14f7666e88dbd2cd9">Ogre::PassTranslator</a>
 , <a class="el" href="class_ogre_1_1_script_translator.html#a6f0fa5113e8c5fecf2da9afe6f624262">Ogre::ScriptTranslator</a>
@@ -604,7 +613,7 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 , <a class="el" href="class_ogre_1_1_technique_translator.html#a0e34fc9525feb12d130576927ce488d6">Ogre::TechniqueTranslator</a>
 , <a class="el" href="class_ogre_1_1_texture_source_translator.html#ae2c0ccab1b183f18b11957ff0e0cbcff">Ogre::TextureSourceTranslator</a>
 , <a class="el" href="class_ogre_1_1_texture_unit_translator.html#a9c157cbbe70047b1381e07b923064cf4">Ogre::TextureUnitTranslator</a>
-, <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a70c8f84893f2752c5e7b5f7852004e5b">Ogre::v1::OldNode</a>
+, <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#af4caed7d0c0e6715dab6f9547a5be606">Ogre::v1::OldNode</a>
 </li>
 <li>translateCustomPass()
 : <a class="el" href="class_ogre_1_1_compositor_pass_provider.html#ad4cb882930b2338c0637f5bb4747777c">Ogre::CompositorPassProvider</a>
@@ -684,6 +693,9 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 </li>
 <li>triStart
 : <a class="el" href="struct_ogre_1_1v1_1_1_edge_data_1_1_edge_group.html#acc35d29237f94cf1a09dbcc42ec378d9">Ogre::v1::EdgeData::EdgeGroup</a>
+</li>
+<li>Truncate()
+: <a class="el" href="class_ogre_1_1_mathlib_c.html#a26f259f5dafcc71c50f7da3b9655f7f4">Ogre::MathlibC</a>
 </li>
 <li>tryLock()
 : <a class="el" href="class_ogre_1_1_lightweight_mutex.html#acf6cc18c5986611ddc1a1f1b9afa9186">Ogre::LightweightMutex</a>

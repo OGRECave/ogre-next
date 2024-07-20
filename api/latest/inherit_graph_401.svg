@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1_planar_reflections_1_1_tracked_renderable.html" target="_top" xlink:title=" ">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 131,-30.5 131,-0.5 0,-0.5"/>
-<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::PlanarReflections</text>
-<text text-anchor="middle" x="65.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::TrackedRenderable</text>
+<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NULLVaoManager</text>
+<text text-anchor="middle" x="65.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::StrideChanger</text>
 </a>
 </g>
 </g>

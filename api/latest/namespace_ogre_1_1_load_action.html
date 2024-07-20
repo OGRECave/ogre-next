@@ -122,9 +122,13 @@ Enumerations</h2></td></tr>
 <p>Actual behavior depends on the API used. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a5660308b2075405f9623301506fc922ea9fee45e65fddf4b04505ea421719654a"></a>ClearOnTilers&#160;</td><td class="fielddoc"><p>On tilers, will clear the subregion. </p>
-<p>On non-tilers, it's the same as <a class="el" href="namespace_ogre_1_1_load_action.html#a5660308b2075405f9623301506fc922ea4a2c6be0581a3d285e5c79d9e745b67e" title="Load the contents that were stored in the texture.">LoadAction::Load</a> and assumes the resource is already cleared. </p><dl class="section remark"><dt>Remarks</dt><dd>This is useful for shadow map atlases. On desktop you probably want to render to a 8192x8192 shadow map in the following way: clear( 0, 0, 8192, 8192 ); foreach( shadowmap in shadowmaps ) render( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height );</dd></dl>
-<p>However this is heavily innefficient for tilers. In tilers you probably want to do the following: foreach( shadowmap in shadowmaps ) clear( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height ); render( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height );</p>
-<p>ClearOnTilers allows you to perform the most efficient shadow map rendering on both tilers &amp; non-tilers using the same compositor script, provided the full clear pass was set to only execute on non-tilers. </p>
+<p>On non-tilers, it's the same as <a class="el" href="namespace_ogre_1_1_load_action.html#a5660308b2075405f9623301506fc922ea4a2c6be0581a3d285e5c79d9e745b67e" title="Load the contents that were stored in the texture.">LoadAction::Load</a> and assumes the resource is already cleared. </p><dl class="section remark"><dt>Remarks</dt><dd>This is useful for shadow map atlases. On desktop you probably want to render to a 8192x8192 shadow map in the following way: <div class="fragment"><div class="line">clear( 0, 0, 8192, 8192 );</div>
+<div class="line"><span class="keywordflow">foreach</span>( shadowmap <span class="keywordflow">in</span> shadowmaps )</div>
+<div class="line">    render( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height );</div>
+</div><!-- fragment --> However this is heavily innefficient for tilers. In tilers you probably want to do the following: <div class="fragment"><div class="line"><span class="keywordflow">foreach</span>( shadowmap <span class="keywordflow">in</span> shadowmaps )</div>
+<div class="line">    clear( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height );</div>
+<div class="line">    render( shadowmap.x, shadowmap.y, shadowmap.width, shadowmap.height );</div>
+</div><!-- fragment --> ClearOnTilers allows you to perform the most efficient shadow map rendering on both tilers &amp; non-tilers using the same compositor script, provided the full clear pass was set to only execute on non-tilers. </dd></dl>
 </td></tr>
 <tr><td class="fieldname"><a id="a5660308b2075405f9623301506fc922ea4a2c6be0581a3d285e5c79d9e745b67e"></a>Load&#160;</td><td class="fielddoc"><p>Load the contents that were stored in the texture. </p>
 </td></tr>

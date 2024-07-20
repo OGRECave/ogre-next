@@ -43,7 +43,7 @@ var class_ogre_1_1_g_l3_plus_render_system =
     [ "_setCurrentDeviceFromTexture", "class_ogre_1_1_g_l3_plus_render_system.html#ab785d5d04938cf2388040f8f09ce783d", null ],
     [ "_setDepthBias", "class_ogre_1_1_g_l3_plus_render_system.html#ae5e688a00de88f111c52f1fcc29d7ca5", null ],
     [ "_setGeometryTexture", "class_ogre_1_1_g_l3_plus_render_system.html#a0a60316143d0c2b5d0b2fe003fe1ba8e", null ],
-    [ "_setHlmsBlendblock", "class_ogre_1_1_g_l3_plus_render_system.html#a776335f47ad3098a1975d1b8855bbb85", null ],
+    [ "_setHlmsBlendblock", "class_ogre_1_1_g_l3_plus_render_system.html#a1c03ce3625db4e8df7220be9022a3a24", null ],
     [ "_setHlmsMacroblock", "class_ogre_1_1_g_l3_plus_render_system.html#a44f62be258fd79061066b2dc533b6287", null ],
     [ "_setHlmsSamplerblock", "class_ogre_1_1_g_l3_plus_render_system.html#a6a7b61b0a4e95d9798b769a9e47b624d", null ],
     [ "_setIndirectBuffer", "class_ogre_1_1_g_l3_plus_render_system.html#a420971d7cf8ec6bc62f663c50a861669", null ],

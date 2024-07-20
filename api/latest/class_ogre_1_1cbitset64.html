@@ -112,6 +112,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a430d829c186ee166fdac787b31328529"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1cbitset64.html#a430d829c186ee166fdac787b31328529">findFirstBitSet</a> () const</td></tr>
 <tr class="memdesc:a430d829c186ee166fdac787b31328529"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the first bit set.  <a href="class_ogre_1_1cbitset64.html#a430d829c186ee166fdac787b31328529">More...</a><br /></td></tr>
 <tr class="separator:a430d829c186ee166fdac787b31328529"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12c36f27860e308e138ac60ddcb885d4"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1cbitset64.html#a12c36f27860e308e138ac60ddcb885d4">findFirstBitSet</a> (const size_t startFrom) const</td></tr>
+<tr class="memdesc:a12c36f27860e308e138ac60ddcb885d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="class_ogre_1_1cbitset64.html#a430d829c186ee166fdac787b31328529" title="Finds the first bit set.">findFirstBitSet()</a>; starting from startFrom (inclusive).  <a href="class_ogre_1_1cbitset64.html#a12c36f27860e308e138ac60ddcb885d4">More...</a><br /></td></tr>
+<tr class="separator:a12c36f27860e308e138ac60ddcb885d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a105b33f5e7a34c5fa03c9cf430132ca8"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1cbitset64.html#a105b33f5e7a34c5fa03c9cf430132ca8">findLastBitSetPlusOne</a> () const</td></tr>
 <tr class="memdesc:a105b33f5e7a34c5fa03c9cf430132ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the first bit unset after the last bit set.  <a href="class_ogre_1_1cbitset64.html#a105b33f5e7a34c5fa03c9cf430132ca8">More...</a><br /></td></tr>
 <tr class="separator:a105b33f5e7a34c5fa03c9cf430132ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,7 +167,7 @@ class Ogre::cbitset64&lt; _N &gt;</h3>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a430d829c186ee166fdac787b31328529"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a430d829c186ee166fdac787b31328529">&#9670;&nbsp;</a></span>findFirstBitSet()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a430d829c186ee166fdac787b31328529">&#9670;&nbsp;</a></span>findFirstBitSet() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -181,7 +184,42 @@ template&lt;size_t _N&gt; </div>
 </div><div class="memdoc">
 
 <p>Finds the first bit set. </p>
-<dl class="section return"><dt>Returns</dt><dd>The index to the first unset bit returns this-&gt;<a class="el" href="class_ogre_1_1cbitset_n.html#a3211343d5cccaa55728ea32b1fbbdf44" title="Return maximum number of bits this bitset can hold.">capacity()</a> if all bits are unset (i.e. all 0s) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The index to the first set bit returns this-&gt;<a class="el" href="class_ogre_1_1cbitset_n.html#a3211343d5cccaa55728ea32b1fbbdf44" title="Return maximum number of bits this bitset can hold.">capacity()</a> if all bits are unset (i.e. all 0s) </dd></dl>
+
+</div>
+</div>
+<a id="a12c36f27860e308e138ac60ddcb885d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12c36f27860e308e138ac60ddcb885d4">&#9670;&nbsp;</a></span>findFirstBitSet() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t _N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="class_ogre_1_1cbitset64.html">Ogre::cbitset64</a>&lt; _N &gt;::findFirstBitSet </td>
+          <td>(</td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>startFrom</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Same as <a class="el" href="class_ogre_1_1cbitset64.html#a430d829c186ee166fdac787b31328529" title="Finds the first bit set.">findFirstBitSet()</a>; starting from startFrom (inclusive). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">startFrom</td><td>In range [0; capacity)</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>e.g. if capacity == 5 and we've set 01001b (0 is the 4th bit, 1 is the 0th bit) then: </p><pre class="fragment">findFirstBitSet( 5 ) = INVALID
+findFirstBitSet( 4 ) = 5u (capacity, not found)
+findFirstBitSet( 3 ) = 3u
+findFirstBitSet( 2 ) = 3u
+findFirstBitSet( 1 ) = 3u
+findFirstBitSet( 0 ) = 0u
+</pre> <dl class="section return"><dt>Returns</dt><dd>The index to the first unset bit returns this-&gt;<a class="el" href="class_ogre_1_1cbitset_n.html#a3211343d5cccaa55728ea32b1fbbdf44" title="Return maximum number of bits this bitset can hold.">capacity()</a> if all bits are unset (i.e. all 0s) </dd></dl>
 
 </div>
 </div>

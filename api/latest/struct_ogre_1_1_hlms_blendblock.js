@@ -1,5 +1,10 @@
 var struct_ogre_1_1_hlms_blendblock =
 [
+    [ "A2CSetting", "struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48d", [
+      [ "A2cDisabled", "struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da6e212e624ecced87d4bcbac99eda4069", null ],
+      [ "A2cEnabled", "struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da30e30c82b1cafcc8aa567a66c5f01586", null ],
+      [ "A2cEnabledMsaaOnly", "struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da5dc84447b84e56f752e7071121084a6f", null ]
+    ] ],
     [ "BlendChannelMasks", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1", [
       [ "BlendChannelRed", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ac7e0bad72e386979b0eea85a9d7984a1", null ],
       [ "BlendChannelGreen", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a8bede65d7286a8222e3be931d02e4daf", null ],
@@ -10,6 +15,7 @@ var struct_ogre_1_1_hlms_blendblock =
     ] ],
     [ "HlmsBlendblock", "struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e", null ],
     [ "calculateSeparateBlendMode", "struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f", null ],
+    [ "isAlphaToCoverage", "struct_ogre_1_1_hlms_blendblock.html#a60707e7fdeec21944b9b951481554613", null ],
     [ "isAutoTransparent", "struct_ogre_1_1_hlms_blendblock.html#a07995e128bd5c66fef5784296aede703", null ],
     [ "isForcedTransparent", "struct_ogre_1_1_hlms_blendblock.html#a4bd13a12602c3f2b0a3fe32069a1348e", null ],
     [ "operator!=", "struct_ogre_1_1_hlms_blendblock.html#afa02cd5c594a782367716cd76413c723", null ],
@@ -17,7 +23,7 @@ var struct_ogre_1_1_hlms_blendblock =
     [ "setBlendType", "struct_ogre_1_1_hlms_blendblock.html#a83761f7ffc5e458eaa2a5fbea2e9c407", null ],
     [ "setBlendType", "struct_ogre_1_1_hlms_blendblock.html#aed32e87dcd3a05f71d8e2171b7dbd6b2", null ],
     [ "setForceTransparentRenderOrder", "struct_ogre_1_1_hlms_blendblock.html#ad34f6d46eece2606c09a6eea73de4591", null ],
-    [ "mAlphaToCoverageEnabled", "struct_ogre_1_1_hlms_blendblock.html#a84604e9d467e80aa7de99146b89e03a9", null ],
+    [ "mAlphaToCoverage", "struct_ogre_1_1_hlms_blendblock.html#a58e33acfc6631e1a3b09f80c3959dabc", null ],
     [ "mBlendChannelMask", "struct_ogre_1_1_hlms_blendblock.html#ab274bfed0268538fe6ede5fce32e3e64", null ],
     [ "mBlendOperation", "struct_ogre_1_1_hlms_blendblock.html#a81bbefc83b818e89da47b4cba0bea28e", null ],
     [ "mBlendOperationAlpha", "struct_ogre_1_1_hlms_blendblock.html#acf7321e2dde4b0e645bac4aa47873741", null ],

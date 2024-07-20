@@ -172,6 +172,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af6654ffb48999902843bdd3d7f47ac0b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b">getBlendblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> &amp;baseParams)</td></tr>
 <tr class="memdesc:af6654ffb48999902843bdd3d7f47ac0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_hlms_manager.html#a171e788a01e9a6c96f627a9b47482a82" title="Creates a macroblock that matches the same parameter as the input.">HlmsManager::getMacroblock</a>.  <a href="class_ogre_1_1_hlms_manager.html#af6654ffb48999902843bdd3d7f47ac0b">More...</a><br /></td></tr>
 <tr class="separator:af6654ffb48999902843bdd3d7f47ac0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab922f500ad6981e9a9394886a3eb7c2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_manager.html#ab922f500ad6981e9a9394886a3eb7c2e">getBlueNoiseTexture</a> () const</td></tr>
+<tr class="separator:ab922f500ad6981e9a9394886a3eb7c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab319f782b54971c8c27ded591632114a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_compute.html">HlmsCompute</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_manager.html#ab319f782b54971c8c27ded591632114a">getComputeHlms</a> ()</td></tr>
 <tr class="separator:ab319f782b54971c8c27ded591632114a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae017c067728c1de583db541cf5fdbb2f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_manager.html#ae017c067728c1de583db541cf5fdbb2f">getDatablock</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name) const</td></tr>
@@ -217,6 +219,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c40e8018024cc263028299e066ad25a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_manager.html#a3c40e8018024cc263028299e066ad25a">getScriptPatterns</a> () const override</td></tr>
 <tr class="memdesc:a3c40e8018024cc263028299e066ad25a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the file patterns which should be used to find scripts for this class.  <a href="class_ogre_1_1_hlms_manager.html#a3c40e8018024cc263028299e066ad25a">More...</a><br /></td></tr>
 <tr class="separator:a3c40e8018024cc263028299e066ad25a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a322b337e7f145a43f1afc9cfc9259344"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_manager.html#a322b337e7f145a43f1afc9cfc9259344">loadBlueNoise</a> ()</td></tr>
+<tr class="separator:a322b337e7f145a43f1afc9cfc9259344"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d68ea5c2f604722aa2cf8246ee4122c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_manager.html#a4d68ea5c2f604722aa2cf8246ee4122c">loadMaterials</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName, <a class="el" href="class_ogre_1_1_hlms_json_listener.html">HlmsJsonListener</a> *listener, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;additionalTextureExtension)</td></tr>
 <tr class="memdesc:a4d68ea5c2f604722aa2cf8246ee4122c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a file containing a JSON string to load all <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> materials from.  <a href="class_ogre_1_1_hlms_manager.html#a4d68ea5c2f604722aa2cf8246ee4122c">More...</a><br /></td></tr>
 <tr class="separator:a4d68ea5c2f604722aa2cf8246ee4122c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -729,6 +733,31 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab922f500ad6981e9a9394886a3eb7c2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab922f500ad6981e9a9394886a3eb7c2e">&#9670;&nbsp;</a></span>getBlueNoiseTexture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a>* Ogre::HlmsManager::getBlueNoiseTexture </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab319f782b54971c8c27ded591632114a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab319f782b54971c8c27ded591632114a">&#9670;&nbsp;</a></span>getComputeHlms()</h2>
 
@@ -1142,6 +1171,23 @@ Public Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A list of file patterns, in the order they should be searched in. </dd></dl>
 
 <p>Implements <a class="el" href="class_ogre_1_1_script_loader.html#ae94e5fc2cc528186cbb752383627153a">Ogre::ScriptLoader</a>.</p>
+
+</div>
+</div>
+<a id="a322b337e7f145a43f1afc9cfc9259344"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a322b337e7f145a43f1afc9cfc9259344">&#9670;&nbsp;</a></span>loadBlueNoise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsManager::loadBlueNoise </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

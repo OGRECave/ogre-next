@@ -4,6 +4,7 @@ var _ogre_array_config_8h =
     [ "ARRAY_MASK_ZERO", "_ogre_array_config_8h.html#a8762434b08d9fca839223afb4c249853", null ],
     [ "ARRAY_PACKED_REALS", "_ogre_array_config_8h.html#aae6e6e54870826a15444682ed7bae799", null ],
     [ "ARRAY_REAL_ZERO", "_ogre_array_config_8h.html#ab1c7750b9e97be8324b83d3493af4dc1", null ],
+    [ "CastArrayToInt32", "_ogre_array_config_8h.html#a5d9413c295c6b1b2b13269d069f9871e", null ],
     [ "CastArrayToReal", "_ogre_array_config_8h.html#a989b3db08edc4819ccbe738466eeeab7", null ],
     [ "CastIntToReal", "_ogre_array_config_8h.html#ab90f373a61d5d76d9485a7b7b8e218a4", null ],
     [ "CastRealToInt", "_ogre_array_config_8h.html#ab3b8c36d8d3b3e7366a3aa95a84512ff", null ],
@@ -17,5 +18,7 @@ var _ogre_array_config_8h =
     [ "ArrayMaskI", "_ogre_array_config_8h.html#adbd5e63c7aa60e3be3b29a1c24292590", null ],
     [ "ArrayMaskR", "_ogre_array_config_8h.html#a3d9f5c00761ed1ff7885a805d82f942c", null ],
     [ "ArrayRadian", "_ogre_array_config_8h.html#a725a35f2df65645c39ef694fe468091d", null ],
-    [ "ArrayReal", "_ogre_array_config_8h.html#aac03185a5fd1c914eec2116588790352", null ]
+    [ "ArrayReal", "_ogre_array_config_8h.html#aac03185a5fd1c914eec2116588790352", null ],
+    [ "ArrayToS16", "_ogre_array_config_8h.html#a7317025557d1df1dffcf6705d645ba82", null ],
+    [ "ArrayToS8", "_ogre_array_config_8h.html#a2437a44ce057091eba32786bc28ac1fb", null ]
 ];

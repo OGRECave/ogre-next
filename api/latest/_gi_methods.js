@@ -22,22 +22,22 @@ var _gi_methods =
     [ "What technique should I choose?", "_gi_methods.html#GiWhatTechniqueChoose", null ],
     [ "Image Voxel Cone Tracing", "_image_voxel_cone_tracing.html", [
       [ "Step 1: Image Voxelizer", "_image_voxel_cone_tracing.html#IVCT_Step1", [
-        [ "Pros", "_gi_methods.html#autotoc_md21", null ],
-        [ "Cons", "_gi_methods.html#autotoc_md22", null ],
-        [ "Pros", "_gi_methods.html#autotoc_md23", null ],
-        [ "Cons", "_gi_methods.html#autotoc_md24", null ],
-        [ "Pros", "_gi_methods.html#autotoc_md25", null ],
-        [ "Cons", "_gi_methods.html#autotoc_md26", null ],
-        [ "Pros", "_gi_methods.html#autotoc_md27", null ],
-        [ "Cons", "_gi_methods.html#autotoc_md28", null ],
+        [ "Pros", "_gi_methods.html#autotoc_md85", null ],
+        [ "Cons", "_gi_methods.html#autotoc_md86", null ],
+        [ "Pros", "_gi_methods.html#autotoc_md87", null ],
+        [ "Cons", "_gi_methods.html#autotoc_md88", null ],
+        [ "Pros", "_gi_methods.html#autotoc_md89", null ],
+        [ "Cons", "_gi_methods.html#autotoc_md90", null ],
+        [ "Pros", "_gi_methods.html#autotoc_md91", null ],
+        [ "Cons", "_gi_methods.html#autotoc_md92", null ],
         [ "Downside", "_image_voxel_cone_tracing.html#IVCT_Step1_Downside", [
-          [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md30", null ]
+          [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md96", null ]
         ] ],
-        [ "Trivia", "_image_voxel_cone_tracing.html#autotoc_md31", null ]
+        [ "Trivia", "_image_voxel_cone_tracing.html#autotoc_md97", null ]
       ] ],
       [ "Step 2: Row Translation", "_image_voxel_cone_tracing.html#IVCT_Step2", null ],
       [ "Step 3: Cascades", "_image_voxel_cone_tracing.html#IVCT_Step3", null ],
-      [ "Wait isn't this what UE5's Lumen does?", "_image_voxel_cone_tracing.html#autotoc_md32", null ],
-      [ "Wait isn't this what Godot does?", "_image_voxel_cone_tracing.html#autotoc_md33", null ]
+      [ "Wait isn't this what UE5's Lumen does?", "_image_voxel_cone_tracing.html#autotoc_md98", null ],
+      [ "Wait isn't this what Godot does?", "_image_voxel_cone_tracing.html#autotoc_md99", null ]
     ] ]
 ];

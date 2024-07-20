@@ -127,6 +127,7 @@ $(document).ready(function(){initNavTree('hlms.html',''); initResizable(); });
 </li>
 <li class="level1"><a href="#HlmsRuntimeRendering">Run-time rendering</a><ul><li class="level2"><a href="#HlmsRuntimeRenderingPreparePassHash">preparePassHash</a></li>
 <li class="level2"><a href="#HlmsRuntimeRenderingFillBuffersFor">fillBuffersFor</a></li>
+<li class="level2"><a href="#autotoc_md104">Multithreaded Shader Compilation</a></li>
 </ul>
 </li>
 <li class="level1"><a href="#UsingHlmsImplementation">Using the HLMS implementations</a><ul><li class="level2"><a href="#UsingHlmsImplementationInitialization">Initialization</a></li>
@@ -149,10 +150,10 @@ $(document).ready(function(){initNavTree('hlms.html',''); initResizable(); });
 <li class="level1"><a href="#HlmsTroubleshooting">Troubleshooting</a><ul><li class="level2"><a href="#HlmsTroubleshootingShadow">My shadows don&#39;t show up or are very glitchy</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md101">Precision / Quality</a></li>
+<li class="level1"><a href="#autotoc_md105">Precision / Quality</a></li>
 </ul>
 </div>
-<div class="textblock"><p><a class="anchor" id="md_manual_hlms"></a></p>
+<div class="textblock"><p><a class="anchor" id="md_manual_Rendering_hlms"></a></p>
 <p>The HLMS (often stylized Hlms) is the new material system used in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.0. It's more user friendly and performs faster.</p>
 <p>HLMS stands for "High Level Material System", because for the user, the HLMS means just define the material and start looking at it (no need for coding or shader knowledge!). But on retrospective, tweaking the shader code for an HLMS is much low level than the old Materials have ever been (and that makes them very powerful).</p>
 <h1><a class="anchor" id="HlmsChanges"></a>
@@ -209,14 +210,7 @@ Blocks</h1>
 <p>We're introducing the concept of blocks, most of them are immutable. Being immutable means you can't change the Macro- Blend- &amp; Samplerblocks after being created. If you want to make a change, you have to create a new block and assign the new one. The previous one won't be destroyed until asked explicitly.</p>
 <p>Technically on OpenGL render systems (GL3+, GLES2) you could <code>const_cast</code> the pointers, change the block's parameters (mind you, the pointer is shared by other datablocks, so you will be changing them as well as side effect) and it would probably work. But it will definitely fail on D3D11 render system. <br  />
 </p>
-<p>Refer to the following pages for parameter references:</p><ul>
-<li><a class="el" href="hlmsblendblockref.html">Reference Guide: HLMS Blendblock</a></li>
-<li><a class="el" href="hlmspbsdatablockref.html">Reference Guide: HLMS PBS Datablock</a></li>
-<li><a class="el" href="hlmsunlitdatablockref.html">Reference Guide: HLMS Unlit Datablock</a></li>
-<li><a class="el" href="hlmsterradatablockref.html">Reference Guide: HLMS Terra Datablock</a></li>
-<li><a class="el" href="hlmsmacroblockref.html">Reference Guide: HLMS Macroblock</a></li>
-<li><a class="el" href="hlmssamplerref.html">Reference Guide: HLMS Samplerblock</a></li>
-</ul>
+<p>For more information refer to the <a class="el" href="_j_s_o_n-_materials.html">JSON Materials</a> page.</p>
 <h2><a class="anchor" id="HlmsBlocksDatablocks"></a>
 Datablocks</h2>
 <p>A Datablock is a "material" from the user's perspective. It is the only mutable block. It holds data (i.e. material properties) that will be passed directly to the shaders, and also holds which Macroblock, Blendblocks and Samplerblocks are assigned to it.</p>
@@ -239,14 +233,14 @@ Samplerblocks</h2>
 Hlms templates</h1>
 <p>The Hlms will parse the template files from the template folder according to the following rules:</p>
 <ol type="1">
-<li>The files with the names "VertexShader\_vs", "PixelShader\_ps", "GeometryShader\_gs", "HullShader\_hs", "DomainShader\_ds" will be fully parsed and compiled into the shader. If an implementation only provides "VertexShader\_vs.glsl", "PixelShader\_ps.glsl" only the vertex and pixel shaders for OpenGL will be created. There will be no geometry or tesellation shaders.</li>
-<li>The files that contain the string "piece\_vs" in their filenames will be parsed only for collecting pieces (more on <em>pieces</em> later). Likewise the words "piece\_ps", "piece\_gs", "piece\_hs", "piece\_ds" correspond to the pieces for their respective shader stages. Note that you can concatenate, thus "MyUtilities\_piece\_vs\_piece\_ps.glsl" will be collected both in the vertex and pixel shader stages. You can use "piece\_all" as a shortcut to collect from a piece file in all stages.</li>
+<li>The files with the names <code>VertexShader_vs</code>, <code>PixelShader_ps</code>, <code>GeometryShader_gs</code>, <code>HullShader_hs</code>, <code>DomainShader_ds</code> will be fully parsed and compiled into the shader. If an implementation only provides <code>VertexShader_vs.glsl</code>, <code>PixelShader_ps.glsl</code> only the vertex and pixel shaders for OpenGL will be created. There will be no geometry or tesellation shaders.</li>
+<li>The files that contain the string <code>piece_vs</code> in their filenames will be parsed only for collecting pieces (more on <em>pieces</em> later). Likewise the words <code>piece_ps</code>, <code>piece_gs</code>, <code>piece_hs</code>, <code>piece_ds</code> correspond to the pieces for their respective shader stages. Note that you can concatenate, thus <code>MyUtilities_piece_vs_piece_ps.glsl</code> will be collected both in the vertex and pixel shader stages. You can use <code>piece_all</code> as a shortcut to collect from a piece file in all stages.</li>
 </ol>
 <p>The Hlms takes a template file (i.e. a file written in GLSL or HLSL) and produces valid shader code. Templates can take advantage of the Hlms' preprocessor, which is a simple yet powerful macro-like preprocessor that helps writing the required code.</p>
 <h1><a class="anchor" id="HlmsPreprocessor"></a>
 The Hlms preprocessor</h1>
 <p>The preprocessor was written with speed and simplicity in mind. It does not implement an AST or anything fancy. This is very important to account while writing templates because there will be cases when using the preprocessor may feel counter-intuitive or frustrating.</p>
-<p>For example </p><div class="fragment"><div class="line">\<span class="keyword">@property</span>( IncludeLighting )</div>
+<p>For example </p><div class="fragment"><div class="line"><span class="keyword">@property</span>( IncludeLighting )</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">/* code here */</span></div>
 <div class="line"> </div>
@@ -256,7 +250,21 @@ The Hlms preprocessor</h1>
 <div class="line"><span class="comment">/* code here */</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#endif</span></div>
-</div><!-- fragment --><p>However you can't evaluate <code>IncludeLighting</code> to anything other than zero and non-zero, i.e. you can't check whether <code>IncludeLighting == 2</code> with the Hlms preprocessor. A simple workaround is to define, from C++, the variable "IncludeLightingEquals2" and check whether it's non-zero. Another solution is to use the GLSL/HLSL preprocessor itself instead of Hlms'. However the advantage of Hlms is that you can see its generated output in a file for inspection, whereas you can't see the GLSL/HLSL after the macro preprocessor without vendor-specific tools. Plus, in the case of GLSL, you'll depend on the driver implementation having a good macro preprocessor.</p>
+</div><!-- fragment --><p>You can also evaluate <code>IncludeLighting</code> to anything other than zero and non-zero, i.e.</p>
+<div class="fragment"><div class="line"><span class="keyword">@property</span>( IncludeLighting == 2 )</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">/* code here */</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">@end</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">@property</span>( IncludeLighting == AnotherVariable )</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">/* code here 2 */</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">@end</span></div>
+</div><!-- fragment --><p>This first snippet will be included if IncludeLighting == 2. And the secon snippet will be included if IncludeLighting == AnotherVariable.</p>
+<p>Note that if both IncludeLighting and AnotherVariable are not defined, it will evaluate to <code>0 == 0</code> and thus be included.</p>
+<p>All comparison operations: <code>== != &lt; &lt;= &gt;= &gt;</code> are supported.</p>
 <h2><a class="anchor" id="HlmsPreprocessorSyntax"></a>
 Preprocessor syntax</h2>
 <p>The preprocessor always starts with @ followed by the command, and often with arguments inside parenthesis. Note that the preprocessor is always case sensitive. The following keywords are recognized:</p>
@@ -276,41 +284,41 @@ Preprocessor syntax</h2>
 <p>Checks whether the variables in the expression are true, if so, the text inside the block is printed. Must be finalized with @end. The expression is case sensitive. When the variable hasn't been declared, it evaluates to false.</p>
 <p>The logical operands <code>&amp;&amp; || !</code> are valid.</p>
 <p>Examples:</p>
-<div class="fragment"><div class="line">\<span class="keyword">@property</span>( hlms_skeleton )</div>
+<div class="fragment"><div class="line"><span class="keyword">@property</span>( hlms_skeleton )</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">//Skeleton animation code here</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">@end</span></div>
 <div class="line"> </div>
-<div class="line">\<span class="keyword">@property</span>( hlms_skeleton &amp;&amp; !hlms_normal )</div>
+<div class="line"><span class="keyword">@property</span>( hlms_skeleton &amp;&amp; !hlms_normal )</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">//Print this code if it has skeleton animation but no normals</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">@end</span></div>
 <div class="line"> </div>
-<div class="line">\<span class="keyword">@property</span>( hlms_normal || hlms_tangent )</div>
+<div class="line"><span class="keyword">@property</span>( hlms_normal || hlms_tangent )</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">//Print this code if it has normals or tangents</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">@end</span></div>
 <div class="line"> </div>
-<div class="line">\<span class="keyword">@property</span>( hlms_normal &amp;&amp; (!hlms_skeleton || hlms_tangent) )</div>
+<div class="line"><span class="keyword">@property</span>( hlms_normal &amp;&amp; (!hlms_skeleton || hlms_tangent) )</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">//Print this code if it has normals and either no skeleton or tangents</span></div>
 <div class="line"> </div>
 <div class="line">@end</div>
-</div><!-- fragment --><p>It is very similar to #if hlms_skeleton != 0 #endif; however there is no equivalent #else or #elif syntax. As a simple workaround you can do:</p>
-<div class="fragment"><div class="line">\<span class="keyword">@property</span>( hlms_skeleton )</div>
+</div><!-- fragment --><p>Hlms supports <code>@else</code> code:</p>
+<div class="fragment"><div class="line"><span class="keyword">@property</span>( hlms_skeleton )</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">//Skeleton animation code here</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">@end</span> \<span class="keyword">@property</span>( !hlms_skeleton )</div>
+<div class="line">@<span class="keywordflow">else</span></div>
 <div class="line"> </div>
 <div class="line"><span class="comment">//Non-Skeleton code here</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">@end</span></div>
+<div class="line">@end</div>
 </div><!-- fragment --><p>Newlines are not necessary. The following is perfectly valid:</p>
-<div class="fragment"><div class="line">diffuse = surfaceDiffuse \@property( hasLights )* lightDiffuse@end ;</div>
+<div class="fragment"><div class="line">diffuse = surfaceDiffuse <span class="keyword">@property</span>( hasLights )* lightDiffuse<span class="keyword">@end</span> ;</div>
 </div><!-- fragment --><p>Which will print:</p>
 <div class="fragment"><div class="line">hasLights != 0                              hasLights == 0</div>
 <div class="line">diffuse = surfaceDiffuse * lightDiffuse;   diffuse = surfaceDiffuse ;</div>
@@ -375,7 +383,7 @@ Preprocessor syntax</h2>
 <div class="line"> </div>
 <div class="line">@psub( myVar, 1 ) <span class="comment">//Decrement myVar on each loop</span></div>
 <div class="line"> </div>
-<div class="line">\<span class="keyword">@property</span>( myVar )</div>
+<div class="line"><span class="keyword">@property</span>( myVar )</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">//Code that shouldn&#39;t be printed in the last iteration</span></div>
 <div class="line"> </div>
@@ -522,7 +530,7 @@ Creation of shaders</h1>
 <h2><a class="anchor" id="HlmsCreationOfShadersCpp"></a>
 C++ interaction with shader templates</h2>
 <p>Note: This section is relevant to those seeking to write their own Hlms implementation.</p>
-<p>C++ can use <code>Hlms::setProperty( "key", value )</code> to set "key" to the given value. This value can be read by <code>\@property</code>, <code>@foreach</code>, <code>@add/sub/mul/div/mod</code>, <code>@counter</code>, <code>@value</code> and <code>@padd/psub/pmul/pdiv/pmod</code></p>
+<p>C++ can use <code>Hlms::setProperty( "key", value )</code> to set "key" to the given value. This value can be read by <code>@property</code>, <code>@foreach</code>, <code>@add/sub/mul/div/mod</code>, <code>@counter</code>, <code>@value</code> and <code>@padd/psub/pmul/pdiv/pmod</code></p>
 <p>To create pieces (or read them) you need to pass your custom <code>Hlms::PiecesMap</code> to <code>Hlms::addRenderableCache</code>.</p>
 <p>The recommended place to do this is in <code>Hlms::calculateHashForPreCreate</code> and <code>Hlms::calculateHashForPreCaster.</code> Both are virtual. The former gets called right before adding the set of properties, pieces and hash to the cache, while the latter happens right before adding a similar set for the shadow caster pass.</p>
 <p>In those two functions you get the chance to call setProperty to set your own variables and add your own pieces.</p>
@@ -623,6 +631,9 @@ preparePassHash</h2>
 <h2><a class="anchor" id="HlmsRuntimeRenderingFillBuffersFor"></a>
 fillBuffersFor</h2>
 <p>This function gets executed for every Renderable that is going to be rendered. Implementations are meant to read the Renderable's data and fill their GPU data structures, like world matrix, bone matrices (if skeletally animated), set the textures. They can rely on parameters like <code>lastCache</code> and <code>lastTextureHash</code> to obtain information about the previously rendered object and avoid setting again many shared paremeters.</p>
+<h2><a class="anchor" id="autotoc_md104"></a>
+Multithreaded Shader Compilation</h2>
+<p>For details see the dedicated section <a class="el" href="_hlms_threading.html">Multithreaded Shader Compilation</a>.</p>
 <h1><a class="anchor" id="UsingHlmsImplementation"></a>
 Using the HLMS implementations</h1>
 <h2><a class="anchor" id="UsingHlmsImplementationInitialization"></a>
@@ -923,7 +934,7 @@ My shadows don't show up or are very glitchy</h2>
 <li>Checkout the <code>Sample_ShadowMapDebugging</code> sample on how to debug shadows. Those techniques may give you useful hints about what's going on.</li>
 </ol>
 <p>[^12]: GL3+ and GLES3: extension ARB_sampler_objects. D3D11: ID3D11SamplerState</p>
-<h1><a class="anchor" id="autotoc_md101"></a>
+<h1><a class="anchor" id="autotoc_md105"></a>
 Precision / Quality</h1>
 <p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.4 added <code>Hlms::setPrecisionMode</code> with the following options:</p>
 <ul>
@@ -963,7 +974,7 @@ Precision / Quality</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="manual.html">Manual</a></li>
+    <li class="navelem"><a class="el" href="manual.html">Manual</a></li><li class="navelem"><a class="el" href="_rendering.html">Rendering</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>

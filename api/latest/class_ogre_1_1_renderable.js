@@ -20,6 +20,7 @@ var class_ogre_1_1_renderable =
     [ "getMaterial", "class_ogre_1_1_renderable.html#a4ca8d5f2bcdbfebda34e9e8f402c9cf8", null ],
     [ "getNumPoses", "class_ogre_1_1_renderable.html#ad569310af19433c1702f781800b79d82", null ],
     [ "getNumWorldTransforms", "class_ogre_1_1_renderable.html#a52885f46abdb3e5f850aed9302d666fa", null ],
+    [ "getParticleType", "class_ogre_1_1_renderable.html#a530690fa574bbdee7081af13e87130e3", null ],
     [ "getPolygonModeOverrideable", "class_ogre_1_1_renderable.html#a9f8bcf98e363839c42bd19708a062b3c", null ],
     [ "getPoseHalfPrecision", "class_ogre_1_1_renderable.html#abbdb6bfe33b416976de33ee15d467674", null ],
     [ "getPoseNormals", "class_ogre_1_1_renderable.html#ad22289842e973a7a6b727c8cd32e9be9", null ],

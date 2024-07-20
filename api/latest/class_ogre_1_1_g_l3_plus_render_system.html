@@ -212,8 +212,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0a60316143d0c2b5d0b2fe003fe1ba8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a0a60316143d0c2b5d0b2fe003fe1ba8e">_setGeometryTexture</a> (size_t unit, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *tex) override</td></tr>
 <tr class="memdesc:a0a60316143d0c2b5d0b2fe003fe1ba8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>.  <a href="class_ogre_1_1_g_l3_plus_render_system.html#a0a60316143d0c2b5d0b2fe003fe1ba8e">More...</a><br /></td></tr>
 <tr class="separator:a0a60316143d0c2b5d0b2fe003fe1ba8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a776335f47ad3098a1975d1b8855bbb85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a776335f47ad3098a1975d1b8855bbb85">_setHlmsBlendblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *blendblock, const <a class="el" href="struct_ogre_1_1_g_l3_plus_hlms_pso.html">GL3PlusHlmsPso</a> *pso)</td></tr>
-<tr class="separator:a776335f47ad3098a1975d1b8855bbb85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c03ce3625db4e8df7220be9022a3a24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a1c03ce3625db4e8df7220be9022a3a24">_setHlmsBlendblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_blendblock.html">HlmsBlendblock</a> *blendblock, const <a class="el" href="struct_ogre_1_1_g_l3_plus_hlms_pso.html">GL3PlusHlmsPso</a> *pso, bool bIsMultisample)</td></tr>
+<tr class="separator:a1c03ce3625db4e8df7220be9022a3a24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44f62be258fd79061066b2dc533b6287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a44f62be258fd79061066b2dc533b6287">_setHlmsMacroblock</a> (const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *macroblock, const <a class="el" href="struct_ogre_1_1_g_l3_plus_hlms_pso.html">GL3PlusHlmsPso</a> *pso)</td></tr>
 <tr class="separator:a44f62be258fd79061066b2dc533b6287"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a7b61b0a4e95d9798b769a9e47b624d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a6a7b61b0a4e95d9798b769a9e47b624d">_setHlmsSamplerblock</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texUnit, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *samplerblock) override</td></tr>
@@ -2125,8 +2125,8 @@ See _createRenderWindow for details about each member. </td></tr>
 
 </div>
 </div>
-<a id="a776335f47ad3098a1975d1b8855bbb85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a776335f47ad3098a1975d1b8855bbb85">&#9670;&nbsp;</a></span>_setHlmsBlendblock()</h2>
+<a id="a1c03ce3625db4e8df7220be9022a3a24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c03ce3625db4e8df7220be9022a3a24">&#9670;&nbsp;</a></span>_setHlmsBlendblock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2141,7 +2141,13 @@ See _createRenderWindow for details about each member. </td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="struct_ogre_1_1_g_l3_plus_hlms_pso.html">GL3PlusHlmsPso</a> *&#160;</td>
-          <td class="paramname"><em>pso</em>&#160;</td>
+          <td class="paramname"><em>pso</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bIsMultisample</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

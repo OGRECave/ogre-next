@@ -1,0 +1,5 @@
+<map id="Ogre::DirectionRandomiserAffector2" name="Ogre::DirectionRandomiserAffector2">
+<area shape="rect" id="node1" title="This class defines a ParticleAffector which applies randomness to the movement of the particles." alt="" coords="5,155,204,196"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_particle_affector2.html" title="Affectors are per ParticleSystemDef." alt="" coords="21,80,189,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="26,5,183,32"/>
+</map>

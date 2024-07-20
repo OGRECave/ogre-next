@@ -140,8 +140,8 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 <li>mAllowTextureResidencyChange
 : <a class="el" href="class_ogre_1_1_hlms_datablock.html#af1ac88fb51276fb7145e0b9d7ce77acd">Ogre::HlmsDatablock</a>
 </li>
-<li>mAlphaToCoverageEnabled
-: <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a84604e9d467e80aa7de99146b89e03a9">Ogre::HlmsBlendblock</a>
+<li>mAlphaToCoverage
+: <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a58e33acfc6631e1a3b09f80c3959dabc">Ogre::HlmsBlendblock</a>
 </li>
 <li>mAnalyzeAllTextureLayouts
 : <a class="el" href="class_ogre_1_1_compositor_pass_quad_def.html#a7b742952771570b4fbb6f1c246f31a75">Ogre::CompositorPassQuadDef</a>
@@ -240,6 +240,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 <li>mBatchCount
 : <a class="el" href="struct_ogre_1_1_rendering_metrics.html#a8acff1695548ca659fad24363c0c32b8">Ogre::RenderingMetrics</a>
 </li>
+<li>mBillboardSet
+: <a class="el" href="struct_ogre_1_1_billboard.html#a4c7b462cac556aa7a6648cae7b8c9777">Ogre::Billboard</a>
+</li>
 <li>mBlendChannelMask
 : <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ab274bfed0268538fe6ede5fce32e3e64">Ogre::HlmsBlendblock</a>
 </li>
@@ -319,7 +322,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_array_matrix4.html#a2c55df3235f7d6b01e83641aa2aa6ea1">Ogre::ArrayMatrix4</a>
 , <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#aac3841269af026e2c3fe9062d8fc6d7a">Ogre::ArrayMatrixAf4x3</a>
 , <a class="el" href="class_ogre_1_1_array_quaternion.html#aeaaa0bf0e7ca5c5d82d83c470fb76f99">Ogre::ArrayQuaternion</a>
+, <a class="el" href="class_ogre_1_1_array_vector2.html#a083a38cd5590b97a3546626304b08368">Ogre::ArrayVector2</a>
 , <a class="el" href="class_ogre_1_1_array_vector3.html#ad37aed4b430c6d8b50b47d5eac29cb7d">Ogre::ArrayVector3</a>
+, <a class="el" href="class_ogre_1_1_array_vector4.html#ac54890432b8c8fb71b0d4d3deef4395d">Ogre::ArrayVector4</a>
 , <a class="el" href="class_ogre_1_1_simple_matrix4.html#af9d1d75e3b4d71fc9fc8783264e6d59b">Ogre::SimpleMatrix4</a>
 , <a class="el" href="class_ogre_1_1_simple_matrix_af4x3.html#af1707ef0a987d6d55dffbf63469c00ec">Ogre::SimpleMatrixAf4x3</a>
 </li>
@@ -346,8 +351,15 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 </li>
 <li>mColour
 : <a class="el" href="class_ogre_1_1_particle.html#a8f94512cf66c84a243f3cd6383bb9c68">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#a92b3161be5912cf88f55cdc579085367">Ogre::ParticleCpuData</a>
 , <a class="el" href="class_ogre_1_1_render_pass_descriptor.html#a313989348844fbde107d9e5f3913cd01">Ogre::RenderPassDescriptor</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_billboard.html#a85f10764ddb09627a50eb40126073674">Ogre::v1::Billboard</a>
+</li>
+<li>mColourAlpha
+: <a class="el" href="struct_ogre_1_1_particle_gpu_data.html#a60a5b62a2fda3393477941ebfc0deb6e">Ogre::ParticleGpuData</a>
+</li>
+<li>mColourRgb
+: <a class="el" href="struct_ogre_1_1_particle_gpu_data.html#a4a9d3e83054c0f8881bb5176ab2d4b89">Ogre::ParticleGpuData</a>
 </li>
 <li>mColourWrite
 : <a class="el" href="class_ogre_1_1_compositor_pass_def.html#aa3381e8cd31c5ccbc33f1d1c5bf9b86c">Ogre::CompositorPassDef</a>
@@ -488,9 +500,14 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 <li>mDiffuseIdx
 : <a class="el" href="class_ogre_1_1_decal.html#aa296990df6c6173ac18a776b9508d698">Ogre::Decal</a>
 </li>
+<li>mDimensions
+: <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#a79296a601c823861c8696b73f25b3466">Ogre::ParticleCpuData</a>
+</li>
 <li>mDirection
 : <a class="el" href="class_ogre_1_1_array_ray.html#a446c150f80233b39a7c4d6f93cd6a9d3">Ogre::ArrayRay</a>
 , <a class="el" href="class_ogre_1_1_particle.html#acdbcf9aeb0a82d00deb6dd0e75207016">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#aa219d926db748ec2531aad88e9832f2a">Ogre::ParticleCpuData</a>
+, <a class="el" href="struct_ogre_1_1_particle_gpu_data.html#ace1481cc057c743af95b46b36552ece4">Ogre::ParticleGpuData</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_billboard.html#ace083a1542cae0826853649eaba214b8">Ogre::v1::Billboard</a>
 </li>
 <li>mDistanceToCamera
@@ -503,6 +520,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 <li>mDrawCount
 : <a class="el" href="struct_ogre_1_1_rendering_metrics.html#af3f28bc50e4dc72e47ff1099fbbb47a2">Ogre::RenderingMetrics</a>
 </li>
+<li>mDurationRemain
+: <a class="el" href="struct_ogre_1_1_emitter_instance_data.html#af541b8bb8e75cdb320182614931cad57">Ogre::EmitterInstanceData</a>
+</li>
 <li>mDynamicBuffer
 : <a class="el" href="struct_ogre_1_1_vulkan_raw_buffer.html#adc7a6651dedffaff88877201b195538d">Ogre::VulkanRawBuffer</a>
 </li>
@@ -513,7 +533,8 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_decal.html#a87b5691e56e3879d8a6986bd27f8f61c">Ogre::Decal</a>
 </li>
 <li>mEnabled
-: <a class="el" href="class_ogre_1_1_skeleton_animation.html#a94e597569c3682b6b56e2214e2fabe0d">Ogre::SkeletonAnimation</a>
+: <a class="el" href="struct_ogre_1_1_emitter_instance_data.html#a254f47e619e9e9fabc4ec6687aba1413">Ogre::EmitterInstanceData</a>
+, <a class="el" href="class_ogre_1_1_skeleton_animation.html#a94e597569c3682b6b56e2214e2fabe0d">Ogre::SkeletonAnimation</a>
 </li>
 <li>mEnableForwardPlus
 : <a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#acf1c9d830639cb9fed39ce667d7daf64">Ogre::CompositorPassSceneDef</a>
@@ -648,6 +669,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 : <a class="el" href="struct_ogre_1_1_aabb.html#af6dc4526b4989562ee3e0c96fc573873">Ogre::Aabb</a>
 , <a class="el" href="class_ogre_1_1_array_aabb.html#a542f4c0f695c6732ae40c8c52d820403">Ogre::ArrayAabb</a>
 </li>
+<li>mHandle
+: <a class="el" href="struct_ogre_1_1_billboard.html#aaf9eeafc8641331bb33814da698995b8">Ogre::Billboard</a>
+</li>
 <li>mHash
 : <a class="el" href="struct_ogre_1_1_id_string.html#a54eeffe30aae07b2f4b7bf7a8cf10d27">Ogre::IdString</a>
 </li>
@@ -656,6 +680,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 </li>
 <li>mHeight
 : <a class="el" href="class_ogre_1_1_particle.html#a93027e6a8be2be918488edf6c88217c0">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_gpu_data.html#a3be234daf52f01558f6002f2b2d0c024">Ogre::ParticleGpuData</a>
 </li>
 <li>mHlmsGlobalIndex
 : <a class="el" href="class_ogre_1_1_renderable.html#a4af66c22373c90b388d2117ee904a92b">Ogre::Renderable</a>
@@ -698,6 +723,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 , <a class="el" href="class_ogre_1_1_colour_interpolator_affector_1_1_cmd_colour_adjust.html#a2c63d0f346cb31156d7fccc5029e9724">Ogre::ColourInterpolatorAffector::CmdColourAdjust</a>
 , <a class="el" href="class_ogre_1_1_colour_interpolator_affector_1_1_cmd_time_adjust.html#a2864f03f51a1402c01eaa9e84a9e6fbd">Ogre::ColourInterpolatorAffector::CmdTimeAdjust</a>
 , <a class="el" href="struct_ogre_1_1_object_data.html#aa32220a1a958bd03902f766ac297bc39">Ogre::ObjectData</a>
+, <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#a39644211748dd5bf67eaafeb6e1a30de">Ogre::ParticleCpuData</a>
 , <a class="el" href="class_ogre_1_1_scale_interpolator_affector_1_1_cmd_scale_adjust.html#a6adb63dc04a407398ade3482948b4f42">Ogre::ScaleInterpolatorAffector::CmdScaleAdjust</a>
 , <a class="el" href="class_ogre_1_1_scale_interpolator_affector_1_1_cmd_time_adjust.html#ab3aee5403000b7817a19f023e789c8d7">Ogre::ScaleInterpolatorAffector::CmdTimeAdjust</a>
 , <a class="el" href="struct_ogre_1_1_transform.html#a14e0f44727da02c219d40449c6e95ded">Ogre::Transform</a>
@@ -1030,6 +1056,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_process_name_exclusion_script_compiler_event.html#ab4e31bae208b7526e183369be3acb410">Ogre::ProcessNameExclusionScriptCompilerEvent</a>
 , <a class="el" href="class_ogre_1_1_sub_mesh.html#a5e7f7fb993cf797e96184620fcae0f71">Ogre::SubMesh</a>
 </li>
+<li>mParentDefGlobalIdx
+: <a class="el" href="class_ogre_1_1_particle_system2.html#a60b19fea59f49de1008191a04753c815">Ogre::ParticleSystem2</a>
+</li>
 <li>mParentIndex
 : <a class="el" href="class_ogre_1_1_bone.html#a044f37d00866112ecba3bde601b167f5">Ogre::Bone</a>
 , <a class="el" href="class_ogre_1_1_movable_object.html#aad9369e62c971d55ca75b7b294c50944">Ogre::MovableObject</a>
@@ -1063,10 +1092,14 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 <li>mPolygonMode
 : <a class="el" href="struct_ogre_1_1_hlms_macroblock.html#ad51e417c152a4061cdd21b215502c5c0">Ogre::HlmsMacroblock</a>
 </li>
+<li>mPos
+: <a class="el" href="struct_ogre_1_1_particle_gpu_data.html#af8c773f5dda06c2175c30703bcab6695">Ogre::ParticleGpuData</a>
+</li>
 <li>mPosition
 : <a class="el" href="struct_ogre_1_1_bone_transform.html#a3cace82d8cec3fab6cdd71215bf1b00b">Ogre::BoneTransform</a>
 , <a class="el" href="struct_ogre_1_1_kf_transform.html#acfc397b84a30ab29087fa1245d0889fb">Ogre::KfTransform</a>
 , <a class="el" href="class_ogre_1_1_particle.html#a73e6fde004e85abb95378d3d9ca0da0a">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#a48c72dbb18e5b80794a3a44053f285c7">Ogre::ParticleCpuData</a>
 , <a class="el" href="struct_ogre_1_1_transform.html#aca9eae11d7bba109ed8fe890b656c7b6">Ogre::Transform</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_billboard.html#ad750f9620fe443ebf5cd2571c7f2b48d">Ogre::v1::Billboard</a>
 </li>
@@ -1155,6 +1188,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 <li>mReinterpretingGS
 : <a class="el" href="class_ogre_1_1_d3_d11_h_l_s_l_program.html#a9174dcd088c729234de410a0d640f090">Ogre::D3D11HLSLProgram</a>
 </li>
+<li>mRemainder
+: <a class="el" href="struct_ogre_1_1_emitter_instance_data.html#aee23268b34d7805ed2e8b88d4bddf922">Ogre::EmitterInstanceData</a>
+</li>
 <li>mRenderables
 : <a class="el" href="class_ogre_1_1_movable_object.html#ab703ec1f1cf82763b0ac9c4b1e51a17b">Ogre::MovableObject</a>
 </li>
@@ -1170,6 +1206,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 <li>mRenderSystem
 : <a class="el" href="struct_ogre_1_1_metal_device.html#a167c3acabd253acf90473e6059568cd1">Ogre::MetalDevice</a>
 , <a class="el" href="struct_ogre_1_1_vulkan_device.html#a85ef8bb90f196ed4d99daac696a377ac">Ogre::VulkanDevice</a>
+</li>
+<li>mRepeatDelayRemain
+: <a class="el" href="struct_ogre_1_1_emitter_instance_data.html#a1aa0da7c5c0fdee22e5cf5b46a47b40b">Ogre::EmitterInstanceData</a>
 </li>
 <li>mRequest
 : <a class="el" href="struct_ogre_1_1_work_queue_1_1_response.html#afdbe309b03faf1265f97d4891af4d258">Ogre::WorkQueue::Response</a>
@@ -1190,10 +1229,13 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 </li>
 <li>mRotation
 : <a class="el" href="class_ogre_1_1_particle.html#a32fb0fa2c3adb521e1f3728990472da3">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#a3aa8318ab8235d81387f648f612edb33">Ogre::ParticleCpuData</a>
+, <a class="el" href="struct_ogre_1_1_particle_gpu_data.html#a3fcef15336860b687515b2ac5487a4b3">Ogre::ParticleGpuData</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_billboard.html#aecb3f6a9ae5c376d40c66f0d6dfd38fe">Ogre::v1::Billboard</a>
 </li>
 <li>mRotationSpeed
 : <a class="el" href="class_ogre_1_1_particle.html#a5aef511f7bcbada271780f42ccfe717e">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#adb2e16342a6eb5d36522d8ab9392a823">Ogre::ParticleCpuData</a>
 </li>
 <li>mRoughness
 : <a class="el" href="class_ogre_1_1_decal.html#a35d4fa19a2750732ceef42ec5f9aabd1">Ogre::Decal</a>
@@ -1222,6 +1264,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 </li>
 <li>MS_CORNERS_TOP
 : <a class="el" href="class_ogre_1_1_volume_1_1_iso_surface.html#a347c64743265efefd007bed0b42febdc">Ogre::Volume::IsoSurface</a>
+</li>
+<li>MsaaSamples
+: <a class="el" href="struct_ogre_1_1_hlms_base_prop.html#af9b291710a26ea27a943eb3389fcb115">Ogre::HlmsBaseProp</a>
 </li>
 <li>msAlphaCmd
 : <a class="el" href="class_ogre_1_1_colour_fader_affector.html#a735a1f8fc6b5504d7a1dcd2ccb4f5660">Ogre::ColourFaderAffector</a>
@@ -1358,6 +1403,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 <li>msMsaaTextureBuffer
 : <a class="el" href="class_ogre_1_1_texture_gpu.html#a43888e98f84f5c9eb9ded14dd0deb34d">Ogre::TextureGpu</a>
 </li>
+<li>msMultiplyModeCmd
+: <a class="el" href="class_ogre_1_1_scale_affector.html#af7cd0af7bd9a919296bcabf52503a864">Ogre::ScaleAffector</a>
+</li>
 <li>msOptimizeForShadowMapping
 : <a class="el" href="class_ogre_1_1_mesh.html#a6f201fa17002cc71492edb7da0b69b53">Ogre::Mesh</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_mesh.html#ae01d3bddf8aac16dc4d8f5923843fa98">Ogre::v1::Mesh</a>
@@ -1423,6 +1471,9 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 </li>
 <li>mStartingSlot
 : <a class="el" href="class_ogre_1_1_compositor_pass_uav_def.html#a4712fa57d68ae444860775563ae4eb0d">Ogre::CompositorPassUavDef</a>
+</li>
+<li>mStartTime
+: <a class="el" href="struct_ogre_1_1_emitter_instance_data.html#af40050f972dbbf78c86b19984689efd5">Ogre::EmitterInstanceData</a>
 </li>
 <li>mStencil
 : <a class="el" href="class_ogre_1_1_render_pass_descriptor.html#a6e1deb374021a878920d2a2fdef0b332">Ogre::RenderPassDescriptor</a>
@@ -1506,9 +1557,11 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 </li>
 <li>mTimeToLive
 : <a class="el" href="class_ogre_1_1_particle.html#ac9741b2623435c312819c9d3903c915e">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#ae61a6df64f48990432b90064904380c4">Ogre::ParticleCpuData</a>
 </li>
 <li>mTotalTimeToLive
 : <a class="el" href="class_ogre_1_1_particle.html#aa4df69c38e5bd02eea6cd9439f9da04a">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_cpu_data.html#a3519fd7cd2272f95c1a2f5e47e9d86bb">Ogre::ParticleCpuData</a>
 </li>
 <li>mTransferQueues
 : <a class="el" href="struct_ogre_1_1_vulkan_device.html#ad1b8cad0bec0d64eae84b3e6d20e9cdc">Ogre::VulkanDevice</a>
@@ -1640,6 +1693,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html',''); initResiza
 </li>
 <li>mWidth
 : <a class="el" href="class_ogre_1_1_particle.html#adf524dfe79984bbdeb8130f5c0348fdb">Ogre::Particle</a>
+, <a class="el" href="struct_ogre_1_1_particle_gpu_data.html#ac00f640fbb8e0a2e14e5bd9d911140c4">Ogre::ParticleGpuData</a>
 </li>
 <li>mWindowImageViews
 : <a class="el" href="struct_ogre_1_1_vulkan_frame_buffer_desc_value.html#a549f7ef0fda0519767049b2c9e2f0b42">Ogre::VulkanFrameBufferDescValue</a>

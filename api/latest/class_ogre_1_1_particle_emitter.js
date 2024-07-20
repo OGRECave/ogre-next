@@ -29,7 +29,7 @@ var class_ogre_1_1_particle_emitter =
     [ "getRepeatDelay", "class_ogre_1_1_particle_emitter.html#aea1a8b6daaed8e525510be22fcaa333f", null ],
     [ "getStartTime", "class_ogre_1_1_particle_emitter.html#ae57fb988a912fd8b81291d83259988de", null ],
     [ "getTimeToLive", "class_ogre_1_1_particle_emitter.html#aae556108f4dcdda4fa73bd4969549bad", null ],
-    [ "getType", "class_ogre_1_1_particle_emitter.html#a28f5bce7debd978cf6a675f1706d7445", null ],
+    [ "getType", "class_ogre_1_1_particle_emitter.html#a3d382cb40b0390d65a852a08bbf237e3", null ],
     [ "getUp", "class_ogre_1_1_particle_emitter.html#aa7b39cbcb1006b1ec78a613165ccf57b", null ],
     [ "isEmitted", "class_ogre_1_1_particle_emitter.html#af12947b9fbc92565fd63b733d106b88e", null ],
     [ "setAngle", "class_ogre_1_1_particle_emitter.html#aeb086f851624a470e1b5592b81418d39", null ],

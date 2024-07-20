@@ -72,7 +72,8 @@ var group___render_system =
       [ "Modes", "class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367", [
         [ "V1_LEGACY", "class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367ac84764f8648d1701fd809afba1358b32", null ],
         [ "V1_FAST", "class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367aae5865e2c1ce44806f2538863c9dda44", null ],
-        [ "FAST", "class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367afaf209c76453b55e28708a165b37386e", null ]
+        [ "FAST", "class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367afaf209c76453b55e28708a165b37386e", null ],
+        [ "PARTICLE_SYSTEM", "class_ogre_1_1_render_queue.html#ad2b57c9b40e33d4b64f613a5a6147367aaba007477484af6f9eeb1e2a1bb76754", null ]
       ] ],
       [ "RqSortMode", "class_ogre_1_1_render_queue.html#acbc6e62a79b77d38cf3881c796e0078b", [
         [ "DisableSort", "class_ogre_1_1_render_queue.html#acbc6e62a79b77d38cf3881c796e0078ba00d99f921af963915cd1e94fa6f769b8", null ],

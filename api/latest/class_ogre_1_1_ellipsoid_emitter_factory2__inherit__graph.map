@@ -1,0 +1,4 @@
+<map id="Ogre::EllipsoidEmitterFactory2" name="Ogre::EllipsoidEmitterFactory2">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,224,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_particle_emitter_def_data_factory.html" title="Abstract class defining the interface to be implemented by creators of EmitterDefData subclasses." alt="" coords="25,5,205,47"/>
+</map>

@@ -36,6 +36,9 @@ var files_dup =
       [ "CmdHeight", "class_ogre_1_1_area_emitter_1_1_cmd_height.html", "class_ogre_1_1_area_emitter_1_1_cmd_height" ],
       [ "CmdWidth", "class_ogre_1_1_area_emitter_1_1_cmd_width.html", "class_ogre_1_1_area_emitter_1_1_cmd_width" ]
     ] ],
+    [ "OgreAreaEmitter2.h", "_ogre_area_emitter2_8h.html", [
+      [ "AreaEmitter2", "class_ogre_1_1_area_emitter2.html", "class_ogre_1_1_area_emitter2" ]
+    ] ],
     [ "C/OgreArrayAabb.h", "_c_2_ogre_array_aabb_8h.html", null ],
     [ "NEON/Single/OgreArrayAabb.h", "_n_e_o_n_2_single_2_ogre_array_aabb_8h.html", null ],
     [ "OgreArrayAabb.h", "_ogre_array_aabb_8h.html", null ],
@@ -61,10 +64,18 @@ var files_dup =
     [ "NEON/Single/OgreArraySphere.h", "_n_e_o_n_2_single_2_ogre_array_sphere_8h.html", null ],
     [ "OgreArraySphere.h", "_ogre_array_sphere_8h.html", null ],
     [ "SSE2/Single/OgreArraySphere.h", "_s_s_e2_2_single_2_ogre_array_sphere_8h.html", null ],
+    [ "C/OgreArrayVector2.h", "_c_2_ogre_array_vector2_8h.html", null ],
+    [ "NEON/Single/OgreArrayVector2.h", "_n_e_o_n_2_single_2_ogre_array_vector2_8h.html", null ],
+    [ "OgreArrayVector2.h", "_ogre_array_vector2_8h.html", null ],
+    [ "SSE2/Single/OgreArrayVector2.h", "_s_s_e2_2_single_2_ogre_array_vector2_8h.html", null ],
     [ "C/OgreArrayVector3.h", "_c_2_ogre_array_vector3_8h.html", null ],
     [ "NEON/Single/OgreArrayVector3.h", "_n_e_o_n_2_single_2_ogre_array_vector3_8h.html", null ],
     [ "OgreArrayVector3.h", "_ogre_array_vector3_8h.html", null ],
     [ "SSE2/Single/OgreArrayVector3.h", "_s_s_e2_2_single_2_ogre_array_vector3_8h.html", null ],
+    [ "C/OgreArrayVector4.h", "_c_2_ogre_array_vector4_8h.html", null ],
+    [ "NEON/Single/OgreArrayVector4.h", "_n_e_o_n_2_single_2_ogre_array_vector4_8h.html", null ],
+    [ "OgreArrayVector4.h", "_ogre_array_vector4_8h.html", null ],
+    [ "SSE2/Single/OgreArrayVector4.h", "_s_s_e2_2_single_2_ogre_array_vector4_8h.html", null ],
     [ "OgreAssert.h", "_ogre_assert_8h.html", "_ogre_assert_8h" ],
     [ "OgreASTCCodec.h", "_ogre_a_s_t_c_codec_8h.html", null ],
     [ "OgreAsyncTextureTicket.h", "_ogre_async_texture_ticket_8h.html", [
@@ -89,6 +100,9 @@ var files_dup =
       [ "Barrier", "class_ogre_1_1_barrier.html", "class_ogre_1_1_barrier" ]
     ] ],
     [ "OgreBillboard.h", "_ogre_billboard_8h.html", null ],
+    [ "OgreBillboard2.h", "_ogre_billboard2_8h.html", [
+      [ "Billboard", "struct_ogre_1_1_billboard.html", "struct_ogre_1_1_billboard" ]
+    ] ],
     [ "OgreBillboardChain.h", "_ogre_billboard_chain_8h.html", [
       [ "Element", "class_ogre_1_1v1_1_1_billboard_chain_1_1_element.html", "class_ogre_1_1v1_1_1_billboard_chain_1_1_element" ]
     ] ],
@@ -104,6 +118,9 @@ var files_dup =
       [ "CmdTextureStacks", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks.html", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_texture_stacks" ]
     ] ],
     [ "OgreBillboardSet.h", "_ogre_billboard_set_8h.html", "_ogre_billboard_set_8h" ],
+    [ "OgreBillboardSet2.h", "_ogre_billboard_set2_8h.html", [
+      [ "BillboardSet", "class_ogre_1_1_billboard_set.html", "class_ogre_1_1_billboard_set" ]
+    ] ],
     [ "OgreBitset.h", "_ogre_bitset_8h.html", null ],
     [ "OgreBitwise.h", "_ogre_bitwise_8h.html", "_ogre_bitwise_8h" ],
     [ "OgreBlendMode.h", "_ogre_blend_mode_8h.html", "_ogre_blend_mode_8h" ],
@@ -137,6 +154,10 @@ var files_dup =
     ] ],
     [ "OgreBoxEmitter.h", "_ogre_box_emitter_8h.html", [
       [ "BoxEmitter", "class_ogre_1_1_box_emitter.html", "class_ogre_1_1_box_emitter" ]
+    ] ],
+    [ "OgreBoxEmitter2.h", "_ogre_box_emitter2_8h.html", [
+      [ "BoxEmitter2", "class_ogre_1_1_box_emitter2.html", "class_ogre_1_1_box_emitter2" ],
+      [ "BoxEmitterFactory2", "class_ogre_1_1_box_emitter_factory2.html", "class_ogre_1_1_box_emitter_factory2" ]
     ] ],
     [ "OgreBoxEmitterFactory.h", "_ogre_box_emitter_factory_8h.html", [
       [ "BoxEmitterFactory", "class_ogre_1_1_box_emitter_factory.html", "class_ogre_1_1_box_emitter_factory" ]
@@ -202,15 +223,27 @@ var files_dup =
       [ "CmdRedAdjust2", "class_ogre_1_1_colour_fader_affector2_1_1_cmd_red_adjust2.html", "class_ogre_1_1_colour_fader_affector2_1_1_cmd_red_adjust2" ],
       [ "CmdStateChange", "class_ogre_1_1_colour_fader_affector2_1_1_cmd_state_change.html", "class_ogre_1_1_colour_fader_affector2_1_1_cmd_state_change" ]
     ] ],
+    [ "OgreColourFaderAffector2FX2.h", "_ogre_colour_fader_affector2_f_x2_8h.html", [
+      [ "ColourFaderAffector2FX2", "class_ogre_1_1_colour_fader_affector2_f_x2.html", "class_ogre_1_1_colour_fader_affector2_f_x2" ],
+      [ "ColourFaderAffector2FX2Factory", "class_ogre_1_1_colour_fader_affector2_f_x2_factory.html", null ]
+    ] ],
     [ "OgreColourFaderAffectorFactory.h", "_ogre_colour_fader_affector_factory_8h.html", [
       [ "ColourFaderAffectorFactory", "class_ogre_1_1_colour_fader_affector_factory.html", null ]
     ] ],
     [ "OgreColourFaderAffectorFactory2.h", "_ogre_colour_fader_affector_factory2_8h.html", [
       [ "ColourFaderAffectorFactory2", "class_ogre_1_1_colour_fader_affector_factory2.html", null ]
     ] ],
+    [ "OgreColourFaderAffectorFX2.h", "_ogre_colour_fader_affector_f_x2_8h.html", [
+      [ "ColourFaderAffectorFX2", "class_ogre_1_1_colour_fader_affector_f_x2.html", "class_ogre_1_1_colour_fader_affector_f_x2" ],
+      [ "ColourFaderAffectorFX2Factory", "class_ogre_1_1_colour_fader_affector_f_x2_factory.html", null ]
+    ] ],
     [ "OgreColourImageAffector.h", "_ogre_colour_image_affector_8h.html", [
       [ "ColourImageAffector", "class_ogre_1_1_colour_image_affector.html", "class_ogre_1_1_colour_image_affector" ],
       [ "CmdImageAdjust", "class_ogre_1_1_colour_image_affector_1_1_cmd_image_adjust.html", "class_ogre_1_1_colour_image_affector_1_1_cmd_image_adjust" ]
+    ] ],
+    [ "OgreColourImageAffector2.h", "_ogre_colour_image_affector2_8h.html", [
+      [ "ColourImageAffector2", "class_ogre_1_1_colour_image_affector2.html", "class_ogre_1_1_colour_image_affector2" ],
+      [ "ColourImageAffectorFactory2", "class_ogre_1_1_colour_image_affector_factory2.html", null ]
     ] ],
     [ "OgreColourImageAffectorFactory.h", "_ogre_colour_image_affector_factory_8h.html", [
       [ "ColourImageAffectorFactory", "class_ogre_1_1_colour_image_affector_factory.html", null ]
@@ -219,6 +252,10 @@ var files_dup =
       [ "ColourInterpolatorAffector", "class_ogre_1_1_colour_interpolator_affector.html", "class_ogre_1_1_colour_interpolator_affector" ],
       [ "CmdColourAdjust", "class_ogre_1_1_colour_interpolator_affector_1_1_cmd_colour_adjust.html", "class_ogre_1_1_colour_interpolator_affector_1_1_cmd_colour_adjust" ],
       [ "CmdTimeAdjust", "class_ogre_1_1_colour_interpolator_affector_1_1_cmd_time_adjust.html", "class_ogre_1_1_colour_interpolator_affector_1_1_cmd_time_adjust" ]
+    ] ],
+    [ "OgreColourInterpolatorAffector2.h", "_ogre_colour_interpolator_affector2_8h.html", [
+      [ "ColourInterpolatorAffector2", "class_ogre_1_1_colour_interpolator_affector2.html", "class_ogre_1_1_colour_interpolator_affector2" ],
+      [ "ColourInterpolatorAffectorFactory2", "class_ogre_1_1_colour_interpolator_affector_factory2.html", null ]
     ] ],
     [ "OgreColourInterpolatorAffectorFactory.h", "_ogre_colour_interpolator_affector_factory_8h.html", [
       [ "ColourInterpolatorAffectorFactory", "class_ogre_1_1_colour_interpolator_affector_factory.html", null ]
@@ -305,6 +342,10 @@ var files_dup =
     [ "OgreCustomCompositionPass.h", "_ogre_custom_composition_pass_8h.html", null ],
     [ "OgreCylinderEmitter.h", "_ogre_cylinder_emitter_8h.html", [
       [ "CylinderEmitter", "class_ogre_1_1_cylinder_emitter.html", "class_ogre_1_1_cylinder_emitter" ]
+    ] ],
+    [ "OgreCylinderEmitter2.h", "_ogre_cylinder_emitter2_8h.html", [
+      [ "CylinderEmitter2", "class_ogre_1_1_cylinder_emitter2.html", "class_ogre_1_1_cylinder_emitter2" ],
+      [ "CylinderEmitterFactory2", "class_ogre_1_1_cylinder_emitter_factory2.html", "class_ogre_1_1_cylinder_emitter_factory2" ]
     ] ],
     [ "OgreCylinderEmitterFactory.h", "_ogre_cylinder_emitter_factory_8h.html", [
       [ "CylinderEmitterFactory", "class_ogre_1_1_cylinder_emitter_factory.html", "class_ogre_1_1_cylinder_emitter_factory" ]
@@ -460,6 +501,10 @@ var files_dup =
       [ "CmdPlaneNormal", "class_ogre_1_1_deflector_plane_affector_1_1_cmd_plane_normal.html", "class_ogre_1_1_deflector_plane_affector_1_1_cmd_plane_normal" ],
       [ "CmdPlanePoint", "class_ogre_1_1_deflector_plane_affector_1_1_cmd_plane_point.html", "class_ogre_1_1_deflector_plane_affector_1_1_cmd_plane_point" ]
     ] ],
+    [ "OgreDeflectorPlaneAffector2.h", "_ogre_deflector_plane_affector2_8h.html", [
+      [ "DeflectorPlaneAffector2", "class_ogre_1_1_deflector_plane_affector2.html", "class_ogre_1_1_deflector_plane_affector2" ],
+      [ "DeflectorPlaneAffectorFactory2", "class_ogre_1_1_deflector_plane_affector_factory2.html", null ]
+    ] ],
     [ "OgreDeflectorPlaneAffectorFactory.h", "_ogre_deflector_plane_affector_factory_8h.html", [
       [ "DeflectorPlaneAffectorFactory", "class_ogre_1_1_deflector_plane_affector_factory.html", null ]
     ] ],
@@ -480,6 +525,10 @@ var files_dup =
       [ "CmdKeepVelocity", "class_ogre_1_1_direction_randomiser_affector_1_1_cmd_keep_velocity.html", "class_ogre_1_1_direction_randomiser_affector_1_1_cmd_keep_velocity" ],
       [ "CmdRandomness", "class_ogre_1_1_direction_randomiser_affector_1_1_cmd_randomness.html", "class_ogre_1_1_direction_randomiser_affector_1_1_cmd_randomness" ],
       [ "CmdScope", "class_ogre_1_1_direction_randomiser_affector_1_1_cmd_scope.html", "class_ogre_1_1_direction_randomiser_affector_1_1_cmd_scope" ]
+    ] ],
+    [ "OgreDirectionRandomiserAffector2.h", "_ogre_direction_randomiser_affector2_8h.html", [
+      [ "DirectionRandomiserAffector2", "class_ogre_1_1_direction_randomiser_affector2.html", "class_ogre_1_1_direction_randomiser_affector2" ],
+      [ "DirectionRandomiserAffectorFactory2", "class_ogre_1_1_direction_randomiser_affector_factory2.html", null ]
     ] ],
     [ "OgreDirectionRandomiserAffectorFactory.h", "_ogre_direction_randomiser_affector_factory_8h.html", [
       [ "DirectionRandomiserAffectorFactory", "class_ogre_1_1_direction_randomiser_affector_factory.html", null ]
@@ -523,8 +572,17 @@ var files_dup =
     [ "OgreEllipsoidEmitter.h", "_ogre_ellipsoid_emitter_8h.html", [
       [ "EllipsoidEmitter", "class_ogre_1_1_ellipsoid_emitter.html", "class_ogre_1_1_ellipsoid_emitter" ]
     ] ],
+    [ "OgreEllipsoidEmitter2.h", "_ogre_ellipsoid_emitter2_8h.html", [
+      [ "EllipsoidEmitter2", "class_ogre_1_1_ellipsoid_emitter2.html", "class_ogre_1_1_ellipsoid_emitter2" ],
+      [ "EllipsoidEmitterFactory2", "class_ogre_1_1_ellipsoid_emitter_factory2.html", "class_ogre_1_1_ellipsoid_emitter_factory2" ]
+    ] ],
     [ "OgreEllipsoidEmitterFactory.h", "_ogre_ellipsoid_emitter_factory_8h.html", [
       [ "EllipsoidEmitterFactory", "class_ogre_1_1_ellipsoid_emitter_factory.html", "class_ogre_1_1_ellipsoid_emitter_factory" ]
+    ] ],
+    [ "OgreEmitter2.h", "_ogre_emitter2_8h.html", [
+      [ "EmitterDefData", "class_ogre_1_1_emitter_def_data.html", "class_ogre_1_1_emitter_def_data" ],
+      [ "EmitterInstanceData", "struct_ogre_1_1_emitter_instance_data.html", "struct_ogre_1_1_emitter_instance_data" ],
+      [ "ParticleEmitterDefDataFactory", "class_ogre_1_1_particle_emitter_def_data_factory.html", "class_ogre_1_1_particle_emitter_def_data_factory" ]
     ] ],
     [ "OgreEmscriptenEGLContext.h", "_ogre_emscripten_e_g_l_context_8h.html", [
       [ "EmscriptenEGLContext", "class_ogre_1_1_emscripten_e_g_l_context.html", "class_ogre_1_1_emscripten_e_g_l_context" ]
@@ -928,6 +986,10 @@ var files_dup =
       [ "CmdInnerY", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_y.html", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_y" ],
       [ "CmdInnerZ", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_z.html", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_z" ]
     ] ],
+    [ "OgreHollowEllipsoidEmitter2.h", "_ogre_hollow_ellipsoid_emitter2_8h.html", [
+      [ "HollowEllipsoidEmitter2", "class_ogre_1_1_hollow_ellipsoid_emitter2.html", "class_ogre_1_1_hollow_ellipsoid_emitter2" ],
+      [ "HollowEllipsoidEmitterFactory2", "class_ogre_1_1_hollow_ellipsoid_emitter_factory2.html", "class_ogre_1_1_hollow_ellipsoid_emitter_factory2" ]
+    ] ],
     [ "OgreHollowEllipsoidEmitterFactory.h", "_ogre_hollow_ellipsoid_emitter_factory_8h.html", [
       [ "HollowEllipsoidEmitterFactory", "class_ogre_1_1_hollow_ellipsoid_emitter_factory.html", "class_ogre_1_1_hollow_ellipsoid_emitter_factory" ]
     ] ],
@@ -977,6 +1039,10 @@ var files_dup =
       [ "LinearForceAffector", "class_ogre_1_1_linear_force_affector.html", "class_ogre_1_1_linear_force_affector" ],
       [ "CmdForceApp", "class_ogre_1_1_linear_force_affector_1_1_cmd_force_app.html", "class_ogre_1_1_linear_force_affector_1_1_cmd_force_app" ],
       [ "CmdForceVector", "class_ogre_1_1_linear_force_affector_1_1_cmd_force_vector.html", "class_ogre_1_1_linear_force_affector_1_1_cmd_force_vector" ]
+    ] ],
+    [ "OgreLinearForceAffector2.h", "_ogre_linear_force_affector2_8h.html", [
+      [ "LinearForceAffector2", "class_ogre_1_1_linear_force_affector2.html", "class_ogre_1_1_linear_force_affector2" ],
+      [ "LinearForceAffectorFactory2", "class_ogre_1_1_linear_force_affector_factory2.html", null ]
     ] ],
     [ "OgreLinearForceAffectorFactory.h", "_ogre_linear_force_affector_factory_8h.html", [
       [ "LinearForceAffectorFactory", "class_ogre_1_1_linear_force_affector_factory.html", null ]
@@ -1340,7 +1406,16 @@ var files_dup =
       [ "CmdUVCoords", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_u_v_coords.html", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_u_v_coords" ]
     ] ],
     [ "OgreParticle.h", "_ogre_particle_8h.html", null ],
+    [ "OgreParticle2.h", "_ogre_particle2_8h.html", [
+      [ "EmittedParticle", "struct_ogre_1_1_emitted_particle.html", "struct_ogre_1_1_emitted_particle" ],
+      [ "ParticleCpuData", "struct_ogre_1_1_particle_cpu_data.html", "struct_ogre_1_1_particle_cpu_data" ],
+      [ "ParticleGpuData", "struct_ogre_1_1_particle_gpu_data.html", "struct_ogre_1_1_particle_gpu_data" ]
+    ] ],
     [ "OgreParticleAffector.h", "_ogre_particle_affector_8h.html", null ],
+    [ "OgreParticleAffector2.h", "_ogre_particle_affector2_8h.html", [
+      [ "ParticleAffector2", "class_ogre_1_1_particle_affector2.html", "class_ogre_1_1_particle_affector2" ],
+      [ "ParticleAffectorFactory2", "class_ogre_1_1_particle_affector_factory2.html", "class_ogre_1_1_particle_affector_factory2" ]
+    ] ],
     [ "OgreParticleAffectorFactory.h", "_ogre_particle_affector_factory_8h.html", null ],
     [ "OgreParticleEmitter.h", "_ogre_particle_emitter_8h.html", null ],
     [ "OgreParticleEmitterCommands.h", "_ogre_particle_emitter_commands_8h.html", [
@@ -1369,6 +1444,10 @@ var files_dup =
       [ "CmdVelocity", "class_ogre_1_1_emitter_commands_1_1_cmd_velocity.html", "class_ogre_1_1_emitter_commands_1_1_cmd_velocity" ]
     ] ],
     [ "OgreParticleEmitterFactory.h", "_ogre_particle_emitter_factory_8h.html", null ],
+    [ "OgreParticleFX2Plugin.h", "_ogre_particle_f_x2_plugin_8h.html", [
+      [ "ParticleFX2Plugin", "class_ogre_1_1_particle_f_x2_plugin.html", "class_ogre_1_1_particle_f_x2_plugin" ]
+    ] ],
+    [ "OgreParticleFX2Prerequisites.h", "_ogre_particle_f_x2_prerequisites_8h.html", "_ogre_particle_f_x2_prerequisites_8h" ],
     [ "OgreParticleFXPlugin.h", "_ogre_particle_f_x_plugin_8h.html", [
       [ "ParticleFXPlugin", "class_ogre_1_1_particle_f_x_plugin.html", "class_ogre_1_1_particle_f_x_plugin" ]
     ] ],
@@ -1387,7 +1466,11 @@ var files_dup =
       [ "CmdSorted", "class_ogre_1_1_particle_system_1_1_cmd_sorted.html", "class_ogre_1_1_particle_system_1_1_cmd_sorted" ],
       [ "CmdWidth", "class_ogre_1_1_particle_system_1_1_cmd_width.html", "class_ogre_1_1_particle_system_1_1_cmd_width" ]
     ] ],
+    [ "OgreParticleSystem2.h", "_ogre_particle_system2_8h.html", "_ogre_particle_system2_8h" ],
     [ "OgreParticleSystemManager.h", "_ogre_particle_system_manager_8h.html", null ],
+    [ "OgreParticleSystemManager2.h", "_ogre_particle_system_manager2_8h.html", [
+      [ "ParticleSystemManager2", "class_ogre_1_1_particle_system_manager2.html", "class_ogre_1_1_particle_system_manager2" ]
+    ] ],
     [ "OgreParticleSystemRenderer.h", "_ogre_particle_system_renderer_8h.html", null ],
     [ "OgrePass.h", "_ogre_pass_8h.html", null ],
     [ "OgrePatchMesh.h", "_ogre_patch_mesh_8h.html", null ],
@@ -1407,6 +1490,10 @@ var files_dup =
     [ "OgrePlugin.h", "_ogre_plugin_8h.html", null ],
     [ "OgrePointEmitter.h", "_ogre_point_emitter_8h.html", [
       [ "PointEmitter", "class_ogre_1_1_point_emitter.html", "class_ogre_1_1_point_emitter" ]
+    ] ],
+    [ "OgrePointEmitter2.h", "_ogre_point_emitter2_8h.html", [
+      [ "PointEmitter2", "class_ogre_1_1_point_emitter2.html", "class_ogre_1_1_point_emitter2" ],
+      [ "PointEmitterFactory2", "class_ogre_1_1_point_emitter_factory2.html", "class_ogre_1_1_point_emitter_factory2" ]
     ] ],
     [ "OgrePointEmitterFactory.h", "_ogre_point_emitter_factory_8h.html", [
       [ "PointEmitterFactory", "class_ogre_1_1_point_emitter_factory.html", "class_ogre_1_1_point_emitter_factory" ]
@@ -1466,6 +1553,10 @@ var files_dup =
       [ "CmdInnerX", "class_ogre_1_1_ring_emitter_1_1_cmd_inner_x.html", "class_ogre_1_1_ring_emitter_1_1_cmd_inner_x" ],
       [ "CmdInnerY", "class_ogre_1_1_ring_emitter_1_1_cmd_inner_y.html", "class_ogre_1_1_ring_emitter_1_1_cmd_inner_y" ]
     ] ],
+    [ "OgreRingEmitter2.h", "_ogre_ring_emitter2_8h.html", [
+      [ "RingEmitter2", "class_ogre_1_1_ring_emitter2.html", "class_ogre_1_1_ring_emitter2" ],
+      [ "RingEmitterFactory2", "class_ogre_1_1_ring_emitter_factory2.html", "class_ogre_1_1_ring_emitter_factory2" ]
+    ] ],
     [ "OgreRingEmitterFactory.h", "_ogre_ring_emitter_factory_8h.html", [
       [ "RingEmitterFactory", "class_ogre_1_1_ring_emitter_factory.html", "class_ogre_1_1_ring_emitter_factory" ]
     ] ],
@@ -1478,13 +1569,22 @@ var files_dup =
       [ "CmdRotationSpeedRangeEnd", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end" ],
       [ "CmdRotationSpeedRangeStart", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html", "class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start" ]
     ] ],
+    [ "OgreRotationAffector2.h", "_ogre_rotation_affector2_8h.html", [
+      [ "RotationAffector2", "class_ogre_1_1_rotation_affector2.html", "class_ogre_1_1_rotation_affector2" ],
+      [ "RotationAffectorFactory2", "class_ogre_1_1_rotation_affector_factory2.html", null ]
+    ] ],
     [ "OgreRotationAffectorFactory.h", "_ogre_rotation_affector_factory_8h.html", [
       [ "RotationAffectorFactory", "class_ogre_1_1_rotation_affector_factory.html", null ]
     ] ],
     [ "OgreRotationalSpline.h", "_ogre_rotational_spline_8h.html", null ],
     [ "OgreScaleAffector.h", "_ogre_scale_affector_8h.html", [
       [ "ScaleAffector", "class_ogre_1_1_scale_affector.html", "class_ogre_1_1_scale_affector" ],
+      [ "CmdMultiplyMode", "class_ogre_1_1_scale_affector_1_1_cmd_multiply_mode.html", "class_ogre_1_1_scale_affector_1_1_cmd_multiply_mode" ],
       [ "CmdScaleAdjust", "class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust.html", "class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust" ]
+    ] ],
+    [ "OgreScaleAffector2.h", "_ogre_scale_affector2_8h.html", [
+      [ "ScaleAffector2", "class_ogre_1_1_scale_affector2.html", "class_ogre_1_1_scale_affector2" ],
+      [ "ScaleAffectorFactory2", "class_ogre_1_1_scale_affector_factory2.html", null ]
     ] ],
     [ "OgreScaleAffectorFactory.h", "_ogre_scale_affector_factory_8h.html", [
       [ "ScaleAffectorFactory", "class_ogre_1_1_scale_affector_factory.html", null ]
@@ -1493,6 +1593,10 @@ var files_dup =
       [ "ScaleInterpolatorAffector", "class_ogre_1_1_scale_interpolator_affector.html", "class_ogre_1_1_scale_interpolator_affector" ],
       [ "CmdScaleAdjust", "class_ogre_1_1_scale_interpolator_affector_1_1_cmd_scale_adjust.html", "class_ogre_1_1_scale_interpolator_affector_1_1_cmd_scale_adjust" ],
       [ "CmdTimeAdjust", "class_ogre_1_1_scale_interpolator_affector_1_1_cmd_time_adjust.html", "class_ogre_1_1_scale_interpolator_affector_1_1_cmd_time_adjust" ]
+    ] ],
+    [ "OgreScaleInterpolatorAffector2.h", "_ogre_scale_interpolator_affector2_8h.html", [
+      [ "ScaleInterpolatorAffector2", "class_ogre_1_1_scale_interpolator_affector2.html", "class_ogre_1_1_scale_interpolator_affector2" ],
+      [ "ScaleInterpolatorAffectorFactory2", "class_ogre_1_1_scale_interpolator_affector_factory2.html", null ]
     ] ],
     [ "OgreScaleInterpolatorAffectorFactory.h", "_ogre_scale_interpolator_affector_factory_8h.html", [
       [ "ScaleInterpolatorAffectorFactory", "class_ogre_1_1_scale_interpolator_affector_factory.html", null ]

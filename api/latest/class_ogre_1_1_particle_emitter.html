@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_particle_emitter.html',
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_particle_emitter__inherit__graph.svg" width="686" height="411"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_particle_emitter__inherit__graph.svg" width="1503" height="342"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -195,9 +195,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aae556108f4dcdda4fa73bd4969549bad"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_emitter.html#aae556108f4dcdda4fa73bd4969549bad">getTimeToLive</a> () const</td></tr>
 <tr class="memdesc:aae556108f4dcdda4fa73bd4969549bad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the time each particle will live for.  <a href="class_ogre_1_1_particle_emitter.html#aae556108f4dcdda4fa73bd4969549bad">More...</a><br /></td></tr>
 <tr class="separator:aae556108f4dcdda4fa73bd4969549bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28f5bce7debd978cf6a675f1706d7445"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_emitter.html#a28f5bce7debd978cf6a675f1706d7445">getType</a> () const</td></tr>
-<tr class="memdesc:a28f5bce7debd978cf6a675f1706d7445"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the type of emitter.  <a href="class_ogre_1_1_particle_emitter.html#a28f5bce7debd978cf6a675f1706d7445">More...</a><br /></td></tr>
-<tr class="separator:a28f5bce7debd978cf6a675f1706d7445"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d382cb40b0390d65a852a08bbf237e3"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_emitter.html#a3d382cb40b0390d65a852a08bbf237e3">getType</a> () const =0</td></tr>
+<tr class="memdesc:a3d382cb40b0390d65a852a08bbf237e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the type of emitter.  <a href="class_ogre_1_1_particle_emitter.html#a3d382cb40b0390d65a852a08bbf237e3">More...</a><br /></td></tr>
+<tr class="separator:a3d382cb40b0390d65a852a08bbf237e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7b39cbcb1006b1ec78a613165ccf57b"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_emitter.html#aa7b39cbcb1006b1ec78a613165ccf57b">getUp</a> () const</td></tr>
 <tr class="memdesc:aa7b39cbcb1006b1ec78a613165ccf57b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the up vector of the emitter.  <a href="class_ogre_1_1_particle_emitter.html#aa7b39cbcb1006b1ec78a613165ccf57b">More...</a><br /></td></tr>
 <tr class="separator:aa7b39cbcb1006b1ec78a613165ccf57b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -483,7 +483,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section remark"><dt>Remarks</dt><dd>For efficiency the emitter does not actually create new <a class="el" href="class_ogre_1_1_particle.html" title="Class representing a single particle instance.">Particle</a> instances (these are reused by the <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> as existing particles 'die'). The implementation for this method must return the number of particles the emitter would like to emit given the number of seconds which have elapsed (passed in as a parameter). </dd></dl>
 <dl class="section user"><dt></dt><dd>Based on the return value from this method, the <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> class will call _initParticle once for each particle it chooses to allow to be emitted by this emitter. The emitter should not track these _initParticle calls, it should assume all emissions requested were made (even if they could not be because of particle quotas). </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_point_emitter.html#ace5011b6ddd179f31125db039d3adfb6">Ogre::PointEmitter</a>, and <a class="el" href="class_ogre_1_1_area_emitter.html#a74302c9670629be939fbe4b5ef73d8a1">Ogre::AreaEmitter</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_point_emitter.html#ace5011b6ddd179f31125db039d3adfb6">Ogre::PointEmitter</a>, <a class="el" href="class_ogre_1_1_area_emitter.html#a74302c9670629be939fbe4b5ef73d8a1">Ogre::AreaEmitter</a>, and <a class="el" href="class_ogre_1_1_emitter_def_data.html#a932c39ce21929c12d114314333153de6">Ogre::EmitterDefData</a>.</p>
 
 </div>
 </div>
@@ -1185,8 +1185,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a28f5bce7debd978cf6a675f1706d7445"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28f5bce7debd978cf6a675f1706d7445">&#9670;&nbsp;</a></span>getType()</h2>
+<a id="a3d382cb40b0390d65a852a08bbf237e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d382cb40b0390d65a852a08bbf237e3">&#9670;&nbsp;</a></span>getType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1195,7 +1195,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&amp; Ogre::ParticleEmitter::getType </td>
+          <td class="memname">virtual const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&amp; Ogre::ParticleEmitter::getType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1203,13 +1203,15 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Returns the name of the type of emitter. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>This property is useful for determining the type of emitter procedurally so another can be created. </dd></dl>
+
+<p>Implemented in <a class="el" href="class_ogre_1_1_ring_emitter2.html#adf07455441edeb49223c9beadd39f130">Ogre::RingEmitter2</a>, <a class="el" href="class_ogre_1_1_point_emitter2.html#a2d5b29b5d6666f0e1bb90f8a1d291929">Ogre::PointEmitter2</a>, <a class="el" href="class_ogre_1_1_hollow_ellipsoid_emitter2.html#aa20b4463df5633731cacf270aa482793">Ogre::HollowEllipsoidEmitter2</a>, <a class="el" href="class_ogre_1_1_ellipsoid_emitter2.html#a10070abf78d70b9a8f7fc11af75f5873">Ogre::EllipsoidEmitter2</a>, <a class="el" href="class_ogre_1_1_cylinder_emitter2.html#af9dfd16d3332cf811fa7ce5d80e521ad">Ogre::CylinderEmitter2</a>, <a class="el" href="class_ogre_1_1_box_emitter2.html#a45ae934eb50c34009cd388a99a6e1a3f">Ogre::BoxEmitter2</a>, <a class="el" href="class_ogre_1_1_ring_emitter.html#ab9780d7e3f2ae85034409d6eba091ca4">Ogre::RingEmitter</a>, <a class="el" href="class_ogre_1_1_point_emitter.html#a2ffeab61231507fa59c8e3c9d31b5be7">Ogre::PointEmitter</a>, <a class="el" href="class_ogre_1_1_hollow_ellipsoid_emitter.html#a04d97a6304414c1b1a0a20081adf4f67">Ogre::HollowEllipsoidEmitter</a>, <a class="el" href="class_ogre_1_1_ellipsoid_emitter.html#ac251e5b73fe953a1b90038c370d93840">Ogre::EllipsoidEmitter</a>, <a class="el" href="class_ogre_1_1_cylinder_emitter.html#a40537ba5f96ecaa8c07dae03342aca1b">Ogre::CylinderEmitter</a>, and <a class="el" href="class_ogre_1_1_box_emitter.html#a61e85a9f1d1a6ad9569ac98a42bf4c27">Ogre::BoxEmitter</a>.</p>
 
 </div>
 </div>
@@ -1473,7 +1475,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_area_emitter.html#a748940b5e82912ce2f504298a1327860">Ogre::AreaEmitter</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_area_emitter2.html#a30a95285415dcb704ee268f9129ac629">Ogre::AreaEmitter2</a>, and <a class="el" href="class_ogre_1_1_area_emitter.html#a748940b5e82912ce2f504298a1327860">Ogre::AreaEmitter</a>.</p>
 
 </div>
 </div>

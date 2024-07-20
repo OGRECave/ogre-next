@@ -128,6 +128,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a1a30fbd6a01705777e14e62e00ddfb27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overridden from <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a>.  <a href="class_ogre_1_1v1_1_1_billboard_set.html#a1a30fbd6a01705777e14e62e00ddfb27">More...</a><br /></td></tr>
 <tr class="separator:a1a30fbd6a01705777e14e62e00ddfb27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d892bd0379dc258a3ce942373815f79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html#a0d892bd0379dc258a3ce942373815f79">_releaseManualHardwareResources</a> () override</td></tr>
+<tr class="memdesc:a0d892bd0379dc258a3ce942373815f79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources were lost.  <a href="class_ogre_1_1v1_1_1_billboard_set.html#a0d892bd0379dc258a3ce942373815f79">More...</a><br /></td></tr>
 <tr class="separator:a0d892bd0379dc258a3ce942373815f79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aead41d67a12b7b6bcb4fe12f034053a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html#aead41d67a12b7b6bcb4fe12f034053a6">_setNullDatablock</a> () override</td></tr>
 <tr class="memdesc:aead41d67a12b7b6bcb4fe12f034053a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the datablock to a null pointer.  <a href="class_ogre_1_1v1_1_1_billboard_set.html#aead41d67a12b7b6bcb4fe12f034053a6">More...</a><br /></td></tr>
@@ -547,6 +548,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a52885f46abdb3e5f850aed9302d666fa inherit pub_methods_class_ogre_1_1_renderable"><td class="memItemLeft" align="right" valign="top">virtual unsigned short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a52885f46abdb3e5f850aed9302d666fa">getNumWorldTransforms</a> () const</td></tr>
 <tr class="memdesc:a52885f46abdb3e5f850aed9302d666fa inherit pub_methods_class_ogre_1_1_renderable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of world transform matrices this renderable requires.  <a href="class_ogre_1_1_renderable.html#a52885f46abdb3e5f850aed9302d666fa">More...</a><br /></td></tr>
 <tr class="separator:a52885f46abdb3e5f850aed9302d666fa inherit pub_methods_class_ogre_1_1_renderable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a530690fa574bbdee7081af13e87130e3 inherit pub_methods_class_ogre_1_1_renderable"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre_1_1_particle_type.html#aec723ad77b60eaee6cf3122e2e3cc44e">ParticleType::ParticleType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a530690fa574bbdee7081af13e87130e3">getParticleType</a> () const</td></tr>
+<tr class="memdesc:a530690fa574bbdee7081af13e87130e3 inherit pub_methods_class_ogre_1_1_renderable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a> to indicate <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> they want specific shader code.  <a href="class_ogre_1_1_renderable.html#a530690fa574bbdee7081af13e87130e3">More...</a><br /></td></tr>
+<tr class="separator:a530690fa574bbdee7081af13e87130e3 inherit pub_methods_class_ogre_1_1_renderable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f8bcf98e363839c42bd19708a062b3c inherit pub_methods_class_ogre_1_1_renderable"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a9f8bcf98e363839c42bd19708a062b3c">getPolygonModeOverrideable</a> () const</td></tr>
 <tr class="memdesc:a9f8bcf98e363839c42bd19708a062b3c inherit pub_methods_class_ogre_1_1_renderable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets whether this renderable's chosen detail level can be overridden (downgraded) by the camera setting.  <a href="class_ogre_1_1_renderable.html#a9f8bcf98e363839c42bd19708a062b3c">More...</a><br /></td></tr>
 <tr class="separator:a9f8bcf98e363839c42bd19708a062b3c inherit pub_methods_class_ogre_1_1_renderable"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -933,7 +937,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Notifies the movable object that hardware resources were lost. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Called automatically by <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> if hardware resources were lost and can not be restored using some internal mechanism. Among affected resources are nested shadow renderables, ManualObjects, etc. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_movable_object.html#a57123ae4fec1b472f25270c1dd6abe59">Ogre::MovableObject</a>.</p>
 

@@ -119,8 +119,14 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_sphere.html">Ogre::ArraySphere</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache-friendly array of <a class="el" href="class_ogre_1_1_sphere.html" title="A sphere primitive, mostly used for bounds checking.">Sphere</a> represented as a SoA array.  <a href="class_ogre_1_1_array_sphere.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_vector2.html">Ogre::ArrayVector2</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache-friendly array of 2-dimensional represented as a SoA array.  <a href="class_ogre_1_1_array_vector2.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_vector3.html">Ogre::ArrayVector3</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache-friendly array of 3-dimensional represented as a SoA array.  <a href="class_ogre_1_1_array_vector3.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_vector4.html">Ogre::ArrayVector4</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache-friendly array of 4-dimensional represented as a SoA array.  <a href="class_ogre_1_1_array_vector4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_axis_aligned_box.html">Ogre::AxisAlignedBox</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A 3D box aligned with the x/y/z axes.  <a href="class_ogre_1_1_axis_aligned_box.html#details">More...</a><br /></td></tr>
@@ -301,6 +307,9 @@ Functions</h2></td></tr>
 <tr class="separator:ga562b349029e40604b6cf201fc49ef68a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad18eb71b870151f8db42f9f4c8318096"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___math.html#gad18eb71b870151f8db42f9f4c8318096">Ogre::Degree::valueRadians</a> () const</td></tr>
 <tr class="separator:gad18eb71b870151f8db42f9f4c8318096"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga27cd9d0c1aae1f96774414a58daeb154"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___math.html#ga27cd9d0c1aae1f96774414a58daeb154">Ogre::Radian::wrapToRangeNPI_PI</a> ()</td></tr>
+<tr class="memdesc:ga27cd9d0c1aae1f96774414a58daeb154"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps the given value to the range [-pi; pi] The algorithm is: const float signedPi = std::copysign( _PI, mRad ); const float wrappedValue = fmod( mRad + signedPi, TWO_PI ); mRad = wrappedValue - signedPi;.  <a href="group___math.html#ga27cd9d0c1aae1f96774414a58daeb154">More...</a><br /></td></tr>
+<tr class="separator:ga27cd9d0c1aae1f96774414a58daeb154"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Typedef Documentation</h2>
@@ -1219,6 +1228,35 @@ template&lt;class T &gt; </div>
 <p class="reference">References <a class="el" href="class_ogre_1_1_math.html#ac0fd8176acceb9af5911d15cce14fb50">Ogre::Math::DegreesToRadians()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="group___math.html#ga6aee68f4913cf646f4fa3c046a18ee60">Ogre::Radian::operator+()</a>, <a class="el" href="group___math.html#gaed5147935125e28f53cb19d70055bc88">Ogre::Radian::operator+=()</a>, <a class="el" href="group___math.html#ga05fd614aac352a71e17d8eb559578d7b">Ogre::Radian::operator-()</a>, <a class="el" href="group___math.html#ga223a82b9ff74351959eee91a335e7cdb">Ogre::Radian::operator-=()</a>, and <a class="el" href="group___math.html#gafab8ce89cde3034f3cc5c2537d5ea6fd">Ogre::Radian::operator=()</a>.</p>
+
+</div>
+</div>
+<a id="ga27cd9d0c1aae1f96774414a58daeb154"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga27cd9d0c1aae1f96774414a58daeb154">&#9670;&nbsp;</a></span>wrapToRangeNPI_PI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Radian::wrapToRangeNPI_PI </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Wraps the given value to the range [-pi; pi] The algorithm is: const float signedPi = std::copysign( _PI, mRad ); const float wrappedValue = fmod( mRad + signedPi, TWO_PI ); mRad = wrappedValue - signedPi;. </p>
+
+<p class="reference">References <a class="el" href="class_ogre_1_1_math.html#aee3e908f569f6d83d8359ef0d88a0461">Ogre::Math::PI</a>.</p>
 
 </div>
 </div>

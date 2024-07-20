@@ -49,6 +49,7 @@ var class_ogre_1_1_root =
     [ "getMovableObjectFactory", "class_ogre_1_1_root.html#ab89302520cbbe6d78d25e325081ea906", null ],
     [ "getMovableObjectFactoryIterator", "class_ogre_1_1_root.html#a3553a2489abef032d90f97db44aa109b", null ],
     [ "getNextFrameNumber", "class_ogre_1_1_root.html#ab96018d26a9ad7381e0946d3432deb44", null ],
+    [ "getParticleSystemManager2", "class_ogre_1_1_root.html#a6fb6f64c332a47412ef428b37ca29da8", null ],
     [ "getRemoveRenderQueueStructuresOnClear", "class_ogre_1_1_root.html#a734be2fb6e01355f328fa5ccd2e737f6", null ],
     [ "getRenderSystem", "class_ogre_1_1_root.html#a302ae050078b8a845a6059201cf9469b", null ],
     [ "getRenderSystemByName", "class_ogre_1_1_root.html#adaeb26515fba041094510f71fb6757c9", null ],

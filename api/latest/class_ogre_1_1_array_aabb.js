@@ -55,6 +55,7 @@ var class_ogre_1_1_array_aabb =
     [ "volume", "class_ogre_1_1_array_aabb.html#a3fb8e5ba6f4f55061d3d3841540db8e2", null ],
     [ "volume", "class_ogre_1_1_array_aabb.html#a3fb8e5ba6f4f55061d3d3841540db8e2", null ],
     [ "BOX_INFINITE", "class_ogre_1_1_array_aabb.html#af6adc0a598a7518f5f860f25b211ce74", null ],
+    [ "BOX_NULL", "class_ogre_1_1_array_aabb.html#ac397ae4283b46b82d2e4fc4d54bb040e", null ],
     [ "BOX_ZERO", "class_ogre_1_1_array_aabb.html#af60970530d444414d0c9de75cdbdc7ad", null ],
     [ "mCenter", "class_ogre_1_1_array_aabb.html#ac24b657e92288c56e381541bef3fcb41", null ],
     [ "mHalfSize", "class_ogre_1_1_array_aabb.html#a542f4c0f695c6732ae40c8c52d820403", null ]

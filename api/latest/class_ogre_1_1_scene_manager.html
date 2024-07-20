@@ -192,6 +192,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1cca7941525cf1c3aa08a6e3dfa5357a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe9e8281f38f5e41457d7fdc578dd7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aafe9e8281f38f5e41457d7fdc578dd7f">_fireParallelHlmsCompile</a> ()</td></tr>
 <tr class="separator:aafe9e8281f38f5e41457d7fdc578dd7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e3828c87665d786609e8f2910b70225"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a0e3828c87665d786609e8f2910b70225">_fireParticleSystemManager2Update</a> ()</td></tr>
+<tr class="separator:a0e3828c87665d786609e8f2910b70225"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7eb12e77377019771c3b8faa001c2062"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a7eb12e77377019771c3b8faa001c2062">_fireWarmUpShadersCompile</a> ()</td></tr>
 <tr class="separator:a7eb12e77377019771c3b8faa001c2062"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88574ace95c8fcc5ede8c5e81a7ae83b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a88574ace95c8fcc5ede8c5e81a7ae83b">_frameEnded</a> ()</td></tr>
@@ -213,6 +215,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac1ad489df9aca72e90f914999f0cd696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad732f23cbf6537f5919d347932fa542"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_node_memory_manager.html">NodeMemoryManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aad732f23cbf6537f5919d347932fa542">_getNodeMemoryManager</a> (<a class="el" href="group___general.html#ga635aa2486e7e05c17c1fdec1913094a6">SceneMemoryMgrTypes</a> sceneType)</td></tr>
 <tr class="separator:aad732f23cbf6537f5919d347932fa542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0cb00eda6557cdf89992cb825688321"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_object_memory_manager.html">ObjectMemoryManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa0cb00eda6557cdf89992cb825688321">_getParticleSysDefMemoryManager</a> ()</td></tr>
+<tr class="separator:aa0cb00eda6557cdf89992cb825688321"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7c1d5eab46fbf7619ec231352aacaa7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_object_memory_manager.html">ObjectMemoryManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa7c1d5eab46fbf7619ec231352aacaa7">_getParticleSysMemoryManager</a> ()</td></tr>
+<tr class="separator:aa7c1d5eab46fbf7619ec231352aacaa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7e9cd4a3903e887c379ead2eba1a996"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_node_memory_manager.html">NodeMemoryManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa7e9cd4a3903e887c379ead2eba1a996">_getTagPointNodeMemoryManager</a> ()</td></tr>
 <tr class="separator:aa7e9cd4a3903e887c379ead2eba1a996"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa27460861e2dd924d914ec21987993b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___scene.html#ga21ffab3c275854b773dcd9efeba9152c">VisibleObjectsPerThreadArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa27460861e2dd924d914ec21987993b4">_getTmpVisibleObjectsList</a> ()</td></tr>
@@ -325,8 +331,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7ed1f8508aab6937936e59131d37b015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a BillboardChain, an object which you can use to render a linked chain of billboards.  <a href="class_ogre_1_1_scene_manager.html#a7ed1f8508aab6937936e59131d37b015">More...</a><br /></td></tr>
 <tr class="separator:a7ed1f8508aab6937936e59131d37b015"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addb069837e615efa614dacce8fb46567"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html">v1::BillboardSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#addb069837e615efa614dacce8fb46567">createBillboardSet</a> (unsigned int poolSize=20, <a class="el" href="group___general.html#ga635aa2486e7e05c17c1fdec1913094a6">SceneMemoryMgrTypes</a> sceneType=<a class="el" href="group___general.html#gga635aa2486e7e05c17c1fdec1913094a6a1ea35787f06b0a63e0dd130cce754204">SCENE_DYNAMIC</a>)</td></tr>
-<tr class="memdesc:addb069837e615efa614dacce8fb46567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new BillboardSet for use with this scene manager.  <a href="class_ogre_1_1_scene_manager.html#addb069837e615efa614dacce8fb46567">More...</a><br /></td></tr>
+<tr class="memdesc:addb069837e615efa614dacce8fb46567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> for use with this scene manager.  <a href="class_ogre_1_1_scene_manager.html#addb069837e615efa614dacce8fb46567">More...</a><br /></td></tr>
 <tr class="separator:addb069837e615efa614dacce8fb46567"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c0763a2e25e20b8f0254539d9688ad8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_billboard_set.html">BillboardSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a7c0763a2e25e20b8f0254539d9688ad8">createBillboardSet2</a> ()</td></tr>
+<tr class="memdesc:a7c0763a2e25e20b8f0254539d9688ad8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an instance of the new generation of billboards.  <a href="class_ogre_1_1_scene_manager.html#a7c0763a2e25e20b8f0254539d9688ad8">More...</a><br /></td></tr>
+<tr class="separator:a7c0763a2e25e20b8f0254539d9688ad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0b123ba8766b15be93d40663f55513b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#af0b123ba8766b15be93d40663f55513b">createCamera</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool notShadowCaster=true, bool forCubemapping=false)</td></tr>
 <tr class="memdesc:af0b123ba8766b15be93d40663f55513b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a camera to be managed by this scene manager.  <a href="class_ogre_1_1_scene_manager.html#af0b123ba8766b15be93d40663f55513b">More...</a><br /></td></tr>
 <tr class="separator:af0b123ba8766b15be93d40663f55513b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -365,6 +374,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0d79919af93bf827cf8185930dd2a5f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_particle_system.html">ParticleSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa0d79919af93bf827cf8185930dd2a5f">createParticleSystem</a> (size_t quota=500, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;resourceGroup=<a class="el" href="class_ogre_1_1_resource_group_manager.html#a813da407fd91dc1afee86103d3a4f5cc">ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME</a>)</td></tr>
 <tr class="memdesc:aa0d79919af93bf827cf8185930dd2a5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a blank particle system.  <a href="class_ogre_1_1_scene_manager.html#aa0d79919af93bf827cf8185930dd2a5f">More...</a><br /></td></tr>
 <tr class="separator:aa0d79919af93bf827cf8185930dd2a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa775136fbe014cb880bbcc9dda4adb71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_particle_system2.html">ParticleSystem2</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa775136fbe014cb880bbcc9dda4adb71">createParticleSystem2</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;templateDefName)</td></tr>
+<tr class="memdesc:aa775136fbe014cb880bbcc9dda4adb71"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_scene_manager.html#a330136c3762d09401ddcd3efb68d3892" title="Creates an instance the next generation of ParticleFX.">createParticleSystem2()</a>.  <a href="class_ogre_1_1_scene_manager.html#aa775136fbe014cb880bbcc9dda4adb71">More...</a><br /></td></tr>
+<tr class="separator:aa775136fbe014cb880bbcc9dda4adb71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a330136c3762d09401ddcd3efb68d3892"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_particle_system2.html">ParticleSystem2</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a330136c3762d09401ddcd3efb68d3892">createParticleSystem2</a> (<a class="el" href="class_ogre_1_1_particle_system_def.html">ParticleSystemDef</a> *systemDef)</td></tr>
+<tr class="memdesc:a330136c3762d09401ddcd3efb68d3892"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an instance the next generation of ParticleFX.  <a href="class_ogre_1_1_scene_manager.html#a330136c3762d09401ddcd3efb68d3892">More...</a><br /></td></tr>
+<tr class="separator:a330136c3762d09401ddcd3efb68d3892"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc6a698e7db380b0733b45d63561292f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_particle_system_def.html">ParticleSystemDef</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#afc6a698e7db380b0733b45d63561292f">createParticleSystemDef</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name)</td></tr>
+<tr class="memdesc:afc6a698e7db380b0733b45d63561292f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the template / definition of the new generation of ParticleFXs.  <a href="class_ogre_1_1_scene_manager.html#afc6a698e7db380b0733b45d63561292f">More...</a><br /></td></tr>
+<tr class="separator:afc6a698e7db380b0733b45d63561292f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd010182f634fc54dd00af2d5e59fb4e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_plane_bounded_volume_list_scene_query.html">PlaneBoundedVolumeListSceneQuery</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#acd010182f634fc54dd00af2d5e59fb4e">createPlaneBoundedVolumeQuery</a> (const <a class="el" href="group___math.html#ga6253a1300d656ba28342fe58260d0e71">PlaneBoundedVolumeList</a> &amp;volumes, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> mask=<a class="el" href="class_ogre_1_1_scene_manager.html#a6c140ffaced93a2b854e5c519c8fb568">QUERY_ENTITY_DEFAULT_MASK</a>)</td></tr>
 <tr class="memdesc:acd010182f634fc54dd00af2d5e59fb4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_ogre_1_1_plane_bounded_volume_list_scene_query.html" title="Specialises the SceneQuery class for querying within a plane-bounded volume.">PlaneBoundedVolumeListSceneQuery</a> for this scene manager.  <a href="class_ogre_1_1_scene_manager.html#acd010182f634fc54dd00af2d5e59fb4e">More...</a><br /></td></tr>
 <tr class="separator:acd010182f634fc54dd00af2d5e59fb4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -409,6 +427,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2c020b93723f94cb548a6656bb550e75"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a2c020b93723f94cb548a6656bb550e75">destroyAllBillboardSets</a> ()</td></tr>
 <tr class="memdesc:a2c020b93723f94cb548a6656bb550e75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys all BillboardSets.  <a href="class_ogre_1_1_scene_manager.html#a2c020b93723f94cb548a6656bb550e75">More...</a><br /></td></tr>
 <tr class="separator:a2c020b93723f94cb548a6656bb550e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a078a999542306050f6f9669dd14a3938"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a078a999542306050f6f9669dd14a3938">destroyAllBillboardSets2</a> ()</td></tr>
+<tr class="memdesc:a078a999542306050f6f9669dd14a3938"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys all <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> created with <a class="el" href="class_ogre_1_1_scene_manager.html#a7c0763a2e25e20b8f0254539d9688ad8" title="Creates an instance of the new generation of billboards.">createBillboardSet2()</a>.  <a href="class_ogre_1_1_scene_manager.html#a078a999542306050f6f9669dd14a3938">More...</a><br /></td></tr>
+<tr class="separator:a078a999542306050f6f9669dd14a3938"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaeca6aaeb426c53e5f740fca5d3acbf3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aaeca6aaeb426c53e5f740fca5d3acbf3">destroyAllCameras</a> ()</td></tr>
 <tr class="memdesc:aaeca6aaeb426c53e5f740fca5d3acbf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes (and destroys) all cameras from the scene.  <a href="class_ogre_1_1_scene_manager.html#aaeca6aaeb426c53e5f740fca5d3acbf3">More...</a><br /></td></tr>
 <tr class="separator:aaeca6aaeb426c53e5f740fca5d3acbf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -435,6 +456,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a653364760a4df8af5c2d0d6511fb91b7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a653364760a4df8af5c2d0d6511fb91b7">destroyAllParticleSystems</a> ()</td></tr>
 <tr class="memdesc:a653364760a4df8af5c2d0d6511fb91b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys all ParticleSystems from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>.  <a href="class_ogre_1_1_scene_manager.html#a653364760a4df8af5c2d0d6511fb91b7">More...</a><br /></td></tr>
 <tr class="separator:a653364760a4df8af5c2d0d6511fb91b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7772758170961b851e162111b433b95c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a7772758170961b851e162111b433b95c">destroyAllParticleSystems2</a> ()</td></tr>
+<tr class="memdesc:a7772758170961b851e162111b433b95c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys all particle systems created with createParticleSystem2.  <a href="class_ogre_1_1_scene_manager.html#a7772758170961b851e162111b433b95c">More...</a><br /></td></tr>
+<tr class="separator:a7772758170961b851e162111b433b95c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd0f342e3cc683f7bcbe15d1ddbce5b3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#acd0f342e3cc683f7bcbe15d1ddbce5b3">destroyAllRectangle2D</a> ()</td></tr>
 <tr class="memdesc:acd0f342e3cc683f7bcbe15d1ddbce5b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys all <a class="el" href="class_ogre_1_1_rectangle2_d.html">Rectangle2D</a>.  <a href="class_ogre_1_1_scene_manager.html#acd0f342e3cc683f7bcbe15d1ddbce5b3">More...</a><br /></td></tr>
 <tr class="separator:acd0f342e3cc683f7bcbe15d1ddbce5b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -454,8 +478,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a570a5bfc2b2285cf38974dc82db416c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys a BillboardChain from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>.  <a href="class_ogre_1_1_scene_manager.html#a570a5bfc2b2285cf38974dc82db416c9">More...</a><br /></td></tr>
 <tr class="separator:a570a5bfc2b2285cf38974dc82db416c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af46af31e3f0a9a4c88eb755b9af885d4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#af46af31e3f0a9a4c88eb755b9af885d4">destroyBillboardSet</a> (<a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html">v1::BillboardSet</a> *set)</td></tr>
-<tr class="memdesc:af46af31e3f0a9a4c88eb755b9af885d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys an BillboardSet from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>.  <a href="class_ogre_1_1_scene_manager.html#af46af31e3f0a9a4c88eb755b9af885d4">More...</a><br /></td></tr>
+<tr class="memdesc:af46af31e3f0a9a4c88eb755b9af885d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys an <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>.  <a href="class_ogre_1_1_scene_manager.html#af46af31e3f0a9a4c88eb755b9af885d4">More...</a><br /></td></tr>
 <tr class="separator:af46af31e3f0a9a4c88eb755b9af885d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3796585b0b54b3f1e7d6e5e34cfac504"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a3796585b0b54b3f1e7d6e5e34cfac504">destroyBillboardSet2</a> (<a class="el" href="class_ogre_1_1_billboard_set.html">BillboardSet</a> *billboardSet)</td></tr>
+<tr class="memdesc:a3796585b0b54b3f1e7d6e5e34cfac504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> created with <a class="el" href="class_ogre_1_1_scene_manager.html#a7c0763a2e25e20b8f0254539d9688ad8" title="Creates an instance of the new generation of billboards.">createBillboardSet2()</a>.  <a href="class_ogre_1_1_scene_manager.html#a3796585b0b54b3f1e7d6e5e34cfac504">More...</a><br /></td></tr>
+<tr class="separator:a3796585b0b54b3f1e7d6e5e34cfac504"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acac58e45f8b6b6826c81933f02a45046"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#acac58e45f8b6b6826c81933f02a45046">destroyCamera</a> (<a class="el" href="class_ogre_1_1_camera.html">Camera</a> *cam)</td></tr>
 <tr class="memdesc:acac58e45f8b6b6826c81933f02a45046"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a camera from the scene.  <a href="class_ogre_1_1_scene_manager.html#acac58e45f8b6b6826c81933f02a45046">More...</a><br /></td></tr>
 <tr class="separator:acac58e45f8b6b6826c81933f02a45046"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -482,6 +509,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abde401fcf3796e3e2beb8c7603648f07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#abde401fcf3796e3e2beb8c7603648f07">destroyParticleSystem</a> (<a class="el" href="class_ogre_1_1_particle_system.html">ParticleSystem</a> *obj)</td></tr>
 <tr class="memdesc:abde401fcf3796e3e2beb8c7603648f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys a <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>.  <a href="class_ogre_1_1_scene_manager.html#abde401fcf3796e3e2beb8c7603648f07">More...</a><br /></td></tr>
 <tr class="separator:abde401fcf3796e3e2beb8c7603648f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ec392f63d0f2fdf537c118c51f1c78e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a1ec392f63d0f2fdf537c118c51f1c78e">destroyParticleSystem2</a> (<a class="el" href="class_ogre_1_1_particle_system2.html">ParticleSystem2</a> *obj)</td></tr>
+<tr class="separator:a1ec392f63d0f2fdf537c118c51f1c78e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08f7adf5f342c6808481fa922c8c62a0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a08f7adf5f342c6808481fa922c8c62a0">destroyQuery</a> (<a class="el" href="class_ogre_1_1_scene_query.html">SceneQuery</a> *query)</td></tr>
 <tr class="memdesc:a08f7adf5f342c6808481fa922c8c62a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a scene query of any type.  <a href="class_ogre_1_1_scene_manager.html#a08f7adf5f342c6808481fa922c8c62a0">More...</a><br /></td></tr>
 <tr class="separator:a08f7adf5f342c6808481fa922c8c62a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -640,6 +669,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae291393bc0c5bd48a8c6e79742180c93"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ae291393bc0c5bd48a8c6e79742180c93">getOptionValues</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;strKey, <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> &amp;refValueList)</td></tr>
 <tr class="memdesc:ae291393bc0c5bd48a8c6e79742180c93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for getting all possible values for a specific option.  <a href="class_ogre_1_1_scene_manager.html#ae291393bc0c5bd48a8c6e79742180c93">More...</a><br /></td></tr>
 <tr class="separator:ae291393bc0c5bd48a8c6e79742180c93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0632d16c0e9df6c44f98cf1574abe113"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_particle_system_manager2.html">ParticleSystemManager2</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a0632d16c0e9df6c44f98cf1574abe113">getParticleSystemManager2</a> ()</td></tr>
+<tr class="separator:a0632d16c0e9df6c44f98cf1574abe113"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86c8a45b3438d263aca4f84a7155c1a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_radial_density_mask.html">RadialDensityMask</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a86c8a45b3438d263aca4f84a7155c1a3">getRadialDensityMask</a> () const</td></tr>
 <tr class="separator:a86c8a45b3438d263aca4f84a7155c1a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa473a1b76a9eb082cfbb31b7390349f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aaa473a1b76a9eb082cfbb31b7390349f">getRelativeOrigin</a> () const</td></tr>
@@ -1565,6 +1596,23 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 
 </div>
 </div>
+<a id="a0e3828c87665d786609e8f2910b70225"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e3828c87665d786609e8f2910b70225">&#9670;&nbsp;</a></span>_fireParticleSystemManager2Update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::_fireParticleSystemManager2Update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7eb12e77377019771c3b8faa001c2062"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7eb12e77377019771c3b8faa001c2062">&#9670;&nbsp;</a></span>_fireWarmUpShadersCompile()</h2>
 
@@ -1763,6 +1811,56 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group___general.html#ga635aa2486e7e05c17c1fdec1913094a6">SceneMemoryMgrTypes</a>&#160;</td>
           <td class="paramname"><em>sceneType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa0cb00eda6557cdf89992cb825688321"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0cb00eda6557cdf89992cb825688321">&#9670;&nbsp;</a></span>_getParticleSysDefMemoryManager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_object_memory_manager.html">ObjectMemoryManager</a>&amp; Ogre::SceneManager::_getParticleSysDefMemoryManager </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa7c1d5eab46fbf7619ec231352aacaa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7c1d5eab46fbf7619ec231352aacaa7">&#9670;&nbsp;</a></span>_getParticleSysMemoryManager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_object_memory_manager.html">ObjectMemoryManager</a>&amp; Ogre::SceneManager::_getParticleSysMemoryManager </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -3018,16 +3116,36 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Creates a new BillboardSet for use with this scene manager. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This method creates a new BillboardSet which is registered with the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>. The <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> will destroy this object when it shuts down or when the <a class="el" href="class_ogre_1_1_scene_manager.html#a01ba0aad5090ed0a8ff5e9c3d24fa924" title="Empties the entire scene, inluding all SceneNodes, Entities, Lights, BillboardSets etc.">SceneManager::clearScene</a> method is called, so the caller does not have to worry about destroying this object (in fact, it definitely should not do this). </dd></dl>
-<dl class="section user"><dt></dt><dd>See the BillboardSet documentations for full details of the returned class. </dd></dl>
+<p>Creates a new <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> for use with this scene manager. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>This method creates a new <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> which is registered with the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>. The <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> will destroy this object when it shuts down or when the <a class="el" href="class_ogre_1_1_scene_manager.html#a01ba0aad5090ed0a8ff5e9c3d24fa924" title="Empties the entire scene, inluding all SceneNodes, Entities, Lights, BillboardSets etc.">SceneManager::clearScene</a> method is called, so the caller does not have to worry about destroying this object (in fact, it definitely should not do this). </dd></dl>
+<dl class="section user"><dt></dt><dd>See the <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> documentations for full details of the returned class. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">poolSize</td><td>The initial size of the pool of billboards (see BillboardSet for more information) </td></tr>
+    <tr><td class="paramname">poolSize</td><td>The initial size of the pool of billboards (see <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> for more information) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd>BillboardSet </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> </dd></dl>
+
+</div>
+</div>
+<a id="a7c0763a2e25e20b8f0254539d9688ad8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c0763a2e25e20b8f0254539d9688ad8">&#9670;&nbsp;</a></span>createBillboardSet2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_billboard_set.html">BillboardSet</a>* Ogre::SceneManager::createBillboardSet2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an instance of the new generation of billboards. </p>
+<p>See <a class="el" href="class_ogre_1_1_particle_system_manager2.html#a7eb2f8e67d3b331f07dcb804e72f3c55" title="Creates a BillboardSet.">ParticleSystemManager2::createBillboardSet</a>. </p><dl class="section remark"><dt>Remarks</dt><dd>This is the same as doing: sceneMgr-&gt;<a class="el" href="class_ogre_1_1_scene_manager.html#a0632d16c0e9df6c44f98cf1574abe113">getParticleSystemManager2()</a>-&gt;<a class="el" href="class_ogre_1_1_scene_manager.html#addb069837e615efa614dacce8fb46567" title="Creates a new BillboardSet for use with this scene manager.">createBillboardSet()</a>; </dd></dl>
 
 </div>
 </div>
@@ -3579,6 +3697,85 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 
 </div>
 </div>
+<a id="aa775136fbe014cb880bbcc9dda4adb71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa775136fbe014cb880bbcc9dda4adb71">&#9670;&nbsp;</a></span>createParticleSystem2() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_particle_system2.html">ParticleSystem2</a>* Ogre::SceneManager::createParticleSystem2 </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>templateDefName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="class_ogre_1_1_scene_manager.html#a330136c3762d09401ddcd3efb68d3892" title="Creates an instance the next generation of ParticleFX.">createParticleSystem2()</a>. </p>
+<p>This supplies the name of the particle system def instead of a pointer (slightly slower) </p>
+
+</div>
+</div>
+<a id="a330136c3762d09401ddcd3efb68d3892"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a330136c3762d09401ddcd3efb68d3892">&#9670;&nbsp;</a></span>createParticleSystem2() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_particle_system2.html">ParticleSystem2</a>* Ogre::SceneManager::createParticleSystem2 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_particle_system_def.html">ParticleSystemDef</a> *&#160;</td>
+          <td class="paramname"><em>systemDef</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an instance the next generation of ParticleFX. </p>
+<p>This instance must be based off a <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a> already setup.</p>
+<p>See <a class="el" href="class_ogre_1_1_scene_manager.html#afc6a698e7db380b0733b45d63561292f" title="Creates the template / definition of the new generation of ParticleFXs.">createParticleSystemDef()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">systemDef</td><td>The <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="class_ogre_1_1_particle_system2.html">ParticleSystem2</a> </dd></dl>
+
+</div>
+</div>
+<a id="afc6a698e7db380b0733b45d63561292f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc6a698e7db380b0733b45d63561292f">&#9670;&nbsp;</a></span>createParticleSystemDef()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_particle_system_def.html">ParticleSystemDef</a>* Ogre::SceneManager::createParticleSystemDef </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the template / definition of the new generation of ParticleFXs. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>A <a class="el" href="class_ogre_1_1_particle_system_def.html" title="A ParticleSystemDef does not form part of the scene.">ParticleSystemDef</a> does not form part of the scene.</dd></dl>
+<p>The reason it derives from <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> is to keep backwards compatibility with the interface of the older ParticleFX plugin for much easier migration/porting.</p>
+<p>Do NOT attach it to a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a>.</p>
+<p>See <a class="el" href="class_ogre_1_1_scene_manager.html#a330136c3762d09401ddcd3efb68d3892" title="Creates an instance the next generation of ParticleFX.">createParticleSystem2()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the definition. Must be unique. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> Definition to setup. </dd></dl>
+
+</div>
+</div>
 <a id="acd010182f634fc54dd00af2d5e59fb4e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd010182f634fc54dd00af2d5e59fb4e">&#9670;&nbsp;</a></span>createPlaneBoundedVolumeQuery()</h2>
 
@@ -4061,8 +4258,28 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </div><div class="memdoc">
 
 <p>Removes &amp; destroys all BillboardSets. </p>
-<dl class="section warning"><dt>Warning</dt><dd>Again, use caution since no BillboardSet must be referred to elsewhere e.g. attached to a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> otherwise a crash is likely. Use clearScene if you are unsure (it clears <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> entries too.) </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Again, use caution since no <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> must be referred to elsewhere e.g. attached to a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> otherwise a crash is likely. Use clearScene if you are unsure (it clears <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a> entries too.) </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_scene_manager.html#a01ba0aad5090ed0a8ff5e9c3d24fa924" title="Empties the entire scene, inluding all SceneNodes, Entities, Lights, BillboardSets etc.">SceneManager::clearScene</a> </dd></dl>
+
+</div>
+</div>
+<a id="a078a999542306050f6f9669dd14a3938"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a078a999542306050f6f9669dd14a3938">&#9670;&nbsp;</a></span>destroyAllBillboardSets2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::destroyAllBillboardSets2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys all <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> created with <a class="el" href="class_ogre_1_1_scene_manager.html#a7c0763a2e25e20b8f0254539d9688ad8" title="Creates an instance of the new generation of billboards.">createBillboardSet2()</a>. </p>
+<p>Do not hold any more references to those pointers as they will become dangling! See <a class="el" href="class_ogre_1_1_particle_system_manager2.html#a6d0c7dbc5d27083cb71a9ede2ba4a551" title="Destroys all BillboardSet created with createBillboardSet().">ParticleSystemManager2::destroyAllBillboardSets</a>. </p><dl class="section remark"><dt>Remarks</dt><dd>This is the same as doing: sceneMgr-&gt;<a class="el" href="class_ogre_1_1_scene_manager.html#a0632d16c0e9df6c44f98cf1574abe113">getParticleSystemManager2()</a>-&gt;<a class="el" href="class_ogre_1_1_scene_manager.html#a2c020b93723f94cb548a6656bb550e75" title="Removes &amp; destroys all BillboardSets.">destroyAllBillboardSets()</a>; </dd></dl>
 
 </div>
 </div>
@@ -4311,6 +4528,26 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 
 </div>
 </div>
+<a id="a7772758170961b851e162111b433b95c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7772758170961b851e162111b433b95c">&#9670;&nbsp;</a></span>destroyAllParticleSystems2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::destroyAllParticleSystems2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys all particle systems created with createParticleSystem2. </p>
+<p>Do not hold any more references to those pointers as they will become dangling! </p>
+
+</div>
+</div>
 <a id="acd0f342e3cc683f7bcbe15d1ddbce5b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd0f342e3cc683f7bcbe15d1ddbce5b3">&#9670;&nbsp;</a></span>destroyAllRectangle2D()</h2>
 
@@ -4504,8 +4741,35 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Removes &amp; destroys an BillboardSet from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>. </p>
-<dl class="section warning"><dt>Warning</dt><dd>Must only be done if the BillboardSet is not attached to a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a>. It may be safer to wait to clear the whole scene. If you are unsure, use clearScene. </dd></dl>
+<p>Removes &amp; destroys an <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>. </p>
+<dl class="section warning"><dt>Warning</dt><dd>Must only be done if the <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> is not attached to a <a class="el" href="class_ogre_1_1_scene_node.html" title="Class representing a node in the scene graph.">SceneNode</a>. It may be safer to wait to clear the whole scene. If you are unsure, use clearScene. </dd></dl>
+
+</div>
+</div>
+<a id="a3796585b0b54b3f1e7d6e5e34cfac504"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3796585b0b54b3f1e7d6e5e34cfac504">&#9670;&nbsp;</a></span>destroyBillboardSet2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::destroyBillboardSet2 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_billboard_set.html">BillboardSet</a> *&#160;</td>
+          <td class="paramname"><em>billboardSet</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys a <a class="el" href="class_ogre_1_1_billboard_set.html" title="A BillboardSet is just a ParticleSystemDef directly exposed to the user but without emitters,...">BillboardSet</a> created with <a class="el" href="class_ogre_1_1_scene_manager.html#a7c0763a2e25e20b8f0254539d9688ad8" title="Creates an instance of the new generation of billboards.">createBillboardSet2()</a>. </p>
+<p>See <a class="el" href="class_ogre_1_1_particle_system_manager2.html#af5014e4aee776ff6e8da514b9a652536" title="Destroys a BillboardSet created with createBillboardSet().">ParticleSystemManager2::destroyBillboardSet</a>. </p><dl class="section remark"><dt>Remarks</dt><dd>This is the same as doing: sceneMgr-&gt;<a class="el" href="class_ogre_1_1_scene_manager.html#a0632d16c0e9df6c44f98cf1574abe113">getParticleSystemManager2()</a>-&gt;destroyBillboardSet( s ); </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">billboardSet</td><td>Set to destroy. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -4778,6 +5042,24 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </div><div class="memdoc">
 
 <p>Removes &amp; destroys a <a class="el" href="class_ogre_1_1_particle_system.html" title="Class defining particle system based special effects.">ParticleSystem</a> from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>. </p>
+
+</div>
+</div>
+<a id="a1ec392f63d0f2fdf537c118c51f1c78e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ec392f63d0f2fdf537c118c51f1c78e">&#9670;&nbsp;</a></span>destroyParticleSystem2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::destroyParticleSystem2 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_particle_system2.html">ParticleSystem2</a> *&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -6425,6 +6707,31 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>On success (the option exists), true is returned. </dd></dl>
 <dl class="section user"><dt></dt><dd>On failure, false is returned. </dd></dl>
+
+</div>
+</div>
+<a id="a0632d16c0e9df6c44f98cf1574abe113"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0632d16c0e9df6c44f98cf1574abe113">&#9670;&nbsp;</a></span>getParticleSystemManager2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_particle_system_manager2.html">ParticleSystemManager2</a>* Ogre::SceneManager::getParticleSystemManager2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

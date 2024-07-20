@@ -257,6 +257,12 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_atomic_object.html#a1b10b36d617340e20ad8bb4cde753624">Ogre::AtomicObject&lt; T &gt;</a>
 , <a class="el" href="class_ogre_1_1_atomic_scalar.html#a9efd49c8680f5e29cfb6da1de45da0e9">Ogre::AtomicScalar&lt; T &gt;</a>
 </li>
+<li>castFromRenderable()
+: <a class="el" href="class_ogre_1_1_particle_system_def.html#ac167d104d7aa4aa8550796965e21754a">Ogre::ParticleSystemDef</a>
+</li>
+<li>castToRenderable()
+: <a class="el" href="class_ogre_1_1_particle_system_def.html#ab24a24e8131fcee8622c971fd33fcdd0">Ogre::ParticleSystemDef</a>
+</li>
 <li>CbBase()
 : <a class="el" href="struct_ogre_1_1_cb_base.html#a3d84db43d70753501c890c8a6c5ca472">Ogre::CbBase</a>
 </li>
@@ -291,7 +297,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="struct_ogre_1_1_cb_samplers.html#a88613d122b406c306dd5a69654d01eeb">Ogre::CbSamplers</a>
 </li>
 <li>CbShaderBuffer()
-: <a class="el" href="struct_ogre_1_1_cb_shader_buffer.html#af0f346e3fd07e527bdd587382c3505bb">Ogre::CbShaderBuffer</a>
+: <a class="el" href="struct_ogre_1_1_cb_shader_buffer.html#af6f4d6dd244825448f5e57bd77e64e23">Ogre::CbShaderBuffer</a>
 </li>
 <li>CbStartV1LegacyRendering()
 : <a class="el" href="struct_ogre_1_1v1_1_1_cb_start_v1_legacy_rendering.html#a97a436281ab7786bc9d8f6bf2d17d973">Ogre::v1::CbStartV1LegacyRendering</a>
@@ -541,14 +547,14 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1v1_1_1_pose.html#afce896bc28c80ad878d38d9a67778c5f">Ogre::v1::Pose</a>
 </li>
 <li>clip()
-: <a class="el" href="class_ogre_1_1_convex_body.html#ac8a3f100f1b91cadf03ec2b9d9d6f684">Ogre::ConvexBody</a>
+: <a class="el" href="class_ogre_1_1_convex_body.html#af5fb91ac168eec8056adb7b2677523e1">Ogre::ConvexBody</a>
 </li>
 <li>clone()
 : <a class="el" href="class_ogre_1_1_abstract_node.html#a3923e8e9bf17ddce22b45ff5b085cca8">Ogre::AbstractNode</a>
 , <a class="el" href="class_ogre_1_1_android_e_g_l_context.html#aadb21a379e2aaed53b1854b2ed0461a1">Ogre::AndroidEGLContext</a>
 , <a class="el" href="class_ogre_1_1_atom_abstract_node.html#a7238174499667ee76a9ebabf20d1d3fa">Ogre::AtomAbstractNode</a>
 , <a class="el" href="class_ogre_1_1_cocoa_context.html#a70602a3a5556db495bb7d6b9b2967332">Ogre::CocoaContext</a>
-, <a class="el" href="class_ogre_1_1_e_g_l_context.html#af39d466fb2a6c268a55d5ce10844b3ce">Ogre::EGLContext</a>
+, <a class="el" href="class_ogre_1_1_e_g_l_context.html#a77b5a6d32de0f68ab716b5fd7ca341c6">Ogre::EGLContext</a>
 , <a class="el" href="class_ogre_1_1_egl_p_buffer_context.html#a635a820e09c0da64d5faf82f293b1eac">Ogre::EglPBufferContext</a>
 , <a class="el" href="class_ogre_1_1_emscripten_e_g_l_context.html#ab5dd1c141d17690e303f3ebafbc9729d">Ogre::EmscriptenEGLContext</a>
 , <a class="el" href="class_ogre_1_1_g_l3_plus_context.html#ab110c0453bb0d4b15db75a38625112e9">Ogre::GL3PlusContext</a>
@@ -560,6 +566,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 , <a class="el" href="class_ogre_1_1_material.html#a28e13cc77ce7deb5f0cbe2388251224d">Ogre::Material</a>
 , <a class="el" href="class_ogre_1_1_mesh.html#ab85133a4f30a0eb9254339b5af8416d9">Ogre::Mesh</a>
 , <a class="el" href="class_ogre_1_1_object_abstract_node.html#a1f0cc7a79e4bc5097acb78810281436f">Ogre::ObjectAbstractNode</a>
+, <a class="el" href="class_ogre_1_1_particle_system_def.html#ab16df3a37655714028af2bd0940bd4e1">Ogre::ParticleSystemDef</a>
 , <a class="el" href="class_ogre_1_1_property_abstract_node.html#a4d3184616d8b093f24c59d253a75f048">Ogre::PropertyAbstractNode</a>
 , <a class="el" href="class_ogre_1_1_sub_mesh.html#a7dd5f3ab8123d75232ee19360457d00b">Ogre::SubMesh</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_animation.html#a1f402b54caa4420b8e69926cacd22348">Ogre::v1::Animation</a>
@@ -613,11 +620,15 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 </li>
 <li>Cmov4()
 : <a class="el" href="class_ogre_1_1_array_quaternion.html#acde78171ef7f96a8d853559694204ba1">Ogre::ArrayQuaternion</a>
+, <a class="el" href="class_ogre_1_1_array_vector2.html#a3b9d94ae1ab44a3a7542b12c1b12762b">Ogre::ArrayVector2</a>
 , <a class="el" href="class_ogre_1_1_array_vector3.html#afb4e1c7d15b5819e3cdb720bc133fb96">Ogre::ArrayVector3</a>
+, <a class="el" href="class_ogre_1_1_array_vector4.html#ac301afa24e0ab2e734778327beab148c">Ogre::ArrayVector4</a>
 , <a class="el" href="class_ogre_1_1_mathlib_c.html#ad1247bb457f65e41e895b4567fe27299">Ogre::MathlibC</a>
 </li>
 <li>CmovRobust()
-: <a class="el" href="class_ogre_1_1_array_vector3.html#a40431a5fffe7c96ecf4fce6dd455e5ff">Ogre::ArrayVector3</a>
+: <a class="el" href="class_ogre_1_1_array_vector2.html#ad85650bafe25b0b71d47afc0bf876f4b">Ogre::ArrayVector2</a>
+, <a class="el" href="class_ogre_1_1_array_vector3.html#a40431a5fffe7c96ecf4fce6dd455e5ff">Ogre::ArrayVector3</a>
+, <a class="el" href="class_ogre_1_1_array_vector4.html#abba200b94865ebee0a9e120ade8c3690">Ogre::ArrayVector4</a>
 , <a class="el" href="class_ogre_1_1_mathlib_c.html#adcfb12520c51062df3faff5b12db8a2d">Ogre::MathlibC</a>
 </li>
 <li>CocoaContext()
@@ -642,11 +653,13 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_lod_collapser.html#ad292c42636402fafb2eb193264ca67a4">Ogre::LodCollapser</a>
 </li>
 <li>collapseMax()
-: <a class="el" href="class_ogre_1_1_array_vector3.html#adb882c4c156ca3eb74f28334e5d31df3">Ogre::ArrayVector3</a>
+: <a class="el" href="class_ogre_1_1_array_vector2.html#ad8b2ce48989b21d8b5fe54b96d06f577">Ogre::ArrayVector2</a>
+, <a class="el" href="class_ogre_1_1_array_vector3.html#adb882c4c156ca3eb74f28334e5d31df3">Ogre::ArrayVector3</a>
 , <a class="el" href="class_ogre_1_1_vector3.html#a900d8f2931e8c69fec828980ef53c282">Ogre::Vector3</a>
 </li>
 <li>collapseMin()
-: <a class="el" href="class_ogre_1_1_array_vector3.html#ab255c905ea93eca9f7eeb09d19f62019">Ogre::ArrayVector3</a>
+: <a class="el" href="class_ogre_1_1_array_vector2.html#aec54b4b49330085db779449e383dfb18">Ogre::ArrayVector2</a>
+, <a class="el" href="class_ogre_1_1_array_vector3.html#ab255c905ea93eca9f7eeb09d19f62019">Ogre::ArrayVector3</a>
 , <a class="el" href="class_ogre_1_1_vector3.html#afefe2929782f80f685885be661e0255b">Ogre::Vector3</a>
 </li>
 <li>collectLights()
@@ -664,11 +677,23 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>ColourFaderAffector2()
 : <a class="el" href="class_ogre_1_1_colour_fader_affector2.html#a84abaa1df7f11b91f5c7db79a6a4b38f">Ogre::ColourFaderAffector2</a>
 </li>
+<li>ColourFaderAffector2FX2()
+: <a class="el" href="class_ogre_1_1_colour_fader_affector2_f_x2.html#a9d64e5a6f9253a12dcbb8a91462b8349">Ogre::ColourFaderAffector2FX2</a>
+</li>
+<li>ColourFaderAffectorFX2()
+: <a class="el" href="class_ogre_1_1_colour_fader_affector_f_x2.html#a7e12cfe6ca1ae580f10d0b4d2579ee3b">Ogre::ColourFaderAffectorFX2</a>
+</li>
 <li>ColourImageAffector()
 : <a class="el" href="class_ogre_1_1_colour_image_affector.html#a7118e0cf5c7cefcbbf004580add48ae5">Ogre::ColourImageAffector</a>
 </li>
+<li>ColourImageAffector2()
+: <a class="el" href="class_ogre_1_1_colour_image_affector2.html#a54978a36e73af2092f1fe9cca8ab2e14">Ogre::ColourImageAffector2</a>
+</li>
 <li>ColourInterpolatorAffector()
 : <a class="el" href="class_ogre_1_1_colour_interpolator_affector.html#a23342275feed700c10a601e5edb17152">Ogre::ColourInterpolatorAffector</a>
+</li>
+<li>ColourInterpolatorAffector2()
+: <a class="el" href="class_ogre_1_1_colour_interpolator_affector2.html#a636541e318c34ee02c9e091e4eaf7750">Ogre::ColourInterpolatorAffector2</a>
 </li>
 <li>ColourValue()
 : <a class="el" href="class_ogre_1_1_colour_value.html#acc033c4828ad9f7469269933d24850f5">Ogre::ColourValue</a>
@@ -720,7 +745,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_compositor_manager2.html#af0102241744aaab9ee5d4e5d5724c96e">Ogre::CompositorManager2</a>
 </li>
 <li>CompositorNamedBuffer()
-: <a class="el" href="struct_ogre_1_1_compositor_named_buffer.html#a3e3705084fa02e8e21f26b49ef4b289f">Ogre::CompositorNamedBuffer</a>
+: <a class="el" href="struct_ogre_1_1_compositor_named_buffer.html#a4d9413c462636d203c525fc1e02d297f">Ogre::CompositorNamedBuffer</a>
 </li>
 <li>CompositorNode()
 : <a class="el" href="class_ogre_1_1_compositor_node.html#a8184bf04d1229243b121a3c1f1f080b7">Ogre::CompositorNode</a>
@@ -1019,6 +1044,9 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aece11cff2cd94b652fcbc8054c6b8798">Ogre::GL3PlusRenderSystem</a>
 , <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ae96b47494abeb2761223b9408a37b2b9">Ogre::GLES2RenderSystem</a>
 </li>
+<li>ConvertToF32()
+: <a class="el" href="class_ogre_1_1_mathlib_c.html#a2da438cdb92b77f10ce14b39330d9f5c">Ogre::MathlibC</a>
+</li>
 <li>convertToMesh()
 : <a class="el" href="class_ogre_1_1_manual_object.html#ae10978b3d4b08b615fad01386099f574">Ogre::ManualObject</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_manual_object.html#a2cdd361cd4ad8eb72d561e4098bc8acb">Ogre::v1::ManualObject</a>
@@ -1077,7 +1105,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 , <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_hardware_index_buffer.html#a7b4614920dc66f13fb395dedff641b49">Ogre::v1::GLES2HardwareIndexBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_hardware_uniform_buffer.html#a469826917326e9f83adc5f18f12223ae">Ogre::v1::GLES2HardwareUniformBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_hardware_vertex_buffer.html#a2bb285555629728d85eb07463c0b3636">Ogre::v1::GLES2HardwareVertexBuffer</a>
-, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a4c89e8f3e555b5baf18bcae16d5fb8dd">Ogre::v1::HardwareBuffer</a>
+, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a5caebd4b5db7696029eb412351d7767f">Ogre::v1::HardwareBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_metal_hardware_buffer_common.html#a7e167c554b0ef1445da0bd341f14a7c0">Ogre::v1::MetalHardwareBufferCommon</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html#a425a22ff45362040189c61ebaaca9ff7">Ogre::v1::MetalHardwareIndexBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html#a61d33a048fc1ed3cd0e7824fe09b3fa4">Ogre::v1::MetalHardwareVertexBuffer</a>
@@ -1186,7 +1214,8 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_scene_manager.html#a2cb1523180fcc65b6093b6330725c823">Ogre::SceneManager</a>
 </li>
 <li>createAffector()
-: <a class="el" href="class_ogre_1_1_particle_affector_factory.html#a7989506f2f5452593f0a377c06d2f61f">Ogre::ParticleAffectorFactory</a>
+: <a class="el" href="class_ogre_1_1_particle_affector_factory2.html#a06de7ed6cad6b9096643491e48f6f594">Ogre::ParticleAffectorFactory2</a>
+, <a class="el" href="class_ogre_1_1_particle_affector_factory.html#a7989506f2f5452593f0a377c06d2f61f">Ogre::ParticleAffectorFactory</a>
 </li>
 <li>createAllFromMatrix4()
 : <a class="el" href="class_ogre_1_1_array_matrix4.html#a3cff98756e40389205f83da2521122ed">Ogre::ArrayMatrix4</a>
@@ -1235,13 +1264,17 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_scene_manager.html#a7ed1f8508aab6937936e59131d37b015">Ogre::SceneManager</a>
 </li>
 <li>createBillboardSet()
-: <a class="el" href="class_ogre_1_1_scene_manager.html#addb069837e615efa614dacce8fb46567">Ogre::SceneManager</a>
+: <a class="el" href="class_ogre_1_1_particle_system_manager2.html#a7eb2f8e67d3b331f07dcb804e72f3c55">Ogre::ParticleSystemManager2</a>
+, <a class="el" href="class_ogre_1_1_scene_manager.html#addb069837e615efa614dacce8fb46567">Ogre::SceneManager</a>
+</li>
+<li>createBillboardSet2()
+: <a class="el" href="class_ogre_1_1_scene_manager.html#a7c0763a2e25e20b8f0254539d9688ad8">Ogre::SceneManager</a>
 </li>
 <li>createBlendMask()
 : <a class="el" href="class_ogre_1_1v1_1_1_animation_state.html#aaefa730f2a86a09168a7c32e60096909">Ogre::v1::AnimationState</a>
 </li>
 <li>createBone()
-: <a class="el" href="class_ogre_1_1v1_1_1_skeleton.html#a50cea0a19d9ee9c760fe92100b1cc9a1">Ogre::v1::Skeleton</a>
+: <a class="el" href="class_ogre_1_1v1_1_1_skeleton.html#a16219d1ee5e8d43904956c3af0d79bc8">Ogre::v1::Skeleton</a>
 </li>
 <li>createBuffer()
 : <a class="el" href="class_ogre_1_1_texture_definition_base.html#a8e350a34aa3810dfb3dad2efe1b5c4fc">Ogre::TextureDefinitionBase</a>
@@ -1342,12 +1375,19 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_d3_d11_h_l_s_l_program.html#a1d0b641dcc02bf8b0ffbc8f8a9c5138e">Ogre::D3D11HLSLProgram</a>
 </li>
 <li>createEmitter()
-: <a class="el" href="class_ogre_1_1_box_emitter_factory.html#a3ab66202e2615f36a33531240a54d8ff">Ogre::BoxEmitterFactory</a>
+: <a class="el" href="class_ogre_1_1_box_emitter_factory2.html#a1be90e4938d1142a580eb3b90be9f069">Ogre::BoxEmitterFactory2</a>
+, <a class="el" href="class_ogre_1_1_box_emitter_factory.html#a3ab66202e2615f36a33531240a54d8ff">Ogre::BoxEmitterFactory</a>
+, <a class="el" href="class_ogre_1_1_cylinder_emitter_factory2.html#acf56fc8d77c980f6291bb625e44ca968">Ogre::CylinderEmitterFactory2</a>
 , <a class="el" href="class_ogre_1_1_cylinder_emitter_factory.html#a19b97bd46db1d6420d3baf91a6fe6d5a">Ogre::CylinderEmitterFactory</a>
+, <a class="el" href="class_ogre_1_1_ellipsoid_emitter_factory2.html#a3447720ed3b0314f8f02c5165824f668">Ogre::EllipsoidEmitterFactory2</a>
 , <a class="el" href="class_ogre_1_1_ellipsoid_emitter_factory.html#a5ca4c6179a2a8eecd140072d6f1657d0">Ogre::EllipsoidEmitterFactory</a>
+, <a class="el" href="class_ogre_1_1_hollow_ellipsoid_emitter_factory2.html#a5f0a90285a12fcaec6cd8f0ab0b13f44">Ogre::HollowEllipsoidEmitterFactory2</a>
 , <a class="el" href="class_ogre_1_1_hollow_ellipsoid_emitter_factory.html#a085e687cf0b63b44d4938ff614170a26">Ogre::HollowEllipsoidEmitterFactory</a>
+, <a class="el" href="class_ogre_1_1_particle_emitter_def_data_factory.html#a287b01b7c790714be2fc7cc8b8304878">Ogre::ParticleEmitterDefDataFactory</a>
 , <a class="el" href="class_ogre_1_1_particle_emitter_factory.html#ad724bb97fa00667c2bc6056631991f82">Ogre::ParticleEmitterFactory</a>
+, <a class="el" href="class_ogre_1_1_point_emitter_factory2.html#afcbd68882e870e793b7064427a0c6b52">Ogre::PointEmitterFactory2</a>
 , <a class="el" href="class_ogre_1_1_point_emitter_factory.html#aec37d1d4134bc8047b178b947232577d">Ogre::PointEmitterFactory</a>
+, <a class="el" href="class_ogre_1_1_ring_emitter_factory2.html#a4c73199bab3b911f4ae537d0e81a62bd">Ogre::RingEmitterFactory2</a>
 , <a class="el" href="class_ogre_1_1_ring_emitter_factory.html#ad1ee45915c1085689fd67ff02410ed8f">Ogre::RingEmitterFactory</a>
 </li>
 <li>createEmitterParticle()
@@ -1360,7 +1400,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_image2.html#a39eb13ec60c94720c3f4f298ea535fdc">Ogre::Image2</a>
 </li>
 <li>createEntity()
-: <a class="el" href="class_ogre_1_1_scene_manager.html#a998341d53edde24071ab556372d2bee9">Ogre::SceneManager</a>
+: <a class="el" href="class_ogre_1_1_scene_manager.html#a74ccdf9af7ecb7b43ebcd020b01bec48">Ogre::SceneManager</a>
 </li>
 <li>createFence()
 : <a class="el" href="class_ogre_1_1_d3_d11_vao_manager.html#aea75dc4add03c4d1a92373418285f703">Ogre::D3D11VaoManager</a>
@@ -1550,6 +1590,13 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>createParticleSystem()
 : <a class="el" href="class_ogre_1_1_scene_manager.html#aa0d79919af93bf827cf8185930dd2a5f">Ogre::SceneManager</a>
 </li>
+<li>createParticleSystem2()
+: <a class="el" href="class_ogre_1_1_scene_manager.html#a330136c3762d09401ddcd3efb68d3892">Ogre::SceneManager</a>
+</li>
+<li>createParticleSystemDef()
+: <a class="el" href="class_ogre_1_1_particle_system_manager2.html#a9b1256301ab87150ee0b5a30c68c7290">Ogre::ParticleSystemManager2</a>
+, <a class="el" href="class_ogre_1_1_scene_manager.html#afc6a698e7db380b0733b45d63561292f">Ogre::SceneManager</a>
+</li>
 <li>CreateParticleSystemScriptCompilerEvent()
 : <a class="el" href="class_ogre_1_1_create_particle_system_script_compiler_event.html#ae5d353f53c585c185969c67c01b80890">Ogre::CreateParticleSystemScriptCompilerEvent</a>
 </li>
@@ -1642,7 +1689,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_scene_manager.html#a25a28f0f0da21cfaf01ccf1cf0fb2d75">Ogre::SceneManager</a>
 </li>
 <li>createSection()
-: <a class="el" href="class_ogre_1_1_paged_world.html#a587e49570767c3f5f4e9ecf168ec58be">Ogre::PagedWorld</a>
+: <a class="el" href="class_ogre_1_1_paged_world.html#a311d8b49f249ffd6eab30079d20b0840">Ogre::PagedWorld</a>
 </li>
 <li>createShaderParams()
 : <a class="el" href="class_ogre_1_1_hlms_compute_job.html#aeb470bf33ca307f270a4d10bc07a4f61">Ogre::HlmsComputeJob</a>
@@ -1663,7 +1710,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>createSrv()
 : <a class="el" href="class_ogre_1_1_d3_d11_read_only_buffer_packed.html#a1e68ddc1caca2e1d1d8f5a72a76d99d7">Ogre::D3D11ReadOnlyBufferPacked</a>
 , <a class="el" href="class_ogre_1_1_d3_d11_tex_buffer_packed.html#a2e67cfa0ee7a77f0d9f9b264a70bda24">Ogre::D3D11TexBufferPacked</a>
-, <a class="el" href="class_ogre_1_1_d3_d11_texture_gpu.html#aa523801e53221bb61e6e17bbb9e218ba">Ogre::D3D11TextureGpu</a>
+, <a class="el" href="class_ogre_1_1_d3_d11_texture_gpu.html#a5d5b459da425f90b585cc45af34e85d2">Ogre::D3D11TextureGpu</a>
 </li>
 <li>createStagingBuffer()
 : <a class="el" href="class_ogre_1_1_d3_d11_vao_manager.html#af42126d8367ea0feb2a9593936c35106">Ogre::D3D11VaoManager</a>
@@ -1683,7 +1730,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 </li>
 <li>createSubMesh()
 : <a class="el" href="class_ogre_1_1_mesh.html#afd8f8725c5277d5f05b857bc404916bc">Ogre::Mesh</a>
-, <a class="el" href="class_ogre_1_1v1_1_1_mesh.html#a94284544838b11da3de794061181d39e">Ogre::v1::Mesh</a>
+, <a class="el" href="class_ogre_1_1v1_1_1_mesh.html#a7ff5f16db61431dbc96263e00e8dbee8">Ogre::v1::Mesh</a>
 </li>
 <li>createSwapchain()
 : <a class="el" href="class_ogre_1_1_vulkan_window_swap_chain_based.html#a53450084ff3d2a80c7edcc4687835844">Ogre::VulkanWindowSwapChainBased</a>
@@ -1730,7 +1777,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_texture_definition_base.html#a3dd5a18207b6fca4f39c679c1c82ff77">Ogre::TextureDefinitionBase</a>
 </li>
 <li>createTextureUnitState()
-: <a class="el" href="class_ogre_1_1_pass.html#ad544240abceb05bdda6c5c18a3e778da">Ogre::Pass</a>
+: <a class="el" href="class_ogre_1_1_pass.html#ae44883ff7b27571bf300ebceb292c567">Ogre::Pass</a>
 </li>
 <li>createTextureUScroller()
 : <a class="el" href="class_ogre_1_1_controller_manager.html#af5924b16f9b1065603e16afef947352d">Ogre::ControllerManager</a>
@@ -1800,7 +1847,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 </li>
 <li>createView()
 : <a class="el" href="class_ogre_1_1_vulkan_texture_gpu.html#a0b0ceb6e5461235a993f1b6982984133">Ogre::VulkanTextureGpu</a>
-, <a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#ac3b9a6f92929930e55371e15d4b00eaf">Ogre::VulkanTextureGpuManager</a>
+, <a class="el" href="class_ogre_1_1_vulkan_texture_gpu_manager.html#a2004ed04a92b7bbe8001521a7d060a43">Ogre::VulkanTextureGpuManager</a>
 </li>
 <li>createVulkanHandles()
 : <a class="el" href="class_ogre_1_1_vulkan_root_layout.html#afdece0a0a4fde3e1666003e10293d4e2">Ogre::VulkanRootLayout</a>
@@ -1836,7 +1883,8 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_page_manager.html#a06904810dcecfb8891e0712d79978369">Ogre::PageManager</a>
 </li>
 <li>crossProduct()
-: <a class="el" href="class_ogre_1_1_array_vector3.html#a34f2c866ac1fd2332b80d5049409f5f8">Ogre::ArrayVector3</a>
+: <a class="el" href="class_ogre_1_1_array_vector2.html#a529309849a1e8365f7c5c7427fbd08df">Ogre::ArrayVector2</a>
+, <a class="el" href="class_ogre_1_1_array_vector3.html#a34f2c866ac1fd2332b80d5049409f5f8">Ogre::ArrayVector3</a>
 , <a class="el" href="class_ogre_1_1_vector2.html#a8f52acf41b4766a235c3a91b42af3a00">Ogre::Vector2</a>
 , <a class="el" href="class_ogre_1_1_vector3.html#a2500548e775c294aab7bff6f7f8f312a">Ogre::Vector3</a>
 </li>
@@ -1897,6 +1945,9 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 </li>
 <li>CylinderEmitter()
 : <a class="el" href="class_ogre_1_1_cylinder_emitter.html#a136f5b1d971ce9d70ee4345bfa09c1ec">Ogre::CylinderEmitter</a>
+</li>
+<li>CylinderEmitter2()
+: <a class="el" href="class_ogre_1_1_cylinder_emitter2.html#a8431e5f2ecb036e96a77491af933f722">Ogre::CylinderEmitter2</a>
 </li>
 </ul>
 </div><!-- contents -->

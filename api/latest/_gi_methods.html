@@ -103,24 +103,24 @@ $(document).ready(function(){initNavTree('_gi_methods.html',''); initResizable()
 <li class="level1"><a href="#GiPPPCC">Per Pixel PCC</a><ul><li class="level2"><a href="#GiPPGridPlacement">PCC Per Pixel Grid Placement</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#GiInstantRadiosity">Instant Radiosity</a><ul><ul><li class="level3"><a href="#autotoc_md21">Pros</a></li>
-<li class="level3"><a href="#autotoc_md22">Cons</a></li>
+<li class="level1"><a href="#GiInstantRadiosity">Instant Radiosity</a><ul><ul><li class="level3"><a href="#autotoc_md85">Pros</a></li>
+<li class="level3"><a href="#autotoc_md86">Cons</a></li>
 </ul>
 </ul>
 </li>
-<li class="level1"><a href="#GiIrradianceVolume">Irradiance Volume</a><ul><ul><li class="level3"><a href="#autotoc_md23">Pros</a></li>
-<li class="level3"><a href="#autotoc_md24">Cons</a></li>
+<li class="level1"><a href="#GiIrradianceVolume">Irradiance Volume</a><ul><ul><li class="level3"><a href="#autotoc_md87">Pros</a></li>
+<li class="level3"><a href="#autotoc_md88">Cons</a></li>
 </ul>
 </ul>
 </li>
-<li class="level1"><a href="#GiVCT">Voxel Cone Tracing (aka VCT)</a><ul><ul><li class="level3"><a href="#autotoc_md25">Pros</a></li>
-<li class="level3"><a href="#autotoc_md26">Cons</a></li>
+<li class="level1"><a href="#GiVCT">Voxel Cone Tracing (aka VCT)</a><ul><ul><li class="level3"><a href="#autotoc_md89">Pros</a></li>
+<li class="level3"><a href="#autotoc_md90">Cons</a></li>
 </ul>
 <li class="level2"><a href="#GiVCTPlusPPPCC">VCT + Per Pixel PCC Hybrid</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#GiIFD">Irradiance Field with Depth (IFD)</a><ul><ul><li class="level3"><a href="#autotoc_md27">Pros</a></li>
-<li class="level3"><a href="#autotoc_md28">Cons</a></li>
+<li class="level1"><a href="#GiIFD">Irradiance Field with Depth (IFD)</a><ul><ul><li class="level3"><a href="#autotoc_md91">Pros</a></li>
+<li class="level3"><a href="#autotoc_md92">Cons</a></li>
 </ul>
 </ul>
 </li>
@@ -128,7 +128,7 @@ $(document).ready(function(){initNavTree('_gi_methods.html',''); initResizable()
 <li class="level1"><a href="#GiWhatTechniqueChoose">What technique should I choose?</a></li>
 </ul>
 </div>
-<div class="textblock"><p><a class="anchor" id="md_manual_GiMethods"></a> <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> offers various GI techniques and it can be overwhelming which one to choose.</p>
+<div class="textblock"><p><a class="anchor" id="md_manual_Rendering_GiMethods"></a> <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> offers various GI techniques and it can be overwhelming which one to choose.</p>
 <h1><a class="anchor" id="GiAmbientLighting"></a>
 Ambient Lighting</h1>
 <p>The simplest and fastest solution there is.</p>
@@ -210,7 +210,7 @@ Instant Radiosity</h1>
 <p>It is based on an old <a href="https://www.gamedev.net/blogs/entry/1925299-deferred-lighting-and-instant-radiosity/">gamedev.net article</a>.</p>
 <p>The technique consist in doing raytracing from the light points of view into all directions. And whenever there is a hit place a 'virtual point light' which is literally a basic point that emits light, mimicking a light bounce</p>
 <p>Another way to see this technique is that it's just placing an arbitrary amount of point lights until the scene is lit enough from many locations. But instead of the lights being placed by artists, it's done automatically.</p>
-<h3><a class="anchor" id="autotoc_md21"></a>
+<h3><a class="anchor" id="autotoc_md85"></a>
 Pros</h3>
 <ol type="1">
 <li>Lots of parameter to tune. The more VPLs you have, the more accurate the solution will be but higher the performance cost</li>
@@ -220,7 +220,7 @@ Pros</h3>
 <li>Camera independent</li>
 <li>Can be enabled at the same time as PCC, and PCC can provide information about specular reflections and sky</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md22"></a>
+<h3><a class="anchor" id="autotoc_md86"></a>
 Cons</h3>
 <ol type="1">
 <li>Requires Forward+ to be active</li>
@@ -241,7 +241,7 @@ Irradiance Volume</h1>
 <p>Irradiance Volume uses a 3D volume to store lighting information. Currently this IV is generated from Instant Radiosity data. But once generated the 3D texture can be saved to disk as is and be loaded directly which should be very fast (only limitation is IO bandwidth)</p>
 <p>Each voxel contains lighting information from all 6 directions.</p>
 <p>Another way to look at this solution is like a 3D grid of lots of 1x1 cubemaps.</p>
-<h3><a class="anchor" id="autotoc_md23"></a>
+<h3><a class="anchor" id="autotoc_md87"></a>
 Pros</h3>
 <ol type="1">
 <li>Extremely fast</li>
@@ -250,7 +250,7 @@ Pros</h3>
 <li>Camera independent</li>
 <li>Can be enabled at the same time as PCC, and PCC can provide information about specular reflections and sky</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md24"></a>
+<h3><a class="anchor" id="autotoc_md88"></a>
 Cons</h3>
 <ol type="1">
 <li>Quality/accuracy depends on how dense the grid is. Big scenes may need very large resolution. 3D volume textures quickly grow in VRAM usage. e.g. a 16x16x16 needs only 16kb of VRAM, whereas a 128x128x128 volume needs 8MB and 256x256x256 needs 64MB</li>
@@ -269,7 +269,7 @@ Voxel Cone Tracing (aka VCT)</h1>
 <p>As of 2021 this technique is state of the art and is <em>very</em> accurate and can even generate specular glossy reflections, although low roughness reflections will not look as good as high roughness reflections.</p>
 <p>This technique works by voxelizing the entire scene (i.e. turning the whole scene into a Minecraft-like world representation) and then at runtime cone tracing against this voxel world to gather bounce data.</p>
 <p><img src="VCT.jpg" alt="" class="inline"/></p>
-<h3><a class="anchor" id="autotoc_md25"></a>
+<h3><a class="anchor" id="autotoc_md89"></a>
 Pros</h3>
 <ol type="1">
 <li>Extremely accurate</li>
@@ -294,7 +294,7 @@ Pros</h3>
 <li>Camera independent</li>
 <li>Specular rough reflections supported</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md26"></a>
+<h3><a class="anchor" id="autotoc_md90"></a>
 Cons</h3>
 <ol type="1">
 <li>Massive amounts of VRAM required</li>
@@ -324,7 +324,7 @@ Irradiance Field with Depth (IFD)</h1>
 <p>As of 2021 this technique is also state of the art and can be very accurate.</p>
 <p>This technique is extremely similar to <code>Irradiance Volume</code> before (e.g. can be thought of a 3D grid of 1x1 cubemaps), but it is combined with depth information to fight leaking.</p>
 <p>Additionally, instead of 3D textures, a 2D texture is used and octahedral maps are used to store information. The use of 2D textures instead of 3D opens up unexplored possibilities such as streaming 2D data using MPEG video compression, or GPU-friendly compression formats such as BC7 or ASTC.</p>
-<h3><a class="anchor" id="autotoc_md27"></a>
+<h3><a class="anchor" id="autotoc_md91"></a>
 Pros</h3>
 <ol type="1">
 <li>Very accurate</li>
@@ -351,7 +351,7 @@ Pros</h3>
 <li>Can be enabled at the same time as per pixel PCC, and PCC can provide information about specular reflections and sky. If VCT is also enabled, See VCT + PCC hybrid section.</li>
 <li>When generated off rasterization, sky information is included.</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md28"></a>
+<h3><a class="anchor" id="autotoc_md92"></a>
 Cons</h3>
 <ol type="1">
 <li>Some artifacts may appear<ol type="a">
@@ -409,7 +409,7 @@ What technique should I choose?</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="manual.html">Manual</a></li>
+    <li class="navelem"><a class="el" href="manual.html">Manual</a></li><li class="navelem"><a class="el" href="_rendering.html">Rendering</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>

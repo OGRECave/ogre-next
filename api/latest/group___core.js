@@ -18,7 +18,11 @@ var group___core =
       [ "clear", "class_ogre_1_1bitset64.html#a840de71d945557a566ea6b8644015059", null ],
       [ "empty", "class_ogre_1_1bitset64.html#a4fecce514dc3143f7c852e8772ba75ca", null ],
       [ "findFirstBitSet", "class_ogre_1_1bitset64.html#a6f02af2301dae4346e56942ad2a51fe5", null ],
+      [ "findFirstBitSet", "class_ogre_1_1bitset64.html#a53fb9528b05d625cd2cbb31bcb609593", null ],
       [ "findLastBitSetPlusOne", "class_ogre_1_1bitset64.html#a00681e8c0b7174244cb4e4c38745bb5a", null ],
+      [ "findLastBitSetPlusOne", "class_ogre_1_1bitset64.html#a6f8921069d4aa316f7380219f1fa776d", null ],
+      [ "findLastBitUnset", "class_ogre_1_1bitset64.html#a8267e155c4ad635bac55fa69f504c76e", null ],
+      [ "findLastBitUnset", "class_ogre_1_1bitset64.html#ac9e641d095e38e01f75462f7b401eb1f", null ],
       [ "numBitsSet", "class_ogre_1_1bitset64.html#a4aafcfea2c858bb9205fee034468a419", null ],
       [ "reset", "class_ogre_1_1bitset64.html#a12b679b9018bc363528a9ae65754e282", null ],
       [ "set", "class_ogre_1_1bitset64.html#ae9448771b1492aabf330a323a87707ec", null ],
@@ -31,6 +35,7 @@ var group___core =
     [ "cbitset32", "class_ogre_1_1cbitset32.html", null ],
     [ "cbitset64", "class_ogre_1_1cbitset64.html", [
       [ "findFirstBitSet", "class_ogre_1_1cbitset64.html#a430d829c186ee166fdac787b31328529", null ],
+      [ "findFirstBitSet", "class_ogre_1_1cbitset64.html#a12c36f27860e308e138ac60ddcb885d4", null ],
       [ "findLastBitSetPlusOne", "class_ogre_1_1cbitset64.html#a105b33f5e7a34c5fa03c9cf430132ca8", null ]
     ] ],
     [ "cbitsetN", "class_ogre_1_1cbitset_n.html", [

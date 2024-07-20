@@ -77,6 +77,7 @@ var group___effects =
       [ "analyzeBarriers", "class_ogre_1_1_compositor_pass.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
       [ "execute", "class_ogre_1_1_compositor_pass.html#a2cc832fbb80b9685b4fedf874b46075c", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass.html#ae40f4defcc8f4847f8b80c70992efc09", null ],
+      [ "getAnyTargetTexture", "class_ogre_1_1_compositor_pass.html#a8775025bcac9b4db48c7aec8ca0defed", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass.html#a123ad972ffeab36c66f31c26a2b639e4", null ],
       [ "getParentNode", "class_ogre_1_1_compositor_pass.html#a1fcf0351919f3f8fa422dae558bbf64b", null ],
       [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass.html#a792590a3c8a0fefc9c22fab8ec5bd66a", null ],
@@ -616,7 +617,7 @@ var group___effects =
     ] ],
     [ "ParticleAffectorFactory", "class_ogre_1_1_particle_affector_factory.html", [
       [ "ParticleAffectorFactory", "class_ogre_1_1_particle_affector_factory.html#adefcc5659fbddb67e72ece498003500c", null ],
-      [ "~ParticleAffectorFactory", "class_ogre_1_1_particle_affector_factory.html#ae030407c3bc3e4cdc997f58f000278ea", null ],
+      [ "~ParticleAffectorFactory", "class_ogre_1_1_particle_affector_factory.html#ad4efbcd179939ceb86a09489c1170f9c", null ],
       [ "createAffector", "class_ogre_1_1_particle_affector_factory.html#a7989506f2f5452593f0a377c06d2f61f", null ],
       [ "destroyAffector", "class_ogre_1_1_particle_affector_factory.html#a073f267f4efff156cac2d0a2ef40f7dd", null ],
       [ "getName", "class_ogre_1_1_particle_affector_factory.html#a6315b2c094791ee6c6cdddc9c435cdec", null ]
@@ -651,7 +652,7 @@ var group___effects =
       [ "getRepeatDelay", "class_ogre_1_1_particle_emitter.html#aea1a8b6daaed8e525510be22fcaa333f", null ],
       [ "getStartTime", "class_ogre_1_1_particle_emitter.html#ae57fb988a912fd8b81291d83259988de", null ],
       [ "getTimeToLive", "class_ogre_1_1_particle_emitter.html#aae556108f4dcdda4fa73bd4969549bad", null ],
-      [ "getType", "class_ogre_1_1_particle_emitter.html#a28f5bce7debd978cf6a675f1706d7445", null ],
+      [ "getType", "class_ogre_1_1_particle_emitter.html#a3d382cb40b0390d65a852a08bbf237e3", null ],
       [ "getUp", "class_ogre_1_1_particle_emitter.html#aa7b39cbcb1006b1ec78a613165ccf57b", null ],
       [ "isEmitted", "class_ogre_1_1_particle_emitter.html#af12947b9fbc92565fd63b733d106b88e", null ],
       [ "setAngle", "class_ogre_1_1_particle_emitter.html#aeb086f851624a470e1b5592b81418d39", null ],
@@ -688,7 +689,7 @@ var group___effects =
     ] ],
     [ "ParticleEmitterFactory", "class_ogre_1_1_particle_emitter_factory.html", [
       [ "ParticleEmitterFactory", "class_ogre_1_1_particle_emitter_factory.html#ae7d84a60ac62a0ee941b690cb6c13ea1", null ],
-      [ "~ParticleEmitterFactory", "class_ogre_1_1_particle_emitter_factory.html#ae60c102ff4c406309b4fd0b03af61f48", null ],
+      [ "~ParticleEmitterFactory", "class_ogre_1_1_particle_emitter_factory.html#a7a630190371c90cce260d5bc078d0db4", null ],
       [ "createEmitter", "class_ogre_1_1_particle_emitter_factory.html#ad724bb97fa00667c2bc6056631991f82", null ],
       [ "destroyEmitter", "class_ogre_1_1_particle_emitter_factory.html#adc0b5ab2657292efbdb4bc6e6e6a2462", null ],
       [ "getName", "class_ogre_1_1_particle_emitter_factory.html#a81999da1779cbe5e0ff478f97d021fe2", null ]
@@ -743,7 +744,7 @@ var group___effects =
         [ "doGet", "class_ogre_1_1_particle_system_1_1_cmd_width.html#a5a94c19d2b14503435794c794feb28f2", null ],
         [ "doSet", "class_ogre_1_1_particle_system_1_1_cmd_width.html#a1164c5a67d3e9fbbc11f1ded4615af13", null ]
       ] ],
-      [ "ParticleSystem", "class_ogre_1_1_particle_system.html#ad5f1a1ab4549fcf9784bed724e5b4eb8", null ],
+      [ "ParticleSystem", "class_ogre_1_1_particle_system.html#a524116911564518fd2adeb65a6d1355f", null ],
       [ "~ParticleSystem", "class_ogre_1_1_particle_system.html#a3fd2f05bcee71b0e5b67152786e85bd8", null ],
       [ "_getIterator", "class_ogre_1_1_particle_system.html#a90bc64bd726bfc096c8a3c4d867777e9", null ],
       [ "_notifyAttached", "class_ogre_1_1_particle_system.html#a4368133a10063f002ee73f7b74c4c831", null ],
@@ -806,7 +807,7 @@ var group___effects =
       [ "setMaterialName", "class_ogre_1_1_particle_system.html#a4495534dfee31210a3ab22336d8f881e", null ],
       [ "setNonVisibleUpdateTimeout", "class_ogre_1_1_particle_system.html#acbba685176e0d844d8aa82472406595c", null ],
       [ "setParticleEmitterRootNode", "class_ogre_1_1_particle_system.html#a750fd44ce67ba960a9dc9bfb4e3d3524", null ],
-      [ "setParticleQuota", "class_ogre_1_1_particle_system.html#aa0e2cb40912f330b101b373c84ae1f83", null ],
+      [ "setParticleQuota", "class_ogre_1_1_particle_system.html#afeaaebbee7503f418134e899d0ae227d", null ],
       [ "setRenderer", "class_ogre_1_1_particle_system.html#a3aa26ab67c0ef0c38512f22f3a9c089f", null ],
       [ "setRenderQueueGroup", "class_ogre_1_1_particle_system.html#a22cc682d26dc6a3502632829323464d8", null ],
       [ "setRenderQueueSubGroup", "class_ogre_1_1_particle_system.html#a59ee8a596d0ba5ca8d333aebc3a971a7", null ],

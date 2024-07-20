@@ -1,0 +1,5 @@
+<map id="Ogre::ScaleAffector2" name="Ogre::ScaleAffector2">
+<area shape="rect" id="node1" title="This plugin subclass of ParticleAffector allows you to alter the scale of particles." alt="" coords="12,155,167,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_particle_affector2.html" title="Affectors are per ParticleSystemDef." alt="" coords="5,80,173,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="11,5,168,32"/>
+</map>

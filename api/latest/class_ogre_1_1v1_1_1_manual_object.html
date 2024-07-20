@@ -130,6 +130,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a674b6ed92fb25af4b91ecc03d635ea07"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_manual_object.html#a674b6ed92fb25af4b91ecc03d635ea07">~ManualObject</a> () override</td></tr>
 <tr class="separator:a674b6ed92fb25af4b91ecc03d635ea07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7504c6d8b4482cf21d146e8312a1c7c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_manual_object.html#a7504c6d8b4482cf21d146e8312a1c7c4">_releaseManualHardwareResources</a> () override</td></tr>
+<tr class="memdesc:a7504c6d8b4482cf21d146e8312a1c7c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources were lost.  <a href="class_ogre_1_1v1_1_1_manual_object.html#a7504c6d8b4482cf21d146e8312a1c7c4">More...</a><br /></td></tr>
 <tr class="separator:a7504c6d8b4482cf21d146e8312a1c7c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e581008a4004f9b568a99b5e7d44aa6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_manual_object.html#a1e581008a4004f9b568a99b5e7d44aa6">_updateRenderQueue</a> (<a class="el" href="class_ogre_1_1_render_queue.html">RenderQueue</a> *queue, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera) override</td></tr>
 <tr class="separator:a1e581008a4004f9b568a99b5e7d44aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -627,7 +628,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Notifies the movable object that hardware resources were lost. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Called automatically by <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> if hardware resources were lost and can not be restored using some internal mechanism. Among affected resources are nested shadow renderables, ManualObjects, etc. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_movable_object.html#a57123ae4fec1b472f25270c1dd6abe59">Ogre::MovableObject</a>.</p>
 

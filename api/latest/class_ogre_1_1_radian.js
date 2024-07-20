@@ -28,5 +28,6 @@ var class_ogre_1_1_radian =
     [ "valueAngleUnits", "group___math.html#ga8f7034ef9399fbeed2e1183ee34c26d8", null ],
     [ "valueDegrees", "group___math.html#ga562b349029e40604b6cf201fc49ef68a", null ],
     [ "valueRadians", "class_ogre_1_1_radian.html#ab1ff6d324f34dc6b2143611cb299e9f4", null ],
+    [ "wrapToRangeNPI_PI", "group___math.html#ga27cd9d0c1aae1f96774414a58daeb154", null ],
     [ "operator<<", "class_ogre_1_1_radian.html#a687923d48a83e82c1a0a75b0d3586396", null ]
 ];

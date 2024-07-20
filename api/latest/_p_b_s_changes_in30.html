@@ -91,29 +91,29 @@ $(document).ready(function(){initNavTree('_p_b_s_changes_in30.html',''); initRes
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md69">Short version</a></li>
-<li class="level1"><a href="#autotoc_md70">Long version</a><ul><li class="level2"><a href="#autotoc_md71">Direct Lighting</a><ul><li class="level3"><a href="#autotoc_md72">Fresnel Diffuse is no longer considered</a><ul><li class="level4"><a href="#autotoc_md73">Raffaele&#39;s comments:</a></li>
-<li class="level4"><a href="#autotoc_md74">Default-enable to diffuse fresnel</a></li>
+<ul><li class="level1"><a href="#autotoc_md59">Short version</a></li>
+<li class="level1"><a href="#autotoc_md60">Long version</a><ul><li class="level2"><a href="#autotoc_md61">Direct Lighting</a><ul><li class="level3"><a href="#autotoc_md62">Fresnel Diffuse is no longer considered</a><ul><li class="level4"><a href="#autotoc_md63">Raffaele&#39;s comments:</a></li>
+<li class="level4"><a href="#autotoc_md64">Default-enable to diffuse fresnel</a></li>
 </ul>
 </li>
-<li class="level3"><a href="#autotoc_md75">Geometric Term change</a></li>
-<li class="level3"><a href="#autotoc_md76">Metalness change</a></li>
+<li class="level3"><a href="#autotoc_md65">Geometric Term change</a></li>
+<li class="level3"><a href="#autotoc_md66">Metalness change</a></li>
 </ul>
 </li>
-<li class="level2"><a href="#autotoc_md77">IBL</a><ul><li class="level3"><a href="#autotoc_md78">IBL Diffuse</a><ul><li class="level4"><a href="#autotoc_md79">Multiplication by PI</a></li>
+<li class="level2"><a href="#autotoc_md67">IBL</a><ul><li class="level3"><a href="#autotoc_md68">IBL Diffuse</a><ul><li class="level4"><a href="#autotoc_md69">Multiplication by PI</a></li>
 </ul>
 </li>
-<li class="level3"><a href="#autotoc_md80">IBL Specular</a></li>
+<li class="level3"><a href="#autotoc_md70">IBL Specular</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </div>
-<div class="textblock"><p><a class="anchor" id="md_manual_PbsChanges30"></a></p>
+<div class="textblock"><p><a class="anchor" id="md_manual_Migrating_PbsChanges30"></a></p>
 <p>Raffaele Bratta, aka TaaTT4, made <a href="https://forums.ogre3d.org/viewtopic.php?p=553900#p553900">a lot of PBR</a> research to ensure OgreNext's PBR workflow matches that of standard DCC (Digital Content Creation) tools such as Marmoset.</p>
 <p>But this also means that materials written against OgreNext 2.3 or older will look different in 3.0</p>
-<h1><a class="anchor" id="autotoc_md69"></a>
+<h1><a class="anchor" id="autotoc_md59"></a>
 Short version</h1>
 <p><b>OgreNext 2.3 looked like this:</b></p>
 <p><img src="ShortVersionOgreNext24.png" alt="" class="inline"/></p>
@@ -129,11 +129,11 @@ Short version</h1>
 <div class="line">pbsDatablock-&gt;setBrdf( Ogre::PbsBrdf::DefaultHasDiffuseFresnel );</div>
 </div><!-- fragment --><p>Which is a very close look to the version in 2.3</p>
 <p>The reason for these changes is to align with external tools that are standard in the industry.</p>
-<h1><a class="anchor" id="autotoc_md70"></a>
+<h1><a class="anchor" id="autotoc_md60"></a>
 Long version</h1>
-<h2><a class="anchor" id="autotoc_md71"></a>
+<h2><a class="anchor" id="autotoc_md61"></a>
 Direct Lighting</h2>
-<h3><a class="anchor" id="autotoc_md72"></a>
+<h3><a class="anchor" id="autotoc_md62"></a>
 Fresnel Diffuse is no longer considered</h3>
 <p>Originally OgreNext diffuse component was multiplied against the inverse of the specular's fresnel to maintain energy conservation.</p>
 <p>In math terms this boils down to:</p>
@@ -151,18 +151,18 @@ Fresnel Diffuse is no longer considered</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">BlinnPhong   </td><td class="markdownTableBodyNone">BlinnPhongHasDiffuseFresnel   </td></tr>
 </table>
-<h4><a class="anchor" id="autotoc_md73"></a>
+<h4><a class="anchor" id="autotoc_md63"></a>
 Raffaele's comments:</h4>
 <p>OGRE "weights" the diffuse lighting contribution by a factor of <code>1 - fresnelS</code>.</p>
 <p>None of the rendering engines I've reviewed do this; all use the diffuse lighting contribution as-is, without any weighting factors.</p>
 <p>Based on a response Sébastien Lagarde gave to a user who commented on a post on his blog, it appears that <code>1 - fresnelS</code> is a better approximation, mathematically speaking, than doing nothing:</p>
 <p><img src="SebLagardeComment.png" alt="" class="inline"/></p>
-<h4><a class="anchor" id="autotoc_md74"></a>
+<h4><a class="anchor" id="autotoc_md64"></a>
 Default-enable to diffuse fresnel</h4>
 <p>Materials written gainst old OgreNext will look very differently due to this change.</p>
 <p>We introduced Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel which, when set to false, will default materials loaded from scripts (simple scripts and JSON materials) to <code>DefaultHasDiffuseFresnel</code>, <code>CookTorranceHasDiffuseFresnel</code> &amp; <code>BlinnPhongHasDiffuseFresnel</code>.</p>
 <p>This should ease porting forward.</p>
-<h3><a class="anchor" id="autotoc_md75"></a>
+<h3><a class="anchor" id="autotoc_md65"></a>
 Geometric Term change</h3>
 <p>The <code>Default</code> BRDF <a href="https://github.com/OGRECave/ogre-next/commit/ecf174d8aff2236fbb261692b2efeb6b56383305">had a change in the parametrization</a> of the term <code>k</code> in the computation of the geometric shadowing (specular <code>G</code>).</p>
 <ul>
@@ -170,14 +170,14 @@ Geometric Term change</h3>
 <li>Marmoset uses <code>k = roughness² / 2</code></li>
 <li>For OgreNext 3.0, the "standard" (or at least, the most used value) seems to be <code>k = (roughness + 1)² / 8</code> (see <a href="https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf">s2013_pbs_epic_notes_v2.pdf</a> page 3).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md76"></a>
+<h3><a class="anchor" id="autotoc_md66"></a>
 Metalness change</h3>
 <p>The <a href="https://github.com/OGRECave/ogre-next/commit/51e487d2a5cc725154cdd3fbcf06babb5789061c">default reflectance value</a> for fully dielectric surfaces was 3%, now it is 4%.</p>
 <p>See <a href="https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf">course_notes_moving_frostbite_to_pbr_v32.pdf</a> page 13.</p>
 <p>This only affects to users who set Ogre::HlmsPbsDatablock::setWorkflow to Ogre::HlmsPbsDatablock::MetallicWorkflow.</p>
-<h2><a class="anchor" id="autotoc_md77"></a>
+<h2><a class="anchor" id="autotoc_md67"></a>
 IBL</h2>
-<h3><a class="anchor" id="autotoc_md78"></a>
+<h3><a class="anchor" id="autotoc_md68"></a>
 IBL Diffuse</h3>
 <p><b>Raffaele's comments:</b></p>
 <p>Unlike Filament and UE4 (which use the Lambertian model for diffuse lighting), OgreNext uses the Disney model. Sébastien Lagarde paper states that, as is done for the specular part, the DFG term must also be considered in diffuse preintegration (see: pag 58-73; especially pag. 67 and listing 18, 24). Similarly to the specular part, also in this case the DFG term depends only on the viewing angle and the roughness and therefore can be precalculated.</p>
@@ -191,10 +191,10 @@ IBL Diffuse</h3>
 <p><b>Old IBL Diffuse using DefaultHasDiffuseFresnel:</b> <img src="OgreIblDiffuseOld.png" alt="" class="inline"/></p>
 <p><b>New IBL Diffuse (Smith DFG) using DefaultHasDiffuseFresnel:</b> <img src="OgreIblDiffuseNew.png" alt="" class="inline"/></p>
 <p><b>New IBL Diffuse (Smith DFG) using Default:</b> <img src="OgreIblDiffuseNewDefault.png" alt="" class="inline"/></p>
-<h4><a class="anchor" id="autotoc_md79"></a>
+<h4><a class="anchor" id="autotoc_md69"></a>
 Multiplication by PI</h4>
 <p>IBL Diffuse was missing a multiplication by PI, as a result the IBL may look brighter.</p>
-<h3><a class="anchor" id="autotoc_md80"></a>
+<h3><a class="anchor" id="autotoc_md70"></a>
 IBL Specular</h3>
 <p>There was a <a href="https://github.com/OGRECave/ogre-next/commit/58dfd9bbef17326592169fdf2c613aa714889843">bug</a> in the computation of the normal distribution function (specular <code>D</code>) during prefilter convolution.</p>
 <p>If you compare the <a href="https://google.github.io/filament/Filament.html#materialsystem/specularbrdf/normaldistributionfunction%28speculard%29">theory</a> with OgreNext code, you can clearly see that a PI is missing in the denominator.</p>
@@ -220,7 +220,7 @@ IBL Specular</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="manual.html">Manual</a></li>
+    <li class="navelem"><a class="el" href="manual.html">Manual</a></li><li class="navelem"><a class="el" href="_migrating_series.html">Migrating Series</a></li><li class="navelem"><a class="el" href="_migrating_23_to_30.html">Migrating from 2.3 to 3.0</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>

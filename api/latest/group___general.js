@@ -783,13 +783,26 @@ var group___general =
       [ "ParticleAffectorTranslator", "class_ogre_1_1_particle_affector_translator.html#ab56f25f9e4dfde491c206c9aa1c35e64", null ],
       [ "translate", "class_ogre_1_1_particle_affector_translator.html#ac6f68579d2d63ee6a126bfd24bc4f81f", null ]
     ] ],
+    [ "ParticleAffectorTranslator2", "class_ogre_1_1_particle_affector_translator2.html", [
+      [ "ParticleAffectorTranslator2", "class_ogre_1_1_particle_affector_translator2.html#a52f222953658f389b1e96bc9e984339b", null ],
+      [ "translate", "class_ogre_1_1_particle_affector_translator2.html#a22e18cf3bd41b4c850f6fc17dd6fd2d8", null ]
+    ] ],
     [ "ParticleEmitterTranslator", "class_ogre_1_1_particle_emitter_translator.html", [
       [ "ParticleEmitterTranslator", "class_ogre_1_1_particle_emitter_translator.html#a47901f76ce875382552d3c5b6567a3ef", null ],
       [ "translate", "class_ogre_1_1_particle_emitter_translator.html#a11b620fd8f8c4288551d3fd65205473a", null ]
     ] ],
+    [ "ParticleEmitterTranslator2", "class_ogre_1_1_particle_emitter_translator2.html", [
+      [ "ParticleEmitterTranslator2", "class_ogre_1_1_particle_emitter_translator2.html#af417b3b8d1de0665191c5842aa0b1327", null ],
+      [ "translate", "class_ogre_1_1_particle_emitter_translator2.html#a3428262a89fa4cdb6f770c9960b6373a", null ]
+    ] ],
     [ "ParticleSystemTranslator", "class_ogre_1_1_particle_system_translator.html", [
       [ "ParticleSystemTranslator", "class_ogre_1_1_particle_system_translator.html#aecfbd64880155bdcb52fba2b4c9d3a4a", null ],
       [ "translate", "class_ogre_1_1_particle_system_translator.html#a2c7474ff556061ae772eb4a9ef7bf685", null ]
+    ] ],
+    [ "ParticleSystemTranslator2", "class_ogre_1_1_particle_system_translator2.html", [
+      [ "ParticleSystemTranslator2", "class_ogre_1_1_particle_system_translator2.html#a28318bc7606a5f35a2e87b12ca42e26d", null ],
+      [ "isParsing", "class_ogre_1_1_particle_system_translator2.html#ab02c52b77b7475f86a9fabb2fba1c4ca", null ],
+      [ "translate", "class_ogre_1_1_particle_system_translator2.html#a411d03537797374fc911d9c7637b7b13", null ]
     ] ],
     [ "PassthroughControllerFunction", "class_ogre_1_1_passthrough_controller_function.html", [
       [ "PassthroughControllerFunction", "class_ogre_1_1_passthrough_controller_function.html#a7596d4806e925e3c6e519f613d94031b", null ],
@@ -1017,6 +1030,7 @@ var group___general =
       [ "getMovableObjectFactory", "class_ogre_1_1_root.html#ab89302520cbbe6d78d25e325081ea906", null ],
       [ "getMovableObjectFactoryIterator", "class_ogre_1_1_root.html#a3553a2489abef032d90f97db44aa109b", null ],
       [ "getNextFrameNumber", "class_ogre_1_1_root.html#ab96018d26a9ad7381e0946d3432deb44", null ],
+      [ "getParticleSystemManager2", "class_ogre_1_1_root.html#a6fb6f64c332a47412ef428b37ca29da8", null ],
       [ "getRemoveRenderQueueStructuresOnClear", "class_ogre_1_1_root.html#a734be2fb6e01355f328fa5ccd2e737f6", null ],
       [ "getRenderSystem", "class_ogre_1_1_root.html#a302ae050078b8a845a6059201cf9469b", null ],
       [ "getRenderSystemByName", "class_ogre_1_1_root.html#adaeb26515fba041094510f71fb6757c9", null ],
@@ -1749,8 +1763,6 @@ var group___general =
       [ "ID_TARGET_HEIGHT_SCALED", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca79d0730d5a52d8f35a311715605aaaee", null ],
       [ "ID_TARGET_ORIENTATION_MODE", "group___general.html#gga30d5439896c2a2362024ec689b1e181cadf9ac85c11433a792de1d59472264b64", null ],
       [ "ID_TARGET_FORMAT", "group___general.html#gga30d5439896c2a2362024ec689b1e181cabbcfc2651045781ac2f42b5e21810c01", null ],
-      [ "ID_NO_GAMMA", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca954c223ebe14be9ae196829145d16ffb", null ],
-      [ "ID_NO_FSAA", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca02452805e94dad9c3a043949be110679", null ],
       [ "ID_MSAA", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca9fd2048862404d5d14d3a4bf027eb540", null ],
       [ "ID_MSAA_AUTO", "group___general.html#gga30d5439896c2a2362024ec689b1e181cad6c66cd5caffc68d90a9cf1adadd7266", null ],
       [ "ID_EXPLICIT_RESOLVE", "group___general.html#gga30d5439896c2a2362024ec689b1e181ca513a675c5cc7e40dae07c905ea94b952", null ],

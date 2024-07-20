@@ -6,6 +6,7 @@ var class_ogre_1_1_ring_emitter =
     [ "_initParticle", "class_ogre_1_1_ring_emitter.html#ac55dd6a31d71aff429dd71df299ec95b", null ],
     [ "getInnerSizeX", "class_ogre_1_1_ring_emitter.html#a80224262847bbfd90eebf2cd6b5f587b", null ],
     [ "getInnerSizeY", "class_ogre_1_1_ring_emitter.html#a3f6dc3d223728ed814e7961114188c64", null ],
+    [ "getType", "class_ogre_1_1_ring_emitter.html#ab9780d7e3f2ae85034409d6eba091ca4", null ],
     [ "setInnerSize", "class_ogre_1_1_ring_emitter.html#a6bec37d0215d00d7c21cf9cd3ecb7e74", null ],
     [ "setInnerSizeX", "class_ogre_1_1_ring_emitter.html#ab72f845f276736ad49f37644e12d9c5b", null ],
     [ "setInnerSizeY", "class_ogre_1_1_ring_emitter.html#a0c27fc47afc5857aecf9558ee88bbc0b", null ]

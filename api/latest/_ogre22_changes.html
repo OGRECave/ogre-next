@@ -91,37 +91,37 @@ $(document).ready(function(){initNavTree('_ogre22_changes.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md35">Load Store semantics</a><ul><li class="level2"><a href="#autotoc_md36">Now that we’ve explained how TBDRs work, we can explain load and store actions</a></li>
+<ul><li class="level1"><a href="#Ogre22LoadStoreSemantics">Load Store semantics</a><ul><li class="level2"><a href="#autotoc_md23">Now that we’ve explained how TBDRs work, we can explain load and store actions</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md37">More control over MSAA</a></li>
-<li class="level1"><a href="#autotoc_md38">Porting to Ogre 2.2 from 2.1</a><ul><li class="level2"><a href="#autotoc_md39">PixelFormats</a><ul><li class="level3"><a href="#autotoc_md40">Common pixel format equivalencies</a></li>
+<li class="level1"><a href="#autotoc_md24">More control over MSAA</a></li>
+<li class="level1"><a href="#autotoc_md25">Porting to Ogre 2.2 from 2.1</a><ul><li class="level2"><a href="#autotoc_md26">PixelFormats</a><ul><li class="level3"><a href="#autotoc_md27">Common pixel format equivalencies</a></li>
 </ul>
 </li>
-<li class="level2"><a href="#autotoc_md41">Useful code snippets</a><ul><li class="level3"><a href="#autotoc_md42">Create a TextureGpu based on a file</a></li>
-<li class="level3"><a href="#autotoc_md43">Create a TextureGpu based that you manually fill</a></li>
-<li class="level3"><a href="#autotoc_md44">Uploading data to a TextureGpu</a></li>
-<li class="level3"><a href="#autotoc_md45">Upload streaming</a></li>
-<li class="level3"><a href="#autotoc_md46">Downloading data from TextureGpu into CPU</a></li>
-<li class="level3"><a href="#autotoc_md47">Downloading streaming</a></li>
+<li class="level2"><a href="#autotoc_md28">Useful code snippets</a><ul><li class="level3"><a href="#autotoc_md29">Create a TextureGpu based on a file</a></li>
+<li class="level3"><a href="#autotoc_md30">Create a TextureGpu based that you manually fill</a></li>
+<li class="level3"><a href="#autotoc_md31">Uploading data to a TextureGpu</a></li>
+<li class="level3"><a href="#autotoc_md32">Upload streaming</a></li>
+<li class="level3"><a href="#autotoc_md33">Downloading data from TextureGpu into CPU</a></li>
+<li class="level3"><a href="#autotoc_md34">Downloading streaming</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md48">Difference between depth, numSlices and depthOrSlices</a></li>
-<li class="level1"><a href="#autotoc_md49">Memory layout of textures and images</a></li>
-<li class="level1"><a href="#autotoc_md50">Troubleshooting errors</a></li>
-<li class="level1"><a href="#autotoc_md51">RenderPassDescriptors</a></li>
-<li class="level1"><a href="#autotoc_md52">DescriptorSetTexture &amp; co.</a></li>
-<li class="level1"><a href="#autotoc_md53">Does 2.2 interoperate well with the HLMS texture arrays?</a></li>
-<li class="level1"><a href="#autotoc_md54">Hlms porting</a></li>
-<li class="level1"><a href="#autotoc_md55">Things to watch out when porting</a></li>
+<li class="level1"><a href="#autotoc_md35">Difference between depth, numSlices and depthOrSlices</a></li>
+<li class="level1"><a href="#autotoc_md36">Memory layout of textures and images</a></li>
+<li class="level1"><a href="#autotoc_md37">Troubleshooting errors</a></li>
+<li class="level1"><a href="#autotoc_md38">RenderPassDescriptors</a></li>
+<li class="level1"><a href="#autotoc_md39">DescriptorSetTexture &amp; co.</a></li>
+<li class="level1"><a href="#autotoc_md40">Does 2.2 interoperate well with the HLMS texture arrays?</a></li>
+<li class="level1"><a href="#autotoc_md41">Hlms porting</a></li>
+<li class="level1"><a href="#autotoc_md42">Things to watch out when porting</a></li>
 </ul>
 </div>
-<div class="textblock"><p><a class="anchor" id="md_manual_Ogre2_2_Changes"></a></p>
+<div class="textblock"><p><a class="anchor" id="md_manual_Migrating_Ogre2_2_Changes"></a></p>
 <p>The main change has been a full refactor of textures.</p>
 <p>The main reason of 2.2 is a complete overhaul of the Texture system, with a focus on lowering GPU RAM consumption, background texture streaming, asynchronic GPU to CPU texture transfers, and reducing out of GPU memory scenarios (which are relatively easy to run into if your project is medium-to-large sized).</p>
-<h1><a class="anchor" id="autotoc_md35"></a>
+<h1><a class="anchor" id="Ogre22LoadStoreSemantics"></a>
 Load Store semantics</h1>
 <p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 is much more mobile friendly. Metal introduced the concepts of “load” and “store” actions, and we follow that paradigm because it’s easy to implement and understand.</p>
 <p>First we need to explain how mobile TBDR GPUs work (**T**iled **B**ased **D**eferred **R**enderers). In a regular immediate GPU (any Desktop GPU), the GPU just processes and draws triangles to the screen in the order they’re submitted, writing results to RAM, and reading from RAM if need to. Run the vertex shader, then the pixel shader, go on to the next triangle. The process is slightly more complex because there’s a lot of parallelization going on (i.e. multiple triangles worked on a the same time), but the overall scheme of things is that desktop GPUs process things in order.</p>
@@ -135,7 +135,7 @@ Load Store semantics</h1>
 <p>This is not usually a problem in mobile because well… nobody expects a phone to process 4 million vertices or more per frame. Also you can make it up by using improved pixel shaders (because of the Early Z you get for free).</p>
 <p>In TBDRs, each tile is a self-contained unit of work that never flushes the cache from start to end until all the works has been done (unless the GPU has ran out of space because we’ve submitted too much work, but let’s not dwell into that).</p>
 <p>If you want a more in-depth explanation, read <a href="https://www.imgtec.com/blog/a-look-at-the-powervr-graphics-architecture-tile-based-rendering/">A look at the PowerVR graphics architecture: Tile-based rendering</a> and <a href="https://www.imgtec.com/blog/understanding-powervr-series5xt-powervr-tbdr-and-architecture-efficiency-part-4/">Understanding PowerVR Series5XT: PowerVR, TBDR and architecture efficiency</a>.</p>
-<h2><a class="anchor" id="autotoc_md36"></a>
+<h2><a class="anchor" id="autotoc_md23"></a>
 Now that we’ve explained how TBDRs work, we can explain load and store actions</h2>
 <p>In an immediate renderer, clearing the colour and depth buffers means we instruct the GPU to basically memset the whole texture to a specific value. And then we render to it.</p>
 <p>In TBDRs, this is inefficient; as the memset will store a value to RAM, that later needs to be read from RAM. TBDRs can:</p>
@@ -159,12 +159,12 @@ Now that we’ve explained how TBDRs work, we can explain load and store actions
 </ol>
 <p>This gives you a lot of power and control over how mobile GPUs control their caches in order to achieve maximum performance. But be careful: If you set a load or store action to “DontCare” and then you do need the values, then you’ll end up reading garbage every frame (uninitialized values), which can result in glitches.</p>
 <p>These semantics can also help on Desktop. Whenever we can, we emulate this behavior (to make porting to mobile easier), but we also tell the API about this information whenever the DX11 and GL APIs allow us. This can mostly help with SLI and Crossfire.</p>
-<h1><a class="anchor" id="autotoc_md37"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 More control over MSAA</h1>
 <p>Explicit MSAA finally arrived in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2; and thanks to load and store actions; you have a lot of control over what happens with MSAA and when; which can result in high quality rendering by making MSAA a first class citizen.</p>
 <p>There have been other numerous MSAA changes. In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 MRT + MSAA did not work correctly except for D3D11 (which makes SSR sample to only work with MSAA in D3D11). Now it works everywhere.</p>
 <p>Another change for example that in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1 all render textures in the compositor default to using MSAA if the main target is using MSAA. In <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2; we default to not using MSAA unless told otherwise. We found out most textures do not need MSAA because they’re postprocessing FXs or similar; thus the MSAA is only a waste of memory and performance by doing useless resolves. Therefore only a few render textures actually need MSAA. This saves a lot of GPU RAM and some performance.</p>
-<h1><a class="anchor" id="autotoc_md38"></a>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Porting to Ogre 2.2 from 2.1</h1>
 <p>The impact from this change can vary a lot based on how you were using <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>:</p>
 <ul>
@@ -235,14 +235,14 @@ Porting to Ogre 2.2 from 2.1</h1>
 <li>TextureGpu</li>
 </ol>
 <p>This doesn't mean that TextureGpu is an overgrown God Class. The fragmentation into 3 was a bad idea to begin with.</p>
-<h2><a class="anchor" id="autotoc_md39"></a>
+<h2><a class="anchor" id="autotoc_md26"></a>
 PixelFormats</h2>
 <p>PixelFormat is deprecated and will be removed. You should use PixelFormatGpu instead. The way to read the format is the following:</p>
 <ul>
 <li>PFG_RGBA8_UNORM: RGBA format, 8 bits per channel (so 32 bit per pixel), in unorm format; that means range is [0; 1]</li>
 <li>PFG_RGBA32_FLOAT: RGBA format, 32 bits per channel (so 128 bit per pixel), in raw float format</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md40"></a>
+<h3><a class="anchor" id="autotoc_md27"></a>
 Common pixel format equivalencies</h3>
 <p>The boolean "hwGamma" that usually came alongside the pixel format is gone. Now the gamma version is part of the format. For example PFG_RGBA8_UNORM and PFG_RGBA8_UNORM_SRGB are both the same format except one is.</p>
 <p>Here's a table with common translations:</p>
@@ -285,9 +285,9 @@ PFG_BC3_UNORM_SRGB   </td></tr>
 <p>Compute job passes use DescriptorSetTexture2 internally by default and support feature format reinterpretation out of the box.</p>
 <p><b>Where are PF_L8 and PF_L16?</b></p>
 <p>These no longer exist as they did not exist in D3D11 &amp; Metal and were being emulated in GL. Use PFG_R8_UNORM &amp; PFG_R16_UNORM instead, which return the data in the red channel, as opposed to L8 which in GL returned data in all 3 RGB channels (but in D3D11 &amp; Metal, only returned data in the red channel...). Use HlmsUnlitDatablock::setTextureSwizzle to control how the channels are routed to your liking.</p>
-<h2><a class="anchor" id="autotoc_md41"></a>
+<h2><a class="anchor" id="autotoc_md28"></a>
 Useful code snippets</h2>
-<h3><a class="anchor" id="autotoc_md42"></a>
+<h3><a class="anchor" id="autotoc_md29"></a>
 Create a TextureGpu based on a file</h3>
 <p>The following snippet loads a texture from file: </p><div class="fragment"><div class="line">Ogre::Root *root = ...;</div>
 <div class="line">Ogre::TextureGpuManager *textureMgr = root-&gt;getRenderSystem()-&gt;getTextureGpuManager();</div>
@@ -317,7 +317,7 @@ Create a TextureGpu based on a file</h3>
 <p>Last, but not least, you can also call:</p>
 <div class="fragment"><div class="line">textureMgr-&gt;waitForStreamingCompletion();</div>
 </div><!-- fragment --><p> This will block the calling thread until <b>all</b> pending textures are loaded.</p>
-<h3><a class="anchor" id="autotoc_md43"></a>
+<h3><a class="anchor" id="autotoc_md30"></a>
 Create a TextureGpu based that you manually fill</h3>
 <p>The following snippet creates a texture that will be filled by hand (e.g. manually loading from file yourself, procedural generation, etc):</p>
 <div class="fragment"><div class="line"><a class="code" href="class_ogre_1_1_root.html">Ogre::Root</a> *root = ...;</div>
@@ -348,7 +348,7 @@ Create a TextureGpu based that you manually fill</h3>
 <div class="ttc" id="anamespace_ogre_1_1_gpu_page_out_strategy_html_a4d2162c156be30917f38f15e2327ce65a28135d9485a60bfa1a598cba471d6891"><div class="ttname"><a href="namespace_ogre_1_1_gpu_page_out_strategy.html#a4d2162c156be30917f38f15e2327ce65a28135d9485a60bfa1a598cba471d6891">Ogre::GpuPageOutStrategy::Discard</a></div><div class="ttdeci">@ Discard</div><div class="ttdoc">When the resource is no longer resident, we just throw the GPU data.</div><div class="ttdef"><b>Definition:</b> OgreGpuResource.h:89</div></div>
 <div class="ttc" id="anamespace_ogre_1_1_texture_flags_html_a59b71e36a14465bd82595d6d467e1434af3d439b1fb1b1aedfbea2c633da4e2b1"><div class="ttname"><a href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434af3d439b1fb1b1aedfbea2c633da4e2b1">Ogre::TextureFlags::ManualTexture</a></div><div class="ttdeci">@ ManualTexture</div><div class="ttdoc">Indicates this texture will be filled by the user, and won't be loaded from file or a listener from w...</div><div class="ttdef"><b>Definition:</b> OgreTextureGpu.h:136</div></div>
 <div class="ttc" id="anamespace_ogre_1_1_texture_types_html_aa364e348564060700791c9940d5ced82aaccb80fce163e32091af35b9de1c1001"><div class="ttname"><a href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82aaccb80fce163e32091af35b9de1c1001">Ogre::TextureTypes::Type2D</a></div><div class="ttdeci">@ Type2D</div><div class="ttdef"><b>Definition:</b> OgreTextureGpu.h:57</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md44"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md31"></a>
 Uploading data to a TextureGpu</h3>
 <div class="fragment"><div class="line"><span class="keyword">const</span> <a class="code" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> rowAlignment = 4u;</div>
 <div class="line"><span class="keyword">const</span> <span class="keywordtype">size_t</span> dataSize = <a class="code" href="class_ogre_1_1_pixel_format_gpu_utils.html#aee2ade90d769c187b8192e0a234c5f17">Ogre::PixelFormatGpuUtils::getSizeBytes</a>( texture-&gt;<a class="code" href="class_ogre_1_1_texture_gpu.html#add1ea0e81537e4b98ad11f6cc06f14cd">getWidth</a>(),</div>
@@ -458,11 +458,11 @@ Uploading data to a TextureGpu</h3>
 <li>Use <code>StagingTexture::supportsFormat</code> to check if the parameters are compatible with the upload you're trying to do. However, mapRegion may still fail if it has run out of space. If supportsFormat returns false, it means mapRegion will always fail. If supportsFormat returns true, it means mapRegion may or may not succeed.</li>
 <li>Due to API restrictions, StagingTextures larger than 2048x2048 can only call mapRegion for one slice at a time. For textures smaller than that, you can map several slices contiguously.</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md45"></a>
+<h3><a class="anchor" id="autotoc_md32"></a>
 Upload streaming</h3>
 <p>Once you've called <code>StagingTexture::upload</code>; calling <code>StagingTexture::startMapRegion</code> again will stall until the copy is done. You can call <code>StagingTexture::uploadWillStall</code> to know if the StagingTexture is ready or not.</p>
 <p>For streaming every frame (e.g. video playback, procedural animation from CPU), you should use two or three StagingTextures (double vs triple buffer), and use one each frame in cycle (do not release these StagingTextures every frame, hold on to them instead).</p>
-<h3><a class="anchor" id="autotoc_md46"></a>
+<h3><a class="anchor" id="autotoc_md33"></a>
 Downloading data from TextureGpu into CPU</h3>
 <p>For that we'll use AsyncTextureTickets. They're like StagingTextures, but in the opposite direction.</p>
 <div class="fragment"><div class="line">AsyncTextureTicket *asyncTicket =</div>
@@ -496,7 +496,7 @@ Downloading data from TextureGpu into CPU</h3>
 <div class="ttc" id="aclass_ogre_1_1_texture_gpu_html_a4b75fd64ef4af817e1ce1e881132b78d"><div class="ttname"><a href="class_ogre_1_1_texture_gpu.html#a4b75fd64ef4af817e1ce1e881132b78d">Ogre::TextureGpu::getTextureType</a></div><div class="ttdeci">TextureTypes::TextureTypes getTextureType() const</div></div>
 </div><!-- fragment --><p>Downloading a single mip for a 2D texture from GPU is straightforward and this code should be enough. But a generic version that works on all types of textures has many small details e.g. what if the TextureGpu uses msaa? It needs to be resolved first.</p>
 <p>It is for that reason that we advise to use <code>Image2::convertFromTexture</code>, which handles all the small details.</p>
-<h3><a class="anchor" id="autotoc_md47"></a>
+<h3><a class="anchor" id="autotoc_md34"></a>
 Downloading streaming</h3>
 <p>Download streaming is very common in the case of video recording and web streaming.</p>
 <p>After calling <code>AsyncTextureTicket::download</code>, calling <code>AsyncTextureTicket::map</code> to access the contents can stall until the GPU is done with the transfer. You can check if we're done by calling <code>AsyncTextureTicket::queryIsTransferDone</code>.</p>
@@ -507,14 +507,14 @@ Downloading streaming</h3>
 <div class="line">    sleep( 1 );</div>
 </div><!-- fragment --><p> and this loop would never exit unless <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> switches that ticket to accurate tracking. An warning in the Ogre.log will be logged if this happens.</p>
 <p>Accurate tracking isn't slow, but switching from innaccurate to accurate is potentially very slow, depending on many circumstances; as worst case scenario it can produce a full stall (CPU waits until GPU has fully finished doing all pending jobs).</p>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md35"></a>
 Difference between depth, numSlices and depthOrSlices</h1>
 <p>You may find that throughout <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> we refer to <code>depth</code>, <code>numSlices</code>, and <code>depthOrSlices</code>. They're similar, but conceptually different.</p>
 <p><b>Depth</b> is associated with 3D volume textures. Depth is affected by mipmaps. Meaning that a 512x512x256 texture at mip 0 becomes 256x256x128 at mip 1. Current GPUs impose a maximum resolution of 2048x2048x2048 for 3D volume textures. Note however, depending on format, you may run out of GPU memory before reaching such high resolution.</p>
 <p><b>NumSlices</b> is associated with everything else: 1D Array &amp; 2D Array textures, cubemap &amp; cubemap array textures. A cubemap has a hardcoded <code>numSlices</code> of 6. A cubemap array must be multiple of 6. Slices are not affected by mipmaps. Meaning that a 512x512x256 texture at mip 0 becomes 256x256x256 at mip 1.</p>
 <p><b>depthOrSlices</b> means that we're storing both depth and numSlices in the same variable. When this happens, usually extra information is needed (in other words, is this a 3D texture or not?). For example TextureGpu declares <code>uint32 mDepthOrSlices</code> because it also declares &amp; knows the texture type <code>TextureTypes::TextureTypes mTextureType</code> If mipmapping isn't involved, then the texture type is not required, thus for the maths needed, depthOrSlices is the same as depth or numSlices.</p>
 <p>AMD GCN Note: At the time of writing (2018/02/01), all known GCN cards add padding to round texture resolutions to the next power of 2 if they have mipmaps. This means a cubemap of 1024x1024x6 actually takes as much as 1024x1024x8. This is very particularly important for 2D Array textures. Always try to use powers of 2 for your slices, otherwise you'll be wasting memory.</p>
-<h1><a class="anchor" id="autotoc_md49"></a>
+<h1><a class="anchor" id="autotoc_md36"></a>
 Memory layout of textures and images</h1>
 <p>All data manipulated by <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> (e.g. TextureBox, Image2, StagingTextures and AsyncTextureTickets) have the following memory layouts and rules:</p>
 <p>Internal layout of data in memory: </p><div class="fragment"><div class="line">Mip0 -&gt; Slice 0, Slice 1, ..., Slice N</div>
@@ -529,7 +529,7 @@ Memory layout of textures and images</h1>
 <div class="line">size_t bytesPerRow = Ogre::PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, pixelFormat, rowAlignment );</div>
 <div class="line">size_t bytesPerImage = Ogre::PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, pixelFormat, rowAlignment );</div>
 <div class="line">size_t bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md50"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md37"></a>
 Troubleshooting errors</h1>
 <p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 code is new. While a lot of bugs have been ironed out already, the streaming code may still contain a few hidden bugs.</p>
 <p>Particularly, most of these bugs only surface if textures are loaded in a particular order (because their resolution or pixel formats affect our algorithms in a way they misbehave).</p>
@@ -545,7 +545,7 @@ Troubleshooting errors</h1>
 <li>mBudget</li>
 </ul>
 <p>And of course, report your problem and findings in <a href="https://forums.ogre3d.org">https://forums.ogre3d.org</a></p>
-<h1><a class="anchor" id="autotoc_md51"></a>
+<h1><a class="anchor" id="autotoc_md38"></a>
 RenderPassDescriptors</h1>
 <p>So far we've covered how to use regular textures. But we left out another big one: Render Textures. Well, that's easy: just create a texture with TextureFlags::RenderTexture flag: </p><div class="fragment"><div class="line">mTexture = textureManager-&gt;createTexture( texName, GpuPageOutStrategy::Discard,</div>
 <div class="line">                                          TextureFlags::RenderToTexture,</div>
@@ -596,7 +596,7 @@ RenderPassDescriptors</h1>
 </ol>
 <p>Note RenderPassDescriptors have more parameters. For example, you can set which mipmap you want to render to, or which slice in an array. You can also render to a 1024x1024 MSAA texture and resolve the result into the mip 1 of a 2048x2048 texture (mip 1 is 1024x1024).</p>
 <p>For further code reference on setting up RenderPassDescriptors you should look into <code>CompositorPass::setupRenderPassDesc</code>.</p>
-<h1><a class="anchor" id="autotoc_md52"></a>
+<h1><a class="anchor" id="autotoc_md39"></a>
 DescriptorSetTexture &amp; co.</h1>
 <p><em>Note: This section is only relevant to those writing their own Hlms implementations.</em></p>
 <p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 uses a different binding model to make compatibility in the future with Vulkan and D3D12 easier.</p>
@@ -625,7 +625,7 @@ DescriptorSetTexture &amp; co.</h1>
 <p>Because supporting more than 16 textures has been a popular complaint about <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.1, and dropping OpenGL is not an option, bakeTextures handles both paths. The code would be simplified if we just assumed one of these paths.</p>
 <p>The second reason is descriptor reuse: Material A may use Texture X, Y &amp; Z. While Material B may use Texture Z, Y &amp; X (same textures, different order). This different order would cause two sets to be generated. However we sort and ensure textures are deterministically ordered; therefore the texture sets can be shared between both materials as only one will be generated.</p>
 <p>Additionally, please note that descriptor sets need to be invalidated when a texture changes residency, which is why we listen for such changes via notifyTextureChanged.</p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md40"></a>
 Does 2.2 interoperate well with the HLMS texture arrays?</h1>
 <p>Yes. <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> 2.2 got rid of anything that used the "old" Textures. That includes the <code>HlmsTextureManager</code>.</p>
 <p>The new <code>TextureGpuManager</code>, which replaces the old <code>TextureManager</code>, also replaces <code>HlmsTextureManager</code>.</p>
@@ -657,7 +657,7 @@ Does 2.2 interoperate well with the HLMS texture arrays?</h1>
 <p>This allows you for example to load MyNormalMap.png two times, one as a RGBA8_UNORM texture to display its contents, and as a RG8_SNORM texture for use as a normal map, as long as you assign them two different alias names.</p>
 <p>At the time of writing a few restrictions from the past still remain though: Unlit will accept both any type of <code>TextureGpu</code>, while PBS will only accept <code>TextureGpu</code> that are <code>Texture2DArray</code> or <code>TextureGpu</code> with <code>AutomaticBatching</code> set (except for the reflections which must be <code>TypeCube</code>).</p>
 <p>Since most TextureGpu textures are loaded as <code>AutomaticBatching</code> <b>by default</b>, this limitation on PBS should be less of an issue than it was on 2.1.</p>
-<h1><a class="anchor" id="autotoc_md54"></a>
+<h1><a class="anchor" id="autotoc_md41"></a>
 Hlms porting</h1>
 <p>If you've done your own Hlms implementation (i.e. you're an advanced user), then there are a few changes you need to be aware:</p>
 <p>A lot of texture shared functionality has been moved out of HlmsUnlitDatablock and HlmsPbsDatablock into Components/Hlms/Common/include/OgreHlmsTextureBaseClass.h</p>
@@ -681,7 +681,7 @@ Hlms porting</h1>
 <p>Furthermore it is in charge of making sure when using GL3+ that DescriptorSetTextures and DescriptorSetSamplers both match 1:1 (see hasSeparateSamplers), while when using D3D11 &amp; Metal they're separated in order to improve performance and significantly raise the number of textures that can be bound per shader.</p>
 <p>OgreHlmsTextureBaseClass also sorts DescriptorSetTextures given a specific criteria to allow sharing of descriptors between different materials (and better draw call sorting) For example if Material X uses texture A then B and Material Y uses texture B then A, OgreHlmsTextureBaseClass sorts the descriptor so that A always comes before B, and thus allow reuse.</p>
 <p>Because textures and samplers have been separated, diffuse_map0_idx indicates the index into the texture array, and the new property "diffuse_map0_sampler" indicates the index of the sampler to use.</p>
-<h1><a class="anchor" id="autotoc_md55"></a>
+<h1><a class="anchor" id="autotoc_md42"></a>
 Things to watch out when porting</h1>
 <p><b>Mipmaps</b></p>
 <p>In 2.1 getNumMipmaps() = 0 means having just 1 mip (the mip 0). Only the extra mips are counted.</p>
@@ -765,7 +765,7 @@ Things to watch out when porting</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="manual.html">Manual</a></li>
+    <li class="navelem"><a class="el" href="manual.html">Manual</a></li><li class="navelem"><a class="el" href="_migrating_series.html">Migrating Series</a></li><li class="navelem"><a class="el" href="_migrating_21_to_22.html">Migrating from 2.1 to 2.2</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>

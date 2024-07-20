@@ -111,6 +111,11 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_hlms_blendblock.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a889e302dec93adba367cf6bece61c48d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48d">A2CSetting</a> { <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da6e212e624ecced87d4bcbac99eda4069">A2cDisabled</a>
+, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da30e30c82b1cafcc8aa567a66c5f01586">A2cEnabled</a>
+, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da5dc84447b84e56f752e7071121084a6f">A2cEnabledMsaaOnly</a>
+ }</td></tr>
+<tr class="separator:a889e302dec93adba367cf6bece61c48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a893b37752fa27b00400cf4e2ab4cf4c1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1">BlendChannelMasks</a> { <br />
 &#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ac7e0bad72e386979b0eea85a9d7984a1">BlendChannelRed</a> = 0x01
 , <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a8bede65d7286a8222e3be931d02e4daf">BlendChannelGreen</a> = 0x02
@@ -130,6 +135,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acaab72f26e7b41ab1082508d86a7ac0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f">calculateSeparateBlendMode</a> ()</td></tr>
 <tr class="memdesc:acaab72f26e7b41ab1082508d86a7ac0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets mSeparateBlend to true or false based on current settings.  <a href="struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f">More...</a><br /></td></tr>
 <tr class="separator:acaab72f26e7b41ab1082508d86a7ac0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60707e7fdeec21944b9b951481554613"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a60707e7fdeec21944b9b951481554613">isAlphaToCoverage</a> (const <a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a> &amp;sd) const</td></tr>
+<tr class="separator:a60707e7fdeec21944b9b951481554613"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07995e128bd5c66fef5784296aede703"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a07995e128bd5c66fef5784296aede703">isAutoTransparent</a> () const</td></tr>
 <tr class="separator:a07995e128bd5c66fef5784296aede703"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bd13a12602c3f2b0a3fe32069a1348e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a4bd13a12602c3f2b0a3fe32069a1348e">isForcedTransparent</a> () const</td></tr>
@@ -153,10 +160,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a84604e9d467e80aa7de99146b89e03a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a84604e9d467e80aa7de99146b89e03a9">mAlphaToCoverageEnabled</a></td></tr>
-<tr class="separator:a84604e9d467e80aa7de99146b89e03a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58e33acfc6631e1a3b09f80c3959dabc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a58e33acfc6631e1a3b09f80c3959dabc">mAlphaToCoverage</a></td></tr>
+<tr class="separator:a58e33acfc6631e1a3b09f80c3959dabc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab274bfed0268538fe6ede5fce32e3e64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ab274bfed0268538fe6ede5fce32e3e64">mBlendChannelMask</a></td></tr>
-<tr class="memdesc:ab274bfed0268538fe6ede5fce32e3e64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Masks which colour channels will be writing to.  <a href="struct_ogre_1_1_hlms_blendblock.html#ab274bfed0268538fe6ede5fce32e3e64">More...</a><br /></td></tr>
+<tr class="memdesc:ab274bfed0268538fe6ede5fce32e3e64"><td class="mdescLeft">&#160;</td><td class="mdescRight">See A2CSetting.  <a href="struct_ogre_1_1_hlms_blendblock.html#ab274bfed0268538fe6ede5fce32e3e64">More...</a><br /></td></tr>
 <tr class="separator:ab274bfed0268538fe6ede5fce32e3e64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81bbefc83b818e89da47b4cba0bea28e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___materials.html#gaa7a12a72231aedf6e33d58aafc11214a">SceneBlendOperation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a81bbefc83b818e89da47b4cba0bea28e">mBlendOperation</a></td></tr>
 <tr class="separator:a81bbefc83b818e89da47b4cba0bea28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +208,28 @@ Public Attributes</h2></td></tr>
 <li>This block contains information of whether the material is transparent. Transparent materials are sorted differently than opaque ones. Up to 32 different blocks are allowed! </li>
 </ul>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a889e302dec93adba367cf6bece61c48d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a889e302dec93adba367cf6bece61c48d">&#9670;&nbsp;</a></span>A2CSetting</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48d">Ogre::HlmsBlendblock::A2CSetting</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a889e302dec93adba367cf6bece61c48da6e212e624ecced87d4bcbac99eda4069"></a>A2cDisabled&#160;</td><td class="fielddoc"><p>Alpha to Coverage is always disabled. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a889e302dec93adba367cf6bece61c48da30e30c82b1cafcc8aa567a66c5f01586"></a>A2cEnabled&#160;</td><td class="fielddoc"><p>Alpha to Coverage is always enabled. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a889e302dec93adba367cf6bece61c48da5dc84447b84e56f752e7071121084a6f"></a>A2cEnabledMsaaOnly&#160;</td><td class="fielddoc"><p>Alpha to Coverage is enabled only if RenderTarget uses MSAA. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a893b37752fa27b00400cf4e2ab4cf4c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a893b37752fa27b00400cf4e2ab4cf4c1">&#9670;&nbsp;</a></span>BlendChannelMasks</h2>
 
@@ -262,6 +291,34 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets mSeparateBlend to true or false based on current settings. </p>
+
+</div>
+</div>
+<a id="a60707e7fdeec21944b9b951481554613"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60707e7fdeec21944b9b951481554613">&#9670;&nbsp;</a></span>isAlphaToCoverage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HlmsBlendblock::isAlphaToCoverage </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a> &amp;&#160;</td>
+          <td class="paramname"><em>sd</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da6e212e624ecced87d4bcbac99eda4069">A2cDisabled</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da30e30c82b1cafcc8aa567a66c5f01586">A2cEnabled</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a889e302dec93adba367cf6bece61c48da5dc84447b84e56f752e7071121084a6f">A2cEnabledMsaaOnly</a>, and <a class="el" href="struct_ogre_1_1_sample_description.html#ab658ef7492721b554c063d0899e8d935">Ogre::SampleDescription::isMultisample()</a>.</p>
 
 </div>
 </div>
@@ -339,7 +396,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_basic_block.html#a8202a5d073a92de41e05e2b6fe50ff26">Ogre::BasicBlock::mAllowGlobalDefaults</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a84604e9d467e80aa7de99146b89e03a9">mAlphaToCoverageEnabled</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ab274bfed0268538fe6ede5fce32e3e64">mBlendChannelMask</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a81bbefc83b818e89da47b4cba0bea28e">mBlendOperation</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#acf7321e2dde4b0e645bac4aa47873741">mBlendOperationAlpha</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ad4c14e110695f0bed5cf54ef6383c23d">mDestBlendFactor</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a63d4a51e01cbbe17e7d69e190b07c6ee">mDestBlendFactorAlpha</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a3df17a567525e19195f4d4daf1d11690">mIsTransparent</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a36bb99bc16fd86300b1152414d10ebb8">mSeparateBlend</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a275c638971e8578cfe0d4a1f1b891ea3">mSourceBlendFactor</a>, and <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a6e6d3852cbde641d61b64808b71bf419">mSourceBlendFactorAlpha</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_basic_block.html#a8202a5d073a92de41e05e2b6fe50ff26">Ogre::BasicBlock::mAllowGlobalDefaults</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a58e33acfc6631e1a3b09f80c3959dabc">mAlphaToCoverage</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ab274bfed0268538fe6ede5fce32e3e64">mBlendChannelMask</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a81bbefc83b818e89da47b4cba0bea28e">mBlendOperation</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#acf7321e2dde4b0e645bac4aa47873741">mBlendOperationAlpha</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#ad4c14e110695f0bed5cf54ef6383c23d">mDestBlendFactor</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a63d4a51e01cbbe17e7d69e190b07c6ee">mDestBlendFactorAlpha</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a3df17a567525e19195f4d4daf1d11690">mIsTransparent</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a36bb99bc16fd86300b1152414d10ebb8">mSeparateBlend</a>, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a275c638971e8578cfe0d4a1f1b891ea3">mSourceBlendFactor</a>, and <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a6e6d3852cbde641d61b64808b71bf419">mSourceBlendFactorAlpha</a>.</p>
 
 </div>
 </div>
@@ -448,14 +505,14 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a84604e9d467e80aa7de99146b89e03a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84604e9d467e80aa7de99146b89e03a9">&#9670;&nbsp;</a></span>mAlphaToCoverageEnabled</h2>
+<a id="a58e33acfc6631e1a3b09f80c3959dabc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58e33acfc6631e1a3b09f80c3959dabc">&#9670;&nbsp;</a></span>mAlphaToCoverage</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool Ogre::HlmsBlendblock::mAlphaToCoverageEnabled</td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> Ogre::HlmsBlendblock::mAlphaToCoverage</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -476,8 +533,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Masks which colour channels will be writing to. </p>
-<p>Default: BlendChannelAll For some advanced effects, you may wish to turn off the writing of certain colour channels, or even all of the colour channels so that only the depth buffer is updated in a rendering pass (if depth writes are on; may be you want to only update the stencil buffer). </p>
+<p>See A2CSetting. </p>
+<p>Masks which colour channels will be writing to. Default: BlendChannelAll For some advanced effects, you may wish to turn off the writing of certain colour channels, or even all of the colour channels so that only the depth buffer is updated in a rendering pass (if depth writes are on; may be you want to only update the stencil buffer). </p>
 
 <p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#afa02cd5c594a782367716cd76413c723">operator!=()</a>.</p>
 

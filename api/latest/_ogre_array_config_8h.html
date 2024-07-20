@@ -112,6 +112,8 @@ Macros</h2></td></tr>
 <tr class="separator:aae6e6e54870826a15444682ed7bae799"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1c7750b9e97be8324b83d3493af4dc1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_array_config_8h.html#ab1c7750b9e97be8324b83d3493af4dc1">ARRAY_REAL_ZERO</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:ab1c7750b9e97be8324b83d3493af4dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d9413c295c6b1b2b13269d069f9871e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_array_config_8h.html#a5d9413c295c6b1b2b13269d069f9871e">CastArrayToInt32</a>(outInt32Ptr,  arraySimd)&#160;&#160;&#160;        ( *( outInt32Ptr ) = static_cast&lt;int32&gt;( arraySimd ) )</td></tr>
+<tr class="separator:a5d9413c295c6b1b2b13269d069f9871e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a989b3db08edc4819ccbe738466eeeab7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_array_config_8h.html#a989b3db08edc4819ccbe738466eeeab7">CastArrayToReal</a>(outFloatPtr,  arraySimd)&#160;&#160;&#160;( *( outFloatPtr ) = arraySimd )</td></tr>
 <tr class="memdesc:a989b3db08edc4819ccbe738466eeeab7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input must be 16-byte aligned.  <a href="_ogre_array_config_8h.html#a989b3db08edc4819ccbe738466eeeab7">More...</a><br /></td></tr>
 <tr class="separator:a989b3db08edc4819ccbe738466eeeab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,6 +146,12 @@ Typedefs</h2></td></tr>
 <tr class="separator:a725a35f2df65645c39ef694fe468091d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac03185a5fd1c914eec2116588790352"><td class="memItemLeft" align="right" valign="top">typedef Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">Ogre::ArrayReal</a></td></tr>
 <tr class="separator:aac03185a5fd1c914eec2116588790352"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7317025557d1df1dffcf6705d645ba82"><td class="memItemLeft" align="right" valign="top">typedef uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a7317025557d1df1dffcf6705d645ba82">Ogre::ArrayToS16</a></td></tr>
+<tr class="memdesc:a7317025557d1df1dffcf6705d645ba82"><td class="mdescLeft">&#160;</td><td class="mdescRight">To store the result of ToSnorm16, can be consumed by extractS16.  <a href="namespace_ogre.html#a7317025557d1df1dffcf6705d645ba82">More...</a><br /></td></tr>
+<tr class="separator:a7317025557d1df1dffcf6705d645ba82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2437a44ce057091eba32786bc28ac1fb"><td class="memItemLeft" align="right" valign="top">typedef uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a2437a44ce057091eba32786bc28ac1fb">Ogre::ArrayToS8</a></td></tr>
+<tr class="memdesc:a2437a44ce057091eba32786bc28ac1fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">To store the result of ToSnorm8, can be consumed by extractS8.  <a href="namespace_ogre.html#a2437a44ce057091eba32786bc28ac1fb">More...</a><br /></td></tr>
+<tr class="separator:a2437a44ce057091eba32786bc28ac1fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a8db2d9511f0c7e1647fd6e78ce9b5fa1"></a>
@@ -196,6 +204,34 @@ Typedefs</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define ARRAY_REAL_ZERO&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d9413c295c6b1b2b13269d069f9871e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d9413c295c6b1b2b13269d069f9871e">&#9670;&nbsp;</a></span>CastArrayToInt32</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CastArrayToInt32</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">outInt32Ptr, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">arraySimd&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;        ( *( outInt32Ptr ) = static_cast&lt;int32&gt;( arraySimd ) )</td>
         </tr>
       </table>
 </div><div class="memdoc">

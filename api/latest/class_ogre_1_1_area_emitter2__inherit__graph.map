@@ -1,0 +1,13 @@
+<map id="Ogre::AreaEmitter2" name="Ogre::AreaEmitter2">
+<area shape="rect" id="node1" title="Particle emitter which emits particles randomly from points inside an area (box, sphere,..." alt="" coords="282,304,429,331"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_box_emitter2.html" title="Particle emitter which emits particles randomly from points inside a box." alt="" coords="5,379,148,405"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_cylinder_emitter2.html" title="Particle emitter which emits particles randomly from points inside a cylinder." alt="" coords="173,379,343,405"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_ellipsoid_emitter2.html" title="Particle emitter which emits particles randomly from points inside an ellipsoid." alt="" coords="368,379,540,405"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_ring_emitter2.html" title="Particle emitter which emits particles randomly from points inside a ring (e.g." alt="" coords="565,379,711,405"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_emitter_def_data.html" title="EmitterDefData are per ParticleSystemDef." alt="" coords="274,229,437,256"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_particle_emitter.html" title="Abstract class defining the interface to be implemented by particle emitters." alt="" coords="277,155,434,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="198,80,355,107"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_particle.html" title="Class representing a single particle instance." alt="" coords="379,80,489,107"/>
+<area shape="rect" id="node6" title=" " alt="" coords="366,5,502,32"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_hollow_ellipsoid_emitter2.html" title="Particle emitter which emits particles randomly from points inside a hollow ellipsoid." alt="" coords="345,453,563,480"/>
+</map>

@@ -1,5 +1,5 @@
 <map id="Ogre::ScriptTranslator" name="Ogre::ScriptTranslator">
-<area shape="rect" id="node1" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="189,593,352,619"/>
+<area shape="rect" id="node1" title="This class translates script AST (abstract syntax tree) into Ogre resources." alt="" coords="189,669,352,695"/>
 <area shape="rect" id="node3" href="$class_ogre_1_1_compositor_load_action_translator.html" title=" " alt="" coords="416,5,624,47"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_compositor_pass_translator.html" title=" " alt="" coords="405,71,635,98"/>
 <area shape="rect" id="node5" href="$class_ogre_1_1_compositor_render_target_view_translator.html" title=" " alt="" coords="409,123,631,164"/>
@@ -13,14 +13,17 @@
 <area shape="rect" id="node16" href="$class_ogre_1_1_hlms_translator.html" title=" " alt="" coords="441,618,599,645"/>
 <area shape="rect" id="node17" href="$class_ogre_1_1_material_translator.html" title=" " alt="" coords="431,669,609,695"/>
 <area shape="rect" id="node18" href="$class_ogre_1_1_particle_affector_translator.html" title=" " alt="" coords="408,719,632,746"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1_particle_emitter_translator.html" title=" " alt="" coords="409,770,631,797"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1_particle_system_translator.html" title=" " alt="" coords="409,821,631,847"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1_pass_translator.html" title=" " alt="" coords="443,871,597,898"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1_shared_params_translator.html" title=" " alt="" coords="411,922,629,949"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1_technique_translator.html" title=" " alt="" coords="425,973,615,999"/>
-<area shape="rect" id="node24" href="$class_ogre_1_1_texture_source_translator.html" title=" " alt="" coords="411,1023,629,1050"/>
-<area shape="rect" id="node25" href="$class_ogre_1_1_texture_unit_translator.html" title=" " alt="" coords="420,1074,620,1101"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,593,141,619"/>
+<area shape="rect" id="node19" href="$class_ogre_1_1_particle_affector_translator2.html" title=" " alt="" coords="404,770,636,797"/>
+<area shape="rect" id="node20" href="$class_ogre_1_1_particle_emitter_translator.html" title=" " alt="" coords="409,821,631,847"/>
+<area shape="rect" id="node21" href="$class_ogre_1_1_particle_emitter_translator2.html" title=" " alt="" coords="405,871,635,898"/>
+<area shape="rect" id="node22" href="$class_ogre_1_1_particle_system_translator.html" title=" " alt="" coords="409,922,631,949"/>
+<area shape="rect" id="node23" href="$class_ogre_1_1_particle_system_translator2.html" title=" " alt="" coords="405,973,635,999"/>
+<area shape="rect" id="node24" href="$class_ogre_1_1_pass_translator.html" title=" " alt="" coords="443,1023,597,1050"/>
+<area shape="rect" id="node25" href="$class_ogre_1_1_shared_params_translator.html" title=" " alt="" coords="411,1074,629,1101"/>
+<area shape="rect" id="node26" href="$class_ogre_1_1_technique_translator.html" title=" " alt="" coords="425,1125,615,1151"/>
+<area shape="rect" id="node27" href="$class_ogre_1_1_texture_source_translator.html" title=" " alt="" coords="411,1175,629,1202"/>
+<area shape="rect" id="node28" href="$class_ogre_1_1_texture_unit_translator.html" title=" " alt="" coords="420,1226,620,1253"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,669,141,695"/>
 <area shape="rect" id="node12" href="$class_ogre_1_1_compositor_node_translator.html" title=" " alt="" coords="688,450,923,477"/>
 <area shape="rect" id="node13" href="$class_ogre_1_1_compositor_shadow_node_translator.html" title=" " alt="" coords="695,501,916,543"/>
 <area shape="rect" id="node14" href="$class_ogre_1_1_compositor_workspace_translator.html" title=" " alt="" coords="702,567,909,608"/>

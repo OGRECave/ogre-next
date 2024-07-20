@@ -125,6 +125,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aad4a3cb37e49d6aac51b648a121038dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#aad4a3cb37e49d6aac51b648a121038dc">clone</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> name) const</td></tr>
 <tr class="memdesc:aad4a3cb37e49d6aac51b648a121038dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of this datablock with the same settings, but a different name.  <a href="class_ogre_1_1_hlms_datablock.html#aad4a3cb37e49d6aac51b648a121038dc">More...</a><br /></td></tr>
 <tr class="separator:aad4a3cb37e49d6aac51b648a121038dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5b16d0602b5668877a7aeec28e0239e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#af5b16d0602b5668877a7aeec28e0239e">getAlphaHashing</a> () const</td></tr>
+<tr class="separator:af5b16d0602b5668877a7aeec28e0239e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7567020e1e5f76035ef68d0724059046"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a7567020e1e5f76035ef68d0724059046">getAlphaTest</a> () const</td></tr>
 <tr class="separator:a7567020e1e5f76035ef68d0724059046"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53f23bd5d085a6a04d31e036765f9c2b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a53f23bd5d085a6a04d31e036765f9c2b">getAlphaTestShadowCasterOnly</a> () const</td></tr>
@@ -170,6 +172,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2bdfaaee402c04a5db850af5382af2c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f0826a189eec659051ce6513eafaa57"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a3f0826a189eec659051ce6513eafaa57">saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
 <tr class="separator:a3f0826a189eec659051ce6513eafaa57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae011026cebbe3b509aef579cb6884922"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#ae011026cebbe3b509aef579cb6884922">setAlphaHashing</a> (bool bAlphaHashing)</td></tr>
+<tr class="memdesc:ae011026cebbe3b509aef579cb6884922"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses a trick to <em>mimic</em> true Order Independent Transparency alpha blending.  <a href="class_ogre_1_1_hlms_datablock.html#ae011026cebbe3b509aef579cb6884922">More...</a><br /></td></tr>
+<tr class="separator:ae011026cebbe3b509aef579cb6884922"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c5bc6488a0f67fa0838f41352172b4d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction, bool shadowCasterOnly=false, bool useAlphaFromTextures=true)</td></tr>
 <tr class="memdesc:a4c5bc6488a0f67fa0838f41352172b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha test to the given compare function.  <a href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">More...</a><br /></td></tr>
 <tr class="separator:a4c5bc6488a0f67fa0838f41352172b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -385,6 +390,31 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="af5b16d0602b5668877a7aeec28e0239e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5b16d0602b5668877a7aeec28e0239e">&#9670;&nbsp;</a></span>getAlphaHashing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HlmsDatablock::getAlphaHashing </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -912,6 +942,35 @@ Public Attributes</h2></td></tr>
     <tr><td class="paramname">savedTextures</td><td>[in/out] Set of texture names. Textures whose name is already in the set won't be saved again. Textures that were saved will be inserted into the set. </td></tr>
     <tr><td class="paramname">saveOitd</td><td>When true, we will download the texture from GPU and save it in OITD format. OITD is faster to load as it's stored in <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>'s native format it understands, but it cannot be opened by traditional image editors; also OITD is not backwards compatible with older versions of <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>. </td></tr>
     <tr><td class="paramname">saveOriginal</td><td>When true, we will attempt to read the raw filestream of the original texture and save it (i.e. copy the original png/dds/etc file). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae011026cebbe3b509aef579cb6884922"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae011026cebbe3b509aef579cb6884922">&#9670;&nbsp;</a></span>setAlphaHashing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsDatablock::setAlphaHashing </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bAlphaHashing</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Uses a trick to <em>mimic</em> true Order Independent Transparency alpha blending. </p>
+<p>The advantage of this method is that it is compatible with depth buffer writes and is order independent.</p>
+<p>Calling this function triggers a HlmsDatablock::flushRenderables </p><dl class="section remark"><dt>Remarks</dt><dd>For best results:</dd></dl>
+<p>Disable alpha test (default) datablock-&gt;setAlphaTest( CMPF_ALWAYS_PASS ); Do NOT enable alpha blending in the <a class="el" href="struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials.">HlmsBlendblock</a> (default) <a class="el" href="struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials.">HlmsBlendblock</a> blendblock; blendblock.setBlendType( SBT_REPLACE ); datablock-&gt;setBlendblock( &amp;blendblock );</p>
+<p>datablock-&gt;setAlphaHashing( true ); </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bAlphaHashing</td><td>True to enable alpha hashing. </td></tr>
   </table>
   </dd>
 </dl>

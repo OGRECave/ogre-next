@@ -250,6 +250,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab96018d26a9ad7381e0946d3432deb44"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#ab96018d26a9ad7381e0946d3432deb44">getNextFrameNumber</a> () const</td></tr>
 <tr class="memdesc:ab96018d26a9ad7381e0946d3432deb44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of the next frame to be rendered.  <a href="class_ogre_1_1_root.html#ab96018d26a9ad7381e0946d3432deb44">More...</a><br /></td></tr>
 <tr class="separator:ab96018d26a9ad7381e0946d3432deb44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fb6f64c332a47412ef428b37ca29da8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_particle_system_manager2.html">ParticleSystemManager2</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a6fb6f64c332a47412ef428b37ca29da8">getParticleSystemManager2</a> ()</td></tr>
+<tr class="memdesc:a6fb6f64c332a47412ef428b37ca29da8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_particle_system_manager2.html">ParticleSystemManager2</a> belongs to <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>.  <a href="class_ogre_1_1_root.html#a6fb6f64c332a47412ef428b37ca29da8">More...</a><br /></td></tr>
+<tr class="separator:a6fb6f64c332a47412ef428b37ca29da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a734be2fb6e01355f328fa5ccd2e737f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a734be2fb6e01355f328fa5ccd2e737f6">getRemoveRenderQueueStructuresOnClear</a> () const</td></tr>
 <tr class="memdesc:a734be2fb6e01355f328fa5ccd2e737f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get whether the entire render queue structure should be emptied on clearing, or whether just the objects themselves should be cleared.  <a href="class_ogre_1_1_root.html#a734be2fb6e01355f328fa5ccd2e737f6">More...</a><br /></td></tr>
 <tr class="separator:a734be2fb6e01355f328fa5ccd2e737f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1776,6 +1779,34 @@ See _createRenderWindow for details about each member. </td></tr>
 
 <p>Gets the number of the next frame to be rendered. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Note that this is 'next frame' rather than 'current frame' because it indicates the frame number that current changes made to the scene will take effect. It is incremented after all rendering commands for the current frame have been queued, thus reflecting that if you start performing changes then, you will actually see them in the next frame. </dd></dl>
+
+</div>
+</div>
+<a id="a6fb6f64c332a47412ef428b37ca29da8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fb6f64c332a47412ef428b37ca29da8">&#9670;&nbsp;</a></span>getParticleSystemManager2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_particle_system_manager2.html">ParticleSystemManager2</a>* Ogre::Root::getParticleSystemManager2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_ogre_1_1_particle_system_manager2.html">ParticleSystemManager2</a> belongs to <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>. </p>
+<p>However parsing of scripts happens before any <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> is created. They are added here instead (which belongs to <a class="el" href="class_ogre_1_1_root.html" title="The root class of the Ogre system.">Root</a>). Later each <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> can clone their definitions as needed. </p>
 
 </div>
 </div>
