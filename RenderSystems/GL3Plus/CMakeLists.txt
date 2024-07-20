@@ -91,6 +91,9 @@ if(NOT APPLE)
   include_directories(
     ${OPENGL_INCLUDE_DIR}
   )
+  include_directories(
+	include/GL
+  )
 endif()
 
 if( OGRE_GLSUPPORT_USE_GLX )
