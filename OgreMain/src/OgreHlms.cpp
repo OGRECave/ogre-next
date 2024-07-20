@@ -220,12 +220,10 @@ namespace Ogre
     const IdString HlmsBaseProp::Syntax         = IdString( "syntax" );
     const IdString HlmsBaseProp::Hlsl           = IdString( "hlsl" );
     const IdString HlmsBaseProp::Glsl           = IdString( "glsl" );
-    const IdString HlmsBaseProp::Glsles         = IdString( "glsles" );
     const IdString HlmsBaseProp::Glslvk         = IdString( "glslvk" );
     const IdString HlmsBaseProp::Hlslvk         = IdString( "hlslvk" );
     const IdString HlmsBaseProp::Metal          = IdString( "metal" );
     const IdString HlmsBaseProp::GL3Plus        = IdString( "GL3+" );
-    const IdString HlmsBaseProp::GLES           = IdString( "GLES" );
     const IdString HlmsBaseProp::iOS            = IdString( "iOS" );
     const IdString HlmsBaseProp::macOS          = IdString( "macOS" );
     const IdString HlmsBaseProp::PrecisionMode  = IdString( "precision_mode" );
@@ -1661,16 +1659,10 @@ namespace Ogre
         {
             setProperty( tid, HlmsBaseProp::GL3Plus, mRenderSystem->getNativeShadingLanguageVersion() );
         }
-        else if( mShaderProfile == "glsles" )  // TODO: String comparision
-        {
-            setProperty( tid, HlmsBaseProp::GLES, mRenderSystem->getNativeShadingLanguageVersion() );
-        }
 
         setProperty( tid, HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.getU32Value() ) );
         setProperty( tid, HlmsBaseProp::Hlsl, static_cast<int32>( HlmsBaseProp::Hlsl.getU32Value() ) );
         setProperty( tid, HlmsBaseProp::Glsl, static_cast<int32>( HlmsBaseProp::Glsl.getU32Value() ) );
-        setProperty( tid, HlmsBaseProp::Glsles,
-                     static_cast<int32>( HlmsBaseProp::Glsles.getU32Value() ) );
         setProperty( tid, HlmsBaseProp::Glslvk,
                      static_cast<int32>( HlmsBaseProp::Glslvk.getU32Value() ) );
         setProperty( tid, HlmsBaseProp::Hlslvk,
@@ -2354,11 +2346,6 @@ namespace Ogre
                     setProperty( tid, HlmsBaseProp::GL3Plus,
                                  mRenderSystem->getNativeShadingLanguageVersion() );
                 }
-                else if( mShaderProfile == "glsles" )  // TODO: String comparision
-                {
-                    setProperty( tid, HlmsBaseProp::GLES,
-                                 mRenderSystem->getNativeShadingLanguageVersion() );
-                }
 
                 setProperty( tid, HlmsBaseProp::Syntax,
                              static_cast<int32>( mShaderSyntax.getU32Value() ) );
@@ -2366,8 +2353,6 @@ namespace Ogre
                              static_cast<int32>( HlmsBaseProp::Hlsl.getU32Value() ) );
                 setProperty( tid, HlmsBaseProp::Glsl,
                              static_cast<int32>( HlmsBaseProp::Glsl.getU32Value() ) );
-                setProperty( tid, HlmsBaseProp::Glsles,
-                             static_cast<int32>( HlmsBaseProp::Glsles.getU32Value() ) );
                 setProperty( tid, HlmsBaseProp::Glslvk,
                              static_cast<int32>( HlmsBaseProp::Glslvk.getU32Value() ) );
                 setProperty( tid, HlmsBaseProp::Hlslvk,
@@ -3897,8 +3882,8 @@ namespace Ogre
                     mFastShaderBuildHack = StringConverter::parseBool( itor->second.currentValue );
             }
 
-            // Prefer glslvk over hlslvk over glsl, and glsl over glsles
-            const String shaderProfiles[6] = { "hlsl", "glsles", "glsl", "hlslvk", "glslvk", "metal" };
+            // Prefer glslvk over hlslvk over glsl
+            const String shaderProfiles[6] = { "hlsl", "glsl", "hlslvk", "glslvk", "metal" };
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
 
             for( size_t i = 0; i < 6; ++i )

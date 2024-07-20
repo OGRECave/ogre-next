@@ -130,7 +130,6 @@ namespace Ogre
                   filename.compare( pos + 1, String::npos, "any" ) != 0 &&
                   filename.compare( pos + 1, String::npos, "metal" ) != 0 &&
                   filename.compare( pos + 1, String::npos, "glsl" ) != 0 &&
-                  filename.compare( pos + 1, String::npos, "glsles" ) != 0 &&
                   filename.compare( pos + 1, String::npos, "hlsl" ) != 0 ) )
             {
                 filename += mShaderFileExt;
@@ -191,8 +190,6 @@ namespace Ogre
             setProperty( kNoTid, HlmsBaseProp::GL3Plus,
                          mRenderSystem->getNativeShadingLanguageVersion() );
         }
-        if( mShaderProfile == "glsles" )  // TODO: String comparision
-            setProperty( kNoTid, HlmsBaseProp::GLES, 300 );
 
         setProperty( kNoTid, HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.getU32Value() ) );
         setProperty( kNoTid, HlmsBaseProp::Hlsl,
@@ -203,8 +200,6 @@ namespace Ogre
                      static_cast<int32>( HlmsBaseProp::Glslvk.getU32Value() ) );
         setProperty( kNoTid, HlmsBaseProp::Hlslvk,
                      static_cast<int32>( HlmsBaseProp::Hlslvk.getU32Value() ) );
-        setProperty( kNoTid, HlmsBaseProp::Glsles,
-                     static_cast<int32>( HlmsBaseProp::Glsles.getU32Value() ) );
         setProperty( kNoTid, HlmsBaseProp::Metal,
                      static_cast<int32>( HlmsBaseProp::Metal.getU32Value() ) );
 

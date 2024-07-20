@@ -292,16 +292,29 @@ namespace Ogre
 
         HlmsDatablockMap mDatablocks;
 
-        String        mShaderProfile;  ///< "glsl", "glsles", "hlsl"
+        /// This is what we tell the RenderSystem to compile as.
+        ///
+        /// For example if we set at the same time:
+        ///     - mShaderProfile = "metal"
+        ///     - mShaderSyntax = "hlsl"
+        ///     - mShaderFileExt = ".glsl"
+        ///
+        /// Then we will:
+        ///     - Look for *.hlsl files.
+        ///     - Tell the Hlms parser that it is glsl, i.e. `@property( syntax == glsl )`.
+        ///     - Tell the RenderSystem to compile it as Metal.
+        String mShaderProfile;  //< "glsl", "glslvk", "hlsl", "metal"
+        /// This is what we tell the Hlms parser what the syntax is.
         IdString      mShaderSyntax;
         IdStringVec   mRsSpecificExtensions;
         String const *mShaderTargets[NumShaderTypes];  ///[0] = "vs_4_0", etc. Only used by D3D
-        String        mShaderFileExt;                  ///< Either glsl or hlsl
-        String        mOutputPath;
-        bool          mDebugOutput;
-        bool          mDebugOutputProperties;
-        uint8         mPrecisionMode;  ///< See PrecisionMode
-        bool          mFastShaderBuildHack;
+        /// This is the extension we look for. e.g. .glsl, .hlsl, etc.
+        String mShaderFileExt;
+        String mOutputPath;
+        bool   mDebugOutput;
+        bool   mDebugOutputProperties;
+        uint8  mPrecisionMode;  ///< See PrecisionMode
+        bool   mFastShaderBuildHack;
 
     public:
         struct DatablockCustomPieceFile
@@ -1240,12 +1253,10 @@ namespace Ogre
         static const IdString Syntax;
         static const IdString Hlsl;
         static const IdString Glsl;
-        static const IdString Glsles;
         static const IdString Glslvk;
         static const IdString Hlslvk;
         static const IdString Metal;
         static const IdString GL3Plus;
-        static const IdString GLES;
         static const IdString iOS;
         static const IdString macOS;
         static const IdString GLVersion;

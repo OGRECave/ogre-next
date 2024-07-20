@@ -137,8 +137,6 @@ namespace Demo
             Ogre::RenderSystem *renderSystem = mRoot->getRenderSystem();
 
             Ogre::String shaderSyntax = "GLSL";
-            if( renderSystem->getName() == "OpenGL ES 2.x Rendering Subsystem" )
-                shaderSyntax = "GLSLES";
             if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
                 shaderSyntax = "HLSL";
             else if( renderSystem->getName() == "Metal Rendering Subsystem" )

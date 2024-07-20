@@ -3863,9 +3863,7 @@ namespace Ogre
         // name of the compatible shading language is part of the path
         Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
         Ogre::String shaderSyntax = "GLSL";
-        if( renderSystem->getName() == "OpenGL ES 2.x Rendering Subsystem" )
-            shaderSyntax = "GLSLES";
-        else if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
+        if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
             shaderSyntax = "HLSL";
         else if( renderSystem->getName() == "Metal Rendering Subsystem" )
             shaderSyntax = "Metal";
