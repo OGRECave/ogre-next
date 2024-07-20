@@ -18,7 +18,7 @@ This is just a solid colour applied uniformly to the entire scene. Very basic
 
 ## Hemisphere {#GiAmbientLightingHemisphere}
 
-Use `SceneManager::setAmbientLight` and set `upperHemisphere` and `lowerHemisphere` to the different values and set `HlmsPbs::setAmbientLightMode` to either `AmbientAuto` or `AmbientHemisphere`.
+Use `SceneManager::setAmbientLight` and set `upperHemisphere` and `lowerHemisphere` to the different values and set `HlmsPbs::setAmbientLightMode` to either `AmbientAuto*` or `AmbientHemisphere*`.
 
 Hemisphere lighting is supposed to be set to the colour of the sky or sun in upperHemisphere, and the colour of the ground in lower hemisphere to mimic a single bounce coming from the ground.
 

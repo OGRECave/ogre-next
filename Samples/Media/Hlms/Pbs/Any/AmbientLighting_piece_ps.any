@@ -72,15 +72,22 @@
 	@end
 
 	@property( ambient_hemisphere )
+		@property( ambient_hemisphere_inverted )
+			float tmpAmbientWS = ambientWD;
+			float tmpAmbientWD = ambientWS;
+		@else
+			float tmpAmbientWS = ambientWS;
+			float tmpAmbientWD = ambientWD;
+		@end
 		@property( vct_num_probes )
 			//Only use ambient lighting if object is outside any VCT probe
 			if( vctSpecular.w == 0 )
 			{
 		@end
 				pixelData.envColourS += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-											  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWD );
+											  midf3_c( passBuf.ambientUpperHemi.xyz ), tmpAmbientWS );
 				pixelData.envColourD += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-											  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWS );
+											  midf3_c( passBuf.ambientUpperHemi.xyz ), tmpAmbientWD );
 		@property( vct_num_probes )
 			}
 		@end

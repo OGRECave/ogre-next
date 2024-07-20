@@ -180,6 +180,7 @@ namespace Ogre
     const IdString PbsProperty::LtcTextureAvailable = IdString( "ltc_texture_available" );
     const IdString PbsProperty::AmbientFixed = IdString( "ambient_fixed" );
     const IdString PbsProperty::AmbientHemisphere = IdString( "ambient_hemisphere" );
+    const IdString PbsProperty::AmbientHemisphereInverted = IdString( "ambient_hemisphere_inverted" );
     const IdString PbsProperty::AmbientSh = IdString( "ambient_sh" );
     const IdString PbsProperty::AmbientShMonochrome = IdString( "ambient_sh_monochrome" );
     const IdString PbsProperty::TargetEnvprobeMap = IdString( "target_envprobe_map" );
@@ -330,7 +331,7 @@ namespace Ogre
         mDefaultBrdfWithDiffuseFresnel( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
-        mAmbientLightMode( AmbientAuto )
+        mAmbientLightMode( AmbientAutoNormal )
     {
         memset( mDecalsTextures, 0, sizeof( mDecalsTextures ) );
 
@@ -1628,7 +1629,7 @@ namespace Ogre
             if( mLtcMatrixTexture )
                 setProperty( kNoTid, PbsProperty::LtcTextureAvailable, 1 );
 
-            if( mAmbientLightMode == AmbientAuto )
+            if( mAmbientLightMode == AmbientAutoNormal || mAmbientLightMode == AmbientAutoInverted )
             {
                 if( upperHemisphere == lowerHemisphere )
                 {
@@ -1639,14 +1640,21 @@ namespace Ogre
                 }
                 else
                 {
-                    ambientMode = AmbientHemisphere;
+                    if( mAmbientLightMode == AmbientAutoInverted )
+                        ambientMode = AmbientHemisphereNormal;
+                    else
+                        ambientMode = AmbientHemisphereInverted;
                 }
             }
 
             if( ambientMode == AmbientFixed )
                 setProperty( kNoTid, PbsProperty::AmbientFixed, 1 );
-            if( ambientMode == AmbientHemisphere )
+            if( ambientMode == AmbientHemisphereNormal || ambientMode == AmbientHemisphereInverted )
+            {
                 setProperty( kNoTid, PbsProperty::AmbientHemisphere, 1 );
+                if( ambientMode == AmbientHemisphereInverted )
+                    setProperty( kNoTid, PbsProperty::AmbientHemisphereInverted, 1 );
+            }
             if( ambientMode == AmbientSh || ambientMode == AmbientShMonochrome )
             {
                 setProperty( kNoTid, PbsProperty::AmbientSh, 1 );
@@ -1899,14 +1907,15 @@ namespace Ogre
                 mapSize += 4u * 4u;
 
             // vec3 ambientUpperHemi + float envMapScale
-            if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere || envMapScale != 1.0f ||
-                vctNeedsAmbientHemi )
+            if( ( ambientMode >= AmbientFixed && ambientMode <= AmbientHemisphereInverted ) ||
+                envMapScale != 1.0f || vctNeedsAmbientHemi )
             {
                 mapSize += 4 * 4;
             }
 
             // vec3 ambientLowerHemi + padding + vec3 ambientHemisphereDir + padding
-            if( ambientMode == AmbientHemisphere || vctNeedsAmbientHemi )
+            if( ambientMode == AmbientHemisphereNormal || ambientMode == AmbientHemisphereInverted ||
+                vctNeedsAmbientHemi )
             {
                 mapSize += 8 * 4;
             }
@@ -2300,8 +2309,8 @@ namespace Ogre
             }
 
             // vec3 ambientUpperHemi + padding
-            if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere || envMapScale != 1.0f ||
-                vctNeedsAmbientHemi )
+            if( ( ambientMode >= AmbientFixed && ambientMode <= AmbientHemisphereInverted ) ||
+                envMapScale != 1.0f || vctNeedsAmbientHemi )
             {
                 *passBufferPtr++ = static_cast<float>( upperHemisphere.r );
                 *passBufferPtr++ = static_cast<float>( upperHemisphere.g );
@@ -2310,7 +2319,8 @@ namespace Ogre
             }
 
             // vec3 ambientLowerHemi + padding + vec3 ambientHemisphereDir + padding
-            if( ambientMode == AmbientHemisphere || vctNeedsAmbientHemi )
+            if( ambientMode == AmbientHemisphereNormal || ambientMode == AmbientHemisphereInverted ||
+                vctNeedsAmbientHemi )
             {
                 *passBufferPtr++ = static_cast<float>( lowerHemisphere.r );
                 *passBufferPtr++ = static_cast<float>( lowerHemisphere.g );
