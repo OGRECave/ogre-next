@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="class_ogre_1_1_vector4.html" target="_top" xlink:title="4&#45;dimensional homogeneous vector.">
+<g id="a_node1"><a xlink:href="class_ogre_1_1_vector2.html" target="_top" xlink:title="Standard 2&#45;dimensional vector.">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-19.5 83,-19.5 83,-0.5 0,-0.5"/>
-<text text-anchor="middle" x="41.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Vector4</text>
+<text text-anchor="middle" x="41.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Vector2</text>
 </a>
 </g>
 </g>

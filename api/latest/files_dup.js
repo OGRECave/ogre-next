@@ -897,6 +897,7 @@ var files_dup =
     ] ],
     [ "OgreHighLevelGpuProgramManager.h", "_ogre_high_level_gpu_program_manager_8h.html", null ],
     [ "OgreHlms.h", "_ogre_hlms_8h.html", [
+      [ "DatablockCustomPieceFile", "struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html", "struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file" ],
       [ "DatablockEntry", "struct_ogre_1_1_hlms_1_1_datablock_entry.html", "struct_ogre_1_1_hlms_1_1_datablock_entry" ],
       [ "Library", "struct_ogre_1_1_hlms_1_1_library.html", "struct_ogre_1_1_hlms_1_1_library" ]
     ] ],
@@ -906,6 +907,7 @@ var files_dup =
     [ "OgreHlmsDatablock.h", "_ogre_hlms_datablock_8h.html", "_ogre_hlms_datablock_8h" ],
     [ "OgreHlmsDiskCache.h", "_ogre_hlms_disk_cache_8h.html", [
       [ "Cache", "struct_ogre_1_1_hlms_disk_cache_1_1_cache.html", "struct_ogre_1_1_hlms_disk_cache_1_1_cache" ],
+      [ "DatablockCustomPiecesCache", "struct_ogre_1_1_hlms_disk_cache_1_1_datablock_custom_pieces_cache.html", "struct_ogre_1_1_hlms_disk_cache_1_1_datablock_custom_pieces_cache" ],
       [ "Pso", "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html", "struct_ogre_1_1_hlms_disk_cache_1_1_pso" ],
       [ "SourceCode", "struct_ogre_1_1_hlms_disk_cache_1_1_source_code.html", "struct_ogre_1_1_hlms_disk_cache_1_1_source_code" ]
     ] ],

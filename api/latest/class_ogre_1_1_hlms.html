@@ -113,6 +113,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_hlms.html',''); initRes
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html">DatablockCustomPieceFile</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_1_1_datablock_entry.html">DatablockEntry</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_1_1_library.html">Library</a></td></tr>
@@ -120,6 +122,13 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:af48f2ddfdb19ffc1bca099ab8602b361"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361">CachedCustomPieceFileStatus</a> { <a class="el" href="class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361a37396b0dc949a8417950a6b058033172">CCPFS_Success</a>
+, <a class="el" href="class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361ad760b55e4d3bc80fc4cbefdd574490ff">CCPFS_OutOfDate</a>
+, <a class="el" href="class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361adad26ddd15ee5571d3444ee3c48f2350">CCPFS_CriticalError</a>
+ }</td></tr>
+<tr class="separator:af48f2ddfdb19ffc1bca099ab8602b361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dce5b85aebcbea8289ab4938ae9aea5"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; <a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a>, <a class="el" href="struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html">DatablockCustomPieceFile</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a6dce5b85aebcbea8289ab4938ae9aea5">DatablockCustomPieceFileMap</a></td></tr>
+<tr class="separator:a6dce5b85aebcbea8289ab4938ae9aea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab38ae89227591ab06dac2f033300e7c0"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>, <a class="el" href="struct_ogre_1_1_hlms_1_1_datablock_entry.html">DatablockEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ab38ae89227591ab06dac2f033300e7c0">HlmsDatablockMap</a></td></tr>
 <tr class="separator:ab38ae89227591ab06dac2f033300e7c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6515668f13ae08887b8104c7133e5c29"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_hlms_1_1_library.html">Library</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a6515668f13ae08887b8104c7133e5c29">LibraryVec</a></td></tr>
@@ -142,6 +151,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a95b467bb6efd01598aa3116ebdd41381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35f79b87545791d5d706a3bae0840fbf"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a35f79b87545791d5d706a3bae0840fbf">~Hlms</a> ()</td></tr>
 <tr class="separator:a35f79b87545791d5d706a3bae0840fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af94ec29fa0a6809a46dbf78d921f79c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#af94ec29fa0a6809a46dbf78d921f79c9">_addDatablockCustomPieceFile</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;resourceGroup)</td></tr>
+<tr class="memdesc:af94ec29fa0a6809a46dbf78d921f79c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_hlms_datablock.html#ad5d6a40c19c3cf34fd7d538d397723df" title="Same as setCustomPieceFile() but sources the code from memory instead of from disk.">HlmsDatablock::setCustomPieceCodeFromMemory</a> &amp; <a class="el" href="class_ogre_1_1_hlms_datablock.html#ae8e2bd9a26e0aa0a6b133b4c063ceeda" title="Sets the filename of a piece file to be parsed from disk.">HlmsDatablock::setCustomPieceFile</a>.  <a href="class_ogre_1_1_hlms.html#af94ec29fa0a6809a46dbf78d921f79c9">More...</a><br /></td></tr>
+<tr class="separator:af94ec29fa0a6809a46dbf78d921f79c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa351fe8acb93f1b008e178fae5a6f8f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361">CachedCustomPieceFileStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#aa351fe8acb93f1b008e178fae5a6f8f8">_addDatablockCustomPieceFile</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;resourceGroup, const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> sourceCodeHash[2])</td></tr>
+<tr class="separator:aa351fe8acb93f1b008e178fae5a6f8f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd8ce577b216ecd2b2cf0e64ed233298"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#acd8ce577b216ecd2b2cf0e64ed233298">_addDatablockCustomPieceFileFromMemory</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;sourceCode)</td></tr>
+<tr class="separator:acd8ce577b216ecd2b2cf0e64ed233298"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8744fe92c019a0f47330772904f4c58"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ab8744fe92c019a0f47330772904f4c58">_changeRenderSystem</a> (<a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *newRs)</td></tr>
 <tr class="separator:ab8744fe92c019a0f47330772904f4c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa833178056ec974abfed8302f82e9e7a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#aa833178056ec974abfed8302f82e9e7a">_clearShaderCache</a> ()</td></tr>
@@ -207,6 +223,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8ea3daf26b92aba6c2a898d40d3e5bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ad8ea3daf26b92aba6c2a898d40d3e5bd">getDatablock</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name) const</td></tr>
 <tr class="memdesc:ad8ea3daf26b92aba6c2a898d40d3e5bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds an existing datablock based on its name (.  <a href="class_ogre_1_1_hlms.html#ad8ea3daf26b92aba6c2a898d40d3e5bd">More...</a><br /></td></tr>
 <tr class="separator:ad8ea3daf26b92aba6c2a898d40d3e5bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c0e4ba14b70027281b3b57c21ca8391"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html">DatablockCustomPieceFile</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a4c0e4ba14b70027281b3b57c21ca8391">getDatablockCustomPieceData</a> (<a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a> filenameHashId) const</td></tr>
+<tr class="memdesc:a4c0e4ba14b70027281b3b57c21ca8391"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all the data we know about filenameHashId. Can be nullptr if not found.  <a href="class_ogre_1_1_hlms.html#a4c0e4ba14b70027281b3b57c21ca8391">More...</a><br /></td></tr>
+<tr class="separator:a4c0e4ba14b70027281b3b57c21ca8391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af03a2aaed3951e40f4072c15ef28f38e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#af03a2aaed3951e40f4072c15ef28f38e">getDatablockCustomPieceFileNameStr</a> (<a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a> filenameHashId) const</td></tr>
+<tr class="separator:af03a2aaed3951e40f4072c15ef28f38e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b62c48a2933a5d8bcdfb601a6aa7518"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_hlms.html#ab38ae89227591ab06dac2f033300e7c0">HlmsDatablockMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a1b62c48a2933a5d8bcdfb601a6aa7518">getDatablockMap</a> () const</td></tr>
 <tr class="memdesc:a1b62c48a2933a5d8bcdfb601a6aa7518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all datablocks owned by this <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a>, including the default one.  <a href="class_ogre_1_1_hlms.html#a1b62c48a2933a5d8bcdfb601a6aa7518">More...</a><br /></td></tr>
 <tr class="separator:a1b62c48a2933a5d8bcdfb601a6aa7518"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -265,6 +286,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a10f828092b41b6224285937a71c69350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfb0ef70d22041d5950adc3c89ce8dae"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#adfb0ef70d22041d5950adc3c89ce8dae">getTypeNameStr</a> () const</td></tr>
 <tr class="separator:adfb0ef70d22041d5950adc3c89ce8dae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a412a9493da6ff386a74c43aa7f53722f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a412a9493da6ff386a74c43aa7f53722f">isDatablockCustomPieceFileCacheable</a> (<a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a> filenameHashId) const</td></tr>
+<tr class="separator:a412a9493da6ff386a74c43aa7f53722f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87e7dcce06295d710b64917bb19e1f52"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a87e7dcce06295d710b64917bb19e1f52">isShaderCodeCacheDirty</a> () const</td></tr>
 <tr class="memdesc:a87e7dcce06295d710b64917bb19e1f52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Users can check this function to tell if <a class="el" href="class_ogre_1_1_hlms_disk_cache.html" title="This class allows saving the current state of an Hlms to disk: both its compiled shaders with source ...">HlmsDiskCache</a> needs saving.  <a href="class_ogre_1_1_hlms.html#a87e7dcce06295d710b64917bb19e1f52">More...</a><br /></td></tr>
 <tr class="separator:a87e7dcce06295d710b64917bb19e1f52"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -330,6 +353,20 @@ Static Public Attributes</h2></td></tr>
 <p>mShaderCodeCache Contains a cache of unique shaders (from <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> templates -&gt; actual valid shader code) based on the properties merged from mRenderableCache &amp; mPassCache. However it is possible that two shaders are exactly the same and thus be duplicated, this can happen if two combinations of properties end up producing the exact same code. The Microcode cache (<a class="el" href="class_ogre_1_1_gpu_program_manager.html#aa21d703ad5720d87243b2cbb8b7dc02a" title="Set if the microcode of a shader should be saved to a cache.">GpuProgramManager::setSaveMicrocodesToCache</a>) can help with that issue.</p>
 <p>mShaderCache Contains a cache of the PSOs. The difference between this and mShaderCodeCache is that PSOs require additional information, such as <a class="el" href="struct_ogre_1_1_hlms_macroblock.html" title="A macro block contains settings that will rarely change, and thus are common to many materials.">HlmsMacroblock</a>. <a class="el" href="struct_ogre_1_1_hlms_blendblock.html" title="A blend block contains settings that rarely change, and thus are common to many materials.">HlmsBlendblock</a>. For more information of all that is required, see <a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12.">HlmsPso</a> </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a6dce5b85aebcbea8289ab4938ae9aea5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dce5b85aebcbea8289ab4938ae9aea5">&#9670;&nbsp;</a></span>DatablockCustomPieceFileMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::map&lt;<a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a>, <a class="el" href="struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html">DatablockCustomPieceFile</a>&gt; <a class="el" href="class_ogre_1_1_hlms.html#a6dce5b85aebcbea8289ab4938ae9aea5">Ogre::Hlms::DatablockCustomPieceFileMap</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab38ae89227591ab06dac2f033300e7c0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab38ae89227591ab06dac2f033300e7c0">&#9670;&nbsp;</a></span>HlmsDatablockMap</h2>
 
@@ -359,6 +396,28 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="af48f2ddfdb19ffc1bca099ab8602b361"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af48f2ddfdb19ffc1bca099ab8602b361">&#9670;&nbsp;</a></span>CachedCustomPieceFileStatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361">Ogre::Hlms::CachedCustomPieceFileStatus</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af48f2ddfdb19ffc1bca099ab8602b361a37396b0dc949a8417950a6b058033172"></a>CCPFS_Success&#160;</td><td class="fielddoc"><p>Everything ok. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af48f2ddfdb19ffc1bca099ab8602b361ad760b55e4d3bc80fc4cbefdd574490ff"></a>CCPFS_OutOfDate&#160;</td><td class="fielddoc"><p>Recompile the cache from the templates. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af48f2ddfdb19ffc1bca099ab8602b361adad26ddd15ee5571d3444ee3c48f2350"></a>CCPFS_CriticalError&#160;</td><td class="fielddoc"><p>The cache contains unrecoverable errors. Do not use the cache. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a6e629e7a87a40040e12d2bfb4ff80d58"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6e629e7a87a40040e12d2bfb4ff80d58">&#9670;&nbsp;</a></span>LightGatheringMode</h2>
 
@@ -486,6 +545,114 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="af94ec29fa0a6809a46dbf78d921f79c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af94ec29fa0a6809a46dbf78d921f79c9">&#9670;&nbsp;</a></span>_addDatablockCustomPieceFile() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Hlms::_addDatablockCustomPieceFile </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>resourceGroup</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="class_ogre_1_1_hlms_datablock.html#ad5d6a40c19c3cf34fd7d538d397723df" title="Same as setCustomPieceFile() but sources the code from memory instead of from disk.">HlmsDatablock::setCustomPieceCodeFromMemory</a> &amp; <a class="el" href="class_ogre_1_1_hlms_datablock.html#ae8e2bd9a26e0aa0a6b133b4c063ceeda" title="Sets the filename of a piece file to be parsed from disk.">HlmsDatablock::setCustomPieceFile</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>Name of the file. </td></tr>
+    <tr><td class="paramname">shaderCode</td><td>The contents of the file. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa351fe8acb93f1b008e178fae5a6f8f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa351fe8acb93f1b008e178fae5a6f8f8">&#9670;&nbsp;</a></span>_addDatablockCustomPieceFile() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361">CachedCustomPieceFileStatus</a> Ogre::Hlms::_addDatablockCustomPieceFile </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>resourceGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td>
+          <td class="paramname"><em>sourceCodeHash</em>[2]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>See <a class="el" href="class_ogre_1_1_hlms.html#af94ec29fa0a6809a46dbf78d921f79c9" title="See HlmsDatablock::setCustomPieceCodeFromMemory &amp; HlmsDatablock::setCustomPieceFile.">_addDatablockCustomPieceFile()</a> overload. Unlike the other overload, file not found errors are ignored. </td></tr>
+    <tr><td class="paramname">resourceGroup</td><td>See <a class="el" href="class_ogre_1_1_hlms.html#af94ec29fa0a6809a46dbf78d921f79c9" title="See HlmsDatablock::setCustomPieceCodeFromMemory &amp; HlmsDatablock::setCustomPieceFile.">_addDatablockCustomPieceFile()</a> overload. </td></tr>
+    <tr><td class="paramname">templateHash</td><td>The expected hash of the file. File won't be added if the hash does not match. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>See CachedCustomPieceFileStatus. </dd></dl>
+
+</div>
+</div>
+<a id="acd8ce577b216ecd2b2cf0e64ed233298"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd8ce577b216ecd2b2cf0e64ed233298">&#9670;&nbsp;</a></span>_addDatablockCustomPieceFileFromMemory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Hlms::_addDatablockCustomPieceFileFromMemory </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>sourceCode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab8744fe92c019a0f47330772904f4c58"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab8744fe92c019a0f47330772904f4c58">&#9670;&nbsp;</a></span>_changeRenderSystem()</h2>
 
@@ -1616,6 +1783,44 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4c0e4ba14b70027281b3b57c21ca8391"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c0e4ba14b70027281b3b57c21ca8391">&#9670;&nbsp;</a></span>getDatablockCustomPieceData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html">DatablockCustomPieceFile</a>* Ogre::Hlms::getDatablockCustomPieceData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a>&#160;</td>
+          <td class="paramname"><em>filenameHashId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns all the data we know about filenameHashId. Can be nullptr if not found. </p>
+
+</div>
+</div>
+<a id="af03a2aaed3951e40f4072c15ef28f38e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af03a2aaed3951e40f4072c15ef28f38e">&#9670;&nbsp;</a></span>getDatablockCustomPieceFileNameStr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&amp; Ogre::Hlms::getDatablockCustomPieceFileNameStr </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a>&#160;</td>
+          <td class="paramname"><em>filenameHashId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1b62c48a2933a5d8bcdfb601a6aa7518"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1b62c48a2933a5d8bcdfb601a6aa7518">&#9670;&nbsp;</a></span>getDatablockMap()</h2>
 
@@ -2302,6 +2507,24 @@ Static Public Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a412a9493da6ff386a74c43aa7f53722f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a412a9493da6ff386a74c43aa7f53722f">&#9670;&nbsp;</a></span>isDatablockCustomPieceFileCacheable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::Hlms::isDatablockCustomPieceFileCacheable </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a>&#160;</td>
+          <td class="paramname"><em>filenameHashId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

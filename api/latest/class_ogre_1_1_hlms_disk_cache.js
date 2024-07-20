@@ -1,8 +1,10 @@
 var class_ogre_1_1_hlms_disk_cache =
 [
     [ "Cache", "struct_ogre_1_1_hlms_disk_cache_1_1_cache.html", "struct_ogre_1_1_hlms_disk_cache_1_1_cache" ],
+    [ "DatablockCustomPiecesCache", "struct_ogre_1_1_hlms_disk_cache_1_1_datablock_custom_pieces_cache.html", "struct_ogre_1_1_hlms_disk_cache_1_1_datablock_custom_pieces_cache" ],
     [ "Pso", "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html", "struct_ogre_1_1_hlms_disk_cache_1_1_pso" ],
     [ "SourceCode", "struct_ogre_1_1_hlms_disk_cache_1_1_source_code.html", "struct_ogre_1_1_hlms_disk_cache_1_1_source_code" ],
+    [ "DatablockCustomPiecesCacheVec", "class_ogre_1_1_hlms_disk_cache.html#a65950e8503b952af57aa2e878108174a", null ],
     [ "PsoVec", "class_ogre_1_1_hlms_disk_cache.html#af8fa1f4d66f6a50812c86914679178dc", null ],
     [ "SourceCodeVec", "class_ogre_1_1_hlms_disk_cache.html#afba4875fb3b00ceffe4781474f8a87b0", null ],
     [ "HlmsDiskCache", "class_ogre_1_1_hlms_disk_cache.html#a50047d59e56d978a4374faf8c01cadc8", null ],

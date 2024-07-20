@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ogre_20next_20samples_20_28feature_20demonstrations_29_28274',['Ogre Next Samples (Feature demonstrations)',['../_samples.html',1,'manual']]]
+  ['ogre_20next_20samples_20_28feature_20demonstrations_29_28313',['Ogre Next Samples (Feature demonstrations)',['../_samples.html',1,'manual']]]
 ];

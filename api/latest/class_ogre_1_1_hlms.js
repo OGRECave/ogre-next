@@ -1,9 +1,16 @@
 var class_ogre_1_1_hlms =
 [
+    [ "DatablockCustomPieceFile", "struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file.html", "struct_ogre_1_1_hlms_1_1_datablock_custom_piece_file" ],
     [ "DatablockEntry", "struct_ogre_1_1_hlms_1_1_datablock_entry.html", "struct_ogre_1_1_hlms_1_1_datablock_entry" ],
     [ "Library", "struct_ogre_1_1_hlms_1_1_library.html", "struct_ogre_1_1_hlms_1_1_library" ],
+    [ "DatablockCustomPieceFileMap", "class_ogre_1_1_hlms.html#a6dce5b85aebcbea8289ab4938ae9aea5", null ],
     [ "HlmsDatablockMap", "class_ogre_1_1_hlms.html#ab38ae89227591ab06dac2f033300e7c0", null ],
     [ "LibraryVec", "class_ogre_1_1_hlms.html#a6515668f13ae08887b8104c7133e5c29", null ],
+    [ "CachedCustomPieceFileStatus", "class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361", [
+      [ "CCPFS_Success", "class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361a37396b0dc949a8417950a6b058033172", null ],
+      [ "CCPFS_OutOfDate", "class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361ad760b55e4d3bc80fc4cbefdd574490ff", null ],
+      [ "CCPFS_CriticalError", "class_ogre_1_1_hlms.html#af48f2ddfdb19ffc1bca099ab8602b361adad26ddd15ee5571d3444ee3c48f2350", null ]
+    ] ],
     [ "LightGatheringMode", "class_ogre_1_1_hlms.html#a6e629e7a87a40040e12d2bfb4ff80d58", [
       [ "LightGatherForward", "class_ogre_1_1_hlms.html#a6e629e7a87a40040e12d2bfb4ff80d58a6461fe4856b648eb0bc6ec35df2e4712", null ],
       [ "LightGatherForwardPlus", "class_ogre_1_1_hlms.html#a6e629e7a87a40040e12d2bfb4ff80d58a792d2cdce23b4018b9c149540ebb1a93", null ],
@@ -17,6 +24,9 @@ var class_ogre_1_1_hlms =
     ] ],
     [ "Hlms", "class_ogre_1_1_hlms.html#a95b467bb6efd01598aa3116ebdd41381", null ],
     [ "~Hlms", "class_ogre_1_1_hlms.html#a35f79b87545791d5d706a3bae0840fbf", null ],
+    [ "_addDatablockCustomPieceFile", "class_ogre_1_1_hlms.html#af94ec29fa0a6809a46dbf78d921f79c9", null ],
+    [ "_addDatablockCustomPieceFile", "class_ogre_1_1_hlms.html#aa351fe8acb93f1b008e178fae5a6f8f8", null ],
+    [ "_addDatablockCustomPieceFileFromMemory", "class_ogre_1_1_hlms.html#acd8ce577b216ecd2b2cf0e64ed233298", null ],
     [ "_changeRenderSystem", "class_ogre_1_1_hlms.html#ab8744fe92c019a0f47330772904f4c58", null ],
     [ "_clearShaderCache", "class_ogre_1_1_hlms.html#aa833178056ec974abfed8302f82e9e7a", null ],
     [ "_collectSamplerblocks", "class_ogre_1_1_hlms.html#ab373a8f13dd34e0c8e9cf534254c90be", null ],
@@ -45,6 +55,8 @@ var class_ogre_1_1_hlms =
     [ "getAreaLightsApproxLimit", "class_ogre_1_1_hlms.html#aa8fcc2f3f94f0d57958062871daf6c19", null ],
     [ "getAreaLightsLtcLimit", "class_ogre_1_1_hlms.html#af1300e74a8d4b63c9e9887fe73058232", null ],
     [ "getDatablock", "class_ogre_1_1_hlms.html#ad8ea3daf26b92aba6c2a898d40d3e5bd", null ],
+    [ "getDatablockCustomPieceData", "class_ogre_1_1_hlms.html#a4c0e4ba14b70027281b3b57c21ca8391", null ],
+    [ "getDatablockCustomPieceFileNameStr", "class_ogre_1_1_hlms.html#af03a2aaed3951e40f4072c15ef28f38e", null ],
     [ "getDatablockMap", "class_ogre_1_1_hlms.html#a1b62c48a2933a5d8bcdfb601a6aa7518", null ],
     [ "getDataFolder", "class_ogre_1_1_hlms.html#ad2c650b2f5332d7fc7d57062cd1ec54d", null ],
     [ "getDefaultDatablock", "class_ogre_1_1_hlms.html#ab362f30ca2781be8e26c1b682b5f3cb8", null ],
@@ -70,6 +82,7 @@ var class_ogre_1_1_hlms =
     [ "getType", "class_ogre_1_1_hlms.html#a508e017c803859196fc55860b7ddfc0f", null ],
     [ "getTypeName", "class_ogre_1_1_hlms.html#a10f828092b41b6224285937a71c69350", null ],
     [ "getTypeNameStr", "class_ogre_1_1_hlms.html#adfb0ef70d22041d5950adc3c89ce8dae", null ],
+    [ "isDatablockCustomPieceFileCacheable", "class_ogre_1_1_hlms.html#a412a9493da6ff386a74c43aa7f53722f", null ],
     [ "isShaderCodeCacheDirty", "class_ogre_1_1_hlms.html#a87e7dcce06295d710b64917bb19e1f52", null ],
     [ "parseOffline", "class_ogre_1_1_hlms.html#ae4dbc640402f792b8d2da9889a4a9e19", null ],
     [ "postCommandBufferExecution", "class_ogre_1_1_hlms.html#a666c0da0880cf52f84e31f03e4736cac", null ],
