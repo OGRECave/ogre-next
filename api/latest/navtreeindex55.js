@@ -1,5 +1,6 @@
 var NAVTREEINDEX55 =
 {
+"class_ogre_1_1_plane.html#abd98e0aae4723943f83262e59cfda535":[6,2,6,21,4],
 "class_ogre_1_1_plane.html#ada033b7c48e8628d4e9be5039ffa4278":[6,2,6,21,12],
 "class_ogre_1_1_plane.html#adb4cf2fec3619764f0e6766df23b303f":[6,2,6,21,5],
 "class_ogre_1_1_plane_bounded_volume.html":[6,2,6,22],
@@ -21,14 +22,14 @@ var NAVTREEINDEX55 =
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#ac7f81d455b20245603c5d51f4b00ea90":[6,2,11,32,0],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#af82e119f79b5e4e91e599c27623977df":[6,0,1,32,3],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#af82e119f79b5e4e91e599c27623977df":[6,2,11,32,3],
-"class_ogre_1_1_plane_optimal_shadow_camera_setup.html":[6,0,1,33],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html":[6,2,11,33],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html":[6,0,1,33],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a7d8d04321951e51400e0ee46a19db0a2":[6,0,1,33,1],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a7d8d04321951e51400e0ee46a19db0a2":[6,2,11,33,1],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[6,0,1,33,0],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[6,2,11,33,0],
-"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#aee02a57c7cffd824a6fd6367cc8c1ab2":[6,2,11,33,2],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#aee02a57c7cffd824a6fd6367cc8c1ab2":[6,0,1,33,2],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#aee02a57c7cffd824a6fd6367cc8c1ab2":[6,2,11,33,2],
 "class_ogre_1_1_platform_information.html":[6,2,2,81],
 "class_ogre_1_1_platform_information.html#a29a6642d1fbad89eeb869fdeb9f84c48":[6,2,2,81,3],
 "class_ogre_1_1_platform_information.html#a980f01831cf5f14af7d1216a8307eef8":[6,2,2,81,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX55 =
 "class_ogre_1_1_pso_cache_helper.html#a2cf5647fb77ed43b8246af90ed80665b":[6,2,10,87,0],
 "class_ogre_1_1_pso_cache_helper.html#a2e6c46d268ae457843aa10aac3a2fa1f":[6,2,10,87,1],
 "class_ogre_1_1_pso_cache_helper.html#a457666e62277abc364179e399c2c1391":[6,2,10,87,2],
-"class_ogre_1_1_pso_cache_helper.html#a50c3710135758e86e41a407a1440789e":[6,2,10,87,11],
-"class_ogre_1_1_pso_cache_helper.html#a7ae3346100de461609296b037e92fe42":[6,2,10,87,9]
+"class_ogre_1_1_pso_cache_helper.html#a50c3710135758e86e41a407a1440789e":[6,2,10,87,11]
 };

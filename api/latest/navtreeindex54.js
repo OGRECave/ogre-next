@@ -1,5 +1,6 @@
 var NAVTREEINDEX54 =
 {
+"class_ogre_1_1_pass.html#a67e3cb12113b4fc56b8d3d4cee03068a":[6,2,5,18,115],
 "class_ogre_1_1_pass.html#a6821e86c7c287fabcd28344117f772d0":[6,2,5,18,149],
 "class_ogre_1_1_pass.html#a6ba6a093b93de27c0c332f0c62c5e7e5":[6,2,5,18,96],
 "class_ogre_1_1_pass.html#a6c50be5e1be1fd923b89d5b589f20aa5":[6,2,5,18,45],
@@ -248,6 +249,5 @@ var NAVTREEINDEX54 =
 "class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bca44420e1c49338ae721f298826e164935":[6,2,6,21,0,3],
 "class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcaad112821a6c39f0097136ba5df53052a":[6,2,6,21,0,0],
 "class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcaaf227c36d02442779fd4600d00580f5e":[6,2,6,21,0,2],
-"class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcac5f2b56ac439b77aad6dfc4031891be5":[6,2,6,21,0,1],
-"class_ogre_1_1_plane.html#abd98e0aae4723943f83262e59cfda535":[6,2,6,21,4]
+"class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcac5f2b56ac439b77aad6dfc4031891be5":[6,2,6,21,0,1]
 };

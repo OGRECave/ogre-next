@@ -1,5 +1,6 @@
 var NAVTREEINDEX107 =
 {
+"struct_ogre_1_1_hlms_bits.html#a1c20ddc62968f4fa2bb4a43baa035423":[6,2,10,48,5],
 "struct_ogre_1_1_hlms_bits.html#a2c91111535d15f22a8c181b93d46d21b":[6,2,10,48,0],
 "struct_ogre_1_1_hlms_bits.html#a384f5dec64f797a0e381a52be85bf930":[6,2,10,48,11],
 "struct_ogre_1_1_hlms_bits.html#a3afd85d87bf34484a15ff47132b52ae5":[6,2,10,48,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX107 =
 "struct_ogre_1_1_lod_data.html#a32cd8e13260aee70438200ab684d235c":[8,0,0,547,14],
 "struct_ogre_1_1_lod_data.html#a3cb3b991e80bfd68dae64c445b9743ed":[8,0,0,547,25],
 "struct_ogre_1_1_lod_data.html#a41b7354e21e31fdffdbf57a3e2726936":[8,0,0,547,24],
-"struct_ogre_1_1_lod_data.html#a45d49919b94ad00023a4500cc9eaa241":[8,0,0,547,26],
-"struct_ogre_1_1_lod_data.html#a5348da65897ff8c17af1ada6f3d1be3f":[8,0,0,547,10]
+"struct_ogre_1_1_lod_data.html#a45d49919b94ad00023a4500cc9eaa241":[8,0,0,547,26]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX44 =
 {
+"class_ogre_1_1_map_iterator.html#acae97fd0a5ae45d19b51ef4bd046d516":[8,0,0,578,1],
 "class_ogre_1_1_map_iterator_wrapper.html":[8,0,0,579],
 "class_ogre_1_1_map_iterator_wrapper.html#a2bef2d340ae00274856261b3ad3dcdbc":[8,0,0,579,5],
 "class_ogre_1_1_map_iterator_wrapper.html#a3ae82a852790d4ccf429958639672765":[8,0,0,579,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX44 =
 "class_ogre_1_1_mathlib_c.html#a5549d5e0c552c9315690bcfa8e6129bf":[8,0,0,586,42],
 "class_ogre_1_1_mathlib_c.html#a5d2b8b11bd795ba12d10eddd5d1263d7":[8,0,0,586,56],
 "class_ogre_1_1_mathlib_c.html#a5f712c7e06708621e7bfd48fbcac2635":[8,0,0,586,64],
-"class_ogre_1_1_mathlib_c.html#a5f89d94367fb36d215e0f3e990ae52b5":[8,0,0,586,18],
-"class_ogre_1_1_mathlib_c.html#a6a479b0c8b69adbcb890142e21a90752":[8,0,0,586,14]
+"class_ogre_1_1_mathlib_c.html#a5f89d94367fb36d215e0f3e990ae52b5":[8,0,0,586,18]
 };

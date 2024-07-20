@@ -1,5 +1,6 @@
 var NAVTREEINDEX64 =
 {
+"class_ogre_1_1_scene_manager_enumerator.html#ac4ab9e57dda13d260b45a7439f7cd109":[6,0,1,46,10],
 "class_ogre_1_1_scene_manager_enumerator.html#ac73478338f38ccf1e5779ef173759111":[6,2,11,46,6],
 "class_ogre_1_1_scene_manager_enumerator.html#ac73478338f38ccf1e5779ef173759111":[6,0,1,46,6],
 "class_ogre_1_1_scene_manager_enumerator.html#acb458bf3cd09c21f35d38c5919926acf":[6,2,11,46,17],
@@ -76,8 +77,8 @@ var NAVTREEINDEX64 =
 "class_ogre_1_1_scene_node.html#aa797529c6a9ee1cf01e3ce47f35be269":[6,2,11,49,18],
 "class_ogre_1_1_scene_node.html#aaaf9c0199970b4e9713dd5d6855cc726":[6,0,1,49,19],
 "class_ogre_1_1_scene_node.html#aaaf9c0199970b4e9713dd5d6855cc726":[6,2,11,49,19],
-"class_ogre_1_1_scene_node.html#ab2678a117ecc1a85d960c3ee921f5d37":[6,2,11,49,4],
 "class_ogre_1_1_scene_node.html#ab2678a117ecc1a85d960c3ee921f5d37":[6,0,1,49,4],
+"class_ogre_1_1_scene_node.html#ab2678a117ecc1a85d960c3ee921f5d37":[6,2,11,49,4],
 "class_ogre_1_1_scene_node.html#ab28f1910847fe893345db1a947adecd9":[6,0,1,49,22],
 "class_ogre_1_1_scene_node.html#ab28f1910847fe893345db1a947adecd9":[6,2,11,49,22],
 "class_ogre_1_1_scene_node.html#ab2f5e0c7aba434f6636329e25593eb33":[6,0,1,49,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX64 =
 "class_ogre_1_1_shader_params.html#a7a33050426d883b45c184998e8f5a06e":[6,0,0,11,11],
 "class_ogre_1_1_shader_params.html#aa2b05265860eb28361eabbaf715c72be":[6,0,0,11,7],
 "class_ogre_1_1_shader_params.html#acfd948f8985348b278999a0fbe8cadda":[6,0,0,11,8],
-"class_ogre_1_1_shader_params.html#ad5c44d85355e1b2539a83141fef28e88":[6,0,0,11,10],
-"class_ogre_1_1_shadow_camera_setup.html":[6,0,1,53]
+"class_ogre_1_1_shader_params.html#ad5c44d85355e1b2539a83141fef28e88":[6,0,0,11,10]
 };

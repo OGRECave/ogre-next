@@ -97,8 +97,8 @@ $(document).ready(function(){initNavTree('_particle_system2.html',''); initResiz
 </ul>
 </li>
 <li class="level1"><a href="#ParticleSystem2Oit">Using OIT (Order Independent Transparency)</a></li>
-<li class="level1"><a href="#autotoc_md74">Thread Safe RandomValueProvider</a></li>
-<li class="level1"><a href="#autotoc_md75">New settings</a></li>
+<li class="level1"><a href="#autotoc_md75">Thread Safe RandomValueProvider</a></li>
+<li class="level1"><a href="#autotoc_md76">New settings</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_manual_Plugins_ParticleSystem2"></a></p>
@@ -177,7 +177,7 @@ Distance to Camera</h2>
 <div class="ttc" id="aclass_ogre_1_1_camera_html_a2b34d86631e2376f5e0aa317e2e817a4"><div class="ttname"><a href="class_ogre_1_1_camera.html#a2b34d86631e2376f5e0aa317e2e817a4">Ogre::Camera::getDerivedPosition</a></div><div class="ttdeci">const Vector3 &amp; getDerivedPosition() const</div><div class="ttdoc">Gets the derived position of the camera, including any translation inherited from a node attachment a...</div></div>
 <div class="ttc" id="aclass_ogre_1_1_particle_system_manager2_html_a8cfc44a25d757598ccdb16e5b5e79ca4"><div class="ttname"><a href="class_ogre_1_1_particle_system_manager2.html#a8cfc44a25d757598ccdb16e5b5e79ca4">Ogre::ParticleSystemManager2::setCameraPosition</a></div><div class="ttdeci">void setCameraPosition(const Vector3 &amp;camPos)</div><div class="ttdoc">All instances are sorted every frame to their distance to camera.</div><div class="ttdef"><b>Definition:</b> OgreParticleSystemManager2.h:218</div></div>
 <div class="ttc" id="aclass_ogre_1_1_scene_manager_html"><div class="ttname"><a href="class_ogre_1_1_scene_manager.html">Ogre::SceneManager</a></div><div class="ttdoc">Manages the organisation and rendering of a 'scene' i.e.</div><div class="ttdef"><b>Definition:</b> OgreSceneManager.h:235</div></div>
-<div class="ttc" id="aclass_ogre_1_1_scene_manager_html_a0632d16c0e9df6c44f98cf1574abe113"><div class="ttname"><a href="class_ogre_1_1_scene_manager.html#a0632d16c0e9df6c44f98cf1574abe113">Ogre::SceneManager::getParticleSystemManager2</a></div><div class="ttdeci">ParticleSystemManager2 * getParticleSystemManager2()</div><div class="ttdef"><b>Definition:</b> OgreSceneManager.h:1699</div></div>
+<div class="ttc" id="aclass_ogre_1_1_scene_manager_html_a0632d16c0e9df6c44f98cf1574abe113"><div class="ttname"><a href="class_ogre_1_1_scene_manager.html#a0632d16c0e9df6c44f98cf1574abe113">Ogre::SceneManager::getParticleSystemManager2</a></div><div class="ttdeci">ParticleSystemManager2 * getParticleSystemManager2()</div><div class="ttdef"><b>Definition:</b> OgreSceneManager.h:1691</div></div>
 </div><!-- fragment --><p>Only one camera position per SceneManager is supported. If rendering from multiple camera positions, consider using the most relevant position for the simulation.</p>
 <p>This value does not control rendering. It's not instantaneous. It merely tells the simulation which systems should be prioritized for emission for this frame.</p>
 <h1><a class="anchor" id="ParticleSystem2Oit"></a>
@@ -210,11 +210,11 @@ Using OIT (Order Independent Transparency)</h1>
 <p><b>Alpha Hashing + A2C (4x MSAA):</b></p>
 <p><img src="AlphaHashA2C.jpg" alt="" class="inline"/></p>
 <p>Note that the noise may look terrible but it quite different in motion. See <code>Samples/2.0/ApiUsage/ParticleFX2</code> sample.</p>
-<h1><a class="anchor" id="autotoc_md74"></a>
+<h1><a class="anchor" id="autotoc_md75"></a>
 Thread Safe RandomValueProvider</h1>
 <p>PFX2 relies on <code>Math::UnitRandom</code> being thread safe.</p>
 <p>If you've registered a custom random provider via <code>Math::SetRandomValueProvider</code>, then make sure <code>RandomValueProvider::getRandomUnit</code> is thread safe (e.g. use TLS).</p>
-<h1><a class="anchor" id="autotoc_md75"></a>
+<h1><a class="anchor" id="autotoc_md76"></a>
 New settings</h1>
 <p>scaler TBD </p>
 </div></div><!-- contents -->

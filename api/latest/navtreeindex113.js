@@ -1,5 +1,6 @@
 var NAVTREEINDEX113 =
 {
+"struct_x_set_window_attributes.html#ad8a85b6080f7496f16e9c4e8a5166929":[8,0,26,4],
 "struct_x_set_window_attributes.html#adaa32df4d46b933e56ad7930613e2f7a":[8,0,26,6],
 "struct_x_set_window_attributes.html#adf8ca250b50e689c71520633337cfb3b":[8,0,26,2],
 "struct_x_size_hints.html":[8,0,27],

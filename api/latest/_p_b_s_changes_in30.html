@@ -108,6 +108,7 @@ $(document).ready(function(){initNavTree('_p_b_s_changes_in30.html',''); initRes
 </li>
 </ul>
 </li>
+<li class="level1"><a href="#autotoc_md71">Hemisphere Ambient Lighting changes</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_manual_Migrating_PbsChanges30"></a></p>
@@ -213,7 +214,39 @@ IBL Specular</h3>
 <p><b>With Perceptual Roughness Fixed:</b> <img src="OgreIblSpecularPerceptualRoughness.png" alt="" class="inline"/></p>
 <p><b>With Perceptual Roughness to LOD mapping:</b> <img src="OgreIblSpecularLOD.png" alt="" class="inline"/></p>
 <p><b>With samples overlapping:</b> <img src="OgreIblSpecularSamplesOverlapping.png" alt="" class="inline"/></p>
-<p><b>With Schlick Fresnel using F0:</b> <img src="OgreIblSpecularFresnelF0.png" alt="" class="inline"/> </p>
+<p><b>With Schlick Fresnel using F0:</b> <img src="OgreIblSpecularFresnelF0.png" alt="" class="inline"/></p>
+<h1><a class="anchor" id="autotoc_md71"></a>
+Hemisphere Ambient Lighting changes</h1>
+<p>If you were using one of the following settings:</p>
+<ul>
+<li><a class="el" href="class_ogre_1_1_scene_manager.html#a661eec1b30244cf1ff7d334d4ea3cc30" title="Sets the ambient light level to be used for the scene.">Ogre::SceneManager::setAmbientLight()</a> (mandatory)</li>
+<li>Ogre::HlmsPbs::setAmbientLightMode( Ogre::HlmsPbs::AmbientAuto ) (the default setting)</li>
+<li>Ogre::HlmsPbs::setAmbientLightMode( Ogre::HlmsPbs::AmbientHemisphere )</li>
+</ul>
+<p>Then you are affected.</p>
+<p>[Hemisphere Ambient Lighting](Ogre::HlmsPbs::AmbientLightMode::AmbientHemisphereNormal) is a cheap trick.</p>
+<p>Therefore there is no true "right way" of doing it.</p>
+<p>Nonetheless user Th3V1kt0r <a href="https://github.com/OGRECave/ogre-next/pull/444">spotted we had swapped diffuse &amp; specular calculations</a>.</p>
+<p>In some cases the difference may be negligible, but depending on how strong your ambient lighting is (controlled via <a class="el" href="class_ogre_1_1_scene_manager.html#a661eec1b30244cf1ff7d334d4ea3cc30" title="Sets the ambient light level to be used for the scene.">Ogre::SceneManager::setAmbientLight</a>), this can result in visible changes:</p>
+<p><img src="AmbientHemisphereLighting.png" alt="" class="inline"/></p>
+<p>Due to how considerable the differences are, and how visually pleasant the old method was; <b>we are keeping both models but default to the new one</b>.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Old Value (&lt;= 2.3)   </th><th class="markdownTableHeadNone">New Value (&gt;= 3.0)   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">#N / A   </td><td class="markdownTableBodyNone">AmbientAutoNormal   </td><td class="markdownTableBodyNone">Did not exist. Default    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">AmbientAuto   </td><td class="markdownTableBodyNone">AmbientAutoInverted   </td><td class="markdownTableBodyNone">Inverts diffuse &amp; specular calculations. This was the default value in OgreNext 2.3    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">#N / A   </td><td class="markdownTableBodyNone">AmbientHemisphereNormal   </td><td class="markdownTableBodyNone">Did not exist.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">AmbientHemisphere   </td><td class="markdownTableBodyNone">AmbientHemisphereInverted   </td><td class="markdownTableBodyNone">Inverts diffuse &amp; specular calculations. This is how hemisphere ambient lighting was calculated in OgreNext 2.3   </td></tr>
+</table>
+<p>Thus if you wish ambient lighting to look how it was before, simply call:</p>
+<div class="fragment"><div class="line">hlmsPbs-&gt;setAmbientLightMode( Ogre::HlmsPbs::AmbientAutoInverted );</div>
+</div><!-- fragment --><p>The most simple explanation of why the old method may be more pleasant is that ambient hemisphere lighting is a very cheap trick to simulate Global Illumination.</p>
+<p>Given how simple it was (it's just the blending of two colours across two hemispheres), this mistake made lighting look more rich and dynamic, even if wrong.</p>
+<p>Thus the correct calculations look more dull unless the data is sourced from something more accurate like a cubemap, spherical harmonics, or true path/raytracing. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

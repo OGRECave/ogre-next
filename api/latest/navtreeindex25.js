@@ -1,5 +1,6 @@
 var NAVTREEINDEX25 =
 {
+"class_ogre_1_1_compositor_workspace.html#a8ea8f3823022091ed1ae79137ff8e38e":[6,2,1,33,8],
 "class_ogre_1_1_compositor_workspace.html#a8fbbf31dda329b1787878187411df613":[6,2,1,33,10],
 "class_ogre_1_1_compositor_workspace.html#a965ba11627840b5f91084b03d2dd4d79":[6,2,1,33,37],
 "class_ogre_1_1_compositor_workspace.html#a9efe884d6ffa745df688a74b94ba950e":[6,2,1,33,1],
@@ -95,8 +96,8 @@ var NAVTREEINDEX25 =
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[6,2,2,26,7],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[6,2,2,26,9],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[6,2,2,26,13],
-"class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[6,2,2,26,15],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[6,2,2,26,11],
+"class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[6,2,2,26,15],
 "class_ogre_1_1_config_dialog.html#aafd08070efcdb79e02065f3182b64e3c":[6,2,2,26,31],
 "class_ogre_1_1_config_dialog.html#aafd08070efcdb79e02065f3182b64e3c":[6,2,2,26,32],
 "class_ogre_1_1_config_dialog.html#aafd08070efcdb79e02065f3182b64e3c":[6,2,2,26,33],
@@ -248,6 +249,5 @@ var NAVTREEINDEX25 =
 "class_ogre_1_1_create_gpu_program_script_compiler_event.html#a2bfe09f8c1632afaf9894bd2331c5db7":[6,2,2,33,5],
 "class_ogre_1_1_create_gpu_program_script_compiler_event.html#a44a1dbc63e7673519dbf1b666102cd34":[6,2,2,33,1],
 "class_ogre_1_1_create_gpu_program_script_compiler_event.html#a53c8dd264143054dbf29a79107dedca1":[6,2,2,33,0],
-"class_ogre_1_1_create_gpu_program_script_compiler_event.html#a5bb7ae1ec25eda3119af6e92ca9bdf39":[6,2,2,33,3],
-"class_ogre_1_1_create_gpu_program_script_compiler_event.html#a7b906375e72b00b76b9ac211716ec9ec":[6,2,2,33,4]
+"class_ogre_1_1_create_gpu_program_script_compiler_event.html#a5bb7ae1ec25eda3119af6e92ca9bdf39":[6,2,2,33,3]
 };

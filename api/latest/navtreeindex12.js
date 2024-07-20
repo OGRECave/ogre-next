@@ -234,6 +234,7 @@ var NAVTREEINDEX12 =
 "_p_b_s_changes_in30.html#autotoc_md68":[4,6,2,2,1,1,0],
 "_p_b_s_changes_in30.html#autotoc_md69":[4,6,2,2,1,1,0,0],
 "_p_b_s_changes_in30.html#autotoc_md70":[4,6,2,2,1,1,1],
+"_p_b_s_changes_in30.html#autotoc_md71":[4,6,2,2,2],
 "_particle-_scripts.html":[4,2,5],
 "_particle-_scripts.html#Billboard-Renderer-Attributes":[4,2,5,1],
 "_particle-_scripts.html#BillboardRendererAttributes_accurate_facing":[4,2,5,1,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "_particle-_scripts.html#ColourFader-Affector":[4,2,5,5,1],
 "_particle-_scripts.html#ColourFader2-Affector":[4,2,5,5,2],
 "_particle-_scripts.html#ColourImage-Affector":[4,2,5,5,6],
-"_particle-_scripts.html#ColourInterpolator-Affector":[4,2,5,5,5],
-"_particle-_scripts.html#Cylinder-Emitter":[4,2,5,3,2]
+"_particle-_scripts.html#ColourInterpolator-Affector":[4,2,5,5,5]
 };

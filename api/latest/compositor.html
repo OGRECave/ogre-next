@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('compositor.html',''); initResizable();
 <ul><li class="level1"><a href="#CompositorNodes">Nodes</a><ul><li class="level2"><a href="#CompositorNodesChannelsAndRTTs">Input &amp; output channels and RTTs</a><ul><li class="level3"><a href="#CompositorNodesChannelsAndRTTsLocalTextures">Locally declared textures</a></li>
 <li class="level3"><a href="#CompositorNodesChannelsAndRTTsFromInputChannel">Textures coming from input channels</a></li>
 <li class="level3"><a href="#CompositorNodesChannelsAndRTTsGlobal">Global Textures</a></li>
-<li class="level3"><a href="#autotoc_md108">compositor_node parameters</a><ul><li class="level4"><a href="#CompositorNode_in">in</a></li>
+<li class="level3"><a href="#autotoc_md109">compositor_node parameters</a><ul><li class="level4"><a href="#CompositorNode_in">in</a></li>
 <li class="level4"><a href="#CompositorNode_out">out</a></li>
 <li class="level4"><a href="#CompositorNode_in_buffer">in_buffer</a></li>
 <li class="level4"><a href="#CompositorNode_out_buffer">out_buffer</a></li>
@@ -104,12 +104,12 @@ $(document).ready(function(){initNavTree('compositor.html',''); initResizable();
 <li class="level3"><a href="#CompositorNodesChannelsAndRTTsMainRenderTarget">Main RenderTarget</a></li>
 </ul>
 </li>
-<li class="level2"><a href="#CompositorNodesTarget">Target</a><ul><li class="level3"><a href="#autotoc_md109">target parameters</a><ul><li class="level4"><a href="#CompositorTarget_target_level_barrier">target_level_barrier</a></li>
+<li class="level2"><a href="#CompositorNodesTarget">Target</a><ul><li class="level3"><a href="#autotoc_md110">target parameters</a><ul><li class="level4"><a href="#CompositorTarget_target_level_barrier">target_level_barrier</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="level2"><a href="#CompositorNodesPasses">Passes</a><ul><li class="level3"><a href="#autotoc_md110">pass parameters</a><ul><li class="level4"><a href="#CompositorPass_pass">pass</a></li>
+<li class="level2"><a href="#CompositorNodesPasses">Passes</a><ul><li class="level3"><a href="#autotoc_md111">pass parameters</a><ul><li class="level4"><a href="#CompositorPass_pass">pass</a></li>
 <li class="level4"><a href="#CompositorPass_num_initial">num_initial</a></li>
 <li class="level4"><a href="#CompositorPass_flush_command_buffers">flush_command_buffers</a></li>
 <li class="level4"><a href="#CompositorPass_identifier">identifier</a></li>
@@ -252,13 +252,13 @@ $(document).ready(function(){initNavTree('compositor.html',''); initResizable();
 <li class="level2"><a href="#CompositorWorkspacesStereoDefaultValues">Default values</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#AdvancedMSAA">Advanced MSAA</a><ul><li class="level2"><a href="#autotoc_md111">What is MSAA?</a><ul><li class="level3"><a href="#autotoc_md112">Supersampling Antialiasing (SSAA) vs MSAA</a></li>
-<li class="level3"><a href="#autotoc_md113">MSAA approach to the problem</a><ul><li class="level4"><a href="#CompositorNodesTexturesMsaaResources">Resources</a></li>
+<li class="level1"><a href="#AdvancedMSAA">Advanced MSAA</a><ul><li class="level2"><a href="#autotoc_md112">What is MSAA?</a><ul><li class="level3"><a href="#autotoc_md113">Supersampling Antialiasing (SSAA) vs MSAA</a></li>
+<li class="level3"><a href="#autotoc_md114">MSAA approach to the problem</a><ul><li class="level4"><a href="#CompositorNodesTexturesMsaaResources">Resources</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="level2"><a href="#autotoc_md114">Ogre + MSAA with Implicit Resolves</a></li>
+<li class="level2"><a href="#autotoc_md115">Ogre + MSAA with Implicit Resolves</a></li>
 <li class="level2"><a href="#MSAAExplicitResolves">Ogre + MSAA with Explicit Resolves</a></li>
 </ul>
 </li>
@@ -380,7 +380,7 @@ Global Textures</h3>
 </ol>
 <p>Global textures are as powerful/dangerous as global variables are in C++. The main reason of their existence is that many nodes may use temporary rtts to perform their work, and it's <em>very</em> wasteful to declare these intermediate rtts on every node when they can be shared and reused.</p>
 <p>Sharing and reusage can also be achieved through input &amp; output channels, however for temporary rtts (or rtts that are accessed very frequently, i.e. a deferred shader's G Buffer) it would lead to connection hell; and hence global textures are a much better fit.</p>
-<h3><a class="anchor" id="autotoc_md108"></a>
+<h3><a class="anchor" id="autotoc_md109"></a>
 compositor_node parameters</h3>
 <ul>
 <li><a class="el" href="compositor.html#CompositorNode_in">in</a></li>
@@ -470,7 +470,7 @@ Target</h2>
 <dl class="section note"><dt>Note</dt><dd>The word 'slice' must not be written. Just write 'target myTexture +X' to work.</dd>
 <dd>
 When the target is a 3D/Cubemap/array texture, if the slice goes out of bounds, an exception will be raised. If the target is a 2D or 1D texture, this value is silently ignored. Default: slice = 0</dd></dl>
-<h3><a class="anchor" id="autotoc_md109"></a>
+<h3><a class="anchor" id="autotoc_md110"></a>
 target parameters</h3>
 <ul>
 <li><a class="el" href="compositor.html#CompositorTarget_target_level_barrier">target_level_barrier</a></li>
@@ -568,7 +568,7 @@ Passes</h2>
 <li><a class="el" href="compositor.html#CompositorNodesPassesCompute">compute</a> (PASS_COMPUTE)</li>
 <li>custom (PASS_CUSTOM)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md110"></a>
+<h3><a class="anchor" id="autotoc_md111"></a>
 pass parameters</h3>
 <p>All passes share the following script parameters:</p>
 <ul>
@@ -2307,12 +2307,12 @@ Default values</h2>
 <div class="line">}</div>
 </div><!-- fragment --><h1><a class="anchor" id="AdvancedMSAA"></a>
 Advanced MSAA</h1>
-<h2><a class="anchor" id="autotoc_md111"></a>
+<h2><a class="anchor" id="autotoc_md112"></a>
 What is MSAA?</h2>
 <p>MSAA (Multisample Antialiasing) is a very common antialiasing technique.</p>
 <p>It is quite common to treat MSAA like black magic: it works automatically and makes those staircase effect aka jagged edges aka aliasing disappear.</p>
 <p>However there are times where we need to understand how it works, what's going on and how to control it explicitly via <a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a>.</p>
-<h3><a class="anchor" id="autotoc_md112"></a>
+<h3><a class="anchor" id="autotoc_md113"></a>
 Supersampling Antialiasing (SSAA) vs MSAA</h3>
 <p>It is best to explain what MSAA is by first explaining Supersampling Antialiasing (SSAA).</p>
 <p>If we have to render 1920x1080 4xSSAA, then we would just render at 3840x2160 and downscale back to 1920x1080 (either with a basic bilinear filter or something more advanced e.g. bicubic, gaussian, etc).</p>
@@ -2322,7 +2322,7 @@ Supersampling Antialiasing (SSAA) vs MSAA</h3>
 <p><b>This operation of scaling down is known as <em>Resolve</em></b></p>
 <p>The problem with SSAA: it consumes a lot of bandwidth and processing power. 4x of everything to be exact (for 4xSSAA).</p>
 <p><b>That's where MSAA comes in.</b> MSAA in is basic form looks like SSAA: the GPU needs to allocate a 3840x2160 colour target and a 3840x2160 depth buffer. Thus it stll consumes 4x more memory.</p>
-<h3><a class="anchor" id="autotoc_md113"></a>
+<h3><a class="anchor" id="autotoc_md114"></a>
 MSAA approach to the problem</h3>
 <p>MSAA exploits a simple fact: only the triangle borders need antialiasing.</p>
 <p>Thus for all pixels except the ones touching the border of a triangle, the GPU will only run the pixel shader <em>once</em> and broadcast the colour to all 4 pixels <em>just as if it were rendering at 1920x1080</em>. This saves 4x of colour bandwidth and 4x processing power, making it very efficient.</p>
@@ -2347,7 +2347,7 @@ Resources</h4>
 <li><a href="http://mynameismjp.wordpress.com/2012/10/24/msaa-overview/">A Quick Overview of MSAA</a></li>
 <li><a href="http://mynameismjp.wordpress.com/2012/10/28/msaa-resolve-filters/">Experimenting with Reconstruction Filters for MSAA Resolve</a></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md114"></a>
+<h2><a class="anchor" id="autotoc_md115"></a>
 Ogre + MSAA with Implicit Resolves</h2>
 <p><a class="el" href="namespace_ogre.html" title="bswapNN may be defined as macros in &lt;sys/endian.h&gt; or &lt;sys/bswap.h&gt;">Ogre</a> by default uses implicit resolves. When you call:</p>
 <div class="fragment"><div class="line">texture = textureGpuManager-&gt;createTexture(</div>

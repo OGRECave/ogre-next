@@ -1,5 +1,6 @@
 var NAVTREEINDEX38 =
 {
+"class_ogre_1_1_gpu_program_parameters.html#a39b96ad6d11ed0042375a0643c311046a0bf7f8842d69f38bc347021812495798":[6,2,5,8,8,1],
 "class_ogre_1_1_gpu_program_parameters.html#a39b96ad6d11ed0042375a0643c311046adf0f8efa1a324ad21768b5c7da26c379":[6,2,5,8,8,0],
 "class_ogre_1_1_gpu_program_parameters.html#a39cb5b9fd534072f7a2697e13190caab":[6,2,5,8,50],
 "class_ogre_1_1_gpu_program_parameters.html#a3abe6e9e9e8028d6587ee6e61e27812f":[6,2,5,8,123],
@@ -248,6 +249,5 @@ var NAVTREEINDEX38 =
 "class_ogre_1_1_hardware_occlusion_query.html#ae30ceda53d771c5db266fdcfd14e6c9c":[6,2,9,3,6],
 "class_ogre_1_1_hashed_vector.html":[6,2,2,52],
 "class_ogre_1_1_hashed_vector.html#a026e68fffa283192435e5bbdfb84ec9a":[6,2,2,52,16],
-"class_ogre_1_1_hashed_vector.html#a126b57c573ec7654ed6a848ff6818303":[6,2,2,52,21],
-"class_ogre_1_1_hashed_vector.html#a19d63298713a0fd765ce7d719d0aec8b":[6,2,2,52,20]
+"class_ogre_1_1_hashed_vector.html#a126b57c573ec7654ed6a848ff6818303":[6,2,2,52,21]
 };

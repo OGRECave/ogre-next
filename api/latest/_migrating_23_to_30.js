@@ -1,8 +1,8 @@
 var _migrating_23_to_30 =
 [
     [ "Resolving Merge Conflicts in Ogre-Next 3.0", "_resolving_merge_conflicts30.html", [
-      [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md71", null ],
-      [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md72", null ]
+      [ "Notes:", "_resolving_merge_conflicts30.html#autotoc_md72", null ],
+      [ "Batch Script", "_resolving_merge_conflicts30.html#autotoc_md73", null ]
     ] ],
     [ "What's new in Ogre-Next 3.0", "_ogre30_changes.html", [
       [ "Ogre to OgreNext name migration", "_ogre30_changes.html#autotoc_md52", null ],
@@ -27,6 +27,7 @@ var _migrating_23_to_30 =
           ] ],
           [ "IBL Specular", "_p_b_s_changes_in30.html#autotoc_md70", null ]
         ] ]
-      ] ]
+      ] ],
+      [ "Hemisphere Ambient Lighting changes", "_p_b_s_changes_in30.html#autotoc_md71", null ]
     ] ]
 ];
