@@ -349,7 +349,7 @@ As a result we provide a few abstractions to separate these differences:
 |---|---|---|
 | `vulkan()` macro | Anything inside is kept | Anything inside is removed |
 | `vulkan_layout()` macro | It is converted to `layout()` | It is removed |
-| `#version ogre_glsl_ver_xxx` | The `ogre_glsl_ver_` part is removed and will be translated to `#version xxx` | Always converted to `#version 450` |
+| `#version ogre_glsl_ver_xxx` | Always converted to `#version 450` | The `ogre_glsl_ver_` part is removed and will be translated to `#version xxx` |
 
 ### Example: {#RootLayoutsGLSLForGLandVKExample}
 
