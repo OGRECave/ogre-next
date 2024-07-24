@@ -1,0 +1,7 @@
+<map id="Ogre::CompositorWorkspaceListener" name="Ogre::CompositorWorkspaceListener">
+<area shape="rect" id="node1" title=" " alt="" coords="291,5,497,47"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="128,95,399,121"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_vct_cascaded_voxelizer.html" title="This class manages multiple cascades of Voxels and each cascade can be composed of VctImageVoxelizer." alt="" coords="423,95,627,121"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="5,169,244,196"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="268,169,536,196"/>
+</map>

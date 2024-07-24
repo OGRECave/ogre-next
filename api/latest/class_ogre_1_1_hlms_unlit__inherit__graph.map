@@ -1,0 +1,7 @@
+<map id="Ogre::HlmsUnlit" name="Ogre::HlmsUnlit">
+<area shape="rect" id="node1" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="139,244,265,271"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_hlms_buffer_manager.html" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="5,169,196,196"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="53,95,148,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="11,5,190,47"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_const_buffer_pool.html" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="221,169,386,196"/>
+</map>

@@ -120,14 +120,15 @@ Short version</h1>
 <p><img src="ShortVersionOgreNext24.png" alt="" class="inline"/></p>
 <p><b>OgreNext 3.0 out of the box now looks like this (same settings):</b></p>
 <p><img src="ShortVersionOgreNext30Default.png" alt="" class="inline"/></p>
-<p>In order to get very close to the 2.3 look, you can use Ogre::HlmsPbsDatablock::setBrdf with Ogre::PbsBrdf::DefaultHasDiffuseFresnel (and use Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel to set defaults)</p>
+<p>In order to get very close to the 2.3 look, you can use <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a2d0a4e307644c4b5c28bf4e6fedaac8b" title="Changes the BRDF in use.">Ogre::HlmsPbsDatablock::setBrdf</a> with <a class="el" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67" title="This used to be &#39;Default&#39; in OgreNext 2.4 and earlier.">Ogre::PbsBrdf::DefaultHasDiffuseFresnel</a> (and use <a class="el" href="class_ogre_1_1_hlms_pbs.html#a67bc1d23e1966e7e7363abbf019e06a2" title="OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match what most DCC tool...">Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel</a> to set defaults)</p>
 <p><b>With DefaultHasDiffuseFresnel OgreNext 3.0 will look like this:</b></p>
 <p><img src="ShortVersionOgreNext30DefaultDiffuseFresnel.png" alt="" class="inline"/></p>
 <div class="fragment"><div class="line">hlmsPbs-&gt;setDefaultBrdfWithDiffuseFresnel( <span class="keyword">true</span> );</div>
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Or per datablock</span></div>
-<div class="line">pbsDatablock-&gt;setBrdf( Ogre::PbsBrdf::DefaultHasDiffuseFresnel );</div>
+<div class="line">pbsDatablock-&gt;setBrdf( <a class="code" href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67">Ogre::PbsBrdf::DefaultHasDiffuseFresnel</a> );</div>
+<div class="ttc" id="anamespace_ogre_1_1_pbs_brdf_html_ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67"><div class="ttname"><a href="namespace_ogre_1_1_pbs_brdf.html#ae5bb5c2b5a05b4ce98b74822dedf3ffeab8033655a242551a0312b79450dadd67">Ogre::PbsBrdf::DefaultHasDiffuseFresnel</a></div><div class="ttdeci">@ DefaultHasDiffuseFresnel</div><div class="ttdoc">This used to be 'Default' in OgreNext 2.4 and earlier.</div><div class="ttdef"><b>Definition:</b> OgreHlmsPbsDatablock.h:113</div></div>
 </div><!-- fragment --><p>Which is a very close look to the version in 2.3</p>
 <p>The reason for these changes is to align with external tools that are standard in the industry.</p>
 <h1><a class="anchor" id="autotoc_md60"></a>
@@ -161,7 +162,7 @@ Raffaele's comments:</h4>
 <h4><a class="anchor" id="autotoc_md64"></a>
 Default-enable to diffuse fresnel</h4>
 <p>Materials written gainst old OgreNext will look very differently due to this change.</p>
-<p>We introduced Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel which, when set to false, will default materials loaded from scripts (simple scripts and JSON materials) to <code>DefaultHasDiffuseFresnel</code>, <code>CookTorranceHasDiffuseFresnel</code> &amp; <code>BlinnPhongHasDiffuseFresnel</code>.</p>
+<p>We introduced <a class="el" href="class_ogre_1_1_hlms_pbs.html#a67bc1d23e1966e7e7363abbf019e06a2" title="OgreNext 3.0 changed Default BRDF to not include diffuse fresnel in order to match what most DCC tool...">Ogre::HlmsPbs::setDefaultBrdfWithDiffuseFresnel</a> which, when set to false, will default materials loaded from scripts (simple scripts and JSON materials) to <code>DefaultHasDiffuseFresnel</code>, <code>CookTorranceHasDiffuseFresnel</code> &amp; <code>BlinnPhongHasDiffuseFresnel</code>.</p>
 <p>This should ease porting forward.</p>
 <h3><a class="anchor" id="autotoc_md65"></a>
 Geometric Term change</h3>
@@ -175,7 +176,7 @@ Geometric Term change</h3>
 Metalness change</h3>
 <p>The <a href="https://github.com/OGRECave/ogre-next/commit/51e487d2a5cc725154cdd3fbcf06babb5789061c">default reflectance value</a> for fully dielectric surfaces was 3%, now it is 4%.</p>
 <p>See <a href="https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf">course_notes_moving_frostbite_to_pbr_v32.pdf</a> page 13.</p>
-<p>This only affects to users who set Ogre::HlmsPbsDatablock::setWorkflow to Ogre::HlmsPbsDatablock::MetallicWorkflow.</p>
+<p>This only affects to users who set <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a9bda57c21a9b68786b9a280a703af906" title="Sets whether to use a specular workflow, or a metallic workflow.">Ogre::HlmsPbsDatablock::setWorkflow</a> to <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a167f6114c3c5b246a7c4601a6e72cbfda426fb218122f591c64e051c229e321fe">Ogre::HlmsPbsDatablock::MetallicWorkflow</a>.</p>
 <h2><a class="anchor" id="autotoc_md67"></a>
 IBL</h2>
 <h3><a class="anchor" id="autotoc_md68"></a>
@@ -220,11 +221,11 @@ Hemisphere Ambient Lighting changes</h1>
 <p>If you were using one of the following settings:</p>
 <ul>
 <li><a class="el" href="class_ogre_1_1_scene_manager.html#a661eec1b30244cf1ff7d334d4ea3cc30" title="Sets the ambient light level to be used for the scene.">Ogre::SceneManager::setAmbientLight()</a> (mandatory)</li>
-<li>Ogre::HlmsPbs::setAmbientLightMode( Ogre::HlmsPbs::AmbientAuto ) (the default setting)</li>
-<li>Ogre::HlmsPbs::setAmbientLightMode( Ogre::HlmsPbs::AmbientHemisphere )</li>
+<li><a class="el" href="class_ogre_1_1_hlms_pbs.html#a8b6aa127ca59f0cfda148a5f85d07647">Ogre::HlmsPbs::setAmbientLightMode</a> ( Ogre::HlmsPbs::AmbientAuto ) (the default setting)</li>
+<li><a class="el" href="class_ogre_1_1_hlms_pbs.html#a8b6aa127ca59f0cfda148a5f85d07647">Ogre::HlmsPbs::setAmbientLightMode</a> ( Ogre::HlmsPbs::AmbientHemisphere )</li>
 </ul>
 <p>Then you are affected.</p>
-<p>[Hemisphere Ambient Lighting](Ogre::HlmsPbs::AmbientLightMode::AmbientHemisphereNormal) is a cheap trick.</p>
+<p><a class="el" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67">Hemisphere Ambient Lighting</a> is a cheap trick.</p>
 <p>Therefore there is no true "right way" of doing it.</p>
 <p>Nonetheless user Th3V1kt0r <a href="https://github.com/OGRECave/ogre-next/pull/444">spotted we had swapped diffuse &amp; specular calculations</a>.</p>
 <p>In some cases the difference may be negligible, but depending on how strong your ambient lighting is (controlled via <a class="el" href="class_ogre_1_1_scene_manager.html#a661eec1b30244cf1ff7d334d4ea3cc30" title="Sets the ambient light level to be used for the scene.">Ogre::SceneManager::setAmbientLight</a>), this can result in visible changes:</p>
@@ -243,7 +244,8 @@ Hemisphere Ambient Lighting changes</h1>
 <td class="markdownTableBodyNone">AmbientHemisphere   </td><td class="markdownTableBodyNone">AmbientHemisphereInverted   </td><td class="markdownTableBodyNone">Inverts diffuse &amp; specular calculations. This is how hemisphere ambient lighting was calculated in OgreNext 2.3   </td></tr>
 </table>
 <p>Thus if you wish ambient lighting to look how it was before, simply call:</p>
-<div class="fragment"><div class="line">hlmsPbs-&gt;setAmbientLightMode( Ogre::HlmsPbs::AmbientAutoInverted );</div>
+<div class="fragment"><div class="line">hlmsPbs-&gt;setAmbientLightMode( <a class="code" href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a659674a0de34474e1f9520530008db9b">Ogre::HlmsPbs::AmbientAutoInverted</a> );</div>
+<div class="ttc" id="aclass_ogre_1_1_hlms_pbs_html_a5fed9e596a4ec91b729d9fdbfc054c67a659674a0de34474e1f9520530008db9b"><div class="ttname"><a href="class_ogre_1_1_hlms_pbs.html#a5fed9e596a4ec91b729d9fdbfc054c67a659674a0de34474e1f9520530008db9b">Ogre::HlmsPbs::AmbientAutoInverted</a></div><div class="ttdeci">@ AmbientAutoInverted</div><div class="ttdoc">Same as AmbientAutoNormal but inverts specular &amp; diffuse calculations.</div><div class="ttdef"><b>Definition:</b> OgreHlmsPbs.h:101</div></div>
 </div><!-- fragment --><p>The most simple explanation of why the old method may be more pleasant is that ambient hemisphere lighting is a very cheap trick to simulate Global Illumination.</p>
 <p>Given how simple it was (it's just the blending of two colours across two hemispheres), this mistake made lighting look more rich and dynamic, even if wrong.</p>
 <p>Thus the correct calculations look more dull unless the data is sourced from something more accurate like a cubemap, spherical harmonics, or true path/raytracing. </p>

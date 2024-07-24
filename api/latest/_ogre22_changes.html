@@ -660,7 +660,7 @@ Does 2.2 interoperate well with the HLMS texture arrays?</h1>
 <h1><a class="anchor" id="autotoc_md41"></a>
 Hlms porting</h1>
 <p>If you've done your own Hlms implementation (i.e. you're an advanced user), then there are a few changes you need to be aware:</p>
-<p>A lot of texture shared functionality has been moved out of HlmsUnlitDatablock and HlmsPbsDatablock into Components/Hlms/Common/include/OgreHlmsTextureBaseClass.h</p>
+<p>A lot of texture shared functionality has been moved out of HlmsUnlitDatablock and HlmsPbsDatablock into <a class="el" href="_ogre_hlms_texture_base_class_8h.html">Components/Hlms/Common/include/OgreHlmsTextureBaseClass.h</a></p>
 <p>This header uses macros (not ideal, I know) to alter hardcoded maximum numbers of textures supported.</p>
 <p>For example HlmsPbsDatablock derives from it by including the header, but previously defining a few macros:</p>
 <div class="fragment"><div class="line">#define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock</div>

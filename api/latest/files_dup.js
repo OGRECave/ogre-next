@@ -339,6 +339,9 @@ var files_dup =
     [ "OgreController.h", "_ogre_controller_8h.html", null ],
     [ "OgreControllerManager.h", "_ogre_controller_manager_8h.html", "_ogre_controller_manager_8h" ],
     [ "OgreConvexBody.h", "_ogre_convex_body_8h.html", null ],
+    [ "OgreCubemapProbe.h", "_ogre_cubemap_probe_8h.html", [
+      [ "CubemapProbe", "class_ogre_1_1_cubemap_probe.html", "class_ogre_1_1_cubemap_probe" ]
+    ] ],
     [ "OgreCustomCompositionPass.h", "_ogre_custom_composition_pass_8h.html", null ],
     [ "OgreCylinderEmitter.h", "_ogre_cylinder_emitter_8h.html", [
       [ "CylinderEmitter", "class_ogre_1_1_cylinder_emitter.html", "class_ogre_1_1_cylinder_emitter" ]
@@ -959,6 +962,7 @@ var files_dup =
       [ "DatablockEntry", "struct_ogre_1_1_hlms_1_1_datablock_entry.html", "struct_ogre_1_1_hlms_1_1_datablock_entry" ],
       [ "Library", "struct_ogre_1_1_hlms_1_1_library.html", "struct_ogre_1_1_hlms_1_1_library" ]
     ] ],
+    [ "OgreHlmsBufferManager.h", "_ogre_hlms_buffer_manager_8h.html", "_ogre_hlms_buffer_manager_8h" ],
     [ "OgreHlmsCommon.h", "_ogre_hlms_common_8h.html", "_ogre_hlms_common_8h" ],
     [ "OgreHlmsCompute.h", "_ogre_hlms_compute_8h.html", null ],
     [ "OgreHlmsComputeJob.h", "_ogre_hlms_compute_job_8h.html", null ],
@@ -971,15 +975,24 @@ var files_dup =
     ] ],
     [ "OgreHlmsJson.h", "_ogre_hlms_json_8h.html", "_ogre_hlms_json_8h" ],
     [ "OgreHlmsJsonCompute.h", "_ogre_hlms_json_compute_8h.html", null ],
+    [ "OgreHlmsJsonPbs.h", "_ogre_hlms_json_pbs_8h.html", null ],
+    [ "OgreHlmsJsonUnlit.h", "_ogre_hlms_json_unlit_8h.html", null ],
     [ "OgreHlmsListener.h", "_ogre_hlms_listener_8h.html", null ],
     [ "OgreHlmsLowLevel.h", "_ogre_hlms_low_level_8h.html", null ],
     [ "OgreHlmsLowLevelDatablock.h", "_ogre_hlms_low_level_datablock_8h.html", null ],
     [ "OgreHlmsManager.h", "_ogre_hlms_manager_8h.html", "_ogre_hlms_manager_8h" ],
+    [ "OgreHlmsPbs.h", "_ogre_hlms_pbs_8h.html", null ],
+    [ "OgreHlmsPbsDatablock.h", "_ogre_hlms_pbs_datablock_8h.html", "_ogre_hlms_pbs_datablock_8h" ],
+    [ "OgreHlmsPbsPrerequisites.h", "_ogre_hlms_pbs_prerequisites_8h.html", "_ogre_hlms_pbs_prerequisites_8h" ],
     [ "OgreHlmsPso.h", "_ogre_hlms_pso_8h.html", null ],
     [ "OgreHlmsSamplerblock.h", "_ogre_hlms_samplerblock_8h.html", "_ogre_hlms_samplerblock_8h" ],
+    [ "OgreHlmsTextureBaseClass.h", "_ogre_hlms_texture_base_class_8h.html", null ],
     [ "OgreHlmsTexturePack.h", "_ogre_hlms_texture_pack_8h.html", [
       [ "TextureEntry", "struct_ogre_1_1_hlms_texture_pack_1_1_texture_entry.html", "struct_ogre_1_1_hlms_texture_pack_1_1_texture_entry" ]
     ] ],
+    [ "OgreHlmsUnlit.h", "_ogre_hlms_unlit_8h.html", null ],
+    [ "OgreHlmsUnlitDatablock.h", "_ogre_hlms_unlit_datablock_8h.html", "_ogre_hlms_unlit_datablock_8h" ],
+    [ "OgreHlmsUnlitPrerequisites.h", "_ogre_hlms_unlit_prerequisites_8h.html", "_ogre_hlms_unlit_prerequisites_8h" ],
     [ "OgreHollowEllipsoidEmitter.h", "_ogre_hollow_ellipsoid_emitter_8h.html", [
       [ "HollowEllipsoidEmitter", "class_ogre_1_1_hollow_ellipsoid_emitter.html", "class_ogre_1_1_hollow_ellipsoid_emitter" ],
       [ "CmdInnerX", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_x.html", "class_ogre_1_1_hollow_ellipsoid_emitter_1_1_cmd_inner_x" ],
@@ -995,6 +1008,10 @@ var files_dup =
     ] ],
     [ "OgreId.h", "_ogre_id_8h.html", "_ogre_id_8h" ],
     [ "OgreIdString.h", "_ogre_id_string_8h.html", "_ogre_id_string_8h" ],
+    [ "OgreIesLoader.h", "_ogre_ies_loader_8h.html", "_ogre_ies_loader_8h" ],
+    [ "OgreIfdProbeVisualizer.h", "_ogre_ifd_probe_visualizer_8h.html", [
+      [ "IfdProbeVisualizer", "class_ogre_1_1_ifd_probe_visualizer.html", "class_ogre_1_1_ifd_probe_visualizer" ]
+    ] ],
     [ "OgreImage2.h", "_ogre_image2_8h.html", null ],
     [ "OgreImageCodec2.h", "_ogre_image_codec2_8h.html", [
       [ "ImageData2", "class_ogre_1_1_image_codec2_1_1_image_data2.html", "class_ogre_1_1_image_codec2_1_1_image_data2" ]
@@ -1006,10 +1023,22 @@ var files_dup =
     [ "OgreIndirectBufferPacked.h", "_ogre_indirect_buffer_packed_8h.html", [
       [ "IndirectBufferPacked", "class_ogre_1_1_indirect_buffer_packed.html", "class_ogre_1_1_indirect_buffer_packed" ]
     ] ],
+    [ "OgreInstantRadiosity.h", "_ogre_instant_radiosity_8h.html", [
+      [ "AreaOfInterest", "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html", "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest" ]
+    ] ],
     [ "OgreInternalCubemapProbe.h", "_ogre_internal_cubemap_probe_8h.html", [
       [ "InternalCubemapProbe", "class_ogre_1_1_internal_cubemap_probe.html", "class_ogre_1_1_internal_cubemap_probe" ],
       [ "InternalCubemapProbeFactory", "class_ogre_1_1_internal_cubemap_probe_factory.html", "class_ogre_1_1_internal_cubemap_probe_factory" ]
     ] ],
+    [ "OgreIrradianceField.h", "_ogre_irradiance_field_8h.html", [
+      [ "IrradianceField", "class_ogre_1_1_irradiance_field.html", "class_ogre_1_1_irradiance_field" ],
+      [ "IrradianceFieldSettings", "struct_ogre_1_1_irradiance_field_settings.html", "struct_ogre_1_1_irradiance_field_settings" ],
+      [ "RasterParams", "struct_ogre_1_1_raster_params.html", "struct_ogre_1_1_raster_params" ]
+    ] ],
+    [ "OgreIrradianceFieldRaster.h", "_ogre_irradiance_field_raster_8h.html", [
+      [ "IrradianceFieldRaster", "class_ogre_1_1_irradiance_field_raster.html", "class_ogre_1_1_irradiance_field_raster" ]
+    ] ],
+    [ "OgreIrradianceVolume.h", "_ogre_irradiance_volume_8h.html", null ],
     [ "OgreItem.h", "_ogre_item_8h.html", null ],
     [ "OgreIteratorWrapper.h", "_ogre_iterator_wrapper_8h.html", [
       [ "ConstMapIterator", "class_ogre_1_1_const_map_iterator.html", "class_ogre_1_1_const_map_iterator" ],
@@ -1031,6 +1060,9 @@ var files_dup =
       [ "KfTransformArrayMemoryManager", "class_ogre_1_1_kf_transform_array_memory_manager.html", "class_ogre_1_1_kf_transform_array_memory_manager" ]
     ] ],
     [ "OgreLight.h", "_ogre_light_8h.html", null ],
+    [ "OgreLightProfiles.h", "_ogre_light_profiles_8h.html", [
+      [ "LightProfiles", "class_ogre_1_1_light_profiles.html", "class_ogre_1_1_light_profiles" ]
+    ] ],
     [ "OgreLightweightMutex.h", "_ogre_lightweight_mutex_8h.html", [
       [ "LightweightMutex", "class_ogre_1_1_lightweight_mutex.html", "class_ogre_1_1_lightweight_mutex" ],
       [ "ScopedLock", "class_ogre_1_1_scoped_lock.html", "class_ogre_1_1_scoped_lock" ]
@@ -1405,6 +1437,12 @@ var files_dup =
       [ "CmdTransparent", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_transparent.html", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_transparent" ],
       [ "CmdUVCoords", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_u_v_coords.html", "class_ogre_1_1v1_1_1_panel_overlay_element_1_1_cmd_u_v_coords" ]
     ] ],
+    [ "OgreParallaxCorrectedCubemap.h", "_ogre_parallax_corrected_cubemap_8h.html", "_ogre_parallax_corrected_cubemap_8h" ],
+    [ "OgreParallaxCorrectedCubemapAuto.h", "_ogre_parallax_corrected_cubemap_auto_8h.html", [
+      [ "ParallaxCorrectedCubemapAuto", "class_ogre_1_1_parallax_corrected_cubemap_auto.html", "class_ogre_1_1_parallax_corrected_cubemap_auto" ],
+      [ "ParallaxCorrectedCubemapAutoListener", "class_ogre_1_1_parallax_corrected_cubemap_auto_listener.html", "class_ogre_1_1_parallax_corrected_cubemap_auto_listener" ]
+    ] ],
+    [ "OgreParallaxCorrectedCubemapBase.h", "_ogre_parallax_corrected_cubemap_base_8h.html", "_ogre_parallax_corrected_cubemap_base_8h" ],
     [ "OgreParticle.h", "_ogre_particle_8h.html", null ],
     [ "OgreParticle2.h", "_ogre_particle2_8h.html", [
       [ "EmittedParticle", "struct_ogre_1_1_emitted_particle.html", "struct_ogre_1_1_emitted_particle" ],
@@ -1475,6 +1513,9 @@ var files_dup =
     [ "OgrePass.h", "_ogre_pass_8h.html", null ],
     [ "OgrePatchMesh.h", "_ogre_patch_mesh_8h.html", null ],
     [ "OgrePatchSurface.h", "_ogre_patch_surface_8h.html", null ],
+    [ "OgrePccPerPixelGridPlacement.h", "_ogre_pcc_per_pixel_grid_placement_8h.html", [
+      [ "PccPerPixelGridPlacement", "class_ogre_1_1_pcc_per_pixel_grid_placement.html", "class_ogre_1_1_pcc_per_pixel_grid_placement" ]
+    ] ],
     [ "OgrePixelCountLodStrategy.h", "_ogre_pixel_count_lod_strategy_8h.html", "_ogre_pixel_count_lod_strategy_8h" ],
     [ "OgrePixelFormatGpu.h", "_ogre_pixel_format_gpu_8h.html", "_ogre_pixel_format_gpu_8h" ],
     [ "OgrePixelFormatGpuUtils.h", "_ogre_pixel_format_gpu_utils_8h.html", null ],
@@ -1715,6 +1756,9 @@ var files_dup =
       [ "CmdFontName", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_font_name.html", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_font_name" ],
       [ "CmdSpaceWidth", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_space_width.html", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_space_width" ]
     ] ],
+    [ "OgreTextureAnimationController.h", "_ogre_texture_animation_controller_8h.html", [
+      [ "TextureAnimationControllerValue", "class_ogre_1_1_texture_animation_controller_value.html", "class_ogre_1_1_texture_animation_controller_value" ]
+    ] ],
     [ "OgreTextureBox.h", "_ogre_texture_box_8h.html", [
       [ "TextureBox", "struct_ogre_1_1_texture_box.html", "struct_ogre_1_1_texture_box" ]
     ] ],
@@ -1756,8 +1800,30 @@ var files_dup =
     [ "OgreUniformScalableTask.h", "_ogre_uniform_scalable_task_8h.html", [
       [ "UniformScalableTask", "class_ogre_1_1_uniform_scalable_task.html", "class_ogre_1_1_uniform_scalable_task" ]
     ] ],
+    [ "OgreUnlitProperty.h", "_ogre_unlit_property_8h.html", [
+      [ "UnlitProperty", "struct_ogre_1_1_unlit_property.html", "struct_ogre_1_1_unlit_property" ],
+      [ "DiffuseMapPtr", "struct_ogre_1_1_unlit_property_1_1_diffuse_map_ptr.html", "struct_ogre_1_1_unlit_property_1_1_diffuse_map_ptr" ]
+    ] ],
     [ "OgreUserObjectBindings.h", "_ogre_user_object_bindings_8h.html", null ],
     [ "OgreVaoManager.h", "_ogre_vao_manager_8h.html", "_ogre_vao_manager_8h" ],
+    [ "OgreVctCascadedVoxelizer.h", "_ogre_vct_cascaded_voxelizer_8h.html", [
+      [ "VctCascadedVoxelizer", "class_ogre_1_1_vct_cascaded_voxelizer.html", "class_ogre_1_1_vct_cascaded_voxelizer" ],
+      [ "VctCascadeSetting", "struct_ogre_1_1_vct_cascade_setting.html", "struct_ogre_1_1_vct_cascade_setting" ]
+    ] ],
+    [ "OgreVctImageVoxelizer.h", "_ogre_vct_image_voxelizer_8h.html", [
+      [ "VctImageVoxelizer", "class_ogre_1_1_vct_image_voxelizer.html", "class_ogre_1_1_vct_image_voxelizer" ]
+    ] ],
+    [ "OgreVctLighting.h", "_ogre_vct_lighting_8h.html", [
+      [ "VctLighting", "class_ogre_1_1_vct_lighting.html", "class_ogre_1_1_vct_lighting" ]
+    ] ],
+    [ "OgreVctMaterial.h", "_ogre_vct_material_8h.html", [
+      [ "VctMaterial", "class_ogre_1_1_vct_material.html", "class_ogre_1_1_vct_material" ],
+      [ "DatablockConversionResult", "struct_ogre_1_1_vct_material_1_1_datablock_conversion_result.html", "struct_ogre_1_1_vct_material_1_1_datablock_conversion_result" ]
+    ] ],
+    [ "OgreVctVoxelizer.h", "_ogre_vct_voxelizer_8h.html", "_ogre_vct_voxelizer_8h" ],
+    [ "OgreVctVoxelizerSourceBase.h", "_ogre_vct_voxelizer_source_base_8h.html", [
+      [ "VctVoxelizerSourceBase", "class_ogre_1_1_vct_voxelizer_source_base.html", "class_ogre_1_1_vct_voxelizer_source_base" ]
+    ] ],
     [ "OgreVector2.h", "_ogre_vector2_8h.html", null ],
     [ "OgreVector3.h", "_ogre_vector3_8h.html", null ],
     [ "OgreVector4.h", "_ogre_vector4_8h.html", null ],
@@ -1832,6 +1898,13 @@ var files_dup =
     ] ],
     [ "OgreVolumeTextureSource.h", "_ogre_volume_texture_source_8h.html", [
       [ "TextureSource", "class_ogre_1_1_volume_1_1_texture_source.html", "class_ogre_1_1_volume_1_1_texture_source" ]
+    ] ],
+    [ "OgreVoxelizedMeshCache.h", "_ogre_voxelized_mesh_cache_8h.html", [
+      [ "VoxelizedMeshCache", "class_ogre_1_1_voxelized_mesh_cache.html", "class_ogre_1_1_voxelized_mesh_cache" ],
+      [ "VoxelizedMesh", "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html", "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh" ]
+    ] ],
+    [ "OgreVoxelVisualizer.h", "_ogre_voxel_visualizer_8h.html", [
+      [ "VoxelVisualizer", "class_ogre_1_1_voxel_visualizer.html", "class_ogre_1_1_voxel_visualizer" ]
     ] ],
     [ "OgreVulkanAndroidSupport.h", "_ogre_vulkan_android_support_8h.html", "_ogre_vulkan_android_support_8h" ],
     [ "OgreVulkanAndroidWindow.h", "_ogre_vulkan_android_window_8h.html", "_ogre_vulkan_android_window_8h" ],

@@ -1,4 +1,12 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,192,47"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_e_s2_hardware_occlusion_query.html" title=" " alt="" coords="240,5,468,47"/>
+<area shape="rect" id="node1" href="$class_ogre_1_1_g_l3_plus_support.html" title=" " alt="" coords="47,183,210,209"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_e_g_l_g_l_support.html" title=" " alt="" coords="321,56,475,83"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_egl_p_buffer_support.html" title=" " alt="" coords="309,107,487,133"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_g_l_x_g_l_support.html" title=" " alt="" coords="321,157,475,184"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_t_k_g_l_support.html" title="GL support in a GTK window." alt="" coords="321,5,475,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_gl_switchable_support.html" title=" " alt="" coords="300,208,496,235"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_o_s_x_g_l3_plus_support.html" title=" " alt="" coords="303,259,493,285"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_s_d_l_g_l_support.html" title=" " alt="" coords="321,309,475,336"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_win32_g_l_support.html" title=" " alt="" coords="313,360,483,387"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,252,32"/>
 </map>

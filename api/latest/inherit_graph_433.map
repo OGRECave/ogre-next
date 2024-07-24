@@ -1,7 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,56,115,83"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_property_base.html" title="Base interface for an instance of a property." alt="" coords="163,5,311,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_property_def.html" title="Definition of a property of an object." alt="" coords="167,56,306,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_property_set.html" title="Defines a complete set of properties for a single object instance." alt="" coords="168,107,305,133"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_property.html" title="Property instance with passthrough calls to a given object." alt="" coords="359,5,513,32"/>
+<area shape="rect" id="node1" href="$class_ogre_1_1_particle_affector_factory2.html" title="Abstract class defining the interface to be implemented by creators of ParticleAffector2 subclasses." alt="" coords="5,307,220,334"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_colour_fader_affector2_f_x2_factory.html" title=" " alt="" coords="281,5,478,47"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_colour_fader_affector_f_x2_factory.html" title=" " alt="" coords="285,71,474,112"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_colour_image_affector_factory2.html" title=" " alt="" coords="282,136,477,177"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_colour_interpolator_affector_factory2.html" title=" " alt="" coords="290,201,469,243"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_deflector_plane_affector_factory2.html" title=" " alt="" coords="276,267,483,308"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_direction_randomiser_affector_factory2.html" title=" " alt="" coords="280,332,479,373"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_linear_force_affector_factory2.html" title=" " alt="" coords="286,397,473,439"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_rotation_affector_factory2.html" title=" " alt="" coords="268,463,491,490"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_scale_affector_factory2.html" title=" " alt="" coords="278,514,481,541"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_scale_interpolator_affector_factory2.html" title=" " alt="" coords="268,565,491,607"/>
 </map>

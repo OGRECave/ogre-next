@@ -2501,7 +2501,7 @@ Getting details of a light as a 4D vector can be useful for doing general calcul
 </div><div class="memdoc">
 
 <p>Sets a textured for types of light that support it. </p>
-<p>At the time of writing only LT_AREA_APPROX supports it. </p><dl class="section remark"><dt>Remarks</dt><dd>Note that HlmsPbs only supports one 2D Array texture active at a time. i.e. you must call hlmsPbs-&gt;setAreaLightMasks( texture ); and if that texture belongs to a different pool as the one you're inputting here, the wrong texture will be displayed! </dd></dl>
+<p>At the time of writing only LT_AREA_APPROX supports it. </p><dl class="section remark"><dt>Remarks</dt><dd>Note that <a class="el" href="class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys...">HlmsPbs</a> only supports one 2D Array texture active at a time. i.e. you must call hlmsPbs-&gt;setAreaLightMasks( texture ); and if that texture belongs to a different pool as the one you're inputting here, the wrong texture will be displayed! </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">texture</td><td>Texture. Can be monochrome or coloured. For Raw version must be a 2D Array texture. For non-Raw version, must be a 2D texture. </td></tr>

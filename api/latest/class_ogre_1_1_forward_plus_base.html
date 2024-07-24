@@ -765,7 +765,7 @@ setAttenuation. And even when controlling the light by its radius, you don't hav
 </div><div class="memdoc">
 
 <p>Toggles whether light masks will be obeyed per object &amp; per light by doing: if( movableObject-&gt;getLightMask() &amp; light-&gt;getLightMask() ) doLighting( movableObject light ); Note this toggle only affects Forward+ lights. </p>
-<p>You may want to see HlmsPbs::setFineLightMaskGranularity for control over Forward lights. If you only need coarse granularity control over Forward+ lights, you may get higher performance via <a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#aa09e5161af218d56d46496e80d0fe60c" title="Used by Forward+ to determine which lights should be used (via Light::setVisibilityFlags)">CompositorPassSceneDef::mLightVisibilityMask</a> (light_visibility_mask keyword in scripts). </p>
+<p>You may want to see <a class="el" href="class_ogre_1_1_hlms_pbs.html#a2eef435df6f7d35adde2e52fbac2cf39" title="Toggles whether light masks will be obeyed per object by doing: if( movableObject-&gt;getLightMask() &amp; l...">HlmsPbs::setFineLightMaskGranularity</a> for control over Forward lights. If you only need coarse granularity control over Forward+ lights, you may get higher performance via <a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#aa09e5161af218d56d46496e80d0fe60c" title="Used by Forward+ to determine which lights should be used (via Light::setVisibilityFlags)">CompositorPassSceneDef::mLightVisibilityMask</a> (light_visibility_mask keyword in scripts). </p>
 
 </div>
 </div>

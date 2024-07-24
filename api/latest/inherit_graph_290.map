@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html" title="Structure defining an auto constant that&#39;s available for use in a parameters object." alt="" coords="5,5,221,47"/>
+<area shape="rect" id="node1" href="$class_ogre_1_1_g_l_s_l_e_s_program_common.html" title="C++ encapsulation of GLSL ES Program Object." alt="" coords="5,5,228,32"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html" title="Specialisation of GLSLESProgramCommon to provide support for separable programs via the Open GL progr..." alt="" coords="276,5,492,32"/>
 </map>

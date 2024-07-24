@@ -95,6 +95,14 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_compositor_workspace_li
 <div class="contents">
 
 <p><code>#include &lt;OgreCompositorWorkspaceListener.h&gt;</code></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ogre::CompositorWorkspaceListener:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_compositor_workspace_listener__inherit__graph.svg" width="632" height="202"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -153,6 +161,8 @@ Public Member Functions</h2></td></tr>
 <p>Called from <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> (not <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a>) when we're about to begin updating all the workspaces. </p>
 <p>You'll have to manage the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> and <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> to call the adequate begin/end calls Warning: Don't add/remove listeners to <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> inside this function. </p>
 
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vct_cascaded_voxelizer.html#abc877f9e18f76267764c13b513766cb8">Ogre::VctCascadedVoxelizer</a>, <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap_auto.html#af64a04cfd731369f573bfcd3e04dd26b">Ogre::ParallaxCorrectedCubemapAuto</a>, and <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap.html#a2b038882356004da5df294f6082ad7bb">Ogre::ParallaxCorrectedCubemap</a>.</p>
+
 </div>
 </div>
 <a id="a47d89a97c8d3e1726c9a8ca2f334c23c"></a>
@@ -179,6 +189,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Called from <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> (not <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a>) when we're about to update all the workspaces (it's safe to update your own workspaces without calling _beginUpdate and _endUpdate) Warning: Don't add/remove listeners to <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> inside this function. </p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap_auto.html#a6c4a9d18d3a13eb4f00838dbcd913a90">Ogre::ParallaxCorrectedCubemapAuto</a>, and <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap.html#af42725f7f4f2f7c13d84aff66df02d7c">Ogre::ParallaxCorrectedCubemap</a>.</p>
 
 </div>
 </div>
@@ -266,6 +278,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Called when each pass is about to be executed. </p>
 <p>Warning: calling pass-&gt;execute can result in recursive calls. </p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap_base.html#abf022fe168d8c3284e044ead5fda7390">Ogre::ParallaxCorrectedCubemapBase</a>, <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap_auto.html#a8f41e739f1d88f880e7ff6fbce03073a">Ogre::ParallaxCorrectedCubemapAuto</a>, and <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap.html#aa4486243e718c461679b4484f802ca1a">Ogre::ParallaxCorrectedCubemap</a>.</p>
 
 </div>
 </div>

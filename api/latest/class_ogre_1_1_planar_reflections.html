@@ -694,7 +694,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reserves a particular slot (i.e. </p>
-<p>texture) to be used only with a specifc actor. A slot can only be reserved by one actor at a time. If this actor doesn't activate (i.e. it's culled by the camera), the slot won't be used and thus the contents of the texture will remain unchanged. </p><dl class="section remark"><dt>Remarks</dt><dd>Reservation is useful to have a texture be linked always with the same actor, which can be used to avoid updating it while still showing a (partially wrong) reflection (as a performance improvement) or for using actors with HlmsUnlit, which can only bind reflection textures with materials; rather than binding actors with materials. </dd></dl>
+<p>texture) to be used only with a specifc actor. A slot can only be reserved by one actor at a time. If this actor doesn't activate (i.e. it's culled by the camera), the slot won't be used and thus the contents of the texture will remain unchanged. </p><dl class="section remark"><dt>Remarks</dt><dd>Reservation is useful to have a texture be linked always with the same actor, which can be used to avoid updating it while still showing a (partially wrong) reflection (as a performance improvement) or for using actors with <a class="el" href="class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,...">HlmsUnlit</a>, which can only bind reflection textures with materials; rather than binding actors with materials. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">activeActorSlot</td><td>Slot to reserve. Must be in range [0; mMaxActiveActors) </td></tr>
@@ -768,7 +768,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Setups how many actors can be active at the same time. </p>
-<p>You may have many actors (i.e. 1000 actors), but for performance and memory reasons you may only want 1-5 actors at the same time. Actors are dynamically activated based on distance to camera. </p><dl class="section remark"><dt>Remarks</dt><dd>Note HlmsPbs hardcodes the max number of actors, so changing this value after having rendered a few frames could cause many shaders to be recompiled. </dd></dl>
+<p>You may have many actors (i.e. 1000 actors), but for performance and memory reasons you may only want 1-5 actors at the same time. Actors are dynamically activated based on distance to camera. </p><dl class="section remark"><dt>Remarks</dt><dd>Note <a class="el" href="class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys...">HlmsPbs</a> hardcodes the max number of actors, so changing this value after having rendered a few frames could cause many shaders to be recompiled. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">maxActiveActors</td><td>New max active actors. Can be lower or higher than its previous value. When this value is less or equal than current value, all the next parameters are ignored. When this value is higher than its previous, value, the new active actors will use these parameters; which don't have to necessarily match previous calls (not recommended since we assume the number of mipmaps is the same for all actors. This affects surfaces with roughness &gt; 0). </td></tr>
