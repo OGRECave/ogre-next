@@ -41,7 +41,7 @@ if(DOXYGEN_FOUND)
 			${OGRE_SOURCE_DIR}/Docs/src/UsingOgre/*.md
 		)
 
-	file(GLOB COMPONENTS ${OGRE_SOURCE_DIR}/Components/*/include)
+	file(GLOB COMPONENTS ${OGRE_SOURCE_DIR}/Components/*/include ${OGRE_SOURCE_DIR}/Components/Hlms/*/include)
 	file(GLOB PLUGINS ${OGRE_SOURCE_DIR}/PlugIns/*/include)
 	file(GLOB SAMPLES ${OGRE_SOURCE_DIR}/Samples/Media/particle/*.particle)
 

@@ -173,12 +173,12 @@ The [second change](https://github.com/OGRECave/ogre-next/commit/4859a0a6cc622a1
 If you were using one of the following settings:
 
  - Ogre::SceneManager::setAmbientLight() (mandatory)
- - Ogre::HlmsPbs::setAmbientLightMode( Ogre::HlmsPbs::AmbientAuto ) (the default setting)
- - Ogre::HlmsPbs::setAmbientLightMode( Ogre::HlmsPbs::AmbientHemisphere )
+ - Ogre::HlmsPbs::setAmbientLightMode ( Ogre::HlmsPbs::AmbientAuto ) (the default setting)
+ - Ogre::HlmsPbs::setAmbientLightMode ( Ogre::HlmsPbs::AmbientHemisphere )
  
 Then you are affected.
 
-[Hemisphere Ambient Lighting](Ogre::HlmsPbs::AmbientLightMode::AmbientHemisphereNormal) is a cheap trick.
+[Hemisphere Ambient Lighting](@ref Ogre::HlmsPbs::AmbientLightMode) is a cheap trick.
 
 Therefore there is no true "right way" of doing it.
 
