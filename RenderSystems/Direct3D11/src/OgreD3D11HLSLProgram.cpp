@@ -2033,7 +2033,7 @@ namespace Ogre
                 {
                     inputDesc[currDesc].SemanticIndex = uvCount++;
                 }
-                else if( it->mSemantic == VES_DIFFUSE )
+                else if( it->mSemantic == VES_DIFFUSE || it->mSemantic == VES_SPECULAR )
                 {
                     inputDesc[currDesc].SemanticIndex = colourCount++;
                 }
