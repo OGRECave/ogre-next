@@ -6,7 +6,7 @@ var _ogre_vertex_elements_8h =
       [ "VES_BLEND_INDICES", "_ogre_vertex_elements_8h.html#a0a62b3f2ede8992ff365bb013a8bc00dae54f94c9c9cf553d227c2aab2c499bbf", null ],
       [ "VES_NORMAL", "_ogre_vertex_elements_8h.html#a0a62b3f2ede8992ff365bb013a8bc00da1dec7d36a64625348e23af26c9231227", null ],
       [ "VES_DIFFUSE", "_ogre_vertex_elements_8h.html#a0a62b3f2ede8992ff365bb013a8bc00daabddc327dc0835e75b7622ee81e7f527", null ],
-      [ "VES_SPECULAR", "_ogre_vertex_elements_8h.html#a0a62b3f2ede8992ff365bb013a8bc00daac8754d6241197a32c19cd72ff1806cc", null ],
+      [ "OGRE_DEPRECATED_VER", "_ogre_vertex_elements_8h.html#a0a62b3f2ede8992ff365bb013a8bc00da88c2feec95e0475942d2e43b44b18aca", null ],
       [ "VES_TEXTURE_COORDINATES", "_ogre_vertex_elements_8h.html#a0a62b3f2ede8992ff365bb013a8bc00da17abb855311f3a67bc31414cad8d6212", null ],
       [ "VES_BINORMAL", "_ogre_vertex_elements_8h.html#a0a62b3f2ede8992ff365bb013a8bc00da2b06bd6ce4e2b9115ab122e35d86502f", null ],
       [ "VES_TANGENT", "_ogre_vertex_elements_8h.html#a0a62b3f2ede8992ff365bb013a8bc00da57d43012049b3ec7b4240b207dd029f2", null ],

@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['ogre_5fdeprecated_5fenum_5fver_29193',['OGRE_DEPRECATED_ENUM_VER',['../struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea35634a45046af55e08feb81bd5ecbb94',1,'Ogre::DepthBuffer']]],
+  ['ogre_5fdeprecated_5fenum_5fver_29192',['OGRE_DEPRECATED_ENUM_VER',['../struct_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea35634a45046af55e08feb81bd5ecbb94',1,'Ogre::DepthBuffer']]],
+  ['ogre_5fdeprecated_5fver_29193',['OGRE_DEPRECATED_VER',['../namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00da88c2feec95e0475942d2e43b44b18aca',1,'Ogre']]],
   ['ogreprof_5fall_29194',['OGREPROF_ALL',['../group___general.html#gga22a20f11c008a0d9b677fc2635922cfeade870d108856d0d9fbd27694bcb2242a',1,'Ogre']]],
   ['ogreprof_5fculling_29195',['OGREPROF_CULLING',['../group___general.html#gga22a20f11c008a0d9b677fc2635922cfea025771347fabdae9bb5db80f997ced2c',1,'Ogre']]],
   ['ogreprof_5fgeneral_29196',['OGREPROF_GENERAL',['../group___general.html#gga22a20f11c008a0d9b677fc2635922cfeaa62424531516cb168cd1865184eeb7a9',1,'Ogre']]],
