@@ -826,7 +826,7 @@ should we render to. Default: No.
 **Note:** if the target is not a cubemap, Ogre will still try to rotate
 the camera, often to unintended angles.
 
--   enable\_plus \[yes|no\]
+-   enable\_forwardplus \[yes|no\]
 
 When yes, this pass will use Forward3D/ForwardClustered (must be enabled first
 by the developer via C++, see Forward3D sample). When No, Forward3D will not be
