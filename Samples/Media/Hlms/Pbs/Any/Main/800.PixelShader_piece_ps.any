@@ -1008,7 +1008,9 @@
 		@insertpiece( SampleDiffuseMap )
 	@end
 	@insertpiece( DoShadowCastPS )
-	@insertpiece( ProcessAlpha )
+	@property( hlms_alpha_hash )
+		@insertpiece( ProcessAlpha )
+	@end
 @end
 
 @end
