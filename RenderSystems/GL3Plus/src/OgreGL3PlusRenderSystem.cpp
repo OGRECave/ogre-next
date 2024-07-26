@@ -2247,7 +2247,7 @@ namespace Ogre
             mClipDistances = newClipDistances;
         }
 
-        mUseAdjacency = false;
+        mUseAdjacency = pso != nullptr && (pso->operationType & OT_DETAIL_ADJACENCY_BIT) != 0;
         mPso = 0;
 
         if( !pso )
