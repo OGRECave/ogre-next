@@ -2272,7 +2272,8 @@ namespace Ogre
             mActiveGeometryGpuProgramParameters = mPso->geometryShader->getDefaultParameters();
             mGeometryProgramBound = true;
 
-            mUseAdjacency = mPso->geometryShader->isAdjacencyInfoRequired();
+            if (mPso->geometryShader->isAdjacencyInfoRequired())
+                mUseAdjacency = true;
         }
         if( mPso->hullShader )
         {
