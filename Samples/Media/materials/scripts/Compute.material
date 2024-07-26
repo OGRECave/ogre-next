@@ -38,7 +38,6 @@ shared_params more_switches
 //         source Compute.hlsl
 //         entry_point mainGS
 //         target gs_4_0
-//         uses_adjacency_information true
 
 //         default_params
 //         {
@@ -76,7 +75,6 @@ shared_params more_switches
 //         source Compute.cg
 //         entry_point mainGS
 //         profiles gpu_gp gp4_gp
-//         uses_adjacency_information true
 
 //         default_params
 //         {
