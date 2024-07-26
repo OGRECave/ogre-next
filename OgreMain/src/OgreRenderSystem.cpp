@@ -1114,6 +1114,12 @@ namespace Ogre
         case OT_TRIANGLE_FAN:
             mMetrics.mFaceCount += ( primCount - 2u );
             break;
+        case OT_TRIANGLE_LIST_ADJ:
+            mMetrics.mFaceCount += ( primCount / 6 );
+            break;
+        case OT_TRIANGLE_STRIP_ADJ:
+            mMetrics.mFaceCount += ( primCount / 2 - 2 );
+            break;
         default:
             break;
         }
