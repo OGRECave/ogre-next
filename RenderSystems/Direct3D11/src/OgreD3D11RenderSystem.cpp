@@ -2197,10 +2197,12 @@ namespace Ogre
         }
 
         const bool useTesselation = (bool)block->tesselationDomainShader;
-        const bool useAdjacency =
-            block->geometryShader && block->geometryShader->isAdjacencyInfoRequired();
 
-        switch( block->operationType )
+        int operationType = block->operationType;
+        if( block->geometryShader && block->geometryShader->isAdjacencyInfoRequired() )
+            operationType |= OT_DETAIL_ADJACENCY_BIT;
+
+        switch( operationType )
         {
         case OT_POINT_LIST:
             pso->topology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
@@ -2208,35 +2210,51 @@ namespace Ogre
         case OT_LINE_LIST:
             if( useTesselation )
                 pso->topology = D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
-            else if( useAdjacency )
-                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ;
             else
                 pso->topology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+            break;
+        case OT_LINE_LIST_ADJ:
+            if( useTesselation )
+                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
+            else
+                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ;
             break;
         case OT_LINE_STRIP:
             if( useTesselation )
                 pso->topology = D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
-            else if( useAdjacency )
-                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ;
             else
                 pso->topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;
+            break;
+        case OT_LINE_STRIP_ADJ:
+            if( useTesselation )
+                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
+            else
+                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ;
             break;
         default:
         case OT_TRIANGLE_LIST:
             if( useTesselation )
                 pso->topology = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
-            else if( useAdjacency )
-                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST_ADJ;
             else
                 pso->topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+            break;
+        case OT_TRIANGLE_LIST_ADJ:
+            if( useTesselation )
+                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
+            else
+                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST_ADJ;
             break;
         case OT_TRIANGLE_STRIP:
             if( useTesselation )
                 pso->topology = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
-            else if( useAdjacency )
-                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ;
             else
                 pso->topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+            break;
+        case OT_TRIANGLE_STRIP_ADJ:
+            if( useTesselation )
+                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
+            else
+                pso->topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ;
             break;
         case OT_TRIANGLE_FAN:
             pso->topology = D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;
@@ -2973,8 +2991,6 @@ namespace Ogre
             if( mGeometryProgramBound && mPso->geometryShader && mPso->geometryShader->isAdjacencyInfoRequired() )
                 operationType |= OT_DETAIL_ADJACENCY_BIT;
 
-            bool useAdjacency = ( mGeometryProgramBound && mPso->geometryShader &&
-                                  mPso->geometryShader->isAdjacencyInfoRequired() );
             switch( operationType )
             {
             case OT_POINT_LIST:
